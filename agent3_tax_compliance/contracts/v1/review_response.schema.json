@@ -1,0 +1,2419 @@
+{
+  "$defs": {
+    "BankTransaction": {
+      "additionalProperties": false,
+      "properties": {
+        "account_owner": {
+          "$ref": "#/$defs/Party"
+        },
+        "counterparty": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Party"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "amount": {
+          "$ref": "#/$defs/FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+        },
+        "booking_date": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_date__BeforeValidator__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reference": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_str_"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "account_owner",
+        "amount"
+      ],
+      "title": "BankTransaction",
+      "type": "object"
+    },
+    "Candidate_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Annotated[Decimal, BeforeValidator, PlainSerializer, WithJsonSchema]]",
+      "type": "object"
+    },
+    "Candidate_Annotated_date__BeforeValidator__": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "format": "date",
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Annotated[date, BeforeValidator]]",
+      "type": "object"
+    },
+    "Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____0-9__10____0-9__3__-_0-9__3__________": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "pattern": "^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$",
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$')])]]",
+      "type": "object"
+    },
+    "Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__3________": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[A-Z]{3}$')])]]",
+      "type": "object"
+    },
+    "Candidate_Literal__INPUT____OUTPUT___": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "enum": [
+            "INPUT",
+            "OUTPUT"
+          ],
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Literal['INPUT', 'OUTPUT']]",
+      "type": "object"
+    },
+    "Candidate_Literal__TAXABLE_RATE____KCT____KKKNT___": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "enum": [
+            "TAXABLE_RATE",
+            "KCT",
+            "KKKNT"
+          ],
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Literal['TAXABLE_RATE', 'KCT', 'KKKNT']]",
+      "type": "object"
+    },
+    "Candidate_str_": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[str]",
+      "type": "object"
+    },
+    "CanonicalFinancialRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Config Version",
+          "type": "string"
+        },
+        "creator": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Creator",
+          "type": "string"
+        },
+        "stage": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Stage",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "record_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Record Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "tenant_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "taxpayer_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Taxpayer Id",
+          "type": "string"
+        },
+        "taxpayer_master_revision": {
+          "minimum": 1,
+          "title": "Taxpayer Master Revision",
+          "type": "integer"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_format": {
+          "$ref": "#/$defs/SourceFormat"
+        },
+        "record_type": {
+          "enum": [
+            "INVOICE",
+            "RECEIPT",
+            "BANK_TRANSACTION"
+          ],
+          "title": "Record Type",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "parties": {
+          "$ref": "#/$defs/Parties"
+        },
+        "invoice": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Invoice"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__3________"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "totals": {
+          "$ref": "#/$defs/Totals"
+        },
+        "items": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Item"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "item_discovery_status": {
+          "default": "UNKNOWN",
+          "enum": [
+            "COMPLETE",
+            "INCOMPLETE",
+            "UNKNOWN"
+          ],
+          "title": "Item Discovery Status",
+          "type": "string"
+        },
+        "bank_transaction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BankTransaction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "derived": {
+          "$ref": "#/$defs/Derived"
+        }
+      },
+      "required": [
+        "config_version",
+        "creator",
+        "stage",
+        "record_id",
+        "revision",
+        "tenant_id",
+        "taxpayer_id",
+        "taxpayer_master_revision",
+        "source_id",
+        "source_format",
+        "record_type",
+        "document_id",
+        "parties",
+        "derived"
+      ],
+      "title": "CanonicalFinancialRecord",
+      "type": "object"
+    },
+    "ConfidenceBasis": {
+      "enum": [
+        "CALIBRATED",
+        "DETERMINISTIC",
+        "HUMAN_CONFIRMED",
+        "UNAVAILABLE"
+      ],
+      "title": "ConfidenceBasis",
+      "type": "string"
+    },
+    "Derived": {
+      "additionalProperties": false,
+      "properties": {
+        "invoice_direction": {
+          "$ref": "#/$defs/FieldObject_Literal__INPUT____OUTPUT___"
+        },
+        "counterparty": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Party"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "totals": {
+          "$ref": "#/$defs/Totals"
+        }
+      },
+      "required": [
+        "invoice_direction"
+      ],
+      "title": "Derived",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "coordinate_system": {
+          "const": "NORMALIZED_TOP_LEFT",
+          "default": "NORMALIZED_TOP_LEFT",
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Span"
+        },
+        "transform_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transform Id"
+        }
+      },
+      "required": [
+        "source_id",
+        "document_id",
+        "page_index",
+        "bbox"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Annotated[Decimal, BeforeValidator, PlainSerializer, WithJsonSchema]]",
+      "type": "object"
+    },
+    "FieldObject_Annotated_date__BeforeValidator__": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Annotated_date__BeforeValidator__"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Annotated[date, BeforeValidator]]",
+      "type": "object"
+    },
+    "FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____0-9__10____0-9__3__-_0-9__3__________": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____0-9__10____0-9__3__-_0-9__3__________"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$')])]]",
+      "type": "object"
+    },
+    "FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__3________": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__3________"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[A-Z]{3}$')])]]",
+      "type": "object"
+    },
+    "FieldObject_Literal__INPUT____OUTPUT___": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "INPUT",
+                "OUTPUT"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Literal__INPUT____OUTPUT___"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Literal['INPUT', 'OUTPUT']]",
+      "type": "object"
+    },
+    "FieldObject_Literal__TAXABLE_RATE____KCT____KKKNT___": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "TAXABLE_RATE",
+                "KCT",
+                "KKKNT"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Literal__TAXABLE_RATE____KCT____KKKNT___"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Literal['TAXABLE_RATE', 'KCT', 'KKKNT']]",
+      "type": "object"
+    },
+    "FieldObject_str_": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_str_"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[str]",
+      "type": "object"
+    },
+    "FieldStatus": {
+      "enum": [
+        "PRESENT",
+        "MISSING",
+        "AMBIGUOUS",
+        "NOT_PROVIDED_BY_SOURCE",
+        "NOT_APPLICABLE"
+      ],
+      "title": "FieldStatus",
+      "type": "string"
+    },
+    "Invoice": {
+      "additionalProperties": false,
+      "properties": {
+        "number": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_str_"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "series": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_str_"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "issue_date": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_date__BeforeValidator__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Invoice",
+      "type": "object"
+    },
+    "Item": {
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Item Id",
+          "type": "string"
+        },
+        "line_number": {
+          "minimum": 1,
+          "title": "Line Number",
+          "type": "integer"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_str_"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "unit_price": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "net": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "vat_treatment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Literal__TAXABLE_RATE____KCT____KKKNT___"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "vat_rate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "item_id",
+        "line_number"
+      ],
+      "title": "Item",
+      "type": "object"
+    },
+    "Parties": {
+      "additionalProperties": false,
+      "properties": {
+        "seller": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Party"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "buyer": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Party"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Parties",
+      "type": "object"
+    },
+    "Party": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_str_"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "tax_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____0-9__10____0-9__3__-_0-9__3__________"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "address": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_str_"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Party",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Method",
+          "type": "string"
+        },
+        "adapter_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Adapter Version",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "calibration_version": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calibration Version"
+        },
+        "deterministic_policy_version": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deterministic Policy Version"
+        },
+        "review_event_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Event Id"
+        },
+        "derived_from": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Derived From",
+          "type": "array"
+        }
+      },
+      "required": [
+        "method",
+        "adapter_version"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    },
+    "SourceFormat": {
+      "enum": [
+        "PDF",
+        "IMAGE",
+        "INVOICE_XML",
+        "EXCEL_TABULAR",
+        "EXCEL_GENERIC",
+        "BANK_STATEMENT",
+        "ERP_API",
+        "UNKNOWN_XML",
+        "UNKNOWN"
+      ],
+      "title": "SourceFormat",
+      "type": "string"
+    },
+    "StageError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_INPUT",
+            "UNSUPPORTED",
+            "ACCESS_DENIED",
+            "REVISION_CONFLICT",
+            "PROCESSING_ERROR"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "retryable",
+        "message"
+      ],
+      "title": "StageError",
+      "type": "object"
+    },
+    "Totals": {
+      "additionalProperties": false,
+      "properties": {
+        "net": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "vat": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "gross": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldObject_Annotated_Decimal__BeforeValidator__PlainSerializer__WithJsonSchema__"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Totals",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "request_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Request Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "SUCCEEDED",
+        "ERROR"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "data": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CanonicalFinancialRecord"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StageError"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "request_id",
+    "input_sha256",
+    "status"
+  ],
+  "title": "StageResponse[CanonicalFinancialRecord]",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:financial:capture:1.0.0:review_response"
+}

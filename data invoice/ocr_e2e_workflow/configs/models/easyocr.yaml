@@ -1,0 +1,9 @@
+model_id: easyocr
+adapter: easyocr
+output_mode: boxes_and_text
+python: "envs/easyocr/Scripts/python.exe"
+languages: [vi, en]
+gpu: auto
+model_storage_directory: "artifacts/models/easyocr"
+download_enabled: true
+

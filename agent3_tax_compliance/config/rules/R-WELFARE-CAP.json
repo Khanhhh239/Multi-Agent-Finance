@@ -1,0 +1,21 @@
+{
+  "rule_id": "R-WELFARE-CAP",
+  "effective_from": "2018-05-01",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "category",
+      "operator": "==",
+      "value": "welfare"
+    },
+    {
+      "field": "welfare_ytd_spent_with_current",
+      "operator": ">",
+      "value_field": "avg_monthly_salary"
+    }
+  ],
+  "verdict": "FAIL",
+  "fixable": false,
+  "fix_hint": "Phần chi phúc lợi vượt quá 1 tháng lương bình quân thực tế trong năm sẽ không được trừ khi tính thuế TNDN.",
+  "citation": "Thông tư 25/2018/TT-BTC (Sửa đổi, bổ sung Khoản 4 Điều 3 Thông tư 96/2015/TT-BTC)"
+}

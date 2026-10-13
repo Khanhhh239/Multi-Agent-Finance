@@ -1,0 +1,3 @@
+# Historical gates and replay use byte-level SHA-256 fingerprints.
+# Preserve existing bytes on checkout, including pinned historical source.
+* -text

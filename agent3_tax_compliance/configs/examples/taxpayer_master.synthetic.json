@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "demo-v1",
+  "creator": "local-demo",
+  "stage": "synthetic-provisioning",
+  "created_at": "2026-10-12T00:00:00Z",
+  "tenant_id": "demo-tenant",
+  "taxpayer_id": "demo-payer",
+  "revision": 1,
+  "tax_code": "0000000000",
+  "effective_from": "2026-01-01",
+  "effective_to": null,
+  "provenance_reference": "project-generated-placeholder-not-a-real-taxpayer"
+}

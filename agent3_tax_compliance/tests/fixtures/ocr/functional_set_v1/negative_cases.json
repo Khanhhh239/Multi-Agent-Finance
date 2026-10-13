@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "cases": [
+    {
+      "id": "receipt-no-buyer",
+      "family": "RECEIPT",
+      "buyer_status": "ABSENT_CONFIRMED",
+      "expected": "Do not derive buyer from tenant"
+    },
+    {
+      "id": "unannotated-buyer",
+      "buyer_status": "NOT_ANNOTATED",
+      "expected": "Exclude from field accuracy denominator"
+    },
+    {
+      "id": "unreadable-tax-id",
+      "seller_tax_id_status": "UNREADABLE",
+      "expected": "No guessed normalized value"
+    },
+    {
+      "id": "vat-kct-vs-zero",
+      "expected": "KCT/KKKNT not numeric zero; legal category not inferred from rate"
+    },
+    {
+      "id": "missing-page",
+      "source": "syn-08-image",
+      "expected": "Do not claim complete item/total discovery"
+    },
+    {
+      "id": "document-pages",
+      "source": "syn-08-pdf_text",
+      "expected": "Both pages stay in one document and one split"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "plan00-v1",
+  "created_date": "2026-10-11",
+  "synthetic_seed": 20261011,
+  "synthetic_template_groups": 10,
+  "synthetic_split_groups": {"dev": [0,1,2,3,4,5], "calibration": [6,7], "test": [8,9]},
+  "real_data_policy": "INVENTORY_ONLY_PENDING_PERMISSION_AND_TEMPLATE_AUDIT",
+  "annotation_statuses": ["OBSERVED", "ABSENT_CONFIRMED", "UNREADABLE", "NOT_ANNOTATED"],
+  "real_invoice_accuracy_target": null,
+  "auto_acceptance_enabled": false,
+  "font_path": "C:/Windows/Fonts/arial.ttf",
+  "fixture_root": "agent3_tax_compliance/tests/fixtures/ocr/functional_set_v1",
+  "local_metadata_root": "data invoice/plan00_local",
+  "manifest_path": "data invoice/plan00_local/dataset_manifest.jsonl",
+  "benchmark_root": "data invoice/ocr_e2e_workflow"
+}

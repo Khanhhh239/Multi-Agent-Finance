@@ -1,0 +1,25 @@
+schema_version: "1.0"
+seed: 20260922
+paths:
+  recognition_images: "../text_recognition_mcocr_data/text_recognition_mcocr_data"
+  recognition_train_labels: "../text_recognition_train_data.txt"
+  recognition_test_labels: "../text_recognition_val_data.txt"
+  full_images: "../train_images/train_images"
+  field_csv: "../mcocr_train_df.csv"
+  detection_labels: "../kie_data/kie_data/boxes_and_transcripts"
+  detection_images: "../kie_data/kie_data/images"
+  detection_visualization_labels: "../dataset/text_detector/txt"
+  kie_transcripts: "../kie_data/kie_data/boxes_and_transcripts"
+output:
+  manifests: "data/manifests"
+  ground_truth: "data/ground_truth"
+  runs: "runs"
+  reports: "reports"
+evaluation:
+  detection_iou_thresholds: [0.3, 0.5, 0.7]
+  primary_iou_threshold: 0.5
+  soft_text_similarity: 0.8
+  bootstrap_samples: 1000
+  warmup_images: 5
+  blank_fixture_count: 3
+models_dir: "configs/models"

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "checked_date": "2026-10-11",
+  "manifest_rows_validated": 20000,
+  "annotation_files_validated": 20000,
+  "annotation_schema_sha256": "9828b31e1a9d0826580cbda682185a36717dd756cfeaa9ca20547105ed433064",
+  "manifest_schema_sha256": "773588dcb442b9167c6e9d78cdef3063f6ce960c9c964f801061a8cdc9f09d69",
+  "annotation_checksums_sha256": "dbe322a22a889b8fb707d259e4d6898f3344d81521594347edd1bba227861f1b",
+  "manifest_sha256": "9ec844e927430ae44331ad268382bd8798803b72432c674178eced23c9e5ab90",
+  "script_sha256": "7a11bc922fa8b215bed1bfe65729c494b2edc0c019b05da5032b525523a15330",
+  "observed_field_counts_image_variants": {
+    "buyer.name": 14800,
+    "invoice.issue_date": 19596,
+    "totals.gross": 16000,
+    "totals.net": 13594,
+    "totals.vat": 7600,
+    "currency": 12258,
+    "seller.name": 13600,
+    "invoice.number": 17600
+  },
+  "money_representation": "decimal strings",
+  "schema_and_ownership_and_status_and_bounds": "PASS",
+  "human_adjudication": "PENDING",
+  "release_accuracy_eligible": false
+}

@@ -1,0 +1,15 @@
+{
+  "version": "review-v1",
+  "schemas": {
+    "change.schema.json": "c56829038163f88cefb5a5d43bf7a5f6f5c352be4cab7181369e14fa64bb3060",
+    "field_correction.schema.json": "0935e18e2a629c915a67c3f3d916dc2b354bc221674f5d3787870b485867d97b",
+    "correction_command.schema.json": "c9b9e11ff4718df8c11958ef2f7bb0a8f56c5fff0dd4e85db44b5936db4d3026",
+    "correction_event.schema.json": "947fb5b96090d090f5bc821370905e6c7ea24e8178c10cf7b82a1a28951c0d30",
+    "correction_result.schema.json": "dabf50db3303b08c42e00f447e398f688bf124a8fe0e7c70356aed074afe4fbd",
+    "review_task.schema.json": "8a508f62fe37166c01a33a2e1dc8d6ecf91bf58808b2838a015eff004433ad36",
+    "task_page.schema.json": "4a73076eee24b4e2cfa3498fbc4b466ad6553aa1f1e4c24d3aae9111ef7c00d7",
+    "task_action.schema.json": "8161e95b64595f20dc7c0b6f79a865fbcfe5bc3f11d624d55fd14576a49575ba",
+    "evidence_token.schema.json": "e6cb105042fd65d4e853518d6f1545925a1c966c39e3d7a5b4882c79815aeacb",
+    "recovery.schema.json": "3d04271eb5812c4e3a2cd40e75c3cc1b3555227b8aa480786ec080eed458d1ac"
+  }
+}

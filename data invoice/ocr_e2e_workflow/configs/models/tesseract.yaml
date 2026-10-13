@@ -1,0 +1,11 @@
+model_id: tesseract
+adapter: tesseract
+output_mode: boxes_and_text
+python: "envs/tesseract/Scripts/python.exe"
+language: vie+eng
+psm: 6
+tesseract_cmd: "tools/tesseract/tesseract.exe"
+tessdata_dir: "tools/tesseract/tessdata"
+auto_orient: true
+auto_orient_min_area: 250000
+orientation_min_confidence: 2.0

@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "enum": [
+        "SINGLE_CANDIDATE",
+        "REVIEW_SPLIT"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "page_groups": {
+      "default": [],
+      "items": {
+        "items": {
+          "type": "integer"
+        },
+        "type": "array"
+      },
+      "title": "Page Groups",
+      "type": "array"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "reason"
+  ],
+  "title": "Segmentation",
+  "type": "object"
+}

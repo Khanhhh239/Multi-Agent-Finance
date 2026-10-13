@@ -1,0 +1,2936 @@
+{
+  "date": "2026-10-12",
+  "scope": "technical-functional-synthetic-development-only",
+  "independently_reviewed_labels": false,
+  "held_out_test": false,
+  "model_execution": false,
+  "production_accuracy_claim": false,
+  "all_require_review": true,
+  "cohorts": {
+    "native": {
+      "documents": 10,
+      "pages": 11,
+      "labelled_documents": 10,
+      "unlabelled_documents": 0,
+      "labelled_fields": 162,
+      "correct_fields": 162,
+      "wrong_present_fields": 0,
+      "rows_expected": 16,
+      "rows_matched": 16,
+      "per_field": {
+        "seller.name": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "seller.tax_id": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "buyer.name": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "buyer.tax_id": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "invoice.number": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "invoice.issue_date": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "currency": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "items.description": {
+          "labelled": 16,
+          "correct": 16,
+          "wrong_present": 0
+        },
+        "items.net_amount": {
+          "labelled": 16,
+          "correct": 16,
+          "wrong_present": 0
+        },
+        "items.vat_treatment": {
+          "labelled": 16,
+          "correct": 16,
+          "wrong_present": 0
+        },
+        "items.vat_rate": {
+          "labelled": 14,
+          "correct": 14,
+          "wrong_present": 0
+        },
+        "totals.net": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "totals.vat": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "totals.gross": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        }
+      }
+    },
+    "hybrid": {
+      "documents": 5,
+      "pages": 6,
+      "labelled_documents": 3,
+      "unlabelled_documents": 2,
+      "labelled_fields": 49,
+      "correct_fields": 37,
+      "wrong_present_fields": 6,
+      "rows_expected": 5,
+      "rows_matched": 1,
+      "per_field": {
+        "seller.name": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 1
+        },
+        "seller.tax_id": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "buyer.name": {
+          "labelled": 3,
+          "correct": 1,
+          "wrong_present": 2
+        },
+        "buyer.tax_id": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "invoice.number": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 1
+        },
+        "invoice.issue_date": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "currency": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "items.description": {
+          "labelled": 5,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "items.net_amount": {
+          "labelled": 5,
+          "correct": 4,
+          "wrong_present": 1
+        },
+        "items.vat_treatment": {
+          "labelled": 5,
+          "correct": 4,
+          "wrong_present": 0
+        },
+        "items.vat_rate": {
+          "labelled": 4,
+          "correct": 4,
+          "wrong_present": 0
+        },
+        "totals.net": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 1
+        },
+        "totals.vat": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "totals.gross": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        }
+      }
+    },
+    "ocr_backed_labelled_subset": {
+      "documents": 2,
+      "pages": 3,
+      "labelled_documents": 2,
+      "unlabelled_documents": 0,
+      "labelled_fields": 35,
+      "correct_fields": 23,
+      "wrong_present_fields": 6,
+      "rows_expected": 4,
+      "rows_matched": 0,
+      "per_field": {
+        "seller.name": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 1
+        },
+        "seller.tax_id": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 0
+        },
+        "buyer.name": {
+          "labelled": 2,
+          "correct": 0,
+          "wrong_present": 2
+        },
+        "buyer.tax_id": {
+          "labelled": 2,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "invoice.number": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 1
+        },
+        "invoice.issue_date": {
+          "labelled": 2,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "currency": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 0
+        },
+        "items.description": {
+          "labelled": 4,
+          "correct": 1,
+          "wrong_present": 0
+        },
+        "items.net_amount": {
+          "labelled": 4,
+          "correct": 3,
+          "wrong_present": 1
+        },
+        "items.vat_treatment": {
+          "labelled": 4,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "items.vat_rate": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "totals.net": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 1
+        },
+        "totals.vat": {
+          "labelled": 2,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "totals.gross": {
+          "labelled": 2,
+          "correct": 2,
+          "wrong_present": 0
+        }
+      }
+    }
+  },
+  "outcomes": [
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-pdf_text.pdf",
+      "input_sha256": "4567b56403e37f389e1ebe5985dfab92186c8384b5018f8dde74d7ef600b51fe",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-f48d95020cfe42ccb8099d3d3d487d85.cfr.json",
+      "artifact_sha256": "2f164b1402195f3ba9e50d2b596f4cbec4f8921497ab46b99f35afe22adf3516",
+      "normalized_input_sha256": "a3d009dad40b452322dd27aea8bb8cdd9ab32e71e230767ff0bae8f1e628c9d2",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-ee01cfd77ed04497896d5d3b57531c6f",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-5ca96e33b8b44670bdf43d1a8ddf999f",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 00",
+            "predicted": "CÔNG TY GIẢ LẬP 00",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/000",
+            "predicted": "DEMO/000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.description",
+            "expected": "HÀNG GIẢ LẬP 0/0",
+            "predicted": "HÀNG GIẢ LẬP 0/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.net_amount",
+            "expected": "100000",
+            "predicted": "100000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "100000",
+            "predicted": "100000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "8000",
+            "predicted": "8000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "108000",
+            "predicted": "108000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 1,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-01-pdf_text.pdf",
+      "input_sha256": "c0c83523056ecfbc2fc5866482addd5bacc54efbb1ac1a2a7891039c19e3834b",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-be715cd9a79a45d2883cde4a76f6c233.cfr.json",
+      "artifact_sha256": "a627f19fcbb048083b442c0a88d94850eaa069c11fe01115aefdee2993ecbb7b",
+      "normalized_input_sha256": "7547d4716f2aa3957021277177d2f2285669f1a65c4dd71487bcfb15073ac025",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-db67eb04da464452a785c8321c091e54",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-9328071a6972474ea2e0556f7dc7bc3e",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 01",
+            "predicted": "CÔNG TY GIẢ LẬP 01",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/001",
+            "predicted": "DEMO/001",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-1-0.description",
+            "expected": "HÀNG GIẢ LẬP 1/0",
+            "predicted": "HÀNG GIẢ LẬP 1/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-1-0.net_amount",
+            "expected": "200000",
+            "predicted": "200000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-1-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-1-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "200000",
+            "predicted": "200000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "16000",
+            "predicted": "16000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "216000",
+            "predicted": "216000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 1,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-02-pdf_text.pdf",
+      "input_sha256": "df8ef2c4e41cebed4178bb7856a91bd06252cd17ece2a5e5aa867300ce2d7990",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-aab41a310364441eb0fc453e7599d392.cfr.json",
+      "artifact_sha256": "19895e77901a6b0e795dc0fde3830ee696f37acc7d795b26867d405e3f9b90ff",
+      "normalized_input_sha256": "97a5403bc53b02dcc770bd2a9871d04a99daee6390bee60cd77f98948963ed7e",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-24d7a457162c4bfba0ed8b586d654924",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-368b22dc8aff4dcd8eefbf9e078acad0",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 02",
+            "predicted": "CÔNG TY GIẢ LẬP 02",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/002",
+            "predicted": "DEMO/002",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-2-0.description",
+            "expected": "HÀNG GIẢ LẬP 2/0",
+            "predicted": "HÀNG GIẢ LẬP 2/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-2-0.net_amount",
+            "expected": "300000",
+            "predicted": "300000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-2-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-2-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "300000",
+            "predicted": "300000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "24000",
+            "predicted": "24000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "324000",
+            "predicted": "324000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 1,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-03-pdf_text.pdf",
+      "input_sha256": "1affab769dc6e9e148926186074c9ada8cd2ab16d187add9e59cb32dee18736b",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-935bb6081712416cabf5e4f1beac5ea6.cfr.json",
+      "artifact_sha256": "24be4428bf598991da421080ed4b298658e2d774b36b7dd943c2e07814720159",
+      "normalized_input_sha256": "db965fdbfd59ca35a2c614adeb68e99bbae85cdac9fc6525d9623d6443635290",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-ed110405e3bc441586d530aa26dffd41",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-2708e99b77bb4b67bd5d2a4c6b986d0f",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 03",
+            "predicted": "CÔNG TY GIẢ LẬP 03",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/003",
+            "predicted": "DEMO/003",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-3-0.description",
+            "expected": "HÀNG GIẢ LẬP 3/0",
+            "predicted": "HÀNG GIẢ LẬP 3/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-3-0.net_amount",
+            "expected": "400000",
+            "predicted": "400000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-3-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-3-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "400000",
+            "predicted": "400000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "32000",
+            "predicted": "32000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "432000",
+            "predicted": "432000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 1,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-04-pdf_text.pdf",
+      "input_sha256": "5f6747f9e46f884c83c53cb89ba64a8a9ef7535ea00ba00cb38fe6269015d840",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-ebbb28f78ff340288ee1462bfc7fe2f2.cfr.json",
+      "artifact_sha256": "1c9041613ca8460138cd85dbb6f333114be91770d3632fffcaa9412b9943e237",
+      "normalized_input_sha256": "2eff5aa213ee6ee0cee6f88b277cbc97bee0293d7680c7d46a59075dfe0e1ba5",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-389faa87a9164451b68449c7a1984b50",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-d67ec17207df4bea9ebfbb1c10727520",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 04",
+            "predicted": "CÔNG TY GIẢ LẬP 04",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/004",
+            "predicted": "DEMO/004",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-4-0.description",
+            "expected": "HÀNG GIẢ LẬP 4/0",
+            "predicted": "HÀNG GIẢ LẬP 4/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-4-0.net_amount",
+            "expected": "500000",
+            "predicted": "500000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-4-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-4-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "500000",
+            "predicted": "500000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "40000",
+            "predicted": "40000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "540000",
+            "predicted": "540000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 1,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-05-pdf_text.pdf",
+      "input_sha256": "77f3bf47d56d8993f831890052c887e1f919f2d5b703f3a92458e81d26263963",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-18b6a68843e945a8be816d120d0c9b20.cfr.json",
+      "artifact_sha256": "0614b7dd057cb2d5168a17de6eee2e51bd77417aa2c16bb677c7e3c7d6fa7dea",
+      "normalized_input_sha256": "0df462fc6fc7b6aa5001de1f340a529e59363feb8940c0384526b4edbf893923",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-16dd29cfb69a4a41b9274759c6c5bbc2",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-c7b9972822724ff8a252ee38536b7362",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 05",
+            "predicted": "CÔNG TY GIẢ LẬP 05",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/005",
+            "predicted": "DEMO/005",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-5-0.description",
+            "expected": "HÀNG GIẢ LẬP 5/0",
+            "predicted": "HÀNG GIẢ LẬP 5/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-5-0.net_amount",
+            "expected": "600000",
+            "predicted": "600000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-5-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-5-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "600000",
+            "predicted": "600000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "48000",
+            "predicted": "48000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "648000",
+            "predicted": "648000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 1,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-06-pdf_text.pdf",
+      "input_sha256": "7557c9f4945b5c409d090b321a0e712677e858b17ecbbdc34bed440fd81fac1d",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-34e8a19777c4493194f0249eedb1b9e2.cfr.json",
+      "artifact_sha256": "dadfabc521ed8bda27f91fe1b6cff7410fe62722063a8b02542363d00d990eef",
+      "normalized_input_sha256": "f3181de95edae00158ba616ee82c5f4bbcfdce18ec69b6a11b6ca3ddc2affc60",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-9d83074e54d64cc19d65bc83db0c25bf",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-b3c97b40cf504dd8a1a98f5751c800d8",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 06",
+            "predicted": "CÔNG TY GIẢ LẬP 06",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/006",
+            "predicted": "DEMO/006",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-6-0.description",
+            "expected": "HÀNG GIẢ LẬP 6/0",
+            "predicted": "HÀNG GIẢ LẬP 6/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-6-0.net_amount",
+            "expected": "700000",
+            "predicted": "700000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-6-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-6-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "700000",
+            "predicted": "700000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "56000",
+            "predicted": "56000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "756000",
+            "predicted": "756000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 1,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-07-pdf_text.pdf",
+      "input_sha256": "b473fca82dcc60ab3bce2652aafc455a0636ac97de785fb5b44d3bfd4f5a66a2",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-80a283c4cad54684acb23dd29840b673.cfr.json",
+      "artifact_sha256": "3b5abf92f8266ffdb4921b397324247e7de97fa6d3041b7040825d4cf4c7fb24",
+      "normalized_input_sha256": "cbfc74dba864e9e64672f310db5102353aaf831d7a21dafecd782f2a19e1e4a6",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-3345bda9a2c0449fbd7d9101b5b53ce9",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-cf9d4391c8354181b902a521da6d29db",
+      "items": 3,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 42,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 07",
+            "predicted": "CÔNG TY GIẢ LẬP 07",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/007",
+            "predicted": "DEMO/007",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-0.description",
+            "expected": "HÀNG GIẢ LẬP 7/0",
+            "predicted": "HÀNG GIẢ LẬP 7/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-0.net_amount",
+            "expected": "800000",
+            "predicted": "800000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-1.description",
+            "expected": "HÀNG GIẢ LẬP 7/1",
+            "predicted": "HÀNG GIẢ LẬP 7/1",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-1.net_amount",
+            "expected": "810000",
+            "predicted": "810000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-1.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-1.vat_rate",
+            "expected": "0",
+            "predicted": "0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-2.description",
+            "expected": "HÀNG GIẢ LẬP 7/2",
+            "predicted": "HÀNG GIẢ LẬP 7/2",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-2.net_amount",
+            "expected": "820000",
+            "predicted": "820000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-7-2.vat_treatment",
+            "expected": "KCT",
+            "predicted": "KCT",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "2430000",
+            "predicted": "2430000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "64000",
+            "predicted": "64000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "2494000",
+            "predicted": "2494000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 3,
+        "rows_matched_description_and_net": 3,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 2,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-08-pdf_text.pdf",
+      "input_sha256": "fe6b307f7e484cf566f22cd3490fb00335cc4f161090df7b5d6b3fa913b33230",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT",
+        "NATIVE_TEXT"
+      ],
+      "pages": 2,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-a970012f4ec444609ae1b81af78e398f.cfr.json",
+      "artifact_sha256": "3076cfc94f6111056f8606edfb0af21292170a7676a9afb5c1dcaf6565e7d618",
+      "normalized_input_sha256": "29d72edce4bc912755a9078656f8154675942eab241be1828004abd9da550c1e",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-6dc1798620c8439d862a12561770162d",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-aebd2001636e41b68d910c457b61d9a7",
+      "items": 3,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 42,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 08",
+            "predicted": "CÔNG TY GIẢ LẬP 08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/008",
+            "predicted": "DEMO/008",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-0.description",
+            "expected": "HÀNG GIẢ LẬP 8/0",
+            "predicted": "HÀNG GIẢ LẬP 8/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-0.net_amount",
+            "expected": "900000",
+            "predicted": "900000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-1.description",
+            "expected": "HÀNG GIẢ LẬP 8/1",
+            "predicted": "HÀNG GIẢ LẬP 8/1",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-1.net_amount",
+            "expected": "910000",
+            "predicted": "910000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-1.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-1.vat_rate",
+            "expected": "0",
+            "predicted": "0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-2.description",
+            "expected": "HÀNG GIẢ LẬP 8/2",
+            "predicted": "HÀNG GIẢ LẬP 8/2",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-2.net_amount",
+            "expected": "920000",
+            "predicted": "920000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-2.vat_treatment",
+            "expected": "KKKNT",
+            "predicted": "KKKNT",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "2730000",
+            "predicted": "2730000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "72000",
+            "predicted": "72000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "2802000",
+            "predicted": "2802000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 3,
+        "rows_matched_description_and_net": 3,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 2,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-09-pdf_text.pdf",
+      "input_sha256": "dfbd3d331a308c6f28bf7fe9232b84c164af33c8d9bafb6f286d43d40e1fc039",
+      "ocr_model_id": "tesseract",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\native-ingestion-e4a7f635bc0e4338886b0041e72e181b.cfr.json",
+      "artifact_sha256": "077163e1312e7327331dda491ffd1f1efbee26d36e15f441e789cf68aa695f72",
+      "normalized_input_sha256": "5654db686a9208d20ee4f7cd4a25d48d4d36b13e5843f6bc529c7b0fcb735296",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-143b9d9f51ca44029981342b9456820c",
+      "ocr_config_key": "2353b91e2de42fa5735f900cc72cd80752fecca7cfeac4bfc0f24a06a1ba40ad",
+      "record_id": "cfr-bd31a12f687f49218fcf5b1a0e61d732",
+      "items": 3,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 44,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 09",
+            "predicted": "CÔNG TY GIẢ LẬP 09",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/009",
+            "predicted": "DEMO/009",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-0.description",
+            "expected": "HÀNG GIẢ LẬP 9/0",
+            "predicted": "HÀNG GIẢ LẬP 9/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-0.net_amount",
+            "expected": "1000000",
+            "predicted": "1000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-1.description",
+            "expected": "HÀNG GIẢ LẬP 9/1",
+            "predicted": "HÀNG GIẢ LẬP 9/1",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-1.net_amount",
+            "expected": "1010000",
+            "predicted": "1010000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-1.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-1.vat_rate",
+            "expected": "0",
+            "predicted": "0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-2.description",
+            "expected": "HÀNG GIẢ LẬP 9/2",
+            "predicted": "HÀNG GIẢ LẬP 9/2",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-2.net_amount",
+            "expected": "1020000",
+            "predicted": "1020000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-2.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-9-2.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "3030000",
+            "predicted": "3030000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "161600",
+            "predicted": "161600",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "3191600",
+            "predicted": "3191600",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 3,
+        "rows_matched_description_and_net": 3,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-image.png",
+      "input_sha256": "4a818ecc9bbd2486490eddaf1355f872e1ed57f8a69cf72b5a767a64b6f39040",
+      "ocr_model_id": "ppocrv6_vietocr",
+      "routes": [
+        "OCR"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\hybrid-ingestion-16e9489ac2624728a0d12eb2328ce902.cfr.json",
+      "artifact_sha256": "ca99036bd1425dcde4990b856ec2c19c041cdb4338d6798e62b5d07bfabea25a",
+      "normalized_input_sha256": "450329828aceeeeb7b22acd92d676d039a707ab4aa0ec42b046395aaebed2622",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-22b59970a3c04e01b352720098442677",
+      "ocr_config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "record_id": "cfr-a47c57d0df0a4f0c89ba0213a92c17f0",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 00",
+            "predicted": "CÔNG TY GIẢ LẬP 00",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIÁ LẬP",
+            "status": "PRESENT",
+            "correct": false,
+            "wrong_present": true,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/000",
+            "predicted": "DEMO/000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.description",
+            "expected": "HÀNG GIẢ LẬP 0/0",
+            "predicted": "HÀNG GIẢ LẬP 0/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.net_amount",
+            "expected": "100000",
+            "predicted": "1000000",
+            "status": "PRESENT",
+            "correct": false,
+            "wrong_present": true,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "items.demo-item-0-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "100000",
+            "predicted": "1000000",
+            "status": "PRESENT",
+            "correct": false,
+            "wrong_present": true,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "totals.vat",
+            "expected": "8000",
+            "predicted": "8000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "108000",
+            "predicted": "108000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 0,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-pdf_text.pdf",
+      "input_sha256": "4567b56403e37f389e1ebe5985dfab92186c8384b5018f8dde74d7ef600b51fe",
+      "ocr_model_id": "ppocrv6_vietocr",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\hybrid-ingestion-f48d95020cfe42ccb8099d3d3d487d85.cfr.json",
+      "artifact_sha256": "fa3782018311215823f50a3e6383a3b2a07f55f8ed3561c382621cbb6066a369",
+      "normalized_input_sha256": "7a7efa1fbd69e1333f927ab5959686a714fdd915fb307bb41cd80f6f48f0ce58",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-ae007e5310cc48269962a48d4ad47615",
+      "ocr_config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "record_id": "cfr-8acd386078a3405fa5dc76082868e860",
+      "items": 1,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 28,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 00",
+            "predicted": "CÔNG TY GIẢ LẬP 00",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": "0000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIẢ LẬP",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/000",
+            "predicted": "DEMO/000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": "VND",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.description",
+            "expected": "HÀNG GIẢ LẬP 0/0",
+            "predicted": "HÀNG GIẢ LẬP 0/0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.net_amount",
+            "expected": "100000",
+            "predicted": "100000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-0-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.net",
+            "expected": "100000",
+            "predicted": "100000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "8000",
+            "predicted": "8000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "108000",
+            "predicted": "108000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 1,
+        "rows_matched_description_and_net": 1,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 1,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-08-pdf_image.pdf",
+      "input_sha256": "535f0caaae655f74e849490743ca6c4a87efe1659182e797b14fb20e4cccaaee",
+      "ocr_model_id": "ppocrv6_vietocr",
+      "routes": [
+        "OCR",
+        "OCR"
+      ],
+      "pages": 2,
+      "artifact_path": "data invoice\\plan04_local\\hybrid-ingestion-0ff29ac61fcc4130a4e15c5ba8412cfa.cfr.json",
+      "artifact_sha256": "050e91a7770ac2a02e6ccc8fc32cafcc12cd8f2840de97eaafef24849deb78ea",
+      "normalized_input_sha256": "996f89aed54fc90640585a9139a0970f50995de9db95dc00dc0ca3096564c1c2",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-37f12c4ec4a74746a56a2f954dd774df",
+      "ocr_config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "record_id": "cfr-dab93b0ff7854fa98f6e5893190a439b",
+      "items": 3,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "UNPARSEABLE_FIELD",
+        "UNPARSEABLE_FIELD",
+        "UNPARSEABLE_VAT",
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 30,
+      "idempotence_and_pure_replay": true,
+      "evaluation": {
+        "fields": [
+          {
+            "field": "seller.name",
+            "expected": "CÔNG TY GIẢ LẬP 08",
+            "predicted": "CÔNG TY GIÁ LẬP OB TẾ",
+            "status": "PRESENT",
+            "correct": false,
+            "wrong_present": true,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "seller.tax_id",
+            "expected": "0000000000",
+            "predicted": null,
+            "status": "MISSING",
+            "correct": false,
+            "wrong_present": false,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "buyer.name",
+            "expected": "ĐƠN VỊ MUA GIẢ LẬP",
+            "predicted": "ĐƠN VỊ MUA GIÁ LẬP",
+            "status": "PRESENT",
+            "correct": false,
+            "wrong_present": true,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "buyer.tax_id",
+            "expected": "0000000000000",
+            "predicted": "0000000000000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "invoice.number",
+            "expected": "DEMO/008",
+            "predicted": "DEMOVOOB",
+            "status": "PRESENT",
+            "correct": false,
+            "wrong_present": true,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "invoice.issue_date",
+            "expected": "2026-10-11",
+            "predicted": "2026-10-11",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "currency",
+            "expected": "VND",
+            "predicted": null,
+            "status": "MISSING",
+            "correct": false,
+            "wrong_present": false,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "items.demo-item-8-0.description",
+            "expected": "HÀNG GIẢ LẬP 8/0",
+            "predicted": null,
+            "status": "MISSING",
+            "correct": false,
+            "wrong_present": false,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "items.demo-item-8-0.net_amount",
+            "expected": "900000",
+            "predicted": "900000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-0.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-0.vat_rate",
+            "expected": "0.08",
+            "predicted": "0.08",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-1.description",
+            "expected": "HÀNG GIẢ LẬP 8/1",
+            "predicted": null,
+            "status": "MISSING",
+            "correct": false,
+            "wrong_present": false,
+            "diagnostic": "PARSER",
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-1.net_amount",
+            "expected": "910000",
+            "predicted": "910000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-1.vat_treatment",
+            "expected": "TAXABLE_RATE",
+            "predicted": "TAXABLE_RATE",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-1.vat_rate",
+            "expected": "0",
+            "predicted": "0",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-2.description",
+            "expected": "HÀNG GIẢ LẬP 8/2",
+            "predicted": null,
+            "status": "MISSING",
+            "correct": false,
+            "wrong_present": false,
+            "diagnostic": "PARSER",
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-2.net_amount",
+            "expected": "920000",
+            "predicted": "920000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "items.demo-item-8-2.vat_treatment",
+            "expected": "KKKNT",
+            "predicted": null,
+            "status": "MISSING",
+            "correct": false,
+            "wrong_present": false,
+            "diagnostic": "OCR_TEXT_OR_LAYOUT_REQUIRES_INSPECTION",
+            "raw_value_in_gt_region": false
+          },
+          {
+            "field": "totals.net",
+            "expected": "2730000",
+            "predicted": "2730000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.vat",
+            "expected": "72000",
+            "predicted": "72000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          },
+          {
+            "field": "totals.gross",
+            "expected": "2802000",
+            "predicted": "2802000",
+            "status": "PRESENT",
+            "correct": true,
+            "wrong_present": false,
+            "diagnostic": null,
+            "raw_value_in_gt_region": true
+          }
+        ],
+        "rows_expected": 3,
+        "rows_matched_description_and_net": 0,
+        "not_evaluated_by_status": {
+          "NOT_ANNOTATED": 2,
+          "ABSENT_CONFIRMED": 0,
+          "UNREADABLE": 0
+        },
+        "row_alignment": "Generator row order for per-field diagnostics; unordered exact description+net multiset for row recall."
+      }
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "data invoice\\plan02_local\\functional_set_v2\\hybrid.pdf",
+      "input_sha256": "921db07080c986c930c68e874459a55cd1033e228d5247d92064414310c6505e",
+      "ocr_model_id": "ppocrv6_vietocr",
+      "routes": [
+        "HYBRID"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\hybrid-ingestion-319f8a601b574fa8a95ba22343d3b466.cfr.json",
+      "artifact_sha256": "2b9e97cf8e6312ac0e3e39037bf4fc39e96d9b11c416e8ab6c69c098ab3bcc8c",
+      "normalized_input_sha256": "aa18c1181440f88960d3b6beef468eef0128d7e0bed897e2fe40e1074f97b752",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-4c42f4e0e42442d192a23acb06104010",
+      "ocr_config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "record_id": "cfr-01a9a11e01464b3a94d7a85e01e588ff",
+      "items": 0,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "TABLE_NOT_DISCOVERED",
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 0,
+      "idempotence_and_pure_replay": true,
+      "evaluation": null
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "data invoice\\plan02_local\\functional_set_v2\\rotation-90.pdf",
+      "input_sha256": "f7c7c5ab975402f7cdefc9ef0fa35c77e543139e34a6c14bb45a1bbd75e375e7",
+      "ocr_model_id": "ppocrv6_vietocr",
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "pages": 1,
+      "artifact_path": "data invoice\\plan04_local\\hybrid-ingestion-c0910574bd0b4354a718ee55e5a30e1f.cfr.json",
+      "artifact_sha256": "4eb6119dfa14d50f118df7f15f1d580bcf4b5261e61199ab48b1f386aa2323b1",
+      "normalized_input_sha256": "b95b8827cb646215593343650e4d300b71ec78f9d007503675078d054dafedf1",
+      "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+      "artifact_id": "extract-408c743ff25948d1b702ebf535ef89c6",
+      "ocr_config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "record_id": "cfr-272f47d95c7a40dfaa80f8ef63dbd907",
+      "items": 0,
+      "discovery": "UNKNOWN",
+      "review_required": true,
+      "issues": [
+        "TABLE_NOT_DISCOVERED",
+        "ITEM_DISCOVERY_UNKNOWN",
+        "UNKNOWN_DIRECTION"
+      ],
+      "evidence_regions_resolved": 0,
+      "idempotence_and_pure_replay": true,
+      "evaluation": null
+    }
+  ],
+  "failures_count": 12,
+  "limitations": [
+    "Generated labels, not independent Vietnamese tax invoice labels.",
+    "Native and hybrid cohorts overlap logical documents; do not pool as independent accuracy samples.",
+    "No explicit row count in original fixtures: discovery remains UNKNOWN even when rows match.",
+    "Unknown VAT legal category is retained; taxonomy is outside PLAN_04.",
+    "OCR/parser attribution is a region-text diagnostic; label/role/layout failures require manual inspection.",
+    "Every CFR requires review; wrong PRESENT values are not accepted financial decisions."
+  ]
+}

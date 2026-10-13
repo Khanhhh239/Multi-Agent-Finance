@@ -1,0 +1,191 @@
+{
+  "schema_version": "1.0.0",
+  "checked_date": "2026-10-11",
+  "dataset_version": "fatura-mapped-v1",
+  "config_sha256": "d9134357eca2c20acaf4a01d55a471793db172b1308a31637773eaf36c946f0a",
+  "script_sha256": "033eb4c2612f86bdcd1dc57248dd72580c08e6cc26554a01c027e8f4b50d753d",
+  "manifest_sha256": "9ec844e927430ae44331ad268382bd8798803b72432c674178eced23c9e5ab90",
+  "split_manifest_sha256": "4793d557b00c972f501008c42a4da54da84b227524377759cca8fb4a7f7fb819",
+  "provenance_sha256": "ecdf56863396fb806d4f7e7fe190756ed4f8f6a1ebca12dd50cc110ffec0ec9d",
+  "logical_documents": 10000,
+  "image_variants": 20000,
+  "annotations": 20000,
+  "template_split_counts": {
+    "dev": 30,
+    "calibration": 10,
+    "test": 10
+  },
+  "logical_split_counts": {
+    "dev": 6000,
+    "test": 2000,
+    "calibration": 2000
+  },
+  "pilot_logical_documents": 50,
+  "pilot_templates": 25,
+  "pilot_dev_only": true,
+  "hf_array_length_errors": 0,
+  "exact_image_hash_groups": 0,
+  "exact_hash_groups_crossing_splits": 0,
+  "mapping_issue_counts": {
+    "NO_SUPPORTED_SEMANTIC_LABEL": 19203,
+    "GSTIN_NOT_VIETNAMESE_TAX_ID": 20000,
+    "NO_INDEPENDENT_LEGAL_TAXONOMY_EVIDENCE": 10000,
+    "TABLE_REGION_ONLY_NO_VERIFIED_ROW_LABELS": 10000,
+    "NORMALIZATION_OR_GEOMETRY_UNRESOLVED": 3273
+  },
+  "field_coverage": {
+    "dev": {
+      "seller.name": {
+        "OBSERVED": 3600,
+        "NOT_ANNOTATED": 2400
+      },
+      "buyer.name": {
+        "OBSERVED": 4800,
+        "NOT_ANNOTATED": 1200
+      },
+      "invoice.issue_date": {
+        "OBSERVED": 5800,
+        "NOT_ANNOTATED": 200
+      },
+      "invoice.number": {
+        "OBSERVED": 4800,
+        "NOT_ANNOTATED": 1200
+      },
+      "totals.gross": {
+        "OBSERVED": 4800,
+        "NOT_ANNOTATED": 1200
+      },
+      "totals.net": {
+        "OBSERVED": 4197,
+        "NOT_ANNOTATED": 1803
+      },
+      "totals.vat": {
+        "OBSERVED": 2600,
+        "NOT_ANNOTATED": 3400
+      },
+      "currency": {
+        "OBSERVED": 3718,
+        "NOT_ANNOTATED": 2282
+      },
+      "seller.tax_id": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 6000
+      },
+      "buyer.tax_id": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 6000
+      },
+      "vat_category": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 6000
+      },
+      "items": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 6000
+      }
+    },
+    "calibration": {
+      "seller.name": {
+        "OBSERVED": 1800,
+        "NOT_ANNOTATED": 200
+      },
+      "buyer.name": {
+        "OBSERVED": 1000,
+        "NOT_ANNOTATED": 1000
+      },
+      "invoice.issue_date": {
+        "OBSERVED": 1999,
+        "NOT_ANNOTATED": 1
+      },
+      "invoice.number": {
+        "OBSERVED": 2000,
+        "NOT_ANNOTATED": 0
+      },
+      "totals.gross": {
+        "OBSERVED": 1800,
+        "NOT_ANNOTATED": 200
+      },
+      "totals.net": {
+        "OBSERVED": 1200,
+        "NOT_ANNOTATED": 800
+      },
+      "totals.vat": {
+        "OBSERVED": 800,
+        "NOT_ANNOTATED": 1200
+      },
+      "currency": {
+        "OBSERVED": 1209,
+        "NOT_ANNOTATED": 791
+      },
+      "seller.tax_id": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 2000
+      },
+      "buyer.tax_id": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 2000
+      },
+      "vat_category": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 2000
+      },
+      "items": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 2000
+      }
+    },
+    "test": {
+      "seller.name": {
+        "OBSERVED": 1400,
+        "NOT_ANNOTATED": 600
+      },
+      "buyer.name": {
+        "OBSERVED": 1600,
+        "NOT_ANNOTATED": 400
+      },
+      "invoice.issue_date": {
+        "OBSERVED": 1999,
+        "NOT_ANNOTATED": 1
+      },
+      "invoice.number": {
+        "OBSERVED": 2000,
+        "NOT_ANNOTATED": 0
+      },
+      "totals.gross": {
+        "OBSERVED": 1400,
+        "NOT_ANNOTATED": 600
+      },
+      "totals.net": {
+        "OBSERVED": 1400,
+        "NOT_ANNOTATED": 600
+      },
+      "totals.vat": {
+        "OBSERVED": 400,
+        "NOT_ANNOTATED": 1600
+      },
+      "currency": {
+        "OBSERVED": 1202,
+        "NOT_ANNOTATED": 798
+      },
+      "seller.tax_id": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 2000
+      },
+      "buyer.tax_id": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 2000
+      },
+      "vat_category": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 2000
+      },
+      "items": {
+        "OBSERVED": 0,
+        "NOT_ANNOTATED": 2000
+      }
+    }
+  },
+  "accuracy_evaluation_eligible": false,
+  "independent_review": "PENDING",
+  "training_or_ocr_run": false
+}

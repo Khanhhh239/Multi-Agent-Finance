@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "checked_date": "2026-10-11",
+  "reviewer": "Codex (AI visual inspection; not independent human adjudication)",
+  "reviewed_white_templates": [1,3,4,7,9,10,11,13,16,17,18,20,27,29,30,31,32,35,36,37,41,45,46,47,50],
+  "reviewed_instances_per_template": [0,100],
+  "visual_review_scope": "Visible header roles, date versus due date, invoice number versus PO number, printed monetary values/currency, presence of tables; not exhaustive character or table-cell transcription",
+  "colored_variants_visually_reviewed": false,
+  "independent_human_review": "PENDING",
+  "findings": [
+    {"id":"INVOICE_ID_PREFIX", "status":"FIXED_AND_REGRESSION_TESTED", "detail":"Remove label ID after INVOICE; preserve the invoice identifier and leading zeros."},
+    {"id":"SHIP_TO_NOT_BUYER", "status":"PRESERVED_AS_UNANNOTATED", "templates":[18,30], "detail":"SHIP_TO only is not sufficient to label billed buyer; keep NOT_ANNOTATED."},
+    {"id":"AMOUNT_DUE_NOT_TOTAL", "status":"PRESERVED_AS_UNANNOTATED", "templates":[36,37], "detail":"Do not substitute AMOUNT_DUE or DUE_AMOUNT for a missing TOTAL label."},
+    {"id":"MISSING_CORE_HEADERS", "status":"PARTIAL_LABELS_DISCLOSED", "templates":[1,4,11,13,20,27,30,37,50], "detail":"No fabrication of seller, buyer, date or invoice number when the supported source label is absent."},
+    {"id":"AMBIGUOUS_CURRENCY", "status":"PRESERVED_AS_UNANNOTATED", "detail":"Dollar sign alone does not establish ISO currency; do not infer from address or language."},
+    {"id":"PRINTED_VALUES_NOT_LEGAL_TRUTH", "status":"RAW_VALUES_PRESERVED", "detail":"Some dates and arithmetic appear inconsistent in generated documents; mapping reflects printed values and does not repair source or assert compliance."}
+  ],
+  "visually_read_expected_fields": {
+    "fatura-T03-I000": {"invoice.number":"INV16291505", "totals.gross":"1377.77", "buyer.name":"Sarah Ross"},
+    "fatura-T16-I000": {"invoice.number":"INV/27-92/824", "invoice.issue_date":"2012-03-12"},
+    "fatura-T18-I000": {"invoice.number":"9203-553", "buyer.name":null},
+    "fatura-T27-I000": {"invoice.number":"INV/55-97/351", "buyer.name":"Jason Roberts", "totals.gross":null},
+    "fatura-T32-I000": {"invoice.number":"INV52959005", "totals.gross":"1162.88"},
+    "fatura-T41-I000": {"invoice.number":"8020-685", "buyer.name":"Leroy Mcclain"},
+    "fatura-T45-I000": {"invoice.number":"INV00871889", "totals.gross":"543.81"},
+    "fatura-T47-I000": {"invoice.number":"INV/56-79/422", "totals.gross":"348.15"},
+    "fatura-T07-I100": {"invoice.number":"INV07502768", "buyer.name":"Dr. Sarah Waters"},
+    "fatura-T29-I100": {"invoice.number":"6605-740", "totals.gross":"550.90"},
+    "fatura-T32-I100": {"invoice.number":"INV31350496", "totals.gross":"393.92"},
+    "fatura-T35-I100": {"invoice.number":"8063-800", "buyer.name":"Dana Mendez"},
+    "fatura-T36-I100": {"invoice.number":"INV/55-49/274", "totals.gross":null},
+    "fatura-T41-I100": {"invoice.number":"2Y5M3d-170", "totals.gross":"885.65"},
+    "fatura-T45-I100": {"invoice.number":"7Y5M8d-781", "totals.gross":"616.81"},
+    "fatura-T46-I100": {"invoice.number":"8157-377", "buyer.name":"Kimberly Zamora"},
+    "fatura-T27-I100": {"buyer.name":"Gregory Martin", "totals.gross":null},
+    "fatura-T30-I100": {"buyer.name":null, "totals.gross":null},
+    "fatura-T50-I100": {"buyer.name":"George Scott", "invoice.issue_date":"2015-11-09", "totals.gross":"278.90"}
+  }
+}

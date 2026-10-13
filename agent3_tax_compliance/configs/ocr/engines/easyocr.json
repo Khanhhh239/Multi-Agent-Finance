@@ -1,0 +1,13 @@
+{
+  "profile_version":"easyocr-runtime-v1",
+  "model_id":"easyocr",
+  "adapter":"easyocr",
+  "interpreter":"envs/easyocr/Scripts/python.exe",
+  "distributions":["easyocr","torch","torchvision","Pillow","numpy"],
+  "source_files":["src/adapters/easyocr_adapter.py"],
+  "assets":["artifacts/models/easyocr/craft_mlt_25k.pth","artifacts/models/easyocr/latin_g2.pth"],
+  "environment":{"OMP_NUM_THREADS":"1","MKL_NUM_THREADS":"1","HF_HUB_OFFLINE":"1"},
+  "adapter_config":{"languages":["vi","en"],"gpu":false,"model_storage_directory":"artifacts/models/easyocr","download_enabled":false},
+  "path_parameters":["model_storage_directory"],
+  "max_processes":2
+}

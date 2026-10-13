@@ -1,0 +1,628 @@
+{
+  "date": "2026-10-13",
+  "gate_scope": "technical-functional-manual-review",
+  "production_accuracy_gate": "NOT_EVALUATED",
+  "frozen_release_test_executed": false,
+  "calibration_fit_on_development": false,
+  "documents": 15,
+  "pages": 17,
+  "review_rate": 1.0,
+  "accepted_fields": 0,
+  "accepted_field_precision": null,
+  "false_acceptances_in_development": 0,
+  "known_wrong_present_fields": 6,
+  "known_wrong_present_auto_accepted": 0,
+  "eligible_calibration_samples": 0,
+  "latency_ms": {
+    "minimum": 15.215100000204984,
+    "mean": 30.4563733341638,
+    "maximum": 38.30549999838695,
+    "scope": "quality repository only; excludes OCR; development fixture timing"
+  },
+  "score_rows": 211,
+  "score_kind_counts": {
+    "DETECTION": 58
+  },
+  "policy": {
+    "version": "quality-manual-v1",
+    "auto_accept_enabled": false,
+    "threshold_status": "TBD_INSUFFICIENT_DATA",
+    "threshold_owner": "UNASSIGNED_REQUIRES_BUSINESS_OWNER",
+    "thresholds": {
+      "tax_id": null,
+      "issue_date": null,
+      "money": null,
+      "other": null
+    },
+    "fidelity_policies": [],
+    "profiles": [
+      {
+        "version": "invoice-quality-v1",
+        "record_type": "INVOICE",
+        "expected_fields": [
+          "parties.seller.name",
+          "parties.seller.tax_id",
+          "parties.buyer.name",
+          "parties.buyer.tax_id",
+          "invoice.number",
+          "invoice.issue_date",
+          "currency",
+          "totals.net",
+          "totals.vat",
+          "totals.gross"
+        ],
+        "critical_fields": [
+          "parties.seller.tax_id",
+          "parties.buyer.tax_id",
+          "invoice.number",
+          "invoice.issue_date",
+          "currency",
+          "totals.gross"
+        ],
+        "item_fields": [
+          "description",
+          "net",
+          "vat_treatment",
+          "vat_rate"
+        ]
+      },
+      {
+        "version": "receipt-quality-v1",
+        "record_type": "RECEIPT",
+        "expected_fields": [
+          "parties.seller.name",
+          "invoice.issue_date",
+          "currency",
+          "totals.gross"
+        ],
+        "critical_fields": [
+          "invoice.issue_date",
+          "currency",
+          "totals.gross"
+        ],
+        "item_fields": [
+          "description",
+          "net"
+        ]
+      }
+    ]
+  },
+  "policy_sha256": "172a3bbdbae2f2fa6db2d05d6f012a725c987e990d366b3e1fcd05336be6511f",
+  "outcomes": [
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-pdf_text.pdf",
+      "assessment_id": "quality-c7ebbcb8d3134455b0edf1a473370fd2",
+      "artifact_id": "extract-ee01cfd77ed04497896d5d3b57531c6f",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-c7ebbcb8d3134455b0edf1a473370fd2.quality.json",
+      "artifact_sha256": "74b31ca918ab869db89d6adb4fb8d3bbc4e6b5317aa691ee3a92ae74ec104dd2",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 30.88220000063302,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-01-pdf_text.pdf",
+      "assessment_id": "quality-722c97299b0d412b8b979a9815965a3a",
+      "artifact_id": "extract-db67eb04da464452a785c8321c091e54",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-722c97299b0d412b8b979a9815965a3a.quality.json",
+      "artifact_sha256": "4e56cf46e4ab714447f41bc2cc422bac57203f9ef8006a11b35b2a055586630b",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 28.042700003425125,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-02-pdf_text.pdf",
+      "assessment_id": "quality-d8921e7317544cd4a1d4d0664decabb1",
+      "artifact_id": "extract-24d7a457162c4bfba0ed8b586d654924",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-d8921e7317544cd4a1d4d0664decabb1.quality.json",
+      "artifact_sha256": "37a34d9d0d2596f1e0c05842967f84449d88671c32774a231f24f17c12fd3459",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 30.26040000258945,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-03-pdf_text.pdf",
+      "assessment_id": "quality-d7308453f67f4498b6da683e264abf95",
+      "artifact_id": "extract-ed110405e3bc441586d530aa26dffd41",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-d7308453f67f4498b6da683e264abf95.quality.json",
+      "artifact_sha256": "8773d47effc3091c92b66596749d214c7194cd2a91af8c78f67072d74a5cafb8",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 38.26090000075055,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-04-pdf_text.pdf",
+      "assessment_id": "quality-196654ca54dd45a88d596781be50aeec",
+      "artifact_id": "extract-389faa87a9164451b68449c7a1984b50",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-196654ca54dd45a88d596781be50aeec.quality.json",
+      "artifact_sha256": "22e62669f343e4305e79a5904dd21b5ad05150239fc530687c8e5f2e35edcee3",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 27.82929999375483,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-05-pdf_text.pdf",
+      "assessment_id": "quality-d1599863bd9444b6864897a2dec04e9c",
+      "artifact_id": "extract-16dd29cfb69a4a41b9274759c6c5bbc2",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-d1599863bd9444b6864897a2dec04e9c.quality.json",
+      "artifact_sha256": "91ba02a52789d7d49fe29a1a77b300b34a96cdd1bfaa8d4cb0dcc5e1bb2b6f4b",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 27.859300003910903,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-06-pdf_text.pdf",
+      "assessment_id": "quality-dc42730c8cbb4d0292ca7c476ebd730b",
+      "artifact_id": "extract-9d83074e54d64cc19d65bc83db0c25bf",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-dc42730c8cbb4d0292ca7c476ebd730b.quality.json",
+      "artifact_sha256": "128f3f5d87d1012075b76d7d56cd95db09a2e4ee6c0e77deb65c2bffad2c2be1",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 27.68600000126753,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-07-pdf_text.pdf",
+      "assessment_id": "quality-3dbce02fd889498d9c9666d14bb229d3",
+      "artifact_id": "extract-3345bda9a2c0449fbd7d9101b5b53ce9",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-3dbce02fd889498d9c9666d14bb229d3.quality.json",
+      "artifact_sha256": "1e2c3f26a7306c09ee57465951ed2bf1bfbbfc871e345f36b9e5875b0e95d564",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 21,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 21,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 37.1824000030756,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-08-pdf_text.pdf",
+      "assessment_id": "quality-69e98c23886a423280937b7df8a46b8f",
+      "artifact_id": "extract-6dc1798620c8439d862a12561770162d",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-69e98c23886a423280937b7df8a46b8f.quality.json",
+      "artifact_sha256": "4d506df8e3480f1c00e3e78cde9e4796bfd3d9f3718aad98c369ac3a82f46fb2",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 21,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 21,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 36.997799994423985,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "native",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-09-pdf_text.pdf",
+      "assessment_id": "quality-ad27e7f341da46cf8a096ab592509b48",
+      "artifact_id": "extract-143b9d9f51ca44029981342b9456820c",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\native-quality-ad27e7f341da46cf8a096ab592509b48.quality.json",
+      "artifact_sha256": "51bced10741f1f6da9db1c1d93e0215f64c2b4fd93ab120a0b9316894a448d0c",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 22,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 22,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 38.30549999838695,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-image.png",
+      "assessment_id": "quality-ab6afbd24e0147f0b735fbff96defa36",
+      "artifact_id": "extract-22b59970a3c04e01b352720098442677",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\hybrid-quality-ab6afbd24e0147f0b735fbff96defa36.quality.json",
+      "artifact_sha256": "3ce1fe756fad4ebd4c4399230281ab124dcfbe2d6f6609c93ef64c4ea00b46f9",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "HEADER_TOTAL_MISMATCH": 1,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 37.55300000193529,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-pdf_text.pdf",
+      "assessment_id": "quality-26b63719b34c4bb4abdaf0f7f5d0340c",
+      "artifact_id": "extract-ae007e5310cc48269962a48d4ad47615",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\hybrid-quality-26b63719b34c4bb4abdaf0f7f5d0340c.quality.json",
+      "artifact_sha256": "77e545ae73273ff353cf8d68f146516e364703b17bb74a40c6fd855d7b9eb221",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 6,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 1.0
+      },
+      "confidence": {
+        "present_count": 14,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "CONFIDENCE_UNAVAILABLE": 14,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 31.043200004205573,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-08-pdf_image.pdf",
+      "assessment_id": "quality-bfb96ea1d9ba4d38af210efc9bc17c09",
+      "artifact_id": "extract-37f12c4ec4a74746a56a2f954dd774df",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\hybrid-quality-bfb96ea1d9ba4d38af210efc9bc17c09.quality.json",
+      "artifact_sha256": "2d3a068ed8fc82868d3e9a007cd7c6ef9659e2fc6e5757d85d15c818349db2b7",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 4,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 0.6666666666666666
+      },
+      "confidence": {
+        "present_count": 15,
+        "calibrated_count": 0,
+        "calibrated_coverage": 0.0,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "MISSING_FIELD": 7,
+        "CONFIDENCE_UNAVAILABLE": 15,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "INVALID_EXTRACTION": 3,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 32.954499998595566,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "data invoice\\plan02_local\\functional_set_v2\\hybrid.pdf",
+      "assessment_id": "quality-dc38f5a3bf8747b684dba5f6febb7371",
+      "artifact_id": "extract-4c42f4e0e42442d192a23acb06104010",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\hybrid-quality-dc38f5a3bf8747b684dba5f6febb7371.quality.json",
+      "artifact_sha256": "76bbd62c23f538e4eba418c50694c8b56dc213cc13d97a05e5f8f613ea7f596d",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 0,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 0.0
+      },
+      "confidence": {
+        "present_count": 0,
+        "calibrated_count": 0,
+        "calibrated_coverage": null,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "MISSING_FIELD": 10,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 16.773300005297642,
+      "replay_and_idempotence": true
+    },
+    {
+      "cohort": "hybrid",
+      "source_path": "data invoice\\plan02_local\\functional_set_v2\\rotation-90.pdf",
+      "assessment_id": "quality-a9d259c8c6b747ab99134f007677c22f",
+      "artifact_id": "extract-408c743ff25948d1b702ebf535ef89c6",
+      "record_revision": 1,
+      "artifact_path": "data invoice\\plan05_local\\hybrid-quality-a9d259c8c6b747ab99134f007677c22f.quality.json",
+      "artifact_sha256": "c7de2e7b4ce82e85d7685f7889333e3d7d10b20cdf4233de69d7f846bb543c4a",
+      "disposition": "REQUEST_DATA",
+      "review_required": true,
+      "auto_accepted_fields": 0,
+      "critical_completeness": {
+        "expected": 6,
+        "denominator": 6,
+        "present": 0,
+        "excluded_not_applicable": 0,
+        "excluded_not_provided": 0,
+        "ratio": 0.0
+      },
+      "confidence": {
+        "present_count": 0,
+        "calibrated_count": 0,
+        "calibrated_coverage": null,
+        "mean": null,
+        "minimum": null
+      },
+      "issue_counts": {
+        "MISSING_FIELD": 10,
+        "INCOMPLETE_ITEMS": 1,
+        "UNKNOWN_DIRECTION": 1,
+        "AUTO_ACCEPT_DISABLED": 1
+      },
+      "latency_ms": 15.215100000204984,
+      "replay_and_idempotence": true
+    }
+  ],
+  "limitations": [
+    "Zero acceptance is a manual-only safety choice, not proof of production precision.",
+    "Native/hybrid cohorts share logical documents and one synthetic template; counts are not independent samples.",
+    "Validity checks establish shape/arithmetic only, not legal identity or OCR correctness.",
+    "No live source fidelity or human-review proof is provisioned; XML branch is functionally tested only.",
+    "Calibration/threshold/frozen production release remain unavailable until DQ conditions are met."
+  ]
+}

@@ -1,0 +1,1261 @@
+{
+  "$defs": {
+    "BenchmarkResult": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "output_mode": {
+          "enum": [
+            "boxes_and_text",
+            "full_page_text",
+            "structured_document"
+          ],
+          "title": "Output Mode",
+          "type": "string"
+        },
+        "image_id": {
+          "title": "Image Id",
+          "type": "string"
+        },
+        "image_width": {
+          "exclusiveMinimum": 0,
+          "title": "Image Width",
+          "type": "integer"
+        },
+        "image_height": {
+          "exclusiveMinimum": 0,
+          "title": "Image Height",
+          "type": "integer"
+        },
+        "load_time_ms": {
+          "minimum": 0,
+          "title": "Load Time Ms",
+          "type": "number"
+        },
+        "inference_time_ms": {
+          "minimum": 0,
+          "title": "Inference Time Ms",
+          "type": "number"
+        },
+        "document_text_raw": {
+          "default": "",
+          "maxLength": 200000,
+          "title": "Document Text Raw",
+          "type": "string"
+        },
+        "detections": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Detection"
+          },
+          "maxItems": 20000,
+          "title": "Detections",
+          "type": "array"
+        },
+        "structured_blocks": {
+          "default": [],
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Structured Blocks",
+          "type": "array"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "schema_version",
+        "run_id",
+        "model_id",
+        "output_mode",
+        "image_id",
+        "image_width",
+        "image_height",
+        "load_time_ms",
+        "inference_time_ms"
+      ],
+      "title": "BenchmarkResult",
+      "type": "object"
+    },
+    "BlockOrigin": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "enum": [
+            "NATIVE_TEXT",
+            "OCR"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "source_block_id": {
+          "title": "Source Block Id",
+          "type": "string"
+        },
+        "raw_score": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Score"
+        },
+        "score_semantics": {
+          "default": "UNAVAILABLE",
+          "enum": [
+            "ENGINE_HEURISTIC_NOT_CALIBRATED",
+            "UNAVAILABLE"
+          ],
+          "title": "Score Semantics",
+          "type": "string"
+        },
+        "score_kind": {
+          "default": "ENGINE_AGGREGATE",
+          "enum": [
+            "ENGINE_AGGREGATE",
+            "DETECTION",
+            "UNAVAILABLE"
+          ],
+          "title": "Score Kind",
+          "type": "string"
+        },
+        "response_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Sha256"
+        }
+      },
+      "required": [
+        "method",
+        "source_block_id"
+      ],
+      "title": "BlockOrigin",
+      "type": "object"
+    },
+    "Detection": {
+      "additionalProperties": false,
+      "properties": {
+        "polygon": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "maxItems": 64,
+          "minItems": 3,
+          "title": "Polygon",
+          "type": "array"
+        },
+        "text_raw": {
+          "maxLength": 200000,
+          "title": "Text Raw",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "block_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Type"
+        },
+        "source_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Id"
+        }
+      },
+      "required": [
+        "polygon",
+        "text_raw"
+      ],
+      "title": "Detection",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "coordinate_system": {
+          "const": "NORMALIZED_TOP_LEFT",
+          "default": "NORMALIZED_TOP_LEFT",
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Span"
+        },
+        "transform_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transform Id"
+        }
+      },
+      "required": [
+        "source_id",
+        "document_id",
+        "page_index",
+        "bbox"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "ExtractionBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "block_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Block Id",
+          "type": "string"
+        },
+        "text_raw": {
+          "title": "Text Raw",
+          "type": "string"
+        },
+        "geometry_status": {
+          "enum": [
+            "AVAILABLE",
+            "UNAVAILABLE"
+          ],
+          "title": "Geometry Status",
+          "type": "string"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Evidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "polygon": {
+          "anyOf": [
+            {
+              "items": {
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [
+                  {
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  {
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                ],
+                "type": "array"
+              },
+              "maxItems": 64,
+              "minItems": 3,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Polygon"
+        },
+        "block_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Type"
+        },
+        "reading_order": {
+          "minimum": 0,
+          "title": "Reading Order",
+          "type": "integer"
+        },
+        "origins": {
+          "items": {
+            "$ref": "#/$defs/BlockOrigin"
+          },
+          "minItems": 1,
+          "title": "Origins",
+          "type": "array"
+        },
+        "conflict_with": {
+          "default": [],
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "title": "Conflict With",
+          "type": "array"
+        }
+      },
+      "required": [
+        "block_id",
+        "text_raw",
+        "geometry_status",
+        "reading_order",
+        "origins"
+      ],
+      "title": "ExtractionBlock",
+      "type": "object"
+    },
+    "Geometry": {
+      "additionalProperties": false,
+      "properties": {
+        "transform_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Transform Id",
+          "type": "string"
+        },
+        "version": {
+          "default": "geometry-v1",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "original_space": {
+          "enum": [
+            "PDF_UNROTATED_CROP_TOP_LEFT",
+            "IMAGE_RAW_PIXELS"
+          ],
+          "title": "Original Space",
+          "type": "string"
+        },
+        "crop_origin": {
+          "default": [
+            0,
+            0
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Crop Origin",
+          "type": "array"
+        },
+        "original_to_render": {
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Original To Render",
+          "type": "array"
+        },
+        "render_to_original": {
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Render To Original",
+          "type": "array"
+        },
+        "render_to_processed": {
+          "default": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Render To Processed",
+          "type": "array"
+        },
+        "processed_to_render": {
+          "default": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Processed To Render",
+          "type": "array"
+        }
+      },
+      "required": [
+        "transform_id",
+        "original_space",
+        "original_to_render",
+        "render_to_original"
+      ],
+      "title": "Geometry",
+      "type": "object"
+    },
+    "NormalizedDocumentExtraction": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Config Version",
+          "type": "string"
+        },
+        "creator": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Creator",
+          "type": "string"
+        },
+        "stage": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Stage",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "tenant_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "taxpayer_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Taxpayer Id",
+          "type": "string"
+        },
+        "taxpayer_master_revision": {
+          "minimum": 1,
+          "title": "Taxpayer Master Revision",
+          "type": "integer"
+        },
+        "ingestion_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Ingestion Id",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "document_artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Document Artifact Sha256",
+          "type": "string"
+        },
+        "runtime_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Runtime Sha256",
+          "type": "string"
+        },
+        "ocr_config": {
+          "$ref": "#/$defs/OCRConfig"
+        },
+        "status": {
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "FAILED"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "pages": {
+          "items": {
+            "$ref": "#/$defs/NormalizedPageExtraction"
+          },
+          "minItems": 1,
+          "title": "Pages",
+          "type": "array"
+        }
+      },
+      "required": [
+        "config_version",
+        "creator",
+        "stage",
+        "tenant_id",
+        "taxpayer_id",
+        "taxpayer_master_revision",
+        "ingestion_id",
+        "source_id",
+        "document_id",
+        "input_sha256",
+        "document_artifact_sha256",
+        "runtime_sha256",
+        "ocr_config",
+        "status",
+        "pages"
+      ],
+      "title": "NormalizedDocumentExtraction",
+      "type": "object"
+    },
+    "NormalizedPageExtraction": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Config Version",
+          "type": "string"
+        },
+        "creator": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Creator",
+          "type": "string"
+        },
+        "stage": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Stage",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "page_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Page Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "image_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Image Hash",
+          "type": "string"
+        },
+        "geometry": {
+          "$ref": "#/$defs/Geometry"
+        },
+        "route": {
+          "enum": [
+            "NATIVE_TEXT",
+            "OCR",
+            "HYBRID",
+            "UNSUPPORTED"
+          ],
+          "title": "Route",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "COMPLETE",
+            "FAILED"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "blocks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExtractionBlock"
+          },
+          "title": "Blocks",
+          "type": "array"
+        },
+        "raw_responses": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/OCRBridgeResponse"
+          },
+          "title": "Raw Responses",
+          "type": "array"
+        },
+        "table_candidates": {
+          "default": [],
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "title": "Table Candidates",
+          "type": "array"
+        },
+        "issue": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OCRIssue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "config_version",
+        "creator",
+        "stage",
+        "page_id",
+        "page_index",
+        "image_hash",
+        "geometry",
+        "route",
+        "status"
+      ],
+      "title": "NormalizedPageExtraction",
+      "type": "object"
+    },
+    "OCRBridgeResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Config Version",
+          "type": "string"
+        },
+        "creator": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Creator",
+          "type": "string"
+        },
+        "stage": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Stage",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "protocol_version": {
+          "const": "ocr-bridge-1",
+          "default": "ocr-bridge-1",
+          "title": "Protocol Version",
+          "type": "string"
+        },
+        "request_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Page Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "image_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Image Hash",
+          "type": "string"
+        },
+        "model_config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Model Config Version",
+          "type": "string"
+        },
+        "runtime_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Runtime Sha256",
+          "type": "string"
+        },
+        "engine_versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Engine Versions",
+          "type": "object"
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BenchmarkResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "issue": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OCRIssue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "config_version",
+        "creator",
+        "stage",
+        "request_id",
+        "source_id",
+        "document_id",
+        "page_id",
+        "page_index",
+        "image_hash",
+        "model_config_version",
+        "runtime_sha256",
+        "engine_versions"
+      ],
+      "title": "OCRBridgeResponse",
+      "type": "object"
+    },
+    "OCRConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "default": "tesseract-v1-psm3",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "model_id": {
+          "default": "tesseract",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Model Id",
+          "type": "string"
+        },
+        "language": {
+          "const": "vie+eng",
+          "default": "vie+eng",
+          "title": "Language",
+          "type": "string"
+        },
+        "psm": {
+          "default": 3,
+          "enum": [
+            3,
+            6,
+            11
+          ],
+          "title": "Psm",
+          "type": "integer"
+        },
+        "preprocess_version": {
+          "const": "render-identity-v1",
+          "default": "render-identity-v1",
+          "title": "Preprocess Version",
+          "type": "string"
+        },
+        "timeout_seconds": {
+          "default": 30,
+          "maximum": 900,
+          "minimum": 1,
+          "title": "Timeout Seconds",
+          "type": "integer"
+        },
+        "memory_mb": {
+          "default": 512,
+          "maximum": 8192,
+          "minimum": 64,
+          "title": "Memory Mb",
+          "type": "integer"
+        },
+        "parameters": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Parameters",
+          "type": "object"
+        },
+        "max_output_bytes": {
+          "default": 4194304,
+          "maximum": 16777216,
+          "minimum": 1024,
+          "title": "Max Output Bytes",
+          "type": "integer"
+        },
+        "max_attempts": {
+          "default": 2,
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Max Attempts",
+          "type": "integer"
+        }
+      },
+      "title": "OCRConfig",
+      "type": "object"
+    },
+    "OCRIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "MODEL_UNAVAILABLE",
+            "BAD_INPUT",
+            "PROTOCOL_ERROR",
+            "WORKER_TIMEOUT",
+            "WORKER_CRASH",
+            "TRANSIENT_IO",
+            "OUTPUT_LIMIT",
+            "OCR_FAILED"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "retryable": {
+          "default": false,
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "OCRIssue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "ingestion_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Ingestion Id",
+      "type": "string"
+    },
+    "config_key": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Config Key",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "QUEUED",
+        "PROCESSING",
+        "COMPLETE",
+        "PARTIAL",
+        "FAILED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "attempts": {
+      "minimum": 0,
+      "title": "Attempts",
+      "type": "integer"
+    },
+    "issue": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/OCRIssue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "result": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NormalizedDocumentExtraction"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "ingestion_id",
+    "config_key",
+    "status",
+    "attempts"
+  ],
+  "title": "OCRJobView",
+  "type": "object"
+}

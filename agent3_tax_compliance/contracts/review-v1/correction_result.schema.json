@@ -1,0 +1,41 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "event_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "record_revision": {
+      "title": "Record Revision",
+      "type": "integer"
+    },
+    "assessment_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Assessment Id",
+      "type": "string"
+    },
+    "replayed": {
+      "title": "Replayed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "event_id",
+    "record_revision",
+    "assessment_id",
+    "replayed"
+  ],
+  "title": "CorrectionResult",
+  "type": "object"
+}

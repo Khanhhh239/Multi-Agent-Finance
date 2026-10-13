@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "ocr-layout-v1",
+  "creator": "validate-plan03",
+  "stage": "gate-validation",
+  "created_at": "2026-10-12T10:51:53.555161+00:00",
+  "gate": "PASS_TECHNICAL_FUNCTIONAL",
+  "tests": {
+    "contracts": 22,
+    "ingestion": 23,
+    "ocr": 22
+  },
+  "total_tests": 67,
+  "schemas": 11,
+  "comparison_samples_per_config": 10,
+  "configurations": 3,
+  "document_artifacts": 38,
+  "pages": 41,
+  "runtime_sha256": "aef2e540e1a329953eae7a94561a71a8a4f57ebc03de61e53981b734cd0779d3",
+  "baseline_sha256": "bfda02a1d47533f457ac6a657dee7fd00856444d9573a740153f2fd0db76ad9b",
+  "runtime_matrix_sha256": "637fc7282d78db0c6079c29d38aa51a925e80c864707569740e7223998d7ab58",
+  "source_sha256": {
+    "agent3_tax_compliance\\src\\adapters\\ocr\\api.py": "a8795809b43a91235d2bf847cfe85768dda34bf66b076326d02ef702ce07ec78",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\bridge.py": "6be8d0889a8e47d989c7c67be0e0817abd9746e762953f62201b1fde9f5f0d44",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\cli.py": "40483cc2bec19da97131e549c950cb7136118a50ca64376088f64bb18bbff80e",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\layout_merge.py": "f712112d585dc3fd37bb1a0ac15c466314a9695298428de99cc424796b71d719",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\normalizer.py": "2bba852b226d6c5c5681e8306e3d3a5493b162f42be2c4e039835569cccdd6d2",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\protocol.py": "a465501de5ab7e26d6cdf659999d5ea16316803ca95fc9ebf208b64d43b845aa",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\repository.py": "eda51d054a1f8900e5a4b7e121b66ea77ab22124c40f23701ca6e044e7c1c00f",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\worker_client.py": "628d1ca2a49f795ce7c0cdc11e80dba756f9089bc232ea778975f384053ebe10",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\__init__.py": "a4062cd6edc76c13da7e0960a4c000b599ab58aaeaebcbf75357a98b9a29c959",
+    "agent3_tax_compliance\\tests\\ocr\\test_ocr.py": "1066da94495faf60ef29b6a09031e34f84ddb69f6b650e36f27522d2ba763e49",
+    "agent3_tax_compliance\\src\\app.py": "f049449638e491d9fc234ac2f021e0cf5fe5536041126b38950c5643b8aeed38",
+    "agent3_tax_compliance\\src\\ingestion\\sandbox.py": "096e9007752273c0470942229b9420f24aa5a8faf2297ea8cc7f0c208f777a10",
+    "agent3_tax_compliance\\src\\persistence\\repository.py": "84121fb4a14ccbf90adcd07832e982895d10c2727f6627d2b29cbee931b40373",
+    "agent3_tax_compliance\\migrations\\003_ocr.sql": "8a307a6770b93ee779304238056054318e64d5e0a602ca3c93d62986d5817fba",
+    "data invoice\\ocr_e2e_workflow\\src\\bridge_worker.py": "a013d83620de01c192884aa85e94b7ce3cdee0beffd62132092ae9adcb67e88b",
+    "agent3_tax_compliance\\configs\\ocr\\tesseract_psm11.json": "12a7dcd514f23e9e6c60f2e66381f56ef35042e28d7a6610c7b433e4ccfd75a4",
+    "agent3_tax_compliance\\configs\\ocr\\tesseract_psm3.json": "b68922e2a26ccbd4e29df125cd48dcf99994ae30f9dff7c68a2aaa6fd837a824",
+    "agent3_tax_compliance\\configs\\ocr\\tesseract_psm6.json": "9427b1cb979bf8f919f89d75a8dc205cbbd373363e6decc285a1ec56ef3aabc2",
+    "scripts\\build_plan03_baseline.py": "e594c008bf6649f9db8c85718b11e1285c77529432566a63d00e6f9853abec0d",
+    "scripts\\export_ocr_contracts.py": "2f2ef5d528bcdd50bd0c07370ca93bea807fcdcea7098d9d57eb0bea43baa0a5",
+    "scripts\\validate_plan03.py": "da51527507fdabe1a8e0a300445aa0c76b998075b49f743e18d41f5cf0fd57d4"
+  },
+  "test_output_sha256": {
+    "contracts": "e2696db3e5879973b0a700d09ad9df9e23a077a10cda9af71d823a29a3e7a169",
+    "ingestion": "53ebe578ac4ae82b2e6380f4fd6631c1229c0ea2009d13cb7261d73cf90eb0bd",
+    "ocr": "b4772fa47892b8c8d0e48568124c2afcff9e7b653b81f5ae37e6e00c075badbb"
+  },
+  "legacy_databases_unchanged": {
+    "agent3_tax_compliance\\data\\database\\tax_compliance.db": "3242aa988e191c776f6b428c7a814107c19345b8c77e148d7a3e85198564edb3",
+    "agent3_tax_compliance\\data\\database\\vector_store.db": "fe44de14aef2479548d5069ce412d4a846b5a64cd8f514cd7316df9bb2762221"
+  },
+  "historical_evidence_unchanged": true,
+  "limitations": [
+    "No independently reviewed Vietnamese invoices; no production quality claim.",
+    "Total/date are OCR exact recognition with ground-truth regions, not CFR field extraction accuracy.",
+    "All configurations share the same functional development split; no held-out selection test.",
+    "RAM is Windows Job Object peak committed memory for the worker tree, not GPU or system-wide RAM.",
+    "Load time is adapter Python initialization; Tesseract executable/model loads inside each inference.",
+    "One engine, three segmentation modes; no cross-engine superiority claim."
+  ]
+}

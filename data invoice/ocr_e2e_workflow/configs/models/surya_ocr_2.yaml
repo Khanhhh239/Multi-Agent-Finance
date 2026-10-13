@@ -1,0 +1,8 @@
+model_id: surya_ocr_2
+adapter: surya
+output_mode: structured_document
+python: "envs/surya_ocr_2/Scripts/python.exe"
+backend: auto
+model_dir: "artifacts/models/surya_ocr_2"
+temperature: 0
+requires_gpu: true

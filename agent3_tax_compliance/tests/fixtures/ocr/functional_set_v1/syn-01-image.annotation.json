@@ -1,0 +1,255 @@
+{
+  "schema_version": "1.0.0",
+  "annotation_version": "synthetic-v1",
+  "document_id": "syn-01-image",
+  "origin": "SYNTHETIC",
+  "review_status": "GENERATOR_VERIFIED_NOT_INDEPENDENTLY_REVIEWED",
+  "page_count": 1,
+  "fields": [
+    {
+      "field_path": "seller.name",
+      "status": "OBSERVED",
+      "raw_text": "CÔNG TY GIẢ LẬP 01",
+      "normalized_value": "CÔNG TY GIẢ LẬP 01",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.09614013889339927,
+            0.6067561814764969,
+            0.10939430001229401
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "seller.tax_id",
+      "status": "OBSERVED",
+      "raw_text": "0000000000",
+      "normalized_value": "0000000000",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.13176959257510948,
+            0.530420127035189,
+            0.14502375369400422
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "buyer.name",
+      "status": "OBSERVED",
+      "raw_text": "ĐƠN VỊ MUA GIẢ LẬP",
+      "normalized_value": "ĐƠN VỊ MUA GIẢ LẬP",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.1673990462568197,
+            0.608083926930147,
+            0.18065320737571444
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "buyer.tax_id",
+      "status": "OBSERVED",
+      "raw_text": "0000000000000",
+      "normalized_value": "0000000000000",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.20302849993852992,
+            0.5584537281709558,
+            0.21628266105742466
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "invoice.number",
+      "status": "OBSERVED",
+      "raw_text": "DEMO/001",
+      "normalized_value": "DEMO/001",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.23865795362024012,
+            0.5200503565684086,
+            0.2519121147391349
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "invoice.issue_date",
+      "status": "OBSERVED",
+      "raw_text": "11/10/2026",
+      "normalized_value": "2026-10-11",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.27428740730195034,
+            0.5210419470522584,
+            0.2875415684208451
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "currency",
+      "status": "OBSERVED",
+      "raw_text": "VND",
+      "normalized_value": "VND",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.30991687910573784,
+            0.4724369850479254,
+            0.32317100398047804
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "items.demo-item-1-0.description",
+      "status": "OBSERVED",
+      "raw_text": "HÀNG GIẢ LẬP 1/0",
+      "normalized_value": "HÀNG GIẢ LẬP 1/0",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.4049287555902984,
+            0.5834452653131565,
+            0.4181828804650386
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "items.demo-item-1-0.net_amount",
+      "status": "OBSERVED",
+      "raw_text": "200000",
+      "normalized_value": "200000",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.42868172471143856,
+            0.4930419921875,
+            0.44193584958617876
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "items.demo-item-1-0.vat_treatment",
+      "status": "OBSERVED",
+      "raw_text": "8%",
+      "normalized_value": "TAXABLE_RATE",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.45243469383257867,
+            0.46126052471769957,
+            0.4656888187073189
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "items.demo-item-1-0.vat_rate",
+      "status": "OBSERVED",
+      "raw_text": "8%",
+      "normalized_value": "0.08",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.45243469383257867,
+            0.46126052471769957,
+            0.4656888187073189
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "totals.net",
+      "status": "OBSERVED",
+      "raw_text": "200000",
+      "normalized_value": "200000",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.7612232924074005,
+            0.4930419921875,
+            0.7744774172821407
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "totals.vat",
+      "status": "OBSERVED",
+      "raw_text": "16000",
+      "normalized_value": "16000",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.7968527460891107,
+            0.4836974584755777,
+            0.8101068709638509
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "totals.gross",
+      "status": "OBSERVED",
+      "raw_text": "216000",
+      "normalized_value": "216000",
+      "evidence": [
+        {
+          "page_index": 0,
+          "bbox": [
+            0.4369747899159664,
+            0.8324821997708209,
+            0.4930419921875,
+            0.8457363246455611
+          ]
+        }
+      ]
+    },
+    {
+      "field_path": "vat_category",
+      "status": "NOT_ANNOTATED",
+      "raw_text": null,
+      "normalized_value": null,
+      "evidence": []
+    }
+  ]
+}

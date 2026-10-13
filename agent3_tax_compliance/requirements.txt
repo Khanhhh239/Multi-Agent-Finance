@@ -1,0 +1,13 @@
+fastapi>=0.100.0
+uvicorn>=0.22.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+pyyaml>=6.0
+python-dotenv>=1.0.0
+openai>=1.0.0
+rapidfuzz>=3.0.0
+pytest>=7.0.0
+hypothesis>=6.0.0
+requests>=2.31.0
+pypdf>=6.19.0
+zen-engine>=0.1.0

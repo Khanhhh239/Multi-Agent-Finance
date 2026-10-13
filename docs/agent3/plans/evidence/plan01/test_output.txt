@@ -1,0 +1,29 @@
+D:\financial\agent3_tax_compliance\.venv\lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_import_does_not_load_legacy_models_or_database (test_foundation.AppTests) ... ok
+test_offline_health_no_database_side_effect (test_foundation.AppTests) ... ok
+test_bank_has_no_seller_buyer (test_foundation.DomainTests) ... ok
+test_branch_mapping_is_explicit_and_time_bound (test_foundation.DomainTests) ... ok
+test_confidence_basis_requires_proof (test_foundation.DomainTests) ... ok
+test_dates_reject_implicit_epoch_and_locales (test_foundation.DomainTests) ... ok
+test_decimal_roundtrip_and_reject_lossy_inputs (test_foundation.DomainTests) ... ok
+test_exported_producer_examples_validate_as_consumer (test_foundation.DomainTests) ... ok
+test_geometry_and_candidate_stability (test_foundation.DomainTests) ... ok
+test_status_value_invariants_and_no_default_probability (test_foundation.DomainTests) ... ok
+test_typed_response_and_correction (test_foundation.DomainTests) ... ok
+test_unknown_direction_and_vat_semantics (test_foundation.DomainTests) ... ok
+test_artifact_job_and_input_hashes (test_foundation.PersistenceTests) ... ok
+test_audit_failure_rolls_back_revision_and_head (test_foundation.PersistenceTests) ... ok
+test_cross_tenant_and_taxpayer_isolation (test_foundation.PersistenceTests) ... ok
+test_item_reorder_preserves_ids_and_identity_changes_rejected (test_foundation.PersistenceTests) ... ok
+test_money_and_raw_integrity_reopen (test_foundation.PersistenceTests) ... ok
+test_read_only_context_cannot_write_or_register_master (test_foundation.PersistenceTests) ... ok
+test_refuse_legacy_database_even_if_named_sqlite (test_foundation.PersistenceTests) ... ok
+test_source_audit_failure_rolls_back_raw (test_foundation.PersistenceTests) ... ok
+test_source_master_pin_and_hash_are_enforced (test_foundation.PersistenceTests) ... ok
+test_two_concurrent_reviewers_only_one_wins (test_foundation.PersistenceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 2.202s
+
+OK

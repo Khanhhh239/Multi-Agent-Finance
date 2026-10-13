@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "code": {
+      "enum": [
+        "MODEL_UNAVAILABLE",
+        "BAD_INPUT",
+        "PROTOCOL_ERROR",
+        "WORKER_TIMEOUT",
+        "WORKER_CRASH",
+        "TRANSIENT_IO",
+        "OUTPUT_LIMIT",
+        "OCR_FAILED"
+      ],
+      "title": "Code",
+      "type": "string"
+    },
+    "retryable": {
+      "default": false,
+      "title": "Retryable",
+      "type": "boolean"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "message"
+  ],
+  "title": "OCRIssue",
+  "type": "object"
+}

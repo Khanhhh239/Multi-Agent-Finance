@@ -1,0 +1,593 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "coordinate_system": {
+          "const": "NORMALIZED_TOP_LEFT",
+          "default": "NORMALIZED_TOP_LEFT",
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Span"
+        },
+        "transform_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transform Id"
+        }
+      },
+      "required": [
+        "source_id",
+        "document_id",
+        "page_index",
+        "bbox"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Geometry": {
+      "additionalProperties": false,
+      "properties": {
+        "transform_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Transform Id",
+          "type": "string"
+        },
+        "version": {
+          "default": "geometry-v1",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "original_space": {
+          "enum": [
+            "PDF_UNROTATED_CROP_TOP_LEFT",
+            "IMAGE_RAW_PIXELS"
+          ],
+          "title": "Original Space",
+          "type": "string"
+        },
+        "crop_origin": {
+          "default": [
+            0,
+            0
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Crop Origin",
+          "type": "array"
+        },
+        "original_to_render": {
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Original To Render",
+          "type": "array"
+        },
+        "render_to_original": {
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Render To Original",
+          "type": "array"
+        },
+        "render_to_processed": {
+          "default": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Render To Processed",
+          "type": "array"
+        },
+        "processed_to_render": {
+          "default": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Processed To Render",
+          "type": "array"
+        }
+      },
+      "required": [
+        "transform_id",
+        "original_space",
+        "original_to_render",
+        "render_to_original"
+      ],
+      "title": "Geometry",
+      "type": "object"
+    },
+    "TextBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "block_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Block Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "source_order": {
+          "minimum": 0,
+          "title": "Source Order",
+          "type": "integer"
+        },
+        "reading_order": {
+          "minimum": 0,
+          "title": "Reading Order",
+          "type": "integer"
+        },
+        "original_bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Original Bbox",
+          "type": "array"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "block_id",
+        "text",
+        "source_order",
+        "reading_order",
+        "original_bbox",
+        "evidence"
+      ],
+      "title": "TextBlock",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "source_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "document_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "page_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Page Id",
+      "type": "string"
+    },
+    "page_index": {
+      "minimum": 0,
+      "title": "Page Index",
+      "type": "integer"
+    },
+    "original_width": {
+      "exclusiveMinimum": 0,
+      "title": "Original Width",
+      "type": "number"
+    },
+    "original_height": {
+      "exclusiveMinimum": 0,
+      "title": "Original Height",
+      "type": "number"
+    },
+    "render_width": {
+      "exclusiveMinimum": 0,
+      "title": "Render Width",
+      "type": "integer"
+    },
+    "render_height": {
+      "exclusiveMinimum": 0,
+      "title": "Render Height",
+      "type": "integer"
+    },
+    "rotation": {
+      "default": 0,
+      "enum": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "title": "Rotation",
+      "type": "integer"
+    },
+    "exif_orientation": {
+      "default": 1,
+      "maximum": 8,
+      "minimum": 1,
+      "title": "Exif Orientation",
+      "type": "integer"
+    },
+    "geometry": {
+      "$ref": "#/$defs/Geometry"
+    },
+    "render_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Render Sha256",
+      "type": "string"
+    },
+    "route": {
+      "enum": [
+        "NATIVE_TEXT",
+        "OCR",
+        "HYBRID",
+        "UNSUPPORTED"
+      ],
+      "title": "Route",
+      "type": "string"
+    },
+    "route_policy_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Route Policy Version",
+      "type": "string"
+    },
+    "route_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Route Reasons",
+      "type": "array"
+    },
+    "valid_glyph_ratio": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Valid Glyph Ratio",
+      "type": "number"
+    },
+    "text_coverage": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Text Coverage",
+      "type": "number"
+    },
+    "image_coverage": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Image Coverage",
+      "type": "number"
+    },
+    "invisible_text_spans": {
+      "minimum": 0,
+      "title": "Invisible Text Spans",
+      "type": "integer"
+    },
+    "table_structure_present": {
+      "default": false,
+      "title": "Table Structure Present",
+      "type": "boolean"
+    },
+    "ocr_regions": {
+      "default": [],
+      "items": {
+        "maxItems": 4,
+        "minItems": 4,
+        "prefixItems": [
+          {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          }
+        ],
+        "type": "array"
+      },
+      "title": "Ocr Regions",
+      "type": "array"
+    },
+    "native_blocks": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/TextBlock"
+      },
+      "title": "Native Blocks",
+      "type": "array"
+    },
+    "deduplication_required": {
+      "default": false,
+      "title": "Deduplication Required",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "source_id",
+    "input_sha256",
+    "document_id",
+    "page_id",
+    "page_index",
+    "original_width",
+    "original_height",
+    "render_width",
+    "render_height",
+    "geometry",
+    "render_sha256",
+    "route",
+    "route_policy_version",
+    "route_reasons",
+    "valid_glyph_ratio",
+    "text_coverage",
+    "image_coverage",
+    "invisible_text_spans"
+  ],
+  "title": "PageArtifact",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:financial:ingestion:1.0.0:page_artifact"
+}

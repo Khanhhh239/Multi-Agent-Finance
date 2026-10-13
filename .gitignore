@@ -1,0 +1,109 @@
+# Python environments and generated caches
+**/.venv/
+**/venv/
+**/envs/
+**/site-packages/
+**/__pycache__/
+*.py[cod]
+**/.pytest_cache/
+**/.hypothesis/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.coverage*
+**/htmlcov/
+**/*.egg-info/
+**/build/
+**/dist/
+**/node_modules/
+
+# Credentials and machine-specific settings (keep safe templates)
+.env
+.env.*
+!.env.example
+!.env.sample
+**/credentials.json
+**/service-account*.json
+**/service_account*.json
+**/secrets.*
+*.pem
+*.key
+*.p12
+*.pfx
+**/.aws/
+**/.codex/
+**/.agents/
+**/.idea/
+**/.vscode/
+*.local
+*.local.*
+
+# Databases, private documents, model weights and runtime output
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.log
+*.tmp
+*.part
+*.bak
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+*.pth
+*.pt
+*.onnx
+*.pdparams
+*.pdiparams
+*.safetensors
+*.h5
+*.hdf5
+*.bin
+*.pdf
+*.xlsx
+*.xls
+*.csv
+*.parquet
+*.jsonl
+!agent3_tax_compliance/tests/fixtures/**/*.pdf
+!agent3_tax_compliance/tests/fixtures/**/*.csv
+!agent3_tax_compliance/tests/fixtures/**/*.jsonl
+
+# Agent 3 runtime data and old local diagnostics
+/agent3_tax_compliance/data/
+/agent3_tax_compliance/ocr_debug_output.txt
+/agent3_tax_compliance/ocr_log.txt
+/agent3_tax_compliance/zen_debug.json
+
+# Keep OCR adapter code/configs/docs/tests; never publish downloaded datasets,
+# virtual environments, weights, runs or local benchmark artifacts.
+/data invoice/*
+!/data invoice/ocr_e2e_workflow/
+/data invoice/ocr_e2e_workflow/artifacts/
+/data invoice/ocr_e2e_workflow/data/
+/data invoice/ocr_e2e_workflow/runs/
+/data invoice/ocr_e2e_workflow/reports/figures/
+/data invoice/ocr_e2e_workflow/reports/debug/
+/data invoice/ocr_e2e_workflow/reports/
+/data invoice/ocr_e2e_workflow/tools/tesseract/
+*.exe
+*.dll
+*.jar
+*.traineddata
+
+# Independent research and local design work are outside this Agent 3 repo.
+/vilegalbert_test/
+/visual/
+
+# Keep only the pinned source needed for historical replay and move manifest.
+/archive/*
+!/archive/plan06_pinned_plan05_quality/
+!/archive/reorganization_manifest.json
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store

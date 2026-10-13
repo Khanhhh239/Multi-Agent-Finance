@@ -1,0 +1,176 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "transform_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Transform Id",
+      "type": "string"
+    },
+    "version": {
+      "default": "geometry-v1",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "original_space": {
+      "enum": [
+        "PDF_UNROTATED_CROP_TOP_LEFT",
+        "IMAGE_RAW_PIXELS"
+      ],
+      "title": "Original Space",
+      "type": "string"
+    },
+    "crop_origin": {
+      "default": [
+        0,
+        0
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Crop Origin",
+      "type": "array"
+    },
+    "original_to_render": {
+      "maxItems": 6,
+      "minItems": 6,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Original To Render",
+      "type": "array"
+    },
+    "render_to_original": {
+      "maxItems": 6,
+      "minItems": 6,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Render To Original",
+      "type": "array"
+    },
+    "render_to_processed": {
+      "default": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "maxItems": 6,
+      "minItems": 6,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Render To Processed",
+      "type": "array"
+    },
+    "processed_to_render": {
+      "default": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "maxItems": 6,
+      "minItems": 6,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Processed To Render",
+      "type": "array"
+    }
+  },
+  "required": [
+    "transform_id",
+    "original_space",
+    "original_to_render",
+    "render_to_original"
+  ],
+  "title": "Geometry",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:financial:ingestion:1.0.0:geometry"
+}

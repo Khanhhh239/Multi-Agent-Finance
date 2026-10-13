@@ -1,0 +1,277 @@
+{
+  "$defs": {
+    "CalibrationBin": {
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "minimum": 0,
+          "title": "Index",
+          "type": "integer"
+        },
+        "count": {
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "correct": {
+          "minimum": 0,
+          "title": "Correct",
+          "type": "integer"
+        },
+        "probability": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Probability",
+          "type": "number"
+        }
+      },
+      "required": [
+        "index",
+        "count",
+        "correct",
+        "probability"
+      ],
+      "title": "CalibrationBin",
+      "type": "object"
+    },
+    "CalibrationScope": {
+      "additionalProperties": false,
+      "properties": {
+        "field_family": {
+          "title": "Field Family",
+          "type": "string"
+        },
+        "document_family": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Family",
+          "type": "string"
+        },
+        "engine_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Engine Id",
+          "type": "string"
+        },
+        "engine_config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Engine Config Version",
+          "type": "string"
+        },
+        "engine_runtime_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Engine Runtime Sha256",
+          "type": "string"
+        },
+        "preprocess_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Preprocess Version",
+          "type": "string"
+        },
+        "extractor_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Extractor Sha256",
+          "type": "string"
+        },
+        "score_kind": {
+          "enum": [
+            "RECOGNITION",
+            "EXTRACTOR",
+            "DETECTION",
+            "UNAVAILABLE"
+          ],
+          "title": "Score Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field_family",
+        "document_family",
+        "engine_id",
+        "engine_config_version",
+        "engine_runtime_sha256",
+        "preprocess_version",
+        "extractor_sha256",
+        "score_kind"
+      ],
+      "title": "CalibrationScope",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/CalibrationScope"
+    },
+    "status": {
+      "enum": [
+        "UNAVAILABLE",
+        "FUNCTIONAL_ONLY",
+        "VALIDATED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "method": {
+      "const": "equal-width-smoothed-bins-v1",
+      "default": "equal-width-smoothed-bins-v1",
+      "title": "Method",
+      "type": "string"
+    },
+    "dataset_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dataset Sha256",
+      "type": "string"
+    },
+    "fit_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Fit Count",
+      "type": "integer"
+    },
+    "holdout_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Holdout Count",
+      "type": "integer"
+    },
+    "fit_group_ids": {
+      "default": [],
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9_.:-]+$",
+        "type": "string"
+      },
+      "title": "Fit Group Ids",
+      "type": "array"
+    },
+    "holdout_group_ids": {
+      "default": [],
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9_.:-]+$",
+        "type": "string"
+      },
+      "title": "Holdout Group Ids",
+      "type": "array"
+    },
+    "bin_count": {
+      "default": 5,
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Bin Count",
+      "type": "integer"
+    },
+    "bins": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CalibrationBin"
+      },
+      "title": "Bins",
+      "type": "array"
+    },
+    "brier": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Brier"
+    },
+    "ece": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ece"
+    },
+    "reliability": {
+      "default": [],
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Reliability",
+      "type": "array"
+    },
+    "reasons": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "version",
+    "scope",
+    "status",
+    "dataset_sha256"
+  ],
+  "title": "CalibrationArtifact",
+  "type": "object"
+}

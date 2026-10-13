@@ -1,0 +1,162 @@
+{
+  "$defs": {
+    "CalibrationScope": {
+      "additionalProperties": false,
+      "properties": {
+        "field_family": {
+          "title": "Field Family",
+          "type": "string"
+        },
+        "document_family": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Family",
+          "type": "string"
+        },
+        "engine_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Engine Id",
+          "type": "string"
+        },
+        "engine_config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Engine Config Version",
+          "type": "string"
+        },
+        "engine_runtime_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Engine Runtime Sha256",
+          "type": "string"
+        },
+        "preprocess_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Preprocess Version",
+          "type": "string"
+        },
+        "extractor_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Extractor Sha256",
+          "type": "string"
+        },
+        "score_kind": {
+          "enum": [
+            "RECOGNITION",
+            "EXTRACTOR",
+            "DETECTION",
+            "UNAVAILABLE"
+          ],
+          "title": "Score Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field_family",
+        "document_family",
+        "engine_id",
+        "engine_config_version",
+        "engine_runtime_sha256",
+        "preprocess_version",
+        "extractor_sha256",
+        "score_kind"
+      ],
+      "title": "CalibrationScope",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "sample_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Sample Id",
+      "type": "string"
+    },
+    "logical_document_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Logical Document Id",
+      "type": "string"
+    },
+    "group_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Group Id",
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Sha256",
+      "type": "string"
+    },
+    "split": {
+      "enum": [
+        "FIT",
+        "HOLDOUT",
+        "TEST",
+        "DEVELOPMENT"
+      ],
+      "title": "Split",
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/CalibrationScope"
+    },
+    "raw_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Raw Score",
+      "type": "number"
+    },
+    "correct": {
+      "title": "Correct",
+      "type": "boolean"
+    },
+    "use_permitted": {
+      "default": false,
+      "title": "Use Permitted",
+      "type": "boolean"
+    },
+    "independently_reviewed": {
+      "default": false,
+      "title": "Independently Reviewed",
+      "type": "boolean"
+    },
+    "split_frozen": {
+      "default": false,
+      "title": "Split Frozen",
+      "type": "boolean"
+    },
+    "synthetic": {
+      "default": true,
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "evidence_reference": {
+      "title": "Evidence Reference",
+      "type": "string"
+    }
+  },
+  "required": [
+    "sample_id",
+    "logical_document_id",
+    "group_id",
+    "source_sha256",
+    "split",
+    "scope",
+    "raw_score",
+    "correct",
+    "evidence_reference"
+  ],
+  "title": "ScoreSample",
+  "type": "object"
+}

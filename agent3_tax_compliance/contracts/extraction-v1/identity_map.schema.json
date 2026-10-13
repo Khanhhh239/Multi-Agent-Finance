@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "IdentityEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "anchor_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Anchor Id",
+          "type": "string"
+        },
+        "item_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Item Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "anchor_id",
+        "item_id"
+      ],
+      "title": "IdentityEntry",
+      "type": "object"
+    },
+    "ItemLineage": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "enum": [
+            "SPLIT",
+            "MERGE"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "previous_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Previous Ids",
+          "type": "array"
+        },
+        "new_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "New Ids",
+          "type": "array"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "previous_ids",
+        "new_ids",
+        "reason"
+      ],
+      "title": "ItemLineage",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "item-identity-v1",
+      "default": "item-identity-v1",
+      "title": "Version",
+      "type": "string"
+    },
+    "entries": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/IdentityEntry"
+      },
+      "title": "Entries",
+      "type": "array"
+    },
+    "lineage": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ItemLineage"
+      },
+      "title": "Lineage",
+      "type": "array"
+    }
+  },
+  "title": "IdentityMap",
+  "type": "object"
+}

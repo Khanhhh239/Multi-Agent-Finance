@@ -1,0 +1,63 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "present_count": {
+      "minimum": 0,
+      "title": "Present Count",
+      "type": "integer"
+    },
+    "calibrated_count": {
+      "minimum": 0,
+      "title": "Calibrated Count",
+      "type": "integer"
+    },
+    "calibrated_coverage": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Calibrated Coverage"
+    },
+    "mean": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Mean"
+    },
+    "minimum": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Minimum"
+    }
+  },
+  "required": [
+    "present_count",
+    "calibrated_count",
+    "calibrated_coverage",
+    "mean",
+    "minimum"
+  ],
+  "title": "ConfidenceSummary",
+  "type": "object"
+}

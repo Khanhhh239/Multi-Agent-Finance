@@ -1,0 +1,21 @@
+{
+  "rule_id": "R-MISSING-DOC",
+  "effective_from": "2015-08-06",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "category",
+      "operator": "in",
+      "value": ["commission", "outsourced_service"]
+    },
+    {
+      "field": "has_supporting_docs",
+      "operator": "==",
+      "value": false
+    }
+  ],
+  "verdict": "REVIEW",
+  "fixable": true,
+  "fix_hint": "Yêu cầu kế toán bổ sung hồ sơ chứng minh thực tế phát sinh (hợp đồng thuê ngoài/môi giới, biên bản bàn giao, biên bản nghiệm thu công việc).",
+  "citation": "Điều 4 Thông tư 96/2015/TT-BTC về tính hợp lệ và đầy đủ của hồ sơ, chứng từ chứng minh chi phí thực tế phát sinh."
+}

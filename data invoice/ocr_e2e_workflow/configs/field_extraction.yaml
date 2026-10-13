@@ -1,0 +1,7 @@
+schema_version: "1.0"
+seller_keywords: ["cửa hàng", "siêu thị", "nhà sách", "minimart", "vincommerce"]
+address_keywords: ["địa chỉ", "đc:", "đ/c:"]
+timestamp_keywords: ["ngày", "thời gian", "ngày bán", "date", "time"]
+total_keywords: ["tổng thanh toán", "tổng tiền", "phải thanh toán", "phải trả", "tổng cộng"]
+confidence_review_threshold: 0.65
+

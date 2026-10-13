@@ -1,0 +1,30 @@
+D:\financial\agent3_tax_compliance\.venv\lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_os_memory_cap_is_enforced (test_ingestion.GeometryAndSandboxTests) ... ok
+test_transform_roundtrips_exif_crop_and_deskew (test_ingestion.GeometryAndSandboxTests) ... ok
+test_actual_process_death_after_raw_commit_and_recovery (test_ingestion.IngestionTests) ... ok
+test_artifact_and_extraction_audit_failure_rolls_back_then_retry (test_ingestion.IngestionTests) ... ok
+test_auth_scope_mime_path_and_unsupported_format_rejection (test_ingestion.IngestionTests) ... ok
+test_authenticated_upload_status_document_render_and_raw (test_ingestion.IngestionTests) ... ok
+test_byte_limit_stops_before_writing_overflow_chunk (test_ingestion.IngestionTests) ... ok
+test_concurrent_same_key_creates_one_ingestion (test_ingestion.IngestionTests) ... ok
+test_cross_tenant_http_reads_and_viewer_upload_are_denied (test_ingestion.IngestionTests) ... ok
+test_encrypted_corrupt_page_and_pixel_limits_are_typed (test_ingestion.IngestionTests) ... ok
+test_exif_rotation_preserves_raw_and_processed_orientation (test_ingestion.IngestionTests) ... ok
+test_expired_worker_lease_recovers_and_stale_token_cannot_complete (test_ingestion.IngestionTests) ... ok
+test_idempotency_same_content_configuration_and_conflicts (test_ingestion.IngestionTests) ... ok
+test_invisible_layer_and_garbage_do_not_skip_ocr (test_ingestion.IngestionTests) ... ok
+test_native_scan_mixed_and_hybrid_routes (test_ingestion.IngestionTests) ... ok
+test_no_runnable_job_when_raw_audit_rolls_back (test_ingestion.IngestionTests) ... ok
+test_pdf_rotations_and_crop_inverse_evidence (test_ingestion.IngestionTests) ... ok
+test_pending_capacity_and_old_foundation_migration (test_ingestion.IngestionTests) ... ok
+test_png_source_pixels_and_document_pixel_budget (test_ingestion.IngestionTests) ... ok
+test_slow_upload_times_out_and_cleans_staging (test_ingestion.IngestionTests) ... ok
+test_staging_cleanup_only_old_system_files (test_ingestion.IngestionTests) ... ok
+test_timeout_retry_budget_is_finite (test_ingestion.IngestionTests) ... ok
+test_vietnamese_font_nbsp_is_valid_native_text (test_ingestion.IngestionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 19.379s
+
+OK

@@ -1,0 +1,43 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "field_path": {
+      "title": "Field Path",
+      "type": "string"
+    },
+    "before": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Before"
+    },
+    "after": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "After"
+    }
+  },
+  "required": [
+    "field_path",
+    "before",
+    "after"
+  ],
+  "title": "FieldCorrection",
+  "type": "object"
+}

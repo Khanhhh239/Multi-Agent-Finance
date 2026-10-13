@@ -1,0 +1,30 @@
+model_id: ppocrv6_vietocr
+revision: detector-only-vietocr-crop-v2
+adapter: ppocrv6_vietocr
+output_mode: boxes_and_text
+python: "envs/ppocrv6_vietocr/Scripts/python.exe"
+detector:
+  text_detection_model_dir: "artifacts/models/ppocrv6_medium/detection"
+  doc_orientation_classify_model_dir: "artifacts/models/ppocrv6_medium/doc_orientation"
+  use_doc_orientation_classify: true
+  enable_mkldnn: false
+  hybrid_cpu_threads: 1
+recognizer:
+  config_name: vgg_transformer
+  base_config_path: "artifacts/models/vietocr/config/base.yml"
+  base_config_sha256: "9c8283fadb950f06f5d3400475f80d5355700ff315c9c48b7875e6ea66647d1c"
+  architecture_config_path: "artifacts/models/vietocr/config/vgg-transformer.yml"
+  architecture_config_sha256: "0df9feee197754c7381871e5dfd07c6f3e292a4853eece6f1af240923e57c907"
+  weights: "artifacts/models/vietocr/transformerocr.pth"
+  weights_sha256: "380512193a8b6cbf6fad80deacdc9b6939d10d473d199892fc6408d13775ea59"
+  cpu_threads: 1
+device: cpu
+worker:
+  max_samples_per_process: 10
+environment:
+  FLAGS_use_mkldnn: "0"
+  PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: "True"
+  OMP_NUM_THREADS: "1"
+  MKL_NUM_THREADS: "1"
+  OPENBLAS_NUM_THREADS: "1"
+  NUMEXPR_NUM_THREADS: "1"

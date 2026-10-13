@@ -1,0 +1,161 @@
+{
+  "$defs": {
+    "IngestionIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "EMPTY_FILE",
+            "UPLOAD_TIMEOUT",
+            "LIMIT_EXCEEDED",
+            "FORMAT_MISMATCH",
+            "UNSUPPORTED_FORMAT",
+            "CORRUPT_DOCUMENT",
+            "ENCRYPTED_PDF",
+            "WORKER_TIMEOUT",
+            "WORKER_RESOURCE_ERROR",
+            "PROCESSING_ERROR",
+            "IDEMPOTENCY_CONFLICT",
+            "ACCESS_DENIED",
+            "NOT_FOUND",
+            "RETRY_NOT_ALLOWED"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "retryable": {
+          "default": false,
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "next_action": {
+          "title": "Next Action",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "next_action"
+      ],
+      "title": "IngestionIssue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "ingestion_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Ingestion Id",
+      "type": "string"
+    },
+    "source_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "document_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "STORED",
+        "QUEUED",
+        "PROCESSING",
+        "SUCCEEDED",
+        "FAILED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "attempts": {
+      "minimum": 0,
+      "title": "Attempts",
+      "type": "integer"
+    },
+    "issue": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IngestionIssue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "extraction_status": {
+      "default": "NOT_QUEUED",
+      "enum": [
+        "NOT_QUEUED",
+        "QUEUED"
+      ],
+      "title": "Extraction Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "ingestion_id",
+    "source_id",
+    "document_id",
+    "input_sha256",
+    "status",
+    "attempts"
+  ],
+  "title": "IngestionView",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:financial:ingestion:1.0.0:ingestion_view"
+}

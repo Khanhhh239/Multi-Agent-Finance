@@ -1,0 +1,16 @@
+{
+  "rule_id": "R-VENDOR-RISK",
+  "effective_from": "2020-07-01",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "vendor_in_high_risk_list",
+      "operator": "==",
+      "value": true
+    }
+  ],
+  "verdict": "REVIEW",
+  "fixable": false,
+  "fix_hint": "Mã số thuế của nhà cung cấp nằm trong danh sách doanh nghiệp rủi ro cao hoặc bỏ trốn của cơ quan Thuế. Kế toán cần xác minh thực tế giao dịch (hợp đồng, biên bản giao nhận, chứng từ thanh toán).",
+  "citation": "Luật Quản lý thuế số 38/2019/QH14 và Công văn chỉ đạo rà soát hóa đơn rủi ro của Tổng cục Thuế"
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "ocr-layout-v1",
+  "creator": "synthetic-fixture",
+  "stage": "ocr",
+  "created_at": "2026-10-12T00:00:00Z",
+  "protocol_version": "ocr-bridge-1",
+  "accepted_result_version": "1.1",
+  "request_id": "request-example",
+  "source_id": "source-example",
+  "document_id": "document-example",
+  "page_id": "page-example",
+  "page_index": 0,
+  "image_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "image_path": "page.png",
+  "image_width": 100,
+  "image_height": 100,
+  "model_config_version": "tesseract-v1-psm3",
+  "runtime_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "timeout_seconds": 30
+}

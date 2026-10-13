@@ -1,0 +1,11 @@
+# Relative paths resolve against agent3_tax_compliance, not process cwd.
+CAPTURE_DATABASE_PATH=data/foundation/capture.sqlite3
+CAPTURE_MAX_UPLOAD_BYTES=20971520
+CAPTURE_STAGING_DIRECTORY=data/foundation/staging
+CAPTURE_MAX_PAGES=40
+CAPTURE_WORKER_TIMEOUT_SECONDS=45
+CAPTURE_WORKER_MEMORY_MB=512
+# Default empty grant list denies every data endpoint. See PLAN_02 runbook.
+CAPTURE_AUTH_GRANTS_JSON=[]
+# Worker/provision CLI needs a credential matching a configured SHA-256 grant.
+# CAPTURE_WORKER_TOKEN must be set locally; never commit a real token.

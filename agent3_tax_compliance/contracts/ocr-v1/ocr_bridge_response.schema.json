@@ -1,0 +1,353 @@
+{
+  "$defs": {
+    "BenchmarkResult": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "output_mode": {
+          "enum": [
+            "boxes_and_text",
+            "full_page_text",
+            "structured_document"
+          ],
+          "title": "Output Mode",
+          "type": "string"
+        },
+        "image_id": {
+          "title": "Image Id",
+          "type": "string"
+        },
+        "image_width": {
+          "exclusiveMinimum": 0,
+          "title": "Image Width",
+          "type": "integer"
+        },
+        "image_height": {
+          "exclusiveMinimum": 0,
+          "title": "Image Height",
+          "type": "integer"
+        },
+        "load_time_ms": {
+          "minimum": 0,
+          "title": "Load Time Ms",
+          "type": "number"
+        },
+        "inference_time_ms": {
+          "minimum": 0,
+          "title": "Inference Time Ms",
+          "type": "number"
+        },
+        "document_text_raw": {
+          "default": "",
+          "maxLength": 200000,
+          "title": "Document Text Raw",
+          "type": "string"
+        },
+        "detections": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Detection"
+          },
+          "maxItems": 20000,
+          "title": "Detections",
+          "type": "array"
+        },
+        "structured_blocks": {
+          "default": [],
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Structured Blocks",
+          "type": "array"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "schema_version",
+        "run_id",
+        "model_id",
+        "output_mode",
+        "image_id",
+        "image_width",
+        "image_height",
+        "load_time_ms",
+        "inference_time_ms"
+      ],
+      "title": "BenchmarkResult",
+      "type": "object"
+    },
+    "Detection": {
+      "additionalProperties": false,
+      "properties": {
+        "polygon": {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "maxItems": 64,
+          "minItems": 3,
+          "title": "Polygon",
+          "type": "array"
+        },
+        "text_raw": {
+          "maxLength": 200000,
+          "title": "Text Raw",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "block_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Type"
+        },
+        "source_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Id"
+        }
+      },
+      "required": [
+        "polygon",
+        "text_raw"
+      ],
+      "title": "Detection",
+      "type": "object"
+    },
+    "OCRIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "MODEL_UNAVAILABLE",
+            "BAD_INPUT",
+            "PROTOCOL_ERROR",
+            "WORKER_TIMEOUT",
+            "WORKER_CRASH",
+            "TRANSIENT_IO",
+            "OUTPUT_LIMIT",
+            "OCR_FAILED"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "retryable": {
+          "default": false,
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "OCRIssue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "protocol_version": {
+      "const": "ocr-bridge-1",
+      "default": "ocr-bridge-1",
+      "title": "Protocol Version",
+      "type": "string"
+    },
+    "request_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Request Id",
+      "type": "string"
+    },
+    "source_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "document_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "page_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Page Id",
+      "type": "string"
+    },
+    "page_index": {
+      "minimum": 0,
+      "title": "Page Index",
+      "type": "integer"
+    },
+    "image_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Image Hash",
+      "type": "string"
+    },
+    "model_config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Model Config Version",
+      "type": "string"
+    },
+    "runtime_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Runtime Sha256",
+      "type": "string"
+    },
+    "engine_versions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Engine Versions",
+      "type": "object"
+    },
+    "result": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BenchmarkResult"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "issue": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/OCRIssue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "request_id",
+    "source_id",
+    "document_id",
+    "page_id",
+    "page_index",
+    "image_hash",
+    "model_config_version",
+    "runtime_sha256",
+    "engine_versions"
+  ],
+  "title": "OCRBridgeResponse",
+  "type": "object"
+}

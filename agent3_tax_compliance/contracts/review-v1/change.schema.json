@@ -1,0 +1,54 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "field_path": {
+      "maxLength": 180,
+      "minLength": 1,
+      "title": "Field Path",
+      "type": "string"
+    },
+    "operation": {
+      "default": "SET",
+      "enum": [
+        "SET",
+        "CONFIRM",
+        "CLEAR"
+      ],
+      "title": "Operation",
+      "type": "string"
+    },
+    "new_value": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "New Value"
+    },
+    "selected_candidate_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Candidate Id"
+    }
+  },
+  "required": [
+    "field_path"
+  ],
+  "title": "Change",
+  "type": "object"
+}

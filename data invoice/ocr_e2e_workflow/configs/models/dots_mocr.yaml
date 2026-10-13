@@ -1,0 +1,10 @@
+model_id: dots_mocr
+adapter: dots_mocr
+output_mode: structured_document
+python: "envs/dots_mocr/Scripts/python.exe"
+model_name: rednote-hilab/dots.mocr
+temperature: 0
+max_new_tokens: 4096
+prompt_mode: prompt_layout_all_en
+requires_gpu: true
+minimum_python: "3.12"

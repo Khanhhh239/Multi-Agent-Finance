@@ -1,0 +1,73 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "polygon": {
+      "items": {
+        "maxItems": 2,
+        "minItems": 2,
+        "prefixItems": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "number"
+          }
+        ],
+        "type": "array"
+      },
+      "maxItems": 64,
+      "minItems": 3,
+      "title": "Polygon",
+      "type": "array"
+    },
+    "text_raw": {
+      "maxLength": 200000,
+      "title": "Text Raw",
+      "type": "string"
+    },
+    "confidence": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Confidence"
+    },
+    "block_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Block Type"
+    },
+    "source_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Id"
+    }
+  },
+  "required": [
+    "polygon",
+    "text_raw"
+  ],
+  "title": "Detection",
+  "type": "object"
+}

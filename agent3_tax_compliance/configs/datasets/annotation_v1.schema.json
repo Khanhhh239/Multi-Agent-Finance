@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PLAN_00 document annotation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "annotation_version", "document_id", "origin", "review_status", "page_count", "fields"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "annotation_version": {"type": "string", "minLength": 1},
+    "document_id": {"type": "string", "minLength": 1},
+    "origin": {"enum": ["SYNTHETIC", "REAL"]},
+    "review_status": {"enum": ["DRAFT", "GENERATOR_VERIFIED_NOT_INDEPENDENTLY_REVIEWED", "SECOND_REVIEW_PENDING", "ADJUDICATED"]},
+    "page_count": {"type": "integer", "minimum": 1},
+    "fields": {"type": "array", "items": {"$ref": "#/$defs/field"}}
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["page_index", "bbox"],
+      "properties": {
+        "page_index": {"type": "integer", "minimum": 0},
+        "bbox": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number", "minimum": 0, "maximum": 1}}
+      }
+    },
+    "field": {
+      "type": "object", "additionalProperties": false,
+      "required": ["field_path", "status", "raw_text", "normalized_value", "evidence"],
+      "properties": {
+        "field_path": {"type": "string", "minLength": 1},
+        "status": {"enum": ["OBSERVED", "ABSENT_CONFIRMED", "UNREADABLE", "NOT_ANNOTATED"]},
+        "raw_text": {"type": ["string", "null"]},
+        "normalized_value": {"type": ["string", "null"]},
+        "reason": {"type": "string", "minLength": 1},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      },
+      "allOf": [
+        {"if": {"properties": {"status": {"const": "OBSERVED"}}}, "then": {"properties": {"raw_text": {"type": "string", "minLength": 1}, "normalized_value": {"type": "string", "minLength": 1}, "evidence": {"minItems": 1}}}, "else": {"properties": {"raw_text": {"type": "null"}, "normalized_value": {"type": "null"}}}},
+        {"if": {"properties": {"status": {"enum": ["ABSENT_CONFIRMED", "UNREADABLE"]}}}, "then": {"required": ["reason"], "properties": {"evidence": {"minItems": 1}}}}
+      ]
+    }
+  }
+}

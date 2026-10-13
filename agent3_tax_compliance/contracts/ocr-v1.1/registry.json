@@ -1,0 +1,17 @@
+{
+  "version": "ocr-v1.1",
+  "schemas": {
+    "ocr_config.schema.json": "861f2caf224969b6ecb0f76def521161d6dc215ac13ddab867a5b88919968bb0",
+    "ocr_bridge_request.schema.json": "c5750c84133ba604a4199f3ddf11ec5ed9daef966bf717ecfd80d8ef9ef0bff8",
+    "ocr_bridge_response.schema.json": "d25ab7073b9a3bf0f225f203d5497f952435aa411a234acd28d1696443fac85e",
+    "ocr_issue.schema.json": "663ed2bd6e22a33afba23412e887fe7a737239b0fe7b9a8f3d008cd8f8735157",
+    "benchmark_result.schema.json": "63300d3da669a3165c3214b7c43b4dde3360919ef0116a14bbcecbc7625380cf",
+    "detection.schema.json": "4a5b95f349ba8f055548251001612b79c9be7fdc098599ffe16eb55f632f72f7",
+    "block_origin.schema.json": "1cd41f7b92eeb8ff6eb16e71158ea2c05e5f6f95ba7b96657d780d0ad8a97544",
+    "extraction_block.schema.json": "8a081a7c4d2202bdea8962ee6eef448eff422773381094641854463dc66a3449",
+    "normalized_page_extraction.schema.json": "bc00b2ad77d37e24b37f4d60b5cdeb39de5537a698658718711f35d7bed927f3",
+    "normalized_document_extraction.schema.json": "6635aba3cd4beaade3cea00dce763156c700375c458d4d2fe8e7fbae814eeefa",
+    "ocr_job_view.schema.json": "f892766e64355f4708c4a7813c923444f6421e684d2a871798cd09cad8c77fae",
+    "engine_profile.schema.json": "ce741259dc9b0c9e31d629dbe05092669024ff00b7f72785180994269ba5b88d"
+  }
+}

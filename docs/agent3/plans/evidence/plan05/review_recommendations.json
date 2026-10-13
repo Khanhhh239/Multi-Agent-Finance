@@ -1,0 +1,2606 @@
+[
+  {
+    "assessment_id": "quality-c7ebbcb8d3134455b0edf1a473370fd2",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-6fd1a70911d3d05c49dd056e30ae557e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-f4616409d89142aea7819d57c2e43a69.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-aa515e8620e4dabca418243575e507eb",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-f4616409d89142aea7819d57c2e43a69.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e425e36ad06ed46efd82c839322e3736",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-f4616409d89142aea7819d57c2e43a69.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e786b745ddeed98d7c7043b460505785",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-f4616409d89142aea7819d57c2e43a69.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd9ed8021626e6ca8dea8aea8de0fa31",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-334ff1966f75e2ba7bcea8e5f1f9b5bd",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f69f2dea4000acc4be4f75353daa0bff",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-722c97299b0d412b8b979a9815965a3a",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-4c4497e624521c215ba1ef624e6be2d9",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-37dc0c0ba5584852bc858ecb677f162f.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-d681b7ca48f971cfa9346b8ba9932efe",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-37dc0c0ba5584852bc858ecb677f162f.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-653a6e067b24fe4fdfe7cef571fb160f",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-37dc0c0ba5584852bc858ecb677f162f.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-7b35c74ea832c5b063e1cdcfb96230ec",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-37dc0c0ba5584852bc858ecb677f162f.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd9ed8021626e6ca8dea8aea8de0fa31",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-334ff1966f75e2ba7bcea8e5f1f9b5bd",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f69f2dea4000acc4be4f75353daa0bff",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-d8921e7317544cd4a1d4d0664decabb1",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f666b4becd10446514bc8a175e209d18",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-ce227f7868834679aced109ca2e370ca.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-24eaab20b5cdc84da6da7b988d94fc29",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-ce227f7868834679aced109ca2e370ca.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-2ed8cc321e9cfc7b8a98f3208a8a551b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-ce227f7868834679aced109ca2e370ca.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-415497bc94d065557979fc40fb05f4c7",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-ce227f7868834679aced109ca2e370ca.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd9ed8021626e6ca8dea8aea8de0fa31",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-334ff1966f75e2ba7bcea8e5f1f9b5bd",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f69f2dea4000acc4be4f75353daa0bff",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-d7308453f67f4498b6da683e264abf95",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ddd3f2d5c60af03f7cc1eb2c577f87ed",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c89ee97cbca9403c816f4d0ee03f331f.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-5ea6dde8126bc4bc62ed0f1d06a55abe",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c89ee97cbca9403c816f4d0ee03f331f.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-72d9e083112fe9409777516fc37e12d5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c89ee97cbca9403c816f4d0ee03f331f.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-7ceb745f162a08e9d3df1305863e51bd",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c89ee97cbca9403c816f4d0ee03f331f.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd9ed8021626e6ca8dea8aea8de0fa31",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-334ff1966f75e2ba7bcea8e5f1f9b5bd",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f69f2dea4000acc4be4f75353daa0bff",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-196654ca54dd45a88d596781be50aeec",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-156ee99df85392e2a520991edfb0851a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-dcb6de79e1da498591e9e1c401f11659.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-4a021e38ed841ae200031bd7f6dac09d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-dcb6de79e1da498591e9e1c401f11659.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-8b86b2ca2697eb5921179d706645340b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-dcb6de79e1da498591e9e1c401f11659.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-dcda81314d8edd53f112275f7ebe9151",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-dcb6de79e1da498591e9e1c401f11659.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd9ed8021626e6ca8dea8aea8de0fa31",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-334ff1966f75e2ba7bcea8e5f1f9b5bd",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f69f2dea4000acc4be4f75353daa0bff",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-d1599863bd9444b6864897a2dec04e9c",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a775f235d2b38c6160181b35b80f05d3",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-590071c3560c451188dc6626e95af60b.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-455a28b8d28c0af3f03df6f171b36325",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-590071c3560c451188dc6626e95af60b.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-6ca0e7d5bea609cab7caf7d6cab8f4cd",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-590071c3560c451188dc6626e95af60b.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-88f175e3448b696837501a791a59acf2",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-590071c3560c451188dc6626e95af60b.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd9ed8021626e6ca8dea8aea8de0fa31",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-334ff1966f75e2ba7bcea8e5f1f9b5bd",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f69f2dea4000acc4be4f75353daa0bff",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-dc42730c8cbb4d0292ca7c476ebd730b",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-5b9c4dc43ce055dda5b9ff4d4b9e551b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-93223fb4d76d4b97a9fa34e0a0033cc4.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-d41afd8cfb9571fb99208fca32b79950",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-93223fb4d76d4b97a9fa34e0a0033cc4.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-1f14f58bcd3ffb333f2ccdad4cfa33fa",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-93223fb4d76d4b97a9fa34e0a0033cc4.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-28309988dd04b161cf771252346da781",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-93223fb4d76d4b97a9fa34e0a0033cc4.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd9ed8021626e6ca8dea8aea8de0fa31",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-334ff1966f75e2ba7bcea8e5f1f9b5bd",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f69f2dea4000acc4be4f75353daa0bff",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-3dbce02fd889498d9c9666d14bb229d3",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-1ca76b4c9862a9f6752228685701ce80",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-095be474256048a39514dde4676fc159.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f2ee6c9b07eec5aa45f1b5a9464e400c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-095be474256048a39514dde4676fc159.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-2c9a0d51088fcecc741dd69bcf32758e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-095be474256048a39514dde4676fc159.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b1dea0f35a87060135b7116c8cbcd29a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-095be474256048a39514dde4676fc159.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-4b33cfbfa37f7af5f5f0be7d89f7f8e0",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-5f01a4155e0c47b0bb14e0394ebfb694.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-558494f84c0c88e2a42c417e6e451f15",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-5f01a4155e0c47b0bb14e0394ebfb694.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c9dec4c55dbd0d82b0d80f158eb17ad4",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-5f01a4155e0c47b0bb14e0394ebfb694.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f8be0a381d823079993d8f70757977f3",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-f513361b7d01425ba1b4ce996ee21f7d.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-58c66d2bc5beda8f0baa47f0be643845",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-f513361b7d01425ba1b4ce996ee21f7d.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-85006d2ebeca571d18fd27a8a8bfc138",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-f513361b7d01425ba1b4ce996ee21f7d.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a7cdd773a790ac10242976ea9d9faccc",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-f513361b7d01425ba1b4ce996ee21f7d.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-acaac0456250420cc7831f717b408847",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-8b96302217f48f60e06b159bffd062e3",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cbe2d623f3e4016fd504c7321b5b0354",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      },
+      {
+        "recommendation_id": "recommend-074ea7472ae62ae65b1d6d52ad019a4b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          17
+        ]
+      },
+      {
+        "recommendation_id": "recommend-aed5ddfcf7ae9e3612d0ee3c2cae2835",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          18
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b3827a30edb3933ca36291d3bf08b1e8",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          19
+        ]
+      },
+      {
+        "recommendation_id": "recommend-4cdc26f81d6c9133872617aecebe5128",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          20
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cac642e1575b720cdc41f17411d4e993",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          21
+        ]
+      },
+      {
+        "recommendation_id": "recommend-36902a9cddbbd8da66702e1e23375da8",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          22
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ad23fc58fece2bd2f292bb7f7667a4df",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          23
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-69e98c23886a423280937b7df8a46b8f",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-d1193e65f36823613fc600f620668212",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-8784fc20929c45e7a550cfd55cfecde0.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-33bde67fc837db38767ae04e3db7aa7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-8784fc20929c45e7a550cfd55cfecde0.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-55fcda0e1fd808df99aeb2e00c7807c2",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-8784fc20929c45e7a550cfd55cfecde0.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae7469dba407c13cc76f6634683afd6f",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-8784fc20929c45e7a550cfd55cfecde0.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-2590b1abc70be2731745f4707ecd749f",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-a1cff24ac57c41c89ab462a6bb62e895.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-70262acda0fb19065b3b196c140b4f3e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-a1cff24ac57c41c89ab462a6bb62e895.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-d3371861e1bfc3e817384fd05f400379",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-a1cff24ac57c41c89ab462a6bb62e895.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c6c5c10287daccebe0aa0ba50ad86a21",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-a1cff24ac57c41c89ab462a6bb62e895.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-24dc6af6900223583ff5dfed60d47d60",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c749610b6d514d9caa588f63b4b6adff.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-09d12d8d8188fc9067c40b5979e33890",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c749610b6d514d9caa588f63b4b6adff.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-dadafcab5ed0f6ad33189f27cba09793",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c749610b6d514d9caa588f63b4b6adff.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-acaac0456250420cc7831f717b408847",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-8b96302217f48f60e06b159bffd062e3",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cbe2d623f3e4016fd504c7321b5b0354",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      },
+      {
+        "recommendation_id": "recommend-074ea7472ae62ae65b1d6d52ad019a4b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          17
+        ]
+      },
+      {
+        "recommendation_id": "recommend-aed5ddfcf7ae9e3612d0ee3c2cae2835",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          18
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b3827a30edb3933ca36291d3bf08b1e8",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          19
+        ]
+      },
+      {
+        "recommendation_id": "recommend-4cdc26f81d6c9133872617aecebe5128",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          20
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cac642e1575b720cdc41f17411d4e993",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          21
+        ]
+      },
+      {
+        "recommendation_id": "recommend-36902a9cddbbd8da66702e1e23375da8",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          22
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ad23fc58fece2bd2f292bb7f7667a4df",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          23
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-ad27e7f341da46cf8a096ab592509b48",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9c1181c06ce60f814346c423d445a8cf",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-7e6c763f67f04171941c7dd946a68d63.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-024d90e1fbf5a31253bdeb9c65cdd59f",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-7e6c763f67f04171941c7dd946a68d63.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-041cc23e727bbf4bd86369441d14464b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-7e6c763f67f04171941c7dd946a68d63.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-227558fdeee09bafa7369d30a7e602f6",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-7e6c763f67f04171941c7dd946a68d63.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9629ccdc16caceb7fa506df6e1265250",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-9d041ecf6bd44f648fef611544b8fdfd.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-782b11b9542c8282ca0bc3e98c65f214",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-9d041ecf6bd44f648fef611544b8fdfd.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-5c2401132102d4558227abd98a822c8e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-9d041ecf6bd44f648fef611544b8fdfd.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-bf77fa71ef94d49406124d7aa488296b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-9d041ecf6bd44f648fef611544b8fdfd.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-987ef51642308202d6ffdc958039701e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c832860b3b374787a8b0e9a11d2f12ab.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-646fafc4db124bd8d4157f2fb66b6a26",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c832860b3b374787a8b0e9a11d2f12ab.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-2801628de926d504ed03fd35af5150d9",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c832860b3b374787a8b0e9a11d2f12ab.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a676edd858cf8a1dc0da77dfcacd9a62",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c832860b3b374787a8b0e9a11d2f12ab.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-de9fa4d81831f38573c8dbf805fdb145",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-6f6e5da65a07e15bbc132141df12006f",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      },
+      {
+        "recommendation_id": "recommend-3f177b42041ad117893805fd3be8d122",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          17
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cee676ace843344675a90e1b5cccde33",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          18
+        ]
+      },
+      {
+        "recommendation_id": "recommend-732deeaf973a32d1e819280f4d73c358",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          19
+        ]
+      },
+      {
+        "recommendation_id": "recommend-3a70c564bc16c4bb2d9c311b7a2d2c09",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          20
+        ]
+      },
+      {
+        "recommendation_id": "recommend-d735133aa5f717d24bbbdaa0a583e788",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          21
+        ]
+      },
+      {
+        "recommendation_id": "recommend-5d6b67c61ad84bf1c8348c8cd0ae0597",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          22
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b3f713d6f8086dfe0b6f53ea1b7aa093",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          23
+        ]
+      },
+      {
+        "recommendation_id": "recommend-db5c3c2da268398c9f25c0b024313939",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          24
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-ab6afbd24e0147f0b735fbff96defa36",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-3672cc8d4c8dd72884dbfe186c4e28e0",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-90f135c47ae9423ea7c856b683b90b3e.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f3cb76aa289483ef303ac0b5090d668b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-90f135c47ae9423ea7c856b683b90b3e.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-7caf67bfc7dc756c9eb143070e172d75",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-90f135c47ae9423ea7c856b683b90b3e.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f5b9809d702740f503faefb867ac8941",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-90f135c47ae9423ea7c856b683b90b3e.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c642a4a7334417c3cd8d79d62991f5c9",
+        "reason": "HEADER_TOTAL_MISMATCH",
+        "field_path": "totals.gross",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-31d7cd65a3c579f831abc33a32ded7f2",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-29004a3621329ffa9f28918d9fd2132a",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          16
+        ]
+      },
+      {
+        "recommendation_id": "recommend-687a1360b838a6bdef8adcdc75707ffb",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          17
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-26b63719b34c4bb4abdaf0f7f5d0340c",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-8eeb81bdfce18c4bb826b09e78d110ee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "currency",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e38eb0bbc0b20f20cfe6a73ab003175a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c38473d4fcd845f4bfe6590dcdce7419.description",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f7dea50bdaf2be1c04c1b779ee631dee",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c38473d4fcd845f4bfe6590dcdce7419.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-4f10a347c059a5adcd00d372c570a9d8",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c38473d4fcd845f4bfe6590dcdce7419.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-13506ef6e0165a9868753edd022ae756",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-c38473d4fcd845f4bfe6590dcdce7419.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9b857827f5061bb93fa0f00e8ec26f7b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-07cccd312eb625d85446a8a7aa153153",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b6031e003886c3842a7c565f3e81a86e",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c4c4fc48dcd84e67fcbd216bad77895c",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ae3d7a3663c7097a03aa404c560c408b",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a819d77c3821190b4508fe6d3f208ad1",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f4d402e3f2ea486c037774a4cc35219d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd9ed8021626e6ca8dea8aea8de0fa31",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-334ff1966f75e2ba7bcea8e5f1f9b5bd",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f69f2dea4000acc4be4f75353daa0bff",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-bfb96ea1d9ba4d38af210efc9bc17c09",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-cddf7c3fea81341c1ec98407fe5c9d01",
+        "reason": "MISSING_FIELD",
+        "field_path": "currency",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e1db75666e2379acba3d0eb89932c95a",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.issue_date",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-af3bf72c9b45b85e96b0e3c85eb27ed5",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "invoice.number",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-4d6aa954a1a90f1c5f0d6e3e7ec5ba5b",
+        "reason": "MISSING_FIELD",
+        "field_path": "items.item-269cf6f674b64799af179712b07e7732.description",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-51b6b181ed205bf62555f5dc1dfd99b8",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-269cf6f674b64799af179712b07e7732.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-6831f83fefe73829c6b1363f9637c34d",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-269cf6f674b64799af179712b07e7732.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-17f91d9cdd991aefbe1180362c780ecf",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-269cf6f674b64799af179712b07e7732.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-5317e89e929dedaff577ddd32119253c",
+        "reason": "MISSING_FIELD",
+        "field_path": "items.item-7b6b7af64d9144c0af009cc66062de45.description",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-d15dd0507f6907be259c605ceb4bfa62",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-7b6b7af64d9144c0af009cc66062de45.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-5c8f17c791d81a7bc86dac4b585425fe",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-7b6b7af64d9144c0af009cc66062de45.vat_rate",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-824e64935d5d538b13fc5e8e8d2da254",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-7b6b7af64d9144c0af009cc66062de45.vat_treatment",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-ad27a0dc458fd63a09ed3902e22e6dc7",
+        "reason": "MISSING_FIELD",
+        "field_path": "items.item-90bbd785a82f4667b9dd5b3ed0c4ba95.description",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-9302a0b4d1a835939e6e9bda5efe9130",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "items.item-90bbd785a82f4667b9dd5b3ed0c4ba95.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a16afb6d217f8b6ec26126a5227587f8",
+        "reason": "MISSING_FIELD",
+        "field_path": "items.item-90bbd785a82f4667b9dd5b3ed0c4ba95.vat_rate",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          13
+        ]
+      },
+      {
+        "recommendation_id": "recommend-883b6f4244036fcd69ea4e8fe0866911",
+        "reason": "MISSING_FIELD",
+        "field_path": "items.item-90bbd785a82f4667b9dd5b3ed0c4ba95.vat_treatment",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          14
+        ]
+      },
+      {
+        "recommendation_id": "recommend-de9fa4d81831f38573c8dbf805fdb145",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          15
+        ]
+      },
+      {
+        "recommendation_id": "recommend-6f6e5da65a07e15bbc132141df12006f",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.buyer.tax_id",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          16
+        ]
+      },
+      {
+        "recommendation_id": "recommend-3f177b42041ad117893805fd3be8d122",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "parties.seller.name",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          17
+        ]
+      },
+      {
+        "recommendation_id": "recommend-0c0c3a05b5aaecf332899f950aef188d",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.seller.tax_id",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          18
+        ]
+      },
+      {
+        "recommendation_id": "recommend-732deeaf973a32d1e819280f4d73c358",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.gross",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          19
+        ]
+      },
+      {
+        "recommendation_id": "recommend-3a70c564bc16c4bb2d9c311b7a2d2c09",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.net",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          20
+        ]
+      },
+      {
+        "recommendation_id": "recommend-d735133aa5f717d24bbbdaa0a583e788",
+        "reason": "CONFIDENCE_UNAVAILABLE",
+        "field_path": "totals.vat",
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          21
+        ]
+      },
+      {
+        "recommendation_id": "recommend-5d6b67c61ad84bf1c8348c8cd0ae0597",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          22
+        ]
+      },
+      {
+        "recommendation_id": "recommend-b3f713d6f8086dfe0b6f53ea1b7aa093",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          23
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c7c67e4ae48b10b8ac64aed84599fedc",
+        "reason": "INVALID_EXTRACTION",
+        "field_path": "parties.seller.tax_id",
+        "action": "REEXTRACT",
+        "issue_refs": [
+          24
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c48ab4a81af3d2f843133c678ca1f4bb",
+        "reason": "INVALID_EXTRACTION",
+        "field_path": "currency",
+        "action": "REEXTRACT",
+        "issue_refs": [
+          25
+        ]
+      },
+      {
+        "recommendation_id": "recommend-f94da25d113f48ee94d50da5b5280afa",
+        "reason": "INVALID_EXTRACTION",
+        "field_path": "items.item-90bbd785a82f4667b9dd5b3ed0c4ba95",
+        "action": "REEXTRACT",
+        "issue_refs": [
+          26
+        ]
+      },
+      {
+        "recommendation_id": "recommend-e8d6fd6780bc7609fd2368bc92cf6fca",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          27
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-dc38f5a3bf8747b684dba5f6febb7371",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-cddf7c3fea81341c1ec98407fe5c9d01",
+        "reason": "MISSING_FIELD",
+        "field_path": "currency",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-753b3465a0f9c0c0209eee117b42cb56",
+        "reason": "MISSING_FIELD",
+        "field_path": "invoice.issue_date",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-daf4880003d4fa12ca9ad8c080059493",
+        "reason": "MISSING_FIELD",
+        "field_path": "invoice.number",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a6ba636a259172dc2cb2df84ac53a66f",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.buyer.name",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c0adecbd91dd718e37321c9886e7e3b9",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.buyer.tax_id",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-efd216281a9c1dda26ef4891b4425bff",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.seller.name",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-36331a3fd6c09952cbff28bb47bd8e78",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.seller.tax_id",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd344771f918295280cf945a82c5a0b8",
+        "reason": "MISSING_FIELD",
+        "field_path": "totals.gross",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a3c40ddf3b4fb770218b92f4eb6f7745",
+        "reason": "MISSING_FIELD",
+        "field_path": "totals.net",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-24b4627f1219ba44cb98f5f44a4afffc",
+        "reason": "MISSING_FIELD",
+        "field_path": "totals.vat",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-0e2f8078c150c6d1fb951ac331ae1c2e",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-328a9324c71cb204a751ca2844541f5e",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-22a29290c630d67c6d1411cdbdb1519f",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      }
+    ]
+  },
+  {
+    "assessment_id": "quality-a9d259c8c6b747ab99134f007677c22f",
+    "recommendations": [
+      {
+        "recommendation_id": "recommend-cddf7c3fea81341c1ec98407fe5c9d01",
+        "reason": "MISSING_FIELD",
+        "field_path": "currency",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          0
+        ]
+      },
+      {
+        "recommendation_id": "recommend-753b3465a0f9c0c0209eee117b42cb56",
+        "reason": "MISSING_FIELD",
+        "field_path": "invoice.issue_date",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          1
+        ]
+      },
+      {
+        "recommendation_id": "recommend-daf4880003d4fa12ca9ad8c080059493",
+        "reason": "MISSING_FIELD",
+        "field_path": "invoice.number",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          2
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a6ba636a259172dc2cb2df84ac53a66f",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.buyer.name",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          3
+        ]
+      },
+      {
+        "recommendation_id": "recommend-c0adecbd91dd718e37321c9886e7e3b9",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.buyer.tax_id",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          4
+        ]
+      },
+      {
+        "recommendation_id": "recommend-efd216281a9c1dda26ef4891b4425bff",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.seller.name",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          5
+        ]
+      },
+      {
+        "recommendation_id": "recommend-36331a3fd6c09952cbff28bb47bd8e78",
+        "reason": "MISSING_FIELD",
+        "field_path": "parties.seller.tax_id",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          6
+        ]
+      },
+      {
+        "recommendation_id": "recommend-cd344771f918295280cf945a82c5a0b8",
+        "reason": "MISSING_FIELD",
+        "field_path": "totals.gross",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          7
+        ]
+      },
+      {
+        "recommendation_id": "recommend-a3c40ddf3b4fb770218b92f4eb6f7745",
+        "reason": "MISSING_FIELD",
+        "field_path": "totals.net",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          8
+        ]
+      },
+      {
+        "recommendation_id": "recommend-24b4627f1219ba44cb98f5f44a4afffc",
+        "reason": "MISSING_FIELD",
+        "field_path": "totals.vat",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          9
+        ]
+      },
+      {
+        "recommendation_id": "recommend-0e2f8078c150c6d1fb951ac331ae1c2e",
+        "reason": "INCOMPLETE_ITEMS",
+        "field_path": "items",
+        "action": "REQUEST_DATA",
+        "issue_refs": [
+          10
+        ]
+      },
+      {
+        "recommendation_id": "recommend-328a9324c71cb204a751ca2844541f5e",
+        "reason": "UNKNOWN_DIRECTION",
+        "field_path": "derived.invoice_direction",
+        "action": "VERIFY_SOURCE",
+        "issue_refs": [
+          11
+        ]
+      },
+      {
+        "recommendation_id": "recommend-22a29290c630d67c6d1411cdbdb1519f",
+        "reason": "AUTO_ACCEPT_DISABLED",
+        "field_path": null,
+        "action": "CONFIRM_VALUE",
+        "issue_refs": [
+          12
+        ]
+      }
+    ]
+  }
+]

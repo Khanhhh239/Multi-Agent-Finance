@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "profile": "capture-foundation-v1",
+  "schemas": {
+    "source_envelope.schema.json": "98aa549d0f0789a2747e3ac36357e53f08f9caff097887f4e2fbbc186008be1c",
+    "field_text.schema.json": "9a15d24cb8500fb0f0a1634719cffc07092dcdd579193dfa79f9ce468f6ece80",
+    "field_money.schema.json": "94b0f0cdad55a1a54476ab621f2ad2c39505705c7660503bf6be114bbf006c91",
+    "evidence.schema.json": "5be380f74069dbc551e70f6ec81cef0ba1b1fe146a3bb8012df77a7ad65fca4b",
+    "page_transform.schema.json": "3d238b727d96862ca98792985b4da777408dfd8ea45a99d5ea787dcee761c631",
+    "cfr.schema.json": "695b7b3354002c15c44108fa564a32a8822ce70e9f835bf12f60bc2610bcc89d",
+    "taxpayer_master.schema.json": "2a5cc7dc8f688b258ce0ac6e6905fde32109eadc50d69e9cae081b81a1ce6f1f",
+    "audit_event.schema.json": "2232485fed98095a84d71520453d654b51b356a51c7376d522ad92e3b3678538",
+    "artifact.schema.json": "d2455e79661ee827ff23ebe3a35e8f91941b5bdea59113afb675f35bd0d235cc",
+    "job.schema.json": "4dc5df2aa37cae2dbcadc52ef7184e17886d3c2fb196f836682a29b41bd3f60b",
+    "document.schema.json": "2908fae9528f2c353d46693803c8a55c37d409232f48cbb06aa5fb7704f64c0b",
+    "detect_response.schema.json": "2e557c9ea0d3c54e87acf6f122269a1304637b92b951566d99af75504816f2fd",
+    "extract_response.schema.json": "06c30a59c2170d194769de4c2ac3b2fefed0d6eb093bad03165f288318bd7020",
+    "canonicalize_response.schema.json": "9e2248e43563da7f2018750ece6871b55fc3dc530512c2178e2f9225da38daf1",
+    "assess_response.schema.json": "d6d65ba26d4f7790d4c4590cdab21ee275fe0f88d69cd6aecf84f4cab68a330e",
+    "review_response.schema.json": "90ead5e4fe8fa885abe1540e0f60d0056b8c6a2d52629fb14a947c1cd3aa57f8",
+    "correction.schema.json": "4933c6641bae01791a8c4a23772bdae5896a9a1d921a5a9dd32950e3c0d59309"
+  },
+  "semantic_validation": "src.domain model validators are mandatory after structural JSON Schema validation"
+}

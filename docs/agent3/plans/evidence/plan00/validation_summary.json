@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "checked_date": "2026-10-11",
+  "annotation_rows_valid": 30,
+  "manifest_rows_valid": 1183,
+  "negative_contracts_rejected": 3,
+  "metrics": 14,
+  "markdown_links": "PASS",
+  "schema_validator": "jsonschema Draft202012Validator in system Python; no package install",
+  "ocr_accuracy_evaluated": false,
+  "independent_human_review": false
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "profile": "ingestion-v1",
+  "schemas": {
+    "document_artifact.schema.json": "c7430df34471bb1ac4007cb08b2b8c07640e74295c41abe758456cbd24655306",
+    "page_artifact.schema.json": "0fab4fe4978245cd9019a4e32a92c4e8904ad4e7784c2fd3c33929847f519689",
+    "geometry.schema.json": "f7b1da9350fe7b8800f137ab0dd0da3f48c6bf702f5165e110d2a6a440560f95",
+    "ingestion_issue.schema.json": "37a2f098ac860cc2460ef927873dc83984892bbfaba335b57afd73e48008189e",
+    "ingestion_view.schema.json": "db1763e1ad9126460335b2f0a0600ca6bf6ab1eeea424fc2a650eee7937c6bc2",
+    "route_policy.schema.json": "af6953d648c70d045ce9299d73e2a54cf66e3cade6e1ca31b3ff768291d3d955",
+    "text_block.schema.json": "17eabc6f2a237fce00e6742aff6a082b40516aa86a2f6059379c012dd2b43364"
+  }
+}

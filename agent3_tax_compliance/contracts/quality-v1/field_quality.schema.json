@@ -1,0 +1,72 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "field_path": {
+      "title": "Field Path",
+      "type": "string"
+    },
+    "field_status": {
+      "title": "Field Status",
+      "type": "string"
+    },
+    "validation": {
+      "enum": [
+        "VALID",
+        "INVALID_SOURCE_CONTENT",
+        "UNKNOWN",
+        "NOT_CHECKED",
+        "NOT_APPLICABLE"
+      ],
+      "title": "Validation",
+      "type": "string"
+    },
+    "reliability": {
+      "enum": [
+        "CALIBRATED",
+        "DETERMINISTIC_VERIFIED",
+        "HUMAN_CONFIRMED",
+        "UNAVAILABLE"
+      ],
+      "title": "Reliability",
+      "type": "string"
+    },
+    "probability": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Probability"
+    },
+    "critical": {
+      "title": "Critical",
+      "type": "boolean"
+    },
+    "eligible_within_policy": {
+      "default": false,
+      "title": "Eligible Within Policy",
+      "type": "boolean"
+    },
+    "auto_accepted": {
+      "const": false,
+      "default": false,
+      "title": "Auto Accepted",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "field_path",
+    "field_status",
+    "validation",
+    "reliability",
+    "critical"
+  ],
+  "title": "FieldQuality",
+  "type": "object"
+}

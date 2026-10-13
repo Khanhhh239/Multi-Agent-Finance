@@ -1,0 +1,6 @@
+torch>=2.1
+transformers>=5.13
+accelerate>=1.13
+Pillow>=10
+PyYAML==6.0.3
+tqdm>=4.66,<5

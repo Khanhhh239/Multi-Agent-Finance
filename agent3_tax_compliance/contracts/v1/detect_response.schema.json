@@ -1,0 +1,285 @@
+{
+  "$defs": {
+    "DetectedSource": {
+      "additionalProperties": false,
+      "properties": {
+        "envelope": {
+          "$ref": "#/$defs/SourceEnvelope"
+        },
+        "detected_format": {
+          "$ref": "#/$defs/SourceFormat"
+        },
+        "detection_status": {
+          "enum": [
+            "SUPPORTED",
+            "UNSUPPORTED",
+            "UNKNOWN"
+          ],
+          "title": "Detection Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "envelope",
+        "detected_format",
+        "detection_status"
+      ],
+      "title": "DetectedSource",
+      "type": "object"
+    },
+    "SourceEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Config Version",
+          "type": "string"
+        },
+        "creator": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Creator",
+          "type": "string"
+        },
+        "stage": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Stage",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "tenant_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "taxpayer_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Taxpayer Id",
+          "type": "string"
+        },
+        "taxpayer_master_revision": {
+          "minimum": 1,
+          "title": "Taxpayer Master Revision",
+          "type": "integer"
+        },
+        "request_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "exclusiveMinimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        },
+        "declared_mime": {
+          "title": "Declared Mime",
+          "type": "string"
+        },
+        "detected_format": {
+          "$ref": "#/$defs/SourceFormat",
+          "default": "UNKNOWN"
+        },
+        "adapter_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Adapter Version",
+          "type": "string"
+        },
+        "profile_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Profile Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "config_version",
+        "creator",
+        "stage",
+        "tenant_id",
+        "taxpayer_id",
+        "taxpayer_master_revision",
+        "request_id",
+        "source_id",
+        "sha256",
+        "size_bytes",
+        "declared_mime",
+        "adapter_version",
+        "profile_version"
+      ],
+      "title": "SourceEnvelope",
+      "type": "object"
+    },
+    "SourceFormat": {
+      "enum": [
+        "PDF",
+        "IMAGE",
+        "INVOICE_XML",
+        "EXCEL_TABULAR",
+        "EXCEL_GENERIC",
+        "BANK_STATEMENT",
+        "ERP_API",
+        "UNKNOWN_XML",
+        "UNKNOWN"
+      ],
+      "title": "SourceFormat",
+      "type": "string"
+    },
+    "StageError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_INPUT",
+            "UNSUPPORTED",
+            "ACCESS_DENIED",
+            "REVISION_CONFLICT",
+            "PROCESSING_ERROR"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "retryable",
+        "message"
+      ],
+      "title": "StageError",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "request_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Request Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "SUCCEEDED",
+        "ERROR"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "data": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DetectedSource"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StageError"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "request_id",
+    "input_sha256",
+    "status"
+  ],
+  "title": "StageResponse[DetectedSource]",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:financial:capture:1.0.0:detect_response"
+}

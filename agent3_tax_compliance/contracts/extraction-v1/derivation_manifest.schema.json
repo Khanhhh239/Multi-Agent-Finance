@@ -1,0 +1,73 @@
+{
+  "$defs": {
+    "DerivationNode": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "inputs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Inputs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "path",
+        "inputs"
+      ],
+      "title": "DerivationNode",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "derive-v1",
+      "default": "derive-v1",
+      "title": "Version",
+      "type": "string"
+    },
+    "observed_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Observed Sha256",
+      "type": "string"
+    },
+    "master_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Master Sha256",
+      "type": "string"
+    },
+    "relations_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Relations Sha256",
+      "type": "string"
+    },
+    "profile_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Profile Version",
+      "type": "string"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/DerivationNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "observed_sha256",
+    "master_sha256",
+    "relations_sha256",
+    "profile_version",
+    "nodes"
+  ],
+  "title": "DerivationManifest",
+  "type": "object"
+}

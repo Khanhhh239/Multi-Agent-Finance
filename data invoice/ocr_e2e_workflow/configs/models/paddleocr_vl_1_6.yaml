@@ -1,0 +1,13 @@
+model_id: paddleocr_vl_1_6
+adapter: paddleocr_vl
+output_mode: structured_document
+python: "envs/paddleocr_vl_1_6/Scripts/python.exe"
+pipeline_version: v1.6
+model_dir: "artifacts/models/paddleocr_vl_1_6"
+device: gpu:0
+requires_gpu: true
+use_doc_orientation_classify: true
+use_doc_unwarping: false
+use_layout_detection: true
+enable_mkldnn: false
+temperature: 0

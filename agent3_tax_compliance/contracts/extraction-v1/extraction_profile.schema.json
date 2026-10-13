@@ -1,0 +1,59 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "default": "invoice-vi-v1",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "number_locale": {
+      "default": "AUTO",
+      "enum": [
+        "AUTO",
+        "VI",
+        "EN"
+      ],
+      "title": "Number Locale",
+      "type": "string"
+    },
+    "date_order": {
+      "default": "DMY",
+      "enum": [
+        "AUTO",
+        "DMY",
+        "MDY"
+      ],
+      "title": "Date Order",
+      "type": "string"
+    },
+    "default_currency": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Default Currency"
+    },
+    "currency_policy_reference": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Currency Policy Reference"
+    }
+  },
+  "title": "ExtractionProfile",
+  "type": "object"
+}

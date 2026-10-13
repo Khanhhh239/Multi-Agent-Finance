@@ -1,0 +1,18 @@
+{
+  "version": "quality-manual-v1",
+  "auto_accept_enabled": false,
+  "threshold_status": "TBD_INSUFFICIENT_DATA",
+  "threshold_owner": "UNASSIGNED_REQUIRES_BUSINESS_OWNER",
+  "thresholds": {"tax_id": null, "issue_date": null, "money": null, "other": null},
+  "fidelity_policies": [],
+  "profiles": [
+    {"version":"invoice-quality-v1","record_type":"INVOICE",
+     "expected_fields":["parties.seller.name","parties.seller.tax_id","parties.buyer.name","parties.buyer.tax_id","invoice.number","invoice.issue_date","currency","totals.net","totals.vat","totals.gross"],
+     "critical_fields":["parties.seller.tax_id","parties.buyer.tax_id","invoice.number","invoice.issue_date","currency","totals.gross"],
+     "item_fields":["description","net","vat_treatment","vat_rate"]},
+    {"version":"receipt-quality-v1","record_type":"RECEIPT",
+     "expected_fields":["parties.seller.name","invoice.issue_date","currency","totals.gross"],
+     "critical_fields":["invoice.issue_date","currency","totals.gross"],
+     "item_fields":["description","net"]}
+  ]
+}

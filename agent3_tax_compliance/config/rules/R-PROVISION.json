@@ -1,0 +1,16 @@
+{
+  "rule_id": "R-PROVISION",
+  "effective_from": "2019-08-08",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "provision_amount",
+      "operator": ">",
+      "value_field": "max_allowed_provision"
+    }
+  ],
+  "verdict": "REVIEW",
+  "fixable": true,
+  "fix_hint": "Bút toán trích lập dự phòng vượt quá mức quy định hoặc không đủ hồ sơ đi kèm. Kế toán cần rà soát lại phương pháp tính và tuổi nợ theo đúng Thông tư 48/2019/TT-BTC.",
+  "citation": "Thông tư 48/2019/TT-BTC hướng dẫn việc trích lập và xử lý các khoản dự phòng."
+}

@@ -1,0 +1,515 @@
+{
+  "date": "2026-10-12",
+  "scope": "synthetic-functional-v1",
+  "runtime_sha256": "aef2e540e1a329953eae7a94561a71a8a4f57ebc03de61e53981b734cd0779d3",
+  "comparison": [
+    {
+      "config": {
+        "version": "tesseract-v1-psm3",
+        "model_id": "tesseract",
+        "language": "vie+eng",
+        "psm": 3,
+        "preprocess_version": "render-identity-v1",
+        "timeout_seconds": 30,
+        "memory_mb": 512,
+        "max_output_bytes": 4194304,
+        "max_attempts": 2
+      },
+      "samples": 10,
+      "split": "synthetic-functional-development-10",
+      "cer_micro": 0.15943517329910142,
+      "wer_micro": 0.561963190184049,
+      "char_edits": 621,
+      "reference_chars": 3895,
+      "word_edits": 458,
+      "reference_words": 815,
+      "date_exact_line_value": {
+        "correct": 10,
+        "eligible": 10
+      },
+      "total_exact_line_value": {
+        "correct": 7,
+        "eligible": 9
+      },
+      "inference_p50_ms": 470.1116500000353,
+      "inference_p95_ms": 622.2431999995024,
+      "cold_first_inference_ms": 481.30200000014156,
+      "warm_inference_p50_ms": 458.92129999992903,
+      "adapter_load_ms": 7.885299994086381,
+      "batch_wall_ms": 5612.558900000295,
+      "peak_job_memory_mb": 56.6640625,
+      "raw_score_distribution": {
+        "semantics": "ENGINE_HEURISTIC_NOT_CALIBRATED",
+        "count": 155,
+        "min": 0.48,
+        "median": 0.815,
+        "max": 0.89125
+      },
+      "failure_rate": 0,
+      "geometry_available_rate": 1.0,
+      "run_manifest": "data invoice\\plan03_local\\comparison-psm3.jsonl",
+      "run_sha256": "f79411b79f817b513dead4b9eb046250f8fb8aa523805955cfeab2691b0daad0"
+    },
+    {
+      "config": {
+        "version": "tesseract-v1-psm6",
+        "model_id": "tesseract",
+        "language": "vie+eng",
+        "psm": 6,
+        "preprocess_version": "render-identity-v1",
+        "timeout_seconds": 30,
+        "memory_mb": 512,
+        "max_output_bytes": 4194304,
+        "max_attempts": 2
+      },
+      "samples": 10,
+      "split": "synthetic-functional-development-10",
+      "cer_micro": 0.15943517329910142,
+      "wer_micro": 0.561963190184049,
+      "char_edits": 621,
+      "reference_chars": 3895,
+      "word_edits": 458,
+      "reference_words": 815,
+      "date_exact_line_value": {
+        "correct": 10,
+        "eligible": 10
+      },
+      "total_exact_line_value": {
+        "correct": 7,
+        "eligible": 9
+      },
+      "inference_p50_ms": 610.7157500009635,
+      "inference_p95_ms": 1277.7711000017007,
+      "cold_first_inference_ms": 481.75869999977294,
+      "warm_inference_p50_ms": 610.7905000026221,
+      "adapter_load_ms": 7.174699996539857,
+      "batch_wall_ms": 8096.686000004411,
+      "peak_job_memory_mb": 56.95703125,
+      "raw_score_distribution": {
+        "semantics": "ENGINE_HEURISTIC_NOT_CALIBRATED",
+        "count": 155,
+        "min": 0.48,
+        "median": 0.815,
+        "max": 0.89125
+      },
+      "failure_rate": 0,
+      "geometry_available_rate": 1.0,
+      "run_manifest": "data invoice\\plan03_local\\comparison-psm6.jsonl",
+      "run_sha256": "5a197c32f459e2646ab1ea2a57dd9293e7e2f268459abef85d718a8d32b386b5"
+    },
+    {
+      "config": {
+        "version": "tesseract-v1-psm11",
+        "model_id": "tesseract",
+        "language": "vie+eng",
+        "psm": 11,
+        "preprocess_version": "render-identity-v1",
+        "timeout_seconds": 30,
+        "memory_mb": 512,
+        "max_output_bytes": 4194304,
+        "max_attempts": 2
+      },
+      "samples": 10,
+      "split": "synthetic-functional-development-10",
+      "cer_micro": 0.15378690629011554,
+      "wer_micro": 0.5852760736196319,
+      "char_edits": 599,
+      "reference_chars": 3895,
+      "word_edits": 477,
+      "reference_words": 815,
+      "date_exact_line_value": {
+        "correct": 0,
+        "eligible": 10
+      },
+      "total_exact_line_value": {
+        "correct": 7,
+        "eligible": 9
+      },
+      "inference_p50_ms": 905.3962000034517,
+      "inference_p95_ms": 1192.066600000544,
+      "cold_first_inference_ms": 860.3423000022303,
+      "warm_inference_p50_ms": 914.7032000037143,
+      "adapter_load_ms": 14.374500002304558,
+      "batch_wall_ms": 10964.71549999842,
+      "peak_job_memory_mb": 58.03515625,
+      "raw_score_distribution": {
+        "semantics": "ENGINE_HEURISTIC_NOT_CALIBRATED",
+        "count": 300,
+        "min": 0.01,
+        "median": 0.77,
+        "max": 0.9533333333333333
+      },
+      "failure_rate": 0,
+      "geometry_available_rate": 1.0,
+      "run_manifest": "data invoice\\plan03_local\\comparison-psm11.jsonl",
+      "run_sha256": "67c480fa9d15c4cbc913658969e71088ea2b9cc0f6b1a3c514365f07349be54a"
+    }
+  ],
+  "selected_config": {
+    "version": "tesseract-v1-psm3",
+    "model_id": "tesseract",
+    "language": "vie+eng",
+    "psm": 3,
+    "preprocess_version": "render-identity-v1",
+    "timeout_seconds": 30,
+    "memory_mb": 512,
+    "max_output_bytes": 4194304,
+    "max_attempts": 2
+  },
+  "document_outcomes": [
+    {
+      "ingestion_id": "ingestion-16e9489ac2624728a0d12eb2328ce902",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "878e418e05c9889117f407f82cd8e04c70114c37a4ab94001f850216a878a613",
+      "path": "data invoice\\plan03_local\\ingestion-16e9489ac2624728a0d12eb2328ce902.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-fd6b33abad8b4f3a8f44952b954b87a0",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "a7785ba5ff7fb4549b5b0093875c116e24b7a5acf2436b4aa423ca7e23340069",
+      "path": "data invoice\\plan03_local\\ingestion-fd6b33abad8b4f3a8f44952b954b87a0.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-f48d95020cfe42ccb8099d3d3d487d85",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 27,
+      "result_sha256": "322f84138895adc101a0ba621e667a82d7d408c35631ef93b9f06e24a48dc9e7",
+      "path": "data invoice\\plan03_local\\ingestion-f48d95020cfe42ccb8099d3d3d487d85.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-b50ddef988e747cbab923ab886dd1cab",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "87de535506935da140aa209f7a85860eb8396f7a3a1a7debe69480299d33a1c1",
+      "path": "data invoice\\plan03_local\\ingestion-b50ddef988e747cbab923ab886dd1cab.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-db05f100add34f96b3478ad937dfd08d",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "308edca4fc61114d5dd274ea90dd4ff3b4567bc5ca6b467558b66a3e9ada355d",
+      "path": "data invoice\\plan03_local\\ingestion-db05f100add34f96b3478ad937dfd08d.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-be715cd9a79a45d2883cde4a76f6c233",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 27,
+      "result_sha256": "6ba6bb97ce3e4ccd93581ce332883133416ea00a0ba25068b1fc57b0606cfb6d",
+      "path": "data invoice\\plan03_local\\ingestion-be715cd9a79a45d2883cde4a76f6c233.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-9ef7c7b406a6480fa4b44638285dbfb7",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "90287518824ecfbfcc0534f1d357e4cb33fc2442e41fb0a02b13b305cdb3d1ca",
+      "path": "data invoice\\plan03_local\\ingestion-9ef7c7b406a6480fa4b44638285dbfb7.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-077e7eaabb6d4135849520d0e4f9bc5f",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "b4c8e2a9de4e499dee49b7373755fbc92007fab0abaedbef93b520db8de5d7e1",
+      "path": "data invoice\\plan03_local\\ingestion-077e7eaabb6d4135849520d0e4f9bc5f.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-aab41a310364441eb0fc453e7599d392",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 27,
+      "result_sha256": "b2886c8d1bcb3b5eded302a42578a1a38bde40ed1c078e7de8617b7a47f2a03e",
+      "path": "data invoice\\plan03_local\\ingestion-aab41a310364441eb0fc453e7599d392.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-819a52244c974213b8bdadc0cdda9de0",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "6f4ebbc06333ecc49591399a4815df3456fed9749d1ebd9b437cb3fdf4531b37",
+      "path": "data invoice\\plan03_local\\ingestion-819a52244c974213b8bdadc0cdda9de0.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-6476cee1abd547a1aa809b22d6ce44f0",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "8c6d60b7a0b988d9c769e3b6c8c1fe80251dcef93f06049d8747409a6e65d639",
+      "path": "data invoice\\plan03_local\\ingestion-6476cee1abd547a1aa809b22d6ce44f0.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-935bb6081712416cabf5e4f1beac5ea6",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 27,
+      "result_sha256": "a87c6b6829af8316c3a39d798b13428f42dd4c1ba1938f17ee0aec1f92d8cec3",
+      "path": "data invoice\\plan03_local\\ingestion-935bb6081712416cabf5e4f1beac5ea6.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-b419592cc3864b7b9ca66055b56e6b99",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "6ee558eaf6a85e00198bf19cd258e2ed4716ae1b9216581aed3cfb33724568a0",
+      "path": "data invoice\\plan03_local\\ingestion-b419592cc3864b7b9ca66055b56e6b99.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-a9d5be2fd94e4d71beba6c48ae1d3176",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "18e6f24473c69df5f6db7319c97fbba4325d9b34895ccf1cb7361b57872c5c00",
+      "path": "data invoice\\plan03_local\\ingestion-a9d5be2fd94e4d71beba6c48ae1d3176.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-ebbb28f78ff340288ee1462bfc7fe2f2",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 27,
+      "result_sha256": "3600941a45d322931c72b4d6750723e2c457e282b4e164b0ac87cf61561e84ee",
+      "path": "data invoice\\plan03_local\\ingestion-ebbb28f78ff340288ee1462bfc7fe2f2.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-f304b8d9b901472ca82a06c89bf4335f",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "8b637458865545f1b00b1779a2e4fc3a931063045ca713381c66a8155a80d66c",
+      "path": "data invoice\\plan03_local\\ingestion-f304b8d9b901472ca82a06c89bf4335f.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-c88d7aa120714b20a86412e24256b311",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "44a44f873e34b36dbcbed6f59e5961c92d251cb10dd81cb02fcfc32f7df32891",
+      "path": "data invoice\\plan03_local\\ingestion-c88d7aa120714b20a86412e24256b311.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-18b6a68843e945a8be816d120d0c9b20",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 27,
+      "result_sha256": "eec51514707a147e4713b930bf52a68db8e00392b7d7b15a2bf2f8d62b859162",
+      "path": "data invoice\\plan03_local\\ingestion-18b6a68843e945a8be816d120d0c9b20.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-c98c939098484d2cba266a804bde6ab6",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "b4a2d80cc259852ec007c9c84fa56844589a76d11f1a21b92250ce3335cb423a",
+      "path": "data invoice\\plan03_local\\ingestion-c98c939098484d2cba266a804bde6ab6.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-b5a5a6576cd940dab74571ea99645b73",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 14,
+      "result_sha256": "9ff459c46d9752e4836f05abbb344b59e8cbf8a8975355d38ccf62de1284e7e7",
+      "path": "data invoice\\plan03_local\\ingestion-b5a5a6576cd940dab74571ea99645b73.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-34e8a19777c4493194f0249eedb1b9e2",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 27,
+      "result_sha256": "f70b689b0231526e79e3e21b0cfe065593b01b3300c15de6cdc9675b02aa7a34",
+      "path": "data invoice\\plan03_local\\ingestion-34e8a19777c4493194f0249eedb1b9e2.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-1a7b53167ef84e6e8ad602e5f160fb05",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 20,
+      "result_sha256": "d40ed237a29dc4d61b68fdb8a52d4f6c1715fd8bb6c45cf420d9a7203dc965af",
+      "path": "data invoice\\plan03_local\\ingestion-1a7b53167ef84e6e8ad602e5f160fb05.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-8ccc39bfc607462aaaa772004885029c",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 20,
+      "result_sha256": "b2c6f3f696f95695766ff37b6c8174477dcc9a7b65f3a625ffb8846881ae42a5",
+      "path": "data invoice\\plan03_local\\ingestion-8ccc39bfc607462aaaa772004885029c.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-80a283c4cad54684acb23dd29840b673",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 39,
+      "result_sha256": "7f33cb99b7124b4e9aaf7e1563b68f2060fdd0d687c51adca7aab9d037b15719",
+      "path": "data invoice\\plan03_local\\ingestion-80a283c4cad54684acb23dd29840b673.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-54143674239f45c29e52e118093bce68",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 17,
+      "result_sha256": "d6a7ebea23de72b75e2dbecf85cdf506c63e14d48f01590a0a846c2473ce313b",
+      "path": "data invoice\\plan03_local\\ingestion-54143674239f45c29e52e118093bce68.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-0ff29ac61fcc4130a4e15c5ba8412cfa",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 2,
+      "blocks": 21,
+      "result_sha256": "eee150a1ac26f9f153f88c814e023bfc2490db7a5e02ce6297f523a78614996a",
+      "path": "data invoice\\plan03_local\\ingestion-0ff29ac61fcc4130a4e15c5ba8412cfa.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-a970012f4ec444609ae1b81af78e398f",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 2,
+      "blocks": 40,
+      "result_sha256": "d15a60f339d6f1b47bf45f8db6e5cf02ad5a0b877e73d11e79baf3f9f47f20ac",
+      "path": "data invoice\\plan03_local\\ingestion-a970012f4ec444609ae1b81af78e398f.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-56b2968329c14b92a62b406cc074897d",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 20,
+      "result_sha256": "bcb3aa4e844da38f3c29abfa474bee350aa2bf526535f3aff31318264831bce8",
+      "path": "data invoice\\plan03_local\\ingestion-56b2968329c14b92a62b406cc074897d.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-b43ec7025bc948b38284d0ba9544abed",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 39,
+      "result_sha256": "2165fd134ab92aef232e2d80793be254aecfb4f7160afa902e027c4a8af6f718",
+      "path": "data invoice\\plan03_local\\ingestion-b43ec7025bc948b38284d0ba9544abed.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-e4a7f635bc0e4338886b0041e72e181b",
+      "case": "project-original",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 39,
+      "result_sha256": "906f6138795211b42601bc3d78bd4b4940a77e79307174d03057e13e8ec1f34c",
+      "path": "data invoice\\plan03_local\\ingestion-e4a7f635bc0e4338886b0041e72e181b.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-d28761d692c649f99f637f4bc453cf6d",
+      "case": "mixed",
+      "status": "COMPLETE",
+      "pages": 2,
+      "blocks": 3,
+      "result_sha256": "322d1e03048f9d2d8ecde2485726eda7f02c287483b8bb15c4f11d852473df10",
+      "path": "data invoice\\plan03_local\\ingestion-d28761d692c649f99f637f4bc453cf6d.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-a51d2801f3304a48bec3174d5067a248",
+      "case": "invisible",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 1,
+      "result_sha256": "a438b32d3b1aed05072606e8c40bdb9ac7e012d7f8fe37a7ce508e7ca6bea361",
+      "path": "data invoice\\plan03_local\\ingestion-a51d2801f3304a48bec3174d5067a248.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-319f8a601b574fa8a95ba22343d3b466",
+      "case": "hybrid",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 3,
+      "result_sha256": "00f905c82b2651eac133ccaef71bfb135ce9f3cab3d1f379aa34011b3e01ec60",
+      "path": "data invoice\\plan03_local\\ingestion-319f8a601b574fa8a95ba22343d3b466.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-870b2c06a98e4b87ae0a7c7f267056be",
+      "case": "garbage",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 2,
+      "result_sha256": "ed14d1759fd3fd2f580ae41e85ac49a844e8cd907c1e5e4ec7e5e9e5ce4be64f",
+      "path": "data invoice\\plan03_local\\ingestion-870b2c06a98e4b87ae0a7c7f267056be.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-c0910574bd0b4354a718ee55e5a30e1f",
+      "case": "rotation-90",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 2,
+      "result_sha256": "67d9ad09c192718c5f3365fd5b4ae935ff87ef13abfefbed9aae23760ed82fcb",
+      "path": "data invoice\\plan03_local\\ingestion-c0910574bd0b4354a718ee55e5a30e1f.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-1214ac46b5b44847b280e9c7263f3f0e",
+      "case": "rotation-180",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 2,
+      "result_sha256": "9c9e88687dc96a302dd9d6ade6b3c90253af323aeb515f52057b4e9f5eb7d5ea",
+      "path": "data invoice\\plan03_local\\ingestion-1214ac46b5b44847b280e9c7263f3f0e.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-d6d0318973c0409eb766dc8cf5e91238",
+      "case": "rotation-270",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 2,
+      "result_sha256": "922985d7ec1d6ef18ecc21e953e0ec7c0ef42192d88bab8fbd409072d6cef2a1",
+      "path": "data invoice\\plan03_local\\ingestion-d6d0318973c0409eb766dc8cf5e91238.extraction.json"
+    },
+    {
+      "ingestion_id": "ingestion-c4fe1d5acb4441b4b929a7eb8b199f5a",
+      "case": "exif-6",
+      "status": "COMPLETE",
+      "pages": 1,
+      "blocks": 0,
+      "result_sha256": "ffe943ae0870bba65dda231e5eaebc788da306b8b9828d1c886bacbed7efa542",
+      "path": "data invoice\\plan03_local\\ingestion-c4fe1d5acb4441b4b929a7eb8b199f5a.extraction.json"
+    }
+  ],
+  "ram_observed_mb": 58.03515625,
+  "ram_budget_mb": 512,
+  "vram_observed_mb": null,
+  "gpu_used": false,
+  "limitations": [
+    "No independently reviewed Vietnamese invoices; no production quality claim.",
+    "Total/date are OCR exact recognition with ground-truth regions, not CFR field extraction accuracy.",
+    "All configurations share the same functional development split; no held-out selection test.",
+    "RAM is Windows Job Object peak committed memory for the worker tree, not GPU or system-wide RAM.",
+    "Load time is adapter Python initialization; Tesseract executable/model loads inside each inference.",
+    "One engine, three segmentation modes; no cross-engine superiority claim."
+  ]
+}

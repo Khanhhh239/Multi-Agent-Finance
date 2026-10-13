@@ -1,0 +1,34 @@
+D:\financial\agent3_tax_compliance\.venv\lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_api_errors_permissions_export_and_ui (test_review.ReviewTests) ... ok
+test_atomic_correction_direction_reassessment_replay_export (test_review.ReviewTests) ... ok
+test_audit_failure_rolls_back_every_write (test_review.ReviewTests) ... ok
+test_bad_formats_derived_identity_and_completeness_are_rejected (test_review.ReviewTests) ... ok
+test_buyer_identity_change_and_ambiguous_direction (test_review.ReviewTests) ... ok
+test_candidate_field_and_record_ownership (test_review.ReviewTests) ... ok
+test_concurrent_reviewers_cas (test_review.ReviewTests) ... ok
+test_events_immutable_and_audit_redacts_fields (test_review.ReviewTests) ... ok
+test_exempt_treatment_is_not_zero_rate (test_review.ReviewTests) ... ok
+test_exempt_with_explicit_clear_replays_once (test_review.ReviewTests) ... ok
+test_expired_lease_recovery_and_stale_worker_fence (test_review.ReviewTests) ... ok
+test_human_proof_survives_second_revision_and_regular_quality (test_review.ReviewTests) ... ok
+test_idempotent_double_submit_and_key_conflict (test_review.ReviewTests) ... ok
+test_item_correction_recomputes_exact_totals (test_review.ReviewTests) ... ok
+test_job_native_flow_and_dedupe (test_review.ReviewTests) ... ok
+test_manual_completion_requires_current_verified_fields (test_review.ReviewTests) ... ok
+test_no_write_permission_even_with_visible_record (test_review.ReviewTests) ... ok
+test_processing_error_retry_bound_and_operator_path (test_review.ReviewTests) ... ok
+test_real_candidate_from_second_record_rejected (test_review.ReviewTests) ... ok
+test_request_data_recovery_path (test_review.ReviewTests) ... ok
+test_review_event_id_cannot_be_reused_for_a_different_value (test_review.ReviewTests) ... ok
+test_scoped_snapshot_pagination (test_review.ReviewTests) ... ok
+test_signed_evidence_expiry_tamper_actor_and_auth (test_review.ReviewTests) ... ok
+test_task_actions_are_scoped_audited_and_old_revision_rejected (test_review.ReviewTests) ... ok
+test_task_dedupe_and_lineage (test_review.ReviewTests) ... ok
+test_task_missing_reason_and_float_payload_rejected (test_review.ReviewTests) ... ok
+test_upload_api_to_worker_to_review_to_export (test_review.ReviewTests) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 20.477s
+
+OK

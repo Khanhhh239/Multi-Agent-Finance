@@ -1,0 +1,130 @@
+{
+  "$defs": {
+    "Change": {
+      "additionalProperties": false,
+      "properties": {
+        "field_path": {
+          "maxLength": 180,
+          "minLength": 1,
+          "title": "Field Path",
+          "type": "string"
+        },
+        "operation": {
+          "default": "SET",
+          "enum": [
+            "SET",
+            "CONFIRM",
+            "CLEAR"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "new_value": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "New Value"
+        },
+        "selected_candidate_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selected Candidate Id"
+        }
+      },
+      "required": [
+        "field_path"
+      ],
+      "title": "Change",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "record_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "expected_revision": {
+      "minimum": 1,
+      "title": "Expected Revision",
+      "type": "integer"
+    },
+    "task_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "changes": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Change"
+      },
+      "maxItems": 32,
+      "title": "Changes",
+      "type": "array"
+    },
+    "confirm_items_complete": {
+      "default": false,
+      "title": "Confirm Items Complete",
+      "type": "boolean"
+    },
+    "expected_item_count": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expected Item Count"
+    },
+    "verified_pages": {
+      "default": [],
+      "items": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "title": "Verified Pages",
+      "type": "array"
+    }
+  },
+  "required": [
+    "record_id",
+    "expected_revision",
+    "task_id",
+    "reason"
+  ],
+  "title": "CorrectionCommand",
+  "type": "object"
+}

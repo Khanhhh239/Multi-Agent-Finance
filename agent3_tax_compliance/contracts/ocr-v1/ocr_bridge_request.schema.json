@@ -1,0 +1,138 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "protocol_version": {
+      "const": "ocr-bridge-1",
+      "default": "ocr-bridge-1",
+      "title": "Protocol Version",
+      "type": "string"
+    },
+    "accepted_result_version": {
+      "const": "1.1",
+      "default": "1.1",
+      "title": "Accepted Result Version",
+      "type": "string"
+    },
+    "request_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Request Id",
+      "type": "string"
+    },
+    "source_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "document_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "page_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Page Id",
+      "type": "string"
+    },
+    "page_index": {
+      "minimum": 0,
+      "title": "Page Index",
+      "type": "integer"
+    },
+    "image_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Image Hash",
+      "type": "string"
+    },
+    "image_path": {
+      "title": "Image Path",
+      "type": "string"
+    },
+    "image_width": {
+      "exclusiveMinimum": 0,
+      "title": "Image Width",
+      "type": "integer"
+    },
+    "image_height": {
+      "exclusiveMinimum": 0,
+      "title": "Image Height",
+      "type": "integer"
+    },
+    "model_config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Model Config Version",
+      "type": "string"
+    },
+    "runtime_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Runtime Sha256",
+      "type": "string"
+    },
+    "timeout_seconds": {
+      "maximum": 120,
+      "minimum": 1,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "request_id",
+    "source_id",
+    "document_id",
+    "page_id",
+    "page_index",
+    "image_hash",
+    "image_path",
+    "image_width",
+    "image_height",
+    "model_config_version",
+    "runtime_sha256",
+    "timeout_seconds"
+  ],
+  "title": "OCRBridgeRequest",
+  "type": "object"
+}

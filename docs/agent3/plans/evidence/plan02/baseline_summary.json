@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "ingestion-v1",
+  "creator": "build_plan02_baseline",
+  "stage": "functional-baseline",
+  "created_at": "2026-10-12T01:49:56.736612+00:00",
+  "original_source_count": 30,
+  "extra_source_count": 11,
+  "original_page_count": 32,
+  "route_confusion": [
+    {
+      "expected": "NATIVE_TEXT",
+      "actual": "NATIVE_TEXT",
+      "count": 11
+    },
+    {
+      "expected": "OCR",
+      "actual": "OCR",
+      "count": 21
+    }
+  ],
+  "reader_latency_ms": {
+    "median": 123.0995499997789,
+    "max": 180.07530000022598,
+    "sample_count": 30
+  },
+  "expected_negative_documents": 3,
+  "unexpected_failures": [],
+  "manifest_sha256": "e9f7861aede71f58bcaa80b46a2c9b3dbaf9f0c6a096f4ff3e8b7ca1c4cbc003",
+  "original_source_sha256": {
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-image.png": "4a818ecc9bbd2486490eddaf1355f872e1ed57f8a69cf72b5a767a64b6f39040",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-pdf_image.pdf": "2176aee05d0a407e0736ce628cd8fddba63025a26d83cd036d73dbc81e7818eb",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-pdf_text.pdf": "4567b56403e37f389e1ebe5985dfab92186c8384b5018f8dde74d7ef600b51fe",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-01-image.png": "c963a7ae0f1ec97bd5b4ed450ec8ef2a03513a75dd694164165919ce991ee960",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-01-pdf_image.pdf": "5dbbe77a68fe45505c8a013b2d93d7a6e8cb5d60ea74580434e233f6a1961fa7",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-01-pdf_text.pdf": "c0c83523056ecfbc2fc5866482addd5bacc54efbb1ac1a2a7891039c19e3834b",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-02-image.png": "fa99f128bc669737f55ac2555f1ef23f6820d381ca5217c25cb05fe7ce501f4a",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-02-pdf_image.pdf": "18d25a3889e83c7c98ef53baca0588585c169114a910f57a8b7579ad97b3b108",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-02-pdf_text.pdf": "df8ef2c4e41cebed4178bb7856a91bd06252cd17ece2a5e5aa867300ce2d7990",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-03-image.png": "6468636a2d40a02e230161db4c678e96be7f12cc19847fce0c67ebf6c9d4efc9",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-03-pdf_image.pdf": "53c416964a519981d959375189225ae8ad71b0e5dffa793e42ac11578ff443e6",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-03-pdf_text.pdf": "1affab769dc6e9e148926186074c9ada8cd2ab16d187add9e59cb32dee18736b",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-04-image.png": "2e526e3aa51cd4f43b4e5edfdd5d94fd30562706550736471d56d18ca4c992da",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-04-pdf_image.pdf": "0cbe9b7670431f759796973f2868eac7c78a57c9caaeebe1abd4db174dfd70a8",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-04-pdf_text.pdf": "5f6747f9e46f884c83c53cb89ba64a8a9ef7535ea00ba00cb38fe6269015d840",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-05-image.png": "a68bcb32c6b4e5887aace2dd76eb271bb044432c4037ce17c5378f9f619d6f37",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-05-pdf_image.pdf": "394eee0a17fe9cad5d2da0f7b9db2f441ae46465cff874e4eee805d8494d277a",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-05-pdf_text.pdf": "77f3bf47d56d8993f831890052c887e1f919f2d5b703f3a92458e81d26263963",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-06-image.png": "0e9424fccb2dee8ebd7abdc925f7f1e11a483c5be721fbbd8b54553f43aa6986",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-06-pdf_image.pdf": "e9642b3468e16e902cbf5be3f8e676a4e918bfc82bfbc66bfd44b1fc18f8624e",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-06-pdf_text.pdf": "7557c9f4945b5c409d090b321a0e712677e858b17ecbbdc34bed440fd81fac1d",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-07-image.png": "9de3473096a5b820b8462de28b54028c37e3a8259b4a0b67565dee4e5269e16d",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-07-pdf_image.pdf": "e5cd47a023fe9f1ec77d49a70f1f2aa970220bf15833dba8f3c90accd754bc19",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-07-pdf_text.pdf": "b473fca82dcc60ab3bce2652aafc455a0636ac97de785fb5b44d3bfd4f5a66a2",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-08-image.png": "2abbc61815329eb25cab227959c621986d502eb2fc58c1b62a354e2b22c57ddf",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-08-pdf_image.pdf": "535f0caaae655f74e849490743ca6c4a87efe1659182e797b14fb20e4cccaaee",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-08-pdf_text.pdf": "fe6b307f7e484cf566f22cd3490fb00335cc4f161090df7b5d6b3fa913b33230",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-09-image.png": "d139e65c0cbb0fc6abae4ef4c37e5330d52137aeaf3e350297dc15b4bb54c12a",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-09-pdf_image.pdf": "e39733595e1854a6d0ddcfb69d58a109598848182893925c55b56d212776e0f6",
+    "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-09-pdf_text.pdf": "dfbd3d331a308c6f28bf7fe9232b84c164af33c8d9bafb6f286d43d40e1fc039"
+  },
+  "scope": "synthetic-functional-only; no OCR inference or real invoice accuracy"
+}

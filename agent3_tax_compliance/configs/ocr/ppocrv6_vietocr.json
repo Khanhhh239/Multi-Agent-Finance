@@ -1,0 +1,7 @@
+{
+  "version":"ppocrv6-vietocr-cpu-v1",
+  "model_id":"ppocrv6_vietocr",
+  "timeout_seconds":600,
+  "memory_mb":6144,
+  "max_attempts":2
+}

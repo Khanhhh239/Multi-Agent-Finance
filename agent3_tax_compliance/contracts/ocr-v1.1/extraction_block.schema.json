@@ -1,0 +1,302 @@
+{
+  "$defs": {
+    "BlockOrigin": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "enum": [
+            "NATIVE_TEXT",
+            "OCR"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "source_block_id": {
+          "title": "Source Block Id",
+          "type": "string"
+        },
+        "raw_score": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Score"
+        },
+        "score_semantics": {
+          "default": "UNAVAILABLE",
+          "enum": [
+            "ENGINE_HEURISTIC_NOT_CALIBRATED",
+            "UNAVAILABLE"
+          ],
+          "title": "Score Semantics",
+          "type": "string"
+        },
+        "score_kind": {
+          "default": "ENGINE_AGGREGATE",
+          "enum": [
+            "ENGINE_AGGREGATE",
+            "DETECTION",
+            "UNAVAILABLE"
+          ],
+          "title": "Score Kind",
+          "type": "string"
+        },
+        "response_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Sha256"
+        }
+      },
+      "required": [
+        "method",
+        "source_block_id"
+      ],
+      "title": "BlockOrigin",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "coordinate_system": {
+          "const": "NORMALIZED_TOP_LEFT",
+          "default": "NORMALIZED_TOP_LEFT",
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Span"
+        },
+        "transform_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transform Id"
+        }
+      },
+      "required": [
+        "source_id",
+        "document_id",
+        "page_index",
+        "bbox"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "block_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Block Id",
+      "type": "string"
+    },
+    "text_raw": {
+      "title": "Text Raw",
+      "type": "string"
+    },
+    "geometry_status": {
+      "enum": [
+        "AVAILABLE",
+        "UNAVAILABLE"
+      ],
+      "title": "Geometry Status",
+      "type": "string"
+    },
+    "evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Evidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "polygon": {
+      "anyOf": [
+        {
+          "items": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "maxItems": 64,
+          "minItems": 3,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Polygon"
+    },
+    "block_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Block Type"
+    },
+    "reading_order": {
+      "minimum": 0,
+      "title": "Reading Order",
+      "type": "integer"
+    },
+    "origins": {
+      "items": {
+        "$ref": "#/$defs/BlockOrigin"
+      },
+      "minItems": 1,
+      "title": "Origins",
+      "type": "array"
+    },
+    "conflict_with": {
+      "default": [],
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9_.:-]+$",
+        "type": "string"
+      },
+      "title": "Conflict With",
+      "type": "array"
+    }
+  },
+  "required": [
+    "block_id",
+    "text_raw",
+    "geometry_status",
+    "reading_order",
+    "origins"
+  ],
+  "title": "ExtractionBlock",
+  "type": "object"
+}

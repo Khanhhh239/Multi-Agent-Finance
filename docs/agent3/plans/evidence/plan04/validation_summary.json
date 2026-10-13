@@ -1,0 +1,351 @@
+{
+  "date": "2026-10-12",
+  "created_at": "2026-10-12T13:08:10.065170+00:00",
+  "gate": "PASS_TECHNICAL_FUNCTIONAL_ONLY",
+  "production_quality_gate": "NOT_EVALUATED",
+  "tests": {
+    "contracts": 22,
+    "ingestion": 23,
+    "ocr": 27,
+    "extraction_v1": 27
+  },
+  "total_tests": 99,
+  "schemas": 7,
+  "documents": 15,
+  "pages": 17,
+  "cohorts": {
+    "native": {
+      "documents": 10,
+      "pages": 11,
+      "labelled_documents": 10,
+      "unlabelled_documents": 0,
+      "labelled_fields": 162,
+      "correct_fields": 162,
+      "wrong_present_fields": 0,
+      "rows_expected": 16,
+      "rows_matched": 16,
+      "per_field": {
+        "seller.name": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "seller.tax_id": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "buyer.name": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "buyer.tax_id": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "invoice.number": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "invoice.issue_date": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "currency": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "items.description": {
+          "labelled": 16,
+          "correct": 16,
+          "wrong_present": 0
+        },
+        "items.net_amount": {
+          "labelled": 16,
+          "correct": 16,
+          "wrong_present": 0
+        },
+        "items.vat_treatment": {
+          "labelled": 16,
+          "correct": 16,
+          "wrong_present": 0
+        },
+        "items.vat_rate": {
+          "labelled": 14,
+          "correct": 14,
+          "wrong_present": 0
+        },
+        "totals.net": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "totals.vat": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        },
+        "totals.gross": {
+          "labelled": 10,
+          "correct": 10,
+          "wrong_present": 0
+        }
+      }
+    },
+    "hybrid": {
+      "documents": 5,
+      "pages": 6,
+      "labelled_documents": 3,
+      "unlabelled_documents": 2,
+      "labelled_fields": 49,
+      "correct_fields": 37,
+      "wrong_present_fields": 6,
+      "rows_expected": 5,
+      "rows_matched": 1,
+      "per_field": {
+        "seller.name": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 1
+        },
+        "seller.tax_id": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "buyer.name": {
+          "labelled": 3,
+          "correct": 1,
+          "wrong_present": 2
+        },
+        "buyer.tax_id": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "invoice.number": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 1
+        },
+        "invoice.issue_date": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "currency": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "items.description": {
+          "labelled": 5,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "items.net_amount": {
+          "labelled": 5,
+          "correct": 4,
+          "wrong_present": 1
+        },
+        "items.vat_treatment": {
+          "labelled": 5,
+          "correct": 4,
+          "wrong_present": 0
+        },
+        "items.vat_rate": {
+          "labelled": 4,
+          "correct": 4,
+          "wrong_present": 0
+        },
+        "totals.net": {
+          "labelled": 3,
+          "correct": 2,
+          "wrong_present": 1
+        },
+        "totals.vat": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "totals.gross": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        }
+      }
+    },
+    "ocr_backed_labelled_subset": {
+      "documents": 2,
+      "pages": 3,
+      "labelled_documents": 2,
+      "unlabelled_documents": 0,
+      "labelled_fields": 35,
+      "correct_fields": 23,
+      "wrong_present_fields": 6,
+      "rows_expected": 4,
+      "rows_matched": 0,
+      "per_field": {
+        "seller.name": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 1
+        },
+        "seller.tax_id": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 0
+        },
+        "buyer.name": {
+          "labelled": 2,
+          "correct": 0,
+          "wrong_present": 2
+        },
+        "buyer.tax_id": {
+          "labelled": 2,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "invoice.number": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 1
+        },
+        "invoice.issue_date": {
+          "labelled": 2,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "currency": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 0
+        },
+        "items.description": {
+          "labelled": 4,
+          "correct": 1,
+          "wrong_present": 0
+        },
+        "items.net_amount": {
+          "labelled": 4,
+          "correct": 3,
+          "wrong_present": 1
+        },
+        "items.vat_treatment": {
+          "labelled": 4,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "items.vat_rate": {
+          "labelled": 3,
+          "correct": 3,
+          "wrong_present": 0
+        },
+        "totals.net": {
+          "labelled": 2,
+          "correct": 1,
+          "wrong_present": 1
+        },
+        "totals.vat": {
+          "labelled": 2,
+          "correct": 2,
+          "wrong_present": 0
+        },
+        "totals.gross": {
+          "labelled": 2,
+          "correct": 2,
+          "wrong_present": 0
+        }
+      }
+    }
+  },
+  "extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+  "baseline_sha256": "a7f9ed6c3bcad3755604d38c97465836e67c0e1a15dcd1eab3b990a43ab5ad5d",
+  "source_sha256": {
+    "agent3_tax_compliance\\src\\extraction\\api.py": "e33b0b5e574858d676ab2de9a5db89c0c2939fbca3e176f910651b6f5d76a3df",
+    "agent3_tax_compliance\\src\\extraction\\candidates.py": "c7bbc4ae5f636450e0d932218f1d60b17e72440e67453faf4ee3f349bdcc4705",
+    "agent3_tax_compliance\\src\\extraction\\cli.py": "bd969d5ae5b1a222dc2c56823b754f127b8d4ae90381456979162ac9597dda52",
+    "agent3_tax_compliance\\src\\extraction\\contracts.py": "0862729697544d10182199e142afe58eabc755f25b236c67f142af0953b8e15e",
+    "agent3_tax_compliance\\src\\extraction\\evidence.py": "3cccd201c5ca562ae88cbc4f026cfed83420251a89ea5bbd80afeb756889914c",
+    "agent3_tax_compliance\\src\\extraction\\invoice_fields.py": "7ee8a415891eb88b8a0c62c0cc0c6c5f6d3873df04bea2a67551ee28778f3309",
+    "agent3_tax_compliance\\src\\extraction\\llm_extractor.py": "92ceba779f4eaa6e1cebdbc8addf5a0cc2e10ab1243ab604e5945a5f0ab4ab1c",
+    "agent3_tax_compliance\\src\\extraction\\ocr_pipeline.py": "6e5f3e57f2b27394107aff5a9c0f1b1dae97e0cbebce1a950c966f27fa342aa5",
+    "agent3_tax_compliance\\src\\extraction\\repository.py": "c2a4c48c51ba65c453456b731c22726bb58ac31f0ef755ccb44af1db5b8c3513",
+    "agent3_tax_compliance\\src\\extraction\\service.py": "a75b96b9503f05306721f909a3f0f57b5ab217d9e891b11b5c22bf0293750037",
+    "agent3_tax_compliance\\src\\extraction\\tables.py": "5901bd74430b631eb94d746a5ef8f2fd8f8c5505a4dd38944c303c1efe2ec577",
+    "agent3_tax_compliance\\src\\extraction\\vat_group_builder.py": "cc4e4d6eacf8dcf1b594331ae55b6135fcd7d8af795e49f5341b175a246c34c9",
+    "agent3_tax_compliance\\src\\extraction\\__init__.py": "288a76f4b96ec2e4ff8990c0dc71e92bf3cc8bc11123aeb1b44a6d28478b704b",
+    "agent3_tax_compliance\\src\\canonicalization\\derive.py": "c12392929cc37b5a03414eef0defb0b70b6a04223c4afeebec7b93c1195a65aa",
+    "agent3_tax_compliance\\src\\canonicalization\\identity.py": "cf2f8aef95ce6215af723ec9264e12855ead93a37b7dafe144dac5715983d382",
+    "agent3_tax_compliance\\src\\canonicalization\\normalize.py": "9c05c40d10cdebf66c27edca2cc93b45bf4f38612bde23fad0f0858e4aeccb9a",
+    "agent3_tax_compliance\\src\\canonicalization\\__init__.py": "debbac8495b3f3fcb70c709795e4db6975fcb080022c6989d7ea275181ed6654",
+    "agent3_tax_compliance\\src\\domain\\base.py": "30772458506fd94b4ed96ef604dc491ed594b23053fb7a6faaa65e899b5006a3",
+    "agent3_tax_compliance\\src\\domain\\cfr.py": "9c93434cc4ab372967436d0259280798fcafd50154e65b500c298560c5f9d3df",
+    "agent3_tax_compliance\\src\\domain\\envelope.py": "b809deac6cabdbbf6a6da528ee51eab2c39a6496db15c9a45491068ee0da8a06",
+    "agent3_tax_compliance\\src\\domain\\events.py": "00a1d84696a98e0c83121d33d793f8c07f1bd9c2418ebd1743cdfd3de19c171e",
+    "agent3_tax_compliance\\src\\domain\\evidence.py": "225084c0602b1fc5f82ae607a7858c6f7a63de80cbffaaeb545d97a31227cd82",
+    "agent3_tax_compliance\\src\\domain\\field.py": "ad442e4412837fc189222996c346268a78ad2503b732d0baffa73814c2767e51",
+    "agent3_tax_compliance\\src\\domain\\interfaces.py": "a9e15cc97daa71776e60a8179899ebf10a18da2c28432a5752e66cfc1a70aefd",
+    "agent3_tax_compliance\\src\\domain\\money.py": "3280793f77a8bfc614a0ea5fc041208b3b7c6dd316ccae497bb1f6fb903d0b5a",
+    "agent3_tax_compliance\\src\\domain\\storage.py": "ed2bcf2dd017b72b5b66661b3fec212d3ef383dbb086e1b123cb535bce7dfa5b",
+    "agent3_tax_compliance\\src\\domain\\taxpayer.py": "29e25731dfd5d64b119c086e4c630cdf08e1cfc18cd0b8f3bd15cc2371f37fb9",
+    "agent3_tax_compliance\\src\\domain\\__init__.py": "3225d337a7aa2879b0a99699bdc496373197e846eab46898405a5a8c99c4b8d1",
+    "agent3_tax_compliance\\tests\\extraction_v1\\test_extraction.py": "c4c09cec74345ce5471ae6d391b19e721812701dc2a3ebaaf556a424f0e93e78",
+    "agent3_tax_compliance\\migrations\\004_extraction.sql": "5d925ee42454bac3008c4ae1309ded89779c3b083b98d32ccfcf59468a72878b",
+    "agent3_tax_compliance\\src\\persistence\\repository.py": "80c9a09bee40dc6571645221727041d523f343ebcda515173c6bd8673e5ccd50",
+    "agent3_tax_compliance\\src\\app.py": "f8a2a31b1fc6276e7837477da870ae18e06d3ef82aeb657e02ae055cce6ca5da",
+    "scripts\\build_extraction_baseline.py": "f193cdd47bff47a8e81221b64d6c3b7dc2f2e6b5a264c7bdb1a2b2e6c86ee317",
+    "scripts\\export_extraction_contracts.py": "52e4ec418c5467a83929b2c6a9d2d2c2b4e72706641d41bd0030235f4cd86400",
+    "scripts\\validate_extraction.py": "7ef092e6689be8a8ab40b4161886940b90512f48a79c8d2aedd4cd2a47333210"
+  },
+  "test_output_sha256": {
+    "contracts": "e7b579038f2d4dc3d2ecc4ddbc0ffcf4af2221571012e7e2942c55144c3eadef",
+    "ingestion": "106624036b7c6482c8d95e2407252de2e278a983179c841003bfb1ebd65b6b0a",
+    "ocr": "3cd771c30c09552a2849abb456b5e43384ff569ee1ddf7cfc54c04edf996db53",
+    "extraction_v1": "b851769bee5a0a0e0a52b6b6f3c7188d9bc9bcfd0a24c41eda05b2af89ac52d1"
+  },
+  "prior_evidence_and_legacy_unchanged": {
+    "docs\\agent3\\plans\\evidence\\plan00\\annotation_examples.json": "f1cc8286da2d0e87321ce6e1888bd936fcab14eb59c84cbdfe26d4cb58bff550",
+    "docs\\agent3\\plans\\evidence\\plan00\\build_summary.json": "6cca4bf0a156a4f26352b471198ec58fe9babe045348284ae21c25a5d4ce3fbb",
+    "docs\\agent3\\plans\\evidence\\plan00\\fatura_contract_validation.json": "00f59151bb73d69ee117e3d5088d2960b5e02cb9c142688e08c6f74e80d49585",
+    "docs\\agent3\\plans\\evidence\\plan00\\fatura_download_check.json": "a9b70402d3d36a469167fa33ce0237c439c3a9fffe414b6af961f9295a3aac50",
+    "docs\\agent3\\plans\\evidence\\plan00\\fatura_mapping_summary.json": "1333645da93fd62a739748fdaff033e782b9d114fd5b2ea403030cb2248b0a38",
+    "docs\\agent3\\plans\\evidence\\plan00\\fatura_pilot_review_summary.json": "ff361cbc59482c57486009e0c4ed33559206a76cec1b9e94ae966d83e418a9cb",
+    "docs\\agent3\\plans\\evidence\\plan00\\validation_summary.json": "7bd368675d60988c97d52409d6b6dfcc1319b1ffb5991d6eacb48d9f6a4a5668",
+    "docs\\agent3\\plans\\evidence\\plan01\\environment_snapshot.json": "23d696ba07eb62083bf0c159a5f7858f0559c5c23ce6e551803a4c5929de93e9",
+    "docs\\agent3\\plans\\evidence\\plan01\\test_output.txt": "f7b033520b41845ff703d050ac20210a148802573a8da0e9f109a2a51f809db1",
+    "docs\\agent3\\plans\\evidence\\plan01\\validation_summary.json": "8be3beb8ee65051d13ad74eeac4a1ff4988369a637d26edb6d54724a028ce8e7",
+    "docs\\agent3\\plans\\evidence\\plan02\\baseline_summary.json": "4b24b26b4f41fd6374e9faba12033b736c863746e38877d127a6d941a9fea20a",
+    "docs\\agent3\\plans\\evidence\\plan02\\contracts_test_output.txt": "3c6bd1d96759a0c5785fc42a0b8a68f15b3b562dfbef38a3018e558c08579404",
+    "docs\\agent3\\plans\\evidence\\plan02\\environment_snapshot.json": "0dac233cb91394e50c0c73e38e9b4b9a4f85a144e9a0cd884aca0d08b39b5ac8",
+    "docs\\agent3\\plans\\evidence\\plan02\\ingestion_test_output.txt": "ea32c73e2104239d4637ae611e51c62fb12cf1c06ce23303ca2b979dffa8da4e",
+    "docs\\agent3\\plans\\evidence\\plan02\\validation_summary.json": "a518d99616d4acbf17bde12b307ada32d4fb03fcd45f745a76733ecd863a668e",
+    "docs\\agent3\\plans\\evidence\\plan03\\adapter_runtime_matrix.json": "637fc7282d78db0c6079c29d38aa51a925e80c864707569740e7223998d7ab58",
+    "docs\\agent3\\plans\\evidence\\plan03\\baseline_summary.json": "bfda02a1d47533f457ac6a657dee7fd00856444d9573a740153f2fd0db76ad9b",
+    "docs\\agent3\\plans\\evidence\\plan03\\contracts_test_output.txt": "e2696db3e5879973b0a700d09ad9df9e23a077a10cda9af71d823a29a3e7a169",
+    "docs\\agent3\\plans\\evidence\\plan03\\ingestion_test_output.txt": "53ebe578ac4ae82b2e6380f4fd6631c1229c0ea2009d13cb7261d73cf90eb0bd",
+    "docs\\agent3\\plans\\evidence\\plan03\\ocr_test_output.txt": "b4772fa47892b8c8d0e48568124c2afcff9e7b653b81f5ae37e6e00c075badbb",
+    "docs\\agent3\\plans\\evidence\\plan03\\validation_summary.json": "049a458c3664fc6abf4e52102bb095c5c589f261c11a78433ddb306feaabfa75",
+    "docs\\agent3\\plans\\evidence\\plan03\\model_switch\\baseline_summary.json": "dd57876aaffd56ffde68300cf5f9d1a57e8619a9f5819017c633a2ede1a3388b",
+    "docs\\agent3\\plans\\evidence\\plan03\\model_switch\\contracts_test_output.txt": "7e57311be9f0302e1117bd6bf71522d48ad198b1c6c58a305dd3ea803cfd9184",
+    "docs\\agent3\\plans\\evidence\\plan03\\model_switch\\ingestion_test_output.txt": "c13dcf77865d79973106020e83bd8c0cb2fa6a6b9fcd6da44bd60e83045942d7",
+    "docs\\agent3\\plans\\evidence\\plan03\\model_switch\\ocr_test_output.txt": "26495f087222a2e922a879ffe58c07a0f7d3b41f219afab134306ab954b6c51c",
+    "docs\\agent3\\plans\\evidence\\plan03\\model_switch\\ppocrv6_vietocr.smoke.json": "d88fe7db64e73e4eb0e43e4a9a2520979cf0c34e175fe58e18c6b9921801ee97",
+    "docs\\agent3\\plans\\evidence\\plan03\\model_switch\\validation_summary.json": "0ed492fa76a71017201def551acfd5a3d585d4fb6e894f7494026c339dbad481",
+    "agent3_tax_compliance\\data\\database\\tax_compliance.db": "3242aa988e191c776f6b428c7a814107c19345b8c77e148d7a3e85198564edb3",
+    "agent3_tax_compliance\\data\\database\\vector_store.db": "fe44de14aef2479548d5069ce412d4a846b5a64cd8f514cd7316df9bb2762221"
+  },
+  "limitations": [
+    "Generated labels, not independent Vietnamese tax invoice labels.",
+    "Native and hybrid cohorts overlap logical documents; do not pool as independent accuracy samples.",
+    "No explicit row count in original fixtures: discovery remains UNKNOWN even when rows match.",
+    "Unknown VAT legal category is retained; taxonomy is outside PLAN_04.",
+    "OCR/parser attribution is a region-text diagnostic; label/role/layout failures require manual inspection.",
+    "Every CFR requires review; wrong PRESENT values are not accepted financial decisions."
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "profile_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Profile Version",
+      "type": "string"
+    },
+    "model_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Model Id",
+      "type": "string"
+    },
+    "adapter": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Adapter",
+      "type": "string"
+    },
+    "interpreter": {
+      "title": "Interpreter",
+      "type": "string"
+    },
+    "distributions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Distributions",
+      "type": "array"
+    },
+    "source_files": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Files",
+      "type": "array"
+    },
+    "assets": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Assets",
+      "type": "array"
+    },
+    "environment": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {},
+      "title": "Environment",
+      "type": "object"
+    },
+    "adapter_config": {
+      "additionalProperties": true,
+      "title": "Adapter Config",
+      "type": "object"
+    },
+    "path_parameters": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Path Parameters",
+      "type": "array"
+    },
+    "max_processes": {
+      "default": 2,
+      "maximum": 8,
+      "minimum": 2,
+      "title": "Max Processes",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "profile_version",
+    "model_id",
+    "adapter",
+    "interpreter",
+    "distributions",
+    "source_files",
+    "assets",
+    "adapter_config"
+  ],
+  "title": "EngineProfile",
+  "type": "object"
+}

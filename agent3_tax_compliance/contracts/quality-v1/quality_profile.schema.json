@@ -1,0 +1,50 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "record_type": {
+      "enum": [
+        "INVOICE",
+        "RECEIPT"
+      ],
+      "title": "Record Type",
+      "type": "string"
+    },
+    "expected_fields": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Expected Fields",
+      "type": "array"
+    },
+    "critical_fields": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Critical Fields",
+      "type": "array"
+    },
+    "item_fields": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Item Fields",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version",
+    "record_type",
+    "expected_fields",
+    "critical_fields"
+  ],
+  "title": "QualityProfile",
+  "type": "object"
+}

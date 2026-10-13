@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "ingestion-v1",
+  "creator": "validate_plan02",
+  "stage": "gate-validation",
+  "created_at": "2026-10-12T01:53:11.417966+00:00",
+  "gate": "PASS",
+  "tests": {
+    "contracts": 22,
+    "ingestion": 23
+  },
+  "total_tests": 45,
+  "schemas_checked": 7,
+  "documents_schema_checked": 38,
+  "packages": {
+    "annotated-doc": "0.0.4",
+    "annotated-types": "0.7.0",
+    "anyio": "4.14.2",
+    "certifi": "2026.6.17",
+    "exceptiongroup": "1.3.1",
+    "fastapi": "0.139.2",
+    "h11": "0.16.0",
+    "httpcore": "1.0.9",
+    "httpx": "0.28.1",
+    "idna": "3.18",
+    "pydantic": "2.13.4",
+    "pydantic-core": "2.46.4",
+    "starlette": "1.3.1",
+    "typing-extensions": "4.16.0",
+    "typing-inspection": "0.4.2",
+    "PyMuPDF": "1.28.2",
+    "Pillow": "12.3.0",
+    "uvicorn": "0.51.0",
+    "click": "8.4.2",
+    "colorama": "0.4.6"
+  },
+  "environment_snapshot_sha256": [
+    "23d696ba07eb62083bf0c159a5f7858f0559c5c23ce6e551803a4c5929de93e9",
+    "0dac233cb91394e50c0c73e38e9b4b9a4f85a144e9a0cd884aca0d08b39b5ac8"
+  ],
+  "legacy_hashes_unchanged": {
+    "agent3_tax_compliance\\data\\database\\tax_compliance.db": "3242aa988e191c776f6b428c7a814107c19345b8c77e148d7a3e85198564edb3",
+    "agent3_tax_compliance\\data\\database\\vector_store.db": "fe44de14aef2479548d5069ce412d4a846b5a64cd8f514cd7316df9bb2762221"
+  },
+  "baseline_summary_sha256": "4b24b26b4f41fd6374e9faba12033b736c863746e38877d127a6d941a9fea20a",
+  "source_sha256": {
+    "agent3_tax_compliance\\src\\ingestion\\api.py": "81d013fdcfbee8ca46631d8896de0483c9d09045d1815bdb534e55c3b65fa181",
+    "agent3_tax_compliance\\src\\ingestion\\auth.py": "41141244baed57cca8f0f794fe87d12b5f911ddb7cd5fb99fdcc755cbf7c0ede",
+    "agent3_tax_compliance\\src\\ingestion\\cli.py": "ab849fb6af7a69552e6c53605e82dbb38c37ee03bc9696c05f1aac07da5b86b5",
+    "agent3_tax_compliance\\src\\ingestion\\detector.py": "b57f2913e44b1d1d3ed91c78e453befe322d5864aa833181d00e286d445722f9",
+    "agent3_tax_compliance\\src\\ingestion\\models.py": "95291616830ec39610da6a41e5999f0445f135ad68358f40e6c666790042a0a3",
+    "agent3_tax_compliance\\src\\ingestion\\pdf_reader.py": "47c7f2bbc73bea401d151faa402e86f915f9a48be045c78f2a2e9bca75b72276",
+    "agent3_tax_compliance\\src\\ingestion\\preprocess.py": "d023dffe2c3bf64e883ce8cfc33a59515a1e91359b418eb42c84aefc460f631f",
+    "agent3_tax_compliance\\src\\ingestion\\reader_worker.py": "5c844b95fa56a67be96b989125ba98fd0e668d56592400f21ab97474b20e27db",
+    "agent3_tax_compliance\\src\\ingestion\\repository.py": "2fd8d60f7ba10ee1e99a40c7e53fcb85436ea758d687596fe56207768a8a4eff",
+    "agent3_tax_compliance\\src\\ingestion\\sandbox.py": "cabcb8e439f72ad48c52bb866e6bfe9771ddb37cbf49a9bb2b195e3b7c5e1f96",
+    "agent3_tax_compliance\\src\\ingestion\\service.py": "4590b9c05bcd9c3ca66a0a217d70e0d3175b24dc4722d2498f36f80169590d05",
+    "agent3_tax_compliance\\src\\ingestion\\upload.py": "e8562b8385520d9e9c2120cd4dbc2d18442bdbfb94ff5c4874573fb1cafb1118",
+    "agent3_tax_compliance\\src\\ingestion\\__init__.py": "7d5775bc966688ca0264d2fcc6374b5ad7605b1aa1c9dc2996618304d061c516",
+    "agent3_tax_compliance\\src\\config.py": "6bc4951e44dc17060cda608d130d1dcca757184a8c83dadacc0cc2974695fd9a",
+    "agent3_tax_compliance\\src\\app.py": "12ec62adb7ee11382bb9416ad97552de4988dc6e60b868e9d6cf2e48cf58b6d5",
+    "agent3_tax_compliance\\src\\persistence\\repository.py": "714f7457a7a685d355f1908c407d6a195c7fa580d101a42f95e472908dfba465",
+    "agent3_tax_compliance\\tests\\ingestion\\fixtures.py": "717e5c2b64ff95c57396d35a095341053911a42ff1ebbecf4bedeaed34b434df",
+    "agent3_tax_compliance\\tests\\ingestion\\test_ingestion.py": "0cb25178b2231652db4d812cd6c9752bf152a287fa27dc20d00d22408683ed94",
+    "agent3_tax_compliance\\migrations\\001_foundation.sql": "7e7b6f6bdde2dcb401fa3699491315ef2bc16b82f09d9df562773a5f3d0c2ddc",
+    "agent3_tax_compliance\\migrations\\002_ingestion.sql": "31b3d35ed1c820c6b77c602ec2ad62d05cc884ad915942a6a7793aa3ecb38cf0",
+    "scripts\\bootstrap_ingestion.py": "2b49448c67298df624e5cfb6844bf674acf8d7cbc2d48bc9458a9c8ee5b74ba8",
+    "scripts\\build_plan02_baseline.py": "adf1504a82f2e85f0be2a7ee0a9ecc7e9df2a627feaec83e9c78b17474672497",
+    "scripts\\export_ingestion_contracts.py": "8f6281a3b58de4c160ab6621f2877697bc5d3f7d12594cae4e3a4999582548b3",
+    "scripts\\validate_plan02.py": "13fa4b040718c295b28716bc15e051851c0d34f600bf1c912297f3e46e38e4e6"
+  },
+  "test_output_sha256": {
+    "contracts": "3c6bd1d96759a0c5785fc42a0b8a68f15b3b562dfbef38a3018e558c08579404",
+    "ingestion": "ea32c73e2104239d4637ae611e51c62fb12cf1c06ce23303ca2b979dffa8da4e"
+  },
+  "limitations": [
+    "synthetic technical scope only",
+    "no OCR inference, field extraction or confidence calibration",
+    "single local worker; extraction outbox consumer belongs to PLAN_03",
+    "Windows Job Object verified; POSIX limits not exercised on this host"
+  ]
+}
