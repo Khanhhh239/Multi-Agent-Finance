@@ -1,0 +1,363 @@
+{
+  "$defs": {
+    "FieldRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "min_confidence": {
+          "default": 0.99,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Confidence",
+          "type": "number"
+        },
+        "allowed_validity": {
+          "default": [
+            "VALID"
+          ],
+          "items": {
+            "enum": [
+              "VALID",
+              "INVALID_SOURCE_CONTENT"
+            ],
+            "type": "string"
+          },
+          "title": "Allowed Validity",
+          "type": "array"
+        },
+        "source_issue_codes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Issue Codes",
+          "type": "array"
+        },
+        "source_fidelity_policy": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Fidelity Policy"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "FieldRequirement",
+      "type": "object"
+    },
+    "LegalBasis": {
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "locator"
+      ],
+      "title": "LegalBasis",
+      "type": "object"
+    },
+    "ObservationRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "field_path": {
+          "title": "Field Path",
+          "type": "string"
+        },
+        "fidelity_policy": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Fidelity Policy",
+          "type": "string"
+        },
+        "accepts": {
+          "default": [
+            "PRESENT_VALUE",
+            "CONFIRMED_ABSENT"
+          ],
+          "items": {
+            "enum": [
+              "PRESENT_VALUE",
+              "CONFIRMED_ABSENT"
+            ],
+            "type": "string"
+          },
+          "title": "Accepts",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field_path",
+        "fidelity_policy"
+      ],
+      "title": "ObservationRequirement",
+      "type": "object"
+    },
+    "Predicate": {
+      "additionalProperties": false,
+      "properties": {
+        "requirement": {
+          "$ref": "#/$defs/FieldRequirement"
+        },
+        "operator": {
+          "default": "EQ",
+          "enum": [
+            "EQ",
+            "GTE"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "requirement",
+        "value"
+      ],
+      "title": "Predicate",
+      "type": "object"
+    },
+    "RuleFamily": {
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "supported_from": {
+          "format": "date",
+          "title": "Supported From",
+          "type": "string"
+        },
+        "supported_to": {
+          "format": "date",
+          "title": "Supported To",
+          "type": "string"
+        },
+        "versions": {
+          "items": {
+            "$ref": "#/$defs/RuleVersion"
+          },
+          "minItems": 1,
+          "title": "Versions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "rule_id",
+        "supported_from",
+        "supported_to",
+        "versions"
+      ],
+      "title": "RuleFamily",
+      "type": "object"
+    },
+    "RuleVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "family": {
+          "enum": [
+            "INVOICE_CONTENT",
+            "VAT_RATE",
+            "PAYMENT_EVIDENCE"
+          ],
+          "title": "Family",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "date_field": {
+          "default": "invoice.issue_date",
+          "enum": [
+            "invoice.issue_date",
+            "context.obligation_date"
+          ],
+          "title": "Date Field",
+          "type": "string"
+        },
+        "unit_type": {
+          "default": "RECORD",
+          "enum": [
+            "RECORD",
+            "ITEM",
+            "VAT_GROUP"
+          ],
+          "title": "Unit Type",
+          "type": "string"
+        },
+        "legal_basis": {
+          "items": {
+            "$ref": "#/$defs/LegalBasis"
+          },
+          "minItems": 1,
+          "title": "Legal Basis",
+          "type": "array"
+        },
+        "publication": {
+          "default": "DRAFT",
+          "enum": [
+            "DRAFT",
+            "APPROVED_TECHNICAL"
+          ],
+          "title": "Publication",
+          "type": "string"
+        },
+        "review_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Reference"
+        },
+        "predicates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          },
+          "title": "Predicates",
+          "type": "array"
+        },
+        "required_fields": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FieldRequirement"
+          },
+          "title": "Required Fields",
+          "type": "array"
+        },
+        "required_observations": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ObservationRequirement"
+          },
+          "title": "Required Observations",
+          "type": "array"
+        },
+        "non_cash_policy": {
+          "anyOf": [
+            {
+              "const": "non-cash-scope-v1",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Non Cash Policy"
+        },
+        "inclusive_threshold": {
+          "anyOf": [
+            {
+              "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inclusive Threshold"
+        }
+      },
+      "required": [
+        "rule_id",
+        "version",
+        "family",
+        "effective_from",
+        "effective_to",
+        "legal_basis"
+      ],
+      "title": "RuleVersion",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "families": {
+      "items": {
+        "$ref": "#/$defs/RuleFamily"
+      },
+      "title": "Families",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version",
+    "families"
+  ],
+  "title": "RuleSet",
+  "type": "object"
+}

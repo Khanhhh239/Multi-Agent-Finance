@@ -48,7 +48,7 @@ class Repository:
             app_id = db.execute('PRAGMA application_id').fetchone()[0]
             version = db.execute('PRAGMA user_version').fetchone()[0]
             if tables:
-                if app_id != APP_ID or version not in (1,2,3,4,5,6):
+                if app_id != APP_ID or version not in (1,2,3,4,5,6,7):
                     raise ValueError('refusing to migrate non-foundation/unknown-version database')
                 if version==1:
                     db.executescript('BEGIN IMMEDIATE;\n'+MIGRATION.with_name('002_ingestion.sql').read_text(encoding='utf-8')+'\nCOMMIT;')
@@ -60,6 +60,8 @@ class Repository:
                     db.executescript('BEGIN IMMEDIATE;\n'+MIGRATION.with_name('005_quality.sql').read_text(encoding='utf-8')+'\nCOMMIT;')
                 if version<6:
                     db.executescript('BEGIN IMMEDIATE;\n'+MIGRATION.with_name('006_review.sql').read_text(encoding='utf-8')+'\nCOMMIT;')
+                if version<7:
+                    db.executescript('BEGIN IMMEDIATE;\n'+MIGRATION.with_name('007_planning.sql').read_text(encoding='utf-8')+'\nCOMMIT;')
                 return
             if app_id or version:
                 raise ValueError('unrecognized database header')
@@ -69,6 +71,7 @@ class Repository:
             db.executescript('BEGIN IMMEDIATE;\n'+MIGRATION.with_name('004_extraction.sql').read_text(encoding='utf-8')+'\nCOMMIT;')
             db.executescript('BEGIN IMMEDIATE;\n'+MIGRATION.with_name('005_quality.sql').read_text(encoding='utf-8')+'\nCOMMIT;')
             db.executescript('BEGIN IMMEDIATE;\n'+MIGRATION.with_name('006_review.sql').read_text(encoding='utf-8')+'\nCOMMIT;')
+            db.executescript('BEGIN IMMEDIATE;\n'+MIGRATION.with_name('007_planning.sql').read_text(encoding='utf-8')+'\nCOMMIT;')
 
     @staticmethod
     def _audit(db, ctx, tenant, taxpayer, event_type, sha, record=None, reason='foundation write'):

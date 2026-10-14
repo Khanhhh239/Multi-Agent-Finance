@@ -1,0 +1,305 @@
+{
+  "version": "technical-draft-ruleset-20261014-v1",
+  "families": [
+    {
+      "rule_id": "INV_CONTENT_001",
+      "supported_from": "2022-07-01",
+      "supported_to": "2026-10-15",
+      "versions": [
+        {
+          "rule_id": "INV_CONTENT_001",
+          "version": "content-2022-v1",
+          "family": "INVOICE_CONTENT",
+          "effective_from": "2022-07-01",
+          "effective_to": "2025-06-01",
+          "date_field": "invoice.issue_date",
+          "unit_type": "RECORD",
+          "publication": "DRAFT",
+          "predicates": [
+            {
+              "requirement": {
+                "path": "context.invoice_kind"
+              },
+              "value": "VAT"
+            }
+          ],
+          "required_fields": [],
+          "required_observations": [
+            {
+              "field_path": "parties.seller.tax_id",
+              "fidelity_policy": "complete-content-v1"
+            }
+          ],
+          "legal_basis": [
+            {
+              "document_id": "ND123_2020",
+              "locator": "Article10.PENDING_REVIEW"
+            }
+          ]
+        },
+        {
+          "rule_id": "INV_CONTENT_001",
+          "version": "content-2025-v1",
+          "family": "INVOICE_CONTENT",
+          "effective_from": "2025-06-01",
+          "effective_to": "2026-07-01",
+          "date_field": "invoice.issue_date",
+          "unit_type": "RECORD",
+          "publication": "DRAFT",
+          "predicates": [
+            {
+              "requirement": {
+                "path": "context.invoice_kind"
+              },
+              "value": "VAT"
+            }
+          ],
+          "required_fields": [],
+          "required_observations": [
+            {
+              "field_path": "parties.seller.tax_id",
+              "fidelity_policy": "complete-content-v1"
+            }
+          ],
+          "legal_basis": [
+            {
+              "document_id": "ND123_2020",
+              "locator": "Article10.PENDING_REVIEW"
+            },
+            {
+              "document_id": "ND70_2025",
+              "locator": "Article1.PENDING_REVIEW"
+            }
+          ]
+        },
+        {
+          "rule_id": "INV_CONTENT_001",
+          "version": "content-2026-v1",
+          "family": "INVOICE_CONTENT",
+          "effective_from": "2026-07-01",
+          "effective_to": "2026-10-15",
+          "date_field": "invoice.issue_date",
+          "unit_type": "RECORD",
+          "publication": "DRAFT",
+          "predicates": [
+            {
+              "requirement": {
+                "path": "context.invoice_kind"
+              },
+              "value": "VAT"
+            }
+          ],
+          "required_fields": [],
+          "required_observations": [
+            {
+              "field_path": "parties.seller.tax_id",
+              "fidelity_policy": "complete-content-v1"
+            }
+          ],
+          "legal_basis": [
+            {
+              "document_id": "ND254_2026",
+              "locator": "Article10.pdf21"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rule_id": "VAT_NON_CASH_PAYMENT_001",
+      "supported_from": "2025-07-01",
+      "supported_to": "2026-10-15",
+      "versions": [
+        {
+          "rule_id": "VAT_NON_CASH_PAYMENT_001",
+          "version": "payment-2025-v1",
+          "family": "PAYMENT_EVIDENCE",
+          "effective_from": "2025-07-01",
+          "effective_to": "2026-01-01",
+          "date_field": "invoice.issue_date",
+          "unit_type": "RECORD",
+          "publication": "DRAFT",
+          "non_cash_policy": "non-cash-scope-v1",
+          "inclusive_threshold": "5000000",
+          "predicates": [
+            {
+              "requirement": {
+                "path": "derived.invoice_direction"
+              },
+              "value": "INPUT"
+            },
+            {
+              "requirement": {
+                "path": "context.vat_method"
+              },
+              "value": "DEDUCTION"
+            },
+            {
+              "requirement": {
+                "path": "context.claim_input_vat"
+              },
+              "value": true
+            },
+            {
+              "requirement": {
+                "path": "context.payment_case"
+              },
+              "value": "STANDARD"
+            }
+          ],
+          "required_fields": [],
+          "legal_basis": [
+            {
+              "document_id": "ND181_2025",
+              "locator": "Article26.pdf32-34"
+            }
+          ]
+        },
+        {
+          "rule_id": "VAT_NON_CASH_PAYMENT_001",
+          "version": "payment-2026a-v1",
+          "family": "PAYMENT_EVIDENCE",
+          "effective_from": "2026-01-01",
+          "effective_to": "2026-06-20",
+          "date_field": "invoice.issue_date",
+          "unit_type": "RECORD",
+          "publication": "DRAFT",
+          "non_cash_policy": "non-cash-scope-v1",
+          "inclusive_threshold": "5000000",
+          "predicates": [
+            {
+              "requirement": {
+                "path": "derived.invoice_direction"
+              },
+              "value": "INPUT"
+            },
+            {
+              "requirement": {
+                "path": "context.vat_method"
+              },
+              "value": "DEDUCTION"
+            },
+            {
+              "requirement": {
+                "path": "context.claim_input_vat"
+              },
+              "value": true
+            },
+            {
+              "requirement": {
+                "path": "context.payment_case"
+              },
+              "value": "STANDARD"
+            }
+          ],
+          "required_fields": [],
+          "legal_basis": [
+            {
+              "document_id": "ND181_2025",
+              "locator": "Article26.pdf32-34"
+            },
+            {
+              "document_id": "ND359_2025",
+              "locator": "AMENDMENT_SCOPE_PENDING"
+            }
+          ]
+        },
+        {
+          "rule_id": "VAT_NON_CASH_PAYMENT_001",
+          "version": "payment-2026b-v1",
+          "family": "PAYMENT_EVIDENCE",
+          "effective_from": "2026-06-20",
+          "effective_to": "2026-10-15",
+          "date_field": "invoice.issue_date",
+          "unit_type": "RECORD",
+          "publication": "DRAFT",
+          "non_cash_policy": "non-cash-scope-v1",
+          "inclusive_threshold": "5000000",
+          "predicates": [
+            {
+              "requirement": {
+                "path": "derived.invoice_direction"
+              },
+              "value": "INPUT"
+            },
+            {
+              "requirement": {
+                "path": "context.vat_method"
+              },
+              "value": "DEDUCTION"
+            },
+            {
+              "requirement": {
+                "path": "context.claim_input_vat"
+              },
+              "value": true
+            },
+            {
+              "requirement": {
+                "path": "context.payment_case"
+              },
+              "value": "STANDARD"
+            }
+          ],
+          "required_fields": [],
+          "legal_basis": [
+            {
+              "document_id": "ND181_2025",
+              "locator": "Article26.pdf32-34"
+            },
+            {
+              "document_id": "ND359_2025",
+              "locator": "AMENDMENT_SCOPE_PENDING"
+            },
+            {
+              "document_id": "ND144_2026",
+              "locator": "Article4.pdf3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rule_id": "VAT_RATE_001",
+      "supported_from": "2025-07-01",
+      "supported_to": "2026-10-15",
+      "versions": [
+        {
+          "rule_id": "VAT_RATE_001",
+          "version": "vat-2025-2026-v1",
+          "family": "VAT_RATE",
+          "effective_from": "2025-07-01",
+          "effective_to": "2026-10-15",
+          "date_field": "invoice.issue_date",
+          "unit_type": "ITEM",
+          "publication": "DRAFT",
+          "legal_basis": [
+            {
+              "document_id": "ND174_2025",
+              "locator": "Article1_APPENDICES_PENDING_REVIEW"
+            }
+          ],
+          "predicates": [
+            {
+              "requirement": {
+                "path": "context.invoice_kind"
+              },
+              "value": "VAT"
+            }
+          ],
+          "required_fields": [
+            {
+              "path": "item.vat_treatment"
+            },
+            {
+              "path": "item.vat_rate"
+            },
+            {
+              "path": "item.vat_category"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "rule-planning-v1",
+  "creator": "rule-planner",
+  "stage": "planning",
+  "created_at": "2026-10-12T00:00:00Z",
+  "evaluation_id": "evaluation-fec8f9398434734a1e1692986fe8b6b2",
+  "tenant_id": "tenant-a",
+  "taxpayer_id": "payer-a",
+  "record_id": "cfr-70aca590b8b64437a963b68deebe323f",
+  "record_revision": 1,
+  "taxpayer_master_revision": 1,
+  "record_sha256": "dafc8f7ded621a1a783b4b61599c4e9c27c216c65643dcb177c2e639d02b36ca",
+  "implementation_sha256": "1218f2d2c8eca4e4fa197076f87f2879969861f2c1e7b5b1b1ee9b48e463cb5e",
+  "pins": [
+    {
+      "name": "ruleset",
+      "version": "fixture",
+      "sha256": "1f6bb9c85772cb9b7362fbb3f1a968c61b185adbf0809ea38698003d224878c5"
+    },
+    {
+      "name": "legal",
+      "version": "fixture",
+      "sha256": "9fb146d6574729d16f4c97f45f047b6bc6a9637b60735d970f1b428b7e3c5a5f"
+    },
+    {
+      "name": "capability",
+      "version": "1",
+      "sha256": "1bec1b68f7c09236e1a99ca81c84dba3ffca5af7a7be56d1658e07450aa4162d"
+    },
+    {
+      "name": "taxonomy",
+      "version": "fixture",
+      "sha256": "9859f81d3f1caf5d7916f539c81a3426e61501fc675be197352e726c599a7c73"
+    },
+    {
+      "name": "context",
+      "version": "planning-context-v1",
+      "sha256": "611614f3f983ebc776191077b4d64273d181ee7316ea5731094ae47f0ae445ad"
+    },
+    {
+      "name": "quality",
+      "version": "fixture",
+      "sha256": "abeeb39bcb4882d344ff87e0d5249c6cc799089fd126a4b5a7e0ba2d63ac04b4"
+    },
+    {
+      "name": "master",
+      "version": "1",
+      "sha256": "2a39d290f8f2a48ebc70adf4e4c1a0fe35efe7444d80b96b3e134c08dacf13bb"
+    }
+  ],
+  "entries": [
+    {
+      "rule_id": "TEST_RULE",
+      "rule_version": "v1",
+      "unit": {
+        "unit_type": "RECORD",
+        "unit_id": "cfr-70aca590b8b64437a963b68deebe323f",
+        "item_refs": [],
+        "discovery": "COMPLETE"
+      },
+      "selection": "MATCH",
+      "applicability": "MATCH",
+      "capability": "SUPPORTED",
+      "eligibility": "ELIGIBLE",
+      "reasons": [
+        "ALL_PLANNING_GATES_SATISFIED"
+      ],
+      "next_action": "NONE",
+      "review_required": false,
+      "traces": [],
+      "legal_basis": [
+        {
+          "document_id": "TEST_LAW",
+          "locator": "synthetic-article"
+        }
+      ]
+    }
+  ],
+  "engine_calls": 0,
+  "technical_only": true
+}

@@ -1,6 +1,6 @@
 # PLAN_07 — Legal Registry, VAT taxonomy và Rule Planning
 
-> Trạng thái triển khai: **NOT_STARTED**. Tài liệu là công việc dự kiến, không chứng nhận code đã hoàn thành.
+> Trạng thái triển khai: **IMPLEMENTED_TECHNICAL — 14/10/2026**. [Gate](evidence/gate_07.md), [runbook](evidence/plan07/runbook.md). Phê duyệt pháp lý, mapping hàng thật và nghiệm thu dữ liệu thực còn PENDING.
 
 [Lộ trình tổng](README.md) · Trước theo thứ tự đọc: [PLAN_06](PLAN_06_REVIEW_CAPTURE_MVP.md) · Sau: [PLAN_08](PLAN_08_ZEN_RULES_AGGREGATION.md)
 
@@ -13,7 +13,7 @@ Chọn đúng rule version và evaluation units; tách applicability, capability
 - Đối chiếu [NEW_PLAN](../NEW_PLAN.md): mục 1.7, 7, 9.3–9.5, 11.
 - Đầu vào: Legal PDFs/source map, CFR contracts, quality signals, capability profiles và danh mục luật MVP.
 
-Không bắt đầu phần phụ thuộc khi gate đầu vào chưa qua. Có thể chuẩn bị fixture/tài liệu độc lập, nhưng không ghi cả chặng DONE vì đã tạo scaffold.
+Theo yêu cầu người dùng, tiếp tục phạm vi kỹ thuật từ PLAN_06; OCR V2 và nghiệm thu dữ liệu thực PLAN_05–06 vẫn mở. Không bật kết luận thuế trước gate nghiệp vụ. Không ghi toàn bộ chặng DONE khi chưa duyệt luật và mapping.
 
 ## 2. Tài sản hiện có và cách tái sử dụng
 
@@ -23,7 +23,7 @@ Kiểm tra lại tính tồn tại/phiên bản khi triển khai; kết quả ki
 
 ## 3. Module và hợp đồng cần xây
 
-Các đường dẫn sau là **đích dự kiến**, chưa hàm ý file đã tồn tại:
+Các module sau đã có triển khai kỹ thuật; trạng thái từng task và giới hạn ở [gate](evidence/gate_07.md):
 
 `agent3_tax_compliance/src/legal_registry/; src/taxonomy/; src/planning/{selector,applicability,capability,eligibility,units}.py; rules/registry/; tests/planning/`
 
@@ -51,7 +51,7 @@ Mọi artifact phải có schema/config version, input hash hoặc record revisi
 
 - [ ] Hoàn thành và đính kèm bằng chứng.
 - Thực hiện: Khai field/evidence capability theo adapter/profile version. Tách source không thể cung cấp payment evidence khỏi record đơn lẻ đang thiếu field.
-- Đầu ra: capability_profiles/*.yaml.
+- Đầu ra: capability_profiles/*.json.
 - Kiểm chứng: Record missing không thành OUT_OF_SCOPE; OCR không được quảng bá chứng minh thanh toán.
 
 ### P07-T04 — VAT taxonomy deliverable
@@ -108,12 +108,12 @@ Cuối mỗi ngày cập nhật task IDs đã làm, bằng chứng và blocker v
 
 ## 6. Ca kiểm thử và tình huống bắt buộc
 
-- [ ] Invoice date missing → rule_version null, no dereference.
-- [ ] Direction UNKNOWN legacy được migrate trước predicate.
+- [x] Invoice date missing → rule_version null, no dereference.
+- [x] Direction UNKNOWN legacy được migrate trước predicate.
 - [ ] Một invoice 4 triệu, cùng supplier/ngày chưa đủ ledger.
 - [ ] XML thiếu bank evidence: scope exclusion hoặc unresolved đúng policy, không FAIL.
 - [ ] Quan sát thiếu nội dung đáng tin mới cho rule xác định vi phạm.
-- [ ] Rule interval overlap/gap; taxonomy version hết hiệu lực.
+- [x] Rule interval overlap/gap; taxonomy version hết hiệu lực.
 
 Dùng fixture tổng hợp nhỏ cho contract/recovery tests, dữ liệu có nhãn cho accuracy và sandbox thật cho connector. Không thay accuracy evaluation bằng unit test parser. Chỉ chạy phần test phù hợp chặng và integration qua ranh giới vừa thay đổi.
 
@@ -132,3 +132,7 @@ Dùng fixture tổng hợp nhỏ cho contract/recovery tests, dữ liệu có nh
 Ghi blocker cụ thể, task bị ảnh hưởng, điều kiện gỡ và người/nguồn cần cung cấp. Tiếp tục các task độc lập. Không biến thiếu dữ liệu, thiếu môi trường hoặc lỗi runtime thành kết quả thành công; không ghi DONE khi chỉ có mock mà gate yêu cầu dữ liệu thật.
 
 Lệnh triển khai/test sẽ được ghi cùng artifact khi module đã tồn tại. Quy ước lệnh và cách cập nhật tiến độ nằm trong [README lộ trình](README.md); tài liệu này không yêu cầu chạy benchmark hoặc cài dependency ngay lúc chia kế hoạch.
+
+## 9. Kết quả triển khai ngày 14/10/2026
+
+Registry và catalog DRAFT, planner thuần, API/CLI, migration 007, schemas và ma trận kỹ thuật đã triển khai. [Báo cáo test](evidence/plan07/validation_summary.json) và [gate từng task](evidence/gate_07.md). Checkbox nghiệm thu toàn phần còn mở khi luật/mapping chưa được duyệt. PLAN_08 nhận RulePlan; PLAN_07 chưa chạy ZEN hoặc trả verdict thuế.

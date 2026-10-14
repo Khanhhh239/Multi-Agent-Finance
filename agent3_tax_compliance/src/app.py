@@ -20,6 +20,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     from .review.api import router as review_router
     from .review.contracts import ReviewError
     application.include_router(review_router)
+    from .planning.api import router as planning_router
+    application.include_router(planning_router)
 
     @application.middleware('http')
     async def private_capture_responses(request,call_next):

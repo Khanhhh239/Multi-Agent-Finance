@@ -1,0 +1,71 @@
+{
+  "scope": "PLAN_07 technical only; synthetic fixtures, not legal or accuracy acceptance",
+  "checked_on": "2026-10-14",
+  "command": "agent3_tax_compliance/.venv/Scripts/python.exe scripts/validate_plan07.py",
+  "implementation_sha256": "1218f2d2c8eca4e4fa197076f87f2879969861f2c1e7b5b1b1ee9b48e463cb5e",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 228,
+  "passed": true,
+  "engine_calls": 0,
+  "production_rules_publication": [
+    "DRAFT"
+  ],
+  "legal_documents": 12,
+  "taxonomy_mappings": 0,
+  "pending": [
+    "Business approval of rule metadata and exception/transitional policies",
+    "Reviewed real goods/services taxonomy mappings",
+    "PLAN_05/06 real-data acceptance",
+    "Signature verification and complete legal amendment review"
+  ]
+}

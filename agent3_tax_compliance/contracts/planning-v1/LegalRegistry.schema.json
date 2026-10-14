@@ -1,0 +1,170 @@
+{
+  "$defs": {
+    "LegalDocument": {
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "official_url": {
+          "title": "Official Url",
+          "type": "string"
+        },
+        "pdf_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pdf Url"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective To"
+        },
+        "source_status": {
+          "title": "Source Status",
+          "type": "string"
+        },
+        "verified_locators": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Verified Locators",
+          "type": "array"
+        },
+        "relationships": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/LegalRelationship"
+          },
+          "title": "Relationships",
+          "type": "array"
+        },
+        "transitional_policy": {
+          "title": "Transitional Policy",
+          "type": "string"
+        },
+        "signature_status": {
+          "default": "NOT_VERIFIED",
+          "title": "Signature Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "official_url",
+        "effective_from",
+        "source_status",
+        "transitional_policy"
+      ],
+      "title": "LegalDocument",
+      "type": "object"
+    },
+    "LegalRelationship": {
+      "additionalProperties": false,
+      "properties": {
+        "target_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Target Id",
+          "type": "string"
+        },
+        "relation": {
+          "title": "Relation",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "evidence_locator": {
+          "minLength": 1,
+          "title": "Evidence Locator",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_id",
+        "relation",
+        "scope",
+        "effective_from",
+        "evidence_locator"
+      ],
+      "title": "LegalRelationship",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "checked_on": {
+      "format": "date",
+      "title": "Checked On",
+      "type": "string"
+    },
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/LegalDocument"
+      },
+      "title": "Documents",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version",
+    "checked_on",
+    "documents"
+  ],
+  "title": "LegalRegistry",
+  "type": "object"
+}
