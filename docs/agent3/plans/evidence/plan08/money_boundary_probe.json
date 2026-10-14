@@ -1,0 +1,26 @@
+{
+  "engine_version": "0.53.0",
+  "unsafe_probes": [
+    {
+      "name": "decimal_object",
+      "error_type": "TypeError"
+    },
+    {
+      "name": "decimal_string_add",
+      "error_type": "RuntimeError"
+    },
+    {
+      "name": "unsafe_large_integer_add",
+      "value": 9007199254740992.0
+    }
+  ],
+  "selected_policy": "decimal-facts-v1",
+  "safe_sum": "9007199254740993",
+  "distinct_large_values": true,
+  "money_sent_to_engine": false,
+  "supported_domain": {
+    "max_digits": 60,
+    "max_scale": 12
+  },
+  "fraction_oracle_cases": 500
+}

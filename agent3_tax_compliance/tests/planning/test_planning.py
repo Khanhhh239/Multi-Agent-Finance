@@ -371,7 +371,7 @@ class PersistencePlanningTests(unittest.TestCase):
         self.assertEqual(self.repo.work(self.ctx,self.payer,self.record.record_id,1),result)
         self.assertEqual(replay(self.repo.snapshot(self.ctx,self.payer,result.evaluation_id),result),result)
         with self.repo.ingestion.db() as db:
-            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],7)
+            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],8)
             with self.assertRaises(sqlite3.IntegrityError):db.execute('DELETE FROM rule_plans')
 
     def test_cross_tenant_denied_and_missing_revision_not_reused(self):

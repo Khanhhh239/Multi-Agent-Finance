@@ -1,0 +1,77 @@
+{
+  "contentType": "application/vnd.gorules.decision",
+  "nodes": [
+    {
+      "id": "input",
+      "name": "Verified adapter facts",
+      "type": "inputNode",
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "table",
+      "name": "Explicit result table",
+      "type": "decisionTableNode",
+      "position": {
+        "x": 300,
+        "y": 0
+      },
+      "content": {
+        "hitPolicy": "first",
+        "inputs": [
+          {
+            "id": "seller_tax_id_printed",
+            "name": "seller_tax_id_printed",
+            "type": "expression",
+            "field": "facts.seller_tax_id_printed"
+          }
+        ],
+        "outputs": [
+          {
+            "id": "o_result",
+            "name": "result",
+            "type": "expression",
+            "field": "result"
+          }
+        ],
+        "rules": [
+          {
+            "_id": "fail-seller_tax_id_printed",
+            "seller_tax_id_printed": "== false",
+            "o_result": "\"FAIL\""
+          },
+          {
+            "_id": "pass-all",
+            "seller_tax_id_printed": "== true",
+            "o_result": "\"PASS\""
+          }
+        ]
+      }
+    },
+    {
+      "id": "output",
+      "name": "Outcome",
+      "type": "outputNode",
+      "position": {
+        "x": 600,
+        "y": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-in",
+      "type": "edge",
+      "sourceId": "input",
+      "targetId": "table"
+    },
+    {
+      "id": "edge-out",
+      "type": "edge",
+      "sourceId": "table",
+      "targetId": "output"
+    }
+  ]
+}

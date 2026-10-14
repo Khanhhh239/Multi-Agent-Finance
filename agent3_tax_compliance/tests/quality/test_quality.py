@@ -222,7 +222,7 @@ class StorageTests(unittest.TestCase):
         a=self.repo.work(self.ctx,'payer-a',self.artifact.artifact_id);b=self.repo.work(self.ctx,'payer-a',self.artifact.artifact_id)
         self.assertEqual(a,b);self.assertEqual(a,replay(self.repo.inputs(self.ctx,'payer-a',a.assessment_id),a))
         self.assertEqual(self.repo.get(self.ctx,'payer-a',a.assessment_id),a)
-        with self.repo.ingestion.db() as db: self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],7)
+        with self.repo.ingestion.db() as db: self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],8)
 
     def test_policy_change_appends_assessment(self):
         a=self.repo.work(self.ctx,'payer-a',self.artifact.artifact_id)

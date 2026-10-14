@@ -309,7 +309,7 @@ os._exit(73)
         repository=Repository(Settings(database_path=path))
         repository.initialize(); repository.initialize()
         with repository.connection() as db:
-            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],7)
+            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],8)
             self.assertEqual(db.execute('SELECT payload FROM taxpayer_masters').fetchone()[0],'preserved')
 
 

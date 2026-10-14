@@ -1,0 +1,183 @@
+{
+  "$defs": {
+    "ConditionTrace": {
+      "additionalProperties": false,
+      "properties": {
+        "condition_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Condition Id",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "boolean"
+        },
+        "origin": {
+          "const": "ADAPTER",
+          "default": "ADAPTER",
+          "title": "Origin",
+          "type": "string"
+        },
+        "policy_version": {
+          "const": "decimal-facts-v1",
+          "default": "decimal-facts-v1",
+          "title": "Policy Version",
+          "type": "string"
+        },
+        "field_paths": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Field Paths",
+          "type": "array"
+        },
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "observed_json": {
+          "title": "Observed Json",
+          "type": "string"
+        },
+        "expected_json": {
+          "title": "Expected Json",
+          "type": "string"
+        }
+      },
+      "required": [
+        "condition_id",
+        "value",
+        "field_paths",
+        "evidence_refs",
+        "observed_json",
+        "expected_json"
+      ],
+      "title": "ConditionTrace",
+      "type": "object"
+    },
+    "EvaluationKey": {
+      "additionalProperties": false,
+      "properties": {
+        "evaluation_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Evaluation Id",
+          "type": "string"
+        },
+        "record_revision": {
+          "minimum": 1,
+          "title": "Record Revision",
+          "type": "integer"
+        },
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "unit_type": {
+          "enum": [
+            "RECORD",
+            "ITEM",
+            "VAT_GROUP"
+          ],
+          "title": "Unit Type",
+          "type": "string"
+        },
+        "unit_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Unit Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evaluation_id",
+        "record_revision",
+        "rule_id",
+        "rule_version",
+        "unit_type",
+        "unit_id"
+      ],
+      "title": "EvaluationKey",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "planning_eligibility": {
+      "const": "ELIGIBLE",
+      "title": "Planning Eligibility",
+      "type": "string"
+    },
+    "key": {
+      "$ref": "#/$defs/EvaluationKey"
+    },
+    "tenant_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "taxpayer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Taxpayer Id",
+      "type": "string"
+    },
+    "record_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Record Sha256",
+      "type": "string"
+    },
+    "plan_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Plan Sha256",
+      "type": "string"
+    },
+    "model_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Model Sha256",
+      "type": "string"
+    },
+    "conditions": {
+      "items": {
+        "$ref": "#/$defs/ConditionTrace"
+      },
+      "minItems": 1,
+      "title": "Conditions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "planning_eligibility",
+    "key",
+    "tenant_id",
+    "taxpayer_id",
+    "record_sha256",
+    "plan_sha256",
+    "model_sha256",
+    "conditions"
+  ],
+  "title": "EngineContext",
+  "type": "object"
+}

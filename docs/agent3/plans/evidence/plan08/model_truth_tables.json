@@ -1,0 +1,201 @@
+{
+  "scope": "Offline technical truth tables on DRAFT models; not approved legal outcomes",
+  "rows": [
+    {
+      "model_id": "INV_CONTENT_001.content-2022-v1",
+      "facts": {
+        "seller_tax_id_printed": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-seller_tax_id_printed"
+    },
+    {
+      "model_id": "INV_CONTENT_001.content-2022-v1",
+      "facts": {
+        "seller_tax_id_printed": true
+      },
+      "expected": "PASS",
+      "observed": "PASS",
+      "matched_row_id": "pass-all"
+    },
+    {
+      "model_id": "INV_CONTENT_001.content-2025-v1",
+      "facts": {
+        "seller_tax_id_printed": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-seller_tax_id_printed"
+    },
+    {
+      "model_id": "INV_CONTENT_001.content-2025-v1",
+      "facts": {
+        "seller_tax_id_printed": true
+      },
+      "expected": "PASS",
+      "observed": "PASS",
+      "matched_row_id": "pass-all"
+    },
+    {
+      "model_id": "INV_CONTENT_001.content-2026-v1",
+      "facts": {
+        "seller_tax_id_printed": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-seller_tax_id_printed"
+    },
+    {
+      "model_id": "INV_CONTENT_001.content-2026-v1",
+      "facts": {
+        "seller_tax_id_printed": true
+      },
+      "expected": "PASS",
+      "observed": "PASS",
+      "matched_row_id": "pass-all"
+    },
+    {
+      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2025-v1",
+      "facts": {
+        "non_cash_proof_verified": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-non_cash_proof_verified"
+    },
+    {
+      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2025-v1",
+      "facts": {
+        "non_cash_proof_verified": true
+      },
+      "expected": "PASS",
+      "observed": "PASS",
+      "matched_row_id": "pass-all"
+    },
+    {
+      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2026a-v1",
+      "facts": {
+        "non_cash_proof_verified": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-non_cash_proof_verified"
+    },
+    {
+      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2026a-v1",
+      "facts": {
+        "non_cash_proof_verified": true
+      },
+      "expected": "PASS",
+      "observed": "PASS",
+      "matched_row_id": "pass-all"
+    },
+    {
+      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2026b-v1",
+      "facts": {
+        "non_cash_proof_verified": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-non_cash_proof_verified"
+    },
+    {
+      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2026b-v1",
+      "facts": {
+        "non_cash_proof_verified": true
+      },
+      "expected": "PASS",
+      "observed": "PASS",
+      "matched_row_id": "pass-all"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "facts": {
+        "taxable_treatment": false,
+        "reduction_category": false,
+        "rate_matches_draft_policy": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-taxable_treatment"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "facts": {
+        "taxable_treatment": false,
+        "reduction_category": false,
+        "rate_matches_draft_policy": true
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-taxable_treatment"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "facts": {
+        "taxable_treatment": false,
+        "reduction_category": true,
+        "rate_matches_draft_policy": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-taxable_treatment"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "facts": {
+        "taxable_treatment": false,
+        "reduction_category": true,
+        "rate_matches_draft_policy": true
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-taxable_treatment"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "facts": {
+        "taxable_treatment": true,
+        "reduction_category": false,
+        "rate_matches_draft_policy": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-reduction_category"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "facts": {
+        "taxable_treatment": true,
+        "reduction_category": false,
+        "rate_matches_draft_policy": true
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-reduction_category"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "facts": {
+        "taxable_treatment": true,
+        "reduction_category": true,
+        "rate_matches_draft_policy": false
+      },
+      "expected": "FAIL",
+      "observed": "FAIL",
+      "matched_row_id": "fail-rate_matches_draft_policy"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "facts": {
+        "taxable_treatment": true,
+        "reduction_category": true,
+        "rate_matches_draft_policy": true
+      },
+      "expected": "PASS",
+      "observed": "PASS",
+      "matched_row_id": "pass-all"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "contentType": "application/vnd.gorules.decision",
+  "nodes": [
+    {
+      "id": "input",
+      "name": "Verified adapter facts",
+      "type": "inputNode",
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "table",
+      "name": "Explicit result table",
+      "type": "decisionTableNode",
+      "position": {
+        "x": 300,
+        "y": 0
+      },
+      "content": {
+        "hitPolicy": "first",
+        "inputs": [
+          {
+            "id": "taxable_treatment",
+            "name": "taxable_treatment",
+            "type": "expression",
+            "field": "facts.taxable_treatment"
+          },
+          {
+            "id": "reduction_category",
+            "name": "reduction_category",
+            "type": "expression",
+            "field": "facts.reduction_category"
+          },
+          {
+            "id": "rate_matches_draft_policy",
+            "name": "rate_matches_draft_policy",
+            "type": "expression",
+            "field": "facts.rate_matches_draft_policy"
+          }
+        ],
+        "outputs": [
+          {
+            "id": "o_result",
+            "name": "result",
+            "type": "expression",
+            "field": "result"
+          }
+        ],
+        "rules": [
+          {
+            "_id": "fail-taxable_treatment",
+            "taxable_treatment": "== false",
+            "reduction_category": "",
+            "rate_matches_draft_policy": "",
+            "o_result": "\"FAIL\""
+          },
+          {
+            "_id": "fail-reduction_category",
+            "taxable_treatment": "",
+            "reduction_category": "== false",
+            "rate_matches_draft_policy": "",
+            "o_result": "\"FAIL\""
+          },
+          {
+            "_id": "fail-rate_matches_draft_policy",
+            "taxable_treatment": "",
+            "reduction_category": "",
+            "rate_matches_draft_policy": "== false",
+            "o_result": "\"FAIL\""
+          },
+          {
+            "_id": "pass-all",
+            "taxable_treatment": "== true",
+            "reduction_category": "== true",
+            "rate_matches_draft_policy": "== true",
+            "o_result": "\"PASS\""
+          }
+        ]
+      }
+    },
+    {
+      "id": "output",
+      "name": "Outcome",
+      "type": "outputNode",
+      "position": {
+        "x": 600,
+        "y": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-in",
+      "type": "edge",
+      "sourceId": "input",
+      "targetId": "table"
+    },
+    {
+      "id": "edge-out",
+      "type": "edge",
+      "sourceId": "table",
+      "targetId": "output"
+    }
+  ]
+}

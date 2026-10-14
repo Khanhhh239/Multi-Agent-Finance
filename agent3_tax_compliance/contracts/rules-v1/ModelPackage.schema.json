@@ -1,0 +1,266 @@
+{
+  "$defs": {
+    "Binding": {
+      "additionalProperties": false,
+      "properties": {
+        "condition_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Condition Id",
+          "type": "string"
+        },
+        "operation": {
+          "enum": [
+            "NONEMPTY",
+            "EQUALS",
+            "OBSERVATION_PRESENT",
+            "PAYMENT_NON_CASH"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "value_type": {
+          "default": "TEXT",
+          "enum": [
+            "TEXT",
+            "DECIMAL",
+            "BOOL"
+          ],
+          "title": "Value Type",
+          "type": "string"
+        },
+        "expected": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected"
+        }
+      },
+      "required": [
+        "condition_id",
+        "operation",
+        "path"
+      ],
+      "title": "Binding",
+      "type": "object"
+    },
+    "LegalBasis": {
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "locator"
+      ],
+      "title": "LegalBasis",
+      "type": "object"
+    },
+    "RuleModel": {
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Model Id",
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "family": {
+          "enum": [
+            "INVOICE_CONTENT",
+            "VAT_RATE",
+            "PAYMENT_EVIDENCE"
+          ],
+          "title": "Family",
+          "type": "string"
+        },
+        "unit_type": {
+          "enum": [
+            "RECORD",
+            "ITEM",
+            "VAT_GROUP"
+          ],
+          "title": "Unit Type",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "publication": {
+          "default": "DRAFT",
+          "enum": [
+            "DRAFT",
+            "APPROVED_TECHNICAL"
+          ],
+          "title": "Publication",
+          "type": "string"
+        },
+        "review_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Reference"
+        },
+        "legal_basis": {
+          "items": {
+            "$ref": "#/$defs/LegalBasis"
+          },
+          "minItems": 1,
+          "title": "Legal Basis",
+          "type": "array"
+        },
+        "bindings": {
+          "items": {
+            "$ref": "#/$defs/Binding"
+          },
+          "minItems": 1,
+          "title": "Bindings",
+          "type": "array"
+        },
+        "review_condition_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Condition Id"
+        },
+        "jdm_json": {
+          "title": "Jdm Json",
+          "type": "string"
+        },
+        "jdm_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Jdm Sha256",
+          "type": "string"
+        },
+        "no_hit_policy": {
+          "const": "ERROR",
+          "default": "ERROR",
+          "title": "No Hit Policy",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_id",
+        "version",
+        "rule_id",
+        "rule_version",
+        "family",
+        "unit_type",
+        "effective_from",
+        "effective_to",
+        "legal_basis",
+        "bindings",
+        "jdm_json",
+        "jdm_sha256"
+      ],
+      "title": "RuleModel",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "package_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Package Id",
+      "type": "string"
+    },
+    "version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "engine_version": {
+      "const": "0.53.0",
+      "default": "0.53.0",
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "models": {
+      "items": {
+        "$ref": "#/$defs/RuleModel"
+      },
+      "title": "Models",
+      "type": "array"
+    }
+  },
+  "required": [
+    "package_id",
+    "version",
+    "models"
+  ],
+  "title": "ModelPackage",
+  "type": "object"
+}

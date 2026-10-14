@@ -1,0 +1,101 @@
+{
+  "checked_on": "2026-10-15",
+  "scope": "PLAN_08 technical; not legal approval, production or real invoice accuracy",
+  "command": "agent3_tax_compliance/.venv/Scripts/python.exe scripts/validate_plan08.py",
+  "python": "3.10.5",
+  "platform": "Windows",
+  "zen_version": "0.53.0",
+  "zen_native_sha256": {
+    "zen.cp310-win_amd64.pyd": "5ad6eaf524126dc41cc4776206eb55ee57dbae69875d67b023b7e2ae8dc1a9e2"
+  },
+  "implementation_sha256": "09f6d10fd21184768ea16378a121350a04dd6d8ebd7ab0cd8126bbcfd38c9fa1",
+  "package_sha256": "1f62799b39da5fb2570a8e26a2f336d8028714482dc77fb1fff91d046237d8f4",
+  "model_hashes": {
+    "INV_CONTENT_001.content-2022-v1": "29be18ad8ef7ac90a186d72416a2e77c51fb1cbd631bfd548a4aa8805b807733",
+    "INV_CONTENT_001.content-2025-v1": "29be18ad8ef7ac90a186d72416a2e77c51fb1cbd631bfd548a4aa8805b807733",
+    "INV_CONTENT_001.content-2026-v1": "29be18ad8ef7ac90a186d72416a2e77c51fb1cbd631bfd548a4aa8805b807733",
+    "VAT_NON_CASH_PAYMENT_001.payment-2025-v1": "cbde8d8f1321054e0577d64d83332b3e393d521107ed2ebb0c8e71f64c73eb25",
+    "VAT_NON_CASH_PAYMENT_001.payment-2026a-v1": "cbde8d8f1321054e0577d64d83332b3e393d521107ed2ebb0c8e71f64c73eb25",
+    "VAT_NON_CASH_PAYMENT_001.payment-2026b-v1": "cbde8d8f1321054e0577d64d83332b3e393d521107ed2ebb0c8e71f64c73eb25",
+    "VAT_RATE_001.vat-2025-2026-v1": "0ae4f480fda3639f8767aa7af779789abe952daf5b8fb1bbc10ca118260396dc"
+  },
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 293,
+  "passed": true,
+  "precedence_matrix_cases": 128,
+  "boolean_review_table_cases": 16,
+  "public_draft_truth_table_cases": 20,
+  "fraction_oracle_cases": 500,
+  "functional_sample": {
+    "execution_id": "execution-29cdefef669383dbef7237e8ef22fb38",
+    "verdict": "PASS",
+    "coverage": "FULL",
+    "record_revision": 2,
+    "attempts": 1,
+    "replay_verified": true,
+    "scope": "Synthetic approved fixture only; capture/review/real isolated ZEN/SQLite/replay"
+  },
+  "pending": [
+    "Legal rule/model approval and real goods/services mappings",
+    "PLAN_05/06 real-data acceptance",
+    "PLAN_09 UI/job integration and template explanations",
+    "Trusted payment proof ingestion/matching; no HTTP assertion endpoint"
+  ]
+}

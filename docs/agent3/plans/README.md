@@ -2,9 +2,9 @@
 
 Ngày lập: **11/10/2026**. Nguồn thiết kế: [NEW_PLAN.md](../NEW_PLAN.md).
 
-Bộ này chia thiết kế thành **16 kế hoạch triển khai**, theo hướng OCR/PDF trước: đọc chứng từ → CFR có evidence → quality → người dùng sửa → luật thuế → mở rộng nguồn. Mỗi PLAN có task IDs, đầu ra, kiểm chứng, lịch nội bộ và gate bàn giao. **PLAN_00 DONE kỹ thuật; PLAN_01 DONE nền móng; PLAN_02 DONE ingestion; PLAN_03 DONE OCR/layout kỹ thuật; PLAN_04 DONE extraction/CFR kỹ thuật; PLAN_05 DONE quality/manual kỹ thuật, calibration/release PENDING; PLAN_06 DONE capture/review kỹ thuật, real/browser acceptance PENDING; PLAN_08-15 chưa triển khai.** Xem [gate PLAN_00](evidence/gate_00.md), [gate PLAN_01](evidence/gate_01.md), [gate PLAN_02](evidence/gate_02.md), [gate PLAN_03](evidence/gate_03.md), [gate PLAN_04](evidence/gate_04.md), [gate PLAN_05](evidence/gate_05.md), [gate PLAN_06](evidence/gate_06.md) và [quyết định phạm vi](evidence/plan00/technical_scope_decision.md); real-data acceptance còn mở ở PLAN_05–06.
+Bộ này chia thiết kế thành **16 kế hoạch triển khai**, theo hướng OCR/PDF trước: đọc chứng từ → CFR có evidence → quality → người dùng sửa → luật thuế → mở rộng nguồn. Mỗi PLAN có task IDs, đầu ra, kiểm chứng, lịch nội bộ và gate bàn giao. **PLAN_00 DONE kỹ thuật; PLAN_01 DONE nền móng; PLAN_02 DONE ingestion; PLAN_03 DONE OCR/layout kỹ thuật; PLAN_04 DONE extraction/CFR kỹ thuật; PLAN_05 DONE quality/manual kỹ thuật, calibration/release PENDING; PLAN_06 DONE capture/review kỹ thuật, real/browser acceptance PENDING; PLAN_09-15 chưa triển khai.** Xem [gate PLAN_00](evidence/gate_00.md), [gate PLAN_01](evidence/gate_01.md), [gate PLAN_02](evidence/gate_02.md), [gate PLAN_03](evidence/gate_03.md), [gate PLAN_04](evidence/gate_04.md), [gate PLAN_05](evidence/gate_05.md), [gate PLAN_06](evidence/gate_06.md) và [quyết định phạm vi](evidence/plan00/technical_scope_decision.md); real-data acceptance còn mở ở PLAN_05–06.
 
-PLAN_07: IMPLEMENTED_TECHNICAL; legal approval/taxonomy mappings PENDING. [Gate PLAN_07](evidence/gate_07.md).
+PLAN_07–08: IMPLEMENTED_TECHNICAL; legal approval/taxonomy mappings PENDING. [Gate PLAN_07](evidence/gate_07.md), [gate PLAN_08](evidence/gate_08.md). PLAN_09–15 chưa triển khai; OCR V2 và nghiệm thu dữ liệu thực PLAN_05–06 vẫn mở.
 
 ## 1. Thứ tự thực hiện và phạm vi các mốc
 
@@ -32,7 +32,7 @@ NEW_PLAN vẫn là hợp đồng kiến trúc. Thứ tự thực hiện ở bộ
 | [PLAN_05](PLAN_05_QUALITY_CALIBRATION.md) | Data Quality, hiệu chỉnh confidence và chính sách review | 4–6 | 21–33 | DONE phần kỹ thuật/manual; calibration/release PENDING; [gate](evidence/gate_05.md) |
 | [PLAN_06](PLAN_06_REVIEW_CAPTURE_MVP.md) | Review, sửa dữ liệu và nghiệm thu MVP đọc chứng từ | 4–6 | 25–39 | DONE kỹ thuật/manual; real/browser acceptance PENDING; [gate](evidence/gate_06.md) |
 | [PLAN_07](PLAN_07_LEGAL_TAXONOMY_PLANNING.md) | Legal Registry, VAT taxonomy và Rule Planning | 6–9 | 31–48 | IMPLEMENTED kỹ thuật; legal/mapping PENDING; [gate](evidence/gate_07.md) |
-| [PLAN_08](PLAN_08_ZEN_RULES_AGGREGATION.md) | GoRules ZEN, Decimal, trace và tổng hợp kết quả | 4–6 | 35–54 | NOT_STARTED |
+| [PLAN_08](PLAN_08_ZEN_RULES_AGGREGATION.md) | GoRules ZEN, Decimal, trace và tổng hợp kết quả | 4–6 | 35–54 | IMPLEMENTED kỹ thuật; legal release PENDING; [gate](evidence/gate_08.md) |
 | [PLAN_09](PLAN_09_COMPLIANCE_MVP.md) | Tích hợp compliance, giải thích bằng template và nghiệm thu | 4–6 | 39–60 | NOT_STARTED |
 | [PLAN_10](PLAN_10_INVOICE_XML.md) | Bổ sung Invoice XML trên cùng pipeline | 3–5 | 42–65 | NOT_STARTED |
 | [PLAN_11](PLAN_11_EXCEL_BANK.md) | Excel và bank statement, không suy diễn đối soát | 5–8 | 47–73 | NOT_STARTED |

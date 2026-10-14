@@ -240,7 +240,7 @@ class PersistenceTests(unittest.TestCase):
         self.assertEqual(self.repo.base.record(CTX,'payer-a',a.record.record_id),a.record)
         with self.repo.ingestion.db() as db:
             self.assertEqual(db.execute('SELECT COUNT(*) FROM records').fetchone()[0],1)
-            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],7)
+            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],8)
 
     def test_audit_failure_rolls_back_record_and_artifact(self):
         with patch.object(self.repo.ingestion,'_event',side_effect=RuntimeError('audit failure')):

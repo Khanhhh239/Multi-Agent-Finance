@@ -1,6 +1,6 @@
 # PLAN_08 — GoRules ZEN, Decimal, trace và tổng hợp kết quả
 
-> Trạng thái triển khai: **NOT_STARTED**. Tài liệu là công việc dự kiến, không chứng nhận code đã hoàn thành.
+> Trạng thái triển khai: **IMPLEMENTED_TECHNICAL — 15/10/2026**. [Gate](evidence/gate_08.md), [runbook](evidence/plan08/runbook.md), [test report](evidence/plan08/validation_summary.json). Legal release còn PENDING; models thực tế DRAFT.
 
 [Lộ trình tổng](README.md) · Trước theo thứ tự đọc: [PLAN_07](PLAN_07_LEGAL_TAXONOMY_PLANNING.md) · Sau: [PLAN_09](PLAN_09_COMPLIANCE_MVP.md)
 
@@ -13,7 +13,7 @@ Chạy mọi unit đủ điều kiện, giữ tiền chính xác, trace có ngu�
 - Đối chiếu [NEW_PLAN](../NEW_PLAN.md): mục 9, 11, 13.
 - Đầu vào: RulePlan, contract spike, legal/taxonomy mappings, rule fixtures.
 
-Không bắt đầu phần phụ thuộc khi gate đầu vào chưa qua. Có thể chuẩn bị fixture/tài liệu độc lập, nhưng không ghi cả chặng DONE vì đã tạo scaffold.
+Theo yêu cầu người dùng, tiếp tục kỹ thuật từ PLAN_07 bằng models/fixtures tổng hợp; không tự đóng legal approval/taxonomy gate còn mở. Chưa phát hành rule thuế thực tế hoặc nối tự động vào UI/job.
 
 ## 2. Tài sản hiện có và cách tái sử dụng
 
@@ -23,7 +23,7 @@ Kiểm tra lại tính tồn tại/phiên bản khi triển khai; kết quả ki
 
 ## 3. Module và hợp đồng cần xây
 
-Các đường dẫn sau là **đích dự kiến**, chưa hàm ý file đã tồn tại:
+Các module sau đã được triển khai kỹ thuật; xem trạng thái từng task và giới hạn trong gate:
 
 `agent3_tax_compliance/src/rules/{zen_adapter,money_boundary,trace,outcomes,aggregator}.py; rules/models/; tests/rules_v1/`
 
@@ -100,12 +100,12 @@ Cuối mỗi ngày cập nhật task IDs đã làm, bằng chứng và blocker v
 
 ## 6. Ca kiểm thử và tình huống bắt buộc
 
-- [ ] 9007199254740992 + 1 không được mất đơn vị.
-- [ ] Một eligible unit bị timeout, unit khác FAIL: giữ FAIL và error.
-- [ ] Duplicate outcome hoặc revision cũ → contract error.
-- [ ] Items discovery incomplete nhưng mọi item thấy được PASS.
-- [ ] Không có in-scope rule → NO_VERDICT, không PASS.
-- [ ] Engine no-hit/malformed output phải đúng explicit policy.
+- [x] 9007199254740992 + 1 không được mất đơn vị.
+- [x] Một eligible unit bị timeout, unit khác FAIL: giữ FAIL và error.
+- [x] Duplicate outcome hoặc revision cũ → contract error.
+- [x] Items discovery incomplete nhưng mọi item thấy được PASS.
+- [x] Không có in-scope rule → NO_VERDICT, không PASS.
+- [x] Engine no-hit/malformed output phải đúng explicit policy.
 
 Dùng fixture tổng hợp nhỏ cho contract/recovery tests, dữ liệu có nhãn cho accuracy và sandbox thật cho connector. Không thay accuracy evaluation bằng unit test parser. Chỉ chạy phần test phù hợp chặng và integration qua ranh giới vừa thay đổi.
 
