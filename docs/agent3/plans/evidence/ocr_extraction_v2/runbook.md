@@ -2,6 +2,8 @@
 
 Ngày: 14/10/2026. Trạng thái: IN_PROGRESS_TECHNICAL_SELF_CHECK. [Kết quả máy đọc được](validation.json) · [Quyết định nhánh](decision_record.md) · [Dữ liệu và người thực hiện](data_workplan.md).
 
+Cập nhật vòng 2: đã sửa nhãn dịch dính chữ, binding tên bên bán khi MST đọc lỗi và ngày có dấu đóng ngoặc dư. OCR default tăng 21→23/31 field đúng; OCR split tăng 23→26/31, còn 3 thiếu/2 điền sai. [Báo cáo và giới hạn vòng 2](missing_fields_round_02.md). Các số trong phần dưới là snapshot vòng đầu, không sửa đè. Theo yêu cầu người dùng, sau mỗi đợt sửa code và kiểm thử hoàn chỉnh sẽ commit/push GitHub một lần.
+
 ## Đã thực hiện
 
 - Chạy baseline OCR thật, đóng băng cấu hình/runtime/source/input/label hash; xuất normalized blocks, candidates/issues, ảnh overlay và crop về thư mục local bị Git ignore.

@@ -21,7 +21,7 @@ ALIASES = {
  'expected_rows': ('so dong','total items'),
 }
 
-TRANSLATIONS = re.compile(r'\s*\(\s*(?:Seller|Buyer|Tax code|Address|Serial(?: No\.)?|Invoice No\.|No\.|Company(?:\x27s name)?|Customer\x27s Name|Payment currency|Total amount(?: excl\. VAT)?|VAT amount|Total payment|Total of payment|Date|Day|Month|Year)\s*\)\s*', re.I)
+TRANSLATIONS = re.compile(r'\s*\(\s*(?:Seller|Buyer|Tax\s*code|Address|Serial(?:\s*No\.)?|Invoice\s*No\.|No\.|Company(?:\x27s\s*name)?|Customer\x27s\s*Name|Payment\s*currency|Total\s*amount(?:\s*excl\.\s*VAT)?|VAT\s*amount|Total\s*payment|Total\s*of\s*payment|Date|Day|Month|Year)\s*\)\s*', re.I)
 
 
 def clean_label(text):
@@ -134,7 +134,11 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                 if found and not value:
                     choices=right_values(refs,fragments)
                     if choices: value=choices[0][1]
-                if value and tax_values(value): taxes.append(i)
+                # A malformed OCR tax value must not hide a clearly observed
+                # issuer name. Use only the shape to anchor the issuer region;
+                # the strict tax parser below still rejects the value itself.
+                if value and (tax_values(value) or re.fullmatch(r'[0-9][0-9\s.-]{8,20}',value)):
+                    taxes.append(i)
             if len(taxes)==1:
                 i=taxes[0];raw,refs=fragments[i]
                 box=bounds(refs)
@@ -166,7 +170,10 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                 role+'.name':('ten don vi','name'),role+'.address':('dia chi','address')})
         if path is None:
             if sections:
-                match=re.fullmatch(r'ngay\s+(\d{1,2})\s+thang\s+(\d{1,2})\s+nam\s+(\d{4})',text)
+                # OCR can append a single closing parenthesis after a complete
+                # labelled date. Accept punctuation, never trailing words or
+                # extra digits; date_values still validates the calendar date.
+                match=re.fullmatch(r'ngay\s+(\d{1,2})\s+thang\s+(\d{1,2})\s+nam\s+(\d{4})\s*\)?',text)
                 if match: yield 'invoice.issue_date','/'.join(match.groups()),blocks
             continue
         if inline:
