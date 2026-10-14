@@ -57,7 +57,7 @@ def main():
         experimental_split_default=False,remaining=['four missing fields on default OCR; three on split OCR',
             'two case-sensitive name mismatches on split OCR','runtime region recovery',
             'new-template evaluation and UI self acceptance'])
-    (PUBLIC/'missing_fields_round_02.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
+    (PUBLIC/'missing_fields_round_02.json').write_bytes(json.dumps(report,ensure_ascii=False,indent=2).encode('utf-8'))
     print(json.dumps(dict(aggregates=aggregates,region=region_scores),ensure_ascii=True,indent=2),flush=True)
 
 
