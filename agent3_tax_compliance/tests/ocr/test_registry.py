@@ -17,6 +17,17 @@ BENCH=PROJECT.parent/'data invoice/ocr_e2e_workflow'
 
 
 class RegistryTests(unittest.TestCase):
+    def test_experimental_split_is_opt_in_and_geometry_code_is_pinned(self):
+        default=EngineRegistry().get(load_default_config().model_id)
+        experimental=EngineRegistry().get('ppocrv6_vietocr_v2_split')
+        self.assertFalse(default.adapter_config['recognizer'].get('split_long_lines',False))
+        self.assertTrue(experimental.adapter_config['recognizer']['split_long_lines'])
+        self.assertIn('src/adapters/recognition_crops.py',experimental.source_files)
+        config=load_default_config().model_copy(update={'model_id':experimental.model_id})
+        compiled=adapter_config(experimental,BENCH,config)
+        self.assertEqual(compiled['model_id'],experimental.model_id)
+        self.assertEqual(compiled['adapter'],'ppocrv6_vietocr')
+
     def test_default_is_hybrid_and_all_profiles_are_valid(self):
         config=load_default_config()
         self.assertEqual(config.model_id,'ppocrv6_vietocr')

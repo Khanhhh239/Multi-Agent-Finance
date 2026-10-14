@@ -8,26 +8,86 @@ ALIASES = {
  'seller.name': ('ten nguoi ban','don vi ban hang','seller name'),
  'seller.tax_id': ('mst nguoi ban','ma so thue nguoi ban','seller tax id'),
  'seller.address': ('dia chi nguoi ban','seller address'),
- 'buyer.name': ('ten nguoi mua','don vi mua hang','buyer name'),
+ 'buyer.name': ('ten nguoi mua','don vi mua hang','buyer name','ho ten nguoi mua hang','ten khach hang'),
  'buyer.tax_id': ('mst nguoi mua','ma so thue nguoi mua','buyer tax id'),
  'buyer.address': ('dia chi nguoi mua','buyer address'),
- 'invoice.number': ('so hoa don','invoice number','invoice no'),
+ 'invoice.number': ('so hoa don','invoice number','invoice no','so'),
  'invoice.series': ('ky hieu','invoice series'),
  'invoice.issue_date': ('ngay lap','ngay hoa don','invoice date'),
- 'currency': ('don vi tien te','loai tien','currency'),
- 'totals.net': ('cong truoc thue','tong tien chua thue','subtotal'),
- 'totals.vat': ('tien thue','tong tien thue','vat amount'),
- 'totals.gross': ('tong thanh toan','tong cong thanh toan','grand total'),
+ 'currency': ('don vi tien te','loai tien','currency','dong tien thanh toan'),
+ 'totals.net': ('cong truoc thue','tong tien chua thue','subtotal','cong tien hang','cong tien hang hoa, dich vu'),
+ 'totals.vat': ('tien thue','tong tien thue','vat amount','tien thue gtgt'),
+ 'totals.gross': ('tong thanh toan','tong cong thanh toan','grand total','tong cong tien thanh toan','tong tien thanh toan'),
  'expected_rows': ('so dong','total items'),
 }
 
+TRANSLATIONS = re.compile(r'\s*\(\s*(?:Seller|Buyer|Tax code|Address|Serial(?: No\.)?|Invoice No\.|No\.|Company(?:\x27s name)?|Customer\x27s Name|Payment currency|Total amount(?: excl\. VAT)?|VAT amount|Total payment|Total of payment|Date|Day|Month|Year)\s*\)\s*', re.I)
+
+
+def clean_label(text):
+    return TRANSLATIONS.sub(' ',text).strip()
+
+
+def bounds(blocks):
+    boxes=[b.evidence.bbox for b in blocks if b.evidence]
+    if not boxes: return None
+    return (min(b[0] for b in boxes),min(b[1] for b in boxes),
+            max(b[2] for b in boxes),max(b[3] for b in boxes))
+
+
+def fragment_text(group):
+    """Use glyph gaps, preserving spaces already present in native runs."""
+    result=group[0].text_raw
+    for previous,current in zip(group,group[1:]):
+        gap=current.evidence.bbox[0]-previous.evidence.bbox[2]
+        char_width=(previous.evidence.bbox[2]-previous.evidence.bbox[0])/max(1,len(previous.text_raw))
+        separator='' if result.endswith((' ','\n')) or current.text_raw.startswith(' ') or gap<=.25*char_width else ' '
+        result+=separator+current.text_raw
+    return result.strip()
+
+
+def logical_fragments(page):
+    """Join adjacent native font runs, retaining every original evidence ID."""
+    # Font ascent changes the top coordinate within a line. Cluster by actual
+    # vertical overlap before sorting left to right (not by rounded top alone).
+    lines=[];unboxed=[]
+    for block in sorted(page.blocks,key=lambda b:b.reading_order):
+        box=bounds((block,))
+        if not box: unboxed.append(block);continue
+        for line in lines:
+            other=bounds(line)
+            overlap=min(box[3],other[3])-max(box[1],other[1])
+            if overlap>.5*min(box[3]-box[1],other[3]-other[1]):
+                line.append(block);break
+        else: lines.append([block])
+    lines.sort(key=lambda line:bounds(line)[1])
+    ordered=[b for line in lines for b in sorted(line,key=lambda b:b.evidence.bbox[0])]+unboxed
+    groups=[]
+    for block in ordered:
+        if not block.text_raw.strip(): continue
+        native=all(o.method=='NATIVE_TEXT' for o in block.origins)
+        box=bounds((block,))
+        target=None
+        if native and box:
+            for group in reversed(groups):
+                other=bounds(group)
+                if not other or not all(all(o.method=='NATIVE_TEXT' for o in b.origins) for b in group): continue
+                overlap=min(box[3],other[3])-max(box[1],other[1])
+                if overlap>.5*min(box[3]-box[1],other[3]-other[1]) and -.003<=box[0]-other[2]<=.012:
+                    target=group;break
+        if target is None: groups.append([block])
+        else: target.append(block)
+    return [(fragment_text(group),tuple(group)) for group in groups]
+
+
 def labelled(text, aliases):
-    normalized=key(text)
+    # Translations are removed from the label only, never from the value.
+    parts=re.split(r'[:：]',text,maxsplit=1)
+    normalized=key(clean_label(parts[0]))
     pairs=sorted(((path,key(label)) for path,labels in aliases.items() for label in labels),key=lambda p:len(p[1]),reverse=True)
     for path,label in pairs:
-        if normalized==label: return path,''
-        parts=re.split(r'[:：]',text,maxsplit=1)
-        if len(parts)==2 and key(parts[0])==label: return path,parts[1].strip()
+        if normalized==label: return path,parts[1].strip() if len(parts)==2 else ''
+        if label=='so': continue  # Never match "Số lượng", account numbers, etc.
         # OCR may merge label + value without a colon. Compare complete label
         # prefixes at whitespace boundaries, retaining offsets in the raw text.
         for boundary in re.finditer(r'\s+',text[:128]):
@@ -35,37 +95,148 @@ def labelled(text, aliases):
                 return path,text[boundary.end():].strip()
     return None,None
 
+
+def right_values(refs,fragments):
+    box=bounds(refs)
+    if not box: return []
+    x0,y0,x1,y1=box;result=[]
+    for raw,blocks in fragments:
+        other=bounds(blocks)
+        if blocks==refs or not other: continue
+        ox0,oy0,ox1,oy1=other
+        if ox0>=x1-.003 and min(y1,oy1)-max(y0,oy0)>.5*min(y1-y0,oy1-oy0):
+            result.append((ox0,raw.lstrip(':：').strip(),blocks))
+    return sorted(result,key=lambda row:row[0])
+
 def values_on_page(page, aliases=ALIASES, sections=False):
-    blocks=sorted(page.blocks,key=lambda b:b.reading_order)
+    fragments=logical_fragments(page)
+    table_tops=[bounds(refs)[1] for raw,refs in fragments if bounds(refs) and key(raw) in ('stt','ten hang hoa, dich vu','dien giai')]
+    party_end=min(table_tops) if table_tops else 1.
+    role_anchors=[]
+    if sections:
+        for raw,refs in fragments:
+            path,_=labelled(raw,ALIASES);box=bounds(refs)
+            role=path.split('.')[0] if path in ('seller.name','buyer.name') else None
+            if key(clean_label(raw)) in ('nguoi ban','seller'):role='seller'
+            if key(clean_label(raw)) in ('nguoi mua','buyer'):role='buyer'
+            if role and box:role_anchors.append((role,box))
+    # An unlabelled issuer block is accepted only with invoice title, an
+    # explicit buyer boundary, one valid tax ID and a nearby organisation name.
+    issuer={}
+    if sections:
+        buyer_indices=[i for i,(raw,_) in enumerate(fragments) if labelled(raw,ALIASES)[0]=='buyer.name']
+        has_title=any('hoa don' in key(raw) for raw,_ in fragments)
+        if buyer_indices and has_title:
+            boundary=buyer_indices[0]
+            taxes=[]
+            for i,(raw,refs) in enumerate(fragments[:boundary]):
+                found,value=labelled(raw,{'tax':('ma so thue','mst')})
+                if found and not value:
+                    choices=right_values(refs,fragments)
+                    if choices: value=choices[0][1]
+                if value and tax_values(value): taxes.append(i)
+            if len(taxes)==1:
+                i=taxes[0];raw,refs=fragments[i]
+                box=bounds(refs)
+                for j in range(max(0,i-3),i):
+                    name,name_refs=fragments[j];nbox=bounds(name_refs)
+                    if (box and nbox and 0<=box[1]-nbox[3]<.05 and abs(nbox[0]-box[0])<.03
+                            and re.match(r'^(cong ty|chi nhanh|tap doan|ban quan ly)\b',key(name))
+                            and ':' not in name):
+                        issuer[i]=(j,name,name_refs);break
     context=None
-    for index,block in enumerate(blocks):
-        text=key(block.text_raw)
+    for index,(raw,blocks) in enumerate(fragments):
+        text=key(clean_label(raw))
+        if index in issuer:
+            _,name,name_refs=issuer[index];context='seller'
+            yield 'seller.name',name,name_refs+blocks
         if sections:
             if text in ('nguoi ban','seller'): context='seller'
             elif text in ('nguoi mua','buyer'): context='buyer'
-        path,inline=labelled(block.text_raw,aliases)
-        if path is None and sections and context:
-            path,inline=labelled(block.text_raw,{
-                context+'.tax_id':('mst','ma so thue','tax id'),
-                context+'.name':('ten don vi','name'),context+'.address':('dia chi','address')})
-        if path is None: continue
+        # A rate and the next VAT label sometimes share a single font run.
+        label_raw=re.sub(r'^\d+(?:[.,]\d+)?\s*%\s+(?=Tiền thuế)', '',raw,flags=re.I)
+        path,inline=labelled(label_raw,aliases)
+        if sections and path in ('seller.name','buyer.name'): context=path.split('.')[0]
+        if path is None and sections and context and (not bounds(blocks) or bounds(blocks)[1]<party_end):
+            box=bounds(blocks);role=context
+            eligible=[(r,b) for r,b in role_anchors if box and b[1]<=box[1]+.003 and b[0]<=box[0]+.03]
+            if eligible:role=min(eligible,key=lambda entry:box[1]-entry[1][1]+.3*abs(box[0]-entry[1][0]))[0]
+            path,inline=labelled(raw,{
+                role+'.tax_id':('mst','ma so thue','tax id'),
+                role+'.name':('ten don vi','name'),role+'.address':('dia chi','address')})
+        if path is None:
+            if sections:
+                match=re.fullmatch(r'ngay\s+(\d{1,2})\s+thang\s+(\d{1,2})\s+nam\s+(\d{4})',text)
+                if match: yield 'invoice.issue_date','/'.join(match.groups()),blocks
+            continue
         if inline:
-            yield path,inline,(block,)
+            yield path,inline,blocks
             continue
         # Pair only blocks immediately to the right on the same visual line.
-        if not block.evidence: continue
-        x0,y0,x1,y1=block.evidence.bbox
+        box=bounds(blocks)
+        if not box: continue
+        x0,y0,x1,y1=box
         candidates=[]
-        for other in blocks:
-            if other.block_id==block.block_id or not other.evidence: continue
-            ox0,oy0,ox1,oy1=other.evidence.bbox
+        for other_raw,other_blocks in fragments:
+            if other_blocks==blocks: continue
+            other_box=bounds(other_blocks)
+            if not other_box: continue
+            ox0,oy0,ox1,oy1=other_box
             overlap=min(y1,oy1)-max(y0,oy0)
             if ox0>=x1-0.003 and overlap>0.5*min(y1-y0,oy1-oy0):
-                if labelled(other.text_raw,aliases)[0] is None:
-                    candidates.append(other)
+                if labelled(other_raw,aliases)[0] is None:
+                    candidates.append((ox0,other_raw,other_blocks))
         if candidates:
-            nearest=min(candidates,key=lambda b:b.evidence.bbox[0])
-            yield path,nearest.text_raw.strip(),(block,nearest)
+            _,value,value_blocks=min(candidates,key=lambda entry:entry[0])
+            yield path,value.strip().lstrip(':：').strip(),blocks+value_blocks
+        elif path.startswith('totals.'):
+            # Some PDF producers offset the right-hand amount by almost one
+            # font height. Read only nearby printed numbers to the right; never
+            # infer a total or borrow a distant previous table row. Preserve
+            # every eligible competing value instead of picking one by amount.
+            for value,value_blocks in fragments:
+                other=bounds(value_blocks)
+                if not other or value_blocks==blocks: continue
+                ox0,oy0,ox1,oy1=other
+                height=max(y1-y0,oy1-oy0)
+                if (x1<=ox0<=x1+.25 and abs((oy0+oy1-y0-y1)/2)<=height
+                        and money_values(value,'AUTO')):
+                    yield path,value.strip(),blocks+value_blocks
+        elif path in ('seller.name','buyer.name','invoice.series','invoice.number','invoice.issue_date'):
+            # A name may be below its explicit label. Never cross a page,
+            # column, another field label or a distant vertical gap.
+            below=[]
+            for value,value_blocks in fragments:
+                other=bounds(value_blocks)
+                if not other: continue
+                ox0,oy0,ox1,oy1=other
+                if abs(ox0-x0)<.015 and 0<=oy0-y1<=1.5*(y1-y0):
+                    below.append((oy0,value,value_blocks))
+            if below:
+                _,value,value_blocks=min(below,key=lambda entry:entry[0])
+                generic={'ignore':('mst','ma so thue','dia chi','so tai khoan','ngan hang','ten don vi','ho ten nguoi mua hang','ten khach hang')}
+                if labelled(value,aliases)[0] is None and labelled(value,generic)[0] is None:
+                    yield path,value.strip(),blocks+value_blocks
+
+
+def extend_address(raw,refs,page):
+    """Continue only adjacent, aligned address text; stop at the next label."""
+    values=[b for b in refs if len(b.text_raw.strip())>12 and key(b.text_raw.strip()) in key(raw)]
+    box=bounds(values or refs)
+    if not box:return raw,refs
+    used={b.block_id for b in refs}
+    for _ in range(5):
+        nearby=[]
+        for text,blocks in logical_fragments(page):
+            other=bounds(blocks)
+            if not other or any(b.block_id in used for b in blocks):continue
+            if abs(other[0]-box[0])<.02 and -.002<=other[1]-box[3]<=1.2*(box[3]-box[1]):
+                nearby.append((other[1],text,blocks,other))
+        if not nearby:break
+        _,text,blocks,other=min(nearby,key=lambda entry:entry[0])
+        if ':' in text or labelled(text,ALIASES)[0] or key(text).startswith(('stt','hinh thuc','so tai khoan','ngan hang')):break
+        raw+=' '+text.strip();refs+=blocks;used.update(b.block_id for b in blocks);box=other
+    return raw,refs
 
 def normalize_field(path,raw,profile):
     if path.endswith('tax_id'): return tax_values(raw)
@@ -74,17 +245,62 @@ def normalize_field(path,raw,profile):
         return money_values(raw,profile.number_locale)
     if path=='currency': return currency_values(raw)
     if path=='expected_rows': return (raw,) if re.fullmatch(r'[0-9]{1,5}',raw) else ()
+    if path=='invoice.series':
+        value=re.sub(r'\s+','',raw)
+        if re.match(r'^[1-9][CK]\d{2}',value,re.I) and not re.fullmatch(r'[1-9][CK]\d{2}[A-Z]{3}',value,re.I): return ()
+        return (value,) if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9/._-]{0,31}',value) else ()
     return (raw.strip(),) if raw.strip() else ()
+
+
+def summary_values(page):
+    """Read multi-column totals only under explicit financial column headers."""
+    labels={
+        'totals.net':('tri gia chua thue gtgt','thanh tien truoc thue gtgt','tien dich vu','amount excluding vat','total before vat'),
+        'totals.vat':('tien thue gtgt','tien thue','vat amount'),
+        'totals.gross':('tien thanh toan','cong tien thanh toan','payment amount','total amount','cong'),
+    }
+    fragments=logical_fragments(page)
+    for raw,refs in fragments:
+        text=key(raw);box=bounds(refs)
+        if not box or not (text.startswith(('tong cong','tong tien thanh toan')) or text=='cong'):continue
+        numbers=[entry for entry in right_values(refs,fragments) if money_values(entry[1],'AUTO')]
+        if len(numbers)<2:continue
+        observations=[]
+        for path,names in labels.items():
+            headings=[]
+            for title,blocks in fragments:
+                header=bounds(blocks)
+                if not header or not 0<box[1]-header[3]<.35:continue
+                normalized=key(title).strip('() ')
+                if normalized not in names:continue
+                center=(header[0]+header[2])/2
+                value=min(numbers,key=lambda row:abs((bounds(row[2])[0]+bounds(row[2])[2])/2-center))
+                vbox=bounds(value[2]);vcenter=(vbox[0]+vbox[2])/2
+                if header[0]-.02<=vcenter<=header[2]+.02:
+                    headings.append((header[3],value,blocks))
+            if headings:
+                _,(_,value,blocks),headers=max(headings,key=lambda entry:entry[0])
+                observations.append((path,value,refs+headers+blocks))
+        if len(observations)==3:yield from observations
 
 def extract_headers(document,profile,issues):
     observations={p:[] for p in ALIASES}
     for page in document.pages:
-        for path,raw,blocks in values_on_page(page,sections=True):
-            normalized=normalize_field(path,raw,profile)
-            if not normalized:
-                issues.append(ExtractionIssue(code='UNPARSEABLE_FIELD',field_path=path,
-                    message='Label found but value failed the explicit parser.',block_refs=tuple(b.block_id for b in blocks)))
-            observations[path].extend(make_candidate(path,raw,value,blocks) for value in normalized)
+        # Preserve competing modality observations. An OCR box slightly closer
+        # to a label must not hide a valid native value behind it.
+        views=[]
+        for method in ('NATIVE_TEXT','OCR'):
+            selected=tuple(b.model_copy(update={'origins':tuple(o for o in b.origins if o.method==method)})
+                           for b in page.blocks if any(o.method==method for o in b.origins))
+            if selected:views.append(page.model_copy(update={'blocks':selected}))
+        for view in views or (page,):
+            for path,raw,blocks in (*values_on_page(view,sections=True),*summary_values(view)):
+                if path.endswith('.address'):raw,blocks=extend_address(raw,blocks,view)
+                normalized=normalize_field(path,raw,profile)
+                if not normalized:
+                    issues.append(ExtractionIssue(code='UNPARSEABLE_FIELD',field_path=path,
+                        message='Label found but value failed the explicit parser.',block_refs=tuple(b.block_id for b in blocks)))
+                observations[path].extend(make_candidate(path,raw,value,blocks) for value in normalized)
     fields={};candidates=[]
     for path,values in observations.items():
         fields[path],marked=choose(path,values,issues);candidates.extend(marked)

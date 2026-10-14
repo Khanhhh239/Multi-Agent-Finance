@@ -9,6 +9,7 @@ from .contracts import ExtractionIssue
 from ..canonicalization.normalize import key,vat_values
 from ..domain.field import FieldObject
 from ..domain.cfr import Item
+from .spatial_tables import discover_spatial
 
 ITEM_ALIASES={
  'description':('ten hang','ten hang hoa','description'),
@@ -21,6 +22,15 @@ ITEM_ALIASES={
 def discover_rows(document,issues):
     rows=[]
     for page in document.pages:
+        native=tuple(b.model_copy(update={'origins':tuple(o for o in b.origins if o.method=='NATIVE_TEXT')})
+                     for b in page.blocks if any(o.method=='NATIVE_TEXT' for o in b.origins))
+        if native and any(any(o.method=='OCR' for o in b.origins) for b in page.blocks):
+            native_page=page.model_copy(update={'blocks':native})
+            native_rows=discover_rows(document.model_copy(update={'pages':(native_page,)}),[])
+            if native_rows:
+                rows.extend(native_rows)
+                issues.append(ExtractionIssue(code='HYBRID_TABLE_REVIEW',message='Native table structure retained; OCR table observations still require review.'))
+                continue
         blocks=sorted(page.blocks,key=lambda b:b.reading_order)
         starts=[n for n,b in enumerate(blocks) if re.fullmatch(r'(mat hang|item)\s+\d+(?:\s+.*|:.*)?',key(b.text_raw))]
         if starts:
@@ -42,7 +52,8 @@ def discover_rows(document,issues):
         for b in blocks:
             for name,labels in ITEM_ALIASES.items():
                 if key(b.text_raw) in labels and b.evidence: headers.setdefault(name,[]).append(b)
-        if not all(k in headers for k in ('description','net','vat')): continue
+        if not all(k in headers for k in ('description','net','vat')):
+            rows.extend(discover_spatial(page));continue
         first=headers['description'][0]
         center=lambda b:(b.evidence.bbox[1]+b.evidence.bbox[3])/2
         aligned={name:min(vals,key=lambda b:abs(center(b)-center(first))) for name,vals in headers.items()}

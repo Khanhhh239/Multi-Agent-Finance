@@ -33,6 +33,30 @@ class ReviewTests(unittest.TestCase):
     def count(self,table):
         with self.repo.ingestion.db() as db:return db.execute('SELECT COUNT(*) FROM '+table).fetchone()[0]
 
+    def test_record_summary_and_job_link_survive_new_browser_session(self):
+        jobs=CaptureJobs(self.fixture.settings);job=jobs.enqueue(self.ctx,self.payer,self.fixture.identifier)
+        view=self.repo.view(self.ctx,self.payer,self.record.record_id)
+        self.assertEqual(view['capture_job']['job_id'],job['job_id'])
+        page=self.repo.page(self.ctx,self.payer,'records')
+        self.assertEqual(page['items'][0]['summary']['invoice_number'],self.record.invoice.number.value)
+        other=self.ctx.model_copy(update={'tenant_id':'another-tenant'})
+        self.assertEqual(self.repo.page(other,self.payer,'records')['items'],[])
+        with self.assertRaises(KeyError):self.repo.view(other,self.payer,self.record.record_id)
+
+    def test_worker_interrupt_releases_lease_for_explicit_retry(self):
+        from src.adapters.ocr.bridge import OCRBridge
+        jobs=CaptureJobs(self.fixture.settings);job=jobs.enqueue(self.ctx,self.payer,self.fixture.identifier)
+        class Native:
+            def inventory(self):return {'runtime_sha256':'a'*64}
+        bridge=OCRBridge(self.fixture.settings,fixtures.OCRConfig(),Native())
+        with patch.object(bridge,'work_one',side_effect=KeyboardInterrupt):
+            with self.assertRaises(KeyboardInterrupt):jobs.work_one(self.ctx,self.payer,job['job_id'],bridge)
+        result=jobs.get(self.ctx,self.payer,job['job_id'])
+        self.assertEqual(result['state'],'PROCESSING_ERROR');self.assertEqual(result['error_code'],'WORKER_INTERRUPTED')
+        self.assertTrue(result['retryable'])
+        retried=jobs.recover(self.ctx,self.payer,job['job_id'],'RETRY','Resume after closing local launcher')
+        self.assertEqual(retried['state'],'QUEUED')
+
     def test_atomic_correction_direction_reassessment_replay_export(self):
         result=self.correct();r=self.repo.base.record(self.ctx,self.payer,self.record.record_id)
         self.assertEqual(r.revision,2);self.assertEqual(r.derived.invoice_direction.value,'OUTPUT')

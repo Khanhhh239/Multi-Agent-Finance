@@ -1,5 +1,9 @@
 # Gate PLAN_06 — review và capture MVP
 
+## Cập nhật 14/10/2026
+
+PLAN_06 tiếp tục nhánh [OCR/extraction V2](ocr_extraction_v2/runbook.md), chưa chuyển PLAN_07. Baseline và ablation mới có nhãn tự đối chiếu, OCR split giữ profile thử nghiệm; sửa binding tổng tiền đã được regression/replay. Người dùng cho phép người code tự test UI cho nghiệm thu kỹ thuật; không coi đây là independent adjudication hoặc pass calibration. [UI/browser evidence bổ sung](ui_review_v2/runbook.md) đã có sau báo cáo ngày 13/10 bên dưới; user acceptance thực tế vẫn cần ghi nhận. Nội dung tiếp theo là snapshot gate cũ, không sửa đè các số đo lịch sử.
+
 Ngày: **13/10/2026**. Quyết định: **PASS_TECHNICAL_MANUAL_REVIEW_ONLY**. **Nghiệm thu hóa đơn Việt Nam thực tế và browser/user acceptance còn PENDING.** Kế thừa phạm vi kỹ thuật đã cho phép ở PLAN_00 và gate kỹ thuật/manual PLAN_05; không thay các điều kiện DQ-01–05.
 
 Đã nối upload → reader/PDF → OCR/layout → CFR → quality → review/correction → rederive → export. Có UI `/review` với trang/bbox/raw/candidates, sửa batch và VAT KCT/KKKNT, task actions, xuất JSON và kiểm audit. Worker capture chạy hữu hạn ngoài HTTP, lease/fencing/retry có giới hạn và đường REQUEST_DATA/OPERATOR. Không có tax verdict hoặc auto-accept.

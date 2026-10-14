@@ -82,7 +82,7 @@ class CaptureJobs(ReviewRepository):
             self.ingestion._event(db,ctx,payer,row['ingestion_id'],'CAPTURE_CLAIMED',sha([job_id,row['attempts']+1]),{'job_id':job_id,'attempt':row['attempts']+1})
         return token
 
-    def work_one(self,ctx,payer,job_id,bridge=None):
+    def work_one(self,ctx,payer,job_id,bridge=None,profile=None):
         bridge=bridge or OCRBridge(self.settings)
         lease=self.settings.worker_timeout_seconds+self.settings.max_pages*bridge.config.timeout_seconds*bridge.config.max_attempts+120
         token=self.claim(ctx,payer,job_id,lease)
@@ -103,13 +103,17 @@ class CaptureJobs(ReviewRepository):
             result=bridge.work_one(ctx,payer,identifier)
             if not result.get('result') or result['result'].status=='FAILED': raise ReviewError('OCR_FAILED','OCR failed; inspect worker/model or request a clearer source.',409)
             key=config_key(bridge.config,bridge.client.inventory()['runtime_sha256'])
-            artifact=self.extraction.work(ctx,payer,identifier,key)
+            artifact=self.extraction.work(ctx,payer,identifier,key,profile)
             self.transition(ctx,payer,job_id,'ASSESSING',token=token,updates={'extraction_artifact_id':artifact.artifact_id})
             quality=self.quality.work(ctx,payer,artifact.artifact_id)
             if artifact.record: self.ensure_tasks(ctx,payer,artifact.record.record_id)
             return self.transition(ctx,payer,job_id,'REVIEW',token=token,updates={
                 'record_id':artifact.record.record_id if artifact.record else None,'assessment_id':quality.assessment_id,
                 'review_split':artifact.record is None,'retryable':False,'error_code':None})
+        except KeyboardInterrupt:
+            self.transition(ctx,payer,job_id,'PROCESSING_ERROR',token=token,updates={
+                'error_code':'WORKER_INTERRUPTED','retryable':True,'recovery_actions':['RETRY','REQUEST_DATA','OPERATOR']})
+            raise
         except Exception as error:
             # No exception text/full tax IDs/model payloads are persisted in operational logs.
             code=error.code if isinstance(error,ReviewError) else 'PROCESSING_ERROR'

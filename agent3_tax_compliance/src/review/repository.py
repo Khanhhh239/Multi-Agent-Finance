@@ -49,9 +49,12 @@ class ReviewRepository:
     def view(self,ctx,payer,record_id):
         r,a,q=self.head_context(ctx,payer,record_id)
         doc=self.ingestion.document(ctx,payer,a.ingestion_id)
+        with self.ingestion.db() as db:
+            job=db.execute('SELECT job_id,state FROM capture_jobs WHERE tenant_id=? AND taxpayer_id=? AND ingestion_id=?',
+                (ctx.tenant_id,payer,a.ingestion_id)).fetchone()
         return envelope(record=r.model_dump(mode='json'),extraction_artifact_id=a.artifact_id,ingestion_id=a.ingestion_id,
             candidates=[c.model_dump(mode='json') for c in a.candidates],assessment=q.model_dump(mode='json'),
-            page_count=len(doc.pages),limitations=self.limitations())
+            page_count=len(doc.pages),limitations=self.limitations(),capture_job=dict(job) if job else None)
 
     @staticmethod
     def limitations():
@@ -120,6 +123,12 @@ class ReviewRepository:
                 data['previous_ids']=json.loads(data['previous_ids'])
                 data.update(schema_version='1.0.0',config_version='review-task-v1',creator='review-task-builder',stage='review',
                     created_at=self.quality.get(ctx,payer,data['assessment_id']).created_at.isoformat())
+            elif kind=='records':
+                record=self.base.record(ctx,payer,data['record_id'])
+                data['summary']={'invoice_number':record.invoice.number.value,
+                    'issue_date':record.invoice.issue_date.value.isoformat() if record.invoice.issue_date.value else None,
+                    'seller_name':record.parties.seller.name.value,
+                    'gross':str(record.totals.gross.value) if record.totals.gross.value is not None else None}
             items.append(data)
         next_cursor=self.sign({'scope':scope,'snapshot':snapshot,'after':rows[limit-1]['_rowid'],'exp':int(time.time())+3600}) if len(rows)>limit else None
         return envelope(items=items,next_cursor=next_cursor)

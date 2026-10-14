@@ -2,7 +2,24 @@
 
 > OCR-based extraction and normalization of Vietnamese accounting documents, with human review, revision tracking, and planned tax compliance checks.
 
-**Cập nhật: 13/10/2026 · Mốc hiện tại: PLAN_06 · Đã đạt MVP kỹ thuật đọc và kiểm tra dữ liệu chứng từ có người duyệt.**
+**Cập nhật: 14/10/2026 · Mốc hiện tại: PLAN_06 + cải thiện extraction/UI · MVP đọc và kiểm tra chứng từ có người duyệt.**
+
+Nhánh [OCR/extraction V2](docs/agent3/plans/PLAN_OCR_EXTRACTION_V2.md) đang triển khai **bên trong PLAN_06**. Đã đóng băng baseline OCR thật, sửa binding tổng tiền lệch dòng và thử tách dòng dài; OCR thử nghiệm chưa bật mặc định. [Kết quả, lệnh chạy và giới hạn](docs/agent3/plans/evidence/ocr_extraction_v2/runbook.md).
+
+### Mở web nhanh trên workspace hiện tại
+
+**Nhấp đúp [OPEN_AGENT3.cmd](OPEN_AGENT3.cmd)** ở thư mục gốc. File này tự chuẩn bị kết nối demo, chạy server và worker, mở trình duyệt, sao chép mã truy cập. Trên web bấm **Dán mã và kết nối**; nếu trình duyệt chặn đọc clipboard, dùng Ctrl+V vào ô mã rồi bấm Kết nối. Upload sẽ được worker tự nhận, không cần chạy lệnh cho từng job.
+
+Giữ cửa sổ chạy mở; Ctrl+C để dừng, hoặc nhấp đúp [STOP_AGENT3.cmd](STOP_AGENT3.cmd). Nếu cổng 8000 đang có ứng dụng khác, launcher dùng cổng trống kế tiếp và mở đúng URL; không tắt server đang có. Chạy lại file mở web sẽ dùng lại phiên launcher demo còn hoạt động.
+
+```powershell
+# Từ D:\financial
+.\OPEN_AGENT3.cmd
+```
+
+UI mới có hóa đơn gốc/dữ liệu cạnh nhau, nhóm trường, bảng dòng hàng, zoom, nhãn tiếng Việt, nguồn/candidate tách xem và chọn, nhập tiền Việt Nam và giữ bản nháp khi xung đột. Hướng dẫn và phạm vi: [runbook UI](docs/agent3/plans/evidence/ui_review_v2/runbook.md). Bộ mẫu thực và giới hạn OCR: [báo cáo pilot](docs/agent3/plans/evidence/real_invoice_pilot_v1/REPORT.md).
+
+Launcher dùng DB demo PLAN_06 và giữ master đã có; token local sinh ngẫu nhiên, lưu trong thư mục runtime bị gitignore. Đây là cách chạy trên máy đã có venv/model, không phải bộ cài máy mới hay đăng nhập production.
 
 Agent 3 là thành phần đọc, chuẩn hóa và hướng tới kiểm tra tuân thủ thuế cho chứng từ kế toán Việt Nam. Hiện hệ thống đã nối được luồng **PDF/ảnh → trích xuất dữ liệu → kiểm tra chất lượng → người dùng đối chiếu và sửa → xuất dữ liệu chuẩn hóa**. Mỗi lần sửa có phiên bản và lịch sử để truy nguyên.
 
@@ -16,7 +33,7 @@ Agent 3 là thành phần đọc, chuẩn hóa và hướng tới kiểm tra tu�
 | Đã làm được | Đọc PDF/ảnh, OCR theo trang, trích trường và dòng hàng, chuẩn hóa, đánh giá chất lượng, review/sửa có audit, xuất JSON |
 | Model OCR | **PP-OCRv6 detector + VietOCR `vgg_transformer`**, mặc định chạy CPU |
 | Mức tự động hóa | Hỗ trợ đọc và chuẩn bị dữ liệu; **vẫn cần người duyệt**, chưa tự chấp nhận chứng từ |
-| Kiểm chứng mới nhất | **160 kiểm thử Python PASS**, kiểm tra JavaScript syntax/DOM PASS, 10 schema mới cho review |
+| Kiểm chứng | Gate PLAN_06: 160 Python tests; các sửa extraction/UI và nghiệm thu browser được báo riêng tại [pilot](docs/agent3/plans/evidence/real_invoice_pilot_v1/REPORT.md) và [UI](docs/agent3/plans/evidence/ui_review_v2/runbook.md) |
 | Baseline review | 15 artifact chứng từ / 17 trang; sửa mô phỏng, export và replay được kiểm chứng |
 | Việc tiếp theo | PLAN_07: căn cứ pháp lý, VAT taxonomy và lập kế hoạch áp dụng rule |
 | Cần hỗ trợ | Hóa đơn Việt Nam có quyền dùng, reviewer nghiệp vụ độc lập, bộ nhãn và tiêu chí nghiệm thu |
@@ -34,7 +51,7 @@ Agent 3 xây dựng một lớp dữ liệu chung để các công đoạn sau s
 | Phạm vi | Hiện trạng |
 |---|---|
 | Đọc và chuẩn hóa chứng từ | Đã triển khai, kiểm chứng kỹ thuật trên fixture/baseline đã nêu |
-| Đối chiếu, sửa và truy vết | Đã có API và UI tối thiểu; còn nghiệm thu browser/người dùng |
+| Đối chiếu, sửa và truy vết | Đã có API, UI mới và kiểm tra Chrome tự động; còn nghiệm thu người dùng thực |
 | Kiểm tra chất lượng dữ liệu | Đã có; tách thiếu dữ liệu, lỗi định dạng, mâu thuẫn số liệu và độ tin cậy |
 | Kiểm tra tuân thủ thuế | PLAN_07–09; chưa có kết luận thuế được nghiệm thu trên pipeline mới |
 | XML, Excel và bank statement | Kế hoạch mở rộng PLAN_10–11 |
@@ -286,6 +303,8 @@ Workspace còn code prototype cũ ngoài các module hiện hành trên. Không 
 [Runtime decision](docs/agent3/plans/evidence/plan01/runtime_decision.md) và lock files [foundation](agent3_tax_compliance/requirements-foundation.lock), [ingestion](agent3_tax_compliance/requirements-ingestion.lock) là nguồn đối chiếu. Chưa nghiệm thu bộ cài hoàn chỉnh trên máy sạch hoặc các hệ điều hành khác. Virtualenv, model weights, dataset và DB baseline là tài sản local, không mặc định có sau `git clone`.
 
 ### Chạy trên workspace đã provision
+
+Cách mở nhanh được giới thiệu ở đầu README dùng launcher local tự chạy worker. Các lệnh dưới đây là cách cấu hình thủ công cho developer; `uvicorn src.app:create_app` đơn lẻ không tự chạy worker.
 
 Thực hiện theo [runbook PLAN_06](docs/agent3/plans/evidence/plan06/runbook.md): tạo token/grants, chọn DB demo riêng, provision taxpayer master và chuẩn bị OCR worker/model. Không có tài khoản/token hardcode để đăng nhập.
 

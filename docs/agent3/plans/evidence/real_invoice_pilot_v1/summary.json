@@ -1,0 +1,448 @@
+{
+  "label_method": "agent visual transcription; no independent human adjudication",
+  "label_scope": "Selected names, tax IDs, invoice identifiers/date, printed totals and explicit currency. Addresses excluded from metric.",
+  "number_locale": "VI explicitly configured in both phases; application default remains AUTO",
+  "extractor_fingerprints": {
+    "before": "9d742525e07fdac5bfd11e0866f5738f389bb91bca40b01c2f533e7c5ac8f4ba",
+    "after": "6c34220266ecb934e09a80dd05010c357933111f2e062f8a693a7a86b6515368"
+  },
+  "scan_origin": "Rasterized copies of 3 native PDFs, not 3 additional real scans",
+  "rows": [
+    {
+      "phase": "before",
+      "case": "accounting_training-p2",
+      "mode": "native_only",
+      "group": "unverified_training_source",
+      "counts": {
+        "MISSING": 8,
+        "CORRECT": 2
+      },
+      "expected_items": 2,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "before",
+      "case": "charity_2023-p1",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 11
+      },
+      "expected_items": 1,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "before",
+      "case": "charity_2023-p2",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "MISSING": 8,
+        "CORRECT": 2
+      },
+      "expected_items": 1,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "before",
+      "case": "cyber_construction-p118",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "MISSING": 10
+      },
+      "expected_items": 1,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "before",
+      "case": "cyber_construction-p69",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "MISSING": 10
+      },
+      "expected_items": 1,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "before",
+      "case": "misa_public_filing-p117",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "MISSING": 7,
+        "CORRECT": 3
+      },
+      "expected_items": 1,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "before",
+      "case": "misa_public_filing-p134",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "MISSING": 7,
+        "CORRECT": 3
+      },
+      "expected_items": 1,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "before",
+      "case": "software_kct-p1",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "MISSING": 9,
+        "WRONG": 1
+      },
+      "expected_items": 1,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "before",
+      "case": "viettel_adjustment-p1",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "AMBIGUOUS": 2,
+        "MISSING": 5,
+        "CORRECT": 2
+      },
+      "expected_items": null,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "accounting_training-p2",
+      "mode": "native_only",
+      "group": "unverified_training_source",
+      "counts": {
+        "CORRECT": 10
+      },
+      "expected_items": 2,
+      "discovered_items": 2,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "charity_2023-p1",
+      "mode": "hybrid",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 9,
+        "AMBIGUOUS": 2
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "charity_2023-p1",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 11
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "charity_2023-p1",
+      "mode": "scan",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 6,
+        "MISSING": 3,
+        "WRONG": 2
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "charity_2023-p2",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 10
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "cyber_construction-p118",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 10
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "cyber_construction-p69",
+      "mode": "hybrid",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 9,
+        "AMBIGUOUS": 1
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "cyber_construction-p69",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 10
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "cyber_construction-p69",
+      "mode": "scan",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 9,
+        "WRONG": 1
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "misa_public_filing-p117",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 10
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "misa_public_filing-p134",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 10
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "software_kct-p1",
+      "mode": "hybrid",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 9,
+        "AMBIGUOUS": 1
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "software_kct-p1",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 10
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "software_kct-p1",
+      "mode": "scan",
+      "group": "public_document_pilot",
+      "counts": {
+        "MISSING": 3,
+        "CORRECT": 6,
+        "WRONG": 1
+      },
+      "expected_items": 1,
+      "discovered_items": 1,
+      "item_discovery_status": "UNKNOWN"
+    },
+    {
+      "phase": "after",
+      "case": "viettel_adjustment-p1",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "counts": {
+        "CORRECT": 8,
+        "MISSING": 1
+      },
+      "expected_items": null,
+      "discovered_items": 0,
+      "item_discovery_status": "UNKNOWN"
+    }
+  ],
+  "aggregates": [
+    {
+      "phase": "after",
+      "mode": "hybrid",
+      "group": "public_document_pilot",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 27,
+        "AMBIGUOUS": 4
+      }
+    },
+    {
+      "phase": "after",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "documents": 8,
+      "counts": {
+        "CORRECT": 79,
+        "MISSING": 1
+      }
+    },
+    {
+      "phase": "after",
+      "mode": "native_only",
+      "group": "unverified_training_source",
+      "documents": 1,
+      "counts": {
+        "CORRECT": 10
+      }
+    },
+    {
+      "phase": "after",
+      "mode": "scan",
+      "group": "public_document_pilot",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 21,
+        "MISSING": 6,
+        "WRONG": 4
+      }
+    },
+    {
+      "phase": "before",
+      "mode": "native_only",
+      "group": "public_document_pilot",
+      "documents": 8,
+      "counts": {
+        "CORRECT": 21,
+        "MISSING": 56,
+        "WRONG": 1,
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "phase": "before",
+      "mode": "native_only",
+      "group": "unverified_training_source",
+      "documents": 1,
+      "counts": {
+        "MISSING": 8,
+        "CORRECT": 2
+      }
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "charity_2023",
+      "url": "https://hpcmn-bucket.s3.ap-southeast-1.amazonaws.com/Chung_Tu_T12_2023_5e840a3a6b.pdf",
+      "sha256": "fa1be987afcaa05f5a7cf5516d1d8fdf6279e94299f5d4c383942445f6109ba9",
+      "bytes": 2110971,
+      "pages": 10,
+      "status": "DOWNLOADED"
+    },
+    {
+      "source_id": "misa_kimthanh",
+      "url": "https://imda.moh.gov.vn/documents/10182/60780527/upload_00012440_1731552552535.pdf?fileId=60786824&version=1.0",
+      "status": "UNAVAILABLE",
+      "error": "URLError"
+    },
+    {
+      "source_id": "misa_asiatech",
+      "url": "https://imda.moh.gov.vn/documents/10182/62377011/upload_00004237_1734407528873.pdf?fileId=62389470&version=1.0",
+      "status": "UNAVAILABLE",
+      "error": "URLError"
+    },
+    {
+      "source_id": "thanh_an",
+      "url": "https://imda.moh.gov.vn/documents/10182/62377011/upload_00004322_1734407951030.pdf?fileId=62390118&version=1.0",
+      "status": "UNAVAILABLE",
+      "error": "URLError"
+    },
+    {
+      "source_id": "viettel_adjustment",
+      "url": "https://congdongketoan.vn/attachments/k24taa18525-pdf.21737/",
+      "sha256": "0c05d8972b0f399f233eb7639973d0ebce919d5dd31718f4f780bc70b8af86a1",
+      "bytes": 135581,
+      "pages": 1,
+      "status": "DOWNLOADED"
+    },
+    {
+      "source_id": "cyber_construction",
+      "url": "https://xaydungdaitruongphuc.com/upload/file/hsnl-2024-7320-1767.pdf",
+      "sha256": "35884b03950f4c10f299ed84cb1ca6ae16eca63a4a5c468bf31662924dc2d831",
+      "bytes": 50690549,
+      "pages": 119,
+      "status": "DOWNLOADED"
+    },
+    {
+      "source_id": "software_kct",
+      "url": "https://file.hstatic.net/1000139524/file/20230516667_0fffb8d703ca4bd886d3971797539a44.pdf",
+      "sha256": "cb42b0f68ca52cec530fab7bb129b7d11ca664c830b55918896ba31539c4d382",
+      "bytes": 344591,
+      "pages": 1,
+      "status": "DOWNLOADED"
+    },
+    {
+      "source_id": "misa_public_filing",
+      "url": "https://shtp.hochiminhcity.gov.vn/Portals/0/Uploads/2026/1/20260128133037046.pdf",
+      "sha256": "4bb404c37b211daec1871b53264350be07c870c805d3db4d8ac6b035ad3f6766",
+      "bytes": 32947348,
+      "pages": 134,
+      "status": "DOWNLOADED"
+    },
+    {
+      "source_id": "accounting_training",
+      "url": "https://hocketoanthuchanh.com/wp-content/uploads/2024/12/HDDT-BCT-DOANH-NGHIEP-Q2.25-CHUAN.pdf",
+      "sha256": "b6377f16cedaab72d55686154a594efd62405cd1430a212ec4cb285c17aa2a03",
+      "bytes": 1683922,
+      "pages": 32,
+      "status": "DOWNLOADED"
+    }
+  ]
+}

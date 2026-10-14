@@ -1,5 +1,7 @@
 # PLAN_06 — Review, sửa dữ liệu và nghiệm thu MVP đọc chứng từ
 
+> Cập nhật 14/10/2026: **PLAN_06 vẫn đang được củng cố**, nhánh [OCR/extraction V2](PLAN_OCR_EXTRACTION_V2.md) IN_PROGRESS. [Baseline, thử nghiệm và giới hạn](evidence/ocr_extraction_v2/runbook.md). Theo người dùng, người code được tự đối chiếu trên UI cho gate kỹ thuật; nhãn này không đổi thành nhãn độc lập. Chưa chuyển sang PLAN_07 và chưa chốt real-data/statistical acceptance.
+
 > Trạng thái triển khai 13/10/2026: **DONE_TECHNICAL_MANUAL_REVIEW — REAL_ACCEPTANCE_PENDING**. P06-T01–07 đã triển khai và kiểm chứng kỹ thuật; P06-T08 còn nghiệm thu dữ liệu thực, browser/người dùng và metrics sau review độc lập. [Gate và giới hạn](evidence/gate_06.md) · [Runbook](evidence/plan06/runbook.md).
 
 [Lộ trình tổng](README.md) · Trước theo thứ tự đọc: [PLAN_05](PLAN_05_QUALITY_CALIBRATION.md) · Sau: [PLAN_07](PLAN_07_LEGAL_TAXONOMY_PLANNING.md)

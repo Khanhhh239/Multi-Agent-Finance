@@ -84,7 +84,12 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
             viet_config["weights"] = str(resolve_path(weights))
         viet_config["cnn"]["pretrained"] = False
         viet_config["device"] = "cuda:0" if self.config.get("device") in ("auto", "cuda") else "cpu"
-        viet_config["predictor"]["beamsearch"] = False
+        viet_config["predictor"]["beamsearch"] = bool(recognizer_config.get("beamsearch", False))
+        if "image_max_width" in recognizer_config:
+            width = int(recognizer_config["image_max_width"])
+            if not 32 <= width <= 2048:
+                raise ValueError('image_max_width must be 32..2048')
+            viet_config["dataset"]["image_max_width"] = width
         self.recognizer = Predictor(viet_config)
 
     def _orientation(self, image: Image.Image) -> tuple[int, float | None]:
@@ -119,6 +124,9 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
         results = self.detector.predict(np.asarray(oriented_image))
         detections = paddle_result_to_detections(results)
         recognition_errors = 0
+        split_detections = 0
+        recognition_segments = []
+        recognizer_config = self.config.get("recognizer", {})
         for detection in detections:
             oriented_polygon = detection["polygon"]
             xs = [point[0] for point in oriented_polygon]
@@ -135,7 +143,36 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
             else:
                 crop = oriented_image.crop(box)
                 try:
-                    detection["text_raw"] = self.recognizer.predict(crop)
+                    if recognizer_config.get("rectify_polygon", False):
+                        from src.adapters.recognition_crops import rectified_crop
+                        rectified = rectified_crop(oriented_image, oriented_polygon,
+                                                  int(recognizer_config.get("crop_padding", 0)))
+                        crop.close()
+                        crop = rectified
+                    if recognizer_config.get("split_long_lines", False):
+                        from src.adapters.recognition_crops import line_segments
+                        segments = line_segments(crop,
+                            float(recognizer_config.get("max_line_aspect", 14)),
+                            int(recognizer_config.get("max_line_parts", 4)))
+                        try:
+                            detection["text_raw"] = ' '.join(self.recognizer.predict(part).strip()
+                                                              for part, _ in segments)
+                            split_detections += int(len(segments) > 1)
+                            if len(segments) > 1:
+                                recognition_segments.append({
+                                    'source_id': detection.get('source_id'),
+                                    'x_spans': [list(span) for _, span in segments],
+                                    'crop_size': list(crop.size),
+                                    'oriented_bbox': list(box),
+                                    'oriented_polygon': oriented_polygon,
+                                    'rectified': bool(recognizer_config.get('rectify_polygon', False)),
+                                    'padding': int(recognizer_config.get('crop_padding', 0)) if recognizer_config.get('rectify_polygon', False) else 0,
+                                })
+                        finally:
+                            for part, _ in segments:
+                                part.close()
+                    else:
+                        detection["text_raw"] = self.recognizer.predict(crop)
                 except Exception:
                     detection["text_raw"] = ""
                     recognition_errors += 1
@@ -158,5 +195,8 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
                 "paddle_backend": "TextDetection",
                 "recognizer_backend": "VietOCR",
                 "recognition_errors": recognition_errors,
+                "split_detections": split_detections,
+                "recognition_segments": recognition_segments,
+                "crop_policy": "experimental-line-split-v2" if recognizer_config.get("split_long_lines", False) else "axis-aligned-v1",
             },
         }
