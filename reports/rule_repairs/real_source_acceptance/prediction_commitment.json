@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "dataset_manifest_sha256": "71b89c2d6bba34923a3e27e79d15bea3b8852d73add58aff3469b7e9330cad19",
+  "dataset_declares_synthetic": 1,
+  "evaluation_from": "2025-01-01T00:00:00+07:00",
+  "as_of": "2025-12-31T23:59:59+07:00",
+  "review_packet_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "prediction_count": 0,
+  "prediction_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "code_sha256": {
+    "real_source_acceptance.py": "8a7ebce4dea11215171a70aed7b16e2bb6fd4e5c5364d0cabf14232e4856c216",
+    "real_source_acceptance.schema.json": "1e5ecc1a3f3e9ab8ea2c0f02a4704f63fc0e103ad2932b79acc5a6c8c1494d15",
+    "rules.py": "aeb440697df76802d97a81b490be8e737bc6bed685b0c0e1cf410b27893ea423",
+    "evidence_policy.py": "c1592ff34cf74ccf690d2b3a097ee4a5a2249fc261bca9481c53cab8e649f541",
+    "evidence_sources.schema.json": "4813eb49257abfe256fcafc39ec6c9ee58d15031cb5a275e97e1ba2b49e12588",
+    "source_snapshot.py": "2a8c74427cbe99c56f59c53678401b28244b0d7fbe8b28b5606ad02a3403b728",
+    "spec_policy.py": "7d29d16b72e006febfe3882bae451c0743912fe9b094e7aee1e9558b2ccd58f7",
+    "temporal_evidence.py": "a5252fa8f9e5dc31b26ac84c0445437ffc2bdd5b2143faa2ec2d51bdc17b184b",
+    "noise_policy.py": "df7da4d82ae85c5cc013b5d4f5bb522a8500baf745f4a445d144c76b066f4c8e",
+    "payment_evidence.py": "d3a7d85d4099120463b683467b2ecd473231213ba285eaa207ba2c5c1bc8acd1",
+    "payment_evidence.schema.json": "4ece7204c78477c791a8b728a3cbc43267ee20238d7723a3075ddfa21a440f22",
+    "authority_policy.py": "a8234abacb8799a41ce25d8c1b2cd10534d17d7e58b037fd6fd8e7305ac29fee",
+    "authority_policy.schema.json": "36fee9d5dea5f12eb6217197b4f6210b4f65b7f29a482b4561780b65b3cdee95",
+    "features.py": "5dfb8914b750f959233792cc43b6ea6305f2717b953a6f1b0356705b489d7e6a",
+    "generate.py": "8165537f76fbd5694a10a1752bcc260990f2dfad8d57062bd3a8aa5628512d9c"
+  },
+  "criteria_sha256": "",
+  "criteria_status": "not_frozen",
+  "disclosure": "Predictions are committed by hash and are not present in the blind review packet."
+}

@@ -1,0 +1,1758 @@
+{
+  "dataset": "data\\sme_fraud_003",
+  "requested_fraud_rate": 0.003,
+  "metrics": [
+    {
+      "period": "train",
+      "rule_id": "E3",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 25154,
+        "tp": 92,
+        "fp": 25062,
+        "fn": 58,
+        "tn": 24788,
+        "fraud_precision": 0.0036574699848930586,
+        "fraud_recall_all": 0.6133333333333333,
+        "fpr": 0.5027482447342027,
+        "accuracy": 0.4976,
+        "false_alerts_per_1000_normal": 502.7482447342026,
+        "fraud_precision_wilson_row95": [
+          0.002983474612921377,
+          0.004483042700503938
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 150,
+        "tn": 49850,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 150,
+        "tn": 49850,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidate_rows_after": 0,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "train",
+      "rule_id": "C1",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 21506,
+        "tp": 83,
+        "fp": 21423,
+        "fn": 67,
+        "tn": 28427,
+        "fraud_precision": 0.0038593880777457452,
+        "fraud_recall_all": 0.5533333333333333,
+        "fpr": 0.4297492477432297,
+        "accuracy": 0.5702,
+        "false_alerts_per_1000_normal": 429.7492477432297,
+        "fraud_precision_wilson_row95": [
+          0.003114662344566509,
+          0.004781326063616102
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 421,
+        "tp": 66,
+        "fp": 355,
+        "fn": 84,
+        "tn": 49495,
+        "fraud_precision": 0.15676959619952494,
+        "fraud_recall_all": 0.44,
+        "fpr": 0.00712136409227683,
+        "accuracy": 0.99122,
+        "false_alerts_per_1000_normal": 7.12136409227683,
+        "fraud_precision_wilson_row95": [
+          0.12516097276823956,
+          0.19458526668252546
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 21506,
+        "tp": 83,
+        "fp": 21423,
+        "fn": 67,
+        "tn": 28427,
+        "fraud_precision": 0.0038593880777457452,
+        "fraud_recall_all": 0.5533333333333333,
+        "fpr": 0.4297492477432297,
+        "accuracy": 0.5702,
+        "false_alerts_per_1000_normal": 429.7492477432297,
+        "fraud_precision_wilson_row95": [
+          0.003114662344566509,
+          0.004781326063616102
+        ]
+      },
+      "candidate_rows_after": 21506,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "train",
+      "rule_id": "A1",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 786,
+        "tp": 14,
+        "fp": 772,
+        "fn": 136,
+        "tn": 49078,
+        "fraud_precision": 0.017811704834605598,
+        "fraud_recall_all": 0.09333333333333334,
+        "fpr": 0.015486459378134403,
+        "accuracy": 0.98184,
+        "false_alerts_per_1000_normal": 15.486459378134404,
+        "fraud_precision_wilson_row95": [
+          0.010639227194131426,
+          0.02967450724598792
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 766,
+        "tp": 14,
+        "fp": 752,
+        "fn": 136,
+        "tn": 49098,
+        "fraud_precision": 0.018276762402088774,
+        "fraud_recall_all": 0.09333333333333334,
+        "fpr": 0.015085255767301907,
+        "accuracy": 0.98224,
+        "false_alerts_per_1000_normal": 15.085255767301906,
+        "fraud_precision_wilson_row95": [
+          0.010917788785922897,
+          0.03044327128152433
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 766,
+        "tp": 14,
+        "fp": 752,
+        "fn": 136,
+        "tn": 49098,
+        "fraud_precision": 0.018276762402088774,
+        "fraud_recall_all": 0.09333333333333334,
+        "fpr": 0.015085255767301907,
+        "accuracy": 0.98224,
+        "false_alerts_per_1000_normal": 15.085255767301906,
+        "fraud_precision_wilson_row95": [
+          0.010917788785922897,
+          0.03044327128152433
+        ]
+      },
+      "candidate_rows_after": 825,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "train",
+      "rule_id": "A2",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 274,
+        "tp": 9,
+        "fp": 265,
+        "fn": 141,
+        "tn": 49585,
+        "fraud_precision": 0.032846715328467155,
+        "fraud_recall_all": 0.06,
+        "fpr": 0.005315947843530591,
+        "accuracy": 0.99188,
+        "false_alerts_per_1000_normal": 5.315947843530592,
+        "fraud_precision_wilson_row95": [
+          0.017375231618859108,
+          0.061235998373240036
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 274,
+        "tp": 9,
+        "fp": 265,
+        "fn": 141,
+        "tn": 49585,
+        "fraud_precision": 0.032846715328467155,
+        "fraud_recall_all": 0.06,
+        "fpr": 0.005315947843530591,
+        "accuracy": 0.99188,
+        "false_alerts_per_1000_normal": 5.315947843530592,
+        "fraud_precision_wilson_row95": [
+          0.017375231618859108,
+          0.061235998373240036
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 274,
+        "tp": 9,
+        "fp": 265,
+        "fn": 141,
+        "tn": 49585,
+        "fraud_precision": 0.032846715328467155,
+        "fraud_recall_all": 0.06,
+        "fpr": 0.005315947843530591,
+        "accuracy": 0.99188,
+        "false_alerts_per_1000_normal": 5.315947843530592,
+        "fraud_precision_wilson_row95": [
+          0.017375231618859108,
+          0.061235998373240036
+        ]
+      },
+      "candidate_rows_after": 288,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "train",
+      "rule_id": "A5",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1839,
+        "tp": 3,
+        "fp": 1836,
+        "fn": 147,
+        "tn": 48014,
+        "fraud_precision": 0.0016313213703099511,
+        "fraud_recall_all": 0.02,
+        "fpr": 0.03683049147442327,
+        "accuracy": 0.96034,
+        "false_alerts_per_1000_normal": 36.83049147442327,
+        "fraud_precision_wilson_row95": [
+          0.0005549481408180031,
+          0.004785423801428103
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1,
+        "tp": 0,
+        "fp": 1,
+        "fn": 150,
+        "tn": 49849,
+        "fraud_precision": 0.0,
+        "fraud_recall_all": 0.0,
+        "fpr": 2.0060180541624874e-05,
+        "accuracy": 0.99698,
+        "false_alerts_per_1000_normal": 0.020060180541624874,
+        "fraud_precision_wilson_row95": [
+          0.0,
+          0.7934506856227534
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 28,
+        "tp": 0,
+        "fp": 28,
+        "fn": 150,
+        "tn": 49822,
+        "fraud_precision": 0.0,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0005616850551654964,
+        "accuracy": 0.99644,
+        "false_alerts_per_1000_normal": 0.5616850551654965,
+        "fraud_precision_wilson_row95": [
+          0.0,
+          0.1206433047658398
+        ]
+      },
+      "candidate_rows_after": 28,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "train",
+      "rule_id": "B3",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 41,
+        "tp": 5,
+        "fp": 36,
+        "fn": 145,
+        "tn": 49814,
+        "fraud_precision": 0.12195121951219512,
+        "fraud_recall_all": 0.03333333333333333,
+        "fpr": 0.0007221664994984955,
+        "accuracy": 0.99638,
+        "false_alerts_per_1000_normal": 0.7221664994984955,
+        "fraud_precision_wilson_row95": [
+          0.053233364685778384,
+          0.25544211520976445
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 5,
+        "tp": 5,
+        "fp": 0,
+        "fn": 145,
+        "tn": 49850,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.03333333333333333,
+        "fpr": 0.0,
+        "accuracy": 0.9971,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.5655175352168389,
+          1.0
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 89,
+        "tp": 5,
+        "fp": 84,
+        "fn": 145,
+        "tn": 49766,
+        "fraud_precision": 0.056179775280898875,
+        "fraud_recall_all": 0.03333333333333333,
+        "fpr": 0.0016850551654964895,
+        "accuracy": 0.99542,
+        "false_alerts_per_1000_normal": 1.6850551654964894,
+        "fraud_precision_wilson_row95": [
+          0.024232878420720638,
+          0.12485416735078247
+        ]
+      },
+      "candidate_rows_after": 89,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "train",
+      "rule_id": "B5",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1766,
+        "tp": 13,
+        "fp": 1753,
+        "fn": 137,
+        "tn": 48097,
+        "fraud_precision": 0.007361268403171008,
+        "fraud_recall_all": 0.08666666666666667,
+        "fpr": 0.03516549648946841,
+        "accuracy": 0.9622,
+        "false_alerts_per_1000_normal": 35.1654964894684,
+        "fraud_precision_wilson_row95": [
+          0.00430702232474858,
+          0.012554069199561344
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 150,
+        "tn": 49850,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1766,
+        "tp": 13,
+        "fp": 1753,
+        "fn": 137,
+        "tn": 48097,
+        "fraud_precision": 0.007361268403171008,
+        "fraud_recall_all": 0.08666666666666667,
+        "fpr": 0.03516549648946841,
+        "accuracy": 0.9622,
+        "false_alerts_per_1000_normal": 35.1654964894684,
+        "fraud_precision_wilson_row95": [
+          0.00430702232474858,
+          0.012554069199561344
+        ]
+      },
+      "candidate_rows_after": 1766,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "train",
+      "rule_id": "E4",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1766,
+        "tp": 13,
+        "fp": 1753,
+        "fn": 137,
+        "tn": 48097,
+        "fraud_precision": 0.007361268403171008,
+        "fraud_recall_all": 0.08666666666666667,
+        "fpr": 0.03516549648946841,
+        "accuracy": 0.9622,
+        "false_alerts_per_1000_normal": 35.1654964894684,
+        "fraud_precision_wilson_row95": [
+          0.00430702232474858,
+          0.012554069199561344
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 150,
+        "tn": 49850,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1766,
+        "tp": 13,
+        "fp": 1753,
+        "fn": 137,
+        "tn": 48097,
+        "fraud_precision": 0.007361268403171008,
+        "fraud_recall_all": 0.08666666666666667,
+        "fpr": 0.03516549648946841,
+        "accuracy": 0.9622,
+        "false_alerts_per_1000_normal": 35.1654964894684,
+        "fraud_precision_wilson_row95": [
+          0.00430702232474858,
+          0.012554069199561344
+        ]
+      },
+      "candidate_rows_after": 1766,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "train",
+      "rule_id": "operational",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1894,
+        "tp": 130,
+        "fp": 1764,
+        "fn": 20,
+        "tn": 48086,
+        "fraud_precision": 0.06863780359028511,
+        "fraud_recall_all": 0.8666666666666667,
+        "fpr": 0.035386158475426276,
+        "accuracy": 0.96432,
+        "false_alerts_per_1000_normal": 35.38615847542628,
+        "fraud_precision_wilson_row95": [
+          0.05810227016084768,
+          0.0809195947027449
+        ]
+      },
+      "contributing_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1003,
+        "tp": 126,
+        "fp": 877,
+        "fn": 24,
+        "tn": 48973,
+        "fraud_precision": 0.12562313060817548,
+        "fraud_recall_all": 0.84,
+        "fpr": 0.017592778335005017,
+        "accuracy": 0.98198,
+        "false_alerts_per_1000_normal": 17.592778335005015,
+        "fraud_precision_wilson_row95": [
+          0.10653014538518968,
+          0.1475728780643603
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1003,
+        "tp": 126,
+        "fp": 877,
+        "fn": 24,
+        "tn": 48973,
+        "fraud_precision": 0.12562313060817548,
+        "fraud_recall_all": 0.84,
+        "fpr": 0.017592778335005017,
+        "accuracy": 0.98198,
+        "false_alerts_per_1000_normal": 17.592778335005015,
+        "fraud_precision_wilson_row95": [
+          0.10653014538518968,
+          0.1475728780643603
+        ]
+      },
+      "candidate_rows_after": 1003,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "E3",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 12605,
+        "tp": 47,
+        "fp": 12558,
+        "fn": 28,
+        "tn": 12367,
+        "fraud_precision": 0.003728679095596985,
+        "fraud_recall_all": 0.6266666666666667,
+        "fpr": 0.5038314944834503,
+        "accuracy": 0.49656,
+        "false_alerts_per_1000_normal": 503.83149448345034,
+        "fraud_precision_wilson_row95": [
+          0.0028053433503716432,
+          0.004954406753572087
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidate_rows_after": 0,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "C1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 11132,
+        "tp": 44,
+        "fp": 11088,
+        "fn": 31,
+        "tn": 13837,
+        "fraud_precision": 0.003952569169960474,
+        "fraud_recall_all": 0.5866666666666667,
+        "fpr": 0.44485456369107323,
+        "accuracy": 0.55524,
+        "false_alerts_per_1000_normal": 444.8545636910732,
+        "fraud_precision_wilson_row95": [
+          0.0029458146631756556,
+          0.005301560190383018
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 241,
+        "tp": 39,
+        "fp": 202,
+        "fn": 36,
+        "tn": 24723,
+        "fraud_precision": 0.16182572614107885,
+        "fraud_recall_all": 0.52,
+        "fpr": 0.008104312938816449,
+        "accuracy": 0.99048,
+        "false_alerts_per_1000_normal": 8.104312938816449,
+        "fraud_precision_wilson_row95": [
+          0.12069602353254602,
+          0.21356705109089555
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 11132,
+        "tp": 44,
+        "fp": 11088,
+        "fn": 31,
+        "tn": 13837,
+        "fraud_precision": 0.003952569169960474,
+        "fraud_recall_all": 0.5866666666666667,
+        "fpr": 0.44485456369107323,
+        "accuracy": 0.55524,
+        "false_alerts_per_1000_normal": 444.8545636910732,
+        "fraud_precision_wilson_row95": [
+          0.0029458146631756556,
+          0.005301560190383018
+        ]
+      },
+      "candidate_rows_after": 11132,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "A1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 369,
+        "tp": 10,
+        "fp": 359,
+        "fn": 65,
+        "tn": 24566,
+        "fraud_precision": 0.02710027100271003,
+        "fraud_recall_all": 0.13333333333333333,
+        "fpr": 0.01440320962888666,
+        "accuracy": 0.98304,
+        "false_alerts_per_1000_normal": 14.40320962888666,
+        "fraud_precision_wilson_row95": [
+          0.014785661407056953,
+          0.049159638281730325
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 362,
+        "tp": 10,
+        "fp": 352,
+        "fn": 65,
+        "tn": 24573,
+        "fraud_precision": 0.027624309392265192,
+        "fraud_recall_all": 0.13333333333333333,
+        "fpr": 0.014122367101303912,
+        "accuracy": 0.98332,
+        "false_alerts_per_1000_normal": 14.122367101303912,
+        "fraud_precision_wilson_row95": [
+          0.015072863864574494,
+          0.050095963357872926
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 362,
+        "tp": 10,
+        "fp": 352,
+        "fn": 65,
+        "tn": 24573,
+        "fraud_precision": 0.027624309392265192,
+        "fraud_recall_all": 0.13333333333333333,
+        "fpr": 0.014122367101303912,
+        "accuracy": 0.98332,
+        "false_alerts_per_1000_normal": 14.122367101303912,
+        "fraud_precision_wilson_row95": [
+          0.015072863864574494,
+          0.050095963357872926
+        ]
+      },
+      "candidate_rows_after": 386,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "A2",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 141,
+        "tp": 6,
+        "fp": 135,
+        "fn": 69,
+        "tn": 24790,
+        "fraud_precision": 0.0425531914893617,
+        "fraud_recall_all": 0.08,
+        "fpr": 0.005416248746238716,
+        "accuracy": 0.99184,
+        "false_alerts_per_1000_normal": 5.4162487462387165,
+        "fraud_precision_wilson_row95": [
+          0.019646160425252412,
+          0.08972486462293358
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 141,
+        "tp": 6,
+        "fp": 135,
+        "fn": 69,
+        "tn": 24790,
+        "fraud_precision": 0.0425531914893617,
+        "fraud_recall_all": 0.08,
+        "fpr": 0.005416248746238716,
+        "accuracy": 0.99184,
+        "false_alerts_per_1000_normal": 5.4162487462387165,
+        "fraud_precision_wilson_row95": [
+          0.019646160425252412,
+          0.08972486462293358
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 141,
+        "tp": 6,
+        "fp": 135,
+        "fn": 69,
+        "tn": 24790,
+        "fraud_precision": 0.0425531914893617,
+        "fraud_recall_all": 0.08,
+        "fpr": 0.005416248746238716,
+        "accuracy": 0.99184,
+        "false_alerts_per_1000_normal": 5.4162487462387165,
+        "fraud_precision_wilson_row95": [
+          0.019646160425252412,
+          0.08972486462293358
+        ]
+      },
+      "candidate_rows_after": 141,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "A5",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 943,
+        "tp": 4,
+        "fp": 939,
+        "fn": 71,
+        "tn": 23986,
+        "fraud_precision": 0.0042417815482502655,
+        "fraud_recall_all": 0.05333333333333334,
+        "fpr": 0.03767301905717151,
+        "accuracy": 0.9596,
+        "false_alerts_per_1000_normal": 37.673019057171516,
+        "fraud_precision_wilson_row95": [
+          0.0016507451673944207,
+          0.010855528940461653
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1,
+        "tp": 0,
+        "fp": 1,
+        "fn": 75,
+        "tn": 24924,
+        "fraud_precision": 0.0,
+        "fraud_recall_all": 0.0,
+        "fpr": 4.012036108324975e-05,
+        "accuracy": 0.99696,
+        "false_alerts_per_1000_normal": 0.04012036108324975,
+        "fraud_precision_wilson_row95": [
+          0.0,
+          0.7934506856227534
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 9,
+        "tp": 0,
+        "fp": 9,
+        "fn": 75,
+        "tn": 24916,
+        "fraud_precision": 0.0,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.00036108324974924776,
+        "accuracy": 0.99664,
+        "false_alerts_per_1000_normal": 0.36108324974924777,
+        "fraud_precision_wilson_row95": [
+          0.0,
+          0.2991450484195325
+        ]
+      },
+      "candidate_rows_after": 9,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "B3",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 11,
+        "tp": 2,
+        "fp": 9,
+        "fn": 73,
+        "tn": 24916,
+        "fraud_precision": 0.18181818181818182,
+        "fraud_recall_all": 0.02666666666666667,
+        "fpr": 0.00036108324974924776,
+        "accuracy": 0.99672,
+        "false_alerts_per_1000_normal": 0.36108324974924777,
+        "fraud_precision_wilson_row95": [
+          0.051367689746086714,
+          0.4769805619608358
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 42,
+        "tp": 3,
+        "fp": 39,
+        "fn": 72,
+        "tn": 24886,
+        "fraud_precision": 0.07142857142857142,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0015646940822467402,
+        "accuracy": 0.99556,
+        "false_alerts_per_1000_normal": 1.5646940822467401,
+        "fraud_precision_wilson_row95": [
+          0.0245904098733066,
+          0.19009426801157883
+        ]
+      },
+      "candidate_rows_after": 42,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "B5",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1053,
+        "tp": 6,
+        "fp": 1047,
+        "fn": 69,
+        "tn": 23878,
+        "fraud_precision": 0.005698005698005698,
+        "fraud_recall_all": 0.08,
+        "fpr": 0.042006018054162486,
+        "accuracy": 0.95536,
+        "false_alerts_per_1000_normal": 42.00601805416249,
+        "fraud_precision_wilson_row95": [
+          0.002613985875904103,
+          0.012375451459730943
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1053,
+        "tp": 6,
+        "fp": 1047,
+        "fn": 69,
+        "tn": 23878,
+        "fraud_precision": 0.005698005698005698,
+        "fraud_recall_all": 0.08,
+        "fpr": 0.042006018054162486,
+        "accuracy": 0.95536,
+        "false_alerts_per_1000_normal": 42.00601805416249,
+        "fraud_precision_wilson_row95": [
+          0.002613985875904103,
+          0.012375451459730943
+        ]
+      },
+      "candidate_rows_after": 1053,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "E4",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1053,
+        "tp": 6,
+        "fp": 1047,
+        "fn": 69,
+        "tn": 23878,
+        "fraud_precision": 0.005698005698005698,
+        "fraud_recall_all": 0.08,
+        "fpr": 0.042006018054162486,
+        "accuracy": 0.95536,
+        "false_alerts_per_1000_normal": 42.00601805416249,
+        "fraud_precision_wilson_row95": [
+          0.002613985875904103,
+          0.012375451459730943
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1053,
+        "tp": 6,
+        "fp": 1047,
+        "fn": 69,
+        "tn": 23878,
+        "fraud_precision": 0.005698005698005698,
+        "fraud_recall_all": 0.08,
+        "fpr": 0.042006018054162486,
+        "accuracy": 0.95536,
+        "false_alerts_per_1000_normal": 42.00601805416249,
+        "fraud_precision_wilson_row95": [
+          0.002613985875904103,
+          0.012375451459730943
+        ]
+      },
+      "candidate_rows_after": 1053,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "validation",
+      "rule_id": "operational",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 976,
+        "tp": 65,
+        "fp": 911,
+        "fn": 10,
+        "tn": 24014,
+        "fraud_precision": 0.06659836065573771,
+        "fraud_recall_all": 0.8666666666666667,
+        "fpr": 0.03654964894684052,
+        "accuracy": 0.96316,
+        "false_alerts_per_1000_normal": 36.54964894684052,
+        "fraud_precision_wilson_row95": [
+          0.05259411280249121,
+          0.08400090225410911
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 486,
+        "tp": 63,
+        "fp": 423,
+        "fn": 12,
+        "tn": 24502,
+        "fraud_precision": 0.12962962962962962,
+        "fraud_recall_all": 0.84,
+        "fpr": 0.016970912738214643,
+        "accuracy": 0.9826,
+        "false_alerts_per_1000_normal": 16.970912738214643,
+        "fraud_precision_wilson_row95": [
+          0.10264697360581915,
+          0.16242135918350947
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 486,
+        "tp": 63,
+        "fp": 423,
+        "fn": 12,
+        "tn": 24502,
+        "fraud_precision": 0.12962962962962962,
+        "fraud_recall_all": 0.84,
+        "fpr": 0.016970912738214643,
+        "accuracy": 0.9826,
+        "false_alerts_per_1000_normal": 16.970912738214643,
+        "fraud_precision_wilson_row95": [
+          0.10264697360581915,
+          0.16242135918350947
+        ]
+      },
+      "candidate_rows_after": 486,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "E3",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 12672,
+        "tp": 47,
+        "fp": 12625,
+        "fn": 28,
+        "tn": 12300,
+        "fraud_precision": 0.0037089646464646465,
+        "fraud_recall_all": 0.6266666666666667,
+        "fpr": 0.506519558676028,
+        "accuracy": 0.49388,
+        "false_alerts_per_1000_normal": 506.5195586760281,
+        "fraud_precision_wilson_row95": [
+          0.002790504938123627,
+          0.004928229880274509
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidate_rows_after": 0,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "C1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 10403,
+        "tp": 31,
+        "fp": 10372,
+        "fn": 44,
+        "tn": 14553,
+        "fraud_precision": 0.002979909641449582,
+        "fraud_recall_all": 0.41333333333333333,
+        "fpr": 0.4161283851554664,
+        "accuracy": 0.58336,
+        "false_alerts_per_1000_normal": 416.1283851554664,
+        "fraud_precision_wilson_row95": [
+          0.002100194580150282,
+          0.004226552981175122
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 229,
+        "tp": 30,
+        "fp": 199,
+        "fn": 45,
+        "tn": 24726,
+        "fraud_precision": 0.13100436681222707,
+        "fraud_recall_all": 0.4,
+        "fpr": 0.0079839518555667,
+        "accuracy": 0.99024,
+        "false_alerts_per_1000_normal": 7.9839518555667,
+        "fraud_precision_wilson_row95": [
+          0.0933285571434454,
+          0.18085568454633377
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 10403,
+        "tp": 31,
+        "fp": 10372,
+        "fn": 44,
+        "tn": 14553,
+        "fraud_precision": 0.002979909641449582,
+        "fraud_recall_all": 0.41333333333333333,
+        "fpr": 0.4161283851554664,
+        "accuracy": 0.58336,
+        "false_alerts_per_1000_normal": 416.1283851554664,
+        "fraud_precision_wilson_row95": [
+          0.002100194580150282,
+          0.004226552981175122
+        ]
+      },
+      "candidate_rows_after": 10403,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "A1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 400,
+        "tp": 8,
+        "fp": 392,
+        "fn": 67,
+        "tn": 24533,
+        "fraud_precision": 0.02,
+        "fraud_recall_all": 0.10666666666666667,
+        "fpr": 0.0157271815446339,
+        "accuracy": 0.98164,
+        "false_alerts_per_1000_normal": 15.727181544633902,
+        "fraud_precision_wilson_row95": [
+          0.010168386791664829,
+          0.03896341576925931
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 393,
+        "tp": 8,
+        "fp": 385,
+        "fn": 67,
+        "tn": 24540,
+        "fraud_precision": 0.020356234096692113,
+        "fraud_recall_all": 0.10666666666666667,
+        "fpr": 0.015446339017051154,
+        "accuracy": 0.98192,
+        "false_alerts_per_1000_normal": 15.446339017051153,
+        "fraud_precision_wilson_row95": [
+          0.010350122402797672,
+          0.039648330076581355
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 393,
+        "tp": 8,
+        "fp": 385,
+        "fn": 67,
+        "tn": 24540,
+        "fraud_precision": 0.020356234096692113,
+        "fraud_recall_all": 0.10666666666666667,
+        "fpr": 0.015446339017051154,
+        "accuracy": 0.98192,
+        "false_alerts_per_1000_normal": 15.446339017051153,
+        "fraud_precision_wilson_row95": [
+          0.010350122402797672,
+          0.039648330076581355
+        ]
+      },
+      "candidate_rows_after": 414,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "A2",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 147,
+        "tp": 3,
+        "fp": 144,
+        "fn": 72,
+        "tn": 24781,
+        "fraud_precision": 0.02040816326530612,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.005777331995987964,
+        "accuracy": 0.99136,
+        "false_alerts_per_1000_normal": 5.777331995987964,
+        "fraud_precision_wilson_row95": [
+          0.006964513334518772,
+          0.058279212744745075
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 147,
+        "tp": 3,
+        "fp": 144,
+        "fn": 72,
+        "tn": 24781,
+        "fraud_precision": 0.02040816326530612,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.005777331995987964,
+        "accuracy": 0.99136,
+        "false_alerts_per_1000_normal": 5.777331995987964,
+        "fraud_precision_wilson_row95": [
+          0.006964513334518772,
+          0.058279212744745075
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 147,
+        "tp": 3,
+        "fp": 144,
+        "fn": 72,
+        "tn": 24781,
+        "fraud_precision": 0.02040816326530612,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.005777331995987964,
+        "accuracy": 0.99136,
+        "false_alerts_per_1000_normal": 5.777331995987964,
+        "fraud_precision_wilson_row95": [
+          0.006964513334518772,
+          0.058279212744745075
+        ]
+      },
+      "candidate_rows_after": 154,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "A5",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 933,
+        "tp": 2,
+        "fp": 931,
+        "fn": 73,
+        "tn": 23994,
+        "fraud_precision": 0.0021436227224008574,
+        "fraud_recall_all": 0.02666666666666667,
+        "fpr": 0.03735205616850552,
+        "accuracy": 0.95984,
+        "false_alerts_per_1000_normal": 37.35205616850552,
+        "fraud_precision_wilson_row95": [
+          0.000588055636396479,
+          0.007782046633164504
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 12,
+        "tp": 0,
+        "fp": 12,
+        "fn": 75,
+        "tn": 24913,
+        "fraud_precision": 0.0,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.000481444332998997,
+        "accuracy": 0.99652,
+        "false_alerts_per_1000_normal": 0.48144433299899697,
+        "fraud_precision_wilson_row95": [
+          0.0,
+          0.24249400665523077
+        ]
+      },
+      "candidate_rows_after": 12,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "B3",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 18,
+        "tp": 3,
+        "fp": 15,
+        "fn": 72,
+        "tn": 24910,
+        "fraud_precision": 0.16666666666666666,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0006018054162487463,
+        "accuracy": 0.99652,
+        "false_alerts_per_1000_normal": 0.6018054162487463,
+        "fraud_precision_wilson_row95": [
+          0.05836576805861604,
+          0.39222038103915036
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 51,
+        "tp": 3,
+        "fp": 48,
+        "fn": 72,
+        "tn": 24877,
+        "fraud_precision": 0.058823529411764705,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.001925777331995988,
+        "accuracy": 0.9952,
+        "false_alerts_per_1000_normal": 1.9257773319959879,
+        "fraud_precision_wilson_row95": [
+          0.020206639422465214,
+          0.15924626048800056
+        ]
+      },
+      "candidate_rows_after": 51,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "B5",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1154,
+        "tp": 10,
+        "fp": 1144,
+        "fn": 65,
+        "tn": 23781,
+        "fraud_precision": 0.008665511265164644,
+        "fraud_recall_all": 0.13333333333333333,
+        "fpr": 0.04589769307923771,
+        "accuracy": 0.95164,
+        "false_alerts_per_1000_normal": 45.89769307923771,
+        "fraud_precision_wilson_row95": [
+          0.004713674483490151,
+          0.01587762378024395
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1154,
+        "tp": 10,
+        "fp": 1144,
+        "fn": 65,
+        "tn": 23781,
+        "fraud_precision": 0.008665511265164644,
+        "fraud_recall_all": 0.13333333333333333,
+        "fpr": 0.04589769307923771,
+        "accuracy": 0.95164,
+        "false_alerts_per_1000_normal": 45.89769307923771,
+        "fraud_precision_wilson_row95": [
+          0.004713674483490151,
+          0.01587762378024395
+        ]
+      },
+      "candidate_rows_after": 1154,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "E4",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1154,
+        "tp": 10,
+        "fp": 1144,
+        "fn": 65,
+        "tn": 23781,
+        "fraud_precision": 0.008665511265164644,
+        "fraud_recall_all": 0.13333333333333333,
+        "fpr": 0.04589769307923771,
+        "accuracy": 0.95164,
+        "false_alerts_per_1000_normal": 45.89769307923771,
+        "fraud_precision_wilson_row95": [
+          0.004713674483490151,
+          0.01587762378024395
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1154,
+        "tp": 10,
+        "fp": 1144,
+        "fn": 65,
+        "tn": 23781,
+        "fraud_precision": 0.008665511265164644,
+        "fraud_recall_all": 0.13333333333333333,
+        "fpr": 0.04589769307923771,
+        "accuracy": 0.95164,
+        "false_alerts_per_1000_normal": 45.89769307923771,
+        "fraud_precision_wilson_row95": [
+          0.004713674483490151,
+          0.01587762378024395
+        ]
+      },
+      "candidate_rows_after": 1154,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    },
+    {
+      "period": "test",
+      "rule_id": "operational",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 967,
+        "tp": 67,
+        "fp": 900,
+        "fn": 8,
+        "tn": 24025,
+        "fraud_precision": 0.06928645294725956,
+        "fraud_recall_all": 0.8933333333333333,
+        "fpr": 0.03610832497492478,
+        "accuracy": 0.96368,
+        "false_alerts_per_1000_normal": 36.10832497492478,
+        "fraud_precision_wilson_row95": [
+          0.0549263353417637,
+          0.08705509485811003
+        ]
+      },
+      "contributing_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 525,
+        "tp": 67,
+        "fp": 458,
+        "fn": 8,
+        "tn": 24467,
+        "fraud_precision": 0.12761904761904763,
+        "fraud_recall_all": 0.8933333333333333,
+        "fpr": 0.018375125376128384,
+        "accuracy": 0.98136,
+        "false_alerts_per_1000_normal": 18.375125376128384,
+        "fraud_precision_wilson_row95": [
+          0.10175782416352978,
+          0.15889015742262963
+        ]
+      },
+      "unsuppressed_signal_after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 525,
+        "tp": 67,
+        "fp": 458,
+        "fn": 8,
+        "tn": 24467,
+        "fraud_precision": 0.12761904761904763,
+        "fraud_recall_all": 0.8933333333333333,
+        "fpr": 0.018375125376128384,
+        "accuracy": 0.98136,
+        "false_alerts_per_1000_normal": 18.375125376128384,
+        "fraud_precision_wilson_row95": [
+          0.10175782416352978,
+          0.15889015742262963
+        ]
+      },
+      "candidate_rows_after": 525,
+      "note": "Point contribution is distinct from predicate/diagnostic accuracy; master/context zero points do not establish correctness."
+    }
+  ],
+  "source_hashes": {
+    "data\\sme_fraud_003\\companies.csv": "2d62ae6e3799122c7c6c8b134ea422828ee630c749e096d3e4e441163a6ef76b",
+    "data\\sme_fraud_003\\employees.csv": "4f2249bd595ce95ee134846fa02c6e4708a49f0b28fc13cd7d2fd8707206a363",
+    "data\\sme_fraud_003\\entity_links.csv": "eb42213dc7a891bb20703e57a23d50612dde355c22f32e58618aec24f332c1cd",
+    "data\\sme_fraud_003\\attendance.csv": "66bfde7d94fe1e965fd2ad854d00a326ad78f947dc9c79b19fc7143662658944",
+    "data\\sme_fraud_003\\vendors.csv": "1b002778b6582c25355a6a31fc237f923f46b0fb1abcea56dcb3e8a36f4f0eac",
+    "data\\sme_fraud_003\\vendor_status_history.csv": "25137d2067be8be03d683652cadc3be29201510c54428f9f791496a6f721e9f4",
+    "data\\sme_fraud_003\\customers.csv": "d0eb1793e6da102fb6c5e08f15dc3a1ab555cc01acdb76af305d23039ebeb989",
+    "data\\sme_fraud_003\\calendar.csv": "7296fea023dd9d6bd4db421d982b767bc7a4e82c2aecbb698c11eac54a252192",
+    "data\\sme_fraud_003\\advances.csv": "d9bcadd70d777e7363050dda03198ca5e0eef75d1c0ebd55abad33af76bf1333",
+    "data\\sme_fraud_003\\advance_events.csv": "dc3d666ff2ebb883a2a63fe18e61886c27c73c87023984fe30be48bae98fb9b4",
+    "data\\sme_fraud_003\\bank_account_changes.csv": "79d227f303dc1308becd3c4018949d1002d14239533ffe1d14ba1b21623061b3",
+    "data\\sme_fraud_003\\transactions.csv": "76a7ebf45a224c85d4285e9b8abc13472cf06eada64d787c1296bc1d9a354fa0",
+    "data\\sme_fraud_003\\labels.csv": "a2e09024e65cfdb068c56c41c4a02c3a583756831dcfb91fec3a488f9150f7d0",
+    "data\\sme_fraud_003\\splits.csv": "b56ebdcc8225adf08e53f68a2e782a7b7e571989fe738a5f69f72fc2e76d2ea5",
+    "data\\sme_fraud_003\\invoices.csv": "9be898f952e429339d0c45ee82640a06d18f8b2de048fa98db58f9d0ce322c83",
+    "data\\sme_fraud_003\\journal_lines.csv": "832ece59c05b7039dac3892165cfeaad8fdf1dc11b332ef18e76eaaad8b8a23c",
+    "data\\sme_fraud_003\\journal_documents.csv": "43de73c808140cd34b1bbac787ac3eb08ed314f28d87f6d9874eb25f64637be7",
+    "data\\sme_fraud_003\\document_links.csv": "34983bd6af8ff14a5e88748405c280538fe38c5f4938ce5865c87db9d5e13724",
+    "data\\sme_fraud_003\\account_flow_edges.csv": "7d94a682b29561a1e0a45a3496cb763becb0f9a7cc2f3e4488ced618834a30cd",
+    "data\\sme_fraud_003\\features.csv": "8c3cdf25d71db344aaf93cb67dbd30b22ce6056bc206eca383f07d75fb1e9640",
+    "data\\sme_fraud_003\\manifest.json": "71b89c2d6bba34923a3e27e79d15bea3b8852d73add58aff3469b7e9330cad19",
+    "reports\\rule_repairs\\phase1\\sme_fraud_003\\rule_scores.csv": "5590cbabe7194078e77e6b321a2a374188b2d1673a83f856596fe64ccfc72a3b",
+    "reports\\rule_repairs\\phase1\\sme_fraud_003\\rule_hits.jsonl": "5122b9a2818c05aa7de09a056cf987e3614ea0728ff60cff3c3792efa7d787b9",
+    "reports\\rule_repairs\\phase1\\sme_fraud_003\\rule_config.json": "cb45a6a6c6c29955b6be864b9b079b6c68d3eeaca04a2339eb755ccf8dfe69eb",
+    "reports\\rule_repairs\\phase1\\sme_fraud_003\\benford_diagnostics.jsonl": "ba284c51aa4861016cef883a7fb8f3a70ed4b7b255bfb6113f86a57e478a981e"
+  },
+  "protected_controls_unchanged": true,
+  "score_replay": "passed",
+  "model_usage": "none",
+  "input_evidence_rows": {
+    "procurement_links": 0,
+    "transaction_documents": 0,
+    "operating_schedules": 0,
+    "recurring_payments": 0
+  },
+  "master_clusters": 222,
+  "uninformative_master_names": 2043,
+  "lost_true_detections": [
+    {
+      "period": "train",
+      "transaction_id": "T000004319",
+      "fraud_type": "split_payments",
+      "variant": "distributed_days",
+      "old_rule_ids": "A2|C1|E3",
+      "after_signal_ids": "C1|A2"
+    },
+    {
+      "period": "train",
+      "transaction_id": "T000027377",
+      "fraud_type": "split_payments",
+      "variant": "multiple_recipients",
+      "old_rule_ids": "A4|B5|C1|E3|E4",
+      "after_signal_ids": "C1|B5|E4"
+    },
+    {
+      "period": "train",
+      "transaction_id": "T000047394",
+      "fraud_type": "split_payments",
+      "variant": "distributed_days",
+      "old_rule_ids": "A2|A4|C1|E3",
+      "after_signal_ids": "C1|A2"
+    },
+    {
+      "period": "train",
+      "transaction_id": "T000050973",
+      "fraud_type": "split_payments",
+      "variant": "distributed_days",
+      "old_rule_ids": "A2|C1|E3",
+      "after_signal_ids": "C1|A2"
+    },
+    {
+      "period": "validation",
+      "transaction_id": "T000030084",
+      "fraud_type": "split_payments",
+      "variant": "distributed_days",
+      "old_rule_ids": "A2|A4|E3",
+      "after_signal_ids": "A2"
+    },
+    {
+      "period": "validation",
+      "transaction_id": "T000081861",
+      "fraud_type": "split_payments",
+      "variant": "near_limit_same_recipient",
+      "old_rule_ids": "A4|C1|E3",
+      "after_signal_ids": "C1"
+    }
+  ],
+  "b3_test_review_rows": 15,
+  "review_cases": 1608
+}
