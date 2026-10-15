@@ -1,0 +1,53 @@
+{
+  "$defs": {
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "fact_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Fact Id",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 16000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "fact_id",
+        "text",
+        "refs"
+      ],
+      "title": "Claim",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "claims": {
+      "items": {
+        "$ref": "#/$defs/Claim"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Claims",
+      "type": "array"
+    }
+  },
+  "required": [
+    "claims"
+  ],
+  "title": "LLMOutput",
+  "type": "object"
+}

@@ -21,7 +21,7 @@ def client(): return FileResponse(STATIC/'index.html',headers={'Cache-Control':'
 
 @router.get('/review-assets/{name}',include_in_schema=False)
 def asset(name:str):
-    if name not in ('app.js','style.css','compliance.js','compliance.css'): raise ReviewError('NOT_FOUND','Asset not found.',404)
+    if name not in ('app.js','style.css','compliance.js','compliance.css','explanation.js'): raise ReviewError('NOT_FOUND','Asset not found.',404)
     return FileResponse(STATIC/name)
 
 @router.get('/v1/records')

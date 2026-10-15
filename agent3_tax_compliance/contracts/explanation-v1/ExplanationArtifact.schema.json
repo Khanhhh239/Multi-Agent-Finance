@@ -1,0 +1,294 @@
+{
+  "$defs": {
+    "Chunk": {
+      "additionalProperties": false,
+      "properties": {
+        "chunk_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "locator": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "document_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Document Sha256",
+          "type": "string"
+        },
+        "text_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Text Sha256",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective To"
+        },
+        "reviewed": {
+          "const": true,
+          "title": "Reviewed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "chunk_id",
+        "document_id",
+        "locator",
+        "document_sha256",
+        "text_sha256",
+        "text",
+        "effective_from",
+        "reviewed"
+      ],
+      "title": "Chunk",
+      "type": "object"
+    },
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "fact_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Fact Id",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 16000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "fact_id",
+        "text",
+        "refs"
+      ],
+      "title": "Claim",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "explanation_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Explanation Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "taxpayer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Taxpayer Id",
+      "type": "string"
+    },
+    "evaluation_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Evaluation Id",
+      "type": "string"
+    },
+    "record_revision": {
+      "minimum": 1,
+      "title": "Record Revision",
+      "type": "integer"
+    },
+    "evaluation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Evaluation Sha256",
+      "type": "string"
+    },
+    "context_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Context Sha256",
+      "type": "string"
+    },
+    "config_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Config Sha256",
+      "type": "string"
+    },
+    "corpus_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Corpus Sha256",
+      "type": "string"
+    },
+    "implementation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Implementation Sha256",
+      "type": "string"
+    },
+    "prompt_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Prompt Version",
+      "type": "string"
+    },
+    "provider": {
+      "title": "Provider",
+      "type": "string"
+    },
+    "model": {
+      "title": "Model",
+      "type": "string"
+    },
+    "model_revision": {
+      "title": "Model Revision",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "TEMPLATE",
+        "LLM_VALIDATED"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "fallback_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Fallback Reason"
+    },
+    "claims": {
+      "items": {
+        "$ref": "#/$defs/Claim"
+      },
+      "title": "Claims",
+      "type": "array"
+    },
+    "excerpts": {
+      "items": {
+        "$ref": "#/$defs/Chunk"
+      },
+      "title": "Excerpts",
+      "type": "array"
+    },
+    "elapsed_seconds": {
+      "minimum": 0,
+      "title": "Elapsed Seconds",
+      "type": "number"
+    },
+    "technical_only": {
+      "const": true,
+      "default": true,
+      "title": "Technical Only",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "explanation_id",
+    "tenant_id",
+    "taxpayer_id",
+    "evaluation_id",
+    "record_revision",
+    "evaluation_sha256",
+    "context_sha256",
+    "config_sha256",
+    "corpus_sha256",
+    "implementation_sha256",
+    "prompt_version",
+    "provider",
+    "model",
+    "model_revision",
+    "mode",
+    "fallback_reason",
+    "claims",
+    "excerpts",
+    "elapsed_seconds"
+  ],
+  "title": "ExplanationArtifact",
+  "type": "object"
+}

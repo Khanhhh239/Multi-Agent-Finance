@@ -2,7 +2,7 @@
 
 > OCR-based extraction and normalization of Vietnamese accounting documents, with human review, revision tracking, and planned tax compliance checks.
 
-**Cập nhật: 15/10/2026 · Mốc hiện tại: PLAN_09 tích hợp kỹ thuật + nhánh OCR V2 trong PLAN_06 · M2 pháp lý còn chờ nghiệm thu.**
+**Cập nhật: 15/10/2026 · PLAN_09 tích hợp kỹ thuật + PLAN_12 giải thích có kiểm soát một phần + nhánh OCR V2 trong PLAN_06 · M2 pháp lý còn chờ nghiệm thu.**
 
 Nhánh [OCR/extraction V2](docs/agent3/plans/PLAN_OCR_EXTRACTION_V2.md) đang triển khai **bên trong PLAN_06**. Đã đóng băng baseline OCR thật, sửa binding tổng tiền lệch dòng và thử tách dòng dài; OCR thử nghiệm chưa bật mặc định. [Kết quả, lệnh chạy và giới hạn](docs/agent3/plans/evidence/ocr_extraction_v2/runbook.md).
 
@@ -27,15 +27,17 @@ Agent 3 là thành phần đọc, chuẩn hóa và hướng tới kiểm tra tu�
 
 ## 1. Thông tin dành cho leader
 
+**PLAN_12:** đã thêm BM25 có ràng buộc phiên bản/căn cứ, context tối thiểu, adapter Ollama local cho ứng viên Qwen3-8B, validator từng claim, API và UI **Diễn giải và nguồn tham chiếu**. Explanation lưu riêng theo evaluation/revision, giữ nguyên report/replay thuế. Mặc định template; corpus trích đoạn thật và model chưa được bật, chất lượng retrieval/readability còn PENDING. Bản đầu chỉ cho model sắp xếp/chọn các cách diễn đạt hữu hạn đã xác nhận. [Gate PLAN_12](docs/agent3/plans/evidence/gate_12.md), [cách chạy và cấu hình](docs/agent3/plans/evidence/plan12/runbook.md). XML/Excel/ERP tiếp tục hoãn theo phạm vi người dùng chọn.
+
 | Nội dung | Trạng thái hiện tại |
 |---|---|
 | Mục tiêu | Giảm công nhập liệu, giúp kế toán đối chiếu chứng từ và tiến tới kiểm tra thuế có căn cứ |
 | Đã làm được | Đọc PDF/ảnh, OCR theo trang, trích trường và dòng hàng, chuẩn hóa, đánh giá chất lượng, review/sửa có audit, xuất JSON |
 | Model OCR | **PP-OCRv6 detector + VietOCR `vgg_transformer`**, mặc định chạy CPU |
 | Mức tự động hóa | Hỗ trợ đọc và chuẩn bị dữ liệu; **vẫn cần người duyệt**, chưa tự chấp nhận chứng từ |
-| Kiểm chứng | [PLAN_09 validation](docs/agent3/plans/evidence/plan09/validation_summary.json): 310 Python tests, syntax/DOM checks và Chrome desktop/mobile. Accuracy thực báo riêng tại [pilot](docs/agent3/plans/evidence/real_invoice_pilot_v1/REPORT.md) |
+| Kiểm chứng | [PLAN_12 validation](docs/agent3/plans/evidence/plan12/validation_summary.json): 343 Python tests, syntax/DOM checks và Chrome desktop/mobile PASS; model/corpus thực chưa nghiệm thu. Accuracy OCR thực báo riêng tại [pilot](docs/agent3/plans/evidence/real_invoice_pilot_v1/REPORT.md) |
 | Baseline review | 15 artifact chứng từ / 17 trang; sửa mô phỏng, export và replay được kiểm chứng |
-| Việc tiếp theo | Hoàn tất P09-T06/duyệt luật và mapping; PLAN_10 mở rộng Invoice XML trên nền kỹ thuật |
+| Việc tiếp theo | Hoàn tất P09-T06/duyệt luật và mapping; nghiệm thu corpus/model/readability PLAN_12; PLAN_10/11/13 đang hoãn |
 | Cần hỗ trợ | Hóa đơn Việt Nam có quyền dùng, reviewer nghiệp vụ độc lập, bộ nhãn và tiêu chí nghiệm thu |
 
 Đọc nhanh **mục 2–3** để hiểu sản phẩm, **mục 6–7** để xem bằng chứng và giới hạn, **mục 8** để nắm việc sắp tới. Người triển khai xem thêm **mục 10–12**.
@@ -223,7 +225,8 @@ FATURA và MC-OCR hiện có là tài sản phát triển/nghiên cứu; việc 
 | PLAN_08 | GoRules ZEN, Decimal, trace và aggregation | Đã triển khai kỹ thuật; models thực tế DRAFT; [gate](docs/agent3/plans/evidence/gate_08.md) |
 | PLAN_09 | Tích hợp MVP compliance và template explanation | Đã có API/UI và revision workflow kỹ thuật; T06/M2 pháp lý PENDING; [gate](docs/agent3/plans/evidence/gate_09.md) |
 | PLAN_10–11 | XML, Excel và bank statement | Chưa triển khai theo roadmap mới |
-| PLAN_12–13 | LLM giải thích và ERP connector | Chưa triển khai; nhánh tùy phạm vi sản phẩm |
+| PLAN_12 | Giải thích có kiểm soát | IMPLEMENTED kỹ thuật một phần; corpus/model thật/readability PENDING; [gate](docs/agent3/plans/evidence/gate_12.md) |
+| PLAN_13 | ERP connector | Chưa triển khai; hoãn theo phạm vi hiện tại |
 | PLAN_14 | Production hardening và phát hành | Chưa triển khai |
 | PLAN_15 | Đối soát nhiều nguồn | Giai đoạn sau MVP |
 
@@ -233,7 +236,7 @@ FATURA và MC-OCR hiện có là tài sản phát triển/nghiên cứu; việc 
 
 **Ưu tiên dữ liệu và người dùng:** hoàn thiện pilot Việt Nam, gán nhãn độc lập, kiểm UI bằng người dùng và đo lỗi/thời gian review. Kết quả quyết định mức tự động hóa chấp nhận được và việc có cần cải thiện/train OCR hoặc thay extraction strategy.
 
-PLAN_09 đã nối template explanation và UI kiểm tra revision đã lưu. Bước tiếp theo là PLAN_10 Invoice XML, đồng thời giữ mở nghiệm thu dữ liệu/pháp lý của M2. LLM ở PLAN_12 là nhánh sau, không tự tính hoặc thay verdict của rule engine.
+PLAN_09 đã nối template explanation và UI kiểm tra revision đã lưu. Người dùng chọn hoãn PLAN_10/11/13 và triển khai nhánh PLAN_12 trước: phần kỹ thuật đã có, corpus/model thật và đánh giá còn mở. LLM không tự tính hoặc thay verdict của rule engine; nghiệm thu dữ liệu/pháp lý M2 vẫn PENDING.
 
 Ước lượng PLAN_07 là **6–9 ngày công một người tập trung**, chưa tính chờ nguồn pháp lý, dữ liệu và người nghiệp vụ. Đây là ước lượng phạm vi, không phải cam kết deadline. [Lộ trình 16 PLAN](docs/agent3/plans/README.md) ghi phụ thuộc, task và gate từng chặng.
 

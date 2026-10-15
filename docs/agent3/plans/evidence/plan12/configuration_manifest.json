@@ -1,0 +1,17 @@
+{
+  "config_version": "explanation-v2-1",
+  "corpus_version": "legal-excerpts-pending-v1",
+  "chunk_count": 0,
+  "config_sha256": "bb8712fc2db1dff08b86b13572a0572b63326f075eae2f27854d4aa529b2dbba",
+  "corpus_sha256": "284b023d0eb00507fd2e4f4febe033e35baaf23177c573bc184e1f670bb26c4b",
+  "implementation_sha256": "20c8d690373690f10585884a16449e75bfb9301c53ad9cdeda2433b0ab1d4cb3",
+  "valid": true,
+  "errors": [],
+  "corpus_acceptance": "PENDING_NO_EXCERPTS",
+  "model": "qwen3:8b",
+  "model_revision": "UNVERIFIED",
+  "llm_enabled": false,
+  "runtime": {
+    "status": "PROVIDER_UNAVAILABLE"
+  }
+}

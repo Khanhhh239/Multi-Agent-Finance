@@ -1,0 +1,83 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "default": "explanation-v2-1",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "enabled": {
+      "default": false,
+      "title": "Enabled",
+      "type": "boolean"
+    },
+    "provider": {
+      "const": "ollama",
+      "default": "ollama",
+      "title": "Provider",
+      "type": "string"
+    },
+    "endpoint": {
+      "default": "http://127.0.0.1:11434/api/chat",
+      "title": "Endpoint",
+      "type": "string"
+    },
+    "model": {
+      "default": "qwen3:8b",
+      "title": "Model",
+      "type": "string"
+    },
+    "model_revision": {
+      "default": "UNVERIFIED",
+      "title": "Model Revision",
+      "type": "string"
+    },
+    "timeout_seconds": {
+      "default": 20,
+      "exclusiveMinimum": 0,
+      "maximum": 60,
+      "title": "Timeout Seconds",
+      "type": "number"
+    },
+    "max_output_tokens": {
+      "default": 1536,
+      "maximum": 4096,
+      "minimum": 128,
+      "title": "Max Output Tokens",
+      "type": "integer"
+    },
+    "max_context_bytes": {
+      "default": 48000,
+      "maximum": 128000,
+      "minimum": 1024,
+      "title": "Max Context Bytes",
+      "type": "integer"
+    },
+    "max_response_bytes": {
+      "default": 64000,
+      "maximum": 256000,
+      "minimum": 1024,
+      "title": "Max Response Bytes",
+      "type": "integer"
+    },
+    "top_k": {
+      "default": 3,
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Top K",
+      "type": "integer"
+    },
+    "max_facts": {
+      "default": 30,
+      "maximum": 100,
+      "minimum": 5,
+      "title": "Max Facts",
+      "type": "integer"
+    }
+  },
+  "title": "Policy",
+  "type": "object"
+}
