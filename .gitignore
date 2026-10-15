@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+data/raw/
+data/interim/
+data/processed/
+data/synthetic/*/*.parquet
+data/synthetic/*/einvoice_xml/
+outputs/**/*.parquet
+outputs/**/*.log
+*.log

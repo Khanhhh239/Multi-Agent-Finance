@@ -1,0 +1,7 @@
+detector,params,world,detection_rate_180d,median_lag_days,false_alarms_per_cust_year,macro_alarms_per_cust_year,n_eligible_shifted
+CUSUM [pit],"{'k': 0.25, 'h': 5}",src (tuned),0.5555555555555556,61.0,0.46641070802057216,0.1503307240727464,18
+CUSUM [pit],"{'k': 0.25, 'h': 5}",held-out (tgt+sens_uk+sens_coface),0.5238095238095238,50.0,0.6333922242128424,0.20206704796015765,21
+Page-Hinkley [pit],"{'delta': 0.1, 'lam': 6}",src (tuned),0.5,75.0,0.3040877894349001,0.10022048271516426,18
+Page-Hinkley [pit],"{'delta': 0.1, 'lam': 6}",held-out (tgt+sens_uk+sens_coface),0.42857142857142855,65.0,0.42439411656012,0.1348890847860683,21
+BOCPD [pit],"{'hazard': 0.03333333333333333, 'thr': 0.3}",src (tuned),0.1111111111111111,89.0,0.0985073120704606,0.02869560829878635,18
+BOCPD [pit],"{'hazard': 0.03333333333333333, 'thr': 0.3}",held-out (tgt+sens_uk+sens_coface),0.09523809523809523,108.0,0.1322232925966203,0.03998688284171985,21

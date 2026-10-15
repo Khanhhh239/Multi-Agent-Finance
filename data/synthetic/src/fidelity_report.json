@@ -1,0 +1,88 @@
+{
+  "A_calibration_targets": {
+    "target_overall": {
+      "paid_on_time": 0.58,
+      "overdue": 0.39,
+      "bad_debt": 0.03
+    },
+    "achieved": {
+      "food_processing": {
+        "ontime": 0.5223,
+        "overdue": 0.4334,
+        "bad_debt": 0.0443,
+        "avg_term_days": 33.0792
+      },
+      "plastic_rubber": {
+        "ontime": 0.5469,
+        "overdue": 0.4118,
+        "bad_debt": 0.0413,
+        "avg_term_days": 44.7778
+      },
+      "services": {
+        "ontime": 0.4539,
+        "overdue": 0.4912,
+        "bad_debt": 0.0548,
+        "avg_term_days": 37.076
+      },
+      "steel_metals": {
+        "ontime": 0.5873,
+        "overdue": 0.3978,
+        "bad_debt": 0.0149,
+        "avg_term_days": 44.969
+      },
+      "textile_clothing": {
+        "ontime": 0.5422,
+        "overdue": 0.4221,
+        "bad_debt": 0.0356,
+        "avg_term_days": 39.4026
+      },
+      "wholesale": {
+        "ontime": 0.4903,
+        "overdue": 0.4841,
+        "bad_debt": 0.0256,
+        "avg_term_days": 34.4525
+      },
+      "ALL": {
+        "ontime": 0.5438,
+        "overdue": 0.4243,
+        "bad_debt": 0.0319,
+        "avg_term_days": 41.5922
+      }
+    },
+    "credit_share_by_value": 0.5888,
+    "target_credit_share": 0.65
+  },
+  "B_independent_checks": {
+    "synthetic_median_over_firms": {
+      "weekend_share_paid": 0.0014,
+      "amount_skew": 4.574999999999999,
+      "delay_var_share_customer": 0.20450000000000002,
+      "customer_persistence_spearman": 0.7224999999999999,
+      "benford_mad": 0.0075,
+      "monthly_count_cv": 0.3685,
+      "top10_customer_share": 0.538
+    },
+    "pooled_late_buckets": {
+      "1_30": 0.4609,
+      "early": 0.2522,
+      "on_due": 0.1689,
+      "31_60": 0.0767,
+      "60p": 0.0413
+    },
+    "reference_customer_invoices": {
+      "weekend_share_paid": 0.0037,
+      "amount_skew": 2.99,
+      "delay_var_share_customer": 0.597,
+      "customer_persistence_spearman": 0.75,
+      "benford_mad": 0.0082,
+      "monthly_count_cv": 0.181,
+      "top10_customer_share": 0.429
+    }
+  },
+  "cash": {
+    "share_firm_days_negative_balance": 0.0239,
+    "firms_with_any_shortfall": 26,
+    "n_firms": 40,
+    "median_buffer_days": 23.15926527932544
+  }
+}

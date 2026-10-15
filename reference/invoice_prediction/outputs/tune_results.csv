@@ -1,0 +1,4 @@
+config,val_mae,val_pinball,best_iter,params
+C0,2.871354615095166,1.435677307547583,79,"{'num_leaves': 31, 'learning_rate': 0.05, 'min_child_samples': 20, 'feature_fraction': 0.8, 'bagging_fraction': 0.8, 'reg_lambda': 1.0}"
+C1,2.880982274121718,1.440491137060859,104,"{'num_leaves': 63, 'learning_rate': 0.03, 'min_child_samples': 40, 'feature_fraction': 0.7, 'bagging_fraction': 0.7, 'reg_lambda': 5.0}"
+C2,2.9608660033894476,1.4804330016947238,40,"{'num_leaves': 15, 'learning_rate': 0.08, 'min_child_samples': 10, 'feature_fraction': 0.9, 'bagging_fraction': 0.9, 'reg_lambda': 0.5}"

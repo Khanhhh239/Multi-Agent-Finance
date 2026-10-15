@@ -1,0 +1,82 @@
+{
+  "A_calibration_targets": {
+    "target_overall": {
+      "paid_on_time": 0.58,
+      "overdue": 0.39,
+      "bad_debt": 0.03
+    },
+    "achieved": {
+      "plastic_rubber": {
+        "ontime": 0.5618,
+        "overdue": 0.375,
+        "bad_debt": 0.0632,
+        "avg_term_days": 47.9779
+      },
+      "services": {
+        "ontime": 0.5703,
+        "overdue": 0.3601,
+        "bad_debt": 0.0696,
+        "avg_term_days": 31.5435
+      },
+      "steel_metals": {
+        "ontime": 0.5534,
+        "overdue": 0.4322,
+        "bad_debt": 0.0143,
+        "avg_term_days": 39.7698
+      },
+      "textile_clothing": {
+        "ontime": 0.5369,
+        "overdue": 0.4044,
+        "bad_debt": 0.0587,
+        "avg_term_days": 31.69
+      },
+      "wholesale": {
+        "ontime": 0.5685,
+        "overdue": 0.4099,
+        "bad_debt": 0.0217,
+        "avg_term_days": 33.688
+      },
+      "ALL": {
+        "ontime": 0.552,
+        "overdue": 0.3999,
+        "bad_debt": 0.0481,
+        "avg_term_days": 35.1676
+      }
+    },
+    "credit_share_by_value": 0.5716,
+    "target_credit_share": 0.65
+  },
+  "B_independent_checks": {
+    "synthetic_median_over_firms": {
+      "weekend_share_paid": 0.0015,
+      "amount_skew": 4.800000000000001,
+      "delay_var_share_customer": 0.1675,
+      "customer_persistence_spearman": 0.7,
+      "benford_mad": 0.009250000000000001,
+      "monthly_count_cv": 0.352,
+      "top10_customer_share": 0.5655
+    },
+    "pooled_late_buckets": {
+      "1_30": 0.4954,
+      "early": 0.2098,
+      "on_due": 0.1991,
+      "60p": 0.0488,
+      "31_60": 0.0469
+    },
+    "reference_customer_invoices": {
+      "weekend_share_paid": 0.0037,
+      "amount_skew": 2.99,
+      "delay_var_share_customer": 0.597,
+      "customer_persistence_spearman": 0.75,
+      "benford_mad": 0.0082,
+      "monthly_count_cv": 0.181,
+      "top10_customer_share": 0.429
+    }
+  },
+  "cash": {
+    "share_firm_days_negative_balance": 0.0458,
+    "firms_with_any_shortfall": 4,
+    "n_firms": 12,
+    "median_buffer_days": 45.485068395356556
+  }
+}

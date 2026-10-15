@@ -1,0 +1,138 @@
+{
+  "wdi_vn": {
+    "license": "CC BY 4.0",
+    "role": "macro",
+    "fetched_utc": "2026-10-14T16:42:52+00:00",
+    "files": [
+      {
+        "path": "wdi_vn/wdi_vietnam.csv",
+        "bytes": 24822,
+        "sha256": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+      }
+    ]
+  },
+  "oxcgrt": {
+    "license": "CC BY 4.0",
+    "role": "T7 mốc gãy cấu trúc Việt Nam 2020-2022; T12 chèn sốc",
+    "fetched_utc": "2026-10-14T16:44:19+00:00",
+    "files": [
+      {
+        "path": "oxcgrt/OxCGRT_compact_national_v1.csv",
+        "bytes": 43837034,
+        "sha256": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79"
+      }
+    ]
+  },
+  "uk_ppr": {
+    "license": "Open Government Licence v3.0",
+    "role": "T12 hình dạng trễ 30/31-60/60+, tỷ lệ tranh chấp (T3)",
+    "fetched_utc": "2026-10-14T16:45:11+00:00",
+    "files": [
+      {
+        "path": "uk_ppr/payment_practices.csv",
+        "bytes": 103147888,
+        "sha256": "3177f12bfd4fb9f3873d363ccadc44bd01f29cdc5dabb9973addfcf866576298"
+      }
+    ]
+  },
+  "online_retail_ii": {
+    "license": "CC BY 4.0",
+    "role": "T4 doanh thu mới (mùa vụ, khách bán buôn), T1 nhịp mua của khách",
+    "fetched_utc": "2026-10-14T16:46:53+00:00",
+    "files": [
+      {
+        "path": "online_retail_ii/online_retail_ii.zip",
+        "bytes": 45622418,
+        "sha256": "572e36277c2390fbfde10664750731e0a86f55e33470d91919085f0408e67bfb"
+      }
+    ]
+  },
+  "berka": {
+    "license": "PKDD'99 public challenge data (mirror github.com/jlacko/berka-dataset)",
+    "role": "T6 độ phủ khoảng trên chuỗi dòng tiền thật; T7 điểm gãy; T2 vỡ nợ khoản vay",
+    "fetched_utc": "2026-10-14T16:47:05+00:00",
+    "files": [
+      {
+        "path": "berka/account.asc",
+        "bytes": 155356,
+        "sha256": "58d7f50abd72e9b1a5568346f74bb54cd71224ee1db9f09a27d7cac563f38cc6"
+      },
+      {
+        "path": "berka/client.asc",
+        "bytes": 94820,
+        "sha256": "e435c6b92d246f4f0dfd5e2827469d745c06238714c32b3ffb415eebe794e1a7"
+      },
+      {
+        "path": "berka/disp.asc",
+        "bytes": 129716,
+        "sha256": "ebd801f77b6d322e8ebc08e52f188e7c8fca539325f85f57f8c73434da9d32d8"
+      },
+      {
+        "path": "berka/district.asc",
+        "bytes": 6574,
+        "sha256": "7f03cf3b9b82f0fdcc3abdf6cc716f145db8e9875c68e2d2e2f7151e9ecf4df3"
+      },
+      {
+        "path": "berka/loan.asc",
+        "bytes": 27037,
+        "sha256": "68535f609a254aa7a3f03dd8e27dcb822b532df12a0d6046f0666b8dc0b8ae8e"
+      },
+      {
+        "path": "berka/order.asc",
+        "bytes": 273800,
+        "sha256": "035930fa6acd2ca42a935e654b21e1bb260248f49b6dc6e7de6351b7c4d56d02"
+      },
+      {
+        "path": "berka/trans.asc",
+        "bytes": 69406578,
+        "sha256": "75ab2f39df9d79d79c5c900de90ddd28248b689f214598ac9fa2ff0f574a70d2"
+      }
+    ]
+  },
+  "customer_invoices": {
+    "license": "không rõ (bản sao GitHub của Kaggle pradumn203)",
+    "role": "T1 bộ AR giống ERP (độ tin cậy C) — chỉ để thử phương pháp",
+    "fetched_utc": "2026-10-14T16:47:06+00:00",
+    "files": [
+      {
+        "path": "customer_invoices/Dataset.csv",
+        "bytes": 7889071,
+        "sha256": "4f2d7db57c0cc66aee5e44522d5554689c036e5fccd2980192b1af148d501590"
+      }
+    ]
+  },
+  "sba_7a": {
+    "license": "US Government public data (SBA FOIA)",
+    "role": "T2 xác suất vỡ nợ doanh nghiệp nhỏ (PIF vs CHGOFF)",
+    "fetched_utc": "2026-10-14T16:50:08+00:00",
+    "files": [
+      {
+        "path": "sba/7a_504_foia_data_dictionary.xlsx",
+        "bytes": 24529,
+        "sha256": "777ba97a6f92e325f79905610816cb59d41f1971cd964c54dc30ef02730a3941"
+      },
+      {
+        "path": "sba/FOIA_7a_FY2010_FY2019.csv",
+        "bytes": 255101999,
+        "sha256": "01a3e2c7988a6f4052e53f218a309feb2ec2fe42887bebdc0fa94ac8b1024ade"
+      },
+      {
+        "path": "sba/FOIA_7a_FY2020_Present.csv",
+        "bytes": 181130871,
+        "sha256": "6c1e9132b5141a19f82bdc8ccafb86c9a01662461cad41ddb36a3cf409d8a4fe"
+      }
+    ]
+  },
+  "bpi2019": {
+    "license": "CC BY 4.0",
+    "role": "T1 thời gian thanh toán hoá đơn thật (phía phải trả), T9 bằng chứng ghi sổ theo lô",
+    "fetched_utc": "2026-10-14T16:55:38+00:00",
+    "files": [
+      {
+        "path": "bpi2019/BPI_Challenge_2019.xes",
+        "bytes": 728558522,
+        "sha256": "af63bc687fc4152f2123b05c3af7772b37ef3fce2d3f67f812666c9e356baae7"
+      }
+    ]
+  }
+}

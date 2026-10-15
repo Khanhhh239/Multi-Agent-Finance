@@ -1,0 +1,76 @@
+{
+  "A_calibration_targets": {
+    "target_overall": {
+      "paid_on_time": 0.58,
+      "overdue": 0.39,
+      "bad_debt": 0.03
+    },
+    "achieved": {
+      "plastic_rubber": {
+        "ontime": 0.5202,
+        "overdue": 0.4307,
+        "bad_debt": 0.0491,
+        "avg_term_days": 56.768
+      },
+      "steel_metals": {
+        "ontime": 0.5992,
+        "overdue": 0.3912,
+        "bad_debt": 0.0097,
+        "avg_term_days": 39.1185
+      },
+      "textile_clothing": {
+        "ontime": 0.593,
+        "overdue": 0.3702,
+        "bad_debt": 0.0368,
+        "avg_term_days": 36.2578
+      },
+      "wholesale": {
+        "ontime": 0.6631,
+        "overdue": 0.3103,
+        "bad_debt": 0.0266,
+        "avg_term_days": 45.8912
+      },
+      "ALL": {
+        "ontime": 0.5704,
+        "overdue": 0.392,
+        "bad_debt": 0.0376,
+        "avg_term_days": 48.2663
+      }
+    },
+    "credit_share_by_value": 0.6396,
+    "target_credit_share": 0.65
+  },
+  "B_independent_checks": {
+    "synthetic_median_over_firms": {
+      "weekend_share_paid": 0.0008,
+      "amount_skew": 4.75,
+      "delay_var_share_customer": 0.1945,
+      "customer_persistence_spearman": 0.829,
+      "benford_mad": 0.01005,
+      "monthly_count_cv": 0.41100000000000003,
+      "top10_customer_share": 0.699
+    },
+    "pooled_late_buckets": {
+      "1_30": 0.3863,
+      "early": 0.3368,
+      "on_due": 0.1302,
+      "31_60": 0.0841,
+      "60p": 0.0626
+    },
+    "reference_customer_invoices": {
+      "weekend_share_paid": 0.0037,
+      "amount_skew": 2.99,
+      "delay_var_share_customer": 0.597,
+      "customer_persistence_spearman": 0.75,
+      "benford_mad": 0.0082,
+      "monthly_count_cv": 0.181,
+      "top10_customer_share": 0.429
+    }
+  },
+  "cash": {
+    "share_firm_days_negative_balance": 0.0978,
+    "firms_with_any_shortfall": 12,
+    "n_firms": 14,
+    "median_buffer_days": 29.142968673538054
+  }
+}

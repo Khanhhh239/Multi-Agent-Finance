@@ -1,0 +1,8 @@
+rule,value,role,pass,ket_luan
+R2 invoice MAE>=10% (mean-of-cutoffs),+11.5%,gate,True,PASS
+R4 invoice coverage 75-85% (CQR test),84.9%,gate,True,PASS
+R1a cash wMAPE vs B1 diem,18.87% vs 10.46%,gate,False,FAIL
+R1b cash CRPS vs B1-dist,0.1255 vs 0.1297,gate,True,PASS
+Action value-precision@100,43.35% vs 42.24%,gate,True,PASS
+S1 unique-invoice>=10%,+8.3%,do nhay,False,FAIL
+S3 khong stacking (CatBoost nostack>=10%),+10.1% (LGBM +4.6%),do nhay,True,PASS
