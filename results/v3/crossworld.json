@@ -1,0 +1,3072 @@
+{
+ "w3_s201": {
+  "Rules+Graph (hand weights)": {
+   "ap": 0.2360223328198085,
+   "r_precision": 0.24,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 17,
+    "precision": 0.0787037037037037,
+    "recall": 0.22666666666666666,
+    "hard_neg_alert_rate": 0.011283497884344146,
+    "cases": 51,
+    "case_recall": 0.3333333333333333,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.0787037037037037
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 24,
+    "precision": 0.037037037037037035,
+    "recall": 0.32,
+    "hard_neg_alert_rate": 0.03455571227080395,
+    "cases": 51,
+    "case_recall": 0.47058823529411764,
+    "median_delay_days": 0.0,
+    "entity_alerts": 453,
+    "entity_precision": 0.052980132450331126
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.6666666666666666
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.375
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.1111111111111111
+    }
+   }
+  },
+  "Rules (weights pretrained)": {
+   "ap": 0.4209881079470841,
+   "r_precision": 0.4,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 29,
+    "precision": 0.13425925925925927,
+    "recall": 0.38666666666666666,
+    "hard_neg_alert_rate": 0.011283497884344146,
+    "cases": 51,
+    "case_recall": 0.5686274509803921,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.13425925925925927
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 37,
+    "precision": 0.05709876543209876,
+    "recall": 0.49333333333333335,
+    "hard_neg_alert_rate": 0.045133991537376586,
+    "cases": 51,
+    "case_recall": 0.6862745098039216,
+    "median_delay_days": 0.0,
+    "entity_alerts": 614,
+    "entity_precision": 0.06026058631921824
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "EntityDeviation": {
+   "ap": 0.009480440128574874,
+   "r_precision": 0.02666666666666667,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 7,
+    "precision": 0.032407407407407406,
+    "recall": 0.09333333333333334,
+    "hard_neg_alert_rate": 0.036671368124118475,
+    "cases": 51,
+    "case_recall": 0.0784313725490196,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.032407407407407406
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 13,
+    "precision": 0.020061728395061727,
+    "recall": 0.17333333333333334,
+    "hard_neg_alert_rate": 0.07052186177715092,
+    "cases": 51,
+    "case_recall": 0.09803921568627451,
+    "median_delay_days": 0.0,
+    "entity_alerts": 581,
+    "entity_precision": 0.022375215146299483
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "LGBM[friend190] pretrained": {
+   "ap": 0.7978408909223871,
+   "r_precision": 0.7733333333333333,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 50,
+    "precision": 0.23148148148148148,
+    "recall": 0.6666666666666666,
+    "hard_neg_alert_rate": 0.023977433004231313,
+    "cases": 51,
+    "case_recall": 0.803921568627451,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.23148148148148148
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 65,
+    "precision": 0.10030864197530864,
+    "recall": 0.8666666666666667,
+    "hard_neg_alert_rate": 0.06770098730606489,
+    "cases": 51,
+    "case_recall": 0.9607843137254902,
+    "median_delay_days": 0.0,
+    "entity_alerts": 632,
+    "entity_precision": 0.09968354430379747
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.7777777777777778
+    }
+   }
+  },
+  "L3 pretrained (friend190+eng+rules)": {
+   "ap": 0.960508123616552,
+   "r_precision": 0.9066666666666666,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 57,
+    "precision": 0.2638888888888889,
+    "recall": 0.76,
+    "hard_neg_alert_rate": 0.045839210155148094,
+    "cases": 51,
+    "case_recall": 0.8823529411764706,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.2638888888888889
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 75,
+    "precision": 0.11574074074074074,
+    "recall": 1.0,
+    "hard_neg_alert_rate": 0.16431593794076163,
+    "cases": 51,
+    "case_recall": 1.0,
+    "median_delay_days": 0.0,
+    "entity_alerts": 629,
+    "entity_precision": 0.11605723370429252
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 1.0
+    }
+   }
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.24211624781909927,
+   "r_precision": 0.22666666666666666,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 18,
+    "precision": 0.08333333333333333,
+    "recall": 0.24,
+    "hard_neg_alert_rate": 0.028913963328631876,
+    "cases": 51,
+    "case_recall": 0.3333333333333333,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.08333333333333333
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 27,
+    "precision": 0.041666666666666664,
+    "recall": 0.36,
+    "hard_neg_alert_rate": 0.06417489421720733,
+    "cases": 51,
+    "case_recall": 0.45098039215686275,
+    "median_delay_days": 0.0,
+    "entity_alerts": 510,
+    "entity_precision": 0.052941176470588235
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.375
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "Fusion max(RulesPretrained,Entity)": {
+   "ap": 0.4022224953980528,
+   "r_precision": 0.4,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 30,
+    "precision": 0.1388888888888889,
+    "recall": 0.4,
+    "hard_neg_alert_rate": 0.02609308885754584,
+    "cases": 51,
+    "case_recall": 0.5882352941176471,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.1388888888888889
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 41,
+    "precision": 0.06327160493827161,
+    "recall": 0.5466666666666666,
+    "hard_neg_alert_rate": 0.06770098730606489,
+    "cases": 51,
+    "case_recall": 0.7254901960784313,
+    "median_delay_days": 0.0,
+    "entity_alerts": 607,
+    "entity_precision": 0.06754530477759473
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "Fusion max(L3,RulesPretrained,Entity)": {
+   "ap": 0.7424035923939097,
+   "r_precision": 0.5866666666666667,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 54,
+    "precision": 0.25,
+    "recall": 0.72,
+    "hard_neg_alert_rate": 0.029619181946403384,
+    "cases": 51,
+    "case_recall": 0.8431372549019608,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.25
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 74,
+    "precision": 0.11419753086419752,
+    "recall": 0.9866666666666667,
+    "hard_neg_alert_rate": 0.10437235543018336,
+    "cases": 51,
+    "case_recall": 0.9803921568627451,
+    "median_delay_days": 0.0,
+    "entity_alerts": 618,
+    "entity_precision": 0.11650485436893204
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 1.0
+    }
+   }
+  },
+  "Fusion mean(L3,Entity)": {
+   "ap": 0.11866012791559537,
+   "r_precision": 0.2,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 16,
+    "precision": 0.07407407407407407,
+    "recall": 0.21333333333333335,
+    "hard_neg_alert_rate": 0.03737658674188998,
+    "cases": 51,
+    "case_recall": 0.1568627450980392,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.07407407407407407
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 26,
+    "precision": 0.040123456790123455,
+    "recall": 0.3466666666666667,
+    "hard_neg_alert_rate": 0.07404795486600846,
+    "cases": 51,
+    "case_recall": 0.21568627450980393,
+    "median_delay_days": 0.0,
+    "entity_alerts": 604,
+    "entity_precision": 0.04304635761589404
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  }
+ },
+ "w3_s202": {
+  "Rules+Graph (hand weights)": {
+   "ap": 0.24723802558079538,
+   "r_precision": 0.24,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 20,
+    "precision": 0.09259259259259259,
+    "recall": 0.26666666666666666,
+    "hard_neg_alert_rate": 0.009034051424600417,
+    "cases": 50,
+    "case_recall": 0.4,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.09259259259259259
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 25,
+    "precision": 0.038580246913580245,
+    "recall": 0.3333333333333333,
+    "hard_neg_alert_rate": 0.03266157053509382,
+    "cases": 50,
+    "case_recall": 0.46,
+    "median_delay_days": 0.0,
+    "entity_alerts": 433,
+    "entity_precision": 0.053117782909930716
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.375
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "Rules (weights pretrained)": {
+   "ap": 0.41307920136211973,
+   "r_precision": 0.4,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 31,
+    "precision": 0.14351851851851852,
+    "recall": 0.41333333333333333,
+    "hard_neg_alert_rate": 0.006254343293954135,
+    "cases": 50,
+    "case_recall": 0.6,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.14351851851851852
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 35,
+    "precision": 0.05401234567901234,
+    "recall": 0.4666666666666667,
+    "hard_neg_alert_rate": 0.031966643502432245,
+    "cases": 50,
+    "case_recall": 0.64,
+    "median_delay_days": 0.0,
+    "entity_alerts": 613,
+    "entity_precision": 0.053833605220228384
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.2222222222222222
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    }
+   }
+  },
+  "EntityDeviation": {
+   "ap": 0.012883653294186498,
+   "r_precision": 0.013333333333333334,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 7,
+    "precision": 0.032407407407407406,
+    "recall": 0.09333333333333334,
+    "hard_neg_alert_rate": 0.03127171646977067,
+    "cases": 50,
+    "case_recall": 0.06,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.032407407407407406
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 12,
+    "precision": 0.018518518518518517,
+    "recall": 0.16,
+    "hard_neg_alert_rate": 0.08061153578874218,
+    "cases": 50,
+    "case_recall": 0.1,
+    "median_delay_days": 0.0,
+    "entity_alerts": 570,
+    "entity_precision": 0.01929824561403509
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "LGBM[friend190] pretrained": {
+   "ap": 0.7445979598249246,
+   "r_precision": 0.6933333333333334,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 48,
+    "precision": 0.2222222222222222,
+    "recall": 0.64,
+    "hard_neg_alert_rate": 0.018068102849200834,
+    "cases": 50,
+    "case_recall": 0.84,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.2222222222222222
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 60,
+    "precision": 0.09259259259259259,
+    "recall": 0.8,
+    "hard_neg_alert_rate": 0.059763724808895066,
+    "cases": 50,
+    "case_recall": 0.94,
+    "median_delay_days": 0.0,
+    "entity_alerts": 626,
+    "entity_precision": 0.09424920127795527
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "L3 pretrained (friend190+eng+rules)": {
+   "ap": 0.9471664344242984,
+   "r_precision": 0.8666666666666667,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 58,
+    "precision": 0.26851851851851855,
+    "recall": 0.7733333333333333,
+    "hard_neg_alert_rate": 0.05211952744961779,
+    "cases": 50,
+    "case_recall": 0.92,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.26851851851851855
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 72,
+    "precision": 0.1111111111111111,
+    "recall": 0.96,
+    "hard_neg_alert_rate": 0.17095205003474634,
+    "cases": 50,
+    "case_recall": 1.0,
+    "median_delay_days": 0.0,
+    "entity_alerts": 634,
+    "entity_precision": 0.10725552050473186
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.6666666666666666
+    }
+   }
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.185581215240758,
+   "r_precision": 0.24,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 24,
+    "precision": 0.1111111111111111,
+    "recall": 0.32,
+    "hard_neg_alert_rate": 0.020847810979847115,
+    "cases": 50,
+    "case_recall": 0.42,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.1111111111111111
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 30,
+    "precision": 0.046296296296296294,
+    "recall": 0.4,
+    "hard_neg_alert_rate": 0.06045865184155664,
+    "cases": 50,
+    "case_recall": 0.42,
+    "median_delay_days": 0.0,
+    "entity_alerts": 510,
+    "entity_precision": 0.052941176470588235
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.2222222222222222
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "Fusion max(RulesPretrained,Entity)": {
+   "ap": 0.3223826464587117,
+   "r_precision": 0.37333333333333335,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 35,
+    "precision": 0.16203703703703703,
+    "recall": 0.4666666666666667,
+    "hard_neg_alert_rate": 0.020847810979847115,
+    "cases": 50,
+    "case_recall": 0.62,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.16203703703703703
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 43,
+    "precision": 0.06635802469135803,
+    "recall": 0.5733333333333334,
+    "hard_neg_alert_rate": 0.06045865184155664,
+    "cases": 50,
+    "case_recall": 0.7,
+    "median_delay_days": 0.0,
+    "entity_alerts": 607,
+    "entity_precision": 0.06754530477759473
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.2222222222222222
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.375
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    }
+   }
+  },
+  "Fusion max(L3,RulesPretrained,Entity)": {
+   "ap": 0.6022497905433086,
+   "r_precision": 0.5066666666666667,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 50,
+    "precision": 0.23148148148148148,
+    "recall": 0.6666666666666666,
+    "hard_neg_alert_rate": 0.031966643502432245,
+    "cases": 50,
+    "case_recall": 0.78,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.23148148148148148
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 71,
+    "precision": 0.1095679012345679,
+    "recall": 0.9466666666666667,
+    "hard_neg_alert_rate": 0.0965948575399583,
+    "cases": 50,
+    "case_recall": 1.0,
+    "median_delay_days": 0.0,
+    "entity_alerts": 617,
+    "entity_precision": 0.1085899513776337
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.6666666666666666
+    }
+   }
+  },
+  "Fusion mean(L3,Entity)": {
+   "ap": 0.1774323764477195,
+   "r_precision": 0.2,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 16,
+    "precision": 0.07407407407407407,
+    "recall": 0.21333333333333335,
+    "hard_neg_alert_rate": 0.029881862404447533,
+    "cases": 50,
+    "case_recall": 0.16,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.07407407407407407
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 27,
+    "precision": 0.041666666666666664,
+    "recall": 0.36,
+    "hard_neg_alert_rate": 0.07435719249478805,
+    "cases": 50,
+    "case_recall": 0.22,
+    "median_delay_days": 0.0,
+    "entity_alerts": 600,
+    "entity_precision": 0.03833333333333333
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.1111111111111111
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  }
+ },
+ "w3_s203": {
+  "Rules+Graph (hand weights)": {
+   "ap": 0.2598694685819194,
+   "r_precision": 0.24,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 19,
+    "precision": 0.08796296296296297,
+    "recall": 0.25333333333333335,
+    "hard_neg_alert_rate": 0.011564625850340135,
+    "cases": 49,
+    "case_recall": 0.3469387755102041,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.08796296296296297
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 26,
+    "precision": 0.040123456790123455,
+    "recall": 0.3466666666666667,
+    "hard_neg_alert_rate": 0.03333333333333333,
+    "cases": 49,
+    "case_recall": 0.46938775510204084,
+    "median_delay_days": 0.0,
+    "entity_alerts": 448,
+    "entity_precision": 0.05580357142857143
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.7777777777777778
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.25
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "Rules (weights pretrained)": {
+   "ap": 0.436974653831063,
+   "r_precision": 0.44,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 33,
+    "precision": 0.1527777777777778,
+    "recall": 0.44,
+    "hard_neg_alert_rate": 0.006802721088435374,
+    "cases": 49,
+    "case_recall": 0.5918367346938775,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.1527777777777778
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 38,
+    "precision": 0.05864197530864197,
+    "recall": 0.5066666666666667,
+    "hard_neg_alert_rate": 0.0380952380952381,
+    "cases": 49,
+    "case_recall": 0.673469387755102,
+    "median_delay_days": 0.0,
+    "entity_alerts": 609,
+    "entity_precision": 0.06239737274220033
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    }
+   }
+  },
+  "EntityDeviation": {
+   "ap": 0.014850877738817943,
+   "r_precision": 0.04,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 8,
+    "precision": 0.037037037037037035,
+    "recall": 0.10666666666666667,
+    "hard_neg_alert_rate": 0.04217687074829932,
+    "cases": 49,
+    "case_recall": 0.10204081632653061,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.037037037037037035
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 12,
+    "precision": 0.018518518518518517,
+    "recall": 0.16,
+    "hard_neg_alert_rate": 0.10272108843537416,
+    "cases": 49,
+    "case_recall": 0.12244897959183673,
+    "median_delay_days": 0.0,
+    "entity_alerts": 568,
+    "entity_precision": 0.02112676056338028
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "LGBM[friend190] pretrained": {
+   "ap": 0.7826730957711707,
+   "r_precision": 0.72,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 47,
+    "precision": 0.2175925925925926,
+    "recall": 0.6266666666666667,
+    "hard_neg_alert_rate": 0.022448979591836733,
+    "cases": 49,
+    "case_recall": 0.7959183673469388,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.2175925925925926
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 63,
+    "precision": 0.09722222222222222,
+    "recall": 0.84,
+    "hard_neg_alert_rate": 0.08843537414965986,
+    "cases": 49,
+    "case_recall": 0.9183673469387755,
+    "median_delay_days": 0.0,
+    "entity_alerts": 621,
+    "entity_precision": 0.09822866344605476
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    }
+   }
+  },
+  "L3 pretrained (friend190+eng+rules)": {
+   "ap": 0.9582240718166124,
+   "r_precision": 0.9333333333333333,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 53,
+    "precision": 0.24537037037037038,
+    "recall": 0.7066666666666667,
+    "hard_neg_alert_rate": 0.05374149659863946,
+    "cases": 49,
+    "case_recall": 0.8367346938775511,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.24537037037037038
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 73,
+    "precision": 0.11265432098765432,
+    "recall": 0.9733333333333334,
+    "hard_neg_alert_rate": 0.17482993197278912,
+    "cases": 49,
+    "case_recall": 0.9795918367346939,
+    "median_delay_days": 0.0,
+    "entity_alerts": 631,
+    "entity_precision": 0.1109350237717908
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    }
+   }
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.1455533789386335,
+   "r_precision": 0.28,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 20,
+    "precision": 0.09259259259259259,
+    "recall": 0.26666666666666666,
+    "hard_neg_alert_rate": 0.031292517006802724,
+    "cases": 49,
+    "case_recall": 0.3469387755102041,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.09259259259259259
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 32,
+    "precision": 0.04938271604938271,
+    "recall": 0.4266666666666667,
+    "hard_neg_alert_rate": 0.07755102040816327,
+    "cases": 49,
+    "case_recall": 0.4897959183673469,
+    "median_delay_days": 0.0,
+    "entity_alerts": 526,
+    "entity_precision": 0.060836501901140684
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.2222222222222222
+    }
+   }
+  },
+  "Fusion max(RulesPretrained,Entity)": {
+   "ap": 0.23448234851674765,
+   "r_precision": 0.41333333333333333,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 29,
+    "precision": 0.13425925925925927,
+    "recall": 0.38666666666666666,
+    "hard_neg_alert_rate": 0.027210884353741496,
+    "cases": 49,
+    "case_recall": 0.5102040816326531,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.13425925925925927
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 47,
+    "precision": 0.07253086419753087,
+    "recall": 0.6266666666666667,
+    "hard_neg_alert_rate": 0.07551020408163266,
+    "cases": 49,
+    "case_recall": 0.7346938775510204,
+    "median_delay_days": 0.0,
+    "entity_alerts": 599,
+    "entity_precision": 0.07846410684474124
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    }
+   }
+  },
+  "Fusion max(L3,RulesPretrained,Entity)": {
+   "ap": 0.5049286105748806,
+   "r_precision": 0.5066666666666667,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 44,
+    "precision": 0.2037037037037037,
+    "recall": 0.5866666666666667,
+    "hard_neg_alert_rate": 0.03197278911564626,
+    "cases": 49,
+    "case_recall": 0.7142857142857143,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.2037037037037037
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 69,
+    "precision": 0.10648148148148148,
+    "recall": 0.92,
+    "hard_neg_alert_rate": 0.11632653061224489,
+    "cases": 49,
+    "case_recall": 0.9591836734693877,
+    "median_delay_days": 0.0,
+    "entity_alerts": 610,
+    "entity_precision": 0.10983606557377049
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.6666666666666666
+    }
+   }
+  },
+  "Fusion mean(L3,Entity)": {
+   "ap": 0.15788400888090212,
+   "r_precision": 0.2,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 17,
+    "precision": 0.0787037037037037,
+    "recall": 0.22666666666666666,
+    "hard_neg_alert_rate": 0.04217687074829932,
+    "cases": 49,
+    "case_recall": 0.1836734693877551,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.0787037037037037
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 26,
+    "precision": 0.040123456790123455,
+    "recall": 0.3466666666666667,
+    "hard_neg_alert_rate": 0.09795918367346938,
+    "cases": 49,
+    "case_recall": 0.24489795918367346,
+    "median_delay_days": 0.0,
+    "entity_alerts": 607,
+    "entity_precision": 0.04118616144975288
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.1111111111111111
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.25
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    }
+   }
+  }
+ },
+ "w3_s204": {
+  "Rules+Graph (hand weights)": {
+   "ap": 0.22800455257995877,
+   "r_precision": 0.22666666666666666,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 16,
+    "precision": 0.07407407407407407,
+    "recall": 0.21333333333333335,
+    "hard_neg_alert_rate": 0.006320224719101123,
+    "cases": 49,
+    "case_recall": 0.30612244897959184,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.07407407407407407
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 23,
+    "precision": 0.035493827160493825,
+    "recall": 0.30666666666666664,
+    "hard_neg_alert_rate": 0.025280898876404494,
+    "cases": 49,
+    "case_recall": 0.42857142857142855,
+    "median_delay_days": 0.0,
+    "entity_alerts": 416,
+    "entity_precision": 0.055288461538461536
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.6666666666666666
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.25
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "Rules (weights pretrained)": {
+   "ap": 0.39096448496965586,
+   "r_precision": 0.38666666666666666,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 26,
+    "precision": 0.12037037037037036,
+    "recall": 0.3466666666666667,
+    "hard_neg_alert_rate": 0.007022471910112359,
+    "cases": 49,
+    "case_recall": 0.4489795918367347,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.12037037037037036
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 33,
+    "precision": 0.05092592592592592,
+    "recall": 0.44,
+    "hard_neg_alert_rate": 0.0351123595505618,
+    "cases": 49,
+    "case_recall": 0.5714285714285714,
+    "median_delay_days": 0.0,
+    "entity_alerts": 620,
+    "entity_precision": 0.05161290322580645
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.25
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.25
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "EntityDeviation": {
+   "ap": 0.011531899481627052,
+   "r_precision": 0.0,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 7,
+    "precision": 0.032407407407407406,
+    "recall": 0.09333333333333334,
+    "hard_neg_alert_rate": 0.033707865168539325,
+    "cases": 49,
+    "case_recall": 0.10204081632653061,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.032407407407407406
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 14,
+    "precision": 0.021604938271604937,
+    "recall": 0.18666666666666668,
+    "hard_neg_alert_rate": 0.061095505617977525,
+    "cases": 49,
+    "case_recall": 0.14285714285714285,
+    "median_delay_days": 0.0,
+    "entity_alerts": 514,
+    "entity_precision": 0.02529182879377432
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "LGBM[friend190] pretrained": {
+   "ap": 0.8288357903729217,
+   "r_precision": 0.8,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 45,
+    "precision": 0.20833333333333334,
+    "recall": 0.6,
+    "hard_neg_alert_rate": 0.02457865168539326,
+    "cases": 49,
+    "case_recall": 0.7959183673469388,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.20833333333333334
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 62,
+    "precision": 0.09567901234567901,
+    "recall": 0.8266666666666667,
+    "hard_neg_alert_rate": 0.0723314606741573,
+    "cases": 49,
+    "case_recall": 0.9387755102040817,
+    "median_delay_days": 0.0,
+    "entity_alerts": 635,
+    "entity_precision": 0.09291338582677165
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    }
+   }
+  },
+  "L3 pretrained (friend190+eng+rules)": {
+   "ap": 0.9121806354252215,
+   "r_precision": 0.8666666666666667,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 51,
+    "precision": 0.2361111111111111,
+    "recall": 0.68,
+    "hard_neg_alert_rate": 0.05407303370786517,
+    "cases": 49,
+    "case_recall": 0.8367346938775511,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.2361111111111111
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 70,
+    "precision": 0.10802469135802469,
+    "recall": 0.9333333333333333,
+    "hard_neg_alert_rate": 0.16151685393258428,
+    "cases": 49,
+    "case_recall": 1.0,
+    "median_delay_days": 0.0,
+    "entity_alerts": 635,
+    "entity_precision": 0.10393700787401575
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    }
+   }
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.06795934492533719,
+   "r_precision": 0.21333333333333335,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 20,
+    "precision": 0.09259259259259259,
+    "recall": 0.26666666666666666,
+    "hard_neg_alert_rate": 0.02247191011235955,
+    "cases": 49,
+    "case_recall": 0.3673469387755102,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.09259259259259259
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 29,
+    "precision": 0.044753086419753084,
+    "recall": 0.38666666666666666,
+    "hard_neg_alert_rate": 0.05266853932584269,
+    "cases": 49,
+    "case_recall": 0.46938775510204084,
+    "median_delay_days": 0.0,
+    "entity_alerts": 476,
+    "entity_precision": 0.06092436974789916
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "Fusion max(RulesPretrained,Entity)": {
+   "ap": 0.126668187379643,
+   "r_precision": 0.30666666666666664,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 27,
+    "precision": 0.125,
+    "recall": 0.36,
+    "hard_neg_alert_rate": 0.023174157303370788,
+    "cases": 49,
+    "case_recall": 0.42857142857142855,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.125
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 42,
+    "precision": 0.06481481481481481,
+    "recall": 0.56,
+    "hard_neg_alert_rate": 0.05056179775280899,
+    "cases": 49,
+    "case_recall": 0.6530612244897959,
+    "median_delay_days": 0.0,
+    "entity_alerts": 571,
+    "entity_precision": 0.07180385288966724
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.25
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "Fusion max(L3,RulesPretrained,Entity)": {
+   "ap": 0.317286096816211,
+   "r_precision": 0.32,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 41,
+    "precision": 0.18981481481481483,
+    "recall": 0.5466666666666666,
+    "hard_neg_alert_rate": 0.030196629213483147,
+    "cases": 49,
+    "case_recall": 0.6530612244897959,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.18981481481481483
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 66,
+    "precision": 0.10185185185185185,
+    "recall": 0.88,
+    "hard_neg_alert_rate": 0.09620786516853932,
+    "cases": 49,
+    "case_recall": 0.9591836734693877,
+    "median_delay_days": 0.0,
+    "entity_alerts": 591,
+    "entity_precision": 0.1065989847715736
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    }
+   }
+  },
+  "Fusion mean(L3,Entity)": {
+   "ap": 0.16642775710875976,
+   "r_precision": 0.21333333333333335,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 17,
+    "precision": 0.0787037037037037,
+    "recall": 0.22666666666666666,
+    "hard_neg_alert_rate": 0.0351123595505618,
+    "cases": 49,
+    "case_recall": 0.1836734693877551,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.0787037037037037
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 25,
+    "precision": 0.038580246913580245,
+    "recall": 0.3333333333333333,
+    "hard_neg_alert_rate": 0.0723314606741573,
+    "cases": 49,
+    "case_recall": 0.24489795918367346,
+    "median_delay_days": 0.0,
+    "entity_alerts": 601,
+    "entity_precision": 0.03826955074875208
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.2222222222222222
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.25
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  }
+ },
+ "w3_s205": {
+  "Rules+Graph (hand weights)": {
+   "ap": 0.2542831061134342,
+   "r_precision": 0.25333333333333335,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 17,
+    "precision": 0.0787037037037037,
+    "recall": 0.22666666666666666,
+    "hard_neg_alert_rate": 0.008928571428571428,
+    "cases": 52,
+    "case_recall": 0.3269230769230769,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.0787037037037037
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 25,
+    "precision": 0.038580246913580245,
+    "recall": 0.3333333333333333,
+    "hard_neg_alert_rate": 0.024725274725274724,
+    "cases": 52,
+    "case_recall": 0.4423076923076923,
+    "median_delay_days": 0.0,
+    "entity_alerts": 401,
+    "entity_precision": 0.059850374064837904
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    }
+   }
+  },
+  "Rules (weights pretrained)": {
+   "ap": 0.4167118799862933,
+   "r_precision": 0.41333333333333333,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 28,
+    "precision": 0.12962962962962962,
+    "recall": 0.37333333333333335,
+    "hard_neg_alert_rate": 0.007554945054945055,
+    "cases": 52,
+    "case_recall": 0.5384615384615384,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.12962962962962962
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 33,
+    "precision": 0.05092592592592592,
+    "recall": 0.44,
+    "hard_neg_alert_rate": 0.03021978021978022,
+    "cases": 52,
+    "case_recall": 0.6153846153846154,
+    "median_delay_days": 0.0,
+    "entity_alerts": 606,
+    "entity_precision": 0.054455445544554455
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.375
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "EntityDeviation": {
+   "ap": 0.010528464019776385,
+   "r_precision": 0.02666666666666667,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 5,
+    "precision": 0.023148148148148147,
+    "recall": 0.06666666666666667,
+    "hard_neg_alert_rate": 0.036401098901098904,
+    "cases": 52,
+    "case_recall": 0.038461538461538464,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.023148148148148147
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 11,
+    "precision": 0.016975308641975308,
+    "recall": 0.14666666666666667,
+    "hard_neg_alert_rate": 0.07692307692307693,
+    "cases": 52,
+    "case_recall": 0.09615384615384616,
+    "median_delay_days": 0.0,
+    "entity_alerts": 571,
+    "entity_precision": 0.017513134851138354
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.375
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "LGBM[friend190] pretrained": {
+   "ap": 0.8101433499174927,
+   "r_precision": 0.7866666666666666,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 46,
+    "precision": 0.21296296296296297,
+    "recall": 0.6133333333333333,
+    "hard_neg_alert_rate": 0.017857142857142856,
+    "cases": 52,
+    "case_recall": 0.75,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.21296296296296297
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 62,
+    "precision": 0.09567901234567901,
+    "recall": 0.8266666666666667,
+    "hard_neg_alert_rate": 0.05837912087912088,
+    "cases": 52,
+    "case_recall": 0.9230769230769231,
+    "median_delay_days": 0.0,
+    "entity_alerts": 621,
+    "entity_precision": 0.0966183574879227
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.6666666666666666
+    }
+   }
+  },
+  "L3 pretrained (friend190+eng+rules)": {
+   "ap": 0.9661755810618267,
+   "r_precision": 0.9333333333333333,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 52,
+    "precision": 0.24074074074074073,
+    "recall": 0.6933333333333334,
+    "hard_neg_alert_rate": 0.04807692307692308,
+    "cases": 52,
+    "case_recall": 0.8461538461538461,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.24074074074074073
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 68,
+    "precision": 0.10493827160493827,
+    "recall": 0.9066666666666666,
+    "hard_neg_alert_rate": 0.14148351648351648,
+    "cases": 52,
+    "case_recall": 0.9615384615384616,
+    "median_delay_days": 0.0,
+    "entity_alerts": 622,
+    "entity_precision": 0.1045016077170418
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.8888888888888888
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    }
+   }
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.1634527448793832,
+   "r_precision": 0.24,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 18,
+    "precision": 0.08333333333333333,
+    "recall": 0.24,
+    "hard_neg_alert_rate": 0.024725274725274724,
+    "cases": 52,
+    "case_recall": 0.34615384615384615,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.08333333333333333
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 26,
+    "precision": 0.040123456790123455,
+    "recall": 0.3466666666666667,
+    "hard_neg_alert_rate": 0.05357142857142857,
+    "cases": 52,
+    "case_recall": 0.4423076923076923,
+    "median_delay_days": 0.0,
+    "entity_alerts": 479,
+    "entity_precision": 0.05219206680584551
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.5
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.0
+    }
+   }
+  },
+  "Fusion max(RulesPretrained,Entity)": {
+   "ap": 0.2681161455233127,
+   "r_precision": 0.4,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 30,
+    "precision": 0.1388888888888889,
+    "recall": 0.4,
+    "hard_neg_alert_rate": 0.024725274725274724,
+    "cases": 52,
+    "case_recall": 0.5769230769230769,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.1388888888888889
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 40,
+    "precision": 0.06172839506172839,
+    "recall": 0.5333333333333333,
+    "hard_neg_alert_rate": 0.057692307692307696,
+    "cases": 52,
+    "case_recall": 0.6538461538461539,
+    "median_delay_days": 0.0,
+    "entity_alerts": 604,
+    "entity_precision": 0.06456953642384106
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.4444444444444444
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.75
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.375
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    }
+   }
+  },
+  "Fusion max(L3,RulesPretrained,Entity)": {
+   "ap": 0.5806297682691695,
+   "r_precision": 0.5466666666666666,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 46,
+    "precision": 0.21296296296296297,
+    "recall": 0.6133333333333333,
+    "hard_neg_alert_rate": 0.024725274725274724,
+    "cases": 52,
+    "case_recall": 0.7692307692307693,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.21296296296296297
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 67,
+    "precision": 0.10339506172839506,
+    "recall": 0.8933333333333333,
+    "hard_neg_alert_rate": 0.08585164835164835,
+    "cases": 52,
+    "case_recall": 0.9807692307692307,
+    "median_delay_days": 0.0,
+    "entity_alerts": 607,
+    "entity_precision": 0.1070840197693575
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 0.625
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 1.0
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 0.875
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.5555555555555556
+    }
+   }
+  },
+  "Fusion mean(L3,Entity)": {
+   "ap": 0.17922351077643642,
+   "r_precision": 0.28,
+   "B1": {
+    "alerts": 216,
+    "alerts_per_1000": 8.64,
+    "tp": 20,
+    "precision": 0.09259259259259259,
+    "recall": 0.26666666666666666,
+    "hard_neg_alert_rate": 0.026785714285714284,
+    "cases": 52,
+    "case_recall": 0.17307692307692307,
+    "median_delay_days": 0.0,
+    "entity_alerts": 216,
+    "entity_precision": 0.09259259259259259
+   },
+   "B3": {
+    "alerts": 648,
+    "alerts_per_1000": 25.92,
+    "tp": 32,
+    "precision": 0.04938271604938271,
+    "recall": 0.4266666666666667,
+    "hard_neg_alert_rate": 0.06387362637362637,
+    "cases": 52,
+    "case_recall": 0.3076923076923077,
+    "median_delay_days": 0.0,
+    "entity_alerts": 595,
+    "entity_precision": 0.05042016806722689
+   },
+   "fam": {
+    "duplicate_payment": {
+     "n": 9,
+     "recall": 0.3333333333333333
+    },
+    "expense_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "ghost_vendor": {
+     "n": 9,
+     "recall": 0.1111111111111111
+    },
+    "kickback_overpricing": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "long_outstanding_advance": {
+     "n": 8,
+     "recall": 0.0
+    },
+    "payroll_padding": {
+     "n": 8,
+     "recall": 1.0
+    },
+    "period_end_adjustment": {
+     "n": 8,
+     "recall": 0.125
+    },
+    "risky_invoice": {
+     "n": 8,
+     "recall": 0.25
+    },
+    "split_payments": {
+     "n": 9,
+     "recall": 0.1111111111111111
+    }
+   }
+  }
+ }
+}

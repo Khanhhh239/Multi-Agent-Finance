@@ -1,0 +1,6792 @@
+{
+ "w3_s201": {
+  "in_distribution": {
+   "Rules (friend)": {
+    "alerts": 648,
+    "tp": 24,
+    "precision": 0.037037037037037035,
+    "recall": 0.32,
+    "case_recall": 0.47058823529411764,
+    "hard_neg_alert_rate": 0.039492242595204514,
+    "entity_precision": 0.05194805194805195,
+    "entity_alerts": 462
+   },
+   "Novelty (cold start)": {
+    "alerts": 648,
+    "tp": 27,
+    "precision": 0.041666666666666664,
+    "recall": 0.36,
+    "case_recall": 0.45098039215686275,
+    "hard_neg_alert_rate": 0.06417489421720733,
+    "entity_precision": 0.052941176470588235,
+    "entity_alerts": 510
+   },
+   "CES": {
+    "alerts": 648,
+    "tp": 55,
+    "precision": 0.08487654320987655,
+    "recall": 0.7333333333333333,
+    "case_recall": 0.7843137254901961,
+    "hard_neg_alert_rate": 0.06064880112834979,
+    "entity_precision": 0.08723747980613894,
+    "entity_alerts": 619
+   },
+   "CES 2+1": {
+    "alerts": 648,
+    "tp": 51,
+    "precision": 0.0787037037037037,
+    "recall": 0.68,
+    "case_recall": 0.7647058823529411,
+    "hard_neg_alert_rate": 0.05853314527503526,
+    "entity_precision": 0.08306188925081433,
+    "entity_alerts": 614
+   },
+   "CES 1+2": {
+    "alerts": 648,
+    "tp": 45,
+    "precision": 0.06944444444444445,
+    "recall": 0.6,
+    "case_recall": 0.7450980392156863,
+    "hard_neg_alert_rate": 0.06488011283497884,
+    "entity_precision": 0.0800711743772242,
+    "entity_alerts": 562
+   },
+   "L3": {
+    "alerts": 648,
+    "tp": 74,
+    "precision": 0.11419753086419752,
+    "recall": 0.9866666666666667,
+    "case_recall": 1.0,
+    "hard_neg_alert_rate": 0.13399153737658676,
+    "entity_precision": 0.11550632911392406,
+    "entity_alerts": 632
+   },
+   "L3 2+1": {
+    "alerts": 648,
+    "tp": 72,
+    "precision": 0.1111111111111111,
+    "recall": 0.96,
+    "case_recall": 1.0,
+    "hard_neg_alert_rate": 0.11847672778561354,
+    "entity_precision": 0.11234177215189874,
+    "entity_alerts": 632
+   },
+   "B1 Novelty": {
+    "alerts": 216,
+    "tp": 18,
+    "precision": 0.08333333333333333,
+    "recall": 0.24,
+    "case_recall": 0.3333333333333333,
+    "hard_neg_alert_rate": 0.028913963328631876,
+    "entity_precision": 0.08333333333333333,
+    "entity_alerts": 216
+   },
+   "B1 CES": {
+    "alerts": 216,
+    "tp": 39,
+    "precision": 0.18055555555555555,
+    "recall": 0.52,
+    "case_recall": 0.6862745098039216,
+    "hard_neg_alert_rate": 0.019746121297602257,
+    "entity_precision": 0.18055555555555555,
+    "entity_alerts": 216
+   },
+   "B1 L3": {
+    "alerts": 216,
+    "tp": 56,
+    "precision": 0.25925925925925924,
+    "recall": 0.7466666666666667,
+    "case_recall": 0.8627450980392157,
+    "hard_neg_alert_rate": 0.045133991537376586,
+    "entity_precision": 0.25925925925925924,
+    "entity_alerts": 216
+   },
+   "B2 CES 1+1": {
+    "alerts": 432,
+    "tp": 43,
+    "precision": 0.09953703703703703,
+    "recall": 0.5733333333333334,
+    "case_recall": 0.7450980392156863,
+    "hard_neg_alert_rate": 0.04372355430183357,
+    "entity_precision": 0.10238095238095238,
+    "entity_alerts": 420
+   },
+   "B2 L3 1+1": {
+    "alerts": 432,
+    "tp": 59,
+    "precision": 0.13657407407407407,
+    "recall": 0.7866666666666666,
+    "case_recall": 0.9215686274509803,
+    "hard_neg_alert_rate": 0.06981664315937941,
+    "entity_precision": 0.1378504672897196,
+    "entity_alerts": 428
+   },
+   "_ap": {
+    "Rules (friend)": 0.2360223328198085,
+    "Novelty (cold start)": 0.24211624781909927,
+    "CES": 0.4965117220968743,
+    "L3": 0.880202169466713
+   },
+   "_family_recall": {
+    "duplicate_payment": {
+     "Rules (friend)": 0.3333333333333333,
+     "Novelty (cold start)": 0.3333333333333333,
+     "CES": 0.3333333333333333,
+     "CES 2+1": 0.3333333333333333,
+     "CES 1+2": 0.3333333333333333,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.3333333333333333,
+     "B1 CES": 0.3333333333333333,
+     "B1 L3": 0.8888888888888888,
+     "B2 CES 1+1": 0.3333333333333333,
+     "B2 L3 1+1": 0.8888888888888888
+    },
+    "expense_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.875,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.5,
+     "L3": 1.0,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.5,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.5,
+     "B2 L3 1+1": 0.75
+    },
+    "ghost_vendor": {
+     "Rules (friend)": 0.6666666666666666,
+     "Novelty (cold start)": 0.5555555555555556,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 0.8888888888888888,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.3333333333333333,
+     "B1 CES": 0.6666666666666666,
+     "B1 L3": 0.5555555555555556,
+     "B2 CES 1+1": 0.8888888888888888,
+     "B2 L3 1+1": 0.8888888888888888
+    },
+    "kickback_overpricing": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.75,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 0.875,
+     "L3": 1.0,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.375,
+     "B1 CES": 0.5,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.625,
+     "B2 L3 1+1": 0.75
+    },
+    "long_outstanding_advance": {
+     "Rules (friend)": 0.625,
+     "Novelty (cold start)": 0.625,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 0.875,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.375,
+     "B1 CES": 0.875,
+     "B1 L3": 0.875,
+     "B2 CES 1+1": 0.875,
+     "B2 L3 1+1": 0.875
+    },
+    "payroll_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.75,
+     "CES 2+1": 0.5,
+     "CES 1+2": 0.375,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.375,
+     "B1 L3": 0.625,
+     "B2 CES 1+1": 0.375,
+     "B2 L3 1+1": 0.625
+    },
+    "period_end_adjustment": {
+     "Rules (friend)": 0.75,
+     "Novelty (cold start)": 0.625,
+     "CES": 0.75,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.75,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.625,
+     "B1 CES": 0.625,
+     "B1 L3": 0.875,
+     "B2 CES 1+1": 0.75,
+     "B2 L3 1+1": 0.875
+    },
+    "risky_invoice": {
+     "Rules (friend)": 0.375,
+     "Novelty (cold start)": 0.375,
+     "CES": 0.75,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.75,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.125,
+     "B1 CES": 0.75,
+     "B1 L3": 0.875,
+     "B2 CES 1+1": 0.75,
+     "B2 L3 1+1": 0.875
+    },
+    "split_payments": {
+     "Rules (friend)": 0.1111111111111111,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.2222222222222222,
+     "CES 2+1": 0.1111111111111111,
+     "CES 1+2": 0.1111111111111111,
+     "L3": 0.8888888888888888,
+     "L3 2+1": 0.8888888888888888,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.1111111111111111,
+     "B1 L3": 0.5555555555555556,
+     "B2 CES 1+1": 0.1111111111111111,
+     "B2 L3 1+1": 0.5555555555555556
+    }
+   }
+  },
+  "unseen_family": {
+   "duplicate_payment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.038787023977433006,
+     "entity_precision": 0.0066815144766146995,
+     "entity_alerts": 449
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.005940594059405941,
+     "entity_alerts": 505
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.06770098730606489,
+     "entity_precision": 0.004885993485342019,
+     "entity_alerts": 614
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.06629055007052186,
+     "entity_precision": 0.004862236628849271,
+     "entity_alerts": 617
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.0691114245416079,
+     "entity_precision": 0.005291005291005291,
+     "entity_alerts": 567
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.1111111111111111,
+     "hard_neg_alert_rate": 0.19534555712270804,
+     "entity_precision": 0.0015748031496062992,
+     "entity_alerts": 635
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.1530324400564175,
+     "entity_precision": 0.006329113924050633,
+     "entity_alerts": 632
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.028913963328631876,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.0232722143864598,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06346967559943582,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.0465444287729196,
+     "entity_precision": 0.007075471698113208,
+     "entity_alerts": 424
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.08815232722143865,
+     "entity_precision": 0.007009345794392523,
+     "entity_alerts": 428
+    }
+   },
+   "expense_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.039492242595204514,
+     "entity_precision": 0.0,
+     "entity_alerts": 449
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.0,
+     "entity_alerts": 505
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05782792665726375,
+     "entity_precision": 0.0,
+     "entity_alerts": 606
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.059943582510578276,
+     "entity_precision": 0.0,
+     "entity_alerts": 607
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06770098730606489,
+     "entity_precision": 0.0,
+     "entity_alerts": 558
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.12976022566995768,
+     "entity_precision": 0.0016051364365971107,
+     "entity_alerts": 623
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.11988716502115655,
+     "entity_precision": 0.0016286644951140066,
+     "entity_alerts": 614
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.028913963328631876,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.02538787023977433,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04936530324400564,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04936530324400564,
+     "entity_precision": 0.0,
+     "entity_alerts": 419
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.07334273624823695,
+     "entity_precision": 0.0,
+     "entity_alerts": 424
+    }
+   },
+   "ghost_vendor": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.7777777777777778,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.039492242595204514,
+     "entity_precision": 0.015555555555555555,
+     "entity_alerts": 450
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.009861932938856016,
+     "entity_alerts": 507
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.0065252854812398045,
+     "entity_alerts": 613
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.06276445698166432,
+     "entity_precision": 0.008156606851549755,
+     "entity_alerts": 613
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.06981664315937941,
+     "entity_precision": 0.008960573476702509,
+     "entity_alerts": 558
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.7777777777777778,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.16361071932299012,
+     "entity_precision": 0.011093502377179081,
+     "entity_alerts": 631
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 8,
+     "precision": 0.012345679012345678,
+     "recall": 0.8888888888888888,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.12976022566995768,
+     "entity_precision": 0.012658227848101266,
+     "entity_alerts": 632
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.029619181946403384,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.02468265162200282,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05148095909732017,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.04866008462623413,
+     "entity_precision": 0.011961722488038277,
+     "entity_alerts": 418
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 7,
+     "precision": 0.016203703703703703,
+     "recall": 0.7777777777777778,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.07898448519040903,
+     "entity_precision": 0.016355140186915886,
+     "entity_alerts": 428
+    }
+   },
+   "kickback_overpricing": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04019746121297602,
+     "entity_precision": 0.0,
+     "entity_alerts": 446
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.06488011283497884,
+     "entity_precision": 0.011881188118811881,
+     "entity_alerts": 505
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.057122708039492244,
+     "entity_precision": 0.0,
+     "entity_alerts": 534
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.07263751763046544,
+     "entity_precision": 0.005208333333333333,
+     "entity_alerts": 576
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.07334273624823695,
+     "entity_precision": 0.007142857142857143,
+     "entity_alerts": 560
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.17418899858956277,
+     "entity_precision": 0.008,
+     "entity_alerts": 625
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.1466854724964739,
+     "entity_precision": 0.006369426751592357,
+     "entity_alerts": 628
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.028913963328631876,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.020451339915373765,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.054301833568406205,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.05077574047954866,
+     "entity_precision": 0.007211538461538462,
+     "entity_alerts": 416
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.08392101551480959,
+     "entity_precision": 0.009389671361502348,
+     "entity_alerts": 426
+    }
+   },
+   "long_outstanding_advance": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.038787023977433006,
+     "entity_precision": 0.011086474501108648,
+     "entity_alerts": 451
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.009881422924901186,
+     "entity_alerts": 506
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.0691114245416079,
+     "entity_precision": 0.006546644844517185,
+     "entity_alerts": 611
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.06629055007052186,
+     "entity_precision": 0.008223684210526315,
+     "entity_alerts": 608
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.07263751763046544,
+     "entity_precision": 0.009025270758122744,
+     "entity_alerts": 554
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.19393511988716503,
+     "entity_precision": 0.009569377990430622,
+     "entity_alerts": 627
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.15444287729196052,
+     "entity_precision": 0.007987220447284345,
+     "entity_alerts": 626
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.029619181946403384,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.375,
+     "case_recall": 0.375,
+     "hard_neg_alert_rate": 0.028913963328631876,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06276445698166432,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.05218617771509168,
+     "entity_precision": 0.01201923076923077,
+     "entity_alerts": 416
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.09167842031029619,
+     "entity_precision": 0.009345794392523364,
+     "entity_alerts": 428
+    }
+   },
+   "payroll_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.039492242595204514,
+     "entity_precision": 0.0,
+     "entity_alerts": 447
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06629055007052186,
+     "entity_precision": 0.0,
+     "entity_alerts": 506
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04866008462623413,
+     "entity_precision": 0.0,
+     "entity_alerts": 597
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.056417489421720736,
+     "entity_precision": 0.0,
+     "entity_alerts": 601
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06629055007052186,
+     "entity_precision": 0.0,
+     "entity_alerts": 554
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.16643159379407615,
+     "entity_precision": 0.0,
+     "entity_alerts": 625
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.13540197461212977,
+     "entity_precision": 0.0,
+     "entity_alerts": 626
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.029619181946403384,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.022566995768688293,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05289139633286319,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.045839210155148094,
+     "entity_precision": 0.0,
+     "entity_alerts": 415
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.07827926657263752,
+     "entity_precision": 0.0,
+     "entity_alerts": 426
+    }
+   },
+   "period_end_adjustment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.039492242595204514,
+     "entity_precision": 0.013422818791946308,
+     "entity_alerts": 447
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.00984251968503937,
+     "entity_alerts": 508
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.008210180623973728,
+     "entity_alerts": 609
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.06417489421720733,
+     "entity_precision": 0.008264462809917356,
+     "entity_alerts": 605
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.0684062059238364,
+     "entity_precision": 0.009025270758122744,
+     "entity_alerts": 554
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.18335684062059238,
+     "entity_precision": 0.007936507936507936,
+     "entity_alerts": 630
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.13610719322990128,
+     "entity_precision": 0.007911392405063292,
+     "entity_alerts": 632
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.029619181946403384,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.027503526093088856,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.05289139633286319,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.05007052186177715,
+     "entity_precision": 0.011990407673860911,
+     "entity_alerts": 417
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.07827926657263752,
+     "entity_precision": 0.01182033096926714,
+     "entity_alerts": 423
+    }
+   },
+   "risky_invoice": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 0.375,
+     "hard_neg_alert_rate": 0.04160789844851904,
+     "entity_precision": 0.00663716814159292,
+     "entity_alerts": 452
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 0.375,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.005928853754940711,
+     "entity_alerts": 506
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06205923836389281,
+     "entity_precision": 0.0,
+     "entity_alerts": 597
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.25,
+     "hard_neg_alert_rate": 0.06276445698166432,
+     "entity_precision": 0.0033112582781456954,
+     "entity_alerts": 604
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.25,
+     "hard_neg_alert_rate": 0.0684062059238364,
+     "entity_precision": 0.003590664272890485,
+     "entity_alerts": 557
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.875,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.12482369534555712,
+     "entity_precision": 0.011146496815286623,
+     "entity_alerts": 628
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.11424541607898449,
+     "entity_precision": 0.009508716323296355,
+     "entity_alerts": 631
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.028913963328631876,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.023977433004231313,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.05289139633286319,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 2,
+     "precision": 0.004629629629629629,
+     "recall": 0.25,
+     "case_recall": 0.25,
+     "hard_neg_alert_rate": 0.04724964739069112,
+     "entity_precision": 0.004807692307692308,
+     "entity_alerts": 416
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 6,
+     "precision": 0.013888888888888888,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.08039492242595205,
+     "entity_precision": 0.014084507042253521,
+     "entity_alerts": 426
+    }
+   },
+   "split_payments": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.03596614950634697,
+     "entity_precision": 0.0022271714922048997,
+     "entity_alerts": 449
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06558533145275035,
+     "entity_precision": 0.0,
+     "entity_alerts": 504
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.05148095909732017,
+     "entity_precision": 0.0016313213703099511,
+     "entity_alerts": 613
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.056417489421720736,
+     "entity_precision": 0.0016366612111292963,
+     "entity_alerts": 611
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.05923836389280677,
+     "entity_precision": 0.0017921146953405018,
+     "entity_alerts": 558
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.1770098730606488,
+     "entity_precision": 0.008156606851549755,
+     "entity_alerts": 613
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.1473906911142454,
+     "entity_precision": 0.008169934640522876,
+     "entity_alerts": 612
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.029619181946403384,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.014809590973201692,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.07263751763046544,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 1,
+     "precision": 0.0023148148148148147,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.0380818053596615,
+     "entity_precision": 0.0023923444976076554,
+     "entity_alerts": 418
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.0930888575458392,
+     "entity_precision": 0.009523809523809525,
+     "entity_alerts": 420
+    }
+   }
+  }
+ },
+ "w3_s202": {
+  "in_distribution": {
+   "Rules (friend)": {
+    "alerts": 648,
+    "tp": 25,
+    "precision": 0.038580246913580245,
+    "recall": 0.3333333333333333,
+    "case_recall": 0.46,
+    "hard_neg_alert_rate": 0.031966643502432245,
+    "entity_precision": 0.053488372093023255,
+    "entity_alerts": 430
+   },
+   "Novelty (cold start)": {
+    "alerts": 648,
+    "tp": 30,
+    "precision": 0.046296296296296294,
+    "recall": 0.4,
+    "case_recall": 0.42,
+    "hard_neg_alert_rate": 0.061153578874218205,
+    "entity_precision": 0.052941176470588235,
+    "entity_alerts": 510
+   },
+   "CES": {
+    "alerts": 648,
+    "tp": 54,
+    "precision": 0.08333333333333333,
+    "recall": 0.72,
+    "case_recall": 0.76,
+    "hard_neg_alert_rate": 0.05837387074357193,
+    "entity_precision": 0.08169934640522876,
+    "entity_alerts": 612
+   },
+   "CES 2+1": {
+    "alerts": 648,
+    "tp": 51,
+    "precision": 0.0787037037037037,
+    "recall": 0.68,
+    "case_recall": 0.74,
+    "hard_neg_alert_rate": 0.05698401667824878,
+    "entity_precision": 0.07855973813420622,
+    "entity_alerts": 611
+   },
+   "CES 1+2": {
+    "alerts": 648,
+    "tp": 47,
+    "precision": 0.07253086419753087,
+    "recall": 0.6266666666666667,
+    "case_recall": 0.7,
+    "hard_neg_alert_rate": 0.05698401667824878,
+    "entity_precision": 0.08108108108108109,
+    "entity_alerts": 555
+   },
+   "L3": {
+    "alerts": 648,
+    "tp": 72,
+    "precision": 0.1111111111111111,
+    "recall": 0.96,
+    "case_recall": 1.0,
+    "hard_neg_alert_rate": 0.17373175816539263,
+    "entity_precision": 0.10810810810810811,
+    "entity_alerts": 629
+   },
+   "L3 2+1": {
+    "alerts": 648,
+    "tp": 69,
+    "precision": 0.10648148148148148,
+    "recall": 0.92,
+    "case_recall": 0.98,
+    "hard_neg_alert_rate": 0.1341209173036831,
+    "entity_precision": 0.10268562401263823,
+    "entity_alerts": 633
+   },
+   "B1 Novelty": {
+    "alerts": 216,
+    "tp": 24,
+    "precision": 0.1111111111111111,
+    "recall": 0.32,
+    "case_recall": 0.42,
+    "hard_neg_alert_rate": 0.020847810979847115,
+    "entity_precision": 0.1111111111111111,
+    "entity_alerts": 216
+   },
+   "B1 CES": {
+    "alerts": 216,
+    "tp": 44,
+    "precision": 0.2037037037037037,
+    "recall": 0.5866666666666667,
+    "case_recall": 0.7,
+    "hard_neg_alert_rate": 0.018763029881862403,
+    "entity_precision": 0.2037037037037037,
+    "entity_alerts": 216
+   },
+   "B1 L3": {
+    "alerts": 216,
+    "tp": 58,
+    "precision": 0.26851851851851855,
+    "recall": 0.7733333333333333,
+    "case_recall": 0.9,
+    "hard_neg_alert_rate": 0.0472550382209868,
+    "entity_precision": 0.26851851851851855,
+    "entity_alerts": 216
+   },
+   "B2 CES 1+1": {
+    "alerts": 432,
+    "tp": 45,
+    "precision": 0.10416666666666667,
+    "recall": 0.6,
+    "case_recall": 0.7,
+    "hard_neg_alert_rate": 0.03961084086170952,
+    "entity_precision": 0.10451306413301663,
+    "entity_alerts": 421
+   },
+   "B2 L3 1+1": {
+    "alerts": 432,
+    "tp": 59,
+    "precision": 0.13657407407407407,
+    "recall": 0.7866666666666666,
+    "case_recall": 0.9,
+    "hard_neg_alert_rate": 0.07018763029881862,
+    "entity_precision": 0.13488372093023257,
+    "entity_alerts": 430
+   },
+   "_ap": {
+    "Rules (friend)": 0.24723802558079538,
+    "Novelty (cold start)": 0.185581215240758,
+    "CES": 0.5566705316045565,
+    "L3": 0.9191094756428092
+   },
+   "_family_recall": {
+    "duplicate_payment": {
+     "Rules (friend)": 0.3333333333333333,
+     "Novelty (cold start)": 0.2222222222222222,
+     "CES": 0.2222222222222222,
+     "CES 2+1": 0.2222222222222222,
+     "CES 1+2": 0.2222222222222222,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.2222222222222222,
+     "B1 CES": 0.2222222222222222,
+     "B1 L3": 0.7777777777777778,
+     "B2 CES 1+1": 0.2222222222222222,
+     "B2 L3 1+1": 0.7777777777777778
+    },
+    "expense_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.0,
+     "CES": 1.0,
+     "CES 2+1": 0.875,
+     "CES 1+2": 0.625,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.625,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.625,
+     "B2 L3 1+1": 0.75
+    },
+    "ghost_vendor": {
+     "Rules (friend)": 0.5555555555555556,
+     "Novelty (cold start)": 0.4444444444444444,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 0.8888888888888888,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.4444444444444444,
+     "B1 CES": 0.8888888888888888,
+     "B1 L3": 0.8888888888888888,
+     "B2 CES 1+1": 0.8888888888888888,
+     "B2 L3 1+1": 0.8888888888888888
+    },
+    "kickback_overpricing": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.625,
+     "CES": 0.625,
+     "CES 2+1": 0.5,
+     "CES 1+2": 0.5,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.25,
+     "B1 CES": 0.375,
+     "B1 L3": 0.875,
+     "B2 CES 1+1": 0.375,
+     "B2 L3 1+1": 0.875
+    },
+    "long_outstanding_advance": {
+     "Rules (friend)": 0.5,
+     "Novelty (cold start)": 0.5,
+     "CES": 1.0,
+     "CES 2+1": 0.875,
+     "CES 1+2": 0.75,
+     "L3": 1.0,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.5,
+     "B1 CES": 0.75,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.75,
+     "B2 L3 1+1": 0.75
+    },
+    "payroll_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.625,
+     "CES": 0.75,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.75,
+     "L3": 1.0,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.5,
+     "B1 CES": 0.75,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.75,
+     "B2 L3 1+1": 0.75
+    },
+    "period_end_adjustment": {
+     "Rules (friend)": 0.875,
+     "Novelty (cold start)": 0.75,
+     "CES": 0.875,
+     "CES 2+1": 0.875,
+     "CES 1+2": 0.875,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.75,
+     "B1 CES": 0.875,
+     "B1 L3": 1.0,
+     "B2 CES 1+1": 0.875,
+     "B2 L3 1+1": 1.0
+    },
+    "risky_invoice": {
+     "Rules (friend)": 0.375,
+     "Novelty (cold start)": 0.125,
+     "CES": 0.625,
+     "CES 2+1": 0.625,
+     "CES 1+2": 0.625,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.125,
+     "B1 CES": 0.625,
+     "B1 L3": 1.0,
+     "B2 CES 1+1": 0.625,
+     "B2 L3 1+1": 1.0
+    },
+    "split_payments": {
+     "Rules (friend)": 0.3333333333333333,
+     "Novelty (cold start)": 0.3333333333333333,
+     "CES": 0.4444444444444444,
+     "CES 2+1": 0.4444444444444444,
+     "CES 1+2": 0.4444444444444444,
+     "L3": 0.6666666666666666,
+     "L3 2+1": 0.5555555555555556,
+     "B1 Novelty": 0.1111111111111111,
+     "B1 CES": 0.2222222222222222,
+     "B1 L3": 0.2222222222222222,
+     "B2 CES 1+1": 0.3333333333333333,
+     "B2 L3 1+1": 0.3333333333333333
+    }
+   }
+  },
+  "unseen_family": {
+   "duplicate_payment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.029881862404447533,
+     "entity_precision": 0.007125890736342043,
+     "entity_alerts": 421
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.06254343293954134,
+     "entity_precision": 0.004024144869215292,
+     "entity_alerts": 497
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.0660180681028492,
+     "entity_precision": 0.0032102728731942215,
+     "entity_alerts": 623
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.05837387074357193,
+     "entity_precision": 0.003179650238473768,
+     "entity_alerts": 629
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.061153578874218205,
+     "entity_precision": 0.003527336860670194,
+     "entity_alerts": 567
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.16817234190410008,
+     "entity_precision": 0.0,
+     "entity_alerts": 639
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.13551077136900624,
+     "entity_precision": 0.003115264797507788,
+     "entity_alerts": 642
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.0236275191104934,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.024322446143154968,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05211952744961779,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 2,
+     "precision": 0.004629629629629629,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.04378040305767894,
+     "entity_precision": 0.004662004662004662,
+     "entity_alerts": 429
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 2,
+     "precision": 0.004629629629629629,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.2222222222222222,
+     "hard_neg_alert_rate": 0.07644197359277276,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 432
+    }
+   },
+   "expense_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.03266157053509382,
+     "entity_precision": 0.0,
+     "entity_alerts": 423
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06323835997220292,
+     "entity_precision": 0.0,
+     "entity_alerts": 496
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05837387074357193,
+     "entity_precision": 0.0016420361247947454,
+     "entity_alerts": 609
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.057678943710910355,
+     "entity_precision": 0.0016750418760469012,
+     "entity_alerts": 597
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.057678943710910355,
+     "entity_precision": 0.0,
+     "entity_alerts": 549
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.17790132036136205,
+     "entity_precision": 0.004739336492890996,
+     "entity_alerts": 633
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.14246004169562196,
+     "entity_precision": 0.001597444089456869,
+     "entity_alerts": 626
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.022932592077831826,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.022932592077831826,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.125,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.059763724808895066,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04100069492703266,
+     "entity_precision": 0.0,
+     "entity_alerts": 417
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 1,
+     "precision": 0.0023148148148148147,
+     "recall": 0.125,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08269631688672689,
+     "entity_precision": 0.002347417840375587,
+     "entity_alerts": 426
+    }
+   },
+   "ghost_vendor": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.03335649756775538,
+     "entity_precision": 0.011737089201877934,
+     "entity_alerts": 426
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06254343293954134,
+     "entity_precision": 0.008032128514056224,
+     "entity_alerts": 498
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06462821403752605,
+     "entity_precision": 0.0065040650406504065,
+     "entity_alerts": 615
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.059763724808895066,
+     "entity_precision": 0.006589785831960461,
+     "entity_alerts": 607
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.061153578874218205,
+     "entity_precision": 0.007233273056057866,
+     "entity_alerts": 553
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.7777777777777778,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.17790132036136205,
+     "entity_precision": 0.011023622047244094,
+     "entity_alerts": 635
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 8,
+     "precision": 0.012345679012345678,
+     "recall": 0.8888888888888888,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.1459346768589298,
+     "entity_precision": 0.012519561815336464,
+     "entity_alerts": 639
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.0236275191104934,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.024322446143154968,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.6666666666666666,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.061153578874218205,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.04378040305767894,
+     "entity_precision": 0.009501187648456057,
+     "entity_alerts": 421
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 8,
+     "precision": 0.018518518518518517,
+     "recall": 0.8888888888888888,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.0847810979847116,
+     "entity_precision": 0.018561484918793503,
+     "entity_alerts": 431
+    }
+   },
+   "kickback_overpricing": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.03266157053509382,
+     "entity_precision": 0.0,
+     "entity_alerts": 423
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06254343293954134,
+     "entity_precision": 0.008064516129032258,
+     "entity_alerts": 496
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.03335649756775538,
+     "entity_precision": 0.0,
+     "entity_alerts": 549
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.0472550382209868,
+     "entity_precision": 0.0034542314335060447,
+     "entity_alerts": 579
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05698401667824878,
+     "entity_precision": 0.007194244604316547,
+     "entity_alerts": 556
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.20083391243919388,
+     "entity_precision": 0.006269592476489028,
+     "entity_alerts": 638
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.15288394718554552,
+     "entity_precision": 0.006269592476489028,
+     "entity_alerts": 638
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.022237665045170257,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.01250868658790827,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06671299513551077,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 2,
+     "precision": 0.004629629629629629,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.035441278665740095,
+     "entity_precision": 0.004819277108433735,
+     "entity_alerts": 415
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.09034051424600417,
+     "entity_precision": 0.009324009324009324,
+     "entity_alerts": 429
+    }
+   },
+   "long_outstanding_advance": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.03127171646977067,
+     "entity_precision": 0.00936768149882904,
+     "entity_alerts": 427
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06254343293954134,
+     "entity_precision": 0.008,
+     "entity_alerts": 500
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 0.375,
+     "hard_neg_alert_rate": 0.06532314107018763,
+     "entity_precision": 0.004942339373970346,
+     "entity_alerts": 607
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06671299513551077,
+     "entity_precision": 0.006644518272425249,
+     "entity_alerts": 602
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06393328700486449,
+     "entity_precision": 0.007272727272727273,
+     "entity_alerts": 550
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.20222376650451704,
+     "entity_precision": 0.007911392405063292,
+     "entity_alerts": 632
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.16191799861014594,
+     "entity_precision": 0.006339144215530904,
+     "entity_alerts": 631
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.022932592077831826,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.027102154273801252,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.0729673384294649,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.046560111188325225,
+     "entity_precision": 0.009501187648456057,
+     "entity_alerts": 421
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.09520500347463516,
+     "entity_precision": 0.00936768149882904,
+     "entity_alerts": 427
+    }
+   },
+   "payroll_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.03474635163307853,
+     "entity_precision": 0.0,
+     "entity_alerts": 422
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.061153578874218205,
+     "entity_precision": 0.010040160642570281,
+     "entity_alerts": 498
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06323835997220292,
+     "entity_precision": 0.0,
+     "entity_alerts": 599
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.05698401667824878,
+     "entity_precision": 0.006688963210702341,
+     "entity_alerts": 598
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.059763724808895066,
+     "entity_precision": 0.00909090909090909,
+     "entity_alerts": 550
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.15774843641417652,
+     "entity_precision": 0.0,
+     "entity_alerts": 626
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.1341209173036831,
+     "entity_precision": 0.00631911532385466,
+     "entity_alerts": 633
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.022237665045170257,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.022237665045170257,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05142460041695622,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.04169562195969423,
+     "entity_precision": 0.009615384615384616,
+     "entity_alerts": 416
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.07505211952744961,
+     "entity_precision": 0.009324009324009324,
+     "entity_alerts": 429
+    }
+   },
+   "period_end_adjustment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.875,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.03127171646977067,
+     "entity_precision": 0.01650943396226415,
+     "entity_alerts": 424
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.06254343293954134,
+     "entity_precision": 0.012,
+     "entity_alerts": 500
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.06393328700486449,
+     "entity_precision": 0.00980392156862745,
+     "entity_alerts": 612
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.06323835997220292,
+     "entity_precision": 0.009933774834437087,
+     "entity_alerts": 604
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.06045865184155664,
+     "entity_precision": 0.01092896174863388,
+     "entity_alerts": 549
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.16886726893676163,
+     "entity_precision": 0.009523809523809525,
+     "entity_alerts": 630
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.1320361362056984,
+     "entity_precision": 0.009554140127388535,
+     "entity_alerts": 628
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.022932592077831826,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.0236275191104934,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.04586518415566365,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 6,
+     "precision": 0.013888888888888888,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.043085476025017375,
+     "entity_precision": 0.014457831325301205,
+     "entity_alerts": 415
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 6,
+     "precision": 0.013888888888888888,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.06810284920083391,
+     "entity_precision": 0.014018691588785047,
+     "entity_alerts": 428
+    }
+   },
+   "risky_invoice": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 0.375,
+     "hard_neg_alert_rate": 0.031966643502432245,
+     "entity_precision": 0.007125890736342043,
+     "entity_alerts": 421
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.06254343293954134,
+     "entity_precision": 0.002012072434607646,
+     "entity_alerts": 497
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06254343293954134,
+     "entity_precision": 0.0,
+     "entity_alerts": 612
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.05837387074357193,
+     "entity_precision": 0.0016666666666666668,
+     "entity_alerts": 600
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.05906879777623349,
+     "entity_precision": 0.0018248175182481751,
+     "entity_alerts": 548
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.12786657400972898,
+     "entity_precision": 0.009419152276295133,
+     "entity_alerts": 637
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.10979847116052814,
+     "entity_precision": 0.0093603744149766,
+     "entity_alerts": 641
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.022237665045170257,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.022932592077831826,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.04794996525364837,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 1,
+     "precision": 0.0023148148148148147,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.04169562195969423,
+     "entity_precision": 0.002403846153846154,
+     "entity_alerts": 416
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.0729673384294649,
+     "entity_precision": 0.01160092807424594,
+     "entity_alerts": 431
+    }
+   },
+   "split_payments": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.03683113273106324,
+     "entity_precision": 0.0023923444976076554,
+     "entity_alerts": 418
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06254343293954134,
+     "entity_precision": 0.0020161290322580645,
+     "entity_alerts": 496
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06393328700486449,
+     "entity_precision": 0.0016556291390728477,
+     "entity_alerts": 604
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05906879777623349,
+     "entity_precision": 0.0016286644951140066,
+     "entity_alerts": 614
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06045865184155664,
+     "entity_precision": 0.0018018018018018018,
+     "entity_alerts": 555
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.12300208478109799,
+     "entity_precision": 0.004739336492890996,
+     "entity_alerts": 633
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.10840861709520501,
+     "entity_precision": 0.0047169811320754715,
+     "entity_alerts": 636
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.022932592077831826,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.022237665045170257,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.2222222222222222,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.0423905489923558,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 2,
+     "precision": 0.004629629629629629,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.04100069492703266,
+     "entity_precision": 0.0023752969121140144,
+     "entity_alerts": 421
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.3333333333333333,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.06740792216817235,
+     "entity_precision": 0.004672897196261682,
+     "entity_alerts": 428
+    }
+   }
+  }
+ },
+ "w3_s203": {
+  "in_distribution": {
+   "Rules (friend)": {
+    "alerts": 648,
+    "tp": 25,
+    "precision": 0.038580246913580245,
+    "recall": 0.3333333333333333,
+    "case_recall": 0.4489795918367347,
+    "hard_neg_alert_rate": 0.03197278911564626,
+    "entity_precision": 0.05321507760532151,
+    "entity_alerts": 451
+   },
+   "Novelty (cold start)": {
+    "alerts": 648,
+    "tp": 32,
+    "precision": 0.04938271604938271,
+    "recall": 0.4266666666666667,
+    "case_recall": 0.4897959183673469,
+    "hard_neg_alert_rate": 0.0782312925170068,
+    "entity_precision": 0.060836501901140684,
+    "entity_alerts": 526
+   },
+   "CES": {
+    "alerts": 648,
+    "tp": 53,
+    "precision": 0.08179012345679013,
+    "recall": 0.7066666666666667,
+    "case_recall": 0.7959183673469388,
+    "hard_neg_alert_rate": 0.08095238095238096,
+    "entity_precision": 0.08346709470304976,
+    "entity_alerts": 623
+   },
+   "CES 2+1": {
+    "alerts": 648,
+    "tp": 53,
+    "precision": 0.08179012345679013,
+    "recall": 0.7066666666666667,
+    "case_recall": 0.7959183673469388,
+    "hard_neg_alert_rate": 0.0782312925170068,
+    "entity_precision": 0.08427876823338736,
+    "entity_alerts": 617
+   },
+   "CES 1+2": {
+    "alerts": 648,
+    "tp": 48,
+    "precision": 0.07407407407407407,
+    "recall": 0.64,
+    "case_recall": 0.7551020408163265,
+    "hard_neg_alert_rate": 0.08095238095238096,
+    "entity_precision": 0.08450704225352113,
+    "entity_alerts": 568
+   },
+   "L3": {
+    "alerts": 648,
+    "tp": 72,
+    "precision": 0.1111111111111111,
+    "recall": 0.96,
+    "case_recall": 0.9795918367346939,
+    "hard_neg_alert_rate": 0.15170068027210884,
+    "entity_precision": 0.10952380952380952,
+    "entity_alerts": 630
+   },
+   "L3 2+1": {
+    "alerts": 648,
+    "tp": 68,
+    "precision": 0.10493827160493827,
+    "recall": 0.9066666666666666,
+    "case_recall": 0.9387755102040817,
+    "hard_neg_alert_rate": 0.12585034013605442,
+    "entity_precision": 0.10443037974683544,
+    "entity_alerts": 632
+   },
+   "B1 Novelty": {
+    "alerts": 216,
+    "tp": 20,
+    "precision": 0.09259259259259259,
+    "recall": 0.26666666666666666,
+    "case_recall": 0.3469387755102041,
+    "hard_neg_alert_rate": 0.031292517006802724,
+    "entity_precision": 0.09259259259259259,
+    "entity_alerts": 216
+   },
+   "B1 CES": {
+    "alerts": 216,
+    "tp": 38,
+    "precision": 0.17592592592592593,
+    "recall": 0.5066666666666667,
+    "case_recall": 0.673469387755102,
+    "hard_neg_alert_rate": 0.03469387755102041,
+    "entity_precision": 0.17592592592592593,
+    "entity_alerts": 216
+   },
+   "B1 L3": {
+    "alerts": 216,
+    "tp": 53,
+    "precision": 0.24537037037037038,
+    "recall": 0.7066666666666667,
+    "case_recall": 0.8571428571428571,
+    "hard_neg_alert_rate": 0.04149659863945578,
+    "entity_precision": 0.24537037037037038,
+    "entity_alerts": 216
+   },
+   "B2 CES 1+1": {
+    "alerts": 432,
+    "tp": 44,
+    "precision": 0.10185185185185185,
+    "recall": 0.5866666666666667,
+    "case_recall": 0.7346938775510204,
+    "hard_neg_alert_rate": 0.058503401360544216,
+    "entity_precision": 0.10476190476190476,
+    "entity_alerts": 420
+   },
+   "B2 L3 1+1": {
+    "alerts": 432,
+    "tp": 57,
+    "precision": 0.13194444444444445,
+    "recall": 0.76,
+    "case_recall": 0.8775510204081632,
+    "hard_neg_alert_rate": 0.07210884353741497,
+    "entity_precision": 0.13225058004640372,
+    "entity_alerts": 431
+   },
+   "_ap": {
+    "Rules (friend)": 0.2598694685819194,
+    "Novelty (cold start)": 0.1455533789386335,
+    "CES": 0.5184543038860013,
+    "L3": 0.8827930215679024
+   },
+   "_family_recall": {
+    "duplicate_payment": {
+     "Rules (friend)": 0.4444444444444444,
+     "Novelty (cold start)": 0.4444444444444444,
+     "CES": 0.4444444444444444,
+     "CES 2+1": 0.4444444444444444,
+     "CES 1+2": 0.4444444444444444,
+     "L3": 0.8888888888888888,
+     "L3 2+1": 0.7777777777777778,
+     "B1 Novelty": 0.4444444444444444,
+     "B1 CES": 0.4444444444444444,
+     "B1 L3": 0.7777777777777778,
+     "B2 CES 1+1": 0.4444444444444444,
+     "B2 L3 1+1": 0.7777777777777778
+    },
+    "expense_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.625,
+     "CES 2+1": 0.625,
+     "CES 1+2": 0.25,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.25,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.25,
+     "B2 L3 1+1": 0.75
+    },
+    "ghost_vendor": {
+     "Rules (friend)": 0.7777777777777778,
+     "Novelty (cold start)": 0.5555555555555556,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 1.0,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.5555555555555556,
+     "B1 CES": 1.0,
+     "B1 L3": 1.0,
+     "B2 CES 1+1": 1.0,
+     "B2 L3 1+1": 1.0
+    },
+    "kickback_overpricing": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.75,
+     "CES": 0.75,
+     "CES 2+1": 0.875,
+     "CES 1+2": 0.75,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.375,
+     "B1 CES": 0.125,
+     "B1 L3": 0.5,
+     "B2 CES 1+1": 0.5,
+     "B2 L3 1+1": 0.75
+    },
+    "long_outstanding_advance": {
+     "Rules (friend)": 0.625,
+     "Novelty (cold start)": 0.5,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 0.875,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.25,
+     "B1 CES": 0.75,
+     "B1 L3": 0.875,
+     "B2 CES 1+1": 0.875,
+     "B2 L3 1+1": 1.0
+    },
+    "payroll_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.625,
+     "CES": 0.75,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.75,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.125,
+     "B1 CES": 0.5,
+     "B1 L3": 0.625,
+     "B2 CES 1+1": 0.625,
+     "B2 L3 1+1": 0.75
+    },
+    "period_end_adjustment": {
+     "Rules (friend)": 0.625,
+     "Novelty (cold start)": 0.75,
+     "CES": 0.75,
+     "CES 2+1": 0.875,
+     "CES 1+2": 0.875,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.625,
+     "B1 CES": 0.75,
+     "B1 L3": 1.0,
+     "B2 CES 1+1": 0.875,
+     "B2 L3 1+1": 1.0
+    },
+    "risky_invoice": {
+     "Rules (friend)": 0.125,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.625,
+     "CES 2+1": 0.625,
+     "CES 1+2": 0.5,
+     "L3": 1.0,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.5,
+     "B1 L3": 0.625,
+     "B2 CES 1+1": 0.5,
+     "B2 L3 1+1": 0.625
+    },
+    "split_payments": {
+     "Rules (friend)": 0.3333333333333333,
+     "Novelty (cold start)": 0.2222222222222222,
+     "CES": 0.4444444444444444,
+     "CES 2+1": 0.2222222222222222,
+     "CES 1+2": 0.3333333333333333,
+     "L3": 0.7777777777777778,
+     "L3 2+1": 0.5555555555555556,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.2222222222222222,
+     "B1 L3": 0.2222222222222222,
+     "B2 CES 1+1": 0.2222222222222222,
+     "B2 L3 1+1": 0.2222222222222222
+    }
+   }
+  },
+  "unseen_family": {
+   "duplicate_payment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.03537414965986395,
+     "entity_precision": 0.009111617312072893,
+     "entity_alerts": 439
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.08027210884353742,
+     "entity_precision": 0.007736943907156673,
+     "entity_alerts": 517
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.08435374149659863,
+     "entity_precision": 0.006493506493506494,
+     "entity_alerts": 616
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.08639455782312926,
+     "entity_precision": 0.006389776357827476,
+     "entity_alerts": 626
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.08503401360544217,
+     "entity_precision": 0.007029876977152899,
+     "entity_alerts": 569
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.1111111111111111,
+     "hard_neg_alert_rate": 0.19115646258503402,
+     "entity_precision": 0.001584786053882726,
+     "entity_alerts": 631
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.15374149659863945,
+     "entity_precision": 0.007861635220125786,
+     "entity_alerts": 636
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.0326530612244898,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.0380952380952381,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05918367346938776,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.06462585034013606,
+     "entity_precision": 0.009433962264150943,
+     "entity_alerts": 424
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.08775510204081632,
+     "entity_precision": 0.00936768149882904,
+     "entity_alerts": 427
+    }
+   },
+   "expense_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.034013605442176874,
+     "entity_precision": 0.0,
+     "entity_alerts": 442
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08027210884353742,
+     "entity_precision": 0.0,
+     "entity_alerts": 517
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08027210884353742,
+     "entity_precision": 0.0,
+     "entity_alerts": 606
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08027210884353742,
+     "entity_precision": 0.0,
+     "entity_alerts": 603
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08163265306122448,
+     "entity_precision": 0.0,
+     "entity_alerts": 557
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.17346938775510204,
+     "entity_precision": 0.0,
+     "entity_alerts": 622
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.1401360544217687,
+     "entity_precision": 0.0,
+     "entity_alerts": 629
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.0326530612244898,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04081632653061224,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06394557823129252,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06258503401360545,
+     "entity_precision": 0.0,
+     "entity_alerts": 416
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08979591836734693,
+     "entity_precision": 0.0,
+     "entity_alerts": 425
+    }
+   },
+   "ghost_vendor": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 8,
+     "precision": 0.012345679012345678,
+     "recall": 0.8888888888888888,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.03469387755102041,
+     "entity_precision": 0.017977528089887642,
+     "entity_alerts": 445
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.6666666666666666,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.08095238095238096,
+     "entity_precision": 0.011583011583011582,
+     "entity_alerts": 518
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08571428571428572,
+     "entity_precision": 0.008090614886731391,
+     "entity_alerts": 618
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08299319727891157,
+     "entity_precision": 0.008143322475570033,
+     "entity_alerts": 614
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08571428571428572,
+     "entity_precision": 0.008880994671403197,
+     "entity_alerts": 563
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.7777777777777778,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.20816326530612245,
+     "entity_precision": 0.011111111111111112,
+     "entity_alerts": 630
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 8,
+     "precision": 0.012345679012345678,
+     "recall": 0.8888888888888888,
+     "case_recall": 0.8333333333333334,
+     "hard_neg_alert_rate": 0.17006802721088435,
+     "entity_precision": 0.012618296529968454,
+     "entity_alerts": 634
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.03197278911564626,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.04013605442176871,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.6666666666666666,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06598639455782312,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06394557823129252,
+     "entity_precision": 0.011904761904761904,
+     "entity_alerts": 420
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 8,
+     "precision": 0.018518518518518517,
+     "recall": 0.8888888888888888,
+     "case_recall": 0.8333333333333334,
+     "hard_neg_alert_rate": 0.0945578231292517,
+     "entity_precision": 0.018691588785046728,
+     "entity_alerts": 428
+    }
+   },
+   "kickback_overpricing": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.03537414965986395,
+     "entity_precision": 0.0,
+     "entity_alerts": 443
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.08027210884353742,
+     "entity_precision": 0.011538461538461539,
+     "entity_alerts": 520
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.03605442176870748,
+     "entity_precision": 0.0,
+     "entity_alerts": 540
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.058503401360544216,
+     "entity_precision": 0.005226480836236934,
+     "entity_alerts": 574
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.07551020408163266,
+     "entity_precision": 0.010619469026548672,
+     "entity_alerts": 565
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.18571428571428572,
+     "entity_precision": 0.003236245954692557,
+     "entity_alerts": 618
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.15850340136054422,
+     "entity_precision": 0.0064,
+     "entity_alerts": 625
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.0326530612244898,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.01292517006802721,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06394557823129252,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.04557823129251701,
+     "entity_precision": 0.007211538461538462,
+     "entity_alerts": 416
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.09591836734693877,
+     "entity_precision": 0.00702576112412178,
+     "entity_alerts": 427
+    }
+   },
+   "long_outstanding_advance": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.03469387755102041,
+     "entity_precision": 0.01126126126126126,
+     "entity_alerts": 444
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.07959183673469387,
+     "entity_precision": 0.007692307692307693,
+     "entity_alerts": 520
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08979591836734693,
+     "entity_precision": 0.0065252854812398045,
+     "entity_alerts": 613
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08707482993197278,
+     "entity_precision": 0.006535947712418301,
+     "entity_alerts": 612
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.0891156462585034,
+     "entity_precision": 0.0071301247771836,
+     "entity_alerts": 561
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.19931972789115646,
+     "entity_precision": 0.0064516129032258064,
+     "entity_alerts": 620
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.16394557823129252,
+     "entity_precision": 0.006369426751592357,
+     "entity_alerts": 628
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.375,
+     "case_recall": 0.375,
+     "hard_neg_alert_rate": 0.03197278911564626,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.044897959183673466,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.375,
+     "case_recall": 0.375,
+     "hard_neg_alert_rate": 0.061224489795918366,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06802721088435375,
+     "entity_precision": 0.00954653937947494,
+     "entity_alerts": 419
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.09251700680272108,
+     "entity_precision": 0.009411764705882352,
+     "entity_alerts": 425
+    }
+   },
+   "payroll_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.03333333333333333,
+     "entity_precision": 0.0,
+     "entity_alerts": 437
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.07959183673469387,
+     "entity_precision": 0.009633911368015413,
+     "entity_alerts": 519
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.0836734693877551,
+     "entity_precision": 0.001652892561983471,
+     "entity_alerts": 605
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.08435374149659863,
+     "entity_precision": 0.004942339373970346,
+     "entity_alerts": 607
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.0836734693877551,
+     "entity_precision": 0.0070921985815602835,
+     "entity_alerts": 564
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.13877551020408163,
+     "entity_precision": 0.001584786053882726,
+     "entity_alerts": 631
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.1272108843537415,
+     "entity_precision": 0.004739336492890996,
+     "entity_alerts": 633
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.375,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.03197278911564626,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04149659863945578,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05782312925170068,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.375,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.0653061224489796,
+     "entity_precision": 0.007177033492822967,
+     "entity_alerts": 418
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.375,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.08571428571428572,
+     "entity_precision": 0.007009345794392523,
+     "entity_alerts": 428
+    }
+   },
+   "period_end_adjustment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.03605442176870748,
+     "entity_precision": 0.011389521640091117,
+     "entity_alerts": 439
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.07959183673469387,
+     "entity_precision": 0.011560693641618497,
+     "entity_alerts": 519
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.08707482993197278,
+     "entity_precision": 0.008130081300813009,
+     "entity_alerts": 615
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.08639455782312926,
+     "entity_precision": 0.009819967266775777,
+     "entity_alerts": 611
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.08775510204081632,
+     "entity_precision": 0.010619469026548672,
+     "entity_alerts": 565
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.1727891156462585,
+     "entity_precision": 0.008025682182985553,
+     "entity_alerts": 623
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.13877551020408163,
+     "entity_precision": 0.009584664536741214,
+     "entity_alerts": 626
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.0326530612244898,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.04421768707482993,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.04965986394557823,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 6,
+     "precision": 0.013888888888888888,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.0673469387755102,
+     "entity_precision": 0.014388489208633094,
+     "entity_alerts": 417
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 6,
+     "precision": 0.013888888888888888,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.07959183673469387,
+     "entity_precision": 0.01405152224824356,
+     "entity_alerts": 427
+    }
+   },
+   "risky_invoice": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.25,
+     "hard_neg_alert_rate": 0.0380952380952381,
+     "entity_precision": 0.004514672686230248,
+     "entity_alerts": 443
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.08027210884353742,
+     "entity_precision": 0.0019342359767891683,
+     "entity_alerts": 517
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08775510204081632,
+     "entity_precision": 0.0,
+     "entity_alerts": 613
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08435374149659863,
+     "entity_precision": 0.0,
+     "entity_alerts": 611
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08639455782312926,
+     "entity_precision": 0.0,
+     "entity_alerts": 563
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.875,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.1306122448979592,
+     "entity_precision": 0.011128775834658187,
+     "entity_alerts": 629
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.875,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.11904761904761904,
+     "entity_precision": 0.0110062893081761,
+     "entity_alerts": 636
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.0326530612244898,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04149659863945578,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.04897959183673469,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.0653061224489796,
+     "entity_precision": 0.0,
+     "entity_alerts": 419
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 6,
+     "precision": 0.013888888888888888,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.07891156462585033,
+     "entity_precision": 0.013953488372093023,
+     "entity_alerts": 430
+    }
+   },
+   "split_payments": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.03945578231292517,
+     "entity_precision": 0.006756756756756757,
+     "entity_alerts": 444
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.2222222222222222,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.08163265306122448,
+     "entity_precision": 0.003861003861003861,
+     "entity_alerts": 518
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08639455782312926,
+     "entity_precision": 0.0016556291390728477,
+     "entity_alerts": 604
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.08639455782312926,
+     "entity_precision": 0.0,
+     "entity_alerts": 616
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08435374149659863,
+     "entity_precision": 0.0017605633802816902,
+     "entity_alerts": 568
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.1836734693877551,
+     "entity_precision": 0.0,
+     "entity_alerts": 625
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.1510204081632653,
+     "entity_precision": 0.0,
+     "entity_alerts": 631
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.0326530612244898,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04285714285714286,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.061224489795918366,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.0673469387755102,
+     "entity_precision": 0.0,
+     "entity_alerts": 423
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.09047619047619047,
+     "entity_precision": 0.0,
+     "entity_alerts": 422
+    }
+   }
+  }
+ },
+ "w3_s204": {
+  "in_distribution": {
+   "Rules (friend)": {
+    "alerts": 648,
+    "tp": 23,
+    "precision": 0.035493827160493825,
+    "recall": 0.30666666666666664,
+    "case_recall": 0.42857142857142855,
+    "hard_neg_alert_rate": 0.02598314606741573,
+    "entity_precision": 0.05542168674698795,
+    "entity_alerts": 415
+   },
+   "Novelty (cold start)": {
+    "alerts": 648,
+    "tp": 29,
+    "precision": 0.044753086419753084,
+    "recall": 0.38666666666666666,
+    "case_recall": 0.46938775510204084,
+    "hard_neg_alert_rate": 0.05196629213483146,
+    "entity_precision": 0.06092436974789916,
+    "entity_alerts": 476
+   },
+   "CES": {
+    "alerts": 648,
+    "tp": 53,
+    "precision": 0.08179012345679013,
+    "recall": 0.7066666666666667,
+    "case_recall": 0.6938775510204082,
+    "hard_neg_alert_rate": 0.05828651685393258,
+    "entity_precision": 0.08077544426494346,
+    "entity_alerts": 619
+   },
+   "CES 2+1": {
+    "alerts": 648,
+    "tp": 48,
+    "precision": 0.07407407407407407,
+    "recall": 0.64,
+    "case_recall": 0.6938775510204082,
+    "hard_neg_alert_rate": 0.05828651685393258,
+    "entity_precision": 0.07592891760904685,
+    "entity_alerts": 619
+   },
+   "CES 1+2": {
+    "alerts": 648,
+    "tp": 42,
+    "precision": 0.06481481481481481,
+    "recall": 0.56,
+    "case_recall": 0.6530612244897959,
+    "hard_neg_alert_rate": 0.05337078651685393,
+    "entity_precision": 0.07636363636363637,
+    "entity_alerts": 550
+   },
+   "L3": {
+    "alerts": 648,
+    "tp": 68,
+    "precision": 0.10493827160493827,
+    "recall": 0.9066666666666666,
+    "case_recall": 0.9591836734693877,
+    "hard_neg_alert_rate": 0.16853932584269662,
+    "entity_precision": 0.10256410256410256,
+    "entity_alerts": 624
+   },
+   "L3 2+1": {
+    "alerts": 648,
+    "tp": 64,
+    "precision": 0.09876543209876543,
+    "recall": 0.8533333333333334,
+    "case_recall": 0.9387755102040817,
+    "hard_neg_alert_rate": 0.1271067415730337,
+    "entity_precision": 0.09697933227344992,
+    "entity_alerts": 629
+   },
+   "B1 Novelty": {
+    "alerts": 216,
+    "tp": 20,
+    "precision": 0.09259259259259259,
+    "recall": 0.26666666666666666,
+    "case_recall": 0.3673469387755102,
+    "hard_neg_alert_rate": 0.02247191011235955,
+    "entity_precision": 0.09259259259259259,
+    "entity_alerts": 216
+   },
+   "B1 CES": {
+    "alerts": 216,
+    "tp": 38,
+    "precision": 0.17592592592592593,
+    "recall": 0.5066666666666667,
+    "case_recall": 0.5918367346938775,
+    "hard_neg_alert_rate": 0.021067415730337078,
+    "entity_precision": 0.17592592592592593,
+    "entity_alerts": 216
+   },
+   "B1 L3": {
+    "alerts": 216,
+    "tp": 51,
+    "precision": 0.2361111111111111,
+    "recall": 0.68,
+    "case_recall": 0.8163265306122449,
+    "hard_neg_alert_rate": 0.04985955056179775,
+    "entity_precision": 0.2361111111111111,
+    "entity_alerts": 216
+   },
+   "B2 CES 1+1": {
+    "alerts": 432,
+    "tp": 41,
+    "precision": 0.09490740740740741,
+    "recall": 0.5466666666666666,
+    "case_recall": 0.6530612244897959,
+    "hard_neg_alert_rate": 0.037219101123595506,
+    "entity_precision": 0.09647058823529411,
+    "entity_alerts": 425
+   },
+   "B2 L3 1+1": {
+    "alerts": 432,
+    "tp": 53,
+    "precision": 0.12268518518518519,
+    "recall": 0.7066666666666667,
+    "case_recall": 0.8367346938775511,
+    "hard_neg_alert_rate": 0.0723314606741573,
+    "entity_precision": 0.12441314553990611,
+    "entity_alerts": 426
+   },
+   "_ap": {
+    "Rules (friend)": 0.22800455257995877,
+    "Novelty (cold start)": 0.06795934492533719,
+    "CES": 0.5038922527660384,
+    "L3": 0.8634318483957735
+   },
+   "_family_recall": {
+    "duplicate_payment": {
+     "Rules (friend)": 0.5555555555555556,
+     "Novelty (cold start)": 0.5555555555555556,
+     "CES": 0.5555555555555556,
+     "CES 2+1": 0.5555555555555556,
+     "CES 1+2": 0.5555555555555556,
+     "L3": 0.8888888888888888,
+     "L3 2+1": 0.8888888888888888,
+     "B1 Novelty": 0.4444444444444444,
+     "B1 CES": 0.5555555555555556,
+     "B1 L3": 0.7777777777777778,
+     "B2 CES 1+1": 0.5555555555555556,
+     "B2 L3 1+1": 0.7777777777777778
+    },
+    "expense_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.75,
+     "CES 2+1": 0.625,
+     "CES 1+2": 0.375,
+     "L3": 0.625,
+     "L3 2+1": 0.625,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.375,
+     "B1 L3": 0.375,
+     "B2 CES 1+1": 0.375,
+     "B2 L3 1+1": 0.375
+    },
+    "ghost_vendor": {
+     "Rules (friend)": 0.6666666666666666,
+     "Novelty (cold start)": 0.5555555555555556,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 1.0,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.4444444444444444,
+     "B1 CES": 1.0,
+     "B1 L3": 1.0,
+     "B2 CES 1+1": 1.0,
+     "B2 L3 1+1": 1.0
+    },
+    "kickback_overpricing": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.625,
+     "CES": 1.0,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.625,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.375,
+     "B1 CES": 0.625,
+     "B1 L3": 0.875,
+     "B2 CES 1+1": 0.625,
+     "B2 L3 1+1": 0.875
+    },
+    "long_outstanding_advance": {
+     "Rules (friend)": 0.75,
+     "Novelty (cold start)": 0.5,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 0.75,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.5,
+     "B1 CES": 0.75,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.75,
+     "B2 L3 1+1": 0.875
+    },
+    "payroll_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.625,
+     "CES": 1.0,
+     "CES 2+1": 0.875,
+     "CES 1+2": 0.75,
+     "L3": 0.875,
+     "L3 2+1": 0.75,
+     "B1 Novelty": 0.25,
+     "B1 CES": 0.375,
+     "B1 L3": 0.375,
+     "B2 CES 1+1": 0.625,
+     "B2 L3 1+1": 0.5
+    },
+    "period_end_adjustment": {
+     "Rules (friend)": 0.5,
+     "Novelty (cold start)": 0.5,
+     "CES": 0.5,
+     "CES 2+1": 0.5,
+     "CES 1+2": 0.5,
+     "L3": 0.875,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.375,
+     "B1 CES": 0.375,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.5,
+     "B2 L3 1+1": 0.75
+    },
+    "risky_invoice": {
+     "Rules (friend)": 0.25,
+     "Novelty (cold start)": 0.125,
+     "CES": 0.25,
+     "CES 2+1": 0.25,
+     "CES 1+2": 0.25,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.25,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.25,
+     "B2 L3 1+1": 0.75
+    },
+    "split_payments": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.3333333333333333,
+     "CES 2+1": 0.2222222222222222,
+     "CES 1+2": 0.2222222222222222,
+     "L3": 0.8888888888888888,
+     "L3 2+1": 0.5555555555555556,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.2222222222222222,
+     "B1 L3": 0.4444444444444444,
+     "B2 CES 1+1": 0.2222222222222222,
+     "B2 L3 1+1": 0.4444444444444444
+    }
+   }
+  },
+  "unseen_family": {
+   "duplicate_payment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.02457865168539326,
+     "entity_precision": 0.012224938875305624,
+     "entity_alerts": 409
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.01079913606911447,
+     "entity_alerts": 463
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.06601123595505617,
+     "entity_precision": 0.008,
+     "entity_alerts": 625
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.0625,
+     "entity_precision": 0.007974481658692184,
+     "entity_alerts": 627
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.05688202247191011,
+     "entity_precision": 0.009041591320072333,
+     "entity_alerts": 553
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.1446629213483146,
+     "entity_precision": 0.0,
+     "entity_alerts": 628
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.11938202247191011,
+     "entity_precision": 0.006309148264984227,
+     "entity_alerts": 634
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.02457865168539326,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.02457865168539326,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04915730337078652,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.04143258426966292,
+     "entity_precision": 0.011682242990654205,
+     "entity_alerts": 428
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.06952247191011236,
+     "entity_precision": 0.009345794392523364,
+     "entity_alerts": 428
+    }
+   },
+   "expense_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.026685393258426966,
+     "entity_precision": 0.0,
+     "entity_alerts": 399
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.0,
+     "entity_alerts": 460
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.054775280898876406,
+     "entity_precision": 0.0,
+     "entity_alerts": 610
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.054775280898876406,
+     "entity_precision": 0.0,
+     "entity_alerts": 610
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05196629213483146,
+     "entity_precision": 0.0,
+     "entity_alerts": 541
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.18047752808988765,
+     "entity_precision": 0.0032258064516129032,
+     "entity_alerts": 620
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.1425561797752809,
+     "entity_precision": 0.0,
+     "entity_alerts": 623
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.02457865168539326,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.023174157303370788,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.056179775280898875,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04002808988764045,
+     "entity_precision": 0.0,
+     "entity_alerts": 421
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.07935393258426966,
+     "entity_precision": 0.0,
+     "entity_alerts": 424
+    }
+   },
+   "ghost_vendor": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.02598314606741573,
+     "entity_precision": 0.012224938875305624,
+     "entity_alerts": 409
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.01079913606911447,
+     "entity_alerts": 463
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.3333333333333333,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.06179775280898876,
+     "entity_precision": 0.004862236628849271,
+     "entity_alerts": 617
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.0625,
+     "entity_precision": 0.0065040650406504065,
+     "entity_alerts": 615
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.054775280898876406,
+     "entity_precision": 0.00922509225092251,
+     "entity_alerts": 542
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.2029494382022472,
+     "entity_precision": 0.007961783439490446,
+     "entity_alerts": 628
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.16362359550561797,
+     "entity_precision": 0.007936507936507936,
+     "entity_alerts": 630
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.02457865168539326,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.4,
+     "hard_neg_alert_rate": 0.026685393258426966,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.06811797752808989,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.042837078651685394,
+     "entity_precision": 0.009456264775413711,
+     "entity_alerts": 423
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.6,
+     "hard_neg_alert_rate": 0.09199438202247191,
+     "entity_precision": 0.00936768149882904,
+     "entity_alerts": 427
+    }
+   },
+   "kickback_overpricing": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.028089887640449437,
+     "entity_precision": 0.0,
+     "entity_alerts": 401
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.010845986984815618,
+     "entity_alerts": 461
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04353932584269663,
+     "entity_precision": 0.0,
+     "entity_alerts": 544
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.05758426966292135,
+     "entity_precision": 0.005136986301369863,
+     "entity_alerts": 584
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.061095505617977525,
+     "entity_precision": 0.007194244604316547,
+     "entity_alerts": 556
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.18398876404494383,
+     "entity_precision": 0.0,
+     "entity_alerts": 615
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.15168539325842698,
+     "entity_precision": 0.0048,
+     "entity_alerts": 625
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.023876404494382022,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.019662921348314606,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06671348314606741,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.04353932584269663,
+     "entity_precision": 0.007125890736342043,
+     "entity_alerts": 421
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.375,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.09058988764044944,
+     "entity_precision": 0.007058823529411765,
+     "entity_alerts": 425
+    }
+   },
+   "long_outstanding_advance": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.026685393258426966,
+     "entity_precision": 0.01485148514851485,
+     "entity_alerts": 404
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.008602150537634409,
+     "entity_alerts": 465
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06530898876404495,
+     "entity_precision": 0.0065252854812398045,
+     "entity_alerts": 613
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06320224719101124,
+     "entity_precision": 0.006535947712418301,
+     "entity_alerts": 612
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.054775280898876406,
+     "entity_precision": 0.0074211502782931356,
+     "entity_alerts": 539
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.20646067415730338,
+     "entity_precision": 0.007961783439490446,
+     "entity_alerts": 628
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.1601123595505618,
+     "entity_precision": 0.006299212598425197,
+     "entity_alerts": 635
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.023876404494382022,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.027387640449438203,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.07162921348314606,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.042837078651685394,
+     "entity_precision": 0.009523809523809525,
+     "entity_alerts": 420
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.09620786516853932,
+     "entity_precision": 0.009324009324009324,
+     "entity_alerts": 429
+    }
+   },
+   "payroll_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.026685393258426966,
+     "entity_precision": 0.0,
+     "entity_alerts": 404
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.010822510822510822,
+     "entity_alerts": 462
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05407303370786517,
+     "entity_precision": 0.0,
+     "entity_alerts": 598
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 3,
+     "precision": 0.004629629629629629,
+     "recall": 0.375,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.056179775280898875,
+     "entity_precision": 0.004966887417218543,
+     "entity_alerts": 604
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.051264044943820225,
+     "entity_precision": 0.00927643784786642,
+     "entity_alerts": 539
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.1622191011235955,
+     "entity_precision": 0.0,
+     "entity_alerts": 627
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.12359550561797752,
+     "entity_precision": 0.003179650238473768,
+     "entity_alerts": 629
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.023876404494382022,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.023876404494382022,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05337078651685393,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 3,
+     "precision": 0.006944444444444444,
+     "recall": 0.375,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.038623595505617975,
+     "entity_precision": 0.007177033492822967,
+     "entity_alerts": 418
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 2,
+     "precision": 0.004629629629629629,
+     "recall": 0.25,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.07443820224719101,
+     "entity_precision": 0.00468384074941452,
+     "entity_alerts": 427
+    }
+   },
+   "period_end_adjustment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.027387640449438203,
+     "entity_precision": 0.009828009828009828,
+     "entity_alerts": 407
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.008620689655172414,
+     "entity_alerts": 464
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06320224719101124,
+     "entity_precision": 0.006578947368421052,
+     "entity_alerts": 608
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06320224719101124,
+     "entity_precision": 0.006568144499178982,
+     "entity_alerts": 609
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.056179775280898875,
+     "entity_precision": 0.007407407407407408,
+     "entity_alerts": 540
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.17275280898876405,
+     "entity_precision": 0.007936507936507936,
+     "entity_alerts": 630
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.125,
+     "entity_precision": 0.00792393026941363,
+     "entity_alerts": 631
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.02457865168539326,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 3,
+     "precision": 0.013888888888888888,
+     "recall": 0.375,
+     "case_recall": 0.375,
+     "hard_neg_alert_rate": 0.028792134831460675,
+     "entity_precision": 0.013888888888888888,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.046348314606741575,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.04564606741573034,
+     "entity_precision": 0.009523809523809525,
+     "entity_alerts": 420
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06882022471910113,
+     "entity_precision": 0.009280742459396751,
+     "entity_alerts": 431
+    }
+   },
+   "risky_invoice": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.25,
+     "hard_neg_alert_rate": 0.028089887640449437,
+     "entity_precision": 0.0049504950495049506,
+     "entity_alerts": 404
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.002173913043478261,
+     "entity_alerts": 460
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06320224719101124,
+     "entity_precision": 0.0,
+     "entity_alerts": 609
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06179775280898876,
+     "entity_precision": 0.0,
+     "entity_alerts": 606
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.05547752808988764,
+     "entity_precision": 0.0018552875695732839,
+     "entity_alerts": 539
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.875,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.16151685393258428,
+     "entity_precision": 0.011023622047244094,
+     "entity_alerts": 635
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.12991573033707865,
+     "entity_precision": 0.009448818897637795,
+     "entity_alerts": 635
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.02457865168539326,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.026685393258426966,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.04985955056179775,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.042837078651685394,
+     "entity_precision": 0.0,
+     "entity_alerts": 420
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.0723314606741573,
+     "entity_precision": 0.009302325581395349,
+     "entity_alerts": 430
+    }
+   },
+   "split_payments": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.025280898876404494,
+     "entity_precision": 0.0,
+     "entity_alerts": 406
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.0,
+     "entity_alerts": 460
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.05828651685393258,
+     "entity_precision": 0.0033112582781456954,
+     "entity_alerts": 604
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.05758426966292135,
+     "entity_precision": 0.0016474464579901153,
+     "entity_alerts": 607
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.05266853932584269,
+     "entity_precision": 0.0018484288354898336,
+     "entity_alerts": 541
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.7777777777777778,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.12780898876404495,
+     "entity_precision": 0.00967741935483871,
+     "entity_alerts": 620
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.11025280898876405,
+     "entity_precision": 0.004784688995215311,
+     "entity_alerts": 627
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.02457865168539326,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.023876404494382022,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.046348314606741575,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 1,
+     "precision": 0.0023148148148148147,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.04002808988764045,
+     "entity_precision": 0.0023752969121140144,
+     "entity_alerts": 421
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 2,
+     "precision": 0.004629629629629629,
+     "recall": 0.2222222222222222,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.06952247191011236,
+     "entity_precision": 0.004705882352941176,
+     "entity_alerts": 425
+    }
+   }
+  }
+ },
+ "w3_s205": {
+  "in_distribution": {
+   "Rules (friend)": {
+    "alerts": 648,
+    "tp": 25,
+    "precision": 0.038580246913580245,
+    "recall": 0.3333333333333333,
+    "case_recall": 0.4423076923076923,
+    "hard_neg_alert_rate": 0.02403846153846154,
+    "entity_precision": 0.06030150753768844,
+    "entity_alerts": 398
+   },
+   "Novelty (cold start)": {
+    "alerts": 648,
+    "tp": 26,
+    "precision": 0.040123456790123455,
+    "recall": 0.3466666666666667,
+    "case_recall": 0.4423076923076923,
+    "hard_neg_alert_rate": 0.05357142857142857,
+    "entity_precision": 0.05219206680584551,
+    "entity_alerts": 479
+   },
+   "CES": {
+    "alerts": 648,
+    "tp": 54,
+    "precision": 0.08333333333333333,
+    "recall": 0.72,
+    "case_recall": 0.75,
+    "hard_neg_alert_rate": 0.0521978021978022,
+    "entity_precision": 0.08538587848932677,
+    "entity_alerts": 609
+   },
+   "CES 2+1": {
+    "alerts": 648,
+    "tp": 51,
+    "precision": 0.0787037037037037,
+    "recall": 0.68,
+    "case_recall": 0.7692307692307693,
+    "hard_neg_alert_rate": 0.061126373626373624,
+    "entity_precision": 0.08169934640522876,
+    "entity_alerts": 612
+   },
+   "CES 1+2": {
+    "alerts": 648,
+    "tp": 40,
+    "precision": 0.06172839506172839,
+    "recall": 0.5333333333333333,
+    "case_recall": 0.7115384615384616,
+    "hard_neg_alert_rate": 0.057005494505494504,
+    "entity_precision": 0.07142857142857142,
+    "entity_alerts": 546
+   },
+   "L3": {
+    "alerts": 648,
+    "tp": 67,
+    "precision": 0.10339506172839506,
+    "recall": 0.8933333333333333,
+    "case_recall": 0.9615384615384616,
+    "hard_neg_alert_rate": 0.15178571428571427,
+    "entity_precision": 0.10483870967741936,
+    "entity_alerts": 620
+   },
+   "L3 2+1": {
+    "alerts": 648,
+    "tp": 63,
+    "precision": 0.09722222222222222,
+    "recall": 0.84,
+    "case_recall": 0.9230769230769231,
+    "hard_neg_alert_rate": 0.12431318681318682,
+    "entity_precision": 0.0976,
+    "entity_alerts": 625
+   },
+   "B1 Novelty": {
+    "alerts": 216,
+    "tp": 18,
+    "precision": 0.08333333333333333,
+    "recall": 0.24,
+    "case_recall": 0.34615384615384615,
+    "hard_neg_alert_rate": 0.024725274725274724,
+    "entity_precision": 0.08333333333333333,
+    "entity_alerts": 216
+   },
+   "B1 CES": {
+    "alerts": 216,
+    "tp": 35,
+    "precision": 0.16203703703703703,
+    "recall": 0.4666666666666667,
+    "case_recall": 0.6538461538461539,
+    "hard_neg_alert_rate": 0.026785714285714284,
+    "entity_precision": 0.16203703703703703,
+    "entity_alerts": 216
+   },
+   "B1 L3": {
+    "alerts": 216,
+    "tp": 50,
+    "precision": 0.23148148148148148,
+    "recall": 0.6666666666666666,
+    "case_recall": 0.8076923076923077,
+    "hard_neg_alert_rate": 0.05013736263736264,
+    "entity_precision": 0.23148148148148148,
+    "entity_alerts": 216
+   },
+   "B2 CES 1+1": {
+    "alerts": 432,
+    "tp": 38,
+    "precision": 0.08796296296296297,
+    "recall": 0.5066666666666667,
+    "case_recall": 0.7115384615384616,
+    "hard_neg_alert_rate": 0.04601648351648352,
+    "entity_precision": 0.08962264150943396,
+    "entity_alerts": 424
+   },
+   "B2 L3 1+1": {
+    "alerts": 432,
+    "tp": 55,
+    "precision": 0.12731481481481483,
+    "recall": 0.7333333333333333,
+    "case_recall": 0.9038461538461539,
+    "hard_neg_alert_rate": 0.07486263736263736,
+    "entity_precision": 0.12910798122065728,
+    "entity_alerts": 426
+   },
+   "_ap": {
+    "Rules (friend)": 0.2542831061134342,
+    "Novelty (cold start)": 0.1634527448793832,
+    "CES": 0.48571273390100217,
+    "L3": 0.9162220438642854
+   },
+   "_family_recall": {
+    "duplicate_payment": {
+     "Rules (friend)": 0.5555555555555556,
+     "Novelty (cold start)": 0.5555555555555556,
+     "CES": 0.4444444444444444,
+     "CES 2+1": 0.5555555555555556,
+     "CES 1+2": 0.5555555555555556,
+     "L3": 0.8888888888888888,
+     "L3 2+1": 0.8888888888888888,
+     "B1 Novelty": 0.5555555555555556,
+     "B1 CES": 0.4444444444444444,
+     "B1 L3": 0.7777777777777778,
+     "B2 CES 1+1": 0.5555555555555556,
+     "B2 L3 1+1": 0.8888888888888888
+    },
+    "expense_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.875,
+     "CES 2+1": 0.625,
+     "CES 1+2": 0.25,
+     "L3": 0.75,
+     "L3 2+1": 0.75,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.25,
+     "B1 L3": 0.5,
+     "B2 CES 1+1": 0.25,
+     "B2 L3 1+1": 0.5
+    },
+    "ghost_vendor": {
+     "Rules (friend)": 0.5555555555555556,
+     "Novelty (cold start)": 0.4444444444444444,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 0.8888888888888888,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.3333333333333333,
+     "B1 CES": 0.7777777777777778,
+     "B1 L3": 0.6666666666666666,
+     "B2 CES 1+1": 0.8888888888888888,
+     "B2 L3 1+1": 1.0
+    },
+    "kickback_overpricing": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.625,
+     "CES": 0.75,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.625,
+     "L3": 0.875,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.125,
+     "B1 CES": 0.375,
+     "B1 L3": 0.625,
+     "B2 CES 1+1": 0.375,
+     "B2 L3 1+1": 0.625
+    },
+    "long_outstanding_advance": {
+     "Rules (friend)": 0.5,
+     "Novelty (cold start)": 0.5,
+     "CES": 1.0,
+     "CES 2+1": 1.0,
+     "CES 1+2": 1.0,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.5,
+     "B1 CES": 1.0,
+     "B1 L3": 1.0,
+     "B2 CES 1+1": 1.0,
+     "B2 L3 1+1": 1.0
+    },
+    "payroll_padding": {
+     "Rules (friend)": 0.0,
+     "Novelty (cold start)": 0.125,
+     "CES": 1.0,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.25,
+     "L3": 1.0,
+     "L3 2+1": 1.0,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.25,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.25,
+     "B2 L3 1+1": 0.75
+    },
+    "period_end_adjustment": {
+     "Rules (friend)": 0.75,
+     "Novelty (cold start)": 0.75,
+     "CES": 0.75,
+     "CES 2+1": 0.75,
+     "CES 1+2": 0.75,
+     "L3": 1.0,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.625,
+     "B1 CES": 0.625,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.75,
+     "B2 L3 1+1": 0.875
+    },
+    "risky_invoice": {
+     "Rules (friend)": 0.125,
+     "Novelty (cold start)": 0.125,
+     "CES": 0.375,
+     "CES 2+1": 0.375,
+     "CES 1+2": 0.375,
+     "L3": 1.0,
+     "L3 2+1": 0.875,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.375,
+     "B1 L3": 0.75,
+     "B2 CES 1+1": 0.375,
+     "B2 L3 1+1": 0.75
+    },
+    "split_payments": {
+     "Rules (friend)": 0.4444444444444444,
+     "Novelty (cold start)": 0.0,
+     "CES": 0.3333333333333333,
+     "CES 2+1": 0.3333333333333333,
+     "CES 1+2": 0.1111111111111111,
+     "L3": 0.5555555555555556,
+     "L3 2+1": 0.3333333333333333,
+     "B1 Novelty": 0.0,
+     "B1 CES": 0.1111111111111111,
+     "B1 L3": 0.2222222222222222,
+     "B2 CES 1+1": 0.1111111111111111,
+     "B2 L3 1+1": 0.2222222222222222
+    }
+   }
+  },
+  "unseen_family": {
+   "duplicate_payment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.023351648351648352,
+     "entity_precision": 0.01020408163265306,
+     "entity_alerts": 392
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.054945054945054944,
+     "entity_precision": 0.010570824524312896,
+     "entity_alerts": 473
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.06387362637362637,
+     "entity_precision": 0.006379585326953748,
+     "entity_alerts": 627
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.06593406593406594,
+     "entity_precision": 0.007987220447284345,
+     "entity_alerts": 626
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.05631868131868132,
+     "entity_precision": 0.00909090909090909,
+     "entity_alerts": 550
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.16002747252747251,
+     "entity_precision": 0.0,
+     "entity_alerts": 623
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.13873626373626374,
+     "entity_precision": 0.007961783439490446,
+     "entity_alerts": 628
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 5,
+     "precision": 0.023148148148148147,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.025412087912087912,
+     "entity_precision": 0.023148148148148147,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.027472527472527472,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06593406593406594,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.04532967032967033,
+     "entity_precision": 0.011682242990654205,
+     "entity_alerts": 428
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 5,
+     "precision": 0.011574074074074073,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.0885989010989011,
+     "entity_precision": 0.011764705882352941,
+     "entity_alerts": 425
+    }
+   },
+   "expense_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.024725274725274724,
+     "entity_precision": 0.0,
+     "entity_alerts": 397
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05563186813186813,
+     "entity_precision": 0.0,
+     "entity_alerts": 472
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.057692307692307696,
+     "entity_precision": 0.0,
+     "entity_alerts": 586
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.057692307692307696,
+     "entity_precision": 0.0,
+     "entity_alerts": 587
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05563186813186813,
+     "entity_precision": 0.0,
+     "entity_alerts": 535
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.19848901098901098,
+     "entity_precision": 0.0031645569620253164,
+     "entity_alerts": 632
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.15934065934065933,
+     "entity_precision": 0.0,
+     "entity_alerts": 625
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.027472527472527472,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.026785714285714284,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.07005494505494506,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04601648351648352,
+     "entity_precision": 0.0,
+     "entity_alerts": 414
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.09340659340659341,
+     "entity_precision": 0.0,
+     "entity_alerts": 423
+    }
+   },
+   "ghost_vendor": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 0.5555555555555556,
+     "hard_neg_alert_rate": 0.02197802197802198,
+     "entity_precision": 0.012658227848101266,
+     "entity_alerts": 395
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.05563186813186813,
+     "entity_precision": 0.008456659619450317,
+     "entity_alerts": 473
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.057692307692307696,
+     "entity_precision": 0.006633499170812604,
+     "entity_alerts": 603
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.06387362637362637,
+     "entity_precision": 0.006578947368421052,
+     "entity_alerts": 608
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.059065934065934064,
+     "entity_precision": 0.007366482504604052,
+     "entity_alerts": 543
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 8,
+     "precision": 0.012345679012345678,
+     "recall": 0.8888888888888888,
+     "case_recall": 0.8888888888888888,
+     "hard_neg_alert_rate": 0.1723901098901099,
+     "entity_precision": 0.012718600953895072,
+     "entity_alerts": 629
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 8,
+     "precision": 0.012345679012345678,
+     "recall": 0.8888888888888888,
+     "case_recall": 0.8888888888888888,
+     "hard_neg_alert_rate": 0.14835164835164835,
+     "entity_precision": 0.0128,
+     "entity_alerts": 625
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.026785714285714284,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.029532967032967032,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 7,
+     "precision": 0.032407407407407406,
+     "recall": 0.7777777777777778,
+     "case_recall": 0.7777777777777778,
+     "hard_neg_alert_rate": 0.06456043956043957,
+     "entity_precision": 0.032407407407407406,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.4444444444444444,
+     "case_recall": 0.4444444444444444,
+     "hard_neg_alert_rate": 0.04945054945054945,
+     "entity_precision": 0.009456264775413711,
+     "entity_alerts": 423
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 8,
+     "precision": 0.018518518518518517,
+     "recall": 0.8888888888888888,
+     "case_recall": 0.8888888888888888,
+     "hard_neg_alert_rate": 0.09134615384615384,
+     "entity_precision": 0.018648018648018648,
+     "entity_alerts": 429
+    }
+   },
+   "kickback_overpricing": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.025412087912087912,
+     "entity_precision": 0.0,
+     "entity_alerts": 394
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.054945054945054944,
+     "entity_precision": 0.00847457627118644,
+     "entity_alerts": 472
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.04189560439560439,
+     "entity_precision": 0.0,
+     "entity_alerts": 537
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.05425824175824176,
+     "entity_precision": 0.0017482517482517483,
+     "entity_alerts": 572
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.054945054945054944,
+     "entity_precision": 0.007285974499089253,
+     "entity_alerts": 549
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.17925824175824176,
+     "entity_precision": 0.0016051364365971107,
+     "entity_alerts": 623
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.16002747252747251,
+     "entity_precision": 0.0016025641025641025,
+     "entity_alerts": 624
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 1,
+     "precision": 0.004629629629629629,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.027472527472527472,
+     "entity_precision": 0.004629629629629629,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.016483516483516484,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.07623626373626374,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 1,
+     "precision": 0.0023148148148148147,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.04189560439560439,
+     "entity_precision": 0.0024154589371980675,
+     "entity_alerts": 414
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 1,
+     "precision": 0.0023148148148148147,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.10302197802197802,
+     "entity_precision": 0.002347417840375587,
+     "entity_alerts": 426
+    }
+   },
+   "long_outstanding_advance": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.02403846153846154,
+     "entity_precision": 0.01,
+     "entity_alerts": 400
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05563186813186813,
+     "entity_precision": 0.008456659619450317,
+     "entity_alerts": 473
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06524725274725275,
+     "entity_precision": 0.006666666666666667,
+     "entity_alerts": 600
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06662087912087912,
+     "entity_precision": 0.006700167504187605,
+     "entity_alerts": 597
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.061126373626373624,
+     "entity_precision": 0.0073937153419593345,
+     "entity_alerts": 541
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.21978021978021978,
+     "entity_precision": 0.006359300476947536,
+     "entity_alerts": 629
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.1662087912087912,
+     "entity_precision": 0.006389776357827476,
+     "entity_alerts": 626
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.027472527472527472,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.032280219780219783,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06868131868131869,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05151098901098901,
+     "entity_precision": 0.009523809523809525,
+     "entity_alerts": 420
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.09546703296703296,
+     "entity_precision": 0.009456264775413711,
+     "entity_alerts": 423
+    }
+   },
+   "payroll_padding": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.025412087912087912,
+     "entity_precision": 0.0,
+     "entity_alerts": 398
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 2,
+     "precision": 0.0030864197530864196,
+     "recall": 0.25,
+     "case_recall": 0.6666666666666666,
+     "hard_neg_alert_rate": 0.05563186813186813,
+     "entity_precision": 0.004219409282700422,
+     "entity_alerts": 474
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05013736263736264,
+     "entity_precision": 0.0,
+     "entity_alerts": 589
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.054945054945054944,
+     "entity_precision": 0.0,
+     "entity_alerts": 583
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.05357142857142857,
+     "entity_precision": 0.0,
+     "entity_alerts": 538
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.17513736263736263,
+     "entity_precision": 0.0,
+     "entity_alerts": 619
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.3333333333333333,
+     "hard_neg_alert_rate": 0.14148351648351648,
+     "entity_precision": 0.0016155088852988692,
+     "entity_alerts": 619
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.027472527472527472,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.025412087912087912,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.06043956043956044,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.044642857142857144,
+     "entity_precision": 0.0,
+     "entity_alerts": 414
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.0831043956043956,
+     "entity_precision": 0.0,
+     "entity_alerts": 425
+    }
+   },
+   "period_end_adjustment": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.023351648351648352,
+     "entity_precision": 0.01507537688442211,
+     "entity_alerts": 398
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.054945054945054944,
+     "entity_precision": 0.012658227848101266,
+     "entity_alerts": 474
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.059752747252747256,
+     "entity_precision": 0.010050251256281407,
+     "entity_alerts": 597
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.06387362637362637,
+     "entity_precision": 0.01011804384485666,
+     "entity_alerts": 593
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.05837912087912088,
+     "entity_precision": 0.011131725417439703,
+     "entity_alerts": 539
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 6,
+     "precision": 0.009259259259259259,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.17032967032967034,
+     "entity_precision": 0.009523809523809525,
+     "entity_alerts": 630
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 7,
+     "precision": 0.010802469135802469,
+     "recall": 0.875,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.13942307692307693,
+     "entity_precision": 0.011326860841423949,
+     "entity_alerts": 618
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.026785714285714284,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.028846153846153848,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 6,
+     "precision": 0.027777777777777776,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.057692307692307696,
+     "entity_precision": 0.027777777777777776,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 6,
+     "precision": 0.013888888888888888,
+     "recall": 0.75,
+     "case_recall": 0.75,
+     "hard_neg_alert_rate": 0.048763736263736264,
+     "entity_precision": 0.014388489208633094,
+     "entity_alerts": 417
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 7,
+     "precision": 0.016203703703703703,
+     "recall": 0.875,
+     "case_recall": 0.875,
+     "hard_neg_alert_rate": 0.08241758241758242,
+     "entity_precision": 0.01647058823529412,
+     "entity_alerts": 425
+    }
+   },
+   "risky_invoice": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.02403846153846154,
+     "entity_precision": 0.0025380710659898475,
+     "entity_alerts": 394
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.05563186813186813,
+     "entity_precision": 0.00211864406779661,
+     "entity_alerts": 472
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.057692307692307696,
+     "entity_precision": 0.0,
+     "entity_alerts": 598
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.06387362637362637,
+     "entity_precision": 0.0016806722689075631,
+     "entity_alerts": 595
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.059752747252747256,
+     "entity_precision": 0.0018587360594795538,
+     "entity_alerts": 538
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.625,
+     "case_recall": 0.625,
+     "hard_neg_alert_rate": 0.21222527472527472,
+     "entity_precision": 0.008064516129032258,
+     "entity_alerts": 620
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 4,
+     "precision": 0.006172839506172839,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.17925824175824176,
+     "entity_precision": 0.006389776357827476,
+     "entity_alerts": 626
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.027472527472527472,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.030906593406593408,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 4,
+     "precision": 0.018518518518518517,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.08447802197802198,
+     "entity_precision": 0.018518518518518517,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 1,
+     "precision": 0.0023148148148148147,
+     "recall": 0.125,
+     "case_recall": 0.125,
+     "hard_neg_alert_rate": 0.04945054945054945,
+     "entity_precision": 0.002380952380952381,
+     "entity_alerts": 420
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 4,
+     "precision": 0.009259259259259259,
+     "recall": 0.5,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.11263736263736264,
+     "entity_precision": 0.00936768149882904,
+     "entity_alerts": 427
+    }
+   },
+   "split_payments": {
+    "Rules (friend)": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.02403846153846154,
+     "entity_precision": 0.007712082262210797,
+     "entity_alerts": 389
+    },
+    "Novelty (cold start)": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.05563186813186813,
+     "entity_precision": 0.00211864406779661,
+     "entity_alerts": 472
+    },
+    "CES": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.06043956043956044,
+     "entity_precision": 0.0016501650165016502,
+     "entity_alerts": 606
+    },
+    "CES 2+1": {
+     "alerts": 648,
+     "tp": 1,
+     "precision": 0.0015432098765432098,
+     "recall": 0.1111111111111111,
+     "case_recall": 0.5,
+     "hard_neg_alert_rate": 0.059065934065934064,
+     "entity_precision": 0.0016181229773462784,
+     "entity_alerts": 618
+    },
+    "CES 1+2": {
+     "alerts": 648,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.059065934065934064,
+     "entity_precision": 0.0,
+     "entity_alerts": 540
+    },
+    "L3": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.1407967032967033,
+     "entity_precision": 0.006472491909385114,
+     "entity_alerts": 618
+    },
+    "L3 2+1": {
+     "alerts": 648,
+     "tp": 5,
+     "precision": 0.007716049382716049,
+     "recall": 0.5555555555555556,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.12568681318681318,
+     "entity_precision": 0.006472491909385114,
+     "entity_alerts": 618
+    },
+    "B1 Novelty": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.027472527472527472,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 CES": {
+     "alerts": 216,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.03021978021978022,
+     "entity_precision": 0.0,
+     "entity_alerts": 216
+    },
+    "B1 L3": {
+     "alerts": 216,
+     "tp": 2,
+     "precision": 0.009259259259259259,
+     "recall": 0.2222222222222222,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.059752747252747256,
+     "entity_precision": 0.009259259259259259,
+     "entity_alerts": 216
+    },
+    "B2 CES 1+1": {
+     "alerts": 432,
+     "tp": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "case_recall": 0.0,
+     "hard_neg_alert_rate": 0.048763736263736264,
+     "entity_precision": 0.0,
+     "entity_alerts": 424
+    },
+    "B2 L3 1+1": {
+     "alerts": 432,
+     "tp": 2,
+     "precision": 0.004629629629629629,
+     "recall": 0.2222222222222222,
+     "case_recall": 1.0,
+     "hard_neg_alert_rate": 0.0831043956043956,
+     "entity_precision": 0.0047169811320754715,
+     "entity_alerts": 424
+    }
+   }
+  }
+ }
+}

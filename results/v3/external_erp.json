@@ -1,0 +1,196 @@
+{
+ "fraud_1": {
+  "rows": 39430,
+  "fraud_lines": 24,
+  "methods": {
+   "IF": {
+    "ap": 0.4587029955331842,
+    "r_precision": 0.5833333333333334,
+    "roc_auc": 0.9932804226090781,
+    "regime": "U (fit on clean runs)"
+   },
+   "ECOD": {
+    "ap": 0.4945552997214121,
+    "r_precision": 0.5833333333333334,
+    "roc_auc": 0.9941305469556243,
+    "regime": "U (fit on clean runs)"
+   },
+   "HBOS": {
+    "ap": 0.2501530291340835,
+    "r_precision": 0.3333333333333333,
+    "roc_auc": 0.9922896682400311,
+    "regime": "U (fit on clean runs)"
+   },
+   "AE": {
+    "ap": 0.14435789036282137,
+    "r_precision": 0.08333333333333333,
+    "roc_auc": 0.9968564431812413,
+    "regime": "U (fit on clean runs)"
+   },
+   "LGBM (other runs)": {
+    "ap": 0.5556933468466363,
+    "r_precision": 0.5,
+    "roc_auc": 0.908843196467543,
+    "regime": "S (other fraud runs)"
+   },
+   "LGBM leave-scenario-out": {
+    "Corporate Injury": {
+     "positives": 14,
+     "ap": 0.7207022483672374,
+     "r_precision": 0.7142857142857143
+    },
+    "Invoice Kickback 1": {
+     "positives": 4,
+     "ap": 0.0003262678777802629,
+     "r_precision": 0.0
+    },
+    "Larceny 2": {
+     "positives": 4,
+     "ap": 0.5739564428312159,
+     "r_precision": 0.5
+    }
+   }
+  }
+ },
+ "fraud_2": {
+  "rows": 36778,
+  "fraud_lines": 50,
+  "methods": {
+   "IF": {
+    "ap": 0.050417206154947145,
+    "r_precision": 0.04,
+    "roc_auc": 0.9647239163580918,
+    "regime": "U (fit on clean runs)"
+   },
+   "ECOD": {
+    "ap": 0.05854259579111612,
+    "r_precision": 0.04,
+    "roc_auc": 0.983257460248312,
+    "regime": "U (fit on clean runs)"
+   },
+   "HBOS": {
+    "ap": 0.014125293704739583,
+    "r_precision": 0.0,
+    "roc_auc": 0.9348213896754519,
+    "regime": "U (fit on clean runs)"
+   },
+   "AE": {
+    "ap": 0.14715716163823983,
+    "r_precision": 0.24,
+    "roc_auc": 0.9707171640165542,
+    "regime": "U (fit on clean runs)"
+   },
+   "LGBM (other runs)": {
+    "ap": 0.24942289632932285,
+    "r_precision": 0.44,
+    "roc_auc": 0.9113559137442823,
+    "regime": "S (other fraud runs)"
+   },
+   "LGBM leave-scenario-out": {
+    "Corporate_Injury_I": {
+     "positives": 4,
+     "ap": 0.05679671821728848,
+     "r_precision": 0.0
+    },
+    "Invoice_Kickback_I": {
+     "positives": 6,
+     "ap": 0.0014253949292353642,
+     "r_precision": 0.0
+    },
+    "Invoice_Kickback_II": {
+     "positives": 18,
+     "ap": 0.005189186982464761,
+     "r_precision": 0.0
+    },
+    "Larceny_II": {
+     "positives": 4,
+     "ap": 0.28154761904761905,
+     "r_precision": 0.0
+    },
+    "Larceny_III": {
+     "positives": 10,
+     "ap": 0.00279619161867505,
+     "r_precision": 0.0
+    },
+    "Larceny_IV": {
+     "positives": 6,
+     "ap": 0.16858389769292584,
+     "r_precision": 0.0
+    }
+   }
+  }
+ },
+ "fraud_3": {
+  "rows": 37407,
+  "fraud_lines": 86,
+  "methods": {
+   "IF": {
+    "ap": 0.1168283122288381,
+    "r_precision": 0.13953488372093023,
+    "roc_auc": 0.9721750894034968,
+    "regime": "U (fit on clean runs)"
+   },
+   "ECOD": {
+    "ap": 0.14733190890194076,
+    "r_precision": 0.13953488372093023,
+    "roc_auc": 0.9866450897711433,
+    "regime": "U (fit on clean runs)"
+   },
+   "HBOS": {
+    "ap": 0.043742317446480716,
+    "r_precision": 0.046511627906976744,
+    "roc_auc": 0.9225643272102557,
+    "regime": "U (fit on clean runs)"
+   },
+   "AE": {
+    "ap": 0.2123932297486001,
+    "r_precision": 0.19767441860465115,
+    "roc_auc": 0.9823663714487074,
+    "regime": "U (fit on clean runs)"
+   },
+   "LGBM (other runs)": {
+    "ap": 0.3970838270151548,
+    "r_precision": 0.43023255813953487,
+    "roc_auc": 0.8296725517088391,
+    "regime": "S (other fraud runs)"
+   },
+   "LGBM leave-scenario-out": {
+    "Corporate_Injury_I": {
+     "positives": 8,
+     "ap": 0.00012060196363594268,
+     "r_precision": 0.0
+    },
+    "Invoice_Kickback_I": {
+     "positives": 24,
+     "ap": 0.045426490214962166,
+     "r_precision": 0.16666666666666666
+    },
+    "Invoice_Kickback_II": {
+     "positives": 6,
+     "ap": 0.003781368314724664,
+     "r_precision": 0.0
+    },
+    "Larceny_I": {
+     "positives": 8,
+     "ap": 0.0038242601964683888,
+     "r_precision": 0.0
+    },
+    "Larceny_II": {
+     "positives": 10,
+     "ap": 0.29852029486568854,
+     "r_precision": 0.3
+    },
+    "Larceny_III": {
+     "positives": 26,
+     "ap": 0.2412125050997038,
+     "r_precision": 0.38461538461538464
+    },
+    "Larceny_IV": {
+     "positives": 4,
+     "ap": 0.6791666666666667,
+     "r_precision": 0.75
+    }
+   }
+  }
+ }
+}

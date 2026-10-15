@@ -1,0 +1,1142 @@
+{
+ "advance_unsettled": {
+  "LGBM[friend190]": {
+   "ap": 6.076072426783327e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 1
+  },
+  "L3": {
+   "ap": 0.0034602076124567475,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  },
+  "Rules+Graph": {
+   "ap": 0.14285714285714285,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  },
+  "EntityDeviation": {
+   "ap": 2.0022024226649315e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 1
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.043478260869565216,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.043478260869565216,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  }
+ },
+ "altered_payee": {
+  "LGBM[friend190]": {
+   "ap": 0.0009798949144433921,
+   "B3_recall": 0.42857142857142855,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 7
+  },
+  "L3": {
+   "ap": 0.5249870218357613,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  },
+  "Rules+Graph": {
+   "ap": 0.00022688768102575345,
+   "B3_recall": 0.14285714285714285,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 7
+  },
+  "EntityDeviation": {
+   "ap": 0.018519714960239207,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.009780126929081933,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.03069842959868785,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  }
+ },
+ "bank_detail_switch": {
+  "LGBM[friend190]": {
+   "ap": 0.000890879218659578,
+   "B3_recall": 0.6666666666666666,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 3
+  },
+  "L3": {
+   "ap": 0.5555909725911496,
+   "B3_recall": 0.6666666666666666,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 3
+  },
+  "Rules+Graph": {
+   "ap": 0.06679173008922107,
+   "B3_recall": 0.3333333333333333,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 3
+  },
+  "EntityDeviation": {
+   "ap": 5.419069414635729e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.01595349323657522,
+   "B3_recall": 0.3333333333333333,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 3
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.03218186633675786,
+   "B3_recall": 0.6666666666666666,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 3
+  }
+ },
+ "bid_rotation": {
+  "LGBM[friend190]": {
+   "ap": 0.0016596885270208036,
+   "B3_recall": 0.25925925925925924,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 27
+  },
+  "L3": {
+   "ap": 0.23939849647833242,
+   "B3_recall": 0.6296296296296297,
+   "B3_precision": 0.004373552868536146,
+   "positives": 27
+  },
+  "Rules+Graph": {
+   "ap": 0.0015302357868779775,
+   "B3_recall": 0.18518518518518517,
+   "B3_precision": 0.0012863390789812194,
+   "positives": 27
+  },
+  "EntityDeviation": {
+   "ap": 0.000488958674214384,
+   "B3_recall": 0.07407407407407407,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 27
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0009178957401217975,
+   "B3_recall": 0.07407407407407407,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 27
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.01571052303568479,
+   "B3_recall": 0.48148148148148145,
+   "B3_precision": 0.0033444816053511705,
+   "positives": 27
+  }
+ },
+ "cash_larceny": {
+  "LGBM[friend190]": {
+   "ap": 0.00010127259915922716,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  },
+  "L3": {
+   "ap": 0.12441570130360305,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 3
+  },
+  "Rules+Graph": {
+   "ap": 8.043602141654074e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  },
+  "EntityDeviation": {
+   "ap": 0.00024922707214073715,
+   "B3_recall": 0.3333333333333333,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 3
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0001327150753332522,
+   "B3_recall": 0.3333333333333333,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 3
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.0045857035634155165,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 3
+  }
+ },
+ "duplicate_payment": {
+  "LGBM[friend190]": {
+   "ap": 0.00010118385105737125,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 1
+  },
+  "L3": {
+   "ap": 0.07142857142857142,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  },
+  "Rules+Graph": {
+   "ap": 0.05263157894736842,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  },
+  "EntityDeviation": {
+   "ap": 4.205921938088829e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 1
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.02631578947368421,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.02631578947368421,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  }
+ },
+ "expense_duplicate_claim": {
+  "LGBM[friend190]": {
+   "ap": 0.00685201299604043,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 2
+  },
+  "L3": {
+   "ap": 0.005626191989828354,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 2
+  },
+  "Rules+Graph": {
+   "ap": 4.7513841954161274e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "EntityDeviation": {
+   "ap": 0.00018815232075398492,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.00011079157467084778,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.0010517559842726518,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 2
+  }
+ },
+ "expense_fictitious": {
+  "LGBM[friend190]": {
+   "ap": 0.01086429244047984,
+   "B3_recall": 0.7142857142857143,
+   "B3_precision": 0.0038590172369436584,
+   "positives": 21
+  },
+  "L3": {
+   "ap": 0.8660624672746826,
+   "B3_recall": 1.0,
+   "B3_precision": 0.005402624131721122,
+   "positives": 21
+  },
+  "Rules+Graph": {
+   "ap": 0.00033093985086371936,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 21
+  },
+  "EntityDeviation": {
+   "ap": 0.0026807523756019035,
+   "B3_recall": 0.47619047619047616,
+   "B3_precision": 0.002572678157962439,
+   "positives": 21
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0015422162834459702,
+   "B3_recall": 0.23809523809523808,
+   "B3_precision": 0.0012863390789812194,
+   "positives": 21
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.1076083282974199,
+   "B3_recall": 1.0,
+   "B3_precision": 0.005402624131721122,
+   "positives": 21
+  }
+ },
+ "expense_padding": {
+  "LGBM[friend190]": {
+   "ap": 0.00035006323179947096,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 9
+  },
+  "L3": {
+   "ap": 0.00039854359803857554,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 9
+  },
+  "Rules+Graph": {
+   "ap": 0.00014000600937553754,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 9
+  },
+  "EntityDeviation": {
+   "ap": 0.000845554561990718,
+   "B3_recall": 0.6666666666666666,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 9
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.00047010303247364924,
+   "B3_recall": 0.3333333333333333,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 9
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.00033064537848657754,
+   "B3_recall": 0.1111111111111111,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 9
+  }
+ },
+ "fake_bonus_list": {
+  "LGBM[friend190]": {
+   "ap": 0.002133239646446605,
+   "B3_recall": 0.25,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 8
+  },
+  "L3": {
+   "ap": 0.014326834973724863,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 8
+  },
+  "Rules+Graph": {
+   "ap": 0.00014420894988207824,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 8
+  },
+  "EntityDeviation": {
+   "ap": 0.01309653149165291,
+   "B3_recall": 0.375,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 8
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.009729564878699389,
+   "B3_recall": 0.25,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 8
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.013018053607555893,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 8
+  }
+ },
+ "false_refund": {
+  "LGBM[friend190]": {
+   "ap": 0.00521279188042453,
+   "B3_recall": 0.9,
+   "B3_precision": 0.002315410342166195,
+   "positives": 10
+  },
+  "L3": {
+   "ap": 0.1355205285473671,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 10
+  },
+  "Rules+Graph": {
+   "ap": 0.00016044482776686616,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 10
+  },
+  "EntityDeviation": {
+   "ap": 0.503236738706911,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 10
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.5015156261974822,
+   "B3_recall": 0.6,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 10
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.5041969559424937,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 10
+  }
+ },
+ "fictitious_revenue_cutoff": {
+  "LGBM[friend190]": {
+   "ap": 0.0033393664148396733,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 2
+  },
+  "L3": {
+   "ap": 0.016722280926162802,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 2
+  },
+  "Rules+Graph": {
+   "ap": 9.414567091372833e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "EntityDeviation": {
+   "ap": 0.00020337989564757944,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.00011347905620032878,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.001580062268254585,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 2
+  }
+ },
+ "ghost_employee": {
+  "LGBM[friend190]": {
+   "ap": 0.000251695445454723,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  },
+  "L3": {
+   "ap": 0.00010228156005047477,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  },
+  "Rules+Graph": {
+   "ap": 5.2348947739619904e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  },
+  "EntityDeviation": {
+   "ap": 4.425497069485835e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 4.483834747694505e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 5.827081439898405e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 3
+  }
+ },
+ "inventory_theft": {
+  "LGBM[friend190]": {
+   "ap": 0.5,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  },
+  "L3": {
+   "ap": 0.6,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  },
+  "Rules+Graph": {
+   "ap": 7.25328947470588e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "EntityDeviation": {
+   "ap": 7.116106225404042e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 6.121362323640805e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 2
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.030098831985624436,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  }
+ },
+ "invoice_mill": {
+  "LGBM[friend190]": {
+   "ap": 0.0012652584380391625,
+   "B3_recall": 0.42857142857142855,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 7
+  },
+  "L3": {
+   "ap": 0.002312252952304207,
+   "B3_recall": 0.5714285714285714,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 7
+  },
+  "Rules+Graph": {
+   "ap": 0.00027193150494978,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 7
+  },
+  "EntityDeviation": {
+   "ap": 0.00018692571727339834,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 7
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0002025985452564907,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 7
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.0008887803476349877,
+   "B3_recall": 0.2857142857142857,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 7
+  }
+ },
+ "kickback_overpricing": {
+  "LGBM[friend190]": {
+   "ap": 0.0007571087187748324,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 15
+  },
+  "L3": {
+   "ap": 0.01002039018062019,
+   "B3_recall": 0.8666666666666667,
+   "B3_precision": 0.0033444816053511705,
+   "positives": 15
+  },
+  "Rules+Graph": {
+   "ap": 0.0004163531901536328,
+   "B3_recall": 0.4,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 15
+  },
+  "EntityDeviation": {
+   "ap": 0.001355381418395819,
+   "B3_recall": 0.5333333333333333,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 15
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0008458051350901607,
+   "B3_recall": 0.3333333333333333,
+   "B3_precision": 0.0012863390789812194,
+   "positives": 15
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.003442242617573607,
+   "B3_recall": 0.6666666666666666,
+   "B3_precision": 0.002572678157962439,
+   "positives": 15
+  }
+ },
+ "off_cycle_payroll": {
+  "LGBM[friend190]": {
+   "ap": 0.001519487443539424,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 5
+  },
+  "L3": {
+   "ap": 1.0,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0012863390789812194,
+   "positives": 5
+  },
+  "Rules+Graph": {
+   "ap": 8.333405619746451e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 5
+  },
+  "EntityDeviation": {
+   "ap": 0.0002558113218302822,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 5
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.00015671008752323205,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 5
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.09944767875802359,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0012863390789812194,
+   "positives": 5
+  }
+ },
+ "overbilling_excess_payment": {
+  "LGBM[friend190]": {
+   "ap": 0.0002726708002583368,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 7
+  },
+  "L3": {
+   "ap": 0.4680227354099534,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  },
+  "Rules+Graph": {
+   "ap": 0.8482142857142856,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  },
+  "EntityDeviation": {
+   "ap": 0.017468252658095536,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.7523384353741496,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.7523384353741496,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 7
+  }
+ },
+ "owner_override_transfer": {
+  "LGBM[friend190]": {
+   "ap": 0.0006233400653225855,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 5
+  },
+  "L3": {
+   "ap": 0.00557371142518657,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 5
+  },
+  "Rules+Graph": {
+   "ap": 0.3809722525816558,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 5
+  },
+  "EntityDeviation": {
+   "ap": 5.9544104223034064e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 5
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.1351281866338705,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 5
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.13513957011939412,
+   "B3_recall": 0.8,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 5
+  }
+ },
+ "payroll_padding": {
+  "LGBM[friend190]": {
+   "ap": 0.00011025957558766386,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 4
+  },
+  "L3": {
+   "ap": 9.087425936207503e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 4
+  },
+  "Rules+Graph": {
+   "ap": 0.0006321496997591396,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 4
+  },
+  "EntityDeviation": {
+   "ap": 0.014620384812069433,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 4
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.008620792375174142,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 4
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.008116968848923786,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 4
+  }
+ },
+ "period_end_adjustment": {
+  "LGBM[friend190]": {
+   "ap": 4.119294776734223e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 1
+  },
+  "L3": {
+   "ap": 0.00013273161667109106,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 1
+  },
+  "Rules+Graph": {
+   "ap": 0.002890173410404624,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  },
+  "EntityDeviation": {
+   "ap": 1.9874788830368677e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 1
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0016207455429497568,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.0013020833333333333,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 1
+  }
+ },
+ "personal_purchase": {
+  "LGBM[friend190]": {
+   "ap": 0.0012570459893353418,
+   "B3_recall": 0.5454545454545454,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 11
+  },
+  "L3": {
+   "ap": 0.19009546590027812,
+   "B3_recall": 0.45454545454545453,
+   "B3_precision": 0.0012863390789812194,
+   "positives": 11
+  },
+  "Rules+Graph": {
+   "ap": 0.00030833643362711364,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 11
+  },
+  "EntityDeviation": {
+   "ap": 0.0022466864481518484,
+   "B3_recall": 0.09090909090909091,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 11
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0014520727305921955,
+   "B3_recall": 0.09090909090909091,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 11
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.008153844567388874,
+   "B3_recall": 0.5454545454545454,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 11
+  }
+ },
+ "price_creep": {
+  "LGBM[friend190]": {
+   "ap": 0.0002517504510631942,
+   "B3_recall": 0.1111111111111111,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 9
+  },
+  "L3": {
+   "ap": 0.04028519068967102,
+   "B3_recall": 0.4444444444444444,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 9
+  },
+  "Rules+Graph": {
+   "ap": 0.00016189502369109982,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 9
+  },
+  "EntityDeviation": {
+   "ap": 0.003005179751092963,
+   "B3_recall": 0.8888888888888888,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 9
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0018034976207354026,
+   "B3_recall": 0.7777777777777778,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 9
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.004013312413870391,
+   "B3_recall": 0.8888888888888888,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 9
+  }
+ },
+ "receivable_lapping": {
+  "LGBM[friend190]": {
+   "ap": 0.0006447358654273566,
+   "B3_recall": 0.125,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 16
+  },
+  "L3": {
+   "ap": 0.0012097557478281272,
+   "B3_recall": 0.1875,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 16
+  },
+  "Rules+Graph": {
+   "ap": 0.0002464970301918564,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 16
+  },
+  "EntityDeviation": {
+   "ap": 0.005837673326486409,
+   "B3_recall": 0.375,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 16
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.004023509178865715,
+   "B3_recall": 0.1875,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 16
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.004179995211990133,
+   "B3_recall": 0.1875,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 16
+  }
+ },
+ "shell_vendor": {
+  "LGBM[friend190]": {
+   "ap": 0.0002838180646471751,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 9
+  },
+  "L3": {
+   "ap": 0.1606910452059133,
+   "B3_recall": 0.4444444444444444,
+   "B3_precision": 0.0010290712631849757,
+   "positives": 9
+  },
+  "Rules+Graph": {
+   "ap": 0.011895874662232749,
+   "B3_recall": 0.8888888888888888,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 9
+  },
+  "EntityDeviation": {
+   "ap": 0.00016391091384460938,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 9
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.006625279247576037,
+   "B3_recall": 0.8888888888888888,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 9
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.014185650449991788,
+   "B3_recall": 0.8888888888888888,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 9
+  }
+ },
+ "split_payments": {
+  "LGBM[friend190]": {
+   "ap": 0.00033546502243419037,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 4
+  },
+  "L3": {
+   "ap": 0.1350960738393594,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 4
+  },
+  "Rules+Graph": {
+   "ap": 9.999478892537943e-05,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 4
+  },
+  "EntityDeviation": {
+   "ap": 0.00017964816856027338,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 4
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.00012031002490037024,
+   "B3_recall": 0.0,
+   "B3_precision": 0.0,
+   "positives": 4
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.007448950705052015,
+   "B3_recall": 0.5,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 4
+  }
+ },
+ "terminated_still_paid": {
+  "LGBM[friend190]": {
+   "ap": 0.0008005503458915371,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  },
+  "L3": {
+   "ap": 1.0,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  },
+  "Rules+Graph": {
+   "ap": 0.17142857142857143,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  },
+  "EntityDeviation": {
+   "ap": 0.0019430640950054746,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.06020066889632107,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.06926406926406926,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 2
+  }
+ },
+ "undisclosed_related_vendor": {
+  "LGBM[friend190]": {
+   "ap": 0.009724381607692291,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 6
+  },
+  "L3": {
+   "ap": 0.004287187610088421,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 6
+  },
+  "Rules+Graph": {
+   "ap": 0.0111539711060332,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 6
+  },
+  "EntityDeviation": {
+   "ap": 0.00011327419906403656,
+   "B3_recall": 0.16666666666666666,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 6
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.005972840072614789,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 6
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.004350985052439884,
+   "B3_recall": 1.0,
+   "B3_precision": 0.0015436068947774634,
+   "positives": 6
+  }
+ },
+ "unrecorded_sales_skimming": {
+  "LGBM[friend190]": {
+   "ap": 0.00032830029688538727,
+   "B3_recall": 0.07692307692307693,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 13
+  },
+  "L3": {
+   "ap": 0.01526193143801046,
+   "B3_recall": 0.6923076923076923,
+   "B3_precision": 0.002315410342166195,
+   "positives": 13
+  },
+  "Rules+Graph": {
+   "ap": 0.0003241685631058554,
+   "B3_recall": 0.07692307692307693,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 13
+  },
+  "EntityDeviation": {
+   "ap": 0.0007578049859724728,
+   "B3_recall": 0.5384615384615384,
+   "B3_precision": 0.0018008747105737071,
+   "positives": 13
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.00047448139095026057,
+   "B3_recall": 0.15384615384615385,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 13
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.004078108538212208,
+   "B3_recall": 0.6153846153846154,
+   "B3_precision": 0.0020581425263699513,
+   "positives": 13
+  }
+ },
+ "vendor_burst": {
+  "LGBM[friend190]": {
+   "ap": 0.0007263024025584801,
+   "B3_recall": 0.1,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 10
+  },
+  "L3": {
+   "ap": 0.00024369148422021333,
+   "B3_recall": 0.1,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 10
+  },
+  "Rules+Graph": {
+   "ap": 0.0006205142836508341,
+   "B3_recall": 0.3,
+   "B3_precision": 0.0007718034473887317,
+   "positives": 10
+  },
+  "EntityDeviation": {
+   "ap": 0.0005327690677164829,
+   "B3_recall": 0.2,
+   "B3_precision": 0.0005145356315924878,
+   "positives": 10
+  },
+  "Fusion max(Rules,Entity)": {
+   "ap": 0.0004999347425899965,
+   "B3_recall": 0.1,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 10
+  },
+  "Fusion max(L3,Rules,Entity)": {
+   "ap": 0.0003790431233044691,
+   "B3_recall": 0.1,
+   "B3_precision": 0.0002572678157962439,
+   "positives": 10
+  }
+ }
+}

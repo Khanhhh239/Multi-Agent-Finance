@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+work/
+friend_zipp/
+external/
+_cache/
+*.log
+*.err
