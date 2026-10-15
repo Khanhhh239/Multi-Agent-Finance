@@ -2,7 +2,7 @@
 
 > OCR-based extraction and normalization of Vietnamese accounting documents, with human review, revision tracking, and planned tax compliance checks.
 
-**Cập nhật: 15/10/2026 · Mốc hiện tại: PLAN_08 kỹ thuật + nhánh OCR V2 trong PLAN_06 · MVP vẫn cần người duyệt.**
+**Cập nhật: 15/10/2026 · Mốc hiện tại: PLAN_09 tích hợp kỹ thuật + nhánh OCR V2 trong PLAN_06 · M2 pháp lý còn chờ nghiệm thu.**
 
 Nhánh [OCR/extraction V2](docs/agent3/plans/PLAN_OCR_EXTRACTION_V2.md) đang triển khai **bên trong PLAN_06**. Đã đóng băng baseline OCR thật, sửa binding tổng tiền lệch dòng và thử tách dòng dài; OCR thử nghiệm chưa bật mặc định. [Kết quả, lệnh chạy và giới hạn](docs/agent3/plans/evidence/ocr_extraction_v2/runbook.md).
 
@@ -23,7 +23,7 @@ Launcher dùng DB demo PLAN_06 và giữ master đã có; token local sinh ngẫ
 
 Agent 3 là thành phần đọc, chuẩn hóa và hướng tới kiểm tra tuân thủ thuế cho chứng từ kế toán Việt Nam. Hiện hệ thống đã nối được luồng **PDF/ảnh → trích xuất dữ liệu → kiểm tra chất lượng → người dùng đối chiếu và sửa → xuất dữ liệu chuẩn hóa**. Mỗi lần sửa có phiên bản và lịch sử để truy nguyên.
 
-**Phần kiểm tra luật thuế thực tế chưa được nghiệm thu.** PLAN_07 đã có registry/taxonomy/planning; PLAN_08 đã chạy ZEN thật với Decimal boundary, trace, retry và aggregation qua API/CLI. Rules/models thực tế còn DRAFT, mappings hàng thật chưa duyệt; PASS/FAIL/REVIEW qua engine được kiểm bằng fixture tổng hợp. Xem [gate PLAN_08](docs/agent3/plans/evidence/gate_08.md) và [hướng dẫn chạy](docs/agent3/plans/evidence/plan08/runbook.md). PLAN_09 sẽ nối job/UI và explanation; chưa chứng nhận accuracy hóa đơn thực hoặc production.
+**Phần kiểm tra luật thuế thực tế chưa được nghiệm thu.** PLAN_09 đã nối CFR đã lưu/review → quality → planning → ZEN → template → API/UI/export/replay. Trên UI có phần **Kiểm tra phạm vi thuế**; sau khi lưu bấm **Kiểm tra bản đã lưu**. Rules/models thực tế còn DRAFT, mappings hàng thật chưa duyệt; PASS/FAIL/REVIEW qua engine được kiểm bằng fixture tổng hợp. [Gate PLAN_09](docs/agent3/plans/evidence/gate_09.md), [hướng dẫn UI/API](docs/agent3/plans/evidence/plan09/demo_runbook.md). Chưa tự chạy compliance khi upload, chưa chứng nhận tax accuracy hoặc production.
 
 ## 1. Thông tin dành cho leader
 
@@ -33,9 +33,9 @@ Agent 3 là thành phần đọc, chuẩn hóa và hướng tới kiểm tra tu�
 | Đã làm được | Đọc PDF/ảnh, OCR theo trang, trích trường và dòng hàng, chuẩn hóa, đánh giá chất lượng, review/sửa có audit, xuất JSON |
 | Model OCR | **PP-OCRv6 detector + VietOCR `vgg_transformer`**, mặc định chạy CPU |
 | Mức tự động hóa | Hỗ trợ đọc và chuẩn bị dữ liệu; **vẫn cần người duyệt**, chưa tự chấp nhận chứng từ |
-| Kiểm chứng | [PLAN_08 validation](docs/agent3/plans/evidence/plan08/validation_summary.json): tám suite gồm capture/planning/rules; 128 tổ hợp precedence và 500 cặp Decimal oracle. Accuracy thực báo riêng tại [pilot](docs/agent3/plans/evidence/real_invoice_pilot_v1/REPORT.md) |
+| Kiểm chứng | [PLAN_09 validation](docs/agent3/plans/evidence/plan09/validation_summary.json): 310 Python tests, syntax/DOM checks và Chrome desktop/mobile. Accuracy thực báo riêng tại [pilot](docs/agent3/plans/evidence/real_invoice_pilot_v1/REPORT.md) |
 | Baseline review | 15 artifact chứng từ / 17 trang; sửa mô phỏng, export và replay được kiểm chứng |
-| Việc tiếp theo | PLAN_09: nối compliance vào job/UI và giải thích template; duyệt luật/taxonomy trước bật rule thực tế |
+| Việc tiếp theo | Hoàn tất P09-T06/duyệt luật và mapping; PLAN_10 mở rộng Invoice XML trên nền kỹ thuật |
 | Cần hỗ trợ | Hóa đơn Việt Nam có quyền dùng, reviewer nghiệp vụ độc lập, bộ nhãn và tiêu chí nghiệm thu |
 
 Đọc nhanh **mục 2–3** để hiểu sản phẩm, **mục 6–7** để xem bằng chứng và giới hạn, **mục 8** để nắm việc sắp tới. Người triển khai xem thêm **mục 10–12**.
@@ -221,7 +221,7 @@ FATURA và MC-OCR hiện có là tài sản phát triển/nghiên cứu; việc 
 | PLAN_06 | Review UI/API, correction, rederive và export | Đạt kỹ thuật/manual; nghiệm thu thực/browser/người dùng còn mở |
 | PLAN_07 | Legal Registry, VAT taxonomy và Rule Planning | Đã triển khai kỹ thuật; legal approval/mapping PENDING; [gate](docs/agent3/plans/evidence/gate_07.md) |
 | PLAN_08 | GoRules ZEN, Decimal, trace và aggregation | Đã triển khai kỹ thuật; models thực tế DRAFT; [gate](docs/agent3/plans/evidence/gate_08.md) |
-| PLAN_09 | Tích hợp MVP compliance và explanation | Chưa triển khai |
+| PLAN_09 | Tích hợp MVP compliance và template explanation | Đã có API/UI và revision workflow kỹ thuật; T06/M2 pháp lý PENDING; [gate](docs/agent3/plans/evidence/gate_09.md) |
 | PLAN_10–11 | XML, Excel và bank statement | Chưa triển khai theo roadmap mới |
 | PLAN_12–13 | LLM giải thích và ERP connector | Chưa triển khai; nhánh tùy phạm vi sản phẩm |
 | PLAN_14 | Production hardening và phát hành | Chưa triển khai |
@@ -229,11 +229,11 @@ FATURA và MC-OCR hiện có là tài sản phát triển/nghiên cứu; việc 
 
 “Đạt kỹ thuật” nghĩa là hợp đồng và chức năng đã qua các kiểm chứng đã nêu; không có nghĩa mọi điều kiện nghiệm thu dữ liệu thực của chặng đã đóng.
 
-**PLAN_07–08 đã triển khai kỹ thuật:** registry, capability, taxonomy interface, planning, ZEN process riêng, Decimal facts, trace, attempt/result store và aggregation. [Runbook PLAN_08](docs/agent3/plans/evidence/plan08/runbook.md). Thiếu dữ liệu/căn cứ giữ blocker; rule/model DRAFT chưa được chạy như luật đã duyệt. Chưa có nút compliance trên UI hoặc tự gọi engine khi upload.
+**PLAN_07–09 đã triển khai kỹ thuật:** registry, capability, taxonomy interface, planning, ZEN process riêng, Decimal facts, trace, attempt/result store, aggregation và template/UI theo revision. [Runbook PLAN_09](docs/agent3/plans/evidence/plan09/demo_runbook.md). Thiếu dữ liệu/căn cứ giữ blocker; model DRAFT chưa được chạy như luật đã duyệt. UI kiểm tra bằng thao tác người dùng trên bản đã lưu, chưa tự chạy khi upload.
 
 **Ưu tiên dữ liệu và người dùng:** hoàn thiện pilot Việt Nam, gán nhãn độc lập, kiểm UI bằng người dùng và đo lỗi/thời gian review. Kết quả quyết định mức tự động hóa chấp nhận được và việc có cần cải thiện/train OCR hoặc thay extraction strategy.
 
-Tiếp theo PLAN_09 nối thành MVP compliance và template explanation trên ruleset đã đối chiếu. LLM giải thích ở PLAN_12 là nhánh sau, không tự tính hoặc thay verdict của rule engine.
+PLAN_09 đã nối template explanation và UI kiểm tra revision đã lưu. Bước tiếp theo là PLAN_10 Invoice XML, đồng thời giữ mở nghiệm thu dữ liệu/pháp lý của M2. LLM ở PLAN_12 là nhánh sau, không tự tính hoặc thay verdict của rule engine.
 
 Ước lượng PLAN_07 là **6–9 ngày công một người tập trung**, chưa tính chờ nguồn pháp lý, dữ liệu và người nghiệp vụ. Đây là ước lượng phạm vi, không phải cam kết deadline. [Lộ trình 16 PLAN](docs/agent3/plans/README.md) ghi phụ thuộc, task và gate từng chặng.
 
@@ -367,7 +367,7 @@ Quality code đã đổi ở PLAN_06 để kiểm human proof. [Phiên bản cũ
 |---|---|
 | Tiến độ, phụ thuộc và ước lượng | [Lộ trình PLAN_00–15](docs/agent3/plans/README.md) |
 | Thiết kế tổng thể | [NEW_PLAN](docs/agent3/NEW_PLAN.md) |
-| Phạm vi đã kiểm chứng mới nhất | [Gate PLAN_08](docs/agent3/plans/evidence/gate_08.md), [test summary](docs/agent3/plans/evidence/plan08/validation_summary.json) |
+| Phạm vi đã kiểm chứng mới nhất | [Gate PLAN_09](docs/agent3/plans/evidence/gate_09.md), [test summary](docs/agent3/plans/evidence/plan09/validation_summary.json) |
 | Nghiệm thu còn mở và giới hạn | [Capture MVP acceptance](docs/agent3/plans/evidence/plan06/capture_mvp_acceptance.md) |
 | Chạy UI/API/worker | [Runbook PLAN_06](docs/agent3/plans/evidence/plan06/runbook.md) |
 | Trạng thái và recovery | [State machine](docs/agent3/plans/evidence/plan06/state_machine.md) |
@@ -375,6 +375,6 @@ Quality code đã đổi ở PLAN_06 để kiểm human proof. [Phiên bản cũ
 | Model và cách đổi engine | [OCR registry/config](agent3_tax_compliance/configs/ocr/README.md) |
 | Lỗi extraction đã đo | [Gate PLAN_04](docs/agent3/plans/evidence/gate_04.md) |
 | Quality/calibration còn thiếu | [Gate PLAN_05](docs/agent3/plans/evidence/gate_05.md) |
-| Công việc chặng tiếp theo | [PLAN_09](docs/agent3/plans/PLAN_09_COMPLIANCE_MVP.md) |
+| Công việc chặng tiếp theo | [PLAN_10](docs/agent3/plans/PLAN_10_INVOICE_XML.md) và [phần M2 còn mở](docs/agent3/plans/evidence/plan09/compliance_mvp_report.md) |
 
 Các PLAN mô tả cả phần đã làm và phần dự kiến. Gate/báo cáo kiểm chứng quyết định phạm vi được công bố; sự tồn tại của tài liệu, enum, profile hoặc prototype không đồng nghĩa chức năng đã được nghiệm thu.

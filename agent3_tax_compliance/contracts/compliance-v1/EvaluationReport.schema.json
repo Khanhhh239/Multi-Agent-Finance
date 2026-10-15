@@ -1,0 +1,610 @@
+{
+  "$defs": {
+    "Aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "processing_status": {
+          "enum": [
+            "SUCCESS",
+            "PARTIAL_ERROR",
+            "ERROR"
+          ],
+          "title": "Processing Status",
+          "type": "string"
+        },
+        "coverage": {
+          "enum": [
+            "FULL",
+            "PARTIAL",
+            "NONE"
+          ],
+          "title": "Coverage",
+          "type": "string"
+        },
+        "verdict": {
+          "anyOf": [
+            {
+              "enum": [
+                "PASS",
+                "PASS_WITHIN_SCOPE",
+                "FAIL",
+                "REVIEW",
+                "NO_VERDICT"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Verdict"
+        },
+        "review_required": {
+          "title": "Review Required",
+          "type": "boolean"
+        },
+        "counts": {
+          "$ref": "#/$defs/UnitCounts"
+        },
+        "distinct_rules_selected": {
+          "minimum": 0,
+          "title": "Distinct Rules Selected",
+          "type": "integer"
+        },
+        "distinct_rules_evaluated": {
+          "minimum": 0,
+          "title": "Distinct Rules Evaluated",
+          "type": "integer"
+        },
+        "scope_exclusions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Scope Exclusions",
+          "type": "array"
+        },
+        "blocked_units": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Blocked Units",
+          "type": "array"
+        },
+        "operational_errors": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Operational Errors",
+          "type": "array"
+        },
+        "unresolved": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Unresolved",
+          "type": "array"
+        },
+        "discovery_blockers": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Discovery Blockers",
+          "type": "array"
+        },
+        "contract_errors": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Contract Errors",
+          "type": "array"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        }
+      },
+      "required": [
+        "processing_status",
+        "coverage",
+        "verdict",
+        "review_required",
+        "counts",
+        "distinct_rules_selected",
+        "distinct_rules_evaluated",
+        "reasons"
+      ],
+      "title": "Aggregate",
+      "type": "object"
+    },
+    "EvaluationKey": {
+      "additionalProperties": false,
+      "properties": {
+        "evaluation_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Evaluation Id",
+          "type": "string"
+        },
+        "record_revision": {
+          "minimum": 1,
+          "title": "Record Revision",
+          "type": "integer"
+        },
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "unit_type": {
+          "enum": [
+            "RECORD",
+            "ITEM",
+            "VAT_GROUP"
+          ],
+          "title": "Unit Type",
+          "type": "string"
+        },
+        "unit_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Unit Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evaluation_id",
+        "record_revision",
+        "rule_id",
+        "rule_version",
+        "unit_type",
+        "unit_id"
+      ],
+      "title": "EvaluationKey",
+      "type": "object"
+    },
+    "Explanation": {
+      "additionalProperties": false,
+      "properties": {
+        "template_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Template Version",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "scope": {
+          "title": "Scope",
+          "type": "string"
+        },
+        "verdict": {
+          "anyOf": [
+            {
+              "enum": [
+                "PASS",
+                "PASS_WITHIN_SCOPE",
+                "FAIL",
+                "REVIEW",
+                "NO_VERDICT"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Verdict"
+        },
+        "notices": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notices",
+          "type": "array"
+        },
+        "next_actions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Next Actions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "template_version",
+        "title",
+        "text",
+        "scope",
+        "verdict",
+        "notices",
+        "next_actions"
+      ],
+      "title": "Explanation",
+      "type": "object"
+    },
+    "UnitCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "selected": {
+          "minimum": 0,
+          "title": "Selected",
+          "type": "integer"
+        },
+        "not_applicable": {
+          "minimum": 0,
+          "title": "Not Applicable",
+          "type": "integer"
+        },
+        "in_scope": {
+          "minimum": 0,
+          "title": "In Scope",
+          "type": "integer"
+        },
+        "eligible": {
+          "minimum": 0,
+          "title": "Eligible",
+          "type": "integer"
+        },
+        "evaluated": {
+          "minimum": 0,
+          "title": "Evaluated",
+          "type": "integer"
+        },
+        "blocked": {
+          "minimum": 0,
+          "title": "Blocked",
+          "type": "integer"
+        },
+        "out_of_scope": {
+          "minimum": 0,
+          "title": "Out Of Scope",
+          "type": "integer"
+        },
+        "unknown_applicability": {
+          "minimum": 0,
+          "title": "Unknown Applicability",
+          "type": "integer"
+        },
+        "unknown_capability": {
+          "minimum": 0,
+          "title": "Unknown Capability",
+          "type": "integer"
+        },
+        "unresolved": {
+          "minimum": 0,
+          "title": "Unresolved",
+          "type": "integer"
+        },
+        "discovery_blockers": {
+          "minimum": 0,
+          "title": "Discovery Blockers",
+          "type": "integer"
+        },
+        "passed": {
+          "minimum": 0,
+          "title": "Passed",
+          "type": "integer"
+        },
+        "failed": {
+          "minimum": 0,
+          "title": "Failed",
+          "type": "integer"
+        },
+        "review": {
+          "minimum": 0,
+          "title": "Review",
+          "type": "integer"
+        },
+        "errors": {
+          "minimum": 0,
+          "title": "Errors",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "selected",
+        "not_applicable",
+        "in_scope",
+        "eligible",
+        "evaluated",
+        "blocked",
+        "out_of_scope",
+        "unknown_applicability",
+        "unknown_capability",
+        "unresolved",
+        "discovery_blockers",
+        "passed",
+        "failed",
+        "review",
+        "errors"
+      ],
+      "title": "UnitCounts",
+      "type": "object"
+    },
+    "UnitIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvaluationKey"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "unit_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Unit Id",
+          "type": "string"
+        },
+        "code": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Code",
+          "type": "string"
+        },
+        "next_action": {
+          "title": "Next Action",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "unit_id",
+        "code",
+        "next_action"
+      ],
+      "title": "UnitIssue",
+      "type": "object"
+    },
+    "VersionPin": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "sha256"
+      ],
+      "title": "VersionPin",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "evaluation_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Evaluation Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "taxpayer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Taxpayer Id",
+      "type": "string"
+    },
+    "record_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "record_revision": {
+      "minimum": 1,
+      "title": "Record Revision",
+      "type": "integer"
+    },
+    "planning_evaluation_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Planning Evaluation Id",
+      "type": "string"
+    },
+    "execution_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "extraction_artifact_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Extraction Artifact Id",
+      "type": "string"
+    },
+    "assessment_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Assessment Id",
+      "type": "string"
+    },
+    "record_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Record Sha256",
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Sha256",
+      "type": "string"
+    },
+    "package_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Package Sha256",
+      "type": "string"
+    },
+    "template_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Template Sha256",
+      "type": "string"
+    },
+    "implementation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Implementation Sha256",
+      "type": "string"
+    },
+    "pins": {
+      "items": {
+        "$ref": "#/$defs/VersionPin"
+      },
+      "title": "Pins",
+      "type": "array"
+    },
+    "aggregate": {
+      "$ref": "#/$defs/Aggregate"
+    },
+    "explanation": {
+      "$ref": "#/$defs/Explanation"
+    },
+    "technical_only": {
+      "const": true,
+      "default": true,
+      "title": "Technical Only",
+      "type": "boolean"
+    },
+    "rule_results_total": {
+      "minimum": 0,
+      "title": "Rule Results Total",
+      "type": "integer"
+    },
+    "attempts_total": {
+      "minimum": 0,
+      "title": "Attempts Total",
+      "type": "integer"
+    },
+    "stage_seconds": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Stage Seconds",
+      "type": "object"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "evaluation_id",
+    "tenant_id",
+    "taxpayer_id",
+    "record_id",
+    "record_revision",
+    "planning_evaluation_id",
+    "execution_id",
+    "extraction_artifact_id",
+    "assessment_id",
+    "record_sha256",
+    "source_sha256",
+    "package_sha256",
+    "template_sha256",
+    "implementation_sha256",
+    "pins",
+    "aggregate",
+    "explanation",
+    "rule_results_total",
+    "attempts_total",
+    "stage_seconds"
+  ],
+  "title": "EvaluationReport",
+  "type": "object"
+}

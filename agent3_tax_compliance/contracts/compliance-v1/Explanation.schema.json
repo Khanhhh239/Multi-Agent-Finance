@@ -1,0 +1,67 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "template_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Template Version",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "text": {
+      "title": "Text",
+      "type": "string"
+    },
+    "scope": {
+      "title": "Scope",
+      "type": "string"
+    },
+    "verdict": {
+      "anyOf": [
+        {
+          "enum": [
+            "PASS",
+            "PASS_WITHIN_SCOPE",
+            "FAIL",
+            "REVIEW",
+            "NO_VERDICT"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Verdict"
+    },
+    "notices": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notices",
+      "type": "array"
+    },
+    "next_actions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Next Actions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "template_version",
+    "title",
+    "text",
+    "scope",
+    "verdict",
+    "notices",
+    "next_actions"
+  ],
+  "title": "Explanation",
+  "type": "object"
+}

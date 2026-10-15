@@ -1,0 +1,18 @@
+{
+  "status": "PASS_TECHNICAL_SMOKE",
+  "case_id": "cyber_construction-p69",
+  "source_sha256": "fdb23f8b1f78b2f4c23a1db8667e574c8a7c3030e20df0c0e923d98fbdae083e",
+  "documents": 1,
+  "pages": 1,
+  "route": "PUBLIC_PDF_PRODUCTION_ROUTER_AND_CONFIGURED_OCR",
+  "ocr_model_id": "ppocrv6_vietocr",
+  "elapsed_seconds": 374.3478902000061,
+  "result": "COMPLETED",
+  "coverage": "NONE",
+  "verdict": "REVIEW",
+  "evaluated_units": 0,
+  "replay_verified": true,
+  "legal_accuracy": "NOT_EVALUATED_NO_APPROVED_RULES_OR_EXPECTED_LEGAL_LABELS",
+  "extraction_accuracy": "NOT_EVALUATED_THIS_SMOKE",
+  "independent_label_review": false
+}

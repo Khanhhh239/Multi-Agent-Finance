@@ -688,7 +688,7 @@ class PersistenceTests(unittest.TestCase):
         self.assertEqual(self.repo.work(self.ctx,self.payer,self.plan.evaluation_id),result)
         self.assertEqual(self.repo.replay(self.ctx,self.payer,result.execution_id),result)
         with self.repo.ingestion.db() as db:
-            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],8)
+            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],9)
             with self.assertRaises(sqlite3.IntegrityError):db.execute('DELETE FROM compliance_results')
 
     def test_cross_tenant_and_taxpayer_isolation(self):

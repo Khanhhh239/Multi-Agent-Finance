@@ -1,0 +1,39 @@
+{
+  "version": "compliance-template-vi-v1",
+  "titles": {
+    "PASS": "Các kiểm tra trong phạm vi đã đạt",
+    "PASS_WITHIN_SCOPE": "Đạt trong phạm vi nguồn hiện có",
+    "FAIL": "Có kiểm tra không đạt",
+    "REVIEW": "Cần đối chiếu thêm",
+    "NO_VERDICT": "Chưa đủ điều kiện kết luận",
+    "PROCESSING_ERROR": "Chưa thể hoàn tất xử lý"
+  },
+  "texts": {
+    "PASS": "Tất cả đơn vị kiểm tra thuộc phạm vi và phiên bản đã chọn đều đạt. Kết quả không xác nhận mọi nghĩa vụ thuế của doanh nghiệp.",
+    "PASS_WITHIN_SCOPE": "Các đơn vị trong phạm vi nguồn đã đạt; một số nghĩa vụ cần nguồn khác đã được loại khỏi phạm vi có căn cứ.",
+    "FAIL": "Có ít nhất một kiểm tra đã thực thi trả kết quả không đạt. Các lỗi xử lý, phần chưa đánh giá và yêu cầu đối chiếu khác vẫn được giữ riêng.",
+    "REVIEW": "Có dữ liệu hoặc kết quả cần người đối chiếu. Chưa được diễn giải phần chưa chắc chắn thành vi phạm.",
+    "NO_VERDICT": "Dữ liệu, khả năng nguồn hoặc căn cứ hiện tại chưa đủ để đưa ra kết luận trong phạm vi đã chọn.",
+    "PROCESSING_ERROR": "Kết quả không đáp ứng hợp đồng xử lý. Cần kiểm tra và phục hồi trước khi tạo giải thích về thuế."
+  },
+  "actions": {
+    "NONE": "Không có thao tác bổ sung cho mục này.",
+    "HUMAN_REVIEW": "Đối chiếu và xác nhận dữ liệu từ chứng từ gốc.",
+    "REQUEST_DATA": "Bổ sung dữ liệu còn thiếu.",
+    "REEXTRACT": "Kiểm tra nguồn và trích xuất lại phần bị lỗi.",
+    "RETRY": "Thử lại trong giới hạn phục hồi cho phép.",
+    "OPERATOR": "Cần người phụ trách kiểm tra cấu hình, căn cứ hoặc lỗi xử lý.",
+    "COLLECT_OTHER_SOURCE": "Bổ sung nguồn độc lập có thể cung cấp bằng chứng cần thiết."
+  },
+  "eligibility": {
+    "ELIGIBLE": "Đủ điều kiện thực thi theo planning.",
+    "NOT_APPLICABLE": "Đã xác định không áp dụng trong phạm vi này.",
+    "OUT_OF_SCOPE_FOR_SOURCE": "Nguồn hiện tại không thể cung cấp bằng chứng cho kiểm tra này.",
+    "NOT_EVALUATED_MISSING_INPUT": "Chưa chạy vì thiếu dữ liệu đầu vào.",
+    "NOT_EVALUATED_LOW_CONFIDENCE": "Chưa chạy vì dữ liệu chưa đủ tin cậy.",
+    "NOT_EVALUATED_INVALID_EXTRACTION": "Chưa chạy vì dữ liệu trích xuất chưa hợp lệ.",
+    "NOT_EVALUATED_UNKNOWN_APPLICABILITY": "Chưa xác định được điều kiện áp dụng.",
+    "NOT_EVALUATED_PLANNING_ERROR": "Chưa chạy: cần kiểm tra phiên bản, cấu hình hoặc căn cứ chưa được duyệt.",
+    "REVIEW_REQUIRED": "Cần đối chiếu dữ liệu hoặc tính đầy đủ của chứng từ."
+  }
+}

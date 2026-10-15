@@ -1,1 +1,1 @@
-# Package initialization
+"""Versioned integration APIs."""

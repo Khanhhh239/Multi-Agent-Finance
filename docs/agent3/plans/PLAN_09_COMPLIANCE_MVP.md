@@ -1,6 +1,6 @@
 # PLAN_09 — Tích hợp compliance, giải thích bằng template và nghiệm thu
 
-> Trạng thái triển khai: **NOT_STARTED**. Tài liệu là công việc dự kiến, không chứng nhận code đã hoàn thành.
+> Trạng thái triển khai: **IMPLEMENTED_TECHNICAL — 15/10/2026**. [Gate](evidence/gate_09.md), [runbook](evidence/plan09/demo_runbook.md), [test report](evidence/plan09/validation_summary.json). P09-T06 và M2 legal release còn PENDING.
 
 [Lộ trình tổng](README.md) · Trước theo thứ tự đọc: [PLAN_08](PLAN_08_ZEN_RULES_AGGREGATION.md) · Sau: [PLAN_10](PLAN_10_INVOICE_XML.md)
 
@@ -13,7 +13,7 @@ Nối OCR/PDF đã review với planning/rules; có demo kết luận theo phạ
 - Đối chiếu [NEW_PLAN](../NEW_PLAN.md): mục 10, 11, 12, 13, 17.
 - Đầu vào: Capture MVP, RulePlan, typed outcomes, aggregate, legal excerpt map.
 
-Không bắt đầu phần phụ thuộc khi gate đầu vào chưa qua. Có thể chuẩn bị fixture/tài liệu độc lập, nhưng không ghi cả chặng DONE vì đã tạo scaffold.
+Theo yêu cầu người dùng, tiếp tục kỹ thuật từ PLAN_06–08. Rule/model DRAFT và gate dữ liệu/pháp lý còn mở được giữ nguyên; không phát hành kết luận thuế thực tế chỉ vì integration tests qua.
 
 ## 2. Tài sản hiện có và cách tái sử dụng
 
@@ -23,7 +23,7 @@ Kiểm tra lại tính tồn tại/phiên bản khi triển khai; kết quả ki
 
 ## 3. Module và hợp đồng cần xây
 
-Các đường dẫn sau là **đích dự kiến**, chưa hàm ý file đã tồn tại:
+Các module dưới đây đã có triển khai kỹ thuật; trạng thái từng task và phần chưa nghiệm thu ở gate:
 
 `agent3_tax_compliance/src/orchestration/; src/explanation/templates/; src/api/v1/{evaluations,rule_results}.py; tests/e2e_v1/`
 
