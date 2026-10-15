@@ -50,13 +50,14 @@ def main():
     for d in months(args.months):
         last=calendar.monthrange(d.year,d.month)[1]
         for day in range(1,last+1):
-            x=date(d.year,d.month,day); con.execute("INSERT INTO dim_period VALUES (?,?,?,?,?,?,?)",(int(x.strftime('%Y%m%d')),x,x.day,x.month,(x.month-1)//3+1,x.year,d,x.replace(day=last)))
+            x=date(d.year,d.month,day); con.execute("INSERT INTO dim_period VALUES (?,?,?,?,?,?,?,?)",(int(x.strftime('%Y%m%d')),x,x.day,x.month,(x.month-1)//3+1,x.year,d,x.replace(day=last)))
+    pkey_of={p[1]:p[0] for p in partners}
     key={r[1]:r[0] for r in con.execute('SELECT account_key,account_code FROM dim_account').fetchall()}; item_key={'SP001':1,'DV001':2}; eid=1; rows=[]
     for mi,d in enumerate(months(args.months)):
         season=Decimal(str(1 + ((mi % 3)-1)*0.08)); revenue=(Decimal('120000000')*season).quantize(Decimal('0.01')); cogs=(revenue*Decimal('0.60')).quantize(Decimal('0.01')); salary=Decimal('18000000'); opex=Decimal('12000000'); day=min(28,calendar.monthrange(d.year,d.month)[1]); x=date(d.year,d.month,day); pkey=int(x.strftime('%Y%m%d'))
         events=[('SALES',key['131'],key['511'],revenue,1,'C001',2,'Doanh thu bán hàng'),('COGS',key['632'],key['156'],cogs,0,None,1,'Giá vốn hàng bán'),('SALARY',key['642'],key['334'],salary,0,'E001',None,'Chi phí lương'),('OPEX',key['642'],key['112'],opex,0,None,None,'Chi phí quản lý')]
         for j,(doc,dr,cr,amt,partnerflag,partner,item,desc) in enumerate(events):
-            jid=f'{d:%Y%m}-{doc}'; rows += [(eid,jid,1,x,pkey,dr,partner,item_key['DV001'] if item==2 else item_key['SP001'] if item==1 else None,desc,amt,Decimal(0),'VND','invoice',jid,datetime.now()),(eid+1,jid,2,x,pkey,cr,partner,item_key['DV001'] if item==2 else item_key['SP001'] if item==1 else None,desc,Decimal(0),amt,'VND','invoice',jid,datetime.now())]; eid+=2
+            jid=f'{d:%Y%m}-{doc}'; rows += [(eid,jid,1,x,pkey,dr,pkey_of.get(partner),item_key['DV001'] if item==2 else item_key['SP001'] if item==1 else None,desc,amt,Decimal(0),'VND','invoice',jid,datetime.now()),(eid+1,jid,2,x,pkey,cr,pkey_of.get(partner),item_key['DV001'] if item==2 else item_key['SP001'] if item==1 else None,desc,Decimal(0),amt,'VND','invoice',jid,datetime.now())]; eid+=2
     con.executemany("INSERT INTO gl_entry VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",rows)
     bad=con.execute("SELECT COUNT(*) FROM (SELECT journal_id FROM gl_entry GROUP BY journal_id HAVING SUM(debit_amount)<>SUM(credit_amount))").fetchone()[0]
     if bad: raise RuntimeError(f'unbalanced journals: {bad}')

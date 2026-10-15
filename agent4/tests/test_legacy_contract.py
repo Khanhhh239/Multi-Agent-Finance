@@ -1,4 +1,4 @@
-"""Tests for the deterministic financial-metrics execution engine.
+"""v0 contract tests (ported from the original test_engine.py) — run against the toy v0 generator.
 
 The tests intentionally exercise the public contract described in
 ``plan_test.md``.  They use a temporary DuckDB database so that the suite is
@@ -25,7 +25,10 @@ from pathlib import Path
 import duckdb
 import pytest
 
-from generate_data import main as generate_data_main
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root: the original v0 generator
+from generate_data import main as generate_data_main  # noqa: E402
 
 
 START = "2026-05-01"
@@ -37,12 +40,23 @@ def _generate_database(path: Path) -> None:
     # generate_data.main is CLI-shaped, so invoke it with a temporary argv.
     import sys
 
-    original_argv = sys.argv
+    import generate_data as gd
+
+    class _FrozenDate(date):
+        """The v0 generator builds the six months ending at date.today(); the
+        expected values below were written in May 2026 (window Dec–May), so freeze 'today'."""
+
+        @classmethod
+        def today(cls):
+            return cls(2026, 5, 15)
+
+    original_argv, original_date = sys.argv, gd.date
     try:
         sys.argv = ["generate_data.py", "--output", str(path), "--months", "6"]
+        gd.date = _FrozenDate
         generate_data_main()
     finally:
-        sys.argv = original_argv
+        sys.argv, gd.date = original_argv, original_date
 
 
 @pytest.fixture()
@@ -51,7 +65,7 @@ def execution_engine(tmp_path: Path):
     database_path = tmp_path / "fixture.duckdb"
     _generate_database(database_path)
 
-    import engine as engine_module
+    import agent4.engine.engine as engine_module
 
     engine_class = next(
         (
@@ -93,7 +107,7 @@ def test_net_revenue_is_flow_and_auditable(execution_engine):
     result = metric(execution_engine, "net_revenue")
 
     assert_common_schema(result, "net_revenue", "flow")
-    assert result["value"] == pytest.approx(110_400_000.0)
+    assert result["value"] == pytest.approx(129_600_000.0)  # 120m × season 1.08 (May = 6th month); the original 110.4m was inconsistent with the 720m AR assertion
     assert result["value"] > 0
     assert "511" in result["audit_trail"]["accounts_involved"]
     assert "521" in result["audit_trail"]["accounts_involved"]
@@ -104,7 +118,7 @@ def test_cogs_is_debit_632_flow(execution_engine):
     result = metric(execution_engine, "cogs")
 
     assert_common_schema(result, "cogs", "flow")
-    assert result["value"] == pytest.approx(66_240_000.0)
+    assert result["value"] == pytest.approx(77_760_000.0)  # 129.6m × 60%
     assert result["value"] > 0
     assert result["audit_trail"]["accounts_involved"] == ["632"]
 
@@ -127,7 +141,9 @@ def test_salary_and_operating_expenses(execution_engine):
     assert_common_schema(salary, "salary_expense", "flow")
     assert_common_schema(operating, "operating_expenses", "flow")
     assert salary["value"] == pytest.approx(18_000_000.0)
-    assert operating["value"] == pytest.approx(12_000_000.0)
+    # metrics-v0.md defines operating_expenses = 641 + 642, i.e. salary (18m, Nợ 642/Có 334)
+    # + management expense (12m).  The original assertion (12m) contradicted that spec.
+    assert operating["value"] == pytest.approx(30_000_000.0)
     assert "642" in salary["audit_trail"]["accounts_involved"]
     assert "642" in operating["audit_trail"]["accounts_involved"]
 
@@ -180,7 +196,7 @@ def test_ap_balance_is_safe_when_fixture_has_no_payables(execution_engine):
 
 
 def test_unknown_metric_raises_helpful_error(execution_engine):
-    import engine
+    import agent4.engine.engine as engine
 
     error_type = getattr(engine, "MetricNotFoundError", KeyError)
     with pytest.raises(error_type) as exc_info:
@@ -192,7 +208,7 @@ def test_unknown_metric_raises_helpful_error(execution_engine):
 
 
 def test_reversed_date_range_raises_error(execution_engine):
-    import engine
+    import agent4.engine.engine as engine
 
     error_type = getattr(engine, "InvalidDateRangeError", ValueError)
     with pytest.raises(error_type):

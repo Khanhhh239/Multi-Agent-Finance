@@ -73,3 +73,6 @@ Desktop.ini
 *.temp
 *.bak
 *.orig
+
+# Agent 4 docs and code docs are tracked
+!agent4/**/*.md
