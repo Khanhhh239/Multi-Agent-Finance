@@ -27,7 +27,8 @@ import pytest
 
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root: the original v0 generator
+for _p in (Path(__file__).resolve().parents[2], Path(__file__).resolve().parents[1] / "reference_v0"):  # repo root or Downloads layout
+    sys.path.insert(0, str(_p))
 from generate_data import main as generate_data_main  # noqa: E402
 
 
