@@ -1,0 +1,108 @@
+{
+  "checked_on": "2026-10-16",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "explanation",
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "legal_v2",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "business_review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 416,
+  "implementation_sha256": "b15bc9e888a9262fff65bcfbb20441648c2d347883e9c3393b4a5f2725278624",
+  "legacy_workflow_implementation_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "source_sha256": {
+    "src/business_review/__init__.py": "8de60cd2775548685db528b1b0cd21ee4d9487bd4ef3e1737aa4952c10b40fee",
+    "src/business_review/api.py": "4e0c9cc226961632a68cdf11c8f3ee5faf20224ad64122d32500b7b38b3464fa",
+    "src/business_review/cli.py": "56bcc892dd18ed776e8dba5e46ecab66e5146cb2ae2abea70edf57d30d5066be",
+    "src/business_review/contracts.py": "7faeb61289f27a227e1903269dfe19c22a2b98e09988a8bd7802fa8e5f14c4d6",
+    "src/business_review/evidence.py": "f20b0bdbc5bb117ed95f164bc933341a6be159c3cb975c1d019e55a26c637776",
+    "src/business_review/repository.py": "d8be7a5292f645cb9cf23039a031d247ce538767c693688abef3eed6e33a8230",
+    "src/business_review/service.py": "acf2c263009595ba4b6ae3e52d901547d7a92f10026e84f7e58aafbfafabe3ae",
+    "configs/business_review/capability_reviewed_capture_v1.json": "2d33299b740c2f21763c3246c416e15b944d228cf963293af790e2e4dbae0949",
+    "configs/business_review/dossier.template.json": "ac723785974a576441db603ddd90034af196302964f73f8e2805c4fa8f1af648"
+  },
+  "legacy_replay_code_unchanged": true,
+  "scope": "Synthetic dossiers, real local CLI/SQLite/HTTP and native ZEN. Not real-product legal accuracy.",
+  "real_product_mappings": "PENDING_NO_PRODUCT_DOSSIERS",
+  "legal_release": "NOT_APPROVED",
+  "passed": true
+}

@@ -1,0 +1,10 @@
+{
+  "profile_id": "reviewed_capture_v1",
+  "version": "business-preparation-20261016-v1",
+  "adapter_id": "LocalBusinessReview",
+  "adapter_version": "business-preparation-20261016-v1",
+  "source_formats": ["PDF", "IMAGE", "INVOICE_XML"],
+  "supported_families": ["INVOICE_CONTENT", "VAT_RATE", "PAYMENT_EVIDENCE"],
+  "unsupported_families": [],
+  "absence_fidelity_policies": ["complete-content-v1"]
+}

@@ -32,3 +32,6 @@ Bàn giao PLAN_10–11 có thể tiếp tục mở rộng nguồn trên nền k�
 
 
 > 2026-10-16 V2 update: source-linked registry/ruleset/corpus revised; 384 regression tests PASS. All real models remain DRAFT; product mapping is unapproved. Current status: [legal revision V2](legal_revision_20261016_v2/REPORT.md). Earlier results below remain historical evidence.
+
+
+> 2026-10-16 business preparation: implemented local review dossiers, retained evidence bytes, revision-bound item classification/payment proof, read-only readiness API and draft planning. No real SKU catalogue supplied; real rules/taxonomy stay unapproved. [Current evidence](business_review_20261016_v1/REPORT.md).
