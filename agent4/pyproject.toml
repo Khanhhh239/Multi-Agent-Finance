@@ -11,7 +11,7 @@ dependencies = ["duckdb>=1.0", "pandas>=2.0", "numpy>=1.26"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "hypothesis>=6.100", "ruff>=0.8"]
-agent = ["httpx>=0.27", "rank-bm25>=0.2.2", "sqlglot>=25", "rich>=13.7"]
+agent = ["httpx>=0.27", "rank-bm25>=0.2.2", "sqlglot>=25", "rich>=13.7", "jsonschema>=4.20"]
 api = ["fastapi>=0.110", "uvicorn>=0.29"]
 ml = ["sentence-transformers>=3"]
 
@@ -23,3 +23,6 @@ testpaths = ["tests"]
 addopts = "-q"
 pythonpath = ["."]
 markers = ["llm: requires a running local Ollama", "slow: regenerates full synthetic data"]
+
+[tool.setuptools.package-data]
+"agent4.agent" = ["data/*.jsonl", "data/*.yml", "data/*.json"]

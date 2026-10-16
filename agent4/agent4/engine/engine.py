@@ -99,6 +99,7 @@ FILTER_KEYS = ("customer", "vendor", "branch", "product_line", "item", "cost_cat
 MEASURE_SQL = {"net_debit": "(debit_amount - credit_amount)", "net_credit": "(credit_amount - debit_amount)",
                "debit": "debit_amount", "credit": "credit_amount"}
 VIEW_TABLE = {"mgmt": "v_mgmt", "tax": "v_tax"}
+COMPARE_MODES = ('previous_period','same_period_last_year')
 FLOW_COND = "NOT COALESCE(is_closing, FALSE) AND COALESCE(source_module, '') <> 'OPENING'"
 
 

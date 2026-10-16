@@ -54,3 +54,9 @@ Theo `3_evaluation/05_tieu_chi_nghiem_thu.md`: “Ba cổng, cứ qua cổng m�
 
 Git riêng đã được khởi tạo trong workspace để tránh thay đổi Git cha ở `C:/Users/Admin`. Các thẻ được tách thành commit và nhánh local. Chưa có remote của dự án nên chưa tạo/push PR.
 - T1.1 xác nhận trước commit: **1.398 passed, 0 skipped**, 78,44 giây; có hai test Ollama thật (`AGENT4_RUN_LLM=1`). công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.2 — P1 thử nghiệm
+
+Schema bảy công cụ chỉ đọc/draft, enum từ registry/engine, executor kiểm quyền và scope, facts pack chỉ display và văn bản bọc; 66 chỉ số chạy qua executor.
+
+Toàn bộ test trước commit: **1472 passed, 0 skipped**, 72.38 giây; `artifacts/t1_2-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).

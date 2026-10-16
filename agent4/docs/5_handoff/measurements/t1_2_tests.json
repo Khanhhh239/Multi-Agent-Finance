@@ -1,0 +1,13 @@
+{
+  "tests": 1472,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 72.382,
+  "card": "T1.2",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:04:09.590524+00:00",
+  "xml": "artifacts/t1_2-pytest.xml",
+  "summary": "Schema bảy công cụ chỉ đọc/draft, enum từ registry/engine, executor kiểm quyền và scope, facts pack chỉ display và văn bản bọc; 66 chỉ số chạy qua executor.",
+  "decision": "P1 chưa có ops handler: propose_action chỉ DRAFT_ONLY trong bộ nhớ; không ghi dữ liệu. SQL fallback và orchestrate_agents chưa quảng bá. Dùng jsonschema để kiểm hợp đồng ở executor và validator."
+}
