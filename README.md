@@ -2,7 +2,7 @@
 
 > OCR-based extraction and normalization of Vietnamese accounting documents, with human review, revision tracking, and planned tax compliance checks.
 
-**Cập nhật: 15/10/2026 · PLAN_09 tích hợp kỹ thuật + PLAN_12 giải thích có kiểm soát một phần + nhánh OCR V2 trong PLAN_06 · M2 pháp lý còn chờ nghiệm thu.**
+**Cập nhật: 16/10/2026 · PLAN_09 tích hợp kỹ thuật + PLAN_12 giải thích/corpus nguồn một phần + nhánh OCR V2 trong PLAN_06 · M2 pháp lý còn chờ nghiệm thu.**
 
 Nhánh [OCR/extraction V2](docs/agent3/plans/PLAN_OCR_EXTRACTION_V2.md) đang triển khai **bên trong PLAN_06**. Đã đóng băng baseline OCR thật, sửa binding tổng tiền lệch dòng và thử tách dòng dài; OCR thử nghiệm chưa bật mặc định. [Kết quả, lệnh chạy và giới hạn](docs/agent3/plans/evidence/ocr_extraction_v2/runbook.md).
 
@@ -27,7 +27,9 @@ Agent 3 là thành phần đọc, chuẩn hóa và hướng tới kiểm tra tu�
 
 ## 1. Thông tin dành cho leader
 
-**PLAN_12:** đã thêm BM25 có ràng buộc phiên bản/căn cứ, context tối thiểu, adapter Ollama local cho ứng viên Qwen3-8B, validator từng claim, API và UI **Diễn giải và nguồn tham chiếu**. Explanation lưu riêng theo evaluation/revision, giữ nguyên report/replay thuế. Mặc định template; corpus trích đoạn thật và model chưa được bật, chất lượng retrieval/readability còn PENDING. Bản đầu chỉ cho model sắp xếp/chọn các cách diễn đạt hữu hạn đã xác nhận. [Gate PLAN_12](docs/agent3/plans/evidence/gate_12.md), [cách chạy và cấu hình](docs/agent3/plans/evidence/plan12/runbook.md). XML/Excel/ERP tiếp tục hoãn theo phạm vi người dùng chọn.
+**Corpus pháp lý, 16/10:** đã tải lại 11 PDF Chính phủ/Công báo, tất cả khớp hash; biên tập 11 trích đoạn runtime từ 4 văn bản, giữ 6 đoạn tham khảo ngoài runtime. Đối chiếu ảnh trang, giới hạn ngày riêng cho khoản đã sửa đổi và giữ ngoại lệ khi retrieval. Corpus phủ đủ locator cho 2/7 rule versions, không phải legal approval; ruleset hiện chỉ đến trước 15/10/2026 nên chưa mở hỗ trợ hóa đơn sau mốc này. [Báo cáo và nguồn/trang/hash](docs/agent3/plans/evidence/plan12/legal_corpus_20261016/REPORT.md).
+
+**PLAN_12:** đã thêm BM25 có ràng buộc phiên bản/căn cứ, context tối thiểu, adapter Ollama local cho ứng viên Qwen3-8B, validator từng claim, API và UI **Diễn giải và nguồn tham chiếu**. Explanation lưu riêng theo evaluation/revision, giữ nguyên report/replay thuế. Mặc định template; corpus nguồn tối thiểu đã có, model chưa bật, chất lượng retrieval/readability và pháp lý còn PENDING. Bản đầu chỉ cho model sắp xếp/chọn các cách diễn đạt hữu hạn đã xác nhận. [Gate PLAN_12](docs/agent3/plans/evidence/gate_12.md), [cách chạy và cấu hình](docs/agent3/plans/evidence/plan12/runbook.md). XML/Excel/ERP tiếp tục hoãn theo phạm vi người dùng chọn.
 
 | Nội dung | Trạng thái hiện tại |
 |---|---|

@@ -1,6 +1,6 @@
 from datetime import date
 from typing import Literal
-from pydantic import Field, model_validator
+from pydantic import Field, StrictInt, model_validator
 from ..domain.base import Contract, Identifier, Stamped
 from ..domain.envelope import Sha256
 
@@ -30,6 +30,12 @@ class Chunk(Contract):
     effective_from: date
     effective_to: date | None = None
     reviewed: Literal[True]
+    provision_locator: str | None = Field(default=None, max_length=500)
+    source_pages: tuple[StrictInt, ...] = ()
+    provision_from: date | None = None
+    provision_to: date | None = None
+    required_context: bool = False
+    scope_note: str | None = Field(default=None, max_length=2000)
 
     @model_validator(mode='after')
     def valid(self):
@@ -38,6 +44,14 @@ class Chunk(Contract):
             raise ValueError('Chunk text hash mismatch')
         if self.effective_to and self.effective_to <= self.effective_from:
             raise ValueError('Invalid chunk interval')
+        start = self.provision_from or self.effective_from
+        end = self.provision_to or self.effective_to
+        if start < self.effective_from or end and end <= start:
+            raise ValueError('Invalid provision interval')
+        if self.effective_to and (end is None or end > self.effective_to):
+            raise ValueError('Provision exceeds document interval')
+        if any(type(p) is not int or p < 1 for p in self.source_pages) or len(set(self.source_pages)) != len(self.source_pages):
+            raise ValueError('Invalid source pages')
         return self
 
 
@@ -45,6 +59,7 @@ class Corpus(Contract):
     version: Identifier
     registry_version: Identifier
     chunks: tuple[Chunk, ...] = ()
+    validated_through: date | None = None
 
     @model_validator(mode='after')
     def unique(self):

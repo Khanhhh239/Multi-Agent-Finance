@@ -20,6 +20,8 @@ def inspect(policy, corpus, registry):
         elif (doc.sha256,doc.effective_from,doc.effective_to)!=(chunk.document_sha256,chunk.effective_from,chunk.effective_to):
             errors.append(chunk.chunk_id+':DOCUMENT_PIN_MISMATCH')
     return dict(config_version=policy.version, corpus_version=corpus.version, chunk_count=len(corpus.chunks),
+        validated_through=corpus.validated_through.isoformat() if corpus.validated_through else None,
+        required_context_chunks=sum(c.required_context for c in corpus.chunks),
         config_sha256=sha(policy.model_dump(mode='json')),corpus_sha256=sha(corpus.model_dump(mode='json')),
         implementation_sha256=implementation_sha(),valid=not errors,errors=errors,
         corpus_acceptance='PENDING_NO_EXCERPTS' if not corpus.chunks else 'REQUIRES_LABELED_RETRIEVAL_EVALUATION',

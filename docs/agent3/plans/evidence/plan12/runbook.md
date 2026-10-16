@@ -1,6 +1,6 @@
 # Chạy và kiểm tra giải thích PLAN_12
 
-Phần giải thích bổ sung hoạt động độc lập với kết quả thuế PLAN_09. Mặc định dùng template; model/corpus thực tế chưa được nghiệm thu.
+Phần giải thích bổ sung hoạt động độc lập với kết quả thuế PLAN_09. Mặc định dùng template; model và nghiệm thu pháp lý vẫn còn mở. **Cập nhật 16/10/2026:** đã có [corpus nguồn tối thiểu](legal_corpus_20261016/REPORT.md), 11 đoạn từ 4 văn bản được đối chiếu PDF; chưa phủ đủ căn cứ mọi rule version.
 
 ## Trên giao diện
 
@@ -35,7 +35,7 @@ Từ thư mục `agent3_tax_compliance`:
 .\.venv\Scripts\python.exe -m src.explanation_v2.cli --probe
 ```
 
-Lệnh kiểm hash/registry/corpus và đọc manifest localhost; không gửi hóa đơn. Config mặc định ở `configs/explanation/policy_v1.json`, corpus ở `configs/explanation/corpus_v1.json`. Override bằng đường dẫn tuyệt đối trong `AGENT3_EXPLANATION_POLICY` và `AGENT3_EXPLANATION_CORPUS`; nên dùng file `*.local.json` bị gitignore. Khởi động server từ terminal có các env này; không thay bằng request từ browser.
+Lệnh kiểm hash/registry/corpus và đọc manifest localhost; không gửi hóa đơn. Config mặc định ở `configs/explanation/policy_v1.json`, corpus mới ở `configs/explanation/corpus_20261016_v1.json`; bản rỗng `corpus_v1.json` giữ để truy lịch sử. Override bằng đường dẫn tuyệt đối trong `AGENT3_EXPLANATION_POLICY` và `AGENT3_EXPLANATION_CORPUS`; nên dùng file `*.local.json` bị gitignore. Khởi động server từ terminal có các env này; không thay bằng request từ browser.
 
 Adapter gọi **Ollama local**, model ứng viên **Qwen3-8B**, tag `qwen3:8b`. [Tài liệu Windows](https://docs.ollama.com/windows), [chat API](https://docs.ollama.com/api/chat), [manifest model/digest](https://docs.ollama.com/api/tags). Không cài Ollama hoặc tải weights tự động khi mở web.
 
@@ -45,9 +45,9 @@ Khi môi trường local đã có Ollama và đủ tài nguyên, tải model b�
 
 ## Chuẩn bị corpus
 
-Schema nằm ở `contracts/explanation-v1/Corpus.schema.json`. Mỗi chunk có `chunk_id`, `document_id`, `locator`, `document_sha256`, `text`, SHA-256 của UTF-8 text, effective interval và `reviewed=true`. Metadata phải khớp pinned LegalRegistry; document phải `PDF_REVIEWED` và locator nằm trong `verified_locators`. `reviewed=true` là lời xác nhận của quy trình biên tập, code không chứng minh người đối chiếu đã đọc đúng đoạn nguồn. Không đưa fixture pháp luật tổng hợp vào corpus thực.
+Schema nằm ở `contracts/explanation-v1/Corpus.schema.json`. Mỗi chunk có `chunk_id`, `document_id`, `locator`, `document_sha256`, `text`, SHA-256 của UTF-8 text, effective interval và `reviewed=true`. Metadata phải khớp pinned LegalRegistry; document phải `PDF_REVIEWED` và locator nằm trong `verified_locators`. Bản 16/10 thêm `source_pages`, `provision_locator`, `provision_from/to`, `required_context`, `scope_note` và corpus `validated_through`; ngoại lệ bắt buộc không bị top-k bỏ, khoản đã sửa đổi có cận ngày riêng. `reviewed=true` là xác nhận đối chiếu nguồn trong quy trình biên tập, không phải legal approval độc lập. Không đưa fixture pháp luật tổng hợp vào corpus thực.
 
-Giữ phiên bản corpus cũ và cấu hình tương ứng khi cần giải thích evaluation lịch sử. Không tự thay corpus theo latest. CLI hiện validate manifest; chưa tự crawl/chunk PDF hoặc xác nhận sự đúng đắn của phần trích đoạn.
+Giữ phiên bản corpus cũ và cấu hình tương ứng khi cần giải thích evaluation lịch sử. Không tự thay corpus theo latest. Scripts mới tải PDF pin và build từ bản chép đã đối chiếu; chưa tự crawl mọi văn bản, tự OCR để chốt nguyên văn hoặc tự xác nhận sự đúng đắn pháp lý. Corpus tham khảo nằm riêng, schema khác runtime để không nạp nhầm.
 
 ## Tái hiện kiểm thử
 

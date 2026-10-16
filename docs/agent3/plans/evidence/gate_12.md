@@ -2,6 +2,8 @@
 
 Ngày: **15/10/2026**. Trạng thái: **IMPLEMENTED_TECHNICAL_PARTIAL; chưa hoàn tất nghiệm thu toàn PLAN_12**.
 
+**Cập nhật 16/10/2026:** [corpus nguồn tối thiểu](plan12/legal_corpus_20261016/REPORT.md) đã có 11 trích đoạn runtime từ 4 văn bản và 6 đoạn chỉ tham khảo; 11 PDF tải lại khớp hash. Corpus đã có dữ liệu, nhưng coverage mới đủ locator cho 2/7 rule versions; pháp lý/model/readability vẫn PENDING. Nội dung trạng thái 15/10 bên dưới là bằng chứng của mốc trước, không phải cấu hình corpus mặc định mới.
+
 Kiểm chứng cuối: **343/343 Python tests PASS** (310 hồi quy + 33 PLAN_12), 3 JavaScript syntax checks và 2 DOM harness PASS. Chrome PLAN_12 có 5 nhóm kiểm tra desktop/mobile PASS; chạy lại Chrome PLAN_09 có 6 nhóm PASS, không có page errors. Hash implementation replay V1 khớp manifest PLAN_09: `f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7`.
 
 [Kế hoạch thực hiện](plan12/implementation_plan.md) · [Runbook/UI/API/model](plan12/runbook.md) · [Validation](plan12/validation_summary.json) · [Config/corpus/runtime manifest](plan12/configuration_manifest.json).

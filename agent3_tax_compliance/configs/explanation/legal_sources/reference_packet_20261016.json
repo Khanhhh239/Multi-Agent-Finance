@@ -1,0 +1,102 @@
+{
+  "publication": "REFERENCE_ONLY_NOT_RUNTIME",
+  "registry_version": "legal-registry-20261014-v1",
+  "checked_on": "2026-10-16",
+  "chunks": [
+    {
+      "chunk_id": "REF-ND123-A10-4",
+      "document_id": "ND123_2020",
+      "document_sha256": "577e27071365311d6ce0bde7a85330fb6607bac5021a6e884105a051985a6a78",
+      "text_sha256": "47926ced6d979cb60dea2794778c78ab81de3bee688de9de3ebe4ca7f9c310f2",
+      "text": "4. Tên, địa chỉ, mã số thuế của người bán\nTrên hóa đơn phải thể hiện tên, địa chỉ, mã số thuế của người bán theo đúng tên, địa chỉ, mã số thuế ghi tại giấy chứng nhận đăng ký doanh nghiệp, giấy chứng nhận đăng ký hoạt động chi nhánh, giấy chứng nhận đăng ký hộ kinh doanh, giấy chứng nhận đăng ký thuế, thông báo mã số thuế, giấy chứng nhận đăng ký đầu tư, giấy chứng nhận đăng ký hợp tác xã.",
+      "effective_from": "2022-07-01",
+      "effective_to": null,
+      "provision_locator": "Điều 10 khoản 4 — người bán",
+      "source_pages": [
+        14
+      ],
+      "provision_to": "2026-07-01",
+      "publication": "REFERENCE_ONLY_NOT_RUNTIME",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2020/10/123.signed_01.pdf"
+    },
+    {
+      "chunk_id": "REF-ND70-A1-7-a",
+      "document_id": "ND70_2025",
+      "document_sha256": "98abd34e952d976fbe6fcc99af12dc84df768bf54c131aa902c67f899c931c3a",
+      "text_sha256": "c91052113fde009a36d53abeeebd09fba00d5d44f69d9b03e784066067d57051",
+      "text": "7. Sửa đổi, bổ sung khoản 5, điểm a khoản 6, khoản 9, điểm c khoản 14 Điều 10 và bổ sung điểm l vào khoản 14, bổ sung khoản 17 vào Điều 10 như sau:\na) Sửa đổi, bổ sung khoản 5 như sau:\n“5. Tên, địa chỉ, mã số thuế hoặc mã số đơn vị có quan hệ với ngân sách hoặc số định danh cá nhân của người mua\na) Trường hợp người mua là cơ sở kinh doanh có mã số thuế thì tên, địa chỉ, mã số thuế của người mua thể hiện trên hóa đơn phải ghi theo đúng tại giấy chứng nhận đăng ký doanh nghiệp, giấy chứng nhận đăng ký hoạt động chi nhánh, giấy chứng nhận đăng ký hộ kinh doanh, giấy chứng nhận đăng ký thuế, thông báo mã số thuế, giấy chứng nhận đăng ký đầu tư, giấy chứng nhận đăng ký hợp tác xã; trường hợp người mua là đơn vị có quan hệ ngân sách thì tên, địa chỉ, mã số đơn vị có quan hệ ngân sách thể hiện trên hóa đơn phải ghi mã số đơn vị có quan hệ với ngân sách được cấp.\nTrường hợp tên, địa chỉ người mua quá dài, trên hóa đơn người bán được viết ngắn gọn một số danh từ thông dụng như: \"Phường\" thành \"P\"; \"Quận\" thành \"Q\", \"Thành phố\" thành \"TP\", \"Việt Nam\" thành \"VN\" hoặc \"Cổ phần\" là \"CP\", \"Trách nhiệm Hữu hạn\" thành \"TNHH\", \"khu công nghiệp\" thành \"KCN\", \"sản xuất\" thành \"SX\", \"Chi nhánh\" thành \"CN\"... nhưng phải đảm bảo đầy đủ số nhà, tên đường phố, phường, xã, quận, huyện, thành phố, xác định được chính xác tên, địa chỉ doanh nghiệp và phù hợp với đăng ký kinh doanh, đăng ký thuế của doanh nghiệp.\nb) Trường hợp người mua không có mã số thuế thì trên hóa đơn không phải thể hiện mã số thuế người mua. Một số trường hợp bán hàng hóa, cung cấp dịch vụ đặc thù cho người tiêu dùng là cá nhân quy định tại khoản 14 Điều này thì trên hóa đơn không phải thể hiện tên, địa chỉ người mua. Trường hợp bán hàng hóa, cung cấp dịch vụ cho khách hàng nước ngoài đến Việt Nam thì thông tin về địa chỉ người mua có thể được thay bằng thông tin về số hộ chiếu hoặc giấy tờ xuất nhập cảnh và quốc tịch của khách hàng nước ngoài. Trường hợp người mua cung cấp mã số thuế, số định danh cá nhân thì trên hóa đơn phải thể hiện mã số thuế, số định danh cá nhân.”",
+      "effective_from": "2025-06-01",
+      "effective_to": null,
+      "provision_locator": "Điều 1 khoản 7 điểm a — sửa khoản 5 Điều 10",
+      "source_pages": [
+        9
+      ],
+      "provision_to": "2026-07-01",
+      "publication": "REFERENCE_ONLY_NOT_RUNTIME",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/3/70-nd-cp.signed.pdf"
+    },
+    {
+      "chunk_id": "REF-ND359-A1-2",
+      "document_id": "ND359_2025",
+      "document_sha256": "7ff09215fea726275eab8b854e41802989223811b440c87fb99ed81a742c4733",
+      "text_sha256": "ed0bdee470e540e93a49658f4d31d78bf8ab9c603cd6a2829451bf958a161d69",
+      "text": "2. Bãi bỏ khoản 3 Điều 37 và khoản 3 Điều 39.",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "provision_locator": "Điều 1 khoản 2 — bãi bỏ khoản 3 Điều 37 và khoản 3 Điều 39",
+      "source_pages": [
+        2
+      ],
+      "publication": "REFERENCE_ONLY_NOT_RUNTIME",
+      "official_pdf_url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/17/359signed-1768621694337850263438.pdf"
+    },
+    {
+      "chunk_id": "REF-ND359-A2-1",
+      "document_id": "ND359_2025",
+      "document_sha256": "7ff09215fea726275eab8b854e41802989223811b440c87fb99ed81a742c4733",
+      "text_sha256": "595b058f56f28c859b98d0f96c94798566bad11cca45818e2b9223b80e500e0b",
+      "text": "Điều 2. Điều khoản thi hành\n1. Nghị định này có hiệu lực thi hành từ ngày 01 tháng 01 năm 2026.",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "provision_locator": "Điều 2 khoản 1 — hiệu lực",
+      "source_pages": [
+        2
+      ],
+      "publication": "REFERENCE_ONLY_NOT_RUNTIME",
+      "official_pdf_url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/17/359signed-1768621694337850263438.pdf"
+    },
+    {
+      "chunk_id": "REF-ND174-A1-1-2a",
+      "document_id": "ND174_2025",
+      "document_sha256": "5d86306f556d4f8d461dfd2695c283268c622950b3884c27e8d0ad8bfb48a5f5",
+      "text_sha256": "7ea4495c8abdfff67c56abb53aa600c156a382d2b1e64db53dd7bac9188b9dfa",
+      "text": "Điều 1. Giảm thuế giá trị gia tăng\n1. Giảm thuế giá trị gia tăng đối với các nhóm hàng hóa, dịch vụ đang áp dụng mức thuế suất 10%, trừ nhóm hàng hóa, dịch vụ sau:\na) Viễn thông, hoạt động tài chính, ngân hàng, chứng khoán, bảo hiểm, kinh doanh bất động sản, sản phẩm kim loại, sản phẩm khai khoáng (trừ than). Chi tiết tại Phụ lục I ban hành kèm theo Nghị định này.\nb) Sản phẩm hàng hóa và dịch vụ chịu thuế tiêu thụ đặc biệt (trừ xăng). Chi tiết tại Phụ lục II ban hành kèm theo Nghị định này.\nc) Việc giảm thuế giá trị gia tăng cho từng loại hàng hóa, dịch vụ quy định tại khoản 1 Điều này được áp dụng thống nhất tại các khâu nhập khẩu, sản xuất, gia công, kinh doanh thương mại.\nTrường hợp hàng hóa, dịch vụ nêu tại các Phụ lục I và II ban hành kèm theo Nghị định này thuộc đối tượng không chịu thuế giá trị gia tăng hoặc đối tượng chịu thuế giá trị gia tăng 5% theo quy định của Luật Thuế giá trị gia tăng thì thực hiện theo quy định của Luật Thuế giá trị gia tăng và không được giảm thuế giá trị gia tăng.\n2. Mức giảm thuế giá trị gia tăng:\na) Cơ sở kinh doanh tính thuế giá trị gia tăng theo phương pháp khấu trừ được áp dụng mức thuế suất thuế giá trị gia tăng 8% đối với hàng hóa, dịch vụ quy định tại khoản 1 Điều này.",
+      "effective_from": "2025-07-01",
+      "effective_to": null,
+      "provision_locator": "Điều 1 khoản 1 và điểm a khoản 2 — chưa bao gồm các phụ lục",
+      "source_pages": [
+        1,
+        2
+      ],
+      "provision_to": "2027-01-01",
+      "publication": "REFERENCE_ONLY_NOT_RUNTIME",
+      "official_pdf_url": "https://congbaocdn.chinhphu.vn/CongBaoCP/VanBan/2025/6/45374/57334-1-2025895-896174-2025-nd-cp.pdf"
+    },
+    {
+      "chunk_id": "REF-ND174-A2-1",
+      "document_id": "ND174_2025",
+      "document_sha256": "5d86306f556d4f8d461dfd2695c283268c622950b3884c27e8d0ad8bfb48a5f5",
+      "text_sha256": "93d2e01ad95376785ca997f7efdbfae0f1fb02925434963a8a52d74c7690b68f",
+      "text": "Điều 2. Điều khoản thi hành\n1. Nghị định này có hiệu lực thi hành từ ngày 01 tháng 7 năm 2025 đến hết ngày 31 tháng 12 năm 2026.",
+      "effective_from": "2025-07-01",
+      "effective_to": null,
+      "provision_locator": "Điều 2 khoản 1 — ngày hết hiệu lực theo bản gốc",
+      "source_pages": [
+        3
+      ],
+      "provision_to": "2027-01-01",
+      "publication": "REFERENCE_ONLY_NOT_RUNTIME",
+      "official_pdf_url": "https://congbaocdn.chinhphu.vn/CongBaoCP/VanBan/2025/6/45374/57334-1-2025895-896174-2025-nd-cp.pdf"
+    }
+  ]
+}

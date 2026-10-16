@@ -41,7 +41,11 @@ def build_context(artifact, excerpts):
         facts.append(Fact(fact_id=row.result_id, variants=variants, refs=refs))
     for chunk in excerpts:
         # Exact quotations are shown as quotations, never as a new legal conclusion.
-        text = f'Trích nguyên văn {chunk.document_id}, {chunk.locator}: «{chunk.text}»'
+        locator = chunk.provision_locator or chunk.locator
+        pages = ' (trang PDF '+', '.join(str(p) for p in chunk.source_pages)+')' if chunk.source_pages else ''
+        text = f'Trích nguyên văn {chunk.document_id}, {locator}{pages}: «{chunk.text}»'
+        if chunk.scope_note:
+            text += '\nGhi chú biên tập, không phải nguyên văn quy phạm: '+chunk.scope_note
         from ..canonicalization.derive import sha
         facts.append(Fact(fact_id='quote:'+sha(chunk.chunk_id)[:24], variants=(text,), refs=('chunk:'+chunk.chunk_id,)))
     return Context(evaluation_id=report.evaluation_id, record_revision=report.record_revision,

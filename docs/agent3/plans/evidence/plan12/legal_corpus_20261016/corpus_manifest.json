@@ -1,0 +1,22 @@
+{
+  "checked_on": "2026-10-16",
+  "corpus_version": "legal-excerpts-20261016-v1",
+  "registry_version": "legal-registry-20261014-v1",
+  "corpus_sha256": "1e07a57ef55533fda729e8ae5c84bd0f0a718677b08b7988aadd55ee8e126e1a",
+  "runtime_chunks": 11,
+  "runtime_documents": 4,
+  "reference_only_chunks": 6,
+  "primary_pdfs_refreshed": 11,
+  "selected_rule_versions": 7,
+  "versions_with_all_locators": 2,
+  "legal_accuracy": "NOT_ESTIMATED",
+  "independent_legal_approval": false,
+  "source_currency_search": "TARGETED_PRIMARY_SOURCES_NOT_EXHAUSTIVE",
+  "limitations": [
+    "No automatic legal approval",
+    "No full ND174 or ND254 appendix taxonomy",
+    "Historical PENDING_REVIEW locators remain blocked",
+    "No XML/signature verification",
+    "Existing ruleset ends 2026-10-15 exclusive; corpus does not extend rule dates"
+  ]
+}

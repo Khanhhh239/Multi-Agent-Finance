@@ -22,7 +22,7 @@ CONFIG = Path(__file__).resolve().parents[2] / 'configs/explanation'
 
 def load_config():
     policy = Policy.model_validate_json(Path(os.environ.get('AGENT3_EXPLANATION_POLICY', CONFIG/'policy_v1.json')).read_text(encoding='utf-8'))
-    corpus = Corpus.model_validate_json(Path(os.environ.get('AGENT3_EXPLANATION_CORPUS', CONFIG/'corpus_v1.json')).read_text(encoding='utf-8'))
+    corpus = Corpus.model_validate_json(Path(os.environ.get('AGENT3_EXPLANATION_CORPUS', CONFIG/'corpus_20261016_v1.json')).read_text(encoding='utf-8'))
     return policy, corpus
 
 

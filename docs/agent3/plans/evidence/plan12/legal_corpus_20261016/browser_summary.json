@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Default offline/template explanation on pinned evaluation without touching verdict",
+    "Validated claims and locator provenance rendered; provider is synthetic, not Qwen inference",
+    "Desktop/mobile 390px: no horizontal overflow, source references accessible",
+    "Unsaved correction cannot request explanation for a mismatched draft",
+    "Saving correction removes explanation of the previous revision"
+  ],
+  "page_errors": [],
+  "scope": "Synthetic invoice/native ZEN/real Chrome; LLM test double; no legal or model accuracy claim"
+}

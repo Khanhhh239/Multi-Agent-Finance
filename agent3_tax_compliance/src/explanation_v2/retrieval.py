@@ -14,6 +14,8 @@ def tokens(text):
 def retrieve(corpus: Corpus, registry, citations, query, on: date, top_k=3):
     if corpus.registry_version != registry.version:
         raise ValueError('Corpus registry version differs from pinned evaluation')
+    if corpus.validated_through and on > corpus.validated_through:
+        return ()
     docs = {d.document_id: d for d in registry.documents}
     allowed = {(c.document_id, c.locator, c.sha256) for c in citations
                if c.locator_reviewed}
@@ -30,6 +32,8 @@ def retrieve(corpus: Corpus, registry, citations, query, on: date, top_k=3):
             continue
         if not chunk.effective_from <= on or chunk.effective_to and on >= chunk.effective_to:
             continue
+        if chunk.provision_from and on < chunk.provision_from or chunk.provision_to and on >= chunk.provision_to:
+            continue
         candidates.append(chunk)
     if not candidates:
         return ()
@@ -43,4 +47,7 @@ def retrieve(corpus: Corpus, registry, citations, query, on: date, top_k=3):
                    (bag[t]*2.2)/(bag[t]+1.2*(.25+.75*size/avg))
                    for t in terms if bag[t])
     ranked = sorted(zip(candidates, bags), key=lambda pair: (-score(pair[1]), pair[0].chunk_id))
-    return tuple(c for c, _ in ranked[:top_k])
+    # Exceptions and scope clauses must survive even top_k=1. Rank only optional chunks.
+    required = tuple(c for c in candidates if c.required_context)
+    optional = tuple(c for c, _ in ranked if not c.required_context)[:top_k]
+    return tuple(sorted(required, key=lambda c: c.chunk_id)) + optional

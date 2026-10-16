@@ -61,6 +61,71 @@
           "const": true,
           "title": "Reviewed",
           "type": "boolean"
+        },
+        "provision_locator": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provision Locator"
+        },
+        "source_pages": {
+          "default": [],
+          "items": {
+            "type": "integer"
+          },
+          "title": "Source Pages",
+          "type": "array"
+        },
+        "provision_from": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provision From"
+        },
+        "provision_to": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provision To"
+        },
+        "required_context": {
+          "default": false,
+          "title": "Required Context",
+          "type": "boolean"
+        },
+        "scope_note": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope Note"
         }
       },
       "required": [
@@ -100,6 +165,19 @@
       },
       "title": "Chunks",
       "type": "array"
+    },
+    "validated_through": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Validated Through"
     }
   },
   "required": [
