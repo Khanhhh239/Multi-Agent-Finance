@@ -88,3 +88,9 @@ Toàn bộ test trước commit: **2331 passed, 0 skipped**, 98.44 giây; `artif
 Renderer/verifier:66 chỉ số render thật qua kiểm;200 diễn đạt đúng FP0;320 lỗi tiêm8loại chặn320/320 trong unit test. Kiểm kiểu tiền/phần trăm/ngày/hệ số, kỳ, nhãn, dấu và anchor giá trị đầu khối.
 
 Toàn bộ test trước commit: **2387 passed, 0 skipped**, 96.66 giây; `artifacts/t1_7-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.5 — P1 thử nghiệm
+
+Prompt ba phần có snapshot,60 few-shot dev, BM25 loại câu trùng nguyên dạng, state giữ ba lượt/hết hạn15phút và ràng buộc người dùng; dữ liệu state và câu hỏi được bọc.
+
+Toàn bộ test trước commit: **2395 passed, 0 skipped**, 125.03 giây; `artifacts/t1_5-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).

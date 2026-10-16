@@ -1,0 +1,13 @@
+{
+  "tests": 2395,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 125.03,
+  "card": "T1.5",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:33:29.291346+00:00",
+  "xml": "artifacts/t1_5-pytest.xml",
+  "summary": "Prompt ba phần có snapshot,60 few-shot dev, BM25 loại câu trùng nguyên dạng, state giữ ba lượt/hết hạn15phút và ràng buộc người dùng; dữ liệu state và câu hỏi được bọc.",
+  "decision": "STATE_YAML dùng JSON subset<=80byte trước wrapper, chỉ nguyên field; lưu mã thực thể thay vì tên. Dùng system tiếng Việt làm baseline đầu tiên, chưa có bằng chứng H8 hay val lớn. Token prompt thật sẽ đo ở M1, không ước lượng rồi báo đạt."
+}
