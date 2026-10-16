@@ -123,3 +123,6 @@ Dùng fixture tổng hợp nhỏ cho contract/recovery tests, dữ liệu có nh
 Ghi blocker cụ thể, task bị ảnh hưởng, điều kiện gỡ và người/nguồn cần cung cấp. Tiếp tục các task độc lập. Không biến thiếu dữ liệu, thiếu môi trường hoặc lỗi runtime thành kết quả thành công; không ghi DONE khi chỉ có mock mà gate yêu cầu dữ liệu thật.
 
 Lệnh triển khai/test sẽ được ghi cùng artifact khi module đã tồn tại. Quy ước lệnh và cách cập nhật tiến độ nằm trong [README lộ trình](README.md); tài liệu này không yêu cầu chạy benchmark hoặc cài dependency ngay lúc chia kế hoạch.
+
+
+> 2026-10-16 business preparation: implemented local review dossiers, retained evidence bytes, revision-bound item classification/payment proof, read-only readiness API and draft planning. No real SKU catalogue supplied; real rules/taxonomy stay unapproved. [Current evidence](evidence/business_review_20261016_v1/REPORT.md).

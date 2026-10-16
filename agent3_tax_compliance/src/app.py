@@ -30,6 +30,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(results_router)
     from .explanation_v2.api import router as explanation_router
     application.include_router(explanation_router)
+    from .business_review.api import router as business_router
+    application.include_router(business_router)
 
     @application.middleware('http')
     async def private_capture_responses(request,call_next):
