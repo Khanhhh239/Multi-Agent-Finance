@@ -1,0 +1,13 @@
+{
+  "tests": 2569,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 163.755,
+  "card": "T1.9",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:42:25.057743+00:00",
+  "xml": "artifacts/t1_9-pytest.xml",
+  "summary": "A8 thật đi qua explain được ẩn chỉ dẫn và có cảnh báo; lợi nhuận trước/sau không đổi. 40 attack tổng hợp bắt40/40, 100 câu tài chính benign FP0 trong smoke; không suy ra miễn nhiễm phổ quát.",
+  "decision": "Chuẩn hóa zero-width/bidi và confusable hữu hạn; dò mẫu lệnh, URL và base64 cục bộ; bọc/escape/cắt text160ký tự, bỏ description khỏi prompt và giữ cảnh báo khi bỏ. Không có công cụ ghi/SQL. Giữ cờ boolean trong facts pack."
+}

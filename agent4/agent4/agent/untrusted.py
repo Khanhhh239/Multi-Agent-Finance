@@ -5,7 +5,8 @@ def clean_text(text):
     return ''.join(c for c in unicodedata.normalize('NFC',str(text)) if unicodedata.category(c) not in ('Cf','Cc') or c=='\n')
 
 def suspicious(text):
-    return bool(re.search(r'ignore\s+(?:all\s+)?(?:previous|instructions)|system\s*(?:note|prompt)|assistant\s*:|bỏ qua.*(?:hướng dẫn|chỉ dẫn)|https?://|báo cáo rằng',clean_text(text),re.I))
+    from .guardrails import detect_injection
+    return detect_injection(text)
 
 def wrap_untrusted(text,source='tool',limit=160):
     value=clean_text(text)

@@ -10,7 +10,9 @@ def pack_facts(result,*,max_rows=8):
     flagged=[]
     def visit(value,key=''):
         if isinstance(value,dict):
-            return {k:visit(v,k) for k,v in value.items() if not k.startswith('_') and k not in DROP and not isinstance(v,(int,float))}
+            for k,v in value.items():
+                if not k.startswith('_') and isinstance(v,str) and suspicious(v): flagged.append(k)
+            return {k:visit(v,k) for k,v in value.items() if not k.startswith('_') and k not in DROP and (not isinstance(v,(int,float)) or isinstance(v,bool))}
         if isinstance(value,list):
             return [visit(v,key) for v in (value[:max_rows] if key in ('rows','top_entries') else value) if not isinstance(v,(int,float))]
         if isinstance(value,str):

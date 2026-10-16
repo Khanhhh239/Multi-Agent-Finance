@@ -22,6 +22,7 @@ def render_facts(results,hints=None,*,max_rows=8,question=''):
     for result in results:
         if 'display' not in result:
             lines.append('Chi tiết cách tính có trong khối nguồn; diễn giải chứng từ là dữ liệu không tin cậy.')
+            if result.get('security_notice'): lines.append(result['security_notice'])
             continue
         period=result['period_label']
         lines.append(f"{safe_label(result['metric_name'])} {period}: {result['display']}.")
@@ -46,6 +47,7 @@ def render_facts(results,hints=None,*,max_rows=8,question=''):
             # Display notes only when needed to explain missing/estimated data.
             note=result['notes'][0]
             if 'chưa có' in note.lower(): lines.append(safe_label(note))
+        if result.get('security_notice'): lines.append(result['security_notice'])
     if not lines: lines=[NOTICE]
     elif NOTICE not in '\n'.join(lines): lines.append(NOTICE)
     allowed=allowed_numbers(results,question,constants=[max_rows])

@@ -16,6 +16,7 @@ from .prompts import build_messages,COMMENTARY_SCHEMA,COMMENTARY_SYSTEM
 from .fewshot import FewShotBank
 from .state import ConversationState,update
 from .policy import AgentConfig,should_clarify,use_think
+from .guardrails import pre_filter,protect_result
 
 @dataclass
 class Step:
@@ -64,7 +65,10 @@ class CFOAgent:
         log('policy',notice=NOTICE)
         if not isinstance(question,str) or not question.strip() or len(question)>2000:
             return finish('Câu hỏi trống hoặc quá dài.','clarify')
-        hints=analyze(question,self.engine,state)
+        guarded=pre_filter(question)
+        hints=analyze(guarded.normalized,self.engine,state)
+        hints.cues.update(guarded.cues)
+        log('guardrails',cues=sorted(guarded.cues),warnings=guarded.warnings)
         log('hints',hints=hints.data())
         if not principal_access(principal):
             return finish('Vai trò hoặc phạm vi không cho phép tra cứu.','refuse')
@@ -130,6 +134,7 @@ class CFOAgent:
         if call['action'] not in ('query_metric','explain_metric'):
             return finish('Thông tin danh mục đã được tra cứu; chọn chỉ số để xem số liệu.','clarify',catalog=pack_facts(outcome.data))
         results.append(outcome.data)
+        results=[protect_result(r) for r in results]
         block=render_facts(results,hints,question=question)
         log('render',lineage_ids=block.lineage_ids)
         base_check=verify(block.text,block.allowed,block.required_labels)

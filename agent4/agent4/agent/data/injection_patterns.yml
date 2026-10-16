@@ -1,0 +1,11 @@
+{
+  "instructions": [
+    "ignore\\s+(?:all\\s+)?(?:previous|prior|instructions)",
+    "disregard.*(?:instruction|rule)", "override.*(?:instruction|system|rule)",
+    "system\\s*(?:note|prompt|message|:)", "developer\\s*(?:message|instruction|:)",
+    "assistant\\s*:", "you are now", "act as.*(?:admin|system)",
+    "bo qua.*(?:huong dan|chi dan|quy tac)", "hay (?:bao cao|tra loi) rang",
+    "bao cao rang", "(?:report|output|say).*net profit", "reveal.*(?:secret|prompt|credential)",
+    "https?://", "javascript:", "<script", "data:text/html", "exfiltrat"
+  ]
+}

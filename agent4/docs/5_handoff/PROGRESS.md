@@ -100,3 +100,9 @@ Toàn bộ test trước commit: **2395 passed, 0 skipped**, 125.03 giây; `arti
 Orchestrator đã có30 kịch bản scripted: đường hints/retriever/schema/validator/engine/render/verifier, sửa<=2, model chết chuyển form, số sai fallbackfacts, scope/state/timeout. Chưa đo accuracy thật10câu.
 
 Toàn bộ test trước commit: **2425 passed, 0 skipped**, 133.45 giây; `artifacts/t1_8-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.9 — P1 thử nghiệm
+
+A8 thật đi qua explain được ẩn chỉ dẫn và có cảnh báo; lợi nhuận trước/sau không đổi. 40 attack tổng hợp bắt40/40, 100 câu tài chính benign FP0 trong smoke; không suy ra miễn nhiễm phổ quát.
+
+Toàn bộ test trước commit: **2569 passed, 0 skipped**, 163.75 giây; `artifacts/t1_9-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
