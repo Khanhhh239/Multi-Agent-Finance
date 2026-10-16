@@ -1,0 +1,13 @@
+{
+  "tests": 2331,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 98.438,
+  "card": "T1.6",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:21:17.205723+00:00",
+  "xml": "artifacts/t1_6-pytest.xml",
+  "summary": "97 test validator riêng: schema, candidate enum, khung điều hành/thuế, kỳ/nhóm/thực thể, scope/quyền và từ chối bộ lọc custom chưa cài đầy đủ. Toàn bộ hồi quy gồm oracle vẫn xanh.",
+  "decision": "Không bỏ trường lạ; chỉ sửa chắc chắn theo hints. Thiếu kỳ flow=this_month/snapshot=today, all của chứng từ lệch giữ None để engine xử lý. Lỗi schema/kỳ sửa<=2 ở orchestrator; quyền/ngoài dữ liệu từ chối. Giới hạn DuckDB4threads512MB để cùng model trên laptop."
+}

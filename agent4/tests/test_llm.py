@@ -51,7 +51,7 @@ def test_scripted_client():
 @pytest.mark.skipif(os.getenv('AGENT4_RUN_LLM')!='1',reason='set AGENT4_RUN_LLM=1 for local model integration')
 @pytest.mark.parametrize('model',['qwen3:4b-instruct-2507-q4_K_M','qwen3:8b'])
 def test_local_models(model):
-    with OllamaClient(LLMConfig(model=model,num_ctx=4096)) as llm:
+    with OllamaClient(LLMConfig(model=model,num_ctx=4096),keep_alive='0s') as llm:
         response=llm.chat([{'role':'user','content':'Trả JSON {"ok": true}.'}],schema={'type':'object','properties':{'ok':{'type':'boolean'}},'required':['ok']},think=False)
     assert json.loads(response.text)['ok'] is True
     assert response.usage['eval_tokens']>0

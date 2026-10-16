@@ -111,6 +111,10 @@ class ExecutionEngine:
     def __init__(self, database_path: str | Path, as_of: date | None = None, read_only: bool = True) -> None:
         self.path = str(database_path)
         self.con = duckdb.connect(self.path, read_only=read_only)
+        # Bound allocator/thread pressure when a local model shares laptop RAM.
+        # These are execution resources, never financial formula settings.
+        self.con.execute('SET threads=4')
+        self.con.execute("SET memory_limit='512MB'")
         self._lock = threading.RLock()
         self.tables = {r[0] for r in self.con.execute("SELECT table_name FROM information_schema.tables").fetchall()}
         self.legacy = "v_gl" not in self.tables

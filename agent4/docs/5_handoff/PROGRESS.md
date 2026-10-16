@@ -76,3 +76,9 @@ Toàn bộ test trước commit: **1695 passed, 0 skipped**, 90.74 giây; `artif
 Hints metadata-only: 100 câu có nhãn, 100 benign và các ca kho thật; trích kỳ/so sánh/nhóm/khung/thực thể, không tính tài chính. Đã sửa FP kinh doanh và còn/CON.
 
 Toàn bộ test trước commit: **1793 passed, 0 skipped**, 83.28 giây; `artifacts/t1_4-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.6 — P1 thử nghiệm
+
+97 test validator riêng: schema, candidate enum, khung điều hành/thuế, kỳ/nhóm/thực thể, scope/quyền và từ chối bộ lọc custom chưa cài đầy đủ. Toàn bộ hồi quy gồm oracle vẫn xanh.
+
+Toàn bộ test trước commit: **2331 passed, 0 skipped**, 98.44 giây; `artifacts/t1_6-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
