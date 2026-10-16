@@ -29,3 +29,5 @@
 
 | 2026-10-16 | T1.2 thử nghiệm | P1 chưa có ops handler: propose_action chỉ DRAFT_ONLY trong bộ nhớ; không ghi dữ liệu. SQL fallback và orchestrate_agents chưa quảng bá. Dùng jsonschema để kiểm hợp đồng ở executor và validator. | Schema bảy công cụ chỉ đọc/draft, enum từ registry/engine, executor kiểm quyền và scope, facts pack chỉ display và văn bản bọc; 66 chỉ số chạy qua executor. | công thức chưa được kế toán duyệt (G0.7 mở); không chứng nhận pilot |
 | 2026-10-16 | Phiếu kế toán song song | Giữ bảng 66 chỉ số đầy đủ; thêm phiếu PDF A4 ngang đúng một trang cho 22 Must, mỗi dòng cần duyệt trước pilot | Không làm mất hồ sơ kỹ thuật hoặc giả lập phê duyệt | pypdf/Poppler xác nhận 1 trang; công thức chưa được kế toán duyệt (G0.7 mở) |
+
+| 2026-10-16 | T1.3 thử nghiệm | Phrase boost 4/token, thuế+2, nhóm+3; mơ hồ nếu score<3 hoặc margin<12%. Ngưỡng chỉ hiệu chỉnh smoke dev; mọi quyết định cuối qua validator. | BM25 metadata, 100 câu smoke dev phủ66 chỉ số: recall@8=100%; 500 lượt mean0.285ms/p950.410ms, chưa đo held-out hoặc embedding. | công thức chưa được kế toán duyệt (G0.7 mở); không chứng nhận pilot |

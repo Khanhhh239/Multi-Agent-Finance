@@ -64,3 +64,9 @@ Toàn bộ test trước commit: **1472 passed, 0 skipped**, 72.38 giây; `artif
 ### Phiếu kế toán song song — G0.7 CHƯA ĐẠT
 
 `FORMULA_REVIEW_ONE_PAGE.pdf`: A4 ngang đúng 1 trang, 22 chỉ số Must, mỗi dòng có công thức lời, ví dụ Q3, câu hỏi và nhãn “cần duyệt trước pilot”. Đã kiểm tra pypdf và ảnh render Poppler, không tràn/cắt chữ. Bản đầy đủ vẫn giữ 66 chỉ số; không có chữ ký duyệt. Toàn bộ test gần nhất trước commit: 1.472 passed (có 4B/8B thật). công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.3 — P1 thử nghiệm
+
+BM25 metadata, 100 câu smoke dev phủ66 chỉ số: recall@8=100%; 500 lượt mean0.285ms/p950.410ms, chưa đo held-out hoặc embedding.
+
+Toàn bộ test trước commit: **1695 passed, 0 skipped**, 90.74 giây; `artifacts/t1_3-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).

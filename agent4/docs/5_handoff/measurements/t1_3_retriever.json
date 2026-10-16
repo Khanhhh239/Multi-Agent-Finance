@@ -1,0 +1,24 @@
+{
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:05:29.774863+00:00",
+  "dataset": "C:\\Users\\Admin\\Downloads\\Agent4\\tests\\data\\retriever_smoke.jsonl",
+  "dataset_role": "handwritten development smoke (used for tuning; not held out)",
+  "method": "BM25 with registry phrase and capability boosts; embeddings not implemented",
+  "questions": 100,
+  "unique_gold_metrics": 66,
+  "k": 8,
+  "hits": 100,
+  "recall_at_k": 1.0,
+  "repeats": 5,
+  "initialization_ms": 4.276899999922534,
+  "latency_ms": {
+    "mean": 0.28540400000429145,
+    "p95": 0.40979999994306127,
+    "max": 0.540599999794722
+  },
+  "acceptance": {
+    "recall_at_least_0_99": true,
+    "every_query_under_30_ms": true
+  },
+  "misses": []
+}

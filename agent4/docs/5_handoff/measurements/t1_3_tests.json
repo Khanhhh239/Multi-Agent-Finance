@@ -1,0 +1,13 @@
+{
+  "tests": 1695,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 90.741,
+  "card": "T1.3",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:10:23.196046+00:00",
+  "xml": "artifacts/t1_3-pytest.xml",
+  "summary": "BM25 metadata, 100 câu smoke dev phủ66 chỉ số: recall@8=100%; 500 lượt mean0.285ms/p950.410ms, chưa đo held-out hoặc embedding.",
+  "decision": "Phrase boost 4/token, thuế+2, nhóm+3; mơ hồ nếu score<3 hoặc margin<12%. Ngưỡng chỉ hiệu chỉnh smoke dev; mọi quyết định cuối qua validator."
+}
