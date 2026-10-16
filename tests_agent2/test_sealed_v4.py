@@ -77,3 +77,14 @@ def test_driver_masks_novel_history_and_persists_before_printing(monkeypatch, tm
     assert calls[0][1].fraud_type.tolist() == [""]
     assert calls[0][2].is_fraud.tolist() == [1]
     pd.testing.assert_frame_equal(calls[1][3]["ref_for_novelty"], frame[frame.split == "validation"])
+
+
+def test_development_pool_preserves_rows_order_dtypes_and_omits_test(monkeypatch):
+    worlds = [pd.DataFrame({"split": ["train", "validation", "test"],
+                            "is_fraud": [0, 1, 1], "company_id": [name] * 3,
+                            "value": np.array([1, 2, 3], dtype=np.float32)}) for name in ("a", "b", "c")]
+    monkeypatch.setattr(sealed_v4, "prepare", lambda path: worlds[path].copy())
+    train, valid = sealed_v4.development_pool([0, 1, 2])
+    for split, actual in (("train", train), ("validation", valid)):
+        expected = pd.concat([w[w.split == split] for w in worlds], ignore_index=True)
+        pd.testing.assert_frame_equal(actual.reset_index(drop=True), expected)

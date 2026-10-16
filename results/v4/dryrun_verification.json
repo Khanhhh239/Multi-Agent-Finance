@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "world": "v4s_smoke",
+  "seed": 939,
+  "rows": 80000,
+  "policies_per_scenario": 24,
+  "test_fraud_rows": 185,
+  "test_novel_rows_from_labels": 47,
+  "frozen_matches": true
+}

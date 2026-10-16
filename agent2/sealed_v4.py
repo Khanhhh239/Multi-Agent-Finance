@@ -10,6 +10,7 @@ reported overall, for the 30 known schemes and for the 7 new schemes. Refuses to
 from __future__ import annotations
 
 import argparse
+import gc
 import hashlib
 import json
 from pathlib import Path
@@ -29,6 +30,24 @@ FROZEN_FILES = ("agent2/hybrid.py", "agent2/eval_v4.py", "agent2/methods.py", "a
 
 def file_hashes(root: Path):
     return {f: hashlib.sha256((root / f).read_bytes()).hexdigest()[:16] for f in FROZEN_FILES}
+
+
+def development_pool(paths):
+    # S2 never uses development test rows. Release them world by world, and
+    # concatenate once rather than keeping three full worlds plus two copies
+    # of their training/calibration rows alive during candidate fitting.
+    history = []
+    for path in paths:
+        frame = prepare(path)
+        history.append(frame[frame.split.isin(["train", "validation"])].copy())
+        del frame
+    pooled = pd.concat(history, ignore_index=True)
+    del history
+    train = pooled[pooled.split == "train"].copy()
+    valid = pooled[pooled.split == "validation"].copy()
+    del pooled
+    gc.collect()
+    return train, valid
 
 
 def report(te: pd.DataFrame, alerts: dict, scores: dict):
@@ -69,7 +88,7 @@ def main():
     # Check the output location before any scoring. Persist the complete result
     # before exposing metrics, so a final write failure cannot leak a lost run.
     a.out.parent.mkdir(parents=True, exist_ok=True)
-    dev = [prepare(x) for x in a.dev]
+    pool_tr, pool_va = development_pool(a.dev)
     result = {"frozen": frozen, "worlds": {}}
     for path in a.sealed:
         df = prepare(path)
@@ -83,8 +102,8 @@ def main():
         te_r = te.reset_index(drop=True)
         al, sc = alerts_for(te_r, s_te, s_va)
         r1 = report(te_r, al, sc)
-        pool_tr = pd.concat([d[d.split == "train"] for d in dev], ignore_index=True)
-        pool_va = pd.concat([d[d.split == "validation"] for d in dev], ignore_index=True)
+        del masked, tr, va, s_te, s_va, al, sc
+        gc.collect()
         s_te2, s_va2, _ = run_candidates(pool_tr, pool_va, te, history=[df[df.split == "train"], df[df.split == "validation"]],
                                          ref_for_novelty=df[df.split == "validation"])
         al2, sc2 = alerts_for(te_r, s_te2, s_va2)
