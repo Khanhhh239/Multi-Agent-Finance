@@ -1,0 +1,14 @@
+{
+  "version": "explanation-v2-1",
+  "enabled": false,
+  "provider": "ollama",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "model": "qwen3:8b",
+  "model_revision": "UNVERIFIED",
+  "timeout_seconds": 20,
+  "max_output_tokens": 1536,
+  "max_context_bytes": 48000,
+  "max_response_bytes": 64000,
+  "top_k": 3,
+  "max_facts": 30
+}

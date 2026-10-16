@@ -1,0 +1,181 @@
+{
+  "checked_on": "2026-10-16",
+  "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+  "independent_legal_approval": false,
+  "normalization": "NFC; reflow physical lines; preserve wording, numbers and punctuation; omit page furniture",
+  "provisions": [
+    {
+      "chunk_id": "ND254-A10",
+      "document_id": "ND254_2026",
+      "locator": "Article10.pdf21",
+      "provision_locator": "Điều 10, khoản 1–8",
+      "source_pages": [21, 22, 23],
+      "required_context": true,
+      "scope_note": "Toàn bộ Điều 10 trên trang PDF 21–23; locator legacy dùng trang bắt đầu. Phụ lục được khoản 3 dẫn chiếu chưa được trích trong bản này. Không suy rằng mọi loại hóa đơn đều bắt buộc mọi chỉ tiêu khoản 1.",
+      "paragraphs": [
+        "Điều 10. Nội dung của hóa đơn",
+        "1. Hóa đơn phải có các nội dung sau:",
+        "a) Tên hóa đơn, ký hiệu hóa đơn, ký hiệu mẫu số hóa đơn;",
+        "b) Số hóa đơn;",
+        "c) Tên, địa chỉ, mã số thuế của người bán;",
+        "d) Tên, địa chỉ, mã số thuế hoặc mã số đơn vị có quan hệ với ngân sách hoặc số định danh cá nhân của người mua;",
+        "đ) Tên, đơn vị tính, số lượng, đơn giá hàng hóa, dịch vụ; thành tiền chưa có thuế giá trị gia tăng, thuế suất thuế giá trị gia tăng, tổng số tiền thuế giá trị gia tăng theo từng loại thuế suất, tổng cộng tiền thuế giá trị gia tăng, tổng tiền thanh toán đã có thuế giá trị gia tăng;",
+        "e) Chữ ký của người bán, chữ ký của người mua: Trên hóa đơn điện tử không nhất thiết phải có chữ ký số của người mua (trừ trường hợp người mua, người bán có thỏa thuận);",
+        "g) Thời điểm lập hóa đơn thực hiện theo hướng dẫn tại Điều 9 Nghị định này và được hiển thị theo định dạng ngày, tháng, năm của năm dương lịch;",
+        "h) Thời điểm ký số trên hóa đơn điện tử;",
+        "i) Mã của cơ quan thuế đối với hóa đơn điện tử có mã của cơ quan thuế;",
+        "k) Phí, lệ phí thuộc ngân sách nhà nước, chiết khấu thương mại, khuyến mại (nếu có) và các nội dung khác liên quan (nếu có).",
+        "2. Chữ viết, chữ số và đồng tiền thể hiện trên hóa đơn.",
+        "3. Quy định chi tiết nội dung của hóa đơn tại khoản 1 và khoản 2 Điều này và một số trường hợp hóa đơn điện tử không nhất thiết có đầy đủ các nội dung được quy định tại Phụ lục kèm theo Nghị định này.",
+        "4. Hóa đơn điện tử khởi tạo từ máy tính tiền có kết nối dữ liệu với cơ quan thuế có các nội dung sau đây:",
+        "a) Tên, địa chỉ, mã số thuế người bán;",
+        "b) Tên, địa chỉ, mã số thuế/số định danh cá nhân/số điện thoại của người mua theo quy định (nếu người mua yêu cầu);",
+        "c) Tên hàng hóa, dịch vụ, đơn giá, số lượng, giá thanh toán. Trường hợp tổ chức kinh tế nộp thuế theo phương pháp khấu trừ phải ghi rõ nội dung giá bán chưa thuế giá trị gia tăng, thuế suất thuế giá trị gia tăng, tiền thuế giá trị gia tăng, tổng tiền thanh toán có thuế giá trị gia tăng;",
+        "d) Thời điểm lập hóa đơn;",
+        "đ) Mã của cơ quan thuế đối với hóa đơn điện tử có mã của cơ quan thuế hoặc dữ liệu điện tử để người mua có thể truy xuất, kê khai thông tin hóa đơn điện tử từ máy tính tiền.",
+        "Người bán gửi hóa đơn điện tử cho người mua bằng hình thức điện tử (tin nhắn, điện tử và các hình thức khác) hoặc cung cấp đường dẫn hoặc mã QR để người mua tra cứu, tải hóa đơn điện tử.",
+        "5. Nội dung khác trên hóa đơn",
+        "Đối với hóa đơn bán hàng của hộ kinh doanh, cá nhân kinh doanh, khuyến khích người bán thể hiện thông tin nhóm ngành nghề tương ứng với hàng hóa, dịch vụ trên dữ liệu hóa đơn điện tử theo định dạng XML gửi cơ quan thuế. Trường hợp hàng hóa, dịch vụ thuộc đối tượng không chịu thuế thì thể hiện tương ứng trên hóa đơn. Thông tin nhóm ngành nghề (nếu có) được hiển thị trên bản thể hiện hóa đơn điện tử.",
+        "Ngoài các nội dung hướng dẫn từ khoản 1 đến khoản 3 Điều này, các tổ chức kinh tế, tổ chức, hộ kinh doanh, cá nhân kinh doanh có thể tạo thêm thông tin về biểu trưng hay lo-gô để thể hiện nhãn hiệu, thương hiệu hay hình ảnh đại diện của người bán. Tùy theo đặc điểm, tính chất giao dịch và yêu cầu quản lý, trên hóa đơn có thể thể hiện thông tin về Hợp đồng mua bán, lệnh vận chuyển, mã khách hàng và các thông tin khác.",
+        "6. Nội dung hóa đơn bán tài sản công thực hiện theo Mẫu số 07/TSC-HĐ ban hành kèm theo Nghị định số 186/2025/NĐ-CP của Chính phủ quy định chi tiết một số điều của Luật Quản lý, sử dụng tài sản công.",
+        "7. Hóa đơn giá trị gia tăng kiêm tờ khai hoàn thuế đảm bảo nội dung quy định tại Điều này và theo quy định của Bộ trưởng Bộ Tài chính.",
+        "8. Bộ trưởng Bộ Tài chính quy định nội dung của hóa đơn điện tử đối với một số trường hợp khác theo yêu cầu quản lý."
+      ]
+    },
+    {
+      "chunk_id": "ND254-A43",
+      "document_id": "ND254_2026",
+      "locator": "Article43.pdf46",
+      "provision_locator": "Điều 43, khoản 1–2",
+      "source_pages": [46],
+      "required_context": true,
+      "paragraphs": [
+        "Điều 43. Hiệu lực thi hành",
+        "1. Nghị định này có hiệu lực thi hành từ ngày 01 tháng 7 năm 2026.",
+        "2. Kể từ ngày Nghị định này có hiệu lực thi hành, các Nghị định sau đây hết hiệu lực thi hành:",
+        "a) Nghị định số 123/2020/NĐ-CP ngày 19 tháng 10 năm 2020 của Chính phủ quy định về hóa đơn, chứng từ;",
+        "b) Điều 1 Nghị định số 41/2022/NĐ-CP ngày 20 tháng 6 năm 2022 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 123/2020/NĐ-CP ngày 19 tháng 10 năm 2020 của Chính phủ quy định về hóa đơn, chứng từ và Nghị định số 15/2022/NĐ-CP ngày 28 tháng 01 năm 2022 của Chính phủ quy định chính sách miễn, giảm thuế theo Nghị quyết số 43/2022/QH15 của Quốc hội về chính sách tài khóa, tiền tệ hỗ trợ chương trình phục hồi và phát triển kinh tế - xã hội;",
+        "c) Nghị định số 70/2025/NĐ-CP ngày 20 tháng 3 năm 2025 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 123/2020/NĐ-CP ngày 19 tháng 10 năm 2020 của Chính phủ quy định về hóa đơn, chứng từ."
+      ]
+    },
+    {
+      "chunk_id": "ND254-A44-1",
+      "document_id": "ND254_2026",
+      "locator": "Article44.pdf46",
+      "provision_locator": "Điều 44 khoản 1 — trích một phần Điều 44",
+      "source_pages": [46],
+      "required_context": true,
+      "scope_note": "Chỉ khoản 1 về bán hàng dự trữ quốc gia; không phải toàn bộ điều khoản chuyển tiếp và không áp dụng rộng cho mọi hóa đơn.",
+      "paragraphs": [
+        "Điều 44. Xử lý chuyển tiếp",
+        "1. Việc quản lý, sử dụng hóa đơn bán hàng dự trữ quốc gia khi bán hàng dự trữ quốc gia (hóa đơn bằng giấy) thực hiện theo quy định pháp luật về bán hàng dự trữ quốc gia. Trường hợp Bộ Tài chính có thông báo chuyển đổi áp dụng hóa đơn điện tử bán hàng dự trữ quốc gia thì các đơn vị thực hiện chuyển đổi theo quy định. Khi chuyển sang sử dụng hóa đơn điện tử bán hàng dự trữ quốc gia, hóa đơn bán hàng dự trữ quốc gia (hóa đơn bằng giấy) chưa sử dụng hết phải thực hiện tiêu hủy theo trình tự, thủ tục do Bộ trưởng Bộ Tài chính quy định."
+      ]
+    },
+    {
+      "chunk_id": "ND181-A26-core",
+      "document_id": "ND181_2025",
+      "locator": "Article26.pdf32-34",
+      "provision_locator": "Điều 26, đoạn mở đầu và khoản 1",
+      "source_pages": [32],
+      "required_context": true,
+      "scope_note": "Phải đọc cùng các trường hợp đặc thù khoản 2 và tổng mua cùng ngày khoản 3. Không kết luận từ ngưỡng 05 triệu riêng lẻ. Từ 20/06/2026, điểm g phải đọc theo Điều 4 NĐ 144/2026/NĐ-CP; bản trích NĐ 181 không tự hợp nhất nội dung sửa đổi.",
+      "paragraphs": [
+        "Điều 26. Chứng từ thanh toán không dùng tiền mặt",
+        "Cơ sở kinh doanh phải có chứng từ thanh toán không dùng tiền mặt đối với hàng hóa, dịch vụ mua vào (bao gồm cả hàng hóa nhập khẩu) từ 05 triệu đồng trở lên đã bao gồm thuế giá trị gia tăng. Trong đó:",
+        "1. Chứng từ thanh toán không dùng tiền mặt là chứng từ chứng minh việc thanh toán không dùng tiền mặt theo quy định của Nghị định số 52/2024/NĐ-CP ngày 15 tháng 5 năm 2024 của Chính phủ về thanh toán không dùng tiền mặt, trừ các chứng từ bên mua nộp tiền mặt vào tài khoản của bên bán."
+      ]
+    },
+    {
+      "chunk_id": "ND181-A26-2-a-f",
+      "document_id": "ND181_2025",
+      "locator": "Article26.pdf32-34",
+      "provision_locator": "Điều 26 khoản 2 điểm a, b, c, d, đ, e",
+      "source_pages": [32, 33],
+      "required_context": true,
+      "paragraphs": [
+        "2. Một số trường hợp đặc thù theo quy định tại điểm b khoản 2 Điều 14 Luật Thuế giá trị gia tăng bao gồm:",
+        "a) Trường hợp hàng hóa, dịch vụ mua vào theo phương thức thanh toán bù trừ giữa giá trị hàng hóa, dịch vụ mua vào với giá trị hàng hóa, dịch vụ bán ra, vay mượn hàng mà phương thức thanh toán này được quy định cụ thể trong hợp đồng thì phải có biên bản đối chiếu số liệu và xác nhận giữa hai bên về việc thanh toán bù trừ giữa hàng hóa, dịch vụ mua vào với hàng hóa, dịch vụ bán ra, vay mượn hàng. Trường hợp bù trừ công nợ qua bên thứ ba phải có biên bản bù trừ công nợ của ba bên làm căn cứ khấu trừ thuế.",
+        "b) Trường hợp hàng hóa, dịch vụ mua vào theo phương thức bù trừ công nợ như vay, mượn tiền; cấn trừ công nợ qua bên thứ ba mà phương thức thanh toán này được quy định cụ thể trong hợp đồng thì phải có hợp đồng vay, mượn tiền dưới hình thức văn bản được lập trước đó và có chứng từ chuyển tiền từ tài khoản của bên cho vay, cho mượn sang tài khoản của bên đi vay, đi mượn đối với khoản vay, mượn bằng tiền bao gồm cả trường hợp bù trừ giữa giá trị hàng hóa, dịch vụ mua vào với khoản tiền mà bên bán hỗ trợ cho bên mua, hoặc nhờ bên mua chi hộ.",
+        "c) Trường hợp hàng hóa, dịch vụ mua vào được thanh toán ủy quyền qua bên thứ ba thanh toán không dùng tiền mặt (bao gồm cả trường hợp bên bán yêu cầu bên mua thanh toán không dùng tiền mặt cho bên thứ ba do bên bán chỉ định) thì việc thanh toán theo ủy quyền hoặc thanh toán cho bên thứ ba theo chỉ định của bên bán phải được quy định cụ thể trong hợp đồng dưới hình thức văn bản và bên thứ ba là một tổ chức hoặc thể nhân đang hoạt động theo quy định của pháp luật.",
+        "d) Trường hợp hàng hóa, dịch vụ mua vào theo phương thức thanh toán tiền hàng hóa, dịch vụ bằng cổ phiếu, trái phiếu mà phương thức thanh toán này được quy định cụ thể trong hợp đồng thì phải có hợp đồng mua bán dưới hình thức văn bản được lập trước đó.",
+        "đ) Trường hợp sau khi thực hiện các hình thức thanh toán nêu tại điểm a, b, c và d khoản này mà phần giá trị còn lại được thanh toán bằng tiền có giá trị từ 05 triệu đồng trở lên thì chỉ được khấu trừ thuế đối với trường hợp có chứng từ thanh toán không dùng tiền mặt.",
+        "e) Trường hợp hàng hóa, dịch vụ mua vào được thanh toán không dùng tiền mặt vào tài khoản của bên thứ ba mở tại Kho bạc Nhà nước để thực hiện cưỡng chế bằng biện pháp thu tiền, tài sản do tổ chức, cá nhân khác đang nắm giữ (theo Quyết định của cơ quan nhà nước có thẩm quyền) thì được khấu trừ thuế giá trị gia tăng đầu vào và xác định tương ứng với số tiền chuyển vào tài khoản của bên thứ ba mở tại Kho bạc Nhà nước."
+      ]
+    },
+    {
+      "chunk_id": "ND181-A26-2-g-original",
+      "document_id": "ND181_2025",
+      "locator": "Article26.pdf32-34",
+      "provision_locator": "Điều 26 khoản 2 điểm g — bản gốc trước sửa đổi",
+      "source_pages": [33],
+      "provision_to": "2026-06-20",
+      "required_context": true,
+      "scope_note": "Điểm g này được Điều 4 NĐ 144/2026/NĐ-CP sửa đổi từ 20/06/2026. Retrieval chặn bản gốc từ ngày đó; không dùng ngày hiệu lực toàn văn ND181 để kéo dài hiệu lực riêng điểm g.",
+      "paragraphs": [
+        "g) Đối với hàng hóa, dịch vụ mua trả chậm, trả góp có giá trị hàng hóa, dịch vụ mua từ 05 triệu đồng trở lên, cơ sở kinh doanh căn cứ vào hợp đồng mua hàng hóa, dịch vụ bằng văn bản, hóa đơn giá trị gia tăng và chứng từ thanh toán không dùng tiền mặt của hàng hóa, dịch vụ mua trả chậm, trả góp để khấu trừ thuế giá trị gia tăng đầu vào. Trường hợp chưa có chứng từ thanh toán không dùng tiền mặt do chưa đến thời điểm thanh toán theo hợp đồng, phụ lục hợp đồng thì cơ sở kinh doanh vẫn được khấu trừ thuế giá trị gia tăng đầu vào. Trường hợp đến thời điểm thanh toán theo hợp đồng, phụ lục hợp đồng, cơ sở kinh doanh không có chứng từ thanh toán không dùng tiền mặt thì cơ sở kinh doanh phải kê khai, điều chỉnh giảm số thuế giá trị gia tăng đầu vào được khấu trừ đối với phần giá trị hàng hóa, dịch vụ không có chứng từ thanh toán không dùng tiền mặt vào kỳ tính thuế phát sinh nghĩa vụ thanh toán theo hợp đồng, phụ lục hợp đồng."
+      ]
+    },
+    {
+      "chunk_id": "ND181-A26-2-hi-3",
+      "document_id": "ND181_2025",
+      "locator": "Article26.pdf32-34",
+      "provision_locator": "Điều 26 khoản 2 điểm h, i và khoản 3",
+      "source_pages": [33, 34],
+      "required_context": true,
+      "paragraphs": [
+        "h) Trường hợp giá trị hàng hóa, dịch vụ nhập khẩu từng lần có giá trị dưới 05 triệu đồng, hàng hóa, dịch vụ mua vào từng lần theo hóa đơn dưới 05 triệu đồng theo giá đã có thuế giá trị gia tăng và trường hợp cơ sở kinh doanh nhập khẩu hàng hóa là quà biếu, quà tặng, hàng mẫu không phải trả tiền của tổ chức, cá nhân ở nước ngoài thì không cần chứng từ thanh toán không dùng tiền mặt đối với hàng hóa, dịch vụ mua vào.",
+        "i) Trường hợp hàng hóa, dịch vụ mua vào phục vụ cho hoạt động sản xuất, kinh doanh hàng hóa, dịch vụ chịu thuế giá trị gia tăng được ủy quyền cho cá nhân là người lao động của cơ sở kinh doanh thanh toán không dùng tiền mặt theo quy chế tài chính hoặc quy chế nội bộ của cơ sở kinh doanh, sau đó cơ sở kinh doanh thanh toán lại cho người lao động bằng hình thức thanh toán không dùng tiền mặt thì được khấu trừ thuế giá trị gia tăng đầu vào.",
+        "3. Trường hợp mua hàng hóa, dịch vụ của một người nộp thuế có giá trị dưới 05 triệu đồng nhưng mua nhiều lần trong cùng một ngày có tổng giá trị từ 05 triệu đồng trở lên thì chỉ được khấu trừ thuế đối với trường hợp có chứng từ thanh toán không dùng tiền mặt."
+      ]
+    },
+    {
+      "chunk_id": "ND144-A4",
+      "document_id": "ND144_2026",
+      "locator": "Article4.pdf3",
+      "provision_locator": "Điều 4 — sửa đổi điểm g khoản 2 Điều 26 NĐ 181",
+      "source_pages": [3],
+      "required_context": true,
+      "paragraphs": [
+        "Điều 4. Sửa đổi, bổ sung điểm g khoản 2 Điều 26",
+        "“g) Đối với hàng hóa, dịch vụ mua trả chậm, trả góp có giá trị hàng hóa, dịch vụ mua từ 05 triệu đồng trở lên, cơ sở kinh doanh căn cứ vào hợp đồng mua hàng hóa, dịch vụ bằng văn bản, hóa đơn giá trị gia tăng và chứng từ thanh toán không dùng tiền mặt của hàng hóa, dịch vụ mua trả chậm, trả góp để khấu trừ thuế giá trị gia tăng đầu vào. Trường hợp chưa có chứng từ thanh toán không dùng tiền mặt do chưa đến thời điểm thanh toán theo hợp đồng, phụ lục hợp đồng thì cơ sở kinh doanh vẫn được khấu trừ thuế giá trị gia tăng đầu vào. Đến thời điểm thanh toán theo hợp đồng, phụ lục hợp đồng, cơ sở kinh doanh không có chứng từ thanh toán không dùng tiền mặt thì cơ sở kinh doanh phải kê khai, điều chỉnh giảm số thuế giá trị gia tăng đầu vào được khấu trừ đối với phần giá trị hàng hóa, dịch vụ không có chứng từ thanh toán không dùng tiền mặt vào kỳ tính thuế phát sinh nghĩa vụ thanh toán theo hợp đồng, phụ lục hợp đồng. Trường hợp sau khi điều chỉnh, cơ sở kinh doanh có chứng từ thanh toán không dùng tiền mặt thì cơ sở kinh doanh được khai, khấu trừ số thuế giá trị gia tăng đầu vào đối với phần giá trị hàng hóa, dịch vụ có chứng từ thanh toán không dùng tiền mặt vào kỳ tính thuế có chứng từ thanh toán không dùng tiền mặt.”."
+      ]
+    },
+    {
+      "chunk_id": "ND144-A1-1",
+      "document_id": "ND144_2026",
+      "locator": "Article1.pdf1",
+      "provision_locator": "Điều 1 khoản 1 — chỉ phần bổ sung khoản 3a Điều 4",
+      "source_pages": [1],
+      "required_context": true,
+      "scope_note": "Chỉ khoản 1; không phải toàn bộ các điểm/khoản Điều 4 được NĐ 144 sửa đổi. Không dùng đoạn này để phân loại mọi mặt hàng.",
+      "paragraphs": [
+        "Điều 1. Sửa đổi, bổ sung một số điểm, khoản của Điều 4",
+        "1. Bổ sung khoản 3a vào sau khoản 3 như sau:",
+        "“3a. Bảo hiểm nhân thọ, bảo hiểm sức khỏe, bảo hiểm người học, các dịch vụ bảo hiểm khác liên quan đến con người; bảo hiểm vật nuôi, bảo hiểm cây trồng, các dịch vụ bảo hiểm nông nghiệp khác; bảo hiểm tàu, thuyền, trang thiết bị và các dụng cụ cần thiết khác phục vụ trực tiếp đánh bắt thủy sản; tái bảo hiểm theo quy định của pháp luật về kinh doanh bảo hiểm; bảo hiểm các công trình, thiết bị dầu khí, tàu chứa dầu mang quốc tịch nước ngoài do nhà thầu dầu khí hoặc nhà thầu phụ nước ngoài thuê để hoạt động tại vùng biển Việt Nam, vùng biển chồng lấn mà Việt Nam và các quốc gia có bờ biển tiếp liền hay đối diện đã thỏa thuận đặt dưới chế độ khai thác chung.”."
+      ]
+    },
+    {
+      "chunk_id": "ND144-A6-1",
+      "document_id": "ND144_2026",
+      "locator": "Article6.pdf3",
+      "provision_locator": "Điều 6 khoản 1 — hiệu lực",
+      "source_pages": [3],
+      "required_context": true,
+      "scope_note": "Chỉ khoản 1 về ngày hiệu lực, không trích khoản 2 trách nhiệm thi hành trên trang 4.",
+      "paragraphs": ["Điều 6. Điều khoản thi hành", "1. Nghị định này có hiệu lực thi hành kể từ ngày 20 tháng 6 năm 2026."]
+    },
+    {
+      "chunk_id": "TT91-A25",
+      "document_id": "TT91_2026",
+      "locator": "Article25.pdf32",
+      "provision_locator": "Điều 25 khoản 1–2",
+      "source_pages": [32],
+      "required_context": true,
+      "paragraphs": [
+        "Điều 25. Hiệu lực thi hành",
+        "1. Thông tư này có hiệu lực thi hành kể từ ngày 01 tháng 7 năm 2026.",
+        "2. Kể từ ngày Thông tư này có hiệu lực thi hành, Thông tư số 32/2025/TT-BTC ngày 31 tháng 5 năm 2025 của Bộ trưởng Bộ Tài chính hướng dẫn thực hiện một số điều của Luật Quản lý thuế ngày 13 tháng 6 năm 2019, Nghị định số 123/2020/NĐ-CP ngày 19 tháng 10 năm 2020 của Chính phủ quy định về hóa đơn, chứng từ, Nghị định số 70/2025/NĐ-CP ngày 20 tháng 3 năm 2025 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 123/2020/NĐ-CP hết hiệu lực thi hành."
+      ]
+    }
+  ]
+}

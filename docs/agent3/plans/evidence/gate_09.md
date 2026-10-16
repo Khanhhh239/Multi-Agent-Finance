@@ -29,3 +29,6 @@ Smoke bổ sung trên **1 trang PDF CyberBill công khai**, router/OCR PP-OCRv6 
 Giới hạn: synchronous MVP API; lịch sử mỗi revision hiện tối đa 20 evaluations; chưa scheduler tự resume compliance; OCR accuracy/calibration/legal review và non-cash proof ingestion/matching chưa được nghiệm thu. Mọi report hiện `technical_only=true`, rules/models catalog vẫn DRAFT. Không có phát hành rule thuế thực tế chỉ vì unit/browser test qua.
 
 Bàn giao PLAN_10–11 có thể tiếp tục mở rộng nguồn trên nền kỹ thuật; PLAN_12 là nhánh tùy chọn cho explanation, PLAN_14 nhận manifest để hardening. Các gate còn mở không được đánh dấu DONE.
+
+
+> 2026-10-16 V2 update: source-linked registry/ruleset/corpus revised; 384 regression tests PASS. All real models remain DRAFT; product mapping is unapproved. Current status: [legal revision V2](legal_revision_20261016_v2/REPORT.md). Earlier results below remain historical evidence.

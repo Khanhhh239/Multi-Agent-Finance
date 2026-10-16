@@ -1,6 +1,6 @@
 # PLAN_12 — RAG và LLM giải thích có kiểm soát — tùy chọn
 
-> Trạng thái triển khai: **NOT_STARTED**. Tài liệu là công việc dự kiến, không chứng nhận code đã hoàn thành.
+> Trạng thái triển khai: **IMPLEMENTED_TECHNICAL_PARTIAL — cập nhật 16/10/2026**. Đã triển khai sidecar BM25/context/adapter Ollama/claim validator/API/UI/template fallback và corpus nguồn tối thiểu; nghiệm thu pháp lý toàn bộ corpus, inference Qwen thật và đánh giá readability còn **PENDING**. [Gate](evidence/gate_12.md) · [Runbook](evidence/plan12/runbook.md) · [Quyết định triển khai](evidence/plan12/implementation_plan.md).
 
 [Lộ trình tổng](README.md) · Trước theo thứ tự đọc: [PLAN_11](PLAN_11_EXCEL_BANK.md) · Sau: [PLAN_13](PLAN_13_ERP_CONNECTOR.md)
 
@@ -26,6 +26,14 @@ Kiểm tra lại tính tồn tại/phiên bản khi triển khai; kết quả ki
 Các đường dẫn sau là **đích dự kiến**, chưa hàm ý file đã tồn tại:
 
 `agent3_tax_compliance/src/explanation/{retrieval,context_builder,llm,validator}.py; configs/explanation/; tests/explanation/`
+
+**Đường dẫn thực tế:** `src/explanation_v2/` thay cho sửa `src/explanation/`, nhằm giữ hash implementation/template replay của report PLAN_09. Config ở `configs/explanation/`, tests ở `tests/explanation/`, schema ở `contracts/explanation-v1/`. Giải thích mở rộng là artifact riêng theo evaluation/revision, không sửa aggregate/outcome.
+
+**Model được chọn làm ứng viên:** Ollama local `qwen3:8b` (Qwen3-8B), `think=false`, pin digest manifest trước khi bật. Mặc định `enabled=false`, chưa cài/tải weights trong đợt triển khai này. Retrieval dùng BM25; BGE-M3/reranker chưa được thêm vì chưa có bộ đánh giá chứng minh lợi ích.
+
+**Giới hạn validator bản đầu:** chỉ nhận fact/variant/refs do code cung cấp và yêu cầu giữ đủ facts; model có thể sắp xếp và chọn cách diễn đạt hữu hạn đã định nghĩa. Chưa nhận paraphrase tự do, chưa tuyên bố tốt hơn template. Corpus nguồn mặc định đã có bản tối thiểu ngày 16/10; thiếu căn cứ được duyệt thì fallback, không dùng kiến thức có sẵn của model thay luật.
+
+**Cập nhật 16/10/2026:** [corpus nguồn đã chuẩn bị](evidence/plan12/legal_corpus_20261016/REPORT.md), mặc định `corpus_20261016_v1.json`, gồm 11 đoạn runtime/4 văn bản và 6 đoạn tham khảo riêng. Có ngày áp dụng riêng khoản/điểm và giữ bắt buộc các đoạn ngoại lệ. Không đổi source approval/ruleset v1; coverage toàn bộ pháp lý và model vẫn chưa được nghiệm thu. Bản rỗng trước đây được giữ nguyên để truy lịch sử.
 
 ExplanationContext chỉ gồm evaluation snapshot hợp lệ, rule outcomes, evidence và legal excerpts đúng selected document/article/version. LLMOutput có structured claims với refs; verdict/coverage/counts là read-only từ system result. Validation failure → deterministic template.
 

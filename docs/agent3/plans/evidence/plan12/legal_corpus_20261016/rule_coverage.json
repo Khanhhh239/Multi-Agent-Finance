@@ -1,0 +1,144 @@
+{
+  "checked_on": "2026-10-16",
+  "ruleset_version": "technical-draft-ruleset-20261014-v1",
+  "notice": "Locator coverage only; not legal accuracy or approval. Current rule support ends before 2026-10-15.",
+  "versions": [
+    {
+      "rule_id": "INV_CONTENT_001",
+      "rule_version": "content-2022-v1",
+      "effective_from": "2022-07-01",
+      "effective_to_exclusive": "2025-06-01",
+      "publication": "DRAFT",
+      "covered_bases": [],
+      "missing_bases": [
+        {
+          "document_id": "ND123_2020",
+          "locator": "Article10.PENDING_REVIEW"
+        }
+      ],
+      "all_selected_locators_have_excerpts": false,
+      "legal_approval": "PENDING",
+      "current_date_outside_version": true
+    },
+    {
+      "rule_id": "INV_CONTENT_001",
+      "rule_version": "content-2025-v1",
+      "effective_from": "2025-06-01",
+      "effective_to_exclusive": "2026-07-01",
+      "publication": "DRAFT",
+      "covered_bases": [],
+      "missing_bases": [
+        {
+          "document_id": "ND123_2020",
+          "locator": "Article10.PENDING_REVIEW"
+        },
+        {
+          "document_id": "ND70_2025",
+          "locator": "Article1.PENDING_REVIEW"
+        }
+      ],
+      "all_selected_locators_have_excerpts": false,
+      "legal_approval": "PENDING",
+      "current_date_outside_version": true
+    },
+    {
+      "rule_id": "INV_CONTENT_001",
+      "rule_version": "content-2026-v1",
+      "effective_from": "2026-07-01",
+      "effective_to_exclusive": "2026-10-15",
+      "publication": "DRAFT",
+      "covered_bases": [
+        {
+          "document_id": "ND254_2026",
+          "locator": "Article10.pdf21"
+        }
+      ],
+      "missing_bases": [],
+      "all_selected_locators_have_excerpts": true,
+      "legal_approval": "PENDING",
+      "current_date_outside_version": true
+    },
+    {
+      "rule_id": "VAT_NON_CASH_PAYMENT_001",
+      "rule_version": "payment-2025-v1",
+      "effective_from": "2025-07-01",
+      "effective_to_exclusive": "2026-01-01",
+      "publication": "DRAFT",
+      "covered_bases": [
+        {
+          "document_id": "ND181_2025",
+          "locator": "Article26.pdf32-34"
+        }
+      ],
+      "missing_bases": [],
+      "all_selected_locators_have_excerpts": true,
+      "legal_approval": "PENDING",
+      "current_date_outside_version": true
+    },
+    {
+      "rule_id": "VAT_NON_CASH_PAYMENT_001",
+      "rule_version": "payment-2026a-v1",
+      "effective_from": "2026-01-01",
+      "effective_to_exclusive": "2026-06-20",
+      "publication": "DRAFT",
+      "covered_bases": [
+        {
+          "document_id": "ND181_2025",
+          "locator": "Article26.pdf32-34"
+        }
+      ],
+      "missing_bases": [
+        {
+          "document_id": "ND359_2025",
+          "locator": "AMENDMENT_SCOPE_PENDING"
+        }
+      ],
+      "all_selected_locators_have_excerpts": false,
+      "legal_approval": "PENDING",
+      "current_date_outside_version": true
+    },
+    {
+      "rule_id": "VAT_NON_CASH_PAYMENT_001",
+      "rule_version": "payment-2026b-v1",
+      "effective_from": "2026-06-20",
+      "effective_to_exclusive": "2026-10-15",
+      "publication": "DRAFT",
+      "covered_bases": [
+        {
+          "document_id": "ND181_2025",
+          "locator": "Article26.pdf32-34"
+        },
+        {
+          "document_id": "ND144_2026",
+          "locator": "Article4.pdf3"
+        }
+      ],
+      "missing_bases": [
+        {
+          "document_id": "ND359_2025",
+          "locator": "AMENDMENT_SCOPE_PENDING"
+        }
+      ],
+      "all_selected_locators_have_excerpts": false,
+      "legal_approval": "PENDING",
+      "current_date_outside_version": true
+    },
+    {
+      "rule_id": "VAT_RATE_001",
+      "rule_version": "vat-2025-2026-v1",
+      "effective_from": "2025-07-01",
+      "effective_to_exclusive": "2026-10-15",
+      "publication": "DRAFT",
+      "covered_bases": [],
+      "missing_bases": [
+        {
+          "document_id": "ND174_2025",
+          "locator": "Article1_APPENDICES_PENDING_REVIEW"
+        }
+      ],
+      "all_selected_locators_have_excerpts": false,
+      "legal_approval": "PENDING",
+      "current_date_outside_version": true
+    }
+  ]
+}

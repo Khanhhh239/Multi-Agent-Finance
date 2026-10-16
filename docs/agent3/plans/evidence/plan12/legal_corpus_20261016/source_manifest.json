@@ -1,0 +1,486 @@
+{
+  "checked_on": "2026-10-16",
+  "registry_version": "legal-registry-20261014-v1",
+  "documents": [
+    {
+      "document_id": "ND123_2020",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2020/10/123.signed_01.pdf",
+      "expected_sha256": "577e27071365311d6ce0bde7a85330fb6607bac5021a6e884105a051985a6a78",
+      "checked_at": "2026-10-16T00:23:11.429048+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2020/10/123.signed_01.pdf",
+      "sha256": "577e27071365311d6ce0bde7a85330fb6607bac5021a6e884105a051985a6a78",
+      "bytes": 5662530,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "TT78_2021",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2021/09/78-btc.pdf",
+      "expected_sha256": "b6df1461163ae7bd8d7e379c3f54c9103a7c254b23754b27b22f37735e353b13",
+      "checked_at": "2026-10-16T00:23:11.429458+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2021/09/78-btc.pdf",
+      "sha256": "b6df1461163ae7bd8d7e379c3f54c9103a7c254b23754b27b22f37735e353b13",
+      "bytes": 1064612,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "ND70_2025",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/3/70-nd-cp.signed.pdf",
+      "expected_sha256": "98abd34e952d976fbe6fcc99af12dc84df768bf54c131aa902c67f899c931c3a",
+      "checked_at": "2026-10-16T00:23:11.429458+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/3/70-nd-cp.signed.pdf",
+      "sha256": "98abd34e952d976fbe6fcc99af12dc84df768bf54c131aa902c67f899c931c3a",
+      "bytes": 2806910,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "TT32_2025",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/6/32-btc.pdf",
+      "expected_sha256": "88431d75855e9b8fa394c7afe3c1a204485caf648bc2355fd2fc8878a39fefa5",
+      "checked_at": "2026-10-16T00:23:11.429458+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/6/32-btc.pdf",
+      "sha256": "88431d75855e9b8fa394c7afe3c1a204485caf648bc2355fd2fc8878a39fefa5",
+      "bytes": 7080597,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "ND181_2025",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/181nd.signed.pdf",
+      "expected_sha256": "63777bd1640c91598f95ee40e3d793cf9422afc123ae79bb75f83dd183d74157",
+      "checked_at": "2026-10-16T00:23:11.891129+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/181nd.signed.pdf",
+      "sha256": "63777bd1640c91598f95ee40e3d793cf9422afc123ae79bb75f83dd183d74157",
+      "bytes": 3551060,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "ND174_2025",
+      "url": "https://congbaocdn.chinhphu.vn/CongBaoCP/VanBan/2025/6/45374/57334-1-2025895-896174-2025-nd-cp.pdf",
+      "expected_sha256": "5d86306f556d4f8d461dfd2695c283268c622950b3884c27e8d0ad8bfb48a5f5",
+      "checked_at": "2026-10-16T00:23:13.228893+00:00",
+      "final_url": "https://congbaocdn.chinhphu.vn/CongBaoCP/VanBan/2025/6/45374/57334-1-2025895-896174-2025-nd-cp.pdf",
+      "sha256": "5d86306f556d4f8d461dfd2695c283268c622950b3884c27e8d0ad8bfb48a5f5",
+      "bytes": 559216,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "ND359_2025",
+      "url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/17/359signed-1768621694337850263438.pdf",
+      "expected_sha256": "7ff09215fea726275eab8b854e41802989223811b440c87fb99ed81a742c4733",
+      "checked_at": "2026-10-16T00:23:13.366748+00:00",
+      "final_url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/17/359signed-1768621694337850263438.pdf",
+      "sha256": "7ff09215fea726275eab8b854e41802989223811b440c87fb99ed81a742c4733",
+      "bytes": 368630,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "ND144_2026",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/4/144-ndcp.signed.pdf",
+      "expected_sha256": "2ab7fc38ad68e435447299126982014bf1d2b6a3051e40f709ae3e14b92bd98a",
+      "checked_at": "2026-10-16T00:23:13.703387+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/4/144-ndcp.signed.pdf",
+      "sha256": "2ab7fc38ad68e435447299126982014bf1d2b6a3051e40f709ae3e14b92bd98a",
+      "bytes": 983186,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "ND254_2026",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/254-ndcp.signed.pdf",
+      "expected_sha256": "d8df03ef58aa26f2f3bf7014c830fe598c7939e2fc32643e436eca24f1fe85ae",
+      "checked_at": "2026-10-16T00:23:13.737066+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/254-ndcp.signed.pdf",
+      "sha256": "d8df03ef58aa26f2f3bf7014c830fe598c7939e2fc32643e436eca24f1fe85ae",
+      "bytes": 2549084,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "TT91_2026",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/91-btc.signed.pdf",
+      "expected_sha256": "3986d7970bd3658ce66523d8f8fcfca22c34abffb807e733b459e4729e06aab6",
+      "checked_at": "2026-10-16T00:23:13.781056+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/91-btc.signed.pdf",
+      "sha256": "3986d7970bd3658ce66523d8f8fcfca22c34abffb807e733b459e4729e06aab6",
+      "bytes": 3423905,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    },
+    {
+      "document_id": "L108_2025",
+      "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/01/108-qh15.signed.pdf",
+      "expected_sha256": "c1128f09f90b43d509fc75067caa5ad734a8773c2f82f4fdf46d54592107ae72",
+      "checked_at": "2026-10-16T00:23:14.036945+00:00",
+      "final_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/01/108-qh15.signed.pdf",
+      "sha256": "c1128f09f90b43d509fc75067caa5ad734a8773c2f82f4fdf46d54592107ae72",
+      "bytes": 3031876,
+      "status": "MATCHED_PINNED_PRIMARY_PDF"
+    }
+  ],
+  "provenance": [
+    {
+      "chunk_id": "ND254-A10",
+      "document_id": "ND254_2026",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/254-ndcp.signed.pdf",
+      "document_sha256": "d8df03ef58aa26f2f3bf7014c830fe598c7939e2fc32643e436eca24f1fe85ae",
+      "text_sha256": "563e712b0788f0e979c48ade8ad3181793e6343651a3c4e598535ada786a269b",
+      "provision_locator": "Điều 10, khoản 1–8",
+      "pages": [
+        {
+          "pdf_page_1based": 21,
+          "image_sha256": "b1c08131a6e8d1f5748196d342c7b7963b6df3fb3ffc6cb0125047aab2c8cf64"
+        },
+        {
+          "pdf_page_1based": 22,
+          "image_sha256": "add6c4d44218c452497bec4e6f718ade945a740556c4372965d55ae0673f25f6"
+        },
+        {
+          "pdf_page_1based": 23,
+          "image_sha256": "ea346ef32cafce574b54d38a0ba32ae568241d8da3d9c9c6946bb38096b101ed"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND254-A43",
+      "document_id": "ND254_2026",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/254-ndcp.signed.pdf",
+      "document_sha256": "d8df03ef58aa26f2f3bf7014c830fe598c7939e2fc32643e436eca24f1fe85ae",
+      "text_sha256": "495372b584812dc1ce246b80c2fa33d9847dc84994faa88ef2a38b9a59312907",
+      "provision_locator": "Điều 43, khoản 1–2",
+      "pages": [
+        {
+          "pdf_page_1based": 46,
+          "image_sha256": "c643c64946692a292527336b600c0be32206af02e405059f6667fc5fd8a0766f"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND254-A44-1",
+      "document_id": "ND254_2026",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/254-ndcp.signed.pdf",
+      "document_sha256": "d8df03ef58aa26f2f3bf7014c830fe598c7939e2fc32643e436eca24f1fe85ae",
+      "text_sha256": "0aab93a40e272257b320974483f8f99b596b3abe50484810ca30172502058998",
+      "provision_locator": "Điều 44 khoản 1 — trích một phần Điều 44",
+      "pages": [
+        {
+          "pdf_page_1based": 46,
+          "image_sha256": "c643c64946692a292527336b600c0be32206af02e405059f6667fc5fd8a0766f"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND181-A26-core",
+      "document_id": "ND181_2025",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/181nd.signed.pdf",
+      "document_sha256": "63777bd1640c91598f95ee40e3d793cf9422afc123ae79bb75f83dd183d74157",
+      "text_sha256": "ba8cefe49debb64c7290c0289ca90c07391f4c309e7a9ff58bb31a49a06a3502",
+      "provision_locator": "Điều 26, đoạn mở đầu và khoản 1",
+      "pages": [
+        {
+          "pdf_page_1based": 32,
+          "image_sha256": "c449821237539d63e5415b48befbde761ae3fe71844c666aa220e76e96e4b0c4"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND181-A26-2-a-f",
+      "document_id": "ND181_2025",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/181nd.signed.pdf",
+      "document_sha256": "63777bd1640c91598f95ee40e3d793cf9422afc123ae79bb75f83dd183d74157",
+      "text_sha256": "6177f3879140139ea505ea99f613f208ce487d09fe091330d004a93e8fda907e",
+      "provision_locator": "Điều 26 khoản 2 điểm a, b, c, d, đ, e",
+      "pages": [
+        {
+          "pdf_page_1based": 32,
+          "image_sha256": "c449821237539d63e5415b48befbde761ae3fe71844c666aa220e76e96e4b0c4"
+        },
+        {
+          "pdf_page_1based": 33,
+          "image_sha256": "46f75b3ac8420fdc416aa3ea30ac5557db68803649ab1488ad857324424ed879"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND181-A26-2-g-original",
+      "document_id": "ND181_2025",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/181nd.signed.pdf",
+      "document_sha256": "63777bd1640c91598f95ee40e3d793cf9422afc123ae79bb75f83dd183d74157",
+      "text_sha256": "5505a2a6d191deb05cad66e4ee73d710b83a38e89de03464854daf94c6c6a965",
+      "provision_locator": "Điều 26 khoản 2 điểm g — bản gốc trước sửa đổi",
+      "pages": [
+        {
+          "pdf_page_1based": 33,
+          "image_sha256": "46f75b3ac8420fdc416aa3ea30ac5557db68803649ab1488ad857324424ed879"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND181-A26-2-hi-3",
+      "document_id": "ND181_2025",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/181nd.signed.pdf",
+      "document_sha256": "63777bd1640c91598f95ee40e3d793cf9422afc123ae79bb75f83dd183d74157",
+      "text_sha256": "d81d1e4fc1e00dbfe9e8e799e64d8aaf3a0976b1862f73febc708acfe022b506",
+      "provision_locator": "Điều 26 khoản 2 điểm h, i và khoản 3",
+      "pages": [
+        {
+          "pdf_page_1based": 33,
+          "image_sha256": "46f75b3ac8420fdc416aa3ea30ac5557db68803649ab1488ad857324424ed879"
+        },
+        {
+          "pdf_page_1based": 34,
+          "image_sha256": "99560ad8ac562db777bbb4c77d082a13d06b7db44746c00c95daf2a747d5d3fc"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND144-A4",
+      "document_id": "ND144_2026",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/4/144-ndcp.signed.pdf",
+      "document_sha256": "2ab7fc38ad68e435447299126982014bf1d2b6a3051e40f709ae3e14b92bd98a",
+      "text_sha256": "ac26c4d7da1be315aef112e4ec0b988ec535890b4ce762743a07ee6eddaa5818",
+      "provision_locator": "Điều 4 — sửa đổi điểm g khoản 2 Điều 26 NĐ 181",
+      "pages": [
+        {
+          "pdf_page_1based": 3,
+          "image_sha256": "f5b5b040baa3fea476a4495ce7e5b7d82b04d0e0f2b83629550e332f3e2e97d6"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND144-A1-1",
+      "document_id": "ND144_2026",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/4/144-ndcp.signed.pdf",
+      "document_sha256": "2ab7fc38ad68e435447299126982014bf1d2b6a3051e40f709ae3e14b92bd98a",
+      "text_sha256": "a3e127fc8c69199977c7b92cbe75cbb1911b99b725d9b07bc4d519a5ce71c3fd",
+      "provision_locator": "Điều 1 khoản 1 — chỉ phần bổ sung khoản 3a Điều 4",
+      "pages": [
+        {
+          "pdf_page_1based": 1,
+          "image_sha256": "b8d6876e5d3d6d2a1cee9bf011a97786ac9f30edb1ba8f6f1b09d99d3f13da99"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "ND144-A6-1",
+      "document_id": "ND144_2026",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/4/144-ndcp.signed.pdf",
+      "document_sha256": "2ab7fc38ad68e435447299126982014bf1d2b6a3051e40f709ae3e14b92bd98a",
+      "text_sha256": "0144a16eaa7a81c6c94eeeac6ff3899177d4188a3adf1e156df45fe9ea584d00",
+      "provision_locator": "Điều 6 khoản 1 — hiệu lực",
+      "pages": [
+        {
+          "pdf_page_1based": 3,
+          "image_sha256": "f5b5b040baa3fea476a4495ce7e5b7d82b04d0e0f2b83629550e332f3e2e97d6"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "TT91-A25",
+      "document_id": "TT91_2026",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/91-btc.signed.pdf",
+      "document_sha256": "3986d7970bd3658ce66523d8f8fcfca22c34abffb807e733b459e4729e06aab6",
+      "text_sha256": "d30e7f15c71d43eea5387ef9d6aaf8aa8bef31d8ca2f2346c0ce997f67a225f8",
+      "provision_locator": "Điều 25 khoản 1–2",
+      "pages": [
+        {
+          "pdf_page_1based": 32,
+          "image_sha256": "c67e142ed0e1c12b80040ae42c0e917d7dcc4a64c338180d703e7b3eae6dc4e6"
+        }
+      ],
+      "runtime": true,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "REF-ND123-A10-4",
+      "document_id": "ND123_2020",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2020/10/123.signed_01.pdf",
+      "document_sha256": "577e27071365311d6ce0bde7a85330fb6607bac5021a6e884105a051985a6a78",
+      "text_sha256": "47926ced6d979cb60dea2794778c78ab81de3bee688de9de3ebe4ca7f9c310f2",
+      "provision_locator": "Điều 10 khoản 4 — người bán",
+      "pages": [
+        {
+          "pdf_page_1based": 14,
+          "image_sha256": "08aef9a51cd2b04747dd271395e5557bb0f01853f30afdf72e573a508a60218e"
+        }
+      ],
+      "runtime": false,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "REF-ND70-A1-7-a",
+      "document_id": "ND70_2025",
+      "official_pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/3/70-nd-cp.signed.pdf",
+      "document_sha256": "98abd34e952d976fbe6fcc99af12dc84df768bf54c131aa902c67f899c931c3a",
+      "text_sha256": "c91052113fde009a36d53abeeebd09fba00d5d44f69d9b03e784066067d57051",
+      "provision_locator": "Điều 1 khoản 7 điểm a — sửa khoản 5 Điều 10",
+      "pages": [
+        {
+          "pdf_page_1based": 9,
+          "image_sha256": "30ffbe0a0aa71598a4e9ef52c8b83c7111e30eb16cad294f056f8b6113c85c32"
+        }
+      ],
+      "runtime": false,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "REF-ND359-A1-2",
+      "document_id": "ND359_2025",
+      "official_pdf_url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/17/359signed-1768621694337850263438.pdf",
+      "document_sha256": "7ff09215fea726275eab8b854e41802989223811b440c87fb99ed81a742c4733",
+      "text_sha256": "ed0bdee470e540e93a49658f4d31d78bf8ab9c603cd6a2829451bf958a161d69",
+      "provision_locator": "Điều 1 khoản 2 — bãi bỏ khoản 3 Điều 37 và khoản 3 Điều 39",
+      "pages": [
+        {
+          "pdf_page_1based": 2,
+          "image_sha256": "84cf173d81927f6b551def987ce9df0a6b702a9eac7b29f72aa1f3b95124b931"
+        }
+      ],
+      "runtime": false,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "REF-ND359-A2-1",
+      "document_id": "ND359_2025",
+      "official_pdf_url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/17/359signed-1768621694337850263438.pdf",
+      "document_sha256": "7ff09215fea726275eab8b854e41802989223811b440c87fb99ed81a742c4733",
+      "text_sha256": "595b058f56f28c859b98d0f96c94798566bad11cca45818e2b9223b80e500e0b",
+      "provision_locator": "Điều 2 khoản 1 — hiệu lực",
+      "pages": [
+        {
+          "pdf_page_1based": 2,
+          "image_sha256": "84cf173d81927f6b551def987ce9df0a6b702a9eac7b29f72aa1f3b95124b931"
+        }
+      ],
+      "runtime": false,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "REF-ND174-A1-1-2a",
+      "document_id": "ND174_2025",
+      "official_pdf_url": "https://congbaocdn.chinhphu.vn/CongBaoCP/VanBan/2025/6/45374/57334-1-2025895-896174-2025-nd-cp.pdf",
+      "document_sha256": "5d86306f556d4f8d461dfd2695c283268c622950b3884c27e8d0ad8bfb48a5f5",
+      "text_sha256": "7ea4495c8abdfff67c56abb53aa600c156a382d2b1e64db53dd7bac9188b9dfa",
+      "provision_locator": "Điều 1 khoản 1 và điểm a khoản 2 — chưa bao gồm các phụ lục",
+      "pages": [
+        {
+          "pdf_page_1based": 1,
+          "image_sha256": "6261516e4ed31af2064be8049287b99dd30a0861f857d5ca8bf7adc853808393"
+        },
+        {
+          "pdf_page_1based": 2,
+          "image_sha256": "e99814cfd10b1023185ba212f32f79765b16be00c9f29f5b829e36a03783e1bc"
+        }
+      ],
+      "runtime": false,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    },
+    {
+      "chunk_id": "REF-ND174-A2-1",
+      "document_id": "ND174_2025",
+      "official_pdf_url": "https://congbaocdn.chinhphu.vn/CongBaoCP/VanBan/2025/6/45374/57334-1-2025895-896174-2025-nd-cp.pdf",
+      "document_sha256": "5d86306f556d4f8d461dfd2695c283268c622950b3884c27e8d0ad8bfb48a5f5",
+      "text_sha256": "93d2e01ad95376785ca997f7efdbfae0f1fb02925434963a8a52d74c7690b68f",
+      "provision_locator": "Điều 2 khoản 1 — ngày hết hiệu lực theo bản gốc",
+      "pages": [
+        {
+          "pdf_page_1based": 3,
+          "image_sha256": "4995467c52135a3a06fea3cb499d138a7b7a9b2ee1f25809c5e1195189e16a79"
+        }
+      ],
+      "runtime": false,
+      "review_method": "CODEX_VISUAL_TRANSCRIPTION_AGAINST_PINNED_PRIMARY_PDF",
+      "reviewer": "Codex visual source comparison",
+      "independent_legal_approval": false,
+      "signature_verification": "NOT_PERFORMED",
+      "line_reflow_only": true
+    }
+  ],
+  "renderer": {
+    "package": "PyMuPDF",
+    "version": "1.28.2",
+    "scale": 1.4,
+    "page_numbering": "physical PDF, 1-based"
+  },
+  "source_refresh_sha256": "9ecd236590e3b913abfd29868d5df746ce20a0b97e1863e1184af7ecd69e97ea",
+  "registry_sha256": "e3ba867796fcff48d530fc951a49a89d12d44b7fc42994aec5ae2f8ebdf78979"
+}

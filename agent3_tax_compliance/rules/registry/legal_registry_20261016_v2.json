@@ -1,0 +1,238 @@
+{
+  "version": "legal-registry-20261016-v2",
+  "checked_on": "2026-10-16",
+  "documents": [
+    {
+      "document_id": "ND123_2020",
+      "official_url": "https://vanban.chinhphu.vn/default.aspx?docid=201365&pageid=27160",
+      "effective_from": "2022-07-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2020/10/123.signed_01.pdf",
+      "sha256": "577e27071365311d6ce0bde7a85330fb6607bac5021a6e884105a051985a6a78",
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article10.4.pdf14",
+        "Article10.14de.pdf19"
+      ],
+      "relationships": [],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES",
+      "effective_to": "2026-07-01"
+    },
+    {
+      "document_id": "TT78_2021",
+      "official_url": "https://vanban.chinhphu.vn/?classid=1&docid=204200&pageid=27160",
+      "effective_from": "2022-07-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2021/09/78-btc.pdf",
+      "sha256": "b6df1461163ae7bd8d7e379c3f54c9103a7c254b23754b27b22f37735e353b13",
+      "source_status": "PDF_DOWNLOADED",
+      "verified_locators": [],
+      "relationships": [],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+    },
+    {
+      "document_id": "ND70_2025",
+      "official_url": "https://vanban.chinhphu.vn/?docid=213179&pageid=27160",
+      "effective_from": "2025-06-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/3/70-nd-cp.signed.pdf",
+      "sha256": "98abd34e952d976fbe6fcc99af12dc84df768bf54c131aa902c67f899c931c3a",
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article1.7a.pdf9",
+        "Article1.7d-dd.pdf11-12"
+      ],
+      "relationships": [],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES",
+      "effective_to": "2026-07-01"
+    },
+    {
+      "document_id": "TT32_2025",
+      "official_url": "https://chinhphu.vn/?classid=1&docid=213855&pageid=27160",
+      "effective_from": "2025-06-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/6/32-btc.pdf",
+      "sha256": "88431d75855e9b8fa394c7afe3c1a204485caf648bc2355fd2fc8878a39fefa5",
+      "source_status": "PDF_DOWNLOADED",
+      "verified_locators": [],
+      "relationships": [],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES",
+      "effective_to": "2026-07-01"
+    },
+    {
+      "document_id": "ND181_2025",
+      "official_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/181nd.signed.pdf",
+      "effective_from": "2025-07-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/181nd.signed.pdf",
+      "sha256": "63777bd1640c91598f95ee40e3d793cf9422afc123ae79bb75f83dd183d74157",
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article26.pdf32-34"
+      ],
+      "relationships": [],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+    },
+    {
+      "document_id": "ND174_2025",
+      "official_url": "https://congbao.chinhphu.vn/tai-ve-van-ban-so-174-2025-nd-cp-45374-57334?format=pdf",
+      "effective_from": "2025-07-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://congbaocdn.chinhphu.vn/CongBaoCP/VanBan/2025/6/45374/57334-1-2025895-896174-2025-nd-cp.pdf",
+      "sha256": "5d86306f556d4f8d461dfd2695c283268c622950b3884c27e8d0ad8bfb48a5f5",
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article1.1-2a.pdf1-2",
+        "Article2.1.pdf3",
+        "AppendixII.I.pdf73",
+        "AppendixII.II.pdf74-75"
+      ],
+      "relationships": [],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES",
+      "effective_to": "2027-01-01"
+    },
+    {
+      "document_id": "ND359_2025",
+      "official_url": "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-359-2025-nd-cp-468511.htm",
+      "effective_from": "2026-01-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/17/359signed-1768621694337850263438.pdf",
+      "sha256": "7ff09215fea726275eab8b854e41802989223811b440c87fb99ed81a742c4733",
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article1.2.pdf2",
+        "Article2.1.pdf2"
+      ],
+      "relationships": [
+        {
+          "target_id": "ND181_2025",
+          "relation": "AMENDS",
+          "scope": "ARTICLE_4_PARAGRAPH_1B_ONLY",
+          "effective_from": "2026-01-01",
+          "evidence_locator": "Article1.pdf1-2"
+        },
+        {
+          "target_id": "ND181_2025",
+          "relation": "REPEALS",
+          "scope": "ARTICLE_37_PARAGRAPH_3_AND_ARTICLE_39_PARAGRAPH_3",
+          "effective_from": "2026-01-01",
+          "evidence_locator": "Article1.2.pdf2"
+        }
+      ],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+    },
+    {
+      "document_id": "ND144_2026",
+      "official_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/4/144-ndcp.signed.pdf",
+      "effective_from": "2026-06-20",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/4/144-ndcp.signed.pdf",
+      "sha256": "2ab7fc38ad68e435447299126982014bf1d2b6a3051e40f709ae3e14b92bd98a",
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article1.pdf1",
+        "Article4.pdf3",
+        "Article6.pdf3"
+      ],
+      "relationships": [
+        {
+          "target_id": "ND181_2025",
+          "relation": "AMENDS",
+          "scope": "ARTICLE_4_PARTIAL_NOT_A_GLOBAL_REPLACEMENT",
+          "effective_from": "2026-06-20",
+          "evidence_locator": "Article1.pdf1"
+        },
+        {
+          "target_id": "ND181_2025",
+          "relation": "AMENDS",
+          "scope": "ARTICLE_26_PARAGRAPH_2_G_DEFERRED_PAYMENT",
+          "effective_from": "2026-06-20",
+          "evidence_locator": "Article4.pdf3"
+        }
+      ],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+    },
+    {
+      "document_id": "ND254_2026",
+      "official_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/254-ndcp.signed.pdf",
+      "effective_from": "2026-07-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/254-ndcp.signed.pdf",
+      "sha256": "d8df03ef58aa26f2f3bf7014c830fe598c7939e2fc32643e436eca24f1fe85ae",
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article10.pdf21",
+        "Article43.pdf46",
+        "Article44.pdf46"
+      ],
+      "relationships": [
+        {
+          "target_id": "ND123_2020",
+          "relation": "SUPERSEDES",
+          "scope": "WHOLE_DOCUMENT",
+          "effective_from": "2026-07-01",
+          "evidence_locator": "Article43.pdf46"
+        },
+        {
+          "target_id": "ND70_2025",
+          "relation": "SUPERSEDES",
+          "scope": "WHOLE_DOCUMENT",
+          "effective_from": "2026-07-01",
+          "evidence_locator": "Article43.pdf46"
+        },
+        {
+          "target_id": "ND41_2022",
+          "relation": "SUPERSEDES",
+          "scope": "ARTICLE_1_ONLY",
+          "effective_from": "2026-07-01",
+          "evidence_locator": "Article43.pdf46"
+        }
+      ],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+    },
+    {
+      "document_id": "TT91_2026",
+      "official_url": "https://vanban.chinhphu.vn/?docid=219006&pageid=27160",
+      "effective_from": "2026-07-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/91-btc.signed.pdf",
+      "sha256": "3986d7970bd3658ce66523d8f8fcfca22c34abffb807e733b459e4729e06aab6",
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article25.pdf32"
+      ],
+      "relationships": [
+        {
+          "target_id": "TT32_2025",
+          "relation": "SUPERSEDES",
+          "scope": "WHOLE_DOCUMENT",
+          "effective_from": "2026-07-01",
+          "evidence_locator": "Article25.pdf32"
+        }
+      ],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+    },
+    {
+      "document_id": "L108_2025",
+      "official_url": "https://chinhphu.vn/?classid=1&docid=216541&pageid=27160",
+      "effective_from": "2026-07-01",
+      "signature_status": "NOT_VERIFIED",
+      "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/01/108-qh15.signed.pdf",
+      "sha256": "c1128f09f90b43d509fc75067caa5ad734a8773c2f82f4fdf46d54592107ae72",
+      "source_status": "PDF_DOWNLOADED",
+      "verified_locators": [],
+      "relationships": [],
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+    },
+    {
+      "document_id": "ND41_2022",
+      "official_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/254-ndcp.signed.pdf",
+      "effective_from": "2022-06-20",
+      "sha256": null,
+      "source_status": "REFERENCED_ONLY",
+      "verified_locators": [],
+      "relationships": [],
+      "transitional_policy": "ONLY_ARTICLE_1_REPEAL_REFERENCED_IN_ND254_ARTICLE43"
+    }
+  ]
+}

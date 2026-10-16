@@ -1,13 +1,13 @@
 {
   "package_id": "agent3-technical-tax-models",
-  "version": "technical-draft-20261015-v1",
+  "version": "technical-draft-20261016-v2",
   "engine_version": "0.53.0",
   "models": [
     {
-      "model_id": "INV_CONTENT_001.content-2022-v1",
+      "model_id": "INV_CONTENT_001.content-2022-v2",
       "version": "draft-model-v1",
       "rule_id": "INV_CONTENT_001",
-      "rule_version": "content-2022-v1",
+      "rule_version": "content-2022-v2",
       "family": "INVOICE_CONTENT",
       "unit_type": "RECORD",
       "effective_from": "2022-07-01",
@@ -16,7 +16,11 @@
       "legal_basis": [
         {
           "document_id": "ND123_2020",
-          "locator": "Article10.PENDING_REVIEW"
+          "locator": "Article10.4.pdf14"
+        },
+        {
+          "document_id": "ND123_2020",
+          "locator": "Article10.14de.pdf19"
         }
       ],
       "bindings": [
@@ -32,10 +36,10 @@
       "file": "content-2022-v1.jdm.json"
     },
     {
-      "model_id": "INV_CONTENT_001.content-2025-v1",
+      "model_id": "INV_CONTENT_001.content-2025-v2",
       "version": "draft-model-v1",
       "rule_id": "INV_CONTENT_001",
-      "rule_version": "content-2025-v1",
+      "rule_version": "content-2025-v2",
       "family": "INVOICE_CONTENT",
       "unit_type": "RECORD",
       "effective_from": "2025-06-01",
@@ -44,11 +48,19 @@
       "legal_basis": [
         {
           "document_id": "ND123_2020",
-          "locator": "Article10.PENDING_REVIEW"
+          "locator": "Article10.4.pdf14"
+        },
+        {
+          "document_id": "ND123_2020",
+          "locator": "Article10.14de.pdf19"
         },
         {
           "document_id": "ND70_2025",
-          "locator": "Article1.PENDING_REVIEW"
+          "locator": "Article1.7a.pdf9"
+        },
+        {
+          "document_id": "ND70_2025",
+          "locator": "Article1.7d-dd.pdf11-12"
         }
       ],
       "bindings": [
@@ -61,17 +73,17 @@
         }
       ],
       "jdm_sha256": "29be18ad8ef7ac90a186d72416a2e77c51fb1cbd631bfd548a4aa8805b807733",
-      "file": "content-2025-v1.jdm.json"
+      "file": "content-2022-v1.jdm.json"
     },
     {
-      "model_id": "INV_CONTENT_001.content-2026-v1",
+      "model_id": "INV_CONTENT_001.content-2026-v2",
       "version": "draft-model-v1",
       "rule_id": "INV_CONTENT_001",
-      "rule_version": "content-2026-v1",
+      "rule_version": "content-2026-v2",
       "family": "INVOICE_CONTENT",
       "unit_type": "RECORD",
       "effective_from": "2026-07-01",
-      "effective_to": "2026-10-15",
+      "effective_to": "2026-10-17",
       "publication": "DRAFT",
       "legal_basis": [
         {
@@ -89,17 +101,17 @@
         }
       ],
       "jdm_sha256": "29be18ad8ef7ac90a186d72416a2e77c51fb1cbd631bfd548a4aa8805b807733",
-      "file": "content-2026-v1.jdm.json"
+      "file": "content-2022-v1.jdm.json"
     },
     {
-      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2025-v1",
+      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-pre144-v2",
       "version": "draft-model-v1",
       "rule_id": "VAT_NON_CASH_PAYMENT_001",
-      "rule_version": "payment-2025-v1",
+      "rule_version": "payment-pre144-v2",
       "family": "PAYMENT_EVIDENCE",
       "unit_type": "RECORD",
       "effective_from": "2025-07-01",
-      "effective_to": "2026-01-01",
+      "effective_to": "2026-06-20",
       "publication": "DRAFT",
       "legal_basis": [
         {
@@ -120,55 +132,19 @@
       "file": "payment-2025-v1.jdm.json"
     },
     {
-      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2026a-v1",
+      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-post144-v2",
       "version": "draft-model-v1",
       "rule_id": "VAT_NON_CASH_PAYMENT_001",
-      "rule_version": "payment-2026a-v1",
-      "family": "PAYMENT_EVIDENCE",
-      "unit_type": "RECORD",
-      "effective_from": "2026-01-01",
-      "effective_to": "2026-06-20",
-      "publication": "DRAFT",
-      "legal_basis": [
-        {
-          "document_id": "ND181_2025",
-          "locator": "Article26.pdf32-34"
-        },
-        {
-          "document_id": "ND359_2025",
-          "locator": "AMENDMENT_SCOPE_PENDING"
-        }
-      ],
-      "bindings": [
-        {
-          "condition_id": "non_cash_proof_verified",
-          "operation": "PAYMENT_NON_CASH",
-          "path": "payment.non_cash_evidence",
-          "value_type": "BOOL",
-          "expected": null
-        }
-      ],
-      "jdm_sha256": "cbde8d8f1321054e0577d64d83332b3e393d521107ed2ebb0c8e71f64c73eb25",
-      "file": "payment-2026a-v1.jdm.json"
-    },
-    {
-      "model_id": "VAT_NON_CASH_PAYMENT_001.payment-2026b-v1",
-      "version": "draft-model-v1",
-      "rule_id": "VAT_NON_CASH_PAYMENT_001",
-      "rule_version": "payment-2026b-v1",
+      "rule_version": "payment-post144-v2",
       "family": "PAYMENT_EVIDENCE",
       "unit_type": "RECORD",
       "effective_from": "2026-06-20",
-      "effective_to": "2026-10-15",
+      "effective_to": "2026-10-17",
       "publication": "DRAFT",
       "legal_basis": [
         {
           "document_id": "ND181_2025",
           "locator": "Article26.pdf32-34"
-        },
-        {
-          "document_id": "ND359_2025",
-          "locator": "AMENDMENT_SCOPE_PENDING"
         },
         {
           "document_id": "ND144_2026",
@@ -185,22 +161,72 @@
         }
       ],
       "jdm_sha256": "cbde8d8f1321054e0577d64d83332b3e393d521107ed2ebb0c8e71f64c73eb25",
-      "file": "payment-2026b-v1.jdm.json"
+      "file": "payment-2025-v1.jdm.json"
     },
     {
-      "model_id": "VAT_RATE_001.vat-2025-2026-v1",
+      "model_id": "VAT_RATE_001.vat-2025-v2",
       "version": "draft-model-v1",
       "rule_id": "VAT_RATE_001",
-      "rule_version": "vat-2025-2026-v1",
+      "rule_version": "vat-2025-v2",
       "family": "VAT_RATE",
       "unit_type": "ITEM",
       "effective_from": "2025-07-01",
-      "effective_to": "2026-10-15",
+      "effective_to": "2026-01-01",
       "publication": "DRAFT",
       "legal_basis": [
         {
           "document_id": "ND174_2025",
-          "locator": "Article1_APPENDICES_PENDING_REVIEW"
+          "locator": "Article1.1-2a.pdf1-2"
+        },
+        {
+          "document_id": "ND174_2025",
+          "locator": "AppendixII.I.pdf73"
+        }
+      ],
+      "bindings": [
+        {
+          "condition_id": "taxable_treatment",
+          "operation": "EQUALS",
+          "path": "item.vat_treatment",
+          "value_type": "TEXT",
+          "expected": "TAXABLE_RATE"
+        },
+        {
+          "condition_id": "reduction_category",
+          "operation": "EQUALS",
+          "path": "item.vat_category",
+          "value_type": "TEXT",
+          "expected": "REDUCTION_CANDIDATE"
+        },
+        {
+          "condition_id": "rate_matches_draft_policy",
+          "operation": "EQUALS",
+          "path": "item.vat_rate",
+          "value_type": "DECIMAL",
+          "expected": "0.08"
+        }
+      ],
+      "jdm_sha256": "0ae4f480fda3639f8767aa7af779789abe952daf5b8fb1bbc10ca118260396dc",
+      "file": "vat-2025-2026-v1.jdm.json"
+    },
+    {
+      "model_id": "VAT_RATE_001.vat-2026-v2",
+      "version": "draft-model-v1",
+      "rule_id": "VAT_RATE_001",
+      "rule_version": "vat-2026-v2",
+      "family": "VAT_RATE",
+      "unit_type": "ITEM",
+      "effective_from": "2026-01-01",
+      "effective_to": "2026-10-17",
+      "publication": "DRAFT",
+      "legal_basis": [
+        {
+          "document_id": "ND174_2025",
+          "locator": "Article1.1-2a.pdf1-2"
+        },
+        {
+          "document_id": "ND174_2025",
+          "locator": "AppendixII.II.pdf74-75"
         }
       ],
       "bindings": [

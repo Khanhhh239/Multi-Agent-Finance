@@ -1,5 +1,5 @@
 {
-  "version": "vat-taxonomy-draft-v1",
+  "version": "vat-taxonomy-draft-v2",
   "effective_from": "2025-07-01",
   "effective_to": "2027-01-01",
   "categories": [
@@ -9,7 +9,7 @@
       "legal_basis": [
         {
           "document_id": "ND174_2025",
-          "locator": "Article1_APPENDICES_PENDING_REVIEW"
+          "locator": "APPENDIX_CLASSIFICATION_NOT_APPROVED"
         }
       ]
     },
@@ -19,7 +19,7 @@
       "legal_basis": [
         {
           "document_id": "ND174_2025",
-          "locator": "Article1_APPENDICES_PENDING_REVIEW"
+          "locator": "APPENDIX_CLASSIFICATION_NOT_APPROVED"
         }
       ]
     }
