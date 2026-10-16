@@ -34,6 +34,7 @@ class OllamaClient:
     def chat(self,messages,*,schema=None,tools=None,options=None,think=None):
         opts = {'temperature':self.cfg.temperature,'top_k':20,'top_p':.8,
                 'num_ctx':self.cfg.num_ctx,'num_predict':512,**(options or {})}
+        timeout_s=float(opts.pop('_timeout_s',self.cfg.timeout_s))
         payload = {'model':self.cfg.model,'messages':messages,'stream':False,'keep_alive':self.keep_alive,
                    'options':opts,'think':self.cfg.think if think is None else think}
         if schema is not None:
@@ -43,7 +44,9 @@ class OllamaClient:
         start = perf_counter()
         for attempt in range(2):
             try:
-                response = self.http.post('/api/chat',json=payload)
+                remaining=timeout_s-(perf_counter()-start)
+                if remaining<=0: raise LLMUnavailable('Đã hết thời gian chờ model cục bộ.')
+                response = self.http.post('/api/chat',json=payload,timeout=min(self.cfg.timeout_s,remaining))
                 response.raise_for_status()
                 raw = response.json()
                 msg = raw['message']

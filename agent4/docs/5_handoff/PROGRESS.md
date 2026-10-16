@@ -94,3 +94,9 @@ Toàn bộ test trước commit: **2387 passed, 0 skipped**, 96.66 giây; `artif
 Prompt ba phần có snapshot,60 few-shot dev, BM25 loại câu trùng nguyên dạng, state giữ ba lượt/hết hạn15phút và ràng buộc người dùng; dữ liệu state và câu hỏi được bọc.
 
 Toàn bộ test trước commit: **2395 passed, 0 skipped**, 125.03 giây; `artifacts/t1_5-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.8 — P1 thử nghiệm
+
+Orchestrator đã có30 kịch bản scripted: đường hints/retriever/schema/validator/engine/render/verifier, sửa<=2, model chết chuyển form, số sai fallbackfacts, scope/state/timeout. Chưa đo accuracy thật10câu.
+
+Toàn bộ test trước commit: **2425 passed, 0 skipped**, 133.45 giây; `artifacts/t1_8-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).

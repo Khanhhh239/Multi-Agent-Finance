@@ -1,0 +1,13 @@
+{
+  "tests": 2425,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 133.452,
+  "card": "T1.8",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:37:48.972757+00:00",
+  "xml": "artifacts/t1_8-pytest.xml",
+  "summary": "Orchestrator đã có30 kịch bản scripted: đường hints/retriever/schema/validator/engine/render/verifier, sửa<=2, model chết chuyển form, số sai fallbackfacts, scope/state/timeout. Chưa đo accuracy thật10câu.",
+  "decision": "M1 hỗ trợ một chỉ số chính mỗi lượt; tối đa một lần engine trong đường hiện tại, thấp hơn cap4. Diễn giải chỉ định tính, mọi chữ số trả từ khối engine. Deadline20s được truyền vào HTTP và kiểm giữa bước; modeltimeout trả facts/form. Không gọi ops ghi."
+}
