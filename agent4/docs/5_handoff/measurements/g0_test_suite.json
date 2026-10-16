@@ -1,0 +1,30 @@
+{
+  "measured_at_utc": "2026-10-16T00:08:58.285271+00:00",
+  "command": "./.venv/Scripts/python.exe -X utf8 -m pytest --junitxml=artifacts/g0-pytest.xml --tb=short",
+  "tests": 1390,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "duration_seconds": 34.467,
+  "python": "3.12.13 (main, Aug  7 2026, 02:26:41) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "code_commit": "53bf5660709d493eb8f4202e5a48d515a8a7290e",
+  "packages": {
+    "duckdb": "1.5.6",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "pytest": "9.1.1",
+    "hypothesis": "6.170.0"
+  },
+  "by_module": {
+    "tests.test_engine_hardening": 97,
+    "tests.test_formatting": 26,
+    "tests.test_invariants": 276,
+    "tests.test_legacy_contract": 12,
+    "tests.test_metrics_golden": 420,
+    "tests.test_periods": 559
+  },
+  "ledger_sha256": "2166c8cf9f1c75961f6faf6549c1bb72397b202aa4bb543d270a3736a74bca51",
+  "accountant_approval": null,
+  "G0": "pending G0.7; accounting exception A4 disclosed; 5M benchmark limited to GL scans"
+}

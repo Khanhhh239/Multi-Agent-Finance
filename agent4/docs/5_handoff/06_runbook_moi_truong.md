@@ -1,5 +1,16 @@
 # 06 · Runbook môi trường và vận hành
 
+## Kết quả tiếp nhận 16/10/2026
+Môi trường tại workspace đã có `.venv` Python 3.12.13. Chạy PowerShell:
+```powershell
+cd C:\Users\Admin\Downloads\Agent4
+./.venv/Scripts/python.exe -X utf8 -m pytest --junitxml=artifacts/g0-pytest.xml
+./.venv/Scripts/python.exe -X utf8 -m eval.review_formulas
+```
+Lượt kiểm chứng cuối: **1.390 passed**. Chi tiết trạng thái và giới hạn ở `PROGRESS.md`; chưa qua G0.7. Hai model Ollama đã có trên máy nhưng chưa chạy đánh giá agent. Oracle/golden chỉ dùng seed dev 20251.
+
+Kho cũ giữ tại `data/cfo_warehouse.duckdb.unversioned`; kho mặc định đã tái sinh với metadata `data_version=v2.0`, cùng hash sổ cái. Dữ liệu và artifact sinh được không commit. Git trong workspace không có remote, nên các nhánh/commit hiện chỉ local.
+
 ## 1. Yêu cầu
 | Thành phần | Phiên bản đã dùng | Ghi chú |
 |---|---|---|

@@ -11,6 +11,9 @@ contract used by ``test_engine.py``.
 from __future__ import annotations
 
 import hashlib
+import copy
+import json
+from functools import wraps
 import re
 import threading
 from datetime import date
@@ -26,29 +29,48 @@ from .metrics import GROUP_LABELS, REGISTRY, MetricDef, Term
 
 class EngineError(ValueError):
     """Base class: messages are Vietnamese and safe to show to the LLM/user."""
+    code = 'ENGINE_ERROR'
 
 
 class MetricNotFoundError(EngineError, KeyError):
+    code = 'METRIC_NOT_FOUND'
     def __str__(self) -> str:  # KeyError would add quotes
         return self.args[0]
 
 
 class InvalidDateRangeError(EngineError):
-    pass
+    code = 'INVALID_DATE_RANGE'
 
 
 class FilterError(EngineError):
+    code = 'INVALID_FILTER'
     def __init__(self, message: str, candidates: list[dict] | None = None):
         super().__init__(message)
         self.candidates = candidates or []
 
 
 class ViewNotAllowedError(EngineError):
-    pass
+    code = 'VIEW_NOT_ALLOWED'
 
 
 class MetricUnavailableError(EngineError):
-    pass
+    code = 'METRIC_UNAVAILABLE'
+
+
+class ScopeNotSupported(EngineError):
+    code = 'SCOPE_NOT_SUPPORTED'
+
+
+def _validated_request(fn):
+    @wraps(fn)
+    def wrapped(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except EngineError:
+            raise
+        except (ValueError, TypeError) as exc:
+            raise EngineError('Tham số yêu cầu không hợp lệ. Kiểm tra kiểu dữ liệu, kỳ và bộ lọc.') from exc
+    return wrapped
 
 
 LEGACY_VIEW_SQL = """
@@ -112,6 +134,22 @@ class ExecutionEngine:
             cur = self.con.execute(sql, params or [])
             cols = [d[0] for d in cur.description]
             return [dict(zip(cols, r)) for r in cur.fetchall()]
+
+    def cursor(self):
+        """Independent DuckDB cursor and lock per request; close it after use."""
+        with self._lock:
+            child = copy.copy(self)
+            child.con = self.con.cursor()
+            child._lock = threading.RLock()
+            if self.legacy:
+                child.con.execute(LEGACY_VIEW_SQL)
+            return child
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()
 
     def _load_dims(self) -> None:
         self.partners = {r[0]: {"code": r[0], "name": r[1], "type": r[2]} for r in self.q("SELECT partner_code, partner_name, partner_type FROM dim_partner")}
@@ -195,7 +233,7 @@ class ExecutionEngine:
                               [{"code": c, "name": n} for _, c, n in best[:5]])
         return [c for _, c, _ in best]
 
-    def build_filters(self, filters: dict | None, as_of: date) -> tuple[str, list, dict]:
+    def build_filters(self, filters: dict | None, as_of: date, scope_sql: str = '', scope_params: list | None = None) -> tuple[str, list, dict]:
         if not filters:
             return "", [], {}
         unknown = set(filters) - set(FILTER_KEYS)
@@ -208,8 +246,8 @@ class ExecutionEngine:
             if val in (None, "", [], 0, "0"):
                 continue
             if key == "exclude_top_customers":
-                top = self.q("""SELECT partner_code FROM v_mgmt WHERE account_code LIKE '131%' AND posting_date <= ? AND partner_code IS NOT NULL
-                                GROUP BY 1 ORDER BY SUM(net_debit) DESC LIMIT ?""", [as_of, int(val)])
+                top = self.q(f"""SELECT partner_code FROM v_mgmt WHERE account_code LIKE '131%' AND posting_date <= ? AND partner_code IS NOT NULL
+                                {scope_sql} GROUP BY 1 ORDER BY SUM(net_debit) DESC LIMIT ?""", [as_of] + (scope_params or []) + [int(val)])
                 codes = [r[0] for r in top]
             elif key == "exclude_customers":
                 codes = [c for v in (val if isinstance(val, list) else [val]) for c in self.resolve_entity("customer", v)]
@@ -306,9 +344,17 @@ class ExecutionEngine:
         except P.PeriodError as exc:
             raise InvalidDateRangeError(str(exc)) from exc
 
+    @_validated_request
     def query(self, metric: str, period: str | dict | None = None, compare_to: str | None = None, group_by: str | None = None,
-              filters: dict | None = None, view: str | None = None, top_k: int | None = None, params: dict | None = None) -> dict:
+              filters: dict | None = None, view: str | None = None, top_k: int | None = None, params: dict | None = None,
+              scope: dict | None = None) -> dict:
         md = self.get_definition(metric)
+        if compare_to not in (None,'none','null','previous_period','prev','previous','same_period_last_year','yoy'):
+            raise EngineError('compare_to không hợp lệ. Dùng previous_period hoặc same_period_last_year.')
+        if params is not None and not isinstance(params,dict) or filters is not None and not isinstance(filters,dict):
+            raise EngineError('params và filters phải là ánh xạ.')
+        if view is not None and not isinstance(view,str):
+            raise ViewNotAllowedError('Khung dữ liệu phải là mgmt hoặc tax.')
         params = {**md.params, **{k: v for k, v in (params or {}).items() if v is not None}}
         view = (view or md.default_view).lower()
         view = {"v_mgmt": "mgmt", "quan_tri": "mgmt", "management": "mgmt", "v_tax": "tax", "thue": "tax"}.get(view, view)
@@ -321,12 +367,30 @@ class ExecutionEngine:
         if group_by and group_by not in md.group_bys:
             raise EngineError(f"Chỉ số '{md.label}' không hỗ trợ nhóm theo '{group_by}'. Hỗ trợ: {', '.join(md.group_bys) or 'không có'}.")
         per = self.resolve(md, period, params)
-        fsql, fparams, resolved = self.build_filters(filters, min(per.end, self.as_of))
+        if top_k is not None and (isinstance(top_k,bool) or not isinstance(top_k,int) or not 1 <= top_k <= 100_000):
+            raise EngineError('top_k phải là số nguyên từ 1 đến 100000.')
+        comparable_custom = {'dso','dpo','dio','cash_conversion_cycle','dso_actual','cash_coverage_days',
+                             'cash_flow_breakdown','ar_aging','overdue_receivables','expense_spikes',
+                             'payroll_summary','cit_estimate','mgmt_vs_tax_gap','vat_position'}
+        if compare_to and compare_to not in ('none','null') and md.kind=='custom' and md.id not in comparable_custom:
+            raise EngineError(f"Chỉ số '{md.label}' chưa hỗ trợ so sánh kỳ.")
+        from .scope import compile_scope
+        ssql,sparams,canonical_scope = compile_scope(self,md,scope)
+        fsql, fparams, resolved = self.build_filters(filters, min(per.end, self.as_of),ssql,sparams)
+        fsql, fparams = fsql+ssql, fparams+sparams
         params["_resolved"] = resolved
         params["_top_k"] = top_k
         res = self.compute(md, per.start, per.end, view, fsql, fparams, group_by, params)
         out = self._package(md, per, view, res, group_by, top_k, resolved)
-        if compare_to and compare_to not in ("none", "null") and res.get("value") is not None and md.kind != "custom":
+        identity = {'data_version':self.info.get('data_version','unversioned'), 'seed':self.info.get('seed'),
+                    'data_through':str(self.as_of),'closed':self.last_closed,'metric':metric,'period':per.as_dict(),
+                    'view':view,'filters':resolved,'scope':canonical_scope,'params':params,'group_by':group_by,
+                    'top_k':top_k,'compare_to':compare_to}
+        out['audit_trail']['lineage_id'] = 'L-'+hashlib.sha256(json.dumps(identity,sort_keys=True,ensure_ascii=False,default=str).encode()).hexdigest()[:20]
+        out['audit_trail']['data_version'] = self.info.get('data_version','unversioned')
+        if scope is not None:
+            out['scope'] = canonical_scope
+        if compare_to and compare_to not in ("none", "null") and res.get("value") is not None:
             out["comparison"] = self._compare(md, per, view, fsql, fparams, compare_to, out["value"], params)
         return out
 
@@ -391,7 +455,7 @@ class ExecutionEngine:
         if res.get("groups") is not None and group_by:
             dim = GROUP_SQL[group_by][1]
             rows = [{"key": k, "label": self.label_for(dim, k) if dim else k, "value": v} for k, v in res["groups"].items()]
-            rows.sort(key=(lambda r: str(r["key"])) if group_by in ("month", "quarter", "year") else (lambda r: -(r["value"] or 0)))
+            rows.sort(key=(lambda r: str(r["key"])) if group_by in ("month", "quarter", "year") else (lambda r: (-(r["value"] or 0),str(r['key']))))
             for r in rows:
                 r["display"] = fmt_value(r["value"], md.unit)
                 if md.unit == "VND" and md.kind != "ratio" and value:
@@ -428,13 +492,21 @@ class ExecutionEngine:
         return res
 
     # --------------------------------------------------------------- lineage
+    @_validated_request
     def explain(self, metric: str, period: str | dict | None = None, filters: dict | None = None, view: str | None = None,
-                limit: int = 10) -> dict:
+                limit: int = 10, scope: dict | None = None) -> dict:
         """'Xem cách tính': formula + per-account totals + the largest GL lines behind a metric."""
         md = self.get_definition(metric)
         view = view or md.default_view
+        if view not in md.views:
+            raise ViewNotAllowedError(f"Chỉ số '{md.label}' không hỗ trợ khung '{view}'.")
+        if isinstance(limit,bool) or not isinstance(limit,int) or not 1 <= limit <= 1000:
+            raise EngineError('limit phải là số nguyên từ 1 đến 1000.')
         per = self.resolve(md, period, md.params)
-        fsql, fparams, resolved = self.build_filters(filters, min(per.end, self.as_of))
+        from .scope import compile_scope
+        ssql,sparams,_ = compile_scope(self,md,scope)
+        fsql, fparams, resolved = self.build_filters(filters, min(per.end, self.as_of),ssql,sparams)
+        fsql,fparams = fsql+ssql,fparams+sparams
         terms = md.terms or (md.num + md.den)
         base = {"metric_id": md.id, "metric_name": md.label, "formula": md.formula, "accounts": list(md.accounts), "period_label": per.label}
         if not terms:

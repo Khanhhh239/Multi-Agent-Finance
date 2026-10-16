@@ -189,17 +189,32 @@ def m_ccc(eng, md, start, end, view, fsql, fparams, group, params):
 def m_dso_actual(eng, md, start, end, view, fsql, fparams, group, params):
     _require(eng, "ar_receipt")
     e = _eff(eng, end)
+    basis = params.get('date_basis','receipt')
+    if basis not in ('receipt','bank'):
+        from .engine import EngineError
+        raise EngineError('date_basis chỉ nhận receipt hoặc bank.')
+    date_column = {'receipt':'receipt_date','bank':'bank_txn_date'}[basis]
     cond, prm = "", []
     inc = _codes(params, "customer")
     if inc:
         cond = f" AND r.customer_code IN ({', '.join('?' * len(inc))})"
         prm = inc
-    row = eng.q(f"""SELECT SUM(r.amount * date_diff('day', i.issue_date, r.receipt_date)) / NULLIF(SUM(r.amount), 0), SUM(r.amount), COUNT(*)
+    for key,column in (('branch','i.branch_code'),('salesperson','i.salesperson_code')):
+        codes = _codes(params,key)
+        if codes:
+            cond += f" AND {column} IN ({','.join('?' for _ in codes)})"
+            prm += codes
+    excluded = _codes(params,'exclude_customers')+_codes(params,'exclude_top_customers')
+    if excluded:
+        cond += f" AND r.customer_code NOT IN ({','.join('?' for _ in excluded)})"
+        prm += excluded
+    row = eng.q(f"""SELECT SUM(r.amount * date_diff('day', i.issue_date, r.{date_column})) / NULLIF(SUM(r.amount), 0), SUM(r.amount), COUNT(*)
                     FROM ar_receipt r JOIN ar_invoice i USING (invoice_id) JOIN dim_partner p ON p.partner_code = r.customer_code
-                    WHERE r.receipt_date BETWEEN ? AND ? AND p.segment <> 'RET'{cond}""", [start, e] + prm)[0]
+                    WHERE r.{date_column} BETWEEN ? AND ? AND p.segment <> 'RET'{cond}""", [start, e] + prm)[0]
     val = float(row[0]) if row[0] is not None else None
     return {"value": val, "entry_count": int(row[2] or 0), "summary": {"collected": fmt_vnd(row[1] or 0), "receipts": int(row[2] or 0)},
-            "notes": ["Không tính khách lẻ thanh toán ngay."]}
+            "notes": ["Không tính khách lẻ thanh toán ngay.", 'Cơ sở ngày: '+('ngày tiền về ngân hàng.' if basis=='bank' else 'ngày ghi sổ thu tiền.')],
+            "date_basis":basis}
 
 
 # ------------------------------------------------------------------ AP
@@ -293,7 +308,7 @@ def cash_journals(eng, start: date, end: date) -> str:
                  AND COALESCE(source_module, '') <> 'OPENING' GROUP BY 1, 2),
          o AS (SELECT journal_id, string_agg(DISTINCT left(account_code, 3), ',') AS accs FROM v_mgmt
                WHERE NOT (account_code LIKE '111%' OR account_code LIKE '112%') AND journal_id IN (SELECT journal_id FROM c) GROUP BY 1)
-    SELECT c.journal_id, c.year_month, c.amt, {CASH_CATEGORY_SQL.replace('accs', 'o.accs').replace('amt', 'c.amt')} AS category
+    SELECT c.journal_id, c.year_month, c.amt, {CASH_CATEGORY_SQL} AS category
     FROM c LEFT JOIN o USING (journal_id)"""
 
 

@@ -79,6 +79,15 @@ def _vn_date(d: date) -> str:
 
 def resolve_period(expr: str | dict | None, as_of: date, default: str = "this_month") -> Period:
     """Resolve a canonical token, an ISO range or a Vietnamese phrase."""
+    try:
+        return _resolve_period(expr, as_of, default)
+    except PeriodError:
+        raise
+    except (ValueError, OverflowError) as exc:
+        raise PeriodError(f"Mốc thời gian không hợp lệ: {expr!r}") from exc
+
+
+def _resolve_period(expr: str | dict | None, as_of: date, default: str = "this_month") -> Period:
     if expr is None or (isinstance(expr, str) and not expr.strip()):
         expr = default
     if isinstance(expr, dict):
@@ -147,15 +156,21 @@ def resolve_period(expr: str | dict | None, as_of: date, default: str = "this_mo
         return Period(s, s + timedelta(days=6), f"tuần {_vn_date(s)}–{_vn_date(s + timedelta(days=6))}", "week", "last_week")
     if mm := re.fullmatch(r"(?:last|past)\s*(\d+)\s*months?|(\d+)\s*thang\s*(?:gan nhat|gan day|qua|vua qua|truoc|vua roi)", t):
         n = int(mm.group(1) or mm.group(2))
+        if n < 1:
+            raise PeriodError("Số tháng phải lớn hơn 0.")
         # N most recent *complete* months (the current month is still open)
         ey, em = _add_months(y, m, -1)
         sy, sm = _add_months(ey, em, -(n - 1))
         return Period(date(sy, sm, 1), _month_end(ey, em), f"{n} tháng gần nhất ({sm:02d}/{sy}–{em:02d}/{ey})", "custom", f"last_{n}_months")
     if mm := re.fullmatch(r"(?:last|past)\s*(\d+)\s*days?|(\d+)\s*ngay\s*(?:gan nhat|qua|vua qua)", t):
         n = int(mm.group(1) or mm.group(2))
+        if n < 1:
+            raise PeriodError("Số ngày phải lớn hơn 0.")
         return Period(as_of - timedelta(days=n - 1), as_of, f"{n} ngày gần nhất", "custom", f"last_{n}_days")
     if mm := re.fullmatch(r"(?:next)\s*(\d+)\s*days?|(\d+)\s*ngay\s*(?:toi|sap toi|ke tiep|tiep theo)", t):
         n = int(mm.group(1) or mm.group(2))
+        if n < 1:
+            raise PeriodError("Số ngày phải lớn hơn 0.")
         s = as_of + timedelta(days=1)
         return Period(s, as_of + timedelta(days=n), f"{n} ngày tới ({_vn_date(s)}–{_vn_date(as_of + timedelta(days=n))})", "custom", f"next_{n}_days")
     if mm := re.fullmatch(r"(?:thang|t)\s*(\d{1,2})(?:\s*(?:/|-|nam)\s*(\d{4}))?", t):
@@ -256,7 +271,9 @@ def extract_periods(question: str, as_of: date) -> list[tuple[str, Period]]:
     """Find every time expression in a free-text question (left to right)."""
     t = _norm(question)
     out: list[tuple[str, Period]] = []
-    for mm in _PHRASE_RE.finditer(t):
+    token_pattern = r"(?<!\w)\d{4}-(?:q[1-4]|h[12]|\d{2}(?:-\d{2})?)(?!\w)"
+    combined = re.compile(token_pattern + "|" + _PHRASE_RE.pattern)
+    for mm in combined.finditer(t):
         phrase = mm.group(0)
         if phrase in ("nam truoc",) and "cung ky" in t[max(0, mm.start() - 12):mm.start()]:
             continue  # "cùng kỳ năm trước" is a comparison, not a period
@@ -264,11 +281,6 @@ def extract_periods(question: str, as_of: date) -> list[tuple[str, Period]]:
             out.append((phrase, resolve_period(phrase, as_of)))
         except PeriodError:
             continue
-    for iso in re.findall(r"\d{4}-\d{2}(?:-\d{2})?", question):
-        try:
-            out.append((iso, resolve_period(iso, as_of)))
-        except (PeriodError, ValueError):
-            pass
     return out
 
 

@@ -1,0 +1,195 @@
+{
+  "measured_on": "2026-10-16",
+  "rows": 5000000,
+  "n": 46,
+  "p95_ms": 64.62469999996756,
+  "method": "materialized repeated gl_wide; linear/ratio metrics only; original subledgers not scaled",
+  "threshold_ms": 5000,
+  "passed": true,
+  "samples": [
+    {
+      "metric": "net_revenue",
+      "ms": 630.883600000061
+    },
+    {
+      "metric": "gross_revenue",
+      "ms": 4.32320000004438
+    },
+    {
+      "metric": "revenue_deductions",
+      "ms": 5.3881000001183565
+    },
+    {
+      "metric": "goods_revenue",
+      "ms": 4.761599999937971
+    },
+    {
+      "metric": "service_revenue",
+      "ms": 3.9822999999614694
+    },
+    {
+      "metric": "cogs",
+      "ms": 4.181799999969371
+    },
+    {
+      "metric": "gross_profit",
+      "ms": 6.956700000046112
+    },
+    {
+      "metric": "gross_margin_pct",
+      "ms": 12.34100000010585
+    },
+    {
+      "metric": "selling_expenses",
+      "ms": 4.213400000026013
+    },
+    {
+      "metric": "admin_expenses",
+      "ms": 2.8301999998348037
+    },
+    {
+      "metric": "operating_expenses",
+      "ms": 3.970199999912438
+    },
+    {
+      "metric": "finance_income",
+      "ms": 2.9024000000390515
+    },
+    {
+      "metric": "finance_cost",
+      "ms": 2.960600000051272
+    },
+    {
+      "metric": "operating_profit",
+      "ms": 11.0316000000239
+    },
+    {
+      "metric": "other_income",
+      "ms": 2.219799999920724
+    },
+    {
+      "metric": "other_expenses",
+      "ms": 2.00089999998454
+    },
+    {
+      "metric": "profit_before_tax",
+      "ms": 14.440599999943515
+    },
+    {
+      "metric": "income_tax_expense",
+      "ms": 2.5286999998570536
+    },
+    {
+      "metric": "net_profit",
+      "ms": 13.933400000041729
+    },
+    {
+      "metric": "net_margin_pct",
+      "ms": 21.32050000000163
+    },
+    {
+      "metric": "ebitda",
+      "ms": 23.76719999983834
+    },
+    {
+      "metric": "depreciation_expense",
+      "ms": 3.2853000000159227
+    },
+    {
+      "metric": "salary_expense",
+      "ms": 7.765099999915037
+    },
+    {
+      "metric": "labor_cost",
+      "ms": 8.544999999912761
+    },
+    {
+      "metric": "cash_and_equivalents",
+      "ms": 25.105799999892042
+    },
+    {
+      "metric": "term_deposits",
+      "ms": 5.6059999999433785
+    },
+    {
+      "metric": "ar_balance",
+      "ms": 9.06899999995403
+    },
+    {
+      "metric": "ar_by_customer",
+      "ms": 35.0556000000779
+    },
+    {
+      "metric": "ar_by_salesperson",
+      "ms": 27.299500000026455
+    },
+    {
+      "metric": "ap_balance",
+      "ms": 7.5395000001208246
+    },
+    {
+      "metric": "ap_by_vendor",
+      "ms": 19.62709999997969
+    },
+    {
+      "metric": "inventory_value",
+      "ms": 15.1352999998835
+    },
+    {
+      "metric": "tax_payable",
+      "ms": 11.35119999980816
+    },
+    {
+      "metric": "debt_balance",
+      "ms": 5.702199999859658
+    },
+    {
+      "metric": "fixed_assets_net",
+      "ms": 4.933899999969071
+    },
+    {
+      "metric": "total_assets",
+      "ms": 11.016899999958696
+    },
+    {
+      "metric": "total_liabilities",
+      "ms": 7.94980000000578
+    },
+    {
+      "metric": "equity",
+      "ms": 18.254899999874397
+    },
+    {
+      "metric": "working_capital",
+      "ms": 63.65809999988414
+    },
+    {
+      "metric": "current_ratio",
+      "ms": 64.62469999996756
+    },
+    {
+      "metric": "quick_ratio",
+      "ms": 78.23980000011943
+    },
+    {
+      "metric": "debt_to_equity",
+      "ms": 24.540699999988647
+    },
+    {
+      "metric": "net_cash_flow",
+      "ms": 5.256800000097428
+    },
+    {
+      "metric": "expense_by_category",
+      "ms": 11.236000000053536
+    },
+    {
+      "metric": "taxable_income",
+      "ms": 16.334500000084518
+    },
+    {
+      "metric": "deductible_expenses",
+      "ms": 8.671800000001895
+    }
+  ]
+}

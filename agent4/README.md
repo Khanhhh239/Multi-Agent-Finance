@@ -2,15 +2,18 @@
 
 Trợ lý hội thoại tiếng Việt trả lời câu hỏi tài chính điều hành trên dữ liệu chưa khóa sổ, bằng lõi chỉ số tất định (TT133) + LLM ≤ 10B (Qwen3) chỉ để chọn công cụ và diễn giải.
 
-**Trạng thái (14/10/2026):** ✅ bộ sinh dữ liệu doanh nghiệp mẫu · ✅ lõi 66 chỉ số + bộ phân giải thời gian/định dạng số · ✅ 12 test hợp đồng v0 · ⏳ agent LLM, guardrail, đánh giá, API/UI chưa làm — xem `docs/5_handoff/`.
+**Trạng thái (16/10/2026):** Đã thực hiện phần kỹ thuật T0.1–T0.5: **1.390 test xanh**, oracle độc lập **66 chỉ số × 6 kỳ**, phạm vi hàng, so sánh custom, ngày thu ngân hàng và data version. **Chờ kế toán trưởng duyệt T0.6/G0.7** trước P1. Agent LLM, đánh giá agent, API/UI và pilot chưa hoàn thành. Xem [báo cáo thực hiện](docs/5_handoff/PROGRESS.md) và [bảng duyệt công thức](docs/5_handoff/FORMULA_REVIEW.md).
 
 ## Bắt đầu
 ```bash
-cd agent4
+python -m venv .venv
+# Windows PowerShell: dùng ./.venv/Scripts/python.exe cho các lệnh python bên dưới
 export PYTHONUTF8=1
 pip install -r requirements.txt
+pip install -e . --no-deps
 python -m agent4.datagen.build --out data/cfo_warehouse.duckdb     # ~1 phút, seed 20251
-python -m pytest tests -q                                          # 12 passed
+python -m pytest tests -q                                          # 1.390 passed
+python -m eval.review_formulas                                    # oracle + bảng rà soát
 ```
 ```python
 from agent4.engine.engine import ExecutionEngine

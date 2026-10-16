@@ -248,7 +248,7 @@ def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: 
     con.execute(VIEWS_SQL)
     _build_budget(con)
     info = {**C.COMPANY, "as_of_date": as_of.isoformat(), "last_closed_month": last_closed, "data_start": "2025-01-01", "seed": str(seed),
-            "generator": "agent4.datagen v2 (event-driven simulation)"}
+            "generator": "agent4.datagen v2 (event-driven simulation)", "data_version": "v2.0"}
     con.executemany("INSERT INTO company_info VALUES (?, ?)", [(k, str(v)) for k, v in info.items()])
     con.execute("CREATE TABLE ground_truth AS SELECT * FROM read_json_auto(?)", [_write_gt(out, sim.ground_truth)])
     stats = _validate(con, quiet=quiet)

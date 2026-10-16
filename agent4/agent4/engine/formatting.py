@@ -89,7 +89,7 @@ def fmt_delta(delta: float | None, unit: str) -> str:
 _SCALE = {"ty": 1e9, "tỷ": 1e9, "tỉ": 1e9, "ti": 1e9, "trieu": 1e6, "triệu": 1e6, "tr": 1e6, "nghin": 1e3, "nghìn": 1e3, "ngan": 1e3,
           "ngàn": 1e3, "k": 1e3, "billion": 1e9, "million": 1e6, "bn": 1e9, "m": 1e6}
 _NUM_RE = re.compile(
-    r"(?<![\w.,])([-+−]?\d{1,3}(?:\.\d{3})+(?:,\d+)?|[-+−]?\d+(?:,\d+)?|[-+−]?\d+(?:\.\d+)?)"
+    r"(?<![\w.,])([-+−]?\d{1,3}(?:\.\d{3})+(?:,\d+)?|[-+−]?\d+(?:[,.]\d+)?)"
     r"\s*(tỷ|tỉ|ty|ti|triệu|trieu|tr|nghìn|nghin|ngàn|ngan|billion|million|bn|%)?(?![\w])",
     re.IGNORECASE,
 )
@@ -110,8 +110,8 @@ def extract_numbers(text: str) -> list[dict]:
     '12,35 tỷ' → 12.35e9, '345 triệu' → 345e6, '19,1%' → 19.1 (unit %),
     '1.234.567 đ' → 1234567.  Dates (14/10/2026) and codes (KH0012) are skipped.
     """
-    cleaned = re.sub(r"\b\d{1,2}/\d{1,2}/\d{4}\b|\b\d{1,2}/\d{4}\b|\b\d{4}-\d{2}(?:-\d{2})?\b", " ", text)
-    cleaned = re.sub(r"\b[A-Za-z]+[-_]?\d[\w\-/]*\b", " ", cleaned)  # codes like KH0012, Q3, 1C26TMP-00001
+    cleaned = re.sub(r"\b\d{1,2}/\d{1,2}/\d{4}\b|\b\d{1,2}/\d{4}\b|\b\d{4}-(?:[QH][1-4]|\d{2}(?:-\d{2})?)\b", " ", text, flags=re.I)
+    cleaned = re.sub(r"\b(?:[A-Za-z]+[-_]?\d|\d+[A-Za-z])[\w\-/]*\b", " ", cleaned)
     out = []
     for mm in _NUM_RE.finditer(cleaned):
         tok, unit = mm.group(1), (mm.group(2) or "").lower()

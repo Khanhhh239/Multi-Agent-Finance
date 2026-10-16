@@ -1,5 +1,10 @@
 # 05 · Hard case và kịch bản cài đặt (ground truth)
 
+## Ghi chú kiểm chứng 16/10/2026
+- `company_info.data_version=v2.0` được bổ sung khi tái sinh kho. Không thay đổi sự kiện hay nhãn ground truth; SHA-256 của bảng `gl_entry` theo `entry_id` vẫn là `2166c8cf9f1c75961f6faf6549c1bb72397b202aa4bb543d270a3736a74bca51`.
+- A4 được giữ nguyên: phương trình kế toán lệch đúng **500.000 đồng** từ 31/07/2026. Không được sửa dữ liệu hoặc tuyên bố tổng sổ cân tuyệt đối. Test kiểm tra ngoại lệ công khai cùng đối soát AR/AP/kho.
+- `budget` của bản sinh hiện dùng `random()` DuckDB không seed: **chỉ sổ cái được xác nhận tái lập**, chưa xác nhận toàn kho. Số liệu ngân sách giữa hai lần build có thể khác; không dùng `data_version + seed` đơn lẻ làm cache key ngân sách cho nhiều kho. Cần sửa có tăng phiên bản khi mở rộng bộ sinh ở T4.1.
+
 ## 1. Triết lý
 Hard case = tình huống mà **một agent ngây thơ sẽ trả lời sai hoặc bỏ sót**. Mỗi ca có: *mô tả thật*, *ở đâu trong dữ liệu*, *câu hỏi kích hoạt*, *đáp án đúng*, *kiểu sai thường gặp*. Danh sách nằm trong bảng `ground_truth` (20 dòng) để bộ chấm điểm tự động đọc.
 
