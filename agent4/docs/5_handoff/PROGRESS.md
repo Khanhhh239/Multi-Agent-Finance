@@ -1,6 +1,12 @@
 # Kết quả thực hiện handoff — 16/10/2026
 
-Phần kỹ thuật **T0.1–T0.5 đã thực hiện và kiểm tra**. Toàn dự án chưa hoàn tất: **T0.6/G0.7 cần kế toán trưởng duyệt**, nên chưa tuyên bố qua G0, M0 hoặc M1. P1–P4 chưa thực hiện. Không có số đo agent/Qwen để báo đạt.
+**công thức chưa được kế toán duyệt (G0.7 mở).** G0.7 vẫn **CHƯA ĐẠT**, không có chữ ký giả lập. Người dùng cho phép tiếp tục **P1 thử nghiệm** ngày 16/10/2026; không coi đó là duyệt công thức hay sẵn sàng pilot.
+
+Phần kỹ thuật **T0.1–T0.5 đã thực hiện và kiểm tra**. P1 đang triển khai; P2–P4 chưa thực hiện, chưa tuyên bố M1. Kết quả P0 cũ được giữ làm bằng chứng lịch sử bên dưới.
+
+## P1 thử nghiệm — tiến độ theo thẻ
+
+- **T1.1:** `OllamaClient` và `ScriptedClient`; timeout, một retry, schema/native tools, think, keep_alive, usage và latency. Đã gọi thật cả 4B và 8B: 4B 16/6 token vào/ra, 56.183 ms; 8B 24/6 token, 28.856 ms. Đây là phép thử JSON có tính cả chi phí tải model, chưa phải M1 hay benchmark chất lượng. Chi tiết `measurements/t1_1_clients.json`; test đầy đủ kể cả `llm` được chạy trước commit.
 
 ## Bằng chứng
 
@@ -47,3 +53,4 @@ Kho mặc định hiện có `data_version=v2.0`, seed 20251, mốc dữ liệu 
 Theo `3_evaluation/05_tieu_chi_nghiem_thu.md`: “Ba cổng, cứ qua cổng mới sang cổng sau”. Vì chưa có xác nhận G0.7, công việc dừng tại cổng này; không giả lập chữ ký kế toán. Nếu người dùng cho phép tiếp tục P1 thử nghiệm, phải giữ G0.7 là chưa đạt và không gắn nhãn sẵn sàng pilot.
 
 Git riêng đã được khởi tạo trong workspace để tránh thay đổi Git cha ở `C:/Users/Admin`. Các thẻ được tách thành commit và nhánh local. Chưa có remote của dự án nên chưa tạo/push PR.
+- T1.1 xác nhận trước commit: **1.398 passed, 0 skipped**, 78,44 giây; có hai test Ollama thật (`AGENT4_RUN_LLM=1`). công thức chưa được kế toán duyệt (G0.7 mở).

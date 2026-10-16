@@ -1,0 +1,23 @@
+{
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "results": [
+    {
+      "model": "qwen3:4b-instruct-2507-q4_K_M",
+      "text": "{\"ok\": true}",
+      "usage": {
+        "prompt_tokens": 16,
+        "eval_tokens": 6
+      },
+      "latency_ms": 56183.02600000004
+    },
+    {
+      "model": "qwen3:8b",
+      "text": "{\"ok\": true}",
+      "usage": {
+        "prompt_tokens": 24,
+        "eval_tokens": 6
+      },
+      "latency_ms": 28855.842100000016
+    }
+  ]
+}
