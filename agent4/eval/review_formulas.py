@@ -41,7 +41,7 @@ def main():
              'Ngày đo: 16/10/2026. Dữ liệu tổng hợp seed 20251; không phải xác nhận tính đúng pháp lý hay phê duyệt kế toán.',
              f"Oracle độc lập: **{report['passed']}/{report['cells']}** ô, 66 chỉ số × 6 kỳ. Oracle đọc bảng gốc, không import engine.",
              f"p95 truy vấn trong lượt đối chiếu: {report['query_p95_ms']:.2f} ms trên {report['gl_rows']:,} dòng; chưa đại diện tải đồng thời.",
-             '', '**G0.7: CHỜ DUYỆT.** Người duyệt: ______. Chức danh: ______. Ngày: ______. Chữ ký/xác nhận: ______.',
+             '', '**G0.7: CHƯA ĐẠT — công thức chưa được kế toán duyệt (G0.7 mở).** Người duyệt: ______. Chức danh: ______. Ngày: ______. Chữ ký/xác nhận: ______.',
              '', 'Các kỳ: tháng khóa 08/2026; tháng dở dang 10/2026; Q3/2026; năm 2025; YTD; 15/06–15/07/2025.',
              '', '| Ưu tiên | Chỉ số | Nhãn | Công thức | Engine Q3 | Oracle Q3 | Đối chiếu | Câu hỏi kế toán | Duyệt |',
              '|---|---|---|---|---:|---:|---|---|---|']
@@ -59,7 +59,7 @@ def main():
     }
     for metric,md in REGISTRY.items():
         c = next(c for c in cells if c['metric']==metric and c['start']=='2026-07-01')
-        lines.append(f"| {'**Must**' if metric in MUST else ''} | `{metric}` | {md.label} | {md.formula.replace('|','/')} | {c['engine']} | {c['oracle']} | {'KHỚP' if c['passed'] else 'LỆCH'} | {questions.get(metric,'Xác nhận công thức, dấu và khung trong định nghĩa.')} | CHỜ |")
+        lines.append(f"| {'**Must — cần duyệt trước pilot**' if metric in MUST else ''} | `{metric}` | {md.label} | {md.formula.replace('|','/')} | {c['engine']} | {c['oracle']} | {'KHỚP' if c['passed'] else 'LỆCH'} | {questions.get(metric,'Xác nhận công thức, dấu và khung trong định nghĩa.')} | CHỜ |")
     lines += ['', '## Ngoại lệ và giới hạn cần giữ minh bạch','',
               '- A4: chứng từ lệch Nợ/Có 500.000 đồng ngày 31/07/2026 là hard case có chủ đích. Phương trình kế toán nguyên trạng lệch đúng khoản này sau ngày đó; test đối chiếu và tách ngoại lệ, không sửa dữ liệu để làm xanh.',
               '- Ngân sách dùng random() DuckDB không seed trong bản dữ liệu cũ; tái lập sổ cái được kiểm chứng riêng, không tuyên bố toàn kho tái lập.',

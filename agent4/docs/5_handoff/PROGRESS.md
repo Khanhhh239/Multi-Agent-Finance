@@ -60,3 +60,7 @@ Git riêng đã được khởi tạo trong workspace để tránh thay đổi G
 Schema bảy công cụ chỉ đọc/draft, enum từ registry/engine, executor kiểm quyền và scope, facts pack chỉ display và văn bản bọc; 66 chỉ số chạy qua executor.
 
 Toàn bộ test trước commit: **1472 passed, 0 skipped**, 72.38 giây; `artifacts/t1_2-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### Phiếu kế toán song song — G0.7 CHƯA ĐẠT
+
+`FORMULA_REVIEW_ONE_PAGE.pdf`: A4 ngang đúng 1 trang, 22 chỉ số Must, mỗi dòng có công thức lời, ví dụ Q3, câu hỏi và nhãn “cần duyệt trước pilot”. Đã kiểm tra pypdf và ảnh render Poppler, không tràn/cắt chữ. Bản đầy đủ vẫn giữ 66 chỉ số; không có chữ ký duyệt. Toàn bộ test gần nhất trước commit: 1.472 passed (có 4B/8B thật). công thức chưa được kế toán duyệt (G0.7 mở).
