@@ -14,6 +14,7 @@ import argparse
 import json
 import time
 import warnings
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -46,6 +47,7 @@ NOVELTY = ["Novelty max(R,E)", "Novelty max(R,E,AE)"]
 POLICIES = [(f"{s} 2+1 {n.split()[0][0]}{n.split(' ', 1)[1]}", "slots", (s, n, 2, 1)) for s in SUPERVISED for n in NOVELTY] + \
            [(f"max({s},{n.split(' ', 1)[1]})", "max", (s, n)) for s in ("L3", "L4-FB", "C-L4-FB") for n in NOVELTY[:1]]
 KEEP = ("alerts", "tp", "precision", "recall", "case_recall", "hard_neg_alert_rate", "entity_precision", "median_delay_days")
+WORKERS = 1
 
 
 def prepare(path: Path) -> pd.DataFrame:
@@ -83,7 +85,7 @@ def summarise(te, alerts_by_name, scores_by_name, per_family=True):
 def run_candidates(train, valid, test, names=None, history=None, ref_for_novelty=None):
     """Fit every candidate on (train, valid); score test. Returns scores on test and on valid."""
     s_te, s_va, secs = {}, {}, {}
-    for name in names or CANDIDATES:
+    def run(name):
         t0 = time.time()
         m = CANDIDATES[name]()
         if isinstance(m, Novelty):
@@ -92,9 +94,18 @@ def run_candidates(train, valid, test, names=None, history=None, ref_for_novelty
             m.fit(train, valid)
             if history is not None and isinstance(m, Collective):
                 m.set_history(history)
-        s_te[name] = m.score(test)
-        s_va[name] = m.score(ref_for_novelty if ref_for_novelty is not None else valid)
-        secs[name] = round(time.time() - t0, 1)
+        te_score = m.score(test)
+        va_score = m.score(ref_for_novelty if ref_for_novelty is not None else valid)
+        return te_score, va_score, round(time.time() - t0, 1)
+    ordered_names = list(names or CANDIDATES)
+    if WORKERS == 1:
+        fitted = map(run, ordered_names)
+        for name, (te_score, va_score, elapsed) in zip(ordered_names, fitted):
+            s_te[name], s_va[name], secs[name] = te_score, va_score, elapsed
+    else:
+        with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+            for name, (te_score, va_score, elapsed) in zip(ordered_names, pool.map(run, ordered_names)):
+                s_te[name], s_va[name], secs[name] = te_score, va_score, elapsed
     return s_te, s_va, secs
 
 
@@ -116,11 +127,18 @@ def alerts_for(te, s_te, s_va, budget=3):
     return alerts, scores
 
 
-def p1_temporal(df):
+def p1_temporal(df, save_alerts=None):
     tr, va, te = (df[df.split == s] for s in ("train", "validation", "test"))
     s_te, s_va, secs = run_candidates(tr, va, te)
     te = te.reset_index(drop=True)
     alerts, scores = alerts_for(te, s_te, s_va)
+    if save_alerts is not None:
+        np.savez_compressed(save_alerts, names=np.asarray(list(alerts), dtype=str),
+                            alerts=np.stack(list(alerts.values())),
+                            company_id=te.company_id.to_numpy(dtype=str),
+                            case_id=te.case_id.fillna("").to_numpy(dtype=str),
+                            transaction_id=te.transaction_id.to_numpy(dtype=str),
+                            is_fraud=te.is_fraud.to_numpy(dtype=int))
     res = summarise(te, alerts, scores)
     for k, v in secs.items():
         res[k]["seconds"] = v
@@ -157,17 +175,22 @@ def p3_new_firm(target, others):
 
 
 def main():
+    global WORKERS
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--data", type=Path, nargs="+", required=True)
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--protocols", default="P1,P2,P3")
+    p.add_argument("--save-alerts", action="store_true", help="Save P1 row decisions for paired bootstrap")
+    p.add_argument("--workers", type=int, default=1, choices=(1, 2, 3), help="Concurrent independent candidate fits; model parameters unchanged")
     a = p.parse_args()
+    WORKERS = a.workers
     a.out.mkdir(parents=True, exist_ok=True)
     protos = a.protocols.split(",")
     target = lambda path: a.out / f"{path.name}.json"
     read = lambda path: json.loads(target(path).read_text(encoding="utf-8")) if target(path).exists() else {"dataset": path.name}
 
     def save(path, res):
+        res["candidate_workers"] = WORKERS
         target(path).write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
 
     for path in a.data:                                   # P1 and P2 need one world in memory at a time
@@ -180,7 +203,7 @@ def main():
             t0 = time.time()
             print("==", path.name, proto, flush=True)
             if proto == "P1":
-                res[proto] = p1_temporal(df)
+                res[proto] = p1_temporal(df, a.out / f"{path.name}_P1_alerts.npz" if a.save_alerts else None)
                 print("   " + " | ".join(f"{k} R={v['recall']:.2f}" for k, v in res[proto].items()), flush=True)
             else:
                 res[proto] = p2_unseen_branch(df)

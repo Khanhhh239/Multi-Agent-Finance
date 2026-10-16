@@ -38,8 +38,11 @@ def table(results: list[dict]) -> pd.DataFrame:
 
 def pick(t: pd.DataFrame, among=None) -> str:
     c = t[t.eligible] if among is None else t[t.eligible & t.config.isin(among)]
+    if c.empty or not np.isfinite(c.score).all():
+        raise ValueError("no eligible configuration with finite development scores")
     best = c.score.max()
-    return c[c.score >= best - .01].iloc[0]["config"]
+    # The registered rule says strictly less than .01, not less than or equal.
+    return c[((best - c.score) < .01) & ~np.isclose(best - c.score, .01, rtol=0, atol=1e-12)].iloc[0]["config"]
 
 
 def main():
@@ -47,17 +50,20 @@ def main():
     p.add_argument("--results", type=Path, default=Path("work/results/v4_methods"))
     p.add_argument("--freeze", type=Path, default=Path("work/results/v4_frozen.json"))
     a = p.parse_args()
+    if a.freeze.exists():
+        raise SystemExit(f"{a.freeze} exists; not overwriting the freeze")
     results = [json.loads(f.read_text(encoding="utf-8")) for f in sorted(a.results.glob("w4_s*.json"))]
     assert all(k in r for r in results for k in ("P1", "P2", "P3")) and len(results) == 3, "dev study incomplete"
     t = table(results)
     chosen, cold = pick(t), pick(t, LABEL_FREE)
+    workers = {r.get("candidate_workers", 1) for r in results}
+    assert len(workers) == 1, "dev study execution settings differ between worlds"
     pd.set_option("display.width", 220)
     print(t.round(3).to_string(index=False))
     print("chosen:", chosen, "| cold start:", cold)
     t.to_csv(a.results / "selection_table.csv", index=False)
-    if a.freeze.exists():
-        raise SystemExit(f"{a.freeze} exists; not overwriting the freeze")
-    a.freeze.write_text(json.dumps(dict(chosen=chosen, cold_start=cold, rule="worklog section 14",
+    a.freeze.parent.mkdir(parents=True, exist_ok=True)
+    a.freeze.write_text(json.dumps(dict(chosen=chosen, cold_start=cold, rule="worklog section 14", candidate_workers=workers.pop(),
                                         hashes=file_hashes(Path(".")), dev_scores=t.set_index("config")[["P1", "P2", "P3", "score", "P1_decoy"]]
                                         .round(4).to_dict(orient="index")), ensure_ascii=False, indent=1), encoding="utf-8")
 

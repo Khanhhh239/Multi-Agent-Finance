@@ -17,6 +17,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from . import eval_v4
+
 from .eval_v4 import KEEP, alerts_for, prepare, run_candidates
 from .metrics import evaluate_scores, operating_point
 from .world_v4_sealed import NOVEL
@@ -63,6 +65,10 @@ def main():
     now = file_hashes(Path("."))
     if now != frozen["hashes"]:
         raise SystemExit(f"code changed after the freeze: {now} != {frozen['hashes']}")
+    eval_v4.WORKERS = frozen.get("candidate_workers", 1)
+    # Check the output location before any scoring. Persist the complete result
+    # before exposing metrics, so a final write failure cannot leak a lost run.
+    a.out.parent.mkdir(parents=True, exist_ok=True)
     dev = [prepare(x) for x in a.dev]
     result = {"frozen": frozen, "worlds": {}}
     for path in a.sealed:
@@ -85,10 +91,12 @@ def main():
         r2 = report(te_r, al2, sc2)
         result["worlds"][path.name] = {"S1": r1, "S2": r2, "test_fraud_rows": int(te.is_fraud.sum()),
                                        "test_novel_rows": int(te.fraud_type.isin(list(NOVEL)).sum())}
-        c = frozen["chosen"]
-        print(path.name, "S1", c, {k: round(r1[c][k], 3) for k in ("recall", "known_recall", "novel_recall", "case_recall", "hard_neg_alert_rate")},
-              "S2", {k: round(r2[c][k], 3) for k in ("recall", "known_recall", "novel_recall", "case_recall")}, flush=True)
-    a.out.write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
+    with a.out.open("x", encoding="utf-8") as stream:
+        stream.write(json.dumps(result, ensure_ascii=False, indent=1))
+    c = frozen["chosen"]
+    for name, world in result["worlds"].items():
+        print(name, "S1", c, {k: round(world["S1"][c][k], 3) for k in ("recall", "known_recall", "novel_recall", "case_recall", "hard_neg_alert_rate")},
+              "S2", {k: round(world["S2"][c][k], 3) for k in ("recall", "known_recall", "novel_recall", "case_recall")}, flush=True)
 
 
 if __name__ == "__main__":

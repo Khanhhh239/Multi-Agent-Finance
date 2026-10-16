@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "data_kind": "synthetic",
+  "world": "w4_s411",
+  "test_rows": 50713,
+  "policies": 24,
+  "changed_alert_flags": 0,
+  "maximum_metric_absolute_difference": 0,
+  "serial_P1_seconds": 91,
+  "parallel_P1_seconds": 64,
+  "parallel_workers": 3
+}
