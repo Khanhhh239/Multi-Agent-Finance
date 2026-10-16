@@ -1,5 +1,6 @@
 """Verify A4 completeness without scoring any true sealed world."""
 import json
+import argparse
 from pathlib import Path
 
 import pandas as pd
@@ -9,8 +10,12 @@ from agent2.world_v4_sealed import NOVEL
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--report', type=Path, default=Path('work/results/sealed_v4_dryrun.json'))
+    parser.add_argument('--out', type=Path, default=Path('results/v4/dryrun_verification.json'))
+    args = parser.parse_args()
     source = Path("work/data/v4s_smoke")
-    report = json.loads(Path("work/results/sealed_v4_dryrun.json").read_text(encoding="utf-8"))
+    report = json.loads(args.report.read_text(encoding="utf-8"))
     frozen = json.loads(Path("work/results/v4_frozen.json").read_text(encoding="utf-8"))
     assert report["frozen"] == frozen
     assert set(report["worlds"]) == {"v4s_smoke"}
@@ -31,7 +36,8 @@ def main():
     output = {"status": "passed", "world": source.name, "seed": 939, "rows": validation["rows"],
               "policies_per_scenario": len(names), "test_fraud_rows": world["test_fraud_rows"],
               "test_novel_rows_from_labels": count, "frozen_matches": True}
-    Path("results/v4/dryrun_verification.json").write_text(json.dumps(output, indent=2), encoding="utf-8")
+    output['execution_max_concurrent_candidates'] = report.get('execution_max_concurrent_candidates', 3)
+    args.out.write_text(json.dumps(output, indent=2), encoding="utf-8")
     print(json.dumps(output))
 
 

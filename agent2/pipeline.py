@@ -39,6 +39,11 @@ def slots(budget: int) -> tuple[int, int]:
 
 
 class Agent2Detector:
+    @classmethod
+    def from_config(cls, config):
+        from .pipeline_v4 import OperationalV4Detector
+        return OperationalV4Detector(config)
+
     def __init__(self, profile="precision", pretrained: dict | None = None):
         if profile != "cold" and not pretrained:
             raise ValueError(f"profile '{profile}' needs --pretrained (train one with agent2.train_pretrained)")
@@ -110,6 +115,8 @@ def to_case_queue(cases: pd.DataFrame) -> pd.DataFrame:
 def run(data: Path, out: Path, profile="precision", budget=3, pretrained_path: Path | None = None, fdr: float | None = None):
     out.mkdir(parents=True, exist_ok=True)
     pretrained = joblib.load(pretrained_path) if pretrained_path else None
+    if pretrained and pretrained.get("schema_version") == 2:
+        raise ValueError("v4 models require --config, --week and an explicit company scope; use the weekly v4 pipeline")
     df = load(data, need_text=True)
     train, valid = df[df.split == "train"], df[df.split == "validation"]
     det = Agent2Detector(profile, pretrained).fit(train, valid)
@@ -147,12 +154,28 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--data", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
-    p.add_argument("--profile", choices=PROFILES, default="precision")
+    p.add_argument("--profile", choices=PROFILES, default=None)
     p.add_argument("--budget", type=int, default=3)
     p.add_argument("--pretrained", type=Path)
     p.add_argument("--fdr", type=float)
+    p.add_argument("--config", type=Path, help="frozen v4 operational configuration")
+    p.add_argument("--week", help="ISO week YYYY-Www for operational v4 scoring")
+    p.add_argument("--company", help="company_id; required for multi-company inputs")
     a = p.parse_args()
-    report, cases = run(a.data, a.out, a.profile, a.budget, a.pretrained, a.fdr)
+    if a.config:
+        if not a.week:
+            p.error("--config requires --week")
+        if a.fdr is not None or a.budget != 3:
+            p.error("the frozen v4 policy uses budget=3 and no additional FDR filter")
+        from .pipeline_v4 import run as run_v4
+        if a.pretrained is not None:
+            p.error("the v4 model path and checksum come from --config")
+        report, cases = run_v4(a.data, a.out, a.config, a.week, a.company, profile=a.profile)
+        print(json.dumps(report, ensure_ascii=False, indent=1, default=float))
+        return
+    if a.week or a.company:
+        p.error("--week and --company require --config")
+    report, cases = run(a.data, a.out, a.profile or "precision", a.budget, a.pretrained, a.fdr)
     print(json.dumps(report, ensure_ascii=False, indent=1, default=float))
     print(cases[["case_id", "company_id", "entity", "priority", "case_score", "reason"]].head(6).to_string())
 

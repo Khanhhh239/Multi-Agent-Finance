@@ -1,0 +1,99 @@
+{
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "scikit-learn": "1.9.1",
+      "lightgbm": "4.7.0",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "pyarrow": "26.0.0",
+      "pytest": "9.1.1",
+      "PyYAML": "6.0.3",
+      "defusedxml": "0.7.1"
+    }
+  },
+  "status": "passed",
+  "worlds": {
+    "w4_s411": {
+      "status": "passed",
+      "expected": {
+        "fraud_rows": 800,
+        "cases": 194,
+        "schemes": 30
+      },
+      "actual": {
+        "fraud_rows": 800,
+        "cases": 194,
+        "schemes": 30
+      }
+    },
+    "w4_s412": {
+      "status": "passed",
+      "expected": {
+        "fraud_rows": 801,
+        "cases": 196,
+        "schemes": 30
+      },
+      "actual": {
+        "fraud_rows": 801,
+        "cases": 196,
+        "schemes": 30
+      }
+    },
+    "w4_s413": {
+      "status": "passed",
+      "expected": {
+        "fraud_rows": 806,
+        "cases": 190,
+        "schemes": 30
+      },
+      "actual": {
+        "fraud_rows": 806,
+        "cases": 190,
+        "schemes": 30
+      }
+    },
+    "s4_s931": {
+      "status": "passed",
+      "expected": {
+        "fraud_rows": 800,
+        "cases": 154,
+        "schemes": 37
+      },
+      "actual": {
+        "fraud_rows": 800,
+        "cases": 154,
+        "schemes": 37
+      }
+    },
+    "s4_s932": {
+      "status": "passed",
+      "expected": {
+        "fraud_rows": 801,
+        "cases": 174,
+        "schemes": 37
+      },
+      "actual": {
+        "fraud_rows": 801,
+        "cases": 174,
+        "schemes": 37
+      }
+    },
+    "s4_s933": {
+      "status": "passed",
+      "expected": {
+        "fraud_rows": 807,
+        "cases": 150,
+        "schemes": 37
+      },
+      "actual": {
+        "fraud_rows": 807,
+        "cases": 150,
+        "schemes": 37
+      }
+    }
+  }
+}

@@ -1,4 +1,23 @@
-# Trạng thái Agent 2 (cập nhật 2026-10-15)
+# Trạng thái Agent 2 (cập nhật 2026-10-16)
+
+## Tiến độ tiếp nhận ngày 2026-10-16
+
+- **A1 hoàn tất:** Python 3.12.14, đúng tám phiên bản thư viện gốc; sáu thế giới sinh lại đều qua kiểm định và khớp số dòng gian lận, vụ, kịch bản. Bằng chứng: `results/v4/a1_repro.json`.
+- **A2 hoàn tất:** đủ P1, 10 nhánh ACFE P2 và P3 của cả ba thế giới, 24 cấu hình; bootstrap ghép cặp 2.000 lần. Kết quả `results/v4/method_study/`, `results/v4/paired_bootstrap.json`; báo cáo 06 thư mục 03. H1 chưa đạt: chưa thể kết luận L4 vượt L3 chắc chắn.
+- **A3 hoàn tất:** khóa **L4-FB**, khởi đầu lạnh **Novelty max(R,E)** theo đúng quy tắc đăng ký trước. Tệp `results/v4/v4_frozen.json`; giữ nguyên sáu băm.
+- **A4 hoàn tất:** thử khô seed 939, 80.000 dòng, đủ S1/S2 và 24 cấu hình; 47 dòng gian lận mới khớp nhãn. Đang thử khô lại với giới hạn bộ nhớ.
+- **A5 đang khôi phục:** lần đầu lỗi cấp phát bộ nhớ trước khi ghi kết quả hoặc in chỉ số; chưa có báo cáo hoàn chỉnh. Giới hạn một ứng viên huấn luyện đồng thời; hồi quy P3 413 có **1.020 chỉ số giống chính xác** (`results/v4/bounded_execution_regression.json`). Trạng thái ở `work/recovery_state.json`. A6 chỉ chạy sau A5 và khi chưa kích hoạt điều kiện dừng toàn dự án.
+- C1: bộ nạp vận hành không nhãn theo công ty và tuần ISO; 273 cột số khớp trên 2.113 dòng. QA đầu-cuối bằng Rules đã qua; chờ v2 để kiểm tích hợp cấu hình chính thức.
+- C3: bộ kiểm tra lược đồ; 200.000 dòng tổng hợp của 411 qua. Đã nối chế độ giảm vào pipeline: chỉ dùng lại C2/C3 khi đủ bằng chứng; tắt các luật và mô hình khác, ghi rõ trong báo cáo. Hợp đồng đầy đủ ở `configs/v4_input_columns.json`.
+- C4: chủ dự án xác nhận chưa có mẫu thật. CSV ánh xạ đã qua vòng nhập 1.000 dòng tổng hợp; có khung XML trích dòng hàng, **chưa kiểm chứng với tệp xuất thật**. Xem `05_ke_hoach_giao_viec/adapters.md`.
+- C2: đủ 15 mẫu v4, lý do luật và thực thể có bằng chứng, đã nối pipeline; kiểm toàn bộ mẫu trên cảnh báo ba thế giới chờ lượt chạy riêng.
+- C5/C6: API Flask, SQLite, cách ly công ty, nhập/chấm/hàng đợi/phản hồi; quyết định chỉ thêm; giao diện gọi API. Học phản hồi có phiên bản riêng, mặc định tắt; chỉ nhận xác nhận hoặc hợp lệ, không coi chưa xem hoặc nghi vấn là âm tính. Biến thể học phản hồi chưa được đánh giá hiệu năng. Công cụ trình duyệt lỗi khởi tạo khi tiếp tục phiên, chưa kiểm trực quan lại sửa đổi cuối.
+- C7/C8: có băm mã, dữ liệu, mô hình, cấu hình và PSI; chưa đo mục tiêu 100.000 dòng một công ty hoặc mốc 200.000 và 1.000.000 dòng. Thẻ mô hình chính thức chờ A6.
+- Pha B chưa bắt đầu các cải tiến B1 đến B12; pha D chưa mở rộng quy mô. Chủ dự án xác nhận **chưa có người viết độc lập cho D4**; mẫu bàn giao tại `05_ke_hoach_giao_viec/independent_scenarios/`. Chưa tải dữ liệu ngoài cho D5; cần đồng ý về nguồn, tệp, dung lượng và giấy phép.
+- E2: đã soạn sáu mẫu thí điểm, chưa được luật sư duyệt. Hồ sơ pháp lý phải cập nhật Luật 91/2025/QH15 và Nghị định 356/2025/NĐ-CP theo nguồn trong `05_ke_hoach_giao_viec/templates/README.md`.
+- Kiểm thử: bộ đầy đủ **141 bài và 18 kiểm tra con qua**, 117,42 giây; các bổ sung sau đó được kiểm thử riêng. Sẽ chạy lại bộ đầy đủ khi ổn định. Hướng dẫn cục bộ tại `05_ke_hoach_giao_viec/huong_dan_van_hanh.md`.
+
+**Các mục 1 đến 4 bên dưới là bản ghi lịch sử trước vòng tiếp nhận mới; trạng thái hiện tại nằm ở phần trên.** Mọi số liệu vẫn là tổng hợp; chưa có kiểm chứng doanh nghiệp thật hoặc thí điểm.
 
 ## 1. Đã hoàn thành và có kiểm chứng
 

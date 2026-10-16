@@ -1,0 +1,10 @@
+{
+  "data_kind": "synthetic",
+  "source_world": "w4_s411",
+  "id_and_amount_roundtrip": "passed",
+  "status": "passed",
+  "errors": [],
+  "warnings": [],
+  "disabled_capabilities": {},
+  "rows": 1000
+}

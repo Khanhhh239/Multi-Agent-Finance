@@ -4,6 +4,8 @@ Mục tiêu: thay giả định bằng số đo thật. **Không bán** khi chư
 
 ## E1. Thẩm định pháp lý **[NGƯỜI]** (trước khi nhận bất kỳ dữ liệu thật nào)
 
+**Cập nhật nguồn ngày 2026-10-16:** Cổng Thông tin điện tử Chính phủ ghi nhận [Luật 91/2025/QH15](https://vanban.chinhphu.vn/?docid=214590&pageid=27160) và [Nghị định 356/2025/NĐ-CP](https://vanban.chinhphu.vn/?docid=216387&pageid=27160&typegroupid=4) có hiệu lực từ 2026-01-01. Các câu hỏi dưới đây giữ để truy vết bàn giao; luật sư cần cập nhật căn cứ và các nghĩa vụ hiện hành cho trường hợp cụ thể, không chỉ đối chiếu Nghị định 13/2023. Chưa có kết luận thẩm định. Gói mẫu mới ở [templates/README.md](templates/README.md).
+
 Câu hỏi cần luật sư trả lời bằng văn bản:
 1. Nghị định 13/2023/NĐ-CP: giám sát giao dịch gắn với tên nhân viên (người lập, người duyệt, bảng lương) có cần sự đồng ý của nhân viên hay chỉ cần thông báo? Căn cứ pháp lý của "lợi ích hợp pháp" của người sử dụng lao động?
 2. Hợp đồng lao động và nội quy: cần bổ sung điều khoản nào để doanh nghiệp được phép dùng giám sát tự động?
@@ -13,6 +15,8 @@ Câu hỏi cần luật sư trả lời bằng văn bản:
 Đầu ra: biên bản tư vấn; danh mục việc doanh nghiệp phải làm.
 
 ## E2. Gói tài liệu thí điểm (coding agent soạn)
+
+**Đã soạn dự thảo ngày 2026-10-16:** đủ sáu mẫu bên dưới trong `templates/`; tất cả cần luật sư duyệt, chưa ký hoặc dùng với dữ liệu thật.
 
 Tạo trong `docs/05_ke_hoach_giao_viec/templates/`:
 - `thoa_thuan_du_lieu.md`: mẫu thỏa thuận (phạm vi dữ liệu, mục đích nghiên cứu, ẩn danh hóa, thời hạn lưu, quyền rút, bên chịu trách nhiệm, không chia sẻ).

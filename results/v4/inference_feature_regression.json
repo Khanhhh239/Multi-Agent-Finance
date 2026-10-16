@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "data_kind": "synthetic",
+  "company_id": "C001",
+  "week": "2025-W40",
+  "rows": 2113,
+  "numeric_columns_compared": 273,
+  "maximum_feature_difference": 0,
+  "input_report": {
+    "status": "passed",
+    "errors": [],
+    "warnings": [],
+    "disabled_capabilities": {},
+    "rows": 2113
+  },
+  "input_snapshot_hashes": {
+    "companies.csv": "6a3c1b450884dd5e55cc37a7a69737065a0c53c6e0b6332dc34495807b1a9aef",
+    "employees.csv": "34c874e4eb09d4eb0a8d93af087f9fbc3e9d06ff7900c2d4861bd0f25c88d39c",
+    "vendors.csv": "851c24082d1e66cc77e7a08487d4635ddcfa7ba53d51a4178b3d29aad208594b",
+    "customers.csv": "96b03ec27c4a6f6e7ad61d9dd1d6f5c23edd1019b5b62b4bb27bba65b7fb1ec5",
+    "calendar.csv": "7296fea023dd9d6bd4db421d982b767bc7a4e82c2aecbb698c11eac54a252192",
+    "entity_links.csv": "095ea6deee0a3e49ff4955ef75a8f82b18d6b3eaa9344bc78fd1db51c2e53660",
+    "attendance.csv": "51855258ecf8b4fad7d77fb6dc260d99e5c349bd37bee50ecf0e1a58c0790d6b",
+    "vendor_status_history.csv": "649a4f5e8ec11ef4efa88219ea9af43ac94194b26b2926b3ada9fdb02b46b1f5",
+    "bank_account_changes.csv": "a2641c17b85b4b7b57c1f1192cf20f4e5448d62574a1dbaf04b519d618c5d717",
+    "advances.csv": "e0205c4e13a4147c931e997f09985d8d6d6193741198d68c5bc5da6e98eb51a6",
+    "advance_events.csv": "8bd61ce071bdf343f790b29079952e647c32bee93bb59084fe0d77732c58d9d1",
+    "transactions.csv": "d540c696551895e0bc9bfeb534fab4daaf02049c507b2830447049191955d6e8",
+    "journal_lines.csv": "50fd82e9df225eb88d978f4eca7315ec1a600426307e4a9351da42b932a63c45"
+  },
+  "operational_loader_reads_truth": false
+}

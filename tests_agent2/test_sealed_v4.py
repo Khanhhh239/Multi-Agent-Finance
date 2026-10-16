@@ -87,4 +87,42 @@ def test_development_pool_preserves_rows_order_dtypes_and_omits_test(monkeypatch
     train, valid = sealed_v4.development_pool([0, 1, 2])
     for split, actual in (("train", train), ("validation", valid)):
         expected = pd.concat([w[w.split == split] for w in worlds], ignore_index=True)
-        pd.testing.assert_frame_equal(actual.reset_index(drop=True), expected)
+        pd.testing.assert_frame_equal(actual, expected)
+
+
+def test_bounded_execution_keeps_candidate_order_and_reference(monkeypatch):
+    monkeypatch.setattr(sealed_v4, 'wait_for_memory', lambda *args: None)
+    seen = []
+    def run(train, valid, test, names, **kwargs):
+        seen.extend(names)
+        assert kwargs == {'history': 'history', 'ref_for_novelty': 'reference'}
+        return ({name: name for name in names}, {name: name for name in names}, {})
+    monkeypatch.setattr(sealed_v4, 'run_candidates', run)
+    scores, reference, _ = sealed_v4.run_bounded(None, None, None, 1, history='history', ref_for_novelty='reference')
+    assert seen == list(sealed_v4.CANDIDATES)
+    assert scores == reference
+    assert list(scores) == list(sealed_v4.CANDIDATES)
+
+
+def test_integer_compaction_is_lossless_including_large_money_and_model_matrix():
+    frame = pd.DataFrame({'binary': [0, 1], 'count': [-1000, 1000],
+                          'money': [2**40, 2**40 + 1], 'label': ['x', 'y'],
+                          'fraction': np.array([.1, .2], dtype=np.float32)})
+    result = sealed_v4.compact_integer_storage(frame)
+    assert result.binary.dtype == np.int8
+    assert result['count'].dtype == np.int16
+    assert result.money.dtype == np.int64
+    for name in frame:
+        np.testing.assert_array_equal(frame[name], result[name])
+    columns = ['binary', 'count', 'money', 'fraction']
+    np.testing.assert_array_equal(frame[columns].to_numpy(dtype=np.float32), result[columns].to_numpy(dtype=np.float32))
+    assert frame.binary.dtype == np.int64
+
+
+def test_memory_gate_waits_without_changing_other_processes(monkeypatch):
+    available = iter([0, 3 * 1024**3])
+    waits = []
+    monkeypatch.setattr(sealed_v4, 'available_commit_memory', lambda: next(available))
+    monkeypatch.setattr(sealed_v4.time, 'sleep', waits.append)
+    sealed_v4.wait_for_memory()
+    assert waits == [5]

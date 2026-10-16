@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sổ Soát · Agent 2</title><link rel="stylesheet" href="/v4.css"><script src="/v4.js" defer></script></head>
+<body>
+<header><a class="brand" href="/"><span class="mark">S</span><span>Sổ Soát<small>Agent 2 · Rà soát giao dịch</small></span></a><span id="environment" class="local">Cục bộ · Chế độ chỉ xem</span></header>
+<main>
+  <section class="heading"><div><p class="eyebrow">TỪ CẢNH BÁO ĐẾN BẰNG CHỨNG</p><h1>Hồ sơ cần rà soát</h1><p>Đối chiếu chứng từ, ghi nhận kết luận và theo dõi phần còn thiếu.</p></div><span id="company" class="company">Chưa kết nối công ty</span></section>
+  <section class="connection panel"><label>Mã truy cập công ty<input id="token" type="password" autocomplete="off" placeholder="Nhập mã được cấp cho công ty"></label><button id="connect">Mở hàng đợi</button><label>Người rà soát<input id="reviewer" placeholder="Mã hoặc tên người được phân quyền" maxlength="128"></label></section>
+  <p id="notice" role="status" aria-live="polite">Nhập mã truy cập để mở dữ liệu của công ty.</p>
+  <section class="stats" aria-label="Tổng quan"><article><span>Chưa rà soát</span><strong id="new-count">—</strong></article><article><span>Tổng hồ sơ</span><strong id="total-count">—</strong></article><article><span>Phút rà soát đã ghi</span><strong id="minutes">—</strong></article><article><span>Đánh giá đáng kiểm tra</span><strong id="worth-rate">Chưa đo</strong></article></section>
+  <details class="panel import"><summary>Nhập dữ liệu và chạy một tuần</summary><p>Nhập CSV hoặc ZIP các bảng CSV, kèm tệp ánh xạ cột YAML. Báo cáo đầu vào cho biết phần dữ liệu còn thiếu.</p>
+    <form id="ingest-form"><label>Tệp dữ liệu<input id="data-file" type="file" accept=".zip,.csv" required></label><label>Ánh xạ cột<input id="mapping-file" type="file" accept=".yaml,.yml" required></label><button type="submit">Kiểm tra và nhập</button></form>
+    <form id="score-form"><label>Mã lần nhập<input id="ingest-id" required placeholder="Có sau khi nhập dữ liệu"></label><label>Tuần dữ liệu<input id="week" type="week" required></label><button type="submit">Chấm tuần đã chọn</button></form>
+  </details>
+  <section class="workspace"><div class="queue panel"><div class="queue-top"><h2>Hàng đợi</h2><select id="status" aria-label="Lọc trạng thái"><option value="new">Chưa rà soát</option><option value="">Tất cả trạng thái</option><option value="worth_review">Đáng kiểm tra</option><option value="legitimate">Hợp lệ</option><option value="suspected">Nghi vấn</option><option value="confirmed">Xác nhận</option></select><button id="refresh" class="secondary">Làm mới</button></div><div id="case-list" class="case-list"><p class="empty">Chưa mở hàng đợi.</p></div></div>
+    <article class="detail panel"><div id="empty-detail" class="empty"><span class="empty-icon">◇</span><h2>Chọn một hồ sơ</h2><p>Lý do, giao dịch liên quan và biểu mẫu phản hồi sẽ hiển thị tại đây.</p></div>
+      <div id="case-detail" hidden><div class="detail-top"><span id="priority" class="badge"></span><span id="case-status"></span></div><h2 id="case-title">Hồ sơ</h2><p id="case-id" class="mono"></p><dl><div><dt>Tuần dữ liệu</dt><dd id="case-week"></dd></div><div><dt>Thời hạn tham chiếu</dt><dd id="deadline"></dd></div><div><dt>Tổng giá trị dòng được gắn cờ</dt><dd id="case-amount"></dd></div></dl><h3>Quan sát cần đối chiếu</h3><p id="reason" class="reason"></p><p id="action"></p><h3>Giao dịch liên quan</h3><p id="transactions" class="mono"></p><hr>
+        <form id="decision-form"><h3>Ghi nhận kết luận</h3><label>Trạng thái<select id="conclusion"><option value="worth_review">Đáng kiểm tra</option><option value="legitimate">Hợp lệ</option><option value="suspected">Nghi vấn</option><option value="confirmed">Xác nhận dấu hiệu sai phạm</option></select></label><label>Giá trị của lần rà soát<select id="worth"><option value="">Chưa đánh giá</option><option value="true">Đáng kiểm tra</option><option value="false">Không đáng kiểm tra</option></select></label><label>Lý do hoặc bằng chứng đã đối chiếu<textarea id="decision-reason" rows="3" maxlength="4000" required placeholder="Ghi ngắn gọn, dùng mã chứng từ khi có thể"></textarea></label><label>Thời gian rà soát (phút)<input id="review-minutes" type="number" min="0" step="0.5" value="0" required></label><button type="submit">Lưu phản hồi</button><small>Quyết định được ghi thêm vào lịch sử. Cảnh báo là yêu cầu kiểm tra giao dịch.</small></form>
+      </div>
+    </article>
+  </section>
+</main><footer>Sổ Soát · Dữ liệu lưu trên máy chạy dịch vụ. Điểm xếp hạng không phải xác suất gian lận.</footer>
+</body></html>

@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "target": "w4_s413",
+  "protocol": "P3",
+  "configurations": 24,
+  "metrics_checked_exactly": 1020,
+  "maximum_metric_difference": 0,
+  "reference_max_concurrent_candidates": 3,
+  "bounded_max_concurrent_candidates": 1,
+  "training_worlds": [
+    "w4_s411",
+    "w4_s412"
+  ],
+  "parameters_or_features_changed": false
+}
