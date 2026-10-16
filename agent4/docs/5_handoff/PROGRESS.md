@@ -82,3 +82,9 @@ Toàn bộ test trước commit: **1793 passed, 0 skipped**, 83.28 giây; `artif
 97 test validator riêng: schema, candidate enum, khung điều hành/thuế, kỳ/nhóm/thực thể, scope/quyền và từ chối bộ lọc custom chưa cài đầy đủ. Toàn bộ hồi quy gồm oracle vẫn xanh.
 
 Toàn bộ test trước commit: **2331 passed, 0 skipped**, 98.44 giây; `artifacts/t1_6-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.7 — P1 thử nghiệm
+
+Renderer/verifier:66 chỉ số render thật qua kiểm;200 diễn đạt đúng FP0;320 lỗi tiêm8loại chặn320/320 trong unit test. Kiểm kiểu tiền/phần trăm/ngày/hệ số, kỳ, nhãn, dấu và anchor giá trị đầu khối.
+
+Toàn bộ test trước commit: **2387 passed, 0 skipped**, 96.66 giây; `artifacts/t1_7-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).

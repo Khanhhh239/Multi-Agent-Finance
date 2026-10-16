@@ -1,0 +1,13 @@
+{
+  "tests": 2387,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 96.664,
+  "card": "T1.7",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:30:41.182505+00:00",
+  "xml": "artifacts/t1_7-pytest.xml",
+  "summary": "Renderer/verifier:66 chỉ số render thật qua kiểm;200 diễn đạt đúng FP0;320 lỗi tiêm8loại chặn320/320 trong unit test. Kiểm kiểu tiền/phần trăm/ngày/hệ số, kỳ, nhãn, dấu và anchor giá trị đầu khối.",
+  "decision": "Không lấy evidence từ description/tên đối tác. Chỉ hằng số đã khai báo của engine được phép: bucket tuổi nợ, mã TK, giả định thuế; mọi số còn lại có nguồn. Mệnh đề nhân quả cần căn cứ; chưa chứng minh ngữ nghĩa tự do, orchestrator giữ diễn giải định tính. Kết quả này không phải bộ E6 lớn."
+}

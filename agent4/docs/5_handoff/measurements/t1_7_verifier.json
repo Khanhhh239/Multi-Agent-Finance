@@ -1,0 +1,20 @@
+{
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "scope": "unit component tests; not large E6 or agent end-to-end",
+  "valid_paraphrases": 200,
+  "false_positives": 0,
+  "injected_errors": 320,
+  "blocked": 320,
+  "injection_kinds": [
+    "digit_swap",
+    "scale_swap",
+    "period_swap",
+    "add_number",
+    "drop_caveat",
+    "sign_flip",
+    "unsupported_cause",
+    "swap_two"
+  ],
+  "real_metric_render_smoke": 66,
+  "limitations": "Primary-value anchor verifies deterministic block swaps; source membership alone does not prove all natural-language claims. Orchestrator restricts commentary to qualitative text."
+}
