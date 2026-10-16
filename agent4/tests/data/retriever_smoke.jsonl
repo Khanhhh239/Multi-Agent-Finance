@@ -1,0 +1,100 @@
+{"question":"Doanh thu thuần tháng này là bao nhiêu?","gold":"net_revenue"}
+{"question":"Doanh thu chưa trừ chiết khấu của quý trước?","gold":"gross_revenue"}
+{"question":"Hàng bán bị trả lại và giảm trừ doanh thu tháng 9?","gold":"revenue_deductions"}
+{"question":"Doanh thu bán hàng hóa trong năm nay?","gold":"goods_revenue"}
+{"question":"Mảng bảo trì ghi nhận doanh thu dịch vụ bao nhiêu?","gold":"service_revenue"}
+{"question":"Giá vốn hàng bán theo từng tháng trong 6 tháng gần nhất?","gold":"cogs"}
+{"question":"Lợi nhuận gộp theo từng sản phẩm/dịch vụ là bao nhiêu?","gold":"gross_profit","hints":{"group_by":"product_line"}}
+{"question":"Biên lợi nhuận gộp tháng này là bao nhiêu?","gold":"gross_margin_pct"}
+{"question":"Chi phí bán hàng tại chi nhánh phía nam tháng trước?","gold":"selling_expenses"}
+{"question":"Chi phí quản lý doanh nghiệp của quý này?","gold":"admin_expenses"}
+{"question":"Tổng chi phí hoạt động tháng này so với tháng trước?","gold":"operating_expenses"}
+{"question":"Lãi tiền gửi ngân hàng trong quý vừa qua?","gold":"finance_income"}
+{"question":"Chi phí lãi vay từ đầu năm đến nay?","gold":"finance_cost"}
+{"question":"Lợi nhuận thuần hoạt động kinh doanh lũy kế từ đầu năm?","gold":"operating_profit"}
+{"question":"Thu nhập khác từ thanh lý tài sản bao nhiêu?","gold":"other_income"}
+{"question":"Chi phí khác bao gồm tiền phạt phát sinh kỳ này?","gold":"other_expenses"}
+{"question":"Lợi nhuận trước thuế năm 2025?","gold":"profit_before_tax"}
+{"question":"Chi phí thuế TNDN đã ghi nhận trong quý?","gold":"income_tax_expense"}
+{"question":"Lợi nhuận sau thuế tháng này và so với cùng kỳ năm trước?","gold":"net_profit"}
+{"question":"Biên lợi nhuận ròng tháng trước có cao không?","gold":"net_margin_pct"}
+{"question":"EBITDA lũy kế năm nay?","gold":"ebitda"}
+{"question":"Chi phí khấu hao tài sản cố định tháng 9?","gold":"depreciation_expense"}
+{"question":"Chi phí lương nhân viên tháng này?","gold":"salary_expense"}
+{"question":"Tổng chi phí nhân sự bao gồm bảo hiểm của công ty?","gold":"labor_cost"}
+{"question":"Tiền mặt và tiền gửi ngân hàng hiện còn bao nhiêu?","gold":"cash_and_equivalents"}
+{"question":"Tiền gửi có kỳ hạn tại cuối quý?","gold":"term_deposits"}
+{"question":"Tổng phải thu khách hàng hiện tại là bao nhiêu?","gold":"ar_balance"}
+{"question":"Khách hàng nào nợ nhiều nhất hiện giờ?","gold":"ar_by_customer","hints":{"group_by":"customer"}}
+{"question":"Công nợ phải thu theo nhân viên phụ trách là bao nhiêu?","gold":"ar_by_salesperson","hints":{"group_by":"salesperson"}}
+{"question":"Tổng công nợ phải trả người bán cuối kỳ?","gold":"ap_balance"}
+{"question":"Nhà cung cấp nào đang có số dư phải trả lớn nhất?","gold":"ap_by_vendor","hints":{"group_by":"vendor"}}
+{"question":"Giá trị hàng tồn kho cuối kỳ là bao nhiêu?","gold":"inventory_value"}
+{"question":"Thuế và các khoản phải nộp Nhà nước còn bao nhiêu?","gold":"tax_payable","hints":{"view_hint":"tax"}}
+{"question":"Dư nợ vay ngân hàng cả ngắn hạn và dài hạn?","gold":"debt_balance"}
+{"question":"Giá trị còn lại tài sản cố định hiện nay?","gold":"fixed_assets_net"}
+{"question":"Tổng tài sản cuối năm 2025?","gold":"total_assets"}
+{"question":"Tổng nợ phải trả trên bảng cân đối?","gold":"total_liabilities"}
+{"question":"Vốn chủ sở hữu cuối tháng trước?","gold":"equity"}
+{"question":"Vốn lưu động ròng có bao nhiêu?","gold":"working_capital"}
+{"question":"Hệ số thanh toán hiện hành cuối kỳ?","gold":"current_ratio"}
+{"question":"Khả năng thanh toán nhanh của doanh nghiệp?","gold":"quick_ratio"}
+{"question":"Đòn bẩy tài chính nợ trên vốn chủ hiện nay?","gold":"debt_to_equity"}
+{"question":"Dòng tiền thuần trong tháng này là bao nhiêu?","gold":"net_cash_flow"}
+{"question":"Tiền thu từ đâu chi vào đâu trong quý?","gold":"cash_flow_breakdown"}
+{"question":"Tiền đủ dùng bao nhiêu ngày nếu giữ tốc độ chi hiện tại?","gold":"cash_coverage_days"}
+{"question":"Phân tích tuổi nợ phải thu theo khách hàng?","gold":"ar_aging","hints":{"group_by":"customer"}}
+{"question":"Danh sách các khoản phải thu quá hạn trên 30 ngày?","gold":"overdue_receivables"}
+{"question":"Số ngày thu hồi nợ bình quân DSO tháng này?","gold":"dso"}
+{"question":"Khách trả tiền sau bao nhiêu ngày tính theo thu thực tế?","gold":"dso_actual"}
+{"question":"Kỳ trả tiền bình quân cho nhà cung cấp DPO?","gold":"dpo"}
+{"question":"Hàng nằm kho bao lâu trước khi bán được?","gold":"dio"}
+{"question":"Chu kỳ chuyển đổi tiền mặt quý trước?","gold":"cash_conversion_cycle"}
+{"question":"Khoản phải trả nào đến hạn thanh toán trong 15 ngày tới?","gold":"ap_due_soon"}
+{"question":"Số tiền cần chi để thanh toán nhà cung cấp và thuế tháng tới?","gold":"upcoming_obligations"}
+{"question":"Chi phí bán hàng và quản lý doanh nghiệp tháng này gồm những khoản nào?","gold":"expense_by_category","hints":{"group_by":"cost_category"}}
+{"question":"Chi phí nào tăng mạnh nhất so với bình quân 3 tháng trước?","gold":"expense_spikes"}
+{"question":"Tài khoản nào phát sinh Nợ/Có lớn bất thường trong tháng?","gold":"unusual_account_movements"}
+{"question":"Có chứng từ nào không cân bằng Nợ và Có không?","gold":"unbalanced_journals"}
+{"question":"Những giao dịch doanh thu lớn nhất trong kỳ là gì?","gold":"top_sales_transactions"}
+{"question":"Doanh thu thực hiện so với kế hoạch tháng này?","gold":"budget_vs_actual"}
+{"question":"Bảng lương và số nhân viên theo phòng ban?","gold":"payroll_summary","hints":{"group_by":"department"}}
+{"question":"Thu nhập chịu thuế TNDN năm nay?","gold":"taxable_income","hints":{"view_hint":"tax"}}
+{"question":"Ước tính thuế TNDN phải nộp cho quý này?","gold":"cit_estimate","hints":{"view_hint":"tax"}}
+{"question":"Chi phí được trừ khi tính thuế trong tháng?","gold":"deductible_expenses","hints":{"view_hint":"tax"}}
+{"question":"Chi phí không được trừ vì thiếu chứng từ là bao nhiêu?","gold":"mgmt_vs_tax_gap","hints":{"view_hint":"tax"}}
+{"question":"Thuế GTGT đầu ra đầu vào và phần phải nộp?","gold":"vat_position","hints":{"view_hint":"tax"}}
+{"question":"doanh so thang truoc tai chi nhanh HCM","gold":"net_revenue","hints":{"group_by":"branch"}}
+{"question":"doanh thu thuan quy nay so voi quy truoc tang hay giam bao nhieu phan tram","gold":"net_revenue"}
+{"question":"gia von hang ban 6 thang gan nhat","gold":"cogs"}
+{"question":"bien lai gop quy 3","gold":"gross_margin_pct"}
+{"question":"lai gop theo nhom san pham dich vu","gold":"gross_profit","hints":{"group_by":"product_line"}}
+{"question":"co cau chi phi hoat dong thang 9","gold":"expense_by_category","hints":{"group_by":"cost_category"}}
+{"question":"lai tu kinh doanh luy ke tu dau nam","gold":"operating_profit"}
+{"question":"lai rong ky nay so voi cung ky","gold":"net_profit"}
+{"question":"con bao nhieu tien trong tai khoan va quy","gold":"cash_and_equivalents"}
+{"question":"cash flow thang 10","gold":"net_cash_flow"}
+{"question":"Tháng này bán được bao nhiêu sau chiết khấu?","gold":"net_revenue"}
+{"question":"Doanh thu trước giảm trừ quý 2?","gold":"gross_revenue"}
+{"question":"Tỷ suất lợi nhuận gộp của từng chi nhánh?","gold":"gross_margin_pct","hints":{"group_by":"branch"}}
+{"question":"Cp qldn trong kỳ tháng 8?","gold":"admin_expenses"}
+{"question":"Tiền lãi phải trả cho các khoản vay năm nay?","gold":"finance_cost"}
+{"question":"Tổng tiền lương thưởng tháng 9?","gold":"salary_expense"}
+{"question":"Nợ NCC còn bao nhiêu cuối tháng?","gold":"ap_balance"}
+{"question":"Top khách hàng nợ trong quý này?","gold":"ar_by_customer"}
+{"question":"Công nợ theo sales tại thời điểm hiện tại?","gold":"ar_by_salesperson"}
+{"question":"Mặt hàng nào chiếm tỷ trọng tồn kho lớn nhất?","gold":"inventory_value","hints":{"group_by":"item"}}
+{"question":"Nghĩa vụ thuế cuối kỳ còn bao nhiêu?","gold":"tax_payable","hints":{"view_hint":"tax"}}
+{"question":"Quy mô tài sản doanh nghiệp năm trước?","gold":"total_assets"}
+{"question":"current ratio cua doanh nghiep","gold":"current_ratio"}
+{"question":"quick ratio cuoi quy","gold":"quick_ratio"}
+{"question":"Runway hiện tại còn bao lâu?","gold":"cash_coverage_days"}
+{"question":"Cơ cấu nợ quá hạn theo nhóm ngày?","gold":"ar_aging"}
+{"question":"Các hóa đơn quá hạn hơn 90 ngày?","gold":"overdue_receivables"}
+{"question":"Dso thực tế dựa trên ngày tiền vào ngân hàng?","gold":"dso_actual"}
+{"question":"Vòng quay hàng tồn kho trong quý?","gold":"dio"}
+{"question":"Lịch trả nợ nhà cung cấp trong hai tuần tới?","gold":"ap_due_soon"}
+{"question":"Chi phí marketing vượt bình quân tháng trước không?","gold":"expense_spikes"}
+{"question":"Chứng từ lệch Nợ Có tháng này?","gold":"unbalanced_journals"}
+{"question":"Chi phí bị loại ở khung thuế vì không hợp lệ?","gold":"mgmt_vs_tax_gap","hints":{"view_hint":"tax"}}
+{"question":"VAT phải nộp tháng này?","gold":"vat_position","hints":{"view_hint":"tax"}}

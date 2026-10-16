@@ -70,3 +70,9 @@ Toàn bộ test trước commit: **1472 passed, 0 skipped**, 72.38 giây; `artif
 BM25 metadata, 100 câu smoke dev phủ66 chỉ số: recall@8=100%; 500 lượt mean0.285ms/p950.410ms, chưa đo held-out hoặc embedding.
 
 Toàn bộ test trước commit: **1695 passed, 0 skipped**, 90.74 giây; `artifacts/t1_3-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.4 — P1 thử nghiệm
+
+Hints metadata-only: 100 câu có nhãn, 100 benign và các ca kho thật; trích kỳ/so sánh/nhóm/khung/thực thể, không tính tài chính. Đã sửa FP kinh doanh và còn/CON.
+
+Toàn bộ test trước commit: **1793 passed, 0 skipped**, 83.28 giây; `artifacts/t1_4-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).

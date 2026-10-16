@@ -25,6 +25,7 @@ def main():
         raise SystemExit('Upstream checkout has pending changes; inspect before publishing.')
     command = ['ls-tree','-r','--name-only','-z',args.commit] if args.all else ['diff-tree','--no-commit-id','--name-only','-r','-z',args.commit]
     files=git(*command).split(b'\0')
+    staged=[]
     for name in files:
         if not name: continue
         relative=name.decode('utf-8')
@@ -35,7 +36,11 @@ def main():
         content=git('show',f'{args.commit}:{relative}')
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes(content)
-    git('add','--','agent4',cwd=CHECKOUT)
+        staged.append(str(target.relative_to(CHECKOUT)))
+    # The monorepo ignores every data/ directory, including tests/data and
+    # package fixtures. Only explicitly tracked local commit files are forced.
+    if staged:
+        git('add','-f','--',*staged,cwd=CHECKOUT)
     if not git('diff','--cached','--name-only',cwd=CHECKOUT).strip():
         print('No changes to publish.')
         return

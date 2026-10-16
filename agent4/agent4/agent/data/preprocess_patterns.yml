@@ -1,0 +1,18 @@
+{
+  "tax": ["thu nhap chiu thue", "chi phi (?:duoc|khong duoc) tru", "thue (?:va cac khoan )?(?:phai nop|tndn|gtgt|gia tri gia tang|thu nhap doanh nghiep)", "khung thue"],
+  "unsafe_action": ["^(?:hay |vui long |giup (?:toi )?|toi muon |lam on )?(?:xoa|sua|huy|ghi de|cap nhat) (?:tat ca |toan bo )?(?:chung tu|but toan|du lieu|so cai|hoa don|so lieu|giao dich)", "\\b(?:xoa|huy) (?:het |toan bo |tat ca )?(?:cac )?(?:chung tu|but toan|du lieu|so cai)\\b", "\\b(?:thuc hien |tien hanh )(?:thanh toan|chuyen tien|nop thue)\\b"],
+  "out_of_scope": ["\\b(?:du bao|du doan|mua|ban|gia) (?:gia )?co phieu\\b", "\\b(?:thoi tiet|chinh tri|tu van phap ly|chan doan benh)\\b", "^(?:viet|ke) (?:giup toi )?(?:bai tho|truyen cuoi)"],
+  "jailbreak": ["bo qua (?:moi |tat ca |cac )?(?:huong dan|chi dan|quy tac)", "ignore (?:all )?(?:previous|prior|instructions)", "(?:reveal|show|print|hien thi|in ra|tiet lo) (?:the |your )?system prompt", "\\bsystem\\s*:", "\\bdeveloper\\s*:", "\\byou are (?:now )?dan\\b", "\\bjailbreak\\b"],
+  "group_salesperson": ["theo (?:tung )?nhan vien", "theo (?:tung )?nguoi phu trach"],
+  "group_customer": ["theo (?:tung )?khach(?: hang)?", "khach hang nao"],
+  "group_vendor": ["theo (?:tung )?(?:nha cung cap|ncc)", "nha cung cap nao"],
+  "group_branch": ["theo (?:tung )?chi nhanh"],
+  "group_department": ["theo (?:tung )?phong(?: ban)?"],
+  "group_product_line": ["theo (?:tung )?(?:san pham/dich vu|dong san pham|nhom san pham|san pham|dich vu)"],
+  "group_cost_category": ["theo (?:tung )?khoan muc", "gom (?:nhung |cac )?khoan nao"],
+  "group_item": ["theo (?:tung )?mat hang", "mat hang nao"],
+  "group_account": ["theo (?:tung )?tai khoan", "tai khoan nao"],
+  "group_month": ["theo (?:tung )?thang"],
+  "group_quarter": ["theo (?:tung )?quy"],
+  "group_year": ["theo (?:tung )?nam"]
+}

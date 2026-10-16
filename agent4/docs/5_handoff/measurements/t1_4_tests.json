@@ -1,0 +1,13 @@
+{
+  "tests": 1793,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 83.279,
+  "card": "T1.4",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-16T07:15:51.298979+00:00",
+  "xml": "artifacts/t1_4-pytest.xml",
+  "summary": "Hints metadata-only: 100 câu có nhãn, 100 benign và các ca kho thật; trích kỳ/so sánh/nhóm/khung/thực thể, không tính tài chính. Đã sửa FP kinh doanh và còn/CON.",
+  "decision": "Patterns YAML là JSON subset; fuzzy tên>=0.92 cần ngữ cảnh. Mã ngắn cần Unicode nguyên dạng viết hoa hoặc ngữ cảnh chiều. Kỳ chính đứng trước kỳ so sánh; explicit hints ghi đè state. Đồng bộ Git force-add chỉ file fixture đã được local Git theo dõi để vượt ignore data của monorepo."
+}
