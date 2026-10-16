@@ -1,5 +1,7 @@
 # Agent 3 — Tax Compliance Assistant
 
+**UI hồ sơ nghiệp vụ — 16/10:** đã có khung **Hồ sơ nghiệp vụ** bên cạnh hóa đơn gốc để lưu loại hóa đơn, phân loại dòng hàng, chứng cứ thanh toán và tổng mua cùng ngày. Có tải tài liệu, giữ bản nháp khi xung đột và đối chiếu lại sau khi sửa hóa đơn. Khởi động lại launcher để dùng; không cần CLI cho thao tác này. Rules thật vẫn DRAFT, mapping SKU còn chờ danh mục sản phẩm. [Hướng dẫn sử dụng và kiểm thử](docs/agent3/plans/evidence/business_ui_20261016_v1/REPORT.md). Thông tin “chưa có UI” ở báo cáo trước là trạng thái lịch sử.
+
 **Đầu vào nghiệp vụ PLAN_09 — 16/10:** đã có bảng quyết định cho ba nhóm rule, hồ sơ review gắn revision/hash, lưu chứng cứ bổ sung, phân loại theo item và kiểm chứng thanh toán/ledger. Có CLI local và API chỉ đọc `business-readiness`; chưa có màn nhập hồ sơ trên UI, chưa tự bật rule thật. Theo xác nhận người dùng, chưa có danh mục sản phẩm nên mapping hàng thật còn chờ. [Báo cáo và cách dùng](docs/agent3/plans/evidence/business_review_20261016_v1/REPORT.md).
 
 **Cập nhật pháp lý V2 — 16/10/2026:** đã hoàn tất ba bước bổ sung căn cứ, tạo phiên bản registry/ruleset và kiểm thử nghiệp vụ. Corpus hiện có 21 trích đoạn từ 8 văn bản, đủ locator đã chọn cho 7/7 rule versions; cửa sổ kỹ thuật đến hết 16/10/2026. 384 Python tests và 11 nhóm browser checks đạt. Toàn bộ model thật vẫn DRAFT, mapping hàng hóa chưa duyệt. [Báo cáo hiện tại, giới hạn và cách chạy lại](docs/agent3/plans/evidence/legal_revision_20261016_v2/REPORT.md). Các số liệu corpus V1 bên dưới là snapshot trước đợt V2.
