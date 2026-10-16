@@ -26,7 +26,8 @@ def write(path,value):
 
 
 def build():
-    registry=load_registry();docs={d.document_id:d for d in registry.documents}
+    archive=APP/'rules/registry/versions/20261014-v1'
+    registry=load_registry(archive/'legal_registry_v1.json');docs={d.document_id:d for d in registry.documents}
     review=json.loads((ASSETS/'transcriptions_20261016.json').read_text(encoding='utf-8'))
     references=json.loads((ASSETS/'reference_candidates_20261016.json').read_text(encoding='utf-8'))
     refresh=json.loads((LOCAL/'source_refresh.json').read_text(encoding='utf-8'))
@@ -80,7 +81,7 @@ def build():
     write(OUT/'source_manifest.json',dict(**refresh,provenance=provenance,
           renderer=dict(package='PyMuPDF',version=pymupdf.VersionBind,scale=1.4,page_numbering='physical PDF, 1-based'),
           source_refresh_sha256=sha(refresh),registry_sha256=sha(registry.model_dump(mode='json'))))
-    rules=json.loads((APP/'rules/registry/ruleset_v1.json').read_text(encoding='utf-8'))
+    rules=json.loads((archive/'ruleset_v1.json').read_text(encoding='utf-8'))
     available={(c.document_id,c.locator) for c in chunks}
     coverage=[]
     for family in rules['families']:

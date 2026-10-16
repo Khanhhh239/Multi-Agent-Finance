@@ -1,14 +1,14 @@
 {
-  "version": "technical-draft-ruleset-20261014-v1",
+  "version": "technical-draft-ruleset-20261016-v2",
   "families": [
     {
       "rule_id": "INV_CONTENT_001",
       "supported_from": "2022-07-01",
-      "supported_to": "2026-10-15",
+      "supported_to": "2026-10-17",
       "versions": [
         {
           "rule_id": "INV_CONTENT_001",
-          "version": "content-2022-v1",
+          "version": "content-2022-v2",
           "family": "INVOICE_CONTENT",
           "effective_from": "2022-07-01",
           "effective_to": "2025-06-01",
@@ -33,13 +33,17 @@
           "legal_basis": [
             {
               "document_id": "ND123_2020",
-              "locator": "Article10.PENDING_REVIEW"
+              "locator": "Article10.4.pdf14"
+            },
+            {
+              "document_id": "ND123_2020",
+              "locator": "Article10.14de.pdf19"
             }
           ]
         },
         {
           "rule_id": "INV_CONTENT_001",
-          "version": "content-2025-v1",
+          "version": "content-2025-v2",
           "family": "INVOICE_CONTENT",
           "effective_from": "2025-06-01",
           "effective_to": "2026-07-01",
@@ -64,20 +68,28 @@
           "legal_basis": [
             {
               "document_id": "ND123_2020",
-              "locator": "Article10.PENDING_REVIEW"
+              "locator": "Article10.4.pdf14"
+            },
+            {
+              "document_id": "ND123_2020",
+              "locator": "Article10.14de.pdf19"
             },
             {
               "document_id": "ND70_2025",
-              "locator": "Article1.PENDING_REVIEW"
+              "locator": "Article1.7a.pdf9"
+            },
+            {
+              "document_id": "ND70_2025",
+              "locator": "Article1.7d-dd.pdf11-12"
             }
           ]
         },
         {
           "rule_id": "INV_CONTENT_001",
-          "version": "content-2026-v1",
+          "version": "content-2026-v2",
           "family": "INVOICE_CONTENT",
           "effective_from": "2026-07-01",
-          "effective_to": "2026-10-15",
+          "effective_to": "2026-10-17",
           "date_field": "invoice.issue_date",
           "unit_type": "RECORD",
           "publication": "DRAFT",
@@ -108,58 +120,13 @@
     {
       "rule_id": "VAT_NON_CASH_PAYMENT_001",
       "supported_from": "2025-07-01",
-      "supported_to": "2026-10-15",
+      "supported_to": "2026-10-17",
       "versions": [
         {
           "rule_id": "VAT_NON_CASH_PAYMENT_001",
-          "version": "payment-2025-v1",
+          "version": "payment-pre144-v2",
           "family": "PAYMENT_EVIDENCE",
           "effective_from": "2025-07-01",
-          "effective_to": "2026-01-01",
-          "date_field": "invoice.issue_date",
-          "unit_type": "RECORD",
-          "publication": "DRAFT",
-          "non_cash_policy": "non-cash-scope-v1",
-          "inclusive_threshold": "5000000",
-          "predicates": [
-            {
-              "requirement": {
-                "path": "derived.invoice_direction"
-              },
-              "value": "INPUT"
-            },
-            {
-              "requirement": {
-                "path": "context.vat_method"
-              },
-              "value": "DEDUCTION"
-            },
-            {
-              "requirement": {
-                "path": "context.claim_input_vat"
-              },
-              "value": true
-            },
-            {
-              "requirement": {
-                "path": "context.payment_case"
-              },
-              "value": "STANDARD"
-            }
-          ],
-          "required_fields": [],
-          "legal_basis": [
-            {
-              "document_id": "ND181_2025",
-              "locator": "Article26.pdf32-34"
-            }
-          ]
-        },
-        {
-          "rule_id": "VAT_NON_CASH_PAYMENT_001",
-          "version": "payment-2026a-v1",
-          "family": "PAYMENT_EVIDENCE",
-          "effective_from": "2026-01-01",
           "effective_to": "2026-06-20",
           "date_field": "invoice.issue_date",
           "unit_type": "RECORD",
@@ -197,19 +164,15 @@
             {
               "document_id": "ND181_2025",
               "locator": "Article26.pdf32-34"
-            },
-            {
-              "document_id": "ND359_2025",
-              "locator": "AMENDMENT_SCOPE_PENDING"
             }
           ]
         },
         {
           "rule_id": "VAT_NON_CASH_PAYMENT_001",
-          "version": "payment-2026b-v1",
+          "version": "payment-post144-v2",
           "family": "PAYMENT_EVIDENCE",
           "effective_from": "2026-06-20",
-          "effective_to": "2026-10-15",
+          "effective_to": "2026-10-17",
           "date_field": "invoice.issue_date",
           "unit_type": "RECORD",
           "publication": "DRAFT",
@@ -248,10 +211,6 @@
               "locator": "Article26.pdf32-34"
             },
             {
-              "document_id": "ND359_2025",
-              "locator": "AMENDMENT_SCOPE_PENDING"
-            },
-            {
               "document_id": "ND144_2026",
               "locator": "Article4.pdf3"
             }
@@ -262,21 +221,25 @@
     {
       "rule_id": "VAT_RATE_001",
       "supported_from": "2025-07-01",
-      "supported_to": "2026-10-15",
+      "supported_to": "2026-10-17",
       "versions": [
         {
           "rule_id": "VAT_RATE_001",
-          "version": "vat-2025-2026-v1",
+          "version": "vat-2025-v2",
           "family": "VAT_RATE",
           "effective_from": "2025-07-01",
-          "effective_to": "2026-10-15",
+          "effective_to": "2026-01-01",
           "date_field": "invoice.issue_date",
           "unit_type": "ITEM",
           "publication": "DRAFT",
           "legal_basis": [
             {
               "document_id": "ND174_2025",
-              "locator": "Article1_APPENDICES_PENDING_REVIEW"
+              "locator": "Article1.1-2a.pdf1-2"
+            },
+            {
+              "document_id": "ND174_2025",
+              "locator": "AppendixII.I.pdf73"
             }
           ],
           "predicates": [
@@ -285,6 +248,81 @@
                 "path": "context.invoice_kind"
               },
               "value": "VAT"
+            },
+            {
+              "requirement": {
+                "path": "context.vat_method"
+              },
+              "value": "DEDUCTION"
+            },
+            {
+              "requirement": {
+                "path": "item.vat_treatment"
+              },
+              "value": "TAXABLE_RATE"
+            },
+            {
+              "requirement": {
+                "path": "item.vat_category"
+              },
+              "value": "REDUCTION_CANDIDATE"
+            }
+          ],
+          "required_fields": [
+            {
+              "path": "item.vat_treatment"
+            },
+            {
+              "path": "item.vat_rate"
+            },
+            {
+              "path": "item.vat_category"
+            }
+          ]
+        },
+        {
+          "rule_id": "VAT_RATE_001",
+          "version": "vat-2026-v2",
+          "family": "VAT_RATE",
+          "effective_from": "2026-01-01",
+          "effective_to": "2026-10-17",
+          "date_field": "invoice.issue_date",
+          "unit_type": "ITEM",
+          "publication": "DRAFT",
+          "legal_basis": [
+            {
+              "document_id": "ND174_2025",
+              "locator": "Article1.1-2a.pdf1-2"
+            },
+            {
+              "document_id": "ND174_2025",
+              "locator": "AppendixII.II.pdf74-75"
+            }
+          ],
+          "predicates": [
+            {
+              "requirement": {
+                "path": "context.invoice_kind"
+              },
+              "value": "VAT"
+            },
+            {
+              "requirement": {
+                "path": "context.vat_method"
+              },
+              "value": "DEDUCTION"
+            },
+            {
+              "requirement": {
+                "path": "item.vat_treatment"
+              },
+              "value": "TAXABLE_RATE"
+            },
+            {
+              "requirement": {
+                "path": "item.vat_category"
+              },
+              "value": "REDUCTION_CANDIDATE"
             }
           ],
           "required_fields": [

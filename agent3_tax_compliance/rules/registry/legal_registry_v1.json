@@ -1,6 +1,6 @@
 {
-  "version": "legal-registry-20261014-v1",
-  "checked_on": "2026-10-14",
+  "version": "legal-registry-20261016-v2",
+  "checked_on": "2026-10-16",
   "documents": [
     {
       "document_id": "ND123_2020",
@@ -9,10 +9,14 @@
       "signature_status": "NOT_VERIFIED",
       "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2020/10/123.signed_01.pdf",
       "sha256": "577e27071365311d6ce0bde7a85330fb6607bac5021a6e884105a051985a6a78",
-      "source_status": "PDF_DOWNLOADED",
-      "verified_locators": [],
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article10.4.pdf14",
+        "Article10.14de.pdf19"
+      ],
       "relationships": [],
-      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES",
+      "effective_to": "2026-07-01"
     },
     {
       "document_id": "TT78_2021",
@@ -33,10 +37,14 @@
       "signature_status": "NOT_VERIFIED",
       "pdf_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/3/70-nd-cp.signed.pdf",
       "sha256": "98abd34e952d976fbe6fcc99af12dc84df768bf54c131aa902c67f899c931c3a",
-      "source_status": "PDF_DOWNLOADED",
-      "verified_locators": [],
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article1.7a.pdf9",
+        "Article1.7d-dd.pdf11-12"
+      ],
       "relationships": [],
-      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES",
+      "effective_to": "2026-07-01"
     },
     {
       "document_id": "TT32_2025",
@@ -48,7 +56,8 @@
       "source_status": "PDF_DOWNLOADED",
       "verified_locators": [],
       "relationships": [],
-      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES",
+      "effective_to": "2026-07-01"
     },
     {
       "document_id": "ND181_2025",
@@ -71,10 +80,16 @@
       "signature_status": "NOT_VERIFIED",
       "pdf_url": "https://congbaocdn.chinhphu.vn/CongBaoCP/VanBan/2025/6/45374/57334-1-2025895-896174-2025-nd-cp.pdf",
       "sha256": "5d86306f556d4f8d461dfd2695c283268c622950b3884c27e8d0ad8bfb48a5f5",
-      "source_status": "PDF_DOWNLOADED",
-      "verified_locators": [],
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article1.1-2a.pdf1-2",
+        "Article2.1.pdf3",
+        "AppendixII.I.pdf73",
+        "AppendixII.II.pdf74-75"
+      ],
       "relationships": [],
-      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
+      "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES",
+      "effective_to": "2027-01-01"
     },
     {
       "document_id": "ND359_2025",
@@ -83,9 +98,27 @@
       "signature_status": "NOT_VERIFIED",
       "pdf_url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/17/359signed-1768621694337850263438.pdf",
       "sha256": "7ff09215fea726275eab8b854e41802989223811b440c87fb99ed81a742c4733",
-      "source_status": "PDF_DOWNLOADED",
-      "verified_locators": [],
-      "relationships": [],
+      "source_status": "PDF_REVIEWED",
+      "verified_locators": [
+        "Article1.2.pdf2",
+        "Article2.1.pdf2"
+      ],
+      "relationships": [
+        {
+          "target_id": "ND181_2025",
+          "relation": "AMENDS",
+          "scope": "ARTICLE_4_PARAGRAPH_1B_ONLY",
+          "effective_from": "2026-01-01",
+          "evidence_locator": "Article1.pdf1-2"
+        },
+        {
+          "target_id": "ND181_2025",
+          "relation": "REPEALS",
+          "scope": "ARTICLE_37_PARAGRAPH_3_AND_ARTICLE_39_PARAGRAPH_3",
+          "effective_from": "2026-01-01",
+          "evidence_locator": "Article1.2.pdf2"
+        }
+      ],
       "transitional_policy": "MANUAL_REVIEW_REQUIRED_FOR_TRANSITIONAL_OR_EXCEPTION_CASES"
     },
     {

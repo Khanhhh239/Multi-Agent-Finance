@@ -22,7 +22,7 @@ class RealCorpusTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.corpus=Corpus.model_validate_json((APP/'configs/explanation/corpus_20261016_v1.json').read_text(encoding='utf-8'))
-        cls.registry=load_registry()
+        cls.registry=load_registry(APP/'rules/registry/versions/20261014-v1/legal_registry_v1.json')
 
     def citation(self,docid,locator,**updates):
         doc=next(d for d in self.registry.documents if d.document_id==docid)
@@ -32,9 +32,10 @@ class RealCorpusTests(unittest.TestCase):
     def search(self,docid,locator,on=date(2026,7,1),query='hóa đơn thuế',top_k=1):
         return retrieve(self.corpus,self.registry,(self.citation(docid,locator),),query,on,top_k)
 
-    def test_default_load_uses_new_corpus_and_keeps_old_frozen_file(self):
+    def test_default_load_uses_v2_and_keeps_v1_frozen_file(self):
         policy,corpus=load_config()
-        self.assertEqual(corpus,self.corpus);self.assertFalse(policy.enabled)
+        self.assertEqual(corpus.version,'legal-excerpts-20261016-v2');self.assertFalse(policy.enabled)
+        self.assertEqual(self.corpus.version,'legal-excerpts-20261016-v1')
         self.assertEqual(json.loads((APP/'configs/explanation/corpus_v1.json').read_text(encoding='utf-8'))['chunks'],[])
 
     def test_real_source_manifest_all_pdfs_pinned(self):

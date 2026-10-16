@@ -43,3 +43,6 @@ Máy hiện tại kiểm tra được khoảng 15,5 GiB RAM, GPU Intel Arc tích
 5. PLAN_14 bổ sung retention/backup sidecar, rate limits/in-flight lease, monitoring và deployment/resource policy trước production.
 
 XML/Excel/ERP chưa triển khai; hoãn theo lựa chọn người dùng. PLAN_12 không mở rộng scope payment/reconciliation hoặc thay kết quả GoRules.
+
+
+> 2026-10-16 V2 update: source-linked registry/ruleset/corpus revised; 384 regression tests PASS. All real models remain DRAFT; product mapping is unapproved. Current status: [legal revision V2](legal_revision_20261016_v2/REPORT.md). Earlier results below remain historical evidence.

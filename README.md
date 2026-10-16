@@ -1,5 +1,7 @@
 # Agent 3 — Tax Compliance Assistant
 
+**Cập nhật pháp lý V2 — 16/10/2026:** đã hoàn tất ba bước bổ sung căn cứ, tạo phiên bản registry/ruleset và kiểm thử nghiệp vụ. Corpus hiện có 21 trích đoạn từ 8 văn bản, đủ locator đã chọn cho 7/7 rule versions; cửa sổ kỹ thuật đến hết 16/10/2026. 384 Python tests và 11 nhóm browser checks đạt. Toàn bộ model thật vẫn DRAFT, mapping hàng hóa chưa duyệt. [Báo cáo hiện tại, giới hạn và cách chạy lại](docs/agent3/plans/evidence/legal_revision_20261016_v2/REPORT.md). Các số liệu corpus V1 bên dưới là snapshot trước đợt V2.
+
 > OCR-based extraction and normalization of Vietnamese accounting documents, with human review, revision tracking, and planned tax compliance checks.
 
 **Cập nhật: 16/10/2026 · PLAN_09 tích hợp kỹ thuật + PLAN_12 giải thích/corpus nguồn một phần + nhánh OCR V2 trong PLAN_06 · M2 pháp lý còn chờ nghiệm thu.**

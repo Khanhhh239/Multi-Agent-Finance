@@ -38,3 +38,6 @@ Bộ test có **228 test: 22 contracts, 23 ingestion, 28 OCR, 50 extraction, 34 
 Không có rule thuế thực tế approved. Chưa có mapping hàng hóa/dịch vụ đã duyệt; chưa hỗ trợ tự xác minh chữ ký, mọi ngoại lệ/thời kỳ chuyển tiếp, FX conversion hoặc ledger được nạp từ API người dùng. Chưa có nút planning trên UI, chưa tự gọi sau upload. Catalog hiện support đến 15/10/2026 exclusive.
 
 PLAN_08 có thể triển khai ZEN/Decimal/trace với rule tổng hợp, dùng RulePlan immutable làm đầu vào; chỉ chạy entries đủ eligibility. Trước bật kết luận thuế thực tế, phải duyệt từng rule/locator/sửa đổi/chuyển tiếp, cung cấp taxonomy/ledger tin cậy đúng scope và hoàn tất nghiệm thu dữ liệu liên quan. Không sửa DRAFT thành APPROVED chỉ để vượt gate.
+
+
+> 2026-10-16 V2 update: source-linked registry/ruleset/corpus revised; 384 regression tests PASS. All real models remain DRAFT; product mapping is unapproved. Current status: [legal revision V2](legal_revision_20261016_v2/REPORT.md). Earlier results below remain historical evidence.

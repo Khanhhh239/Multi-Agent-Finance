@@ -1,0 +1,28 @@
+{
+  "version": "vat-taxonomy-draft-v2",
+  "effective_from": "2025-07-01",
+  "effective_to": "2027-01-01",
+  "categories": [
+    {
+      "category_id": "REDUCTION_CANDIDATE",
+      "description": "Needs independent goods/services classification and exception review",
+      "legal_basis": [
+        {
+          "document_id": "ND174_2025",
+          "locator": "APPENDIX_CLASSIFICATION_NOT_APPROVED"
+        }
+      ]
+    },
+    {
+      "category_id": "REDUCTION_EXCLUDED",
+      "description": "Needs verified annex classification; never derive from printed rate",
+      "legal_basis": [
+        {
+          "document_id": "ND174_2025",
+          "locator": "APPENDIX_CLASSIFICATION_NOT_APPROVED"
+        }
+      ]
+    }
+  ],
+  "mappings": []
+}
