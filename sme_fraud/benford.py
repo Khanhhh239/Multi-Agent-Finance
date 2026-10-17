@@ -63,16 +63,13 @@ def digits_test(amounts, kind, min_rows=300):
     return result
 
 
-def monthly_diagnostics(tables, definition_policy='legacy'):
+def monthly_diagnostics(tables):
     """Only records posted strictly before each calendar-month cutoff participate.
 
     First/second digit tests use one positive scored financial disbursement per
     observation, excluding fixed payroll/rent and journal lines to avoid duplicates.
     Historical empirical suffix baseline is frozen before the current window.
     """
-    if definition_policy not in {'legacy', 'phase4'}:
-        raise ValueError('Unknown aggregate definition policy')
-    phase4 = definition_policy == 'phase4'
     rows = sorted(tables['transactions'], key=lambda r: (r['posted_at'], r['transaction_id']))
     if not rows:
         return []
@@ -123,22 +120,9 @@ def monthly_diagnostics(tables, definition_policy='legacy'):
                         for digit in candidate_digits:
                             index = near_test['categories'].index(digit)
                             expected = near_test['expected_counts'][index]
-                            actual_near = sum(.8 <= int(r['amount_vnd']) / limit < 1 and int(str(r['amount_vnd'])[:2]) == digit for r in observations)
-                            count = actual_near if phase4 else near_test['observed_counts'][index]
-                            if count > expected * 1.2:
+                            if near_test['observed_counts'][index] > expected * 1.2:
                                 excess.append(digit)
-                        near_test.update(approval_limit_vnd=limit, excess_leading_pairs=excess,
-                            definition_policy=definition_policy, actual_near_limit_rows=sum(.8 <= int(r['amount_vnd'])/limit < 1 for r in observations),
-                            comparison_note='Global first-two-digit test plus conservative actual-near-amount screen; not proof of threshold evasion.')
-            if phase4:
-                for field in ('department', 'project_id'):
-                    segments = defaultdict(list)
-                    for r in company_rows:
-                        if r.get(field):
-                            segments[r[field]].append(r)
-                    for key, observations in sorted(segments.items()):
-                        segmented = record('D6', f'{field}:{key}', observations, 'first', 300)
-                        segmented['segmentation'] = field
+                        near_test.update(approval_limit_vnd=limit, excess_leading_pairs=excess)
             recent = [r for r in company_rows if (cutoff - parse(r['posted_at'])).total_seconds() <= 30 * 86400]
             older = [r for r in prior if r['company_id'] == cid and 30 * 86400 < (cutoff - parse(r['posted_at'])).total_seconds() <= 120 * 86400]
             suffixes = (0, 500, 999)
@@ -153,18 +137,13 @@ def monthly_diagnostics(tables, definition_policy='legacy'):
                     current = sum(int(r['amount_vnd']) % 1000 == ending for r in recent) / len(recent)
                     previous = sum(int(r['amount_vnd']) % 1000 == ending for r in older) / len(older)
                     ratios.append(dict(suffix=f'{ending:03}', current_rate=current, baseline_rate=previous,
-                                       signal=(current > previous * 2 if previous > 0 else None) if phase4 else previous > 0 and current > previous * 2,
-                                       note='zero_baseline_rate_not_evaluable' if phase4 and previous == 0 else ''))
+                                       signal=previous > 0 and current > previous * 2))
                 suffix['suffix_comparison'] = ratios
                 suffix['signal'] = any(r['signal'] for r in ratios)
-                if phase4 and any(r['signal'] is None for r in ratios):
-                    suffix.update(status='partial', skip_reasons=['zero_rate_for_at_least_one_suffix'])
             period_results.append(suffix)
         tested = [r for r in period_results if r['status'] == 'evaluated' and 'pvalue' in r]
         for item, adjusted in zip(tested, bh_adjust([r['pvalue'] for r in tested])):
             item['pvalue_bh'] = adjusted
-            corrected = min(1., adjusted * sum(1/i for i in range(1,len(tested)+1))) if phase4 else adjusted
-            item.update(pvalue_corrected=corrected, correction_method='BY' if phase4 else 'BH')
-            item['signal'] = corrected < .05 and (bool(item.get('excess_leading_pairs')) if item['rule_id'] == 'D3' else True)
+            item['signal'] = adjusted < .05 and (bool(item.get('excess_leading_pairs')) if item['rule_id'] == 'D3' else True)
         results.extend(period_results)
     return results
