@@ -1,0 +1,61 @@
+{
+  "transaction_id": "T000081861",
+  "current": {
+    "transaction_id": "T000081861",
+    "posted_at": "2025-06-04T08:15:13+07:00",
+    "company_id": "C004",
+    "creator_id": "E0000122",
+    "txn_type": "vendor_payment",
+    "amount_vnd": 46340000,
+    "approval_limit_vnd": 50000000,
+    "vendor_id": "V0000466",
+    "recipient_account": "BANK_SYN_0000958"
+  },
+  "legacy_a4_prior": [
+    {
+      "transaction_id": "T000020737",
+      "posted_at": "2025-05-13T18:01:40+07:00",
+      "company_id": "C004",
+      "creator_id": "E0000122",
+      "txn_type": "vendor_payment",
+      "amount_vnd": 41778000,
+      "approval_limit_vnd": 50000000,
+      "vendor_id": "V0000292",
+      "recipient_account": "BANK_SYN_0000632"
+    },
+    {
+      "transaction_id": "T000055554",
+      "posted_at": "2025-05-07T15:46:45+07:00",
+      "company_id": "C004",
+      "creator_id": "E0000122",
+      "txn_type": "vendor_payment",
+      "amount_vnd": 40000000,
+      "approval_limit_vnd": 50000000,
+      "vendor_id": "V0000275",
+      "recipient_account": "BANK_SYN_0000615"
+    },
+    {
+      "transaction_id": "T000096347",
+      "posted_at": "2025-05-10T15:14:58+07:00",
+      "company_id": "C004",
+      "creator_id": "E0000122",
+      "txn_type": "vendor_payment",
+      "amount_vnd": 49465000,
+      "approval_limit_vnd": 50000000,
+      "vendor_id": "V0000255",
+      "recipient_account": "BANK_SYN_0000595"
+    }
+  ],
+  "current_month_near_count_at_transaction": 1,
+  "current_month_ids": [
+    "T000081861"
+  ],
+  "current_a4_present": false,
+  "first_followup": {
+    "transaction_id": "T000019496",
+    "detected_at": "2025-06-04T13:20:13+07:00",
+    "rule_id": "A1",
+    "points": 8
+  },
+  "conclusion": "Legacy rolling-window context is in May; calendar-month A4 correctly has insufficient June observations at the first payment. Later detection is distinct from immediate row admission."
+}

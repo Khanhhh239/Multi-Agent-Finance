@@ -53,3 +53,24 @@ def test_sealed_world_small_is_valid(tmp_path):
     assert r["status"] == "passed"
     assert len(set(NOVEL) & set(r["rows_per_scheme"])) >= 6
     assert {"legit_volume_discount", "legit_extra_withdrawal", "legit_tax_installment"} <= set(r["decoys"])
+
+
+def test_accounting_extension_keeps_source_validation_and_feature_contract():
+    from agent2 import accounting_ext
+    from sme_fraud.exception_validation import validated_record
+    from sme_fraud.features import FEATURE_DESCRIPTIONS
+    from sme_fraud.generate import PAIRS
+
+    original_pairs = dict(PAIRS)
+    original_features = dict(FEATURE_DESCRIPTIONS)
+    accounting_ext.install()
+    assert PAIRS == original_pairs
+    assert FEATURE_DESCRIPTIONS == original_features
+    assert set(accounting_ext.NEW_KINDS).isdisjoint(PAIRS)
+    record = dict(transaction_id="EXT_TX", company_id="EXT_COMPANY")
+    for kind in accounting_ext.NEW_KINDS:
+        assert validated_record("transactions", dict(record, txn_type=kind))["txn_type"] == kind
+    with pytest.raises(ValueError, match="unknown transaction type"):
+        validated_record("transactions", dict(record, txn_type="cash_withdrawal_typo"))
+    with pytest.raises(ValueError, match="goods_receipt_verified"):
+        validated_record("transactions", dict(record, txn_type="cash_withdrawal", goods_receipt_verified=2))

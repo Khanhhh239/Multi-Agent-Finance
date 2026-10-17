@@ -2,12 +2,14 @@
 
 Nhánh `agent2-Khanh`. Bắt đầu từ [docs/README.md](docs/README.md) và [docs/STATUS.md](docs/STATUS.md).
 
+Bộ luật `sme_fraud/` được cập nhật ngày 17/10/2026. Xem [hướng dẫn chạy và kiểm thử bộ luật](docs/AGENT2_GITHUB.md), [readiness](reports/rule_readiness_recheck_20261016.md), [đồng bộ feature/model](reports/rule_feature_model_sync.md) và [tiếp nhận mẫu A2/A4](reports/rule_split_pattern_admission.md).
+
 | Thư mục | Nội dung |
 |---|---|
 | `docs/` | Tài liệu theo vai trò: kinh tế và nghiệp vụ, dữ liệu, đánh giá và hiệu quả kinh tế, phương pháp và pipeline, kế hoạch giao việc |
 | `agent2/` | Bộ sinh dữ liệu v3, v4, niêm phong; đặc trưng; phương pháp; đánh giá; đường ống |
-| `sme_fraud/` | Mã gốc của bạn bạn (luật, đồ thị, kế toán, phản hồi); chỉ sửa `run_rules.py` |
-| `tests_agent2/`, `tests_sme_fraud/` | 84 bài kiểm thử |
+| `sme_fraud/` | Bộ luật, đồ thị, bằng chứng, đóng lô, ID hồ sơ và hợp đồng feature/model; đồng bộ workspace ngày 17/10/2026 |
+| `tests/`, `tests_agent2/`, `tests_sme_fraud/` | Kiểm thử bộ luật cập nhật và pipeline Agent 2 |
 | `scripts/` | Tập lệnh sinh dữ liệu và thí nghiệm đã dùng |
 | `results/` | Kết quả JSON, CSV (dữ liệu tổng hợp) |
 | `models/` | Mô hình huấn luyện sẵn trên v3 (`pretrained_v1.joblib`) |
@@ -18,6 +20,8 @@ Chạy kiểm thử:
 ```powershell
 pip install -r requirements.txt
 $env:PYTHONPATH = (Get-Location).Path
+New-Item -ItemType Directory -Force .runtime | Out-Null
+python -B -m unittest discover -s tests -v
 pytest tests_agent2 tests_sme_fraud -q
 ```
 

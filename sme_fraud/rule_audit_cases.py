@@ -75,20 +75,22 @@ class Case:
         self.tables['bank_account_changes'].append(dict(change_id='AUDIT_CHANGE',
             company_id='C001', vendor_id=self.vendor['vendor_id'],
             old_account=self.vendor['bank_account'], new_account='AUDIT_NEW_BANK',
-            observed_at=stamp(effective-timedelta(days=4) if scheduled else effective),
+            new_bank_code='AUDIT_BANK',
+            observed_at=stamp(effective+timedelta(hours=1) if verified else
+                              effective-timedelta(days=4) if scheduled else effective),
             effective_at=stamp(effective), callback_verified=int(verified),
             verified_at=stamp(effective+timedelta(hours=1)) if verified else '',
             approver_id=self.director['employee_id'] if verified else ''))
         if scheduled:
             self.pay(effective-timedelta(days=2), 1_000_000, kind='cash_expense')
-        return self.pay(amount=50_000_000, recipient_account='AUDIT_NEW_BANK')
+        return self.pay(amount=50_000_000, recipient_account='AUDIT_NEW_BANK', recipient_bank_code='AUDIT_BANK')
 
     def score(self):
         self.tables['transactions'] = self.rows
         # The financial templates see ordinary source evidence, never labels.
         enrich_accounting(self.tables, 20261013)
         self.features = build_features(self.tables)
-        return score_rules(self.tables, features=self.features, config=getattr(self, 'config', {}))
+        return score_rules(self.tables, features=self.features, config={'noise_policy': 'legacy', 'spec_policy': 'legacy', 'evidence_policy': 'disabled', **getattr(self, 'config', {})})
 
 
 def run_cases():

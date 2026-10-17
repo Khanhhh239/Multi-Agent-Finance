@@ -17,7 +17,9 @@ from .benford import monthly_diagnostics
 from .features import FEATURE_DESCRIPTIONS
 from .generate import write_csv
 from .rules import load_inputs, score_rules
-from .case_queue import review_queue
+from .case_queue import review_queue, batch_groups
+from .feature_contract import require_model
+import sklearn
 
 
 def jsonl(path, records):
@@ -82,6 +84,7 @@ def run(dataset, output, model_path, budget=.003, config=None):
         'case_id', 'company_id', 'status', 'owner_id', 'priority', 'explanation_vi'])
     write_csv(output / 'case_events.csv', events, ['case_id', 'event_at', 'event', 'transaction_id', 'rule_score', 'priority'])
     jsonl(output / 'rule_hits.jsonl', result['hits'])
+    jsonl(output / 'batch_events.jsonl', result['batch_events'])
     jsonl(output / 'benford_diagnostics.jsonl', diagnostics)
     counts = Counter(r['rule_id'] for r in result['hits'] if not r['suppressed_reason'])
     suppressions = Counter(r['rule_id'] for r in result['hits'] if r['suppressed_reason'])
@@ -110,8 +113,7 @@ def compare_results(dataset, output, model_path, budget, tables, features, metad
     val_mask = np.array([partitions[i] == 'validation' for i in ids])
     test_mask = np.array([partitions[i] == 'test' for i in ids])
     artifact = joblib.load(model_path)
-    if artifact['feature_columns'] != list(FEATURE_DESCRIPTIONS) or artifact['dataset_version'] != metadata['version']:
-        raise ValueError('IF model feature schema/version mismatch')
+    require_model(artifact, metadata, sklearn.__version__)
     x = np.array([[row[c] for c in artifact['feature_columns']] for row in features], dtype=np.float32)
     if not np.isfinite(x).all():
         raise ValueError('Nonfinite causal features')
@@ -120,8 +122,7 @@ def compare_results(dataset, output, model_path, budget, tables, features, metad
     rule_scores = np.array([r['rule_score'] for r in direct['scores']], dtype=float)
     graph_scores = np.array([r['rule_score'] for r in result['scores']], dtype=float)
     ensemble = .8 * empirical_rank(graph_scores[val_mask], graph_scores) + .2 * empirical_rank(if_scores[val_mask], if_scores)
-    # Added by agent2: rule points decide the order, the IF rank (0..1) only breaks ties inside a rule-score band.
-    # The preset .8/.2 rank blend above lets a weak IF rank push rule hits out of the top of the queue (AP .61 -> .45).
+    # Preserve the existing Agent 2 benchmark variant: IF only breaks ties within a rule-score band.
     gated = graph_scores + .5 * empirical_rank(if_scores[val_mask], if_scores)
     variants = {'Rules': rule_scores, 'IF': if_scores, 'Rules+Graph': graph_scores, 'Rules+Graph+IF': ensemble,
                 'Rules+Graph gated by IF': gated}
@@ -138,6 +139,8 @@ def compare_results(dataset, output, model_path, budget, tables, features, metad
         ranking_policy='Fixed capacity set before test labels; tie-break by SHA256(transaction_id)',
         ensemble_policy='Preset .8 rule validation midrank + .2 IF validation midrank; no label tuning',
         models={}, review_cases=len(cases), operational_alerts=sum(r['operational_alert'] for r in result['scores']),
+        batch_events=len(result['batch_events']),
+        batch_review_participants=len({tid for group in batch_groups(result) for tid in group['_members']}),
         coverage_status=dict(Counter(r['status'] for r in result['coverage'])),
         limitations=['Synthetic single-seed benchmark, not real SME performance.',
             'Existing test was inspected in prior iterations; use a fresh sealed dataset for final acceptance.',

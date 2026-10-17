@@ -1,0 +1,1244 @@
+{
+  "dataset": "data\\sme_fraud_003",
+  "requested_fraud_rate": 0.003,
+  "metrics": [
+    {
+      "period": "train",
+      "rule_id": "A3",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 15,
+        "tp": 7,
+        "fp": 8,
+        "fn": 143,
+        "tn": 49842,
+        "fraud_precision": 0.4666666666666667,
+        "fraud_recall_all": 0.04666666666666667,
+        "fpr": 0.000160481444332999,
+        "accuracy": 0.99698,
+        "false_alerts_per_1000_normal": 0.160481444332999,
+        "fraud_precision_wilson_row95": [
+          0.24809535365737842,
+          0.6988301997450107
+        ]
+      },
+      "after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 17,
+        "tp": 9,
+        "fp": 8,
+        "fn": 141,
+        "tn": 49842,
+        "fraud_precision": 0.5294117647058824,
+        "fraud_recall_all": 0.06,
+        "fpr": 0.000160481444332999,
+        "accuracy": 0.99702,
+        "false_alerts_per_1000_normal": 0.160481444332999,
+        "fraud_precision_wilson_row95": [
+          0.30963235060004934,
+          0.738348935575901
+        ]
+      },
+      "candidates_after": 17,
+      "unsuppressed_after": 17,
+      "hard_negative_before": {
+        "declared_related_party": 3
+      },
+      "hard_negative_after": {
+        "declared_related_party": 3
+      }
+    },
+    {
+      "period": "train",
+      "rule_id": "A4",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 933,
+        "tp": 13,
+        "fp": 920,
+        "fn": 137,
+        "tn": 48930,
+        "fraud_precision": 0.013933547695605574,
+        "fraud_recall_all": 0.08666666666666667,
+        "fpr": 0.018455366098294883,
+        "accuracy": 0.97886,
+        "false_alerts_per_1000_normal": 18.455366098294885,
+        "fraud_precision_wilson_row95": [
+          0.008160684923358471,
+          0.023692579617536912
+        ]
+      },
+      "after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 593,
+        "tp": 8,
+        "fp": 585,
+        "fn": 142,
+        "tn": 49265,
+        "fraud_precision": 0.013490725126475547,
+        "fraud_recall_all": 0.05333333333333334,
+        "fpr": 0.011735205616850552,
+        "accuracy": 0.98546,
+        "false_alerts_per_1000_normal": 11.735205616850552,
+        "fraud_precision_wilson_row95": [
+          0.006851466191106083,
+          0.02639263662289562
+        ]
+      },
+      "candidates_after": 593,
+      "unsuppressed_after": 593,
+      "hard_negative_before": {
+        "declared_related_party": 8,
+        "verified_bank_change": 4,
+        "new_legitimate_vendor": 8,
+        "weekend_operations": 8,
+        "remote_employee_payroll": 14,
+        "legitimate_installments": 7,
+        "historical_valid_invoice": 1
+      },
+      "hard_negative_after": {
+        "verified_bank_change": 3,
+        "weekend_operations": 3,
+        "declared_related_party": 5,
+        "remote_employee_payroll": 13,
+        "legitimate_installments": 5,
+        "new_legitimate_vendor": 4
+      }
+    },
+    {
+      "period": "train",
+      "rule_id": "A5",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1,
+        "tp": 0,
+        "fp": 1,
+        "fn": 150,
+        "tn": 49849,
+        "fraud_precision": 0.0,
+        "fraud_recall_all": 0.0,
+        "fpr": 2.0060180541624874e-05,
+        "accuracy": 0.99698,
+        "false_alerts_per_1000_normal": 0.020060180541624874,
+        "fraud_precision_wilson_row95": [
+          0.0,
+          0.7934506856227534
+        ]
+      },
+      "after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 150,
+        "tn": 49850,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidates_after": 28,
+      "unsuppressed_after": 28,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "train",
+      "rule_id": "B1",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 5,
+        "tp": 5,
+        "fp": 0,
+        "fn": 145,
+        "tn": 49850,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.03333333333333333,
+        "fpr": 0.0,
+        "accuracy": 0.9971,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.5655175352168389,
+          1.0
+        ]
+      },
+      "after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 5,
+        "tp": 5,
+        "fp": 0,
+        "fn": 145,
+        "tn": 49850,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.03333333333333333,
+        "fpr": 0.0,
+        "accuracy": 0.9971,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.5655175352168389,
+          1.0
+        ]
+      },
+      "candidates_after": 5,
+      "unsuppressed_after": 5,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "train",
+      "rule_id": "B3",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 5,
+        "tp": 5,
+        "fp": 0,
+        "fn": 145,
+        "tn": 49850,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.03333333333333333,
+        "fpr": 0.0,
+        "accuracy": 0.9971,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.5655175352168389,
+          1.0
+        ]
+      },
+      "after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 5,
+        "tp": 5,
+        "fp": 0,
+        "fn": 145,
+        "tn": 49850,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.03333333333333333,
+        "fpr": 0.0,
+        "accuracy": 0.9971,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.5655175352168389,
+          1.0
+        ]
+      },
+      "candidates_after": 89,
+      "unsuppressed_after": 89,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "train",
+      "rule_id": "F1",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 49,
+        "tp": 11,
+        "fp": 38,
+        "fn": 139,
+        "tn": 49812,
+        "fraud_precision": 0.22448979591836735,
+        "fraud_recall_all": 0.07333333333333333,
+        "fpr": 0.0007622868605817452,
+        "accuracy": 0.99646,
+        "false_alerts_per_1000_normal": 0.7622868605817452,
+        "fraud_precision_wilson_row95": [
+          0.1302497014965939,
+          0.35878787235959597
+        ]
+      },
+      "after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 150,
+        "tn": 49850,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidates_after": 49,
+      "unsuppressed_after": 49,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "train",
+      "rule_id": "C1",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 421,
+        "tp": 66,
+        "fp": 355,
+        "fn": 84,
+        "tn": 49495,
+        "fraud_precision": 0.15676959619952494,
+        "fraud_recall_all": 0.44,
+        "fpr": 0.00712136409227683,
+        "accuracy": 0.99122,
+        "false_alerts_per_1000_normal": 7.12136409227683,
+        "fraud_precision_wilson_row95": [
+          0.12516097276823956,
+          0.19458526668252546
+        ]
+      },
+      "after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 412,
+        "tp": 68,
+        "fp": 344,
+        "fn": 82,
+        "tn": 49506,
+        "fraud_precision": 0.1650485436893204,
+        "fraud_recall_all": 0.4533333333333333,
+        "fpr": 0.006900702106318957,
+        "accuracy": 0.99148,
+        "false_alerts_per_1000_normal": 6.900702106318957,
+        "fraud_precision_wilson_row95": [
+          0.132329184046054,
+          0.2039563301912168
+        ]
+      },
+      "candidates_after": 21506,
+      "unsuppressed_after": 21506,
+      "hard_negative_before": {
+        "long_approval_delay": 3,
+        "weekend_operations": 10,
+        "declared_related_party": 1
+      },
+      "hard_negative_after": {
+        "long_approval_delay": 3,
+        "weekend_operations": 10,
+        "declared_related_party": 1
+      }
+    },
+    {
+      "period": "train",
+      "rule_id": "operational",
+      "before": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 1003,
+        "tp": 126,
+        "fp": 877,
+        "fn": 24,
+        "tn": 48973,
+        "fraud_precision": 0.12562313060817548,
+        "fraud_recall_all": 0.84,
+        "fpr": 0.017592778335005017,
+        "accuracy": 0.98198,
+        "false_alerts_per_1000_normal": 17.592778335005015,
+        "fraud_precision_wilson_row95": [
+          0.10653014538518968,
+          0.1475728780643603
+        ]
+      },
+      "after": {
+        "rows": 50000,
+        "fraud_rows": 150,
+        "normal_rows": 49850,
+        "alerts": 967,
+        "tp": 128,
+        "fp": 839,
+        "fn": 22,
+        "tn": 49011,
+        "fraud_precision": 0.13236814891416754,
+        "fraud_recall_all": 0.8533333333333334,
+        "fpr": 0.01683049147442327,
+        "accuracy": 0.98278,
+        "false_alerts_per_1000_normal": 16.83049147442327,
+        "fraud_precision_wilson_row95": [
+          0.11245587297869263,
+          0.1551897415136366
+        ]
+      },
+      "candidates_after": 0,
+      "unsuppressed_after": 0,
+      "hard_negative_before": {
+        "weekend_operations": 16,
+        "long_approval_delay": 3,
+        "legitimate_installments": 1,
+        "declared_related_party": 3
+      },
+      "hard_negative_after": {
+        "weekend_operations": 16,
+        "long_approval_delay": 3,
+        "legitimate_installments": 1,
+        "declared_related_party": 3
+      }
+    },
+    {
+      "period": "validation",
+      "rule_id": "A3",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 5,
+        "tp": 2,
+        "fp": 3,
+        "fn": 73,
+        "tn": 24922,
+        "fraud_precision": 0.4,
+        "fraud_recall_all": 0.02666666666666667,
+        "fpr": 0.00012036108324974925,
+        "accuracy": 0.99696,
+        "false_alerts_per_1000_normal": 0.12036108324974924,
+        "fraud_precision_wilson_row95": [
+          0.11762077423265177,
+          0.7692757187239805
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 6,
+        "tp": 3,
+        "fp": 3,
+        "fn": 72,
+        "tn": 24922,
+        "fraud_precision": 0.5,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.00012036108324974925,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.12036108324974924,
+        "fraud_precision_wilson_row95": [
+          0.18761630648265576,
+          0.8123836935173443
+        ]
+      },
+      "candidates_after": 6,
+      "unsuppressed_after": 6,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "validation",
+      "rule_id": "A4",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 531,
+        "tp": 7,
+        "fp": 524,
+        "fn": 68,
+        "tn": 24401,
+        "fraud_precision": 0.013182674199623353,
+        "fraud_recall_all": 0.09333333333333334,
+        "fpr": 0.02102306920762287,
+        "accuracy": 0.97632,
+        "false_alerts_per_1000_normal": 21.023069207622868,
+        "fraud_precision_wilson_row95": [
+          0.006400044481815607,
+          0.026958362063618783
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 307,
+        "tp": 5,
+        "fp": 302,
+        "fn": 70,
+        "tn": 24623,
+        "fraud_precision": 0.016286644951140065,
+        "fraud_recall_all": 0.06666666666666667,
+        "fpr": 0.012116349047141425,
+        "accuracy": 0.98512,
+        "false_alerts_per_1000_normal": 12.116349047141425,
+        "fraud_precision_wilson_row95": [
+          0.006976228924503695,
+          0.037552769469749225
+        ]
+      },
+      "candidates_after": 307,
+      "unsuppressed_after": 307,
+      "hard_negative_before": {
+        "remote_employee_payroll": 5,
+        "declared_related_party": 5,
+        "historical_valid_invoice": 4,
+        "new_legitimate_vendor": 1,
+        "legitimate_installments": 2,
+        "long_approval_delay": 1,
+        "verified_bank_change": 2
+      },
+      "hard_negative_after": {
+        "remote_employee_payroll": 5,
+        "historical_valid_invoice": 3,
+        "declared_related_party": 2,
+        "legitimate_installments": 2
+      }
+    },
+    {
+      "period": "validation",
+      "rule_id": "A5",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 1,
+        "tp": 0,
+        "fp": 1,
+        "fn": 75,
+        "tn": 24924,
+        "fraud_precision": 0.0,
+        "fraud_recall_all": 0.0,
+        "fpr": 4.012036108324975e-05,
+        "accuracy": 0.99696,
+        "false_alerts_per_1000_normal": 0.04012036108324975,
+        "fraud_precision_wilson_row95": [
+          0.0,
+          0.7934506856227534
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidates_after": 9,
+      "unsuppressed_after": 9,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "validation",
+      "rule_id": "B1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "candidates_after": 3,
+      "unsuppressed_after": 3,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "validation",
+      "rule_id": "B3",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "candidates_after": 42,
+      "unsuppressed_after": 42,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "validation",
+      "rule_id": "F1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 21,
+        "tp": 3,
+        "fp": 18,
+        "fn": 72,
+        "tn": 24907,
+        "fraud_precision": 0.14285714285714285,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0007221664994984955,
+        "accuracy": 0.9964,
+        "false_alerts_per_1000_normal": 0.7221664994984955,
+        "fraud_precision_wilson_row95": [
+          0.04981012499725407,
+          0.3463606028062029
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidates_after": 21,
+      "unsuppressed_after": 21,
+      "hard_negative_before": {
+        "long_approval_delay": 1
+      },
+      "hard_negative_after": {}
+    },
+    {
+      "period": "validation",
+      "rule_id": "C1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 241,
+        "tp": 39,
+        "fp": 202,
+        "fn": 36,
+        "tn": 24723,
+        "fraud_precision": 0.16182572614107885,
+        "fraud_recall_all": 0.52,
+        "fpr": 0.008104312938816449,
+        "accuracy": 0.99048,
+        "false_alerts_per_1000_normal": 8.104312938816449,
+        "fraud_precision_wilson_row95": [
+          0.12069602353254602,
+          0.21356705109089555
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 233,
+        "tp": 40,
+        "fp": 193,
+        "fn": 35,
+        "tn": 24732,
+        "fraud_precision": 0.17167381974248927,
+        "fraud_recall_all": 0.5333333333333333,
+        "fpr": 0.007743229689067202,
+        "accuracy": 0.99088,
+        "false_alerts_per_1000_normal": 7.743229689067202,
+        "fraud_precision_wilson_row95": [
+          0.12867926628351925,
+          0.2253189705039342
+        ]
+      },
+      "candidates_after": 11132,
+      "unsuppressed_after": 11132,
+      "hard_negative_before": {
+        "long_approval_delay": 1,
+        "weekend_operations": 2
+      },
+      "hard_negative_after": {
+        "weekend_operations": 2
+      }
+    },
+    {
+      "period": "validation",
+      "rule_id": "operational",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 486,
+        "tp": 63,
+        "fp": 423,
+        "fn": 12,
+        "tn": 24502,
+        "fraud_precision": 0.12962962962962962,
+        "fraud_recall_all": 0.84,
+        "fpr": 0.016970912738214643,
+        "accuracy": 0.9826,
+        "false_alerts_per_1000_normal": 16.970912738214643,
+        "fraud_precision_wilson_row95": [
+          0.10264697360581915,
+          0.16242135918350947
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 469,
+        "tp": 64,
+        "fp": 405,
+        "fn": 11,
+        "tn": 24520,
+        "fraud_precision": 0.13646055437100213,
+        "fraud_recall_all": 0.8533333333333334,
+        "fpr": 0.01624874623871615,
+        "accuracy": 0.98336,
+        "false_alerts_per_1000_normal": 16.248746238716148,
+        "fraud_precision_wilson_row95": [
+          0.10833233557116109,
+          0.17049570786969434
+        ]
+      },
+      "candidates_after": 0,
+      "unsuppressed_after": 0,
+      "hard_negative_before": {
+        "weekend_operations": 2,
+        "long_approval_delay": 2
+      },
+      "hard_negative_after": {
+        "weekend_operations": 2,
+        "long_approval_delay": 1
+      }
+    },
+    {
+      "period": "test",
+      "rule_id": "A3",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 12,
+        "tp": 4,
+        "fp": 8,
+        "fn": 71,
+        "tn": 24917,
+        "fraud_precision": 0.3333333333333333,
+        "fraud_recall_all": 0.05333333333333334,
+        "fpr": 0.000320962888665998,
+        "accuracy": 0.99684,
+        "false_alerts_per_1000_normal": 0.320962888665998,
+        "fraud_precision_wilson_row95": [
+          0.13812009109121645,
+          0.6093779111271937
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 13,
+        "tp": 5,
+        "fp": 8,
+        "fn": 70,
+        "tn": 24917,
+        "fraud_precision": 0.38461538461538464,
+        "fraud_recall_all": 0.06666666666666667,
+        "fpr": 0.000320962888665998,
+        "accuracy": 0.99688,
+        "false_alerts_per_1000_normal": 0.320962888665998,
+        "fraud_precision_wilson_row95": [
+          0.17709707797762958,
+          0.644771084873337
+        ]
+      },
+      "candidates_after": 13,
+      "unsuppressed_after": 13,
+      "hard_negative_before": {
+        "declared_related_party": 2
+      },
+      "hard_negative_after": {
+        "declared_related_party": 2
+      }
+    },
+    {
+      "period": "test",
+      "rule_id": "A4",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 476,
+        "tp": 6,
+        "fp": 470,
+        "fn": 69,
+        "tn": 24455,
+        "fraud_precision": 0.012605042016806723,
+        "fraud_recall_all": 0.08,
+        "fpr": 0.018856569709127382,
+        "accuracy": 0.97844,
+        "false_alerts_per_1000_normal": 18.85656970912738,
+        "fraud_precision_wilson_row95": [
+          0.00578946122131691,
+          0.027224482300002524
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 291,
+        "tp": 4,
+        "fp": 287,
+        "fn": 71,
+        "tn": 24638,
+        "fraud_precision": 0.013745704467353952,
+        "fraud_recall_all": 0.05333333333333334,
+        "fpr": 0.011514543630892679,
+        "accuracy": 0.98568,
+        "false_alerts_per_1000_normal": 11.514543630892678,
+        "fraud_precision_wilson_row95": [
+          0.0053580735392921,
+          0.03480404907418753
+        ]
+      },
+      "candidates_after": 291,
+      "unsuppressed_after": 291,
+      "hard_negative_before": {
+        "remote_employee_payroll": 5,
+        "long_approval_delay": 2,
+        "weekend_operations": 3,
+        "historical_valid_invoice": 1,
+        "declared_related_party": 1
+      },
+      "hard_negative_after": {
+        "remote_employee_payroll": 5,
+        "declared_related_party": 1,
+        "long_approval_delay": 1,
+        "weekend_operations": 3,
+        "historical_valid_invoice": 1
+      }
+    },
+    {
+      "period": "test",
+      "rule_id": "A5",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidates_after": 12,
+      "unsuppressed_after": 12,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "test",
+      "rule_id": "B1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "candidates_after": 3,
+      "unsuppressed_after": 3,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "test",
+      "rule_id": "B3",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 3,
+        "tp": 3,
+        "fp": 0,
+        "fn": 72,
+        "tn": 24925,
+        "fraud_precision": 1.0,
+        "fraud_recall_all": 0.04,
+        "fpr": 0.0,
+        "accuracy": 0.99712,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": [
+          0.4385029682449681,
+          1.0
+        ]
+      },
+      "candidates_after": 51,
+      "unsuppressed_after": 51,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "test",
+      "rule_id": "F1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 20,
+        "tp": 5,
+        "fp": 15,
+        "fn": 70,
+        "tn": 24910,
+        "fraud_precision": 0.25,
+        "fraud_recall_all": 0.06666666666666667,
+        "fpr": 0.0006018054162487463,
+        "accuracy": 0.9966,
+        "false_alerts_per_1000_normal": 0.6018054162487463,
+        "fraud_precision_wilson_row95": [
+          0.11186170140766816,
+          0.4687008776187378
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 75,
+        "tn": 24925,
+        "fraud_precision": null,
+        "fraud_recall_all": 0.0,
+        "fpr": 0.0,
+        "accuracy": 0.997,
+        "false_alerts_per_1000_normal": 0.0,
+        "fraud_precision_wilson_row95": null
+      },
+      "candidates_after": 20,
+      "unsuppressed_after": 20,
+      "hard_negative_before": {},
+      "hard_negative_after": {}
+    },
+    {
+      "period": "test",
+      "rule_id": "C1",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 229,
+        "tp": 30,
+        "fp": 199,
+        "fn": 45,
+        "tn": 24726,
+        "fraud_precision": 0.13100436681222707,
+        "fraud_recall_all": 0.4,
+        "fpr": 0.0079839518555667,
+        "accuracy": 0.99024,
+        "false_alerts_per_1000_normal": 7.9839518555667,
+        "fraud_precision_wilson_row95": [
+          0.0933285571434454,
+          0.18085568454633377
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 223,
+        "tp": 31,
+        "fp": 192,
+        "fn": 44,
+        "tn": 24733,
+        "fraud_precision": 0.13901345291479822,
+        "fraud_recall_all": 0.41333333333333333,
+        "fpr": 0.007703109327983952,
+        "accuracy": 0.99056,
+        "false_alerts_per_1000_normal": 7.7031093279839515,
+        "fraud_precision_wilson_row95": [
+          0.09969263072771042,
+          0.1905605670915563
+        ]
+      },
+      "candidates_after": 10403,
+      "unsuppressed_after": 10403,
+      "hard_negative_before": {
+        "weekend_operations": 7,
+        "legitimate_installments": 1,
+        "long_approval_delay": 2
+      },
+      "hard_negative_after": {
+        "weekend_operations": 7,
+        "legitimate_installments": 1,
+        "long_approval_delay": 2
+      }
+    },
+    {
+      "period": "test",
+      "rule_id": "operational",
+      "before": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 525,
+        "tp": 67,
+        "fp": 458,
+        "fn": 8,
+        "tn": 24467,
+        "fraud_precision": 0.12761904761904763,
+        "fraud_recall_all": 0.8933333333333333,
+        "fpr": 0.018375125376128384,
+        "accuracy": 0.98136,
+        "false_alerts_per_1000_normal": 18.375125376128384,
+        "fraud_precision_wilson_row95": [
+          0.10175782416352978,
+          0.15889015742262963
+        ]
+      },
+      "after": {
+        "rows": 25000,
+        "fraud_rows": 75,
+        "normal_rows": 24925,
+        "alerts": 511,
+        "tp": 68,
+        "fp": 443,
+        "fn": 7,
+        "tn": 24482,
+        "fraud_precision": 0.13307240704500978,
+        "fraud_recall_all": 0.9066666666666666,
+        "fpr": 0.01777331995987964,
+        "accuracy": 0.982,
+        "false_alerts_per_1000_normal": 17.77331995987964,
+        "fraud_precision_wilson_row95": [
+          0.10634365379330343,
+          0.16527677697196078
+        ]
+      },
+      "candidates_after": 0,
+      "unsuppressed_after": 0,
+      "hard_negative_before": {
+        "legitimate_installments": 2,
+        "weekend_operations": 10,
+        "long_approval_delay": 3,
+        "declared_related_party": 2
+      },
+      "hard_negative_after": {
+        "legitimate_installments": 2,
+        "weekend_operations": 10,
+        "long_approval_delay": 3,
+        "declared_related_party": 2
+      }
+    }
+  ],
+  "source_hashes": {
+    "data\\sme_fraud_003\\companies.csv": "2d62ae6e3799122c7c6c8b134ea422828ee630c749e096d3e4e441163a6ef76b",
+    "data\\sme_fraud_003\\employees.csv": "4f2249bd595ce95ee134846fa02c6e4708a49f0b28fc13cd7d2fd8707206a363",
+    "data\\sme_fraud_003\\entity_links.csv": "eb42213dc7a891bb20703e57a23d50612dde355c22f32e58618aec24f332c1cd",
+    "data\\sme_fraud_003\\attendance.csv": "66bfde7d94fe1e965fd2ad854d00a326ad78f947dc9c79b19fc7143662658944",
+    "data\\sme_fraud_003\\vendors.csv": "1b002778b6582c25355a6a31fc237f923f46b0fb1abcea56dcb3e8a36f4f0eac",
+    "data\\sme_fraud_003\\vendor_status_history.csv": "25137d2067be8be03d683652cadc3be29201510c54428f9f791496a6f721e9f4",
+    "data\\sme_fraud_003\\customers.csv": "d0eb1793e6da102fb6c5e08f15dc3a1ab555cc01acdb76af305d23039ebeb989",
+    "data\\sme_fraud_003\\calendar.csv": "7296fea023dd9d6bd4db421d982b767bc7a4e82c2aecbb698c11eac54a252192",
+    "data\\sme_fraud_003\\advances.csv": "d9bcadd70d777e7363050dda03198ca5e0eef75d1c0ebd55abad33af76bf1333",
+    "data\\sme_fraud_003\\advance_events.csv": "dc3d666ff2ebb883a2a63fe18e61886c27c73c87023984fe30be48bae98fb9b4",
+    "data\\sme_fraud_003\\bank_account_changes.csv": "79d227f303dc1308becd3c4018949d1002d14239533ffe1d14ba1b21623061b3",
+    "data\\sme_fraud_003\\transactions.csv": "76a7ebf45a224c85d4285e9b8abc13472cf06eada64d787c1296bc1d9a354fa0",
+    "data\\sme_fraud_003\\labels.csv": "a2e09024e65cfdb068c56c41c4a02c3a583756831dcfb91fec3a488f9150f7d0",
+    "data\\sme_fraud_003\\splits.csv": "b56ebdcc8225adf08e53f68a2e782a7b7e571989fe738a5f69f72fc2e76d2ea5",
+    "data\\sme_fraud_003\\invoices.csv": "9be898f952e429339d0c45ee82640a06d18f8b2de048fa98db58f9d0ce322c83",
+    "data\\sme_fraud_003\\journal_lines.csv": "832ece59c05b7039dac3892165cfeaad8fdf1dc11b332ef18e76eaaad8b8a23c",
+    "data\\sme_fraud_003\\journal_documents.csv": "43de73c808140cd34b1bbac787ac3eb08ed314f28d87f6d9874eb25f64637be7",
+    "data\\sme_fraud_003\\document_links.csv": "34983bd6af8ff14a5e88748405c280538fe38c5f4938ce5865c87db9d5e13724",
+    "data\\sme_fraud_003\\account_flow_edges.csv": "7d94a682b29561a1e0a45a3496cb763becb0f9a7cc2f3e4488ced618834a30cd",
+    "data\\sme_fraud_003\\features.csv": "8c3cdf25d71db344aaf93cb67dbd30b22ce6056bc206eca383f07d75fb1e9640",
+    "data\\sme_fraud_003\\manifest.json": "71b89c2d6bba34923a3e27e79d15bea3b8852d73add58aff3469b7e9330cad19",
+    "reports\\rule_repairs\\phase2\\sme_fraud_003\\rule_scores.csv": "4b011cea33020bd98ca9f2048272205d1b867ab1b0e494c18ad4b4737fdf98b1",
+    "reports\\rule_repairs\\phase2\\sme_fraud_003\\rule_hits.jsonl": "70a3e44bae1096b5c2877cf9e3a57bca1a8dfbda0c11298fa20b79c87864e3eb",
+    "reports\\rule_repairs\\phase2\\sme_fraud_003\\rule_config.json": "bca483f7e904b38c6917361bb1638d81844e188319c54d32c2f29b078072eaf2",
+    "reports\\rule_repairs\\phase2\\sme_fraud_003\\benford_diagnostics.jsonl": "ba284c51aa4861016cef883a7fb8f3a70ed4b7b255bfb6113f86a57e478a981e"
+  },
+  "source_unchanged": true,
+  "score_replay": "passed",
+  "protected_controls": [
+    "B2",
+    "B4",
+    "B7",
+    "C2",
+    "E1",
+    "P1",
+    "T2"
+  ],
+  "protected_controls_unchanged": true,
+  "model_usage": "none",
+  "rows": 100000,
+  "review_cases": 1550,
+  "optional_source_rows": {
+    "payroll_entitlements": 0,
+    "supplier_payment_agreements": 0,
+    "procurement_links": 0,
+    "transaction_documents": 0,
+    "operating_schedules": 0,
+    "recurring_payments": 0,
+    "journal_audit_log": 0,
+    "closing_periods": 0,
+    "materiality_policies": 0
+  },
+  "f1_status_counts": {
+    "unconfirmed_proxy": 90
+  },
+  "master_identity_findings": 11,
+  "benford_diagnostics": "reused_unchanged_phase2"
+}

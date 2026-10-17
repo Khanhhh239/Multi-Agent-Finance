@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "independent_transaction_metric_blocks": 207,
+  "matching_sha256_fingerprints": 39,
+  "matrix_rows": 306,
+  "main_matrix_rows": 279,
+  "detail_reports": 31,
+  "local_report_links": 108,
+  "unit_and_regression_tests": 42,
+  "controlled_cases": 51,
+  "controlled_matches": 43,
+  "controlled_gaps": 8,
+  "predicate_full_recompute": false,
+  "model_usage": "none",
+  "detector_changed": false,
+  "dataset_changed": false
+}

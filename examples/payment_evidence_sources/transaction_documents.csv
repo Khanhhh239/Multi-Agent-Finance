@@ -1,0 +1,1 @@
+record_id,company_id,vendor_id,transaction_id,document_type,invoice_number,invoice_gross_vnd,contract_id,status,evidence_id,verifier_id,verified_at,observed_at

@@ -1,0 +1,1572 @@
+{
+  "dataset": "data\\sme_fraud_005",
+  "dataset_version": "2.0",
+  "seed": 20261012,
+  "validation_alert_budget": 0.003,
+  "test_rows": 25000,
+  "test_fraud_rows": 125,
+  "fixed_capacity_k": 75,
+  "threshold_policy": "Unlabelled validation quantile; all ties retained (may exceed budget)",
+  "ranking_policy": "Fixed capacity set before test labels; tie-break by SHA256(transaction_id)",
+  "ensemble_policy": "Preset .8 rule validation midrank + .2 IF validation midrank; no label tuning",
+  "models": {
+    "Rules": {
+      "average_precision": 0.6570572043647445,
+      "threshold": 14.0,
+      "validation_alert_rate": 0.0044,
+      "threshold_metrics": {
+        "alerts": 103,
+        "tp": 76,
+        "fp": 27,
+        "precision": 0.7378640776699029,
+        "recall": 0.608,
+        "fpr": 0.001085427135678392,
+        "per_fraud_type": [
+          {
+            "name": "duplicate_payment",
+            "rows": 21,
+            "detected": 21,
+            "recall": 1.0
+          },
+          {
+            "name": "ghost_vendor",
+            "rows": 21,
+            "detected": 13,
+            "recall": 0.6190476190476191
+          },
+          {
+            "name": "long_outstanding_advance",
+            "rows": 20,
+            "detected": 10,
+            "recall": 0.5
+          },
+          {
+            "name": "period_end_adjustment",
+            "rows": 21,
+            "detected": 20,
+            "recall": 0.9523809523809523
+          },
+          {
+            "name": "risky_invoice",
+            "rows": 21,
+            "detected": 7,
+            "recall": 0.3333333333333333
+          },
+          {
+            "name": "split_payments",
+            "rows": 21,
+            "detected": 5,
+            "recall": 0.23809523809523808
+          }
+        ],
+        "hard_negatives": [
+          {
+            "name": "approved_advance_extension",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "approved_advance_writeoff",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "declared_related_party",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "historical_valid_invoice",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_installments",
+            "rows": 96,
+            "false_alerts": 1,
+            "fpr": 0.010416666666666666
+          },
+          {
+            "name": "legitimate_period_close",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_self_approval",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "long_approval_delay",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "new_legitimate_vendor",
+            "rows": 96,
+            "false_alerts": 1,
+            "fpr": 0.010416666666666666
+          },
+          {
+            "name": "remote_employee_payroll",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "round_recurring_payment",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "verified_bank_change",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "weekend_operations",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          }
+        ],
+        "per_accounting_framework": [
+          {
+            "name": "TT133",
+            "rows": 15046,
+            "fraud_rows": 78,
+            "alerts": 61,
+            "tp": 42,
+            "fp": 19,
+            "precision": 0.6885245901639344,
+            "recall": 0.5384615384615384,
+            "fpr": 0.0012693746659540352
+          },
+          {
+            "name": "TT200",
+            "rows": 9954,
+            "fraud_rows": 47,
+            "alerts": 42,
+            "tp": 34,
+            "fp": 8,
+            "precision": 0.8095238095238095,
+            "recall": 0.723404255319149,
+            "fpr": 0.0008075098415261935
+          }
+        ],
+        "case_recall": {
+          "cases": 109,
+          "detected": 73,
+          "recall": 0.6697247706422018
+        }
+      },
+      "fixed_capacity": {
+        "alerts": 75,
+        "tp": 67,
+        "fp": 8,
+        "precision": 0.8933333333333333,
+        "recall": 0.536,
+        "fpr": 0.00032160804020100504,
+        "per_fraud_type": [
+          {
+            "name": "duplicate_payment",
+            "rows": 21,
+            "detected": 21,
+            "recall": 1.0
+          },
+          {
+            "name": "ghost_vendor",
+            "rows": 21,
+            "detected": 12,
+            "recall": 0.5714285714285714
+          },
+          {
+            "name": "long_outstanding_advance",
+            "rows": 20,
+            "detected": 10,
+            "recall": 0.5
+          },
+          {
+            "name": "period_end_adjustment",
+            "rows": 21,
+            "detected": 20,
+            "recall": 0.9523809523809523
+          },
+          {
+            "name": "risky_invoice",
+            "rows": 21,
+            "detected": 2,
+            "recall": 0.09523809523809523
+          },
+          {
+            "name": "split_payments",
+            "rows": 21,
+            "detected": 2,
+            "recall": 0.09523809523809523
+          }
+        ],
+        "hard_negatives": [
+          {
+            "name": "approved_advance_extension",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "approved_advance_writeoff",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "declared_related_party",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "historical_valid_invoice",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_installments",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_period_close",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_self_approval",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "long_approval_delay",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "new_legitimate_vendor",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "remote_employee_payroll",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "round_recurring_payment",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "verified_bank_change",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "weekend_operations",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          }
+        ],
+        "per_accounting_framework": [
+          {
+            "name": "TT133",
+            "rows": 15046,
+            "fraud_rows": 78,
+            "alerts": 46,
+            "tp": 39,
+            "fp": 7,
+            "precision": 0.8478260869565217,
+            "recall": 0.5,
+            "fpr": 0.0004676643506146446
+          },
+          {
+            "name": "TT200",
+            "rows": 9954,
+            "fraud_rows": 47,
+            "alerts": 29,
+            "tp": 28,
+            "fp": 1,
+            "precision": 0.9655172413793104,
+            "recall": 0.5957446808510638,
+            "fpr": 0.0001009387301907742
+          }
+        ],
+        "case_recall": {
+          "cases": 109,
+          "detected": 67,
+          "recall": 0.6146788990825688
+        }
+      },
+      "top_k": [
+        {
+          "k": 25,
+          "tp": 25,
+          "precision": 1.0,
+          "recall": 0.2
+        },
+        {
+          "k": 50,
+          "tp": 50,
+          "precision": 1.0,
+          "recall": 0.4
+        },
+        {
+          "k": 75,
+          "tp": 67,
+          "precision": 0.8933333333333333,
+          "recall": 0.536
+        },
+        {
+          "k": 100,
+          "tp": 75,
+          "precision": 0.75,
+          "recall": 0.6
+        },
+        {
+          "k": 250,
+          "tp": 87,
+          "precision": 0.348,
+          "recall": 0.696
+        }
+      ]
+    },
+    "IF": {
+      "average_precision": 0.0532569441133927,
+      "threshold": 0.5274416340002567,
+      "validation_alert_rate": 0.003,
+      "threshold_metrics": {
+        "alerts": 65,
+        "tp": 6,
+        "fp": 59,
+        "precision": 0.09230769230769231,
+        "recall": 0.048,
+        "fpr": 0.002371859296482412,
+        "per_fraud_type": [
+          {
+            "name": "duplicate_payment",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "ghost_vendor",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "long_outstanding_advance",
+            "rows": 20,
+            "detected": 6,
+            "recall": 0.3
+          },
+          {
+            "name": "period_end_adjustment",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "risky_invoice",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "split_payments",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          }
+        ],
+        "hard_negatives": [
+          {
+            "name": "approved_advance_extension",
+            "rows": 96,
+            "false_alerts": 5,
+            "fpr": 0.052083333333333336
+          },
+          {
+            "name": "approved_advance_writeoff",
+            "rows": 96,
+            "false_alerts": 48,
+            "fpr": 0.5
+          },
+          {
+            "name": "declared_related_party",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "historical_valid_invoice",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_installments",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_period_close",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_self_approval",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "long_approval_delay",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "new_legitimate_vendor",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "remote_employee_payroll",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "round_recurring_payment",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "verified_bank_change",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "weekend_operations",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          }
+        ],
+        "per_accounting_framework": [
+          {
+            "name": "TT133",
+            "rows": 15046,
+            "fraud_rows": 78,
+            "alerts": 34,
+            "tp": 3,
+            "fp": 31,
+            "precision": 0.08823529411764706,
+            "recall": 0.038461538461538464,
+            "fpr": 0.002071084981293426
+          },
+          {
+            "name": "TT200",
+            "rows": 9954,
+            "fraud_rows": 47,
+            "alerts": 31,
+            "tp": 3,
+            "fp": 28,
+            "precision": 0.0967741935483871,
+            "recall": 0.06382978723404255,
+            "fpr": 0.0028262844453416777
+          }
+        ],
+        "case_recall": {
+          "cases": 109,
+          "detected": 6,
+          "recall": 0.05504587155963303
+        }
+      },
+      "fixed_capacity": {
+        "alerts": 75,
+        "tp": 8,
+        "fp": 67,
+        "precision": 0.10666666666666667,
+        "recall": 0.064,
+        "fpr": 0.002693467336683417,
+        "per_fraud_type": [
+          {
+            "name": "duplicate_payment",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "ghost_vendor",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "long_outstanding_advance",
+            "rows": 20,
+            "detected": 8,
+            "recall": 0.4
+          },
+          {
+            "name": "period_end_adjustment",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "risky_invoice",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "split_payments",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          }
+        ],
+        "hard_negatives": [
+          {
+            "name": "approved_advance_extension",
+            "rows": 96,
+            "false_alerts": 11,
+            "fpr": 0.11458333333333333
+          },
+          {
+            "name": "approved_advance_writeoff",
+            "rows": 96,
+            "false_alerts": 48,
+            "fpr": 0.5
+          },
+          {
+            "name": "declared_related_party",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "historical_valid_invoice",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_installments",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_period_close",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_self_approval",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "long_approval_delay",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "new_legitimate_vendor",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "remote_employee_payroll",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "round_recurring_payment",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "verified_bank_change",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "weekend_operations",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          }
+        ],
+        "per_accounting_framework": [
+          {
+            "name": "TT133",
+            "rows": 15046,
+            "fraud_rows": 78,
+            "alerts": 36,
+            "tp": 5,
+            "fp": 31,
+            "precision": 0.1388888888888889,
+            "recall": 0.0641025641025641,
+            "fpr": 0.002071084981293426
+          },
+          {
+            "name": "TT200",
+            "rows": 9954,
+            "fraud_rows": 47,
+            "alerts": 39,
+            "tp": 3,
+            "fp": 36,
+            "precision": 0.07692307692307693,
+            "recall": 0.06382978723404255,
+            "fpr": 0.003633794286867871
+          }
+        ],
+        "case_recall": {
+          "cases": 109,
+          "detected": 8,
+          "recall": 0.07339449541284404
+        }
+      },
+      "top_k": [
+        {
+          "k": 25,
+          "tp": 5,
+          "precision": 0.2,
+          "recall": 0.04
+        },
+        {
+          "k": 50,
+          "tp": 5,
+          "precision": 0.1,
+          "recall": 0.04
+        },
+        {
+          "k": 75,
+          "tp": 8,
+          "precision": 0.10666666666666667,
+          "recall": 0.064
+        },
+        {
+          "k": 100,
+          "tp": 10,
+          "precision": 0.1,
+          "recall": 0.08
+        },
+        {
+          "k": 250,
+          "tp": 21,
+          "precision": 0.084,
+          "recall": 0.168
+        }
+      ]
+    },
+    "Rules+Graph": {
+      "average_precision": 0.6699713668240059,
+      "threshold": 14.0,
+      "validation_alert_rate": 0.0044,
+      "threshold_metrics": {
+        "alerts": 105,
+        "tp": 76,
+        "fp": 29,
+        "precision": 0.7238095238095238,
+        "recall": 0.608,
+        "fpr": 0.0011658291457286433,
+        "per_fraud_type": [
+          {
+            "name": "duplicate_payment",
+            "rows": 21,
+            "detected": 21,
+            "recall": 1.0
+          },
+          {
+            "name": "ghost_vendor",
+            "rows": 21,
+            "detected": 13,
+            "recall": 0.6190476190476191
+          },
+          {
+            "name": "long_outstanding_advance",
+            "rows": 20,
+            "detected": 10,
+            "recall": 0.5
+          },
+          {
+            "name": "period_end_adjustment",
+            "rows": 21,
+            "detected": 20,
+            "recall": 0.9523809523809523
+          },
+          {
+            "name": "risky_invoice",
+            "rows": 21,
+            "detected": 7,
+            "recall": 0.3333333333333333
+          },
+          {
+            "name": "split_payments",
+            "rows": 21,
+            "detected": 5,
+            "recall": 0.23809523809523808
+          }
+        ],
+        "hard_negatives": [
+          {
+            "name": "approved_advance_extension",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "approved_advance_writeoff",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "declared_related_party",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "historical_valid_invoice",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_installments",
+            "rows": 96,
+            "false_alerts": 1,
+            "fpr": 0.010416666666666666
+          },
+          {
+            "name": "legitimate_period_close",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_self_approval",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "long_approval_delay",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "new_legitimate_vendor",
+            "rows": 96,
+            "false_alerts": 1,
+            "fpr": 0.010416666666666666
+          },
+          {
+            "name": "remote_employee_payroll",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "round_recurring_payment",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "verified_bank_change",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "weekend_operations",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          }
+        ],
+        "per_accounting_framework": [
+          {
+            "name": "TT133",
+            "rows": 15046,
+            "fraud_rows": 78,
+            "alerts": 61,
+            "tp": 42,
+            "fp": 19,
+            "precision": 0.6885245901639344,
+            "recall": 0.5384615384615384,
+            "fpr": 0.0012693746659540352
+          },
+          {
+            "name": "TT200",
+            "rows": 9954,
+            "fraud_rows": 47,
+            "alerts": 44,
+            "tp": 34,
+            "fp": 10,
+            "precision": 0.7727272727272727,
+            "recall": 0.723404255319149,
+            "fpr": 0.001009387301907742
+          }
+        ],
+        "case_recall": {
+          "cases": 109,
+          "detected": 73,
+          "recall": 0.6697247706422018
+        }
+      },
+      "fixed_capacity": {
+        "alerts": 75,
+        "tp": 67,
+        "fp": 8,
+        "precision": 0.8933333333333333,
+        "recall": 0.536,
+        "fpr": 0.00032160804020100504,
+        "per_fraud_type": [
+          {
+            "name": "duplicate_payment",
+            "rows": 21,
+            "detected": 21,
+            "recall": 1.0
+          },
+          {
+            "name": "ghost_vendor",
+            "rows": 21,
+            "detected": 12,
+            "recall": 0.5714285714285714
+          },
+          {
+            "name": "long_outstanding_advance",
+            "rows": 20,
+            "detected": 10,
+            "recall": 0.5
+          },
+          {
+            "name": "period_end_adjustment",
+            "rows": 21,
+            "detected": 20,
+            "recall": 0.9523809523809523
+          },
+          {
+            "name": "risky_invoice",
+            "rows": 21,
+            "detected": 2,
+            "recall": 0.09523809523809523
+          },
+          {
+            "name": "split_payments",
+            "rows": 21,
+            "detected": 2,
+            "recall": 0.09523809523809523
+          }
+        ],
+        "hard_negatives": [
+          {
+            "name": "approved_advance_extension",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "approved_advance_writeoff",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "declared_related_party",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "historical_valid_invoice",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_installments",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_period_close",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_self_approval",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "long_approval_delay",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "new_legitimate_vendor",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "remote_employee_payroll",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "round_recurring_payment",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "verified_bank_change",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "weekend_operations",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          }
+        ],
+        "per_accounting_framework": [
+          {
+            "name": "TT133",
+            "rows": 15046,
+            "fraud_rows": 78,
+            "alerts": 45,
+            "tp": 39,
+            "fp": 6,
+            "precision": 0.8666666666666667,
+            "recall": 0.5,
+            "fpr": 0.00040085515766969537
+          },
+          {
+            "name": "TT200",
+            "rows": 9954,
+            "fraud_rows": 47,
+            "alerts": 30,
+            "tp": 28,
+            "fp": 2,
+            "precision": 0.9333333333333333,
+            "recall": 0.5957446808510638,
+            "fpr": 0.0002018774603815484
+          }
+        ],
+        "case_recall": {
+          "cases": 109,
+          "detected": 67,
+          "recall": 0.6146788990825688
+        }
+      },
+      "top_k": [
+        {
+          "k": 25,
+          "tp": 25,
+          "precision": 1.0,
+          "recall": 0.2
+        },
+        {
+          "k": 50,
+          "tp": 50,
+          "precision": 1.0,
+          "recall": 0.4
+        },
+        {
+          "k": 75,
+          "tp": 67,
+          "precision": 0.8933333333333333,
+          "recall": 0.536
+        },
+        {
+          "k": 100,
+          "tp": 74,
+          "precision": 0.74,
+          "recall": 0.592
+        },
+        {
+          "k": 250,
+          "tp": 90,
+          "precision": 0.36,
+          "recall": 0.72
+        }
+      ]
+    },
+    "Rules+Graph+IF": {
+      "average_precision": 0.5004204150805224,
+      "threshold": 0.97718,
+      "validation_alert_rate": 0.003,
+      "threshold_metrics": {
+        "alerts": 80,
+        "tp": 47,
+        "fp": 33,
+        "precision": 0.5875,
+        "recall": 0.376,
+        "fpr": 0.0013266331658291458,
+        "per_fraud_type": [
+          {
+            "name": "duplicate_payment",
+            "rows": 21,
+            "detected": 6,
+            "recall": 0.2857142857142857
+          },
+          {
+            "name": "ghost_vendor",
+            "rows": 21,
+            "detected": 11,
+            "recall": 0.5238095238095238
+          },
+          {
+            "name": "long_outstanding_advance",
+            "rows": 20,
+            "detected": 19,
+            "recall": 0.95
+          },
+          {
+            "name": "period_end_adjustment",
+            "rows": 21,
+            "detected": 11,
+            "recall": 0.5238095238095238
+          },
+          {
+            "name": "risky_invoice",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "split_payments",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          }
+        ],
+        "hard_negatives": [
+          {
+            "name": "approved_advance_extension",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "approved_advance_writeoff",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "declared_related_party",
+            "rows": 96,
+            "false_alerts": 1,
+            "fpr": 0.010416666666666666
+          },
+          {
+            "name": "historical_valid_invoice",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_installments",
+            "rows": 96,
+            "false_alerts": 5,
+            "fpr": 0.052083333333333336
+          },
+          {
+            "name": "legitimate_period_close",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_self_approval",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "long_approval_delay",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "new_legitimate_vendor",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "remote_employee_payroll",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "round_recurring_payment",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "verified_bank_change",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "weekend_operations",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          }
+        ],
+        "per_accounting_framework": [
+          {
+            "name": "TT133",
+            "rows": 15046,
+            "fraud_rows": 78,
+            "alerts": 44,
+            "tp": 29,
+            "fp": 15,
+            "precision": 0.6590909090909091,
+            "recall": 0.3717948717948718,
+            "fpr": 0.0010021378941742383
+          },
+          {
+            "name": "TT200",
+            "rows": 9954,
+            "fraud_rows": 47,
+            "alerts": 36,
+            "tp": 18,
+            "fp": 18,
+            "precision": 0.5,
+            "recall": 0.3829787234042553,
+            "fpr": 0.0018168971434339356
+          }
+        ],
+        "case_recall": {
+          "cases": 109,
+          "detected": 47,
+          "recall": 0.43119266055045874
+        }
+      },
+      "fixed_capacity": {
+        "alerts": 75,
+        "tp": 45,
+        "fp": 30,
+        "precision": 0.6,
+        "recall": 0.36,
+        "fpr": 0.001206030150753769,
+        "per_fraud_type": [
+          {
+            "name": "duplicate_payment",
+            "rows": 21,
+            "detected": 6,
+            "recall": 0.2857142857142857
+          },
+          {
+            "name": "ghost_vendor",
+            "rows": 21,
+            "detected": 11,
+            "recall": 0.5238095238095238
+          },
+          {
+            "name": "long_outstanding_advance",
+            "rows": 20,
+            "detected": 17,
+            "recall": 0.85
+          },
+          {
+            "name": "period_end_adjustment",
+            "rows": 21,
+            "detected": 11,
+            "recall": 0.5238095238095238
+          },
+          {
+            "name": "risky_invoice",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          },
+          {
+            "name": "split_payments",
+            "rows": 21,
+            "detected": 0,
+            "recall": 0.0
+          }
+        ],
+        "hard_negatives": [
+          {
+            "name": "approved_advance_extension",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "approved_advance_writeoff",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "declared_related_party",
+            "rows": 96,
+            "false_alerts": 1,
+            "fpr": 0.010416666666666666
+          },
+          {
+            "name": "historical_valid_invoice",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_installments",
+            "rows": 96,
+            "false_alerts": 4,
+            "fpr": 0.041666666666666664
+          },
+          {
+            "name": "legitimate_period_close",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "legitimate_self_approval",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "long_approval_delay",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "new_legitimate_vendor",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "remote_employee_payroll",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "round_recurring_payment",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "verified_bank_change",
+            "rows": 97,
+            "false_alerts": 0,
+            "fpr": 0.0
+          },
+          {
+            "name": "weekend_operations",
+            "rows": 96,
+            "false_alerts": 0,
+            "fpr": 0.0
+          }
+        ],
+        "per_accounting_framework": [
+          {
+            "name": "TT133",
+            "rows": 15046,
+            "fraud_rows": 78,
+            "alerts": 42,
+            "tp": 27,
+            "fp": 15,
+            "precision": 0.6428571428571429,
+            "recall": 0.34615384615384615,
+            "fpr": 0.0010021378941742383
+          },
+          {
+            "name": "TT200",
+            "rows": 9954,
+            "fraud_rows": 47,
+            "alerts": 33,
+            "tp": 18,
+            "fp": 15,
+            "precision": 0.5454545454545454,
+            "recall": 0.3829787234042553,
+            "fpr": 0.001514080952861613
+          }
+        ],
+        "case_recall": {
+          "cases": 109,
+          "detected": 45,
+          "recall": 0.41284403669724773
+        }
+      },
+      "top_k": [
+        {
+          "k": 25,
+          "tp": 24,
+          "precision": 0.96,
+          "recall": 0.192
+        },
+        {
+          "k": 50,
+          "tp": 36,
+          "precision": 0.72,
+          "recall": 0.288
+        },
+        {
+          "k": 75,
+          "tp": 45,
+          "precision": 0.6,
+          "recall": 0.36
+        },
+        {
+          "k": 100,
+          "tp": 49,
+          "precision": 0.49,
+          "recall": 0.392
+        },
+        {
+          "k": 250,
+          "tp": 80,
+          "precision": 0.32,
+          "recall": 0.64
+        }
+      ]
+    }
+  },
+  "review_cases": 2821,
+  "operational_alerts": 4013,
+  "coverage_status": {
+    "implemented": 21,
+    "partial": 8,
+    "not_evaluable": 5
+  },
+  "limitations": [
+    "Synthetic single-seed benchmark, not real SME performance.",
+    "Existing test was inspected in prior iterations; use a fresh sealed dataset for final acceptance.",
+    "No retroactive alerts on an earlier payment using a later transaction.",
+    "D-group diagnostics are aggregate screens and do not add transaction scores.",
+    "Queue is an offline snapshot with suggested ownership/SLA, no messages or automatic transaction blocks.",
+    "Rule score/ensemble score are not calibrated fraud probabilities."
+  ],
+  "operational_threshold_metrics": {
+    "alerts": 1004,
+    "tp": 114,
+    "fp": 890,
+    "precision": 0.11354581673306773,
+    "recall": 0.912,
+    "fpr": 0.03577889447236181,
+    "per_fraud_type": [
+      {
+        "name": "duplicate_payment",
+        "rows": 21,
+        "detected": 21,
+        "recall": 1.0
+      },
+      {
+        "name": "ghost_vendor",
+        "rows": 21,
+        "detected": 21,
+        "recall": 1.0
+      },
+      {
+        "name": "long_outstanding_advance",
+        "rows": 20,
+        "detected": 20,
+        "recall": 1.0
+      },
+      {
+        "name": "period_end_adjustment",
+        "rows": 21,
+        "detected": 20,
+        "recall": 0.9523809523809523
+      },
+      {
+        "name": "risky_invoice",
+        "rows": 21,
+        "detected": 17,
+        "recall": 0.8095238095238095
+      },
+      {
+        "name": "split_payments",
+        "rows": 21,
+        "detected": 15,
+        "recall": 0.7142857142857143
+      }
+    ],
+    "hard_negatives": [
+      {
+        "name": "approved_advance_extension",
+        "rows": 96,
+        "false_alerts": 0,
+        "fpr": 0.0
+      },
+      {
+        "name": "approved_advance_writeoff",
+        "rows": 96,
+        "false_alerts": 0,
+        "fpr": 0.0
+      },
+      {
+        "name": "declared_related_party",
+        "rows": 96,
+        "false_alerts": 4,
+        "fpr": 0.041666666666666664
+      },
+      {
+        "name": "historical_valid_invoice",
+        "rows": 96,
+        "false_alerts": 1,
+        "fpr": 0.010416666666666666
+      },
+      {
+        "name": "legitimate_installments",
+        "rows": 96,
+        "false_alerts": 11,
+        "fpr": 0.11458333333333333
+      },
+      {
+        "name": "legitimate_period_close",
+        "rows": 96,
+        "false_alerts": 0,
+        "fpr": 0.0
+      },
+      {
+        "name": "legitimate_self_approval",
+        "rows": 97,
+        "false_alerts": 0,
+        "fpr": 0.0
+      },
+      {
+        "name": "long_approval_delay",
+        "rows": 96,
+        "false_alerts": 4,
+        "fpr": 0.041666666666666664
+      },
+      {
+        "name": "new_legitimate_vendor",
+        "rows": 96,
+        "false_alerts": 13,
+        "fpr": 0.13541666666666666
+      },
+      {
+        "name": "remote_employee_payroll",
+        "rows": 96,
+        "false_alerts": 0,
+        "fpr": 0.0
+      },
+      {
+        "name": "round_recurring_payment",
+        "rows": 96,
+        "false_alerts": 0,
+        "fpr": 0.0
+      },
+      {
+        "name": "verified_bank_change",
+        "rows": 97,
+        "false_alerts": 1,
+        "fpr": 0.010309278350515464
+      },
+      {
+        "name": "weekend_operations",
+        "rows": 96,
+        "false_alerts": 20,
+        "fpr": 0.20833333333333334
+      }
+    ],
+    "per_accounting_framework": [
+      {
+        "name": "TT133",
+        "rows": 15046,
+        "fraud_rows": 78,
+        "alerts": 580,
+        "tp": 69,
+        "fp": 511,
+        "precision": 0.11896551724137931,
+        "recall": 0.8846153846153846,
+        "fpr": 0.034139497594869055
+      },
+      {
+        "name": "TT200",
+        "rows": 9954,
+        "fraud_rows": 47,
+        "alerts": 424,
+        "tp": 45,
+        "fp": 379,
+        "precision": 0.10613207547169812,
+        "recall": 0.9574468085106383,
+        "fpr": 0.038255778742303424
+      }
+    ],
+    "case_recall": {
+      "cases": 109,
+      "detected": 104,
+      "recall": 0.9541284403669725
+    }
+  }
+}

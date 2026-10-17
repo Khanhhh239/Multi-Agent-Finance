@@ -1,0 +1,384 @@
+{
+  "seed": 2026101402,
+  "seed_partition": "test",
+  "requested_rate": 0.005,
+  "data": "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005",
+  "report": "reports\\rule_repairs\\phase4\\seed_2026101402\\sme_fraud_005",
+  "rows": 50000,
+  "metrics": [
+    {
+      "period": "train",
+      "rows": 25000,
+      "fraud_rows": 125,
+      "normal_rows": 24875,
+      "alerts": 433,
+      "tp": 109,
+      "fp": 324,
+      "fn": 16,
+      "tn": 24551,
+      "fraud_precision": 0.2517321016166282,
+      "fraud_recall_all": 0.872,
+      "fpr": 0.013025125628140703,
+      "accuracy": 0.9864,
+      "false_alerts_per_1000_normal": 13.025125628140703,
+      "fraud_precision_wilson_row95": [
+        0.21315775771244333,
+        0.2946728392725169
+      ],
+      "block_precision": {
+        "unit": "company_calendar_month_blocks",
+        "blocks": 36,
+        "repetitions": 299,
+        "interval95": [
+          0.2045977011494253,
+          0.2977667493796526
+        ],
+        "note": "Descriptive uncertainty on frozen simulations; few companies/seeds remain a limitation."
+      },
+      "hard_negatives": [
+        {
+          "name": "approved_advance_extension",
+          "rows": 96,
+          "false_alerts": 0
+        },
+        {
+          "name": "approved_advance_writeoff",
+          "rows": 96,
+          "false_alerts": 0
+        },
+        {
+          "name": "declared_related_party",
+          "rows": 96,
+          "false_alerts": 0
+        },
+        {
+          "name": "historical_valid_invoice",
+          "rows": 96,
+          "false_alerts": 0
+        },
+        {
+          "name": "legitimate_installments",
+          "rows": 96,
+          "false_alerts": 1
+        },
+        {
+          "name": "legitimate_period_close",
+          "rows": 96,
+          "false_alerts": 0
+        },
+        {
+          "name": "legitimate_self_approval",
+          "rows": 97,
+          "false_alerts": 0
+        },
+        {
+          "name": "long_approval_delay",
+          "rows": 96,
+          "false_alerts": 1
+        },
+        {
+          "name": "new_legitimate_vendor",
+          "rows": 96,
+          "false_alerts": 0
+        },
+        {
+          "name": "remote_employee_payroll",
+          "rows": 96,
+          "false_alerts": 0
+        },
+        {
+          "name": "round_recurring_payment",
+          "rows": 96,
+          "false_alerts": 0
+        },
+        {
+          "name": "verified_bank_change",
+          "rows": 97,
+          "false_alerts": 0
+        },
+        {
+          "name": "weekend_operations",
+          "rows": 96,
+          "false_alerts": 8
+        }
+      ]
+    },
+    {
+      "period": "validation",
+      "rows": 12500,
+      "fraud_rows": 63,
+      "normal_rows": 12437,
+      "alerts": 225,
+      "tp": 53,
+      "fp": 172,
+      "fn": 10,
+      "tn": 12265,
+      "fraud_precision": 0.23555555555555555,
+      "fraud_recall_all": 0.8412698412698413,
+      "fpr": 0.013829701696550616,
+      "accuracy": 0.98544,
+      "false_alerts_per_1000_normal": 13.829701696550615,
+      "fraud_precision_wilson_row95": [
+        0.18483629887765798,
+        0.2951530325430918
+      ],
+      "block_precision": {
+        "unit": "company_calendar_month_blocks",
+        "blocks": 18,
+        "repetitions": 299,
+        "interval95": [
+          0.171875,
+          0.2961165048543689
+        ],
+        "note": "Descriptive uncertainty on frozen simulations; few companies/seeds remain a limitation."
+      },
+      "hard_negatives": [
+        {
+          "name": "approved_advance_extension",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "approved_advance_writeoff",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "declared_related_party",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "historical_valid_invoice",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "legitimate_installments",
+          "rows": 48,
+          "false_alerts": 1
+        },
+        {
+          "name": "legitimate_period_close",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "legitimate_self_approval",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "long_approval_delay",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "new_legitimate_vendor",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "remote_employee_payroll",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "round_recurring_payment",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "verified_bank_change",
+          "rows": 49,
+          "false_alerts": 0
+        },
+        {
+          "name": "weekend_operations",
+          "rows": 48,
+          "false_alerts": 2
+        }
+      ]
+    },
+    {
+      "period": "test",
+      "rows": 12500,
+      "fraud_rows": 62,
+      "normal_rows": 12438,
+      "alerts": 247,
+      "tp": 56,
+      "fp": 191,
+      "fn": 6,
+      "tn": 12247,
+      "fraud_precision": 0.22672064777327935,
+      "fraud_recall_all": 0.9032258064516129,
+      "fpr": 0.01535616658626789,
+      "accuracy": 0.98424,
+      "false_alerts_per_1000_normal": 15.35616658626789,
+      "fraud_precision_wilson_row95": [
+        0.17892119444486365,
+        0.2828902595520592
+      ],
+      "block_precision": {
+        "unit": "company_calendar_month_blocks",
+        "blocks": 18,
+        "repetitions": 299,
+        "interval95": [
+          0.1592920353982301,
+          0.2967479674796748
+        ],
+        "note": "Descriptive uncertainty on frozen simulations; few companies/seeds remain a limitation."
+      },
+      "hard_negatives": [
+        {
+          "name": "approved_advance_extension",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "approved_advance_writeoff",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "declared_related_party",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "historical_valid_invoice",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "legitimate_installments",
+          "rows": 48,
+          "false_alerts": 1
+        },
+        {
+          "name": "legitimate_period_close",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "legitimate_self_approval",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "long_approval_delay",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "new_legitimate_vendor",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "remote_employee_payroll",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "round_recurring_payment",
+          "rows": 48,
+          "false_alerts": 0
+        },
+        {
+          "name": "verified_bank_change",
+          "rows": 49,
+          "false_alerts": 0
+        },
+        {
+          "name": "weekend_operations",
+          "rows": 48,
+          "false_alerts": 0
+        }
+      ]
+    }
+  ],
+  "aggregate_coverage": [
+    {
+      "rule_id": "D1",
+      "windows": 72,
+      "evaluated": 72,
+      "skip_reasons": {}
+    },
+    {
+      "rule_id": "D2",
+      "windows": 72,
+      "evaluated": 0,
+      "skip_reasons": {
+        "need_at_least_1000_positive_rows": 72
+      }
+    },
+    {
+      "rule_id": "D3",
+      "windows": 863,
+      "evaluated": 0,
+      "skip_reasons": {
+        "need_at_least_1000_positive_rows": 863,
+        "fewer_than_100_distinct_amounts": 472,
+        "range_less_than_two_orders_of_magnitude": 442,
+        "expected_cell_count_less_than_5": 863,
+        "dominant_fixed_amount_over_20_percent": 233
+      }
+    },
+    {
+      "rule_id": "D4",
+      "windows": 72,
+      "evaluated": 0,
+      "skip_reasons": {
+        "need_300_rows_in_each_window": 47,
+        "zero_rate_for_at_least_one_suffix": 25
+      }
+    },
+    {
+      "rule_id": "D5",
+      "windows": 72,
+      "evaluated": 72,
+      "skip_reasons": {}
+    },
+    {
+      "rule_id": "D6",
+      "windows": 3311,
+      "evaluated": 110,
+      "skip_reasons": {
+        "need_at_least_300_positive_rows": 3201,
+        "fewer_than_100_distinct_amounts": 2734,
+        "range_less_than_two_orders_of_magnitude": 1959,
+        "expected_cell_count_less_than_5": 2727,
+        "dominant_fixed_amount_over_20_percent": 281
+      }
+    }
+  ],
+  "source_hashes": {
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\companies.csv": "6e37b0f78c7d9252701c3e6a480947d7994606bfce59ff71142989973da424dd",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\employees.csv": "6c2f088362f7930af2146d9529719d16acaddfd1a7e448d179a51993d04b157f",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\entity_links.csv": "576843835d25f5863a5d04e69ab1f38d624ed1fa5e230622d1752b37f061241e",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\attendance.csv": "f34966d852d15b721522b11280c951d83d6b7a474d6aa69bf19f9cd3d16c4bae",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\vendors.csv": "16293e604903a8f816590aa4fa2c18b31bb0839b7f90aa4aafa409ecdbae2d06",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\vendor_status_history.csv": "4fa4753be880c9bf29b3a172e550172d9c2b18102560bfe6612059cc8686e061",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\customers.csv": "e1bee091ed9dd26c03c4f38dde210c211d176e3b1ffc3a04010ee15436cb18a5",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\calendar.csv": "7296fea023dd9d6bd4db421d982b767bc7a4e82c2aecbb698c11eac54a252192",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\advances.csv": "1027e7a2f378397cb1b6dd8527f486905d9beb525b81eda813706608b137730e",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\advance_events.csv": "53e550db005393471203a63652131f00f73576501f2023c7dcd35243847f4b9e",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\bank_account_changes.csv": "b3f8deef339173a6be7f47a42208d4b141ab6edf87e1df9b270dd8cafef29194",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\transactions.csv": "80bc7c1890c2d5402de71084fa69feb65e13a40b63297379fc37ba983986d0ea",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\labels.csv": "3aa9372531f7f0dcd7b473cb342872c67e4d088bd8d5c58780b221fa7eda2bd7",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\splits.csv": "01c0f1b327ee4179d313d832f9bc8ad108d7b54af8816fdf818c0a4d2b5447b2",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\invoices.csv": "e91f7a2adb643b940760c8a88db970f0aa8173cd12bfbae1fc9e9def4bbb6cf5",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\journal_lines.csv": "63a7fed7b9e3657e6e4f9a529debe87833ad5e7037916722c640df736ba21a7f",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\journal_documents.csv": "8f39705a487757938c1f71c13c0d34bb7fd94fc032c051d1743e02b804c815f1",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\document_links.csv": "4f211cac5cd341343eedfadfb4ee396cf6f56f6d0bac3cf49d448f54edcd1a60",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\account_flow_edges.csv": "62703e010570dc4a801712be28153c9debfd6e96216dee501ad6dd9fb58cf0ff",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\features.csv": "9ce5f18fc94f389a466848cad3640e848c053127419e703852b084ee3606a299",
+    "data\\rule_evidence_phase4\\seed_2026101402\\sme_fraud_005\\manifest.json": "aaba45c7c827b5f43643356e6a7968f8fad0bf2192faa49d207439c348311437"
+  },
+  "review_cases": 762,
+  "score_replay": "passed",
+  "queue_membership": "passed",
+  "model_usage": "none",
+  "source_scope_note": "Fresh six-family SME generator still lacks actual HR/ERP/receipt sources; source challenges assess those capabilities separately."
+}
