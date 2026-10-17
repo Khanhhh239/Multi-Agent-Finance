@@ -37,5 +37,7 @@ Không đưa dữ liệu thiếu trường vào pipeline v3 cũ. Kiểm tra này
 
 ## Kiểm chứng
 
+Trước phép so thời gian, các cột có hậu tố `_at` được chuẩn hóa về giờ Việt Nam. CSV adapter dùng múi giờ nguồn khai báo trong YAML cho giá trị chưa có múi giờ; đường vào chuẩn trực tiếp mặc định giờ Việt Nam. Giá trị đã có độ lệch múi giờ được chuyển đúng thời điểm. Khi đọc CSV chuẩn, biểu diễn số nguyên như `1000.0` được đổi thành token `1000`, không làm tròn giá trị có phần lẻ hoặc số tiền lớn. Cách xử lý này tránh đảo thứ tự thời gian khi đầu vào trộn UTC và giờ địa phương, đồng thời giữ giao diện số nguyên của bộ máy luật.
+
 - Chín kiểm thử cho dữ liệu thiếu, tiền sai kiểu, thời gian sai, nhãn lẫn vào đầu vào, khóa trùng và khóa ngoại khác công ty.
 - Thế giới tổng hợp `w4_s411` tái sinh ngày 2026-10-16: 200.000 giao dịch, `passed`, không có lỗi, cảnh báo hoặc năng lực thiếu cột. Kết quả tại `results/v4/schema_w4_s411.json`.

@@ -2,6 +2,8 @@
 from pathlib import Path
 import json
 import shutil
+import datetime as dt
+from zoneinfo import ZoneInfo
 
 import numpy as np
 
@@ -18,7 +20,7 @@ def main():
     gates, stop_reasons = {}, []
     fields = ("recall", "known_recall", "novel_recall", "case_recall", "new_decoy_alert_rate", "hard_neg_alert_rate")
     lines = ["# Kết quả niêm phong v4 trên dữ liệu tổng hợp", "",
-             "Ngày 2026-10-16. Đây là báo cáo hoàn chỉnh đầu tiên của ba seed 931 đến 933, sau khi đóng băng và thử khô seed 939 thành công. Lần thực thi trước dừng do lỗi cấp phát bộ nhớ, chưa ghi tệp kết quả hoặc in chỉ số từng phần; chạy lại theo ngoại lệ hạ tầng của A5. Không điều chỉnh phương pháp hoặc chọn lại cấu hình theo kết quả này.", "",
+             f"Ngày {dt.datetime.now(ZoneInfo('Asia/Ho_Chi_Minh')).date().isoformat()}. Đây là báo cáo hoàn chỉnh đầu tiên của ba seed 931 đến 933, sau khi đóng băng và thử khô seed 939 thành công. Lần thực thi trước dừng do lỗi cấp phát bộ nhớ, chưa ghi tệp kết quả hoặc in chỉ số từng phần; chạy lại theo ngoại lệ hạ tầng của A5. Không điều chỉnh phương pháp hoặc chọn lại cấu hình theo kết quả này.", "",
              f"Cấu hình đã chọn: **{chosen}**. Khởi đầu lạnh: **{frozen['cold_start']}**. Ngân sách ba dòng mỗi công ty mỗi tuần. S1 ẩn nhãn bảy kịch bản mới trong lịch sử của công ty; S2 học có giám sát từ ba thế giới phát triển và dùng lịch sử không nhãn của công ty đích.", "",
              "## Cấu hình đã chọn", "",
              "Đơn vị phần trăm. Số vụ được thể hiện bằng tỷ lệ vụ tìm thấy; số dòng gian lận kiểm thử và dòng mới có trong JSON gốc.", "",

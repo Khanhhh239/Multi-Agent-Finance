@@ -22,6 +22,7 @@ from . import accounting_ext  # noqa: F401; use the same v4 templates as the gen
 from .feats import engineered_features
 from .feats_v4 import v4_features
 from .schema import validate_input
+from .input_values import normalize
 
 TABLES = (*INPUT_TABLES, *OPTIONAL_INPUT_TABLES, "journal_lines")
 REQUIRED_TABLES = set(INPUT_TABLES) | {"journal_lines"}
@@ -53,6 +54,7 @@ def snapshot_input(data, out, company_id, week, require_full=True):
         frame = pd.read_csv(path, dtype=str, keep_default_na=False, encoding="utf-8-sig")
         if "company_id" in frame:
             frame = frame[frame.company_id == str(company_id)].copy()
+        frame = normalize(frame)
         observed = next((c for c in ("observed_at", "recorded_at") if c in frame), None)
         if name == "transactions":
             observed = "posted_at"

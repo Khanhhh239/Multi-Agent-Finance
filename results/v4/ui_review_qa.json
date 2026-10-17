@@ -1,0 +1,17 @@
+{
+  "data_kind": "synthetic_qa_fixture",
+  "date": "2026-10-17",
+  "policy": "Rules fixture, not frozen L4-FB",
+  "method": "manual browser interaction and screenshot inspection",
+  "observed_checks": [
+    "company C001 queue visible",
+    "EMPTY company shows zero cases and no stale C001 details",
+    "switching back restores C001 queue",
+    "legitimate decision with reviewer, reason, worth false and 1.5 minutes appended",
+    "queue counters and worth-review denominator updated",
+    "saved case displays legitimate status"
+  ],
+  "screenshot": "results/v4/ui_review_qa.png",
+  "real_company_performance_measured": false,
+  "official_v2_integration_verified": false
+}

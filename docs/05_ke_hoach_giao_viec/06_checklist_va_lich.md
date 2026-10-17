@@ -1,5 +1,7 @@
 # Danh sách việc, công ước tính, định nghĩa hoàn thành
 
+**Kết quả ngày 2026-10-17:** A1 đến A5 hoàn tất, nhưng G5 không đạt và **M2 kích hoạt điều kiện dừng toàn dự án**: recall S1 trung bình ba thế giới là 41,31%, thấp hơn 50%. A6, pha B và các công việc phát triển, triển khai tiếp không được thực hiện trong vòng này. Các phần C đã viết là hiện vật nghiên cứu, chưa hoàn tất chấp nhận hoặc thí điểm. Xem [báo cáo](../03_danh_gia_va_hieu_qua_kinh_te/07_ket_qua_niem_phong_v4.md) và [trạng thái](../STATUS.md). Bảng dưới giữ nguyên kế hoạch và ngưỡng gốc để truy vết.
+
 Công tính theo ngày công của một kỹ sư (không gồm thời gian máy chạy). Ước tính thô **[G]**.
 
 | Mã | Việc | Công | Phụ thuộc | Đầu ra chính |

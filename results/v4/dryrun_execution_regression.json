@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "data_kind": "synthetic_dryrun_only",
+  "old_report": "results\\v4\\sealed_v4_dryrun.json",
+  "bounded_report": "results\\v4\\sealed_v4_bounded_dryrun.json",
+  "worlds_exact_equal": true,
+  "scenarios": [
+    "S1",
+    "S2"
+  ],
+  "policies_per_scenario": 24,
+  "frozen_code_hashes_match": true,
+  "report_sha256": {
+    "results\\v4\\sealed_v4_dryrun.json": "f07c280292156368f0c46c62dfc2fd1c049a456558f72846f96bb96b8985580a",
+    "results\\v4\\sealed_v4_bounded_dryrun.json": "8c86572fe61d22970b80b4ae1e6153ab8ccaa2f24436600e5f64cabc85d57854"
+  }
+}

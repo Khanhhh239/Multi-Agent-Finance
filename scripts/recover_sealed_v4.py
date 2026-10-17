@@ -56,6 +56,7 @@ def main():
     step('explanation_check_v4', 'scripts/check_explanations_v4.py')
     step('api_integration_v4', 'scripts/check_api_v4.py')
     step('tests_complete_v4', '-m', 'pytest', 'tests_agent2', 'tests_sme_fraud', '-q')
+    step('performance_v4', 'scripts/performance_v4.py')
     state('A6_C1', 'complete', g5_passed=gates['g5_passed_macro_scenarios'])
 
 

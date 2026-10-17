@@ -36,6 +36,14 @@ def train(worlds, holdout, frozen_path, sealed_report, out):
         raise ValueError("A5 complete one-shot report must match the frozen configuration")
     if file_hashes(Path(".")) != frozen["hashes"]:
         raise ValueError("frozen code differs; do not silently train another implementation")
+    for scenario in ('S1', 'S2'):
+        values = np.asarray([[w[scenario][frozen['chosen']]['recall'], w[scenario][frozen['chosen']]['hard_neg_alert_rate']]
+                             for w in sealed['worlds'].values()], dtype=float)
+        if not np.isfinite(values).all():
+            raise ValueError('M2 metrics undefined; training is forbidden')
+        recall, hard_negative = values.mean(axis=0)
+        if recall < .50 or hard_negative > .25:
+            raise ValueError('M2 global stop condition met; training is forbidden')
     frames = [compact_integer_storage(prepare(w)) for w in worlds]
     pool_tr = pd.concat([f[f.split == "train"] for f in frames], ignore_index=True)
     pool_va = pd.concat([f[f.split == "validation"] for f in frames], ignore_index=True)
@@ -58,6 +66,8 @@ def train(worlds, holdout, frozen_path, sealed_report, out):
                             "target label-free signals require the target company's own past data",
                             "priority scores are not calibrated fraud probabilities"]}
     meta['holdout_is_independent_selection_test'] = False
+    meta['artifact_status'] = 'synthetic_research_only'
+    meta['accepted_for_real_company_use'] = False
     bundle = {"schema_version": 2, "frozen": frozen, "models": models, "ces": ces, "meta": meta}
     target = compact_integer_storage(prepare(holdout))
     tr, va, te = (target[target.split == s] for s in ("train", "validation", "test"))

@@ -1,0 +1,12 @@
+{
+  "stage": "M2",
+  "status": "global_stop",
+  "reasons": [
+    {
+      "aggregation": "equal mean over three worlds",
+      "scenario": "S1",
+      "recall": 0.41310124066944637,
+      "hard_neg_alert_rate": 0.10373061977302582
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 # Chiến lược kiểm thử
 
+## Cập nhật vòng v4 ngày 2026-10-17
+
+Kiểm thử đầy đủ hiện tại: **165 bài và 18 kiểm tra con qua**, 72,36 giây. Đã bổ sung bộ chọn, cổng niêm phong, thống kê ghép cặp, lược đồ, adapter, đầu vào theo thời gian, cách ly công ty, quyết định chỉ thêm và bảo vệ phản hồi; bằng chứng tại `results/v4/test_verification.json`. Các con số 84 bài và trạng thái chưa làm trong bảng lịch sử bên dưới thuộc lúc bàn giao ban đầu.
+
+A5 đã hoàn tất, **G5 không đạt và M2 yêu cầu dừng toàn dự án**: recall S1 trung bình đều ba thế giới là 41,31%, dưới ngưỡng 50%; S2 là 63,87%. Không đổi ngưỡng, không chọn lại cấu hình, không huấn luyện v2 hoặc thí điểm. Báo cáo đầy đủ tại [kết quả niêm phong v4](07_ket_qua_niem_phong_v4.md). Các kiểm kỹ thuật đã qua không thay thế cổng hiệu năng mô hình hoặc kiểm chứng doanh nghiệp thật. Bảng cổng gốc phía dưới được giữ để truy vết tiêu chí đặt trước.
+
 ## 1. Kim tự tháp kiểm thử
 
 | Tầng | Kiểm cái gì | Hiện có | Cần thêm |

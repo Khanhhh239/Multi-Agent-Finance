@@ -107,3 +107,15 @@ Mỗi phương pháp có cùng giao diện `fit(train, valid)` / `score(df)` (`a
 
 ## 7. Mã và cách chạy lại
 `agent2/methods.py` (phương pháp), `metrics.py`, `bench.py`, `final_eval.py`, `aggregate.py` (giao thức), `alerting.py` (chọn cảnh báo, lý do, conformal), `feedback_sim.py`, `external.py`, `pipeline.py`. Kết quả thô: `results/`. Lệnh: xem [AGENT2_README.md](AGENT2_README.md).
+
+## 8. Vòng v4 tiếp nhận ngày 2026-10-16 và 2026-10-17
+
+Các kết quả ở mục 5 và tiêu chí ở mục 6 thuộc vòng nghiên cứu trước. Vòng v4 mới dùng đúng đăng ký trước tại nhật ký mục 14: trung bình ba giao thức P1, P2 theo 10 nhánh ACFE và P3, trên ba thế giới phát triển, trần báo nhầm P1 là 20%; chênh dưới 0,01 ưu tiên cấu hình đứng trước.
+
+Đã hoàn tất 24 cấu hình trên cả ba thế giới, kèm bootstrap ghép cặp theo vụ 2.000 lần. Chọn **L4-FB**, khởi đầu lạnh **Novelty max(R,E)**; tệp khóa `results/v4/v4_frozen.json`. Điểm chọn 0,7416, recall P1 80,81%, P2 59,06%, P3 82,62%, báo nhầm ca khó P1 16,62%. H1 chưa đạt vì khoảng tin cậy P1 của L4 trừ L3 chứa hoặc chạm 0. Xem [báo cáo phát triển v4](../03_danh_gia_va_hieu_qua_kinh_te/06_so_sanh_phuong_phap_v4.md).
+
+Thử khô seed 939 đã qua. Thực thi giới hạn một ứng viên đồng thời và thu nhỏ kiểu lưu số nguyên cho toàn bộ kết quả thử khô giống chính xác lần trước; hồi quy P3 413 có 1.020 chỉ số giống chính xác. Không đổi sáu tệp, tham số hoặc chính sách đã khóa. A5 hoàn tất sau khôi phục hạ tầng chưa từng lộ chỉ số từng phần.
+
+Kết quả niêm phong tổng hợp của L4-FB, trung bình đều ba thế giới: S1 recall chung **41,31%**, kịch bản mới **20,32%**, báo nhầm toàn bộ ca khó **10,37%**; S2 tương ứng **63,87%**, **31,22%**, **11,39%**. G5 không đạt; S1 dưới 50% kích hoạt **dừng toàn dự án tại M2**. Không chọn lại ứng viên từ bảng chẩn đoán, không huấn luyện v2, không tiếp tục pha B hoặc thí điểm. Xem [báo cáo niêm phong](../03_danh_gia_va_hieu_qua_kinh_te/07_ket_qua_niem_phong_v4.md). Chủ dự án cần xem lại bài toán trước hướng công việc mới; ba seed này đã dùng và không được tái sử dụng làm kiểm thử niêm phong.
+
+Đường ống vận hành mới nhận bảng thô theo công ty và tuần, không đọc nhãn hay đặc trưng lưu sẵn. Đối chiếu 273 cột số trên 2.113 dòng với đường ống nghiên cứu có chênh lớn nhất bằng không. Điều này kiểm tính tương đương đặc trưng; chưa xác nhận hiệu năng trên dữ liệu thật. Bộ API, hàng đợi và phản hồi đã có kiểm thử kỹ thuật, chưa có đánh giá thí điểm. Hướng dẫn tại [vận hành cục bộ](../05_ke_hoach_giao_viec/huong_dan_van_hanh.md).

@@ -2,6 +2,8 @@
 
 Tài liệu cho hiện vật nghiên cứu trên dữ liệu tổng hợp. Chỉ chuyển sang thí điểm khi các cổng đánh giá và hồ sơ pháp lý đã được đáp ứng. Chưa có tệp xuất thực tế để xác nhận tương thích phần mềm kế toán.
 
+**Trạng thái ngày 2026-10-17: dừng theo M2.** Recall niêm phong S1 là 41,31%, dưới ngưỡng 50%. Không huấn luyện v2, không triển khai hoặc nhận dữ liệu thí điểm. Các lệnh vận hành bên dưới là thiết kế đã chuẩn bị, có điều kiện A6; hiện chưa có mô hình v2 và cấu hình chính thức để chạy chúng. Xem [báo cáo niêm phong](../03_danh_gia_va_hieu_qua_kinh_te/07_ket_qua_niem_phong_v4.md) và [trạng thái](../STATUS.md).
+
 ## Môi trường
 
 Tại thư mục gốc dự án, dùng Python 3.12.14 và các phiên bản trong `requirements.txt`:

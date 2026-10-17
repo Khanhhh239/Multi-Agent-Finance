@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from .base import Adapter
 from ..schema import validate_input
+from ..input_values import normalize
 
 
 class CSVAdapter(Adapter):
@@ -75,7 +76,7 @@ class CSVAdapter(Adapter):
                     frame[col] = frame[col].map(timestamp)
                 else:
                     raise ValueError(f"unsupported type: {kind}")
-            tables[name] = frame
+            tables[name] = normalize(frame, timezone, integer_strings=False)
         self.last_report = validate_input(tables)
         if self.last_report["errors"]:
             raise ValueError(f"input validation failed: {json.dumps(self.last_report['errors'], ensure_ascii=False)}")

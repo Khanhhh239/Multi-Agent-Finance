@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "checked_at": "2026-10-17T11:09:09.494623+07:00",
+  "command": ".venv/Scripts/python.exe -m pytest tests_agent2 tests_sme_fraud -q",
+  "exit_code": 0,
+  "passed": 165,
+  "subtests_passed": 18,
+  "seconds": 72.36,
+  "stderr_empty": true,
+  "log_path": "work/compact_tests_complete_v4.log",
+  "log_sha256": "0daea8a6a7dbbed81b9889f3a1c430338b4ec716d5d95a99bf12edafef05c24e",
+  "python": "3.12.14",
+  "frozen_hashes_match": true,
+  "frozen_hashes": {
+    "agent2/hybrid.py": "2d236ea488543379",
+    "agent2/eval_v4.py": "52921091e66d9fb7",
+    "agent2/methods.py": "54293542665432ba",
+    "agent2/feats_v4.py": "c276b8d9b424c743",
+    "agent2/feats.py": "3965ff18eb6a8a4f",
+    "agent2/data.py": "20dfc1320ba520c0"
+  },
+  "syntax_checks": {
+    "python_compileall_agent2_scripts": "passed",
+    "node_check_review_ui_v4_js": "passed"
+  },
+  "model_v2_created": false,
+  "official_config_created": false,
+  "deployment_accepted": false,
+  "stop_reason": "M2 S1 recall below 50 percent; synthetic sealed evaluation"
+}

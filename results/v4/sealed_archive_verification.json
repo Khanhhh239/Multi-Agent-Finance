@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "source": "work\\results\\sealed_v4.json",
+  "archive": "results\\v4\\sealed_v4.json",
+  "source_sha256": "5b326d5eeac48b4c6c2bc77b2531646ad1453c804aa6ae6f4624246d5835ec97",
+  "archive_sha256": "9316e0cb94f64e35a8a46a6643795f215d38be10cc521297adbf98f8e03fa7b5",
+  "json_values_exact_equal": true,
+  "archive_format": "LF line endings; original source preserved in work",
+  "frozen_matches": true,
+  "policies_per_scenario": {
+    "s4_s931": {
+      "S1": 24,
+      "S2": 24
+    },
+    "s4_s932": {
+      "S1": 24,
+      "S2": 24
+    },
+    "s4_s933": {
+      "S1": 24,
+      "S2": 24
+    }
+  }
+}

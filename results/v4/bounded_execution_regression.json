@@ -11,5 +11,6 @@
     "w4_s411",
     "w4_s412"
   ],
-  "parameters_or_features_changed": false
+  "parameters_or_features_changed": false,
+  "lossless_integer_compaction": true
 }
