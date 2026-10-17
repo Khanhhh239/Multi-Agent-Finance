@@ -19,6 +19,7 @@ from src.explanation_v2.retrieval import retrieve, tokens
 from src.explanation_v2.context_builder import build_context
 from src.explanation_v2.validator import validate, fallback
 from src.explanation_v2.llm import Ollama, ProviderFailure
+from src.explanation_v2.selection import request_data, materialize
 from src.explanation_v2.service import ExplanationService, explain
 from src.legal_registry.registry import LegalRegistry, LegalDocument
 from src.orchestration.contracts import LegalCitation
@@ -269,6 +270,46 @@ class ExplanationIntegrationTests(unittest.TestCase):
         self.assertEqual(self.fixture.client.get('/review-assets/credentials.json').status_code,404)
 
 
+class CompactSelectionTests(unittest.TestCase):
+    def context(self):
+        return Context(evaluation_id='e',record_revision=1,record_sha256='a'*64,excerpts=(),facts=(
+            Fact(fact_id='summary',variants=('First verified text','Second verified text'),refs=('evaluation:e',)),
+            Fact(fact_id='scope',variants=('Required scope warning',),refs=('evaluation:e',)),
+            Fact(fact_id='quote:legal',variants=('Exact legal quotation '+('long text '*1000),),refs=('chunk:one',))))
+
+    def test_wire_omits_quotes_refs_and_snapshot_metadata(self):
+        context=self.context();content,schema=request_data(context)
+        self.assertNotIn('Exact legal quotation',content)
+        self.assertNotIn('evaluation:e',content)
+        self.assertNotIn('record_sha256',content)
+        self.assertLess(len(content),len(context.model_dump_json())/10)
+        self.assertEqual(schema['properties']['selections']['minItems'],2)
+        self.assertFalse(schema['additionalProperties'])
+        self.assertEqual(schema['$defs']['Selection']['properties']['fact_id']['enum'],['summary','scope'])
+
+    def test_order_and_variant_choices_restore_exact_refs_and_legal_quote(self):
+        context=self.context()
+        raw=json.dumps({'selections':[{'fact_id':'scope','variant_index':0},{'fact_id':'summary','variant_index':1}]})
+        claims=validate(materialize(raw,context),context)
+        self.assertEqual([c.fact_id for c in claims],['scope','summary','quote:legal'])
+        self.assertEqual(claims[1].text,'Second verified text')
+        self.assertEqual(claims[-1].text,context.facts[-1].variants[0])
+        self.assertEqual(claims[-1].refs,('chunk:one',))
+
+    def test_missing_duplicate_unknown_injection_and_invalid_indices_rejected(self):
+        valid=[{'fact_id':'summary','variant_index':0},{'fact_id':'scope','variant_index':0}]
+        invalid=[{'error':'Cannot parse'}, {'selections':valid[:1]}, {'selections':[valid[0],valid[0]]},
+            {'selections':[{'fact_id':'invented','variant_index':0},valid[1]]},
+            {'selections':[{'fact_id':'summary','variant_index':2},valid[1]]},
+            {'selections':[{'fact_id':'summary','variant_index':-1},valid[1]]},
+            {'selections':[{'fact_id':'summary','variant_index':True},valid[1]]},
+            {'selections':[{'fact_id':'summary','variant_index':0,'text':'Invented PASS'},valid[1]]},
+            {'selections':valid,'refs':['forged-source']}]
+        for raw in invalid:
+            with self.subTest(raw=raw),self.assertRaises(ValueError):
+                materialize(json.dumps(raw),self.context())
+
+
 class ProviderTransportTests(unittest.TestCase):
     def context(self):
         return Context(evaluation_id='e',record_revision=1,record_sha256='a'*64,excerpts=(),facts=(Fact(fact_id='f',variants=('Verified',),refs=('evaluation:e',)),))
@@ -286,7 +327,10 @@ class ProviderTransportTests(unittest.TestCase):
                 if mode=='timeout':time.sleep(1)
                 if mode=='invalid':raw=b'not json'
                 elif mode=='oversized':raw=b'x'*3000
-                else:raw=json.dumps({'model':body['model'],'done':True,'message':{'content':json.dumps({'claims':[c.model_dump() for c in fallback(owner.context())]})}}).encode()
+                else:
+                    output={'selections':[{'fact_id':'f','variant_index':0}]}
+                    if mode=='bad_selection':output={'error':'Cannot parse input'}
+                    raw=json.dumps({'model':body['model'],'done':True,'message':{'content':json.dumps(output)}}).encode()
                 self.send_response(200);self.end_headers()
                 try:self.wfile.write(raw)
                 except OSError:pass
@@ -299,6 +343,16 @@ class ProviderTransportTests(unittest.TestCase):
         policy=self.server();raw=Ollama()._generate(self.context(),policy)
         self.assertTrue(validate(raw,self.context()))
         self.assertFalse(self.observed['think']);self.assertFalse(self.observed['stream'])
+        self.assertIsInstance(self.observed['format'],dict)
+        self.assertIn('selections',self.observed['format']['properties'])
+        user=json.loads(self.observed['messages'][1]['content'])
+        self.assertEqual(set(user),{'facts'})
+        self.assertNotIn('refs',user['facts'][0])
+
+    def test_invalid_selection_cannot_bypass_validator(self):
+        with self.assertRaises(ProviderFailure) as caught:
+            Ollama()._generate(self.context(),self.server('bad_selection'))
+        self.assertEqual(str(caught.exception),'CLAIM_VALIDATION_FAILED')
 
     def test_supervised_local_transport(self):
         policy=self.server()
