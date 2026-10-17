@@ -11,7 +11,13 @@ function renderExplanation(item){
  LEGAL_BASIS_NOT_REVIEWED:'Căn cứ pháp lý còn chờ đối chiếu',LEGAL_EXCERPT_UNAVAILABLE:'Chưa có trích đoạn pháp lý đã duyệt',
  CORPUS_VERSION_MISMATCH:'Kho pháp lý chưa khớp phiên bản đánh giá',NO_SELECTED_LEGAL_BASIS:'Chưa chọn được căn cứ pháp lý',
  MISSING_LEGAL_DATE:'Chưa xác nhận ngày áp dụng',CONTEXT_BUDGET:'Nội dung vượt giới hạn xử lý',
- PROVIDER_UNAVAILABLE:'Model hiện không sẵn sàng',CLAIM_VALIDATION_FAILED:'Nội dung model không qua kiểm tra'};
+ PROVIDER_UNAVAILABLE:'Không kết nối được model; kiểm tra Ollama và thử lại',CLAIM_VALIDATION_FAILED:'Nội dung model không qua kiểm tra',
+ PROVIDER_TIMEOUT:'Model phản hồi quá thời gian chờ; thử lại khi model đã tải xong',
+ MODEL_REVISION_MISMATCH:'Model đã cài khác phiên bản được cấu hình',MODEL_MANIFEST_UNAVAILABLE:'Không đọc được phiên bản model từ Ollama',
+ PROVIDER_HTTP_ERROR:'Ollama trả lỗi khi tạo diễn giải',PROVIDER_INVALID_RESPONSE:'Model trả dữ liệu không đúng định dạng',
+ OUTPUT_TRUNCATED:'Phản hồi model vượt giới hạn độ dài',RESPONSE_BUDGET:'Phản hồi model vượt giới hạn dữ liệu',
+ MODEL_OR_COMPLETION_MISMATCH:'Model chưa hoàn tất phản hồi hoặc không khớp cấu hình',
+ LOCAL_ENDPOINT_REQUIRED:'Cấu hình model cần dùng địa chỉ local được hỗ trợ',PROVIDER_FAILURE:'Model gặp lỗi xử lý; có thể thử lại'};
  $('explanation-status').textContent=(item.mode==='LLM_VALIDATED'?'Diễn giải có model hỗ trợ, đã kiểm tra từng phát biểu.':'Diễn giải bằng mẫu: '+(reasons[item.fallback_reason]||'Model chưa đáp ứng điều kiện xử lý')+'.')+' Thuộc bản dữ liệu '+item.record_revision+'.';
  $('explanation-claims').replaceChildren(...item.claims.map(claim=>{const li=element('li');li.append(element('p',claim.text));const details=element('details');details.append(element('summary','Tham chiếu nguồn'),element('small',claim.refs.join(' · ')));li.append(details);return li;}));
  $('explanation-sources').replaceChildren(...item.excerpts.map(c=>element('p',c.document_id+' · '+c.locator+' · '+c.chunk_id)));
