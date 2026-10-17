@@ -41,6 +41,15 @@ def retrieval_fixture():
     return registry, corpus, citation
 
 
+class PolicyTimeoutTests(unittest.TestCase):
+    def test_five_minute_deadline_is_supported_and_bounded(self):
+        self.assertEqual(Policy().timeout_seconds, 300)
+        self.assertEqual(Policy(timeout_seconds=300).timeout_seconds, 300)
+        for value in (0, -1, 301, float('inf'), float('nan')):
+            with self.subTest(value=value), self.assertRaises(ValidationError):
+                Policy(timeout_seconds=value)
+
+
 class RetrievalTests(unittest.TestCase):
     def test_nfc_tokenization(self):
         self.assertEqual(tokens('Hóa đơn'), tokens(unicodedata.normalize('NFD','Hóa đơn')))
