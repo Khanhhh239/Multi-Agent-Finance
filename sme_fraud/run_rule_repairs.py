@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import shutil
 
-from .case_queue import review_queue
+from .case_queue import review_queue, operational_members
 from .generate import write_csv
 from .rule_audit import confusion, read_csv, replay_scores, sha
 from .rule_audit_cases import run_cases
@@ -96,11 +96,12 @@ def run(dataset, baseline, output):
                         txn_type=transactions[tid]['txn_type'], company_id=transactions[tid]['company_id']))
     cases, events = review_queue(result, tables)
     members = [tid for case in cases for tid in json.loads(case['transaction_ids'])]
-    if len(members) != len(set(members)) or set(members) != after:
+    if len(members) != len(set(members)) or set(members) != operational_members(result):
         raise ValueError('Review queue does not reconcile with operational alerts')
     output.mkdir(parents=True)
     write_csv(output / 'rule_scores.csv', [{k: v for k, v in row.items() if k != 'known_risky_prior_ids'} for row in result['scores']])
     write_jsonl(output / 'rule_hits.jsonl', result['hits'])
+    write_jsonl(output / 'batch_events.jsonl', result['batch_events'])
     write_csv(output / 'case_queue.csv', cases)
     write_csv(output / 'case_events.csv', events)
     write_csv(output / 'changed_hits.csv', changes, ['period', 'rule_id', 'direction', 'transaction_id', 'is_fraud', 'hard_negative_type', 'txn_type', 'company_id'])

@@ -118,6 +118,40 @@ class ReviewTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             self.store.detail('003', 'missing')
 
+    def batch_fixture(self):
+        with (self.report/'case_queue.csv').open(encoding='utf-8-sig', newline='') as stream:
+            cases = list(csv.DictReader(stream))
+        case = next(row for row in cases if row['case_id'] == 'RC_1')
+        for row in cases:
+            row['batch_event_ids'] = json.dumps(['BE_TEST']) if row is case else '[]'
+        case['case_type'] = 'batch'
+        event = dict(event_id='BE_TEST', company_id='C001', detected_at=case['opened_at'],
+            phase='batch_closed', rule_id='P1', rule_name='Thanh toán vượt hóa đơn', points=20,
+            hard_trigger=1, transaction_ids=['T1'], related_transaction_ids=['T0'], graph_path=[],
+            evidence=dict(invoice_number='HD001', invoice_gross_vnd=1_000_000,
+                          cumulative_paid_vnd=2_000_000, excess_vnd=1_000_000))
+        write_csv(self.report/'case_queue.csv', cases)
+        (self.report/'batch_events.jsonl').write_text(json.dumps(event)+'\n', encoding='utf-8')
+        return event
+
+    def test_batch_evidence_survives_artifact_loading_and_cache_refresh(self):
+        event = self.batch_fixture()
+        self.store.prepare()
+        detail = self.store.detail('003', 'RC_1')
+        self.assertEqual(detail['case']['case_type'], 'batch')
+        self.assertEqual(detail['batch_events'], [event])
+        self.assertEqual(self.store.transaction('003', 'T0')['transaction_id'], 'T0')
+        event['evidence']['excess_vnd'] = 500_000
+        (self.report/'batch_events.jsonl').write_text(json.dumps(event)+'\n', encoding='utf-8')
+        self.store.prepare()
+        self.assertEqual(self.store.detail('003', 'RC_1')['batch_events'][0]['evidence']['excess_vnd'], 500_000)
+
+    def test_missing_batch_artifact_is_rejected(self):
+        self.batch_fixture()
+        (self.report/'batch_events.jsonl').unlink()
+        with self.assertRaisesRegex(ValueError, 'Batch cases require'):
+            self.store.prepare()
+
     def test_budget_is_per_company_idempotent_and_resets_on_local_day(self):
         for i in range(1, 6):
             self.store.admit('003', f'RC_{i}')

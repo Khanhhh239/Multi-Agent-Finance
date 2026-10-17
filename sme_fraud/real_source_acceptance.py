@@ -290,7 +290,8 @@ def _code_hashes():
              'source_snapshot.py', 'spec_policy.py', 'temporal_evidence.py',
              'noise_policy.py', 'payment_evidence.py', 'payment_evidence.schema.json',
              'authority_policy.py', 'authority_policy.schema.json', 'features.py',
-             'generate.py')
+             'generate.py', 'batch_controls.py', 'case_queue.py', 'exception_validation.py', 'case_identity.py',
+             'feature_contract.py', 'sync_feature_model.py', 'evaluate.py', 'run_rules.py', 'case_admission.py')
     return {name: sha(root / name) for name in names}
 
 

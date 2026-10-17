@@ -64,10 +64,10 @@ async function openCase(identifier) {
   const scenario=state.scenario, request=++openGeneration;
   try {
     hideNotice();
-    await api("/api/admit",{scenario,case_id:identifier});
     const detail=await api("/api/case?"+new URLSearchParams({scenario,id:identifier}));
+    if(!detail.case.archived) await api("/api/admit",{scenario,case_id:detail.case.case_id});
     if(request!==openGeneration||scenario!==state.scenario)return;
-    state.selected=identifier; state.detail=detail; state.tab="overview";
+    state.selected=detail.case.case_id; state.detail=detail; state.tab="overview";
     renderDetail(); await loadQueue();
     if(window.innerWidth<820) $("detail-panel").scrollIntoView({behavior:"smooth",block:"start"});
   } catch(error) { if(request===openGeneration&&scenario===state.scenario)notice(error.message); }
@@ -77,13 +77,14 @@ function renderDetail() {
   const source=row.case_type==="source";
   const paid=data.transactions.filter(tx=>Number(tx.is_financial_entry)===1 && ["bank","cash"].includes(tx.payment_channel) && tx.txn_type!=="customer_receipt").reduce((sum,tx)=>sum+tx.amount_vnd,0);
   const tabs=source?[["overview","Tổng quan"],["source","Hồ sơ nguồn"],["history","Nhật ký"]]:[["overview","Tổng quan"],["transactions","Giao dịch"],["evidence","Bằng chứng"],["history","Nhật ký"]];
-  const unit=source?`hồ sơ nguồn · ${esc(row.source_scope)}`:`${row.observation_count} nghiệp vụ`;
+  const unit=source?`hồ sơ nguồn · ${esc(row.source_scope)}`:`${row.case_type==="batch"?"Lô ":""}${row.observation_count} nghiệp vụ`;
   const scoreValue=source?row.estimated_minutes:row.max_score;
   const scoreLabel=source?"Phút xử lý ước tính":"Điểm ưu tiên rà soát";
   const scoreDetail=source?(row.requires_rereview?`Cần tái rà soát từ ${date(row.rereview_due_at)}`:"Rà soát nguồn một lần"):(paid?"Chi trả trong hồ sơ: "+money(paid):"Chủ yếu là bút toán hoặc rà soát số dư");
   $("detail-panel").innerHTML=`<div class="detail-header"><div class="detail-overline"><span class="chip priority-${esc(row.priority)}">● Ưu tiên ${esc(priorities[row.priority].toLowerCase())}</span><span class="detail-id">${esc(row.case_id)}</span></div><h2>${esc(headline(row))}</h2><div class="detail-meta"><span>${esc(row.company_id)} · ${unit}</span><span>Mở ${date(row.opened_at)}</span><span>${esc(statuses[row.status])}</span></div><div class="detail-score"><div class="score-circle">${scoreValue}</div><div class="score-caption">${scoreLabel}<br><strong>${scoreDetail}</strong></div></div></div><nav class="detail-tabs" aria-label="Các phần hồ sơ">${tabs.map(([id,label])=>`<button data-tab="${id}" class="${state.tab===id?"active":""}">${label}</button>`).join("")}</nav><div class="detail-content" id="detail-content"></div><form id="feedback-form" class="feedback-form"><h3>Ghi nhận kết luận rà soát</h3><div class="form-note">Lưu kết luận sau khi đối chiếu. Phần còn thiếu có thể tiếp tục bổ sung ở lần rà soát sau.</div><div class="decision-options">${Object.entries(decisions).map(([value,label])=>`<label><input type="radio" name="decision" value="${value}" required ${row.feedback?.decision===value?"checked":""}>${label}</label>`).join("")}</div><label class="field">Người rà soát<input type="text" id="reviewer" maxlength="100" required placeholder="Họ và tên người thực hiện" value="${esc(localStorage.getItem("reviewer_name")||"")}"></label><label class="field">Lý do / chứng từ đã đối chiếu<textarea id="reason" maxlength="2000" rows="3" required placeholder="Nêu nội dung đã kiểm tra hoặc bằng chứng cần bổ sung…"></textarea></label><div class="form-bottom"><span class="save-note">Mỗi lần lưu được ghi vào lịch sử.<br>Hồ sơ thiếu bằng chứng tiếp tục mở và tính công tái rà soát.</span><button type="submit" class="primary-button" id="save-feedback">Lưu kết luận →</button></div></form>`;
   document.querySelectorAll("[data-tab]").forEach(button=>button.addEventListener("click",()=>{state.tab=button.dataset.tab; document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===state.tab)); renderTab();}));
-  $("feedback-form").addEventListener("submit",saveFeedback);
+  if(row.archived) $("feedback-form").remove();
+  else $("feedback-form").addEventListener("submit",saveFeedback);
   renderTab();
 }
 function sourceSummary(data) {
@@ -104,12 +105,35 @@ function sourceEvidence(data) {
   const invoice=evidence.invoice||{}, customer=data.entities?.[invoice.customer_id]||{};
   return `<div class="section-label">Sổ chi tiết công nợ và thu tiền</div><div class="summary-grid">${[["Hóa đơn",invoice.invoice_id||"—"],["Khách hàng",customer.name||invoice.customer_id||"—"],["Giá trị hóa đơn",money(invoice.gross_vnd)],["Ngày đến hạn",date(invoice.due_at)],["Đã thu được xác minh",money(evidence.known_paid_vnd)],["Dư còn lại",money(evidence.outstanding_vnd)],["Số ngày quá hạn",number(evidence.overdue_days)],["Coverage thu tiền",(evidence.receipt_coverage||[]).length?"Đủ hồ sơ khai báo":"Thiếu / chưa xác nhận"]].map(([label,value])=>`<div><span>${esc(label)}</span>${esc(value)}</div>`).join("")}</div><div class="source-block"><span>Phân bổ tiền thu hợp lệ</span><strong>${compactList(evidence.receipt_allocations||[])}</strong></div><div class="source-block"><span>Phân bổ không hợp lệ</span><strong>${compactList(evidence.invalid_allocation_ids||[])}</strong></div><div class="source-block"><span>Giải trình còn hiệu lực</span><strong>${compactList(evidence.approved_explanations||[])}</strong></div><p class="graph-caption">Đối chiếu hóa đơn, giao dịch thu tiền, phân bổ đã xác minh, coverage nguồn và giải trình công nợ tại thời điểm chốt.</p>`;
 }
+function batchEvidence(data) {
+  const events=data.batch_events||[];
+  if(!events.length)return "";
+  return `<div class="section-label">Đối chiếu các khoản cùng thời điểm</div>${events.map(event=>{
+    const facts=Object.entries(event.evidence).filter(([key])=>fields[key]);
+    const identifiers=[...event.transaction_ids,...event.related_transaction_ids];
+    return `<details class="evidence-card" open><summary><span class="evidence-head"><span class="rule-tag">${esc(event.rule_id)}</span>${esc(event.rule_name)}<span class="evidence-points">${esc(event.points)} điểm</span></span></summary><div class="evidence-body"><div class="graph-caption">Chốt ${datetime(event.detected_at)} · ${event.transaction_ids.length} khoản cùng thời điểm, ${event.related_transaction_ids.length} khoản lịch sử cần đối chiếu.</div><div class="evidence-facts">${facts.map(([key,value])=>`<div><span>${esc(fields[key])}</span>${esc(factValue(key,value))}</div>`).join("")}</div><div>${identifiers.map(id=>`<button class="link-button" data-transaction="${esc(id)}">${esc(id)}</button>`).join(" · ")}</div></div></details>`;
+  }).join("")}`;
+}
+function renderLineage(data, container) {
+  const labels={equivalent:"Đổi định danh, giữ cùng phạm vi",split:"Tách hồ sơ",merged:"Gộp hồ sơ",split_merge:"Tách và gộp hồ sơ",changed:"Thay đổi phạm vi hoặc bằng chứng",retired:"Không còn trong snapshot hiện tại"};
+  const relations=data.case_lineage||[], history=data.related_feedback_history||[];
+  if(!relations.length&&!history.length&&!data.feedback_history.some(event=>event.applies_to_current_scope===false)) return;
+  const link=id=>id?`<button class="link-button" data-lineage-case="${esc(id)}">${esc(id)}</button>`:"—";
+  container.insertAdjacentHTML("afterbegin",`<div class="section-label">Liên kết hồ sơ qua các lần cập nhật</div>${relations.map(item=>`<div class="timeline-entry"><strong>${esc(labels[item.relation]||item.relation)}</strong>${link(item.old_case_id)} → ${link(item.new_case_id)}</div>`).join("")}${history.map(event=>`<div class="timeline-entry"><strong>Kết luận tại hồ sơ trước: ${esc(decisions[event.decision])}</strong>${esc(event.case_id)} · ${esc(event.reason)}<br><small>${esc(event.reviewer)} · ${datetime(event.reviewed_at)}</small></div>`).join("")}<div class="graph-caption">Kết luận cũ chỉ áp dụng khi phạm vi và bằng chứng vẫn tương đương. Hồ sơ tách/gộp hoặc đổi bằng chứng cần được rà soát lại.</div>`);
+  container.querySelectorAll("[data-lineage-case]").forEach(button=>button.addEventListener("click",()=>openCase(button.dataset.lineageCase)));
+}
 function renderTab() {
   const data=state.detail, container=$("detail-content");
+  if(data.case.archived) {
+    container.innerHTML=`<div class="integrity">${esc(data.archive_notice)}</div><div class="section-label">Kết luận tại snapshot cũ</div>${data.feedback_history.map(event=>`<div class="timeline-entry"><strong>${esc(decisions[event.decision])}</strong>${esc(event.reason)}<br><small>${esc(event.reviewer)} · ${datetime(event.reviewed_at)}</small></div>`).join("")||'<div class="graph-caption">Chưa có kết luận được lưu cho hồ sơ này.</div>'}`;
+    renderLineage(data,container);
+    return;
+  }
   if(data.case.case_type==="source") {
     if(state.tab==="overview") container.innerHTML=sourceSummary(data);
     else if(state.tab==="source") container.innerHTML=sourceEvidence(data);
     else container.innerHTML=`<div class="integrity">✓ Nhật ký kết luận đã kiểm tra tính liên tục.</div><div class="section-label">Kết luận của người rà soát</div>${data.feedback_history.length?data.feedback_history.slice().reverse().map(event=>`<div class="timeline-entry"><strong>${esc(decisions[event.decision])}</strong>${esc(event.reason)}<br><small>${esc(event.reviewer)} · ${datetime(event.reviewed_at)}</small></div>`).join(""):'<div class="graph-caption">Hồ sơ chưa có kết luận của người rà soát.</div>'}<div class="section-label">Lịch sử hồ sơ nguồn</div>${data.case_events.map(event=>`<div class="timeline-entry"><strong>${event.event==="opened"?"Mở hồ sơ nguồn":"Nguồn đã thay đổi trạng thái"}</strong>${esc(data.case.source_scope)}<br><small>${datetime(event.event_at)}</small></div>`).join("")}<div class="graph-caption">Hạn rà soát gợi ý: ${datetime(data.case.sla_due_at)}. ${data.case.requires_rereview?`Lịch tái rà soát: ${datetime(data.case.rereview_due_at)}.`:""}</div>`;
+    renderLineage(data,container);
     return;
   }
   if(state.tab==="overview") {
@@ -123,8 +147,10 @@ function renderTab() {
   } else if(state.tab==="evidence") {
     container.innerHTML=`<div class="section-label">Dấu hiệu đã ghi nhận tại thời điểm giao dịch</div><div class="graph-caption">Mỗi dấu hiệu có dữ kiện và giao dịch ngữ cảnh riêng. Ngoại lệ không đóng góp điểm.</div>${data.hits.map(h=>evidenceCard(h,false)).join("")}`;
   } else {
-    container.innerHTML=`<div class="integrity">✓ Nhật ký kết luận đã kiểm tra tính liên tục.</div><div class="section-label">Kết luận của người rà soát</div>${data.feedback_history.length?data.feedback_history.slice().reverse().map(event=>`<div class="timeline-entry"><strong>${esc(decisions[event.decision])}</strong>${esc(event.reason)}<br><small>${esc(event.reviewer)} · ${datetime(event.reviewed_at)}</small></div>`).join(""):'<div class="graph-caption">Hồ sơ chưa có kết luận của người rà soát.</div>'}<div class="section-label">Lịch sử cảnh báo mô phỏng</div>${data.case_events.map(event=>`<div class="timeline-entry"><strong>${event.event==="opened"?"Mở hồ sơ":"Nâng mức ưu tiên"}</strong>Ưu tiên ${esc(priorities[event.priority])} · ${event.rule_score} điểm<br><small>${datetime(event.event_at)} · ${esc(event.transaction_id)}</small></div>`).join("")}<div class="graph-caption">Hạn rà soát gợi ý từ snapshot: ${datetime(data.case.sla_due_at)}. Đây là lịch của dữ liệu mô phỏng.</div>`;
+    container.innerHTML=`<div class="integrity">✓ Nhật ký kết luận đã kiểm tra tính liên tục.</div><div class="section-label">Kết luận của người rà soát</div>${data.feedback_history.length?data.feedback_history.slice().reverse().map(event=>`<div class="timeline-entry"><strong>${esc(decisions[event.decision])}</strong>${esc(event.reason)}<br><small>${esc(event.reviewer)} · ${datetime(event.reviewed_at)}</small></div>`).join(""):'<div class="graph-caption">Hồ sơ chưa có kết luận của người rà soát.</div>'}<div class="section-label">Lịch sử cảnh báo mô phỏng</div>${data.case_events.map(event=>`<div class="timeline-entry"><strong>${event.event==="opened"?"Mở hồ sơ":event.event==="batch_closed"?"Đối chiếu lô hoàn tất":"Nâng mức ưu tiên"}</strong>Ưu tiên ${esc(priorities[event.priority])} · ${event.rule_score} điểm<br><small>${datetime(event.event_at)} · ${esc(event.transaction_id)}</small></div>`).join("")}<div class="graph-caption">Hạn rà soát gợi ý từ snapshot: ${datetime(data.case.sla_due_at)}. Đây là lịch của dữ liệu mô phỏng.</div>`;
   }
+  if(state.tab==="overview"||state.tab==="evidence")container.insertAdjacentHTML("afterbegin",batchEvidence(data));
+  renderLineage(data,container);
   container.querySelectorAll("[data-related]").forEach(button=>button.addEventListener("click",()=>relatedModal(Number(button.dataset.related))));
   container.querySelectorAll("[data-transaction]").forEach(button=>button.addEventListener("click",()=>transactionModal(button.dataset.transaction)));
 }

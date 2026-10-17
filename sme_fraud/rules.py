@@ -16,7 +16,9 @@ from pathlib import Path
 
 from .features import FEATURE_DESCRIPTIONS, Stream, UnionFind, build_features
 from .generate import parse as _parse
-from .temporal_evidence import (BankChangeHistory, ObservedVersions, bank_change_state,
+from .exception_validation import validated_tables
+from .case_identity import component_key
+from .temporal_evidence import (BankChangeHistory, ObservedVersions, bank_change_evidence,
                                 approved_evidence, paid_leave_entitlement)
 from .noise_policy import (name_key, name_similarity, evidence_id, independent_requests,
                            vendor_fulfilment, outside_schedule, RobustAmounts,
@@ -24,6 +26,7 @@ from .noise_policy import (name_key, name_similarity, evidence_id, independent_r
 from .spec_policy import bank_identity, identity_matches, PeriodPayments, manual_close_evidence
 from .payment_evidence import PaymentEvidence
 from .authority_policy import ApprovalAuthority
+from .batch_controls import BatchControls
 from .evidence_policy import EvidencePolicy, SOURCES as EVIDENCE_SOURCES, REQUIRED as EVIDENCE_REQUIRED, required_columns
 
 parse = lru_cache(maxsize=150000)(_parse)
@@ -74,6 +77,7 @@ DEFAULT_CONFIG['enable_graph'] = True
 DEFAULT_CONFIG.update(noise_policy='phase2', amount_baseline='log_mad', robust_z=3.5)
 DEFAULT_CONFIG.update(spec_policy='phase3', near_period='calendar_month', amount_tail='upper')
 DEFAULT_CONFIG.update(evidence_policy='phase4', receivable_overdue_days=60)
+DEFAULT_CONFIG.update(split_pattern_policy='split_patterns_v1')
 INPUT_TABLES = ('companies', 'employees', 'vendors', 'customers', 'calendar',
                 'entity_links', 'attendance', 'vendor_status_history',
                 'bank_account_changes', 'advances', 'advance_events', 'transactions')
@@ -97,6 +101,21 @@ def normalize(value, kind='text'):
         elif value.startswith('84') and len(value) == 11:
             value = '0' + value[2:]
     return value
+
+
+def invoice_payment_key(row):
+    """Only identified cash/bank supplier payments can share an invoice cap.
+
+    ERP invoice IDs may be aliases for the same invoice, so retain the existing
+    company/vendor/normalized-number identity rather than falling back to them.
+    """
+    if (row['txn_type'] != 'vendor_payment' or int(row['is_financial_entry']) != 1
+            or row['payment_channel'] not in {'bank', 'cash'}):
+        return None
+    number = normalize(row['invoice_number'])
+    if not row['company_id'] or not row['vendor_id'] or not number:
+        return None
+    return row['company_id'], row['vendor_id'], number
 
 
 def load_inputs(directory: Path):
@@ -123,6 +142,9 @@ def load_inputs(directory: Path):
                 raise ValueError(f'Incomplete evidence schema: {path.name}')
             tables[name] = list(reader)
     feature_path = directory / 'features.csv'
+    tables = validated_tables(tables)
+    from .feature_contract import validate_cache
+    validate_cache(meta)
     # Cached causal features are an existing dataset artifact, not label-derived.
     entry = meta['files']['features.csv']
     expected_hash = entry.get('sha256') if isinstance(entry, dict) else entry
@@ -197,6 +219,7 @@ class KnownGraph:
         self.groups = defaultdict(UnionFind)
         self.adjacency = defaultdict(lambda: defaultdict(dict))
         self.current = defaultdict(dict)
+        self.identities = defaultdict(dict)
         self.dirty = set()
 
     @staticmethod
@@ -229,7 +252,9 @@ class KnownGraph:
         # after the entire observation batch, from the surviving current edges.
         if cid in self.dirty:
             group, adjacency = UnionFind(), defaultdict(dict)
-            for _, edge in self.current[cid].values():
+            edges = sorted((edge for _, edge in self.current[cid].values()),
+                           key=lambda e: (e['source'], e['link_type'], e['target'], e['observed_at']))
+            for edge in edges:
                 left, right = edge['source'], edge['target']
                 if not right:
                     continue
@@ -237,8 +262,20 @@ class KnownGraph:
                 adjacency[left][right] = edge
                 adjacency[right][left] = edge
             self.groups[cid], self.adjacency[cid] = group, adjacency
+            members = defaultdict(list)
+            for node in group.parent:
+                if node.startswith('entity:'):
+                    members[group.root(node)].append(node)
+            self.identities[cid] = {root: (component_key(cid, nodes), tuple(sorted(nodes)))
+                                    for root, nodes in members.items()}
             self.dirty.remove(cid)
         return self.groups[cid]
+
+    def identity(self, cid, node):
+        root = self.group(cid).root(node)
+        if root not in self.identities[cid]:
+            self.identities[cid][root] = component_key(cid, [node]), (node,)
+        return self.identities[cid][root]
 
     def revoke(self, cid, left, right, at, kind):
         previous = self.current[cid].get((left, kind))
@@ -292,9 +329,13 @@ def rule_coverage():
 
 
 def score_rules(tables, config=None, features=None):
+    from .case_admission import admission, SPLIT_PATTERN_POLICY
+    tables = validated_tables(tables)
     if set(config or {}) - set(DEFAULT_CONFIG):
         raise ValueError(f'Unknown rule config keys: {set(config) - set(DEFAULT_CONFIG)}')
     cfg = {**DEFAULT_CONFIG, **(config or {})}
+    if cfg['split_pattern_policy'] not in {'disabled', SPLIT_PATTERN_POLICY}:
+        raise ValueError('Invalid split-pattern review policy')
     if cfg['noise_policy'] not in {'legacy', 'phase2'} or cfg['amount_baseline'] not in {'raw', 'log_mad'} or cfg['robust_z'] <= 0:
         raise ValueError('Invalid noise policy/baseline')
     phase2 = cfg['noise_policy'] == 'phase2'
@@ -315,7 +356,7 @@ def score_rules(tables, config=None, features=None):
         raise ValueError('Causal features must map one-to-one to observations')
     masters = {name: Stream(tables[name], 'recorded_at') for name in ('employees', 'vendors')}
     links = Stream(tables['entity_links'])
-    bank_changes = BankChangeHistory(tables['bank_account_changes'])
+    bank_changes = BankChangeHistory(tables.get('bank_account_changes', []))
     entitlements = ObservedVersions(tables.get('payroll_entitlements', []), 'entitlement_id')
     agreements = ObservedVersions(tables.get('supplier_payment_agreements', []), 'agreement_id')
     procurement = Stream(tables.get('procurement_links', []))
@@ -331,6 +372,10 @@ def score_rules(tables, config=None, features=None):
     period_payments = PeriodPayments()
     payment_evidence = PaymentEvidence(tables)
     approval_authority = ApprovalAuthority(tables)
+    employee_history = approval_authority.employee_history
+    batch_controls = BatchControls(cfg, normalize=normalize, invoice_key=invoice_payment_key,
+        installment_exception=long_installment_exception, names=RULE_NAMES, weights=WEIGHTS)
+    batch_events = []
     robust_amounts = RobustAmounts()
     staff, vendors = {}, {}
     fuzzy_matches = defaultdict(dict)
@@ -456,6 +501,7 @@ def score_rules(tables, config=None, features=None):
             payment = row['txn_type'] == 'vendor_payment'
             financial = int(row['is_financial_entry']) == 1
             recipient = normalize(row['recipient_account'], 'bank_account')
+            recipient_identity = bank_identity(row['recipient_account'], row.get('recipient_bank_code', ''))
             entity = vid or eid or maker
             risk_key = (cid, entity)
             records = histories[cid]
@@ -472,20 +518,25 @@ def score_rules(tables, config=None, features=None):
                     hard_trigger=int(code in HARD_TRIGGERS and not suppressed), suppressed_reason=suppressed,
                     evidence=evidence, related_transaction_ids=sorted(set(related)), graph_path=list(path)))
 
+            invoice_key = invoice_payment_key(row)
+            previous_invoice = invoice_payments.get(invoice_key, [])
+            gross = int(row['invoice_gross_vnd']) if payment else 0
+            total_invoice = sum(int(r['amount_vnd']) for r in previous_invoice) + amount
             # The current observation participates; every other observation is strictly earlier.
             if payment and recipient:
-                same_queue = recipient_payments[(cid, recipient)]
+                if row['payment_channel'] == 'bank' and not recipient_identity:
+                    for code in ('A1', 'A2'):
+                        emit(code, dict(evidence_status='information_gap', recipient_account=row['recipient_account'],
+                                        missing_fields=['recipient_bank_code']), weight=0)
+                        current_hits[-1].update(hard_trigger=0, scoring_role='context')
+                same_queue = recipient_payments[(cid, recipient_identity)] if recipient_identity else deque()
                 while same_queue and (at - parse(same_queue[0]['posted_at'])).total_seconds() > cfg['long_days'] * 86400:
                     same_queue.popleft()
                 same = [r for r in same_queue if int(r['amount_vnd']) < int(r['approval_limit_vnd'])]
                 short = [r for r in same if (at - parse(r['posted_at'])).total_seconds() <= cfg['short_days'] * 86400]
                 same_maker = [r for r in same if r['creator_id'] == maker]
                 candidate = amount < limit
-                invoice_key = (cid, vid, normalize(row['invoice_number']))
-                previous_invoice = invoice_payments[invoice_key]
-                gross = int(row['invoice_gross_vnd'])
-                total_invoice = sum(int(r['amount_vnd']) for r in previous_invoice) + amount
-                same_invoice_short = bool(short and all(normalize(r['invoice_number']) == invoice_key[2]
+                same_invoice_short = bool(invoice_key and short and all(normalize(r['invoice_number']) == invoice_key[2]
                                                        and r['vendor_id'] == vid for r in short))
                 documented_installment = (same_invoice_short and gross > 0 and total_invoice <= gross
                                           and int(row['support_doc_count']) > 0)
@@ -495,22 +546,23 @@ def score_rules(tables, config=None, features=None):
                 request_id = (a1_proof or {}).get('request_id', '')
                 strict_purchase = phase2 and payment_evidence.strong_purchase_for(row)
                 if phase2 and not strict_purchase:
-                    a1_scope, a1_excluded, request_id = independent_requests(row, short, known_procurement, staff, now)
-                    a2_scope, a2_excluded, _ = independent_requests(row, same_maker, known_procurement, staff, now)
+                    a1_scope, a1_excluded, request_id = independent_requests(row, short, known_procurement, employee_history, now)
+                    a2_scope, a2_excluded, _ = independent_requests(row, same_maker, known_procurement, employee_history, now)
                 if phase2:
                     if strict_purchase:
                         exception = 'Hồ sơ nghĩa vụ chi đã duyệt, gắn đúng giao dịch và tổng tiền chưa vượt trần' if a1_proof else ''
                         installment_evidence = a1_proof or dict(basis='no_valid_bound_payment_evidence')
                     else:
                         exception, installment_evidence = long_installment_exception(row, short, previous_invoice,
-                            contract_payments[(cid, vid, row.get('contract_id', ''))], agreements.records(cid, vid), staff, now, 'A1')
+                            contract_payments[(cid, vid, row.get('contract_id', ''))], agreements.records(cid, vid), employee_history, now, 'A1')
                 else:
                     installment_evidence = {}
                 raw_a1 = candidate and short and sum(int(r['amount_vnd']) for r in short) + amount >= cfg['short_total_ratio'] * limit
                 scoped_a1 = candidate and a1_scope and sum(int(r['amount_vnd']) for r in a1_scope) + amount >= cfg['short_total_ratio'] * limit
                 if raw_a1:
                     independent_a1 = bool(a1_excluded) and not scoped_a1
-                    emit('A1', dict(count=len(short) + 1, total_vnd=sum(int(r['amount_vnd']) for r in short) + amount,
+                    emit('A1', dict(recipient_identity=recipient_identity,
+                                   count=len(short) + 1, total_vnd=sum(int(r['amount_vnd']) for r in short) + amount,
                                    approval_limit_vnd=limit, window_days=cfg['short_days'],
                                    evaluated_transaction_ids=[r['transaction_id'] for r in a1_scope] + [tid],
                                    installment_check=installment_evidence, excluded_independent_obligations=a1_excluded,
@@ -526,9 +578,10 @@ def score_rules(tables, config=None, features=None):
                         long_exception, installment_evidence = long_installment_exception(
                             row, same_maker, previous_invoice,
                             contract_payments[(cid, vid, row.get('contract_id', ''))],
-                            agreements.records(cid, vid), staff, now)
+                            agreements.records(cid, vid), employee_history, now)
                     independent_a2 = bool(a2_excluded) and not scoped_a2
-                    emit('A2', dict(count=len(same_maker) + 1, total_vnd=sum(int(r['amount_vnd']) for r in same_maker) + amount,
+                    emit('A2', dict(recipient_identity=recipient_identity,
+                                   count=len(same_maker) + 1, total_vnd=sum(int(r['amount_vnd']) for r in same_maker) + amount,
                                    approval_limit_vnd=limit, window_days=cfg['long_days'],
                                    evaluated_transaction_ids=[r['transaction_id'] for r in a2_scope] + [tid],
                                    installment_check=installment_evidence, excluded_independent_obligations=a2_excluded,
@@ -559,12 +612,21 @@ def score_rules(tables, config=None, features=None):
                                    branch='short_2_85pct' if short_branch else 'long_3_100pct', linkage='bank_phone_representative'),
                          [r['transaction_id'] for r in chosen],
                          graph.path(cid, node, {graph.node(x, 'entity') for x in chosen_others}))
-                if previous_invoice and gross > 0 and total_invoice > gross + 1:
+                if gross > 0 and gross % 1000 and amount % 1000 == 0 and amount > gross + 1:
+                    emit('A6', dict(payment_vnd=amount, invoice_gross_vnd=gross, difference_vnd=amount - gross))
+            # Invoice obligations apply to both cash and bank disbursements,
+            # independently of whether a recipient bank account was supplied.
+            if payment and financial and row['payment_channel'] in {'bank', 'cash'} and gross > 0:
+                if invoice_key is None:
+                    emit('P1', dict(invoice_number=row['invoice_number'], invoice_gross_vnd=gross,
+                                    payment_vnd=amount, evidence_status='information_gap',
+                                    missing_fields=[field for field in ('company_id', 'vendor_id', 'invoice_number')
+                                                    if not normalize(row[field])]), weight=0)
+                    current_hits[-1].update(hard_trigger=0, scoring_role='context')
+                elif previous_invoice and total_invoice > gross + 1:
                     emit('P1', dict(invoice_number=row['invoice_number'], invoice_gross_vnd=gross,
                                     cumulative_paid_vnd=total_invoice, excess_vnd=total_invoice - gross),
                          [r['transaction_id'] for r in previous_invoice])
-                if gross > 0 and gross % 1000 and amount % 1000 == 0 and amount > gross + 1:
-                    emit('A6', dict(payment_vnd=amount, invoice_gross_vnd=gross, difference_vnd=amount - gross))
             creator_rows = creator_payments[(cid, maker)]
             calendar_month = phase3 and cfg['near_period'] == 'calendar_month'
             while creator_rows and (creator_rows[0]['posted_at'][:7] != now[:7] if calendar_month else (at - parse(creator_rows[0]['posted_at'])).total_seconds() > 30 * 86400):
@@ -572,7 +634,7 @@ def score_rules(tables, config=None, features=None):
             is_disbursement = financial and row['payment_channel'] in {'bank', 'cash'} and row['txn_type'] != 'customer_receipt'
             bound_payment_proof = payment_evidence.exemption(row, now) if phase3 and is_disbursement else None
             a4_exception = bound_payment_proof or (period_payments.exception(row, entitlements.records(cid, eid),
-                recurring.records(cid, vid or eid or None), staff, now) if phase3 and is_disbursement and not row['vendor_id'] else '')
+                recurring.records(cid, vid or eid or None), employee_history, now) if phase3 and is_disbursement and not row['vendor_id'] else '')
             if phase3 and not bound_payment_proof and batch_payment_keys[PeriodPayments.key(row)] > 1:
                 a4_exception = ''  # Cannot assign a single monthly budget to simultaneous payments independently.
             near = is_disbursement and not a4_exception and cfg['near_low'] <= amount / limit <= cfg['near_high']
@@ -597,7 +659,7 @@ def score_rules(tables, config=None, features=None):
                 amount_evidence = dict(method='raw_mean_sd', baseline_rows=num, baseline_mean_vnd=round(mean),
                     baseline_sd_vnd=round(sd), z=round((amount-mean)/sd, 4) if sd else None, scope=list(baseline_key))
             if financial and amount % 1000 == 0 and amount_signal:
-                recurring_id = recurring_exception(recurring.records(cid, vid or eid or None), row, staff, now) if phase2 else ''
+                recurring_id = recurring_exception(recurring.records(cid, vid or eid or None), row, employee_history, now) if phase2 else ''
                 emit('A5', dict(**amount_evidence, recurring_pattern_id=recurring_id, tail='upper'),
                      suppressed='Khoản định kỳ đúng thỏa thuận đã duyệt/as-of' if recurring_id else '')
             disclosed = bool(v and v.get('related_party_disclosed_at') and v['related_party_disclosed_at'] <= now)
@@ -632,7 +694,7 @@ def score_rules(tables, config=None, features=None):
                 type_moments = moments[fallback_key]
                 large = amount >= limit or (type_moments[0] >= cfg['baseline_min'] and amount > type_moments[1] + 2 * math.sqrt(type_moments[2] / max(1, type_moments[0] - 1)))
                 if (financial or not phase3) and not first_history and 0 <= age < cfg['vendor_new_days'] and large:
-                    fulfilled, fulfilment = vendor_fulfilment(documents.records(cid, vid), row, staff, now) if phase2 else (False, [])
+                    fulfilled, fulfilment = vendor_fulfilment(documents.records(cid, vid), row, employee_history, now) if phase2 else (False, [])
                     emit('B3', dict(vendor_age_days=age, amount_vnd=amount, large_reference_limit_vnd=limit,
                                    first_basis='observed_economic_entry' if phase3 else 'cash_payment_history',
                                    history_scope='available_observation_window_not_lifetime'),
@@ -672,12 +734,18 @@ def score_rules(tables, config=None, features=None):
                                         payment_schedule=schedule),
                              suppressed='Khoản thanh toán theo mùa/năm có lịch duyệt và tổng kỳ trong trần' if schedule else '')
                 change = bank_changes.current(cid, vid, now)
-                recent, verified = bank_change_state(change, row, staff, now, cfg['bank_change_days'])
-                if payment and recent:
+                bank_check = bank_change_evidence(change, row, employee_history, now, cfg['bank_change_days'])
+                identity_gap = bank_check['evidence_status'] == 'information_gap'
+                if payment and (bank_check['recent'] or identity_gap):
                     emit('B7', dict(change_id=change['change_id'], effective_at=change['effective_at'],
                                     observed_at=change['observed_at'],
-                                    verified_at=change['verified_at'], approver_id=change['approver_id']),
-                         suppressed='Callback và người duyệt độc lập đã xác minh trước thanh toán' if verified else '')
+                                    verified_at=change['verified_at'], approver_id=change['approver_id'],
+                                    new_bank_code=change.get('new_bank_code', ''),
+                                    recipient_bank_code=row.get('recipient_bank_code', ''), **bank_check),
+                         weight=0 if identity_gap else None,
+                         suppressed='Callback và người duyệt độc lập đã xác minh trước thanh toán' if bank_check['verified'] else '')
+                    if identity_gap:
+                        current_hits[-1].update(hard_trigger=0, scoring_role='context')
                 similar = [(value, key) for key, value in fuzzy_matches[vid].items()]
                 if similar:
                     emit('E3', dict(matched_vendor_count=len(similar), top_matches=sorted(similar, reverse=True)[:5],
@@ -689,10 +757,10 @@ def score_rules(tables, config=None, features=None):
                         or dt.weekday() >= 5 and not saturday_allowed)
             if phase2:
                 schedule_rows = schedules_by_company[cid]
-                made_outside, maker_schedule = outside_schedule(row['created_at'], 'maker', companies[cid], user, schedule_rows, staff, holidays)
-                approver = staff.get(row['approver_id'], user)
+                made_outside, maker_schedule = outside_schedule(row['created_at'], 'maker', companies[cid], user, schedule_rows, employee_history, holidays)
+                approver = staff.get(row['approver_id'], {'employee_id': row['approver_id']})
                 checker_rows = schedules_by_company[cid]
-                approved_outside, checker_schedule = outside_schedule(row['approved_at'], 'checker', companies[cid], approver, checker_rows, staff, holidays)
+                approved_outside, checker_schedule = outside_schedule(row['approved_at'], 'checker', companies[cid], approver, checker_rows, employee_history, holidays)
             else:
                 made_outside, approved_outside = outside(row['created_at']), outside(row['approved_at'])
                 maker_schedule = checker_schedule = 'company_default'
@@ -702,18 +770,20 @@ def score_rules(tables, config=None, features=None):
                                created_outside=int(made_outside), approved_outside=int(approved_outside),
                                maker_schedule_id=maker_schedule, checker_schedule_id=checker_schedule))
             self_approved = maker == row['approver_id']
-            permitted = amount <= int(user['self_approval_limit_vnd'])
+            approval_user = approval_authority.employee_at(cid, maker, row['approved_at']) if phase3 else user
+            self_approval_limit = int(approval_user['self_approval_limit_vnd']) if approval_user else None
+            permitted = self_approval_limit is not None and amount <= self_approval_limit
             if self_approved:
-                authority = approval_authority.self_approval(row, staff) if phase3 else dict(mode='legacy_fallback')
+                authority = approval_authority.self_approval(row) if phase3 else dict(mode='legacy_fallback')
                 explicit_permitted = authority.get('permitted') if authority['mode'] == 'authority_matrix' else None
                 permitted = explicit_permitted if explicit_permitted is not None else permitted
-                emit('C2', dict(amount_vnd=amount, self_approval_limit_vnd=int(user['self_approval_limit_vnd']),
+                emit('C2', dict(amount_vnd=amount, self_approval_limit_vnd=self_approval_limit,
                                 authority_check=authority),
                      suppressed=('Trong quyền tự duyệt/ủy quyền đã được phê duyệt' if explicit_permitted else
                                  'Trong hạn mức tự duyệt đã biết' if permitted else ''))
             seconds = (parse(row['approved_at']) - parse(row['created_at'])).total_seconds()
             if 0 <= seconds < 60:
-                checker = approval_authority.checker_level(row, staff) if phase3 else dict(mode='legacy_fallback')
+                checker = approval_authority.checker_level(row) if phase3 else dict(mode='legacy_fallback')
                 explicit_high = (checker.get('status') == 'authorized' and
                                  checker.get('authority_level') in {'high', 'executive'})
                 if explicit_high or (checker['mode'] == 'legacy_fallback' and amount >= cfg['high_approval_vnd']):
@@ -721,15 +791,15 @@ def score_rules(tables, config=None, features=None):
                                     high_approval_vnd=cfg['high_approval_vnd'], authority_check=checker,
                                     authority_basis='explicit_matrix' if explicit_high else 'amount_proxy'))
             if row['txn_type'] == 'payroll' and feature['attendance_known'] and not feature['attendance_days'] and not feature['alternative_work_evidence']:
-                entitlement = paid_leave_entitlement(entitlements.records(cid, eid), row, staff, now)
+                entitlement = paid_leave_entitlement(entitlements.records(cid, eid), row, employee_history, now)
                 emit('E1', dict(employee_id=eid, payroll_period=row['payroll_period'], attendance_days=0,
-                               alternative_work_evidence=0, recipient_employee_bank_count=feature['recipient_employee_bank_count'],
+                               alternative_work_evidence=0, recipient_employee_bank_count=int(feature['recipient_employee_bank_count']),
                                paid_leave_entitlement=dict(entitlement) if entitlement else None),
                      suppressed='Nghỉ hưởng lương có quyền chi đã duyệt và bằng chứng cho đúng kỳ/số tiền' if entitlement else '')
             close_distance = calendar.monthrange(at.year, at.month)[1] - at.day
             materiality = int(cfg['materiality_vnd_by_company'].get(cid, limit))
             confirmed_close = manual_close_evidence(row, journal_audits.records(cid, maker), closing_periods.records(cid, None),
-                materiality_policies.records(cid, None), staff, now, cfg['close_days']) if phase3 and financial else None
+                materiality_policies.records(cid, None), employee_history, now, cfg['close_days']) if phase3 and financial else None
             if confirmed_close:
                 emit('F1', confirmed_close)
             elif row['txn_type'] == 'adjustment' and close_distance < cfg['close_days'] and amount > materiality:
@@ -741,8 +811,8 @@ def score_rules(tables, config=None, features=None):
                 if phase3:
                     current_hits[-1]['scoring_role'] = 'context'
             if row['advance_id'] and feature['advance_open_fraction'] > 0 and feature['advance_overdue_days'] > cfg['advance_grace_days']:
-                emit('T1', dict(advance_id=row['advance_id'], overdue_days=feature['advance_overdue_days'],
-                               open_fraction=feature['advance_open_fraction'], extension_known=feature['advance_extension_known']),
+                emit('T1', dict(advance_id=row['advance_id'], overdue_days=int(feature['advance_overdue_days']),
+                               open_fraction=feature['advance_open_fraction'], extension_known=int(feature['advance_extension_known'])),
                      suppressed='Xóa nợ có hồ sơ tại thời điểm ghi sổ' if row['txn_type'] == 'advance_writeoff' and int(row['evidence_on_file']) else '')
             if row['txn_type'] == 'advance_writeoff' and not int(row['evidence_on_file']):
                 emit('T2', dict(advance_id=row['advance_id'], evidence_on_file=0,
@@ -770,20 +840,26 @@ def score_rules(tables, config=None, features=None):
             hard = any(h['hard_trigger'] for h in current_hits)
             score = base_score + recurrence
             codes = sorted(h['rule_id'] for h in current_hits if h['points'] > 0)
-            priority = 'cao_nhat' if hard else 'cao' if score >= 14 else 'trung_binh' if score >= cfg['operational_score'] else 'thap'
+            review = admission(current_hits, score, hard, cfg)
             node = graph.node(vid, 'entity') if vid else ''
             # Roots may evolve; case grouping is diagnostic, never a feature/label input.
-            case_entity = graph.group(cid).root(node) if vid else f'employee:{eid}' if eid else f'maker:{maker}'
+            case_entity, case_members = (graph.identity(cid, node) if vid else
+                (f'employee:{eid}', (f'employee:{eid}',)) if eid else (f'maker:{maker}', (f'maker:{maker}',)))
             result = dict(transaction_id=tid, company_id=cid, posted_at=now, rule_score=score,
                           base_score=base_score, recurrence_points=recurrence, rule_ids='|'.join(codes),
-                          hard_trigger=int(hard), priority=priority, operational_alert=int(score >= cfg['operational_score']),
-                          case_entity=case_entity, explanation_vi='; '.join(RULE_NAMES[c] for c in codes),
+                          hard_trigger=int(hard), **review,
+                          case_entity=case_entity, case_cluster_members=json.dumps(case_members),
+                          explanation_vi='; '.join(RULE_NAMES[c] for c in codes),
                           known_risky_prior_ids=[x[1] for x in prior_risk])
             scores.append(result)
             hits.extend(current_hits)
             batch_scores.append(result)
             result['_a4_exception'] = a4_exception
-        # Commit after the timestamp batch: equal-time payments cannot see each other.
+        # All row results are final. Evaluate the now-complete batch separately,
+        # before committing shared evidence histories (which already expose this batch).
+        batch_events.extend(batch_controls.close(now, batch, batch_scores, graph=graph,
+            evidence=payment_evidence, staff=employee_history, procurement=known_procurement, agreements=agreements))
+        # Commit after the timestamp batch: equal-time row scores cannot see each other.
         for row, result in zip(batch, batch_scores):
             cid, vid, maker = row['company_id'], row['vendor_id'], row['creator_id']
             amount = int(row['amount_vnd'])
@@ -793,9 +869,13 @@ def score_rules(tables, config=None, features=None):
             payment_evidence.commit(row)
             if row['txn_type'] == 'vendor_payment':
                 histories[cid].append(row)
-                recipient_payments[(cid, normalize(row['recipient_account'], 'bank_account'))].append(row)
+                recipient_identity = bank_identity(row['recipient_account'], row.get('recipient_bank_code', ''))
+                if recipient_identity:
+                    recipient_payments[(cid, recipient_identity)].append(row)
                 vendor_windows[(cid, vid)].append(row)
-                invoice_payments[(cid, vid, normalize(row['invoice_number']))].append(row)
+                invoice_key = invoice_payment_key(row)
+                if invoice_key is not None:
+                    invoice_payments[invoice_key].append(row)
                 if row.get('contract_id'):
                     contract_payments[(cid, vid, row['contract_id'])].append(row)
                 vendor_amounts[(cid, vid)].append((now, amount))
@@ -810,11 +890,19 @@ def score_rules(tables, config=None, features=None):
             if int(row['is_financial_entry']) and row['payment_channel'] in {'bank', 'cash'} and row['txn_type'] != 'customer_receipt':
                 creator_payments[(cid, maker)].append({**row, '_a4_exception': result['_a4_exception']})
             del result['_a4_exception']
-            if result['operational_alert']:
+            # A review-only split admission must not seed numeric recurrence.
+            if result['rule_score'] >= cfg['operational_score']:
                 previous_risk[(cid, vid or row['employee_id'] or maker)].append((now, row['transaction_id']))
     coverage = rule_coverage()
     for record in coverage:
         record['spec_policy'] = cfg['spec_policy']
+        if record['rule_id'] in {'P1', 'A1', 'A2', 'A3', 'A4'}:
+            batch_subset = [event for event in batch_events if event['rule_id'] == record['rule_id']]
+            record.update(batch_scope='company_timestamp_closed', batch_event_count=len(batch_subset),
+                          batch_active_events=sum(event['points'] > 0 for event in batch_subset))
+        if record['rule_id'] in {'A2', 'A4'}:
+            record.update(review_admission_policy=cfg['split_pattern_policy'],
+                          review_admission='Unsuppressed multi-payment predicate; numeric score and hard trigger unchanged')
         if record['rule_id'] in EVIDENCE_REQUIRED:
             required = EVIDENCE_REQUIRED[record['rule_id']]
             cutoff = rows[-1]['posted_at'] if rows else ''
@@ -832,4 +920,5 @@ def score_rules(tables, config=None, features=None):
             if record['scoring_role'] == 'master_quality':
                 record['note'] += ' Kiểm tra master riêng, không cộng điểm giao dịch; B5/E4 chung evidence.'
     return dict(scores=scores, hits=hits, coverage=coverage, config=cfg, master_name_quality=master_name_quality,
-                master_identity_findings=master_identity_findings, evidence_findings=evidence_policy.findings if evidence_policy else [])
+                master_identity_findings=master_identity_findings, evidence_findings=evidence_policy.findings if evidence_policy else [],
+                batch_events=batch_events)

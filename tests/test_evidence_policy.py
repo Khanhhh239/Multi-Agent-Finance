@@ -116,6 +116,9 @@ class EvidencePolicyTest(unittest.TestCase):
                     write_csv(folder/f'{name}.csv',records)
             write_csv(folder/'features.csv',c.features,['transaction_id',*FEATURE_DESCRIPTIONS])
             manifest = dict(files={p.name:dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in folder.glob('*.csv')})
+            manifest['feature_columns'] = list(FEATURE_DESCRIPTIONS)
+            from sme_fraud.feature_contract import cache_contract
+            manifest['feature_contract'] = cache_contract(manifest['files'])
             (folder/'manifest.json').write_text(json.dumps(manifest),encoding='utf-8')
             tables,features,_ = load_inputs(folder)
             self.assertTrue(decision(score_rules(tables,features=features,config=c.config),'C4',row,scope))

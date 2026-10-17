@@ -1,5 +1,18 @@
 # Việc tiếp theo sau Rule Audit
 
+**Ưu tiên hiện tại sau sửa R6, 16/10/2026:** ID hồ sơ và owner độc lập thứ tự nguồn; đã có ánh xạ hồ sơ tương đương để giữ phản hồi/phân công/admissions. **341/341 test đạt**, gồm 22 test mới; **7/7 probe readiness đạt**. Xem [bản sửa R6](rule_case_identity.md) và [readiness](rule_readiness_recheck_20261016.md). Tiếp theo là đồng bộ nguồn/feature/model, chấm các bản sửa kết hợp và nghiệm thu nguồn thật.
+
+## Thứ tự công việc cần xử lý
+
+Kết quả và hash mã sau R6 được ghi tại [checkpoint R6](../.runtime/case_identity_20261016/result.json). Các artifact trước đó được giữ nguyên làm lịch sử. Migration mới chỉ được kiểm thử trên database tạm; chưa chuyển bộ report/database vận hành cũ trong workspace.
+
+| Ưu tiên | Công việc | Kết quả cần có |
+| --- | --- | --- |
+| 1 | **Đồng bộ cache/model và chấm kết hợp** | Dựng lại feature trên dataset mới với nguồn hợp lệ theo R7, kiểm tra model tương thích; chấm train/validation, giải thích delta điểm/hit/hồ sơ/ID, áp migration R6 đúng bộ rà soát và đo tải xử lý |
+| 2 | **Nghiệm thu nguồn thật** | Coverage nguồn, tiêu chí khóa trước review, kết luận độc lập và tập nghiệm thu mới giữ kín. Hiện cổng nghiệm thu vẫn có 0 đơn vị chấm mù |
+
+Các lỗi R1–R8 đã sửa kỹ thuật trong phạm vi từng bản. Hai mục trên là việc tích hợp/nghiệm thu còn thiếu, không được xem là đã hoàn thành nhờ 341 test qua. Nguồn thật có thể chuẩn bị song song; số lượng luật và ngưỡng chỉ điều chỉnh khi có bằng chứng về mẫu còn thiếu hoặc tải cảnh báo.
+
 Danh sách dưới dựa trên [audit baseline](rule_audit/summary_vi.md). **Đợt 1 đã sửa B7/E1/A2**: xem [logic, nguồn bằng chứng và kiểm thử](rule_repairs_phase1.md), [kết quả chấm lại](rule_repairs/phase1/summary_vi.md). Ngưỡng vận hành giữ nguyên. Ưu tiên hoàn thiện kiểm soát và giảm cảnh báo sai trước khi phát triển ML tiếp.
 
 **Đợt 2 đã triển khai xử lý nguồn nhiễu và phân vai điểm**: [thiết kế và nguồn mới](rule_repairs_phase2.md), [validation/test sau sửa](rule_repairs/phase2/summary_vi.md). Số liệu trong bảng dưới vẫn là mốc audit trước sửa. Các nguồn lịch ca/PO/chứng từ còn thiếu trong dataset gốc; kết quả không thay thế nghiệm thu trên dữ liệu SME thật.
@@ -63,6 +76,26 @@ Cập nhật A1/A2/A4: đã bổ sung bằng chứng ràng buộc yêu cầu chi
 Cập nhật lịch sử đồ thị A3/B2: đã sửa thay thế/thu hồi cạnh và tách lại cụm; 151 test qua, chấm lại train/validation không đổi tập cảnh báo trên snapshot được đối chiếu. [Chi tiết và giới hạn nguồn](rule_graph_history.md).
 
 Cập nhật thẩm quyền C2/C3 và B6: đã bổ sung coverage ma trận, quyền tự duyệt/ủy quyền theo phạm vi, cấp thẩm quyền thật của checker và lịch thanh toán năm/mùa có trần kỳ. Thiếu nguồn giữ fallback hiện tại; validation cũ không có nguồn nên không đổi hàng đợi. [Chi tiết và schema](rule_authority_dormancy.md).
+
+Cập nhật P1 (16/10/2026): đã ngăn gộp hóa đơn thiếu số và kiểm tra vượt hóa đơn cho chi tiền mặt không có tài khoản nhận. Thiếu định danh ghi information_gap, 0 điểm, không hard trigger. 198/198 test đạt tại lần chốt R1; [chi tiết bản sửa và giới hạn](rule_p1_payments.md).
+
+Cập nhật lịch sử nhân sự C2/C3 (16/10/2026): đã tra người ký bằng chứng tại ngày ký và vai trò/công ty người thực hiện tại lúc duyệt; C2 fallback dùng hạn mức tại lúc duyệt. 209/209 test đạt tại lần chốt R3; [chi tiết và giới hạn](rule_authority_history.md).
+
+Cập nhật kiểm tra đóng lô (16/10/2026): đã phát hiện tổng vượt hóa đơn và chia nhỏ cùng timestamp bằng sự kiện lô P1/A1–A4, nối hàng đợi/UI và giữ nguyên điểm từng dòng. 227/227 test đạt tại lần chốt R4; [đặc tả và giới hạn](rule_batch_close.md).
+
+Cập nhật kiểm định quyền R5 (16/10/2026): đã từ chối cờ boolean ngoài miền hợp lệ, enum sai, hạn mức và ngày giờ sai cho cả quyền/coverage C2/C3 trước khi chấm. Không còn ép `self_approval_allowed=2` thành có quyền. 247/247 test đạt tại lần chốt R5, gồm 20 test mới; [miền dữ liệu và đối chứng](rule_authority_validation.md).
+
+Cập nhật định danh ngân hàng R2 (16/10/2026): đã sửa khóa lịch sử A1/A2, B7/callback, feature tài khoản và binding sự kiện đổi TK; nguồn thực thiếu mã ngân hàng ghi information_gap, không tự ghép. 268/268 test đạt tại lần chốt R2, gồm 21 test mới; [hướng dẫn dữ liệu/cache và đối chứng](rule_bank_identity.md).
+
+Cập nhật lịch sử người ký R8 (16/10/2026): E1/B7 và feature chọn snapshot tại ngày ký/xác minh; đã xử lý các helper lịch ca, chứng từ/PO, ngoại lệ và F1 có ca tái hiện, giữ đối chứng C2/C3. 292/292 test đạt tại lần chốt R8; [chi tiết và 24 test mới](rule_signer_history.md).
+
+Cập nhật kiểm định ngoại lệ R7 (16/10/2026): nguồn sai bị từ chối bằng lỗi bảng/ID/trường trước feature/chấm luật; E1/B7 không còn cấp ngoại lệ với cờ `2`. 319/319 test đạt tại lần chốt R7, gồm 27 test mới; [hợp đồng dữ liệu và lưu ý nguồn cũ](rule_exception_validation.md).
+
+Cập nhật định danh hồ sơ R6 (16/10/2026): khóa cụm theo thành viên, owner theo thời điểm, migration hồ sơ tương đương giữ phản hồi/phân công/lượt nhận việc; hồ sơ tách/gộp đổi phạm vi phải rà lại. 341/341 test đạt, 7/7 probe đạt; [chính sách và cách áp dụng](rule_case_identity.md).
+
+Cập nhật đồng bộ feature/model (17/10/2026): đã dựng lại **225.000 dòng train/validation** cho ba bộ chuẩn, fit lại ba IF, thêm kiểm tra provenance cache/model và nạp/replay artifact chính xác; dựng cache rà soát riêng cho **3.434 hồ sơ**. **352/352 test và 7/7 probe đạt**; chưa chấm test, chưa chuyển database/feedback vận hành cũ. Trên validation mô phỏng, **FP 2.737 → 1.208, TP 198 → 194**; cần ưu tiên rà mẫu chia nhỏ A2/A4 có hit nhưng chưa vào queue sau giảm nhiễu và A4 qua ranh giới tháng. Không tự siết/hạ ngưỡng toàn bộ. [Chi tiết, từng bộ và giới hạn nguồn](rule_feature_model_sync.md).
+
+Cập nhật tiếp nhận mẫu chia nhỏ A2/A4 (17/10/2026): đã thêm chính sách nhận hồ sơ riêng cho hit còn hợp lệ, ở cả dòng đơn và đóng lô, giữ điểm 4/3, họ A lấy max, ngưỡng 7 và hard trigger. **373/373 test, 7/7 probe đạt**. Validation: **TP 194 → 200, FP 1.208 → 2.347**; tổng hồ sơ train/validation **3.434 → 5.538**. Khôi phục 5/6 dòng bị mất trước đó; ca A4 còn lại đúng tháng lịch, A1 bắt chuỗi ở khoản kế tiếp. Đã giữ ID bằng chứng E1/T1 ổn định khi đọc cache. Chưa nghiệm thu chất lượng/tải hoặc chuyển database vận hành. [Bản sửa và đánh đổi](rule_split_pattern_admission.md).
 
 Chạy lại các fixture lệch và đối chứng hợp lệ, kiểm tra quan sát theo thời gian, đo TP/FP/hard negatives riêng từng rule và tác động toàn hàng đợi. Kiểm tra thay đổi kết hợp bằng đối chứng chung; không cộng delta bỏ từng rule.
 

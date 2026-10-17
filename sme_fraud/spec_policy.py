@@ -1,22 +1,9 @@
 """Phase 3 business definitions; source evidence is optional, never inferred truth."""
 from collections import defaultdict
-from functools import lru_cache
 import re
 
 from .generate import parse
-from .temporal_evidence import approved_evidence, bank_token
-
-
-@lru_cache(maxsize=100000)
-def bank_identity(account, code=''):
-    number, bank = bank_token(account), bank_token(code)
-    if not number:
-        return ''
-    if bank:
-        return f'B{len(bank)}C{bank}A{number}'
-    # The generator's namespace guarantees unique synthetic account identifiers.
-    # Ordinary numeric accounts require an institution to be strong evidence.
-    return number if number.startswith('BANKSYN') else ''
+from .temporal_evidence import approved_evidence, bank_token, bank_identity, employee_at
 
 
 def identity_matches(vendor, staff, account=None, bank_code=None):
@@ -49,13 +36,14 @@ class PeriodPayments:
 
     def exception(self, row, entitlements, recurring, staff, now):
         cumulative = self.totals[self.key(row)] + int(row['amount_vnd'])
+        employee = employee_at(staff, row['employee_id'], now)
         if row['txn_type'] == 'payroll':
             for record in sorted(entitlements, key=lambda r: r['observed_at'], reverse=True):
                 if (record.get('payroll_period') == row['payroll_period'] == now[:7] and
                         record.get('leave_type') in {'regular_payroll', 'paid_leave'} and
                         record.get('approver_id') != row['employee_id'] and
                         approved_evidence(record, staff, row['company_id'], now) and
-                        staff.get(row['employee_id'], {}).get('contract_on_file') in {1, '1'} and
+                        employee and employee.get('contract_on_file') in {1, '1'} and
                         cumulative <= int(record.get('entitled_amount_vnd', 0))):
                     return record['entitlement_id']
         for record in recurring:
@@ -80,7 +68,7 @@ def manual_close_evidence(row, audits, closings, policies, staff, now, days):
               r.get('entry_origin') in {'manual', 'automatic'} and r.get('evidence_id') and
               r.get('employee_id') == row['creator_id'] and
               r.get('entered_at') and r['entered_at'] <= r['observed_at'] <= now and
-              staff[row['creator_id']]['recorded_at'] <= r['entered_at']]
+              (actor := employee_at(staff, row['creator_id'], r['entered_at'])) and actor['company_id'] == cid]
     audit = max(audits, key=lambda r: (r['observed_at'], r['audit_id']), default=None)
     if not audit or audit['entry_origin'] != 'manual':
         return None

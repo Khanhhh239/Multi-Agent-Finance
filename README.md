@@ -1,8 +1,10 @@
-# Multi-Agent Finance — Agent 2
+# Multi-Agent Finance — Agent 2 (Sang)
 
 Agent 2 giám sát rủi ro tài chính SME: bộ luật có bằng chứng, phân tích quan hệ, benchmark Isolation Forest và giao diện rà soát cục bộ. Xem [kiến trúc chung](docs/DIGITAL_ACCOUNTING_PART2_ARCH_PART3_PLAN.md) và [cách cài, kiểm thử, chạy từ bản clone mới](docs/AGENT2_GITHUB.md).
 
 Bản GitHub gồm mã nguồn, test, schema, CSV mẫu chỉ có header và tài liệu/báo cáo đối chiếu. Dataset, model đã train, hàng đợi chi tiết, phản hồi người dùng và môi trường Python được tạo trên máy khi chạy. Các kết quả trong `reports/` là snapshot lịch sử; hãy dùng thư mục đầu ra mới theo hướng dẫn để chạy lại.
+
+Nhánh làm việc: **`agent2-Sang`**. Bản cập nhật ngày 17/10/2026: [readiness](reports/rule_readiness_recheck_20261016.md), [đồng bộ feature/model](reports/rule_feature_model_sync.md) và [tiếp nhận A2/A4](reports/rule_split_pattern_admission.md).
 
 ## Dữ liệu tổng hợp gian lận tài chính SME Việt Nam
 
@@ -123,6 +125,10 @@ python -m sme_fraud.validate --data data/my_sme_003
 python -m sme_fraud.evaluate --data data/my_sme_003 --output reports/my_sme_003 --alert-budget 0.003
 python -m unittest discover -s tests -v
 ```
+
+Sau các bản sửa luật, cache/model cũ thiếu hợp đồng ngữ nghĩa sẽ bị từ chối khi chấm mới. Để dựng lại ba snapshot chuẩn và chỉ chấm train/validation, dùng `python -B -m sme_fraud.sync_feature_model --output reports/feature_model_sync_20261017 --jobs 4`. Lượt này đã hoàn tất; khi đổi mã/cấu hình hãy chọn thư mục output mới. Xem [kết quả đồng bộ, kiểm tra tương thích và các ca cần rà tiếp](reports/rule_feature_model_sync.md). Lệnh `evaluate` thông thường phía trên vẫn là benchmark có chấm test.
+
+Đã có [chính sách nhận riêng mẫu chia nhỏ A2/A4](reports/rule_split_pattern_admission.md), giữ điểm và hard trigger; chấm riêng bản sửa bằng `python -B -m sme_fraud.run_split_pattern_review --output reports/split_pattern_admission_20261017_v2`. Báo cáo ghi cả TP được thu hồi, FP và tải hồ sơ tăng; chưa thay đổi database rà soát vận hành.
 
 Nghiệm thu các rule cần nguồn HR/ERP/công nợ thật dùng quy trình hai bước dưới đây. Bước `prepare` tạo phiếu chấm mù và khóa hash dự đoán; bước `evaluate` chỉ chấp nhận khi coverage, review độc lập và ngưỡng phê duyệt đều hợp lệ.
 

@@ -4,7 +4,8 @@ import json
 from pathlib import Path
 
 from .generate import parse
-from .temporal_evidence import approved_evidence
+from .exception_validation import validated_tables
+from .temporal_evidence import approved_evidence, EmployeeHistory
 from .noise_policy import verified_document
 
 SOURCES = {
@@ -38,6 +39,7 @@ class EvidenceBook:
     Empty tables and queries are valid; malformed/conflicting source IDs fail.
     """
     def __init__(self, tables):
+        tables = validated_tables(tables, SOURCES)
         self.rows = {}
         self.index = {}
         for name, identity in SOURCES.items():
@@ -79,8 +81,7 @@ class EvidencePolicy:
         self.book = EvidenceBook(tables)
         self.config = config
         self.transactions = {r['transaction_id']: r for r in tables['transactions']}
-        self.staff_history = sorted(tables['employees'],key=lambda r:r['recorded_at'])
-        self.staff_cache = {}
+        self.employee_history = EmployeeHistory(tables['employees'])
         self.customers = defaultdict(list)
         for customer in sorted(tables.get('customers', []), key=lambda c: c['recorded_at']):
             self.customers[(customer['company_id'], customer['customer_id'])].append(customer)
@@ -89,16 +90,7 @@ class EvidencePolicy:
         self.findings = []
 
     def staff_at(self, at):
-        if at not in self.staff_cache:
-            known = {}
-            for employee in self.staff_history:
-                if employee['recorded_at']>at:
-                    break
-                known[employee['employee_id']] = employee
-            if len(self.staff_cache)>=512:
-                self.staff_cache.pop(next(iter(self.staff_cache)))
-            self.staff_cache[at] = known
-        return self.staff_cache[at]
+        return self.employee_history.at(at)
 
     def approved(self, record, company, now):
         return approved_evidence(record,self.staff_at(record.get('approved_at','')),company,now)

@@ -1,10 +1,10 @@
 """Bound purchase/payment evidence and cumulative limits; no truth inputs."""
 from collections import defaultdict
 from datetime import date
-from functools import lru_cache
 
 from .generate import parse
-from .temporal_evidence import approved_evidence, bank_token
+from .exception_validation import validated_tables
+from .temporal_evidence import approved_evidence, bank_token, EmployeeHistory
 from .noise_policy import verified_document
 from .spec_policy import bank_identity
 
@@ -58,6 +58,7 @@ class PaymentEvidence:
     Batch totals reserve authority once without ordering equal-time transactions.
     """
     def __init__(self, tables):
+        tables = validated_tables(tables, SOURCE_IDS)
         for name, required in SOURCE_REQUIRED.items():
             for record in tables.get(name, []):
                 missing = set(required) - set(record)
@@ -84,19 +85,13 @@ class PaymentEvidence:
                 revisions[version] = record
             self.streams[name], self.positions[name], self.known[name] = rows, 0, defaultdict(dict)
             self.by_entity[name], self.by_transaction[name] = defaultdict(set), defaultdict(set)
-        self.staff_rows = sorted(tables['employees'], key=lambda r: r['recorded_at'])
+        self.employee_history = EmployeeHistory(tables['employees'])
         self.transactions = {r['transaction_id']: r for r in tables['transactions']}
         self.history = defaultdict(list)
         self.batch = []
 
-    @lru_cache(maxsize=512)
     def staff_at(self, at):
-        known = {}
-        for record in self.staff_rows:
-            if record['recorded_at'] > at:
-                break
-            known[record['employee_id']] = record
-        return known
+        return self.employee_history.at(at)
 
     def advance(self, now, batch):
         for name, rows in self.streams.items():

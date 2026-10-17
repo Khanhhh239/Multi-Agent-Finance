@@ -9,7 +9,7 @@ from statistics import median
 import unicodedata
 
 from .generate import parse
-from .temporal_evidence import approved_evidence
+from .temporal_evidence import approved_evidence, employee_at
 
 
 def name_key(value):
@@ -35,8 +35,8 @@ def evidence_id(kind, company, evidence):
 
 
 def verified_document(record, staff, company, now):
-    verifier = staff.get(record.get('verifier_id'))
     verified = record.get('verified_at', '')
+    verifier = employee_at(staff, record.get('verifier_id'), verified)
     return bool(record.get('company_id') == company and record.get('status') == 'verified' and record.get('evidence_id') and verified and
                 verified <= record['observed_at'] <= now and verifier and
                 verifier['company_id'] == company and verifier['recorded_at'] <= verified)
@@ -73,12 +73,15 @@ def vendor_fulfilment(documents, row, staff, now):
 
 def outside_schedule(timestamp, action, company, employee, schedules, staff, holidays):
     dt = parse(timestamp)
+    employee = employee_at(staff, employee['employee_id'], timestamp)
     versions = {}
     for record in sorted(schedules, key=lambda r: r['observed_at']):
         if record['observed_at'] <= timestamp:
             versions[record['schedule_id']] = record
     matching = []
     for record in versions.values():
+        if not employee or employee['company_id'] != company['company_id']:
+            continue
         if record.get('employee_id') and record['employee_id'] != employee['employee_id']:
             continue
         if record.get('role') and record['role'] != employee['role']:

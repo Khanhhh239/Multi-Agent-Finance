@@ -2,6 +2,10 @@
 
 Ngày kiểm tra: 15/10/2026. Bản sửa giữ nguyên trọng số, ngưỡng tốc độ 60 giây, thời gian ngủ đông 180 ngày và P90 lịch sử. Nguồn mới chỉ thay proxy khi có bằng chứng đầy đủ, đã được quan sát trước hành động.
 
+**Cập nhật 16/10/2026:** đã sửa lịch sử nhân sự C2/C3 để thay đổi hồ sơ không vô hiệu bằng chứng đã ký và không dùng vai trò/hạn mức sau hành động. Toàn bộ 209/209 test đạt; [chi tiết và 11 test mới](rule_authority_history.md). Số liệu 181 test và snapshot validation bên dưới thuộc lần chốt đợt 6 trước cập nhật này.
+
+**Cập nhật kiểm định nguồn R5 (16/10/2026):** quyền và coverage từ chối boolean/enum/hạn mức/ngày giờ sai trước khi chấm; 247/247 test đạt. [Miền dữ liệu, đối chứng và giới hạn](rule_authority_validation.md).
+
 ## C2 — quyền tự duyệt và ủy quyền
 
 Khi `approval_authority_coverage` xác nhận ma trận đầy đủ cho `self_approve`, C2 không còn dựa riêng vào `employees.self_approval_limit_vnd`. Engine đối chiếu:

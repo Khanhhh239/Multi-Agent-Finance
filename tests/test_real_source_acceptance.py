@@ -7,6 +7,7 @@ from pathlib import Path
 
 from sme_fraud.evidence_cases import EvidenceCase, prepare as evidence_case
 from sme_fraud.features import FEATURE_DESCRIPTIONS
+from sme_fraud.feature_contract import cache_contract
 from sme_fraud.generate import write_csv
 from sme_fraud.real_source_acceptance import (
     COVERAGE_FIELDS, PACKET_FIELDS, RULES, RULE_SOURCES, _coverage_by_rule,
@@ -28,7 +29,8 @@ class RealSourceAcceptanceTest(unittest.TestCase):
         files = {}
         for path in folder.glob('*.csv'):
             files[path.name] = dict(sha256=hashlib.sha256(path.read_bytes()).hexdigest())
-        (folder/'manifest.json').write_text(json.dumps(dict(version='real-test', files=files)),
+        (folder/'manifest.json').write_text(json.dumps(dict(version='real-test', files=files,
+            feature_columns=list(FEATURE_DESCRIPTIONS), feature_contract=cache_contract(files))),
                                            encoding='utf-8')
 
     def test_prepare_does_not_claim_real_acceptance_or_disclose_predictions(self):

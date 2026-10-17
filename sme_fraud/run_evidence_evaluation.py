@@ -13,7 +13,7 @@ if packages.exists():
 from .accounting import enrich_accounting
 from .aggregate_challenge import PATTERNS, window_case
 from .benford import monthly_diagnostics
-from .case_queue import review_queue
+from .case_queue import review_queue, operational_members
 from .evidence_cases import SCENARIOS, prepare, decision
 from .evidence_evaluation import boolean_metrics, block_precision, budget_review
 from .features import build_features
@@ -155,12 +155,13 @@ def fresh_dataset(data, destination, config, seed, partition, rate, rows, reuse=
     candidates, contributing, raw = sets_from_hits(result['hits'])
     cases, events = review_queue(result,tables)
     members = [t for c in cases for t in json.loads(c['transaction_ids'])]
-    if len(members)!=len(set(members)) or set(members)!=active:
+    if len(members)!=len(set(members)) or set(members)!=operational_members(result):
         raise ValueError('Queue membership differs')
     diagnostics = monthly_diagnostics(tables, 'phase4')
     destination.mkdir(parents=True)
     write_csv(destination/'rule_scores.csv',[{k:v for k,v in r.items() if k!='known_risky_prior_ids'} for r in result['scores']])
     write_jsonl(destination/'rule_hits.jsonl',result['hits'])
+    write_jsonl(destination/'batch_events.jsonl',result['batch_events'])
     write_csv(destination/'case_queue.csv',cases)
     write_csv(destination/'case_events.csv',events)
     write_jsonl(destination/'benford_diagnostics.jsonl',diagnostics)
@@ -225,7 +226,8 @@ def main():
     names = ('rules.py','evidence_policy.py','evidence_cases.py','evidence_evaluation.py','aggregate_challenge.py','benford.py',
              'features.py','accounting.py','generate.py','temporal_evidence.py','noise_policy.py','spec_policy.py','payment_evidence.py',
              'authority_policy.py','case_queue.py','run_evidence_evaluation.py','rule_audit.py','evidence_sources.schema.json',
-             'payment_evidence.schema.json','authority_policy.schema.json')
+             'payment_evidence.schema.json','authority_policy.schema.json','batch_controls.py','exception_validation.py','case_identity.py',
+             'feature_contract.py','sync_feature_model.py','evaluate.py','run_rules.py','case_admission.py')
     fingerprints = {str(code/name):sha(code/name) for name in names}
     print('Predeclared source controls',flush=True)
     controls = source_controls(args.output,config)

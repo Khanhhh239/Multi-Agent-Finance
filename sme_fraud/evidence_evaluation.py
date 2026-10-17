@@ -93,7 +93,9 @@ def budget_review(cases, events, transactions, labels, budget):
                     backlog[company].remove(item)
                     case, event = item['case'], item['event']
                     identifiers = json.loads(case['transaction_ids']) if isinstance(case['transaction_ids'], str) else case['transaction_ids']
-                    seen = [t for t in identifiers if t in transactions and transactions[t]['posted_at'][:10] == event['event_at'][:10]]
+                    seen = [t for t in identifiers if t in transactions
+                            and transactions[t]['posted_at'][:10] == event['event_at'][:10]
+                            and transactions[t]['posted_at'] <= event['event_at']]
                     outcome = (any(int(labels[t]['is_fraud']) for t in seen)
                                if item['work_type'] == 'initial_review' else None)
                     wait = (day.date()-parse(item['due']+'T00:00:00+07:00').date()).days

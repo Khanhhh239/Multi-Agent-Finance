@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import shutil
 
-from .case_queue import review_queue
+from .case_queue import review_queue, operational_members
 from .generate import write_csv
 from .rule_audit import confusion, read_csv, replay_scores, sha
 from .rules import load_inputs, score_rules, RULE_NAMES, OPTIONAL_INPUT_TABLES
@@ -81,11 +81,12 @@ def run(data, baseline, output, config):
                         hard_negative_type=labels[tid]['hard_negative_type'], old_rule_ids=previous[tid]['rule_ids']))
     cases, events = review_queue(result, tables)
     members = [tid for c in cases for tid in json.loads(c['transaction_ids'])]
-    if len(members) != len(set(members)) or set(members) != after:
+    if len(members) != len(set(members)) or set(members) != operational_members(result):
         raise ValueError('Queue membership differs')
     output.mkdir(parents=True)
     write_csv(output / 'rule_scores.csv', [{k: v for k, v in r.items() if k != 'known_risky_prior_ids'} for r in result['scores']])
     write_jsonl(output / 'rule_hits.jsonl', result['hits'])
+    write_jsonl(output / 'batch_events.jsonl', result['batch_events'])
     write_csv(output / 'case_queue.csv', cases)
     write_csv(output / 'case_events.csv', events)
     write_jsonl(output / 'master_identity_findings.jsonl', result['master_identity_findings'])

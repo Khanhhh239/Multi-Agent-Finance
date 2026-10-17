@@ -1,6 +1,15 @@
 {
-  "version": "phase4",
+  "version": "phase4.1",
   "timezone": "+07:00",
+  "validation": {
+    "contract": "exception_validation.py",
+    "mode": "reject_all_malformed_revisions_before_as_of_filtering",
+    "boolean_inputs": [0, 1, false, true, "0", "1"],
+    "integer_inputs": "Nonnegative native integers excluding booleans, or CSV [0-9]+; number/year/day fields also enforce declared ranges.",
+    "time_inputs": "Real canonical dates/timestamps in +07:00 at second precision, ordered intervals and signature/action <= observed_at. Scheduled effective/closing dates may be future.",
+    "status_inputs": "Approved sources: approved/revoked/draft/pending/rejected. Other source enums are declared per table in the shared contract. Unknown enums raise ValueError.",
+    "missing_proof": "Empty proof/signature fields remain non-authorizing. Validation does not grant approval or alter missing-source scoring policy."
+  },
   "common": ["company_id", "observed_at"],
   "approved": ["status", "approver_id", "approved_at", "evidence_on_file", "evidence_id"],
   "tables": {

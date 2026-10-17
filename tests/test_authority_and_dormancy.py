@@ -148,6 +148,176 @@ class AuthorityAndDormancyTest(unittest.TestCase):
         self.assertEqual(hit['points'], 8)
         self.assertEqual(hit['evidence']['authority_basis'], 'amount_proxy')
 
+    def revise_employee(self, case, employee, at, **values):
+        revision = dict(employee, recorded_at=stamp(at), **values)
+        case.tables['employees'].append(revision)
+
+    def role_authority(self, case, subject, action, **values):
+        self.authority(case, subject['employee_id'], action, **values)
+        case.tables['approval_authorities'][-1].update(
+            subject_employee_id='', subject_role=subject['role'])
+
+    def test_c2_profile_updates_do_not_erase_coverage_or_authority_approval(self):
+        for source in ('coverage', 'authority'):
+            with self.subTest(source=source):
+                case = self.case()
+                row = case.pay(amount=9_000_000, approver_id=case.maker['employee_id'])
+                self.coverage(case, 'self_approve')
+                self.authority(case, case.maker['employee_id'], 'self_approve',
+                               maximum=10_000_000, self_allowed=1)
+                case.tables['approval_authorities'][-1]['approver_id'] = case.worker['employee_id']
+                before = self.hit(case.score(), row, 'C2')
+                self.assertEqual(before['points'], 0)
+                employee = case.director if source == 'coverage' else case.worker
+                self.revise_employee(case, employee, case.at-timedelta(days=1), full_name='Updated name')
+                after = self.hit(case.score(), row, 'C2')
+                self.assertEqual(after, before)
+
+    def test_c3_profile_updates_do_not_erase_high_authority(self):
+        for source in ('coverage', 'authority'):
+            with self.subTest(source=source):
+                case = self.case()
+                row = self.fast_payment(case, 1_000_000)
+                self.coverage(case, 'approve')
+                self.authority(case, case.director['employee_id'], 'approve', level='high')
+                before = self.hit(case.score(), row, 'C3')
+                self.assertEqual(before['points'], 8)
+                employee = case.director if source == 'coverage' else case.maker
+                self.revise_employee(case, employee, case.at-timedelta(days=1), full_name='Updated name')
+                self.assertEqual(self.hit(case.score(), row, 'C3'), before)
+
+    def test_c2_role_authority_uses_role_at_approval_not_posting(self):
+        for matches_at_approval in (True, False):
+            with self.subTest(matches_at_approval=matches_at_approval):
+                case = self.case()
+                row = self.fast_payment(case, 9_000_000)
+                row['approver_id'] = case.maker['employee_id']
+                self.coverage(case, 'self_approve')
+                self.role_authority(case, case.maker, 'self_approve', self_allowed=1)
+                if not matches_at_approval:
+                    case.tables['approval_authorities'][-1]['subject_role'] = 'new_role'
+                self.revise_employee(case, case.maker, case.at-timedelta(minutes=2), role='new_role')
+                hit = self.hit(case.score(), row, 'C2')
+                expected = 0 if matches_at_approval else 20
+                self.assertEqual((hit['points'], hit['hard_trigger']), (expected, int(bool(expected))))
+
+    def test_c3_role_authority_uses_role_at_approval_not_posting(self):
+        for matches_at_approval in (True, False):
+            with self.subTest(matches_at_approval=matches_at_approval):
+                case = self.case()
+                row = self.fast_payment(case, 1_000_000)
+                self.coverage(case, 'approve')
+                self.role_authority(case, case.director, 'approve', level='high')
+                if not matches_at_approval:
+                    case.tables['approval_authorities'][-1]['subject_role'] = 'new_role'
+                self.revise_employee(case, case.director, case.at-timedelta(minutes=2), role='new_role')
+                hit = self.hit(case.score(), row, 'C3')
+                if matches_at_approval:
+                    self.assertIsNotNone(hit)
+                    self.assertEqual(hit['points'], 8)
+                else:
+                    self.assertIsNone(hit)
+
+    def test_c2_fallback_uses_self_approval_limit_at_approval(self):
+        for old_limit, new_limit in ((10_000_000, 2_000_000), (2_000_000, 10_000_000)):
+            with self.subTest(old_limit=old_limit, new_limit=new_limit):
+                case = self.case()
+                case.maker['self_approval_limit_vnd'] = old_limit
+                row = self.fast_payment(case, 9_000_000)
+                row['approver_id'] = case.maker['employee_id']
+                self.revise_employee(case, case.maker, case.at-timedelta(minutes=2),
+                                     self_approval_limit_vnd=new_limit)
+                hit = self.hit(case.score(), row, 'C2')
+                self.assertEqual(hit['points'], 0 if old_limit >= 9_000_000 else 20)
+                self.assertEqual(hit['evidence']['self_approval_limit_vnd'], old_limit)
+
+    def test_matrix_approval_cannot_use_an_approver_first_seen_later(self):
+        for source in ('coverage', 'authority'):
+            with self.subTest(source=source):
+                case = self.case()
+                row = case.pay(amount=9_000_000, approver_id=case.maker['employee_id'])
+                self.coverage(case, 'self_approve')
+                self.authority(case, case.maker['employee_id'], 'self_approve', self_allowed=1)
+                table = 'approval_authority_coverage' if source == 'coverage' else 'approval_authorities'
+                case.tables[table][-1]['approver_id'] = case.worker['employee_id']
+                case.worker['recorded_at'] = stamp(case.at-timedelta(days=2))
+                hit = self.hit(case.score(), row, 'C2')
+                self.assertEqual((hit['points'], hit['hard_trigger']), (20, 1))
+
+    def test_c2_cannot_grant_authority_to_an_actor_first_seen_after_action(self):
+        case = self.case()
+        row = self.fast_payment(case, 9_000_000)
+        row['approver_id'] = case.maker['employee_id']
+        self.coverage(case, 'self_approve')
+        self.authority(case, case.maker['employee_id'], 'self_approve', self_allowed=1)
+        case.maker['recorded_at'] = stamp(case.at-timedelta(minutes=2))
+        hit = self.hit(case.score(), row, 'C2')
+        self.assertEqual((hit['points'], hit['hard_trigger']), (20, 1))
+        self.assertEqual(hit['evidence']['authority_check']['status'], 'unknown_actor')
+
+    def test_future_employee_revisions_do_not_rewrite_c2_or_c3(self):
+        case = self.case()
+        self.fast_payment(case, 9_000_000)['approver_id'] = case.maker['employee_id']
+        self.fast_payment(case, 1_000_000)
+        self.coverage(case)
+        self.authority(case, case.maker['employee_id'], 'self_approve', self_allowed=1)
+        self.authority(case, case.director['employee_id'], 'approve', level='high')
+        before = copy.deepcopy(case.score())
+        for employee in (case.maker, case.director, case.worker):
+            self.revise_employee(case, employee, case.at+timedelta(days=1),
+                                 full_name='Future name', role='future_role', self_approval_limit_vnd=0)
+        self.assertEqual(case.score(), before)
+
+    def test_revocations_only_affect_actions_after_their_observation(self):
+        for table in ('approval_authority_coverage', 'approval_authorities'):
+            for before_action in (True, False):
+                with self.subTest(table=table, before_action=before_action):
+                    case = self.case()
+                    row = self.fast_payment(case, 9_000_000)
+                    row['approver_id'] = case.maker['employee_id']
+                    self.coverage(case, 'self_approve')
+                    self.authority(case, case.maker['employee_id'], 'self_approve', self_allowed=1)
+                    record = case.tables[table][0]
+                    observed = case.at-timedelta(minutes=5 if before_action else 2)
+                    case.tables[table].append(dict(record, status='revoked', observed_at=stamp(observed)))
+                    self.revise_employee(case, case.director, case.at-timedelta(days=1), full_name='Updated name')
+                    hit = self.hit(case.score(), row, 'C2')
+                    self.assertEqual(hit['points'], 20 if before_action else 0)
+
+    def test_approver_company_is_checked_at_the_evidence_approval_time(self):
+        for before_signing in (True, False):
+            with self.subTest(before_signing=before_signing):
+                case = self.case()
+                case.tables['companies'].append(dict(case.tables['companies'][0], company_id='OTHER_COMPANY'))
+                row = case.pay(amount=9_000_000, approver_id=case.maker['employee_id'])
+                self.coverage(case, 'self_approve')
+                self.authority(case, case.maker['employee_id'], 'self_approve', self_allowed=1)
+                case.tables['approval_authorities'][-1]['approver_id'] = case.worker['employee_id']
+                self.revise_employee(case, case.worker,
+                                     case.at-timedelta(days=6 if before_signing else 1),
+                                     company_id='OTHER_COMPANY')
+                hit = self.hit(case.score(), row, 'C2')
+                self.assertEqual(hit['points'], 20 if before_signing else 0)
+
+    def test_c3_actor_company_is_checked_at_action_not_posting(self):
+        for before_action in (True, False):
+            with self.subTest(before_action=before_action):
+                case = self.case()
+                case.tables['companies'].append(dict(case.tables['companies'][0], company_id='OTHER_COMPANY'))
+                row = self.fast_payment(case, 1_000_000)
+                self.coverage(case, 'approve')
+                case.tables['approval_authority_coverage'][-1]['approver_id'] = case.worker['employee_id']
+                self.authority(case, case.director['employee_id'], 'approve', level='high')
+                self.revise_employee(case, case.director,
+                                     case.at-timedelta(minutes=10 if before_action else 2),
+                                     company_id='OTHER_COMPANY')
+                hit = self.hit(case.score(), row, 'C3')
+                if before_action:
+                    self.assertIsNone(hit)
+                else:
+                    self.assertIsNotNone(hit)
+                    self.assertEqual(hit['points'], 8)
+
     def test_b6_approved_seasonal_or_annual_schedule_suppresses(self):
         for kind in ('seasonal', 'annual'):
             with self.subTest(kind=kind):

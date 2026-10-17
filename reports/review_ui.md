@@ -64,3 +64,9 @@ SLA hiển thị theo ngày mở trong snapshot mô phỏng. Các hồ sơ lịc
 ## Việc còn lại trước pilot thực
 
 Kiểm tra trình duyệt/viewport, thêm danh tính và phân quyền, nạp dữ liệu SME được phép sử dụng, đối chiếu chính sách duyệt chi và lịch làm việc, hiệu chỉnh sức chứa/ngưỡng trên validation hoặc phản hồi đã thẩm định. Năm rule C4/E2/F2/F3/F4 vẫn cần thêm dữ liệu nguồn. Các cổng pilot trong roadmap chưa được chứng minh bằng kết quả tổng hợp này.
+
+## Cập nhật định danh hồ sơ R6 — 16/10/2026
+
+Đã có ID cụm theo thành viên thay root UnionFind và migration khi nạp lại cache: hồ sơ tương đương một-một giữ phản hồi, người phụ trách và lượt nhận việc; tách/gộp hoặc đổi bằng chứng giữ lịch sử và yêu cầu rà lại. ID cũ có alias mở đúng hồ sơ mới; hồ sơ lịch sử chỉ đọc không tiêu tốn lượt nhận việc. Nhật ký hash gốc không bị viết lại, CSV trạng thái được dựng lại sau migration.
+
+Giữ database đang dùng, `feedback_audit.jsonl`, `case_identity.json` và snapshot cũ trước khi áp queue mới; SQLite còn chứa admissions thực tế, không phải toàn bộ đều là dữ liệu cache có thể bỏ. Xem [hợp đồng, cách chạy prepare và giới hạn](rule_case_identity.md). R6 được kiểm thử trên database tạm; chưa migration database vận hành trong workspace. Bộ hồi quy hiện đạt 341/341, 7/7 probe readiness đạt; Node VM kiểm tra cú pháp/điều hướng, chưa có kiểm tra hiển thị mới trên trình duyệt.

@@ -51,3 +51,5 @@ node_modules/
 *.key
 .DS_Store
 Thumbs.db
+
+!examples/bank_identity_sources/*.csv

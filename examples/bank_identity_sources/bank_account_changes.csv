@@ -1,0 +1,1 @@
+change_id,company_id,vendor_id,old_account,old_bank_code,new_account,new_bank_code,effective_at,observed_at,callback_verified,verified_at,approver_id,status

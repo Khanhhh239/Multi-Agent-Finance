@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import shutil
 
-from .case_queue import review_queue
+from .case_queue import review_queue, operational_members
 from .generate import write_csv
 from .name_challenge import run_challenge
 from .rule_audit import confusion, read_csv, replay_scores, sha
@@ -152,11 +152,12 @@ def evaluate_dataset(data, baseline, destination, config):
                 verified_document_types='|'.join(r['document_type'] for r in hit['evidence']['verified_documents']),
                 evidence_status=hit['evidence']['evidence_status'], contributing_points=hit['points']))
     cases, events = review_queue(result, tables)
-    if {tid for c in cases for tid in json.loads(c['transaction_ids'])} != alerts:
+    if {tid for c in cases for tid in json.loads(c['transaction_ids'])} != operational_members(result):
         raise ValueError('Queue membership differs')
     destination.mkdir(parents=True)
     write_csv(destination / 'rule_scores.csv', [{k: v for k, v in r.items() if k != 'known_risky_prior_ids'} for r in result['scores']])
     write_jsonl(destination / 'rule_hits.jsonl', result['hits'])
+    write_jsonl(destination / 'batch_events.jsonl', result['batch_events'])
     write_csv(destination / 'case_queue.csv', cases)
     write_csv(destination / 'case_events.csv', events)
     write_jsonl(destination / 'master_findings.jsonl', list(clusters.values()))
