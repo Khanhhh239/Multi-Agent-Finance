@@ -6,3 +6,4 @@ __pycache__/
 data/*.duckdb*
 data/*ground_truth.json
 artifacts/
+data/traces/

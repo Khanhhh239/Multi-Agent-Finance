@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from agent4.engine import periods as P
+from agent4.engine.metrics import REGISTRY
 from .untrusted import clean_text, wrap_untrusted
 
 _CONFIG = json.loads((Path(__file__).parent / "data" / "preprocess_patterns.yml").read_text(encoding="utf-8"))
@@ -45,6 +46,8 @@ class Hints:
     group_by: str | None = None
     params: dict = field(default_factory=dict)
     inherited: dict = field(default_factory=dict)
+    metric_hint: str | None = None
+    action_hint: str | None = None
 
     def data(self) -> dict:
         """Prompt-safe projection: no unwrapped names or inherited free text."""
@@ -65,6 +68,7 @@ class Hints:
                           "codes": list(hit.codes)} for hit in self.entities],
             "view_hint": self.view_hint, "cues": sorted(self.cues),
             "group_by": self.group_by, "params": dict(self.params),
+            "metric_hint": self.metric_hint, "action_hint": self.action_hint,
             "inherited": safe(self.inherited),
         }
 
@@ -140,6 +144,27 @@ def _state_value(state, name):
     return state.get(name) if isinstance(state, dict) else getattr(state, name, None)
 
 
+def explicit_metric(question: str) -> str | None:
+    """Unique explicit registry phrase, excluding nested shorter aliases.
+
+    Multiple independent metric mentions remain unresolved. No scores, ledger
+    values or formulas enter this lexical consistency check.
+    """
+    words = _words(question)
+    hits = set()
+    for metric, definition in REGISTRY.items():
+        for phrase in (definition.label, *definition.synonyms):
+            phrase = _words(phrase)
+            if len(phrase.split()) < 2:
+                continue
+            for match in re.finditer(r'(?<!\w)' + re.escape(phrase) + r'(?!\w)', words):
+                hits.add((match.start(), match.end(), metric))
+    maximal = {metric for start, end, metric in hits if not any(
+        left <= start and right >= end and (left < start or right > end)
+        for left, right, _ in hits)}
+    return next(iter(maximal)) if len(maximal) == 1 else None
+
+
 def analyze(question: str, engine, state=None, as_of=None) -> Hints:
     if not isinstance(question, str):
         raise TypeError("Câu hỏi phải là văn bản.")
@@ -149,6 +174,7 @@ def analyze(question: str, engine, state=None, as_of=None) -> Hints:
     if isinstance(cutoff, str):
         cutoff = date.fromisoformat(cutoff)
     hints = Hints(normalized=normalized, no_accent=plain)
+    hints.metric_hint = explicit_metric(normalized)
     hints.periods = [PeriodHit(text, period) for text, period in P.extract_periods(normalized, cutoff)]
     hints.compare = P.detect_comparison(normalized)
     if not hints.compare and re.search(r"\bso (?:voi )?(?:thang|quy|ky|tuan) truoc\b", plain):
@@ -171,6 +197,10 @@ def analyze(question: str, engine, state=None, as_of=None) -> Hints:
             break
     if match := re.search(r"(?:qua han|cham tra) (?:tren |hon )?(\d+) ngay", plain):
         hints.params["min_days"] = int(match.group(1))
+    if re.search(r'\b(?:cong thuc|cach tinh|nguon so lieu|but toan)\b', plain):
+        hints.action_hint = 'explain_metric'
+    elif hints.group_by:
+        hints.action_hint = 'query_metric'
     if match := re.search(r"(?:trong )?(\d+) ngay (?:toi|sap toi|ke tiep|tiep theo)", plain):
         hints.params["days"] = int(match.group(1))
     if re.search(r"ngay (?:bao co|thu ngan hang)|theo ngay ngan hang", plain):

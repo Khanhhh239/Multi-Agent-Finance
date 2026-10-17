@@ -104,7 +104,9 @@ class CFOAgent:
                     proposed={'action':function.get('name'),**arguments}
                 else: proposed=json.loads(response.text)
                 checked=validate(proposed,hints=hints,candidates=candidates,principal=principal,engine=self.engine)
-                log('validator',ok=checked.ok,action=checked.action,issues=[asdict(e) for e in checked.errors],call=checked.fixed_call)
+                log('validator',ok=checked.ok,action=checked.action,issues=[asdict(e) for e in checked.errors],call=checked.fixed_call,
+                    proposed_action=proposed.get('action'),proposed_metric=proposed.get('metric'),
+                    corrected=checked.ok and checked.fixed_call!=proposed)
             except (ValueError,TypeError):
                 log('validator',ok=False,action='repair',issues=[{'code':'INVALID_JSON'}])
                 checked=None

@@ -24,7 +24,7 @@ def main():
     with (root/'docs/5_handoff/PROGRESS.md').open('a',encoding='utf-8') as f:
         f.write(f"\n### {args.card} — P1 thử nghiệm\n\n{args.summary}\n\nToàn bộ test trước commit: **{record['tests']-record['skipped']} passed, {record['skipped']} skipped**, {record['time']:.2f} giây; `{args.xml}`. công thức chưa được kế toán duyệt (G0.7 mở).\n")
     with (root/'docs/5_handoff/DECISIONS.md').open('a',encoding='utf-8') as f:
-        f.write(f"\n| 2026-10-16 | {args.card} thử nghiệm | {args.decision.replace('|','/')} | {args.summary.replace('|','/')} | công thức chưa được kế toán duyệt (G0.7 mở); không chứng nhận pilot |\n")
+        f.write(f"\n| {datetime.now().date().isoformat()} | {args.card} thử nghiệm | {args.decision.replace('|','/')} | {args.summary.replace('|','/')} | công thức chưa được kế toán duyệt (G0.7 mở); không chứng nhận pilot |\n")
     print(json.dumps(record,ensure_ascii=False))
 
 if __name__=='__main__': main()

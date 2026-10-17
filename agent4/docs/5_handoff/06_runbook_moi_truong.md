@@ -1,15 +1,23 @@
 # 06 · Runbook môi trường và vận hành
 
-## Kết quả tiếp nhận 16/10/2026
+## Kết quả cập nhật 17/10/2026
 Môi trường tại workspace đã có `.venv` Python 3.12.13. Chạy PowerShell:
 ```powershell
 cd C:\Users\Admin\Downloads\Agent4
-./.venv/Scripts/python.exe -X utf8 -m pytest --junitxml=artifacts/g0-pytest.xml
-./.venv/Scripts/python.exe -X utf8 -m eval.review_formulas
+$env:AGENT4_RUN_LLM='1'
+./.venv/Scripts/python.exe -X utf8 -m pytest --junitxml=artifacts/t1_10-final-pytest.xml
+./.venv/Scripts/python.exe -X utf8 -m agent4.agent.cli --model qwen3:4b-instruct-2507-q4_K_M
 ```
-Lượt kiểm chứng cuối: **1.390 passed**. Chi tiết trạng thái và giới hạn ở `PROGRESS.md`; chưa qua G0.7. Hai model Ollama đã có trên máy nhưng chưa chạy đánh giá agent. Oracle/golden chỉ dùng seed dev 20251.
+Lượt kiểm chứng cuối: **2.586 passed, 0 skipped**, 64,53s (JUnit), có hai test kết nối Ollama thật. **M1 10/10 câu dev đúng bằng Qwen4B**, 31.702/1.680 token vào/ra, p50/p95=4,109/6,622s. Đã dừng tại M1; không chạy held-out val/test hoặc bộ đánh giá lớn. Chi tiết `M1_REPORT.md`/`PROGRESS.md`. **công thức chưa được kế toán duyệt (G0.7 mở)**; G0.7 **CHƯA ĐẠT**, 22 Must **cần duyệt trước pilot**.
 
-Kho cũ giữ tại `data/cfo_warehouse.duckdb.unversioned`; kho mặc định đã tái sinh với metadata `data_version=v2.0`, cùng hash sổ cái. Dữ liệu và artifact sinh được không commit. Git trong workspace không có remote, nên các nhánh/commit hiện chỉ local.
+Kho cũ giữ tại `data/cfo_warehouse.duckdb.unversioned`; kho mặc định đã tái sinh với metadata `data_version=v2.0`, cùng hash sổ cái. Kho DuckDB không commit; phép đo/trace dev dùng làm bằng chứng ở `measurements/`. Git local độc lập; dùng `scripts/publish_card.py` để đồng bộ từng commit vào `agent4/` của monorepo và push `agent4-Khanh` qua checkout `.publish/`.
+
+CLI mặc định 4B/context4096/deadline20s, tắt thinking; khác mặc định `LLMConfig` chung ở bảng dưới. `--question '…'` dùng batch, `--samples 10 --json` chạy demo, trace mặc định `data/traces/cli.jsonl`. Model lỗi trả lựa chọn form; chạy `--query net_revenue --period 2026-Q3` để tra không cần model. Engine dùng 4 threads/512MB để chia sẻ RAM. Integration test unload model sau mỗi test; client thường giữ 5 phút. 8B/context8192 đã từng HTTP500, chưa xác nhận ổn định.
+
+Chạy lại phép đo (dùng run-id mới, không ghi đè bằng chứng):
+```powershell
+./.venv/Scripts/python.exe -X utf8 -m eval.smoke_m1 --run-id m1-repeat
+```
 
 ## 1. Yêu cầu
 | Thành phần | Phiên bản đã dùng | Ghi chú |
@@ -17,7 +25,7 @@ Kho cũ giữ tại `data/cfo_warehouse.duckdb.unversioned`; kho mặc định �
 | OS | Windows 11 (Git Bash + PowerShell) | Mã chạy cả Linux/macOS |
 | Python | 3.12 (qua `uv`) | Trình khởi chạy `py`/Python cài sẵn trên máy dev bị hỏng ⇒ **dùng venv của `uv`** |
 | DuckDB | ≥ 1.0 (bản mới nhất trong venv) | Kho ~28 MB |
-| Ollama | 0.40.4 | Model: `qwen3:8b` (5,2 GB), `qwen3:4b-instruct-2507-q4_K_M` (2,5 GB) |
+| Ollama | 0.40.5 (đo ở M1) | Model: `qwen3:8b` (5,2 GB), `qwen3:4b-instruct-2507-q4_K_M` (2,5 GB) |
 | GPU | RTX 4050 Laptop 6 GB | Xem `4_ai_engineering/06` |
 | Thư viện | `duckdb pytest openai httpx pydantic numpy pandas rich fastapi uvicorn` | P1+ thêm `rank-bm25 sqlglot hypothesis` (tùy chọn `sentence-transformers`) |
 

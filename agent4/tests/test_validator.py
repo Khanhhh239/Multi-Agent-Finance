@@ -80,3 +80,32 @@ def test_repair_diagnostic_is_short(engine):
     result=check(engine,{'action':'delete'})
     prompt=repair_prompt(result.errors)
     assert len(prompt.split())<=25 and 'SCHEMA' in prompt
+
+@pytest.mark.parametrize('question,proposed,expected',[
+    ('Lãi gộp theo chi nhánh tháng trước','gross_margin_pct','gross_profit'),
+    ('Biên lợi nhuận gộp quý này','gross_profit','gross_margin_pct'),
+    ('Tỷ suất lợi nhuận gộp theo sản phẩm','gross_profit','gross_margin_pct'),
+    ('Chi phí bán hàng và quản lý doanh nghiệp gồm những khoản nào?','selling_expenses','operating_expenses'),
+])
+def test_explicit_registry_phrase_corrects_related_metric(engine,question,proposed,expected):
+    h=analyze(question,engine)
+    assert h.metric_hint==expected
+    r=check(engine,{'action':'query_metric','metric':proposed},h)
+    assert r.ok and r.fixed_call['metric']==expected
+
+def test_multiple_metric_mentions_are_not_collapsed(engine):
+    assert analyze('Doanh thu thuần và lợi nhuận gộp tháng này',engine).metric_hint is None
+
+def test_hint_never_extends_candidates_or_permissions(engine):
+    h=analyze('Tiền mặt và tiền gửi ngân hàng',engine)
+    assert check(engine,{'action':'query_metric','metric':'net_revenue'},h,candidates=['net_revenue']).action=='clarify'
+    assert check(engine,{'action':'query_metric','metric':'net_revenue'},h,
+                 principal=Principal(role='sales',scope={'salesperson':['NV001']})).action=='refuse'
+
+def test_group_request_corrects_explain_but_formula_request_keeps_explain(engine):
+    h=analyze('Chi phí bán hàng và quản lý doanh nghiệp gồm những khoản nào?',engine)
+    r=check(engine,{'action':'explain_metric','metric':'operating_expenses'},h)
+    assert r.ok and r.fixed_call['action']=='query_metric' and r.fixed_call['group_by']=='cost_category'
+    h=analyze('Công thức lợi nhuận gộp theo sản phẩm',engine)
+    r=check(engine,{'action':'explain_metric','metric':'gross_profit'},h)
+    assert r.ok and r.fixed_call['action']=='explain_metric'

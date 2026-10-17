@@ -1,0 +1,13 @@
+{
+  "tests": 2586,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 64.525,
+  "card": "T1.10",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "measured_at_utc": "2026-10-17T03:45:56.401230+00:00",
+  "xml": "artifacts/t1_10-final-pytest.xml",
+  "summary": "CLI chat/form và trace JSONL hoàn tất. M1 Qwen4B thật: lượt dev 1=9/10, lượt 2=8/10, lượt 3=10/10; 31.702/1.680 token vào/ra, p50=4,109s, p95=6,622s. Giữ cả ba lượt và báo cáo fallback; không chạy val/test hoặc đánh giá lớn.",
+  "decision": "CLI mặc định4B/context4096/deadline20s, một chỉ số chính; --samples và --json để tái lập. Thuật ngữ registry tường minh khớp span dài nhất không lồng, nhiều chỉ số khác nhau không ép về một; validator sửa trong enum/quyền, nhóm cần query trừ câu hỏi công thức. Chỉ gửi state khi hints có kế thừa. Metadata description cũng bọc; thêm đơn vị VND/%. Trace ghi proposed/fixed call, chỉ preview/hash prompt, không SQL. Phép chấm kiểm đủ dòng nhóm và delta/% từ oracle; không thêm warmup hay nhận vơ cold-start. M1 chỉ dev demo; dừng ở đây với G0.7 CHƯA ĐẠT."
+}

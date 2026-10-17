@@ -1,14 +1,14 @@
-# Kết quả thực hiện handoff — 16/10/2026
+# Kết quả thực hiện handoff — cập nhật 17/10/2026
 
 **công thức chưa được kế toán duyệt (G0.7 mở).** G0.7 vẫn **CHƯA ĐẠT**, không có chữ ký giả lập. Người dùng cho phép tiếp tục **P1 thử nghiệm** ngày 16/10/2026; không coi đó là duyệt công thức hay sẵn sàng pilot.
 
-Phần kỹ thuật **T0.1–T0.5 đã thực hiện và kiểm tra**. P1 đang triển khai; P2–P4 chưa thực hiện, chưa tuyên bố M1. Kết quả P0 cũ được giữ làm bằng chứng lịch sử bên dưới.
+Phần kỹ thuật **T0.1–T0.5 và T1.1–T1.10 đã thực hiện và kiểm tra**. **M1 thử nghiệm: 10/10 câu mẫu đúng bằng Qwen4B thật**, 31.702/1.680 token vào/ra, p50=4,109s, p95=6,622s. Toàn bộ test cuối **2.586 passed, 0 skipped**, 64,53s (JUnit). Đã dừng ở M1; P2–P4 và held-out val/test chưa chạy. Không coi M1 là qua G0.7, G1 hoặc sẵn sàng pilot. [Báo cáo đầy đủ](M1_REPORT.md) giữ cả lượt sai 9/10 và 8/10 trước sửa.
 
 ## P1 thử nghiệm — tiến độ theo thẻ
 
 - **T1.1:** `OllamaClient` và `ScriptedClient`; timeout, một retry, schema/native tools, think, keep_alive, usage và latency. Đã gọi thật cả 4B và 8B: 4B 16/6 token vào/ra, 56.183 ms; 8B 24/6 token, 28.856 ms. Đây là phép thử JSON có tính cả chi phí tải model, chưa phải M1 hay benchmark chất lượng. Chi tiết `measurements/t1_1_clients.json`; test đầy đủ kể cả `llm` được chạy trước commit.
 
-## Bằng chứng
+## Bằng chứng lịch sử P0 (16/10/2026)
 
 | Hạng mục | Kết quả | Tệp kiểm chứng |
 |---|---|---|
@@ -50,9 +50,9 @@ Kho mặc định hiện có `data_version=v2.0`, seed 20251, mốc dữ liệu 
 
 `FORMULA_REVIEW.md` có đủ 66 hàng: công thức, ví dụ Q3, kết quả oracle và câu hỏi cần chốt. Kế toán trưởng cần xác nhận các chỉ số Must, ghi tên, ngày và quyết định Đồng ý/Sửa/Bỏ. Ưu tiên DSO gồm VAT, ngày tiền về, vốn chủ chưa kết chuyển, khung nghĩa vụ thuế, giả định dự báo, cách so chi phí nhiều tháng và thuế mô phỏng.
 
-Theo `3_evaluation/05_tieu_chi_nghiem_thu.md`: “Ba cổng, cứ qua cổng mới sang cổng sau”. Vì chưa có xác nhận G0.7, công việc dừng tại cổng này; không giả lập chữ ký kế toán. Nếu người dùng cho phép tiếp tục P1 thử nghiệm, phải giữ G0.7 là chưa đạt và không gắn nhãn sẵn sàng pilot.
+Theo `3_evaluation/05_tieu_chi_nghiem_thu.md`: “Ba cổng, cứ qua cổng mới sang cổng sau”. Người dùng đã cho phép tiếp tục riêng P1 **thử nghiệm**, giữ G0.7 **CHƯA ĐẠT** và dừng tại M1; không giả lập chữ ký hay gắn nhãn sẵn sàng pilot. 22 chỉ số Must đều **cần duyệt trước pilot**.
 
-Git riêng đã được khởi tạo trong workspace để tránh thay đổi Git cha ở `C:/Users/Admin`. Các thẻ được tách thành commit và nhánh local. Chưa có remote của dự án nên chưa tạo/push PR.
+Git riêng được khởi tạo trong workspace để tránh thay đổi Git cha ở `C:/Users/Admin`. Mỗi thẻ có commit riêng; `scripts/publish_card.py` đồng bộ vào thư mục `agent4/` của monorepo và đẩy lên `agent4-Khanh`, giữ lịch sử upstream, không force push. Không tạo PR trong phạm vi yêu cầu này.
 - T1.1 xác nhận trước commit: **1.398 passed, 0 skipped**, 78,44 giây; có hai test Ollama thật (`AGENT4_RUN_LLM=1`). công thức chưa được kế toán duyệt (G0.7 mở).
 
 ### T1.2 — P1 thử nghiệm
@@ -106,3 +106,9 @@ Toàn bộ test trước commit: **2425 passed, 0 skipped**, 133.45 giây; `arti
 A8 thật đi qua explain được ẩn chỉ dẫn và có cảnh báo; lợi nhuận trước/sau không đổi. 40 attack tổng hợp bắt40/40, 100 câu tài chính benign FP0 trong smoke; không suy ra miễn nhiễm phổ quát.
 
 Toàn bộ test trước commit: **2569 passed, 0 skipped**, 163.75 giây; `artifacts/t1_9-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T1.10 — P1 thử nghiệm
+
+CLI chat/form và trace JSONL hoàn tất. M1 Qwen4B thật: lượt dev 1=9/10, lượt 2=8/10, lượt 3=10/10; 31.702/1.680 token vào/ra, p50=4,109s, p95=6,622s. Giữ cả ba lượt và báo cáo fallback; không chạy val/test hoặc đánh giá lớn.
+
+Toàn bộ test trước commit: **2586 passed, 0 skipped**, 64.53 giây; `artifacts/t1_10-final-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).

@@ -52,9 +52,21 @@ def test_state_update_preserves_codes_only_and_three_turns(engine):
 
 def test_untrusted_names_in_question_and_state_are_wrapped():
     state=ConversationState(last_filters={'customer':'Hoàng Long'})
-    text=json.dumps(build_messages('Hoàng Long nợ bao nhiêu',Hints(),['ar_balance'],state),ensure_ascii=False)
+    text=json.dumps(build_messages('Hoàng Long nợ bao nhiêu',Hints(inherited={'filters':state.last_filters}),['ar_balance'],state),ensure_ascii=False)
     assert '<du_lieu_khong_tin_cay' in text
     assert 'user.question' in text and 'state' in text
+
+def test_candidates_distinguish_currency_and_margin_and_wrap_descriptions():
+    messages=build_messages('Lãi gộp theo chi nhánh',Hints(),['gross_profit','gross_margin_pct'])
+    metrics=json.loads(messages[1]['content'].split('\n',1)[1])
+    assert [(m['id'],m['unit']) for m in metrics]==[('gross_profit','VND'),('gross_margin_pct','%')]
+    assert all('<du_lieu_khong_tin_cay' in m['description'] for m in metrics)
+    assert 'chỉ dùng gross_margin_pct' in messages[0]['content']
+
+def test_unrelated_question_does_not_send_previous_metric():
+    state=ConversationState(last_metric='gross_margin_pct')
+    messages=build_messages('Lãi gộp theo chi nhánh',Hints(),['gross_profit'],state)
+    assert json.loads(messages[-1]['content'])['STATE_YAML']=='{}'
 
 def test_followup_inherits_and_explicit_period_overrides(engine):
     state=ConversationState(last_metric='net_revenue',last_period='2026-Q3',last_filters={'branch':['HCM']})

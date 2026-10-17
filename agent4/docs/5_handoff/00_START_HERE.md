@@ -1,5 +1,7 @@
 # 00 · START HERE — dành cho coding agent tiếp nhận Agent 4
 
+**Cập nhật 17/10/2026:** đã dừng tại **M1 P1 thử nghiệm**, 10/10 câu dev đúng bằng Qwen4B thật, 2.586 test passed (có Ollama). Đọc [M1_REPORT.md](M1_REPORT.md) và [PROGRESS.md](PROGRESS.md) trước khi tiếp nhận. **công thức chưa được kế toán duyệt (G0.7 mở)**; G0.7 **CHƯA ĐẠT**, 22 Must **cần duyệt trước pilot**. Chưa chạy P2–P4/held-out.
+
 ## Bạn sẽ làm gì
 Hoàn thiện **Agent 4 "CFO ảo"**: lõi dữ liệu + chỉ số **đã có**; bạn xây **agent LLM (Qwen ≤ 10B) + guardrail + bộ đánh giá + sản phẩm**, rồi *đo* và *tối ưu*. Đừng viết lại phần đã có; hãy kiểm chứng nó (P0) trước.
 
@@ -17,7 +19,7 @@ cd agent4
 export PYTHONUTF8=1
 python -m pip install -r requirements.txt            # hoặc dùng uv/venv
 python -m agent4.datagen.build --out data/cfo_warehouse.duckdb      # ~1 phút
-python -m pytest tests -q                                           # 12 passed
+python -m pytest tests -q                                           # số đo hiện tại: PROGRESS.md
 ollama list                                                         # cần qwen3:8b, qwen3:4b-instruct-2507-q4_K_M
 ```
 Thử nhanh lõi:

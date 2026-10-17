@@ -54,6 +54,18 @@ def validate(call,*,hints,candidates,principal=None,engine):
         if action=='propose_action' and principal.role not in ('owner','cfo'):
             return _result('NO_PERMISSION','Vai trò không được tạo đề xuất.','refuse')
         return ValidationResult(True,fixed)
+    # A unique explicit registry term overrides stale conversational intent.
+    # Never extend the candidate enum or the caller's authorization.
+    explicit=getattr(hints,'metric_hint',None)
+    if explicit:
+        if explicit not in ids:
+            return _result('METRIC_HINT','Chỉ số được nêu rõ chưa có trong ứng viên.','clarify')
+        if not principal_access(principal,explicit):
+            return _result('NO_PERMISSION','Chỉ số được nêu rõ vượt quyền.','refuse')
+        metric=fixed['metric']=explicit
+    action_hint=getattr(hints,'action_hint',None)
+    if action_hint in ('query_metric','explain_metric'):
+        action=fixed['action']=action_hint
     md=engine.get_definition(metric)
     if 'needs_clarification' in cues:
         return _result('AMBIGUOUS','Cần xác định rõ loại lợi nhuận hoặc ý nghĩa câu hỏi.','clarify')
