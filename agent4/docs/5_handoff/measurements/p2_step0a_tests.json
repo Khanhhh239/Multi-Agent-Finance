@@ -1,0 +1,14 @@
+{
+  "tests": 2595,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 91.402,
+  "card": "P2.Step0a",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-17T04:50:17.539361+00:00",
+  "xml": "artifacts/p2_step0a-pytest.xml",
+  "summary": "formulas not accountant-approved. Symbolic insight slots: M1 dev 10/10, fallback 7/10 to 0/10; 20 calls, 15129/414 tokens. Excluded from P2 metrics; n10 does not prove population fallback below10%.",
+  "decision": "No financial facts/names sent to slot model. Model selects 1–2 enum slots only; templates produce sentences and verifier remains mandatory. Reject free-text/numbers/extra keys. Frozen P2 protocol, no held-out preview."
+}

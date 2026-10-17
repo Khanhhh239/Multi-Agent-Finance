@@ -11,12 +11,13 @@ from .validator import validate,repair_prompt as call_repair
 from .tools import execute,Principal,build_union_schema,principal_access
 from .packer import pack_facts
 from .render import render_facts
-from .verifier import verify,mentions,Violation,repair_prompt as answer_repair
-from .prompts import build_messages,COMMENTARY_SCHEMA,COMMENTARY_SYSTEM
+from .verifier import verify,repair_prompt as answer_repair
+from .prompts import build_messages
 from .fewshot import FewShotBank
 from .state import ConversationState,update
 from .policy import AgentConfig,should_clarify,use_think
 from .guardrails import pre_filter,protect_result
+from .insights import available_slots,selection_schema,selection_messages,render_selection
 
 @dataclass
 class Step:
@@ -145,27 +146,26 @@ class CFOAgent:
             return finish('Khối sự kiện chưa qua xác minh; cần rà soát nguồn trước khi trả số.','refuse')
         text=block.text
         if self.cfg.commentary and call['action']=='query_metric':
-            commentary_messages=[{'role':'system','content':COMMENTARY_SYSTEM},
-                {'role':'user','content':json.dumps([pack_facts(r) for r in results],ensure_ascii=False)}]
+            slots=available_slots(results)
+            commentary_messages=selection_messages(slots)
             for attempt in range(self.cfg.verify_attempts+1):
                 try:
-                    response=call_model(commentary_messages,COMMENTARY_SCHEMA,128)
-                    commentary=json.loads(response.text).get('commentary','')
-                    if not isinstance(commentary,str): raise ValueError()
+                    response=call_model(commentary_messages,selection_schema(slots),48)
+                    commentary,selected=render_selection(response.text,slots)
+                    log('insight_slots',selected=selected)
                     combined=block.text+'\n'+commentary
                     checked=verify(combined,block.allowed,block.required_labels)
-                    # All numerical output remains in the deterministic block.
-                    if re.search(r'\d',commentary) or list(mentions(commentary)):
-                        checked.ok=False
-                        checked.violations.append(Violation('NUMERIC_COMMENTARY','Diễn giải phải định tính.'))
                     log('verifier',ok=checked.ok,violations=[asdict(v) for v in checked.violations])
                     if checked.ok:
                         text=combined
                         break
                     commentary_messages.append({'role':'user','content':answer_repair(checked.violations)})
-                except (LLMUnavailable,ValueError,TypeError):
+                except LLMUnavailable:
                     log('commentary_unavailable')
                     break
+                except (ValueError,TypeError):
+                    log('insight_invalid')
+                    commentary_messages.append({'role':'user','content':'Chỉ chọn slots trong enum; không thêm nội dung.'})
             else: log('verifier_fallback')
         update(state,call,outcome.data,question=question,user_id=principal.user_id)
         return finish(text,facts=[pack_facts(r) for r in results],caveats=block.caveats,lineage_ids=block.lineage_ids,

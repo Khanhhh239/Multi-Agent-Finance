@@ -1,5 +1,7 @@
 # Kết quả thực hiện handoff — cập nhật 17/10/2026
 
+**P2 đang triển khai theo yêu cầu mới:** Step0 → T2.1–T2.6 → dừng M2; xem `P2_PROTOCOL.md`. **formulas not accountant-approved**; G0.7 OPEN / CHƯA ĐẠT. Kết quả M1 phía dưới là lịch sử, không phải metric P2. Test seed9001 chỉ được mở câu hỏi/kết quả ở lượt final duy nhất sau khi đóng băng B*.
+
 **công thức chưa được kế toán duyệt (G0.7 mở).** G0.7 vẫn **CHƯA ĐẠT**, không có chữ ký giả lập. Người dùng cho phép tiếp tục **P1 thử nghiệm** ngày 16/10/2026; không coi đó là duyệt công thức hay sẵn sàng pilot.
 
 Phần kỹ thuật **T0.1–T0.5 và T1.1–T1.10 đã thực hiện và kiểm tra**. **M1 thử nghiệm: 10/10 câu mẫu đúng bằng Qwen4B thật**, 31.702/1.680 token vào/ra, p50=4,109s, p95=6,622s. Toàn bộ test cuối **2.586 passed, 0 skipped**, 64,53s (JUnit). Đã dừng ở M1; P2–P4 và held-out val/test chưa chạy. Không coi M1 là qua G0.7, G1 hoặc sẵn sàng pilot. [Báo cáo đầy đủ](M1_REPORT.md) giữ cả lượt sai 9/10 và 8/10 trước sửa.
@@ -112,3 +114,9 @@ Toàn bộ test trước commit: **2569 passed, 0 skipped**, 163.75 giây; `arti
 CLI chat/form và trace JSONL hoàn tất. M1 Qwen4B thật: lượt dev 1=9/10, lượt 2=8/10, lượt 3=10/10; 31.702/1.680 token vào/ra, p50=4,109s, p95=6,622s. Giữ cả ba lượt và báo cáo fallback; không chạy val/test hoặc đánh giá lớn.
 
 Toàn bộ test trước commit: **2586 passed, 0 skipped**, 64.53 giây; `artifacts/t1_10-final-pytest.xml`. công thức chưa được kế toán duyệt (G0.7 mở).
+
+### P2.Step0a — P2 thử nghiệm
+
+formulas not accountant-approved. Symbolic insight slots: M1 dev 10/10, fallback 7/10 to 0/10; 20 calls, 15129/414 tokens. Excluded from P2 metrics; n10 does not prove population fallback below10%.
+
+Toàn bộ test trước commit: **2595 passed, 0 skipped**, 91.40 giây; `artifacts/p2_step0a-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

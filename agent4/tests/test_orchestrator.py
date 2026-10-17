@@ -13,7 +13,7 @@ METRICS=['net_revenue','net_revenue','cogs','gross_margin_pct','gross_profit','e
 
 @pytest.mark.parametrize('i',range(10))
 def test_ten_sample_paths_with_scripted_router(engine,i):
-    llm=ScriptedClient([{'action':'query_metric','metric':METRICS[i]},{'commentary':'Có thể xem thêm nguồn để rà soát kết quả.'}])
+    llm=ScriptedClient([{'action':'query_metric','metric':METRICS[i]},{'slots':['caveat']}])
     reply=CFOAgent(engine,llm).ask(QUESTIONS[i])
     assert reply.behavior=='answer',reply.text
     assert NOTICE in reply.text

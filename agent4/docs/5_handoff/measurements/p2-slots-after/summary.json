@@ -1,0 +1,206 @@
+{
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "G0_7": "CHƯA ĐẠT",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "num_ctx": 4096,
+  "dataset": "first 10 reference_v0/sample-questions.md, development demo",
+  "ollama": {
+    "version": "0.40.5"
+  },
+  "model_digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+  "python": "3.12.13 (main, Aug  7 2026, 02:26:41) [MSC v.1944 64 bit (AMD64)]",
+  "warehouse": {
+    "as_of_date": "2026-10-14",
+    "data_version": "v2.0",
+    "seed": "20251",
+    "last_closed_month": "2026-08"
+  },
+  "trace_records": 10,
+  "trace_ids_match": true,
+  "observations": {
+    "llm_calls": 20,
+    "validator_failed_attempts": 0,
+    "commentary_rejected_attempts": 0,
+    "facts_fallback_answers": 0,
+    "llm_unavailable": 0,
+    "commentary_unavailable": 0,
+    "facts_verification_failures": 0
+  },
+  "command": [
+    "C:\\Users\\Admin\\Downloads\\Agent4\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-m",
+    "agent4.agent.cli",
+    "--model",
+    "qwen3:4b-instruct-2507-q4_K_M",
+    "--samples",
+    "10",
+    "--json",
+    "--trace",
+    "C:\\Users\\Admin\\Downloads\\Agent4\\docs\\5_handoff\\measurements\\p2-slots-after\\trace.jsonl"
+  ],
+  "cli_exit": 0,
+  "questions": 10,
+  "passed": 10,
+  "M1": true,
+  "wall_seconds": 27.818932299999688,
+  "latency_p50_ms": 1460.8453499999996,
+  "latency_p95_ms": 12958.104299999832,
+  "prompt_tokens": 15129,
+  "eval_tokens": 414,
+  "cases": [
+    {
+      "question": 1,
+      "passed": true,
+      "errors": [],
+      "expected_value": 12556551000.0,
+      "actual_value": 12556551000.0,
+      "tokens": {
+        "prompt_tokens": 1574,
+        "eval_tokens": 27
+      },
+      "latency_ms": 12958.104299999832,
+      "rows_total": null,
+      "rows_returned": 0
+    },
+    {
+      "question": 2,
+      "passed": true,
+      "errors": [],
+      "expected_value": 12556551000.0,
+      "actual_value": 12556551000.0,
+      "tokens": {
+        "prompt_tokens": 1623,
+        "eval_tokens": 46
+      },
+      "latency_ms": 1474.0732000000207,
+      "rows_total": null,
+      "rows_returned": 0
+    },
+    {
+      "question": 3,
+      "passed": true,
+      "errors": [],
+      "expected_value": 88058038508.0,
+      "actual_value": 88058038508.0,
+      "tokens": {
+        "prompt_tokens": 1523,
+        "eval_tokens": 51
+      },
+      "latency_ms": 1560.031799999706,
+      "rows_total": 6,
+      "rows_returned": 6
+    },
+    {
+      "question": 4,
+      "passed": true,
+      "errors": [],
+      "expected_value": 22.57525664491786,
+      "actual_value": 22.57525664491786,
+      "tokens": {
+        "prompt_tokens": 1521,
+        "eval_tokens": 45
+      },
+      "latency_ms": 1445.1322999993863,
+      "rows_total": null,
+      "rows_returned": 0
+    },
+    {
+      "question": 5,
+      "passed": true,
+      "errors": [],
+      "expected_value": 2834673614.0,
+      "actual_value": 2834673614.0,
+      "tokens": {
+        "prompt_tokens": 1501,
+        "eval_tokens": 50
+      },
+      "latency_ms": 1448.0960999999297,
+      "rows_total": 4,
+      "rows_returned": 4
+    },
+    {
+      "question": 6,
+      "passed": true,
+      "errors": [],
+      "expected_value": 51023296.0,
+      "actual_value": 51023296.0,
+      "tokens": {
+        "prompt_tokens": 1539,
+        "eval_tokens": 51
+      },
+      "latency_ms": 1473.5946000000695,
+      "rows_total": 2,
+      "rows_returned": 2
+    },
+    {
+      "question": 7,
+      "passed": true,
+      "errors": [],
+      "expected_value": 4373464381.0,
+      "actual_value": 4373464381.0,
+      "tokens": {
+        "prompt_tokens": 1560,
+        "eval_tokens": 45
+      },
+      "latency_ms": 1380.8734999993248,
+      "rows_total": null,
+      "rows_returned": 0
+    },
+    {
+      "question": 8,
+      "passed": true,
+      "errors": [],
+      "expected_value": 2778050318.0,
+      "actual_value": 2778050318.0,
+      "tokens": {
+        "prompt_tokens": 1540,
+        "eval_tokens": 44
+      },
+      "latency_ms": 1482.211699999425,
+      "rows_total": null,
+      "rows_returned": 0
+    },
+    {
+      "question": 9,
+      "passed": true,
+      "errors": [],
+      "expected_value": 3187443878.0,
+      "actual_value": 3187443878.0,
+      "tokens": {
+        "prompt_tokens": 1316,
+        "eval_tokens": 28
+      },
+      "latency_ms": 1150.4885999993348,
+      "rows_total": null,
+      "rows_returned": 0
+    },
+    {
+      "question": 10,
+      "passed": true,
+      "errors": [],
+      "expected_value": -4345494331.0,
+      "actual_value": -4345494331.0,
+      "tokens": {
+        "prompt_tokens": 1432,
+        "eval_tokens": 27
+      },
+      "latency_ms": 1207.1252000005188,
+      "rows_total": null,
+      "rows_returned": 0
+    }
+  ],
+  "not_measured": [
+    "large evaluation",
+    "held-out val/test",
+    "8B answer quality",
+    "pilot readiness",
+    "accountant approval"
+  ],
+  "limitations": [
+    "no warmup added; cold/warm residency was not controlled, loading is included if required",
+    "tables display at most eight rows with explicit truncation",
+    "numeric membership and deterministic anchors do not establish every natural-language causal claim"
+  ]
+}
