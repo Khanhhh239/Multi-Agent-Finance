@@ -1,9 +1,10 @@
 'use strict';
-const explanationView = {generation:0, evaluation:null, busy:false, key:null};
+const explanationView = {generation:0, evaluation:null, busy:false, key:null, cacheValid:false};
 function clearExplanation(view=null){
- explanationView.generation++;explanationView.evaluation=view;explanationView.busy=false;explanationView.key=null;
+ explanationView.generation++;explanationView.evaluation=view;explanationView.busy=false;explanationView.key=null;explanationView.cacheValid=false;
  $('explanation-detail').hidden=!view?.report;$('generate-explanation').disabled=!view?.report;
  $('explanation-status').textContent='Có thể xem diễn giải và nguồn của bản kết quả đã lưu.';
+ $('explanation-status').className='';
  $('explanation-claims').replaceChildren();$('explanation-sources').replaceChildren();
 }
 function renderExplanation(item){
@@ -18,8 +19,17 @@ function renderExplanation(item){
  OUTPUT_TRUNCATED:'Phản hồi model vượt giới hạn độ dài',RESPONSE_BUDGET:'Phản hồi model vượt giới hạn dữ liệu',
  MODEL_OR_COMPLETION_MISMATCH:'Model chưa hoàn tất phản hồi hoặc không khớp cấu hình',
  LOCAL_ENDPOINT_REQUIRED:'Cấu hình model cần dùng địa chỉ local được hỗ trợ',PROVIDER_FAILURE:'Model gặp lỗi xử lý; có thể thử lại'};
- $('explanation-status').textContent=(item.mode==='LLM_VALIDATED'?'Diễn giải có model hỗ trợ, đã kiểm tra từng phát biểu.':'Diễn giải bằng mẫu: '+(reasons[item.fallback_reason]||'Model chưa đáp ứng điều kiện xử lý')+'.')+' Thuộc bản dữ liệu '+item.record_revision+'.';
+ $('explanation-status').textContent=(item.mode==='NATURAL_DRAFT'?'Bản diễn giải tự nhiên cần đối chiếu. Đã kiểm tra cấu trúc và một số ràng buộc; chưa xác nhận đầy đủ ý nghĩa.':item.mode==='LLM_VALIDATED'?'Diễn giải có model hỗ trợ, đã kiểm tra từng phát biểu.':'Diễn giải bằng mẫu: '+(reasons[item.fallback_reason]||'Model chưa đáp ứng điều kiện xử lý')+'.')+' Thuộc bản dữ liệu '+item.record_revision+'.';
+ $('explanation-status').className=item.mode==='NATURAL_DRAFT'?'natural-draft-status':'';
  $('explanation-claims').replaceChildren(...item.claims.map(claim=>{const li=element('li');li.append(element('p',claim.text));const details=element('details');details.append(element('summary','Tham chiếu nguồn'),element('small',claim.refs.join(' · ')));li.append(details);return li;}));
+ if(item.natural_draft){
+  const original=element('details');original.append(element('summary','Thông tin gốc và bằng chứng đã kiểm soát'));
+  const originalList=element('ul');for(const node of [...$('explanation-claims').children])originalList.append(node);original.append(originalList);
+  const draft=item.natural_draft;const groups=[['Tình trạng hiện tại',[draft.summary]],['Vì sao?',draft.reasons],['Bạn cần làm gì?',draft.next_actions]];
+  $('explanation-claims').replaceChildren();
+  for(const [title,paragraphs] of groups){const li=element('li');li.append(element('h3',title));for(const p of paragraphs){li.append(element('p',p.text));const refs=item.claims.filter(c=>p.fact_ids.includes(c.fact_id)).flatMap(c=>c.refs);const source=element('details');source.append(element('summary','Xem nguồn tham chiếu'),element('small',[...new Set(refs)].join(' · ')));li.append(source);}$('explanation-claims').append(li);}
+  const sourceItem=element('li');sourceItem.append(original);$('explanation-claims').append(sourceItem);
+ }
  $('explanation-sources').replaceChildren(...item.excerpts.map(c=>element('p',c.document_id+' · '+c.locator+' · '+c.chunk_id)));
 }
 async function loadExplanation(view){
@@ -28,6 +38,7 @@ async function loadExplanation(view){
  const data=await api('/v1/evaluations/'+view.evaluation_id+'/explanations');
  if(generation!==explanationView.generation||compliance.current?.evaluation_id!==view.evaluation_id)return;
  if(data.explanation)renderExplanation(data.explanation);
+ explanationView.cacheValid=data.cache_valid===true;
 }
 async function generateExplanation(){
  const view=explanationView.evaluation;
@@ -38,7 +49,7 @@ async function generateExplanation(){
  explanationView.key=explanationView.key||crypto.randomUUID();
  try{const item=await api('/v1/evaluations/'+view.evaluation_id+'/explanations',{method:'POST',headers:{'Idempotency-Key':explanationView.key},body:{expected_record_revision:view.record_revision}});
   if(generation!==explanationView.generation||compliance.current?.evaluation_id!==view.evaluation_id)return;
-  renderExplanation(item);explanationView.key=null;
+  renderExplanation(item);explanationView.key=null;explanationView.cacheValid=true;
  }catch(error){if(generation===explanationView.generation)$('explanation-status').textContent='Chưa tải được diễn giải bổ sung. Kết quả và giải thích gốc phía trên vẫn dùng được.';throw error;
  }finally{if(generation===explanationView.generation){explanationView.busy=false;$('generate-explanation').disabled=false;}}
 }

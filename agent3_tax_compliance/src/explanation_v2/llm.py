@@ -6,7 +6,7 @@ import multiprocessing
 from urllib.parse import urlparse
 from .selection import request_data, materialize
 
-PROMPT_VERSION = 'grounded-index-selection-vi-v2'
+PROMPT_VERSION = 'grounded-explanation-vi-v3'
 SYSTEM = ('Arrange verified Vietnamese explanation facts for readability. '
           'Return JSON with exactly one key selections: an array of {fact_id,variant_index}. '
           'Include EVERY supplied fact exactly once. variant_index is zero-based; use 0 unless another supplied variant reads better. '
@@ -49,11 +49,16 @@ class Ollama:
         if (url.scheme != 'http' or url.hostname not in ('127.0.0.1', '::1') or
             url.username or url.password or url.query or url.fragment or url.path != '/api/chat'):
             raise ProviderFailure('LOCAL_ENDPOINT_REQUIRED')
-        content, output_schema = request_data(context)
+        system=SYSTEM
+        if policy.style=='NATURAL_DRAFT':
+            from .natural import request_data as natural_request, SYSTEM as natural_system
+            content,output_schema=natural_request(context);system=natural_system
+        else:
+            content, output_schema = request_data(context)
         if len(content.encode()) > policy.max_context_bytes:
             raise ProviderFailure('CONTEXT_BUDGET')
         body = json.dumps(dict(model=policy.model, stream=False, think=False, keep_alive='5m',
-            format=output_schema, messages=[dict(role='system', content=SYSTEM), dict(role='user', content=content)],
+            format=output_schema, messages=[dict(role='system', content=system), dict(role='user', content=content)],
             options=dict(temperature=0, num_predict=policy.max_output_tokens)), ensure_ascii=False).encode()
         started = time.monotonic()
         connection = http.client.HTTPConnection(url.hostname, url.port or 80, timeout=policy.timeout_seconds)
@@ -99,6 +104,8 @@ class Ollama:
                 raise ProviderFailure('MODEL_OR_COMPLETION_MISMATCH')
             if payload.get('done_reason') == 'length':
                 raise ProviderFailure('OUTPUT_TRUNCATED')
+            if policy.style=='NATURAL_DRAFT':
+                return payload['message']['content']
             try:
                 return materialize(payload['message']['content'], context)
             except (ValueError, TypeError) as exc:

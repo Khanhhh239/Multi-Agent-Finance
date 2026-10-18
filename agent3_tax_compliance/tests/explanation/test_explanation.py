@@ -14,7 +14,7 @@ from pydantic import ValidationError
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'e2e_v1'))
 import test_compliance as cf
-from src.explanation_v2.contracts import Policy, Corpus, Chunk, Context, Fact
+from src.explanation_v2.contracts import Policy, Corpus, Chunk, Context, Fact, ExplanationArtifact
 from src.explanation_v2.retrieval import retrieve, tokens
 from src.explanation_v2.context_builder import build_context
 from src.explanation_v2.validator import validate, fallback
@@ -168,6 +168,48 @@ class ExplanationIntegrationTests(unittest.TestCase):
         self.assertEqual(result.mode,'LLM_VALIDATED');self.assertTrue(result.excerpts)
         self.assertEqual(self.workflow.artifact(self.fixture.ctx,self.fixture.payer,self.state.evaluation_id),self.original)
         self.assertTrue(self.workflow.replay(self.fixture.ctx,self.fixture.payer,self.state.evaluation_id)['verified'])
+
+    def test_natural_draft_is_not_promoted_to_validated_claims(self):
+        class NaturalProvider:
+            def generate(inner,context,policy):
+                facts=[f for f in context.facts if not f.fact_id.startswith('quote:')]
+                paragraph={'text':' '.join(f.variants[0] for f in facts[:2]),'fact_ids':[f.fact_id for f in facts[:2]]}
+                rest=[{'text':f.variants[0],'fact_ids':[f.fact_id]} for f in facts[2:]]
+                return json.dumps({'summary':paragraph,'reasons':rest[:8],'next_actions':rest[8:] or rest[:1]},ensure_ascii=False)
+        result=self.create(key='natural',policy=self.policy.model_copy(update={'style':'NATURAL_DRAFT'}),provider=NaturalProvider())
+        self.assertEqual(result.mode,'NATURAL_DRAFT')
+        self.assertTrue(result.semantic_review_required)
+        self.assertEqual(result.claims,fallback(build_context(self.original,result.excerpts)))
+        self.assertEqual(self.workflow.artifact(self.fixture.ctx,self.fixture.payer,self.state.evaluation_id),self.original)
+        payload=result.model_dump(mode='json');payload['semantic_review_required']=False
+        with self.assertRaises(ValueError):ExplanationArtifact.model_validate(payload)
+
+    def test_explanation_cache_invalidates_on_policy_change(self):
+        self.create(key='cached-policy')
+        path='/v1/evaluations/'+self.state.evaluation_id+'/explanations?taxpayer_id='+self.fixture.payer
+        with patch('src.explanation_v2.api.load_config',return_value=(self.policy,self.corpus)):
+            self.assertTrue(self.fixture.client.get(path,headers=self.fixture.headers).json()['cache_valid'])
+        changed=self.policy.model_copy(update={'style':'NATURAL_DRAFT'})
+        with patch('src.explanation_v2.api.load_config',return_value=(changed,self.corpus)):
+            response=self.fixture.client.get(path,headers=self.fixture.headers)
+            self.assertFalse(response.json()['cache_valid'])
+            self.assertIsNotNone(response.json()['explanation'])
+
+    def test_transient_failure_is_not_a_reusable_model_cache(self):
+        class Bad:
+            def generate(inner,context,policy):raise ProviderFailure('PROVIDER_TIMEOUT')
+        self.create(key='transient',provider=Bad())
+        path='/v1/evaluations/'+self.state.evaluation_id+'/explanations?taxpayer_id='+self.fixture.payer
+        with patch('src.explanation_v2.api.load_config',return_value=(self.policy,self.corpus)):
+            self.assertFalse(self.fixture.client.get(path,headers=self.fixture.headers).json()['cache_valid'])
+
+    def test_invalid_natural_draft_keeps_template(self):
+        class Bad:
+            def generate(inner,context,policy):return '{"verdict":"PASS"}'
+        result=self.create(key='bad-natural',policy=self.policy.model_copy(update={'style':'NATURAL_DRAFT'}),provider=Bad())
+        self.assertEqual(result.mode,'TEMPLATE')
+        self.assertEqual(result.fallback_reason,'CLAIM_VALIDATION_FAILED')
+        self.assertIsNone(result.natural_draft)
 
     def test_idempotency_and_config_conflict(self):
         first=self.create()
@@ -330,6 +372,9 @@ class ProviderTransportTests(unittest.TestCase):
                 else:
                     output={'selections':[{'fact_id':'f','variant_index':0}]}
                     if mode=='bad_selection':output={'error':'Cannot parse input'}
+                    if mode=='natural':
+                        p={'text':'Verified','fact_ids':['f']}
+                        output={'summary':p,'reasons':[p],'next_actions':[p]}
                     raw=json.dumps({'model':body['model'],'done':True,'message':{'content':json.dumps(output)}}).encode()
                 self.send_response(200);self.end_headers()
                 try:self.wfile.write(raw)
@@ -353,6 +398,14 @@ class ProviderTransportTests(unittest.TestCase):
         with self.assertRaises(ProviderFailure) as caught:
             Ollama()._generate(self.context(),self.server('bad_selection'))
         self.assertEqual(str(caught.exception),'CLAIM_VALIDATION_FAILED')
+
+    def test_natural_transport_pins_section_refs_but_does_not_approve_semantics(self):
+        from src.explanation_v2.natural import validate_draft
+        policy=self.server('natural').model_copy(update={'style':'NATURAL_DRAFT'})
+        raw=Ollama()._generate(self.context(),policy)
+        self.assertTrue(validate_draft(raw,self.context()))
+        schema=self.observed['format']
+        self.assertEqual(schema['properties']['summary']['properties']['fact_ids']['prefixItems'][0]['const'],'f')
 
     def test_supervised_local_transport(self):
         policy=self.server()

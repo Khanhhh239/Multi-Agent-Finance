@@ -8,6 +8,7 @@ from ..domain.envelope import Sha256
 class Policy(Contract):
     version: Identifier = 'explanation-v2-1'
     enabled: bool = False
+    style: Literal['CONTROLLED_SELECTION','NATURAL_DRAFT'] = 'CONTROLLED_SELECTION'
     provider: Literal['ollama'] = 'ollama'
     endpoint: str = 'http://127.0.0.1:11434/api/chat'
     model: str = 'qwen3:8b'
@@ -92,6 +93,17 @@ class LLMOutput(Contract):
     claims: tuple[Claim, ...] = Field(min_length=1, max_length=100)
 
 
+class NaturalParagraph(Contract):
+    text: str = Field(min_length=1,max_length=1200)
+    fact_ids: tuple[str,...] = Field(min_length=1,max_length=30)
+
+
+class NaturalDraft(Contract):
+    summary: NaturalParagraph
+    reasons: tuple[NaturalParagraph,...] = Field(min_length=1,max_length=8)
+    next_actions: tuple[NaturalParagraph,...] = Field(min_length=1,max_length=8)
+
+
 class ExplanationArtifact(Stamped):
     explanation_id: Identifier
     tenant_id: Identifier
@@ -107,7 +119,9 @@ class ExplanationArtifact(Stamped):
     provider: str
     model: str
     model_revision: str
-    mode: Literal['TEMPLATE', 'LLM_VALIDATED']
+    mode: Literal['TEMPLATE', 'LLM_VALIDATED', 'NATURAL_DRAFT']
+    natural_draft: NaturalDraft | None = None
+    semantic_review_required: bool = False
     fallback_reason: str | None
     claims: tuple[Claim, ...]
     excerpts: tuple[Chunk, ...]
@@ -119,6 +133,10 @@ class ExplanationArtifact(Stamped):
         import math
         if (self.mode == 'TEMPLATE') != bool(self.fallback_reason):
             raise ValueError('Fallback reason and mode disagree')
+        if (self.mode=='NATURAL_DRAFT') != (self.natural_draft is not None):
+            raise ValueError('Draft mode and narrative disagree')
+        if self.mode=='NATURAL_DRAFT' and not self.semantic_review_required:
+            raise ValueError('Natural language requires semantic review')
         if not self.claims or len({c.fact_id for c in self.claims}) != len(self.claims):
             raise ValueError('Missing or duplicate claims')
         if not math.isfinite(self.elapsed_seconds):

@@ -14,6 +14,15 @@
       "title": "Enabled",
       "type": "boolean"
     },
+    "style": {
+      "default": "CONTROLLED_SELECTION",
+      "enum": [
+        "CONTROLLED_SELECTION",
+        "NATURAL_DRAFT"
+      ],
+      "title": "Style",
+      "type": "string"
+    },
     "provider": {
       "const": "ollama",
       "default": "ollama",

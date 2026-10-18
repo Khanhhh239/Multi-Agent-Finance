@@ -1,5 +1,7 @@
 # Agent 3 — Tax Compliance Assistant
 
+**OCR + LLM + tự chạy — 18/10:** sửa mất dòng hàng, thêm **Trích xuất lại dữ liệu** và chuỗi **Tự kiểm tra và diễn giải sau tải/lưu** theo lựa chọn người dùng. Có diễn giải tự nhiên thử nghiệm, luôn ghi cần đối chiếu; auto-accept và rule thật chưa được duyệt. [Cách dùng, kiểm thử và giới hạn](docs/agent3/plans/evidence/automation_20261018_v1/REPORT.md).
+
 **UI theo quy trình — 17/10:** giao diện chia thành bốn bước **Dữ liệu hóa đơn → Hồ sơ bổ sung → Kiểm tra thuế → Diễn giải**, giữ nguồn cạnh dữ liệu, tìm chứng từ, bảng hàng gọn và thông báo lỗi Qwen cụ thể. Khởi động lại web rồi Ctrl+F5 để dùng. [Hướng dẫn và bằng chứng kiểm thử](docs/agent3/plans/evidence/workflow_ui_20261017_v1/REPORT.md). Rule thật vẫn DRAFT; đây là đợt hoàn thiện UI, chưa nghiệm thu production.
 
 **UI hồ sơ nghiệp vụ — 16/10:** đã có khung **Hồ sơ nghiệp vụ** bên cạnh hóa đơn gốc để lưu loại hóa đơn, phân loại dòng hàng, chứng cứ thanh toán và tổng mua cùng ngày. Có tải tài liệu, giữ bản nháp khi xung đột và đối chiếu lại sau khi sửa hóa đơn. Khởi động lại launcher để dùng; không cần CLI cho thao tác này. Rules thật vẫn DRAFT, mapping SKU còn chờ danh mục sản phẩm. [Hướng dẫn sử dụng và kiểm thử](docs/agent3/plans/evidence/business_ui_20261016_v1/REPORT.md). Thông tin “chưa có UI” ở báo cáo trước là trạng thái lịch sử.
