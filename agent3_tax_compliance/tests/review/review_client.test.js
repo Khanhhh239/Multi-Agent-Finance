@@ -17,7 +17,8 @@ const html=fs.readFileSync('src/review/static/index.html','utf8');
 for(const match of html.matchAll(/id="([^"]+)"/g)){assert(!ids.has(match[1]),'duplicate DOM ID');ids.set(match[1],new Element());}
 const code=fs.readFileSync('src/review/static/app.js','utf8');
 for(const match of code.matchAll(/\$\('([^']+)'\)/g))assert(ids.has(match[1]),'missing DOM ID '+match[1]);
-const context={document:{getElementById:id=>ids.get(id),createElement:()=>new Element(),createElementNS:()=>new Element()},
+const events=[];
+const context={CustomEvent:class{constructor(type,options){this.type=type;this.detail=options?.detail;}},document:{dispatchEvent:event=>events.push(event),getElementById:id=>ids.get(id),createElement:()=>new Element(),createElementNS:()=>new Element()},
  location:{origin:'http://127.0.0.1:8000'},window:{addEventListener(){},confirm:()=>true},navigator:{},URL,Blob,crypto:{randomUUID:()=> 'functional-id'},console,setTimeout,clearTimeout,
  fetch:async(url,options)=>{calls.push({url:String(url),options});return {ok:true,json:async()=>({token:'signed-proof',geometry_available:true}),blob:async()=>new Blob(['png'])};}};
 vm.createContext(context);vm.runInContext(code+'\nglobalThis.client={state,api,getField,renderFields,syncVat,showPage,message,reset,showField,formatDecimalVI,parseDecimalVI,canonicalValue,displayValue,showConflict};',context);
@@ -49,6 +50,7 @@ async function main(){
  c.state.view.candidates=[{candidate_id:'candidate-a',semantic_field:'seller.tax_id',raw_value:'1234567890',normalized_value:'1234567890',evidence_refs:[{page_index:0,bbox:[.1,.2,.4,.5]}]}];
  const seller=c.state.edits.get('parties.seller.tax_id');seller.input.value='9876543210';seller.checked.checked=false;
  await c.showField('parties.seller.tax_id');
+ assert.equal(events.at(-1).type,'agent3:field-selected');assert.equal(events.at(-1).detail.path,'parties.seller.tax_id');
  assert.equal(seller.input.value,'9876543210','viewing source must not apply a candidate');assert.equal(seller.checked.checked,false);
  const candidateActions=ids.get('candidates').children[0].children[1];await candidateActions.children[1].handlers.click();
  assert.equal(seller.input.value,'1234567890');assert.equal(seller.checked.checked,true);

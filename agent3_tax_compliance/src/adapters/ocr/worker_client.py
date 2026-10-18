@@ -5,6 +5,7 @@ import subprocess
 import tempfile
 import threading
 import time
+from contextlib import contextmanager
 from pathlib import Path
 
 from ...ingestion.sandbox import run_bounded
@@ -13,6 +14,14 @@ from .protocol import OCRBridgeResponse, OCRError, correlate
 from .registry import EngineRegistry, confined, adapter_config
 
 _WORKER_SLOT=threading.BoundedSemaphore(1)
+
+
+@contextmanager
+def worker_slot(timeout=None):
+    acquired=_WORKER_SLOT.acquire() if timeout is None else _WORKER_SLOT.acquire(timeout=timeout)
+    if not acquired:raise OCRError('WORKER_TIMEOUT','OCR worker is busy; retry later',True)
+    try:yield
+    finally:_WORKER_SLOT.release()
 
 
 def sha(raw):
@@ -73,7 +82,7 @@ class WorkerClient:
             if not path.is_file() or sha(path.read_bytes())!=expected:
                 raise OCRError('MODEL_UNAVAILABLE','Runtime files changed since inventory; restart worker client')
 
-    def run_batch(self, requests, config):
+    def run_batch(self, requests, config, *, slot_timeout=None):
         runtime=self.inventory()
         if config.model_id!=self.profile.model_id:
             raise OCRError('PROTOCOL_ERROR','Client engine does not match OCR configuration')
@@ -82,7 +91,7 @@ class WorkerClient:
             if req.runtime_sha256!=runtime['runtime_sha256'] or req.model_config_version!=config.version or req.model_id!=config.model_id:
                 raise OCRError('PROTOCOL_ERROR','Request runtime/config mismatch')
         self.verify_runtime()
-        with _WORKER_SLOT, tempfile.TemporaryDirectory(prefix='capture-ocr-') as directory:
+        with worker_slot(slot_timeout), tempfile.TemporaryDirectory(prefix='capture-ocr-') as directory:
             output=Path(directory)/'responses.jsonl'
             engine_config=adapter_config(self.profile,self.root,config)
             payload=dict(config=engine_config,distributions=list(self.profile.distributions),requests_jsonl='\n'.join(r.model_dump_json() for r in requests),

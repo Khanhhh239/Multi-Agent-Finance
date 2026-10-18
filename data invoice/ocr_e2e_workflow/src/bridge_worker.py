@@ -53,7 +53,7 @@ def main():
                     adapter.run_id=req['request_id']
                     result=adapter.predict(path).to_dict()
                     if config['adapter']=='ppocrv6_vietocr':
-                        result['metadata']['confidence_semantics']='DETECTION_SCORE_NOT_TEXT_CONFIDENCE'
+                        result['metadata']['confidence_semantics']=('UNAVAILABLE' if config.get('recognition_only') else 'DETECTION_SCORE_NOT_TEXT_CONFIDENCE')
                     if result['error']:
                         issue=('OCR_FAILED','Adapter inference failed',False)
                     elif result['metadata'].get('recognition_errors',0):

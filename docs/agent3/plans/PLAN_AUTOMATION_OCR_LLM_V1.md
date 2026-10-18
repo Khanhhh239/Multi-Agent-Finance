@@ -11,7 +11,8 @@
 | Luồng tự chạy | Opt-in trong browser; một lượt phục hồi bảng theo source/phiên, kiểm tra bản đã lưu, giải thích có cache; chặn bản nháp, bỏ kết quả UI cũ khi đổi record/revision |
 | Bật auto-accept | **CHƯA BẬT**: thiếu calibration/holdout và nghiệm thu chất lượng |
 | Duyệt luật / mapping hàng thật | **PENDING**: không đổi DRAFT thành approved bằng code |
-| OCR lại vùng, crop/recognizer/layout mới | **CHƯA TRIỂN KHAI trong lát cắt này**; chọn nhánh tiếp theo bằng error inventory và benchmark riêng |
+| OCR lại vùng nguồn — 19/10 | Đã có nút đọc lại tên/địa chỉ/mô tả hàng từ tối đa 4 block dòng đã có evidence. VietOCR beam search chạy riêng, giữ observation cũ/mới và cache; ứng viên chỉ vào bản nháp khi người dùng chọn. [Runbook và giới hạn](evidence/region_recovery_20261019_v1/REPORT.md) |
+| Vùng chưa detect / render DPI mới / layout mới | **CHƯA TRIỂN KHAI**: đọc lại vùng hiện dùng render đã giữ, không tìm lại chữ chưa có box hoặc tự chọn vùng/bố cục bằng model mới |
 | Job bền vững khi đóng browser | Capture worker hiện có tiếp tục chạy; chuỗi UI mới chỉ chạy khi trang mở. Durable orchestration/production còn thuộc PLAN_14 |
 | Dữ liệu mở rộng, fine-tune và nghiệm thu readability | **PENDING**; không suy chất lượng tổng quát từ fixture/dev đã sửa |
 
@@ -24,3 +25,9 @@
 5. Đo dev và model thật, tách khỏi fixture và giữ dữ liệu chứng từ ngoài Git.
 
 Xem [báo cáo và runbook](evidence/automation_20261018_v1/REPORT.md).
+
+## Bổ sung 19/10 — đọc lại vùng, vẫn trong PLAN_06
+
+Luồng: **Xem nguồn → Đọc lại vùng chữ → đối chiếu ứng viên → Đưa vào bản nháp → Lưu dữ liệu hóa đơn**. Với dòng hàng, mở **Chi tiết** trước để thấy nút Xem nguồn. Không tự sửa reviewer correction và không bật auto-accept. Chuỗi tự chạy của lát cắt trước chưa tự gọi model vùng; cần thêm tập calibration và trigger đáng tin cậy trước khi bật.
+
+Thử nghiệm trên một hóa đơn dev có lỗi lặp từ cuối dòng: greedy vẫn lặp, beam search trên cùng crop đã bỏ lỗi lặp; đã xác minh lại qua Chrome với model thật trên bản sao DB. Đây là bằng chứng sửa một lỗi, không phải accuracy holdout. Các bước mở rộng dataset, layout, recognizer khác và tự động chọn kết quả vẫn giữ trạng thái chưa nghiệm thu.

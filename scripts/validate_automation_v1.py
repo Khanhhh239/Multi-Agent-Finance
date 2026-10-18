@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1];APP=ROOT/'agent3_tax_compliance'
 OUT=ROOT/'docs/agent3/plans/evidence/automation_20261018_v1'
 
 
-def main():
+def main(checked_on='2026-10-18'):
     spec=importlib.util.spec_from_file_location('business_regression',ROOT/'scripts/validate_business_review.py')
     regression=importlib.util.module_from_spec(spec);spec.loader.exec_module(regression)
     regression.OUT=OUT
@@ -20,7 +20,7 @@ def main():
     report['suites'].append(dict(suite='recovery',tests=recovery.testsRun,failures=len(recovery.failures),errors=len(recovery.errors),skipped=len(recovery.skipped)))
     report['total_tests']+=recovery.testsRun
     if recovery.failures or recovery.errors:status=1
-    commands=[['node','--check','src/review/static/'+file] for file in ('app.js','compliance.js','explanation.js','business.js','workflow.js','automation.js')]
+    commands=[['node','--check','src/review/static/'+file] for file in ('app.js','compliance.js','explanation.js','business.js','workflow.js','automation.js','region.js')]
     commands += [['node','tests/review/'+file] for file in ('review_client.test.js','explanation_client.test.js')]
     js=[]
     for command in commands:
@@ -28,7 +28,8 @@ def main():
         js.append(dict(command=' '.join(command),passed=result.returncode==0))
         if result.returncode:print(result.stderr)
     browsers=[]
-    for script,source,label in [('check_automation_browser.py','data/automation_v1/browser/result.json','automation'),
+    for script,source,label in [('check_region_browser.py','data/region_recovery/browser/result.json','region'),
+        ('check_automation_browser.py','data/automation_v1/browser/result.json','automation'),
         ('check_workflow_browser.py','data/workflow_ui/browser/result.json','workflow'),
         ('check_business_browser.py','data/business_ui/browser/result.json','business'),
         ('check_compliance_browser.py','data/plan09/browser/result.json','compliance'),
@@ -40,7 +41,7 @@ def main():
         browsers.append(dict(name=label,passed=result.returncode==0 and data['result']=='PASS',checks=len(data['checks'])))
     from src.business_review.web import SaveCommand
     regression.write(APP/'contracts/business-review-v1/SaveCommand.schema.json',SaveCommand.model_json_schema())
-    report.update(checked_on='2026-10-18',javascript=js,browser=browsers,browser_checks=sum(b['checks'] for b in browsers),
+    report.update(checked_on=checked_on,javascript=js,browser=browsers,browser_checks=sum(b['checks'] for b in browsers),
         scope='Synthetic operator review in real HTTP/SQLite/Chrome, regression and native ZEN fixtures; no legal or bank-document accuracy claim.',
         ui_source_sha256={p.relative_to(APP).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
             for p in sorted((APP/'src/review/static').glob('*')) if p.is_file()},

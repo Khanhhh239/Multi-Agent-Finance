@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Opt-in chain does not automatically write on opening a record",
+    "One opt-in action runs new revision evaluation and natural draft; draft is explicitly unapproved",
+    "Repeated run reuses explanation when config/corpus/implementation match",
+    "Unsaved fields block both recovery and chain, with draft preserved and no POST",
+    "Saving correction automatically evaluates the new revision after the save guard is released",
+    "Natural explanation and automation controls fit mobile and desktop",
+    "Loading record fences recovery and old editors until the new snapshot is ready",
+    "Unchanged extraction returns bounded NO_CHANGE and leaves the current record intact",
+    "New extraction opens a separate record and preserves the original reviewed record in the list",
+    "Zero-row old extraction recovers once, continues automatically, preserves old record and does not confirm completeness"
+  ],
+  "page_errors": [],
+  "scope": "Real Chrome/HTTP/ZEN; synthetic data and natural provider test double. No legal or semantic acceptance."
+}

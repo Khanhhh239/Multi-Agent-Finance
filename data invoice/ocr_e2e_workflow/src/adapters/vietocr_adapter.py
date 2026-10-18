@@ -24,6 +24,7 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
         from vietocr.tool.predictor import Predictor
 
         self.recognition_only = bool(self.config.get("recognition_only", False))
+        self.location_support = not self.recognition_only
         self.detector = None
         self.orientation_classifier = None
         if not self.recognition_only:
@@ -106,13 +107,22 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
         with Image.open(image_path) as source:
             image = source.convert("RGB")
         if self.recognition_only:
+            segments = []
             try:
-                recognized = self.recognizer.predict(image)
+                from src.adapters.recognition_crops import line_segments
+                options = self.config.get('recognizer', {})
+                segments = line_segments(image, float(options.get('max_line_aspect', 14)),
+                                         int(options.get('max_line_parts', 4))) if options.get('split_long_lines') else [(image.copy(), (0, image.width))]
+                texts = [self.recognizer.predict(part).strip() for part, _ in segments]
+                recognized = ' '.join(texts)
             finally:
+                for part, _ in segments:
+                    part.close()
                 image.close()
             return {
                 "document_text_raw": recognized,
-                "metadata": {"recognizer_backend": "VietOCR", "recognition_only": True},
+                "metadata": {"recognizer_backend": "VietOCR", "recognition_only": True,
+                             "segment_texts": texts, "x_spans": [list(span) for _, span in segments]},
             }
         angle, orientation_score = self._orientation(image)
         transpose = {

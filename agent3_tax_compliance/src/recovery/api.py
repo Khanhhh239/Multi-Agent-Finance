@@ -7,6 +7,13 @@ from ..review.repository import ReviewRepository, envelope
 from ..review.contracts import ReviewError
 
 router = APIRouter(prefix='/v1')
+from .regions import RegionCommand, RegionRecovery
+
+
+@router.post('/records/{record_id}/reread-region')
+def reread_region(request:Request,record_id:Identifier,taxpayer_id:Identifier,command:RegionCommand):
+    ctx=authenticate(request.app.state.settings,request.headers.get('authorization'))
+    return RegionRecovery(request.app.state.settings).read(ctx,taxpayer_id,record_id,command)
 
 
 class ReextractCommand(Contract):
