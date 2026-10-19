@@ -132,3 +132,9 @@ Toàn bộ test trước commit: **2596 passed, 0 skipped**, 88.85 giây; `artif
 formulas not accountant-approved. Created val seed71 and sealed test warehouse seed9001, all v2.1. All AR/AP/inventory reconciliation gaps exactly0 for train/val/test. No test questions or evaluation results opened.
 
 Toàn bộ test trước commit: **2597 passed, 0 skipped**, 82.48 giây; `artifacts/p2_step0c-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.1 — P2 thử nghiệm
+
+formulas not accountant-approved. E1/E2 each600 TRAIN /200 val /400 sealed test, 66 metrics, >=3 per metric and >=2 forms per split, exactly25% noise, 100% independent oracle coverage. Excluded880 tuning strings. TRAIN-only bank1200 examples replaces old dev bank.
+
+Toàn bộ test trước commit: **2602 passed, 0 skipped**, 109.02 giây; `artifacts/t2_1-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

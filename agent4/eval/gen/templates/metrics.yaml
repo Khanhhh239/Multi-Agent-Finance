@@ -1,0 +1,4754 @@
+[
+  {
+    "id": "e1.net_revenue.train.form0",
+    "metric": "net_revenue",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.net_revenue.train.form1",
+    "metric": "net_revenue",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.net_revenue.val.form0",
+    "metric": "net_revenue",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.net_revenue.val.form1",
+    "metric": "net_revenue",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.net_revenue.test.form0",
+    "metric": "net_revenue",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.net_revenue.test.form1",
+    "metric": "net_revenue",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_revenue.train.form0",
+    "metric": "gross_revenue",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_revenue.train.form1",
+    "metric": "gross_revenue",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.gross_revenue.val.form0",
+    "metric": "gross_revenue",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_revenue.val.form1",
+    "metric": "gross_revenue",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_revenue.test.form0",
+    "metric": "gross_revenue",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_revenue.test.form1",
+    "metric": "gross_revenue",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.revenue_deductions.train.form0",
+    "metric": "revenue_deductions",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.revenue_deductions.train.form1",
+    "metric": "revenue_deductions",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.revenue_deductions.val.form0",
+    "metric": "revenue_deductions",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.revenue_deductions.val.form1",
+    "metric": "revenue_deductions",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.revenue_deductions.test.form0",
+    "metric": "revenue_deductions",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.revenue_deductions.test.form1",
+    "metric": "revenue_deductions",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.goods_revenue.train.form0",
+    "metric": "goods_revenue",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.goods_revenue.train.form1",
+    "metric": "goods_revenue",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.goods_revenue.val.form0",
+    "metric": "goods_revenue",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.goods_revenue.val.form1",
+    "metric": "goods_revenue",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.goods_revenue.test.form0",
+    "metric": "goods_revenue",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.goods_revenue.test.form1",
+    "metric": "goods_revenue",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.service_revenue.train.form0",
+    "metric": "service_revenue",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.service_revenue.train.form1",
+    "metric": "service_revenue",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.service_revenue.val.form0",
+    "metric": "service_revenue",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.service_revenue.val.form1",
+    "metric": "service_revenue",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.service_revenue.test.form0",
+    "metric": "service_revenue",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.service_revenue.test.form1",
+    "metric": "service_revenue",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.cogs.train.form0",
+    "metric": "cogs",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.cogs.train.form1",
+    "metric": "cogs",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.cogs.val.form0",
+    "metric": "cogs",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cogs.val.form1",
+    "metric": "cogs",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cogs.test.form0",
+    "metric": "cogs",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.cogs.test.form1",
+    "metric": "cogs",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_profit.train.form0",
+    "metric": "gross_profit",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_profit.train.form1",
+    "metric": "gross_profit",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.gross_profit.val.form0",
+    "metric": "gross_profit",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_profit.val.form1",
+    "metric": "gross_profit",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_profit.test.form0",
+    "metric": "gross_profit",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_profit.test.form1",
+    "metric": "gross_profit",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_margin_pct.train.form0",
+    "metric": "gross_margin_pct",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_margin_pct.train.form1",
+    "metric": "gross_margin_pct",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.gross_margin_pct.val.form0",
+    "metric": "gross_margin_pct",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_margin_pct.val.form1",
+    "metric": "gross_margin_pct",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_margin_pct.test.form0",
+    "metric": "gross_margin_pct",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.gross_margin_pct.test.form1",
+    "metric": "gross_margin_pct",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.selling_expenses.train.form0",
+    "metric": "selling_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.selling_expenses.train.form1",
+    "metric": "selling_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.selling_expenses.val.form0",
+    "metric": "selling_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.selling_expenses.val.form1",
+    "metric": "selling_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.selling_expenses.test.form0",
+    "metric": "selling_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.selling_expenses.test.form1",
+    "metric": "selling_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.admin_expenses.train.form0",
+    "metric": "admin_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.admin_expenses.train.form1",
+    "metric": "admin_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.admin_expenses.val.form0",
+    "metric": "admin_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.admin_expenses.val.form1",
+    "metric": "admin_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.admin_expenses.test.form0",
+    "metric": "admin_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.admin_expenses.test.form1",
+    "metric": "admin_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_expenses.train.form0",
+    "metric": "operating_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_expenses.train.form1",
+    "metric": "operating_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.operating_expenses.val.form0",
+    "metric": "operating_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_expenses.val.form1",
+    "metric": "operating_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_expenses.test.form0",
+    "metric": "operating_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_expenses.test.form1",
+    "metric": "operating_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_income.train.form0",
+    "metric": "finance_income",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_income.train.form1",
+    "metric": "finance_income",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.finance_income.val.form0",
+    "metric": "finance_income",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_income.val.form1",
+    "metric": "finance_income",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_income.test.form0",
+    "metric": "finance_income",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_income.test.form1",
+    "metric": "finance_income",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_cost.train.form0",
+    "metric": "finance_cost",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_cost.train.form1",
+    "metric": "finance_cost",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.finance_cost.val.form0",
+    "metric": "finance_cost",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_cost.val.form1",
+    "metric": "finance_cost",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_cost.test.form0",
+    "metric": "finance_cost",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.finance_cost.test.form1",
+    "metric": "finance_cost",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_profit.train.form0",
+    "metric": "operating_profit",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_profit.train.form1",
+    "metric": "operating_profit",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.operating_profit.val.form0",
+    "metric": "operating_profit",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_profit.val.form1",
+    "metric": "operating_profit",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_profit.test.form0",
+    "metric": "operating_profit",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.operating_profit.test.form1",
+    "metric": "operating_profit",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.other_income.train.form0",
+    "metric": "other_income",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.other_income.train.form1",
+    "metric": "other_income",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.other_income.val.form0",
+    "metric": "other_income",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.other_income.val.form1",
+    "metric": "other_income",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.other_income.test.form0",
+    "metric": "other_income",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.other_income.test.form1",
+    "metric": "other_income",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.other_expenses.train.form0",
+    "metric": "other_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.other_expenses.train.form1",
+    "metric": "other_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.other_expenses.val.form0",
+    "metric": "other_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.other_expenses.val.form1",
+    "metric": "other_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.other_expenses.test.form0",
+    "metric": "other_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.other_expenses.test.form1",
+    "metric": "other_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.profit_before_tax.train.form0",
+    "metric": "profit_before_tax",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.profit_before_tax.train.form1",
+    "metric": "profit_before_tax",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.profit_before_tax.val.form0",
+    "metric": "profit_before_tax",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.profit_before_tax.val.form1",
+    "metric": "profit_before_tax",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.profit_before_tax.test.form0",
+    "metric": "profit_before_tax",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.profit_before_tax.test.form1",
+    "metric": "profit_before_tax",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.income_tax_expense.train.form0",
+    "metric": "income_tax_expense",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.income_tax_expense.train.form1",
+    "metric": "income_tax_expense",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.income_tax_expense.val.form0",
+    "metric": "income_tax_expense",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.income_tax_expense.val.form1",
+    "metric": "income_tax_expense",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.income_tax_expense.test.form0",
+    "metric": "income_tax_expense",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.income_tax_expense.test.form1",
+    "metric": "income_tax_expense",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.net_profit.train.form0",
+    "metric": "net_profit",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.net_profit.train.form1",
+    "metric": "net_profit",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.net_profit.val.form0",
+    "metric": "net_profit",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.net_profit.val.form1",
+    "metric": "net_profit",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.net_profit.test.form0",
+    "metric": "net_profit",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.net_profit.test.form1",
+    "metric": "net_profit",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.net_margin_pct.train.form0",
+    "metric": "net_margin_pct",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.net_margin_pct.train.form1",
+    "metric": "net_margin_pct",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.net_margin_pct.val.form0",
+    "metric": "net_margin_pct",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.net_margin_pct.val.form1",
+    "metric": "net_margin_pct",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.net_margin_pct.test.form0",
+    "metric": "net_margin_pct",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.net_margin_pct.test.form1",
+    "metric": "net_margin_pct",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.ebitda.train.form0",
+    "metric": "ebitda",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.ebitda.train.form1",
+    "metric": "ebitda",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.ebitda.val.form0",
+    "metric": "ebitda",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ebitda.val.form1",
+    "metric": "ebitda",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ebitda.test.form0",
+    "metric": "ebitda",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.ebitda.test.form1",
+    "metric": "ebitda",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.depreciation_expense.train.form0",
+    "metric": "depreciation_expense",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.depreciation_expense.train.form1",
+    "metric": "depreciation_expense",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.depreciation_expense.val.form0",
+    "metric": "depreciation_expense",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.depreciation_expense.val.form1",
+    "metric": "depreciation_expense",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.depreciation_expense.test.form0",
+    "metric": "depreciation_expense",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.depreciation_expense.test.form1",
+    "metric": "depreciation_expense",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.salary_expense.train.form0",
+    "metric": "salary_expense",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.salary_expense.train.form1",
+    "metric": "salary_expense",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.salary_expense.val.form0",
+    "metric": "salary_expense",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.salary_expense.val.form1",
+    "metric": "salary_expense",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.salary_expense.test.form0",
+    "metric": "salary_expense",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.salary_expense.test.form1",
+    "metric": "salary_expense",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.labor_cost.train.form0",
+    "metric": "labor_cost",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.labor_cost.train.form1",
+    "metric": "labor_cost",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.labor_cost.val.form0",
+    "metric": "labor_cost",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.labor_cost.val.form1",
+    "metric": "labor_cost",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.labor_cost.test.form0",
+    "metric": "labor_cost",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.labor_cost.test.form1",
+    "metric": "labor_cost",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_and_equivalents.train.form0",
+    "metric": "cash_and_equivalents",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_and_equivalents.train.form1",
+    "metric": "cash_and_equivalents",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.cash_and_equivalents.val.form0",
+    "metric": "cash_and_equivalents",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_and_equivalents.val.form1",
+    "metric": "cash_and_equivalents",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_and_equivalents.test.form0",
+    "metric": "cash_and_equivalents",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_and_equivalents.test.form1",
+    "metric": "cash_and_equivalents",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.term_deposits.train.form0",
+    "metric": "term_deposits",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.term_deposits.train.form1",
+    "metric": "term_deposits",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.term_deposits.val.form0",
+    "metric": "term_deposits",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.term_deposits.val.form1",
+    "metric": "term_deposits",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.term_deposits.test.form0",
+    "metric": "term_deposits",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.term_deposits.test.form1",
+    "metric": "term_deposits",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_balance.train.form0",
+    "metric": "ar_balance",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_balance.train.form1",
+    "metric": "ar_balance",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.ar_balance.val.form0",
+    "metric": "ar_balance",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_balance.val.form1",
+    "metric": "ar_balance",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_balance.test.form0",
+    "metric": "ar_balance",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_balance.test.form1",
+    "metric": "ar_balance",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_customer.train.form0",
+    "metric": "ar_by_customer",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_customer.train.form1",
+    "metric": "ar_by_customer",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.ar_by_customer.val.form0",
+    "metric": "ar_by_customer",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_customer.val.form1",
+    "metric": "ar_by_customer",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_customer.test.form0",
+    "metric": "ar_by_customer",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_customer.test.form1",
+    "metric": "ar_by_customer",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_salesperson.train.form0",
+    "metric": "ar_by_salesperson",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_salesperson.train.form1",
+    "metric": "ar_by_salesperson",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.ar_by_salesperson.val.form0",
+    "metric": "ar_by_salesperson",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_salesperson.val.form1",
+    "metric": "ar_by_salesperson",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_salesperson.test.form0",
+    "metric": "ar_by_salesperson",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_by_salesperson.test.form1",
+    "metric": "ar_by_salesperson",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_balance.train.form0",
+    "metric": "ap_balance",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_balance.train.form1",
+    "metric": "ap_balance",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.ap_balance.val.form0",
+    "metric": "ap_balance",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_balance.val.form1",
+    "metric": "ap_balance",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_balance.test.form0",
+    "metric": "ap_balance",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_balance.test.form1",
+    "metric": "ap_balance",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_by_vendor.train.form0",
+    "metric": "ap_by_vendor",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_by_vendor.train.form1",
+    "metric": "ap_by_vendor",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.ap_by_vendor.val.form0",
+    "metric": "ap_by_vendor",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_by_vendor.val.form1",
+    "metric": "ap_by_vendor",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_by_vendor.test.form0",
+    "metric": "ap_by_vendor",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_by_vendor.test.form1",
+    "metric": "ap_by_vendor",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.inventory_value.train.form0",
+    "metric": "inventory_value",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.inventory_value.train.form1",
+    "metric": "inventory_value",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.inventory_value.val.form0",
+    "metric": "inventory_value",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.inventory_value.val.form1",
+    "metric": "inventory_value",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.inventory_value.test.form0",
+    "metric": "inventory_value",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.inventory_value.test.form1",
+    "metric": "inventory_value",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.tax_payable.train.form0",
+    "metric": "tax_payable",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.tax_payable.train.form1",
+    "metric": "tax_payable",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.tax_payable.val.form0",
+    "metric": "tax_payable",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.tax_payable.val.form1",
+    "metric": "tax_payable",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.tax_payable.test.form0",
+    "metric": "tax_payable",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.tax_payable.test.form1",
+    "metric": "tax_payable",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_balance.train.form0",
+    "metric": "debt_balance",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_balance.train.form1",
+    "metric": "debt_balance",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.debt_balance.val.form0",
+    "metric": "debt_balance",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_balance.val.form1",
+    "metric": "debt_balance",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_balance.test.form0",
+    "metric": "debt_balance",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_balance.test.form1",
+    "metric": "debt_balance",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.fixed_assets_net.train.form0",
+    "metric": "fixed_assets_net",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.fixed_assets_net.train.form1",
+    "metric": "fixed_assets_net",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.fixed_assets_net.val.form0",
+    "metric": "fixed_assets_net",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.fixed_assets_net.val.form1",
+    "metric": "fixed_assets_net",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.fixed_assets_net.test.form0",
+    "metric": "fixed_assets_net",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.fixed_assets_net.test.form1",
+    "metric": "fixed_assets_net",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.total_assets.train.form0",
+    "metric": "total_assets",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.total_assets.train.form1",
+    "metric": "total_assets",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.total_assets.val.form0",
+    "metric": "total_assets",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.total_assets.val.form1",
+    "metric": "total_assets",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.total_assets.test.form0",
+    "metric": "total_assets",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.total_assets.test.form1",
+    "metric": "total_assets",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.total_liabilities.train.form0",
+    "metric": "total_liabilities",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.total_liabilities.train.form1",
+    "metric": "total_liabilities",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.total_liabilities.val.form0",
+    "metric": "total_liabilities",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.total_liabilities.val.form1",
+    "metric": "total_liabilities",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.total_liabilities.test.form0",
+    "metric": "total_liabilities",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.total_liabilities.test.form1",
+    "metric": "total_liabilities",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.equity.train.form0",
+    "metric": "equity",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.equity.train.form1",
+    "metric": "equity",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.equity.val.form0",
+    "metric": "equity",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.equity.val.form1",
+    "metric": "equity",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.equity.test.form0",
+    "metric": "equity",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.equity.test.form1",
+    "metric": "equity",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.working_capital.train.form0",
+    "metric": "working_capital",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.working_capital.train.form1",
+    "metric": "working_capital",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.working_capital.val.form0",
+    "metric": "working_capital",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.working_capital.val.form1",
+    "metric": "working_capital",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.working_capital.test.form0",
+    "metric": "working_capital",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.working_capital.test.form1",
+    "metric": "working_capital",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.current_ratio.train.form0",
+    "metric": "current_ratio",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.current_ratio.train.form1",
+    "metric": "current_ratio",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.current_ratio.val.form0",
+    "metric": "current_ratio",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.current_ratio.val.form1",
+    "metric": "current_ratio",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.current_ratio.test.form0",
+    "metric": "current_ratio",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.current_ratio.test.form1",
+    "metric": "current_ratio",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.quick_ratio.train.form0",
+    "metric": "quick_ratio",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.quick_ratio.train.form1",
+    "metric": "quick_ratio",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.quick_ratio.val.form0",
+    "metric": "quick_ratio",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.quick_ratio.val.form1",
+    "metric": "quick_ratio",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.quick_ratio.test.form0",
+    "metric": "quick_ratio",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.quick_ratio.test.form1",
+    "metric": "quick_ratio",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_to_equity.train.form0",
+    "metric": "debt_to_equity",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_to_equity.train.form1",
+    "metric": "debt_to_equity",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.debt_to_equity.val.form0",
+    "metric": "debt_to_equity",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_to_equity.val.form1",
+    "metric": "debt_to_equity",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_to_equity.test.form0",
+    "metric": "debt_to_equity",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.debt_to_equity.test.form1",
+    "metric": "debt_to_equity",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.net_cash_flow.train.form0",
+    "metric": "net_cash_flow",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.net_cash_flow.train.form1",
+    "metric": "net_cash_flow",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.net_cash_flow.val.form0",
+    "metric": "net_cash_flow",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.net_cash_flow.val.form1",
+    "metric": "net_cash_flow",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.net_cash_flow.test.form0",
+    "metric": "net_cash_flow",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.net_cash_flow.test.form1",
+    "metric": "net_cash_flow",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_flow_breakdown.train.form0",
+    "metric": "cash_flow_breakdown",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_flow_breakdown.train.form1",
+    "metric": "cash_flow_breakdown",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.cash_flow_breakdown.val.form0",
+    "metric": "cash_flow_breakdown",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_flow_breakdown.val.form1",
+    "metric": "cash_flow_breakdown",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_flow_breakdown.test.form0",
+    "metric": "cash_flow_breakdown",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_flow_breakdown.test.form1",
+    "metric": "cash_flow_breakdown",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_coverage_days.train.form0",
+    "metric": "cash_coverage_days",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_coverage_days.train.form1",
+    "metric": "cash_coverage_days",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.cash_coverage_days.val.form0",
+    "metric": "cash_coverage_days",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_coverage_days.val.form1",
+    "metric": "cash_coverage_days",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_coverage_days.test.form0",
+    "metric": "cash_coverage_days",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_coverage_days.test.form1",
+    "metric": "cash_coverage_days",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_aging.train.form0",
+    "metric": "ar_aging",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_aging.train.form1",
+    "metric": "ar_aging",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.ar_aging.val.form0",
+    "metric": "ar_aging",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_aging.val.form1",
+    "metric": "ar_aging",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_aging.test.form0",
+    "metric": "ar_aging",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.ar_aging.test.form1",
+    "metric": "ar_aging",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.overdue_receivables.train.form0",
+    "metric": "overdue_receivables",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.overdue_receivables.train.form1",
+    "metric": "overdue_receivables",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.overdue_receivables.val.form0",
+    "metric": "overdue_receivables",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.overdue_receivables.val.form1",
+    "metric": "overdue_receivables",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.overdue_receivables.test.form0",
+    "metric": "overdue_receivables",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.overdue_receivables.test.form1",
+    "metric": "overdue_receivables",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.dso.train.form0",
+    "metric": "dso",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.dso.train.form1",
+    "metric": "dso",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.dso.val.form0",
+    "metric": "dso",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.dso.val.form1",
+    "metric": "dso",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.dso.test.form0",
+    "metric": "dso",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.dso.test.form1",
+    "metric": "dso",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.dso_actual.train.form0",
+    "metric": "dso_actual",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.dso_actual.train.form1",
+    "metric": "dso_actual",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.dso_actual.val.form0",
+    "metric": "dso_actual",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.dso_actual.val.form1",
+    "metric": "dso_actual",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.dso_actual.test.form0",
+    "metric": "dso_actual",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.dso_actual.test.form1",
+    "metric": "dso_actual",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.dpo.train.form0",
+    "metric": "dpo",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.dpo.train.form1",
+    "metric": "dpo",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.dpo.val.form0",
+    "metric": "dpo",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.dpo.val.form1",
+    "metric": "dpo",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.dpo.test.form0",
+    "metric": "dpo",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.dpo.test.form1",
+    "metric": "dpo",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.dio.train.form0",
+    "metric": "dio",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.dio.train.form1",
+    "metric": "dio",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.dio.val.form0",
+    "metric": "dio",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.dio.val.form1",
+    "metric": "dio",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.dio.test.form0",
+    "metric": "dio",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.dio.test.form1",
+    "metric": "dio",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_conversion_cycle.train.form0",
+    "metric": "cash_conversion_cycle",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_conversion_cycle.train.form1",
+    "metric": "cash_conversion_cycle",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.cash_conversion_cycle.val.form0",
+    "metric": "cash_conversion_cycle",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_conversion_cycle.val.form1",
+    "metric": "cash_conversion_cycle",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_conversion_cycle.test.form0",
+    "metric": "cash_conversion_cycle",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.cash_conversion_cycle.test.form1",
+    "metric": "cash_conversion_cycle",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_due_soon.train.form0",
+    "metric": "ap_due_soon",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_due_soon.train.form1",
+    "metric": "ap_due_soon",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.ap_due_soon.val.form0",
+    "metric": "ap_due_soon",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_due_soon.val.form1",
+    "metric": "ap_due_soon",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_due_soon.test.form0",
+    "metric": "ap_due_soon",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.ap_due_soon.test.form1",
+    "metric": "ap_due_soon",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.upcoming_obligations.train.form0",
+    "metric": "upcoming_obligations",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.upcoming_obligations.train.form1",
+    "metric": "upcoming_obligations",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.upcoming_obligations.val.form0",
+    "metric": "upcoming_obligations",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.upcoming_obligations.val.form1",
+    "metric": "upcoming_obligations",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.upcoming_obligations.test.form0",
+    "metric": "upcoming_obligations",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.upcoming_obligations.test.form1",
+    "metric": "upcoming_obligations",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_by_category.train.form0",
+    "metric": "expense_by_category",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_by_category.train.form1",
+    "metric": "expense_by_category",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.expense_by_category.val.form0",
+    "metric": "expense_by_category",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_by_category.val.form1",
+    "metric": "expense_by_category",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_by_category.test.form0",
+    "metric": "expense_by_category",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_by_category.test.form1",
+    "metric": "expense_by_category",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_spikes.train.form0",
+    "metric": "expense_spikes",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_spikes.train.form1",
+    "metric": "expense_spikes",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.expense_spikes.val.form0",
+    "metric": "expense_spikes",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_spikes.val.form1",
+    "metric": "expense_spikes",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_spikes.test.form0",
+    "metric": "expense_spikes",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.expense_spikes.test.form1",
+    "metric": "expense_spikes",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.unusual_account_movements.train.form0",
+    "metric": "unusual_account_movements",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.unusual_account_movements.train.form1",
+    "metric": "unusual_account_movements",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.unusual_account_movements.val.form0",
+    "metric": "unusual_account_movements",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.unusual_account_movements.val.form1",
+    "metric": "unusual_account_movements",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.unusual_account_movements.test.form0",
+    "metric": "unusual_account_movements",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.unusual_account_movements.test.form1",
+    "metric": "unusual_account_movements",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.unbalanced_journals.train.form0",
+    "metric": "unbalanced_journals",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.unbalanced_journals.train.form1",
+    "metric": "unbalanced_journals",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.unbalanced_journals.val.form0",
+    "metric": "unbalanced_journals",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.unbalanced_journals.val.form1",
+    "metric": "unbalanced_journals",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.unbalanced_journals.test.form0",
+    "metric": "unbalanced_journals",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.unbalanced_journals.test.form1",
+    "metric": "unbalanced_journals",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.top_sales_transactions.train.form0",
+    "metric": "top_sales_transactions",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.top_sales_transactions.train.form1",
+    "metric": "top_sales_transactions",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.top_sales_transactions.val.form0",
+    "metric": "top_sales_transactions",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.top_sales_transactions.val.form1",
+    "metric": "top_sales_transactions",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.top_sales_transactions.test.form0",
+    "metric": "top_sales_transactions",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.top_sales_transactions.test.form1",
+    "metric": "top_sales_transactions",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.budget_vs_actual.train.form0",
+    "metric": "budget_vs_actual",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.budget_vs_actual.train.form1",
+    "metric": "budget_vs_actual",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.budget_vs_actual.val.form0",
+    "metric": "budget_vs_actual",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.budget_vs_actual.val.form1",
+    "metric": "budget_vs_actual",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.budget_vs_actual.test.form0",
+    "metric": "budget_vs_actual",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.budget_vs_actual.test.form1",
+    "metric": "budget_vs_actual",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.payroll_summary.train.form0",
+    "metric": "payroll_summary",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.payroll_summary.train.form1",
+    "metric": "payroll_summary",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.payroll_summary.val.form0",
+    "metric": "payroll_summary",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.payroll_summary.val.form1",
+    "metric": "payroll_summary",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.payroll_summary.test.form0",
+    "metric": "payroll_summary",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.payroll_summary.test.form1",
+    "metric": "payroll_summary",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.taxable_income.train.form0",
+    "metric": "taxable_income",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.taxable_income.train.form1",
+    "metric": "taxable_income",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.taxable_income.val.form0",
+    "metric": "taxable_income",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.taxable_income.val.form1",
+    "metric": "taxable_income",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.taxable_income.test.form0",
+    "metric": "taxable_income",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.taxable_income.test.form1",
+    "metric": "taxable_income",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.cit_estimate.train.form0",
+    "metric": "cit_estimate",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.cit_estimate.train.form1",
+    "metric": "cit_estimate",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.cit_estimate.val.form0",
+    "metric": "cit_estimate",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cit_estimate.val.form1",
+    "metric": "cit_estimate",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.cit_estimate.test.form0",
+    "metric": "cit_estimate",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.cit_estimate.test.form1",
+    "metric": "cit_estimate",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.deductible_expenses.train.form0",
+    "metric": "deductible_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.deductible_expenses.train.form1",
+    "metric": "deductible_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.deductible_expenses.val.form0",
+    "metric": "deductible_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.deductible_expenses.val.form1",
+    "metric": "deductible_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.deductible_expenses.test.form0",
+    "metric": "deductible_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.deductible_expenses.test.form1",
+    "metric": "deductible_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.mgmt_vs_tax_gap.train.form0",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.mgmt_vs_tax_gap.train.form1",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.mgmt_vs_tax_gap.val.form0",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.mgmt_vs_tax_gap.val.form1",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.mgmt_vs_tax_gap.test.form0",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.mgmt_vs_tax_gap.test.form1",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e1.vat_position.train.form0",
+    "metric": "vat_position",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e1.vat_position.train.form1",
+    "metric": "vat_position",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e1.vat_position.val.form0",
+    "metric": "vat_position",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.vat_position.val.form1",
+    "metric": "vat_position",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e1.vat_position.test.form0",
+    "metric": "vat_position",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e1.vat_position.test.form1",
+    "metric": "vat_position",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.net_revenue.train.form0",
+    "metric": "net_revenue",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.net_revenue.train.form1",
+    "metric": "net_revenue",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.net_revenue.val.form0",
+    "metric": "net_revenue",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.net_revenue.val.form1",
+    "metric": "net_revenue",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.net_revenue.test.form0",
+    "metric": "net_revenue",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.net_revenue.test.form1",
+    "metric": "net_revenue",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_revenue.train.form0",
+    "metric": "gross_revenue",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_revenue.train.form1",
+    "metric": "gross_revenue",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.gross_revenue.val.form0",
+    "metric": "gross_revenue",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_revenue.val.form1",
+    "metric": "gross_revenue",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_revenue.test.form0",
+    "metric": "gross_revenue",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_revenue.test.form1",
+    "metric": "gross_revenue",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.revenue_deductions.train.form0",
+    "metric": "revenue_deductions",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.revenue_deductions.train.form1",
+    "metric": "revenue_deductions",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.revenue_deductions.val.form0",
+    "metric": "revenue_deductions",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.revenue_deductions.val.form1",
+    "metric": "revenue_deductions",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.revenue_deductions.test.form0",
+    "metric": "revenue_deductions",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.revenue_deductions.test.form1",
+    "metric": "revenue_deductions",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.goods_revenue.train.form0",
+    "metric": "goods_revenue",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.goods_revenue.train.form1",
+    "metric": "goods_revenue",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.goods_revenue.val.form0",
+    "metric": "goods_revenue",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.goods_revenue.val.form1",
+    "metric": "goods_revenue",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.goods_revenue.test.form0",
+    "metric": "goods_revenue",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.goods_revenue.test.form1",
+    "metric": "goods_revenue",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.service_revenue.train.form0",
+    "metric": "service_revenue",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.service_revenue.train.form1",
+    "metric": "service_revenue",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.service_revenue.val.form0",
+    "metric": "service_revenue",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.service_revenue.val.form1",
+    "metric": "service_revenue",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.service_revenue.test.form0",
+    "metric": "service_revenue",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.service_revenue.test.form1",
+    "metric": "service_revenue",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.cogs.train.form0",
+    "metric": "cogs",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.cogs.train.form1",
+    "metric": "cogs",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.cogs.val.form0",
+    "metric": "cogs",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cogs.val.form1",
+    "metric": "cogs",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cogs.test.form0",
+    "metric": "cogs",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.cogs.test.form1",
+    "metric": "cogs",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_profit.train.form0",
+    "metric": "gross_profit",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_profit.train.form1",
+    "metric": "gross_profit",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.gross_profit.val.form0",
+    "metric": "gross_profit",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_profit.val.form1",
+    "metric": "gross_profit",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_profit.test.form0",
+    "metric": "gross_profit",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_profit.test.form1",
+    "metric": "gross_profit",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_margin_pct.train.form0",
+    "metric": "gross_margin_pct",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_margin_pct.train.form1",
+    "metric": "gross_margin_pct",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.gross_margin_pct.val.form0",
+    "metric": "gross_margin_pct",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_margin_pct.val.form1",
+    "metric": "gross_margin_pct",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_margin_pct.test.form0",
+    "metric": "gross_margin_pct",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.gross_margin_pct.test.form1",
+    "metric": "gross_margin_pct",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.selling_expenses.train.form0",
+    "metric": "selling_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.selling_expenses.train.form1",
+    "metric": "selling_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.selling_expenses.val.form0",
+    "metric": "selling_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.selling_expenses.val.form1",
+    "metric": "selling_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.selling_expenses.test.form0",
+    "metric": "selling_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.selling_expenses.test.form1",
+    "metric": "selling_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.admin_expenses.train.form0",
+    "metric": "admin_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.admin_expenses.train.form1",
+    "metric": "admin_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.admin_expenses.val.form0",
+    "metric": "admin_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.admin_expenses.val.form1",
+    "metric": "admin_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.admin_expenses.test.form0",
+    "metric": "admin_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.admin_expenses.test.form1",
+    "metric": "admin_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_expenses.train.form0",
+    "metric": "operating_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_expenses.train.form1",
+    "metric": "operating_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.operating_expenses.val.form0",
+    "metric": "operating_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_expenses.val.form1",
+    "metric": "operating_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_expenses.test.form0",
+    "metric": "operating_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_expenses.test.form1",
+    "metric": "operating_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_income.train.form0",
+    "metric": "finance_income",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_income.train.form1",
+    "metric": "finance_income",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.finance_income.val.form0",
+    "metric": "finance_income",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_income.val.form1",
+    "metric": "finance_income",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_income.test.form0",
+    "metric": "finance_income",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_income.test.form1",
+    "metric": "finance_income",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_cost.train.form0",
+    "metric": "finance_cost",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_cost.train.form1",
+    "metric": "finance_cost",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.finance_cost.val.form0",
+    "metric": "finance_cost",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_cost.val.form1",
+    "metric": "finance_cost",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_cost.test.form0",
+    "metric": "finance_cost",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.finance_cost.test.form1",
+    "metric": "finance_cost",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_profit.train.form0",
+    "metric": "operating_profit",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_profit.train.form1",
+    "metric": "operating_profit",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.operating_profit.val.form0",
+    "metric": "operating_profit",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_profit.val.form1",
+    "metric": "operating_profit",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_profit.test.form0",
+    "metric": "operating_profit",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.operating_profit.test.form1",
+    "metric": "operating_profit",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.other_income.train.form0",
+    "metric": "other_income",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.other_income.train.form1",
+    "metric": "other_income",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.other_income.val.form0",
+    "metric": "other_income",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.other_income.val.form1",
+    "metric": "other_income",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.other_income.test.form0",
+    "metric": "other_income",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.other_income.test.form1",
+    "metric": "other_income",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.other_expenses.train.form0",
+    "metric": "other_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.other_expenses.train.form1",
+    "metric": "other_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.other_expenses.val.form0",
+    "metric": "other_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.other_expenses.val.form1",
+    "metric": "other_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.other_expenses.test.form0",
+    "metric": "other_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.other_expenses.test.form1",
+    "metric": "other_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.profit_before_tax.train.form0",
+    "metric": "profit_before_tax",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.profit_before_tax.train.form1",
+    "metric": "profit_before_tax",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.profit_before_tax.val.form0",
+    "metric": "profit_before_tax",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.profit_before_tax.val.form1",
+    "metric": "profit_before_tax",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.profit_before_tax.test.form0",
+    "metric": "profit_before_tax",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.profit_before_tax.test.form1",
+    "metric": "profit_before_tax",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.income_tax_expense.train.form0",
+    "metric": "income_tax_expense",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.income_tax_expense.train.form1",
+    "metric": "income_tax_expense",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.income_tax_expense.val.form0",
+    "metric": "income_tax_expense",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.income_tax_expense.val.form1",
+    "metric": "income_tax_expense",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.income_tax_expense.test.form0",
+    "metric": "income_tax_expense",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.income_tax_expense.test.form1",
+    "metric": "income_tax_expense",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.net_profit.train.form0",
+    "metric": "net_profit",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.net_profit.train.form1",
+    "metric": "net_profit",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.net_profit.val.form0",
+    "metric": "net_profit",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.net_profit.val.form1",
+    "metric": "net_profit",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.net_profit.test.form0",
+    "metric": "net_profit",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.net_profit.test.form1",
+    "metric": "net_profit",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.net_margin_pct.train.form0",
+    "metric": "net_margin_pct",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.net_margin_pct.train.form1",
+    "metric": "net_margin_pct",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.net_margin_pct.val.form0",
+    "metric": "net_margin_pct",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.net_margin_pct.val.form1",
+    "metric": "net_margin_pct",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.net_margin_pct.test.form0",
+    "metric": "net_margin_pct",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.net_margin_pct.test.form1",
+    "metric": "net_margin_pct",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.ebitda.train.form0",
+    "metric": "ebitda",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.ebitda.train.form1",
+    "metric": "ebitda",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.ebitda.val.form0",
+    "metric": "ebitda",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ebitda.val.form1",
+    "metric": "ebitda",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ebitda.test.form0",
+    "metric": "ebitda",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.ebitda.test.form1",
+    "metric": "ebitda",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.depreciation_expense.train.form0",
+    "metric": "depreciation_expense",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.depreciation_expense.train.form1",
+    "metric": "depreciation_expense",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.depreciation_expense.val.form0",
+    "metric": "depreciation_expense",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.depreciation_expense.val.form1",
+    "metric": "depreciation_expense",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.depreciation_expense.test.form0",
+    "metric": "depreciation_expense",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.depreciation_expense.test.form1",
+    "metric": "depreciation_expense",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.salary_expense.train.form0",
+    "metric": "salary_expense",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.salary_expense.train.form1",
+    "metric": "salary_expense",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.salary_expense.val.form0",
+    "metric": "salary_expense",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.salary_expense.val.form1",
+    "metric": "salary_expense",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.salary_expense.test.form0",
+    "metric": "salary_expense",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.salary_expense.test.form1",
+    "metric": "salary_expense",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.labor_cost.train.form0",
+    "metric": "labor_cost",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.labor_cost.train.form1",
+    "metric": "labor_cost",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.labor_cost.val.form0",
+    "metric": "labor_cost",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.labor_cost.val.form1",
+    "metric": "labor_cost",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.labor_cost.test.form0",
+    "metric": "labor_cost",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.labor_cost.test.form1",
+    "metric": "labor_cost",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_and_equivalents.train.form0",
+    "metric": "cash_and_equivalents",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_and_equivalents.train.form1",
+    "metric": "cash_and_equivalents",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.cash_and_equivalents.val.form0",
+    "metric": "cash_and_equivalents",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_and_equivalents.val.form1",
+    "metric": "cash_and_equivalents",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_and_equivalents.test.form0",
+    "metric": "cash_and_equivalents",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_and_equivalents.test.form1",
+    "metric": "cash_and_equivalents",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.term_deposits.train.form0",
+    "metric": "term_deposits",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.term_deposits.train.form1",
+    "metric": "term_deposits",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.term_deposits.val.form0",
+    "metric": "term_deposits",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.term_deposits.val.form1",
+    "metric": "term_deposits",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.term_deposits.test.form0",
+    "metric": "term_deposits",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.term_deposits.test.form1",
+    "metric": "term_deposits",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_balance.train.form0",
+    "metric": "ar_balance",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_balance.train.form1",
+    "metric": "ar_balance",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.ar_balance.val.form0",
+    "metric": "ar_balance",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_balance.val.form1",
+    "metric": "ar_balance",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_balance.test.form0",
+    "metric": "ar_balance",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_balance.test.form1",
+    "metric": "ar_balance",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_customer.train.form0",
+    "metric": "ar_by_customer",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_customer.train.form1",
+    "metric": "ar_by_customer",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.ar_by_customer.val.form0",
+    "metric": "ar_by_customer",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_customer.val.form1",
+    "metric": "ar_by_customer",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_customer.test.form0",
+    "metric": "ar_by_customer",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_customer.test.form1",
+    "metric": "ar_by_customer",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_salesperson.train.form0",
+    "metric": "ar_by_salesperson",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_salesperson.train.form1",
+    "metric": "ar_by_salesperson",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.ar_by_salesperson.val.form0",
+    "metric": "ar_by_salesperson",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_salesperson.val.form1",
+    "metric": "ar_by_salesperson",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_salesperson.test.form0",
+    "metric": "ar_by_salesperson",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_by_salesperson.test.form1",
+    "metric": "ar_by_salesperson",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_balance.train.form0",
+    "metric": "ap_balance",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_balance.train.form1",
+    "metric": "ap_balance",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.ap_balance.val.form0",
+    "metric": "ap_balance",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_balance.val.form1",
+    "metric": "ap_balance",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_balance.test.form0",
+    "metric": "ap_balance",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_balance.test.form1",
+    "metric": "ap_balance",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_by_vendor.train.form0",
+    "metric": "ap_by_vendor",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_by_vendor.train.form1",
+    "metric": "ap_by_vendor",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.ap_by_vendor.val.form0",
+    "metric": "ap_by_vendor",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_by_vendor.val.form1",
+    "metric": "ap_by_vendor",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_by_vendor.test.form0",
+    "metric": "ap_by_vendor",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_by_vendor.test.form1",
+    "metric": "ap_by_vendor",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.inventory_value.train.form0",
+    "metric": "inventory_value",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.inventory_value.train.form1",
+    "metric": "inventory_value",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.inventory_value.val.form0",
+    "metric": "inventory_value",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.inventory_value.val.form1",
+    "metric": "inventory_value",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.inventory_value.test.form0",
+    "metric": "inventory_value",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.inventory_value.test.form1",
+    "metric": "inventory_value",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.tax_payable.train.form0",
+    "metric": "tax_payable",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.tax_payable.train.form1",
+    "metric": "tax_payable",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.tax_payable.val.form0",
+    "metric": "tax_payable",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.tax_payable.val.form1",
+    "metric": "tax_payable",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.tax_payable.test.form0",
+    "metric": "tax_payable",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.tax_payable.test.form1",
+    "metric": "tax_payable",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_balance.train.form0",
+    "metric": "debt_balance",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_balance.train.form1",
+    "metric": "debt_balance",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.debt_balance.val.form0",
+    "metric": "debt_balance",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_balance.val.form1",
+    "metric": "debt_balance",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_balance.test.form0",
+    "metric": "debt_balance",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_balance.test.form1",
+    "metric": "debt_balance",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.fixed_assets_net.train.form0",
+    "metric": "fixed_assets_net",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.fixed_assets_net.train.form1",
+    "metric": "fixed_assets_net",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.fixed_assets_net.val.form0",
+    "metric": "fixed_assets_net",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.fixed_assets_net.val.form1",
+    "metric": "fixed_assets_net",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.fixed_assets_net.test.form0",
+    "metric": "fixed_assets_net",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.fixed_assets_net.test.form1",
+    "metric": "fixed_assets_net",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.total_assets.train.form0",
+    "metric": "total_assets",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.total_assets.train.form1",
+    "metric": "total_assets",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.total_assets.val.form0",
+    "metric": "total_assets",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.total_assets.val.form1",
+    "metric": "total_assets",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.total_assets.test.form0",
+    "metric": "total_assets",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.total_assets.test.form1",
+    "metric": "total_assets",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.total_liabilities.train.form0",
+    "metric": "total_liabilities",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.total_liabilities.train.form1",
+    "metric": "total_liabilities",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.total_liabilities.val.form0",
+    "metric": "total_liabilities",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.total_liabilities.val.form1",
+    "metric": "total_liabilities",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.total_liabilities.test.form0",
+    "metric": "total_liabilities",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.total_liabilities.test.form1",
+    "metric": "total_liabilities",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.equity.train.form0",
+    "metric": "equity",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.equity.train.form1",
+    "metric": "equity",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.equity.val.form0",
+    "metric": "equity",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.equity.val.form1",
+    "metric": "equity",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.equity.test.form0",
+    "metric": "equity",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.equity.test.form1",
+    "metric": "equity",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.working_capital.train.form0",
+    "metric": "working_capital",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.working_capital.train.form1",
+    "metric": "working_capital",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.working_capital.val.form0",
+    "metric": "working_capital",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.working_capital.val.form1",
+    "metric": "working_capital",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.working_capital.test.form0",
+    "metric": "working_capital",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.working_capital.test.form1",
+    "metric": "working_capital",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.current_ratio.train.form0",
+    "metric": "current_ratio",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.current_ratio.train.form1",
+    "metric": "current_ratio",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.current_ratio.val.form0",
+    "metric": "current_ratio",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.current_ratio.val.form1",
+    "metric": "current_ratio",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.current_ratio.test.form0",
+    "metric": "current_ratio",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.current_ratio.test.form1",
+    "metric": "current_ratio",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.quick_ratio.train.form0",
+    "metric": "quick_ratio",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.quick_ratio.train.form1",
+    "metric": "quick_ratio",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.quick_ratio.val.form0",
+    "metric": "quick_ratio",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.quick_ratio.val.form1",
+    "metric": "quick_ratio",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.quick_ratio.test.form0",
+    "metric": "quick_ratio",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.quick_ratio.test.form1",
+    "metric": "quick_ratio",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_to_equity.train.form0",
+    "metric": "debt_to_equity",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_to_equity.train.form1",
+    "metric": "debt_to_equity",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.debt_to_equity.val.form0",
+    "metric": "debt_to_equity",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_to_equity.val.form1",
+    "metric": "debt_to_equity",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_to_equity.test.form0",
+    "metric": "debt_to_equity",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.debt_to_equity.test.form1",
+    "metric": "debt_to_equity",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.net_cash_flow.train.form0",
+    "metric": "net_cash_flow",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.net_cash_flow.train.form1",
+    "metric": "net_cash_flow",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.net_cash_flow.val.form0",
+    "metric": "net_cash_flow",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.net_cash_flow.val.form1",
+    "metric": "net_cash_flow",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.net_cash_flow.test.form0",
+    "metric": "net_cash_flow",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.net_cash_flow.test.form1",
+    "metric": "net_cash_flow",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_flow_breakdown.train.form0",
+    "metric": "cash_flow_breakdown",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_flow_breakdown.train.form1",
+    "metric": "cash_flow_breakdown",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.cash_flow_breakdown.val.form0",
+    "metric": "cash_flow_breakdown",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_flow_breakdown.val.form1",
+    "metric": "cash_flow_breakdown",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_flow_breakdown.test.form0",
+    "metric": "cash_flow_breakdown",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_flow_breakdown.test.form1",
+    "metric": "cash_flow_breakdown",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_coverage_days.train.form0",
+    "metric": "cash_coverage_days",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_coverage_days.train.form1",
+    "metric": "cash_coverage_days",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.cash_coverage_days.val.form0",
+    "metric": "cash_coverage_days",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_coverage_days.val.form1",
+    "metric": "cash_coverage_days",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_coverage_days.test.form0",
+    "metric": "cash_coverage_days",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_coverage_days.test.form1",
+    "metric": "cash_coverage_days",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_aging.train.form0",
+    "metric": "ar_aging",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_aging.train.form1",
+    "metric": "ar_aging",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.ar_aging.val.form0",
+    "metric": "ar_aging",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_aging.val.form1",
+    "metric": "ar_aging",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_aging.test.form0",
+    "metric": "ar_aging",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.ar_aging.test.form1",
+    "metric": "ar_aging",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.overdue_receivables.train.form0",
+    "metric": "overdue_receivables",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.overdue_receivables.train.form1",
+    "metric": "overdue_receivables",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.overdue_receivables.val.form0",
+    "metric": "overdue_receivables",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.overdue_receivables.val.form1",
+    "metric": "overdue_receivables",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.overdue_receivables.test.form0",
+    "metric": "overdue_receivables",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.overdue_receivables.test.form1",
+    "metric": "overdue_receivables",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.dso.train.form0",
+    "metric": "dso",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.dso.train.form1",
+    "metric": "dso",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.dso.val.form0",
+    "metric": "dso",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.dso.val.form1",
+    "metric": "dso",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.dso.test.form0",
+    "metric": "dso",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.dso.test.form1",
+    "metric": "dso",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.dso_actual.train.form0",
+    "metric": "dso_actual",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.dso_actual.train.form1",
+    "metric": "dso_actual",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.dso_actual.val.form0",
+    "metric": "dso_actual",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.dso_actual.val.form1",
+    "metric": "dso_actual",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.dso_actual.test.form0",
+    "metric": "dso_actual",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.dso_actual.test.form1",
+    "metric": "dso_actual",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.dpo.train.form0",
+    "metric": "dpo",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.dpo.train.form1",
+    "metric": "dpo",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.dpo.val.form0",
+    "metric": "dpo",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.dpo.val.form1",
+    "metric": "dpo",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.dpo.test.form0",
+    "metric": "dpo",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.dpo.test.form1",
+    "metric": "dpo",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.dio.train.form0",
+    "metric": "dio",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.dio.train.form1",
+    "metric": "dio",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.dio.val.form0",
+    "metric": "dio",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.dio.val.form1",
+    "metric": "dio",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.dio.test.form0",
+    "metric": "dio",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.dio.test.form1",
+    "metric": "dio",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_conversion_cycle.train.form0",
+    "metric": "cash_conversion_cycle",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_conversion_cycle.train.form1",
+    "metric": "cash_conversion_cycle",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.cash_conversion_cycle.val.form0",
+    "metric": "cash_conversion_cycle",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_conversion_cycle.val.form1",
+    "metric": "cash_conversion_cycle",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_conversion_cycle.test.form0",
+    "metric": "cash_conversion_cycle",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.cash_conversion_cycle.test.form1",
+    "metric": "cash_conversion_cycle",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_due_soon.train.form0",
+    "metric": "ap_due_soon",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_due_soon.train.form1",
+    "metric": "ap_due_soon",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.ap_due_soon.val.form0",
+    "metric": "ap_due_soon",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_due_soon.val.form1",
+    "metric": "ap_due_soon",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_due_soon.test.form0",
+    "metric": "ap_due_soon",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.ap_due_soon.test.form1",
+    "metric": "ap_due_soon",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.upcoming_obligations.train.form0",
+    "metric": "upcoming_obligations",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.upcoming_obligations.train.form1",
+    "metric": "upcoming_obligations",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.upcoming_obligations.val.form0",
+    "metric": "upcoming_obligations",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.upcoming_obligations.val.form1",
+    "metric": "upcoming_obligations",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.upcoming_obligations.test.form0",
+    "metric": "upcoming_obligations",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.upcoming_obligations.test.form1",
+    "metric": "upcoming_obligations",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_by_category.train.form0",
+    "metric": "expense_by_category",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_by_category.train.form1",
+    "metric": "expense_by_category",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.expense_by_category.val.form0",
+    "metric": "expense_by_category",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_by_category.val.form1",
+    "metric": "expense_by_category",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_by_category.test.form0",
+    "metric": "expense_by_category",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_by_category.test.form1",
+    "metric": "expense_by_category",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_spikes.train.form0",
+    "metric": "expense_spikes",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_spikes.train.form1",
+    "metric": "expense_spikes",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.expense_spikes.val.form0",
+    "metric": "expense_spikes",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_spikes.val.form1",
+    "metric": "expense_spikes",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_spikes.test.form0",
+    "metric": "expense_spikes",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.expense_spikes.test.form1",
+    "metric": "expense_spikes",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.unusual_account_movements.train.form0",
+    "metric": "unusual_account_movements",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.unusual_account_movements.train.form1",
+    "metric": "unusual_account_movements",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.unusual_account_movements.val.form0",
+    "metric": "unusual_account_movements",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.unusual_account_movements.val.form1",
+    "metric": "unusual_account_movements",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.unusual_account_movements.test.form0",
+    "metric": "unusual_account_movements",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.unusual_account_movements.test.form1",
+    "metric": "unusual_account_movements",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.unbalanced_journals.train.form0",
+    "metric": "unbalanced_journals",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.unbalanced_journals.train.form1",
+    "metric": "unbalanced_journals",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.unbalanced_journals.val.form0",
+    "metric": "unbalanced_journals",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.unbalanced_journals.val.form1",
+    "metric": "unbalanced_journals",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.unbalanced_journals.test.form0",
+    "metric": "unbalanced_journals",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.unbalanced_journals.test.form1",
+    "metric": "unbalanced_journals",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.top_sales_transactions.train.form0",
+    "metric": "top_sales_transactions",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.top_sales_transactions.train.form1",
+    "metric": "top_sales_transactions",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.top_sales_transactions.val.form0",
+    "metric": "top_sales_transactions",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.top_sales_transactions.val.form1",
+    "metric": "top_sales_transactions",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.top_sales_transactions.test.form0",
+    "metric": "top_sales_transactions",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.top_sales_transactions.test.form1",
+    "metric": "top_sales_transactions",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.budget_vs_actual.train.form0",
+    "metric": "budget_vs_actual",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.budget_vs_actual.train.form1",
+    "metric": "budget_vs_actual",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.budget_vs_actual.val.form0",
+    "metric": "budget_vs_actual",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.budget_vs_actual.val.form1",
+    "metric": "budget_vs_actual",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.budget_vs_actual.test.form0",
+    "metric": "budget_vs_actual",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.budget_vs_actual.test.form1",
+    "metric": "budget_vs_actual",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.payroll_summary.train.form0",
+    "metric": "payroll_summary",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.payroll_summary.train.form1",
+    "metric": "payroll_summary",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.payroll_summary.val.form0",
+    "metric": "payroll_summary",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.payroll_summary.val.form1",
+    "metric": "payroll_summary",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.payroll_summary.test.form0",
+    "metric": "payroll_summary",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.payroll_summary.test.form1",
+    "metric": "payroll_summary",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.taxable_income.train.form0",
+    "metric": "taxable_income",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.taxable_income.train.form1",
+    "metric": "taxable_income",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.taxable_income.val.form0",
+    "metric": "taxable_income",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.taxable_income.val.form1",
+    "metric": "taxable_income",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.taxable_income.test.form0",
+    "metric": "taxable_income",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.taxable_income.test.form1",
+    "metric": "taxable_income",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.cit_estimate.train.form0",
+    "metric": "cit_estimate",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.cit_estimate.train.form1",
+    "metric": "cit_estimate",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.cit_estimate.val.form0",
+    "metric": "cit_estimate",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cit_estimate.val.form1",
+    "metric": "cit_estimate",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.cit_estimate.test.form0",
+    "metric": "cit_estimate",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.cit_estimate.test.form1",
+    "metric": "cit_estimate",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.deductible_expenses.train.form0",
+    "metric": "deductible_expenses",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.deductible_expenses.train.form1",
+    "metric": "deductible_expenses",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.deductible_expenses.val.form0",
+    "metric": "deductible_expenses",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.deductible_expenses.val.form1",
+    "metric": "deductible_expenses",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.deductible_expenses.test.form0",
+    "metric": "deductible_expenses",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.deductible_expenses.test.form1",
+    "metric": "deductible_expenses",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.mgmt_vs_tax_gap.train.form0",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.mgmt_vs_tax_gap.train.form1",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.mgmt_vs_tax_gap.val.form0",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.mgmt_vs_tax_gap.val.form1",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.mgmt_vs_tax_gap.test.form0",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.mgmt_vs_tax_gap.test.form1",
+    "metric": "mgmt_vs_tax_gap",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  },
+  {
+    "id": "e2.vat_position.train.form0",
+    "metric": "vat_position",
+    "split": "train",
+    "text": "Cho tôi tra {metric} {period}{suffix}."
+  },
+  {
+    "id": "e2.vat_position.train.form1",
+    "metric": "vat_position",
+    "split": "train",
+    "text": "{metric} cho {period}{suffix}, báo kết quả giúp tôi."
+  },
+  {
+    "id": "e2.vat_position.val.form0",
+    "metric": "vat_position",
+    "split": "val",
+    "text": "Báo cáo giúp {metric} ứng với kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.vat_position.val.form1",
+    "metric": "vat_position",
+    "split": "val",
+    "text": "Đọc kết quả {metric} tại kỳ {period}{suffix}."
+  },
+  {
+    "id": "e2.vat_position.test.form0",
+    "metric": "vat_position",
+    "split": "test",
+    "text": "Tôi cần tra cứu {metric} thuộc khoảng {period}{suffix}."
+  },
+  {
+    "id": "e2.vat_position.test.form1",
+    "metric": "vat_position",
+    "split": "test",
+    "text": "Vui lòng cung cấp {metric} đối với {period}{suffix}."
+  }
+]

@@ -9,14 +9,14 @@ from agent4.agent.preprocess import Hints,analyze
 from agent4.agent.tools import build_union_schema
 from agent4.engine.metrics import REGISTRY
 
-def test_bank_has_60_development_examples_and_valid_calls():
+def test_bank_has_train_examples_and_valid_calls():
     bank=FewShotBank()
-    assert len(bank.examples)==60
+    assert len(bank.examples)>=1200
     validator=Draft202012Validator(build_union_schema(list(REGISTRY)))
     for example in bank.examples:
-        assert example['split']=='dev'
+        assert example['split']=='train' and example['warehouse_seed']==20251
         assert validator.is_valid(example['answer']),example
-    assert len({e['answer']['action'] for e in bank.examples})>=4
+    assert all(e.get('template_id') for e in bank.examples)
 
 def test_knn_excludes_exact_question():
     bank=FewShotBank()
@@ -24,9 +24,10 @@ def test_knn_excludes_exact_question():
     chosen=bank.select_examples(q,3)
     assert len(chosen)==3 and all(e['question']!=q for e in chosen)
 
-def test_bank_rejects_non_dev(tmp_path):
+@pytest.mark.parametrize('split',['val','test','dev'])
+def test_bank_rejects_non_train(tmp_path,split):
     p=tmp_path/'bad.jsonl'
-    p.write_text(json.dumps({'split':'test','question':'q','answer':{}}),encoding='utf-8')
+    p.write_text(json.dumps({'split':split,'question':'q','answer':{}}),encoding='utf-8')
     with pytest.raises(ValueError): FewShotBank(p)
 
 def test_prompt_snapshot_and_fixed_prefix():

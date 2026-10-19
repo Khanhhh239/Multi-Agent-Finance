@@ -1,15 +1,15 @@
-"""Development-only hand-authored examples, ranked locally by BM25."""
+"""TRAIN-only oracle-labeled examples, ranked locally by BM25."""
 import json
 from pathlib import Path
 from rank_bm25 import BM25Okapi
 from .retriever import normalize
 
-PATH=Path(__file__).parent/'data/fewshot_bank.jsonl'
+PATH=Path(__file__).parent/'data/fewshot_train.jsonl'
 
 class FewShotBank:
     def __init__(self,path=PATH):
         self.examples=[json.loads(line) for line in Path(path).read_text(encoding='utf-8').splitlines() if line.strip()]
-        if any(e.get('split')!='dev' for e in self.examples): raise ValueError('Few-shot chỉ nhận dữ liệu dev.')
+        if any(e.get('split')!='train' for e in self.examples): raise ValueError('Few-shot chỉ nhận TRAIN.')
         self.index=BM25Okapi([normalize(e['question']).split() for e in self.examples])
 
     def select_examples(self,question,k=3):

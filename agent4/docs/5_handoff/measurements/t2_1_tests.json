@@ -1,0 +1,14 @@
+{
+  "tests": 2602,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 109.016,
+  "card": "T2.1",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-19T00:18:56.815047+00:00",
+  "xml": "artifacts/t2_1-pytest.xml",
+  "summary": "formulas not accountant-approved. E1/E2 each600 TRAIN /200 val /400 sealed test, 66 metrics, >=3 per metric and >=2 forms per split, exactly25% noise, 100% independent oracle coverage. Excluded880 tuning strings. TRAIN-only bank1200 examples replaces old dev bank.",
+  "decision": "Disjoint authored template bodies per split and normalized-question hashes; freeze manifest hashes. Period phrases all verified by resolver. Snapshot periods varied to avoid duplicate-only generation, without changing labels after freeze. Commit only TRAIN sample/bank and aggregate manifest; do not inspect test rows or use them for few-shot."
+}
