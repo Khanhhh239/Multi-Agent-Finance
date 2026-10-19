@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Reread shows a separate candidate and original value without changing CFR or completeness",
+    "Repeated HTTP reread uses the pinned cache without another model call",
+    "Using a candidate creates only a draft; draft blocks another model request",
+    "Explicit reviewed save creates a new revision through the existing correction service",
+    "Switching to another field clears output and fences a late response",
+    "Untrusted recognition text remains text and cannot create HTML",
+    "Typed Ngày lập reread creates a correctly formatted draft without changing saved data",
+    "Typed Tổng thanh toán reread creates a correctly formatted draft without changing saved data",
+    "Region controls fit desktop and mobile without horizontal page overflow"
+  ],
+  "page_errors": [],
+  "scope": "Synthetic data, reader double; real Chrome/HTTP/correction storage, no OCR accuracy claim"
+}

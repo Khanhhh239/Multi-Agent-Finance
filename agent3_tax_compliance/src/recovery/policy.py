@@ -5,7 +5,7 @@ from ..quality.completeness import flatten
 from .regions import supported,plan_regions
 from ..review.contracts import ReviewError
 
-VERSION='recovery-policy-v1'
+VERSION='recovery-policy-v2'
 MAX_FIELDS=2
 MAX_CROPS=4
 

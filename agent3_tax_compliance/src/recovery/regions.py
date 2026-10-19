@@ -20,15 +20,19 @@ from ..review.repository import ReviewRepository, envelope
 from ..review.revision_reprocessor import field_slot
 from ..adapters.ocr.protocol import OCRConfig, OCRBridgeRequest, OCRError, correlate
 from ..adapters.ocr.worker_client import WorkerClient
+from .field_reads import TYPED_PATHS,recovery_refs,typed_read,text_read
 
-POLICY='region-lines-v1'
+POLICY='region-fields-v2'
 MODEL='vietocr_region_v1'
 _SLOT=threading.BoundedSemaphore(1)
 
 
 def implementation_sha():
     root=Path(__file__).resolve().parents[1]/'adapters/ocr'
-    paths=[Path(__file__),*(root/name for name in ('protocol.py','worker_client.py','registry.py'))]
+    paths=[Path(__file__),Path(__file__).with_name('field_reads.py'),
+           Path(__file__).parents[1]/'extraction/invoice_fields.py',
+           Path(__file__).parents[1]/'canonicalization/normalize.py',
+           *(root/name for name in ('protocol.py','worker_client.py','registry.py'))]
     return sha({p.name:digest(p.read_bytes()) for p in paths})
 
 
@@ -39,12 +43,12 @@ class RegionCommand(Contract):
 
 def supported(path):
     parts=path.split('.')
-    return path in {'parties.'+p+'.'+f for p in ('seller','buyer') for f in ('name','address')} or (len(parts)==3 and parts[0]=='items' and parts[2]=='description')
+    return path in TYPED_PATHS or path in {'parties.'+p+'.'+f for p in ('seller','buyer') for f in ('name','address')} or (len(parts)==3 and parts[0]=='items' and parts[2]=='description')
 
 
 def plan_regions(record,artifact,normalized,path):
     if not supported(path):
-        raise ReviewError('REGION_UNSUPPORTED','Chỉ đọc lại tên, địa chỉ hoặc mô tả dòng hàng trong phiên bản này.')
+        raise ReviewError('REGION_UNSUPPORTED','Trường này chưa có bộ đọc vùng phù hợp.')
     node,key=field_slot(record.model_dump(mode='json'),path)
     field=node.get(key) or {}
     refs=field.get('provenance',{}).get('evidence',[])
@@ -59,10 +63,27 @@ def plan_regions(record,artifact,normalized,path):
         if pair:
             p,b=pair;selected[(p.page_index,b.block_id)]=(p,b)
     if not selected:
+        anchors=recovery_refs(path,artifact,normalized)
+        for (index,identifier),(p,b) in blocks.items():
+            if (index,identifier) in anchors or (None,identifier) in anchors:
+                selected[(index,identifier)]=(p,b)
+    if not selected:
         raise ReviewError('REGION_NO_EVIDENCE','Chưa có vùng chữ đáng tin cậy. Cần đối chiếu toàn trang hoặc xử lý riêng.')
     if len(selected)>4:
         raise ReviewError('REGION_BUDGET','Trường có hơn 4 vùng chữ; cần xử lý riêng thay vì đọc thiếu một phần.')
-    ordered=sorted(selected.values(),key=lambda v:(v[0].page_index,v[1].reading_order))
+    # Detector output order is not necessarily visual order. Joining a value
+    # before its label prevents even a correct reread from being parsed.
+    ordered=sorted(selected.values(),key=lambda v:(v[0].page_index,v[1].evidence.bbox[1],v[1].evidence.bbox[0]))
+    # Small vertical jitter is common for same-line label/value boxes.
+    lines=[]
+    for p,b in ordered:
+        box=b.evidence.bbox
+        if lines:
+            other=lines[-1][0][1].evidence.bbox
+            overlap=min(box[3],other[3])-max(box[1],other[1])
+        if lines and p.page_index==lines[-1][0][0].page_index and overlap>.5*min(box[3]-box[1],other[3]-other[1]):lines[-1].append((p,b))
+        else:lines.append([(p,b)])
+    ordered=[entry for line in lines for entry in sorted(line,key=lambda v:v[1].evidence.bbox[0])]
     for (pa,a),(pb,b) in zip(ordered,ordered[1:]):
         if pa.page_index!=pb.page_index or b.evidence.bbox[1]-a.evidence.bbox[3]>.04:
             raise ReviewError('REGION_CONFLICT','Các vùng nguồn rời nhau; cần chọn đúng ứng viên trước khi đọc lại để tránh ghép nhầm bên bán/bên mua.')
@@ -156,13 +177,19 @@ class RegionRecovery:
             head=self.repo.base.record(ctx,payer,record_id)
             if head.revision!=record.revision:
                 raise ReviewError('REVISION_CONFLICT','Hóa đơn đã đổi trong khi đọc vùng; kết quả chưa được áp dụng.',409,head.revision)
-            suggestion=unicodedata.normalize('NFC',' '.join(o['text'].strip() for o in observations)).strip()
+            suggestion=text_read(command.field_path,[o['text'] for o in observations])
+            if suggestion:suggestion=unicodedata.normalize('NFC',suggestion).strip()
+            parse_status='NOT_REQUIRED'
+            if command.field_path in TYPED_PATHS:
+                suggestion=typed_read(command.field_path,[o['text'] for o in observations],artifact.profile)
+                parse_status='VALID' if suggestion is not None else 'REJECTED'
             # Preserve duplicates and disagreements for review, not a guessed correction.
             result=envelope(recovery_id='region-read-'+uuid4().hex,record_id=record_id,record_revision=record.revision,
                 extraction_artifact_id=artifact.artifact_id,field_path=command.field_path,actor_id=ctx.actor_id,
                 created_at=utcnow().isoformat(),policy=POLICY,model_id=MODEL,runtime_sha256=runtime,
                 status='CANDIDATE' if suggestion and all(o['text'].strip() for o in observations) else 'NEEDS_REVIEW',
                 original_value=field.get('value'),suggested_value=suggestion or None,review_required=True,
+                value_format='CANONICAL',parse_status=parse_status,
                 observations=observations,elapsed_seconds=time.perf_counter()-started,cache_hit=False)
             payload=json.dumps(result,ensure_ascii=False,separators=(',',':'))
             from contextlib import closing

@@ -3,9 +3,9 @@
 const regionView={path:null,generation:0,busy:false};
 const regionPanel=element('div',undefined,'region-panel');regionPanel.hidden=true;
 const regionRead=button('Đọc lại vùng chữ',()=>perform(readSelectedRegion));regionRead.id='reread-region';
-const regionStatus=element('p','Chỉ đọc tên, địa chỉ và mô tả hàng có vùng nguồn. Kết quả cần đối chiếu.','muted');regionStatus.id='region-status';regionStatus.setAttribute('role','status');
+const regionStatus=element('p','Đọc lại trường có vùng nguồn; ngày, MST và tiền được kiểm tra định dạng. Kết quả cần đối chiếu.','muted');regionStatus.id='region-status';regionStatus.setAttribute('role','status');
 const regionOutput=element('div');regionOutput.id='region-output';regionPanel.append(regionRead,regionStatus,regionOutput);$('candidates').after(regionPanel);
-function regionSupported(path){return /^(parties\.(seller|buyer)\.(name|address)|items\.[A-Za-z0-9_:-]+\.description)$/.test(path||'');}
+function regionSupported(path){return /^(parties\.(seller|buyer)\.(name|address|tax_id)|invoice\.(number|series|issue_date)|currency|totals\.(net|vat|gross)|items\.[A-Za-z0-9_:-]+\.description)$/.test(path||'');}
 function clearRegion(){regionView.generation++;regionView.path=null;regionPanel.hidden=true;regionOutput.replaceChildren();}
 document.addEventListener('agent3:record-loading',clearRegion);
 document.addEventListener('agent3:field-selected',event=>{regionView.generation++;regionView.path=event.detail.path;regionPanel.hidden=!regionSupported(regionView.path);regionOutput.replaceChildren();regionRead.disabled=regionView.busy;regionStatus.textContent='Đọc lại từng dòng từ vùng nguồn; không tự sửa hoặc xác nhận dữ liệu.';});
@@ -26,7 +26,7 @@ async function readSelectedRegion(){
    if(!current()||state.loadingRecord||state.saving)return;
    const edit=state.edits.get(path);if(!edit)return;
    if(hasDraft()){message('Đang có bản nháp. Lưu hoặc bỏ thay đổi trước khi dùng kết quả đọc lại.',true);return;}
-   edit.input.value=result.suggested_value;edit.checked.checked=true;delete edit.candidate;edit.error.textContent='';updateDirty();
+   edit.input.value=displayValue(path,result.suggested_value);edit.checked.checked=true;delete edit.candidate;edit.error.textContent='';updateDirty();
    $('reason').value='Đối chiếu ảnh gốc và kết quả đọc lại vùng '+result.recovery_id;
    message('Đã đưa vào bản nháp. Đối chiếu ảnh, rồi lưu dữ liệu hóa đơn để xác nhận.');
   }));
@@ -89,7 +89,7 @@ function applyRecoveryRecommendations(){
  if(state.loadingRecord||state.saving||hasDraft())throw new Error('Lưu hoặc bỏ bản nháp trước khi đưa gợi ý vào.');
  const entries=report.entries.filter(e=>e.selection?.decision==='RECOMMENDED');
  for(const entry of entries){const edit=state.edits.get(entry.field_path);if(!edit||edit.current?.confidence_basis==='HUMAN_CONFIRMED')throw new Error('Trường đã thay đổi; tải lại để đối chiếu.');}
- for(const entry of entries){const edit=state.edits.get(entry.field_path);edit.input.value=entry.selection.selected_value;edit.checked.checked=true;delete edit.candidate;edit.error.textContent='';}
+ for(const entry of entries){const edit=state.edits.get(entry.field_path);edit.input.value=displayValue(entry.field_path,entry.selection.selected_value);edit.checked.checked=true;delete edit.candidate;edit.error.textContent='';}
  $('reason').value='Đối chiếu nguồn và gợi ý phục hồi OCR '+report.run_id;updateDirty();message('Đã đưa gợi ý vào bản nháp. Đối chiếu rồi lưu để xác nhận.');
 }
 document.addEventListener('agent3:record-loading',()=>{recoveryQueue.generation++;recoveryQueue.report=null;queueItems.replaceChildren();queueApply.hidden=true;queueRetry.hidden=true;});

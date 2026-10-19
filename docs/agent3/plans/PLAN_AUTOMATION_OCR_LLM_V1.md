@@ -42,3 +42,9 @@ Thử nghiệm trên một hóa đơn dev có lỗi lặp từ cuối dòng: gre
 4. UI diễn giải có ba phần dễ hiểu; Qwen chỉ nhận fact tối thiểu, không nhận tên/MST/raw OCR. Khi căn cứ pháp lý chưa dùng được, context DATA_REVIEW chỉ chứa tình trạng dữ liệu và bước xử lý, không đưa kết quả thuế vào lời model. Giữ nguyên report/core replay và cảnh báo bản nháp.
 
 Xem [runbook, kiểm thử và giới hạn của đợt này](evidence/automation_20261019_v2/REPORT.md). Vẫn thuộc PLAN_06/PLAN_12. Chưa bật auto-accept, chưa hoàn tất OCR V2 toàn bộ hoặc nghiệm thu production/pháp lý.
+
+## Mở rộng độ phủ trường — 19/10, round 3
+
+Đã mở rộng bộ đọc vùng cho MST, số/ký hiệu, ngày lập, currency và totals; tìm lại vùng từ quan sát không parse được khi CFR thiếu evidence, giữ vai trò và giới hạn ngân sách. Cải thiện địa chỉ/MST dưới nhãn, nhãn song ngữ và thứ tự crop. Gợi ý tên loại nhãn/anchor trước khi đưa vào draft; số/ngày phải qua parser và dùng đúng định dạng UI.
+
+Model thật đã đọc lại 8 lỗi được chọn từ 3 hóa đơn dev: cứu đúng cả 4 trường từng trống; tên còn lỗi nên vẫn review, không tự xác nhận. Không dùng phép đo này như holdout hoặc kết quả tự điền CFR. Chi tiết, số liệu và cách chạy ở [báo cáo round 3](evidence/field_coverage_round3/REPORT.md). Vẫn còn chữ không được detect, ảnh mờ và bảng khó ngoài phạm vi đợt này.

@@ -25,6 +25,9 @@ TRANSLATIONS = re.compile(r'\s*\(\s*(?:Seller|Buyer|Tax\s*code|Address|Serial(?:
 
 
 def clean_label(text):
+    # Known OCR variants of the English address gloss only. Never fuzzy-edit
+    # the actual address or accept an arbitrary parenthetical label.
+    text=re.sub(r'\(\s*(?:Addres|Addrass)\s*\)', ' ', text, flags=re.I)
     return TRANSLATIONS.sub(' ',text).strip()
 
 
@@ -90,8 +93,8 @@ def labelled(text, aliases):
         if label=='so': continue  # Never match "Số lượng", account numbers, etc.
         # OCR may merge label + value without a colon. Compare complete label
         # prefixes at whitespace boundaries, retaining offsets in the raw text.
-        for boundary in re.finditer(r'\s+',text[:128]):
-            if key(text[:boundary.start()])==label:
+        for boundary in reversed(list(re.finditer(r'\s+',text[:128]))):
+            if key(clean_label(text[:boundary.start()]))==label:
                 return path,text[boundary.end():].strip()
     return None,None
 
@@ -175,6 +178,10 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                 # extra digits; date_values still validates the calendar date.
                 match=re.fullmatch(r'ngay\s+(\d{1,2})\s+thang\s+(\d{1,2})\s+nam\s+(\d{4})\s*\)?',text)
                 if match: yield 'invoice.issue_date','/'.join(match.groups()),blocks
+                elif re.match(r'^ngay\s+\d{1,2}\s+thang\s+\d{1,2}\s+nam\s+\d{4}\b',text):
+                    # Keep the invalid observation for targeted recovery. The
+                    # strict parser rejects trailing words/digits as before.
+                    yield 'invoice.issue_date',raw,blocks
             continue
         if inline:
             yield path,inline,blocks
@@ -209,7 +216,8 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                 if (x1<=ox0<=x1+.25 and abs((oy0+oy1-y0-y1)/2)<=height
                         and money_values(value,'AUTO')):
                     yield path,value.strip(),blocks+value_blocks
-        elif path in ('seller.name','buyer.name','invoice.series','invoice.number','invoice.issue_date'):
+        elif path in ('seller.name','buyer.name','seller.tax_id','buyer.tax_id',
+                      'seller.address','buyer.address','invoice.series','invoice.number','invoice.issue_date'):
             # A name may be below its explicit label. Never cross a page,
             # column, another field label or a distant vertical gap.
             below=[]
