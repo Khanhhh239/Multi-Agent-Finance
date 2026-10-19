@@ -12,7 +12,7 @@
 | Bật auto-accept | **CHƯA BẬT**: thiếu calibration/holdout và nghiệm thu chất lượng |
 | Duyệt luật / mapping hàng thật | **PENDING**: không đổi DRAFT thành approved bằng code |
 | OCR lại vùng nguồn — 19/10 | Đã có nút đọc lại tên/địa chỉ/mô tả hàng từ tối đa 4 block dòng đã có evidence. VietOCR beam search chạy riêng, giữ observation cũ/mới và cache; ứng viên chỉ vào bản nháp khi người dùng chọn. [Runbook và giới hạn](evidence/region_recovery_20261019_v1/REPORT.md) |
-| Vùng chưa detect / render DPI mới / layout mới | **CHƯA TRIỂN KHAI**: đọc lại vùng hiện dùng render đã giữ, không tìm lại chữ chưa có box hoặc tự chọn vùng/bố cục bằng model mới |
+| Vùng chưa detect / render DPI mới / layout mới | Đã có profile thử tiling/deskew/DPI và kiểm tra geometry; chưa promote vì chưa có lợi ích end-to-end/holdout được xác nhận. [Báo cáo coverage](evidence/ocr_coverage_v1/REPORT.md) |
 | Job bền vững khi đóng browser | Capture worker hiện có tiếp tục chạy; chuỗi UI mới chỉ chạy khi trang mở. Durable orchestration/production còn thuộc PLAN_14 |
 | Dữ liệu mở rộng, fine-tune và nghiệm thu readability | **PENDING**; không suy chất lượng tổng quát từ fixture/dev đã sửa |
 
@@ -48,3 +48,9 @@ Xem [runbook, kiểm thử và giới hạn của đợt này](evidence/automati
 Đã mở rộng bộ đọc vùng cho MST, số/ký hiệu, ngày lập, currency và totals; tìm lại vùng từ quan sát không parse được khi CFR thiếu evidence, giữ vai trò và giới hạn ngân sách. Cải thiện địa chỉ/MST dưới nhãn, nhãn song ngữ và thứ tự crop. Gợi ý tên loại nhãn/anchor trước khi đưa vào draft; số/ngày phải qua parser và dùng đúng định dạng UI.
 
 Model thật đã đọc lại 8 lỗi được chọn từ 3 hóa đơn dev: cứu đúng cả 4 trường từng trống; tên còn lỗi nên vẫn review, không tự xác nhận. Không dùng phép đo này như holdout hoặc kết quả tự điền CFR. Chi tiết, số liệu và cách chạy ở [báo cáo round 3](evidence/field_coverage_round3/REPORT.md). Vẫn còn chữ không được detect, ảnh mờ và bảng khó ngoài phạm vi đợt này.
+
+## Coverage, đối chứng, bảng nhiều trang và manifest — 19/10
+
+Đã triển khai cấu hình ảnh/phát hiện chữ có inverse geometry, render DPI có giới hạn, đọc đối chứng theo vùng (thủ công và fallback tự động khi còn crop budget), bảng lặp tiêu đề/tiếp nối có dấu hiệu rõ, công cụ khóa dữ liệu test mới và bộ hồi quy. Sửa thêm lỗi Windows khóa file làm che mất timeout. Mở thử cấu hình ảnh bằng `OPEN_AGENT3_OCR_LAB.cmd`, DB riêng; UI thường vẫn dùng cấu hình chính hiện tại.
+
+Chưa promote cấu hình 200 DPI/beam/tiles/deskew toàn trang vì các lượt đo chưa hoàn tất trong ngân sách; PP-OCRv6 recognizer chưa đủ căn cứ thay VietOCR cho tên/địa chỉ. Holdout vẫn PENDING_UNSEEN_DATA. [Kết quả, giới hạn và cách chạy lại](evidence/ocr_coverage_v1/REPORT.md). Không đánh dấu hoàn tất mục tiêu chất lượng hoặc PLAN_14 bằng việc đã có code.

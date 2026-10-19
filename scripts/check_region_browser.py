@@ -24,7 +24,7 @@ def main():
     server=uvicorn.Server(uvicorn.Config(create_app(f.fixture.settings),host='127.0.0.1',port=port,log_level='error'))
     thread=threading.Thread(target=server.run,daemon=True);checks=[];errors=[];posts=[]
     try:
-        with patch('src.recovery.api.RegionRecovery',return_value=case.service),sync_playwright() as pw:
+        with patch('src.recovery.api.RegionRecovery',return_value=case.service),patch('src.recovery.regions.WorkerClient',return_value=case.reader),sync_playwright() as pw:
             thread.start()
             for _ in range(100):
                 if server.started:break
@@ -86,6 +86,12 @@ def main():
                 expect(page.locator('#region-output')).to_contain_text('<img src=x',timeout=20000)
             assert page.locator('#region-output img').count()==0
             checks.append('Untrusted recognition text remains text and cannot create HTML')
+            case.reader.text='Comparison observation'
+            page.locator('#compare-region').click()
+            expect(page.locator('#region-output')).to_contain_text('Bộ đọc đối chứng',timeout=20000)
+            assert all(r.model_id=='vietocr_region_wide' for r in case.reader.requests)
+            assert f.repo.base.record(f.ctx,f.payer,f.record.record_id).revision==2
+            checks.append('Comparison reader is explicitly selected, separately cached and does not replace saved data')
             # Typed values arrive in canonical format, then use the same exact
             # date/Decimal display function as the normal correction form.
             for label,text,want in [('Ngày lập','Ngày lập: 30/06/2025','30/06/2025'),

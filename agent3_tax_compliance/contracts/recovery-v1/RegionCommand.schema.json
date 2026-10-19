@@ -1,0 +1,31 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "expected_record_revision": {
+      "minimum": 1,
+      "title": "Expected Record Revision",
+      "type": "integer"
+    },
+    "field_path": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Field Path",
+      "type": "string"
+    },
+    "reader": {
+      "default": "primary",
+      "enum": [
+        "primary",
+        "comparison"
+      ],
+      "title": "Reader",
+      "type": "string"
+    }
+  },
+  "required": [
+    "expected_record_revision",
+    "field_path"
+  ],
+  "title": "RegionCommand",
+  "type": "object"
+}

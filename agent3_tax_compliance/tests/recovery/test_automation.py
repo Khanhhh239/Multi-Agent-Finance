@@ -75,6 +75,20 @@ class AutoRecoveryTests(unittest.TestCase):
             self.assertEqual(err.exception.code,'AUTOMATION_BUSY')
         self.hook=hook;self.run_auto();self.assertEqual(len(self.calls),1)
 
+    def test_comparison_recovery_uses_spare_crop_budget_and_preserves_primary(self):
+        calls=[]
+        def read(ctx,payer,rid,command):
+            calls.append(command.reader)
+            return {'status':'NEEDS_REVIEW' if command.reader=='primary' else 'CANDIDATE',
+                'suggested_value':None if command.reader=='primary' else 'Dịch vụ tháng)',
+                'original_value':'Dịch vụ tháng) tháng)','recovery_id':'comparison-test','observations':[]}
+        self.service.region.comparison_runtime=lambda:'c'*64
+        with patch.object(self.service.region,'read',side_effect=read):result=self.run_auto()
+        entry=next(e for e in result['entries'] if e['field_path']==self.path)
+        self.assertEqual(calls,['primary','comparison'])
+        self.assertEqual(entry['primary_recovery']['status'],'NEEDS_REVIEW')
+        self.assertEqual(entry['comparison']['status'],'CANDIDATE');self.assertFalse(result['auto_confirmed'])
+
     def test_stale_results_persist_but_are_not_returned_as_current(self):
         self.hook=self.f.correct
         with self.assertRaises(ReviewError) as err:self.run_auto()

@@ -9,7 +9,7 @@ from .contracts import ExtractionIssue
 from ..canonicalization.normalize import key,vat_values
 from ..domain.field import FieldObject
 from ..domain.cfr import Item
-from .spatial_tables import discover_spatial
+from .spatial_tables import discover_spatial,spatial_headers,header_name
 
 ITEM_ALIASES={
  'description':('ten hang','ten hang hoa','description'),
@@ -20,8 +20,18 @@ ITEM_ALIASES={
 }
 
 def discover_rows(document,issues):
-    rows=[]
+    rows=[];previous_layout=None;previous_index=None
     for page in document.pages:
+        layout=spatial_headers(page)
+        continuation=any(key(b.text_raw).strip('() .:') in ('tiep theo','continued','table continued') for b in page.blocks)
+        if (not layout and continuation and previous_layout and previous_index is not None
+                and page.page_index==previous_index+1 and page.status=='COMPLETE'):
+            more=discover_spatial(page,previous_layout)
+            if more:
+                rows.extend(more);previous_index=page.page_index
+                issues.append(ExtractionIssue(code='CONTINUATION_LAYOUT_REVIEW',message='Explicit continuation uses previous page columns; row completeness still requires review.'))
+                continue
+        previous_layout=layout;previous_index=page.page_index
         native=tuple(b.model_copy(update={'origins':tuple(o for o in b.origins if o.method=='NATIVE_TEXT')})
                      for b in page.blocks if any(o.method=='NATIVE_TEXT' for o in b.origins))
         if native and any(any(o.method=='OCR' for o in b.origins) for b in page.blocks):
@@ -31,6 +41,11 @@ def discover_rows(document,issues):
                 rows.extend(native_rows)
                 issues.append(ExtractionIssue(code='HYBRID_TABLE_REVIEW',message='Native table structure retained; OCR table observations still require review.'))
                 continue
+        descriptions=[b.evidence.bbox[1] for b in page.blocks if b.evidence and header_name(b.text_raw)=='description']
+        if descriptions and max(descriptions)-min(descriptions)>.06:
+            rows.extend(discover_spatial(page))
+            issues.append(ExtractionIssue(code='REPEATED_TABLE_HEADER_REVIEW',message='Table regions separated at repeated headers.'))
+            continue
         blocks=sorted(page.blocks,key=lambda b:b.reading_order)
         starts=[n for n,b in enumerate(blocks) if re.fullmatch(r'(mat hang|item)\s+\d+(?:\s+.*|:.*)?',key(b.text_raw))]
         if starts:

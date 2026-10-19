@@ -1,5 +1,7 @@
 # Agent 3 — Tax Compliance Assistant
 
+**OCR coverage — 19/10:** thêm đọc đối chứng theo vùng, fallback tự động trong ngân sách, bảng lặp/tiếp nối và sửa lỗi cleanup khi worker Windows timeout. Profile DPI/deskew/tiling thử nghiệm mở bằng `OPEN_AGENT3_OCR_LAB.cmd` trên DB riêng; cấu hình toàn trang mặc định chưa đổi vì chưa vượt gate chất lượng/thời gian. [Báo cáo và kiểm thử](docs/agent3/plans/evidence/ocr_coverage_v1/REPORT.md).
+
 **Độ phủ trường OCR — round 3, 19/10:** đọc lại thêm MST, số/ký hiệu, ngày, tiền tệ và tổng tiền từ vùng lỗi có căn cứ, kể cả khi parser cũ không tạo được candidate. Giữ parser nghiêm ngặt và bản nháp cần đối chiếu; chưa tự xác nhận. Model thật cứu được cả 4 trường từng trống trong nhóm lỗi dev được chọn, tên vẫn còn lỗi. [Phạm vi, số liệu và kiểm thử](docs/agent3/plans/evidence/field_coverage_round3/REPORT.md).
 
 **Tự phục hồi OCR + diễn giải rõ hơn — 19/10:** bật **Tự kiểm tra và diễn giải** để hệ thống chẩn đoán, đọc lại vùng lỗi có giới hạn và chuẩn bị gợi ý. Bấm **Đưa các gợi ý được chọn vào bản nháp**, đối chiếu rồi lưu; dữ liệu đã xác nhận được bảo vệ. Diễn giải hiển thị đã đọc/thiếu/việc cần làm; thiếu căn cứ thì Qwen chỉ nói về chất lượng dữ liệu. [Báo cáo hiện tại, kiểm thử và cách chạy lại](docs/agent3/plans/evidence/automation_20261019_v2/REPORT.md).

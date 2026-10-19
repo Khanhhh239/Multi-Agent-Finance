@@ -1,0 +1,7 @@
+{
+  "version": "ppocrv6_vietocr_coverage-v1",
+  "model_id": "ppocrv6_vietocr_coverage",
+  "timeout_seconds": 600,
+  "memory_mb": 6144,
+  "max_attempts": 1
+}

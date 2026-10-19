@@ -1,0 +1,25 @@
+{
+  "version": "ocr-holdout-v1",
+  "entries": [],
+  "used_groups": [
+    "accounting_training",
+    "accounting_training-p2",
+    "charity_2023",
+    "charity_2023-p1",
+    "charity_2023-p2",
+    "cyber_construction",
+    "cyber_construction-p118",
+    "cyber_construction-p69",
+    "misa_public_filing",
+    "misa_public_filing-p117",
+    "misa_public_filing-p134",
+    "software_kct",
+    "software_kct-p1",
+    "viettel_adjustment",
+    "viettel_adjustment-p1"
+  ],
+  "status": "PENDING_UNSEEN_DATA",
+  "independent_label_acceptance": false,
+  "accuracy_evaluated": false,
+  "manifest_sha256": "058d6168204953633d1d00e9cf3350f3b8c0c10b1abdb939d3d81b753c9c6213"
+}

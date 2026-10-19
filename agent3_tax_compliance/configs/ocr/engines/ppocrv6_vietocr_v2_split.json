@@ -15,7 +15,8 @@
   "source_files": [
     "src/adapters/vietocr_adapter.py",
     "src/adapters/paddle_common.py",
-    "src/adapters/recognition_crops.py"
+    "src/adapters/recognition_crops.py",
+    "src/adapters/coverage_geometry.py"
   ],
   "assets": [
     "artifacts/models/ppocrv6_medium/detection/inference.pdiparams",

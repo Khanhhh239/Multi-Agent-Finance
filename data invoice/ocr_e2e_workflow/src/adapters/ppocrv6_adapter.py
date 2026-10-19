@@ -6,7 +6,7 @@ from typing import Any
 from PIL import Image
 
 from src.adapters.base import BaseAdapter, flatten_document_text
-from src.adapters.paddle_common import paddle_result_orientation, paddle_result_to_detections
+from src.adapters.paddle_common import paddle_result_orientation, paddle_result_to_detections,_as_dict
 from src.utils import resolve_path
 
 
@@ -14,6 +14,13 @@ class PPOCRv6Adapter(BaseAdapter):
     location_support = True
 
     def load_model(self) -> None:
+        self.recognition_only=bool(self.config.get('recognition_only',False))
+        if self.recognition_only:
+            from paddleocr import TextRecognition
+            self.location_support=False
+            self.recognizer=TextRecognition(model_dir=str(resolve_path(self.config['text_recognition_model_dir'])),
+                device=self.config.get('device','cpu'),enable_mkldnn=False,cpu_threads=1)
+            return
         from paddleocr import PaddleOCR
 
         kwargs: dict[str, Any] = {}
@@ -47,6 +54,15 @@ class PPOCRv6Adapter(BaseAdapter):
         self.ocr = PaddleOCR(**kwargs)
 
     def infer(self, image_path: Path) -> dict[str, Any]:
+        if self.recognition_only:
+            values=[];scores=[]
+            for result in self.recognizer.predict(str(image_path)):
+                value=_as_dict(result);value=value.get('res',value)
+                values.append(str(value.get('rec_text','')))
+                scores.append(value.get('rec_score'))
+            return {'document_text_raw':' '.join(values),'metadata':{'recognition_only':True,
+                'recognizer_backend':'PP-OCRv6_medium_rec','recognition_scores':scores,
+                'confidence_semantics':'RECOGNITION_HEURISTIC_NOT_CALIBRATED'}}
         if hasattr(self.ocr, "predict"):
             results = list(self.ocr.predict(str(image_path)))
         else:

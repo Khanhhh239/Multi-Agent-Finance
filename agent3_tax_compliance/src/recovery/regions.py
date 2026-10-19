@@ -9,6 +9,7 @@ import time
 import unicodedata
 from pathlib import Path
 from uuid import uuid4
+from typing import Literal
 
 from PIL import Image
 from pydantic import Field, StrictInt
@@ -24,6 +25,7 @@ from .field_reads import TYPED_PATHS,recovery_refs,typed_read,text_read
 
 POLICY='region-fields-v2'
 MODEL='vietocr_region_v1'
+COMPARISON_MODEL='vietocr_region_wide'
 _SLOT=threading.BoundedSemaphore(1)
 
 
@@ -39,6 +41,7 @@ def implementation_sha():
 class RegionCommand(Contract):
     expected_record_revision: StrictInt = Field(ge=1)
     field_path: str = Field(min_length=1,max_length=256)
+    reader: Literal['primary','comparison'] = 'primary'
 
 
 def supported(path):
@@ -106,7 +109,12 @@ class RegionRecovery:
         self.settings=settings
         self.repo=ReviewRepository(settings)
         self.client=client or WorkerClient(model_id=MODEL)
+        self.comparison_client=None
         self.path=settings.database_path.with_suffix('.region-ocr.sqlite3')
+
+    def comparison_runtime(self):
+        if self.comparison_client is None:self.comparison_client=WorkerClient(model_id=COMPARISON_MODEL)
+        return self.comparison_client.inventory()['runtime_sha256']
 
     def db(self):
         db=sqlite3.connect(self.path,timeout=10)
@@ -131,8 +139,11 @@ class RegionRecovery:
                 (ctx.tenant_id,payer,artifact.artifact_id)).fetchone()[0]
         normalized=self.repo.extraction.ocr.get(ctx,payer,artifact.ingestion_id,key)['result']
         field,regions=plan_regions(record,artifact,normalized,command.field_path)
-        config=OCRConfig(version=POLICY,model_id=MODEL,timeout_seconds=30,memory_mb=3072,max_attempts=1,max_output_bytes=256*1024)
-        try:runtime=self.client.inventory()['runtime_sha256']
+        model=MODEL if command.reader=='primary' else COMPARISON_MODEL
+        if command.reader=='comparison':self.comparison_runtime()
+        client=self.client if command.reader=='primary' else self.comparison_client
+        config=OCRConfig(version=POLICY,model_id=model,timeout_seconds=30,memory_mb=3072,max_attempts=1,max_output_bytes=256*1024)
+        try:runtime=client.inventory()['runtime_sha256']
         except OCRError as exc:raise ReviewError(exc.issue.code,'Bộ đọc vùng chưa sẵn sàng; dữ liệu hiện tại được giữ nguyên.',503) from None
         cache_key=sha({'record':sha(record.model_dump(mode='json')),'artifact':artifact.artifact_id,
             'ocr':sha(normalized.model_dump(mode='json')),'field':command.field_path,'runtime':runtime,
@@ -164,10 +175,10 @@ class RegionRecovery:
                     requests.append(OCRBridgeRequest(config_version=POLICY,creator='region-recovery',stage='ocr',request_id='region-'+uuid4().hex,
                         source_id=record.source_id,document_id=record.document_id,page_id=page.page_id,page_index=page.page_index,
                         image_hash=image_hash,image_path=str(path.resolve()),image_width=width,image_height=height,
-                        model_config_version=config.version,runtime_sha256=runtime,model_id=MODEL,timeout_seconds=config.timeout_seconds))
+                        model_config_version=config.version,runtime_sha256=runtime,model_id=model,timeout_seconds=config.timeout_seconds))
                     observations.append({'block_id':block.block_id,'original_text':block.text_raw,'evidence':block.evidence.model_dump(mode='json'),
                         'crop_pixel_box':box,'page_size':image.size,'crop_sha256':image_hash})
-                try:responses=self.client.run_batch(requests,config,slot_timeout=0)
+                try:responses=client.run_batch(requests,config,slot_timeout=0)
                 except OCRError as exc:raise ReviewError(exc.issue.code,'Đọc vùng chưa thành công; giữ nguyên kết quả cũ và có thể thử lại.',503) from None
             if len(responses)!=len(requests):raise ValueError('region response count mismatch')
             for request,observation,response in zip(requests,observations,responses):
@@ -186,7 +197,7 @@ class RegionRecovery:
             # Preserve duplicates and disagreements for review, not a guessed correction.
             result=envelope(recovery_id='region-read-'+uuid4().hex,record_id=record_id,record_revision=record.revision,
                 extraction_artifact_id=artifact.artifact_id,field_path=command.field_path,actor_id=ctx.actor_id,
-                created_at=utcnow().isoformat(),policy=POLICY,model_id=MODEL,runtime_sha256=runtime,
+                created_at=utcnow().isoformat(),policy=POLICY,model_id=model,reader=command.reader,runtime_sha256=runtime,
                 status='CANDIDATE' if suggestion and all(o['text'].strip() for o in observations) else 'NEEDS_REVIEW',
                 original_value=field.get('value'),suggested_value=suggestion or None,review_required=True,
                 value_format='CANONICAL',parse_status=parse_status,

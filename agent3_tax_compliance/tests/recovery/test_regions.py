@@ -84,6 +84,16 @@ class RegionTests(unittest.TestCase):
         self.assertEqual(result['status'],'NEEDS_REVIEW');self.assertEqual(result['parse_status'],'REJECTED')
         self.assertIsNone(result['suggested_value']);self.assertIn('31/02/2025',[o['text'] for o in result['observations']])
 
+    def test_comparison_is_separately_pinned_and_cannot_choose_arbitrary_model(self):
+        primary=self.read()
+        with patch('src.recovery.regions.WorkerClient',return_value=self.reader):
+            result=self.read(self.command.model_copy(update={'reader':'comparison'}))
+            again=self.read(self.command.model_copy(update={'reader':'comparison'}))
+        self.assertEqual(result['model_id'],'vietocr_region_wide');self.assertEqual(result['reader'],'comparison')
+        self.assertNotEqual(result['recovery_id'],primary['recovery_id']);self.assertTrue(again['cache_hit'])
+        self.assertTrue(all(r.model_id=='vietocr_region_wide' for r in self.reader.requests))
+        with self.assertRaises(ValidationError):RegionCommand(expected_record_revision=1,field_path=self.command.field_path,reader='arbitrary')
+
     def test_cache_commit_race_returns_persisted_winner_not_unstored_id(self):
         winner=self.read();self.reader.text='Losing concurrent observation'
         # Simulate a cache miss racing another app process's completed INSERT.
