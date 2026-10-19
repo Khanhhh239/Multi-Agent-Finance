@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-19",
+  "status": "passed",
+  "data_kind": "dữ liệu tổng hợp",
+  "analysis_kind": "hậu kiểm, không phải niêm phong",
+  "protocols_completed": 15,
+  "original_operating_checks_passed": 6,
+  "methods_per_original_check": 3,
+  "maximum_absolute_AP_difference_in_final_run": 0.0,
+  "protected_artifacts_unchanged": true,
+  "frozen_sources_unchanged": true,
+  "all_input_and_code_hashes_match_manifest": true,
+  "evaluation_case_populations_unchanged": true,
+  "novelty_negative_control_unchanged": true,
+  "decomposition_identity_passed": true,
+  "markdown_tables_checked": 18,
+  "R1_approval": "pending",
+  "R2_started": false,
+  "pytest": {
+    "passed": 174,
+    "subtests_passed": 18,
+    "seconds": 401.98,
+    "log": "work/r0_final_tests.log",
+    "log_sha256": "38ff24f3b138ff7ef7cf1e52420a05456d63f6605c612823c6f6339cd71e1c74"
+  },
+  "python": "3.12.14",
+  "warnings": 4,
+  "warning_note": "LightGBM eval_set deprecation in frozen-recipe parity check",
+  "validation_source_sha256": {
+    "agent2/postmortem_v4.py": "2563d747f9265cc212cb5992b77effb4cf1d2edda235c31799097caa717c9b76",
+    "scripts/report_postmortem_v4.py": "cffba4c957057d0c2680c2af589ab0802e89c7ae76b87f4cf72458d080e2e5b3",
+    "tests_agent2/test_postmortem_v4.py": "b6128617c3f4e9fb4e722ea46097daf94a54ebf59a459200bd0ce3cae30b22b6"
+  },
+  "packages": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "scipy": "1.18.1",
+    "joblib": "1.6.0",
+    "pyarrow": "26.0.0",
+    "pytest": "9.1.1"
+  },
+  "report_sha256": "6fb9a0df4586e3ad99ca2f44c3ff76ea685d256eeb0960353cab14577029b874",
+  "registration_draft_sha256": "711c4acda8451f594deb303d4dabdd2fe1eefbaf5e124ca4856c97b09211db4a"
+}

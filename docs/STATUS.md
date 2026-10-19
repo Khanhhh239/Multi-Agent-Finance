@@ -1,10 +1,17 @@
 # Trạng thái Agent 2 (cập nhật 2026-10-19)
 
-## Vòng v5, tiếp tục ngày 2026-10-19
+## Vòng v5, cập nhật ngày 2026-10-19
 
-Chủ dự án đã cho phép mở vòng mới sau M2: thực hiện Bước 0, hậu kiểm R0 và soạn đăng ký trước R1, sau đó **dừng chờ trả lời “duyệt” trước R2**. Kết luận v4 không đạt G5 và các tệp kết quả, khóa v4 giữ nguyên. Phân tích lại v4 chỉ được gọi là **hậu kiểm, không phải niêm phong**; không phải kiểm thử xác nhận cho v5.
+**ĐIỂM DỪNG R1: CHỜ CHỦ DỰ ÁN DUYỆT.** Chủ dự án đã cho phép làm R0 và soạn R1 sau M2. R0 đã hoàn tất; R1 đã có bản đề xuất, chưa được duyệt. Không bắt đầu R2, R3, tải dữ liệu ngoài hoặc R4 trước phạm vi được phép. Kết luận **v4 không đạt G5** giữ nguyên; mọi kết quả R0 là **hậu kiểm, không phải niêm phong**, trên **dữ liệu tổng hợp**.
 
-Bước 0 phát hiện remote có commit `f593a78` cập nhật bộ luật, sau đó commit `2954ee0` hoàn tác bản cập nhật đó. Đã hợp nhất nội dung README, giữ bốn commit cục bộ và commit remote. Kiểm thử sau hợp nhất: 166 bài pytest cùng 18 kiểm tra con qua; 373 bài unittest của bộ luật mới qua. Push tiếp tục bị từ chối do commit hoàn tác mới; đã hợp nhất theo quyết định hoàn tác của remote, đưa bộ luật về đúng bản trước cập nhật. Bản cuối đã qua 165 bài pytest và 18 kiểm tra con trong 125,82 giây. Sẵn sàng push sau commit hợp nhất; không force-push. R0 chưa chạy, R1 chưa được duyệt. R3, tải dữ liệu ngoài và R4 chưa bắt đầu.
+- **Bước 0 hoàn tất:** đã push bốn commit v4, giữ cả lịch sử cập nhật và hoàn tác của remote, không force-push. Commit đồng bộ cuối `3a3cfe3`; bằng chứng `results/v5/step0_merge_verification.json`.
+- **R0 hoàn tất:** mã `agent2/postmortem_v4.py`; đủ 15 giao thức của L3, L4-FB và Novelty max(R,E). Chỉ số cảnh báo, recall, vụ, ca khó và từng họ của 18 cặp gốc khớp; AP lượt hoàn chỉnh cũng khớp. Hai lượt dừng vì AP rất nhỏ và lỗi mã hóa thông báo cuối được ghi lại, không xóa dấu vết. Tệp v4 và sáu mã nguồn khóa không đổi băm.
+- **Kết quả R0:** loại dòng mới chỉ khỏi huấn luyện làm recall L4-FB tăng 5,59 điểm, khoảng 95% từ 1,41 đến 9,91; giảm trọng số nhãn 0 xuống 0,2 tăng 10,07 điểm, khoảng từ 6,86 đến 13,40. Đây là chẩn đoán tổng hợp, không phải kết quả triển khai. Phân rã mô tả mức tụt 39,50 điểm cộng đúng; không quy toàn bộ cho nhiễu nhãn hoặc lịch lương.
+- Báo cáo: [08_mo_xe_niem_phong_v4.md](03_danh_gia_va_hieu_qua_kinh_te/08_mo_xe_niem_phong_v4.md). JSON hoàn chỉnh tại `results/v5/postmortem_v4/run3/`; hai manifest đã dừng được giữ riêng. Có bảng theo lịch lương, quy mô, đủ 30 kịch bản đã biết, cấu trúc seed 933 và bootstrap theo vụ.
+- **Kiểm chứng R0:** 174 bài và 18 kiểm tra con qua, 401,98 giây; bốn cảnh báo bỏ dần API LightGBM ở phép kiểm công thức gốc, không lỗi. Đủ 18 bảng Markdown hợp lệ. Bằng chứng `results/v5/r0_verification.json` xác nhận băm mọi đầu vào và mã R0, tập vụ không đổi, đối chứng Novelty không đổi và đồng nhất thức phân rã.
+- **R1 chờ duyệt:** [08_dang_ky_truoc_v5.md](05_ke_hoach_giao_viec/08_dang_ky_truoc_v5.md). Đề xuất S2 là chính; S1 phụ dùng nhãn chưa biết; chọn minimax trên đủ 20 thế giới, trần ca khó 15% ở từng thế giới; cổng v5 và điều kiện đổi hướng được ghi bằng số trước R2. Chỉ tiếp tục R2 sau câu trả lời “duyệt” của chủ dự án.
+
+Phần tiếp nhận v4 bên dưới giữ nguyên kết luận lịch sử M2; quyền hậu kiểm R0 và soạn đề xuất R1 là phạm vi mới chủ dự án đã chỉ định, không phải thay cổng v4.
 
 ## Tiến độ tiếp nhận ngày 2026-10-16 và 2026-10-17
 

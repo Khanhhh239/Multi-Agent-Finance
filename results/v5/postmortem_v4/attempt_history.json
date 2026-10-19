@@ -1,0 +1,41 @@
+{
+  "data_kind": "dữ liệu tổng hợp",
+  "analysis_kind": "hậu kiểm, không phải niêm phong",
+  "failed_attempts": [
+    {
+      "attempt": "attempt1",
+      "status": "failed_before_interventions",
+      "stage": "s4_s931 S1 original",
+      "reason": "strict AP comparison differed; no operating metric differed",
+      "historical_ap": 0.16422235614986885,
+      "rerun_ap": 0.16422235690085454,
+      "ap_delta": 7.509856903009648e-10,
+      "manifest": "manifest.json",
+      "manifest_sha256": "201b6071641c64fdb02395fd9e89fcb9e9a98c134a24b4e161f971ba2a009a5c",
+      "error_log": "work/r0_diagnostic.err",
+      "error_log_sha256": "66c4d01f7b72c353b8744cf6bce0131171019bd63bf61fedb4af783436b4a21e"
+    },
+    {
+      "attempt": "attempt2",
+      "status": "failed_before_interventions",
+      "stage": "s4_s931 S1 original",
+      "reason": "strict AP comparison differed; no operating metric differed",
+      "historical_ap": 0.16422235614986885,
+      "rerun_ap": 0.16422235690085454,
+      "ap_delta": 7.509856903009648e-10,
+      "manifest": "run2/manifest.json",
+      "manifest_sha256": "484f22ef17c9fcc4540d18327fffdfeb72763198c7eec94b575f5ed7e9a04829",
+      "error_log": "work/r0_run2_diagnostic.err",
+      "error_log_sha256": "7105485359c8a4c459e4275752efa99d2349352d30fc2613fa4d89b89b5e8026"
+    }
+  ],
+  "final_run": "run3",
+  "operating_metric_tolerance_unchanged": 1e-12,
+  "AP_retained_separately_not_used_for_selection": true,
+  "final_run_output_error": {
+    "stage": "after all 15 checkpoints and summary saved",
+    "exception": "UnicodeEncodeError on cp1252 stdout",
+    "recovery": "PYTHONIOENCODING=utf-8; checkpoints reused; no model refitted",
+    "recovered_status": "complete"
+  }
+}

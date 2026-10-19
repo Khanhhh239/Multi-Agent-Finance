@@ -33,7 +33,6 @@
   },
   "force_push_used": false,
   "remote_revert_integrated": "2954ee0",
-  "intermediate_tests_only": true,
   "final_tree_tests": {
     "status": "passed",
     "passed": 165,
@@ -43,5 +42,8 @@
     "exit_code": 0,
     "R0_overlay_tests_excluded": true
   },
-  "active_rules": "original rules, respecting remote revert 2954ee0"
+  "active_rules": "original rules, respecting remote revert 2954ee0",
+  "initial_pytest_and_unittest_describe_intermediate_tree": true,
+  "push_status": "passed",
+  "pushed_commit": "3a3cfe3"
 }
