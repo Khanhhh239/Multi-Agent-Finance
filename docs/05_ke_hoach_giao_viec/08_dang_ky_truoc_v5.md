@@ -60,7 +60,7 @@ Thứ tự R2 được khóa: (1) sinh 20 thế giới, kiểm V1 đến V12 và
 | 5 | Cold mới: luật cộng EntityDeviation2, hoàn toàn không nhãn |
 | 6 | Cold cũ để đối chứng |
 
-Khóa danh sách, tiêu chí giữ hoặc bỏ, phép so sánh và băm trong nhật ký trước chạy. Không mở thêm ứng viên sau khi xem kết quả. Các ứng viên Cold vẫn tuân thủ quy tắc chọn riêng đã có của v1; cách tính ba suất chuyển tầng được ghi rõ trong biên bản làm rõ của chủ dự án trước khi xếp hạng.
+Khóa danh sách, tiêu chí giữ hoặc bỏ, phép so sánh và băm trong nhật ký trước chạy. Không mở thêm ứng viên sau khi xem kết quả. Chủ dự án đã làm rõ: **ba suất chuyển tầng chỉ dành cho ứng viên có giám sát; Cold chọn riêng như v1**. Cold không chiếm ba suất này. Hai Cold được sàng lọc theo J, chọn Cold dẫn đầu sang tầng chọn riêng; các thành phần không nhãn cố định không được khớp theo nhãn hoặc seed có giám sát.
 
 Mỗi ý tưởng có đối chứng dùng cùng nguồn học và cùng năm seed. Hiệu được báo trên toàn bộ thế giới, gồm số âm và thế giới tệ nhất, không chỉ trung bình. Danh sách hữu hạn ứng viên, thứ tự đơn giản đến phức tạp và băm mã phải được ghi vào manifest trước lần chạy so sánh chính. Muốn bổ sung họ ứng viên ngoài giao việc này phải được chủ dự án duyệt sửa đăng ký trước khi thử; không mở rộng sau niêm phong.
 
