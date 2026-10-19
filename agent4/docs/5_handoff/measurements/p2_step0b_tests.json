@@ -1,0 +1,14 @@
+{
+  "tests": 2596,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 88.847,
+  "card": "P2.Step0b",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-19T00:09:34.709552+00:00",
+  "xml": "artifacts/p2_step0b-pytest.xml",
+  "summary": "formulas not accountant-approved. Budget generation uses warehouse-seeded SHA256 per group, independent of SQL thread/group order. Regenerated dev v2.1; 396/396 independent goldens; GL hash unchanged; same-seed budget reproduction tested.",
+  "decision": "Replace fixed DuckDB setseed/random ANY_VALUE with deterministic keyed uniform factors; preserve 2026 growth assumptions and all ledger events. data_version=v2.1; old warehouse retained as cfo_warehouse.v2_0.duckdb. Use golden_check to preserve unsigned accountant packet. G0.7 OPEN."
+}

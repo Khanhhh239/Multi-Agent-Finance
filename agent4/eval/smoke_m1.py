@@ -138,7 +138,7 @@ def main():
     traces=[json.loads(line) for line in (out/'trace.jsonl').read_text(encoding='utf-8').splitlines()]
     trace_ok=len(traces)==10 and [t['request_id'] for t in traces]==[r['request_id'] for r in responses]
     latencies=[r['latency_ms'] for r in responses]
-    report={'notice':NOTICE,'G0_7':'CHƯA ĐẠT','model':args.model,'num_ctx':4096,'dataset':'first 10 reference_v0/sample-questions.md, development demo',
+    report={'notice':NOTICE,'report_notice':'formulas not accountant-approved','G0_7':'CHƯA ĐẠT','model':args.model,'num_ctx':4096,'dataset':'first 10 reference_v0/sample-questions.md, development demo',
             'ollama':server,'model_digest':model_meta.get('digest'),'python':sys.version,
             'warehouse':{k:warehouse.get(k) for k in ('as_of_date','data_version','seed','last_closed_month')},
             'trace_records':len(traces),'trace_ids_match':trace_ok,

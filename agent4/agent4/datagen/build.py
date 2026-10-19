@@ -13,6 +13,7 @@ CIT-deductible lines) — that the semantic metric layer reads from.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import time
 from datetime import date, timedelta
@@ -24,6 +25,8 @@ import pandas as pd
 from ..config import get_settings
 from . import company as C
 from .simulator import Simulator, add_months, is_business_day
+
+DATA_VERSION = 'v2.1'
 
 SCHEMA_SQL = """
 CREATE TABLE dim_account(
@@ -246,9 +249,9 @@ def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: 
                 y, m = (y, m + 1) if m < 12 else (y + 1, 1)
     con.executemany("INSERT INTO loan_schedule VALUES (?, ?, ?)", sched)
     con.execute(VIEWS_SQL)
-    _build_budget(con)
+    _build_budget(con, seed)
     info = {**C.COMPANY, "as_of_date": as_of.isoformat(), "last_closed_month": last_closed, "data_start": "2025-01-01", "seed": str(seed),
-            "generator": "agent4.datagen v2 (event-driven simulation)", "data_version": "v2.0"}
+            "generator": "agent4.datagen v2 (event-driven simulation)", "data_version": DATA_VERSION}
     con.executemany("INSERT INTO company_info VALUES (?, ?)", [(k, str(v)) for k, v in info.items()])
     con.execute("CREATE TABLE ground_truth AS SELECT * FROM read_json_auto(?)", [_write_gt(out, sim.ground_truth)])
     stats = _validate(con, quiet=quiet)
@@ -264,7 +267,7 @@ def _write_gt(out: Path, gt: list[dict]) -> str:
     return str(path)
 
 
-def _build_budget(con: duckdb.DuckDBPyConnection) -> None:
+def _build_budget(con: duckdb.DuckDBPyConnection, seed: int = 20251) -> None:
     """Budgets are set the way a real FP&A team does it: 2025 ≈ prior-year plan
     (±5% noise around actuals), 2026 = 2025 actuals × growth targets."""
     con.execute("""
@@ -273,21 +276,29 @@ def _build_budget(con: duckdb.DuckDBPyConnection) -> None:
            SUM(CASE WHEN account_code LIKE '511%' THEN credit_amount - debit_amount ELSE 0 END) AS revenue,
            SUM(CASE WHEN account_code LIKE '642%' THEN debit_amount - credit_amount ELSE 0 END) AS opex
     FROM v_gl WHERE NOT is_closing AND year_no = 2025 GROUP BY ALL""")
-    con.execute("SELECT setseed(0.42)")
-    con.execute("""
-    INSERT INTO budget
-    SELECT year_no, month_no, branch_code, 'REVENUE', NULL, ROUND(SUM(revenue) * ANY_VALUE(0.97 + 0.06 * random()), -6)
+    rows = con.execute("""
+    SELECT year_no, month_no, branch_code, 'REVENUE', NULL, SUM(revenue)
     FROM actual WHERE branch_code IS NOT NULL GROUP BY year_no, month_no, branch_code HAVING SUM(revenue) > 0
     UNION ALL
-    SELECT 2026, month_no, branch_code, 'REVENUE', NULL, ROUND(SUM(revenue) * 1.20, -6)
+    SELECT 2026, month_no, branch_code, 'REVENUE', NULL, SUM(revenue)
     FROM actual WHERE branch_code IS NOT NULL GROUP BY month_no, branch_code HAVING SUM(revenue) > 0
     UNION ALL
-    SELECT year_no, month_no, COALESCE(branch_code, 'HN'), 'EXPENSE', cost_category, ROUND(SUM(opex) * ANY_VALUE(0.96 + 0.08 * random()), -5)
+    SELECT year_no, month_no, COALESCE(branch_code, 'HN'), 'EXPENSE', cost_category, SUM(opex)
     FROM actual WHERE cost_category IS NOT NULL GROUP BY year_no, month_no, COALESCE(branch_code, 'HN'), cost_category HAVING SUM(opex) > 0
     UNION ALL
-    SELECT 2026, month_no, COALESCE(branch_code, 'HN'), 'EXPENSE', cost_category,
-           ROUND(SUM(opex) * CASE cost_category WHEN 'MARKETING' THEN 1.15 WHEN 'LUONG' THEN 1.07 ELSE 1.05 END, -5)
-    FROM actual WHERE cost_category IS NOT NULL GROUP BY month_no, COALESCE(branch_code, 'HN'), cost_category HAVING SUM(opex) > 0""")
+    SELECT 2026, month_no, COALESCE(branch_code, 'HN'), 'EXPENSE', cost_category, SUM(opex)
+    FROM actual WHERE cost_category IS NOT NULL GROUP BY month_no, COALESCE(branch_code, 'HN'), cost_category HAVING SUM(opex) > 0""").fetchall()
+    plans = []
+    for year, month, branch, line, category, amount in rows:
+        key = json.dumps([seed, year, month, branch, line, category], separators=(',', ':'))
+        uniform = int.from_bytes(hashlib.sha256(key.encode()).digest()[:8], 'big') / 2**64
+        if year == 2025:
+            factor = .97 + .06 * uniform if line == 'REVENUE' else .96 + .08 * uniform
+        else:
+            factor = 1.20 if line == 'REVENUE' else {'MARKETING': 1.15, 'LUONG': 1.07}.get(category, 1.05)
+        plans.append((year, month, branch, line, category, round(float(amount) * factor, -6 if line == 'REVENUE' else -5)))
+    con.executemany('INSERT INTO budget VALUES (?, ?, ?, ?, ?, ?)', sorted(plans, key=lambda r: repr(r[:5])))
+    con.execute('DROP TABLE actual')
 
 
 def _validate(con: duckdb.DuckDBPyConnection, quiet: bool = False) -> dict:

@@ -120,3 +120,9 @@ Toàn bộ test trước commit: **2586 passed, 0 skipped**, 64.53 giây; `artif
 formulas not accountant-approved. Symbolic insight slots: M1 dev 10/10, fallback 7/10 to 0/10; 20 calls, 15129/414 tokens. Excluded from P2 metrics; n10 does not prove population fallback below10%.
 
 Toàn bộ test trước commit: **2595 passed, 0 skipped**, 91.40 giây; `artifacts/p2_step0a-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### P2.Step0b — P2 thử nghiệm
+
+formulas not accountant-approved. Budget generation uses warehouse-seeded SHA256 per group, independent of SQL thread/group order. Regenerated dev v2.1; 396/396 independent goldens; GL hash unchanged; same-seed budget reproduction tested.
+
+Toàn bộ test trước commit: **2596 passed, 0 skipped**, 88.85 giây; `artifacts/p2_step0b-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

@@ -202,5 +202,6 @@
     "no warmup added; cold/warm residency was not controlled, loading is included if required",
     "tables display at most eight rows with explicit truncation",
     "numeric membership and deterministic anchors do not establish every natural-language causal claim"
-  ]
+  ],
+  "report_notice": "formulas not accountant-approved"
 }

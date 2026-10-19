@@ -79,5 +79,9 @@ def test_same_seed_reproduces_ledger(tmp_path,warehouse):
     build(other,seed=20251,quiet=True)
     assert ledger_hash(other) == ledger_hash(warehouse)
     con = duckdb.connect(str(other),read_only=True)
-    assert dict(con.execute('SELECT key,value FROM company_info').fetchall())['data_version']=='v2.0'
+    assert dict(con.execute('SELECT key,value FROM company_info').fetchall())['data_version']=='v2.1'
+    original=duckdb.connect(str(warehouse),read_only=True)
+    sql='SELECT * FROM budget ORDER BY ALL'
+    assert con.execute(sql).fetchall()==original.execute(sql).fetchall()
+    original.close()
     con.close()
