@@ -1,0 +1,7 @@
+{
+  "report_notice": "formulas not accountant-approved",
+  "excluded_question_hashes": [
+    "219288c73b09dc2212851f9c5b0de527a5776d2f376ff0fe66b92432224b1376"
+  ],
+  "reason": "A unit test initially reused this follow-up from a held-out template in generator source. No generated test record or model result was opened. The unit now uses TRAIN wording. Exclude any matching full question or conversation turn from all reported metrics; disclose exclusions and conservative planned-denominator bounds."
+}

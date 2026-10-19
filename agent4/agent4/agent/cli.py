@@ -16,6 +16,7 @@ from .validator import validate
 from .render import render_facts
 from .verifier import verify
 from .trace import TraceWriter,public_data
+from .pipeline import PipelineAgent,PipelineConfig
 
 def form_query(engine,metric,period,principal):
     try:
@@ -37,9 +38,10 @@ def form_query(engine,metric,period,principal):
 def main(argv=None):
     settings=get_settings()
     parser=argparse.ArgumentParser(description='CFO ảo P1 thử nghiệm — '+NOTICE)
-    parser.add_argument('--model',default='qwen3:4b-instruct-2507-q4_K_M')
+    parser.add_argument('--model',default=None)
+    parser.add_argument('--config',type=Path,help='P2 experimental JSON/YAML-subset pipeline configuration')
     parser.add_argument('--db',type=Path,default=settings.warehouse_path)
-    parser.add_argument('--num-ctx',type=int,default=4096)
+    parser.add_argument('--num-ctx',type=int,default=None)
     parser.add_argument('--trace',type=Path,default=settings.warehouse_path.parent/'traces/cli.jsonl')
     parser.add_argument('--question',action='append',default=[])
     parser.add_argument('--samples',type=int,choices=range(1,31),metavar='1..30')
@@ -48,6 +50,9 @@ def main(argv=None):
     parser.add_argument('--query',help='Tra cứu form không cần model, bằng metric ID')
     parser.add_argument('--period',default=None)
     args=parser.parse_args(argv)
+    pipeline=PipelineConfig(**json.loads(args.config.read_text(encoding='utf8'))) if args.config else None
+    args.model=args.model or (pipeline.model if pipeline else 'qwen3:4b-instruct-2507-q4_K_M')
+    args.num_ctx=args.num_ctx or (pipeline.num_ctx if pipeline else 4096)
     if not args.db.exists(): parser.error('Chưa có kho dữ liệu; chạy python -m agent4.datagen.build trước.')
     if args.num_ctx<1024 or args.num_ctx>8192: parser.error('num-ctx trong thử nghiệm phải từ 1024 đến 8192.')
     principal=Principal()
@@ -67,9 +72,12 @@ def main(argv=None):
         if args.query:
             output(args.query,form_query(engine,args.query,args.period,principal))
             return 0
-        cfg=LLMConfig(model=args.model,num_ctx=args.num_ctx,timeout_s=20)
+        cfg=LLMConfig(model=args.model,num_ctx=args.num_ctx,timeout_s=pipeline.max_duration_s if pipeline else 20)
         with OllamaClient(cfg) as client:
-            agent=CFOAgent(engine,client,cfg=AgentConfig(commentary=not args.no_commentary))
+            if pipeline:
+                if args.no_commentary:pipeline.answer_mode='template'
+                agent=PipelineAgent(engine,client,pipeline)
+            else:agent=CFOAgent(engine,client,cfg=AgentConfig(commentary=not args.no_commentary))
             state=ConversationState(user_id=principal.user_id)
             if questions:
                 for question in questions: output(question,agent.ask(question,principal,state))

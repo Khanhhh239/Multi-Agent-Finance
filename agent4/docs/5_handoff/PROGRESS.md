@@ -156,3 +156,9 @@ Toàn bộ test trước commit: **2628 passed, 0 skipped**, 73.26 giây; `artif
 formulas not accountant-approved. E8 60/20/60 with20 techniques and user/tool/name/A8 stages; poison copies preserve amounts. E9 100/30/100 independent reference-SQL tasks, SQL capability disabled. E10 ten seed-varied ground-truth warehouses generated; bulletin not measured.
 
 Toàn bộ test trước commit: **2630 passed, 0 skipped**, 114.59 giây; `artifacts/t2_4-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.5a — P2 thử nghiệm
+
+formulas not accountant-approved. Configurable pipeline/CLI supports true66 native functions, schema/hints/kNN/language controls, validated read-only batches<=3, canonical-code history, source templates and why-premise caveats. Added multi60/20/40 and why30/20/30 oracle datasets; no val/model results or final test run yet.
+
+Toàn bộ test trước commit: **2707 passed, 0 skipped**, 281.78 giây; `artifacts/t2_5a-security-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

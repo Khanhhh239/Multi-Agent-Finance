@@ -28,3 +28,13 @@ def test_selected_template_passes_verifier_and_reports_no_fallback(engine):
     assert any(s.stage=='insight_slots' for s in reply.trace)
     assert not any(s.stage in ('verifier_fallback','commentary_unavailable','insight_invalid') for s in reply.trace)
     assert any(s.stage=='verifier' and s.data['ok'] for s in reply.trace)
+
+from agent4.engine.metrics import REGISTRY
+from agent4.agent.render import render_facts
+from agent4.agent.verifier import verify
+
+@pytest.mark.parametrize('metric',REGISTRY)
+def test_each_available_insight_is_source_faithful_for_real_metrics(engine,metric):
+    result=engine.query(metric,'2026-Q3');block=render_facts([result])
+    for sentence in available_slots([result]).values():
+        assert verify(block.text+'\n'+sentence,block.allowed,block.required_labels).ok

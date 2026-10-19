@@ -1,0 +1,31 @@
+{
+  "report_notice": "formulas not accountant-approved",
+  "G0_7": "OPEN / CHƯA ĐẠT",
+  "datasets": {
+    "multi.train": {
+      "n": 60,
+      "sha256": "bc02a9189a0503e1e91ce0dfa8946763875aed7824651a0e4310ed90148c7a85"
+    },
+    "why.train": {
+      "n": 30,
+      "sha256": "e1a5df7b355280d14796f8d382e4fd86a4490297105f422dae369b90eff9097b"
+    },
+    "multi.val": {
+      "n": 20,
+      "sha256": "61e3cab823a3a4debe46bd1c792107cc975c8f99b976fdd5621e520ca8f3281a"
+    },
+    "why.val": {
+      "n": 20,
+      "sha256": "4b8f68e46167195fdda2f93c78ce50ae740f3dbf476b4489d4e04f81e09f3bcb"
+    },
+    "multi.test": {
+      "n": 40,
+      "sha256": "57650d691922e8236b7e4687e29ebc0b4833cee7f6e64b75d351a939cc875d88"
+    },
+    "why.test": {
+      "n": 30,
+      "sha256": "e9a70f15f13c8b20e80de6d78e4ab3f61cbff51ba7c8ff6c0e16aa3115cb2707"
+    }
+  },
+  "why_note": "The question premise may be false; judge comparison and evidence limits, not fabricated causal explanations."
+}

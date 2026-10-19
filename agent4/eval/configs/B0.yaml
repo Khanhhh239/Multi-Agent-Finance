@@ -1,0 +1,19 @@
+{
+  "name": "B0",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "num_ctx": 8192,
+  "hints": false,
+  "k": 66,
+  "output_mode": "native",
+  "think": false,
+  "fewshot": 3,
+  "fewshot_mode": "static",
+  "language": "vi",
+  "answer_mode": "template",
+  "verifier": false,
+  "causal_level": 1,
+  "max_duration_s": 45,
+  "max_calls": 3,
+  "num_predict": 384,
+  "repair_attempts": 2
+}
