@@ -13,6 +13,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 from .generate import write_csv
+from .case_identity import load_lineage, resolve, scope_hash, feedback_view
 
 DECISIONS = {'confirmed_fraud', 'non_compliance', 'false_positive', 'information_gap'}
 
@@ -80,6 +81,8 @@ def _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at
         raise ValueError('Valid decision, reviewer and reason are required')
     with (directory / 'case_queue.csv').open(encoding='utf-8-sig', newline='') as stream:
         cases = {r['case_id']: r for r in csv.DictReader(stream)}
+    lineage = load_lineage(directory)
+    case_id = resolve(case_id, lineage['aliases'])
     if case_id not in cases:
         raise ValueError('Unknown case ID')
     audit_path = directory / 'feedback_audit.jsonl'
@@ -91,14 +94,21 @@ def _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at
     if events and when < datetime.fromisoformat(events[-1]['reviewed_at']):
         raise ValueError('Review timestamps must be nondecreasing')
     event = dict(case_id=case_id, decision=decision, reviewer=reviewer.strip(), reason=reason.strip(),
-                 reviewed_at=stamp, previous_hash=events[-1]['event_hash'] if events else '')
+                 reviewed_at=stamp, previous_hash=events[-1]['event_hash'] if events else '',
+                 case_scope_hash=scope_hash(lineage['current'].get(case_id, cases[case_id])))
     event['event_hash'] = event_hash(event)
     with audit_path.open('a', encoding='utf-8') as stream:
         stream.write(json.dumps(event, ensure_ascii=False) + '\n')
         stream.flush()
         os.fsync(stream.fileno())
     events.append(event)
-    latest = {r['case_id']: r for r in events}
+    write_review_states(directory, cases, events, lineage)
+    return event
+
+
+def write_review_states(directory, cases, events, lineage):
+    """Refresh the derived CSV after either feedback or an identity migration."""
+    latest, _ = feedback_view(events, lineage['current'] or cases, lineage)
     states = []
     for key, case in cases.items():
         feedback = latest.get(key)
@@ -114,7 +124,6 @@ def _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at
         temporary_path.replace(directory / 'case_review_states.csv')
     finally:
         temporary_path.unlink(missing_ok=True)
-    return event
 
 
 def main():

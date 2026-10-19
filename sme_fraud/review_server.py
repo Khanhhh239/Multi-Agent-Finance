@@ -87,8 +87,10 @@ def make_server(store, port=8765, qa=False, instance_id=''):
                         if offset >= page['total']:
                             break
                     output = io.StringIO(newline='')
-                    fields = ['case_id', 'company_id', 'status', 'priority', 'max_score', 'opened_at', 'last_seen_at',
-                              'owner_name', 'observation_count', 'explanation_vi']
+                    fields = ['case_id', 'case_type', 'company_id', 'status', 'priority', 'max_score',
+                              'opened_at', 'last_seen_at', 'owner_name', 'observation_count',
+                              'source_scope', 'source_status', 'estimated_minutes', 'work_type_today',
+                              'explanation_vi']
                     writer = csv.DictWriter(output, fieldnames=fields, extrasaction='ignore')
                     writer.writeheader()
                     for row in rows:
@@ -124,7 +126,8 @@ def make_server(store, port=8765, qa=False, instance_id=''):
                     result = store.save_feedback(scenario, body.get('case_id', ''), body.get('decision', ''),
                         body.get('reviewer', ''), body.get('reason', ''), body.get('expected_hash', ''))
                 elif path == '/api/budget':
-                    result = dict(daily_budget=store.set_budget(body.get('daily_budget')))
+                    result = dict(daily_budget=store.set_budget(body.get('daily_budget')),
+                                  daily_capacity_minutes=store.capacity_minutes())
                 elif path == '/api/shutdown':
                     self.respond(200, dict(status='stopping'))
                     threading.Thread(target=self.server.shutdown, daemon=True).start()

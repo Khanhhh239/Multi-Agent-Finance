@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import sys
@@ -20,6 +21,7 @@ from sklearn.ensemble import IsolationForest
 from sklearn.metrics import average_precision_score, confusion_matrix, precision_recall_curve, roc_auc_score
 
 from .features import FEATURE_DESCRIPTIONS
+from .feature_contract import validate_cache, sha, digest, require_model
 
 
 def wilson(successes, total):
@@ -50,6 +52,9 @@ def evaluate(dataset: Path, output: Path, alert_budget=.003, seed=20261012, n_es
         raise FileExistsError(f"Refusing to overwrite non-empty report: {output}")
     output.mkdir(parents=True,exist_ok=True)
     metadata=json.loads((dataset/'manifest.json').read_text(encoding='utf-8'))
+    contract = validate_cache(metadata)
+    if sha(dataset / 'features.csv') != metadata['files']['features.csv']['sha256']:
+        raise ValueError('Feature checksum differs from manifest')
     features = pd.read_csv(dataset/"features.csv", dtype={"transaction_id":"string"})
     columns = list(FEATURE_DESCRIPTIONS)
     if list(features.columns)!=["transaction_id", *columns]:
@@ -69,9 +74,14 @@ def evaluate(dataset: Path, output: Path, alert_budget=.003, seed=20261012, n_es
     validation_scores = -model.score_samples(x[masks["validation"]])
     scores = -model.score_samples(x[masks["test"]])
     threshold = float(np.quantile(validation_scores, 1-alert_budget, method="higher"))
-    joblib.dump(dict(model=model, feature_columns=columns, threshold=threshold,
+    artifact = dict(model=model, feature_columns=columns, threshold=threshold,
                      score_direction="higher_is_more_anomalous", seed=seed,dataset_version=metadata['version'],
-                     expense_normalisation='641/642/6421/6422 -> ML expense group 642'),output/"isolation_forest.joblib")
+                     expense_normalisation='641/642/6421/6422 -> ML expense group 642',
+                     sklearn_version=sklearn.__version__, feature_contract_fingerprint=contract['fingerprint'],
+                     training_feature_fingerprint=digest([features.loc[masks['train'], 'transaction_id'].tolist(),
+                         hashlib.sha256(x[masks['train']].tobytes()).hexdigest()]))
+    require_model(artifact, metadata, sklearn.__version__)
+    joblib.dump(artifact, output/"isolation_forest.joblib")
     truth = pd.read_csv(dataset/"labels.csv", keep_default_na=False).set_index("transaction_id")
     test_ids = features.loc[masks["test"],"transaction_id"].tolist()
     ground = truth.loc[test_ids].reset_index()

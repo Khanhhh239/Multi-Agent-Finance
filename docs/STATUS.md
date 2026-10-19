@@ -1,4 +1,10 @@
-# Trạng thái Agent 2 (cập nhật 2026-10-17)
+# Trạng thái Agent 2 (cập nhật 2026-10-19)
+
+## Vòng v5, tiếp tục ngày 2026-10-19
+
+Chủ dự án đã cho phép mở vòng mới sau M2: thực hiện Bước 0, hậu kiểm R0 và soạn đăng ký trước R1, sau đó **dừng chờ trả lời “duyệt” trước R2**. Kết luận v4 không đạt G5 và các tệp kết quả, khóa v4 giữ nguyên. Phân tích lại v4 chỉ được gọi là **hậu kiểm, không phải niêm phong**; không phải kiểm thử xác nhận cho v5.
+
+Bước 0 phát hiện remote có commit `f593a78` cập nhật bộ luật. Đã hợp nhất nội dung README, giữ bốn commit cục bộ và commit remote. Kiểm thử sau hợp nhất: 166 bài pytest cùng 18 kiểm tra con qua; 373 bài unittest của bộ luật mới qua. Push sẽ thực hiện sau commit hợp nhất, không force-push. R0 chưa chạy, R1 chưa được duyệt. R3, tải dữ liệu ngoài và R4 chưa bắt đầu.
 
 ## Tiến độ tiếp nhận ngày 2026-10-16 và 2026-10-17
 

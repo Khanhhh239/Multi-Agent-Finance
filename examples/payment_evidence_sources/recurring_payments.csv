@@ -1,0 +1,1 @@
+pattern_id,company_id,vendor_id,employee_id,txn_type,contract_id,invoice_number,frequency,expected_amount_vnd,tolerance_vnd,allow_partial,effective_from,effective_to,status,evidence_on_file,evidence_id,approver_id,approved_at,observed_at,recipient_account,recipient_bank_code

@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "unit_tests_passed": 66,
+  "new_regression_tests": 24,
+  "snapshot_counts": [
+    {
+      "scenario": "001",
+      "rows": 100000,
+      "alerts": 3649,
+      "cases": 2561
+    },
+    {
+      "scenario": "003",
+      "rows": 100000,
+      "alerts": 3837,
+      "cases": 2700
+    },
+    {
+      "scenario": "005",
+      "rows": 100000,
+      "alerts": 4012,
+      "cases": 2820
+    }
+  ],
+  "fresh_rule_rows": 300000,
+  "controlled_matches": 46,
+  "controlled_cases": 51,
+  "repaired_fixture_gaps": 0,
+  "remaining_other_fixture_gaps": 5,
+  "source_fingerprints": "passed",
+  "score_and_case_membership_reconciliation": "passed",
+  "review_store_integration": "passed",
+  "local_report_links": 7,
+  "model_usage": "none"
+}

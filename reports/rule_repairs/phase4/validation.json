@@ -1,0 +1,77 @@
+{
+  "status": "passed",
+  "unit_tests": {
+    "tests": 135,
+    "successful": true,
+    "failures": 0,
+    "errors": 0
+  },
+  "source_controls": 301,
+  "aggregate_rule_window_checks": 336,
+  "independent_window_experiments": 56,
+  "source_hashes": "passed",
+  "frozen_plan": "passed",
+  "score_replay": "passed",
+  "queue_membership": "passed",
+  "review_store_integration": "passed",
+  "budget_caps": "passed",
+  "multi_override_fix_did_not_change_sme_predictions": true,
+  "fresh_rows": 350000,
+  "historical_prefix_rows": 30000,
+  "source_templates": 14,
+  "local_report_links": 19,
+  "snapshot_counts": [
+    {
+      "seed": 2026101401,
+      "rate": 0.003,
+      "rows": 50000,
+      "alerts": 799,
+      "cases": 689
+    },
+    {
+      "seed": 2026101402,
+      "rate": 0.001,
+      "rows": 50000,
+      "alerts": 731,
+      "cases": 624
+    },
+    {
+      "seed": 2026101402,
+      "rate": 0.003,
+      "rows": 50000,
+      "alerts": 832,
+      "cases": 699
+    },
+    {
+      "seed": 2026101402,
+      "rate": 0.005,
+      "rows": 50000,
+      "alerts": 905,
+      "cases": 762
+    },
+    {
+      "seed": 2026101403,
+      "rate": 0.001,
+      "rows": 50000,
+      "alerts": 724,
+      "cases": 619
+    },
+    {
+      "seed": 2026101403,
+      "rate": 0.003,
+      "rows": 50000,
+      "alerts": 803,
+      "cases": 686
+    },
+    {
+      "seed": 2026101403,
+      "rate": 0.005,
+      "rows": 50000,
+      "alerts": 887,
+      "cases": 752
+    }
+  ],
+  "model_usage": "none",
+  "visual_browser_test": false,
+  "extra_source_snapshot_hash": "2a8c74427cbe99c56f59c53678401b28244b0d7fbe8b28b5606ad02a3403b728"
+}

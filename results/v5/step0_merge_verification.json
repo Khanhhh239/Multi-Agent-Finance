@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-19",
+  "status": "passed",
+  "branch": "agent2-Khanh",
+  "remote_commit_integrated": "f593a78",
+  "local_commits_preserved": [
+    "eee088e",
+    "8d3ab69",
+    "4089e84",
+    "0d5e11a"
+  ],
+  "pytest": {
+    "passed": 166,
+    "subtests_passed": 18,
+    "seconds": 129.52,
+    "log": "work/v5_merge_agent2_legacy.log"
+  },
+  "unittest": {
+    "passed": 373,
+    "seconds": 88.748,
+    "log": "work/v5_rules_check_19.err"
+  },
+  "protected_files_byte_equal_to_0d5e11a": true,
+  "protected_sha256": {
+    "results/v4/sealed_v4.json": "9316e0cb94f64e35a8a46a6643795f215d38be10cc521297adbf98f8e03fa7b5",
+    "results/v4/v4_frozen.json": "c0f14937256b27278245001ece1c6e08bd75c5aa9b0d69c1b8135f3aca6026dd",
+    "agent2/hybrid.py": "2d236ea488543379bf257bef926ac394cd9a17b8440c3a6d9666f5fa176f0e86",
+    "agent2/eval_v4.py": "52921091e66d9fb75585fd3e1df820e5e952d14ecf0bf81f411a96acba3f6feb",
+    "agent2/methods.py": "54293542665432bace04a90bc8cd793005bd72e90564da3eb9d5510faa5f6190",
+    "agent2/feats_v4.py": "c276b8d9b424c7439f54b85b3cb47147f0920fa1ff7cee166eb9f6e9c9636317",
+    "agent2/feats.py": "3965ff18eb6a8a4f95c25a54d9f3e42c732865101e9682891d2670ded6ef49e8",
+    "agent2/data.py": "20dfc1320ba520c0708e64d8f3c8fb0a6ec7cbf463fe4050443c9bdd37333d94"
+  },
+  "force_push_used": false
+}
