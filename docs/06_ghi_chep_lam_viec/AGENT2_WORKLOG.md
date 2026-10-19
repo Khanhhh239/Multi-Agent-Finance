@@ -297,3 +297,12 @@ Chi tiết đầy đủ trong [DATA_V4.md](DATA_V4.md).
 - Bản đăng ký ghi nguồn dữ liệu, chia thời gian, PU, năm seed, ngân sách, số lần thử, giới hạn tính toán 220 giao thức cho mỗi ứng viên và 1.100 lượt khớp khi tập hợp năm seed, chưa phải thời gian đo. Đăng ký cơ chế niêm phong v5 và giới hạn độc lập giữa các phiên agent, không thay thế chuyên gia độc lập.
 - Nếu S2 v5 trượt: giữ kết quả, không tự mở vòng v6 hoặc chỉnh rồi chấm lại; trình phương án dịch vụ rà soát định kỳ cho đơn vị kế toán. Nếu chỉ Cold trượt, không chào bán Cold và phải trình lại phạm vi sản phẩm. Trước dữ liệu ngoài phải xin duyệt riêng về tệp, nguồn, dung lượng, giấy phép.
 - **Điểm dừng bắt buộc thứ nhất:** bàn giao R0 và R1, chờ chủ dự án trả lời “duyệt”. Chưa bắt đầu R2, R3, sinh dữ liệu v5, tải dữ liệu ngoài hoặc R4. Chỉ bổ sung tài liệu sau commit R0, không thay mã mô hình hoặc dữ liệu đã kiểm thử.
+
+## 21. R1 v1.1 được duyệt có sửa đổi (2026-10-19)
+
+- Chủ dự án duyệt rõ ràng bốn sửa đổi. Cập nhật đăng ký v1.1 trước R2, giữ nguyên toàn bộ byte bản v1 ở cuối tệp và ghi băm gốc. Đây là quyền tiếp tục R2; không cần hỏi duyệt lại khi chỉ thực hiện đúng sửa đổi.
+- Khóa hai tầng: sàng lọc 1001 đến 1008, seed 0, 11 giao thức; ba ứng viên dẫn đầu sang tầng chọn 1001 đến 1020, năm seed trung bình điểm. J là trung bình Q của hai hoặc bốn thế giới thấp nhất; B gộp các nhánh dưới 10 dòng dương theo recall vi mô. Trần ca khó 15% từng thế giới và giao thức. Giữ 19 thế giới nguồn mỗi đích.
+- Chọn w trong 0,1; 0,2; 0,5 trên L4-FB bằng J sàng lọc rồi khóa trước mô hình khác. Mọi mô hình có giám sát đều dùng w. Không thử nnPU trong danh sách chính; nếu bổ sung phải đăng ký riêng trước thử.
+- Chốt chặn trước sinh niêm phong: S2 đồng thời 65% chung, 40% nhánh, 50% thế giới tệ nhất; Cold 40%, 33%, 30%. S2 trượt thì không sinh hoặc chấm v5 và viết đề xuất đổi hướng. Cold trượt thì bỏ Cold. Giữ các cổng niêm phong của v1.
+- Cần làm rõ phạm vi ba suất chuyển tầng so với điều khoản chọn Cold riêng của v1; đã gửi câu hỏi trước mọi so sánh. Không tự quyết định bằng kết quả. Có thể tiếp tục sinh và kiểm định 20 thế giới vì không phụ thuộc cách xếp Cold.
+- Sau commit tài liệu mới bắt đầu R2: khóa danh sách và tiêu chí giữ hoặc bỏ trước chạy, sinh và kiểm V1 đến V12, chọn w, triển khai thay đổi và công nợ với kiểm thử vét cạn, sàng lọc rồi chọn. Mọi kết quả là dữ liệu tổng hợp; không sửa tệp khóa hoặc kết luận v4.
