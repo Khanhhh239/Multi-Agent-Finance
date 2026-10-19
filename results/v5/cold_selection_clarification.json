@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-19",
+  "status": "passed",
+  "data_origin": "dữ liệu tổng hợp",
+  "change": "Both Cold controls run all twenty selection worlds outside the three supervised slots",
+  "pytest": {
+    "passed": 8,
+    "seconds": 0.38,
+    "log": "work/v5_cold_clarification_tests.log"
+  },
+  "source_sha256": {
+    "agent2/select_v5.py": "aea46894d1bcddab6e9f5e8ad6aa045919f1b4d3a4191752ca4ce927e1b95f99",
+    "tests_agent2/test_select_v5.py": "09aa66f00883a1b90ca1a29f265a00def2b592961d335245a49cffe70f157a3a",
+    "docs/05_ke_hoach_giao_viec/08_dang_ky_truoc_v5.md": "09ff1da89051715a004c6f9eda03f24e2beac2b31be3284e0330e70c58fd0905",
+    "results/v5/r1_review_state.json": "c6ad98c2870612ba1b6f998980d2f23ed1313038ea722bc18988ac244a1afaae"
+  },
+  "model_performance_measured": false
+}

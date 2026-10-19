@@ -5,7 +5,7 @@ Ngày cập nhật 2026-10-19. **Trạng thái: ĐÃ DUYỆT v1.1 theo bốn s�
 | Phiên bản | Dấu vết thay đổi và thẩm quyền |
 |---|---|
 | v1 | Đề xuất chờ duyệt; băm tệp gốc SHA-256 `711c4acda8451f594deb303d4dabdd2fe1eefbaf5e124ca4856c97b09211db4a` |
-| v1.1 | Chủ dự án duyệt có sửa đổi: hai tầng, J theo nhóm 20% thấp nhất, gộp nhánh nhỏ, chốt chặn trước niêm phong, PU là nền và thứ tự R2. Giữ các điều khoản v1 không bị sửa và giữ nguyên cổng niêm phong. |
+| v1.1 | Làm rõ tiếp theo: ba suất cho mô hình có giám sát, cả hai Cold chạy đủ 20 thế giới ở tầng chọn rồi chọn riêng. Chủ dự án duyệt có sửa đổi: hai tầng, J theo nhóm 20% thấp nhất, gộp nhánh nhỏ, chốt chặn trước niêm phong, PU là nền và thứ tự R2. Giữ các điều khoản v1 không bị sửa và giữ nguyên cổng niêm phong. |
 
 Mọi số đo dự kiến là trên **dữ liệu tổng hợp**, trừ khi một báo cáo kiểm thử ngoài hoặc thí điểm chỉ rõ nguồn thật và phạm vi nhãn. Kết luận **v4 không đạt G5 và kích hoạt M2** giữ nguyên. Ba seed v4 931 đến 933 đã được dùng để hậu kiểm, không còn là kiểm thử niêm phong và không được tính vào cổng v5.
 
@@ -60,7 +60,7 @@ Thứ tự R2 được khóa: (1) sinh 20 thế giới, kiểm V1 đến V12 và
 | 5 | Cold mới: luật cộng EntityDeviation2, hoàn toàn không nhãn |
 | 6 | Cold cũ để đối chứng |
 
-Khóa danh sách, tiêu chí giữ hoặc bỏ, phép so sánh và băm trong nhật ký trước chạy. Không mở thêm ứng viên sau khi xem kết quả. Chủ dự án đã làm rõ: **ba suất chuyển tầng chỉ dành cho ứng viên có giám sát; Cold chọn riêng như v1**. Cold không chiếm ba suất này. Hai Cold được sàng lọc theo J, chọn Cold dẫn đầu sang tầng chọn riêng; các thành phần không nhãn cố định không được khớp theo nhãn hoặc seed có giám sát.
+Khóa danh sách, tiêu chí giữ hoặc bỏ, phép so sánh và băm trong nhật ký trước chạy. Không mở thêm ứng viên sau khi xem kết quả. Chủ dự án đã làm rõ: **ba suất chuyển tầng chỉ dành cho ứng viên có giám sát; Cold chọn riêng như v1**. Cold không chiếm ba suất này. Theo lời làm rõ tiếp theo của chủ dự án ngày 2026-10-19, **Cold mới và Cold cũ đều chạy đủ tầng chọn trên 20 thế giới 1001 đến 1020**, không loại một Cold sau tầng sàng lọc. Sau đó mới chọn Cold riêng bằng cùng J, tức trung bình Q của bốn thế giới thấp nhất; giữ trần báo nhầm ca khó 15% ở từng thế giới và từng giao thức, cùng chốt chặn Cold ở mục 5. Các thành phần không nhãn cố định không được khớp theo nhãn hoặc seed có giám sát.
 
 Mỗi ý tưởng có đối chứng dùng cùng nguồn học và cùng năm seed. Hiệu được báo trên toàn bộ thế giới, gồm số âm và thế giới tệ nhất, không chỉ trung bình. Danh sách hữu hạn ứng viên, thứ tự đơn giản đến phức tạp và băm mã phải được ghi vào manifest trước lần chạy so sánh chính. Muốn bổ sung họ ứng viên ngoài giao việc này phải được chủ dự án duyệt sửa đăng ký trước khi thử; không mở rộng sau niêm phong.
 

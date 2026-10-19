@@ -3,8 +3,8 @@ import copy
 import numpy as np
 import pytest
 
-from agent2.select_v5 import (SUPERVISED, advance, branch_macro, candidate_summary,
-                             final_choice, pre_seal_gate, world_summary)
+from agent2.select_v5 import (COLD, SUPERVISED, advance, branch_macro, candidate_summary,
+                             choose_cold, final_choice, pre_seal_gate, selection_roster, world_summary)
 
 BRANCHES = tuple(f'b{i}' for i in range(10))
 
@@ -58,3 +58,20 @@ def test_pre_seal_all_thresholds_inclusive_and_failure_prevents_seal(cold,values
         assert gate['decision']==('drop_cold' if cold else 'stop_without_generating_sealed_worlds')
     summary['tier']='screening'
     with pytest.raises(ValueError): pre_seal_gate(summary,cold)
+
+
+def test_both_cold_controls_run_twenty_worlds_outside_supervised_slots():
+    supervised={name:dict(J=.8-i*.03,eligible=True) for i,name in enumerate(SUPERVISED)}
+    roster=selection_roster(supervised)
+    assert roster['supervised']==list(SUPERVISED[:3])
+    assert roster['cold']==list(COLD)
+    worlds={seed:dict(R=.5,B=.4,Q=.45,eligible=True) for seed in range(1001,1021)}
+    cold={name:candidate_summary(copy.deepcopy(worlds),'selection') for name in COLD}
+    assert choose_cold(cold)==COLD[0]
+    # The higher-ranked Cold cannot win if it violates the per-world ceiling.
+    cold[COLD[0]]['eligible']=False
+    assert choose_cold(cold)==COLD[1]
+    del cold[COLD[0]]['worlds'][1020]
+    with pytest.raises(ValueError): choose_cold(cold)
+    del cold[COLD[0]]
+    with pytest.raises(ValueError): choose_cold(cold)

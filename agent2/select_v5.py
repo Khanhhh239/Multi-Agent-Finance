@@ -95,6 +95,21 @@ def advance(candidates, order=SUPERVISED, count=3):
                   key=lambda name:(-candidates[name]['J'],order.index(name)))[:count]
 
 
+def selection_roster(supervised_screening):
+    """Only supervised models compete for three slots; BOTH Cold controls run."""
+    return {'supervised':advance(supervised_screening), 'cold':list(COLD)}
+
+
+def choose_cold(candidates):
+    """Do not select Cold until both controls finish all twenty selection worlds."""
+    if set(candidates) != set(COLD):
+        raise ValueError('Both Cold candidates must finish the selection tier')
+    for candidate in candidates.values():
+        if candidate['tier'] != 'selection' or {int(seed) for seed in candidate['worlds']} != set(TIERS['selection'][0]):
+            raise ValueError('Each Cold candidate requires all twenty selection worlds')
+    return final_choice(candidates,COLD)
+
+
 def final_choice(candidates, order):
     """Retain v1's final near-tie rule; screening uses exact ties only."""
     valid = [name for name in order if name in candidates and candidates[name]['eligible']]
