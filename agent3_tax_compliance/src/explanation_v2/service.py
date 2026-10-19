@@ -62,6 +62,14 @@ def explain(artifact, inputs, policy, corpus, provider=None):
             selected.update((c.chunk_id, c) for c in found)
         excerpts = tuple(selected[k] for k in sorted(selected))
     context = build_context(artifact, excerpts)
+    from .guide import build_guide,data_context
+    guide=build_guide(record)
+    legal_reason=reason
+    scope='EVALUATION'
+    if policy.style=='NATURAL_DRAFT' and reason:
+        # Missing legal evidence cannot be bypassed into a tax explanation.
+        # The model can still describe capture quality from non-identifying facts.
+        context=data_context(report,guide);excerpts=();scope='DATA_REVIEW';reason=None
     claims = fallback(context)
     mode = 'TEMPLATE'
     natural_draft = None
@@ -97,6 +105,7 @@ def explain(artifact, inputs, policy, corpus, provider=None):
         provider=policy.provider, model=policy.model, model_revision=policy.model_revision,
         mode=mode, fallback_reason=reason, claims=claims, excerpts=excerpts,
         natural_draft=natural_draft,semantic_review_required=mode=='NATURAL_DRAFT',
+        user_guide=guide,explanation_scope=scope,legal_context_reason=legal_reason,
         elapsed_seconds=time.perf_counter()-started)
 
 

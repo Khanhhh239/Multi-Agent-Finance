@@ -36,3 +36,61 @@ async function readSelectedRegion(){
  }
  finally{regionView.busy=false;regionRead.disabled=false;}
 }
+
+// Revision-bound review queue. Recommendations are selected by policy, never
+// silently written to a saved field or marked HUMAN_CONFIRMED.
+const recoveryQueue={generation:0,report:null,busy:false};
+const queuePanel=element('details',undefined,'task-section');queuePanel.id='recovery-queue';queuePanel.open=false;
+const queueTitle=element('summary','Tự kiểm tra lỗi OCR');const queueStatus=element('p','Đang tải chẩn đoán…','muted');queueStatus.id='recovery-queue-status';queueStatus.setAttribute('role','status');
+const queueItems=element('div');queueItems.id='recovery-queue-items';
+const queueRun=button('Kiểm tra và đọc lại vùng lỗi',()=>perform(()=>runAutomaticRecovery(()=>true)));queueRun.id='run-region-recovery';
+const queueRetry=button('Thử lại lượt bị lỗi',()=>perform(()=>runAutomaticRecovery(()=>true,true)));queueRetry.id='retry-region-recovery';queueRetry.hidden=true;
+const queueApply=button('Đưa các gợi ý được chọn vào bản nháp',applyRecoveryRecommendations);queueApply.id='apply-recovery-recommendations';queueApply.hidden=true;
+queuePanel.append(queueTitle,queueStatus,queueItems,queueRun,queueRetry,queueApply);$('fields').before(queuePanel);
+function queueKey(){return state.view?state.payer+':'+state.view.record.record_id+':'+state.view.record.revision:null;}
+function queueMatch(key,generation){return key===queueKey()&&generation===recoveryQueue.generation;}
+function renderRecoveryQueue(report){
+ recoveryQueue.report=report;queueItems.replaceChildren();queueRetry.hidden=!report.errors?.length||report.attempt>=2;queueApply.hidden=!report.recommended;
+ const entries=report.entries||[];
+ queueTitle.textContent=`Tự kiểm tra lỗi OCR · ${report.recommended||0} gợi ý · ${entries.length} trường cần chú ý`;
+ queuePanel.open=Boolean(report.recommended||report.errors?.length);
+ queueStatus.textContent=report.stale?'Bản này đã đổi. Tải lại trước khi dùng gợi ý.':`${report.recommended||0} gợi ý được chọn để đối chiếu · ${entries.length} trường cần chú ý. Dữ liệu đã lưu chưa thay đổi.`;
+ if(report.errors?.length&&report.attempt>=2)queueStatus.textContent+=' Đã hết hai lượt thử; cần nguồn rõ hơn hoặc xử lý riêng.';
+ for(const entry of entries){const row=element('div',undefined,'recovery-entry');row.append(element('strong',fieldLabel(entry.field_path)));
+  const reason={REPEATED_SUFFIX:'Lặp chữ ở cuối',FIELD_MISSING:'Chưa đọc được',FIELD_AMBIGUOUS:'Có nhiều ứng viên',UNREADABLE_CHARACTER:'Có ký tự lỗi',SOURCE_CONFLICT:'Nguồn có xung đột'};
+  row.append(element('p',entry.issue_codes.map(c=>reason[c]||'Cần đối chiếu').join(' · ')));
+  if(entry.recovery)row.append(element('p','Đã lưu: '+(entry.recovery.original_value??'Chưa có')),element('p','Đọc lại: '+(entry.recovery.suggested_value??'Chưa có')));
+  const decision=entry.selection?.decision;
+  row.append(element('p',decision==='RECOMMENDED'?'Gợi ý sửa phần lặp đã được hai cách đọc đối chiếu; vẫn cần bạn xác nhận.':decision==='UNCHANGED'?'Đọc lại giống kết quả cũ; không chứng minh đã đúng.':entry.state==='ERROR'?'Chưa đọc lại được; dữ liệu cũ được giữ nguyên.':entry.state==='DEFERRED'?'Đã hết ngân sách lượt này; cần xử lý tiếp.':'Cần đối chiếu thủ công; chưa có gợi ý đủ căn cứ.','muted'));
+  const key=queueKey(),generation=recoveryQueue.generation;
+  row.append(button('Xem trường và nguồn',()=>{if(queueMatch(key,generation))return showField(entry.field_path);}));queueItems.append(row);
+ }
+}
+async function loadRecoveryQueue(){
+ if(!state.view||state.loadingRecord)return;const key=queueKey(),generation=++recoveryQueue.generation;
+ const result=await api('/v1/records/'+state.view.record.record_id+'/automation-review');if(!queueMatch(key,generation))return;
+ renderRecoveryQueue(result.latest||{entries:result.plan.entries,recommended:0,errors:[]});
+}
+async function runAutomaticRecovery(stillCurrent=()=>true,retryFailed=false){
+ if(!state.view||state.loadingRecord||recoveryQueue.busy)return;
+ if(state.saving||hasDraft())throw new Error('Lưu hoặc bỏ bản nháp trước khi tự phục hồi OCR.');
+ const key=queueKey(),generation=++recoveryQueue.generation,record=state.view.record;
+ recoveryQueue.busy=true;queueRun.disabled=true;queueRetry.disabled=true;queuePanel.open=true;queueStatus.textContent='Đang kiểm tra và đọc lại tối đa hai trường; bản đã lưu được giữ nguyên…';
+ try{const result=await api('/v1/records/'+record.record_id+'/automation-review',{method:'POST',body:{expected_record_revision:record.revision,retry_failed:retryFailed}});
+  if(queueMatch(key,generation)&&stillCurrent()&&!hasDraft())renderRecoveryQueue(result);
+ }catch(error){
+  const reasons={AUTOMATION_BUDGET:'Đã hết hai lượt phục hồi cho bản này. Cần nguồn rõ hơn hoặc xử lý riêng.',AUTOMATION_BUSY:'Bản này đang có lượt phục hồi khác; chờ hoàn tất rồi tải lại.'};
+  if(reasons[error.code])error.message=reasons[error.code];if(queueMatch(key,generation))queueStatus.textContent='Chưa phục hồi được: '+error.message;throw error;
+ }
+ finally{recoveryQueue.busy=false;queueRun.disabled=false;queueRetry.disabled=false;}
+}
+function applyRecoveryRecommendations(){
+ const report=recoveryQueue.report;if(!report||report.stale||report.record_id!==state.view?.record.record_id||report.record_revision!==state.view.record.revision)return;
+ if(state.loadingRecord||state.saving||hasDraft())throw new Error('Lưu hoặc bỏ bản nháp trước khi đưa gợi ý vào.');
+ const entries=report.entries.filter(e=>e.selection?.decision==='RECOMMENDED');
+ for(const entry of entries){const edit=state.edits.get(entry.field_path);if(!edit||edit.current?.confidence_basis==='HUMAN_CONFIRMED')throw new Error('Trường đã thay đổi; tải lại để đối chiếu.');}
+ for(const entry of entries){const edit=state.edits.get(entry.field_path);edit.input.value=entry.selection.selected_value;edit.checked.checked=true;delete edit.candidate;edit.error.textContent='';}
+ $('reason').value='Đối chiếu nguồn và gợi ý phục hồi OCR '+report.run_id;updateDirty();message('Đã đưa gợi ý vào bản nháp. Đối chiếu rồi lưu để xác nhận.');
+}
+document.addEventListener('agent3:record-loading',()=>{recoveryQueue.generation++;recoveryQueue.report=null;queueItems.replaceChildren();queueApply.hidden=true;queueRetry.hidden=true;});
+document.addEventListener('agent3:record-ready',()=>{if(!autoInput.checked)perform(loadRecoveryQueue);});

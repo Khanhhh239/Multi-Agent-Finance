@@ -104,6 +104,13 @@ class NaturalDraft(Contract):
     next_actions: tuple[NaturalParagraph,...] = Field(min_length=1,max_length=8)
 
 
+class UserGuide(Contract):
+    read_summary: str
+    missing_items: tuple[str,...]
+    next_steps: tuple[str,...]
+    warning: str
+
+
 class ExplanationArtifact(Stamped):
     explanation_id: Identifier
     tenant_id: Identifier
@@ -120,6 +127,9 @@ class ExplanationArtifact(Stamped):
     model: str
     model_revision: str
     mode: Literal['TEMPLATE', 'LLM_VALIDATED', 'NATURAL_DRAFT']
+    explanation_scope: Literal['EVALUATION','DATA_REVIEW'] = 'EVALUATION'
+    legal_context_reason: str | None = None
+    user_guide: UserGuide | None = None
     natural_draft: NaturalDraft | None = None
     semantic_review_required: bool = False
     fallback_reason: str | None

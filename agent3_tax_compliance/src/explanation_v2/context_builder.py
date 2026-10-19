@@ -22,7 +22,8 @@ def build_context(artifact, excerpts):
     base = report.explanation
     ref = 'evaluation:' + report.evaluation_id
     facts = [Fact(fact_id='summary', variants=(base.text,), refs=(ref,)),
-             Fact(fact_id='scope', variants=(base.scope,), refs=(ref,))]
+             Fact(fact_id='scope', variants=(base.scope,
+                 f'Chỉ giải thích kết quả của bản dữ liệu {report.record_revision} trong phạm vi kiểm tra đã chọn; không tự áp dụng cho chứng từ khác.'), refs=(ref,))]
     counts = report.aggregate.counts
     coverage = {'FULL':'đầy đủ trong phạm vi', 'PARTIAL':'một phần', 'NONE':'chưa có đơn vị được đánh giá'}[report.aggregate.coverage]
     facts.append(Fact(fact_id='coverage', variants=(

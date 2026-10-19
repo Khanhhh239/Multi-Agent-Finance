@@ -1,0 +1,32 @@
+{
+  "checked_on": "2026-10-19",
+  "full_browser_data_review": {
+    "result": "PASS",
+    "real_models": true,
+    "isolated_copy": true,
+    "recommended": 1,
+    "draft_only": true,
+    "saved_value_unchanged": true,
+    "explanation_mode": "NATURAL_DRAFT",
+    "explanation_scope": "DATA_REVIEW",
+    "fallback_reason": null,
+    "qwen_seconds": 101.43775189999724,
+    "page_errors": [],
+    "independent_accuracy": "NOT_EVALUATED"
+  },
+  "evaluation_scope": {
+    "mode": "NATURAL_DRAFT",
+    "scope": "EVALUATION",
+    "fallback_reason": null,
+    "seconds": 96.36331920002704,
+    "model_revision": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+    "semantic_review_required": true,
+    "core_evaluation_unchanged": true
+  },
+  "data_source": "isolated SQLite copies",
+  "source_database_modified": false,
+  "label_status": "AGENT_SELF_CHECK_DEV_ONLY",
+  "semantic_approval": false,
+  "auto_accept": false,
+  "raw_text_and_images": "LOCAL_ONLY_EXCLUDED_FROM_GIT"
+}

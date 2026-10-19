@@ -6,8 +6,15 @@ function clearExplanation(view=null){
  $('explanation-status').textContent='Có thể xem diễn giải và nguồn của bản kết quả đã lưu.';
  $('explanation-status').className='';
  $('explanation-claims').replaceChildren();$('explanation-sources').replaceChildren();
+ if($('user-guide'))$('user-guide').replaceChildren();
 }
 function renderExplanation(item){
+ const guide=$('user-guide');guide.replaceChildren();
+ if(item.user_guide){
+  guide.append(element('h3','Đã đọc được gì?'),element('p',item.user_guide.read_summary),element('h3','Còn thiếu hoặc cần kiểm tra gì?'));
+  for(const text of item.user_guide.missing_items)guide.append(element('p',text));guide.append(element('h3','Bạn cần làm gì?'));
+  for(const text of item.user_guide.next_steps)guide.append(element('p',text));guide.append(element('p',item.user_guide.warning,'muted'));
+ }
  const reasons={LLM_DISABLED:'Model chưa được bật',MODEL_REVISION_UNPINNED:'Model chưa được khóa phiên bản',
  LEGAL_BASIS_NOT_REVIEWED:'Căn cứ pháp lý còn chờ đối chiếu',LEGAL_EXCERPT_UNAVAILABLE:'Chưa có trích đoạn pháp lý đã duyệt',
  CORPUS_VERSION_MISMATCH:'Kho pháp lý chưa khớp phiên bản đánh giá',NO_SELECTED_LEGAL_BASIS:'Chưa chọn được căn cứ pháp lý',
@@ -25,12 +32,13 @@ function renderExplanation(item){
  if(item.natural_draft){
   const original=element('details');original.append(element('summary','Thông tin gốc và bằng chứng đã kiểm soát'));
   const originalList=element('ul');for(const node of [...$('explanation-claims').children])originalList.append(node);original.append(originalList);
-  const draft=item.natural_draft;const groups=[['Tình trạng hiện tại',[draft.summary]],['Vì sao?',draft.reasons],['Bạn cần làm gì?',draft.next_actions]];
+  const draft=item.natural_draft;const groups=[[item.explanation_scope==='DATA_REVIEW'?'Diễn giải tình trạng dữ liệu':'Tình trạng hiện tại',[draft.summary]],['Vì sao?',draft.reasons],['Bạn cần làm gì?',draft.next_actions]];
   $('explanation-claims').replaceChildren();
   for(const [title,paragraphs] of groups){const li=element('li');li.append(element('h3',title));for(const p of paragraphs){li.append(element('p',p.text));const refs=item.claims.filter(c=>p.fact_ids.includes(c.fact_id)).flatMap(c=>c.refs);const source=element('details');source.append(element('summary','Xem nguồn tham chiếu'),element('small',[...new Set(refs)].join(' · ')));li.append(source);}$('explanation-claims').append(li);}
   const sourceItem=element('li');sourceItem.append(original);$('explanation-claims').append(sourceItem);
  }
  $('explanation-sources').replaceChildren(...item.excerpts.map(c=>element('p',c.document_id+' · '+c.locator+' · '+c.chunk_id)));
+ if(item.explanation_scope==='DATA_REVIEW')$('explanation-status').textContent+=' Chỉ giải thích dữ liệu; chưa diễn giải kết quả thuế.';
 }
 async function loadExplanation(view){
  clearExplanation(view);if(!view?.report)return;

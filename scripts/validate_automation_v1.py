@@ -28,7 +28,8 @@ def main(checked_on='2026-10-18'):
         js.append(dict(command=' '.join(command),passed=result.returncode==0))
         if result.returncode:print(result.stderr)
     browsers=[]
-    for script,source,label in [('check_region_browser.py','data/region_recovery/browser/result.json','region'),
+    for script,source,label in [('check_automation_v2_browser.py','data/automation_v2/browser/result.json','automation_v2'),
+        ('check_region_browser.py','data/region_recovery/browser/result.json','region'),
         ('check_automation_browser.py','data/automation_v1/browser/result.json','automation'),
         ('check_workflow_browser.py','data/workflow_ui/browser/result.json','workflow'),
         ('check_business_browser.py','data/business_ui/browser/result.json','business'),

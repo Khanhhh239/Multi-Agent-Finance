@@ -33,3 +33,4 @@
 .region-panel p{white-space:pre-wrap;overflow-wrap:anywhere}
 .region-panel button{max-width:100%;white-space:normal}
 .items-table .field-head{position:relative}
+.recovery-entry{padding:10px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.recovery-entry p{white-space:pre-wrap}.recovery-entry button{font-size:11px}#recovery-queue>button{margin:8px 5px 0 0;font-size:11px}#user-guide{padding:12px;background:#f4f8f7;border-radius:8px;margin:12px 0}#user-guide h3{margin:10px 0 5px}#user-guide p{font-size:12px;overflow-wrap:anywhere}

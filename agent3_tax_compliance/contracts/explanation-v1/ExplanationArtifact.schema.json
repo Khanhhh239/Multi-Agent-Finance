@@ -231,6 +231,41 @@
       ],
       "title": "NaturalParagraph",
       "type": "object"
+    },
+    "UserGuide": {
+      "additionalProperties": false,
+      "properties": {
+        "read_summary": {
+          "title": "Read Summary",
+          "type": "string"
+        },
+        "missing_items": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Items",
+          "type": "array"
+        },
+        "next_steps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Next Steps",
+          "type": "array"
+        },
+        "warning": {
+          "title": "Warning",
+          "type": "string"
+        }
+      },
+      "required": [
+        "read_summary",
+        "missing_items",
+        "next_steps",
+        "warning"
+      ],
+      "title": "UserGuide",
+      "type": "object"
     }
   },
   "additionalProperties": false,
@@ -352,6 +387,38 @@
       ],
       "title": "Mode",
       "type": "string"
+    },
+    "explanation_scope": {
+      "default": "EVALUATION",
+      "enum": [
+        "EVALUATION",
+        "DATA_REVIEW"
+      ],
+      "title": "Explanation Scope",
+      "type": "string"
+    },
+    "legal_context_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Legal Context Reason"
+    },
+    "user_guide": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/UserGuide"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "natural_draft": {
       "anyOf": [

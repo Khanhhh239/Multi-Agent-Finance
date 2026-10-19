@@ -7,8 +7,8 @@
 | Đóng băng đầu vào phát triển | Đọc lại 10 artifact OCR cũ bằng DB read-only; input và extractor hashes, nhóm dev đã dùng sửa code; không giả làm holdout |
 | Sửa mất bảng đã chẩn đoán | Giữ dòng chữ chạm mép header; không nuốt phần mô tả xuống dòng vào STT; fallback khi VAT footer bị chọn làm header |
 | Recovery trên web | Trích xuất lại từ OCR bất biến; tạo hồ sơ riêng nếu code đã đổi, cache chống tạo bản vô hạn; giữ revision/đối chiếu cũ |
-| Diễn giải tự nhiên | Chế độ NATURAL_DRAFT thử nghiệm, nguồn fact ID, JSON Schema; giữ nguyên thông tin gốc và nhãn cần đối chiếu |
-| Luồng tự chạy | Opt-in trong browser; một lượt phục hồi bảng theo source/phiên, kiểm tra bản đã lưu, giải thích có cache; chặn bản nháp, bỏ kết quả UI cũ khi đổi record/revision |
+| Diễn giải tự nhiên | NATURAL_DRAFT có nguồn, thêm tóm tắt đã đọc/thiếu/việc cần làm; thiếu căn cứ thì chỉ diễn giải chất lượng dữ liệu với scope DATA_REVIEW, không kết luận thuế |
+| Luồng tự chạy | Opt-in: phục hồi bảng nếu cần → chẩn đoán và đọc lại vùng theo ngân sách → kiểm tra bản đã lưu → diễn giải. Có cache, lease và giới hạn lượt thử qua phiên web; gợi ý chỉ vào bản nháp khi người dùng chọn |
 | Bật auto-accept | **CHƯA BẬT**: thiếu calibration/holdout và nghiệm thu chất lượng |
 | Duyệt luật / mapping hàng thật | **PENDING**: không đổi DRAFT thành approved bằng code |
 | OCR lại vùng nguồn — 19/10 | Đã có nút đọc lại tên/địa chỉ/mô tả hàng từ tối đa 4 block dòng đã có evidence. VietOCR beam search chạy riêng, giữ observation cũ/mới và cache; ứng viên chỉ vào bản nháp khi người dùng chọn. [Runbook và giới hạn](evidence/region_recovery_20261019_v1/REPORT.md) |
@@ -28,6 +28,17 @@ Xem [báo cáo và runbook](evidence/automation_20261018_v1/REPORT.md).
 
 ## Bổ sung 19/10 — đọc lại vùng, vẫn trong PLAN_06
 
-Luồng: **Xem nguồn → Đọc lại vùng chữ → đối chiếu ứng viên → Đưa vào bản nháp → Lưu dữ liệu hóa đơn**. Với dòng hàng, mở **Chi tiết** trước để thấy nút Xem nguồn. Không tự sửa reviewer correction và không bật auto-accept. Chuỗi tự chạy của lát cắt trước chưa tự gọi model vùng; cần thêm tập calibration và trigger đáng tin cậy trước khi bật.
+Luồng thủ công: **Xem nguồn → Đọc lại vùng chữ → đối chiếu ứng viên → Đưa vào bản nháp → Lưu dữ liệu hóa đơn**. Với dòng hàng, mở **Chi tiết** trước để thấy nút Xem nguồn. Không tự sửa reviewer correction và không bật auto-accept. Đợt đầu chưa tự gọi model vùng; đợt tự động có giới hạn được bổ sung bên dưới.
 
 Thử nghiệm trên một hóa đơn dev có lỗi lặp từ cuối dòng: greedy vẫn lặp, beam search trên cùng crop đã bỏ lỗi lặp; đã xác minh lại qua Chrome với model thật trên bản sao DB. Đây là bằng chứng sửa một lỗi, không phải accuracy holdout. Các bước mở rộng dataset, layout, recognizer khác và tự động chọn kết quả vẫn giữ trạng thái chưa nghiệm thu.
+
+## Đợt tự động hóa tiếp theo — 19/10
+
+Đã triển khai bốn phần kỹ thuật được chọn:
+
+1. Chấm riêng từng nhóm field trên native PDF đọc lại bằng reader hiện tại và các artifact OCR scan/hybrid đã giữ; báo số mẫu, wrong-present và phần chưa có nhãn. Mẫu đào tạo báo riêng, không giả làm hóa đơn độc lập hoặc holdout.
+2. Trigger theo lặp hậu tố, ký tự lỗi, trạng thái missing/ambiguous và xung đột nguồn. Chỉ đọc lại trường được adapter hỗ trợ và có geometry hợp lệ; tối đa 2 trường/4 crop mỗi lượt. Lease và số lượt được giữ ở SQLite, không mất giới hạn khi tải lại web.
+3. Policy chỉ đề xuất sửa lặp khi chuỗi đọc lại khớp chính xác giá trị bỏ một hậu tố lặp (NFC/khoảng trắng/hoa thường). Thay số, đổi tên khác hoặc xung đột đều giữ REVIEW; HUMAN_CONFIRMED được bỏ qua. Không sửa CFR hoặc tạo xác nhận bằng model. Người dùng đưa các đề xuất vào bản nháp rồi đối chiếu/lưu.
+4. UI diễn giải có ba phần dễ hiểu; Qwen chỉ nhận fact tối thiểu, không nhận tên/MST/raw OCR. Khi căn cứ pháp lý chưa dùng được, context DATA_REVIEW chỉ chứa tình trạng dữ liệu và bước xử lý, không đưa kết quả thuế vào lời model. Giữ nguyên report/core replay và cảnh báo bản nháp.
+
+Xem [runbook, kiểm thử và giới hạn của đợt này](evidence/automation_20261019_v2/REPORT.md). Vẫn thuộc PLAN_06/PLAN_12. Chưa bật auto-accept, chưa hoàn tất OCR V2 toàn bộ hoặc nghiệm thu production/pháp lý.

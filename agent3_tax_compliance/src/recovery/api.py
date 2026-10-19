@@ -8,6 +8,21 @@ from ..review.contracts import ReviewError
 
 router = APIRouter(prefix='/v1')
 from .regions import RegionCommand, RegionRecovery
+from .automation import AutomationReview,AutoCommand
+
+
+@router.get('/records/{record_id}/automation-review')
+def inspect_automation(request:Request,record_id:Identifier,taxpayer_id:Identifier):
+    ctx=authenticate(request.app.state.settings,request.headers.get('authorization'))
+    record,plan,key,latest=AutomationReview(request.app.state.settings).inspect(ctx,taxpayer_id,record_id)
+    from ..explanation_v2.guide import build_guide
+    return envelope(record_id=record_id,record_revision=record.revision,plan=plan,plan_key=key,latest=latest,user_guide=build_guide(record).model_dump(mode='json'))
+
+
+@router.post('/records/{record_id}/automation-review')
+def run_automation(request:Request,record_id:Identifier,taxpayer_id:Identifier,command:AutoCommand):
+    ctx=authenticate(request.app.state.settings,request.headers.get('authorization'))
+    return AutomationReview(request.app.state.settings).run(ctx,taxpayer_id,record_id,command)
 
 
 @router.post('/records/{record_id}/reread-region')

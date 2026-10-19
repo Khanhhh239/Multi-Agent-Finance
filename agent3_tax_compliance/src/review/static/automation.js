@@ -44,6 +44,8 @@ async function runAutomation(force=false){
    if(await recoverExtraction(true))return;
   }
   if(!automationMatch(key,generation)||hasDraft())return;
+  await runAutomaticRecovery(()=>automationMatch(key,generation)&&!hasDraft());
+  if(!automationMatch(key,generation)||hasDraft())return;
   autoStatus.textContent='Đang tải kết quả hoặc kiểm tra bản đã lưu; không tự chấp nhận dữ liệu…';
   await loadCurrentEvaluation();if(!automationMatch(key,generation)||hasDraft())return;
   if(!compliance.current?.report)await evaluateRecord();

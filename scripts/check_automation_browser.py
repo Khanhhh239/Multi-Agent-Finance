@@ -18,10 +18,8 @@ import test_explanation as fixtures
 
 class NaturalProvider:
     def generate(self,context,policy):
-        facts=[f for f in context.facts if not f.fact_id.startswith('quote:')]
-        summary={'text':' '.join(f.variants[0] for f in facts[:2]),'fact_ids':[f.fact_id for f in facts[:2]]}
-        rest=[{'text':f.variants[0],'fact_ids':[f.fact_id]} for f in facts[2:]]
-        return json.dumps({'summary':summary,'reasons':rest[:8],'next_actions':rest[8:] or rest[:1]},ensure_ascii=False)
+        from natural_fixture import payload
+        return payload(context)
 
 
 def main():

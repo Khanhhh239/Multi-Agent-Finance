@@ -172,10 +172,8 @@ class ExplanationIntegrationTests(unittest.TestCase):
     def test_natural_draft_is_not_promoted_to_validated_claims(self):
         class NaturalProvider:
             def generate(inner,context,policy):
-                facts=[f for f in context.facts if not f.fact_id.startswith('quote:')]
-                paragraph={'text':' '.join(f.variants[0] for f in facts[:2]),'fact_ids':[f.fact_id for f in facts[:2]]}
-                rest=[{'text':f.variants[0],'fact_ids':[f.fact_id]} for f in facts[2:]]
-                return json.dumps({'summary':paragraph,'reasons':rest[:8],'next_actions':rest[8:] or rest[:1]},ensure_ascii=False)
+                from natural_fixture import payload
+                return payload(context)
         result=self.create(key='natural',policy=self.policy.model_copy(update={'style':'NATURAL_DRAFT'}),provider=NaturalProvider())
         self.assertEqual(result.mode,'NATURAL_DRAFT')
         self.assertTrue(result.semantic_review_required)
@@ -210,6 +208,32 @@ class ExplanationIntegrationTests(unittest.TestCase):
         self.assertEqual(result.mode,'TEMPLATE')
         self.assertEqual(result.fallback_reason,'CLAIM_VALIDATION_FAILED')
         self.assertIsNone(result.natural_draft)
+
+    def test_missing_legal_basis_natural_mode_is_data_only_and_private(self):
+        original=self.original.model_copy(update={'rule_results':tuple(r.model_copy(update={'citations':()}) for r in self.original.rule_results)})
+        inputs=self.workflow.planning.snapshot(self.fixture.ctx,self.fixture.payer,self.original.report.planning_evaluation_id)
+        calls=[]
+        class DataProvider:
+            def generate(inner,context,policy):
+                from natural_fixture import payload
+                calls.append(context)
+                return payload(context)
+        result=explain(original,inputs,self.policy.model_copy(update={'style':'NATURAL_DRAFT'}),self.corpus,DataProvider())
+        self.assertEqual(result.mode,'NATURAL_DRAFT');self.assertEqual(result.explanation_scope,'DATA_REVIEW')
+        self.assertEqual(result.legal_context_reason,'NO_SELECTED_LEGAL_BASIS');self.assertFalse(result.excerpts)
+        self.assertEqual(len(calls),1);self.assertNotIn('quote:',calls[0].model_dump_json());self.assertIsNotNone(result.user_guide)
+        control=explain(original,inputs,self.policy,self.corpus,self.provider())
+        self.assertEqual(control.mode,'TEMPLATE');self.assertEqual(control.fallback_reason,'NO_SELECTED_LEGAL_BASIS')
+
+    def test_data_only_provider_cannot_promote_an_affirmative_tax_claim(self):
+        original=self.original.model_copy(update={'rule_results':tuple(r.model_copy(update={'citations':()}) for r in self.original.rule_results)})
+        inputs=self.workflow.planning.snapshot(self.fixture.ctx,self.fixture.payer,self.original.report.planning_evaluation_id)
+        class UnsafeProvider:
+            def generate(inner,context,policy):
+                from natural_fixture import payload
+                raw=json.loads(payload(context));raw['summary']['text']='Hóa đơn hợp lệ.';return json.dumps(raw)
+        result=explain(original,inputs,self.policy.model_copy(update={'style':'NATURAL_DRAFT'}),self.corpus,UnsafeProvider())
+        self.assertEqual(result.mode,'TEMPLATE');self.assertEqual(result.fallback_reason,'CLAIM_VALIDATION_FAILED')
 
     def test_idempotency_and_config_conflict(self):
         first=self.create()
