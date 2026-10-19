@@ -1,0 +1,31 @@
+{
+  "report_notice": "formulas not accountant-approved",
+  "G0_7": "OPEN / CHƯA ĐẠT",
+  "datasets": {
+    "e6.train": {
+      "n": 400,
+      "sha256": "4d8c187a0a8238e0a9fcad4dd9d1a60119c3b6f258e46d2c697f89c4579a3243"
+    },
+    "e7.train": {
+      "n": 80,
+      "sha256": "9269165fb3138cd99aaee21520e567756ceabbce81ae22fcf8ba36ec5a1d9fe1"
+    },
+    "e6.val": {
+      "n": 100,
+      "sha256": "18278f443bbc69fbc260986aff2ff90088757c4ad3937b0b8932beff009ebb61"
+    },
+    "e7.val": {
+      "n": 30,
+      "sha256": "de2443fb192cf6bb9860e2fc42533036961bd2ba735fa8869bff4287b261e9fd"
+    },
+    "e6.test": {
+      "n": 300,
+      "sha256": "7875d5d4037538c4c4199fbe3ad1de96c8ac537c8365681fa4d33c4fb15ae62e"
+    },
+    "e7.test": {
+      "n": 80,
+      "sha256": "eb32589c7630a78aff8155fe6dc7e3f86eef45f77cf4df78a5e74e1dd0bb6341"
+    }
+  },
+  "E6_note": "Engine fixtures are permitted for verifier mutation labels, never used as E1/E2 gold values."
+}

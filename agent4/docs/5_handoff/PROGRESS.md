@@ -1,10 +1,10 @@
-# Kết quả thực hiện handoff — cập nhật 17/10/2026
+# Kết quả thực hiện handoff — cập nhật 19/10/2026
 
 **P2 đang triển khai theo yêu cầu mới:** Step0 → T2.1–T2.6 → dừng M2; xem `P2_PROTOCOL.md`. **formulas not accountant-approved**; G0.7 OPEN / CHƯA ĐẠT. Kết quả M1 phía dưới là lịch sử, không phải metric P2. Test seed9001 chỉ được mở câu hỏi/kết quả ở lượt final duy nhất sau khi đóng băng B*.
 
 **công thức chưa được kế toán duyệt (G0.7 mở).** G0.7 vẫn **CHƯA ĐẠT**, không có chữ ký giả lập. Người dùng cho phép tiếp tục **P1 thử nghiệm** ngày 16/10/2026; không coi đó là duyệt công thức hay sẵn sàng pilot.
 
-Phần kỹ thuật **T0.1–T0.5 và T1.1–T1.10 đã thực hiện và kiểm tra**. **M1 thử nghiệm: 10/10 câu mẫu đúng bằng Qwen4B thật**, 31.702/1.680 token vào/ra, p50=4,109s, p95=6,622s. Toàn bộ test cuối **2.586 passed, 0 skipped**, 64,53s (JUnit). Đã dừng ở M1; P2–P4 và held-out val/test chưa chạy. Không coi M1 là qua G0.7, G1 hoặc sẵn sàng pilot. [Báo cáo đầy đủ](M1_REPORT.md) giữ cả lượt sai 9/10 và 8/10 trước sửa.
+Kết quả lịch sử 17/10: phần kỹ thuật **T0.1–T0.5 và T1.1–T1.10 đã thực hiện và kiểm tra**. **M1 thử nghiệm: 10/10 câu mẫu đúng bằng Qwen4B thật**, 31.702/1.680 token vào/ra, p50=4,109s, p95=6,622s; lúc đó **2.586 test passed**. Hiện tiếp tục P2 theo yêu cầu mới; P3/P4 chưa thực hiện. Không coi M1 là qua G0.7, G1 hoặc sẵn sàng pilot. [Báo cáo M1](M1_REPORT.md) giữ cả lượt sai trước sửa; tiến độ P2 theo từng thẻ bên dưới.
 
 ## P1 thử nghiệm — tiến độ theo thẻ
 
@@ -144,3 +144,9 @@ Toàn bộ test trước commit: **2602 passed, 0 skipped**, 109.02 giây; `arti
 formulas not accountant-approved. E3/E4 150/50/100 each; E5 100/40/100.30 ambiguity families,15 refusal groups, missing-period negative controls. Reviewed54 train/val rows (10%); test rows not reviewed. TRAIN bank1600, behavior diverse.
 
 Toàn bộ test trước commit: **2604 passed, 0 skipped**, 111.67 giây; `artifacts/t2_2-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.3 — P2 thử nghiệm
+
+formulas not accountant-approved. E6 400/100/300 with7 error kinds plus faithful variants (TRAIN50 per kind); E7 80/30/80 conversations of2–5 turns and10 reference patterns. Gold conversation values use independent oracle; test content remains sealed.
+
+Toàn bộ test trước commit: **2628 passed, 0 skipped**, 73.26 giây; `artifacts/t2_3-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
