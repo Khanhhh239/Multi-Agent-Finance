@@ -31,5 +31,17 @@
     "agent2/feats.py": "3965ff18eb6a8a4f95c25a54d9f3e42c732865101e9682891d2670ded6ef49e8",
     "agent2/data.py": "20dfc1320ba520c0708e64d8f3c8fb0a6ec7cbf463fe4050443c9bdd37333d94"
   },
-  "force_push_used": false
+  "force_push_used": false,
+  "remote_revert_integrated": "2954ee0",
+  "intermediate_tests_only": true,
+  "final_tree_tests": {
+    "status": "passed",
+    "passed": 165,
+    "subtests_passed": 18,
+    "seconds": 125.82,
+    "log": "work/v5_step0_final_tests.log",
+    "exit_code": 0,
+    "R0_overlay_tests_excluded": true
+  },
+  "active_rules": "original rules, respecting remote revert 2954ee0"
 }

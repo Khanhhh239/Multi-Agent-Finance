@@ -54,8 +54,7 @@ class RuleRepairsTest(unittest.TestCase):
     def test_b7_callback_revision_is_applied_only_when_observed(self):
         c = Case()
         first = c.change()
-        second = c.pay(c.at+timedelta(days=1), 50_000_000,
-                       recipient_account='AUDIT_NEW_BANK', recipient_bank_code='AUDIT_BANK')
+        second = c.pay(c.at+timedelta(days=1), 50_000_000, recipient_account='AUDIT_NEW_BANK')
         original = c.tables['bank_account_changes'][0]
         c.tables['bank_account_changes'].append(dict(original, callback_verified=1,
             verified_at=stamp(c.at+timedelta(hours=1)), observed_at=stamp(c.at+timedelta(hours=2)),

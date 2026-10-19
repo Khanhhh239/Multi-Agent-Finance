@@ -32,10 +32,6 @@ def install():
     acc.pair_supported = pair_supported_v4
     import sme_fraud.audit_accounting as audit
     audit.pair_supported = pair_supported_v4
-    # Register the same five explicit kinds with scalar validation without
-    # changing generate.PAIRS or the feature-column contract shared by v2/v3.
-    import sme_fraud.exception_validation as validation
-    validation.PAIRS = {**validation.PAIRS, **NEW_KINDS}
 
 
 def check_accounting_v4(tables):

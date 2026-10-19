@@ -13,30 +13,11 @@ from pathlib import Path
 
 from .generate import parse, write_csv
 from .rules import RULE_NAMES
-from .rule_audit_policy import NO_POSITIVE_TRUTH, SPEC_NOTES, TARGETS, eligible as policy_eligible, target_match
+from .rule_audit_policy import NO_POSITIVE_TRUTH, SPEC_NOTES, TARGETS, eligible, target_match
 
 MAIN_RULES = [rule for rule in RULE_NAMES if rule[0] in 'ABCDEF']
 EXTRA_RULES = ['P1', 'T1', 'T2']
 PERIODS = ('train', 'validation', 'test')
-
-
-def eligible(rule, transaction, config=None):
-    """Use the saved policy, including snapshots predating explicit version keys."""
-    phase3 = (config or {}).get('spec_policy', 'legacy') == 'phase3'
-    phase4 = (config or {}).get('evidence_policy', 'disabled') == 'phase4'
-    if phase4 and rule in {'C4','F2'}:
-        return bool(transaction['creator_id'] and transaction['approver_id'])
-    if phase4 and rule == 'E2':
-        return transaction['txn_type'] == 'payroll'
-    if phase4 and rule == 'F3':
-        return bool(int(transaction['is_financial_entry']))
-    if rule == 'F1':
-        return bool(int(transaction['is_financial_entry'])) if phase3 else transaction['txn_type'] == 'adjustment'
-    if rule == 'B1' and phase3:
-        return bool(transaction['vendor_id'] and int(transaction['is_financial_entry']) and
-                    transaction['payment_channel'] in {'bank', 'cash'} and
-                    str(transaction['credit_account']).startswith(('111', '112')))
-    return policy_eligible(rule, transaction)
 
 
 def read_csv(path):
@@ -134,10 +115,10 @@ def scenario_coverage(rule, ids, selected, labels):
                 note='Bao phủ nhãn kịch bản, không phải sensitivity đối với vi phạm/điều kiện rule được gán nhãn độc lập.')
 
 
-def profiles_for_rule(rule, ids, active, candidates, suppressed, labels, transactions, all_active, config=None):
+def profiles_for_rule(rule, ids, active, candidates, suppressed, labels, transactions, all_active):
     selected, raw, waived = active & set(ids), candidates & set(ids), suppressed & set(ids)
     metric = confusion(ids, selected, labels)
-    scoped = [i for i in ids if eligible(rule, transactions[i], config)]
+    scoped = [i for i in ids if eligible(rule, transactions[i])]
     metric['input_scope'] = confusion(scoped, selected, labels)
     metric['candidate_count'] = len(raw)
     metric['suppressed_count'] = len(waived)
@@ -179,11 +160,6 @@ def audit_scenario(dataset, report):
     saved_names = ['rule_hits.jsonl', 'rule_scores.csv', 'rule_config.json', 'rule_coverage.json', 'benford_diagnostics.jsonl']
     for name in saved_names:
         source_hashes[str(report / name)] = sha(report / name)
-    evidence_diagnostics = []
-    if (report/'evidence_findings.jsonl').exists():
-        source_hashes[str(report/'evidence_findings.jsonl')] = sha(report/'evidence_findings.jsonl')
-        with (report/'evidence_findings.jsonl').open(encoding='utf-8') as stream:
-            evidence_diagnostics = [json.loads(line) for line in stream]
     rows = read_csv(dataset / 'transactions.csv')
     transactions = {r['transaction_id']: r for r in rows}
     labels = {r['transaction_id']: r for r in read_csv(dataset / 'labels.csv')}
@@ -210,20 +186,16 @@ def audit_scenario(dataset, report):
                 raise ValueError('Future/simultaneous evidence in saved hit')
             if any(e['observed_at'] > hit['detected_at'] for e in hit['graph_path']):
                 raise ValueError('Future graph evidence')
-            for alias in dict.fromkeys([code,*hit.get('aliases',[])]):
-                if alias not in RULE_NAMES or tid in candidates[alias]:
-                    raise ValueError('Duplicate/unknown alias evidence')
-                candidates[alias].add(tid)
-                details[alias][tid] = hit
-                if hit['suppressed_reason']:
-                    if hit['points'] or hit['hard_trigger']:
-                        raise ValueError('Suppressed rule contributes points')
-                    suppressed[alias].add(tid)
-                elif hit['points'] > 0:
-                    active[alias].add(tid)
-                    all_active[tid].add(alias)
-            if hit['points'] > 0:
+            candidates[code].add(tid)
+            details[code][tid] = hit
+            if hit['suppressed_reason']:
+                if hit['points'] or hit['hard_trigger']:
+                    raise ValueError('Suppressed rule contributes points')
+                suppressed[code].add(tid)
+            elif hit['points'] > 0:
+                active[code].add(tid)
                 points[tid][code] = hit['points']
+                all_active[tid].add(code)
     baseline = replay_scores(rows, points, config)
     saved_scores = {r['transaction_id']: r for r in read_csv(report / 'rule_scores.csv')}
     if set(saved_scores) != set(transactions):
@@ -251,10 +223,6 @@ def audit_scenario(dataset, report):
         if coverage[code]['status'] == 'not_evaluable':
             row['audit_status'] = 'missing_source_or_implementation'
             row['periods'] = {name: None for name in PERIODS}
-        elif coverage[code]['scope']=='source_diagnostic':
-            row['audit_status'] = 'source_truth_unavailable'
-            row['periods'] = {name: dict(unit='source_cutoff', observations=sum(f['rule_id']==code and period_for_window(f['cutoff_at'])==name for f in evidence_diagnostics),
-                fraud_precision=None,fpr=None,note='Không gán nhãn từng dòng cho số chứng từ/công nợ; xem challenge có nhãn nguồn riêng.') for name in PERIODS}
         elif code.startswith('D'):
             row['audit_status'] = 'aggregate_truth_unavailable'
             for name in PERIODS:
@@ -268,7 +236,7 @@ def audit_scenario(dataset, report):
         else:
             row['audit_status'] = 'transaction_fraud_label_audit'
             for name, ids in partitions.items():
-                row['periods'][name] = profiles_for_rule(code, ids, active[code], candidates[code], suppressed[code], labels, transactions, all_active, config)
+                row['periods'][name] = profiles_for_rule(code, ids, active[code], candidates[code], suppressed[code], labels, transactions, all_active)
             without = replay_scores(rows, points, config, omitted={code})
             if any(without[i]['rule_score'] > baseline[i]['rule_score'] for i in transactions):
                 raise ValueError('Dropping a nonnegative rule increased score')

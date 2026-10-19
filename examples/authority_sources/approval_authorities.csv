@@ -1,1 +1,0 @@
-authority_id,company_id,subject_employee_id,subject_role,action,txn_type,department,project_id,min_amount_vnd,max_amount_vnd,self_approval_allowed,authority_level,authority_type,delegated_by_id,effective_from,effective_to,status,evidence_on_file,evidence_id,approver_id,approved_at,observed_at

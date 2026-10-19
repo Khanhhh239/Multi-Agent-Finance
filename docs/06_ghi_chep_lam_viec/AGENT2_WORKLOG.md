@@ -261,3 +261,7 @@ Chi tiết đầy đủ trong [DATA_V4.md](DATA_V4.md).
 - Push bốn commit bị từ chối vì remote có thêm `f593a78`. Fetch và hợp nhất giữ toàn bộ lịch sử, không force-push; giải quyết README bằng cách giữ cả kết luận v4 và hướng dẫn bộ luật mới. Không sửa sáu tệp khóa hoặc kết quả v4.
 - Lần gọi pytest chung cả ba thư mục lỗi trùng tên module; chế độ importlib lại không đáp ứng các import fixture của bộ mới. Chạy riêng đúng hai bộ như hướng dẫn repository. Bộ tương thích qua 166 bài và 18 kiểm tra con trong 129,52 giây. Phiên kiểm bộ mới trước bị ngắt; lượt sau lỗi thiếu thư mục `.runtime`; đã tạo thư mục theo hướng dẫn và chạy lại: 373 bài qua, 88,748 giây. Chỉ push sau các kết quả qua này.
 - Bằng chứng kiểm thử và băm được lưu tại `results/v5/step0_merge_verification.json`. Mã hậu kiểm và kiểm thử R0 được chuẩn bị riêng, chưa chạy trên dữ liệu thật của ba thế giới hậu kiểm tại mốc Bước 0.
+
+- Trong lúc kiểm thử, remote bổ sung `2954ee0` hoàn tác toàn bộ `f593a78`. Push bị từ chối lần nữa. Hợp nhất commit hoàn tác, tôn trọng trạng thái bộ luật trên remote, giữ phần v4 cục bộ trong README; không khôi phục lại bản cập nhật bị hoàn tác. Kiểm thử lại bản cuối trước push; kết quả 166 và 373 bài ở trên là bằng chứng trạng thái trung gian, không thay cho kiểm thử bản cuối.
+
+- Bản cuối sau hợp nhất hoàn tác qua **165 bài pytest và 18 kiểm tra con**, 125,82 giây, mã thoát 0. Chưa đưa mã hoặc kiểm thử R0 đang chuẩn bị vào commit Bước 0. Kiểm lại băm kết quả và sáu tệp v4 trước push: không đổi.

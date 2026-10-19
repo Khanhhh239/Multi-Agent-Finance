@@ -452,7 +452,7 @@ class Generator:
                     new_account = self.identifier("BANK_SYN_")
                     change = dict(change_id=self.identifier("BC"), company_id=cid, vendor_id=v["vendor_id"],
                         old_account=v["bank_account"], new_account=new_account, effective_at=stamp(at-timedelta(days=2)),
-                        observed_at=stamp(at-timedelta(days=1)), verified_at=stamp(at-timedelta(days=1)),
+                        observed_at=stamp(at-timedelta(days=2)), verified_at=stamp(at-timedelta(days=1)),
                         callback_verified=1, approver_id=self.company_staff[cid][0])
                     self.tables["bank_account_changes"].append(change)
                     self.link(cid, v["vendor_id"], new_account, "bank_account", parse(change["observed_at"]))
@@ -586,8 +586,6 @@ def save_dataset(output,tables,n,rate,seed,companies):
     for name in tables:
         path = output/f"{name}.csv"
         manifest["files"][path.name] = dict(rows=len(tables[name]), sha256=hashlib.sha256(path.read_bytes()).hexdigest())
-    from .feature_contract import cache_contract
-    manifest['feature_contract'] = cache_contract(manifest['files'])
     (output/"manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     dictionary = {name: {field: {"example": rows[0].get(field),
                     "kind": "integer" if isinstance(rows[0].get(field), int) else "number" if isinstance(rows[0].get(field), float) else "text"}

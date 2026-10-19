@@ -4,7 +4,7 @@
 
 Chủ dự án đã cho phép mở vòng mới sau M2: thực hiện Bước 0, hậu kiểm R0 và soạn đăng ký trước R1, sau đó **dừng chờ trả lời “duyệt” trước R2**. Kết luận v4 không đạt G5 và các tệp kết quả, khóa v4 giữ nguyên. Phân tích lại v4 chỉ được gọi là **hậu kiểm, không phải niêm phong**; không phải kiểm thử xác nhận cho v5.
 
-Bước 0 phát hiện remote có commit `f593a78` cập nhật bộ luật. Đã hợp nhất nội dung README, giữ bốn commit cục bộ và commit remote. Kiểm thử sau hợp nhất: 166 bài pytest cùng 18 kiểm tra con qua; 373 bài unittest của bộ luật mới qua. Push sẽ thực hiện sau commit hợp nhất, không force-push. R0 chưa chạy, R1 chưa được duyệt. R3, tải dữ liệu ngoài và R4 chưa bắt đầu.
+Bước 0 phát hiện remote có commit `f593a78` cập nhật bộ luật, sau đó commit `2954ee0` hoàn tác bản cập nhật đó. Đã hợp nhất nội dung README, giữ bốn commit cục bộ và commit remote. Kiểm thử sau hợp nhất: 166 bài pytest cùng 18 kiểm tra con qua; 373 bài unittest của bộ luật mới qua. Push tiếp tục bị từ chối do commit hoàn tác mới; đã hợp nhất theo quyết định hoàn tác của remote, đưa bộ luật về đúng bản trước cập nhật. Bản cuối đã qua 165 bài pytest và 18 kiểm tra con trong 125,82 giây. Sẵn sàng push sau commit hợp nhất; không force-push. R0 chưa chạy, R1 chưa được duyệt. R3, tải dữ liệu ngoài và R4 chưa bắt đầu.
 
 ## Tiến độ tiếp nhận ngày 2026-10-16 và 2026-10-17
 
