@@ -1,0 +1,14 @@
+{
+  "tests": 2597,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 82.48,
+  "card": "P2.Step0c",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-19T00:12:34.208616+00:00",
+  "xml": "artifacts/p2_step0c-pytest.xml",
+  "summary": "formulas not accountant-approved. Created val seed71 and sealed test warehouse seed9001, all v2.1. All AR/AP/inventory reconciliation gaps exactly0 for train/val/test. No test questions or evaluation results opened.",
+  "decision": "Expose only aggregate reconciliation metadata before final. Retain one intentional A4 unbalanced journal in each warehouse; it is not a subledger reconciliation gap. Reuse existing matching seed/version; refuse mismatched existing warehouses."
+}

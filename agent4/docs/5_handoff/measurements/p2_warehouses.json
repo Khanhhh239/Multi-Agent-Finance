@@ -1,0 +1,44 @@
+{
+  "report_notice": "formulas not accountant-approved",
+  "G0_7": "OPEN / CHƯA ĐẠT",
+  "measured_at_utc": "2026-10-19T00:09:56.167573+00:00",
+  "warehouses": [
+    {
+      "split": "train",
+      "seed": 20251,
+      "data_version": "v2.1",
+      "reconciliation_gaps": {
+        "ar_gl_vs_subledger_gap": 0.0,
+        "ap_gl_vs_subledger_gap": 0.0,
+        "inventory_gl_vs_subledger_gap": 0.0
+      },
+      "gl_rows": 140583,
+      "intentional_A4_unbalanced_journals": 1
+    },
+    {
+      "split": "val",
+      "seed": 71,
+      "data_version": "v2.1",
+      "reconciliation_gaps": {
+        "ar_gl_vs_subledger_gap": 0.0,
+        "ap_gl_vs_subledger_gap": 0.0,
+        "inventory_gl_vs_subledger_gap": 0.0
+      },
+      "gl_rows": 144971,
+      "intentional_A4_unbalanced_journals": 1
+    },
+    {
+      "split": "test",
+      "seed": 9001,
+      "data_version": "v2.1",
+      "reconciliation_gaps": {
+        "ar_gl_vs_subledger_gap": 0.0,
+        "ap_gl_vs_subledger_gap": 0.0,
+        "inventory_gl_vs_subledger_gap": 0.0
+      },
+      "gl_rows": 144595,
+      "intentional_A4_unbalanced_journals": 1
+    }
+  ],
+  "limitation": "A4 deliberately contains one unbalanced journal; this is not an AR/AP/inventory reconciliation gap. No test questions or answer results were inspected."
+}

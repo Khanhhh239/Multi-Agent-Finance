@@ -126,3 +126,9 @@ Toàn bộ test trước commit: **2595 passed, 0 skipped**, 91.40 giây; `artif
 formulas not accountant-approved. Budget generation uses warehouse-seeded SHA256 per group, independent of SQL thread/group order. Regenerated dev v2.1; 396/396 independent goldens; GL hash unchanged; same-seed budget reproduction tested.
 
 Toàn bộ test trước commit: **2596 passed, 0 skipped**, 88.85 giây; `artifacts/p2_step0b-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### P2.Step0c — P2 thử nghiệm
+
+formulas not accountant-approved. Created val seed71 and sealed test warehouse seed9001, all v2.1. All AR/AP/inventory reconciliation gaps exactly0 for train/val/test. No test questions or evaluation results opened.
+
+Toàn bộ test trước commit: **2597 passed, 0 skipped**, 82.48 giây; `artifacts/p2_step0c-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
