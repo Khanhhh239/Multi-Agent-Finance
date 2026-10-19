@@ -69,6 +69,12 @@ def test_unrelated_question_does_not_send_previous_metric():
     messages=build_messages('Lãi gộp theo chi nhánh',Hints(),['gross_profit'],state)
     assert json.loads(messages[-1]['content'])['STATE_YAML']=='{}'
 
+def test_named_partner_in_train_example_is_also_wrapped():
+    messages=build_messages('Tra công nợ',Hints(),['ar_balance'],examples=[{'question':'Khách Hoàng Long nợ bao nhiêu?',
+                             'answer':{'action':'query_metric','metric':'ar_balance'}}])
+    example=json.loads(messages[-1]['content'])['EXAMPLES'][0]
+    assert example['question'].startswith('<du_lieu_khong_tin_cay') and 'Hoàng Long' in example['question']
+
 def test_followup_inherits_and_explicit_period_overrides(engine):
     state=ConversationState(last_metric='net_revenue',last_period='2026-Q3',last_filters={'branch':['HCM']})
     hints=analyze('Còn quý trước?',engine,state)

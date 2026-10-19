@@ -138,3 +138,9 @@ Toàn bộ test trước commit: **2597 passed, 0 skipped**, 82.48 giây; `artif
 formulas not accountant-approved. E1/E2 each600 TRAIN /200 val /400 sealed test, 66 metrics, >=3 per metric and >=2 forms per split, exactly25% noise, 100% independent oracle coverage. Excluded880 tuning strings. TRAIN-only bank1200 examples replaces old dev bank.
 
 Toàn bộ test trước commit: **2602 passed, 0 skipped**, 109.02 giây; `artifacts/t2_1-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.2 — P2 thử nghiệm
+
+formulas not accountant-approved. E3/E4 150/50/100 each; E5 100/40/100.30 ambiguity families,15 refusal groups, missing-period negative controls. Reviewed54 train/val rows (10%); test rows not reviewed. TRAIN bank1600, behavior diverse.
+
+Toàn bộ test trước commit: **2604 passed, 0 skipped**, 111.67 giây; `artifacts/t2_2-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

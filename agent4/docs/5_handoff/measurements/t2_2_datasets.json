@@ -1,0 +1,51 @@
+{
+  "report_notice": "formulas not accountant-approved",
+  "G0_7": "OPEN / CHƯA ĐẠT",
+  "datasets": {
+    "e3.train": {
+      "n": 150,
+      "sha256": "190099e40f30326b91ae0644029845f5dd4c79d4a155910f1255b64a3acb00ef"
+    },
+    "e4.train": {
+      "n": 150,
+      "sha256": "47321f1890328895af974615088ff86932662d6fd9a03e2a59cc5a3d5da13506"
+    },
+    "e5.train": {
+      "n": 100,
+      "sha256": "5e268b0261088744ff23f2be3c2385ee3a786e6e55d7ae7ba93fc68c615fc29f"
+    },
+    "e3.val": {
+      "n": 50,
+      "sha256": "5d91b8cf455e3f3001974fc9dec0c207cc0ebe6f7c65b8674313a7bd7aeca633"
+    },
+    "e4.val": {
+      "n": 50,
+      "sha256": "bb7d353023f9355c3d0fd38cd81fa76a914c5d87e56c87a81e972a189dc098a6"
+    },
+    "e5.val": {
+      "n": 40,
+      "sha256": "66d26c49916f9d9bb353c5d863a4a23066da57db01ce5f1924abdb2dafbee422"
+    },
+    "e3.test": {
+      "n": 100,
+      "sha256": "f95dad7200bc386227c1baadec51306006333743652cdfe9b0ead63ff6236d7a"
+    },
+    "e4.test": {
+      "n": 100,
+      "sha256": "edcebd69093606b161a7c91370b4ef5339e79e396424bff6d69c6bd81e7d169e"
+    },
+    "e5.test": {
+      "n": 100,
+      "sha256": "70601cf260f0450c799779c305ab6183e342d395e2a743cb866fd4e30219e612"
+    }
+  },
+  "manual_review": "Agent review of authored semantic templates; not accountant approval. Row review on train/val only; test review deferred until final.",
+  "review": {
+    "seed": 20261019,
+    "train_val_rows_reviewed": 54,
+    "train_val_rows": 540,
+    "fraction": 0.1,
+    "test_rows_reviewed": 0,
+    "reviewer": "coding-agent semantic audit, not accountant sign-off"
+  }
+}

@@ -21,6 +21,7 @@ def build_messages(question,hints,candidates,state=None,examples=None):
               'description':wrap_untrusted(REGISTRY[m].description[:100],'metric.description'),
               'views':REGISTRY[m].views,'groups':REGISTRY[m].group_bys} for m in ids]
     examples=[e for e in (examples or []) if not e.get('answer',{}).get('metric') or e['answer']['metric'] in ids][:3]
+    examples=[{**e,'question':wrap_untrusted(e['question'],'example.question',limit=1200)} for e in examples]
     data={'HINTS':hints.data(),'STATE_YAML':wrap_untrusted(state.summary(),'state') if state and hints.inherited else '{}',
           'EXAMPLES':examples,'QUESTION':wrap_untrusted(question,'user.question',limit=1200)}
     return [{'role':'system','content':SYSTEM},
