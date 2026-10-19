@@ -162,3 +162,9 @@ Toàn bộ test trước commit: **2630 passed, 0 skipped**, 114.59 giây; `arti
 formulas not accountant-approved. Configurable pipeline/CLI supports true66 native functions, schema/hints/kNN/language controls, validated read-only batches<=3, canonical-code history, source templates and why-premise caveats. Added multi60/20/40 and why30/20/30 oracle datasets; no val/model results or final test run yet.
 
 Toàn bộ test trước commit: **2707 passed, 0 skipped**, 281.78 giây; `artifacts/t2_5a-security-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.5b — P2 thử nghiệm
+
+formulas not accountant-approved. Runner/scorers/bootstrap95%CI, exclusions and one-final-run global seal implemented; 3 TRAIN smoke cases exported tokens/latency, not validation metrics. Blind aggregate split audit: 2330/760/1710. Corpus language-v2 uses genuine synonym/noise variation; no val model measurement or test preview.
+
+Toàn bộ test trước commit: **2720 passed, 0 skipped**, 82.82 giây; `artifacts/t2_5b-final-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

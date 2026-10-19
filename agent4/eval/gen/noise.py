@@ -9,7 +9,8 @@ def perturb(question,index):
     elif kind=='colloquial':question='Cho anh coi với, '+question
     elif kind=='abbreviation':
         original=question
-        for phrase,short in [('doanh thu','dt'),('chi phí','cp'),('lợi nhuận','ln')]:
+        for phrase,short in [('doanh thu','dt'),('doanh số','ds'),('chi phí','cp'),('lợi nhuận','ln'),('giá vốn','gv'),
+                             ('phải thu','pt'),('tồn kho','tk'),('dòng tiền','dtien'),('nhân viên','nv')]:
             question=re.sub(phrase,short,question,flags=re.I)
         if original==question:question='Nhờ tra giúp: '+question;kind='colloquial'
     elif kind=='typo':

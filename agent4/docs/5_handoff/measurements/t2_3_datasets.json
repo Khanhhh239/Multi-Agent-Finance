@@ -4,7 +4,7 @@
   "datasets": {
     "e6.train": {
       "n": 400,
-      "sha256": "4d8c187a0a8238e0a9fcad4dd9d1a60119c3b6f258e46d2c697f89c4579a3243"
+      "sha256": "b3569b91fba6ee19b8eb52617092db3843541d897e81df5d67c084e0db3bb372"
     },
     "e7.train": {
       "n": 80,
@@ -20,7 +20,7 @@
     },
     "e6.test": {
       "n": 300,
-      "sha256": "7875d5d4037538c4c4199fbe3ad1de96c8ac537c8365681fa4d33c4fb15ae62e"
+      "sha256": "c897539cb4027674af2f674956ab0732544e9913a9941da81738c4d3318e8c3c"
     },
     "e7.test": {
       "n": 80,

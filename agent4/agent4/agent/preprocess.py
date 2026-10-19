@@ -182,12 +182,15 @@ def analyze(question: str, engine, state=None, as_of=None) -> Hints:
     hints.entities = _entities(normalized, engine)
     if any(len(hit.codes) > 1 for hit in hints.entities):
         hints.cues.add("needs_clarification")
-    if any(pattern.search(plain) for pattern in _PATTERNS["tax"]):
-        hints.view_hint = "tax"
+    tax_signal=any(pattern.search(plain) for pattern in _PATTERNS["tax"]) or (
+        hints.metric_hint and REGISTRY[hints.metric_hint].default_view=='tax')
+    if tax_signal:
+        explicit_mgmt=re.search(r'\b(?:theo|khung|so|goc nhin)\s*(?:khung\s*)?(?:quan tri|dieu hanh)\b',plain)
+        hints.view_hint = 'mgmt' if explicit_mgmt else 'tax'
     for cue in ("unsafe_action", "out_of_scope", "jailbreak"):
         if any(pattern.search(plain) for pattern in _PATTERNS[cue]):
             hints.cues.add(cue)
-    if re.search(r"\bloi nhuan\b", plain) and not re.search(
+    if re.search(r"\bloi nhuan\b", plain) and not hints.metric_hint and not re.search(
         r"loi nhuan (?:gop|rong|thuan|truoc thue|sau thue)|thu nhap chiu thue", plain
     ):
         hints.cues.add("needs_clarification")

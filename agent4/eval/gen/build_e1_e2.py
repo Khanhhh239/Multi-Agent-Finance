@@ -59,7 +59,7 @@ def make_cases(suite,split,con,excluded):
         tokens=('today','last_month','last_quarter','2026-Q2','ytd') if md.period_type=='snapshot' else ('this_month','last_month','last_quarter','2026-Q2','ytd')
         token=tokens[j%len(tokens)]
         phrase=PHRASES[token][(j//len(tokens))%4]
-        syn=synonyms(metric)[(j//(4*len(tokens)))%len(synonyms(metric))]
+        syn=synonyms(metric)[j%len(synonyms(metric))]
         call={'action':'query_metric','metric':metric,'period':token,'view':md.default_view}
         suffix=' theo khung thuế' if md.default_view=='tax' else ''
         tags=[]
@@ -81,7 +81,7 @@ def make_cases(suite,split,con,excluded):
         question=FORMS[split][form_index].format(metric=syn,period=phrase,suffix=suffix)
         if suite=='e2':question='Tra số chi tiết: '+question
         if i%4==0:
-            question,noise=perturb(question,j);tags.append(noise)
+            question,noise=perturb(question,i//4);tags.append(noise)
         digest=question_hash(question)
         if digest in excluded:
             attempt+=1
@@ -92,7 +92,7 @@ def make_cases(suite,split,con,excluded):
         rows.append({'id':f'{suite}.{split}.{i:04}','split':split,'template_id':f'{suite}.{metric}.{split}.form{form_index}',
                      'template_family':f'{suite}.{split}.form{form_index}','capability':'tool' if suite=='e1' else 'args',
                      'difficulty':'hard' if len(tags)>1 else 'medium' if tags else 'easy','tags':tags,'as_of':AS_OF.isoformat(),
-                     'question':question,'expected':{'tool':'query_metric','args':{k:v for k,v in call.items() if k!='action'}},
+                     'question':question,'metric_synonym':syn,'expected':{'tool':'query_metric','args':{k:v for k,v in call.items() if k!='action'}},
                      'expected_behavior':'answer','gold':gold,'label_source':'independent_oracle','warehouse_seed':seed})
     return rows
 
@@ -112,18 +112,22 @@ def main():
             counts=Counter(r['expected']['args']['metric'] for r in rows)
             assert min(counts.values())>=3 and len(counts)==66
             assert all(len({r['template_id'] for r in rows if r['expected']['args']['metric']==metric})>=2 for metric in REGISTRY)
+            synonym_min=min(len({r['metric_synonym'] for r in rows if r['expected']['args']['metric']==metric}) for metric in REGISTRY)
+            assert synonym_min>=2
             manifest[f'{suite}.{split}']={'n':len(rows),'noise':sum(bool(set(r['tags'])&{'noaccent','colloquial','abbreviation','typo','ordinal'}) for r in rows),
                                          'metric_min':min(counts.values()),'metric_count':len(counts),'sha256':hashlib.sha256(payload.encode()).hexdigest(),
                                          'metric_distribution':dict(counts),'difficulty_distribution':dict(Counter(r['difficulty'] for r in rows)),
+                                         'synonym_min':synonym_min,'noise_distribution':dict(Counter(t for r in rows for t in r['tags'] if t in {'noaccent','colloquial','abbreviation','typo','ordinal'})),
                                          'oracle_coverage':1.0,'warehouse_seed':seed}
     assert_disjoint(all_records)
     template_catalog=[{'id':f'{suite}.{metric}.{split}.form{i}','metric':metric,'split':split,'text':form}
                       for suite in ('e1','e2') for metric in REGISTRY for split,forms in FORMS.items() for i,form in enumerate(forms)]
     templates=Path(__file__).parent/'templates';templates.mkdir(exist_ok=True)
     (templates/'metrics.yaml').write_text(json.dumps(template_catalog,ensure_ascii=False,indent=2),encoding='utf8')
-    manifest={'report_notice':'formulas not accountant-approved','G0_7':'OPEN / CHƯA ĐẠT','tuning_questions_excluded':initial,
+    manifest={'report_notice':'formulas not accountant-approved','G0_7':'OPEN / CHƯA ĐẠT','corpus_version':'p2-language-v2','tuning_questions_excluded':initial,
               'template_disjoint':True,'normalized_questions_disjoint':True,'datasets':manifest}
     (args.out/'manifest_e1_e2.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf8')
+    (ROOT/'docs/5_handoff/measurements/t2_1_datasets_v2.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf8')
     print(json.dumps(manifest,ensure_ascii=False))
 
 

@@ -1,0 +1,14 @@
+{
+  "tests": 2720,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 82.82,
+  "card": "T2.5b",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-19T09:17:17.039822+00:00",
+  "xml": "artifacts/t2_5b-final-pytest.xml",
+  "summary": "formulas not accountant-approved. Runner/scorers/bootstrap95%CI, exclusions and one-final-run global seal implemented; 3 TRAIN smoke cases exported tokens/latency, not validation metrics. Blind aggregate split audit: 2330/760/1710. Corpus language-v2 uses genuine synonym/noise variation; no val model measurement or test preview.",
+  "decision": "Retire pre-validation corpus v1 before any val model measurement; preserve old manifest hashes. TRAIN-only taxonomy correction prevents explicit tax-profit ambiguity. Planned sample sizes and promotion rules preregistered. Record total-device sampled VRAM separately from model allocation; dedicated server uses KV q8_0, FA1, parallel1, cache-RAM0. Source/model/data/config hashes and started-ID journal prevent final reruns; lost started cases count incomplete rather than repeated."
+}

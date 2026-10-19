@@ -13,3 +13,13 @@ Development fixes happen on TRAIN only. Val chooses configurations, without revi
 Order: B0 4B/8B (66 metric-specific native tools, no hints) → H2 → H1 k66/20/12/8/5 → H3 native/schema → H4 model×think → H7 counts/H8 VI/EN → H5 answer modes/H6 verifier → H13 quantization. Retain a change only by the preregistered rule; report rejected or unmeasured hypotheses explicitly. Safety is enforced for real execution in every configuration; a verifier-off experimental score never grants SQL/write capabilities.
 
 Seal B* config/model/data/template hashes before opening test. The final runner creates an exclusive start marker, never repeats a completed test case, and permits no alternative config on test. Final report compares B0 vs B* on val and reports the single B* held-out run separately. No post-test tuning.
+
+## Pre-validation audit and experiment sample plan (19/10/2026)
+
+Before any val model measurement, the initial E1/E2 sampling loop was found to under-exercise synonyms and noise kinds. Language corpus v1 is retired; v2 cycles genuine normalized synonyms and all five noise kinds, then recomputes independent golds and E6 fixtures. Warehouse version stays v2.1. Preserve old manifest hashes; no labels are revised from model results. Behavior-template review remains valid because E3/E4/E5 did not change.
+
+B0: full frozen val suites for both models. H2/H1/H3: full E1/E2/E5/E6/E8 val. H4/H7/H8/H5/H6/H13: fixed seed0 screening subset of100 E1 and100 E2, plus complete E5/E6/E8; every arm in a comparison uses exactly the same IDs. Report actual n, bootstrap CI and subset limitations. Reuse an already measured identical arm as reference; postprocessing-only replays must be labeled, with no claim of fresh routing latency. Reconfirm the chosen B* on the complete val suite before the sole held-out run.
+
+Promotion requires >=1 percentage point target improvement and no Must regression. Thinking is also subject to the documented operational latency targets (p50<=6s,p95<=15s); a quality gain rejected for latency is not called a refuted accuracy hypothesis. Configurations without enough measured Must evidence cannot be promoted.
+
+Exclude all prior tuning hashes, including any matching E7 turn. One unit test accidentally copied a held-out followup from generator source; no generated test record or model result was opened. The unit now uses TRAIN wording. The permanent exclusion hash prevents evaluating matching scenarios. Disclose exclusions and a conservative planned-denominator bound, rather than presenting the remaining sample as the full planned test. Never regenerate cleaner test questions from this failure.
