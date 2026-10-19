@@ -19,6 +19,9 @@ async function main(){
  handler=async()=>item;await ui.generateExplanation();assert.match(ids.get('explanation-status').textContent,/bản dữ liệu 2/);
  assert.equal(ids.get('explanation-claims').children[0].children[0].textContent,item.claims[0].text);
  assert.equal(ids.get('generate-explanation').disabled,false);
+ ui.renderExplanation({...item,fallback_reason:'PROVIDER_TIMEOUT'});
+ assert.match(ids.get('explanation-status').textContent,/thời gian chờ/);
+ assert.doesNotMatch(ids.get('explanation-status').textContent,/chưa đáp ứng điều kiện/);
  let resolve;handler=()=>new Promise(r=>resolve=r);
  const pending=ui.generateExplanation();ui.clearExplanation();resolve(item);await pending;
  assert.equal(ids.get('explanation-detail').hidden,true);assert.equal(ids.get('explanation-claims').children.length,0);

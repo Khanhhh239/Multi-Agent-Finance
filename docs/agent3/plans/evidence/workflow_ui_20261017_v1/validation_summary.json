@@ -1,0 +1,175 @@
+{
+  "checked_on": "2026-10-17",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "explanation",
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "legal_v2",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "business_review",
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 428,
+  "implementation_sha256": "5e2bd172bf7399de9f8e74d60e93d7bf547043199ea862d286543201b75d9416",
+  "legacy_workflow_implementation_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "source_sha256": {
+    "src/business_review/__init__.py": "8de60cd2775548685db528b1b0cd21ee4d9487bd4ef3e1737aa4952c10b40fee",
+    "src/business_review/api.py": "cb4e71199b5998d18c10d229b48775ab7946c9a58b1efc11e633f80d55f5f66c",
+    "src/business_review/cli.py": "56bcc892dd18ed776e8dba5e46ecab66e5146cb2ae2abea70edf57d30d5066be",
+    "src/business_review/contracts.py": "7faeb61289f27a227e1903269dfe19c22a2b98e09988a8bd7802fa8e5f14c4d6",
+    "src/business_review/evidence.py": "f20b0bdbc5bb117ed95f164bc933341a6be159c3cb975c1d019e55a26c637776",
+    "src/business_review/repository.py": "d8be7a5292f645cb9cf23039a031d247ce538767c693688abef3eed6e33a8230",
+    "src/business_review/service.py": "acf2c263009595ba4b6ae3e52d901547d7a92f10026e84f7e58aafbfafabe3ae",
+    "src/business_review/web.py": "07ae4d845051f4de2412d66216b221ca4e203fbafc5a4b1633b1c2c16ceb5863",
+    "configs/business_review/capability_reviewed_capture_v1.json": "2d33299b740c2f21763c3246c416e15b944d228cf963293af790e2e4dbae0949",
+    "configs/business_review/dossier.template.json": "ac723785974a576441db603ddd90034af196302964f73f8e2805c4fa8f1af648"
+  },
+  "legacy_replay_code_unchanged": true,
+  "scope": "Synthetic operator review in real HTTP/SQLite/Chrome, regression and native ZEN fixtures; no legal or bank-document accuracy claim.",
+  "real_product_mappings": "PENDING_NO_PRODUCT_DOSSIERS",
+  "legal_release": "NOT_APPROVED",
+  "passed": true,
+  "javascript": [
+    {
+      "command": "node --check src/review/static/app.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/compliance.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/explanation.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/business.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/workflow.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/review_client.test.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/explanation_client.test.js",
+      "passed": true
+    }
+  ],
+  "browser": [
+    {
+      "name": "workflow",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "business",
+      "passed": true,
+      "checks": 12
+    },
+    {
+      "name": "compliance",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "name": "explanation",
+      "passed": true,
+      "checks": 5
+    }
+  ],
+  "browser_checks": 30,
+  "ui_source_sha256": {
+    "src/review/static/app.js": "ac73d8fefef2d883e0cb9603f806b710f7e7cce1ce76990f80c692277dbc0a78",
+    "src/review/static/business.css": "88dffa6ea97e07450a20e57a56b7f782e870c524d823f04257bcca9d917af1f5",
+    "src/review/static/business.js": "f710e3405a6f73cdbf32f72da7e142f2d6dba891f84b033dde0827b5836cea51",
+    "src/review/static/compliance.css": "961389c3e6535ff378de0fc07f85d04b40daf662363f7f00fb8fabdb2a4c8790",
+    "src/review/static/compliance.js": "a00f7c845ec73c7b6ab06a9fd6540553d7d6641a1a41019e608749d717a2c73a",
+    "src/review/static/explanation.js": "498c44de355e8dd0ecf4890e7242350793913cdfee7623f4e1f2c6ea877d4889",
+    "src/review/static/index.html": "1d96caec585e6eb99ae8418d483274192feb30b05602a28b8289786be44e256c",
+    "src/review/static/style.css": "6aa20a5a88ba4218ada82c5e21b03b9c64189fd00f00244048c39c5b0482390e",
+    "src/review/static/workflow.css": "0bcf33a8a554b2c9f070a3046f7e3749c9d4516ed6476c5bbe8cfa5b83253106",
+    "src/review/static/workflow.js": "f3d686d145599d5131ae5248771853d84198ce75b22963422b583044bc99df5b"
+  },
+  "final_verification": "After CSS-only viewport height adjustment: all four Chrome suites repeated; Python/backend unchanged."
+}

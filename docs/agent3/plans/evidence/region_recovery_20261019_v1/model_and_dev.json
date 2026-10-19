@@ -1,0 +1,100 @@
+{
+  "checked_on": "2026-10-19",
+  "real_browser": {
+    "result": "PASS",
+    "real_model": true,
+    "isolated_copy": true,
+    "row_count": 1,
+    "crop_count": 2,
+    "suffix_duplication_removed": true,
+    "record_unchanged": true,
+    "elapsed_seconds": 8.658412300006603,
+    "cache_hit": false,
+    "page_errors": [],
+    "runtime_sha256": "07e65974f6439d118ac946657725323efd63a4dee6104494a9d58f9459267e74",
+    "scope": "One development invoice; agent visual self-check, no holdout accuracy claim"
+  },
+  "dev_replay": {
+    "cases": [
+      {
+        "case": "dev-1",
+        "status": "CANDIDATE",
+        "crops": 2,
+        "changed": true,
+        "seconds": 10.457,
+        "cache_hit": true
+      },
+      {
+        "case": "dev-2",
+        "status": "REGION_BUDGET",
+        "model_not_run": true
+      },
+      {
+        "case": "dev-3",
+        "status": "CANDIDATE",
+        "crops": 3,
+        "changed": true,
+        "seconds": 7.764,
+        "cache_hit": false
+      },
+      {
+        "case": "dev-4",
+        "status": "CANDIDATE",
+        "crops": 1,
+        "changed": false,
+        "seconds": 8.569,
+        "cache_hit": false
+      }
+    ],
+    "label_status": "NOT_ANNOTATED",
+    "split": "DEV_ALREADY_USED",
+    "accuracy_claim": false
+  },
+  "ablation": {
+    "one_development_crop": true,
+    "raw_predictions_kept_local": true,
+    "variants": [
+      {
+        "beamsearch": false,
+        "inset_y": 0,
+        "inference_seconds": 1.182,
+        "line_suffix_correct_self_check": false
+      },
+      {
+        "beamsearch": false,
+        "inset_y": 2,
+        "inference_seconds": 1.0,
+        "line_suffix_correct_self_check": true
+      },
+      {
+        "beamsearch": false,
+        "inset_y": 4,
+        "inference_seconds": 1.02,
+        "line_suffix_correct_self_check": true
+      },
+      {
+        "beamsearch": true,
+        "inset_y": 0,
+        "inference_seconds": 2.362,
+        "line_suffix_correct_self_check": true
+      },
+      {
+        "beamsearch": true,
+        "inset_y": 2,
+        "inference_seconds": 2.521,
+        "line_suffix_correct_self_check": true
+      },
+      {
+        "beamsearch": true,
+        "inset_y": 4,
+        "inference_seconds": 2.486,
+        "line_suffix_correct_self_check": true
+      }
+    ]
+  },
+  "source_data_split": "DEV_ALREADY_USED_FOR_FIXES",
+  "label_status": "AGENT_VISUAL_SELF_CHECK_ONLY",
+  "accuracy_holdout": "NOT_EVALUATED",
+  "live_database_written": false,
+  "initial_real_browser_seconds": 10.457321900001261
+}

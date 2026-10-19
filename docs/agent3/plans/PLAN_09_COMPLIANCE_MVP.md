@@ -126,3 +126,6 @@ Lệnh triển khai/test sẽ được ghi cùng artifact khi module đã tồn 
 
 
 > 2026-10-16 business preparation: implemented local review dossiers, retained evidence bytes, revision-bound item classification/payment proof, read-only readiness API and draft planning. No real SKU catalogue supplied; real rules/taxonomy stay unapproved. [Current evidence](evidence/business_review_20261016_v1/REPORT.md).
+
+
+> 2026-10-16 UI follow-up: human business review and supplemental documents are now available in /review, with server-bound metadata, idempotency/review-version checks and scoped evidence access. Rules remain DRAFT; real product mappings are pending. [Usage and current validation](evidence/business_ui_20261016_v1/REPORT.md).

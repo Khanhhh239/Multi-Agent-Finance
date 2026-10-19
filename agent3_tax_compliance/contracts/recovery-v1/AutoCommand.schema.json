@@ -1,0 +1,20 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "expected_record_revision": {
+      "minimum": 1,
+      "title": "Expected Record Revision",
+      "type": "integer"
+    },
+    "retry_failed": {
+      "default": false,
+      "title": "Retry Failed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "expected_record_revision"
+  ],
+  "title": "AutoCommand",
+  "type": "object"
+}

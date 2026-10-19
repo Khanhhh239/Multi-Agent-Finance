@@ -57,7 +57,8 @@ def discover_rows(document,issues):
         first=headers['description'][0]
         center=lambda b:(b.evidence.bbox[1]+b.evidence.bbox[3])/2
         aligned={name:min(vals,key=lambda b:abs(center(b)-center(first))) for name,vals in headers.items()}
-        if any(abs(center(b)-center(first))>0.02 for b in aligned.values()): continue
+        if any(abs(center(b)-center(first))>0.02 for b in aligned.values()):
+            rows.extend(discover_spatial(page));continue
         columns=sorted(aligned.items(),key=lambda pair:pair[1].evidence.bbox[0])
         cuts=[(columns[n][1].evidence.bbox[2]+columns[n+1][1].evidence.bbox[0])/2 for n in range(len(columns)-1)]
         body=[b for b in blocks if b.evidence and b.evidence.bbox[1]>max(h.evidence.bbox[3] for h in aligned.values())]

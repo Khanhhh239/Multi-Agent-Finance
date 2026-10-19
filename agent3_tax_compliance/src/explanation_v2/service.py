@@ -62,8 +62,17 @@ def explain(artifact, inputs, policy, corpus, provider=None):
             selected.update((c.chunk_id, c) for c in found)
         excerpts = tuple(selected[k] for k in sorted(selected))
     context = build_context(artifact, excerpts)
+    from .guide import build_guide,data_context
+    guide=build_guide(record)
+    legal_reason=reason
+    scope='EVALUATION'
+    if policy.style=='NATURAL_DRAFT' and reason:
+        # Missing legal evidence cannot be bypassed into a tax explanation.
+        # The model can still describe capture quality from non-identifying facts.
+        context=data_context(report,guide);excerpts=();scope='DATA_REVIEW';reason=None
     claims = fallback(context)
     mode = 'TEMPLATE'
+    natural_draft = None
     if not policy.enabled:
         reason = reason or 'LLM_DISABLED'
     elif len(context.facts) > policy.max_facts or len(context.model_dump_json().encode()) > policy.max_context_bytes:
@@ -72,8 +81,14 @@ def explain(artifact, inputs, policy, corpus, provider=None):
         reason = reason or 'MODEL_REVISION_UNPINNED'
     elif reason is None:
         try:
-            claims = validate((provider or provider_for(policy)).generate(context, policy), context)
-            mode = 'LLM_VALIDATED'
+            raw=(provider or provider_for(policy)).generate(context, policy)
+            if policy.style=='NATURAL_DRAFT':
+                from .natural import validate_draft
+                natural_draft=validate_draft(raw,context)
+                mode='NATURAL_DRAFT'
+            else:
+                claims = validate(raw, context)
+                mode = 'LLM_VALIDATED'
         except ProviderFailure as exc:
             reason = str(exc)
         except (ValueError, TypeError) as exc:
@@ -89,6 +104,8 @@ def explain(artifact, inputs, policy, corpus, provider=None):
         implementation_sha256=implementation_sha(), prompt_version=PROMPT_VERSION,
         provider=policy.provider, model=policy.model, model_revision=policy.model_revision,
         mode=mode, fallback_reason=reason, claims=claims, excerpts=excerpts,
+        natural_draft=natural_draft,semantic_review_required=mode=='NATURAL_DRAFT',
+        user_guide=guide,explanation_scope=scope,legal_context_reason=legal_reason,
         elapsed_seconds=time.perf_counter()-started)
 
 

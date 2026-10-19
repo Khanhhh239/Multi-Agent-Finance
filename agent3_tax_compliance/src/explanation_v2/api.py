@@ -4,7 +4,8 @@ from pydantic import Field, StrictInt
 from ..domain.base import Contract, Identifier
 from ..ingestion.auth import authenticate
 from .contracts import ExplanationArtifact
-from .service import ExplanationService
+from .service import ExplanationService, load_config, implementation_sha
+from ..canonicalization.derive import sha
 
 router = APIRouter(prefix='/v1')
 
@@ -26,5 +27,13 @@ def latest(request: Request, evaluation_id: Identifier, taxpayer_id: Identifier)
     ctx = authenticate(request.app.state.settings, request.headers.get('authorization'))
     service = ExplanationService(request.app.state.settings)
     state = service.workflow.get(ctx, taxpayer_id, evaluation_id)
-    return dict(explanation=service.latest(ctx, taxpayer_id, evaluation_id), is_current_revision=state.is_current_revision,
+    item=service.latest(ctx,taxpayer_id,evaluation_id)
+    policy,corpus=load_config()
+    cache_valid=bool(item and item.config_sha256==sha(policy.model_dump(mode='json'))
+                     and item.corpus_sha256==sha(corpus.model_dump(mode='json'))
+                     and item.implementation_sha256==implementation_sha())
+    if item and item.mode=='TEMPLATE' and (str(item.fallback_reason).startswith('PROVIDER_')
+            or item.fallback_reason in ('CLAIM_VALIDATION_FAILED','MODEL_MANIFEST_UNAVAILABLE','OUTPUT_TRUNCATED')):
+        cache_valid=False
+    return dict(explanation=item,cache_valid=cache_valid,is_current_revision=state.is_current_revision,
                 latest_record_revision=state.latest_record_revision)

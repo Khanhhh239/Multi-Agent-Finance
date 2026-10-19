@@ -46,7 +46,9 @@ def discover_spatial(page):
     body=[]
     for raw,refs in fragments:
         box=bounds(refs)
-        if not box or box[1]<=top:continue
+        # OCR boxes can touch the header bottom while the text centre is in
+        # the first data row. Testing only the top silently drops that line.
+        if not box or (box[1]+box[3])/2<=top:continue
         normalized=key(raw)
         if normalized.startswith(STOP) or normalized in ('cong','tong'):break
         body.append((raw,refs,box))
@@ -61,6 +63,12 @@ def discover_spatial(page):
         cells={name:[] for name in columns}
         for raw,refs,box in band:
             x=(box[0]+box[2])/2;name=columns[sum(x>cut for cut in cuts)]
+            # The sequence header is narrow, while a centred description
+            # header can put the midpoint inside the actual description cell.
+            # A nonnumeric continuation to its right cannot be an STT value.
+            if (name=='_sequence' and not re.fullmatch(r'\d+',raw.strip())
+                    and box[0]>=bounds(headers['_sequence'][1])[2]-.003):
+                name='description'
             cells[name].append((raw,refs))
         def text(name):return ' '.join(raw for raw,_ in cells.get(name,()))
         desc=text('description')

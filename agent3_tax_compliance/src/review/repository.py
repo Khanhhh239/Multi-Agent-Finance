@@ -50,11 +50,13 @@ class ReviewRepository:
         r,a,q=self.head_context(ctx,payer,record_id)
         doc=self.ingestion.document(ctx,payer,a.ingestion_id)
         with self.ingestion.db() as db:
-            job=db.execute('SELECT job_id,state FROM capture_jobs WHERE tenant_id=? AND taxpayer_id=? AND ingestion_id=?',
+            job=db.execute('SELECT job_id,state,payload FROM capture_jobs WHERE tenant_id=? AND taxpayer_id=? AND ingestion_id=?',
                 (ctx.tenant_id,payer,a.ingestion_id)).fetchone()
+        if job and json.loads(job['payload']).get('record_id',r.record_id)!=r.record_id:
+            job=None
         return envelope(record=r.model_dump(mode='json'),extraction_artifact_id=a.artifact_id,ingestion_id=a.ingestion_id,
             candidates=[c.model_dump(mode='json') for c in a.candidates],assessment=q.model_dump(mode='json'),
-            page_count=len(doc.pages),limitations=self.limitations(),capture_job=dict(job) if job else None)
+            page_count=len(doc.pages),limitations=self.limitations(),capture_job={k:job[k] for k in ('job_id','state')} if job else None)
 
     @staticmethod
     def limitations():

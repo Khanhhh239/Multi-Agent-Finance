@@ -172,6 +172,100 @@
       ],
       "title": "Claim",
       "type": "object"
+    },
+    "NaturalDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "summary": {
+          "$ref": "#/$defs/NaturalParagraph"
+        },
+        "reasons": {
+          "items": {
+            "$ref": "#/$defs/NaturalParagraph"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Reasons",
+          "type": "array"
+        },
+        "next_actions": {
+          "items": {
+            "$ref": "#/$defs/NaturalParagraph"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Next Actions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "summary",
+        "reasons",
+        "next_actions"
+      ],
+      "title": "NaturalDraft",
+      "type": "object"
+    },
+    "NaturalParagraph": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "maxLength": 1200,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "fact_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "minItems": 1,
+          "title": "Fact Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text",
+        "fact_ids"
+      ],
+      "title": "NaturalParagraph",
+      "type": "object"
+    },
+    "UserGuide": {
+      "additionalProperties": false,
+      "properties": {
+        "read_summary": {
+          "title": "Read Summary",
+          "type": "string"
+        },
+        "missing_items": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Items",
+          "type": "array"
+        },
+        "next_steps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Next Steps",
+          "type": "array"
+        },
+        "warning": {
+          "title": "Warning",
+          "type": "string"
+        }
+      },
+      "required": [
+        "read_summary",
+        "missing_items",
+        "next_steps",
+        "warning"
+      ],
+      "title": "UserGuide",
+      "type": "object"
     }
   },
   "additionalProperties": false,
@@ -288,10 +382,59 @@
     "mode": {
       "enum": [
         "TEMPLATE",
-        "LLM_VALIDATED"
+        "LLM_VALIDATED",
+        "NATURAL_DRAFT"
       ],
       "title": "Mode",
       "type": "string"
+    },
+    "explanation_scope": {
+      "default": "EVALUATION",
+      "enum": [
+        "EVALUATION",
+        "DATA_REVIEW"
+      ],
+      "title": "Explanation Scope",
+      "type": "string"
+    },
+    "legal_context_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Legal Context Reason"
+    },
+    "user_guide": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/UserGuide"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "natural_draft": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NaturalDraft"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "semantic_review_required": {
+      "default": false,
+      "title": "Semantic Review Required",
+      "type": "boolean"
     },
     "fallback_reason": {
       "anyOf": [

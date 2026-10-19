@@ -4,6 +4,10 @@ Phần giải thích bổ sung hoạt động độc lập với kết quả thu
 
 ## Trên giao diện
 
+**Adapter Qwen 17/10:** đã dùng JSON Schema và lựa chọn fact/biến thể dạng chỉ số, không yêu cầu model chép lại trích dẫn dài hoặc refs. Server dựng lại claims và chạy validator cũ. [Báo cáo, kiểm thử và lượt Qwen thật](../qwen_selection_20261017/REPORT.md).
+
+**Cập nhật 17/10/2026:** timeout model mặc định và giới hạn cấu hình là **300 giây (5 phút)**. Cấu hình local trên máy cũng đã được cập nhật. Sau khi đổi mã hợp đồng cấu hình, khởi động lại server; mỗi lượt diễn giải mới đọc policy hiện tại. Kết quả timeout đã lưu vẫn giữ nguyên trong lịch sử; bấm tạo diễn giải để chạy lượt mới. Timeout bao gồm chờ nạp model và sinh phản hồi; không bảo đảm model sẽ hoàn tất trong 5 phút.
+
 1. Dừng phiên web cũ rồi mở lại `OPEN_AGENT3.cmd`; launcher có thể tái sử dụng server đang chạy nên cần restart để nạp route mới.
 2. Kết nối, mở chứng từ, đối chiếu và lưu bản sửa.
 3. Bấm **Kiểm tra bản đã lưu** trong **Kiểm tra phạm vi thuế**.

@@ -1,0 +1,19 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Initial editor binds saved revision; no automatic confirmation/classification",
+    "Save/reload restores reviewed facts; CFR and old compliance flow are unchanged",
+    "Invalid document shows localized error, keeps existing dossier and permits retry",
+    "Upload stores scoped evidence; untrusted filename renders as text; upload alone is not proof",
+    "Payment review round trip keeps Decimal amount and selected document; no tax verdict produced",
+    "Evidence download requires API authorization and returns the retained exact bytes",
+    "Product review saves independent documents and exact base rate, preserves unknown annex classification",
+    "Ledger UI round trip keeps completeness false and pins server-derived purchase rows",
+    "Product section remains unclassified without independent product dossiers",
+    "Concurrent save rejects stale review ID and preserves draft until explicit reload",
+    "390px layout has no page overflow; labels and controls remain accessible",
+    "Unsaved CFR blocks business save; correction invalidates old dossier for the new revision"
+  ],
+  "page_errors": [],
+  "scope": "Synthetic documents/operator attestations; real Chrome/HTTP/storage. No legal or bank verification claim."
+}

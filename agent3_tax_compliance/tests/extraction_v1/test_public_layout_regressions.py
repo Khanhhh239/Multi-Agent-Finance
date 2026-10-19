@@ -11,6 +11,23 @@ def run(spans):return extract(fragmented(spans),'PDF',MASTER,ExtractionProfile(n
 
 
 class PublicLayoutRegressions(unittest.TestCase):
+    def test_header_touching_wrapped_description_is_not_lost_as_sequence(self):
+        r=run([('STT',.03,.47,.05),('Tên hàng hóa, dịch vụ',.16,.47,.18),
+            ('Đơn vị tính',.44,.47,.10),('Số lượng',.59,.47,.08),
+            ('Đơn giá',.73,.47,.07),('Thành tiền',.86,.47,.10),
+            ('Phần mềm thử nghiệm (Gói 12',.081,.485,.32),
+            ('1',.045,.53,.02),('tháng)',.081,.53,.06),('Gói',.47,.53,.04),
+            ('1',.67,.53,.02),('4.080.000',.76,.53,.08),('4.080.000',.90,.53,.08),
+            ('Cộng tiền hàng:',.42,.63,.15),('4.080.000',.90,.63,.08)])
+        self.assertEqual(len(r.items),1)
+        self.assertIn('tháng)',r.items[0].description.value)
+        self.assertIn('Phần mềm',r.items[0].description.value)
+        self.assertEqual(str(r.items[0].net.value),'4080000')
+        self.assertEqual(str(r.items[0].quantity.value),'1')
+        self.assertEqual(r.items[0].vat_treatment.status,'MISSING')
+        self.assertNotEqual(r.item_discovery_status,'COMPLETE')
+        self.assertGreaterEqual(len(r.items[0].description.provenance.evidence),2)
+
     def test_empty_buyer_name_is_section_not_literal_company_label(self):
         r=run([('Họ tên người mua hàng:',.05,.1,.4),('Tên đơn vị: CÔNG TY B',.05,.116,.45),
                ('Mã số thuế: 9876543210',.05,.14,.45)])
