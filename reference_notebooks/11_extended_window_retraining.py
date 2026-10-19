@@ -37,9 +37,9 @@ import lightgbm as lgb
 
 PROJECT_ROOT = next(
     parent for parent in (Path.cwd(), *Path.cwd().parents)
-    if (parent / "notebooks").is_dir() and (parent / ".gitignore").is_file()
+    if (parent / "reference_notebooks").is_dir() and (parent / ".gitignore").is_file()
 )
-sys.path.insert(0, str(PROJECT_ROOT / "notebooks"))
+sys.path.insert(0, str(PROJECT_ROOT / "reference_notebooks"))
 import survival_utils as X
 
 warnings.filterwarnings("ignore")

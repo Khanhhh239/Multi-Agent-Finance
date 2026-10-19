@@ -11,7 +11,7 @@ Chứa đúng ba thứ, và không chứa gì khác:
 Lý do tách file: notebook 11 và 12 phải dựng CÙNG một snapshot. Nếu chép code hai lần,
 hai notebook sẽ trôi khỏi nhau và mọi so sánh giữa chúng mất hiệu lực.
 
-Nguồn logic gốc: notebooks/08_discrete_time_survival.ipynb (D45–D53).
+Nguồn logic gốc: reference_notebooks/08_discrete_time_survival.ipynb (D45–D53).
 """
 
 from __future__ import annotations

@@ -18,7 +18,7 @@ REQUIRED_DOCS = (
     "AGENTS.md", "README.md", "docs/README.md", "docs/project-overview.md",
     "docs/getting-started.md", "docs/CONTRIBUTING.md",
     "docs/reference/repository-structure.md", "docs/reference/t1-data-contracts.md",
-    "data/README.md", "notebooks/README.md", "research/references/README.md",
+    "data/README.md", "reference_notebooks/README.md", "research/references/README.md",
 )
 SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules"}
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")

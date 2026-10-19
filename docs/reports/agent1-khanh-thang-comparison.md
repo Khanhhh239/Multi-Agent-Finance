@@ -4,6 +4,8 @@
 
 Ngày đối chiếu: **17/10/2026**. Báo cáo dựa trên mã, tài liệu và kết quả CSV đang có trong repository; không chạy lại huấn luyện hoặc tải thêm dữ liệu.
 
+Trong checkout hiện tại, bộ `notebooks/` được nhắc theo tên lịch sử bên dưới đã chuyển sang [reference_notebooks/](../../reference_notebooks/README.md), chỉ dùng tham khảo khi xây code T1 mới.
+
 ## 1. Phạm vi và kết luận chính
 
 Tên “agent-Thắng” trong yêu cầu được hiểu là nhánh **`agent1-Thắng`**. Hai phiên bản được so sánh:

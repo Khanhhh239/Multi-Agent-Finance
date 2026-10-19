@@ -6,7 +6,7 @@
 
 - Hiểu nghiệp vụ: [nhu cầu và nhiệm vụ](explanation/user-needs-and-tasks.md) → [kiến trúc cash forecast](explanation/cash-forecast-architecture.md).
 - Kiểm tra dữ liệu thực: [hướng dẫn dữ liệu T1](../data/T1/README.md) → [audit nguồn Séc](../research/notes/t1_czech_full_dataset_audit.md) → [cách chạy audit](how-to/audit-t1-data.md).
-- Đọc phương pháp và mã: [thứ tự notebook](../notebooks/README.md) → [tổng kết kết quả lịch sử](reports/agent1-implementation-review.md) → [paper](../research/references/README.md).
+- Đọc phương pháp và mã tham khảo: [bộ notebook cũ](../reference_notebooks/README.md) → [tổng kết kết quả lịch sử](reports/agent1-implementation-review.md) → [paper](../research/references/README.md).
 - Thay đổi repo: [Contributing](CONTRIBUTING.md), và [AGENTS.md](../AGENTS.md) nếu dùng AI.
 
 ## 2. Chuẩn bị môi trường
@@ -42,6 +42,8 @@ Ví dụ cho audit đầy đủ:
 
 Audit hai nguồn Séc độc lập với mô hình: dùng [hướng dẫn audit T1](how-to/audit-t1-data.md).
 
-Để chạy phần dự báo thời điểm thanh toán T1, trước hết đáp ứng [đầu vào và quy tắc nhãn T1](reference/t1-data-contracts.md), rồi theo [mục lục notebook](../notebooks/README.md). Không đổi tên bảng audit thành `dataset.csv` để bỏ qua bước adapter. Công cụ dựng notebook 11/12 thực thi cell và có thể ghi đè output; chỉ dùng khi đã có đầu vào và môi trường phù hợp.
+Code T1 mới chưa được triển khai. Khi xây code mới, xác định đầu vào, nhãn và cutoff theo [hợp đồng dữ liệu T1](reference/t1-data-contracts.md); các mapping của pipeline cũ chỉ là tham khảo. Không đổi tên bảng audit thành `dataset.csv` để bỏ qua bước chuẩn hóa và xác minh nhãn.
+
+Nếu cần tái lập thí nghiệm cũ, xem [mục lục notebook tham khảo](../reference_notebooks/README.md). Công cụ dựng notebook 11/12 thực thi cell và có thể ghi đè output; chỉ dùng khi đã có đầu vào và môi trường phù hợp.
 
 Khi báo cáo kết quả, ghi dataset/snapshot, cutoff, cách chia train/calibration/test, seed, phiên bản thư viện, metric và artifact. Kết quả lịch sử không thay thế lần chạy kiểm chứng mới.

@@ -2,6 +2,8 @@
 
 > **Ảnh chụp trạng thái lịch sử:** giữ nội dung tại thời điểm viết; không cập nhật như bảng tiến độ hiện hành. Xem [project overview](../project-overview.md) cho trạng thái checkout và [tổng kết ngày 24/09/2026](../reports/agent1-implementation-review.md) cho kết quả được báo cáo trước đây.
 
+> Đường dẫn `notebooks/` bên dưới là tên tại thời điểm chụp trạng thái; bộ này hiện đã chuyển sang [reference_notebooks/](../../reference_notebooks/README.md), chỉ dùng tham khảo.
+
 ---
 
 ## 1. NHỮNG GÌ CHUẨN BỊ LÀM

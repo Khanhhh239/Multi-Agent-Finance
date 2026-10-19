@@ -2,6 +2,8 @@
 
 > **Ghi chú checkout:** nội dung và số liệu dưới đây được chốt ngày 24/09/2026 theo artifact được tài liệu dẫn lại. Lần sắp xếp ngày 18/10/2026 cập nhật tên file/đường dẫn; chưa chạy lại huấn luyện hoặc xác minh các metric. Checkout hiện không kèm `data/processed/` và model đầu vào.
 
+> Bộ notebook hiện nằm tại [reference_notebooks/](../../reference_notebooks/README.md), chỉ dùng tham khảo. Các đường dẫn thao tác bên dưới đã cập nhật theo tên này; code T1 mới chưa được triển khai.
+
 > File này gộp 4 file cũ thành một và thay thế toàn bộ chúng:
 > `AGENT1_PIPELINE_OPTIMIZED.md` (24/09 — mới nhất, làm khung chính) ·
 > `DANH_GIA_AGENT1_VA_HO_SO_VONG1.md` (đánh giá vòng 1 + hồ sơ .docx) ·
@@ -100,7 +102,7 @@ Kết quả: **48.833 invoice** (39.152 closed + 9.681 open).
 Hai lưới bổ sung, không loại trừ: lưới cũ dừng trước ngày phát hành sớm nhất của mọi hóa đơn
 đang mở (2020-02-27) nên không thể chứa pool mở thật; kéo lưới cũ về −7 ngày sẽ tạo 45,6% dòng
 không nhãn và phá vỡ trục `02`→`07`, nên **không làm** — đây là quyết định thiết kế, không phải lỗi
-(Đ1 tại nguồn → xem §6). Lưới mở rộng định nghĩa một lần trong `notebooks/survival_utils.py`, dùng lại
+(Đ1 tại nguồn → xem §6). Lưới mở rộng định nghĩa một lần trong `reference_notebooks/survival_utils.py`, dùng lại
 cho survival, money check và Đ2/Đ15.
 
 Mỗi cutoff `T`: tập hóa đơn "đang mở tại T" = `issue_date <= T < paid_date`; feature chỉ từ
@@ -480,15 +482,15 @@ dọn Đ19 + `02_payment_baselines`. Không train lại trục chính (Đ2 đã 
 ## 9. Cách Tái Tạo
 
 ```text
-notebooks/04_conformal_calibration.ipynb   -> cqr_*.csv
-notebooks/05_monte_carlo_cash_in.ipynb   -> mc_*.csv, mc_*.npy
-notebooks/06_stress_testing_regime_detection.ipynb   -> stress_*.csv, psi_*.csv, changepoint_*.csv, regime_status.csv
-notebooks/07_backtesting_evaluation.ipynb    -> eval_*.csv
-notebooks/08_discrete_time_survival.ipynb      -> survival_*.csv
-notebooks/09_collection_prioritization.ipynb    -> collection_*.csv, default_screen.csv
-notebooks/10_cash_in_dashboard.ipynb     -> reports/dashboard.html, agent_context_pack.json, dunning_drafts.md
-python notebooks/11_extended_window_retraining.py    -> ext_retrain_*.csv   (~15 phút)
-python notebooks/12_oof_survival_boost.py  -> oof_boost_*.csv     (~4 phút)
+reference_notebooks/04_conformal_calibration.ipynb   -> cqr_*.csv
+reference_notebooks/05_monte_carlo_cash_in.ipynb   -> mc_*.csv, mc_*.npy
+reference_notebooks/06_stress_testing_regime_detection.ipynb   -> stress_*.csv, psi_*.csv, changepoint_*.csv, regime_status.csv
+reference_notebooks/07_backtesting_evaluation.ipynb    -> eval_*.csv
+reference_notebooks/08_discrete_time_survival.ipynb      -> survival_*.csv
+reference_notebooks/09_collection_prioritization.ipynb    -> collection_*.csv, default_screen.csv
+reference_notebooks/10_cash_in_dashboard.ipynb     -> reports/dashboard.html, agent_context_pack.json, dunning_drafts.md
+python reference_notebooks/11_extended_window_retraining.py    -> ext_retrain_*.csv   (~15 phút)
+python reference_notebooks/12_oof_survival_boost.py  -> oof_boost_*.csv     (~4 phút)
 python scripts/notebooks/build_notebook.py 11_extended_window_retraining
 python scripts/notebooks/build_notebook.py 12_oof_survival_boost
 ```

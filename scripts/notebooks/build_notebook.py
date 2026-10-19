@@ -1,9 +1,10 @@
 """
-build_notebook.py — chuyển script `# %%` thành notebook .ipynb ĐÃ CHẠY (kèm output).
+build_notebook.py — dựng lại notebook tham khảo .ipynb ĐÃ CHẠY (kèm output).
 
 Vì sao tồn tại: notebook 11 và 12 được viết dưới dạng .py để chạy được từ dòng lệnh và để
 diff được bằng git, nhưng phần còn lại của project dùng .ipynb. File này giữ hai bản đồng bộ:
-nguồn duy nhất là .py, .ipynb là bản dựng lại có output.
+nguồn duy nhất là .py, .ipynb là bản dựng lại có output trong reference_notebooks/.
+Đây là công cụ tái lập thí nghiệm cũ, không phải pipeline cho code T1 mới.
 
 Cách dùng:
     python scripts/notebooks/build_notebook.py 11_extended_window_retraining
@@ -17,7 +18,7 @@ import nbformat
 from nbclient import NotebookClient
 
 ROOT = Path(__file__).resolve().parents[2]
-NOTEBOOKS = ROOT / "notebooks"
+NOTEBOOKS = ROOT / "reference_notebooks"
 
 
 def split_cells(text):

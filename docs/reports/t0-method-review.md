@@ -17,8 +17,6 @@
 | **P1 — Lịch sử** | Phân biệt snapshot/SCD2 với event sourcing; ghi event cho các quyết định phân bổ/đảo do hệ thống tạo | Lưu nhiều bản sao ERP không có nghĩa đã thu đủ event nghiệp vụ của ERP |
 | **P1 — Gold** | Cho phép tổng hợp và tính feature; quy định rõ đơn vị mỗi dòng, công thức và cutoff | Sửa nhận định “Gold không còn phép tính”; dữ liệu báo cáo hiện tại chưa thay thế được snapshot lịch sử cho ML |
 
-**Ví dụ chống leakage:** giao dịch xảy ra ngày 10/03 nhưng hệ thống chỉ nhận và công bố ngày 12/03 thì backtest ngày 11/03 không được dùng giao dịch đó. Quy tắc này áp dụng cả với quyết định đối soát và allocation. Lịch nghĩa vụ tương lai đã biết tại T vẫn có thể được dùng.
-
 Về tiền, cần phân biệt **ngày thu lần đầu, ngày trả đủ và ngày clear ERP**. Credit note làm giảm công nợ nhưng không tạo cash-in. Với receipt cùng tiền tệ đã chuẩn hóa, kiểm tra:
 
 ```text

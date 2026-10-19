@@ -19,6 +19,7 @@
 
 ## Đánh giá và lịch sử
 
+- [Notebook tham khảo](../reference_notebooks/README.md) — bộ thử nghiệm cũ, được giữ để tra cứu khi xây code T1 mới.
 - [Tổng kết triển khai Agent 1](reports/agent1-implementation-review.md) — kết quả lịch sử chốt 24/09/2026.
 - [So sánh Khanh–Thắng](reports/agent1-khanh-thang-comparison.md) — hai commit ngày 17/10/2026.
 - [Đánh giá phương pháp T0](reports/t0-method-review.md) — khuyến nghị nghiên cứu ngày 18/10/2026.

@@ -1,6 +1,10 @@
-# Notebook thực nghiệm Agent 1
+# Notebook tham khảo — thực nghiệm Agent 1 trước đây
 
-Chạy theo thứ tự dưới đây; mỗi bước sử dụng artifact của các bước trước. Đường dẫn được tính theo gốc repo, kể cả khi mở notebook từ `notebooks/`. [Tổng quan hiện tại](../docs/project-overview.md) xác định đầu vào còn thiếu và trạng thái tích hợp; [Getting started](../docs/getting-started.md) hướng dẫn môi trường.
+Bộ notebook này chỉ dùng để tham khảo phương pháp, code và kết quả lịch sử. Code T1 mới sẽ được xây riêng; không mặc định dùng bộ này làm pipeline triển khai.
+
+Ngày 19/10/2026, thư mục `notebooks/` được đổi thành `reference_notebooks/`; chỉ cập nhật đường dẫn trong source, không chạy lại cell hoặc thay output. Với 11/12, cả `.py` và source cell trong `.ipynb` đã đổi đường dẫn; `.ipynb` chưa được dựng lại bằng thực thi, output vẫn là lịch sử.
+
+Thứ tự dưới đây mô tả pipeline cũ; mỗi bước sử dụng artifact của các bước trước. Nếu cần tái lập thí nghiệm cũ, đường dẫn được tính theo gốc repo, kể cả khi mở notebook từ `reference_notebooks/`. [Tổng quan hiện tại](../docs/project-overview.md) xác định đầu vào còn thiếu và trạng thái tích hợp; [Getting started](../docs/getting-started.md) hướng dẫn môi trường.
 
 | Bước | Notebook | Nội dung |
 |---|---|---|

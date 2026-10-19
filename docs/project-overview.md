@@ -6,13 +6,14 @@ Cập nhật: 2026-10-19. Đây là nơi ghi phạm vi và trạng thái hiện 
 
 Đích sản phẩm là giúp SME Việt Nam bán chịu B2B dự báo dòng tiền 13 tuần, phát hiện nguy cơ thiếu tiền và ưu tiên thu nợ. [Bản đồ nhiệm vụ T0–T13](explanation/user-needs-and-tasks.md) mô tả phạm vi thiết kế đầy đủ.
 
-Prototype trong checkout chủ yếu dự báo **thời điểm trả và cash-in từ hóa đơn phải thu đang mở**: baseline lịch sử, LightGBM phân vị, conformal calibration, Monte Carlo và survival. Các notebook bổ sung thử nghiệm ưu tiên thu nợ, stress và dashboard. Có notebook hoặc thiết kế chưa đồng nghĩa chức năng đã được kiểm định trong doanh nghiệp.
+Bộ notebook thử nghiệm trước đây về **thời điểm trả và cash-in từ hóa đơn phải thu đang mở** được giữ tại `reference_notebooks/`, chỉ để tham khảo phương pháp, code và kết quả lịch sử. Bộ này có baseline, LightGBM phân vị, conformal calibration, Monte Carlo, survival và các thử nghiệm ưu tiên thu nợ, stress, dashboard. Code T1 mới sẽ được xây riêng; hiện chưa có trong checkout. Có notebook hoặc thiết kế chưa đồng nghĩa chức năng đã được kiểm định trong doanh nghiệp.
 
 ## Thành phần hiện có
 
 | Thành phần | Trạng thái và nguồn chi tiết |
 |---|---|
-| Thực nghiệm | Notebook 01–12 và helper Python; [mục lục notebook](../notebooks/README.md) xác định thứ tự và nguồn `.py` của 11/12. Output lưu sẵn là kết quả lịch sử. |
+| Mã tham khảo | Notebook 01–12 và helper Python tại `reference_notebooks/`; [mục lục](../reference_notebooks/README.md) xác định thứ tự cũ và nguồn `.py` của 11/12. Output lưu sẵn là kết quả lịch sử. |
+| Code T1 mới | Chưa triển khai; sẽ xây riêng, không mặc định kế thừa pipeline notebook tham khảo. |
 | Nguồn T1 | Đã tải và audit hai nguồn hóa đơn Séc; giữ thêm mẫu BPI/DC. [Hướng dẫn dữ liệu T1](../data/T1/README.md) giải thích nội dung, mục đích và giới hạn. |
 | Đầu vào huấn luyện | `data/dataset.csv`, các bảng `data/processed/` và model mà notebook lịch sử yêu cầu chưa có. Chưa có adapter đưa dữ liệu Séc vào pipeline này. |
 | Kiến trúc mở rộng | T0–T13 và hệ thống bốn agent nằm trong [tài liệu thiết kế](README.md); không mặc định đã có code triển khai ở checkout. |
@@ -22,10 +23,9 @@ Prototype trong checkout chủ yếu dự báo **thời điểm trả và cash-i
 flowchart LR
     S[Nguồn hóa đơn Séc] --> R[Raw + manifest]
     R --> A[Audit và bảng interim]
-    A -. Adapter chưa triển khai .-> I[Đầu vào chuẩn của mô hình]
-    H[Đầu vào lịch sử chưa có] -.-> I
-    I --> N[Notebook 01–12]
-    N --> O[Dự báo và đánh giá cash-in]
+    A -. Chưa triển khai .-> T[Code T1 mới]
+    H[Đầu vào lịch sử chưa có] -.-> N[reference_notebooks: chỉ tham khảo]
+    N --> O[Output thí nghiệm lịch sử]
 ```
 
 ## Giới hạn cần giữ khi phát triển

@@ -1,10 +1,6 @@
 # BPI 2019 và DC PASS: có đủ field cho T1 không?
 
-> Hai nguồn Séc đã được tải đầy đủ: [kết quả audit và vị trí dữ liệu](t1_czech_full_dataset_audit.md). Tài liệu BPI/DC này không mô tả quy mô hai bộ Séc.
-
-> **Cập nhật nghiên cứu sâu:** [đề xuất dataset T1](t1_dataset_recommendation.md) có thống kê aggregate toàn bảng DC, profile 3.000 dòng DC và 220 case BPI từ file gốc, đồng thời bổ sung các nguồn hóa đơn của Séc. Bản đối chiếu bên dưới giữ phạm vi metadata/schema của lần kiểm tra trước; các số liệu mẫu mới nằm trong tài liệu cập nhật.
-
-Đối chiếu ngày **18/10/2026** với metadata nguồn, schema DC, [notebook chuẩn hóa dữ liệu](../../notebooks/01_data_preparation_eda.ipynb) và [survival_utils.py](../../notebooks/survival_utils.py). Chưa audit toàn bộ bản ghi BPI/DC hoặc dựng bộ train từ hai nguồn này.
+Đối chiếu field ngày **18/10/2026** với metadata nguồn, schema DC, [notebook chuẩn hóa dữ liệu](../../reference_notebooks/01_data_preparation_eda.ipynb) và [survival_utils.py](../../reference_notebooks/survival_utils.py). Thống kê DC toàn bảng và profile mẫu BPI/DC nằm tại [đề xuất dataset T1](t1_dataset_recommendation.md); chưa audit toàn bộ bản ghi BPI/DC hoặc dựng bộ train từ hai nguồn này.
 
 **Kết luận: cả hai chưa đủ để thay trực tiếp dữ liệu T1 hiện tại. DC có thể phục vụ một benchmark rút gọn về thời gian từ hóa đơn đến lần chi trả được ghi nhận; BPI phù hợp benchmark thời gian xử lý/clear theo quy trình, cần định nghĩa lại đơn vị dự báo.** Không có đủ bằng chứng để dùng chúng xác nhận đầy đủ T1 trên danh mục hóa đơn phải thu đang mở của SME Việt Nam.
 
@@ -14,11 +10,11 @@
 
 Các bước `Record Invoice Receipt` và `Clear Invoice` cho phép nghiên cứu thời gian giữa các sự kiện. Ngày nhận hóa đơn ở bên mua không mặc định là ngày bên bán phát hành; clear kế toán không mặc định là lúc tiền khả dụng trong tài khoản bên bán. Việc ghép một receipt với một clear trong case có nhiều hóa đơn cần quy tắc và kiểm chứng, không chỉ lấy event đầu và cuối. [Báo cáo phân tích dữ liệu BPI tại ICPM](https://icpmconference.org/2019/wp-content/uploads/sites/6/2019/07/BPI-Challenge-Student-Submission-1.pdf).
 
-**DC PASS Payments** là dữ liệu chính quyền District of Columbia, Mỹ, chi trả cho nhà cung cấp. Đây là B2G, nhìn từ phía bên trả. [Schema API chính thức](https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17) có invoice, voucher, payment, supplier và agency. Đã truy vấn được 5 bản ghi có ngày hóa đơn/ngày thanh toán trong lần kiểm tra nguồn trước; kết quả này không xác nhận độ đầy đủ hay tính duy nhất của toàn bộ bảng.
+**DC PASS Payments** là dữ liệu chính quyền District of Columbia, Mỹ, chi trả cho nhà cung cấp. Đây là B2G, nhìn từ phía bên trả. [Schema API chính thức](https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17) có invoice, voucher, payment, supplier và agency. Thống kê aggregate và profile mẫu chưa xác nhận độ đầy đủ hay tính duy nhất của toàn bộ bảng.
 
-## 2. T1 hiện tại yêu cầu gì?
+## 2. T1 và pipeline notebook tham khảo yêu cầu gì?
 
-Notebook 01 định nghĩa schema chung:
+Code T1 mới chưa được triển khai. Notebook 01 trong `reference_notebooks/` dùng schema chuẩn hóa sau; đây là đầu vào lịch sử để đối chiếu:
 
 ```text
 invoice_id, customer_id, issue_date, due_date,
@@ -27,7 +23,7 @@ paid_date, amount, payment_terms, is_open
 
 `paid_date` được phép thiếu với hóa đơn đang mở nếu có đủ thông tin kết thúc quan sát. T1 landmark dự báo thời gian còn lại từ cutoff T; một nhãn trên hóa đơn trả sau T là `paid_date - T`. Các cột aging, overdue, customer history và baseline được dựng từ dữ liệu gốc, không phải tất cả đều cần tồn tại sẵn trong nguồn.
 
-Về toán học, dự báo thời gian đến sự kiện có thể bỏ due date. **Nhưng pipeline và feature hiện tại sử dụng due date/payment terms**, nên bỏ chúng đồng nghĩa phải thiết kế lại feature/baseline và phạm vi đánh giá. `load_pools()` trong `survival_utils.py` hiện lọc bỏ hóa đơn thiếu `due_date` hoặc payment terms không hợp lệ.
+Về toán học, dự báo thời gian đến sự kiện có thể bỏ due date. **Pipeline tham khảo sử dụng due date/payment terms**; nếu tái sử dụng nó cho nguồn thiếu các field này, phải thiết kế lại feature/baseline và phạm vi đánh giá. `load_pools()` trong `survival_utils.py` lọc bỏ hóa đơn thiếu `due_date` hoặc payment terms không hợp lệ. Bộ lọc này không phải yêu cầu mặc định cho code T1 mới.
 
 ## 3. Đối chiếu field và ý nghĩa
 
@@ -77,6 +73,8 @@ Một hóa đơn có payment trong tương lai có thể được xem là đang 
 **Để chạy T1 đầy đủ như thiết kế hiện tại:** cần nguồn invoice có định danh ổn định, bên trả, ngày phát hành/hạn hợp đồng, số tiền còn phải thu tại cutoff, các lần thu/phân bổ, các invoice đang mở, mốc kết thúc quan sát và lịch sử khả dụng. Khi đó mới đánh giá được cả aging, censored survival, các khoảng dự báo và khả năng áp dụng lên danh mục đang mở.
 
 ## 6. Quyết định đề xuất
+
+Nguồn benchmark T1 được ưu tiên hiện tại là [hai bộ hóa đơn Séc đã audit](t1_czech_full_dataset_audit.md). BPI/DC chỉ là các hướng bổ trợ:
 
 - Dùng **DC** làm ứng viên benchmark rút gọn sau audit grain, chất lượng và quyền sử dụng; không nạp thẳng vào pipeline hiện tại.
 - Dùng **BPI** cho nghiên cứu process/clearing và xử lý nhiều invoice trong một case; chỉ chuyển thành invoice-level khi chứng minh được mapping.

@@ -4,12 +4,14 @@ Trang này chỉ ghi hợp đồng dữ liệu và nhãn cho **T1 — dự báo 
 
 Mapping thực tế phải được kiểm tra trong code; thay đổi định nghĩa T1 phải cập nhật cả trang này và phần xử lý liên quan.
 
+Bộ notebook cũ hiện nằm tại `reference_notebooks/` và chỉ dùng tham khảo. Schema và bộ lọc lịch sử dưới đây không mặc định là thiết kế của code T1 mới, vốn chưa được triển khai.
+
 ## Hai lớp dữ liệu khác nhau
 
 | Lớp | Nguồn xác định | Ý nghĩa |
 |---|---|---|
 | Raw và audit Séc | [Hướng dẫn T1](../../data/T1/README.md), [script audit](../../scripts/data_audit/audit_czech_t1_datasets.py) | Giữ field/nguồn và flag chất lượng. Chưa phải input huấn luyện đã xử lý dedup và nhãn. |
-| Input notebook lịch sử | [Notebook 01](../../notebooks/01_data_preparation_eda.ipynb), [survival helper](../../notebooks/survival_utils.py) | Schema hóa đơn phải thu, bảng sạch và rolling snapshot. Chưa có adapter từ audit Séc sang schema này. |
+| Input notebook lịch sử | [Notebook 01](../../reference_notebooks/01_data_preparation_eda.ipynb), [survival helper](../../reference_notebooks/survival_utils.py) | Schema hóa đơn phải thu, bảng sạch và rolling snapshot. Chưa có adapter từ audit Séc sang schema này. |
 
 ## Field đầu vào nghiệp vụ
 

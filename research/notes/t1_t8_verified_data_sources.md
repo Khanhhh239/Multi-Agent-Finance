@@ -1,10 +1,10 @@
 # Nguồn dữ liệu thật cho T1–T8: khả năng lấy và mức sát domain
 
-> **Cập nhật riêng T1:** [nghiên cứu dataset và đề xuất mới](t1_dataset_recommendation.md) bổ sung nguồn hóa đơn Séc, thống kê DC toàn bảng và kiểm tra mẫu XES BPI. Dùng tài liệu này cho quyết định lựa chọn dataset T1 hiện tại.
+> **Riêng T1:** dùng [đề xuất dataset](t1_dataset_recommendation.md) và [audit toàn bộ hai nguồn Séc](t1_czech_full_dataset_audit.md) để chọn nguồn và cohort. BPI/DC là hướng bổ trợ.
 
 Kiểm tra ngày **18/10/2026**. Domain đích: **SME Việt Nam bán chịu B2B, có liên kết hóa đơn–phân bổ tiền–sao kê, dự báo dòng tiền 13 tuần**. Nhiệm vụ được hiểu theo [bản đồ T0–T13](../../docs/explanation/user-needs-and-tasks.md).
 
-Đây là rà soát nguồn có chọn lọc, gồm metadata của nhà phát hành và một số kiểm tra HTTP/API nhỏ; chưa tải, làm sạch hoặc kiểm định toàn bộ dataset. [Nhật ký kiểm tra truy cập](../references/data-checks/t1-t8/data_sources_t1_t8_access_checks.json) ghi chính xác phần đã kiểm tra. Các mức gần domain và khuyến nghị bên dưới là đánh giá của bản rà soát.
+Đây là rà soát nguồn có chọn lọc, gồm metadata của nhà phát hành và một số kiểm tra HTTP/API nhỏ. [Nhật ký kiểm tra truy cập](../references/data-checks/t1-t8/data_sources_t1_t8_access_checks.json) ghi phần kiểm tra ban đầu; bằng chứng tải và audit toàn bộ nguồn Séc nằm trong báo cáo T1 liên kết trên. Các mức gần domain và khuyến nghị bên dưới là đánh giá nguồn, chưa phải kết quả train.
 
 ## 1. Kết luận theo từng task
 
@@ -12,7 +12,7 @@ Kiểm tra ngày **18/10/2026**. Domain đích: **SME Việt Nam bán chịu B2B
 
 | Task | Nguồn nên ưu tiên | Dùng được vào việc gì? | Mức gần domain và giới hạn |
 |---|---|---|---|
-| **T1 — thời điểm trả** | BPI Challenge 2019; DC PASS Payments | Benchmark thời gian xử lý/clear hoặc ngày hóa đơn → ngày thanh toán | Gần nghiệp vụ hóa đơn, nhưng BPI là AP doanh nghiệp lớn ở Hà Lan; DC là B2G Mỹ. Chưa xác nhận ngày tiền thực vào ngân hàng bên bán |
+| **T1 — thời điểm trả** | Hai nguồn hóa đơn Bộ Tài chính và ngành y tế Séc đã tải/audit | Chuẩn bị benchmark thời gian phát hành/nhận hóa đơn → ngày trả và độ trễ so với hạn, sau khi chốt nhãn và xử lý trùng | B2G Séc; chưa chứng minh có toàn bộ danh mục chưa trả hoặc ngày tiền thực vào ngân hàng bên bán |
 | **T2 — không trả/vỡ nợ** | SBA 7(a) & 504 FOIA | Benchmark rủi ro khoản vay doanh nghiệp nhỏ | Gần đối tượng SME, khác sản phẩm, quốc gia và chân trời; không phải nhãn nợ xấu từng hóa đơn |
 | **T3 — trả một phần/tranh chấp** | Chưa có nguồn mở đã xác minh đủ nhãn; UK Payment Practices làm tham chiếu | Tham chiếu hành vi thanh toán/chính sách; nghiên cứu đối soát qua BPI | Thiếu allocation và nhãn tranh chấp cấp hóa đơn; không đủ train và test đầy đủ T3 |
 | **T4 — doanh thu mới** | UCI Online Retail II | Chuỗi doanh thu/giao dịch theo tuần, khách, sản phẩm | Lựa chọn công khai tốt trong nhóm đã kiểm tra; có nhiều khách bán buôn. Khác Việt Nam/ngành/thời kỳ; thiếu lịch thu nợ |
@@ -25,7 +25,7 @@ Không nên gộp “dữ liệu thật”, “nguồn uy tín”, “tải đư
 
 ## 2. Các nguồn có thể đưa vào kế hoạch lấy dữ liệu
 
-Riêng T1, xem [đối chiếu field BPI/DC với pipeline hiện tại](t1_bpi_dc_field_audit.md). “Benchmark T1” ở đây chỉ phạm vi đã được điều chỉnh theo nguồn; cả hai chưa đủ để thay trực tiếp dữ liệu AR hiện tại.
+Hai nguồn Séc được mô tả tại [hướng dẫn dữ liệu T1](../../data/T1/README.md). Các mục BPI/DC dưới đây là hướng bổ trợ; [đối chiếu field với pipeline](t1_bpi_dc_field_audit.md) giải thích vì sao chưa thể dùng chúng thay trực tiếp dữ liệu AR.
 
 ### S1. BPI Challenge 2019 — T1, bổ trợ T3/T0
 
@@ -38,21 +38,10 @@ Riêng T1, xem [đối chiếu field BPI/DC với pipeline hiện tại](t1_bpi_
 ### S2. DC PASS Payments — T1; ứng viên nghiên cứu allocation cho T3
 
 - **Nguồn chính thức:** [ArcGIS REST của District of Columbia](https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17).
-- **Đã kiểm tra:** schema và truy vấn nhỏ trả HTTP 200, có 5 bản ghi với ngày hóa đơn/ngày thanh toán không rỗng. Schema gồm `INVOICENUMBER`, `SUPPLIERNAME`, `INVOICEDATE`, `PAYMENTDATE`, `ESTPAYMENTDATE`, `VOUCHERAMOUNT`, `PAYMENTAMOUNT`, `PAYMENTNUMBER`.
+- **Bằng chứng kiểm tra:** thống kê aggregate toàn bảng và profile mẫu theo fiscal year được duy trì tại [đề xuất dataset T1](t1_dataset_recommendation.md). Schema gồm `INVOICENUMBER`, `SUPPLIERNAME`, `INVOICEDATE`, `PAYMENTDATE`, `ESTPAYMENTDATE`, `VOUCHERAMOUNT`, `PAYMENTAMOUNT`, `PAYMENTNUMBER`.
 - **Đề xuất:** benchmark `PAYMENTDATE - INVOICEDATE` và thời gian còn lại tại cutoff trên dữ liệu đã thanh toán. Đây là dữ liệu **chính quyền trả nhà cung cấp, B2G Mỹ**.
 - **Giới hạn cần xử lý:** không coi `ESTPAYMENTDATE` là hạn trả hợp đồng; payment date chưa chứng minh ngày tài khoản bên bán được ghi có. Tập payments không tự chứa toàn bộ hóa đơn chưa trả, nên không đủ để suy ra xác suất không trả hay dựng risk set survival đầy đủ. Cần xác minh grain, adjustment, duplicate và ý nghĩa voucher trước khi suy ra partial payment.
 - **Quyền dùng:** API công khai có thể đọc được; `copyrightText` trong schema đang null. Điều đó không tương đương một giấy phép mở. **Cần chốt điều khoản sử dụng của bộ dữ liệu trước khi phát hành lại/đưa vào bộ dữ liệu chính.**
-
-Ví dụ truy vấn đọc mẫu, không cần tải toàn bộ:
-
-```text
-GET <layer-url>/query
-  ?where=INVOICEDATE IS NOT NULL AND PAYMENTDATE IS NOT NULL
-  &outFields=INVOICEDATE,PAYMENTDATE,PAYMENTAMOUNT
-  &resultRecordCount=5
-  &returnGeometry=false
-  &f=json
-```
 
 ### S3. SBA 7(a) & 504 FOIA — T2
 
@@ -151,10 +140,10 @@ Nguồn đúng nhiệm vụ nên lấy từ ERP/CRM hoặc form ghi lời hứa 
 | Ưu tiên | Việc cụ thể | Đầu ra được phép kỳ vọng |
 |---|---|---|
 | **1** | Lấy UCI Online Retail II từ nhà phát hành; lưu license/citation/hash | Benchmark T4 thực, ngoài miền |
-| **2** | Lấy BPI 2019 từ 4TU; audit case grain và sự kiện clear | Benchmark T1/process và ca phức tạp T0/T3, ngoài miền |
+| **2** | Chốt nhãn, xử lý trùng và dựng adapter cho hai nguồn Séc đã audit | Benchmark timing T1 riêng theo nguồn/buyer; chưa phải kiểm định danh mục AR mở |
 | **3** | Lấy SBA CSV + dictionary đúng phiên bản | Benchmark T2 khoản vay SME, tách khỏi nhãn hóa đơn |
 | **4** | Lấy UK PPR; chọn chuỗi TCPD có quyền dùng phù hợp; lọc OxCGRT VN | Thống kê tham chiếu và đánh giá T7 theo phạm vi cụ thể |
-| **5** | Chốt quyền dùng và audit DC PASS toàn bộ trước khi đưa vào bộ chính | Benchmark ngày thanh toán B2G bổ trợ T1 |
+| **5** | Khi cần benchmark bổ trợ, chốt quyền dùng/audit DC PASS; chỉ mở rộng BPI khi có câu hỏi quy trình riêng | Benchmark ngày thanh toán B2G hoặc process/clear, theo giới hạn grain và nhãn từng nguồn |
 | **6** | Theo quy trình truy cập UNU-WIDER/WBES; không tự nộp hồ sơ thay người dùng | Tham chiếu đối tượng VN và các giả định |
 | **7** | Xin bộ xuất ẩn danh của đối tác gồm invoice, allocation, sao kê, nghĩa vụ và promises | Nền tảng kiểm chứng T1/T3/T5/T6/T8 đúng domain |
 

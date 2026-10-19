@@ -19,9 +19,9 @@
 ## Quy ước sửa mã và notebook
 
 - Dùng đường dẫn theo gốc repo hoặc `__file__`; không ghi đường dẫn máy cá nhân. Giữ thay đổi đúng phạm vi yêu cầu, tránh refactor không liên quan.
-- Notebook 11/12 có nguồn chính là `.py`; quy trình đồng bộ và trường hợp chưa thể dựng lại nằm ở `docs/CONTRIBUTING.md`. Với 01–10, sửa trực tiếp `.ipynb`.
+- `reference_notebooks/` chỉ dùng tham khảo; code T1 mới được xây riêng. Khi sửa bộ tham khảo: notebook 11/12 có nguồn chính là `.py`; quy trình đồng bộ và trường hợp chưa thể dựng lại nằm ở `docs/CONTRIBUTING.md`. Với 01–10, sửa trực tiếp `.ipynb`.
 - Không chạy train hoặc dựng lại output chỉ để kiểm tra tài liệu. Không xóa output/artifact lịch sử ngoài phạm vi công việc.
-- Nguồn ngoài phải có URL, ngày kiểm tra và giới hạn sử dụng; số liệu thí nghiệm phải gắn với snapshot/cấu hình/artifact. Đọc hướng dẫn tại `data/`, `notebooks/`, `research/references/` khi chạm vào phần tương ứng.
+- Nguồn ngoài phải có URL, ngày kiểm tra và giới hạn sử dụng; số liệu thí nghiệm phải gắn với snapshot/cấu hình/artifact. Đọc hướng dẫn tại `data/`, `reference_notebooks/`, `research/references/` khi chạm vào phần tương ứng.
 
 ## Kiểm tra trước khi kết thúc
 

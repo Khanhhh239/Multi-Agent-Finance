@@ -145,4 +145,4 @@ Lệnh download dùng cache các file đã tải, tải lại trang đầu/metad
 - [Script tải](../../scripts/data_download/download_czech_t1_datasets.py) và [script audit](../../scripts/data_audit/audit_czech_t1_datasets.py).
 - [Hướng dẫn Bộ Tài chính](https://data.mf.gov.cz/stories/navod-faktury.html), [CSV gốc](https://data.mf.gov.cz/exports/faktury/faktury.csv), [metadata điều kiện sử dụng](https://data.mf.gov.cz/katalog/cs/dataset/prehled-faktur-ministerstva-financi-cr/resource/649107b9-e2d8-4b47-92c5-024c6a200c0a).
 - [Tài liệu API ngành y tế](https://faktury.mzcr.cz/site/otevrena-data). Đã tải được không đồng nghĩa mọi điều kiện tái phân phối đã được chốt; chưa tự gán license chưa xác minh cho bản data mới.
-- [Nghiên cứu lựa chọn nguồn trước khi tải đầy đủ](t1_dataset_recommendation.md) được giữ để đọc bối cảnh; số liệu mẫu trong đó không phải số liệu toàn bộ.
+- [Đề xuất lựa chọn nguồn và thiết kế benchmark T1](t1_dataset_recommendation.md), gồm đối chiếu BPI/DC và các thay đổi pipeline còn cần thực hiện.
