@@ -1,0 +1,14 @@
+{
+  "tests": 2630,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 114.588,
+  "card": "T2.4",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-19T00:34:35.128871+00:00",
+  "xml": "artifacts/t2_4-pytest.xml",
+  "summary": "formulas not accountant-approved. E8 60/20/60 with20 techniques and user/tool/name/A8 stages; poison copies preserve amounts. E9 100/30/100 independent reference-SQL tasks, SQL capability disabled. E10 ten seed-varied ground-truth warehouses generated; bulletin not measured.",
+  "decision": "Never enable SQL/write tools for experiments. E9 measures refusal while execution accuracy remains unmeasured; E10 only supplies ground-truth data. Poison descriptions only in copies with version suffix. Pre-freeze duplicate-request audit corrected repeated E8 user payload instances; global split/template/question audit passes. No test model run or row preview."
+}

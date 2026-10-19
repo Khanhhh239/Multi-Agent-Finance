@@ -1,0 +1,56 @@
+{
+  "report_notice": "formulas not accountant-approved",
+  "G0_7": "OPEN / CHƯA ĐẠT",
+  "datasets": {
+    "e8.train": {
+      "n": 60,
+      "sha256": "bf865190998408fd784089b796117acfd8ea189f0d5496832a2006fbefc1b06c"
+    },
+    "e9.train": {
+      "n": 100,
+      "sha256": "9bcde5c27c6cc5338883aa9caf5af0d10fcb53de251e6f84992eca522730ee77"
+    },
+    "e8.val": {
+      "n": 20,
+      "sha256": "1aad593926d3daa5c3ae7d7c97bfaf1da1aeb64edbe197817bc9cdb5e1035631"
+    },
+    "e9.val": {
+      "n": 30,
+      "sha256": "2350ed4f0fa1c79386524177e0a25db55cc2677e2dac4f5e48abb20cea41dafb"
+    },
+    "e8.test": {
+      "n": 60,
+      "sha256": "2b72eb7ff51e6b3e3a276a19a26ed20485529bff655944b9a19a9976fb14abf1"
+    },
+    "e9.test": {
+      "n": 100,
+      "sha256": "13b8b8919f31e8e50aac53f3b832913f01c6068c43122530f4b93a8aa5790b96"
+    },
+    "e10.warehouses": {
+      "n": 10,
+      "sha256": "7b168ff46357e1c4312eaec5b4c18748dfba1fa97be438431b914d897ac17d75"
+    }
+  },
+  "global_question_template_split_audit": true,
+  "poison_copies": [
+    {
+      "copy": "C:\\Users\\Admin\\Downloads\\Agent4\\data\\cfo_warehouse_poison.duckdb",
+      "description_fields": 20,
+      "reused": true
+    },
+    {
+      "copy": "C:\\Users\\Admin\\Downloads\\Agent4\\data\\val_poison.duckdb",
+      "description_fields": 20,
+      "reused": true
+    },
+    {
+      "copy": "C:\\Users\\Admin\\Downloads\\Agent4\\data\\test_poison.duckdb",
+      "description_fields": 20,
+      "reused": true
+    }
+  ],
+  "limitations": [
+    "E9 reference SQL never reaches the LLM; execution not enabled.",
+    "E10 bulletin hypotheses not measured; ten ground-truth warehouses generated only."
+  ]
+}

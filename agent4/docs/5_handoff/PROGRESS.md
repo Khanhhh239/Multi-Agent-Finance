@@ -150,3 +150,9 @@ Toàn bộ test trước commit: **2604 passed, 0 skipped**, 111.67 giây; `arti
 formulas not accountant-approved. E6 400/100/300 with7 error kinds plus faithful variants (TRAIN50 per kind); E7 80/30/80 conversations of2–5 turns and10 reference patterns. Gold conversation values use independent oracle; test content remains sealed.
 
 Toàn bộ test trước commit: **2628 passed, 0 skipped**, 73.26 giây; `artifacts/t2_3-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.4 — P2 thử nghiệm
+
+formulas not accountant-approved. E8 60/20/60 with20 techniques and user/tool/name/A8 stages; poison copies preserve amounts. E9 100/30/100 independent reference-SQL tasks, SQL capability disabled. E10 ten seed-varied ground-truth warehouses generated; bulletin not measured.
+
+Toàn bộ test trước commit: **2630 passed, 0 skipped**, 114.59 giây; `artifacts/t2_4-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
