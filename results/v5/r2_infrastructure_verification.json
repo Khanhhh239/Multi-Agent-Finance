@@ -1,0 +1,180 @@
+{
+  "status": "passed",
+  "data_origin": "dữ liệu tổng hợp",
+  "unit_tests": {
+    "passed": 13,
+    "seconds": 18.51
+  },
+  "smoke": {
+    "status": "passed",
+    "data_origin": "dữ liệu tổng hợp",
+    "seconds": 164.54700000000003,
+    "config": {
+      "seed": 1099,
+      "rows": 60000,
+      "fraud_rate": 0.004,
+      "companies": 8,
+      "money_scale": 15.86639327536257,
+      "difficulty_weights": [
+        0.21252794750839388,
+        0.7808142797216411,
+        0.006657772769965137
+      ],
+      "calendar_seed": 521099,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    "validation": {
+      "status": "passed",
+      "rows": 60000,
+      "fraud_rows": 383,
+      "fraud_rate": 0.006383333333333334,
+      "cases": 89,
+      "schemes": 30,
+      "scheme_split_gaps": {
+        "terminated_still_paid": [
+          "test"
+        ]
+      },
+      "companies": 8,
+      "companies_with_fraud": 5,
+      "perpetrator_level": {
+        "employee": 35,
+        "manager": 48,
+        "owner_executive": 6
+      },
+      "collusion": {
+        "1": 39,
+        "2": 19,
+        "3+": 31
+      },
+      "concealment": {
+        "L1": 68,
+        "L0": 20,
+        "L2": 1
+      },
+      "acfe_branch_cases": {
+        "billing": 18,
+        "payment_tampering": 9,
+        "payroll": 14,
+        "expense": 12,
+        "skimming": 9,
+        "cash_larceny": 3,
+        "noncash": 3,
+        "corruption": 12,
+        "financial_statement": 6,
+        "owner_override": 3
+      },
+      "rows_per_scheme": {
+        "ghost_employee": 13,
+        "off_cycle_payroll": 9,
+        "shell_vendor": 8,
+        "fictitious_revenue_cutoff": 6,
+        "payroll_padding": 13,
+        "owner_override_transfer": 9,
+        "expense_fictitious": 24,
+        "duplicate_payment": 7,
+        "altered_payee": 5,
+        "split_payments": 12,
+        "invoice_mill": 10,
+        "advance_unsettled": 3,
+        "overbilling_excess_payment": 10,
+        "unrecorded_sales_skimming": 18,
+        "receivable_lapping": 13,
+        "personal_purchase": 17,
+        "terminated_still_paid": 5,
+        "undisclosed_related_vendor": 19,
+        "false_refund": 30,
+        "expense_padding": 23,
+        "bid_rotation": 22,
+        "vendor_burst": 13,
+        "cash_larceny": 23,
+        "period_end_adjustment": 4,
+        "price_creep": 21,
+        "kickback_overpricing": 11,
+        "fake_bonus_list": 9,
+        "bank_detail_switch": 3,
+        "expense_duplicate_claim": 8,
+        "inventory_theft": 15
+      },
+      "decoys": {
+        "legit_bulk_purchase": 89,
+        "tet_bonus_payroll": 77,
+        "legit_sales_return": 116,
+        "long_approval_delay": 231,
+        "declared_related_party": 231,
+        "weekend_operations": 232,
+        "round_recurring_payment": 232,
+        "legitimate_self_approval": 232,
+        "historical_valid_invoice": 229,
+        "verified_bank_change": 232,
+        "legitimate_installments": 232,
+        "new_legitimate_vendor": 231,
+        "legit_bonus_run": 237,
+        "legitimate_period_close": 229,
+        "remote_employee_payroll": 231,
+        "legit_director_advance": 40,
+        "legit_affiliate_payment": 91,
+        "legit_offcycle_payroll": 10,
+        "legit_inventory_writeoff": 56,
+        "legit_final_settlement": 11,
+        "approved_advance_extension": 229,
+        "approved_advance_writeoff": 229,
+        "legit_bad_debt_writeoff": 428,
+        "legit_price_increase": 99,
+        "year_end_bonus_payroll": 77
+      },
+      "payroll_after_resignation": {
+        "legit_final_settlement": 11,
+        "terminated_still_paid": 5
+      },
+      "txn_types": {
+        "vendor_payment": 13423,
+        "cogs": 5155,
+        "sales_invoice": 6152,
+        "stock_purchase": 5323,
+        "cash_expense": 9069,
+        "selling_expense": 3968,
+        "adjustment": 502,
+        "payroll": 4942,
+        "rent": 427,
+        "material_purchase": 2296,
+        "advance_issue": 850,
+        "equipment_purchase": 71,
+        "tools_purchase": 326,
+        "cash_withdrawal": 384,
+        "sales_return": 133,
+        "material_issue": 108,
+        "vat_offset": 66,
+        "customer_receipt": 5106,
+        "tax_payment": 128,
+        "depreciation": 194,
+        "advance_settlement": 380,
+        "inventory_writeoff": 89,
+        "advance_review": 230,
+        "advance_writeoff": 231,
+        "bad_debt_writeoff": 432,
+        "customer_refund": 15
+      },
+      "accounting_status": "passed"
+    },
+    "scope": "V1-V9 and V11 passed; V10 reports one missing scheme in test on this reduced smoke; V12 not run on smoke",
+    "V10_warning": {
+      "terminated_still_paid": [
+        "test"
+      ]
+    }
+  },
+  "protected_sha256": {
+    "agent2/hybrid.py": "2d236ea488543379bf257bef926ac394cd9a17b8440c3a6d9666f5fa176f0e86",
+    "agent2/eval_v4.py": "52921091e66d9fb75585fd3e1df820e5e952d14ecf0bf81f411a96acba3f6feb",
+    "agent2/methods.py": "54293542665432bace04a90bc8cd793005bd72e90564da3eb9d5510faa5f6190",
+    "agent2/feats_v4.py": "c276b8d9b424c7439f54b85b3cb47147f0920fa1ff7cee166eb9f6e9c9636317",
+    "agent2/feats.py": "3965ff18eb6a8a4f95c25a54d9f3e42c732865101e9682891d2670ded6ef49e8",
+    "agent2/data.py": "20dfc1320ba520c0708e64d8f3c8fb0a6ec7cbf463fe4050443c9bdd37333d94",
+    "results/v4/sealed_v4.json": "9316e0cb94f64e35a8a46a6643795f215d38be10cc521297adbf98f8e03fa7b5",
+    "results/v4/v4_frozen.json": "c0f14937256b27278245001ece1c6e08bd75c5aa9b0d69c1b8135f3aca6026dd",
+    "work/results/v4_frozen.json": "c0f14937256b27278245001ece1c6e08bd75c5aa9b0d69c1b8135f3aca6026dd"
+  },
+  "registration_v1_preserved": true,
+  "model_performance_measured": false
+}

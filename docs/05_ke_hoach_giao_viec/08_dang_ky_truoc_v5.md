@@ -134,7 +134,7 @@ Tại lúc cập nhật đăng ký: chưa chạy R2, chưa sinh thế giới ph�
 
 ---
 
-## Phu luc lich su: ban v1 nguyen van, da duoc thay the boi v1.1
+## Phụ lục lịch sử: bản v1 nguyên văn, đã được thay thế bởi v1.1
 
 # Đăng ký trước v5, đề xuất chờ chủ dự án duyệt
 
