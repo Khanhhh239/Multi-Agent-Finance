@@ -1,9 +1,9 @@
 # %% [markdown]
 # # 12 — Đ15: Sinh feature Survival-Boost bằng out-of-fold
 #
-# **Vị trí:** `08_survival` (đo lần đầu, in-sample) → **[12_oof_survival_boost]** → quyết định production
+# **Vị trí:** `08_discrete_time_survival` (đo lần đầu, in-sample) → **[12_oof_survival_boost]** → quyết định production
 #
-# `../method/AGENT1_TONG_HOP.md` Đ15 ghi trạng thái ⚠️ *"đã đo, chưa OOF"* kèm cảnh báo của chính nó:
+# `../docs/reports/agent1_implementation_review.md` Đ15 ghi trạng thái ⚠️ *"đã đo, chưa OOF"* kèm cảnh báo của chính nó:
 #
 # > Feature survival cho tập **train** là dự báo in-sample của hazard model (nó được fit trên chính
 # > các dòng đó). […] Trước khi đưa vào production, sinh feature bằng out-of-fold (K-fold theo cutoff)
@@ -17,7 +17,7 @@
 # | Bộ feature | Feature survival cho tập TRAIN sinh thế nào |
 # |---|---|
 # | **F0 — gốc** | không có feature survival (bộ Tầng 5, 31 feature) |
-# | **F1 — in-sample** | hazard model fit trên toàn bộ train, rồi dự báo lại chính train (bản `08_survival`) |
+# | **F1 — in-sample** | hazard model fit trên toàn bộ train, rồi dự báo lại chính train (bản `08_discrete_time_survival`) |
 # | **F2 — OOF K-fold** | 5 fold theo cutoff; feature của fold k đến từ hazard fit trên 4 fold còn lại |
 # | **F3 — walk-forward** | feature của fold k chỉ dùng hazard fit trên các cutoff **trước** fold k |
 #
@@ -34,8 +34,12 @@ import numpy as np
 import pandas as pd
 import lightgbm as lgb
 
-sys.path.insert(0, str(Path("D:/CURRICULUM/Semester VI/Finance Project/notebooks")))
-import ext_lib as X
+PROJECT_ROOT = next(
+    parent for parent in (Path.cwd(), *Path.cwd().parents)
+    if (parent / "notebooks").is_dir() and (parent / ".gitignore").is_file()
+)
+sys.path.insert(0, str(PROJECT_ROOT / "notebooks"))
+import survival_utils as X
 
 warnings.filterwarnings("ignore")
 pd.set_option("display.max_columns", 60)
@@ -44,7 +48,7 @@ pd.set_option("display.float_format", "{:,.4f}".format)
 
 SEED = X.SEED
 N_FOLDS = 5
-N_TREES_HAZARD = 300          # cố định như 08_survival — không early stopping
+N_TREES_HAZARD = 300          # cố định như 08_discrete_time_survival — không early stopping
 TARGET = "duration_days"
 
 HZ_PARAMS = dict(objective="binary", n_estimators=N_TREES_HAZARD, learning_rate=0.05,
@@ -120,7 +124,7 @@ print(f"Hazard model 'full' : fit trên {n_pp_full:,} dòng person-period ({time
 # %% [markdown]
 # ## 3. Ba cách sinh feature cho tập TRAIN
 #
-# * **F1 in-sample** — `haz_full` dự báo lại chính `train_pre`. Đây là bản `08_survival` §9.
+# * **F1 in-sample** — `haz_full` dự báo lại chính `train_pre`. Đây là bản `08_discrete_time_survival` §9.
 # * **F2 OOF** — với mỗi fold k: fit hazard trên các fold ≠ k, dự báo cho fold k.
 # * **F3 walk-forward** — với mỗi fold k ≥ 1: fit hazard chỉ trên fold < k, dự báo cho fold k.
 #   Fold 0 không có quá khứ nên bị loại khỏi tập train của F3 (ghi rõ, không lấp liếm).
@@ -287,7 +291,7 @@ else:
     verdict = "BỎ khỏi MVP — phần cải thiện biến mất khi sinh feature đúng cách"
 
 summary = pd.DataFrame([
-    {"chỉ số": "Cải thiện MAE — in-sample (bản 08_survival)", "giá trị": f"{gain_f1:+.2f}%"},
+    {"chỉ số": "Cải thiện MAE — in-sample (bản 08_discrete_time_survival)", "giá trị": f"{gain_f1:+.2f}%"},
     {"chỉ số": "Cải thiện MAE — OOF K-fold (đúng thứ Đ15 yêu cầu)", "giá trị": f"{gain_f2:+.2f}%"},
     {"chỉ số": "Cải thiện MAE — walk-forward (so với F0 đủ dữ liệu)", "giá trị": f"{gain_f3_naive:+.2f}%"},
     {"chỉ số": "Cải thiện MAE — walk-forward vs đối chứng cùng tập dòng",

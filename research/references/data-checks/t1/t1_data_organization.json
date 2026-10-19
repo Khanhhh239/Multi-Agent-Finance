@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-19",
+  "task": "T1",
+  "removed_files": 299,
+  "removed_bytes": 1867988,
+  "removed_groups": {
+    "http_sidecars_consolidated_in_manifest": 296,
+    "identical_verification_bodies": 3
+  },
+  "retained_file_checks": [
+    {
+      "bytes": 73750565,
+      "sha256": "48cfd9d35e5e15977f77d6b8e337c548d0a18e14b84f0880e9484f581d76ae08",
+      "path": "data/T1/interim/czech/2026-10-18/finance_invoice_audit.csv"
+    },
+    {
+      "bytes": 6780,
+      "sha256": "d79aae1df946def63ea0d8c2ccbb1d1e4e4031f22175d0c82dc539343678009b",
+      "path": "data/T1/interim/czech/2026-10-18/finance_monthly_coverage.csv"
+    },
+    {
+      "bytes": 658,
+      "sha256": "11da195d1ed51d6f702235ab1fc390af3093138b40c79b51a9ce68eca64f30ef",
+      "path": "data/T1/interim/czech/2026-10-18/health_by_organization.csv"
+    },
+    {
+      "bytes": 82617276,
+      "sha256": "0141982002b408606d11cf026281e32094e69d51f7d06d5954260216d690674a",
+      "path": "data/T1/interim/czech/2026-10-18/health_invoice_audit.csv"
+    },
+    {
+      "bytes": 10772,
+      "sha256": "21c43ab40e348439681aba5d8625bf5b0b96abbe54ee3ca0463985dcc0e8df29",
+      "path": "data/T1/interim/czech/2026-10-18/health_monthly_coverage.csv"
+    },
+    {
+      "bytes": 2000000,
+      "sha256": "7c9c366d3a6e9530ba223b115f7bd0599ea0e788c32deb6696e38b23d1c7565e",
+      "path": "data/T1/raw/source_samples/bpi_prefix.xml.part"
+    },
+    {
+      "bytes": 639780,
+      "sha256": "d75848516e8e2b7f9278aa662902d7d6886aa2e02f0826f6960e29fdea6aafaa",
+      "path": "data/T1/raw/source_samples/dc_sample_2020.json"
+    },
+    {
+      "bytes": 644115,
+      "sha256": "dc39967f7342cf32952c8d153ca7fc17929bde4a22dbe0cef598e04ef5fe85c6",
+      "path": "data/T1/raw/source_samples/dc_sample_2024.json"
+    },
+    {
+      "bytes": 642745,
+      "sha256": "ddee5320b115f1dd54f0cac28e91129498945134dd1d84216f58aef75153d29e",
+      "path": "data/T1/raw/source_samples/dc_sample_2026.json"
+    }
+  ],
+  "raw_invoice_hashes": "Finance CSV and all 290 Health pages reverified by a full offline audit after relocation.",
+  "moves": {
+    "data/raw/czech_t1/": "data/T1/raw/czech/",
+    "data/raw/t1_source_audit/": "data/T1/raw/source_samples/",
+    "data/interim/czech_t1/": "data/T1/interim/czech/"
+  },
+  "verification": {
+    "full_offline_audit": "passed",
+    "all_retained_audit_tables_and_source_samples_sha256": "unchanged",
+    "metadata_payload_hashes": "passed",
+    "scripts_syntax": "passed",
+    "downloader_fresh_cache_and_changed_check_payloads_mock": "passed",
+    "new_guide_links": "passed",
+    "raw_and_interim_gitignore": "passed",
+    "finance_clean_candidate_ids": 114326,
+    "health_ordinary_invoice_candidate_rows": 64775
+  }
+}

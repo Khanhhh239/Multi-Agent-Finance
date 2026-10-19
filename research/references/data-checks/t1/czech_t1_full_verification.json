@@ -1,0 +1,29 @@
+{
+  "snapshot": "2026-10-18",
+  "download_complete": true,
+  "integrity_verified_by_audit": true,
+  "export_invariants": "passed",
+  "script_syntax": "passed",
+  "new_report_local_links": "passed",
+  "datasets": {
+    "finance": {
+      "audit_csv_rows": 194372,
+      "unique_source_ids": 120753,
+      "issue_gate": 187877,
+      "csv_bytes": 73750565
+    },
+    "health": {
+      "audit_csv_rows": 289698,
+      "unique_source_ids": 289698,
+      "issue_gate": 66163,
+      "csv_bytes": 82617276
+    }
+  },
+  "storage_reorganization_check": {
+    "date": "2026-10-19",
+    "layout": "data/T1/",
+    "full_offline_audit": "passed",
+    "audit_table_sha256_unchanged": true,
+    "request_metadata_consolidated": true
+  }
+}

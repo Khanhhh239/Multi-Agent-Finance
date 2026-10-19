@@ -1,0 +1,626 @@
+{
+  "scope": "Non-random prefixes / selected pages / first OBJECTID rows in selected fiscal years. Counts describe these samples only.",
+  "sources": {
+    "cz_health_sample": {
+      "rows": 1000,
+      "dates": {
+        "datum_vystaveni": {
+          "missing_or_invalid": 1000,
+          "min": null,
+          "max": null
+        },
+        "datum_prijeti": {
+          "missing_or_invalid": 0,
+          "min": "2019-01-02",
+          "max": "2019-11-27"
+        },
+        "datum_splatnosti": {
+          "missing_or_invalid": 0,
+          "min": "2019-01-05",
+          "max": "2019-12-09"
+        },
+        "datum_uhrady": {
+          "missing_or_invalid": 0,
+          "min": "2019-01-10",
+          "max": "2019-12-04"
+        }
+      },
+      "distinct_buyer_ids": 1,
+      "distinct_supplier_ids": 149,
+      "duplicate_invoice_ids": 0,
+      "import_ids": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "document_types": {
+        "DOFA": 59,
+        "Faktury přijaté": 941
+      },
+      "paid_amount_zero": 0,
+      "gross_amount_nonpositive": 0,
+      "paid_amount_below_gross_same_currency": 0,
+      "paid_before_received": 0,
+      "paid_late_with_valid_dates": 132,
+      "paid_date_in_1970": 0,
+      "missing_paid_and_due_dates": 0,
+      "positive_rows_with_issue_due_paid_dates_ordered": 0,
+      "complete_rows_by_buyer_code": {},
+      "repeated_buyer_supplier_supplier_reference_rows": 79
+    },
+    "cz_health_page_145": {
+      "rows": 1000,
+      "dates": {
+        "datum_vystaveni": {
+          "missing_or_invalid": 280,
+          "min": "2007-10-03",
+          "max": "2021-09-30"
+        },
+        "datum_prijeti": {
+          "missing_or_invalid": 0,
+          "min": "2020-12-08",
+          "max": "2021-10-26"
+        },
+        "datum_splatnosti": {
+          "missing_or_invalid": 720,
+          "min": "2021-05-20",
+          "max": "2021-12-17"
+        },
+        "datum_uhrady": {
+          "missing_or_invalid": 0,
+          "min": "1970-01-01",
+          "max": "2021-10-29"
+        }
+      },
+      "distinct_buyer_ids": 3,
+      "distinct_supplier_ids": 368,
+      "duplicate_invoice_ids": 0,
+      "import_ids": [
+        516,
+        517,
+        518,
+        519
+      ],
+      "document_types": {
+        "Faktury přijaté": 106,
+        "Zálohové faktury přijaté": 4,
+        "RELC": 101,
+        "REPA": 2,
+        "Faktura přijatá": 720,
+        "Přijatá faktura": 67
+      },
+      "paid_amount_zero": 112,
+      "gross_amount_nonpositive": 1,
+      "paid_amount_below_gross_same_currency": 129,
+      "paid_before_received": 126,
+      "paid_late_with_valid_dates": 41,
+      "paid_date_in_1970": 112,
+      "missing_paid_and_due_dates": 0,
+      "positive_rows_with_issue_due_paid_dates_ordered": 0,
+      "complete_rows_by_buyer_code": {},
+      "repeated_buyer_supplier_supplier_reference_rows": 519
+    },
+    "cz_health_page_218": {
+      "rows": 1000,
+      "dates": {
+        "datum_vystaveni": {
+          "missing_or_invalid": 540,
+          "min": "2023-05-02",
+          "max": "2023-08-30"
+        },
+        "datum_prijeti": {
+          "missing_or_invalid": 0,
+          "min": "2023-04-17",
+          "max": "2023-09-22"
+        },
+        "datum_splatnosti": {
+          "missing_or_invalid": 6,
+          "min": "2023-05-01",
+          "max": "2023-10-21"
+        },
+        "datum_uhrady": {
+          "missing_or_invalid": 0,
+          "min": "2023-06-01",
+          "max": "2023-09-27"
+        }
+      },
+      "distinct_buyer_ids": 4,
+      "distinct_supplier_ids": 385,
+      "duplicate_invoice_ids": 0,
+      "import_ids": [
+        856,
+        857,
+        858,
+        859,
+        860,
+        861,
+        862
+      ],
+      "document_types": {
+        "Faktura přijatá": 190,
+        "Běžná faktura": 454,
+        "Opravný daňový doklad (dobropis)": 4,
+        "Zálohová faktura": 2,
+        "Přijatá faktura": 196,
+        "Faktury přijaté": 138,
+        "Zálohové faktury přijaté": 16
+      },
+      "paid_amount_zero": 0,
+      "gross_amount_nonpositive": 10,
+      "paid_amount_below_gross_same_currency": 12,
+      "paid_before_received": 3,
+      "paid_late_with_valid_dates": 34,
+      "paid_date_in_1970": 0,
+      "missing_paid_and_due_dates": 0,
+      "positive_rows_with_issue_due_paid_dates_ordered": 450,
+      "complete_rows_by_buyer_code": {
+        "2936": 450
+      },
+      "repeated_buyer_supplier_supplier_reference_rows": 102
+    },
+    "cz_health_page_290": {
+      "rows": 698,
+      "dates": {
+        "datum_vystaveni": {
+          "missing_or_invalid": 634,
+          "min": "2026-07-16",
+          "max": "2026-09-02"
+        },
+        "datum_prijeti": {
+          "missing_or_invalid": 0,
+          "min": "2026-08-03",
+          "max": "2026-09-29"
+        },
+        "datum_splatnosti": {
+          "missing_or_invalid": 540,
+          "min": "2026-08-06",
+          "max": "2026-10-13"
+        },
+        "datum_uhrady": {
+          "missing_or_invalid": 540,
+          "min": "2026-08-05",
+          "max": "2026-09-29"
+        }
+      },
+      "distinct_buyer_ids": 3,
+      "distinct_supplier_ids": 230,
+      "duplicate_invoice_ids": 0,
+      "import_ids": [
+        1130,
+        1131,
+        1132
+      ],
+      "document_types": {
+        "null": 540,
+        "Faktura přijatá": 62,
+        "Zálohová faktura přijatá": 2,
+        "Faktury přijaté": 94
+      },
+      "paid_amount_zero": 0,
+      "gross_amount_nonpositive": 3,
+      "paid_amount_below_gross_same_currency": 0,
+      "paid_before_received": 6,
+      "paid_late_with_valid_dates": 12,
+      "paid_date_in_1970": 0,
+      "missing_paid_and_due_dates": 540,
+      "positive_rows_with_issue_due_paid_dates_ordered": 62,
+      "complete_rows_by_buyer_code": {
+        "1752": 62
+      },
+      "repeated_buyer_supplier_supplier_reference_rows": 4
+    },
+    "cz_health_page_73": {
+      "rows": 1000,
+      "dates": {
+        "datum_vystaveni": {
+          "missing_or_invalid": 572,
+          "min": "2018-12-05",
+          "max": "2020-08-05"
+        },
+        "datum_prijeti": {
+          "missing_or_invalid": 0,
+          "min": "2018-12-06",
+          "max": "2020-08-07"
+        },
+        "datum_splatnosti": {
+          "missing_or_invalid": 0,
+          "min": "2018-12-26",
+          "max": "2020-09-04"
+        },
+        "datum_uhrady": {
+          "missing_or_invalid": 0,
+          "min": "1970-01-01",
+          "max": "2020-07-31"
+        }
+      },
+      "distinct_buyer_ids": 3,
+      "distinct_supplier_ids": 437,
+      "duplicate_invoice_ids": 0,
+      "import_ids": [
+        275,
+        276,
+        277,
+        278,
+        279,
+        280
+      ],
+      "document_types": {
+        "Faktury přijaté": 244,
+        "ZÁL": 186,
+        "Přijatá faktura": 142,
+        "Běžná faktura": 426,
+        "Opravný daňový doklad (dobropis)": 2
+      },
+      "paid_amount_zero": 2,
+      "gross_amount_nonpositive": 0,
+      "paid_amount_below_gross_same_currency": 2,
+      "paid_before_received": 59,
+      "paid_late_with_valid_dates": 147,
+      "paid_date_in_1970": 2,
+      "missing_paid_and_due_dates": 0,
+      "positive_rows_with_issue_due_paid_dates_ordered": 413,
+      "complete_rows_by_buyer_code": {
+        "1816": 413
+      },
+      "repeated_buyer_supplier_supplier_reference_rows": 95
+    },
+    "cz_health_combined": {
+      "rows": 4698,
+      "dates": {
+        "datum_vystaveni": {
+          "missing_or_invalid": 3026,
+          "min": "2007-10-03",
+          "max": "2026-09-02"
+        },
+        "datum_prijeti": {
+          "missing_or_invalid": 0,
+          "min": "2018-12-06",
+          "max": "2026-09-29"
+        },
+        "datum_splatnosti": {
+          "missing_or_invalid": 1266,
+          "min": "2018-12-26",
+          "max": "2026-10-13"
+        },
+        "datum_uhrady": {
+          "missing_or_invalid": 540,
+          "min": "1970-01-01",
+          "max": "2026-09-29"
+        }
+      },
+      "distinct_buyer_ids": 12,
+      "distinct_supplier_ids": 1285,
+      "duplicate_invoice_ids": 0,
+      "import_ids": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        275,
+        276,
+        277,
+        278,
+        279,
+        280,
+        516,
+        517,
+        518,
+        519,
+        856,
+        857,
+        858,
+        859,
+        860,
+        861,
+        862,
+        1130,
+        1131,
+        1132
+      ],
+      "document_types": {
+        "DOFA": 59,
+        "Faktury přijaté": 1523,
+        "Zálohové faktury přijaté": 20,
+        "RELC": 101,
+        "REPA": 2,
+        "Faktura přijatá": 972,
+        "Přijatá faktura": 405,
+        "Běžná faktura": 880,
+        "Opravný daňový doklad (dobropis)": 6,
+        "Zálohová faktura": 2,
+        "null": 540,
+        "Zálohová faktura přijatá": 2,
+        "ZÁL": 186
+      },
+      "paid_amount_zero": 114,
+      "gross_amount_nonpositive": 14,
+      "paid_amount_below_gross_same_currency": 143,
+      "paid_before_received": 194,
+      "paid_late_with_valid_dates": 366,
+      "paid_date_in_1970": 114,
+      "missing_paid_and_due_dates": 540,
+      "positive_rows_with_issue_due_paid_dates_ordered": 925,
+      "complete_rows_by_buyer_code": {
+        "2936": 450,
+        "1752": 62,
+        "1816": 413
+      },
+      "repeated_buyer_supplier_supplier_reference_rows": 867
+    },
+    "cz_health_imports": {
+      "rows": 944,
+      "organization_ids": 27,
+      "imported_at_min": "2020-01-06 08:20:58",
+      "imported_at_max": "2026-10-15 10:52:30"
+    },
+    "dc_sample_2020": {
+      "rows": 1000,
+      "dates": {
+        "INVOICEDATE": {
+          "missing_or_invalid": 887,
+          "min": "2017-06-01",
+          "max": "2020-09-09"
+        },
+        "PAYMENTDATE": {
+          "missing_or_invalid": 0,
+          "min": "2019-10-09",
+          "max": "2020-09-22"
+        },
+        "ESTPAYMENTDATE": {
+          "missing_or_invalid": 0,
+          "min": "2019-10-04",
+          "max": "2020-09-22"
+        },
+        "RECORDCREATED": {
+          "missing_or_invalid": 0,
+          "min": "2022-12-10",
+          "max": "2022-12-10"
+        },
+        "RECORDUPDATEDDATE": {
+          "missing_or_invalid": 0,
+          "min": "2022-12-10",
+          "max": "2022-12-10"
+        }
+      },
+      "payment_before_invoice": 0,
+      "estimated_date_equals_payment_date": 22,
+      "repeated_rows_on_AGENCYCODE+SUPPLIERNAME+INVOICENUMBER": 327,
+      "repeated_rows_on_AGENCYCODE+SUPPLIERNAME+INVOICENUMBER+VOUCHERNUMBER+PAYMENTNUMBER": 286,
+      "payment_amount_differs_from_voucher": 0,
+      "nonpositive_payment_amount": 0
+    },
+    "dc_sample_2024": {
+      "rows": 1000,
+      "dates": {
+        "INVOICEDATE": {
+          "missing_or_invalid": 0,
+          "min": "2023-01-12",
+          "max": "2024-09-17"
+        },
+        "PAYMENTDATE": {
+          "missing_or_invalid": 0,
+          "min": "2023-10-01",
+          "max": "2024-09-29"
+        },
+        "ESTPAYMENTDATE": {
+          "missing_or_invalid": 201,
+          "min": "2023-04-24",
+          "max": "2024-09-27"
+        },
+        "RECORDCREATED": {
+          "missing_or_invalid": 0,
+          "min": "2023-09-29",
+          "max": "2024-09-27"
+        },
+        "RECORDUPDATEDDATE": {
+          "missing_or_invalid": 0,
+          "min": "2023-10-24",
+          "max": "2024-11-26"
+        }
+      },
+      "payment_before_invoice": 0,
+      "estimated_date_equals_payment_date": 11,
+      "repeated_rows_on_AGENCYCODE+SUPPLIERNAME+INVOICENUMBER": 81,
+      "repeated_rows_on_AGENCYCODE+SUPPLIERNAME+INVOICENUMBER+VOUCHERNUMBER+PAYMENTNUMBER": 0,
+      "payment_amount_differs_from_voucher": 656,
+      "nonpositive_payment_amount": 0
+    },
+    "dc_sample_2026": {
+      "rows": 1000,
+      "dates": {
+        "INVOICEDATE": {
+          "missing_or_invalid": 0,
+          "min": "2023-09-28",
+          "max": "2026-09-17"
+        },
+        "PAYMENTDATE": {
+          "missing_or_invalid": 0,
+          "min": "2025-10-01",
+          "max": "2026-09-30"
+        },
+        "ESTPAYMENTDATE": {
+          "missing_or_invalid": 242,
+          "min": "2024-06-11",
+          "max": "2026-09-28"
+        },
+        "RECORDCREATED": {
+          "missing_or_invalid": 0,
+          "min": "2025-09-29",
+          "max": "2026-09-28"
+        },
+        "RECORDUPDATEDDATE": {
+          "missing_or_invalid": 0,
+          "min": "2025-10-08",
+          "max": "2026-10-14"
+        }
+      },
+      "payment_before_invoice": 0,
+      "estimated_date_equals_payment_date": 7,
+      "repeated_rows_on_AGENCYCODE+SUPPLIERNAME+INVOICENUMBER": 79,
+      "repeated_rows_on_AGENCYCODE+SUPPLIERNAME+INVOICENUMBER+VOUCHERNUMBER+PAYMENTNUMBER": 0,
+      "payment_amount_differs_from_voucher": 660,
+      "nonpositive_payment_amount": 0
+    },
+    "cz_mf_prefix": {
+      "rows": 5322,
+      "dates": {
+        "datum_vystavení": {
+          "missing_or_invalid": 7,
+          "min": "2018-07-03",
+          "max": "2026-04-28"
+        },
+        "datum_přijetí": {
+          "missing_or_invalid": 7,
+          "min": "2025-11-18",
+          "max": "2026-04-30"
+        },
+        "datum_splatnosti": {
+          "missing_or_invalid": 7,
+          "min": "2025-09-22",
+          "max": "2026-05-24"
+        },
+        "datum_úhrady": {
+          "missing_or_invalid": 7,
+          "min": "2025-11-11",
+          "max": "2026-05-04"
+        }
+      },
+      "record_types": {
+        "souhrnný": 1956,
+        "položkový": 3366
+      },
+      "unique_iri": 3934,
+      "summary_rows": {
+        "rows": 1956,
+        "dates": {
+          "datum_vystavení": {
+            "missing_or_invalid": 7,
+            "min": "2018-07-03",
+            "max": "2026-04-28"
+          },
+          "datum_přijetí": {
+            "missing_or_invalid": 7,
+            "min": "2025-11-18",
+            "max": "2026-04-30"
+          },
+          "datum_splatnosti": {
+            "missing_or_invalid": 7,
+            "min": "2025-09-22",
+            "max": "2026-05-24"
+          },
+          "datum_úhrady": {
+            "missing_or_invalid": 7,
+            "min": "2025-11-11",
+            "max": "2026-05-04"
+          }
+        }
+      }
+    },
+    "bpi_prefix": {
+      "complete_cases": 220,
+      "case_keys": [
+        "Company",
+        "Document Type",
+        "GR-Based Inv. Verif.",
+        "Goods Receipt",
+        "Item",
+        "Item Category",
+        "Item Type",
+        "Name",
+        "Purch. Doc. Category name",
+        "Purchasing Document",
+        "Source",
+        "Spend area text",
+        "Spend classification text",
+        "Sub spend area text",
+        "Vendor",
+        "concept:name"
+      ],
+      "event_keys": [
+        "Cumulative net worth (EUR)",
+        "User",
+        "concept:name",
+        "org:resource",
+        "time:timestamp"
+      ],
+      "activity_counts": {
+        "SRM: Created": 279,
+        "SRM: Complete": 279,
+        "SRM: Awaiting Approval": 279,
+        "SRM: Document Completed": 279,
+        "SRM: In Transfer to Execution Syst.": 324,
+        "SRM: Ordered": 279,
+        "SRM: Change was Transmitted": 220,
+        "Create Purchase Order Item": 220,
+        "Vendor creates invoice": 589,
+        "Record Goods Receipt": 797,
+        "Record Invoice Receipt": 813,
+        "Clear Invoice": 562,
+        "Record Service Entry Sheet": 661,
+        "SRM: Transfer Failed (E.Sys.)": 17,
+        "Cancel Goods Receipt": 4,
+        "Vendor creates debit memo": 25,
+        "Cancel Invoice Receipt": 32,
+        "Change Delivery Indicator": 2,
+        "Remove Payment Block": 22,
+        "SRM: Deleted": 59,
+        "Change Price": 48,
+        "Delete Purchase Order Item": 2,
+        "SRM: Transaction Completed": 2,
+        "Change Quantity": 1
+      },
+      "invoice_receipt_events_per_case": {
+        "1": 161,
+        "2": 9,
+        "0": 12,
+        "5": 2,
+        "20": 2,
+        "51": 1,
+        "24": 2,
+        "43": 1,
+        "11": 1,
+        "9": 2,
+        "7": 1,
+        "6": 1,
+        "8": 1,
+        "3": 3,
+        "61": 1,
+        "12": 11,
+        "10": 4,
+        "13": 1,
+        "4": 3,
+        "125": 1
+      },
+      "clear_events_per_case": {
+        "1": 155,
+        "2": 7,
+        "0": 20,
+        "5": 1,
+        "11": 3,
+        "14": 1,
+        "8": 1,
+        "17": 1,
+        "6": 3,
+        "9": 3,
+        "13": 1,
+        "4": 3,
+        "3": 5,
+        "40": 1,
+        "12": 11,
+        "10": 3,
+        "29": 1
+      }
+    }
+  }
+}

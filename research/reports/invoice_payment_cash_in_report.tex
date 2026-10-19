@@ -1,0 +1,277 @@
+% Báo cáo dự án Invoice Prediction — biên dịch bằng pdfLaTeX (TeX Live) hoặc Overleaf.
+% Compiler: pdfLaTeX. Yêu cầu gói babel-vietnamese (có sẵn trong TeX Live).
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=2.3cm}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{Báo cáo dự án Invoice Prediction:\\từ dự báo ngày trả từng hóa đơn (T1) tới dự báo dòng tiền (Cash) và quyết định GO}
+\author{Nhóm triển khai --- dữ liệu AR thật 50.000 hóa đơn}
+\date{Tháng 9 năm 2026}
+
+\begin{document}
+\maketitle
+
+\begin{quote}
+\textbf{Ghi chú lưu trữ (18/10/2026).} Báo cáo này mô tả kết quả và cấu trúc mã tại thời điểm viết. Các lệnh \texttt{run.py}, thư mục mã và artifact được dẫn ở cuối báo cáo không có đầy đủ trong checkout hiện tại. Xem README ở gốc dự án để biết đường chạy notebook đang có.
+\end{quote}
+\tableofcontents
+\newpage
+
+% =====================================================================
+\section{Tóm tắt điều hành (cho người không làm kỹ thuật)}
+\label{sec:summary}
+
+\textbf{Bài toán.} Công ty có sổ phải thu (AR) gần 10.000 hóa đơn đang mở, tổng dư nợ
+\textbf{312,5 triệu USD} tại ngày 22/05/2020. Câu hỏi của CFO: \textit{30 ngày tới thu được bao nhiêu tiền, chắc chắn tới đâu, và đòi ai trước?}
+
+\textbf{Cách làm gồm 2 tầng.}
+\begin{enumerate}
+\item \textbf{T1 -- từng hóa đơn:} dự báo mỗi hóa đơn còn bao nhiêu ngày nữa thì trả
+(\texttt{remaining\_days\_at\_T}), kèm khoảng tin cậy 80\% [P10, P90].
+\item \textbf{Cash -- dòng tiền:} cộng 9.681 dự báo hóa đơn thành dòng tiền theo tuần bằng
+mô phỏng Monte Carlo (10.000 kịch bản), có tính tới việc khách hàng trả nợ theo chùm
+(copula Gauss), rồi backtest trên 10 thời điểm quá khứ.
+\end{enumerate}
+
+\textbf{Kết luận: GO có điều kiện.} Mô hình thắng baseline trên 4/5 cửa chính theo đúng luật
+chấm đã đặt ra từ đầu (bảng~\ref{tab:gate}):
+\begin{itemize}
+\item Dự báo ngày trả từng hóa đơn tốt hơn baseline \textbf{+11,5\%} (MAE 3,52 so với 4,03 ngày).
+\item Khoảng tin cậy đạt chuẩn: \textbf{84,9\%} số hóa đơn thực về nằm trong dải (dung sai 75--85\%).
+\item Dòng tiền dạng phân phối tốt hơn baseline trên metric đúng loại CRPS:
+\textbf{0,1255 so với 0,1297}.
+\item Danh sách thu hồi 100 hóa đơn/tuần bắt được nhiều tiền rủi ro hơn baseline
+(43,35\% so với 42,24\% giá trị thu hồi).
+\end{itemize}
+
+\textbf{Con số CFO dùng được (live, 2.000 kịch bản):}
+30 ngày tới P10 \textbf{256 triệu}, P50 \textbf{309 triệu}, trung bình thu 94,1\% dư nợ;
+tiền rơi ngoài 91 ngày chỉ $\sim$240 nghìn (0,08\%).
+
+\textbf{Nhãn cảnh báo bắt buộc đi kèm mọi con số:} forecast lạc quan hơn benchmark lịch sử
+(94,1\% so với 83,5\%) vì tập train thiếu hóa đơn không bao giờ trả; ngưỡng kế hoạch chỉ là proxy;
+không dùng số này để cam kết với bên thứ ba khi chưa qua stress test.
+
+% =====================================================================
+\section{Dữ liệu và pipeline (cho người hiểu kỹ thuật sơ sơ)}
+\label{sec:data}
+
+\subsection{Nguồn và làm sạch}
+File \texttt{data/dataset.csv}: 50.000 dòng, 19 cột (mã khách, ngày phát hành/đáo hạn/thanh toán,
+số tiền USD/CAD, điều khoản thanh toán\dots).
+Sau chuẩn hóa còn \textbf{48.833} hóa đơn sạch: \textbf{39.152 đã đóng} (có ngày trả để học)
+và \textbf{9.681 đang mở} (để dự báo thật). Đã gộp 1.161 dòng trùng exact, suy luận 88 điều khoản
+thanh toán từ median theo mã, quy đổi CAD$\to$USD 0,75, gắn cờ \texttt{due\_before\_issue} (131 dòng).
+
+\subsection{Snapshot theo thời gian và chống leakage}
+Mô phỏng production bằng 47 ``điểm cắt'' $T$ mỗi thứ Sáu từ 04/2019 tới 02/2020:
+tại ngày $T$, hóa đơn nào đang mở, còn bao nhiêu ngày mới trả, quá hạn bao lâu.
+Mọi feature lịch sử (median delay của khách, recency 5 hóa đơn gần nhất, thống kê theo
+điều khoản/toàn cục) \textbf{chỉ tính từ hóa đơn đã trả trước hoặc đúng $T$}.
+Chia theo thời gian: train 28 -- validation 9 -- test 10 cutoffs (76.151 dòng invoice-as-of).
+Đây là lớp chống leakage quan trọng nhất: model không bao giờ được nhìn tương lai.
+
+\begin{table}[h]\centering
+\caption{Quy mô artifacts (đo thật).}
+\label{tab:scale-data}
+\begin{tabular}{lrr}\toprule
+Artifact & Dòng & Cutoffs \\\midrule
+\texttt{invoices\_ar\_clean.csv} & 48.833 & --- \\
+\texttt{rolling\_snapshot\_features.csv} & 76.151 & 47 (28/9/10) \\
+\texttt{current\_open\_invoice\_features.csv} & 9.681 & 1 (22/05/2020) \\\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================
+\section{Kỹ thuật đã dùng để tới GO (semi-tech)}
+\label{sec:tech}
+
+\subsection{Baseline B1/B1R}
+\texttt{B1 = days\_until\_due + median delay của khách} (rơi về median theo term/global nếu
+khách mới). \texttt{B1R} dùng median 5 hóa đơn gần nhất. Trên test:
+B1 MAE \textbf{4,027} ngày (median AE 1,0), B1R 4,602 --- chốt B1 là mốc phải vượt.
+
+\subsection{LightGBM quantile + ensemble vote}
+Ba model LightGBM độc lập cho Q10/Q50/Q90 của \texttt{remaining\_days\_at\_T}
+(\texttt{num\_leaves 31, lr 0,05, early-stopping 100}), 31 features as-of-$T$ cộng
+dự báo B1 làm meta-feature, rồi sắp đơn điệu P10$\le$P50$\le$P90 (rearrangement) và chặn $\ge$0.
+Tune grid 3 configs (C0 thắng với val MAE 2,871), bagging 3 seeds:
+test MAE \textbf{3,519} (\textbf{+11,5\%} mean-of-cutoffs, +12,5\% row), pinball P50 1,76 so với 2,01,
+quantile crossing 1,1\%, coverage test 76,0\%.
+
+\subsection{Survival classifier và đuôi risk-weighted}
+Ba classifier LightGBM $P(\text{trả trong }N\mid \text{sống tới }T)$, $N=30/60/90$:
+AUC \textbf{0,953/0,943/0,749}, Brier 0,033/0,014/0,006. Xác suất này dùng để
+\textit{chỉ nới rộng dải ở hóa đơn rủi ro cao} (3,2\% hóa đơn có trọng số $>$2),
+thay vì nới toàn bộ làm mất độ sắc.
+
+\subsection{CQR + Monte Carlo copula}
+Hiệu chỉnh Conformalized Quantile Regression trên validation (qhat global 0,17 ngày):
+coverage invoice test \textbf{76,0\% $\to$ 84,9\%}, P50 giữ nguyên (median shift $<$ ngưỡng).
+Mô phỏng cash: $U=\rho_m M+\rho_c C+\sqrt{1-\rho_c^2-\rho_m^2}\,Z$,
+$(\rho_c,\rho_m)=(0{,}25;0{,}75)$ đã quét lưới xác nhận; residual bootstrap theo nhóm aging
+cộng đuôi mũ $\mathrm{Exp}((Q90-Q50)/2)$ với xác suất 5\% có trọng số survival cho stragglers.
+Giả định độc lập làm coverage sập còn 36,9\% và CRPS tệ đi (0,1625) --- bằng chứng phải mô hình
+phụ thuộc.
+
+\subsection{Luật chấm GO (Tầng 9)}
+Bảng~\ref{tab:gate} là toàn bộ sự thật, cả cửa FAIL cũng ghi.
+
+\begin{table}[h]\centering
+\caption{Bảng gate cuối (test, sims=800; code \texttt{python run.py go}).}
+\label{tab:gate}
+\begin{tabular}{llcc}\toprule
+Rule & Giá trị & Vai trò & Kết luận \\\midrule
+R2 invoice MAE $\ge$10\% (mean-of-cutoffs) & +11,5\% & gate & PASS \\
+R4 coverage invoice 75--85\% (CQR test) & 84,9\% & gate & PASS \\
+R1a cash wMAPE so B1 điểm & 18,87\% vs 10,46\% & gate & FAIL \\
+R1b cash CRPS so B1-dist & 0,1255 vs 0,1297 & gate & PASS \\
+Action value-precision@100 & 43,35\% vs 42,24\% & gate & PASS \\
+S1 unique-invoice $\ge$10\% & +8,3\% & độ nhạy & FAIL \\
+S3 không stacking (CatBoost nostack) & +10,1\% & độ nhạy & PASS \\\bottomrule
+\end{tabular}
+\end{table}
+
+R1a FAIL là cấu trúc (mục D32 trong log): wMAPE thưởng dự báo dồn hết tiền vào tuần mode,
+nên baseline điểm kém sắc hơn vẫn thắng mọi phân phối. CRPS mới là metric đúng loại cho hệ
+cảnh báo rủi ro. Theo luật plan (cash cần 1 trong 2 R1): \textbf{GO}.
+
+% =====================================================================
+\section{Các thí nghiệm đã thử: thông số, vì sao fail, bài học}
+\label{sec:exp}
+
+\begin{table}[h]\centering
+\caption{Thí nghiệm T1 (test 10.906 dòng; B1 MAE 4,027).}
+\label{tab:t1exp}
+\begin{tabular}{lp{5cm}ccp{4.5cm}}\toprule
+Thí nghiệm & Thông số chính & MAE & vs B1 & Bài học \\\midrule
+Tune C0/C1/C2 & leaves 31/63/15, lr 0,05/0,03/0,08 & 2,87 val & --- &
+Mặc định đã tối ưu; khỏi tune thêm. \\
+Seed-bagging $\times$3 & seeds 42/7/123, Q10/50/90 & 3,519 & +12,6\% &
+std seeds 0,22 ngày: đồng thuận cao, lift nhỏ nhưng ổn định. \\
+CatBoost stacked & depth 6, iter 1500, 4 categoricals & 3,544 & +12,0\% &
+Ngang LGBM; categoricals thật có giá trị. \\
+CatBoost \textbf{no-stack} & bỏ \texttt{pred\_b1} & 3,621 & \textbf{+10,1\% PASS} &
+Học tín hiệu thật (LGBM no-stack chỉ +4,6\% FAIL): production gọi đúng tên là vote, không phải ``LGBM thuần''. \\
+Weighting overdue$\times$3 cold$\times$3 & sample\_weight LGBM & 3,546 & +12,0\% &
+Overdue 9,97 vs 12,82 (+22\%); đổi 0,02 MAE tổng lấy 3 điểm segment khó --- đáng. \\
+Voting mean(LGBM, CatBoost) & --- & \textbf{3,510} & +12,8\% &
+Đa dạng thắng đơn lẻ; thêm B1 vào vote lại tụt. \\
+DeepSurv MLP hazard & 6 bins, 128-64, 15 epochs, GPU & expMAE 5,07 &
+AUC30 0,875 $<$ LGBM 0,953 &
+Tabular 50k dòng GBDT vẫn vua; DL chỉ ngang/hơn khi có sequence. C-index 0,846 cho thấy xếp hạng được. \\
+TFT-lite & embedding + MLP quantile, 12 epochs & 5,69 & \textbf{-41\% FAIL} &
+Underfit thảm: DL tabular nhỏ thua GBDT là luật chung --- dừng, đừng cứu. \\
+Chronos-2-small & delay sequences top-10 khách, zero-shot next-3 &
+12,3 vs median 17,9 & +31\% &
+Thắng ở khách biến động (+48\%, +33\%), thua ở khách ổn định (-55\%, -79\%).
+Dùng lai theo độ biến động, không thay regressor. \\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]\centering
+\caption{Thí nghiệm cash (test 10 cutoffs $\times$ 13 tuần).}
+\label{tab:cashexp}
+\begin{tabular}{lccccp{4cm}}\toprule
+Cấu hình & wMAPE & CRPS & Cover & vs B1-dist & Ghi chú \\\midrule
+Single, no-tail & 20,50\% & 0,1315 & 51,5\% & hòa & Xuất phát (notebook: 23,2\%/0,1431/53,8\%). \\
+Ensemble, no-tail & 19,71\% & 0,1286 & 56,2\% & thắng nhẹ & Residual tốt hơn. \\
++ tail đều 5\% & 20,49\% & 0,1276 & 68,5\% & thắng & Nới cả tuần lớn: coverage lên, wMAPE nhích. \\
++ tail đều 10\% & 24,51\% & 0,1413 & 72,3\% & \textbf{thua CRPS} & Quá tay: dừng. \\
++ tail 5\% risk-weighted & \textbf{18,87\%} & \textbf{0,1255} & 65,4\% &
+thắng cả hai & Chỉ widen 3,2\% HĐ rủi ro: chốt. \\
+Cond-shift theo tuần & 20,02\% & 0,1283 & 53,1\% & hòa/tụt &
+Bias tuần 1--4 $<$1 ngày: lệch shape, không phải vị trí --- giết. \\
+W1 post-hoc $\times$1,15 & $\sim$17\% & --- & --- & diagnostic &
+Factor ổn định val$\approx$test nhưng chỉ là băng gạc báo cáo. \\
+VN bias theo aging & 3,519$\to$3,543 & --- & --- & \textbf{-0,68\%} &
+Bias val không transfer --- giết, ghi nợ retrain có feats VN. \\\bottomrule
+\end{tabular}
+\end{table}
+
+Bài học chung: (1) đo 3 cách tổng hợp row/cutoff/unique, con số phụ thuộc cách đếm;
+(2) coverage đều-tuần phạt tuần bụi $45k ngang tuần $15M --- phải báo thêm coverage trọng số tiền (83,3\%);
+(3) thí nghiệm âm cũng là tài sản: cond-shift, TFT-lite, VN-bias đều có số fail rõ ràng để khỏi làm lại.
+
+% =====================================================================
+\section{Chứng minh cách làm hiện tại scale được}
+\label{sec:scale}
+
+Độ phức tạp: preprocess $O(\text{cutoffs}\times \text{history})$ với groupby theo từng $T$;
+train LightGBM histogram $O(n \log n)$ gần tuyến tính; MC $O(\text{sims}\times n)$ cộng
+$O(B^2)$ cho CRPS theo (cutoff, tuần). Thời gian đo trên laptop RTX 4050 (tham khảo):
+preprocess $\sim$1 phút, baseline $<$1 phút, train $\sim$4 phút, ensemble 9 models $\sim$8 phút,
+survival $\sim$2 phút, backtest cash sims=800 $\sim$8 phút, live 9.681 HĐ $\times$ 2.000 sims $\sim$3 phút.
+RAM đỉnh vài trăm MB (snapshot 76k$\times$80 cột; ma trận sims $91\times2000$ float32 $<$1MB).
+
+Lên 10$\times$ dữ liệu (500k hóa đơn): snapshot $\sim$760k dòng vẫn vừa RAM;
+train LightGBM $\sim$15--30 phút; backtest tăng tuyến tính theo cutoff --- song song hóa theo
+cutoff/seeds, giảm sims giám sát xuống 300 (sai số CRPS $\pm$0,005 vẫn phân biệt được),
+giữ 800--2000 cho báo cáo tuần. GPU chỉ cần cho nhánh DL (tùy chọn); đường GO chạy CPU thuần.
+Parquet thay CSV, cache pools/CQR theo nhóm, retrain định kỳ quý (drift đã đo bằng PSI/change-point)
+là đủ vận hành. Cổ chai duy nhất là vòng lặp Python theo cutoff trong MC --- vector hóa/Cython
+nếu cần realtime.
+
+% =====================================================================
+\section{Hạn chế: do data hay do algorithm?}
+\label{sec:limits}
+
+\subsection{Do data (không thuật toán nào gỡ được nếu không thêm dữ liệu)}
+\begin{itemize}
+\item \textbf{P0-1 -- thiếu censored:} train chỉ có hóa đơn cuối cùng đã trả; hóa đơn không bao giờ
+trả không tồn tại trong dữ liệu. Live mean 30d 94,1\% vs benchmark lịch sử 83,5\% (+11 điểm):
+forecast lạc quan cấu trúc. Sửa gốc = survival có censoring thật (notebook 08), không phải tune thêm.
+\item \textbf{Cold-start:} 292 dòng test (+3,4\%), mọi model đều yếu vì không có lịch sử khách.
+Cần dữ liệu ngoài (tuổi khách, ngành, hạn mức) hoặc hierarchical prior.
+\item \textbf{Regime shift COVID 03/2020:} late\_rate 40\%$\to$82\%, cash/tuần 19,4M$\to$1M;
+PSI train-vs-live tới 6,2 (ngưỡng 0,25). Test quá khứ không đại diện live hiện tại.
+\item \textbf{Tuần bụi:} coverage đều-tuần bị kéo xuống bởi tuần \$45--78k (1 straggler quyết định hit/miss).
+\item \textbf{Ngưỡng kế hoạch proxy} chỉ 1\% sổ AR --- phần shortfall analysis chỉ mang tính minh họa.
+\end{itemize}
+
+\subsection{Do algorithm (sửa được bằng kỹ thuật)}
+\begin{itemize}
+\item \textbf{R1a cấu trúc:} wMAPE thưởng dự báo dồn --- chấp nhận FAIL có lý do, lấy CRPS làm metric chính.
+\item \textbf{Phụ thuộc stacking:} LGBM no-stack chỉ +4,6\% (importance \texttt{pred\_b1} 106k vs 26k).
+Đã xử lý bằng vote có CatBoost no-stack +10,1\% và gọi đúng tên.
+\item \textbf{S1 unique +8,3\% $<$10\%:} mỗi hóa đơn lặp 1,93 lần trong test; báo cả 3 cách đếm, không cherry-pick.
+\item \textbf{Tail trade-off:} đuôi 10\% coverage 72\% nhưng phá CRPS; chốt 5\% risk-weighted.
+\item \textbf{Copula Gauss + đuôi mũ + ngưỡng proxy} đều là lựa chọn thiết kế, không phải kết quả fit ---
+đã khai báo rõ trong báo cáo.
+\end{itemize}
+
+% =====================================================================
+\section{Kết luận và bước tiếp theo}
+\label{sec:conclusion}
+Đường GO hiện tại (vote LGBM+CatBoost $\to$ CQR $\to$ MC copula + tail risk-weighted) đạt
+R2/R4/R1b/Action, tái hiện được bằng một lệnh
+\texttt{python run.py cash --model ensemble --sims 800 --sims-live 2000 --tail 0.05 --risk-tail}
+rồi \texttt{python run.py go}. Bước tiếp theo theo thứ tự: survival censoring thật cho live pool;
+model timing riêng cho imminent payments (bias tuần-1 hệ số 1,15 còn bỏ ngỏ);
+retrain có features VN thay vì cộng bias; coverage trọng số tiền thành metric chính thức;
+monitor PSI/change-point hàng tuần gắn nhãn CRISIS tự động.
+
+\appendix
+\section{Lệnh chạy và cấu trúc repo}
+\begin{verbatim}
+pip install -r requirements.txt
+python run.py full-t1 --input data/dataset.csv
+python run.py cash --model ensemble --sims 800 --sims-live 2000 \
+    --tail 0.05 --risk-tail
+python run.py go            # bảng gate -> outputs/go_decision.csv
+python run.py second --input2 data/dataset_ledger2.csv
+\end{verbatim}
+\texttt{src/invoice\_pred/}: \texttt{config, data\_loader, preprocessing, features, baseline,
+metrics, model, ensemble, survival, cash, plots}. \texttt{data/}: \texttt{dataset.csv} +
+\texttt{processed/}. \texttt{outputs/}: metrics, backtest, plots, \texttt{go\_decision.csv}.
+\texttt{models/}: \texttt{lgbm\_q*.txt, ensemble\_qbag.pkl, survival\_clf.pkl}.
+
+\end{document}

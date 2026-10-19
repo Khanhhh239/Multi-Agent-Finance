@@ -1,0 +1,126 @@
+{
+  "checked_on": "2026-10-18",
+  "scope": "Small response or HEAD checks only; no full dataset quality audit or license acceptance.",
+  "checks": [
+    {
+      "id": "uci_online_retail_ii",
+      "method": "HEAD",
+      "url": "https://archive.ics.uci.edu/static/public/502/online+retail+ii.zip",
+      "status": 200,
+      "final_url": "https://archive.ics.uci.edu/static/public/502/online+retail+ii.zip",
+      "content_type": null,
+      "content_length_header": null,
+      "response_bytes_read": 0
+    },
+    {
+      "id": "dc_pass_schema",
+      "method": "GET",
+      "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17?f=pjson",
+      "status": 200,
+      "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17?f=pjson",
+      "content_type": "text/plain; charset=UTF-8",
+      "content_length_header": "5143",
+      "response_bytes_read": 5143,
+      "response_sha256": "dd4b4de2eb42ff600c72ec81462d604f2d4442e5fa94d1e16c54e2aaa7c12b6e",
+      "fields": [
+        "AGENCYCODE",
+        "AGENCY_ACRONYM",
+        "AGENCY_NAME",
+        "CONTRACTNUMBER",
+        "SUPPLIERNAME",
+        "INVOICENUMBER",
+        "PONUMBER",
+        "VOUCHERNUMBER",
+        "VOUCHERAMOUNT",
+        "PAYMENTDATE",
+        "PAYMENTAMOUNT",
+        "FISCALYEAR",
+        "TRANSACTION_CODE",
+        "PAYMENTTYPE",
+        "INVOICEDATE",
+        "ESTPAYMENTDATE",
+        "PAYMENTNUMBER",
+        "RECORDUPDATEDDATE",
+        "RECORDCREATED",
+        "DCS_REC_CRT_DTTM",
+        "DCS_LAST_MOD_DTTM",
+        "OBJECTID"
+      ],
+      "copyright_text": null
+    },
+    {
+      "id": "dc_pass_sample",
+      "method": "GET",
+      "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=INVOICEDATE+IS+NOT+NULL+AND+PAYMENTDATE+IS+NOT+NULL&outFields=INVOICEDATE%2CPAYMENTDATE%2CESTPAYMENTDATE%2CPAYMENTAMOUNT%2CVOUCHERAMOUNT%2CPAYMENTTYPE&returnGeometry=false&resultRecordCount=5&f=json",
+      "status": 200,
+      "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=INVOICEDATE+IS+NOT+NULL+AND+PAYMENTDATE+IS+NOT+NULL&outFields=INVOICEDATE%2CPAYMENTDATE%2CESTPAYMENTDATE%2CPAYMENTAMOUNT%2CVOUCHERAMOUNT%2CPAYMENTTYPE&returnGeometry=false&resultRecordCount=5&f=json",
+      "content_type": "application/json; charset=UTF-8",
+      "content_length_header": "1740",
+      "response_bytes_read": 1740,
+      "response_sha256": "b9d7f2b84fb8b47a9628af8b4601cd3e5a7102f479934de18c688b5eb8203d49",
+      "returned_records": 5,
+      "api_error": null,
+      "returned_field_names": [
+        "INVOICEDATE",
+        "PAYMENTDATE",
+        "ESTPAYMENTDATE",
+        "PAYMENTAMOUNT",
+        "VOUCHERAMOUNT",
+        "PAYMENTTYPE"
+      ]
+    },
+    {
+      "id": "world_bank_vnm_cpi",
+      "method": "GET",
+      "url": "https://api.worldbank.org/v2/country/VNM/indicator/FP.CPI.TOTL.ZG?format=json",
+      "status": 200,
+      "final_url": "https://api.worldbank.org/v2/country/VNM/indicator/FP.CPI.TOTL.ZG?format=json",
+      "content_type": "application/json;charset=utf-8",
+      "content_length_header": null,
+      "response_bytes_read": 11253,
+      "response_sha256": "db7b08f8406789c3711859277067b26363f56e7fcf8056556c875e6f200d1458",
+      "observations_returned": 50
+    },
+    {
+      "id": "tcpd_annotations",
+      "method": "GET",
+      "url": "https://raw.githubusercontent.com/alan-turing-institute/TCPD/master/annotations.json",
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/alan-turing-institute/TCPD/master/annotations.json",
+      "content_type": "text/plain; charset=utf-8",
+      "content_length_header": "7268",
+      "response_bytes_read": 7268,
+      "response_sha256": "532bedc29837086a024cf680213afaa832ecdf3d6b1763ae9ad89181fd85227d",
+      "annotated_series_count": 42
+    },
+    {
+      "id": "sba_dictionary",
+      "method": "HEAD",
+      "url": "https://data.sba.gov/sites/default/files/uploaded_resources/7a_504_foia_data_dictionary.xlsx",
+      "status": 200,
+      "final_url": "https://data.sba.gov/sites/default/files/uploaded_resources/7a_504_foia_data_dictionary.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "content_length_header": "24529",
+      "response_bytes_read": 0
+    },
+    {
+      "id": "bpi2019_doi",
+      "method": "HEAD",
+      "url": "https://doi.org/10.4121/uuid:d06aff4b-79f0-45e6-8ec8-e19730c248f1",
+      "status": 200,
+      "final_url": "https://data.4tu.nl/articles/_/12715853/1",
+      "content_type": "text/html; charset=utf-8",
+      "content_length_header": "31067",
+      "response_bytes_read": 0
+    }
+  ],
+  "additional_metadata_checks": [
+    {
+      "id": "bpi2019_license",
+      "url": "https://data.4tu.nl/articles/_/12715853/1",
+      "verified_on": "2026-10-18",
+      "verification": "Read publisher record HTML; JSON-LD license and visible license agree.",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ]
+}

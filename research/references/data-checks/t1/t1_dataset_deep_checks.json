@@ -1,0 +1,767 @@
+{
+  "checked_at_utc": "2026-10-18T08:53:58.147798+00:00",
+  "scope": "Metadata, bounded downloads and non-random samples; not a full training dataset audit.",
+  "checks": [
+    {
+      "id": "cook_metadata",
+      "url": "https://datacatalog.cookcountyil.gov/api/views/exta-e29u.json",
+      "method": "GET",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "cook_sample",
+      "url": "https://datacatalog.cookcountyil.gov/resource/exta-e29u.json?$limit=5",
+      "method": "GET",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "cz_mf_csv",
+      "url": "https://data.mf.gov.cz/exports/faktury/faktury.csv",
+      "method": "GET",
+      "error": "download exceeds 50 MB bound"
+    },
+    {
+      "id": "cz_health_sample",
+      "url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000",
+      "method": "GET",
+      "status": 200,
+      "final_url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000",
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_read": 1582437,
+      "sha256": "5116082642533f3f4896454dfe268fca5d267667311f469dca9e1103777b8fa3",
+      "headers": {
+        "X-Pagination-Total-Count": "289698",
+        "X-Pagination-Page-Count": "290",
+        "X-Pagination-Current-Page": "1",
+        "X-Pagination-Per-Page": "1000"
+      },
+      "rows": 1000,
+      "fields": [
+        "id_invoice",
+        "import_id",
+        "ucel_platby",
+        "castka_bez_dph",
+        "castka_bez_dph_mena",
+        "castka_s_dph",
+        "castka_s_dph_mena",
+        "castka_celkem_devizy",
+        "castka_celkem_devizy_mena",
+        "castka_uhrazena",
+        "castka_uhrazena_mena",
+        "datum_plneni",
+        "datum_vystaveni",
+        "datum_prijeti",
+        "datum_splatnosti",
+        "datum_uhrady",
+        "typ_dokladu",
+        "identifikator_odberatele",
+        "identifikator_dodavatele",
+        "identifikator_smlouvy",
+        "url",
+        "kapitola_rozpoctu_original",
+        "odberatel",
+        "dodavatel",
+        "polozky"
+      ],
+      "first_row_shape": {
+        "id_invoice": "int",
+        "import_id": "int",
+        "ucel_platby": "str",
+        "castka_bez_dph": "str",
+        "castka_bez_dph_mena": "str",
+        "castka_s_dph": "str",
+        "castka_s_dph_mena": "str",
+        "castka_celkem_devizy": "NoneType",
+        "castka_celkem_devizy_mena": "str",
+        "castka_uhrazena": "str",
+        "castka_uhrazena_mena": "str",
+        "datum_plneni": "str",
+        "datum_vystaveni": "NoneType",
+        "datum_prijeti": "str",
+        "datum_splatnosti": "str",
+        "datum_uhrady": "str",
+        "typ_dokladu": "str",
+        "identifikator_odberatele": "str",
+        "identifikator_dodavatele": "str",
+        "identifikator_smlouvy": "str",
+        "url": "NoneType",
+        "kapitola_rozpoctu_original": "NoneType",
+        "odberatel": "dict",
+        "dodavatel": "dict",
+        "polozky": "list"
+      }
+    },
+    {
+      "id": "cz_health_imports",
+      "url": "https://faktury.mzcr.cz/rest/imports?per-page=5",
+      "method": "GET",
+      "status": 200,
+      "final_url": "https://faktury.mzcr.cz/rest/imports?per-page=5",
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_read": 363,
+      "sha256": "947856cd20bc296e58277a9cba5b979e5fb453388c0d06492f0d2f96404dfea5",
+      "headers": {
+        "X-Pagination-Total-Count": "944",
+        "X-Pagination-Page-Count": "189",
+        "X-Pagination-Current-Page": "1",
+        "X-Pagination-Per-Page": "5",
+        "content-length": "363"
+      },
+      "rows": 5,
+      "fields": [
+        "id_import",
+        "organization_id",
+        "imported_at"
+      ]
+    },
+    {
+      "id": "bpi_file_head",
+      "url": "https://data.4tu.nl/file/35ed7122-966a-484e-a0e1-749b64e3366d/864493d1-3a58-47f6-ad6f-27f95f995828",
+      "method": "HEAD",
+      "status": 200,
+      "final_url": "https://data.4tu.nl/file/35ed7122-966a-484e-a0e1-749b64e3366d/864493d1-3a58-47f6-ad6f-27f95f995828",
+      "content_type": "application/octet-stream",
+      "bytes_read": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headers": {
+        "Content-Length": "728558522",
+        "Content-disposition": "filename*=UTF-8''BPI_Challenge_2019.xes",
+        "Last-Modified": "Sat, 25 Jul 2020 10:01:38 GMT"
+      }
+    },
+    {
+      "id": "dc_year_counts",
+      "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=1%3D1&groupByFieldsForStatistics=FISCALYEAR&outStatistics=%5B%7B%22statisticType%22%3A+%22count%22%2C+%22onStatisticField%22%3A+%22OBJECTID%22%2C+%22outStatisticFieldName%22%3A+%22n%22%7D%5D&f=json",
+      "method": "GET",
+      "status": 200,
+      "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=1%3D1&groupByFieldsForStatistics=FISCALYEAR&outStatistics=%5B%7B%22statisticType%22%3A+%22count%22%2C+%22onStatisticField%22%3A+%22OBJECTID%22%2C+%22outStatisticFieldName%22%3A+%22n%22%7D%5D&f=json",
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_read": 762,
+      "sha256": "5686d31b1b86e012d3cf67e97452754b33a7dd9de56924d886af75323ecd64f5",
+      "headers": {
+        "Content-Length": "762"
+      },
+      "response": {
+        "displayFieldName": "",
+        "fieldAliases": {
+          "FISCALYEAR": "FISCALYEAR",
+          "N": "N"
+        },
+        "fields": [
+          {
+            "name": "FISCALYEAR",
+            "type": "esriFieldTypeString",
+            "alias": "FISCALYEAR",
+            "length": 50
+          },
+          {
+            "name": "N",
+            "type": "esriFieldTypeBigInteger",
+            "alias": "N"
+          }
+        ],
+        "features": [
+          {
+            "attributes": {
+              "FISCALYEAR": "2022",
+              "N": 224702
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2019",
+              "N": 209223
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2026",
+              "N": 70164
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2020",
+              "N": 197343
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2018",
+              "N": 206847
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2027",
+              "N": 5447
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2017",
+              "N": 191399
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2021",
+              "N": 214028
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2023",
+              "N": 97252
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2024",
+              "N": 85317
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2025",
+              "N": 76917
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cz_mf_prefix",
+      "url": "https://data.mf.gov.cz/exports/faktury/faktury.csv",
+      "method": "GET",
+      "limit_bytes": 2000000,
+      "status": 200,
+      "final_url": "https://data.mf.gov.cz/exports/faktury/faktury.csv",
+      "bytes_read": 2000000,
+      "sha256": "0d74e104b2be9dfe0b21d0fc98cd0337c36673c7c4e1b5dec9b18396d406ef05",
+      "headers": {
+        "Content-Length": "398969432",
+        "Content-Type": "text/csv",
+        "Last-Modified": "Fri, 15 May 2026 02:14:01 GMT"
+      },
+      "rows": 5322,
+      "fields": [
+        "typ_záznamu",
+        "iri",
+        "dodavatel_ičo",
+        "dodavatel_název",
+        "typ_dokladu",
+        "částka",
+        "částka_bez_dph",
+        "částka_v_měně",
+        "měna",
+        "datum_vystavení",
+        "datum_přijetí",
+        "datum_splatnosti",
+        "datum_úhrady",
+        "částka_k_úhradě",
+        "částka_k_úhradě_v_měně",
+        "účel_platby",
+        "položka_rozpočtu",
+        "název_položky_rozpočtu",
+        "částka_za_položku_rozpočtu",
+        "číslo_faktury"
+      ],
+      "partial_response": true
+    },
+    {
+      "id": "bpi_xes_prefix",
+      "url": "https://data.4tu.nl/file/35ed7122-966a-484e-a0e1-749b64e3366d/864493d1-3a58-47f6-ad6f-27f95f995828",
+      "method": "GET",
+      "limit_bytes": 2000000,
+      "status": 200,
+      "final_url": "https://data.4tu.nl/file/35ed7122-966a-484e-a0e1-749b64e3366d/864493d1-3a58-47f6-ad6f-27f95f995828",
+      "bytes_read": 2000000,
+      "sha256": "7c9c366d3a6e9530ba223b115f7bd0599ea0e788c32deb6696e38b23d1c7565e",
+      "headers": {
+        "Content-Type": "application/octet-stream",
+        "Content-Length": "728558522",
+        "Last-Modified": "Sat, 25 Jul 2020 10:01:38 GMT"
+      },
+      "complete_traces_in_prefix": 220,
+      "partial_response": true
+    },
+    {
+      "id": "cz_health_imports_all",
+      "url": "https://faktury.mzcr.cz/rest/imports?per-page=1000",
+      "method": "GET",
+      "limit_bytes": 2000000,
+      "status": 200,
+      "final_url": "https://faktury.mzcr.cz/rest/imports?per-page=1000",
+      "bytes_read": 70465,
+      "sha256": "f5b378ef0d303f8556bf4570bdb8630d5db8a4e433f217ed14fc7b5ee67cc1a6",
+      "headers": {
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Pagination-Total-Count": "944",
+        "X-Pagination-Page-Count": "1",
+        "X-Pagination-Current-Page": "1",
+        "X-Pagination-Per-Page": "1000",
+        "content-length": "70465"
+      },
+      "rows": 944
+    },
+    {
+      "id": "dc_schema",
+      "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17?f=pjson",
+      "method": "GET",
+      "limit_bytes": 1000000,
+      "status": 200,
+      "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17?f=pjson",
+      "bytes_read": 5143,
+      "sha256": "dd4b4de2eb42ff600c72ec81462d604f2d4442e5fa94d1e16c54e2aaa7c12b6e",
+      "headers": {
+        "Content-Length": "5143",
+        "Content-Type": "text/plain; charset=UTF-8"
+      },
+      "field_types": {
+        "AGENCYCODE": "esriFieldTypeString",
+        "AGENCY_ACRONYM": "esriFieldTypeString",
+        "AGENCY_NAME": "esriFieldTypeString",
+        "CONTRACTNUMBER": "esriFieldTypeString",
+        "SUPPLIERNAME": "esriFieldTypeString",
+        "INVOICENUMBER": "esriFieldTypeString",
+        "PONUMBER": "esriFieldTypeString",
+        "VOUCHERNUMBER": "esriFieldTypeString",
+        "VOUCHERAMOUNT": "esriFieldTypeDouble",
+        "PAYMENTDATE": "esriFieldTypeDate",
+        "PAYMENTAMOUNT": "esriFieldTypeDouble",
+        "FISCALYEAR": "esriFieldTypeString",
+        "TRANSACTION_CODE": "esriFieldTypeString",
+        "PAYMENTTYPE": "esriFieldTypeString",
+        "INVOICEDATE": "esriFieldTypeDate",
+        "ESTPAYMENTDATE": "esriFieldTypeDate",
+        "PAYMENTNUMBER": "esriFieldTypeString",
+        "RECORDUPDATEDDATE": "esriFieldTypeDate",
+        "RECORDCREATED": "esriFieldTypeDate",
+        "DCS_REC_CRT_DTTM": "esriFieldTypeDate",
+        "DCS_LAST_MOD_DTTM": "esriFieldTypeDate",
+        "OBJECTID": "esriFieldTypeOID"
+      },
+      "copyrightText": null,
+      "description": "This dataset contains payment information that the District of Columbia Government made to vendors. Questions regarding details within the data, contact the Office of Contract and Procurement at https://contracts.ocp.dc.gov/contact.",
+      "maxRecordCount": 1000
+    },
+    {
+      "id": "cz_health_page_73",
+      "url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000&page=73",
+      "method": "GET",
+      "limit_bytes": 4000000,
+      "status": 200,
+      "final_url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000&page=73",
+      "bytes_read": 2328636,
+      "sha256": "797e497b5a2784b563604f7e33ed64d8861e9f0fb21c2327f065e9150a98cedc",
+      "headers": {
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Pagination-Total-Count": "289698",
+        "X-Pagination-Page-Count": "290",
+        "X-Pagination-Current-Page": "73",
+        "X-Pagination-Per-Page": "1000"
+      },
+      "rows": 1000
+    },
+    {
+      "id": "cz_health_page_145",
+      "url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000&page=145",
+      "method": "GET",
+      "limit_bytes": 4000000,
+      "status": 200,
+      "final_url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000&page=145",
+      "bytes_read": 1178323,
+      "sha256": "87501d6f7a14e36ede9edd6b0733dc96203fa485ae3a08f01a57e257df2c4dbd",
+      "headers": {
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Pagination-Total-Count": "289698",
+        "X-Pagination-Page-Count": "290",
+        "X-Pagination-Current-Page": "145",
+        "X-Pagination-Per-Page": "1000"
+      },
+      "rows": 1000
+    },
+    {
+      "id": "cz_health_page_218",
+      "url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000&page=218",
+      "method": "GET",
+      "limit_bytes": 4000000,
+      "status": 200,
+      "final_url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000&page=218",
+      "bytes_read": 2067317,
+      "sha256": "a38671c186ef6432efbe8c888d0e59c1ff7a5769717deb55b7819a1a7169d23c",
+      "headers": {
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Pagination-Total-Count": "289698",
+        "X-Pagination-Page-Count": "290",
+        "X-Pagination-Current-Page": "218",
+        "X-Pagination-Per-Page": "1000"
+      },
+      "rows": 1000
+    },
+    {
+      "id": "cz_health_page_290",
+      "url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000&page=290",
+      "method": "GET",
+      "limit_bytes": 4000000,
+      "status": 200,
+      "final_url": "https://faktury.mzcr.cz/rest/invoices?per-page=1000&page=290",
+      "bytes_read": 784492,
+      "sha256": "f52352cbda4a29a98b443dc03c17aa7bec1163db5ae260801bcbdf1743236abc",
+      "headers": {
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Pagination-Total-Count": "289698",
+        "X-Pagination-Page-Count": "290",
+        "X-Pagination-Current-Page": "290",
+        "X-Pagination-Per-Page": "1000"
+      },
+      "rows": 698
+    },
+    {
+      "id": "dc_sample_2020",
+      "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272020%27&outFields=%2A&orderByFields=OBJECTID&resultRecordCount=2000&returnGeometry=false&f=json",
+      "method": "GET",
+      "limit_bytes": 4000000,
+      "status": 200,
+      "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272020%27&outFields=%2A&orderByFields=OBJECTID&resultRecordCount=2000&returnGeometry=false&f=json",
+      "bytes_read": 639780,
+      "sha256": "d75848516e8e2b7f9278aa662902d7d6886aa2e02f0826f6960e29fdea6aafaa",
+      "headers": {
+        "Content-Type": "application/json; charset=UTF-8"
+      },
+      "rows": 1000,
+      "exceededTransferLimit": true,
+      "error_response": null
+    },
+    {
+      "id": "dc_sample_2024",
+      "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272024%27&outFields=%2A&orderByFields=OBJECTID&resultRecordCount=2000&returnGeometry=false&f=json",
+      "method": "GET",
+      "limit_bytes": 4000000,
+      "status": 200,
+      "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272024%27&outFields=%2A&orderByFields=OBJECTID&resultRecordCount=2000&returnGeometry=false&f=json",
+      "bytes_read": 644115,
+      "sha256": "dc39967f7342cf32952c8d153ca7fc17929bde4a22dbe0cef598e04ef5fe85c6",
+      "headers": {
+        "Content-Type": "application/json; charset=UTF-8"
+      },
+      "rows": 1000,
+      "exceededTransferLimit": true,
+      "error_response": null
+    },
+    {
+      "id": "dc_sample_2026",
+      "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272026%27&outFields=%2A&orderByFields=OBJECTID&resultRecordCount=2000&returnGeometry=false&f=json",
+      "method": "GET",
+      "limit_bytes": 4000000,
+      "status": 200,
+      "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272026%27&outFields=%2A&orderByFields=OBJECTID&resultRecordCount=2000&returnGeometry=false&f=json",
+      "bytes_read": 642745,
+      "sha256": "ddee5320b115f1dd54f0cac28e91129498945134dd1d84216f58aef75153d29e",
+      "headers": {
+        "Content-Type": "application/json; charset=UTF-8"
+      },
+      "rows": 1000,
+      "exceededTransferLimit": true,
+      "error_response": null
+    },
+    {
+      "id": "dc_year_date_counts",
+      "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=1%3D1&groupByFieldsForStatistics=FISCALYEAR&outStatistics=%5B%7B%22statisticType%22%3A+%22count%22%2C+%22onStatisticField%22%3A+%22OBJECTID%22%2C+%22outStatisticFieldName%22%3A+%22n_rows%22%7D%2C+%7B%22statisticType%22%3A+%22count%22%2C+%22onStatisticField%22%3A+%22INVOICEDATE%22%2C+%22outStatisticFieldName%22%3A+%22n_invoice_date%22%7D%2C+%7B%22statisticType%22%3A+%22count%22%2C+%22onStatisticField%22%3A+%22PAYMENTDATE%22%2C+%22outStatisticFieldName%22%3A+%22n_payment_date%22%7D%5D&f=json",
+      "method": "GET",
+      "status": 200,
+      "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=1%3D1&groupByFieldsForStatistics=FISCALYEAR&outStatistics=%5B%7B%22statisticType%22%3A+%22count%22%2C+%22onStatisticField%22%3A+%22OBJECTID%22%2C+%22outStatisticFieldName%22%3A+%22n_rows%22%7D%2C+%7B%22statisticType%22%3A+%22count%22%2C+%22onStatisticField%22%3A+%22INVOICEDATE%22%2C+%22outStatisticFieldName%22%3A+%22n_invoice_date%22%7D%2C+%7B%22statisticType%22%3A+%22count%22%2C+%22onStatisticField%22%3A+%22PAYMENTDATE%22%2C+%22outStatisticFieldName%22%3A+%22n_payment_date%22%7D%5D&f=json",
+      "bytes_read": 1589,
+      "sha256": "4a8db17725473b8c90cdf332fb4ae30a0ec81e0e2a6a8cf774a3ead88df5ad8f",
+      "response": {
+        "displayFieldName": "",
+        "fieldAliases": {
+          "FISCALYEAR": "FISCALYEAR",
+          "N_ROWS": "N_ROWS",
+          "N_INVOICE_DATE": "N_INVOICE_DATE",
+          "N_PAYMENT_DATE": "N_PAYMENT_DATE"
+        },
+        "fields": [
+          {
+            "name": "FISCALYEAR",
+            "type": "esriFieldTypeString",
+            "alias": "FISCALYEAR",
+            "length": 50
+          },
+          {
+            "name": "N_ROWS",
+            "type": "esriFieldTypeBigInteger",
+            "alias": "N_ROWS"
+          },
+          {
+            "name": "N_INVOICE_DATE",
+            "type": "esriFieldTypeBigInteger",
+            "alias": "N_INVOICE_DATE"
+          },
+          {
+            "name": "N_PAYMENT_DATE",
+            "type": "esriFieldTypeBigInteger",
+            "alias": "N_PAYMENT_DATE"
+          }
+        ],
+        "features": [
+          {
+            "attributes": {
+              "FISCALYEAR": "2022",
+              "N_ROWS": 224702,
+              "N_INVOICE_DATE": 211571,
+              "N_PAYMENT_DATE": 224702
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2019",
+              "N_ROWS": 209223,
+              "N_INVOICE_DATE": 196989,
+              "N_PAYMENT_DATE": 209223
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2026",
+              "N_ROWS": 70164,
+              "N_INVOICE_DATE": 70164,
+              "N_PAYMENT_DATE": 70164
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2020",
+              "N_ROWS": 197343,
+              "N_INVOICE_DATE": 185388,
+              "N_PAYMENT_DATE": 197343
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2018",
+              "N_ROWS": 206847,
+              "N_INVOICE_DATE": 198531,
+              "N_PAYMENT_DATE": 206847
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2027",
+              "N_ROWS": 5447,
+              "N_INVOICE_DATE": 5447,
+              "N_PAYMENT_DATE": 5447
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2017",
+              "N_ROWS": 191399,
+              "N_INVOICE_DATE": 182646,
+              "N_PAYMENT_DATE": 191399
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2021",
+              "N_ROWS": 214028,
+              "N_INVOICE_DATE": 202147,
+              "N_PAYMENT_DATE": 214028
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2023",
+              "N_ROWS": 97252,
+              "N_INVOICE_DATE": 96850,
+              "N_PAYMENT_DATE": 97252
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2024",
+              "N_ROWS": 85317,
+              "N_INVOICE_DATE": 85317,
+              "N_PAYMENT_DATE": 85317
+            }
+          },
+          {
+            "attributes": {
+              "FISCALYEAR": "2025",
+              "N_ROWS": 76917,
+              "N_INVOICE_DATE": 76917,
+              "N_PAYMENT_DATE": 76917
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "dc_arcgis_item_search",
+      "url": "https://www.arcgis.com/sharing/rest/search?q=%22PASS+Payments%22&f=json&num=20",
+      "method": "GET",
+      "status": 200,
+      "final_url": "https://www.arcgis.com/sharing/rest/search?q=%22PASS+Payments%22&f=json&num=20",
+      "bytes_read": 1277,
+      "sha256": "3ce205025b8e38bc5cad967b907eb482dcd0b233faa72187870c6fb30fa10a3a",
+      "results": [
+        {
+          "id": "5b9421a5f82e4f74b51355c712fbbd0a",
+          "title": "pointderechargevoitureélectrique",
+          "owner": "joadupont_ucl_online",
+          "url": "https://services1.arcgis.com/0ahS9rhKCluPQ0Wm/arcgis/rest/services/pointderechargevoitureélectrique/FeatureServer",
+          "licenseInfo": ""
+        }
+      ]
+    },
+    {
+      "id": "cz_health_homepage",
+      "url": "https://faktury.mzcr.cz/",
+      "method": "GET",
+      "status": 200,
+      "final_url": "https://faktury.mzcr.cz/",
+      "bytes_read": 17958,
+      "sha256": "ef223573657f10c09bc793078e588deebfafb14763c5e88881c24afe0df2493d",
+      "links": [
+        "/favicon.ico",
+        "/assets/665b0c99/css/bootstrap.css",
+        "/assets/e8017de3/css/select2.min.css",
+        "/assets/9abd5a98/css/select2-addl.min.css",
+        "/assets/9abd5a98/css/select2-krajee-bs4.min.css",
+        "/assets/9302c7dc/css/kv-widgets.min.css",
+        "/assets/762d9af/css/bootstrap-datepicker4.min.css",
+        "/assets/762d9af/css/datepicker-kv.min.css",
+        "/assets/994e7738/css/field-range-bs4.min.css",
+        "/css/site.css",
+        "/",
+        "/site/index",
+        "/site/o-projektu",
+        "/imports/test",
+        "/site/otevrena-data",
+        "/site/login",
+        "/organizations/view/1",
+        "/organizations/view/4",
+        "/organizations/view/26",
+        "/organizations/view/3",
+        "/organizations/view/5",
+        "/organizations/view/17",
+        "/organizations/view/18",
+        "/organizations/view/19",
+        "/organizations/view/20",
+        "/organizations/view/21",
+        "/organizations/view/22",
+        "/organizations/view/23",
+        "/organizations/view/24",
+        "/organizations/view/28",
+        "/organizations/view/6",
+        "/organizations/view/10",
+        "/organizations/view/11",
+        "/organizations/view/12",
+        "/organizations/view/14",
+        "/organizations/view/15",
+        "/organizations/view/25",
+        "/organizations/view/27",
+        "/organizations/view/7",
+        "/organizations/view/8",
+        "/organizations/view/9",
+        "/organizations/view/13",
+        "/organizations/view/16",
+        "#",
+        "#"
+      ]
+    },
+    {
+      "id": "cz_mf_usage_metadata",
+      "url": "https://data.mf.gov.cz/katalog/cs/dataset/prehled-faktur-ministerstva-financi-cr/resource/649107b9-e2d8-4b47-92c5-024c6a200c0a",
+      "method": "GET",
+      "status": 200,
+      "final_url": "https://data.mf.gov.cz/katalog/cs/dataset/prehled-faktur-ministerstva-financi-cr/resource/649107b9-e2d8-4b47-92c5-024c6a200c0a",
+      "bytes_read": 18464,
+      "sha256": "1c7c66f05384f0dac7092172149d9901660d5ca8b6a30d1322cfad1e556ec1cb"
+    }
+  ],
+  "local_sample_files": [
+    {
+      "path": "data/T1/raw/source_samples/bpi_prefix.xml.part",
+      "bytes": 2000000,
+      "sha256": "7c9c366d3a6e9530ba223b115f7bd0599ea0e788c32deb6696e38b23d1c7565e",
+      "local_file_status": "retained"
+    },
+    {
+      "path": "data/T1/raw/source_samples/cz_health_imports_all.json",
+      "bytes": 70465,
+      "sha256": "f5b378ef0d303f8556bf4570bdb8630d5db8a4e433f217ed14fc7b5ee67cc1a6",
+      "local_file_status": "removed_after_full_czech_download",
+      "replacement_root": "data/T1/raw/czech/2026-10-18/"
+    },
+    {
+      "path": "data/T1/raw/source_samples/cz_health_page_145.json",
+      "bytes": 1178323,
+      "sha256": "87501d6f7a14e36ede9edd6b0733dc96203fa485ae3a08f01a57e257df2c4dbd",
+      "local_file_status": "removed_after_full_czech_download",
+      "replacement_root": "data/T1/raw/czech/2026-10-18/"
+    },
+    {
+      "path": "data/T1/raw/source_samples/cz_health_page_218.json",
+      "bytes": 2067317,
+      "sha256": "a38671c186ef6432efbe8c888d0e59c1ff7a5769717deb55b7819a1a7169d23c",
+      "local_file_status": "removed_after_full_czech_download",
+      "replacement_root": "data/T1/raw/czech/2026-10-18/"
+    },
+    {
+      "path": "data/T1/raw/source_samples/cz_health_page_290.json",
+      "bytes": 784492,
+      "sha256": "f52352cbda4a29a98b443dc03c17aa7bec1163db5ae260801bcbdf1743236abc",
+      "local_file_status": "removed_after_full_czech_download",
+      "replacement_root": "data/T1/raw/czech/2026-10-18/"
+    },
+    {
+      "path": "data/T1/raw/source_samples/cz_health_page_73.json",
+      "bytes": 2328636,
+      "sha256": "797e497b5a2784b563604f7e33ed64d8861e9f0fb21c2327f065e9150a98cedc",
+      "local_file_status": "removed_after_full_czech_download",
+      "replacement_root": "data/T1/raw/czech/2026-10-18/"
+    },
+    {
+      "path": "data/T1/raw/source_samples/cz_health_sample.json",
+      "bytes": 1582437,
+      "sha256": "5116082642533f3f4896454dfe268fca5d267667311f469dca9e1103777b8fa3",
+      "local_file_status": "removed_after_full_czech_download",
+      "replacement_root": "data/T1/raw/czech/2026-10-18/"
+    },
+    {
+      "path": "data/T1/raw/source_samples/cz_mf_prefix.csv",
+      "bytes": 2004842,
+      "sha256": "433e7246cb19fbc8820596a054bcbcfacbf29609fddb9a12b8c89a0e67680b25",
+      "local_file_status": "removed_after_full_czech_download",
+      "replacement_root": "data/T1/raw/czech/2026-10-18/"
+    },
+    {
+      "path": "data/T1/raw/source_samples/cz_mf_usage_metadata.html",
+      "bytes": 18464,
+      "sha256": "1c7c66f05384f0dac7092172149d9901660d5ca8b6a30d1322cfad1e556ec1cb",
+      "local_file_status": "removed_after_full_czech_download",
+      "replacement_root": "data/T1/raw/czech/2026-10-18/"
+    },
+    {
+      "path": "data/T1/raw/source_samples/dc_sample_2020.json",
+      "bytes": 639780,
+      "sha256": "d75848516e8e2b7f9278aa662902d7d6886aa2e02f0826f6960e29fdea6aafaa",
+      "local_file_status": "retained"
+    },
+    {
+      "path": "data/T1/raw/source_samples/dc_sample_2024.json",
+      "bytes": 644115,
+      "sha256": "dc39967f7342cf32952c8d153ca7fc17929bde4a22dbe0cef598e04ef5fe85c6",
+      "local_file_status": "retained"
+    },
+    {
+      "path": "data/T1/raw/source_samples/dc_sample_2026.json",
+      "bytes": 642745,
+      "sha256": "ddee5320b115f1dd54f0cac28e91129498945134dd1d84216f58aef75153d29e",
+      "local_file_status": "retained"
+    }
+  ],
+  "local_sample_files_note": "Historical selected-sample checks, not the current full-source audit. Retained BPI/DC samples moved to data/T1/raw/source_samples/. Czech samples were removed after confirming their contents in the complete snapshot at data/T1/raw/czech/2026-10-18/. Use czech_t1_full_audit.json for full-source results."
+}
