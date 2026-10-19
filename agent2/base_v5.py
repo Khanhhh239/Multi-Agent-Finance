@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import argparse
 import gc
+import hashlib
+import inspect
 import json
 import time
 from pathlib import Path
@@ -45,10 +47,17 @@ def _load(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
 
 
+def preparation_hashes():
+    paths=[Path(name) for name in ('agent2/data.py','agent2/feats.py','agent2/feats_v4.py',
+                                  'agent2/hybrid.py','agent2/methods.py')]
+    paths.extend(sorted(Path('sme_fraud').glob('*.py')))
+    return {'prepare_world_function':hashlib.sha256(inspect.getsource(prepare_world).encode()).hexdigest(),
+            **{str(path):sha256(path) for path in paths}}
+
+
 def prepare_world(seed, root, matrices, generation):
     from .data import load
     from .hybrid import FEATURE_SETS, attach_unsupervised
-    from .sealed_v4 import release_feature_caches
     source = root/f'v5dev_s{seed}'
     verified = _load(generation/f'world_{seed}.json')
     if verified['status'] != 'validated' or any(value!='passed' for value in verified['checks'].values()):
@@ -58,6 +67,7 @@ def prepare_world(seed, root, matrices, generation):
     if manifest_path.exists():
         manifest=_load(manifest_path)
         assert manifest['input_hash']==sha256(generation/f'world_{seed}.json')
+        assert manifest['preparation_hashes']==preparation_hashes()
         assert all(sha256(directory/name)==digest for name,digest in manifest['files'].items())
         return manifest
     wait_memory(3,matrices/'runtime.json')
@@ -79,9 +89,13 @@ def prepare_world(seed, root, matrices, generation):
         meta.to_parquet(directory/f'{split}.parquet',index=False)
         del part,meta
     del frame
-    release_feature_caches(); gc.collect()
+    from sme_fraud import rules
+    rules.parse.cache_clear()
+    rules.normalize.cache_clear()
+    gc.collect()
     manifest={'data_origin':'dữ liệu tổng hợp','seed':seed,'columns':cols,'L3_columns':l3,
-              'input_hash':sha256(generation/f'world_{seed}.json'),'seconds':time.monotonic()-began,
+              'input_hash':sha256(generation/f'world_{seed}.json'),'preparation_hashes':preparation_hashes(),
+              'seconds':time.monotonic()-began,
               'files':{p.name:sha256(p) for p in directory.iterdir() if p.suffix in ('.npy','.parquet')}}
     write_json(manifest_path,manifest)
     return manifest
@@ -228,9 +242,15 @@ def run(args):
     if not pilot_file.exists():
         began=time.monotonic()
         run_world(1001,.1,args.matrices,args.output)
-        seconds=time.monotonic()-began
+        wall_seconds=time.monotonic()-began
+        # On resume, count all measured protocols rather than timing only the
+        # unfinished suffix and underestimating the complete world workload.
+        pilot_directory=args.output/'w0.1'/'s1001'
+        seconds=sum(_load(pilot_directory/f'{protocol}.json')['seconds'] for protocol in ('S2',*BRANCHES))
         estimate={'data_origin':'dữ liệu tổng hợp','pilot_candidate':'L4-FB-PU','pilot_weight':.1,
                   'pilot_target':1001,'protocols':11,'model_seed':0,'seconds':seconds,
+                  'wall_seconds_this_invocation':wall_seconds,
+                  'timing_definition':'sum of all eleven saved protocol runtimes; excludes waiting for memory; safe on resume',
                   'preparation_seconds':sum(_load(args.matrices/f's{s}'/'manifest.json')['seconds'] for s in range(1001,1021)),
                   'PU_screen_world_runs':24,'PU_screen_estimated_hours':seconds*24/3600,
                   'supervised_screen_world_runs':32,'supervised_screen_estimated_hours':seconds*32/3600,

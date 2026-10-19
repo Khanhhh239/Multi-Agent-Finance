@@ -3,7 +3,9 @@
   "data_origin": "dữ liệu tổng hợp",
   "unit_tests": {
     "passed": 13,
-    "seconds": 18.51
+    "seconds": 13.14,
+    "log": "work/v5_infrastructure_tests.log",
+    "log_sha256": "ca30e59166d658e2b64a66726e5d573843afdf698824649acb1a5b673e41dbfe"
   },
   "smoke": {
     "status": "passed",
@@ -173,8 +175,18 @@
     "agent2/data.py": "20dfc1320ba520c0708e64d8f3c8fb0a6ec7cbf463fe4050443c9bdd37333d94",
     "results/v4/sealed_v4.json": "9316e0cb94f64e35a8a46a6643795f215d38be10cc521297adbf98f8e03fa7b5",
     "results/v4/v4_frozen.json": "c0f14937256b27278245001ece1c6e08bd75c5aa9b0d69c1b8135f3aca6026dd",
-    "work/results/v4_frozen.json": "c0f14937256b27278245001ece1c6e08bd75c5aa9b0d69c1b8135f3aca6026dd"
+    "work/results/v4_frozen.json": "c0f14937256b27278245001ece1c6e08bd75c5aa9b0d69c1b8135f3aca6026dd",
+    "results/v4/sealed_gates.json": "725a3d22e21af2e633de8cb1767fe30e7f3bda7765d512f8927d0ed1550372cf",
+    "docs/03_danh_gia_va_hieu_qua_kinh_te/07_ket_qua_niem_phong_v4.md": "5b45e4b626a10ea0f46b42f453f4e105b2062f93c76e135142cb7c8ed164f42f"
   },
   "registration_v1_preserved": true,
-  "model_performance_measured": false
+  "model_performance_measured": false,
+  "source_sha256": {
+    "agent2/base_v5.py": "a5fc564a15fbe938e8ebf4f2fd37e3b00da43615d43082823f87f71f01ebaddf",
+    "agent2/select_v5.py": "483834fdecc89ebc7220623114a71d8abc11b3924bddc1b3f49fa2cc2084da1e",
+    "agent2/runtime_v5.py": "28df41f97933ce1882c1bb96751530287bbd9ee9e8cb00d56e28928a46992ba0",
+    "agent2/world_v5_dev.py": "38b1186f650483be6b508c437f2bffdd1a15d9d9edada51989ddcebeb82d0a96",
+    "scripts/run_v5_generation_and_PU.py": "92bef051aaa69639bf622cda04b566af1c768f3020f7214509804e2491e4da21"
+  },
+  "registration_archived_v1_sha256": "711c4acda8451f594deb303d4dabdd2fe1eefbaf5e124ca4856c97b09211db4a"
 }
