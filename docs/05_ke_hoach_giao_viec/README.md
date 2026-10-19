@@ -2,6 +2,10 @@
 
 Người đọc: một coding agent (hoặc kỹ sư) tiếp nhận dự án, **chưa có ngữ cảnh**. Tài liệu này nói: việc gì, theo thứ tự nào, tạo tệp nào, thí nghiệm giả thuyết gì, làm thế nào, thế nào là xong.
 
+## Vòng v5 sau M2
+
+Chủ dự án đã giao vòng mới: [hậu kiểm R0](../03_danh_gia_va_hieu_qua_kinh_te/08_mo_xe_niem_phong_v4.md) hoàn tất trên dữ liệu tổng hợp; [đăng ký trước R1](08_dang_ky_truoc_v5.md) là **bản đề xuất chờ duyệt**. Dừng chờ trả lời “duyệt” trước R2. Không dùng các kết quả hậu kiểm để viết lại kết luận v4 không đạt G5. Kế hoạch A đến E bên dưới được giữ để truy vết; trạng thái mới tại [STATUS.md](../STATUS.md).
+
 ## Đọc theo thứ tự này
 1. [STATUS.md](../STATUS.md): trạng thái hiện tại.
 2. [00_thiet_lap_va_quy_tac.md](00_thiet_lap_va_quy_tac.md): môi trường, bản đồ mã, **quy tắc không được vi phạm**.

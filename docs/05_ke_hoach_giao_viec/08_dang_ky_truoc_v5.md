@@ -1,0 +1,107 @@
+# Đăng ký trước v5, đề xuất chờ chủ dự án duyệt
+
+Ngày soạn 2026-10-19. **Trạng thái: CHỜ DUYỆT. Không bắt đầu R2.** Chủ dự án cần trả lời đúng ý “duyệt” cho bản này hoặc chỉ rõ nội dung cần sửa. Việc cho phép làm R0 không tự động là duyệt R1. Nếu sửa bản đề xuất, lưu dấu vết thay đổi và xin duyệt bản cuối trước khi thực hiện các thí nghiệm R2.
+
+Mọi số đo dự kiến là trên **dữ liệu tổng hợp**, trừ khi một báo cáo kiểm thử ngoài hoặc thí điểm chỉ rõ nguồn thật và phạm vi nhãn. Kết luận **v4 không đạt G5 và kích hoạt M2** giữ nguyên. Ba seed v4 931 đến 933 đã được dùng để hậu kiểm, không còn là kiểm thử niêm phong và không được tính vào cổng v5.
+
+## 1. Câu hỏi và giao thức chính
+
+Mục tiêu chính là S2: học từ các thế giới tổng hợp khác rồi áp vào **công ty đích không có nhãn điều tra**. S2 được đánh giá riêng với chế độ khởi đầu lạnh không nhãn; S1 chỉ báo cáo phụ và không tham gia điểm chọn hoặc cổng đi tiếp.
+
+| Giao thức | Nguồn học có giám sát | Công ty đích | Vai trò |
+|---|---|---|---|
+| S2 đầy đủ | Các thế giới nguồn, chỉ train và validation trước kỳ test | Chỉ lịch sử thô trước kỳ chấm, không đọc nhãn đích | Giao thức chính |
+| P2 kết hợp S2 | Như S2, nhưng lần lượt ẩn một nhánh ACFE khỏi nhãn nguồn | Giữ toàn bộ giao dịch đích cạnh tranh cùng ngân sách; đo riêng gian lận của nhánh ẩn | Chọn khả năng chuyển giao |
+| Khởi đầu lạnh không nhãn | Không dùng nhãn gian lận nguồn hoặc đích để khớp bộ chấm | Có lịch sử trước kỳ chấm để ước lượng nền và phân vị | Cấu hình riêng, cổng riêng |
+| S1 phụ | Chỉ các dương tính đã xác nhận trong lịch sử cùng công ty và các dòng chưa biết | Nhãn chưa phát hiện là chưa biết, không phải âm tính đã xác nhận | Chẩn đoán phụ |
+
+Lịch thời gian ban đầu giữ như v4: train năm 2024, validation nửa đầu 2025, test nửa cuối 2025. Nguồn chỉ dùng train và validation. Đích chỉ dùng thông tin quan sát trước giao dịch; tham chiếu hiệu chỉnh lấy trước kỳ chấm. Cấm đọc nhãn đích để chọn cây, ngưỡng, hệ số PU, cửa sổ, trọng số hoặc cấu hình. Đầu ra không nhãn được khớp trên lịch sử đích trước kỳ test; không khớp trên cả kỳ test.
+
+Trong P2 kết hợp S2, các dòng thuộc nhánh bị ẩn vẫn ở lịch sử nhưng có trạng thái **U, chưa biết**. Dương tính quan sát có trạng thái **P, đã xác nhận**. S1 cũng dùng P và U; không được tuyên bố nhãn 0 của dữ liệu tổng hợp là âm tính đã kiểm tra. Nếu dùng giảm trọng số U trong hàm mất mát, phải ghi đó là phép xấp xỉ PU, có thể vẫn có thiên lệch; không đổi cách diễn giải nhãn thành âm tính thật. Chỉ dữ liệu được xác nhận hợp lệ bằng một nguồn riêng mới được gọi là âm tính đã xác nhận.
+
+Đối chiếu R0 loại dòng nhờ biết nhãn thật không được trở thành cách lọc lịch sử trong S1 hoặc S2 v5. Không dùng họ kịch bản bị ẩn để sửa từng dòng đầu vào vận hành.
+
+Khởi đầu lạnh ở đây nghĩa là **không có nhãn**, không phải hoàn toàn không có lịch sử. Tối thiểu 20 quan sát quá khứ cho nền thực thể; thiếu nền phải báo thiếu năng lực. Ngày đầu không có lịch sử chỉ chạy các luật có đủ bằng chứng, báo riêng là chế độ giảm, không gán các cổng khởi đầu lạnh dưới đây cho chế độ đó.
+
+## 2. Thế giới phát triển và cách chia
+
+1. Dùng đầy đủ **20 thế giới mới**, seed 1001 đến 1020. Yêu cầu ít nhất 8 thế giới là sàn tối thiểu về thiết kế; kế hoạch được duyệt này không cho phép chỉ chọn 8 trong 20 sau khi thấy kết quả. Nếu một thế giới lỗi kiểm định, sửa lỗi hạ tầng hoặc bộ sinh, ghi nhật ký và sinh lại đồng nhất trước khi so sánh; không loại vì mô hình làm kém.
+2. Mỗi thế giới yêu cầu 200.000 giao dịch. Số công ty là số nguyên đều trong 30 đến 60; hệ số tiền lấy trên thang log từ 1 đến 20. Lịch lương thay đổi giữa các lịch hợp lệ theo cơ chế chung. Tỷ trọng L0, L1, L2 lấy từ Dirichlet(1,1,1) cho mỗi thế giới và ghi manifest, không chọn tỷ trọng theo điểm mô hình. Tỷ lệ gian lận mặc định 0,004, công khai là giả định tổng hợp; không diễn giải thành tần suất thật.
+3. Mỗi thế giới làm đích một lần, học có giám sát từ **19 thế giới còn lại**. Mã công ty, thực thể và giao dịch có tiền tố thế giới; cấm trùng khóa giữa nguồn và đích. Mỗi vòng P2 kết hợp S2 ẩn lần lượt đủ 10 nhánh ACFE ở tất cả thế giới nguồn, trong cả train và validation; không bỏ nhánh khó.
+4. Tất cả ứng viên dùng cùng bảng dữ liệu, nhãn quan sát, ngân sách và giao thức. Mỗi giao thức lưu JSON, cờ cảnh báo và băm trước khi chạy tiếp. Nếu tài nguyên buộc giảm số thế giới, phải sửa đăng ký và được duyệt **trước khi chạy và xem bất kỳ kết quả so sánh nào**, không tự đổi sang thế giới thuận lợi.
+
+Các seed phát triển v4 có thể dùng để kiểm thử hồi quy mã; không trộn chỉ số v4 vào điểm chọn v5. Ba thế giới hậu kiểm v4 không dùng để chọn hệ số hoặc xếp hạng ứng viên v5.
+
+Thiết kế đầy đủ có 20 đích nhân 11 giao thức, tức **220 giao thức cho một ứng viên**; một ứng viên tập hợp năm seed tương ứng 1.100 lượt khớp trước khi tính lưới cây nội bộ. Đây là số công việc theo thiết kế, chưa phải thời gian chạy đã đo. Phải thực thi lần lượt theo giới hạn bộ nhớ, lưu kết quả để tiếp tục sau ngắt, không tự giảm số seed hoặc thế giới vì thời gian lâu.
+
+## 3. Đăng ký các họ ứng viên và kiểm soát số lần thử
+
+Các ý tưởng R2 được giới hạn theo giao việc: thay đổi theo thực thể và đuôi trái; thay đổi theo nhóm; công nợ; PU; đa dạng thế giới; tập hợp năm seed. Không thêm đặc trưng phân nhánh theo tên một kịch bản v4 hoặc v5. Các hàm chỉ nhận trường nghiệp vụ quan sát được và thời gian quá khứ, không nhận tên họ, nhãn thật hoặc mã kịch bản.
+
+Trước từng ý tưởng R2 phải ghi tiêu chí giữ hoặc bỏ và phép so sánh vào nhật ký, sau đó mới chạy. Giữ cả kết quả không đạt. Lưới ban đầu cho bộ cây giữ hai cấu hình `(7 lá, 0,05)` và `(15 lá, 0,05)` của v4, tối đa 600 cây và dừng sớm 60 vòng; không mở lưới sau khi xem niêm phong. Tập hợp lấy trung bình điểm từ năm seed cố định **0, 1, 2, 3, 4**, không chọn seed tốt nhất.
+
+Với giảm trọng số U, chỉ thử ba hệ số cố định **0,1; 0,2; 0,5** trên phát triển. Nếu dùng nnPU, phải chốt cách ước lượng tiên nghiệm lớp từ dữ liệu nguồn quan sát, miền giá trị hợp lệ và cách chọn siêu tham số trước thí nghiệm tương ứng; không lấy tỷ lệ nhãn thật của công ty đích làm tiên nghiệm. Hệ số không phải bằng chứng rằng mọi U đều hợp lệ.
+
+Mỗi ý tưởng có đối chứng dùng cùng nguồn học và cùng năm seed. Hiệu được báo trên toàn bộ thế giới, gồm số âm và thế giới tệ nhất, không chỉ trung bình. Danh sách hữu hạn ứng viên, thứ tự đơn giản đến phức tạp và băm mã phải được ghi vào manifest trước lần chạy so sánh chính. Muốn bổ sung họ ứng viên ngoài giao việc này phải được chủ dự án duyệt sửa đăng ký trước khi thử; không mở rộng sau niêm phong.
+
+## 4. Quy tắc chọn theo thế giới tệ nhất
+
+Với ứng viên c và thế giới đích w, đặt:
+
+- R(c,w): recall chung ở S2 đầy đủ, trên tất cả dòng gian lận trong kỳ test.
+- B(c,w): trung bình đều 10 recall theo nhánh bị ẩn của P2 kết hợp S2. Các dòng của mọi nhánh vẫn cạnh tranh cùng ngân sách; chỉ mẫu số đo recall thay đổi.
+- Q(c,w) = [R(c,w) + B(c,w)] / 2.
+- **Điểm chọn J(c) = nhỏ nhất của Q(c,w) trên toàn bộ 20 thế giới.**
+
+Điều kiện hợp lệ: tỷ lệ cảnh báo trên **toàn bộ ca hợp lệ khó không quá 15% ở từng thế giới**, kiểm riêng S2 đầy đủ và từng nhánh P2 kết hợp S2. Không thay trần bằng trung bình nhiều thế giới. Chỉ số thiếu hoặc không hữu hạn làm ứng viên không hợp lệ; không tự điền 0 hoặc bỏ thế giới. Nếu không còn ứng viên hợp lệ, dừng vòng chọn và báo thất bại phát triển.
+
+Chọn ứng viên hợp lệ có J cao nhất. Nếu chênh với điểm cao nhất **nhỏ hơn 0,01**, chọn ứng viên đứng trước trong danh sách đã khóa trước chạy. Không dùng AP, số liệu v4 hoặc bất kỳ số v5 niêm phong nào để phá hòa. Báo kèm trung bình, nhỏ nhất, từng thế giới, độ phân tán và ngân sách; trung bình không được thay J khi chọn.
+
+Khởi đầu lạnh chọn riêng giữa các ứng viên hoàn toàn không nhãn, gồm luật và luật kết hợp EntityDeviation2. Dùng cùng J, cùng các nhánh đánh giá và cùng trần 15%; nhãn chỉ được dùng để **đo và chọn trên thế giới phát triển**, không khớp các thành phần chấm điểm hoặc hiệu chỉnh theo công ty đích. Lưu riêng cấu hình S2 có giám sát và cấu hình không nhãn.
+
+Ngân sách cố định **tối đa ba dòng mỗi công ty mỗi tuần**, không có ngưỡng riêng cho một họ hoặc công ty niêm phong. Quy tắc gộp vụ và buộc thứ tự khi hòa được khóa trước R4. Không đổi từ ngân sách dòng sang ngân sách vụ sau khi có kết quả.
+
+## 5. Cổng chấp nhận v5 đề xuất
+
+Kiểm trên **bốn thế giới niêm phong v5**, sau thử khô, đúng một lượt hoàn chỉnh. Dùng trung bình đều theo thế giới, không gộp dòng khiến thế giới lớn chi phối. Bảy kịch bản v4 đã lộ không được tính vào tập “mới” của v5; tập mới được xác định bằng danh mục kịch bản độc lập v5 đã khóa trước chấm.
+
+| Cổng | Điều kiện phải cùng đạt | Lý do đặt trước |
+|---|---|---|
+| V5-S2 chung | Trung bình recall chung từ **60%** | Ngưỡng cho giao thức chuyển công ty mới; đây là đề xuất cho vòng mới, không hạ cổng G5 để đổi kết luận v4 |
+| V5-S2 mới | Trung bình recall trên kịch bản mới từ **35%** | Đòi hỏi chuyển giao tốt hơn mốc 31,22% S2 v4 trên dữ liệu tổng hợp; không chấp nhận chỉ tăng ở kịch bản đã biết |
+| V5-S2 sàn | Recall chung của **từng thế giới từ 45%** | Chặn trường hợp trung bình che một thế giới suy sụp; không được bỏ thế giới kém nhất |
+| V5-S2 lệch dev | Chênh tuyệt đối giữa recall S2 trung bình niêm phong và recall S2 trung bình ngoài thế giới của ứng viên chọn ở phát triển **không quá 15 điểm phần trăm** | So cùng định nghĩa S2; không so với J vốn gộp P2 hoặc S1 |
+| V5-S2 báo nhầm | Toàn bộ ca hợp lệ khó **không quá 15% ở từng thế giới** | Điều kiện năng lực rà soát, giữ đồng nhất trần chọn và cổng; báo thêm ca khó mới riêng |
+| V5-Cold | Không nhãn: recall chung trung bình từ **35%**, recall mới trung bình từ **30%**, recall chung từng thế giới từ **25%**, ca khó từng thế giới không quá **15%** | Mức dịch vụ thấp hơn mô hình có giám sát nhưng phải có sàn và giới hạn quá tải rõ ràng |
+
+Các cổng là điều kiện đồng thời. V5-Cold trượt có nghĩa **không chấp nhận cung cấp chế độ khởi đầu lạnh**, không được dùng S2 đạt để quảng bá chế độ đó. S2 trượt bất kỳ điều kiện nào là thất bại phương pháp chính. Không lấy một phương pháp khác trong bảng chẩn đoán thay cho cấu hình đã chọn. S1 không cứu được cổng S2.
+
+Khoảng bootstrap 95% theo vụ được báo cho recall, chênh và vụ phát hiện, cùng số dòng và vụ ở từng thế giới. Quyết định cổng dựa trên ước lượng điểm đã định nghĩa ở trên; không đổi sang một đầu khoảng hoặc thêm ngoại lệ sau khi xem số. Cảnh báo rõ nếu một kịch bản chỉ có rất ít vụ. Các khoảng không xác nhận hiệu năng doanh nghiệp thật.
+
+## 6. R3 và R4 sau khi đăng ký được duyệt
+
+R3 dùng một phiên agent khác, lịch sử tách biệt; phiên viết chỉ đọc brief được cấp, mẫu văn xuôi, ACFE và các vụ án Việt Nam. Cấm đọc `agent2/`, `docs/04_*`, `results/`, báo cáo hậu kiểm hoặc điểm mô hình. Không giao tên các điểm yếu mô hình cho phiên viết để nhắm kịch bản. Đây là độc lập giữa phiên, chưa thay thế tác giả nghiệp vụ hoặc kiểm toán viên độc lập.
+
+Brief yêu cầu 8 đến 10 kịch bản và ca hợp lệ tương ứng, cơ chế dễ, vừa, khó, dấu thời gian, quy mô và nguồn; người mã hóa không sửa ý kịch bản để thuận lợi cho bộ phát hiện. Phải ghi nguồn, quyền truy cập, dấu vết bàn giao và những lần tác giả làm rõ. Chốt văn xuôi trước khi mã hóa. Nếu không kiểm soát được giới hạn đọc của phiên viết, không gọi tập đó là độc lập và phải báo chủ dự án trước R4.
+
+Sinh bốn thế giới với seed do khâu giữ niêm phong chọn và ghi manifest trước sinh, khác mọi seed phát triển và thử khô. Mỗi thế giới yêu cầu 200.000 dòng, trong miền ngẫu nhiên hóa công ty và quy mô của đăng ký. Bảo đảm đủ kịch bản trong test và báo số vụ; mục tiêu tối thiểu ba vụ test cho mỗi kịch bản mới, tối thiểu 40 vụ gian lận test mỗi thế giới. Nếu bộ sinh không đáp ứng, chỉ sửa tính toàn vẹn và sinh lại trước khi chấm; không dùng điểm bộ phát hiện để quyết định sinh lại.
+
+Kiểm V1 đến V12, khóa băm dữ liệu, kịch bản, mô hình, mã phụ thuộc, tham số và chính sách. Sau chọn, huấn luyện bản S2 cuối trên cả 20 nguồn theo cùng train và validation thời gian; lịch sử đích chỉ dùng cho thành phần không nhãn. Danh sách tệp băm phải bao gồm cả bộ luật và hợp đồng đặc trưng, không chỉ sáu module v4. Chạy thử khô trên seed khác trước khi chấm v5. Chỉ chấm một lần, lưu đầy đủ trước khi in chỉ số; lỗi hạ tầng chỉ được khôi phục nếu chưa có báo cáo hoặc chỉ số từng phần bị lộ, có nhật ký và bằng chứng.
+
+Trước tải ERP Fraud Data, phải trình riêng **tên tệp, nguồn gốc chính thức, dung lượng xác minh và giấy phép**, chờ chủ dự án đồng ý. Bản đăng ký này không phải đồng ý tải. Không đưa dữ liệu thật lên Git hoặc dịch vụ ngoài. Chưa tải dữ liệu ngoài trong R0 hoặc R1.
+
+## 7. Điều kiện đổi hướng sản phẩm
+
+Nếu S2 v5 trượt bất kỳ cổng nào, giữ nguyên kết quả, không sửa rồi chấm lại, và viết đề xuất đổi hướng trong `09_ket_qua_niem_phong_v5.md`. Không tự mở vòng v6 để tiếp tục tìm số đạt.
+
+Hướng phải trình chủ dự án là dịch vụ rà soát định kỳ cho đơn vị kế toán, với các quy tắc bằng chứng rõ, đối chiếu chứng từ và hàng đợi con người quyết định. Chưa quảng bá phát hiện gian lận tự động hoặc thu hồi tổn thất dựa trên dữ liệu tổng hợp. Nếu chỉ Cold trượt nhưng S2 đạt, không chào bán Cold; phải trình lại phạm vi sản phẩm S2 trước thí điểm.
+
+Đề xuất đổi hướng phải nêu: công việc kế toán nào được hỗ trợ; phần nào vẫn phải người xử lý; ngân sách cảnh báo và thời gian; phép đo đáng kiểm tra, thời gian rà soát, mức sẵn lòng trả cần thu trong thí điểm. Các con số thí điểm chỉ được xác lập sau đồng ý pháp lý và doanh nghiệp; không tự thay bằng số tổng hợp. Nếu không còn ứng viên phát triển hợp lệ dưới trần 15%, cũng dừng và trình hướng này mà không tiêu tốn lượt niêm phong v5.
+
+## Điểm dừng bắt buộc
+
+1. **Sau R0 kèm R1:** bàn giao báo cáo, mã, JSON, kiểm thử, commit và bản đăng ký này; dừng chờ chủ dự án trả lời “duyệt”.
+2. **Trước tải dữ liệu ngoài:** hỏi riêng từng bộ với tệp, nguồn, dung lượng và giấy phép đã xác minh.
+3. **Sau R4:** bàn giao kết quả v5 và quyết định cổng; nếu trượt, có đề xuất đổi hướng, không chỉnh sau kết quả.
+
+Chưa có phê duyệt R1 tại thời điểm soạn. Chưa bắt đầu R2, chưa tạo bộ phát hiện cải tiến, chưa sinh thế giới v5, chưa chạy niêm phong v5.
