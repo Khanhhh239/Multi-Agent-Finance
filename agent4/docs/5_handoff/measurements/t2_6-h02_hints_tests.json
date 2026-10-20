@@ -1,0 +1,14 @@
+{
+  "tests": 2733,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 264.701,
+  "card": "T2.6-H02_hints",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-20T11:41:47.070907+00:00",
+  "xml": "artifacts\\H02_hints_pytest.xml",
+  "summary": "formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Measured H02_hints on frozen val; selected reference.",
+  "decision": "on: rejected — target gain <1 percentage point."
+}

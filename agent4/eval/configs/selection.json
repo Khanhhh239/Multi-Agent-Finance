@@ -1,7 +1,7 @@
 {
   "notice": "formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).",
   "config": {
-    "name": "B0",
+    "name": "H02_hints_reference",
     "model": "qwen3:4b-instruct-2507-q4_K_M",
     "num_ctx": 8192,
     "hints": false,
@@ -20,7 +20,15 @@
     "repair_attempts": 2
   },
   "completed": [
-    "H00_B0"
+    "H00_B0",
+    "H02_hints"
   ],
-  "decisions": {}
+  "decisions": {
+    "H02_hints": {
+      "selected": "reference",
+      "reasons": [
+        "on: rejected — target gain <1 percentage point."
+      ]
+    }
+  }
 }

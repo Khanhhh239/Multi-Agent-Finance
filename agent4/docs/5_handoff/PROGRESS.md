@@ -194,3 +194,9 @@ OS reboot at20Oct18:08:13 terminated hardware probe/server/workers.4B ctx8192 TR
 formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Both full-val baselines measured; no held-out test accessed.
 
 Toàn bộ test trước commit: **2733 passed, 0 skipped**, 263.55 giây; `artifacts\H00_B0_pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.6-H02_hints — P2 thử nghiệm
+
+formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Measured H02_hints on frozen val; selected reference.
+
+Toàn bộ test trước commit: **2733 passed, 0 skipped**, 264.70 giây; `artifacts\H02_hints_pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
