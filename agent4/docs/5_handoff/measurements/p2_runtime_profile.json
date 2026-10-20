@@ -1,0 +1,33 @@
+{
+  "report_notice": "formulas not accountant-approved",
+  "G0_7": "OPEN / CHƯA ĐẠT",
+  "date_local": "2026-10-19",
+  "ollama_version": "0.40.5",
+  "endpoint": "http://127.0.0.1:11435",
+  "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+  "physical_ram_bytes": 16873545728,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "gpu_total_mib": 6141,
+  "driver": "581.86",
+  "server": {
+    "OLLAMA_KV_CACHE_TYPE": "q8_0",
+    "OLLAMA_FLASH_ATTENTION": "1",
+    "OLLAMA_NUM_PARALLEL": "1",
+    "OLLAMA_MAX_LOADED_MODELS": "1",
+    "OLLAMA_NO_CLOUD": "1",
+    "LLAMA_ARG_CACHE_RAM": "0"
+  },
+  "runtime_confirmation": {
+    "log": "artifacts/p2-ollama-20261019-161731.err.log",
+    "flash_attention": "llama_context: flash_attn = enabled",
+    "kv_cache_4b_ctx8192": "612.00 MiB, K q8_0 306.00 MiB, V q8_0 306.00 MiB",
+    "ram_prompt_cache": "srv load_model: prompt cache is disabled",
+    "slot_prefix_cache": "Prefix reuse within the active slot remains enabled; RAM prompt-cache disable does not disable KV prefix reuse."
+  },
+  "limitations": [
+    "Shared laptop; unrelated CPU/GPU activity is not experimentally controlled.",
+    "GPU sampler reports total device memory including display, at1s intervals; not allocator peak.",
+    "Default desktop Ollama endpoint11434 is separate; live unit tests run only between measured arms.",
+    "An earlier dedicated server disappeared between user turns; cause unmeasured. Restart preserved the same profile before B0 began."
+  ]
+}

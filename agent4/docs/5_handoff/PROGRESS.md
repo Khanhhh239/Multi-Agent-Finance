@@ -168,3 +168,9 @@ Toàn bộ test trước commit: **2707 passed, 0 skipped**, 281.78 giây; `arti
 formulas not accountant-approved. Runner/scorers/bootstrap95%CI, exclusions and one-final-run global seal implemented; 3 TRAIN smoke cases exported tokens/latency, not validation metrics. Blind aggregate split audit: 2330/760/1710. Corpus language-v2 uses genuine synonym/noise variation; no val model measurement or test preview.
 
 Toàn bộ test trước commit: **2720 passed, 0 skipped**, 82.82 giây; `artifacts/t2_5b-final-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.5c — P2 thử nghiệm
+
+formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Audited first-response layer scoring, exact currency checks, source-derived renderer footer counts, sealed-test controls and VAL-only interrupted recovery; 2733 tests passed. B0 8B remains partial446/760, no held-out access.
+
+Toàn bộ test trước commit: **2733 passed, 0 skipped**, 75.50 giây; `artifacts/p2-recovery-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

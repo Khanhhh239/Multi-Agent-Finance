@@ -1,0 +1,14 @@
+{
+  "tests": 2733,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 75.503,
+  "card": "T2.5c",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-20T07:55:05.056160+00:00",
+  "xml": "artifacts/p2-recovery-pytest.xml",
+  "summary": "formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Audited first-response layer scoring, exact currency checks, source-derived renderer footer counts, sealed-test controls and VAL-only interrupted recovery; 2733 tests passed. B0 8B remains partial446/760, no held-out access.",
+  "decision": "Preserve raw baseline traces and original source hashes. Reconstruct exact original routing bytes before VAL migration; rescore CPU-only, do not repeat completed or lost-started cases. Dedicated q8_0 server restarted; shared RAM/load confounds timing. No G1 or strict G0.1 claim."
+}

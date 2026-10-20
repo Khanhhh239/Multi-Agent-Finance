@@ -50,3 +50,26 @@ def claim_final(path,folder,resume=False):
             raise ValueError('Final already claimed; resume the original output only.')
     else:
         with path.open('x',encoding='utf8') as f:json.dump(owner,f)
+
+
+def require_not_consumed(path):
+    if Path(path).exists():raise ValueError('Held-out test already completed; inspect its report, do not repeat it.')
+
+
+def acquire_final_lease(path):
+    """OS releases the exclusive lease after a crash; concurrent resumes fail."""
+    import os
+    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
+    handle=path.open('a+b')
+    if path.stat().st_size==0:handle.write(b'0');handle.flush()
+    handle.seek(0)
+    try:
+        if os.name=='nt':
+            import msvcrt
+            msvcrt.locking(handle.fileno(),msvcrt.LK_NBLCK,1)
+        else:
+            import fcntl
+            fcntl.flock(handle.fileno(),fcntl.LOCK_EX|fcntl.LOCK_NB)
+    except OSError as exc:
+        handle.close();raise ValueError('Another final process is active; do not resume concurrently.') from exc
+    return handle

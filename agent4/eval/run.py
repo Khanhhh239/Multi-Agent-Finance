@@ -21,10 +21,19 @@ from eval.gen.split import question_hash
 from .scorers import score_case,score_verifier_fixture
 from .report import summarize,markdown
 from .telemetry import GPUSampler
-from .gate import digest,config_digest,require_split_access,start_final,started_ids,claim_final
+from .runtime_events import latest_log,events
+from .gate import digest,config_digest,require_split_access,start_final,started_ids,claim_final,require_not_consumed,acquire_final_lease
 
 ROOT=Path(__file__).resolve().parents[1]
 DEFAULT_SUITES='e1,e2,e3,e4,e5,e6,e7,e8,e9,multi,why'
+
+
+def routing_hash():
+    h=hashlib.sha256()
+    for path in sorted((ROOT/'agent4').rglob('*.py')):
+        h.update(path.relative_to(ROOT).as_posix().encode());h.update(path.read_bytes())
+    h.update((ROOT/'agent4/agent/data/fewshot_train.jsonl').read_bytes())
+    return h.hexdigest()
 
 
 def source_hash():
@@ -112,8 +121,6 @@ def run_case(case,agent,engine,poison_engine,client,cfg):
         detail={'turns':turns};reply=None
     else:
         reply=agent.ask(case['question']);metrics=score_case(reply,case,engine);detail={'reply':public_data(reply)}
-        if suite=='e8':
-            metrics['injection_blocked']=float(reply.behavior!='answer' or metrics.get('numeric_faithfulness')==1)
     record={'id':case['id'],'suite':suite,'report_notice':'formulas not accountant-approved','status':'completed',
             'question':case['question'],'template_id':case['template_id'],'tags':case.get('tags',[]),
             'difficulty':case.get('difficulty'),'metric':case.get('expected',{}).get('args',{}).get('metric'),
@@ -130,6 +137,7 @@ def main():
     p.add_argument('--final',action='store_true');p.add_argument('--resume',action='store_true');a=p.parse_args()
     if a.n is not None and a.n<1:p.error('--n must be positive')
     require_split_access(a.split,a.final)
+    if a.final:require_not_consumed(ROOT/'eval/configs/test_consumed.json')
     if a.final and (a.split!='test' or a.n is not None or a.seed!=0):p.error('Final must use the whole test split and seed0.')
     suites=a.suite.split(',')
     if a.final and a.suite!=DEFAULT_SUITES:p.error('Final must include every frozen suite.')
@@ -145,6 +153,8 @@ def main():
     hashes=split_hashes(suites,a.split);src=source_hash();out=a.out
     if out.exists() and not a.resume:raise SystemExit('Output already exists; use a fresh run or --resume.')
     out.mkdir(parents=True,exist_ok=True)
+    if a.final:final_lease=acquire_final_lease(ROOT/'eval/.sealed/active_final.lock')
+    server_log=latest_log(ROOT/'artifacts');log_offset=server_log.stat().st_size if server_log else 0
     warm_start=time.perf_counter()
     warm=api.post('/api/generate',json={'model':cfg.model,'stream':False,'keep_alive':'30m','options':{'num_ctx':cfg.num_ctx}})
     warm.raise_for_status();warm_ms=(time.perf_counter()-warm_start)*1000
@@ -153,15 +163,24 @@ def main():
         start_final(out,lock,config,model['digest'],hashes,src,a.resume)
         claim_final(ROOT/'eval/.sealed/final_claim.json',out,a.resume)
     meta={'report_notice':'formulas not accountant-approved','G0_7':'OPEN / CHƯA ĐẠT','split':a.split,'config':config,
+          'metadata_created_at_utc':datetime.now(timezone.utc).isoformat(),
+          'scoring_contract':'First-response TSA/schema; final normalized args; exact raw VND oracle, ratios1e-9; source/display faithfulness separately.',
           'config_sha256':config_digest(config),'model_digest':model['digest'],'ollama':version,'source_hash':src,'data_hashes':hashes,
+          'routing_hash':routing_hash(),
+          'llm_sampling':{'temperature':0,'top_k':20,'top_p':.8,'seed':a.seed},
           'git_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip(),'seed':a.seed,'base_url':a.base_url,
           'warmup_ms':warm_ms,'warmup':'Empty preload excluded from per-case latency; first measured prompt prefill remains included.'}
+    meta['server_log_audit']={'path':str(server_log) if server_log else None,'start_byte':log_offset}
     meta_path=out/'metadata.json'
     if a.resume and meta_path.exists():
         old=json.loads(meta_path.read_text(encoding='utf8'))
         for key in ('config_sha256','model_digest','source_hash','data_hashes','seed','base_url'):
             if meta[key]!=old[key]:raise SystemExit('Resume contract mismatch: '+key)
         meta=old
+        if old.get('server_log_audit'):
+            server_log=Path(old['server_log_audit']['path']) if old['server_log_audit']['path'] else None
+            log_offset=old['server_log_audit']['start_byte']
+        else:meta['server_log_audit']={'path':str(server_log) if server_log else None,'start_byte':log_offset}
     else:meta_path.write_text(json.dumps(meta,ensure_ascii=False,indent=2),encoding='utf8')
     excluded_hashes=exclusions();cases=[];rng=random.Random(a.seed)
     for suite in suites:
@@ -170,7 +189,7 @@ def main():
     path=out/'results.jsonl';journal=out/'started.jsonl';done=started_ids(path);attempted=started_ids(journal);started=time.perf_counter()
     warehouse=ROOT/'data'/{'train':'cfo_warehouse.duckdb','val':'val.duckdb','test':'test.duckdb'}[a.split]
     poison=warehouse.with_name(warehouse.stem+'_poison.duckdb')
-    with GPUSampler(out/'gpu.json'),ExecutionEngine(warehouse) as engine,ExecutionEngine(poison) as poison_engine,OllamaClient(LLMConfig(model=cfg.model,num_ctx=cfg.num_ctx,base_url=a.base_url,timeout_s=cfg.max_duration_s),keep_alive='30m') as real:
+    with GPUSampler(out/'gpu.json'),ExecutionEngine(warehouse) as engine,ExecutionEngine(poison) as poison_engine,OllamaClient(LLMConfig(model=cfg.model,num_ctx=cfg.num_ctx,base_url=a.base_url,temperature=0,think=cfg.think,timeout_s=cfg.max_duration_s),keep_alive='30m') as real:
         client=RecordingClient(real,a.seed);agent=PipelineAgent(engine,client,cfg)
         meta['data_version']=engine.info['data_version'];meta['warehouse_seed']=engine.info['seed']
         for index,case in enumerate(cases):
@@ -198,11 +217,19 @@ def main():
     summary['tokens_observed']={key:sum(m.get('usage',{}).get(key,0) for m in llm) for key in ('prompt_tokens','eval_tokens')}
     summary['llm_usage_unknown_calls']=sum(bool(m.get('usage_unknown')) for m in llm)
     summary['llm_calls']=len(llm);summary['wall_seconds']=time.perf_counter()-started
+    summary['resumed']=a.resume
+    summary['wall_time_note']='wall_seconds is current process session only; case latencies and token totals cover all recorded cases.'
+    summary['server_runtime_events']=events(server_log,log_offset)
     summary['not_measured']=['E-gold expert-written set','pilot','accountant approval','SQL execution accuracy','bulletin detection quality']
     (out/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf8')
     (out/'report.md').write_text(markdown(summary),encoding='utf8')
-    if a.final:(out/'COMPLETED.json').write_text(json.dumps({'config_sha256':meta['config_sha256'],'n':summary['n'],'planned':len(cases)}),encoding='utf8')
+    if a.final:
+        completed={'report_notice':'formulas not accountant-approved','config_sha256':meta['config_sha256'],'n':summary['n'],'planned':len(cases),
+                   'results_sha256':digest(out/'results.jsonl'),'model_digest':meta['model_digest'],'data_hashes':hashes}
+        (out/'COMPLETED.json').write_text(json.dumps(completed,indent=2),encoding='utf8')
+        with (ROOT/'eval/configs/test_consumed.json').open('x',encoding='utf8') as f:json.dump(completed,f,indent=2)
     api.post('/api/generate',json={'model':cfg.model,'keep_alive':0})
+    if a.final:final_lease.close()
     print(json.dumps({'run':cfg.name,'observed':summary['n'],'planned':len(cases),'tokens':summary['tokens_observed'],'latency':summary['latency_model_cases'],'report_notice':'formulas not accountant-approved'},ensure_ascii=False),flush=True)
 
 

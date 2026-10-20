@@ -16,7 +16,7 @@ def check(db):
             for start,end in RANGES:
                 gold=oracle(con,metric,date.fromisoformat(start),date.fromisoformat(end),md.default_view)
                 actual=engine.query(metric,{'start_date':start,'end_date':end})['value']
-                ok=actual is None and gold is None or actual is not None and gold is not None and abs(actual-gold)<=(.5 if md.unit=='VND' else 1e-9)
+                ok=actual is None and gold is None or actual is not None and gold is not None and abs(actual-gold)<=(0 if md.unit=='VND' else 1e-9)
                 rows.append({'metric':metric,'start':start,'end':end,'oracle':gold,'actual':actual,'passed':ok})
         info=engine.info
     return {'report_notice':'formulas not accountant-approved','G0_7':'OPEN / CHƯA ĐẠT',

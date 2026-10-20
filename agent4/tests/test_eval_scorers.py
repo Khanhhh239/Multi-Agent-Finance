@@ -1,7 +1,7 @@
 from datetime import date
 from agent4.agent.render import render_facts
 from eval.oracle import oracle
-from eval.scorers import score_case,score_args,score_behavior,score_safety
+from eval.scorers import score_case,score_args,score_behavior,score_safety,first_proposals,numeric_equal,match_args
 from eval.report import bootstrap,paired_delta
 
 
@@ -48,3 +48,33 @@ def test_paired_ci_matches_only_identical_ids():
     a=[{'id':'a','metrics':{'x':0}},{'id':'b','metrics':{'x':1}}]
     b=[{'id':'a','metrics':{'x':1}},{'id':'c','metrics':{'x':0}}]
     assert paired_delta(a,b,'x')=={'estimate':1.0,'ci95':[1.0,1.0],'n':1}
+
+
+def test_first_response_layers_are_not_inflated_by_a_successful_repair():
+    trace=[{'stage':'llm','data':{}},
+           {'stage':'validator','data':{'ok':False,'proposed':{'action':'query_metric','metric':'net_revenue','period':'nonsense'}}},
+           {'stage':'llm','data':{}},
+           {'stage':'validator','data':{'ok':True,'proposed':{'action':'query_metric','metric':'cogs'}}}]
+    proposed,valid=first_proposals(trace)
+    assert valid and len(proposed)==1 and proposed[0]['metric']=='net_revenue'
+    trace[1]['data']={'ok':False,'issues':['INVALID_OR_MISSING_CALL']}
+    assert first_proposals(trace)==([],False)
+
+
+def test_raw_currency_oracle_is_exact_while_display_rounding_is_separate():
+    assert numeric_equal(1000,1000,'VND')
+    assert not numeric_equal(1000.25,1000,'VND')
+
+
+def test_batch_arguments_require_one_to_one_matching(engine):
+    right={'metric':'net_revenue','period':'2026-Q3'}
+    wrong={'metric':'cogs','period':'2026-Q3'}
+    assert not match_args([right,wrong],[right,right],engine)
+    assert match_args([wrong,right],[right,wrong],engine)
+
+
+def test_user_attack_requires_refusal_not_merely_a_sourced_answer(engine):
+    case={'capability':'injection','setup':'user','expected_behavior':'refuse'}
+    for behavior,expected in [('refuse',1),('clarify',0),('answer',0)]:
+        reply={'behavior':behavior,'blocks':{},'trace':[],'text':'Experimental response'}
+        assert score_case(reply,case,engine)['injection_blocked']==expected

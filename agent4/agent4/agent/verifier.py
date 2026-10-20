@@ -23,6 +23,7 @@ class NumberSet:
     labels: set[str] = field(default_factory=set)
     causal_level: int = 1
     primary: dict[str,NumberEvidence] = field(default_factory=dict)
+    renderer_counts: set[tuple[int,int]] = field(default_factory=set)
 
 @dataclass
 class Violation:
@@ -144,7 +145,15 @@ def _matches(number,scale,digits,evidence):
 
 def verify(answer_text,allowed,required_labels=None):
     violations=[]
-    for number,scale,digits in mentions(answer_text):
+    # Row cardinalities are presentation metadata, not financial evidence.
+    # Trust only an exact source-derived footer pair, never a global numeric
+    # whitelist that could also admit an invented customer/amount claim.
+    def footer(match):
+        pair=tuple(map(int,match.groups()))
+        if pair not in allowed.renderer_counts:violations.append(Violation('WRONG_RENDER_COUNT',match.group()))
+        return 'hiển thị [số dòng đã kiểm tra] dòng'
+    numeric_text=re.sub(r'hiển\s+thị\s+(\d+)/(\d+)\s+dòng',footer,answer_text,flags=re.I)
+    for number,scale,digits in mentions(numeric_text):
         if not any(_matches(number,scale,digits,e) for e in allowed.values):
             violations.append(Violation('UNSUPPORTED_NUMBER',number.source))
     for period in _periods(answer_text)-allowed.periods:

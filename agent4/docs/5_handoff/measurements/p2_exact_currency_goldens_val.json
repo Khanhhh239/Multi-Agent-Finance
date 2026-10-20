@@ -1,0 +1,3179 @@
+{
+  "report_notice": "formulas not accountant-approved",
+  "G0_7": "OPEN / CHƯA ĐẠT",
+  "measured_at_utc": "2026-10-19T09:31:01.080913+00:00",
+  "data_version": "v2.1",
+  "seed": "71",
+  "n": 396,
+  "passed": 395,
+  "results": [
+    {
+      "metric": "net_revenue",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 17397434000.0,
+      "actual": 17397434000.0,
+      "passed": true
+    },
+    {
+      "metric": "net_revenue",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 11918195000.0,
+      "actual": 11918195000.0,
+      "passed": true
+    },
+    {
+      "metric": "net_revenue",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 55416848000.0,
+      "actual": 55416848000.0,
+      "passed": true
+    },
+    {
+      "metric": "net_revenue",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 190246844000.0,
+      "actual": 190246844000.0,
+      "passed": true
+    },
+    {
+      "metric": "net_revenue",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 169112117000.0,
+      "actual": 169112117000.0,
+      "passed": true
+    },
+    {
+      "metric": "net_revenue",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 15106179000.0,
+      "actual": 15106179000.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_revenue",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 17397434000.0,
+      "actual": 17397434000.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_revenue",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 11956471000.0,
+      "actual": 11956471000.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_revenue",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 55501262000.0,
+      "actual": 55501262000.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_revenue",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 191140324000.0,
+      "actual": 191140324000.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_revenue",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 169367345000.0,
+      "actual": 169367345000.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_revenue",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 15138027000.0,
+      "actual": 15138027000.0,
+      "passed": true
+    },
+    {
+      "metric": "revenue_deductions",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "revenue_deductions",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 38276000.0,
+      "actual": 38276000.0,
+      "passed": true
+    },
+    {
+      "metric": "revenue_deductions",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 84414000.0,
+      "actual": 84414000.0,
+      "passed": true
+    },
+    {
+      "metric": "revenue_deductions",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 893480000.0,
+      "actual": 893480000.0,
+      "passed": true
+    },
+    {
+      "metric": "revenue_deductions",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 255228000.0,
+      "actual": 255228000.0,
+      "passed": true
+    },
+    {
+      "metric": "revenue_deductions",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 31848000.0,
+      "actual": 31848000.0,
+      "passed": true
+    },
+    {
+      "metric": "goods_revenue",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 15728079000.0,
+      "actual": 15728079000.0,
+      "passed": true
+    },
+    {
+      "metric": "goods_revenue",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 10262083000.0,
+      "actual": 10262083000.0,
+      "passed": true
+    },
+    {
+      "metric": "goods_revenue",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 50433615000.0,
+      "actual": 50433615000.0,
+      "passed": true
+    },
+    {
+      "metric": "goods_revenue",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 174694968000.0,
+      "actual": 174694968000.0,
+      "passed": true
+    },
+    {
+      "metric": "goods_revenue",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 153252245000.0,
+      "actual": 153252245000.0,
+      "passed": true
+    },
+    {
+      "metric": "goods_revenue",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 13849023000.0,
+      "actual": 13849023000.0,
+      "passed": true
+    },
+    {
+      "metric": "service_revenue",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 1669355000.0,
+      "actual": 1669355000.0,
+      "passed": true
+    },
+    {
+      "metric": "service_revenue",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 1656112000.0,
+      "actual": 1656112000.0,
+      "passed": true
+    },
+    {
+      "metric": "service_revenue",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 4983233000.0,
+      "actual": 4983233000.0,
+      "passed": true
+    },
+    {
+      "metric": "service_revenue",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 15551876000.0,
+      "actual": 15551876000.0,
+      "passed": true
+    },
+    {
+      "metric": "service_revenue",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 15859872000.0,
+      "actual": 15859872000.0,
+      "passed": true
+    },
+    {
+      "metric": "service_revenue",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 1257156000.0,
+      "actual": 1257156000.0,
+      "passed": true
+    },
+    {
+      "metric": "cogs",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 13900049486.0,
+      "actual": 13900049486.0,
+      "passed": true
+    },
+    {
+      "metric": "cogs",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 8901881411.0,
+      "actual": 8901881411.0,
+      "passed": true
+    },
+    {
+      "metric": "cogs",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 44735957989.0,
+      "actual": 44735957989.0,
+      "passed": true
+    },
+    {
+      "metric": "cogs",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 153054087192.0,
+      "actual": 153054087192.0,
+      "passed": true
+    },
+    {
+      "metric": "cogs",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 134505237605.0,
+      "actual": 134505237605.0,
+      "passed": true
+    },
+    {
+      "metric": "cogs",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 12113737940.0,
+      "actual": 12113737940.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_profit",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 3497384514.0,
+      "actual": 3497384514.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_profit",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 3016313589.0,
+      "actual": 3016313589.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_profit",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 10680890011.0,
+      "actual": 10680890011.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_profit",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 37192756808.0,
+      "actual": 37192756808.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_profit",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 34606879395.0,
+      "actual": 34606879395.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_profit",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 2992441060.0,
+      "actual": 2992441060.0,
+      "passed": true
+    },
+    {
+      "metric": "gross_margin_pct",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 20.102875596481642,
+      "actual": 20.102875596481642,
+      "passed": true
+    },
+    {
+      "metric": "gross_margin_pct",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 25.308476568809287,
+      "actual": 25.308476568809287,
+      "passed": true
+    },
+    {
+      "metric": "gross_margin_pct",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 19.273723418914045,
+      "actual": 19.273723418914045,
+      "passed": true
+    },
+    {
+      "metric": "gross_margin_pct",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 19.54973655594518,
+      "actual": 19.54973655594518,
+      "passed": true
+    },
+    {
+      "metric": "gross_margin_pct",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 20.463867408743987,
+      "actual": 20.463867408743987,
+      "passed": true
+    },
+    {
+      "metric": "gross_margin_pct",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 19.80938435854626,
+      "actual": 19.80938435854626,
+      "passed": true
+    },
+    {
+      "metric": "selling_expenses",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 1862518626.0,
+      "actual": 1862518626.0,
+      "passed": true
+    },
+    {
+      "metric": "selling_expenses",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 102212222.0,
+      "actual": 102212222.0,
+      "passed": true
+    },
+    {
+      "metric": "selling_expenses",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 6775123101.0,
+      "actual": 6775123101.0,
+      "passed": true
+    },
+    {
+      "metric": "selling_expenses",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 20815862811.0,
+      "actual": 20815862811.0,
+      "passed": true
+    },
+    {
+      "metric": "selling_expenses",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 17705904138.0,
+      "actual": 17705904138.0,
+      "passed": true
+    },
+    {
+      "metric": "selling_expenses",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 1690569885.0,
+      "actual": 1690569885.0,
+      "passed": true
+    },
+    {
+      "metric": "admin_expenses",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 1151697227.0,
+      "actual": 1151697227.0,
+      "passed": true
+    },
+    {
+      "metric": "admin_expenses",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "admin_expenses",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 3272396494.0,
+      "actual": 3272396494.0,
+      "passed": true
+    },
+    {
+      "metric": "admin_expenses",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 12381719568.0,
+      "actual": 12381719568.0,
+      "passed": true
+    },
+    {
+      "metric": "admin_expenses",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 9530459189.0,
+      "actual": 9530459189.0,
+      "passed": true
+    },
+    {
+      "metric": "admin_expenses",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 1000259779.0,
+      "actual": 1000259779.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_expenses",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 3014215853.0,
+      "actual": 3014215853.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_expenses",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 102212222.0,
+      "actual": 102212222.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_expenses",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 10047519595.0,
+      "actual": 10047519595.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_expenses",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 33197582379.0,
+      "actual": 33197582379.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_expenses",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 27236363327.0,
+      "actual": 27236363327.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_expenses",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 2690829664.0,
+      "actual": 2690829664.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_income",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 690000.0,
+      "actual": 690000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_income",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": -0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_income",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 2856000.0,
+      "actual": 2856000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_income",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 245765000.0,
+      "actual": 245765000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_income",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 123597000.0,
+      "actual": 123597000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_income",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 116191000.0,
+      "actual": 116191000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_cost",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 173213000.0,
+      "actual": 173213000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_cost",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_cost",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 506638000.0,
+      "actual": 506638000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_cost",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 822999000.0,
+      "actual": 822999000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_cost",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 1182861000.0,
+      "actual": 1182861000.0,
+      "passed": true
+    },
+    {
+      "metric": "finance_cost",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 57500000.0,
+      "actual": 57500000.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_profit",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 310645661.0,
+      "actual": 310645661.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_profit",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 2914101367.0,
+      "actual": 2914101367.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_profit",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 129588416.0,
+      "actual": 129588416.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_profit",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 3417940429.0,
+      "actual": 3417940429.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_profit",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 6311252068.0,
+      "actual": 6311252068.0,
+      "passed": true
+    },
+    {
+      "metric": "operating_profit",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 360302396.0,
+      "actual": 360302396.0,
+      "passed": true
+    },
+    {
+      "metric": "other_income",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": -0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "other_income",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": -0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "other_income",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": -0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "other_income",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 18500000.0,
+      "actual": 18500000.0,
+      "passed": true
+    },
+    {
+      "metric": "other_income",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": -0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "other_income",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": -0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "other_expenses",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "other_expenses",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "other_expenses",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 4500000.0,
+      "actual": 4500000.0,
+      "passed": true
+    },
+    {
+      "metric": "other_expenses",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 6200000.0,
+      "actual": 6200000.0,
+      "passed": true
+    },
+    {
+      "metric": "other_expenses",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 17100000.0,
+      "actual": 17100000.0,
+      "passed": true
+    },
+    {
+      "metric": "other_expenses",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "profit_before_tax",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 310645661.0,
+      "actual": 310645661.0,
+      "passed": true
+    },
+    {
+      "metric": "profit_before_tax",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 2914101367.0,
+      "actual": 2914101367.0,
+      "passed": true
+    },
+    {
+      "metric": "profit_before_tax",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 125088416.0,
+      "actual": 125088416.0,
+      "passed": true
+    },
+    {
+      "metric": "profit_before_tax",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 3430240429.0,
+      "actual": 3430240429.0,
+      "passed": true
+    },
+    {
+      "metric": "profit_before_tax",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 6294152068.0,
+      "actual": 6294152068.0,
+      "passed": true
+    },
+    {
+      "metric": "profit_before_tax",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 360302396.0,
+      "actual": 360302396.0,
+      "passed": true
+    },
+    {
+      "metric": "income_tax_expense",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "income_tax_expense",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "income_tax_expense",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 68568000.0,
+      "actual": 68568000.0,
+      "passed": true
+    },
+    {
+      "metric": "income_tax_expense",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 745674000.0,
+      "actual": 745674000.0,
+      "passed": true
+    },
+    {
+      "metric": "income_tax_expense",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 737995000.0,
+      "actual": 737995000.0,
+      "passed": true
+    },
+    {
+      "metric": "income_tax_expense",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 174950000.0,
+      "actual": 174950000.0,
+      "passed": true
+    },
+    {
+      "metric": "net_profit",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 310645661.0,
+      "actual": 310645661.0,
+      "passed": true
+    },
+    {
+      "metric": "net_profit",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 2914101367.0,
+      "actual": 2914101367.0,
+      "passed": true
+    },
+    {
+      "metric": "net_profit",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 56520416.0,
+      "actual": 56520416.0,
+      "passed": true
+    },
+    {
+      "metric": "net_profit",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 2684566429.0,
+      "actual": 2684566429.0,
+      "passed": true
+    },
+    {
+      "metric": "net_profit",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 5556157068.0,
+      "actual": 5556157068.0,
+      "passed": true
+    },
+    {
+      "metric": "net_profit",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 185352396.0,
+      "actual": 185352396.0,
+      "passed": true
+    },
+    {
+      "metric": "net_margin_pct",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 1.7855832130186555,
+      "actual": 1.7855832130186555,
+      "passed": true
+    },
+    {
+      "metric": "net_margin_pct",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 24.450861619565714,
+      "actual": 24.450861619565714,
+      "passed": true
+    },
+    {
+      "metric": "net_margin_pct",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 0.10199139438605385,
+      "actual": 0.10199139438605385,
+      "passed": true
+    },
+    {
+      "metric": "net_margin_pct",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 1.4110964326956195,
+      "actual": 1.4110964326956195,
+      "passed": true
+    },
+    {
+      "metric": "net_margin_pct",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 3.285487265232449,
+      "actual": 3.285487265232449,
+      "passed": true
+    },
+    {
+      "metric": "net_margin_pct",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 1.2269972174962311,
+      "actual": 1.2269972174962311,
+      "passed": true
+    },
+    {
+      "metric": "ebitda",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 607815011.0,
+      "actual": 607815011.0,
+      "passed": true
+    },
+    {
+      "metric": "ebitda",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 2914101367.0,
+      "actual": 2914101367.0,
+      "passed": true
+    },
+    {
+      "metric": "ebitda",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 1003595466.0,
+      "actual": 1003595466.0,
+      "passed": true
+    },
+    {
+      "metric": "ebitda",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 5555798956.0,
+      "actual": 5555798956.0,
+      "passed": true
+    },
+    {
+      "metric": "ebitda",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 8569286884.0,
+      "actual": 8569286884.0,
+      "passed": true
+    },
+    {
+      "metric": "ebitda",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 523675412.0,
+      "actual": 523675412.0,
+      "passed": true
+    },
+    {
+      "metric": "depreciation_expense",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 123956350.0,
+      "actual": 123956350.0,
+      "passed": true
+    },
+    {
+      "metric": "depreciation_expense",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "depreciation_expense",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 371869050.0,
+      "actual": 371869050.0,
+      "passed": true
+    },
+    {
+      "metric": "depreciation_expense",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 1302559527.0,
+      "actual": 1302559527.0,
+      "passed": true
+    },
+    {
+      "metric": "depreciation_expense",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 1092273816.0,
+      "actual": 1092273816.0,
+      "passed": true
+    },
+    {
+      "metric": "depreciation_expense",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 105873016.0,
+      "actual": 105873016.0,
+      "passed": true
+    },
+    {
+      "metric": "salary_expense",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 1749519000.0,
+      "actual": 1749519000.0,
+      "passed": true
+    },
+    {
+      "metric": "salary_expense",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "salary_expense",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 5259832000.0,
+      "actual": 5259832000.0,
+      "passed": true
+    },
+    {
+      "metric": "salary_expense",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 21377876000.0,
+      "actual": 21377876000.0,
+      "passed": true
+    },
+    {
+      "metric": "salary_expense",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 15758440000.0,
+      "actual": 15758440000.0,
+      "passed": true
+    },
+    {
+      "metric": "salary_expense",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 1658190000.0,
+      "actual": 1658190000.0,
+      "passed": true
+    },
+    {
+      "metric": "labor_cost",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 2110763294.0,
+      "actual": 2110763294.0,
+      "passed": true
+    },
+    {
+      "metric": "labor_cost",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "labor_cost",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 6343564882.0,
+      "actual": 6343564882.0,
+      "passed": true
+    },
+    {
+      "metric": "labor_cost",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 25489436000.0,
+      "actual": 25489436000.0,
+      "passed": true
+    },
+    {
+      "metric": "labor_cost",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 19012133630.0,
+      "actual": 19012133630.0,
+      "passed": true
+    },
+    {
+      "metric": "labor_cost",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 2000820000.0,
+      "actual": 2000820000.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_and_equivalents",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 4316097369.0,
+      "actual": 4316097369.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_and_equivalents",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 6676561533.0,
+      "actual": 6676561533.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_and_equivalents",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 5681269468.0,
+      "actual": 5681269468.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_and_equivalents",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 8917311151.0,
+      "actual": 8917311151.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_and_equivalents",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 6676561533.0,
+      "actual": 6676561533.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_and_equivalents",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 3432552969.0,
+      "actual": 3432552969.0,
+      "passed": true
+    },
+    {
+      "metric": "term_deposits",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 5000000000.0,
+      "actual": 5000000000.0,
+      "passed": true
+    },
+    {
+      "metric": "term_deposits",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 5000000000.0,
+      "actual": 5000000000.0,
+      "passed": true
+    },
+    {
+      "metric": "term_deposits",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 5000000000.0,
+      "actual": 5000000000.0,
+      "passed": true
+    },
+    {
+      "metric": "term_deposits",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 5000000000.0,
+      "actual": 5000000000.0,
+      "passed": true
+    },
+    {
+      "metric": "term_deposits",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 5000000000.0,
+      "actual": 5000000000.0,
+      "passed": true
+    },
+    {
+      "metric": "term_deposits",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 5000000000.0,
+      "actual": 5000000000.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_balance",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 39419508760.0,
+      "actual": 39419508760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_balance",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 44611180760.0,
+      "actual": 44611180760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_balance",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 40034065920.0,
+      "actual": 40034065920.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_balance",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 35228046160.0,
+      "actual": 35228046160.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_balance",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 44611180760.0,
+      "actual": 44611180760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_balance",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 28091501100.0,
+      "actual": 28091501100.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_customer",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 39419508760.0,
+      "actual": 39419508760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_customer",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 44611180760.0,
+      "actual": 44611180760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_customer",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 40034065920.0,
+      "actual": 40034065920.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_customer",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 35228046160.0,
+      "actual": 35228046160.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_customer",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 44611180760.0,
+      "actual": 44611180760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_customer",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 28091501100.0,
+      "actual": 28091501100.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_salesperson",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 39419508760.0,
+      "actual": 39419508760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_salesperson",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 44611180760.0,
+      "actual": 44611180760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_salesperson",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 40034065920.0,
+      "actual": 40034065920.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_salesperson",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 35228046160.0,
+      "actual": 35228046160.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_salesperson",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 44611180760.0,
+      "actual": 44611180760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_by_salesperson",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 28091501100.0,
+      "actual": 28091501100.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_balance",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 16439978700.0,
+      "actual": 16439978700.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_balance",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 21839301320.0,
+      "actual": 21839301320.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_balance",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 14148904600.0,
+      "actual": 14148904600.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_balance",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 23242556160.0,
+      "actual": 23242556160.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_balance",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 21839301320.0,
+      "actual": 21839301320.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_balance",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 15346002080.0,
+      "actual": 15346002080.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_by_vendor",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 16439978700.0,
+      "actual": 16439978700.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_by_vendor",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 21839301320.0,
+      "actual": 21839301320.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_by_vendor",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 14148904600.0,
+      "actual": 14148904600.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_by_vendor",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 23242556160.0,
+      "actual": 23242556160.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_by_vendor",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 21839301320.0,
+      "actual": 21839301320.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_by_vendor",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 15346002080.0,
+      "actual": 15346002080.0,
+      "passed": true
+    },
+    {
+      "metric": "inventory_value",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 26776599338.0,
+      "actual": 26776599338.0,
+      "passed": true
+    },
+    {
+      "metric": "inventory_value",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 24702916986.0,
+      "actual": 24702916986.0,
+      "passed": true
+    },
+    {
+      "metric": "inventory_value",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 22327931397.0,
+      "actual": 22327931397.0,
+      "passed": true
+    },
+    {
+      "metric": "inventory_value",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 18348426804.0,
+      "actual": 18348426804.0,
+      "passed": true
+    },
+    {
+      "metric": "inventory_value",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 24702916986.0,
+      "actual": 24702916986.0,
+      "passed": true
+    },
+    {
+      "metric": "inventory_value",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 14772512031.0,
+      "actual": 14772512031.0,
+      "passed": true
+    },
+    {
+      "metric": "tax_payable",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 173450245.0,
+      "actual": 173450245.0,
+      "passed": true
+    },
+    {
+      "metric": "tax_payable",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 1593083905.0,
+      "actual": 1593083905.0,
+      "passed": true
+    },
+    {
+      "metric": "tax_payable",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 639628305.0,
+      "actual": 639628305.0,
+      "passed": true
+    },
+    {
+      "metric": "tax_payable",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 373017332.0,
+      "actual": 373017332.0,
+      "passed": true
+    },
+    {
+      "metric": "tax_payable",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 1593083905.0,
+      "actual": 1593083905.0,
+      "passed": true
+    },
+    {
+      "metric": "tax_payable",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 917354684.0,
+      "actual": 917354684.0,
+      "passed": true
+    },
+    {
+      "metric": "debt_balance",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 25666666668.0,
+      "actual": 25666666668.0,
+      "passed": true
+    },
+    {
+      "metric": "debt_balance",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 25144444446.0,
+      "actual": 25144444446.0,
+      "passed": true
+    },
+    {
+      "metric": "debt_balance",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 25144444446.0,
+      "actual": 25144444446.0,
+      "passed": true
+    },
+    {
+      "metric": "debt_balance",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 12000000000.0,
+      "actual": 12000000000.0,
+      "passed": true
+    },
+    {
+      "metric": "debt_balance",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 25144444446.0,
+      "actual": 25144444446.0,
+      "passed": true
+    },
+    {
+      "metric": "debt_balance",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 7000000000.0,
+      "actual": 7000000000.0,
+      "passed": true
+    },
+    {
+      "metric": "fixed_assets_net",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 5505671612.0,
+      "actual": 5505671612.0,
+      "passed": true
+    },
+    {
+      "metric": "fixed_assets_net",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 5381715262.0,
+      "actual": 5381715262.0,
+      "passed": true
+    },
+    {
+      "metric": "fixed_assets_net",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 5381715262.0,
+      "actual": 5381715262.0,
+      "passed": true
+    },
+    {
+      "metric": "fixed_assets_net",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 5353989078.0,
+      "actual": 5353989078.0,
+      "passed": true
+    },
+    {
+      "metric": "fixed_assets_net",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 5381715262.0,
+      "actual": 5381715262.0,
+      "passed": true
+    },
+    {
+      "metric": "fixed_assets_net",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 5636310509.0,
+      "actual": 5636310509.0,
+      "passed": true
+    },
+    {
+      "metric": "total_assets",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 81460877078.0,
+      "actual": 81460877078.0,
+      "passed": true
+    },
+    {
+      "metric": "total_assets",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 88483481092.0,
+      "actual": 88483481092.0,
+      "passed": true
+    },
+    {
+      "metric": "total_assets",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 78486815380.0,
+      "actual": 78486815380.0,
+      "passed": true
+    },
+    {
+      "metric": "total_assets",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 72885406526.0,
+      "actual": 72885406526.0,
+      "passed": true
+    },
+    {
+      "metric": "total_assets",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 88483481092.0,
+      "actual": 88483481092.0,
+      "passed": true
+    },
+    {
+      "metric": "total_assets",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 58510238341.0,
+      "actual": 58510238341.0,
+      "passed": true
+    },
+    {
+      "metric": "total_liabilities",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 44367386907.0,
+      "actual": 44367386907.0,
+      "passed": true
+    },
+    {
+      "metric": "total_liabilities",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 49111330990.0,
+      "actual": 49111330990.0,
+      "passed": true
+    },
+    {
+      "metric": "total_liabilities",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 42028766645.0,
+      "actual": 42028766645.0,
+      "passed": true
+    },
+    {
+      "metric": "total_liabilities",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 39069913492.0,
+      "actual": 39069913492.0,
+      "passed": true
+    },
+    {
+      "metric": "total_liabilities",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 49111330990.0,
+      "actual": 49111330990.0,
+      "passed": true
+    },
+    {
+      "metric": "total_liabilities",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 23759076764.0,
+      "actual": 23759076764.0,
+      "passed": true
+    },
+    {
+      "metric": "equity",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 37092990171.0,
+      "actual": 37092990171.0,
+      "passed": true
+    },
+    {
+      "metric": "equity",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 39371650102.0,
+      "actual": 39371650102.0,
+      "passed": true
+    },
+    {
+      "metric": "equity",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 36457548735.0,
+      "actual": 36457548735.0,
+      "passed": true
+    },
+    {
+      "metric": "equity",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 33815493034.0,
+      "actual": 33815493034.0,
+      "passed": true
+    },
+    {
+      "metric": "equity",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 39371650102.0,
+      "actual": 39371650102.0,
+      "passed": true
+    },
+    {
+      "metric": "equity",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 34751161577.0,
+      "actual": 34751161577.0,
+      "passed": true
+    },
+    {
+      "metric": "working_capital",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 36852685228.0,
+      "actual": 36852685228.0,
+      "passed": true
+    },
+    {
+      "metric": "working_capital",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 38035645953.0,
+      "actual": 38035645953.0,
+      "passed": true
+    },
+    {
+      "metric": "working_capital",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 36179944586.0,
+      "actual": 36179944586.0,
+      "passed": true
+    },
+    {
+      "metric": "working_capital",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 34445170623.0,
+      "actual": 34445170623.0,
+      "passed": true
+    },
+    {
+      "metric": "working_capital",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 38035645953.0,
+      "actual": 38035645953.0,
+      "passed": true
+    },
+    {
+      "metric": "working_capital",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 35041517736.0,
+      "actual": 35041517736.0,
+      "passed": true
+    },
+    {
+      "metric": "current_ratio",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 1.9522480460418492,
+      "actual": 1.9522480460418492,
+      "passed": true
+    },
+    {
+      "metric": "current_ratio",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 1.865097552789773,
+      "actual": 1.865097552789773,
+      "passed": true
+    },
+    {
+      "metric": "current_ratio",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 1.9809030620327057,
+      "actual": 1.9809030620327057,
+      "passed": true
+    },
+    {
+      "metric": "current_ratio",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 2.041586354053593,
+      "actual": 2.041586354053593,
+      "passed": true
+    },
+    {
+      "metric": "current_ratio",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 1.865097552789773,
+      "actual": 1.865097552789773,
+      "passed": true
+    },
+    {
+      "metric": "current_ratio",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 3.090897859676395,
+      "actual": 3.090897859676395,
+      "passed": true
+    },
+    {
+      "metric": "quick_ratio",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 1.2603591309870763,
+      "actual": 1.2603591309870763,
+      "passed": true
+    },
+    {
+      "metric": "quick_ratio",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 1.303244782949487,
+      "actual": 1.303244782949487,
+      "passed": true
+    },
+    {
+      "metric": "quick_ratio",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 1.3755528735017815,
+      "actual": 1.3755528735017815,
+      "passed": true
+    },
+    {
+      "metric": "quick_ratio",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 1.4867488940632998,
+      "actual": 1.4867488940632998,
+      "passed": true
+    },
+    {
+      "metric": "quick_ratio",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 1.303244782949487,
+      "actual": 1.303244782949487,
+      "passed": true
+    },
+    {
+      "metric": "quick_ratio",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 2.2094345046822412,
+      "actual": 2.2094345046822412,
+      "passed": true
+    },
+    {
+      "metric": "debt_to_equity",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 0.6919546402076445,
+      "actual": 0.6919546402076445,
+      "passed": true
+    },
+    {
+      "metric": "debt_to_equity",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.638643399015748,
+      "actual": 0.638643399015748,
+      "passed": true
+    },
+    {
+      "metric": "debt_to_equity",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 0.6896910329536449,
+      "actual": 0.6896910329536449,
+      "passed": true
+    },
+    {
+      "metric": "debt_to_equity",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 0.35486692410294074,
+      "actual": 0.35486692410294074,
+      "passed": true
+    },
+    {
+      "metric": "debt_to_equity",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 0.638643399015748,
+      "actual": 0.638643399015748,
+      "passed": true
+    },
+    {
+      "metric": "debt_to_equity",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 0.20143211571474315,
+      "actual": 0.20143211571474315,
+      "passed": true
+    },
+    {
+      "metric": "net_cash_flow",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": -2727962298.0,
+      "actual": -2727962298.0,
+      "passed": true
+    },
+    {
+      "metric": "net_cash_flow",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 995292065.0,
+      "actual": 995292065.0,
+      "passed": true
+    },
+    {
+      "metric": "net_cash_flow",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": -313233695.0,
+      "actual": -313233695.0,
+      "passed": true
+    },
+    {
+      "metric": "net_cash_flow",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": -1777688849.0,
+      "actual": -1777688849.0,
+      "passed": true
+    },
+    {
+      "metric": "net_cash_flow",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": -2240749618.0,
+      "actual": -2240749618.0,
+      "passed": true
+    },
+    {
+      "metric": "net_cash_flow",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": -1525347258.0,
+      "actual": -1525347258.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_flow_breakdown",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": -2727962298.0,
+      "actual": -2727962298.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_flow_breakdown",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 995292065.0,
+      "actual": 995292065.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_flow_breakdown",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": -313233695.0,
+      "actual": -313233695.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_flow_breakdown",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": -1777688849.0,
+      "actual": -1777688849.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_flow_breakdown",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": -2240749618.0,
+      "actual": -2240749618.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_flow_breakdown",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": -1525347258.0,
+      "actual": -1525347258.0,
+      "passed": true
+    },
+    {
+      "metric": "cash_coverage_days",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 6.421008659662079,
+      "actual": 6.421008659662079,
+      "passed": true
+    },
+    {
+      "metric": "cash_coverage_days",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 10.340577784831588,
+      "actual": 10.340577784831588,
+      "passed": true
+    },
+    {
+      "metric": "cash_coverage_days",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 8.560109702312936,
+      "actual": 8.560109702312936,
+      "passed": true
+    },
+    {
+      "metric": "cash_coverage_days",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 15.0493384404756,
+      "actual": 15.0493384404756,
+      "passed": true
+    },
+    {
+      "metric": "cash_coverage_days",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 10.340577784831588,
+      "actual": 10.340577784831588,
+      "passed": true
+    },
+    {
+      "metric": "cash_coverage_days",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 5.958520666641648,
+      "actual": 5.958520666641648,
+      "passed": true
+    },
+    {
+      "metric": "ar_aging",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 39419508760.0,
+      "actual": 39419508760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_aging",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 44611180760.0,
+      "actual": 44611180760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_aging",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 40034065920.0,
+      "actual": 40034065920.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_aging",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 35228046160.0,
+      "actual": 35228046160.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_aging",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 44611180760.0,
+      "actual": 44611180760.0,
+      "passed": true
+    },
+    {
+      "metric": "ar_aging",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 28091501100.0,
+      "actual": 28091501100.0,
+      "passed": true
+    },
+    {
+      "metric": "overdue_receivables",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 9427612760.0,
+      "actual": 9427612760.0,
+      "passed": true
+    },
+    {
+      "metric": "overdue_receivables",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 9336329280.0,
+      "actual": 9336329280.0,
+      "passed": true
+    },
+    {
+      "metric": "overdue_receivables",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 9339188200.0,
+      "actual": 9339188200.0,
+      "passed": true
+    },
+    {
+      "metric": "overdue_receivables",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 2550727640.0,
+      "actual": 2550727640.0,
+      "passed": true
+    },
+    {
+      "metric": "overdue_receivables",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 9336329280.0,
+      "actual": 9336329280.0,
+      "passed": true
+    },
+    {
+      "metric": "overdue_receivables",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 1266795840.0,
+      "actual": 1266795840.0,
+      "passed": true
+    },
+    {
+      "metric": "dso",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 65.3263700182367,
+      "actual": 65.3263700182367,
+      "passed": true
+    },
+    {
+      "metric": "dso",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 45.88532844280322,
+      "actual": 45.88532844280322,
+      "passed": true
+    },
+    {
+      "metric": "dso",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 58.65337155756927,
+      "actual": 58.65337155756927,
+      "passed": true
+    },
+    {
+      "metric": "dso",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 43.76854893178559,
+      "actual": 43.76854893178559,
+      "passed": true
+    },
+    {
+      "metric": "dso",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 62.63466933926634,
+      "actual": 62.63466933926634,
+      "passed": true
+    },
+    {
+      "metric": "dso",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 53.90602453654847,
+      "actual": 53.90602453654847,
+      "passed": true
+    },
+    {
+      "metric": "dso_actual",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 58.77138114078602,
+      "actual": 58.77138114078602,
+      "passed": true
+    },
+    {
+      "metric": "dso_actual",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 59.89480459060212,
+      "actual": 59.89480459060212,
+      "passed": true
+    },
+    {
+      "metric": "dso_actual",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 58.780272623820466,
+      "actual": 58.780272623820466,
+      "passed": true
+    },
+    {
+      "metric": "dso_actual",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 56.389902296593384,
+      "actual": 56.389902296593384,
+      "passed": true
+    },
+    {
+      "metric": "dso_actual",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 60.68228074871671,
+      "actual": 60.68228074871671,
+      "passed": true
+    },
+    {
+      "metric": "dso_actual",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 56.482406338699775,
+      "actual": 56.482406338699775,
+      "passed": true
+    },
+    {
+      "metric": "dpo",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 34.24614810428255,
+      "actual": 34.24614810428255,
+      "passed": true
+    },
+    {
+      "metric": "dpo",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 18.878686129380878,
+      "actual": 18.878686129380878,
+      "passed": true
+    },
+    {
+      "metric": "dpo",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 36.31735790801701,
+      "actual": 36.31735790801701,
+      "passed": true
+    },
+    {
+      "metric": "dpo",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 34.044299817345426,
+      "actual": 34.044299817345426,
+      "passed": true
+    },
+    {
+      "metric": "dpo",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 40.11854035473083,
+      "actual": 40.11854035473083,
+      "passed": true
+    },
+    {
+      "metric": "dpo",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 31.686289491733703,
+      "actual": 31.686289491733703,
+      "passed": true
+    },
+    {
+      "metric": "dio",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 58.09929344912693,
+      "actual": 58.09929344912693,
+      "passed": true
+    },
+    {
+      "metric": "dio",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 36.982736960996796,
+      "actual": 36.982736960996796,
+      "passed": true
+    },
+    {
+      "metric": "dio",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 50.03258702617609,
+      "actual": 50.03258702617609,
+      "passed": true
+    },
+    {
+      "metric": "dio",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 41.19574014590292,
+      "actual": 41.19574014590292,
+      "passed": true
+    },
+    {
+      "metric": "dio",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 45.93031426781665,
+      "actual": 45.93031426781665,
+      "passed": true
+    },
+    {
+      "metric": "dio",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 36.68658896376126,
+      "actual": 36.68658896376126,
+      "passed": true
+    },
+    {
+      "metric": "cash_conversion_cycle",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 89.1795153630811,
+      "actual": 89.1795153630811,
+      "passed": true
+    },
+    {
+      "metric": "cash_conversion_cycle",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 63.989379274419136,
+      "actual": 63.989379274419136,
+      "passed": true
+    },
+    {
+      "metric": "cash_conversion_cycle",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 72.36860067572835,
+      "actual": 72.36860067572835,
+      "passed": true
+    },
+    {
+      "metric": "cash_conversion_cycle",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 50.91998926034308,
+      "actual": 50.91998926034308,
+      "passed": true
+    },
+    {
+      "metric": "cash_conversion_cycle",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 68.44644325235214,
+      "actual": 68.44644325235214,
+      "passed": true
+    },
+    {
+      "metric": "cash_conversion_cycle",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 58.906324008576036,
+      "actual": 58.906324008576036,
+      "passed": true
+    },
+    {
+      "metric": "ap_due_soon",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 6022307880.0,
+      "actual": 6022307880.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_due_soon",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 6022307880.0,
+      "actual": 6022307880.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_due_soon",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 6022307880.0,
+      "actual": 6022307880.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_due_soon",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 6022307880.0,
+      "actual": 6022307880.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_due_soon",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 6022307880.0,
+      "actual": 6022307880.0,
+      "passed": true
+    },
+    {
+      "metric": "ap_due_soon",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 6022307880.0,
+      "actual": 6022307880.0,
+      "passed": true
+    },
+    {
+      "metric": "upcoming_obligations",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 2284614557.3333335,
+      "actual": 2284614557.3333335,
+      "passed": true
+    },
+    {
+      "metric": "upcoming_obligations",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 10562083859.333334,
+      "actual": 10562083859.333334,
+      "passed": true
+    },
+    {
+      "metric": "upcoming_obligations",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 2284614557.3333335,
+      "actual": 2284614557.3333335,
+      "passed": true
+    },
+    {
+      "metric": "upcoming_obligations",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 2284614557.3333335,
+      "actual": 2284614557.3333335,
+      "passed": true
+    },
+    {
+      "metric": "upcoming_obligations",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 2284614557.3333335,
+      "actual": 2284614557.3333335,
+      "passed": true
+    },
+    {
+      "metric": "upcoming_obligations",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 2284614557.3333335,
+      "actual": 2284614557.3333335,
+      "passed": true
+    },
+    {
+      "metric": "expense_by_category",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 3014215853.0,
+      "actual": 3014215853.0,
+      "passed": true
+    },
+    {
+      "metric": "expense_by_category",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 102212222.0,
+      "actual": 102212222.0,
+      "passed": true
+    },
+    {
+      "metric": "expense_by_category",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 10047519595.0,
+      "actual": 10047519595.0,
+      "passed": true
+    },
+    {
+      "metric": "expense_by_category",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 33197582379.0,
+      "actual": 33197582379.0,
+      "passed": true
+    },
+    {
+      "metric": "expense_by_category",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 27236363327.0,
+      "actual": 27236363327.0,
+      "passed": true
+    },
+    {
+      "metric": "expense_by_category",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 2690829664.0,
+      "actual": 2690829664.0,
+      "passed": true
+    },
+    {
+      "metric": "expense_spikes",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 111414666.66666667,
+      "actual": 111414666.66666667,
+      "passed": true
+    },
+    {
+      "metric": "expense_spikes",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 22473824.924731184,
+      "actual": 22473824.924731184,
+      "passed": true
+    },
+    {
+      "metric": "expense_spikes",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 2604875333.333333,
+      "actual": 2604875333.333333,
+      "passed": true
+    },
+    {
+      "metric": "expense_spikes",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 14842800000.0,
+      "actual": 14842800000.0,
+      "passed": true
+    },
+    {
+      "metric": "expense_spikes",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 10499636000.0,
+      "actual": 10499636000.0,
+      "passed": true
+    },
+    {
+      "metric": "expense_spikes",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 76444444.33333334,
+      "actual": 76444444.33333334,
+      "passed": true
+    },
+    {
+      "metric": "unusual_account_movements",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 3.0,
+      "actual": 3.0,
+      "passed": true
+    },
+    {
+      "metric": "unusual_account_movements",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 26.0,
+      "actual": 26.0,
+      "passed": true
+    },
+    {
+      "metric": "unusual_account_movements",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 6.0,
+      "actual": 6.0,
+      "passed": true
+    },
+    {
+      "metric": "unusual_account_movements",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 18.0,
+      "actual": 18.0,
+      "passed": true
+    },
+    {
+      "metric": "unusual_account_movements",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 26.0,
+      "actual": 26.0,
+      "passed": true
+    },
+    {
+      "metric": "unusual_account_movements",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 25.0,
+      "actual": 25.0,
+      "passed": true
+    },
+    {
+      "metric": "unbalanced_journals",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "unbalanced_journals",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "unbalanced_journals",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    {
+      "metric": "unbalanced_journals",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "unbalanced_journals",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    {
+      "metric": "unbalanced_journals",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "top_sales_transactions",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 390378000.0,
+      "actual": 390378000.0,
+      "passed": true
+    },
+    {
+      "metric": "top_sales_transactions",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 2709396000.0,
+      "actual": 2709396000.0,
+      "passed": true
+    },
+    {
+      "metric": "top_sales_transactions",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 944228000.0,
+      "actual": 944228000.0,
+      "passed": true
+    },
+    {
+      "metric": "top_sales_transactions",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 843125000.0,
+      "actual": 843125000.0,
+      "passed": true
+    },
+    {
+      "metric": "top_sales_transactions",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 2709396000.0,
+      "actual": 2709396000.0,
+      "passed": true
+    },
+    {
+      "metric": "top_sales_transactions",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 474936000.0,
+      "actual": 474936000.0,
+      "passed": true
+    },
+    {
+      "metric": "budget_vs_actual",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": -2083566000.0,
+      "actual": -2083566000.0,
+      "passed": true
+    },
+    {
+      "metric": "budget_vs_actual",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 2899936935.4838715,
+      "actual": 2899936935.4838715,
+      "passed": true
+    },
+    {
+      "metric": "budget_vs_actual",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": -741152000.0,
+      "actual": -741152000.0,
+      "passed": true
+    },
+    {
+      "metric": "budget_vs_actual",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 175844000.0,
+      "actual": 175844000.0,
+      "passed": true
+    },
+    {
+      "metric": "budget_vs_actual",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": -1086141064.5161133,
+      "actual": -1086141064.5161133,
+      "passed": true
+    },
+    {
+      "metric": "budget_vs_actual",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": -432790892.4731178,
+      "actual": -432790892.47311974,
+      "passed": false
+    },
+    {
+      "metric": "payroll_summary",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 2110763294.0,
+      "actual": 2110763294.0,
+      "passed": true
+    },
+    {
+      "metric": "payroll_summary",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "metric": "payroll_summary",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 6343564882.0,
+      "actual": 6343564882.0,
+      "passed": true
+    },
+    {
+      "metric": "payroll_summary",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 24001436000.0,
+      "actual": 24001436000.0,
+      "passed": true
+    },
+    {
+      "metric": "payroll_summary",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 19012133630.0,
+      "actual": 19012133630.0,
+      "passed": true
+    },
+    {
+      "metric": "payroll_summary",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 3995232000.0,
+      "actual": 3995232000.0,
+      "passed": true
+    },
+    {
+      "metric": "taxable_income",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 417581661.0,
+      "actual": 417581661.0,
+      "passed": true
+    },
+    {
+      "metric": "taxable_income",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 2948165367.0,
+      "actual": 2948165367.0,
+      "passed": true
+    },
+    {
+      "metric": "taxable_income",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 342838157.0,
+      "actual": 342838157.0,
+      "passed": true
+    },
+    {
+      "metric": "taxable_income",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 3728370429.0,
+      "actual": 3728370429.0,
+      "passed": true
+    },
+    {
+      "metric": "taxable_income",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 6638139809.0,
+      "actual": 6638139809.0,
+      "passed": true
+    },
+    {
+      "metric": "taxable_income",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 360302396.0,
+      "actual": 360302396.0,
+      "passed": true
+    },
+    {
+      "metric": "cit_estimate",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 83516332.2,
+      "actual": 83516332.2,
+      "passed": true
+    },
+    {
+      "metric": "cit_estimate",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 589633073.4,
+      "actual": 589633073.4,
+      "passed": true
+    },
+    {
+      "metric": "cit_estimate",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 68567631.4,
+      "actual": 68567631.4,
+      "passed": true
+    },
+    {
+      "metric": "cit_estimate",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 745674085.8000001,
+      "actual": 745674085.8000001,
+      "passed": true
+    },
+    {
+      "metric": "cit_estimate",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 1327627961.8000002,
+      "actual": 1327627961.8000002,
+      "passed": true
+    },
+    {
+      "metric": "cit_estimate",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 72060479.2,
+      "actual": 72060479.2,
+      "passed": true
+    },
+    {
+      "metric": "deductible_expenses",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 16980542339.0,
+      "actual": 16980542339.0,
+      "passed": true
+    },
+    {
+      "metric": "deductible_expenses",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 8970029633.0,
+      "actual": 8970029633.0,
+      "passed": true
+    },
+    {
+      "metric": "deductible_expenses",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 55076865843.0,
+      "actual": 55076865843.0,
+      "passed": true
+    },
+    {
+      "metric": "deductible_expenses",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 186782738571.0,
+      "actual": 186782738571.0,
+      "passed": true
+    },
+    {
+      "metric": "deductible_expenses",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 162597574191.0,
+      "actual": 162597574191.0,
+      "passed": true
+    },
+    {
+      "metric": "deductible_expenses",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 14862067604.0,
+      "actual": 14862067604.0,
+      "passed": true
+    },
+    {
+      "metric": "mgmt_vs_tax_gap",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 106936000.0,
+      "actual": 106936000.0,
+      "passed": true
+    },
+    {
+      "metric": "mgmt_vs_tax_gap",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": 34064000.0,
+      "actual": 34064000.0,
+      "passed": true
+    },
+    {
+      "metric": "mgmt_vs_tax_gap",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 217749741.0,
+      "actual": 217749741.0,
+      "passed": true
+    },
+    {
+      "metric": "mgmt_vs_tax_gap",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 298130000.0,
+      "actual": 298130000.0,
+      "passed": true
+    },
+    {
+      "metric": "mgmt_vs_tax_gap",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 343987741.0,
+      "actual": 343987741.0,
+      "passed": true
+    },
+    {
+      "metric": "mgmt_vs_tax_gap",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 0.0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "metric": "vat_position",
+      "start": "2026-08-01",
+      "end": "2026-08-31",
+      "oracle": 138128245.0,
+      "actual": 138128245.0,
+      "passed": true
+    },
+    {
+      "metric": "vat_position",
+      "start": "2026-10-01",
+      "end": "2026-10-31",
+      "oracle": -38817618.0,
+      "actual": -38817618.0,
+      "passed": true
+    },
+    {
+      "metric": "vat_position",
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "oracle": 926089952.0,
+      "actual": 926089952.0,
+      "passed": true
+    },
+    {
+      "metric": "vat_position",
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "oracle": 2465653901.0,
+      "actual": 2465653901.0,
+      "passed": true
+    },
+    {
+      "metric": "vat_position",
+      "start": "2026-01-01",
+      "end": "2026-10-14",
+      "oracle": 1532892127.0,
+      "actual": 1532892127.0,
+      "passed": true
+    },
+    {
+      "metric": "vat_position",
+      "start": "2025-06-15",
+      "end": "2025-07-15",
+      "oracle": 68947974.0,
+      "actual": 68947974.0,
+      "passed": true
+    }
+  ]
+}

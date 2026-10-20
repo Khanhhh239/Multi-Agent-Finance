@@ -50,5 +50,8 @@ def render_facts(results,hints=None,*,max_rows=8,question=''):
         if result.get('security_notice'): lines.append(result['security_notice'])
     if not lines: lines=[NOTICE]
     elif NOTICE not in '\n'.join(lines): lines.append(NOTICE)
-    allowed=allowed_numbers(results,question,constants=[max_rows])
+    allowed=allowed_numbers(results,question)
+    for result in results:
+        rows=result.get('rows',[]);shown=min(max_rows,len(rows));total=result.get('rows_total',len(rows))
+        if total>shown:allowed.renderer_counts.add((shown,total))
     return FactsBlock('\n'.join(lines),allowed,list(dict.fromkeys(required)),ids,caveats)
