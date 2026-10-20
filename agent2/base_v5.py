@@ -47,6 +47,21 @@ def _load(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
 
 
+def verify_storage_revision(generation):
+    migration=Path(generation)/'io_revision1'/'migration_proof.json'
+    if not migration.exists():
+        return
+    recorded=_load(migration)['partial_1013_csv_sha256']
+    actual=_load(Path(generation)/'world_1013.json')['file_hashes']
+    mismatches=[name for name,value in recorded.items() if actual.get(name)!=value]
+    proof={'data_origin':'dữ liệu tổng hợp','status':'failed' if mismatches else 'passed',
+           'world':1013,'csv_files_compared':len(recorded),'mismatches':mismatches,
+           'migration_sha256':sha256(migration),'checkpoint_sha256':sha256(Path(generation)/'world_1013.json')}
+    write_json(Path(generation)/'storage_full_world_parity.json',proof)
+    if mismatches:
+        raise ValueError('Full-world storage equivalence failed; refuse any feature preparation or model evaluation')
+
+
 def preparation_hashes():
     paths=[Path(name) for name in ('agent2/data.py','agent2/feats.py','agent2/feats_v4.py',
                                   'agent2/hybrid.py','agent2/methods.py')]
@@ -220,6 +235,7 @@ def run_world(target,weight,matrices,output):
 
 def run(args):
     args.output.mkdir(parents=True,exist_ok=True)
+    verify_storage_revision(args.generation)
     # No model fit until all twenty world validations are present.
     for seed in range(1001,1021):
         checked=_load(args.generation/f'world_{seed}.json')
@@ -295,6 +311,7 @@ def main():
                 checked=_load(args.generation/f'world_{seed}.json')
                 if checked['status']!='validated' or any(value!='passed' for value in checked['checks'].values()):
                     raise ValueError('All twenty worlds must be validated before feature preparation')
+            verify_storage_revision(args.generation)
             write_json(args.output/'runtime.json',{'status':'preparing_base_features','world':args.prepare_world,
                                                   'data_origin':'dữ liệu tổng hợp'})
             prepare_world(args.prepare_world,args.root,args.matrices,args.generation)

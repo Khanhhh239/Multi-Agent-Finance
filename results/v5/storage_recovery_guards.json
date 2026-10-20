@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-20",
+  "data_origin": "dữ liệu tổng hợp",
+  "status": "storage_recovery_guards_tested_waiting_for_resources",
+  "validated_worlds": 12,
+  "pending_world": 1013,
+  "model_performance_measured": false,
+  "full_world_storage_parity_pending": true,
+  "tests": {
+    "passed": 19,
+    "seconds": 16.98,
+    "log": "work/v5_storage_recovery_tests.log",
+    "log_sha256": "1bf6d38feb14e773a9cbb6613d955bd20fbd40bab39da4701d7961203e3e5251"
+  },
+  "source_sha256": {
+    "agent2/base_v5.py": "7ec0f7a56eb7f8d1fe07deac2a32283815d15b6a4a80f7fd6cdb907bd8a1ede6",
+    "tests_agent2/test_base_v5.py": "455d1dc9edef5ad9c3003c1e36dc6912e31eb48958f760bc79b678d7ef4b69a0"
+  },
+  "system_memory_checkpoint": {
+    "status": "waiting_for_memory",
+    "available_gib": 1.6783218383789062,
+    "available_commit_gib": 4.640495300292969,
+    "preferred_physical_gib": 3,
+    "hard_job_cap_gib": 6,
+    "time": 1792483284.3630457,
+    "pid": 33304
+  }
+}

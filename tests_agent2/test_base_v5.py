@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
+import pytest
 
-from agent2.base_v5 import MatrixSequence, fit_source, observed_labels
+from agent2.base_v5 import MatrixSequence, fit_source, observed_labels, verify_storage_revision
 from agent2.runtime_v5 import write_json
 
 
@@ -47,3 +48,12 @@ def test_streamed_PU_fit_uses_nineteen_sources_and_hidden_branch(tmp_path):
     assert details['source_worlds']==19 and details['source_train_rows']==19*48
     assert details['source_validation_rows']==19*24
     assert details['source_observed_train_positives']==19*6
+
+
+def test_storage_migration_blocks_models_if_full_world_bytes_change(tmp_path):
+    write_json(tmp_path/'io_revision1'/'migration_proof.json',{'partial_1013_csv_sha256':{'features.csv':'abc','labels.csv':'def'}})
+    write_json(tmp_path/'world_1013.json',{'file_hashes':{'features.csv':'abc','labels.csv':'def'}})
+    verify_storage_revision(tmp_path)
+    write_json(tmp_path/'world_1013.json',{'file_hashes':{'features.csv':'changed','labels.csv':'def'}})
+    with pytest.raises(ValueError,match='Full-world storage equivalence failed'):
+        verify_storage_revision(tmp_path)
