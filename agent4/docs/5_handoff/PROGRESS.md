@@ -200,3 +200,9 @@ Toàn bộ test trước commit: **2733 passed, 0 skipped**, 263.55 giây; `arti
 formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Measured H02_hints on frozen val; selected reference.
 
 Toàn bộ test trước commit: **2733 passed, 0 skipped**, 264.70 giây; `artifacts\H02_hints_pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### T2.6-H01_retriever — P2 thử nghiệm
+
+formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Measured H01_retriever on frozen val; selected k8.
+
+Toàn bộ test trước commit: **2733 passed, 0 skipped**, 143.11 giây; `artifacts\H01_retriever_pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

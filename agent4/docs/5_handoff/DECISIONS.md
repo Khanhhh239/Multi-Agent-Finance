@@ -91,3 +91,5 @@
 | 2026-10-20 | T2.6-H00_B0 thử nghiệm | Start ablation path with4B; compare8B after architecture in H4. | formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Both full-val baselines measured; no held-out test accessed. | công thức chưa được kế toán duyệt (G0.7 mở); không chứng nhận pilot |
 
 | 2026-10-20 | T2.6-H02_hints thử nghiệm | on: rejected — target gain <1 percentage point. | formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Measured H02_hints on frozen val; selected reference. | công thức chưa được kế toán duyệt (G0.7 mở); không chứng nhận pilot |
+
+| 2026-10-20 | T2.6-H01_retriever thử nghiệm | k66: rejected — target gain <1 percentage point. k20: eligible. k12: eligible. k8: eligible. k5: rejected — numeric_faithfulness: regressed, injection_blocked: regressed, target gain <1 percentage point. | formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Measured H01_retriever on frozen val; selected k8. | công thức chưa được kế toán duyệt (G0.7 mở); không chứng nhận pilot |

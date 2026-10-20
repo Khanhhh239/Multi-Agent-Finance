@@ -1,0 +1,14 @@
+{
+  "tests": 2733,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 143.108,
+  "card": "T2.6-H01_retriever",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-20T12:47:23.653578+00:00",
+  "xml": "artifacts\\H01_retriever_pytest.xml",
+  "summary": "formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Measured H01_retriever on frozen val; selected k8.",
+  "decision": "k66: rejected — target gain <1 percentage point. k20: eligible. k12: eligible. k8: eligible. k5: rejected — numeric_faithfulness: regressed, injection_blocked: regressed, target gain <1 percentage point."
+}

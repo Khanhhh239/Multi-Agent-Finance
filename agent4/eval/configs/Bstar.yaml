@@ -1,9 +1,9 @@
 {
-  "name": "H02_hints_reference",
+  "name": "H01_retriever_k8",
   "model": "qwen3:4b-instruct-2507-q4_K_M",
   "num_ctx": 8192,
   "hints": false,
-  "k": 66,
+  "k": 8,
   "output_mode": "native",
   "think": false,
   "fewshot": 3,
