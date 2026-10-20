@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-20",
+  "checkpoint_time": "2026-10-20T07:20:00.630594+07:00",
+  "data_origin": "dữ liệu tổng hợp",
+  "status": "repair_validated_on_two_full_worlds",
+  "validated_seeds_at_checkpoint": [
+    1001,
+    1002
+  ],
+  "required_worlds": 20,
+  "world_evidence": {
+    "1001": {
+      "rows": 200000,
+      "seconds": 100.17200000000003,
+      "checks": {
+        "V1": "passed",
+        "V2": "passed",
+        "V3": "passed",
+        "V4": "passed",
+        "V5": "passed",
+        "V6": "passed",
+        "V7": "passed",
+        "V8": "passed",
+        "V9": "passed",
+        "V10": "passed",
+        "V11": "passed",
+        "V12": "passed"
+      },
+      "shortcut_audit": {
+        "type_only": 0.7789079196375046,
+        "type_plus_nuisance": 0.7582257440858511,
+        "gain": -0.020682175551653526
+      }
+    },
+    "1002": {
+      "rows": 200000,
+      "seconds": 89.5,
+      "checks": {
+        "V1": "passed",
+        "V2": "passed",
+        "V3": "passed",
+        "V4": "passed",
+        "V5": "passed",
+        "V6": "passed",
+        "V7": "passed",
+        "V8": "passed",
+        "V9": "passed",
+        "V10": "passed",
+        "V11": "passed",
+        "V12": "passed"
+      },
+      "shortcut_audit": {
+        "type_only": 0.8106354109651486,
+        "type_plus_nuisance": 0.8000608423284159,
+        "gain": -0.010574568636732673
+      }
+    }
+  },
+  "tests": {
+    "passed": 16,
+    "seconds": 9.98,
+    "log": "work/v5_generator_repair_tests.log",
+    "log_sha256": "9c63ca0bfec438dd4a59004f1f5728dfc31ddb1a163ac6fa86c33cc47672dcd1"
+  },
+  "protected_v4_files_unchanged": true,
+  "archived_R1_v1_unchanged": true,
+  "PU_locked": false,
+  "detector_performance_measured": false,
+  "source_sha256": {
+    "agent2\\world_v5_dev.py": "f14760f5f0ddeb593e1aa60a77772241888f2f6b8d2604a698bcaf8981cb4d2f",
+    "agent2\\runtime_v5.py": "96bf146757cbbde61294e234c660e7c392b1a4fb2e33271fdbc36f415fa45b26"
+  }
+}
