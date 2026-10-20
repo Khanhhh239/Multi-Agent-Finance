@@ -1,0 +1,14 @@
+{
+  "tests": 2735,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 280.286,
+  "card": "T2.6-H03_output",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-20T23:48:49.787992+00:00",
+  "xml": "artifacts\\H03_output_pytest.xml",
+  "summary": "formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). H3 full frozen-val comparison: native reference retained; schema559/560 observed, one lost-started E2, no promotion from incomplete evidence. Existing raw inference preserved; no held-out access.",
+  "decision": "No completed or lost-started model case repeated. Report observed/planned n separately; incomplete arm cannot promote. Resume full pytest and publish after reboot, then H4."
+}

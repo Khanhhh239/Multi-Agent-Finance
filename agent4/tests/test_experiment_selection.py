@@ -46,3 +46,24 @@ def test_report_preserves_missing_measurements_as_na(tmp_path,monkeypatch):
     assert 'formulas not accountant-approved' in md and 'N/A' in md
     exported=json.loads((tmp_path/'exports/H_UNIT_ONLY_evidence.json').read_text(encoding='utf8'))
     assert exported['arms']['ref']['target']['n']==1
+
+
+def test_interrupted_primary_observation_blocks_promotion_without_repeating_ids():
+    baseline=evidence(.6,.6)
+    candidate=evidence(1,1)
+    missing={'id':'e2.val.unit-lost','suite':'e2','status':'interrupted_not_repeated','metrics':{}}
+    candidate.append(missing)
+    ok,reasons=eligible(baseline,candidate,'args')
+    assert not ok and any('incomplete primary evidence' in r for r in reasons)
+    assert subset_records(candidate,'full')[-1] is missing
+    assert target_score(candidate,'args')['n']==1
+    assert target_score(candidate,'args')['estimate']==1
+
+
+def test_interrupted_case_does_not_create_latency_or_model_error_examples():
+    from scripts.run_p2_experiments import latency,error_examples,observed
+    good={'id':'e1.val.unit-good','suite':'e1','status':'completed','elapsed_ms':12,'metrics':{'tool_correct':1}}
+    missing={'id':'e1.val.unit-lost','suite':'e1','status':'interrupted_not_repeated','metrics':{}}
+    assert observed([good,missing])==[good]
+    assert latency([good,missing])=={'n':1,'p50_ms':12.0,'p95_ms':12.0}
+    assert error_examples([good,missing])==[]

@@ -1,5 +1,5 @@
 {
-  "name": "H01_retriever_k8",
+  "name": "H03_output_reference",
   "model": "qwen3:4b-instruct-2507-q4_K_M",
   "num_ctx": 8192,
   "hints": false,

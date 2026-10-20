@@ -1,7 +1,7 @@
 {
   "notice": "formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).",
   "config": {
-    "name": "H01_retriever_k8",
+    "name": "H03_output_reference",
     "model": "qwen3:4b-instruct-2507-q4_K_M",
     "num_ctx": 8192,
     "hints": false,
@@ -22,7 +22,8 @@
   "completed": [
     "H00_B0",
     "H02_hints",
-    "H01_retriever"
+    "H01_retriever",
+    "H03_output"
   ],
   "decisions": {
     "H02_hints": {
@@ -39,6 +40,13 @@
         "k12: eligible.",
         "k8: eligible.",
         "k5: rejected — numeric_faithfulness: regressed, injection_blocked: regressed, target gain <1 percentage point."
+      ]
+    },
+    "H03_output": {
+      "selected": "reference",
+      "reasons": [
+        "native: rejected — target gain <1 percentage point.",
+        "schema: rejected — incomplete primary evidence; no promotion, missing cases are not repeated."
       ]
     }
   }

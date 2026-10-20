@@ -109,6 +109,7 @@ def report():
         ev=read(path)
         for label,arm in ev.get('arms',{}).items():
             if label==ev.get('reference'):continue
+            if arm.get('incomplete'):continue  # Interrupted evidence is inconclusive, never a refuted gain claim.
             delta=arm.get('paired_target_delta',{});ci=delta.get('ci95',[None,None])
             if ci[1] is not None and ci[1]<.01:
                 found=True;lines.append(f'- {path.stem}/{label}: >=1pp target gain is not supported by these paired cases;95% bootstrap upper delta={ci[1]:.4f}, n={delta["n"]}. This refutes that engineering gain claim on the sampled corpus, not the general usefulness of the component.')

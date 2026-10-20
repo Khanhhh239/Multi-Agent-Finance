@@ -206,3 +206,17 @@ Toàn bộ test trước commit: **2733 passed, 0 skipped**, 264.70 giây; `arti
 formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Measured H01_retriever on frozen val; selected k8.
 
 Toàn bộ test trước commit: **2733 passed, 0 skipped**, 143.11 giây; `artifacts\H01_retriever_pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### H3 interruption recovery — 2026-10-20T16:17:34.716193+00:00
+
+**formulas not accountant-approved** — công thức chưa được kế toán duyệt (G0.7 mở). OS reboot23:09:05 removed workers/server; H3 raw schema arm has305 completed,306 started of560planned. Resume only unstarted IDs; lost-started E2 remains incomplete. B0,H2,H1 are published and will not rerun; current selection stays4B k8/native/hints-off until a complete eligible improvement is measured. Controller can now report incomplete arms with explicit observed/planned n, excludes missing data from observed CI/latency, and ALWAYS blocks their promotion. It does not relax the1pp/Must rule. No held-out start/consumption.
+
+### H3 publication recovery — 2026-10-20T23:43:56.358655+00:00
+
+**formulas not accountant-approved** — công thức chưa được kế toán duyệt (G0.7 mở). Raw H3 finished559/560; original305-record prefix verified unchanged; one E2 interrupted_not_repeated. Schema arm is not promoted. OS reboot06:39:37 interrupted full pytest before H3 commit; partial test log is preserved, no test pass claim. Resume full pytest+publish only, then H4. No repeated model cases, held-out test still sealed.
+
+### T2.6-H03_output — P2 thử nghiệm
+
+formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). H3 full frozen-val comparison: native reference retained; schema559/560 observed, one lost-started E2, no promotion from incomplete evidence. Existing raw inference preserved; no held-out access.
+
+Toàn bộ test trước commit: **2735 passed, 0 skipped**, 280.29 giây; `artifacts\H03_output_pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
