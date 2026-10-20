@@ -1,0 +1,9 @@
+{
+  "status": "waiting_for_memory",
+  "available_gib": 1.1222381591796875,
+  "available_commit_gib": 12.392578125,
+  "preferred_physical_gib": 3,
+  "hard_job_cap_gib": 6,
+  "time": 1792455251.7007647,
+  "pid": 9668
+}

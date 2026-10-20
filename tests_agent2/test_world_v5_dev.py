@@ -74,4 +74,5 @@ def test_scheduler_needs_commit_margin_and_limits_paging_fallback():
     assert not memory_ready(4,5,3)
     assert memory_ready(2,20,3)
     assert not memory_ready(2,11,3)
-    assert not memory_ready(1,20,3)
+    assert memory_ready(1,20,3)
+    assert not memory_ready(.5,20,3)

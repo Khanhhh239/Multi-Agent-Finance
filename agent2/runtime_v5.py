@@ -57,10 +57,10 @@ def available_commit_gib():
 
 def memory_ready(physical, commit, preferred_physical):
     # The hard job limit remains 6 GiB. With ample commit headroom Windows may
-    # page cold data; require 1.5 GiB physical and twice the job limit in that
+    # page cold data; require 0.75 GiB physical and twice the job limit in that
     # case. This changes scheduling only, never experiment size or parameters.
     return commit >= 6 and (physical >= preferred_physical or
-                           (physical >= min(1.5,preferred_physical) and commit >= 12))
+                           (physical >= min(.75,preferred_physical) and commit >= 12))
 
 
 def wait_memory(required_gib, checkpoint):
