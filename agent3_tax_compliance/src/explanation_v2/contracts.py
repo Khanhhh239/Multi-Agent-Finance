@@ -104,11 +104,19 @@ class NaturalDraft(Contract):
     next_actions: tuple[NaturalParagraph,...] = Field(min_length=1,max_length=8)
 
 
+class GuideAction(Contract):
+    title: str
+    reason: str
+    steps: tuple[str,...]
+    target: Literal['data','business','tax']
+    field_paths: tuple[str,...] = ()
+
 class UserGuide(Contract):
     read_summary: str
     missing_items: tuple[str,...]
     next_steps: tuple[str,...]
     warning: str
+    actions: tuple[GuideAction,...] = ()
 
 
 class ExplanationArtifact(Stamped):

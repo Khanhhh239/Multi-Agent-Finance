@@ -4,8 +4,9 @@ const regionView={path:null,generation:0,busy:false};
 const regionPanel=element('div',undefined,'region-panel');regionPanel.hidden=true;
 const regionRead=button('Đọc lại vùng chữ',()=>perform(readSelectedRegion));regionRead.id='reread-region';
 const regionCompare=button('Đọc bằng bộ đối chứng',()=>perform(()=>readSelectedRegion('comparison')));regionCompare.id='compare-region';
+const regionExpand=button('Đọc vùng rộng và phóng to',()=>perform(()=>readSelectedRegion('expanded')));regionExpand.id='expand-region';
 const regionStatus=element('p','Đọc lại trường có vùng nguồn; ngày, MST và tiền được kiểm tra định dạng. Kết quả cần đối chiếu.','muted');regionStatus.id='region-status';regionStatus.setAttribute('role','status');
-const regionOutput=element('div');regionOutput.id='region-output';regionPanel.append(regionRead,regionCompare,regionStatus,regionOutput);$('candidates').after(regionPanel);
+const regionOutput=element('div');regionOutput.id='region-output';regionPanel.append(regionRead,regionExpand,regionCompare,regionStatus,regionOutput);$('candidates').after(regionPanel);
 function regionSupported(path){return /^(parties\.(seller|buyer)\.(name|address|tax_id)|invoice\.(number|series|issue_date)|currency|totals\.(net|vat|gross)|items\.[A-Za-z0-9_:-]+\.description)$/.test(path||'');}
 function clearRegion(){regionView.generation++;regionView.path=null;regionPanel.hidden=true;regionOutput.replaceChildren();}
 document.addEventListener('agent3:record-loading',clearRegion);
@@ -15,12 +16,12 @@ async function readSelectedRegion(reader='primary'){
  if(state.loadingRecord||state.saving||hasDraft())throw new Error('Lưu hoặc bỏ bản nháp trước khi đọc lại vùng chữ.');
  const generation=regionView.generation,record=state.view.record,path=regionView.path,payer=state.payer;
  const current=()=>generation===regionView.generation&&state.payer===payer&&state.view?.record.record_id===record.record_id&&state.view.record.revision===record.revision;
- regionView.busy=true;regionRead.disabled=true;regionCompare.disabled=true;regionOutput.replaceChildren();regionStatus.textContent='Đang đọc lại vùng chữ trên máy; dữ liệu đã lưu được giữ nguyên…';
+ regionView.busy=true;regionRead.disabled=true;regionCompare.disabled=true;regionExpand.disabled=true;regionOutput.replaceChildren();regionStatus.textContent='Đang đọc lại vùng chữ trên máy; dữ liệu đã lưu được giữ nguyên…';
  try{
   const result=await api('/v1/records/'+record.record_id+'/reread-region',{method:'POST',body:{expected_record_revision:record.revision,field_path:path,reader}});
   if(!current())return;
   regionStatus.textContent=result.status==='CANDIDATE'?'Đã đọc lại. So sánh với ảnh gốc trước khi dùng; chưa xác nhận dữ liệu.':'Chưa đọc đủ vùng chữ. Đối chiếu ảnh hoặc yêu cầu nguồn rõ hơn.';
-  regionOutput.append(element('p',(result.reader==='comparison'?'Bộ đọc đối chứng':'Bộ đọc chính')+' · Kết quả cần đối chiếu'),element('p','Giá trị đã lưu: '+(result.original_value??'Chưa có')),element('p','Đọc lại: '+(result.suggested_value??'Chưa có')));
+  regionOutput.append(element('p',(result.reader==='comparison'?'Bộ đọc đối chứng':result.reader==='expanded'?'Vùng rộng và phóng to':'Bộ đọc chính')+' · Kết quả cần đối chiếu'),element('p','Giá trị đã lưu: '+(result.original_value??'Chưa có')),element('p','Đọc lại: '+(result.suggested_value??'Chưa có')));
   const details=element('details');details.append(element('summary','Xem từng dòng và vùng nguồn'));
   for(const observation of result.observations){const row=element('div');row.append(element('p',observation.original_text+' → '+observation.text));row.append(button('Xem vùng',()=>{if(current())return showPage(observation.evidence.page_index,[observation.evidence]);}));details.append(row);}regionOutput.append(details);
   if(result.status==='CANDIDATE')regionOutput.append(button('Đưa vào bản nháp',()=>{
@@ -35,7 +36,7 @@ async function readSelectedRegion(reader='primary'){
   const reasons={REGION_NO_EVIDENCE:'Chưa có vùng nguồn. Cần đối chiếu toàn trang hoặc xử lý riêng.',REGION_CONFLICT:'Các vùng nguồn rời nhau. Chọn đúng ứng viên trước để tránh ghép nhầm người bán/người mua.',REGION_BUDGET:'Trường có quá nhiều vùng hoặc ảnh quá lớn; cần xử lý riêng.',REGION_NOT_LINE:'Vùng nguồn gồm nhiều dòng hoặc quá lớn; cần tách vùng trước.',REGION_BUSY:'Đang đọc một vùng khác. Thử lại sau khi hoàn tất.',WORKER_TIMEOUT:'Bộ đọc đang bận hoặc hết thời gian. Dữ liệu cũ được giữ nguyên; có thể thử lại.',MODEL_UNAVAILABLE:'Bộ đọc vùng chưa sẵn sàng trên máy. Kiểm tra runtime/model rồi thử lại.'};
   if(reasons[error.code])error.message=reasons[error.code];if(current())regionStatus.textContent=error.message;throw error;
  }
- finally{regionView.busy=false;regionRead.disabled=false;regionCompare.disabled=false;}
+ finally{regionView.busy=false;regionRead.disabled=false;regionCompare.disabled=false;regionExpand.disabled=false;}
 }
 
 // Revision-bound review queue. Recommendations are selected by policy, never

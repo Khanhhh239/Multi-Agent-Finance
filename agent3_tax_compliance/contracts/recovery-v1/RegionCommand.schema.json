@@ -16,7 +16,8 @@
       "default": "primary",
       "enum": [
         "primary",
-        "comparison"
+        "comparison",
+        "expanded"
       ],
       "title": "Reader",
       "type": "string"

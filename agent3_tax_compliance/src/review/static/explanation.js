@@ -14,6 +14,12 @@ function renderExplanation(item){
   guide.append(element('h3','Đã đọc được gì?'),element('p',item.user_guide.read_summary),element('h3','Còn thiếu hoặc cần kiểm tra gì?'));
   for(const text of item.user_guide.missing_items)guide.append(element('p',text));guide.append(element('h3','Bạn cần làm gì?'));
   for(const text of item.user_guide.next_steps)guide.append(element('p',text));guide.append(element('p',item.user_guide.warning,'muted'));
+  for(const action of item.user_guide.actions||[]){
+   const details=element('details');details.append(element('summary',action.title),element('p',action.reason));
+   const steps=element('ol');for(const text of action.steps)steps.append(element('li',text));details.append(steps);
+   const record=state.view?.record,revision=item.record_revision;
+   details.append(button('Mở phần cần xử lý',()=>{if(!record||state.view?.record.record_id!==record.record_id||state.view.record.revision!==revision)throw new Error('Tải lại diễn giải của bản dữ liệu hiện tại.');setWorkflowStep(action.target);const path=(action.field_paths||[]).find(p=>state.edits.has(p));if(path)return showField(path);}));guide.append(details);
+  }
  }
  const reasons={LLM_DISABLED:'Model chưa được bật',MODEL_REVISION_UNPINNED:'Model chưa được khóa phiên bản',
  LEGAL_BASIS_NOT_REVIEWED:'Căn cứ pháp lý còn chờ đối chiếu',LEGAL_EXCERPT_UNAVAILABLE:'Chưa có trích đoạn pháp lý đã duyệt',

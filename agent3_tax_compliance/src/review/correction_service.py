@@ -37,11 +37,17 @@ class CorrectionService(ReviewRepository):
             if not task or task['record_id']!=command.record_id: raise ReviewError('TASK_OWNERSHIP','Task does not belong to this record.',404)
             if task['revision']!=head or task['status'] not in ('OPEN','WAITING_DATA','OPERATOR'):
                 raise ReviewError('STALE_TASK','Task belongs to an older revision or is already resolved.',409,head)
+            for op in command.item_operations:
+                if op.operation!='ADD':continue
+                history=db.execute('SELECT payload,sha256 FROM review_events WHERE tenant_id=? AND taxpayer_id=? AND record_id=?',scope).fetchall()
+                if any(any(c['field_path']=='items' and any(i['item_id']==op.item_id for side in ('before','after') for i in (c[side] or {}).get('rows',[]))
+                           for c in self.checked_event(row)['changes']) for row in history):
+                    raise ReviewError('ITEM_ID_CONFLICT','Mã dòng đã dùng trong lịch sử; hãy tạo dòng mới.')
             updated,changes,manifest,affected=apply(record,artifact,master,command,event_id,[p.page_index for p in doc.pages],now)
             # Store fully validated canonical field payloads, including Decimal/date normalization.
             fields=flatten(updated)
             for change in changes:
-                if change['field_path']!='item_discovery_status': change['after']=fields[change['field_path']].model_dump(mode='json')
+                if change['field_path'] not in ('item_discovery_status','items'): change['after']=fields[change['field_path']].model_dump(mode='json')
             proofs=verified_events(db,updated)+(event_id,)
             policy=load_policy();scope_model=CalibrationScope.model_validate(previous_inputs['scope'])
             q=assess(artifact,updated,policy,scope_model,assessment_id='quality-'+uuid4().hex,created_at=now,

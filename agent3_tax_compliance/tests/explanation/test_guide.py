@@ -19,7 +19,8 @@ class GuideTests(unittest.TestCase):
     def test_empty_items_abstains_from_empty_invoice_conclusion(self):
         record=run(document(['Số hóa đơn: A'])).record;guide=build_guide(record)
         self.assertTrue(any('Chưa trích được dòng hàng' in t for t in guide.missing_items))
-        self.assertTrue(any('xử lý riêng' in t for t in guide.next_steps))
+        self.assertTrue(any('Bổ sung dòng hàng' in t for t in guide.next_steps))
+        self.assertTrue(any(a.target=='data' and 'bỏ sót' in a.title for a in guide.actions))
 
     def test_data_only_rejects_affirmative_legal_claim_and_internal_ids(self):
         context=Context(evaluation_id='e',record_revision=1,record_sha256='a'*64,excerpts=(),facts=(

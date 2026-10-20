@@ -1,0 +1,35 @@
+{
+  "scope": "One previously used DEV crop: resize-only ablation, no padding experiment or general accuracy claim. Local Qwen synthetic data-only smoke, no real invoice sent.",
+  "ocr": [
+    {
+      "scale": 1,
+      "labeled": 1,
+      "exact": 0,
+      "elapsed_seconds": 8.779967299997224,
+      "load_ms": 5943.186200005584,
+      "inference_ms": 1443.3051999949384,
+      "runtime_sha256": "f28b9b95988d1c8c0ae5758ba29c7ea131433c87e06ca84535cfdd8828fa9619",
+      "status": "COMPLETE"
+    },
+    {
+      "scale": 2,
+      "labeled": 1,
+      "exact": 0,
+      "elapsed_seconds": 8.173936599996523,
+      "load_ms": 5368.690399991465,
+      "inference_ms": 1403.0694999964908,
+      "runtime_sha256": "f28b9b95988d1c8c0ae5758ba29c7ea131433c87e06ca84535cfdd8828fa9619",
+      "status": "COMPLETE"
+    }
+  ],
+  "llm": {
+    "status": "STRUCTURAL_GUARDS_PASSED",
+    "attempted": true,
+    "elapsed_seconds": 56.3167664000066,
+    "model": "qwen3:8b",
+    "model_revision": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+    "semantic_approval": false
+  },
+  "default_profile_changed": false,
+  "quality_release_approved": false
+}

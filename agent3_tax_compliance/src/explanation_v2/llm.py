@@ -6,7 +6,7 @@ import multiprocessing
 from urllib.parse import urlparse
 from .selection import request_data, materialize
 
-PROMPT_VERSION = 'grounded-explanation-vi-v4'
+PROMPT_VERSION = 'grounded-explanation-vi-v5'
 SYSTEM = ('Arrange verified Vietnamese explanation facts for readability. '
           'Return JSON with exactly one key selections: an array of {fact_id,variant_index}. '
           'Include EVERY supplied fact exactly once. variant_index is zero-based; use 0 unless another supplied variant reads better. '

@@ -20,6 +20,9 @@ class NaturalDraftTests(unittest.TestCase):
 
     def test_natural_text_has_schema_and_explicit_refs(self):
         text,schema=request_data(self.context());self.assertNotIn('record_sha256',text)
+        wire=json.loads(text)
+        self.assertEqual({f['fact_id'] for f in wire['section_inputs']['summary']},{'summary','scope','coverage'})
+        self.assertNotIn('Luật còn chờ duyệt',json.dumps(wire['section_inputs']['summary'],ensure_ascii=False))
         self.assertFalse(schema['additionalProperties'])
         self.assertEqual(validate_draft(json.dumps(self.valid()),self.context()).summary.fact_ids,('summary','scope'))
         self.assertEqual(Policy().style,'CONTROLLED_SELECTION')

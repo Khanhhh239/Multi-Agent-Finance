@@ -1,5 +1,11 @@
 # OCR, diễn giải và tự động hóa — lát cắt triển khai 18/10/2026
 
+## Bổ sung 21/10 — năm cải tiến luồng người dùng
+
+Đã triển khai thêm/xóa dòng hàng trên web qua correction event có bbox/trang nguồn và replay, đọc lại crop có padding/phóng to 2× trong ngân sách chung, gán vai trò hai cột theo vùng, hướng dẫn có nút mở đúng phần cần xử lý và bảng số liệu chất lượng dữ liệu/thời gian HTTP. Lệnh thêm/xóa tách khỏi lưu ô để giữ bản nháp và xử lý xung đột rõ ràng. Thử lại khi mất phản hồi HTTP dùng cùng ID dòng/idempotency key để tránh tạo trùng.
+
+Qwen nhận facts theo riêng từng đoạn; kết quả không qua guard vẫn dùng mẫu. Dữ liệu có giá trị/đã xác nhận không đồng nghĩa accuracy độc lập. Crop phóng to chưa chứng minh sửa được tên khó; không bật mặc định cấu hình toàn trang mới hoặc tự xác nhận. Vẫn PLAN_06/PLAN_12, holdout và nghiệm thu production/pháp lý còn chờ. [Runbook, số liệu và bộ kiểm thử](evidence/capture_upgrade_20261021/REPORT.md).
+
 Đây là nhánh củng cố PLAN_06 và PLAN_12, không phải nghiệm thu PLAN_14. Giữ PLAN_OCR_EXTRACTION_V2 làm kế hoạch đầy đủ; không đánh dấu xong các hạng mục chưa được thử nghiệm.
 
 | Công việc | Trạng thái / bằng chứng |

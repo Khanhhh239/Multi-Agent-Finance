@@ -93,6 +93,17 @@ class AutomationReview:
                     if inventory_error:raise ReviewError(inventory_error,'Bộ đọc chưa sẵn sàng.',503)
                     result=self.region.read(ctx,payer,rid,RegionCommand(expected_record_revision=record.revision,field_path=entry['field_path']))
                     item.update(state='PROCESSED',recovery=result,selection=select_candidate(fields[entry['field_path']],entry,result))
+                    if (result.get('status')=='NEEDS_REVIEW' and entry['crop_count']<=spare):
+                        spare-=entry['crop_count']
+                        try:
+                            expanded=self.region.read(ctx,payer,rid,RegionCommand(expected_record_revision=record.revision,
+                                field_path=entry['field_path'],reader='expanded'))
+                            item['expanded']=expanded
+                            if expanded.get('status')=='CANDIDATE':
+                                item.update(primary_recovery=result,recovery=expanded,
+                                    selection=select_candidate(fields[entry['field_path']],entry,expanded))
+                                result=expanded
+                        except Exception:item['expanded_error']='EXPANDED_UNAVAILABLE'
                     if (comparison_ready and result.get('status')=='NEEDS_REVIEW' and entry['crop_count']<=spare):
                         spare-=entry['crop_count'];comparison_ready=False
                         try:

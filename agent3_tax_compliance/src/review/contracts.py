@@ -77,12 +77,36 @@ class Change(Contract):
         if self.new_value is not None and not self.new_value.strip(): raise ValueError('empty value')
         return self
 
+class ItemOperation(Contract):
+    operation: Literal['ADD','DELETE']
+    item_id: Identifier
+    page_index: Annotated[int,Field(strict=True,ge=0)] | None = None
+    bbox: tuple[Annotated[float,Field(ge=0,le=1,allow_inf_nan=False)],
+                Annotated[float,Field(ge=0,le=1,allow_inf_nan=False)],
+                Annotated[float,Field(ge=0,le=1,allow_inf_nan=False)],
+                Annotated[float,Field(ge=0,le=1,allow_inf_nan=False)]] | None = None
+    values: dict[str,Annotated[str,Field(strict=True,min_length=1,max_length=10000)]] = Field(default_factory=dict)
+
+    @model_validator(mode='after')
+    def shape(self):
+        allowed={'description','quantity','unit_price','net','vat_treatment','vat_rate'}
+        if self.operation=='DELETE':
+            if self.values or self.page_index is not None or self.bbox is not None: raise ValueError('DELETE takes only item_id')
+        else:
+            if self.page_index is None or self.bbox is None or not self.values.get('description','').strip():
+                raise ValueError('ADD requires source page, region and printed description')
+            if not self.values.keys()<=allowed or any(not v.strip() for v in self.values.values()):raise ValueError('invalid item fields')
+            if self.bbox[0]>=self.bbox[2] or self.bbox[1]>=self.bbox[3]:raise ValueError('positive region required')
+        return self
+
+
 class CorrectionCommand(Contract):
     record_id: Identifier
     expected_revision: Annotated[int,Field(strict=True,ge=1)]
     task_id: Identifier
     reason: str = Field(min_length=1,max_length=2000)
     changes: tuple[Change,...] = Field(default=(),max_length=32)
+    item_operations: tuple[ItemOperation,...] = Field(default=(),max_length=10)
     confirm_items_complete: bool = False
     expected_item_count: Annotated[int,Field(strict=True,ge=1)] | None = None
     verified_pages: tuple[Annotated[int,Field(strict=True,ge=0)],...] = ()
@@ -90,7 +114,11 @@ class CorrectionCommand(Contract):
     @model_validator(mode='after')
     def meaningful(self):
         if not self.reason.strip(): raise ValueError('reason required')
-        if not self.changes and not self.confirm_items_complete: raise ValueError('no correction')
+        if not self.changes and not self.item_operations and not self.confirm_items_complete: raise ValueError('no correction')
+        ids=[o.item_id for o in self.item_operations]
+        if ids and self.changes:raise ValueError('save row operations separately from field edits')
+        if len(set(ids))!=len(ids):raise ValueError('duplicate item operation')
+        if any(c.field_path.startswith('items.'+i+'.') for i in ids for c in self.changes):raise ValueError('item operation conflicts with field change')
         if len({c.field_path for c in self.changes})!=len(self.changes): raise ValueError('duplicate field')
         if not self.confirm_items_complete and (self.expected_item_count is not None or self.verified_pages):
             raise ValueError('row/page proof requires completeness confirmation')

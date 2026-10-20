@@ -1,5 +1,7 @@
 # Agent 3 — Tax Compliance Assistant
 
+**Nhập liệu và diễn giải — 21/10:** có thể bổ sung dòng bị OCR bỏ sót bằng cách kéo vùng nguồn, xóa dòng nhận nhầm có lý do và xem lại lịch sử. Đọc lại thêm crop rộng/phóng to trong ngân sách; gán bên bán/bên mua theo vùng hai cột; hướng dẫn mở đúng phần cần xử lý và số liệu thời gian trên UI. Khởi động lại `OPEN_AGENT3.cmd`, Ctrl+F5. Chưa bật auto-accept hoặc nghiệm thu accuracy. [Hướng dẫn và kiểm thử 5 hạng mục](docs/agent3/plans/evidence/capture_upgrade_20261021/REPORT.md).
+
 **OCR coverage — 19/10:** thêm đọc đối chứng theo vùng, fallback tự động trong ngân sách, bảng lặp/tiếp nối và sửa lỗi cleanup khi worker Windows timeout. Profile DPI/deskew/tiling thử nghiệm mở bằng `OPEN_AGENT3_OCR_LAB.cmd` trên DB riêng; cấu hình toàn trang mặc định chưa đổi vì chưa vượt gate chất lượng/thời gian. [Báo cáo và kiểm thử](docs/agent3/plans/evidence/ocr_coverage_v1/REPORT.md).
 
 **Độ phủ trường OCR — round 3, 19/10:** đọc lại thêm MST, số/ký hiệu, ngày, tiền tệ và tổng tiền từ vùng lỗi có căn cứ, kể cả khi parser cũ không tạo được candidate. Giữ parser nghiêm ngặt và bản nháp cần đối chiếu; chưa tự xác nhận. Model thật cứu được cả 4 trường từng trống trong nhóm lỗi dev được chọn, tên vẫn còn lỗi. [Phạm vi, số liệu và kiểm thử](docs/agent3/plans/evidence/field_coverage_round3/REPORT.md).

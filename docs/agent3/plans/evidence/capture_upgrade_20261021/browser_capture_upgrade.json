@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Add with dragged source region saves exact Decimal, human proof and incomplete table; no inferred rate",
+    "Lost HTTP response can be retried with the same item identity and idempotency key without duplicating rows",
+    "Manual row source highlights correct page and audit replay reconstructs the saved revision",
+    "Delete needs a reason, keeps immutable original and surviving IDs, and replay passes",
+    "UI measurements reflect current revision and distinguish counts from accuracy",
+    "Zero extracted rows can be repaired entirely on web without declaring an empty table complete",
+    "Concurrent revision rejects structural save and keeps modal draft intact",
+    "Mobile layout has no document overflow and keeps add-row control reachable"
+  ],
+  "javascript_errors": [],
+  "scope": "Synthetic Chrome/HTTP/SQLite operator flow, no real-invoice accuracy claim."
+}

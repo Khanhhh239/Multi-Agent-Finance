@@ -41,7 +41,7 @@ def implementation_sha():
 class RegionCommand(Contract):
     expected_record_revision: StrictInt = Field(ge=1)
     field_path: str = Field(min_length=1,max_length=256)
-    reader: Literal['primary','comparison'] = 'primary'
+    reader: Literal['primary','comparison','expanded'] = 'primary'
 
 
 def supported(path):
@@ -98,10 +98,12 @@ def plan_regions(record,artifact,normalized,path):
     return field,ordered
 
 
-def crop_box(bbox,width,height):
+def crop_box(bbox,width,height,expanded=False):
     x0,y0,x1,y1=bbox
-    return (max(0,math.floor(x0*width)-1),max(0,math.floor(y0*height)-1),
-            min(width,math.ceil(x1*width)+1),min(height,math.ceil(y1*height)+1))
+    px=max(1,min(16,round((x1-x0)*width*.025))) if expanded else 1
+    py=max(1,min(8,round((y1-y0)*height*.16))) if expanded else 1
+    return (max(0,math.floor(x0*width)-px),max(0,math.floor(y0*height)-py),
+            min(width,math.ceil(x1*width)+px),min(height,math.ceil(y1*height)+py))
 
 
 class RegionRecovery:
@@ -139,15 +141,15 @@ class RegionRecovery:
                 (ctx.tenant_id,payer,artifact.artifact_id)).fetchone()[0]
         normalized=self.repo.extraction.ocr.get(ctx,payer,artifact.ingestion_id,key)['result']
         field,regions=plan_regions(record,artifact,normalized,command.field_path)
-        model=MODEL if command.reader=='primary' else COMPARISON_MODEL
+        model=COMPARISON_MODEL if command.reader=='comparison' else MODEL
         if command.reader=='comparison':self.comparison_runtime()
-        client=self.client if command.reader=='primary' else self.comparison_client
+        client=self.comparison_client if command.reader=='comparison' else self.client
         config=OCRConfig(version=POLICY,model_id=model,timeout_seconds=30,memory_mb=3072,max_attempts=1,max_output_bytes=256*1024)
         try:runtime=client.inventory()['runtime_sha256']
         except OCRError as exc:raise ReviewError(exc.issue.code,'Bộ đọc vùng chưa sẵn sàng; dữ liệu hiện tại được giữ nguyên.',503) from None
         cache_key=sha({'record':sha(record.model_dump(mode='json')),'artifact':artifact.artifact_id,
             'ocr':sha(normalized.model_dump(mode='json')),'field':command.field_path,'runtime':runtime,
-            'config':config.model_dump(mode='json'),'implementation':implementation_sha()})
+            'config':config.model_dump(mode='json'),'reader':command.reader,'implementation':implementation_sha()})
         cached=self.cached(ctx,payer,cache_key)
         if cached:
             head=self.repo.base.record(ctx,payer,record_id)
@@ -163,21 +165,25 @@ class RegionRecovery:
                     raw=self.repo.ingestion.render(ctx,payer,artifact.ingestion_id,page.page_index)
                     if digest(raw)!=page.image_hash:raise ValueError('region page hash mismatch')
                     with Image.open(io.BytesIO(raw)) as image:
-                        box=crop_box(block.evidence.bbox,*image.size)
-                        pixels=(box[2]-box[0])*(box[3]-box[1]);total_pixels+=pixels
+                        box=crop_box(block.evidence.bbox,*image.size,expanded=command.reader=='expanded')
+                        scale=2 if command.reader=='expanded' else 1
+                        pixels=(box[2]-box[0])*(box[3]-box[1])*scale*scale;total_pixels+=pixels
                         if pixels>1_000_000 or total_pixels>2_000_000:
                             raise ReviewError('REGION_BUDGET','Vùng vượt ngân sách ảnh; cần xử lý riêng.')
                         with image.crop(box) as crop:
                             path=Path(directory)/f'line-{index}.png'
-                            with crop.convert('RGB') as rgb:rgb.save(path)
-                            width,height=crop.size
+                            with crop.convert('RGB') as rgb:
+                                width,height=rgb.width*scale,rgb.height*scale
+                                if scale==1:rgb.save(path)
+                                else:
+                                    with rgb.resize((width,height),Image.Resampling.LANCZOS) as enlarged:enlarged.save(path)
                     image_hash=digest(path.read_bytes())
                     requests.append(OCRBridgeRequest(config_version=POLICY,creator='region-recovery',stage='ocr',request_id='region-'+uuid4().hex,
                         source_id=record.source_id,document_id=record.document_id,page_id=page.page_id,page_index=page.page_index,
                         image_hash=image_hash,image_path=str(path.resolve()),image_width=width,image_height=height,
                         model_config_version=config.version,runtime_sha256=runtime,model_id=model,timeout_seconds=config.timeout_seconds))
                     observations.append({'block_id':block.block_id,'original_text':block.text_raw,'evidence':block.evidence.model_dump(mode='json'),
-                        'crop_pixel_box':box,'page_size':image.size,'crop_sha256':image_hash})
+                        'crop_pixel_box':box,'page_size':image.size,'crop_sha256':image_hash,'resize_scale':scale})
                 try:responses=client.run_batch(requests,config,slot_timeout=0)
                 except OCRError as exc:raise ReviewError(exc.issue.code,'Đọc vùng chưa thành công; giữ nguyên kết quả cũ và có thể thử lại.',503) from None
             if len(responses)!=len(requests):raise ValueError('region response count mismatch')

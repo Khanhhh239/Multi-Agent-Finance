@@ -53,6 +53,15 @@ class RegionTests(unittest.TestCase):
         self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id),before)
         self.assertEqual(self.f.repo.extraction.get(self.f.ctx,self.f.payer,self.artifact.artifact_id),self.artifact)
 
+    def test_expanded_crop_has_distinct_cache_scale_and_original_evidence(self):
+        primary=self.read();expanded=self.read(self.command.model_copy(update={'reader':'expanded'}))
+        self.assertEqual(expanded['reader'],'expanded');self.assertNotEqual(primary['recovery_id'],expanded['recovery_id'])
+        self.assertEqual(primary['observations'][0]['evidence'],expanded['observations'][0]['evidence'])
+        self.assertEqual(expanded['observations'][0]['resize_scale'],2)
+        self.assertTrue(all(r.image_width>0 and r.image_height>0 for r in self.reader.requests))
+        self.assertTrue(self.read(self.command.model_copy(update={'reader':'expanded'}))['cache_hit'])
+        self.assertEqual(self.reader.calls,2)
+
     def test_scope_readonly_stale_and_unsupported_do_not_call_model(self):
         for context in (self.f.ctx.model_copy(update={'tenant_id':'other'}),self.f.ctx.model_copy(update={'permissions':frozenset({'READ'})})):
             with self.assertRaises((KeyError,PermissionError)):self.read(ctx=context)
