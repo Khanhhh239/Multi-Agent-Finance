@@ -284,10 +284,23 @@ def main():
     parser.add_argument('--matrices',type=Path,default=Path('work/v5_matrices'))
     parser.add_argument('--output',type=Path,default=Path('results/v5/PU_screen'))
     parser.add_argument('--pilot-only',action='store_true')
+    parser.add_argument('--prepare-world',type=int,help='Prepare one world in a fresh bounded worker; no model evaluation')
     args=parser.parse_args()
     limit_memory(6)
     try:
-        run(args)
+        if args.prepare_world is not None:
+            if args.prepare_world not in range(1001,1021):
+                raise ValueError('Preparation seed outside registered development set')
+            for seed in range(1001,1021):
+                checked=_load(args.generation/f'world_{seed}.json')
+                if checked['status']!='validated' or any(value!='passed' for value in checked['checks'].values()):
+                    raise ValueError('All twenty worlds must be validated before feature preparation')
+            write_json(args.output/'runtime.json',{'status':'preparing_base_features','world':args.prepare_world,
+                                                  'data_origin':'dữ liệu tổng hợp'})
+            prepare_world(args.prepare_world,args.root,args.matrices,args.generation)
+            print(f'prepared base matrix {args.prepare_world}',flush=True)
+        else:
+            run(args)
     except Exception as error:
         write_json(args.output/'failure.json',{'status':'failed','error':repr(error),'data_origin':'dữ liệu tổng hợp'})
         raise

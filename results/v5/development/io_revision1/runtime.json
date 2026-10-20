@@ -1,0 +1,10 @@
+{
+  "status": "failed",
+  "error": "MemoryError()",
+  "data_origin": "dữ liệu tổng hợp",
+  "last_progress": {
+    "status": "generating",
+    "seed": 1013,
+    "data_origin": "dữ liệu tổng hợp"
+  }
+}

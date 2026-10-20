@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-20",
+  "data_origin": "dữ liệu tổng hợp",
+  "tests": {
+    "passed": 18,
+    "seconds": 10.35,
+    "log": "work/v5_streaming_writer_tests_final.log",
+    "log_sha256": "adfbbaee6dcd48b68ad060c2b478dc569d6f0401d986a53046cfc9adcc0fc843"
+  },
+  "source_sha256": {
+    "agent2/world_v5_io.py": "7b7100a6de603cc45d280aba03de16353f36ecb80ed3d0ad9004b9938fd66e07",
+    "agent2/world_v5_dev.py": "baf2fe7300cc2421498b0d50f18246c73a2be6814bf35594d0ed8cf81d2a76b8",
+    "agent2/base_v5.py": "ffadaabe5cff1b718d7ffbbf1cff7261f7e25fe144002a726f5e478c689b70a4",
+    "scripts/run_v5_generation_and_PU.py": "d32a4ac917aa2521d48a9429e199fd85ce1de273ad1475732b07d1c41e169497",
+    "tests_agent2/test_world_v5_io.py": "3ff66715db0883257a731df3e16c78b143a9ddca222a871813318fed79ced022"
+  },
+  "economic_data_generation_unchanged": true,
+  "existing_twelve_worlds_byte_hash_verified": true,
+  "detector_results_observed": false
+}

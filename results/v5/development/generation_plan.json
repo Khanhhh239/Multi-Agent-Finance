@@ -283,13 +283,14 @@
     }
   ],
   "source_hashes": {
-    "agent2\\world_v5_dev.py": "f14760f5f0ddeb593e1aa60a77772241888f2f6b8d2604a698bcaf8981cb4d2f",
+    "agent2\\world_v5_dev.py": "baf2fe7300cc2421498b0d50f18246c73a2be6814bf35594d0ed8cf81d2a76b8",
     "agent2\\runtime_v5.py": "96bf146757cbbde61294e234c660e7c392b1a4fb2e33271fdbc36f415fa45b26",
     "agent2\\world_v4.py": "d2ffe563594620f1f3a99afe3f7aa391e0a0069d5a28aa113268e5d47af10531",
     "agent2\\world_v4_schemes.py": "8f327f877d9c9e750e9856fae18832fbc45122abcf30cff92975e6c1b3f1255c",
     "agent2\\world_v3.py": "edc2257e4f3832361a4afeefefdcde7ed2bcef2f998a815261df22b2c3962084",
     "agent2\\accounting_ext.py": "e08e962577bcd006de44bc3ea10d1008874aa780a02a585a967115b35e903c82",
     "agent2\\validate_v4.py": "383e024f140bf12b61d3af7540edd51aa13d28bc28e85ab49b282292b1cc894b",
+    "agent2\\world_v5_io.py": "7b7100a6de603cc45d280aba03de16353f36ecb80ed3d0ad9004b9938fd66e07",
     "sme_fraud\\__init__.py": "462e8bede63cef0c4e73689a8ca449985f554f626e1e884ad8d5f5cf176881d0",
     "sme_fraud\\accounting.py": "a560e00f82bb16052e2582e33481a1c9aee9e77e3fffc17945c512c1ad35e9da",
     "sme_fraud\\audit_accounting.py": "22706f019f5ebaa96b9775072a3ee0a30272f7215a1a5284805a08ab4d93187a",

@@ -15,11 +15,12 @@ from pathlib import Path
 
 import numpy as np
 
-from sme_fraud.generate import WINDOWS, parse, save_dataset, stamp
+from sme_fraud.generate import WINDOWS, parse, stamp
 from sme_fraud.accounting import enrich_accounting
 from .runtime_v5 import limit_memory, sha256, wait_memory, write_json
 from .validate_v4 import validate_v4
 from .world_v4 import WorldV4
+from .world_v5_io import save_dataset_streamed as save_dataset
 
 
 def development_config(seed):
@@ -152,19 +153,25 @@ def generate(config, directory):
     return manifest
 
 
-def run(root, output, seeds):
-    output.mkdir(parents=True, exist_ok=True)
+def generation_plan(seeds):
     dependencies = [Path('agent2/world_v5_dev.py'), Path('agent2/runtime_v5.py'), Path('agent2/world_v4.py'),
         Path('agent2/world_v4_schemes.py'), Path('agent2/world_v3.py'), Path('agent2/accounting_ext.py'),
-        Path('agent2/validate_v4.py'), *sorted(Path('sme_fraud').glob('*.py'))]
+        Path('agent2/validate_v4.py'), Path('agent2/world_v5_io.py'), *sorted(Path('sme_fraud').glob('*.py'))]
     source_hashes = {str(p): sha256(p) for p in dependencies}
-    plan = {'data_origin': 'dữ liệu tổng hợp', 'worlds': [development_config(s) for s in seeds], 'source_hashes': source_hashes,
+    return {'data_origin': 'dữ liệu tổng hợp', 'worlds': [development_config(s) for s in seeds], 'source_hashes': source_hashes,
             'validation': 'V1-V12; V10 scheme coverage reported explicitly, not silently passed', 'memory_cap_gib': 6}
+
+
+def run(root, output, seeds, one_world=None):
+    output.mkdir(parents=True, exist_ok=True)
+    plan = generation_plan(seeds)
     plan_path = output / 'generation_plan.json'
     if plan_path.exists() and json.loads(plan_path.read_text(encoding='utf-8')) != plan:
         raise ValueError('Generation plan or source hashes changed; refuse mixed world versions')
     write_json(plan_path, plan)
-    for seed in seeds:
+    if one_world is not None and one_world not in seeds:
+        raise ValueError('Requested world is outside registered development seeds')
+    for seed in ([one_world] if one_world is not None else seeds):
         checkpoint = output / f'world_{seed}.json'
         directory = root / f'v5dev_s{seed}'
         if checkpoint.exists():
@@ -190,7 +197,9 @@ def run(root, output, seeds):
         write_json(checkpoint, result)
         print(f'validated development seed {seed}: {result["seconds"]:.1f}s; V10={checks["V10"]}', flush=True)
         gc.collect()
-    write_json(output / 'runtime.json', {'status':'complete','worlds':len(seeds),'data_origin':'dữ liệu tổng hợp'})
+    write_json(output / 'runtime.json', {'status':'world_complete' if one_world is not None else 'complete',
+                                       'worlds':1 if one_world is not None else len(seeds),
+                                       'seed':one_world,'data_origin':'dữ liệu tổng hợp'})
 
 
 def main():
@@ -198,10 +207,11 @@ def main():
     p.add_argument('--root', type=Path, default=Path('work/data'))
     p.add_argument('--output', type=Path, default=Path('results/v5/development'))
     p.add_argument('--seeds', type=int, nargs='+', default=list(range(1001,1021)))
+    p.add_argument('--one-world',type=int,help='Process one seed while retaining the complete twenty-world plan')
     args=p.parse_args()
     limit_memory(6)
     try:
-        run(args.root,args.output,args.seeds)
+        run(args.root,args.output,args.seeds,args.one_world)
     except Exception as error:
         failure = {'status':'failed','error':repr(error),'data_origin':'dữ liệu tổng hợp'}
         runtime = args.output / 'runtime.json'
