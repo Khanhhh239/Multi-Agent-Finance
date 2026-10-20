@@ -1,0 +1,1745 @@
+[
+  {
+    "report_notice": "formulas not accountant-approved",
+    "profile": "4B_ctx8192",
+    "config": {
+      "name": "hardware_4B_ctx8192",
+      "model": "qwen3:4b-instruct-2507-q4_K_M",
+      "num_ctx": 8192,
+      "hints": true,
+      "k": 8,
+      "output_mode": "schema",
+      "think": false,
+      "fewshot": 3,
+      "fewshot_mode": "static",
+      "language": "vi",
+      "answer_mode": "template",
+      "verifier": true,
+      "causal_level": 1,
+      "max_duration_s": 45,
+      "max_calls": 3,
+      "num_predict": 384,
+      "repair_attempts": 2
+    },
+    "n_train": 38,
+    "load_ms": 10588.244399999894,
+    "runtime_ps": {
+      "models": [
+        {
+          "name": "qwen3:4b-instruct-2507-q4_K_M",
+          "model": "qwen3:4b-instruct-2507-q4_K_M",
+          "size": 3311423979,
+          "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen3",
+            "families": [
+              "qwen3"
+            ],
+            "parameter_size": "4.0B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-10-20T16:21:59.784426+07:00",
+          "size_vram": 3311423979,
+          "context_length": 8192,
+          "runner": "llamacpp"
+        }
+      ]
+    },
+    "preload_server_events": {
+      "measured": true,
+      "log": "C:\\Users\\Admin\\Downloads\\Agent4\\artifacts\\p2-ollama-20261020-145221.err.log",
+      "start_byte": 812374,
+      "end_byte": 830748,
+      "context_shift_events": 0,
+      "truncated_request_events": 0,
+      "cuda_oom_messages": 0,
+      "scheduler_oom_events": 0,
+      "model_load_events": 1,
+      "gpu_discovery_timeouts": 2,
+      "note": "Server event counts, not distinct failed questions. RAM prompt cache disabled; active-slot KV prefix reuse remains enabled."
+    },
+    "gpu": {
+      "report_notice": "formulas not accountant-approved",
+      "n": 108,
+      "sample_errors": 0,
+      "total_device_peak_mib": 3269,
+      "minimum_available_ram_mib": 49.01171875,
+      "note": "Sampled total GPU memory, includes display and unrelated processes; not allocator peak. 1s cadence may miss transients."
+    },
+    "latency": {
+      "n": 30,
+      "p50_ms": 1810.5069499997626,
+      "p95_ms": 4564.00609999946
+    },
+    "prefill_median_ms": 231.2335,
+    "generation_tok_s": 58.76739668359259,
+    "tool_accuracy_train": {
+      "estimate": 1.0,
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "n": 10
+    },
+    "train_suite_metrics": {
+      "e1": {
+        "answer_rate": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "period_f1": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        }
+      },
+      "e7": {
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 8
+        },
+        "task_success": {
+          "estimate": 0.25,
+          "ci95": [
+            0.0,
+            0.625
+          ],
+          "n": 8
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 8
+        }
+      },
+      "multi": {
+        "answer_rate": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 0.1,
+          "ci95": [
+            0.0,
+            0.3
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 9
+        },
+        "period_f1": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ],
+          "n": 10
+        }
+      },
+      "why": {
+        "answer_rate": {
+          "estimate": 0.6,
+          "ci95": [
+            0.3,
+            0.9
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 0.5,
+          "ci95": [
+            0.2,
+            0.8
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 0.6,
+          "ci95": [
+            0.3,
+            0.9
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "causal_caveat": {
+          "estimate": 0.6,
+          "ci95": [
+            0.3,
+            0.9
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 0.4,
+          "ci95": [
+            0.1,
+            0.7
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 0.5,
+          "ci95": [
+            0.2,
+            0.8
+          ],
+          "n": 10
+        },
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 6
+        },
+        "period_f1": {
+          "estimate": 0.6,
+          "ci95": [
+            0.3,
+            0.9
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 0.4,
+          "ci95": [
+            0.1,
+            0.7
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 0.4,
+          "ci95": [
+            0.1,
+            0.7
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 0.4,
+          "ci95": [
+            0.1,
+            0.7
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 0.5,
+          "ci95": [
+            0.2,
+            0.8
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 0.6,
+          "ci95": [
+            0.3,
+            0.9
+          ],
+          "n": 10
+        }
+      }
+    },
+    "server_runtime_events": {
+      "measured": true,
+      "log": "C:\\Users\\Admin\\Downloads\\Agent4\\artifacts\\p2-ollama-20261020-145221.err.log",
+      "start_byte": 830748,
+      "end_byte": 955313,
+      "context_shift_events": 0,
+      "truncated_request_events": 0,
+      "cuda_oom_messages": 2,
+      "scheduler_oom_events": 1,
+      "model_load_events": 1,
+      "gpu_discovery_timeouts": 0,
+      "note": "Server event counts, not distinct failed questions. RAM prompt cache disabled; active-slot KV prefix reuse remains enabled."
+    },
+    "unknown_usage_calls": 0,
+    "not_normal_stops": 0,
+    "incomplete": [
+      {
+        "id": "e7.train.014",
+        "status": "excluded_tuning"
+      },
+      {
+        "id": "e7.train.063",
+        "status": "excluded_tuning"
+      }
+    ],
+    "note": "Same TRAIN subset:10 E1 +10 E7 conversations +10 multi +10 why; narrow k8 schema, hints on, think off, static3. Single-question latency n30 excludes whole-conversation durations. Warm E2E includes first prompt prefill, empty weight preload separate. Total GPU peak includes display/other workloads. Small stability stress probe, not validation accuracy or a long soak."
+  },
+  {
+    "report_notice": "formulas not accountant-approved",
+    "profile": "8B_ctx4096",
+    "config": {
+      "name": "hardware_8B_ctx4096",
+      "model": "qwen3:8b",
+      "num_ctx": 4096,
+      "hints": true,
+      "k": 8,
+      "output_mode": "schema",
+      "think": false,
+      "fewshot": 3,
+      "fewshot_mode": "static",
+      "language": "vi",
+      "answer_mode": "template",
+      "verifier": true,
+      "causal_level": 1,
+      "max_duration_s": 45,
+      "max_calls": 3,
+      "num_predict": 384,
+      "repair_attempts": 2
+    },
+    "n_train": 37,
+    "load_ms": 12482.897100000002,
+    "runtime_ps": {
+      "models": [
+        {
+          "name": "qwen3:8b",
+          "model": "qwen3:8b",
+          "size": 5717161409,
+          "digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen3",
+            "families": [
+              "qwen3"
+            ],
+            "parameter_size": "8.2B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-10-20T18:44:31.9818692+07:00",
+          "size_vram": 4152224645,
+          "context_length": 4096,
+          "runner": "llamacpp"
+        }
+      ]
+    },
+    "preload_server_events": {
+      "measured": true,
+      "log": "C:\\Users\\Admin\\Downloads\\Agent4\\artifacts\\p2-ollama-20261020-181138.err.log",
+      "start_byte": 2613,
+      "end_byte": 21594,
+      "context_shift_events": 0,
+      "truncated_request_events": 0,
+      "cuda_oom_messages": 0,
+      "scheduler_oom_events": 0,
+      "model_load_events": 1,
+      "gpu_discovery_timeouts": 0,
+      "note": "Server event counts, not distinct failed questions. RAM prompt cache disabled; active-slot KV prefix reuse remains enabled."
+    },
+    "gpu": {
+      "report_notice": "formulas not accountant-approved",
+      "n": 263,
+      "sample_errors": 0,
+      "total_device_peak_mib": 4132,
+      "minimum_available_ram_mib": 116.51171875,
+      "note": "Sampled total GPU memory, includes display and unrelated processes; not allocator peak. 1s cadence may miss transients."
+    },
+    "latency": {
+      "n": 30,
+      "p50_ms": 12161.866950000018,
+      "p95_ms": 14196.893499999987
+    },
+    "prefill_median_ms": 748.713,
+    "generation_tok_s": 11.89955500194946,
+    "tool_accuracy_train": {
+      "estimate": 1.0,
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "n": 10
+    },
+    "train_suite_metrics": {
+      "e1": {
+        "answer_rate": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "period_f1": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        }
+      },
+      "e7": {
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 7
+        },
+        "task_success": {
+          "estimate": 0.42857142857142855,
+          "ci95": [
+            0.14285714285714285,
+            0.8571428571428571
+          ],
+          "n": 7
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 7
+        }
+      },
+      "multi": {
+        "answer_rate": {
+          "estimate": 0.3,
+          "ci95": [
+            0.1,
+            0.6
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 0.3,
+          "ci95": [
+            0.1,
+            0.6
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 0.7,
+          "ci95": [
+            0.4,
+            0.9
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 3
+        },
+        "period_f1": {
+          "estimate": 0.16666666666666666,
+          "ci95": [
+            0.03333333333333333,
+            0.36666666666666664
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 0.1,
+          "ci95": [
+            0.0,
+            0.3
+          ],
+          "n": 10
+        }
+      },
+      "why": {
+        "answer_rate": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "causal_caveat": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "period_f1": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        }
+      }
+    },
+    "server_runtime_events": {
+      "measured": true,
+      "segments": [
+        {
+          "measured": true,
+          "log": "C:\\Users\\Admin\\Downloads\\Agent4\\artifacts\\p2-ollama-20261020-145221.err.log",
+          "start_byte": 976799,
+          "end_byte": 1036030,
+          "context_shift_events": 0,
+          "truncated_request_events": 0,
+          "cuda_oom_messages": 0,
+          "scheduler_oom_events": 0,
+          "model_load_events": 0,
+          "gpu_discovery_timeouts": 0,
+          "note": "Server event counts, not distinct failed questions. RAM prompt cache disabled; active-slot KV prefix reuse remains enabled."
+        },
+        {
+          "measured": true,
+          "log": "C:\\Users\\Admin\\Downloads\\Agent4\\artifacts\\p2-ollama-20261020-181138.err.log",
+          "start_byte": 21594,
+          "end_byte": 83624,
+          "context_shift_events": 0,
+          "truncated_request_events": 0,
+          "cuda_oom_messages": 0,
+          "scheduler_oom_events": 0,
+          "model_load_events": 0,
+          "gpu_discovery_timeouts": 0,
+          "note": "Server event counts, not distinct failed questions. RAM prompt cache disabled; active-slot KV prefix reuse remains enabled."
+        }
+      ],
+      "note": "Disjoint server-log run spans before/after reboot; new preload audited separately.",
+      "context_shift_events": 0,
+      "truncated_request_events": 0,
+      "cuda_oom_messages": 0,
+      "scheduler_oom_events": 0,
+      "model_load_events": 0,
+      "gpu_discovery_timeouts": 0
+    },
+    "unknown_usage_calls": 0,
+    "not_normal_stops": 0,
+    "incomplete": [
+      {
+        "id": "e7.train.014",
+        "status": "excluded_tuning"
+      },
+      {
+        "id": "e7.train.063",
+        "status": "excluded_tuning"
+      },
+      {
+        "id": "e7.train.041",
+        "status": "interrupted_not_repeated"
+      }
+    ],
+    "note": "Same TRAIN subset:10 E1 +10 E7 conversations +10 multi +10 why; narrow k8 schema, hints on, think off, static3. Single-question latency n30 excludes whole-conversation durations. Warm E2E includes first prompt prefill, empty weight preload separate. Total GPU peak includes display/other workloads. Small stability stress probe, not validation accuracy or a long soak. Reboot recovery: reuse completed IDs; started-but-lost ID is incomplete, never repeated. GPU samples and load_ms cover resumed segment only; original cold preload and continuous GPU samples unavailable.",
+    "recovery": {
+      "notice": "formulas not accountant-approved",
+      "profile": "8B_ctx4096",
+      "resume": true,
+      "load_ms": 12482.897100000002,
+      "ollama": {
+        "version": "0.40.6"
+      },
+      "runtime_ps": {
+        "models": [
+          {
+            "name": "qwen3:8b",
+            "model": "qwen3:8b",
+            "size": 5717161409,
+            "digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen3",
+              "families": [
+                "qwen3"
+              ],
+              "parameter_size": "8.2B",
+              "quantization_level": "Q4_K_M"
+            },
+            "expires_at": "2026-10-20T18:44:31.9818692+07:00",
+            "size_vram": 4152224645,
+            "context_length": 4096,
+            "runner": "llamacpp"
+          }
+        ]
+      },
+      "preload_server_events": {
+        "measured": true,
+        "log": "C:\\Users\\Admin\\Downloads\\Agent4\\artifacts\\p2-ollama-20261020-181138.err.log",
+        "start_byte": 2613,
+        "end_byte": 21594,
+        "context_shift_events": 0,
+        "truncated_request_events": 0,
+        "cuda_oom_messages": 0,
+        "scheduler_oom_events": 0,
+        "model_load_events": 1,
+        "gpu_discovery_timeouts": 0,
+        "note": "Server event counts, not distinct failed questions. RAM prompt cache disabled; active-slot KV prefix reuse remains enabled."
+      },
+      "scope": "Resumed segment preload only; original preload was not persisted."
+    }
+  },
+  {
+    "report_notice": "formulas not accountant-approved",
+    "profile": "8B_ctx8192",
+    "config": {
+      "name": "hardware_8B_ctx8192",
+      "model": "qwen3:8b",
+      "num_ctx": 8192,
+      "hints": true,
+      "k": 8,
+      "output_mode": "schema",
+      "think": false,
+      "fewshot": 3,
+      "fewshot_mode": "static",
+      "language": "vi",
+      "answer_mode": "template",
+      "verifier": true,
+      "causal_level": 1,
+      "max_duration_s": 45,
+      "max_calls": 3,
+      "num_predict": 384,
+      "repair_attempts": 2
+    },
+    "n_train": 38,
+    "load_ms": 20030.79319999995,
+    "runtime_ps": {
+      "models": [
+        {
+          "name": "qwen3:8b",
+          "model": "qwen3:8b",
+          "size": 6042219969,
+          "digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen3",
+            "families": [
+              "qwen3"
+            ],
+            "parameter_size": "8.2B",
+            "quantization_level": "Q4_K_M"
+          },
+          "expires_at": "2026-10-20T18:49:55.1132214+07:00",
+          "size_vram": 4115063111,
+          "context_length": 8192,
+          "runner": "llamacpp"
+        }
+      ]
+    },
+    "preload_server_events": {
+      "measured": true,
+      "log": "C:\\Users\\Admin\\Downloads\\Agent4\\artifacts\\p2-ollama-20261020-181138.err.log",
+      "start_byte": 83624,
+      "end_byte": 106135,
+      "context_shift_events": 0,
+      "truncated_request_events": 0,
+      "cuda_oom_messages": 0,
+      "scheduler_oom_events": 0,
+      "model_load_events": 1,
+      "gpu_discovery_timeouts": 3,
+      "note": "Server event counts, not distinct failed questions. RAM prompt cache disabled; active-slot KV prefix reuse remains enabled."
+    },
+    "gpu": {
+      "report_notice": "formulas not accountant-approved",
+      "n": 416,
+      "sample_errors": 0,
+      "total_device_peak_mib": 4102,
+      "minimum_available_ram_mib": 282.63671875,
+      "note": "Sampled total GPU memory, includes display and unrelated processes; not allocator peak. 1s cadence may miss transients."
+    },
+    "latency": {
+      "n": 30,
+      "p50_ms": 13134.28129999994,
+      "p95_ms": 20324.961499999972
+    },
+    "prefill_median_ms": 1208.187,
+    "generation_tok_s": 10.147911796134684,
+    "tool_accuracy_train": {
+      "estimate": 1.0,
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "n": 10
+    },
+    "train_suite_metrics": {
+      "e1": {
+        "answer_rate": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "period_f1": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        }
+      },
+      "e7": {
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 8
+        },
+        "task_success": {
+          "estimate": 0.25,
+          "ci95": [
+            0.0,
+            0.625
+          ],
+          "n": 8
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 8
+        }
+      },
+      "multi": {
+        "answer_rate": {
+          "estimate": 0.2,
+          "ci95": [
+            0.0,
+            0.5
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 0.2,
+          "ci95": [
+            0.0,
+            0.5
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 0.8,
+          "ci95": [
+            0.5,
+            1.0
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "numeric_faithfulness": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 2
+        },
+        "period_f1": {
+          "estimate": 0.06666666666666667,
+          "ci95": [
+            0.0,
+            0.16666666666666666
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        }
+      },
+      "why": {
+        "answer_rate": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "args_exact": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "behavior_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "candidate_recall": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "causal_caveat": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "clarification": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "e2e_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "period_f1": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "raw_tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "refusal": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "schema_valid": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "tool_and_args": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "unauthorized_action": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "validated_schema": {
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "n": 10
+        },
+        "validated_tool_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        },
+        "view_correct": {
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 10
+        }
+      }
+    },
+    "server_runtime_events": {
+      "measured": true,
+      "log": "C:\\Users\\Admin\\Downloads\\Agent4\\artifacts\\p2-ollama-20261020-181138.err.log",
+      "start_byte": 106135,
+      "end_byte": 228881,
+      "context_shift_events": 0,
+      "truncated_request_events": 0,
+      "cuda_oom_messages": 0,
+      "scheduler_oom_events": 0,
+      "model_load_events": 0,
+      "gpu_discovery_timeouts": 0,
+      "note": "Server event counts, not distinct failed questions. RAM prompt cache disabled; active-slot KV prefix reuse remains enabled."
+    },
+    "unknown_usage_calls": 0,
+    "not_normal_stops": 0,
+    "incomplete": [
+      {
+        "id": "e7.train.014",
+        "status": "excluded_tuning"
+      },
+      {
+        "id": "e7.train.063",
+        "status": "excluded_tuning"
+      }
+    ],
+    "note": "Same TRAIN subset:10 E1 +10 E7 conversations +10 multi +10 why; narrow k8 schema, hints on, think off, static3. Single-question latency n30 excludes whole-conversation durations. Warm E2E includes first prompt prefill, empty weight preload separate. Total GPU peak includes display/other workloads. Small stability stress probe, not validation accuracy or a long soak."
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "tests": 2733,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "time": 263.55,
+  "card": "T2.6-H00_B0",
+  "notice": "công thức chưa được kế toán duyệt (G0.7 mở)",
+  "report_notice": "formulas not accountant-approved",
+  "measured_at_utc": "2026-10-20T11:32:36.826353+00:00",
+  "xml": "artifacts\\H00_B0_pytest.xml",
+  "summary": "formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Both full-val baselines measured; no held-out test accessed.",
+  "decision": "Start ablation path with4B; compare8B after architecture in H4."
+}

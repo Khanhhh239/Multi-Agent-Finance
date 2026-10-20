@@ -60,10 +60,19 @@ Quyết định: dev bằng Ollama, đo song song llama.cpp (H3); sản xuất �
 ## 7. Giám sát khi chạy
 Số liệu: độ trễ từng giai đoạn · tỷ lệ retry/verifier fallback · tỷ lệ hỏi lại/từ chối · tỷ lệ `suspicious_text` · lỗi engine theo loại · mức dùng VRAM. Cảnh báo khi `verifier_fallback` > 5% hoặc `call_omission` tăng đột biến sau khi đổi model/prompt.
 
-## 8. Bảng ghi số đo (điền khi chạy)
-| Cấu hình | VRAM đỉnh | Prefill (ms) | tok/s sinh | p50 / p95 E2E | TSA | Ghi chú |
-|---|---|---|---|---|---|---|
-| 4B‑2507 Q4 · ctx 8k | | | | | | |
-| 8B Q4 · ctx 4k | | | | | | |
-| 8B Q4 · KV q8 | | | | | | |
-| 8B think=on | | | | | | |
+## 8. Bảng ghi số đo — P2 thử nghiệm
+
+**formulas not accountant-approved** — công thức chưa được kế toán duyệt (G0.7 mở).
+
+| Cấu hình | VRAM đỉnh lấy mẫu (MiB) | Prefill median (ms/call) | tok/s sinh | p50 / p95 E2E (ms) | TSA | Ghi chú |
+|---|---:|---:|---:|---:|---:|---|
+| 4B Q4 · ctx8192 · KV q8_0 | 3269 | 231.2 | 58.8 | 1810.5 / 4564.0 | 1.000 | TRAIN n=38; E1 n=10; latency n=30; API errors=0; length stops=0; context shifts=0 |
+| 8B Q4 · ctx4096 · KV q8_0 | 4132 | 748.7 | 11.9 | 12161.9 / 14196.9 | 1.000 | TRAIN n=37; E1 n=10; latency n=30; API errors=0; length stops=0; context shifts=0 |
+| 8B Q4 · ctx8192 · KV q8_0 | 4102 | 1208.2 | 10.1 | 13134.3 / 20325.0 | 1.000 | TRAIN n=38; E1 n=10; latency n=30; API errors=0; length stops=0; context shifts=0 |
+| 8B think=on · đợi H4 | chưa đo | chưa đo | chưa đo | chưa đo | chưa đo | Không suy diễn số đo |
+
+Lựa chọn ổn định trong phép thử hữu hạn: chưa có cấu hình8B thỏa điều kiện đã đo. Nguồn/điều kiện: `docs/5_handoff/measurements/p2_8b_stability_decision.json`. Không đồng nghĩa đã qua long soak hoặc G1.
+
+Nguồn: `docs/5_handoff/measurements/p2_hardware_train.json`. Cùng mẫu TRAIN:10 E1,10 hội thoại E7,10 câu nhiều chỉ số,10 câu vì sao. k8, schema, hints bật, static3, think tắt. E2E n30 loại thời gian toàn hội thoại E7; n thực tế ghi từng dòng. Cold preload đo riêng trong JSON.
+
+VRAM là đỉnh quan sát toàn GPU (gồm màn hình/tác vụ khác), lấy mẫu khoảng1 giây; không phải allocator peak. Máy dùng chung, chưa có kiểm soát tải nền hoặc long soak. TSA ở đây là TRAIN, không thay thế kết quả val/test hay chứng nhận G1. Chọn cấu hình8B ổn định theo API/context/truncation thực đo và xem độ đúng riêng; không suy diễn rằng n nhỏ bảo đảm mọi tải.

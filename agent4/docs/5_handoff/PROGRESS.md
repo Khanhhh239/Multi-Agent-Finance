@@ -174,3 +174,23 @@ Toàn bộ test trước commit: **2720 passed, 0 skipped**, 82.82 giây; `artif
 formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Audited first-response layer scoring, exact currency checks, source-derived renderer footer counts, sealed-test controls and VAL-only interrupted recovery; 2733 tests passed. B0 8B remains partial446/760, no held-out access.
 
 Toàn bộ test trước commit: **2733 passed, 0 skipped**, 75.50 giây; `artifacts/p2-recovery-pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).
+
+### P2 running checkpoint — 2026-10-20T08:25:47.425937+00:00
+
+**formulas not accountant-approved** — công thức chưa được kế toán duyệt (G0.7 mở). G0.7 OPEN / CHƯA ĐẠT;22 Must cần duyệt trước pilot.
+
+T2.5c published upstream72d4205d17eb49311915db23d7283aab89cdbf47 after2733/2733 tests (0skip). B08B resumed without repeating446 completed cases; one E3 lost-started case remains excluded. At this checkpoint657 completed/760planned,658 recorded; E7 still running. B04B complete: first-response E1 TSA72.5% CI[66,78.5],n200; E2 args36% CI[29,42.5],n200. Do not present these as G1 success. No held-out test opened.
+
+Detached ordered worker and final worker are alive; see artifacts/p2_background_workers.json, p2_ordered_checkpoint.json, p2_ordered_detached.*.log and p2_final_detached.*.log. They run hardware TRAIN probes, ordered val experiments, tests/publish each card, matching-family quantization preparation, full B* val, freeze, sole test, M2 report/publish, then stop. Codex thread heartbeat agent4-p2-n-m2 is ACTIVE every10minutes to diagnose interruptions, avoid duplicate GPU runs, and report M2 once verified; pause it after M2. Do not rerun an active worker or completed/lost-started test case. Current helper/doc edits are pending the next B0 card full test+commit; no concurrent live pytest during measurements.
+
+### Reboot recovery — 2026-10-20T11:14:16.917723+00:00
+
+**formulas not accountant-approved** — công thức chưa được kế toán duyệt (G0.7 mở). B08B full-val run completed759/760 with one lost-started E3 excluded: E1 first TSA83.5% CI[78.4875,88.5],n200; E2 args45% CI[37.5,52],n200; observed tokens5554862/40903,20 usage-unknown calls; latency n480 p50=4523.9174ms,p95=21230.7581ms. This is not G1 acceptance.
+
+OS reboot at20Oct18:08:13 terminated hardware probe/server/workers.4B ctx8192 TRAIN probe completed38/40 with2 tuning exclusions and1 scheduler OOM; sampled available RAM minimum49MiB.8B ctx4096 has17 recorded rows (15 complete,2 excluded), one started E7 lacks a result. Hardware helper now reuses complete measurement and resumes exactly frozen partial journal without repeat; resumed preload/VRAM scope and split server logs are recorded. No held-out access. Next B0 card will run all tests and publish the pending helper/docs changes before H2.
+
+### T2.6-H00_B0 — P2 thử nghiệm
+
+formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở). Both full-val baselines measured; no held-out test accessed.
+
+Toàn bộ test trước commit: **2733 passed, 0 skipped**, 263.55 giây; `artifacts\H00_B0_pytest.xml`. formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).

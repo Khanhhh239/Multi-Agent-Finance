@@ -20,6 +20,8 @@ from eval.report import bootstrap
 
 PY=str(ROOT/'.venv/Scripts/python.exe');OUT=ROOT/'eval/results';DOC=ROOT/'eval/experiments'
 NOTICE='formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).'
+REQUIRED_STAGES=['H00_B0','H02_hints','H01_retriever','H03_output','H04_model_think',
+                 'H07_fewshot','H08_language','H05_answer','H06_verifier','H13_quantization']
 
 
 def read(path):return json.loads(Path(path).read_text(encoding='utf8'))
@@ -115,8 +117,15 @@ def report():
             'Strict0-VND audit: dev396/396; val395/396. One fractional-month budget_vs_actual golden differs by~0.00000194 VND from floating summation order. Earlier0.5-VND-tolerance396/396 reports are historical. G0.1 strict acceptance is not claimed; formulas/labels were not changed from val feedback. First-response TSA/schema are distinct from final validated calls. B0 4B was rescored from unchanged raw traces after the layer-scoring audit, with original files retained and no model rerun.','',
             'Not measured: expert E-gold100, human CSAT, pilot/business effect, accountant/legal approval, SQL execution, bulletin detection, arbitrary-company generalization, long-duration8B soak. E8 tool/name/A8 stages test deterministic quarantine with symbolic-slot boundary; they do not constitute unrestricted model red teaming. Tokens are successful Ollama response counts; unknown calls have no invented token values. LLM-call counts mean client chat invocations; internal HTTP retry attempt-level token usage is not fully instrumented. Cold weight preload is separate from warm case latency; first prompt prefill is included. Sampled GPU memory includes display and other processes.','',
             'Stop at M2; wait for the user before further tuning or a new test cycle.']
+    hardware=read(ROOT/'docs/5_handoff/measurements/p2_8b_stability_decision.json')
+    lines+=['','8B bounded stability measurement (TRAIN, separate from model-quality selection):',
+            'Chosen bounded-probe configuration: `'+json.dumps(hardware['chosen_bounded_probe_config'],ensure_ascii=False)+'`.',
+            'Rejected profiles: `'+json.dumps(hardware['rejected'],ensure_ascii=False)+'`.',
+            hardware['criterion']+' '+hardware['limitation'],
+            'Actual VRAM/prefill/generation speed and p50/p95 are in docs/4_ai_engineering/06 table8 and p2_hardware_train.json. A null choice means no measured profile met these conditions; it is not an 8B stability success.',
+            '', 'B0 timing limitations: shared laptop load was uncontrolled. The4B log recorded1 scheduler OOM event (2 CUDA OOM messages),376 context shifts and a reload. B08B resumed after446 cases with exact source/data provenance and no repeated completed case; its old continuous GPU sample was lost. B0 8B original preload_ms is retained from segment1; separate resumed preload client timing was not persisted. Per-run event counts and unknown-usage calls are in the evidence, not inferred as financial hallucinations.']
     DOC.mkdir(parents=True,exist_ok=True);(DOC/'M2_B0_vs_Bstar.md').write_text('\n'.join(lines)+'\n',encoding='utf8')
-    write(DOC/'M2_evidence.json',{'notice':NOTICE,'G0_7':'OPEN / CHƯA ĐẠT','G1':'NOT CERTIFIED','config':cfg,'top8':top,'threshold_audit':audit,'val':val,'test':test})
+    write(DOC/'M2_evidence.json',{'notice':NOTICE,'G0_7':'OPEN / CHƯA ĐẠT','G1':'NOT CERTIFIED','config':cfg,'top8':top,'threshold_audit':audit,'hardware_bounded_probe':hardware,'val':val,'test':test})
     print('M2 report generated. '+NOTICE)
 
 
@@ -129,6 +138,10 @@ def main():
         if out.exists():args+=['--resume']
         subprocess.run(args,cwd=ROOT,check=True);return
     if a.step=='freeze':
+        selection=read(ROOT/'eval/configs/selection.json')
+        if selection.get('completed')!=REQUIRED_STAGES:raise SystemExit('Complete every ordered val experiment before sealing test.')
+        if any(not (DOC/(stage+'.md')).exists() for stage in REQUIRED_STAGES):raise SystemExit('Missing experiment report; keep test sealed.')
+        if not (ROOT/'docs/5_handoff/measurements/p2_hardware_train.json').exists():raise SystemExit('Complete TRAIN hardware measurements before final freeze.')
         cfg=asdict(PipelineConfig(**read(ROOT/'eval/configs/Bstar.yaml')));s=read(OUT/'Bstar_val/summary.json')
         if config_digest(cfg)!=s['config_sha256'] or s['source_hash']!=source_hash():raise SystemExit('B* val must match current code/config before freeze.')
         if s['planned']!=760 or s['n']+len(s['excluded_or_incomplete'])!=760:raise SystemExit('Complete full-val accounting required.')

@@ -12,6 +12,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from agent4.agent.pipeline import PipelineConfig
 from eval.report import summarize,bootstrap
+from eval.scorers import first_proposals
 from eval.run import routing_hash,split_hashes
 
 PY=str(ROOT/'.venv/Scripts/python.exe')
@@ -101,7 +102,7 @@ def must_safe(reference,candidate):
 def latency(records):
     import numpy as np
     v=[r['elapsed_ms'] for r in records if r['suite'] in ('e1','e2','e5')]
-    return {'p50_ms':float(np.median(v)),'p95_ms':float(np.quantile(v,.95,method='higher'))}
+    return {'n':len(v),'p50_ms':float(np.median(v)),'p95_ms':float(np.quantile(v,.95,method='higher'))}
 
 
 def eligible(reference,candidate,kind,extra=None):
@@ -124,6 +125,7 @@ def report(stage,arms,reference,kind,selected,decisions,scope='full',notes=None)
     lines=[f'# {stage} experiment','','**'+NOTICE+'**','',
            f'Val only, seed0, {scope} scope. Target: {kind}. Every arm uses the same IDs for its comparison. Bootstrap95%CI: 2000 case resamples.',
            'Screening uses100 E1+100 E2 and full E5/E6/E8; full uses200+200+40+100+20. Identical prior arms may be reused; their latency is historical, not a fresh measurement.','',
+           'Latency in this table covers E1/E2/E5 only (full n440, screening n240); CPU E6 and E8 quarantine/user attacks are excluded. Full-suite B0 summaries separately include multi/why latency (n480). Source token totals and scoped token observations are both labeled in evidence.','',
            '| Arm | Target [95%CI] | n target / cases | E1 TSA | E2 Arg | E5 view | Faith | E6 recall / FP | Injection | p50/p95 ms |',
            '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
     errors=[];evidence={}
@@ -158,7 +160,8 @@ def report(stage,arms,reference,kind,selected,decisions,scope='full',notes=None)
         detail=row.get('detail',{});reply=detail.get('reply',{});pred=reply.get('blocks',{}).get('calls',[]) if isinstance(reply,dict) else []
         q=row.get('question','').replace('\n',' ')[:300]
         request_errors=[c for c in row.get('llm',[]) if c.get('error')]
-        lines.append(f'- {label} / {row["id"]}: {q} Expected `{json.dumps(row.get("expected"),ensure_ascii=False)[:650]}`; actual `{json.dumps(pred,ensure_ascii=False)[:650]}`; failed metrics `{json.dumps({k:v for k,v in row["metrics"].items() if v==0},ensure_ascii=False)}`; request errors `{json.dumps(request_errors,ensure_ascii=False)[:300]}`.')
+        proposal,_=first_proposals(reply.get('trace',[])) if isinstance(reply,dict) else ([],False)
+        lines.append(f'- {label} / {row["id"]}: {q} Expected `{json.dumps(row.get("expected"),ensure_ascii=False)[:650]}`; behavior `{row.get("behavior")}`, first proposal `{json.dumps(proposal,ensure_ascii=False)[:650]}`, final calls `{json.dumps(pred,ensure_ascii=False)[:650]}`; failed metrics `{json.dumps({k:v for k,v in row["metrics"].items() if v==0},ensure_ascii=False)}`; request errors `{json.dumps(request_errors,ensure_ascii=False)[:300]}`.')
     if len(errors)<10:
         lines.append(f'Only {len(errors)} observed failures in these arms. Additional controlled injected-error examples below are adversarial inputs already measured on E6, not model failures:')
         audit=[]
@@ -200,7 +203,7 @@ def publish(stage,summary,decision):
     subprocess.run([PY,'-X','utf8','scripts/record_card.py','--card','T2.6-'+stage,'--xml',str(xml.relative_to(ROOT)),
                     '--summary',NOTICE+' '+summary,'--decision',decision],cwd=ROOT,check=True)
     # Explicit paths only: generated question sets and raw model output stay local.
-    staged=['scripts/run_p2_experiments.py','scripts/measure_p2_hardware.py','scripts/finalize_p2.py','scripts/rescore_p2_layers.py','scripts/recover_p2_val.py','tests/test_val_recovery.py',
+    staged=['scripts/run_p2_experiments.py','scripts/measure_p2_hardware.py','scripts/finalize_p2.py','scripts/rescore_p2_layers.py','scripts/recover_p2_val.py','scripts/prepare_p2_quantization.py','tests/test_val_recovery.py',
             '.gitignore','eval/README.md','eval/gate.py','eval/run.py','eval/scorers.py','eval/golden_check.py','eval/runtime_events.py','eval/telemetry.py','tests/test_runtime_events.py','tests/test_eval_gate.py','tests/test_eval_scorers.py','tests/test_experiment_selection.py','docs/5_handoff/P2_PROTOCOL.md','eval/configs','eval/experiments',
             'agent4/agent/render.py','agent4/agent/verifier.py','tests/test_renderer_counts.py',
             'docs/5_handoff/PROGRESS.md','docs/5_handoff/DECISIONS.md','docs/5_handoff/measurements']
@@ -274,6 +277,13 @@ def main():
             tag=next(m for m in tags if m['name']==model)
             provenance['models'][label]={'name':model,'digest':tag['digest'],'details':body['details'],'parameters':body.get('parameters'),
                 'template_sha256':hashlib.sha256(body.get('template','').encode()).hexdigest(),'capabilities':body.get('capabilities')}
+        ref=provenance['models']['Q4']
+        for label,item in provenance['models'].items():
+            if any(item['details'].get(k)!=ref['details'].get(k) for k in ('family','parameter_size')) or item['template_sha256']!=ref['template_sha256']:
+                raise SystemExit('H13 family/template confound: '+label+'; do not label this a quantization-only comparison.')
+            normalize=lambda text:sorted(' '.join(line.split()) for line in (text or '').splitlines() if line.strip())
+            if normalize(item['parameters'])!=normalize(ref['parameters']):raise SystemExit('H13 default-parameter confound: '+label)
+        provenance['controlled_comparison']='Same model family/parameter count, identical template SHA and normalized defaults; inference sampling/context/think fixed by arm config.'
         prep=ROOT/'artifacts'/('quantization_prepare_8b_llamacpp.json' if is8 else 'quantization_prepare_llamacpp.json')
         if prep.exists():provenance['historical_preparation_snapshot']=read(prep)
         write(EXPERIMENTS/'H13_quantization_provenance.json',provenance)

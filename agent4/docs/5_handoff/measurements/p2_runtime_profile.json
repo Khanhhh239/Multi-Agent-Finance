@@ -29,5 +29,25 @@
     "GPU sampler reports total device memory including display, at1s intervals; not allocator peak.",
     "Default desktop Ollama endpoint11434 is separate; live unit tests run only between measured arms.",
     "An earlier dedicated server disappeared between user turns; cause unmeasured. Restart preserved the same profile before B0 began."
-  ]
+  ],
+  "ollama_version_note": "0.40.5 was the preparation snapshot. Actual B0 metadata and20Oct restarted API report0.40.6; per-run versions are authoritative.",
+  "recovery_2026_10_20": {
+    "version": {
+      "version": "0.40.6"
+    },
+    "physical_memory_point": {
+      "ram_available_mib": 1049.21484375,
+      "ram_load_pct": 93
+    },
+    "profile_unchanged": true,
+    "8b_gpu_offload": "Observed26/37 layers GPU, API size_vram4115063111B at8192 context; not full GPU.",
+    "4b_baseline_server_events": {
+      "cuda_oom_messages": 2,
+      "scheduler_oom_events": 1,
+      "context_shift_events": 376
+    },
+    "limitations": "Shared resource load; no exclusive RAM/CPU/GPU controls. Pre-crash8B continuous GPU sampler was not flushed. Resumed segment sampled separately.",
+    "resumed_segment_git_sha": "054b130d4553ad9cba820abe5079ad0331934b02",
+    "preload_note": "Original B0 8B warmup_ms is retained from segment1; resumed preload occurred but its separate client warmup_ms was not persisted by the legacy resume metadata path. Do not present the original number as the restart preload measurement."
+  }
 }

@@ -1,0 +1,14 @@
+{
+  "notice": "formulas not accountant-approved; công thức chưa được kế toán duyệt (G0.7 mở).",
+  "chosen_bounded_probe_config": null,
+  "rejected": {
+    "8B_ctx4096": [
+      "excluded/incomplete TRAIN probes"
+    ],
+    "8B_ctx8192": [
+      "excluded/incomplete TRAIN probes"
+    ]
+  },
+  "criterion": "TRAIN40 per profile: no incomplete cases, API errors, output length stops, OOM or context truncation in preload/run logs; prefer lower measured p95. Partial CPU offload is allowed and recorded. Routing accuracy is reported separately.",
+  "limitation": "Small shared-laptop probe only; not a long soak, exclusive-load benchmark or G1 acceptance. H4 keeps its8192 context fixed across models for the architecture comparison."
+}
