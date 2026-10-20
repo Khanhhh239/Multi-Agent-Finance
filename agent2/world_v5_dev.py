@@ -10,11 +10,12 @@ import gc
 import json
 import random
 import time
+from datetime import timedelta
 from pathlib import Path
 
 import numpy as np
 
-from sme_fraud.generate import WINDOWS, parse, save_dataset
+from sme_fraud.generate import WINDOWS, parse, save_dataset, stamp
 from sme_fraud.accounting import enrich_accounting
 from .runtime_v5 import limit_memory, sha256, wait_memory, write_json
 from .validate_v4 import validate_v4
@@ -76,6 +77,48 @@ class WorldV5Development(WorldV4):
         # WorldV3.difficulty_weights. Override the actual case-level draw.
         case['concealment'] = self.rng.choices(['L0', 'L1', 'L2'], self.development['difficulty_weights'])[0]
         return case
+
+    def advance(self, cid, split, at, creator, valid=True, mode='review', hard=''):
+        """Select staff against the ACTUAL issue date, drawn exactly once.
+
+        The inherited wrapper checked a preliminary random issue date before
+        the base helper drew another date. A new hire could therefore receive
+        an issue before their master record existed. Keep the economic/event
+        semantics, but share one date between eligibility and the record.
+        """
+        issued = WINDOWS[split][0] + timedelta(days=self.rng.randint(4,15),hours=10)
+        pool = [eid for eid in self.company_staff[cid][6:]
+                if self.active(self.employees[eid],issued) and self.active(self.employees[eid],at)]
+        if not pool:
+            pool = [eid for eid in self.company_staff[cid][3:6]
+                    if self.active(self.employees[eid],issued) and self.active(self.employees[eid],at)]
+        if not pool:
+            raise ValueError('No employee active for the complete advance lifecycle')
+        staff = self.employees[self.rng.choice(pool)]
+        case, aid = self.identifier('CASE'), self.identifier('A')
+        amount = self.rng.choice([3,5,8,12,18,25])*1_000_000
+        due = issued + timedelta(days=self.rng.choice([15,30,45]))
+        first = self.transaction(cid,split,issued,'advance_issue',employee=staff,amount=amount,creator=creator)
+        first['advance_id'] = aid
+        issue_id = self.put(split,first,case=case,support=True)
+        self.tables['advances'].append(dict(advance_id=aid,company_id=cid,employee_id=staff['employee_id'],
+            issue_transaction_id=issue_id,issued_at=stamp(issued),recorded_at=stamp(issued),
+            original_due_at=stamp(due),original_amount_vnd=amount))
+        if valid:
+            self.tables['advance_events'].append(dict(event_id=self.identifier('AE'),advance_id=aid,company_id=cid,
+                event_type='extension',observed_at=stamp(due-timedelta(days=1)),new_due_at=stamp(at+timedelta(days=10)),
+                amount_vnd=0,transaction_id='',evidence_on_file=1))
+        row = self.transaction(cid,split,at,'advance_review' if mode=='review' else 'advance_writeoff',
+                               employee=staff,amount=amount,creator=creator)
+        row.update(advance_id=aid,support_doc_count=self.rng.randint(1,3) if valid else self.rng.choice([0,0,1,2]),
+                   business_purpose='Đối chiếu tạm ứng')
+        family = '' if valid else 'long_outstanding_advance'
+        variant = 'overdue_unsettled' if mode=='review' else 'opaque_writeoff'
+        tid = self.put(split,row,family,variant if family else '',case,hard=hard)
+        if mode!='review':
+            self.tables['advance_events'].append(dict(event_id=self.identifier('AE'),advance_id=aid,company_id=cid,
+                event_type='writeoff',observed_at=stamp(at),new_due_at='',amount_vnd=amount,
+                transaction_id=tid,evidence_on_file=int(valid)))
 
     def finalize(self):
         # Same placement sequence as Generator.finalize, with scaling BEFORE
@@ -160,7 +203,12 @@ def main():
     try:
         run(args.root,args.output,args.seeds)
     except Exception as error:
-        write_json(args.output / 'failure.json', {'status':'failed','error':repr(error),'data_origin':'dữ liệu tổng hợp'})
+        failure = {'status':'failed','error':repr(error),'data_origin':'dữ liệu tổng hợp'}
+        runtime = args.output / 'runtime.json'
+        if runtime.exists():
+            failure['last_progress'] = json.loads(runtime.read_text(encoding='utf-8'))
+        write_json(args.output / 'failure.json', failure)
+        write_json(runtime, failure)
         raise
 
 

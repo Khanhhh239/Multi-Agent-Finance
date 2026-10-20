@@ -42,10 +42,35 @@ def available_gib():
     return state.available / 2**30
 
 
+def available_commit_gib():
+    if os.name != 'nt':
+        return available_gib()
+    class Memory(ctypes.Structure):
+        _fields_ = [('length',ctypes.c_ulong),('load',ctypes.c_ulong)] + [
+            (name,ctypes.c_ulonglong) for name in ('total','available','page_total','page_available',
+                                                 'virtual_total','virtual_available','extended')]
+    state=Memory(); state.length=ctypes.sizeof(state)
+    if not ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(state)):
+        raise ctypes.WinError()
+    return state.page_available / 2**30
+
+
+def memory_ready(physical, commit, preferred_physical):
+    # The hard job limit remains 6 GiB. With ample commit headroom Windows may
+    # page cold data; require 1.5 GiB physical and twice the job limit in that
+    # case. This changes scheduling only, never experiment size or parameters.
+    return commit >= 6 and (physical >= preferred_physical or
+                           (physical >= min(1.5,preferred_physical) and commit >= 12))
+
+
 def wait_memory(required_gib, checkpoint):
-    while available_gib() < required_gib:
-        write_json(checkpoint, {'status': 'waiting_for_memory', 'available_gib': available_gib(),
-                               'required_gib': required_gib, 'time': time.time(), 'pid': os.getpid()})
+    while True:
+        physical,commit=available_gib(),available_commit_gib()
+        if memory_ready(physical,commit,required_gib):
+            return
+        write_json(checkpoint, {'status': 'waiting_for_memory', 'available_gib': physical,
+                               'available_commit_gib':commit,'preferred_physical_gib':required_gib,
+                               'hard_job_cap_gib':6,'time': time.time(), 'pid': os.getpid()})
         time.sleep(30)
 
 

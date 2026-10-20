@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-20",
+  "kind": "generator_integrity_repair_before_any_detector_evaluation",
+  "data_origin": "dữ liệu tổng hợp",
+  "failed_attempt": "results/v5/development_attempt1",
+  "archived_raw_root": "work/archive/v5_development_attempt1",
+  "failure_seed": 1002,
+  "failure_transaction": "T000088295",
+  "issue_time": "2025-01-05T10:00:00+07:00",
+  "employee_recorded_time": "2025-01-06T09:00:00+07:00",
+  "future_master_violations_in_failed_world": 1,
+  "cause": "Inherited advance wrapper validated one random issue date; base helper drew a second actual issue date",
+  "repair": "Draw actual issue date once; select employee active at actual issue and review",
+  "regenerate_all_twenty": true,
+  "any_detector_metrics_observed": false,
+  "memory_job_cap_gib": 6,
+  "paging_fallback": {
+    "minimum_physical_gib": 1.5,
+    "minimum_commit_headroom_gib": 12
+  },
+  "tests": {
+    "passed": 16,
+    "seconds": 2.01,
+    "log": "work/v5_generator_repair_tests.log"
+  },
+  "source_sha256": {
+    "agent2/world_v5_dev.py": "f14760f5f0ddeb593e1aa60a77772241888f2f6b8d2604a698bcaf8981cb4d2f",
+    "agent2/runtime_v5.py": "e6a2d7e696d5a6644add8ab9c9b0d965e0f746c0912b0c4abc80332ff28941ff",
+    "tests_agent2/test_world_v5_dev.py": "231285d46e6f037b6eb9e75b77482229e784b4f50ec3e6d45c0f56483d9c746c"
+  }
+}

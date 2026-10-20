@@ -1,8 +1,13 @@
 import copy
 import random
+from collections import defaultdict
+from datetime import timedelta
+
+from sme_fraud.generate import WINDOWS, parse
 
 from agent2.world_v5_dev import WorldV5Development, development_config, scale_money
 from agent2.world_v4 import WorldV4
+from agent2.runtime_v5 import memory_ready
 
 
 def test_development_draws_are_fixed_and_in_domain():
@@ -34,3 +39,39 @@ def test_world_share_controls_actual_case_concealment(monkeypatch):
     for i in range(3):
         world.development={'difficulty_weights':[int(j==i) for j in range(3)]}
         assert {world.open_case('scheme','company')['concealment'] for _ in range(30)}=={f'L{i}'}
+
+
+def test_advance_checks_staff_against_its_actual_issue_date():
+    class Earliest:
+        def randint(self,a,b): return a
+        def choice(self,values): return values[0]
+    world=WorldV5Development.__new__(WorldV5Development)
+    world.rng=Earliest()
+    world.tables=defaultdict(list)
+    world.company_staff={'C1':[f'E{i}' for i in range(9)]}
+    world.employees={eid:dict(employee_id=eid,hired_at='2023-01-01T00:00:00+07:00',terminated_at='')
+                     for eid in world.company_staff['C1']}
+    world.employees['E6']['hired_at']='2025-01-06T09:00:00+07:00'
+    world.employees['E7']['terminated_at']='2025-01-04T17:00:00+07:00'
+    serial=iter(range(100)); world.identifier=lambda prefix:prefix+str(next(serial))
+    records=[]
+    def transaction(cid,split,at,kind,**kwargs):
+        row=dict(posted_at=at,kind=kind,employee_id=kwargs['employee']['employee_id'])
+        records.append(row)
+        return row
+    world.transaction=transaction
+    world.put=lambda *args,**kwargs:'T'+str(next(serial))
+    review=WINDOWS['validation'][0]+timedelta(days=110,hours=10)
+    world.advance('C1','validation',review,'E3',valid=True,mode='writeoff')
+    assert [row['employee_id'] for row in records]==['E8','E8']
+    assert records[0]['posted_at']==WINDOWS['validation'][0]+timedelta(days=4,hours=10)
+    assert parse(world.tables['advances'][0]['issued_at'])==records[0]['posted_at']
+    assert {event['event_type'] for event in world.tables['advance_events']}=={'extension','writeoff'}
+
+
+def test_scheduler_needs_commit_margin_and_limits_paging_fallback():
+    assert memory_ready(3,6,3)
+    assert not memory_ready(4,5,3)
+    assert memory_ready(2,20,3)
+    assert not memory_ready(2,11,3)
+    assert not memory_ready(1,20,3)
