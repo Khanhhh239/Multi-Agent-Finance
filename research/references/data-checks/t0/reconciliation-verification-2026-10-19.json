@@ -1,0 +1,56 @@
+{
+  "verification": {
+    "verified_at_utc": "2026-10-19T15:56:29.431299+00:00",
+    "invoice_runs_verified": 84,
+    "benchrec_predictions_verified": 60,
+    "benchrec_matchers_replayed": 4,
+    "historical_report_content_hash": "eb42e4d0f84ad00ff47b0881eab8e5532ed18adf286630eaf9bcbd1be54fd776",
+    "plan_content_hash": "a59f9a0581f133a78613a9f310a2b531fde05f9922b7c2ca9d4a2efe2b2773c1",
+    "historical_files_modified": false,
+    "parameters_tuned": false,
+    "verification_source_sha256": {
+      "scripts/data_audit/benchmark_reconciliation.py": "957c5b72931b3a8d3a377da96d24a8e103db14ba6a2f27195e3cb24e8650fed9",
+      "t0/__init__.py": "adea27bcc0aee0d5be31d8adf7cd19d561e4c85dc7f1afeb2eff3362d096e8b1",
+      "t0/__main__.py": "c8b2a1d2321d6a68127a638bac0f2b038ac55268819e51ff0c2a8041b9298136",
+      "t0/benchrec.py": "6581ce974886812dff504de97009c264a599b6e2ebfc4f7a73f3f8f801f66aee",
+      "t0/data.py": "0d6fd5dd6ea0ce8e78b0bad2b0a9d86eaba906561e3d4b1279f9d97e1464b44f",
+      "t0/evaluation.py": "2e4e95b8e1b94703303a46c3fea4a9cb7156b378cd8ca43363d51c79bc4621a5",
+      "t0/matching.py": "d3bc92b6cf2996f441a52198c63bd18f2b943a3a6a7477f3de90455d5ac0ef40",
+      "t0/real_data.py": "013c7b9f03561dd21641266e0f5015438f69db8a8ed5ca1e6b41019e611c233e",
+      "t0/scenarios.py": "ebc4f64e344b40fd1c1bca7218bcaff60939197ef1edae26eff386e2e99435ef",
+      "t0/source_survey.py": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "t0/synthetic.py": "b50fb18b8bfdffc28399e037b418655f4d470da63176b348f545b6e25ce25c09"
+    }
+  },
+  "cleanup": {
+    "removed_derived_files": [
+      "data/T0/processed/reconciliation/allocations.jsonl",
+      "data/T0/processed/reconciliation/decisions.jsonl",
+      "data/T0/processed/reconciliation/audit.json",
+      "data/T0/processed/evaluation.json"
+    ],
+    "removed_derived_bytes": 59161.0,
+    "removed_pyc_files": 22,
+    "protected_files_verified": 328,
+    "protected_truth_files": 46,
+    "preserved_hashes_unchanged": true,
+    "raw_deleted": false,
+    "reason": "Obsolete smoke outputs duplicated by baseline test/noisy/101/reference_then_global; runtime caches are regenerated."
+  },
+  "full_benchrec_audit": {
+    "profiles_unchanged": true,
+    "train_semantics_unchanged": true,
+    "script_sha256": "cd0b81076098d427f590e39a09beb5eafba2acb0841a33362093d681b4f240b8"
+  },
+  "source_cache_validated": 9,
+  "algorithm_parameters_unchanged": true,
+  "checks": {
+    "status": "passed",
+    "unit_tests": 88,
+    "markdown_files": 35,
+    "diff_check": "passed",
+    "checked_at_utc": "2026-10-19T15:58:46.267741+00:00"
+  },
+  "scope": "Offline T0 maintenance and regression verification; no SME connector, full ledger, adjustment accounting, balance reconciliation or T1 Gold implemented.",
+  "transient_review_artifacts_consolidated": true
+}

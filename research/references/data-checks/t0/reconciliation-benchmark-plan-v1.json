@@ -1,0 +1,41 @@
+{
+  "version": "reconciliation-v1",
+  "created_on": "2026-10-19",
+  "policy": "Fixed descriptive baselines; no training or threshold selection on evaluation labels. Historical structural solution inspection already occurred; this is not a blind competition submission.",
+  "benchrec": {
+    "date_window_days": 14,
+    "text_threshold": 0.65,
+    "text_margin": 0.1,
+    "group_max_size": 3,
+    "group_candidate_cap": 12,
+    "methods": ["exact_amount_date", "nearest_date", "text_mutual", "bounded_group_sum"],
+    "profiles": {
+      "original": {"mask_reference": 0, "date_error_days": 0},
+      "noisy": {"mask_reference": 0.1, "date_error_days": 1},
+      "stress": {"mask_reference": 0.3, "date_error_days": 3}
+    },
+    "seeds": [101, 203, 307, 409, 503]
+  },
+  "invoice_suite": {
+    "blocks": 8,
+    "validation_seeds": [23, 29],
+    "test_seeds": [101, 203, 307, 409, 503],
+    "profiles": {
+      "clean": {"mask_reference": 0, "typo_probability": 0, "date_error_days": 0},
+      "noisy": {"mask_reference": 0.1, "typo_probability": 0.1, "date_error_days": 1},
+      "stress": {"mask_reference": 0.3, "typo_probability": 0.3, "date_error_days": 3}
+    }
+  },
+  "parameter_basis": "Noise levels, windows, thresholds, group caps and balanced scenario frequencies are declared engineering sensitivity settings, not estimates from SMEs or thresholds validated for automation. Baselines remain fixed regardless of test outcomes.",
+  "sources": [
+    {"id": "SSMP", "kind": "academic", "url": "https://arxiv.org/html/2508.19218v1", "supports": "Disjoint group matching; equal sums alone do not establish business identity; computational caps must be reported."},
+    {"id": "RMIT", "kind": "academic", "url": "https://www.newswise.com/pdf_docs/176364346984800_1-s2.0-S2405918825000224-main.pdf", "supports": "Real business Xero study; noisy descriptions, one-to-many and repeated-run stability; no claim of reproducing the graph model."},
+    {"id": "DITTO", "kind": "academic", "url": "https://arxiv.org/abs/2004.00584v3", "supports": "Pair classification and data augmentation are distinct from financial allocation constraints."},
+    {"id": "ERP-PAYMENT", "kind": "business_documentation", "url": "https://docs.frappe.io/erpnext/payment-reconciliation", "supports": "Partial/multiple payments, unallocated advances, company/party scope and reviewed allocations."},
+    {"id": "ERP-BANK", "kind": "business_documentation", "url": "https://docs.frappe.io/erpnext/bank-reconciliation", "supports": "Timing differences, fees, duplicate imports, currency/account/reference checks and clearance versus posting."},
+    {"id": "AP-MATCHING", "kind": "business_documentation", "url": "https://learn.microsoft.com/en-us/dynamics365/finance/accounts-payable/accounts-payable-invoice-matching", "supports": "AP two/three-way invoice matching means PO/receipt validation, outside this cash allocation benchmark."},
+    {"id": "ACCA", "kind": "professional_education", "url": "https://www.accaglobal.com/content/dam/acca/global/PDF-students/fia/examreports/fa2/FA2%20S22-A23%20examiner%27s%20report.pdf", "supports": "Timing differences and bank charges require different reconciliation treatment."},
+    {"id": "BENCHREC", "kind": "dataset_publisher", "url": "https://www.operartis.com/benchrec", "supports": "Obfuscated production GL-bank data and benchmark provenance as stated by publisher."},
+    {"id": "KAGGLE", "kind": "dataset_card", "url": "https://www.kaggle.com/api/v1/datasets/view/benchmarkteam/benchrec-real-world-cash-reconciliation-dataset", "supports": "Allocation-key task, nonempty subset correctness, null matches and publisher precision requirement."}
+  ]
+}

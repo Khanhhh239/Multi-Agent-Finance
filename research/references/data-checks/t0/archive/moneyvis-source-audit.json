@@ -1,0 +1,95 @@
+{
+  "audit_version": 1,
+  "audited_at_utc": "2026-10-19T04:35:25.170834+00:00",
+  "source": {
+    "source_id": "moneyvis-author-csv",
+    "kind": "real_source_candidate",
+    "source_page": "https://data.mendeley.com/datasets/dnxtg6n4rv/1",
+    "paper": "https://doi.org/10.2312/evs.20231052",
+    "csv_url": "https://raw.githubusercontent.com/thevisgroup/MoneyVis/9fdd14e397ea309f0f52c5ff9d0a99c7ab4ff124/data/data.csv",
+    "commit": "9fdd14e397ea309f0f52c5ff9d0a99c7ab4ff124",
+    "retrieved_at_utc": "2026-10-19T04:19:09.455023+00:00",
+    "final_url": "https://raw.githubusercontent.com/thevisgroup/MoneyVis/9fdd14e397ea309f0f52c5ff9d0a99c7ab4ff124/data/data.csv",
+    "bytes": 420184,
+    "sha256": "6a97cf4889b86808775f693ad8cf07d82561c461cb8fcfdbbd071b38599945a0",
+    "reality_basis": "Authors describe anonymized real retail banking data; not independently verified",
+    "license": "Mendeley v1 declares CC BY 4.0; transfer to this GitHub snapshot unverified",
+    "use_policy": "inspection_only_excluded_from_matching",
+    "limitations": [
+      "retail banking, not SME receivables",
+      "no invoices or allocation labels",
+      "no explicit currency, availability history or transaction identifier"
+    ]
+  },
+  "audit_code_sha256": "013c7b9f03561dd21641266e0f5015438f69db8a8ed5ca1e6b41019e611c233e",
+  "scope": "Full pinned CSV; offline source-quality and task-fit audit only",
+  "profile": {
+    "columns": [
+      "Transaction Date",
+      "Transaction Type",
+      "Sort Code",
+      "Account Number",
+      "Transaction Description",
+      "Debit Amount",
+      "Credit Amount",
+      "Balance"
+    ],
+    "rows": 6567,
+    "valid_rows": 6567,
+    "errors": [],
+    "date_min": "2015-07-27",
+    "date_max": "2022-07-25",
+    "dates_nondecreasing_in_file": false,
+    "dates_nonincreasing_in_file": true,
+    "account_count": 1,
+    "transaction_type_counts": {
+      "": 61,
+      "BGC": 158,
+      "BP": 1167,
+      "CHQ": 16,
+      "CPT": 448,
+      "DD": 775,
+      "DEB": 3268,
+      "DEP": 55,
+      "FEE": 34,
+      "FPI": 82,
+      "FPO": 307,
+      "PAY": 50,
+      "SO": 102,
+      "TFR": 44
+    },
+    "identical_row_occurrences_beyond_first": 0,
+    "duplicate_interpretation": "No transaction ID: identical rows not automatically removed",
+    "credit_total_source_decimal_units": "503203.29",
+    "debit_total_source_decimal_units": "511178.92",
+    "currency": null,
+    "balance_transitions": {
+      "checked": 6566,
+      "reverse_storage_balance_equation_pass": 6566,
+      "forward_storage_balance_equation_pass": 49,
+      "reverse_mismatch_csv_lines": []
+    }
+  },
+  "matching_gate": {
+    "accepted": false,
+    "status": "excluded",
+    "reasons": [
+      "missing_invoice_table",
+      "missing_independent_allocation_truth",
+      "retail_domain_differs_from_SME_AR",
+      "missing_explicit_currency",
+      "missing_transaction_id_and_availability_history",
+      "reuse_license_for_this_snapshot_unverified"
+    ],
+    "action": "Do not normalize into matcher inputs, train, tune or rank methods on this source"
+  },
+  "matcher_runs": 0,
+  "precision": null,
+  "recall": null,
+  "limitations": [
+    "Balance equations inspect adjacent source rows; no sorting, fixes or deduplication",
+    "No opening balance supplied: first chronological transaction not checked",
+    "Passing balance equations does not establish statement completeness or matching accuracy",
+    "No raw account identifiers or descriptions included in this report"
+  ]
+}

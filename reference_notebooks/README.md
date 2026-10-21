@@ -4,6 +4,8 @@ Bộ notebook này chỉ dùng để tham khảo phương pháp, code và kết 
 
 Ngày 19/10/2026, thư mục `notebooks/` được đổi thành `reference_notebooks/`; chỉ cập nhật đường dẫn trong source, không chạy lại cell hoặc thay output. Với 11/12, cả `.py` và source cell trong `.ipynb` đã đổi đường dẫn; `.ipynb` chưa được dựng lại bằng thực thi, output vẫn là lịch sử.
 
+Rà soát ngày 21/10/2026 sửa helper `survival_utils.py`: input person-period rỗng, event ngoài horizon, bin width khi suy luận, kiểm xác suất model và median tại plateau 0,5. Có test bằng fixture nhỏ khi cài numpy/pandas; không train hoặc dựng lại 11/12 vì thiếu đầu vào lịch sử. Source cell notebook không đổi; output lưu sẵn chưa phản ánh các sửa helper này và không phải kết quả đã chạy lại.
+
 Thứ tự dưới đây mô tả pipeline cũ; mỗi bước sử dụng artifact của các bước trước. Nếu cần tái lập thí nghiệm cũ, đường dẫn được tính theo gốc repo, kể cả khi mở notebook từ `reference_notebooks/`. [Tổng quan hiện tại](../docs/project-overview.md) xác định đầu vào còn thiếu và trạng thái tích hợp; [Getting started](../docs/getting-started.md) hướng dẫn môi trường.
 
 | Bước | Notebook | Nội dung |

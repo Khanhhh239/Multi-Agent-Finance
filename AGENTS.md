@@ -22,6 +22,7 @@
 - `reference_notebooks/` chỉ dùng tham khảo; code T1 mới được xây riêng. Khi sửa bộ tham khảo: notebook 11/12 có nguồn chính là `.py`; quy trình đồng bộ và trường hợp chưa thể dựng lại nằm ở `docs/CONTRIBUTING.md`. Với 01–10, sửa trực tiếp `.ipynb`.
 - Không chạy train hoặc dựng lại output chỉ để kiểm tra tài liệu. Không xóa output/artifact lịch sử ngoài phạm vi công việc.
 - Nguồn ngoài phải có URL, ngày kiểm tra và giới hạn sử dụng; số liệu thí nghiệm phải gắn với snapshot/cấu hình/artifact. Đọc hướng dẫn tại `data/`, `reference_notebooks/`, `research/references/` khi chạm vào phần tương ứng.
+- Nghiên cứu nguồn dữ liệu phải kèm code đã chạy và bằng chứng kết quả. Phân biệt kiểm tra truy cập/provenance/schema với audit dữ liệu nghiệp vụ và chạy phương pháp; thiếu dữ liệu hoặc quyền truy cập thì ghi rõ phần chưa chạy, không tính tài liệu/synthetic thành dữ liệu thật.
 
 ## Kiểm tra trước khi kết thúc
 

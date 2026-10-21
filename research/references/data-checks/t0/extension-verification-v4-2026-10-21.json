@@ -1,0 +1,80 @@
+{
+  "schema": "t0-v04-extension-verification-v1",
+  "checked_at_utc": "2026-10-21T02:29:48.702975+00:00",
+  "scope": "Inspected synthetic contract fixtures and local source regression; not SME or blind domain evaluation",
+  "pipeline_output": "data/T0/processed/offline-v4-2026-10-21-verified",
+  "verification_output": "data/T0/processed/verification-v4-2026-10-21-verified",
+  "checks": {
+    "tests": 181,
+    "all_tests_pass": true,
+    "new_contract_tests": 33,
+    "docs_checker_pass": true,
+    "technical_exit": 0,
+    "quality_exit": 4,
+    "pipeline_artifacts_verified": 222,
+    "cutoff_versions_pass": true,
+    "refund_bank_pass": true,
+    "fx_example_pass": true,
+    "journal_multiline_trial_balance_pass": true
+  },
+  "code_sha256": {
+    "t0/__init__.py": "c98780e38138647e5234fe9339b5d4f70f2c9289044920d7962b49503c9b6fdc",
+    "t0/__main__.py": "6fd8347dc00960b6857e1838495da140020e702c8736285bbf2689a3f58c2105",
+    "t0/adapters.py": "eb4ae2cd7f5e94f9b65d3a6e0c6cf3783b095c505df64e3db76cdc0817715c98",
+    "t0/allocation.py": "4348242d8d98f5e65efb5a7d77e36c05dcd4f64ec5bb4b8a8474b706fd68fcfe",
+    "t0/balances.py": "526a80b4f1f7753871a552614f092d3069e81145a3d3f56a18254bf0bf59b76c",
+    "t0/benchrec.py": "6581ce974886812dff504de97009c264a599b6e2ebfc4f7a73f3f8f801f66aee",
+    "t0/constrained.py": "3f07298671aae377e033580c0e5869b5115bb4954ef503ec0c29057776ee0f10",
+    "t0/data.py": "a0a90153a22849e435e853085107b6e1d2ec6ea5141482c38abcf9b5fce7a1f4",
+    "t0/evaluation.py": "df402478b4c4e2f3a625fe111cfa60cd5c0c4bcf57aef4a1efe6362774ba85ca",
+    "t0/fx.py": "315901e7e2fac84684a93341e553ef57f444dde74bfedcd3f597427e81752c93",
+    "t0/gates.py": "382fdb1bcb314062fc72d08457c28b84ffb017a489c9f7d843783e1bd98fd334",
+    "t0/journal.py": "785bf1d147c8ff43fb2e67bbacee0f62290279fb245209b52a301730d097c354",
+    "t0/journal_policy.py": "47bf9220b9a2b3ebfe269bbf9240420dd434b381fb39302c46180c720c3a6919",
+    "t0/ledger.py": "a3c11726541f4b1863481c9cfcf82fe9b971671ab4e95ff4f41e997321a1161c",
+    "t0/matching.py": "d3bc92b6cf2996f441a52198c63bd18f2b943a3a6a7477f3de90455d5ac0ef40",
+    "t0/offline.py": "87c110dd4d241022bb62bf6cda5a887240433a51eb60abfa8ffa6aeae550b713",
+    "t0/robustness.py": "78cdefae7d264e7e8c0adc29e78047a50a8429865dde0aef6ae89603cf76405d",
+    "t0/scenarios.py": "ebc4f64e344b40fd1c1bca7218bcaff60939197ef1edae26eff386e2e99435ef",
+    "t0/settlement.py": "0c06da53408646babb3d57abea60c4e98eaa49edc059a3044607403a84743871"
+  },
+  "test_sha256": {
+    "tests/test_check_docs.py": "fbf837e520ee7699e3ab616183914a2572fd841ca5592d8a060bf26279c76b48",
+    "tests/test_t0_additional_sources.py": "5e35a67df676b80cffa4292e4733604db99e9dce92fd4d61902252fc9ec53b71",
+    "tests/test_t0_benchrec_preflight.py": "3e8840ddd0c6be9d389adcf9c379cfbc7437b9f76bfecf43c40df2c47754cced",
+    "tests/test_t0_extensions.py": "d61eaeaef587ebe72cf40d0f90c68fbabf9e82a30b9cf56208ffb915be39be57",
+    "tests/test_t0_fixture_research.py": "77dd5dd748f8e77ed98ca5907b1fafab1131b8c412b7ef00c9a4511661919402",
+    "tests/test_t0_hardening.py": "933173260d45cdb080a686c135785fe778796f06605948e4e7e9636a7eafaab2",
+    "tests/test_t0_moneyvis_audit.py": "06c21c3491d3b3c44698554988a791fc694ff0a494006e3fe9b0964a40573c4a",
+    "tests/test_t0_offline.py": "5f799e7c0bfccb1c1d4a81ebb60e8fde9aecdfd12ee560a822af422c0b4dacea",
+    "tests/test_t0_receipts.py": "bd639592b901833d82a033c30c43970e8aa2c99055eb8c1e3f8337ec6e5a2ffd",
+    "tests/test_t0_reconciliation_benchmark.py": "8827f2d64742e267b34d4d1cbb00b7e4a3990694537a1d4b12800490a3882879",
+    "tests/test_t0_source_survey.py": "f815c0dbd530b95159764ff70ae7eca3ce7a713f88022eb4ce137784c9903366"
+  },
+  "example_sha256": {
+    "data/T0/examples/v04/invoices.jsonl": "1b8751c49213de5862a640f9f5725889621f4caf908e105d0851c1fbb50ed68b",
+    "data/T0/examples/v04/journal-policy.jsonl": "0cf9e7c16694316bf51d5bc5c920b00e0133d42927d29943207d942245cd7d68",
+    "data/T0/examples/v04/ledger.jsonl": "7aa7ce76c94ec00eebd6258583b6ba849e209fed65fb6d5e5edbf8dc8c5d4aa4",
+    "data/T0/examples/v04/manifest.json": "06f15d6203dd6a2e907c918413d934044583de9293d87040dbf19fb2fd787dbd",
+    "data/T0/examples/v04/payments.jsonl": "a3f913a15012fe28757fa019f39e8d64a52199662a1615b2e7d7df0c97168c9e"
+  },
+  "outputs_sha256": {
+    "docs-check.log": "02db070207b0eeef18870333c281a8183908a6896341087bc77d964b1a92749a",
+    "fx/predictions.json": "d5880762e92bc94dbd73e77f148990bee16d6dba68674179596b4a75660be216",
+    "gold-2025-01-31.json": "40ea380b2f5fffaac912241b5f37117d9edf7265f8fc6f31bb70773d92e3f776",
+    "gold-2025-02-01.json": "e81877de9f4467b81b53a222bb284076e5d4519b36d94456c3999493241cc99e",
+    "journal/predictions.json": "813f1cf4bf3530fac6d97aa9e3792056796751e16a7447876e9673b0a236a2b5",
+    "ledger.sqlite": "01f96efcc0055ef07ae1a0e0ec418847fb03d8f23008d4f1a7d8beca1f25fac8",
+    "unittest.log": "50b7eec2921d2a08a23c3ed28c98ee3d4e7842a6e9362619b03701f265d8848f"
+  },
+  "commands": [
+    "python scripts/checks/check_docs.py",
+    "python -m unittest discover -s tests -v",
+    "python -m t0 run-offline --output data/T0/processed/offline-v4-2026-10-21-verified --gate technical",
+    "python -m t0 allocate-fx --input data/T0/examples/v04 --cutoff 2025-01-31 --output data/T0/processed/verification-v4-2026-10-21-verified/fx",
+    "python -m t0 journal-predict --input data/T0/examples/v04/journal-policy.jsonl --output data/T0/processed/verification-v4-2026-10-21-verified/journal",
+    "python -m t0 ledger --input data/T0/examples/v04/ledger.jsonl --store data/T0/processed/verification-v4-2026-10-21-verified/ledger.sqlite",
+    "python -m t0 gold --store data/T0/processed/verification-v4-2026-10-21-verified/ledger.sqlite --cutoff 2025-01-31 --output data/T0/processed/verification-v4-2026-10-21-verified/gold-2025-01-31.json",
+    "python -m t0 gold --store data/T0/processed/verification-v4-2026-10-21-verified/ledger.sqlite --cutoff 2025-02-01 --output data/T0/processed/verification-v4-2026-10-21-verified/gold-2025-02-01.json"
+  ]
+}

@@ -41,3 +41,9 @@ Chọn lọc và kiểm tra ngày **18/10/2026** để phục vụ [bản đánh
 - [MISA Developer Portal](https://developer.misa.vn/) và [giới thiệu MISA BankHub](https://sme.misa.vn/63513/): kiểm tra loại dữ liệu/tích hợp; quyền API và điều kiện sử dụng cụ thể vẫn cần xác nhận với nhà cung cấp.
 
 Thứ tự gợi ý: **R3 → R7 → R4 → R1/R2 → R5/R6/R8**. Tách rõ paper nền tảng, nghiên cứu gần đây và preprint; năm mới hơn không bảo đảm phù hợp hơn với task.
+
+## Bổ sung bank reconciliation — 19/10/2026
+
+**R9 — Munoz, Jalili, Tafakori: Enhancing bookkeeper decision support through graph representation learning for bank reconciliation.** [DOI](https://doi.org/10.1016/j.jfds.2025.100170), [bản journal pre-proof](https://www.newswise.com/pdf_docs/176364346984800_1-s2.0-S2405918825000224-main.pdf). Đọc phần dữ liệu Xero, nhóm 1–N và repeated runs. Không có corpus để tái lập; không suy kết quả paper thành kết quả code hiện tại.
+
+Nghiên cứu nghiệp vụ, bảng ánh xạ nguồn → tình huống, thiết kế clean/noisy/stress và đánh giá BenchRec được duy trì tại [cơ sở nghiên cứu trong báo cáo T0](../../../docs/reports/t0-method-review.md#cơ-sở-nghiên-cứu). [Bằng chứng đọc/kiểm tra nguồn](../data-checks/t0/reconciliation-research-2026-10-19.json) giữ URL/hash và ngày kiểm tra. Raw tải bổ sung nằm ngoài Git; không thay manifest tám PDF cũ hoặc nhận đã được cấp corpus Xero.

@@ -1,0 +1,159 @@
+{
+  "checked_at_utc": "2026-10-19T09:48:28.709203+00:00",
+  "scope": "Fresh bounded access follow-up for user handoff; no business dataset audit or matching run",
+  "raw_base": "data/T0/raw/access_followup/2026-10-19",
+  "sources": [
+    {
+      "source_id": "benchrec",
+      "manifest": {
+        "source_id": "benchrec",
+        "spec_hash": "542e0d6915932434122c7f2b776c0fed99c08538607ff54905104bc4fd4354db",
+        "retrieved_at_utc": "2026-10-19T09:48:07.723656+00:00",
+        "source": {
+          "provider": "Operartis",
+          "format": "access_gated",
+          "source_page": "https://www.operartis.com/benchrec",
+          "documentation": "https://sites.google.com/view/fintranmatch-competition-icaif",
+          "scope": "Participation page only; no dataset download, registration or contact submission",
+          "license": "Dataset terms unavailable until access granted; GL is not necessarily an invoice",
+          "files": {
+            "participation.html": "https://www.operartis.com/benchrec"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "participation.html",
+            "url": "https://www.operartis.com/benchrec",
+            "final_url": "https://www.operartis.com/benchrec",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T09:48:09.578594+00:00",
+            "content_type": "text/html; charset=UTF-8",
+            "bytes": 1268905,
+            "sha256": "679be46f35d8a215d1a596f173c881bbf329c6a79378576fa17543caf4e9bc41"
+          }
+        ],
+        "errors": [],
+        "download_status": "downloaded"
+      },
+      "audited_at_utc": "2026-10-19T09:48:10.331103+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": null,
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "access_gated",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "only_participation_page_downloaded",
+          "dataset_and_terms_require_access"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    },
+    {
+      "source_id": "ukraine-spending",
+      "manifest": {
+        "source_id": "ukraine-spending",
+        "spec_hash": "92d9f1c7daaa5b453c0155ccdcdcbfc81d7db23e80d9a9c1501b050a3e778757",
+        "source": {
+          "kind": "public_funds_candidate",
+          "source_page": "https://spending.gov.ua/",
+          "requests": {
+            "acts.json": "https://api.spending.gov.ua/api/v2/disposers/acts?disposerId=42001897",
+            "transactions.json": "https://api.spending.gov.ua/api/v2/api/transactions/?startdate=2025-12-01&enddate=2025-12-01&payers_edrpous=42001897"
+          },
+          "limits": "Treasury transactions and acts/invoices may be different grains. Query parameter/filter semantics and independent allocation truth not verified."
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [],
+        "errors": [
+          {
+            "file": "acts.json",
+            "url": "https://api.spending.gov.ua/api/v2/disposers/acts?disposerId=42001897",
+            "checked_at_utc": "2026-10-19T09:48:07.725653+00:00",
+            "error_type": "URLError",
+            "http_status": null,
+            "reason": "<urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>"
+          },
+          {
+            "file": "transactions.json",
+            "url": "https://api.spending.gov.ua/api/v2/api/transactions/?startdate=2025-12-01&enddate=2025-12-01&payers_edrpous=42001897",
+            "checked_at_utc": "2026-10-19T09:48:08.700253+00:00",
+            "error_type": "URLError",
+            "http_status": null,
+            "reason": "<urlopen error timed out>"
+          }
+        ]
+      },
+      "business_dataset_audits": 0,
+      "matching_accepted": false,
+      "matcher_runs": 0,
+      "inspection": null,
+      "status": "access_incomplete"
+    },
+    {
+      "source_id": "rmit-xero-study",
+      "manifest": {
+        "source_id": "rmit-xero-study",
+        "spec_hash": "4671baa4c94a57b51de8899b1fa505d345ad33636fe36416eac7304974b121ef",
+        "source": {
+          "kind": "research_code_availability",
+          "source_page": "https://ssrn.com/abstract=5019966",
+          "requests": {
+            "repository.json": "https://api.github.com/repos/justinadrmun/stellargraph",
+            "readme.md": "https://raw.githubusercontent.com/justinadrmun/stellargraph/master/README.md"
+          },
+          "limits": "Paper describes business data verified by bookkeepers, but a public model-code repository is not a released business dataset."
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "repository.json",
+            "url": "https://api.github.com/repos/justinadrmun/stellargraph",
+            "final_url": "https://api.github.com/repos/justinadrmun/stellargraph",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T09:48:07.725093+00:00",
+            "bytes": 17487,
+            "sha256": "7653de96fd717a63e83070cc3202c6366561ddf54f543064583aaa98c43b04ac"
+          },
+          {
+            "file": "readme.md",
+            "url": "https://raw.githubusercontent.com/justinadrmun/stellargraph/master/README.md",
+            "final_url": "https://raw.githubusercontent.com/justinadrmun/stellargraph/master/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T09:48:08.459489+00:00",
+            "bytes": 21590,
+            "sha256": "31956ed2be78a499d06cd9985d07ee317a1289f6cf5d671578259c8c9057fe7f"
+          }
+        ],
+        "errors": []
+      },
+      "business_dataset_audits": 0,
+      "matching_accepted": false,
+      "matcher_runs": 0,
+      "inspection": {
+        "kind": "code_availability_inspection",
+        "default_branch": "develop",
+        "repository_is_public": true,
+        "interpretation": "Public graph library code exists; no public link to the paper's business corpus verified"
+      },
+      "status": "provenance_or_access_inspected"
+    }
+  ],
+  "business_dataset_audits": 0,
+  "matcher_runs": 0,
+  "code_sha256": {
+    "t0/source_survey.py": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+    "t0/real_data.py": "013c7b9f03561dd21641266e0f5015438f69db8a8ed5ca1e6b41019e611c233e",
+    "t0/data.py": "d78159c4835500de5ed233dc0631a1ec3c1fa0edc7728a72ce657b989ec5ad20",
+    "scripts/data_audit/research_t0_additional_sources.py": "7ae6e4b825b3dcb8881966f5471cd93f238249d1d702243a42581bdbf6526b32"
+  },
+  "reproduce_python": "from pathlib import Path\nfrom t0.source_survey import download_source, audit_source\nfrom scripts.data_audit.research_t0_additional_sources import check_source\nbase = Path('data/T0/raw/access_followup/2026-10-19')\ndownload_source(base / 'survey', 'benchrec')\nbenchrec = audit_source(base / 'survey', 'benchrec')\nukraine = check_source(base / 'research', 'ukraine-spending')\nrmit = check_source(base / 'research', 'rmit-xero-study')\n",
+  "limits": [
+    "Cached snapshots include failed requests; choose a new base to retry",
+    "No forms submitted, accounts registered or messages sent",
+    "Public code and HTML are not business records; dataset access and reuse terms remain unverified"
+  ]
+}

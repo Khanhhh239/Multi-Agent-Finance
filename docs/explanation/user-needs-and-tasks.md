@@ -24,7 +24,7 @@ Các hạn chế thực địa mà Phần 1 và Phần 3 đã nêu (ghi sổ the
 
 | Mã | Nhiệm vụ | Công dụng cho người dùng | Thuật toán chính | Dữ liệu huấn luyện | Dữ liệu đánh giá | Đáp ứng |
 | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
-| T0 | Nền dữ liệu và lược đồ chuẩn  | Số liệu khớp sổ sách, không nhập tay (Kiếm API ERP(Misa, Fast), API ngân hàng) |  | Dữ liệu tổng hợp theo lược đồ hoá đơn điện tử | Kiểm thử lược đồ, tỷ lệ khớp sổ | N6 |
+| T0 | Nền dữ liệu và lược đồ chuẩn | Số liệu có nguồn, đối chiếu công nợ và ngân hàng | Allocation, ledger và audit theo [contract T0](../reference/t0-data-contracts.md); connector ERP/bank còn thiếu | Fixture tổng hợp và nguồn theo task; chưa có bộ SME có nhãn độc lập | Invariant, replay/cutoff và metric riêng từng task | N6 |
 | T1 | Thời điểm thanh toán của từng hoá đơn \-\> đã làm  | Biết khoản nào về khi nào | \-LightGBM (contest ML hay sài) \-Ensemble (tunning ) \-Phân tích sống sót thời gian rời rạc | Tổng hợp hiệu chỉnh theo Việt Nam; bộ thật tương tự để thử phương pháp | Chia theo thời gian; điểm cắt kiểm duyệt nhân tạo | N1, N2 |
 | T2 | Khả năng trả và vỡ nợ | Biết khoản nào có nguy cơ không thu được |  | SBA, Freddie Mac, Home Credit; tổng hợp | Chia theo thời gian; hiệu chỉnh xác suất | N3 |
 | T3 | Trả một phần và tranh chấp (hợp đồng sẽ có,  1 hóa đơn tách ra hóa đơn con), tranh chấp nhiễu…  (advanced) | Số tiền về đúng chứ không chỉ ngày về | Hồi quy tỷ lệ trả; phân loại tranh chấp | Home Credit; tổng hợp | Chia theo thời gian | N1, N2 |

@@ -134,6 +134,8 @@ Vì sao đây là tối ưu (không phải thỏa hiệp):
 
 ### Mô hình dữ liệu "1 nguồn – 2 view" (điểm thiết kế quan trọng nhất)
 
+Đây là schema mục tiêu cho hệ thống nhiều phân hệ, chưa phải schema T0 đã triển khai. T0 hiện có SQLite command/event store, revision invoice/payment và Gold local theo [contract T0](../reference/t0-data-contracts.md); chưa có PostgreSQL mart, hai view thuế/quản trị hoặc connector MISA. Không dùng DDL minh họa dưới đây thay contract tiền/cutoff/version hiện hành.
+
 ```sql
 -- Bảng lõi: MỘT nguồn sự thật, không bao giờ có 2 sổ rời
 CREATE TABLE journal_entries (
@@ -238,6 +240,8 @@ Phân công: người A → Agent 1; người B → Agent 2; người C → GĐ0
 
 <a name="31"></a>
 ## 3.1 GIAI ĐOẠN 0 (tuần 1–4) — Nền móng: schema + synthetic generator
+
+Phần này là thiết kế mở rộng cho cả hệ thống; lịch tuần và generator tám module chưa được triển khai trong T0. Generator/benchmark T0 đang dùng JSON plan và fixture riêng theo [hướng dẫn hiện hành](../../data/T0/README.md), không có `config.yaml` hoặc Synthetic Company Generator như đề xuất dưới đây. [Kế hoạch T0](../../research/notes/t0_data_foundation_reconciliation.md#kế-hoạch-tiếp-tục-t0) là nơi duy trì tiến độ và công việc tiếp theo.
 
 ### Bước 0.1 — Canonical schema (tuần 1)
 Triển khai schema mục 2.3 trên PostgreSQL, thêm bảng phụ:

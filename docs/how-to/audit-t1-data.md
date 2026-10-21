@@ -24,7 +24,7 @@ python scripts/data_audit/audit_czech_t1_datasets.py --snapshot YYYY-MM-DD
 
 Thay `YYYY-MM-DD` bằng ngày tải thực tế. Dùng thư mục ngày mới khi lấy phiên bản nguồn mới: tên snapshot là ngày thu thập, **không phải truy vấn trạng thái quá khứ của API**. Lệnh tải dùng mạng, ghi raw và manifest tại `data/T1/raw/czech/<snapshot>/`.
 
-Downloader tiếp tục trang đã tải dựa trên cache/metadata; không coi đó là cơ chế khóa phiên bản nguồn. Kiểm tra `complete`, count, hash và flag thay đổi nguồn trong manifest. Kiểm tra trước/sau không bảo đảm API được chụp trong một transaction nguyên tử.
+Downloader tiếp tục trang đã tải sau khi kiểm cả SHA256 và kích thước theo metadata. Khi request trả nội dung khác file raw đã có, script dừng và yêu cầu snapshot mới, giữ nguyên raw cũ. Không coi cache là cơ chế khóa phiên bản API. Kiểm tra `complete`, count, hash và flag thay đổi nguồn trong manifest. Kiểm tra trước/sau không bảo đảm API được chụp trong một transaction nguyên tử.
 
 ## Audit mẫu BPI/DC
 

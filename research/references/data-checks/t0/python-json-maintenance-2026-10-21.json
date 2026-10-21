@@ -1,0 +1,376 @@
+{
+  "schema": "repository-python-json-maintenance-v1",
+  "checked_at_utc": "2026-10-21T02:55:20.528714+00:00",
+  "scope": "Repository-maintained Python/JSON/JSONL, deterministic regression fixtures and local cached T0 pipeline; no training or network",
+  "python": "3.13.5",
+  "output": "data/T0/processed/python-json-review-2026-10-21",
+  "syntax_json_scan_before_this_evidence": {
+    "counts": {
+      ".json": 29,
+      ".jsonl": 4,
+      ".py": 50
+    },
+    "errors": []
+  },
+  "code_sha256": {
+    "reference_notebooks/11_extended_window_retraining.py": "5d76a935d9a990559f1b332ee5e23e610954b2ddc968cc426f3813370bdd31e8",
+    "reference_notebooks/12_oof_survival_boost.py": "4ea2d8073563640c011ddb9304e0f5a6bf813cb1f2bd22f26f93bf120105958d",
+    "reference_notebooks/survival_utils.py": "3de4ebaca663a8d0ed07484374f96f9484257449e5786a122fb67f40188fc509",
+    "scripts/archive/t0/audit_t0_moneyvis.py": "e13cf6284c587af14025dd5965aeb26bdbe78ec44f2e5d8c93aee789ba6f53b9",
+    "scripts/archive/t0/audit_t0_source_survey.py": "6ba0e64f4372ea89ec0cd2002472f751696132a095ca78838a6f80b34bd79cec",
+    "scripts/archive/t0/benchmark_t0_receipts_v01.py": "dd8fd1118a721aa2ffaf0ff20271d25b8a127faf9e19dc3758a5c01902350358",
+    "scripts/archive/t0/generate_t0_receipts_v01.py": "3234e852717db8220076443d4aa8b264e53648f95885ffd800a656d64d9f45e1",
+    "scripts/archive/t0/research_t0_additional_sources.py": "7562f4df374cb4b4b0961277851708ca55cdabc84efa629028a294f9ab444b40",
+    "scripts/checks/check_code.py": "705595b4d5ac0e9e5573128a50e14f426cbb46900698dec421ce119501c75d8c",
+    "scripts/checks/check_docs.py": "1a0fc1ad4534f9ec3b497e86fd2d16cc75cbb5bb13c510f72baea856bd5c612a",
+    "scripts/data_audit/audit_czech_t1_datasets.py": "7e0152fc74bbf03422da634bd464f8c96c0901209f58eee1d435eae0723cc0d5",
+    "scripts/data_audit/audit_t0_benchrec.py": "409c4aa718842712211428758448ec8238eb850c88243586955fbb6f7e77b12b",
+    "scripts/data_audit/audit_t1_source_samples.py": "54f8424e87e8f04485ccb04144d0325434c8909282ac85ddcce459a410a07d03",
+    "scripts/data_audit/benchmark_t0_reconciliation.py": "473399a7b918e0e024d88e847d8a1489da386501c319a337a2deb2ceeca83e85",
+    "scripts/data_audit/research_t0_fixture_sources.py": "862b2dd2b370a02a3186c4ce812947b7626480831db35352e93e5b5240598a00",
+    "scripts/data_audit/research_t0_reconciliation.py": "ec66de7e81eea6c7c81888f60e17084ff8afaa8bddd5db1d276022dbc9a48e0e",
+    "scripts/data_download/download_czech_t1_datasets.py": "f44a98e6e9f87eca98de34fc6ce1c3d1c1ac56b96eb850c796fa223a55974111",
+    "scripts/data_download/download_t0_benchrec.py": "4de832415ab5ee2b4c44cee0be8b9ee5487abb4f6a06d57db38471081f49a7c3",
+    "scripts/notebooks/build_notebook.py": "ffd4ea287bccee6f3506c3b4a37b83c8961ef8efc532c500887beea7e8ce2dc7",
+    "t0/__init__.py": "c98780e38138647e5234fe9339b5d4f70f2c9289044920d7962b49503c9b6fdc",
+    "t0/__main__.py": "e34eebd8c903dfb14e976dea7b4e5790724d0574704af0e836372747c7beeeb3",
+    "t0/adapters.py": "6c5065cf6d26588b615d5adccf5a68492c46a35eca27250008637a054c9e5faf",
+    "t0/allocation.py": "4348242d8d98f5e65efb5a7d77e36c05dcd4f64ec5bb4b8a8474b706fd68fcfe",
+    "t0/balances.py": "526a80b4f1f7753871a552614f092d3069e81145a3d3f56a18254bf0bf59b76c",
+    "t0/benchrec.py": "a643a90451d8aeef245bc0593e452d22db71c809692fcf821135bee0f80c0c05",
+    "t0/constrained.py": "3f07298671aae377e033580c0e5869b5115bb4954ef503ec0c29057776ee0f10",
+    "t0/data.py": "51095fcc60214c298c5052e445f4aeb5704fcaf38a093016f0e84d00038e2b9c",
+    "t0/evaluation.py": "df402478b4c4e2f3a625fe111cfa60cd5c0c4bcf57aef4a1efe6362774ba85ca",
+    "t0/fx.py": "315901e7e2fac84684a93341e553ef57f444dde74bfedcd3f597427e81752c93",
+    "t0/gates.py": "382fdb1bcb314062fc72d08457c28b84ffb017a489c9f7d843783e1bd98fd334",
+    "t0/journal.py": "619c39bde7257dcbb54460adebd977e9a27027e410223e0d61ca39f379d3ead8",
+    "t0/journal_policy.py": "9c115895c9965d0bd3928808952db25dcbc632abf0576d16f36d60f224411aae",
+    "t0/ledger.py": "4ca66538e45610f84c225a7f5892c6497c39c8469e39c553f9467328d9e2e655",
+    "t0/matching.py": "5b0a53cc53fe128acaf256c9a9d0db0d8258e227eb234f1d279708cf474a9ffd",
+    "t0/offline.py": "d29e8130602efdcc38c650073bb337211965d8a3f860937c1d8898231d572267",
+    "t0/robustness.py": "ea36b95559c458f651e80cc9712cd611097895adce31b4022365a8ac3bf07302",
+    "t0/scenarios.py": "ebc4f64e344b40fd1c1bca7218bcaff60939197ef1edae26eff386e2e99435ef",
+    "t0/settlement.py": "0c06da53408646babb3d57abea60c4e98eaa49edc059a3044607403a84743871",
+    "tests/test_check_docs.py": "fbf837e520ee7699e3ab616183914a2572fd841ca5592d8a060bf26279c76b48",
+    "tests/test_repository_hardening.py": "3181a5c39072d40688757297c09fed11fe9890c04ca2a9cd54701c5aa36b6c58",
+    "tests/test_t0_additional_sources.py": "5e35a67df676b80cffa4292e4733604db99e9dce92fd4d61902252fc9ec53b71",
+    "tests/test_t0_benchrec_preflight.py": "3e8840ddd0c6be9d389adcf9c379cfbc7437b9f76bfecf43c40df2c47754cced",
+    "tests/test_t0_extensions.py": "1f0c312183d98b230b56d970aefbb669c73bfb14ab4ea90ab12c4bbd118e1fc4",
+    "tests/test_t0_fixture_research.py": "77dd5dd748f8e77ed98ca5907b1fafab1131b8c412b7ef00c9a4511661919402",
+    "tests/test_t0_hardening.py": "933173260d45cdb080a686c135785fe778796f06605948e4e7e9636a7eafaab2",
+    "tests/test_t0_moneyvis_audit.py": "06c21c3491d3b3c44698554988a791fc694ff0a494006e3fe9b0964a40573c4a",
+    "tests/test_t0_offline.py": "bbac6c9df1a3240ae2254b61668defb98efa33246cef95ac3d5f944cefcd0df5",
+    "tests/test_t0_receipts.py": "bd639592b901833d82a033c30c43970e8aa2c99055eb8c1e3f8337ec6e5a2ffd",
+    "tests/test_t0_reconciliation_benchmark.py": "8827f2d64742e267b34d4d1cbb00b7e4a3990694537a1d4b12800490a3882879",
+    "tests/test_t0_source_survey.py": "f815c0dbd530b95159764ff70ae7eca3ce7a713f88022eb4ce137784c9903366"
+  },
+  "retained_json_sha256": {
+    "data/T0/examples/v04/manifest.json": "06f15d6203dd6a2e907c918413d934044583de9293d87040dbf19fb2fd787dbd",
+    "research/references/data-checks/t0/allocation-robustness-plan-v1.json": "8a90aabbbd9865ff4be0daa9b36fb8a41ac37a396481f99e2dc4e004f6e7b9fa",
+    "research/references/data-checks/t0/ar-benchmark-plan-v2.json": "55ad103e0714d65ae499fac9845fba4ba5e0304484658140bdd2b5fcbeb5580c",
+    "research/references/data-checks/t0/benchrec-train-semantics-2026-10-19.json": "a3a0341d68a9c59ed7962eaa479181f91a454e77988754ecca1da1d1b8dca536",
+    "research/references/data-checks/t0/code-review-2026-10-21.json": "496b90455dd8c2310753b217c41f845431fe6344afd0acde233161651878b101",
+    "research/references/data-checks/t0/extension-verification-v4-2026-10-21.json": "aabbf821d883b58d18d59dc66d2fc63c2cbb3ec9400f15e85373972c62ba35b8",
+    "research/references/data-checks/t0/fixture-source-research-2026-10-20.json": "ff074f3907d9166344b5d60b1d13bd4f470fe72f574c0b67bb8825fbe1778e31",
+    "research/references/data-checks/t0/offline-evaluation-2026-10-21.json": "8ee7a510e6f6fe42d89412fa9e1c20b93555bb6820a6d5dff2190a6823291197",
+    "research/references/data-checks/t0/offline-evaluation-v3-2026-10-21.json": "e1546fe385e0988bed4b6a4f10d9a5681dcc96150493c14dde3ea9b1775e247d",
+    "research/references/data-checks/t0/offline-evaluation-v4-2026-10-21.json": "b2eba3d0110f67590acdd80063c9ed456440c0dd6e30638340d3d28ec5878e72",
+    "research/references/data-checks/t0/reconciliation-benchmark-2026-10-19.json": "1c16da7b71a7bc90e51918356cdcb3ff3a0b3c199ee9b59e637f910bf631f3bc",
+    "research/references/data-checks/t0/reconciliation-benchmark-plan-v1.json": "999dfd0df00f6d0d963a0175d6dd9d7d3b894ce1066758f29913cb672370db29",
+    "research/references/data-checks/t0/reconciliation-research-2026-10-19.json": "5fa68f56ce4e4537e8cf321c0d3bea150417d656c466cb06760b5061fe5f9a40",
+    "research/references/data-checks/t0/reconciliation-verification-2026-10-19.json": "9677014841c99d7931597a2c3eb9b25008ead89a54ad682422d9f31a7d597968",
+    "research/references/data-checks/t0/reconciliation-verification-after-v3-2026-10-21.json": "6acc979789f5b83ce5cfc3abac8d9212fa32857a49448230d48d5acaee2c9ed8",
+    "research/references/data-checks/t0/archive/access-followup-2026-10-19.json": "c39601887f4aacb03ee81f87268ce15ec0940862095745f3e3ba00a2e88b13eb",
+    "research/references/data-checks/t0/archive/additional-source-research-2026-10-19.json": "a33d9f6f37331a1e29bed67dc55aaa7742b1db819675b9f4a56617dbc56924ff",
+    "research/references/data-checks/t0/archive/benchmark-baseline.json": "cfed4acbb966d3bd01fb38658f44181a82efafe5062c36bd23b70cf30e6f1210",
+    "research/references/data-checks/t0/archive/benchrec-kaggle-preflight-2026-10-19.json": "7bbf12dbf0dc4808513638a7e43f49028e09d7548099aaee72c248f28e78dfc4",
+    "research/references/data-checks/t0/archive/moneyvis-source-audit.json": "fd8cf8382fc25e45bf9fd9728954ed7b2c97e5af48c5884e8f59a4c9443707d1",
+    "research/references/data-checks/t0/archive/real-source-survey-2026-10-19.json": "d67520d1e3af4c3311a9061f4cf1fe597d4a22c88ab939821a9fe268a631236e",
+    "research/references/data-checks/t0/archive/user-links-2026-10-19.json": "5ab6765821ef056270f3d5ff7a5e093ab1f27821f06ca15a62fa77fc5f4b8d3d",
+    "research/references/data-checks/t1/czech_t1_full_audit.json": "e3ddafeeacde3b665f2a93b65806e70dba7b85a2416d7b4560dabcbc200639ce",
+    "research/references/data-checks/t1/czech_t1_full_verification.json": "4570efdc1c62c146920f7d74086dde2a25d0a294adf0c806c0b05de43385ece7",
+    "research/references/data-checks/t1/t1_data_organization.json": "90cbb415cf1129c9bbb1eb3f02d63053a6c732a50229678bbcf10b62d868e477",
+    "research/references/data-checks/t1/t1_dataset_deep_checks.json": "6bf35ad8902597d69e8a6a6a676eeb8aa8a9d8d62397b3c007898cf2bff3154e",
+    "research/references/data-checks/t1/t1_dataset_sample_profiles.json": "b837addae7b05fd63c7381c262a24e2904a10a951aa9e2b26c8932eadc30f375",
+    "research/references/data-checks/t1-t8/data_sources_t1_t8_access_checks.json": "26157a9ccfccc00805a319ec35d914e3aa2e14ac1e9d33ca1b395e7c9c843557",
+    "research/references/papers/t0/manifest.json": "ddff458b11335e68cf62e08cf6dd5e68de31e91e30afc905e1f432fc7e3ca8b9"
+  },
+  "tests": {
+    "total": 204,
+    "new_regressions": 23,
+    "failures": 0,
+    "skipped": 0,
+    "stdlib_only_new_module": {
+      "tests_run": 19,
+      "failures": 0,
+      "skipped_class": 1,
+      "reason": "Optional numpy/pandas reference-helper class is unavailable under python -S"
+    }
+  },
+  "checks": {
+    "unittest": 0,
+    "pipeline_technical": 0,
+    "pipeline_quality": 4,
+    "cli_deliveries": 11,
+    "all_cli_assertions_pass": true,
+    "fixture_source_audit_offline": 0,
+    "pipeline_artifact_hashes_verified": 222,
+    "pipeline_code_hashes_verified": 19
+  },
+  "logs_sha256": {
+    "data/T0/processed/python-json-review-2026-10-21/unittest-final.log": "dae0c8adcd4c16b2f142e03906b5f2377d2221782255345d1811bc3ff6578d24",
+    "data/T0/processed/python-json-review-2026-10-21/stdlib-tests-final.log": "770ff61127728de7dd59c92fb76c4a87078ad51a504d01cbae319480473f1cfb",
+    "data/T0/processed/python-json-review-2026-10-21/offline.log": "65b99d2a6400feb640b940652fc5e2f68f8a9a71abdbe65c4bc687b20eb092a1",
+    "data/T0/processed/python-json-review-2026-10-21/fixture-source-audit.log": "97ce224ccc64a7225b6740000c60299f6db5226f9d22fa9ed2ee807f2ad3296c"
+  },
+  "cli": {
+    "commands": [
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "generate",
+          "--seed",
+          "7",
+          "--blocks",
+          "1",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\typed"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "allocate",
+          "--input",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\typed",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\flow"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "allocate",
+          "--method",
+          "v2",
+          "--input",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\typed",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\v2"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "allocate-fx",
+          "--input",
+          "data\\T0\\examples\\v04",
+          "--cutoff",
+          "2025-01-31",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\fx"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "journal-predict",
+          "--input",
+          "data\\T0\\examples\\v04\\journal-policy.jsonl",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\journal"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "ledger",
+          "--input",
+          "data\\T0\\examples\\v04\\ledger.jsonl",
+          "--store",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\ledger.sqlite"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "ledger",
+          "--input",
+          "data\\T0\\examples\\v04\\ledger.jsonl",
+          "--store",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\ledger.sqlite"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "gold",
+          "--store",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\ledger.sqlite",
+          "--cutoff",
+          "2025-01-31",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\gold-before.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "gold",
+          "--store",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\ledger.sqlite",
+          "--cutoff",
+          "2025-02-01",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\gold-after.json"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "reconcile",
+          "--input",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\receipt",
+          "--cutoff",
+          "2025-02-01",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\receipt-prediction"
+        ],
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "python",
+          "-m",
+          "t0",
+          "evaluate",
+          "--input",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\receipt",
+          "--cutoff",
+          "2025-02-01",
+          "--truth-exhaustive",
+          "--output",
+          "data\\T0\\processed\\python-json-review-2026-10-21\\receipt-evaluation.json"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "assertions_pass": true,
+    "scope": "Synthetic/CLI compatibility, not source quality"
+  },
+  "pipeline_evidence_sha256": "a173ceff4f3d764eaebcc9d2ec1ec819f9effe2a685d9bc425034c44a9a2f6af",
+  "technical_checks": {
+    "ar_invariants": true,
+    "ar_order_stability": true,
+    "fiscus": true,
+    "recbench_order_stability": true,
+    "recbench_unknown_predictions": true,
+    "ledger_retry": true,
+    "ledger_statements": true,
+    "ledger_refund_bank": true,
+    "robustness": true
+  },
+  "assessment": {
+    "policy": {
+      "ar_min_precision": 0.998,
+      "ar_min_recall": 0.8,
+      "settlement_min_precision": 0.998,
+      "settlement_min_recall": 0.95,
+      "journal_min_precision": 0.998,
+      "journal_min_recall": 0.8
+    },
+    "policy_scope": "Explicit development gates, not a production SLA or statistical certificate",
+    "unavailable_tasks": [],
+    "execution_complete": true,
+    "technical_pass": true,
+    "task_quality_pass": {
+      "ar_v2_regression": false,
+      "constrained_flow": false,
+      "finrca": null,
+      "recbench": true,
+      "finbalance": false
+    },
+    "quality_complete": false,
+    "status": "quality_or_evidence_incomplete",
+    "production_ready": false,
+    "missing_external_evidence": [
+      "Independent SME invoice-bank labels and historical availability",
+      "Verified FinRCA repair/bank oracle",
+      "Live ERP/bank and domain holdout",
+      "RecBench missing endpoints and full settlement",
+      "Broad journal policies/main eval"
+    ]
+  },
+  "finbalance": {
+    "coverage_records": 143,
+    "predicted_entries": 255,
+    "expected_entries": 1873,
+    "correct_entries": 156,
+    "entry_precision": 0.611764705882353,
+    "entry_recall_full_coverage_pool": 0.08328884143085959,
+    "records_with_full_journal_exact": 4,
+    "records_with_balance_sheet_evaluated": 2,
+    "records_with_balance_sheet_exact": 1
+  },
+  "inconsistency_quality": {
+    "tp": 8,
+    "fp": 3,
+    "tn": 0,
+    "fn": 0,
+    "unknown_positive": 15,
+    "unknown_negative": 117,
+    "precision": 0.7272727272727273,
+    "recall_full_pool": 0.34782608695652173,
+    "decision_coverage": 0.07692307692307693,
+    "records": 143
+  },
+  "metric_comparison": "FinBalance journal and detector metrics unchanged from the historical v0.4 evidence; no quality improvement claim",
+  "cleanup": [
+    "Removed duplicate BenchRec CSV reader body; retained csv_rows import API through shared implementation",
+    "Moved observed journal identity to one implementation shared by detector/dependency resolver",
+    "CLI/ledger/plans and operational T0 scripts share strict JSON/JSONL readers",
+    "Removed unused journal_policy import in extension tests; corrected two invalid positive fixtures"
+  ],
+  "preserved": [
+    "All 29 pre-existing repository JSON evidence/config files retained byte-for-byte",
+    "Raw/cache and historical processed results untouched; all new outputs use a separate directory",
+    "Archived generators, baselines and research scripts retained because tests/reproducibility still use them",
+    "Pre-existing working-tree changes retained; no commit"
+  ],
+  "limits": [
+    "Static checks exclude raw/interim/processed, dependencies and external reference code",
+    "No claim of exhaustive semantic validation of every historical JSON schema",
+    "No live Czech API or ERP/bank execution; downloader fixes tested with mocked responses",
+    "No model training or notebook rebuild; saved notebook outputs remain historical",
+    "SME labels and broad journal evidence missing; quality gate remains 4, production_ready false"
+  ]
+}

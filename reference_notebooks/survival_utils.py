@@ -207,30 +207,47 @@ def build_extended_snapshot(verbose=True):
 # 2. Hạ tầng survival (person-period → hazard → S(t) → feature)
 # ══════════════════════════════════════════════════════════════════════════════
 def expand_person_period(frame, bin_days=BIN_DAYS, max_bins=MAX_BINS):
-    n_bins = np.clip(np.ceil(frame["duration_days"].to_numpy(float) / bin_days).astype(int), 1, max_bins)
+    if type(bin_days) is not int or type(max_bins) is not int or min(bin_days, max_bins) < 1:
+        raise ValueError("bin_days/max_bins must be positive integers")
+    duration = frame["duration_days"].to_numpy(float)
+    if not np.isfinite(duration).all() or (duration <= 0).any() or not frame["event"].isin([0, 1]).all():
+        raise ValueError("positive finite durations and binary event indicators required")
+    n_bins = np.ceil(np.minimum(duration, bin_days * max_bins) / bin_days).astype(int)
     idx = np.repeat(np.arange(len(frame)), n_bins)
-    bin_no = np.concatenate([np.arange(1, k + 1) for k in n_bins])
+    bin_no = np.concatenate([np.arange(1, k + 1) for k in n_bins]) if len(n_bins) else np.array([], dtype=int)
     out = frame.iloc[idx].reset_index(drop=True)
     out["bin_index"] = bin_no
     out["is_last_bin"] = (bin_no == np.repeat(n_bins, n_bins)).astype(int)
-    out["hazard_event"] = (out["is_last_bin"] & (out["event"] == 1)).astype(int)
+    # A payment beyond the model horizon is censored at the horizon, never
+    # relabelled as a payment in the last model bin.
+    out["hazard_event"] = (out["is_last_bin"] & (out["event"] == 1)
+                           & (out["duration_days"] <= bin_days * max_bins)).astype(int)
     out["days_past_due_at_bin"] = out["days_past_due_at_T"] + bin_days * (out["bin_index"] - 1)
     out["age_at_bin"] = out["observed_age_days"] + bin_days * (out["bin_index"] - 1)
     out["days_until_due_at_bin"] = out["days_until_due_at_T"] - bin_days * (out["bin_index"] - 1)
     return out
 
 
-def survival_matrix(frame, model, max_bins=MAX_BINS):
+def survival_matrix(frame, model, max_bins=MAX_BINS, bin_days=BIN_DAYS):
     """Ma trận S(t) — dòng = hoá đơn-cutoff, cột = bin tuần."""
     n = len(frame)
+    if type(bin_days) is not int or type(max_bins) is not int or min(bin_days, max_bins) < 1:
+        raise ValueError("bin_days/max_bins must be positive integers")
     haz = np.empty((n, max_bins))
+    if not n:
+        return haz
     b = frame.copy()
     for j in range(1, max_bins + 1):
         b["bin_index"] = j
-        b["days_past_due_at_bin"] = frame["days_past_due_at_T"].to_numpy() + BIN_DAYS * (j - 1)
-        b["age_at_bin"] = frame["observed_age_days"].to_numpy() + BIN_DAYS * (j - 1)
-        b["days_until_due_at_bin"] = frame["days_until_due_at_T"].to_numpy() - BIN_DAYS * (j - 1)
-        haz[:, j - 1] = model.predict_proba(b[HAZARD_FEATURES].to_numpy(float))[:, 1]
+        b["days_past_due_at_bin"] = frame["days_past_due_at_T"].to_numpy() + bin_days * (j - 1)
+        b["age_at_bin"] = frame["observed_age_days"].to_numpy() + bin_days * (j - 1)
+        b["days_until_due_at_bin"] = frame["days_until_due_at_T"].to_numpy() - bin_days * (j - 1)
+        probabilities = np.asarray(model.predict_proba(b[HAZARD_FEATURES].to_numpy(float)), dtype=float)
+        if (probabilities.shape != (n, 2) or not np.isfinite(probabilities).all()
+                or ((probabilities < 0) | (probabilities > 1)).any()
+                or not np.allclose(probabilities.sum(axis=1), 1)):
+            raise ValueError("model must return two finite class probabilities per row")
+        haz[:, j - 1] = probabilities[:, 1]
     return np.cumprod(1.0 - haz, axis=1)
 
 
@@ -240,7 +257,7 @@ def survival_features(S, prefix="", horizons=(7, 14, 30, 60, 90), bin_days=BIN_D
         j = min(int(np.ceil(h / bin_days)), S.shape[1])
         out[f"{prefix}S_{h}"] = S[:, j - 1]
         out[f"{prefix}prob_paid_{h}d"] = 1.0 - S[:, j - 1]
-    below = S < 0.5
+    below = S <= 0.5
     first = np.where(below.any(axis=1), below.argmax(axis=1) + 1, S.shape[1] + 1)
     med = np.empty(len(S))
     for i, j in enumerate(first):

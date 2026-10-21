@@ -135,7 +135,7 @@ Quyết định "vẽ phần nào chung, phần nào riêng" theo đúng tiêu c
            └──────────────────┬────────────────────┘
                               ▼  dbt marts
            ┌───────────────────────────────────────┐
-           │ 🟦 GOLD (Star Schema) — không tính toán│
+           │ 🟦 GOLD — trạng thái, aggregate, lineage│
            │    fct_invoices · dim_customer (SCD2) │
            │    fct_bank_txns · fixed_obligations  │
            └──────────────────┬────────────────────┘
@@ -167,36 +167,21 @@ raw_promises → promises → promise_outcomes → trust_scores → fct_customer
 <a name="c2"></a>
 ### C.2 CHUNG-2 — Reconciliation engine
 
-*🟦 Phần chung — nối giao dịch ngân hàng với hóa đơn; là nguồn "ngày trả thật" cho T1 & nhãn PTP cho T8.*
+*🟦 Phần chung — đề xuất liên kết hóa đơn, payment và bank; ngày ghi sổ/giá trị ngân hàng cần xác minh theo nguồn.*
+
+T0 offline hiện dùng typed AP/AR, constrained flow có kiểm nghiệm duy nhất và cap, FX remittance tường minh, cùng SQLite decision ledger/Gold. [Contract T0](../reference/t0-data-contracts.md) duy trì thuật toán, cutoff, approval/commit và giới hạn; [lệnh chạy](../../data/T0/README.md) duy trì CLI. Thiết kế không mặc định có LLM extractor, scorer ML, UI duyệt hoặc connector ERP/bank đã chạy.
 
 ```
-bank_transaction ──┬─► Tầng 1 (80%): Exact match (Regex mã HĐ + số tiền)        ─► auto
-                   │
-                   ├─► Tầng 2 (15%): Heuristic & Combinatorics
-                   │    ├─ Fuzzy text (Levenshtein) — chấp nhận 1 ngưỡng sai
-                   │    ├─ Filter theo customer + date window
-                   │    └─ Subset Sum (DP) tìm tổ hợp HĐ = amount ± tolerance
-                   │         → ≥2 hợp lệ → fallback Tầng 3
-                   │
-                   └─► Tầng 3 (5%): AI Fallback & Optimization
-                        ├─ LLM Extractor: bóc tách nội dung mập mờ → JSON sạch
-                        ├─ LightGBM Scoring: xác suất khớp (giao dịch, hóa đơn)
-                        ├─ Greedy Match: xếp hạng · khớp từ cao → thấp · dừng < 85%
-                        └─ 🟨 Human-in-the-loop: điểm thấp → Kế toán duyệt
-                              → label → retrain LightGBM
-                                              │
-                                              ▼
-                              payment_allocations → invoices.balance
-                                              │
-                              ┌───────────────┴────────────────┐
-                              ▼                                ▼
-                    🟧 label day_paid cho T1         🟧 outcome kept/broken cho T8
-                    (ưu tiên bank_txn_date           (T9 reconciliation detect tiền
-                     thay vì posted_date)             về → cập nhật reliability)
+Observed invoice/payment/bank + availability
+    → Chuẩn hóa, lineage, scope và kiểm tiền/ngày
+    → Đề xuất allocation/link; mơ hồ hoặc vượt cap → review
+    → suggest → approve → commit/unknown → verify; reverse khi cần
+    → Gold theo cutoff + bank reconciliation với statement khai báo
+    → Dữ liệu dẫn xuất cho task sau, chỉ khi nhãn và availability đã xác minh
 ```
 
-- Tolerance **adaptive theo khách** (không hardcode): `tolerance = f(customer_size, avg_bank_fee)`; chênh lệch tách `bank_fee` / `fx_gain_loss` riêng.
-- Batch payment: 1 giao dịch → N allocations (subset-sum). Reverse: N giao dịch → 1 journal entry (min-cost flow ngược).
+- Phí và FX phải có bằng chứng/quote theo contract; không dùng tolerance để tự xóa phần nợ chênh lệch. Tiền thừa giữ unapplied.
+- N:M allocation, payment–bank link và journal là các quan hệ riêng; nhiều giao dịch có cùng tổng không chứng minh chúng thuộc một bút toán. Các thuật toán học máy hoặc min-cost flow chỉ là hướng thử khi có nhãn phù hợp.
 
 ---
 

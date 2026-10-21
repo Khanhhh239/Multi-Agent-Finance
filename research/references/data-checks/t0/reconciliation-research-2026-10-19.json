@@ -1,0 +1,166 @@
+{
+  "checked_at_utc": "2026-10-19T14:08:23.718567+00:00",
+  "script_sha256": "f15fadf1e00de310ee7221d1f89109a49bc0f85bddafacb3b209ffaef555e870",
+  "plan_sha256": "999dfd0df00f6d0d963a0175d6dd9d7d3b894ce1066758f29913cb672370db29",
+  "sources": [
+    {
+      "id": "SSMP",
+      "kind": "academic",
+      "url": "https://arxiv.org/html/2508.19218v1",
+      "supports": "Disjoint group matching; equal sums alone do not establish business identity; computational caps must be reported.",
+      "checked_at_utc": "2026-10-19T14:08:07.114495+00:00",
+      "status": 200,
+      "final_url": "https://arxiv.org/html/2508.19218v1",
+      "bytes": 365989,
+      "sha256": "5d41583ab27cfba3cc2286f726021b831940e5657a408558fa92b3401df89fc3",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "id": "RMIT",
+      "kind": "academic",
+      "url": "https://www.newswise.com/pdf_docs/176364346984800_1-s2.0-S2405918825000224-main.pdf",
+      "supports": "Real business Xero study; noisy descriptions, one-to-many and repeated-run stability; no claim of reproducing the graph model.",
+      "checked_at_utc": "2026-10-19T14:08:07.113877+00:00",
+      "status": 200,
+      "final_url": "https://www.newswise.com/pdf_docs/176364346984800_1-s2.0-S2405918825000224-main.pdf",
+      "bytes": 3789652,
+      "sha256": "71a7bae40dddedc5b3dbc4bc129eda167e2b19665c8bf7255645c9d7c99d2cf3",
+      "content_type": "application/pdf"
+    },
+    {
+      "id": "DITTO",
+      "kind": "academic",
+      "url": "https://arxiv.org/abs/2004.00584v3",
+      "supports": "Pair classification and data augmentation are distinct from financial allocation constraints.",
+      "checked_at_utc": "2026-10-19T14:08:07.115842+00:00",
+      "status": 200,
+      "final_url": "https://arxiv.org/abs/2004.00584v3",
+      "bytes": 45233,
+      "sha256": "6f9893517d19b6a252d52416b153bef3ee0e8c438fafade838191baf711c63d9",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "id": "ERP-PAYMENT",
+      "kind": "business_documentation",
+      "url": "https://docs.frappe.io/erpnext/payment-reconciliation",
+      "supports": "Partial/multiple payments, unallocated advances, company/party scope and reviewed allocations.",
+      "checked_at_utc": "2026-10-19T14:08:07.575506+00:00",
+      "status": 200,
+      "final_url": "https://docs.frappe.io/erpnext/payment-reconciliation",
+      "bytes": 2878465,
+      "sha256": "2f0310bfbcd1106cf85f52a4368c3fce3bbd9bcc9b7136d9fd790c6c71ae6533",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "id": "ERP-BANK",
+      "kind": "business_documentation",
+      "url": "https://docs.frappe.io/erpnext/bank-reconciliation",
+      "supports": "Timing differences, fees, duplicate imports, currency/account/reference checks and clearance versus posting.",
+      "checked_at_utc": "2026-10-19T14:08:07.732141+00:00",
+      "status": 200,
+      "final_url": "https://docs.frappe.io/erpnext/bank-reconciliation",
+      "bytes": 2865393,
+      "sha256": "470c7ffe0fb8145f49fea1159094030c4987001a676c1efb303641ce8bd56e71",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "id": "AP-MATCHING",
+      "kind": "business_documentation",
+      "url": "https://learn.microsoft.com/en-us/dynamics365/finance/accounts-payable/accounts-payable-invoice-matching",
+      "supports": "AP two/three-way invoice matching means PO/receipt validation, outside this cash allocation benchmark.",
+      "checked_at_utc": "2026-10-19T14:08:07.874239+00:00",
+      "status": 200,
+      "final_url": "https://learn.microsoft.com/en-us/dynamics365/finance/accounts-payable/accounts-payable-invoice-matching",
+      "bytes": 68260,
+      "sha256": "a274fb53efe7852c9df67a9ca2ae5795694a7605def5eb07ae711b221582b8d1",
+      "content_type": "text/html"
+    },
+    {
+      "id": "ACCA",
+      "kind": "professional_education",
+      "url": "https://www.accaglobal.com/content/dam/acca/global/PDF-students/fia/examreports/fa2/FA2%20S22-A23%20examiner%27s%20report.pdf",
+      "supports": "Timing differences and bank charges require different reconciliation treatment.",
+      "checked_at_utc": "2026-10-19T14:08:08.277136+00:00",
+      "status": 200,
+      "final_url": "https://www.accaglobal.com/content/dam/acca/global/PDF-students/fia/examreports/fa2/FA2%20S22-A23%20examiner%27s%20report.pdf",
+      "bytes": 199983,
+      "sha256": "c353981a71a0a5090cf2c79fc7e6ca865790421d4e0a716dde61137ff1f14a1b",
+      "content_type": "application/pdf"
+    },
+    {
+      "id": "BENCHREC",
+      "kind": "dataset_publisher",
+      "url": "https://www.operartis.com/benchrec",
+      "supports": "Obfuscated production GL-bank data and benchmark provenance as stated by publisher.",
+      "checked_at_utc": "2026-10-19T14:08:08.941608+00:00",
+      "status": 200,
+      "final_url": "https://www.operartis.com/benchrec",
+      "bytes": 1267256,
+      "sha256": "3d69e98916be3e58c0bb7025077d411b8103af612f691a11a51b18f3c0034f0e",
+      "content_type": "text/html; charset=UTF-8"
+    },
+    {
+      "id": "KAGGLE",
+      "kind": "dataset_card",
+      "url": "https://www.kaggle.com/api/v1/datasets/view/benchmarkteam/benchrec-real-world-cash-reconciliation-dataset",
+      "supports": "Allocation-key task, nonempty subset correctness, null matches and publisher precision requirement.",
+      "checked_at_utc": "2026-10-19T14:08:08.991772+00:00",
+      "status": 200,
+      "final_url": "https://www.kaggle.com/api/v1/datasets/view/benchmarkteam/benchrec-real-world-cash-reconciliation-dataset",
+      "bytes": 12198,
+      "sha256": "bb529934ff0b5b630a0c019bb1851045c860a7ed3d75e1076ba5eaf71a091ef5",
+      "content_type": "application/json"
+    }
+  ],
+  "local_papers_read": [
+    {
+      "path": "research/references/papers/t0/2012_temporal_features_sql2011.pdf",
+      "pages": 10,
+      "sha256": "5e57a70e9b8dc8cbec496ce0fb9a67762ca7a9e0bd7fb68aa3f7657b3bbca485",
+      "extracted_characters": 42970
+    },
+    {
+      "path": "research/references/papers/t0/2018_automating_data_quality_verification.pdf",
+      "pages": 14,
+      "sha256": "d451ecf77b0fdc0756f91ec82aaa511c86bdb18229af13ab943c0f9e89a350cc",
+      "extracted_characters": 78828
+    },
+    {
+      "path": "research/references/papers/t0/2020_delta_lake_acid_storage.pdf",
+      "pages": 14,
+      "sha256": "b0fa92e38efb80f6c10f94a0fa31ccc42d0d75c345d5f94d08a7dc18632e9437",
+      "extracted_characters": 90193
+    },
+    {
+      "path": "research/references/papers/t0/2020_ditto_deep_entity_matching.pdf",
+      "pages": 15,
+      "sha256": "fdd9451b0b60b76ea1e0f1690e9577070978ce62ce6409e65b5370d327159d24",
+      "extracted_characters": 80294
+    },
+    {
+      "path": "research/references/papers/t0/2021_lakehouse_open_platforms.pdf",
+      "pages": 8,
+      "sha256": "df79a5de561b4c23354da08f3f9247bd33413b7339da1d8afee30ccfee4b5faa",
+      "extracted_characters": 51697
+    },
+    {
+      "path": "research/references/papers/t0/2025_match_compare_select_entity_matching.pdf",
+      "pages": 14,
+      "sha256": "3a74ec32a332268f96394862ea841414b1e61c12a158efe17f53c3533dd89f33",
+      "extracted_characters": 59761
+    },
+    {
+      "path": "research/references/papers/t0/2025_subset_sum_matching_problem.pdf",
+      "pages": 9,
+      "sha256": "b42e7708497c781b816840c4e1c3b984dd8b2aa76e7ba53ca856d06830bf8ebd",
+      "extracted_characters": 44359
+    },
+    {
+      "path": "research/references/papers/t0/2026_llm_labeling_entity_matching_v2.pdf",
+      "pages": 13,
+      "sha256": "fe888ee9e76aa2804765f236ff6a260b19ebeb1fdb53f43adc7ea5686b78315e",
+      "extracted_characters": 77968
+    }
+  ],
+  "scope": "Source access and local PDF text extraction; synthesis is maintained in t0-method-review.md. Not a business-data audit or a replication of published models."
+}

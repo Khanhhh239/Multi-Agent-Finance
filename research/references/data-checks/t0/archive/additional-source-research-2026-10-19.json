@@ -1,0 +1,345 @@
+{
+  "checked_at_utc": "2026-10-19T04:46:04.843656+00:00",
+  "script_sha256": "7ae6e4b825b3dcb8881966f5471cd93f238249d1d702243a42581bdbf6526b32",
+  "sources": [
+    {
+      "source_id": "ukraine-spending",
+      "manifest": {
+        "source_id": "ukraine-spending",
+        "spec_hash": "92d9f1c7daaa5b453c0155ccdcdcbfc81d7db23e80d9a9c1501b050a3e778757",
+        "source": {
+          "kind": "public_funds_candidate",
+          "source_page": "https://spending.gov.ua/",
+          "requests": {
+            "acts.json": "https://api.spending.gov.ua/api/v2/disposers/acts?disposerId=42001897",
+            "transactions.json": "https://api.spending.gov.ua/api/v2/api/transactions/?startdate=2025-12-01&enddate=2025-12-01&payers_edrpous=42001897"
+          },
+          "limits": "Treasury transactions and acts/invoices may be different grains. Query parameter/filter semantics and independent allocation truth not verified."
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [],
+        "errors": [
+          {
+            "file": "acts.json",
+            "url": "https://api.spending.gov.ua/api/v2/disposers/acts?disposerId=42001897",
+            "checked_at_utc": "2026-10-19T04:42:40.710028+00:00",
+            "error_type": "URLError",
+            "http_status": null,
+            "reason": "<urlopen error [WinError 10054] An existing connection was forcibly closed by the remote host>"
+          },
+          {
+            "file": "transactions.json",
+            "url": "https://api.spending.gov.ua/api/v2/api/transactions/?startdate=2025-12-01&enddate=2025-12-01&payers_edrpous=42001897",
+            "checked_at_utc": "2026-10-19T04:42:41.564367+00:00",
+            "error_type": "URLError",
+            "http_status": null,
+            "reason": "<urlopen error timed out>"
+          }
+        ]
+      },
+      "business_dataset_audits": 0,
+      "matching_accepted": false,
+      "matcher_runs": 0,
+      "inspection": null,
+      "status": "access_incomplete"
+    },
+    {
+      "source_id": "rmit-xero-study",
+      "manifest": {
+        "source_id": "rmit-xero-study",
+        "spec_hash": "4671baa4c94a57b51de8899b1fa505d345ad33636fe36416eac7304974b121ef",
+        "source": {
+          "kind": "research_code_availability",
+          "source_page": "https://ssrn.com/abstract=5019966",
+          "requests": {
+            "repository.json": "https://api.github.com/repos/justinadrmun/stellargraph",
+            "readme.md": "https://raw.githubusercontent.com/justinadrmun/stellargraph/master/README.md"
+          },
+          "limits": "Paper describes business data verified by bookkeepers, but a public model-code repository is not a released business dataset."
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "repository.json",
+            "url": "https://api.github.com/repos/justinadrmun/stellargraph",
+            "final_url": "https://api.github.com/repos/justinadrmun/stellargraph",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:40.711752+00:00",
+            "bytes": 17487,
+            "sha256": "7653de96fd717a63e83070cc3202c6366561ddf54f543064583aaa98c43b04ac"
+          },
+          {
+            "file": "readme.md",
+            "url": "https://raw.githubusercontent.com/justinadrmun/stellargraph/master/README.md",
+            "final_url": "https://raw.githubusercontent.com/justinadrmun/stellargraph/master/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:41.414308+00:00",
+            "bytes": 21590,
+            "sha256": "31956ed2be78a499d06cd9985d07ee317a1289f6cf5d671578259c8c9057fe7f"
+          }
+        ],
+        "errors": []
+      },
+      "business_dataset_audits": 0,
+      "matching_accepted": false,
+      "matcher_runs": 0,
+      "inspection": {
+        "kind": "code_availability_inspection",
+        "default_branch": "develop",
+        "repository_is_public": true,
+        "interpretation": "Public graph library code exists; no public link to the paper's business corpus verified"
+      },
+      "status": "provenance_or_access_inspected"
+    },
+    {
+      "source_id": "docile",
+      "manifest": {
+        "source_id": "docile",
+        "spec_hash": "0116920f2b108221a822b9f58d7b68544d7dbd9ef8d4bbe19811078f900dbf9c",
+        "source": {
+          "kind": "document_extraction_benchmark",
+          "source_page": "https://docile.rossum.ai/",
+          "requests": {
+            "readme.md": "https://raw.githubusercontent.com/rossumai/docile/main/README.md",
+            "dataset_page.html": "https://docile.rossum.ai/"
+          },
+          "limits": "Invoice/document field extraction labels are not invoice-bank allocations. Annotated and synthetic subsets must be separated. No access form submitted."
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "readme.md",
+            "url": "https://raw.githubusercontent.com/rossumai/docile/main/README.md",
+            "final_url": "https://raw.githubusercontent.com/rossumai/docile/main/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:40.712529+00:00",
+            "bytes": 14114,
+            "sha256": "33816bb56d19f8e3401cc68a89d7878b17376160cfd8780a2f4397d60d02d3bf"
+          },
+          {
+            "file": "dataset_page.html",
+            "url": "https://docile.rossum.ai/",
+            "final_url": "https://docile.rossum.ai/",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:41.368350+00:00",
+            "bytes": 13740,
+            "sha256": "f86f48e41dffc126252b3660ee9c678b446caaf2d39ce1f0cb5d23fb8fb65c1b"
+          }
+        ],
+        "errors": []
+      },
+      "business_dataset_audits": 0,
+      "matching_accepted": false,
+      "matcher_runs": 0,
+      "inspection": {
+        "kind": "access_and_task_inspection",
+        "readme_requires_token": true,
+        "page_mentions_access_request": true,
+        "page_separates_synthetic": true,
+        "interpretation": "Research access process; document extraction benchmark, no bank allocation labels established"
+      },
+      "status": "provenance_or_access_inspected"
+    },
+    {
+      "source_id": "bankstatemently",
+      "manifest": {
+        "source_id": "bankstatemently",
+        "spec_hash": "328b04517327ef86cfa99eb418d44a48edad1d2a46099ffa850cade38b2cc921",
+        "source": {
+          "kind": "synthetic_parser_benchmark",
+          "source_page": "https://github.com/bankstatemently/bank-statement-parsing-benchmark",
+          "requests": {
+            "readme.md": "https://raw.githubusercontent.com/bankstatemently/bank-statement-parsing-benchmark/main/README.md"
+          },
+          "limits": "Synthetic statements despite real-world formatting claims; excluded as evidence on real business data. No PDFs or evaluation service used."
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "readme.md",
+            "url": "https://raw.githubusercontent.com/bankstatemently/bank-statement-parsing-benchmark/main/README.md",
+            "final_url": "https://raw.githubusercontent.com/bankstatemently/bank-statement-parsing-benchmark/main/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:41.980278+00:00",
+            "bytes": 29143,
+            "sha256": "8a1f774785ac30c64ccd4f15bf4b9e8a2077cc6b4ec46aaa03de169eacb204d2"
+          }
+        ],
+        "errors": []
+      },
+      "business_dataset_audits": 0,
+      "matching_accepted": false,
+      "matcher_runs": 0,
+      "inspection": {
+        "kind": "provenance_inspection",
+        "declares_synthetic": true,
+        "interpretation": "Excluded from real-data validation; no synthetic statement counted as a real account"
+      },
+      "status": "provenance_or_access_inspected"
+    },
+    {
+      "source_id": "erpnext",
+      "manifest": {
+        "source_id": "erpnext",
+        "spec_hash": "741cb2e4b5644ffae1494b4d71f345979d9c605a274cdaa939c2b80f4b60f943",
+        "source": {
+          "kind": "erp_export_schema",
+          "source_page": "https://docs.frappe.io/erpnext/bank-reconciliation",
+          "requests": {
+            "sales_invoice.json": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/sales_invoice/sales_invoice.json",
+            "payment_entry_reference.json": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/payment_entry_reference/payment_entry_reference.json",
+            "bank_transaction.json": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/bank_transaction/bank_transaction.json",
+            "bank_transaction_payments.json": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/bank_transaction_payments/bank_transaction_payments.json"
+          },
+          "limits": "Official develop-branch schemas describe an export route, not actual company records. Exact bytes/hashes preserved; production version and permissions still need checking."
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "sales_invoice.json",
+            "url": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/sales_invoice/sales_invoice.json",
+            "final_url": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/sales_invoice/sales_invoice.json",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:41.988961+00:00",
+            "bytes": 56653,
+            "sha256": "386b6911003b72a40f3e523fa25e83b4b9c26bb509704d534d0aa949841ad8f5"
+          },
+          {
+            "file": "payment_entry_reference.json",
+            "url": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/payment_entry_reference/payment_entry_reference.json",
+            "final_url": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/payment_entry_reference/payment_entry_reference.json",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:42.470710+00:00",
+            "bytes": 4061,
+            "sha256": "25180787cb1f5ae6820fbda5fd94d24016da3590ed65126c9f260a94d68aca9d"
+          },
+          {
+            "file": "bank_transaction.json",
+            "url": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/bank_transaction/bank_transaction.json",
+            "final_url": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/bank_transaction/bank_transaction.json",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:42.925811+00:00",
+            "bytes": 7063,
+            "sha256": "fc738adcab193f8b5ed0c7ccc5b9bf91db8248517e775ec7c1e68cf258837c28"
+          },
+          {
+            "file": "bank_transaction_payments.json",
+            "url": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/bank_transaction_payments/bank_transaction_payments.json",
+            "final_url": "https://raw.githubusercontent.com/frappe/erpnext/develop/erpnext/accounts/doctype/bank_transaction_payments/bank_transaction_payments.json",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:43.356057+00:00",
+            "bytes": 1477,
+            "sha256": "c1ae8072a58d3e3221968d818bcb7ba40ec0f618febc00ea499076d895d13ce4"
+          }
+        ],
+        "errors": []
+      },
+      "business_dataset_audits": 0,
+      "matching_accepted": false,
+      "matcher_runs": 0,
+      "inspection": {
+        "kind": "official_schema_inspection",
+        "schemas": {
+          "sales_invoice": {
+            "schema_field_count": 235,
+            "required_present": [
+              "currency",
+              "customer",
+              "due_date",
+              "grand_total",
+              "outstanding_amount"
+            ],
+            "required_missing": []
+          },
+          "payment_entry_reference": {
+            "schema_field_count": 20,
+            "required_present": [
+              "allocated_amount",
+              "reference_doctype",
+              "reference_name"
+            ],
+            "required_missing": []
+          },
+          "bank_transaction": {
+            "schema_field_count": 37,
+            "required_present": [
+              "bank_account",
+              "currency",
+              "date",
+              "deposit",
+              "payment_entries",
+              "withdrawal"
+            ],
+            "required_missing": []
+          },
+          "bank_transaction_payments": {
+            "schema_field_count": 5,
+            "required_present": [
+              "allocated_amount",
+              "clearance_date",
+              "payment_document",
+              "payment_entry"
+            ],
+            "required_missing": []
+          }
+        },
+        "all_proposed_fields_present": true,
+        "interpretation": "Schema can guide a pilot export; no instance export, business data or mapping accuracy checked"
+      },
+      "status": "schema_inspected"
+    },
+    {
+      "source_id": "misa",
+      "manifest": {
+        "source_id": "misa",
+        "spec_hash": "3d8e353722c495064d0156a647ffec6dfcb51a964dc2f33b6bffc08d3cf41e51",
+        "source": {
+          "kind": "local_erp_export_route",
+          "source_page": "https://developer.misa.vn/?lang=vi",
+          "requests": {
+            "portal.html": "https://developer.misa.vn/?lang=vi",
+            "invoice_receipts.html": "https://helpact.misa.vn/kb/lam-the-nao-khi-khong-thay-chuc-nang-thu-tien-theo-hoa-don/"
+          },
+          "limits": "Product supports invoice-level receipt workflows, but export/API field coverage and historical bank links not established. No account registered or private records accessed."
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "portal.html",
+            "url": "https://developer.misa.vn/?lang=vi",
+            "final_url": "https://developer.misa.vn/?lang=vi",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:42.523733+00:00",
+            "bytes": 4772,
+            "sha256": "58703b81d14def573ea9407ba68b58899136ba19f2641189bf6c7662003f3d3d"
+          },
+          {
+            "file": "invoice_receipts.html",
+            "url": "https://helpact.misa.vn/kb/lam-the-nao-khi-khong-thay-chuc-nang-thu-tien-theo-hoa-don/",
+            "final_url": "https://helpact.misa.vn/kb/lam-the-nao-khi-khong-thay-chuc-nang-thu-tien-theo-hoa-don/",
+            "status": 200,
+            "checked_at_utc": "2026-10-19T04:42:42.692959+00:00",
+            "bytes": 93796,
+            "sha256": "3aea5c2e33c3ad29845623c74b5735250b253706b543b47135d930f291307e6a"
+          }
+        ],
+        "errors": []
+      },
+      "business_dataset_audits": 0,
+      "matching_accepted": false,
+      "matcher_runs": 0,
+      "inspection": {
+        "kind": "product_workflow_inspection",
+        "portal_mentions_open_api": false,
+        "portal_mentions_sandbox": false,
+        "help_mentions_invoice_level_receivables": true,
+        "interpretation": "Static HTML keyword checks only; absence is inconclusive for JS pages. Actual export columns, API entitlement and independent bank mappings still untested"
+      },
+      "status": "provenance_or_access_inspected"
+    }
+  ],
+  "business_dataset_audits": 0,
+  "matcher_runs": 0,
+  "scope": "Executed access/provenance/schema checks. No business dataset or model benchmark run.",
+  "limits": "No credential, account registration, form submission or execution of downloaded code. Cached snapshots, including failures, are reused; choose a new input folder to retry."
+}

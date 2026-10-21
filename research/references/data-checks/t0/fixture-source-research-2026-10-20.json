@@ -1,0 +1,1260 @@
+{
+  "checked_at_utc": "2026-10-20T14:56:58.089042+00:00",
+  "client_research_date": "2026-10-20",
+  "script_sha256": "1c311362b9da7bd32abb4acf58c411929136836c500a01bef1b7d13870bb8e07",
+  "sources": [
+    {
+      "source_id": "erpnext",
+      "manifest": {
+        "source_id": "erpnext",
+        "spec_hash": "164f9d63f31c536d275473cb53124c3016e88ab8d56701513493a7ae769e37c3",
+        "source": {
+          "kind": "software_test_fixtures",
+          "revision": "064e673b84ff119ed995f261a5e47446d8259b19",
+          "page": "https://github.com/frappe/erpnext",
+          "license_scope": "GPL-3.0 software; inspect license.txt; not private company data",
+          "requests": {
+            "license.txt": "https://raw.githubusercontent.com/frappe/erpnext/064e673b84ff119ed995f261a5e47446d8259b19/license.txt",
+            "erpnext/accounts/doctype/payment_reconciliation/test_payment_reconciliation.py": "https://raw.githubusercontent.com/frappe/erpnext/064e673b84ff119ed995f261a5e47446d8259b19/erpnext/accounts/doctype/payment_reconciliation/test_payment_reconciliation.py",
+            "erpnext/accounts/doctype/bank_transaction/test_bank_transaction.py": "https://raw.githubusercontent.com/frappe/erpnext/064e673b84ff119ed995f261a5e47446d8259b19/erpnext/accounts/doctype/bank_transaction/test_bank_transaction.py",
+            "erpnext/setup/demo_data/payment_entry.json": "https://raw.githubusercontent.com/frappe/erpnext/064e673b84ff119ed995f261a5e47446d8259b19/erpnext/setup/demo_data/payment_entry.json"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "license.txt",
+            "url": "https://raw.githubusercontent.com/frappe/erpnext/064e673b84ff119ed995f261a5e47446d8259b19/license.txt",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:35.182751+00:00",
+            "bytes": 35149,
+            "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+          },
+          {
+            "file": "erpnext/accounts/doctype/payment_reconciliation/test_payment_reconciliation.py",
+            "url": "https://raw.githubusercontent.com/frappe/erpnext/064e673b84ff119ed995f261a5e47446d8259b19/erpnext/accounts/doctype/payment_reconciliation/test_payment_reconciliation.py",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:35.774295+00:00",
+            "bytes": 101921,
+            "sha256": "5dea96bbf922f5f6649eba00bbf3bddca8490fb8516f66fb3d24e9be972a3d3a"
+          },
+          {
+            "file": "erpnext/accounts/doctype/bank_transaction/test_bank_transaction.py",
+            "url": "https://raw.githubusercontent.com/frappe/erpnext/064e673b84ff119ed995f261a5e47446d8259b19/erpnext/accounts/doctype/bank_transaction/test_bank_transaction.py",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:36.245247+00:00",
+            "bytes": 12426,
+            "sha256": "6830134e25ab9eca1327141aa7d13157c130fb2cedfb2183c9ebefcbe0e1e9bf"
+          }
+        ],
+        "errors": [
+          {
+            "file": "erpnext/setup/demo_data/payment_entry.json",
+            "url": "https://raw.githubusercontent.com/frappe/erpnext/064e673b84ff119ed995f261a5e47446d8259b19/erpnext/setup/demo_data/payment_entry.json",
+            "checked_at_utc": "2026-10-20T14:53:36.635387+00:00",
+            "error_type": "HTTPError",
+            "http_status": 404,
+            "reason": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      "real_business_datasets_added": 0,
+      "matcher_runs": 0,
+      "matching_accepted": false,
+      "inspection": {
+        "file_profiles": {
+          "erpnext/accounts/doctype/bank_transaction/test_bank_transaction.py": {
+            "test_functions": [
+              "test_linked_payments",
+              "test_reconcile",
+              "test_cancel_voucher",
+              "test_clearance_date_cleared_on_amend",
+              "test_debit_credit_output",
+              "test_already_reconciled",
+              "test_clear_sales_invoice",
+              "test_matching_loan_repayment"
+            ],
+            "external_code_executed": false
+          },
+          "erpnext/accounts/doctype/payment_reconciliation/test_payment_reconciliation.py": {
+            "test_functions": [
+              "test_voucher_outstanding_metadata_comes_from_one_ledger_entry",
+              "test_voucher_outstanding_splits_by_party_account",
+              "test_invoice_limit_keeps_a_voucher_outstanding_on_one_account",
+              "test_filter_min_max",
+              "test_filter_posting_date",
+              "test_filter_posting_date_case2",
+              "test_filter_invoice_limit",
+              "test_payment_against_invoice",
+              "test_payment_against_journal",
+              "test_payment_against_foreign_currency_journal",
+              "test_journal_against_invoice",
+              "test_negative_debit_or_credit_journal_against_invoice",
+              "test_journal_against_journal",
+              "test_cr_note_against_invoice",
+              "test_invoice_status_after_cr_note_cancellation",
+              "test_cr_note_partial_against_invoice",
+              "test_pr_output_foreign_currency_and_amount",
+              "test_difference_amount_via_journal_entry",
+              "test_exchange_gain_loss_split_default_account",
+              "test_payment_reconciliation_difference_account_override",
+              "test_difference_amount_via_negative_debit_or_credit_journal_entry",
+              "test_difference_amount_via_payment_entry",
+              "test_differing_cost_center_on_invoice_and_payment",
+              "test_cost_center_filter_on_vouchers",
+              "test_user_permission_on_accounting_dimension_filters_vouchers",
+              "test_no_difference_amount_for_base_currency_accounts",
+              "test_reconciliation_purchase_invoice_against_return",
+              "test_reconciliation_from_purchase_order_to_multiple_invoices",
+              "test_rounding_of_unallocated_amount",
+              "test_allocate_entries_rounds_running_balance_to_currency_precision",
+              "test_allocate_entries_rounds_running_balance_to_account_currency_precision",
+              "test_reverse_payment_against_payment_for_supplier",
+              "test_advance_reverse_payment_against_payment_for_supplier",
+              "test_advance_payment_reconciliation_date",
+              "test_advance_payment_reconciliation_date_for_older_date",
+              "test_advance_payment_reconciliation_against_journal_for_customer",
+              "test_advance_payment_reconciliation_against_journal_for_supplier",
+              "test_cr_note_payment_limit_filter",
+              "test_reconciliation_on_closed_period_payment",
+              "test_advance_reconciliation_effect_on_same_date",
+              "test_partial_advance_payment_with_closed_fiscal_year",
+              "test_foreign_currency_reverse_payment_entry_against_payment_entry_for_customer",
+              "test_foreign_currency_reverse_payment_entry_against_payment_entry_for_supplier",
+              "test_foreign_currency_reverse_payment_entry_gain_for_supplier",
+              "test_foreign_currency_reverse_journal_entry_against_journal_entry_for_customer",
+              "test_foreign_currency_reverse_journal_entry_against_journal_entry_for_supplier",
+              "test_cr_note_split_across_invoices_floating_point_precision"
+            ],
+            "external_code_executed": false
+          }
+        },
+        "record_audits": {}
+      },
+      "status": "inspected_with_access_gaps"
+    },
+    {
+      "source_id": "oca",
+      "manifest": {
+        "source_id": "oca",
+        "spec_hash": "473a6b28a22e3a6f7d7e33523890b6448090e78730b3f2586b9b25f93407d693",
+        "source": {
+          "kind": "software_test_fixtures",
+          "revision": "2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3",
+          "page": "https://github.com/OCA/account-reconcile/tree/18.0",
+          "license_scope": "Repository license plus module manifest; verify per-module terms before copying",
+          "requests": {
+            "LICENSE": "https://raw.githubusercontent.com/OCA/account-reconcile/2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3/LICENSE",
+            "account_mass_reconcile/__manifest__.py": "https://raw.githubusercontent.com/OCA/account-reconcile/2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3/account_mass_reconcile/__manifest__.py",
+            "account_mass_reconcile/tests/test_reconcile.py": "https://raw.githubusercontent.com/OCA/account-reconcile/2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3/account_mass_reconcile/tests/test_reconcile.py",
+            "account_move_base_import/tests/data/statement.csv": "https://raw.githubusercontent.com/OCA/account-reconcile/2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3/account_move_base_import/tests/data/statement.csv"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "LICENSE",
+            "url": "https://raw.githubusercontent.com/OCA/account-reconcile/2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3/LICENSE",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:35.183585+00:00",
+            "bytes": 34523,
+            "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+          },
+          {
+            "file": "account_mass_reconcile/__manifest__.py",
+            "url": "https://raw.githubusercontent.com/OCA/account-reconcile/2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3/account_mass_reconcile/__manifest__.py",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:35.758756+00:00",
+            "bytes": 629,
+            "sha256": "0da9b92cfd32f4458fee42bb2357d067c82ebd1fa70c7e24a5c7381f525903df"
+          },
+          {
+            "file": "account_mass_reconcile/tests/test_reconcile.py",
+            "url": "https://raw.githubusercontent.com/OCA/account-reconcile/2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3/account_mass_reconcile/tests/test_reconcile.py",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:36.191020+00:00",
+            "bytes": 2649,
+            "sha256": "ebc2ec4270fbaa05a210926bd972d3f8775df9dbfad57c520401e123dac44546"
+          },
+          {
+            "file": "account_move_base_import/tests/data/statement.csv",
+            "url": "https://raw.githubusercontent.com/OCA/account-reconcile/2da3bc0d9d2e6e3c34af25326d1d6130b4ac59e3/account_move_base_import/tests/data/statement.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:36.596128+00:00",
+            "bytes": 155,
+            "sha256": "2eb671b4322cd0318530bbc8975ce362f5e0a0b272e9f9f36616857e4aaab28f"
+          }
+        ],
+        "errors": []
+      },
+      "real_business_datasets_added": 0,
+      "matcher_runs": 0,
+      "matching_accepted": false,
+      "inspection": {
+        "file_profiles": {
+          "account_mass_reconcile/__manifest__.py": {
+            "test_functions": [],
+            "external_code_executed": false
+          },
+          "account_mass_reconcile/tests/test_reconcile.py": {
+            "test_functions": [
+              "test_last_history",
+              "test_last_history_empty",
+              "test_last_history_full_no_history",
+              "test_open_unreconcile",
+              "test_prepare_run_transient",
+              "test_open_full_empty",
+              "test_open_full_empty_from_method"
+            ],
+            "external_code_executed": false
+          },
+          "account_move_base_import/tests/data/statement.csv": {
+            "rows": 3,
+            "fields": [
+              "date;amount;commission_amount;label"
+            ]
+          }
+        },
+        "record_audits": {}
+      },
+      "status": "inspected"
+    },
+    {
+      "source_id": "recbench",
+      "manifest": {
+        "source_id": "recbench",
+        "spec_hash": "d6b7546cbb9396bd7431c559c0755ba2c5a2a37061a500fc0803a4ab243465fc",
+        "source": {
+          "kind": "synthetic_settlement_benchmark",
+          "revision": "8cf65de21434a480cb3a499e3c39246c9e8b744a",
+          "page": "https://huggingface.co/datasets/end-close/recbench",
+          "license_scope": "Dataset card declares CC BY 4.0; code availability not verified",
+          "requests": {
+            "README.md": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/README.md",
+            "small/manifest.json": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/manifest.json",
+            "small/csv/payouts.csv": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/payouts.csv",
+            "small/csv/bank_statements.csv": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/bank_statements.csv",
+            "small/csv/truth_payout_bank.csv": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/truth_payout_bank.csv",
+            "small/csv/labels_payout.csv": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/labels_payout.csv",
+            "small/csv/labels_bank.csv": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/labels_bank.csv"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "README.md",
+            "url": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:35.183482+00:00",
+            "bytes": 4572,
+            "sha256": "d57987e1fc575aaca485f813307defed6f34bf561b95bd812a15113788d73d3f"
+          },
+          {
+            "file": "small/manifest.json",
+            "url": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/manifest.json",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:36.006605+00:00",
+            "bytes": 2479,
+            "sha256": "aa003554ae4f40e10f910907c075626587f4e5a2cb68b324cd18a0819d815506"
+          },
+          {
+            "file": "small/csv/payouts.csv",
+            "url": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/payouts.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:36.351170+00:00",
+            "bytes": 6403725,
+            "sha256": "8492da56afbba6214816e14d40ad9d9d8a7e0aa3b2352e28038001c602b4175b"
+          },
+          {
+            "file": "small/csv/bank_statements.csv",
+            "url": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/bank_statements.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:37.694665+00:00",
+            "bytes": 8558008,
+            "sha256": "3138a7d04904037e364d6256a770bc7bb8f54d64b73e47ca229fef85a2acbb6c"
+          },
+          {
+            "file": "small/csv/truth_payout_bank.csv",
+            "url": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/truth_payout_bank.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:38.824715+00:00",
+            "bytes": 1725069,
+            "sha256": "fb94c0464e8e42a62b8a85a623c4d4a9097d958200f6d783a460008d13d9108b"
+          },
+          {
+            "file": "small/csv/labels_payout.csv",
+            "url": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/labels_payout.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:39.433694+00:00",
+            "bytes": 1523599,
+            "sha256": "68093d91c60c30e0756b67a8af04a547df4644873ee8d2921a1986cb5c1a195c"
+          },
+          {
+            "file": "small/csv/labels_bank.csv",
+            "url": "https://huggingface.co/datasets/end-close/recbench/resolve/8cf65de21434a480cb3a499e3c39246c9e8b744a/small/csv/labels_bank.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:40.259645+00:00",
+            "bytes": 1953922,
+            "sha256": "ac809af8a819703026db33d7e39c26b710f00f64436b6107a790e30fad5a3d26"
+          }
+        ],
+        "errors": []
+      },
+      "real_business_datasets_added": 0,
+      "matcher_runs": 0,
+      "matching_accepted": false,
+      "inspection": {
+        "file_profiles": {
+          "small/csv/bank_statements.csv": {
+            "rows": 75138,
+            "fields": [
+              "stmt_line_id",
+              "bank_account",
+              "currency",
+              "amount_minor",
+              "value_date",
+              "counterparty",
+              "reference",
+              "direction"
+            ]
+          },
+          "small/csv/labels_bank.csv": {
+            "rows": 75138,
+            "fields": [
+              "stmt_line_id",
+              "match_type",
+              "is_matchable"
+            ]
+          },
+          "small/csv/labels_payout.csv": {
+            "rows": 75002,
+            "fields": [
+              "payout_id",
+              "level",
+              "is_matchable",
+              "member_count"
+            ]
+          },
+          "small/csv/payouts.csv": {
+            "rows": 73955,
+            "fields": [
+              "payout_id",
+              "payout_ref",
+              "processor",
+              "entity_id",
+              "settle_currency",
+              "amount_minor",
+              "line_count",
+              "sales_date",
+              "expected_arrival_date"
+            ]
+          },
+          "small/csv/truth_payout_bank.csv": {
+            "rows": 75002,
+            "fields": [
+              "payout_id",
+              "stmt_line_id"
+            ]
+          }
+        },
+        "record_audits": {
+          "complete_same_currency_groups": 73955,
+          "complete_groups_equal_amount": 73955,
+          "groups_skipped_incomplete_observed_endpoints": 1047,
+          "truth_rows_with_payout_absent_from_observed_table": 1047,
+          "truth_rows_with_bank_absent": 0,
+          "duplicate_truth_edges": 0,
+          "bank_ids_with_multiple_truth_payouts": 0,
+          "payout_ids_with_multiple_bank_links": 0,
+          "bank_currencies": {
+            "USD": 39685,
+            "EUR": 21859,
+            "GBP": 13594
+          },
+          "bank_labels": {
+            "payout_a": 67440,
+            "payout_b": 6515,
+            "unmatched": 136,
+            "payout_c": 1047
+          },
+          "payout_labels": {
+            "a": 67440,
+            "b": 6515,
+            "c": 1047
+          },
+          "ledger_settlement_tables_audited": false,
+          "manifest_parquet_hashes_verified": false
+        }
+      },
+      "status": "inspected"
+    },
+    {
+      "source_id": "finrca",
+      "manifest": {
+        "source_id": "finrca",
+        "spec_hash": "60a01feffdee067d4f9ac36c3cf821f40c423a0082530d22dede2daf137d0f6d",
+        "source": {
+          "kind": "synthetic_accounts_payable_benchmark",
+          "revision": "76c93ec32536e29826e2ab9e68b58e0351410bc7",
+          "page": "https://github.com/PratikGhawate/FinRCA-AI-Bench",
+          "license_scope": "Repository MIT license; no separate dataset license established by this inspection",
+          "requests": {
+            "README.md": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/README.md",
+            "LICENSE": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/LICENSE",
+            "docs/data_dictionary.md": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/docs/data_dictionary.md",
+            "docs/failure_taxonomy.md": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/docs/failure_taxonomy.md",
+            "data/benchmark/train/rca_ground_truth.jsonl": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/train/rca_ground_truth.jsonl",
+            "data/raw_clean/invoices.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/invoices.csv",
+            "data/raw_clean/payments.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/payments.csv",
+            "data/raw_clean/payment_allocations.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/payment_allocations.csv",
+            "data/raw_clean/bank_transactions.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/bank_transactions.csv",
+            "data/raw_clean/bank_statements.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/bank_statements.csv",
+            "data/benchmark/full/invoices.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/invoices.csv",
+            "data/benchmark/full/payments.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/payments.csv",
+            "data/benchmark/full/payment_allocations.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/payment_allocations.csv",
+            "data/benchmark/full/bank_transactions.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/bank_transactions.csv",
+            "data/benchmark/full/bank_statements.csv": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/bank_statements.csv"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "README.md",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:35.183322+00:00",
+            "bytes": 13449,
+            "sha256": "26438e17925818bf8ff216b1a4cfe10574fc0a31a6f61401dc21885487efdca1"
+          },
+          {
+            "file": "LICENSE",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/LICENSE",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:35.744719+00:00",
+            "bytes": 1065,
+            "sha256": "485457c4afff7eefb93d99cbef5b9b91a6da05577246b17ed9427861b52d86e9"
+          },
+          {
+            "file": "docs/data_dictionary.md",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/docs/data_dictionary.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:35.869609+00:00",
+            "bytes": 5399,
+            "sha256": "3061fa32d016ddc77c236ec1d25658dbc9ebe8e1a859cb78425f116f63023476"
+          },
+          {
+            "file": "docs/failure_taxonomy.md",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/docs/failure_taxonomy.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:36.261833+00:00",
+            "bytes": 16290,
+            "sha256": "1e8de87b49b9cd34921efea20ce6efc581d27ecd2e6a0321feb102bd15ffb900"
+          },
+          {
+            "file": "data/benchmark/train/rca_ground_truth.jsonl",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/train/rca_ground_truth.jsonl",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:36.657781+00:00",
+            "bytes": 1257887,
+            "sha256": "7f1fe32586637450c558633f2b20c090f9e7031257582ef24dbc141d68b279b5"
+          },
+          {
+            "file": "data/raw_clean/invoices.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/invoices.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:37.370803+00:00",
+            "bytes": 1211176,
+            "sha256": "f8f9557e7907a7d8a99fdfdfdad425f71b7513ca5cc76c0ab8f2224d148a22df"
+          },
+          {
+            "file": "data/raw_clean/payments.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/payments.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:37.752077+00:00",
+            "bytes": 796323,
+            "sha256": "e9e7975a804c1566a721febe22db282af2374cc4d8c085183a14da7bc1f08d9c"
+          },
+          {
+            "file": "data/raw_clean/payment_allocations.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/payment_allocations.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:38.074024+00:00",
+            "bytes": 353949,
+            "sha256": "42c47f95e7e35fe07d5aadbb4671054e0570a766184847625483b97472d0c156"
+          },
+          {
+            "file": "data/raw_clean/bank_transactions.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/bank_transactions.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:38.351106+00:00",
+            "bytes": 938434,
+            "sha256": "6f12d8e185f2b6d5a08bcf6b656e35cde216b29e266cea546814c32ecca66bd3"
+          },
+          {
+            "file": "data/raw_clean/bank_statements.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/raw_clean/bank_statements.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:38.820569+00:00",
+            "bytes": 4909,
+            "sha256": "f264f1816323d34747d6b3f7e7c7f0f164ffc8120edb030a2fa9f946bdb955fd"
+          },
+          {
+            "file": "data/benchmark/full/invoices.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/invoices.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:39.297769+00:00",
+            "bytes": 1234475,
+            "sha256": "49a529ab18e6b0d2373cbf9ab5352a5ab1df74580907ef96900af012e85416e8"
+          },
+          {
+            "file": "data/benchmark/full/payments.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/payments.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:40.079681+00:00",
+            "bytes": 823402,
+            "sha256": "0289a1fe560edb8afc5f199d2dc6f485e08f14c805bffa532b4781f9e474c2f2"
+          },
+          {
+            "file": "data/benchmark/full/payment_allocations.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/payment_allocations.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:41.647565+00:00",
+            "bytes": 358928,
+            "sha256": "0bff28018ce3053352ba3e41d084d931d6cede03bfa12ca05e5e4332b3b441aa"
+          },
+          {
+            "file": "data/benchmark/full/bank_transactions.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/bank_transactions.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:42.279826+00:00",
+            "bytes": 970897,
+            "sha256": "3692b353dda734eb89eb4f90c547493112852d90cff291f0b816719544fca513"
+          },
+          {
+            "file": "data/benchmark/full/bank_statements.csv",
+            "url": "https://raw.githubusercontent.com/PratikGhawate/FinRCA-AI-Bench/76c93ec32536e29826e2ab9e68b58e0351410bc7/data/benchmark/full/bank_statements.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:45.044351+00:00",
+            "bytes": 5279,
+            "sha256": "03ae8c7053d9f496ac1572e8935a3e7a90a932bb7174b06e8f5a1256ef8c2933"
+          }
+        ],
+        "errors": []
+      },
+      "real_business_datasets_added": 0,
+      "matcher_runs": 0,
+      "matching_accepted": false,
+      "inspection": {
+        "file_profiles": {
+          "data/benchmark/full/bank_statements.csv": {
+            "rows": 57,
+            "fields": [
+              "bank_statement_id",
+              "bank_account_id",
+              "statement_date",
+              "opening_balance",
+              "closing_balance",
+              "total_debits",
+              "total_credits",
+              "source_system"
+            ]
+          },
+          "data/benchmark/full/bank_transactions.csv": {
+            "rows": 6263,
+            "fields": [
+              "bank_transaction_id",
+              "bank_account_id",
+              "transaction_date",
+              "posted_date",
+              "transaction_type",
+              "amount",
+              "currency",
+              "direction",
+              "bank_reference",
+              "counterparty_token",
+              "payment_reference",
+              "status",
+              "source_system"
+            ]
+          },
+          "data/benchmark/full/invoices.csv": {
+            "rows": 8147,
+            "fields": [
+              "invoice_id",
+              "vendor_id",
+              "po_id",
+              "invoice_number",
+              "invoice_date",
+              "received_date",
+              "due_date",
+              "currency",
+              "subtotal",
+              "tax",
+              "shipping",
+              "invoice_total",
+              "payment_terms",
+              "status",
+              "duplicate_reference",
+              "created_at",
+              "source_system"
+            ]
+          },
+          "data/benchmark/full/payment_allocations.csv": {
+            "rows": 7180,
+            "fields": [
+              "payment_id",
+              "invoice_id",
+              "allocated_amount",
+              "allocation_date",
+              "source_system"
+            ]
+          },
+          "data/benchmark/full/payments.csv": {
+            "rows": 6200,
+            "fields": [
+              "payment_id",
+              "vendor_id",
+              "payment_date",
+              "payment_method",
+              "payment_currency",
+              "payment_amount",
+              "bank_account_id",
+              "payment_status",
+              "settlement_status",
+              "reference_number",
+              "created_at",
+              "source_system"
+            ]
+          },
+          "data/benchmark/train/rca_ground_truth.jsonl": {
+            "rows": 1192,
+            "fields": [
+              "affected_entities",
+              "affected_systems",
+              "case_id",
+              "difficulty",
+              "evidence_ids",
+              "evidence_required",
+              "expected_resolution",
+              "failure_type",
+              "group_vendor_id",
+              "injected_timestamp",
+              "observed_symptom",
+              "primary_entity",
+              "reasoning_hops",
+              "root_cause",
+              "root_cause_category",
+              "scenario_variant",
+              "severity",
+              "split"
+            ]
+          },
+          "data/raw_clean/bank_statements.csv": {
+            "rows": 54,
+            "fields": [
+              "bank_statement_id",
+              "bank_account_id",
+              "statement_date",
+              "opening_balance",
+              "closing_balance",
+              "total_debits",
+              "total_credits",
+              "source_system"
+            ]
+          },
+          "data/raw_clean/bank_transactions.csv": {
+            "rows": 6063,
+            "fields": [
+              "bank_transaction_id",
+              "bank_account_id",
+              "transaction_date",
+              "posted_date",
+              "transaction_type",
+              "amount",
+              "currency",
+              "direction",
+              "bank_reference",
+              "counterparty_token",
+              "payment_reference",
+              "status",
+              "source_system"
+            ]
+          },
+          "data/raw_clean/invoices.csv": {
+            "rows": 8000,
+            "fields": [
+              "invoice_id",
+              "vendor_id",
+              "po_id",
+              "invoice_number",
+              "invoice_date",
+              "received_date",
+              "due_date",
+              "currency",
+              "subtotal",
+              "tax",
+              "shipping",
+              "invoice_total",
+              "payment_terms",
+              "status",
+              "duplicate_reference",
+              "created_at",
+              "source_system"
+            ]
+          },
+          "data/raw_clean/payment_allocations.csv": {
+            "rows": 7080,
+            "fields": [
+              "payment_id",
+              "invoice_id",
+              "allocated_amount",
+              "allocation_date",
+              "source_system"
+            ]
+          },
+          "data/raw_clean/payments.csv": {
+            "rows": 6000,
+            "fields": [
+              "payment_id",
+              "vendor_id",
+              "payment_date",
+              "payment_method",
+              "payment_currency",
+              "payment_amount",
+              "bank_account_id",
+              "payment_status",
+              "settlement_status",
+              "reference_number",
+              "created_at",
+              "source_system"
+            ]
+          }
+        },
+        "record_audits": {
+          "raw_clean": {
+            "duplicate_allocation_pairs": 0,
+            "cross_currency_edges": 0,
+            "cross_vendor_edges": 0,
+            "invoices_with_multiple_payments": 1080,
+            "payments_with_multiple_invoices": 1080,
+            "invoices_no_allocation": 2000,
+            "invoices_partly_allocated": 0,
+            "invoices_overallocated": 0,
+            "payments_overallocated_same_currency": 0,
+            "bank_rows_with_unique_payment_reference": 6063,
+            "bank_reference_is_confirmed_truth": false,
+            "statement_equation_failures": 0,
+            "statement_totals_checked_against_transactions": false
+          },
+          "benchmark/full": {
+            "duplicate_allocation_pairs": 0,
+            "cross_currency_edges": 0,
+            "cross_vendor_edges": 0,
+            "invoices_with_multiple_payments": 1162,
+            "payments_with_multiple_invoices": 1080,
+            "invoices_no_allocation": 2147,
+            "invoices_partly_allocated": 100,
+            "invoices_overallocated": 147,
+            "payments_overallocated_same_currency": 0,
+            "bank_rows_with_unique_payment_reference": 6163,
+            "bank_reference_is_confirmed_truth": false,
+            "statement_equation_failures": 0,
+            "statement_totals_checked_against_transactions": false
+          },
+          "train_label_fields": [
+            "affected_entities",
+            "affected_systems",
+            "case_id",
+            "difficulty",
+            "evidence_ids",
+            "evidence_required",
+            "expected_resolution",
+            "failure_type",
+            "group_vendor_id",
+            "injected_timestamp",
+            "observed_symptom",
+            "primary_entity",
+            "reasoning_hops",
+            "root_cause",
+            "root_cause_category",
+            "scenario_variant",
+            "severity",
+            "split"
+          ]
+        }
+      },
+      "status": "inspected"
+    },
+    {
+      "source_id": "finbalance",
+      "manifest": {
+        "source_id": "finbalance",
+        "spec_hash": "0bcb0c2916f56a2bf3e7d50bed3d7f3d4d54d0b83ece9f6f4e1ff2537b72de7b",
+        "source": {
+          "kind": "synthetic_document_accounting_benchmark",
+          "revision": "a1062b7b392eaf53311308c2f63cf748b68bb8cf",
+          "page": "https://github.com/Devansh1105/finbalance",
+          "license_scope": "DATA_LICENSE.md explicitly covers generated data under CC BY 4.0; software license separate",
+          "requests": {
+            "README.md": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/README.md",
+            "LICENSE": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/LICENSE",
+            "DATA_LICENSE.md": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/DATA_LICENSE.md",
+            "data/README.md": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/data/README.md",
+            "data/coverage/records.jsonl": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/data/coverage/records.jsonl"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "README.md",
+            "url": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:37.064903+00:00",
+            "bytes": 12649,
+            "sha256": "490551e0f8cd9bc851c30c21055b75997417dc7cb42237119cf6b97dd40b1080"
+          },
+          {
+            "file": "LICENSE",
+            "url": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/LICENSE",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:37.505997+00:00",
+            "bytes": 10174,
+            "sha256": "9568a2b155e66ac3e0ba1fd80b52b827b9460e6cf6f233125e7cbca8e206ddc3"
+          },
+          {
+            "file": "DATA_LICENSE.md",
+            "url": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/DATA_LICENSE.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:38.055255+00:00",
+            "bytes": 2167,
+            "sha256": "c3103b5aac603bebc267ac4433b4840ec2b4eb342ba93fe16a530a9fc8f86c1b"
+          },
+          {
+            "file": "data/README.md",
+            "url": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/data/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:38.180589+00:00",
+            "bytes": 3095,
+            "sha256": "8e07f3ef49dd5b8269dea29216b6740f9ef730b143aaef2f4207bb26f8a80ee7"
+          },
+          {
+            "file": "data/coverage/records.jsonl",
+            "url": "https://raw.githubusercontent.com/Devansh1105/finbalance/a1062b7b392eaf53311308c2f63cf748b68bb8cf/data/coverage/records.jsonl",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:39.172420+00:00",
+            "bytes": 4262261,
+            "sha256": "c1568a30ac43401047e3b1c19f672359ed2dadfd977aa0d1bc36dd6b2cd41580"
+          }
+        ],
+        "errors": []
+      },
+      "real_business_datasets_added": 0,
+      "matcher_runs": 0,
+      "matching_accepted": false,
+      "inspection": {
+        "file_profiles": {
+          "data/coverage/records.jsonl": {
+            "rows": 143,
+            "fields": [
+              "allowed_accounts",
+              "difficulty_level",
+              "documents",
+              "expected_balance_sheet",
+              "expected_entries",
+              "expected_inconsistency",
+              "expected_inconsistency_codes",
+              "inconsistency_reasons",
+              "industry",
+              "metadata",
+              "opening_balance",
+              "period_end",
+              "period_start",
+              "record_id"
+            ]
+          }
+        },
+        "record_audits": {
+          "coverage_records": 143,
+          "documents": 2567,
+          "document_types": {
+            "opening_trial_balance": 143,
+            "customer_invoice": 230,
+            "cancellation_note": 53,
+            "vendor_invoice": 134,
+            "expense_receipt": 67,
+            "bank_statement": 173,
+            "memo": 64,
+            "payment_advice": 212,
+            "rent_notice": 20,
+            "payroll_summary": 90,
+            "service_period_memo": 64,
+            "lease_agreement": 14,
+            "loan_statement": 95,
+            "equipment_invoice": 47,
+            "lease_payment_notice": 14,
+            "asset_disposal_notice": 14,
+            "sale_proceeds_advice": 14,
+            "transfer_advice": 30,
+            "utilities_statement": 56,
+            "depreciation_schedule": 35,
+            "lease_amortization_schedule": 23,
+            "insurance_notice": 15,
+            "lease_modification_notice": 9,
+            "tax_depreciation_schedule": 18,
+            "deferred_tax_memo": 18,
+            "retainer_agreement_memo": 15,
+            "revenue_recognition_schedule": 33,
+            "reclassification_memo": 5,
+            "exchange_rate_notice": 11,
+            "ar_aging_summary": 15,
+            "credit_memo": 21,
+            "vendor_statement": 41,
+            "secondary_copy": 53,
+            "fixed_asset_rollforward": 18,
+            "fx_remeasurement_memo": 7,
+            "work_order": 25,
+            "supplier_invoice": 115,
+            "sales_summary": 30,
+            "pos_batch_report": 30,
+            "card_settlement_report": 12,
+            "stock_count_sheet": 35,
+            "inventory_adjustment_note": 18,
+            "return_note": 8,
+            "inventory_rollforward": 17,
+            "goods_receipt_note": 22,
+            "delivery_note": 26,
+            "tax_regime_notice": 9,
+            "tax_exemption_certificate": 9,
+            "customer_tax_profile": 9,
+            "patient_invoice": 71,
+            "insurer_remittance": 12,
+            "copay_receipt": 12,
+            "rent_roll": 44,
+            "security_deposit_notice": 34,
+            "material_requisition_slip": 15,
+            "production_batch_sheet": 15,
+            "finished_goods_transfer_note": 15,
+            "direct_labor_record": 12,
+            "overhead_accrual_memo": 9,
+            "scrap_report": 6,
+            "subscription_order_form": 47,
+            "ssp_rate_card": 10,
+            "implementation_acceptance_memo": 10,
+            "performance_obligation_schedule": 10,
+            "renewal_notice": 9
+          },
+          "record_fields": [
+            "allowed_accounts",
+            "difficulty_level",
+            "documents",
+            "expected_balance_sheet",
+            "expected_entries",
+            "expected_inconsistency",
+            "expected_inconsistency_codes",
+            "inconsistency_reasons",
+            "industry",
+            "metadata",
+            "opening_balance",
+            "period_end",
+            "period_start",
+            "record_id"
+          ],
+          "pdfs_downloaded": false,
+          "ledger_replayed": false
+        }
+      },
+      "status": "inspected"
+    },
+    {
+      "source_id": "fiscus",
+      "manifest": {
+        "source_id": "fiscus",
+        "spec_hash": "6dcdbae32e3087e7a39e03f8273da8a052dd77cce5581cd7dad0bccffa65c91e",
+        "source": {
+          "kind": "synthetic_workflow_state_fixtures",
+          "revision": "86178237e0c5d75f4ff08b6452cbd9b2d25cb061",
+          "page": "https://data.mendeley.com/datasets/w7tk797ngc/1",
+          "license_scope": "Mendeley v1 and HF card declare CC BY 4.0",
+          "requests": {
+            "README.md": "https://huggingface.co/datasets/keaxe21/fiscus-financial-workflow-state-fixtures/resolve/86178237e0c5d75f4ff08b6452cbd9b2d25cb061/README.md",
+            "data/financial_workflow_state_fixtures.jsonl": "https://huggingface.co/datasets/keaxe21/fiscus-financial-workflow-state-fixtures/resolve/86178237e0c5d75f4ff08b6452cbd9b2d25cb061/data/financial_workflow_state_fixtures.jsonl"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "README.md",
+            "url": "https://huggingface.co/datasets/keaxe21/fiscus-financial-workflow-state-fixtures/resolve/86178237e0c5d75f4ff08b6452cbd9b2d25cb061/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:37.177038+00:00",
+            "bytes": 4255,
+            "sha256": "5024b63275248491aee80ac00a98156f239205140990367fc91f2e3b77013a4f"
+          },
+          {
+            "file": "data/financial_workflow_state_fixtures.jsonl",
+            "url": "https://huggingface.co/datasets/keaxe21/fiscus-financial-workflow-state-fixtures/resolve/86178237e0c5d75f4ff08b6452cbd9b2d25cb061/data/financial_workflow_state_fixtures.jsonl",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:37.765573+00:00",
+            "bytes": 11399,
+            "sha256": "a4f618e6c8a01f93a78383142200ba89d1afca81bdba9f280f9053cb12ab1666"
+          }
+        ],
+        "errors": []
+      },
+      "real_business_datasets_added": 0,
+      "matcher_runs": 0,
+      "matching_accepted": false,
+      "inspection": {
+        "file_profiles": {
+          "data/financial_workflow_state_fixtures.jsonl": {
+            "rows": 25,
+            "fields": [
+              "approval_state",
+              "audit_required",
+              "case_id",
+              "domain",
+              "event",
+              "expected_status",
+              "external_result",
+              "financial_effect",
+              "initial_status",
+              "rationale_tr",
+              "reason_code",
+              "retry_policy"
+            ]
+          }
+        },
+        "record_audits": {
+          "domains": {
+            "bank_reconciliation": 4,
+            "invoice": 4,
+            "e_document": 4,
+            "expense": 3,
+            "collection": 3,
+            "exchange_rate": 2,
+            "ledger": 3,
+            "organization_access": 2
+          },
+          "expected_statuses": {
+            "approved": 1,
+            "committed": 5,
+            "review_required": 6,
+            "rejected": 4,
+            "reversal_required": 2,
+            "submitted": 1,
+            "submitted_status_unknown": 1,
+            "rejected_by_provider": 1,
+            "suggested": 1,
+            "collected": 2,
+            "verified": 1
+          },
+          "published_jsonl_hash_matches": true
+        }
+      },
+      "status": "inspected"
+    },
+    {
+      "source_id": "invoice_sample",
+      "manifest": {
+        "source_id": "invoice_sample",
+        "spec_hash": "0bd404c802c2fb2b8c06f47b18404d598be5ea18794acd03473241d65723a6b8",
+        "source": {
+          "kind": "constructed_invoice_payment_sample",
+          "revision": "ed946c293697575a7ed1bf9bc27488bea2052ea0",
+          "page": "https://github.com/RichieGarafola/invoice-reconciliation-tool",
+          "license_scope": "Repository LICENSE; constructed sample, not verified company records",
+          "requests": {
+            "README.md": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/README.md",
+            "LICENSE": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/LICENSE",
+            "data/sample_invoices.csv": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/data/sample_invoices.csv",
+            "data/sample_payments.csv": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/data/sample_payments.csv",
+            "scripts/generate_sample_data.py": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/scripts/generate_sample_data.py"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "README.md",
+            "url": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:38.123095+00:00",
+            "bytes": 17007,
+            "sha256": "f856c68c83b7d175106b1a9f76a4155a08d89b511c3116c4db9e16ea5e7bea9e"
+          },
+          {
+            "file": "LICENSE",
+            "url": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/LICENSE",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:38.581555+00:00",
+            "bytes": 1072,
+            "sha256": "c8849e8c5e298031bbad1e012c27a98e0c892f8e870f20f283000fb6b9ff2ca2"
+          },
+          {
+            "file": "data/sample_invoices.csv",
+            "url": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/data/sample_invoices.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:39.557344+00:00",
+            "bytes": 3309,
+            "sha256": "21b7abc180bf8c51bd0e2cfec0fa6dec86e75b7fe7303499f35d1703607cc47e"
+          },
+          {
+            "file": "data/sample_payments.csv",
+            "url": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/data/sample_payments.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:40.066389+00:00",
+            "bytes": 1741,
+            "sha256": "11dbf708b87d49bd9b83e0184841bf9ca84dabf6c7a8d985e2809ce6eaec5c00"
+          },
+          {
+            "file": "scripts/generate_sample_data.py",
+            "url": "https://raw.githubusercontent.com/RichieGarafola/invoice-reconciliation-tool/ed946c293697575a7ed1bf9bc27488bea2052ea0/scripts/generate_sample_data.py",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:40.512564+00:00",
+            "bytes": 5929,
+            "sha256": "51ba3468339fd935c81e4daa75b4935783362ad59f455f5feabd89a4bd0689ca"
+          }
+        ],
+        "errors": []
+      },
+      "real_business_datasets_added": 0,
+      "matcher_runs": 0,
+      "matching_accepted": false,
+      "inspection": {
+        "file_profiles": {
+          "data/sample_invoices.csv": {
+            "rows": 35,
+            "fields": [
+              "invoice_id",
+              "client",
+              "issue_date",
+              "due_date",
+              "amount",
+              "description"
+            ]
+          },
+          "data/sample_payments.csv": {
+            "rows": 33,
+            "fields": [
+              "payment_id",
+              "invoice_id",
+              "payment_date",
+              "amount_paid",
+              "payment_method"
+            ]
+          },
+          "scripts/generate_sample_data.py": {
+            "test_functions": [],
+            "external_code_executed": false
+          }
+        },
+        "record_audits": {
+          "invoice_payment_status_counts": {
+            "orphan_payment_rows": 0,
+            "paid": 22,
+            "unpaid": 10,
+            "overpaid": 1,
+            "partial": 2
+          },
+          "explicit_invoice_id_already_in_payment": true,
+          "independent_bank_observation_present": false
+        }
+      },
+      "status": "inspected"
+    },
+    {
+      "source_id": "invoice_matcher",
+      "manifest": {
+        "source_id": "invoice_matcher",
+        "spec_hash": "485b9010a26e916dfbccaac2173a490387e7c7f03779bdd54468283caa4140b9",
+        "source": {
+          "kind": "software_demo_fixtures",
+          "revision": "1b1e4a4e14acb22503ca7d8dae821115aee3cb12",
+          "page": "https://github.com/realtonkaa/invoice-payment-matcher",
+          "license_scope": "Repository LICENSE; demo provenance only, no independent SME truth established",
+          "requests": {
+            "README.md": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/README.md",
+            "LICENSE": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/LICENSE",
+            "tests/fixtures/sample_bank.csv": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/tests/fixtures/sample_bank.csv",
+            "tests/fixtures/sample_invoices/invoice_001.txt": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/tests/fixtures/sample_invoices/invoice_001.txt",
+            "tests/fixtures/sample_invoices/invoice_002.txt": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/tests/fixtures/sample_invoices/invoice_002.txt",
+            "tests/fixtures/sample_invoices/invoice_003.txt": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/tests/fixtures/sample_invoices/invoice_003.txt"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "README.md",
+            "url": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/README.md",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:39.832127+00:00",
+            "bytes": 11720,
+            "sha256": "32368cde43fe2ab3d6254859bf98132bb158296fd003a05ee5e26185b914a073"
+          },
+          {
+            "file": "LICENSE",
+            "url": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/LICENSE",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:40.354179+00:00",
+            "bytes": 1067,
+            "sha256": "628d01042ed658e374c195bdfa91dd43c1c9669b98ad67df7475294113d0bd5f"
+          },
+          {
+            "file": "tests/fixtures/sample_bank.csv",
+            "url": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/tests/fixtures/sample_bank.csv",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:40.761665+00:00",
+            "bytes": 246,
+            "sha256": "2a248e630ccba8abcab0a85578f08c65eeb5df80bbafcadb4b8c1c72792dc925"
+          },
+          {
+            "file": "tests/fixtures/sample_invoices/invoice_001.txt",
+            "url": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/tests/fixtures/sample_invoices/invoice_001.txt",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:41.272926+00:00",
+            "bytes": 979,
+            "sha256": "4b6c76d0a132311d55f113a2ca5b84746c80e1c1e9aaadfbbf8e72afafb34fdb"
+          },
+          {
+            "file": "tests/fixtures/sample_invoices/invoice_002.txt",
+            "url": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/tests/fixtures/sample_invoices/invoice_002.txt",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:41.800407+00:00",
+            "bytes": 564,
+            "sha256": "f704d38fe642e06d9e93d79b884d8321e0d25c9c3cbc7b29ba6c535aa0a4663d"
+          },
+          {
+            "file": "tests/fixtures/sample_invoices/invoice_003.txt",
+            "url": "https://raw.githubusercontent.com/realtonkaa/invoice-payment-matcher/1b1e4a4e14acb22503ca7d8dae821115aee3cb12/tests/fixtures/sample_invoices/invoice_003.txt",
+            "status": 200,
+            "checked_at_utc": "2026-10-20T14:53:42.278950+00:00",
+            "bytes": 922,
+            "sha256": "a0ff2ef74a7cc4430e68332045db683e09cbbefed7e1a0f107141c4a73d138d9"
+          }
+        ],
+        "errors": []
+      },
+      "real_business_datasets_added": 0,
+      "matcher_runs": 0,
+      "matching_accepted": false,
+      "inspection": {
+        "file_profiles": {
+          "tests/fixtures/sample_bank.csv": {
+            "rows": 4,
+            "fields": [
+              "Date",
+              "Description",
+              "Amount",
+              "Type"
+            ]
+          }
+        },
+        "record_audits": {}
+      },
+      "status": "inspected"
+    }
+  ],
+  "scope": "Pinned public fixture downloads, static source inspection and bounded tabular/JSONL audits; no upstream code, matcher or training run",
+  "real_business_datasets_added": 0,
+  "matcher_runs": 0,
+  "limits": "Synthetic/demo fixtures are not SME validation. CSV hashes are local provenance, not verification of RecBench parquet release hashes. Historical labels and workflow expectations are not interchangeable with exhaustive invoice-bank amount truth."
+}

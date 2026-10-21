@@ -1,0 +1,17 @@
+{
+  "schema": "t0-offline-benchmark-v2",
+  "frozen_on": "2026-10-21",
+  "task": "synthetic_AR_invoice_payment",
+  "seeds": {"validation": [2101, 2102], "test": [9101, 9102]},
+  "blocks": 4,
+  "profiles": ["clean", "masked"],
+  "methods": ["exact_reference", "amount_date", "scored_global", "reference_then_global", "v2_no_amount_groups", "v2_no_overpayment", "v2_full"],
+  "allocation_config": {"max_age_days": 120, "max_group_size": 3, "max_group_pool": 12},
+  "feature_allowlist": {
+    "invoices": ["tenant_id", "id", "invoice_number", "party_id", "currency", "side", "amount_minor", "issued_on"],
+    "payments": ["tenant_id", "id", "reference", "party_id", "currency", "side", "amount_minor", "payment_on"]
+  },
+  "scope": "New synthetic capability cases; no SME distribution or domain holdout. Old four baselines frozen. No threshold tuning on test.",
+  "unknown_policy": "FinRCA bank-link quality null until oracle verified; RecBench missing endpoints unknown; FinBalance unsupported documents explicit",
+  "budgets": "Deterministic pool <=12 and group <=3; overflow is review, never truncate"
+}

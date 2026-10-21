@@ -1,0 +1,4580 @@
+{
+  "schema": "t0-offline-evidence-v2",
+  "checked_at_utc": "2026-10-20T21:16:11.264069+00:00",
+  "code_hashes": {
+    "t0/__init__.py": "e06e6f30a0ddf461da54e69bd0f0c8bbdd678e7d4606238497a1aa5f4496a403",
+    "t0/__main__.py": "eee0bc81a44ad1a81d48a2f8783ab18eeea8c0845e34261f85e8425775b024b9",
+    "t0/adapters.py": "96613caf9c8f6bc2082f115eb6ea03f717760183568aac1165440b68bdb94edd",
+    "t0/allocation.py": "4348242d8d98f5e65efb5a7d77e36c05dcd4f64ec5bb4b8a8474b706fd68fcfe",
+    "t0/benchrec.py": "6581ce974886812dff504de97009c264a599b6e2ebfc4f7a73f3f8f801f66aee",
+    "t0/data.py": "e5f36f8222c60d9161cd62be98cdbb1c598874ccf338ad6c2a0a279653ebf503",
+    "t0/evaluation.py": "3aadfc8025d37b23357115c5722efb5022f35a9260890891d6a6880da4aa4b0a",
+    "t0/journal.py": "9c6f2d1b00bfd40be7eeb8c7e5cd938a88c69cd5a9dbcda126d00fa0d96d81a9",
+    "t0/ledger.py": "c06f3eec44a0ed50e49c0c19a67f2aeb5c92d7852ae4ea3c726b9af4f0b2c199",
+    "t0/matching.py": "d3bc92b6cf2996f441a52198c63bd18f2b943a3a6a7477f3de90455d5ac0ef40",
+    "t0/offline.py": "af8b25295fabd6d3021034634cff87376fd82fbaad346744fb58841375f466c6",
+    "t0/scenarios.py": "ebc4f64e344b40fd1c1bca7218bcaff60939197ef1edae26eff386e2e99435ef",
+    "t0/settlement.py": "2af35120ff65e03e18369291823f34b747b2e8686642f6ddbde9cf06216ba39a"
+  },
+  "plan_hash": "e53a968ee20266698a6c22486306997d1d2b99be091881110e0748365949f20e",
+  "checks": {
+    "ar_invariants": true,
+    "ar_order_stability": true,
+    "fiscus": true
+  },
+  "ar_summary": [
+    {
+      "split": "validation",
+      "profile": "clean",
+      "method": "exact_reference",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.7692307692307693,
+          "std": 0.0,
+          "min": 0.7692307692307693,
+          "max": 0.7692307692307693
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.012042649992508814,
+          "std": 0.00013258252262493054,
+          "min": 0.011948899991693906,
+          "max": 0.012136399993323721
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 410900000,
+            "std": 138310086.4000887,
+            "min": 313100000,
+            "max": 508700000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 434900000,
+            "std": 138310086.4000887,
+            "min": 337100000,
+            "max": 532700000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 709500000,
+            "std": 230516810.6668145,
+            "min": 546500000,
+            "max": 872500000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 337850,
+            "std": 108823.73362460967,
+            "min": 260900,
+            "max": 414800
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 361850,
+            "std": 108823.73362460967,
+            "min": 284900,
+            "max": 438800
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 587750,
+            "std": 181372.88937434944,
+            "min": 459500,
+            "max": 716000
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "clean",
+      "method": "amount_date",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3076923076923077,
+          "std": 0.0,
+          "min": 0.3076923076923077,
+          "max": 0.3076923076923077
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.31302515000425046,
+          "std": 0.004381445741070815,
+          "min": 0.30992700000933837,
+          "max": 0.31612329999916255
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 410900000,
+            "std": 138310086.4000887,
+            "min": 313100000,
+            "max": 508700000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 434900000,
+            "std": 138310086.4000887,
+            "min": 337100000,
+            "max": 532700000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 709500000,
+            "std": 230516810.6668145,
+            "min": 546500000,
+            "max": 872500000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 337850,
+            "std": 108823.73362460967,
+            "min": 260900,
+            "max": 414800
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 361850,
+            "std": 108823.73362460967,
+            "min": 284900,
+            "max": 438800
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 587750,
+            "std": 181372.88937434944,
+            "min": 459500,
+            "max": 716000
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "clean",
+      "method": "scored_global",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3076923076923077,
+          "std": 0.0,
+          "min": 0.3076923076923077,
+          "max": 0.3076923076923077
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.35101695000048494,
+          "std": 0.0400467804194333,
+          "min": 0.322699600001215,
+          "max": 0.3793342999997549
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 410900000,
+            "std": 138310086.4000887,
+            "min": 313100000,
+            "max": 508700000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 434900000,
+            "std": 138310086.4000887,
+            "min": 337100000,
+            "max": 532700000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 709500000,
+            "std": 230516810.6668145,
+            "min": 546500000,
+            "max": 872500000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 337850,
+            "std": 108823.73362460967,
+            "min": 260900,
+            "max": 414800
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 361850,
+            "std": 108823.73362460967,
+            "min": 284900,
+            "max": 438800
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 587750,
+            "std": 181372.88937434944,
+            "min": 459500,
+            "max": 716000
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "clean",
+      "method": "reference_then_global",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.5384615384615384,
+          "std": 0.0,
+          "min": 0.5384615384615384,
+          "max": 0.5384615384615384
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.8461538461538461,
+          "std": 0.0,
+          "min": 0.8461538461538461,
+          "max": 0.8461538461538461
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.15001145000132965,
+          "std": 0.0149500051223594,
+          "min": 0.1394402000005357,
+          "max": 0.1605827000021236
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 556000000,
+            "std": 184413448.5334516,
+            "min": 425600000,
+            "max": 686400000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 289800000,
+            "std": 92206724.2667258,
+            "min": 224600000,
+            "max": 355000000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 564400000,
+            "std": 184413448.5334516,
+            "min": 434000000,
+            "max": 694800000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 458600,
+            "std": 145098.31149947955,
+            "min": 356000,
+            "max": 561200
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 241100,
+            "std": 72549.15574973977,
+            "min": 189800,
+            "max": 292400
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 467000,
+            "std": 145098.31149947955,
+            "min": 364400,
+            "max": 569600
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "clean",
+      "method": "v2_no_amount_groups",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.6153846153846154,
+          "std": 0.0,
+          "min": 0.6153846153846154,
+          "max": 0.6153846153846154
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.004564249997201841,
+          "std": 0.00010288402776109655,
+          "min": 0.004491500003496185,
+          "max": 0.004636999990907498
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 693100000,
+            "std": 230516810.6668145,
+            "min": 530100000,
+            "max": 856100000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 152700000,
+            "std": 46103362.1333629,
+            "min": 120100000,
+            "max": 185300000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 427300000,
+            "std": 138310086.4000887,
+            "min": 329500000,
+            "max": 525100000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 571350,
+            "std": 181372.88937434944,
+            "min": 443100,
+            "max": 699600
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 128350,
+            "std": 36274.57787486989,
+            "min": 102700,
+            "max": 154000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 354250,
+            "std": 108823.73362460967,
+            "min": 277300,
+            "max": 431200
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "clean",
+      "method": "v2_no_overpayment",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.6923076923076923,
+          "std": 0.0,
+          "min": 0.6923076923076923,
+          "max": 0.6923076923076923
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.00392364999424899,
+          "std": 7.926666665082816e-05,
+          "min": 0.003867599996738136,
+          "max": 0.003979699991759844
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 566400000,
+            "std": 184413448.5334516,
+            "min": 436000000,
+            "max": 696800000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 279400000,
+            "std": 92206724.2667258,
+            "min": 214200000,
+            "max": 344600000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 554000000,
+            "std": 184413448.5334516,
+            "min": 423600000,
+            "max": 684400000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 469000,
+            "std": 145098.31149947955,
+            "min": 366400,
+            "max": 571600
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 230700,
+            "std": 72549.15574973977,
+            "min": 179400,
+            "max": 282000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 456600,
+            "std": 145098.31149947955,
+            "min": 354000,
+            "max": 559200
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "clean",
+      "method": "v2_full",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.7692307692307693,
+          "std": 0.0,
+          "min": 0.7692307692307693,
+          "max": 0.7692307692307693
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.004907399998046458,
+          "std": 0.001327522274866861,
+          "min": 0.003968699995311908,
+          "max": 0.005846100000781007
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 703500000,
+            "std": 230516810.6668145,
+            "min": 540500000,
+            "max": 866500000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 142300000,
+            "std": 46103362.1333629,
+            "min": 109700000,
+            "max": 174900000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 416900000,
+            "std": 138310086.4000887,
+            "min": 319100000,
+            "max": 514700000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 581750,
+            "std": 181372.88937434944,
+            "min": 453500,
+            "max": 710000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 117950,
+            "std": 36274.57787486989,
+            "min": 92300,
+            "max": 143600
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 343850,
+            "std": 108823.73362460967,
+            "min": 266900,
+            "max": 420800
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "masked",
+      "method": "exact_reference",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.125,
+          "std": 0.013598207330510521,
+          "min": 0.11538461538461539,
+          "max": 0.1346153846153846
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.35096153846153844,
+          "std": 0.00679910366525528,
+          "min": 0.34615384615384615,
+          "max": 0.3557692307692308
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.010715099997469224,
+          "std": 0.00017069558022927167,
+          "min": 0.010594399995170534,
+          "max": 0.010835799999767914
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 297150000,
+            "std": 124945768.23566295,
+            "min": 208800000,
+            "max": 385500000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 548650000,
+            "std": 151674404.56451446,
+            "min": 441400000,
+            "max": 655900000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 823250000,
+            "std": 243881128.83124024,
+            "min": 650800000,
+            "max": 995700000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 129800,
+            "std": 12162.236636408617,
+            "min": 121200,
+            "max": 138400
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 569900,
+            "std": 205485.2306128107,
+            "min": 424600,
+            "max": 715200
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 795800,
+            "std": 278034.3863625505,
+            "min": 599200,
+            "max": 992400
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "masked",
+      "method": "amount_date",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3076923076923077,
+          "std": 0.0,
+          "min": 0.3076923076923077,
+          "max": 0.3076923076923077
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.3008258499976364,
+          "std": 0.015189572892435742,
+          "min": 0.2900852000020677,
+          "max": 0.31156649999320507
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 410900000,
+            "std": 138310086.4000887,
+            "min": 313100000,
+            "max": 508700000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 434900000,
+            "std": 138310086.4000887,
+            "min": 337100000,
+            "max": 532700000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 709500000,
+            "std": 230516810.6668145,
+            "min": 546500000,
+            "max": 872500000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 337850,
+            "std": 108823.73362460967,
+            "min": 260900,
+            "max": 414800
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 361850,
+            "std": 108823.73362460967,
+            "min": 284900,
+            "max": 438800
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 587750,
+            "std": 181372.88937434944,
+            "min": 459500,
+            "max": 716000
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "masked",
+      "method": "scored_global",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3076923076923077,
+          "std": 0.0,
+          "min": 0.3076923076923077,
+          "max": 0.3076923076923077
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.31800594999367604,
+          "std": 0.020859862171326477,
+          "min": 0.30325579999771435,
+          "max": 0.33275609998963773
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 410900000,
+            "std": 138310086.4000887,
+            "min": 313100000,
+            "max": 508700000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 434900000,
+            "std": 138310086.4000887,
+            "min": 337100000,
+            "max": 532700000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 709500000,
+            "std": 230516810.6668145,
+            "min": 546500000,
+            "max": 872500000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 337850,
+            "std": 108823.73362460967,
+            "min": 260900,
+            "max": 414800
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 361850,
+            "std": 108823.73362460967,
+            "min": 284900,
+            "max": 438800
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 587750,
+            "std": 181372.88937434944,
+            "min": 459500,
+            "max": 716000
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "masked",
+      "method": "reference_then_global",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.3557692307692307,
+          "std": 0.013598207330510521,
+          "min": 0.34615384615384615,
+          "max": 0.36538461538461536
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.5673076923076923,
+          "std": 0.0,
+          "min": 0.5673076923076923,
+          "max": 0.5673076923076923
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.21675530000356957,
+          "std": 0.013853070365096016,
+          "min": 0.20695970000815578,
+          "max": 0.22655089999898337
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 506750000,
+            "std": 126077139.08556142,
+            "min": 417600000,
+            "max": 595900000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 339050000,
+            "std": 150543033.71461597,
+            "min": 232600000,
+            "max": 445500000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 613650000,
+            "std": 242749757.98134178,
+            "min": 442000000,
+            "max": 785300000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 408400,
+            "std": 85418.49916733494,
+            "min": 348000,
+            "max": 468800
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 291300,
+            "std": 132228.96808188438,
+            "min": 197800,
+            "max": 384800
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 517200,
+            "std": 204778.12383162417,
+            "min": 372400,
+            "max": 662000
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "masked",
+      "method": "v2_no_amount_groups",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.375,
+          "std": 0.0,
+          "min": 0.375,
+          "max": 0.375
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.9038461538461539,
+          "std": 0.013598207330510481,
+          "min": 0.8942307692307693,
+          "max": 0.9134615384615384
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.0036629999958677217,
+          "std": 0.00015952329033328135,
+          "min": 0.003550199995515868,
+          "max": 0.0037757999962195754
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 547433334,
+            "std": 165133002.69028935,
+            "min": 430666668,
+            "max": 664200000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 298366666,
+            "std": 111487170.10988803,
+            "min": 219533332,
+            "max": 377200000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 572966666,
+            "std": 203693894.37661383,
+            "min": 428933332,
+            "max": 717000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 462967,
+            "std": 81363.94888401128,
+            "min": 405434,
+            "max": 520500
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 236733,
+            "std": 136283.51836520806,
+            "min": 140366,
+            "max": 333100
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 462633,
+            "std": 208832.67411494782,
+            "min": 314966,
+            "max": 610300
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "masked",
+      "method": "v2_no_overpayment",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.625,
+          "std": 0.013598207330510481,
+          "min": 0.6153846153846154,
+          "max": 0.6346153846153846
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.9038461538461539,
+          "std": 0.013598207330510481,
+          "min": 0.8942307692307693,
+          "max": 0.9134615384615384
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.0034243499976582825,
+          "std": 0.00018660548047472143,
+          "min": 0.003292399997008033,
+          "max": 0.003556299998308532
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 506383334,
+            "std": 129848374.30908063,
+            "min": 414566668,
+            "max": 598200000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 339416666,
+            "std": 146771798.49109676,
+            "min": 235633332,
+            "max": 443200000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 614016666,
+            "std": 238978522.75782254,
+            "min": 445033332,
+            "max": 783000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 417617,
+            "std": 92748.3680611147,
+            "min": 352034,
+            "max": 483200
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 282083,
+            "std": 124899.09918810464,
+            "min": 193766,
+            "max": 370400
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 507983,
+            "std": 197448.2549378444,
+            "min": 368366,
+            "max": 647600
+          }
+        }
+      }
+    },
+    {
+      "split": "validation",
+      "profile": "masked",
+      "method": "v2_full",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.6634615384615385,
+          "std": 0.027196414661021042,
+          "min": 0.6442307692307693,
+          "max": 0.6826923076923077
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.9038461538461539,
+          "std": 0.013598207330510481,
+          "min": 0.8942307692307693,
+          "max": 0.9134615384615384
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.0038511499951709993,
+          "std": 0.00012734992346990066,
+          "min": 0.0037611000007018447,
+          "max": 0.003941199989640154
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 1120400000,
+            "std": 368826897.0669032,
+            "min": 859600000,
+            "max": 1381200000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 565833334,
+            "std": 165133002.69028935,
+            "min": 449066668,
+            "max": 682600000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 279966666,
+            "std": 111487170.10988803,
+            "min": 201133332,
+            "max": 358800000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 554566666,
+            "std": 203693894.37661383,
+            "min": 410533332,
+            "max": 698600000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 925600,
+            "std": 290196.6229989591,
+            "min": 720400,
+            "max": 1130800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 479367,
+            "std": 78535.52175926509,
+            "min": 423834,
+            "max": 534900
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 220333,
+            "std": 139111.94548995423,
+            "min": 121966,
+            "max": 318700
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 446233,
+            "std": 211661.10123969402,
+            "min": 296566,
+            "max": 595900
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "clean",
+      "method": "exact_reference",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.7692307692307693,
+          "std": 0.0,
+          "min": 0.7692307692307693,
+          "max": 0.7692307692307693
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.012020800000755116,
+          "std": 0.0007010256707289939,
+          "min": 0.011525099995196797,
+          "max": 0.012516500006313436
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 361250000,
+            "std": 145310443.53383553,
+            "min": 258500000,
+            "max": 464000000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 385250000,
+            "std": 145310443.53383553,
+            "min": 282500000,
+            "max": 488000000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 626750000,
+            "std": 242184072.55639252,
+            "min": 455500000,
+            "max": 798000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 323900,
+            "std": 28849.95667241114,
+            "min": 303500,
+            "max": 344300
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 347900,
+            "std": 28849.95667241114,
+            "min": 327500,
+            "max": 368300
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 564500,
+            "std": 48083.26112068523,
+            "min": 530500,
+            "max": 598500
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "clean",
+      "method": "amount_date",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3076923076923077,
+          "std": 0.0,
+          "min": 0.3076923076923077,
+          "max": 0.3076923076923077
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.32955875000334345,
+          "std": 0.011229492080349986,
+          "min": 0.32161830000404734,
+          "max": 0.33749920000263955
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 361250000,
+            "std": 145310443.53383553,
+            "min": 258500000,
+            "max": 464000000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 385250000,
+            "std": 145310443.53383553,
+            "min": 282500000,
+            "max": 488000000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 626750000,
+            "std": 242184072.55639252,
+            "min": 455500000,
+            "max": 798000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 323900,
+            "std": 28849.95667241114,
+            "min": 303500,
+            "max": 344300
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 347900,
+            "std": 28849.95667241114,
+            "min": 327500,
+            "max": 368300
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 564500,
+            "std": 48083.26112068523,
+            "min": 530500,
+            "max": 598500
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "clean",
+      "method": "scored_global",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3076923076923077,
+          "std": 0.0,
+          "min": 0.3076923076923077,
+          "max": 0.3076923076923077
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.3114348500021151,
+          "std": 0.009273493297571767,
+          "min": 0.30487750000611413,
+          "max": 0.3179921999981161
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 361250000,
+            "std": 145310443.53383553,
+            "min": 258500000,
+            "max": 464000000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 385250000,
+            "std": 145310443.53383553,
+            "min": 282500000,
+            "max": 488000000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 626750000,
+            "std": 242184072.55639252,
+            "min": 455500000,
+            "max": 798000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 323900,
+            "std": 28849.95667241114,
+            "min": 303500,
+            "max": 344300
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 347900,
+            "std": 28849.95667241114,
+            "min": 327500,
+            "max": 368300
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 564500,
+            "std": 48083.26112068523,
+            "min": 530500,
+            "max": 598500
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "clean",
+      "method": "reference_then_global",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.5384615384615384,
+          "std": 0.0,
+          "min": 0.5384615384615384,
+          "max": 0.5384615384615384
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.8461538461538461,
+          "std": 0.0,
+          "min": 0.8461538461538461,
+          "max": 0.8461538461538461
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.14612304999900516,
+          "std": 0.03765916366358911,
+          "min": 0.11949399999866728,
+          "max": 0.17275209999934305
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 489800000,
+            "std": 193747258.045114,
+            "min": 352800000,
+            "max": 626800000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 256700000,
+            "std": 96873629.022557,
+            "min": 188200000,
+            "max": 325200000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 498200000,
+            "std": 193747258.045114,
+            "min": 361200000,
+            "max": 635200000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 440000,
+            "std": 38466.60889654818,
+            "min": 412800,
+            "max": 467200
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 231800,
+            "std": 19233.30444827409,
+            "min": 218200,
+            "max": 245400
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 448400,
+            "std": 38466.60889654818,
+            "min": 421200,
+            "max": 475600
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "clean",
+      "method": "v2_no_amount_groups",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.6153846153846154,
+          "std": 0.0,
+          "min": 0.6153846153846154,
+          "max": 0.6153846153846154
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.004034799996588845,
+          "std": 0.0003558161354463135,
+          "min": 0.0037831999943591654,
+          "max": 0.004286399998818524
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 610350000,
+            "std": 242184072.55639252,
+            "min": 439100000,
+            "max": 781600000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 136150000,
+            "std": 48436814.5112785,
+            "min": 101900000,
+            "max": 170400000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 377650000,
+            "std": 145310443.53383553,
+            "min": 274900000,
+            "max": 480400000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 548100,
+            "std": 48083.26112068523,
+            "min": 514100,
+            "max": 582100
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 123700,
+            "std": 9616.652224137046,
+            "min": 116900,
+            "max": 130500
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 340300,
+            "std": 28849.95667241114,
+            "min": 319900,
+            "max": 360700
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "clean",
+      "method": "v2_no_overpayment",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.6923076923076923,
+          "std": 0.0,
+          "min": 0.6923076923076923,
+          "max": 0.6923076923076923
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.004165400001511443,
+          "std": 0.00036981683284505786,
+          "min": 0.003903900011209771,
+          "max": 0.004426899991813116
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 500200000,
+            "std": 193747258.045114,
+            "min": 363200000,
+            "max": 637200000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 246300000,
+            "std": 96873629.022557,
+            "min": 177800000,
+            "max": 314800000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 487800000,
+            "std": 193747258.045114,
+            "min": 350800000,
+            "max": 624800000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 450400,
+            "std": 38466.60889654818,
+            "min": 423200,
+            "max": 477600
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 221400,
+            "std": 19233.30444827409,
+            "min": 207800,
+            "max": 235000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 438000,
+            "std": 38466.60889654818,
+            "min": 410800,
+            "max": 465200
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "clean",
+      "method": "v2_full",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.7692307692307693,
+          "std": 0.0,
+          "min": 0.7692307692307693,
+          "max": 0.7692307692307693
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.004088400004548021,
+          "std": 1.5273499296547962e-05,
+          "min": 0.004077600009622984,
+          "max": 0.004099199999473058
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 620750000,
+            "std": 242184072.55639252,
+            "min": 449500000,
+            "max": 792000000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 125750000,
+            "std": 48436814.5112785,
+            "min": 91500000,
+            "max": 160000000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 367250000,
+            "std": 145310443.53383553,
+            "min": 264500000,
+            "max": 470000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 558500,
+            "std": 48083.26112068523,
+            "min": 524500,
+            "max": 592500
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 113300,
+            "std": 9616.652224137046,
+            "min": 106500,
+            "max": 120100
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 329900,
+            "std": 28849.95667241114,
+            "min": 309500,
+            "max": 350300
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "masked",
+      "method": "exact_reference",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.1201923076923077,
+          "std": 0.0067991036652552605,
+          "min": 0.11538461538461539,
+          "max": 0.125
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3557692307692308,
+          "std": 0.06799103665255264,
+          "min": 0.3076923076923077,
+          "max": 0.40384615384615385
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.010527250007726252,
+          "std": 0.00044300239661159427,
+          "min": 0.010214000009000301,
+          "max": 0.010840500006452203
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 229750000,
+            "std": 61871843.35382291,
+            "min": 186000000,
+            "max": 273500000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 516750000,
+            "std": 228749043.7138481,
+            "min": 355000000,
+            "max": 678500000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 758250000,
+            "std": 325622672.73640513,
+            "min": 528000000,
+            "max": 988500000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 143000,
+            "std": 31678.38379715733,
+            "min": 120600,
+            "max": 165400
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 528800,
+            "std": 26021.529547664948,
+            "min": 510400,
+            "max": 547200
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 745400,
+            "std": 45254.83399593904,
+            "min": 713400,
+            "max": 777400
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "masked",
+      "method": "amount_date",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3076923076923077,
+          "std": 0.0,
+          "min": 0.3076923076923077,
+          "max": 0.3076923076923077
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.3078136499898392,
+          "std": 0.003274965062181727,
+          "min": 0.30549789998622146,
+          "max": 0.3101293999934569
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 361250000,
+            "std": 145310443.53383553,
+            "min": 258500000,
+            "max": 464000000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 385250000,
+            "std": 145310443.53383553,
+            "min": 282500000,
+            "max": 488000000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 626750000,
+            "std": 242184072.55639252,
+            "min": 455500000,
+            "max": 798000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 323900,
+            "std": 28849.95667241114,
+            "min": 303500,
+            "max": 344300
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 347900,
+            "std": 28849.95667241114,
+            "min": 327500,
+            "max": 368300
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 564500,
+            "std": 48083.26112068523,
+            "min": 530500,
+            "max": 598500
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "masked",
+      "method": "scored_global",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.23076923076923078,
+          "std": 0.0,
+          "min": 0.23076923076923078,
+          "max": 0.23076923076923078
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.3076923076923077,
+          "std": 0.0,
+          "min": 0.3076923076923077,
+          "max": 0.3076923076923077
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.31844590000400785,
+          "std": 0.001128400991381801,
+          "min": 0.31764800001110416,
+          "max": 0.31924379999691155
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 361250000,
+            "std": 145310443.53383553,
+            "min": 258500000,
+            "max": 464000000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 385250000,
+            "std": 145310443.53383553,
+            "min": 282500000,
+            "max": 488000000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 626750000,
+            "std": 242184072.55639252,
+            "min": 455500000,
+            "max": 798000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 323900,
+            "std": 28849.95667241114,
+            "min": 303500,
+            "max": 344300
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 347900,
+            "std": 28849.95667241114,
+            "min": 327500,
+            "max": 368300
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 564500,
+            "std": 48083.26112068523,
+            "min": 530500,
+            "max": 598500
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "masked",
+      "method": "reference_then_global",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.40384615384615385,
+          "std": 0.027196414661021042,
+          "min": 0.38461538461538464,
+          "max": 0.4230769230769231
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.5817307692307693,
+          "std": 0.047593725656786844,
+          "min": 0.5480769230769231,
+          "max": 0.6153846153846154
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.19657364999875426,
+          "std": 0.010846381631402358,
+          "min": 0.18890409999585245,
+          "max": 0.20424320000165608
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 459700000,
+            "std": 227829804.89830562,
+            "min": 298600000,
+            "max": 620800000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 286800000,
+            "std": 62791082.16936542,
+            "min": 242400000,
+            "max": 331200000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 528300000,
+            "std": 159664711.19192243,
+            "min": 415400000,
+            "max": 641200000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 417850,
+            "std": 12798.63273947651,
+            "min": 408800,
+            "max": 426900
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 253950,
+            "std": 44901.28060534577,
+            "min": 222200,
+            "max": 285700
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 470550,
+            "std": 64134.58505361986,
+            "min": 425200,
+            "max": 515900
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "masked",
+      "method": "v2_no_amount_groups",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.4182692307692308,
+          "std": 0.0611919329872974,
+          "min": 0.375,
+          "max": 0.46153846153846156
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.8846153846153846,
+          "std": 0.01359820733051056,
+          "min": 0.875,
+          "max": 0.8942307692307693
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.003528950001054909,
+          "std": 7.078138240401846e-05,
+          "min": 0.0034789000055752695,
+          "max": 0.0035789999965345487
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 526333334,
+            "std": 200016939.11444378,
+            "min": 384900000,
+            "max": 667766668
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 220166666,
+            "std": 90603947.95322725,
+            "min": 156100000,
+            "max": 284233332
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 461666666,
+            "std": 187477576.97578427,
+            "min": 329100000,
+            "max": 594233332
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 433450.5,
+            "std": 19492.812636969556,
+            "min": 419667,
+            "max": 447234
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 238349.5,
+            "std": 38207.100707852725,
+            "min": 211333,
+            "max": 265366
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 454949.5,
+            "std": 57440.40515612681,
+            "min": 414333,
+            "max": 495566
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "masked",
+      "method": "v2_no_overpayment",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.625,
+          "std": 0.013598207330510481,
+          "min": 0.6153846153846154,
+          "max": 0.6346153846153846
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.8846153846153846,
+          "std": 0.01359820733051056,
+          "min": 0.875,
+          "max": 0.8942307692307693
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.004466549995413516,
+          "std": 0.0007340475516113944,
+          "min": 0.0039474999939557165,
+          "max": 0.004985599996871315
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 461183334,
+            "std": 209562880.66046217,
+            "min": 313000000,
+            "max": 609366668
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 285316666,
+            "std": 81058006.40720886,
+            "min": 228000000,
+            "max": 342633332
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 526816666,
+            "std": 177931635.42976588,
+            "min": 401000000,
+            "max": 652633332
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 411400.5,
+            "std": 7118.443966204974,
+            "min": 406367,
+            "max": 416434
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 260399.5,
+            "std": 50581.4693786173,
+            "min": 224633,
+            "max": 296166
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 476999.5,
+            "std": 69814.7738268914,
+            "min": 427633,
+            "max": 526366
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "masked",
+      "method": "v2_full",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.6682692307692308,
+          "std": 0.03399551832627628,
+          "min": 0.6442307692307693,
+          "max": 0.6923076923076923
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.8846153846153846,
+          "std": 0.01359820733051056,
+          "min": 0.875,
+          "max": 0.8942307692307693
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.0038767500082030892,
+          "std": 0.0005970102532134251,
+          "min": 0.0034546000097179785,
+          "max": 0.0042989000066882
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 541733334,
+            "std": 201431152.67681688,
+            "min": 399300000,
+            "max": 684166668
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 204766666,
+            "std": 89189734.39085415,
+            "min": 141700000,
+            "max": 267833332
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 446266666,
+            "std": 186063363.41341117,
+            "min": 314700000,
+            "max": 577833332
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 448850.5,
+            "std": 20907.02619934265,
+            "min": 434067,
+            "max": 463634
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 222949.5,
+            "std": 36792.887145479624,
+            "min": 196933,
+            "max": 248966
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 439549.5,
+            "std": 56026.19159375372,
+            "min": 399933,
+            "max": 479166
+          }
+        }
+      }
+    }
+  ],
+  "ledger": {
+    "commands": 12,
+    "idempotent_retry": {
+      "sequence": 9,
+      "command_hash": "9736a928bf8c1871b6baeeeeeb8a65882012903b5b34635b4aca5cd6c0fed2a6",
+      "replayed": true
+    },
+    "snapshots": {
+      "2025-01-30": {
+        "outstanding_minor": 900,
+        "unallocated_minor": 1100,
+        "cash_movements": [
+          {
+            "tenant_id": "DEMO",
+            "currency": "VND",
+            "net_minor": 1080
+          }
+        ],
+        "snapshot_hash": "aa2dda26fc31aa4de814bf3642387c63e291971b8436cfece677ac1fbf9bce11"
+      },
+      "2025-01-31": {
+        "outstanding_minor": 900,
+        "unallocated_minor": 1100,
+        "cash_movements": [
+          {
+            "tenant_id": "DEMO",
+            "currency": "VND",
+            "net_minor": 1080
+          }
+        ],
+        "snapshot_hash": "6c590628817199927f1070f580516a67c7d1f5c0648060046883123a12266380"
+      },
+      "2025-02-01": {
+        "outstanding_minor": 0,
+        "unallocated_minor": 200,
+        "cash_movements": [
+          {
+            "tenant_id": "DEMO",
+            "currency": "VND",
+            "net_minor": 1080
+          }
+        ],
+        "snapshot_hash": "86f4f84df999b53469b2241a31d4301a8f304be99025164284cb579c33561819"
+      },
+      "2025-02-02": {
+        "outstanding_minor": 900,
+        "unallocated_minor": 1100,
+        "cash_movements": [
+          {
+            "tenant_id": "DEMO",
+            "currency": "VND",
+            "net_minor": 1080
+          }
+        ],
+        "snapshot_hash": "bbd21b65cb1720d17bd4d145ee52e3a33d55f7b5033efce218ce13e12bc7e893"
+      },
+      "2025-02-03": {
+        "outstanding_minor": 900,
+        "unallocated_minor": 900,
+        "cash_movements": [
+          {
+            "tenant_id": "DEMO",
+            "currency": "VND",
+            "net_minor": 880
+          }
+        ],
+        "snapshot_hash": "c4e06872413eeddf18318d1598c2f01b8082fcb6380fe609ed284b2d3e50eb39"
+      }
+    },
+    "limits": [
+      "Local simulation; external verification is supplied explicitly",
+      "Cash is bank movement, not opening-to-closing balance",
+      "Refund consumes unapplied credit after reversal; refund bank event is separate"
+    ]
+  },
+  "finrca": {
+    "raw_clean": {
+      "source_counts": {
+        "invoices": 8000,
+        "payments": 6000,
+        "payment_allocations": 7080,
+        "bank_transactions": 6063,
+        "bank_statements": 54
+      },
+      "normalized_counts": {
+        "invoices": 8000,
+        "payments": 6000,
+        "bank": 6063,
+        "allocations": 7080
+      },
+      "quarantined_rows": 0,
+      "allocation_reason_counts": {},
+      "invoices_overallocated": 0,
+      "invoices_partial": 0,
+      "raw_decimal_invoice_overallocated_comparisons": 0,
+      "raw_nonpositive_invoice_totals": 0,
+      "raw_comparison_limit": "Negative invoice totals are quarantined, not silently treated as positive invoices or inferred credit notes",
+      "statement_reconciliation": {
+        "statements": 54,
+        "equation_failures": 0,
+        "posted_date_total_failures": 18,
+        "transaction_date_total_failures": 54,
+        "rows": [
+          {
+            "statement_id": "BST_0420019",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": null,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420020",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420021",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420022",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420023",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420024",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420025",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420026",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420027",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420028",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420029",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420030",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420031",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420032",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420033",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420034",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420035",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420036",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420037",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": null,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420038",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420039",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420040",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420041",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420042",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420043",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420044",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420045",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420046",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420047",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420048",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420049",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420050",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420051",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420052",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420053",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420054",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420001",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": null,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420002",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420003",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420004",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420005",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420006",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420007",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420008",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420009",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420010",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420011",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420012",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420013",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420014",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420015",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420016",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420017",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420018",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          }
+        ],
+        "complete_bank_scope_verified": false
+      },
+      "matching_quality": null,
+      "bank_link_oracle_verified": false,
+      "availability": "absent; static retrospective pool only",
+      "proposal_counts": {
+        "unmatched": 1305,
+        "auto": 2623,
+        "review": 2072
+      },
+      "proposal_invariant_errors": []
+    },
+    "benchmark/full": {
+      "source_counts": {
+        "invoices": 8147,
+        "payments": 6200,
+        "payment_allocations": 7180,
+        "bank_transactions": 6263,
+        "bank_statements": 57
+      },
+      "normalized_counts": {
+        "invoices": 8100,
+        "payments": 6200,
+        "bank": 6263,
+        "allocations": 7180
+      },
+      "quarantined_rows": 47,
+      "allocation_reason_counts": {
+        "invoice_overallocated": 218
+      },
+      "invoices_overallocated": 100,
+      "invoices_partial": 100,
+      "raw_decimal_invoice_overallocated_comparisons": 147,
+      "raw_nonpositive_invoice_totals": 47,
+      "raw_comparison_limit": "Negative invoice totals are quarantined, not silently treated as positive invoices or inferred credit notes",
+      "statement_reconciliation": {
+        "statements": 57,
+        "equation_failures": 0,
+        "posted_date_total_failures": 19,
+        "transaction_date_total_failures": 57,
+        "rows": [
+          {
+            "statement_id": "BST_0420131",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": null,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420132",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420133",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420134",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420135",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420136",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420137",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420138",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420139",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420140",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420141",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420142",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420143",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420144",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420145",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420146",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420147",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420148",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420149",
+            "account_id": "BANK_ACCT_DISBURSEMENTS_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420150",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": null,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420151",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420152",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420153",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420154",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420155",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420156",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420157",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420158",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420159",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420160",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420161",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420162",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420163",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420164",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420165",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420166",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420167",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420168",
+            "account_id": "BANK_ACCT_GLOBAL",
+            "equation_pass": true,
+            "currency_unambiguous": false,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": false,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420112",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": null,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420113",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420114",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420115",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420116",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420117",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420118",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420119",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420120",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420121",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420122",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420123",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420124",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420125",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420126",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420127",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420128",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420129",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          },
+          {
+            "statement_id": "BST_0420130",
+            "account_id": "BANK_ACCT_OPERATING_USD",
+            "equation_pass": true,
+            "currency_unambiguous": true,
+            "opening_matches_previous_observed_close": true,
+            "posted_date_totals_pass": true,
+            "transaction_date_totals_pass": false
+          }
+        ],
+        "complete_bank_scope_verified": false
+      },
+      "matching_quality": null,
+      "bank_link_oracle_verified": false,
+      "availability": "absent; static retrospective pool only",
+      "proposal_counts": {
+        "unmatched": 1464,
+        "auto": 2523,
+        "review": 2213
+      },
+      "proposal_invariant_errors": []
+    }
+  },
+  "recbench": {
+    "truth_edges_total": 75002,
+    "truth_groups_complete": 73955,
+    "truth_groups_missing_endpoints": 1047,
+    "explicit_negative_bank_rows": 136,
+    "unknown_bank_rows": 1047,
+    "predictions_on_unknown_bank_rows": 0,
+    "nonmatchable_labels_with_truth": 25,
+    "predictions_on_nonmatchable_labels": 0,
+    "scored_predictions": 73828,
+    "correct_links": 73828,
+    "exact_link_precision": 1.0,
+    "exact_link_recall": 0.9982827395037522,
+    "observed_truth_group_coverage": 0.9860403722567398,
+    "by_currency": {
+      "EUR": {
+        "bank_rows": 21859,
+        "scored_bank_rows": 21536
+      },
+      "GBP": {
+        "bank_rows": 13594,
+        "scored_bank_rows": 13371
+      },
+      "USD": {
+        "bank_rows": 39685,
+        "scored_bank_rows": 39184
+      }
+    },
+    "runtime_seconds": 1.00939059999655,
+    "order_stable": true
+  },
+  "finbalance": {
+    "coverage_records": 143,
+    "predicted_entries": 90,
+    "expected_entries": 1873,
+    "correct_entries": 54,
+    "entry_precision": 0.6,
+    "entry_recall_full_coverage_pool": 0.028830752802989856,
+    "records_with_full_journal_exact": 10,
+    "records_with_balance_sheet_evaluated": 2,
+    "records_with_balance_sheet_exact": 1
+  },
+  "fiscus": {
+    "provenance": {
+      "source_id": "fiscus",
+      "source": {
+        "kind": "synthetic_workflow_state_fixtures",
+        "revision": "86178237e0c5d75f4ff08b6452cbd9b2d25cb061",
+        "page": "https://data.mendeley.com/datasets/w7tk797ngc/1",
+        "license_scope": "Mendeley v1 and HF card declare CC BY 4.0",
+        "requests": {
+          "README.md": "https://huggingface.co/datasets/keaxe21/fiscus-financial-workflow-state-fixtures/resolve/86178237e0c5d75f4ff08b6452cbd9b2d25cb061/README.md",
+          "data/financial_workflow_state_fixtures.jsonl": "https://huggingface.co/datasets/keaxe21/fiscus-financial-workflow-state-fixtures/resolve/86178237e0c5d75f4ff08b6452cbd9b2d25cb061/data/financial_workflow_state_fixtures.jsonl"
+        }
+      },
+      "source_manifest_sha256": "0eb78e48fbced7f514de5cface10a68859f03a4189f686481840af597e489265",
+      "raw_sha256": {
+        "data/financial_workflow_state_fixtures.jsonl": "a4f618e6c8a01f93a78383142200ba89d1afca81bdba9f280f9053cb12ab1666"
+      }
+    },
+    "bank_cases": [
+      {
+        "case_id": "bank_reconciliation_001",
+        "status": "approved",
+        "financial_effect": "none_until_commit",
+        "status_pass": true,
+        "effect_pass": true,
+        "audit_events": 4
+      },
+      {
+        "case_id": "bank_reconciliation_002",
+        "status": "committed",
+        "financial_effect": "created_once",
+        "status_pass": true,
+        "effect_pass": true,
+        "audit_events": 5
+      },
+      {
+        "case_id": "bank_reconciliation_003",
+        "status": "review_required",
+        "financial_effect": "unknown_do_not_duplicate",
+        "status_pass": true,
+        "effect_pass": true,
+        "audit_events": 5
+      },
+      {
+        "case_id": "bank_reconciliation_004",
+        "status": "committed",
+        "financial_effect": "no_new_effect",
+        "status_pass": true,
+        "effect_pass": true,
+        "audit_events": 5
+      }
+    ],
+    "unsupported_domains_cases": 21,
+    "all_pass": true,
+    "limits": "Bank workflow fixture simulation only; no external API/concurrency certification"
+  },
+  "artifact_sha256": {
+    "ar/datasets/test/clean-9101/invoices.jsonl": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+    "ar/datasets/test/clean-9101/manifest.json": "53e53cc0d45db38cc9892b43b355ee81e97d038e24c9677b5b102fdece50edb8",
+    "ar/datasets/test/clean-9101/payments.jsonl": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+    "ar/datasets/test/clean-9101/predictions-amount_date.json": "62bd45d290eef2b8f9d22f1c2b4621d30bbc9ce33f12a93abfac1cc6647867f1",
+    "ar/datasets/test/clean-9101/predictions-exact_reference.json": "c5882c535489bd5625610a7eac583ec17db1bb51db41240db317609757d9c972",
+    "ar/datasets/test/clean-9101/predictions-reference_then_global.json": "410d41157a446d02e2148bf8efe1eedb50a8362e795a4e767a8a8fbd7decd98d",
+    "ar/datasets/test/clean-9101/predictions-scored_global.json": "9a365d0cfade6725e94de1127f5e1883e8b04aba8b293d1da27dd58830784776",
+    "ar/datasets/test/clean-9101/predictions-v2_full.json": "4f24500051ce37fd6d17529b9b2fc9a76c110f8377d09c2db6a9288c795b9059",
+    "ar/datasets/test/clean-9101/predictions-v2_no_amount_groups.json": "22d0a57ca3741f9649b101cac3b447e1eaa9f533ef9470c84596d9732a0d20e0",
+    "ar/datasets/test/clean-9101/predictions-v2_no_overpayment.json": "a4bb9e34e91608f0af069dbded6dd5edba9399ce0f5f5ab416ed84a31c57451c",
+    "ar/datasets/test/clean-9101/truth.jsonl": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+    "ar/datasets/test/clean-9102/invoices.jsonl": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+    "ar/datasets/test/clean-9102/manifest.json": "b1d176e2d4cd51d8e648b5f369f44dec18a1a6b6bfe47f89f1ef9414d66186c1",
+    "ar/datasets/test/clean-9102/payments.jsonl": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+    "ar/datasets/test/clean-9102/predictions-amount_date.json": "66fc5ee6bac0f26057f87c1688750cb7737e1fe4f45b5bfe45b22876a97c28b6",
+    "ar/datasets/test/clean-9102/predictions-exact_reference.json": "2384d3452b4f26439147c3eeff14ebf026eeda17d835d2d6519a460ff044c536",
+    "ar/datasets/test/clean-9102/predictions-reference_then_global.json": "5fee303039edf63d972fdc0613b794c001629a41dddce8cb95fdd867304fad9f",
+    "ar/datasets/test/clean-9102/predictions-scored_global.json": "11a87faff59edfa9ac3aa994a19198f27b8c64be72b152dacf23616d618920da",
+    "ar/datasets/test/clean-9102/predictions-v2_full.json": "3240d7387ef3c2a48d9ba4a1fb31a50d2bb1fba2bdd967e6f2495b43558133ef",
+    "ar/datasets/test/clean-9102/predictions-v2_no_amount_groups.json": "b9e2f4775abb704ab5e2035e21feacc43a35b9d735cc850629d1943a216c1838",
+    "ar/datasets/test/clean-9102/predictions-v2_no_overpayment.json": "a2fb64e9a97062626d22a2e4a29a4b9e156c79501eaa8d33bd024b45a53236c7",
+    "ar/datasets/test/clean-9102/truth.jsonl": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+    "ar/datasets/test/masked-9101/invoices.jsonl": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+    "ar/datasets/test/masked-9101/manifest.json": "358cdd165949d766137d5b375974c50bef6350610a17fdc78a270af43e25b268",
+    "ar/datasets/test/masked-9101/payments.jsonl": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+    "ar/datasets/test/masked-9101/predictions-amount_date.json": "62bd45d290eef2b8f9d22f1c2b4621d30bbc9ce33f12a93abfac1cc6647867f1",
+    "ar/datasets/test/masked-9101/predictions-exact_reference.json": "8d2a9b9cfe83309230284fed4e7bf23fbd963c940b050aaa8a0376e53e25fc21",
+    "ar/datasets/test/masked-9101/predictions-reference_then_global.json": "65c57d3c9cbce00e4cbe134465236fbfc51d5ef46bc33a57f99252a3e27204cc",
+    "ar/datasets/test/masked-9101/predictions-scored_global.json": "9a365d0cfade6725e94de1127f5e1883e8b04aba8b293d1da27dd58830784776",
+    "ar/datasets/test/masked-9101/predictions-v2_full.json": "b9c5ea131dc857a8f921132dc10185f764f4ec0341981c51aaeb19e6ab9e8095",
+    "ar/datasets/test/masked-9101/predictions-v2_no_amount_groups.json": "2933a75bfca76e7a7b5c4cb34406416f12c114a3ae097f598f490964e147df71",
+    "ar/datasets/test/masked-9101/predictions-v2_no_overpayment.json": "d51261199cff557c9b9e29b33c67f1e89093b1a26fcc8d91b6bb88db06330f1e",
+    "ar/datasets/test/masked-9101/truth.jsonl": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+    "ar/datasets/test/masked-9102/invoices.jsonl": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+    "ar/datasets/test/masked-9102/manifest.json": "e25ce832875aa4b503561b43ab353a0ee1c036d9abee30253755e340bfc6f4f4",
+    "ar/datasets/test/masked-9102/payments.jsonl": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+    "ar/datasets/test/masked-9102/predictions-amount_date.json": "66fc5ee6bac0f26057f87c1688750cb7737e1fe4f45b5bfe45b22876a97c28b6",
+    "ar/datasets/test/masked-9102/predictions-exact_reference.json": "d0488afcdce3e88c19255009e3d82094305d6abf1fc30b81cb9e537ab6c7fe28",
+    "ar/datasets/test/masked-9102/predictions-reference_then_global.json": "e570507709a4498c5fef315117117d9d12ad1f5a02f04d024681dfb58cbf40c7",
+    "ar/datasets/test/masked-9102/predictions-scored_global.json": "11a87faff59edfa9ac3aa994a19198f27b8c64be72b152dacf23616d618920da",
+    "ar/datasets/test/masked-9102/predictions-v2_full.json": "f731b1ef7d28436cc7541107cf5c0d5d6e4e662776a28a088f31826be1fcf343",
+    "ar/datasets/test/masked-9102/predictions-v2_no_amount_groups.json": "2d1bfe097f34b6069f6eea9c50ef8f71a1d1350a6151f0896bb3512d93886d50",
+    "ar/datasets/test/masked-9102/predictions-v2_no_overpayment.json": "5ace84d3fb16d570c46b3bbdeed7c9063055d3162dac7be7b010be5961a640d1",
+    "ar/datasets/test/masked-9102/truth.jsonl": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+    "ar/datasets/validation/clean-2101/invoices.jsonl": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+    "ar/datasets/validation/clean-2101/manifest.json": "294d8858e2efbe38e9172718f7387c1fe9b28ef8bcd844fea237715bfecf6db7",
+    "ar/datasets/validation/clean-2101/payments.jsonl": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+    "ar/datasets/validation/clean-2101/predictions-amount_date.json": "048f2aafdfd92e2d914fa8451204604b34e6339fc1a4a9eac3eca4109cdb2e93",
+    "ar/datasets/validation/clean-2101/predictions-exact_reference.json": "34e98f12fa317bb05f390c685a7cc3956c80082abb5a7447e7d02b88ebd08904",
+    "ar/datasets/validation/clean-2101/predictions-reference_then_global.json": "07792cb9a102f17e48dc0c159a73fb4c2798a66d5f39a1850803d8225a242299",
+    "ar/datasets/validation/clean-2101/predictions-scored_global.json": "249af87ca0eaf7cd3fed652d0bb74e78e4b322575bce1e5aed426b6936c462d6",
+    "ar/datasets/validation/clean-2101/predictions-v2_full.json": "958144b4440019168e345802f6d5d097f1ad2d490e032f8f1f001ba6bca1bf22",
+    "ar/datasets/validation/clean-2101/predictions-v2_no_amount_groups.json": "7bfab3ec53ac15787c23aee2cf34c85f89fcae4cc933eb14dc09430a1ca4a60b",
+    "ar/datasets/validation/clean-2101/predictions-v2_no_overpayment.json": "9773645146a3750c3a94c06dbd104c4f7a7f66f7472bf403d63ae47885b5c80d",
+    "ar/datasets/validation/clean-2101/truth.jsonl": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+    "ar/datasets/validation/clean-2102/invoices.jsonl": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+    "ar/datasets/validation/clean-2102/manifest.json": "cd7d0229051514281d59d74793421d17b92f47f997ae79342a8db9441de50853",
+    "ar/datasets/validation/clean-2102/payments.jsonl": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+    "ar/datasets/validation/clean-2102/predictions-amount_date.json": "ae9804c766f22f7e6c77eb17a192255270b46b7dfca7308964264415d0c33dd9",
+    "ar/datasets/validation/clean-2102/predictions-exact_reference.json": "01c62eb32a7a3dd0d26afe5202d446f619092123ceb1f9e5a0a323111aeb170f",
+    "ar/datasets/validation/clean-2102/predictions-reference_then_global.json": "cd47aade02995d0946df8b5627f77c874e301f2579422b54a1da8d6ecf438d4e",
+    "ar/datasets/validation/clean-2102/predictions-scored_global.json": "51620a41c12619fe87d9180b0fe4d6debdcfe76af8eb85c1c9b6d9f4078f9fa6",
+    "ar/datasets/validation/clean-2102/predictions-v2_full.json": "67ed4489857651431d4225dd3d9d6c0428f173f47ab4dd3818b11acc08d59d1b",
+    "ar/datasets/validation/clean-2102/predictions-v2_no_amount_groups.json": "6213bf63499e595c05643981d951e7421e8486a284ddf736a8b864b97cab35fb",
+    "ar/datasets/validation/clean-2102/predictions-v2_no_overpayment.json": "045d3a357affe93abbfc22d08642c700932b825b27b94057a60d4eacf06d5cce",
+    "ar/datasets/validation/clean-2102/truth.jsonl": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+    "ar/datasets/validation/masked-2101/invoices.jsonl": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+    "ar/datasets/validation/masked-2101/manifest.json": "ad2bb543e7e1cbcef358686cb4227ce7911278d898d31deabe754ba3e949a8fb",
+    "ar/datasets/validation/masked-2101/payments.jsonl": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+    "ar/datasets/validation/masked-2101/predictions-amount_date.json": "048f2aafdfd92e2d914fa8451204604b34e6339fc1a4a9eac3eca4109cdb2e93",
+    "ar/datasets/validation/masked-2101/predictions-exact_reference.json": "e64c99c4c0880ea4171b15da6009b2022db1eaa0e628dad9378eece568e35089",
+    "ar/datasets/validation/masked-2101/predictions-reference_then_global.json": "eb1a90ba15a67445e738970732caa665467821acb5013391b2c2dc4f8e2decc7",
+    "ar/datasets/validation/masked-2101/predictions-scored_global.json": "249af87ca0eaf7cd3fed652d0bb74e78e4b322575bce1e5aed426b6936c462d6",
+    "ar/datasets/validation/masked-2101/predictions-v2_full.json": "119df2e6e7b834fca6948e7e7c9c13eae3f79605694fe1ae9daf67923db94b45",
+    "ar/datasets/validation/masked-2101/predictions-v2_no_amount_groups.json": "ff438b25cbd826934c6a7dd610cf7e149c8ea80e06bf9594ca7f956266350663",
+    "ar/datasets/validation/masked-2101/predictions-v2_no_overpayment.json": "fe7e5a51997776bd8cb401f22349c4cb4cd435f09d7ae25f7503978f0b033899",
+    "ar/datasets/validation/masked-2101/truth.jsonl": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+    "ar/datasets/validation/masked-2102/invoices.jsonl": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+    "ar/datasets/validation/masked-2102/manifest.json": "10391448a91fa213744b652a0439685305e7e02ab3e29bf752beea1bea858edb",
+    "ar/datasets/validation/masked-2102/payments.jsonl": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+    "ar/datasets/validation/masked-2102/predictions-amount_date.json": "ae9804c766f22f7e6c77eb17a192255270b46b7dfca7308964264415d0c33dd9",
+    "ar/datasets/validation/masked-2102/predictions-exact_reference.json": "699a5ee422a2357df5282eb05c53028cf1a6cd4066d2cd793243dffbff4abec7",
+    "ar/datasets/validation/masked-2102/predictions-reference_then_global.json": "173ee5306fd99d0b4c1a2dd2c1fa6e4dedd1713a7a80db6ed4fa4714b85f74d7",
+    "ar/datasets/validation/masked-2102/predictions-scored_global.json": "51620a41c12619fe87d9180b0fe4d6debdcfe76af8eb85c1c9b6d9f4078f9fa6",
+    "ar/datasets/validation/masked-2102/predictions-v2_full.json": "d9a71eea5056fd7ade80bdbb521845f4ff30ea6ee246b6c0ebdfcfd43ee7a59b",
+    "ar/datasets/validation/masked-2102/predictions-v2_no_amount_groups.json": "eab516e97058fedd612151d3cc9fe50683b2cac2f3759b334a6107976ebadee0",
+    "ar/datasets/validation/masked-2102/predictions-v2_no_overpayment.json": "b735a16f32e18212e4e1ddf5b7da2b705d8758d30b6107fbfc621e0a986510dd",
+    "ar/datasets/validation/masked-2102/truth.jsonl": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+    "ar/experiment.json": "9b90b330beb7093a8a86a6b9d7ad8e09f1eadc662d628998898d7ffcd74accf9",
+    "ar/report.json": "7da942d631e25db35b9f8bf007d7f15beedc2f0bc0f2f27e5b15dfc41ddbe263",
+    "finbalance/predictions.json": "0a7a134dbea884573b78c2819f7e5d76a67bbe70f9c1d43d667f476db77ea9e1",
+    "finbalance/report.json": "3111a7bb9f2c02f1bd7370753b61e75d7db85542166fc57e803c9ea6714ec1f4",
+    "finrca/clean/audit.json": "058518b0c672dd9bc01059d9c26b80cbd841d2e27d1cb9031a834c95dbd47090",
+    "finrca/clean/bank.jsonl": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+    "finrca/clean/invoices.jsonl": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+    "finrca/clean/manifest.json": "4d12aac6d92b271df71ddbbd189077a6c0f2dc993fdee1edf539c2f4b6d56d07",
+    "finrca/clean/observed_allocations.jsonl": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+    "finrca/clean/payments.jsonl": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+    "finrca/clean/predictions.json": "97135ec001ded15d615fbaf1210ae38d4bedc9c4db404f6c65cdd19c3adf6fed",
+    "finrca/clean/quarantine.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "finrca/corrupted/audit.json": "890df7d6cb2e4a53f5c2a242e1f073818cd808d5cc80ed0189759c4a0265bd25",
+    "finrca/corrupted/bank.jsonl": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+    "finrca/corrupted/invoices.jsonl": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+    "finrca/corrupted/manifest.json": "4d12aac6d92b271df71ddbbd189077a6c0f2dc993fdee1edf539c2f4b6d56d07",
+    "finrca/corrupted/observed_allocations.jsonl": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+    "finrca/corrupted/payments.jsonl": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+    "finrca/corrupted/predictions.json": "f870615043c1a65abde79de3525638df2b4d42d411014e683c3311aaaf638fc9",
+    "finrca/corrupted/quarantine.jsonl": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+    "finrca/manifest.json": "d954d86b6ddcdbf480a240b43094d41b7bad31ada99fef1c4c7d43cf10a39e56",
+    "fiscus/bank_reconciliation_001.sqlite": "4ec6c5e0fdaf70f5a56bbebb8459151b71a344ed091cc5d7334573c1707b69c1",
+    "fiscus/bank_reconciliation_002.sqlite": "549ff9aa8f305cbd702a7b9c7daea4aaf247fe33ffae334ec0994bbd006c043d",
+    "fiscus/bank_reconciliation_003.sqlite": "abb8eb1a4cb19cf9a9b4a521f465b03d6d46d152cd3aa3c61ca3d0192d278445",
+    "fiscus/bank_reconciliation_004.sqlite": "acc41ffd5c3ee88474500aa1b1c58e286eda387869a6a614a8d4e1991abe9393",
+    "fiscus/report.json": "a02c3a065cee3bc2c41496020a7ee7d1aef90b4518b970a8829d4f017dcdde85",
+    "ledger/commands.jsonl": "7b523d337e2e223a6217cb6b5625fca4d6ccef14360d71609c608af5184ad5c3",
+    "ledger/gold-2025-01-30.json": "21e13126dfb6061222a81dc66d74cfc3ec21e165c6c33d44a3a502a481e1553e",
+    "ledger/gold-2025-01-31.json": "8b438ad5c552f0e72902df8d324ec7b424ae47769aed85b40cb7e21becb602e7",
+    "ledger/gold-2025-02-01.json": "1ee996eb94be0cede4b31d028fc8482f8fcfc87636e306a5c3a9f9fecc9a05ff",
+    "ledger/gold-2025-02-02.json": "8f1a0c6896f34357eb7c7b163272825b65f73a795933a9d197697fd589076695",
+    "ledger/gold-2025-02-03.json": "ba79812b076384e86559b81ae65b2fe236896f1217cc95c52e985f0086e5c6d0",
+    "ledger/ledger.sqlite": "9f807a1f2439fffd1d444d8f3a72453a8e1958c90f3935c488d4e7ac4b61998c",
+    "ledger/report.json": "72eaee56bf85dd9cd49b72f3a083125aee813829d8063de815c70315d6f4ecbd",
+    "recbench/predictions.json": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+    "recbench/report.json": "4798fc3cd22e20b4caed72277991a134fa6f87e2ae626a4b5de5666a680c0113"
+  },
+  "missing": [
+    "SME AR independent labels/availability/approval logs",
+    "Verified FinRCA bank-link oracle",
+    "RecBench ledger/settlement and missing payout endpoints",
+    "FinBalance main/PDF and broad journal policies",
+    "Live ERP/bank connector and T1 efficacy backtest"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schema": "t0-allocation-robustness-v1",
+  "frozen_on": "2026-10-21",
+  "seeds": {"validation": [3201, 3202], "test": [19201, 19202]},
+  "blocks": 4,
+  "profiles": ["clean", "masked", "noisy", "stress"],
+  "methods": ["v2_full", "constrained_flow"],
+  "allocation_config": {"max_age_days": 120, "max_group_size": 3, "max_group_pool": 12},
+  "feature_allowlist": {
+    "invoices": ["tenant_id", "id", "invoice_number", "side", "party_id", "currency", "amount_minor", "issued_on"],
+    "payments": ["tenant_id", "id", "side", "party_id", "currency", "amount_minor", "payment_on", "reference", "remittance"]
+  },
+  "noise": {"masked": [0.5, 0, 0], "noisy": [0.1, 0.1, 1], "stress": [0.3, 0.3, 3]},
+  "scope": "Synthetic development capability/regression suite, including wrong valid references, unique/nonunique N:M and observed partial remittance. Oracle from intent. Not blind SME holdout or new population evidence. No tuning on test. Old v2 suite remains separate."
+}

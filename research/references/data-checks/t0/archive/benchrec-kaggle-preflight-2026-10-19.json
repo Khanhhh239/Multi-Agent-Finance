@@ -1,0 +1,275 @@
+{
+  "audited_at_utc": "2026-10-19T13:06:19.680293+00:00",
+  "source": {
+    "source_id": "benchrec-kaggle-v3",
+    "source_page": "https://www.kaggle.com/datasets/benchmarkteam/benchrec-real-world-cash-reconciliation-dataset",
+    "url": "https://www.kaggle.com/api/v1/datasets/download/benchmarkteam/benchrec-real-world-cash-reconciliation-dataset?datasetVersionNumber=3",
+    "requested_version": 3,
+    "checked_at_utc": "2026-10-19T13:04:25.756614+00:00",
+    "use_policy": "inspection_only_excluded_from_matching",
+    "files": [
+      {
+        "file": "BenchRec_cash_v1.0_eval.csv",
+        "bytes": 25850839,
+        "sha256": "2b1d2f734420d92c12b563d8f9a281608f9a50a8305369ac41913aa39b508bdf"
+      },
+      {
+        "file": "BenchRec_cash_v1.0_solution.csv",
+        "bytes": 6715938,
+        "sha256": "1cb0fe95563b2c191fbfafe206e6fb97eb7844a486dbc3a1638c1c7ff2362477"
+      },
+      {
+        "file": "BenchRec_cash_v1.0_train.csv",
+        "bytes": 78765900,
+        "sha256": "a7d66dc4a2fcf65abc1047d9f60905dfd248bad9db4c34920c3a9c86e6fadefb"
+      },
+      {
+        "file": "MatcherByChatGPT_submission.csv",
+        "bytes": 10537973,
+        "sha256": "ca74a5f846f681eb74b0476505d03b0ee2c8a7eb743f83ea990414d3f2fe7a8d"
+      }
+    ],
+    "errors": [],
+    "limits": "Download and inspection only; GL-bank allocation-key labels are not invoice-bank amount labels",
+    "status": 200,
+    "bytes": 15583204,
+    "sha256": "46d6851a47f1888a7295ac5f7d49295f845b5041ddd18965fef7b79be1b86b4b",
+    "content_type": "application/zip",
+    "download_status": "downloaded"
+  },
+  "audit_script_sha256": "55bdd55ffdfff71c3930dca3f78c296c24283ca740259a4f4e467abe06224193",
+  "scope": "Full CSV structural preflight: hashes, row grain, ID overlap, field presence, decimal/ISO-date parsing only",
+  "profiles": {
+    "train": {
+      "columns": [
+        "matchId",
+        "matchDate",
+        "matchRule",
+        "matchedBy",
+        "wasPreviouslyMismatched",
+        "A_transactionType",
+        "A_id",
+        "A_allocation",
+        "A_importDate",
+        "A_debitOrCredit",
+        "A_amount",
+        "A_valueDate",
+        "A_currencyCode",
+        "A_account",
+        "A_transactionReferences",
+        "A_transactionAttributes",
+        "B_transactionType",
+        "B_id",
+        "B_importDate",
+        "B_debitOrCredit",
+        "B_amount",
+        "B_valueDate",
+        "B_currencyCode",
+        "B_account",
+        "B_transactionReferences",
+        "B_transactionAttributes",
+        "targetAllocation"
+      ],
+      "rows": 149854,
+      "B_id_occurrences": 68975,
+      "B_id_duplicate_occurrences": 0,
+      "B_amount_negative": 33643,
+      "B_amount_zero": 0,
+      "B_rows_with_target": 67740,
+      "B_rows_without_target": 1235,
+      "A_id_occurrences": 80879,
+      "A_id_duplicate_occurrences": 0,
+      "A_amount_negative": 39992,
+      "A_amount_zero": 0,
+      "nonempty_counts": {
+        "matchId": 149854,
+        "matchDate": 149854,
+        "matchRule": 149272,
+        "matchedBy": 149854,
+        "wasPreviouslyMismatched": 149854,
+        "B_transactionType": 68975,
+        "B_id": 68975,
+        "B_importDate": 68975,
+        "B_debitOrCredit": 68975,
+        "B_amount": 68975,
+        "B_valueDate": 68975,
+        "B_currencyCode": 68975,
+        "B_account": 68975,
+        "B_transactionReferences": 68975,
+        "targetAllocation": 67740,
+        "A_transactionType": 80879,
+        "A_id": 80879,
+        "A_allocation": 80879,
+        "A_importDate": 80879,
+        "A_debitOrCredit": 80879,
+        "A_amount": 80879,
+        "A_valueDate": 80879,
+        "A_currencyCode": 80879,
+        "A_account": 80879,
+        "A_transactionReferences": 80879,
+        "A_transactionAttributes": 80876,
+        "B_transactionAttributes": 57286
+      },
+      "row_shapes_by_present_id": {
+        "B": 68975,
+        "A": 80879
+      },
+      "issues": {},
+      "unique_id_counts": {
+        "A_id": 80879,
+        "B_id": 68975
+      }
+    },
+    "eval": {
+      "columns": [
+        "matchId",
+        "matchDate",
+        "matchRule",
+        "matchedBy",
+        "wasPreviouslyMismatched",
+        "A_transactionType",
+        "A_id",
+        "A_allocation",
+        "A_importDate",
+        "A_debitOrCredit",
+        "A_amount",
+        "A_valueDate",
+        "A_currencyCode",
+        "A_account",
+        "A_transactionReferences",
+        "A_transactionAttributes",
+        "B_transactionType",
+        "B_id",
+        "B_importDate",
+        "B_debitOrCredit",
+        "B_amount",
+        "B_valueDate",
+        "B_currencyCode",
+        "B_account",
+        "B_transactionReferences",
+        "B_transactionAttributes",
+        "targetAllocation"
+      ],
+      "rows": 69171,
+      "B_id_occurrences": 32048,
+      "B_id_duplicate_occurrences": 0,
+      "B_amount_negative": 16080,
+      "B_amount_zero": 0,
+      "B_rows_with_target": 0,
+      "B_rows_without_target": 32048,
+      "A_id_occurrences": 37123,
+      "A_id_duplicate_occurrences": 0,
+      "A_amount_negative": 18851,
+      "A_amount_zero": 0,
+      "nonempty_counts": {
+        "wasPreviouslyMismatched": 69171,
+        "B_transactionType": 32048,
+        "B_id": 32048,
+        "B_importDate": 32048,
+        "B_debitOrCredit": 32048,
+        "B_amount": 32048,
+        "B_valueDate": 32048,
+        "B_currencyCode": 32048,
+        "B_account": 32048,
+        "B_transactionReferences": 32048,
+        "B_transactionAttributes": 26827,
+        "A_transactionType": 37123,
+        "A_id": 37123,
+        "A_allocation": 37123,
+        "A_importDate": 37123,
+        "A_debitOrCredit": 37123,
+        "A_amount": 37123,
+        "A_valueDate": 37123,
+        "A_currencyCode": 37123,
+        "A_account": 37123,
+        "A_transactionReferences": 37123,
+        "A_transactionAttributes": 37123
+      },
+      "row_shapes_by_present_id": {
+        "B": 32048,
+        "A": 37123
+      },
+      "issues": {},
+      "unique_id_counts": {
+        "A_id": 37123,
+        "B_id": 32048
+      }
+    },
+    "solution": {
+      "columns": [
+        "B_id",
+        "targetAllocation",
+        "Usage"
+      ],
+      "rows": 32048,
+      "B_id_occurrences": 32048,
+      "B_id_duplicate_occurrences": 0,
+      "nonempty_counts": {
+        "B_id": 32048,
+        "targetAllocation": 31836,
+        "Usage": 32048
+      },
+      "row_shapes_by_present_id": {},
+      "issues": {},
+      "unique_id_counts": {
+        "A_id": 0,
+        "B_id": 32048
+      }
+    },
+    "submission_example": {
+      "columns": [
+        "B_id",
+        "A_id",
+        "A_allocation",
+        "confidence",
+        "confidence_raw",
+        "tfidf_cos",
+        "amt_diff",
+        "date_diff",
+        "quick",
+        "targetAllocation",
+        "explanation"
+      ],
+      "rows": 32048,
+      "A_id_occurrences": 20800,
+      "A_id_duplicate_occurrences": 0,
+      "B_id_occurrences": 32048,
+      "B_id_duplicate_occurrences": 0,
+      "nonempty_counts": {
+        "B_id": 32048,
+        "A_id": 20800,
+        "A_allocation": 20800,
+        "confidence": 32048,
+        "confidence_raw": 20800,
+        "tfidf_cos": 20800,
+        "amt_diff": 20800,
+        "date_diff": 20800,
+        "quick": 20800,
+        "targetAllocation": 32048,
+        "explanation": 32048
+      },
+      "row_shapes_by_present_id": {},
+      "issues": {},
+      "unique_id_counts": {
+        "A_id": 20800,
+        "B_id": 32048
+      }
+    }
+  },
+  "identity_checks": {
+    "eval_B_ids_missing_solution": 0,
+    "solution_B_ids_absent_from_eval": 0,
+    "train_eval_A_id_overlap": 0,
+    "train_eval_B_id_overlap": 0
+  },
+  "matcher_runs": 0,
+  "accepted_for_current_invoice_matcher": false,
+  "limits": [
+    "Publisher describes real GL-bank data; origin not independently authenticated",
+    "targetAllocation is an allocation-key target, not a verified invoice-bank amount edge",
+    "No allocation-label correctness, group-money conservation or availability backtest verified",
+    "Historical matchId/matchDate/matchRule/matchedBy, targetAllocation and solution need leakage controls",
+    "Submission example is someone else's predictions, never ground truth",
+    "No account, transaction reference, allocation value or transaction IDs copied to report"
+  ]
+}

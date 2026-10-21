@@ -43,10 +43,13 @@ Tất cả thay đổi chạy hai lệnh không cần dữ liệu:
 
 ```powershell
 python scripts/checks/check_docs.py
+python scripts/checks/check_code.py
 python -m unittest discover -s tests -v
 ```
 
-Checker kiểm tra file tài liệu bắt buộc và link tới file/thư mục trong Markdown, bỏ qua ví dụ trong code. Nó không kiểm tra URL trên mạng, heading anchor hoặc tính đúng của nội dung. CI tự chạy hai lệnh này; việc tài liệu phản ánh đúng thay đổi code vẫn cần người sửa và reviewer kiểm tra.
+Checker tài liệu kiểm tra file bắt buộc và link tới file/thư mục trong Markdown, bỏ qua ví dụ trong code. Nó không kiểm tra URL trên mạng, heading anchor hoặc tính đúng của nội dung. `check_code.py` biên dịch kiểm tra `.py` mà không thực thi và đọc nghiêm ngặt `.json`/`.jsonl`, gồm cấu hình, ví dụ và bằng chứng lịch sử. Checker bỏ qua môi trường/dependency, raw/interim/processed và mã bên ngoài tại `research/references/code/`; không thay cho audit dữ liệu tải về. CI chạy cả ba lệnh; việc tài liệu phản ánh đúng thay đổi code vẫn cần người sửa và reviewer kiểm tra.
+
+Nhóm test helper notebook tham khảo chỉ chạy khi có `numpy`/`pandas`; thiếu dependency sẽ ghi `skipped`, không tính là đã kiểm thử helper. Test không train mô hình hoặc dựng lại notebook. Những test T0/checker còn lại chỉ cần thư viện chuẩn.
 
 | Phạm vi sửa | Kiểm tra bổ sung |
 |---|---|

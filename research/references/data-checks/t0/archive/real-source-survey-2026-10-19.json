@@ -1,0 +1,633 @@
+{
+  "audited_at_utc": "2026-10-19T04:35:24.824644+00:00",
+  "sources": [
+    {
+      "source_id": "cityvizor-cernosice-2025",
+      "manifest": {
+        "source_id": "cityvizor-cernosice-2025",
+        "spec_hash": "6b7a1f7948a4c1fe337f8b20c147e5df945f83cc71519be1f953bc491e8fdf71",
+        "retrieved_at_utc": "2026-10-19T04:30:15.994778+00:00",
+        "source": {
+          "provider": "CityVizor / Cernosice",
+          "format": "cityvizor",
+          "profile_id": 3,
+          "source_page": "https://www.mestocernosice.cz/samosprava/rozpocet/",
+          "documentation": "https://cityvizor.cz/landing/dokumentace",
+          "scope": "Entire payments export for profile 3, accounting year 2025; not all bank activity",
+          "license": "Data reuse terms not verified; software AGPL does not license municipal records",
+          "files": {
+            "payments.json": "https://cityvizor.cz/api/exports/profiles/3/payments/2025",
+            "years.json": "https://cityvizor.cz/api/exports/profiles/3/years"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "payments.json",
+            "url": "https://cityvizor.cz/api/exports/profiles/3/payments/2025",
+            "final_url": "https://cityvizor.cz/api/exports/profiles/3/payments/2025",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:19.247934+00:00",
+            "content_type": "application/json; charset=utf-8",
+            "bytes": 2577924,
+            "sha256": "1714b4c2cb69184f1cadd4b8b5f9e3640e8d3a6172a4cecdc2015ba130225f49"
+          },
+          {
+            "file": "years.json",
+            "url": "https://cityvizor.cz/api/exports/profiles/3/years",
+            "final_url": "https://cityvizor.cz/api/exports/profiles/3/years",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:24.255424+00:00",
+            "content_type": "application/json; charset=utf-8",
+            "bytes": 2449,
+            "sha256": "94e9e42a67fcc60d7c2efbc211bd70bceab355faad8351a266b31b574a736cb9"
+          }
+        ],
+        "errors": [],
+        "download_status": "downloaded"
+      },
+      "audited_at_utc": "2026-10-19T04:35:24.387134+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": {
+        "rows": 7828,
+        "columns": [
+          "counterpartyId",
+          "counterpartyName",
+          "date",
+          "description",
+          "event",
+          "expenditureAmount",
+          "incomeAmount",
+          "item",
+          "paragraph",
+          "profileId",
+          "unit",
+          "year"
+        ],
+        "valid_rows": 7828,
+        "date_min": "2025-01-02",
+        "date_max": "2025-12-31",
+        "errors": [],
+        "wrong_profile_or_year_rows": 0,
+        "missing_counterparty_id_rows": 832,
+        "missing_counterparty_name_rows": 832,
+        "identical_row_occurrences_beyond_first": 2958,
+        "amount_signs": {
+          "negative_rows": 100,
+          "zero_both_rows": 0,
+          "both_nonzero_rows": 0,
+          "income_nonzero_rows": 1946,
+          "expenditure_nonzero_rows": 5882
+        },
+        "income_total_source_decimal_units": "31650201.55",
+        "expenditure_total_source_decimal_units": "362077997.37",
+        "currency": null,
+        "year_metadata_present": true,
+        "year_metadata_validity": null,
+        "grain": "Budget-coded accounting/payment lines; invoice can split across item/paragraph/event",
+        "absent_invoice_id_and_bank_transaction_id": true,
+        "duplicate_policy": "Count only; identical accounting lines may be legitimate, no removal"
+      },
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "audited_excluded",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "no_independent_invoice_bank_allocation_truth",
+          "public_sector_differs_from_SME_AR",
+          "no_historical_availability_for_asof_matching",
+          "no_separate_bank_statement",
+          "no_explicit_invoice_or_bank_transaction_identifier",
+          "budget_split_line_grain",
+          "data_reuse_terms_unverified"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    },
+    {
+      "source_id": "cityvizor-nmnm-2025",
+      "manifest": {
+        "source_id": "cityvizor-nmnm-2025",
+        "spec_hash": "02e2be552f5e1940ee2187cd5288800c59338469fd024ce3f5846f354779d2f2",
+        "retrieved_at_utc": "2026-10-19T04:30:15.993015+00:00",
+        "source": {
+          "provider": "CityVizor / Nove Mesto na Morave",
+          "format": "cityvizor",
+          "profile_id": 1,
+          "source_page": "https://cityvizor.cz/nmnm/prehled",
+          "documentation": "https://cityvizor.cz/landing/dokumentace",
+          "scope": "Entire payments export for profile 1, accounting year 2025; not all bank activity",
+          "license": "Data reuse terms not verified; software AGPL does not license municipal records",
+          "files": {
+            "payments.json": "https://cityvizor.cz/api/exports/profiles/1/payments/2025",
+            "years.json": "https://cityvizor.cz/api/exports/profiles/1/years"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "payments.json",
+            "url": "https://cityvizor.cz/api/exports/profiles/1/payments/2025",
+            "final_url": "https://cityvizor.cz/api/exports/profiles/1/payments/2025",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:18.814308+00:00",
+            "content_type": "application/json; charset=utf-8",
+            "bytes": 2370825,
+            "sha256": "219d456cf97b8057b3015d788d977fdeb8e279aed5b2d5810c9de7c940df236f"
+          },
+          {
+            "file": "years.json",
+            "url": "https://cityvizor.cz/api/exports/profiles/1/years",
+            "final_url": "https://cityvizor.cz/api/exports/profiles/1/years",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:23.202865+00:00",
+            "content_type": "application/json; charset=utf-8",
+            "bytes": 2618,
+            "sha256": "11eb5f1f6425aa50d03685dc50936706ef78d9b970bc31ceb8e2a5bbb016d6d6"
+          }
+        ],
+        "errors": [],
+        "download_status": "downloaded"
+      },
+      "audited_at_utc": "2026-10-19T04:35:24.600026+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": {
+        "rows": 8261,
+        "columns": [
+          "counterpartyId",
+          "counterpartyName",
+          "date",
+          "description",
+          "event",
+          "expenditureAmount",
+          "incomeAmount",
+          "item",
+          "paragraph",
+          "profileId",
+          "unit",
+          "year"
+        ],
+        "valid_rows": 8261,
+        "date_min": "2025-01-02",
+        "date_max": "2025-12-31",
+        "errors": [],
+        "wrong_profile_or_year_rows": 0,
+        "missing_counterparty_id_rows": 1399,
+        "missing_counterparty_name_rows": 1399,
+        "identical_row_occurrences_beyond_first": 3114,
+        "amount_signs": {
+          "negative_rows": 1009,
+          "zero_both_rows": 0,
+          "both_nonzero_rows": 0,
+          "income_nonzero_rows": 1136,
+          "expenditure_nonzero_rows": 7125
+        },
+        "income_total_source_decimal_units": "29875654.04",
+        "expenditure_total_source_decimal_units": "353501270.38",
+        "currency": null,
+        "year_metadata_present": true,
+        "year_metadata_validity": null,
+        "grain": "Budget-coded accounting/payment lines; invoice can split across item/paragraph/event",
+        "absent_invoice_id_and_bank_transaction_id": true,
+        "duplicate_policy": "Count only; identical accounting lines may be legitimate, no removal"
+      },
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "audited_excluded",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "no_independent_invoice_bank_allocation_truth",
+          "public_sector_differs_from_SME_AR",
+          "no_historical_availability_for_asof_matching",
+          "no_separate_bank_statement",
+          "no_explicit_invoice_or_bank_transaction_identifier",
+          "budget_split_line_grain",
+          "data_reuse_terms_unverified"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    },
+    {
+      "source_id": "national-archives-2025-12",
+      "manifest": {
+        "source_id": "national-archives-2025-12",
+        "spec_hash": "bd0fafd1af7f713556601786d4d1e01a7770fd76db90d7402c302b710badcd8e",
+        "retrieved_at_utc": "2026-10-19T04:30:15.994083+00:00",
+        "source": {
+          "provider": "The National Archives, UK",
+          "format": "tna",
+          "source_page": "https://www.nationalarchives.gov.uk/about-us/how-we-work/transparency/how-we-spend-public-money/",
+          "documentation": "https://www.nationalarchives.gov.uk/legal/copyright/",
+          "scope": "Entire December 2025 over-GBP-25000 supplier payment CSV; thresholded disclosure",
+          "license": "Check source copyright/OGL exceptions; no raw redistribution in this repository",
+          "files": {
+            "payments.csv": "https://www.nationalarchives.gov.uk/wagtail-documents/107/payments-over-25k-december-2025.csv"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "payments.csv",
+            "url": "https://www.nationalarchives.gov.uk/wagtail-documents/107/payments-over-25k-december-2025.csv",
+            "final_url": "https://www.nationalarchives.gov.uk/wagtail-documents/107/payments-over-25k-december-2025.csv",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:17.241223+00:00",
+            "content_type": "text/csv",
+            "bytes": 4189,
+            "sha256": "4b50ab0436199db51cbf63dc49f26f303f29c94bf815734e9ea043daa60165e0"
+          }
+        ],
+        "errors": [],
+        "download_status": "downloaded"
+      },
+      "audited_at_utc": "2026-10-19T04:35:24.785642+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": {
+        "rows": 20,
+        "columns": [
+          "Operational Transaction Number",
+          "Last Invoice Payment Date",
+          "Supplier",
+          "Supplier's Invoice Number",
+          "Line Amount Spend",
+          "Invoice Amount Spend",
+          "Spend Category as Worktag",
+          "Cost Center Hierarchies",
+          "Cost Centre Type"
+        ],
+        "valid_rows": 20,
+        "errors": [],
+        "date_min": "2025-12-05",
+        "date_max": "2025-12-19",
+        "identical_row_occurrences_beyond_first": 0,
+        "negative_line_rows": 0,
+        "missing_supplier_rows": 0,
+        "missing_invoice_number_rows": 0,
+        "missing_operational_transaction_rows": 0,
+        "line_total_source_decimal_units": "1954485.34",
+        "currency": "GBP (source page threshold, not CSV column)",
+        "candidate_invoice_transaction_groups": 20,
+        "max_lines_per_candidate_group": 1,
+        "groups_with_conflicting_repeated_invoice_amounts": 0,
+        "groups_with_consistent_invoice_amount": 20,
+        "groups_where_sum_lines_equals_invoice_amount": 20,
+        "grain": "Spend lines; repeated Invoice Amount Spend must not be summed as separate invoices",
+        "grouping_limit": "Exploratory supplier + invoice number + operational transaction grouping, not verified invoice identity",
+        "bank_statement_and_independent_allocation_truth": false
+      },
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "audited_excluded",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "no_independent_invoice_bank_allocation_truth",
+          "public_sector_differs_from_SME_AR",
+          "no_historical_availability_for_asof_matching",
+          "no_separate_bank_statement"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    },
+    {
+      "source_id": "dc-pass-fy2025-prefix",
+      "manifest": {
+        "source_id": "dc-pass-fy2025-prefix",
+        "spec_hash": "6766098d45aed605e17203524d7b9ea0d9d07800f455fecd4bf114f9ac903bd7",
+        "retrieved_at_utc": "2026-10-19T04:30:15.992550+00:00",
+        "source": {
+          "provider": "District of Columbia / DC GIS",
+          "format": "dc",
+          "source_page": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17",
+          "documentation": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17",
+          "scope": "First up to 1000 FY2025 rows ordered by OBJECTID, deterministic nonrandom prefix only",
+          "license": "Endpoint copyright is null; public access does not establish reuse permission",
+          "files": {
+            "schema.json": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17?f=pjson",
+            "count.json": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272025%27&f=json&returnCountOnly=true",
+            "payments.json": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272025%27&f=json&outFields=%2A&returnGeometry=false&resultRecordCount=1000&orderByFields=OBJECTID+ASC"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "schema.json",
+            "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17?f=pjson",
+            "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17?f=pjson",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:17.324394+00:00",
+            "content_type": "text/plain; charset=UTF-8",
+            "bytes": 5143,
+            "sha256": "dd4b4de2eb42ff600c72ec81462d604f2d4442e5fa94d1e16c54e2aaa7c12b6e"
+          },
+          {
+            "file": "count.json",
+            "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272025%27&f=json&returnCountOnly=true",
+            "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272025%27&f=json&returnCountOnly=true",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:19.944945+00:00",
+            "content_type": "application/json; charset=UTF-8",
+            "bytes": 15,
+            "sha256": "fd3b7121b5708f50d2f296411cbd28d2ff0239af85e4ce039c9bd8f8e5164184"
+          },
+          {
+            "file": "payments.json",
+            "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272025%27&f=json&outFields=%2A&returnGeometry=false&resultRecordCount=1000&orderByFields=OBJECTID+ASC",
+            "final_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Government_Operations/MapServer/17/query?where=FISCALYEAR%3D%272025%27&f=json&outFields=%2A&returnGeometry=false&resultRecordCount=1000&orderByFields=OBJECTID+ASC",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:24.780431+00:00",
+            "content_type": "application/json; charset=UTF-8",
+            "bytes": 643730,
+            "sha256": "7db25b64928a03c818ebe41c571b893cfa4ac60fe798ae10f604d9fe655f0a9b"
+          }
+        ],
+        "errors": [],
+        "download_status": "downloaded"
+      },
+      "audited_at_utc": "2026-10-19T04:35:24.794928+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": {
+        "rows": 1000,
+        "columns": [
+          "AGENCYCODE",
+          "AGENCY_ACRONYM",
+          "AGENCY_NAME",
+          "CONTRACTNUMBER",
+          "DCS_LAST_MOD_DTTM",
+          "DCS_REC_CRT_DTTM",
+          "ESTPAYMENTDATE",
+          "FISCALYEAR",
+          "INVOICEDATE",
+          "INVOICENUMBER",
+          "OBJECTID",
+          "PAYMENTAMOUNT",
+          "PAYMENTDATE",
+          "PAYMENTNUMBER",
+          "PAYMENTTYPE",
+          "PONUMBER",
+          "RECORDCREATED",
+          "RECORDUPDATEDDATE",
+          "SUPPLIERNAME",
+          "TRANSACTION_CODE",
+          "VOUCHERAMOUNT",
+          "VOUCHERNUMBER"
+        ],
+        "errors": [],
+        "query_total_rows_at_download": 76917,
+        "sample_is_full_query": false,
+        "exceeded_transfer_limit": true,
+        "sample_selection": "Nonrandom OBJECTID ascending prefix, no population accuracy inference",
+        "unique_object_ids": 1000,
+        "object_ids_sorted": true,
+        "payment_date_min": "2024-10-01",
+        "payment_date_max": "2025-09-30",
+        "schema_has_actual_and_estimated_payment_date": true,
+        "wrong_fiscal_year_rows": 0,
+        "negative_payment_rows": 0,
+        "zero_payment_rows": 4,
+        "missing_PAYMENTDATE": 0,
+        "missing_ESTPAYMENTDATE": 200,
+        "missing_INVOICEDATE": 0,
+        "missing_PAYMENTNUMBER": 0,
+        "missing_INVOICENUMBER": 0,
+        "actual_before_invoice_rows": 0,
+        "actual_differs_from_estimate_rows": 796,
+        "candidate_invoice_groups_with_multiple_rows": 60,
+        "candidate_payment_groups_with_multiple_rows": 159,
+        "sum_PAYMENTAMOUNT_source_decimal_units_unverified_grain": "478518330.93",
+        "amount_total_limit": "Not a verified cash total: row grain/payment repetition not established",
+        "currency": null,
+        "independent_bank_statement_and_allocation_truth": false,
+        "grain": "Invoice/voucher/payment disclosure rows; OBJECTID is row ID, not invoice ID"
+      },
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "audited_excluded",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "no_independent_invoice_bank_allocation_truth",
+          "public_sector_differs_from_SME_AR",
+          "no_historical_availability_for_asof_matching",
+          "no_separate_bank_statement",
+          "nonrandom_prefix_only",
+          "payment_and_invoice_row_grain_unverified",
+          "data_reuse_terms_unverified"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    },
+    {
+      "source_id": "wigan-fy2025-26",
+      "manifest": {
+        "source_id": "wigan-fy2025-26",
+        "spec_hash": "217950e3e1918d8405bd5d4e20f4c1f4f4272f52f3825ed14f47fde658ab7e99",
+        "retrieved_at_utc": "2026-10-19T04:30:17.242933+00:00",
+        "source": {
+          "provider": "Wigan Council, UK",
+          "format": "unavailable",
+          "source_page": "https://www.wigan.gov.uk/Council/DataProtection-FOI-Stats/Spending-and-Finance-data.aspx",
+          "documentation": "https://www.wigan.gov.uk/Docs/PDF/Council/Data-Protection-FOI/Open-Data/FinancialSpendsMetadata.pdf",
+          "scope": "Attempted FY2025-26 creditor payment CSV; not treated as downloaded if request fails",
+          "license": "Source page and metadata explicitly state Open Government Licence",
+          "files": {
+            "payments.csv": "https://www.wigan.gov.uk/Docs/PDF/Council/Data-Protection-FOI/Open-Data/Open-Data-2025-26/Open-Data-M12-March-2026-Creditor-Payments-CSV.csv"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [],
+        "errors": [
+          {
+            "file": "payments.csv",
+            "url": "https://www.wigan.gov.uk/Docs/PDF/Council/Data-Protection-FOI/Open-Data/Open-Data-2025-26/Open-Data-M12-March-2026-Creditor-Payments-CSV.csv",
+            "error_type": "HTTPError",
+            "http_status": 403,
+            "reason": "HTTP Error 403: Forbidden",
+            "checked_at_utc": "2026-10-19T04:30:17.407131+00:00"
+          }
+        ],
+        "download_status": "failed"
+      },
+      "audited_at_utc": "2026-10-19T04:35:24.820738+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": null,
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "access_failed",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "no_downloaded_dataset"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    },
+    {
+      "source_id": "opencollective-webpack",
+      "manifest": {
+        "source_id": "opencollective-webpack",
+        "spec_hash": "dc5d19fd9b9240cbb88ac97b14da437332c917677a961fcb466927e2d2e526e8",
+        "retrieved_at_utc": "2026-10-19T04:30:17.409696+00:00",
+        "source": {
+          "provider": "Open Collective / webpack",
+          "format": "unavailable",
+          "source_page": "https://opencollective.com/webpack/transactions",
+          "documentation": "https://documentation.opencollective.com/advanced/ledger",
+          "scope": "Public GraphQL transaction request, limit 100; ledger is not an independent bank statement",
+          "license": "Data reuse not verified; private attachments not requested",
+          "files": {
+            "transactions.json": "https://api.opencollective.com/graphql/v2?query=%7Baccount%28slug%3A%22webpack%22%29%7Bslug+currency+transactions%28limit%3A100%29%7BtotalCount+nodes%7Bid+createdAt+type+kind+amount%7BvalueInCents+currency%7D%7D%7D%7D%7D"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [],
+        "errors": [
+          {
+            "file": "transactions.json",
+            "url": "https://api.opencollective.com/graphql/v2?query=%7Baccount%28slug%3A%22webpack%22%29%7Bslug+currency+transactions%28limit%3A100%29%7BtotalCount+nodes%7Bid+createdAt+type+kind+amount%7BvalueInCents+currency%7D%7D%7D%7D%7D",
+            "error_type": "HTTPError",
+            "http_status": 403,
+            "reason": "HTTP Error 403: Forbidden",
+            "checked_at_utc": "2026-10-19T04:30:17.565472+00:00"
+          }
+        ],
+        "download_status": "failed"
+      },
+      "audited_at_utc": "2026-10-19T04:35:24.821369+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": null,
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "access_failed",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "no_downloaded_dataset"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    },
+    {
+      "source_id": "berka-original",
+      "manifest": {
+        "source_id": "berka-original",
+        "spec_hash": "50558e3010124ecef861515f4f6acbfb97d21c8538d16acf0f84c32994ffb212",
+        "retrieved_at_utc": "2026-10-19T04:30:17.568206+00:00",
+        "source": {
+          "provider": "PKDD99 / original VSE archive",
+          "format": "unavailable",
+          "source_page": "https://relational.fel.cvut.cz/dataset/Financial",
+          "documentation": "https://relational.fel.cvut.cz/dataset/Financial",
+          "scope": "Attempt original archived bank dataset URL; no invoice allocation truth established",
+          "license": "Reuse conditions not verified",
+          "files": {
+            "data_berka.zip": "https://lisp.vse.cz/pkdd99/DATA/data_berka.zip"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [],
+        "errors": [
+          {
+            "file": "data_berka.zip",
+            "url": "https://lisp.vse.cz/pkdd99/DATA/data_berka.zip",
+            "error_type": "URLError",
+            "http_status": null,
+            "reason": "<urlopen error [Errno 11001] getaddrinfo failed>",
+            "checked_at_utc": "2026-10-19T04:30:17.802342+00:00"
+          }
+        ],
+        "download_status": "failed"
+      },
+      "audited_at_utc": "2026-10-19T04:35:24.821951+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": null,
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "access_failed",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "no_downloaded_dataset"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    },
+    {
+      "source_id": "benchrec",
+      "manifest": {
+        "source_id": "benchrec",
+        "spec_hash": "542e0d6915932434122c7f2b776c0fed99c08538607ff54905104bc4fd4354db",
+        "retrieved_at_utc": "2026-10-19T04:30:17.804590+00:00",
+        "source": {
+          "provider": "Operartis",
+          "format": "access_gated",
+          "source_page": "https://www.operartis.com/benchrec",
+          "documentation": "https://sites.google.com/view/fintranmatch-competition-icaif",
+          "scope": "Participation page only; no dataset download, registration or contact submission",
+          "license": "Dataset terms unavailable until access granted; GL is not necessarily an invoice",
+          "files": {
+            "participation.html": "https://www.operartis.com/benchrec"
+          }
+        },
+        "use_policy": "inspection_only_excluded_from_matching",
+        "files": [
+          {
+            "file": "participation.html",
+            "url": "https://www.operartis.com/benchrec",
+            "final_url": "https://www.operartis.com/benchrec",
+            "status": 200,
+            "retrieved_at_utc": "2026-10-19T04:30:19.326789+00:00",
+            "content_type": "text/html; charset=UTF-8",
+            "bytes": 1267256,
+            "sha256": "3d69e98916be3e58c0bb7025077d411b8103af612f691a11a51b18f3c0034f0e"
+          }
+        ],
+        "errors": [],
+        "download_status": "downloaded"
+      },
+      "audited_at_utc": "2026-10-19T04:35:24.824369+00:00",
+      "audit_code_sha256": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+      "profile": null,
+      "matcher_runs": 0,
+      "precision": null,
+      "recall": null,
+      "status": "access_gated",
+      "matching_gate": {
+        "accepted": false,
+        "reasons": [
+          "only_participation_page_downloaded",
+          "dataset_and_terms_require_access"
+        ],
+        "action": "Inspection only; no matcher inputs, pseudo-labels, training, tuning or method ranking"
+      }
+    }
+  ],
+  "code_hashes": {
+    "source_survey.py": "b7a1d062c027d9852bd99486388c20361fc709d6ee088f8d38f6885e57fd8584",
+    "real_data.py": "013c7b9f03561dd21641266e0f5015438f69db8a8ed5ca1e6b41019e611c233e",
+    "data.py": "d78159c4835500de5ed233dc0631a1ec3c1fa0edc7728a72ce657b989ec5ad20"
+  },
+  "summary": {
+    "candidate_snapshots": 8,
+    "audited_data_snapshots": 4,
+    "rows_inspected": 17109,
+    "accepted_for_matching": 0,
+    "matcher_runs": 0
+  },
+  "limits": [
+    "CityVizor profiles share a provider/schema, not independent data formats",
+    "Failed access is session-specific, not proof a source is permanently unavailable",
+    "Only the DC prefix is sampled; entire selected export files audited for other accessible sources",
+    "Public-source authenticity follows publisher provenance, not independent real-world verification",
+    "Source audit success is not matching acceptance; no raw names/descriptions copied to report"
+  ]
+}

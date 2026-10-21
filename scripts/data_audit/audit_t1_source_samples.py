@@ -22,17 +22,20 @@ RAW = ROOT / "data/T1/raw/source_samples"
 def date(value):
     if value is None or str(value).strip() in ("", "0000-00-00"):
         return None
-    if isinstance(value, (float, int)):
-        return datetime.fromtimestamp(value / 1000, tz=timezone.utc).date()
     try:
+        if isinstance(value, bool):
+            return None
+        if isinstance(value, (float, int)):
+            return datetime.fromtimestamp(value / 1000, tz=timezone.utc).date()
         return datetime.fromisoformat(str(value)[:10]).date()
-    except ValueError:
+    except (ValueError, OverflowError, OSError):
         return None
 
 
 def number(value):
     try:
-        return Decimal(str(value)) if value is not None else None
+        number = Decimal(str(value)) if value is not None else None
+        return number if number is not None and number.is_finite() else None
     except InvalidOperation:
         return None
 
@@ -81,10 +84,10 @@ def health_profile(rows):
         if all(d is not None and d.year >= 2000 for d in dates) and dates[2] >= dates[0] and amount is not None and amount > 0:
             complete.append(row)
     result["positive_rows_with_issue_due_paid_dates_ordered"] = len(complete)
-    result["complete_rows_by_buyer_code"] = dict(Counter(str(r["odberatel"]["id_company"]) for r in complete))
+    result["complete_rows_by_buyer_code"] = dict(Counter(str((r.get("odberatel") or {}).get("id_company")) for r in complete))
     # Different imports may republish invoices; matching identifiers are candidates,
     # not proof of duplicate invoices. Blank supplier references are excluded.
-    keys = [(r.get("odberatel", {}).get("id_company"), r.get("dodavatel", {}).get("id_company"),
+    keys = [((r.get("odberatel") or {}).get("id_company"), (r.get("dodavatel") or {}).get("id_company"),
              r.get("identifikator_dodavatele")) for r in rows if r.get("identifikator_dodavatele")]
     result["repeated_buyer_supplier_supplier_reference_rows"] = len(keys) - len(set(keys))
     return result

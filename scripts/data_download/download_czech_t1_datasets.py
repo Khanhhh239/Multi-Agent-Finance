@@ -30,6 +30,19 @@ def save_json(path, value):
     tmp.replace(path)
 
 
+def verified_cache(target, metadata):
+    """Size alone cannot establish identity when resuming a raw snapshot."""
+    if not target.exists() or not metadata:
+        return False
+    digest = hashlib.sha256()
+    with target.open("rb") as handle:
+        while chunk := handle.read(1024 * 1024):
+            digest.update(chunk)
+    if target.stat().st_size != metadata["bytes"] or digest.hexdigest() != metadata["sha256"]:
+        raise ValueError(f"Cached raw hash/size mismatch: {target}; preserve it and use a new --snapshot")
+    return True
+
+
 def get(url, target, max_bytes, json_response=False):
     for attempt in range(4):
         tmp = target.with_suffix(target.suffix + ".part")
@@ -69,8 +82,15 @@ def get(url, target, max_bytes, json_response=False):
                 if rows and "id_invoice" in rows[0]:
                     ids = [r["id_invoice"] for r in rows]
                     metadata.update(invoice_id_min=min(ids), invoice_id_max=max(ids))
-            tmp.replace(target)
+            if target.exists():
+                verified_cache(target, metadata)
+                tmp.unlink()
+            else:
+                tmp.replace(target)
             return metadata
+        except ValueError:
+            # A schema/size/snapshot conflict is not a transient HTTP failure.
+            raise
         except Exception:
             if attempt == 3:
                 raise
@@ -100,10 +120,9 @@ def main():
     def download_mf():
         target = mf / "faktury.csv"
         meta = cached.get("sources", {}).get("finance")
-        if target.exists() and meta:
-            if target.stat().st_size == meta["bytes"]:
-                print("Finance CSV already downloaded; auditing will verify SHA256.", flush=True)
-                return meta
+        if verified_cache(target, meta):
+            print("Finance CSV already downloaded; SHA256 verified.", flush=True)
+            return meta
         print("Downloading complete Finance CSV...", flush=True)
         meta = get(MF_URL, target, 1_000_000_000)
         print(f"Finance CSV complete: {meta['bytes']:,} bytes.", flush=True)
@@ -127,9 +146,9 @@ def main():
         def page_job(page):
             target = pages / f"page_{page:04d}.json"
             meta = cached_pages.get(page)
-            if target.exists() and meta:
+            if verified_cache(target, meta):
                 page_headers = {k.lower(): v for k, v in meta["headers"].items()}
-                if target.stat().st_size == meta["bytes"] and int(page_headers.get("x-pagination-total-count", -1)) == total:
+                if int(page_headers.get("x-pagination-total-count", -1)) == total:
                     return page, meta
             url = HEALTH_URL + "?" + urllib.parse.urlencode({"per-page": 1000, "page": page})
             return page, get(url, target, 20_000_000, True)

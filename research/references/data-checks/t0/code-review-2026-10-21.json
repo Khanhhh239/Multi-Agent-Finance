@@ -1,0 +1,429 @@
+{
+  "schema": "t0-code-review-v1",
+  "review_date": "2026-10-21",
+  "checked_at_utc": "2026-10-21T01:08:24.935353+00:00",
+  "scope": "Current T0 source, existing repository tests, full cached offline rerun, targeted extra fixtures; reference notebooks inventoried, not executed. No model training or new network data.",
+  "python": "3.13.5",
+  "code_hashes": {
+    "t0/__init__.py": "e06e6f30a0ddf461da54e69bd0f0c8bbdd678e7d4606238497a1aa5f4496a403",
+    "t0/__main__.py": "eee0bc81a44ad1a81d48a2f8783ab18eeea8c0845e34261f85e8425775b024b9",
+    "t0/adapters.py": "96613caf9c8f6bc2082f115eb6ea03f717760183568aac1165440b68bdb94edd",
+    "t0/allocation.py": "4348242d8d98f5e65efb5a7d77e36c05dcd4f64ec5bb4b8a8474b706fd68fcfe",
+    "t0/benchrec.py": "6581ce974886812dff504de97009c264a599b6e2ebfc4f7a73f3f8f801f66aee",
+    "t0/data.py": "e5f36f8222c60d9161cd62be98cdbb1c598874ccf338ad6c2a0a279653ebf503",
+    "t0/evaluation.py": "df402478b4c4e2f3a625fe111cfa60cd5c0c4bcf57aef4a1efe6362774ba85ca",
+    "t0/journal.py": "9c6f2d1b00bfd40be7eeb8c7e5cd938a88c69cd5a9dbcda126d00fa0d96d81a9",
+    "t0/ledger.py": "c06f3eec44a0ed50e49c0c19a67f2aeb5c92d7852ae4ea3c726b9af4f0b2c199",
+    "t0/matching.py": "d3bc92b6cf2996f441a52198c63bd18f2b943a3a6a7477f3de90455d5ac0ef40",
+    "t0/offline.py": "80cb74f52f8aec3deffe814116d854d20eb73d179de612694354b9af411ba83a",
+    "t0/scenarios.py": "ebc4f64e344b40fd1c1bca7218bcaff60939197ef1edae26eff386e2e99435ef",
+    "t0/settlement.py": "2af35120ff65e03e18369291823f34b747b2e8686642f6ddbde9cf06216ba39a"
+  },
+  "plan_hash": "e53a968ee20266698a6c22486306997d1d2b99be091881110e0748365949f20e",
+  "commands": [
+    {
+      "command": "python scripts/checks/check_docs.py",
+      "exit_code": 0,
+      "markdown_files": 35
+    },
+    {
+      "command": "python -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "tests": 124
+    },
+    {
+      "command": "python -m t0 run-offline --output data/T0/processed/offline-review-2026-10-21",
+      "exit_code": 0
+    }
+  ],
+  "offline_checks": {
+    "ar_invariants": true,
+    "ar_order_stability": true,
+    "fiscus": true
+  },
+  "offline_artifact_count": 124,
+  "offline_evidence_path": "data/T0/processed/offline-review-2026-10-21/evidence.json",
+  "offline_evidence_sha256": "88772dbd136a7abaa8f4efc0a93a19dde391c55edce201881de038bbb78b3aad",
+  "ar_test_v2_full": [
+    {
+      "split": "test",
+      "profile": "clean",
+      "method": "v2_full",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.7692307692307693,
+          "std": 0.0,
+          "min": 0.7692307692307693,
+          "max": 0.7692307692307693
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.009733600003528409,
+          "std": 0.0005697866406388957,
+          "min": 0.009330700006103143,
+          "max": 0.010136500000953674
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 620750000,
+            "std": 242184072.55639252,
+            "min": 449500000,
+            "max": 792000000
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 125750000,
+            "std": 48436814.5112785,
+            "min": 91500000,
+            "max": 160000000
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 367250000,
+            "std": 145310443.53383553,
+            "min": 264500000,
+            "max": 470000000
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 558500,
+            "std": 48083.26112068523,
+            "min": 524500,
+            "max": 592500
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 113300,
+            "std": 9616.652224137046,
+            "min": 106500,
+            "max": 120100
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 329900,
+            "std": 28849.95667241114,
+            "min": 309500,
+            "max": 350300
+          }
+        }
+      }
+    },
+    {
+      "split": "test",
+      "profile": "masked",
+      "method": "v2_full",
+      "metrics": {
+        "precision": {
+          "n": 2,
+          "mean": 1.0,
+          "std": 0.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "recall": {
+          "n": 2,
+          "mean": 0.6682692307692308,
+          "std": 0.03399551832627628,
+          "min": 0.6442307692307693,
+          "max": 0.6923076923076923
+        },
+        "candidate_recall": {
+          "n": 2,
+          "mean": 0.8846153846153846,
+          "std": 0.01359820733051056,
+          "min": 0.875,
+          "max": 0.8942307692307693
+        },
+        "runtime_seconds": {
+          "n": 2,
+          "mean": 0.009165599985863082,
+          "std": 0.002100955675690642,
+          "min": 0.007679999980609864,
+          "max": 0.0106511999911163
+        }
+      },
+      "all_order_stable": true,
+      "all_invariants_pass": true,
+      "money_by_currency": {
+        "VND": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 988000000,
+            "std": 387494516.090228,
+            "min": 714000000,
+            "max": 1262000000
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 541733334,
+            "std": 201431152.67681688,
+            "min": 399300000,
+            "max": 684166668
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 204766666,
+            "std": 89189734.39085415,
+            "min": 141700000,
+            "max": 267833332
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 446266666,
+            "std": 186063363.41341117,
+            "min": 314700000,
+            "max": 577833332
+          }
+        },
+        "USD": {
+          "receipt_minor": {
+            "n": 2,
+            "mean": 888400,
+            "std": 76933.21779309637,
+            "min": 834000,
+            "max": 942800
+          },
+          "allocated_minor": {
+            "n": 2,
+            "mean": 448850.5,
+            "std": 20907.02619934265,
+            "min": 434067,
+            "max": 463634
+          },
+          "wrong_minor": {
+            "n": 2,
+            "mean": 0,
+            "std": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "missing_minor": {
+            "n": 2,
+            "mean": 222949.5,
+            "std": 36792.887145479624,
+            "min": 196933,
+            "max": 248966
+          },
+          "unallocated_minor": {
+            "n": 2,
+            "mean": 439549.5,
+            "std": 56026.19159375372,
+            "min": 399933,
+            "max": 479166
+          }
+        }
+      }
+    }
+  ],
+  "finrca_matching_quality": {
+    "raw_clean": null,
+    "benchmark/full": null
+  },
+  "recbench": {
+    "truth_edges_total": 75002,
+    "truth_groups_complete": 73955,
+    "truth_groups_missing_endpoints": 1047,
+    "explicit_negative_bank_rows": 136,
+    "unknown_bank_rows": 1047,
+    "predictions_on_unknown_bank_rows": 0,
+    "nonmatchable_labels_with_truth": 25,
+    "predictions_on_nonmatchable_labels": 0,
+    "scored_predictions": 73828,
+    "correct_links": 73828,
+    "exact_link_precision": 1.0,
+    "exact_link_recall": 0.9982827395037522,
+    "observed_truth_group_coverage": 0.9860403722567398,
+    "by_currency": {
+      "EUR": {
+        "bank_rows": 21859,
+        "scored_bank_rows": 21536
+      },
+      "GBP": {
+        "bank_rows": 13594,
+        "scored_bank_rows": 13371
+      },
+      "USD": {
+        "bank_rows": 39685,
+        "scored_bank_rows": 39184
+      }
+    },
+    "runtime_seconds": 1.756476799986558,
+    "order_stable": true
+  },
+  "finbalance": {
+    "coverage_records": 143,
+    "predicted_entries": 90,
+    "expected_entries": 1873,
+    "correct_entries": 54,
+    "entry_precision": 0.6,
+    "entry_recall_full_coverage_pool": 0.028830752802989856,
+    "records_with_full_journal_exact": 10,
+    "records_with_balance_sheet_evaluated": 2,
+    "records_with_balance_sheet_exact": 1
+  },
+  "extra_probes": {
+    "invalid_availability_''": {
+      "accepted": true,
+      "visible_invoices": 1,
+      "auto_allocations": 1
+    },
+    "invalid_availability_'2025-1-1'": {
+      "accepted": true,
+      "visible_invoices": 0,
+      "auto_allocations": 0
+    },
+    "invalid_availability_'2025-01-00'": {
+      "accepted": true,
+      "visible_invoices": 1,
+      "auto_allocations": 1
+    },
+    "wrong_valid_reference": {
+      "allocations": [
+        {
+          "tenant_id": "A",
+          "payment_id": "P1",
+          "invoice_id": "I2",
+          "currency": "VND",
+          "side": "AR",
+          "amount_minor": 100,
+          "reason": "reference"
+        }
+      ],
+      "metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "candidate_recall": 0.0,
+        "truth_edges": 1,
+        "excluded_future_truth_edges": 0,
+        "predicted_edges": 1,
+        "correct_edges": 0,
+        "money_by_currency": {
+          "VND": {
+            "receipt_minor": 100,
+            "allocated_minor": 100,
+            "wrong_minor": 100,
+            "missing_minor": 100,
+            "unallocated_minor": 0
+          }
+        },
+        "by_scenario": {
+          "wrong_valid_reference": {
+            "truth_edges": 1,
+            "correct_edges": 0
+          }
+        },
+        "by_currency": {
+          "VND": {
+            "truth_edges": 1,
+            "predicted_edges": 1,
+            "correct_edges": 0
+          }
+        },
+        "decision_counts": {
+          "auto": 1
+        },
+        "overflow_payments": 0,
+        "invariant_errors": []
+      }
+    },
+    "credit_note_predates_endpoint": {
+      "accepted": true,
+      "endpoint_effective_on": "2025-01-20",
+      "adjustment_effective_on": "2025-01-01"
+    },
+    "refund_predates_endpoint": {
+      "accepted": true,
+      "endpoint_effective_on": "2025-01-20",
+      "adjustment_effective_on": "2025-01-01"
+    }
+  },
+  "findings": [
+    {
+      "id": "R1",
+      "source": "t0/__main__.py:22",
+      "status": "reproduced_unfixed",
+      "finding": "Simulated availability is compared as a string before validating each row. Empty or impossible dates can enter a snapshot; noncanonical dates can be silently excluded. Existing tests did not catch this."
+    },
+    {
+      "id": "R2",
+      "source": "t0/allocation.py:123",
+      "status": "capability_gap_reproduced",
+      "finding": "A wrong but valid invoice reference with matching scope can produce an auto proposal on the wrong invoice; financial invariants remain empty. This probe is one counterexample, not a population accuracy estimate."
+    },
+    {
+      "id": "R3",
+      "source": "t0/ledger.py:116",
+      "status": "validation_gap_reproduced",
+      "finding": "Credit note/refund effective date may predate the referenced invoice/payment. Endpoint existence and scope are checked, but effective chronology of these related records is not. Separate from late-arrival availability protection."
+    },
+    {
+      "id": "R4",
+      "source": "t0/offline.py:341",
+      "status": "gate_scope",
+      "finding": "Offline success checks AR invariants/order and FISCUS workflow, not minimum matching/journal quality or all task availability. Success is not a completeness or production-quality certificate."
+    }
+  ],
+  "limitations": [
+    "Not an exhaustive audit of every notebook cell or every possible scenario",
+    "No new BenchRec full benchmark/verify-existing run in this review; v1 results remain historical",
+    "No SME holdout, live ERP/bank connector, T1 training/backtest, or concurrency/load certification",
+    "Original working tree changes preserved; source algorithms not changed"
+  ]
+}

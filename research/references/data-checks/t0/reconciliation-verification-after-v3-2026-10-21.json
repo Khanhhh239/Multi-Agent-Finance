@@ -1,0 +1,30 @@
+{
+  "verified_at_utc": "2026-10-21T01:34:58.089583+00:00",
+  "invoice_runs_verified": 84,
+  "benchrec_predictions_verified": 60,
+  "benchrec_matchers_replayed": 4,
+  "historical_report_content_hash": "eb42e4d0f84ad00ff47b0881eab8e5532ed18adf286630eaf9bcbd1be54fd776",
+  "plan_content_hash": "a59f9a0581f133a78613a9f310a2b531fde05f9922b7c2ca9d4a2efe2b2773c1",
+  "historical_files_modified": false,
+  "parameters_tuned": false,
+  "verification_source_sha256": {
+    "scripts/data_audit/benchmark_t0_reconciliation.py": "34201baf9ee0676bd7a5618601e461a04c4bba12f54c4c0160eb8dbed93d026a",
+    "t0/__init__.py": "c32fbe849136a15a7dc076942f792605c296e4295f144b2a99ac50bf8ce5862b",
+    "t0/__main__.py": "f13b0128316c1bcbd68f2c13ac0c3400f39d1c4062b5ed5e6b3b3b52776e3fa5",
+    "t0/adapters.py": "eb4ae2cd7f5e94f9b65d3a6e0c6cf3783b095c505df64e3db76cdc0817715c98",
+    "t0/allocation.py": "4348242d8d98f5e65efb5a7d77e36c05dcd4f64ec5bb4b8a8474b706fd68fcfe",
+    "t0/balances.py": "526a80b4f1f7753871a552614f092d3069e81145a3d3f56a18254bf0bf59b76c",
+    "t0/benchrec.py": "6581ce974886812dff504de97009c264a599b6e2ebfc4f7a73f3f8f801f66aee",
+    "t0/constrained.py": "625516a0755b497eaab04de235196d0e3b8179bb2a855e9df4f0a9bffafd57fc",
+    "t0/data.py": "a0a90153a22849e435e853085107b6e1d2ec6ea5141482c38abcf9b5fce7a1f4",
+    "t0/evaluation.py": "df402478b4c4e2f3a625fe111cfa60cd5c0c4bcf57aef4a1efe6362774ba85ca",
+    "t0/gates.py": "382fdb1bcb314062fc72d08457c28b84ffb017a489c9f7d843783e1bd98fd334",
+    "t0/journal.py": "5d33cff09da3750a9e3a8db44d92c8e8cce7f68b53b8ed24661fcd55d2264082",
+    "t0/ledger.py": "fed9c3aa36b532304e120f2e8ab652086da5d51dea27f5f0912020a6f76f8197",
+    "t0/matching.py": "d3bc92b6cf2996f441a52198c63bd18f2b943a3a6a7477f3de90455d5ac0ef40",
+    "t0/offline.py": "457cf0976ce1fd9235143f6c05d631d08edd388c6758e3a4fbfcce405930a6be",
+    "t0/robustness.py": "78cdefae7d264e7e8c0adc29e78047a50a8429865dde0aef6ae89603cf76405d",
+    "t0/scenarios.py": "ebc4f64e344b40fd1c1bca7218bcaff60939197ef1edae26eff386e2e99435ef",
+    "t0/settlement.py": "0c06da53408646babb3d57abea60c4e98eaa49edc059a3044607403a84743871"
+  }
+}
