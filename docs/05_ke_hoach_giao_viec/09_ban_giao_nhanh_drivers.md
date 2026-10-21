@@ -26,6 +26,11 @@ Toàn bộ: **206 bài qua**, 12 bỏ qua (kiểm thử thuộc tính chậm), 1
    **Cổng Cold 40% gần như chắc trượt**; báo trước cho chủ dự án.
 5. Đặc trưng thay đổi bắt tốt "bán giá thấp cho một khách" (64%) và "hóa đơn bán khống" (45%) khi đứng riêng, nhưng thua trong ngân sách 3 cảnh báo khi ghép với các kênh khác.
 
+**Về các tệp trong `results/v5/drivers_diagnostics/`:**
+- `diag_cd_transfer.json` là lượt **trước khi sửa** lỗi đơn vị thời gian và vẫn dừng sớm; chỉ giữ để truy vết, **không dùng**.
+- Số đúng ở mục 2.2 và 2.3 là từ `scripts/diag_cd_seed_check.py` (3 seed, 400 cây cố định, sau khi sửa); đầu ra in ra màn hình, đã chép vào mục trên.
+- `diag_cd_sealedv4_fixed.json` là kênh không nhãn sau khi sửa.
+
 ## 3. Việc Agent 2 phải làm, theo thứ tự
 
 1. **Merge** `agent2-v5-drivers` vào `agent2-Khanh`. Chạy `pytest tests_agent2 tests_sme_fraud -q`.
