@@ -79,6 +79,44 @@ class WorldV5Development(WorldV4):
         case['concealment'] = self.rng.choices(['L0', 'L1', 'L2'], self.development['difficulty_weights'])[0]
         return case
 
+    STAFF_FIELDS = ('employee_id', 'creator_id', 'approver_id')
+
+    def hire_guard(self, row):
+        """Central invariant: no row may reference staff before their master record.
+
+        Several inherited paths check eligibility at one time of day (09:00 or
+        15:00) and then draw a random posting hour (08:00 to 17:59), so a
+        replacement hired at 09:00 can appear on a row posted at 08:xx the same
+        day (seed 1017, year-end bonus run). Same-day conflicts are repaired by
+        moving the row to one minute after the latest hire, preserving the
+        created <= approved <= posted order and drawing NO random numbers, so
+        worlds without a conflict stay byte-identical. A conflict across days is
+        a logic error in the calling path and raises with context.
+        """
+        posted = parse(row['posted_at'])
+        latest = None
+        for field in self.STAFF_FIELDS:
+            staff = self.employees.get(row.get(field) or '')
+            if staff is None:
+                continue
+            recorded = parse(staff['recorded_at'])
+            if recorded > posted:
+                if recorded.date() != posted.date():
+                    raise ValueError(f"{field} {staff['employee_id']} recorded {staff['recorded_at']} after "
+                                     f"{row.get('txn_type')} posted {row['posted_at']}")
+                latest = recorded if latest is None else max(latest, recorded)
+        if latest is not None:
+            shift = latest + timedelta(minutes=1) - posted
+            for key in ('created_at', 'approved_at', 'posted_at'):
+                row[key] = stamp(parse(row[key]) + shift)
+        return row
+
+    def emit(self, row, filler=False, hard=''):
+        return super().emit(self.hire_guard(row), filler=filler, hard=hard)
+
+    def put(self, split, row, *args, **kwargs):
+        return super().put(split, self.hire_guard(row), *args, **kwargs)
+
     def advance(self, cid, split, at, creator, valid=True, mode='review', hard=''):
         """Select staff against the ACTUAL issue date, drawn exactly once.
 
