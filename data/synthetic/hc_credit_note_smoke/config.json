@@ -1,0 +1,50 @@
+{
+  "name": "hc_credit_note_smoke",
+  "seed": 901,
+  "start": "2023-01-01",
+  "end": "2024-12-31",
+  "n_firms": 1,
+  "tail": "atradius",
+  "industry_mix": {
+    "steel_metals": 0.2,
+    "textile_clothing": 0.2,
+    "plastic_rubber": 0.2,
+    "wholesale": 0.2,
+    "food_processing": 0.1,
+    "services": 0.1
+  },
+  "posting_mode_p": [
+    0.45,
+    0.3,
+    0.25
+  ],
+  "payrun_p": [
+    0.34,
+    0.07,
+    0.07,
+    0.06,
+    0.06,
+    0.12,
+    0.08,
+    0.08,
+    0.07,
+    0.05
+  ],
+  "late_scale": 1.0,
+  "dispute_scale": 1.0,
+  "n_cust_median": 60.0,
+  "revenue_median": 40000000000.0,
+  "memo_invoice_no_p": [
+    2.0,
+    2.0
+  ],
+  "ontime_shift": {},
+  "pd_mult": {},
+  "write_xml": 0,
+  "cod_mult": 1.8,
+  "cash_cap_days": 60.0,
+  "promises_mode": "legacy",
+  "rng_version": 2,
+  "season_override": null,
+  "hard_case": "credit_note"
+}

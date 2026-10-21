@@ -60,3 +60,22 @@ def test_latent_columns_are_rejected():
     validate_feature_columns(FEATURES)
     with pytest.raises(ValueError, match='Đặc trưng cấm'):
         validate_feature_columns(FEATURES + ['liquidity_at_due'])
+
+
+def test_compact_snapshot_cache_preserves_features_and_invalidates_source_changes(tmp_path,monkeypatch):
+    from scripts import run_t1 as runner
+    root=tmp_path/'worlds';world=root/'small';world.mkdir(parents=True)
+    cache=tmp_path/'cache';cache.mkdir()
+    inv=invoices();inv.to_parquet(world/'invoices.parquet',index=False)
+    pd.DataFrame().to_parquet(world/'payments.parquet',index=False)
+    monkeypatch.setattr(runner,'SYNTH',root);monkeypatch.setattr(runner,'PROCESSED',cache)
+    cutoffs=pd.to_datetime(['2023-03-20','2023-04-01'])
+    expected=SnapshotBuilder(inv).build(cutoffs)
+    actual=runner.snapshots('small',cutoffs)
+    assert_frame_equal(actual[FEATURES],expected[FEATURES],check_dtype=False,rtol=1e-6)
+    assert_frame_equal(actual,runner.snapshots('small',cutoffs))
+    inv.loc[inv.invoice_id=='future','amount_gross']=2e12
+    inv.to_parquet(world/'invoices.parquet',index=False)
+    after=runner.snapshots('small',cutoffs)
+    assert_frame_equal(actual,after)
+    assert len(list(cache.glob('*.parquet')))==2

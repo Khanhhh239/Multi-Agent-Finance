@@ -14,6 +14,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from agent1.paths import SYNTH, OUT  # noqa: E402
 from agent1.models.t7_changepoint import residual_stream, run_detector, GRIDS  # noqa: E402
+from agent1.models.t7_portfolio import consensus_alarms
 
 RES = OUT / "t7"
 RES.mkdir(parents=True, exist_ok=True)
@@ -37,14 +38,18 @@ def streams(world, method):
         b = brk.get(cid, pd.NaT)
         n_after = int(((dates >= b) & (dates <= b + pd.Timedelta(days=180))).sum()) if pd.notna(b) else 0
         in_stress = np.array([(x - pd.Timedelta(days=x.weekday())).normalize() in stress for x in dates])
-        out.append(dict(cid=cid, z=z, raw=raw, dates=dates, brk=b, n_after=n_after, stress=in_stress))
+        out.append(dict(cid=cid, fid=g.firm_id.iloc[0], world=world, z=z, raw=raw, dates=dates, brk=b, n_after=n_after, stress=in_stress))
     return out
 
 
 def evaluate(S, name, kw):
     det, lags, fa, fy, macro = [], [], 0, 0.0, 0
     for s in S:
-        al = run_detector(name, s["z"], s["raw"], **kw)
+        if name=='Consensus':
+            confirmed=consensus_alarms(s['dates'],s['z'],s['raw'],**kw)
+            al=np.searchsorted(s['dates'],confirmed).tolist()
+        else:
+            al = run_detector(name, s["z"], s["raw"], **kw)
         al_d = s["dates"][al] if len(al) else pd.DatetimeIndex([])
         st = s["stress"][al] if len(al) else np.array([], bool)
         macro += int(st.sum())
@@ -87,7 +92,18 @@ def main():
             rows.append(dict(detector=label, params=str(best), world="src (tuned)", **best_r))
             rows.append(dict(detector=label, params=str(best), world="held-out (tgt+sens_uk+sens_coface)", **rt))
             print(rows[-2], "\n", rows[-1], flush=True)
+    src=streams('src','pit');held=streams('tgt','pit')+streams('sens_uk','pit')+streams('sens_coface','pit')
+    candidates=[]
+    for window in (14,30,45):
+        params=dict(window_days=window)
+        result=evaluate(src,'Consensus',params)
+        if result['false_alarms_per_cust_year']<=FA_TARGET:candidates.append((params,result))
+    if candidates:
+        params,result=max(candidates,key=lambda item:item[1]['detection_rate_180d'])
+        rows.extend([dict(detector='Consensus 2-of-3 [pit]',params=str(params),world='src (tuned)',**result),
+                     dict(detector='Consensus 2-of-3 [pit]',params=str(params),world='held-out (tgt+sens_uk+sens_coface)',**evaluate(held,'Consensus',params))])
     out = pd.DataFrame(rows)
+    out['measurement_version']='changepoint-consensus-v2';out['seed']=7
     print(out.round(3).to_string(), flush=True)
     out.to_csv(RES / "t7_changepoint.csv", index=False)
 

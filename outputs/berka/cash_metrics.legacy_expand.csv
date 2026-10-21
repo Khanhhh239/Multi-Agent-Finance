@@ -1,0 +1,3 @@
+model,cov80,IS80,ci_low,ci_high,bootstrap_n,cluster_unit,n_accounts,measurement_version,seed
+Direct LGBM-Q,0.7685463880006683,16.9651286247093,0.7636318255212152,0.7729069266943546,300,account,1478,berka-train-through1996-test1997-98-v1,7
+Direct LGBM-Q + ACI,0.7691849912220668,16.949703589283974,0.7646274469608508,0.7733190210521637,300,account,1478,berka-train-through1996-test1997-98-v1,7

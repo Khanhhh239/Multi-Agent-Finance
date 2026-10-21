@@ -1,0 +1,9 @@
+hypothesis,world,months_history,model,baseline,metric,threshold_pct,improvement_pct,improvement_ci_low,improvement_ci_high,n_firms,bootstrap_n,status,test_used_for_selection,measurement_version
+DA1,tgt,0,zero-shot,B1,cash_error_w1_4,20,59.05306038931534,46.62432034816498,65.57589881623834,14,300,supported,False,DA-paired-locked-budget-v1
+DA2,tgt,3,fine-tune,zero-shot,pinball_sum,10,-7.825068951532686,-16.919183844276784,-2.7141593669158968,14,300,rejected,False,DA-paired-locked-budget-v1
+DA3,tgt,3,fine-tune,target-only,pinball_sum,0,34.647118152581484,28.16188988203955,43.99823560314886,14,300,supported,False,DA-paired-locked-budget-v1
+DA3,tgt,6,fine-tune,target-only,pinball_sum,0,13.518081299603862,7.024478260118248,22.82585764906335,14,300,supported,False,DA-paired-locked-budget-v1
+DA4,tgt,6,IW-pooled,pooled,pinball_sum,0,0.0,0.0,0.0,14,300,rejected,False,DA-paired-locked-budget-v1
+DA3,tgt,24,target-only,fine-tune,pinball_sum,0,-9.566445415919477,-12.355418832737872,-4.134824852145283,14,300,rejected,False,DA-paired-locked-budget-v1
+DA4,sens_uk,6,IW-pooled,pooled,pinball_sum,0,-0.4278935300536934,-1.016864914831599,0.07052762084444805,12,300,not_demonstrated,False,DA-paired-locked-budget-v1
+DA4,sens_coface,6,IW-pooled,pooled,pinball_sum,0,0.37400918895816265,-0.5612021524591737,1.284337152057457,12,300,not_demonstrated,False,DA-paired-locked-budget-v1

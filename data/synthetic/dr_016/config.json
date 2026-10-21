@@ -1,0 +1,57 @@
+{
+  "name": "dr_016",
+  "seed": 73016,
+  "start": "2019-01-01",
+  "end": "2025-12-31",
+  "n_firms": 12,
+  "tail": "uk",
+  "industry_mix": {
+    "steel_metals": 0.2,
+    "textile_clothing": 0.2,
+    "plastic_rubber": 0.2,
+    "wholesale": 0.2,
+    "food_processing": 0.1,
+    "services": 0.1
+  },
+  "posting_mode_p": [
+    0.13785473511152174,
+    0.6646054347120163,
+    0.19753983017646184
+  ],
+  "payrun_p": [
+    0.026467430342943476,
+    0.04713842340954551,
+    0.008393033238622831,
+    0.40273644766195876,
+    0.055385415468990014,
+    0.1647663903596152,
+    0.20508233961884614,
+    0.016068203005016452,
+    0.028153326268150633,
+    0.04580899062631099
+  ],
+  "late_scale": 1.2552724998114222,
+  "dispute_scale": 1.2529132442388335,
+  "n_cust_median": 47.882824663783836,
+  "revenue_median": 24887281873.177628,
+  "memo_invoice_no_p": [
+    3.0130429633396414,
+    3.9951014509259912
+  ],
+  "ontime_shift": {
+    "steel_metals": -0.22170743630862105,
+    "textile_clothing": -0.22170743630862105,
+    "plastic_rubber": -0.22170743630862105,
+    "wholesale": -0.22170743630862105,
+    "food_processing": -0.22170743630862105,
+    "services": -0.22170743630862105
+  },
+  "pd_mult": {},
+  "write_xml": 0,
+  "cod_mult": 1.4231399655494756,
+  "cash_cap_days": 60.0,
+  "promises_mode": "legacy",
+  "rng_version": 1,
+  "season_override": null,
+  "hard_case": null
+}

@@ -37,7 +37,7 @@ def collection_kernel(inv_hist: pd.DataFrame, T, label_col="paid_date_true", wee
 
 def simulate(open_df, P, B0, known_out, rev_q, kernel, capex_rate, capex_sizes, n=1000, rho=0.15, nu=DEFAULT_NU, seed=0,
              rev_corr=0.7, p_bad=None, rho_bad=.15, rho_customer=0., recovery_rate=.25,
-             payment_shift=None, force_week=None):
+             payment_shift=None, force_week=None,draw_cap=None,draw_target=None,draw_weeks=None):
     """Trả về mảng mẫu số dư cuối tuần (n x K) và dòng ròng (n x K)."""
     # Dòng RNG riêng giữ CRN giữa các kịch bản dù số bước mô phỏng thay đổi.
     streams = [np.random.default_rng(s) for s in np.random.SeedSequence(seed).spawn(4)]
@@ -84,7 +84,7 @@ def simulate(open_df, P, B0, known_out, rev_q, kernel, capex_rate, capex_sizes, 
             if bad_prob.shape != (m,) or not np.isfinite(bad_prob).all() or ((bad_prob < 0) | (bad_prob > 1)).any():
                 raise ValueError('p_bad phải có một xác suất cho mỗi HĐ')
             ub = norm.cdf(np.sqrt(rho_bad) * g[:, None] + np.sqrt(1 - rho_bad) * bad_rng.standard_normal((n, m)))
-            defaulted = ub < bad_prob[None, :]
+            defaulted = ub > (1 - bad_prob[None, :])
             wk[defaulted] = K
         inflow = np.zeros((n, K))
         for k in range(K):
@@ -112,8 +112,32 @@ def simulate(open_df, P, B0, known_out, rev_q, kernel, capex_rate, capex_sizes, 
             if mask.any():
                 out[mask, k] += np.array([cap_rng.choice(capex_sizes, c).sum() for c in cnt[mask, k]])
     net = inflow - out
-    bal = B0 + np.cumsum(net, axis=1)
+    if draw_cap is not None and draw_target is not None and draw_weeks is not None:
+        if draw_target<0 or draw_cap<draw_target:
+            raise ValueError('Ngưỡng rút vốn không hợp lệ')
+        mask=np.asarray(draw_weeks,bool)
+        if mask.shape!=(K,):raise ValueError('draw_weeks cần 13 cờ')
+        bal=np.empty((n,K));running=np.full(n,float(B0))
+        for k in range(K):
+            running=running+net[:,k]
+            draw=np.maximum(running-draw_target,0.) if mask[k] else np.zeros(n)
+            draw=np.where(running>draw_cap,draw,0.)
+            net[:,k]-=draw;running-=draw;bal[:,k]=running
+    else:
+        bal = B0 + np.cumsum(net, axis=1)
     return bal, net
+
+
+def conditional_payment_pmf(P,p_bad):
+    """Tách phần cure khỏi CDF vô điều kiện; báo va chạm khi p_bad vượt S13."""
+    P,p_bad=np.asarray(P,float),np.asarray(p_bad,float)
+    if P.ndim!=2 or p_bad.shape!=(len(P),) or ((p_bad<0)|(p_bad>1)).any():
+        raise ValueError('PMF hoặc p_bad không hợp lệ')
+    conflict=p_bad>1-P.sum(1)+1e-8
+    conditional=P/np.maximum(1-p_bad[:,None],1e-12)
+    conditional/=np.maximum(conditional.sum(1,keepdims=True),1.)
+    conditional[p_bad>=1]=0.
+    return conditional,conflict
 
 
 class ACI:

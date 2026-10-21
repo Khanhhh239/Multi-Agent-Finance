@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "same_source": true,
+  "before_sha256": {
+    "metrics.csv": "1e7f9c83d4038e0c757246235c1d7af58fbaba88bf07276a142836df6845cf3c",
+    "decisions.csv": "94c9b0dd52c56c1293d07e95fd14f78680668753be590d2908e9e2d46b0a3c12"
+  },
+  "after_sha256": {
+    "metrics.csv": "1e7f9c83d4038e0c757246235c1d7af58fbaba88bf07276a142836df6845cf3c",
+    "decisions.csv": "94c9b0dd52c56c1293d07e95fd14f78680668753be590d2908e9e2d46b0a3c12"
+  },
+  "checked_at_utc": "2026-10-20T07:55:47.990503+00:00",
+  "scope": "DR model refitting and all four target scores from prepared snapshots; not regeneration or independent source seeds"
+}

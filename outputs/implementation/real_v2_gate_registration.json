@@ -1,0 +1,19 @@
+{
+  "registered_on": "2026-10-21",
+  "requested_by": "user",
+  "G5": {
+    "dataset": "ci",
+    "deployment": "BLEND(DH-GBM,B1d) calibration w",
+    "pinball_gain_vs_B1_min_pct": 10,
+    "ci_low_vs_B1d_strictly_gt": 0
+  },
+  "G6": {
+    "datasets": [
+      "ci",
+      "bpi"
+    ],
+    "ci_high_vs_B1d_min": 0,
+    "point_gain_min_pct": -2
+  },
+  "changed_after_test": false
+}

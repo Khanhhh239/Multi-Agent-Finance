@@ -1,0 +1,3 @@
+model,n_fits,fallback_count,converged_count,warning_count,measurement_version
+ARIMA,728,2,726,306,cash-traditional-same-E2E-cohort-v1
+ETS,728,0,728,0,cash-traditional-same-E2E-cohort-v1

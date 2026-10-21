@@ -1,0 +1,23 @@
+{
+  "complete": true,
+  "n_firms": 14,
+  "n_weeks": 52,
+  "n_paths": 1000,
+  "training": "rolling 52 net-cash weeks ending at cutoff; observed balance B0",
+  "ETS": "additive damped trend, no seasonal component, bootstrap fitted innovations",
+  "ARIMA": "(1,0,1) constant; Gaussian conditional path simulation",
+  "fallback": "nonconvergence or nonfinite paths -> historical mean plus iid bootstrap residuals, counted explicitly",
+  "B0": "point due dates + known-outflows estimate + historical revenue mean through observed collection kernel",
+  "parameters_selected_on_test": false,
+  "comparison": "saved estimated-T9 E2E ACI, exact truth/cohort/normalization match asserted",
+  "limitation": "synthetic;traditional models do not receive obligation covariates;B0 excludes unplanned capex and owner draw;Chronos not measured",
+  "code_sha256": "c9779a5b5328428eed1e838e9db76a9d2ebc6c64522a5d388d9a5121e328cabb",
+  "reference_sha256": "c5f5cccf8c271095b241893c9c92f50db870f51a88816863c35e44268f176a6a",
+  "input_sha256": {
+    "tgt\\daily_cash.parquet": "c2e7b8d06f916d2be04b788b90c4dc4b0e461477e6c7c6b5d64fabfae380cb1c",
+    "e2e_observed_tgt\\invoices.parquet": "71e8f42b9fd5b78f06192b207b9498b302a9e1b2306779893b75cf51b0460247",
+    "e2e_observed_tgt\\payments.parquet": "50395eab90dae9e843142b7f28e0a924992a030b7eb2a394437e680fd4e39ae3",
+    "e2e_observed_tgt\\promises.parquet": "b2f82111c991c5d3f2bbfb97909604d146eb88db9a509b6137e649ee3187591c",
+    "e2e_observed_tgt\\outflows.parquet": "dda5eb89e4cf3207913c36fa156c7d45d8370d5eaf9c776deaf93bcadce5ed08"
+  }
+}

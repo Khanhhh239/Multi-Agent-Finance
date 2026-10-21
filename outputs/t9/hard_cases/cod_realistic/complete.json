@@ -1,0 +1,26 @@
+{
+  "signature": {
+    "code": {
+      "scripts/run_t9_hardcases.py": "1922c568fb2513fb6e9b0f5afd1e44d3031b3b5c71387af7b2ee7ad0241ea88e",
+      "scripts/run_t9.py": "a74fc4e7002be972843c39251ad098c6047b112c77f07a9e360ca64a89c9368f",
+      "agent1/models/t9_recon.py": "a3b87cd3a0a4cdf4b01bd6f3b6ee639b0b95e372f98b788fb632164064a5b0fc",
+      "agent1/models/reconciliation_pipeline.py": "cc47114ff12a136254ffb5d03b735ec1d10376ed9ed7243767921d00ed8099e7",
+      "agent1/eval/cluster.py": "6f665a4031476c40dacb7820125c422b002096951e40ac9a68acc9e027ae7f56"
+    },
+    "source_model": {
+      "metadata.json": "0b7b0fa785d4151c8b107b8fb2bd8cf3dd9cfedfc52e549c88bb26f9c1cbf514",
+      "model.txt": "157b29fe00f3afc887458cd82da0d8b48dca63c464b80514d34d51cfc5fcf74e"
+    },
+    "start": "2024-07-01",
+    "end": "2025-06-29",
+    "tau_auto": 0.9,
+    "world": "hc_cod_realistic",
+    "inputs": {
+      "bank_txns": "5f7042cdb51f3b2cb69e2037a4f0d1c7603865ee1c9eb471f0ba6ba623e2c57c",
+      "invoices": "4a57e9f3495069c04b35e897f7a14c50946b8b0c519b6deebe50eb556d2b6eba",
+      "customers": "7fa949542c7ec013cee71c8bcb73a9cdc0e5a55796db23e6a39f09cb3ee64620",
+      "payments": "d6b5a6f9769a368b2922b6403f699939d1b2a88ea274116e23ebf382db7f77c0"
+    }
+  },
+  "output_sha256": "5d3b392da1c49ad2dead8336e9f0d34809182fc644fd02d323efa3792dcae014"
+}

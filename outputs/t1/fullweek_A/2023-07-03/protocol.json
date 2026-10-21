@@ -1,0 +1,8 @@
+{
+  "origin": "2023-07-03",
+  "training_label_end": "2023-01-01",
+  "calibration_cutoff_end": "2023-03-05",
+  "test_used_for_selection": false,
+  "expand_full_week_only": true,
+  "source_code_sha256": "0cb523f7f3670d4ba4e1327fab3d9df412b4f205b4c6c0cd5779c2997f2f4c4f"
+}

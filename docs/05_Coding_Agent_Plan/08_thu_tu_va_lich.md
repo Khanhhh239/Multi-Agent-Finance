@@ -52,6 +52,18 @@ G1, G2, G5, G9, G11, G12, G13, G15 (F1+MAE), G16 đạt; G3/G4 trong ±5 điểm
 
 ## 8.5 Điều kiện hoàn thành toàn bộ ("sản phẩm hoàn hảo")
 
+### Thông tin thực tế đã xác nhận 16/10/2026
+
+- Q1/Q2: người giao việc trả lời chưa có Home Credit và SEC_USER_AGENT.
+  Theo phương án mặc định, chưa tải Kaggle/SEC và không tự điền thông tin liên hệ.
+- Q3/Q4/Q5: chưa có dữ liệu pilot, đánh giá của ba người, tài khoản LLM hoặc Zalo OA.
+  Hiện dùng dữ liệu tổng hợp, mẫu câu và file cảnh báo mã hoá; chưa có gửi tin thật.
+- Q6: giữ giả định kinh tế hiện hành; chưa thay bằng ROI đo trên DN thật.
+- Q8: đã có cấu hình Docker local, nhưng Docker daemon trên máy chưa hoạt động;
+  kiểm tra CLI trả lỗi thiếu pipe `dockerDesktopLinuxEngine`. Tiếp tục xác minh dịch vụ bằng Python local.
+- Không coi kết quả smoke E2E là bằng chứng GO. Xem trạng thái sinh từ CSV tại
+  `../03_Evaluation/GATES_CURRENT.md` và nhật ký `outputs/implementation/run_status.json`.
+
 1. **Dữ liệu**: ≥24 thế giới tổng hợp (đa dạng) + 12 hard-case + ≥5 nguồn thật có kết quả; mọi thế giới qua `validate_world`; C2ST AUC báo cáo; marginal Atradius ± 3 điểm.
 2. **Mô hình**: G1–G18 đã đo theo giao thức mới; không chỉ số nào chỉ có "bảng cũ"; CI bootstrap theo công ty.
 3. **Hệ thống**: T0→T10 chạy đầu-cuối từ dữ liệu thô (XML + sao kê) trong ≤5 phút/DN; UI/API/cảnh báo; MLOps cơ bản.

@@ -1,0 +1,27 @@
+{
+  "params": {
+    "num_leaves": 89,
+    "min_data_in_leaf": 139,
+    "lambda_l2": 1.7341161246323222,
+    "feature_fraction": 0.8596620612545207,
+    "learning_rate": 0.05303934632910677,
+    "bagging_fraction": 0.9532116345821693
+  },
+  "seed": 7,
+  "validation_pinball": 5.491419462130623,
+  "origin": "2024-07-01",
+  "training_label_end": "2023-12-31",
+  "calibration_last_cutoff": "2024-03-03",
+  "test_used": false,
+  "source_fingerprint": "34f71f0f57de",
+  "n_train": 40000,
+  "n_validation": 10000,
+  "max_train": 40000,
+  "max_validation": 10000,
+  "study_name": "source_2024-07-01_7_34f71f0f57de_40000_10000",
+  "n_complete": 17,
+  "n_pruned": 33,
+  "n_failed": 1,
+  "search_complete": true,
+  "worker_isolation": true
+}

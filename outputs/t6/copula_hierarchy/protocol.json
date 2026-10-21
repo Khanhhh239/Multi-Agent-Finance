@@ -1,0 +1,49 @@
+{
+  "complete": true,
+  "signature": {
+    "code": {
+      "scripts/run_copula_hierarchy.py": "6db1aa0f9b639e19eaaf921bb91158e178e2d976a43e6fd784010c26d2f8f398",
+      "agent1/eval/copula_selection.py": "a482fcaa5df2f9b0ea348d9e9233a99a059d4d728c0f539e8610cb4581f53267",
+      "scripts/run_collection_policy.py": "b9cc09ad24ee880d546276466fca34bfab5e3a42088f4a4c8b166f9196935b5a",
+      "scripts/run_t6.py": "b6d99650c3e731454041cd98f1719a6eaba59cffca0718537af60fbcc17afe12",
+      "agent1/models/features.py": "311d6ae6dc7628c80723d3163c8810f46765f0cb4ac38e3e8a6f57872c81ebe5",
+      "agent1/models/t1.py": "0cb523f7f3670d4ba4e1327fab3d9df412b4f205b4c6c0cd5779c2997f2f4c4f",
+      "agent1/models/t6_cash.py": "0cce3a9661d7a2862da417099d8c62bc9b28caaf72a97682db8576e23e36a93d",
+      "agent1/eval/collection_policy.py": "d93664094e7e8ca6a8ce365ae3ae62fd0cafb7c6315c93e5635b098b8585338e",
+      "agent1/eval/cash_cohort.py": "06225be9d5ca1af0fe05608af7321da11bf93271eb719a01b742ff6525ed73b9"
+    },
+    "data": {
+      "src\\invoices.parquet": "418ee64c251c045378ede37755bcb4ce43b204ed2afa98da8dcc1d5d1f90a200",
+      "src\\payments.parquet": "25edade48c1443d4223142e66c2623c81475b5487b9800003a18876864aaec99",
+      "src\\firms.parquet": "9af40aa928033c166cc6b5e8a9abc78b215b96255688063c43c426f65298bf6c",
+      "tgt\\invoices.parquet": "c6837975eb5d9ba344378fa73ef6ee9792813ac856f36efa2fdc13baa3046e80",
+      "tgt\\payments.parquet": "ab7451e51cc4a59d94c8ffd14af01d54c0af1936dcb64d78d3b5893704101cc3",
+      "tgt\\firms.parquet": "794d5c617f6cd50b4ff61fc29e0a89e80406071e3e5945473d09af8363fe35eb",
+      "tgt\\daily_cash.parquet": "c2e7b8d06f916d2be04b788b90c4dc4b0e461477e6c7c6b5d64fabfae380cb1c",
+      "tgt\\outflows.parquet": "cdddd2500184125f542fccdb8ee0723663c750fcc5f05d3fdc512f5ccdcc55bb"
+    },
+    "target_model": "443acdb8283e2eb9d5e8f79d529663231745b4eae9ba9caede64f62580e6a323"
+  },
+  "nu": 4,
+  "n_paths": 512,
+  "calibration": "4 source firms, 13 weekly origins Jan-Mar2023, outcomes end Jun2023; source model trained labels <=2022-12-31",
+  "criterion": "paired IS80 improvement on target, CI by firm; no automatic adoption",
+  "target_used_for_selection": false,
+  "limitation": "oracle receipt histories, historical revenue quantiles, raw intervals without ACI, 20k-source/20k-target frozen T1; separate from T9 E2E; fixed grid has different search sizes",
+  "choices": {
+    "source_selected_one_factor": [
+      0.3,
+      0.0
+    ],
+    "source_selected_hierarchical": [
+      0.3,
+      0.25
+    ],
+    "fixed_one_factor": [
+      0.15,
+      0.0
+    ]
+  },
+  "n_source_train": 20000,
+  "metrics_sha256": "d96b2273fdf25d993367eca27a0238e2a08a2da5edc2615167aacbad7ba6790f"
+}

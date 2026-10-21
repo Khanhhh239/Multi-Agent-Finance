@@ -1,0 +1,58 @@
+{
+  "global": {
+    "k": 4.259949299272547,
+    "sigma2": 549.3428158718181,
+    "tau2": 128.95524741705893,
+    "n_customers": 2851,
+    "n_observations": 114809,
+    "status": "fit_source_only"
+  },
+  "food_processing": {
+    "k": 3.9540258355653473,
+    "sigma2": 379.66565790693323,
+    "tau2": 96.02002457645767,
+    "n_customers": 296,
+    "n_observations": 23438,
+    "status": "fit_source_only"
+  },
+  "plastic_rubber": {
+    "k": 3.955098881853677,
+    "sigma2": 586.3314977963129,
+    "tau2": 148.24698833357886,
+    "n_customers": 545,
+    "n_observations": 26232,
+    "status": "fit_source_only"
+  },
+  "services": {
+    "k": 3.982815143782802,
+    "sigma2": 601.1839332037104,
+    "tau2": 150.94447306753918,
+    "n_customers": 590,
+    "n_observations": 21878,
+    "status": "fit_source_only"
+  },
+  "steel_metals": {
+    "k": 4.974308863564408,
+    "sigma2": 502.37430883607954,
+    "tau2": 100.99379081903179,
+    "n_customers": 806,
+    "n_observations": 14782,
+    "status": "fit_source_only"
+  },
+  "textile_clothing": {
+    "k": 4.641483083379054,
+    "sigma2": 628.5896913728293,
+    "tau2": 135.42862918617138,
+    "n_customers": 470,
+    "n_observations": 14894,
+    "status": "fit_source_only"
+  },
+  "wholesale": {
+    "k": 4.588837118207738,
+    "sigma2": 652.3871310590976,
+    "tau2": 142.16829106235534,
+    "n_customers": 144,
+    "n_observations": 13585,
+    "status": "fit_source_only"
+  }
+}

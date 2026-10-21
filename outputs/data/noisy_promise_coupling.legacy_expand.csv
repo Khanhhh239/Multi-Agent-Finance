@@ -1,0 +1,10 @@
+table,unchanged,n_rows
+invoices,True,193469
+payments,True,202810
+bank_txns,True,188260
+outflows,True,35217
+daily_cash,True,102280
+firms,True,40
+customers,True,3427
+macro,True,366
+events,True,2436

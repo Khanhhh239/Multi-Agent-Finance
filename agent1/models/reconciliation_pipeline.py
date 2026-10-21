@@ -36,15 +36,16 @@ def choose_subset(open_invoices, amount, probabilities=None):
     return op.index[matrix[pick].astype(bool)].tolist(), len(feasible)
 
 
-def reconcile(rec, bank, invoices, customers, tau_auto=.9, assignments=None):
+def reconcile(rec, bank, invoices, customers, tau_auto=.9, assignments=None, rules_first=True,
+              rule_mode='both', ledger_policy='asof'):
     """Chỉ cập nhật công nợ từ liên kết tự động; không lấy nhãn thật để ra quyết định."""
     if not 0 <= tau_auto <= 1:
         raise ValueError('tau_auto trong [0,1]')
+    if rule_mode not in {'both', 'amount', 'memo'} or ledger_policy not in {'asof', 'opening_only'}:
+        raise ValueError('Chính sách quy tắc/sổ cái không hợp lệ')
     inv = invoices.copy().sort_values(['due_date', 'invoice_id']).set_index('invoice_id', drop=False)
     inv['remaining_amount'] = inv['amount_gross'].astype(float)
-    # Điều chỉnh chỉ được dùng khi có ngày ghi nhận quan sát được.
-    if 'credit_note_date' in inv and len(bank):
-        inv['remaining_amount'] -= inv.credit_note.where(inv.credit_note_date <= bank.value_date.min(), 0.)
+    inv['_credit_applied'] = 0.
     if len(bank) and 'ledger_clear_date' in inv:
         inv.loc[inv.ledger_clear_date < bank.value_date.min(), 'remaining_amount'] = 0.
     if assignments is None and rec.model is not None and len(bank):
@@ -56,14 +57,23 @@ def reconcile(rec, bank, invoices, customers, tau_auto=.9, assignments=None):
         if getattr(t, 'direction', 'in') != 'in' or t.amount <= 0:
             reviews.append(dict(txn_id=t.txn_id, reason='not_positive_inflow', amount=t.amount))
             continue
+        # Nhìn sổ cái/điều chỉnh tới đúng ngày giao dịch, không chỉ đầu kỳ sao kê.
+        if ledger_policy == 'asof' and 'ledger_clear_date' in inv:
+            cleared = (inv.firm_id == t.firm_id) & (inv.ledger_clear_date < t.value_date)
+            inv.loc[cleared, 'remaining_amount'] = 0.
+        if 'credit_note_date' in inv and 'credit_note' in inv:
+            known = (inv.firm_id == t.firm_id) & (inv.credit_note_date <= t.value_date)
+            delta = (inv.loc[known, 'credit_note'] - inv.loc[known, '_credit_applied']).clip(lower=0.)
+            inv.loc[known, 'remaining_amount'] = (inv.loc[known, 'remaining_amount'] - delta).clip(lower=0.)
+            inv.loc[known, '_credit_applied'] = inv.loc[known, 'credit_note']
         op = inv[(inv.firm_id == t.firm_id) & (inv.issue_date <= t.value_date) & (inv.remaining_amount > TOL)]
         nums = set(memo_numbers(t.memo))
         matches = op[op.invoice_no.astype(int).isin(nums)]
         chosen, method, confidence = [], '', 0.
-        if len(matches) and matches.invoice_no.astype(int).nunique() == len(matches) and matches.customer_id.nunique() == 1:
+        if rules_first and rule_mode != 'amount' and len(matches) and matches.invoice_no.astype(int).nunique() == len(matches) and matches.customer_id.nunique() == 1:
             if abs(matches.remaining_amount.sum() - t.amount) <= TOL:
                 chosen, method, confidence = matches.index.tolist(), 'R2_memo', 1.
-        if not chosen:
+        if rules_first and rule_mode != 'memo' and not chosen:
             exact = op[np.abs(op.remaining_amount - t.amount) <= TOL]
             if len(exact) == 1:
                 chosen, method, confidence = exact.index.tolist(), 'R1_unique_amount', 1.
@@ -106,7 +116,14 @@ def build_bank_labels(invoices, links):
     ordered = links.sort_values(['est_pay_date', 'txn_id']).copy()
     gross = out.set_index('invoice_id')['amount_gross']
     ordered['cumulative_amount'] = ordered.groupby('invoice_id').amount.cumsum()
-    settled = ordered[ordered.cumulative_amount + TOL >= ordered.invoice_id.map(gross)]
+    target = ordered.invoice_id.map(gross)
+    if 'credit_note_date' in out and 'credit_note' in out:
+        metadata = out.set_index('invoice_id')
+        known = ordered.invoice_id.map(metadata.credit_note_date) <= ordered.est_pay_date
+        target = target - ordered.invoice_id.map(metadata.credit_note).where(known, 0.)
+    settled = ordered[ordered.cumulative_amount + TOL >= target]
+    if settled.empty:
+        return out
     dates = settled.groupby('invoice_id').est_pay_date.min()
     out['paid_date_est'] = out.invoice_id.map(dates)
     return out

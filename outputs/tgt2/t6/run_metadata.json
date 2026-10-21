@@ -1,0 +1,22 @@
+{
+  "origin": "2024-07-01",
+  "visible_from": "2023-07-01",
+  "n_paths": 1000,
+  "nu": 4,
+  "rho": 0.5,
+  "bootstrap_seed": 7,
+  "source_t1_seed": 7,
+  "cure_seed": 11,
+  "simulation_seed_policy": {
+    "copula": "cutoff_timestamp_ns_mod_1000000",
+    "independent": 2,
+    "point_dates": 3
+  },
+  "target_used_for_hyperparameter_selection": false,
+  "labels": "oracle_bank",
+  "target_world": "tgt2",
+  "evaluation_world": "tgt2",
+  "source_budget": 40000,
+  "n_weeks": 52,
+  "measurement_version": "cash-asof-outflows-owner-tcopula-v5-true-labels-fullweek"
+}

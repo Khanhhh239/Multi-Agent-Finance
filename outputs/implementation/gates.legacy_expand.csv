@@ -1,0 +1,19 @@
+gate,status,reason,evidence
+G1,passed,Giảm WAPE >=30% ở hai origin,outputs/t1/A_rolling_origin_src.csv
+G2,passed,IBS so với B1 trên hai origin,outputs/t1/A_rolling_origin_src.csv
+G3,failed,Độ phủ DH-GBM+CQR ở đủ hai origin theo ngưỡng cổng 75–85%,outputs/t1/A_rolling_origin_src.csv
+G4,passed,ECE4 <=0.05 trên cả hai origin,outputs/t1/A_rolling_origin_src.csv
+G5,failed,"Ensemble vs B1 trên AR thật, cohort đã chín",outputs/t1/C_real_domains.csv
+G6,failed,Ensemble không thua B1d trên hai bộ thật,outputs/t1/C_real_domains.csv
+G7,failed,Fine-tune M12 cải thiện pinball >=10%,outputs/t1/B_domain_adaptation_tgt.csv
+G8,failed,"SBA drop EXEMPT, kỳ hạn <=120 tháng, nhãn chín trước test",outputs/t2_t3/t2_sba_variants.csv
+G9,passed,So mốc doanh thu trên nguồn và đích,outputs/t4/t4_revenue_forecast.csv
+G10,passed,"Đối chứng thật, có phân biệt cụm series",outputs/t4/t4_revenue_forecast.csv
+G11,failed,Quy tắc cần cả hồi quy và xác minh chuyên môn; hiện chưa xác minh,outputs/rules/rules_review.csv
+G12,passed,"Nhãn T9 ước lượng: cov80 75–85%, IS80 thắng đủ bốn đối chứng, Brier thắng naive",outputs/e2e/e2e_metrics.csv
+G13,failed,"Cảnh báo theo sự kiện, ngưỡng chọn trên nguồn",outputs\e2e\protocol\alert_policy.csv
+G14,failed,Bộ phát hiện chọn ngưỡng trên nguồn; kết quả giữ lại,outputs/t7/t7_changepoint.csv
+G15,failed,"WP4: F1 >=.80 và thắng quy tắc, precision >=.95, tự động >=.6, MAE ngày <=3",outputs/t9/t9_reconciliation_tgt.csv
+G16,passed,"Chèn lỗi có nhãn, precision/recall >=.95",outputs/wp0/T0_quality_metrics.csv
+G17,failed,Giảm MAE >=10% trên lời hứa sạch và nhiễu,outputs/t1/EF_t8_t9*.csv
+G18,passed,"Điểm ước lượng: T9 thu hẹp >=50% khoảng cách WAPE với oracle ở cả hai chân trời; CI xa còn rộng, không bảo đảm cho mọi DN",outputs/t1/T9_T1_gap_reduction.csv

@@ -17,6 +17,30 @@ from .. import calendar_vn as cal
 
 BASELINE_QUANTILES = ['hist_q10', 'hist_q50', 'hist_q90']
 
+
+class StationaryFeatures:
+    """Tuỳ chọn P4; kẹp học chỉ từ train, tháng lịch bị ẩn khi lịch sử DN <24 tháng."""
+    def fit(self,train):
+        values=pd.to_numeric(train['f_n_hist'],errors='coerce').dropna()
+        if values.empty or (values<0).any():raise ValueError('Cần f_n_hist train không âm')
+        self.count_cap=float(values.quantile(.99))
+        return self
+
+    def transform(self,frame,history_days=None):
+        if not hasattr(self,'count_cap'):raise ValueError('Phải fit phân vị 99 trên train trước')
+        result=frame.copy()
+        result['f_n_hist']=np.log1p(result.f_n_hist.clip(lower=0,upper=self.count_cap))
+        result['c_tenure_days']=np.log1p(result.c_tenure_days.clip(lower=0))
+        if history_days is None:
+            if 'firm_history_days' not in result:raise ValueError('Thiếu tuổi lịch sử DN as-of')
+            history_days=result.firm_history_days
+        # 24 tháng tính theo lịch tại từng cutoff, không suy từ công ty trong test.
+        elapsed=pd.to_numeric(pd.Series(np.asarray(history_days),index=result.index),errors='coerce')
+        threshold=(result.cutoff-result.cutoff.map(lambda day:day-pd.DateOffset(months=24))).dt.days
+        short=elapsed.isna() | (elapsed<threshold)
+        result.loc[short,['issue_month','cut_month']]=np.nan
+        return result
+
 FEATURES = [
     # hoá đơn
     "log_amount_rel", "term_days", "age_days", "days_to_due", "days_past_due", "is_overdue", "issue_month",
@@ -45,7 +69,10 @@ def _dom_next(dom_from: np.ndarray, targets: np.ndarray) -> np.ndarray:
 class SnapshotBuilder:
     def __init__(self, invoices: pd.DataFrame, payments: pd.DataFrame | None = None,
                  promises: pd.DataFrame | None = None, label_col: str = "paid_date_true", ewm_halflife: float = 90.0,
-                 eb_k: float = 4.0):
+                 eb_k: float = 4.0,stationary_features: bool = False,stationary_state=None):
+        self.stationary_features=stationary_features
+        self.stationary_state=stationary_state
+        if stationary_features and stationary_state is None:raise ValueError('stationary_features cần trạng thái đã fit từ train')
         inv = invoices.copy()
         due = inv['due_date'] if 'due_date' in inv else pd.Series(pd.NaT, index=inv.index, dtype='datetime64[ns]')
         inv["has_due"] = due.notna().astype(int)
@@ -108,7 +135,8 @@ class SnapshotBuilder:
         else:
             op["paid_frac_so_far"] = np.nan
         # ---------------- công ty
-        f = hist.groupby("firm_id").agg(f_n_hist=("delay", "size"), f_delay_mean=("delay", lambda s: s.clip(-60, 180).mean()))
+        f = hist.assign(delay_clipped=hist['delay'].clip(-60, 180)).groupby("firm_id").agg(
+            f_n_hist=("delay", "size"), f_delay_mean=("delay_clipped", 'mean'))
         op = op.merge(f, left_on="firm_id", right_index=True, how="left")
         # ---------------- khách
         if len(hist):
@@ -116,11 +144,12 @@ class SnapshotBuilder:
             h = h.assign(dl=h["delay"].clip(-60, 240), age_pay=(T - h["label_date"]).dt.days)
             h["w"] = np.power(0.5, h["age_pay"] / self.hl)
             h["dw"] = h["dl"] * h["w"]
+            h['late_flag'], h['late30_flag'] = h['dl'] > 0, h['dl'] > 30
             g = h.groupby("customer_id")
             c = pd.DataFrame({
                 "c_n_hist": g.size(), "c_delay_mean": g["dl"].mean(), "c_delay_med": g["dl"].median(),
-                "c_delay_std": g["dl"].std(), "c_late_share": g["dl"].apply(lambda s: (s > 0).mean()),
-                "c_late30_share": g["dl"].apply(lambda s: (s > 30).mean()),
+                "c_delay_std": g["dl"].std(), "c_late_share": g['late_flag'].mean(),
+                "c_late30_share": g['late30_flag'].mean(),
                 "c_delay_ewm": g["dw"].sum() / g["w"].sum(), "c_life_med": g["life"].median(),
                 "c_last_pay": g["label_date"].max(), "c_first_issue": g["issue_date"].min(),
                 "c_amount_med": g["amount_rel"].median(),
@@ -178,13 +207,13 @@ class SnapshotBuilder:
         op["c_max_dpd"] = g["days_past_due"].transform("max")
         op["f_open_n"] = op.groupby("firm_id")["invoice_id"].transform("size")
         # ---------------- lời hứa
-        if self.prom is not None:
+        if self.prom is not None and (self.prom['made_date'] <= T).any():
             pr = self.prom[self.prom["made_date"] <= T]
             last_p = pr.sort_values("made_date").groupby("invoice_id").tail(1).set_index("invoice_id")
             op["has_promise"] = op["invoice_id"].isin(last_p.index).astype(int)
             op["days_to_promised"] = (op["invoice_id"].map(last_p["promised_date"]) - T).dt.days
             op["promise_overdue"] = (op["days_to_promised"] < -3).astype(float).where(op["has_promise"] == 1)
-            resolved = pr[pr["promised_date"] + pd.Timedelta(days=3) <= T]
+            resolved = pr[(pr["promised_date"] + pd.Timedelta(days=3) <= T) & pr['kept'].notna()]
             kc = resolved.groupby("customer_id")["kept"].agg(["sum", "size"])
             a, b = 4.0, 2.0  # tiền nghiệm Beta (co về mức trung bình khi ít quan sát) — T8
             rel = (kc["sum"] + a) / (kc["size"] + a + b)
@@ -201,6 +230,11 @@ class SnapshotBuilder:
         for col in FEATURES:
             if col not in op:
                 op[col] = np.nan
+        if self.stationary_features:
+            first=self.inv.groupby('firm_id').issue_date.min()
+            beginning=op.firm_id.map(first)
+            if visible_from is not None:beginning=beginning.clip(lower=pd.Timestamp(visible_from))
+            op=self.stationary_state.transform(op,history_days=(T-beginning).dt.days)
         return op
 
     # --------------------------------------------------------------------------------------------

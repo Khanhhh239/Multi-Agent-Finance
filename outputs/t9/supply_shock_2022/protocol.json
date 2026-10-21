@@ -1,0 +1,62 @@
+{
+  "complete": true,
+  "signature": {
+    "code": {
+      "scripts/run_t9_supply_shock.py": "d4fb6d3afc37b7c03b53bc2356230e6dc9e9cdc1edb9a7cb9b5274d59c87d897",
+      "scripts/run_t9_hardcases.py": "4a742a68859d432c019ea9b903b1d3dd78eed9fc9c13d42a627db61cef57fe47",
+      "scripts/run_t9.py": "a74fc4e7002be972843c39251ad098c6047b112c77f07a9e360ca64a89c9368f",
+      "agent1/models/t9_recon.py": "a3b87cd3a0a4cdf4b01bd6f3b6ee639b0b95e372f98b788fb632164064a5b0fc",
+      "agent1/models/t9_fast.py": "9c15de29a83afca5a104b2b8d59a59fd817acf8b01519f35565ab45a87ae7ac0",
+      "agent1/models/reconciliation_pipeline.py": "cc47114ff12a136254ffb5d03b735ec1d10376ed9ed7243767921d00ed8099e7",
+      "agent1/eval/cluster.py": "6f665a4031476c40dacb7820125c422b002096951e40ac9a68acc9e027ae7f56"
+    },
+    "inputs": {
+      "src/invoices": "418ee64c251c045378ede37755bcb4ce43b204ed2afa98da8dcc1d5d1f90a200",
+      "src/bank_txns": "8480c9e5b7e5624f9f93241c0c9d3cdedfc38306d007ba082ef2f11f42bce61e",
+      "src/customers": "f4200f56c170991969de36360c40a1c73f6031e8403f752888c9ce26a49af594",
+      "src/payments": "25edade48c1443d4223142e66c2623c81475b5487b9800003a18876864aaec99",
+      "src/firms": "9af40aa928033c166cc6b5e8a9abc78b215b96255688063c43c426f65298bf6c",
+      "hc_supply_shock_v2/invoices": "6466da1cc4071a19c586af46b8bddab6560fdcd5ca4e592dd993ca50a067f1a5",
+      "hc_supply_shock_v2/bank_txns": "cb4a11143c09edc71fa6b8e444471d4e7b56bbd733ebd98d3b7b404ee3389d4b",
+      "hc_supply_shock_v2/customers": "a00fa75cc0bd30a2122174354f1322b878b6760e72f2374afde1537f3c6e9653",
+      "hc_supply_shock_v2/payments": "44fda6b35a51df4be746b502791838bfda247c5b9219308f4a5287b04ff56244",
+      "hc_supply_shock_v2/firms": "fe1f87078598976d140d173eeceb8aabf96d02a688953791fcf185d3579b71ec"
+    },
+    "tau_auto": 0.9,
+    "windows": [
+      [
+        "before",
+        "2022-06-01",
+        "2022-10-02"
+      ],
+      [
+        "shock",
+        "2022-10-03",
+        "2022-11-27"
+      ],
+      [
+        "after",
+        "2022-11-28",
+        "2023-03-31"
+      ]
+    ]
+  },
+  "source_training": [
+    "2020-01-01",
+    "2020-12-31"
+  ],
+  "source_calibration": [
+    "2021-01-01",
+    "2021-12-31"
+  ],
+  "test_used_for_selection": false,
+  "tau_auto": 0.9,
+  "measurement_version": "T9-supply-shock-pre2022-source-v1",
+  "scope": "synthetic shock with before/during/after periods; frozen tau=.9, source-only isotonic; not new G15 adoption",
+  "limitation": "one synthetic world/seed, few steel firms; not independent companies across windows; ledger information only available as-of transaction",
+  "n_rows": 27,
+  "source_model_sha256": "768d9628736fcef1f1ca3dddb70199d0a92b302fddc28bbccc2d4036e1733365",
+  "metrics_sha256": "94fa35a429c875ba0a73bfea097dbadd57b72047a7373ed97aeb6ce1b70d4da4",
+  "n_steel_firms": 3,
+  "source_signature_sha256": "cb7e86776c0e28f64c8bdda4d80dd7f658ce01fd0c0de4cabdd080ef15f41f4f"
+}

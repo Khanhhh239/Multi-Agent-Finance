@@ -89,3 +89,11 @@ Thang tin cậy: A = chính thức/bình duyệt; B = uy tín nhưng có hạn c
 | T6 khoảng dự báo | Berka | Dòng tiền ròng tuần → độ phủ khoảng | Khoảng có đạt độ phủ trên chuỗi tiền thật? (chưa chạy — kế hoạch 05) |
 | T7 điểm gãy | Berka, OxCGRT | Phân đoạn/CUSUM trên chuỗi thật | Phát hiện thay đổi chế độ thật? (chưa chạy) |
 | T12 độ trung thực | UK PPR, Customer Invoices | So dấu hiệu cấu trúc | Máy phát có "thật" hơn trọng số cố định? |
+# Bổ sung đối chiếu công khai ngày 20/10/2026
+
+Đã đọc BCTC chính chủ SMC 2024, TCM 2022 và NTP 2024 để kiểm tra DSO/DPO mô tả,
+không hiệu chỉnh máy phát. Xem [phạm vi, trang nguồn và giới hạn mẫu](09_vn_listed_spot_check.md).
+Ba DN-kỳ chưa đại diện ngành hoặc SME; BMP trả HTTP403, mẫu nhựa dùng NTP riêng.
+Lệnh tải: `python scripts/crawl.py --only vn_listed_fy2024,vn_tcm_fy2022,vn_ntp_fy2024`;
+lệnh đối chiếu: `python scripts/run_vn_listed_check.py`.
+

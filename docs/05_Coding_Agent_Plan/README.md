@@ -1,5 +1,9 @@
 # 05 · Kế hoạch giao việc cho Coding Agent tiếp theo
 
+> **Trạng thái triển khai hiện hành:** xem [TIEN_DO_TRIEN_KHAI.md](TIEN_DO_TRIEN_KHAI.md),
+> sinh từ bằng chứng trên đĩa. Những mô tả “hiện trạng/chưa chạy” bên dưới và trong
+> file 01–08 là đầu vào lịch sử của kế hoạch; không thay kết quả CSV và cổng hiện hành.
+
 Bạn (coding agent) nhận **Agent 1 — Trợ lý dòng tiền** ở trạng thái: dữ liệu + T0–T9 đã có mã và đã đo lần đầu (T1, T2, T3, T4, T6, T7, T8, T9, thích nghi miền); **T10 demo còn lỗi**, chưa có sản phẩm (API, dashboard, giám sát). Mục tiêu: hoàn thành thành **sản phẩm chạy được, đo được, đáng tin**.
 
 > **Lưu ý trạng thái mã:** sau lần chạy đầu (15/10 sáng–trưa), một phiên khác đã bắt đầu làm WP-0/WP-1/WP-6 ngay trong cùng thư mục (chiều 15/10: thêm `t10.py`, `t7_portfolio.py`, `t8_promise.py`, `reconciliation_pipeline.py`, `tune_t1.py`, `validate_worlds.py`, sửa `features.py`/`t1.py`/`run_t1.py`/`run_t6.py`/`make_report.py`). Các CSV kết quả cũ (A, B, E/F, T6) đo bằng giao thức trước khi sửa; `make_report.py` đánh dấu "CSV cũ". Trước khi làm tiếp: `git diff`/so sánh với bản `v1`, chạy lại `pytest`, và chạy lại A/B/E/T6 để có bảng theo giao thức mới.

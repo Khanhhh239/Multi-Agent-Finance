@@ -1,0 +1,332 @@
+[
+  {
+    "source": "00_INDEX.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\00_INDEX.pdf",
+    "pages": 2,
+    "columns": 3
+  },
+  {
+    "source": "01_Business_Analyst\\01_kinh_te_hoc_dong_tien.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\01_Business_Analyst\\01_kinh_te_hoc_dong_tien.pdf",
+    "pages": 2,
+    "columns": 3
+  },
+  {
+    "source": "01_Business_Analyst\\02_problem_statement.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\01_Business_Analyst\\02_problem_statement.pdf",
+    "pages": 2,
+    "columns": 3
+  },
+  {
+    "source": "01_Business_Analyst\\03_noi_dau_va_bang_chung.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\01_Business_Analyst\\03_noi_dau_va_bang_chung.pdf",
+    "pages": 2,
+    "columns": 4
+  },
+  {
+    "source": "01_Business_Analyst\\04_nhu_cau_nguoi_dung.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\01_Business_Analyst\\04_nhu_cau_nguoi_dung.pdf",
+    "pages": 2,
+    "columns": 4
+  },
+  {
+    "source": "01_Business_Analyst\\05_thi_truong_va_canh_tranh.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\01_Business_Analyst\\05_thi_truong_va_canh_tranh.pdf",
+    "pages": 2,
+    "columns": 4
+  },
+  {
+    "source": "01_Business_Analyst\\06_yeu_cau_va_pham_vi.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\01_Business_Analyst\\06_yeu_cau_va_pham_vi.pdf",
+    "pages": 2,
+    "columns": 4
+  },
+  {
+    "source": "01_Business_Analyst\\07_mo_hinh_kinh_doanh_va_rui_ro.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\01_Business_Analyst\\07_mo_hinh_kinh_doanh_va_rui_ro.pdf",
+    "pages": 2,
+    "columns": 5
+  },
+  {
+    "source": "01_Business_Analyst\\README.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\01_Business_Analyst\\README.pdf",
+    "pages": 1,
+    "columns": 2
+  },
+  {
+    "source": "02_Data\\01_chien_luoc_du_lieu.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\01_chien_luoc_du_lieu.pdf",
+    "pages": 2,
+    "columns": 4
+  },
+  {
+    "source": "02_Data\\02_du_lieu_that_dung.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\02_du_lieu_that_dung.pdf",
+    "pages": 4,
+    "columns": 6
+  },
+  {
+    "source": "02_Data\\03_du_lieu_khong_dung.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\03_du_lieu_khong_dung.pdf",
+    "pages": 2,
+    "columns": 5
+  },
+  {
+    "source": "02_Data\\04_may_phat_tong_hop.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\04_may_phat_tong_hop.pdf",
+    "pages": 5,
+    "columns": 3
+  },
+  {
+    "source": "02_Data\\05_hard_cases.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\05_hard_cases.pdf",
+    "pages": 4,
+    "columns": 7
+  },
+  {
+    "source": "02_Data\\06_quy_mo_va_ke_hoach_sinh.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\06_quy_mo_va_ke_hoach_sinh.pdf",
+    "pages": 3,
+    "columns": 9
+  },
+  {
+    "source": "02_Data\\07_bo_danh_gia.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\07_bo_danh_gia.pdf",
+    "pages": 4,
+    "columns": 7
+  },
+  {
+    "source": "02_Data\\08_tai_lieu_tham_khao.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\08_tai_lieu_tham_khao.pdf",
+    "pages": 2,
+    "columns": 4
+  },
+  {
+    "source": "02_Data\\README.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\02_Data\\README.pdf",
+    "pages": 1,
+    "columns": 3
+  },
+  {
+    "source": "03_Evaluation\\01_metric_ky_thuat.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\01_metric_ky_thuat.pdf",
+    "pages": 3,
+    "columns": 4
+  },
+  {
+    "source": "03_Evaluation\\02_metric_kinh_te.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\02_metric_kinh_te.pdf",
+    "pages": 2,
+    "columns": 5
+  },
+  {
+    "source": "03_Evaluation\\03_cong_nghiem_thu.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\03_cong_nghiem_thu.pdf",
+    "pages": 2,
+    "columns": 5
+  },
+  {
+    "source": "03_Evaluation\\04_ket_qua_2026-10-15_lich_su.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\04_ket_qua_2026-10-15_lich_su.pdf",
+    "pages": 8,
+    "columns": 8
+  },
+  {
+    "source": "03_Evaluation\\04_ket_qua_hien_co.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\04_ket_qua_hien_co.pdf",
+    "pages": 90,
+    "columns": 9
+  },
+  {
+    "source": "03_Evaluation\\05_chi_phi_xay_dung_va_van_hanh.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\05_chi_phi_xay_dung_va_van_hanh.pdf",
+    "pages": 3,
+    "columns": 4
+  },
+  {
+    "source": "03_Evaluation\\06_roi_truoc_sau.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\06_roi_truoc_sau.pdf",
+    "pages": 3,
+    "columns": 5
+  },
+  {
+    "source": "03_Evaluation\\07_ke_hoach_kiem_thu.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\07_ke_hoach_kiem_thu.pdf",
+    "pages": 3,
+    "columns": 5
+  },
+  {
+    "source": "03_Evaluation\\GATES_CURRENT.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\GATES_CURRENT.pdf",
+    "pages": 1,
+    "columns": 3
+  },
+  {
+    "source": "03_Evaluation\\KET_QUA_CHUA_DAT.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\KET_QUA_CHUA_DAT.pdf",
+    "pages": 1,
+    "columns": 0
+  },
+  {
+    "source": "03_Evaluation\\README.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\03_Evaluation\\README.pdf",
+    "pages": 1,
+    "columns": 2
+  },
+  {
+    "source": "04_AI_Methods\\01_pipeline_he_thong.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\01_pipeline_he_thong.pdf",
+    "pages": 2,
+    "columns": 3
+  },
+  {
+    "source": "04_AI_Methods\\02_t1_hazard_thoi_diem_tra.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\02_t1_hazard_thoi_diem_tra.pdf",
+    "pages": 3,
+    "columns": 3
+  },
+  {
+    "source": "04_AI_Methods\\03_t2_t3_t8_xac_suat_hoa_don.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\03_t2_t3_t8_xac_suat_hoa_don.pdf",
+    "pages": 3,
+    "columns": 7
+  },
+  {
+    "source": "04_AI_Methods\\04_t4_t5_thu_moi_va_chi.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\04_t4_t5_thu_moi_va_chi.pdf",
+    "pages": 3,
+    "columns": 7
+  },
+  {
+    "source": "04_AI_Methods\\05_domain_adaptation.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\05_domain_adaptation.pdf",
+    "pages": 2,
+    "columns": 5
+  },
+  {
+    "source": "04_AI_Methods\\06_t6_monte_carlo_conformal.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\06_t6_monte_carlo_conformal.pdf",
+    "pages": 2,
+    "columns": 2
+  },
+  {
+    "source": "04_AI_Methods\\07_t7_t9_t10.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\07_t7_t9_t10.pdf",
+    "pages": 3,
+    "columns": 6
+  },
+  {
+    "source": "04_AI_Methods\\08_thi_nghiem_de_xuat.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\08_thi_nghiem_de_xuat.pdf",
+    "pages": 4,
+    "columns": 5
+  },
+  {
+    "source": "04_AI_Methods\\09_tham_so_va_toi_uu.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\09_tham_so_va_toi_uu.pdf",
+    "pages": 3,
+    "columns": 4
+  },
+  {
+    "source": "04_AI_Methods\\README.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\04_AI_Methods\\README.pdf",
+    "pages": 1,
+    "columns": 2
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\01_hien_trang_va_quy_uoc.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\01_hien_trang_va_quy_uoc.pdf",
+    "pages": 3,
+    "columns": 4
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\02_WP0_WP1_nen_tang_va_T1.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\02_WP0_WP1_nen_tang_va_T1.pdf",
+    "pages": 3,
+    "columns": 0
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\03_WP2_WP3_T2_va_thich_nghi_mien.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\03_WP2_WP3_T2_va_thich_nghi_mien.pdf",
+    "pages": 3,
+    "columns": 0
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\04_WP4_WP5_WP7_WP8_T9_T5_T7_T8.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\04_WP4_WP5_WP7_WP8_T9_T5_T7_T8.pdf",
+    "pages": 3,
+    "columns": 0
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\05_WP6_T6_T10_end_to_end.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\05_WP6_T6_T10_end_to_end.pdf",
+    "pages": 2,
+    "columns": 3
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\06_WPD_du_lieu.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\06_WPD_du_lieu.pdf",
+    "pages": 3,
+    "columns": 5
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\07_WP9_WP10_san_pham_va_pilot.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\07_WP9_WP10_san_pham_va_pilot.pdf",
+    "pages": 3,
+    "columns": 3
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\08_thu_tu_va_lich.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\08_thu_tu_va_lich.pdf",
+    "pages": 2,
+    "columns": 3
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\README.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\README.pdf",
+    "pages": 2,
+    "columns": 2
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\TIEN_DO_2026-10-16_lich_su.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\TIEN_DO_2026-10-16_lich_su.pdf",
+    "pages": 2,
+    "columns": 0
+  },
+  {
+    "source": "05_Coding_Agent_Plan\\TIEN_DO_TRIEN_KHAI.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\05_Coding_Agent_Plan\\TIEN_DO_TRIEN_KHAI.pdf",
+    "pages": 2,
+    "columns": 3
+  },
+  {
+    "source": "DATA_CARD.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\DATA_CARD.pdf",
+    "pages": 5,
+    "columns": 7
+  },
+  {
+    "source": "legal_changelog.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\legal_changelog.pdf",
+    "pages": 1,
+    "columns": 0
+  },
+  {
+    "source": "METHODS.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\METHODS.pdf",
+    "pages": 2,
+    "columns": 5
+  },
+  {
+    "source": "RESULTS_TABLES.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\RESULTS_TABLES.pdf",
+    "pages": 89,
+    "columns": 9
+  },
+  {
+    "source": "security_privacy.md",
+    "pdf": "C:\\Users\\Admin\\Downloads\\Agent1\\docs\\file_pdf\\security_privacy.pdf",
+    "pages": 1,
+    "columns": 0
+  }
+]

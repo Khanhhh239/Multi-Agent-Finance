@@ -1,0 +1,18 @@
+{
+  "complete": true,
+  "test_start": "2024-07-01",
+  "n_weeks": 52,
+  "history_rule": "made<=T and promised+3<=T; resolved_date<=T when present",
+  "predictions": "freeze at T for new promises in (T,T+7]; query supplies identifiers only",
+  "source_only_parameters": {
+    "strength": 6,
+    "half_life_days": 90
+  },
+  "test_used_for_selection": false,
+  "code_sha256": "e5e0c78b5d6b8933acaf9ad73ce3740bec64f47117065811b67d2ebddfb86a2d",
+  "input_sha256": {
+    "src": "62f51aff6ec4e56e9c6f2702dcb12882d77de281213fcd41a4c655b286269988",
+    "src_noisy_promises": "8997958acb4117a5bcafae061225c24504c10093e19f47d9f08c769aa0763636",
+    "tgt": "0e5ade13bf76f9b45698320ee47ef767aa923bb4ac427aa600c56544e6be9e64"
+  }
+}

@@ -1,0 +1,11 @@
+[
+  {
+    "job": "G3",
+    "status": "passed",
+    "exit_code": 0,
+    "seconds": 6.7630253,
+    "scope": "same frozen A predictions, no fitting",
+    "criterion_met": false,
+    "metrics_sha256": "e1646fb06cff2934bdf434fe0e256dc213f6925641800d087222a8ead497e2f5"
+  }
+]

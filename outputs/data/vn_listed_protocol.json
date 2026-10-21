@@ -1,0 +1,21 @@
+{
+  "complete": true,
+  "n_issuer_years": 3,
+  "n_industries": 3,
+  "scope": "three issuer-years in three industries, not a complete VN sector validation",
+  "missing": "BMP2024 downloads HTTP403, plastics illustrated with NTP2024 instead; TCM2024 annual report lacks full statements, used separately disclosed audited2022 instead",
+  "formula": "365*(opening+closing short-term gross trade balance)/2 / net revenue (DSO), COGS (DPO proxy, not purchases)",
+  "limitations": "listed consolidated entities not SMEs; n=1 per sector; different years; no sector CI; VAT/net-sales mismatch; SMC emphasis of matter; synthetic realized AR treats known terminal settlement/write-off as zero; no synthetic AP comparable",
+  "used_for_generator_calibration": false,
+  "expert_verified": false,
+  "input_sha256": "a051b8b8439c6186aee31112652cd915b2f3a7509fc3dbaf494dace9913f0f77",
+  "synthetic_sha256": {
+    "src/invoices.parquet": "418ee64c251c045378ede37755bcb4ce43b204ed2afa98da8dcc1d5d1f90a200",
+    "src/payments.parquet": "25edade48c1443d4223142e66c2623c81475b5487b9800003a18876864aaec99",
+    "src/firms.parquet": "9af40aa928033c166cc6b5e8a9abc78b215b96255688063c43c426f65298bf6c",
+    "tgt/invoices.parquet": "c6837975eb5d9ba344378fa73ef6ee9792813ac856f36efa2fdc13baa3046e80",
+    "tgt/payments.parquet": "ab7451e51cc4a59d94c8ffd14af01d54c0af1936dcb64d78d3b5893704101cc3",
+    "tgt/firms.parquet": "794d5c617f6cd50b4ff61fc29e0a89e80406071e3e5945473d09af8363fe35eb"
+  },
+  "code_sha256": "e0f7276813c438ae1c58446b6683316d33b43aac51cc6d585faed38cc429cbbb"
+}

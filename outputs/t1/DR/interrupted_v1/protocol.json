@@ -1,0 +1,12 @@
+{
+  "complete": false,
+  "code_sha256": "69728b6ecdf53fdc0d42f53b8f6cbf569b1e358f8887a10d203dbaaf0784c6e9",
+  "source_manifest_sha256": "411eabba2bf3e8ea25ed2278eeb4cddfdcef2f80103ce3ee33ac47ed74fe488d",
+  "design": "one world x400 vs twenty worlds x20; same per-pair invoice counts before features",
+  "fit": "source-only; max 40k snapshots per arm, 300 trees, same N; no target tuning",
+  "history": "observed target histories available; zero-shot model, no target-label fitting; not M0 onboarding",
+  "criterion": "DR pinball reduction >=5%; report paired CI by target firm; no automatic adoption",
+  "limitation": "one generator seed design; CI does not include source-generation uncertainty; synthetic vs real calendar origins trained separately",
+  "target_used_for_selection": false,
+  "origins": []
+}

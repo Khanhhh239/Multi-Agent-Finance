@@ -1,0 +1,35 @@
+{
+  "complete": true,
+  "origin": "2024-07-01",
+  "source_budget": 40000,
+  "target_budget": 40000,
+  "source_rounds": 300,
+  "pooled_rounds": 300,
+  "target_only_rounds": 300,
+  "finetune_rounds": 150,
+  "adaptation_months": {
+    "tgt": [
+      0,
+      3,
+      6,
+      24
+    ],
+    "sens_uk": [
+      6
+    ],
+    "sens_coface": [
+      6
+    ]
+  },
+  "weights": "fixed source density-ratio classifier 200 trees, normalized/clipped [.05,20]; target weight max(1,.3*Nsrc/Ntgt)",
+  "selection": "parameters locked; no selection from held-out test",
+  "acceptance": "DA1 CI low>=20%; DA2 CI low>=10%; DA3 paired noninferiority at zero margin at M3/M6 and catchup M24; DA4 CI low>0 in BOTH sens domains",
+  "limitation": "budget-limited confirmation separate from original B;synthetic truth labels;no CQR in this ablation;weekly overlapping forecasts clustered by firm",
+  "code_sha256": "463bc5c7d4586232dfe3c9dcb59d54bd001c213654840bee1a2a8ec56f792f70",
+  "input_sha256": {
+    "src": "418ee64c251c045378ede37755bcb4ce43b204ed2afa98da8dcc1d5d1f90a200",
+    "tgt": "c6837975eb5d9ba344378fa73ef6ee9792813ac856f36efa2fdc13baa3046e80",
+    "sens_uk": "4ce695a9f6470a13b829f44e1f8a4f9735398c411e0c4a31a37cea78535d0448",
+    "sens_coface": "f4f46c677a43b14d4219d458d3b1163153f7f8639dea529c6a274803ac71a4a3"
+  }
+}

@@ -1,0 +1,10 @@
+world,model,n_test,n_source,n_target,pinball_avg,test_used_for_selection,measurement_version
+tgt,pooled,39304,40000,15864,6.321834514981842,False,IW-company-OOF-M6-locked-budget-v1-fullweek
+tgt,IW-in-sample,39304,40000,15864,6.321834514981842,False,IW-company-OOF-M6-locked-budget-v1-fullweek
+tgt,IW-company-OOF,39304,40000,15864,6.443277732315797,False,IW-company-OOF-M6-locked-budget-v1-fullweek
+sens_uk,pooled,60967,40000,18902,5.270877004014342,False,IW-company-OOF-M6-locked-budget-v1-fullweek
+sens_uk,IW-in-sample,60967,40000,18902,5.293430745691606,False,IW-company-OOF-M6-locked-budget-v1-fullweek
+sens_uk,IW-company-OOF,60967,40000,18902,5.406210562114432,False,IW-company-OOF-M6-locked-budget-v1-fullweek
+sens_coface,pooled,29159,40000,9992,6.42033323965226,False,IW-company-OOF-M6-locked-budget-v1-fullweek
+sens_coface,IW-in-sample,29159,40000,9992,6.3963206033742255,False,IW-company-OOF-M6-locked-budget-v1-fullweek
+sens_coface,IW-company-OOF,29159,40000,9992,6.434435769771632,False,IW-company-OOF-M6-locked-budget-v1-fullweek

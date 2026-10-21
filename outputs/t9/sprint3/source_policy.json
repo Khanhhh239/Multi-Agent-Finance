@@ -1,0 +1,81 @@
+{
+  "complete": true,
+  "source_firms": [
+    "F012",
+    "F013",
+    "F014",
+    "F015",
+    "F016",
+    "F017",
+    "F018",
+    "F019",
+    "F020",
+    "F021",
+    "F022",
+    "F023",
+    "F024",
+    "F025",
+    "F026",
+    "F027",
+    "F028",
+    "F029",
+    "F030",
+    "F031",
+    "F032",
+    "F033",
+    "F034",
+    "F035",
+    "F036",
+    "F037",
+    "F038",
+    "F039"
+  ],
+  "training_firms": [
+    "F000",
+    "F001",
+    "F002",
+    "F003",
+    "F004",
+    "F005",
+    "F006",
+    "F007",
+    "F008",
+    "F009",
+    "F010",
+    "F011"
+  ],
+  "selection_period": [
+    "2024-01-01",
+    "2024-06-30"
+  ],
+  "target_used": false,
+  "selected_tau": 0.5,
+  "selected_variant": "candidate",
+  "source_precision_coverage_joint_met": true,
+  "stop_rule_recommendation": null,
+  "source_inputs": {
+    "invoices": "418ee64c251c045378ede37755bcb4ce43b204ed2afa98da8dcc1d5d1f90a200",
+    "bank_txns": "8480c9e5b7e5624f9f93241c0c9d3cdedfc38306d007ba082ef2f11f42bce61e",
+    "customers": "f4200f56c170991969de36360c40a1c73f6031e8403f752888c9ce26a49af594",
+    "payments": "25edade48c1443d4223142e66c2623c81475b5487b9800003a18876864aaec99"
+  },
+  "source_classifier": {
+    "model.txt": "157b29fe00f3afc887458cd82da0d8b48dca63c464b80514d34d51cfc5fcf74e",
+    "metadata.json": "8d9ad971a7f7d47dc69a524b432aed1a229ab439d3b122c5492282ca05b822ba"
+  },
+  "candidate_enabled": true,
+  "hazard_prior": {
+    "model_sha256": "0405c8a95868bb0e57c42d33fbef053d4a9fd26563b0d867669eaa0176a3166b",
+    "protocol_sha256": "80edd9623df70d22b3f8724c752c01962ac75e70cce6c83241c30a730af7cb7c",
+    "training_label_end": "2023-01-01"
+  },
+  "source_code_sha256": {
+    "scripts/sprint1/t9_source_diagnostics.py": "7bb2f04de53a21ce5f1ccdb5533a73b536d30fe45bac3bbee1d421fc1c924b52",
+    "agent1/models/t9_source_policy.py": "6faa3cf90604fcbc182c4b11eea96d248dc2ed9554e97291f62a790b9559d617",
+    "agent1/models/t9_fast.py": "b78d19c68a447333c522f0605024e689d853fcf01869f41541f166da8837f4d1",
+    "agent1/models/t9_recon.py": "a3b87cd3a0a4cdf4b01bd6f3b6ee639b0b95e372f98b788fb632164064a5b0fc"
+  },
+  "note": "source-only tau/variant selection; partial memo residual/COD and frozen T1 prior; contract retention split requires known_at, not synthetic future annotations",
+  "target_complete": true,
+  "target_metrics_sha256": "abe5861f3f21a00f97821c90c8948bba23e420356d46659daed6fc38077bd8c5"
+}

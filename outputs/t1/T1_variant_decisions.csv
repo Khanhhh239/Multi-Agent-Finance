@@ -1,0 +1,15 @@
+world,model,improvement_pct,ci_low,ci_high,candidate_adopted,test_used_for_selection,measurement_version
+src,B1d-cust-quantiles,-156.42423009127467,-189.5577652814896,-129.9661275577114,False,False,T1-locked-source-variants-v1-fullweek
+src,B1-cust-median,-208.5780459352263,-243.65632555352812,-181.42992855462884,False,False,T1-locked-source-variants-v1-fullweek
+src,DH-GBM default,0.0,0.0,0.0,False,False,T1-locked-source-variants-v1-fullweek
+src,DH-GBM monotone PDP,0.11494759984946154,-0.48030214132971255,0.8339562600323774,False,False,T1-locked-source-variants-v1-fullweek
+src,Due-window mixture,0.22332441555813157,-0.5304129766268366,1.091676192563479,False,False,T1-locked-source-variants-v1-fullweek
+src,DH-GBM EB ML-II,0.197753694436485,-0.7810263458614409,1.292549152563965,False,False,T1-locked-source-variants-v1-fullweek
+src,DH daily28 + weekly tail,0.621019132626233,0.08448486311099243,1.1678258512962747,False,False,T1-locked-source-variants-v1-fullweek
+tgt,B1d-cust-quantiles,-191.83906042029696,-335.72667487953095,-118.5150511402681,False,False,T1-locked-source-variants-v1-fullweek
+tgt,B1-cust-median,-255.58359460381675,-401.98774365956933,-179.43742042426905,False,False,T1-locked-source-variants-v1-fullweek
+tgt,DH-GBM default,0.0,0.0,0.0,False,False,T1-locked-source-variants-v1-fullweek
+tgt,DH-GBM monotone PDP,-0.22845449918585245,-0.8754340004983817,0.6252447735091404,False,False,T1-locked-source-variants-v1-fullweek
+tgt,Due-window mixture,0.7746828903851016,0.12592905676885685,1.9960381101719953,False,False,T1-locked-source-variants-v1-fullweek
+tgt,DH-GBM EB ML-II,0.48154470609900785,-1.5925246487638627,1.9954897965737535,False,False,T1-locked-source-variants-v1-fullweek
+tgt,DH daily28 + weekly tail,1.230269714181829,-0.025454600100427743,1.739447959931269,False,False,T1-locked-source-variants-v1-fullweek

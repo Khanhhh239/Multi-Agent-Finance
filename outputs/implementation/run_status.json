@@ -1,0 +1,1204 @@
+[
+  {
+    "job": "point-baselines",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/rescore_point_baselines.py"
+    ],
+    "started_at": 1792109189.4365165,
+    "status": "passed",
+    "source_hash": "eeb14021441282e482c4a05094277bb0349ec6b699e28ee7980039d0c7a28c95",
+    "exit_code": 0,
+    "seconds": 124.39845252037048
+  },
+  {
+    "job": "B",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "B"
+    ],
+    "started_at": 1792109313.8494825,
+    "status": "passed",
+    "source_hash": "a95110426f75d0ab57f824f411d9d4b28af5d243a7d6c0aa49bd54905874fa62",
+    "exit_code": 0,
+    "seconds": 991.9403789043427
+  },
+  {
+    "job": "EF",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "E,F"
+    ],
+    "started_at": 1792110305.7968621,
+    "status": "passed",
+    "source_hash": "191c2c1e536de8deb816299d9d15eb733b4b42a9c19b97fc6871f5cb7f0697c2",
+    "exit_code": 0,
+    "seconds": 518.4292778968811
+  },
+  {
+    "job": "SBA",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t2_t3.py",
+      "--tasks",
+      "sba,t3"
+    ],
+    "started_at": 1792110824.2281227,
+    "status": "passed",
+    "source_hash": "bd49446a70d00391544fb0027dd7c8107aecff3009009578230e256ce310013f",
+    "exit_code": 0,
+    "seconds": 249.60525345802307
+  },
+  {
+    "job": "T6",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t6.py"
+    ],
+    "started_at": 1792111073.8363724,
+    "status": "passed",
+    "source_hash": "0b119d556fe428cf4b70ce219fb3ed1e831f34e9eb6aa13e522a5a824e81a313",
+    "exit_code": 0,
+    "seconds": 766.7328457832336
+  },
+  {
+    "job": "T9",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9.py"
+    ],
+    "started_at": 1792111840.5712445,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 361.0170795917511
+  },
+  {
+    "job": "T7",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t7.py"
+    ],
+    "started_at": 1792112201.5903263,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 139.2533369064331
+  },
+  {
+    "job": "audit",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/audit_synthetic.py"
+    ],
+    "started_at": 1792112340.847699,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 13.449181318283081
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792112354.2993813,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 1.08616304397583
+  },
+  {
+    "job": "T6-v5",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t6.py"
+    ],
+    "started_at": 1792112358.7336044,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 1175.1571247577667
+  },
+  {
+    "job": "C",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "C"
+    ],
+    "started_at": 1792113533.8926792,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 284.05091881752014
+  },
+  {
+    "job": "seeds",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_seed_stability.py"
+    ],
+    "started_at": 1792113817.9466045,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 728.188218832016
+  },
+  {
+    "job": "T4",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t4.py"
+    ],
+    "started_at": 1792114546.1489518,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 283.08515977859497
+  },
+  {
+    "job": "Berka",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_berka.py"
+    ],
+    "started_at": 1792114829.2462003,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 903.9522728919983
+  },
+  {
+    "job": "noisy-build",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/build_noisy_promises.py"
+    ],
+    "started_at": 1792115733.206481,
+    "status": "passed",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "exit_code": 0,
+    "seconds": 194.39117789268494
+  },
+  {
+    "job": "noisy-EF",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "E,F",
+      "--world",
+      "src_noisy_promises"
+    ],
+    "started_at": 1792115927.6051862,
+    "status": "interrupted",
+    "source_hash": "8f6b00d4cf27658f5d5b540bef9759ac4e209565de2b7e351e8f5d07b0004104",
+    "interruption_observed_at": 1792133962.6753595,
+    "reason": "No matching process exists; no completion claimed"
+  },
+  {
+    "job": "noisy-EF",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "E,F",
+      "--world",
+      "src_noisy_promises"
+    ],
+    "started_at": 1792133962.7656274,
+    "status": "failed",
+    "source_hash": "480df238f8c24c74b320245412264b79fbd433617f989312df846956b7f7ca7b",
+    "exit_code": 1,
+    "seconds": 164.4434630870819
+  },
+  {
+    "job": "tune",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/tune_t1.py"
+    ],
+    "started_at": 1792134127.2153127,
+    "status": "failed",
+    "source_hash": "146b35e78f0b9ee3f8cb024cb08d9229648f7b340f993e468bab0b24531643fa",
+    "exit_code": 1,
+    "seconds": 1.6400315761566162
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792134128.8553443,
+    "status": "passed",
+    "source_hash": "146b35e78f0b9ee3f8cb024cb08d9229648f7b340f993e468bab0b24531643fa",
+    "exit_code": 0,
+    "seconds": 1.042900562286377
+  },
+  {
+    "job": "noisy-EF",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "E,F",
+      "--world",
+      "src_noisy_promises"
+    ],
+    "started_at": 1792134186.110514,
+    "status": "interrupted",
+    "source_hash": "dfd05af30098eb9075b39c90c5bbc0e02c6b64aefb10a04f61997115267748c9",
+    "reason": "Restart with exact required cutoffs and compact numeric dtypes to reduce RAM",
+    "interruption_observed_at": 1792134323.7727768
+  },
+  {
+    "job": "noisy-EF",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "E,F",
+      "--world",
+      "src_noisy_promises"
+    ],
+    "started_at": 1792134323.8879583,
+    "status": "failed",
+    "source_hash": "6c6d98e7bc1a2a40e3e68afd76671bcc7bcd4d6561af896dd0306bf12ec4e74e",
+    "exit_code": 3221225477,
+    "seconds": 311.5590760707855
+  },
+  {
+    "job": "tune",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/tune_t1.py"
+    ],
+    "started_at": 1792134635.4524534,
+    "status": "interrupted",
+    "source_hash": "c86d0fe1915f7dc8d126bc5ea1840c0649be44dccac4f9e3ebe963dcf8f00d0c",
+    "reason": "Stopped own tuner so T9 and tuning do not compete for limited RAM",
+    "interruption_observed_at": 1792134883.4093664
+  },
+  {
+    "job": "T3-v2",
+    "status": "passed",
+    "command": [
+      "scripts/run_t2_t3.py",
+      "--tasks",
+      "t3"
+    ],
+    "exit_code": 0,
+    "evidence": "outputs/implementation/T3-v2.log"
+  },
+  {
+    "job": "noisy-EF",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "E",
+      "--world",
+      "src_noisy_promises"
+    ],
+    "started_at": 1792135041.518843,
+    "status": "passed",
+    "source_hash": "e68cee659c4b3583127b936000b88d276aaa3f9d698d4cb44c25075368724a4b",
+    "exit_code": 0,
+    "seconds": 192.06467580795288
+  },
+  {
+    "job": "big",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/build_big.py"
+    ],
+    "started_at": 1792135233.5870283,
+    "status": "failed",
+    "source_hash": "a18bfe1e243aa6e8d554a4c44fb863296d6e394563e4e0d03c846f96f13a5ddb",
+    "exit_code": 1,
+    "seconds": 1.8806805610656738
+  },
+  {
+    "job": "tune",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/tune_t1.py",
+      "--max-train",
+      "40000",
+      "--max-valid",
+      "10000"
+    ],
+    "started_at": 1792135235.4687095,
+    "status": "failed",
+    "source_hash": "a18bfe1e243aa6e8d554a4c44fb863296d6e394563e4e0d03c846f96f13a5ddb",
+    "exit_code": 1,
+    "seconds": 1165.9592475891113
+  },
+  {
+    "job": "tests",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--junitxml=outputs/implementation/tests.xml"
+    ],
+    "started_at": 1792136401.4368112,
+    "status": "passed",
+    "source_hash": "f12a84aaa4ba9a6aef95b19cc3b15cd4345f23effebcab71e2d60fd84c861ede",
+    "exit_code": 0,
+    "seconds": 49.90195822715759
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792136451.3439493,
+    "status": "passed",
+    "source_hash": "f12a84aaa4ba9a6aef95b19cc3b15cd4345f23effebcab71e2d60fd84c861ede",
+    "exit_code": 0,
+    "seconds": 2.695023775100708
+  },
+  {
+    "job": "T9-v4",
+    "status": "passed",
+    "exit_code": 0,
+    "evidence": "outputs/implementation/T9-v4.log",
+    "completion_confirmed_at": 1792136455.1512113
+  },
+  {
+    "job": "tuned-eval",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/evaluate_tuned_t1.py"
+    ],
+    "started_at": 1792136455.312466,
+    "status": "failed",
+    "source_hash": "f12a84aaa4ba9a6aef95b19cc3b15cd4345f23effebcab71e2d60fd84c861ede",
+    "exit_code": 1,
+    "seconds": 13.85542631149292
+  },
+  {
+    "job": "onboarding",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_onboarding_source.py"
+    ],
+    "started_at": 1792136469.169894,
+    "status": "passed",
+    "source_hash": "f12a84aaa4ba9a6aef95b19cc3b15cd4345f23effebcab71e2d60fd84c861ede",
+    "exit_code": 0,
+    "seconds": 138.1803331375122
+  },
+  {
+    "job": "big",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/build_big.py"
+    ],
+    "started_at": 1792136607.3522508,
+    "status": "passed",
+    "source_hash": "2632863e9dbe52480aa10c2ae86daf389b207c3eea70dd2214b1ed04c9f98e39",
+    "exit_code": 0,
+    "seconds": 2056.0146884918213
+  },
+  {
+    "job": "tests",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--junitxml=outputs/implementation/tests.xml"
+    ],
+    "started_at": 1792138663.375902,
+    "status": "passed",
+    "source_hash": "2632863e9dbe52480aa10c2ae86daf389b207c3eea70dd2214b1ed04c9f98e39",
+    "exit_code": 0,
+    "seconds": 24.218334913253784
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792138687.5953212,
+    "status": "passed",
+    "source_hash": "2632863e9dbe52480aa10c2ae86daf389b207c3eea70dd2214b1ed04c9f98e39",
+    "exit_code": 0,
+    "seconds": 1.2632853984832764
+  },
+  {
+    "job": "tune",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/tune_t1.py",
+      "--max-train",
+      "40000",
+      "--max-valid",
+      "10000"
+    ],
+    "started_at": 1792208395.6598577,
+    "status": "passed",
+    "source_hash": "2632863e9dbe52480aa10c2ae86daf389b207c3eea70dd2214b1ed04c9f98e39",
+    "exit_code": 0,
+    "seconds": 131.02497601509094
+  },
+  {
+    "job": "tuned-eval",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/evaluate_tuned_t1.py"
+    ],
+    "started_at": 1792208526.6858356,
+    "status": "passed",
+    "source_hash": "2632863e9dbe52480aa10c2ae86daf389b207c3eea70dd2214b1ed04c9f98e39",
+    "exit_code": 0,
+    "seconds": 141.3667094707489
+  },
+  {
+    "job": "T9-v5",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9.py"
+    ],
+    "started_at": 1792208668.0535502,
+    "status": "passed",
+    "source_hash": "2632863e9dbe52480aa10c2ae86daf389b207c3eea70dd2214b1ed04c9f98e39",
+    "exit_code": 0,
+    "seconds": 456.54624819755554
+  },
+  {
+    "job": "E2E-smoke",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_e2e.py",
+      "--protocol",
+      "source-finetune",
+      "--firms",
+      "F000",
+      "--weeks",
+      "2",
+      "--source-budget",
+      "5000"
+    ],
+    "started_at": 1792209124.6007981,
+    "status": "failed",
+    "source_hash": "ccbb75d2ac9a8deb387c845892ddabe99f3558809a53c0bc7460f1716bcbfceb",
+    "exit_code": 1,
+    "seconds": 115.38718557357788
+  },
+  {
+    "job": "E2E-smoke",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_e2e.py",
+      "--protocol",
+      "source-finetune",
+      "--firms",
+      "F000",
+      "--weeks",
+      "2",
+      "--source-budget",
+      "5000"
+    ],
+    "started_at": 1792209557.0581312,
+    "status": "passed",
+    "source_hash": "d95c19534b142038c1e096f01afe2a0f605f0ea14fe7aee630b6e3116e123a9b",
+    "exit_code": 0,
+    "seconds": 301.33898425102234
+  },
+  {
+    "job": "E2E-full",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_e2e.py",
+      "--protocol",
+      "source-finetune"
+    ],
+    "started_at": 1792209858.398116,
+    "status": "passed",
+    "source_hash": "afcfc3d8ee57e2214864a9ef535bcf4c18f804bc52d947ed870308e7711dc735",
+    "exit_code": 0,
+    "seconds": 1632.1442193984985
+  },
+  {
+    "job": "tests",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--junitxml=outputs/implementation/tests.xml"
+    ],
+    "started_at": 1792211490.5437791,
+    "status": "passed",
+    "source_hash": "62bf1c98f9bc60bf5e525e1c598aad28871865dcb45482c636505bfb95293502",
+    "exit_code": 0,
+    "seconds": 19.70513677597046
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792211510.2504663,
+    "status": "passed",
+    "source_hash": "62bf1c98f9bc60bf5e525e1c598aad28871865dcb45482c636505bfb95293502",
+    "exit_code": 0,
+    "seconds": 1.1224291324615479
+  },
+  {
+    "job": "scaling",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_scaling.py"
+    ],
+    "started_at": 1792211511.4790998,
+    "status": "passed",
+    "source_hash": "62bf1c98f9bc60bf5e525e1c598aad28871865dcb45482c636505bfb95293502",
+    "exit_code": 0,
+    "seconds": 597.4542498588562
+  },
+  {
+    "job": "domain-distance",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_domain_distance.py"
+    ],
+    "started_at": 1792212108.9346626,
+    "status": "passed",
+    "source_hash": "2e172d3e6cef2dde2e1b9f5c72f11e700f738d44fc3263eee5240f1fc48d13ed",
+    "exit_code": 0,
+    "seconds": 23.88717293739319
+  },
+  {
+    "job": "tests",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--junitxml=outputs/implementation/tests.xml"
+    ],
+    "started_at": 1792212132.8218355,
+    "status": "passed",
+    "source_hash": "42f3c7eb35a4dc3b204c789db3db3989bcd13d67c3ce552fc366b12ad8bb7bb9",
+    "exit_code": 0,
+    "seconds": 20.458934783935547
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792212153.2807703,
+    "status": "passed",
+    "source_hash": "42f3c7eb35a4dc3b204c789db3db3989bcd13d67c3ce552fc366b12ad8bb7bb9",
+    "exit_code": 0,
+    "seconds": 0.9646358489990234
+  },
+  {
+    "job": "T1-variants",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1_variants.py"
+    ],
+    "started_at": 1792212154.40736,
+    "status": "passed",
+    "source_hash": "42f3c7eb35a4dc3b204c789db3db3989bcd13d67c3ce552fc366b12ad8bb7bb9",
+    "exit_code": 0,
+    "seconds": 268.6029133796692
+  },
+  {
+    "job": "tests",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--junitxml=outputs/implementation/tests.xml"
+    ],
+    "started_at": 1792212423.011276,
+    "status": "passed",
+    "source_hash": "43ef533ab2009842573629970dd415854f227205947c24bf60d912b9fae19153",
+    "exit_code": 0,
+    "seconds": 20.812156915664673
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792212443.8244348,
+    "status": "passed",
+    "source_hash": "a88cb33212cdd5ae45adb6269361be955dd86be326414ac2c2af7b55ca6d40f3",
+    "exit_code": 0,
+    "seconds": 1.4628193378448486
+  },
+  {
+    "job": "T9-T1",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9_t1_propagation.py"
+    ],
+    "started_at": 1792212445.4865687,
+    "status": "passed",
+    "source_hash": "a88cb33212cdd5ae45adb6269361be955dd86be326414ac2c2af7b55ca6d40f3",
+    "exit_code": 0,
+    "seconds": 170.12418031692505
+  },
+  {
+    "job": "tests",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--junitxml=outputs/implementation/tests.xml"
+    ],
+    "started_at": 1792212615.612768,
+    "status": "passed",
+    "source_hash": "a88cb33212cdd5ae45adb6269361be955dd86be326414ac2c2af7b55ca6d40f3",
+    "exit_code": 0,
+    "seconds": 24.026358127593994
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792212639.640136,
+    "status": "passed",
+    "source_hash": "196942193ce6afcc0113ca8727921797ec66dc2e22e3ee6e80c7220e7664b6dc",
+    "exit_code": 0,
+    "seconds": 0.9530341625213623
+  },
+  {
+    "job": "BPI-no-due",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_nodue_bpi.py"
+    ],
+    "started_at": 1792212640.826535,
+    "status": "passed",
+    "source_hash": "196942193ce6afcc0113ca8727921797ec66dc2e22e3ee6e80c7220e7664b6dc",
+    "exit_code": 0,
+    "seconds": 142.4344036579132
+  },
+  {
+    "job": "tests",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--junitxml=outputs/implementation/tests.xml"
+    ],
+    "started_at": 1792212783.2619436,
+    "status": "passed",
+    "source_hash": "1927321a5a34f58f5dbe20d165ce9f810ece5ca1bb665b8441ce65606f2792e6",
+    "exit_code": 0,
+    "seconds": 28.999114274978638
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792212812.2630577,
+    "status": "passed",
+    "source_hash": "1927321a5a34f58f5dbe20d165ce9f810ece5ca1bb665b8441ce65606f2792e6",
+    "exit_code": 0,
+    "seconds": 1.1627628803253174
+  },
+  {
+    "job": "T8-reliability",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t8_reliability.py"
+    ],
+    "started_at": 1792368826.7303274,
+    "status": "passed",
+    "source_hash": "9346f6be8a7399718531da1ce6048175731abc602ce6222a45e11d77e2852480",
+    "exit_code": 0,
+    "seconds": 96.71688628196716
+  },
+  {
+    "job": "T3-T1",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t3_t1.py"
+    ],
+    "started_at": 1792368923.4487338,
+    "status": "passed",
+    "source_hash": "9346f6be8a7399718531da1ce6048175731abc602ce6222a45e11d77e2852480",
+    "exit_code": 0,
+    "seconds": 149.91527104377747
+  },
+  {
+    "job": "DA-paired",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_da_paired.py"
+    ],
+    "started_at": 1792375997.734763,
+    "status": "passed",
+    "source_hash": "8d0c43eda1ee8145e165bc4422f9e94545d83183c4404eea319557cbc85352bf",
+    "exit_code": 0,
+    "seconds": 327.38145875930786
+  },
+  {
+    "job": "DA-paired",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_da_paired.py"
+    ],
+    "started_at": 1792376356.2722332,
+    "status": "passed",
+    "source_hash": "352bc9c9c460087ee59de923d24355f36dbfb812352508fb0b195661df1429ab",
+    "exit_code": 0,
+    "seconds": 196.19641780853271
+  },
+  {
+    "job": "T9-hardcases",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9_hardcases.py"
+    ],
+    "started_at": 1792376552.4696555,
+    "status": "interrupted",
+    "source_hash": "d36beb63dded55a863642392d653e5e5213d5b30d78c1d3995c117c9c98710da",
+    "reason": "No matching process remains; completion marker false; cached completed cases retained"
+  },
+  {
+    "job": "T9-hardcases",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9_hardcases.py"
+    ],
+    "started_at": 1792401454.2377954,
+    "status": "failed",
+    "source_hash": "f04c8066852e76fd0e229756a99d4feb37f18c0ef8c31675a4c31ed5d2b79dcd",
+    "exit_code": 4294967295,
+    "seconds": 287.37944626808167
+  },
+  {
+    "job": "T9-hardcases",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9_hardcases.py"
+    ],
+    "started_at": 1792401923.3865037,
+    "status": "failed",
+    "source_hash": "f6008cd861934156b92f17dc7da3d53c7571287aad75c2937f4ad12d75cc306c",
+    "exit_code": 4294967295,
+    "seconds": 163.1669819355011
+  },
+  {
+    "job": "T9-hardcases",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9_hardcases.py"
+    ],
+    "started_at": 1792402192.016602,
+    "status": "failed",
+    "source_hash": "72300ed872807b25deffda6aaba9ab3928d875675c5d93e718a5440a9080d52c",
+    "exit_code": 4294967295,
+    "seconds": 294.2914776802063
+  },
+  {
+    "job": "T9-hardcases",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9_hardcases.py"
+    ],
+    "started_at": 1792402529.7253225,
+    "status": "passed",
+    "source_hash": "02cebfaeb412f14bb5124514447fd733d1b5024884ddc751bd7980d67ac3ad30",
+    "exit_code": 0,
+    "seconds": 894.5908169746399
+  },
+  {
+    "job": "tests",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--junitxml=outputs/implementation/tests.xml"
+    ],
+    "started_at": 1792403424.3357074,
+    "status": "passed",
+    "source_hash": "b71f99480d66d75c2ea86849d95537a510acf0e2063c41ea46abf8720c474b10",
+    "exit_code": 0,
+    "seconds": 111.7318422794342
+  },
+  {
+    "job": "report",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/make_report.py"
+    ],
+    "started_at": 1792403536.0728955,
+    "status": "passed",
+    "source_hash": "b3ec0c86d22c82bf1571103ea884ccf9b42be261a9d431f58fd228756547f4f7",
+    "exit_code": 0,
+    "seconds": 4.360280752182007
+  },
+  {
+    "job": "DR-build",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/build_dr_comparison.py"
+    ],
+    "started_at": 1792403797.3415718,
+    "status": "failed",
+    "source_hash": "e7359a0378cdd035a58bc6206cf655c0dc9af6a142e4cd994cdd53e2b909b476",
+    "exit_code": 4294967295,
+    "seconds": 538.5350689888
+  },
+  {
+    "job": "DR-build",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/build_dr_comparison.py"
+    ],
+    "started_at": 1792404385.0405385,
+    "status": "running",
+    "source_hash": "6d3e7047775f8ed75a192fa8f4b3e80330dbd2309b93c4563ed2b304457461a4"
+  },
+  {
+    "job": "DR-build",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/build_dr_comparison.py"
+    ],
+    "started_at": 1792454930.0697308,
+    "status": "passed",
+    "source_hash": "9541336ac788e7516fc0110e7f058183675ca8c5e9436513ce3c0e4e1735f384",
+    "exit_code": 0,
+    "seconds": 581.903094291687
+  },
+  {
+    "job": "DR-eval",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_dr_comparison.py"
+    ],
+    "started_at": 1792455511.9758253,
+    "status": "failed",
+    "source_hash": "aadfc5cfe3a10f1c130730b65410096861e1a8a387e87842825ad303ca1cf5ae",
+    "exit_code": 1073807364,
+    "seconds": 1743.4386141300201
+  },
+  {
+    "job": "DR-eval",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_dr_comparison.py"
+    ],
+    "started_at": 1792482468.7987278,
+    "status": "passed",
+    "source_hash": "942ae91c1b0246e5fb54cf6bed4a7870bc43b7e32801207a10a03d1f7573e235",
+    "exit_code": 0,
+    "seconds": 164.23190999031067
+  },
+  {
+    "job": "A",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "A"
+    ],
+    "started_at": 1792544555.2943075,
+    "status": "passed",
+    "source_hash": "a18587e139e29f28649539c3d31343b14217a9ed10abca68893a4bbf285db97b",
+    "exit_code": 0,
+    "seconds": 891.9396858215332
+  },
+  {
+    "job": "B",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "B"
+    ],
+    "started_at": 1792547697.5931728,
+    "status": "passed",
+    "source_hash": "6f7fba2c7da5e82c7a2fe19d5e90616a2d68b5f86e5857314ed41ef795a6adfe",
+    "exit_code": 0,
+    "seconds": 1691.5759944915771
+  },
+  {
+    "job": "DA-paired",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_da_paired.py"
+    ],
+    "started_at": 1792549389.5336852,
+    "status": "passed",
+    "source_hash": "3a7b62f753bd7f6ee6eb9390deaeb21eb7062dd08a1f02dac81066a4d3666910",
+    "exit_code": 0,
+    "seconds": 622.3789341449738
+  },
+  {
+    "job": "T1-variants",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1_variants.py"
+    ],
+    "started_at": 1792550012.1593168,
+    "status": "passed",
+    "source_hash": "36a0f868f37aa3b8a08a89f360cfe7f95e77d16adcbaf0761a4037d55f964464",
+    "exit_code": 0,
+    "seconds": 515.4610352516174
+  },
+  {
+    "job": "onboarding",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_onboarding_source.py"
+    ],
+    "started_at": 1792550527.9096673,
+    "status": "passed",
+    "source_hash": "44d1d8555fe13d30b2e9655783d1cf29105a6de51b17e917fa17ea1c533a0045",
+    "exit_code": 0,
+    "seconds": 158.10413074493408
+  },
+  {
+    "job": "EF",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "E,F"
+    ],
+    "started_at": 1792550686.191215,
+    "status": "passed",
+    "source_hash": "44d1d8555fe13d30b2e9655783d1cf29105a6de51b17e917fa17ea1c533a0045",
+    "exit_code": 0,
+    "seconds": 561.1847107410431
+  },
+  {
+    "job": "noisy-EF",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t1.py",
+      "--exp",
+      "E",
+      "--world",
+      "src_noisy_promises"
+    ],
+    "started_at": 1792551247.582518,
+    "status": "passed",
+    "source_hash": "44d1d8555fe13d30b2e9655783d1cf29105a6de51b17e917fa17ea1c533a0045",
+    "exit_code": 0,
+    "seconds": 263.27531599998474
+  },
+  {
+    "job": "T9-T1",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t9_t1_propagation.py"
+    ],
+    "started_at": 1792551511.0141377,
+    "status": "passed",
+    "source_hash": "44d1d8555fe13d30b2e9655783d1cf29105a6de51b17e917fa17ea1c533a0045",
+    "exit_code": 0,
+    "seconds": 148.98179364204407
+  },
+  {
+    "job": "T3-T1",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t3_t1.py"
+    ],
+    "started_at": 1792551660.1784372,
+    "status": "passed",
+    "source_hash": "44d1d8555fe13d30b2e9655783d1cf29105a6de51b17e917fa17ea1c533a0045",
+    "exit_code": 0,
+    "seconds": 95.16151738166809
+  },
+  {
+    "job": "crisis-ablation",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/eval_by_regime.py"
+    ],
+    "started_at": 1792551755.5613072,
+    "status": "passed",
+    "source_hash": "44d1d8555fe13d30b2e9655783d1cf29105a6de51b17e917fa17ea1c533a0045",
+    "exit_code": 0,
+    "seconds": 315.68099069595337
+  },
+  {
+    "job": "DR-eval",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_dr_comparison.py"
+    ],
+    "started_at": 1792552071.4055572,
+    "status": "passed",
+    "source_hash": "44d1d8555fe13d30b2e9655783d1cf29105a6de51b17e917fa17ea1c533a0045",
+    "exit_code": 0,
+    "seconds": 2904.7782394886017
+  },
+  {
+    "job": "E2E-full",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_e2e.py",
+      "--protocol",
+      "source-finetune"
+    ],
+    "started_at": 1792554976.4017518,
+    "status": "passed",
+    "source_hash": "605d921012244ee0f38f5f1a85b9ce9c5549527b381277fd21304a55e6f5ab1e",
+    "exit_code": 0,
+    "seconds": 2771.1985285282135
+  },
+  {
+    "job": "T6",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_t6.py"
+    ],
+    "started_at": 1792557747.8105257,
+    "status": "passed",
+    "source_hash": "7cd9b2aabaa63b9c38e4a93374cb208977e8dbd44be1037e04de1371743920ad",
+    "exit_code": 0,
+    "seconds": 1187.371957063675
+  },
+  {
+    "job": "regime-cash",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_regime_cash.py"
+    ],
+    "started_at": 1792558935.364108,
+    "status": "passed",
+    "source_hash": "132c8d6d9cb5c836ab506674bf42a24b862161b4384d3ea0009d236ae509fa65",
+    "exit_code": 0,
+    "seconds": 344.2305655479431
+  },
+  {
+    "job": "collection-policy",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_collection_policy.py"
+    ],
+    "started_at": 1792559279.7096076,
+    "status": "running",
+    "source_hash": "132c8d6d9cb5c836ab506674bf42a24b862161b4384d3ea0009d236ae509fa65"
+  },
+  {
+    "job": "T9-source-policy",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/sprint1/t9_source_diagnostics.py",
+      "--with-policy"
+    ],
+    "started_at": 1792574175.0777493,
+    "status": "passed",
+    "source_hash": "3ca678a69b525b540598613684d28b826f45e349f6f3be8ed4e17a8f55d00c97",
+    "exit_code": 0,
+    "seconds": 780.6352024078369
+  },
+  {
+    "job": "P4",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/sprint1/run_stationary.py"
+    ],
+    "started_at": 1792574958.359569,
+    "status": "running",
+    "source_hash": "3ca678a69b525b540598613684d28b826f45e349f6f3be8ed4e17a8f55d00c97"
+  },
+  {
+    "job": "P4",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/sprint1/run_stationary.py"
+    ],
+    "started_at": 1792595947.9425962,
+    "status": "passed",
+    "source_hash": "3ca678a69b525b540598613684d28b826f45e349f6f3be8ed4e17a8f55d00c97",
+    "exit_code": 0,
+    "seconds": 1317.6554815769196
+  },
+  {
+    "job": "collection-policy",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_collection_policy.py"
+    ],
+    "started_at": 1792597269.7047493,
+    "status": "passed",
+    "source_hash": "9d68ac65dc79691bf8ca96a21d497da6f6b0157219942b3e5bf3b061efd519ee",
+    "exit_code": 0,
+    "seconds": 188.46371293067932
+  },
+  {
+    "job": "copula-hierarchy",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_copula_hierarchy.py"
+    ],
+    "started_at": 1792597463.906555,
+    "status": "passed",
+    "source_hash": "9d68ac65dc79691bf8ca96a21d497da6f6b0157219942b3e5bf3b061efd519ee",
+    "exit_code": 0,
+    "seconds": 162.18688201904297
+  },
+  {
+    "job": "IW-oof",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_iw_oof.py"
+    ],
+    "started_at": 1792597628.2397108,
+    "status": "passed",
+    "source_hash": "9d68ac65dc79691bf8ca96a21d497da6f6b0157219942b3e5bf3b061efd519ee",
+    "exit_code": 0,
+    "seconds": 83.14861273765564
+  },
+  {
+    "job": "scaling",
+    "command": [
+      "C:\\Users\\Admin\\Downloads\\Agent1\\.venv\\Scripts\\python.exe",
+      "scripts/run_scaling.py"
+    ],
+    "started_at": 1792597716.392286,
+    "status": "passed",
+    "source_hash": "9d68ac65dc79691bf8ca96a21d497da6f6b0157219942b3e5bf3b061efd519ee",
+    "exit_code": 0,
+    "seconds": 566.8114609718323
+  }
+]

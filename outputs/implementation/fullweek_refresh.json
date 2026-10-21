@@ -1,0 +1,167 @@
+[
+  {
+    "job": "A",
+    "status": "passed",
+    "started_at": "2026-10-21T08:02:35.143655+07:00",
+    "free_ram_bytes": 3806400512,
+    "primary": "outputs\\t1\\A_rolling_origin_src.csv",
+    "before": "pinball_avg=10.5744; cov80=0.627364",
+    "exit_code": 0,
+    "seconds": 892.1409999999996,
+    "after": "pinball_avg=10.5673; cov80=0.62893"
+  },
+  {
+    "job": "B",
+    "status": "passed",
+    "started_at": "2026-10-21T08:54:57.446044+07:00",
+    "free_ram_bytes": 3328176128,
+    "primary": "outputs\\t1\\B_domain_adaptation_tgt.csv",
+    "before": "pinball_avg=9.59214; cov80=0.603433",
+    "exit_code": 0,
+    "seconds": 1691.7659999999996,
+    "after": "pinball_avg=9.59214; cov80=0.603434"
+  },
+  {
+    "job": "DA-paired",
+    "status": "passed",
+    "started_at": "2026-10-21T09:23:09.350940+07:00",
+    "free_ram_bytes": 3604324352,
+    "primary": "outputs\\t1\\DA_paired_metrics.csv",
+    "before": "pinball_avg=9.32263; WAPE_collect_w1_4=0.63048",
+    "exit_code": 0,
+    "seconds": 622.5780000000013,
+    "after": "pinball_avg=9.32703; WAPE_collect_w1_4=0.630599"
+  },
+  {
+    "job": "T1-variants",
+    "status": "passed",
+    "started_at": "2026-10-21T09:33:31.977016+07:00",
+    "free_ram_bytes": 3816558592,
+    "primary": "outputs\\t1\\T1_variants.csv",
+    "before": "pinball_avg=8.94929; cov80=0.693197",
+    "exit_code": 0,
+    "seconds": 515.6720000000005,
+    "after": "pinball_avg=8.94639; cov80=0.693672"
+  },
+  {
+    "job": "onboarding",
+    "status": "passed",
+    "started_at": "2026-10-21T09:42:07.737316+07:00",
+    "free_ram_bytes": 3507073024,
+    "primary": "outputs\\t1\\onboarding_source_validation.csv",
+    "before": "pinball_avg=6.74799; cov80=0.747671",
+    "exit_code": 0,
+    "seconds": 158.29700000000048,
+    "after": "pinball_avg=6.75351; cov80=0.748821"
+  },
+  {
+    "job": "EF",
+    "status": "passed",
+    "started_at": "2026-10-21T09:44:46.074042+07:00",
+    "free_ram_bytes": 4977680384,
+    "primary": "outputs\\t1\\EF_t8_t9.csv",
+    "before": "pinball_avg=5.00984; cov80=0.855422",
+    "exit_code": 0,
+    "seconds": 561.3119999999999,
+    "after": "pinball_avg=5.00984; cov80=0.855422"
+  },
+  {
+    "job": "noisy-EF",
+    "status": "passed",
+    "started_at": "2026-10-21T09:54:07.431500+07:00",
+    "free_ram_bytes": 4498939904,
+    "primary": "outputs\\t1\\EF_t8_t9_src_noisy_promises.csv",
+    "before": "pinball_avg=5.05832; cov80=0.853168",
+    "exit_code": 0,
+    "seconds": 263.4380000000001,
+    "after": "pinball_avg=5.05832; cov80=0.853168"
+  },
+  {
+    "job": "T9-T1",
+    "status": "passed",
+    "started_at": "2026-10-21T09:58:30.912955+07:00",
+    "free_ram_bytes": 5224296448,
+    "primary": "outputs\\t1\\T9_T1_error_propagation.csv",
+    "before": "6 h\u00e0ng",
+    "exit_code": 0,
+    "seconds": 149.09300000000076,
+    "after": "6 h\u00e0ng"
+  },
+  {
+    "job": "T3-T1",
+    "status": "passed",
+    "started_at": "2026-10-21T10:01:00.074472+07:00",
+    "free_ram_bytes": 5120802816,
+    "primary": "outputs\\t1\\T3_T1_ablation.csv",
+    "before": "pinball_avg=11.7501; cov80=0.704736",
+    "exit_code": 0,
+    "seconds": 95.28099999999904,
+    "after": "pinball_avg=11.7456; cov80=0.706599"
+  },
+  {
+    "job": "crisis-ablation",
+    "status": "passed",
+    "started_at": "2026-10-21T10:02:35.420342+07:00",
+    "free_ram_bytes": 5134680064,
+    "primary": "outputs\\t1\\crisis_ablation.csv",
+    "before": "16 h\u00e0ng",
+    "exit_code": 0,
+    "seconds": 315.84300000000076,
+    "after": "16 h\u00e0ng"
+  },
+  {
+    "job": "DR-eval",
+    "status": "passed",
+    "started_at": "2026-10-21T10:07:51.305453+07:00",
+    "free_ram_bytes": 4997296128,
+    "primary": "outputs\\t1\\DR\\metrics.csv",
+    "before": "pinball_avg=7.83417; cov80=0.768881",
+    "exit_code": 0,
+    "seconds": 2904.9069999999992,
+    "after": "pinball_avg=7.87122; cov80=0.767209"
+  },
+  {
+    "job": "E2E-full",
+    "status": "passed",
+    "started_at": "2026-10-21T10:56:16.290546+07:00",
+    "free_ram_bytes": 3228254208,
+    "primary": "outputs\\e2e\\e2e_metrics.csv",
+    "before": "cov80=0.53627; IS80=25.4515",
+    "exit_code": 0,
+    "seconds": 2771.342999999999,
+    "after": "cov80=0.531281; IS80=25.5441"
+  },
+  {
+    "job": "T6",
+    "status": "passed",
+    "started_at": "2026-10-21T11:42:27.706203+07:00",
+    "free_ram_bytes": 3638734848,
+    "primary": "outputs\\t6\\t6_interval_metrics.csv",
+    "before": "cov80=0.551582; IS80=16.6864",
+    "exit_code": 0,
+    "seconds": 1187.5,
+    "after": "cov80=0.550186; IS80=16.6989"
+  },
+  {
+    "job": "regime-cash",
+    "status": "passed",
+    "started_at": "2026-10-21T12:02:15.253662+07:00",
+    "free_ram_bytes": 4637519872,
+    "primary": "outputs\\t7\\regime_cash\\metrics.csv",
+    "before": "cov80=0.632736; IS80=13.4699",
+    "exit_code": 0,
+    "seconds": 344.34400000000096,
+    "after": "cov80=0.64037; IS80=13.1051"
+  },
+  {
+    "job": "collection-policy",
+    "status": "failed",
+    "started_at": "2026-10-21T12:07:59.624645+07:00",
+    "free_ram_bytes": 4744527872,
+    "primary": "outputs\\t6\\collection_policy\\metrics.csv",
+    "before": "21 h\u00e0ng",
+    "exit_code": 1073807364,
+    "seconds": 352.7970000000023,
+    "after": "21 h\u00e0ng"
+  }
+]

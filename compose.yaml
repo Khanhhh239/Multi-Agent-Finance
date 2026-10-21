@@ -1,0 +1,15 @@
+services:
+  agent1:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      AGENT1_FIRM_ID: F000
+      AGENT1_RESEARCH_MODE: "0"
+      AGENT1_DEMO_DIR: /demo/tgt
+    command: ["sh", "-c", "python -m agent1_service.seed_demo && uvicorn agent1_service.main:app --host 0.0.0.0 --port 8000"]
+    volumes:
+      - agent1-state:/state
+      - ./data/synthetic/tgt:/demo/tgt:ro
+volumes:
+  agent1-state:

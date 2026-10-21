@@ -1,0 +1,10 @@
+{
+  "n_reports": 115490,
+  "avg_time_to_pay_median": 33.0,
+  "pct_within_30_median": 60.0,
+  "pct_31_60_median": 27.0,
+  "pct_over_60_median": 7.0,
+  "pct_not_within_terms_median": 20.0,
+  "pct_dispute_median": 0.0,
+  "pct_dispute_p90": 0.0
+}

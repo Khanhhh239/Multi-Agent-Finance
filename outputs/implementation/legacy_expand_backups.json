@@ -1,0 +1,907 @@
+[
+  {
+    "path": "outputs\\berka\\cash_metrics.csv",
+    "backup": "outputs\\berka\\cash_metrics.legacy_expand.csv",
+    "sha256": "c25c4d4da497f39e8f3d0b7570c29eb56ea95b415428c358a0e26abbb219cda4"
+  },
+  {
+    "path": "outputs\\berka\\changepoint_injected.csv",
+    "backup": "outputs\\berka\\changepoint_injected.legacy_expand.csv",
+    "sha256": "af1197c70ea099dfdbb31879d9f5a17601b657f1fe5c18058e84600f6eb3d310"
+  },
+  {
+    "path": "outputs\\data\\big_worlds.csv",
+    "backup": "outputs\\data\\big_worlds.legacy_expand.csv",
+    "sha256": "34f076959b35ff19220c158dd3eff877f2b039a710f8673e36a1353a10a72b2c"
+  },
+  {
+    "path": "outputs\\data\\big_worlds_smoke.csv",
+    "backup": "outputs\\data\\big_worlds_smoke.legacy_expand.csv",
+    "sha256": "00cdc38d709f80c06e2d9c1e6a103fcda75044e3336158c4e01b749c5ad7cf8b"
+  },
+  {
+    "path": "outputs\\data\\c2st.csv",
+    "backup": "outputs\\data\\c2st.legacy_expand.csv",
+    "sha256": "52666928795500617dcd05985a61056ca54b0b5c325a0f23f83fd076b7349a3c"
+  },
+  {
+    "path": "outputs\\data\\c2st_features_sens_coface.csv",
+    "backup": "outputs\\data\\c2st_features_sens_coface.legacy_expand.csv",
+    "sha256": "55878e22c1c1065154c6afc5a82e250b1f2a1b97870a6f2f78be9d1a5056da76"
+  },
+  {
+    "path": "outputs\\data\\c2st_features_sens_uk.csv",
+    "backup": "outputs\\data\\c2st_features_sens_uk.legacy_expand.csv",
+    "sha256": "86d9b4a4610d2f28ba95eb923d191e8e24dbb50df1ae7935d526209688a253e7"
+  },
+  {
+    "path": "outputs\\data\\c2st_features_src.csv",
+    "backup": "outputs\\data\\c2st_features_src.legacy_expand.csv",
+    "sha256": "22ad897776746327eba9f1aeaf21817be983c073ff0460f0c8b28c5f6f382396"
+  },
+  {
+    "path": "outputs\\data\\design.csv",
+    "backup": "outputs\\data\\design.legacy_expand.csv",
+    "sha256": "d1f18060d2f58ccbe378d631d3506291df18a92797bf8f00d3424027aaee1ef3"
+  },
+  {
+    "path": "outputs\\data\\DR_comparison_build.csv",
+    "backup": "outputs\\data\\DR_comparison_build.legacy_expand.csv",
+    "sha256": "2fc966bd8615e16900eb782b4490eb0fed141c45b888b06cfc7417a47f3382e6"
+  },
+  {
+    "path": "outputs\\data\\DR_comparison_design.csv",
+    "backup": "outputs\\data\\DR_comparison_design.legacy_expand.csv",
+    "sha256": "ddc8585eae9e48e581254b0b83b76dbf7d068f9d68ca79868efef2a4f8ddd3b8"
+  },
+  {
+    "path": "outputs\\data\\generator_benchmark.csv",
+    "backup": "outputs\\data\\generator_benchmark.legacy_expand.csv",
+    "sha256": "3afb84f7186b29929ff43905a7a4f0f76cf39d15d8d7237d18c49894fcab0c69"
+  },
+  {
+    "path": "outputs\\data\\generator_profile.csv",
+    "backup": "outputs\\data\\generator_profile.legacy_expand.csv",
+    "sha256": "0583f3e0b44f49c72a384e8695aa62ea6c920c757f5e6817b793584476a37102"
+  },
+  {
+    "path": "outputs\\data\\hard_case_fidelity.csv",
+    "backup": "outputs\\data\\hard_case_fidelity.legacy_expand.csv",
+    "sha256": "bd9e5bdf25e93bfe6f87e6d40c69cb38fc1ea4907185722984f5f6a5ce195f23"
+  },
+  {
+    "path": "outputs\\data\\hard_case_smoke.csv",
+    "backup": "outputs\\data\\hard_case_smoke.legacy_expand.csv",
+    "sha256": "611c61ea7707121c7b709442ee205be8bdeaba6e3ef57a22704aa8ff8dd4453d"
+  },
+  {
+    "path": "outputs\\data\\hard_cases.csv",
+    "backup": "outputs\\data\\hard_cases.legacy_expand.csv",
+    "sha256": "4716775b7f79838f8b4d2f068339d4c01903945b476fbf9e58208015ad0a3a5d"
+  },
+  {
+    "path": "outputs\\data\\hard_cases_v2.csv",
+    "backup": "outputs\\data\\hard_cases_v2.legacy_expand.csv",
+    "sha256": "2af58536faf436b8540b17dfecb3a473a7179cfd9631fb6633b25c7d88223036"
+  },
+  {
+    "path": "outputs\\data\\noisy_promise_coupling.csv",
+    "backup": "outputs\\data\\noisy_promise_coupling.legacy_expand.csv",
+    "sha256": "f7f8a88e1d59bcfac8e28e887e2df7a1b62eade2b6a6b1f4f5d345fa8df5e44b"
+  },
+  {
+    "path": "outputs\\data\\vn_listed_accounting.csv",
+    "backup": "outputs\\data\\vn_listed_accounting.legacy_expand.csv",
+    "sha256": "533e46db6be060bb7120ae30d3598e267b18db149bfc72ad28e89017851e0a6a"
+  },
+  {
+    "path": "outputs\\data\\vn_listed_DSO_comparison.csv",
+    "backup": "outputs\\data\\vn_listed_DSO_comparison.legacy_expand.csv",
+    "sha256": "dc820b8eec1e70aea2730a79993999ef0decc8d85b7d3492b5fd3417424434df"
+  },
+  {
+    "path": "outputs\\data\\vn_listed_synthetic_DSO.csv",
+    "backup": "outputs\\data\\vn_listed_synthetic_DSO.legacy_expand.csv",
+    "sha256": "c7103796419ea6a29c0b0ec94af70f378ce0cb338c7428e9a87f3de76c7d2380"
+  },
+  {
+    "path": "outputs\\e2e\\company_errors.csv",
+    "backup": "outputs\\e2e\\company_errors.legacy_expand.csv",
+    "sha256": "fc2c7321172fac761df0e977e484ab96fb460c8475fa6511693cb1ac98d14cb2"
+  },
+  {
+    "path": "outputs\\e2e\\e2e_metrics.csv",
+    "backup": "outputs\\e2e\\e2e_metrics.legacy_expand.csv",
+    "sha256": "dd99e84650cb4c527a592a23987506d7db827bfecc380cf10d5e1e6b511e384a"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\alert_policy.csv",
+    "backup": "outputs\\e2e\\protocol\\alert_policy.legacy_expand.csv",
+    "sha256": "cf769318079644e90296a78b8c09a698a29fff6cdbba7372b8dee44b56609da2"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\cure_diagnostics.csv",
+    "backup": "outputs\\e2e\\protocol\\cure_diagnostics.legacy_expand.csv",
+    "sha256": "b24df78584c0b8e40da4a8d257fe70b2638d060df04bc09d41a63572798e2640"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\demo_band.csv",
+    "backup": "outputs\\e2e\\protocol\\demo_band.legacy_expand.csv",
+    "sha256": "ccc461ba2861b1e6f0f4d2a1a091010799d17f934ec08ba0d1a2b8c408ec3dd0"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\demo_collect_first.csv",
+    "backup": "outputs\\e2e\\protocol\\demo_collect_first.legacy_expand.csv",
+    "sha256": "11005b8284fd3ea0c9fe0a5432a6f5515ce48b00cea9824743f15988c098deb4"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\missed_Direct_LGBM_Q__src_.csv",
+    "backup": "outputs\\e2e\\protocol\\missed_Direct_LGBM_Q__src_.legacy_expand.csv",
+    "sha256": "5afdfd054fd78757ee66441143b52d5aac378aaf20845679ac4ea1d3d96e2ff4"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\missed_MC_copula_t___calibrated_cure.csv",
+    "backup": "outputs\\e2e\\protocol\\missed_MC_copula_t___calibrated_cure.legacy_expand.csv",
+    "sha256": "e80a684cdeff8e90ce7bf40956fb0cbc2edeaff6d07495ba2b3e31bf792094f5"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\missed_MC_copula_t__T1_T4_T5_.csv",
+    "backup": "outputs\\e2e\\protocol\\missed_MC_copula_t__T1_T4_T5_.legacy_expand.csv",
+    "sha256": "ca5e11952ff208b7347ffd8972f83742d7045107c52636a812672f984b9cdd9a"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\missed_MC_independent__rho_0_.csv",
+    "backup": "outputs\\e2e\\protocol\\missed_MC_independent__rho_0_.legacy_expand.csv",
+    "sha256": "d7b70145f259a77ed00503ba756ace0330e82611582698a2fed9404a46b2235c"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\missed_MC_with_B1_point_dates.csv",
+    "backup": "outputs\\e2e\\protocol\\missed_MC_with_B1_point_dates.legacy_expand.csv",
+    "sha256": "838dba5be7298ad22232f27bfda7ad0f61fa3c226d447e4017fad65a525a96d8"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\missed_Naive__known_out___avg_in_.csv",
+    "backup": "outputs\\e2e\\protocol\\missed_Naive__known_out___avg_in_.legacy_expand.csv",
+    "sha256": "e7e3d0f47785a42a28f56a611fc1f5a3f526aa2d98d063cbfe2e6b2c5b000db4"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\oracle_equal_budget\\alert_policy.csv",
+    "backup": "outputs\\e2e\\protocol\\oracle_equal_budget\\alert_policy.legacy_expand.csv",
+    "sha256": "37dbaa5cab8df278423d4eb55d91826fdd00014d3a22438af9055fa16d82e960"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\oracle_equal_budget\\cure_diagnostics.csv",
+    "backup": "outputs\\e2e\\protocol\\oracle_equal_budget\\cure_diagnostics.legacy_expand.csv",
+    "sha256": "4218127123f66a0d18f005cd395e160fdd8576044cd2e2cf023753ab9508427b"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\oracle_equal_budget\\demo_band.csv",
+    "backup": "outputs\\e2e\\protocol\\oracle_equal_budget\\demo_band.legacy_expand.csv",
+    "sha256": "d2fc1bbaa4c8709d6e35328dd385e9d6a23d57257f752f29028d52a6a46acfbe"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\oracle_equal_budget\\demo_collect_first.csv",
+    "backup": "outputs\\e2e\\protocol\\oracle_equal_budget\\demo_collect_first.legacy_expand.csv",
+    "sha256": "1e0d9de6f2dc984f6ff9e10afb0f4c51f38431efe48abf9308df34d2c585e348"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\oracle_equal_budget\\stress_scenarios.csv",
+    "backup": "outputs\\e2e\\protocol\\oracle_equal_budget\\stress_scenarios.legacy_expand.csv",
+    "sha256": "62720b51c6f84db9f8798d310a608689d45703cb10117174458e61b82c3b3708"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\oracle_equal_budget\\t6_interval_metrics.csv",
+    "backup": "outputs\\e2e\\protocol\\oracle_equal_budget\\t6_interval_metrics.legacy_expand.csv",
+    "sha256": "4ba0a6567bd3919e137725974a389f47a853bfc947638f9166c096e313553002"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\oracle_equal_budget\\t6_shortfall_metrics.csv",
+    "backup": "outputs\\e2e\\protocol\\oracle_equal_budget\\t6_shortfall_metrics.legacy_expand.csv",
+    "sha256": "fe7b8ce5c2d0a658e6df780b5c8fd78be07304a5f021dcf9d63c15c0306616ad"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\oracle_equal_budget\\t6_shortfall_predictions.csv",
+    "backup": "outputs\\e2e\\protocol\\oracle_equal_budget\\t6_shortfall_predictions.legacy_expand.csv",
+    "sha256": "661936abb5981bd7f7afa4caddbbc71dbcde4b1bf822f6ecd0ebfe7c24dc2e19"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\stress_scenarios.csv",
+    "backup": "outputs\\e2e\\protocol\\stress_scenarios.legacy_expand.csv",
+    "sha256": "62720b51c6f84db9f8798d310a608689d45703cb10117174458e61b82c3b3708"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\t6_interval_metrics.csv",
+    "backup": "outputs\\e2e\\protocol\\t6_interval_metrics.legacy_expand.csv",
+    "sha256": "0a70b739df440716dae9c2f4cbb3e1dad04bf9c5271c237ec7a316c34b1b1bf5"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\t6_shortfall_metrics.csv",
+    "backup": "outputs\\e2e\\protocol\\t6_shortfall_metrics.legacy_expand.csv",
+    "sha256": "ffd7cb91fc618d6e2eda4c79ae01a94164e2dda3ffda495995a73a355b26d56c"
+  },
+  {
+    "path": "outputs\\e2e\\protocol\\t6_shortfall_predictions.csv",
+    "backup": "outputs\\e2e\\protocol\\t6_shortfall_predictions.legacy_expand.csv",
+    "sha256": "0612061da1c1a4f130cc0eb89b0cc0aa5ece71a68e2dfe761541cc1ff084d69d"
+  },
+  {
+    "path": "outputs\\e2e\\worst_cases.csv",
+    "backup": "outputs\\e2e\\worst_cases.legacy_expand.csv",
+    "sha256": "5955bae70371e7f86c1583c60050708649ae6ec6d6caf210d4e97d1c538f552d"
+  },
+  {
+    "path": "outputs\\implementation\\gates.csv",
+    "backup": "outputs\\implementation\\gates.legacy_expand.csv",
+    "sha256": "12ab933b3300c2e5e6e2244f7b22fe1cd536f8f2de162169706f207dd623da03"
+  },
+  {
+    "path": "outputs\\implementation\\test_summary.csv",
+    "backup": "outputs\\implementation\\test_summary.legacy_expand.csv",
+    "sha256": "33b35fe7317fd21f8d3bce33f34f489b885824b975b25fbf0c2cb35c7525810c"
+  },
+  {
+    "path": "outputs\\implementation\\work_packages.csv",
+    "backup": "outputs\\implementation\\work_packages.legacy_expand.csv",
+    "sha256": "9e375cd61be0375a18f1e620c2d24733cc4020e7175d57ddd101c62e7642e04d"
+  },
+  {
+    "path": "outputs\\rules\\business_case_coverage.csv",
+    "backup": "outputs\\rules\\business_case_coverage.legacy_expand.csv",
+    "sha256": "d920849fbfea0023bf65776bc50fc2b982ffb25f6cb947f7f9ab3c522ca81248"
+  },
+  {
+    "path": "outputs\\rules\\business_cases.csv",
+    "backup": "outputs\\rules\\business_cases.legacy_expand.csv",
+    "sha256": "dbe553d1505f0dea52018b2946e12fc33a1abcd6e09aa8e042fee59c548bec64"
+  },
+  {
+    "path": "outputs\\rules\\extended_obligation_cases.csv",
+    "backup": "outputs\\rules\\extended_obligation_cases.legacy_expand.csv",
+    "sha256": "15b651b359e527778d80b3c750d904a1fd78e30ac6f1edf98dc4b8b7246ccd33"
+  },
+  {
+    "path": "outputs\\rules\\rules_review.csv",
+    "backup": "outputs\\rules\\rules_review.legacy_expand.csv",
+    "sha256": "e7a2b6fce542d53544fad50e0af79ccb982eaba4bf3ac0c649e4f34321c047f8"
+  },
+  {
+    "path": "outputs\\service\\alert_gate_summary.csv",
+    "backup": "outputs\\service\\alert_gate_summary.legacy_expand.csv",
+    "sha256": "0e7dc71d318aeb947f02f9a8a23894cf88789a207e527934f12dc4d735f3acce"
+  },
+  {
+    "path": "outputs\\service\\alert_number_gate.csv",
+    "backup": "outputs\\service\\alert_number_gate.legacy_expand.csv",
+    "sha256": "75ea5ea4299f4849df7d1c589eb4b6794e4d09e1feb76e7574635f2aca4bcbfc"
+  },
+  {
+    "path": "outputs\\service\\local_validation.csv",
+    "backup": "outputs\\service\\local_validation.legacy_expand.csv",
+    "sha256": "90775af5738655c6308cbdc1d70c62c3a6060258eb8877caf9a90c98e0763cf8"
+  },
+  {
+    "path": "outputs\\t1\\A_checkpoint.csv",
+    "backup": "outputs\\t1\\A_checkpoint.legacy_expand.csv",
+    "sha256": "bdb0aabecded25fddf4dcb3d8fcb48ae5ccf55ae2e9484a8042ced97c88d11a6"
+  },
+  {
+    "path": "outputs\\t1\\A_rolling_origin_src.csv",
+    "backup": "outputs\\t1\\A_rolling_origin_src.legacy_expand.csv",
+    "sha256": "4cbe77d23121a645e2737ec2d69381f664d9c485cc169615ca91f9106a0ea4ea"
+  },
+  {
+    "path": "outputs\\t1\\A_rolling_origin_src.v1.csv",
+    "backup": "outputs\\t1\\A_rolling_origin_src.v1.legacy_expand.csv",
+    "sha256": "1f210e3584000fe89372dc58e045f1e19c1b65fc7b8b01cecc134697589691b1"
+  },
+  {
+    "path": "outputs\\t1\\A_rolling_origin_src.v2_before_point_fix.csv",
+    "backup": "outputs\\t1\\A_rolling_origin_src.v2_before_point_fix.legacy_expand.csv",
+    "sha256": "bdb0aabecded25fddf4dcb3d8fcb48ae5ccf55ae2e9484a8042ced97c88d11a6"
+  },
+  {
+    "path": "outputs\\t1\\A_seed_cv.csv",
+    "backup": "outputs\\t1\\A_seed_cv.legacy_expand.csv",
+    "sha256": "165b9abf459848fb64eee33a04b1516586a3a355291d12c9e469913fbbc31970"
+  },
+  {
+    "path": "outputs\\t1\\A_seed_stability.csv",
+    "backup": "outputs\\t1\\A_seed_stability.legacy_expand.csv",
+    "sha256": "f15a715879d8b0ee4d9c42d58c699affd7b9750be55685367e40d49af6a96e9d"
+  },
+  {
+    "path": "outputs\\t1\\A_strata.csv",
+    "backup": "outputs\\t1\\A_strata.legacy_expand.csv",
+    "sha256": "50e69bfc91e3cef8e0a276ab91fd3fd7386b37506d888848b261fe1058b5823f"
+  },
+  {
+    "path": "outputs\\t1\\A_tuned_equal_budget.csv",
+    "backup": "outputs\\t1\\A_tuned_equal_budget.legacy_expand.csv",
+    "sha256": "ee7e45c8cbdb37bdf1cfca8d37d30474c7f430a0ca9736e6cfb742f6714e9dfd"
+  },
+  {
+    "path": "outputs\\t1\\B_domain_adaptation_tgt.csv",
+    "backup": "outputs\\t1\\B_domain_adaptation_tgt.legacy_expand.csv",
+    "sha256": "58c7e3dcce9e20b152102015d032941b71e1bc91380f9cb05162b180cca68c53"
+  },
+  {
+    "path": "outputs\\t1\\BPI_no_due_ablation.csv",
+    "backup": "outputs\\t1\\BPI_no_due_ablation.legacy_expand.csv",
+    "sha256": "1b0c9925d5f563e8f3948ef510802607d6524f1d72275c1cb86b3eeb7f6a9058"
+  },
+  {
+    "path": "outputs\\t1\\C_real_domains.csv",
+    "backup": "outputs\\t1\\C_real_domains.legacy_expand.csv",
+    "sha256": "181c11f21ad88b14372dd729b40aeb2dbb33545d7685c1f48c018118c83a3b64"
+  },
+  {
+    "path": "outputs\\t1\\crisis_ablation.csv",
+    "backup": "outputs\\t1\\crisis_ablation.legacy_expand.csv",
+    "sha256": "7755d33b80801ddf1c37abccb720e18513b88833df970e43ab54fa3162b424b9"
+  },
+  {
+    "path": "outputs\\t1\\crisis_company_losses.csv",
+    "backup": "outputs\\t1\\crisis_company_losses.legacy_expand.csv",
+    "sha256": "5165ed55bde71be382248314eeebf4c454fbf3a977bf82e64533cd61bbb0ece3"
+  },
+  {
+    "path": "outputs\\t1\\D_t2_cure.csv",
+    "backup": "outputs\\t1\\D_t2_cure.legacy_expand.csv",
+    "sha256": "ed69d6d7cf744d09d5a98e6fd53c6acad7286172495bb8dbd0ebacff69004f14"
+  },
+  {
+    "path": "outputs\\t1\\DA_hypotheses.csv",
+    "backup": "outputs\\t1\\DA_hypotheses.legacy_expand.csv",
+    "sha256": "0f479cfc05558c01bc178b78646ef95fa25a2708de8c42031d9a772ebdb1b6bf"
+  },
+  {
+    "path": "outputs\\t1\\DA_paired_company_losses.csv",
+    "backup": "outputs\\t1\\DA_paired_company_losses.legacy_expand.csv",
+    "sha256": "ed02eeaebbc7fa9e1550f4cb048395f7704e42bf336b394ffdcf3e9196eff18b"
+  },
+  {
+    "path": "outputs\\t1\\DA_paired_comparisons.csv",
+    "backup": "outputs\\t1\\DA_paired_comparisons.legacy_expand.csv",
+    "sha256": "367ee1f426af03a0f8481737cd5f958a86ee54abeb1f64f00dccef916c323c79"
+  },
+  {
+    "path": "outputs\\t1\\DA_paired_metrics.csv",
+    "backup": "outputs\\t1\\DA_paired_metrics.legacy_expand.csv",
+    "sha256": "adf46bb0ec803f3122ab88e9f872c15020c90f8dab5d67bf379d172eb8656178"
+  },
+  {
+    "path": "outputs\\t1\\dh_gbm_feature_importance.csv",
+    "backup": "outputs\\t1\\dh_gbm_feature_importance.legacy_expand.csv",
+    "sha256": "25cff43dbd313f8f47d931ab019751a82ad94b89c89a8388ea7e27d8096d2089"
+  },
+  {
+    "path": "outputs\\t1\\domain_distance.csv",
+    "backup": "outputs\\t1\\domain_distance.legacy_expand.csv",
+    "sha256": "a9ea92dc831e61c2d322fa39c4afc80d0fe0ed6f32dbc22df5c2c331c899d923"
+  },
+  {
+    "path": "outputs\\t1\\domain_top_features.csv",
+    "backup": "outputs\\t1\\domain_top_features.legacy_expand.csv",
+    "sha256": "79c6993712c6903c093d3482be51a578cf01cd520a51f8af221724a7f15b3abd"
+  },
+  {
+    "path": "outputs\\t1\\DR\\decisions.csv",
+    "backup": "outputs\\t1\\DR\\decisions.legacy_expand.csv",
+    "sha256": "94c9b0dd52c56c1293d07e95fd14f78680668753be590d2908e9e2d46b0a3c12"
+  },
+  {
+    "path": "outputs\\t1\\DR\\interrupted_v1\\decisions.csv",
+    "backup": "outputs\\t1\\DR\\interrupted_v1\\decisions.legacy_expand.csv",
+    "sha256": "12e79abbafc666afd00974affff21ebc1ae40acb4d76e5e9e4c3ae189e8be879"
+  },
+  {
+    "path": "outputs\\t1\\DR\\interrupted_v1\\metrics.csv",
+    "backup": "outputs\\t1\\DR\\interrupted_v1\\metrics.legacy_expand.csv",
+    "sha256": "f2e0fbfc60a5758cd0e13cda680cf5099a159621a1e57ee776b1f9a8ce0e1ae3"
+  },
+  {
+    "path": "outputs\\t1\\DR\\invoice_quotas_2019-10-01.csv",
+    "backup": "outputs\\t1\\DR\\invoice_quotas_2019-10-01.legacy_expand.csv",
+    "sha256": "c28b920c6b7c5d653cef8527493ed39e4f52863e23ae97f05acd046f0bab73f3"
+  },
+  {
+    "path": "outputs\\t1\\DR\\invoice_quotas_2024-07-01.csv",
+    "backup": "outputs\\t1\\DR\\invoice_quotas_2024-07-01.legacy_expand.csv",
+    "sha256": "d1a621b18586b3d91c715ac2618d72320ef0d9f9d4f8152a38e6aa83c3f08eb7"
+  },
+  {
+    "path": "outputs\\t1\\DR\\metrics.csv",
+    "backup": "outputs\\t1\\DR\\metrics.legacy_expand.csv",
+    "sha256": "1e7f9c83d4038e0c757246235c1d7af58fbaba88bf07276a142836df6845cf3c"
+  },
+  {
+    "path": "outputs\\t1\\EF_t8_t9.csv",
+    "backup": "outputs\\t1\\EF_t8_t9.legacy_expand.csv",
+    "sha256": "d25884a1f9e405a9d3abf34f02cdb224b41cb4e7c6c80d32d6856c3f71fe6d9d"
+  },
+  {
+    "path": "outputs\\t1\\EF_t8_t9_src_noisy_promises.csv",
+    "backup": "outputs\\t1\\EF_t8_t9_src_noisy_promises.legacy_expand.csv",
+    "sha256": "ecb7b55a55f5b8475fd32c260b34ce12023943d8c023fb1fc23cb05e0378bba5"
+  },
+  {
+    "path": "outputs\\t1\\IW_oof\\company_losses.csv",
+    "backup": "outputs\\t1\\IW_oof\\company_losses.legacy_expand.csv",
+    "sha256": "29e6ccf72738fb9a4662601ffee911cfe97d97004d1b4a9222b67add86fc5fa6"
+  },
+  {
+    "path": "outputs\\t1\\IW_oof\\comparisons.csv",
+    "backup": "outputs\\t1\\IW_oof\\comparisons.legacy_expand.csv",
+    "sha256": "643e807a38bd952b186c84e4009b1c174ba7500bc94492ef7612fc31b2cd5cdc"
+  },
+  {
+    "path": "outputs\\t1\\IW_oof\\metrics.csv",
+    "backup": "outputs\\t1\\IW_oof\\metrics.legacy_expand.csv",
+    "sha256": "d2690dcd7792468610f3b240e77613eb4a35ee88af5012b1d916caf5aca6f3cd"
+  },
+  {
+    "path": "outputs\\t1\\IW_oof\\weight_diagnostics.csv",
+    "backup": "outputs\\t1\\IW_oof\\weight_diagnostics.legacy_expand.csv",
+    "sha256": "9743ea6fe8f805c8e58e6f6d6953f8a86d78546538a44861aa6a4b3e0a071239"
+  },
+  {
+    "path": "outputs\\t1\\IW_weight_diagnostics.csv",
+    "backup": "outputs\\t1\\IW_weight_diagnostics.legacy_expand.csv",
+    "sha256": "2558c3ae7a2e337d3c64a48bbf428ac4617ca268b58b27210b45a05d824e46cc"
+  },
+  {
+    "path": "outputs\\t1\\onboarding_source_validation.csv",
+    "backup": "outputs\\t1\\onboarding_source_validation.legacy_expand.csv",
+    "sha256": "4f278097ac17d6f63bcdb9a2137025324e4391692be3f7db2d95687c152a299b"
+  },
+  {
+    "path": "outputs\\t1\\scaling_1000000.csv",
+    "backup": "outputs\\t1\\scaling_1000000.legacy_expand.csv",
+    "sha256": "f00a274b4d8f2e52a45c0cc2408863c069b53c5bc67426433bd1615d85ead1b5"
+  },
+  {
+    "path": "outputs\\t1\\scaling_10000000.csv",
+    "backup": "outputs\\t1\\scaling_10000000.legacy_expand.csv",
+    "sha256": "82e858afd2408989915701ba7641c6e5c26ad90c446aafac9e6940bdf0dcef3c"
+  },
+  {
+    "path": "outputs\\t1\\scaling_3000000.csv",
+    "backup": "outputs\\t1\\scaling_3000000.legacy_expand.csv",
+    "sha256": "1dd5301488e9a2871b599374d0f00405bc7104992fb2f1f274abbd92df2e2078"
+  },
+  {
+    "path": "outputs\\t1\\scaling_company_losses_1000000.csv",
+    "backup": "outputs\\t1\\scaling_company_losses_1000000.legacy_expand.csv",
+    "sha256": "99bb2e9b46653f535d4d73c12b65470b3ae8ab321a86680e2023a86a4db3cdbb"
+  },
+  {
+    "path": "outputs\\t1\\scaling_company_losses_10000000.csv",
+    "backup": "outputs\\t1\\scaling_company_losses_10000000.legacy_expand.csv",
+    "sha256": "9630401735858ddcb21dc1eaa045d1eb83a04a60505b44ba859178d6c9f5601c"
+  },
+  {
+    "path": "outputs\\t1\\scaling_company_losses_3000000.csv",
+    "backup": "outputs\\t1\\scaling_company_losses_3000000.legacy_expand.csv",
+    "sha256": "abcf5e2b84f7edf4ddb0047240b396ced301ee01c754f2d21a7c7fbf49b32883"
+  },
+  {
+    "path": "outputs\\t1\\scaling_M_star.csv",
+    "backup": "outputs\\t1\\scaling_M_star.legacy_expand.csv",
+    "sha256": "69dd3da036b75eb8799831528e3452106d1738225da3cbc62f04c836753b0a41"
+  },
+  {
+    "path": "outputs\\t1\\scaling_results.csv",
+    "backup": "outputs\\t1\\scaling_results.legacy_expand.csv",
+    "sha256": "8b7997018282ff30966918d25f0edb7bd81d19b6081976221d9f2194a3674bd6"
+  },
+  {
+    "path": "outputs\\t1\\source_PDP.csv",
+    "backup": "outputs\\t1\\source_PDP.legacy_expand.csv",
+    "sha256": "34f8e607ce81c56ca5998da1b47be511e4bd8ba9e8b8f0d7b72a8ab941b3b8b2"
+  },
+  {
+    "path": "outputs\\t1\\T1_variant_decisions.csv",
+    "backup": "outputs\\t1\\T1_variant_decisions.legacy_expand.csv",
+    "sha256": "32d6d9c68d78f59abfa83db996b07e0095871b51deceeeb9533c7ad8bfae76bf"
+  },
+  {
+    "path": "outputs\\t1\\T1_variants.csv",
+    "backup": "outputs\\t1\\T1_variants.legacy_expand.csv",
+    "sha256": "123ff3e8104b611e41fa7dd6afb6de5aff3edd0482fa76c4d63a48db1fc3ecbd"
+  },
+  {
+    "path": "outputs\\t1\\T3_T1_ablation.csv",
+    "backup": "outputs\\t1\\T3_T1_ablation.legacy_expand.csv",
+    "sha256": "226f7da1bf2f29b6c12e05fe48892d2849e9bba94a87b3bd0a91774fe0edf22d"
+  },
+  {
+    "path": "outputs\\t1\\T3_T1_company_losses.csv",
+    "backup": "outputs\\t1\\T3_T1_company_losses.legacy_expand.csv",
+    "sha256": "2735abbf1ca529bf0becb3ea5fca7b6d417a518058d62b449e41e2c673ecfce0"
+  },
+  {
+    "path": "outputs\\t1\\T9_T1_company_cash_losses.csv",
+    "backup": "outputs\\t1\\T9_T1_company_cash_losses.legacy_expand.csv",
+    "sha256": "960498c2023d77167104e598d42d079bae96233df3ced126daf05308d9074d68"
+  },
+  {
+    "path": "outputs\\t1\\T9_T1_error_propagation.csv",
+    "backup": "outputs\\t1\\T9_T1_error_propagation.legacy_expand.csv",
+    "sha256": "463f712fcc7605d4195cfa5a1ea0aed1514ececbd7dd22f1b305bb75a779fd9e"
+  },
+  {
+    "path": "outputs\\t1\\T9_T1_gap_reduction.csv",
+    "backup": "outputs\\t1\\T9_T1_gap_reduction.legacy_expand.csv",
+    "sha256": "08b9abe4ba93e4125bde21224f8f44db3fd9c015733cefaa552cc6bdcd0394cb"
+  },
+  {
+    "path": "outputs\\t1\\tuning_comparison.csv",
+    "backup": "outputs\\t1\\tuning_comparison.legacy_expand.csv",
+    "sha256": "c477b2fef814bfb87639a35976d3915ab60230029d234522f9230f1a42e9b39b"
+  },
+  {
+    "path": "outputs\\t1\\tuning_trials.csv",
+    "backup": "outputs\\t1\\tuning_trials.legacy_expand.csv",
+    "sha256": "effd8391cf29d0049c734fa06361d243c05d66068dd3f26a95cf35d543249ef9"
+  },
+  {
+    "path": "outputs\\t2_t3\\sba_macro_by_fy.csv",
+    "backup": "outputs\\t2_t3\\sba_macro_by_fy.legacy_expand.csv",
+    "sha256": "f7f69e8d710381bb982da5be0d47558a72bd5baf0d20e8f74ca05e0f0e460fab"
+  },
+  {
+    "path": "outputs\\t2_t3\\sba_macro_comparisons.csv",
+    "backup": "outputs\\t2_t3\\sba_macro_comparisons.legacy_expand.csv",
+    "sha256": "4a2b55977ebce07949cbfb3bc152b1740db7c3e0f1605fe2aa3ed2d602f13827"
+  },
+  {
+    "path": "outputs\\t2_t3\\sba_macro_metrics.csv",
+    "backup": "outputs\\t2_t3\\sba_macro_metrics.legacy_expand.csv",
+    "sha256": "03074d3531dc64ede65658ca1b71a0215d8d1a0fc2a134b0cc2b07fd1dc3f537"
+  },
+  {
+    "path": "outputs\\t2_t3\\t2_sba_calibration_by_fy.csv",
+    "backup": "outputs\\t2_t3\\t2_sba_calibration_by_fy.legacy_expand.csv",
+    "sha256": "8a0acb19fa8c07be365993e5412b484cbe9eb2f8e7da21a802ae6cf0d56cf9c2"
+  },
+  {
+    "path": "outputs\\t2_t3\\t2_sba_calibration_by_fy_censor.csv",
+    "backup": "outputs\\t2_t3\\t2_sba_calibration_by_fy_censor.legacy_expand.csv",
+    "sha256": "ce04ed1347b42c8e0f3ae1d46ae7554979db626ca93169d1abad81723cd1ea56"
+  },
+  {
+    "path": "outputs\\t2_t3\\t2_sba_calibration_by_fy_drop.csv",
+    "backup": "outputs\\t2_t3\\t2_sba_calibration_by_fy_drop.legacy_expand.csv",
+    "sha256": "ce04ed1347b42c8e0f3ae1d46ae7554979db626ca93169d1abad81723cd1ea56"
+  },
+  {
+    "path": "outputs\\t2_t3\\t2_sba_calibration_by_fy_keep.csv",
+    "backup": "outputs\\t2_t3\\t2_sba_calibration_by_fy_keep.legacy_expand.csv",
+    "sha256": "ed147e5e37052d4d995213f10eaa7e2ae7a244b893aed58ababf6e9be475df5f"
+  },
+  {
+    "path": "outputs\\t2_t3\\t2_sba_variants.csv",
+    "backup": "outputs\\t2_t3\\t2_sba_variants.legacy_expand.csv",
+    "sha256": "ea6f1e0d17a03e7c2b72d403a75d59229f6d52abbde21e4d0758d93a0a6cfd5f"
+  },
+  {
+    "path": "outputs\\t2_t3\\t2_t3_results.csv",
+    "backup": "outputs\\t2_t3\\t2_t3_results.legacy_expand.csv",
+    "sha256": "4d1a1f949f236c114272add1ffacb0563bc35a7537e19b21200b24eee24aafdd"
+  },
+  {
+    "path": "outputs\\t4\\t4_revenue_forecast.csv",
+    "backup": "outputs\\t4\\t4_revenue_forecast.legacy_expand.csv",
+    "sha256": "7621c77912b7283c24ef2e8517a23079fd1cb53808cdd88e1ce3c856acc611d1"
+  },
+  {
+    "path": "outputs\\t6\\additional_baseline_comparisons.csv",
+    "backup": "outputs\\t6\\additional_baseline_comparisons.legacy_expand.csv",
+    "sha256": "5ba5d38483ea1bf17b38b5847c0089515756a4e7c97a5c28e10fbf9a1a23a6e0"
+  },
+  {
+    "path": "outputs\\t6\\alert_policy.csv",
+    "backup": "outputs\\t6\\alert_policy.legacy_expand.csv",
+    "sha256": "f41d8b488c659db7744a661a63121585a7fff266ca8a32620ce16164df83901f"
+  },
+  {
+    "path": "outputs\\t6\\chronos\\metrics.csv",
+    "backup": "outputs\\t6\\chronos\\metrics.legacy_expand.csv",
+    "sha256": "0af0d366857c40708b06418cd52b835ffe0de76685428409db9c4155dd83c2f4"
+  },
+  {
+    "path": "outputs\\t6\\collection_policy\\actions.csv",
+    "backup": "outputs\\t6\\collection_policy\\actions.legacy_expand.csv",
+    "sha256": "ef06e4f908064055f14a64be8ebbe9ac7474ce8a6b16bc8a5f239d24c6176ee2"
+  },
+  {
+    "path": "outputs\\t6\\collection_policy\\company_metrics.csv",
+    "backup": "outputs\\t6\\collection_policy\\company_metrics.legacy_expand.csv",
+    "sha256": "f5108b905f848dd970feae34c3db1d1006e1694a50d7d61e7c4624c9d021e3f7"
+  },
+  {
+    "path": "outputs\\t6\\collection_policy\\metrics.csv",
+    "backup": "outputs\\t6\\collection_policy\\metrics.legacy_expand.csv",
+    "sha256": "350e21a62e635733dafcebe65825367d33cf4bdfd98222162db5826fc6468eb7"
+  },
+  {
+    "path": "outputs\\t6\\collection_policy\\P2_vs_P1.csv",
+    "backup": "outputs\\t6\\collection_policy\\P2_vs_P1.legacy_expand.csv",
+    "sha256": "aa36211da5a01ad5f4cc757e80891fee911e2507834347a23c9716359fa400c0"
+  },
+  {
+    "path": "outputs\\t6\\collection_policy_v1_credit_residual_legacy\\actions.csv",
+    "backup": "outputs\\t6\\collection_policy_v1_credit_residual_legacy\\actions.legacy_expand.csv",
+    "sha256": "24d1f668a6df2755222919abd2dfd3d78774cec8dd95fd9ef545b72b3f1a9955"
+  },
+  {
+    "path": "outputs\\t6\\collection_policy_v1_credit_residual_legacy\\company_metrics.csv",
+    "backup": "outputs\\t6\\collection_policy_v1_credit_residual_legacy\\company_metrics.legacy_expand.csv",
+    "sha256": "d82d39ced00079abf6006dbc110ab88e9bdc62b32a2a36cd4ecd68edab1454b6"
+  },
+  {
+    "path": "outputs\\t6\\collection_policy_v1_credit_residual_legacy\\metrics.csv",
+    "backup": "outputs\\t6\\collection_policy_v1_credit_residual_legacy\\metrics.legacy_expand.csv",
+    "sha256": "4cb999018870d555ab5c62908248cfbe6e6a96b24c22326ba3d7039defd074e6"
+  },
+  {
+    "path": "outputs\\t6\\collection_policy_v1_credit_residual_legacy\\P2_vs_P1.csv",
+    "backup": "outputs\\t6\\collection_policy_v1_credit_residual_legacy\\P2_vs_P1.legacy_expand.csv",
+    "sha256": "b8af15a350cdb4e6db0442f9a3a9de269958c397a316044d2e2c5f47918e3481"
+  },
+  {
+    "path": "outputs\\t6\\copula_hierarchy\\metrics.csv",
+    "backup": "outputs\\t6\\copula_hierarchy\\metrics.legacy_expand.csv",
+    "sha256": "33dfc1b3723a896862d16ed67d4051b55b066cffd222e8667a60a6d89fc0f512"
+  },
+  {
+    "path": "outputs\\t6\\copula_hierarchy\\source_grid.csv",
+    "backup": "outputs\\t6\\copula_hierarchy\\source_grid.legacy_expand.csv",
+    "sha256": "92283478f0b06a85d7408c6864b85718a10030cb70284902da303ddd4c68bf74"
+  },
+  {
+    "path": "outputs\\t6\\copula_hierarchy_v1_missing_empty_AR\\metrics.csv",
+    "backup": "outputs\\t6\\copula_hierarchy_v1_missing_empty_AR\\metrics.legacy_expand.csv",
+    "sha256": "f0a2dfd563eb9ff5b7981f450720c94865b2de84e86bfd10f3b95b2e80786ec3"
+  },
+  {
+    "path": "outputs\\t6\\copula_hierarchy_v1_missing_empty_AR\\source_grid.csv",
+    "backup": "outputs\\t6\\copula_hierarchy_v1_missing_empty_AR\\source_grid.legacy_expand.csv",
+    "sha256": "92283478f0b06a85d7408c6864b85718a10030cb70284902da303ddd4c68bf74"
+  },
+  {
+    "path": "outputs\\t6\\cure_diagnostics.csv",
+    "backup": "outputs\\t6\\cure_diagnostics.legacy_expand.csv",
+    "sha256": "ec08ec49823de009a5b44d6bb0a8c3c9d47904d5e8c196c8e388b3b3898bbe33"
+  },
+  {
+    "path": "outputs\\t6\\demo_band.csv",
+    "backup": "outputs\\t6\\demo_band.legacy_expand.csv",
+    "sha256": "8e18835cd6bf04298b7887e82f15c1a28e6271f8252587e2b3f51f859484e348"
+  },
+  {
+    "path": "outputs\\t6\\demo_collect_first.csv",
+    "backup": "outputs\\t6\\demo_collect_first.legacy_expand.csv",
+    "sha256": "252e5445141ab8ef11609cef4b5afe20200ab8073df5a2129d9fd58155749080"
+  },
+  {
+    "path": "outputs\\t6\\stress_scenarios.csv",
+    "backup": "outputs\\t6\\stress_scenarios.legacy_expand.csv",
+    "sha256": "62720b51c6f84db9f8798d310a608689d45703cb10117174458e61b82c3b3708"
+  },
+  {
+    "path": "outputs\\t6\\t6_interval_metrics.csv",
+    "backup": "outputs\\t6\\t6_interval_metrics.legacy_expand.csv",
+    "sha256": "21af49608d41c9b40fe332dd883a8b7233c6183a85a2ff68caa4229b565acdc6"
+  },
+  {
+    "path": "outputs\\t6\\t6_shortfall_metrics.csv",
+    "backup": "outputs\\t6\\t6_shortfall_metrics.legacy_expand.csv",
+    "sha256": "4e7d90e9dc06d38568185132beaa0e9dfbd11eb2f91842283d89e99e62b17ecf"
+  },
+  {
+    "path": "outputs\\t6\\t6_shortfall_predictions.csv",
+    "backup": "outputs\\t6\\t6_shortfall_predictions.legacy_expand.csv",
+    "sha256": "7dff764effabdbdd1a29d083b1b178fca313d62bf658ba44d4f0173398c9b8d1"
+  },
+  {
+    "path": "outputs\\t6\\traditional\\fit_diagnostics.csv",
+    "backup": "outputs\\t6\\traditional\\fit_diagnostics.legacy_expand.csv",
+    "sha256": "2c85e6c5792e9b64543f96eafd0a1bb99ef40493cbcc38a64535365fa2666747"
+  },
+  {
+    "path": "outputs\\t6\\traditional\\fit_summary.csv",
+    "backup": "outputs\\t6\\traditional\\fit_summary.legacy_expand.csv",
+    "sha256": "f20c6f82d5cf205ae3dc09af9317305d140f218e96d1c19ead9d93d8c7a5ece0"
+  },
+  {
+    "path": "outputs\\t6\\traditional\\metrics.csv",
+    "backup": "outputs\\t6\\traditional\\metrics.legacy_expand.csv",
+    "sha256": "874c717ba4c8bb567069ba2f2d78728b54a79ad4bc3f46945c70cac6af1a4b04"
+  },
+  {
+    "path": "outputs\\t6\\traditional\\shortfall_predictions.csv",
+    "backup": "outputs\\t6\\traditional\\shortfall_predictions.legacy_expand.csv",
+    "sha256": "9cc859f3f48cbb59515a2a511e8aef8e0682bc8135f79dfd924e7d9377d7f743"
+  },
+  {
+    "path": "outputs\\t6\\v4_without_owner_policy\\alert_policy.csv",
+    "backup": "outputs\\t6\\v4_without_owner_policy\\alert_policy.legacy_expand.csv",
+    "sha256": "bdd05d22d776dad9aecedf24e7c3f558dd9297b775518068f502ad9c936dd82c"
+  },
+  {
+    "path": "outputs\\t6\\v4_without_owner_policy\\demo_band.csv",
+    "backup": "outputs\\t6\\v4_without_owner_policy\\demo_band.legacy_expand.csv",
+    "sha256": "bf048d790ec06ae02f9aa55333c017571bdbee5b58882348275412d9f5382de2"
+  },
+  {
+    "path": "outputs\\t6\\v4_without_owner_policy\\demo_collect_first.csv",
+    "backup": "outputs\\t6\\v4_without_owner_policy\\demo_collect_first.legacy_expand.csv",
+    "sha256": "e99145291cc148d9f6af525564290a187ffe1e98ff4d44a1dd4e1210e9e327f8"
+  },
+  {
+    "path": "outputs\\t6\\v4_without_owner_policy\\stress_scenarios.csv",
+    "backup": "outputs\\t6\\v4_without_owner_policy\\stress_scenarios.legacy_expand.csv",
+    "sha256": "62720b51c6f84db9f8798d310a608689d45703cb10117174458e61b82c3b3708"
+  },
+  {
+    "path": "outputs\\t6\\v4_without_owner_policy\\t6_interval_metrics.csv",
+    "backup": "outputs\\t6\\v4_without_owner_policy\\t6_interval_metrics.legacy_expand.csv",
+    "sha256": "97f3cad79141873f89f1bbf907464f3b9bf90ba196717337f1e089b312c40651"
+  },
+  {
+    "path": "outputs\\t6\\v4_without_owner_policy\\t6_shortfall_metrics.csv",
+    "backup": "outputs\\t6\\v4_without_owner_policy\\t6_shortfall_metrics.legacy_expand.csv",
+    "sha256": "3a17e4a28d144970a67635f522c09e82823a56cfcfd4af92e76af9d30cdc5930"
+  },
+  {
+    "path": "outputs\\t6\\v4_without_owner_policy\\t6_shortfall_predictions.csv",
+    "backup": "outputs\\t6\\v4_without_owner_policy\\t6_shortfall_predictions.legacy_expand.csv",
+    "sha256": "661c6dbecd47b0f3d53d9c2d36739748981761b4b68268f1f7c917f5ac7728e9"
+  },
+  {
+    "path": "outputs\\t7\\regime_cash\\calibration_2021-07-01.csv",
+    "backup": "outputs\\t7\\regime_cash\\calibration_2021-07-01.legacy_expand.csv",
+    "sha256": "34d495510dc93572a6c7f96bb4c2698557eeb8f3a751361a8f1485dbebbb7653"
+  },
+  {
+    "path": "outputs\\t7\\regime_cash\\calibration_2022-10-01.csv",
+    "backup": "outputs\\t7\\regime_cash\\calibration_2022-10-01.legacy_expand.csv",
+    "sha256": "be7e24a768df3acf8839adb7dbd11b1592cb3bb2148bafd518e643837b6f2249"
+  },
+  {
+    "path": "outputs\\t7\\regime_cash\\metrics.csv",
+    "backup": "outputs\\t7\\regime_cash\\metrics.legacy_expand.csv",
+    "sha256": "10acf9d000ec9a5aa03549d6b010ddf55b4c050b9072518875b2c19a112c0784"
+  },
+  {
+    "path": "outputs\\t7\\regime_cash\\source_residuals_2021-07-01.csv",
+    "backup": "outputs\\t7\\regime_cash\\source_residuals_2021-07-01.legacy_expand.csv",
+    "sha256": "8f02979d3c6a31e5ed6c4255962bdae9405b63437fcbfd8a88022d563cf02097"
+  },
+  {
+    "path": "outputs\\t7\\regime_cash\\source_residuals_2022-10-01.csv",
+    "backup": "outputs\\t7\\regime_cash\\source_residuals_2022-10-01.legacy_expand.csv",
+    "sha256": "a0703c4414eb74810789d3b4fdbe845200e5df03fcc303ea56de157a73c26fb7"
+  },
+  {
+    "path": "outputs\\t7\\t7_changepoint.csv",
+    "backup": "outputs\\t7\\t7_changepoint.legacy_expand.csv",
+    "sha256": "85ee0fa1b4055a01522bea160938f69b59e2c50cb25aeda225b567547b9212df"
+  },
+  {
+    "path": "outputs\\t8\\reliability_company_losses.csv",
+    "backup": "outputs\\t8\\reliability_company_losses.legacy_expand.csv",
+    "sha256": "250ee19a2aafc8a1072470b04949beeaf4768912c946e12f3a60d70f56564f4c"
+  },
+  {
+    "path": "outputs\\t8\\reliability_metrics.csv",
+    "backup": "outputs\\t8\\reliability_metrics.legacy_expand.csv",
+    "sha256": "9994f9999194fff1114edc74a921cc3d7860124882ad02eb6442d1fb0794b7eb"
+  },
+  {
+    "path": "outputs\\t9\\hard_case_recall.csv",
+    "backup": "outputs\\t9\\hard_case_recall.legacy_expand.csv",
+    "sha256": "d7e80670ff1335563af43c2fd0cec90391415bec3d301fb06b0fb12b1efb4121"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\cod_realistic\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\cod_realistic\\metrics.legacy_expand.csv",
+    "sha256": "5d3b392da1c49ad2dead8336e9f0d34809182fc644fd02d323efa3792dcae014"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\credit_note\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\credit_note\\metrics.legacy_expand.csv",
+    "sha256": "d97e85c16536a510586eaf3e8f9cb11d17c7b04d8b2709be4fedc6f85992fdf3"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\discount_early\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\discount_early\\metrics.legacy_expand.csv",
+    "sha256": "98d051ad2e2d340048a04743512bf39869b7f85192f273c28a1f26c258c9a759"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\fx\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\fx\\metrics.legacy_expand.csv",
+    "sha256": "ff326d4f54c9c8b87d48e703e7cd1caac4b32f3316c0d39ee0d07ca559825304"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\group_payer\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\group_payer\\metrics.legacy_expand.csv",
+    "sha256": "39e35e1971afcd6b84234584b9c2d43ea23adc93e9961c1e402c3897c58a7d1b"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\heterogeneity\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\heterogeneity\\metrics.legacy_expand.csv",
+    "sha256": "549d89786129db074c583da8df35429178dbf5021b99abfb159acbba4387d973"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\lumpy_customer\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\lumpy_customer\\metrics.legacy_expand.csv",
+    "sha256": "31cfa025bea6ba58ddff66726d65f5c659094a2bec6f193bbc85a5cca401d820"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\new_company\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\new_company\\metrics.legacy_expand.csv",
+    "sha256": "777d66a14ea53101aec4dc887b398d394186ba2fa7635c4b01b696e6b9054f59"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\retention\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\retention\\metrics.legacy_expand.csv",
+    "sha256": "883b804e6634c132ca601781644dfe66277bf4048595018012f8a8d9cee29629"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\seasonal_extreme\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\seasonal_extreme\\metrics.legacy_expand.csv",
+    "sha256": "1c2b58ddbef03c31a0675295e085364cf3b93fc6680c8b7141ec1c3814d28515"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\supply_shock\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\supply_shock\\metrics.legacy_expand.csv",
+    "sha256": "d16c81f4bdbd269cd3f6c290e7fa464f8a143e0a4d5e41c35a76f43ac1b1f3b1"
+  },
+  {
+    "path": "outputs\\t9\\hard_cases\\verbal\\metrics.csv",
+    "backup": "outputs\\t9\\hard_cases\\verbal\\metrics.legacy_expand.csv",
+    "sha256": "b76e31caa5e47842f048f90466b82600e9537c7ec1e20e974170a560bcc2fe07"
+  },
+  {
+    "path": "outputs\\t9\\precision_coverage.csv",
+    "backup": "outputs\\t9\\precision_coverage.legacy_expand.csv",
+    "sha256": "dc7857d04b5fba09b945293fcb2344e1305e965ba7d042ca3c5fc9983cadee35"
+  },
+  {
+    "path": "outputs\\t9\\source_allocation_diagnostics.csv",
+    "backup": "outputs\\t9\\source_allocation_diagnostics.legacy_expand.csv",
+    "sha256": "24fd286808e670e31777d907427b68c0c5841ba82025cc4d4a10eebd01768733"
+  },
+  {
+    "path": "outputs\\t9\\supply_shock_2022\\metrics.csv",
+    "backup": "outputs\\t9\\supply_shock_2022\\metrics.legacy_expand.csv",
+    "sha256": "94fa35a429c875ba0a73bfea097dbadd57b72047a7373ed97aeb6ce1b70d4da4"
+  },
+  {
+    "path": "outputs\\t9\\t9_reconciliation_tgt.csv",
+    "backup": "outputs\\t9\\t9_reconciliation_tgt.legacy_expand.csv",
+    "sha256": "5ff4481b929f70aaa19f3b0687932d9afb3407c81a7da41e67aec71747d7f469"
+  },
+  {
+    "path": "outputs\\t9\\t9_reconciliation_tgt.v3.csv",
+    "backup": "outputs\\t9\\t9_reconciliation_tgt.v3.legacy_expand.csv",
+    "sha256": "6feac04d7752d7d4a6edb517e96a1be07c17a8a48df1d3e0e59bee29267b7207"
+  },
+  {
+    "path": "outputs\\wp0\\T0_quality_metrics.csv",
+    "backup": "outputs\\wp0\\T0_quality_metrics.legacy_expand.csv",
+    "sha256": "fe182786abed5a86e2b46aa1c310dd4bcc43eefb7e7f5465742b268988dabac3"
+  },
+  {
+    "path": "outputs\\wp0\\world_contract_summary.csv",
+    "backup": "outputs\\wp0\\world_contract_summary.legacy_expand.csv",
+    "sha256": "0209eda6daa4bcdfe6a4a66429922e36eb3712183faae1e3b79a5de6f5270931"
+  },
+  {
+    "path": "outputs\\wp0\\world_contracts.csv",
+    "backup": "outputs\\wp0\\world_contracts.legacy_expand.csv",
+    "sha256": "fcedd9dff9eb40873dd1184a74ffb321bcb981036354f55434bdda3051dcdfb8"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "complete": true,
+  "n_cases": 54,
+  "n_rule_versions": 27,
+  "minimum_cases_per_rule": 2,
+  "expert_verified": false,
+  "scope": "historical configured arithmetic/calendar regression; not legal-source or current-law verification",
+  "source_sha256": {
+    "agent1/rules/regression_cases.py": "ce1bc2debf1bab634334a860e12ce8ee17f9ad3d29149b5e2053172e37de2a32",
+    "agent1/rules/rules_history.json": "e9bbc189ad552a2578d10bc6535685b388f24955a7977077319c385e1399a42f",
+    "agent1/rules/provisioning.py": "860a4ae770a1b5c16d264e46d4c7bf973b988d6dcc22f1546626813f0a8f2146",
+    "agent1/rules/__init__.py": "ed73e9ae7c3ba4602fabcfe35333b517baf17179bac5348d8401fed9edf474a7",
+    "agent1/calendar_vn.py": "d8aa35df3315746fc7136f0cc72c49eb3905122d99768288d912c74f38b0f550",
+    "scripts/run_rules_business_cases.py": "01f3ad906cbf7026121366cae727b32a77b5e5a559a8e35e57f236ee1079a38b"
+  }
+}

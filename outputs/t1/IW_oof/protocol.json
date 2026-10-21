@@ -1,0 +1,35 @@
+{
+  "complete": true,
+  "source_budget": 40000,
+  "target_budget": 40000,
+  "origin": "2024-07-01",
+  "months_history": 6,
+  "domain_classifier": "4 folds hold out complete firms within each domain, 200 trees, seed7; same probability/weight clips as original",
+  "fit": "all 3 pooled models 300 rounds; same source/target sample and target weight as DA-paired M6",
+  "limitation": "synthetic truth, repeated weekly cohorts, diagnostic ablation not source-policy selection; no automatic adoption; OOF is not proof of overlap or calibrated density ratios",
+  "test_used_for_selection": false,
+  "code_sha256": {
+    "scripts/run_iw_oof.py": "9097763b2a07b241944d8c3dfa03d017ab48af30ba176c0271855c85a0ea76f5",
+    "agent1/models/domain_weight_oof.py": "83afda17da9e10db9bd2a8140dadab3d2f5805270b28688e3f66ababe4cbc8d5",
+    "scripts/run_t1.py": "6e6f50eb9eba77ef5cbc067530edafa6223934a1409bbfaa6276dc4a2b7ad124",
+    "scripts/run_da_paired.py": "6da90904c327dd280f0a3c40b200e2345f1cc235d7bdb3bc3f90df4e91e0eef3",
+    "agent1/models/features.py": "311d6ae6dc7628c80723d3163c8810f46765f0cb4ac38e3e8a6f57872c81ebe5",
+    "agent1/models/t1.py": "0cb523f7f3670d4ba4e1327fab3d9df412b4f205b4c6c0cd5779c2997f2f4c4f",
+    "agent1/eval/adaptation.py": "2668c791e777daff50a793697235f3eb81ad08c27af41d2614eac4483a3a64d9"
+  },
+  "input_sha256": {
+    "src/invoices.parquet": "418ee64c251c045378ede37755bcb4ce43b204ed2afa98da8dcc1d5d1f90a200",
+    "src/payments.parquet": "25edade48c1443d4223142e66c2623c81475b5487b9800003a18876864aaec99",
+    "src/promises.parquet": "62f51aff6ec4e56e9c6f2702dcb12882d77de281213fcd41a4c655b286269988",
+    "tgt/invoices.parquet": "c6837975eb5d9ba344378fa73ef6ee9792813ac856f36efa2fdc13baa3046e80",
+    "tgt/payments.parquet": "ab7451e51cc4a59d94c8ffd14af01d54c0af1936dcb64d78d3b5893704101cc3",
+    "tgt/promises.parquet": "0e5ade13bf76f9b45698320ee47ef767aa923bb4ac427aa600c56544e6be9e64",
+    "sens_uk/invoices.parquet": "4ce695a9f6470a13b829f44e1f8a4f9735398c411e0c4a31a37cea78535d0448",
+    "sens_uk/payments.parquet": "2d8151d49964ac0da1beb875f4e278b6c593ad621b504a2409ba340eb5b7742c",
+    "sens_uk/promises.parquet": "224adab5eda86a5c8236a7c03eef5e4e12295c076d4d0161ffb0c62a71b8d223",
+    "sens_coface/invoices.parquet": "f4f46c677a43b14d4219d458d3b1163153f7f8639dea529c6a274803ac71a4a3",
+    "sens_coface/payments.parquet": "5e849061b1f3991008ee8c14e7fc477100375d31ee9543c61804553ecda49028",
+    "sens_coface/promises.parquet": "9374a2eea991a9a585297f09d5f1c57a50606b0e3ef4c2372e9c94164c3c8712"
+  },
+  "metrics_sha256": "47ce4dc494bdd3381c51f45fb2ae9bdb8486cf4422acbceea6739346ddf8b160"
+}

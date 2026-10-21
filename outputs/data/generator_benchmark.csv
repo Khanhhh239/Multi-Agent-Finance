@@ -1,0 +1,2 @@
+n_firms,n_invoices,legacy_seconds,vectorized_seconds,speedup,meets_5x,value_tables_equal,seed,scope
+6,29817,13.375,8.657000000000153,1.544992491625247,False,True,314,full_world_small_not_1M

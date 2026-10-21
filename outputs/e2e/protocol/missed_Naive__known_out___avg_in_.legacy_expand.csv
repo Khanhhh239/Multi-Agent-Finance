@@ -1,0 +1,21 @@
+model,firm_id,cutoff,y4,y13,p4,p13,threshold
+Naive (known out + avg in),F011,2024-08-05,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2024-08-12,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2024-08-19,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F010,2024-08-26,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2024-08-26,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F010,2024-09-02,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2024-09-02,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F010,2024-09-09,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2024-09-09,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F010,2024-09-16,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2024-09-16,1.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F010,2024-09-23,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2024-09-23,1.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F009,2024-12-09,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F009,2024-12-16,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F009,2024-12-23,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F009,2024-12-30,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2025-01-27,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2025-02-03,0.0,1.0,0.0,0.0,0.02
+Naive (known out + avg in),F011,2025-02-10,0.0,1.0,0.0,0.0,0.02

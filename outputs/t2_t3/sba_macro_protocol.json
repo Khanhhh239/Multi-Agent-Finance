@@ -1,0 +1,23 @@
+{
+  "complete": true,
+  "publication_lag_days": 90,
+  "cohort": "[approval-2 calendar years, approval-1 calendar year)",
+  "denominator": "all approvals with valid date; no filtering on final LoanStatus",
+  "train": "FY<=2013",
+  "calibration": "FY2014",
+  "test": "FY2018-2022",
+  "horizon_years": 3,
+  "limitation": "SBA retrospective extract, no historical release vintages; 90d is assumed reporting lag; borrower-name/address bootstrap proxy; US loans are not VN invoices",
+  "test_used_for_selection": false,
+  "source_sha256": {
+    "FOIA_7a_FY2010_FY2019.csv": "01a3e2c7988a6f4052e53f218a309feb2ec2fe42887bebdc0fa94ac8b1024ade",
+    "FOIA_7a_FY2020_Present.csv": "6c1e9132b5141a19f82bdc8ccafb86c9a01662461cad41ddb36a3cf409d8a4fe"
+  },
+  "code_sha256": {
+    "scripts/run_sba_macro.py": "089e55530485ab8d4b79c7dc44fdd489a6f359048d399e51af65025fe76fbd39",
+    "agent1/data/sba_macro.py": "1ac386a8e403c0dc7215380df7a4b6bf14e2b4dc8f700174f91c2c10c6cf1ad7",
+    "agent1/data/real_loaders.py": "997a628b4fadb946cd429c31734804ba81ea72f7d0695811c19833772dd44799",
+    "scripts/run_t2_t3.py": "4e6edc39e85c492e94c215ca08fb95b4855f1643bbc00647ad0743b72333640c"
+  },
+  "metrics_sha256": "03074d3531dc64ede65658ca1b71a0215d8d1a0fc2a134b0cc2b07fd1dc3f537"
+}

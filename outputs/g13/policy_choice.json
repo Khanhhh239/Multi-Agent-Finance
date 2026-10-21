@@ -1,0 +1,62 @@
+{
+  "Direct LGBM-Q (src)|raw": {
+    "tau": 0.45,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "Direct LGBM-Q (src)|isotonic": {
+    "tau": 0.15,
+    "k": 2,
+    "feasible_on_source": true
+  },
+  "MC with B1 point dates|raw": {
+    "tau": 0.3,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "MC with B1 point dates|isotonic": {
+    "tau": 0.2,
+    "k": 3,
+    "feasible_on_source": true
+  },
+  "MC-copula-t (T1+T4+T5)|raw": {
+    "tau": 0.35,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "MC-copula-t (T1+T4+T5)|isotonic": {
+    "tau": 0.3,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "MC-copula-t + calibrated cure|raw": {
+    "tau": 0.35,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "MC-copula-t + calibrated cure|isotonic": {
+    "tau": 0.3,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "MC-independent (rho=0)|raw": {
+    "tau": 0.35,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "MC-independent (rho=0)|isotonic": {
+    "tau": 0.3,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "Naive (known out + avg in)|raw": {
+    "tau": 0.6,
+    "k": 1,
+    "feasible_on_source": true
+  },
+  "Naive (known out + avg in)|isotonic": {
+    "tau": 0.25,
+    "k": 1,
+    "feasible_on_source": true
+  }
+}

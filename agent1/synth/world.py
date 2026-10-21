@@ -61,6 +61,17 @@ TAILS = {  # độ dài trễ phần quá hạn — chạy như khoảng nhạy 
     "uk": dict(late_med=(8.0, 20.0), late_sig=(0.45, 0.8), ultra=0.003),
     "coface": dict(late_med=(30.0, 60.0), late_sig=(0.5, 0.9), ultra=0.03),
 }
+# Realism v2 (Sprint 4). Tham số lấy từ DẠNG quan sát được ở bộ AR giống ERP (Customer Invoices): lập HĐ cuối tuần ~19%,
+# log-sd số tiền tương đối ~1,8, đuôi trái dày. Đây là giả định về HÌNH DẠNG, không phải mục tiêu hiệu chỉnh cho VN.
+DOW_V2 = np.array([.15, .165, .175, .165, .165, .115, .065])
+SIG_AMT_V2 = 1.15
+P_SMALL_V2 = 0.06
+KEEP_WEEKEND_V2 = 0.85
+N_CUST_MULT_V2 = 3          # số khách gấp 3 (cộng nhóm mua lẻ)
+P_OCCASIONAL_V2 = 0.65      # tỷ lệ khách mua lẻ
+W_OCCASIONAL_V2 = 0.02      # trọng số doanh thu của khách mua lẻ so khách thường
+ONTIME_BETA_V2 = (1.4, 1.1) # dị biệt kỷ luật trả giữa các khách lớn hơn (v1: Beta(2,4; 1,5))
+LATE_SPREAD_V2 = 0.9        # độ phân tán trễ trung vị giữa các khách (v1: 0,55)
 PAYRUNS = ["adhoc", "dow1", "dow2", "dow3", "dow4", "dom_10_25", "dom_5_20", "dom_15_eom", "dom_eom", "dom_25"]
 
 
@@ -86,6 +97,12 @@ class WorldConfig:
     write_xml: int = 200
     cod_mult: float = 1.8
     cash_cap_days: float = 60.0   # rút lợi nhuận/chia cổ tức khi số dư vượt ngưỡng (ngày chi bình quân)
+    promises_mode: str = 'legacy'
+    rng_version: int = 1
+    season_override: list | None = None
+    hard_case: str | None = None
+    customer_realism: bool = False   # thử nghiệm (Sprint 4 vòng 2): khách mua lẻ + dị biệt khách; CHƯA có lợi ích đo được
+    realism: str = 'v1'   # 'v2' (Sprint 4): cuối tuần, phân tán số tiền, HĐ điều chỉnh nhỏ — xem docs/02_Data/10_realism_v2.md
 
 
 # ---------------------------------------------------------------------------- calendar arrays
@@ -273,19 +290,26 @@ class World:
         I = INDUSTRY[firm["industry"]]
         T = TAILS[cfg.tail]
         n = int(np.clip(np.exp(r.normal(np.log(cfg.n_cust_median), 0.6)), 8, 400))
+        v2 = bool(cfg.customer_realism)
+        if v2:   # Sprint 4: nhiều khách mua lẻ (bộ ERP thật: trung vị 3 HĐ/khách, 10% chỉ 1 HĐ)
+            n = int(min(n * N_CUST_MULT_V2, 1200))
         w = r.pareto(1.5, n) + 1.0
+        occ = (r.random(n) < P_OCCASIONAL_V2) if v2 else np.zeros(n, bool)
+        w = np.where(occ, w * W_OCCASIONAL_V2, w)
         w = w / w.sum()
         span = (self.end - self.start).days
         start_days = np.where(r.random(n) < 0.55, 0, r.integers(0, span - 120, n))
         end_days = np.minimum(start_days + r.exponential(365 * 6, n) + 180, span + 2000)
+        if v2:
+            end_days = np.where(occ, start_days + r.exponential(200, n) + 30, end_days)
         tk = np.array(list(I["terms"]))
         tp = np.array(list(I["terms"].values()))
         terms = r.choice(tk, n, p=tp / tp.sum())
         cod = r.random(n) < np.clip((1 - I["credit"]) * self.cfg.cod_mult * (1 - w / w.max()) ** 2, 0, 0.9)
         terms = np.where(cod, 0, terms)
-        ontime_base = np.clip(r.beta(2.4, 1.5, n), 0.02, 0.995)
+        ontime_base = np.clip(r.beta(*(ONTIME_BETA_V2 if v2 else (2.4, 1.5)), n), 0.02, 0.995)
         a_logit = np.log(ontime_base / (1 - ontime_base)) + cfg.ontime_shift.get(firm["industry"], 0.0)
-        late_med = np.exp(r.normal(np.log(np.sqrt(T["late_med"][0] * T["late_med"][1])), 0.55, n)) * cfg.late_scale
+        late_med = np.exp(r.normal(np.log(np.sqrt(T["late_med"][0] * T["late_med"][1])), LATE_SPREAD_V2 if v2 else 0.55, n)) * cfg.late_scale
         payrun = r.choice(PAYRUNS, n, p=np.array(cfg.payrun_p) / sum(cfg.payrun_p))
         rows = []
         for i in range(n):
@@ -342,7 +366,7 @@ class World:
         r, C = self.rng, self.cal
         I = INDUSTRY[firm["industry"]]
         W = self.W
-        season = np.array(I["season"])[self.weeks.month.values - 1]
+        season = np.array(self.cfg.season_override or I["season"])[self.weeks.month.values - 1]
         tet = np.ones(W)
         for a, b in cal.TET_BREAK.values():
             wa = (pd.Timestamp(a) - self.weeks[0]).days // 7
@@ -374,8 +398,15 @@ class World:
                 continue
             cis = np.repeat(nz, k[nz])
             ci_l.append(cis)
-            day_l.append(day0 + r.choice(6, len(cis), p=[.19, .19, .19, .19, .19, .05]))
-            amt_l.append(tick[cis] * r.lognormal(0, 0.75, len(cis)))
+            if self.cfg.realism == 'v2':
+                day_l.append(day0 + r.choice(7, len(cis), p=DOW_V2))
+                amt = tick[cis] * r.lognormal(0, SIG_AMT_V2, len(cis)) * np.exp(0.75 ** 2 / 2 - SIG_AMT_V2 ** 2 / 2)
+                small = r.random(len(cis)) < P_SMALL_V2          # HĐ điều chỉnh/lẻ nhỏ: đuôi trái dày
+                amt[small] *= r.lognormal(-2.5, 0.8, int(small.sum()))
+                amt_l.append(amt)
+            else:
+                day_l.append(day0 + r.choice(6, len(cis), p=[.19, .19, .19, .19, .19, .05]))
+                amt_l.append(tick[cis] * r.lognormal(0, 0.75, len(cis)))
         inv = pd.DataFrame({"ci": np.concatenate(ci_l), "day": np.concatenate(day_l), "net": np.concatenate(amt_l)})
         mc = cust["monthly_consolidate"].values[inv["ci"].values]
         if mc.any():
@@ -387,7 +418,10 @@ class World:
             inv = pd.concat([inv[~mc], g], ignore_index=True)
         inv = inv[(inv["day"] >= 0) & (inv["day"] <= (self.end - self.start).days)].copy()
         di = C.clip(inv["day"].values.astype(np.int64) + self.base_i)
-        keep_sat = (C.wd[di] == 5) & (r.random(len(di)) < 0.6) & ~C.hol[di]
+        if self.cfg.realism == 'v2':   # HĐĐT vẫn lập cuối tuần; ngày lễ chính thức thì dời
+            keep_sat = (C.wd[di] >= 5) & (r.random(len(di)) < KEEP_WEEKEND_V2) & ~C.hol[di]
+        else:
+            keep_sat = (C.wd[di] == 5) & (r.random(len(di)) < 0.6) & ~C.hol[di]
         inv["issue_i"] = np.where(keep_sat, di, C.next_bd[di])
         inv["net"] = (np.round(inv["net"].values / 1000) * 1000).clip(1e6, None)
         return inv.sort_values(["issue_i", "ci"]).reset_index(drop=True)
@@ -493,17 +527,20 @@ class World:
         p["grp"] = np.where(batch, p["ci"].astype(str) + "_" + p["day_i"].astype(str), "s" + p.index.astype(str))
         txns = []
         tx_of = np.empty(len(p), dtype=object)
-        for g, sub in p.groupby("grp", sort=False):
-            c = cust.iloc[int(sub["ci"].iloc[0])]
+        customer_records = cust.to_dict('records')
+        ci_values, day_values = p['ci'].to_numpy(), p['day_i'].to_numpy()
+        amount_values, invoice_values = p['amount'].to_numpy(), p['invoice_no'].to_numpy()
+        for positions in p.groupby('grp', sort=False).indices.values():
+            c = customer_records[int(ci_values[positions[0]])]
             fee = float(r.choice([11000, 22000])) if r.random() < 0.05 else 0.0
-            dt = pd.Timestamp(C.date(int(sub["day_i"].iloc[0])))
+            dt = pd.Timestamp(C.date(int(day_values[positions[0]])))
             tid = f"{firm['firm_id']}-T{len(txns):06d}"
-            txns.append(dict(txn_id=tid, firm_id=firm["firm_id"], value_date=dt, amount=float(sub["amount"].sum()) - fee,
+            txns.append(dict(txn_id=tid, firm_id=firm["firm_id"], value_date=dt, amount=float(amount_values[positions].sum()) - fee,
                              direction="in", counterparty=nm.counterparty_variant(r, c["name"], c["short"]),
-                             memo=nm.transfer_memo(r, c["short"], firm["core"], sub["invoice_no"].tolist(), dt.month,
+                             memo=nm.transfer_memo(r, c["short"], firm["core"], invoice_values[positions].tolist(), dt.month,
                                                    c["memo_no_p"]),
                              txn_type="customer_payment", true_customer_id=c["customer_id"], fee_deducted=fee))
-            tx_of[sub.index.values] = tid
+            tx_of[positions] = tid
         p["txn_id"] = tx_of
         span = (self.end - self.start).days
         k_noise = int(len(txns) * 0.12) + 24
@@ -575,7 +612,25 @@ class World:
                 rows.append(dict(invoice_k=int(k), made_i=int(C.snap_bd(tk)), promised_i=prom, kept=bool(kept)))
                 if kept:
                     done[k] = True
-        return pd.DataFrame(rows)
+        result = pd.DataFrame(rows)
+        if self.cfg.promises_mode == 'noisy' and len(result):
+            noise = np.random.default_rng(np.random.SeedSequence([self.cfg.seed, int(firm['firm_id'][1:]), 801]))
+            k = result.invoice_k.to_numpy()
+            verbal = noise.random(len(cust)) < .15
+            result = result[~verbal[inv.ci.to_numpy()[k]]].copy()
+            k = result.invoice_k.to_numpy()
+            perturb = np.round(noise.standard_t(3, len(result)) * 7).astype(int)
+            result['promised_i'] = C.snap_bd(np.maximum(result.made_i.to_numpy() + 1, result.promised_i.to_numpy() + perturb))
+            result['kept'] = np.abs(actual[k] - result.promised_i.to_numpy()) <= 3
+            result['promise_type'] = noise.choice(['exact', 'vague', 'partial'], len(result), p=[.55, .25, .2])
+            repeat = result[(noise.random(len(result)) < .3) & ~result.kept].copy()
+            repeat['made_i'] = C.snap_bd(repeat.made_i.to_numpy() + noise.integers(7, 15, len(repeat)))
+            repeat['promised_i'] = C.snap_bd(repeat.promised_i.to_numpy() + noise.integers(7, 15, len(repeat)))
+            repeat['promised_i'] = np.maximum(repeat.promised_i, repeat.made_i + 1)
+            repeat = repeat[repeat.made_i.to_numpy() < actual[repeat.invoice_k.to_numpy()]]
+            repeat['kept'] = np.abs(actual[repeat.invoice_k.to_numpy()] - repeat.promised_i.to_numpy()) <= 3
+            result = pd.concat([result, repeat], ignore_index=True)
+        return result
 
     def outflows(self, firm, inv):
         r, C = self.rng, self.cal
@@ -642,24 +697,48 @@ class World:
         return out
 
     # ---------------- run
-    def run(self, out_dir: Path | None = None, verbose=True):
+    def run(self, out_dir: Path | None = None, verbose=True, *, firm_indices=None):
         cfg, C = self.cfg, self.cal
+        indices=list(range(cfg.n_firms)) if firm_indices is None else list(firm_indices)
+        if not indices or len(set(indices))!=len(indices) or any(not isinstance(i,int) or not 0<=i<cfg.n_firms for i in indices):
+            raise ValueError('Danh sách công ty phải duy nhất và nằm trong cấu hình')
+        if firm_indices is not None and cfg.rng_version!=2:
+            raise ValueError('Sinh theo shard chỉ hỗ trợ RNG v2 tách theo công ty')
         out_dir = Path(out_dir or (SYNTH / cfg.name))
         out_dir.mkdir(parents=True, exist_ok=True)
+        if cfg.rng_version == 2:
+            self.rng = np.random.default_rng(np.random.SeedSequence([cfg.seed, 900]))
         macro = self.macro()
         firms, custs, invs, pays_all, banks, proms, outs, events = [], [], [], [], [], [], [], []
-        for f in range(cfg.n_firms):
+        selected=set(indices)
+        # Tên công ty là namespace chung: phát lại riêng hai pha tên của các
+        # công ty trước shard để số lần rút RNG do tránh trùng cũng giống bản khối.
+        replay=range(max(indices)+1) if firm_indices is not None else indices
+        for f in replay:
+            def phase(k):
+                if cfg.rng_version == 2:
+                    self.rng = np.random.default_rng(np.random.SeedSequence([cfg.seed, f, k]))
+            phase(0)
             firm = self.make_firm(f)
+            phase(1)
             cust = self.make_customers(firm)
+            if f not in selected:
+                continue
+            phase(2)
             L, default_w, sec = self.customer_paths(firm, cust)
+            phase(3)
             inv = self.make_invoices(firm, cust)
             yrs = pd.DatetimeIndex(C.date(inv["issue_i"].values)).year
             sym = {y: nm.einvoice_symbol(y, self.rng) for y in sorted(set(yrs))}
             inv["symbol"] = [sym[y] for y in yrs]
             inv["invoice_no"] = (inv.groupby("symbol").cumcount() + 1).map(lambda x: f"{x:08d}")
+            phase(4)
             inv, pays = self.settle(firm, cust, inv, L, default_w, sec)
+            phase(5)
             bank, pays = self.bank_ledger(firm, cust, inv, pays)
+            phase(6)
             prom = self.promises(firm, cust, inv, pays)
+            phase(7)
             out = self.outflows(firm, inv)
             fid = firm["firm_id"]
             inv["firm_id"] = fid
@@ -733,9 +812,15 @@ class World:
                           "ledger_post_date": D(pays["post_i"]), "amount": pays["amount"].values,
                           "kind": pays["kind"].values})
         if len(prom):
+            promise_type = prom['promise_type'].to_numpy() if 'promise_type' in prom else None
             prom = pd.DataFrame({"firm_id": prom["firm_id"], "invoice_id": prom["invoice_id"],
                                  "customer_id": prom["customer_id"], "made_date": D(prom["made_i"]),
                                  "promised_date": D(prom["promised_i"]), "kept": prom["kept"].values})
+            if promise_type is not None:
+                prom['promise_type'] = promise_type
+                prom['promised_date_lo'] = prom.promised_date - pd.to_timedelta(np.where(prom.promise_type == 'vague', 3, 0), unit='D')
+                prom['promised_date_hi'] = prom.promised_date + pd.to_timedelta(np.where(prom.promise_type == 'vague', 3, 0), unit='D')
+                prom['promised_fraction'] = np.where(prom.promise_type == 'partial', .5, 1.)
         out["date"] = D(out["day_i"])
         out = out.drop(columns="day_i")
         daily = self.cash_paths(firms, bank, out)

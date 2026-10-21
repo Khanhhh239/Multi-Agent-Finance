@@ -1,0 +1,17 @@
+case,metric,value,target_low,target_high,point_target_met,limitation,measurement_version,world
+lumpy_customer,firms_with_anchor_revenue_share_40_60,1.0,1.0,1.0,True,"Tỷ trọng doanh thu thực hiện, không chỉ trọng số sinh",hard-case-observed-fidelity-v1,hc_lumpy_customer_v2
+group_payer,different_group_payer_share,0.6124002728123463,0.01,1.0,True,Chưa đo lại recall T9 trên hard case,hard-case-observed-fidelity-v1,hc_group_payer
+heterogeneity,customer_between_variance_share,0.37958881482286644,0.55,0.65,False,ANOVA mô tả trên nhãn thật tổng hợp; chưa chứng minh nhân quả,hard-case-observed-fidelity-v1,hc_heterogeneity
+cod_realistic,COD_invoice_count_share,0.2191118704458171,0.2,0.3,True,,hard-case-observed-fidelity-v1,hc_cod_realistic
+discount_early,discounted_invoices_with_net30_terms,1.0,1.0,1.0,True,,hard-case-observed-fidelity-v1,hc_discount_early_v2
+discount_early,discounted_invoices_paid_on_business_day_10,1.0,1.0,1.0,True,,hard-case-observed-fidelity-v1,hc_discount_early_v2
+discount_early,discounted_paid_fraction_mean,0.9800000516094957,0.9799,0.9801,True,Làm tròn nghìn VND,hard-case-observed-fidelity-v1,hc_discount_early_v2
+retention,retained_fraction_mean,0.05,0.0499,0.0501,True,Kịch bản tổng hợp; cần lịch hợp đồng thật,hard-case-observed-fidelity-v1,hc_retention
+fx,USD_invoice_count_share,0.14932609044844555,0.12,0.18,True,"Tỷ giá tổng hợp, sổ quy về VND",hard-case-observed-fidelity-v1,hc_fx
+fx,relative_currency_conversion_error,1.455305218556885e-16,0.0,1e-10,True,,hard-case-observed-fidelity-v1,hc_fx
+credit_note,adjustment_references_present_in_invoice_chain,0.0,1.0,1.0,False,"Hiện chỉ đổi mã/tham chiếu thay thế; chưa giữ đủ bản gốc, huỷ, điều chỉnh",hard-case-observed-fidelity-v1,hc_credit_note
+verbal,customers_with_verbal_extension,0.1712018140589569,0.12,0.18,True,,hard-case-observed-fidelity-v1,hc_verbal
+verbal,unrecorded_extension_invoices_with_recorded_promise,0.0,0.0,0.0,True,,hard-case-observed-fidelity-v1,hc_verbal
+supply_shock,sector_localization_implemented,1.0,1.0,1.0,True,Cần thêm đánh giá tác động T6/T7,hard-case-observed-fidelity-v1,hc_supply_shock_v2
+seasonal_extreme,revenue_in_four_focus_months,0.5849735947438861,0.57,0.63,True,,hard-case-observed-fidelity-v1,hc_seasonal_extreme
+new_company,max_observed_history_days,359.0,0.0,365.0,True,,hard-case-observed-fidelity-v1,hc_new_company

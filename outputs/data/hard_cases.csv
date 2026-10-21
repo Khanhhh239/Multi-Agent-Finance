@@ -1,0 +1,13 @@
+world,case,n_firms,n_invoices,checks,passed,smoke,seed
+hc_lumpy_customer,lumpy_customer,12,76887,68,68,False,901
+hc_group_payer,group_payer,12,68481,68,68,False,901
+hc_heterogeneity,heterogeneity,12,68481,68,68,False,901
+hc_cod_realistic,cod_realistic,12,68481,68,68,False,901
+hc_discount_early,discount_early,12,68481,68,68,False,901
+hc_retention,retention,12,68481,68,68,False,901
+hc_fx,fx,12,68481,70,70,False,901
+hc_credit_note,credit_note,12,68481,68,68,False,901
+hc_verbal,verbal,12,68481,68,68,False,901
+hc_supply_shock,supply_shock,12,68481,68,68,False,901
+hc_seasonal_extreme,seasonal_extreme,12,67883,68,68,False,901
+hc_new_company,new_company,12,7318,68,68,False,901

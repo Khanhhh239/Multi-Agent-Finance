@@ -1,0 +1,2 @@
+world,n_firms,n_invoices,bytes,tables_sha256,seconds,resumed,contracts_passed,seed,measurement_version
+big_smoke_000,1,5766,1023889,e0d3fdfe220f835645187eee0db40697f18c44d8f0fb9617972e39e48ffba1ce,2.469000000000051,False,True,81000,big-world-rng2-v1

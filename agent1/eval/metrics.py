@@ -104,4 +104,8 @@ def bootstrap_ci(fn, *arrays, n=300, seed=0, groups=None):
             pick = rng.choice(ug, len(ug))
             ix = np.concatenate([pos[g] for g in pick])
             vals.append(fn(*[a[ix] for a in arrays]))
-    return float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))
+    finite = np.asarray(vals, float)
+    finite = finite[np.isfinite(finite)]
+    if len(finite) < n * .8:
+        return np.nan, np.nan
+    return float(np.percentile(finite, 2.5)), float(np.percentile(finite, 97.5))

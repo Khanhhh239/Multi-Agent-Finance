@@ -1,0 +1,7 @@
+world,model,baseline,improvement_pct,improvement_ci_low,improvement_ci_high,n_firms,bootstrap_n,status,test_used_for_selection,measurement_version
+tgt,IW-company-OOF,pooled,-1.92101227968164,-2.9444003729848065,0.10104343938701836,14,300,not_demonstrated,False,IW-company-OOF-M6-locked-budget-v1
+tgt,IW-company-OOF,IW-in-sample,-1.92101227968164,-2.9444003729848065,0.10104343938701836,14,300,not_demonstrated,False,IW-company-OOF-M6-locked-budget-v1
+sens_uk,IW-company-OOF,pooled,-2.5675719239325923,-4.076259777007801,-1.0898073263747172,12,300,rejected,False,IW-company-OOF-M6-locked-budget-v1
+sens_uk,IW-company-OOF,IW-in-sample,-2.130561857536709,-3.3599693989169435,-0.8507847371315204,12,300,rejected,False,IW-company-OOF-M6-locked-budget-v1
+sens_coface,IW-company-OOF,pooled,-0.2196541767065,-1.0492722239078902,0.7986630838781903,12,300,not_demonstrated,False,IW-company-OOF-M6-locked-budget-v1
+sens_coface,IW-company-OOF,IW-in-sample,-0.5958920567130412,-1.8974533798427013,0.688502872047449,12,300,not_demonstrated,False,IW-company-OOF-M6-locked-budget-v1

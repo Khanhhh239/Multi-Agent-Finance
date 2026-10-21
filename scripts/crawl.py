@@ -28,6 +28,24 @@ SBA = "https://data.sba.gov/sites/default/files/uploaded_resources/"
 BERKA = "https://raw.githubusercontent.com/jlacko/berka-dataset/HEAD/"
 
 SOURCES = {
+    "vn_listed_fy2024": dict(files=[
+        ("https://smc.vn/wp-content/uploads/2025/05/BCTC-HOP-NHAT-SAU-KIEM-TOAN-2024-ENG.pdf", "vn_listed/SMC_FY2024_consolidated_EN.pdf"),
+        ("https://smc.vn/wp-content/uploads/2025/04/CBTT-DINH-CHINH-BCTC-2024.pdf", "vn_listed/SMC_FY2024_correction.pdf"),
+        ("https://www.thanhcong.com.vn/wp-content/uploads/2025/04/TCM_Thiet-ke_2024-CBTT-8.4.2025.pdf", "vn_listed/TCM_FY2024_annual_report.pdf")],
+        license="Public issuer disclosures; copyright retained by issuers; no redistribution licence asserted",
+        role="Independent descriptive DSO/DPO spot-check, one listed issuer per sector, not SME estimates or generator calibration"),
+    "vn_bmp_fy2024": dict(files=[
+        ("https://binhminhplastic.com.vn/Data/Sites/1/media/co-dong/bctn/20250415-bmp-ar-2024-vn-%28final%29.pdf", "vn_listed/BMP_FY2024_annual_report.pdf")],
+        license="Public issuer disclosure; copyright retained; automated download returned HTTP403 on 2026-10-20",
+        role="Independent plastics-sector DSO spot-check; incomplete until original report can be read"),
+    "vn_tcm_fy2022": dict(files=[
+        ("https://www.thanhcong.com.vn/wp-content/uploads/2023/03/20230324-TCM-BCTC-hop-nhat-nam-2022-da-kiem-toan_VN.pdf", "vn_listed/TCM_FY2022_consolidated.pdf")],
+        license="Public issuer disclosure; copyright retained; no redistribution licence asserted",
+        role="Independent textiles DSO/DPO spot-check from audited 2022 report; not a 2024 sector estimate"),
+    "vn_ntp_fy2024": dict(files=[
+        ("https://admin.nhuatienphong.vn/img/posts/1_f2284364f5cd0dd5e057ecb4e3e165f0BCTN%202024.pdf", "vn_listed/NTP_FY2024_annual_report.pdf")],
+        license="Public issuer disclosure; copyright retained; no redistribution licence asserted",
+        role="Independent plastics DSO/DPO spot-check from audited statements in 2024 annual report; not SME estimate"),
     # --- tầng 2: thống kê thật để hiệu chỉnh / kiểm định máy phát ---
     "uk_ppr": dict(files=[("https://check-payment-practices.service.gov.uk/export/csv/", "uk_ppr/payment_practices.csv")],
                    license="Open Government Licence v3.0", role="T12 hình dạng trễ 30/31-60/60+, tỷ lệ tranh chấp (T3)"),
@@ -140,6 +158,7 @@ def main():
     if any(k not in keys for k in want):
         sys.exit("unknown keys: %s" % [k for k in want if k not in keys])
     man = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
+    failures=[]
     for k in want:
         print("[%s]" % k)
         try:
@@ -169,6 +188,9 @@ def main():
             MANIFEST.write_text(json.dumps(man, indent=2, ensure_ascii=False), encoding="utf-8")
         except Exception as e:  # noqa: BLE001
             print("  [fail] %s: %s" % (k, e))
+            failures.append(k)
+    if failures:
+        raise SystemExit('Failed sources: '+','.join(failures))
 
 
 if __name__ == "__main__":

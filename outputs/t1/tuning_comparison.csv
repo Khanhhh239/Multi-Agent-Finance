@@ -1,0 +1,2 @@
+pinball_gain_pct,target_pct,candidate_cov80,baseline_cov80,candidate_ECE,baseline_ECE,improvement_ci_low,improvement_ci_high,meets_target,candidate_adopted,test_used_for_selection,measurement_version
+-1.16809295737903,3.0,0.8036536353671904,0.8173036170990136,0.0198607205956832,0.015368582163547,-2.368375618665626,-0.0386134436640755,False,False,False,tuning-source-equal-budget-v1

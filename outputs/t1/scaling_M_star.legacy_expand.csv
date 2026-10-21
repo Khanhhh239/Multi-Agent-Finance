@@ -1,0 +1,4 @@
+expanded_rows,M_star,criterion,measurement_version,M_star_ci_low,M_star_ci_high,prob_reaches_by_24m,paired_prob_largest_needs_less_history_than_smallest,bootstrap_n,unreached_encoded_as
+1000000,0,"zero-shot M0, fine-tune M>0; pinball <=0.9*B1d at same M (predeclared)",scaling-nested-expanded-v1,0.0,0.0,1.0,0.0,300,inf
+3000000,0,"zero-shot M0, fine-tune M>0; pinball <=0.9*B1d at same M (predeclared)",scaling-nested-expanded-v1,0.0,0.0,1.0,0.0,300,inf
+10000000,0,"zero-shot M0, fine-tune M>0; pinball <=0.9*B1d at same M (predeclared)",scaling-nested-expanded-v1,0.0,0.0,1.0,0.0,300,inf

@@ -1,0 +1,80 @@
+{
+  "selection_domain": "src_company_holdout",
+  "target_used": false,
+  "training_firms": [
+    "F000",
+    "F001",
+    "F002",
+    "F003",
+    "F004",
+    "F005",
+    "F006",
+    "F007",
+    "F008",
+    "F009",
+    "F010",
+    "F011",
+    "F012",
+    "F013",
+    "F014",
+    "F015",
+    "F016",
+    "F017",
+    "F018",
+    "F019",
+    "F020",
+    "F021",
+    "F022",
+    "F023",
+    "F024",
+    "F025",
+    "F026",
+    "F027",
+    "F028",
+    "F029",
+    "F030",
+    "F031"
+  ],
+  "validation_firms": [
+    "F032",
+    "F033",
+    "F034",
+    "F035",
+    "F036",
+    "F037",
+    "F038",
+    "F039"
+  ],
+  "max_validated_domain_auc": 0.9,
+  "domain_auc_limit_status": "predeclared_applicability_limit_not_empirical_guarantee",
+  "seed": 7,
+  "training_budget": 20000,
+  "rules": [
+    {
+      "months_history": 0,
+      "min_rows": 0,
+      "strategy": "zero-shot"
+    },
+    {
+      "months_history": 3,
+      "min_rows": 0,
+      "strategy": "zero-shot"
+    },
+    {
+      "months_history": 6,
+      "min_rows": 4709,
+      "strategy": "fine-tune"
+    },
+    {
+      "months_history": 12,
+      "min_rows": 14286,
+      "strategy": "fine-tune"
+    },
+    {
+      "months_history": 24,
+      "min_rows": 20000,
+      "strategy": "fine-tune"
+    }
+  ],
+  "research_only": true
+}

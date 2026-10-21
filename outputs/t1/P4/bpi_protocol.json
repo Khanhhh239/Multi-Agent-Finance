@@ -1,0 +1,31 @@
+{
+  "complete": true,
+  "origin": "2018-07-26",
+  "protocol": "exact v2 split/refit and DH-GBM params; no CQR",
+  "choices": {
+    "baseline": {
+      "calibration_w": 0.25,
+      "calibration_losses": {
+        "0.0": 15.100120363370987,
+        "0.25": 9.713276458011203,
+        "0.5": 11.746017493061876,
+        "0.75": 19.50055909880768,
+        "1.0": 29.894313693859832
+      },
+      "n_train": 400000,
+      "train_count_cap": null
+    },
+    "stationary": {
+      "calibration_w": 0.25,
+      "calibration_losses": {
+        "0.0": 15.100120363370987,
+        "0.25": 9.722902375032936,
+        "0.5": 11.779151171728875,
+        "0.75": 19.56653429802958,
+        "1.0": 30.00397632566827
+      },
+      "n_train": 400000,
+      "train_count_cap": 72989.0
+    }
+  }
+}

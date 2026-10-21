@@ -48,7 +48,14 @@ Chỉ số: pinball, MAE, cov80, IBS, ECE, WAPE thu 1–4 và 5–13 tuần — 
 | DA6 | Tiền huấn luyện nguồn lớn hơn (×5) giảm nhu cầu M (scaling) | M* (tháng để đạt ngưỡng) giảm |
 | DA7 | Đặc trưng sốc chung đo trực tiếp giúp ở giai đoạn khủng hoảng | A/B trên 2021-07→10 và 2022-10→2023-06 |
 
-Trạng thái: thí nghiệm B **đã chạy** (03_Evaluation/04 §4.9): DA1 đạt (zero-shot thấp hơn B1 60% pinball, WAPE 0,465 vs 1,070); **DA2 bị bác bỏ** (fine-tune M=3: 6,83 vs zero-shot 6,28); DA3 một phần (fine-tune ≈ zero-shot, TGT-only vẫn kém ở M=24); DA4 chưa phân biệt được (IW ≈ POOLED, trọng số ≈1); DA5 không cần (khoảng đã dư); DA6, DA7 chưa làm. Hàm ý: miền đích hiện còn quá gần nguồn; cần miền lệch mạnh (domain randomization, Customer Invoices) trước khi kết luận. Giao việc: 05_Coding_Agent_Plan/WP-3.
+Trạng thái hiện hành lấy từ `outputs/t1/DA_hypotheses.csv` và
+[04_ket_qua_hien_co.md](../03_Evaluation/04_ket_qua_hien_co.md). Các kết luận cũ trước sửa
+as-of/CDF được giữ trong bản lịch sử. `scripts/run_da_paired.py` bổ sung phép xác nhận
+DA1–DA4 với CI cặp trên ngân sách nguồn/đích tối đa 40k snapshot và 300 vòng (FT thêm 150),
+lưu riêng với bảng B cũ. Scaling và DA7 có bảng riêng; trạng thái hoàn tất đọc từ metadata
+và sổ tiến độ. Không dùng số trên miền đích để xây chính sách onboarding.
+WAPE của T1 dồn số dư hoá đơn đang mở vào tuần tất toán theo giao thức gốc;
+đây là chỉ số proxy cho tiền thu, không thay E2E hoặc phép đo T9→T1 dùng từng khoản tiền thực nhận.
 
 ## 5.5 Phương án nâng cao (nếu S0–S4 chưa đủ)
 

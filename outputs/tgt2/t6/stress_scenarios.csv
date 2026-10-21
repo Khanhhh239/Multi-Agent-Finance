@@ -1,0 +1,5 @@
+scenario,runway_weeks,censored_at_13w,minimum_balance
+all_payments_plus30d,0,False,-126851398.64484927
+all_payments_plus60d,0,False,-126851398.64484927
+top_customer_default,0,False,-75259398.64484927
+revenue_minus30pct,0,False,-108570556.18795952

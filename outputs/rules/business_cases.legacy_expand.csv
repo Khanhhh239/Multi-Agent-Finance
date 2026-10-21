@@ -1,0 +1,55 @@
+case,rule,operation,expected,arguments,actual,passed,expert_verified,measurement_version
+minimum_wage@2019-01-01:1,minimum_wage@2019-01-01,wage,4180000,"[""2019-01-01"", 1]",4180000,True,False,configured-rules-business-regression-v1
+minimum_wage@2019-01-01:2,minimum_wage@2019-01-01,wage,2920000,"[""2019-01-01"", 4]",2920000,True,False,configured-rules-business-regression-v1
+minimum_wage@2020-01-01:3,minimum_wage@2020-01-01,wage,4420000,"[""2020-01-01"", 1]",4420000,True,False,configured-rules-business-regression-v1
+minimum_wage@2020-01-01:4,minimum_wage@2020-01-01,wage,3070000,"[""2020-01-01"", 4]",3070000,True,False,configured-rules-business-regression-v1
+minimum_wage@2022-07-01:5,minimum_wage@2022-07-01,wage,4680000,"[""2022-07-01"", 1]",4680000,True,False,configured-rules-business-regression-v1
+minimum_wage@2022-07-01:6,minimum_wage@2022-07-01,wage,3250000,"[""2022-07-01"", 4]",3250000,True,False,configured-rules-business-regression-v1
+minimum_wage@2024-07-01:7,minimum_wage@2024-07-01,wage,4960000,"[""2024-07-01"", 1]",4960000,True,False,configured-rules-business-regression-v1
+minimum_wage@2024-07-01:8,minimum_wage@2024-07-01,wage,3450000,"[""2024-07-01"", 4]",3450000,True,False,configured-rules-business-regression-v1
+minimum_wage@2026-01-01:9,minimum_wage@2026-01-01,wage,5310000,"[""2026-01-01"", 1]",5310000,True,False,configured-rules-business-regression-v1
+minimum_wage@2026-01-01:10,minimum_wage@2026-01-01,wage,3700000,"[""2026-01-01"", 4]",3700000,True,False,configured-rules-business-regression-v1
+vat_reduction@2022-02-01:11,vat_reduction@2022-02-01,vat,0.1,"[""2022-01-31"", ""textile_clothing""]",0.1,True,False,configured-rules-business-regression-v1
+vat_reduction@2022-02-01:12,vat_reduction@2022-02-01,vat,0.08,"[""2022-12-31"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2023-07-01:13,vat_reduction@2023-07-01,vat,0.1,"[""2023-06-30"", ""textile_clothing""]",0.1,True,False,configured-rules-business-regression-v1
+vat_reduction@2023-07-01:14,vat_reduction@2023-07-01,vat,0.08,"[""2023-12-31"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2024-01-01:15,vat_reduction@2024-01-01,vat,0.08,"[""2023-12-31"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2024-01-01:16,vat_reduction@2024-01-01,vat,0.08,"[""2024-06-30"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2024-07-01:17,vat_reduction@2024-07-01,vat,0.08,"[""2024-06-30"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2024-07-01:18,vat_reduction@2024-07-01,vat,0.08,"[""2024-12-31"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2025-01-01:19,vat_reduction@2025-01-01,vat,0.08,"[""2024-12-31"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2025-01-01:20,vat_reduction@2025-01-01,vat,0.08,"[""2025-06-30"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2025-07-01:21,vat_reduction@2025-07-01,vat,0.08,"[""2025-06-30"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_reduction@2025-07-01:22,vat_reduction@2025-07-01,vat,0.08,"[""2026-12-31"", ""textile_clothing""]",0.08,True,False,configured-rules-business-regression-v1
+vat_base@2018-01-01:23,vat_base@2018-01-01,vat,0.1,"[""2021-06-01"", ""textile_clothing""]",0.1,True,False,configured-rules-business-regression-v1
+vat_base@2018-01-01:24,vat_base@2018-01-01,vat,0.1,"[""2023-04-01"", ""textile_clothing""]",0.1,True,False,configured-rules-business-regression-v1
+vat_excluded_industries@2018-01-01:25,vat_excluded_industries@2018-01-01,vat,0.1,"[""2022-06-01"", ""steel_metals""]",0.1,True,False,configured-rules-business-regression-v1
+vat_excluded_industries@2018-01-01:26,vat_excluded_industries@2018-01-01,vat,0.1,"[""2025-06-01"", ""steel_metals""]",0.1,True,False,configured-rules-business-regression-v1
+social_insurance_employer@2018-01-01:27,social_insurance_employer@2018-01-01,employer,21500000,[100000000],21500000.0,True,False,configured-rules-business-regression-v1
+social_insurance_employee@2018-01-01:28,social_insurance_employee@2018-01-01,net_payroll,89500000,[100000000],89500000.0,True,False,configured-rules-business-regression-v1
+social_insurance_employer@2018-01-01:29,social_insurance_employer@2018-01-01,employer,43000000,[200000000],43000000.0,True,False,configured-rules-business-regression-v1
+social_insurance_employee@2018-01-01:30,social_insurance_employee@2018-01-01,net_payroll,179000000,[200000000],179000000.0,True,False,configured-rules-business-regression-v1
+monthly_vat_threshold@2018-01-01:31,monthly_vat_threshold@2018-01-01,vat_count,0,[50000000000],0,True,False,configured-rules-business-regression-v1
+monthly_vat_threshold@2018-01-01:32,monthly_vat_threshold@2018-01-01,vat_count,1,[50000000001],1,True,False,configured-rules-business-regression-v1
+vat_monthly_day@2018-01-01:33,vat_monthly_day@2018-01-01,vat_due,2024-04-22,"[""2024-03-31""]",2024-04-22,True,False,configured-rules-business-regression-v1
+vat_monthly_day@2018-01-01:34,vat_monthly_day@2018-01-01,vat_due,2025-02-20,"[""2025-01-31""]",2025-02-20,True,False,configured-rules-business-regression-v1
+cit_provisional_day@2018-01-01:35,cit_provisional_day@2018-01-01,cit_due,2024-05-02,"[""2024-03-31""]",2024-05-02,True,False,configured-rules-business-regression-v1
+cit_provisional_day@2018-01-01:36,cit_provisional_day@2018-01-01,cit_due,2024-07-30,"[""2024-06-30""]",2024-07-30,True,False,configured-rules-business-regression-v1
+cit_final_month@2018-01-01:37,cit_final_month@2018-01-01,cit_final,2024-04-01,[2023],2024-04-01,True,False,configured-rules-business-regression-v1
+cit_final_month@2018-01-01:38,cit_final_month@2018-01-01,cit_final,2025-03-31,[2024],2025-03-31,True,False,configured-rules-business-regression-v1
+license_fee_day@2018-01-01:39,license_fee_day@2018-01-01,license_due,2023-01-30,[2023],2023-01-30,True,False,configured-rules-business-regression-v1
+license_fee_day@2018-01-01:40,license_fee_day@2018-01-01,license_due,2024-01-30,[2024],2024-01-30,True,False,configured-rules-business-regression-v1
+license_fee_capital_threshold@2018-01-01:41,license_fee_capital_threshold@2018-01-01,license_amount,2000000,"[2025, 10000000000]",2000000.0,True,False,configured-rules-business-regression-v1
+license_fee_capital_threshold@2018-01-01:42,license_fee_capital_threshold@2018-01-01,license_amount,3000000,"[2025, 10000000001]",3000000.0,True,False,configured-rules-business-regression-v1
+license_fee_low@2018-01-01:43,license_fee_low@2018-01-01,license_amount,2000000,"[2025, 0]",2000000.0,True,False,configured-rules-business-regression-v1
+license_fee_low@2018-01-01:44,license_fee_low@2018-01-01,license_amount,2000000,"[2025, 9000000000]",2000000.0,True,False,configured-rules-business-regression-v1
+license_fee_high@2018-01-01:45,license_fee_high@2018-01-01,license_amount,3000000,"[2025, 11000000000]",3000000.0,True,False,configured-rules-business-regression-v1
+license_fee_high@2018-01-01:46,license_fee_high@2018-01-01,license_amount,3000000,"[2025, 20000000000]",3000000.0,True,False,configured-rules-business-regression-v1
+license_fee_abolished@2018-01-01:47,license_fee_abolished@2018-01-01,license_amount,2000000,"[2025, 1000000000]",2000000.0,True,False,configured-rules-business-regression-v1
+license_fee_abolished@2018-01-01:48,license_fee_abolished@2018-01-01,license_amount,0,"[2026, 1000000000]",0.0,True,False,configured-rules-business-regression-v1
+lunar_new_year@2018-01-01:49,lunar_new_year@2018-01-01,tet_days,1,"[""2024-02-09""]",1,True,False,configured-rules-business-regression-v1
+lunar_new_year@2018-01-01:50,lunar_new_year@2018-01-01,tet_days,-1,"[""2025-01-30""]",-1,True,False,configured-rules-business-regression-v1
+tet_break@2018-01-01:51,tet_break@2018-01-01,tet_break,True,"[""2024-02-08""]",True,True,False,configured-rules-business-regression-v1
+tet_break@2018-01-01:52,tet_break@2018-01-01,tet_break,False,"[""2024-02-15""]",False,True,False,configured-rules-business-regression-v1
+provisioning_months@2018-01-01:53,provisioning_months@2018-01-01,provision,0,[5],0.0,True,False,configured-rules-business-regression-v1
+provisioning_months@2018-01-01:54,provisioning_months@2018-01-01,provision,30000000,[6],30000000.0,True,False,configured-rules-business-regression-v1

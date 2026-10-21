@@ -1,0 +1,11 @@
+{
+  "complete": true,
+  "code_hash": "fff3dec6be65058d29919640b4ab4e0c0dde5ae4ae4d59a712729d1214e7b2f9",
+  "input_hash": "5cafa50c1e52002a916a9fe84ac2e6cb66e4bae9dc368648d0349fc9c72110ab",
+  "output_sha256": "1b0c9925d5f563e8f3948ef510802607d6524f1d72275c1cb86b3eeb7f6a9058",
+  "training_label_end": "2018-07-26",
+  "source": "BPI2019",
+  "test_used_for_selection": false,
+  "max_train": 40000,
+  "rounds": 300
+}

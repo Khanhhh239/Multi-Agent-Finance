@@ -102,6 +102,7 @@ def chronos_predict(series_list, horizon=H, model_id="amazon/chronos-bolt-small"
     try:
         import torch
         from chronos import BaseChronosPipeline
+        torch.set_num_threads(min(NT,4))
     except Exception:  # noqa: BLE001
         return None
     pipe = BaseChronosPipeline.from_pretrained(model_id, device_map="cpu", torch_dtype=torch.float32)

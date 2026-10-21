@@ -1,0 +1,37 @@
+{
+  "oof_domain_AUC": 0.9929374086769416,
+  "folds": [
+    {
+      "fold": 0,
+      "n_train": 38376,
+      "n_heldout": 11616,
+      "n_source_train": 30332,
+      "n_target_train": 8044
+    },
+    {
+      "fold": 1,
+      "n_train": 38399,
+      "n_heldout": 11593,
+      "n_source_train": 30372,
+      "n_target_train": 8027
+    },
+    {
+      "fold": 2,
+      "n_train": 35657,
+      "n_heldout": 14335,
+      "n_source_train": 27926,
+      "n_target_train": 7731
+    },
+    {
+      "fold": 3,
+      "n_train": 37544,
+      "n_heldout": 12448,
+      "n_source_train": 31370,
+      "n_target_train": 6174
+    }
+  ],
+  "weight_min": 0.4022883211093114,
+  "weight_max": 20.0,
+  "weight_std": 0.43043821286258216,
+  "effective_sample_size": 21209.470783014032
+}

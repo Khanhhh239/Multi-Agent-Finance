@@ -30,5 +30,7 @@ def test_number_gate_rejects_invented_numbers_and_percentages():
     assert check_numbers(verbalize(table), table)
     assert not check_numbers('Thiếu hụt 250% ở tuần 4', table)
     assert not check_numbers('Số dư 10.000.000 VND', table)
+    assert not check_numbers('Tuần9999 có rủi ro',table)
+    assert not check_numbers('VND9999',table)
     with pytest.raises(ValueError, match='số không'):
         verbalize(table, llm=lambda _: 'Thiếu 999 VND')

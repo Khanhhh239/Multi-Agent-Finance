@@ -1,0 +1,16 @@
+{
+  "complete": true,
+  "eligible": false,
+  "candidate": "mondrian_two_sided",
+  "criterion": "both origins cov80 [.75,.85]; IS80 <= global two-sided at each origin",
+  "calibration": "source only, same pre-origin model; minimum group 100 fixed before test",
+  "test_used_for_selection": false,
+  "input_sha256": {
+    "2023-07-03/calibration.parquet": "c3c13d3a67ab539987135a2f3293a3732ab3012faada54e48d5f56a2df9e6c0e",
+    "2023-07-03/test.parquet": "20f83c6404b2827ba70088b65f545a1a91257b0108c7c445bb0706b48d9293a4",
+    "2023-07-03/protocol.json": "80edd9623df70d22b3f8724c752c01962ac75e70cce6c83241c30a730af7cb7c",
+    "2024-07-01/calibration.parquet": "fa5a8a76741e4523e3525e376fac59862173248ead67004cf37391080a2827d9",
+    "2024-07-01/test.parquet": "4ec1b1425b2311126c6d0ec597ad7148faad411477eb97ecee4b93a4e23a4673",
+    "2024-07-01/protocol.json": "f13711702c2b05d00ecb4fc6ebc12498c96f5d68d2627200978633fba1b95f19"
+  }
+}

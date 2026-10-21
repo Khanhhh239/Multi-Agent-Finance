@@ -1,58 +1,91 @@
-# Agent 1 — Trợ lý dòng tiền (Cash-Flow Copilot): dữ liệu + mô hình T0–T12
+# Agent 1 — Trợ lý dòng tiền
 
-Hiện thực hoá [Phần 7 — nhiệm vụ Agent 1](../graphRAG/DIGITAL_ACCOUNTING_PART7_AGENT1_TASKS.md) trên nền
-[Phần 5 — nguồn dữ liệu](../graphRAG/DIGITAL_ACCOUNTING_PART5_AGENT1_DATA_SOURCES.md), kế thừa và vượt
-`invoice_prediction` (T1 cũ chỉ dùng LightGBM phân vị trên một bộ dữ liệu).
+Dự án nghiên cứu dự báo thu tiền và số dư 13 tuần, gồm máy phát dữ liệu SME Việt Nam,
+mô hình T1–T10, đối soát ngân hàng, thí nghiệm thích nghi miền và dịch vụ local.
+**Chưa hoàn thành toàn bộ kế hoạch 01–08; trạng thái nghiệm thu hiện tại là NO_GO.**
 
-- **Dữ liệu**: xem [docs/DATA_CARD.md](docs/DATA_CARD.md) — crawl 8 nguồn thật (có SHA-256), 4 thế giới SME Việt Nam
-  tổng hợp hiệu chỉnh theo Atradius VN 2025 + OxCGRT VN + luật VN, thiết kế cho **domain adaptation** (nguồn → đích niêm phong).
-- **Phương pháp**: xem [docs/METHODS.md](docs/METHODS.md) — lựa chọn SOTA theo từng T và lý do.
-- **Kết quả**: xem [docs/RESULTS.md](docs/RESULTS.md) — mọi bảng số lấy từ `outputs/` (CSV), kể cả chỗ mô hình thua.
+Đọc [tiến độ triển khai](docs/05_Coding_Agent_Plan/TIEN_DO_TRIEN_KHAI.md) để biết phần đã đo và phần còn thiếu;
+[cổng hiện hành](docs/03_Evaluation/GATES_CURRENT.md) để xem điều kiện nghiệm thu;
+[kết quả hiện có](docs/03_Evaluation/04_ket_qua_hien_co.md) và
+[kết quả chưa đạt](docs/03_Evaluation/KET_QUA_CHUA_DAT.md) để xem bằng chứng từ CSV.
+Các tài liệu lịch sử không thay các bảng hiện hành này.
 
-## Cấu trúc
+## Cài đặt và kiểm tra trên Windows
 
-```
-Agent1/
-  agent1/
-    calendar_vn.py          T5: lịch VN, Tết, nghỉ bù, hạn thuế/BHXH/lương, lương tối thiểu vùng (có ngày hiệu lực)
-    synth/                  T12: máy phát thế giới (world.py), tên/MST/nội dung CK (names.py),
-                            XML hoá đơn điện tử (einvoice.py), kiểm định độ trung thực (fidelity.py), calibration_vn.json
-    data/                   T0: real_loaders.py (8 nguồn thật -> lược đồ chuẩn), schema.py (cổng chất lượng)
-    models/                 features.py (snapshot as-of, chống rò rỉ), t1.py (T1/T2), t4_revenue.py, t6_cash.py,
-                            t7_changepoint.py, t9_recon.py
-    eval/metrics.py         T11: pinball, interval score, CRPS, IBS, ECE, C-index, WAPE, bootstrap
-  scripts/
-    crawl.py                tải dữ liệu công khai + MANIFEST
-    build_worlds.py         hiệu chỉnh máy phát + dựng src / tgt / sens_uk / sens_coface
-    run_t1.py               T1/T2/T8/T9-nhãn: A rolling-origin, B domain adaptation, C dữ liệu thật, D cure, E/F
-    run_t2_t3.py            T2 trên SBA 7(a) thật, T3 tranh chấp/trả một phần
-    run_t4.py  run_t6.py  run_t7.py  run_t9.py
-    run_all_t1.sh           chạy tuần tự (giới hạn luồng: máy dùng chung)
-    realism_audit.py        công cụ kiểm tra bộ hoá đơn (từ Phần 7)
-  tests/test_t0_t5.py       15 kiểm thử: hạn thuế theo ví dụ luật, MST, XML, cổng chất lượng
-  data/{raw,interim,processed,synthetic}/   outputs/{t1,t4,t6,t7,t9,t2_t3}/   docs/
+Python 3.12, PowerShell, tại thư mục dự án:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+$env:PYTHONUTF8='1'
+$env:AGENT1_THREADS='4'
+$env:OMP_NUM_THREADS='4'
+$env:OPENBLAS_NUM_THREADS='1'
+.\.venv\Scripts\python.exe -m pytest tests -q --junitxml=outputs/implementation/tests.xml
+.\.venv\Scripts\python.exe -m ruff check agent1 agent1_service scripts tests --select E9,F63,F7,F82
 ```
 
-## Chạy lại từ đầu
+`requirements.txt` khoá phụ thuộc trực tiếp; `requirements-lock.txt` ghi môi trường đầy đủ.
+Chronos/PyTorch là nhánh tuỳ chọn trong `requirements-forecast.txt`; kết quả nếu đã hoàn tất nằm ở `outputs/t6/chronos/`.
+Giảm số luồng khi máy dùng chung; các thí nghiệm lớn cần kiểm tra RAM và dung lượng trước khi chạy.
 
-```bash
-python -m venv .venv && .venv/Scripts/pip install numpy pandas scipy scikit-learn lightgbm xgboost catboost holidays rapidfuzz ruptures statsmodels pyarrow matplotlib requests openpyxl lxml pytest unidecode torch chronos-forecasting
-```
-```bash
-.venv/Scripts/python.exe scripts/crawl.py --only wdi_vn,oxcgrt,uk_ppr,online_retail_ii,berka,customer_invoices,sba_7a,bpi2019
-```
-```bash
-.venv/Scripts/python.exe scripts/build_worlds.py --calibrate --worlds src,tgt,sens_uk,sens_coface
-```
-```bash
-.venv/Scripts/python.exe -m pytest -q tests
-```
-```bash
-bash scripts/run_all_t1.sh
-```
-```bash
-.venv/Scripts/python.exe scripts/run_t6.py
+## Chạy thí nghiệm
+
+Đợt chạy lại 21/10/2026 sau sửa `expand`: dùng
+`.venv/Scripts/python.exe -u scripts/sprint1/fullweek_refresh.py` cho đúng
+chuỗi 18 job, chờ RAM >=3 GiB và ghi nhật ký trước/sau. Xem
+[thiết kế fullweek](docs/04_AI_Methods/13_fullweek_refresh_2026-10-21.md).
+Job `C-v2` dùng giao thức thật mới; `C` chỉ còn để kiểm toán v1.
+
+```powershell
+.\.venv\Scripts\python.exe scripts/run_plan.py --jobs tests,report --fail-fast
+.\.venv\Scripts\python.exe scripts/run_plan.py --jobs T8-reliability,T3-T1,DA-paired --fail-fast
+.\.venv\Scripts\python.exe scripts/run_plan.py --jobs SBA-macro,regime-cash,collection-policy,policy-comparisons --fail-fast
+.\.venv\Scripts\python.exe scripts/run_plan.py --jobs rules-business-cases,obligation-cases --fail-fast
 ```
 
-`AGENT1_THREADS` (mặc định 6) giới hạn số luồng LightGBM/XGBoost — trên máy dùng chung, để mặc định 20 luồng làm
-huấn luyện chậm hơn hàng chục lần do tranh chấp CPU.
+Danh sách job ở `scripts/run_plan.py`. Lệnh không có `--jobs` chạy cả chuỗi lớn,
+có thể mất nhiều giờ; tuning và scaling tốn đáng kể tài nguyên. Mỗi job ghi trạng thái,
+exit code, hash mã và nhật ký trong `outputs/implementation/`.
+Smoke E2E lưu riêng; kết quả đầy đủ nằm trong `outputs/e2e/e2e_metrics.csv`.
+Không dùng dữ liệu kiểm tra miền đích để chọn tham số hoặc chính sách onboarding.
+Các phép đo bổ sung và giới hạn ở [SBA/T7/chính sách/copula](docs/04_AI_Methods/12_new_ablations.md),
+[lịch nghĩa vụ từ hồ sơ](docs/04_AI_Methods/11_extended_obligations.md) và
+[đối chiếu BCTC niêm yết](docs/02_Data/09_vn_listed_spot_check.md).
+
+Khi cần dựng dữ liệu ban đầu, xem [data card](docs/DATA_CARD.md) và các script
+`crawl.py`, `build_worlds.py`, `build_multiworld.py`, `build_big.py`.
+Không tự chấp nhận điều khoản Kaggle hoặc điền danh tính SEC; hai nguồn này đang được tạm bỏ.
+Không ghi đè bộ dữ liệu hiện có bằng cấu hình khác.
+
+## Dịch vụ local
+
+Xem [hướng dẫn dịch vụ](agent1_service/README.md) cho nhập XML/CSV/Excel, token,
+dashboard, registry mô hình và giám sát. Lệnh khởi động sau khi đã có thế giới `tgt`:
+
+```powershell
+$env:AGENT1_DEMO_DIR='data/synthetic/tgt'
+.\.venv\Scripts\python.exe -m agent1_service.seed_demo
+.\.venv\Scripts\python.exe -m uvicorn agent1_service.main:app --host 127.0.0.1 --port 8000
+```
+
+Mở `http://127.0.0.1:8000`, dùng token trong `.state/api-token.txt`.
+Dữ liệu và registry được mã hoá trong SQLite; không chia sẻ token hoặc thư mục `.state`.
+Mặc định dự báo trả `409 NO_GO`; chế độ nghiên cứu local cần cấu hình rõ trong hướng dẫn dịch vụ.
+Docker cần daemon hoạt động. Kiểm tra local không thay UAT của người dùng hoặc pilot doanh nghiệp thật.
+
+## Cấu trúc và tái lập báo cáo
+
+| Thư mục | Nội dung |
+|---|---|
+| `agent1/data`, `agent1/synth` | Nạp dữ liệu, hợp đồng, máy phát và tình huống khó |
+| `agent1/models`, `agent1/eval` | Đặc trưng as-of, mô hình, chỉ số và bootstrap theo công ty |
+| `agent1/rules` | Quy tắc có phiên bản, nguồn và trạng thái xác minh |
+| `agent1_service`, `agent1/jobs` | API/UI local, lưu trữ, retrain và giám sát |
+| `scripts`, `tests` | Các giao thức thực nghiệm và kiểm thử |
+| `outputs` | CSV kết quả, metadata, hình và nhật ký |
+| `docs/05_Coding_Agent_Plan` | Kế hoạch gốc và sổ tiến độ sinh tự động |
+
+Sau khi các job kết thúc, chạy `python scripts/make_report.py` để sinh lại tài liệu từ CSV.
+Số ca kiểm thử đọc từ `outputs/implementation/test_summary.csv`; không giữ số đếm thủ công trong README.
+Không commit dữ liệu thô, parquet tổng hợp, cache hoặc bí mật. Kết quả tổng hợp chưa chứng minh hiệu quả trên DN thật.

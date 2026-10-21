@@ -1,0 +1,47 @@
+[
+  {
+    "issuer": "SMC", "industry": "steel_metals", "year": 2024,
+    "report": "vn_listed/SMC_FY2024_consolidated_EN.pdf",
+    "source_url": "https://smc.vn/wp-content/uploads/2025/05/BCTC-HOP-NHAT-SAU-KIEM-TOAN-2024-ENG.pdf",
+    "opening_short_trade_receivables": 1999235012077,
+    "closing_short_trade_receivables": 1773566850606,
+    "opening_short_trade_payables": 2009778690862,
+    "closing_short_trade_payables": 1420521537782,
+    "net_revenue": 8929794811796, "cost_of_sales": 8924084713782,
+    "pdf_pages_balance": "7;9", "pdf_page_income": 11,
+    "report_printed_pages": "5;7;9", "unit": "VND",
+    "transcription": "Read from rendered original PDF pages; no independent second reviewer",
+    "audit_note": "Auditor emphasis on Novaland receivables and material going-concern uncertainty, PDF page 6",
+    "expert_verified": false
+  },
+  {
+    "issuer": "TCM", "industry": "textile_clothing", "year": 2022,
+    "report": "vn_listed/TCM_FY2022_consolidated.pdf",
+    "source_url": "https://www.thanhcong.com.vn/wp-content/uploads/2023/03/20230324-TCM-BCTC-hop-nhat-nam-2022-da-kiem-toan_VN.pdf",
+    "opening_short_trade_receivables": 373421248475,
+    "closing_short_trade_receivables": 345356640265,
+    "opening_short_trade_payables": 553869214628,
+    "closing_short_trade_payables": 176425047928,
+    "net_revenue": 4337389009868, "cost_of_sales": 3627138944601,
+    "pdf_pages_balance": "7;9", "pdf_page_income": 10,
+    "report_printed_pages": "5;7;8", "unit": "VND",
+    "transcription": "Read from rendered original PDF pages; no independent second reviewer",
+    "audit_note": "Unmodified opinion read on PDF page 6; FY2024 annual report has audit opinion but not full statements",
+    "expert_verified": false
+  },
+  {
+    "issuer": "NTP", "industry": "plastic_rubber", "year": 2024,
+    "report": "vn_listed/NTP_FY2024_annual_report.pdf",
+    "source_url": "https://admin.nhuatienphong.vn/img/posts/1_f2284364f5cd0dd5e057ecb4e3e165f0BCTN%202024.pdf",
+    "opening_short_trade_receivables": 869315928192,
+    "closing_short_trade_receivables": 388318659135,
+    "opening_short_trade_payables": 313255093379,
+    "closing_short_trade_payables": 313880517607,
+    "net_revenue": 5656563814495, "cost_of_sales": 3886614549588,
+    "pdf_pages_balance": "59;60", "pdf_page_income": 60,
+    "report_printed_pages": "117;118;119", "unit": "VND",
+    "transcription": "Read from rendered original PDF pages; no independent second reviewer",
+    "audit_note": "Unmodified KPMG opinion read on PDF page 59, printed page 116, dated 2025-03-25",
+    "expert_verified": false
+  }
+]

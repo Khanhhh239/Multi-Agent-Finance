@@ -1,0 +1,48 @@
+{
+  "complete": true,
+  "signature": {
+    "code": {
+      "scripts/run_copula_hierarchy.py": "7bc33b600ea099b7da2be46b48f75c6fecf804ba938f6b8957798f0c225a75ed",
+      "agent1/eval/copula_selection.py": "a482fcaa5df2f9b0ea348d9e9233a99a059d4d728c0f539e8610cb4581f53267",
+      "scripts/run_collection_policy.py": "b54e35ad4507bea63c51e7cd620702103d3f3ddacb4be4e8a953847b8cc27a88",
+      "scripts/run_t6.py": "9ed0589dd4c9a470c1c948d7fa6041ad662326214f9dc042a1d1ccca6ad18377",
+      "agent1/models/features.py": "2bc9101fff3997bca519dc44c72eb4abaa913f9ec0a5621cb4d413b780bbcabc",
+      "agent1/models/t1.py": "7068a84309f9584c24da749cdddcbf4f8d58b8cff8fef0a7664c322c0d178a8b",
+      "agent1/models/t6_cash.py": "0cce3a9661d7a2862da417099d8c62bc9b28caaf72a97682db8576e23e36a93d",
+      "agent1/eval/collection_policy.py": "d8fa3dd0028091ccfb9f428bb272ce8eaa8719ac77eb7129255255577b77d327"
+    },
+    "data": {
+      "src\\invoices.parquet": "418ee64c251c045378ede37755bcb4ce43b204ed2afa98da8dcc1d5d1f90a200",
+      "src\\payments.parquet": "25edade48c1443d4223142e66c2623c81475b5487b9800003a18876864aaec99",
+      "src\\firms.parquet": "9af40aa928033c166cc6b5e8a9abc78b215b96255688063c43c426f65298bf6c",
+      "tgt\\invoices.parquet": "c6837975eb5d9ba344378fa73ef6ee9792813ac856f36efa2fdc13baa3046e80",
+      "tgt\\payments.parquet": "ab7451e51cc4a59d94c8ffd14af01d54c0af1936dcb64d78d3b5893704101cc3",
+      "tgt\\firms.parquet": "794d5c617f6cd50b4ff61fc29e0a89e80406071e3e5945473d09af8363fe35eb",
+      "tgt\\daily_cash.parquet": "c2e7b8d06f916d2be04b788b90c4dc4b0e461477e6c7c6b5d64fabfae380cb1c",
+      "tgt\\outflows.parquet": "cdddd2500184125f542fccdb8ee0723663c750fcc5f05d3fdc512f5ccdcc55bb"
+    },
+    "target_model": "ea0ff828ddf2c821e5854e93bb37438886236f221a60bb26014b617cee7d956c"
+  },
+  "nu": 4,
+  "n_paths": 512,
+  "calibration": "4 source firms, 13 weekly origins Jan-Mar2023, outcomes end Jun2023; source model trained labels <=2022-12-31",
+  "criterion": "paired IS80 improvement on target, CI by firm; no automatic adoption",
+  "target_used_for_selection": false,
+  "limitation": "oracle receipt histories, historical revenue quantiles, raw intervals without ACI, 20k-source/20k-target frozen T1; separate from T9 E2E; fixed grid has different search sizes",
+  "choices": {
+    "source_selected_one_factor": [
+      0.3,
+      0.0
+    ],
+    "source_selected_hierarchical": [
+      0.3,
+      0.25
+    ],
+    "fixed_one_factor": [
+      0.15,
+      0.0
+    ]
+  },
+  "n_source_train": 20000,
+  "metrics_sha256": "f0a2dfd563eb9ff5b7981f450720c94865b2de84e86bfd10f3b95b2e80786ec3"
+}

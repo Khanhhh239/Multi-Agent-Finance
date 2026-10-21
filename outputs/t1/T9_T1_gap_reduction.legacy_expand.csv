@@ -1,0 +1,3 @@
+horizon,bank_WAPE,ledger_WAPE,T9_WAPE,distance_reduction_fraction,reduction_ci_low,reduction_ci_high,bootstrap_n,bootstrap_valid,target_met,measurement_version
+w1-4,0.4226214147059686,0.730282780399694,0.4890993289893004,0.7839250497590584,0.4808736094306979,0.8678753874139432,300,300,True,T9-T1-observed-cash-equal-budget-v1
+w5-13,0.5586497218473301,0.8949381263957771,0.699435034091662,0.5813554367615734,-0.40290198883152817,0.8527746340023338,300,300,True,T9-T1-observed-cash-equal-budget-v1

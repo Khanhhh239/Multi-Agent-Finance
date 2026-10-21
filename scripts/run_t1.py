@@ -31,6 +31,7 @@ from agent1.data import real_loaders as R  # noqa: E402
 
 RES = OUT / "t1"
 RES.mkdir(parents=True, exist_ok=True)
+HAZARD_OVERRIDE = None
 
 
 def log(*a):
@@ -61,14 +62,27 @@ def snapshots(name, cutoffs, label_col="paid_date_true", visible_from=None, tag=
         return pd.read_parquet(p)
     inv, pay, prom = load_world(name)
     sb = SnapshotBuilder(inv, pay if use_payments else None, prom if use_promises else None, label_col=label_col)
-    df = sb.build(cutoffs, label_end=None, visible_from=visible_from, firms=firms)
-    df["amount_open"] = df["amount_gross"] * (1 - df["paid_frac_so_far"].fillna(0))
     keep = list(dict.fromkeys(["invoice_id", "firm_id", "customer_id", "cutoff", "issue_date", "due_date", "label_date",
                                "writeoff_date", "amount_gross", "amount_open", "is_bad_debt", "top1", "top2"] + FEATURES + BASELINE_QUANTILES))
-    df = df[[c for c in keep if c in df]]
-    f64 = df.select_dtypes("float64").columns
-    df[f64] = df[f64].astype("float32")
+    parts = []
+    # Bỏ cột thô và hạ float trước khi ghép; tránh giữ hàng trăm bản tên/MST/metadata.
+    for i, cutoff in enumerate(cutoffs):
+        part = sb.snapshot(cutoff, visible_from=visible_from, firms=firms)
+        if part.empty:
+            continue
+        part['amount_open'] = part.amount_gross * (1 - part.paid_frac_so_far.fillna(0))
+        part = part[[c for c in keep if c in part]].copy()
+        numeric = [c for c in part.select_dtypes('number').columns if c in FEATURES + BASELINE_QUANTILES
+                   or c in ['amount_gross', 'amount_open']]
+        part[numeric] = part[numeric].astype('float32')
+        parts.append(part)
+        if i % 40 == 0:
+            log('snapshots', name, label_col, i + 1, '/', len(cutoffs))
+    if not parts:
+        raise ValueError(f'{name}: không có snapshot ở các cutoff đã yêu cầu')
+    df = pd.concat(parts, ignore_index=True)
     df.to_parquet(p, index=False)
+    p.with_suffix('.json').write_text(json.dumps(signature,sort_keys=True,indent=2),encoding='utf-8')
     return df
 
 
@@ -84,6 +98,8 @@ def fully_observed(df, end):
 # ------------------------------------------------------------------------------------------------
 def fit_all(train, cal=None, include=("B1", "QLGBM", "AFT", "DH-LR", "DH-GBM"), hazard_params=None):
     models = {}
+    if HAZARD_OVERRIDE:
+        hazard_params={**HAZARD_OVERRIDE,**(hazard_params or {})}
     if "DH-GBM" in include:
         models["DH-GBM"] = t1.HazardGBM(hazard_params).fit(train)
     if "DH-LR" in include:
@@ -91,7 +107,11 @@ def fit_all(train, cal=None, include=("B1", "QLGBM", "AFT", "DH-LR", "DH-GBM"), 
     if "QLGBM" in include:
         models["QLGBM"] = t1.QuantileLGBM().fit(train)
     if "AFT" in include:
-        models["AFT"] = t1.AFT().fit(train)
+        if cal is not None and len(cal):
+            candidates=[t1.AFT(scale=scale).fit(train) for scale in (.2,.3,.5,.8)]
+            models['AFT']=min(candidates,key=lambda m:t1.evaluate_quantiles(cal.remaining,m.predict(cal))['pinball_avg'])
+        else:
+            models["AFT"] = t1.AFT().fit(train)
     return models
 
 
@@ -131,14 +151,19 @@ def score(preds, test, tag, extra=None, strata_rows=None):
         return np.maximum(np.array(t1.QS) * err, (np.array(t1.QS) - 1) * err).mean(1)
     base_loss = pinball_rows(preds[base_name]['Q']) if base_name in preds else None
     for n, d in preds.items():
-        r = {"setting": tag, "model": n, "n": len(test), 'seed': 7, 'measurement_version': 'asof-pchip-v2'}
+        r = {"setting": tag, "model": n, "n": len(test), 'seed': 7, 'measurement_version': 'asof-pchip-v2-fullweek'}
         r.update(t1.evaluate_quantiles(y, d["Q"]))
         cdf = d.get("cdf")
         if cdf is None:
-            cdf = t1.cdf_from_quantiles(d["Q"])
+            # Mốc điểm không được tự gán thêm 10% khối lượng vào đuôi.
+            if np.all(d['Q'][:, 0] == d['Q'][:, -1]):
+                cdf = (d['Q'][:, 1:2] <= 7 * np.arange(1, 14)).astype(float)
+            else:
+                cdf = t1.cdf_from_quantiles(d["Q"])
             P = np.diff(np.hstack([np.zeros((len(cdf), 1)), cdf]), axis=1)
         else:
             P = d["P"]
+        r['measurement_version'] = 'asof-pchip-v3-point-mass-fullweek'
         r["IBS_13w"], _ = M.ibs_weekly(y, cdf)
         r['IBS_13w_fair'] = r['IBS_13w']
         losses = pinball_rows(d['Q'])
@@ -200,6 +225,17 @@ def exp_A(origins=("2023-07-03", "2024-07-01")):
         hq = hist_quantiles(inv, O)
         P_te = predict_all(models, te, hq)
         P_cal = predict_all(models, cal, hq)
+        # Dự báo nguồn đã khoá để đo G3/P4, tránh phải huấn luyện lại chỉ để lấy khoảng.
+        evidence=RES/'fullweek_A'/str(O.date());evidence.mkdir(parents=True,exist_ok=True)
+        for name,frame,predictions in [('calibration',cal,P_cal),('test',te,P_te)]:
+            saved=frame[['invoice_id','firm_id','cutoff','days_to_due','remaining']].copy()
+            saved[['Q10','Q50','Q90']]=predictions['DH-GBM']['Q']
+            saved.to_parquet(evidence/f'{name}.parquet',index=False)
+        models['DH-GBM'].booster.save_model(str(evidence/'model.txt'))
+        (evidence/'protocol.json').write_text(json.dumps(dict(origin=str(O.date()),
+            training_label_end=str(cal_lo.date()),calibration_cutoff_end=str(cal_hi.date()),
+            test_used_for_selection=False,expand_full_week_only=t1.FULL_WEEK_ONLY,
+            source_code_sha256=hashlib.sha256(Path(t1.__file__).read_bytes()).hexdigest()),indent=2),encoding='utf-8')
         for n in list(P_te):
             if n in ("DH-GBM", "QLGBM", "AFT", "B1d-cust-quantiles", "ENS DH-GBM+QLGBM"):
                 qhat = t1.cqr_fit_asym(cal["remaining"].values, P_cal[n]["Q"])
@@ -207,6 +243,7 @@ def exp_A(origins=("2023-07-03", "2024-07-01")):
                 P_te[n + "+CQR"] = {"Q": t1.cqr_apply_asym(P_te[n]["Q"], qhat)}
         sc = score(P_te, te, f"A_src_origin_{O.date()}", strata_rows=strata_rows)
         res.append(sc)
+        pd.concat(res).to_csv(RES / 'A_checkpoint.csv', index=False)
         log(sc[["model", "MAE_p50", "pinball_avg", "cov80", "IBS_13w", "WAPE_collect_w1_4", "C_index"]].round(4).to_string())
         if O == pd.Timestamp(origins[-1]):
             imp = pd.Series(models["DH-GBM"].booster.feature_importance("gain"),
@@ -245,11 +282,14 @@ def exp_B(O="2024-07-01", months=(0, 3, 6, 12, 24)):
         vis = O - pd.DateOffset(months=Mm) if Mm > 0 else O
         test_cut = pd.date_range(O, O + pd.Timedelta(days=357), freq="7D")
         te = censor(snapshots("tgt", test_cut, visible_from=vis, tag=f"test_M{Mm}"), "2025-12-31")
+        te = te[te.issue_date >= O].copy()  # Cùng cohort kiểm tra cho mọi mức lịch sử.
         hq = hist_quantiles(inv_t, O, visible_from=vis)
         preds = {}
         preds["B1-cust-median"] = {"Q": np.column_stack([t1.b1_predict(te)] * 3)}
-        if Mm > 0:
-            preds["B1d-cust-quantiles"] = {"Q": t1.b1_dist(te, hq)}
+        preds["B1d-cust-quantiles"] = {"Q": t1.b1_dist(te, hq)}
+        eb = np.clip(te.days_to_due.to_numpy() + te.c_delay_eb.fillna(0).to_numpy(), .5, t1.CAP)
+        preds['Customer-EB'] = {'Q': np.column_stack([eb] * 3)}
+        train_seconds, n_target_rows = {}, 0
         H = m_src.hazards(te)
         P, S = t1.pmf_from_hazard(H)
         preds["SRC-only DH-GBM (zero-shot)"] = {"Q": t1.quantiles_from_hazard(H), "P": P, "cdf": 1 - S,
@@ -258,42 +298,71 @@ def exp_B(O="2024-07-01", months=(0, 3, 6, 12, 24)):
         if Mm >= 3:
             tr_cut = pd.date_range(vis + pd.Timedelta(days=28), O - pd.Timedelta(days=7), freq="7D")
             Tt = censor(snapshots("tgt", tr_cut, visible_from=vis, tag=f"adapt_M{Mm}"), O)
+            cal_lo, cal_hi = O - pd.Timedelta(days=183), O - pd.Timedelta(days=120)
+            calw = censor(Tt[Tt.cutoff.between(cal_lo, cal_hi)], O)
+            # Có hiệu chỉnh thì tách cả cutoff lẫn ngày chốt nhãn khỏi cửa sổ fit.
+            if len(calw) > 200 and (Tt.cutoff < cal_lo).sum() > 200:
+                Tt = censor(Tt[Tt.cutoff < cal_lo], cal_lo)
+            else:
+                calw = calw.iloc[:0]
+            n_target_rows = len(Tt)
+            if Tt.empty:
+                calw = calw.iloc[:0]
             log(f"B M={Mm}: target adapt rows={len(Tt)}")
             variants = {}
+            start = time.perf_counter()
             variants["TGT-only DH-GBM"] = t1.HazardGBM(dict(min_data_in_leaf=50, num_leaves=31), rounds=300).fit(Tt)
+            train_seconds['TGT-only DH-GBM'] = time.perf_counter() - start
             pooled = pd.concat([Ssrc, Tt], ignore_index=True)
             w = np.r_[np.ones(len(Ssrc)), np.full(len(Tt), max(1.0, 0.3 * len(Ssrc) / max(len(Tt), 1)))]
+            start = time.perf_counter()
             variants["POOLED (tgt-upweighted)"] = t1.HazardGBM().fit(pooled, weight=w)
+            train_seconds['POOLED (tgt-upweighted)'] = time.perf_counter() - start
             ft = t1.HazardGBM(dict(learning_rate=0.02), rounds=150)
+            start = time.perf_counter()
             ft.fit(Tt, init_model=m_src.booster)
+            train_seconds['FINE-TUNE src->tgt'] = time.perf_counter() - start
             variants["FINE-TUNE src->tgt"] = ft
+            start = time.perf_counter()
             wsrc = domain_weights(Ssrc, Tt)
             variants["IW-POOLED (density-ratio)"] = t1.HazardGBM().fit(
                 pooled, weight=np.r_[wsrc, np.full(len(Tt), max(1.0, 0.3 * len(Ssrc) / max(len(Tt), 1)))])
+            train_seconds['IW-POOLED (density-ratio)'] = time.perf_counter() - start
             for n, m in variants.items():
                 H = m.hazards(te)
                 P, S = t1.pmf_from_hazard(H)
                 preds[n] = {"Q": t1.quantiles_from_hazard(H), "P": P, "cdf": 1 - S, "exp": t1.expected_days_from_hazard(H)}
             # conformal hiệu chỉnh trên cửa sổ đích gần nhất đã quan sát đủ
-            calw = Tt[Tt["cutoff"] <= O - pd.Timedelta(days=int(t1.CAP))]
             if len(calw) > 200:
                 calw = censor(calw, O)
                 for n in ("FINE-TUNE src->tgt", "POOLED (tgt-upweighted)"):
                     Hc = variants[n].hazards(calw)
-                    qhat = t1.cqr_fit(np.minimum(calw["time_obs"].values, t1.CAP), t1.quantiles_from_hazard(Hc))
-                    preds[n + "+CQR"] = dict(preds[n], Q=t1.cqr_apply(preds[n]["Q"], qhat))
-        sc = score(preds, te, f"B_tgt_M{Mm}", extra={"months_history": Mm})
+                    qhat = t1.cqr_fit_asym(calw['remaining'].values, t1.quantiles_from_hazard(Hc))
+                    preds[n + "+CQR"] = {'Q': t1.cqr_apply_asym(preds[n]['Q'], qhat)}
+            preds['S5 ENS fine-tune+B1d'] = {'Q': (preds['FINE-TUNE src->tgt']['Q'] + preds['B1d-cust-quantiles']['Q']) / 2}
+        sc = score(preds, te, f"B_tgt_M{Mm}", extra={"months_history": Mm, 'n_target_rows': n_target_rows})
+        sc['strategy'] = sc['model']
+        sc['train_seconds'] = sc.model.map(train_seconds).fillna(0.)
         res.append(sc)
         log(sc[["model", "MAE_p50", "pinball_avg", "cov80", "IBS_13w", "WAPE_collect_w1_4"]].round(4).to_string())
     out = pd.concat(res)
     out.to_csv(RES / "B_domain_adaptation_tgt.csv", index=False)
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(figsize=(10, 6))
+    for name, g in out.groupby('strategy'):
+        ax.plot(g.months_history, g.pinball_avg, marker='o', label=name)
+    ax.set(xlabel='Months of history', ylabel='Mean pinball (days)')
+    ax.legend(fontsize=7); fig.tight_layout(); fig.savefig(RES / 'B_learning_curve.png', dpi=160); plt.close(fig)
     return out
 
 
 def exp_C():
+    """LEGACY v1: chia dữ liệu cũ để kiểm toán; dùng job C-v2 cho nghiệm thu."""
     res = []
     for name, loader, O, test_days, start in (
-            ("real_customer_invoices", R.customer_invoices, "2019-12-01", 63, "2019-03-01"),
+            ("real_customer_invoices", R.customer_invoices, "2019-10-01", 63, "2019-03-01"),
             ("real_bpi2019", R.bpi2019, "2018-09-03", 56, "2018-03-05")):
         inv = loader()
         inv = inv.copy()
@@ -301,33 +370,45 @@ def exp_C():
             inv["due_date"] = pd.NaT
         inv["writeoff_date"] = pd.NaT
         inv["is_bad_debt"] = False
-        O = pd.Timestamp(O)
+        data_end = inv['paid_date_true'].max()
+        O = min(pd.Timestamp(O), data_end-pd.Timedelta(days=int(t1.CAP)+test_days))
         cut = pd.date_range(start, O + pd.Timedelta(days=test_days), freq="7D")
-        p = PROCESSED / f"snap_{name}.parquet"
+        feature_hash=hashlib.sha256((Path(__file__).resolve().parents[1]/'agent1/models/features.py').read_bytes()).hexdigest()[:12]
+        p = PROCESSED / f"snap_{name}_{feature_hash}.parquet"
         if p.exists():
             S = pd.read_parquet(p)
         else:
             sb = SnapshotBuilder(inv, None, None, label_col="paid_date_true")
             S = sb.build(cut)
             S = S[[c for c in dict.fromkeys(["invoice_id", "firm_id", "customer_id", "cutoff", "issue_date", "due_date",
-                                             "label_date", "writeoff_date", "amount_gross", "top1", "top2"] + FEATURES)
+                                             "label_date", "writeoff_date", "amount_gross", "top1", "top2"] + FEATURES + BASELINE_QUANTILES)
                    if c in S]]
             S.to_parquet(p, index=False)
         f64 = S.select_dtypes("float64").columns
         S[f64] = S[f64].astype("float32")
         data_end = inv["paid_date_true"].max()
-        tr = censor(S[S["cutoff"] < O], O)
+        cal_lo,cal_hi=O-pd.Timedelta(days=183),O-pd.Timedelta(days=120)
+        cal=censor(S[S.cutoff.between(cal_lo,cal_hi)],O)
+        if len(cal)>100 and (S.cutoff<cal_lo).sum()>100:
+            tr=censor(S[S.cutoff<cal_lo],cal_lo)
+        else:
+            tr=censor(S[S.cutoff<O],O);cal=None
         if len(tr) > 400_000:   # BPI: mỗi 2 tuần + lấy mẫu để vừa RAM
             tr = tr[tr["cutoff"].dt.isocalendar().week.astype(int) % 2 == 0]
             tr = tr.sample(min(len(tr), 400_000), random_state=0)
         te = censor(S[S["cutoff"] >= O], data_end)
-        te = te[te["cutoff"] <= data_end - pd.Timedelta(days=int(t1.CAP))] if (te["cutoff"] <= data_end - pd.Timedelta(days=int(t1.CAP))).any() else te
+        te = te[te["cutoff"] <= data_end - pd.Timedelta(days=int(t1.CAP))]
+        if te.empty:
+            raise ValueError(f'{name}: không có cutoff test đủ 120 ngày quan sát; không chấm nhãn kiểm duyệt như nợ xấu')
         te = te.assign(amount_open=te["amount_gross"])
         log(f"C {name}: train={len(tr)} test={len(te)} data_end={data_end.date()}")
-        models = fit_all(tr, hazard_params=dict(min_data_in_leaf=100))
+        models = fit_all(tr, cal=cal, hazard_params=dict(min_data_in_leaf=100))
         hq = hist_quantiles(inv.assign(due_date=inv["due_date"].fillna(inv["issue_date"])), O)
         preds = predict_all(models, te, hq)
         sc = score(preds, te, f"C_{name}")
+        sc['aft_scale_selected_on_cal']=models['AFT'].scale
+        sc['origin']=str(O.date());sc['observation_end']=str(data_end.date())
+        sc['n_calibration_rows']=len(cal) if cal is not None else 0
         res.append(sc)
         log(sc[["model", "MAE_p50", "pinball_avg", "cov80", "IBS_13w", "C_index"]].round(4).to_string())
     out = pd.concat(res)
@@ -375,11 +456,12 @@ def exp_D(O="2024-07-01"):
     return out
 
 
-def exp_EF(O="2024-07-01"):
+def exp_EF(O="2024-07-01", world='src', with_reconciliation=True):
     """E: T8 lời hứa trả (có/không đặc trưng lời hứa).  F: T9 học từ ngày ghi sổ vs ngày ngân hàng."""
     O = pd.Timestamp(O)
-    cut = pd.date_range("2019-07-01", "2025-09-29", freq="7D")
-    S = snapshots("src", cut, tag="weekly")
+    all_cut = pd.date_range('2019-07-01', O + pd.Timedelta(days=175), freq='7D')
+    cut = [T for T in all_cut if T >= O or T.isocalendar().week % 2 == 0]
+    S = snapshots(world, cut, tag="weekly")
     tr = censor(S[S["cutoff"] < O], O)
     tr = tr[tr["cutoff"].dt.isocalendar().week.astype(int) % 2 == 0]
     te = censor(S[(S["cutoff"] >= O) & (S["cutoff"] < O + pd.Timedelta(days=182))], "2025-12-31")
@@ -387,6 +469,7 @@ def exp_EF(O="2024-07-01"):
     no_prom = [f for f in FEATURES if f not in ("has_promise", "days_to_promised", "promise_overdue", "c_promise_rel",
                                                 "c_promise_n")]
     for n, feats in (("DH-GBM with promises (T8)", FEATURES), ("DH-GBM without promises", no_prom)):
+        log('EF fit',world,n,len(tr))
         m = t1.HazardGBM(feats=feats).fit(tr)
         H = m.hazards(te)
         P, Sv = t1.pmf_from_hazard(H)
@@ -396,11 +479,20 @@ def exp_EF(O="2024-07-01"):
         sc["MAE_p50_promised_only"] = float(np.mean(np.abs(np.minimum(te.loc[sub, "remaining"], t1.CAP) -
                                                          t1.quantiles_from_hazard(H[sub.values])[:, 1])))
         res.append(sc)
+        if world != 'src':
+            pd.concat(res).to_csv(RES/f'E_checkpoint_{world}.csv',index=False)
+    if not with_reconciliation:
+        out=pd.concat(res)
+        out.to_csv(RES/('E_t8.csv' if world=='src' else f'EF_t8_t9_{world}.csv'),index=False)
+        return out
+    del S, m, H, P, Sv
     # F: nhãn từ sổ cái (ngày ghi sổ theo lô) -> đánh giá trên ngày tiền về thật
-    SL = snapshots("src", cut, label_col="ledger_clear_date", tag="weekly")
+    SL = snapshots(world, cut, label_col="ledger_clear_date", tag="weekly")
     trL = censor(SL[SL["cutoff"] < O], O)
     trL = trL[trL["cutoff"].dt.isocalendar().week.astype(int) % 2 == 0]
+    log('F fit ledger',world,len(trL))
     mL = t1.HazardGBM().fit(trL)
+    log('F fit bank',world,len(tr))
     mB = t1.HazardGBM().fit(tr)
     for n, m in (("DH-GBM trained on LEDGER dates", mL), ("DH-GBM trained on BANK dates (T9)", mB)):
         H = m.hazards(te)
@@ -409,14 +501,19 @@ def exp_EF(O="2024-07-01"):
                               "exp": t1.expected_days_from_hazard(H)}}, te, "F_T9_label_source"))
     out = pd.concat(res)
     log(out[["setting", "model", "MAE_p50", "IBS_13w", "WAPE_collect_w1_4", "cov80"]].round(4).to_string())
-    out.to_csv(RES / "EF_t8_t9.csv", index=False)
+    out.to_csv(RES / ('EF_t8_t9.csv' if world=='src' else f'EF_t8_t9_{world}.csv'), index=False)
     return out
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--exp", default="A,B,C,D,E")
+    ap.add_argument('--params',default=None)
+    ap.add_argument('--world',default='src')
     a = ap.parse_args()
+    if a.params:
+        config=json.loads(Path(a.params).read_text(encoding='utf-8'))
+        HAZARD_OVERRIDE=config.get('params',config)
     ex = set(a.exp.split(","))
     if "A" in ex:
         exp_A()
@@ -427,4 +524,4 @@ if __name__ == "__main__":
     if "D" in ex:
         exp_D()
     if "E" in ex or "F" in ex:
-        exp_EF()
+        exp_EF(world=a.world,with_reconciliation=('F' in ex))

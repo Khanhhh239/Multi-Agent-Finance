@@ -1,0 +1,4 @@
+target,origin,ci_low,ci_high,bootstrap_n,n_firms,improvement_pct,improvement_ci_low,improvement_ci_high,threshold_pct,status,candidate_adopted,test_used_for_selection,measurement_version
+tgt,2024-07-01,5.055805451527588,6.290520656110839,300,14,1.238117863016521,-0.6916831429205521,3.3712062704880323,5.0,rejected,False,False,DR-400-matched-invoices-source-only-v1
+sens_uk,2024-07-01,4.863909142100617,5.657563777748069,300,12,1.442226594857692,-0.5304848042703958,3.2806110067314975,5.0,rejected,False,False,DR-400-matched-invoices-source-only-v1
+sens_coface,2024-07-01,5.460209421588161,6.909454511206975,300,12,2.1893010113045337,0.03449681074931781,4.945835915780777,5.0,rejected,False,False,DR-400-matched-invoices-source-only-v1

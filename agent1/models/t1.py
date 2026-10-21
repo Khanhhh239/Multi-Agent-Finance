@@ -14,6 +14,8 @@ Mô hình:
 """
 from __future__ import annotations
 
+import os
+
 import numpy as np
 
 from ..threads import NT
@@ -44,6 +46,8 @@ def _week_feats(df: pd.DataFrame, k: int) -> dict:
     T = df["cutoff"].values.astype("datetime64[D]")
     s = (T - _DAY0).astype(int) + 7 * (k - 1) + 1
     e = s + 7
+    if len(s) and (s.min() < 0 or e.max() >= len(_CUMBD)):
+        raise ValueError('Cutoff nằm ngoài lịch T1 đã cấu hình 2015–2029')
     out = {"k": np.full(len(df), k, np.int16)}
     dtd = df["days_to_due"].values.astype(float)
     out["dtd_k"] = dtd - 7 * (k - 1)
@@ -66,6 +70,9 @@ def _week_feats(df: pd.DataFrame, k: int) -> dict:
 
 
 WEEK_FEATS = ["k", "dtd_k", "due_in_k", "bd_in_k", "tet_in_k", "payrun_in_k", "promised_in_k"]
+# True: sửa thiên lệch khai triển (xem expand). False: tái lập kết quả trước 20/10/2026.
+FULL_WEEK_ONLY = os.environ.get("AGENT1_EXPAND_LEGACY", "0") != "1"
+Z_CLIP = 5.0  # HazardLR: kẹp đặc trưng chuẩn hoá để không ngoại suy tuyến tính ngoài miền huấn luyện
 
 
 def expand(df: pd.DataFrame, train=True, feats=FEATURES):
@@ -75,17 +82,26 @@ def expand(df: pd.DataFrame, train=True, feats=FEATURES):
     rem = df["remaining"].values if "remaining" in df else np.full(len(df), np.inf)
     tobs = df["time_obs"].values if "time_obs" in df else np.full(len(df), np.inf)
     ev = df["event"].values if "event" in df else np.zeros(len(df))
+    # Cửa sổ quan sát hành chính (label_end - T) biết cho MỌI hàng, kể cả hàng có sự kiện.
+    obs = df["obs_window"].values.astype(float) if "obs_window" in df else None
     for k in range(1, K + 1):
         if train:
             at_risk = tobs > 7 * (k - 1)
             evk = (ev == 1) & (np.ceil(rem / 7) == k)
-            known = evk | (tobs >= 7 * k)
+            if FULL_WEEK_ONLY and obs is not None:
+                # Sprint 1 (20/10/2026): chỉ dùng tuần k khi CẢ tuần đã quan sát được. Bản cũ giữ hàng có sự kiện
+                # trong tuần bị cắt dở nhưng bỏ hàng không có sự kiện -> thổi phồng hazard khi kiểm duyệt nặng.
+                known = obs >= 7 * k
+            else:
+                known = evk | (tobs >= 7 * k)
             m = at_risk & known
         else:
             m = np.ones(len(df), bool)
         if not m.any():
             continue
         wf = _week_feats(df.loc[m] if not m.all() else df, k)
+        if 'days_to_promised' not in feats:
+            wf['promised_in_k'] = np.full(int(m.sum()), np.nan)
         W = np.column_stack([wf[c] for c in WEEK_FEATS]).astype("float32")
         parts.append(np.hstack([X0[m], W]))
         idx.append(np.nonzero(m)[0])
@@ -128,6 +144,53 @@ class HazardGBM:
         H[ix, np.repeat(np.arange(K), len(df))] = h
         return np.clip(H, 1e-5, 1 - 1e-5)
 
+    def fit_interval(self, df, left, right, em_steps=2, weight=None):
+        """EM cho ngày trả trong (L,R]; R=inf là kiểm duyệt tại L.
+
+        Mỗi tuần dùng hai hàng 0/1 với trọng số kỳ vọng để LightGBM không
+        biến nhãn xác suất thành nhãn cứng. Phần ngoài 13 tuần giữ khối sống sót.
+        """
+        left, right = np.asarray(left, float), np.asarray(right, float)
+        if left.shape != (len(df),) or right.shape != left.shape or (left < 0).any() or (right <= left).any():
+            raise ValueError('Khoảng phải thoả 0 <= L < R, cùng số hàng snapshot')
+        if not np.isfinite(left).all() or np.isnan(right).any():
+            raise ValueError('L phải hữu hạn; R được phép inf')
+        initial = df.copy()
+        observed = np.isfinite(right)
+        initial['remaining'] = right
+        initial['event'] = observed.astype(int)
+        initial['time_obs'] = np.where(observed, right, left)
+        self.fit(initial, weight=weight)
+        X, _, _ = expand(df, False, self.feats)
+        user_weight = np.ones(len(df)) if weight is None else np.asarray(weight, float)
+        for _ in range(em_steps):
+            H = self.hazards(df)
+            P, S = pmf_from_hazard(H)
+            lo, hi = 7 * np.arange(K), 7 * np.arange(1, K + 1)
+            overlap = np.maximum(0., np.minimum(right[:, None], hi) - np.maximum(left[:, None], lo)) / 7
+            masses = P * overlap
+            tail_h = np.clip(H[:, -4:].mean(1), .02, .6)
+            tail_start = np.maximum(left, 91)
+            tail_mass = S[:, -1] * (np.power(1-tail_h, (tail_start-91)/7) -
+                np.power(1-tail_h, (right-91).clip(0)/7))
+            tail_mass = np.where(right > 91, tail_mass, 0.)
+            total = masses.sum(1) + tail_mass
+            posterior = masses / np.maximum(total[:, None], 1e-12)
+            tail_post = tail_mass / np.maximum(total, 1e-12)
+            risk = np.flip(np.cumsum(np.flip(posterior, axis=1), axis=1), axis=1) + tail_post[:, None]
+            # Với nhãn kiểm duyệt, chỉ tuần quan sát trọn vẹn được đưa vào loss.
+            risk[~observed] = (hi[None, :] <= left[~observed, None]).astype(float)
+            posterior[~observed] = 0.
+            positive = (posterior * user_weight[:, None]).T.ravel()
+            negative = (np.maximum(risk - posterior, 0.) * user_weight[:, None]).T.ravel()
+            all_weights = np.r_[negative, positive]
+            keep = all_weights > 1e-12
+            XX = np.concatenate([X, X])[keep]
+            yy = np.r_[np.zeros(len(X)), np.ones(len(X))][keep]
+            self.booster = lgb.train(self.p, lgb.Dataset(XX, yy, weight=all_weights[keep],
+                feature_name=self.feats + WEEK_FEATS), num_boost_round=self.rounds)
+        return self
+
 
 class HazardLR:
     name = "DH-LR"
@@ -155,7 +218,7 @@ class HazardLR:
         X = np.sign(X) * np.log1p(np.abs(X))
         if fit:
             self.mu, self.sd = X.mean(0), X.std(0) + 1e-6
-        X = (X - self.mu) / self.sd
+        X = np.clip((X - self.mu) / self.sd, -Z_CLIP, Z_CLIP)
         kcol = len(self.feats)  # cột k -> one-hot
         oh = np.eye(K)[np.clip(np.round(X[:, kcol] * self.sd[kcol] + self.mu[kcol]).astype(int), 0, K - 1)] \
             if False else np.zeros((len(X), 0))
@@ -336,21 +399,37 @@ def cqr_apply_asym(Q, qhat):
 
 def cdf_from_quantiles(Q, alphas=QS, grid=None):
     """Nội suy PCHIP đơn điệu; gộp phân vị trùng để xử lý khối lượng điểm."""
-    from scipy.interpolate import PchipInterpolator
     Q, alphas = np.asarray(Q, float), np.asarray(alphas, float)
     if Q.ndim != 2 or Q.shape[1] != len(alphas) or not np.isfinite(Q).all():
         raise ValueError('Kích thước hoặc giá trị phân vị không hợp lệ')
     if np.any(np.diff(alphas) <= 0) or np.any((alphas <= 0) | (alphas >= 1)):
         raise ValueError('alphas phải tăng trong (0,1)')
     grid = 7 * np.arange(1, K + 1) if grid is None else np.asarray(grid, float)
+    if not len(Q):
+        return np.empty((0, len(grid)))
+    rows = np.maximum(np.sort(Q, axis=1), .5)
+    x = np.column_stack([np.zeros(len(Q)), rows, np.maximum(CAP * 1.5, rows[:, -1] + 1)])
+    p = np.r_[0., alphas, .999]
+    # Làm dốc gần đứng ở phân vị trùng; CDF tại điểm trùng lấy mức cao nhất.
+    for j in range(x.shape[1] - 2, 0, -1):
+        x[:, j] = np.minimum(x[:, j], x[:, j + 1] - 1e-7)
+    h = np.diff(x, axis=1)
+    slopes = np.diff(p)[None, :] / h
+    derivatives = np.zeros_like(x)
+    w1, w2 = 2 * h[:, 1:] + h[:, :-1], h[:, 1:] + 2 * h[:, :-1]
+    derivatives[:, 1:-1] = (w1 + w2) / (w1 / slopes[:, :-1] + w2 / slopes[:, 1:])
+    for dest, a, b in [(0, 0, 1), (-1, -1, -2)]:
+        d = ((2 * h[:, a] + h[:, b]) * slopes[:, a] - h[:, a] * slopes[:, b]) / (h[:, a] + h[:, b])
+        derivatives[:, dest] = np.maximum(d, 0.)
     out = np.empty((len(Q), len(grid)))
-    for i, row in enumerate(np.sort(Q, axis=1)):
-        x = np.r_[0., np.maximum(row, .5), max(CAP * 1.5, row[-1] + 1)]
-        p = np.r_[0., alphas, .999]
-        # Điểm trùng đại diện CDF liên tục phải tại phân vị cao nhất.
-        keep = np.r_[np.diff(x) > 0, True]
-        f = PchipInterpolator(x[keep], p[keep], extrapolate=False)
-        out[i] = np.where(grid < 0, 0., np.where(grid > x[-1], 1., f(np.clip(grid, 0, x[-1]))))
+    idx = np.arange(len(Q))
+    for j, t in enumerate(grid):
+        segment = np.clip((x <= t).sum(1) - 1, 0, x.shape[1] - 2)
+        width = h[idx, segment]
+        s = np.clip((t - x[idx, segment]) / width, 0, 1)
+        out[:, j] = ((2*s**3 - 3*s**2 + 1) * p[segment] + (s**3 - 2*s**2 + s) * width * derivatives[idx, segment]
+                     + (-2*s**3 + 3*s**2) * p[segment+1] + (s**3 - s**2) * width * derivatives[idx, segment+1])
+        out[:, j] = np.where(t < 0, 0., np.where(t > x[:, -1], 1., out[:, j]))
     return np.clip(out, 0, 1)
 
 

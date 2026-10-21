@@ -193,7 +193,8 @@ def berka_loans() -> pd.DataFrame:
 SBA_COLS = ["GrossApproval", "SBAGuaranteedApproval", "ApprovalDate", "ApprovalFY", "InitialInterestRate",
             "FixedorVariableInterestInd", "TermInMonths", "NaicsCode", "ProjectState", "BusinessType", "BusinessAge",
             "LoanStatus", "PaidInFullDate", "ChargeOffDate", "GrossChargeOffAmount", "RevolverStatus", "JobsSupported",
-            "CollateralInd", "ProcessingMethod", "SoldSecMrktInd", "FranchiseCode", "BankState", "BorrState"]
+            "CollateralInd", "ProcessingMethod", "SoldSecMrktInd", "FranchiseCode", "BankState", "BorrState",
+            'BorrName','BorrStreet','BorrCity','BorrZip']
 
 
 def label_sba(df, *, horizon_years=3, exempt='drop', asof='2026-06-30'):
@@ -226,13 +227,23 @@ def label_sba(df, *, horizon_years=3, exempt='drop', asof='2026-06-30'):
 def sba_7a(force=False, horizon_years=3, exempt='drop', asof='2026-06-30') -> pd.DataFrame:
     """Khoản vay DN nhỏ Mỹ: nhãn = bị xoá nợ (charge-off) trong `horizon_years` năm kể từ phê duyệt.
     Nhãn theo chân trời cố định -> không bị thiên lệch do khoản vay còn đang chạy, nếu cohort đủ già."""
-    p = _cache(f"real_sba7a_v2_h{horizon_years}_{exempt}_{asof}")
+    p = _cache(f"real_sba7a_v3_h{horizon_years}_{exempt}_{asof}")
     if p.exists() and not force:
         return pd.read_parquet(p)
     parts = []
     for f in ("FOIA_7a_FY2010_FY2019.csv", "FOIA_7a_FY2020_Present.csv"):
         parts.append(pd.read_csv(RAW / "sba" / f, usecols=lambda c: c in SBA_COLS, low_memory=False))
     df = pd.concat(parts, ignore_index=True)
+    from hashlib import sha256
+    identity_columns=[c for c in ['BorrName','BorrStreet','BorrCity','BorrZip','BorrState'] if c in df]
+    if 'BorrName' in identity_columns:
+        identity=df[identity_columns].fillna('').astype(str).apply(lambda s:s.str.upper().str.replace(r'\s+',' ',regex=True).str.strip()).agg('|'.join,axis=1)
+        df['borrower_cluster']=identity.map(lambda s:sha256(s.encode()).hexdigest())
+        df['cluster_definition']='borrower_name_address_proxy'
+    else:
+        df['borrower_cluster']='loan-'+df.index.astype(str)
+        df['cluster_definition']='loan_only_no_company_id'
+    df=df.drop(columns=[c for c in identity_columns if c!='BorrState'])
     df = label_sba(df, horizon_years=horizon_years, exempt=exempt, asof=asof)
     df["naics2"] = df["NaicsCode"].astype("Int64").astype(str).str[:2]
     df["guarantee_ratio"] = df["SBAGuaranteedApproval"] / df["GrossApproval"]

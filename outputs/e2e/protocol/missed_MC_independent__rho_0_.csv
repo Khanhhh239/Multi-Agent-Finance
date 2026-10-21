@@ -1,0 +1,3 @@
+model,firm_id,cutoff,y4,y13,p4,p13,threshold
+MC-independent (rho=0),F004,2024-09-02,1.0,1.0,0.005,0.018,0.02
+MC-independent (rho=0),F009,2024-12-30,0.0,1.0,0.0,0.0,0.02

@@ -1,0 +1,8 @@
+{
+  "complete": true,
+  "n_cases": 18,
+  "all_passed": true,
+  "scope": "configured events and contract cash schedules; no tax amount or refund processing-time inference",
+  "integration": "standalone schedule plus weekly cash arrays; does not alter existing research forecasts",
+  "expert_verified": false
+}

@@ -13,6 +13,7 @@ from agent1.paths import SYNTH, OUT  # noqa: E402
 from agent1.models import t4_revenue as T4  # noqa: E402
 from agent1.data import real_loaders as R  # noqa: E402
 from agent1.eval.metrics import coverage  # noqa: E402
+from agent1.eval.cluster import mean_ci
 
 RES = OUT / "t4"
 RES.mkdir(parents=True, exist_ok=True)
@@ -92,9 +93,12 @@ def evaluate(test_series, model, vn, tag, use_chronos=True, cal=None):
     scale = np.array([np.mean(np.abs(np.diff(test_series[sid].values[:int(t) + 1]))) for sid, (t, h, s) in zip(ids, meta)])
     for n, Q in pred.items():
         sp = T4.spl(yt, Q, scale)
+        ci=mean_ci(sp,ids)
         rows.append({"setting": tag, "model": n, "SPL": float(sp.mean()), "SPL_h1_4": float(sp[meta[:, 1] <= 4].mean()),
                      "SPL_h5_13": float(sp[meta[:, 1] > 4].mean()), "cov80": coverage(yt, Q[:, 0], Q[:, 2]),
-                     "WAPE_p50": float(np.abs(yt - Q[:, 1]).sum() / np.abs(yt).sum()), "n": len(yt)})
+                     "WAPE_p50": float(np.abs(yt - Q[:, 1]).sum() / np.abs(yt).sum()), "n": len(yt),
+                     'SPL_ci_low':ci['ci_low'],'SPL_ci_high':ci['ci_high'],'bootstrap_n':300,'seed':2,
+                     'measurement_version':'revenue-source-calibration-v2','cluster_unit':'company' if vn else 'series'})
     return pd.DataFrame(rows)
 
 

@@ -1,0 +1,9 @@
+{
+  "complete": true,
+  "eligible": false,
+  "default_enabled": false,
+  "criterion": "no dataset worse >1%; >=2% gain on at least one real dataset",
+  "test_used_for_hyperparameter_selection": false,
+  "code_sha256": "0eced8971322afd539e131f1f317a154ccba6831e5c7b9e07b37e50844b9ec2a",
+  "protected_real_v2_sha256": "def7cfd1ba2e0240c926834ce131c518b5db14d1b1a19d8d57e46566ebc93ec0"
+}

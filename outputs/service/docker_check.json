@@ -1,0 +1,13 @@
+{
+  "checked_at_utc": "2026-10-20T00:45:08.5741161+00:00",
+  "command": [
+    "docker",
+    "info",
+    "--format",
+    "{{.ServerVersion}}"
+  ],
+  "exit_code": 1,
+  "status": "unavailable",
+  "reason": "dockerDesktopLinuxEngine named pipe not found",
+  "container_started": false
+}

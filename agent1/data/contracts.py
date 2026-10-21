@@ -25,6 +25,9 @@ FORBIDDEN_FEATURES = frozenset({
     'is_bad_debt', 'writeoff_date', 'paid_amount', 'days_late_true', 'dispute', 'partial',
     'liquidity_at_due', 'stress_at_due', 'ontime_logit', 'late_med', 'late_sig', 'reliability',
     'default_week', 'default_date', 'break_day', 'break_shift', 'pd_frailty', 'kept',
+    'weight','early_p','ultra_p','payrun','beta_F','rho','idio_sd','dispute_p','partial_p',
+    'batch_pay','memo_no_p','tet_settle_p','monthly_consolidate','ticket','fifo_alloc',
+    'true_customer_id','verbal_extension_days','is_anchor','retention_due_i','discount_eligible',
 })
 
 
@@ -88,7 +91,12 @@ def validate_world(directory, *, raise_on_error=True):
         check('invoices.customer_firm', (j['firm_id'] == j['firm_id_customer']).all())
     if ready('payments', 'invoices'):
         pay = tables['payments']
-        amt = pay.groupby('invoice_id')['amount'].sum()
+        normalized_amount = pay['amount'] - pay['fx_adjustment'] if 'fx_adjustment' in pay else pay['amount']
+        amt = normalized_amount.groupby(pay['invoice_id']).sum()
+        if 'fx_adjustment' in pay:
+            check('payments.fx_normalized_nonnegative', (normalized_amount >= 0).all())
+            currencies = tables['invoices'].set_index('invoice_id')['original_currency']
+            check('payments.fx_only_foreign', ((pay.fx_adjustment == 0) | pay.invoice_id.map(currencies).eq('USD')).all())
         gross = tables['invoices'].set_index('invoice_id')['amount_gross'].reindex(amt.index)
         check('payments.not_overpaid', (amt <= gross + 1.0).all())
         issue = tables['invoices'].set_index('invoice_id')['issue_date']

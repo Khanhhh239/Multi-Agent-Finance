@@ -1,0 +1,8 @@
+{
+  "free_disk": 96025194496,
+  "required_disk": 2273741824,
+  "free_ram": 3947868160,
+  "required_ram": 1258291200,
+  "can_start": true,
+  "estimate": "Conservative planning estimate; not a measured performance result"
+}

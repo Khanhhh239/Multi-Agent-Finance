@@ -1,0 +1,25 @@
+main,challenger,horizon,metric,main_loss,challenger_loss,main_improvement_pct,main_improvement_ci_low,main_improvement_ci_high,n_firms,bootstrap_n,main_beats_challenger_with_CI,test_used_for_selection,measurement_version
+MC-copula-t + ACI,ARIMA (declared fallback),w1-4,IS80,12.189819533553298,13.070458097292283,6.737625852007599,-14.965134422131248,25.95143410116603,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ARIMA (declared fallback),w1-4,pinball,0.766744567436842,0.8416400672162314,8.898756451449627,-7.534777994573699,23.52310917288041,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ARIMA (declared fallback),w1-4,MAE,2.1625034979103925,2.4357487838389322,11.218122646370928,0.22468604650840884,22.578695695507587,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ARIMA (declared fallback),w5-13,IS80,20.8352763606396,24.917208474446245,16.381980019924203,-6.368030252776574,34.31605087343752,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ARIMA (declared fallback),w5-13,pinball,1.3467049734210286,1.6045694667282302,16.070634438345373,-3.833563159438662,33.069238225598305,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ARIMA (declared fallback),w5-13,MAE,3.913174568398251,4.643975105480133,15.736530030479699,-2.22632955782519,32.56553135919804,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,B0 due spreadsheet,w1-4,IS80,12.189819533553298,234.87507583988565,94.81008383287842,92.37378272718728,96.18493648279431,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,B0 due spreadsheet,w1-4,pinball,0.766744567436842,11.743753791994282,93.47104357756945,90.1054216518743,95.22870176839062,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,B0 due spreadsheet,w1-4,MAE,2.1625034979103925,23.487507583988563,90.7929630669515,85.56869950124835,93.40490110834939,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,B0 due spreadsheet,w5-13,IS80,20.8352763606396,244.60815998551382,91.48218262143278,87.13575392427185,93.82153820970923,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,B0 due spreadsheet,w5-13,pinball,1.3467049734210286,12.23040799927569,88.98887941023077,83.60591694663724,91.63243581903339,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,B0 due spreadsheet,w5-13,MAE,3.913174568398251,24.46081599855138,84.00227298782674,76.42769383245134,87.52136599236835,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,Chronos-Bolt Tiny zero-shot,w1-4,IS80,12.189819533553298,11.771601128877657,-3.552774173172434,-29.09522689704535,17.84958391286982,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,Chronos-Bolt Tiny zero-shot,w1-4,pinball,0.766744567436842,0.789967890126026,2.9397805884843033,-15.799860589451304,19.289158468403688,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,Chronos-Bolt Tiny zero-shot,w1-4,MAE,2.1625034979103925,2.385487114980624,9.347508761205054,-2.984705911723077,21.45559787348164,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,Chronos-Bolt Tiny zero-shot,w5-13,IS80,20.8352763606396,18.69666654167986,-11.438455160935815,-39.40845676514626,12.532772730378031,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,Chronos-Bolt Tiny zero-shot,w5-13,pinball,1.3467049734210286,1.2893649379263725,-4.447153308424335,-29.3964892070444,14.19922504774509,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,Chronos-Bolt Tiny zero-shot,w5-13,MAE,3.913174568398251,3.996856319222264,2.0936892432574723,-21.481829919167588,19.09617851762985,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ETS (declared fallback),w1-4,IS80,12.189819533553298,12.782219349324702,4.634561491879746,-21.1030674507977,25.93430400681067,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ETS (declared fallback),w1-4,pinball,0.766744567436842,0.832601609348976,7.909790369445546,-10.213648218275207,23.86114058942598,14,300,False,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ETS (declared fallback),w1-4,MAE,2.1625034979103925,2.4391657862289144,11.342496269852044,0.5799540106337748,21.53122687025738,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ETS (declared fallback),w5-13,IS80,20.8352763606396,27.261029778180475,23.57120574617471,3.953650533908236,40.05179562998789,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ETS (declared fallback),w5-13,pinball,1.3467049734210286,1.7676680404654255,23.81459965376518,9.186950781184107,37.424309536364746,14,300,True,False,cash-paired-additional-baselines-v1
+MC-copula-t + ACI,ETS (declared fallback),w5-13,MAE,3.913174568398251,5.1538022871564575,24.07208599852414,11.660595445539903,34.18548677423632,14,300,True,False,cash-paired-additional-baselines-v1

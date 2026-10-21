@@ -1,0 +1,10 @@
+q,metric,mean_P1,mean_P2,reduction_P2_vs_P1,reduction_ci_low,reduction_ci_high,n_firms,bootstrap_n,decision,evidence_type,test_used_for_selection
+0.3,shortfall_events,0.9285714285714286,1.0714285714285714,-0.14285714285714285,-0.35714285714285715,0.0,14,300,not_demonstrated,policy_simulation_not_causal,False
+0.3,shortfall_weeks,5.785714285714286,6.071428571428571,-0.2857142857142857,-0.7517857142857143,0.0,14,300,not_demonstrated,policy_simulation_not_causal,False
+0.3,DSO,56.67484075954007,57.11756973013604,-0.4427289705959634,-1.2253877209671058,0.1085030271929406,14,300,not_demonstrated,policy_simulation_not_causal,False
+0.5,shortfall_events,0.8571428571428571,0.8571428571428571,0.0,0.0,0.0,14,300,not_demonstrated,policy_simulation_not_causal,False
+0.5,shortfall_weeks,5.5,5.571428571428571,-0.07142857142857142,-0.21428571428571427,0.0,14,300,not_demonstrated,policy_simulation_not_causal,False
+0.5,DSO,53.14587109997491,53.42462597531654,-0.27875487534162324,-0.7935455547340524,0.1569023615560567,14,300,not_demonstrated,policy_simulation_not_causal,False
+0.7,shortfall_events,0.7857142857142857,0.7857142857142857,0.0,0.0,0.0,14,300,not_demonstrated,policy_simulation_not_causal,False
+0.7,shortfall_weeks,5.357142857142857,5.428571428571429,-0.07142857142857142,-0.21428571428571427,0.0,14,300,not_demonstrated,policy_simulation_not_causal,False
+0.7,DSO,50.16897364925092,50.44500073844159,-0.27602708919067037,-0.6520045477864496,0.10830545878617333,14,300,not_demonstrated,policy_simulation_not_causal,False

@@ -13,6 +13,9 @@ from __future__ import annotations
 
 import itertools
 import re
+import json
+import hashlib
+from pathlib import Path
 
 import numpy as np
 
@@ -44,10 +47,38 @@ FEATS = ["name_score", "memo_name_score", "n_no_hit", "amt_exact_single", "amt_s
          "cust_open_n", "days_from_oldest_due", "is_rank1_name", "cust_hist_txn_share"]
 
 
+class CalibrationCurve:
+    def __init__(self,x,y):
+        self.x,self.y=np.asarray(x),np.asarray(y)
+        self.X_thresholds_,self.y_thresholds_=self.x,self.y
+    def predict(self,p):return np.interp(p,self.x,self.y)
+
+
 class Reconciler:
     def __init__(self, top_k=4):
         self.top_k = top_k
         self.model = None
+
+    def save(self,directory,provenance):
+        directory=Path(directory);directory.mkdir(parents=True,exist_ok=True)
+        path=directory/'model.txt';self.model.save_model(str(path))
+        calibrator=getattr(self,'calibrator',None)
+        knots=(dict(x=calibrator.X_thresholds_.tolist(),y=calibrator.y_thresholds_.tolist()) if calibrator is not None else None)
+        metadata=dict(features=FEATS,model_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+            code_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),calibration=knots,provenance=provenance)
+        (directory/'metadata.json').write_text(json.dumps(metadata,indent=2),encoding='utf-8')
+
+    @classmethod
+    def load(cls,directory):
+        directory=Path(directory);metadata=json.loads((directory/'metadata.json').read_text(encoding='utf-8'))
+        path=directory/'model.txt'
+        if metadata['features']!=FEATS or metadata['code_sha256']!=hashlib.sha256(Path(__file__).read_bytes()).hexdigest() or metadata['model_sha256']!=hashlib.sha256(path.read_bytes()).hexdigest():
+            raise ValueError('Mô hình T9 không khớp hash mã/đặc trưng/tệp')
+        result=cls();result.model=lgb.Booster(model_file=str(path))
+        if metadata['calibration']:
+            result.calibrator=CalibrationCurve(**metadata['calibration'])
+        result.provenance=metadata['provenance']
+        return result
 
     # ------------------------------------------------------------------ ứng viên + đặc trưng
     def candidates(self, bank: pd.DataFrame, inv: pd.DataFrame, cust: pd.DataFrame) -> pd.DataFrame:
@@ -61,17 +92,21 @@ class Reconciler:
             fi_no = fi.assign(no=fi["invoice_no"].astype(int))
             by_cust = {k: g for k, g in fi_no.groupby("customer_id")}
             no_rows = {number: g[['customer_id', 'issue_date']].values for number, g in fi_no.groupby('no')}
+            first_issue=fi_no.groupby('customer_id').issue_date.min().reindex(ids).to_numpy()
             share = (b["true_customer_id"].value_counts(normalize=True) if False else None)
             for t in b.itertuples(index=False):
+                known=np.flatnonzero(first_issue<=np.datetime64(t.value_date))
+                active_keys=[keys[j] for j in known]
+                active_ids=[ids[j] for j in known]
                 cp = norm_name(t.counterparty)
                 memo_n = norm_name(t.memo)
                 nums = memo_numbers(t.memo)
                 cand = {}
                 if cp:
-                    for _, sc, j in process.extract(cp, keys, scorer=fuzz.token_set_ratio, limit=self.top_k):
-                        cand[ids[j]] = max(cand.get(ids[j], 0), sc)
-                for _, sc, j in process.extract(memo_n, keys, scorer=fuzz.partial_ratio, limit=2):
-                    cand.setdefault(ids[j], 0)
+                    for _, sc, j in process.extract(cp, active_keys, scorer=fuzz.token_set_ratio, limit=self.top_k):
+                        cand[active_ids[j]] = max(cand.get(active_ids[j], 0), sc)
+                for _, sc, j in process.extract(memo_n, active_keys, scorer=fuzz.partial_ratio, limit=2):
+                    cand.setdefault(active_ids[j], 0)
                 for n in nums:
                     for cid, issued in no_rows.get(n, []):
                         if issued <= t.value_date:
@@ -98,7 +133,9 @@ class Reconciler:
         o = op[known_clear.isna() | (known_clear >= date)].head(12)
         if o.empty:
             o = op.tail(6)
-        a = o["amount_gross"].values - o["credit_note"].values
+        adjustment = (o['credit_note'].where(o['credit_note_date'] <= date, 0.)
+                      if 'credit_note_date' in o and 'credit_note' in o else 0.)
+        a = (o['amount_gross'] - adjustment).to_numpy()
         exact = int(np.any(np.abs(a - amt) <= TOL))
         best = np.min(np.abs(a - amt)) if len(a) else amt
         sub = 0

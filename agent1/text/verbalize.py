@@ -3,7 +3,7 @@ import math
 import numbers
 import re
 
-NUMBER = re.compile(r'(?<!\w)[+-]?\d+(?:[.,]\d+)*(?:[eE][+-]?\d+)?%?')
+NUMBER = re.compile(r'[+-]?\d+(?:[.,]\d+)*(?:[eE][+-]?\d+)?%?')
 
 
 def _allowed_tokens(value):

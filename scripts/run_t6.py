@@ -21,11 +21,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from agent1.paths import SYNTH, OUT  # noqa: E402
 from agent1.threads import NT  # noqa: E402
 from agent1.models import t1, t4_revenue as T4  # noqa: E402
-from agent1.models.t6_cash import simulate, collection_kernel, ACI, K  # noqa: E402
+from agent1.models.t6_cash import simulate, collection_kernel, ACI, K, conditional_payment_pmf  # noqa: E402
 from agent1.models.features import FEATURES  # noqa: E402
 from agent1.eval import metrics as M  # noqa: E402
+from agent1.eval.cluster import mean_ci
+from agent1.eval.alerts import choose_threshold, event_metrics
 import run_t1 as R1  # noqa: E402
-from run_t4 import synth_series  # noqa: E402
 
 RES = OUT / "t6"
 RES.mkdir(parents=True, exist_ok=True)
@@ -50,16 +51,31 @@ def weekly(series_daily, T, k_weeks=K):
 
 def firm_context(world, fid, inv, out, daily):
     o = out[out["firm_id"] == fid]
-    known = o[o["category"].isin(KNOWN)].groupby("date")["amount"].sum()
+    fixed_categories={'payroll_net','social_insurance','rent','loan_service','license_fee'}
+    known = o[o["category"].isin(fixed_categories)].groupby("date")["amount"].sum()
     sup = o[o["category"] == "supplier"].groupby("date")["amount"].sum()
     capex = o[o["category"] == "capex"]
     d = daily[daily["firm_id"] == fid].set_index("date")
     net = d["inflow_ar"] + d["inflow_other"] - d["outflow"] - d['owner_draw']
-    return dict(known=known, sup=sup, capex=capex, net=net, bal=d["balance"], inv=inv[inv["firm_id"] == fid], outflows=o)
+    scheduled=o[o.category.isin(KNOWN-fixed_categories)]
+    return dict(known=known, sup=sup, capex=capex, net=net, bal=d["balance"], inv=inv[inv["firm_id"] == fid], outflows=o,scheduled=scheduled,owner_draw=d.owner_draw)
 
 
 def known_outflows(ctx, T):
     ko = weekly(ctx["known"], T)
+    scheduled=ctx.get('scheduled')
+    if scheduled is not None:
+        for category,g in scheduled.groupby('category'):
+            history=g[g.date<=T]
+            estimate=float(history.amount.tail(4).mean()) if len(history) else 0.
+            future=g[g.date>T].copy()
+            if category in {'vat','cit_provisional'}:
+                # Nghĩa vụ của kỳ đã đóng được biết từ đầu tháng kê khai.
+                known_at=future.date.dt.to_period('M').dt.start_time
+                future['forecast_amount']=np.where(known_at<=T,future.amount,estimate)
+            else:
+                future['forecast_amount']=estimate
+            ko+=weekly(future.groupby('date').forecast_amount.sum(),T)
     sup_hist = ctx["sup"][(ctx["sup"].index < T) & (ctx["sup"].index >= T - pd.Timedelta(days=91))].sum() / 13
     # Bộ cũ thiếu incurred_date: không thể lấy chi NCC tương lai làm thông tin đã biết.
     sup = np.full(K, sup_hist)
@@ -73,6 +89,25 @@ def known_outflows(ctx, T):
 def truth_path(ctx, T):
     B0 = float(ctx["bal"][ctx["bal"].index <= T].iloc[-1])
     return B0, B0 + np.cumsum(weekly(ctx["net"], T))
+
+
+def draw_policy(ctx,T):
+    """Học chính sách rút vốn từ quý đã qua; không đọc buffer_days/cash_cap_days tiềm ẩn."""
+    history=ctx['bal'][(ctx['bal'].index<=T)&(ctx['bal'].index>T-pd.Timedelta(days=365))]
+    dates=history.index[history.index.is_quarter_end]
+    if not len(dates):return {}
+    observed_draw=ctx['owner_draw'].reindex(dates).fillna(0.)
+    positive=observed_draw>0
+    if not positive.any():return {}
+    target=float(history.reindex(dates[positive]).median())
+    pre=history.reindex(dates)+observed_draw
+    upper=float(pre[positive].min())
+    lower=max(target,float(pre[~positive].max())) if (~positive).any() else target
+    cap=max(target,(lower+upper)/2)
+    future=pd.date_range(T+pd.Timedelta(days=1),T+pd.Timedelta(days=91))
+    quarter_ends=future[future.is_quarter_end]
+    mask=np.array([((quarter_ends>T+pd.Timedelta(days=7*k))&(quarter_ends<=T+pd.Timedelta(days=7*(k+1)))).any() for k in range(K)])
+    return dict(draw_cap=cap,draw_target=target,draw_weeks=mask)
 
 
 def direct_features(ctx, snap_f, T, ko):
@@ -103,36 +138,72 @@ def rev_quantiles(model, ser, T):
     return model.predict(X) * meta[:, 2:3]
 
 
-def main():
+def cash_revenue_series(inv, world):
+    data = inv.assign(week=inv.issue_date.dt.to_period('W-MON').dt.start_time)
+    result = {}
+    for fid, g in data.groupby('firm_id'):
+        s = g.groupby('week').amount_gross.sum()
+        result[f'{world}:{fid}'] = s.reindex(pd.date_range(s.index.min(), s.index.max(), freq='7D'), fill_value=0.)
+    return result
+
+
+def main(*,target_world='tgt',evaluation_world=None,result_dir=None,source_budget=None,n_weeks=52,label_mode='oracle_bank'):
+    global RES
+    if result_dir is not None:
+        RES=Path(result_dir);RES.mkdir(parents=True,exist_ok=True)
+    evaluation_world=evaluation_world or target_world
+    version=f'cash-e2e-{label_mode}-v1' if target_world!=evaluation_world else 'cash-asof-outflows-owner-tcopula-v5-true-labels'
+    version+='-fullweek'
     inv_s = pd.read_parquet(SYNTH / "src" / "invoices.parquet")
-    inv_t = pd.read_parquet(SYNTH / "tgt" / "invoices.parquet")
-    out_s, out_t = (pd.read_parquet(SYNTH / w / "outflows.parquet") for w in ("src", "tgt"))
-    day_s, day_t = (pd.read_parquet(SYNTH / w / "daily_cash.parquet") for w in ("src", "tgt"))
+    inv_t = pd.read_parquet(SYNTH / target_world / "invoices.parquet")
+    out_s, out_t = (pd.read_parquet(SYNTH / w / "outflows.parquet") for w in ("src", target_world))
+    day_s, day_t = (pd.read_parquet(SYNTH / w / "daily_cash.parquet") for w in ("src", evaluation_world))
     # ---------------- T1: src -> fine-tune tgt (12 tháng)
-    Ssrc = R1.snapshots("src", pd.date_range("2019-07-01", "2025-09-29", freq="7D"), tag="weekly")
+    source_cut=pd.date_range('2019-07-01','2025-09-29',freq='7D')
+    if source_budget:
+        source_cut=sorted(set(pd.date_range('2019-07-01',O-pd.Timedelta(days=7),freq='14D')) |
+            set(pd.date_range(O-pd.Timedelta(days=183),O-pd.Timedelta(days=120),freq='7D')) |
+            set(pd.date_range(O-pd.Timedelta(days=210),O-pd.Timedelta(days=98),freq='14D')) |
+            set(pd.date_range('2020-01-06',O-pd.Timedelta(days=98),freq='28D')))
+    Ssrc = R1.snapshots('src',source_cut,tag='cash_budget' if source_budget else 'weekly')
     tr = R1.censor(Ssrc[Ssrc["cutoff"].isin(pd.date_range("2019-07-01", O - pd.Timedelta(days=7), freq="14D"))], O)
+    if source_budget:tr=tr.sample(min(source_budget,len(tr)),random_state=7)
     log("T1 src fit", len(tr))
     m_src = t1.HazardGBM().fit(tr)
-    Tt = R1.censor(R1.snapshots("tgt", pd.date_range(VIS + pd.Timedelta(days=28), O - pd.Timedelta(days=7), freq="7D"),
+    Tt = R1.censor(R1.snapshots(target_world, pd.date_range(VIS + pd.Timedelta(days=28), O - pd.Timedelta(days=7), freq="7D"),
                                 visible_from=VIS, tag="adapt_M12"), O)
     m_ft = t1.HazardGBM(dict(learning_rate=0.02), rounds=150)
     m_ft.fit(Tt, init_model=m_src.booster)
-    test_cut = pd.date_range(O, O + pd.Timedelta(days=357), freq="7D")
-    Ste = R1.snapshots("tgt", test_cut, visible_from=VIS, tag="test_M12")
+    test_cut = pd.date_range(O, periods=n_weeks, freq='7D')
+    Ste = R1.snapshots(target_world, test_cut, visible_from=VIS, tag="test_M12")
     Ste = Ste.assign(amount_open=Ste["amount_open"].fillna(Ste["amount_gross"]))
     log("predict hazards", len(Ste))
     H = m_ft.hazards(Ste)
     P_all, _ = t1.pmf_from_hazard(H)
+    cure_split=O-pd.Timedelta(days=183)
+    cure_train=R1.censor(Ssrc[Ssrc.cutoff<cure_split],cure_split)
+    cure_cal=R1.censor(Ssrc[Ssrc.cutoff.between(cure_split,O-pd.Timedelta(days=120))],O)
+    if source_budget:
+        cure_train=cure_train.sample(min(source_budget,len(cure_train)),random_state=11)
+        cure_cal=cure_cal.sample(min(10000,len(cure_cal)),random_state=11)
+    log('T2 cure source fit/calibrate',len(cure_train),len(cure_cal))
+    cure=t1.CureGBM().fit(cure_train,calibration=cure_cal)
+    bad_all=cure.predict_proba_calibrated(Ste)
+    conditional_all,cure_conflicts=conditional_payment_pmf(P_all,bad_all)
+    pd.DataFrame([dict(n=len(Ste),mean_p_bad=float(bad_all.mean()),
+                      incompatible_cure_share=float(cure_conflicts.mean()),seed=11)]).to_csv(RES/'cure_diagnostics.csv',index=False)
     b1w = np.clip(np.ceil(t1.b1_predict(Ste) / 7).astype(int) - 1, 0, K)      # tuần trả theo B1 (K = ngoài)
     P_b1 = np.zeros_like(P_all)
     inside = b1w < K
     P_b1[np.nonzero(inside)[0], b1w[inside]] = 1.0
     # ---------------- T4
-    ss = synth_series("src")
+    ss = cash_revenue_series(inv_s, 'src')
     from run_t4 import build
-    Xr, Yr, _, _ = build(ss, True, lambda n: list(range(20, n - 13 - 13 - 70)))
+    rho_cal_start = O - pd.Timedelta(days=7 * 30)
+    ss_train = {key: values[values.index + pd.Timedelta(days=6) < rho_cal_start] for key, values in ss.items()}
+    Xr, Yr, _, _ = build(ss_train, True, lambda n: list(range(20, n - K)))
     m4 = T4.GlobalQuantileLGBM().fit(Xr, Yr)
-    st = synth_series("tgt")
+    st = cash_revenue_series(inv_t, 'tgt')
     # ---------------- Direct LGBM-Q trên src
     log("direct model on src")
     Sdir = Ssrc[Ssrc["cutoff"].isin(pd.date_range("2020-01-06", O - pd.Timedelta(days=7 * 14), freq="28D"))]
@@ -158,9 +229,12 @@ def main():
     tune_cut = pd.date_range(O - pd.Timedelta(days=7 * 30), O - pd.Timedelta(days=7 * 14), freq="14D")
     Stune = Ssrc[Ssrc["cutoff"].isin(tune_cut)]
     Stune = Stune.assign(amount_open=Stune["amount_open"].fillna(Stune["amount_gross"]))
-    Ht = m_src.hazards(Stune)
+    tr_tune = R1.censor(tr[tr.cutoff < rho_cal_start], rho_cal_start)
+    m_tune = t1.HazardGBM().fit(tr_tune)
+    Ht = m_tune.hazards(Stune)
     Pt, _ = t1.pmf_from_hazard(Ht)
     score_rho = {r: [] for r in rho_grid}
+    alerts_cal = []
     for fid in inv_s["firm_id"].unique()[:16]:
         ctx = firm_context("src", fid, inv_s, out_s, day_s)
         for T in tune_cut:
@@ -170,10 +244,12 @@ def main():
             rq = rev_quantiles(m4, ss[f"src:{fid}"], T)
             ker = collection_kernel(ctx["inv"][ctx["inv"]["issue_date"] < T], T)
             for r in rho_grid:
-                bal, _ = simulate(Stune[msk], Pt[msk], B0, ko, rq, ker, 0.0, [], n=400, rho=r, seed=1)
+                bal, _ = simulate(Stune[msk], Pt[msk], B0, ko, rq, ker, 0.0, [], n=400, rho=r, seed=1,**draw_policy(ctx,T))
                 lo, hi = np.quantile(bal, .1, axis=0), np.quantile(bal, .9, axis=0)
                 sc = max(ko.mean(), 1.0)
                 score_rho[r].append(M.interval_score(tp / sc, lo / sc, hi / sc))
+                alerts_cal.append(dict(rho=r, y4=float(tp[:4].min() < 0), y13=float(tp.min() < 0),
+                                       p4=float((bal[:, :4].min(1) < 0).mean()), p13=float((bal.min(1) < 0).mean())))
     rho = min(score_rho, key=lambda r: np.mean(score_rho[r]))
     log("rho scores", {r: round(float(np.mean(v)), 3) for r, v in score_rho.items()}, "-> rho", rho)
     # ---------------- vòng test trên tgt
@@ -197,10 +273,13 @@ def main():
             cap_sz = cap_h["amount"].values
             sc = max(ko.mean(), 1.0)
             res = {}
-            bal, _ = simulate(snap, P_all[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=rho, seed=int(T.value % 1e6))
+            policy=draw_policy(ctx,T)
+            bal, _ = simulate(snap, P_all[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=rho, seed=int(T.value % 1e6),**policy)
             res["MC-copula-t (T1+T4+T5)"] = bal
-            res["MC-independent (rho=0)"] = simulate(snap, P_all[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=0.0, seed=2)[0]
-            res["MC with B1 point dates"] = simulate(snap, P_b1[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=0.0, seed=3)[0]
+            res['MC-copula-t + calibrated cure'] = simulate(snap,conditional_all[msk],B0,ko,rq,ker,cap_rate,cap_sz,
+                n=1000,rho=rho,seed=int(T.value%1e6),p_bad=bad_all[msk],**policy)[0]
+            res["MC-independent (rho=0)"] = simulate(snap, P_all[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=0.0, seed=2,**policy)[0]
+            res["MC with B1 point dates"] = simulate(snap, P_b1[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=0.0, seed=3,**policy)[0]
             Xq, scale_d = direct_features(ctx, snap, T, ko)
             Qd = np.sort(np.column_stack([md[q].predict(Xq) for q in (0.1, 0.5, 0.9)]), axis=1) * scale_d + B0
             # naive: chi biết trước + thu trung bình 13 tuần; phần dư từ lịch sử nhìn thấy của chính công ty
@@ -245,20 +324,36 @@ def main():
                 shortfall_rows.append(dict(model=n_, firm_id=fid, cutoff=T, y4=ev4, y13=ev13, p4=max(pk[:4]),
                                            p13=max(pk)))
             if demo is None and T >= O + pd.Timedelta(days=7 * 20) and (np.quantile(bal, .1, axis=0) < 0).any():
-                demo = (fid, T, snap, P_all[msk], H[msk], B0, ko, rq, ker, cap_rate, cap_sz, bal, tp)
+                demo = (fid, T, snap, P_all[msk], H[msk], B0, ko, rq, ker, cap_rate, cap_sz, bal, tp,policy)
     df = pd.DataFrame(rows)
     df.to_parquet(RES / "t6_predictions.parquet", index=False)
     summ = []
     for (n_, grp), g in df.assign(grp=np.where(df["k"] <= 4, "w1-4", "w5-13")).groupby(["model", "grp"]):
-        summ.append(dict(model=n_, horizon=grp, cov80=M.coverage(g["y"], g["lo"], g["hi"]),
+        row = dict(model=n_, horizon=grp, cov80=M.coverage(g["y"], g["lo"], g["hi"]),
                          IS80=M.interval_score(g["y"], g["lo"], g["hi"]),
                          pinball=np.mean([M.pinball(g["y"], g[c], a) for c, a in (("lo", .1), ("med", .5), ("hi", .9))]),
-                         MAE_p50=float(np.mean(np.abs(g["y"] - g["med"])))))
+                         MAE_p50=float(np.mean(np.abs(g["y"] - g["med"]))), seed=7,
+                         measurement_version=version)
+        ci = mean_ci(((g.y >= g.lo) & (g.y <= g.hi)).astype(float), g.firm_id)
+        row.update(cov80_ci_low=ci['ci_low'], cov80_ci_high=ci['ci_high'], bootstrap_n=ci['bootstrap_n'])
+        summ.append(row)
     sf = pd.DataFrame(shortfall_rows)
+    sf.to_csv(RES / 't6_shortfall_predictions.csv', index=False)
+    cal_alerts = pd.DataFrame(alerts_cal)
+    cal_alerts = cal_alerts[cal_alerts.rho == rho]
+    policy_rows = []
+    for cost_ratio in (2, 5, 10):
+        for horizon in (4, 13):
+            tau, cost = choose_threshold(cal_alerts[f'y{horizon}'], cal_alerts[f'p{horizon}'], cost_ratio)
+            for name, g in sf.groupby('model'):
+                policy_rows.append(dict(model=name, cost_ratio=cost_ratio, horizon=horizon, threshold=tau,
+                    calibration_cost=cost, threshold_selected_on='source_only',
+                    **event_metrics(g, day_t, threshold=tau, probability=f'p{horizon}', horizon_days=7*horizon)))
+    pd.DataFrame(policy_rows).to_csv(RES / 'alert_policy.csv', index=False)
     from sklearn.metrics import roc_auc_score
     srows = []
     for n_, g in sf.groupby("model"):
-        r = dict(model=n_)
+        r = dict(model=n_, measurement_version=version, seed=7)
         for h in ("4", "13"):
             y, p = g[f"y{h}"].values, g[f"p{h}"].values
             r[f"shortfall_rate_{h}w"] = y.mean()
@@ -271,57 +366,38 @@ def main():
     S2.to_csv(RES / "t6_shortfall_metrics.csv", index=False)
     json.dump({"rho_selected": rho, "rho_scores": {str(k): float(np.mean(v)) for k, v in score_rho.items()}},
               open(RES / "t6_rho.json", "w"), indent=2)
+    (RES/'run_metadata.json').write_text(json.dumps(dict(
+        origin=str(O.date()),visible_from=str(VIS.date()),n_paths=1000,nu=4,rho=rho,
+        bootstrap_seed=7,source_t1_seed=7,cure_seed=11,
+        simulation_seed_policy={'copula':'cutoff_timestamp_ns_mod_1000000','independent':2,'point_dates':3},
+        target_used_for_hyperparameter_selection=False,labels=label_mode,
+        target_world=target_world,evaluation_world=evaluation_world,source_budget=source_budget,n_weeks=n_weeks,
+        measurement_version=version),indent=2),encoding='utf-8')
     if demo is not None:
-        t10_demo(demo, m_ft)
+        t10_demo(demo, m_ft, rho)
 
 
-def t10_demo(demo, model):
+def t10_demo(demo, model, rho=.2):
     """T10: dải xác suất, danh sách HĐ nên đòi trước kèm lý do SHAP, kịch bản 'nếu như'."""
-    fid, T, snap, P, H, B0, ko, rq, ker, cr, cs, bal, tp = demo
-    band = pd.DataFrame({"week": np.arange(1, K + 1), "P10": np.quantile(bal, .1, 0), "P50": np.quantile(bal, .5, 0),
-                         "P90": np.quantile(bal, .9, 0), "P_shortfall_by_week": (np.minimum.accumulate(bal, 1) < 0).mean(0),
-                         "actual_no_action": tp})
-    base_p = float((bal.min(1) < 0).mean())
-    # giá trị đòi sớm: chuyển HĐ i về tuần 1 -> giảm P(thiếu hụt)
-    gains = []
-    for j in range(len(snap)):
-        P2 = P.copy()
-        P2[j] = 0
-        P2[j, 0] = 1.0
-        b2, _ = simulate(snap, P2, B0, ko, rq, ker, cr, cs, n=600, rho=0.2, seed=9)
-        gains.append(base_p - float((b2.min(1) < 0).mean()))
-    snap = snap.assign(p_paid_4w=P[:, :4].sum(1), exp_week=(P * np.arange(1, K + 1)).sum(1) + (1 - P.sum(1)) * 15,
-                       shortfall_reduction_if_collected_now=gains)
-    X, _, ix = t1.expand(snap, False)
-    contrib = model.booster.predict(X, pred_contrib=True)
-    names = FEATURES + t1.WEEK_FEATS
-    first = ix[:len(snap)] if False else None
-    reasons = []
-    wk1 = np.arange(len(snap))  # hàng tuần 1 nằm ở block đầu tiên của expand(train=False)
-    for j in wk1:
-        c = contrib[j, :-1]
-        top = np.argsort(c)[:3]  # đóng góp âm nhất vào hazard tuần 1 = lý do khiến khả năng trả sớm thấp
-        reasons.append("; ".join(f"{names[t]}={snap.iloc[j].get(names[t], np.nan) if names[t] in snap else X[j, t]:.3g}"
-                                 for t in top))
-    snap["why_late (SHAP top-3)"] = reasons
-    top = snap.sort_values("shortfall_reduction_if_collected_now", ascending=False).head(10)[
-        ["invoice_id", "customer_id", "amount_open", "days_to_due", "p_paid_4w", "exp_week",
-         "shortfall_reduction_if_collected_now", "why_late (SHAP top-3)"]]
-    # kịch bản: khách lớn nhất trả chậm thêm 2 tuần
-    big = snap.groupby("customer_id")["amount_open"].sum().idxmax()
-    P3 = P.copy()
-    m = (snap["customer_id"] == big).values
-    P3[m] = np.hstack([np.zeros((m.sum(), 2)), P[m, :-2]])
-    b3, _ = simulate(snap, P3, B0, ko, rq, ker, cr, cs, n=1000, rho=0.2, seed=4)
-    scen = {"firm": fid, "cutoff": str(T.date()), "P_shortfall_13w_base": base_p,
-            "scenario": f"khách lớn nhất {big} trả chậm thêm 2 tuần",
-            "P_shortfall_13w_scenario": float((b3.min(1) < 0).mean()),
-            "P10_min_balance_base": float(np.quantile(bal.min(1), .1)),
-            "P10_min_balance_scenario": float(np.quantile(b3.min(1), .1))}
-    band.to_csv(RES / "demo_band.csv", index=False)
-    top.to_csv(RES / "demo_collect_first.csv", index=False)
-    json.dump(scen, open(RES / "demo_whatif.json", "w"), indent=2, ensure_ascii=False)
-    log("demo", scen)
+    fid, T, snap, P, H, B0, ko, rq, ker, cr, cs, bal, tp,policy = demo
+    from agent1.models.t10 import rank_collections, what_if, explain_invoice, scenario_library
+    args = dict(open_df=snap, P=P, B0=B0, known_out=ko, rev_q=rq, kernel=ker,
+                capex_rate=cr, capex_sizes=cs, n=1000, rho=rho, seed=int(T.value % 1e6))
+    args.update(policy)
+    top = rank_collections(snap, P, args, top_n=10)
+    reasons = {row.invoice_id: explain_invoice(model, snap[snap.invoice_id == row.invoice_id].iloc[:1]) for row in top.itertuples()}
+    top['reasons'] = top.invoice_id.map(lambda iid: json.dumps(reasons[iid], ensure_ascii=False))
+    band = pd.DataFrame(np.quantile(bal, [.1, .5, .9], axis=0).T, columns=['P10', 'P50', 'P90'])
+    band.insert(0, 'week', np.arange(1, 14))
+    band['actual_no_action'] = tp
+    band.to_csv(RES / 'demo_band.csv', index=False)
+    top.to_csv(RES / 'demo_collect_first.csv', index=False)
+    big = snap.groupby('customer_id').amount_open.sum().idxmax()
+    scen = what_if(args, delay_customer=big, delay_weeks=2)
+    (RES / 'demo_whatif.json').write_text(json.dumps(dict(firm=fid, cutoff=str(T.date()), customer=big,
+        baseline_risk=float((bal.min(1) < 0).mean()), scenario_risk=scen['shortfall_probability']), indent=2), encoding='utf-8')
+    scenario_library(args).to_csv(RES / 'stress_scenarios.csv', index=False)
+    return
 
 
 if __name__ == "__main__":

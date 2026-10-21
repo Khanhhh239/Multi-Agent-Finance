@@ -1,0 +1,15 @@
+world,model,improvement_pct,ci_low,ci_high,candidate_adopted,test_used_for_selection,measurement_version
+src,B1d-cust-quantiles,-157.07750837079274,-189.41639013380734,-130.68334569491404,False,False,T1-locked-source-variants-v1
+src,B1-cust-median,-209.36419369853976,-244.14054828477566,-183.32359595768864,False,False,T1-locked-source-variants-v1
+src,DH-GBM default,0.0,0.0,0.0,False,False,T1-locked-source-variants-v1
+src,DH-GBM monotone PDP,-0.2602064792358587,-0.7972720012071595,0.22462650454017344,False,False,T1-locked-source-variants-v1
+src,Due-window mixture,-0.6575956542687725,-1.5581871698811718,0.19639358588929018,False,False,T1-locked-source-variants-v1
+src,DH-GBM EB ML-II,-0.5906326465702059,-1.156955327564388,0.033155630951192804,False,False,T1-locked-source-variants-v1
+src,DH daily28 + weekly tail,0.6245787500164448,0.15962469654298053,1.093678721033794,False,False,T1-locked-source-variants-v1
+tgt,B1d-cust-quantiles,-190.37630610478348,-339.4463001222531,-115.04601539378417,False,False,T1-locked-source-variants-v1
+tgt,B1-cust-median,-253.80134024491275,-406.26692837669884,-175.41545428232038,False,False,T1-locked-source-variants-v1
+tgt,DH-GBM default,0.0,0.0,0.0,False,False,T1-locked-source-variants-v1
+tgt,DH-GBM monotone PDP,0.18622401208938413,-1.1972155612019848,0.7657720383055528,False,False,T1-locked-source-variants-v1
+tgt,Due-window mixture,2.1962541831653537,-1.1758292271352695,4.146324025536879,False,False,T1-locked-source-variants-v1
+tgt,DH-GBM EB ML-II,0.9460463765888841,-1.3327858028350528,1.8982901250095887,False,False,T1-locked-source-variants-v1
+tgt,DH daily28 + weekly tail,1.441424023997111,-0.3460795444104948,2.264332729100453,False,False,T1-locked-source-variants-v1

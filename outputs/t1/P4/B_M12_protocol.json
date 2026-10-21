@@ -1,0 +1,7 @@
+{
+  "complete": true,
+  "origin": "2024-07-01",
+  "n_source": 335632,
+  "n_target": 16321,
+  "protocol": "exact B M12 source pretrain+150 fine-tune; P4 count cap frozen from source train"
+}

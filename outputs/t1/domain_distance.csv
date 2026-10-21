@@ -1,0 +1,9 @@
+domain,feature_set,AUC,AUC_ci_low,AUC_ci_high,n_train,n_test,n_source_test_firms,n_target_test_firms,bootstrap_n,target_used_for_policy_selection,measurement_version,limitation
+tgt,all_T1,0.6072544593725686,0.3363898594857492,0.8114273471001962,8308,6113,12,4,300,False,domain-snapshot-company-heldout-v1,domain_diagnostic_not_performance
+tgt,shared_without_promises,0.606429906256408,0.3294414988373351,0.8085058736124356,8308,6113,12,4,300,False,domain-snapshot-company-heldout-v1,domain_diagnostic_not_performance
+sens_uk,all_T1,0.8879169973976796,0.6186423126322845,1.0,8158,6115,12,3,300,False,domain-snapshot-company-heldout-v1,domain_diagnostic_not_performance
+sens_uk,shared_without_promises,0.8812112195810079,0.5952546064608856,1.0,8158,6115,12,3,300,False,domain-snapshot-company-heldout-v1,domain_diagnostic_not_performance
+sens_coface,all_T1,0.521188484212868,0.32119203358865883,0.9490171915812964,7746,4474,12,3,300,False,domain-snapshot-company-heldout-v1,domain_diagnostic_not_performance
+sens_coface,shared_without_promises,0.5793585434841334,0.4004271425924713,0.9741808030403429,7746,4474,12,3,300,False,domain-snapshot-company-heldout-v1,domain_diagnostic_not_performance
+Customer Invoices,all_T1,1.0,1.0,1.0,19348,3155,12,1,300,False,domain-snapshot-company-heldout-v1,domain_diagnostic_not_performance;ledger_labels;only_one_heldout_real_company
+Customer Invoices,shared_without_promises,1.0,1.0,1.0,19348,3155,12,1,300,False,domain-snapshot-company-heldout-v1,domain_diagnostic_not_performance;ledger_labels;only_one_heldout_real_company

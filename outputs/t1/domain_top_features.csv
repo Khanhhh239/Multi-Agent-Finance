@@ -1,0 +1,81 @@
+domain,feature_set,rank,feature,gain,measurement_version
+tgt,all_T1,1,f_resid_28d,42794.21350709145,domain-snapshot-company-heldout-v1
+tgt,all_T1,2,f_n_hist,37844.45282681444,domain-snapshot-company-heldout-v1
+tgt,all_T1,3,f_delay_mean,25213.412445377267,domain-snapshot-company-heldout-v1
+tgt,all_T1,4,f_open_n,7399.32618163788,domain-snapshot-company-heldout-v1
+tgt,all_T1,5,f_resid_trend,3155.313871437782,domain-snapshot-company-heldout-v1
+tgt,all_T1,6,c_n_hist,1069.5556573821232,domain-snapshot-company-heldout-v1
+tgt,all_T1,7,c_open_share,130.34999409115608,domain-snapshot-company-heldout-v1
+tgt,all_T1,8,c_life_med,118.17792991234435,domain-snapshot-company-heldout-v1
+tgt,all_T1,9,c_tenure_days,72.87006718295474,domain-snapshot-company-heldout-v1
+tgt,all_T1,10,c_days_since_last_pay,40.017938400396815,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,1,f_resid_28d,42545.5669599937,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,2,f_n_hist,38028.476635895364,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,3,f_delay_mean,25381.028250042196,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,4,f_open_n,7343.939691445946,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,5,f_resid_trend,3088.7688857788307,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,6,c_n_hist,1100.7172818090767,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,7,c_open_share,133.64570382444526,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,8,c_life_med,125.94058011018734,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,9,c_tenure_days,72.37718531675637,domain-snapshot-company-heldout-v1
+tgt,shared_without_promises,10,c_days_since_last_pay,38.822769480324496,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,1,f_delay_mean,94720.72267154623,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,2,f_open_n,8693.658488881028,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,3,f_n_hist,7919.935094648214,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,4,c_delay_std,1824.8092355909057,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,5,f_resid_28d,1162.8417122364044,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,6,c_life_med,369.9285737343548,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,7,c_payrun_strength,310.144254838553,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,8,f_resid_trend,274.7757200875434,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,9,c_n_hist,231.26566828273516,domain-snapshot-company-heldout-v1
+sens_uk,all_T1,10,c_open_overdue_n,155.40899665642064,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,1,f_delay_mean,94754.93164257002,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,2,f_open_n,8704.571620668072,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,3,f_n_hist,7826.765878049129,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,4,c_delay_std,1842.3230154667103,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,5,f_resid_28d,1168.5397909428714,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,6,c_life_med,371.09147053338864,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,7,c_payrun_strength,308.8518456013605,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,8,f_resid_trend,306.51584938913584,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,9,c_n_hist,231.85768428116808,domain-snapshot-company-heldout-v1
+sens_uk,shared_without_promises,10,c_open_overdue_n,155.48727856576443,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,1,f_delay_mean,79482.30164744775,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,2,f_open_n,16112.384621775316,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,3,f_n_hist,12516.782086990977,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,4,f_resid_28d,892.9464576861462,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,5,c_max_dpd,707.5265618599,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,6,f_resid_trend,131.64273867077088,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,7,c_promise_rel,99.74197721481323,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,8,c_open_overdue_n,80.59704875946045,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,9,c_open_n,24.783831935914908,domain-snapshot-company-heldout-v1
+sens_coface,all_T1,10,days_to_tet,8.23217921963078,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,1,f_delay_mean,79501.91349976031,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,2,f_open_n,16086.847366384405,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,3,f_n_hist,12532.684596021085,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,4,f_resid_28d,890.6711668606696,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,5,c_max_dpd,765.2904652830621,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,6,f_resid_trend,144.08405557598212,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,7,c_open_overdue_n,106.11417162418365,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,8,c_open_n,26.46120314225637,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,9,c_n_hist,2.3493800163269043,domain-snapshot-company-heldout-v1
+sens_coface,shared_without_promises,10,c_late30_share,2.2654500007629395,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,1,paid_frac_so_far,274925.8368229866,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,2,log_amount_rel,4.295062503671889e-11,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,3,age_days,2.4812118212779893e-12,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,4,days_to_due,1.7111323526892829e-12,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,5,c_n_hist,1.2957280100886056e-12,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,6,c_delay_mean,5.911944333555793e-13,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,7,c_late_share,4.4764241946665373e-13,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,8,c_delay_std,1.572216558685037e-13,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,9,c_payrun_strength,1.1723971043085238e-13,domain-snapshot-company-heldout-v1
+Customer Invoices,all_T1,10,days_past_due,9.2370527908484e-14,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,1,paid_frac_so_far,274925.8368229866,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,2,log_amount_rel,4.295062503671889e-11,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,3,age_days,2.4812118212779893e-12,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,4,days_to_due,1.7111323526892829e-12,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,5,c_n_hist,1.2957280100886056e-12,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,6,c_delay_mean,5.911944333555793e-13,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,7,c_late_share,4.4764241946665373e-13,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,8,c_delay_std,1.572216558685037e-13,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,9,c_payrun_strength,1.1723971043085238e-13,domain-snapshot-company-heldout-v1
+Customer Invoices,shared_without_promises,10,days_past_due,9.2370527908484e-14,domain-snapshot-company-heldout-v1

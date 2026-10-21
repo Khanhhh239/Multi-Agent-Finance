@@ -1,0 +1,4 @@
+world,case,n_firms,n_invoices,checks,passed,smoke,seed
+hc_lumpy_customer_v2,lumpy_customer,12,89690,68,68,False,901
+hc_discount_early_v2,discount_early,12,68481,68,68,False,901
+hc_supply_shock_v2,supply_shock,12,68481,68,68,False,901

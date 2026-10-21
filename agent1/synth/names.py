@@ -3,6 +3,7 @@ tên đối tác và nội dung chuyển khoản theo kiểu sao kê ngân hàng
 from __future__ import annotations
 
 import re
+from functools import lru_cache
 
 import numpy as np
 
@@ -75,6 +76,7 @@ def make_company_name(rng, sector: str, used: set) -> tuple[str, str, str]:
     raise RuntimeError("name space exhausted")
 
 
+@lru_cache(maxsize=16384)
 def ascii_upper(s: str) -> str:
     return unidecode(s).upper()
 

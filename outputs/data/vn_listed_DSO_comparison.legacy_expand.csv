@@ -1,0 +1,7 @@
+issuer,year,industry,world,n_synthetic_firms,issuer_DSO_proxy,synthetic_DSO_median,synthetic_DSO_p10,synthetic_DSO_p90,calibration_used,decision
+SMC,2024,steel_metals,src,10,77.1055051601086,38.07038933919314,24.538181656566675,56.57935062476855,False,descriptive_only_no_sector_CI
+SMC,2024,steel_metals,tgt,4,77.1055051601086,49.612135314015205,27.927978049071104,64.25742768652763,False,descriptive_only_no_sector_CI
+TCM,2022,textile_clothing,src,7,30.2433017644046,41.00618637334969,28.59516832067915,55.66325066518075,False,descriptive_only_no_sector_CI
+TCM,2022,textile_clothing,tgt,4,30.2433017644046,29.10303272726816,19.869611626873656,39.616494799370784,False,descriptive_only_no_sector_CI
+NTP,2024,plastic_rubber,src,8,40.57557197516885,52.562043582045604,39.531009221358204,82.0634257976573,False,descriptive_only_no_sector_CI
+NTP,2024,plastic_rubber,tgt,4,40.57557197516885,54.8752485286043,48.04717700073557,89.19832086844568,False,descriptive_only_no_sector_CI

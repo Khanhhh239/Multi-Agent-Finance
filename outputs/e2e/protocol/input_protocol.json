@@ -1,0 +1,20 @@
+{
+  "world": "tgt",
+  "observed_world": "e2e_observed_tgt",
+  "visible_from": "2023-07-01",
+  "n_firms": 14,
+  "n_invoices": 18926,
+  "n_bank": 16872,
+  "n_links": 13371,
+  "n_review": 5237,
+  "tau_auto": 0.9,
+  "customer_model": "source_2023_cal2024H1",
+  "true_invoice_labels_used": false,
+  "additional_inputs": [
+    "declared_obligation_schedule",
+    "observed_balances",
+    "recorded_promises"
+  ],
+  "promise_outcomes": "derived_from_estimated_links_not_oracle",
+  "opening_ar": "invoices_issued_before_visible_from_excluded_in_all_compared_models"
+}

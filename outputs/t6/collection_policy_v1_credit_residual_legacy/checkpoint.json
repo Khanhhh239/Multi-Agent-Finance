@@ -1,0 +1,28 @@
+{
+  "signature": {
+    "code": {
+      "scripts\\run_collection_policy.py": "b54e35ad4507bea63c51e7cd620702103d3f3ddacb4be4e8a953847b8cc27a88",
+      "agent1\\eval\\collection_policy.py": "d8fa3dd0028091ccfb9f428bb272ce8eaa8719ac77eb7129255255577b77d327",
+      "scripts\\run_dr_comparison.py": "f9c043c859ac80bcde9991b60e8520be027119cac52e1212c1134507b83c1dd5",
+      "agent1\\models\\features.py": "2bc9101fff3997bca519dc44c72eb4abaa913f9ec0a5621cb4d413b780bbcabc",
+      "agent1\\models\\t1.py": "7068a84309f9584c24da749cdddcbf4f8d58b8cff8fef0a7664c322c0d178a8b",
+      "agent1\\models\\t6_cash.py": "0cce3a9661d7a2862da417099d8c62bc9b28caaf72a97682db8576e23e36a93d",
+      "agent1\\calendar_vn.py": "d8aa35df3315746fc7136f0cc72c49eb3905122d99768288d912c74f38b0f550",
+      "scripts\\run_t6.py": "9ed0589dd4c9a470c1c948d7fa6041ad662326214f9dc042a1d1ccca6ad18377"
+    },
+    "inputs": {
+      "src\\invoices.parquet": "418ee64c251c045378ede37755bcb4ce43b204ed2afa98da8dcc1d5d1f90a200",
+      "src\\payments.parquet": "25edade48c1443d4223142e66c2623c81475b5487b9800003a18876864aaec99",
+      "src\\firms.parquet": "9af40aa928033c166cc6b5e8a9abc78b215b96255688063c43c426f65298bf6c",
+      "tgt\\invoices.parquet": "c6837975eb5d9ba344378fa73ef6ee9792813ac856f36efa2fdc13baa3046e80",
+      "tgt\\payments.parquet": "ab7451e51cc4a59d94c8ffd14af01d54c0af1936dcb64d78d3b5893704101cc3",
+      "tgt\\firms.parquet": "794d5c617f6cd50b4ff61fc29e0a89e80406071e3e5945473d09af8363fe35eb",
+      "tgt\\daily_cash.parquet": "c2e7b8d06f916d2be04b788b90c4dc4b0e461477e6c7c6b5d64fabfae380cb1c",
+      "tgt\\outflows.parquet": "cdddd2500184125f542fccdb8ee0723663c750fcc5f05d3fdc512f5ccdcc55bb"
+    },
+    "seed": 7
+  },
+  "model_sha256": "ea0ff828ddf2c821e5854e93bb37438886236f221a60bb26014b617cee7d956c",
+  "company_sha256": "d82d39ced00079abf6006dbc110ab88e9bdc62b32a2a36cd4ecd68edab1454b6",
+  "actions_sha256": "24d1f668a6df2755222919abd2dfd3d78774cec8dd95fd9ef545b72b3f1a9955"
+}

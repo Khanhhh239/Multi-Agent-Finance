@@ -1,0 +1,30 @@
+{
+  "complete": true,
+  "code_sha256": "92acc853f3483a83894ab45f7d1a5de157c7d45bc27b77b981d5c08cd95a615b",
+  "source_manifest_sha256": "411eabba2bf3e8ea25ed2278eeb4cddfdcef2f80103ce3ee33ac47ed74fe488d",
+  "design": "one world x400 vs twenty worlds x20; same per-pair invoice counts before features",
+  "fit": "source-only; max 40k snapshots per arm, 300 trees, same N; no target tuning",
+  "history": "observed target histories available; zero-shot model, no target-label fitting; not M0 onboarding",
+  "criterion": "DR pinball reduction >=5%; report paired CI by target firm; no automatic adoption",
+  "limitation": "one generator seed design; CI does not include source-generation uncertainty; synthetic vs real calendar origins trained separately",
+  "target_used_for_selection": false,
+  "origins": [
+    {
+      "origin": "2024-07-01",
+      "n_source_invoices_per_arm": 983862,
+      "n_source_firms_per_arm": 400,
+      "n_train_per_arm": 40000
+    },
+    {
+      "origin": "2019-10-01",
+      "n_source_invoices_per_arm": 110713,
+      "n_source_firms_per_arm": 400,
+      "n_train_per_arm": 40000
+    }
+  ],
+  "cache_resume": {
+    "previous_code_sha256": null,
+    "validated_prepared_cache_sha256": {},
+    "scope": "checkpoint/storage only; original snapshot sampling and model fitting unchanged"
+  }
+}

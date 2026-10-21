@@ -1,0 +1,4 @@
+check,value,cutoff,target_met,measurement_version,limitation
+stored_model_loaded_by_forecast,1.0,2024-07-01,True,service-local-synthetic-research-v1,one_firm_demo_with_user_supplied_opening_balance;not_pilot_or_UAT_evidence
+forecast_seconds,19.375,2024-07-01,True,service-local-synthetic-research-v1,one_firm_demo_with_user_supplied_opening_balance;not_pilot_or_UAT_evidence
+realized_coverage_single_company_demo,0.07692307692307693,2024-10-01,,service-local-synthetic-research-v1,one_firm_demo_with_user_supplied_opening_balance;not_pilot_or_UAT_evidence

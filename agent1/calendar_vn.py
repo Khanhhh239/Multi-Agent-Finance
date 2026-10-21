@@ -27,32 +27,18 @@ try:
 except ImportError:  # pragma: no cover
     _hol = None
 
-# Mùng 1 Tết âm lịch
-LUNAR_NEW_YEAR = {
-    2018: "2018-02-16", 2019: "2019-02-05", 2020: "2020-01-25", 2021: "2021-02-12", 2022: "2022-02-01",
-    2023: "2023-01-22", 2024: "2024-02-10", 2025: "2025-01-29", 2026: "2026-02-17", 2027: "2027-02-06",
-}
-# Kỳ nghỉ Tết chính thức theo thông báo Chính phủ (gồm nghỉ bù/hoán đổi)
-TET_BREAK = {
-    2018: ("2018-02-14", "2018-02-20"), 2019: ("2019-02-02", "2019-02-10"), 2020: ("2020-01-23", "2020-01-29"),
-    2021: ("2021-02-10", "2021-02-16"), 2022: ("2022-01-29", "2022-02-06"), 2023: ("2023-01-20", "2023-01-26"),
-    2024: ("2024-02-08", "2024-02-14"), 2025: ("2025-01-25", "2025-02-02"), 2026: ("2026-02-14", "2026-02-22"),
-    2027: ("2027-02-04", "2027-02-10"),
-}
-
-MIN_WAGE = [  # (hiệu lực từ, vùng I..IV) VND/tháng
-    ("2019-01-01", (4180000, 3710000, 3250000, 2920000)),
-    ("2020-01-01", (4420000, 3920000, 3430000, 3070000)),
-    ("2022-07-01", (4680000, 4160000, 3640000, 3250000)),
-    ("2024-07-01", (4960000, 4410000, 3860000, 3450000)),
-    ("2026-01-01", (5310000, 4730000, 4140000, 3700000)),
-]
-VAT_REDUCTION = [("2022-02-01", "2022-12-31"), ("2023-07-01", "2023-12-31"), ("2024-01-01", "2024-06-30"),
-                 ("2024-07-01", "2024-12-31"), ("2025-01-01", "2025-06-30"), ("2025-07-01", "2026-12-31")]
-SI_RATE_EMPLOYER = 0.215
-SI_RATE_EMPLOYEE = 0.105
-MONTHLY_VAT_THRESHOLD = 50e9
-LICENSE_FEE_ABOLISHED = date(2026, 1, 1)
+# Hằng tương thích cho thí nghiệm lịch sử; nguồn duy nhất là kho quy tắc JSON.
+from .rules import all_rules, load_rules
+_RULES = all_rules()
+_GLOBAL = load_rules("2026-01-01")
+LUNAR_NEW_YEAR = {int(k): v for k, v in _GLOBAL["lunar_new_year"].items()}
+TET_BREAK = {int(k): tuple(v) for k, v in _GLOBAL["tet_break"].items()}
+MIN_WAGE = [(r["effective_from"], tuple(r["value"])) for r in _RULES if r["kind"] == "minimum_wage"]
+VAT_REDUCTION = [(r["effective_from"], r["effective_to"]) for r in _RULES if r["kind"] == "vat_reduction"]
+SI_RATE_EMPLOYER = _GLOBAL["social_insurance_employer"]
+SI_RATE_EMPLOYEE = _GLOBAL["social_insurance_employee"]
+MONTHLY_VAT_THRESHOLD = _GLOBAL["monthly_vat_threshold"]
+LICENSE_FEE_ABOLISHED = date.fromisoformat(_GLOBAL["license_fee_abolished"])
 
 
 @lru_cache(maxsize=None)
@@ -140,22 +126,18 @@ def in_tet_break(d) -> bool:
 
 
 def min_wage(d, region: int) -> int:
-    d = pd.Timestamp(d)
-    val = MIN_WAGE[0][1]
-    for eff, v in MIN_WAGE:
-        if d >= pd.Timestamp(eff):
-            val = v
-    return val[region - 1]
+    if region not in (1, 2, 3, 4):
+        raise ValueError("Vùng lương phải thuộc 1..4")
+    rules = load_rules(d)
+    # Hai tháng mở sổ trước 2019 giữ quy ước khởi tạo của mô phỏng cũ.
+    return rules.get('minimum_wage', MIN_WAGE[0][1])[region - 1]
 
 
 def vat_rate(d, industry: str) -> float:
-    d = pd.Timestamp(d)
-    if industry == "steel_metals":
-        return 0.10
-    for a, b in VAT_REDUCTION:
-        if pd.Timestamp(a) <= d <= pd.Timestamp(b):
-            return 0.08
-    return 0.10
+    rules = load_rules(d)
+    if industry in rules["vat_excluded_industries"]:
+        return rules["vat_base"]
+    return rules.get("vat_reduction", rules["vat_base"])
 
 
 def month_end(y, m) -> pd.Timestamp:
@@ -168,17 +150,17 @@ def vat_deadline(period_end: pd.Timestamp, monthly: bool) -> pd.Timestamp:
     """Hạn nộp tờ khai + tiền thuế GTGT cho kỳ kết thúc tại period_end."""
     period_end = pd.Timestamp(period_end)
     nxt = period_end + pd.offsets.MonthBegin(1)
-    raw = pd.Timestamp(nxt.year, nxt.month, 20) if monthly else month_end(nxt.year, nxt.month)
+    raw = pd.Timestamp(nxt.year, nxt.month, load_rules(period_end)["vat_monthly_day"]) if monthly else month_end(nxt.year, nxt.month)
     return next_business_day(raw)
 
 
 def cit_provisional_deadline(quarter_end: pd.Timestamp) -> pd.Timestamp:
     q = pd.Timestamp(quarter_end) + pd.offsets.MonthBegin(1)
-    return next_business_day(pd.Timestamp(q.year, q.month, 30) if q.month != 2 else month_end(q.year, 2))
+    return next_business_day(pd.Timestamp(q.year, q.month, load_rules(quarter_end)["cit_provisional_day"]) if q.month != 2 else month_end(q.year, 2))
 
 
 def cit_final_deadline(fiscal_year: int) -> pd.Timestamp:
-    return next_business_day(month_end(fiscal_year + 1, 3))
+    return next_business_day(month_end(fiscal_year + 1, load_rules(f"{fiscal_year}-12-31")["cit_final_month"]))
 
 
 def si_deadline(y: int, m: int) -> pd.Timestamp:
@@ -190,7 +172,7 @@ def si_deadline(y: int, m: int) -> pd.Timestamp:
 def license_fee_deadline(y: int):
     if date(y, 1, 1) >= LICENSE_FEE_ABOLISHED:
         return None
-    return next_business_day(pd.Timestamp(y, 1, 30))
+    return next_business_day(pd.Timestamp(y, 1, load_rules(f"{y}-01-01")["license_fee_day"]))
 
 
 def obligation_schedule(firm: dict, start, end, payroll_by_month: dict | None = None,
@@ -229,7 +211,7 @@ def obligation_schedule(firm: dict, start, end, payroll_by_month: dict | None = 
         if m == 1:
             dl = license_fee_deadline(y)
             if dl is not None:
-                fee = 3_000_000 if firm.get("charter_capital", 0) > 10e9 else 2_000_000
+                fee = load_rules(dl)["license_fee_high"] if firm.get("charter_capital", 0) > load_rules(dl)["license_fee_capital_threshold"] else load_rules(dl)["license_fee_low"]
                 rows.append((dl, "license_fee", fee, (y, m)))
     df = pd.DataFrame(rows, columns=["date", "category", "amount", "period"])
     return df[(df["date"] >= start) & (df["date"] <= end)].sort_values("date").reset_index(drop=True)

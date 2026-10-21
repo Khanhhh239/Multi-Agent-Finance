@@ -1,0 +1,4 @@
+world,months_history,n_source,n_target,weight_min,weight_max,weight_mean,weight_std,effective_sample_size,constant_weights,classifier,measurement_version
+tgt,6,40000,15864,0.9999999999999999,0.9999999999999999,0.9999999999999998,1.1102230246251565e-16,39999.99999999999,True,"in-sample density ratio, fixed 200 trees; saturation can erase differences",DA-paired-locked-budget-v1-fullweek
+sens_uk,6,40000,18902,0.9999697094568892,1.9829303425191918,1.0,0.005045940943404805,39998.98156513073,False,"in-sample density ratio, fixed 200 trees; saturation can erase differences",DA-paired-locked-budget-v1-fullweek
+sens_coface,6,40000,9992,0.9997450159302599,3.634813978064755,1.0000000000000002,0.020480572930702063,39983.228880008355,False,"in-sample density ratio, fixed 200 trees; saturation can erase differences",DA-paired-locked-budget-v1-fullweek

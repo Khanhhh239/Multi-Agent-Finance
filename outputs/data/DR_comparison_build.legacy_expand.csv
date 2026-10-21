@@ -1,0 +1,22 @@
+arm,world,n_firms,n_invoices,contracts_passed,validation_scope,measurement_version
+one_world,dr_cmp_control_400,400,2362440,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_000,20,148619,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_001,20,74181,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_002,20,186973,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_003,20,109310,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_004,20,94042,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_005,20,93490,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_006,20,95628,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_007,20,76303,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_008,20,59318,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_009,20,93341,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_010,20,63335,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_011,20,117157,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_012,20,140288,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_013,20,128316,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_014,20,90467,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_015,20,155003,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_016,20,84203,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_017,20,105000,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_018,20,108690,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1
+twenty_worlds,dr_cmp_multi_019,20,163059,True,per firm shard; logical IDs namespaced,DR-400-firms-sharded-v1

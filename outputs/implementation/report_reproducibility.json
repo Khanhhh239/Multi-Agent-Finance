@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "report_sha256": {
+    "docs\\RESULTS_TABLES.md": "dce9ed90507cdce129080ae7b03721882f396ce5e02cc6532de5852c6c665bf6",
+    "docs\\03_Evaluation\\04_ket_qua_hien_co.md": "6b5f36cbe8a0a3aa5933fc2bb0ba5eac324a2d670c521553372f704e421783b2",
+    "docs\\03_Evaluation\\GATES_CURRENT.md": "93d2724acbb5fdac253c774b73018c5ffe0431674205e44e9416b27929108a16",
+    "docs\\03_Evaluation\\KET_QUA_CHUA_DAT.md": "1bd830990dd84b879aea0ee4a502e7fcc0afc819780af9cdd044593858478c34",
+    "docs\\05_Coding_Agent_Plan\\TIEN_DO_TRIEN_KHAI.md": "31333070b6c42428bf7c08faef177677a4862f7a9dd5cd7ea06622a64ebb7e85",
+    "outputs\\implementation\\work_packages.csv": "9e375cd61be0375a18f1e620c2d24733cc4020e7175d57ddd101c62e7642e04d",
+    "outputs\\implementation\\gates.csv": "12ab933b3300c2e5e6e2244f7b22fe1cd536f8f2de162169706f207dd623da03",
+    "outputs\\t1\\DA_hypotheses.csv": "0f479cfc05558c01bc178b78646ef95fa25a2708de8c42031d9a772ebdb1b6bf"
+  },
+  "stable_inputs": true,
+  "checked_at_utc": "2026-10-20T07:57:19.158105+00:00",
+  "scope": "report generation only; does not establish experimental retraining reproducibility"
+}
