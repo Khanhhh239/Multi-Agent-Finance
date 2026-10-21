@@ -1,17 +1,24 @@
 # Việc tiếp theo sau Rule Audit
 
-**Ưu tiên hiện tại sau sửa R6, 16/10/2026:** ID hồ sơ và owner độc lập thứ tự nguồn; đã có ánh xạ hồ sơ tương đương để giữ phản hồi/phân công/admissions. **341/341 test đạt**, gồm 22 test mới; **7/7 probe readiness đạt**. Xem [bản sửa R6](rule_case_identity.md) và [readiness](rule_readiness_recheck_20261016.md). Tiếp theo là đồng bộ nguồn/feature/model, chấm các bản sửa kết hợp và nghiệm thu nguồn thật.
+**Ưu tiên hiện tại sau sửa export, 17/10/2026:** checkpoint **437 test/7 probe đạt**. Export lý do dòng/lô đã hoàn tất kỹ thuật; còn review bản thử A4/công sức, replay ưu tiên theo sự kiện và nguồn thật. Xem [bản sửa export](rule_admission_export.md), [việc cần sửa tiếp](rule_readiness_next_20261017.md). Không đổi ngưỡng hoặc chính sách giữ cảnh báo khi thiếu nghĩa vụ chi.
+
+**Nguồn mô phỏng mới:** đã sinh 62.182 giao dịch trên ba seed, đủ nguồn F1/C4/E2/F2/F3/F4; hai bộ reporting khớp 1.216/1.216 kỳ vọng nguồn, một bộ holdout chưa chấm. Có mapping minh họa, hai SQLite và diễn tập R6 riêng; nguồn thật/reviewer độc lập vẫn còn thiếu. [Bộ dữ liệu và giới hạn](rule_synthetic_source_readiness.md).
 
 ## Thứ tự công việc cần xử lý
 
-Kết quả và hash mã sau R6 được ghi tại [checkpoint R6](../.runtime/case_identity_20261016/result.json). Các artifact trước đó được giữ nguyên làm lịch sử. Migration mới chỉ được kiểm thử trên database tạm; chưa chuyển bộ report/database vận hành cũ trong workspace.
+Lượt [checkpoint A4](../.runtime/a4_pattern_trial_20261017/result.json) trước đó đạt 412 test/7 probe; mặc định replay đúng queue cũ, bản thử giữ nguyên tập giao dịch/TP/FP, có kiểm tra cache và bảo vệ nguồn/model/SQLite. Lượt export mới đạt 437 test/7 probe, đối chiếu đủ ID và bằng chứng trong thư mục bổ sung. Các artifact trước giữ nguyên; chưa chuyển database/feedback vận hành cũ.
 
 | Ưu tiên | Công việc | Kết quả cần có |
 | --- | --- | --- |
-| 1 | **Đồng bộ cache/model và chấm kết hợp** | Dựng lại feature trên dataset mới với nguồn hợp lệ theo R7, kiểm tra model tương thích; chấm train/validation, giải thích delta điểm/hit/hồ sơ/ID, áp migration R6 đúng bộ rà soát và đo tải xử lý |
-| 2 | **Nghiệm thu nguồn thật** | Coverage nguồn, tiêu chí khóa trước review, kết luận độc lập và tập nghiệm thu mới giữ kín. Hiện cổng nghiệm thu vẫn có 0 đơn vị chấm mù |
+| Đã hoàn tất kỹ thuật | **Đồng bộ cache/model và chấm kết hợp** | Đã dựng/chấm 225.000 dòng train/validation, replay model/cache và SQLite; có đối chiếu ID/điểm/hit/hồ sơ trước/sau tiếp nhận |
+| Đã sửa kỹ thuật | **Thống nhất công suất** | Dùng chung hợp đồng lượt/phút giữa simulator/API, tách tên cấu hình nghiên cứu/UI, có lịch/tồn cuối kỳ và thời gian xử lý tồn; đã replay 120 tổ hợp trên sáu snapshot |
+| Đã sửa kỹ thuật | **Hoàn thiện export** | Đã xuất CSV v2/JSONL, truy được đủ 3.315 ID mới tới hit/lô/case; membership/điểm/cờ và report đã khóa giữ nguyên |
+| 2 — có bản thử, chưa đóng | **Review hồ sơ mẫu A4** | 5.538 → 4.774 hồ sơ thử, cùng tập giao dịch; 905 gói reviewer, 0 xác nhận. Cần đo việc rà trùng/phút thực tế và xử lý mẫu vượt công suất khi giữ tổng phút |
+| 3 | **Replay ưu tiên theo sự kiện** | Mô phỏng cập nhật hồ sơ đang chờ từ sự kiện đã biết, chốt chính sách tái rà khi bằng chứng đổi; không lấy ưu tiên cuối snapshot cho quá khứ |
+| Song song, bắt buộc trước nghiệm thu | **Nguồn thật và chất lượng vận hành** | Coverage nguồn, tiêu chí khóa trước review, kết luận độc lập và tập nghiệm thu mới giữ kín. Hiện cổng nghiệm thu vẫn có 0 đơn vị chấm mù |
+| Khi triển khai bộ rà soát cũ | **Migration R6** | Dùng snapshot/audit cũ đúng phiên bản; chỉ chuyển phản hồi/phân công tương đương một-một, hồ sơ đổi phạm vi phải rà lại |
 
-Các lỗi R1–R8 đã sửa kỹ thuật trong phạm vi từng bản. Hai mục trên là việc tích hợp/nghiệm thu còn thiếu, không được xem là đã hoàn thành nhờ 341 test qua. Nguồn thật có thể chuẩn bị song song; số lượng luật và ngưỡng chỉ điều chỉnh khi có bằng chứng về mẫu còn thiếu hoặc tải cảnh báo.
+Các lỗi R1–R8 đã sửa kỹ thuật trong phạm vi từng bản. Những việc còn mở không được xem là hoàn thành nhờ 412 test qua. Nguồn thật có thể chuẩn bị song song; số lượng luật và ngưỡng chỉ điều chỉnh khi có bằng chứng về mẫu còn thiếu hoặc tải cảnh báo.
 
 Danh sách dưới dựa trên [audit baseline](rule_audit/summary_vi.md). **Đợt 1 đã sửa B7/E1/A2**: xem [logic, nguồn bằng chứng và kiểm thử](rule_repairs_phase1.md), [kết quả chấm lại](rule_repairs/phase1/summary_vi.md). Ngưỡng vận hành giữ nguyên. Ưu tiên hoàn thiện kiểm soát và giảm cảnh báo sai trước khi phát triển ML tiếp.
 

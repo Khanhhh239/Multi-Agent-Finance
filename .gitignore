@@ -53,3 +53,5 @@ node_modules/
 Thumbs.db
 
 !examples/bank_identity_sources/*.csv
+
+!examples/tax_risk_sources/*.csv

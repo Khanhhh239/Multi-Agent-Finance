@@ -1,0 +1,126 @@
+[
+  {
+    "version": "0.1.0",
+    "release_id": "0.1.0-2ad16a6e23ce",
+    "installation": "D:\\agent22\\.runtime\\release_20261019\\installations\\review010",
+    "environment": {
+      "prefix": "D:\\agent22\\.runtime\\release_20261019\\installations\\review010\\env",
+      "base_prefix": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312",
+      "user_site": false,
+      "packages": {
+        "cloudpickle": "3.1.0",
+        "joblib": "1.5.1",
+        "narwhals": "2.19.0",
+        "networkx": "3.6.1",
+        "numpy": "1.26.4",
+        "pandas": "2.2.3",
+        "pip": "24.2",
+        "python-dateutil": "2.9.0.post0",
+        "pytz": "2024.2",
+        "scikit-learn": "1.8.0",
+        "scipy": "1.15.1",
+        "six": "1.16.0",
+        "threadpoolctl": "3.6.0",
+        "tzdata": "2024.2"
+      }
+    },
+    "pip_check": "No broken requirements found.",
+    "offline_install": true,
+    "schema": {
+      "review": "8",
+      "p2": "1"
+    },
+    "runtime_contracts": {
+      "review": {
+        "review_backup.py": "aa81e669127c5753aa38d8a991ce41f2eebe19cb3db26b7f2db497fa299b92db",
+        "review_store.py": "713825b7ece0f0a26886d1d79b4c45e7b7c48f138eb6b571011fc429cbe73fa1",
+        "review_support.py": "5431630768675cb68f2fc2e3bcb4b870ecb1ed3bc690d4736c3105adc6a7642c",
+        "case_identity.py": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+        "information_requests.py": "223e74b01902c3dd3ab6a9848bfb136b91711e9e6fab75671d35e004b7cc158e",
+        "feedback.py": "ba20cae1327b5724caf3120892beeed2f0346d1a80acf8f24a6c22c6db6198e5",
+        "review_capacity.py": "67d69da7c8f9fdcfd0888eb54896f11bc6f7b8ab35664d3cb4b1617bd9d7ddf8",
+        "entity_graph.py": "3befd693403d2b9c2bd587e8cd5ce407453ca942dbcb8428108e9f49cea54a09",
+        "review_decision_gate.py": "4f624a1fee6ed2c0b923ad7fafe5321f1f562473d1233d61c803e7a57ad7a12e"
+      },
+      "suite": {
+        "review": {
+          "review_backup.py": "aa81e669127c5753aa38d8a991ce41f2eebe19cb3db26b7f2db497fa299b92db",
+          "review_store.py": "713825b7ece0f0a26886d1d79b4c45e7b7c48f138eb6b571011fc429cbe73fa1",
+          "review_support.py": "5431630768675cb68f2fc2e3bcb4b870ecb1ed3bc690d4736c3105adc6a7642c",
+          "case_identity.py": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+          "information_requests.py": "223e74b01902c3dd3ab6a9848bfb136b91711e9e6fab75671d35e004b7cc158e",
+          "feedback.py": "ba20cae1327b5724caf3120892beeed2f0346d1a80acf8f24a6c22c6db6198e5",
+          "review_capacity.py": "67d69da7c8f9fdcfd0888eb54896f11bc6f7b8ab35664d3cb4b1617bd9d7ddf8",
+          "entity_graph.py": "3befd693403d2b9c2bd587e8cd5ce407453ca942dbcb8428108e9f49cea54a09",
+          "review_decision_gate.py": "4f624a1fee6ed2c0b923ad7fafe5321f1f562473d1233d61c803e7a57ad7a12e"
+        },
+        "suite": {
+          "backup_suite.py": "eec955aff96e93a0c88bc3aa678db49ed1e58274ff905c7184082f7e1536395c",
+          "p2_controls_web.py": "055cb766eebe250db97cd1f1bb3b2daf0aeab6a825f4976f40b87785e89ba36c"
+        }
+      }
+    }
+  },
+  {
+    "version": "0.1.1+rehearsal",
+    "release_id": "0.1.1+rehearsal-1977c8503fa5",
+    "installation": "D:\\agent22\\.runtime\\release_20261019\\installations\\candidate011",
+    "environment": {
+      "prefix": "D:\\agent22\\.runtime\\release_20261019\\installations\\candidate011\\env",
+      "base_prefix": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312",
+      "user_site": false,
+      "packages": {
+        "cloudpickle": "3.1.0",
+        "joblib": "1.5.1",
+        "narwhals": "2.19.0",
+        "networkx": "3.6.1",
+        "numpy": "1.26.4",
+        "pandas": "2.2.3",
+        "pip": "24.2",
+        "python-dateutil": "2.9.0.post0",
+        "pytz": "2024.2",
+        "scikit-learn": "1.8.0",
+        "scipy": "1.15.1",
+        "six": "1.16.0",
+        "threadpoolctl": "3.6.0",
+        "tzdata": "2024.2"
+      }
+    },
+    "pip_check": "No broken requirements found.",
+    "offline_install": true,
+    "schema": {
+      "review": "8",
+      "p2": "1"
+    },
+    "runtime_contracts": {
+      "review": {
+        "review_backup.py": "aa81e669127c5753aa38d8a991ce41f2eebe19cb3db26b7f2db497fa299b92db",
+        "review_store.py": "713825b7ece0f0a26886d1d79b4c45e7b7c48f138eb6b571011fc429cbe73fa1",
+        "review_support.py": "5431630768675cb68f2fc2e3bcb4b870ecb1ed3bc690d4736c3105adc6a7642c",
+        "case_identity.py": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+        "information_requests.py": "223e74b01902c3dd3ab6a9848bfb136b91711e9e6fab75671d35e004b7cc158e",
+        "feedback.py": "ba20cae1327b5724caf3120892beeed2f0346d1a80acf8f24a6c22c6db6198e5",
+        "review_capacity.py": "67d69da7c8f9fdcfd0888eb54896f11bc6f7b8ab35664d3cb4b1617bd9d7ddf8",
+        "entity_graph.py": "3befd693403d2b9c2bd587e8cd5ce407453ca942dbcb8428108e9f49cea54a09",
+        "review_decision_gate.py": "4f624a1fee6ed2c0b923ad7fafe5321f1f562473d1233d61c803e7a57ad7a12e"
+      },
+      "suite": {
+        "review": {
+          "review_backup.py": "aa81e669127c5753aa38d8a991ce41f2eebe19cb3db26b7f2db497fa299b92db",
+          "review_store.py": "713825b7ece0f0a26886d1d79b4c45e7b7c48f138eb6b571011fc429cbe73fa1",
+          "review_support.py": "5431630768675cb68f2fc2e3bcb4b870ecb1ed3bc690d4736c3105adc6a7642c",
+          "case_identity.py": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+          "information_requests.py": "223e74b01902c3dd3ab6a9848bfb136b91711e9e6fab75671d35e004b7cc158e",
+          "feedback.py": "ba20cae1327b5724caf3120892beeed2f0346d1a80acf8f24a6c22c6db6198e5",
+          "review_capacity.py": "67d69da7c8f9fdcfd0888eb54896f11bc6f7b8ab35664d3cb4b1617bd9d7ddf8",
+          "entity_graph.py": "3befd693403d2b9c2bd587e8cd5ce407453ca942dbcb8428108e9f49cea54a09",
+          "review_decision_gate.py": "4f624a1fee6ed2c0b923ad7fafe5321f1f562473d1233d61c803e7a57ad7a12e"
+        },
+        "suite": {
+          "backup_suite.py": "eec955aff96e93a0c88bc3aa678db49ed1e58274ff905c7184082f7e1536395c",
+          "p2_controls_web.py": "055cb766eebe250db97cd1f1bb3b2daf0aeab6a825f4976f40b87785e89ba36c"
+        }
+      }
+    }
+  }
+]

@@ -14,8 +14,9 @@ from pathlib import Path
 
 from .generate import write_csv
 from .case_identity import load_lineage, resolve, scope_hash, feedback_view
+from .review_decision_gate import check_decision
 
-DECISIONS = {'confirmed_fraud', 'non_compliance', 'false_positive', 'information_gap'}
+DECISIONS = {'confirmed_suspicion', 'confirmed_fraud', 'non_compliance', 'false_positive', 'information_gap'}
 
 
 @contextmanager
@@ -70,15 +71,17 @@ def read_audit(path):
     return events
 
 
-def record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at=None):
+def record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at=None, *, expected_hash=None, database=None):
     directory = Path(directory)
     with feedback_lock(directory):
-        return _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at)
+        return _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at,
+                                expected_hash=expected_hash,expected_database=database)
 
 
-def _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at):
-    if decision not in DECISIONS or not reviewer.strip() or not reason.strip():
-        raise ValueError('Valid decision, reviewer and reason are required')
+def _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at, *, expected_hash=None,expected_database=None):
+    if (decision not in DECISIONS or not isinstance(reviewer,str) or not isinstance(reason,str) or
+            not reviewer.strip() or not reason.strip() or len(reviewer)>100 or len(reason)>2000):
+        raise ValueError('Valid decision, reviewer (1–100 characters) and reason (1–2000 characters) are required')
     with (directory / 'case_queue.csv').open(encoding='utf-8-sig', newline='') as stream:
         cases = {r['case_id']: r for r in csv.DictReader(stream)}
     lineage = load_lineage(directory)
@@ -87,6 +90,11 @@ def _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at
         raise ValueError('Unknown case ID')
     audit_path = directory / 'feedback_audit.jsonl'
     events = read_audit(audit_path)
+    latest,_=feedback_view(events,lineage['current'] or cases,lineage)
+    actual=latest.get(case_id,{}).get('event_hash','')
+    if expected_hash is not None and expected_hash!=actual:
+        raise RuntimeError('Hồ sơ vừa có kết luận mới. Tải lại hồ sơ trước khi lưu.')
+    check_decision(directory,lineage['current'].get(case_id,cases[case_id]),decision,expected_database=expected_database)
     stamp = reviewed_at or datetime.now(timezone(timedelta(hours=7))).isoformat(timespec='seconds')
     when = datetime.fromisoformat(stamp)
     if when.tzinfo is None or when < datetime.fromisoformat(cases[case_id]['last_seen_at']):
@@ -134,8 +142,11 @@ def main():
     parser.add_argument('--reviewer', required=True)
     parser.add_argument('--reason', required=True)
     parser.add_argument('--reviewed-at')
+    parser.add_argument('--expected-hash',help='Phiên bản kết luận đã đọc; dùng chuỗi rỗng cho lần đầu')
+    parser.add_argument('--database',type=Path,help='Nếu khai báo, phải trùng SQLite đã gắn với thư mục hồ sơ')
     args = parser.parse_args()
-    print(json.dumps(record_feedback(args.report, args.case_id, args.decision, args.reviewer, args.reason, args.reviewed_at), ensure_ascii=False))
+    print(json.dumps(record_feedback(args.report, args.case_id, args.decision, args.reviewer, args.reason, args.reviewed_at,
+                                    expected_hash=args.expected_hash,database=args.database), ensure_ascii=True))
 
 
 if __name__ == '__main__':

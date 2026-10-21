@@ -1,0 +1,16 @@
+{
+  "completed_at": "2026-10-20T02:48:21.933Z",
+  "goal": "BUG01/P2_NO_GROSS",
+  "browser_result": "PASS",
+  "both_tabs_missing_total": true,
+  "queue_score": 0,
+  "queue_priority": "Thấp",
+  "related_recur_a5_selected": 23,
+  "renderer_checks": 22,
+  "locked_files_unchanged": 1209,
+  "post_fix_code_hashes_verified": true,
+  "report_links_verified": true,
+  "prior_failure_history_preserved": true,
+  "full_39_sample_17_workflow_reacceptance": false,
+  "report": "../bug01_retest_20261020.md"
+}

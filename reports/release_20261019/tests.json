@@ -1,0 +1,16 @@
+{
+  "successful": true,
+  "tests": 93,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "patterns": [
+    "test_release_manager.py",
+    "test_review_backup.py",
+    "test_review_decision_gate.py",
+    "test_p2_controls_web.py",
+    "test_cash_controls.py"
+  ],
+  "elapsed_seconds": 70.25,
+  "failing_tests": []
+}

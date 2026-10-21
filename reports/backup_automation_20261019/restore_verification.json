@@ -1,0 +1,45 @@
+{
+  "successful": true,
+  "backup": "D:\\agent22\\.runtime\\scheduled_review_backups\\run-20261019T143548Z-652aef27",
+  "restored": "D:\\agent22\\.runtime\\backup_automation_20261019\\restored",
+  "case_counts": {
+    "001": 584,
+    "003": 627
+  },
+  "all_main_tables_match": true,
+  "request_events": 6,
+  "feedback_events": {
+    "001": 0,
+    "003": 0
+  },
+  "p2_journals": {
+    "step2_uat": {
+      "history_events": 0,
+      "current_reviews": 0,
+      "all_tables_match": true
+    },
+    "browser_uat": {
+      "history_events": 0,
+      "current_reviews": 0,
+      "all_tables_match": true
+    },
+    "assistant_review": {
+      "history_events": 20,
+      "current_reviews": 20,
+      "all_tables_match": true
+    },
+    "p2_web": {
+      "history_events": 0,
+      "current_reviews": 0,
+      "all_tables_match": true
+    }
+  },
+  "p2_controls": 32,
+  "p2_transactions": 73,
+  "representative_case_http_checks": 7,
+  "protected_files_unchanged": 1209,
+  "notification_mode": "dry_run",
+  "external_messages_sent": 0,
+  "browser_visual_acceptance": false,
+  "independent_accounting_acceptance": false
+}

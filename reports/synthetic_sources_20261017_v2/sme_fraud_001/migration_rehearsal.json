@@ -1,0 +1,19 @@
+{
+  "status": "synthetic_rehearsal_passed",
+  "real_history_migrated": false,
+  "simulated_reviewer": "SIM_REHEARSAL_BOT",
+  "independent_reviewed_units": 0,
+  "audit_sha256": "1b8646cc49ca85bdccd5f2a214660d7271caecb14135d0ca384b6daedf1a632e",
+  "old_case_id": "RC_4fa2eaa50c0d41d5",
+  "equivalent_case_id": "SIM_EQ_RC_4fa2eaa50c0d41d5",
+  "changed_case_id": "SIM_CHANGED_RC_4fa2eaa50c0d41d5",
+  "checks": {
+    "equivalent_feedback_preserved": true,
+    "equivalent_assignment_preserved": true,
+    "equivalent_admission_preserved": true,
+    "audit_chain_unchanged": true,
+    "changed_scope_no_feedback": true,
+    "changed_scope_no_admission": true,
+    "audit_chain_still_unchanged": true
+  }
+}

@@ -1,0 +1,218 @@
+[
+  {
+    "review_id": "P2_FULL_BELOW", "verdict": "passed", "clarity": "clear", "priority_assessment": "not_applicable",
+    "observed": "Chi tiền mặt 4.999.999 VND, hóa đơn cùng giá trị, trước ngày chi; không có hit P2 và không mở hồ sơ.",
+    "explanation_review": "Thông báo không phát sinh P2 và lưu ý chưa chứng nhận hợp lệ là dễ hiểu. Nên nói thêm giá trị thấp hơn ngưỡng 5.000.000 của snapshot để người đọc không phải so mẫu khác.",
+    "required_evidence": ["Bản hóa đơn gốc HD_CONTROL và phiếu chi để xác thực metadata; trong mẫu không thiếu trường hóa đơn bắt buộc."],
+    "priority_review": "Không mở hồ sơ P2 là phù hợp với phạm vi kiểm tra của mẫu. Không suy rộng thành phê duyệt toàn bộ giao dịch.",
+    "suggested_explanation": "Khoản chi và tổng hóa đơn 4.999.999 VND thấp hơn ngưỡng đối chiếu 5.000.000 VND của snapshot; không phát sinh P2.", "issues": ["RR07"]
+  },
+  {
+    "review_id": "P2_FULL_EQUAL", "verdict": "passed", "clarity": "clear", "priority_assessment": "reasonable",
+    "observed": "Khoản chi và hóa đơn đúng 5.000.000 VND, phát sinh P2 8 điểm, ưu tiên trung bình; điều kiện ngưỡng của snapshot bao gồm dấu bằng.",
+    "explanation_review": "Phân biệt đối chiếu chứng từ/VAT với kết luận gian lận là rõ. Nên ghi rõ 'bằng ngưỡng' để giải thích sự khác biệt với FULL_BELOW.",
+    "required_evidence": ["Hóa đơn gốc, phiếu chi và hồ sơ nghĩa vụ chi; việc đủ trường metadata chưa xác minh tính xác thực tài liệu."],
+    "priority_review": "Trung bình là hợp lý cho yêu cầu đối chiếu đã có thông tin hóa đơn nhưng chưa có bằng chứng kết luận gian lận.",
+    "suggested_explanation": "Chi tiền mặt cho hóa đơn 5.000.000 VND, bằng ngưỡng đối chiếu của snapshot; cần rà chứng từ thanh toán, chưa kết luận sai phạm.", "issues": []
+  },
+  {
+    "review_id": "P2_FULL_BANK", "verdict": "passed", "clarity": "clear", "priority_assessment": "not_applicable",
+    "observed": "Khoản 30.000.000 VND có kênh ngân hàng, Nợ 642/Có 112 và hóa đơn đủ trường; không có P2.",
+    "explanation_review": "Kênh ngân hàng thể hiện rõ. Câu 'không phát sinh P2' đúng nhưng nên nói rõ do không thuộc nhánh chi tiền mặt.",
+    "required_evidence": ["Ủy nhiệm chi/sao kê, hóa đơn và phê duyệt nghĩa vụ chi. Mẫu cô lập P2, không chứng nhận đã kiểm tra mọi thẩm quyền khác."],
+    "priority_review": "Không mở P2 là phù hợp. Không được xem đây là kết luận về các kiểm soát phê duyệt ngoài phạm vi mẫu.",
+    "suggested_explanation": "Giao dịch thanh toán qua ngân hàng nên không thuộc nhánh P2 chi tiền mặt; vẫn cần đối chiếu chứng từ và các kiểm soát khác.", "issues": ["RR07"]
+  },
+  {
+    "review_id": "P2_NO_INVOICE", "verdict": "passed", "clarity": "clear", "priority_assessment": "reasonable",
+    "observed": "Chi 5.000.000 VND nhưng thiếu mã/số, ngày và tổng tiền hóa đơn; P2 0 điểm, hồ sơ yêu cầu bổ sung ưu tiên thấp.",
+    "explanation_review": "Danh sách trường cần bổ sung và cách hiển thị giá trị chưa có thông tin là rõ; không tự chuyển thiếu hóa đơn thành nghi vấn có điểm.",
+    "required_evidence": ["Hóa đơn gốc có định danh, ngày phát hành và tổng tiền", "Phiếu chi, bên nhận tiền và nội dung chi cụ thể"],
+    "priority_review": "Thấp/0 điểm hợp lý cho yêu cầu dữ liệu. Đây không phải kết luận khoản chi ít rủi ro hay hợp lệ.",
+    "suggested_explanation": "Chưa có thông tin hóa đơn để đánh giá khoản chi; cần bổ sung định danh, ngày và tổng tiền hóa đơn trước khi đối chiếu lại.", "issues": []
+  },
+  {
+    "review_id": "P2_NO_DATE", "verdict": "passed", "clarity": "clear", "priority_assessment": "reasonable",
+    "observed": "Hóa đơn HD_CONTROL có mã và giá trị 5.000.000 VND nhưng ngày phát hành trống; P2 0 điểm, ưu tiên thấp.",
+    "explanation_review": "Trường ngày hóa đơn được chỉ ra trong danh sách thiếu. Giữ trạng thái cần bổ sung thay vì suy diễn ngày từ ngày chi là phù hợp.",
+    "required_evidence": ["Ngày phát hành và bản hóa đơn gốc HD_CONTROL", "Nguồn/thời điểm chứng từ được biết trước khi đối chiếu lại"],
+    "priority_review": "Ưu tiên thấp của yêu cầu bổ sung là hợp lý khi chưa đủ mốc thời gian để đánh giá theo snapshot.",
+    "suggested_explanation": "Có hóa đơn 5.000.000 VND nhưng thiếu ngày phát hành; chưa đủ dữ kiện đối chiếu theo thời điểm.", "issues": []
+  },
+  {
+    "review_id": "P2_FUTURE_INVOICE", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Chi lúc 11:00 ngày 12/08/2025; hóa đơn phát hành và được ghi nhận lúc 12:00 cùng ngày. P2 vẫn 0 điểm và yêu cầu bổ sung.",
+    "explanation_review": "Đúng logic thời điểm nhưng phần hóa đơn nguồn vẫn trình bày đầy đủ như tài liệu thông thường. Cần cảnh báo trực tiếp chênh lệch một giờ, thay vì chỉ ghi 'hóa đơn đã có lúc chi' trong danh sách cần bổ sung.",
+    "required_evidence": ["Chứng từ/nhật ký thể hiện tài liệu thực sự có trước 11:00", "Giải trình thời điểm phát hành/nhập hóa đơn, không sửa ngày chỉ để khớp quy tắc"],
+    "priority_review": "Thấp/0 điểm phù hợp cho khoảng trống bằng chứng tại thời điểm chi; không dùng hóa đơn biết sau để kết luận quá khứ.",
+    "suggested_explanation": "Chi lúc 11:00 nhưng hóa đơn chỉ được biết lúc 12:00; tại thời điểm chi chưa đủ bằng chứng hóa đơn.", "issues": ["RR04"]
+  },
+  {
+    "review_id": "P2_INSTALL_CASH", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Hai khoản tiền mặt 3.000.000 VND thuộc cùng hóa đơn 12.000.000 VND. Mỗi khoản có P2 8 điểm; hồ sơ trung bình có max_score 9. Invoice.recorded_at lại là 14/08, sau khoản đầu 12/08.",
+    "explanation_review": "Cần giải thích P2 được phát theo tổng hóa đơn chứ không chỉ số tiền từng đợt, và giải thích phần điểm lặp lại. Mốc recorded_at có dấu hiệu bị cập nhật theo đợt cuối trong bộ dựng nguồn; cần tách thời điểm biết đầu tiên với cập nhật sau.",
+    "required_evidence": ["Hóa đơn 12.000.000 VND và lịch thanh toán", "Hai phiếu chi, số đã trả/còn phải trả", "Lịch sử phiên bản hóa đơn chứng minh đã biết ở khoản đầu"],
+    "priority_review": "Trung bình là hợp lý cho đối chiếu thanh toán của hóa đơn. Chưa có cơ sở gọi hai khoản là cố ý chia nhỏ hoặc tự tăng mức ưu tiên.",
+    "suggested_explanation": "Mỗi đợt chi 3.000.000 VND nhưng cùng hóa đơn 12.000.000 VND vượt ngưỡng của snapshot; cần đối chiếu cả lịch thanh toán.", "issues": ["RR04", "RR05"]
+  },
+  {
+    "review_id": "P2_INSTALL_MIXED", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Hóa đơn 20.000.000 VND được trả 19.000.000 qua ngân hàng và 1.000.000 tiền mặt; P2 chỉ ở đợt tiền mặt, 8 điểm/trung bình. A1 được giải trình bằng AGR_CONTROL. Invoice.recorded_at là thời điểm đợt sau.",
+    "explanation_review": "Cần hiển thị tổng hợp hai kênh và lý do khoản tiền mặt 1.000.000 vẫn được đối chiếu theo hóa đơn. Câu ngoại lệ A1 hiện chưa cho người đọc xem đủ căn cứ thỏa thuận và tổng được phép.",
+    "required_evidence": ["Hóa đơn, sao kê đợt 19.000.000 và phiếu chi 1.000.000", "AGR_CONTROL/CONTRACT_CONTROL và phê duyệt gắn đúng nghĩa vụ", "Lịch sử biết hóa đơn trước đợt đầu"],
+    "priority_review": "Giữ trung bình cho P2 và không cộng nghi vấn chia nhỏ đã được giải trình là hợp lý trong mẫu; không chứng nhận nghĩa vụ chi là thật.",
+    "suggested_explanation": "Cùng hóa đơn 20.000.000 VND có hai kênh thanh toán; cần rà riêng đợt tiền mặt 1.000.000 VND. Mẫu chia nhỏ A1 đã có thỏa thuận giải trình.", "issues": ["RR04", "RR05", "RR08"]
+  },
+  {
+    "review_id": "P2_REFUND_FULL", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "conditional",
+    "observed": "Chi 5.000.000 VND ngày 12/08 có P2 8 điểm/trung bình; thu hoàn đủ 5.000.000 ngày 13/08 Nợ 111/Có 642, có liên kết gốc, không có P2 mới.",
+    "explanation_review": "Mặc định chọn dòng hoàn nên thông báo 'không mở hồ sơ' dễ bị hiểu là hồ sơ gốc đã xong. Cần bảng chi gốc/đã hoàn/còn lại và trạng thái hồ sơ gốc.",
+    "required_evidence": ["Phiếu chi gốc và phiếu thu hoàn đã đối chiếu sổ quỹ", "Lý do hoàn, xác nhận nhận lại tiền và liên kết chứng từ", "Giải trình để người rà quyết định xử lý hồ sơ gốc"],
+    "priority_review": "Trung bình tại lúc chi là hợp lý. Sau hoàn đủ cần tái rà hồ sơ bằng chứng hiện tại; chưa xác thực phiếu thu thì không tự hạ điểm hay xóa hit lịch sử.",
+    "suggested_explanation": "Đã ghi nhận hoàn đủ 5.000.000 VND; dòng hoàn không tạo P2 mới, hồ sơ khoản chi gốc vẫn cần người rà xác minh và xử lý.", "issues": ["RR06"]
+  },
+  {
+    "review_id": "P2_REFUND_PART", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "conditional",
+    "observed": "Chi 6.000.000 VND, hoàn 1.000.000 VND có liên kết; khoản gốc vẫn P2 8 điểm/trung bình, dòng thu hoàn không có P2.",
+    "explanation_review": "Thiếu tóm tắt đã hoàn 1.000.000 và số chi thuần 5.000.000; người dùng phải tự cộng sổ. Không được xem số chi thuần là căn cứ tự bù trừ VAT.",
+    "required_evidence": ["Phiếu chi 6.000.000 và phiếu thu hoàn 1.000.000", "Biên bản/lý do hoàn và đối chiếu công nợ, hóa đơn liên quan"],
+    "priority_review": "Giữ đối chiếu trung bình là có cơ sở; việc hoàn một phần chưa tự giải trình điều kiện của khoản chi gốc.",
+    "suggested_explanation": "Chi 6.000.000 VND, ghi nhận hoàn 1.000.000 VND; cần rà cả khoản gốc và chứng từ hoàn, không tạo cảnh báo mua mới trên dòng thu.", "issues": ["RR06"]
+  },
+  {
+    "review_id": "P2_REVERSAL_JOURNAL", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "conditional",
+    "observed": "Khoản chi 5.000.000 VND có P2; dòng đảo Nợ 111/Có 642 mang payment_channel=journal và không có P2. Liên kết nguồn vẫn mang loại cash_return_of.",
+    "explanation_review": "UI hiển thị kênh 'journal' và dịch liên kết thành 'Hoàn tiền', dễ đánh đồng đảo sổ với thực thu tiền. Cần loại liên kết đảo riêng trong phiên bản nguồn tiếp theo và nhãn tiếng Việt.",
+    "required_evidence": ["Chứng từ đảo, phê duyệt và lý do điều chỉnh", "Tham chiếu bút toán gốc; chỉ xác nhận thực thu nếu có bằng chứng dòng tiền riêng"],
+    "priority_review": "Giữ bằng chứng P2 quá khứ là đúng; ưu tiên xử lý hiện tại cần xem lý do đảo. Chưa đủ căn cứ coi khoản chi đã thực sự được hoàn tiền.",
+    "suggested_explanation": "Đã có bút toán đảo sổ, không phải khoản chi mới; cần xác minh điều chỉnh và không tự diễn giải thành tiền đã thu hồi.", "issues": ["RR06"]
+  },
+  {
+    "review_id": "P2_RECEIPT_UNLINKED", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "not_applicable",
+    "observed": "Thu 5.000.000 VND, Nợ 111/Có 642; không có chứng từ gốc liên kết, không có P2 hoặc hồ sơ P2.",
+    "explanation_review": "Không coi dòng thu là khoản chi mới là đúng. Thông báo chung chưa chỉ ra nhiệm vụ xác minh nguồn thu và nối khoản gốc.",
+    "required_evidence": ["Phiếu thu, bên nộp tiền và lý do thu", "Chứng từ gốc hoặc giải trình vì sao chưa liên kết", "Đối chiếu sổ quỹ và tài khoản chi phí"],
+    "priority_review": "Không mở P2 là hợp lý trong phạm vi chi tiền mặt. Tình trạng chưa nối nguồn gốc cần được theo dõi như yêu cầu dữ liệu riêng, không suy thành hợp lệ.",
+    "suggested_explanation": "Đây là dòng thu nên không phát sinh P2 chi tiền mặt; cần xác định nguồn thu và liên kết chứng từ gốc.", "issues": ["RR07"]
+  },
+  {
+    "review_id": "P2_RECUR_CASH", "verdict": "passed", "clarity": "clear", "priority_assessment": "reasonable",
+    "observed": "Ba khoản định kỳ 5.000.000 VND có hóa đơn từng tháng và thỏa thuận đã duyệt; mỗi khoản vẫn P2 8 điểm. Hai hồ sơ trung bình có max_score 8 và 10, khoản tháng 10 thêm C1.",
+    "explanation_review": "Thể hiện rõ thỏa thuận định kỳ không tự miễn P2. Có thể cải thiện cách giải thích tổng điểm hồ sơ khi có ngữ cảnh và lặp lại.",
+    "required_evidence": ["Thỏa thuận định kỳ đã ký, hóa đơn từng kỳ, phiếu chi", "Đối chiếu tiền thực trả với kỳ và mức đã duyệt"],
+    "priority_review": "Trung bình phù hợp cho đối chiếu chứng từ; không nâng thành gian lận chỉ vì khoản chi lặp lại hoặc phát sinh Chủ nhật.",
+    "suggested_explanation": "Chi định kỳ đã có thỏa thuận nhưng từng khoản tiền mặt vẫn cần đối chiếu hóa đơn/thanh toán; P2 đóng góp 8 điểm mỗi khoản.", "issues": ["RR05"]
+  },
+  {
+    "review_id": "P2_RECUR_GAP", "verdict": "passed", "clarity": "clear", "priority_assessment": "reasonable",
+    "observed": "Ba khoản định kỳ 5.000.000 VND có mẫu PAT_CONTROL đã duyệt nhưng không có mã, ngày và tổng hóa đơn; các khoản đều 0 điểm, ưu tiên thấp.",
+    "explanation_review": "Danh sách thiếu và phần thỏa thuận cho phép hiểu vì sao có hợp đồng vẫn cần hóa đơn. C1 ở khoản cuối giữ 0 điểm, không làm tăng nghi vấn từ khoảng trống dữ liệu.",
+    "required_evidence": ["Hóa đơn theo từng kỳ và phiếu chi", "Đối chiếu thỏa thuận định kỳ với nội dung dịch vụ/thời gian phát sinh"],
+    "priority_review": "Yêu cầu bổ sung thấp/0 điểm hợp lý. Việc có thỏa thuận không thay thế tài liệu còn thiếu.",
+    "suggested_explanation": "Đã có thỏa thuận định kỳ, nhưng chưa có hóa đơn từng kỳ để đối chiếu khoản chi; tiếp tục yêu cầu bổ sung, chưa cộng điểm rủi ro.", "issues": []
+  },
+  {
+    "review_id": "P2_RECUR_A5", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "not_applicable",
+    "observed": "22 mẫu chi phí lịch sử 1.000.000 VND tạo P99 1.000.000; khoản hiện tại 3.000.000 khớp PAT_CONTROL đã duyệt, A5 được giải trình về 0 điểm; không có P2/hồ sơ.",
+    "explanation_review": "Thỏa thuận hiển thị đủ mức và thời điểm, nhưng phần A5 của web P2 chỉ hiện câu ngoại lệ, chưa hiện 22 mẫu, ngưỡng và mã mẫu giải trình cạnh nhau.",
+    "required_evidence": ["Thỏa thuận 3.000.000 VND đã được duyệt trước giao dịch và hồ sơ thực hiện kỳ hiện tại", "Nguồn lịch sử cùng phạm vi tài khoản để giải thích vì sao phát sinh tín hiệu thống kê"],
+    "priority_review": "Không mở hồ sơ A5 do ngoại lệ đã được khai báo là hợp lý trong mẫu. Không suy rằng mọi khoản định kỳ đều được miễn P2 hoặc đã hợp lệ thực tế.",
+    "suggested_explanation": "Khoản 3.000.000 VND vượt P99 1.000.000 của 22 mẫu lịch sử, nhưng khớp thỏa thuận PAT_CONTROL đã duyệt nên A5 không cộng điểm.", "issues": ["RR08"]
+  },
+  {
+    "review_id": "P2_LIMIT_VERIFIED", "verdict": "needs_information", "clarity": "clear", "priority_assessment": "needs_owner_decision",
+    "observed": "Chi 2.000.001 VND, vượt hạn mức đã xác minh 2.000.000 đúng 1 VND; P2 14 điểm/ưu tiên cao dù thông tin hóa đơn vẫn thiếu.",
+    "explanation_review": "Nguồn, người xác minh và lý do vượt được tách đúng với thiếu hóa đơn. Cần thể hiện số vượt 1 VND để người nghiệm thu đánh giá mức ưu tiên.",
+    "required_evidence": ["Quyết định hạn mức và nguyên tắc xử lý sai số/mức vượt nhỏ", "Phê duyệt ngoại lệ nếu có", "Hóa đơn và phiếu chi còn thiếu"],
+    "priority_review": "Cao/14 đúng cấu hình hiện tại nhưng tính hợp lý nghiệp vụ cho mức vượt 1 VND cần chủ kiểm soát quyết định. Không tự đổi trọng số hoặc ngưỡng trong đợt rà này.",
+    "suggested_explanation": "Khoản chi vượt hạn mức nội bộ đã xác minh 1 VND; cần xác minh ngoại lệ và chính sách trọng yếu trước khi chốt cách ưu tiên vận hành.", "issues": ["RR09"]
+  },
+  {
+    "review_id": "P2_LIMIT_UNVERIFIED", "verdict": "passed", "clarity": "clear", "priority_assessment": "reasonable",
+    "observed": "Có con số hạn mức 2.000.000 và khoản chi 2.000.001 VND, nhưng không có xác minh; hệ thống giữ 0 điểm/thấp và yêu cầu bằng chứng.",
+    "explanation_review": "Phân biệt 'chưa xác minh' với 'đã xác minh vượt hạn mức' rõ, không gọi chênh 1 VND là vi phạm đã biết.",
+    "required_evidence": ["Nguồn quyết định hạn mức, người và thời điểm xác minh, thời hạn hiệu lực", "Hóa đơn/phiếu chi và phê duyệt ngoại lệ nếu có"],
+    "priority_review": "Thấp của yêu cầu bổ sung là hợp lý khi chưa đủ bằng chứng hạn mức có hiệu lực.",
+    "suggested_explanation": "Đã khai báo hạn mức nhưng chưa có xác minh; cần xác minh nguồn và hiệu lực trước khi kết luận vượt hạn mức.", "issues": []
+  },
+  {
+    "review_id": "P2_LIMIT_FUTURE", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Khoản 2.000.001 VND so với hạn mức 2.000.000 có trạng thái not_known_at_payment; tại lúc chi chưa có xác minh, P2 0 điểm/thấp.",
+    "explanation_review": "Trạng thái đúng nhưng bản chứng minh bị trả về null nên người dùng không nhìn được mốc xác minh đến sau. Cần hiển thị mốc bị loại khỏi đánh giá, có nhãn không dùng làm bằng chứng quá khứ.",
+    "required_evidence": ["Nguồn xác minh hạn mức đã có tại thời điểm chi nếu tồn tại", "Nhật ký thời điểm xác minh và hóa đơn/phiếu chi"],
+    "priority_review": "Giữ yêu cầu bổ sung thấp là hợp lý theo thời điểm, không dùng xác minh tương lai để chấm vi phạm quá khứ.",
+    "suggested_explanation": "Xác minh hạn mức chỉ được biết sau khoản chi; tại thời điểm chi chưa đủ căn cứ chấm vượt hạn mức.", "issues": ["RR04"]
+  },
+  {
+    "review_id": "P2_LIMIT_EXPIRED", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Khoản chi lúc 11:00 ngày 12/08/2025; effective_to của hạn mức cũng là mốc này. Snapshot dùng khoảng hiệu lực loại trừ mốc cuối, nên trạng thái outside_effective_period và 0 điểm/thấp.",
+    "explanation_review": "UI nói ngoài hiệu lực nhưng chỉ hiện ngày xác minh, chưa hiện hiệu lực từ/đến và quy tắc mốc cuối; dễ nhầm với LIMIT_VERIFIED.",
+    "required_evidence": ["Quyết định hạn mức còn hiệu lực hoặc văn bản gia hạn", "Thời điểm hiệu lực chính xác và hóa đơn/phiếu chi"],
+    "priority_review": "Thấp của yêu cầu bổ sung là hợp lý vì chưa có hạn mức áp dụng ở thời điểm này. Không coi bằng chứng hết hiệu lực là hạn mức hiện hành.",
+    "suggested_explanation": "Hạn mức hết hiệu lực đúng mốc 11:00, không bao gồm khoản chi tại mốc cuối; cần quyết định còn hiệu lực để đánh giá.", "issues": ["RR04"]
+  },
+  {
+    "review_id": "P2_LIMIT_FOREIGN", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "conditional",
+    "observed": "Giao dịch ghi currency=USD, amount_vnd=5.000.000; P2 yêu cầu verified_vnd_amount và giữ 0 điểm. Tuy nhiên dòng sổ debit_vnd/credit_vnd cũng bằng 5.000.000 và tab sổ gắn nhãn VND.",
+    "explanation_review": "Phần giao dịch cảnh báo chưa xác minh VND là đúng, nhưng tab sổ trình bày cùng số như VND, tạo mâu thuẫn về đơn vị. Cần gắn trạng thái chưa xác minh cho sổ này và tách số nguyên tệ/giá trị quy đổi ở phiên bản nguồn sau.",
+    "required_evidence": ["Số nguyên tệ, đồng tiền, tỷ giá và thời điểm quy đổi từ nguồn xác minh", "Giá trị VND đã đối chiếu cùng chứng từ gốc"],
+    "priority_review": "0 điểm và tuyến bổ sung hợp lý vì chưa thể so với hạn mức VND. Cần ưu tiên sửa cách thể hiện đơn vị dữ liệu, không tự suy rằng 5.000.000 USD bằng 5.000.000 VND.",
+    "suggested_explanation": "Chưa xác minh giá trị VND của khoản ngoại tệ; chưa so hạn mức, các giá trị sổ trong mẫu này cũng chưa phải số quy đổi đã xác nhận.", "issues": ["RR03"]
+  },
+  {
+    "review_id": "A5_001_TX_3103d5f23fde8b1a6f", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Chi NCC 102.187.000 VND, TK 331, P99 69.986.200 từ 44 mẫu/90 ngày; vượt 32.200.800 (46,01%). A5 +3, C4 +8, C1 +1; tổng hồ sơ 11 do các tín hiệu nhóm C không cộng chồng.",
+    "explanation_review": "Thẻ A5 có số đo và ngưỡng nhưng còn thuật ngữ cash_outflow/payables/baseline. Thẻ C4 không hiển thị nhân viên, kỳ nghỉ và hành động dù JSON có đủ: E0000418 lập lúc 06:03 ngày 09/04 trong kỳ nghỉ 08–10/04 đã duyệt.",
+    "required_evidence": ["Hồ sơ nghỉ phép, ủy quyền/ngoại lệ thao tác, nhật ký ERP xác định người thực hiện", "Hóa đơn, chứng từ ngân hàng và phê duyệt chi 102.187.000", "Giải trình quy mô giao dịch so với lịch sử cùng phạm vi"],
+    "priority_review": "Trung bình/11 là có cơ sở vì C4 là tín hiệu độc lập; A5 chỉ hỗ trợ. Chưa đủ căn cứ nâng thành gian lận hoặc tăng ưu tiên chỉ vì vượt P99.",
+    "suggested_explanation": "Khoản chi cao hơn P99 của 44 mẫu lịch sử 46,01%; đồng thời có thao tác của người đang nghỉ phép chưa thấy ủy quyền. Cần rà quyền thao tác và chứng từ chi.", "issues": ["RR02", "RR05"]
+  },
+  {
+    "review_id": "A5_001_TX_ac2d5e5d289dc9227b", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Bút toán trích trước Nợ 6422/Có 335 là 56.693.000 VND, P99 18.709.907,68 từ 52 mẫu; F1 xác nhận nguồn nhập thủ công, còn 3,6382 ngày đến khóa sổ và vượt trọng yếu 17.238.000. A5 +3/F1 +8, hồ sơ 11 điểm/trung bình.",
+    "explanation_review": "Thẻ F1 có số tiền, trọng yếu và số ngày nhưng thiếu liên kết nhật ký nhập thủ công, ngày khóa sổ và quyết định trọng yếu; số ngày 3,6382 khó đọc. Đây là trích trước chưa có hóa đơn, không được gọi là chi tiền bất thường.",
+    "required_evidence": ["Biên bản nghiệm thu dịch vụ/bảng tính trích trước và phê duyệt kế toán", "Nhật ký ERP nhập thủ công, lịch khóa sổ và chính sách trọng yếu", "Hóa đơn hoặc đối soát khi đến kỳ sau"],
+    "priority_review": "Giữ trung bình/11 là hợp lý cho kiểm tra điều chỉnh có căn cứ độc lập F1. Nhập thủ công gần khóa sổ và số tiền lớn chưa chứng minh khoản trích trước là sai.",
+    "suggested_explanation": "Khoản trích trước 56.693.000 VND được nhập thủ công khoảng 3,64 ngày trước khóa sổ, vượt mức trọng yếu và P99 lịch sử; cần kiểm tra căn cứ trích trước.", "issues": ["RR02", "RR05"]
+  },
+  {
+    "review_id": "A5_001_cold_information_request", "verdict": "passed", "clarity": "clear", "priority_assessment": "conditional",
+    "observed": "Chi tiền mặt 55.814.000 VND ngày 01/01/2024, thiếu hóa đơn; A5 có 0/20 mẫu, threshold=null, không có hit. Hồ sơ P2 yêu cầu bổ sung 0 điểm/thấp; C1 là ngữ cảnh 0 điểm.",
+    "explanation_review": "Khi mở phần A5, nhãn thiếu mẫu, số 0/20 và chưa có ngưỡng là rõ. Cần giữ trạng thái này tách khỏi 'không bất thường'; không biến C1 ngày nghỉ thành bằng chứng độc lập.",
+    "required_evidence": ["Hóa đơn có định danh/ngày/tổng tiền, phiếu chi và bên nhận", "Lịch sử thực có cùng C003–TK6422–chi phí trong cửa sổ trước lúc chi, kèm thời điểm được biết; nếu không có thì giữ thiếu mẫu"],
+    "priority_review": "0 điểm/thấp đúng tuyến thiếu dữ liệu. Với khoản lớn, cần người phụ trách và hạn lấy chứng từ riêng; không đồng nhất ưu tiên bổ sung thấp với ít rủi ro và không sửa điểm A5.",
+    "suggested_explanation": "Chưa đánh giá được A5 vì chưa có đủ lịch sử 0/20 mẫu; hồ sơ đang yêu cầu hóa đơn, chưa có kết luận hợp lệ.", "issues": ["RR10"]
+  },
+  {
+    "review_id": "A5_001_cold_operational", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Chi NCC 96.898.000 VND; A5 có 19/20 mẫu, ngưỡng null và không có hit. Hồ sơ trung bình/8 mở bởi C4: E0000491 lập trong kỳ nghỉ 19–21/08/2025 đã duyệt, không thấy ủy quyền trong bằng chứng.",
+    "explanation_review": "A5 thiếu mẫu được hiển thị đúng. C4 là căn cứ mở hồ sơ nhưng thẻ hiện không trình bày hành động, nhân viên và khoảng nghỉ, nên người rà thiếu dữ kiện ngay trên thẻ.",
+    "required_evidence": ["Nhật ký thao tác và hồ sơ nghỉ phép/ủy quyền", "Chứng từ chi NCC và nguồn lịch sử đúng cửa sổ, không tự tạo thêm một mẫu chỉ để đủ 20"],
+    "priority_review": "Trung bình do C4 là hợp lý; thiếu mẫu A5 không xóa tín hiệu độc lập và cũng không tự làm tăng mức ưu tiên.",
+    "suggested_explanation": "A5 chưa đánh giá được vì mới có 19/20 mẫu; hồ sơ được mở riêng do thao tác trong kỳ nghỉ phép cần xác minh.", "issues": ["RR02"]
+  },
+  {
+    "review_id": "A5_003_TX_60bac87c93f578f6c3", "verdict": "needs_fix", "clarity": "needs_edit", "priority_assessment": "reasonable",
+    "observed": "Chi lương 31.815.000 VND, P99 30.625.000 từ 168 mẫu; mức vượt chỉ 1.190.000 (3,89%). A5 +3, E2 +20/hard trigger; hồ sơ cao nhất/23. Quyết định nghỉ hiệu lực 06/09/2025; nguồn chi là lương thường kỳ cho giai đoạn 07/09–26/10.",
+    "explanation_review": "Mức ưu tiên cao nhất đến từ E2, không phải từ mức vượt P99 3,89%. Thẻ E2 hiện không hiển thị quyết định chấm dứt, kỳ phục vụ và loại khoản chi dù JSON có đầy đủ.",
+    "required_evidence": ["Quyết định chấm dứt hợp đồng và lịch sử tái tuyển/điều chỉnh nếu có", "Bảng lương, kỳ phục vụ, quyết toán cuối cùng và phê duyệt chi", "Sao kê thanh toán cho đúng người nhận"],
+    "priority_review": "Cao nhất/23 có cơ sở rà sớm vì E2 ghi nhận lương thường kỳ thuộc giai đoạn sau chấm dứt. Cần loại trừ quyết toán/tái tuyển bằng chứng gốc, chưa kết luận gian lận.",
+    "suggested_explanation": "Ưu tiên rà vì khoản lương thường kỳ phục vụ giai đoạn sau ngày chấm dứt hợp đồng; A5 chỉ bổ sung vì số tiền cao hơn P99 3,89%.", "issues": ["RR02", "RR05"]
+  },
+  {
+    "review_id": "A5_003_cold_information_request", "verdict": "passed", "clarity": "clear", "priority_assessment": "conditional",
+    "observed": "Chi tiền mặt 21.738.000 VND ngày 13/03/2024, thiếu hóa đơn; C001–TK642 có 0/20 mẫu và không có ngưỡng. Chỉ hồ sơ P2 yêu cầu bổ sung 0 điểm/thấp.",
+    "explanation_review": "Có thể phân biệt thiếu hóa đơn với thiếu lịch sử A5 khi mở phần trạng thái; không có hit A5 không được đọc thành không có rủi ro.",
+    "required_evidence": ["Hóa đơn có định danh/ngày/tổng tiền, phiếu chi và nội dung chi", "Lịch sử cùng phạm vi trước 13/03/2024 trong cửa sổ đánh giá nếu thực có"],
+    "priority_review": "Thấp là phù hợp với tuyến bổ sung, chưa đủ bằng chứng nâng rủi ro. Cần quản lý thời hạn thu tài liệu riêng; các ngày SLA ở đây là lịch sử mô phỏng, không phải hồ sơ thực đang quá hạn.",
+    "suggested_explanation": "Khoản chi đang thiếu hóa đơn và A5 chưa đủ lịch sử 0/20 mẫu; cần bổ sung nguồn, chưa được đánh giá là hợp lệ.", "issues": ["RR10"]
+  },
+  {
+    "review_id": "A5_003_cold_operational", "verdict": "needs_fix", "clarity": "blocked", "priority_assessment": "reasonable",
+    "observed": "Khoản 17.145.000 VND có A5 19/20 mẫu, ngưỡng null. Hồ sơ mở theo admission_basis=split_pattern bởi A4: 3 khoản cận hạn mức trong tháng, tổng điểm 3 nhưng ưu tiên trung bình; 2 giao dịch trước là ngữ cảnh.",
+    "explanation_review": "Đã tái hiện TypeError 'Cannot convert undefined or null to object' khi evidenceCard đọc window_days=null. Ngoài lỗi dựng thẻ, cần giải thích vì sao hồ sơ 3 điểm vẫn vào hàng đợi: chính sách rà mẫu A4, không phải A5 hay ngưỡng điểm thông thường.",
+    "required_evidence": ["Chứng từ của cả 3 khoản, thẩm quyền theo thời điểm và nghĩa vụ chi tương ứng", "Giải trình các khoản độc lập hoặc lịch thanh toán đã duyệt", "Lịch sử cùng tài khoản nếu có; không hạ số mẫu A5 để đánh giá được"],
+    "priority_review": "Trung bình có cơ sở theo tuyến rà mẫu A4 hiện tại; không phải lỗi tính ưu tiên do điểm 3 dưới ngưỡng số học. Chưa khẳng định các khoản cùng nghĩa vụ hay cố ý chia nhỏ.",
+    "suggested_explanation": "A5 chưa đủ 20 mẫu; hồ sơ vẫn cần rà vì có 3 khoản cận hạn mức trong tháng theo chính sách A4. Kiểm tra nghĩa vụ từng khoản và các ngoại lệ đã duyệt.", "issues": ["RR01", "RR05"]
+  }
+]

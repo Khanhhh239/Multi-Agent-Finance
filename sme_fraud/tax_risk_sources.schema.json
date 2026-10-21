@@ -1,0 +1,14 @@
+{
+  "version": "tax-risk-v1",
+  "table": "tax_risk_history",
+  "required": [
+    "record_id", "company_id", "tax_code", "status", "risk_reason",
+    "effective_from", "effective_to", "published_at", "observed_at",
+    "source_url", "source_document_id", "source_sha256"
+  ],
+  "status": ["high_risk", "removed"],
+  "date_interval": "[effective_from, effective_to); empty effective_to is open-ended",
+  "timestamps": "timezone-aware ISO 8601; normalized to +07:00",
+  "identity": "company_id + exact normalized 10/13 digit tax code; preserve leading zeros",
+  "provenance": "HTTPS government URL, source document ID, SHA-256 of archived source document"
+}

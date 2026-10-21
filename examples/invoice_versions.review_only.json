@@ -1,0 +1,24 @@
+[
+  {
+    "company_id": "SIM_COMPANY",
+    "invoice_id": "SIM_INVOICE",
+    "revision_id": "SIM_REV_1",
+    "observed_at": "2025-08-12T09:00:00+07:00",
+    "issued_at": "2025-08-11T09:00:00+07:00",
+    "source_updated_at": "2025-08-12T08:30:00+07:00",
+    "gross_amount_vnd": 12000000,
+    "status": "received",
+    "evidence_id": "SIM_SOURCE_1"
+  },
+  {
+    "company_id": "SIM_COMPANY",
+    "invoice_id": "SIM_INVOICE",
+    "revision_id": "SIM_REV_2",
+    "observed_at": "2025-08-14T11:00:00+07:00",
+    "issued_at": "2025-08-11T09:00:00+07:00",
+    "source_updated_at": "2025-08-14T10:30:00+07:00",
+    "gross_amount_vnd": 12000000,
+    "status": "verified_copy",
+    "evidence_id": "SIM_SOURCE_2"
+  }
+]

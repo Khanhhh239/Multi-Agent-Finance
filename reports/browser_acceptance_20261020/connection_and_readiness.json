@@ -1,0 +1,52 @@
+{
+  "client_date": "2026-10-20",
+  "status": "blocked_no_connected_browser",
+  "browser_inventory": {
+    "apps": [],
+    "browsers": []
+  },
+  "open_attempts": [
+    {
+      "browser": "iab",
+      "result": "Browser is not available: iab"
+    },
+    {
+      "browser": "chrome",
+      "result": "Browser is not available: chrome"
+    }
+  ],
+  "base_url": "http://127.0.0.1:8771",
+  "sample_results": {
+    "pending_browser": 39
+  },
+  "workflow_checks_pending": 17,
+  "ui_files": {
+    "review_ui/app.js": "90e15150b9a7282d520a7c4aed44efb22481fea30c92e311f502ea121dd70fc7",
+    "review_ui/case_graph.js": "08cb109f77b9fe4b83ae30b3512e772230458ea5246eb957f4dfa579e7caf91b",
+    "review_ui/index.html": "151b3190adf86c15168d7d21b1eb8d981aca3d5e9ad828e394e6daaa9273ddf6",
+    "review_ui/p2_controls.css": "4130deebfd8b75f38cacc88f992b6e1d0a6b6e2d8a11875ec0bd563e0232b274",
+    "review_ui/p2_controls.html": "68ff17b87974d8a274d65e89309516a0846edd47187b4a5bcb7b325ba602cf08",
+    "review_ui/p2_controls.js": "931dbc618f9ddc04babeef08a5b17e6cfb0b2bb436ab1a880cb670805fcdbc43",
+    "review_ui/review_explanations.js": "0a2c5c28b46372916a3a3d731f47b7c08fa698f114efec4b20a63b4b92ba0e72",
+    "review_ui/styles.css": "324d1b46c5e497aafa9ff8029db3299e7c2c233014721f6bd015ca1c9cb8a0d2",
+    "review_ui/vendor/cytoscape.min.js": "5f3b5b529546d5af1fc5628590af033b74511a5b6f789f5f4682845863228b91",
+    "review_ui/vendor/CYTOSCAPE_LICENSE.txt": "eb319c6e6f233607f71e8e2f450391751883cfc0eeb3ca7ef574c13d1d9c2203",
+    "review_ui/vendor/manifest.json": "1aa610932c5593cdac234f59a7cc3368e287172f331af36f413d193b6f219fac",
+    "sme_fraud/review_server.py": "e831c0870d94e87fc72df967926363079e53369688ea281331bee2fa9b233fd2",
+    "sme_fraud/review_store.py": "713825b7ece0f0a26886d1d79b4c45e7b7c48f138eb6b571011fc429cbe73fa1",
+    "sme_fraud/review_decision_gate.py": "4f624a1fee6ed2c0b923ad7fafe5321f1f562473d1233d61c803e7a57ad7a12e",
+    "sme_fraud/p2_controls_web.py": "055cb766eebe250db97cd1f1bb3b2daf0aeab6a825f4976f40b87785e89ba36c",
+    "sme_fraud/p2_controls_server.py": "c7952aa73b0f4f2e1fb7f4b25a5199624f79eda5397e9f6f673aa7cd5a911ccc"
+  },
+  "changed_since_original_packet": [
+    "sme_fraud/p2_controls_web.py"
+  ],
+  "browser_verified": false,
+  "independent_accounting_acceptance": false,
+  "browser_actions_performed": 0,
+  "browser_screenshots_captured": 0,
+  "business_conclusions_written": 0,
+  "product_code_changed_in_this_attempt": false,
+  "notification_mode": "dry_run",
+  "limitation": "HTTP readiness and source hashes cannot substitute for visible browser acceptance."
+}

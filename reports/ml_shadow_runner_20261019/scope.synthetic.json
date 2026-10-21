@@ -1,0 +1,12 @@
+{
+  "company_ids": [
+    "C001",
+    "C002",
+    "C003",
+    "C004",
+    "C005"
+  ],
+  "start_at": "2025-01-01T00:00:00+07:00",
+  "end_at": "2025-07-01T00:00:00+07:00",
+  "source_ref": "SIM: existing validation cache; technical replay, not independent evaluation"
+}

@@ -98,6 +98,11 @@ def run(dataset, output, model_path, budget=.003, config=None):
             row['hits'], row['suppressed_hits'] = counts[row['rule_id']], suppressions[row['rule_id']]
     (output / 'rule_coverage.json').write_text(json.dumps(result['coverage'], ensure_ascii=False, indent=2), encoding='utf-8')
     (output / 'rule_config.json').write_text(json.dumps(result['config'], ensure_ascii=False, indent=2), encoding='utf-8')
+    if result.get('dynamic_policy'):
+        from .a5_coverage import write_coverage
+        write_coverage(output, result)
+        from .threshold_artifacts import write_parameters
+        write_parameters(output, result['dynamic_parameters'], result['dynamic_policy'], result['dynamic_source_summary'])
     write_csv(output / 'direct_rule_scores.csv', direct['scores'])
     return compare_results(dataset, output, model_path, budget, tables, features, metadata, result, direct, cases)
 
@@ -122,10 +127,7 @@ def compare_results(dataset, output, model_path, budget, tables, features, metad
     rule_scores = np.array([r['rule_score'] for r in direct['scores']], dtype=float)
     graph_scores = np.array([r['rule_score'] for r in result['scores']], dtype=float)
     ensemble = .8 * empirical_rank(graph_scores[val_mask], graph_scores) + .2 * empirical_rank(if_scores[val_mask], if_scores)
-    # Preserve the existing Agent 2 benchmark variant: IF only breaks ties within a rule-score band.
-    gated = graph_scores + .5 * empirical_rank(if_scores[val_mask], if_scores)
-    variants = {'Rules': rule_scores, 'IF': if_scores, 'Rules+Graph': graph_scores, 'Rules+Graph+IF': ensemble,
-                'Rules+Graph gated by IF': gated}
+    variants = {'Rules': rule_scores, 'IF': if_scores, 'Rules+Graph': graph_scores, 'Rules+Graph+IF': ensemble}
     thresholds = {name: float(np.quantile(values[val_mask], 1 - budget, method='higher')) for name, values in variants.items()}
     with (dataset / 'labels.csv').open(encoding='utf-8-sig', newline='') as stream:
         truth = {r['transaction_id']: r for r in csv.DictReader(stream)}

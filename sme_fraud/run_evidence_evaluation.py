@@ -16,6 +16,7 @@ from .benford import monthly_diagnostics
 from .case_queue import review_queue, operational_members
 from .evidence_cases import SCENARIOS, prepare, decision
 from .evidence_evaluation import boolean_metrics, block_precision, budget_review
+from .review_capacity import workload_scenarios
 from .features import build_features
 from .generate import generate, write_csv
 from .rule_audit import confusion, read_csv, replay_scores, sha
@@ -189,7 +190,10 @@ def fresh_dataset(data, destination, config, seed, partition, rate, rows, reuse=
                     candidate_rows=len(candidates[code]&ids),
                     hard_negative_contributions=dict(Counter(labels[t]['hard_negative_type'] for t in contributing[code]&ids if labels[t]['hard_negative_type'])),
                     note='Fraud intent labels are not independent predicate truth.'))
-    budgets = [budget_review(cases,events,tx,labels,b) for b in (1,3,5)]
+    budgets = [dict(capacity_profile=profile, profile_kind=kind,
+                    **budget_review(cases, events, tx, labels, limits.slots, capacity_minutes=limits.minutes,
+                                    period_end=max(row['posted_at'][:10] for row in tx.values())))
+               for profile, kind, limits in workload_scenarios()]
     write_jsonl(destination/'rule_metrics.jsonl',per_rule)
     write_jsonl(destination/'budget_metrics.jsonl',budgets)
     aggregate_coverage = [dict(rule_id=code, windows=sum(r['rule_id']==code for r in diagnostics),
@@ -217,6 +221,7 @@ def main():
             raise FileExistsError(f'Refusing to overwrite {path}')
     args.output.mkdir(parents=True)
     config = json.loads(Path('reports/rule_repairs/phase3/sme_fraud_003/rule_config.json').read_text(encoding='utf-8'))
+    config.setdefault('cash_payment_policy', 'disabled')
     config.update(evidence_policy='phase4',receivable_overdue_days=60)
     plan = dict(config=config, control_seeds=CONTROL_SEEDS, fresh_seeds=FRESH_SEEDS, rows_per_dataset=args.rows,
         test_threshold_tuning=False, held_out_test_seeds=True, benford_definition_policy='phase4',

@@ -1,0 +1,14 @@
+{
+  "dry_run": true,
+  "replay_existing": true,
+  "daily_budget": 5,
+  "weekly_weekday": 0,
+  "weekly_hour": 8,
+  "case_url": "http://127.0.0.1:8765/",
+  "recipients": {
+    "C001": {
+      "email": ["simulation@example.invalid"],
+      "zalo": ["SIMULATION_GMF"]
+    }
+  }
+}

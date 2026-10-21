@@ -15,6 +15,7 @@ def main():
     output.parent.mkdir(parents=True,exist_ok=True)
     files = [root/name for name in ("README.md", "requirements.txt", "requirements-lock.txt", "run_benchmark.ps1", "package_dataset.py")]
     files += sorted((root/"sme_fraud").glob("*.py"))
+    files += sorted((root/"sme_fraud").glob("*.schema.json"))
     files += sorted((root/"tests").glob("*.py"))
     if (root/'review_ui'/'index.html').is_file():
         files += sorted(path for path in (root/'review_ui').glob('*') if path.is_file())

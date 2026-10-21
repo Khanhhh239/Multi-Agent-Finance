@@ -1,0 +1,31 @@
+{
+  "tag": "001",
+  "version": "admission-provenance-v2",
+  "baseline_members": 1304,
+  "snapshot_members": 2399,
+  "added_members": 1095,
+  "removed_members": 0,
+  "exported_rows": 1095,
+  "evidence_records": 1095,
+  "added_members_sha256": "eb22a497fcc2fde649ef5cc8a50734c44f2b9163f85bb8dca1bbc38833accfaa",
+  "exported_members_sha256": "eb22a497fcc2fde649ef5cc8a50734c44f2b9163f85bb8dca1bbc38833accfaa",
+  "removed_ids": [],
+  "row_observations_unchanged": true,
+  "membership_unchanged": true,
+  "all_added_ids_explained": true,
+  "admission_sources": {
+    "row": 1093,
+    "row|batch_closed": 2
+  },
+  "effective_bases": {
+    "split_pattern": 1095
+  },
+  "batch_only_rows": [],
+  "numeric_score_changed": false,
+  "hard_trigger_changed": false,
+  "operational_flag_changed": false,
+  "detector_scored": false,
+  "model_refitted": false,
+  "user_history_written": false,
+  "source_directory": "../../split_pattern_admission_20261017_v2/sme_fraud_001"
+}

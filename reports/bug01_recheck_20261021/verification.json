@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-21",
+  "bug": "BUG01",
+  "status": "CLOSED",
+  "technical_acceptance": "PASS",
+  "browser": "Chrome",
+  "base_url": "http://127.0.0.1:8771/p2-controls",
+  "browser_observations": 5,
+  "code_changed_this_recheck": false,
+  "invoice_presentation_matches_original_fix": true,
+  "invoice_presentation_sha256": "44a5bbfb2d4249ce7454f34e11884d6bc9f60c49c68c3dbc8703d58a42d71201",
+  "existing_renderer_regressions": 22,
+  "existing_test_result": "reports/wf17_retest_20261021/javascript_tests.json",
+  "tests_repeated_this_recheck": false,
+  "protected_total": 1209,
+  "protected_changed": [],
+  "business_journals_unchanged": true,
+  "p2_review_events_before": 35,
+  "p2_review_events_after": 35,
+  "handling_005": "opaque SHA256 only; no parsing/loading/scoring",
+  "independent_accounting_acceptance": false,
+  "full_39_sample_17_workflow_reacceptance": false
+}

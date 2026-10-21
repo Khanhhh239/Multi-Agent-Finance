@@ -74,9 +74,11 @@ Nhiễu giảm nhưng có giao dịch gian lận mô phỏng mất cảnh báo v
 
 Bộ 0,1% validation có hai ca `distributed_days`: `T000038122`, `T000050567`, điểm **8 → 4**; A2 vẫn có hit nhưng không vào queue. Đây là bằng chứng cần rà chính sách tổng hợp/tiếp nhận cảnh báo, không phải model IF đổi điểm.
 
-Mỗi thư mục bộ dữ liệu có `score_changes_train_validation.csv`, `score_change_analysis.json`, `changed_hits_train_validation.csv`, `case_identity_comparison.json` và `comparison_train_validation.json`: đối chiếu từng ID, điểm/hard trigger, rule mất/thêm, hit và bằng chứng hiện tại của các ca gian lận mất cảnh báo. Báo cáo JSON chứa cả hard negatives, loại gian lận, chế độ kế toán, từng rule/công ty, precision hồ sơ hồi cứu và tải ở 1/3/5 hồ sơ/công ty/ngày. Các thay đổi score/hit không được cộng cơ học thành tác động toàn queue.
+Trong **thư mục báo cáo lượt đồng bộ trước sửa tiếp nhận** `reports/feature_model_sync_20261017/sme_fraud_00x/` có `score_changes_train_validation.csv`, `score_change_analysis.json`, `changed_hits_train_validation.csv`, `case_identity_comparison.json` và `comparison_train_validation.json`. Chúng đối chiếu từng ID, điểm/hard trigger/cờ cảnh báo dòng, hit còn điểm mất/thêm và bằng chứng của các ca mất cảnh báo tại snapshot đó. JSON có hard negatives, loại gian lận, chế độ kế toán, từng rule/công ty, precision hồ sơ hồi cứu và tải ở 1/3/5 hồ sơ/công ty/ngày. Lượt sau sửa tiếp nhận dùng `added_admissions.csv` và `comparison.json` trong `reports/split_pattern_admission_20261017_v2/sme_fraud_00x/`. [Mục lục artifact và kiểm tra từng đơn vị đo](rule_artifact_inventory.md).
 
-Đổi ID theo R6 được lưu đối chiếu theo giao dịch chung; không tự chuyển feedback/phân công sang hồ sơ đổi phạm vi. Tất cả file nguồn và snapshot/model baseline đã được kiểm tra hash giữ nguyên. Ba SQLite mới nạp và replay thành công.
+Số hit, giao dịch được nhận và số hồ sơ là các đơn vị khác nhau; không cộng cơ học delta điểm/hit thành tác động toàn queue. Tập nhận hồ sơ còn bao gồm các khoản được nhận nhờ đóng lô dù điểm/cờ cảnh báo dòng vẫn bằng 0.
+
+`case_identity_comparison.json` lưu đối chiếu theo giao dịch chung, **không phải xác nhận tương đương để migration R6**. Không tự chuyển feedback/phân công sang hồ sơ đổi phạm vi. Nguồn và snapshot/model baseline đã được kiểm tra hash giữ nguyên; ba SQLite của lượt đồng bộ đã nạp/replay thành công. [Đối chiếu chỉ đọc cả sáu cache của hai lượt](../.runtime/artifact_inventory_20261017/verification.json) kiểm tra thêm queue, bảng thành viên và số liệu đã lưu; database/feedback vận hành chưa được chuyển.
 
 ## Giới hạn nghiệm thu
 

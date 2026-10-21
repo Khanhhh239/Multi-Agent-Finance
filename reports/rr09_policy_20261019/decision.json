@@ -1,0 +1,45 @@
+{
+  "issue_id": "RR09",
+  "version": "rr09-draft-v1",
+  "recorded_on": "2026-10-19",
+  "status": "draft_direction_selected_parameters_pending",
+  "selected_direction": "B_tier_priority_by_excess_and_materiality",
+  "direction_source": "User selected this direction in the conversation on 2026-10-19; this is not a control-owner approval.",
+  "user_owner_response": "chưa chỉ định",
+  "approval": {
+    "status": "not_approved",
+    "control_owner": null,
+    "approved_at": null,
+    "effective_from": null,
+    "company_scope": null,
+    "approval_reference": null
+  },
+  "parameters_to_decide": {
+    "tiers_and_processing_priorities": null,
+    "absolute_excess_boundaries_vnd": null,
+    "relative_excess_boundaries": null,
+    "absolute_relative_combination": null,
+    "materiality_basis_and_boundaries": null,
+    "interval_boundary_operators": null,
+    "recurrence_treatment": null,
+    "approved_exception_treatment": null,
+    "risk_points_vs_processing_order": null
+  },
+  "current_implementation": {
+    "cash_review_policy": "evidence_v2",
+    "internal_limit_comparison": "cash_amount_vnd > verified_company_limit_vnd",
+    "small_excess_tolerance_added": false,
+    "p2_verified_breach_points": 14,
+    "isolated_case_priority": "cao",
+    "total_case_score_may_include_other_rules_and_recurrence": true,
+    "example_amount_vnd": 2000001,
+    "example_limit_vnd": 2000000,
+    "example_excess_vnd": 1
+  },
+  "application": {
+    "new_policy_enabled": false,
+    "scoring_or_queue_changes_authorized": false,
+    "historical_reclassification_authorized": false,
+    "next_action": "Control owner approves complete policy parameters and scope, then create a new version of configuration and controls before implementation."
+  }
+}

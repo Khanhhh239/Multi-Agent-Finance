@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Đối chứng P2 · Nghiệm thu</title>
+  <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/p2_controls.css">
+  <script src="/review_explanations.js" defer></script>
+  <script src="/p2_controls.js" defer></script>
+</head>
+<body class="p2-uat">
+  <aside class="sidebar">
+    <a class="brand" href="/p2-controls"><span class="brand-mark">▧</span><span>CaseSuite<small>NGHIỆM THU NGHIỆP VỤ</small></span></a>
+    <div class="workspace-label">BỘ ĐỐI CHỨNG RIÊNG</div>
+    <div class="nav-item active"><span>✓</span>Đối chứng P2</div>
+    <div class="uat-side-note">Xem cả giao dịch có và không có P2. Mỗi tình huống giữ nguồn và cấu hình riêng.</div>
+    <div class="sidebar-bottom"><i class="local-dot"></i>Chỉ lưu nghiệm thu cục bộ<small>Thông báo đã tắt · Không sửa nguồn</small></div>
+  </aside>
+  <main>
+    <header class="topbar"><div class="breadcrumb">Nghiệm thu <span>/</span> Đối chứng P2</div><span class="simulation-badge">DỮ LIỆU MÔ PHỎNG</span></header>
+    <section class="page-heading"><div><div class="eyebrow">KIỂM TRA BẰNG TÌNH HUỐNG</div><h1>Đối chứng chi tiền mặt</h1><p>Đọc nghiệp vụ, đối chiếu bằng chứng và ghi kết quả nghiệm thu cho từng tình huống.</p></div><button id="refresh-controls" class="icon-button">Làm mới ↻</button></section>
+    <div id="uat-notice" class="notice hidden" role="status"></div>
+    <section class="stats" aria-label="Tổng hợp nghiệm thu">
+      <article><span>Tình huống khớp tự động</span><strong id="uat-matched">—</strong><small>So với kỳ vọng đã khai báo</small></article>
+      <article><span>Giao dịch trong bộ đối chứng</span><strong id="uat-transactions">—</strong><small>Giữ cả giao dịch không phát sinh P2</small></article>
+      <article><span>Đã có ghi chú UAT</span><strong id="uat-reviewed">—</strong><small>Chưa xác nhận kế toán độc lập nghiệm thu</small></article>
+      <article><span>Tình huống cần sửa</span><strong id="uat-needs-fix">—</strong><small>Theo kết quả người nghiệm thu</small></article>
+    </section>
+    <div class="uat-acceptance-status source-banner source-gap" role="note"><strong>Nghiệm thu kế toán độc lập: chưa có biên bản được xác minh.</strong>Khớp kỳ vọng tự động và ghi chú UAT, kể cả ghi chú của trợ lý, không được tính là nghiệm thu độc lập. Cần kế toán đối chiếu và ký biên bản riêng.</div>
+    <section class="filters" aria-label="Lọc tình huống">
+      <label class="search"><span>⌕</span><input id="uat-search" type="search" placeholder="Tìm mã hoặc tên tình huống" aria-label="Tìm tình huống" maxlength="200"></label>
+      <select id="uat-group" aria-label="Nhóm tình huống"><option value="">Mọi nhóm</option></select>
+      <select id="uat-category" aria-label="Kết quả P2"><option value="">Mọi kết quả P2</option></select>
+      <select id="uat-verdict" aria-label="Kết quả nghiệm thu"><option value="">Mọi trạng thái nghiệm thu</option><option value="unreviewed">Chưa nghiệm thu</option></select>
+      <a id="uat-export" class="icon-button" href="/api/p2-controls/export">↓ CSV</a>
+    </section>
+    <section class="review-layout">
+      <section class="queue-panel panel" aria-label="Danh sách tình huống">
+        <div class="panel-heading"><h2>Tình huống <span id="uat-count" class="count-badge">—</span></h2></div>
+        <div class="queue-note">Đây là danh sách kiểm tra, gồm cả tình huống không mở hồ sơ. Không áp dụng ngân sách cảnh báo vận hành.</div>
+        <div id="uat-list" class="case-list" aria-live="polite"><div class="empty-state">Đang kiểm tra và nạp bộ đối chứng…</div></div>
+      </section>
+      <section id="uat-detail" class="detail-panel panel" aria-label="Chi tiết tình huống"><div class="detail-placeholder"><h2>Chọn một tình huống để nghiệm thu</h2><p>Xem giao dịch, chứng từ gốc và cách P2 đưa vào hàng đợi.</p></div></section>
+    </section>
+    <footer>Kết quả “Đạt” xác nhận tình huống nghiệm thu đáp ứng yêu cầu; không chứng nhận giao dịch hợp lệ hoặc là kết luận gian lận. Nguồn và kết quả detector được giữ nguyên.</footer>
+  </main>
+</body>
+</html>

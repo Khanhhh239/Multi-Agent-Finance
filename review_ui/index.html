@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sổ Soát · Rà soát tài chính SME</title>
   <link rel="stylesheet" href="/styles.css">
+  <script src="/vendor/cytoscape.min.js" defer></script>
+  <script src="/case_graph.js" defer></script>
+  <script src="/review_explanations.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -13,12 +16,15 @@
     <div class="workspace-label">KHÔNG GIAN LÀM VIỆC</div>
     <button class="nav-item active" id="queue-nav"><span>▤</span>Hồ sơ rà soát</button>
     <button class="nav-item" id="coverage-nav"><span>◇</span>Phạm vi quy tắc</button>
+    <a class="nav-item hidden" id="p2-controls-nav" href="/p2-controls"><span>✓</span>Đối chứng P2</a>
+    <button class="nav-item" id="notifications-nav"><span>✉</span>Thông báo</button>
     <button class="nav-item" id="help-nav"><span>ⓘ</span>Hướng dẫn sử dụng</button>
     <div class="sidebar-bottom"><span class="local-dot"></span> Bản thử nội bộ<small>Dữ liệu tổng hợp 2024–2025</small></div>
   </aside>
   <main>
     <header class="topbar">
       <div class="breadcrumb">Kiểm soát nội bộ <span>/</span> Hồ sơ rà soát</div>
+      <button id="notifications-mobile" class="icon-button" aria-label="Thông báo Zalo / Email">✉</button>
       <span class="simulation-badge" id="environment-label">Dữ liệu mô phỏng</span>
     </header>
     <section class="page-heading">
@@ -36,10 +42,12 @@
       <article><span>Đã kết luận</span><strong id="stat-closed">—</strong><small>Có lý do và người rà soát</small><i class="stat-icon green">✓</i></article>
     </section>
     <section class="filters" aria-label="Bộ lọc hồ sơ">
+      <label class="daily-toggle"><input type="checkbox" id="daily-only" checked> Ưu tiên hôm nay</label>
       <label class="search"><span>⌕</span><input id="search" placeholder="Tìm mã hồ sơ, đối tượng hoặc nội dung…" aria-label="Tìm hồ sơ"></label>
       <select id="company" aria-label="Công ty"><option value="">Tất cả công ty</option></select>
       <select id="status" aria-label="Trạng thái"><option value="active">Đang xử lý</option><option value="new">Chưa rà soát</option><option value="awaiting_information">Chờ bổ sung</option><option value="closed">Đã kết luận</option><option value="all">Tất cả trạng thái</option></select>
-      <select id="priority" aria-label="Mức ưu tiên"><option value="">Mọi mức ưu tiên</option><option value="cao_nhat">Cao nhất</option><option value="cao">Cao</option><option value="trung_binh">Trung bình</option></select>
+      <select id="priority" aria-label="Mức ưu tiên"><option value="">Mọi mức ưu tiên</option><option value="cao_nhat">Cao nhất</option><option value="cao">Cao</option><option value="trung_binh">Trung bình</option><option value="thap">Thấp</option></select>
+      <select id="category" aria-label="Nhóm hồ sơ"><option value="">Mọi nhóm hồ sơ</option><option value="operational_review">Rà soát nghiệp vụ</option><option value="information_request">Yêu cầu bổ sung P2</option></select>
       <select id="rule" aria-label="Quy tắc"><option value="">Mọi quy tắc</option></select>
       <button id="export" class="icon-button" title="Xuất danh sách đang lọc" aria-label="Xuất CSV">↓ CSV</button>
     </section>

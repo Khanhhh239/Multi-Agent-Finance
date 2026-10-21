@@ -1,0 +1,75 @@
+{
+  "capacity_contract": "review-capacity-v1",
+  "period_ends": {
+    "train": "2024-12-31",
+    "validation": "2025-06-30"
+  },
+  "profiles": [
+    {
+      "name": "research_1_cases_45_minutes",
+      "kind": "research",
+      "slots": 1,
+      "minutes": 45
+    },
+    {
+      "name": "research_3_cases_135_minutes",
+      "kind": "research",
+      "slots": 3,
+      "minutes": 135
+    },
+    {
+      "name": "research_5_cases_225_minutes",
+      "kind": "research",
+      "slots": 5,
+      "minutes": 225
+    },
+    {
+      "name": "ui_5_cases_120_minutes",
+      "kind": "ui",
+      "slots": 5,
+      "minutes": 120
+    },
+    {
+      "name": "ui_10_cases_240_minutes",
+      "kind": "ui",
+      "slots": 10,
+      "minutes": 240
+    }
+  ],
+  "calendars": {
+    "calendar_days": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "weekdays_mon_fri": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    }
+  },
+  "labels_read": false,
+  "detector_scored": false,
+  "test_scored": false,
+  "model_refitted": false,
+  "rank_policy": "opening_event_only",
+  "effort_policy": "saved_final_snapshot_estimate",
+  "source_sha256": {
+    "review_capacity.py": "67d69da7c8f9fdcfd0888eb54896f11bc6f7b8ab35664d3cb4b1617bd9d7ddf8",
+    "evidence_evaluation.py": "ea442bcb7d5b31654f3ef64a9099deb6b726dc280b7fd8d752dd5f52f653c940",
+    "review_store.py": "b84d8a3426f30677939d61e1b631c61fa4e0cf19f859e0a3fa0922dca9af1c6b",
+    "replay_review_workload.py": "d827bdd11d02e29ce508029182df5141514793ab19fcccbad010d949fc601894"
+  }
+}

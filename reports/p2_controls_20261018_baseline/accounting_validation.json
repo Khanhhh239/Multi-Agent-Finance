@@ -1,0 +1,290 @@
+[
+  {
+    "control_id": "FULL_BELOW",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "FULL_EQUAL",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "FULL_ABOVE",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "OLD_BELOW",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "OLD_EQUAL",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "FULL_BANK",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 3,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "NO_INVOICE",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "NO_DATE",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "NO_GROSS",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "NO_IDENTITY",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "FUTURE_INVOICE",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "INSTALL_CASH",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 3,
+    "journal_lines": 7,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "INSTALL_SMALL",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 3,
+    "journal_lines": 7,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "INSTALL_MIXED",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 3,
+    "journal_lines": 7,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "INSTALL_SAME_TIME",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 3,
+    "journal_lines": 7,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "INSTALL_GAP",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 3,
+    "journal_lines": 7,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "REFUND_FULL",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 2,
+    "journal_lines": 4,
+    "return_links": 1,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "REFUND_PART",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 2,
+    "journal_lines": 4,
+    "return_links": 1,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "REFUND_BANK",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 2,
+    "journal_lines": 4,
+    "return_links": 1,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "REVERSAL_JOURNAL",
+    "status": "passed",
+    "transactions": 2,
+    "documents": 2,
+    "journal_lines": 4,
+    "return_links": 1,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "RECEIPT_UNLINKED",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "REFUND_MULTI",
+    "status": "passed",
+    "transactions": 3,
+    "documents": 3,
+    "journal_lines": 6,
+    "return_links": 2,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "RECUR_SMALL",
+    "status": "passed",
+    "transactions": 3,
+    "documents": 3,
+    "journal_lines": 6,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "RECUR_BANK",
+    "status": "passed",
+    "transactions": 3,
+    "documents": 3,
+    "journal_lines": 9,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "RECUR_CASH",
+    "status": "passed",
+    "transactions": 3,
+    "documents": 3,
+    "journal_lines": 6,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "RECUR_GAP",
+    "status": "passed",
+    "transactions": 3,
+    "documents": 3,
+    "journal_lines": 6,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "RECUR_A5",
+    "status": "passed",
+    "transactions": 23,
+    "documents": 23,
+    "journal_lines": 46,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "LIMIT_VERIFIED",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "LIMIT_UNVERIFIED",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "LIMIT_FUTURE",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "LIMIT_EXPIRED",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  },
+  {
+    "control_id": "LIMIT_FOREIGN",
+    "status": "passed",
+    "transactions": 1,
+    "documents": 1,
+    "journal_lines": 2,
+    "return_links": 0,
+    "scope": "Positive balanced fixture journals; cash_refund is a local receipt template, not a new statutory account whitelist"
+  }
+]

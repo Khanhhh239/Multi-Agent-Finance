@@ -30,11 +30,12 @@ from .run_rules import empirical_rank, evaluate_scores
 from .run_rule_repairs import write_jsonl
 from .evidence_evaluation import budget_review
 from .review_store import ReviewStore
+from .review_capacity import workload_scenarios
 
 CUTOFF = '2025-07-01T00:00:00+07:00'
 PERIODS = ('train', 'validation')
 RULE_INPUTS = (*INPUT_TABLES, *OPTIONAL_INPUT_TABLES)
-FEATURE_INPUTS = (*RULE_INPUTS, 'journal_lines')
+FEATURE_INPUTS = tuple(dict.fromkeys((*RULE_INPUTS, 'journal_lines')))
 
 
 def write_json(path, value):
@@ -278,6 +279,9 @@ def run_dataset(root, tag, budget=.003, jobs=4):
     write_csv(output / 'case_events.csv', events)
     write_json(output / 'rule_config.json', result['config'])
     write_json(output / 'rule_coverage.json', result['coverage'])
+    if result.get('dynamic_policy'):
+        from .threshold_artifacts import write_parameters
+        write_parameters(output, result['dynamic_parameters'], result['dynamic_policy'], result['dynamic_source_summary'])
     predictions = [dict(transaction_id=i, period=partitions[i],
         **{f'{v}_{k}': float(a[n]) for v, modes in values.items() for k, a in modes.items()}) for n, i in enumerate(ids)]
     write_csv(output / 'predictions_train_validation.csv', predictions)
@@ -357,10 +361,13 @@ def run_dataset(root, tag, budget=.003, jobs=4):
                 cases_with_fraud_at_cutoff=useful, cases_without_fraud_at_cutoff=len(selected_cases)-useful,
                 precision_at_cutoff=useful/len(selected_cases) if selected_cases else None,
                 note='Retrospective member labels, not independent reviewer conclusions; opening-time diagnostic is in workload.'))
-            for capacity in (1, 3, 5):
-                measure = budget_review(selected_cases, history, tx, labels, capacity)
+            for profile, kind, capacity in workload_scenarios():
+                measure = budget_review(selected_cases, history, tx, labels, capacity.slots,
+                    capacity_minutes=capacity.minutes,
+                    period_end='2024-12-31' if period == 'train' else '2025-06-30')
                 measure.pop('admissions')
-                report['workload'].append(dict(version=version, period=period, **measure))
+                report['workload'].append(dict(version=version, period=period,
+                    capacity_profile=profile, profile_kind=kind, **measure))
     write_csv(output / 'changed_hits_train_validation.csv', changed_hits)
     store = ReviewStore(target.parent, Path(root), Path(root) / f'review_{tag}.sqlite3', scenarios=[tag])
     store.prepare()

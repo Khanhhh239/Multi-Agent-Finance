@@ -1,0 +1,110 @@
+[
+  {
+    "control_id": "REFUND_FULL",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "REFUND_FULL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "REFUND_FULL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_edc6bcf7a3044544"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {
+      "p2_present": {
+        "expected": false,
+        "actual": true
+      },
+      "category": {
+        "expected": null,
+        "actual": "information_request"
+      },
+      "case_types": {
+        "expected": [],
+        "actual": [
+          "information_request"
+        ]
+      },
+      "priorities": {
+        "expected": [],
+        "actual": [
+          "thap"
+        ]
+      }
+    }
+  },
+  {
+    "control_id": "RECEIPT_UNLINKED",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "RECEIPT_UNLINKED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECEIPT_UNLINKED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {
+      "p2_present": {
+        "expected": false,
+        "actual": true
+      },
+      "category": {
+        "expected": null,
+        "actual": "information_request"
+      },
+      "case_types": {
+        "expected": [],
+        "actual": [
+          "information_request"
+        ]
+      },
+      "priorities": {
+        "expected": [],
+        "actual": [
+          "thap"
+        ]
+      }
+    }
+  }
+]

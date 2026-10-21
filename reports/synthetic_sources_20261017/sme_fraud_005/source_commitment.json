@@ -1,0 +1,9 @@
+{
+  "manifest_sha256": "4632fda89e2228643cc71cb0acc26bbcdaa93685608c751d08ced00a8c1fb694",
+  "oracle_sha256": "cf87fc8dfe09113af0029cbf4db5450712af680816d1dde4a454f2405ce4ee9d",
+  "registry_sha256": "37bc4c4831fb3e83c44c0000606fccde6c634824fc39324ed3348be1fdd3ed0a",
+  "role": "blind_holdout_unscored",
+  "predictions_created": false,
+  "source_origin": "synthetic",
+  "human_reviewed_units": 0
+}

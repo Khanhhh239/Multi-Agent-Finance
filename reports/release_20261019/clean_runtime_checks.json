@@ -1,0 +1,23 @@
+{
+  "successful": true,
+  "venv_global_site_disabled": true,
+  "module_locations": {
+    "0.1.0": {
+      "numpy": "D:\\agent22\\.runtime\\release_20261019\\installations\\review010\\env\\Lib\\site-packages\\numpy\\__init__.py",
+      "pandas": "D:\\agent22\\.runtime\\release_20261019\\installations\\review010\\env\\Lib\\site-packages\\pandas\\__init__.py",
+      "scipy": "D:\\agent22\\.runtime\\release_20261019\\installations\\review010\\env\\Lib\\site-packages\\scipy\\__init__.py",
+      "sklearn": "D:\\agent22\\.runtime\\release_20261019\\installations\\review010\\env\\Lib\\site-packages\\sklearn\\__init__.py",
+      "networkx": "D:\\agent22\\.runtime\\release_20261019\\installations\\review010\\env\\Lib\\site-packages\\networkx\\__init__.py"
+    },
+    "0.1.1+rehearsal": {
+      "numpy": "D:\\agent22\\.runtime\\release_20261019\\installations\\candidate011\\env\\Lib\\site-packages\\numpy\\__init__.py",
+      "pandas": "D:\\agent22\\.runtime\\release_20261019\\installations\\candidate011\\env\\Lib\\site-packages\\pandas\\__init__.py",
+      "scipy": "D:\\agent22\\.runtime\\release_20261019\\installations\\candidate011\\env\\Lib\\site-packages\\scipy\\__init__.py",
+      "sklearn": "D:\\agent22\\.runtime\\release_20261019\\installations\\candidate011\\env\\Lib\\site-packages\\sklearn\\__init__.py",
+      "networkx": "D:\\agent22\\.runtime\\release_20261019\\installations\\candidate011\\env\\Lib\\site-packages\\networkx\\__init__.py"
+    }
+  },
+  "clean_environment_engine_tests": 24,
+  "global_dependency_versions_unchanged": true,
+  "global_lock_mismatches_recorded": 8
+}

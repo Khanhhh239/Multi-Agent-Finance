@@ -1,0 +1,110 @@
+[
+  {
+    "tag": "001",
+    "period": "train",
+    "variant": "baseline",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 1171,
+    "cases_with_fraud_member": 40,
+    "precision": 0.034158838599487616
+  },
+  {
+    "tag": "001",
+    "period": "train",
+    "variant": "trial",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 986,
+    "cases_with_fraud_member": 40,
+    "precision": 0.04056795131845842
+  },
+  {
+    "tag": "001",
+    "period": "validation",
+    "variant": "baseline",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 569,
+    "cases_with_fraud_member": 21,
+    "precision": 0.03690685413005272
+  },
+  {
+    "tag": "001",
+    "period": "validation",
+    "variant": "trial",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 493,
+    "cases_with_fraud_member": 21,
+    "precision": 0.04259634888438134
+  },
+  {
+    "tag": "003",
+    "period": "train",
+    "variant": "baseline",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 1244,
+    "cases_with_fraud_member": 119,
+    "precision": 0.09565916398713827
+  },
+  {
+    "tag": "003",
+    "period": "train",
+    "variant": "trial",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 1060,
+    "cases_with_fraud_member": 119,
+    "precision": 0.11226415094339623
+  },
+  {
+    "tag": "003",
+    "period": "validation",
+    "variant": "baseline",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 608,
+    "cases_with_fraud_member": 58,
+    "precision": 0.09539473684210527
+  },
+  {
+    "tag": "003",
+    "period": "validation",
+    "variant": "trial",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 532,
+    "cases_with_fraud_member": 58,
+    "precision": 0.10902255639097744
+  },
+  {
+    "tag": "005",
+    "period": "train",
+    "variant": "baseline",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 1305,
+    "cases_with_fraud_member": 201,
+    "precision": 0.15402298850574714
+  },
+  {
+    "tag": "005",
+    "period": "train",
+    "variant": "trial",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 1138,
+    "cases_with_fraud_member": 202,
+    "precision": 0.17750439367311072
+  },
+  {
+    "tag": "005",
+    "period": "validation",
+    "variant": "baseline",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 641,
+    "cases_with_fraud_member": 100,
+    "precision": 0.15600624024961
+  },
+  {
+    "tag": "005",
+    "period": "validation",
+    "variant": "trial",
+    "unit": "retrospective_case_member_labels_not_reviewer_truth",
+    "cases": 565,
+    "cases_with_fraud_member": 101,
+    "precision": 0.17876106194690267
+  }
+]

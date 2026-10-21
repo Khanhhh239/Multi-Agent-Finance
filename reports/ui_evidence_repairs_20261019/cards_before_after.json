@@ -1,0 +1,67 @@
+[
+  {
+    "id": "A5_003_cold_operational",
+    "case_id": "RC_d3c7009ff2ea6dbf",
+    "rule": "A4",
+    "before": {
+      "rendered": false,
+      "error": "Cannot convert undefined or null to object"
+    },
+    "after": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">A4</span>Người lập có nhiều khoản cận hạn mức <span class=\"evidence-points\">+3 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"evidence-facts\"><div><span>Kỳ tháng</span>2024-01</div><div><span>Số lần</span>3</div></div><div class=\"graph-caption\">10:36 10/01/2024 · TX_40bfce2fa18bcc16e7</div><button class=\"link-button\" data-related=\"0\">Đối chiếu 2 giao dịch ngữ cảnh →</button></div></details>"
+    }
+  },
+  {
+    "id": "A5_001_TX_3103d5f23fde8b1a6f",
+    "case_id": "RC_18adf5be97ee0e84",
+    "rule": "C4",
+    "before": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">C4</span>Thao tác trong kỳ nghỉ phép chính thức <span class=\"evidence-points\">+8 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"evidence-facts\"></div><div class=\"graph-caption\">13:13 09/04/2025 · TX_3103d5f23fde8b1a6f</div></div></details>"
+    },
+    "after": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">C4</span>Thao tác trong kỳ nghỉ phép chính thức <span class=\"evidence-points\">+8 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"source-block\"><strong>Thao tác cần đối chiếu</strong><div class=\"evidence-facts\"><div><span>Nhân viên thao tác</span>E0000418</div><div><span>Thao tác</span>Lập bút toán</div><div><span>Thời điểm thao tác</span>06:03 09/04/2025</div><div><span>Mã hành động</span>ACT_8356be3430d352c8c0</div><div><span>Kỳ nghỉ bắt đầu</span>13:13 08/04/2025</div><div><span>Kỳ nghỉ kết thúc</span>13:13 10/04/2025</div><div><span>Mã kỳ nghỉ</span>LEAVE_65472385b304fde0be</div></div><details class=\"source-block\"><summary>Nguồn thao tác</summary><div class=\"evidence-facts\"><div><span>Mã hành động</span>ACT_8356be3430d352c8c0</div><div><span>Giao dịch</span>TX_3103d5f23fde8b1a6f</div><div><span>Mã bằng chứng</span>EV_615cccf8aaa6d8f2a5</div><div><span>Trạng thái nguồn</span>Không khai báo</div><div><span>Người duyệt</span>Chưa có thông tin</div><div><span>Phê duyệt lúc</span>—</div><div><span>Nguồn được biết lúc</span>13:13 09/04/2025</div></div></details><details class=\"source-block\"><summary>Nguồn nghỉ phép</summary><div class=\"evidence-facts\"><div><span>Mã kỳ nghỉ</span>LEAVE_65472385b304fde0be</div><div><span>Nhân viên nghỉ phép</span>E0000418</div><div><span>Mã bằng chứng</span>EV_7c6306e66bca5beee0</div><div><span>Trạng thái nguồn</span>Đã duyệt</div><div><span>Người duyệt</span>E0000081</div><div><span>Phê duyệt lúc</span>13:13 27/03/2025</div><div><span>Nguồn được biết lúc</span>13:13 28/03/2025</div></div></details><p>Chưa thấy quyền làm việc trong kỳ nghỉ phù hợp trong bằng chứng của thao tác này.</p></div><p class=\"graph-caption\">Các mốc lấy từ snapshot bằng chứng của lần đánh giá. Đối chiếu người thực hiện và quyền làm việc; dấu hiệu này chưa phải kết luận gian lận.</p><div class=\"graph-caption\">13:13 09/04/2025 · TX_3103d5f23fde8b1a6f</div></div></details>"
+    }
+  },
+  {
+    "id": "A5_001_cold_operational",
+    "case_id": "RC_035196cd1b97a1e1",
+    "rule": "C4",
+    "before": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">C4</span>Thao tác trong kỳ nghỉ phép chính thức <span class=\"evidence-points\">+8 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"evidence-facts\"></div><div class=\"graph-caption\">15:34 20/08/2025 · TX_211bf3453a6679bad2</div></div></details>"
+    },
+    "after": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">C4</span>Thao tác trong kỳ nghỉ phép chính thức <span class=\"evidence-points\">+8 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"source-block\"><strong>Thao tác cần đối chiếu</strong><div class=\"evidence-facts\"><div><span>Nhân viên thao tác</span>E0000491</div><div><span>Thao tác</span>Lập bút toán</div><div><span>Thời điểm thao tác</span>12:56 20/08/2025</div><div><span>Mã hành động</span>ACT_ca79cbd121112c5f2b</div><div><span>Kỳ nghỉ bắt đầu</span>15:34 19/08/2025</div><div><span>Kỳ nghỉ kết thúc</span>15:34 21/08/2025</div><div><span>Mã kỳ nghỉ</span>LEAVE_aebd1c601f791f052c</div></div><details class=\"source-block\"><summary>Nguồn thao tác</summary><div class=\"evidence-facts\"><div><span>Mã hành động</span>ACT_ca79cbd121112c5f2b</div><div><span>Giao dịch</span>TX_211bf3453a6679bad2</div><div><span>Mã bằng chứng</span>EV_81c726ffd6e059c33f</div><div><span>Trạng thái nguồn</span>Không khai báo</div><div><span>Người duyệt</span>Chưa có thông tin</div><div><span>Phê duyệt lúc</span>—</div><div><span>Nguồn được biết lúc</span>15:34 20/08/2025</div></div></details><details class=\"source-block\"><summary>Nguồn nghỉ phép</summary><div class=\"evidence-facts\"><div><span>Mã kỳ nghỉ</span>LEAVE_aebd1c601f791f052c</div><div><span>Nhân viên nghỉ phép</span>E0000491</div><div><span>Mã bằng chứng</span>EV_6c3bcb79a43d77c616</div><div><span>Trạng thái nguồn</span>Đã duyệt</div><div><span>Người duyệt</span>E0000161</div><div><span>Phê duyệt lúc</span>15:34 07/08/2025</div><div><span>Nguồn được biết lúc</span>15:34 08/08/2025</div></div></details><p>Chưa thấy quyền làm việc trong kỳ nghỉ phù hợp trong bằng chứng của thao tác này.</p></div><p class=\"graph-caption\">Các mốc lấy từ snapshot bằng chứng của lần đánh giá. Đối chiếu người thực hiện và quyền làm việc; dấu hiệu này chưa phải kết luận gian lận.</p><div class=\"graph-caption\">15:34 20/08/2025 · TX_211bf3453a6679bad2</div></div></details>"
+    }
+  },
+  {
+    "id": "A5_003_TX_60bac87c93f578f6c3",
+    "case_id": "RC_b929346759d67338",
+    "rule": "E2",
+    "before": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">E2</span>Lương sau chấm dứt hợp đồng <span class=\"evidence-points\">+20 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"evidence-facts\"></div><div class=\"graph-caption\">15:56 16/10/2025 · TX_60bac87c93f578f6c3</div></div></details>"
+    },
+    "after": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">E2</span>Lương sau chấm dứt hợp đồng <span class=\"evidence-points\">+20 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"source-banner source-signal\"><strong>Nguồn ghi nhận lương thường kỳ cho giai đoạn sau chấm dứt</strong></div><div class=\"evidence-facts\"><div><span>Nhân viên</span>E0000388</div><div><span>Sự kiện lao động</span>Chấm dứt hợp đồng</div><div><span>Ngày hiệu lực</span>6/9/2025</div><div><span>Loại khoản chi</span>Lương thường kỳ</div><div><span>Kỳ lương</span>2025-10</div><div><span>Kỳ phục vụ từ</span>7/9/2025</div><div><span>Kỳ phục vụ đến</span>26/10/2025</div><div><span>Số tiền được duyệt</span>31.815.000 ₫</div></div><details class=\"source-block\"><summary>Nguồn sự kiện lao động</summary><div class=\"evidence-facts\"><div><span>Mã sự kiện</span>EMP_592a14be853d88d550</div><div><span>Mã bằng chứng</span>EV_da2fb08f94a35e5776</div><div><span>Trạng thái nguồn</span>Đã duyệt</div><div><span>Người duyệt</span>E0000041</div><div><span>Phê duyệt lúc</span>15:56 14/08/2025</div><div><span>Nguồn được biết lúc</span>15:56 15/08/2025</div></div></details><details class=\"source-block\"><summary>Nguồn khoản chi lương</summary><div class=\"evidence-facts\"><div><span>Mã khoản chi</span>PAY_4e5488e51fba4e35b6</div><div><span>Giao dịch</span>TX_60bac87c93f578f6c3</div><div><span>Mã bằng chứng</span>EV_58c27f416dac3f5a42</div><div><span>Trạng thái nguồn</span>Đã duyệt</div><div><span>Người duyệt</span>E0000041</div><div><span>Phê duyệt lúc</span>15:56 12/10/2025</div><div><span>Nguồn được biết lúc</span>15:56 13/10/2025</div></div></details><p class=\"graph-caption\">Các mốc lấy từ snapshot bằng chứng của lần đánh giá. Đối chiếu quyết định gốc, tái tuyển và quyết toán trước khi kết luận.</p><div class=\"graph-caption\">15:56 16/10/2025 · TX_60bac87c93f578f6c3</div></div></details>"
+    }
+  },
+  {
+    "id": "A5_001_TX_ac2d5e5d289dc9227b",
+    "case_id": "RC_963dc712d016c11d",
+    "rule": "F1",
+    "before": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">F1</span>Điều chỉnh thủ công sát khóa sổ và trọng yếu <span class=\"evidence-points\">+8 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"evidence-facts\"><div><span>Mức trọng yếu</span>17.238.000 ₫</div><div><span>Ngày trước khóa sổ</span>3.6382</div><div><span>Giá trị nghiệp vụ</span>56.693.000 ₫</div></div><div class=\"graph-caption\">10:06 28/08/2025 · TX_ac2d5e5d289dc9227b</div></div></details>"
+    },
+    "after": {
+      "rendered": true,
+      "html": "<details class=\"evidence-card\" open><summary><span class=\"evidence-head\"><span class=\"rule-tag\">F1</span>Điều chỉnh thủ công sát khóa sổ và trọng yếu <span class=\"evidence-points\">+8 điểm</span></span></summary><div class=\"evidence-body\"><div class=\"source-banner source-signal\"><strong>Có nguồn xác nhận nhập thủ công, lịch khóa sổ và mức trọng yếu</strong></div><div class=\"evidence-facts\"><div><span>Giá trị bút toán</span>56.693.000 ₫</div><div><span>Mức trọng yếu</span>17.238.000 ₫</div><div><span>Nhập sổ lúc</span>08:41 28/08/2025</div><div><span>Khóa sổ lúc</span>23:59 31/08/2025</div><div><span>Cách thời điểm khóa sổ</span>3,64 ngày</div><div><span>Mã nhật ký nhập sổ</span>AUD_37c5b8d37a9d83b4a3</div><div><span>Mã lịch khóa sổ</span>CLOSE_4e3e579f42934ef64e</div><div><span>Mã chính sách trọng yếu</span>MAT_79219e8e57f93abe93</div></div><details class=\"source-block\"><summary>Nhật ký nhập sổ</summary><div class=\"evidence-facts\"><div><span>Mã nhật ký</span>AUD_37c5b8d37a9d83b4a3</div><div><span>Người nhập</span>E0000286</div><div><span>Nguồn nhập</span>Nhập thủ công</div><div><span>Mã bằng chứng</span>EV_0ec7c3c07c85c969ff</div><div><span>Trạng thái nguồn</span>Không khai báo</div><div><span>Người duyệt</span>Chưa có thông tin</div><div><span>Phê duyệt lúc</span>—</div><div><span>Nguồn được biết lúc</span>10:06 28/08/2025</div></div></details><details class=\"source-block\"><summary>Lịch khóa sổ</summary><div class=\"evidence-facts\"><div><span>Mã lịch</span>CLOSE_4e3e579f42934ef64e</div><div><span>Kỳ bắt đầu</span>1/8/2025</div><div><span>Kỳ kết thúc</span>31/8/2025</div><div><span>Mã bằng chứng</span>EV_5ddeefdef5a39514ac</div><div><span>Trạng thái nguồn</span>Đã duyệt</div><div><span>Người duyệt</span>E0000281</div><div><span>Phê duyệt lúc</span>00:00 29/07/2025</div><div><span>Nguồn được biết lúc</span>00:00 30/07/2025</div></div></details><details class=\"source-block\"><summary>Chính sách trọng yếu</summary><div class=\"evidence-facts\"><div><span>Mã chính sách</span>MAT_79219e8e57f93abe93</div><div><span>Hiệu lực từ</span>1/1/2024</div><div><span>Hiệu lực đến</span>31/12/2025</div><div><span>Mã bằng chứng</span>EV_d79537a2436a4dae01</div><div><span>Trạng thái nguồn</span>Đã duyệt</div><div><span>Người duyệt</span>E0000281</div><div><span>Phê duyệt lúc</span>00:00 29/12/2023</div><div><span>Nguồn được biết lúc</span>00:00 30/12/2023</div></div></details><p class=\"graph-caption\">Tham chiếu lấy từ snapshot bằng chứng của lần đánh giá, không thay thế tài liệu gốc. Nhập thủ công gần khóa sổ chưa chứng minh bút toán sai.</p><div class=\"graph-caption\">10:06 28/08/2025 · TX_ac2d5e5d289dc9227b</div></div></details>"
+    }
+  }
+]

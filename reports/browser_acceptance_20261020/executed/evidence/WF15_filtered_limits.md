@@ -1,0 +1,106 @@
+- complementary:
+  - link "▧ CaseSuite NGHIỆM THU NGHIỆP VỤ":
+    - /url: /p2-controls
+    - generic: ▧
+    - text: CaseSuite
+    - generic: NGHIỆM THU NGHIỆP VỤ
+  - generic: BỘ ĐỐI CHỨNG RIÊNG
+  - generic: ✓
+  - text: Đối chứng P2
+  - generic: Xem cả giao dịch có và không có P2. Mỗi tình huống giữ nguồn và cấu hình riêng.
+  - text: Chỉ lưu nghiệm thu cục bộ
+  - generic: Thông báo đã tắt · Không sửa nguồn
+- main:
+  - generic: Nghiệm thu / Đối chứng P2
+  - generic: DỮ LIỆU MÔ PHỎNG
+  - generic: KIỂM TRA BẰNG TÌNH HUỐNG
+  - heading "Đối chứng chi tiền mặt" [level=1]
+  - paragraph: Đọc nghiệp vụ, đối chiếu bằng chứng và ghi kết quả nghiệm thu cho từng tình huống.
+  - button "Làm mới ↻"
+  - status: Đã lưu nghiệm thu cho FULL_BELOW. Nguồn và kết quả P2 giữ nguyên.
+  - region "Tổng hợp nghiệm thu":
+    - article:
+      - generic: Tình huống khớp tự động
+      - strong: 32/32
+      - text: So với kỳ vọng đã khai báo
+    - article:
+      - generic: Giao dịch trong bộ đối chứng
+      - strong: "73"
+      - text: Giữ cả giao dịch không phát sinh P2
+    - article:
+      - generic: Đã có ghi chú UAT
+      - strong: 1/32
+      - text: Chưa xác nhận kế toán độc lập nghiệm thu
+    - article:
+      - generic: Tình huống cần sửa
+      - strong: "0"
+      - text: Theo kết quả người nghiệm thu
+  - note:
+    - strong: "Nghiệm thu kế toán độc lập: chưa có biên bản được xác minh."
+    - text: Khớp kỳ vọng tự động và ghi chú UAT, kể cả ghi chú của trợ lý, không được tính là nghiệm thu độc lập. Cần kế toán đối chiếu và ký biên bản riêng.
+  - region "Lọc tình huống":
+    - generic: ⌕
+    - searchbox "Tìm tình huống"
+    - combobox "Nhóm tình huống":
+      - option "Mọi nhóm"
+      - option "Hóa đơn đầy đủ"
+      - option "Thiếu chứng từ"
+      - option "Trả nhiều đợt"
+      - option "Hoàn / đảo giao dịch"
+      - option "Chi định kỳ"
+      - option "Hạn mức nội bộ" [selected]
+    - combobox "Kết quả P2":
+      - option "Mọi kết quả P2" [selected]
+      - option "Không phát sinh P2"
+      - option "Thiếu bằng chứng · 0 điểm"
+      - option "Đối chiếu chứng từ / VAT · 8 điểm"
+      - option "Vượt hạn mức đã xác minh · 14 điểm"
+    - combobox "Kết quả nghiệm thu":
+      - option "Mọi trạng thái nghiệm thu" [selected]
+      - option "Chưa nghiệm thu"
+      - option "Đạt"
+      - option "Cần sửa"
+      - option "Cần bổ sung"
+    - link "↓ CSV" [active]:
+      - /url: /api/p2-controls/export?group=internal_limit&category=&verdict=&q=
+  - region "Danh sách tình huống":
+    - heading "Tình huống 5" [level=2]
+    - generic: Đây là danh sách kiểm tra, gồm cả tình huống không mở hồ sơ. Không áp dụng ngân sách cảnh báo vận hành.
+    - 'button "Chưa nghiệm thu ✓ Khớp tự động Hạn mức đã xác minh, hóa đơn vẫn thiếu Hạn mức nội bộ · 1 giao dịch Vượt hạn mức đã xác minh: 1 LIMIT_VERIFIED"':
+      - generic: Chưa nghiệm thu
+      - generic: ✓ Khớp tự động
+      - generic: Hạn mức đã xác minh, hóa đơn vẫn thiếu
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Vượt hạn mức đã xác minh: 1"
+      - generic: LIMIT_VERIFIED
+    - 'button "Chưa nghiệm thu ✓ Khớp tự động Hạn mức chỉ có con số, chưa có xác minh Hạn mức nội bộ · 1 giao dịch Thiếu bằng chứng: 1 LIMIT_UNVERIFIED"':
+      - generic: Chưa nghiệm thu
+      - generic: ✓ Khớp tự động
+      - generic: Hạn mức chỉ có con số, chưa có xác minh
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: LIMIT_UNVERIFIED
+    - 'button "Chưa nghiệm thu ✓ Khớp tự động Xác minh hạn mức chỉ có sau thời điểm chi Hạn mức nội bộ · 1 giao dịch Thiếu bằng chứng: 1 LIMIT_FUTURE"':
+      - generic: Chưa nghiệm thu
+      - generic: ✓ Khớp tự động
+      - generic: Xác minh hạn mức chỉ có sau thời điểm chi
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: LIMIT_FUTURE
+    - 'button "Chưa nghiệm thu ✓ Khớp tự động Hạn mức đã hết hiệu lực lúc chi Hạn mức nội bộ · 1 giao dịch Thiếu bằng chứng: 1 LIMIT_EXPIRED"':
+      - generic: Chưa nghiệm thu
+      - generic: ✓ Khớp tự động
+      - generic: Hạn mức đã hết hiệu lực lúc chi
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: LIMIT_EXPIRED
+    - 'button "Chưa nghiệm thu ✓ Khớp tự động Ngoại tệ chưa xác minh số tiền VND Hạn mức nội bộ · 1 giao dịch Thiếu bằng chứng: 1 LIMIT_FOREIGN"':
+      - generic: Chưa nghiệm thu
+      - generic: ✓ Khớp tự động
+      - generic: Ngoại tệ chưa xác minh số tiền VND
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: LIMIT_FOREIGN
+  - region "Chi tiết tình huống":
+    - generic: Chọn tình huống trong danh sách đang lọc.
+  - generic: Kết quả “Đạt” xác nhận tình huống nghiệm thu đáp ứng yêu cầu; không chứng nhận giao dịch hợp lệ hoặc là kết luận gian lận. Nguồn và kết quả detector được giữ nguyên.

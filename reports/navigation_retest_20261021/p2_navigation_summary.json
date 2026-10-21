@@ -1,0 +1,162 @@
+[
+  {
+    "sample_id": "P2_FULL_BELOW",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_FULL_EQUAL",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_FULL_ABOVE",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_OLD_BELOW",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_OLD_EQUAL",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_FULL_BANK",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_NO_INVOICE",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_NO_DATE",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_NO_GROSS",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_NO_IDENTITY",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_FUTURE_INVOICE",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_INSTALL_CASH",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_INSTALL_SMALL",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_INSTALL_MIXED",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_INSTALL_SAME_TIME",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_INSTALL_GAP",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_REFUND_FULL",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_REFUND_PART",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_REFUND_BANK",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_REVERSAL_JOURNAL",
+    "transactions": 2,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_RECEIPT_UNLINKED",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_REFUND_MULTI",
+    "transactions": 3,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_RECUR_SMALL",
+    "transactions": 3,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_RECUR_BANK",
+    "transactions": 3,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_RECUR_CASH",
+    "transactions": 3,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_RECUR_GAP",
+    "transactions": 3,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_RECUR_A5",
+    "transactions": 23,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_LIMIT_VERIFIED",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_LIMIT_UNVERIFIED",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_LIMIT_FUTURE",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_LIMIT_EXPIRED",
+    "transactions": 1,
+    "result": "PASS"
+  },
+  {
+    "sample_id": "P2_LIMIT_FOREIGN",
+    "transactions": 1,
+    "result": "PASS"
+  }
+]

@@ -1,0 +1,72 @@
+{
+  "tag": "001",
+  "transactions": 20559,
+  "companies": 8,
+  "journal_documents": 29737,
+  "journal_lines": 66749,
+  "rule_hits": 10949,
+  "cases": 556,
+  "source_cases": 144,
+  "operational_members": 1326,
+  "features": {
+    "rows": 20559,
+    "columns": 190,
+    "cache_replayed_exactly": true,
+    "dtype": "float32",
+    "matrix_sha256": "861662e151d798da53ec9fa3d154c245c97c44bd4f86dc0393298cf45dd0d4d2",
+    "ordered_ids_sha256": "a468a4020b5ab8b908f7e479117e46d426267fd7c3033594656bc699751c899e",
+    "truth_loaded": false
+  },
+  "entity_graph": {
+    "changed": true,
+    "fingerprint": "aa287b01b962b458b68515d106591e53477de0cdbc38bef4977f159b58c0f789",
+    "as_of": "2025-12-31T23:59:59+07:00",
+    "companies": 8,
+    "nodes": 4290,
+    "links": 3359,
+    "findings": 24
+  },
+  "thresholds": {
+    "changed": true,
+    "fingerprint": "a4cac915e8c3a1f828fc6f41be8f5a8ad079c3950aea9465a2b961ca673e4490",
+    "as_of": "2025-12-31T23:59:59+07:00",
+    "companies": 8,
+    "observations_known_at_cutoff": 24690,
+    "parameter_rows": 9135,
+    "status_counts": {
+      "ready": 750,
+      "insufficient_history": 8337,
+      "insufficient_cycle_history": 48
+    }
+  },
+  "threshold_checks": {
+    "batch_rows": 9135,
+    "statuses": {
+      "ready": 750,
+      "insufficient_history": 8337,
+      "insufficient_cycle_history": 48
+    },
+    "rule_a5_hits": 219,
+    "causal_a5_evidence_replayed": 20,
+    "batch_matches_independent_instance": true,
+    "cold_start_rows": 8385
+  },
+  "controlled_units": 608,
+  "control_mismatches": 0,
+  "prediction_files": {
+    "rule_scores.csv": "66f5feddb2260c61dae550418530f53cc28d21447803a2566842d9d5f4e32be2",
+    "rule_hits.jsonl": "9e0dee41efdef67285d0f9031f98e8448be4ccb32bfac1759a3fe0582d3f16d7",
+    "case_queue.csv": "8c9d1169aa5292f3fc49c124a2fb6bb152408ebefaad5cc721017c5caad0c10f",
+    "case_events.csv": "5ae3c8e48098f485248183946cba85269cc828fc860407e2872b822ad68f822c",
+    "batch_events.jsonl": "da6504460af11817a26de4f290f28b0422cc15b2c29808d093ab37c1c8497c22",
+    "evidence_findings.jsonl": "195e98589c02f6cc8833f47a665d35bc2a9067475a3187d2d123298ebb8b929a",
+    "rule_config.json": "2e8e36a86a393bf0701ecd941ab2b0bfafd8e1c3ae77f804c5cd11b4dd979b76",
+    "rule_coverage.json": "50d88646e18816fb148d357a3d874bbad5eb33e2829e922488bafad89b22ec10",
+    "predictions.json": "eea18d88eeb4984bd64239a4583dd00683b06f11a7c21931432e8f2ae06974e7",
+    "review_packet.csv": "0ab6bad154d5c629db80422344063c4f6fed1390bf889a8f97fa6c8d1366a2e6",
+    "dynamic_threshold_parameters.csv": "ad191b49b29bb8147c586ebdb5136373281e79e9a4de85bd094067dfd1de0e17",
+    "dynamic_threshold_parameters.json": "9ef64c11d13f91a49c5f05fbba82b7cffd45c6ef5df24a00a3aaeee547717840",
+    "dynamic_threshold_policy.json": "614c4fbcb28acb9b5ef96931672c4e882f6e65e1582aea7894f1aa7ca93a6233"
+  },
+  "elapsed_seconds": 177.237
+}

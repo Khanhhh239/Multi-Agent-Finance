@@ -40,6 +40,11 @@ def scope(case, *, cluster=True):
                   max_score=int(case.get('max_score', 0)))
     if cluster:
         result['cluster_members'] = values(case.get('cluster_members'))
+    if result['case_type'] == 'pattern':
+        raw = case.get('pattern_scope') or '{}'
+        result['pattern_scope'] = json.loads(raw) if isinstance(raw, str) else raw
+        result['pattern_context_ids'] = values(case.get('pattern_context_ids'))
+        result['pattern_evidence_ids'] = values(case.get('pattern_evidence_ids'))
     return result
 
 

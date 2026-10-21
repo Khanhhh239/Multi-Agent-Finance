@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-21",
+  "workflow": "WF13",
+  "result": "PASS",
+  "browser": "Chrome",
+  "url": "http://127.0.0.1:8771/",
+  "browser_observations": 10,
+  "browser_assertions": 10,
+  "javascript_regression_checks": 47,
+  "api_tests": 5,
+  "protected_total": 1209,
+  "protected_changed": [],
+  "business_journals_unchanged": true,
+  "runtime_contract_changed": [],
+  "code_changed": [
+    "review_ui/app.js",
+    "sme_fraud/review_server.py",
+    "tests/review_navigation_ui.test.js",
+    "tests/test_sprint14_api.py"
+  ],
+  "code_sha256_after": {
+    "review_ui/app.js": "7b46d3b3306bb5b3af283d0b7d1b19433e2589dd0bfb96aa7c515260104f9f60",
+    "sme_fraud/review_store.py": "713825b7ece0f0a26886d1d79b4c45e7b7c48f138eb6b571011fc429cbe73fa1",
+    "sme_fraud/review_server.py": "cb5c83a7cd810cd28b86eb6c110a399c4711ee4090e0332b8b573b25376006cb",
+    "tests/review_navigation_ui.test.js": "424eb1dee220d9ad035e67b609f05ff4a8fbd6e23571c33bf3ae66d44edeb7b5",
+    "tests/test_sprint14_api.py": "a36779280a0cfd9109fb9bac8682e78accac619a6e26eabee45f9e19d34fa2dc"
+  },
+  "handling_005": "opaque SHA256 only; no parsing/loading/scoring",
+  "notification_mode": "dry_run only; no preview/dispatch in browser",
+  "full_39_sample_17_workflow_reacceptance": false
+}

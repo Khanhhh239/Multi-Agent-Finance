@@ -90,7 +90,11 @@ class Case:
         # The financial templates see ordinary source evidence, never labels.
         enrich_accounting(self.tables, 20261013)
         self.features = build_features(self.tables)
-        return score_rules(self.tables, features=self.features, config={'noise_policy': 'legacy', 'spec_policy': 'legacy', 'evidence_policy': 'disabled', **getattr(self, 'config', {})})
+        # These fixtures reproduce the pre-P2 audits. New cash controls are
+        # enabled explicitly by their own cases; historical expectations stay pinned.
+        self.config = {'noise_policy': 'legacy', 'spec_policy': 'legacy', 'evidence_policy': 'disabled',
+                       'cash_payment_policy': 'disabled', 'amount_baseline': 'log_mad', **getattr(self, 'config', {})}
+        return score_rules(self.tables, features=self.features, config=self.config)
 
 
 def run_cases():

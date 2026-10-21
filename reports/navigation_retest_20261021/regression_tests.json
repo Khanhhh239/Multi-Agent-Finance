@@ -1,0 +1,72 @@
+{
+  "evidence": {
+    "successful": true,
+    "check_count": 22,
+    "checks": [
+      "A4 real null window renders calendar month and count",
+      "Null numeric facts are missing, zero is still a value",
+      "C4 exposes both real actions, leave windows and source references",
+      "Authorized leave action displays the permission, without false missing warning",
+      "E2 exposes termination, regular salary, service period and both sources",
+      "E2 missing settlement stays explicitly unevaluable",
+      "F1 exposes audit, closing, policy references, observations and rounded days",
+      "Legacy evidence and missing F1 source keep their uncertainty",
+      "Stored source values are HTML escaped",
+      "Foreign ledger and transaction consistently avoid claiming verified VND or original USD amount",
+      "Currency annotations stay bound to company, document and invoice",
+      "NO_GROSS missing invoice total agrees between transaction and document tabs",
+      "Absent invoice totals stay missing, while ledger and refund zero remain values",
+      "No-P2 explanation does not compare an unknown invoice total to the threshold",
+      "Future invoice is explicitly excluded at payment time in both tabs",
+      "Late verification and expired limit display effective dates without changing points",
+      "Installments expose source-version ambiguity without asserting lookahead",
+      "Refund summary keeps original case and distinguishes full and partial returns",
+      "Journal reversal is never presented as proof of physical cash recovery",
+      "Original-transaction navigation works from the last refund row",
+      "Independent accounting acceptance is not inferred from UAT counts",
+      "All 32 frozen controls and all 73 transactions render; VND columns retain currency"
+    ],
+    "rendered_controls": 32,
+    "rendered_transactions": 73,
+    "rendered_documents": 78,
+    "browser_visual_qa": false
+  },
+  "workflow": {
+    "successful": true,
+    "check_count": 13,
+    "checks": [
+      "A1 installment explanation shows actual agreement and source, without exempting P2",
+      "Recurring A5 explains approval, P99 and expense accrual without treating no P2 as valid",
+      "Small cash installment explains invoice-total threshold",
+      "Unlinked receipts request payer and original evidence; journal returns never clear original",
+      "Invoice revisions distinguish first observation, current revision and later update",
+      "Late approval is historical context even if source was observed earlier",
+      "A4 admission and E2 hard trigger explain queue without changing score",
+      "Score decomposition shows source base and recurrence without adding correlated hits",
+      "Future invoice warning has no literal template expression",
+      "Main requests tab exposes owner, operational deadline and received-awaiting-review",
+      "Changed scope and archived requests remain read-only",
+      "Request submission posts scope and due time separately from risk",
+      "Late detail refresh cannot overwrite another selected case"
+    ],
+    "browser_visual_qa": false
+  },
+  "navigation": {
+    "successful": true,
+    "check_count": 11,
+    "checks": [
+      "Case selection writes scenario/id and reload route opens that case",
+      "Same-tab case hash switches dataset/detail; duplicate history events admit once",
+      "Scenario dropdown clears old case URL; back/forward restore matching selection",
+      "Late case response never displays or admits a superseded route",
+      "Invalid case or dataset clears previous evidence and feedback form",
+      "P2 cards and transaction picker update URL without losing review draft",
+      "P2 same-control Back/Forward selects transaction without refetching",
+      "P2 cross-control hashes clear stale filters and load only the new route",
+      "P2 late response cannot repopulate a cleared route",
+      "Invalid P2 transaction does not silently fall back to another transaction",
+      "A default P2 link canonicalizes in place and never manufactures an engine case"
+    ],
+    "browser_visual_qa": false
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-21",
+  "workflow": "WF17",
+  "result": "PASS",
+  "browser": "Chrome",
+  "url": "http://127.0.0.1:8771/",
+  "browser_notification_articles": 30,
+  "browser_case_link_inspections": 66,
+  "browser_actual_link_clicks": 4,
+  "browser_reload_observations": 1,
+  "opened_cases": [
+    {
+      "step": "01_email_high_open",
+      "expected": "RC_44efef175ded587b",
+      "url": "http://127.0.0.1:8771/#scenario=001&case=RC_44efef175ded587b"
+    },
+    {
+      "step": "02_zalo_high_open",
+      "expected": "RC_4fa2eaa50c0d41d5",
+      "url": "http://127.0.0.1:8771/#scenario=001&case=RC_4fa2eaa50c0d41d5"
+    },
+    {
+      "step": "03_email_weekly_same_case",
+      "expected": "RC_4fa2eaa50c0d41d5",
+      "url": "http://127.0.0.1:8771/#scenario=001&case=RC_4fa2eaa50c0d41d5"
+    },
+    {
+      "step": "04_zalo_weekly_open",
+      "expected": "RC_18adf5be97ee0e84",
+      "url": "http://127.0.0.1:8771/#scenario=001&case=RC_18adf5be97ee0e84"
+    },
+    {
+      "step": "05_notification_target_reload",
+      "expected": "RC_18adf5be97ee0e84",
+      "url": "http://127.0.0.1:8771/#scenario=001&case=RC_18adf5be97ee0e84"
+    }
+  ],
+  "python_tests": 24,
+  "javascript_checks": 48,
+  "outbox_jobs": 48,
+  "outbox_dry_run_simulated": 48,
+  "outbox_live": 0,
+  "outbox_sent": 0,
+  "entire_outbox_unchanged": true,
+  "outbox_sha256": "231bb2b0f58ee3b9cdf08663cf4523fe2e9d3ec4bc723665559dab8c58c15e63",
+  "historical_payloads": "Original 8765 URLs retained; read-only preview and clickable links use current 8771 URL",
+  "business_journals_unchanged": true,
+  "protected_total": 1209,
+  "protected_changed": [],
+  "runtime_contract_changed": [],
+  "code_changed": [
+    "examples/browser_acceptance/run_demo.py",
+    "examples/browser_acceptance/README.md",
+    "sme_fraud/review_server.py",
+    "sme_fraud/notifications.py",
+    "review_ui/app.js",
+    "tests/test_sprint14_api.py",
+    "tests/test_sprint14_notifications.py",
+    "tests/review_workflow_ui.test.js"
+  ],
+  "code_sha256_after": {
+    "examples/browser_acceptance/run_demo.py": "94a768a055e9ce8e730f0a6530d118a44ca9de31ec80a32b3f37b317e0a6e81f",
+    "examples/browser_acceptance/README.md": "d9ba1bad8294c3e7e1006658e480a1aacb4d5d718e8fe357d49c3763c4e31df4",
+    "sme_fraud/review_server.py": "80b0dac37acf13572f40f9ad74ad873abce049e7f101c482c18b6522f655f690",
+    "sme_fraud/notifications.py": "2d7307cb7cc3a642c2897df2ee506d536bc46a5a23e232a749c1e48bafea5f12",
+    "review_ui/app.js": "604e671986ff674591e8df12b13876ba96b1d55bdd2c5ee186b327b6b282430e",
+    "tests/test_sprint14_api.py": "4473a15141bc8cdbd68749c2e33bcf5a13215eb0ccbd34dc062cb802819673a2",
+    "tests/test_sprint14_notifications.py": "56a1d6b7bc710a8ddd25abc7f4e1fdc816fde39ee310a50e40fd9096c49705dd",
+    "tests/review_workflow_ui.test.js": "c4a91ca9d54c68bb4f35b0cd7f859f1455cc069cb1a26a25d5766410dd7126e5"
+  },
+  "handling_005": "opaque SHA256 only; no parsing/loading/scoring",
+  "full_39_sample_17_workflow_reacceptance": false
+}

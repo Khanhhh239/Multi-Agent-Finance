@@ -240,6 +240,11 @@ def _restricted_score(tables: dict, features: list[dict], as_of: str):
 def predictions_for_packet(tables: dict, features: list[dict], packet: list[dict],
                            as_of: str) -> list[dict]:
     result = _restricted_score(tables, features, as_of)
+    return predictions_from_result(result, tables, packet, as_of)
+
+
+def predictions_from_result(result: dict, tables: dict, packet: list[dict], as_of: str) -> list[dict]:
+    """Project a scored snapshot; acceptance callers still recompute the engine."""
     hits = defaultdict(list)
     for hit in result['hits']:
         if hit['rule_id'] in RULES:
@@ -291,13 +296,15 @@ def _code_hashes():
              'noise_policy.py', 'payment_evidence.py', 'payment_evidence.schema.json',
              'authority_policy.py', 'authority_policy.schema.json', 'features.py',
              'generate.py', 'batch_controls.py', 'case_queue.py', 'exception_validation.py', 'case_identity.py',
-             'feature_contract.py', 'sync_feature_model.py', 'evaluate.py', 'run_rules.py', 'case_admission.py')
+             'feature_contract.py', 'sync_feature_model.py', 'evaluate.py', 'run_rules.py', 'case_admission.py',
+             'review_capacity.py', 'a4_pattern_queue.py')
     return {name: sha(root / name) for name in names}
 
 
 def _looks_synthetic(manifest: dict) -> bool:
-    return any(key in manifest for key in ('requested_fraud_rate', 'actual_fraud_rows',
-                                            'fraud_variants'))
+    return (manifest.get('is_synthetic') is True
+            or str(manifest.get('data_origin', '')).startswith('synthetic')
+            or any(key in manifest for key in ('requested_fraud_rate', 'actual_fraud_rows', 'fraud_variants')))
 
 
 def make_commitment(data: Path, packet: list[dict], predictions: list[dict],

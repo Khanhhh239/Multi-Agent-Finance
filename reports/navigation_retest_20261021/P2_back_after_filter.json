@@ -1,0 +1,9 @@
+{
+  "step": "P2_back_after_filter",
+  "url": "http://127.0.0.1:8771/p2-controls#control=FULL_BELOW&transaction=AUDIT_0000",
+  "control": "FULL_BELOW",
+  "transaction": "AUDIT_0000",
+  "selected": "AUDIT_0000",
+  "result": "PASS",
+  "detail": "FULL_BELOW · Hóa đơn đầy đủ\nĐạt\nHóa đơn đủ, dưới ngưỡng đối chiếu\n1 giao dịch · Khớp kỳ vọng tự động\nGiao dịch & P2\nChứng từ & liên kết\nHàng đợi\nLịch sử nghiệm thu\nChọn giao dịch · gồm cả dòng không có P2\nAUDIT_0000 · 11:00:00 12/8/2025 · 4.999.999 ₫\nThời điểm ghi sổ\n11:00:00 12/8/2025\nGiá trị theo nguồn\n4.999.999 ₫\nNợ / Có\n642 / 111\nKênh thanh toán\nTiền mặt\nChứng từ\nJD000000001\nNội dung\nThanh toán hoạt động\nMốc chứng từ tại thời điểm chi\nThời điểm chi / ghi sổ\n11:00:00 12/8/2025\nHóa đơn phát hành lúc\n11:00:00 8/8/2025\nMốc ghi nhận hóa đơn trong nguồn\n10:30:00 12/8/2025\nKhông phát sinh P2 cho giao dịch này.\n\nKhoản chi 4.999.999 ₫ và tổng hóa đơn đang có 4.999.999 ₫ dưới mốc đối chiếu 5.000.000 ₫ trong chính sách của snapshot.\n\nKiểm tra chứng từ và hạn mức nội bộ nếu có; không mở P2 giả cho tình huống ngoài điều kiện.\n\nKhông có P2 chưa phải chứng nhận nghiệp vụ hợp lệ.\n\nKết quả đưa vào hàng đợi\n\nKhông mở hồ sơ · Không có mức ưu tiên\n\nQuy tắc khác có điểm: Không có\nXem kỳ vọng đã khai báo và đối chiếu tự động\nGhi kết quả nghiệm thu tình huống\n\nÁp dụng cho toàn bộ 1 giao dịch của tình huống này. Đây là kết quả kiểm tra giao diện/nghiệp vụ, không phải kết luận gian lận hoặc phản hồi vận hành.\n\nKết quả\nChọn kết quả\nĐạt\nCần sửa\nCần bổ sung\nNgười nghiệm thu\nLý do / lỗi có thể tái hiện\nLưu nghiệm thu\n\nKết quả gần nhất: Đạt · ASSISTANT_BROWSER_SIM · 08:43:47 20/10/2026"
+}

@@ -1,0 +1,12 @@
+{
+  "filter_clear": {
+    "url": "http://127.0.0.1:8771/p2-controls",
+    "detail": "Chọn tình huống trong danh sách đang lọc."
+  },
+  "invalid": {
+    "url": "http://127.0.0.1:8771/p2-controls#control=REFUND_FULL&transaction=MISSING",
+    "notice": "Không tìm thấy giao dịch trong tình huống của liên kết.",
+    "detail": "Chưa mở được tình huống. Chọn tình huống khác hoặc thử Làm mới."
+  },
+  "recovered": true
+}

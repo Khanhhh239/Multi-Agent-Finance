@@ -18,6 +18,8 @@ from .run_rule_repairs import write_jsonl
 from .run_rules import evaluate_scores
 from .evidence_evaluation import budget_review
 from .review_store import ReviewStore
+from .review_capacity import workload_scenarios
+from .admission_export import explain_admissions, FIELDS as ADMISSION_EXPORT_FIELDS
 
 BASELINE = Path('reports/feature_model_sync_20261017')
 DATA = Path('data/feature_model_sync_20261017')
@@ -90,7 +92,10 @@ def run(root, tag):
     artifact = joblib.load(model_path)
     compatibility = require_model(artifact, meta, sklearn.__version__)
     del artifact
-    result = score_rules(tables, features=features)
+    replay_config = json.loads((before_path/'rule_config.json').read_text(encoding='utf-8'))
+    replay_config.setdefault('cash_payment_policy', 'disabled')
+    replay_config['split_pattern_policy'] = DEFAULT_CONFIG['split_pattern_policy']
+    result = score_rules(tables, features=features, config=replay_config)
     before = {r['transaction_id']: r for r in read_rows(before_path/'rule_scores.csv')}
     for r in result['scores']:
         for field in FIXED_FIELDS:
@@ -161,11 +166,21 @@ def run(root, tag):
             for next_score in result['scores'] if (i := next_score['transaction_id']) in gained)
         for version, queue, history in (('before', old_cases, old_events), ('after', cases, events)):
             subset = [c for c in queue if c['opened_at'][:4] == ('2024' if period == 'train' else '2025')]
-            for budget in (1, 3, 5):
-                load = budget_review(subset, history, tx, labels, budget)
+            for profile, kind, capacity in workload_scenarios():
+                load = budget_review(subset, history, tx, labels, capacity.slots,
+                    capacity_minutes=capacity.minutes,
+                    period_end='2024-12-31' if period == 'train' else '2025-06-30')
                 load.pop('admissions')
-                report['workload'].append(dict(period=period, version=version, **load))
+                report['workload'].append(dict(period=period, version=version,
+                    capacity_profile=profile, profile_kind=kind, **load))
     write_csv(output/'added_admissions.csv', changed)
+    detailed, admission_evidence = explain_admissions(result, cases, members-old_members,
+        metadata={row['transaction_id']: row for row in changed})
+    write_csv(output/'added_admissions_v2.csv', detailed, list(ADMISSION_EXPORT_FIELDS))
+    write_jsonl(output/'admission_evidence.jsonl', admission_evidence)
+    write_json(output/'admission_export_commitment.json', dict(version='admission-provenance-v2',
+        sha256={name: sha(output/name) for name in ('added_admissions_v2.csv', 'admission_evidence.jsonl')},
+        membership_unchanged=True, row_scores_flags_hard_triggers_unchanged=True))
     # Compare identifiers by shared transactions for review, never transfer feedback automatically.
     new_owners = {i: c['case_id'] for c in cases for i in json.loads(c['transaction_ids'])}
     write_json(output/'case_identity_comparison.json', [dict(previous_case_id=c['case_id'],
@@ -199,7 +214,8 @@ def main():
     code = Path(__file__).resolve().parent
     frozen_code = {str(p):sha(p) for p in (*code.glob('*.py'), *code.glob('*.schema.json'))}
     plan = dict(periods=list(PERIODS), test_scored=False, cutoff_exclusive=CUTOFF,
-        config=DEFAULT_CONFIG, feature_contract=current_contract(), labels_used_for_policy=False,
+        admission_policy=DEFAULT_CONFIG['split_pattern_policy'], other_policies='frozen baseline rule_config.json',
+        feature_contract=current_contract(), labels_used_for_policy=False,
         policy='Admit already evaluated unsuppressed A2/A4; no score, threshold, hard trigger, feature or model change',
         source_sha256=frozen_code)
     plan_path = args.output/'evaluation_plan.json'

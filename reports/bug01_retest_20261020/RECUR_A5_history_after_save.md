@@ -1,0 +1,326 @@
+- complementary:
+  - link "▧ CaseSuite NGHIỆM THU NGHIỆP VỤ":
+    - /url: /p2-controls
+    - generic: ▧
+    - text: CaseSuite
+    - generic: NGHIỆM THU NGHIỆP VỤ
+  - generic: BỘ ĐỐI CHỨNG RIÊNG
+  - generic: ✓
+  - text: Đối chứng P2
+  - generic: Xem cả giao dịch có và không có P2. Mỗi tình huống giữ nguồn và cấu hình riêng.
+  - text: Chỉ lưu nghiệm thu cục bộ
+  - generic: Thông báo đã tắt · Không sửa nguồn
+- main:
+  - generic: Nghiệm thu / Đối chứng P2
+  - generic: DỮ LIỆU MÔ PHỎNG
+  - generic: KIỂM TRA BẰNG TÌNH HUỐNG
+  - heading "Đối chứng chi tiền mặt" [level=1]
+  - paragraph: Đọc nghiệp vụ, đối chiếu bằng chứng và ghi kết quả nghiệm thu cho từng tình huống.
+  - button "Làm mới ↻"
+  - status: Đã lưu nghiệm thu cho RECUR_A5. Nguồn và kết quả P2 giữ nguyên.
+  - region "Tổng hợp nghiệm thu":
+    - article:
+      - generic: Tình huống khớp tự động
+      - strong: 32/32
+      - text: So với kỳ vọng đã khai báo
+    - article:
+      - generic: Giao dịch trong bộ đối chứng
+      - strong: "73"
+      - text: Giữ cả giao dịch không phát sinh P2
+    - article:
+      - generic: Đã có ghi chú UAT
+      - strong: 32/32
+      - text: Chưa xác nhận kế toán độc lập nghiệm thu
+    - article:
+      - generic: Tình huống cần sửa
+      - strong: "0"
+      - text: Theo kết quả người nghiệm thu
+  - note:
+    - strong: "Nghiệm thu kế toán độc lập: chưa có biên bản được xác minh."
+    - text: Khớp kỳ vọng tự động và ghi chú UAT, kể cả ghi chú của trợ lý, không được tính là nghiệm thu độc lập. Cần kế toán đối chiếu và ký biên bản riêng.
+  - region "Lọc tình huống":
+    - generic: ⌕
+    - searchbox "Tìm tình huống"
+    - combobox "Nhóm tình huống":
+      - option "Mọi nhóm" [selected]
+      - option "Hóa đơn đầy đủ"
+      - option "Thiếu chứng từ"
+      - option "Trả nhiều đợt"
+      - option "Hoàn / đảo giao dịch"
+      - option "Chi định kỳ"
+      - option "Hạn mức nội bộ"
+    - combobox "Kết quả P2":
+      - option "Mọi kết quả P2" [selected]
+      - option "Không phát sinh P2"
+      - option "Thiếu bằng chứng · 0 điểm"
+      - option "Đối chiếu chứng từ / VAT · 8 điểm"
+      - option "Vượt hạn mức đã xác minh · 14 điểm"
+    - combobox "Kết quả nghiệm thu":
+      - option "Mọi trạng thái nghiệm thu" [selected]
+      - option "Chưa nghiệm thu"
+      - option "Đạt"
+      - option "Cần sửa"
+      - option "Cần bổ sung"
+    - link "↓ CSV":
+      - /url: /api/p2-controls/export?group=&category=&verdict=&q=
+  - region "Danh sách tình huống":
+    - heading "Tình huống 32" [level=2]
+    - generic: Đây là danh sách kiểm tra, gồm cả tình huống không mở hồ sơ. Không áp dụng ngân sách cảnh báo vận hành.
+    - 'button "Đạt ✓ Khớp tự động Hóa đơn đủ, dưới ngưỡng đối chiếu Hóa đơn đầy đủ · 1 giao dịch Không phát sinh P2: 1 FULL_BELOW"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hóa đơn đủ, dưới ngưỡng đối chiếu
+      - generic: Hóa đơn đầy đủ · 1 giao dịch
+      - paragraph: "Không phát sinh P2: 1"
+      - generic: FULL_BELOW
+    - 'button "Đạt ✓ Khớp tự động Hóa đơn đủ, đúng ngưỡng đối chiếu Hóa đơn đầy đủ · 1 giao dịch Đối chiếu chứng từ / VAT: 1 FULL_EQUAL"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hóa đơn đủ, đúng ngưỡng đối chiếu
+      - generic: Hóa đơn đầy đủ · 1 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 1"
+      - generic: FULL_EQUAL
+    - 'button "Đạt ✓ Khớp tự động Hóa đơn đủ, trên ngưỡng đối chiếu Hóa đơn đầy đủ · 1 giao dịch Đối chiếu chứng từ / VAT: 1 FULL_ABOVE"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hóa đơn đủ, trên ngưỡng đối chiếu
+      - generic: Hóa đơn đầy đủ · 1 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 1"
+      - generic: FULL_ABOVE
+    - 'button "Đạt ✓ Khớp tự động Mốc lịch sử: dưới ngưỡng phiên bản cũ Hóa đơn đầy đủ · 1 giao dịch Không phát sinh P2: 1 OLD_BELOW"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: "Mốc lịch sử: dưới ngưỡng phiên bản cũ"
+      - generic: Hóa đơn đầy đủ · 1 giao dịch
+      - paragraph: "Không phát sinh P2: 1"
+      - generic: OLD_BELOW
+    - 'button "Đạt ✓ Khớp tự động Mốc lịch sử: đúng ngưỡng phiên bản cũ Hóa đơn đầy đủ · 1 giao dịch Đối chiếu chứng từ / VAT: 1 OLD_EQUAL"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: "Mốc lịch sử: đúng ngưỡng phiên bản cũ"
+      - generic: Hóa đơn đầy đủ · 1 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 1"
+      - generic: OLD_EQUAL
+    - 'button "Đạt ✓ Khớp tự động Hóa đơn đủ, trả qua ngân hàng Hóa đơn đầy đủ · 1 giao dịch Không phát sinh P2: 1 FULL_BANK"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hóa đơn đủ, trả qua ngân hàng
+      - generic: Hóa đơn đầy đủ · 1 giao dịch
+      - paragraph: "Không phát sinh P2: 1"
+      - generic: FULL_BANK
+    - 'button "Đạt ✓ Khớp tự động Không có thông tin hóa đơn Thiếu chứng từ · 1 giao dịch Thiếu bằng chứng: 1 NO_INVOICE"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Không có thông tin hóa đơn
+      - generic: Thiếu chứng từ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: NO_INVOICE
+    - 'button "Đạt ✓ Khớp tự động Thiếu ngày hóa đơn Thiếu chứng từ · 1 giao dịch Thiếu bằng chứng: 1 NO_DATE"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Thiếu ngày hóa đơn
+      - generic: Thiếu chứng từ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: NO_DATE
+    - 'button "Đạt ✓ Khớp tự động Thiếu tổng tiền hóa đơn Thiếu chứng từ · 1 giao dịch Thiếu bằng chứng: 1 NO_GROSS"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Thiếu tổng tiền hóa đơn
+      - generic: Thiếu chứng từ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: NO_GROSS
+    - 'button "Đạt ✓ Khớp tự động Thiếu mã và số hóa đơn Thiếu chứng từ · 1 giao dịch Thiếu bằng chứng: 1 NO_IDENTITY"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Thiếu mã và số hóa đơn
+      - generic: Thiếu chứng từ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: NO_IDENTITY
+    - 'button "Đạt ✓ Khớp tự động Hóa đơn chỉ có sau lúc chi Thiếu chứng từ · 1 giao dịch Thiếu bằng chứng: 1 FUTURE_INVOICE"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hóa đơn chỉ có sau lúc chi
+      - generic: Thiếu chứng từ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: FUTURE_INVOICE
+    - 'button "Đạt ✓ Khớp tự động Hai đợt tiền mặt nhỏ thuộc một hóa đơn lớn Trả nhiều đợt · 2 giao dịch Đối chiếu chứng từ / VAT: 2 INSTALL_CASH"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hai đợt tiền mặt nhỏ thuộc một hóa đơn lớn
+      - generic: Trả nhiều đợt · 2 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 2"
+      - generic: INSTALL_CASH
+    - 'button "Đạt ✓ Khớp tự động Hai đợt nhỏ, hóa đơn tổng dưới ngưỡng Trả nhiều đợt · 2 giao dịch Không phát sinh P2: 2 INSTALL_SMALL"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hai đợt nhỏ, hóa đơn tổng dưới ngưỡng
+      - generic: Trả nhiều đợt · 2 giao dịch
+      - paragraph: "Không phát sinh P2: 2"
+      - generic: INSTALL_SMALL
+    - 'button "Đạt ✓ Khớp tự động Một đợt ngân hàng và một đợt tiền mặt Trả nhiều đợt · 2 giao dịch Không phát sinh P2: 1 · Đối chiếu chứng từ / VAT: 1 INSTALL_MIXED"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Một đợt ngân hàng và một đợt tiền mặt
+      - generic: Trả nhiều đợt · 2 giao dịch
+      - paragraph: "Không phát sinh P2: 1 · Đối chiếu chứng từ / VAT: 1"
+      - generic: INSTALL_MIXED
+    - 'button "Đạt ✓ Khớp tự động Hai khoản cùng thời điểm dùng cùng hóa đơn Trả nhiều đợt · 2 giao dịch Đối chiếu chứng từ / VAT: 2 INSTALL_SAME_TIME"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hai khoản cùng thời điểm dùng cùng hóa đơn
+      - generic: Trả nhiều đợt · 2 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 2"
+      - generic: INSTALL_SAME_TIME
+    - 'button "Đạt ✓ Khớp tự động Có tổng hóa đơn nhưng chưa có ngày phát hành Trả nhiều đợt · 2 giao dịch Thiếu bằng chứng: 2 INSTALL_GAP"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Có tổng hóa đơn nhưng chưa có ngày phát hành
+      - generic: Trả nhiều đợt · 2 giao dịch
+      - paragraph: "Thiếu bằng chứng: 2"
+      - generic: INSTALL_GAP
+    - 'button "Đạt ✓ Khớp tự động Hoàn đủ tiền mặt sau khoản chi Hoàn / đảo giao dịch · 2 giao dịch Đối chiếu chứng từ / VAT: 1 · Không phát sinh P2: 1 REFUND_FULL"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hoàn đủ tiền mặt sau khoản chi
+      - generic: Hoàn / đảo giao dịch · 2 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 1 · Không phát sinh P2: 1"
+      - generic: REFUND_FULL
+    - 'button "Đạt ✓ Khớp tự động Hoàn một phần tiền mặt Hoàn / đảo giao dịch · 2 giao dịch Đối chiếu chứng từ / VAT: 1 · Không phát sinh P2: 1 REFUND_PART"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hoàn một phần tiền mặt
+      - generic: Hoàn / đảo giao dịch · 2 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 1 · Không phát sinh P2: 1"
+      - generic: REFUND_PART
+    - 'button "Đạt ✓ Khớp tự động Hoàn khoản chi qua ngân hàng Hoàn / đảo giao dịch · 2 giao dịch Không phát sinh P2: 2 REFUND_BANK"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hoàn khoản chi qua ngân hàng
+      - generic: Hoàn / đảo giao dịch · 2 giao dịch
+      - paragraph: "Không phát sinh P2: 2"
+      - generic: REFUND_BANK
+    - 'button "Đạt ✓ Khớp tự động Đảo bút toán, không có khoản chi mới Hoàn / đảo giao dịch · 2 giao dịch Đối chiếu chứng từ / VAT: 1 · Không phát sinh P2: 1 REVERSAL_JOURNAL"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Đảo bút toán, không có khoản chi mới
+      - generic: Hoàn / đảo giao dịch · 2 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 1 · Không phát sinh P2: 1"
+      - generic: REVERSAL_JOURNAL
+    - 'button "Đạt ✓ Khớp tự động Thu tiền mặt chưa nối chứng từ gốc; không phải chi Hoàn / đảo giao dịch · 1 giao dịch Không phát sinh P2: 1 RECEIPT_UNLINKED"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Thu tiền mặt chưa nối chứng từ gốc; không phải chi
+      - generic: Hoàn / đảo giao dịch · 1 giao dịch
+      - paragraph: "Không phát sinh P2: 1"
+      - generic: RECEIPT_UNLINKED
+    - 'button "Đạt ✓ Khớp tự động Hai lần hoàn một phần, giữ bằng chứng khoản gốc Hoàn / đảo giao dịch · 3 giao dịch Đối chiếu chứng từ / VAT: 1 · Không phát sinh P2: 2 REFUND_MULTI"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hai lần hoàn một phần, giữ bằng chứng khoản gốc
+      - generic: Hoàn / đảo giao dịch · 3 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 1 · Không phát sinh P2: 2"
+      - generic: REFUND_MULTI
+    - 'button "Đạt ✓ Khớp tự động Định kỳ đã duyệt, tiền mặt dưới ngưỡng Chi định kỳ · 3 giao dịch Không phát sinh P2: 3 RECUR_SMALL"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Định kỳ đã duyệt, tiền mặt dưới ngưỡng
+      - generic: Chi định kỳ · 3 giao dịch
+      - paragraph: "Không phát sinh P2: 3"
+      - generic: RECUR_SMALL
+    - 'button "Đạt ✓ Khớp tự động Định kỳ đã duyệt, trả ngân hàng Chi định kỳ · 3 giao dịch Không phát sinh P2: 3 RECUR_BANK"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Định kỳ đã duyệt, trả ngân hàng
+      - generic: Chi định kỳ · 3 giao dịch
+      - paragraph: "Không phát sinh P2: 3"
+      - generic: RECUR_BANK
+    - 'button "Đạt ✓ Khớp tự động Định kỳ đã duyệt vẫn cần đối chiếu thanh toán Chi định kỳ · 3 giao dịch Đối chiếu chứng từ / VAT: 3 RECUR_CASH"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Định kỳ đã duyệt vẫn cần đối chiếu thanh toán
+      - generic: Chi định kỳ · 3 giao dịch
+      - paragraph: "Đối chiếu chứng từ / VAT: 3"
+      - generic: RECUR_CASH
+    - 'button "Đạt ✓ Khớp tự động Hợp đồng định kỳ không thay thế hóa đơn còn thiếu Chi định kỳ · 3 giao dịch Thiếu bằng chứng: 3 RECUR_GAP"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hợp đồng định kỳ không thay thế hóa đơn còn thiếu
+      - generic: Chi định kỳ · 3 giao dịch
+      - paragraph: "Thiếu bằng chứng: 3"
+      - generic: RECUR_GAP
+    - 'button "Đạt ✓ Khớp tự động Định kỳ có bằng chứng được loại khỏi tín hiệu A5 Chi định kỳ · 23 giao dịch Không phát sinh P2: 23 RECUR_A5" [pressed]':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Định kỳ có bằng chứng được loại khỏi tín hiệu A5
+      - generic: Chi định kỳ · 23 giao dịch
+      - paragraph: "Không phát sinh P2: 23"
+      - generic: RECUR_A5
+    - 'button "Đạt ✓ Khớp tự động Hạn mức đã xác minh, hóa đơn vẫn thiếu Hạn mức nội bộ · 1 giao dịch Vượt hạn mức đã xác minh: 1 LIMIT_VERIFIED"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hạn mức đã xác minh, hóa đơn vẫn thiếu
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Vượt hạn mức đã xác minh: 1"
+      - generic: LIMIT_VERIFIED
+    - 'button "Đạt ✓ Khớp tự động Hạn mức chỉ có con số, chưa có xác minh Hạn mức nội bộ · 1 giao dịch Thiếu bằng chứng: 1 LIMIT_UNVERIFIED"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hạn mức chỉ có con số, chưa có xác minh
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: LIMIT_UNVERIFIED
+    - 'button "Đạt ✓ Khớp tự động Xác minh hạn mức chỉ có sau thời điểm chi Hạn mức nội bộ · 1 giao dịch Thiếu bằng chứng: 1 LIMIT_FUTURE"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Xác minh hạn mức chỉ có sau thời điểm chi
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: LIMIT_FUTURE
+    - 'button "Đạt ✓ Khớp tự động Hạn mức đã hết hiệu lực lúc chi Hạn mức nội bộ · 1 giao dịch Thiếu bằng chứng: 1 LIMIT_EXPIRED"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Hạn mức đã hết hiệu lực lúc chi
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: LIMIT_EXPIRED
+    - 'button "Đạt ✓ Khớp tự động Ngoại tệ chưa xác minh số tiền VND Hạn mức nội bộ · 1 giao dịch Thiếu bằng chứng: 1 LIMIT_FOREIGN"':
+      - generic: Đạt
+      - generic: ✓ Khớp tự động
+      - generic: Ngoại tệ chưa xác minh số tiền VND
+      - generic: Hạn mức nội bộ · 1 giao dịch
+      - paragraph: "Thiếu bằng chứng: 1"
+      - generic: LIMIT_FOREIGN
+  - region "Chi tiết tình huống":
+    - generic: RECUR_A5 · Chi định kỳ
+    - generic: Đạt
+    - heading "Định kỳ có bằng chứng được loại khỏi tín hiệu A5" [level=2]
+    - generic: 23 giao dịch · Khớp kỳ vọng tự động
+    - navigation "Nội dung tình huống":
+      - button "Giao dịch & P2"
+      - button "Chứng từ & liên kết"
+      - button "Hàng đợi"
+      - button "Lịch sử nghiệm thu"
+    - generic: Lịch sử nghiệm thu · chỉ bộ đối chứng này
+    - generic: Đạt
+    - paragraph: "SIM_BROWSER_UAT RETEST BUG01: PASS RECUR_A5. Đã chọn đủ 23 giao dịch và đọc chứng từ/hàng đợi/lịch sử. 22 dòng thiếu tổng hóa đơn hiện Chưa có thông tin, không còn so tổng chưa biết như 0 dưới ngưỡng. Dòng cuối vẫn 3 triệu, 22/20 mẫu và ngoại lệ lịch duyệt; không mở hồ sơ. Giữ ghi chú FAIL trước sửa; chưa nghiệm thu kế toán độc lập."
+    - text: ASSISTANT_BROWSER_SIM · 09:46:53 20/10/2026
+    - generic: Cần sửa
+    - paragraph: "SIM_BROWSER_UAT: FAIL — Đã chọn đủ 23 giao dịch. Dòng cuối A5 22/20 mẫu, ngưỡng 1 triệu, ngoại lệ lịch duyệt 3 triệu/as-of đúng. BUG01: dòng lịch sử AUDIT_0000 thiếu hóa đơn nhưng giải thích tổng hóa đơn đang có 0 ₫; mong đợi ghi chưa có thông tin. Chỉ nghiệm thu giao diện trên dữ liệu mô phỏng; chưa nghiệm thu kế toán độc lập."
+    - text: ASSISTANT_BROWSER_SIM · 09:11:38 20/10/2026
+    - paragraph: Nhật ký được kiểm tra chuỗi hash khi đọc và lưu; không phải chữ ký số.
+    - heading "Ghi kết quả nghiệm thu tình huống" [level=3]
+    - paragraph: Áp dụng cho toàn bộ 23 giao dịch của tình huống này. Đây là kết quả kiểm tra giao diện/nghiệp vụ, không phải kết luận gian lận hoặc phản hồi vận hành.
+    - text: Kết quả
+    - combobox "Kết quả":
+      - option "Chọn kết quả" [selected]
+      - option "Đạt"
+      - option "Cần sửa"
+      - option "Cần bổ sung"
+    - text: Người nghiệm thu
+    - textbox "Người nghiệm thu": ASSISTANT_BROWSER_SIM
+    - text: Lý do / lỗi có thể tái hiện
+    - textbox "Lý do / lỗi có thể tái hiện":
+      - /placeholder: Đã kiểm tra điều gì? Nếu cần sửa, ghi bước thực hiện và kết quả mong muốn.
+    - button "Lưu nghiệm thu"
+    - paragraph: "Kết quả gần nhất: Đạt · ASSISTANT_BROWSER_SIM · 09:46:53 20/10/2026"
+  - generic: Kết quả “Đạt” xác nhận tình huống nghiệm thu đáp ứng yêu cầu; không chứng nhận giao dịch hợp lệ hoặc là kết luận gian lận. Nguồn và kết quả detector được giữ nguyên.

@@ -1,0 +1,76 @@
+{
+  "successful": true,
+  "cohorts": [
+    {
+      "scenario": "001",
+      "p2_hits": 1217,
+      "p2_points_before": {
+        "8": 1217
+      },
+      "p2_points_after": {
+        "0": 1217
+      },
+      "p2_all_retained": true,
+      "cases_before": 556,
+      "transaction_cases_before": 412,
+      "cases_after": 584,
+      "transaction_cases_after": 112,
+      "source_cases_after": 144,
+      "information_request_cases": 328,
+      "information_request_transactions": 1206,
+      "p2_transactions_in_independent_operational_cases": 11,
+      "priorities_before": {
+        "cao_nhat": 16,
+        "cao": 39,
+        "trung_binh": 453,
+        "thap": 48
+      },
+      "priorities_after": {
+        "cao_nhat": 16,
+        "trung_binh": 192,
+        "thap": 376
+      },
+      "all_hit_counts_unchanged": true,
+      "graph_and_thresholds_unchanged": true,
+      "previous_frozen_artifacts_and_audit_unchanged": true
+    },
+    {
+      "scenario": "003",
+      "p2_hits": 1192,
+      "p2_points_before": {
+        "8": 1192
+      },
+      "p2_points_after": {
+        "0": 1192
+      },
+      "p2_all_retained": true,
+      "cases_before": 594,
+      "transaction_cases_before": 450,
+      "cases_after": 627,
+      "transaction_cases_after": 163,
+      "source_cases_after": 144,
+      "information_request_cases": 320,
+      "information_request_transactions": 1180,
+      "p2_transactions_in_independent_operational_cases": 12,
+      "priorities_before": {
+        "cao_nhat": 16,
+        "cao": 53,
+        "trung_binh": 477,
+        "thap": 48
+      },
+      "priorities_after": {
+        "cao_nhat": 16,
+        "trung_binh": 243,
+        "thap": 368
+      },
+      "all_hit_counts_unchanged": true,
+      "graph_and_thresholds_unchanged": true,
+      "previous_frozen_artifacts_and_audit_unchanged": true
+    }
+  ],
+  "holdout_005_scored": false,
+  "information_request_high_priority_jobs": 0,
+  "financial_fraud_precision": null,
+  "independent_human_reviews": 0,
+  "external_messages_sent": 0
+}

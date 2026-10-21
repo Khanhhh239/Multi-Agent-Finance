@@ -1,0 +1,23 @@
+{
+  "protected_files": 1209,
+  "changed_protected_files": [],
+  "unchanged": true,
+  "tracked_code_changed": [
+    "review_ui/app.js",
+    "review_ui/p2_controls.js",
+    "review_ui/p2_controls.css"
+  ],
+  "code_sha256": {
+    "review_ui/app.js": "ecba45cf9015cc8fe3349acfda138527ca92e0785b0864af3bd2ab3ada79f5b3",
+    "review_ui/p2_controls.js": "bfabd744a44cf94f351c1fc72320180c3ba92477159cc85cc5e176f85823ca85",
+    "review_ui/p2_controls.html": "75a9d65a2e177314709eeb616f1a9a145e905b69609a4a2551efa8ab7d133814",
+    "review_ui/p2_controls.css": "4130deebfd8b75f38cacc88f992b6e1d0a6b6e2d8a11875ec0bd563e0232b274",
+    "tests/review_evidence_ui.test.js": "4fccc1e2160030871f94ff62fdde33a453c2618aaae0edbcfb412b9b73975bcc",
+    "sme_fraud/rules.py": "802051faebd176efade79683170aaab5c66f5bc953739c7b74eea61d341938a1",
+    "sme_fraud/cash_controls.py": "c5dcb6f4e83e8893e44ab6753aa222400fda95c858949e45747292552b426222",
+    "sme_fraud/p2_controls_web.py": "74255e85373ff8fbd2921213b6a8f1785b8ef76143b781f6f652ba713d7c7148",
+    "sme_fraud/case_queue.py": "a2d8604fed99e88a3cd5282d6143533af8bc768f2740e02357a3c3ff7076b7fe"
+  },
+  "holdout_005_handling": "opaque hash only, not loaded or scored",
+  "scoring_or_threshold_changed": false
+}

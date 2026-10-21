@@ -1,6 +1,14 @@
 # Rà soát lại lớp tất định / luật cứng — 16/10/2026
 
-**Kết luận cập nhật 17/10/2026: chưa đủ cơ sở để nghiệm thu vận hành chính thức.** R1–R8 và cơ chế nhận hồ sơ A2/A4 đã sửa kỹ thuật; đã chấm kết hợp train/validation trên ba bộ chuẩn. **373/373 test hồi quy, 7/7 probe readiness đạt.** Điểm/ngưỡng/hard trigger và model giữ nguyên; việc nhận riêng mẫu giúp thêm TP nhưng tăng FP/tải rà soát. Cần nghiệm thu nguồn/chính sách tiếp nhận và áp dụng migration khi triển khai vào bộ rà soát cũ. [Bản sửa và đánh đổi](rule_split_pattern_admission.md).
+**Kết luận cập nhật 17/10/2026: chưa đủ cơ sở để nghiệm thu vận hành chính thức.** R1–R8, tiếp nhận A2/A4 và hợp đồng công suất đã sửa kỹ thuật; có bản thử hồ sơ mẫu A4, chưa đổi mặc định. **412/412 test hồi quy, 7/7 probe readiness đạt.** Điểm/ngưỡng/hard trigger và model giữ nguyên. Cần reviewer xác nhận công sức/phạm vi, nghiệm thu nguồn và áp dụng migration khi triển khai vào bộ rà soát cũ. [Bản thử A4](rule_a4_pattern_trial.md), [bản sửa công suất](rule_review_capacity.md).
+
+**Checkpoint mới sau sinh nguồn mô phỏng: 425/425 test, 7/7 probe đạt.** Có 62.182 giao dịch từ ba seed; hai bộ reporting khớp 1.216/1.216 oracle điều kiện nguồn, một bộ giữ lại chưa chấm. Nguồn thật vẫn `awaiting_real_data`, 0 đơn vị được reviewer độc lập kết luận. [Dữ liệu và giới hạn](rule_synthetic_source_readiness.md).
+
+**Checkpoint hiện tại sau sửa export: 437/437 test, 7/7 probe đạt.** Đã xuất v2 giải thích đủ 3.315 ID nhận thêm, gồm hai dòng 0 điểm vào queue qua A4 đóng lô. Đối chiếu membership và hash 192 file nguồn/baseline giữ nguyên; không chấm lại luật/model hoặc ghi SQLite. Vấn đề truy vết export đã đóng kỹ thuật. [Bản sửa và kiểm chứng](rule_admission_export.md).
+
+**Sau sửa công suất:** simulator nhận riêng lượt/phút và dùng chung hợp đồng với API, có lịch làm việc và tồn cuối kỳ; ca áp lực đã khớp API. Tính lại 120 tổ hợp tải trên queue đã khóa, 36 đối chứng nghiên cứu cũ khớp, hash nguồn/model/queue/SQLite giữ nguyên. Theo mọi ngày lịch, 120 phút không tăng carryover trên validation hiện có; theo lịch T2–T6, cấu hình UI còn 4/2/3 hồ sơ tại cuối kỳ, hết tồn sau một ngày lịch. Chưa xác nhận lỗi predicate mới trong đợt rà. Hồ sơ mẫu A4 và replay ưu tiên sau mở vẫn còn mở. [Danh sách và tiêu chí](rule_readiness_next_20261017.md).
+
+**Bản thử hồ sơ A4:** queue riêng 5.538 → 4.774 hồ sơ; tập được nhận và validation TP 200/FP 2.347 không đổi. Có 905 gói reviewer không kèm nhãn, hiện 0 đơn vị xác nhận; phân tích giữ tổng phút còn công việc vượt trần ngày. Mục chất lượng/công sức chưa đóng, queue mặc định/SQLite vận hành giữ nguyên. [Kết quả, R6 và điều kiện nghiệm thu](rule_a4_pattern_trial.md).
 
 ## Việc cần làm tiếp theo sau đồng bộ feature/model
 
@@ -13,9 +21,12 @@ Chốt R6 ngày 16/10/2026: **341/341 test hồi quy đạt**, gồm 22 test m�
 | Thứ tự | Việc cần làm | Điều kiện hoàn thành |
 | --- | --- | --- |
 | Đã hoàn tất trong lượt này | **Dựng lại feature/model và chấm kết hợp train/validation** | Đã có dataset dẫn xuất hợp lệ R7, model đúng provenance, replay cache/model/SQLite, đối chiếu hit/điểm/hồ sơ/ID và tải 1/3/5 hồ sơ/công ty/ngày; 352 test và 7 probe đạt |
-| 1 — kỹ thuật đã sửa, chưa nghiệm thu chất lượng | **Tiếp nhận mẫu A2/A4 và tải rà soát** | Đã nhận riêng mẫu hợp lệ ở 4/3 điểm, không tăng hard trigger/cộng trùng họ A; áp dụng cả đóng lô, giữ tháng lịch và ngoại lệ. 373 test/7 probe đạt. FP và số hồ sơ tăng đáng kể; cần nguồn nghĩa vụ chi đầy đủ, reviewer độc lập và năng lực xử lý để nghiệm thu chính sách |
-| 2 — khi áp dụng vào bộ rà soát cũ | **Migration R6 trên lịch sử người dùng thật** | Cache mới đã dựng riêng, có đối chiếu ID theo giao dịch; chưa chuyển database/feedback vận hành. Dùng snapshot/audit cũ để chỉ chuyển trạng thái tương đương một-một, rà lại hồ sơ đổi phạm vi |
-| 3 — nghiệm thu chưa có bằng chứng | **Nguồn SME thật và chất lượng vận hành** | Có coverage ERP/HR/chi tiền, khóa tiêu chí trước review, kết luận độc lập và tập nghiệm thu mới giữ kín. Cổng hiện có vẫn ghi 0 đơn vị chấm mù, `awaiting_real_data` và `not_frozen` |
+| Đã sửa kỹ thuật | **Công suất và tải từ queue đã khóa** | Simulator/API cùng hợp đồng lượt/phút; có lịch/cutoff/tồn và thời gian xử lý tồn, replay 120 tổ hợp; 390 test/7 probe đạt. Chưa phải thời gian SME thực tế |
+| 1 — cần sửa kỹ thuật tiếp | **Truy vết tiếp nhận** | Export riêng lý do dòng/lô, ID hồ sơ/sự kiện và liên kết bằng chứng. Hai dòng chỉ nhận nhờ đóng lô đã có ca xác nhận ở [báo cáo mới](rule_readiness_next_20261017.md) |
+| 2 — đã có bản thử, chưa nghiệm thu | **Hồ sơ mẫu A4 và công sức** | Có queue thử/gói reviewer, không đổi mặc định; 412 test/7 probe đạt. Cần xác nhận việc rà trùng, thời gian và nhiệm vụ riêng; chưa đóng bằng việc giảm số hồ sơ |
+| 3 — còn mở | **Replay ưu tiên theo sự kiện** | Cập nhật hồ sơ đang chờ từ sự kiện đã biết, chốt tái rà khi có bằng chứng mới; simulator hiện vẫn dùng thứ hạng lúc mở |
+| Khi áp dụng vào bộ rà soát cũ | **Migration R6 trên lịch sử người dùng thật** | Cache mới đã dựng riêng, có đối chiếu ID theo giao dịch; chưa chuyển database/feedback vận hành. Dùng snapshot/audit cũ để chỉ chuyển trạng thái tương đương một-một, rà lại hồ sơ đổi phạm vi |
+| Song song, bắt buộc trước nghiệm thu | **Nguồn SME thật và chất lượng vận hành** | Có coverage ERP/HR/chi tiền, khóa tiêu chí trước review, kết luận độc lập và tập nghiệm thu mới giữ kín. Cổng hiện có vẫn ghi 0 đơn vị chấm mù, `awaiting_real_data` và `not_frozen` |
 
 Chuẩn bị nguồn thật có thể thực hiện song song; chỉ kết luận nghiệm thu sau khi các lỗi kỹ thuật và chính sách đánh giá đã được chốt. Chưa có cơ sở tăng số lượng luật hoặc siết ngưỡng đồng loạt từ số lượng test đạt.
 

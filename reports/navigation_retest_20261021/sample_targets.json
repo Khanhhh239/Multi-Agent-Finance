@@ -1,0 +1,158 @@
+[
+  {
+    "id": "P2_FULL_BELOW",
+    "url": "http://127.0.0.1:8771/p2-controls#control=FULL_BELOW"
+  },
+  {
+    "id": "P2_FULL_EQUAL",
+    "url": "http://127.0.0.1:8771/p2-controls#control=FULL_EQUAL"
+  },
+  {
+    "id": "P2_FULL_ABOVE",
+    "url": "http://127.0.0.1:8771/p2-controls#control=FULL_ABOVE"
+  },
+  {
+    "id": "P2_OLD_BELOW",
+    "url": "http://127.0.0.1:8771/p2-controls#control=OLD_BELOW"
+  },
+  {
+    "id": "P2_OLD_EQUAL",
+    "url": "http://127.0.0.1:8771/p2-controls#control=OLD_EQUAL"
+  },
+  {
+    "id": "P2_FULL_BANK",
+    "url": "http://127.0.0.1:8771/p2-controls#control=FULL_BANK"
+  },
+  {
+    "id": "P2_NO_INVOICE",
+    "url": "http://127.0.0.1:8771/p2-controls#control=NO_INVOICE"
+  },
+  {
+    "id": "P2_NO_DATE",
+    "url": "http://127.0.0.1:8771/p2-controls#control=NO_DATE"
+  },
+  {
+    "id": "P2_NO_GROSS",
+    "url": "http://127.0.0.1:8771/p2-controls#control=NO_GROSS"
+  },
+  {
+    "id": "P2_NO_IDENTITY",
+    "url": "http://127.0.0.1:8771/p2-controls#control=NO_IDENTITY"
+  },
+  {
+    "id": "P2_FUTURE_INVOICE",
+    "url": "http://127.0.0.1:8771/p2-controls#control=FUTURE_INVOICE"
+  },
+  {
+    "id": "P2_INSTALL_CASH",
+    "url": "http://127.0.0.1:8771/p2-controls#control=INSTALL_CASH"
+  },
+  {
+    "id": "P2_INSTALL_SMALL",
+    "url": "http://127.0.0.1:8771/p2-controls#control=INSTALL_SMALL"
+  },
+  {
+    "id": "P2_INSTALL_MIXED",
+    "url": "http://127.0.0.1:8771/p2-controls#control=INSTALL_MIXED"
+  },
+  {
+    "id": "P2_INSTALL_SAME_TIME",
+    "url": "http://127.0.0.1:8771/p2-controls#control=INSTALL_SAME_TIME"
+  },
+  {
+    "id": "P2_INSTALL_GAP",
+    "url": "http://127.0.0.1:8771/p2-controls#control=INSTALL_GAP"
+  },
+  {
+    "id": "P2_REFUND_FULL",
+    "url": "http://127.0.0.1:8771/p2-controls#control=REFUND_FULL"
+  },
+  {
+    "id": "P2_REFUND_PART",
+    "url": "http://127.0.0.1:8771/p2-controls#control=REFUND_PART"
+  },
+  {
+    "id": "P2_REFUND_BANK",
+    "url": "http://127.0.0.1:8771/p2-controls#control=REFUND_BANK"
+  },
+  {
+    "id": "P2_REVERSAL_JOURNAL",
+    "url": "http://127.0.0.1:8771/p2-controls#control=REVERSAL_JOURNAL"
+  },
+  {
+    "id": "P2_RECEIPT_UNLINKED",
+    "url": "http://127.0.0.1:8771/p2-controls#control=RECEIPT_UNLINKED"
+  },
+  {
+    "id": "P2_REFUND_MULTI",
+    "url": "http://127.0.0.1:8771/p2-controls#control=REFUND_MULTI"
+  },
+  {
+    "id": "P2_RECUR_SMALL",
+    "url": "http://127.0.0.1:8771/p2-controls#control=RECUR_SMALL"
+  },
+  {
+    "id": "P2_RECUR_BANK",
+    "url": "http://127.0.0.1:8771/p2-controls#control=RECUR_BANK"
+  },
+  {
+    "id": "P2_RECUR_CASH",
+    "url": "http://127.0.0.1:8771/p2-controls#control=RECUR_CASH"
+  },
+  {
+    "id": "P2_RECUR_GAP",
+    "url": "http://127.0.0.1:8771/p2-controls#control=RECUR_GAP"
+  },
+  {
+    "id": "P2_RECUR_A5",
+    "url": "http://127.0.0.1:8771/p2-controls#control=RECUR_A5"
+  },
+  {
+    "id": "P2_LIMIT_VERIFIED",
+    "url": "http://127.0.0.1:8771/p2-controls#control=LIMIT_VERIFIED"
+  },
+  {
+    "id": "P2_LIMIT_UNVERIFIED",
+    "url": "http://127.0.0.1:8771/p2-controls#control=LIMIT_UNVERIFIED"
+  },
+  {
+    "id": "P2_LIMIT_FUTURE",
+    "url": "http://127.0.0.1:8771/p2-controls#control=LIMIT_FUTURE"
+  },
+  {
+    "id": "P2_LIMIT_EXPIRED",
+    "url": "http://127.0.0.1:8771/p2-controls#control=LIMIT_EXPIRED"
+  },
+  {
+    "id": "P2_LIMIT_FOREIGN",
+    "url": "http://127.0.0.1:8771/p2-controls#control=LIMIT_FOREIGN"
+  },
+  {
+    "id": "A5_001_TX_3103d5f23fde8b1a6f",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_18adf5be97ee0e84"
+  },
+  {
+    "id": "A5_001_TX_ac2d5e5d289dc9227b",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_963dc712d016c11d"
+  },
+  {
+    "id": "A5_001_cold_information_request",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=IR_30749635120c8936"
+  },
+  {
+    "id": "A5_001_cold_operational",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_035196cd1b97a1e1"
+  },
+  {
+    "id": "A5_003_TX_60bac87c93f578f6c3",
+    "url": "http://127.0.0.1:8771/#scenario=003&case=RC_b929346759d67338"
+  },
+  {
+    "id": "A5_003_cold_information_request",
+    "url": "http://127.0.0.1:8771/#scenario=003&case=IR_c39bd6eef7d31a7c"
+  },
+  {
+    "id": "A5_003_cold_operational",
+    "url": "http://127.0.0.1:8771/#scenario=003&case=RC_d3c7009ff2ea6dbf"
+  }
+]

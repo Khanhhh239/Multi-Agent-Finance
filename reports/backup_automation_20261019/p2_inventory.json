@@ -1,0 +1,30 @@
+[
+  {
+    "id": "step2_uat",
+    "database": "D:\\agent22\\.runtime\\step2_review_20261019\\p2_uat.sqlite3",
+    "events": 0,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "current_reviews": 0
+  },
+  {
+    "id": "browser_uat",
+    "database": "D:\\agent22\\.runtime\\browser_acceptance_20261019\\p2_uat.sqlite3",
+    "events": 0,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "current_reviews": 0
+  },
+  {
+    "id": "assistant_review",
+    "database": "D:\\agent22\\.runtime\\representative_review_20261018\\p2_reviews.sqlite3",
+    "events": 20,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "current_reviews": 20
+  },
+  {
+    "id": "p2_web",
+    "database": "D:\\agent22\\.runtime\\p2_controls_web\\reviews.sqlite3",
+    "events": 0,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "current_reviews": 0
+  }
+]

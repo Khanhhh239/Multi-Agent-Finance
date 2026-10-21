@@ -1,0 +1,12 @@
+{
+  "batch_rows": 9135,
+  "statuses": {
+    "ready": 750,
+    "insufficient_history": 8337,
+    "insufficient_cycle_history": 48
+  },
+  "rule_a5_hits": 219,
+  "causal_a5_evidence_replayed": 20,
+  "batch_matches_independent_instance": true,
+  "cold_start_rows": 8385
+}

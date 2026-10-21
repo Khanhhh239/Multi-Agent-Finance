@@ -1,0 +1,11 @@
+{
+  "successful": true,
+  "tests_run": 646,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 212.66,
+  "patterns": [
+    "test_*.py"
+  ]
+}

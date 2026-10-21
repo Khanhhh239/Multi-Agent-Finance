@@ -1,5 +1,7 @@
 # Giao diện rà soát tài chính SME — MVP cục bộ
 
+**Cập nhật Sprint 1.4, 18/10/2026:** đã có Cytoscape, hai nút kết luận nhanh, chế độ ưu tiên hôm nay và UI xem trước outbox Email/Zalo. [Phạm vi mới, bản mẫu, cấu hình và kiểm thử](case_management_sprint_1_4.md). Các đoạn mô tả chưa có kênh thông báo bên dưới là trạng thái MVP trước Sprint 1.4; luồng hiện tại đang nghiệm thu giả lập, chưa gửi ra ngoài.
+
 Bước tiếp theo sau bộ luật là đưa cảnh báo thành hồ sơ có thể đối chiếu và ghi nhận kết luận. Giao diện **Sổ Soát** dùng ba snapshot đã kiểm chứng, tổng cộng **8.083 hồ sơ** (2.561 / 2.701 / 2.821 theo các bộ 0,1% / 0,3% / 0,5%). Đây là dữ liệu tổng hợp 2024–2025, chưa phải kết quả pilot tại SME thật.
 
 ## Mở và dừng ứng dụng
@@ -34,12 +36,16 @@ python -m sme_fraud.review_server --port 8765
 
 1. Chọn bộ dữ liệu, công ty, trạng thái, mức ưu tiên hoặc rule. Có tìm kiếm, phân trang và xuất danh sách đang lọc sang CSV.
 2. Mở hồ sơ để xem số tiền, định khoản, hóa đơn, người lập/duyệt, chứng từ kế toán và các giao dịch ngữ cảnh. Số tiền chi trả chỉ cộng nghiệp vụ thực sự có chi tiền; sự kiện rà soát số dư không bị cộng thành dòng tiền.
-3. Sơ đồ hiển thị đường đi từ bằng chứng rule; nếu không có đường đi, hiển thị quan hệ giao dịch–người nhận–tài khoản. Có phóng to, kéo, chọn nút và tra cứu giao dịch. Quan hệ cùng TK/SĐT chưa tự xác nhận gian lận.
-4. Chọn **Hợp lệ / báo động giả**, **Cần bổ sung bằng chứng**, **Vi phạm kiểm soát** hoặc **Xác nhận gian lận**. Nhập người rà soát và lý do rồi lưu. Hồ sơ cần bổ sung tiếp tục mở; các quyết định khác đóng hồ sơ. Có thể cập nhật kết luận với lý do mới và giữ toàn bộ lịch sử.
+3. Sơ đồ Cytoscape hiển thị đường đi từ bằng chứng rule; nếu không có đường đi, hiển thị quan hệ giao dịch–người nhận–tài khoản. Có phóng to, kéo nút/sơ đồ, chọn nút/cạnh và tra cứu giao dịch. Quan hệ cùng TK/SĐT chưa tự xác nhận gian lận.
+4. Có hai nút nhanh **Xác nhận nghi vấn** / **Bỏ qua, hợp lệ**, kèm lý do nhanh và reviewer. Xác nhận nghi vấn lưu `confirmed_suspicion` để kết thúc sàng lọc/chuyển kiểm tra sâu, tách riêng với xác nhận gian lận. Các quyết định cũ **Cần bổ sung bằng chứng**, **Vi phạm kiểm soát**, **Xác nhận gian lận** vẫn có trong biểu mẫu. Hồ sơ cần bổ sung tiếp tục mở; các quyết định khác đóng bước rà soát, giữ toàn bộ lịch sử và có thể cập nhật với lý do mới.
 
-Ngân sách giới hạn việc **mở hồ sơ mới để rà soát**, mặc định 5 hoặc 10 hồ sơ/công ty/bộ dữ liệu/ngày theo UTC+7. Mở lại một hồ sơ trong ngày không tính thêm. Danh sách vẫn hiển thị các hồ sơ còn lại; chưa có cơ chế phát email/Zalo hay giới hạn số cảnh báo trực tuyến. Đây là chính sách sức chứa cho bản thử, không thay đổi ngưỡng bộ luật hay điểm benchmark.
+Ngân sách giới hạn việc **mở hồ sơ mới để rà soát**, mặc định 5 hoặc 10 hồ sơ/công ty/bộ dữ liệu/ngày theo UTC+7. Mở lại một hồ sơ trong ngày không tính thêm. Mặc định **Ưu tiên hôm nay** chọn các hồ sơ đứng đầu trong sức chứa còn lại; bỏ chọn để đọc tồn đọng. Email/Zalo có outbox và ngân sách thông báo, đang ở chế độ giả lập theo Sprint 1.4. Chính sách sức chứa không thay đổi ngưỡng bộ luật hoặc điểm benchmark.
+
+Giới hạn phút đi cùng là **5 lượt/120 phút** hoặc **10 lượt/240 phút**, dùng chung hợp đồng với simulator. Mặc định cấp lượt mọi ngày; khi chạy server trực tiếp có thể thêm `--working-weekdays 0,1,2,3,4` và lặp `--non-working-date YYYY-MM-DD` để cấu hình lịch. Metadata/API công bố lịch; ngoài lịch không cấp lượt mới. Lịch là cấu hình tiến trình, cần truyền lại khi khởi động. [Hợp đồng, chỉ số tồn cuối kỳ và kiểm chứng](rule_review_capacity.md).
 
 SLA hiển thị theo ngày mở trong snapshot mô phỏng. Các hồ sơ lịch sử không được coi là giao dịch mới phát sinh hôm nay. Điểm ưu tiên không phải xác suất gian lận.
+
+Có [bộ thử hồ sơ mẫu A4 riêng](rule_a4_pattern_trial.md), chưa thay snapshot mặc định. Tổng quan mẫu hiển thị người lập/tháng và từng khoản/NCC/ngân hàng/hóa đơn, tách thành viên với ngữ cảnh; liên kết hồ sơ có kết luận riêng, không tự đóng hoặc chuyển feedback giữa các hồ sơ. Gói reviewer chưa có xác nhận giảm việc thực tế.
 
 ## Dữ liệu, phản hồi và API
 

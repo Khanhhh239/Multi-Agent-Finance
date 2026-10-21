@@ -1,0 +1,16 @@
+{
+  "successful": true,
+  "tests_run": 63,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 63.77,
+  "patterns": [
+    "test_review_backup.py",
+    "test_review.py",
+    "test_information_requests.py",
+    "test_cash_review_flow.py",
+    "test_sprint14_api.py",
+    "test_sprint14_notifications.py"
+  ]
+}

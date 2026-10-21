@@ -124,6 +124,7 @@ def main():
         raise FileExistsError(f'Refusing to overwrite: {args.output}')
     args.output.mkdir(parents=True, exist_ok=True)
     config = json.loads((args.baseline_root / 'sme_fraud_003/rule_config.json').read_text(encoding='utf-8'))
+    config.setdefault('cash_payment_policy', 'disabled')
     config.update(spec_policy='phase3', near_period='calendar_month', amount_tail='upper', evidence_policy='disabled')
     frozen = dict(config=config, test_tuning=False, rationale='Business definitions; A5 baseline and operational threshold unchanged from validation-selected phase2.')
     (args.output / 'policy_selection.json').write_text(json.dumps(frozen, indent=2), encoding='utf-8')

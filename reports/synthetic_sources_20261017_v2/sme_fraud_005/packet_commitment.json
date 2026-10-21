@@ -1,0 +1,8 @@
+{
+  "packet_sha256": "c8b713047ddde9e2f35e55ff30064866707d7f374edc7a662cac3150b6f69a63",
+  "universe_units": 19245,
+  "packet_units": 1104,
+  "before_predictions": true,
+  "reviewer_conclusions": 0,
+  "role": "blind_holdout_unscored"
+}

@@ -28,6 +28,10 @@ from .payment_evidence import PaymentEvidence
 from .authority_policy import ApprovalAuthority
 from .batch_controls import BatchControls
 from .evidence_policy import EvidencePolicy, SOURCES as EVIDENCE_SOURCES, REQUIRED as EVIDENCE_REQUIRED, required_columns
+from .cash_controls import CASH_POLICY, cash_payment_check, REVIEW_POLICY, validate_review_config
+from .tax_risk import TaxRiskHistory
+from .dynamic_thresholds import DynamicThresholds, ThresholdPolicy, timestamp as threshold_timestamp
+from .threshold_sources import extract_observations
 
 parse = lru_cache(maxsize=150000)(_parse)
 
@@ -59,12 +63,13 @@ RULE_NAMES = {
     'F2': 'Quản lý ghi đè quy trình', 'F3': 'Khoảng trống/trùng số chứng từ',
     'F4': 'Doanh thu/công nợ kéo dài chưa đối chiếu tiền',
     'P1': 'Thanh toán vượt tổng giá trị cùng hóa đơn',
+    'P2': 'Chi tiền mặt cần rà soát hạn mức và chứng từ VAT',
     'T1': 'Tạm ứng còn dư nợ quá hạn', 'T2': 'Xóa nợ tạm ứng thiếu hồ sơ',
 }
 WEIGHTS = dict(A1=8, A2=4, A3=8, A4=3, A5=3, A6=8,
                B1=20, B2=8, B3=8, B4=10, B5=3, B6=8, B7=20,
                C1=1, C2=20, C3=8, C4=8, E1=20, E2=20, E3=3, E4=3, F1=8, F2=8, F3=3,
-               P1=20, T1=8, T2=20)
+               P1=20, P2=8, T1=8, T2=20)
 HARD_TRIGGERS = {'B1', 'B7', 'C2', 'E1', 'E2', 'P1', 'T2'}
 DEFAULT_CONFIG = dict(short_days=3, long_days=30, short_total_ratio=.85,
                       near_low=.8, near_high=.99, near_count=3,
@@ -78,6 +83,11 @@ DEFAULT_CONFIG.update(noise_policy='phase2', amount_baseline='log_mad', robust_z
 DEFAULT_CONFIG.update(spec_policy='phase3', near_period='calendar_month', amount_tail='upper')
 DEFAULT_CONFIG.update(evidence_policy='phase4', receivable_overdue_days=60)
 DEFAULT_CONFIG.update(split_pattern_policy='split_patterns_v1')
+DEFAULT_CONFIG.update(cash_payment_policy=CASH_POLICY, cash_limit_vnd_by_company={})
+DEFAULT_CONFIG.update(cash_review_policy=REVIEW_POLICY, cash_limit_evidence_by_company={})
+DEFAULT_CONFIG.update(amount_baseline='rolling_account', dynamic_window_days=90, dynamic_method='p99',
+                      dynamic_min_samples=20, dynamic_sigma_k=3., dynamic_cycle_enabled=True,
+                      dynamic_cycle_radius_days=2, dynamic_cycle_learning_days=180, dynamic_min_cycle_months=3)
 INPUT_TABLES = ('companies', 'employees', 'vendors', 'customers', 'calendar',
                 'entity_links', 'attendance', 'vendor_status_history',
                 'bank_account_changes', 'advances', 'advance_events', 'transactions')
@@ -86,6 +96,8 @@ OPTIONAL_INPUT_TABLES = ('payroll_entitlements', 'supplier_payment_agreements', 
                          'vendor_payment_schedules', 'approval_authorities', 'approval_authority_coverage',
                          'journal_audit_log', 'closing_periods', 'materiality_policies')
 OPTIONAL_INPUT_TABLES += tuple(EVIDENCE_SOURCES)
+OPTIONAL_INPUT_TABLES += ('tax_risk_history',)
+OPTIONAL_INPUT_TABLES += ('journal_documents', 'journal_lines')
 
 
 @lru_cache(maxsize=100000)
@@ -313,7 +325,7 @@ def rule_coverage():
     partial = {
         'A3': 'Gom TK/SĐT/người đại diện; địa chỉ chung đơn lẻ chỉ là tín hiệu yếu B5/E4.',
         'B1': 'Master riêng; cảnh báo trên chi NCC qua tiền/ngân hàng. Đọc bank_code/recipient_bank_code/national_id nếu có; số TK thực thiếu mã ngân hàng chỉ là đối chiếu chưa xác nhận.',
-        'B4': 'Lịch sử trạng thái tổng hợp theo observed_at; chưa kết nối cổng thuế/ngành nghề.',
+        'B4': 'Hỗ trợ tax_risk_history theo MST chính xác, ngày hóa đơn, công bố/quan sát và chứng từ nguồn; chưa tự tải danh sách thuế. Lịch sử trạng thái tổng hợp vẫn được giữ riêng.',
         'B7': 'Có lịch đổi TK/callback/người duyệt; chưa có nguồn email BEC.',
         'E3': 'SequenceMatcher trên tên chuẩn hóa là proxy, không phải Levenshtein/Jaro-Winkler.',
         'F1': 'Cần journal_audit_log, closing_periods và materiality_policies đã biết/được duyệt. Proxy adjustment/cuối tháng/hạn mức chỉ là chẩn đoán 0 điểm.',
@@ -321,7 +333,7 @@ def rule_coverage():
         'D4': 'Dùng baseline đuôi thực nghiệm kỳ trước thay giả định đuôi phân bố đều.',
     }
     return [dict(rule_id=code, group=code[0], name=name,
-                 source='rule_class_1.md' if code[0] not in 'PT' else 'original_six_fraud_families',
+                 source='rule_class_1.md' if code[0] not in 'PT' else 'cash_purchase_controls' if code == 'P2' else 'original_six_fraud_families',
                  status='not_evaluable' if code in gaps else 'partial' if code in partial else 'implemented',
                  note=gaps.get(code, partial.get(code, '')),
                  scope='aggregate_diagnostic' if code.startswith('D') else 'transaction')
@@ -334,9 +346,18 @@ def score_rules(tables, config=None, features=None):
     if set(config or {}) - set(DEFAULT_CONFIG):
         raise ValueError(f'Unknown rule config keys: {set(config) - set(DEFAULT_CONFIG)}')
     cfg = {**DEFAULT_CONFIG, **(config or {})}
+    dynamic_policy = ThresholdPolicy.from_config(cfg)
+    if cfg['cash_payment_policy'] not in {'disabled', CASH_POLICY}:
+        raise ValueError('Invalid cash payment policy')
+    cash_limits = cfg['cash_limit_vnd_by_company']
+    if not isinstance(cash_limits, dict) or any(
+            not isinstance(company, str) or not company.strip() or type(value) is not int or value <= 0
+            for company, value in cash_limits.items()):
+        raise ValueError('Internal cash limits require company IDs and positive integer VND amounts')
+    validate_review_config(cfg)
     if cfg['split_pattern_policy'] not in {'disabled', SPLIT_PATTERN_POLICY}:
         raise ValueError('Invalid split-pattern review policy')
-    if cfg['noise_policy'] not in {'legacy', 'phase2'} or cfg['amount_baseline'] not in {'raw', 'log_mad'} or cfg['robust_z'] <= 0:
+    if cfg['noise_policy'] not in {'legacy', 'phase2'} or cfg['amount_baseline'] not in {'raw', 'log_mad', 'rolling_account'} or cfg['robust_z'] <= 0:
         raise ValueError('Invalid noise policy/baseline')
     phase2 = cfg['noise_policy'] == 'phase2'
     if cfg['spec_policy'] not in {'legacy', 'phase3'} or cfg['near_period'] not in {'calendar_month', 'rolling_30d'} or cfg['amount_tail'] != 'upper':
@@ -371,12 +392,25 @@ def score_rules(tables, config=None, features=None):
     materiality_policies = ObservedVersions(tables.get('materiality_policies', []), 'policy_id')
     period_payments = PeriodPayments()
     payment_evidence = PaymentEvidence(tables)
+    tax_risk = TaxRiskHistory(tables.get('tax_risk_history', []))
     approval_authority = ApprovalAuthority(tables)
     employee_history = approval_authority.employee_history
     batch_controls = BatchControls(cfg, normalize=normalize, invoice_key=invoice_payment_key,
         installment_exception=long_installment_exception, names=RULE_NAMES, weights=WEIGHTS)
     batch_events = []
     robust_amounts = RobustAmounts()
+    dynamic, dynamic_sources = None, {}
+    a5_evaluations = []
+    if phase2 and cfg['amount_baseline'] == 'rolling_account':
+        dynamic_tables = dict(tables)
+        # A historical transaction prefix may be supplied alongside a complete
+        # ledger export. Future postings cannot impose source bindings on that
+        # prefix. Late knowledge stays attached to complete document amounts.
+        upper = threshold_timestamp(rows[-1]['posted_at']) if rows else ''
+        for name in ('journal_documents', 'journal_lines'):
+            dynamic_tables[name] = [r for r in tables.get(name, []) if threshold_timestamp(r['posted_at']) <= upper]
+        observations, dynamic_sources = extract_observations(dynamic_tables)
+        dynamic = DynamicThresholds(observations, dynamic_policy)
     staff, vendors = {}, {}
     fuzzy_matches = defaultdict(dict)
     employee_index = defaultdict(set)
@@ -518,6 +552,14 @@ def score_rules(tables, config=None, features=None):
                     hard_trigger=int(code in HARD_TRIGGERS and not suppressed), suppressed_reason=suppressed,
                     evidence=evidence, related_transaction_ids=sorted(set(related)), graph_path=list(path)))
 
+            cash_check = cash_payment_check(row, cfg)
+            if cash_check:
+                emit('P2', cash_check, weight=cash_check.get('review_points',
+                    0 if cash_check['evidence_status'] == 'information_gap' else WEIGHTS['P2']))
+                if cash_check.get('review_category') == 'information_request':
+                    current_hits[-1].update(status='information_gap', signal=None, scoring_role='information_request',
+                                           score_reason='Thiếu dữ kiện; yêu cầu bổ sung riêng, không cộng điểm rủi ro')
+
             invoice_key = invoice_payment_key(row)
             previous_invoice = invoice_payments.get(invoice_key, [])
             gross = int(row['invoice_gross_vnd']) if payment else 0
@@ -652,7 +694,12 @@ def score_rules(tables, config=None, features=None):
                 num, mean, m2 = moments[fallback_key]
                 baseline_key = fallback_key
             sd = math.sqrt(m2 / max(1, num - 1))
-            if phase2 and cfg['amount_baseline'] == 'log_mad':
+            if dynamic is not None:
+                from .a5_coverage import transaction_record
+                diagnostics = {}
+                amount_signal, amount_evidence = dynamic.evaluate_transaction(row, diagnostics=diagnostics)
+                a5_evaluations.append(transaction_record(row, amount_signal, amount_evidence, diagnostics, dynamic_policy))
+            elif phase2 and cfg['amount_baseline'] == 'log_mad':
                 amount_signal, amount_evidence = robust_amounts.evaluate(row, cfg['baseline_min'], cfg['robust_z'])
             else:
                 amount_signal = bool(num >= cfg['baseline_min'] and sd > 0 and (amount - mean) / sd > cfg['round_z'])
@@ -704,7 +751,11 @@ def score_rules(tables, config=None, features=None):
                         current_hits[-1]['evidence'].update(verified_documents=fulfilment,
                             legacy_document_count=int(row['support_doc_count']), goods_receipt_flag=int(row['goods_receipt_verified']),
                             evidence_status='verified_fulfilment' if fulfilled else 'needs_typed_fulfilment_evidence')
-                if feature['registry_risky_at_invoice']:
+                tax_check = tax_risk.invoice_check(row, v, now)
+                if tax_check:
+                    tax_check['registry_risky_now'] = int(feature['registry_risky_now'])
+                    emit('B4', tax_check)
+                elif feature['registry_risky_at_invoice']:
                     emit('B4', dict(invoice_issued_at=row['invoice_issued_at'], risky_at_invoice=1,
                                    registry_risky_now=int(feature['registry_risky_now'])))
                 elif feature['registry_risky_now']:
@@ -914,11 +965,31 @@ def score_rules(tables, config=None, features=None):
                 record['scope'] = 'source_diagnostic'
         if record['rule_id'] == 'F1' and phase3:
             record['scoring_role'] = 'transaction_when_confirmed_else_zero_point_context'
+        if record['rule_id'] == 'A5':
+            record.update(amount_baseline=cfg['amount_baseline'],
+                          dynamic_policy=dynamic_policy.as_dict() if dynamic is not None else None)
+        if record['rule_id'] == 'P2':
+            record.update(status='disabled' if cfg['cash_payment_policy'] == 'disabled' else 'implemented',
+                          cash_payment_policy=cfg['cash_payment_policy'],
+                          cash_review_policy=cfg['cash_review_policy'],
+                          scoring_role='evidence_classified',
+                          note='Rà soát chi mua bằng tiền mặt: ngưỡng VAT theo thời điểm, giá trị hóa đơn và hạn mức nội bộ. Không tự kết luận loại khấu trừ; chưa gộp nhiều hóa đơn cùng ngày.')
+        if record['rule_id'] == 'B4':
+            record.update(tax_risk_source_records=sum(
+                r['observed_at'] <= rows[-1]['posted_at'] for group in tax_risk.records.values() for r in group) if rows else 0,
+                tax_risk_feed='versioned_import', live_tax_authority_connection=False)
     if phase2:
         for record in coverage:
             record.setdefault('scoring_role', 'master_quality' if record['rule_id'] in {'B5', 'E4', 'E3'} else 'context' if record['rule_id'] in {'C1', 'A5', 'B3'} else 'transaction')
             if record['scoring_role'] == 'master_quality':
                 record['note'] += ' Kiểm tra master riêng, không cộng điểm giao dịch; B5/E4 chung evidence.'
+    if dynamic is not None:
+        from .a5_coverage import attach_hits
+        attach_hits(a5_evaluations, hits)
     return dict(scores=scores, hits=hits, coverage=coverage, config=cfg, master_name_quality=master_name_quality,
                 master_identity_findings=master_identity_findings, evidence_findings=evidence_policy.findings if evidence_policy else [],
-                batch_events=batch_events)
+                batch_events=batch_events,
+                dynamic_parameters=dynamic.parameter_table(rows[-1]['posted_at']) if dynamic is not None and rows else [],
+                dynamic_policy=dynamic_policy.as_dict() if dynamic is not None else None,
+                dynamic_source_summary=dynamic_sources,
+                a5_evaluations=a5_evaluations if dynamic is not None else None)

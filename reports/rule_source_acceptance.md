@@ -4,6 +4,8 @@
 
 Logic và đối chứng mô phỏng của sáu rule đã có, nhưng **chưa rule nào được nghiệm thu trên nguồn SME thật trong workspace**. Dataset nghiệp vụ chính dùng cho báo cáo readiness (`sme_fraud_003`) không khai báo các bảng HR/ERP/công nợ này; bộ `rule_evidence_phase4` có nguồn fixture mô phỏng. Kết quả 301/301 source case phase 4 là kiểm tra đặc tả và tính nhân quả, không phải precision/recall thực địa.
 
+Theo yêu cầu khi chưa có data thật, đã bổ sung [ba bộ nguồn mô phỏng mới](rule_synthetic_source_readiness.md): 62.182 giao dịch, ba seed, hai bộ reporting và một holdout chưa chấm. Hai bộ reporting khớp 1.216 kỳ vọng điều kiện nguồn đã khai báo trước. Có 3.312 đơn vị trong phiếu nguồn mới nhưng 0 đơn vị có reviewer độc lập; các phiếu này tách khỏi readiness nguồn thật cũ. `is_synthetic=true` hoặc `data_origin=synthetic...` luôn giữ cổng nguồn thật ở `awaiting_real_data`, kể cả khi đủ file/schema/checksum.
+
 Đã bổ sung `sme_fraud.real_source_acceptance` để nghiệm thu mà không dùng kết quả rule làm nhãn. Quy trình khóa hash dự đoán trước, phát phiếu chấm không có cột prediction, yêu cầu người rà soát và người phân xử khác nhau, rồi mới mở so sánh. Vì thế việc chọn hồ sơ và gán kết luận không thể vô tình tối ưu theo hit của rule.
 
 ## Nguồn bắt buộc

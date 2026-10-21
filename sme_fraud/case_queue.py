@@ -8,6 +8,7 @@ from .generate import parse
 from .temporal_evidence import EmployeeHistory
 from .case_identity import IDENTITY_VERSION, scope_hash, values
 from .case_admission import admission
+from .a4_pattern_queue import ENTITY_QUEUE, A4_PATTERN_TRIAL, prepare_arrivals, finish_cases
 
 
 def owner_at(staff, company, at):
@@ -122,7 +123,47 @@ def operational_members(result):
             | {tid for group in batch_groups(result) for tid in group['_members']})
 
 
-def review_queue(result, tables):
+def cash_information_members(result):
+    return {hit['transaction_id'] for hit in result.get('hits', [])
+            if hit['rule_id'] == 'P2' and not hit.get('suppressed_reason')
+            and hit['evidence'].get('review_category') == 'information_request'}
+
+
+def _cash_information_cases(result, staff, already_bound):
+    """Retain P2 gaps separately; never duplicate an operational case member."""
+    hits = {hit['transaction_id']: hit for hit in result.get('hits', [])
+            if hit['rule_id'] == 'P2' and hit['evidence'].get('review_category') == 'information_request'
+            and not hit.get('suppressed_reason')}
+    cases, events, active = [], [], {}
+    for row in sorted(result['scores'], key=lambda r: (r['posted_at'], r['transaction_id'])):
+        tid = row['transaction_id']
+        if tid not in hits or tid in already_bound:
+            continue
+        proof = hits[tid]['evidence']
+        key = row['company_id'], row['case_entity']
+        previous = active.get(key)
+        if previous is None or (parse(row['posted_at'])-parse(previous['opened_at'])).total_seconds() > 30*86400:
+            identity = 'IR_'+hashlib.sha256(f'P2|{key}|{tid}'.encode()).hexdigest()[:16]
+            previous = dict(case_id=identity, company_id=key[0], entity=key[1], opened_at=row['posted_at'],
+                last_seen_at=row['posted_at'], priority='thap', max_score=0,
+                owner_id=owner_at(staff, key[0], row['posted_at']), status='awaiting_information', conclusion='',
+                reviewer_note='', transaction_ids=[], rule_ids={'P2'}, explanation_vi=proof['summary_vi'],
+                batch_event_ids=set(), case_type='information_request', source_scope='', source_status='information_gap',
+                estimated_minutes=20, requires_rereview=1, rereview_due_at='',
+                admission_basis={'evidence_request'}, review_rule_ids={'P2'}, cluster_members=set())
+            cases.append(previous)
+            active[key] = previous
+            events.append(dict(case_id=identity, event_at=row['posted_at'], event='opened',
+                transaction_id=tid, rule_score=0, priority='thap'))
+        previous['transaction_ids'].append(tid)
+        previous['last_seen_at'] = row['posted_at']
+        previous['cluster_members'].update(values(row.get('case_cluster_members')))
+    return cases, events
+
+
+def review_queue(result, tables, *, policy=ENTITY_QUEUE):
+    if policy not in {ENTITY_QUEUE, A4_PATTERN_TRIAL}:
+        raise ValueError('Unsupported review queue policy')
     staff = EmployeeHistory(tables['employees'])
     cases, events, active = [], [], {}
     score_by_id = {r['transaction_id']: r for r in result['scores']}
@@ -130,30 +171,36 @@ def review_queue(result, tables):
     arrivals = [dict(r, _members=[r['transaction_id']], _batch_events=[])
                 for r in result['scores'] if r['operational_alert']]
     arrivals.extend(batch_groups(result))
+    if policy == A4_PATTERN_TRIAL:
+        arrivals = prepare_arrivals(arrivals, result, tables)
     arrivals.sort(key=lambda r: (r['posted_at'], bool(r['_batch_events']), r['transaction_id'] or r['case_entity']))
     for score in arrivals:
         is_batch = bool(score['_batch_events'])
+        is_pattern = bool(score.get('_pattern_scope'))
         key = (score['company_id'], score['case_entity'])
         when = parse(score['posted_at'])
         matching = {member_case[tid]['case_id']: member_case[tid]
                     for tid in score['_members'] if tid in member_case} if is_batch else {}
-        if is_batch and not matching:
+        if is_batch and not matching and not is_pattern:
             for tid in score['_members']:
                 row = score_by_id[tid]
                 candidate = active.get((row['company_id'], row['case_entity']))
                 if candidate and (when-parse(candidate['opened_at'])).total_seconds() <= 30*86400:
                     matching[candidate['case_id']] = candidate
         previous = min(matching.values(), key=lambda c: (c['opened_at'], c['case_id'])) if matching else active.get(key)
-        if previous is None or (when - parse(previous['opened_at'])).total_seconds() > 30 * 86400:
-            case_id = ('BC_'+score['case_entity'].split(':', 1)[1] if is_batch else
+        if previous is None or (not is_pattern and (when - parse(previous['opened_at'])).total_seconds() > 30 * 86400):
+            case_id = ('PC_'+score['case_entity'].rsplit(':', 1)[1] if is_pattern else
+                       'BC_'+score['case_entity'].split(':', 1)[1] if is_batch else
                        'RC_' + hashlib.sha256(f"{key}|{score['transaction_id']}".encode()).hexdigest()[:16])
             previous = dict(case_id=case_id, company_id=key[0], entity=key[1], opened_at=score['posted_at'],
                             last_seen_at=score['posted_at'], priority=score['priority'], max_score=score['rule_score'],
                             owner_id=owner_at(staff, key[0], score['posted_at']), status='new',
                             conclusion='', reviewer_note='', transaction_ids=[], rule_ids=set(), explanation_vi='', batch_event_ids=set(),
-                            case_type='batch' if is_batch else 'transaction', source_scope='', source_status='', estimated_minutes=20,
+                            case_type='pattern' if is_pattern else 'batch' if is_batch else 'transaction', source_scope='', source_status='', estimated_minutes=20,
                             requires_rereview=0, rereview_due_at='', admission_basis=set(), review_rule_ids=set())
             previous['cluster_members'] = set()
+            if is_pattern:
+                previous.update(pattern_scope=score['_pattern_scope'], pattern_context_ids=set(), pattern_evidence_ids=set())
             active[key] = previous
             cases.append(previous)
             events.append(dict(case_id=case_id, event_at=score['posted_at'], event='opened',
@@ -163,9 +210,13 @@ def review_queue(result, tables):
                 previous['transaction_ids'].append(tid)
                 member_case[tid] = previous
             row = score_by_id[tid]
-            active[(row['company_id'], row['case_entity'])] = member_case[tid]
+            if member_case[tid]['case_type'] != 'pattern':
+                active[(row['company_id'], row['case_entity'])] = member_case[tid]
         affected = {previous['case_id']: previous, **matching}
         for case in affected.values():
+            if is_pattern:
+                case['pattern_context_ids'].update(score['_pattern_context_ids'])
+                case['pattern_evidence_ids'].update(score['_pattern_evidence_ids'])
             case['admission_basis'].update(filter(None, score.get('admission_basis', '').split('|')))
             case['review_rule_ids'].update(filter(None, score.get('review_rule_ids', '').split('|')))
             for tid in score['_members']:
@@ -187,6 +238,11 @@ def review_queue(result, tables):
     source_cases, source_events = _source_cases(result.get('evidence_findings', []), staff)
     cases.extend(source_cases)
     events.extend(source_events)
+    information_cases, information_events = _cash_information_cases(result, staff, member_case)
+    cases.extend(information_cases)
+    events.extend(information_events)
+    if policy == A4_PATTERN_TRIAL:
+        finish_cases(cases, result)
     for case in cases:
         case['admission_basis'] = '|'.join(sorted(case.get('admission_basis', [])))
         case['review_rule_ids'] = '|'.join(sorted(case.get('review_rule_ids', [])))

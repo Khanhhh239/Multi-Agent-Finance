@@ -1,12 +1,38 @@
 # Multi-Agent Finance — Agent 2 (Sang)
 
-Agent 2 giám sát rủi ro tài chính SME: bộ luật có bằng chứng, phân tích quan hệ, benchmark Isolation Forest và giao diện rà soát cục bộ. Xem [kiến trúc chung](docs/DIGITAL_ACCOUNTING_PART2_ARCH_PART3_PLAN.md) và [cách cài, kiểm thử, chạy từ bản clone mới](docs/AGENT2_GITHUB.md).
-
-Bản GitHub gồm mã nguồn, test, schema, CSV mẫu chỉ có header và tài liệu/báo cáo đối chiếu. Dataset, model đã train, hàng đợi chi tiết, phản hồi người dùng và môi trường Python được tạo trên máy khi chạy. Các kết quả trong `reports/` là snapshot lịch sử; hãy dùng thư mục đầu ra mới theo hướng dẫn để chạy lại.
-
-Nhánh làm việc: **`agent2-Sang`**. Bản cập nhật ngày 17/10/2026: [readiness](reports/rule_readiness_recheck_20261016.md), [đồng bộ feature/model](reports/rule_feature_model_sync.md) và [tiếp nhận A2/A4](reports/rule_split_pattern_admission.md).
+Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **21/10/2026**. Xem [hướng dẫn cài và kiểm thử](docs/AGENT2_GITHUB.md), [cài đặt/nâng cấp/khôi phục](RELEASES.md) và [trạng thái sửa lỗi nghiệm thu UI](reports/browser_acceptance_status_20261021.md).
 
 ## Dữ liệu tổng hợp gian lận tài chính SME Việt Nam
+
+**Đóng gói phiên bản:** [Hướng dẫn cài sạch, lưu runtime cũ, nâng cấp và rollback](RELEASES.md). Profile web/backup dùng `requirements-review-lock.txt`; các định dạng schema/backup và hợp đồng ML giữ phiên bản riêng.
+
+**Vận hành — 19/10/2026:** đã bổ sung [sao lưu/khôi phục và cổng kết luận chung web/CLI](reports/operational_reliability_20261019.md). SQLite, audit, định danh và liên kết kho được phục hồi sang thư mục mới; cả web/CLI chặn kết luận cuối khi còn yêu cầu tài liệu mở/đã nhận. [Cách sao lưu](examples/review_backup/README.md), [cách dùng CLI](examples/review_decision_gate/README.md). Bản phục hồi chỉ dùng thông báo giả lập, không tự dispatch.
+
+**Sao lưu tự động — 19/10/2026:** đã đăng ký lịch **02:00 mỗi ngày**, giữ **30 ngày/tối thiểu 3 bản tốt**, gồm ReviewStore và 4 journal P2. Có trạng thái lỗi, retention giới hạn trong đúng kho và diễn tập phục hồi đủ dữ liệu. [Kết quả kiểm chứng](reports/backup_automation_20261019.md), [cách vận hành](examples/review_backup/automation.md). Tác vụ chạy khi máy bật và tài khoản hiện tại đăng nhập.
+
+**Bước 2 rà hồ sơ — 19/10/2026:** đã triển khai RR04–RR08 và RR10: phiên bản/thời điểm chứng từ, giải thích trả nhiều đợt/ngoại lệ/điểm, chi gốc–hoàn–đảo và tab Bổ sung tài liệu có người phụ trách, hạn vận hành, nhận → rà lại → kết luận có lý do. [Biên bản kỹ thuật](reports/step2_review_20261019.md), [hướng dẫn dùng thử](examples/case_review_workflow/README.md). 597 kiểm thử Python và 32 kiểm tra JavaScript đạt; giữ nguyên điểm/ngưỡng và 1.209 tệp khóa. Browser/kế toán độc lập và RR09 còn chờ.
+
+**ML — runner chỉ xuất điểm 19/10/2026:** sau [audit 2 model/4 cache](reports/ml_pilot_readiness_20261019.md), đã có [runner cache và biên bản kỹ thuật](reports/ml_shadow_runner_20261019.md), [cách chạy](examples/ml_shadow_runner/README.md). 28 kiểm thử liên quan đạt; chạy lặp hai cache validation cũ, tổng 50.000 dòng, cho cùng hash kết quả. Model vẫn từ chối định dạng nguồn mới; chưa nối shadow nguồn SME thật, xác minh tách cửa sổ train/calibration/đánh giá hoặc chứng minh lợi ích vận hành. Protocol/review độc lập tiếp tục chờ; hàng đợi, ngưỡng và model giữ nguyên.
+
+**UI bằng chứng/P2 — 19/10/2026:** đã sửa A4 null, hiện bằng chứng C4/E2 và nguồn F1, thống nhất nhãn ngoại tệ chưa xác minh VND; bổ sung mốc chứng từ và tóm tắt chi gốc–hoàn–đảo. [Bản trước/sau, 19 kiểm tra JavaScript và 27 kiểm thử Python liên quan](reports/ui_evidence_repairs_20261019.md). Có phiếu P2 cho kế toán độc lập và phiếu chờ quyết định RR09; chưa coi test/UAT trợ lý là nghiệm thu độc lập. Nguồn, điểm và ngưỡng giữ nguyên.
+
+**Web đối chứng P2 — 18/10/2026:** đã có giao diện đủ 32 tình huống/73 giao dịch, gồm cả dòng không có P2; xem chứng từ, kỳ vọng, hàng đợi và lưu nghiệm thu riêng. Chạy `python -B -m sme_fraud.p2_controls_server --port 8767`, mở `http://127.0.0.1:8767/p2-controls`; hoặc thêm `--p2-controls` vào Case Management để có menu cùng cổng. [Cách dùng](examples/p2_controls_web/README.md), [585 kiểm thử và biên bản nghiệm thu kỹ thuật](reports/p2_controls_web_20261018.md). Chưa nghiệm thu trực quan browser hoặc bởi kế toán độc lập.
+
+**A5 — đo độ phủ thực tế 18/10/2026:** đã bổ sung bản đo theo từng giao dịch, trạng thái thiếu mẫu trên UI và đối chứng A5 cùng cấu hình hiện tại. Đủ lịch sử trên nhóm có nguồn: **89,25% (001)** và **90,46% (003)**; tính trên toàn bộ giao dịch: **56,71%/60,47%**. A5 có thêm hit nhưng đối chứng giữ nguyên số hồ sơ, thành viên vận hành và mức ưu tiên hồ sơ. Giữ nguyên ngưỡng. [Số liệu, hồ sơ cần rà và kiểm chứng](reports/a5_coverage_20261018.md), [cách mở snapshot web có bản đo](examples/a5_coverage/README.md).
+
+**Bộ đối chứng P2 riêng 18/10/2026:** đã bổ sung [32 tình huống, 73 giao dịch và ma trận kỳ vọng](reports/p2_controls_20261018.md) cho hóa đơn đầy đủ/thiếu, trả nhiều đợt, hoàn/đảo, định kỳ và hạn mức nội bộ. Bộ đối chứng phát hiện và sửa P2 tiếp nhận dòng thu tiền mặt còn mang loại chi; chấm lại cùng nguồn đã khóa đạt 73/73. [Nguồn, cấu trúc thư mục và lệnh chạy lại](examples/p2_controls/README.md). Bộ 001/003 cùng holdout 005 giữ nguyên.
+
+**P2 — phân loại bằng chứng 18/10/2026:** mặc định mới `cash_review_policy=evidence_v2`: thiếu dữ kiện 0 điểm, giữ yêu cầu bổ sung ưu tiên thấp; đủ thông tin hóa đơn để đối chiếu 8 điểm; vượt hạn mức nội bộ có xác minh đúng thời điểm 14 điểm. UI có nhóm yêu cầu bổ sung và các trường cần cung cấp. [Kết quả chạy lại 001/003](reports/cash_review_p2_20261018.md), [cấu hình và điều kiện xác minh](examples/cash_review/README.md). Các trọng số phục vụ ưu tiên rà soát, chưa hiệu chỉnh trên dữ liệu thật.
+
+**Diễn tập xuyên suốt 18/10/2026:** đã chạy lại [pipeline mới trên 001/003](reports/pipeline_rehearsal_20261018.md): 41.082 giao dịch từ nguồn → rules → NetworkX → ngưỡng động → hàng đợi → kết luận → thông báo giả lập. 1.216 điều kiện nguồn khớp kỳ vọng; kết luận/outbox giữ qua restart, không gửi tin ra ngoài. Hàng đợi tăng lên 556/594 hồ sơ nên cần rà P2/A5; holdout 005 chưa chấm, Gate nguồn thật vẫn `awaiting_real_data`.
+
+**Sprint 1.4:** đã tích hợp [Cytoscape, kết luận nhanh, ưu tiên hôm nay và luồng Zalo/Email giả lập](reports/case_management_sprint_1_4.md). Có SMTP/OA adapters, webhook receiver, worker và outbox theo ngân sách 5/10 hồ sơ. [Bản mẫu](reports/case_management_20261018/verification.json) giữ nguồn gốc và không gửi tin ra ngoài; tài liệu có lệnh mở UI riêng. Chưa nghiệm thu browser hoặc dịch vụ gửi thật.
+
+**Sprint 1.3:** đã bổ sung [ngưỡng động theo công ty–tài khoản, P95/P99/μ+kσ, cửa sổ 30/60/90 ngày và chu kỳ tháng](reports/dynamic_thresholds_sprint_1_3.md). Baseline A5 mặc định dùng rolling-account; có bảng CSV/JSON riêng theo công ty và job cập nhật định kỳ. Báo cáo ghi thứ tự các file nên đọc, lệnh chạy và phạm vi nghiệm thu; chưa bật lịch nền hoặc hiệu chỉnh trên SME thật.
+
+**Sprint 1.2:** đã có [module đồ thị NetworkX sáu loại thực thể, JSON/API và đồng bộ định kỳ](reports/entity_graph_sprint_1_2.md). Module giữ lịch sử/as-of, tách theo công ty và trả rõ quan hệ cần đối chiếu; UI có cửa sổ mạng lưới từ hồ sơ. Cần kiểm tra trực quan UI và triển khai lịch nền theo môi trường sử dụng.
+
+**Đối chiếu thư viện quy tắc ngày 17/10/2026:** đã bổ sung P2 rà soát chi tiền mặt theo ngưỡng thời gian và nguồn danh sách thuế theo MST cho B4. Tổng hiện tại 35 mã kiểm tra; [bảng đối chiếu yêu cầu và 20 quy tắc nghiệp vụ](reports/core_rule_requirements_20261017.md) giải thích vai trò/giới hạn từng phần. [Header, importer và config mẫu](examples/tax_risk_sources/README.md). Đã chạy P2 trên hai bộ nguồn mô phỏng 001/003 trong lượt diễn tập trên; chưa nạp danh sách thuế thật hoặc nghiệm thu chất lượng trên SME thật.
 
 Bộ sinh dữ liệu và benchmark Isolation Forest cho 5 doanh nghiệp SME giả lập. Mọi tên, MST, tài khoản, SĐT và địa chỉ là token tổng hợp, không phải dữ liệu của người hoặc doanh nghiệp thật. Các tỷ lệ 0,1%, 0,3%, 0,5% là kịch bản thử theo yêu cầu, **không phải số liệu đo tỷ lệ gian lận tại Việt Nam**.
 

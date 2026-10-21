@@ -1,0 +1,9 @@
+{
+  "target": "LIMIT_UNVERIFIED",
+  "observed_url": "http://127.0.0.1:8771/p2-controls#control=LIMIT_UNVERIFIED",
+  "detail": "Chưa mở được tình huống. Chọn tình huống khác hoặc thử Làm mới.",
+  "notice": "Failed to fetch",
+  "server_health_after": "ok",
+  "server_process": "still running; not restarted",
+  "cause": "Chưa xác định; sẽ tải lại đúng URL và kiểm tra lại 4 mẫu còn lại."
+}

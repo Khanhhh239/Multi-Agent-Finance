@@ -1,0 +1,117 @@
+{
+  "checked_at": "2026-10-20T02:53:49.843Z",
+  "sample_id": "P2_RECUR_A5",
+  "result": "PASS",
+  "browser_selected_transactions": 23,
+  "missing_invoice_total_rows": 22,
+  "last_transaction": {
+    "id": "AUDIT_0022",
+    "sample_count": 22,
+    "minimum_samples": 20,
+    "threshold_vnd": 1000000,
+    "recurring_amount_vnd": 3000000,
+    "a5_points": 0,
+    "approved_at": "2025-01-01T09:00:00+07:00",
+    "observed_at": "2025-01-01T10:00:00+07:00",
+    "payment_at": "2025-08-12T11:00:00+07:00",
+    "as_of_verified": true,
+    "history_known_before_payment": true
+  },
+  "prior_fail_and_saved_retest_pass_preserved": true,
+  "code_matches_version_with_22_passing_regressions": true,
+  "code_hashes": {
+    "review_ui/review_explanations.js": "44a5bbfb2d4249ce7454f34e11884d6bc9f60c49c68c3dbc8703d58a42d71201",
+    "review_ui/p2_controls.js": "cbc0b470857b09b17cb1eff1def465d2f7c2aeb90fe64775dfc172aaecb9686a"
+  },
+  "frozen_recur_files_unchanged": [
+    {
+      "file": "data\\p2_controls_20261018_v2\\RECUR_A5\\account_flow_edges.csv",
+      "sha256": "74b23621d7dc918824f75768a505d0b32ac9e578fb908edee6e0c2e9d1031f4d"
+    },
+    {
+      "file": "data\\p2_controls_20261018_v2\\RECUR_A5\\invoices.csv",
+      "sha256": "ceea4e95f5eafc817ec188025d9bf176863ba3d0550c4c46d2ccf5b85500ff63"
+    },
+    {
+      "file": "data\\p2_controls_20261018_v2\\RECUR_A5\\journal_documents.csv",
+      "sha256": "ad6a7c533c46d5abe4024c1295be6dd8d81dc0034e8a3f0410492972e14b440f"
+    },
+    {
+      "file": "data\\p2_controls_20261018_v2\\RECUR_A5\\journal_lines.csv",
+      "sha256": "e6f168130a38b18be7cf93b8ae443f82095b51c88eed2b82cf4866310bc909e5"
+    },
+    {
+      "file": "data\\p2_controls_20261018_v2\\RECUR_A5\\recurring_payments.csv",
+      "sha256": "daedade1a04c1e2daea790881a8b28dac4a1f6a4b1ee32e081ebe346eea363da"
+    },
+    {
+      "file": "data\\p2_controls_20261018_v2\\RECUR_A5\\rule_config.json",
+      "sha256": "a75c1990072fa2edeea2039b282d0929aed0ef6e271f95683560f054522d21de"
+    },
+    {
+      "file": "data\\p2_controls_20261018_v2\\RECUR_A5\\tables.json",
+      "sha256": "2c47020e57ff34117f1a9117d576c25b0f79b1e438af1a8b57fb4e5110901794"
+    },
+    {
+      "file": "data\\p2_controls_20261018_v2\\RECUR_A5\\transactions.csv",
+      "sha256": "a4c033b8e0611f6716f500113c8c2cbbe457e8c6b815235ff73ad8699b5d08ca"
+    },
+    {
+      "file": "reports\\p2_controls_20261018\\RECUR_A5\\case_events.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "file": "reports\\p2_controls_20261018\\RECUR_A5\\case_queue.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "file": "reports\\p2_controls_20261018\\RECUR_A5\\feature_contract.json",
+      "sha256": "ca27d432830c1e8270f44b0be72b2108a4d7f83ce6d295e86afe9fa6a6c92c32"
+    },
+    {
+      "file": "reports\\p2_controls_20261018\\RECUR_A5\\predictions.json",
+      "sha256": "3fb1e0f918feaf9ef4140bfb3bf895e904b1bde5d58a252fad53703b109def0a"
+    },
+    {
+      "file": "reports\\p2_controls_20261018\\RECUR_A5\\rule_config.json",
+      "sha256": "a75c1990072fa2edeea2039b282d0929aed0ef6e271f95683560f054522d21de"
+    },
+    {
+      "file": "reports\\p2_controls_20261018\\RECUR_A5\\rule_hits.json",
+      "sha256": "636e1590859a152eb6536519d22474dd030d34602bb9f6d01d6564e67bbfc471"
+    },
+    {
+      "file": "reports\\p2_controls_20261018\\RECUR_A5\\rule_scores.csv",
+      "sha256": "6fcfae130f3907cb468b5e5f60c105859bfc0bcb599f348c0c8d8ab8a9c8af6a"
+    },
+    {
+      "file": "reports\\p2_controls_20261018_baseline\\RECUR_A5\\case_events.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "file": "reports\\p2_controls_20261018_baseline\\RECUR_A5\\case_queue.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "file": "reports\\p2_controls_20261018_baseline\\RECUR_A5\\feature_contract.json",
+      "sha256": "ca27d432830c1e8270f44b0be72b2108a4d7f83ce6d295e86afe9fa6a6c92c32"
+    },
+    {
+      "file": "reports\\p2_controls_20261018_baseline\\RECUR_A5\\predictions.json",
+      "sha256": "3fb1e0f918feaf9ef4140bfb3bf895e904b1bde5d58a252fad53703b109def0a"
+    },
+    {
+      "file": "reports\\p2_controls_20261018_baseline\\RECUR_A5\\rule_config.json",
+      "sha256": "a75c1990072fa2edeea2039b282d0929aed0ef6e271f95683560f054522d21de"
+    },
+    {
+      "file": "reports\\p2_controls_20261018_baseline\\RECUR_A5\\rule_hits.json",
+      "sha256": "636e1590859a152eb6536519d22474dd030d34602bb9f6d01d6564e67bbfc471"
+    },
+    {
+      "file": "reports\\p2_controls_20261018_baseline\\RECUR_A5\\rule_scores.csv",
+      "sha256": "6fcfae130f3907cb468b5e5f60c105859bfc0bcb599f348c0c8d8ab8a9c8af6a"
+    }
+  ],
+  "product_code_changed_in_this_followup": false
+}

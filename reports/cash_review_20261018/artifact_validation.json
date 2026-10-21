@@ -1,0 +1,17 @@
+{
+  "successful": true,
+  "protected_input_files": 229,
+  "reporting_cohorts": [
+    "001",
+    "003"
+  ],
+  "source_controls_matched": 1216,
+  "all_days_distributions_manually_checked": 522,
+  "graph_nodes_checked": 8433,
+  "simulated_feedback_events": 6,
+  "outbox_unique_jobs": 128,
+  "allocation_buckets_checked": 32,
+  "external_messages_sent": 0,
+  "holdout_oracle_deserialized": false,
+  "detector_or_model_executed": false
+}

@@ -1,0 +1,16 @@
+{
+  "client_date": "2026-10-21",
+  "completed_at": "2026-10-21T04:02:14.458Z",
+  "WF02": "PASS",
+  "WF10": "PASS",
+  "browser_sample_links_verified": 39,
+  "p2_transactions_verified": 73,
+  "case_A4_survives_reload": true,
+  "back_forward_case_and_p2_verified": true,
+  "code_matches_46_passing_regressions": true,
+  "journals_not_duplicated": true,
+  "protected_files_unchanged": 1209,
+  "one_failed_fetch_observed_and_recovered_with_manual_reload": true,
+  "report_links_verified": true,
+  "full_17_workflows_pass_claimed": false
+}

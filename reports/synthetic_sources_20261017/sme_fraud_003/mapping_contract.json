@@ -1,0 +1,58 @@
+{
+  "data_origin": "synthetic",
+  "timezone": "Asia/Saigon",
+  "currency": "VND",
+  "amount": "nonnegative integer, grouped decimal string at ERP boundary",
+  "bank_identity": "company + bank code + account text; preserve leading zeros",
+  "fields": {
+    "voucher_uid": "transaction_id",
+    "org_code": "company_id",
+    "booked_at_utc": "posted_at",
+    "value_vnd": "amount_vnd",
+    "recipient_number": "recipient_account",
+    "recipient_bank": "recipient_bank_code",
+    "maker_ref": "creator_id",
+    "checker_ref": "approver_id",
+    "payment_kind": "txn_type"
+  },
+  "round_trip_verified_rows": 20523,
+  "rejected_probe_records": 16,
+  "future_transactions_quarantined": 16,
+  "erp_hr_cash_source_mapping": {
+    "F1": [
+      "journal_audit_log",
+      "closing_periods",
+      "materiality_policies"
+    ],
+    "C4": [
+      "leave_periods",
+      "system_actions",
+      "leave_activity_authorizations"
+    ],
+    "E2": [
+      "employment_events",
+      "payroll_settlements"
+    ],
+    "F2": [
+      "workflow_policies",
+      "override_events"
+    ],
+    "F3": [
+      "document_series",
+      "document_register",
+      "document_cancellations"
+    ],
+    "F4": [
+      "receivable_invoices",
+      "receipt_allocations",
+      "receipt_coverage",
+      "receivable_explanations"
+    ]
+  },
+  "unsupported_semantics": [
+    "refund",
+    "reversal",
+    "cancelled_payment",
+    "parallel_bank_account"
+  ]
+}

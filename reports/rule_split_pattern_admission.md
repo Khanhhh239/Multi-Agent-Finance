@@ -56,9 +56,13 @@ Tải validation ở 3 hồ sơ/công ty/ngày, trần 135 phút/ngày:
 
 Validation gộp ba bộ cùng seed: **TP 194 → 200; FP 1208 → 2347**. Chính sách khôi phục tiếp nhận ngay **5/6** dòng đã mất cảnh báo trong phép so sánh nhiều phase trước; ca còn lại là A4 qua ranh giới tháng đã phân tích ở trên. [Đối chiếu từng dòng cũ](split_pattern_admission_20261017_v2/previous_losses_review.json). Không mất cảnh báo đã có từ baseline trực tiếp.
 
+**Rà tiếp sau khóa artifact:** phần nhận thêm validation có 813 dòng chỉ-A4, trong đó 1 dòng có nhãn gian lận mô phỏng. Đã tái hiện nhiều hồ sơ NCC từ cùng chuỗi A4 người lập–tháng; cần đánh giá hồ sơ mẫu và nguồn nghĩa vụ chi, không tự tắt rule theo nhãn. [Phân rã và tiêu chí sửa tiếp](rule_readiness_next_20261017.md). **Công suất đã sửa:** simulator/API dùng chung hợp đồng lượt/phút, tách cấu hình nghiên cứu 5/225 với UI 5/120; đã tính lại tải ở thư mục mới, gồm lịch/tồn cuối kỳ, không sửa artifact tại đây. [Bản sửa và 120 tổ hợp tải](rule_review_capacity.md).
+
 **Đánh đổi rõ ràng:** thu hồi mẫu chia nhỏ làm tăng FP, số hồ sơ và thời gian rà soát; không tuyên bố chất lượng vận hành đã đạt. Đây là chính sách tiếp nhận theo điều kiện nghiệp vụ, không dùng nhãn để chọn rule/ngưỡng. Chưa hiệu chỉnh lại ngưỡng hoặc IF sau khi nhìn kết quả. Cần quyết định khả năng tiếp nhận dựa trên nguồn hồ sơ đầy đủ và kết luận reviewer độc lập.
 
 Ước lượng tải dùng 20–45 phút/hồ sơ và cấp năng lực mỗi ngày lịch, kể cả cuối tuần; chưa đo thời gian làm việc thực tế. JSON từng bộ có tải ở 1/3/5 hồ sơ/công ty/ngày, hard negatives, loại gian lận, chế độ kế toán, từng công ty và ID giao dịch mới được nhận.
+
+[Mục lục và đối chiếu artifact](rule_artifact_inventory.md) phân biệt các file trước/sau sửa và đơn vị hit/giao dịch/hồ sơ. `added_admissions.csv` ghi cả các khoản chỉ nhận nhờ đóng lô; trường nguyên nhân lấy từ dòng có thể rỗng, khi đó tra `batch_event_ids` của hồ sơ và `batch_events.jsonl`. Bộ `005` có hai trường hợp `T000021842`, `T000068394`; điểm và cờ cảnh báo dòng vẫn bằng 0 theo đúng thiết kế.
 
 Lượt thử đầu đã bị loại tại [REJECTED.md](split_pattern_admission_20261017/REJECTED.md); chỉ các artifact trong thư mục `_v2` được dùng cho kết luận này.
 

@@ -42,6 +42,7 @@ def run(dataset, baseline, output):
         fingerprints[str(baseline / name)] = sha(baseline / name)
     tables, features, meta = load_inputs(dataset)
     config = json.loads((baseline / 'rule_config.json').read_text(encoding='utf-8'))
+    config.setdefault('cash_payment_policy', 'disabled')
     config['noise_policy'] = 'legacy'
     config['spec_policy'] = 'legacy'
     config['evidence_policy'] = 'disabled'

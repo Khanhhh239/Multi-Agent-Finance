@@ -1,0 +1,69 @@
+{
+  "client_date": "2026-10-21",
+  "checked_at": "2026-10-21T03:58:41.654Z",
+  "workflows": {
+    "WF02": "PASS",
+    "WF10": "PASS"
+  },
+  "browser_samples": 39,
+  "p2_controls": 32,
+  "p2_selected_transactions": 73,
+  "cases": 7,
+  "empty_case_controls_verified": 9,
+  "regression_checks": 46,
+  "protected_total": 1209,
+  "protected_unchanged": 1209,
+  "protected_changed": [],
+  "handling_005": "opaque SHA256 only; no parsing/loading/scoring",
+  "ui_changes_since_bug01": [
+    "review_ui/app.js",
+    "review_ui/p2_controls.js"
+  ],
+  "ui_hashes_after": {
+    "review_ui/app.js": "481160a883a3a65aeeb3f5cc20d52b0c8059a891953611475f4164006f608934",
+    "review_ui/case_graph.js": "08cb109f77b9fe4b83ae30b3512e772230458ea5246eb957f4dfa579e7caf91b",
+    "review_ui/index.html": "151b3190adf86c15168d7d21b1eb8d981aca3d5e9ad828e394e6daaa9273ddf6",
+    "review_ui/p2_controls.css": "4130deebfd8b75f38cacc88f992b6e1d0a6b6e2d8a11875ec0bd563e0232b274",
+    "review_ui/p2_controls.html": "68ff17b87974d8a274d65e89309516a0846edd47187b4a5bcb7b325ba602cf08",
+    "review_ui/p2_controls.js": "342655d9652ad18b3998fa747b799d9159046c0ab6c696fd0c87b2189237ea38",
+    "review_ui/review_explanations.js": "44a5bbfb2d4249ce7454f34e11884d6bc9f60c49c68c3dbc8703d58a42d71201",
+    "review_ui/styles.css": "324d1b46c5e497aafa9ff8029db3299e7c2c233014721f6bd015ca1c9cb8a0d2",
+    "review_ui/vendor/cytoscape.min.js": "5f3b5b529546d5af1fc5628590af033b74511a5b6f789f5f4682845863228b91",
+    "review_ui/vendor/CYTOSCAPE_LICENSE.txt": "eb319c6e6f233607f71e8e2f450391751883cfc0eeb3ca7ef574c13d1d9c2203",
+    "review_ui/vendor/manifest.json": "1aa610932c5593cdac234f59a7cc3368e287172f331af36f413d193b6f219fac",
+    "sme_fraud/review_server.py": "e831c0870d94e87fc72df967926363079e53369688ea281331bee2fa9b233fd2",
+    "sme_fraud/review_store.py": "713825b7ece0f0a26886d1d79b4c45e7b7c48f138eb6b571011fc429cbe73fa1",
+    "sme_fraud/review_decision_gate.py": "4f624a1fee6ed2c0b923ad7fafe5321f1f562473d1233d61c803e7a57ad7a12e",
+    "sme_fraud/p2_controls_web.py": "055cb766eebe250db97cd1f1bb3b2daf0aeab6a825f4976f40b87785e89ba36c",
+    "sme_fraud/p2_controls_server.py": "c7952aa73b0f4f2e1fb7f4b25a5199624f79eda5397e9f6f673aa7cd5a911ccc"
+  },
+  "business_journals_unchanged": true,
+  "journal_counts_after": {
+    "checked_at": "2026-10-21T03:58:39.888Z",
+    "requests_count": 12,
+    "requests_sha256": "f05234b1ebfcc910d5056c352f502c5c9e22bf9801b8674c6798f5376c3aacfc",
+    "p2_reviews_count": 35,
+    "p2_reviews_sha256": "c1bc9f4163a68a25812e90caf5a3f533641f677601ccf6262d6ca2782b6e9ab6",
+    "feedback_events": 3,
+    "feedback_sha256": "4098f9eec5008cc084f6f9b49992d06627ad2ad194d2d70c4505c73906ff95e1",
+    "case_counts": [
+      {
+        "scenario": "001",
+        "count": 584
+      },
+      {
+        "scenario": "003",
+        "count": 627
+      }
+    ],
+    "notification_counts": [
+      {
+        "mode": "dry_run",
+        "status": "simulated",
+        "count": 48
+      }
+    ]
+  },
+  "full_17_workflow_reacceptance": false,
+  "independent_accounting_acceptance": false
+}

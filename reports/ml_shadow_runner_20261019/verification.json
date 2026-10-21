@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-19",
+  "status": "technical_score_only_runner_verified_awaiting_real_data",
+  "tests": {
+    "successful": true,
+    "tests_run": 27,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_shadow_scoring.py",
+      "test_feature_model_sync.py"
+    ],
+    "seconds": 6.67
+  },
+  "runs": [
+    {
+      "tag": "001",
+      "rows_per_replay": 25000,
+      "run_id": "ef2d5639bcfc5e9a4e801d3f816736e2b37347d131894bfd4e3cd2df247a064a",
+      "scores_sha256": "1925a2b7482dc4bdd643bb2b93ec9a9aeb772dd031e91989c2f75282bb1cfbd0",
+      "replayed_exactly": true,
+      "rejected_new_source": "IF model incompatible: dataset_format_version_mismatch"
+    },
+    {
+      "tag": "003",
+      "rows_per_replay": 25000,
+      "run_id": "3d7c137a945751eea22b9083cdf18dc6fbb66750a8e4e1d8476fb4d968a2d2f6",
+      "scores_sha256": "4e80adc4c185991c218746eda4d7c4073bf69abbab49d7770073bb9e588f8470",
+      "replayed_exactly": true,
+      "rejected_new_source": "IF model incompatible: dataset_format_version_mismatch"
+    }
+  ],
+  "successful_replays": 4,
+  "rows_per_two_cache_replay": 50000,
+  "total_score_evaluations": 100000,
+  "model_cache_mismatch_rejections": 2,
+  "models_fitted_by_replay": 0,
+  "labels_loaded_by_runner": false,
+  "splits_loaded_by_runner": false,
+  "protected_files": 1209,
+  "protected_files_unchanged": true,
+  "prior_model_cache_files_unchanged": true,
+  "current_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1",
+  "queue_changed": false,
+  "threshold_changed": false,
+  "holdout_005_access": "opaque_hash_only_no_parsing_loading_scoring_or_oracle",
+  "external_notifications": 0,
+  "real_source_available": false,
+  "independent_real_reviews": 0,
+  "operational_benefit_measured": false,
+  "training_and_calibration_overlap": "Existing validation cache was already used for calibration; not an independent performance evaluation",
+  "gates": {
+    "real_data": "awaiting_real_data",
+    "protocol": "draft_not_approved",
+    "real_source_shadow_integration": "not_connected",
+    "temporal_model_provenance": "not_verified",
+    "operational_benefit": "not_measured"
+  },
+  "code_sha256": {
+    "sme_fraud/shadow_scoring.py": "fe5f5d925a8f97d15e1fa767bce167c4aa6d66d4c693b6d8da4e6d2ac3fd315c",
+    "tests/test_shadow_scoring.py": "32e9d5e1d1790e88f524813051f66377217b6f57eef347265db3c6ab368a037f",
+    "sme_fraud/feature_contract.py": "908781843fac5e794365fedb37afd104dd3916c2a3a903792372476a6bc1fd41",
+    "sme_fraud/features.py": "669285a16f60ad9311f50fcffec3342fa84d1db237968f02efc55d6af1fc708c"
+  }
+}

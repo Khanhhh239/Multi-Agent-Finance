@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Optional read-only invoice revision evidence for case review",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["company_id", "invoice_id", "revision_id", "observed_at", "evidence_id"],
+    "properties": {
+      "company_id": {"type": "string", "minLength": 1},
+      "invoice_id": {"type": "string", "minLength": 1},
+      "revision_id": {"type": "string", "minLength": 1},
+      "observed_at": {"type": "string", "format": "date-time", "pattern": "([+-][0-9]{2}:[0-9]{2}|Z)$"},
+      "evidence_id": {"type": "string", "minLength": 1},
+      "issued_at": {"type": "string", "format": "date-time"},
+      "source_updated_at": {"type": "string", "format": "date-time"},
+      "gross_amount_vnd": {"type": ["integer", "string"]},
+      "status": {"type": "string"}
+    },
+    "additionalProperties": true
+  },
+  "$comment": "Optional invoice_versions.csv projection only; not consumed by the detector. observed_at is when this revision became available to the reviewing system, not the invoice issue date. Preserve revisions; do not overwrite earlier observations. Duplicate revision IDs or simultaneous revisions need source reconciliation. Apply timezone and schema validation at source admission."
+}

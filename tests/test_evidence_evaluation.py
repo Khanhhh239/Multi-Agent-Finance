@@ -18,7 +18,7 @@ class EvidenceEvaluationTest(unittest.TestCase):
                   dict(case_id='B',event='opened',event_at='2025-09-01T11:00:00+07:00',priority='cao_nhat',rule_score=20)]
         tx = dict(normal=dict(posted_at=events[0]['event_at']),fraud=dict(posted_at=events[1]['event_at']),future=dict(posted_at='2025-10-01T10:00:00+07:00'))
         labels = dict(normal=dict(is_fraud=0),fraud=dict(is_fraud=1),future=dict(is_fraud=1))
-        result = budget_review(cases, events, tx, labels, 1)
+        result = budget_review(cases, events, tx, labels, 1, capacity_minutes=45)
         self.assertEqual(result['admissions'][0]['case_id'],'B')
         self.assertEqual(result['useful_cases'],1)
 

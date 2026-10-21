@@ -1,0 +1,15 @@
+# Tested local review/backup profile: CPython 3.12, Windows x64.
+# The release builder adds artifact SHA256 hashes and an offline wheelhouse.
+cloudpickle==3.1.0
+joblib==1.5.1
+narwhals==2.19.0
+networkx==3.6.1
+numpy==1.26.4
+pandas==2.2.3
+python-dateutil==2.9.0.post0
+pytz==2024.2
+scikit-learn==1.8.0
+scipy==1.15.1
+six==1.16.0
+threadpoolctl==3.6.0
+tzdata==2024.2

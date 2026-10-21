@@ -1,0 +1,7 @@
+{
+  "review_ui/app.js": "481160a883a3a65aeeb3f5cc20d52b0c8059a891953611475f4164006f608934",
+  "sme_fraud/review_store.py": "713825b7ece0f0a26886d1d79b4c45e7b7c48f138eb6b571011fc429cbe73fa1",
+  "sme_fraud/review_server.py": "e831c0870d94e87fc72df967926363079e53369688ea281331bee2fa9b233fd2",
+  "tests/review_navigation_ui.test.js": "7706f7829ab00503cc39059752d26400137daba09292cf073b97ba450e967797",
+  "tests/test_sprint14_api.py": "283996d9a02d3e1330c105618276344ce8d6413cffa4e1294979e6b18f9d9877"
+}

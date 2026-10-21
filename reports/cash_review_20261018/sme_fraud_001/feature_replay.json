@@ -1,0 +1,9 @@
+{
+  "rows": 20559,
+  "columns": 190,
+  "cache_replayed_exactly": true,
+  "dtype": "float32",
+  "matrix_sha256": "861662e151d798da53ec9fa3d154c245c97c44bd4f86dc0393298cf45dd0d4d2",
+  "ordered_ids_sha256": "a468a4020b5ab8b908f7e479117e46d426267fd7c3033594656bc699751c899e",
+  "truth_loaded": false
+}

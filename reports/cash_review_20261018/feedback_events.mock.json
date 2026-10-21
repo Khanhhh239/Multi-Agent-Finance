@@ -1,0 +1,38 @@
+[
+  {
+    "scenario": "001",
+    "case_id": "RC_b8e286f40dab8fba",
+    "decision": "false_positive",
+    "event_hash": "e5e5625ebcd923e23712dd3bf9ec6b8e492797ee0bfa5457d63965f3efa054c7"
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_5eb1f662cdbd2265",
+    "decision": "confirmed_suspicion",
+    "event_hash": "f89fdeb83b7032434a52b23ef505c960d4e0543003e768deac8b7ff54fb425f2"
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_4fa2eaa50c0d41d5",
+    "decision": "information_gap",
+    "event_hash": "77c7f9a6564afcce6ae2471fc24081e8a1567dcb8db5905a2619f1a65692a356"
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_865066c5ce9e39b4",
+    "decision": "false_positive",
+    "event_hash": "d13317e0b4e0dcf2ad18a58cd81b22603e438f51295f95cd609fcaca8c2d5bef"
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_b929346759d67338",
+    "decision": "confirmed_suspicion",
+    "event_hash": "245133fb187d292df237668929dbb2033846bdfd0310c3c6c978cd1d570fb43d"
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_f4a881ba5ced7003",
+    "decision": "information_gap",
+    "event_hash": "f85355ee2fdd11d7a25b712c590bdd1452e15c0c5d4442a097fbaa7c91d2a285"
+  }
+]

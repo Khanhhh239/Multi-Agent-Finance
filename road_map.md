@@ -100,11 +100,17 @@
   - *Kế toán:* Biên soạn tài liệu chi tiết về cơ sở kế toán cho từng quy tắc vi phạm.
 * **Đầu ra:** Module `RuleEngine` trả về mã lỗi, mức độ nghiêm trọng và metadata kèm theo.
 
+* **Cập nhật P2 18/10/2026:** đã tách thiếu bằng chứng (0 điểm, yêu cầu bổ sung), đối chiếu chứng từ/VAT (8 điểm) và vượt hạn mức nội bộ có xác minh đúng thời điểm (14 điểm). Thiếu hóa đơn không tự làm neo cộng điểm ngữ cảnh; giữ hit và hồ sơ bổ sung để truy vết. [Kết quả, kiểm thử và cấu hình](reports/cash_review_p2_20261018.md). Chưa hiệu chỉnh trọng số trên SME thật hoặc nghiệm thu pilot.
+
+* **Đối chứng P2 bổ sung:** có bộ nguồn riêng 32 tình huống/73 giao dịch, khai báo kỳ vọng trước khi chấm và khóa kết quả trước khi đối chiếu. Bao phủ hóa đơn đầy đủ/thiếu, trả nhiều đợt, hoàn/đảo, định kỳ và hạn mức. Đã sửa điều kiện P2 cho dòng thu tiền mặt, kết quả 73/73 khớp; các bộ 001/003/005 và báo cáo đã khóa giữ nguyên. [Ma trận và kết quả](reports/p2_controls_20261018.md). Đây là kiểm tra logic xác định, chưa phải đánh giá trên SME thật.
+
+* **Web nghiệm thu P2 — 18/10/2026:** bộ đối chứng riêng đã có giao diện đủ 32 tình huống/73 giao dịch, chứng từ, kỳ vọng, hàng đợi, journal nghiệm thu theo phiên bản và CSV theo bộ lọc. 585/585 kiểm thử đạt; [cách mở và phạm vi kiểm chứng](reports/p2_controls_web_20261018.md). Chưa có browser kết nối để nghiệm thu trực quan hoặc người kế toán độc lập kết luận.
+
 #### Sprint 1.2: Đồ thị quan hệ thực thể tất định bằng NetworkX
 * **Thời gian:** Tuần 12 – Tuần 14
 * **Nhiệm vụ:**
-  - [ ] Xây dựng đồ thị đa phân: Các nút gồm `Nhân viên`, `Nhà cung cấp`, `Tài khoản ngân hàng`, `SĐT`, `Địa chỉ`, `MST`.
-  - [ ] Viết thuật toán truy vấn thành phần liên thông và đường đi:
+  - [x] Xây dựng đồ thị đa phân: Các nút gồm `Nhân viên`, `Nhà cung cấp`, `Tài khoản ngân hàng`, `SĐT`, `Địa chỉ`, `MST`.
+  - [x] Viết thuật toán truy vấn thành phần liên thông và đường đi:
     - Phát hiện nhà cung cấp có cùng tài khoản thụ hưởng hoặc số điện thoại với nhân viên.
     - Phát hiện mạng lưới các nhà cung cấp khác nhau nhưng dùng chung địa chỉ đăng ký kinh doanh hoặc chung tài khoản ngân hàng.
 * **Phân công:**
@@ -112,38 +118,47 @@
   - *Backend:* Đồng bộ dữ liệu quan hệ vào đồ thị theo lô định kỳ.
 * **Đầu ra:** Module trích xuất đồ thị quan hệ trả về định dạng JSON hỗ trợ hiển thị trực quan.
 
+* **Cập nhật 17/10/2026:** Đã triển khai NetworkX, JSON/API, đồng bộ một lô hoặc định kỳ và liên kết từ UI; 496/496 test đạt. [Mã, snapshot mẫu và giới hạn nghiệm thu](reports/entity_graph_sprint_1_2.md). Chưa bật lịch nền, kết nối ERP thật hoặc kiểm tra trực quan UI trong browser.
+
 #### Sprint 1.3: Thống kê ngưỡng động (Dynamic Thresholds)
 * **Thời gian:** Tuần 15 – Tuần 17
 * **Nhiệm vụ:**
-  - [ ] Thay thế ngưỡng tĩnh cứng nhắc bằng chỉ số thống kê thích nghi theo từng doanh nghiệp:
+  - [x] Thay thế ngưỡng tĩnh cứng nhắc bằng chỉ số thống kê thích nghi theo từng doanh nghiệp:
     - Ngưỡng giao dịch bất thường tính theo phân vị (ví dụ 95th, 99th) hoặc độ lệch chuẩn $\mu + k\sigma$ dựa trên lịch sử từng tài khoản chi phí cụ thể.
     - Tính toán ngưỡng dao động dựa trên chu kỳ tháng (ngày chốt lương, ngày thanh toán công nợ).
 * **Phân công:**
   - *ML/AI:* Viết module tính toán phân phối thống kê theo cửa sổ trượt (Rolling Window 30/60/90 ngày).
 * **Đầu ra:** Bảng tham số ngưỡng động tự cập nhật riêng biệt cho từng doanh nghiệp.
 
+* **Cập nhật 17/10/2026:** Đã có module P95/P99/μ+kσ theo công ty–tài khoản, cửa sổ 30/60/90 ngày, ngữ cảnh ngày trong tháng/cuối tháng, tích hợp baseline A5 và bảng CSV/JSON cập nhật theo lô hoặc định kỳ. 520/520 kiểm thử đạt; [mã, bảng mẫu, cách chạy và giới hạn nghiệm thu](reports/dynamic_thresholds_sprint_1_3.md). Chưa bật lịch nền hoặc hiệu chỉnh/đối chiếu trên nguồn SME thật.
+
+* **Bổ sung đo độ phủ A5 — 18/10/2026:** đo theo giao dịch tại thời điểm ghi sổ, tách đủ mẫu/thiếu mẫu/đủ một phần/ngoài nguồn; UI hiển thị mẫu số và số mẫu. 001/003 đủ lịch sử trên nhóm có nguồn 89,25%/90,46%, trên toàn bộ giao dịch 56,71%/60,47%. Đối chứng chỉ đổi baseline A5 giữ nguyên số hồ sơ, thành viên vận hành và mức ưu tiên; chưa có cơ sở đổi ngưỡng để giảm hồ sơ. [Bản đo và rà từng hit/hồ sơ](reports/a5_coverage_20261018.md). Giữ nguyên dữ liệu đã khóa, 005 chưa chấm; gate SME thật vẫn `awaiting_real_data`.
+
 #### Sprint 1.4: Giao diện Hàng đợi (Case Management UI) & Kênh thông báo
 * **Thời gian:** Tuần 18 – Tuần 20
 * **Nhiệm vụ:**
-  - [ ] Phát triển giao diện web Case Management:
+  - [x] Phát triển giao diện web Case Management:
     - Thẻ hồ sơ nghi vấn hiển thị tóm tắt tình huống bằng ngôn ngữ kế toán dễ hiểu.
     - Sơ đồ tương tác đồ thị trực quan (sử dụng Cytoscape.js hoặc D3.js).
     - Thao tác một chạm: "Xác nhận nghi vấn" / "Bỏ qua, hợp lệ" kèm lý do nhanh.
-  - [ ] Thiết lập *Ngân sách cảnh báo (Alert Budget)*: Khống chế tối đa 5–10 trường hợp ưu tiên nhất/ngày để tránh quá tải người dùng.
-  - [ ] Tích hợp Zalo OA và Email: Gửi thông báo tóm tắt tuần hoặc thông báo khi có case mức độ cao.
+  - [x] Thiết lập *Ngân sách cảnh báo (Alert Budget)*: Khống chế tối đa 5–10 trường hợp ưu tiên nhất/ngày để tránh quá tải người dùng.
+  - [x] Tích hợp Zalo OA và Email: Gửi thông báo tóm tắt tuần hoặc thông báo khi có case mức độ cao.
 * **Phân công:**
   - *Frontend:* Thiết kế giao diện Case Management và trực quan hóa sơ đồ mạng lưới.
   - *Backend:* Tích hợp Webhook Zalo OA, dịch vụ gửi email và logic điều phối ngân sách cảnh báo.
 * **Đầu ra:** Giao diện Web tương tác hoàn chỉnh kết nối với luồng thông báo Zalo/Email.
 
+* **Cập nhật 18/10/2026:** Đã tích hợp kỹ thuật ở chế độ **giả lập theo lựa chọn của người dùng**: thẻ tóm tắt, Cytoscape.js, kết luận nhanh có lý do, ưu tiên hôm nay, outbox/quota 5–10 hồ sơ, worker tuần/ưu tiên cao, SMTP/Zalo OA adapter và webhook receiver. 540/540 test và 8/8 kiểm tra JavaScript/đồ thị đạt. [Mã, bản mẫu, lệnh mở UI và giới hạn nghiệm thu](reports/case_management_sprint_1_4.md). Chưa kiểm tra trực quan browser, gửi SMTP/OA thật, đối chiếu callback OA thực tế hoặc bật lịch nền; chưa nghiệm thu pilot.
+
 #### Sprint 1.5: Kiểm thử khô trên dữ liệu Pilot & Cổng chất lượng 1
 * **Thời gian:** Tuần 21 – Tuần 22
+* **Diễn tập trước pilot — 18/10/2026:** đã chạy toàn bộ pipeline hiện tại trên 001/003: 41.082 giao dịch, 1.216/1.216 điều kiện nguồn khớp kỳ vọng; kiểm đồ thị, ngưỡng 30/60/90 ngày, hàng đợi, 6 kết luận bot qua API/restart và ngân sách thông báo giả lập 5/10 hồ sơ. Không gửi tin ra ngoài; 005 chưa chấm. Hàng đợi tăng từ 256/307 lên 556/594 hồ sơ, cần rà nghiệp vụ P2/A5. [Báo cáo và cách mở kết quả](reports/pipeline_rehearsal_20261018.md). Đây là nghiệm thu kỹ thuật trên nguồn mô phỏng; chưa có kết luận kế toán độc lập, trạng thái nguồn thật vẫn `awaiting_real_data`.
 * **Nhiệm vụ:**
   - [ ] Nạp toàn bộ dữ liệu lịch sử của 3–5 DN pilot vào hệ thống và kích hoạt toàn bộ lớp quy tắc + đồ thị ở môi trường nội bộ.
   - [ ] Tổ chức buổi làm việc với Kế toán trưởng các đơn vị để rà soát danh sách cảnh báo.
 * **Cổng chất lượng 1 (Gate 1):**
-  - [x] Kế toán trưởng xác nhận ít nhất $70\%$ cảnh báo sinh ra là hợp lý và cần kiểm tra lại nghiệp vụ.
-  - [x] Không phát sinh bất kỳ lỗi logic cơ bản nào về cân đối kế toán (Nợ = Có).
+  - [ ] Kế toán trưởng xác nhận ít nhất $70\%$ cảnh báo sinh ra là hợp lý và cần kiểm tra lại nghiệp vụ.
+  - [ ] Không phát sinh bất kỳ lỗi logic cơ bản nào về cân đối kế toán (Nợ = Có) trên dữ liệu pilot. Lượt mô phỏng 001/003 đã kiểm 59.309 chứng từ cân đối; chưa thay thế nghiệm thu pilot.
 
 ---
 

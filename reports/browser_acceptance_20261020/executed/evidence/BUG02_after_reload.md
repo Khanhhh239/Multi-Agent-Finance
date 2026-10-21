@@ -1,0 +1,404 @@
+- complementary:
+  - link "S Sổ Soát KIỂM SOÁT NỘI BỘ":
+    - /url: /
+    - generic: S
+    - text: Sổ Soát
+    - generic: KIỂM SOÁT NỘI BỘ
+  - generic: KHÔNG GIAN LÀM VIỆC
+  - button "▤ Hồ sơ rà soát":
+    - generic: ▤
+    - text: Hồ sơ rà soát
+  - button "◇ Phạm vi quy tắc":
+    - generic: ◇
+    - text: Phạm vi quy tắc
+  - link "✓ Đối chứng P2":
+    - /url: /p2-controls
+    - generic: ✓
+    - text: Đối chứng P2
+  - button "✉ Thông báo":
+    - generic: ✉
+    - text: Thông báo
+  - button "ⓘ Hướng dẫn sử dụng":
+    - generic: ⓘ
+    - text: Hướng dẫn sử dụng
+  - text: Bản thử nội bộ
+  - generic: Dữ liệu tổng hợp 2024–2025
+- main:
+  - generic: Kiểm soát nội bộ / Hồ sơ rà soát
+  - generic: KIỂM THỬ GIAO DIỆN
+  - generic: TỪ CẢNH BÁO ĐẾN BẰNG CHỨNG
+  - heading "Hồ sơ cần rà soát" [level=1]
+  - paragraph: Đối chiếu nghiệp vụ, ghi nhận kết luận và theo dõi phần còn thiếu.
+  - text: Bộ dữ liệu
+  - combobox "Bộ dữ liệu":
+    - option "Mô phỏng 0,1%"
+    - option "Mô phỏng 0,3%" [selected]
+  - text: Ngân sách / ngày / công ty
+  - combobox "Ngân sách rà soát":
+    - option "5 lượt / 120 phút" [selected]
+    - option "10 lượt / 240 phút"
+  - region "Tổng quan hồ sơ":
+    - article:
+      - generic: Tồn đọng
+      - strong: "627"
+      - text: Hồ sơ giao dịch và nguồn đang mở
+      - generic: ▤
+    - article:
+      - generic: Ưu tiên cao
+      - strong: "16"
+      - text: Cần đối chiếu trước
+      - generic: "!"
+    - article:
+      - generic: Chờ bổ sung
+      - strong: "320"
+      - text: Còn thiếu bằng chứng
+      - generic: ◷
+    - article:
+      - generic: Đã kết luận
+      - strong: "0"
+      - text: Có lý do và người rà soát
+      - generic: ✓
+  - region "Bộ lọc hồ sơ":
+    - checkbox "Ưu tiên hôm nay" [checked]
+    - text: Ưu tiên hôm nay
+    - generic: ⌕
+    - textbox "Tìm hồ sơ":
+      - /placeholder: Tìm mã hồ sơ, đối tượng hoặc nội dung…
+    - combobox "Công ty":
+      - option "Tất cả công ty" [selected]
+      - option "C001 · An Phúc Trading C001"
+      - option "C002 · An Phúc Manufacturing C002"
+      - option "C003 · Minh Lộ Services C003"
+      - option "C004 · Vân Hải Retail C004"
+      - option "C005 · Vân Hải Logistics C005"
+      - option "C006 · Minh Lộ Trading C006"
+      - option "C007 · Vân Hải Manufacturing C007"
+      - option "C008 · Minh Lộ Services C008"
+    - combobox "Trạng thái":
+      - option "Đang xử lý" [selected]
+      - option "Chưa rà soát"
+      - option "Chờ bổ sung"
+      - option "Đã kết luận"
+      - option "Tất cả trạng thái"
+    - combobox "Mức ưu tiên":
+      - option "Mọi mức ưu tiên" [selected]
+      - option "Cao nhất"
+      - option "Cao"
+      - option "Trung bình"
+      - option "Thấp"
+    - combobox "Nhóm hồ sơ":
+      - option "Mọi nhóm hồ sơ" [selected]
+      - option "Rà soát nghiệp vụ"
+      - option "Yêu cầu bổ sung P2"
+    - combobox "Quy tắc":
+      - option "Mọi quy tắc" [selected]
+      - option "A1 · Chia nhỏ cùng người nhận trong 3 ngày"
+      - option "A2 · Chia nhỏ cùng người lập/người nhận trong 30 ngày"
+      - option "A3 · Chia nhỏ qua cụm người nhận liên kết"
+      - option "A4 · Người lập có nhiều khoản cận hạn mức"
+      - option "A5 · Số tiền tròn lệch baseline lịch sử"
+      - option "A6 · Thanh toán làm tròn vượt hóa đơn gốc"
+      - option "B1 · Tài khoản hoặc căn cước NCC trùng nhân viên"
+      - option "B2 · Thông tin hoặc người đại diện NCC liên kết nhân viên"
+      - option "B3 · NCC mới thành lập nhận giao dịch lớn đầu tiên"
+      - option "B4 · Trạng thái người phát hành hóa đơn rủi ro"
+      - option "B6 · NCC ngủ đông nhận khoản lớn"
+      - option "B7 · Đổi tài khoản gần ngày thanh toán chưa xác minh"
+      - option "C1 · Lập hoặc duyệt ngoài lịch vận hành"
+      - option "C2 · Tự duyệt vượt quyền được cấp"
+      - option "C3 · Duyệt dưới 60 giây ở cấp thẩm quyền cao"
+      - option "C4 · Thao tác trong kỳ nghỉ phép chính thức"
+      - option "E1 · Lương không có chấm công hoặc bằng chứng thay thế"
+      - option "E2 · Lương sau chấm dứt hợp đồng"
+      - option "F1 · Điều chỉnh thủ công sát khóa sổ và trọng yếu"
+      - option "F2 · Quản lý ghi đè quy trình"
+      - option "F3 · Khoảng trống/trùng số chứng từ"
+      - option "F4 · Doanh thu/công nợ kéo dài chưa đối chiếu tiền"
+      - option "P1 · Thanh toán vượt tổng giá trị cùng hóa đơn"
+      - option "P2 · Chi tiền mặt cần rà soát hạn mức và chứng từ VAT"
+      - option "T1 · Tạm ứng còn dư nợ quá hạn"
+      - option "T2 · Xóa nợ tạm ứng thiếu hồ sơ"
+    - button "Xuất CSV": ↓ CSV
+  - heading "Hàng đợi ưu tiên 40" [level=2]
+  - button "Làm mới ↻"
+  - generic: Tồn 627 hồ sơ / 17.310 phút; 144 hồ sơ nguồn, 368 chờ tái rà soát. Đã phân bổ 3 lượt / 40 phút cho các công ty đang hiển thị; hạn mức mỗi công ty 5 lượt / 120 phút/ngày.
+  - button "● Cao nhất 23điểm Nghiệp vụ cần đối chiếu bổ sung Số tiền tròn lệch baseline lịch sử; Lương sau chấm dứt hợp đồng C002 · 1 nghiệp vụ · Chưa rà soát A5E2 16/10/2025 RC_b929346759d67338 Đã phân bổ 20 phút ✓":
+    - generic: ● Cao nhất
+    - generic: 23điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Số tiền tròn lệch baseline lịch sử; Lương sau chấm dứt hợp đồng
+    - generic: C002 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A5E2
+    - generic: 16/10/2025
+    - generic: RC_b929346759d67338
+    - generic: Đã phân bổ 20 phút ✓
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C003 · 1 nghiệp vụ · Chưa rà soát C1E2 18/4/2025 RC_f4a881ba5ced7003":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 18/4/2025
+    - generic: RC_f4a881ba5ced7003
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C004 · 1 nghiệp vụ · Chưa rà soát C1E2 20/4/2025 RC_8b8c1880dbadaaa6":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C004 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 20/4/2025
+    - generic: RC_8b8c1880dbadaaa6
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C001 · 1 nghiệp vụ · Chưa rà soát C1E2 13/5/2025 RC_865066c5ce9e39b4":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C001 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 13/5/2025
+    - generic: RC_865066c5ce9e39b4
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C004 · 1 nghiệp vụ · Chưa rà soát C1E2 13/5/2025 RC_2dfdf4705a6707fd":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C004 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 13/5/2025
+    - generic: RC_2dfdf4705a6707fd
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C003 · 1 nghiệp vụ · Chưa rà soát C1E2 17/8/2025 RC_e1c5b844a5b45eac":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 17/8/2025
+    - generic: RC_e1c5b844a5b45eac
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C007 · 1 nghiệp vụ · Chưa rà soát C1E2 17/9/2025 RC_4113f7ddbef07adf":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C007 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 17/9/2025
+    - generic: RC_4113f7ddbef07adf
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C006 · 1 nghiệp vụ · Chưa rà soát E2 17/4/2025 RC_66d47e6bdacfa136":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C006 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 17/4/2025
+    - generic: RC_66d47e6bdacfa136
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C008 · 1 nghiệp vụ · Chưa rà soát E2 15/5/2025 RC_36e44a90937922d8":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C008 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 15/5/2025
+    - generic: RC_36e44a90937922d8
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C005 · 1 nghiệp vụ · Chưa rà soát E2 15/5/2025 RC_8871943e45475fa5":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C005 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 15/5/2025
+    - generic: RC_8871943e45475fa5
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C001 · 1 nghiệp vụ · Chưa rà soát E2 12/6/2025 RC_964c6ecccc7c216b":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C001 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 12/6/2025
+    - generic: RC_964c6ecccc7c216b
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C008 · 1 nghiệp vụ · Chưa rà soát E2 14/8/2025 RC_4c9596155cc56a02":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C008 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 14/8/2025
+    - generic: RC_4c9596155cc56a02
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C005 · 1 nghiệp vụ · Chưa rà soát E2 11/10/2025 RC_53a81e4cba315277":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C005 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 11/10/2025
+    - generic: RC_53a81e4cba315277
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C007 · 1 nghiệp vụ · Chưa rà soát E2 12/11/2025 RC_93dca7c6bc85353a":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C007 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 12/11/2025
+    - generic: RC_93dca7c6bc85353a
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C006 · 1 nghiệp vụ · Chưa rà soát E2 18/11/2025 RC_7bb4e3ca7c4c7763":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C006 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 18/11/2025
+    - generic: RC_7bb4e3ca7c4c7763
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C002 · 1 nghiệp vụ · Chưa rà soát E2 20/11/2025 RC_d69a1248b7a64439":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C002 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 20/11/2025
+    - generic: RC_d69a1248b7a64439
+  - button "● Trung bình 10điểm Phê duyệt hoặc điều chỉnh cần đối chiếu Lập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu C008 · 2 nghiệp vụ · Chưa rà soát C1F1 30/8/2025 RC_c1b620d0a47e3f17":
+    - generic: ● Trung bình
+    - generic: 10điểm
+    - generic: Phê duyệt hoặc điều chỉnh cần đối chiếu
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu
+    - generic: C008 · 2 nghiệp vụ · Chưa rà soát
+    - generic: C1F1
+    - generic: 30/8/2025
+    - generic: RC_c1b620d0a47e3f17
+  - button "● Trung bình 10điểm Phê duyệt hoặc điều chỉnh cần đối chiếu Lập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu C006 · 2 nghiệp vụ · Chưa rà soát C1F1 28/11/2025 RC_489a993644a7e48b":
+    - generic: ● Trung bình
+    - generic: 10điểm
+    - generic: Phê duyệt hoặc điều chỉnh cần đối chiếu
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu
+    - generic: C006 · 2 nghiệp vụ · Chưa rà soát
+    - generic: C1F1
+    - generic: 28/11/2025
+    - generic: RC_489a993644a7e48b
+  - button "● Trung bình 9điểm Chuỗi khoản chi cần kiểm tra hạn mức Chia nhỏ cùng người nhận trong 3 ngày; Lập hoặc duyệt ngoài lịch vận hành C003 · 1 nghiệp vụ · Chưa rà soát A1C1 6/1/2024 RC_88a5aadb387ed483":
+    - generic: ● Trung bình
+    - generic: 9điểm
+    - generic: Chuỗi khoản chi cần kiểm tra hạn mức
+    - paragraph: Chia nhỏ cùng người nhận trong 3 ngày; Lập hoặc duyệt ngoài lịch vận hành
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A1C1
+    - generic: 6/1/2024
+    - generic: RC_88a5aadb387ed483
+  - button "● Trung bình 9điểm Chuỗi khoản chi cần kiểm tra hạn mức Chia nhỏ cùng người nhận trong 3 ngày; Lập hoặc duyệt ngoài lịch vận hành C008 · 1 nghiệp vụ · Chưa rà soát A1C1 9/3/2024 RC_ed9a3cef02b8445b":
+    - generic: ● Trung bình
+    - generic: 9điểm
+    - generic: Chuỗi khoản chi cần kiểm tra hạn mức
+    - paragraph: Chia nhỏ cùng người nhận trong 3 ngày; Lập hoặc duyệt ngoài lịch vận hành
+    - generic: C008 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A1C1
+    - generic: 9/3/2024
+    - generic: RC_ed9a3cef02b8445b
+  - generic: 1–20 / 40 hồ sơ
+  - button "Trang trước" [disabled]: ←
+  - button "Trang sau": →
+  - region "Chi tiết hồ sơ":
+    - generic: ● Ưu tiên thấp
+    - generic: IR_c39bd6eef7d31a7c
+    - heading "Chi tiền mặt · Cần bổ sung bằng chứng" [level=2]
+    - generic: C001 · 1 nghiệp vụ
+    - generic: Mở 13/3/2024
+    - generic: Chờ bổ sung
+    - generic: "0"
+    - text: Điểm ưu tiên rà soát
+    - strong: "Chi trả trong hồ sơ: 21.738.000 ₫"
+    - navigation "Các phần hồ sơ":
+      - button "Tổng quan"
+      - button "Giao dịch"
+      - button "Bằng chứng"
+      - button "Bổ sung tài liệu"
+      - button "Nhật ký"
+    - strong: Căn cứ vào hàng đợi và điểm ưu tiên
+    - generic: Điểm hồ sơ theo snapshot
+    - text: "0"
+    - generic: Căn cứ tiếp nhận
+    - text: Yêu cầu bổ sung dữ kiện, chưa phải kết luận rủi ro đã xác minh.
+    - generic "TX_1fa268d74dc24300a7 · 0 điểm"
+    - paragraph: Không cộng cơ học mọi hit hoặc mọi giao dịch thành điểm hồ sơ. Điểm dùng để ưu tiên rà, không phải xác suất gian lận.
+    - generic "A5 · 0/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)":
+      - strong: A5 · 0/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)
+    - generic: Cần bổ sung bằng chứng cho khoản chi tiền mặt.
+    - generic: Quan hệ cần đối chiếu
+    - button "Thu nhỏ sơ đồ": −
+    - button "Phóng to sơ đồ": +
+    - button "Đặt lại"
+    - group "Sơ đồ quan hệ của hồ sơ"
+    - generic: Đối tác / nghiệp vụ
+    - generic: TK / SĐT
+    - generic: Nhân sự
+    - button "Mở mạng lưới thực thể liên quan →"
+    - generic: Chọn một nút để xem chi tiết. Có thể phóng to và kéo sơ đồ.
+    - generic: Bằng chứng chính
+    - generic "P2 Chi tiền mặt cần rà soát hạn mức và chứng từ VAT Cần bổ sung · 0 điểm":
+      - generic: P2
+      - text: Chi tiền mặt cần rà soát hạn mức và chứng từ VAT
+      - generic: Cần bổ sung · 0 điểm
+    - strong: Cần bổ sung bằng chứng cho khoản chi tiền mặt
+    - generic: Nhóm xử lý
+    - text: Yêu cầu bổ sung bằng chứng
+    - generic: Số tiền chi
+    - text: 21.738.000 ₫
+    - generic: Hóa đơn
+    - text: Chưa có thông tin
+    - generic: Giá trị hóa đơn
+    - text: Chưa có thông tin
+    - generic: Hạn mức nội bộ
+    - text: Chưa khai báo
+    - generic: Xác minh hạn mức
+    - text: Chưa khai báo
+    - generic: Ngưỡng đối chiếu theo thời điểm
+    - text: 20.000.000 ₫
+    - paragraph:
+      - strong: "Cần bổ sung:"
+      - text: Tổng tiền hóa đơn; Mã hoặc số hóa đơn; Ngày hóa đơn.
+    - paragraph: Bổ sung các trường còn thiếu và nguồn xác minh, sau đó chạy lại đối chiếu.
+    - paragraph: Cần bổ sung bằng chứng cho khoản chi tiền mặt; chưa kết luận gian lận hoặc loại khấu trừ.
+    - generic: 18:00 13/03/2024 · TX_1fa268d74dc24300a7
+    - button "Xem toàn bộ 1 dấu hiệu và ngoại lệ →"
+    - paragraph: Còn 1 yêu cầu tài liệu. Rà lại hoặc hủy từng yêu cầu có lý do trước khi kết luận cuối. Có thể ghi “Cần bổ sung bằng chứng” để tiếp tục theo dõi.
+    - heading "Ghi nhận kết luận rà soát" [level=3]
+    - generic: Lưu kết luận sau khi đối chiếu. Phần còn thiếu có thể tiếp tục bổ sung ở lần rà soát sau.
+    - radio "Xác nhận nghi vấn"
+    - text: Xác nhận nghi vấn
+    - radio "Hợp lệ / báo động giả"
+    - text: Hợp lệ / báo động giả
+    - radio "Cần bổ sung bằng chứng"
+    - text: Cần bổ sung bằng chứng
+    - radio "Vi phạm kiểm soát"
+    - text: Vi phạm kiểm soát
+    - radio "Xác nhận gian lận"
+    - text: Xác nhận gian lận
+    - text: Người rà soát
+    - textbox "Người rà soát":
+      - /placeholder: Họ và tên người thực hiện
+      - text: ASSISTANT_BROWSER_SIM
+    - text: Lý do nhanh
+    - combobox "Lý do nhanh":
+      - option "Chọn lý do đã kiểm tra…" [selected]
+      - option "Chứng từ chưa giải trình được dấu hiệu"
+      - option "Quan hệ cần chuyển kiểm tra sâu"
+      - option "Chứng từ và nghĩa vụ chi khớp"
+      - option "Đúng thẩm quyền, có phê duyệt"
+    - button "Xác nhận nghi vấn"
+    - button "Bỏ qua, hợp lệ"
+    - text: Lý do / chứng từ đã đối chiếu
+    - textbox "Lý do / chứng từ đã đối chiếu":
+      - /placeholder: Nêu nội dung đã kiểm tra hoặc bằng chứng cần bổ sung…
+    - text: Mỗi lần lưu được ghi vào lịch sử.
+    - text: Hồ sơ thiếu bằng chứng tiếp tục mở và tính công tái rà soát.
+    - button "Lưu kết luận →"
+  - generic: Điểm dùng để ưu tiên rà soát. Cảnh báo cần được đối chiếu chứng từ trước khi kết luận.

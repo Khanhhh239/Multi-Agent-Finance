@@ -1,30 +1,46 @@
-# Agent 2 — nhánh agent2-Sang
+# Agent 2 Sang — bản nguồn ngày 21/10/2026
 
-Bản cập nhật của workspace `agent22` ngày 17/10/2026 được chuyển từ lần đẩy `f593a78` sang nhánh **`agent2-Sang`**. Nhánh giữ mã nguồn `sme_fraud/`, giao diện `review_ui/`, bộ test `tests/`, schema, mẫu nguồn và báo cáo của workspace.
+Mã nguồn của workspace `agent22` được đồng bộ vào nhánh **`agent2-Sang`**. [README](../README.md) ghi phạm vi nghiệp vụ; [RELEASES.md](../RELEASES.md) hướng dẫn cài sạch, backup, nâng cấp và khôi phục bằng runtime phù hợp.
 
-Các thay đổi gồm bằng chứng nghĩa vụ chi và thẩm quyền theo lịch sử, định danh ngân hàng, đóng lô, ID hồ sơ, hợp đồng feature/model và tiếp nhận mẫu A2/A4. Xem [readiness](../reports/rule_readiness_recheck_20261016.md), [feature/model](../reports/rule_feature_model_sync.md), [A2/A4](../reports/rule_split_pattern_admission.md) và [README đầy đủ](../README.md).
+## Nội dung cập nhật
 
-## Cài đặt và kiểm thử
+- Bộ luật, đồ thị quan hệ, ngưỡng động, nguồn thuế/tiền mặt và công cụ đồng bộ.
+- ReviewStore, quản lý hồ sơ/yêu cầu tài liệu, lịch công việc, thông báo giả lập và cổng kết luận chung web/CLI.
+- Sao lưu/khôi phục, tác vụ backup, quản lý phiên bản và gói phát hành có checksum.
+- Giao diện bằng chứng, P2, điều hướng và thư viện Cytoscape được ghim phiên bản kèm giấy phép.
+- Test Python/JavaScript, schema, mẫu cấu hình và báo cáo kiểm chứng đến ngày 21/10.
+
+Trạng thái sửa lỗi UI nằm tại [browser_acceptance_status_20261021.md](../reports/browser_acceptance_status_20261021.md). Báo cáo giữ riêng kết quả kiểm thử tự động, thao tác browser và các mục nghiệm thu còn chờ.
+
+## Cài từ mã nguồn và kiểm thử
+
+Profile web/backup đã kiểm chứng dùng **CPython 3.12, Windows x64**:
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip install -r requirements-review-lock.txt
 New-Item -ItemType Directory -Force .runtime | Out-Null
 .\.venv\Scripts\python.exe -B -m unittest discover -s tests -v
 ```
 
-`requirements-lock.txt` giữ phiên bản benchmark lịch sử. Đã chạy lại **373/373 test hồi quy đạt** trên nhánh đích; log nằm cục bộ trong `.runtime/github_move_agent2_sang_tests.log`.
+Với Node.js đã cài, chạy các kiểm tra VM/DOM riêng:
 
-## Chạy từ bản clone mới
+Các kiểm tra dùng fixture mô phỏng cố định tại `tests/fixtures/` (32 tình huống/73 giao dịch), có SHA256 của nguồn; không cần dataset gốc để chạy các kiểm tra này.
 
 ```powershell
-.\.venv\Scripts\python.exe -m sme_fraud.generate --output data/sme_fraud_003 --rows 100000 --fraud-rate 0.003 --seed 42 --companies 5
-.\.venv\Scripts\python.exe -m sme_fraud.validate --data data/sme_fraud_003
-.\.venv\Scripts\python.exe -m sme_fraud.evaluate --data data/sme_fraud_003 --output reports/local_if/sme_fraud_003
-.\.venv\Scripts\python.exe -m sme_fraud.run_rules --data data/sme_fraud_003 --output reports/local_rules/sme_fraud_003 --if-model reports/local_if/sme_fraud_003/isolation_forest.joblib
-.\.venv\Scripts\python.exe -m sme_fraud.review_server --data-root data --reports-root reports/local_rules
+node tests/review_evidence_ui.test.js
+node tests/review_workflow_ui.test.js
+node tests/review_navigation_ui.test.js
 ```
 
-Mở `http://127.0.0.1:8765`. Dùng thư mục đầu ra mới vì pipeline từ chối ghi đè snapshot đã có.
+`requirements.txt` mô tả phụ thuộc tổng quát; `requirements-lock.txt` giữ profile benchmark lịch sử. Không thay hai profile này cho nhau khi cần mở model/backup đã khóa hợp đồng runtime. Xem README và từng ví dụ trong `examples/` để sinh dữ liệu và mở demo bằng thư mục đầu ra mới.
 
-Bản Git gồm mã nguồn, test, schema, CSV mẫu chỉ có header và snapshot Markdown/JSON. Dataset, model, runtime, cache, SQLite, phản hồi người dùng và kết quả chi tiết từng dòng được giữ cục bộ. Các chỉ số trong báo cáo là kết quả trên dữ liệu tổng hợp; trạng thái nghiệm thu vận hành nằm trong báo cáo readiness.
+Các test web/backup tự tạo bộ đối chứng P2 khai báo sẵn trong thư mục tạm riêng; không cần mở dataset của máy phát triển và không thay cấu hình mặc định của ứng dụng.
+
+Kiểm chứng bản cập nhật: 663 ca Python đạt trong lượt kiểm tra toàn bộ; 34 ca web/P2/backup được chạy lại sau khi tách fixture và đều đạt. Ba bộ JavaScript đạt 22 + 14 + 12 kiểm tra. Log được giữ cục bộ trong `.runtime/github_update_20261021_*`.
+
+## Phạm vi lưu trên Git
+
+Bản nguồn gồm Python/PowerShell, HTML/CSS/JavaScript, tài liệu, schema, cấu hình mẫu, CSV chỉ chứa header và các báo cáo/JSON tổng hợp. Thư viện browser trong `review_ui/vendor/` có manifest SHA256 và giấy phép đi kèm.
+
+Dataset, model, SQLite, runtime, wheelhouse/gói cài đặt, ảnh/trace browser và kết quả chi tiết từng dòng được giữ cục bộ. Một số liên kết từ biên bản tới artifact đó chỉ có nội dung trong môi trường đã chạy; đọc phạm vi và kết luận trực tiếp trong từng báo cáo. Mẫu cấu hình thông báo lấy thông tin xác thực từ biến môi trường.

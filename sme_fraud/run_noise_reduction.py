@@ -36,6 +36,7 @@ def choose_validation(data, baseline, output):
     features = [r for r in features if r['transaction_id'] in ids]
     validation = {r['transaction_id'] for r in tables['transactions'] if r['posted_at'] >= '2025-01-01T00:00:00+07:00'}
     config = json.loads((baseline / 'rule_config.json').read_text(encoding='utf-8'))
+    config.setdefault('cash_payment_policy', 'disabled')
     candidates = [dict(noise_policy='phase2', amount_baseline='raw', robust_z=3.5),
                   *[dict(noise_policy='phase2', amount_baseline='log_mad', robust_z=z) for z in (2.5, 3.0, 3.5)]]
     for candidate in candidates:

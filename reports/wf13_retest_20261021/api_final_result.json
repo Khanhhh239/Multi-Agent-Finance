@@ -1,0 +1,18 @@
+{
+  "command": "python -B -m unittest discover -s tests -p test_sprint14_api.py -v",
+  "exit_code": 0,
+  "tests_run": 5,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "elapsed_seconds": 4.686,
+  "final_implementation": "Localization in HTTP layer; ReviewStore unchanged",
+  "checks": [
+    "test_asset_routes_csp_and_daily_priority_filter",
+    "test_live_service_never_sends_from_browser_preview",
+    "test_missing_case_is_vietnamese_404_without_repr_quotes_and_recovers",
+    "test_preview_csrf_and_company_scoped_metadata_does_not_expose_recipient_or_secrets",
+    "test_quick_decision_requires_reason_and_retains_optimistic_audit"
+  ],
+  "source": "Observed exec result, chunk 81e714"
+}

@@ -1,0 +1,111 @@
+{
+  "status": "passed",
+  "cohorts": [
+    {
+      "tag": "001",
+      "transactions": 20559,
+      "independent_history_and_p99_checks": 13064,
+      "a5_predicates_match_frozen_hits": true,
+      "all_frozen_files_verified": true,
+      "unavailable_source_by_type": [
+        {
+          "txn_type": "customer_receipt",
+          "is_financial_entry": 1,
+          "transactions": 2973
+        },
+        {
+          "txn_type": "equipment_purchase",
+          "is_financial_entry": 1,
+          "transactions": 8
+        },
+        {
+          "txn_type": "material_purchase",
+          "is_financial_entry": 1,
+          "transactions": 867
+        },
+        {
+          "txn_type": "sales_invoice",
+          "is_financial_entry": 1,
+          "transactions": 2692
+        },
+        {
+          "txn_type": "stock_purchase",
+          "is_financial_entry": 1,
+          "transactions": 934
+        },
+        {
+          "txn_type": "tools_purchase",
+          "is_financial_entry": 1,
+          "transactions": 21
+        }
+      ]
+    },
+    {
+      "tag": "003",
+      "transactions": 20523,
+      "independent_history_and_p99_checks": 13720,
+      "a5_predicates_match_frozen_hits": true,
+      "all_frozen_files_verified": true,
+      "unavailable_source_by_type": [
+        {
+          "txn_type": "customer_receipt",
+          "is_financial_entry": 1,
+          "transactions": 3300
+        },
+        {
+          "txn_type": "equipment_purchase",
+          "is_financial_entry": 1,
+          "transactions": 12
+        },
+        {
+          "txn_type": "material_purchase",
+          "is_financial_entry": 1,
+          "transactions": 263
+        },
+        {
+          "txn_type": "sales_invoice",
+          "is_financial_entry": 1,
+          "transactions": 2887
+        },
+        {
+          "txn_type": "stock_purchase",
+          "is_financial_entry": 1,
+          "transactions": 321
+        },
+        {
+          "txn_type": "tools_purchase",
+          "is_financial_entry": 1,
+          "transactions": 20
+        }
+      ]
+    }
+  ],
+  "api_checks": [
+    {
+      "tag": "001",
+      "statuses_checked": [
+        "insufficient_history",
+        "ready"
+      ],
+      "member_states": {
+        "ready": 1,
+        "insufficient_history": 2
+      }
+    },
+    {
+      "tag": "003",
+      "statuses_checked": [
+        "insufficient_history",
+        "ready"
+      ],
+      "member_states": {
+        "ready": 1,
+        "insufficient_history": 1
+      }
+    }
+  ],
+  "protected_inputs_unchanged": true,
+  "independent_human_reviews": 0,
+  "external_messages_sent": 0,
+  "browser_visual_qa": false
+}

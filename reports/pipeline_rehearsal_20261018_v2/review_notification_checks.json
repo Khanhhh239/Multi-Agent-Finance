@@ -1,0 +1,317 @@
+{
+  "reviewed_by_bot": 6,
+  "independent_human_reviews": 0,
+  "detailed_cases_checked": 16,
+  "balanced_api_documents": 32,
+  "feedback_and_admissions_survive_restart": true,
+  "notification_restart_idempotent": true,
+  "feedback_audit_sha256": {
+    "001": "6c08384ce70e8e62ddfb3116efd7c6ea8dd2dda59ce47d4d7428e439f42c6d06",
+    "003": "44c3d0e3d7a9fc388cb6f895e473dc10dfe49f76731bdcde7576c6c6efd40348"
+  },
+  "day_results": [
+    {
+      "day": "2026-10-18",
+      "budget": 5,
+      "states": {
+        "001": {
+          "cancelled": 4,
+          "simulated": 88
+        },
+        "003": {
+          "cancelled": 4,
+          "simulated": 82
+        }
+      }
+    },
+    {
+      "day": "2026-10-19",
+      "budget": 5,
+      "states": {
+        "001": {
+          "cancelled": 4,
+          "simulated": 126
+        },
+        "003": {
+          "cancelled": 4,
+          "simulated": 118
+        }
+      }
+    },
+    {
+      "day": "2026-10-20",
+      "budget": 10,
+      "states": {
+        "001": {
+          "cancelled": 4,
+          "simulated": 138
+        },
+        "003": {
+          "cancelled": 4,
+          "simulated": 138
+        }
+      }
+    }
+  ],
+  "notification_jobs": 284,
+  "notification_statuses": {
+    "simulated": 276,
+    "cancelled": 8
+  },
+  "notification_kinds": {
+    "high_priority": 220,
+    "weekly": 64
+  },
+  "daily_allocation_counts": [
+    {
+      "day": "2026-10-18",
+      "scenario": "001",
+      "company_id": "C001",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "001",
+      "company_id": "C002",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "001",
+      "company_id": "C003",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "001",
+      "company_id": "C004",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "001",
+      "company_id": "C005",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "001",
+      "company_id": "C006",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "001",
+      "company_id": "C007",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "001",
+      "company_id": "C008",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "003",
+      "company_id": "C001",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "003",
+      "company_id": "C002",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "003",
+      "company_id": "C003",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "003",
+      "company_id": "C004",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "003",
+      "company_id": "C005",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "003",
+      "company_id": "C006",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "003",
+      "company_id": "C007",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-18",
+      "scenario": "003",
+      "company_id": "C008",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "001",
+      "company_id": "C001",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "001",
+      "company_id": "C002",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "001",
+      "company_id": "C003",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "001",
+      "company_id": "C004",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "001",
+      "company_id": "C005",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "001",
+      "company_id": "C006",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "001",
+      "company_id": "C007",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "001",
+      "company_id": "C008",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "003",
+      "company_id": "C001",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "003",
+      "company_id": "C002",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "003",
+      "company_id": "C003",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "003",
+      "company_id": "C004",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "003",
+      "company_id": "C005",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "003",
+      "company_id": "C006",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "003",
+      "company_id": "C007",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-19",
+      "scenario": "003",
+      "company_id": "C008",
+      "cases": 5,
+      "limit": 5
+    },
+    {
+      "day": "2026-10-20",
+      "scenario": "001",
+      "company_id": "C002",
+      "cases": 2,
+      "limit": 10
+    },
+    {
+      "day": "2026-10-20",
+      "scenario": "001",
+      "company_id": "C003",
+      "cases": 4,
+      "limit": 10
+    },
+    {
+      "day": "2026-10-20",
+      "scenario": "003",
+      "company_id": "C003",
+      "cases": 10,
+      "limit": 10
+    }
+  ],
+  "external_messages_sent": 0,
+  "mode": "dry_run",
+  "browser_visual_qa": false,
+  "initial_review_at": "2026-10-18T09:00:00+07:00",
+  "final_review_at": "2026-10-20T09:00:00+07:00"
+}
