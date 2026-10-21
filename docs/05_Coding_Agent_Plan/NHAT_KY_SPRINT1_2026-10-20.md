@@ -200,3 +200,14 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
   A gốc 2023 −1,4% [−2,7; −0,1], A gốc 2024 +0,4%, **B (tgt M12) −5,8% [−7,3; −3,1]**, CI +0,06%, **BPI +6,3% [2,3; 9,5]**.
   Giúp BPI rõ, nhưng hại tgt ⇒ giữ tuỳ chọn `stationary_features=False`. Không mở ablation theo miền (ngoài danh sách).
 - `tgt2` frozen run khởi động 22:48 song song `scaling` (RAM khả dụng 3,6 GB, commit dự phòng 17 GB — an toàn).
+
+## 12. HOÀN TẤT (agent1-Khanh, 21/10/2026 23:30) — commit `ad9effa` trên `agent1-Khanh`
+
+- Chuỗi xong: `scaling` passed (22:58), báo cáo + cổng sinh lại; **340/340 kiểm thử đạt**.
+- **tgt2 (niêm phong, chạy đúng một lần):** G13 chính sách đóng băng: phát hiện 0,746 [0,59; 0,84], độ sớm 7 tuần, báo giả 0,75 [0,43; 1,10]
+  ⇒ đạt điểm ước lượng (dòng tham khảo `G13_tgt2`). cov80 copula-t gốc 0,62/0,72 (hẹp); **copula-t + ACI 0,767/0,771** (tgt: 0,754/0,767).
+  Tiêu chí 1 (BLEND vs B1d) **chưa đo trên tgt2**. Chi tiết: `docs/03_Evaluation/GO_NO_GO_SYNTHETIC_ONLY.md` mục 4b, `G13_ALERT_POLICY.md` mục 4.
+- **Cổng cuối:** đạt G1, G2, G5, G6, G9, G10, G12, G16, G18; trượt G3, G4, G7, G8, G11, G13 (tgt), G14, G15, G17. **Pilot NO-GO** cho bậc hành động;
+  **GO bậc 0 "bóng"** với luật an toàn (BLEND neo B1d, cổng thoái lui, dải tiền copula-t + ACI, cảnh báo có người duyệt).
+- **Việc mở còn lại (không chặn bậc 0):** G15 T9 (độ phủ ghép 0,47), G3/G4 hiệu chỉnh T1, G7 (tinh chỉnh M12), G14/G17;
+  thử cổng thoái lui trên `hc_supply_shock`/`hc_retention`; bộ AR thật nhiều công ty để kiểm định giống/khác.
