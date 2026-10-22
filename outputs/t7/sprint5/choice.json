@@ -1,0 +1,51 @@
+{
+  "baseline": {
+    "detector": "CUSUM",
+    "params": "{\"k\": 0.25, \"h\": 5}",
+    "refractory_days": 0
+  },
+  "chosen": {
+    "detector": "CUSUM",
+    "params": "{\"k\": 0.25, \"h\": 5}",
+    "refractory_days": 60
+  },
+  "source_baseline": {
+    "detector": "CUSUM",
+    "params": "{\"k\": 0.25, \"h\": 5}",
+    "refractory_days": 0,
+    "detection_rate_180d": 0.5555555555555556,
+    "median_lag_days": 61.0,
+    "false_alarms_per_cust_year": 0.46641070802057216,
+    "macro_alarms_per_cust_year": 0.1503307240727464,
+    "n_eligible_shifted": 18
+  },
+  "source_chosen": {
+    "detector": "CUSUM",
+    "params": "{\"k\": 0.25, \"h\": 5}",
+    "refractory_days": 60,
+    "detection_rate_180d": 0.5555555555555556,
+    "median_lag_days": 61.0,
+    "false_alarms_per_cust_year": 0.33578144636191787,
+    "macro_alarms_per_cust_year": 0.11863706714572864,
+    "n_eligible_shifted": 18
+  },
+  "fa_margin": 0.35,
+  "groups": {
+    "old_heldout": [
+      "tgt",
+      "sens_uk",
+      "sens_coface"
+    ],
+    "new_tgt2_tgt3": [
+      "tgt2",
+      "tgt3"
+    ]
+  },
+  "worlds": [
+    "tgt",
+    "sens_uk",
+    "sens_coface",
+    "tgt2",
+    "tgt3"
+  ]
+}
