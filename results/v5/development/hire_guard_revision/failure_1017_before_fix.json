@@ -1,0 +1,10 @@
+{
+  "status": "failed",
+  "error": "AssertionError('future master T000087376 employee_id ')",
+  "data_origin": "dữ liệu tổng hợp",
+  "last_progress": {
+    "status": "generating",
+    "seed": 1017,
+    "data_origin": "dữ liệu tổng hợp"
+  }
+}

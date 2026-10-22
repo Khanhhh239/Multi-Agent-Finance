@@ -1,4 +1,4 @@
-# Đăng ký trước v5, bản v1.1 đã được chủ dự án duyệt
+# Đăng ký trước v5, bản v1.2 (v1.1 đã duyệt cộng sửa đổi hạ tầng v1.2)
 
 Ngày cập nhật 2026-10-19. **Trạng thái: ĐÃ DUYỆT v1.1 theo bốn sửa đổi của chủ dự án. Được bắt đầu R2.** Không cần duyệt lại khi chỉ áp đúng các sửa đổi này; mọi thay đổi khác phải dừng và hỏi. Bản v1 nguyên văn nằm ở cuối tệp, chỉ là lịch sử, không còn điều khiển thực thi.
 
@@ -6,8 +6,33 @@ Ngày cập nhật 2026-10-19. **Trạng thái: ĐÃ DUYỆT v1.1 theo bốn s�
 |---|---|
 | v1 | Đề xuất chờ duyệt; băm tệp gốc SHA-256 `711c4acda8451f594deb303d4dabdd2fe1eefbaf5e124ca4856c97b09211db4a` |
 | v1.1 | Làm rõ tiếp theo: ba suất cho mô hình có giám sát, cả hai Cold chạy đủ 20 thế giới ở tầng chọn rồi chọn riêng. Chủ dự án duyệt có sửa đổi: hai tầng, J theo nhóm 20% thấp nhất, gộp nhánh nhỏ, chốt chặn trước niêm phong, PU là nền và thứ tự R2. Giữ các điều khoản v1 không bị sửa và giữ nguyên cổng niêm phong. |
+| v1.2 | 2026-10-22: số cây cố định, định nghĩa ứng viên, tái sử dụng bộ dữ liệu nguồn, lấy mẫu âm có điều kiện, hạ tầng; ghi trước mọi so sánh (mục Sửa đổi v1.2). |
 
 Mọi số đo dự kiến là trên **dữ liệu tổng hợp**, trừ khi một báo cáo kiểm thử ngoài hoặc thí điểm chỉ rõ nguồn thật và phạm vi nhãn. Kết luận **v4 không đạt G5 và kích hoạt M2** giữ nguyên. Ba seed v4 931 đến 933 đã được dùng để hậu kiểm, không còn là kiểm thử niêm phong và không được tính vào cổng v5.
+
+## Sửa đổi v1.2 (2026-10-22, ghi TRƯỚC mọi thí nghiệm so sánh)
+
+Thẩm quyền: chủ dự án giao cho phiên hỗ trợ tự thực hiện R2 đến hết ngày 2026-10-22 ("tự làm đến khi xong"). Sửa đổi chỉ về **cách huấn luyện và hạ tầng**, không đổi giao thức, ứng viên, J, trần ca khó, chốt chặn hay cổng niêm phong. Bằng chứng chẩn đoán dẫn tới sửa đổi: `docs/05_ke_hoach_giao_viec/09_ban_giao_nhanh_drivers.md` (hậu kiểm trên dữ liệu tổng hợp, không dùng để chọn).
+
+1. **Số cây cố định.** Mọi mô hình có giám sát huấn luyện đúng 400 cây, tốc độ học 0,05, lá 7 và 15, chọn lá theo AP trên validation nguồn. Bỏ dừng sớm 60 vòng của v1.1: chẩn đoán cho thấy dừng sớm theo AP có lúc dừng ở 1 cây dưới trọng số PU, làm kết quả phụ thuộc may rủi.
+2. **Định nghĩa ứng viên.**
+   - `L3-PU`: cột L3.
+   - `L4-FB-PU`: cột L4, cân bằng họ.
+   - `L4-PU-E2-AR`: cột L4 cộng `change_feature_names()` (23 đặc trưng thay đổi theo thực thể và công nợ, 21 đuôi EntityDeviation2, `ed2_score`).
+   - `L4-PU-E2-AR-2plus1`: 2 khe từ `L4-PU-E2-AR`, 1 khe từ `Cold-Rules-E2`.
+   - `Cold-Rules-E2` = max hạng (luật, `ed2_score`).
+   - `Cold-v4` = max hạng (luật, EntityDeviation v4).
+
+   Hạng Cold so với validation của chính thế giới đích, không nhãn.
+3. **PU.** w chọn trong {0,1; 0,2; 0,5} trên `L4-FB-PU`, tầng sàng lọc, seed 0, theo J; hòa chính xác thì chọn w đứng trước. Khóa ở `results/v5/R2/PU_locked.json`. Kết quả `L4-FB-PU` với w đã khóa được dùng lại ở bước sàng lọc ứng viên (cùng ước lượng, không huấn luyện lại).
+4. **Tái sử dụng bộ dữ liệu nguồn** cho một đích và một bộ cột; 11 giao thức, w và seed chỉ đổi nhãn và trọng số. Kiểm thử chứng minh kết quả giống hệt dựng mới (`tests_agent2/test_screen_v5.py`).
+5. **Lấy mẫu âm có điều kiện.**
+   - Chỉ dùng nếu `scripts/check_subsample_equivalence.py` trên đích 1001, `L4-PU`, w = 0,2 cho Spearman ≥ 0,95 **và** chênh recall@B3 ≤ 2 điểm phần trăm.
+   - Khi dùng: giữ mọi dòng gian lận thật của nguồn (dòng nhánh bị ẩn vẫn là U với trọng số w), mọi ca hợp lệ khó, và tỷ lệ f các dòng còn lại với trọng số 1/f.
+   - f là giá trị nhỏ nhất trong {0,1; 0,2} đạt kiểm tra; không đạt cả hai thì không lấy mẫu.
+   - Validation nguồn và tập đích không bao giờ lấy mẫu.
+6. **Hạ tầng.** Mỗi đợt chạy một tiến trình, trần bộ nhớ 10 GiB (máy đã tăng bộ nhớ ảo lên 35,7 GB), 8 luồng LightGBM, lưu JSON và cờ sau từng giao thức.
+7. **Bộ sinh.** Sửa `hire_guard` (seed 1017) đã chứng minh giữ nguyên từng byte ở 1001 và 1016 (`results/v5/development/hire_guard_parity.json`).
 
 ## 1. Câu hỏi và giao thức chính
 

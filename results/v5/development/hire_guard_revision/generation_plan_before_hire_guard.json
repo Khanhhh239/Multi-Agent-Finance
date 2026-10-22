@@ -1,0 +1,321 @@
+{
+  "data_origin": "dữ liệu tổng hợp",
+  "worlds": [
+    {
+      "seed": 1001,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 39,
+      "money_scale": 15.86639327536257,
+      "difficulty_weights": [
+        0.21252794750839388,
+        0.7808142797216411,
+        0.006657772769965137
+      ],
+      "calendar_seed": 521001,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1002,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 35,
+      "money_scale": 12.065585898472413,
+      "difficulty_weights": [
+        0.8550224371187614,
+        0.03964071462541197,
+        0.10533684825582665
+      ],
+      "calendar_seed": 521002,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1003,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 37,
+      "money_scale": 3.1309858695207655,
+      "difficulty_weights": [
+        0.20229181343729297,
+        0.3144519659452818,
+        0.48325622061742524
+      ],
+      "calendar_seed": 521003,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1004,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 50,
+      "money_scale": 16.599254648867998,
+      "difficulty_weights": [
+        0.01782049175703772,
+        0.02276413542996388,
+        0.9594153728129984
+      ],
+      "calendar_seed": 521004,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1005,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 46,
+      "money_scale": 13.95875845046126,
+      "difficulty_weights": [
+        0.07796182656282886,
+        0.72928613070825,
+        0.1927520427289211
+      ],
+      "calendar_seed": 521005,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1006,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 33,
+      "money_scale": 1.5883777807837667,
+      "difficulty_weights": [
+        0.3741190469735271,
+        0.5359940945521303,
+        0.08988685847434272
+      ],
+      "calendar_seed": 521006,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1007,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 47,
+      "money_scale": 2.5007123588048406,
+      "difficulty_weights": [
+        0.2708996086373279,
+        0.4533799031653836,
+        0.2757204881972885
+      ],
+      "calendar_seed": 521007,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1008,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 36,
+      "money_scale": 8.152381918003549,
+      "difficulty_weights": [
+        0.7929294300715418,
+        0.018373963628993503,
+        0.18869660629946478
+      ],
+      "calendar_seed": 521008,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1009,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 55,
+      "money_scale": 4.183175232294143,
+      "difficulty_weights": [
+        0.6503485041072323,
+        0.0869232255551022,
+        0.26272827033766555
+      ],
+      "calendar_seed": 521009,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1010,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 36,
+      "money_scale": 7.443686157220917,
+      "difficulty_weights": [
+        0.6146573987520096,
+        0.22852940444134692,
+        0.1568131968066434
+      ],
+      "calendar_seed": 521010,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1011,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 35,
+      "money_scale": 2.44279899559269,
+      "difficulty_weights": [
+        0.44064070413795947,
+        0.4372256789223292,
+        0.12213361693971118
+      ],
+      "calendar_seed": 521011,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1012,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 33,
+      "money_scale": 1.3822869358668757,
+      "difficulty_weights": [
+        0.6081068850957198,
+        0.007505591223177355,
+        0.3843875236811029
+      ],
+      "calendar_seed": 521012,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1013,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 60,
+      "money_scale": 5.177227830242849,
+      "difficulty_weights": [
+        0.6143249109207418,
+        0.16273017803740308,
+        0.222944911041855
+      ],
+      "calendar_seed": 521013,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1014,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 33,
+      "money_scale": 2.9813626928889048,
+      "difficulty_weights": [
+        0.4910808828802623,
+        0.3135714426813895,
+        0.19534767443834805
+      ],
+      "calendar_seed": 521014,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1015,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 47,
+      "money_scale": 1.9003223197994215,
+      "difficulty_weights": [
+        0.0575756024759462,
+        0.6436123435199166,
+        0.29881205400413724
+      ],
+      "calendar_seed": 521015,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1016,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 46,
+      "money_scale": 1.4048464527291715,
+      "difficulty_weights": [
+        0.06625440021031358,
+        0.4005235993635024,
+        0.533222000426184
+      ],
+      "calendar_seed": 521016,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1017,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 52,
+      "money_scale": 4.081008873289061,
+      "difficulty_weights": [
+        0.12204456630793428,
+        0.08839276328486809,
+        0.7895626704071977
+      ],
+      "calendar_seed": 521017,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1018,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 47,
+      "money_scale": 13.002829618624727,
+      "difficulty_weights": [
+        0.14456042578627226,
+        0.7055518263296194,
+        0.1498877478841082
+      ],
+      "calendar_seed": 521018,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1019,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 37,
+      "money_scale": 2.802748756104497,
+      "difficulty_weights": [
+        0.5867323058115302,
+        0.4074277910067269,
+        0.005839903181742921
+      ],
+      "calendar_seed": 521019,
+      "data_origin": "dữ liệu tổng hợp"
+    },
+    {
+      "seed": 1020,
+      "rows": 200000,
+      "fraud_rate": 0.004,
+      "companies": 58,
+      "money_scale": 1.7994332332321492,
+      "difficulty_weights": [
+        0.06944119097542382,
+        0.5257891405482494,
+        0.4047696684763267
+      ],
+      "calendar_seed": 521020,
+      "data_origin": "dữ liệu tổng hợp"
+    }
+  ],
+  "source_hashes": {
+    "agent2\\world_v5_dev.py": "baf2fe7300cc2421498b0d50f18246c73a2be6814bf35594d0ed8cf81d2a76b8",
+    "agent2\\runtime_v5.py": "96bf146757cbbde61294e234c660e7c392b1a4fb2e33271fdbc36f415fa45b26",
+    "agent2\\world_v4.py": "d2ffe563594620f1f3a99afe3f7aa391e0a0069d5a28aa113268e5d47af10531",
+    "agent2\\world_v4_schemes.py": "8f327f877d9c9e750e9856fae18832fbc45122abcf30cff92975e6c1b3f1255c",
+    "agent2\\world_v3.py": "edc2257e4f3832361a4afeefefdcde7ed2bcef2f998a815261df22b2c3962084",
+    "agent2\\accounting_ext.py": "e08e962577bcd006de44bc3ea10d1008874aa780a02a585a967115b35e903c82",
+    "agent2\\validate_v4.py": "383e024f140bf12b61d3af7540edd51aa13d28bc28e85ab49b282292b1cc894b",
+    "agent2\\world_v5_io.py": "7b7100a6de603cc45d280aba03de16353f36ecb80ed3d0ad9004b9938fd66e07",
+    "sme_fraud\\__init__.py": "462e8bede63cef0c4e73689a8ca449985f554f626e1e884ad8d5f5cf176881d0",
+    "sme_fraud\\accounting.py": "a560e00f82bb16052e2582e33481a1c9aee9e77e3fffc17945c512c1ad35e9da",
+    "sme_fraud\\audit_accounting.py": "22706f019f5ebaa96b9775072a3ee0a30272f7215a1a5284805a08ab4d93187a",
+    "sme_fraud\\audit_rules.py": "695f3f53101ae45eab4446044f02ff386e3291dc7f2fe51a9e37020d189910a4",
+    "sme_fraud\\benford.py": "9b4d614125d75c1efd8650a7c9f7e22f577524df42da5b259d36cc2489e88436",
+    "sme_fraud\\case_queue.py": "fda7e144418b8242c3021df348757d39b930bd393159127c77b0e4282d7cbba0",
+    "sme_fraud\\evaluate.py": "3f88435e588d061232a2c760d6516ded277dc4ae5ccf0f19ed8c08d14219881c",
+    "sme_fraud\\features.py": "5dfb8914b750f959233792cc43b6ea6305f2717b953a6f1b0356705b489d7e6a",
+    "sme_fraud\\feedback.py": "add2308406eef480d7f2afaa3a6d9a75da59c614eb3f8e5bcc274bafa1d2496e",
+    "sme_fraud\\generate.py": "8165537f76fbd5694a10a1752bcc260990f2dfad8d57062bd3a8aa5628512d9c",
+    "sme_fraud\\migrate.py": "3caf319c52628f19434a55a4c2dc7fa6b9b8ddd2fd254b0f3b45132768fba873",
+    "sme_fraud\\rebuild_features.py": "f14ee61308ce8d4ecc449eb694e66c1b6a6a888c874789c0f1a51a13484d8d51",
+    "sme_fraud\\review_server.py": "1d2850c229923dfa3ec558166984c11e0e79af72239bcf1c8ee3b367213d1570",
+    "sme_fraud\\review_store.py": "a5a154e516a9282c5a5d44a00e41efe20e29c62a6a99be26d665c8269bd09191",
+    "sme_fraud\\rule_audit.py": "089338c0448f547457e74873b39e0293605515a76134b0a28528e2959ae01320",
+    "sme_fraud\\rule_audit_cases.py": "3fb88b251a96e18f457cafafd17a8a4b9cffeac214645c0775e614a6f70c225d",
+    "sme_fraud\\rule_audit_policy.py": "471a89c890f578e29be4983fbc2773c46ea2ff84736da1f2e9b99deca88412b2",
+    "sme_fraud\\rules.py": "2aa30347252420162b73862010d11a7abbeb0d6515e21a5de2a8eb4f1cadb3cc",
+    "sme_fraud\\run_rule_repairs.py": "6fceb494a2bc70646cce25847375ee7da226b0db09316e6abdc7905f775c05f4",
+    "sme_fraud\\run_rules.py": "13b8b00519cb775fb28ae677b9febce011dd40086a87afccad1a42299e971a41",
+    "sme_fraud\\summarise.py": "c32e40f47d17dc7d3e7a1a8e661376beefa335f0a2cae7cb290e91f350b111bc",
+    "sme_fraud\\summarise_rules.py": "e51065d0da5f7541bd0fd34bcb9a3817dea5494779ed40049c788e9aafc58387",
+    "sme_fraud\\temporal_evidence.py": "827f234b75073b3257ab2e4754c1e0a0437e8b5f40aff88a52de3d0e7eae2d66",
+    "sme_fraud\\validate.py": "fdd44bebce380e915da50f85c5d0350d3249b2977a905f196ec0045322ed43e9"
+  },
+  "validation": "V1-V12; V10 scheme coverage reported explicitly, not silently passed",
+  "memory_cap_gib": 6
+}

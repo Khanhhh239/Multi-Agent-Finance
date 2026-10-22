@@ -283,7 +283,7 @@
     }
   ],
   "source_hashes": {
-    "agent2\\world_v5_dev.py": "baf2fe7300cc2421498b0d50f18246c73a2be6814bf35594d0ed8cf81d2a76b8",
+    "agent2\\world_v5_dev.py": "1e8282f5e8512f928230e79b5260304e998e307488a83a8481cf3e56fb247977",
     "agent2\\runtime_v5.py": "96bf146757cbbde61294e234c660e7c392b1a4fb2e33271fdbc36f415fa45b26",
     "agent2\\world_v4.py": "d2ffe563594620f1f3a99afe3f7aa391e0a0069d5a28aa113268e5d47af10531",
     "agent2\\world_v4_schemes.py": "8f327f877d9c9e750e9856fae18832fbc45122abcf30cff92975e6c1b3f1255c",
