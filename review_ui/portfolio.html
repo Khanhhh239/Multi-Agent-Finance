@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Danh mục khách rà soát</title>
+<style>
+  :root { --bg:#f7f7f5; --fg:#1d1d1b; --muted:#6b6b66; --line:#dcdcd6; --hi:#b3261e; --card:#fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141413; --fg:#ececea; --muted:#a3a39c; --line:#33332f; --hi:#ff8a80; --card:#1c1c1a; } }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, sans-serif; }
+  main { max-width:960px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  p.note { color:var(--muted); margin:0 0 16px; }
+  form { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  input { flex:1 1 260px; padding:8px; border:1px solid var(--line); border-radius:6px; background:var(--card); color:var(--fg); }
+  button { padding:8px 14px; border:1px solid var(--line); border-radius:6px; background:var(--card); color:var(--fg); cursor:pointer; }
+  .wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; background:var(--card); }
+  th, td { padding:8px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; }
+  th:first-child, td:first-child { text-align:left; }
+  td.hi { color:var(--hi); font-weight:600; }
+  #msg { color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Danh mục khách rà soát</h1>
+  <p class="note">Hàng đợi rà soát của các khách do đơn vị phụ trách. Đây không phải kết luận về gian lận hay về cá nhân; người rà soát quyết định.</p>
+  <form id="f"><input id="key" type="password" placeholder="Khóa truy cập của đơn vị kế toán" autocomplete="off"><button>Xem</button></form>
+  <p id="msg"></p>
+  <div class="wrap"><table id="t" hidden>
+    <thead><tr><th>Khách</th><th>Vụ chưa xem</th><th>Ưu tiên cao nhất</th><th>Đã kết luận</th><th>Phút rà soát</th><th>Tỷ lệ đáng kiểm tra</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+</main>
+<script>
+const f = document.getElementById('f'), msg = document.getElementById('msg'), t = document.getElementById('t');
+f.addEventListener('submit', async (e) => {
+  e.preventDefault(); msg.textContent = 'Đang tải...'; t.hidden = true;
+  try {
+    const r = await fetch('/portfolio', { headers: { Authorization: 'Bearer ' + document.getElementById('key').value } });
+    const body = await r.json();
+    if (!r.ok) { msg.textContent = body.error || 'Không tải được'; return; }
+    const tb = t.querySelector('tbody'); tb.replaceChildren();
+    for (const c of body.companies) {
+      const tr = document.createElement('tr');
+      const rate = c.worth_review_rate === null ? 'chưa đo' : Math.round(100 * c.worth_review_rate) + '%';
+      for (const [v, cls] of [[c.company_id], [c.open_cases], [c.open_highest_priority, c.open_highest_priority > 0 ? 'hi' : ''],
+                             [c.decisions], [c.review_minutes], [rate]]) {
+        const td = document.createElement('td'); td.textContent = v; if (cls) td.className = cls; tr.appendChild(td);
+      }
+      tb.appendChild(tr);
+    }
+    msg.textContent = body.note; t.hidden = false;
+  } catch (err) { msg.textContent = 'Lỗi kết nối dịch vụ cục bộ'; }
+});
+</script>
+</body>
+</html>

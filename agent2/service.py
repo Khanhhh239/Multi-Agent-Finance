@@ -50,11 +50,21 @@ def extract_csv_archive(payload, target):
                 shutil.copyfileobj(source, output)
 
 
-def create_app(database, storage, company_tokens, scorer=None, scoring_version="unspecified", synthetic_demo=False):
+def create_app(database, storage, company_tokens, scorer=None, scoring_version="unspecified", synthetic_demo=False,
+               firm_tokens=None):
     if not company_tokens or len(set(company_tokens.values())) != len(company_tokens):
         raise ValueError("distinct company bearer keys must be configured")
     if any(not isinstance(k, str) or not k or not isinstance(v, str) or not v for k, v in company_tokens.items()):
         raise ValueError("company ids and bearer keys must be non-empty strings")
+    firm_tokens = dict(firm_tokens or {})
+    for firm, spec in firm_tokens.items():
+        token, members = spec.get("token") if isinstance(spec, dict) else None, spec.get("companies") if isinstance(spec, dict) else None
+        if not isinstance(firm, str) or not firm or not isinstance(token, str) or not token or not members:
+            raise ValueError("each accounting firm needs a non-empty bearer key and company list")
+        if token in company_tokens.values() or sum(s["token"] == token for s in firm_tokens.values()) > 1:
+            raise ValueError("firm bearer keys must differ from every other key")
+        if not set(members) <= set(company_tokens):
+            raise ValueError("firm portfolio lists an unknown company")
     app = Flask(__name__, static_folder=None)
     app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024
     store = ReviewStore(database)
@@ -66,10 +76,17 @@ def create_app(database, storage, company_tokens, scorer=None, scoring_version="
 
     @app.before_request
     def authenticate():
-        if request.path in ("/", "/v4.js", "/v4.css", "/health"):
+        if request.path in ("/", "/v4.js", "/v4.css", "/health", "/portfolio.html"):
             return None
         value = request.headers.get("Authorization", "")
         supplied = value[7:] if value.startswith("Bearer ") else ""
+        if request.path == "/portfolio":
+            # Read-only portfolio for an accounting firm: firm keys work here and nowhere else.
+            firms = [f for f, spec in firm_tokens.items() if secrets.compare_digest(supplied, spec["token"])]
+            if not firms:
+                abort(401, description="accounting firm bearer key required")
+            g.firm = firms[0]
+            return None
         match = [company for company, token in company_tokens.items() if secrets.compare_digest(supplied, token)]
         if not match:
             abort(401, description="company bearer key required")
@@ -109,6 +126,10 @@ def create_app(database, storage, company_tokens, scorer=None, scoring_version="
     @app.get("/v4.css")
     def stylesheet():
         return send_from_directory(ui, "v4.css")
+
+    @app.get("/portfolio.html")
+    def portfolio_page():
+        return send_from_directory(ui, "portfolio.html")
 
     @app.get("/health")
     def health():
@@ -202,6 +223,22 @@ def create_app(database, storage, company_tokens, scorer=None, scoring_version="
     def report():
         return jsonify(clean(store.report(g.company)))
 
+    @app.get("/portfolio")
+    def portfolio():
+        """Per-client summary for the firm's reviewer: open work, priority and measured review quality."""
+        rows = []
+        for company in firm_tokens[g.firm]["companies"]:
+            summary = store.report(company)
+            open_cases = store.list_cases(company, "new")
+            rows.append({"company_id": company, "open_cases": len(open_cases),
+                         "open_highest_priority": sum(c.get("priority") == "cao_nhat" for c in open_cases),
+                         "decisions": summary["decisions"], "review_minutes": summary["review_minutes"],
+                         "worth_review_rate": summary["worth_review_rate"],
+                         "cases_by_status": summary["cases_by_status"]})
+        rows.sort(key=lambda r: (-r["open_highest_priority"], -r["open_cases"], r["company_id"]))
+        return jsonify(firm=g.firm, companies=clean(rows),
+                       note="Tổng hợp hàng đợi rà soát; không phải kết luận về gian lận hay về cá nhân.")
+
     @app.get("/decisions")
     def decisions():
         return jsonify(decisions=store.decisions(g.company))
@@ -214,6 +251,7 @@ def main():
     p.add_argument("--db", type=Path, default=Path("work/service/review.sqlite"))
     p.add_argument("--storage", type=Path, default=Path("work/service/data"))
     p.add_argument("--tenants", type=Path, required=True, help="local JSON company_id -> bearer key; keep outside Git")
+    p.add_argument("--firms", type=Path, help="local JSON firm_id -> {token, companies}; keep outside Git")
     p.add_argument("--config", type=Path)
     p.add_argument("--host", default="127.0.0.1")
     p.add_argument("--port", type=int, default=8766)
@@ -228,7 +266,8 @@ def main():
     config = json.loads(a.config.read_text(encoding="utf-8")) if a.config else {}
     version = hashlib.sha256(a.config.read_bytes()).hexdigest() if a.config else "unconfigured"
     app = create_app(a.db, a.storage, json.loads(a.tenants.read_text(encoding="utf-8")), scorer,
-                     scoring_version=version, synthetic_demo=bool(config.get("qa_fixture_only")))
+                     scoring_version=version, synthetic_demo=bool(config.get("qa_fixture_only")),
+                     firm_tokens=json.loads(a.firms.read_text(encoding="utf-8")) if a.firms else None)
     app.run(host=a.host, port=a.port, debug=False, use_reloader=False)
 
 
