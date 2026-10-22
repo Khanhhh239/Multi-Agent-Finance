@@ -1,0 +1,14 @@
+{
+  "tp": 53,
+  "positives": 222,
+  "branch_tp": 4,
+  "branch_positives": 7,
+  "hard_negative_alerts": 657,
+  "hard_negatives": 4463,
+  "alerts": 3807,
+  "world": 1007,
+  "candidate": "Cold-Rules-E2",
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "financial_statement",
+  "flags_sha256": "b054c3bd008694a08aea24c47c4068cf1e48896a8c0e6e8abce4fa8809da98c9"
+}

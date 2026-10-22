@@ -1,0 +1,28 @@
+{
+  "tp": 241,
+  "positives": 276,
+  "branch_tp": 2,
+  "branch_positives": 16,
+  "hard_negative_alerts": 543,
+  "hard_negatives": 4154,
+  "alerts": 3721,
+  "world": 1005,
+  "candidate": "L4-FB-PU",
+  "fits": [
+    {
+      "validation_ap": 0.7627430154722923,
+      "num_leaves": 15,
+      "trees": 400,
+      "source_train_rows": 329128,
+      "source_worlds": 19,
+      "observed_train_positives": 5875,
+      "PU_weight": 0.5,
+      "model_seed": 0
+    }
+  ],
+  "seconds": 59.20300000000043,
+  "dataset_seconds": 21.0,
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "payroll",
+  "flags_sha256": "9d766bacf633af5d57caf58552885ee5d569611b8bd42db1c3daba35ced31c19"
+}

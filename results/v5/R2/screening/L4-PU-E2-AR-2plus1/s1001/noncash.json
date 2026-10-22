@@ -1,0 +1,14 @@
+{
+  "tp": 194,
+  "positives": 243,
+  "branch_tp": 16,
+  "branch_positives": 16,
+  "hard_negative_alerts": 521,
+  "hard_negatives": 4011,
+  "alerts": 3159,
+  "world": 1001,
+  "candidate": "L4-PU-E2-AR-2plus1",
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "noncash",
+  "flags_sha256": "0a00d8e1e2b6240d326fb6e7241f1d72eca781b00caf05cb49221dfb2afd9f4e"
+}

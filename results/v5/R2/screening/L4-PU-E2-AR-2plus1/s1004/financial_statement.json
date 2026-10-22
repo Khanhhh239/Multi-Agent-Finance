@@ -1,0 +1,14 @@
+{
+  "tp": 184,
+  "positives": 240,
+  "branch_tp": 5,
+  "branch_positives": 9,
+  "hard_negative_alerts": 674,
+  "hard_negatives": 4290,
+  "alerts": 4045,
+  "world": 1004,
+  "candidate": "L4-PU-E2-AR-2plus1",
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "financial_statement",
+  "flags_sha256": "1acca9e02e178be3c54d7f614187fb6bee2eb2a00160d12f38f3ffae4906a983"
+}

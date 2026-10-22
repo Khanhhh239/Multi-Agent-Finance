@@ -1,0 +1,14 @@
+{
+  "tp": 100,
+  "positives": 238,
+  "branch_tp": 2,
+  "branch_positives": 17,
+  "hard_negative_alerts": 507,
+  "hard_negatives": 4068,
+  "alerts": 2916,
+  "world": 1008,
+  "candidate": "Cold-v4",
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "cash_larceny",
+  "flags_sha256": "909c990b87a611c7f94fe941229784b35221e97ec0a33dbd209055690b82a956"
+}

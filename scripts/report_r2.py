@@ -24,7 +24,20 @@ def gate_table(gate):
     return rows + [""]
 
 
-def outcome(sel, cold):
+def cap_stats(name, w=None):
+    """Worlds over the 15 percent hard-negative cap and the worst rate, from per-world summaries (screening tier)."""
+    dirs = [R2 / "screening" / name]
+    if name == "L4-FB-PU" and w is not None:
+        dirs.insert(0, R2 / f"pu_w{w}" / name)
+    for d in dirs:
+        files = sorted(d.glob("s*/summary.json"))
+        if files:
+            rates = [max(json.loads(f.read_text(encoding="utf-8"))["hard_negative_rates"].values()) for f in files]
+            return sum(x > .15 for x in rates), len(rates), max(rates)
+    return None
+
+
+def outcome(sel, cold, sc=None, pu=None):
     """Registration section 7 when the supervised gate failed; None when R3 may proceed."""
     if sel is None or sel["gate"]["passed"]:
         return None
@@ -32,12 +45,30 @@ def outcome(sel, cold):
           "Tự sinh bởi `scripts/report_r2.py`. Mọi số là **dữ liệu tổng hợp**. Theo mục 5 và mục 7 của đăng ký "
           "(`docs/05_ke_hoach_giao_viec/08_dang_ky_truoc_v5.md`): giữ nguyên kết quả, không sửa rồi chấm lại, "
           "không mở vòng v6, **không sinh và không chấm thế giới niêm phong v5**.", "",
-          f"## 1. Ứng viên S2 đã chọn: {sel['chosen']}", ""]
+          f"## 1. Ứng viên S2 đã chọn: {sel['chosen'] or 'không có (không ứng viên nào hợp lệ)'}", ""]
     md += gate_table(sel["gate"]) if "checks" in sel["gate"] else ["Không còn ứng viên hợp lệ dưới trần ca khó 15%.", ""]
+    if sc:
+        w = (pu or {}).get("w") if (pu or {}).get("w") is not None else sc.get("w")
+        md += ["## Bằng chứng: tầng sàng lọc (8 thế giới, seed 0)", "",
+               "| Cấu hình | R trung bình | R nhỏ nhất | B trung bình | Thế giới vượt trần 15% | Mức cảnh báo nhầm cao nhất | Hợp lệ |",
+               "|---|---:|---:|---:|---:|---:|:-:|"]
+        for name, c in sc["candidates"].items():
+            cap = cap_stats(name, w)
+            over = f"{cap[0]} trên {cap[1]}" if cap else ""
+            md.append(f"| {name} | {pct(c['R_mean'])} | {pct(c['R_min'])} | {pct(c['B_mean'])} | {over} | "
+                      f"{pct(cap[2]) if cap else ''} | {'Có' if c['eligible'] else 'Không'} |")
+        md += ["", "Recall chung và recall nhánh bị ẩn của cả bốn ứng viên đều cao hơn ngưỡng chốt chặn (65% và 40%), nhưng "
+               "**không ứng viên nào giữ được cảnh báo nhầm trên ca hợp lệ khó dưới 15% ở mọi thế giới và mọi giao thức**. "
+               "Trần này là điều kiện hợp lệ trước mọi so sánh, nên không có ứng viên vào tầng chọn. Đây là số trên dữ liệu "
+               "phát triển; kinh nghiệm v4 cho thấy điểm niêm phong thường thấp hơn nhiều.", ""]
     if cold:
         state = "đạt" if cold.get("gate") and cold["gate"]["passed"] else "không đạt"
-        md += [f"Cold đã chọn: **{cold.get('chosen')}**, chốt chặn Cold {state}. Vì S2 không đạt, Cold không được chào "
-               "bán riêng và cũng không được chấm niêm phong.", ""]
+        rows = ["| Cold | R trung bình | R nhỏ nhất | B trung bình | Hợp lệ |", "|---|---:|---:|---:|:-:|"]
+        rows += [f"| {n} | {pct(c['R_mean'])} | {pct(c['R_min'])} | {pct(c['B_mean'])} | {'Có' if c['eligible'] else 'Không'} |"
+                 for n, c in cold["candidates"].items()]
+        md += ["## Cold (không nhãn, 20 thế giới)", ""] + rows + [""]
+        md += [f"Chốt chặn Cold (R từ 40%, B từ 33%, thế giới tệ nhất từ 30%, trần 15%) {state}: không ứng viên Cold nào hợp lệ. "
+               "Vì S2 không đạt, Cold không được chào bán riêng và cũng không được chấm niêm phong.", ""]
     md += ["## 2. Đề xuất đổi hướng", "",
            "Hướng trình chủ dự án là **dịch vụ rà soát định kỳ cho đơn vị kế toán**: quy tắc bằng chứng rõ, đối chiếu "
            "chứng từ, hàng đợi để con người quyết định. Chưa quảng bá phát hiện gian lận tự động hoặc thu hồi tổn thất "
@@ -119,7 +150,7 @@ def main():
             md += [f"## Phụ lục: từng thế giới, tầng {tier}", "", worlds_table(R2 / tier), ""]
     write(OUT, md)
     print(OUT)
-    stop = outcome(sel, cold)
+    stop = outcome(sel, cold, sc, pu)
     if stop:
         write(OUTCOME, stop)
         print(OUTCOME)

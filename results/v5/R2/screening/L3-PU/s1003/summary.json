@@ -1,0 +1,40 @@
+{
+  "R": 0.8454545454545455,
+  "B": 0.5745368916797489,
+  "large_branches": {
+    "billing": 0.58,
+    "corruption": 0.05128205128205128,
+    "expense": 0.7142857142857143,
+    "payment_tampering": 0.8333333333333334,
+    "payroll": 0.35714285714285715,
+    "skimming": 0.6190476190476191
+  },
+  "small_group": {
+    "branches": [
+      "cash_larceny",
+      "financial_statement",
+      "noncash",
+      "owner_override"
+    ],
+    "tp": 13,
+    "positives": 15,
+    "recall": 0.8666666666666667
+  },
+  "averaging_terms": 7,
+  "Q": 0.7099957185671472,
+  "hard_negative_rates": {
+    "S2": 0.1311516362727954,
+    "billing": 0.1309018236322758,
+    "cash_larceny": 0.13439920059955035,
+    "corruption": 0.13764676492630526,
+    "expense": 0.1498875843117662,
+    "financial_statement": 0.12815388458656007,
+    "noncash": 0.1264051961029228,
+    "owner_override": 0.12740444666500125,
+    "payment_tampering": 0.13165126155383464,
+    "payroll": 0.10317262053459905,
+    "skimming": 0.10866849862603048
+  },
+  "eligible": true,
+  "data_origin": "dữ liệu tổng hợp"
+}

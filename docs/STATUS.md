@@ -1,6 +1,6 @@
 # Trạng thái Agent 2 (cập nhật 2026-10-22)
 
-## Vòng v5, R2 đang chạy (phiên hỗ trợ do chủ dự án giao, 2026-10-21 và 2026-10-22)
+## Vòng v5, R2 đã xong và chốt chặn trước niêm phong KHÔNG ĐẠT (cập nhật 2026-10-22 17:45)
 
 Mọi số là **dữ liệu tổng hợp**. Kết luận v4 không đạt G5 giữ nguyên.
 
@@ -14,7 +14,8 @@ Mọi số là **dữ liệu tổng hợp**. Kết luận v4 không đạt G5 gi
 | Kiểm tra lối tắt dạng trường V13 | Có công cụ; phát hiện 3 lối tắt (ghi ở dữ liệu L11) | `scripts/audit_field_presence.py` |
 | R2 bước 1: ma trận nền và đặc trưng thay đổi cho 1001 đến 1020 | Xong 10:30 ngày 2026-10-22; sau khi máy tắt lúc 10:32 (tắt từ menu Start, không phải lỗi) đã kiểm lại SHA-256 mọi tệp ma trận theo manifest: khớp đủ 20 thế giới | `work/v5_matrices/s*/manifest*.json` |
 | R2 bước 2: kiểm tương đương lấy mẫu âm (thế giới 1001, L4-PU, w = 0,2) | **Đạt** với tỷ lệ 0,1: Spearman 0,957 (ngưỡng 0,95), lệch recall tại B3 0,82 điểm (ngưỡng 2). Tỷ lệ 0,1 được đăng ký cho các bước sau | `results/v5/R2/subsample_equivalence_0.1.json` |
-| R2 bước 3 trở đi: chọn w, sàng lọc, Cold, tầng chọn | **Đang chạy** bằng bộ điều phối tách rời, có điểm khôi phục (chạy lại từ 14:52) | `work/r2_master.log`, `results/v5/R2/master_state.json` |
+| R2 bước 3 đến 6: chọn w, sàng lọc, Cold, tầng chọn | **XONG 17:43 ngày 2026-10-22.** Không ứng viên nào hợp lệ dưới trần ca hợp lệ khó 15%: cả 3 giá trị w, cả 4 ứng viên có giám sát (recall chung 82 đến 90%, nhánh bị ẩn 56 đến 59%, nhưng 4 hoặc 5 trên 8 thế giới vượt trần, cao nhất 18,8%) và cả 2 Cold (recall chung 21,8% và 37,4%). Tầng chọn không có ứng viên để chạy | `results/v5/R2/`, `10_ket_qua_R2_v5.md` |
+| Chốt chặn trước niêm phong | **KHÔNG ĐẠT** (`stop_without_generating_sealed_worlds`). Theo mục 4 và 7 của đăng ký: không sinh và không chấm niêm phong v5, không mở v6, trình đề xuất đổi hướng | `03_.../09_ket_qua_niem_phong_v5.md` |
 | Khung mã hóa R3 (chỉ dùng nếu chốt chặn đạt) | Móc ca hợp lệ mới với tần suất ghi trước khi đọc kịch bản; kiểm thử máy móc bằng kịch bản thay thế | `agent2/world_v5_sealed.py`, `tests_agent2/test_world_v5_sealed.py`, mục Làm rõ thực thi R3 của đăng ký |
 | Kịch bản độc lập R3 | Đã nộp 10 kịch bản lúc 15:00 và **chốt văn xuôi** bằng SHA-256; nhật ký công cụ xác nhận phiên viết chỉ đọc brief và README. Có kế hoạch mã hóa và danh sách câu hỏi cho tác giả; chỉ mã hóa nếu chốt chặn R2 đạt | `independent_scenarios/scenarios_v5.md`, `handover_v5.md`, `encoding_plan_v5.md` |
 | Thử khô niêm phong có V13 | Bước `dryrun` kiểm tra hiện diện trường trên 5199 và dừng nếu có tách biệt chưa thấy ở thế giới phát triển | `scripts/run_sealed_v5.py` |

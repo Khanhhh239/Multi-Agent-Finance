@@ -1,0 +1,14 @@
+{
+  "tp": 39,
+  "positives": 220,
+  "branch_tp": 0,
+  "branch_positives": 3,
+  "hard_negative_alerts": 494,
+  "hard_negatives": 4003,
+  "alerts": 2997,
+  "world": 1003,
+  "candidate": "Cold-Rules-E2",
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "cash_larceny",
+  "flags_sha256": "c0e51b0d3dcecf1e08df051914e83b1c544d8b6cb162853c0fbe7d8fdc9e3618"
+}

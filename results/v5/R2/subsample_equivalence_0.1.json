@@ -1,0 +1,43 @@
+{
+  "data_origin": "dữ liệu tổng hợp",
+  "target": 1001,
+  "kind": "L4-PU",
+  "fraction": 0.1,
+  "spearman": 0.9573578062853269,
+  "recall_full": 0.8765432098765432,
+  "recall_subsampled": 0.8847736625514403,
+  "recall_difference_points": 0.8230452674897082,
+  "passed": true,
+  "details": {
+    "1.0": {
+      "source_worlds": 19,
+      "source_train_rows": 1864818,
+      "source_validation_rows": 964401,
+      "source_observed_train_positives": 6362,
+      "validation_ap": 0.7187959926861036,
+      "num_leaves": 15,
+      "best_iteration": 0,
+      "trees": 400,
+      "kind": "L4-PU",
+      "round_policy": "fixed",
+      "negative_fraction": 1.0,
+      "PU_weight": 0.2,
+      "model_seed": 0
+    },
+    "0.1": {
+      "source_worlds": 19,
+      "source_train_rows": 329723,
+      "source_validation_rows": 964401,
+      "source_observed_train_positives": 6362,
+      "validation_ap": 0.7358190642041358,
+      "num_leaves": 15,
+      "best_iteration": 0,
+      "trees": 400,
+      "kind": "L4-PU",
+      "round_policy": "fixed",
+      "negative_fraction": 0.1,
+      "PU_weight": 0.2,
+      "model_seed": 0
+    }
+  }
+}

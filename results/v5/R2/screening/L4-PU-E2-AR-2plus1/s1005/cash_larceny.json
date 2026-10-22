@@ -1,0 +1,14 @@
+{
+  "tp": 233,
+  "positives": 276,
+  "branch_tp": 17,
+  "branch_positives": 22,
+  "hard_negative_alerts": 649,
+  "hard_negatives": 4154,
+  "alerts": 3721,
+  "world": 1005,
+  "candidate": "L4-PU-E2-AR-2plus1",
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "cash_larceny",
+  "flags_sha256": "a4b00b3971b0cc671d753d1a46ccdd593e7e93440fa0ab376fa0f121fc6a4663"
+}

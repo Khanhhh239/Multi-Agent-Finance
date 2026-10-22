@@ -1,0 +1,14 @@
+{
+  "tp": 99,
+  "positives": 243,
+  "branch_tp": 0,
+  "branch_positives": 0,
+  "hard_negative_alerts": 558,
+  "hard_negatives": 4011,
+  "alerts": 3159,
+  "world": 1001,
+  "candidate": "Cold-v4",
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "S2",
+  "flags_sha256": "1ff3cc7cfb646200e32a1af1b2ae9d9af425786b2e9dc7c599989b9182ebe361"
+}

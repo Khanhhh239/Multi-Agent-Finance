@@ -1,6 +1,6 @@
 # Hiểu toàn bộ dự án Agent 2 trong một tệp
 
-Cập nhật 2026-10-22 (khoảng 15:30). Tệp này viết cho người **không cần biết lập trình**. Mục tiêu: đọc xong bạn kể lại được dự án cho người khác nghe, và biết hôm nay đang ở đâu.
+Cập nhật 2026-10-22 (17:45, sau khi R2 xong). Tệp này viết cho người **không cần biết lập trình**. Mục tiêu: đọc xong bạn kể lại được dự án cho người khác nghe, và biết hôm nay đang ở đâu.
 
 Mọi con số là **dữ liệu tổng hợp** (dữ liệu do chương trình tự sinh), trừ khi có ghi rõ khác. Không con số nào là kết quả trên doanh nghiệp thật.
 
@@ -18,10 +18,10 @@ BẰNG CHỨNG    Chưa có dữ liệu gian lận thật, nên tự sinh "thế
    |
 V4 (xong)     Chấm thi niêm phong một lần: TRƯỢT cổng G5 (S1 41%, S2 64%)
    |
-V5 (đang)     Làm lại có kỷ luật hơn. Hiện ở bước R2: máy đang chạy thí nghiệm
+V5            Làm lại có kỷ luật hơn. R2 đã xong: chốt chặn trước niêm phong KHÔNG ĐẠT
    |
-NGÃ BA        R2 đạt chốt chặn  --> R3, R4: sinh đề niêm phong mới, chấm một lần
-              R2 không đạt      --> DỪNG, đổi hướng sang "dịch vụ rà soát cho đơn vị kế toán"
+KẾT QUẢ      R2 KHÔNG đạt --> DỪNG, không sinh đề niêm phong, đổi hướng sang
+              "dịch vụ rà soát cho đơn vị kế toán" (chờ chủ dự án quyết)
 ```
 
 Năm điều cần nhớ nhất:
@@ -305,42 +305,33 @@ Việc chọn trọng số PU w (0,1; 0,2; 0,5) làm trước, dùng L4-FB-PU tr
 | Khung mã hóa niêm phong, kiểm V13, nhánh báo cáo "không đạt" | Xong, có kiểm thử |
 | Bộ kiểm thử | 179 bài qua, 12 bỏ qua (lần chạy toàn bộ gần nhất) |
 
-### 7.2 Việc đang chạy: R2
+### 7.2 Kết quả R2 (xong lúc 17:43 ngày 2026-10-22)
 
-Máy đang chạy tự động nhiều giờ liền. Các bước và thời điểm dự kiến (ước lượng từ tốc độ đo lúc 15:09, có thể lệch):
+| Hạng mục | Kết quả |
+|---|---|
+| Chọn trọng số PU | Cả ba w (0,1; 0,2; 0,5) đều vượt trần ca hợp lệ khó 15%; khóa w = 0,1 là w có J cao nhất (làm rõ đã ghi vào đăng ký trước khi có kết quả sàng lọc) |
+| Sàng lọc 4 ứng viên có giám sát | Recall chung 82 đến 90%, nhánh bị ẩn 56 đến 59%, vượt ngưỡng 65% và 40%. Nhưng **4 hoặc 5 trên 8 thế giới vượt trần 15%** (cao nhất 18,8%), nên không ứng viên nào hợp lệ |
+| Cold (không nhãn) | Recall chung 21,8% (Cold-Rules-E2) và 37,4% (Cold-v4), dưới ngưỡng 40%; cũng không hợp lệ |
+| Tầng chọn | Không có ứng viên nào để chạy |
+| Chốt chặn trước niêm phong | **KHÔNG ĐẠT** |
 
-| Bước | Nội dung | Dự kiến xong |
-|---|---|---|
-| 3 | Chọn trọng số PU: 3 giá trị w nhân 88 giao thức | khoảng 16:40 hôm nay |
-| 4 | Sàng lọc 4 ứng viên có giám sát | khoảng 19:00 hôm nay |
-| 5 | Chọn Cold (20 thế giới) | khoảng 19:30 hôm nay |
-| 6 | Tầng chọn có giám sát: 20 thế giới, 5 seed | khoảng 20:00 ngày 23/10 |
-| 7 | Sinh báo cáo `10_ket_qua_R2_v5.md` và quyết định chốt chặn | ngay sau bước 6 |
+Hiểu đúng kết quả này: mô hình **bắt gian lận khá tốt trên dữ liệu phát triển** (kinh nghiệm v4 cho thấy con số sẽ tụt khi sang đề thi mới), nhưng **cảnh báo nhầm quá nhiều trên các giao dịch hợp lệ trông giống gian lận**, nhất là nhóm chi phí (`expense`). Mức vượt chỉ vài điểm phần trăm so với trần, nhưng trần được áp cho từng thế giới và từng giao thức nên rất nghiêm. Luật đã khóa không cho nới trần sau khi thấy kết quả.
 
-Máy đang chạy ở khoảng 95% CPU và hết RAM; cắm sạc và đặt chế độ Best performance sẽ nhanh hơn. Nếu máy tắt, chạy lại `work/r2_master_v2.ps1` thì master tự tiếp tục từ điểm lưu.
+### 7.3 Điều gì xảy ra tiếp theo
 
-### 7.3 Dự đoán thận trọng (không phải kết luận)
+Theo mục 4 và mục 7 của đăng ký: **không sinh và không chấm niêm phong v5, không mở vòng v6.** Kịch bản độc lập đã viết được giữ làm tư liệu, không mã hóa. Việc còn lại là đề xuất đổi hướng (Phần 8) để chủ dự án quyết định. Báo cáo: `03_danh_gia_va_hieu_qua_kinh_te/09_ket_qua_niem_phong_v5.md` và `10_ket_qua_R2_v5.md`.
 
-- Dấu hiệu sớm khi chọn w trên thế giới 1001: recall S2 khoảng 86 đến 90%. **Chưa có ý nghĩa**, vì chỉ là một thế giới và chưa tính thế giới tệ nhất hay nhánh bị giấu.
-- Chẩn đoán trên các thế giới v4 đã lộ cho thấy kênh không nhãn **khó đạt 40%** của Cold. Khả năng Cold bị loại là đáng kể.
-- Cổng S2 (65%, B 40%, thế giới tệ nhất 50%) **chưa thể đoán**. Đợi kết quả tầng chọn.
-
-### 7.4 Cây quyết định sau R2
+### 7.4 Cây quyết định (đã đi đến nhánh dưới)
 
 ```
 R2 xong
   |
-  +-- S2 ĐẠT chốt chặn
-  |      |
-  |      +-- R3: mã hóa 10 kịch bản + 20 tình huống hợp lệ giống, sinh 4 thế giới + 1 thử khô
-  |      +-- Thử khô 5199 (kèm V13), rồi R4: chấm niêm phong MỘT lần
-  |      +-- So với cổng niêm phong v5, báo kết quả đúng như có
-  |      (cần chủ dự án quyết 1 việc: kịch bản dài 10 đến 30 tháng mà kỳ test chỉ 6 tháng)
+  +-- S2 đạt chốt chặn   (không xảy ra)
   |
-  +-- S2 KHÔNG ĐẠT
+  +-- S2 KHÔNG đạt   <--- Ở ĐÂY
          |
          +-- KHÔNG sinh, KHÔNG chấm niêm phong
-         +-- Viết 09_ket_qua_niem_phong_v5.md (tự sinh từ báo cáo R2)
+         +-- Báo cáo 09_ket_qua_niem_phong_v5.md đã viết
          +-- Trình hướng đổi hướng: dịch vụ rà soát cho đơn vị kế toán
 ```
 
@@ -448,8 +439,10 @@ Thí điểm thật với đơn vị kế toán, thẩm định pháp lý, báo 
 
 ## Phần 13. Bạn cần làm gì tiếp
 
-1. **Cắm sạc**, đặt chế độ Best performance, và không cho máy ngủ. Việc này rút ngắn đáng kể thời gian chạy.
-2. Mỗi lần mở lại, đọc đầu `STATUS.md` hoặc hỏi "master đang ở bước nào".
-3. Khi R2 xong, tệp `03_danh_gia_va_hieu_qua_kinh_te/10_ket_qua_R2_v5.md` được tự sinh. Đọc phần kết quả và bảng chốt chặn trước.
-4. Nếu S2 đạt, sẽ cần bạn quyết một vấn đề thiết kế: các kịch bản dài hơn 6 tháng được **cắt trong kỳ test** hay cho **bắt đầu trước kỳ test và chỉ chấm các dòng trong kỳ test** (phương án sau đổi cách chấm nên cần bạn duyệt).
-5. Nếu S2 không đạt, đọc `09_ket_qua_niem_phong_v5.md` và `01_.../09_de_xuat_doi_huong_dich_vu_ra_soat.md`, rồi quyết có theo hướng dịch vụ rà soát hay không.
+R2 đã xong và chốt chặn không đạt, nên không còn việc chờ máy chạy. Có ba quyết định thuộc về chủ dự án:
+
+1. **Chấp nhận kết luận v5 hay không.** Luật đã khóa nói: không nới trần 15%, không mở vòng v6, không chấm niêm phong. Đọc `03_danh_gia_va_hieu_qua_kinh_te/09_ket_qua_niem_phong_v5.md` (bảng bằng chứng chỉ một trang).
+2. **Có đi theo hướng "dịch vụ rà soát cho đơn vị kế toán" không.** Nội dung ở `01_phan_tich_kinh_te_va_nghiep_vu/09_de_xuat_doi_huong_dich_vu_ra_soat.md` và Phần 8 của tệp này. Hướng này cần thẩm định pháp lý và 3 đến 5 đơn vị kế toán thử nghiệm ở chế độ chỉ xem.
+3. **Có muốn mở một vòng mới ngoài khuôn v5 không** (ví dụ giảm cảnh báo nhầm ở nhóm chi phí). Việc này phải là một đăng ký mới do chủ dự án duyệt, không phải sửa v5 sau khi thấy kết quả.
+
+Kịch bản độc lập đã viết (10 kịch bản, văn xuôi đã khóa) được giữ làm tư liệu, chưa mã hóa.
