@@ -7,15 +7,17 @@ Bán cho **đơn vị dịch vụ kế toán** (không bán thẳng cho chủ do
 
 ## 2. Công việc kế toán được hỗ trợ (dựa trên phần đã có, không cần học máy)
 
-| Công việc | Thành phần đã có | Chất lượng đã biết (dữ liệu tổng hợp) |
+| Công việc | Thành phần đã có | Recall đã đo của kênh không nhãn, chưa có ngân sách riêng cho từng việc |
 |---|---|---|
-| Đối chiếu nhà cung cấp với nhân viên (trùng tài khoản, điện thoại, địa chỉ, người đại diện) | Luật B1, B2, B5, E3, E4, đồ thị quan hệ | Bắt chắc chắn khi có trùng; không bắt nhà cung cấp ma "sạch" |
-| Thanh toán trùng, vượt hóa đơn, chia nhỏ né hạn mức | P1, A1 đến A6 | Bắt tốt `duplicate_payment`, `overbilling` (khoảng 83 đến 100%) |
-| Lương sau nghỉ việc, lương không chấm công | E1, E2, đặc trưng v4 | Bắt tốt `terminated_still_paid` |
-| Tạm ứng quá hạn, xóa nợ tạm ứng thiếu hồ sơ | T1, T2 | Bắt tốt `advance_unsettled` |
-| Đổi tài khoản nhà cung cấp gần ngày chi | B7 | Trung bình |
-| Bút toán tay sát khóa sổ | F1, F2 | Trung bình |
-| Lệch so với chính thực thể (giá, lương, khách) | EntityDeviation, `EntityDeviation2` | Tín hiệu yếu, cần người đọc |
+| Đối chiếu nhà cung cấp với nhân viên (trùng tài khoản, điện thoại, địa chỉ, người đại diện) | Luật B1, B2, B5, E3, E4, đồ thị quan hệ | `shell_vendor` 63,9% (8 vụ); `undisclosed_related_vendor` 47,0% (3 vụ). Nhà cung cấp ma "sạch", không trùng thông tin nào, thì luật không bắt |
+| Thanh toán trùng, vượt hóa đơn, chia nhỏ né hạn mức | P1, A1 đến A6 | `overbilling_excess_payment` 100% (4 vụ); `split_payments` 58,3% (4 vụ); `duplicate_payment` 44,4% (3 vụ) |
+| Lương sau nghỉ việc, lương không chấm công | E1, E2, đặc trưng v4 | `terminated_still_paid` 90,5% (6 vụ) |
+| Tạm ứng quá hạn, xóa nợ tạm ứng thiếu hồ sơ | T1, T2 | `advance_unsettled` 100% (3 vụ) |
+| Đổi tài khoản nhà cung cấp gần ngày chi | B7 | `bank_detail_switch` 27,8% (3 vụ): yếu |
+| Bút toán tay sát khóa sổ | F1, F2 | `period_end_adjustment` 83,3% (4 vụ) |
+| Lệch so với chính thực thể (giá, lương, khách) | EntityDeviation, `EntityDeviation2` | Tín hiệu yếu, cần người đọc; dùng chủ yếu để giải thích |
+
+Nguồn số: phương pháp không nhãn `Novelty max(R,E)` (luật cùng đuôi thực thể, không dùng nhãn), recall ở đích, trung bình đều ba thế giới niêm phong v4 đã mở (seed 931 đến 933), ngân sách ba dòng cảnh báo mỗi công ty mỗi tuần; bảng "Novelty max(R,E), P1 so với S2 gốc" ở `docs/03_danh_gia_va_hieu_qua_kinh_te/08_mo_xe_niem_phong_v4.md` mục 3. Đây là **dữ liệu tổng hợp**, số vụ mỗi kịch bản rất nhỏ (3 đến 8), nên chỉ dùng để xếp thứ tự việc nên làm trước, không dùng để chào bán. Ba thế giới này đã dùng để hậu kiểm, không còn là kiểm thử niêm phong.
 
 Mỗi câu hỏi kèm lý do tiếng Việt kiểm được số (`explain_v4.py`, `explain_v5.py`) và danh sách chứng từ cần xin.
 
