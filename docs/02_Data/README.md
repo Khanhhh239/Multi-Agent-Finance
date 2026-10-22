@@ -13,6 +13,7 @@ làm ra thế nào, quy mô, hard case, bộ đánh giá từng năng lực.
 | [06_quy_mo_va_ke_hoach_sinh.md](06_quy_mo_va_ke_hoach_sinh.md) | Quy mô hiện có, kế hoạch sinh dữ liệu rất lớn, cấu hình, chi phí tính toán | Cần sinh thêm dữ liệu |
 | [07_bo_danh_gia.md](07_bo_danh_gia.md) | Bộ đánh giá riêng từng năng lực và đánh giá chung, quy tắc niêm phong | Cần chạy benchmark |
 | [08_tai_lieu_tham_khao.md](08_tai_lieu_tham_khao.md) | Paper/nguồn tham khảo cho dữ liệu và máy phát, ánh xạ vào thiết kế | Cần trích dẫn |
+| [10_realism_v2.md](10_realism_v2.md) | C2ST tách đặc trưng thiết kế/hành vi, khớp cửa sổ quan sát, máy phát `realism=v2`; vì sao dừng chỉnh máy phát (22/10/2026) | Cần biết dữ liệu tổng hợp giống thật tới đâu |
 
 Vị trí thực tế trong repo: `data/raw/` (crawl, MANIFEST.json), `data/interim/` (cache chuẩn hoá), `data/synthetic/`
 (4 thế giới), code `agent1/data/`, `agent1/synth/`, `scripts/crawl.py`, `scripts/build_worlds.py`.

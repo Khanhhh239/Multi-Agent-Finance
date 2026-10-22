@@ -20,6 +20,8 @@ Bạn (coding agent) nhận **Agent 1 — Trợ lý dòng tiền** ở trạng t
 | [06_WPD_du_lieu.md](06_WPD_du_lieu.md) | Vector hoá máy phát, hard-case worlds, sinh quy mô lớn, C2ST, dữ liệu thật bổ sung |
 | [07_WP9_WP10_san_pham_va_pilot.md](07_WP9_WP10_san_pham_va_pilot.md) | API, dashboard, LLM diễn giải, giám sát, chuẩn bị pilot T13 |
 | [08_thu_tu_va_lich.md](08_thu_tu_va_lich.md) | Đồ thị phụ thuộc, thứ tự ưu tiên, mốc, tiêu chí hoàn thành toàn bộ |
+| [NHAT_KY_SPRINT1_2026-10-20.md](NHAT_KY_SPRINT1_2026-10-20.md) | **Nhật ký thực thi** Sprint 1–5 (đọc trước khi làm tiếp): sửa `expand`, chạy lại, G13, tgt2, cổng thoái lui |
+| [09_KE_HOACH_TIEP_THEO_2026-10-20.md](09_KE_HOACH_TIEP_THEO_2026-10-20.md) | Kế hoạch sprint sau Sprint 1 |
 
 ## Nguyên tắc làm việc (bắt buộc)
 

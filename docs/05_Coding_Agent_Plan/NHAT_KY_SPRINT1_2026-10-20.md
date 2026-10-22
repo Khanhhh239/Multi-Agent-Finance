@@ -211,3 +211,26 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
   **GO bậc 0 "bóng"** với luật an toàn (BLEND neo B1d, cổng thoái lui, dải tiền copula-t + ACI, cảnh báo có người duyệt).
 - **Việc mở còn lại (không chặn bậc 0):** G15 T9 (độ phủ ghép 0,47), G3/G4 hiệu chỉnh T1, G7 (tinh chỉnh M12), G14/G17;
   thử cổng thoái lui trên `hc_supply_shock`/`hc_retention`; bộ AR thật nhiều công ty để kiểm định giống/khác.
+
+## 13. Sau hoàn tất: đóng các lỗ hổng còn lại (agent1-Khanh, 22/10/2026)
+
+- **Tiêu chí 1 trên tgt2 (BLEND vs B1d): ĐẠT** — `scripts/sprint5/blend_fallback_eval.py`, luồng triển khai T1 (tinh chỉnh M12, w chọn trên cửa sổ
+  hiệu chỉnh trước O của chính DN ⇒ w = 1,0): **+47,5% [30,9; 60,7]**. hc_supply_shock +46,2%, hc_retention +85,7%.
+- **Cổng thoái lui:** tổng hợp — gần như không kích hoạt (mô hình không thua), tốn < 1 điểm. **Dữ liệu thật BPI**: DH-GBM thuần −62,5% → +cổng −22,3%;
+  BLEND +6,5% → BLEND+cổng +4,7% [2,4; 6,7]. Customer Invoices tái lập đúng v2 (+13,1% / +14,4%). Tham số cổng đặt trước, không chỉnh theo BPI.
+  ⇒ BLEND là lớp bảo vệ chính, cổng là lưới an toàn thứ hai (`GO_NO_GO_SYNTHETIC_ONLY.md` mục 4c–4d).
+- **Đính chính T9:** "recall 0,47 / F1 0,63" là của quy tắc R1. Phương pháp triển khai trên tgt: **F1 0,796, precision 0,925** (cổng: F1 ≥ .80, P ≥ .95)
+  ⇒ trượt sát nút, chủ yếu do precision. `docs/03_Evaluation/T9_RECALL_DIAGNOSIS.md`.
+- **T9 lớp chặn bằng chứng** (`agent1/models/t9_fast.py::corroborate_below`, mặc định None = hành vi cũ; `tests/test_t9_corroboration.py`):
+  liên kết qua mô hình khách có độ tin cậy < g chỉ tự động khi số HĐ có trong nội dung CK hoặc tên người chuyển khớp ≥ 90.
+  Chọn (τ, g) trên DN nguồn giữ lại, đo một lần trên tgt/hc: `scripts/sprint5/t9_guard.py` → `outputs/t9/sprint5/`.
+- `docs/00_INDEX.md` cập nhật trạng thái cuối (bỏ các dòng "đang chạy lại", số thế giới cũ).
+- **T9 lớp chặn: giả thuyết bị bác** — mọi (g, τ) trên nguồn cho cùng P 0,951–0,952 ⇒ chọn không chặn; tgt tái lập P 0,925 / F1 0,796.
+  Phân rã theo phương pháp (`outputs/t9/sprint5/method_breakdown.csv`): số HĐ trong nội dung CK precision 1,0; `R1_unique_amount` 0,96/0,95;
+  `ML_subset` 0,87/0,81 (54% liên kết sai trên tgt); `hazard_weighted_subset` **0,54/0,50**. Độ tin cậy khách trung vị 1,0 kể cả khi sai.
+  Không đổi quy tắc chọn sau khi nhìn tgt; đề xuất đăng ký trước và đo trên `tgt3` mới (`T9_RECALL_DIAGNOSIS.md` mục 2b–3).
+- **Cổng thoái lui trên AR thật** (`scripts/sprint5/real_fallback_eval.py`): BPI DH-GBM −62,5% → +cổng −22,3%; BLEND +6,5% → +cổng +4,7% [2,4; 6,7].
+- **Dịch vụ: dải công bố = copula-t + ACI** (`agent1_service/jobs/aci_band.py`; `nightly.run(aci_state=...)`; `/forecast` lưu trạng thái ACI theo DN ở store kind
+  `aci_state`, id `current`). Phản hồi có `band_method`, `aci_ready` (≥ 8 tuần lộ diện), `band_note`, `band_raw`. Kiểm thử `tests/test_aci_band.py`,
+  `tests/test_service_aci_state.py`. Gọi `run` trực tiếp không truyền `aci_state` giữ dải gốc (script nghiên cứu cũ không đổi).
+- Prompt giao việc tiếp: `docs/05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-22.md`.

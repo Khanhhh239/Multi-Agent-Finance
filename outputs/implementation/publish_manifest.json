@@ -1,7 +1,7 @@
 {
   "copied": true,
-  "n_files": 1102,
-  "total_bytes": 17926466,
+  "n_files": 1121,
+  "total_bytes": 17998371,
   "files": [
     {
       "path": "agent1/api_surface.py",
@@ -255,8 +255,8 @@
     },
     {
       "path": "agent1/models/t9_fast.py",
-      "bytes": 12220,
-      "sha256": "b78d19c68a447333c522f0605024e689d853fcf01869f41541f166da8837f4d1"
+      "bytes": 13289,
+      "sha256": "38a63fa80bc241bbc6d311f396a363ae8ef8b871f4dbc01328e0bd1230e27715"
     },
     {
       "path": "agent1/models/t9_recon.py",
@@ -355,8 +355,8 @@
     },
     {
       "path": "agent1_service/api.py",
-      "bytes": 11583,
-      "sha256": "bbfd6c6a70226f97827f69f0a21530768e4853629bf86a1b6b94c4824b213aa2"
+      "bytes": 11977,
+      "sha256": "8f49bccfe3598f68298381c2eb409e5c7cd52b702143aa7e1b5f3fc8aac404fb"
     },
     {
       "path": "agent1_service/main.py",
@@ -424,14 +424,19 @@
       "sha256": "e697f136f7bcbf67213ece095b14bc51b10fdb0e542c8595e2817d0bd0bfe590"
     },
     {
+      "path": "agent1_service/jobs/aci_band.py",
+      "bytes": 3041,
+      "sha256": "e6d005d9e6a45dbe4e526fe7002f102bcc3f52aa5cbe9a104a502b216b3ad56c"
+    },
+    {
       "path": "agent1_service/jobs/alerts.py",
       "bytes": 1138,
       "sha256": "b501bdc1c25a94a2b53c86da9d65e69699b517a083a8f6a2960b80ab38a1d0a3"
     },
     {
       "path": "agent1_service/jobs/nightly.py",
-      "bytes": 5199,
-      "sha256": "9b5b25e82eddbe96d6f0de2307d4dcd3eb214fba2e9d199427c55cf7cf95c72f"
+      "bytes": 5790,
+      "sha256": "71314553f0bd95831cbfeaa358406c840c9164c1eaf3708ff9292f5cc0591ef8"
     },
     {
       "path": "agent1_service/jobs/weekly.py",
@@ -894,6 +899,11 @@
       "sha256": "7a42e97bd5dbacc480df23289e434d42c1c386b1e36e7ff0950a44574c4d1f75"
     },
     {
+      "path": "scripts/sprint5/blend_fallback_eval.py",
+      "bytes": 6789,
+      "sha256": "72ff1a2ab37fb143d4abf7c114db1e7d47325aa1df35560fba10e5c65066d9fc"
+    },
+    {
       "path": "scripts/sprint5/build_tgt2.py",
       "bytes": 1671,
       "sha256": "0539ea59caa3b8af843ef7198566a95f51963518b503cd8847ca8a9a273c1c63"
@@ -909,9 +919,24 @@
       "sha256": "765e9dad5fcd68a54ef23ccc263e5f802a1aaf589439b2e8e8977f1c45513a72"
     },
     {
+      "path": "scripts/sprint5/real_fallback_eval.py",
+      "bytes": 4883,
+      "sha256": "e6168cceed541a02fe409492571d7aa2dca3718dee570e1f3887b603dd46c5c3"
+    },
+    {
       "path": "scripts/sprint5/run_tgt2_frozen.py",
       "bytes": 3534,
       "sha256": "d789f2a1e0532f2f4e255f128a2baba0e29b67ac16c7f07541d680ed90356173"
+    },
+    {
+      "path": "scripts/sprint5/t9_guard.py",
+      "bytes": 6150,
+      "sha256": "79b0acd51c7664ee35bc9aed0c730af9ce324f5fcdd5f588074ae246f9ee9d0b"
+    },
+    {
+      "path": "scripts/sprint5/t9_method_breakdown.py",
+      "bytes": 3085,
+      "sha256": "4a63dbfdd7e7fa87ae65609653256d7daebaecb01cc4b1fdd76e569bbcea3ad2"
     },
     {
       "path": "tests/conftest.py",
@@ -922,6 +947,11 @@
       "path": "tests/test_accounting.py",
       "bytes": 449,
       "sha256": "718cf60972868423cf6dbb2acd92b1f5e0d0daa57d47510fa9c1d02b639e8dbe"
+    },
+    {
+      "path": "tests/test_aci_band.py",
+      "bytes": 2063,
+      "sha256": "4ba886a4752655bb396f3600b3e6b1425e568ebede7f116d53e36859289cb753"
     },
     {
       "path": "tests/test_adaptive_features.py",
@@ -1174,6 +1204,11 @@
       "sha256": "8652551ab86fffab4641edd671a8a758a3b4fda7161814355d16eaa5957d2c54"
     },
     {
+      "path": "tests/test_service_aci_state.py",
+      "bytes": 2596,
+      "sha256": "c2565c0edbb03bfb7f140457238b00bee69720d145da1430bd90c0058eb5c1c0"
+    },
+    {
       "path": "tests/test_service_scenarios.py",
       "bytes": 2275,
       "sha256": "74be4d6f246cda063b0f071f48ba4d8378d154892bfe94a2d9a944069aea87a2"
@@ -1244,6 +1279,11 @@
       "sha256": "cdba64fdcd52da7f730b60430f1914ce409bf1bf652f04212f6c556a9785fea3"
     },
     {
+      "path": "tests/test_t9_corroboration.py",
+      "bytes": 838,
+      "sha256": "13a4b6428ec764ea4d30d5fd87b881a7a107b458f27334a664accad084133440"
+    },
+    {
       "path": "tests/test_t9_fast.py",
       "bytes": 5536,
       "sha256": "0ef146f5325eeeb7077530ee733da6612dd8bc8363a4031e3ffcfe3235f64cd0"
@@ -1280,8 +1320,8 @@
     },
     {
       "path": "docs/00_INDEX.md",
-      "bytes": 4835,
-      "sha256": "0d4dbb8fd7d1cbb7b4c4e391f6b32a0f7424ae30a3848888b04d5e53d7d9bb05"
+      "bytes": 6658,
+      "sha256": "eb61b9f6f482999b28e4f1c88a1664645ea53a8bd529e82acc8bc9156d0a28e9"
     },
     {
       "path": "docs/DATA_CARD.md",
@@ -1400,8 +1440,8 @@
     },
     {
       "path": "docs/02_Data/README.md",
-      "bytes": 2053,
-      "sha256": "a56c3ef6c8f013b576bd3671d964980b834218286e166c46819c9403651b3b69"
+      "bytes": 2332,
+      "sha256": "0fb3bdc426b90f2786ed38a6777ab1826add88d7226fe8c7c9a010d2b0ef54a7"
     },
     {
       "path": "docs/02_Data/vn_listed_inputs.json",
@@ -1465,8 +1505,8 @@
     },
     {
       "path": "docs/03_Evaluation/GO_NO_GO_SYNTHETIC_ONLY.md",
-      "bytes": 7367,
-      "sha256": "0c417175f41545754fb37412fa51e16bcca2b2c064f8fbc43877a89607e286b6"
+      "bytes": 9887,
+      "sha256": "0441bf010fb77ce2d13e210ae80b95c1e7043f833f64537249eadb23b7fd483e"
     },
     {
       "path": "docs/03_Evaluation/KET_QUA_CHUA_DAT.md",
@@ -1475,8 +1515,13 @@
     },
     {
       "path": "docs/03_Evaluation/README.md",
-      "bytes": 1692,
-      "sha256": "3f34820e4bd201f158648fb86bc8f9c597e70c743c42c34d8bce562faf101a0d"
+      "bytes": 2403,
+      "sha256": "ea7585ba5da53e6b0b480d94005398e7502d44f008159540b6f1d3e8757499fa"
+    },
+    {
+      "path": "docs/03_Evaluation/T9_RECALL_DIAGNOSIS.md",
+      "bytes": 6169,
+      "sha256": "268f5b1d63458323340a8d09a4448bb8e1316ef5ccb1d0ce59a5c58003717ced"
     },
     {
       "path": "docs/04_AI_Methods/01_pipeline_he_thong.md",
@@ -1600,8 +1645,8 @@
     },
     {
       "path": "docs/05_Coding_Agent_Plan/NHAT_KY_SPRINT1_2026-10-20.md",
-      "bytes": 20652,
-      "sha256": "1feadd467afd7ca6ac3606028f7d34716728aaca49d25967db15288c158dfa90"
+      "bytes": 25074,
+      "sha256": "224accdce91b84bc1153eb5b7570b7a65adffeac38884075adbbd1aa55ec8879"
     },
     {
       "path": "docs/05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-21.md",
@@ -1609,9 +1654,14 @@
       "sha256": "c9bd05ba7bb09c2acbba35c4b4538b4d7a419fb024db0da078084893ea20a49c"
     },
     {
+      "path": "docs/05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-22.md",
+      "bytes": 3623,
+      "sha256": "96874c8e98b6c18ea452af0eebb9e067900317363078b6af53cdc8e2175d0aeb"
+    },
+    {
       "path": "docs/05_Coding_Agent_Plan/README.md",
-      "bytes": 4730,
-      "sha256": "c40e09737414fe6c6c4664b72d735e2e2397e92d1429bff4bd923e0820030065"
+      "bytes": 5048,
+      "sha256": "c197fb68724dcf171bf3f8471afce9324afd8732cb38387a0dc96dcf6fea78a9"
     },
     {
       "path": "docs/05_Coding_Agent_Plan/TIEN_DO_2026-10-16_lich_su.md",
@@ -2772,6 +2822,31 @@
       "path": "outputs/service/local_validation.legacy_expand.csv",
       "bytes": 560,
       "sha256": "90775af5738655c6308cbdc1d70c62c3a6060258eb8877caf9a90c98e0763cf8"
+    },
+    {
+      "path": "outputs/sprint5/blend_fallback_hc_retention.csv",
+      "bytes": 998,
+      "sha256": "e9ee3a1e2b8887fbb408c8052efa027fa02f603523dea5a5dab08b33725698a7"
+    },
+    {
+      "path": "outputs/sprint5/blend_fallback_hc_supply_shock.csv",
+      "bytes": 1011,
+      "sha256": "87edfede1b9706af65c1f2f1aeb2e73ad5ecd052f9a95627e5f8a83d0bf67825"
+    },
+    {
+      "path": "outputs/sprint5/blend_fallback_summary.csv",
+      "bytes": 2589,
+      "sha256": "7b3e10cc543f1d60f4b87331320a75de61a2e48f5a7b7bb5a63dc386cbd84363"
+    },
+    {
+      "path": "outputs/sprint5/blend_fallback_tgt2.csv",
+      "bytes": 978,
+      "sha256": "501abd78fb6177c264dae5e6e628401841a74c549df5ac6ae00ec4be61ae321d"
+    },
+    {
+      "path": "outputs/sprint5/real_fallback_gate.csv",
+      "bytes": 1558,
+      "sha256": "f3cf07cb0777d1245893c4579166c480b5e65a00ad4f056cdbb1c8f7122766de"
     },
     {
       "path": "outputs/t1/A_checkpoint.csv",
@@ -4487,6 +4562,26 @@
       "path": "outputs/t9/sprint3/source_reconciler/metadata.json",
       "bytes": 3376,
       "sha256": "8d9ad971a7f7d47dc69a524b432aed1a229ab439d3b122c5492282ca05b822ba"
+    },
+    {
+      "path": "outputs/t9/sprint5/choice.json",
+      "bytes": 178,
+      "sha256": "fc11d83565e23173212c4fe636a6af17f18220c8a5e3bfcaa7f11f3eb8c3118a"
+    },
+    {
+      "path": "outputs/t9/sprint5/method_breakdown.csv",
+      "bytes": 831,
+      "sha256": "81fd537501179e4849f94a79e40ea7c34a25a7c4a746085e1d3d65691ab17373"
+    },
+    {
+      "path": "outputs/t9/sprint5/source_grid.csv",
+      "bytes": 10527,
+      "sha256": "20ea67c4a659f13ac72a1c222c45d61a2fe05f362ba431558e60cbfce2a1f75a"
+    },
+    {
+      "path": "outputs/t9/sprint5/target_metrics.csv",
+      "bytes": 1871,
+      "sha256": "7fe85f5e4a90a5fee8c01417897b06bb5a97364b71714267f88974b5a6e999ea"
     },
     {
       "path": "outputs/t9/supply_shock_2022/metrics.csv",

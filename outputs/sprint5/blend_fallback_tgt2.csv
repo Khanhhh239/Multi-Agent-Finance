@@ -1,0 +1,5 @@
+world,model,w_selected,n,n_firms,pinball,improvement_vs_B1d_pct,improvement_ci_low,improvement_ci_high,selected_on,target_test_used_for_selection,measurement_version,MAE_p50,cov80,share_rows_on_B1d
+tgt2,B1d,1.0,112822,40,11.912442904442143,0.0,0.0,0.0,own_pre_O_calibration_window,False,blend-fallback-deploy-flow-v1,30.246405842832072,0.6201627342185034,
+tgt2,FT DH-GBM,1.0,112822,40,6.2535002882712245,47.50446790440189,30.900740998591147,60.68661003128729,own_pre_O_calibration_window,False,blend-fallback-deploy-flow-v1,20.305795051071335,0.8322047118469802,
+tgt2,BLEND w=1.0,1.0,112822,40,6.2535002882712245,47.50446790440189,30.900740998591147,60.68661003128729,own_pre_O_calibration_window,False,blend-fallback-deploy-flow-v1,20.305795051071335,0.8322047118469802,
+tgt2,BLEND + fallback gate,1.0,112822,40,5.907934023682878,50.405352864442165,40.40517743102833,60.228089910794566,own_pre_O_calibration_window,False,blend-fallback-deploy-flow-v1,,,0.2914824256705062

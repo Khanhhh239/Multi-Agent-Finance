@@ -182,7 +182,12 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run):
                 model,version=load(store,firm,body.cutoff)
                 if model is not None:cache={'t1':model}
             kwargs={'model_cache':cache} if engine is run else {}
+            if engine is run:
+                # Dải công bố = copula-t + ACI; trạng thái ACI giữ theo doanh nghiệp qua các lần dự báo.
+                previous=store.get(firm,'aci_state');kwargs['aci_state']=previous[-1] if previous else {}
             result,args=engine(tables['invoices'],tables['bank_txns'],tables['customers'],promises,tables['outflows'],body.cutoff,body.balance,**kwargs)
+            state=result.pop('aci_state',None)
+            if state is not None:store.put(firm,'aci_state',[dict(state,id='current')])
             result['model_version']=version['id'] if version else None
             result['opening_balance']=body.balance
         except (ValueError,KeyError) as e:raise HTTPException(422,str(e))

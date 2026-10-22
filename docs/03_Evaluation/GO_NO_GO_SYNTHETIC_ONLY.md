@@ -53,7 +53,7 @@ Vì không có dữ liệu thật, độ tin cậy duy nhất có thể tăng l�
 
 | Tiêu chí đăng ký trước | Kết quả | Trạng thái |
 |---|---|---|
-| 1. BLEND không thua B1d | **Chưa đo trên tgt2** (luồng T6 không có BLEND; BLEND chỉ đo trên AR thật CI/BPI — đạt) | chưa đánh giá |
+| 1. BLEND không thua B1d | Đo 22/10 bằng luồng triển khai T1 (`scripts/sprint5/blend_fallback_eval.py`): tinh chỉnh M12, w chọn trên cửa sổ hiệu chỉnh trước O của chính doanh nghiệp (chọn w = 1,0). **+47,5% [30,9; 60,7]** so với B1d | **đạt** |
 | 2. cov80 ∈ [75; 85]% với hiệu chỉnh cửa sổ nguồn | copula-t: 0,622 (tuần 1–4), 0,721 (tuần 5–13) | **trượt** (khoảng hẹp) |
 | 2'. (báo cáo thêm, không đăng ký trước) copula-t + ACI | **0,767 [0,74; 0,80]**, **0,771 [0,74; 0,81]**; trên tgt E2E 0,754 / 0,767 | trong khoảng ở cả hai bộ đích |
 | 3. G13 với chính sách đóng băng | phát hiện 0,746 [0,59; 0,84], độ sớm 7 tuần, báo giả 0,75 [0,43; 1,10] | **đạt điểm ước lượng**, CI chạm ngưỡng |
@@ -61,6 +61,39 @@ Vì không có dữ liệu thật, độ tin cậy duy nhất có thể tăng l�
 **Hệ quả cho luồng triển khai:** dải tiền mặt công bố phải là **copula-t + ACI** (hiệu chỉnh trực tuyến bằng kết quả đã lộ diện), không phải
 copula-t gốc. ACI cần vài tuần lộ diện trước khi tin được độ phủ ⇒ khớp với bậc 0 "bóng" ≥ 8 tuần.
 Lưu ý trung thực: 2' không phải tiêu chí đăng ký trước; nó được báo cáo vì nhất quán trên hai bộ đích độc lập (tgt, tgt2).
+
+## 4c. Cổng thoái lui (22/10/2026, `outputs/sprint5/blend_fallback_summary.csv`)
+
+Luồng triển khai T1 (tinh chỉnh M12, w chọn trên cửa sổ hiệu chỉnh trước O của chính doanh nghiệp), cải thiện pinball so với B1d, CI theo công ty:
+
+| Thế giới | Mô hình (BLEND, w chọn = 1,0) | BLEND + cổng thoái lui | Ghi chú |
+|---|---|---|---|
+| `tgt2` (niêm phong) | +47,5% [30,9; 60,7] | **+50,4% [40,4; 60,2]** | cổng giúp nhẹ: vài công ty B1d tạm thời tốt hơn |
+| `hc_supply_shock` | +46,2% [38,7; 54,5] | +45,5% [38,0; 53,7] | chi phí chuyển nhầm 0,7 điểm |
+| `hc_retention` | +85,7% [82,0; 88,4] | +85,3% [81,7; 88,0] | chi phí 0,4 điểm |
+
+**Đọc trung thực:** trên dữ liệu tổng hợp mô hình không bao giờ thua B1d, nên cổng gần như không có việc; nó chỉ tốn < 1 điểm.
+Giá trị thật của cổng là ở nơi mô hình THUA — đo trên dữ liệu AR thật ở mục 4d.
+
+## 4d. Cổng thoái lui trên dữ liệu AR THẬT (22/10/2026, `outputs/sprint5/real_fallback_gate.csv`)
+
+Cùng giao thức v2 (cùng mô hình cuối, w đã chọn trên cửa sổ hiệu chỉnh); tham số cổng (8 tuần, 5%, 4 tuần) đặt trước, **không chỉnh theo dữ liệu này**.
+
+| Bộ thật | Phương pháp | So với B1d [CI 95%] | Dòng dùng B1d |
+|---|---|---|---|
+| Customer Invoices | DH-GBM | +13,1% [8,3; 17,9] | — |
+| | BLEND w=0,5 | +14,4% [11,7; 17,4] | — |
+| | BLEND + cổng | +14,4% [11,7; 17,4] | 0% |
+| **BPI 2019** | **DH-GBM thuần** | **−62,5% [−90,4; −37,4]** | — |
+| | DH-GBM + cổng | −22,3% [−30,5; −13,6] | 77% |
+| | BLEND w=0,25 | +6,5% [2,1; 11,0] | — |
+| | **BLEND + cổng** | **+4,7% [2,4; 6,7]** | 49% |
+
+**Kết luận:**
+- Lớp bảo vệ **chính** là BLEND với w chọn trên cửa sổ hiệu chỉnh của chính doanh nghiệp: biến −62,5% thành +6,5%.
+- Cổng là lưới an toàn **thứ hai**: khi mô hình tệ, cắt 2/3 thiệt hại (−62,5% → −22,3%) nhưng không cứu hết vì phải chờ mất mát lộ diện
+  (khách trả tiền) và 4 tuần xác nhận. Trên BLEND, cổng tốn 1,8 điểm trung bình nhưng cận dưới CI cao hơn (2,4 so với 2,1).
+- ⇒ Luật vận hành giữ nguyên: luôn BLEND + cổng. Không dùng mô hình thuần dù nó thắng trên dữ liệu tổng hợp.
 
 ## 5. Quyết định
 
@@ -71,5 +104,5 @@ Lưu ý trung thực: 2' không phải tiêu chí đăng ký trước; nó đư�
 
 ## 6. Việc còn lại để tăng độ tin cậy mà không cần dữ liệu thật (theo thứ tự)
 1. ~~Sinh `tgt2` và chạy luồng đóng băng một lần~~ — xong (mục 4b).
-2. ~~Cài đặt cổng thoái lui~~ — xong (`agent1/eval/fallback_gate.py`); còn: chạy thử trên `hc_supply_shock`, `hc_retention`.
+2. ~~Cài đặt cổng thoái lui và chạy thử trên thế giới sốc~~ — xong (mục 4c).
 3. Tìm thêm bộ AR thật công khai nhiều công ty để thu hẹp CI của kiểm định giống/khác.

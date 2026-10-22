@@ -8,7 +8,10 @@ from agent1.models.t1 import b1_dist
 from agent1.models.t6_cash import K
 
 
-def run(invoices,bank,customers,promises,outflows,cutoff,balance, *, seed=7,model_cache=None,evaluation_label_mode='reconciled'):
+def run(invoices,bank,customers,promises,outflows,cutoff,balance, *, seed=7,model_cache=None,evaluation_label_mode='reconciled',
+        aci_state=None):
+    """aci_state: trạng thái ACI của doanh nghiệp (dict, {} cho lần đầu). Có thì dải công bố là copula-t + ACI và
+    result['aci_state'] là trạng thái mới cần lưu; None giữ dải copula-t gốc (cho script nghiên cứu cũ)."""
     start=time.monotonic(); T=pd.Timestamp(cutoff)
     inv=invoices[invoices.issue_date<=T].copy()
     observed_bank=bank[bank.value_date<=T].copy()
@@ -78,11 +81,17 @@ def run(invoices,bank,customers,promises,outflows,cutoff,balance, *, seed=7,mode
     samples,_=api.simulate(**args)
     band=np.quantile(samples,[.1,.5,.9],axis=0).T
     rows=[dict(week=k+1,P10=float(band[k,0]),P50=float(band[k,1]),P90=float(band[k,2])) for k in range(K)]
+    band_extra={}
+    if aci_state is not None:
+        from .aci_band import update as aci_update,band as aci_band
+        state,aci=aci_update(aci_state,T,balance)
+        raw_rows=rows;rows,meta=aci_band(state,aci,T,samples)
+        band_extra=dict(meta,band_raw=raw_rows,aci_state=state)
     ranked=api.rank_collections(snapshot,P,args,top_n=10)
     if len(ranked):ranked['customer_id']=ranked.invoice_id.map(snapshot.set_index('invoice_id').customer_id)
     result=dict(cutoff=str(T.date()),band=rows,shortfall_4w=float((samples[:,:4].min(1)<0).mean()),
         shortfall_13w=float((samples.min(1)<0).mean()),collections=ranked.to_dict('records'),
         auto_txn_coverage=links.txn_id.nunique()/max(len(observed_bank),1),review_count=len(queue),
         model='tenant-HazardGBM' if trained else 'B1d-fallback',seconds=time.monotonic()-start,
-        evidence_type='experimental_observed_data_pipeline',seed=seed)
+        evidence_type='experimental_observed_data_pipeline',seed=seed,**band_extra)
     return result,args

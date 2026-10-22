@@ -109,10 +109,22 @@ def concatenate_parts(parts):
     return pd.concat(nonempty,ignore_index=True) if nonempty else parts[0].copy()
 
 
+NAME_CORROBORATION=90.
+
+
+def corroborated(candidate,memo_hits,chosen_numbers):
+    """Bằng chứng độc lập với mô hình khách: số HĐ đã chọn có trong nội dung CK, hoặc tên người chuyển khớp tên khách."""
+    return bool(memo_hits&set(chosen_numbers)) or float(candidate.get('name_score',0) or 0)>=NAME_CORROBORATION
+
+
 def reconcile_arrays(rec,bank,invoices,customers,tau_auto=.9,assignments=None,rules_first=True,
-                     rule_mode='both',ledger_policy='asof',allocation_policy=None):
-    """Cùng quy tắc/cash state của bản chuẩn; lọc mảng thay sao chép DataFrame mỗi giao dịch."""
+                     rule_mode='both',ledger_policy='asof',allocation_policy=None,corroborate_below=None):
+    """Cùng quy tắc/cash state của bản chuẩn; lọc mảng thay sao chép DataFrame mỗi giao dịch.
+
+    corroborate_below: nếu đặt, liên kết qua mô hình khách có độ tin cậy < ngưỡng này chỉ tự động khi có bằng chứng
+    độc lập (`corroborated`); không có thì vào hàng chờ. None = hành vi cũ."""
     if not 0<=tau_auto<=1:raise ValueError('tau_auto trong [0,1]')
+    if corroborate_below is not None and not tau_auto<=corroborate_below<=1:raise ValueError('corroborate_below trong [tau_auto,1]')
     if rule_mode not in {'both','amount','memo'} or ledger_policy not in {'asof','opening_only'}:
         raise ValueError('Chính sách quy tắc/sổ cái không hợp lệ')
     columns=['invoice_id','firm_id','customer_id','issue_date','due_date','invoice_no','amount_gross',
@@ -174,6 +186,9 @@ def reconcile_arrays(rec,bank,invoices,customers,tau_auto=.9,assignments=None,ru
                     if not set(proposed)<=set(pool) or remaining[proposed].sum()+TOL<txn.amount:
                         raise ValueError('Phân bổ vượt khách/ngày/công nợ đã biết')
                     chosen=proposed;method=extra_method
+        if chosen and corroborate_below is not None and method not in ('R1_unique_amount','R2_memo') and confidence<corroborate_below:
+            if not corroborated(assigned.loc[txn.txn_id],numbers,inv.invoice_no.to_numpy()[chosen].astype(int).tolist()):
+                chosen=[];reason='uncorroborated_low_confidence'
         if not chosen:
             reviews.append(dict(txn_id=txn.txn_id,reason=reason,amount=txn.amount,confidence=confidence));continue
         cash=float(txn.amount)

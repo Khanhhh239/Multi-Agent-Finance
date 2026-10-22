@@ -1,0 +1,8 @@
+{
+  "tau": 0.5,
+  "guard": null,
+  "source_precision": 0.9508736894658013,
+  "source_f1": 0.8529714720766716,
+  "source_auto": 0.7958979033728351,
+  "target_used": false
+}
