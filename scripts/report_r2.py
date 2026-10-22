@@ -93,7 +93,10 @@ def main():
         md += ["## 1. Chọn trọng số PU (L4-FB-PU, 8 thế giới sàng lọc, seed 0)", "",
                "| w | J | Hợp lệ |", "|---:|---:|:-:|"]
         md += [f"| {w} | {pct(pu['J'][w])} | {'Có' if pu['eligible'][w] else 'Không'} |" for w in pu["J"]]
-        md += ["", f"Khóa: **w = {pu['w']}** (trạng thái `{pu['status']}`).", ""]
+        locked = pu["w"] if pu["w"] is not None else max(pu["J"], key=lambda k: pu["J"][k])
+        note = ("" if pu["w"] is not None else " Không w nào hợp lệ theo trần ca khó 15%; áp mục Làm rõ khóa w của đăng ký "
+                "(w có J cao nhất, trần không đổi).")
+        md += ["", f"Khóa: **w = {locked}** (trạng thái `{pu['status']}`).{note}", ""]
     sc = load("screening_summary.json")
     if sc:
         md += ["## 2. Sàng lọc 4 ứng viên có giám sát", "", table(sc["candidates"], cols),

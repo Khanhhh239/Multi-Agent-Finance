@@ -8,9 +8,22 @@ Ngày cập nhật 2026-10-19. **Trạng thái: ĐÃ DUYỆT v1.1 theo bốn s�
 | v1.1 | Làm rõ tiếp theo: ba suất cho mô hình có giám sát, cả hai Cold chạy đủ 20 thế giới ở tầng chọn rồi chọn riêng. Chủ dự án duyệt có sửa đổi: hai tầng, J theo nhóm 20% thấp nhất, gộp nhánh nhỏ, chốt chặn trước niêm phong, PU là nền và thứ tự R2. Giữ các điều khoản v1 không bị sửa và giữ nguyên cổng niêm phong. |
 | v1.2 | 2026-10-22: số cây cố định, định nghĩa ứng viên, tái sử dụng bộ dữ liệu nguồn, lấy mẫu âm có điều kiện, hạ tầng; ghi trước mọi so sánh (mục Sửa đổi v1.2). |
 | v1.3 | 2026-10-22, trước bước sàng lọc ứng viên dùng đặc trưng mới: loại lối tắt liên kết hóa đơn của bộ sinh (mục Sửa đổi v1.3). |
+| Làm rõ R2-w | 2026-10-22 16:50, sau khi bước chọn w xong và TRƯỚC khi có bất kỳ kết quả sàng lọc nào: cách khóa w khi không w nào hợp lệ (mục Làm rõ khóa w). Không đổi cổng, trần 15% hay ứng viên. |
 | Làm rõ R3 | 2026-10-22, trước khi đọc văn xuôi kịch bản độc lập: tần suất và mức phủ của ca hợp lệ mới trong thế giới niêm phong (mục Làm rõ thực thi R3). Không đổi cổng, quy tắc chọn hoặc ứng viên. |
 
 Mọi số đo dự kiến là trên **dữ liệu tổng hợp**, trừ khi một báo cáo kiểm thử ngoài hoặc thí điểm chỉ rõ nguồn thật và phạm vi nhãn. Kết luận **v4 không đạt G5 và kích hoạt M2** giữ nguyên. Ba seed v4 931 đến 933 đã được dùng để hậu kiểm, không còn là kiểm thử niêm phong và không được tính vào cổng v5.
+
+## Làm rõ khóa w khi không w nào hợp lệ (2026-10-22 16:50, trước mọi kết quả sàng lọc)
+
+**Sự kiện:** bước chọn w (L4-FB-PU, 8 thế giới 1001 đến 1008, seed 0) xong lúc 16:36. J của w = 0,1; 0,2; 0,5 lần lượt là 0,7026; 0,6911; 0,6720. Cả ba w đều **không hợp lệ** theo trần ca hợp lệ khó 15%: vượt trần ở 5 trên 8 thế giới với w = 0,1 (cao nhất 18,6%, ở nhánh `expense`), 5 trên 8 với w = 0,2 và 5 trên 8 với w = 0,5. Bộ điều phối ghi `no_eligible_weight` và dùng w = 0,1 cho sàng lọc.
+
+**Điều đăng ký chưa nêu:** mục 3 chỉ nói chọn w bằng J trên L4-FB; mục 4 nói ứng viên không hợp lệ không được chọn. Không nêu cách khóa w khi không w nào hợp lệ. Việc dùng w = 0,1 là giá trị mặc định trong mã (phần tử đầu của danh sách), chưa được đăng ký.
+
+**Làm rõ (giữ đúng tinh thần mục 3, không đổi cổng):**
+- Khi không w nào hợp lệ, w được khóa là w có **J cao nhất**, tức 0,1, hòa thì theo thứ tự danh sách. Lý do: w chỉ là tham số nền chung của mọi ứng viên có giám sát; tính hợp lệ được xét cho **từng ứng viên ở tầng sàng lọc và tầng chọn**, không xét lại ở bước chọn w. Lựa chọn này trùng với w có J cao nhất nên không phụ thuộc vào kết quả sàng lọc chưa có.
+- Trần 15% **không đổi** và không được nới ở bất kỳ bước nào.
+- Nếu sau sàng lọc không ứng viên có giám sát nào hợp lệ, hoặc sau tầng chọn không còn ứng viên hợp lệ, áp mục 4 và mục 7: dừng, **không sinh và không chấm niêm phong**, viết đề xuất đổi hướng. Không đổi w, trần hay danh sách ứng viên để cứu.
+- Chủ dự án có thể bác bỏ làm rõ này. Khi đó kết quả sàng lọc chạy bằng w = 0,1 bị bỏ và chạy lại theo quyết định của chủ dự án.
 
 ## Làm rõ thực thi R3 (2026-10-22, trước khi đọc văn xuôi kịch bản độc lập)
 
