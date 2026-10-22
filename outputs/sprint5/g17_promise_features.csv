@@ -1,0 +1,7 @@
+world,model,n_promised,MAE_p50_promised_only,improvement_vs_no_promises_pct,ci_low,ci_high,measurement_version
+src,B without promises,14929,13.846913197713521,0.0,0.0,0.0,g17-promise-features-v1
+src,A current promise features,14929,11.237499136194355,18.844734738064556,16.126960905743186,21.76043049923596,g17-promise-features-v1
+src,C current + 6 new,14929,10.672320773548785,22.926354623851775,20.069439710654823,26.467683461689,g17-promise-features-v1
+src_noisy_promises,B without promises,12957,13.902849891486882,0.0,0.0,0.0,g17-promise-features-v1
+src_noisy_promises,A current promise features,12957,12.850170030702136,7.5716840000504675,5.3747838013639875,9.577194250378527,g17-promise-features-v1
+src_noisy_promises,C current + 6 new,12957,12.397135908097523,10.830254193504251,8.155695667320456,13.00945988771047,g17-promise-features-v1

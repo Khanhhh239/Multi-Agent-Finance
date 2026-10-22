@@ -30,4 +30,18 @@ Không đổi bộ đặc trưng nếu kết quả không đạt (báo cáo như
 nhưng đây không phải bộ niêm phong.
 
 ## 5. Kết quả
-_Điền sau khi chạy._
+Chạy 22/10/2026 (`outputs/sprint5/g17_promise_features.csv`, `g17-promise-features-v1`), huấn luyện cutoff < 2024-07-01, kiểm 26 tuần sau, MAE_p50 trên hoá đơn có lời hứa, CI 95% bootstrap theo công ty:
+
+| Thế giới | B không lời hứa | A 5 đặc trưng hiện tại | **C + 6 mới** |
+|---|---|---|---|
+| `src` (sạch), n = 14.929 | 13,847 | 11,237 (−18,8% [16,1; 21,8]) | **10,672 (−22,9% [20,1; 26,5])** |
+| `src_noisy_promises`, n = 12.957 | 13,903 | 12,850 (**−7,6%** [5,4; 9,6]) | **12,397 (−10,8% [8,2; 13,0])** |
+
+Mô hình A tái lập đúng số của G17 cũ (11,237 và 12,850) ⇒ cùng giao thức, chỉ khác đặc trưng.
+
+**Cổng `G17_v2`: ĐẠT ở điểm ước lượng** (sạch −22,9% ≥ 10; nhiễu −10,8% ≥ 10; C không tệ hơn A ở sạch, tốt hơn 4,3%).
+**Giới hạn:** ở lời hứa nhiễu, cận dưới CI 95% là 8,2% (< 10) ⇒ đạt **sát ngưỡng, chưa vững**; cửa sổ kiểm không niêm phong (đã nêu ở mục 4).
+**Chưa tách đóng góp từng đặc trưng** (không có ablation), nên chưa biết đặc trưng nào tạo ra lợi ích; chưa kiểm trên lời hứa thật.
+
+**Chỉnh sửa triển khai** (không đổi bộ 6 đặc trưng đã đăng ký): thế giới sạch không có cột `promised_date_lo/hi`, `promised_fraction` ⇒ mặc định lời hứa chính xác (độ rộng 0, tỉ lệ 1);
+chuẩn hoá cột ngày về `datetime64[ns]` cho `merge_asof`.

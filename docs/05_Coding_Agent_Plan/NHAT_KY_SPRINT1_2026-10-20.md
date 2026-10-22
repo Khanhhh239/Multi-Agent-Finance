@@ -276,3 +276,23 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - Bỏ FY2022 thì cả ba đạt (kể cả cấu hình cũ) ⇒ không có bằng chứng f−4 tốt hơn khi chế độ ổn định.
 - **Tôi đã sai:** nghi nhãn FY2022 chưa chín. Dữ liệu tới 07/2026 ⇒ cửa sổ đã khép. Tỉ lệ vỡ nợ FY2022 (6–8%) là thay đổi chế độ thật. Không bỏ FY2022 để "đạt".
 - Đề xuất: đổi hướng T2 sang phát hiện trôi tỉ lệ gốc + cảnh báo (chủ dự án quyết nếu muốn đổi định nghĩa G8).
+
+
+## Sprint 6 — prompt 22/10/2026
+
+Đăng ký trước commit `98e93fd`; tgt/tgt2/tgt3 đã dùng, không dùng để chọn. GO chỉ bậc 0 bóng.
+
+| Ngày | Việc | Giây | Kết quả | CSV |
+|---|---|---|---|---|
+| 22/10/2026 16:17 | T9 chọn nguồn | 598.3 | chọn anchored_cal1_p0.9; chỉ src, tgt4 chưa sinh | `outputs/t9/v3/source_grid.csv` |
+| 22/10/2026 16:26 | G15 tgt4 | 215.8 | P=0.9677; R=0.4909; F1=0.6514; gate=False | `outputs/t9/v3/target_metrics.csv` |
+| 22/10/2026 17:36 | G3/G4 | 45.7 | G3=False; G4=False; cov80=[0.8694, 0.8422]; ECE4=[0.1015, 0.016] | `outputs/t1/sprint6_calibration/metrics.csv` |
+| 22/10/2026 17:44 | G7 M12 | 114.4 | G7=False; cải thiện vs source=0.048% [0.000; 0.183] | `outputs/t1/sprint6_finetune/metrics.csv` |
+
+## 19. Sprint 6 của agent kia và G17 (agent1-Khanh, 22/10/2026)
+
+- **Sprint 6 (agent kia, đã xong 17:48):** G3, G4, G7 vẫn trượt (hiệu chỉnh theo nhóm đáo hạn IS80 −3,9%; tinh chỉnh M12 không cải thiện, một biến thể −8,5%);
+  T9 v3 trên `tgt4`: P 0,968, R 0,491, F1 0,651 ⇒ G15 vẫn trượt (recall, không phải precision).
+- **G17_v2 đạt ở điểm ước lượng** (`G17_T8_PREREG.md`, commit `9238a6c` trước khi chạy): 6 đặc trưng lời hứa mới (độ mơ hồ, tỉ lệ hứa, số lần hứa lại, số lần thất hứa, tuổi lời hứa, độ lệch theo khách).
+  Nhiễu −7,6% → **−10,8% [8,2; 13,0]**, sạch −18,8% → −22,9%. Sát ngưỡng, cận dưới CI < 10%.
+- Đang chạy: G13 trên `tgt3` với nhãn T9 v2 / T9 cũ / thật (`G13_E2E_T9V2_PREREG.md`, commit `de2e2b5`).
