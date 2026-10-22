@@ -253,3 +253,12 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - Không có dữ liệu thật: làm tốt nhất trên dữ liệu sinh. **G11 (cần chuyên gia) → `out_of_scope`** trong `evaluate_gates.py`; không tính là đạt,
   pilot THẬT vẫn yêu cầu G11. `GATES_CURRENT.md` có thêm dòng "Giai đoạn CHỈ DỮ LIỆU TỔNG HỢP": hiện **chưa đạt, còn thiếu G13, G15**.
 - G8, G14, G17 chưa bị bỏ; cần phân loại lại từng cái (tôi đã gộp chung là "cần dữ liệu/con người" mà chưa kiểm tiêu chí).
+
+## 16. G13 và phân loại lại G8/G14/G17 (agent1-Khanh, 22/10/2026; làm song song agent T9, không đụng t9_fast/features/t1)
+
+- **G13 trượt trên tgt vì nhiễu nhãn T9, không phải chính sách:** cùng tgt, cùng đầu vào, cùng chính sách đóng băng — nhãn T9 ước lượng báo giả 2,08 [1,08; 3,37],
+  nhãn thật 0,57 [0,22; 1,00] (đạt điểm ước lượng). `G13_ALERT_POLICY.md` mục 5. **Khuyến nghị:** chạy lại E2E với nhãn T9 v2 (cấu hình `cap=2|hazard=off|fifo=off`)
+  để xem G13 có đạt không — cần sửa `run_e2e_protocol.py` (luồng T9/E2E, chưa đụng để tránh xung đột).
+- Lấp khoảng trống giữa báo động: âm tính (mục 6). `agent1/eval/alert_policy.py::fill_gaps` tắt mặc định.
+- **Phân loại lại (đọc tiêu chí trong `evaluate_gates.py`):** G8 (SBA thật; ECE 0,022 vs ≤0,02; tỉ lệ tiền vỡ nợ 0,63 vs 0,8–1,25), G14 (CUSUM 0,52/0,63; PH 0,43/0,42; cần
+  ≥0,5 và ≤0,5), G17 (sạch −18,8% ✓; nhiễu −7,6% < 10%) đều **làm được bằng mã, không cần chuyên gia**. G17 nằm trong `features.py` (agent T9/T1) nên tôi chưa đụng.

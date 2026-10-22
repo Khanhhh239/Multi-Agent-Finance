@@ -55,3 +55,16 @@ def test_oof_calibration_bounded():
     pred = pred.assign(y13=(pred.p13 > 0.5).astype(float))
     c = oof_calibrate(pred, 'p13', 'y13', n_folds=2)
     assert np.all((c >= 0) & (c <= 1))
+
+
+def test_fill_gaps_never_adds_episodes_or_loses_detection():
+    from agent1.eval.alert_policy import fill_gaps
+    pred, cash = _toy()
+    # tách đôi đợt cảnh báo của F0 bằng một tuần im lặng
+    pred = pred.copy(); mask = (pred.firm_id == 'F0') & (pred.cutoff == pred.cutoff.unique()[15]); pred.loc[mask, 'p13'] = 0.0
+    split = policy_metrics(pred, cash, 'p13', 0.5, 1, fill=0)
+    merged = policy_metrics(pred, cash, 'p13', 0.5, 1, fill=2)
+    assert merged['false_alarms_per_firm_year'] <= split['false_alarms_per_firm_year']
+    assert merged['detected_at_least_4w'] >= split['detected_at_least_4w']
+    a0 = confirmed_alarm(pred, 'p13', 0.5, 1)
+    assert fill_gaps(pred, a0, 2).sum() >= a0.sum() and fill_gaps(pred, a0, 0).equals(a0)

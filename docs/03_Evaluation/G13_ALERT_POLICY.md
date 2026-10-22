@@ -38,3 +38,23 @@ Chính sách cho cổng: MC-copula-t, isotonic, **τ = 0,30, k = 1** (trên src:
 - Trên `tgt2`, CI của phát hiện (0,59) và báo giả (1,10) đều chạm ngưỡng ⇒ đạt ở điểm ước lượng, **chưa vững**.
 - So đối chứng trên `tgt2`: naive phát hiện 0,49; MC với ngày B1 0,52 ⇒ copula-t có giá trị thật so với mốc.
 - **Kết luận vận hành:** cảnh báo dùng được làm **gợi ý có người duyệt** (bậc 2 trong GO_NO_GO), không tự động. Không chỉnh ngưỡng theo tgt/tgt2.
+
+## 5. Vì sao G13 trượt trên `tgt`: nhiễu nhãn T9 (22/10/2026, `scripts/sprint5/g13_label_noise.py`, `outputs/g13/v3/label_noise.csv`)
+
+Cùng thế giới `tgt`, cùng đầu vào E2E, **cùng chính sách đóng băng** (τ = 0,30, k = 1, isotonic học trên src, không chọn lại gì);
+chỉ khác nhãn thanh toán đưa vào T1:
+
+| Nhãn | Sự kiện | Phát hiện ≥4 tuần [CI] | Độ sớm trung vị | Báo giả/công ty-năm [CI] | Brier 13 tuần |
+|---|---|---|---|---|---|
+| T9 ước lượng (E2E, cổng chính thức) | 16 | 0,938 [0,87; 1,00] | 11,6 | **2,079 [1,08; 3,37]** | 0,097 |
+| Nhãn thật, cùng đầu vào | 16 | 0,812 [0,71; 0,93] | 8,1 | **0,573 [0,22; 1,00]** | 0,090 |
+
+**Kết luận:** báo giả tăng 3,6 lần chỉ vì nhãn T9 nhiễu ⇒ G13 phụ thuộc chất lượng T9 (G15). Với nhãn thật, chính sách đạt cổng ở điểm ước lượng
+(CI trên của báo giả 1,00 chạm ngưỡng). Hệ quả: việc T9 v2 làm (sai số ngày trả 2,5 → 0,8 ngày) có thể kéo G13 về phía đạt;
+cần chạy lại E2E với nhãn T9 v2 để biết (chưa làm — nằm trong luồng T9/E2E của agent khác).
+
+## 6. Thử "lấp khoảng trống giữa các báo động" (`scripts/sprint5/g13_v3_source.py`, `outputs/g13/v3/source_frontier.csv`) — âm tính
+
+Giả thuyết: gộp các đợt cảnh báo bị tách nhỏ sẽ giảm báo giả. Trên nguồn (27 sự kiện): đường biên **không đổi** khi lấp 1–6 tuần
+(báo giả ≤ 0,5 ⇒ phát hiện tối đa 0,48 và độ sớm 3,4 tuần, dưới ngưỡng cổng). Đánh đổi phát hiện – báo giả là bản chất của dự báo, không phải của cách đếm đợt.
+Mã `fill_gaps` giữ lại (mặc định tắt, có kiểm thử), không dùng.

@@ -40,15 +40,31 @@ def confirmed_alarm(pred, probability, tau, k):
     return pd.Series((run >= k).to_numpy(), index=pred.index).reindex(pred.index)
 
 
-def policy_metrics(pred, daily_cash, probability, tau, k, horizon_days=91):
-    alarm = confirmed_alarm(pred, probability, tau, k)
+def fill_gaps(pred, alarm, gap_weeks):
+    """Lấp khoảng trống <= gap_weeks tuần giữa hai báo động của cùng công ty ⇒ một đợt cảnh báo không bị tách đôi.
+    Chỉ thêm tuần báo động SAU báo động đầu của đợt: không làm mất phát hiện, không tăng số đợt (báo giả không tăng)."""
+    if not gap_weeks:
+        return alarm
+    out = alarm.copy()
+    p = pred.assign(_a=alarm.to_numpy().astype(bool))
+    for _, g in p.sort_values(['firm_id', 'cutoff']).groupby('firm_id'):
+        on = g[g._a]
+        for (i0, d0), (_, d1) in zip(on.cutoff.items(), list(on.cutoff.items())[1:]):
+            if 0 < (d1 - d0).days <= 7 * gap_weeks:
+                between = g.index[(g.cutoff > d0) & (g.cutoff < d1)]
+                out.loc[between] = True
+    return out
+
+
+def policy_metrics(pred, daily_cash, probability, tau, k, horizon_days=91, fill=0):
+    alarm = fill_gaps(pred, confirmed_alarm(pred, probability, tau, k), fill)
     scored = pred.assign(_alarm=alarm.astype(float).reindex(pred.index).to_numpy())
     return event_metrics(scored, daily_cash, threshold=0.5, probability='_alarm', horizon_days=horizon_days)
 
 
-def select_policy(pred, daily_cash, probability, horizon_days=91, fa_budget=FA_BUDGET):
-    rows = [dict(tau=t, k=k, **policy_metrics(pred, daily_cash, probability, t, k, horizon_days))
-            for t in TAUS for k in CONFIRM]
+def select_policy(pred, daily_cash, probability, horizon_days=91, fa_budget=FA_BUDGET, fills=(0,)):
+    rows = [dict(tau=t, k=k, fill=f, **policy_metrics(pred, daily_cash, probability, t, k, horizon_days, fill=f))
+            for t in TAUS for k in CONFIRM for f in fills]
     grid = pd.DataFrame(rows)
     ok = grid[(grid.false_alarms_per_firm_year <= fa_budget) & (grid.n_events > 0)]
     if len(ok):
@@ -58,7 +74,7 @@ def select_policy(pred, daily_cash, probability, horizon_days=91, fa_budget=FA_B
     else:
         best = grid.sort_values(['false_alarms_per_firm_year', 'detected_at_least_4w'], ascending=[True, False]).iloc[0]
         feasible = False
-    return dict(tau=float(best.tau), k=int(best.k), feasible_on_source=feasible), grid
+    return dict(tau=float(best.tau), k=int(best.k), fill=int(best.fill), feasible_on_source=feasible), grid
 
 
 def firm_bootstrap(pred, daily_cash, probability, tau, k, horizon_days=91, n=200, seed=7):

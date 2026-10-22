@@ -1,0 +1,3 @@
+labels,tau,k,brier_13w,n_events,detected_at_least_4w,median_lead_weeks,false_alarms_per_firm_year,detected_ci_low,detected_ci_high,fa_ci_low,fa_ci_high,bootstrap_n,policy_frozen_on,world,measurement_version
+T9 ước lượng (E2E),0.3,1,0.09743857883229051,16,0.9375,11.642857142857142,2.078541993720565,0.8709326788218794,1.0,1.075107927786499,3.368671507064364,200,src,tgt,g13-label-noise-v1
+"nhãn thật, cùng đầu vào",0.3,1,0.09005845838844416,16,0.8125,8.071428571428571,0.5733908948194661,0.7057352941176471,0.9286904761904763,0.2150215855572998,1.0034340659340657,200,src,tgt,g13-label-noise-v1
