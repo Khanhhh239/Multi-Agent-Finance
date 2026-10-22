@@ -10,7 +10,7 @@ Ghi theo mục 6 của đăng ký (`08_dang_ky_truoc_v5.md`): nguồn, quyền t
 | SHA-256 | `3723fb9d4820f1db2411acdd6c1b8bc79d8f4219447e2db7858e2625159a02cc` |
 | Ngày nộp | 2026-10-22, 15:00 |
 | Số kịch bản | 10 (V5-KB01 đến V5-KB10), mỗi phiếu đủ 11 mục, hai tình huống hợp lệ trông giống, bảng 10 dòng mẫu |
-| Kiểm hình thức | Dòng xác nhận độc lập ở đầu tệp; không có ký tự "~" hay "&"; không nhắc mã, kết quả hay số đo mô hình |
+| Kiểm hình thức | Dòng xác nhận độc lập ở đầu tệp; không có ký tự cấm theo quy ước văn phong (dấu ngã đứng riêng, dấu và viết tắt); không nhắc mã, kết quả hay số đo mô hình |
 
 ## 2. Người viết và mức độc lập
 
