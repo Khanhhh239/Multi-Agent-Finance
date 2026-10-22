@@ -1,0 +1,168 @@
+{
+  "version": "model-time-partition-audit-v1",
+  "status": "actual_source_partitions_verified",
+  "dataset": "D:\\agent22\\data\\synthetic_sources_20261017_v2\\sme_fraud_001",
+  "dataset_version": "synthetic-source-world-v1",
+  "data_origin": "synthetic_process_simulation",
+  "plan": {
+    "company_ids": [
+      "C001",
+      "C002",
+      "C003",
+      "C004",
+      "C005",
+      "C006",
+      "C007",
+      "C008"
+    ],
+    "source_ref": "SIM_SYNTHETIC_SOURCE_WORLD_V1_TECHNICAL_COMPATIBILITY",
+    "train": {
+      "start_at": "2024-01-01T00:00:00+07:00",
+      "end_at": "2025-01-01T00:00:00+07:00"
+    },
+    "calibration": {
+      "start_at": "2025-01-01T00:00:00+07:00",
+      "end_at": "2025-07-01T00:00:00+07:00"
+    },
+    "evaluation": {
+      "start_at": "2025-07-01T00:00:00+07:00",
+      "end_at": "2026-01-01T00:00:00+07:00"
+    }
+  },
+  "partition_time_field": "posted_at",
+  "comparison_timezone": "UTC",
+  "window_end_exclusive": true,
+  "model_sha256": "6c2f9313fd9888437734c5894fdbc96bd6e283370031ba91ecc408387657a4a7",
+  "source_manifest_sha256": "1600bf6339d43fc7d8af04f4dfae2116caebccf0cb17dce7f33f80b5312c0de3",
+  "training_record_sha256": "9ea83d9c1d3543e3bc2d874690b88792888975f4373adbdd6ed917f6e47d5031",
+  "temporal_provenance_fingerprint": "fc55c7ab856918223366ebb3045c81d468f83e693cd35c41753d8b75ff142acd",
+  "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1",
+  "windows": {
+    "train": {
+      "scope": {
+        "company_ids": [
+          "C001",
+          "C002",
+          "C003",
+          "C004",
+          "C005",
+          "C006",
+          "C007",
+          "C008"
+        ],
+        "source_ref": "SIM_SYNTHETIC_SOURCE_WORLD_V1_TECHNICAL_COMPATIBILITY",
+        "start_at": "2024-01-01T00:00:00+07:00",
+        "end_at": "2025-01-01T00:00:00+07:00"
+      },
+      "rows": 9321,
+      "company_rows": {
+        "C001": 1361,
+        "C002": 2993,
+        "C003": 1579,
+        "C004": 614,
+        "C005": 875,
+        "C006": 627,
+        "C007": 538,
+        "C008": 734
+      },
+      "min_posted_at": "2024-01-01T10:24:03+07:00",
+      "max_posted_at": "2024-12-31T18:33:14+07:00",
+      "feature_fingerprint": "41fa47b931d535a455be12d0a81d5ee9d3d8992184ea8797d28398fb6e284e67",
+      "transaction_ids_sha256": "fc8562d6aec576e0b073bbc85fdb6b28ac622fcf5f947f37063de69c0131eeba"
+    },
+    "calibration": {
+      "scope": {
+        "company_ids": [
+          "C001",
+          "C002",
+          "C003",
+          "C004",
+          "C005",
+          "C006",
+          "C007",
+          "C008"
+        ],
+        "source_ref": "SIM_SYNTHETIC_SOURCE_WORLD_V1_TECHNICAL_COMPATIBILITY",
+        "start_at": "2025-01-01T00:00:00+07:00",
+        "end_at": "2025-07-01T00:00:00+07:00"
+      },
+      "rows": 5304,
+      "company_rows": {
+        "C001": 711,
+        "C002": 1614,
+        "C003": 889,
+        "C004": 387,
+        "C005": 545,
+        "C006": 359,
+        "C007": 364,
+        "C008": 435
+      },
+      "min_posted_at": "2025-01-01T10:50:09+07:00",
+      "max_posted_at": "2025-06-30T18:56:38+07:00",
+      "feature_fingerprint": "cfdb2f12fb2886042d9382e1fb534588c79270b7b6e67b9d1d84fa7e32e4eaa9",
+      "transaction_ids_sha256": "cdd5b44e9bebda765057e7395fc931582e36dfce0530c263138227fb30f4cbb8"
+    },
+    "evaluation": {
+      "scope": {
+        "company_ids": [
+          "C001",
+          "C002",
+          "C003",
+          "C004",
+          "C005",
+          "C006",
+          "C007",
+          "C008"
+        ],
+        "source_ref": "SIM_SYNTHETIC_SOURCE_WORLD_V1_TECHNICAL_COMPATIBILITY",
+        "start_at": "2025-07-01T00:00:00+07:00",
+        "end_at": "2026-01-01T00:00:00+07:00"
+      },
+      "rows": 5934,
+      "company_rows": {
+        "C001": 876,
+        "C002": 1668,
+        "C003": 1010,
+        "C004": 382,
+        "C005": 573,
+        "C006": 439,
+        "C007": 423,
+        "C008": 563
+      },
+      "min_posted_at": "2025-07-01T10:00:00+07:00",
+      "max_posted_at": "2025-12-31T18:56:25+07:00",
+      "feature_fingerprint": "9845638a681215ef4edb7ce990e7b03dd7e28e1f3b8c963e55d04f08f4a5dee8",
+      "transaction_ids_sha256": "3d85553a9c2e486f51623f980b5b61f1472bef55def4040ede28bef93011dcf6"
+    }
+  },
+  "actual_id_overlaps": {
+    "train__calibration": 0,
+    "train__evaluation": 0,
+    "calibration__evaluation": 0
+  },
+  "membership_rows": 20559,
+  "partition_counts": {
+    "calibration": 5304,
+    "evaluation": 5934,
+    "train": 9321
+  },
+  "membership_fingerprint": "4636d113231dbb71ade2469e58f212e718c8c9acdb125cb227fe58819d290877",
+  "actual_train_calibration_features_match_model": true,
+  "frozen_calibration_threshold": 0.5671807202868715,
+  "threshold_matches_training_record": true,
+  "models_fitted": 0,
+  "observations_scored": 0,
+  "labels_loaded": false,
+  "splits_loaded": false,
+  "oracle_loaded": false,
+  "queue_changed": false,
+  "holdout_005_loaded_or_scored": false,
+  "external_notifications": 0,
+  "operational_benefit_measured": false,
+  "limitations": [
+    "Audits a trusted model and its original cache; does not rebuild raw-source features",
+    "Evaluation scores from earlier technical runs are not an untouched future benchmark",
+    "Real SME acceptance and independent operational review remain pending"
+  ],
+  "membership_csv_sha256": "5bfce659cac8a903ae4593000c1c770117dd4edbb1c05c8c354147e701bc1f38"
+}

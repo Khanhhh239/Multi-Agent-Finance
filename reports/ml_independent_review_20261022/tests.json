@@ -1,0 +1,12 @@
+{
+  "successful": true,
+  "tests_run": 30,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "patterns": [
+    "test_independent_ml_review.py",
+    "test_compare_shadow.py"
+  ],
+  "seconds": 1.313
+}

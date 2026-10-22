@@ -1,0 +1,14 @@
+{
+  "successful": true,
+  "tests_run": 55,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "patterns": [
+    "test_if_aggregation.py",
+    "test_if_aggregation_dependence.py",
+    "test_if_coverage.py",
+    "test_compare_shadow.py"
+  ],
+  "seconds": 1.14
+}

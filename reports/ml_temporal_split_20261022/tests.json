@@ -1,0 +1,15 @@
+{
+  "successful": true,
+  "tests_run": 61,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "patterns": [
+    "test_model_windows.py",
+    "test_train_source_model.py",
+    "test_shadow_scoring.py",
+    "test_feature_model_sync.py",
+    "test_causality.py"
+  ],
+  "seconds": 16.781
+}

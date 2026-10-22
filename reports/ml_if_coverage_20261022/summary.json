@@ -1,0 +1,303 @@
+{
+  "version": "if-coverage-audit-v1",
+  "summaries": {
+    "5": {
+      "baseline": {
+        "selected_work_reviews": 2436,
+        "transaction_work_reviews": 1659,
+        "nontransaction_work_reviews": 777,
+        "full_if_coverage": 1144,
+        "missing_or_partial": 515,
+        "full_fraction": 0.6895720313441832,
+        "reasons": {
+          "full_evaluation_scored": 1144,
+          "historical_only_unscored": 454,
+          "mixed_history_evaluation": 61
+        },
+        "unscored_partition_signatures": {
+          "calibration": 180,
+          "calibration+evaluation": 61,
+          "train": 264,
+          "train+calibration": 10
+        },
+        "entirely_evaluation_work_reviews": 1144,
+        "entirely_evaluation_full_fraction": 1.0,
+        "unique_transaction_case_ids": 860,
+        "unique_transaction_work_keys": 1659
+      },
+      "if_shadow": {
+        "selected_work_reviews": 2435,
+        "transaction_work_reviews": 1658,
+        "nontransaction_work_reviews": 777,
+        "full_if_coverage": 1143,
+        "missing_or_partial": 515,
+        "full_fraction": 0.6893848009650181,
+        "reasons": {
+          "full_evaluation_scored": 1143,
+          "historical_only_unscored": 454,
+          "mixed_history_evaluation": 61
+        },
+        "unscored_partition_signatures": {
+          "calibration": 180,
+          "calibration+evaluation": 61,
+          "train": 264,
+          "train+calibration": 10
+        },
+        "entirely_evaluation_work_reviews": 1143,
+        "entirely_evaluation_full_fraction": 1.0,
+        "unique_transaction_case_ids": 860,
+        "unique_transaction_work_keys": 1658
+      }
+    },
+    "10": {
+      "baseline": {
+        "selected_work_reviews": 2544,
+        "transaction_work_reviews": 1675,
+        "nontransaction_work_reviews": 869,
+        "full_if_coverage": 1148,
+        "missing_or_partial": 527,
+        "full_fraction": 0.6853731343283582,
+        "reasons": {
+          "full_evaluation_scored": 1148,
+          "historical_only_unscored": 460,
+          "mixed_history_evaluation": 67
+        },
+        "unscored_partition_signatures": {
+          "calibration": 186,
+          "calibration+evaluation": 67,
+          "train": 264,
+          "train+calibration": 10
+        },
+        "entirely_evaluation_work_reviews": 1148,
+        "entirely_evaluation_full_fraction": 1.0,
+        "unique_transaction_case_ids": 860,
+        "unique_transaction_work_keys": 1675
+      },
+      "if_shadow": {
+        "selected_work_reviews": 2544,
+        "transaction_work_reviews": 1675,
+        "nontransaction_work_reviews": 869,
+        "full_if_coverage": 1148,
+        "missing_or_partial": 527,
+        "full_fraction": 0.6853731343283582,
+        "reasons": {
+          "full_evaluation_scored": 1148,
+          "historical_only_unscored": 460,
+          "mixed_history_evaluation": 67
+        },
+        "unscored_partition_signatures": {
+          "calibration": 186,
+          "calibration+evaluation": 67,
+          "train": 264,
+          "train+calibration": 10
+        },
+        "entirely_evaluation_work_reviews": 1148,
+        "entirely_evaluation_full_fraction": 1.0,
+        "unique_transaction_case_ids": 860,
+        "unique_transaction_work_keys": 1675
+      }
+    }
+  },
+  "evaluation_transactions": 11811,
+  "valid_evaluation_scores": 11811,
+  "source_data_defects": 0,
+  "selected_review_data_errors": 0,
+  "cohort_summaries": {
+    "001": {
+      "5": {
+        "baseline": {
+          "selected_work_reviews": 1193,
+          "transaction_work_reviews": 812,
+          "nontransaction_work_reviews": 381,
+          "full_if_coverage": 567,
+          "missing_or_partial": 245,
+          "full_fraction": 0.6982758620689655,
+          "reasons": {
+            "full_evaluation_scored": 567,
+            "historical_only_unscored": 210,
+            "mixed_history_evaluation": 35
+          },
+          "unscored_partition_signatures": {
+            "calibration": 83,
+            "calibration+evaluation": 35,
+            "train": 121,
+            "train+calibration": 6
+          },
+          "entirely_evaluation_work_reviews": 567,
+          "entirely_evaluation_full_fraction": 1.0,
+          "unique_transaction_case_ids": 412,
+          "unique_transaction_work_keys": 812
+        },
+        "if_shadow": {
+          "selected_work_reviews": 1193,
+          "transaction_work_reviews": 812,
+          "nontransaction_work_reviews": 381,
+          "full_if_coverage": 567,
+          "missing_or_partial": 245,
+          "full_fraction": 0.6982758620689655,
+          "reasons": {
+            "full_evaluation_scored": 567,
+            "historical_only_unscored": 210,
+            "mixed_history_evaluation": 35
+          },
+          "unscored_partition_signatures": {
+            "calibration": 83,
+            "calibration+evaluation": 35,
+            "train": 121,
+            "train+calibration": 6
+          },
+          "entirely_evaluation_work_reviews": 567,
+          "entirely_evaluation_full_fraction": 1.0,
+          "unique_transaction_case_ids": 412,
+          "unique_transaction_work_keys": 812
+        }
+      },
+      "10": {
+        "baseline": {
+          "selected_work_reviews": 1245,
+          "transaction_work_reviews": 818,
+          "nontransaction_work_reviews": 427,
+          "full_if_coverage": 568,
+          "missing_or_partial": 250,
+          "full_fraction": 0.6943765281173594,
+          "reasons": {
+            "full_evaluation_scored": 568,
+            "historical_only_unscored": 213,
+            "mixed_history_evaluation": 37
+          },
+          "unscored_partition_signatures": {
+            "calibration": 86,
+            "calibration+evaluation": 37,
+            "train": 121,
+            "train+calibration": 6
+          },
+          "entirely_evaluation_work_reviews": 568,
+          "entirely_evaluation_full_fraction": 1.0,
+          "unique_transaction_case_ids": 412,
+          "unique_transaction_work_keys": 818
+        },
+        "if_shadow": {
+          "selected_work_reviews": 1245,
+          "transaction_work_reviews": 818,
+          "nontransaction_work_reviews": 427,
+          "full_if_coverage": 568,
+          "missing_or_partial": 250,
+          "full_fraction": 0.6943765281173594,
+          "reasons": {
+            "full_evaluation_scored": 568,
+            "historical_only_unscored": 213,
+            "mixed_history_evaluation": 37
+          },
+          "unscored_partition_signatures": {
+            "calibration": 86,
+            "calibration+evaluation": 37,
+            "train": 121,
+            "train+calibration": 6
+          },
+          "entirely_evaluation_work_reviews": 568,
+          "entirely_evaluation_full_fraction": 1.0,
+          "unique_transaction_case_ids": 412,
+          "unique_transaction_work_keys": 818
+        }
+      }
+    },
+    "003": {
+      "5": {
+        "baseline": {
+          "selected_work_reviews": 1243,
+          "transaction_work_reviews": 847,
+          "nontransaction_work_reviews": 396,
+          "full_if_coverage": 577,
+          "missing_or_partial": 270,
+          "full_fraction": 0.6812278630460449,
+          "reasons": {
+            "full_evaluation_scored": 577,
+            "historical_only_unscored": 244,
+            "mixed_history_evaluation": 26
+          },
+          "unscored_partition_signatures": {
+            "calibration": 97,
+            "calibration+evaluation": 26,
+            "train": 143,
+            "train+calibration": 4
+          },
+          "entirely_evaluation_work_reviews": 577,
+          "entirely_evaluation_full_fraction": 1.0,
+          "unique_transaction_case_ids": 448,
+          "unique_transaction_work_keys": 847
+        },
+        "if_shadow": {
+          "selected_work_reviews": 1242,
+          "transaction_work_reviews": 846,
+          "nontransaction_work_reviews": 396,
+          "full_if_coverage": 576,
+          "missing_or_partial": 270,
+          "full_fraction": 0.6808510638297872,
+          "reasons": {
+            "full_evaluation_scored": 576,
+            "historical_only_unscored": 244,
+            "mixed_history_evaluation": 26
+          },
+          "unscored_partition_signatures": {
+            "calibration": 97,
+            "calibration+evaluation": 26,
+            "train": 143,
+            "train+calibration": 4
+          },
+          "entirely_evaluation_work_reviews": 576,
+          "entirely_evaluation_full_fraction": 1.0,
+          "unique_transaction_case_ids": 448,
+          "unique_transaction_work_keys": 846
+        }
+      },
+      "10": {
+        "baseline": {
+          "selected_work_reviews": 1299,
+          "transaction_work_reviews": 857,
+          "nontransaction_work_reviews": 442,
+          "full_if_coverage": 580,
+          "missing_or_partial": 277,
+          "full_fraction": 0.676779463243874,
+          "reasons": {
+            "full_evaluation_scored": 580,
+            "historical_only_unscored": 247,
+            "mixed_history_evaluation": 30
+          },
+          "unscored_partition_signatures": {
+            "calibration": 100,
+            "calibration+evaluation": 30,
+            "train": 143,
+            "train+calibration": 4
+          },
+          "entirely_evaluation_work_reviews": 580,
+          "entirely_evaluation_full_fraction": 1.0,
+          "unique_transaction_case_ids": 448,
+          "unique_transaction_work_keys": 857
+        },
+        "if_shadow": {
+          "selected_work_reviews": 1299,
+          "transaction_work_reviews": 857,
+          "nontransaction_work_reviews": 442,
+          "full_if_coverage": 580,
+          "missing_or_partial": 277,
+          "full_fraction": 0.676779463243874,
+          "reasons": {
+            "full_evaluation_scored": 580,
+            "historical_only_unscored": 247,
+            "mixed_history_evaluation": 30
+          },
+          "unscored_partition_signatures": {
+            "calibration": 100,
+            "calibration+evaluation": 30,
+            "train": 143,
+            "train+calibration": 4
+          },
+          "entirely_evaluation_work_reviews": 580,
+          "entirely_evaluation_full_fraction": 1.0,
+          "unique_transaction_case_ids": 448,
+          "unique_transaction_work_keys": 857
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "company_ids": ["C001", "C002", "C003", "C004", "C005", "C006", "C007", "C008"],
+  "source_ref": "SIM_SYNTHETIC_SOURCE_WORLD_V1_TECHNICAL_COMPATIBILITY",
+  "train": {"start_at": "2024-01-01T00:00:00+07:00", "end_at": "2025-01-01T00:00:00+07:00"},
+  "calibration": {"start_at": "2025-01-01T00:00:00+07:00", "end_at": "2025-07-01T00:00:00+07:00"},
+  "evaluation": {"start_at": "2025-07-01T00:00:00+07:00", "end_at": "2026-01-01T00:00:00+07:00"}
+}

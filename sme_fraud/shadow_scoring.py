@@ -67,7 +67,7 @@ def output_guard(output,dataset,model):
     if output.is_relative_to(ROOT/'data') or output.is_relative_to(dataset) or output.is_relative_to(model.parent):
         raise ValueError('Output must be outside input/model directories')
     for parent in output.parents:
-        if any((parent/name).is_file() for name in ('manifest.json','case_queue.csv','predictions_frozen.json')):
+        if any((parent/name).is_file() for name in ('manifest.json','case_queue.csv','predictions_frozen.json','training_run.json')):
             raise ValueError('Output must be outside source/detection snapshots')
 
 
@@ -150,6 +150,8 @@ def run_shadow(dataset,model_path,output,*,model_sha256,scope,batch_size=2048):
     # Only load trusted workspace artifacts. Deserialization uses the exact checked bytes.
     artifact=joblib.load(io.BytesIO(model_bytes))
     compatibility=require_model(artifact,metadata,sklearn.__version__)
+    from .train_source_model import verify_scoring_window
+    temporal_verified=verify_scoring_window(artifact,scope,start,end)
     inputs=source_checks(dataset,metadata)
     rows,matrix=selected_matrix(dataset,contract['columns'],scope,start,end)
     scores=[]
@@ -169,10 +171,12 @@ def run_shadow(dataset,model_path,output,*,model_sha256,scope,batch_size=2048):
         rows_scored=len(rows),score_direction='higher_is_more_anomalous',models_fitted=0,
         labels_loaded=False,splits_loaded=False,feature_rebuild=False,threshold_changed=False,
         queue_changed=False,external_notifications=0,holdout_005_loaded_or_scored=False,
-        source_acceptance_verified=False,model_training_window_disjointness_verified=False,
+        source_acceptance_verified=False,model_training_window_disjointness_verified=temporal_verified,
         operational_benefit_measured=False,independent_review=False,
         gates=dict(real_source='awaiting_accepted_real_data',protocol='awaiting_business_approval',
-                   temporal_model_provenance='not_verified_by_this_runner',benefit='not_measured'))
+                   temporal_model_provenance='verified_declared_windows' if temporal_verified else 'not_verified_by_this_runner',benefit='not_measured'))
+    if temporal_verified:
+        run['temporal_provenance_fingerprint']=artifact['temporal_provenance']['fingerprint']
     run['run_id']=digest(run)
     output.parent.mkdir(parents=True,exist_ok=True)
     # Inherit the destination ACL. tempfile.mkdtemp uses private Windows ACLs,

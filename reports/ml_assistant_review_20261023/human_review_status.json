@@ -1,0 +1,9 @@
+{
+  "status": "pending_independent_reviews",
+  "validated_independent_units": 0,
+  "pending_units": 128,
+  "human_active_review_minutes": null,
+  "human_adjudication_minutes": null,
+  "forms_unchanged": true,
+  "source": "Preserved initial validator status, rechecked by form hashes and blank outcome/signature/time fields; private sample mapping not opened."
+}

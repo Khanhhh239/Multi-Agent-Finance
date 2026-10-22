@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "frozen_hashes_budgets_and_pins_verified": true,
+  "zero_share_controls_exact": true,
+  "all_nonzero_scenarios_same_38_document_set": true,
+  "review_packet_initial_validation_verified": true,
+  "protected_files": 1482,
+  "protected_files_unchanged": true,
+  "tests": {
+    "successful": true,
+    "tests_run": 71,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_if_discovery.py",
+      "test_if_discovery_review.py",
+      "test_compare_shadow.py",
+      "test_if_coverage.py",
+      "test_independent_ml_review.py"
+    ],
+    "seconds": 1.5
+  },
+  "documentation_sha256": {
+    "reports/ml_if_discovery_shadow_20261022.md": "88dc3bb79c50c674c6ec0c20d00f38229a4bcab039b0a667a51a04ea86eb88b6",
+    "examples/ml_if_discovery_shadow/README.md": "f7b5d6fa7401190504ce8bfaa33922bba54649f11cdd075084565e84f916c8eb"
+  }
+}

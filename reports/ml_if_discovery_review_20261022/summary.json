@@ -1,0 +1,14 @@
+{
+  "units": 128,
+  "sample_groups": {
+    "if_discovery_selected": 38,
+    "baseline_selection_disagreement": 58,
+    "reference_common_selected": 16,
+    "reference_unreviewed_document_at_end": 16
+  },
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "actionable_gain": null,
+  "reviewer_zip_sha256": "0a37f6b9b7f1fe14d399cb0f5664e0097f4ce7c28c49d52e1a014f0ebfea3643",
+  "status": "prepared_awaiting_human_review"
+}

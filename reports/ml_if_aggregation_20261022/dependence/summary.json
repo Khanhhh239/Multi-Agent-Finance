@@ -1,0 +1,370 @@
+[
+  {
+    "cohort": "001",
+    "profile": "all_full_member_sets",
+    "units": 568,
+    "size_bins": {
+      "1": 159,
+      "3-4": 129,
+      "2": 77,
+      "5-8": 145,
+      "9+": 58
+    },
+    "unique_evaluation_members": 773,
+    "repeated_member_occurrences": 1544,
+    "size_max_spearman": 0.4347801654162965,
+    "size_residual_spearman": -0.06233303936430488,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.46956579643031204,
+      "included_units": 568,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.47116796804290656,
+      "included_units": 529,
+      "excluded_units": 39,
+      "included_strata": 12,
+      "total_strata": 37
+    }
+  },
+  {
+    "cohort": "001",
+    "profile": "first_full_set_per_case",
+    "units": 194,
+    "size_bins": {
+      "1": 159,
+      "3-4": 19,
+      "2": 13,
+      "5-8": 3
+    },
+    "unique_evaluation_members": 267,
+    "repeated_member_occurrences": 0,
+    "size_max_spearman": 0.12103526679960877,
+    "size_residual_spearman": -0.045339595344109994,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.1714385610559826,
+      "included_units": 175,
+      "excluded_units": 19,
+      "included_strata": 7,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.27649321541265043,
+      "included_units": 147,
+      "excluded_units": 47,
+      "included_strata": 7,
+      "total_strata": 29
+    }
+  },
+  {
+    "cohort": "001",
+    "profile": "largest_full_set_per_case",
+    "units": 194,
+    "size_bins": {
+      "1": 79,
+      "2": 15,
+      "5-8": 50,
+      "3-4": 28,
+      "9+": 22
+    },
+    "unique_evaluation_members": 773,
+    "repeated_member_occurrences": 0,
+    "size_max_spearman": 0.4165361297624564,
+    "size_residual_spearman": -0.12607797348764463,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.4401886384676038,
+      "included_units": 194,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.4833883263557757,
+      "included_units": 156,
+      "excluded_units": 38,
+      "included_strata": 10,
+      "total_strata": 33
+    }
+  },
+  {
+    "cohort": "001",
+    "profile": "largest_full_set_per_transaction_overlap_component",
+    "units": 194,
+    "size_bins": {
+      "1": 79,
+      "2": 15,
+      "5-8": 50,
+      "3-4": 28,
+      "9+": 22
+    },
+    "unique_evaluation_members": 773,
+    "repeated_member_occurrences": 0,
+    "size_max_spearman": 0.4165361297624564,
+    "size_residual_spearman": -0.12607797348764463,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.4401886384676038,
+      "included_units": 194,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.4833883263557757,
+      "included_units": 156,
+      "excluded_units": 38,
+      "included_strata": 10,
+      "total_strata": 33
+    }
+  },
+  {
+    "cohort": "001",
+    "profile": "rerankable_first_appearance_sets",
+    "units": 560,
+    "size_bins": {
+      "1": 151,
+      "3-4": 129,
+      "2": 77,
+      "5-8": 145,
+      "9+": 58
+    },
+    "unique_evaluation_members": 765,
+    "repeated_member_occurrences": 1544,
+    "size_max_spearman": 0.43586370808693803,
+    "size_residual_spearman": -0.05478821284107113,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.47201435046041323,
+      "included_units": 560,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.47116796804290656,
+      "included_units": 529,
+      "excluded_units": 31,
+      "included_strata": 12,
+      "total_strata": 30
+    }
+  },
+  {
+    "cohort": "003",
+    "profile": "all_full_member_sets",
+    "units": 580,
+    "size_bins": {
+      "1": 155,
+      "2": 84,
+      "5-8": 123,
+      "3-4": 126,
+      "9+": 92
+    },
+    "unique_evaluation_members": 788,
+    "repeated_member_occurrences": 1895,
+    "size_max_spearman": 0.39632449487169213,
+    "size_residual_spearman": -0.3284777912443444,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.3528746649007794,
+      "included_units": 580,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.39981283984539334,
+      "included_units": 541,
+      "excluded_units": 39,
+      "included_strata": 15,
+      "total_strata": 34
+    }
+  },
+  {
+    "cohort": "003",
+    "profile": "first_full_set_per_case",
+    "units": 200,
+    "size_bins": {
+      "1": 155,
+      "2": 26,
+      "5-8": 1,
+      "3-4": 18
+    },
+    "unique_evaluation_members": 272,
+    "repeated_member_occurrences": 0,
+    "size_max_spearman": -0.06404385641706453,
+    "size_residual_spearman": -0.2832861628845354,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.022391301821022887,
+      "included_units": 200,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.1609640492844004,
+      "included_units": 163,
+      "excluded_units": 37,
+      "included_strata": 8,
+      "total_strata": 26
+    }
+  },
+  {
+    "cohort": "003",
+    "profile": "largest_full_set_per_case",
+    "units": 200,
+    "size_bins": {
+      "3-4": 37,
+      "5-8": 35,
+      "2": 21,
+      "9+": 25,
+      "1": 82
+    },
+    "unique_evaluation_members": 788,
+    "repeated_member_occurrences": 0,
+    "size_max_spearman": 0.3364956630074662,
+    "size_residual_spearman": -0.2728111165466767,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.337622420961739,
+      "included_units": 200,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.4085945849246785,
+      "included_units": 158,
+      "excluded_units": 42,
+      "included_strata": 11,
+      "total_strata": 31
+    }
+  },
+  {
+    "cohort": "003",
+    "profile": "largest_full_set_per_transaction_overlap_component",
+    "units": 200,
+    "size_bins": {
+      "3-4": 37,
+      "5-8": 35,
+      "2": 21,
+      "9+": 25,
+      "1": 82
+    },
+    "unique_evaluation_members": 788,
+    "repeated_member_occurrences": 0,
+    "size_max_spearman": 0.3364956630074662,
+    "size_residual_spearman": -0.2728111165466767,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.337622420961739,
+      "included_units": 200,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.4085945849246785,
+      "included_units": 158,
+      "excluded_units": 42,
+      "included_strata": 11,
+      "total_strata": 31
+    }
+  },
+  {
+    "cohort": "003",
+    "profile": "rerankable_first_appearance_sets",
+    "units": 572,
+    "size_bins": {
+      "1": 147,
+      "2": 84,
+      "5-8": 123,
+      "3-4": 126,
+      "9+": 92
+    },
+    "unique_evaluation_members": 780,
+    "repeated_member_occurrences": 1895,
+    "size_max_spearman": 0.3936278842635686,
+    "size_residual_spearman": -0.3143209223645784,
+    "within_company": {
+      "strata": [
+        "company_id"
+      ],
+      "rho": 0.35713344360978994,
+      "included_units": 572,
+      "excluded_units": 0,
+      "included_strata": 8,
+      "total_strata": 8
+    },
+    "within_company_type": {
+      "strata": [
+        "company_id",
+        "txn_group"
+      ],
+      "rho": 0.39981283984539334,
+      "included_units": 541,
+      "excluded_units": 31,
+      "included_strata": 15,
+      "total_strata": 29
+    }
+  }
+]

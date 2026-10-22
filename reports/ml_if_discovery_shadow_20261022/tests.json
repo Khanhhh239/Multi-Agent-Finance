@@ -1,0 +1,15 @@
+{
+  "successful": true,
+  "tests_run": 71,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "patterns": [
+    "test_if_discovery.py",
+    "test_if_discovery_review.py",
+    "test_compare_shadow.py",
+    "test_if_coverage.py",
+    "test_independent_ml_review.py"
+  ],
+  "seconds": 1.5
+}

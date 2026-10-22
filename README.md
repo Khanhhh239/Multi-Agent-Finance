@@ -1,10 +1,24 @@
 # Multi-Agent Finance — Agent 2 (Sang)
 
-Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **21/10/2026**. Xem [hướng dẫn cài và kiểm thử](docs/AGENT2_GITHUB.md), [cài đặt/nâng cấp/khôi phục](RELEASES.md) và [trạng thái sửa lỗi nghiệm thu UI](reports/browser_acceptance_status_20261021.md).
+Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **23/10/2026**. Xem [hướng dẫn cài và kiểm thử](docs/AGENT2_GITHUB.md), [cài đặt/nâng cấp/khôi phục](RELEASES.md) và [trạng thái sửa lỗi nghiệm thu UI](reports/browser_acceptance_status_20261021.md).
 
 ## Dữ liệu tổng hợp gian lận tài chính SME Việt Nam
 
 **Đóng gói phiên bản:** [Hướng dẫn cài sạch, lưu runtime cũ, nâng cấp và rollback](RELEASES.md). Profile web/backup dùng `requirements-review-lock.txt`; các định dạng schema/backup và hợp đồng ML giữ phiên bản riêng.
+
+**ML — discovery shadow 22/10/2026:** đã thử mở admission ngoài baseline với tối đa 1/5 suất sau pin bắt buộc, giữ trần 5/120. Chọn thêm 38 chứng từ có 0 điểm giao dịch luật; 809 lượt bắt buộc giữ đủ, 0 vượt ngân sách. Có 23 lượt baseline chậm tối đa 4 ngày và thêm 760 phút ước tính; quota 40% không mở thêm đầu mối. 71 kiểm thử đạt, 1.482 tệp bảo toàn không đổi; gói rà mù mới 128 phiếu đang chờ người thực hiện. [Kết quả và giới hạn](reports/ml_if_discovery_shadow_20261022.md), [protocol/cách chạy](examples/ml_if_discovery_shadow/README.md).
+
+**ML — kiểm tra gộp max 22/10/2026:** đã phân tích quy mô/công ty/nghiệp vụ trên 1.148 tập thành viên đủ IF và kiểm tra thêm mỗi hồ sơ/cụm không trùng giao dịch một lần. Tương quan quy mô–max rõ hơn ở hồ sơ đã mở rộng; chưa chứng minh ưu tiên sai hoặc lợi ích của phép gộp khác. Giữ max và thứ tự hiện tại; 55 kiểm thử đạt, 1.447 tệp bảo toàn không đổi. [Kết quả và giới hạn](reports/ml_if_aggregation_20261022.md), [cách chạy](examples/ml_if_aggregation/README.md).
+
+**ML — độ phủ IF 22/10/2026:** đã truy đủ 515/1.659 lượt baseline thiếu điểm: 454 lượt chỉ có lịch sử và 61 lượt trộn calibration/evaluation; không phát hiện lỗi dữ liệu. Giữ tỷ lệ toàn bộ 68,96%; 11.811/11.811 giao dịch evaluation có điểm hợp lệ. Không chấm thêm train/calibration; 62 kiểm thử đạt, 1.424 tệp bảo toàn không đổi. [Phân loại, mẫu số và bằng chứng từng lượt](reports/ml_if_coverage_20261022.md), [cách chạy audit](examples/ml_if_coverage/README.md).
+
+**ML — bộ rà độc lập 22/10/2026:** đã chuẩn bị 69 phiếu có bằng chứng theo cutoff: 37 mẫu bất đồng và 32 mẫu tham chiếu ngẫu nhiên, trộn/ẩn nhánh và điểm IF. Có phiếu primary, phân xử, phút đo thực tế và validator; 30 kiểm thử liên quan đạt, 1.269 tệp bảo toàn không đổi. Người rà/người phân xử chưa được phân công, outcome và phút thực tế vẫn trống. [Gói giao reviewer và trạng thái](reports/ml_independent_review_20261022.md), [cách chuẩn bị/nhập](examples/ml_independent_review/README.md). Chưa có kết luận độc lập hoặc lợi ích ML được xác nhận.
+
+**ML — so sánh shadow cùng ngân sách 22/10/2026:** đã chạy IF trên 11.811 giao dịch evaluation của 001/003 và so với baseline rules + graph + A5 theo cutoff từng ngày. Ở mức 5 hồ sơ/120 phút, IF đổi tập được chọn tại 15 cặp công ty/ngày; ở mức 10/240, tập được chọn giống baseline. 88 kiểm thử đạt, 0 vi phạm ngân sách/đẩy suất bắt buộc đã chọn, 1.240 tệp bảo toàn không đổi. Chưa có review độc lập nên chưa kết luận lợi ích. [Kết quả, giới hạn và phiếu rà](reports/ml_shadow_comparison_20261022.md), [cách chạy](examples/ml_shadow_comparison/README.md).
+
+**ML — tương thích nguồn mới 22/10/2026:** đã huấn luyện hai IF mới cho `synthetic-source-world-v1` từ cache 190 feature đúng hợp đồng, với cửa sổ train/calibration/evaluation tách riêng. Hai lượt shadow trên 11.811 giao dịch evaluation cho cùng hash; 45 kiểm thử liên quan đạt và 1.215 tệp bảo toàn không đổi. Model cũ tiếp tục bị chặn; hàng đợi giữ nguyên. [Kết quả và model](reports/model_source_sync_20261022.md), [cách huấn luyện/chấm](examples/ml_source_model/README.md). Chưa nghiệm thu SME thật hoặc lợi ích vận hành.
+
+**ML — kiểm toán cửa sổ 22/10/2026:** đã đối chiếu [membership của 41.082 giao dịch](reports/ml_temporal_split_20261022.md): train năm 2024, calibration nửa đầu 2025, evaluation nửa cuối 2025; 0 ID giao nhau và fingerprint train/calibration khớp model đã lưu. 61 kiểm thử đạt; audit không fit/chấm lại model, 1.232 tệp bảo toàn không đổi. Cửa sổ evaluation đã được chấm kỹ thuật trước đó, chưa phải đánh giá giữ kín trên SME thật.
 
 **Vận hành — 19/10/2026:** đã bổ sung [sao lưu/khôi phục và cổng kết luận chung web/CLI](reports/operational_reliability_20261019.md). SQLite, audit, định danh và liên kết kho được phục hồi sang thư mục mới; cả web/CLI chặn kết luận cuối khi còn yêu cầu tài liệu mở/đã nhận. [Cách sao lưu](examples/review_backup/README.md), [cách dùng CLI](examples/review_decision_gate/README.md). Bản phục hồi chỉ dùng thông báo giả lập, không tự dispatch.
 

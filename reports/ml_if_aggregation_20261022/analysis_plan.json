@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-22",
+  "version": "if-max-member-audit-v1",
+  "cohorts": [
+    "001",
+    "003"
+  ],
+  "seed": 20261022,
+  "reference_repetitions": 1000,
+  "policy": "Existing max only; no alternative aggregator or ranking experiment",
+  "analysis_unit": "Exact member set at first causal appearance, all admitted transaction cases",
+  "metrics": "Descriptive size/company/txn_type distributions and within-stratum rank correlations",
+  "reference": "Same cohort/company/type composition, available evaluation scores strictly before cutoff; without replacement",
+  "interpretation": "A mechanical max diagnostic, not an independent operational outcome or causal estimate",
+  "input_preservation_files": 1447,
+  "model_fit": false,
+  "model_scored": false,
+  "queue_write": false
+}

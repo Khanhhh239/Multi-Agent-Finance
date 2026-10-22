@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "arithmetic_and_member_trace_verified": true,
+  "input_and_output_commitments_verified": true,
+  "documentation_links_verified": true,
+  "protected_files": 1424,
+  "protected_files_unchanged": true,
+  "code_sha256": {
+    "sme_fraud/audit_if_coverage.py": "eeb48dbfa26e9ceb45fa2546d6f9bf330975c08936a187528f4515f6e51aaf7c",
+    "tests/test_if_coverage.py": "a22d3da5f6ac017ddbb5cfbb58d241a10b923a03ed074ffb60fed13d7aa3e8f4"
+  }
+}

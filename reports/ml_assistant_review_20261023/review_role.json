@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-23",
+  "reviewer_type": "AI_assistant",
+  "reviewer_id": "CODEX_ASSISTANT",
+  "independent_of_development": false,
+  "blind_to_arm_and_score": false,
+  "reason": "Assistant developed/evaluated the project and has prior aggregate branch/score exposure; current assessment uses public evidence only",
+  "human_forms_changed": false,
+  "independent_review_count": 0,
+  "human_active_review_minutes": null,
+  "timing_policy": "Batch wall-clock elapsed for assistant work is measured separately; never allocate or label it human per-case active time",
+  "tests_run": 22,
+  "tests_successful": true,
+  "user_confirmed_human_reviewers_unassigned": true,
+  "assistant_reviewed_snapshots": 128
+}

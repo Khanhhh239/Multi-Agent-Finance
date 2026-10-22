@@ -1,0 +1,24 @@
+{
+  "version": "independent-ml-review-v1",
+  "status": "prepared_awaiting_human_review",
+  "units": 69,
+  "sample_groups": {
+    "disagreement": 37,
+    "reference_common_selected": 16,
+    "reference_neither_selected": 16
+  },
+  "source_origin": "synthetic_process_simulation",
+  "independent_reviews": 0,
+  "real_sme_reviews": 0,
+  "actionable_gain": null,
+  "actual_review_minutes": null,
+  "primary_reviewer_assigned": false,
+  "adjudicator_assigned": false,
+  "model_fit": false,
+  "model_scored": false,
+  "queue_changed": false,
+  "plan_sha256": "1e8ecd52d1b3eccba7e6e4b06e3e572c64030b74eccbd51797592fc60698aeea",
+  "public_manifest_sha256": "c5e9f3babce2451506f2263e34c2c823d8f8325920aa4c52a1215f7d17a80a1f",
+  "reviewer_zip_sha256": "fd6e48e3ca00d12e0b39896f0aae38473cdcaa974ea0e7aa038ba3fdf903391c",
+  "inputs_unchanged": true
+}

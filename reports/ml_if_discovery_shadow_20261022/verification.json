@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-22",
+  "status": "discovery_shadow_complete_pending_independent_review",
+  "tests": {
+    "successful": true,
+    "tests_run": 71,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_if_discovery.py",
+      "test_if_discovery_review.py",
+      "test_compare_shadow.py",
+      "test_if_coverage.py",
+      "test_independent_ml_review.py"
+    ],
+    "seconds": 1.5
+  },
+  "protected_files": 1482,
+  "protected_files_unchanged": true,
+  "models_fitted": 0,
+  "observations_scored": 0,
+  "models_deserialized": 0,
+  "production_queue_changed": false,
+  "old_studies_and_reviewer_packet_changed": false,
+  "external_sends": 0,
+  "zero_share_controls_exactly_reproduce_frozen_baseline": true,
+  "mandatory_displacements": 0,
+  "budget_violations": 0,
+  "threshold_retuned": false,
+  "training_or_calibration_scored": false,
+  "labels_or_oracle_loaded": false,
+  "holdout_005_access": "opaque_hash_only_during_preservation_checks",
+  "independent_outcomes_added": 0,
+  "code_sha256": {
+    "sme_fraud/compare_if_discovery.py": "4041fb5b039a75b40a8309a0e762edb2d289b22631c6d6ebbb91d575bf55a0a3",
+    "tests/test_if_discovery.py": "db1e91d07cd055eaac910bad1033928325182d602bd40058543f66693c1fd2a5",
+    "sme_fraud/if_discovery_review.py": "f12804dba0354c8607f2067840680f8ab9389f0e912a445424edb023070bf2aa",
+    "tests/test_if_discovery_review.py": "a5c533ef98c4a9099cbf2607d2ea6d0340cf1ec070c23a355dd1f5a034012463"
+  },
+  "initial_tests": {
+    "successful": true,
+    "tests_run": 51,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_if_discovery.py",
+      "test_compare_shadow.py",
+      "test_if_coverage.py"
+    ],
+    "seconds": 1.469
+  },
+  "independent_review_packet": "reports\\ml_if_discovery_review_20261022",
+  "independent_review_units": 128,
+  "review_packet_blinding_company_and_asof_verified": true
+}

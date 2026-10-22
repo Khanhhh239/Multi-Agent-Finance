@@ -2,6 +2,8 @@
 
 Module: [shadow_scoring.py](../../sme_fraud/shadow_scoring.py). Runner kiểm tra cache/model hiện có, chọn công ty và khoảng thời gian rồi xuất điểm Isolation Forest vào thư mục mới. Không gọi `fit`, dựng lại feature, đọc nhãn/splits, chọn ngưỡng hoặc sửa hàng đợi/kết luận/thông báo. [Biên bản kiểm chứng](../../reports/ml_shadow_runner_20261019.md).
 
+**Cập nhật 22/10/2026:** đã có [hai model mới tương thích `synthetic-source-world-v1`](../../reports/model_source_sync_20261022.md) và [luồng huấn luyện riêng](../ml_source_model/README.md). Khi artifact có provenance mới, runner bắt buộc scope nằm trong evaluation đã khai báo và kiểm tra tách cửa sổ với train/calibration; model cũ vẫn giữ trạng thái thời gian chưa xác minh.
+
 ## Thử trên mô phỏng
 
 ```powershell
@@ -25,7 +27,7 @@ Runner kiểm tra hash trước/sau tính điểm và chỉ công bố output ho
 
 ## Trước khi dùng nguồn thật
 
-Phiên bản này chạy ở chế độ `technical_cache_replay`. Nó chưa nạp trực tiếp bản xuất ERP, chưa xác minh nghiệm thu nguồn, chưa tự dựng feature mới và chưa chứng minh cửa sổ chấm tách khỏi train/calibration. Việc nạp điểm từ cache đúng checksum không thay thế các kiểm tra thời điểm của producer feature. Ma trận phạm vi được nạp vào RAM; chưa benchmark dung lượng/độ trễ trên nguồn SME thật.
+Runner chạy ở chế độ `technical_cache_replay`. Nó chưa nạp trực tiếp bản xuất ERP, chưa xác minh nghiệm thu nguồn hoặc tự dựng feature mới. Việc tách cửa sổ được xác minh theo provenance khai báo với model mới; model cũ không có provenance vẫn ghi `model_training_window_disjointness_verified=false`. Việc nạp điểm từ cache đúng checksum không thay thế các kiểm tra thời điểm của producer feature. Ma trận phạm vi được nạp vào RAM; chưa benchmark dung lượng/độ trễ trên nguồn SME thật.
 
 Để nối pilot cần: nguồn/mapping được chủ nguồn xác nhận; feature đúng thời điểm; model phù hợp được train/calibrate trên cửa sổ riêng; provenance thời gian và công ty được kiểm tra; thiết kế so sánh được duyệt và có người rà độc lập. Sau đó mới kết nối runner với nguồn đó. Giữ điểm riêng để quan sát, chưa đổi ngân sách/thứ tự hồ sơ hoặc áp threshold benchmark cho SME mới.
 

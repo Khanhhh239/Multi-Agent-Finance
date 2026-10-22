@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-22",
+  "status": "actual_temporal_partitions_verified_synthetic_only",
+  "tests": {
+    "successful": true,
+    "tests_run": 61,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_model_windows.py",
+      "test_train_source_model.py",
+      "test_shadow_scoring.py",
+      "test_feature_model_sync.py",
+      "test_causality.py"
+    ],
+    "seconds": 16.781
+  },
+  "audits": [
+    {
+      "tag": "001",
+      "counts": {
+        "train": 9321,
+        "calibration": 5304,
+        "evaluation": 5934
+      },
+      "actual_id_overlaps": {
+        "train__calibration": 0,
+        "train__evaluation": 0,
+        "calibration__evaluation": 0
+      },
+      "model_sha256": "6c2f9313fd9888437734c5894fdbc96bd6e283370031ba91ecc408387657a4a7",
+      "membership_sha256": "5bfce659cac8a903ae4593000c1c770117dd4edbb1c05c8c354147e701bc1f38",
+      "actual_train_calibration_features_match_model": true,
+      "threshold_matches_training_record": true
+    },
+    {
+      "tag": "003",
+      "counts": {
+        "train": 9289,
+        "calibration": 5357,
+        "evaluation": 5877
+      },
+      "actual_id_overlaps": {
+        "train__calibration": 0,
+        "train__evaluation": 0,
+        "calibration__evaluation": 0
+      },
+      "model_sha256": "a54f91bea581d5abb2f49339c062cedb068d21a0b724876e33a7593aa4b188b7",
+      "membership_sha256": "52debf6a2559cb7a2098740a965352831ce9b3f0655a9975c3f32b70e0fcdced",
+      "actual_train_calibration_features_match_model": true,
+      "threshold_matches_training_record": true
+    }
+  ],
+  "rows_audited": 41082,
+  "source_audit_models_fitted": 0,
+  "source_audit_observations_scored": 0,
+  "protected_files": 1232,
+  "protected_files_unchanged": true,
+  "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1",
+  "labels_splits_oracle_loaded_by_source_audit": false,
+  "holdout_005_access": "opaque_hash_only_during_preservation_checks",
+  "queue_changed": false,
+  "external_notifications": 0,
+  "operational_benefit_measured": false,
+  "code_sha256": {
+    "sme_fraud/audit_model_windows.py": "176bdafe86964d073ed9a3dd931d2e1b7d91e85c91a7f8eccbc2a2cb4c31eb28",
+    "tests/test_model_windows.py": "e374c7e8a65a6247ec662ad1c7b2161b5a0d56f2ac3abafb6834daece891eb36"
+  },
+  "gates": {
+    "real_source": "awaiting_real_data",
+    "independent_review": "pending",
+    "protocol": "draft_not_approved",
+    "operational_benefit": "not_measured"
+  }
+}
