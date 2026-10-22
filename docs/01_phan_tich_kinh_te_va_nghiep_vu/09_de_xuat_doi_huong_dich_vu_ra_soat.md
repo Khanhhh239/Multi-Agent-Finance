@@ -51,4 +51,6 @@ Các ngưỡng này là **giả định**. Chỉ thí điểm sau khi có thẩm
 Nếu một vòng sau có mô hình có giám sát đạt cổng niêm phong độc lập, mô hình chỉ thêm **thứ tự ưu tiên** cho các câu hỏi. Giao diện và quy trình con người giữ nguyên, nên không phải đổi sản phẩm.
 
 ## 8. Mã và hiện vật dùng ngay
-`sme_fraud/rules.py` (luật, đồ thị), `agent2/alerting.py` (ngân sách, gộp vụ), `agent2/explain_v4.py`, `agent2/explain_v5.py`, `agent2/service.py` (API cục bộ), `review_ui/` (hàng đợi, phản hồi), `agent2/schema.py` (kiểm tra đầu vào). Thiếu: bộ nhận dữ liệu từ phần mềm kế toán thật (chưa có tệp mẫu) và bảng điều khiển nhiều khách cho đơn vị kế toán.
+`sme_fraud/rules.py` (luật, đồ thị), `agent2/alerting.py` (ngân sách, gộp vụ), `agent2/explain_v4.py`, `agent2/explain_v5.py`, `agent2/service.py` (API cục bộ), `review_ui/` (hàng đợi, phản hồi), `agent2/schema.py` (kiểm tra đầu vào). Đã bổ sung ngày 2026-10-22: trang danh mục nhiều khách cho đơn vị kế toán (`/portfolio`, `review_ui/portfolio.html`, chỉ đọc), đo chỉ số thí điểm K1, K2, K3, K5 từ kho rà soát (`scripts/pilot_kpis.py`, chỉ đọc, phân theo mức ưu tiên và họ tín hiệu), quan sát biến động v5 trong lý do tuần (`agent2/change_ops.py`, chỉ thêm lời giải thích). Hướng dẫn cho người rà soát: `docs/05_ke_hoach_giao_viec/huong_dan_ke_toan_vien.md`.
+
+Còn thiếu: bộ nhận dữ liệu từ phần mềm kế toán thật (chủ dự án xác nhận ngày 2026-10-16 là chưa có tệp mẫu; xem `docs/05_ke_hoach_giao_viec/adapters.md`).
