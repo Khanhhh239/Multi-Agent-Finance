@@ -25,10 +25,20 @@ SHRINK = 6.0
 def add_features(S, world):
     prom = pd.read_parquet(SYNTH / world / "promises.parquet")
     inv = pd.read_parquet(SYNTH / world / "invoices.parquet", columns=["invoice_id", "paid_date_true"])
+    # Thế giới sạch (promises_mode='legacy') không có các cột mơ hồ: lời hứa ở đó luôn chính xác ⇒ độ rộng 0, hứa đủ (tỉ lệ 1).
+    if "promised_date_lo" not in prom:
+        prom["promised_date_lo"] = prom["promised_date"]
+    if "promised_date_hi" not in prom:
+        prom["promised_date_hi"] = prom["promised_date"]
+    if "promised_fraction" not in prom:
+        prom["promised_fraction"] = 1.0
     for c in ("made_date", "promised_date", "promised_date_lo", "promised_date_hi"):
         prom[c] = pd.to_datetime(prom[c])
     prom = prom.merge(inv, on="invoice_id", how="left")
+    for c in ("made_date", "promised_date", "promised_date_lo", "promised_date_hi", "paid_date_true"):
+        prom[c] = pd.to_datetime(prom[c]).astype("datetime64[ns]")     # cùng độ phân giải cho merge_asof
     S = S.copy().reset_index(drop=True)
+    S["cutoff"] = pd.to_datetime(S["cutoff"]).astype("datetime64[ns]")
     S["_row"] = np.arange(len(S))
     left = S[["_row", "invoice_id", "cutoff", "customer_id"]].sort_values("cutoff")
     # (1) lời hứa gần nhất có made_date <= T, kèm số lời hứa tích luỹ trên hoá đơn
