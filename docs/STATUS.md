@@ -12,7 +12,12 @@ Mọi số là **dữ liệu tổng hợp**. Kết luận v4 không đạt G5 gi
 | Đăng ký v1.2 (400 cây cố định, định nghĩa ứng viên, lấy mẫu âm có điều kiện) | Ghi trước mọi so sánh | `08_dang_ky_truoc_v5.md`, commit `2389a9d` |
 | Đăng ký v1.3 (loại lối tắt liên kết hóa đơn của bộ sinh) | Ghi trước khi ứng viên dùng đặc trưng mới chạy | commit `10a0b17` |
 | Kiểm tra lối tắt dạng trường V13 | Có công cụ; phát hiện 3 lối tắt (ghi ở dữ liệu L11) | `scripts/audit_field_presence.py` |
-| R2: chuẩn bị ma trận, kiểm tương đương lấy mẫu, chọn w, sàng lọc, Cold, tầng chọn | **Đang chạy** bằng bộ điều phối tách rời, có điểm khôi phục | `work/r2_master.log`, `results/v5/R2/` |
+| R2 bước 1: ma trận nền và đặc trưng thay đổi cho 1001 đến 1020 | Xong 10:30 ngày 2026-10-22; sau khi máy tắt lúc 10:32 (tắt từ menu Start, không phải lỗi) đã kiểm lại SHA-256 mọi tệp ma trận theo manifest: khớp đủ 20 thế giới | `work/v5_matrices/s*/manifest*.json` |
+| R2 bước 2: kiểm tương đương lấy mẫu âm (thế giới 1001, L4-PU, w = 0,2) | **Đạt** với tỷ lệ 0,1: Spearman 0,957 (ngưỡng 0,95), lệch recall tại B3 0,82 điểm (ngưỡng 2). Tỷ lệ 0,1 được đăng ký cho các bước sau | `results/v5/R2/subsample_equivalence_0.1.json` |
+| R2 bước 3 trở đi: chọn w, sàng lọc, Cold, tầng chọn | **Đang chạy** bằng bộ điều phối tách rời, có điểm khôi phục (chạy lại từ 14:52) | `work/r2_master.log`, `results/v5/R2/master_state.json` |
+| Khung mã hóa R3 (chỉ dùng nếu chốt chặn đạt) | Móc ca hợp lệ mới với tần suất ghi trước khi đọc kịch bản; kiểm thử máy móc bằng kịch bản thay thế | `agent2/world_v5_sealed.py`, `tests_agent2/test_world_v5_sealed.py`, mục Làm rõ thực thi R3 của đăng ký |
+| Kịch bản độc lập R3 | Phiên viết tách biệt đang soạn (dừng tạm do giới hạn API, đã cho chạy tiếp) | `docs/05_ke_hoach_giao_viec/independent_scenarios/` |
+| Quan sát biến động v5 trong lý do tuần | Xong, chỉ thêm lời giải thích, không đổi cảnh báo | `agent2/change_ops.py`, `agent2/pipeline_v4.py` |
 | Đề xuất đổi hướng (mục 7 đăng ký) | Đã soạn sẵn | `01_phan_tich_kinh_te_va_nghiep_vu/09_de_xuat_doi_huong_dich_vu_ra_soat.md` |
 
 Phát hiện chính của vòng này: dừng sớm theo AP có thể sụp mô hình xuống 1 cây (đã thay bằng 400 cây cố định); đặc trưng thay đổi giúp ít nhưng ổn định khi dùng có giám sát; chế độ Cold không nhãn khó đạt cổng 40%.
