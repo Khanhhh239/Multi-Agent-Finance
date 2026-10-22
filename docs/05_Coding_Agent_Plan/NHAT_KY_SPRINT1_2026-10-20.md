@@ -247,3 +247,9 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
   precision +4–9 điểm, MAE giảm 2–3 lần, recall −2–6 điểm. Dòng cổng `G15_tgt3` thêm vào `evaluate_gates.py`.
 - tgt3 **đã dùng** — không chọn gì thêm trên nó. Đòn bẩy recall còn lại là thông tin (số HĐ trong nội dung CK), không phải tinh chỉnh.
 - Dashboard: hiển thị `band_method` và cảnh báo `band_note` khi ACI chưa đủ 8 tuần (`agent1_service/ui/index.html`).
+
+## 15. Quyết định phạm vi (chủ dự án, 22/10/2026)
+
+- Không có dữ liệu thật: làm tốt nhất trên dữ liệu sinh. **G11 (cần chuyên gia) → `out_of_scope`** trong `evaluate_gates.py`; không tính là đạt,
+  pilot THẬT vẫn yêu cầu G11. `GATES_CURRENT.md` có thêm dòng "Giai đoạn CHỈ DỮ LIỆU TỔNG HỢP": hiện **chưa đạt, còn thiếu G13, G15**.
+- G8, G14, G17 chưa bị bỏ; cần phân loại lại từng cái (tôi đã gộp chung là "cần dữ liệu/con người" mà chưa kiểm tiêu chí).

@@ -6,9 +6,11 @@ Dán nguyên phần trong khung cho coding agent kế tiếp.
 
 > Bạn tiếp tục dự án Agent 1 tại `C:\Users\Admin\Downloads\Agent1`, nhánh git `agent1-Khanh` của
 > `https://github.com/Khanhhh239/Multi-Agent-Finance.git` (đẩy qua clone riêng `.publish-repo`, dùng `scripts/sprint1/prepare_publish.py --copy`).
-> **Đọc trước:** `docs/00_INDEX.md`, `docs/03_Evaluation/GO_NO_GO_SYNTHETIC_ONLY.md`, `docs/05_Coding_Agent_Plan/NHAT_KY_SPRINT1_2026-10-20.md` (mục 8–13).
+> **Đọc trước:** `docs/00_INDEX.md`, `docs/03_Evaluation/GO_NO_GO_SYNTHETIC_ONLY.md`, `docs/05_Coding_Agent_Plan/NHAT_KY_SPRINT1_2026-10-20.md` (mục 8–14).
 >
-> **Bối cảnh:** không có dữ liệu doanh nghiệp VN thật. Quyết định hiện hành: GO bậc 0 "bóng", NO-GO mọi bậc hành động.
+> **Bối cảnh:** không có dữ liệu doanh nghiệp VN thật. Chủ dự án quyết (22/10/2026): làm tốt nhất trên dữ liệu SINH; cổng cần chuyên gia (G11)
+> **ra khỏi phạm vi giai đoạn này** (trạng thái `out_of_scope`, KHÔNG tính là đạt; pilot thật vẫn đòi G11). Mục tiêu giai đoạn: các cổng còn lại,
+> hiện chỉ thiếu **G13 và G15**. Quyết định vận hành hiện hành: GO bậc 0 "bóng", NO-GO mọi bậc hành động.
 > Cổng: đạt G1, G2, G5, G6, G9, G10, G12, G16, G18; trượt G3, G4, G7, G8, G11, G13 (tgt), G14, G15, G17.
 > `tgt2` (luồng đóng băng) và `tgt3` (T9 v2) **đã dùng** — không chọn gì trên chúng. Bộ đích mới: `tgt4`, seed mới, đăng ký trước commit trước khi sinh.
 >
@@ -35,4 +37,5 @@ Dán nguyên phần trong khung cho coding agent kế tiếp.
 
 ## Ghi chú cho người giao việc
 - Thứ tự gợi ý: Việc 1 (gần đạt, mở khoá G15) → Việc 2 → Việc 3; phần dashboard của Việc 4 nhỏ, làm xen kẽ.
-- G8 (SBA, dữ liệu cho vay Mỹ), G11 (cần chuyên gia xác minh quy tắc) và G14, G17 cần dữ liệu hoặc con người, không giải được bằng mã.
+- G11 (chuyên gia) đã ra khỏi phạm vi. G8 (SBA, dữ liệu cho vay Mỹ), G14 (phát hiện đổi hành vi) và G17 (lời hứa/MAE): trước đây gộp chung là "cần dữ liệu hoặc con người",
+  **chưa kiểm tra kỹ từng cái** — agent kế tiếp nên đọc tiêu chí trong `scripts/evaluate_gates.py` và phân loại lại trước khi bỏ.

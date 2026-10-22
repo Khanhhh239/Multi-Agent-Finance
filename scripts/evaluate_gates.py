@@ -179,9 +179,16 @@ def main():
         set_gate('G18',propagation.target_met.all(),'Điểm ước lượng: T9 thu hẹp >=50% khoảng cách WAPE với oracle ở cả hai chân trời; CI xa còn rộng, không bảo đảm cho mọi DN',
                  'outputs/t1/T9_T1_gap_reduction.csv')
     df=pd.DataFrame(rows.values());df.to_csv(OUT/'implementation/gates.csv',index=False)
+    # Quyết định của chủ dự án 22/10/2026: chưa có dữ liệu thật/chuyên gia ⇒ cổng cần chuyên gia (G11) ra khỏi phạm vi giai đoạn
+    # chỉ-dữ-liệu-tổng-hợp. KHÔNG tính là đạt: dòng giữ trạng thái 'out_of_scope', pilot THẬT vẫn đòi G11.
+    df.loc[df.gate=='G11',['status','reason']]=['out_of_scope','Ngoài phạm vi giai đoạn dữ liệu tổng hợp (cần chuyên gia xác minh quy tắc; chủ dự án quyết 22/10/2026). Pilot thật vẫn yêu cầu.']
     required=['G1','G2','G5','G9','G11','G12','G13','G15','G16']
+    synthetic_required=[g for g in required if g!='G11']
     ready=df.set_index('gate').loc[required,'status'].eq('passed').all()
-    text='# Cổng hiện hành (sinh tự động)\n\nTrạng thái pilot: **'+('GO' if ready else 'NO-GO')+'**.\n\n'
+    ready_synth=df.set_index('gate').loc[synthetic_required,'status'].eq('passed').all()
+    missing=[g for g in synthetic_required if df.set_index('gate').loc[g,'status']!='passed']
+    text='# Cổng hiện hành (sinh tự động)\n\nTrạng thái pilot THẬT: **'+('GO' if ready else 'NO-GO')+'**.\n\n'
+    text+='Giai đoạn CHỈ DỮ LIỆU TỔNG HỢP (bỏ G11): **'+('ĐẠT' if ready_synth else 'CHƯA ĐẠT')+'**; còn thiếu: '+(', '.join(missing) or 'không')+'.\n\n'
     text+='| Cổng | Trạng thái | Bằng chứng / lý do |\n|---|---|---|\n'
     for r in df.itertuples():text+=f'| {r.gate} | {r.status} | {r.reason} (`{r.evidence}`) |\n'
     (ROOT/'docs/03_Evaluation/GATES_CURRENT.md').write_text(text,encoding='utf-8')

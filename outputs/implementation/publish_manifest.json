@@ -1,7 +1,7 @@
 {
   "copied": true,
-  "n_files": 1130,
-  "total_bytes": 18043821,
+  "n_files": 1131,
+  "total_bytes": 18051294,
   "files": [
     {
       "path": "agent1/api_surface.py",
@@ -540,8 +540,8 @@
     },
     {
       "path": "scripts/evaluate_gates.py",
-      "bytes": 15150,
-      "sha256": "ad296ca5967333f1593f76dc5abc372552a35f247c97457bff8c62f7244c87b9"
+      "bytes": 16103,
+      "sha256": "31b127f5e109b2a06d0d5acb81fcd80eda0b582d0636fe83e7bc03aa0793eeee"
     },
     {
       "path": "scripts/evaluate_tuned_t1.py",
@@ -1515,8 +1515,8 @@
     },
     {
       "path": "docs/03_Evaluation/GATES_CURRENT.md",
-      "bytes": 3578,
-      "sha256": "2f3234e4b2a7e6957732b707191759f158ddb6d01ca26b04e7c4d1ab90e0233d"
+      "bytes": 3772,
+      "sha256": "f0d5e6f65b79e90a8e5ee6b3fe9674a1d414b6894642bd37abc0e65be0388b58"
     },
     {
       "path": "docs/03_Evaluation/GO_NO_GO_SYNTHETIC_ONLY.md",
@@ -1532,6 +1532,11 @@
       "path": "docs/03_Evaluation/README.md",
       "bytes": 2403,
       "sha256": "ea7585ba5da53e6b0b480d94005398e7502d44f008159540b6f1d3e8757499fa"
+    },
+    {
+      "path": "docs/03_Evaluation/SPRINT6_PREREG_2026-10-22.md",
+      "bytes": 5202,
+      "sha256": "ca82cfde0a7ecff435caac637d9d9fb8cee8936f82fe2d886d1b89d10a0d915b"
     },
     {
       "path": "docs/03_Evaluation/T9_RECALL_DIAGNOSIS.md",
@@ -1660,8 +1665,8 @@
     },
     {
       "path": "docs/05_Coding_Agent_Plan/NHAT_KY_SPRINT1_2026-10-20.md",
-      "bytes": 26547,
-      "sha256": "589fdb45b47007f5b165f338a195ee3dd6994b267515a34e7a113158bb5af106"
+      "bytes": 27117,
+      "sha256": "084d6b7f9ef476fc9ef02e216744eaf092feb54bfde4573cc80584ee62d289a1"
     },
     {
       "path": "docs/05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-21.md",
@@ -1670,8 +1675,8 @@
     },
     {
       "path": "docs/05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-22.md",
-      "bytes": 3490,
-      "sha256": "51b97ee8e01de502b63c55e4b632da20fa60ecb2ddbfa318ec50d28a02adad04"
+      "bytes": 4044,
+      "sha256": "213f30349c062ce47a814bcc0ef2327eb5c4e92839450cee62adec8c8eb8c78a"
     },
     {
       "path": "docs/05_Coding_Agent_Plan/README.md",

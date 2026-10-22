@@ -1,6 +1,8 @@
 # Cổng hiện hành (sinh tự động)
 
-Trạng thái pilot: **NO-GO**.
+Trạng thái pilot THẬT: **NO-GO**.
+
+Giai đoạn CHỈ DỮ LIỆU TỔNG HỢP (bỏ G11): **CHƯA ĐẠT**; còn thiếu: G13, G15.
 
 | Cổng | Trạng thái | Bằng chứng / lý do |
 |---|---|---|
@@ -14,7 +16,7 @@ Trạng thái pilot: **NO-GO**.
 | G8 | failed | SBA drop EXEMPT, kỳ hạn <=120 tháng, nhãn chín trước test (`outputs/t2_t3/t2_sba_variants.csv`) |
 | G9 | passed | So mốc doanh thu trên nguồn và đích (`outputs/t4/t4_revenue_forecast.csv`) |
 | G10 | passed | Đối chứng thật, có phân biệt cụm series (`outputs/t4/t4_revenue_forecast.csv`) |
-| G11 | failed | Quy tắc cần cả hồi quy và xác minh chuyên môn; hiện chưa xác minh (`outputs/rules/rules_review.csv`) |
+| G11 | out_of_scope | Ngoài phạm vi giai đoạn dữ liệu tổng hợp (cần chuyên gia xác minh quy tắc; chủ dự án quyết 22/10/2026). Pilot thật vẫn yêu cầu. (`outputs/rules/rules_review.csv`) |
 | G12 | passed | Nhãn T9 ước lượng: cov80 75–85%, IS80 thắng đủ bốn đối chứng, Brier thắng naive (`outputs/e2e/e2e_metrics.csv`) |
 | G13 | failed | Isotonic + xác nhận 1 tuần, τ=0.3, chọn trên backtest src; phát hiện 0.94 [0.87; 1.00], báo giả 2.08/công ty-năm (`outputs/e2e/protocol/alert_policy_v2.csv`) |
 | G14 | failed | Bộ phát hiện chọn ngưỡng trên nguồn; kết quả giữ lại (`outputs/t7/t7_changepoint.csv`) |
