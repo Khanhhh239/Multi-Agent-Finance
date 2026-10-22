@@ -269,3 +269,10 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - **Nhóm chính (33 khách): phát hiện 0,576, báo giả 0,431 ⇒ đạt ở điểm ước lượng** (cũ: 0,576 / 0,600). Nhóm cũ (21 khách): 0,476 / 0,465 ⇒ trượt sát nút.
 - Đính chính trong tài liệu: khoảng nghỉ **có thể** làm mất phát hiện (báo giả ngay trước điểm gãy che báo động thật). Không có CI, G14 còn mong manh.
 - Dòng cổng `G14_new` thêm vào `evaluate_gates.py`; `G14` cũ giữ nguyên (failed). Việc còn lại cho G14: bootstrap CI theo công ty trên tgt4 nếu muốn kết luận vững.
+
+## 18. G8 (SBA) — hiệu chỉnh lại hằng năm: không đạt, và giả thuyết của tôi sai (agent1-Khanh, 22/10/2026)
+
+- Đăng ký trước `G8_T2_PREREG.md` (commit `4178799`) → `scripts/sprint5/t2_rolling_recal.py`. Gộp FY2018–2022: A ECE 0,021 / tỉ lệ 0,741; cấu hình cũ 0,022 / 0,630 ⇒ **G8 vẫn trượt**.
+- Bỏ FY2022 thì cả ba đạt (kể cả cấu hình cũ) ⇒ không có bằng chứng f−4 tốt hơn khi chế độ ổn định.
+- **Tôi đã sai:** nghi nhãn FY2022 chưa chín. Dữ liệu tới 07/2026 ⇒ cửa sổ đã khép. Tỉ lệ vỡ nợ FY2022 (6–8%) là thay đổi chế độ thật. Không bỏ FY2022 để "đạt".
+- Đề xuất: đổi hướng T2 sang phát hiện trôi tỉ lệ gốc + cảnh báo (chủ dự án quyết nếu muốn đổi định nghĩa G8).

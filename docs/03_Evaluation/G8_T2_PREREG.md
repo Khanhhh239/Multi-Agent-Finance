@@ -28,4 +28,22 @@ Biến thể A đạt cả ba điều kiện G8 trên tập gộp. Bộ kiểm F
 quy tắc f−4 xuất phát từ logic nhãn chín, đã chốt trước khi chạy, nhưng đây không phải bộ niêm phong như `tgt2`/`tgt3`.
 
 ## 5. Kết quả
-_Điền sau khi chạy._
+Chạy 22/10/2026 (`outputs/sprint5/t2_rolling_recal.csv`, `sba-rolling-recal-f-minus-4-v1`). Kỳ hạn ≤ 120 tháng, loại EXEMPT.
+
+| Phạm vi | Biến thể | ECE | Tỉ lệ tiền vỡ nợ dự báo/thực tế | Đạt G8 |
+|---|---|---|---|---|
+| **Gộp FY2018–2022 (cổng)** | **A isotonic f−4 (chính)** | **0,021** | **0,741** | **KHÔNG** |
+| | B dịch hệ số chặn | 0,019 | 0,734 | không |
+| | C hiện tại (isotonic FY2014) | 0,022 | 0,630 | không |
+| Gộp FY2018–2021 | A / B / C | 0,018 / 0,016 / 0,019 | 0,973 / 0,987 / 0,853 | cả ba đạt |
+| FY2022 riêng | A / B / C | 0,056 / 0,059 / 0,061 | 0,247 / 0,194 / 0,152 | không |
+
+**Kết luận: G8 theo định nghĩa hiện tại VẪN TRƯỢT.** Hiệu chỉnh lại hằng năm cải thiện tỉ lệ 0,63 → 0,74 và ECE 0,022 → 0,021 nhưng không đủ.
+
+**Đính chính mục 3:** tôi viết "nghi nhãn FY2022 chưa chín". **Sai.** Dữ liệu trích xuất tới 07/2026 (xoá nợ muộn nhất 2026-07-01), nên cửa sổ 3 năm của FY2022 đã khép.
+Tỉ lệ vỡ nợ FY2022 = 6,2% (7,7% ở kỳ hạn ≤ 120 tháng) là **thật**, gấp 4–5 lần FY2018–2021 (1,3–2,3%): một thay đổi chế độ.
+Không mô hình nào học từ FY ≤ 2013 (hay hiệu chỉnh bằng nhóm chín f−4) thấy trước được. Hiệu chỉnh lại chậm 4 năm nghĩa là luôn chậm một chế độ.
+
+**Điều thực sự đúng:** FY2018–2021 (chế độ ổn định) đạt ở cả ba biến thể, kể cả cấu hình cũ ⇒ **lần này không có bằng chứng quy tắc f−4 tốt hơn** khi chế độ ổn định; nó chỉ giảm bớt thiếu sót khi chế độ đổi.
+Không chuyển cổng thành "đạt" bằng cách bỏ FY2022: đó là loại bỏ dữ liệu bất lợi sau khi xem kết quả. Quyết định có nên đổi định nghĩa cổng (ví dụ yêu cầu mô hình cảnh báo khi trôi tỉ lệ gốc thay vì đòi tỉ lệ 0,8–1,25) thuộc chủ dự án.
+**Hướng đúng cho T2:** phát hiện trôi tỉ lệ gốc theo nhóm (giống G14) và hiển thị "mô hình đang dự báo thấp" thay vì cam kết hiệu chỉnh.
