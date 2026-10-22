@@ -24,7 +24,7 @@ RES = OUT / "g13" / "e2e_tgt3"
 MODEL = "MC-copula-t (T1+T4+T5)"
 VISIBLE = pd.Timestamp("2023-07-01")
 VERSION = "g13-e2e-t9v2-tgt3-v1"
-VARIANTS = {"v2": "T9 v2", "sprint3": "T9 sprint3", "oracle": "nhãn thật"}
+VARIANTS = {"v2": "T9 v2", "sprint3": "T9 sprint3", "oracle": "nhãn thật", "v2fill": "T9 v2 + nhãn thật cho phần thiếu (ablation)"}
 
 
 def obs_name(variant):
@@ -39,7 +39,7 @@ def build(variant):
     from t9_guard import hazard_prior, prepare
     from t9_v2 import links_for
     v2 = json.loads((OUT / "t9/v2/choice.json").read_text(encoding="utf-8"))
-    cfg = dict(cap=v2["cap"], hazard=v2["hazard"], fifo=v2["fifo"]) if variant == "v2" else dict(cap=None, hazard=True, fifo=False)
+    cfg = dict(cap=v2["cap"], hazard=v2["hazard"], fifo=v2["fifo"]) if variant in ("v2", "v2fill") else dict(cap=None, hazard=True, fifo=False)
     source = fast_source(source_reconciler(OUT / "t9/sprint3/source_reconciler", require_training_firms=True))
     model, label_end = hazard_prior()
     end = str(pd.read_parquet(SYNTH / WORLD / "bank_txns.parquet", columns=["value_date"]).value_date.max().date())
@@ -52,6 +52,11 @@ def build(variant):
     invoices = invoices[invoices.issue_date >= VISIBLE].copy()
     labelled = build_bank_labels(invoices, links)
     labelled["paid_date_true"] = labelled.pop("paid_date_est")      # tên cột nội bộ T1; giá trị là nhãn ƯỚC LƯỢNG
+    if variant == "v2fill":
+        # ABLATION chẩn đoán (ghi thêm sau khi có kết quả, không phải cổng): giữ nhãn T9 v2, điền ngày trả THẬT vào hoá đơn đang thiếu nhãn.
+        truth = invoices.set_index("invoice_id").paid_date_true
+        missing = labelled.paid_date_true.isna()
+        labelled.loc[missing, "paid_date_true"] = labelled.loc[missing, "invoice_id"].map(truth)
     labelled["writeoff_date"] = pd.NaT; labelled["ledger_clear_date"] = pd.NaT
     labelled["is_bad_debt"] = False; labelled["credit_note"] = 0.; labelled["dispute"] = False; labelled["partial"] = False
     target = SYNTH / obs_name(variant); target.mkdir(exist_ok=True)
@@ -108,8 +113,11 @@ def score():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--build", action="store_true"); ap.add_argument("--run", default=""); ap.add_argument("--score", action="store_true")
+    ap.add_argument("--build-variant", default="")
     a = ap.parse_args()
     RES.mkdir(parents=True, exist_ok=True)
+    if a.build_variant:
+        build(a.build_variant)
     if a.build:
         for v in ("v2", "sprint3"):
             build(v)

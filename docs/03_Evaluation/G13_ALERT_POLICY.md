@@ -58,3 +58,9 @@ cần chạy lại E2E với nhãn T9 v2 để biết (chưa làm — nằm tron
 Giả thuyết: gộp các đợt cảnh báo bị tách nhỏ sẽ giảm báo giả. Trên nguồn (27 sự kiện): đường biên **không đổi** khi lấp 1–6 tuần
 (báo giả ≤ 0,5 ⇒ phát hiện tối đa 0,48 và độ sớm 3,4 tuần, dưới ngưỡng cổng). Đánh đổi phát hiện – báo giả là bản chất của dự báo, không phải của cách đếm đợt.
 Mã `fill_gaps` giữ lại (mặc định tắt, có kiểm thử), không dùng.
+
+## 7. Kiểm trên bộ đích sạch `tgt3` với nhãn T9 v2 (22/10/2026, `G13_E2E_T9V2_PREREG.md`) — G13 vẫn trượt
+
+46 sự kiện, 30 công ty, chính sách đóng băng. Báo giả: **T9 v2 2,71** [1,97; 3,45], T9 cũ 2,41, **nhãn thật 0,90** [0,53; 1,30].
+Phát hiện (0,80–0,85) và độ sớm (8–11 tuần) đạt ở mọi nhánh. Báo giả đi theo **độ phủ nhãn** (59,5% → 2,71; 69,8% → 2,41; 100% → 0,90), không theo độ chính xác ngày.
+Kết luận: chính sách cảnh báo đủ tốt (đạt khi có nhãn thật, trên `tgt` 0,57 và `tgt3` 0,90); **trần của G13 nằm ở độ phủ nhãn T9**.

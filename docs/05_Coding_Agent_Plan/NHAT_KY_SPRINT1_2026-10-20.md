@@ -296,3 +296,10 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - **G17_v2 đạt ở điểm ước lượng** (`G17_T8_PREREG.md`, commit `9238a6c` trước khi chạy): 6 đặc trưng lời hứa mới (độ mơ hồ, tỉ lệ hứa, số lần hứa lại, số lần thất hứa, tuổi lời hứa, độ lệch theo khách).
   Nhiễu −7,6% → **−10,8% [8,2; 13,0]**, sạch −18,8% → −22,9%. Sát ngưỡng, cận dưới CI < 10%.
 - Đang chạy: G13 trên `tgt3` với nhãn T9 v2 / T9 cũ / thật (`G13_E2E_T9V2_PREREG.md`, commit `de2e2b5`).
+
+## 20. G13 trên tgt3 với nhãn T9 v2: vẫn trượt, và vì sao (agent1-Khanh, 22/10/2026 20:30)
+
+- Đăng ký trước commit `de2e2b5`; chạy 3 nhánh T6 (≈ 2,4 giờ): T9 v2 báo giả **2,71** (trượt), T9 cũ 2,41, nhãn thật **0,90**. Phát hiện/độ sớm đạt ở cả ba.
+- **Báo giả đi theo độ phủ nhãn** (59,5% / 69,8% / 100%), không theo độ chính xác ngày (0,71 / 2,64 / 0). T9 v2 tối ưu precision (G15) nhưng G13 cần recall.
+- Kỳ vọng ghi trước ("T9 v2 ≈ cũ ⇒ nhiễu nhãn không phải đòn bẩy chính") hẹp hơn dữ liệu; đã ghi đúng lại trong `G13_E2E_T9V2_PREREG.md` mục 5. Giả thuyết "thiếu nhãn ⇒ báo giả" nhất quán với 3 điểm, **chưa có ablation trực tiếp**.
+- Hệ quả cho việc tiếp: G13 và G15 cùng đòi **tăng độ phủ nhãn mà giữ precision**; không phải chỉnh chính sách cảnh báo nữa.
