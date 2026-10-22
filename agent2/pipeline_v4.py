@@ -94,7 +94,7 @@ class OperationalV4Detector:
         return self.prepared.alerts(self._transform(frame), 3)
 
 
-def explain_alerts(frame, flags, entity, score):
+def explain_alerts(frame, flags, entity, score, change_parts=None):
     parts = entity.parts(frame)
     lines, texts, fallback = [], pd.Series("", index=frame.index), 0
     for position in np.flatnonzero(flags):
@@ -106,6 +106,9 @@ def explain_alerts(frame, flags, entity, score):
                                       "payroll_off_calendar", "refund_to_foreign_account", "offquarter_writeoff")
                      if float(row.get(name, 0)) > 0]
         found = rule_observations(row)[:2] + observations(row, dict.fromkeys(selected))[:2] + entity_observations(row, row_parts)[:2]
+        if change_parts:
+            from .explain_v5 import change_observations
+            found += change_observations(row, {n: float(v[position]) for n, v in change_parts.items()}, top=1)
         if not found:
             fallback += 1
             found = [{"feature": "ranking_only", "text": "Giao dịch được ưu tiên rà soát theo điểm xếp hạng; chưa có lý do nghiệp vụ cụ thể đủ bằng chứng.",
@@ -164,7 +167,18 @@ def run(data, out, config, week, company_id=None, profile=None):
                                       feedback_matrix, artifact, company_id, start.tz_localize('Asia/Ho_Chi_Minh'))
     times["fit_target_and_score"] = time.perf_counter() - timer
     timer = time.perf_counter()
-    deploy["explanation_vi"], evidence, fallback = explain_alerts(deploy, flags, det.signals.entity, score)
+    change_parts, change_status = None, "used"
+    try:   # v5 change observations: explanations only, never alter ranking or alerts
+        from .change_ops import ChangeExplainer, lenient_change_features
+        cf = lenient_change_features(out / "input_snapshot")
+        keep = [c for c in cf.columns if c not in deploy.columns or c == "transaction_id"]
+        hist = train[["transaction_id", "txn_type"]].merge(cf[keep], on="transaction_id", how="left").fillna(0)
+        deploy = deploy.merge(cf[keep], on="transaction_id", how="left")
+        deploy[keep[1:]] = deploy[keep[1:]].fillna(0)
+        change_parts = ChangeExplainer().fit(hist).parts(deploy)
+    except Exception as error:   # explanations degrade gracefully; record why
+        change_status = f"skipped: {type(error).__name__}"
+    deploy["explanation_vi"], evidence, fallback = explain_alerts(deploy, flags, det.signals.entity, score, change_parts)
     cases = build_cases(deploy, flags, score)
     cases['feedback_vector'] = aggregate(cases, deploy, feedback_matrix)
     hard_ids = set(deploy.loc[flags & (deploy.rule_hard.to_numpy() > 0), "transaction_id"])
@@ -195,7 +209,7 @@ def run(data, out, config, week, company_id=None, profile=None):
               "training_data_kind": "none" if det.profile == "cold" else "synthetic", "input_data_kind": cfg.get("input_data_kind", "unspecified"),
               "explanation_numbers_supported": True, "ranking_only_explanations": fallback,
               "priority_score_is_fraud_probability": False, "input_report": input_report,
-              "timing_seconds": times, "median_alert_ranking_score": float(np.median(score[flags])) if flags.any() else None}
+              "change_observations": change_status, "timing_seconds": times, "median_alert_ranking_score": float(np.median(score[flags])) if flags.any() else None}
     report['feedback_sha256'] = feedback_sha256
     report['policy_variant'] = 'unvalidated_feedback' if feedback_sha256 else 'frozen'
     if feedback_sha256:

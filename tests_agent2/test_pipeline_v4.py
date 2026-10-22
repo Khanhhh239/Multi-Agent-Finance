@@ -40,6 +40,7 @@ def test_unlabelled_weekly_pipeline_budget_and_future_invariance(world, tmp_path
     dates = pd.to_datetime(alerts.posted_at, utc=True)
     assert ((dates >= start) & (dates < end)).all()
     assert report["alert_rows"] <= 3
+    assert report["change_observations"] == "used"
     assert set(cases.company_id) <= {"C001"}
     assert all(cases.reason.str.len() > 0)
     assert not json.loads((before / "run_manifest.json").read_text())["labels_read"]
