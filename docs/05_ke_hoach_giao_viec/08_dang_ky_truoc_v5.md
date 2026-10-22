@@ -8,8 +8,17 @@ Ngày cập nhật 2026-10-19. **Trạng thái: ĐÃ DUYỆT v1.1 theo bốn s�
 | v1.1 | Làm rõ tiếp theo: ba suất cho mô hình có giám sát, cả hai Cold chạy đủ 20 thế giới ở tầng chọn rồi chọn riêng. Chủ dự án duyệt có sửa đổi: hai tầng, J theo nhóm 20% thấp nhất, gộp nhánh nhỏ, chốt chặn trước niêm phong, PU là nền và thứ tự R2. Giữ các điều khoản v1 không bị sửa và giữ nguyên cổng niêm phong. |
 | v1.2 | 2026-10-22: số cây cố định, định nghĩa ứng viên, tái sử dụng bộ dữ liệu nguồn, lấy mẫu âm có điều kiện, hạ tầng; ghi trước mọi so sánh (mục Sửa đổi v1.2). |
 | v1.3 | 2026-10-22, trước bước sàng lọc ứng viên dùng đặc trưng mới: loại lối tắt liên kết hóa đơn của bộ sinh (mục Sửa đổi v1.3). |
+| Làm rõ R3 | 2026-10-22, trước khi đọc văn xuôi kịch bản độc lập: tần suất và mức phủ của ca hợp lệ mới trong thế giới niêm phong (mục Làm rõ thực thi R3). Không đổi cổng, quy tắc chọn hoặc ứng viên. |
 
 Mọi số đo dự kiến là trên **dữ liệu tổng hợp**, trừ khi một báo cáo kiểm thử ngoài hoặc thí điểm chỉ rõ nguồn thật và phạm vi nhãn. Kết luận **v4 không đạt G5 và kích hoạt M2** giữ nguyên. Ba seed v4 931 đến 933 đã được dùng để hậu kiểm, không còn là kiểm thử niêm phong và không được tính vào cổng v5.
+
+## Làm rõ thực thi R3 (2026-10-22, trước khi đọc văn xuôi kịch bản độc lập)
+
+Mục 6 yêu cầu ca hợp lệ tương ứng cho mỗi kịch bản nhưng chưa nêu tần suất sinh. Để tần suất không thể bị chỉnh theo bộ phát hiện sau khi đã đọc kịch bản, ghi trước như sau (`agent2/world_v5_sealed.py`, có kiểm thử máy móc bằng kịch bản thay thế):
+- Mỗi ca hợp lệ mới xuất hiện ở một công ty và một kỳ (train, validation, test) với xác suất 0,5, mỗi lần 1 đến 2 lượt; thế giới niêm phong v4 đã dùng 0,3 đến 0,5 và 0 đến 2 lượt.
+- Mỗi ca hợp lệ mới phải có ít nhất 3 dòng trong kỳ test. Nếu lượt ngẫu nhiên thiếu, bổ sung lượt ở kỳ test cho công ty chọn ngẫu nhiên, tối đa 200 lần thử; vẫn thiếu thì dừng sinh, coi là lỗi toàn vẹn theo mục 6.
+- Thế giới thử khô 5199 phải qua kiểm tra hiện diện trường (V13, `scripts/audit_field_presence.py`) trước khi chấm, để bộ mã hóa không tạo lối tắt kiểu L11.
+- Các phần này chỉ dùng nếu chốt chặn trước niêm phong đạt. Đây là làm rõ thực thi, không phải sửa cổng; chủ dự án có thể bác bỏ trước R3.
 
 ## Sửa đổi v1.3 (2026-10-22, trước khi bất kỳ ứng viên nào dùng đặc trưng thay đổi được chạy)
 
