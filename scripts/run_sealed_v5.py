@@ -2,7 +2,8 @@
 
   python scripts/run_sealed_v5.py generate      # dry-run seed 5199 then 5101-5104: generate, validate V1-V12, hash
   python scripts/run_sealed_v5.py prepare       # base + change matrices into work/v5_sealed_matrices
-  python scripts/run_sealed_v5.py dryrun        # full evaluation path on 5199 -> results/v5/sealed_v5_dryrun.json
+  python scripts/run_sealed_v5.py dryrun        # V13 field-presence audit on 5199, then full evaluation path on 5199
+                                                #   -> results/v5/sealed_v5_dryrun.json
   python scripts/run_sealed_v5.py evaluate      # ONE run on 5101-5104 -> results/v5/sealed_v5.json
 Sealed world folders are named v5dev_s<seed> only because the preparation code expects that prefix.
 """
@@ -55,6 +56,29 @@ def sub(args):
         raise SystemExit(code)
 
 
+def new_separations(findings, baselines):
+    """V13 findings on the dry-run world that no development world showed (encoding artefacts to review)."""
+    known = {(f["txn_type"], f["column"]) for base in baselines for f in base["findings"]}
+    return [f for f in findings if (f["txn_type"], f["column"]) not in known]
+
+
+def audit_dry_run():
+    """V13 on the dry-run world only (never on 5101-5104): stop if the encoding added a field-presence shortcut."""
+    import importlib.util
+    from agent2.runtime_v5 import write_json
+    spec = importlib.util.spec_from_file_location("audit_field_presence", ROOT / "scripts" / "audit_field_presence.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    baselines = [json.loads((ROOT / "results" / "v5" / f"field_presence_{s}.json").read_text(encoding="utf-8"))
+                 for s in (1001, 1010, 1020)]
+    findings = module.audit(DATA / "v5dev_s5199")
+    new = new_separations(findings, baselines)
+    write_json(GEN / "field_presence_5199.json", {"data_origin": "dữ liệu tổng hợp", "findings": findings, "new": new,
+                                                  "baseline_worlds": [1001, 1010, 1020]})
+    if new:
+        raise SystemExit(f"V13: {len(new)} new field-presence separations on 5199; review before any evaluation: {new}")
+
+
 def main():
     stage = sys.argv[1]
     if stage == "world":
@@ -70,6 +94,7 @@ def main():
         for seed in SEEDS:
             sub([__file__, "prepare_one", str(seed)])
     elif stage == "dryrun":
+        audit_dry_run()
         sub(["-m", "agent2.sealed_v5", "evaluate", "--seeds", "5199", "--out", "results/v5/sealed_v5_dryrun.json",
              "--sealed-matrices", str(MAT)])
     elif stage == "evaluate":
