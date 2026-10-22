@@ -1,0 +1,78 @@
+{
+ "data_origin": "dữ liệu tổng hợp",
+ "world": "v5dev_s1020",
+ "findings": [
+  {
+   "txn_type": "adjustment",
+   "column": "customer_id",
+   "filled_rows": 4,
+   "empty_rows": 1522,
+   "fraud_rate_filled": 1.0,
+   "fraud_rate_empty": 0.004,
+   "fraud_share_filled": 0.4
+  },
+  {
+   "txn_type": "adjustment",
+   "column": "invoice_id",
+   "filled_rows": 4,
+   "empty_rows": 1522,
+   "fraud_rate_filled": 1.0,
+   "fraud_rate_empty": 0.004,
+   "fraud_share_filled": 0.4
+  },
+  {
+   "txn_type": "adjustment",
+   "column": "invoice_number",
+   "filled_rows": 4,
+   "empty_rows": 1522,
+   "fraud_rate_filled": 1.0,
+   "fraud_rate_empty": 0.004,
+   "fraud_share_filled": 0.4
+  },
+  {
+   "txn_type": "adjustment",
+   "column": "invoice_issued_at",
+   "filled_rows": 4,
+   "empty_rows": 1522,
+   "fraud_rate_filled": 1.0,
+   "fraud_rate_empty": 0.004,
+   "fraud_share_filled": 0.4
+  },
+  {
+   "txn_type": "adjustment",
+   "column": "counterparty_account",
+   "filled_rows": 4,
+   "empty_rows": 1522,
+   "fraud_rate_filled": 1.0,
+   "fraud_rate_empty": 0.004,
+   "fraud_share_filled": 0.4
+  },
+  {
+   "txn_type": "bad_debt_writeoff",
+   "column": "applied_invoice_id",
+   "filled_rows": 8,
+   "empty_rows": 567,
+   "fraud_rate_filled": 1.0,
+   "fraud_rate_empty": 0.0,
+   "fraud_share_filled": 1.0
+  },
+  {
+   "txn_type": "bad_debt_writeoff",
+   "column": "collector_id",
+   "filled_rows": 8,
+   "empty_rows": 567,
+   "fraud_rate_filled": 1.0,
+   "fraud_rate_empty": 0.0,
+   "fraud_share_filled": 1.0
+  },
+  {
+   "txn_type": "sales_return",
+   "column": "applied_invoice_id",
+   "filled_rows": 5,
+   "empty_rows": 344,
+   "fraud_rate_filled": 1.0,
+   "fraud_rate_empty": 0.061,
+   "fraud_share_filled": 0.192
+  }
+ ]
+}
