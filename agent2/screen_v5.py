@@ -11,7 +11,7 @@ with weight w), every hard negative, and a fraction f of the remaining rows with
 importance-sampling estimate of the full-data loss). Validation and targets are never subsampled.
 
 Candidates: L3-PU, L4-FB-PU, L4-PU-E2-AR (L4 + change features), L4-PU-E2-AR-2plus1 (two slots from
-L4-PU-E2-AR, one from Cold-Rules-E2), Cold-Rules-E2 = max rank(rules, EntityDeviation2), Cold-v4 = max rank
+L4-PU-E2-AR, one from Cold-Rules-E2), Cold-Rules-E2 = max rank(rules, EntityDeviation2 without the link shortcut, R1 v1.3), Cold-v4 = max rank
 (rules, EntityDeviation v4). Cold ranks are relative to the TARGET world's own validation period (no labels).
 """
 from __future__ import annotations
@@ -27,8 +27,8 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import average_precision_score
 
-from .base_v5 import (BRANCHES, MatrixSequence, SubsetSequence, change_feature_names, observed_labels,
-                      predict_sequences, world_sequence)
+from .base_v5 import (BRANCHES, ConcatSequence, MatrixSequence, SubsetSequence, observed_labels,
+                      predict_sequences)
 from .methods import empirical_rank
 from .metrics import tie_break, weekly_alerts
 from .runtime_v5 import limit_memory, sha256, write_json
@@ -41,8 +41,52 @@ KIND = {'L3-PU': ('L3', False, False), 'L4-FB-PU': ('L4', True, False), 'L4-PU-E
 PROTOCOLS = ('S2', *BRANCHES)
 
 
+# R1 v1.3: in the v4/v5 generators only FRAUDULENT reversals carry `applied_invoice_id` (legitimate returns and
+# write-offs never link the original invoice), so every feature built on that link is a generator shortcut.
+# They are excluded and the EntityDeviation2 maximum is recomputed without them.
+LINK_SHORTCUT = {'ar_reversal_age_days', 'ar_reversal_unpaid', 'ar_creator_reversal_share',
+                 'ar_reversal_age_days-', 'ar_reversal_unpaid+', 'ar_creator_reversal_share+', 'ed2_score'}
+
+
 def _load(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
+
+
+class CleanChangeSequence(lgb.Sequence):
+    """Change-feature matrix without the link shortcut, plus `ed2_clean` = max over the kept detector tails."""
+    batch_size = 4096
+
+    def __init__(self, path, names):
+        self.array = np.load(path, mmap_mode='r')
+        self.keep = np.array([i for i, n in enumerate(names) if n not in LINK_SHORTCUT])
+        self.detectors = np.array([i for i, n in enumerate(names) if n[-1] in '+-' and n not in LINK_SHORTCUT])
+
+    def __len__(self):
+        return len(self.array)
+
+    def _block(self, x):
+        x = np.atleast_2d(np.asarray(x, dtype=np.float64))
+        return np.concatenate([x[:, self.keep], x[:, self.detectors].max(axis=1, keepdims=True)], axis=1)
+
+    def __getitem__(self, index):
+        block = self._block(self.array[index])
+        return block[0] if np.ndim(index) == 0 and not isinstance(index, slice) else block
+
+    def take(self, rows):
+        return self._block(self.array[np.asarray(rows)])
+
+
+def clean_change_names(matrices):
+    names = _load(matrices / 's1001' / 'manifest_cd.json')['columns']
+    return [n for n in names if n not in LINK_SHORTCUT] + ['ed2_clean']
+
+
+def pool_sequence(directory, split, cols, change):
+    base = MatrixSequence(directory / f'{split}.npy', cols)
+    if not change:
+        return base
+    names = _load(directory / 'manifest_cd.json')['columns']
+    return ConcatSequence([base, CleanChangeSequence(directory / f'{split}_cd.npy', names)])
 
 
 def columns_for(matrices, kind):
@@ -70,7 +114,7 @@ class SourcePool:
             if seed == target:
                 continue
             d = matrices / f's{seed}'
-            seq, meta = world_sequence(d, 'train', cols, change), _meta(d, 'train')
+            seq, meta = pool_sequence(d, 'train', cols, change), _meta(d, 'train')
             meta['factor'] = 1.0
             if fraction < 1:
                 rng = np.random.default_rng(1000 + seed)
@@ -86,10 +130,10 @@ class SourcePool:
         self.dataset = lgb.Dataset(seqs, label=np.zeros(len(self.meta)), weight=np.ones(len(self.meta)),
                                    params={'max_bin': 255, 'feature_pre_filter': False, 'verbosity': -1},
                                    free_raw_data=False).construct()
-        self.valid = [world_sequence(matrices / f's{s}', 'validation', cols, change) for s in sources if s != target]
+        self.valid = [pool_sequence(matrices / f's{s}', 'validation', cols, change) for s in sources if s != target]
         self.valid_meta = pd.concat([_meta(matrices / f's{s}', 'validation') for s in sources if s != target],
                                     ignore_index=True)
-        self.target = world_sequence(matrices / f's{target}', 'test', cols, change)
+        self.target = pool_sequence(matrices / f's{target}', 'test', cols, change)
         self.rows, self.sources = len(self.meta), len([s for s in sources if s != target])
 
     def fit_score(self, hidden, weight, seed):
@@ -173,9 +217,9 @@ def cold_scores(matrices, target, which):
         channels.append(('u_entity', va.u_entity.fillna(0).to_numpy(), te.u_entity.fillna(0).to_numpy()))
     else:
         names = _load(d / 'manifest_cd.json')['columns']
-        k = names.index('ed2_score')
-        channels.append(('ed2_score', np.load(d / 'validation_cd.npy', mmap_mode='r')[:, k],
-                         np.load(d / 'test_cd.npy', mmap_mode='r')[:, k]))
+        clean = CleanChangeSequence(d / 'validation_cd.npy', names)       # max over kept detectors (v1.3)
+        channels.append(('ed2_clean', clean.take(np.arange(len(clean)))[:, -1],
+                         CleanChangeSequence(d / 'test_cd.npy', names).take(np.arange(len(te)))[:, -1]))
     ranks = [empirical_rank(np.sort(np.asarray(v, dtype=float)), np.asarray(t, dtype=float)) for _, v, t in channels]
     return te, np.max(ranks, axis=0) + 1e-3 * np.mean(ranks, axis=0)
 

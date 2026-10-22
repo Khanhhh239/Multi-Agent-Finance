@@ -34,6 +34,20 @@ def matrices(tmp_path, monkeypatch):
     return tmp_path
 
 
+def test_link_shortcut_columns_are_removed_and_max_recomputed(matrices):
+    names = change_feature_names()
+    seq = S.CleanChangeSequence(matrices / 's1001' / 'train_cd.npy', names)
+    raw = np.load(matrices / 's1001' / 'train_cd.npy')
+    out = seq[0:10]
+    kept = [i for i, n in enumerate(names) if n not in S.LINK_SHORTCUT]
+    det = [i for i, n in enumerate(names) if n[-1] in '+-' and n not in S.LINK_SHORTCUT]
+    np.testing.assert_allclose(out[:, :-1], raw[:10, kept])
+    np.testing.assert_allclose(out[:, -1], raw[:10, det].max(axis=1))
+    assert out.shape[1] == len(S.clean_change_names(matrices))
+    assert not set(S.clean_change_names(matrices)) & (S.LINK_SHORTCUT - {'ed2_score'})
+    np.testing.assert_allclose(seq[3], out[3])
+
+
 def test_label_swapping_equals_fresh_dataset(matrices):
     pool = S.SourcePool(1001, matrices, 'L4-PU-E2-AR', 1.0)
     pool.fit_score(None, .2, 0)

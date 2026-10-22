@@ -1,4 +1,4 @@
-# Đăng ký trước v5, bản v1.2 (v1.1 đã duyệt cộng sửa đổi hạ tầng v1.2)
+# Đăng ký trước v5, bản v1.3 (v1.1 đã duyệt cộng sửa đổi v1.2 và v1.3)
 
 Ngày cập nhật 2026-10-19. **Trạng thái: ĐÃ DUYỆT v1.1 theo bốn sửa đổi của chủ dự án. Được bắt đầu R2.** Không cần duyệt lại khi chỉ áp đúng các sửa đổi này; mọi thay đổi khác phải dừng và hỏi. Bản v1 nguyên văn nằm ở cuối tệp, chỉ là lịch sử, không còn điều khiển thực thi.
 
@@ -7,8 +7,19 @@ Ngày cập nhật 2026-10-19. **Trạng thái: ĐÃ DUYỆT v1.1 theo bốn s�
 | v1 | Đề xuất chờ duyệt; băm tệp gốc SHA-256 `711c4acda8451f594deb303d4dabdd2fe1eefbaf5e124ca4856c97b09211db4a` |
 | v1.1 | Làm rõ tiếp theo: ba suất cho mô hình có giám sát, cả hai Cold chạy đủ 20 thế giới ở tầng chọn rồi chọn riêng. Chủ dự án duyệt có sửa đổi: hai tầng, J theo nhóm 20% thấp nhất, gộp nhánh nhỏ, chốt chặn trước niêm phong, PU là nền và thứ tự R2. Giữ các điều khoản v1 không bị sửa và giữ nguyên cổng niêm phong. |
 | v1.2 | 2026-10-22: số cây cố định, định nghĩa ứng viên, tái sử dụng bộ dữ liệu nguồn, lấy mẫu âm có điều kiện, hạ tầng; ghi trước mọi so sánh (mục Sửa đổi v1.2). |
+| v1.3 | 2026-10-22, trước bước sàng lọc ứng viên dùng đặc trưng mới: loại lối tắt liên kết hóa đơn của bộ sinh (mục Sửa đổi v1.3). |
 
 Mọi số đo dự kiến là trên **dữ liệu tổng hợp**, trừ khi một báo cáo kiểm thử ngoài hoặc thí điểm chỉ rõ nguồn thật và phạm vi nhãn. Kết luận **v4 không đạt G5 và kích hoạt M2** giữ nguyên. Ba seed v4 931 đến 933 đã được dùng để hậu kiểm, không còn là kiểm thử niêm phong và không được tính vào cổng v5.
+
+## Sửa đổi v1.3 (2026-10-22, trước khi bất kỳ ứng viên nào dùng đặc trưng thay đổi được chạy)
+
+**Phát hiện:** trong bộ sinh v4 và v5, chỉ các dòng trả hàng hoặc xóa nợ **gian lận** ghi `applied_invoice_id`; dòng hợp lệ không bao giờ ghi. Thế giới 1001: 10/10 dòng có liên kết là gian lận, 985 dòng không liên kết đều hợp lệ. Mọi đặc trưng dựa trên liên kết này là lối tắt của bộ sinh, không phải tín hiệu kiểm toán (sổ thật luôn liên kết chứng từ điều chỉnh với hóa đơn gốc).
+
+**Sửa đổi:**
+- Loại `ar_reversal_age_days`, `ar_reversal_unpaid`, `ar_creator_reversal_share` và ba bộ phát hiện tương ứng khỏi `L4-PU-E2-AR`, `L4-PU-E2-AR-2plus1`, `Cold-Rules-E2`.
+- Thay `ed2_score` bằng `ed2_clean`, là max các đuôi còn lại (`screen_v5.LINK_SHORTCUT`, `CleanChangeSequence`, có kiểm thử).
+- Bộ sinh và các thế giới đã khóa giữ nguyên; lỗi bộ sinh được ghi vào hạn chế dữ liệu và phải sửa ở phiên bản bộ sinh sau.
+- Khi sửa đổi này được ghi, mới chỉ có bước chuẩn bị ma trận đang chạy; chưa có kết quả so sánh nào.
 
 ## Sửa đổi v1.2 (2026-10-22, ghi TRƯỚC mọi thí nghiệm so sánh)
 
