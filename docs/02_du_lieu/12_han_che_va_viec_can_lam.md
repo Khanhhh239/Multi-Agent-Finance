@@ -14,6 +14,8 @@
 | L8 | Nhãn giả định "gian lận chưa bị phát hiện" trong P2 là nhãn 0 | Mô phỏng nhãn bị thiếu, chưa mô phỏng nhãn nhiễu theo người | Mô phỏng nhiễu nhãn 0%, 15%, 30% (đã làm ở vòng phản hồi) |
 | L9 | Một giai đoạn kiểm thử khoảng 200 dòng dương mỗi thế giới | Sai số recall khoảng 3 điểm phần trăm | Nhiều thế giới; bootstrap theo vụ |
 | L10 | Lịch lễ minh họa, không phải lịch thật | | Thay bằng lịch thật |
+| L11 | **Lối tắt "có hay không có giá trị" của bộ sinh** (phát hiện 2026-10-22 bằng `scripts/audit_field_presence.py`, kết quả `results/v5/field_presence_1001.json`). Trả hàng và xóa nợ chỉ trỏ `applied_invoice_id` khi gian lận (10/10 ở thế giới 1001); xóa nợ chỉ có `collector_id` khi gian lận; bút toán điều chỉnh Nợ 131 / Có 511 kèm khách và hóa đơn chỉ có ở gian lận (7/7) | Đặc trưng dựa trên các trường này học dấu vết bộ sinh. Đã loại ở đăng ký v1.3 cho đặc trưng mới. Riêng bút toán tay ghi doanh thu là dấu hiệu kiểm toán có thật, nhưng sổ thật cũng có điều chỉnh hợp lệ dạng này | Bộ sinh phiên bản sau: dòng hợp lệ cũng trỏ hóa đơn gốc, có người phụ trách; thêm điều chỉnh doanh thu hợp lệ; thêm V13 vào `validate_v4` thành phép kiểm bắt buộc |
+| L12 | Thời gian lưu trữ của pandas 3 là mili giây | Mã cũ đổi thời gian bằng `astype('int64') / 1e9` sẽ sai 1.000 lần | Đã sửa trong `change_detect.py`; dùng hiệu với mốc thời gian chia `Timedelta(seconds=1)` |
 
 ## 2. Việc cần làm (xếp theo giá trị)
 

@@ -28,3 +28,14 @@ Số liệu chi tiết: [03_danh_gia_va_hieu_qua_kinh_te/06_ket_qua_hien_co.md](
 6. **pandas 3:** `groupby().rolling()` đổi hình dạng chỉ mục, làm hỏng đặc trưng bộ nhớ; đã viết lại căn theo vị trí và kiểm thử với phép tính vét cạn.
 7. **Mã định danh trùng giữa các thế giới** (cùng `T000000001`, `C001`): khi gộp thế giới phải thêm tiền tố (đã sửa trong `eval_v4.prepare`).
 
+
+## Vòng v5 (2026-10-21 và 2026-10-22, phiên hỗ trợ; dữ liệu tổng hợp)
+
+| # | Thí nghiệm | Giả thuyết | Kết quả | Kết luận |
+|---|---|---|---|---|
+| X15 | Chẩn đoán `EntityDeviation2` không nhãn trên 931 đến 933 (đã lộ, hậu kiểm) | Lệch hai phía và đổi bậc theo thực thể bắt kiểu mới | Một mình: recall 12%, kịch bản mới 17% (tốt nhất); bán giá thấp nhận lại quả 64%, hóa đơn bán khống 45% ở thế giới 931. Ghép max-rank hoặc chia khe: 24 đến 29%, không hơn Novelty cũ 28,5% | Tín hiệu có, nhưng thua trong ngân sách 3 cảnh báo; Cold khó đạt 40% |
+| X16 | Chuyển giao mô hình gọn (khoảng 70 cột, PU 0,2) có hoặc không đặc trưng thay đổi, 3 seed | Đặc trưng thay đổi giúp S2 | 400 cây cố định: 50,8% → 52,7%; kịch bản mới 12,3% → 14,4%; ca khó 14,9% → 15,2% | Lợi ích nhỏ nhưng nhất quán; đưa vào ứng viên `L4-PU-E2-AR` |
+| X17 | Cùng mô hình nhưng dừng sớm theo AP kiểm định | Dừng sớm vô hại | Có seed dừng ở **1 cây**; recall khoảng 34% và dao động mạnh | **Thất bại quan trọng:** bỏ dừng sớm, dùng 400 cây cố định (đăng ký v1.2) |
+| X18 | Kiểm tra tiền tố và vét cạn cho đặc trưng thay đổi | Đặc trưng nhân quả | Qua; phát hiện lỗi đơn vị thời gian pandas 3 (mili giây) làm mọi cửa sổ sai 1.000 lần | Đã sửa, có kiểm thử hồi quy |
+| X19 | Kiểm tra "có hay không có giá trị" theo trường (V13) | Bộ sinh không để lối tắt dạng trường | Trả hàng và xóa nợ chỉ trỏ hóa đơn gốc khi gian lận | Loại 3 đặc trưng và 3 bộ phát hiện (đăng ký v1.3); ghi vào hạn chế dữ liệu L11 |
+| X20 | Sinh lại 1001 và 1016 sau khi sửa `hire_guard` | Sửa lỗi không đổi dữ liệu cũ | Giống từng byte | Sinh tiếp 1017 đến 1020, cả 20 thế giới đạt V1 đến V12 |

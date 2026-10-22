@@ -55,3 +55,21 @@ Chi tiết cơ sở bằng chứng từng luật và điều chỉnh đề xuấ
 2. Các quy trình thu tiền, lương theo lịch, xóa nợ, hủy hàng không có đặc trưng trong 190 cột (đã bổ sung bằng 15 dấu hiệu đỏ).
 3. Chưa có đặc trưng đồ thị tổng hợp (số lân cận chung, tổng tiền qua tài khoản chung) cho mô hình học; đồ thị mới chỉ vào qua điểm luật (giả thuyết H12 ở tệp 08).
 4. Chưa có dòng hàng hóa đơn nên giá theo mặt hàng chưa kiểm được.
+
+## 6. Đặc trưng thay đổi theo thực thể v5 (`agent2/change_detect.py`)
+
+Một lượt nhân quả (dòng chỉ thấy dòng đăng trước; dòng cùng thời điểm không thấy nhau), không đọc nhãn, kịch bản hay giai đoạn.
+
+| Nhóm | Đặc trưng | Ý nghĩa kiểm toán |
+|---|---|---|
+| Lương | `pay_lr`, `pay_cusum_up`, `pay_cusum_dn`, `pay_shift` | Dòng lương đầu tiên trong tháng so với trung vị các kỳ trước của chính nhân viên; CUSUM hai phía (ngưỡng 0,03 log); dịch mức 3 kỳ gần so với trước. Thưởng là dòng thứ hai trong tháng nên không làm bẩn tham chiếu |
+| Nhóm | `grp_pay_up_share`, `grp_pay_up_n` | Trong 35 ngày, bao nhiêu người do cùng người lập bảng lương được tăng trên 5% |
+| Đơn giá | `price_lr2`, `price_cusum_up`, `price_cusum_dn`, `price_slope6` | So với trung vị 6 lần mua trước của nhà cung cấp; CUSUM; độ dốc xu hướng |
+| Khách hàng | `cust_z`, `cust_cusum_up`, `cust_cusum_dn` | Số tiền hóa đơn theo đơn vị z vững (trung vị, MAD) so với lịch sử của chính khách; **cả hai phía** (giảm giá bất thường cũng đáng ngờ) |
+| Công nợ | `ar_cust_overdue_n`, `ar_mgr_overdue_share` | Hóa đơn quá hạn chưa thu của khách và của người lập khi lập hóa đơn mới |
+| Định kỳ | `rec_excess`, `rec_amount_lr`, `rec_new_counterparty` | Rút tiền, nộp thuế, thuê nhà nhiều hơn nhịp thường lệ; số tiền lệch; đối tượng mới |
+| Tạm ứng | `adv_open_n`, `adv_growth` | Tạm ứng mới khi còn tạm ứng chưa quyết toán; tăng so với lần trước |
+
+**Loại theo đăng ký v1.3** vì là lối tắt của bộ sinh: `ar_reversal_age_days`, `ar_reversal_unpaid`, `ar_creator_reversal_share`.
+
+`EntityDeviation2`: 21 bộ phát hiện đuôi trái hoặc phải trên các đặc trưng trên, tham chiếu là kỳ huấn luyện của chính thế giới, điểm = max (bản sạch `ed2_clean` bỏ 3 bộ phát hiện lối tắt). Câu lý do tiếng Việt: `agent2/explain_v5.py` (mọi con số được kiểm trung thực).

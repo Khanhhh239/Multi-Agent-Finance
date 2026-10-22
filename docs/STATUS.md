@@ -1,4 +1,21 @@
-# Trạng thái Agent 2 (cập nhật 2026-10-20)
+# Trạng thái Agent 2 (cập nhật 2026-10-22)
+
+## Vòng v5, R2 đang chạy (phiên hỗ trợ do chủ dự án giao, 2026-10-21 và 2026-10-22)
+
+Mọi số là **dữ liệu tổng hợp**. Kết luận v4 không đạt G5 giữ nguyên.
+
+| Hạng mục | Trạng thái | Bằng chứng |
+|---|---|---|
+| Sửa lỗi bộ sinh seed 1017 (nhân viên chưa vào làm) | Xong; chốt chung `hire_guard`; 1001 và 1016 sinh lại giống từng byte | `results/v5/development/hire_guard_parity.json` |
+| 20 thế giới phát triển 1001 đến 1020 | Đủ, đạt V1 đến V12 | `results/v5/development/world_*.json` |
+| Đặc trưng thay đổi theo thực thể, `EntityDeviation2`, câu lý do v5 | Xong, có kiểm thử nhân quả và trung thực | `agent2/change_detect.py`, `agent2/explain_v5.py` |
+| Đăng ký v1.2 (400 cây cố định, định nghĩa ứng viên, lấy mẫu âm có điều kiện) | Ghi trước mọi so sánh | `08_dang_ky_truoc_v5.md`, commit `2389a9d` |
+| Đăng ký v1.3 (loại lối tắt liên kết hóa đơn của bộ sinh) | Ghi trước khi ứng viên dùng đặc trưng mới chạy | commit `10a0b17` |
+| Kiểm tra lối tắt dạng trường V13 | Có công cụ; phát hiện 3 lối tắt (ghi ở dữ liệu L11) | `scripts/audit_field_presence.py` |
+| R2: chuẩn bị ma trận, kiểm tương đương lấy mẫu, chọn w, sàng lọc, Cold, tầng chọn | **Đang chạy** bằng bộ điều phối tách rời, có điểm khôi phục | `work/r2_master.log`, `results/v5/R2/` |
+| Đề xuất đổi hướng (mục 7 đăng ký) | Đã soạn sẵn | `01_phan_tich_kinh_te_va_nghiep_vu/09_de_xuat_doi_huong_dich_vu_ra_soat.md` |
+
+Phát hiện chính của vòng này: dừng sớm theo AP có thể sụp mô hình xuống 1 cây (đã thay bằng 400 cây cố định); đặc trưng thay đổi giúp ít nhưng ổn định khi dùng có giám sát; chế độ Cold không nhãn khó đạt cổng 40%.
 
 ## Vòng v5, cập nhật ngày 2026-10-19
 
