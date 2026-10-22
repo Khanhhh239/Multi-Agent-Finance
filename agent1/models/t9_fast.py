@@ -117,12 +117,19 @@ def corroborated(candidate,memo_hits,chosen_numbers):
     return bool(memo_hits&set(chosen_numbers)) or float(candidate.get('name_score',0) or 0)>=NAME_CORROBORATION
 
 
+GUESS_METHODS=('ML_subset','hazard_weighted_subset','fifo_allocation')
+
+
 def reconcile_arrays(rec,bank,invoices,customers,tau_auto=.9,assignments=None,rules_first=True,
-                     rule_mode='both',ledger_policy='asof',allocation_policy=None,corroborate_below=None):
+                     rule_mode='both',ledger_policy='asof',allocation_policy=None,corroborate_below=None,
+                     max_guess_subset=None,fifo_allocation=False,hazard_subsets=True):
     """Cùng quy tắc/cash state của bản chuẩn; lọc mảng thay sao chép DataFrame mỗi giao dịch.
 
     corroborate_below: nếu đặt, liên kết qua mô hình khách có độ tin cậy < ngưỡng này chỉ tự động khi có bằng chứng
-    độc lập (`corroborated`); không có thì vào hàng chờ. None = hành vi cũ."""
+    độc lập (`corroborated`); không có thì vào hàng chờ. None = hành vi cũ.
+    max_guess_subset: liên kết "đoán" (GUESS_METHODS) gồm nhiều hơn số HĐ này thì vào hàng chờ (tổ hợp lớn dễ trùng tổng tình cờ).
+    fifo_allocation: khách đã gán đủ tin cậy nhưng không tổ hợp nào khớp số tiền ⇒ phân bổ theo hạn sớm nhất (HĐ cuối có thể trả một phần).
+    hazard_subsets: False ⇒ bỏ nhánh `hazard_weighted_subset` của chính sách phân bổ."""
     if not 0<=tau_auto<=1:raise ValueError('tau_auto trong [0,1]')
     if corroborate_below is not None and not tau_auto<=corroborate_below<=1:raise ValueError('corroborate_below trong [tau_auto,1]')
     if rule_mode not in {'both','amount','memo'} or ledger_policy not in {'asof','opening_only'}:
@@ -181,11 +188,22 @@ def reconcile_arrays(rec,bank,invoices,customers,tau_auto=.9,assignments=None,ru
                 pool=opened[custs[opened]==candidate.customer_id]
                 observed=inv.iloc[pool].copy();observed['remaining_amount']=remaining[pool]
                 selected,extra_method=allocation_policy(observed,txn)
+                if extra_method=='hazard_weighted_subset' and not hazard_subsets:selected,extra_method=[],''
                 if selected:
                     proposed=[positions[iid] for iid in selected]
                     if not set(proposed)<=set(pool) or remaining[proposed].sum()+TOL<txn.amount:
                         raise ValueError('Phân bổ vượt khách/ngày/công nợ đã biết')
                     chosen=proposed;method=extra_method
+        if not chosen and fifo_allocation and len(assigned) and txn.txn_id in assigned.index:
+            candidate=assigned.loc[txn.txn_id];confidence=float(candidate.get('confidence',candidate.get('p',0)))
+            if confidence>=tau_auto:
+                pool=opened[custs[opened]==candidate.customer_id]      # opened đã theo hạn sớm nhất trước
+                if len(pool):
+                    cumulative=np.cumsum(remaining[pool])
+                    if cumulative[-1]+TOL>=txn.amount:
+                        chosen=pool[:int(np.searchsorted(cumulative,txn.amount-TOL))+1].tolist();method='fifo_allocation'
+        if chosen and max_guess_subset is not None and method in GUESS_METHODS and len(chosen)>max_guess_subset:
+            chosen=[];reason='large_guess_subset'
         if chosen and corroborate_below is not None and method not in ('R1_unique_amount','R2_memo') and confidence<corroborate_below:
             if not corroborated(assigned.loc[txn.txn_id],numbers,inv.invoice_no.to_numpy()[chosen].astype(int).tolist()):
                 chosen=[];reason='uncorroborated_low_confidence'

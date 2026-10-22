@@ -1,7 +1,7 @@
 {
   "copied": true,
-  "n_files": 1121,
-  "total_bytes": 17998371,
+  "n_files": 1125,
+  "total_bytes": 18015881,
   "files": [
     {
       "path": "agent1/api_surface.py",
@@ -255,8 +255,8 @@
     },
     {
       "path": "agent1/models/t9_fast.py",
-      "bytes": 13289,
-      "sha256": "38a63fa80bc241bbc6d311f396a363ae8ef8b871f4dbc01328e0bd1230e27715"
+      "bytes": 14795,
+      "sha256": "06500af44daa21ba37878608ef1c886f004a80b724dcd0d5337a3c60e51bce87"
     },
     {
       "path": "agent1/models/t9_recon.py",
@@ -939,6 +939,16 @@
       "sha256": "4a63dbfdd7e7fa87ae65609653256d7daebaecb01cc4b1fdd76e569bbcea3ad2"
     },
     {
+      "path": "scripts/sprint5/t9_source_strata.py",
+      "bytes": 3313,
+      "sha256": "899c1a80ed8f43ae84a896f9ba497e1e4783f94a1104b62bf4f525b11b388cf2"
+    },
+    {
+      "path": "scripts/sprint5/t9_v2.py",
+      "bytes": 7359,
+      "sha256": "cc73b83dbc0a3791592a264958a7bd371aea3d87a7056f0187a74551be480126"
+    },
+    {
       "path": "tests/conftest.py",
       "bytes": 288,
       "sha256": "5c90f30977b6bdc8da64899cf0e7715baf68796248d512f80a18b8676c35aaf2"
@@ -1280,8 +1290,8 @@
     },
     {
       "path": "tests/test_t9_corroboration.py",
-      "bytes": 838,
-      "sha256": "13a4b6428ec764ea4d30d5fd87b881a7a107b458f27334a664accad084133440"
+      "bytes": 2272,
+      "sha256": "6627892ff53995c304c00f00c9b5bd688ba8e7f6a283d16032095c3cc7089625"
     },
     {
       "path": "tests/test_t9_fast.py",
@@ -1497,6 +1507,11 @@
       "path": "docs/03_Evaluation/G13_ALERT_POLICY.md",
       "bytes": 3950,
       "sha256": "d705d7b50379af517fe18bb2e046f07ccb1bcbb2474be208319b0d222071a66d"
+    },
+    {
+      "path": "docs/03_Evaluation/G15_T9_V2_PREREG.md",
+      "bytes": 2806,
+      "sha256": "5ccff7a49688f2ff71c77700cf1a4ca9d6421baf40f1c0c9f4de26755ddd8e5b"
     },
     {
       "path": "docs/03_Evaluation/GATES_CURRENT.md",
@@ -4577,6 +4592,11 @@
       "path": "outputs/t9/sprint5/source_grid.csv",
       "bytes": 10527,
       "sha256": "20ea67c4a659f13ac72a1c222c45d61a2fe05f362ba431558e60cbfce2a1f75a"
+    },
+    {
+      "path": "outputs/t9/sprint5/source_strata.csv",
+      "bytes": 1092,
+      "sha256": "b24c1afb31be67846b0ca64fa1a6cf46fa4e641038ea56f032a01ba037715345"
     },
     {
       "path": "outputs/t9/sprint5/target_metrics.csv",
