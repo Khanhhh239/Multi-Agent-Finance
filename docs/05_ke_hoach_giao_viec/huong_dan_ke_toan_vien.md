@@ -35,6 +35,16 @@ Dành cho người rà soát, không cần biết kỹ thuật. Công cụ chỉ
 | Tạm ứng khi còn tạm ứng cũ chưa quyết toán; tạm ứng tự duyệt; tạm ứng quá hạn | Sổ theo dõi tạm ứng, đề nghị tạm ứng, chứng từ quyết toán | Công tác dài ngày có phê duyệt; gia hạn có văn bản |
 | Bút toán tay sát khóa sổ, ghi đè quy trình | Chứng từ gốc của bút toán, người phê duyệt, lý do | Bút toán khóa sổ định kỳ (khấu hao, phân bổ) |
 
+## 3a. Câu "so với lịch sử của chính đối tượng"
+
+Từ bản v5, một mục trong hàng đợi có thể kèm thêm **một câu quan sát biến động**, ví dụ "Đơn giá cao hơn 35% so với trung vị sáu lần mua gần nhất của nhà cung cấp" hoặc "Nhân viên đang có 2 khoản tạm ứng chưa quyết toán khi nhận tạm ứng mới". Cách đọc:
+
+- Câu này so sánh giao dịch với **lịch sử của chính** nhân viên, nhà cung cấp, khách hàng hoặc người lập đó, không so với công ty khác.
+- Câu này chỉ là **thông tin bổ sung**: nó không làm một giao dịch được đưa vào hay bị loại khỏi hàng đợi.
+- Con số trong câu đã được đối chiếu với dữ liệu đầu vào. Nếu lịch sử ngắn (khách mới, nhà cung cấp mới) thì câu này thường không xuất hiện.
+- Kiểm theo đúng dòng tương ứng ở bảng mục 3: lương tăng thì xem quyết định điều chỉnh lương; đơn giá tăng thì xem báo giá và hợp đồng; hóa đơn quá hạn thì xem xác nhận công nợ; tạm ứng chồng tạm ứng thì xem sổ theo dõi tạm ứng; khoản chi định kỳ nhiều hơn nhịp thường lệ thì xem kế hoạch tiền mặt và hợp đồng.
+- Một biến động lớn **không** có nghĩa là sai phạm: tăng giá theo thị trường, thưởng cuối năm, gia hạn công nợ có phê duyệt đều là lý do hợp lệ thường gặp.
+
 ## 4. Ghi kết luận
 
 | Kết luận | Khi nào dùng |

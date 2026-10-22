@@ -28,12 +28,29 @@ Thời hạn xử lý là **mô phỏng theo mức ưu tiên** (`sla_basis = mo_
 `Confidence` là hồi quy isotonic từ điểm vụ sang tỷ lệ trúng quan sát trên kiểm định (mức thực thể-tuần). **Nhãn chỉ có trong mô phỏng**; ở dữ liệu thật phải thay bằng phản hồi người rà soát.
 
 ## 6. Lý do bằng tiếng Việt
-`reasons_for_row`: lấy tối đa 2 lý do từ luật (xếp theo trọng số học, nên luật nhiễu như số tròn không đứng đầu một vụ đã có luật mạnh) và tối đa 2 lý do từ đuôi thực thể (chỉ khi điểm ≥ 4,0 và có mẫu câu). 12 mẫu câu hiện có, ví dụ:
-- "Đơn giá hóa đơn cao hơn {x}% so với trung vị các lần mua gần nhất của chính nhà cung cấp."
-- "Khoản chi lương cao hơn {x}% so với mức thường lệ của chính nhân viên (ngoài tháng thưởng)."
-- "Có khoản thanh toán số tiền gần giống (sai lệch dưới 3%) cho cùng nhà cung cấp trong 30 ngày nhưng khác số hóa đơn."
 
-**Thiếu:** mẫu câu cho 15 dấu hiệu đỏ v4. Việc cần làm: thêm vào `ENTITY_REASONS`, ví dụ "Phiếu thu áp dụng cho khách A nhưng tiền đến từ tài khoản của khách B", "Lương đăng sau ngày ghi nhận nghỉ việc", "Hoàn tiền sang tài khoản không phải của khách". Cấm dùng mô hình ngôn ngữ để tự do sinh số liệu; có thể dùng để làm mượt cách diễn đạt, sau đó kiểm tra tự động mọi con số trong câu có trong bằng chứng (H14).
+Cập nhật 2026-10-22 theo code hiện tại. Đường ống tuần (`agent2/pipeline_v4.py`, hàm `explain_alerts`) ghép lý do cho mỗi dòng được cảnh báo theo thứ tự cố định:
+
+| Thứ tự | Nguồn | Tối đa | Điều kiện | Code |
+|---|---|---|---|---|
+| 1 | Luật đã kích hoạt (A1, A2 có số lần, cửa sổ, tổng tiền, hạn mức; C3 có số giây duyệt) | 2 | luật có bằng chứng đủ trường | `explain_v4.rule_observations` |
+| 2 | 15 dấu hiệu đỏ v4 (phiếu thu khác tài khoản khách, lương sau nghỉ việc, hoàn tiền sang tài khoản lạ, ...) | 2 | đuôi thực thể từ 4,0 trở lên, hoặc dấu hiệu nhị phân bật | `explain_v4.V4_REASONS`, `observations` |
+| 3 | Đuôi thực thể của bộ phát hiện cũ (đơn giá, lương, gần trùng, tiền mặt sát hạn mức) | 2 | đuôi từ 4,0 trở lên, giá trị đo được hợp lệ | `explain_v4.entity_observations` |
+| 4 | Quan sát biến động v5 so với lịch sử của chính đối tượng (lương, đơn giá, hóa đơn bán, công nợ quá hạn, trả hàng và xóa nợ, khoản định kỳ, tạm ứng) | 1 | đuôi EntityDeviation2 từ 4,0 trở lên | `explain_v5.change_observations`, `change_ops.ChangeExplainer` |
+| 5 | Câu dự phòng "ưu tiên theo điểm xếp hạng" | 1 | chỉ khi bốn nguồn trên không có câu nào | `explain_alerts` |
+
+Nguyên tắc chung:
+- Mọi con số trong câu phải có trong bằng chứng của chính dòng đó; `explain_check.check` kiểm tra tự động, sai thì đường ống dừng với lỗi chứ không xuất câu sai.
+- Câu mô tả một quan sát cần đối chiếu, không mô tả con người và không kết luận gian lận.
+- Không dùng mô hình ngôn ngữ để sinh số liệu.
+- Nguồn 4 (v5) **chỉ thêm lời giải thích**: nó không thay đổi dòng nào được cảnh báo hay thứ tự xếp hạng. Bộ EntityDeviation2 được khớp trên lịch sử không nhãn của chính công ty. Hai đặc trưng liên kết hóa đơn bị loại ở R1 v1.3 (lối tắt của bộ sinh dữ liệu, xem hạn chế L11) cũng không được dùng để giải thích.
+- Dữ liệu xuất thật có thể thiếu một số cột (đơn giá, hóa đơn được áp, người thu tiền, mã tạm ứng) hoặc thiếu bảng công ty; `change_ops.lenient_change_features` coi cột thiếu là rỗng và kỳ hạn công nợ mặc định 30 ngày. Nếu bước này lỗi, báo cáo tuần ghi `change_observations = "skipped: <loại lỗi>"` và đường ống vẫn chạy với nguồn 1 đến 3.
+- Tỷ lệ dòng chỉ có câu dự phòng được ghi trong báo cáo tuần (`ranking_only_explanations`); trong thí điểm cần theo dõi chỉ số này cùng K2 (`scripts/pilot_kpis.py`, phân theo họ tín hiệu).
 
 ## 7. Giao diện rà soát
-`review_ui/` (HTML, JS, CSS, ngoại tuyến, không gửi dữ liệu đi) và `start_review.py` của bạn bạn; `agent2/review_page.py` tạo trang HTML một tệp từ hàng đợi vụ. Ghi kết luận vào nhật ký kiểm toán cục bộ có khóa tệp (`sme_fraud/feedback.py`). Chưa nối với đường ống `agent2`.
+
+Có hai lối vào, đều ngoại tuyến hoặc nội bộ, không gửi dữ liệu ra ngoài:
+- Dịch vụ `agent2/service.py` (Flask): tải dữ liệu, chấm điểm tuần, hàng đợi vụ, ghi kết luận vào kho rà soát SQLite. Giao diện `review_ui/v4.html` (kèm `v4.js`, `v4.css`) và trang danh mục khách `review_ui/portfolio.html` (GET `/portfolio`, chỉ đọc, chỉ khóa của công ty dịch vụ). Hướng dẫn vận hành: `docs/05_ke_hoach_giao_viec/huong_dan_van_hanh.md`; hướng dẫn cho người rà soát: `docs/05_ke_hoach_giao_viec/huong_dan_ke_toan_vien.md`.
+- Trang HTML một tệp do `agent2/review_page.py` tạo từ hàng đợi vụ, dùng khi chưa dựng dịch vụ.
+
+Chỉ số thí điểm K1, K2, K3, K5 đọc trực tiếp từ kho rà soát bằng `scripts/pilot_kpis.py` (chỉ đọc).
