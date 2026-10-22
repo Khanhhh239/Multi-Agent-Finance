@@ -1,0 +1,5 @@
+group,worlds,variant,detector,params,refractory_days,selected_on,target_used,measurement_version,detection_rate_180d,median_lag_days,false_alarms_per_cust_year,macro_alarms_per_cust_year,n_eligible_shifted
+old_heldout,tgt+sens_uk+sens_coface,"baseline (refractory 0, FA<=0.5 on src)",CUSUM,"{""k"": 0.25, ""h"": 5}",0,src,False,changepoint-refractory-v1,0.5238095238095238,50.0,0.6333922242128424,0.20206704796015765,21
+old_heldout,tgt+sens_uk+sens_coface,chosen,CUSUM,"{""k"": 0.25, ""h"": 5}",60,src,False,changepoint-refractory-v1,0.47619047619047616,57.5,0.46491415783972945,0.16687859105944416,21
+new_tgt2_tgt3,tgt2+tgt3,"baseline (refractory 0, FA<=0.5 on src)",CUSUM,"{""k"": 0.25, ""h"": 5}",0,src,False,changepoint-refractory-v1,0.5757575757575758,94.0,0.5995427871720903,0.20733164846033084,33
+new_tgt2_tgt3,tgt2+tgt3,chosen,CUSUM,"{""k"": 0.25, ""h"": 5}",60,src,False,changepoint-refractory-v1,0.5757575757575758,94.0,0.4308007856333101,0.1550602176302305,33

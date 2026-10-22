@@ -24,4 +24,20 @@ Lưới: CUSUM, Page-Hinkley × tham số T7 sẵn có × R ∈ {0, 30, 60, 90, 
 Phát hiện ≥ 0,5 và báo giả ≤ 0,5 trên nhóm chính. Báo cả CI không có (không bootstrap) ⇒ **đạt điểm ước lượng, ghi rõ số khách đủ điều kiện**.
 
 ## 5. Kết quả
-_Điền sau khi đo._
+Đo ngày 22/10/2026 (`outputs/t7/sprint5/target_metrics.csv`), một lần, cấu hình đóng băng CUSUM k=0,25 h=5 R=60:
+
+| Nhóm | Khách đủ điều kiện | Phiên bản | Phát hiện | Báo giả/khách-năm | Độ trễ trung vị |
+|---|---|---|---|---|---|
+| **`tgt2`+`tgt3` (chính, chưa dùng cho T7)** | 33 | cũ (R=0) | 0,576 | **0,600** | 94 ngày |
+| | | **mới (R=60)** | **0,576** | **0,431** | 94 ngày |
+| tgt + sens_uk + sens_coface (nhóm cũ) | 21 | cũ | 0,524 | 0,633 | 50 |
+| | | mới | 0,476 | 0,465 | 57,5 |
+
+**Nhóm chính: ĐẠT ở điểm ước lượng** (phát hiện 0,576 ≥ 0,5; báo giả 0,431 ≤ 0,5). Báo giả giảm 28% mà phát hiện giữ nguyên.
+**Nhóm cũ: trượt sát nút** (phát hiện 0,476 < 0,5, mất 1 trong 21 khách).
+
+**Đính chính mục 1:** tôi viết khoảng nghỉ "không làm mất phát hiện". Chỉ đúng nếu xét cả chuỗi; **không đúng trong cửa sổ 180 ngày sau điểm gãy**:
+một báo động giả ngay trước điểm gãy làm báo động thật sau đó rơi vào thời gian nghỉ và bị bỏ. Nhóm cũ cho thấy đúng cái giá này (độ trễ cũng tăng 50 → 57,5 ngày).
+
+**Giới hạn:** không có CI (không bootstrap); 33 khách đủ điều kiện nên tỉ lệ phát hiện có độ hạt ~3 điểm; ngưỡng 0,5 cả hai chiều, đạt "sát nút" ở cả hai.
+Kết luận thận trọng: khoảng nghỉ cải thiện rõ **đánh đổi** (cùng phát hiện, ít báo giả hơn) nhưng G14 vẫn mong manh.

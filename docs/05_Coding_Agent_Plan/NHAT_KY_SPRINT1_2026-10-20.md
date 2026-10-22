@@ -262,3 +262,10 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - Lấp khoảng trống giữa báo động: âm tính (mục 6). `agent1/eval/alert_policy.py::fill_gaps` tắt mặc định.
 - **Phân loại lại (đọc tiêu chí trong `evaluate_gates.py`):** G8 (SBA thật; ECE 0,022 vs ≤0,02; tỉ lệ tiền vỡ nợ 0,63 vs 0,8–1,25), G14 (CUSUM 0,52/0,63; PH 0,43/0,42; cần
   ≥0,5 và ≤0,5), G17 (sạch −18,8% ✓; nhiễu −7,6% < 10%) đều **làm được bằng mã, không cần chuyên gia**. G17 nằm trong `features.py` (agent T9/T1) nên tôi chưa đụng.
+
+## 17. G14 với khoảng nghỉ (agent1-Khanh, 22/10/2026)
+
+- Đăng ký trước `G14_T7_PREREG.md` (commit `00eeefc`, 16:10) → chọn trên src: CUSUM k=0,25 h=5 + nghỉ 60 ngày → đo một lần trên `tgt2`+`tgt3` (chưa dùng cho T7).
+- **Nhóm chính (33 khách): phát hiện 0,576, báo giả 0,431 ⇒ đạt ở điểm ước lượng** (cũ: 0,576 / 0,600). Nhóm cũ (21 khách): 0,476 / 0,465 ⇒ trượt sát nút.
+- Đính chính trong tài liệu: khoảng nghỉ **có thể** làm mất phát hiện (báo giả ngay trước điểm gãy che báo động thật). Không có CI, G14 còn mong manh.
+- Dòng cổng `G14_new` thêm vào `evaluate_gates.py`; `G14` cũ giữ nguyên (failed). Việc còn lại cho G14: bootstrap CI theo công ty trên tgt4 nếu muốn kết luận vững.
