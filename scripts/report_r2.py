@@ -11,7 +11,7 @@ OUT = Path("docs/03_danh_gia_va_hieu_qua_kinh_te/10_ket_qua_R2_v5.md")
 OUTCOME = Path("docs/03_danh_gia_va_hieu_qua_kinh_te/09_ket_qua_niem_phong_v5.md")
 PIVOT = "../01_phan_tich_kinh_te_va_nghiep_vu/09_de_xuat_doi_huong_dich_vu_ra_soat.md"
 ROUND = {"name": "v5", "title": "Kết quả R2 v5 trên dữ liệu tổng hợp", "registration": "08_dang_ky_truoc_v5.md",
-         "final": ""}
+         "final": "", "clause": "mục 5 và mục 7 của "}
 
 
 def write(path, lines):
@@ -44,7 +44,7 @@ def outcome(sel, cold, sc=None, pu=None):
     if sel is None or sel["gate"]["passed"]:
         return None
     md = ["# Kết quả v5: chốt chặn trước niêm phong KHÔNG ĐẠT, không sinh và không chấm niêm phong", "",
-          "Tự sinh bởi `scripts/report_r2.py`. Mọi số là **dữ liệu tổng hợp**. Theo đăng ký "
+          "Tự sinh bởi `scripts/report_r2.py`. Mọi số là **dữ liệu tổng hợp**. Theo " + ROUND["clause"] + "đăng ký "
           f"(`docs/05_ke_hoach_giao_viec/{ROUND['registration']}`): giữ nguyên kết quả, không sửa rồi chấm lại, "
           f"{ROUND['final'] or 'không mở vòng v6, '}**không sinh và không chấm thế giới niêm phong {ROUND['name']}**.", "",
           f"## 1. Ứng viên S2 đã chọn: {sel['chosen'] or 'không có (không ứng viên nào hợp lệ)'}", ""]
@@ -175,6 +175,6 @@ if __name__ == "__main__":
         R2 = Path("results/v6/R6")
         OUT = Path("docs/03_danh_gia_va_hieu_qua_kinh_te/12_ket_qua_R6_v6.md")
         OUTCOME = Path("docs/03_danh_gia_va_hieu_qua_kinh_te/13_ket_qua_niem_phong_v6.md")
-        ROUND.update(name="v6", title="Kết quả R6 v6 trên dữ liệu tổng hợp", registration="11_dang_ky_truoc_v6.md",
+        ROUND.update(name="v6", title="Kết quả R6 v6 trên dữ liệu tổng hợp", registration="11_dang_ky_truoc_v6.md", clause="",
                      final="đây là vòng cuối, không mở v7, ")
     main()
