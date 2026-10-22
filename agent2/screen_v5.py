@@ -32,7 +32,7 @@ from .base_v5 import (BRANCHES, ConcatSequence, MatrixSequence, SubsetSequence, 
 from .methods import empirical_rank
 from .metrics import tie_break, weekly_alerts
 from .runtime_v5 import limit_memory, sha256, write_json
-from .select_v5 import (COLD, PU_WEIGHTS, SUPERVISED, TIERS, candidate_summary, choose_cold, final_choice,
+from .select_v5 import (COLD, HN_WEIGHTS, PU_WEIGHTS, advance, SUPERVISED, TIERS, candidate_summary, choose_cold, final_choice,
                         pre_seal_gate, selection_roster, world_summary)
 
 WORLDS = tuple(range(1001, 1021))
@@ -137,8 +137,8 @@ class SourcePool:
         self.target = pool_sequence(Path(target_dir) if target_dir else matrices / f's{target}', 'test', cols, change)
         self.rows, self.sources = len(self.meta), len([s for s in sources if s != target])
 
-    def fit_score(self, hidden, weight, seed):
-        y, sample = observed_labels(self.meta, hidden, self.balanced, weight)
+    def fit_score(self, hidden, weight, seed, hn=None):
+        y, sample = observed_labels(self.meta, hidden, self.balanced, weight, hn)
         sample = sample * self.meta.factor.to_numpy(dtype=np.float32)
         self.dataset.set_label(y)
         self.dataset.set_weight(sample)
@@ -182,7 +182,7 @@ def save(directory, protocol, te, scores, alerts, result):
     return result
 
 
-def run_supervised(kind, target, tier_dir, matrices, weight, seeds, fraction):
+def run_supervised(kind, target, tier_dir, matrices, weight, seeds, fraction, hn=None):
     """All eleven protocols of one target; resumes protocol by protocol."""
     out = tier_dir / kind / f's{target}'
     done = {p: _load(out / f'{p}.json') for p in PROTOCOLS if (out / f'{p}.json').exists()}
@@ -195,13 +195,13 @@ def run_supervised(kind, target, tier_dir, matrices, weight, seeds, fraction):
             if protocol in done:
                 continue
             t0 = time.monotonic()
-            runs = [pool.fit_score(None if protocol == 'S2' else protocol, weight, seed) for seed in seeds]
+            runs = [pool.fit_score(None if protocol == 'S2' else protocol, weight, seed, hn) for seed in seeds]
             scores = np.mean([r[0] for r in runs], axis=0)
             alerts, metrics = evaluate(te, scores, protocol)
             done[protocol] = save(out, protocol, te, scores, alerts,
                                   dict(metrics, world=target, candidate=kind, fits=[r[1] for r in runs],
                                        seconds=time.monotonic() - t0, dataset_seconds=built))
-            print(f'{kind} w={weight} target={target} {protocol} R={metrics["tp"] / max(1, metrics["positives"]):.3f}',
+            print(f'{kind} w={weight} hn={hn} target={target} {protocol} R={metrics["tp"] / max(1, metrics["positives"]):.3f}',
                   flush=True)
         del pool
         gc.collect()
@@ -259,7 +259,7 @@ def run_two_plus_one(target, tier_dir, matrices):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('stage', choices=['pu', 'screen', 'select', 'cold', 'one'])
+    p.add_argument('stage', choices=['pu', 'hn', 'screen', 'select', 'cold', 'one'])
     p.add_argument('--matrices', type=Path, default=Path('work/v5_matrices'))
     p.add_argument('--output', type=Path, default=Path('results/v5/R2'))
     p.add_argument('--fraction', type=float, required=True, help='registered negative subsampling fraction (1 = none)')
@@ -267,6 +267,7 @@ def main():
     p.add_argument('--target', type=int, default=1001)
     p.add_argument('--weight', type=float, default=.2)
     p.add_argument('--weights', type=float, nargs='*', help='pu: compute only these w (parallel workers); summary needs all')
+    p.add_argument('--hns', type=float, nargs='*', help='hn: compute only these h (parallel workers); summary needs all')
     p.add_argument('--kinds', nargs='*', help='screen/select: compute only these kinds (parallel workers), no summary')
     p.add_argument('--threads', type=int, default=8)
     a = p.parse_args()
@@ -295,22 +296,43 @@ def main():
         return
     lock = _load(a.output / 'PU_locked.json')
     w = lock['w'] if lock['w'] is not None else PU_WEIGHTS[0]
+    if a.stage == 'hn':                                    # v6 registration section 3: lock h on L4-FB-PU, w fixed
+        summaries = {}
+        for h in (a.hns or HN_WEIGHTS):
+            worlds = {s: run_supervised('L4-FB-PU', s, a.output / f'hn_{h}', a.matrices, w, (0,), a.fraction, h)
+                      for s in screening}
+            summaries[str(h)] = candidate_summary(worlds, 'screening')
+        if a.hns:
+            return
+        valid = [h for h in HN_WEIGHTS if summaries[str(h)]['eligible']]
+        h = max(valid, key=lambda v: (summaries[str(v)]['J'], -HN_WEIGHTS.index(v))) if valid else None
+        write_json(a.output / 'HN_locked.json', {'status': 'locked' if h is not None else 'no_eligible_hn_weight', 'h': h,
+                   'w': w, 'J': {k: v['J'] for k, v in summaries.items()},
+                   'eligible': {k: v['eligible'] for k, v in summaries.items()},
+                   'R_mean': {k: v['R_mean'] for k, v in summaries.items()},
+                   'B_mean': {k: v['B_mean'] for k, v in summaries.items()}, 'data_origin': 'dữ liệu tổng hợp'})
+        return
+    hn_lock = a.output / 'HN_locked.json'
+    hn = _load(hn_lock)['h'] if hn_lock.exists() else None          # v6 when present; None keeps v5 behaviour
+    if hn_lock.exists() and hn is None:
+        raise SystemExit('v6: no eligible hard-negative weight; the round stops (registration section 3)')
     if a.stage == 'screen':
         tier = a.output / 'screening'
         cands = {}
         for kind in (a.kinds or ('L3-PU', 'L4-FB-PU', 'L4-PU-E2-AR')):
-            if kind == 'L4-FB-PU' and (a.output / f'pu_w{w}').exists():
-                src = a.output / f'pu_w{w}'          # identical estimand (seed 0, same w): reuse, never refit
-            else:
-                src = tier
-            cands[kind] = candidate_summary({s: run_supervised(kind, s, src, a.matrices, w, (0,), a.fraction)
+            reuse = a.output / (f'pu_w{w}' if hn is None else f'hn_{hn}')
+            src = reuse if kind == 'L4-FB-PU' and reuse.exists() else tier   # identical estimand: reuse, never refit
+            cands[kind] = candidate_summary({s: run_supervised(kind, s, src, a.matrices, w, (0,), a.fraction, hn)
                                              for s in screening}, 'screening')
         if a.kinds:
             return
-        cands['L4-PU-E2-AR-2plus1'] = candidate_summary({s: run_two_plus_one(s, tier, a.matrices) for s in screening},
-                                                        'screening')
-        roster = selection_roster(cands)
-        write_json(a.output / 'screening_summary.json', {'w': w, 'candidates': {k: {x: v[x] for x in
+        if hn is None:
+            cands['L4-PU-E2-AR-2plus1'] = candidate_summary({s: run_two_plus_one(s, tier, a.matrices) for s in screening},
+                                                            'screening')
+            roster = selection_roster(cands)
+        else:                                          # v6: three supervised candidates, no Cold, no 2plus1
+            roster = {'supervised': advance(cands, order=tuple(cands)), 'cold': []}
+        write_json(a.output / 'screening_summary.json', {'w': w, 'hn': hn, 'candidates': {k: {x: v[x] for x in
                    ('J', 'Q_min', 'Q_mean', 'R_mean', 'R_min', 'B_mean', 'B_min', 'eligible', 'tail_worlds')}
                    for k, v in cands.items()}, 'roster': roster, 'data_origin': 'dữ liệu tổng hợp'})
         return
@@ -330,16 +352,16 @@ def main():
         if a.kinds:                        # worker mode: fit the given base kinds only
             for kind in a.kinds:
                 for s in selection:
-                    run_supervised(kind, s, tier, a.matrices, w, (0, 1, 2, 3, 4), a.fraction)
+                    run_supervised(kind, s, tier, a.matrices, w, (0, 1, 2, 3, 4), a.fraction, hn)
             return
         for kind in roster:
             base = 'L4-PU-E2-AR' if kind == 'L4-PU-E2-AR-2plus1' else kind
-            worlds = {s: run_supervised(base, s, tier, a.matrices, w, (0, 1, 2, 3, 4), a.fraction) for s in selection}
+            worlds = {s: run_supervised(base, s, tier, a.matrices, w, (0, 1, 2, 3, 4), a.fraction, hn) for s in selection}
             if kind == 'L4-PU-E2-AR-2plus1':
                 worlds = {s: run_two_plus_one(s, tier, a.matrices) for s in selection}
             res[kind] = candidate_summary(worlds, 'selection')
         chosen = final_choice(res, SUPERVISED)
-        write_json(a.output / 'selection_summary.json', {'w': w, 'chosen': chosen,
+        write_json(a.output / 'selection_summary.json', {'w': w, 'hn': hn, 'chosen': chosen,
                    'candidates': {k: {x: v[x] for x in ('J', 'Q_min', 'Q_mean', 'R_mean', 'R_min', 'B_mean', 'B_min',
                                                          'eligible', 'tail_worlds')} for k, v in res.items()},
                    'gate': pre_seal_gate(res[chosen]) if chosen else {'passed': False, 'decision':

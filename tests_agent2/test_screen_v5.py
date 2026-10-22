@@ -76,3 +76,39 @@ def test_world_runs_produce_registered_summaries(matrices, tmp_path):
         assert 0 <= s['Q'] <= 1
     again = S.run_supervised('L4-PU-E2-AR', 1001, out, matrices, .2, (0, 1), 1.0)   # resume: no refit
     assert again == sup
+
+
+def test_hard_negative_weight_only_changes_confirmed_legitimate_hard_negatives():
+    from agent2.base_v5 import observed_labels
+    meta = pd.DataFrame(dict(is_fraud=[1, 0, 0, 0, 1], fraud_type=['a', '', '', '', 'b'], branch=['x', '', '', '', 'y'],
+                             hard_negative_type=['', '', 'legit_x', '', '']))
+    y0, w0 = observed_labels(meta, None, False, .1)
+    y1, w1 = observed_labels(meta, None, False, .1, None)
+    assert (y0 == y1).all() and (w0 == w1).all()                       # v5 behaviour is unchanged by default
+    y2, w2 = observed_labels(meta, None, False, .1, 1.0)
+    assert (y2 == y0).all()                                            # labels never change
+    assert list(w2) == [1., .1, 1., .1, 1.]                            # only the hard-negative row moved from w to h
+    _, w3 = observed_labels(meta, 'x', False, .1, 2.0)                 # a hidden branch stays unknown at w, not at h
+    assert w3[0] == .1 and w3[2] == 2.0
+    with pytest.raises(ValueError, match='Unregistered hard-negative weight'):
+        observed_labels(meta, None, False, .1, .3)
+
+
+def test_hn_stage_locks_h_and_screening_uses_it(matrices, tmp_path, monkeypatch):
+    import json
+    import sys
+    out = tmp_path / 'R6'
+    out.mkdir()
+    write_json(out / 'PU_locked.json', {'status': 'inherited_from_v5', 'w': .1, 'data_origin': 'dữ liệu tổng hợp'})
+    monkeypatch.setattr(S, 'limit_memory', lambda *_: None)
+    import agent2.select_v5 as SEL
+    tiny = {'screening': ((1001, 1002), 1), 'selection': ((1001, 1002), 1)}
+    monkeypatch.setattr(S, 'TIERS', tiny)
+    monkeypatch.setattr(SEL, 'TIERS', tiny)
+    monkeypatch.setattr(S, 'HN_WEIGHTS', (.5, 1.))
+    monkeypatch.setattr(sys, 'argv', ['screen_v5', 'hn', '--matrices', str(matrices), '--output', str(out), '--fraction', '1',
+                                      '--threads', '2'])
+    S.main()
+    locked = json.loads((out / 'HN_locked.json').read_text(encoding='utf-8'))
+    assert locked['status'] in ('locked', 'no_eligible_hn_weight') and set(locked['J']) == {'0.5', '1.0'}
+    assert (out / 'hn_0.5' / 'L4-FB-PU' / 's1001' / 'summary.json').exists()

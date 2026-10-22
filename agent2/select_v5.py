@@ -9,6 +9,7 @@ import numpy as np
 SUPERVISED = ('L3-PU', 'L4-FB-PU', 'L4-PU-E2-AR', 'L4-PU-E2-AR-2plus1')
 COLD = ('Cold-Rules-E2', 'Cold-v4')
 PU_WEIGHTS = (.1, .2, .5)
+HN_WEIGHTS = (.5, 1., 2.)      # v6 registration section 3: weight of confirmed legitimate hard negatives in source worlds
 TIERS = {'screening': (tuple(range(1001, 1009)), 2), 'selection': (tuple(range(1001, 1021)), 4)}
 HARD_NEGATIVE_MAX = .15
 

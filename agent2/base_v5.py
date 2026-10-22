@@ -20,7 +20,7 @@ import pandas as pd
 from sklearn.metrics import average_precision_score
 
 from .runtime_v5 import limit_memory, sha256, wait_memory, write_json
-from .select_v5 import PU_WEIGHTS, candidate_summary, world_summary
+from .select_v5 import HN_WEIGHTS, PU_WEIGHTS, candidate_summary, world_summary
 from .world_v4_schemes import SCHEMES
 
 BRANCHES = tuple(sorted({item[0] for item in SCHEMES.values()}))
@@ -171,9 +171,12 @@ def prepare_world(seed, root, matrices, generation):
     return manifest
 
 
-def observed_labels(metadata, hidden=None, balanced=False, weight=.1):
+def observed_labels(metadata, hidden=None, balanced=False, weight=.1, hn_weight=None):
+    """v6: `hn_weight` re-weights source rows that are legitimate AND a confirmed hard negative; None = v5 behaviour."""
     if weight not in PU_WEIGHTS:
         raise ValueError('Unregistered PU weight')
+    if hn_weight is not None and hn_weight not in HN_WEIGHTS:
+        raise ValueError('Unregistered hard-negative weight')
     y=metadata.is_fraud.to_numpy(dtype=np.int8).copy()
     if hidden is not None:
         y[metadata.branch.to_numpy()==hidden]=0
@@ -185,6 +188,8 @@ def observed_labels(metadata, hidden=None, balanced=False, weight=.1):
         families=metadata.fraud_type.to_numpy()
         for name,count in zip(names,counts):
             sample[pos & (families==name)]=pos.sum()/len(names)/count
+    if hn_weight is not None:
+        sample[(metadata.is_fraud.to_numpy()==0) & (metadata.hard_negative_type.to_numpy()!='')]=hn_weight
     return y,sample
 
 
