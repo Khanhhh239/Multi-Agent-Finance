@@ -66,9 +66,9 @@ def case_bootstrap(te, flags, mask, reps=1000, seed=0):
     return [float(np.percentile(stats, 2.5)), float(np.percentile(stats, 97.5))]
 
 
-def evaluate(dev_matrices: Path, sealed_matrices: Path, sealed_seeds, novel, new_decoys):
-    if OUT.exists():
-        raise SystemExit(f'{OUT} exists: the sealed v5 worlds are evaluated once only')
+def evaluate(dev_matrices: Path, sealed_matrices: Path, sealed_seeds, novel, new_decoys, out_path=OUT):
+    if out_path.exists():
+        raise SystemExit(f'{out_path} exists: the sealed v5 worlds are evaluated once only')
     frozen = json.loads(FROZEN.read_text(encoding='utf-8'))
     if code_hashes() != frozen['hashes']:
         changed = sorted(k for k in set(code_hashes()) | set(frozen['hashes'])
@@ -96,7 +96,7 @@ def evaluate(dev_matrices: Path, sealed_matrices: Path, sealed_seeds, novel, new
         out['worlds'][str(seed)] = res
         print(seed, {k: round(v['recall'], 4) for k, v in res.items()}, flush=True)
     out['gates'] = gates(out, frozen)
-    write_json(OUT, out)
+    write_json(out_path, out)
     return out
 
 
@@ -142,13 +142,16 @@ def main():
     p.add_argument('--dev-matrices', type=Path, default=Path('work/v5_matrices'))
     p.add_argument('--sealed-matrices', type=Path, default=Path('work/v5_sealed_matrices'))
     p.add_argument('--seeds', type=int, nargs='+', default=[5101, 5102, 5103, 5104])
+    p.add_argument('--out', type=Path, default=OUT, help='use a different path for the dry run')
     a = p.parse_args()
     limit_memory(10)
     if a.stage == 'freeze':
         print(json.dumps(freeze(), ensure_ascii=False)[:500])
     else:
         from .world_v5_sealed import NOVEL_V5, NEW_DECOYS_V5
-        evaluate(a.dev_matrices, a.sealed_matrices, a.seeds, NOVEL_V5, NEW_DECOYS_V5)
+        if a.out == OUT and a.seeds != [5101, 5102, 5103, 5104]:
+            raise SystemExit('only the four sealed seeds may write the sealed result')
+        evaluate(a.dev_matrices, a.sealed_matrices, a.seeds, NOVEL_V5, NEW_DECOYS_V5, a.out)
 
 
 if __name__ == '__main__':
