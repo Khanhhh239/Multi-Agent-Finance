@@ -13,5 +13,6 @@ Mục tiêu: chứng minh bài toán **có thật, đo được bằng tiền, v
 | [06_yeu_cau_san_pham.md](06_yeu_cau_san_pham.md) | Yêu cầu chức năng, phi chức năng, pháp lý, ngoài phạm vi | Viết đặc tả và kiểm thử |
 | [07_mo_hinh_kinh_doanh.md](07_mo_hinh_kinh_doanh.md) | Giá, kênh bán, kinh tế đơn vị | Quyết định thương mại |
 | [08_gia_dinh_rui_ro_va_cau_hoi_mo.md](08_gia_dinh_rui_ro_va_cau_hoi_mo.md) | Sổ giả định, rủi ro, việc cần kiểm chứng | Lập kế hoạch thí điểm |
+| [09_de_xuat_doi_huong_dich_vu_ra_soat.md](09_de_xuat_doi_huong_dich_vu_ra_soat.md) | Đổi hướng: dịch vụ rà soát định kỳ qua đơn vị kế toán (mục 7 đăng ký v5) | Khi mô hình chưa đạt cổng, hoặc để đưa sản phẩm vào dùng sớm |
 
 Phép tính tiền (chi phí xây dựng, doanh nghiệp tiết kiệm bao nhiêu) nằm ở [03_danh_gia_va_hieu_qua_kinh_te](../03_danh_gia_va_hieu_qua_kinh_te/README.md).

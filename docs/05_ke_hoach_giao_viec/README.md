@@ -4,7 +4,7 @@ Người đọc: một coding agent (hoặc kỹ sư) tiếp nhận dự án, **
 
 ## Vòng v5 sau M2
 
-Chủ dự án đã giao vòng mới: [hậu kiểm R0](../03_danh_gia_va_hieu_qua_kinh_te/08_mo_xe_niem_phong_v4.md) hoàn tất trên dữ liệu tổng hợp; [đăng ký trước R1](08_dang_ky_truoc_v5.md) là **bản đề xuất chờ duyệt**. Dừng chờ trả lời “duyệt” trước R2. Không dùng các kết quả hậu kiểm để viết lại kết luận v4 không đạt G5. Kế hoạch A đến E bên dưới được giữ để truy vết; trạng thái mới tại [STATUS.md](../STATUS.md).
+Chủ dự án đã giao vòng mới: [hậu kiểm R0](../03_danh_gia_va_hieu_qua_kinh_te/08_mo_xe_niem_phong_v4.md) hoàn tất trên dữ liệu tổng hợp; [đăng ký trước](08_dang_ky_truoc_v5.md) đã duyệt v1.1 và có sửa đổi v1.2, v1.3 ghi trước mọi so sánh. R2 đang chạy bằng `scripts/run_r2_master.py`; báo cáo tự sinh bằng `scripts/report_r2.py`. Nếu chốt chặn đạt: R3 theo [brief_v5.md](independent_scenarios/brief_v5.md), mã hóa vào `agent2/world_v5_sealed.py`, rồi `scripts/run_sealed_v5.py` (sinh, chuẩn bị, thử khô, đánh giá một lần). Nếu không đạt: [đề xuất đổi hướng](../01_phan_tich_kinh_te_va_nghiep_vu/09_de_xuat_doi_huong_dich_vu_ra_soat.md). Bàn giao các thành phần chính: [09_ban_giao_nhanh_drivers.md](09_ban_giao_nhanh_drivers.md). Không dùng các kết quả hậu kiểm để viết lại kết luận v4 không đạt G5. Kế hoạch A đến E bên dưới được giữ để truy vết; trạng thái mới tại [STATUS.md](../STATUS.md).
 
 ## Đọc theo thứ tự này
 1. [STATUS.md](../STATUS.md): trạng thái hiện tại.
