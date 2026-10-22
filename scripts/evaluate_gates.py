@@ -149,6 +149,16 @@ def main():
                     r.auto_txn_coverage>=.6 and r.pay_date_MAE_est_days<=3,
                     'T9 P5: tau/ứng viên chọn trên DN nguồn; F1 >=.8, precision >=.95, coverage >=.6, MAE ngày <=3; chưa đổi pipeline E2E',
                     'outputs/t9/sprint3/target_metrics.csv')
+    # G15 trên bộ đích sạch tgt3 (đăng ký trước: docs/03_Evaluation/G15_T9_V2_PREREG.md); dòng G15 cũ (tgt) giữ để kiểm toán.
+    v2=OUT/'t9/v2/target_metrics.csv'
+    if v2.exists():
+        part=pd.read_csv(v2);part=part[part.world=='tgt3']
+        deployed=part[part.method=='T9 v2 (source-selected)'] if 'method' in part else part.iloc[:0]
+        if len(deployed)==1:
+            r=deployed.iloc[0];rules=part[part.method.isin(['R1','R2'])].link_f1.max()
+            set_gate('G15_tgt3',r.link_f1>=.8 and r.link_f1>rules and r.link_precision>=.95 and r.auto_txn_coverage>=.6 and r.pay_date_MAE_est_days<=3,
+                f'T9 v2 chọn trên nguồn, đo một lần trên tgt3 niêm phong: P {r.link_precision:.3f}, R {r.link_recall:.3f}, F1 {r.link_f1:.3f}, tự động {r.auto_txn_coverage:.3f}, MAE {r.pay_date_MAE_est_days:.2f} ngày',
+                'outputs/t9/v2/target_metrics.csv')
     if t0.exists():
         r=pd.read_csv(t0).iloc[0];set_gate('G16',r.precision>=.95 and r.recall>=.95,'Chèn lỗi có nhãn, precision/recall >=.95','outputs/wp0/T0_quality_metrics.csv')
     ef=load('t1/EF_t8_t9.csv');noisy=load('t1/EF_t8_t9_src_noisy_promises.csv')

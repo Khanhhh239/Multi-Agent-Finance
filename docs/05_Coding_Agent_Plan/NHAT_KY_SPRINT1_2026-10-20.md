@@ -234,3 +234,16 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
   `aci_state`, id `current`). Phản hồi có `band_method`, `aci_ready` (≥ 8 tuần lộ diện), `band_note`, `band_raw`. Kiểm thử `tests/test_aci_band.py`,
   `tests/test_service_aci_state.py`. Gọi `run` trực tiếp không truyền `aci_state` giữ dải gốc (script nghiên cứu cũ không đổi).
 - Prompt giao việc tiếp: `docs/05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-22.md`.
+
+## 14. T9 v2 với bộ đích sạch tgt3 (agent1-Khanh, 22/10/2026)
+
+- Phân tích **chỉ nguồn** (`scripts/sprint5/t9_source_strata.py`): liên kết đoán sai tập trung ở tổ hợp ≥ 3 HĐ (ML_subset 0,736; hazard 0,468);
+  1–2 HĐ đạt 0,96–0,99. Lỗi là chọn sai tổ hợp, không phải sai khách.
+- Mã: `reconcile_arrays(max_guess_subset=, fifo_allocation=, hazard_subsets=)` (mặc định = hành vi cũ); kiểm thử `tests/test_t9_corroboration.py`
+  (lưu ý `TOL` = 25.000 đ — dữ liệu kiểm thử phải ở thang triệu đồng).
+- **Đăng ký trước** `docs/03_Evaluation/G15_T9_V2_PREREG.md`, commit `5f94cc8` (10:01) **trước khi** sinh `tgt3` (seed 7310, 30 công ty, cấu hình tgt).
+- Chọn trên nguồn: `cap=2 | hazard=off | fifo=off` (P 0,979, F1 0,831). FIFO bị loại (precision 0,19–0,26).
+- **tgt3 (một lần): P 0,962 ✓, F1 0,706 ✗ (R 0,557), tự động 0,689 ✓, MAE 0,82 ✓ ⇒ `G15_tgt3` trượt vì recall.** Nhất quán ở tgt2/tgt/hc:
+  precision +4–9 điểm, MAE giảm 2–3 lần, recall −2–6 điểm. Dòng cổng `G15_tgt3` thêm vào `evaluate_gates.py`.
+- tgt3 **đã dùng** — không chọn gì thêm trên nó. Đòn bẩy recall còn lại là thông tin (số HĐ trong nội dung CK), không phải tinh chỉnh.
+- Dashboard: hiển thị `band_method` và cảnh báo `band_note` khi ACI chưa đủ 8 tuần (`agent1_service/ui/index.html`).

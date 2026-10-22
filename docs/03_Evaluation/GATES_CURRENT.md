@@ -27,3 +27,4 @@ Trạng thái pilot: **NO-GO**.
 | G13_v1 | failed | v1 (kiểm toán): ngưỡng theo chi phí từng tuần trên 144 điểm nguồn (`outputs\e2e\protocol\alert_policy.csv`) |
 | G13_tgt2 | passed | THAM KHẢO, nhãn oracle (cận trên): 71 sự kiện, phát hiện 0.75 [0.59; 0.84], báo giả 0.75 [0.43; 1.10] (`outputs/tgt2/alert_policy_tgt2.csv`) |
 | G15_v1 | failed | LEGACY allocation: WP4: F1 >=.80 và thắng quy tắc, precision >=.95, tự động >=.6, MAE ngày <=3 (`outputs/t9/t9_reconciliation_tgt.csv`) |
+| G15_tgt3 | failed | T9 v2 chọn trên nguồn, đo một lần trên tgt3 niêm phong: P 0.962, R 0.557, F1 0.706, tự động 0.689, MAE 0.82 ngày (`outputs/t9/v2/target_metrics.csv`) |

@@ -43,7 +43,9 @@ trước, nếu khách lớn trả chậm thì sao* — bằng dải P10/P50/P90
   SPL 3,8% nhưng **Chronos-Bolt zero-shot tốt nhất** (báo cáo trung thực).
 - T7: có phát hiện thay đổi theo khách/danh mục và phép đo chuyển chế độ; kết quả và giới hạn ở bảng hiện hành.
 - T9: khớp sao kê lai quy tắc/ML, phần mơ hồ vào hàng chờ. Trên nguồn đạt (F1 0,826); trên `tgt` trượt sát nút
-  (F1 0,796, precision 0,925 < 0,95) — chẩn đoán và hướng sửa ở [T9_RECALL_DIAGNOSIS](03_Evaluation/T9_RECALL_DIAGNOSIS.md).
+  (F1 0,796, precision 0,925 < 0,95) — chẩn đoán ở [T9_RECALL_DIAGNOSIS](03_Evaluation/T9_RECALL_DIAGNOSIS.md).
+  **T9 v2** (đăng ký trước, đo một lần trên bộ đích sạch `tgt3`): precision 0,962 (đạt), ngày trả chính xác hơn 3 lần, nhưng F1 0,706 do recall
+  ⇒ liên kết tự động đáng tin, phần còn lại vào hàng chờ ([G15_T9_V2_PREREG](03_Evaluation/G15_T9_V2_PREREG.md)).
 - T0/T5: 15 kiểm thử đạt (hạn thuế theo ví dụ luật, kể cả dịch hạn do Tết 2025).
 
 - T6: E2E XML/CSV, nhãn T9 ước lượng, khoảng số dư và cảnh báo; số đo hiện hành ở G12/G13 và CSV fullweek, đối chứng bổ sung được báo riêng.

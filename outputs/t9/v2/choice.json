@@ -1,0 +1,12 @@
+{
+  "variant": "cap=2|hazard=off|fifo=off",
+  "cap": 2,
+  "hazard": false,
+  "fifo": false,
+  "tau": 0.5,
+  "fallback_rule": false,
+  "source_precision": 0.9791850220264318,
+  "source_f1": 0.8311676170889034,
+  "source_auto": 0.7758432087511394,
+  "target_used": false
+}

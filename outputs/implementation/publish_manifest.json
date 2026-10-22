@@ -1,7 +1,7 @@
 {
   "copied": true,
-  "n_files": 1125,
-  "total_bytes": 18015881,
+  "n_files": 1130,
+  "total_bytes": 18043821,
   "files": [
     {
       "path": "agent1/api_surface.py",
@@ -450,8 +450,8 @@
     },
     {
       "path": "agent1_service/ui/index.html",
-      "bytes": 11676,
-      "sha256": "dfd202774a80b48380e22f3e2bd565bf0076ccd378bc2601308bf7fedc681907"
+      "bytes": 11767,
+      "sha256": "cfe4ab428e9111795e0ddf1dfa622152dd51b5b385c7722ad7657fb1612f8c36"
     },
     {
       "path": "scripts/analyze_results.py",
@@ -540,8 +540,8 @@
     },
     {
       "path": "scripts/evaluate_gates.py",
-      "bytes": 14226,
-      "sha256": "3ae5f57977ad249887cbb7e43aa3657dba7e48b96a07564ee56b69e45fd3b8d5"
+      "bytes": 15150,
+      "sha256": "ad296ca5967333f1593f76dc5abc372552a35f247c97457bff8c62f7244c87b9"
     },
     {
       "path": "scripts/evaluate_tuned_t1.py",
@@ -1330,8 +1330,8 @@
     },
     {
       "path": "docs/00_INDEX.md",
-      "bytes": 6658,
-      "sha256": "eb61b9f6f482999b28e4f1c88a1664645ea53a8bd529e82acc8bc9156d0a28e9"
+      "bytes": 6950,
+      "sha256": "5ac238f6acda1d7630595bd60de0f8f0a12ddf2e8bc01d3223d09bf171951f8e"
     },
     {
       "path": "docs/DATA_CARD.md",
@@ -1350,8 +1350,8 @@
     },
     {
       "path": "docs/RESULTS_TABLES.md",
-      "bytes": 245471,
-      "sha256": "85a5c40a2b22297fcfcf2ee8242c69603ff65e1787624049b58b71fb4b7ea5f9"
+      "bytes": 245662,
+      "sha256": "817d8d4202e8c0a44589ceda8fe27cd26119825c548cb74816d077353c5e7efe"
     },
     {
       "path": "docs/security_privacy.md",
@@ -1485,8 +1485,8 @@
     },
     {
       "path": "docs/03_Evaluation/04_ket_qua_hien_co.md",
-      "bytes": 246377,
-      "sha256": "9a662a99becdbf5da471c3ba9334ffef1c90be0e53a87638adebca677461757f"
+      "bytes": 246568,
+      "sha256": "9ea023ef146addee80690276d5197b02b9c684cd79dd9b5d6762f12d178edbde"
     },
     {
       "path": "docs/03_Evaluation/05_chi_phi_xay_dung_va_van_hanh.md",
@@ -1510,13 +1510,13 @@
     },
     {
       "path": "docs/03_Evaluation/G15_T9_V2_PREREG.md",
-      "bytes": 2806,
-      "sha256": "5ccff7a49688f2ff71c77700cf1a4ca9d6421baf40f1c0c9f4de26755ddd8e5b"
+      "bytes": 5756,
+      "sha256": "0335f344f9909199c0589d7e8400e6c651ec062bc4ad1e3eee41eaf115754191"
     },
     {
       "path": "docs/03_Evaluation/GATES_CURRENT.md",
-      "bytes": 3385,
-      "sha256": "5037e9266380e89df18d0b0e328f8578f9e7eb17355f5ccf08d0dd9bcaa6fa6c"
+      "bytes": 3578,
+      "sha256": "2f3234e4b2a7e6957732b707191759f158ddb6d01ca26b04e7c4d1ab90e0233d"
     },
     {
       "path": "docs/03_Evaluation/GO_NO_GO_SYNTHETIC_ONLY.md",
@@ -1535,8 +1535,8 @@
     },
     {
       "path": "docs/03_Evaluation/T9_RECALL_DIAGNOSIS.md",
-      "bytes": 6169,
-      "sha256": "268f5b1d63458323340a8d09a4448bb8e1316ef5ccb1d0ce59a5c58003717ced"
+      "bytes": 6539,
+      "sha256": "5356b01c280d6b57012b0a5d0f3b022ce613ded04cbe3bf8fbc2b7216b10576e"
     },
     {
       "path": "docs/04_AI_Methods/01_pipeline_he_thong.md",
@@ -1660,8 +1660,8 @@
     },
     {
       "path": "docs/05_Coding_Agent_Plan/NHAT_KY_SPRINT1_2026-10-20.md",
-      "bytes": 25074,
-      "sha256": "224accdce91b84bc1153eb5b7570b7a65adffeac38884075adbbd1aa55ec8879"
+      "bytes": 26547,
+      "sha256": "589fdb45b47007f5b165f338a195ee3dd6994b267515a34e7a113158bb5af106"
     },
     {
       "path": "docs/05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-21.md",
@@ -1670,8 +1670,8 @@
     },
     {
       "path": "docs/05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-22.md",
-      "bytes": 3623,
-      "sha256": "96874c8e98b6c18ea452af0eebb9e067900317363078b6af53cdc8e2175d0aeb"
+      "bytes": 3490,
+      "sha256": "51b97ee8e01de502b63c55e4b632da20fa60ecb2ddbfa318ec50d28a02adad04"
     },
     {
       "path": "docs/05_Coding_Agent_Plan/README.md",
@@ -2680,8 +2680,8 @@
     },
     {
       "path": "outputs/implementation/gates.csv",
-      "bytes": 3009,
-      "sha256": "f1a4f53c5f3816b7f5859fb76a7bbfc96764b071232cd0c5433a13329a7bb242"
+      "bytes": 3192,
+      "sha256": "e737edcb97795e2e269a3364a80787b4850a68a64431ccbd86e323a22dfcd26a"
     },
     {
       "path": "outputs/implementation/gates.legacy_expand.csv",
@@ -4624,6 +4624,26 @@
       "sha256": "b7de635bb49466b749faaf776d575a78a18ec2e518ddf1eff5362db9b5ac92b8"
     },
     {
+      "path": "outputs/t9/v2/choice.json",
+      "bytes": 281,
+      "sha256": "e224b476d4d07d2ebbe6ef49f101e1f6f15f594a56474bfa49a45e4dcf9ae49d"
+    },
+    {
+      "path": "outputs/t9/v2/source_grid.csv",
+      "bytes": 6631,
+      "sha256": "7717ca4691d5f36a4896322574e9b0e549587bc75095d326536d601367b1cc47"
+    },
+    {
+      "path": "outputs/t9/v2/source_methods.csv",
+      "bytes": 3575,
+      "sha256": "4de170a3511e0fb492a102b4e3c001032aa3648ac61c6ad29f6547278d8f4624"
+    },
+    {
+      "path": "outputs/t9/v2/target_metrics.csv",
+      "bytes": 9302,
+      "sha256": "5cc7cf7579ef7bb0805967294cf10c636da725840ef6104d3fea3d3cdf8f129f"
+    },
+    {
       "path": "outputs/tgt2/alert_policy_tgt2.csv",
       "bytes": 3022,
       "sha256": "a810aa52f95d1608f11e8403737e5269bf89860c8291c1511a898eb48da65db9"
@@ -5582,6 +5602,11 @@
       "path": "data/synthetic/tgt2/config.json",
       "bytes": 1429,
       "sha256": "404bdecb707876dd1d4ec99216bb58efe476bc89f7661ac4febf3de4edeb135b"
+    },
+    {
+      "path": "data/synthetic/tgt3/config.json",
+      "bytes": 1426,
+      "sha256": "078233734e2593ef35bb652c85a269384ee6036b87df275fc4e57380f47569c1"
     },
     {
       "path": ".gitignore",

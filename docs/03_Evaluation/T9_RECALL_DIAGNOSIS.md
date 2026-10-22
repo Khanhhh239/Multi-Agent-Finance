@@ -69,4 +69,8 @@ Lưới g ∈ {none, .7, .8, .9, .95} × τ ∈ {.5….9} trên DN nguồn giữ
 | 3 | **Phân bổ từng phần**: liên kết `partial` khi số tiền < số còn nợ và có số HĐ hoặc khách chỉ còn một HĐ mở | recall |
 | 4 | Doanh nghiệp ghi sổ theo tháng: đặc trưng dựa ngày giá trị NH, không dựa ngày ghi sổ | recall |
 
+## 4. Kết quả T9 v2 (đăng ký trước, đo một lần trên tgt3 sạch) — xem `G15_T9_V2_PREREG.md` mục 6
+Giới hạn tổ hợp đoán ≤ 2 HĐ + tắt `hazard_weighted_subset`: precision tgt3 **0,962** (đạt), F1 **0,706** (trượt, recall 0,557).
+Phân bổ FIFO cho thanh toán từng phần bị loại trên nguồn (precision 0,19–0,26).
+
 G15 không chặn bậc 0 "bóng": ở bậc 0, T9 chỉ cung cấp nhãn, và E2E với nhãn T9 ước lượng đã đạt G12.
