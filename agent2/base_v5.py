@@ -42,6 +42,61 @@ class MatrixSequence(lgb.Sequence):
         # on-disk storage stays float32 and only requested rows are copied.
         return np.asarray(self.array[index][..., self.columns], dtype=np.float64, order='C')
 
+    def take(self, rows):
+        """Gather arbitrary sorted rows (fancy indexing on the memory map reads only those rows)."""
+        return np.asarray(self.array[np.asarray(rows)][:, self.columns], dtype=np.float64, order='C')
+
+
+class ConcatSequence(lgb.Sequence):
+    """Column-wise concatenation of several row-aligned sequences (base L4 + change features)."""
+    batch_size = 4096
+
+    def __init__(self, parts):
+        self.parts = parts
+        assert len({len(p) for p in parts}) == 1, 'row counts differ between matrices'
+
+    def __len__(self):
+        return len(self.parts[0])
+
+    def __getitem__(self, index):
+        blocks = [p[index] for p in self.parts]
+        return np.concatenate(blocks, axis=blocks[0].ndim - 1)
+
+    def take(self, rows):
+        return np.concatenate([p.take(rows) for p in self.parts], axis=1)
+
+
+class SubsetSequence(lgb.Sequence):
+    """Rows `index` (sorted) of a MatrixSequence or ConcatSequence, gathered batch by batch."""
+    batch_size = 4096
+
+    def __init__(self, sequence, index):
+        self.sequence, self.index = sequence, np.asarray(index, dtype=np.int64)
+
+    def __len__(self):
+        return len(self.index)
+
+    def __getitem__(self, item):
+        rows = self.index[item]
+        if np.ndim(rows) == 0:
+            return self.sequence.take(np.array([rows]))[0]
+        return self.sequence.take(rows)
+
+
+def negative_subsample(metadata, y, fraction, world_seed):
+    """Keep every observed positive and every hard negative; keep `fraction` of the remaining rows.
+
+    Returns (kept row index, inverse-probability factor per kept row). Deterministic per source world.
+    """
+    if fraction >= 1:
+        return np.arange(len(y)), np.ones(len(y), dtype=np.float32)
+    rng = np.random.default_rng(1000 + world_seed)
+    always = (y == 1) | (metadata.hard_negative_type.to_numpy() != '')
+    keep = always | (rng.random(len(y)) < fraction)
+    index = np.flatnonzero(keep)
+    factor = np.where(always[index], 1.0, 1.0 / fraction).astype(np.float32)
+    return index, factor
+
 
 def _load(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
@@ -133,16 +188,83 @@ def observed_labels(metadata, hidden=None, balanced=False, weight=.1):
     return y,sample
 
 
-def source_data(target, split, matrices, hidden, weight, columns, balanced):
-    sequences=[]; metas=[]
+def change_feature_names():
+    from .change_detect import CD_FEATURES, ED2_SPECS
+    return list(CD_FEATURES) + [f"{f}{'+' if s > 0 else '-'}" for f, s, _ in ED2_SPECS] + ['ed2_score']
+
+
+def prepare_change_world(seed, root, matrices):
+    """Change features + EntityDeviation2 tails for one prepared world, row-aligned with its base matrices.
+
+    EntityDeviation2 is fitted on the world's own TRAIN period without labels. Files: {split}_cd.npy and
+    manifest_cd.json. Base matrices are never modified.
+    """
+    from .change_detect import CD_FEATURES, EntityDeviation2, change_features
+    directory = matrices/f's{seed}'
+    manifest_path = directory/'manifest_cd.json'
+    if manifest_path.exists():
+        manifest = _load(manifest_path)
+        assert all(sha256(directory/name)==digest for name,digest in manifest['files'].items())
+        return manifest
+    began = time.monotonic()
+    world = root/f'v5dev_s{seed}'
+    features = change_features(world)
+    kinds = pd.read_csv(world/'transactions.csv', dtype=str, keep_default_na=False,
+                        usecols=['transaction_id','txn_type'])
+    split = pd.read_csv(world/'splits.csv', dtype=str)
+    features = features.merge(kinds, on='transaction_id').merge(split, on='transaction_id')
+    train = features[features.split=='train']
+    ed2 = EntityDeviation2().fit(train, train.txn_type.to_numpy())
+    names = change_feature_names()
+    parts = ed2.parts(features, features.txn_type.to_numpy())
+    block = pd.DataFrame({name: parts.get(name, np.zeros(len(features))) for name in names[len(CD_FEATURES):-1]})
+    block['ed2_score'] = ed2.score(features, features.txn_type.to_numpy())
+    full = pd.concat([features[['transaction_id'] + list(CD_FEATURES)].reset_index(drop=True), block], axis=1)
+    full['transaction_id'] = f'v5dev_s{seed}:' + full['transaction_id']
+    full = full.set_index('transaction_id')
+    files = {}
+    for part in ('train','validation','test'):
+        ids = pd.read_parquet(directory/f'{part}.parquet', columns=['transaction_id']).transaction_id
+        matrix = full.loc[ids.to_numpy(), names].to_numpy(dtype=np.float32)   # same row order as the base matrix
+        np.save(directory/f'{part}_cd.npy', matrix)
+        files[f'{part}_cd.npy'] = sha256(directory/f'{part}_cd.npy')
+    manifest = {'data_origin':'dữ liệu tổng hợp','seed':seed,'columns':names,'files':files,
+                'code_sha256':{'agent2/change_detect.py':sha256(Path('agent2/change_detect.py'))},
+                'base_manifest_sha256':sha256(directory/'manifest.json'),'seconds':time.monotonic()-began}
+    write_json(manifest_path, manifest)
+    return manifest
+
+
+def world_sequence(directory, split, columns, with_change=False):
+    base = MatrixSequence(directory/f'{split}.npy', columns)
+    return ConcatSequence([base, MatrixSequence(directory/f'{split}_cd.npy')]) if with_change else base
+
+
+def source_data(target, split, matrices, hidden, weight, columns, balanced, with_change=False, negative_fraction=1.0):
+    sequences=[]; metas=[]; seeds=[]
     for seed in range(1001,1021):
         if seed==target:
             continue
         directory=matrices/f's{seed}'
-        sequences.append(MatrixSequence(directory/f'{split}.npy',columns))
-        metas.append(pd.read_parquet(directory/f'{split}.parquet',columns=['is_fraud','fraud_type','branch']))
+        sequences.append(world_sequence(directory,split,columns,with_change))
+        meta=pd.read_parquet(directory/f'{split}.parquet')
+        if 'hard_negative_type' not in meta:
+            meta['hard_negative_type']=''
+        metas.append(meta[['is_fraud','fraud_type','branch','hard_negative_type']].copy())
+        del meta
+        seeds.append(seed)
     metadata=pd.concat(metas,ignore_index=True)
+    # labels and family balancing over the pooled sources, exactly as before subsampling existed
     y,sample=observed_labels(metadata,hidden,balanced,weight)
+    if negative_fraction<1 and split=='train':
+        kept_y,kept_w,start=[],[],0
+        for k,(meta,seed) in enumerate(zip(metas,seeds)):
+            stop=start+len(meta)
+            index,factor=negative_subsample(meta,y[start:stop],negative_fraction,seed)
+            sequences[k]=SubsetSequence(sequences[k],index)
+            kept_y.append(y[start:stop][index]); kept_w.append(sample[start:stop][index]*factor)
+            start=stop
+        y,sample=np.concatenate(kept_y),np.concatenate(kept_w)
     del metadata,metas
     return sequences,y,sample
 
@@ -155,17 +277,28 @@ def predict_sequences(booster,sequences):
     return np.concatenate(pieces)
 
 
-def fit_source(target,matrices,hidden,weight,seed=0,kind='L4-FB-PU',max_rounds=600,early_stop=60):
+KINDS = ('L3-PU', 'L4-FB-PU', 'L4-PU', 'L4-PU-E2-AR')
+
+
+def fit_source(target,matrices,hidden,weight,seed=0,kind='L4-FB-PU',max_rounds=600,early_stop=60,
+               negative_fraction=1.0):
+    """early_stop=None trains exactly `max_rounds` trees for each leaf setting and picks the leaf setting by
+    validation AP. Diagnostics (scripts/diag_cd_transfer.py) showed early stopping on validation AP can stop
+    after ONE tree under PU weights; the fixed-round policy must be registered before it is used."""
     contract=_load(matrices/f's{target}'/'manifest.json')
     columns=list(range(len(contract['columns'])))
+    if kind not in KINDS:
+        raise ValueError('Base runner accepts only registered base models')
     if kind=='L3-PU':
         columns=[contract['columns'].index(name) for name in contract['L3_columns']]
-    elif kind!='L4-FB-PU':
-        raise ValueError('Base runner accepts only registered base models')
+    with_change = kind=='L4-PU-E2-AR'
     for world in range(1001,1021):
         assert _load(matrices/f's{world}'/'manifest.json')['columns']==contract['columns']
-    train,y,weights=source_data(target,'train',matrices,hidden,weight,columns,kind=='L4-FB-PU')
-    valid,yv,_=source_data(target,'validation',matrices,hidden,weight,columns,False)
+        if with_change:
+            assert _load(matrices/f's{world}'/'manifest_cd.json')['columns']==change_feature_names()
+    balanced = kind=='L4-FB-PU'
+    train,y,weights=source_data(target,'train',matrices,hidden,weight,columns,balanced,with_change,negative_fraction)
+    valid,yv,_=source_data(target,'validation',matrices,hidden,weight,columns,False,with_change)
     if not y.sum() or not yv.sum():
         raise ValueError('Source positive support absent; refuse undocumented fallback')
     common=dict(objective='binary',metric=['binary_logloss','average_precision'],min_child_samples=10,
@@ -176,16 +309,22 @@ def fit_source(target,matrices,hidden,weight,seed=0,kind='L4-FB-PU',max_rounds=6
     dv=lgb.Dataset(valid,label=yv,reference=ds,free_raw_data=True,params=common)
     best=(-1.,None,None)
     for leaves in (7,15):
+        callbacks=[] if early_stop is None else [lgb.early_stopping(early_stop,first_metric_only=False,verbose=False)]
         model=lgb.train(dict(common,num_leaves=leaves),ds,num_boost_round=max_rounds,
-                        valid_sets=[dv],valid_names=['validation'],callbacks=[lgb.early_stopping(early_stop,verbose=False)])
+                        valid_sets=[dv],valid_names=['validation'],callbacks=callbacks)
         ap=float(average_precision_score(yv,predict_sequences(model,valid)))
         if ap>best[0]:
             best=(ap,model,leaves)
-    target_x=MatrixSequence(matrices/f's{target}'/'test.npy',columns)
+    target_x=world_sequence(matrices/f's{target}','test',columns,with_change)
     scores=predict_sequences(best[1],[target_x])
+    trees=best[1].current_iteration()
     details={'source_worlds':19,'source_train_rows':len(y),'source_validation_rows':len(yv),
              'source_observed_train_positives':int(y.sum()),'validation_ap':best[0],
-             'num_leaves':best[2],'best_iteration':best[1].best_iteration,'PU_weight':weight,'model_seed':seed}
+             'num_leaves':best[2],'best_iteration':best[1].best_iteration,'trees':trees,'kind':kind,
+             'round_policy':'fixed' if early_stop is None else f'early_stop_{early_stop}',
+             'negative_fraction':negative_fraction,'PU_weight':weight,'model_seed':seed}
+    if trees < 20:
+        details['warning']='fewer than 20 trees: early stopping collapsed; do not use this fit for selection'
     del ds,dv,train,valid,model,best
     gc.collect()
     return scores,details
@@ -301,10 +440,18 @@ def main():
     parser.add_argument('--output',type=Path,default=Path('results/v5/PU_screen'))
     parser.add_argument('--pilot-only',action='store_true')
     parser.add_argument('--prepare-world',type=int,help='Prepare one world in a fresh bounded worker; no model evaluation')
+    parser.add_argument('--prepare-change-world',type=int,
+                        help='Add change features and EntityDeviation2 tails to one prepared world; no model evaluation')
     args=parser.parse_args()
     limit_memory(6)
     try:
-        if args.prepare_world is not None:
+        if args.prepare_change_world is not None:
+            if args.prepare_change_world not in range(1001,1021):
+                raise ValueError('Preparation seed outside registered development set')
+            assert (args.matrices/f's{args.prepare_change_world}'/'manifest.json').exists(), 'prepare the base world first'
+            prepare_change_world(args.prepare_change_world,args.root,args.matrices)
+            print(f'prepared change features {args.prepare_change_world}',flush=True)
+        elif args.prepare_world is not None:
             if args.prepare_world not in range(1001,1021):
                 raise ValueError('Preparation seed outside registered development set')
             for seed in range(1001,1021):

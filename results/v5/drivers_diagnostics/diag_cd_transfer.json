@@ -1,0 +1,142 @@
+{
+ "data_origin": "dữ liệu tổng hợp",
+ "status": "post-hoc diagnostic, not selection",
+ "931": {
+  "A rules+u+type": {
+   "recall": 0.3375,
+   "known": 0.49,
+   "novel": 0.0833,
+   "hard_fa": 0.0995,
+   "by_novel": {
+    "phantom_sales_real_dealers": 0.276,
+    "underpriced_sales_kickback": 0.0,
+    "cash_withdrawal_skim": 0.25,
+    "advance_kiting": 0.0,
+    "overtime_inflation_group": 0.0,
+    "fake_lease_vendor": 0.0,
+    "fake_tax_payment": 0.0
+   }
+  },
+  "B A+change": {
+   "recall": 0.3844,
+   "known": 0.485,
+   "novel": 0.2167,
+   "hard_fa": 0.1348,
+   "by_novel": {
+    "phantom_sales_real_dealers": 0.414,
+    "underpriced_sales_kickback": 0.121,
+    "cash_withdrawal_skim": 0.25,
+    "advance_kiting": 0.0,
+    "overtime_inflation_group": 0.231,
+    "fake_lease_vendor": 1.0,
+    "fake_tax_payment": 0.0
+   }
+  }
+ },
+ "932": {
+  "A rules+u+type": {
+   "recall": 0.4133,
+   "known": 0.5574,
+   "novel": 0.1136,
+   "hard_fa": 0.1117,
+   "by_novel": {
+    "phantom_sales_real_dealers": 0.333,
+    "underpriced_sales_kickback": 0.0,
+    "cash_withdrawal_skim": 0.0,
+    "advance_kiting": 0.0,
+    "overtime_inflation_group": 0.0,
+    "fake_lease_vendor": 0.0,
+    "fake_tax_payment": 0.0
+   }
+  },
+  "B A+change": {
+   "recall": 0.4428,
+   "known": 0.5574,
+   "novel": 0.2045,
+   "hard_fa": 0.1739,
+   "by_novel": {
+    "phantom_sales_real_dealers": 0.5,
+    "underpriced_sales_kickback": 0.0,
+    "cash_withdrawal_skim": 0.0,
+    "advance_kiting": 0.0,
+    "overtime_inflation_group": 0.3,
+    "fake_lease_vendor": 0.0,
+    "fake_tax_payment": 0.0
+   }
+  }
+ },
+ "933": {
+  "A rules+u+type": {
+   "recall": 0.2563,
+   "known": 0.3818,
+   "novel": 0.0714,
+   "hard_fa": 0.1151,
+   "by_novel": {
+    "phantom_sales_real_dealers": 0.2,
+    "underpriced_sales_kickback": 0.059,
+    "cash_withdrawal_skim": 0.0,
+    "advance_kiting": 0.0,
+    "overtime_inflation_group": 0.0,
+    "fake_lease_vendor": 0.667,
+    "fake_tax_payment": 0.0
+   }
+  },
+  "B A+change": {
+   "recall": 0.2599,
+   "known": 0.3879,
+   "novel": 0.0714,
+   "hard_fa": 0.1263,
+   "by_novel": {
+    "phantom_sales_real_dealers": 0.0,
+    "underpriced_sales_kickback": 0.0,
+    "cash_withdrawal_skim": 0.0,
+    "advance_kiting": 0.0,
+    "overtime_inflation_group": 0.085,
+    "fake_lease_vendor": 0.5,
+    "fake_tax_payment": 0.0
+   }
+  }
+ },
+ "top_change_gain": [
+  [
+   "price_cusum_up",
+   11907.2998046875
+  ],
+  [
+   "pay_lr",
+   0.0
+  ],
+  [
+   "pay_cusum_up",
+   0.0
+  ],
+  [
+   "pay_cusum_dn",
+   0.0
+  ],
+  [
+   "pay_shift",
+   0.0
+  ],
+  [
+   "grp_pay_up_share",
+   0.0
+  ],
+  [
+   "grp_pay_up_n",
+   0.0
+  ],
+  [
+   "price_lr2",
+   0.0
+  ],
+  [
+   "price_cusum_dn",
+   0.0
+  ],
+  [
+   "price_slope6",
+   0.0
+  ]
+ ]
+}
