@@ -16,7 +16,8 @@ Mọi số là **dữ liệu tổng hợp**. Kết luận v4 không đạt G5 gi
 | R2 bước 2: kiểm tương đương lấy mẫu âm (thế giới 1001, L4-PU, w = 0,2) | **Đạt** với tỷ lệ 0,1: Spearman 0,957 (ngưỡng 0,95), lệch recall tại B3 0,82 điểm (ngưỡng 2). Tỷ lệ 0,1 được đăng ký cho các bước sau | `results/v5/R2/subsample_equivalence_0.1.json` |
 | R2 bước 3 trở đi: chọn w, sàng lọc, Cold, tầng chọn | **Đang chạy** bằng bộ điều phối tách rời, có điểm khôi phục (chạy lại từ 14:52) | `work/r2_master.log`, `results/v5/R2/master_state.json` |
 | Khung mã hóa R3 (chỉ dùng nếu chốt chặn đạt) | Móc ca hợp lệ mới với tần suất ghi trước khi đọc kịch bản; kiểm thử máy móc bằng kịch bản thay thế | `agent2/world_v5_sealed.py`, `tests_agent2/test_world_v5_sealed.py`, mục Làm rõ thực thi R3 của đăng ký |
-| Kịch bản độc lập R3 | Phiên viết tách biệt đang soạn (dừng tạm do giới hạn API, đã cho chạy tiếp) | `docs/05_ke_hoach_giao_viec/independent_scenarios/` |
+| Kịch bản độc lập R3 | Đã nộp 10 kịch bản lúc 15:00 và **chốt văn xuôi** bằng SHA-256; nhật ký công cụ xác nhận phiên viết chỉ đọc brief và README. Có kế hoạch mã hóa và danh sách câu hỏi cho tác giả; chỉ mã hóa nếu chốt chặn R2 đạt | `independent_scenarios/scenarios_v5.md`, `handover_v5.md`, `encoding_plan_v5.md` |
+| Thử khô niêm phong có V13 | Bước `dryrun` kiểm tra hiện diện trường trên 5199 và dừng nếu có tách biệt chưa thấy ở thế giới phát triển | `scripts/run_sealed_v5.py` |
 | Quan sát biến động v5 trong lý do tuần | Xong, chỉ thêm lời giải thích, không đổi cảnh báo | `agent2/change_ops.py`, `agent2/pipeline_v4.py` |
 | Đề xuất đổi hướng (mục 7 đăng ký) | Đã soạn sẵn | `01_phan_tich_kinh_te_va_nghiep_vu/09_de_xuat_doi_huong_dich_vu_ra_soat.md` |
 
