@@ -107,7 +107,7 @@ def _meta(directory, split):
 class SourcePool:
     """Source worlds of one target, one feature set; train rows optionally subsampled once."""
 
-    def __init__(self, target, matrices, kind, fraction, sources=WORLDS):
+    def __init__(self, target, matrices, kind, fraction, sources=WORLDS, target_dir=None):
         _, self.balanced, change = KIND[kind]
         cols = columns_for(matrices, kind)
         seqs, metas = [], []
@@ -134,7 +134,7 @@ class SourcePool:
         self.valid = [pool_sequence(matrices / f's{s}', 'validation', cols, change) for s in sources if s != target]
         self.valid_meta = pd.concat([_meta(matrices / f's{s}', 'validation') for s in sources if s != target],
                                     ignore_index=True)
-        self.target = pool_sequence(matrices / f's{target}', 'test', cols, change)
+        self.target = pool_sequence(Path(target_dir) if target_dir else matrices / f's{target}', 'test', cols, change)
         self.rows, self.sources = len(self.meta), len([s for s in sources if s != target])
 
     def fit_score(self, hidden, weight, seed):
