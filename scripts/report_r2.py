@@ -10,6 +10,8 @@ R2 = Path("results/v5/R2")
 OUT = Path("docs/03_danh_gia_va_hieu_qua_kinh_te/10_ket_qua_R2_v5.md")
 OUTCOME = Path("docs/03_danh_gia_va_hieu_qua_kinh_te/09_ket_qua_niem_phong_v5.md")
 PIVOT = "../01_phan_tich_kinh_te_va_nghiep_vu/09_de_xuat_doi_huong_dich_vu_ra_soat.md"
+ROUND = {"name": "v5", "title": "Kết quả R2 v5 trên dữ liệu tổng hợp", "registration": "08_dang_ky_truoc_v5.md",
+         "final": ""}
 
 
 def write(path, lines):
@@ -24,11 +26,11 @@ def gate_table(gate):
     return rows + [""]
 
 
-def cap_stats(name, w=None):
+def cap_stats(name, reuse=None):
     """Worlds over the 15 percent hard-negative cap and the worst rate, from per-world summaries (screening tier)."""
     dirs = [R2 / "screening" / name]
-    if name == "L4-FB-PU" and w is not None:
-        dirs.insert(0, R2 / f"pu_w{w}" / name)
+    if name == "L4-FB-PU" and reuse:
+        dirs.insert(0, R2 / reuse / name)
     for d in dirs:
         files = sorted(d.glob("s*/summary.json"))
         if files:
@@ -42,18 +44,19 @@ def outcome(sel, cold, sc=None, pu=None):
     if sel is None or sel["gate"]["passed"]:
         return None
     md = ["# Kết quả v5: chốt chặn trước niêm phong KHÔNG ĐẠT, không sinh và không chấm niêm phong", "",
-          "Tự sinh bởi `scripts/report_r2.py`. Mọi số là **dữ liệu tổng hợp**. Theo mục 5 và mục 7 của đăng ký "
-          "(`docs/05_ke_hoach_giao_viec/08_dang_ky_truoc_v5.md`): giữ nguyên kết quả, không sửa rồi chấm lại, "
-          "không mở vòng v6, **không sinh và không chấm thế giới niêm phong v5**.", "",
+          "Tự sinh bởi `scripts/report_r2.py`. Mọi số là **dữ liệu tổng hợp**. Theo đăng ký "
+          f"(`docs/05_ke_hoach_giao_viec/{ROUND['registration']}`): giữ nguyên kết quả, không sửa rồi chấm lại, "
+          f"{ROUND['final'] or 'không mở vòng v6, '}**không sinh và không chấm thế giới niêm phong {ROUND['name']}**.", "",
           f"## 1. Ứng viên S2 đã chọn: {sel['chosen'] or 'không có (không ứng viên nào hợp lệ)'}", ""]
     md += gate_table(sel["gate"]) if "checks" in sel["gate"] else ["Không còn ứng viên hợp lệ dưới trần ca khó 15%.", ""]
     if sc:
         w = (pu or {}).get("w") if (pu or {}).get("w") is not None else sc.get("w")
+        reuse = f"hn_{sc['hn']}" if sc.get("hn") is not None else f"pu_w{w}"
         md += ["## Bằng chứng: tầng sàng lọc (8 thế giới, seed 0)", "",
                "| Cấu hình | R trung bình | R nhỏ nhất | B trung bình | Thế giới vượt trần 15% | Mức cảnh báo nhầm cao nhất | Hợp lệ |",
                "|---|---:|---:|---:|---:|---:|:-:|"]
         for name, c in sc["candidates"].items():
-            cap = cap_stats(name, w)
+            cap = cap_stats(name, reuse)
             over = f"{cap[0]} trên {cap[1]}" if cap else ""
             md.append(f"| {name} | {pct(c['R_mean'])} | {pct(c['R_min'])} | {pct(c['B_mean'])} | {over} | "
                       f"{pct(cap[2]) if cap else ''} | {'Có' if c['eligible'] else 'Không'} |")
@@ -115,8 +118,8 @@ def worlds_table(base):
 def main():
     cols = [("J", "J"), ("Q nhỏ nhất", "Q_min"), ("Q trung bình", "Q_mean"), ("R trung bình", "R_mean"),
             ("R nhỏ nhất", "R_min"), ("B trung bình", "B_mean"), ("Hợp lệ (ca khó ≤ 15%)", "eligible")]
-    md = ["# Kết quả R2 v5 trên dữ liệu tổng hợp", "",
-          "Tự sinh bởi `scripts/report_r2.py` từ `results/v5/R2/`. Mọi số là **dữ liệu tổng hợp**; quy tắc theo đăng ký "
+    md = [f"# {ROUND['title']}", "",
+          "Tự sinh bởi `scripts/report_r2.py` từ `" + R2.as_posix() + "/`. Mọi số là **dữ liệu tổng hợp**; quy tắc theo đăng ký "
           "R1 v1.2. R = recall@B3 ở S2; B = trung bình recall các nhánh ACFE bị ẩn (gộp nhánh nhỏ); Q = (R + B) / 2; "
           "J = trung bình Q của 20% thế giới thấp nhất.", ""]
     pu = load("PU_locked.json")
@@ -128,6 +131,13 @@ def main():
         note = ("" if pu["w"] is not None else " Không w nào hợp lệ theo trần ca khó 15%; áp mục Làm rõ khóa w của đăng ký "
                 "(w có J cao nhất, trần không đổi).")
         md += ["", f"Khóa: **w = {locked}** (trạng thái `{pu['status']}`).{note}", ""]
+    hn = load("HN_locked.json")
+    if hn:
+        md += ["## 1b. Chọn trọng số ca hợp lệ khó h (L4-FB-PU, 8 thế giới sàng lọc, w = %s)" % hn["w"], "",
+               "| h | J | R trung bình | B trung bình | Hợp lệ |", "|---:|---:|---:|---:|:-:|"]
+        md += [f"| {k} | {pct(hn['J'][k])} | {pct(hn['R_mean'][k])} | {pct(hn['B_mean'][k])} | "
+               f"{'Có' if hn['eligible'][k] else 'Không'} |" for k in hn["J"]]
+        md += ["", f"Khóa: **h = {hn['h']}** (trạng thái `{hn['status']}`).", ""]
     sc = load("screening_summary.json")
     if sc:
         md += ["## 2. Sàng lọc 4 ứng viên có giám sát", "", table(sc["candidates"], cols),
@@ -157,4 +167,14 @@ def main():
 
 
 if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--round", choices=["v5", "v6"], default="v5")
+    a = ap.parse_args()
+    if a.round == "v6":
+        R2 = Path("results/v6/R6")
+        OUT = Path("docs/03_danh_gia_va_hieu_qua_kinh_te/12_ket_qua_R6_v6.md")
+        OUTCOME = Path("docs/03_danh_gia_va_hieu_qua_kinh_te/13_ket_qua_niem_phong_v6.md")
+        ROUND.update(name="v6", title="Kết quả R6 v6 trên dữ liệu tổng hợp", registration="11_dang_ky_truoc_v6.md",
+                     final="đây là vòng cuối, không mở v7, ")
     main()
