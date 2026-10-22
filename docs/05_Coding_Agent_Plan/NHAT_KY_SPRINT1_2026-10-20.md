@@ -303,3 +303,5 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - **Báo giả đi theo độ phủ nhãn** (59,5% / 69,8% / 100%), không theo độ chính xác ngày (0,71 / 2,64 / 0). T9 v2 tối ưu precision (G15) nhưng G13 cần recall.
 - Kỳ vọng ghi trước ("T9 v2 ≈ cũ ⇒ nhiễu nhãn không phải đòn bẩy chính") hẹp hơn dữ liệu; đã ghi đúng lại trong `G13_E2E_T9V2_PREREG.md` mục 5. Giả thuyết "thiếu nhãn ⇒ báo giả" nhất quán với 3 điểm, **chưa có ablation trực tiếp**.
 - Hệ quả cho việc tiếp: G13 và G15 cùng đòi **tăng độ phủ nhãn mà giữ precision**; không phải chỉnh chính sách cảnh báo nữa.
+- **Ablation (21:10):** nhãn T9 v2 + nhãn thật cho phần thiếu ⇒ báo giả **0,87** [0,47; 1,30] (T9 v2: 2,71; nhãn thật: 0,90). **Xác nhận: độ phủ nhãn là đòn bẩy chính của G13.**
+  Việc tiếp cho T9 (G13 + G15 cùng đòi): tăng độ phủ nhãn mà giữ precision; chưa biết độ phủ tối thiểu đủ dùng (ablation chỉ thử 100%).

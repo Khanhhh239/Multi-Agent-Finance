@@ -64,3 +64,5 @@ Mã `fill_gaps` giữ lại (mặc định tắt, có kiểm thử), không dùn
 46 sự kiện, 30 công ty, chính sách đóng băng. Báo giả: **T9 v2 2,71** [1,97; 3,45], T9 cũ 2,41, **nhãn thật 0,90** [0,53; 1,30].
 Phát hiện (0,80–0,85) và độ sớm (8–11 tuần) đạt ở mọi nhánh. Báo giả đi theo **độ phủ nhãn** (59,5% → 2,71; 69,8% → 2,41; 100% → 0,90), không theo độ chính xác ngày.
 Kết luận: chính sách cảnh báo đủ tốt (đạt khi có nhãn thật, trên `tgt` 0,57 và `tgt3` 0,90); **trần của G13 nằm ở độ phủ nhãn T9**.
+
+**Ablation xác nhận (G13_E2E_T9V2_PREREG mục 6):** nhãn T9 v2 + nhãn thật chỉ cho phần thiếu ⇒ báo giả **0,87** (so với 2,71 khi thiếu). Độ phủ nhãn là đòn bẩy chính của G13 trên đường ước lượng.

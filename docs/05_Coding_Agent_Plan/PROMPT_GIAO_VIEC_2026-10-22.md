@@ -20,6 +20,10 @@ Dán nguyên phần trong khung cho coding agent kế tiếp.
 > (`final`) theo số dư còn lại sau khi đã ghép phần đầu; (c) đặc trưng ngày giá trị NH cho DN ghi sổ theo tháng. Mọi lựa chọn trên DN nguồn;
 > đo trên một bộ đích MỚI (`tgt4`, seed mới) với đăng ký trước commit trước khi sinh.
 >
+> **Bổ sung 22/10 tối (quan trọng cho Việc 1):** G13 và G15 cùng đòi **tăng độ phủ nhãn T9** mà giữ precision. Ablation: nhãn T9 v2 + nhãn thật cho phần thiếu ⇒ báo giả G13 0,87 (đạt);
+> T9 v2 gốc 2,71 (độ phủ 59,5%). Chính xác hơn từng nhãn **không** giúp. Xem `G13_E2E_T9V2_PREREG.md` mục 5–6. Sprint 6 đã xong (G3/G4/G7 vẫn trượt; T9 v3 F1 0,651).
+> Đề xuất đo "độ phủ nhãn tối thiểu đủ dùng" (thử 70/80/90%) bằng cách điền nhãn thật ngẫu nhiên theo công ty, trước khi thiết kế thuật toán T9 mới.
+>
 > **Việc 2 — G3/G4 (hiệu chỉnh T1).** cov80 0,867/0,844 (khoảng hơi rộng), ECE4 > 0,05. Thử CQR bất đối xứng theo nhóm đáo hạn hiệu chỉnh trên
 > cửa sổ nguồn gần nhất; isotonic cho xác suất 4 tuần. Tiêu chí trong `scripts/evaluate_gates.py` — không đổi tiêu chí.
 >

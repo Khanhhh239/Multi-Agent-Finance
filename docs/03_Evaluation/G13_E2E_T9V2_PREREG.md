@@ -43,3 +43,18 @@ Chạy 22/10/2026 (`outputs/g13/e2e_tgt3/alert_policy_tgt3.csv`, `g13-e2e-t9v2-t
   Cách giải thích hợp lý: hoá đơn đã trả mà không có nhãn bị T1 coi là còn mở, nên dự báo trễ và nguy cơ thiếu hụt bị đánh cao. **Đây là giả thuyết nhất quán với 3 điểm, chưa kiểm trực tiếp** (cần ablation: gán nhãn thật cho một phần hoá đơn).
 - T9 v2 được chọn trên nguồn với ràng buộc precision ≥ 0,975 (đúng đăng ký của G15), còn G13 cần **recall**. Hai cổng kéo hai hướng ngược nhau với cùng một bộ ghép.
 - Vì vậy G15 (F1 ≥ 0,8) và G13 (báo giả ≤ 1) cùng đòi một việc: **tăng độ phủ nhãn mà giữ precision**. Đòn bẩy ngoài mô hình: số hoá đơn trong nội dung chuyển khoản.
+
+## 6. Ablation chẩn đoán (ghi thêm SAU khi có kết quả mục 5; không phải cổng)
+
+Giữ nguyên nhãn T9 v2, **chỉ điền ngày trả thật vào các hoá đơn đang thiếu nhãn** (nhánh `v2fill`, cùng chính sách đóng băng, cùng quy trình):
+
+| Nhánh | Hoá đơn đã trả có nhãn | Phát hiện | Báo giả/công ty-năm [CI] |
+|---|---|---|---|
+| T9 v2 | 59,5% | 0,848 | 2,709 [1,97; 3,45] |
+| **T9 v2 + nhãn thật cho phần thiếu** | **100%** (nhãn có sẵn vẫn của T9 v2) | 0,804 | **0,870 [0,47; 1,30]** |
+| Nhãn thật hoàn toàn | 100% | 0,804 | 0,903 [0,53; 1,30] |
+
+**Xác nhận trực tiếp:** thiếu nhãn gây ~3/4 báo giả (2,71 → 0,87); các nhãn T9 v2 đã có **không** gây hại thêm (0,87 ≈ 0,90, trong sai số).
+⇒ Để G13 đạt trên đường ước lượng, mục tiêu là **tăng độ phủ nhãn** (đạt khoảng 100% hoá đơn đã trả có nhãn đủ tốt), không cần chính xác hơn từng nhãn.
+Mục tiêu cụ thể cho T9: độ phủ nhãn từ 59,5% lên mức cao (ablation cho thấy 100% là đủ; chưa biết ngưỡng thấp hơn, ví dụ 85–90%, có đủ không).
+Giới hạn: một bộ đích (30 công ty, 46 sự kiện), CI chồng nhau giữa hai nhánh dưới (0,87 và 0,90).

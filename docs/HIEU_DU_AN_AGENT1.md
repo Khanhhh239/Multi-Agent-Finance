@@ -1,4 +1,4 @@
-# Hiểu toàn bộ dự án Agent 1 — bản dễ nhớ (cập nhật 22/10/2026)
+# Hiểu toàn bộ dự án Agent 1 — bản dễ nhớ (cập nhật cuối 22/10/2026, tối)
 
 > Mục tiêu của tài liệu này: đọc một lần (khoảng 40 phút) là nắm được **dự án làm gì, làm bằng cách nào, đã tới đâu, tin được tới mức nào, và việc tiếp theo là gì**.
 > Mọi con số lấy từ kết quả đã đo trong `outputs/` và `docs/03_Evaluation/GATES_CURRENT.md`. Chỗ nào chưa chắc, tài liệu nói rõ là chưa chắc.
@@ -37,13 +37,13 @@ Mỗi tuần nó trả lời bốn câu hỏi:
 | 3 | Nên **đòi khoản nào trước**? | Danh sách hoá đơn xếp theo mức giảm rủi ro |
 | 4 | **Nếu** khách lớn trả chậm 2 tuần thì sao? | Mô phỏng kịch bản "nếu như" |
 
-**Tình trạng một dòng:** hệ thống chạy được từ đầu đến cuối, qua **9/18 cổng nghiệm thu**, nhưng **chưa từng thấy dữ liệu doanh nghiệp Việt Nam thật**. Nên kết luận hiện tại là: *được chạy thử "bóng" (ghi dự báo, không ai hành động theo), chưa được dùng để ra quyết định thật.*
+**Tình trạng một dòng:** hệ thống chạy được từ đầu đến cuối, qua **9/18 cổng gốc** (cộng thêm 2 cổng thay thế mới đạt sát ngưỡng: G14, G17), nhưng **chưa từng thấy dữ liệu doanh nghiệp Việt Nam thật**. Nên kết luận hiện tại là: *được chạy thử "bóng" (ghi dự báo, không ai hành động theo), chưa được dùng để ra quyết định thật.*
 
 **Ba điều cần nhớ nhất:**
 
 1. Mọi kết quả tốt đều trên dữ liệu **sinh** hoặc dữ liệu thật **nước ngoài**. Đúng với dữ liệu sinh ≠ đúng với doanh nghiệp thật.
 2. Mô hình thông minh **có lúc thua** cách đoán đơn giản (BPI: thua 62,5%). Vì vậy hệ thống luôn **trộn** với cách đơn giản và có **cầu dao tự ngắt**.
-3. Cảnh báo thiếu tiền phụ thuộc vào **chất lượng ghép sao kê ngân hàng (T9)**. Muốn cảnh báo tốt, phải sửa T9 trước.
+3. Cảnh báo thiếu tiền phụ thuộc vào **độ phủ nhãn của trạm ghép sao kê (T9)**: ghép được càng nhiều hoá đơn đã trả thì cảnh báo càng đúng. Đã kiểm chứng bằng thí nghiệm (mục 7.5).
 
 ---
 
@@ -275,15 +275,25 @@ Luồng triển khai thật (tinh chỉnh 12 tháng dữ liệu của doanh nghi
 
 ### 7.5 G13 — cảnh báo thiếu tiền
 
-Cảnh báo = khi xác suất thiếu hụt vượt ngưỡng, báo trước ≥ 4 tuần. Chính sách: hiệu chỉnh isotonic, ngưỡng τ = 0,30, chọn **chỉ trên nguồn** rồi đóng băng.
+Cảnh báo = khi xác suất thiếu hụt vượt ngưỡng, báo trước ≥ 4 tuần. Chính sách: hiệu chỉnh isotonic, ngưỡng τ = 0,30, chọn **chỉ trên nguồn** rồi đóng băng. Cổng cần báo giả ≤ 1 lần/công ty-năm.
 
-| Bộ đánh giá | Phát hiện ≥4 tuần | Báo giả / công ty-năm (cần ≤ 1) | Kết quả |
-|---|---|---|---|
-| `tgt`, nhãn T9 ước lượng (cổng chính thức) | 0,94 | **2,08** [1,08; 3,37] | Trượt |
-| `tgt`, **nhãn thật**, cùng đầu vào | 0,81 | **0,57** [0,22; 1,00] | Đạt điểm ước lượng |
-| `tgt2` niêm phong, nhãn thật | 0,75 [0,59; 0,84] | 0,75 [0,43; 1,10] | Đạt điểm ước lượng, CI chạm ngưỡng |
+| Bộ đánh giá | Nhãn thanh toán | Phát hiện ≥4 tuần | Báo giả/công ty-năm | Kết quả |
+|---|---|---|---|---|
+| `tgt` (cổng chính thức) | T9 ước lượng | 0,94 | **2,08** | Trượt |
+| `tgt` | thật | 0,81 | **0,57** | Đạt điểm ước lượng |
+| `tgt2` niêm phong | thật | 0,75 | 0,75 | Đạt điểm ước lượng |
+| **`tgt3` niêm phong** | T9 v2 (phủ 59,5%) | 0,85 | **2,71** | Trượt |
+| `tgt3` | T9 cũ (phủ 69,8%) | 0,83 | 2,41 | Trượt |
+| `tgt3` | thật (phủ 100%) | 0,80 | **0,90** | Đạt điểm ước lượng |
+| `tgt3` | **T9 v2 + nhãn thật chỉ cho phần thiếu** | 0,80 | **0,87** | Đạt điểm ước lượng |
 
-**Phát hiện quan trọng nhất của đợt này:** báo giả tăng 3,6 lần **chỉ vì nhãn T9 nhiễu**, chứ không phải vì chính sách cảnh báo kém. ⇒ **Sửa T9 là cách sửa G13.**
+**Cách đọc, theo từng bước:**
+1. Có nhãn thật thì chính sách cảnh báo **đạt** (trên cả 3 bộ đích). Vậy chính sách không phải vấn đề.
+2. Với nhãn do T9 ước lượng thì báo giả gấp 3 lần. Vậy vấn đề nằm ở nhãn.
+3. **Nhãn chính xác hơn không giúp** (T9 v2 chính xác ngày hơn nhiều nhưng báo giả không giảm). Báo giả đi theo **độ phủ**: càng nhiều hoá đơn đã trả được gán nhãn thì càng ít báo giả.
+4. **Thí nghiệm quyết định:** giữ nguyên nhãn T9 v2, chỉ điền nhãn thật vào chỗ thiếu ⇒ báo giả về 0,87. Vậy thiếu nhãn chiếm khoảng 3/4 báo giả.
+
+**Hình ảnh dễ nhớ:** hoá đơn đã trả mà không có nhãn giống như tiền đã vào ví nhưng sổ vẫn ghi "chưa thu". Hệ thống tưởng còn thiếu tiền nên báo động nhầm.
 
 Đã thử và loại: gộp các đợt cảnh báo bị tách nhỏ (không đổi được đánh đổi giữa phát hiện và báo giả).
 
@@ -306,6 +316,10 @@ Cảnh báo = khi xác suất thiếu hụt vượt ngưỡng, báo trước ≥
 
 **Điểm nghẽn thật:** nhiều khoản tiền **không có số hoá đơn trong nội dung** nên không thể xác định được. Đòn bẩy lớn nhất nằm *ngoài mô hình*: khuyến khích khách ghi số hoá đơn khi chuyển khoản.
 
+**Thử lần 3 (T9 v3 trên bộ `tgt4`, do agent kia làm):** precision 0,968, recall 0,491, F1 0,651. Vẫn chưa đạt: chỉnh quy tắc không nâng được recall.
+
+**Liên hệ quan trọng:** vì G13 cần *độ phủ nhãn* (mục 7.5) và G15 cần F1, hai cổng này cùng cần T9 ghép được nhiều hơn mà vẫn chính xác.
+
 ---
 
 ## 8. Bảng 18 cổng
@@ -318,21 +332,21 @@ Cổng = điều kiện nghiệm thu đã **viết trước** và **không đổ
 |---|---|---|
 | G1 | T1 giảm WAPE ≥ 30% ở hai mốc thời gian | ✅ Đạt |
 | G2 | T1 tốt hơn B1 theo IBS | ✅ Đạt |
-| G3 | Khoảng dự báo T1 phủ 75–85% | ❌ cov80 0,867 / 0,844 (hơi rộng) |
+| G3 | Khoảng dự báo T1 phủ 75–85% | ❌ cov80 0,867 / 0,844 (hơi rộng); agent kia thử Mondrian theo nhóm đáo hạn còn xấu hơn |
 | G4 | Xác suất 4 tuần hiệu chỉnh tốt (ECE ≤ 0,05) | ❌ |
 | G5 | T1 thắng B1 ≥ 10% trên dữ liệu thật | ✅ Đạt (giao thức v2) |
 | G6 | T1 không thua B1d trên cả hai bộ thật | ✅ Đạt (nhờ BLEND) |
-| G7 | Tinh chỉnh 12 tháng cải thiện ≥ 10% | ❌ |
+| G7 | Tinh chỉnh 12 tháng cải thiện ≥ 10% | ❌ thử tinh chỉnh có dừng sớm vẫn không cải thiện (một biến thể còn −8,5%) |
 | G8 | Xác suất vỡ nợ trên SBA thật (ECE ≤ 0,02, tỉ lệ 0,8–1,25) | ❌ ECE 0,021; tỉ lệ 0,74 (đã thử hiệu chỉnh hằng năm, vẫn trượt vì năm 2022 vỡ nợ tăng thật gấp 4–5 lần) |
 | G9 | T4 doanh thu thắng mốc | ✅ Đạt |
 | G10 | T4 thắng trên dữ liệu thật | ✅ Đạt |
 | G11 | Quy tắc được **chuyên gia** xác minh | ⏸ **Ngoài phạm vi** (cần chuyên gia) |
 | G12 | Dải số dư E2E cov80 75–85% | ✅ Đạt |
-| G13 | Cảnh báo thiếu tiền | ❌ trên `tgt`; ✔ tham khảo `tgt2` |
+| G13 | Cảnh báo thiếu tiền | ❌ trên `tgt` (2,08) và `tgt3` (2,71); đạt khi có nhãn thật (0,57–0,90) |
 | G14 | Phát hiện đổi hành vi (≥ 0,5 phát hiện, ≤ 0,5 báo giả) | ❌ cổng cũ. ✔ bản mới (CUSUM + nghỉ 60 ngày) trên `tgt2`+`tgt3`: 0,576 / 0,431, đạt điểm ước lượng, **không có CI, sát ngưỡng** |
 | G15 | T9 ghép sao kê (F1 ≥ 0,8, precision ≥ 0,95...) | ❌ F1 0,706 |
 | G16 | T0 phát hiện lỗi dữ liệu chèn sẵn | ✅ Đạt |
-| G17 | Lời hứa giảm MAE ≥ 10% | ❌ sạch −18,8% ✓, nhiễu −7,6% ✗ |
+| G17 | Lời hứa giảm MAE ≥ 10% | ❌ cổng cũ (nhiễu −7,6%). ✔ bản mới thêm 6 đặc trưng: sạch −22,9%, nhiễu −10,8% [8,2; 13,0], **sát ngưỡng**, chưa tách đóng góp từng đặc trưng |
 | G18 | T9 thu hẹp ≥ 50% khoảng cách với nhãn thật | ✅ Đạt |
 
 ### 8.2 Hai trạng thái pilot (đừng nhầm)
@@ -340,7 +354,7 @@ Cổng = điều kiện nghiệm thu đã **viết trước** và **không đổ
 | Trạng thái | Giá trị | Vì sao |
 |---|---|---|
 | **Pilot THẬT** | **NO-GO** | Còn G11, G13, G15 |
-| **Giai đoạn chỉ dữ liệu sinh** (bỏ G11) | **Chưa đạt, còn thiếu: G13, G15** (và G3, G4, G7, G8, G17 chưa đạt) | G14 có bản mới đạt sát ngưỡng |
+| **Giai đoạn chỉ dữ liệu sinh** (bỏ G11) | **Chưa đạt, còn thiếu: G13, G15** (cộng G3, G4, G7, G8 trượt) | G14 và G17 có bản mới đạt sát ngưỡng |
 
 > **G11 không được tính là "đạt".** Nó chỉ tạm ra khỏi phạm vi vì không có chuyên gia. Pilot thật vẫn đòi nó.
 
@@ -360,6 +374,7 @@ Minh bạch về sai sót giúp bạn biết **khi nào nên nghi ngờ** một 
 | 6 | Ước lượng thời gian lệch (có lúc quá lạc quan, có lúc quá bi quan) | — | Đừng tin ước lượng giờ của tôi |
 | 7 | Ý tưởng nào cũng có thể sai: lớp chặn T9, FIFO, lấp khoảng trống G13, khách mua lẻ trong máy phát | Ghi lại, không dùng | Kết quả âm tính cũng là kết quả |
 | 8 | Nói "khoảng nghỉ G14 không làm mất phát hiện" và "nhãn SBA 2022 chưa chín" | Cả hai **sai** khi đo (nhóm cũ mất 1 khách; dữ liệu SBA tới 2026 nên nhãn đã chín) | Giả thuyết phải được thử, và sai thì sửa công khai trong tài liệu |
+| 9 | Kỳ vọng "T9 chính xác hơn thì G13 tốt hơn" | Sai: T9 v2 chính xác hơn nhưng báo giả không giảm; nguyên nhân là **độ phủ nhãn** (đã kiểm bằng ablation) | Hỏi "thiếu gì" trước khi hỏi "sai ở đâu" |
 
 ---
 
@@ -427,18 +442,16 @@ Không được hứa "chính xác X%" dựa trên dữ liệu sinh.
 | 21/10 | Chạy lại chuỗi; G13 chính sách mới; sinh `tgt2`; cầu dao; dịch vụ dùng ACI |
 | 22/10 | T9 v2 với `tgt3`; cầu dao trên dữ liệu thật; phát hiện G13 phụ thuộc T9; chuyển sang phạm vi "dữ liệu sinh"; G14 (khoảng nghỉ) và G8 (hiệu chỉnh hằng năm) đo xong; agent kia bắt đầu sprint 6 (T9 v3, G3/G4, G7) |
 
-### 12.3 Việc tiếp theo (đã giao agent kế tiếp)
+### 12.3 Việc tiếp theo
 
-Thứ tự ưu tiên, theo `05_Coding_Agent_Plan/PROMPT_GIAO_VIEC_2026-10-22.md`:
+**Đã làm xong trong đợt cuối (22/10):** G14 (khoảng nghỉ), G8 (hiệu chỉnh hằng năm, không đạt vì năm 2022 vỡ nợ tăng thật), G17 (6 đặc trưng mới), G13 trên `tgt3` + ablation, sprint 6 của agent kia (G3/G4/G7 không đạt, T9 v3 chưa đạt).
 
-1. **G15 (T9):** tăng recall mà giữ precision. Hướng: xử lý chuyển khoản gộp ≥ 3 hoá đơn, ghép thanh toán phần cuối, dùng ngày giá trị ngân hàng cho doanh nghiệp ghi sổ theo tháng. Đo trên `tgt4` (đăng ký trước).
-2. **G13:** sau khi T9 tốt hơn, **chạy lại E2E với nhãn T9 v2** để xem báo giả có xuống dưới 1 không.
-3. **G3/G4:** thu hẹp khoảng dự báo T1 và hiệu chỉnh xác suất 4 tuần.
-4. **G7:** tinh chỉnh 12 tháng.
-5. **G14, G8, G17:** đã phân loại lại: **đều làm được bằng mã**, không cần chuyên gia.
-   - **G14: đã làm** (khoảng nghỉ 60 ngày): đạt sát ngưỡng ở nhóm mới, trượt sát ở nhóm cũ, không có CI.
-   - **G8: đã làm, không đạt.** Hiệu chỉnh hằng năm nâng tỉ lệ 0,63 → 0,74 nhưng vẫn dưới 0,8. Nguyên nhân thật: năm 2022 vỡ nợ tăng thật (không phải nhãn lỗi như tôi nghi lúc đầu, tôi đã sửa lại). Đề xuất đổi hướng: phát hiện trôi tỉ lệ gốc thay vì cam kết hiệu chỉnh.
-   - **G17:** chưa làm (nằm trong mã agent kia đang giữ).
+**Còn lại, theo thứ tự đáng làm:**
+1. **Tăng độ phủ nhãn T9 mà giữ precision.** Mở khoá đồng thời G13 và G15. Việc đầu tiên: đo *độ phủ tối thiểu đủ dùng* (ablation mới chỉ thử 100%; thử 70/80/90%) trước khi thiết kế thuật toán mới.
+2. **G17:** tách đóng góp từng đặc trưng; kiểm trên bộ lời hứa nhiễu mới để cận dưới khoảng tin cậy vượt 10%.
+3. **G14:** bootstrap khoảng tin cậy theo công ty trên bộ đích mới.
+4. **G3, G4, G7:** hai sprint đã thử không thắng; cần ý tưởng khác (ví dụ ngừng đặt mục tiêu 75–85% nếu khoảng rộng hơn là chấp nhận được về mặt kinh doanh).
+5. **G8:** đổi hướng sang phát hiện trôi tỉ lệ vỡ nợ gốc và cảnh báo, thay vì cam kết hiệu chỉnh (chủ dự án quyết).
 
 ### 12.4 Việc không giải bằng mã được
 
