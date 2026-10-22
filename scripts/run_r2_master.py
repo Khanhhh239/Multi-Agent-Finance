@@ -43,6 +43,27 @@ def run(args, step):
     log(f"DONE {step}")
 
 
+def parallel(jobs, step):
+    """Independent, checkpointed workers in parallel; any failure stops the master."""
+    log(f"START {step}: {len(jobs)} workers")
+    state(step=step, status="running")
+    env = {**__import__("os").environ, "PYTHONPATH": str(ROOT), "PYTHONIOENCODING": "utf-8"}
+    procs = []
+    for k, args in enumerate(jobs):
+        out = (ROOT / "work" / f"r2_{step}_{k}.log").open("a", encoding="utf-8")
+        procs.append((subprocess.Popen([PY, *args], cwd=ROOT, stdout=out, stderr=subprocess.STDOUT, env=env), out, args))
+        time.sleep(20)                     # stagger dataset construction peaks
+    codes = []
+    for proc, out, args in procs:
+        codes.append(proc.wait())
+        out.close()
+    if any(codes):
+        state(step=step, status="failed", exit_codes=codes)
+        log(f"FAILED {step} exit={codes}")
+        raise SystemExit(1)
+    log(f"DONE {step}")
+
+
 def main():
     gen = ROOT / "results" / "v5" / "development"
     for s in WORLDS:
@@ -67,14 +88,22 @@ def main():
     fraction = fraction or 1.0
     state(fraction=fraction)
     log(f"registered subsampling fraction = {fraction}")
+    common = ["--fraction", str(fraction), "--threads", "6"]
     if not (r2 / "PU_locked.json").exists():
-        run(["-m", "agent2.screen_v5", "pu", "--fraction", str(fraction)], "PU_screen")
+        parallel([["-m", "agent2.screen_v5", "pu", *common, "--weights", w] for w in ("0.1", "0.2", "0.5")], "PU_workers")
+        run(["-m", "agent2.screen_v5", "pu", *common], "PU_summary")
     if not (r2 / "screening_summary.json").exists():
-        run(["-m", "agent2.screen_v5", "screen", "--fraction", str(fraction)], "candidate_screen")
+        parallel([["-m", "agent2.screen_v5", "screen", *common, "--kinds", k] for k in ("L3-PU", "L4-PU-E2-AR")],
+                 "screen_workers")
+        run(["-m", "agent2.screen_v5", "screen", *common], "screen_summary")
     if not (r2 / "cold_selection.json").exists():
-        run(["-m", "agent2.screen_v5", "cold", "--fraction", str(fraction)], "cold_selection")
+        run(["-m", "agent2.screen_v5", "cold", *common], "cold_selection")
     if not (r2 / "selection_summary.json").exists():
-        run(["-m", "agent2.screen_v5", "select", "--fraction", str(fraction)], "supervised_selection")
+        roster = json.loads((r2 / "screening_summary.json").read_text(encoding="utf-8"))["roster"]["supervised"]
+        bases = sorted({"L4-PU-E2-AR" if k == "L4-PU-E2-AR-2plus1" else k for k in roster})
+        if bases:
+            parallel([["-m", "agent2.screen_v5", "select", *common, "--kinds", b] for b in bases], "select_workers")
+        run(["-m", "agent2.screen_v5", "select", *common], "select_summary")
     state(step="R2_complete", status="done")
     log("R2 COMPLETE")
 

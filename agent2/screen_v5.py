@@ -37,6 +37,7 @@ from .select_v5 import (COLD, PU_WEIGHTS, SUPERVISED, TIERS, candidate_summary, 
 
 WORLDS = tuple(range(1001, 1021))
 ROUNDS, LEAVES, LR = 400, (7, 15), .05
+THREADS = 8
 KIND = {'L3-PU': ('L3', False, False), 'L4-FB-PU': ('L4', True, False), 'L4-PU-E2-AR': ('L4', False, True)}
 PROTOCOLS = ('S2', *BRANCHES)
 
@@ -146,7 +147,7 @@ class SourcePool:
             raise ValueError('Source positive support absent; refuse undocumented fallback')
         params = dict(objective='binary', learning_rate=LR, min_child_samples=10, subsample=.8, subsample_freq=1,
                       colsample_bytree=.6, reg_lambda=2., scale_pos_weight=max(1., (len(y) - y.sum()) / y.sum()) ** .5,
-                      seed=seed, num_threads=8, verbosity=-1)
+                      seed=seed, num_threads=THREADS, verbosity=-1)
         best = (-1., None, None)
         for leaves in LEAVES:
             model = lgb.train(dict(params, num_leaves=leaves), self.dataset, num_boost_round=ROUNDS)
@@ -265,7 +266,12 @@ def main():
     p.add_argument('--kind', default='L4-FB-PU')
     p.add_argument('--target', type=int, default=1001)
     p.add_argument('--weight', type=float, default=.2)
+    p.add_argument('--weights', type=float, nargs='*', help='pu: compute only these w (parallel workers); summary needs all')
+    p.add_argument('--kinds', nargs='*', help='screen/select: compute only these kinds (parallel workers), no summary')
+    p.add_argument('--threads', type=int, default=8)
     a = p.parse_args()
+    global THREADS
+    THREADS = a.threads
     limit_memory(10)
     screening, _ = TIERS['screening']
     selection, _ = TIERS['selection']
@@ -275,10 +281,12 @@ def main():
         return
     if a.stage == 'pu':
         summaries = {}
-        for w in PU_WEIGHTS:
+        for w in (a.weights or PU_WEIGHTS):
             worlds = {s: run_supervised('L4-FB-PU', s, a.output / f'pu_w{w}', a.matrices, w, (0,), a.fraction)
                       for s in screening}
             summaries[str(w)] = candidate_summary(worlds, 'screening')
+        if a.weights:                      # worker mode: results are checkpointed, the summary run decides
+            return
         valid = [w for w in PU_WEIGHTS if summaries[str(w)]['eligible']]
         w = max(valid, key=lambda v: (summaries[str(v)]['J'], -PU_WEIGHTS.index(v))) if valid else None
         write_json(a.output / 'PU_locked.json', {'status': 'locked' if w is not None else 'no_eligible_weight', 'w': w,
@@ -290,13 +298,15 @@ def main():
     if a.stage == 'screen':
         tier = a.output / 'screening'
         cands = {}
-        for kind in ('L3-PU', 'L4-FB-PU', 'L4-PU-E2-AR'):
+        for kind in (a.kinds or ('L3-PU', 'L4-FB-PU', 'L4-PU-E2-AR')):
             if kind == 'L4-FB-PU' and (a.output / f'pu_w{w}').exists():
                 src = a.output / f'pu_w{w}'          # identical estimand (seed 0, same w): reuse, never refit
             else:
                 src = tier
             cands[kind] = candidate_summary({s: run_supervised(kind, s, src, a.matrices, w, (0,), a.fraction)
                                              for s in screening}, 'screening')
+        if a.kinds:
+            return
         cands['L4-PU-E2-AR-2plus1'] = candidate_summary({s: run_two_plus_one(s, tier, a.matrices) for s in screening},
                                                         'screening')
         roster = selection_roster(cands)
@@ -317,6 +327,11 @@ def main():
         roster = _load(a.output / 'screening_summary.json')['roster']['supervised']
         tier = a.output / 'selection'
         res = {}
+        if a.kinds:                        # worker mode: fit the given base kinds only
+            for kind in a.kinds:
+                for s in selection:
+                    run_supervised(kind, s, tier, a.matrices, w, (0, 1, 2, 3, 4), a.fraction)
+            return
         for kind in roster:
             base = 'L4-PU-E2-AR' if kind == 'L4-PU-E2-AR-2plus1' else kind
             worlds = {s: run_supervised(base, s, tier, a.matrices, w, (0, 1, 2, 3, 4), a.fraction) for s in selection}
