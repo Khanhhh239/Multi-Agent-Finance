@@ -84,6 +84,9 @@ def stop(reason):
     raise SystemExit(0)
 
 
+DROP = ("L3-PU",)      # registration v6.1: removed from the selection tier by the owner (compute time)
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     if not (OUT / "PU_locked.json").exists():              # inherited from v5, registered before any v6 result
@@ -99,12 +102,12 @@ def main():
         parallel([["-m", "agent2.screen_v5", "screen", *COMMON, "--kinds", k] for k in ("L3-PU", "L4-PU-E2-AR")],
                  "screen_workers")
         run(["-m", "agent2.screen_v5", "screen", *COMMON], "screen_summary")
-    roster = load("screening_summary.json")["roster"]["supervised"]
+    roster = [k for k in load("screening_summary.json")["roster"]["supervised"] if k not in DROP]
     if not roster:
         stop("no eligible supervised candidate after screening")
     if not (OUT / "selection_summary.json").exists():
-        parallel([["-m", "agent2.screen_v5", "select", *COMMON, "--kinds", k] for k in roster], "select_workers")
-        run(["-m", "agent2.screen_v5", "select", *COMMON], "select_summary")
+        parallel([["-m", "agent2.screen_v5", "select", *COMMON, "--kinds", k, "--drop", *DROP] for k in roster], "select_workers")
+        run(["-m", "agent2.screen_v5", "select", *COMMON, "--drop", *DROP], "select_summary")
     state(step="R6_complete", status="done")
     log("R6 COMPLETE")
 

@@ -112,3 +112,24 @@ def test_hn_stage_locks_h_and_screening_uses_it(matrices, tmp_path, monkeypatch)
     locked = json.loads((out / 'HN_locked.json').read_text(encoding='utf-8'))
     assert locked['status'] in ('locked', 'no_eligible_hn_weight') and set(locked['J']) == {'0.5', '1.0'}
     assert (out / 'hn_0.5' / 'L4-FB-PU' / 's1001' / 'summary.json').exists()
+
+
+def test_select_stage_drop_removes_a_kind_from_the_roster(matrices, tmp_path, monkeypatch):
+    import json
+    import sys
+    import agent2.select_v5 as SEL
+    out = tmp_path / 'R6'
+    out.mkdir()
+    write_json(out / 'PU_locked.json', {'status': 'inherited_from_v5', 'w': .1})
+    write_json(out / 'HN_locked.json', {'status': 'locked', 'h': .5})
+    write_json(out / 'screening_summary.json', {'roster': {'supervised': ['L4-FB-PU', 'L3-PU'], 'cold': []}})
+    tiny = {'screening': ((1001, 1002), 1), 'selection': ((1001, 1002), 1)}
+    for module in (S, SEL):
+        monkeypatch.setattr(module, 'TIERS', tiny)
+    monkeypatch.setattr(S, 'limit_memory', lambda *_: None)
+    monkeypatch.setattr(sys, 'argv', ['screen_v5', 'select', '--matrices', str(matrices), '--output', str(out), '--fraction', '1',
+                                      '--threads', '2', '--drop', 'L3-PU'])
+    S.main()
+    summary = json.loads((out / 'selection_summary.json').read_text(encoding='utf-8'))
+    assert set(summary['candidates']) == {'L4-FB-PU'} and summary['hn'] == .5
+    assert not (out / 'selection' / 'L3-PU').exists()

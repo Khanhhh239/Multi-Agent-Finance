@@ -36,6 +36,14 @@ Soạn 2026-10-22, **trước khi viết mã hay chạy bất kỳ thí nghiệm
 
 Quy tắc hợp lệ, định nghĩa R, B, Q, J, 20% thế giới thấp nhất và trần 15% cho từng thế giới, từng giao thức **giữ nguyên v5**. Trần không được nới ở bất kỳ bước nào.
 
+## 3a. Sửa đổi v6.1 (2026-10-23 23:15, theo chỉ đạo của chủ dự án, trước khi có bất kỳ kết quả tầng chọn nào)
+
+- **Nội dung:** `L3-PU` bị **loại khỏi tầng chọn**. Tầng chọn chỉ gồm `L4-FB-PU` và `L4-PU-E2-AR`. Lý do duy nhất là thời gian chạy (máy chỉ chịu hai tiến trình cùng lúc; ba ứng viên cần thêm khoảng 18 giờ), không phải kết quả.
+- **Tình trạng kết quả khi ghi:** tầng chọn mới có khoảng 55 trên 220 giao thức cho `L4-FB-PU`, 48 cho `L4-PU-E2-AR` và 9 cho `L3-PU`. **Chưa tổng hợp J, R, B hay tỷ lệ cảnh báo nhầm của tầng chọn cho bất kỳ ứng viên nào**, và tôi không xem chúng. Chín giao thức đã xong của `L3-PU` bị bỏ, không dùng.
+- **Không đổi:** sàng lọc đã chạy với ba ứng viên và bảng kết quả (L3-PU J 0,687, hợp lệ) giữ nguyên trong báo cáo; mọi quy tắc chọn, trần 15%, chốt chặn và cổng giữ nguyên. Quy tắc gần hòa 0,01 áp cho hai ứng viên còn lại.
+- **Rủi ro đã nêu cho chủ dự án:** ở sàng lọc, ba ứng viên chỉ cách nhau 0,011 J; bỏ một ứng viên có thể bỏ lỡ lựa chọn đơn giản hơn. Chủ dự án chấp nhận.
+- Mã: tham số `--drop` của giai đoạn `select`, bộ điều phối `scripts/run_r6_master.py` truyền `--drop L3-PU`.
+
 ## 4. Chốt chặn và cổng
 
 Chốt chặn trước niêm phong S2: R trung bình ít nhất 65%, B trung bình ít nhất 40%, R của thế giới tệ nhất ít nhất 50%, trần 15%, **giống hệt v5 mục 5**. Cổng niêm phong sau R4: **giống hệt v5 mục 5** (chung 60%, kịch bản mới 35%, từng thế giới 45%, lệch phát triển không quá 15 điểm, trần 15%).

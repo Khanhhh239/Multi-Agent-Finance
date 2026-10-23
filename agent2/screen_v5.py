@@ -267,6 +267,7 @@ def main():
     p.add_argument('--target', type=int, default=1001)
     p.add_argument('--weight', type=float, default=.2)
     p.add_argument('--weights', type=float, nargs='*', help='pu: compute only these w (parallel workers); summary needs all')
+    p.add_argument('--drop', nargs='*', default=[], help='select: kinds removed from the roster (registration v6.1)')
     p.add_argument('--hns', type=float, nargs='*', help='hn: compute only these h (parallel workers); summary needs all')
     p.add_argument('--kinds', nargs='*', help='screen/select: compute only these kinds (parallel workers), no summary')
     p.add_argument('--threads', type=int, default=8)
@@ -346,7 +347,7 @@ def main():
                    'gate': pre_seal_gate(res[chosen], cold=True) if chosen else None, 'data_origin': 'dữ liệu tổng hợp'})
         return
     if a.stage == 'select':
-        roster = _load(a.output / 'screening_summary.json')['roster']['supervised']
+        roster = [k for k in _load(a.output / 'screening_summary.json')['roster']['supervised'] if k not in a.drop]
         tier = a.output / 'selection'
         res = {}
         if a.kinds:                        # worker mode: fit the given base kinds only
