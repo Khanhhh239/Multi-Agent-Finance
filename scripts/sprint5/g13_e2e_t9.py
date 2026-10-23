@@ -8,6 +8,7 @@
 """
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -19,12 +20,14 @@ sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts")); sys.pa
 from agent1.paths import OUT, SYNTH  # noqa: E402
 from agent1.eval.alert_policy import fit_isotonic, policy_metrics, firm_bootstrap  # noqa: E402
 
-WORLD = "tgt3"
-RES = OUT / "g13" / "e2e_tgt3"
+WORLD = os.environ.get("G13_WORLD", "tgt3")          # tgt3 (mặc định) hoặc tgt5 (docs/03_Evaluation/G13_SOFT_LABELS_PREREG.md)
+RES = OUT / "g13" / f"e2e_{WORLD}"
 MODEL = "MC-copula-t (T1+T4+T5)"
 VISIBLE = pd.Timestamp("2023-07-01")
 VERSION = "g13-e2e-t9v2-tgt3-v1"
-VARIANTS = {"v2": "T9 v2", "sprint3": "T9 sprint3", "oracle": "nhãn thật", "v2fill": "T9 v2 + nhãn thật cho phần thiếu (ablation)"}
+SOFT_CONFIDENCE = 0.8     # đăng ký trước (G13_SOFT_LABELS_PREREG.md mục 1)
+VARIANTS = {"v2soft": "T9 v2 + nhãn mềm", "v2": "T9 v2", "sprint3": "T9 sprint3", "oracle": "nhãn thật", "v2fill": "T9 v2 + nhãn thật cho phần thiếu (ablation)",
+            "v2fill50": "T9 v2 + nhãn thật cho 50% phần thiếu", "v2fill80": "T9 v2 + nhãn thật cho 80% phần thiếu"}
 
 
 def obs_name(variant):
@@ -39,7 +42,7 @@ def build(variant):
     from t9_guard import hazard_prior, prepare
     from t9_v2 import links_for
     v2 = json.loads((OUT / "t9/v2/choice.json").read_text(encoding="utf-8"))
-    cfg = dict(cap=v2["cap"], hazard=v2["hazard"], fifo=v2["fifo"]) if variant in ("v2", "v2fill") else dict(cap=None, hazard=True, fifo=False)
+    cfg = dict(cap=v2["cap"], hazard=v2["hazard"], fifo=v2["fifo"]) if variant.startswith("v2") else dict(cap=None, hazard=True, fifo=False)
     source = fast_source(source_reconciler(OUT / "t9/sprint3/source_reconciler", require_training_firms=True))
     model, label_end = hazard_prior()
     end = str(pd.read_parquet(SYNTH / WORLD / "bank_txns.parquet", columns=["value_date"]).value_date.max().date())
@@ -47,16 +50,27 @@ def build(variant):
     inv = inv[inv.issue_date >= VISIBLE]
     prep = prepare(source, bank, inv, cust, model, label_end)
     links = links_for(source, prep, cfg)
+    asg = pd.concat([a for *_, a, _ in prep])
     original = SYNTH / WORLD
     invoices = pd.read_parquet(original / "invoices.parquet")
     invoices = invoices[invoices.issue_date >= VISIBLE].copy()
     labelled = build_bank_labels(invoices, links)
     labelled["paid_date_true"] = labelled.pop("paid_date_est")      # tên cột nội bộ T1; giá trị là nhãn ƯỚC LƯỢNG
-    if variant == "v2fill":
-        # ABLATION chẩn đoán (ghi thêm sau khi có kết quả, không phải cổng): giữ nhãn T9 v2, điền ngày trả THẬT vào hoá đơn đang thiếu nhãn.
-        truth = invoices.set_index("invoice_id").paid_date_true
+    if variant == "v2soft":
+        # Nhãn mềm: chỉ cho hoá đơn T9 bỏ sót; không thay liên kết T9. Ngày = ngày giao dịch tất toán theo phân bổ FIFO theo khách.
+        from agent1.models.t9_soft_labels import soft_fifo_labels
+        soft = soft_fifo_labels(links, bank, inv, asg, min_confidence=SOFT_CONFIDENCE)
         missing = labelled.paid_date_true.isna()
-        labelled.loc[missing, "paid_date_true"] = labelled.loc[missing, "invoice_id"].map(truth)
+        labelled.loc[missing, "paid_date_true"] = labelled.loc[missing, "invoice_id"].map(soft)
+        print("soft labels added", int(labelled.loc[missing, "paid_date_true"].notna().sum()), flush=True)
+    if variant.startswith("v2fill"):
+        # ABLATION chẩn đoán (ghi thêm sau khi có kết quả, không phải cổng): giữ nhãn T9 v2, điền ngày trả THẬT vào một phần
+        # hoá đơn đang thiếu nhãn (v2fill = tất cả; v2fill50 = ngẫu nhiên 50% phần thiếu, seed 7). Mô phỏng kế toán duyệt hàng chờ.
+        frac = int(variant[len("v2fill"):] or 100) / 100
+        truth = invoices.set_index("invoice_id").paid_date_true
+        missing = labelled.paid_date_true.isna() & labelled.invoice_id.map(truth).notna()
+        pick = missing & (np.random.default_rng(7).random(len(labelled)) < frac)
+        labelled.loc[pick, "paid_date_true"] = labelled.loc[pick, "invoice_id"].map(truth)
     labelled["writeoff_date"] = pd.NaT; labelled["ledger_clear_date"] = pd.NaT
     labelled["is_bad_debt"] = False; labelled["credit_note"] = 0.; labelled["dispute"] = False; labelled["partial"] = False
     target = SYNTH / obs_name(variant); target.mkdir(exist_ok=True)
@@ -77,6 +91,23 @@ def build(variant):
     firms[["firm_id", "name", "mst"]].to_parquet(target / "firms.parquet", index=False)
     n_true = int(labelled.paid_date_true.notna().sum())
     print(variant, "links", len(links), "invoices with estimated label", n_true, "of", len(labelled), flush=True)
+
+
+def build_world():
+    """Sinh bộ đích niêm phong mới (chỉ sau khi đăng ký trước đã commit). Cấu hình = tgt, seed theo G13_SEED."""
+    from agent1.synth.world import WorldConfig, generate
+    from dataclasses import fields
+    if (SYNTH / WORLD / "invoices.parquet").exists():
+        raise SystemExit(f"{WORLD} đã tồn tại — không sinh lại")
+    base = json.loads((SYNTH / "tgt" / "config.json").read_text(encoding="utf-8"))
+    allowed = {f.name for f in fields(WorldConfig)}
+    cfg = {k: v for k, v in base.items() if k in allowed}
+    cfg.update(name=WORLD, seed=int(os.environ["G13_SEED"]), n_firms=30, write_xml=0)
+    for key in ("posting_mode_p", "payrun_p", "memo_invoice_no_p"):
+        if key in cfg:
+            cfg[key] = tuple(cfg[key])
+    generate(WorldConfig(**cfg), verbose=False)
+    (SYNTH / WORLD / "SEALED.txt").write_text(f"{WORLD} niêm phong 23/10/2026; đo một lần (G13_SOFT_LABELS_PREREG.md).\n", encoding="utf-8")
 
 
 def run(variant):
@@ -113,13 +144,15 @@ def score():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--build", action="store_true"); ap.add_argument("--run", default=""); ap.add_argument("--score", action="store_true")
-    ap.add_argument("--build-variant", default="")
+    ap.add_argument("--build-variant", default=""); ap.add_argument("--build-world", action="store_true")
     a = ap.parse_args()
     RES.mkdir(parents=True, exist_ok=True)
+    if a.build_world:
+        build_world()
     if a.build_variant:
         build(a.build_variant)
     if a.build:
-        for v in ("v2", "sprint3"):
+        for v in (os.environ.get("G13_BUILD", "v2,sprint3").split(",")):
             build(v)
     if a.run:
         run(a.run)
