@@ -1,4 +1,21 @@
-# Trạng thái Agent 2 (cập nhật 2026-10-22)
+# Trạng thái Agent 2 (cập nhật 2026-10-23 11:30)
+
+## Vòng v6 đang chạy (mở theo chỉ đạo bằng lời của chủ dự án, vòng cuối)
+
+Mọi số là **dữ liệu tổng hợp**. Kết luận v5 (chốt chặn không đạt) giữ nguyên. Đăng ký: `05_ke_hoach_giao_viec/11_dang_ky_truoc_v6.md`, ghi trước khi viết mã.
+
+| Hạng mục | Trạng thái | Bằng chứng |
+|---|---|---|
+| Thay đổi duy nhất | Ca hợp lệ khó đã xác nhận ở thế giới nguồn nhận trọng số h thay cho w = 0,1; không đọc nhãn đích | `agent2/base_v5.py` (`observed_labels`) |
+| Khóa h (8 thế giới, L4-FB-PU) | **Xong 09:02 ngày 23/10.** h = 0,5 (J 0,698; 0,697; 0,680 cho h = 0,5; 1; 2). Cả ba h hợp lệ, không thế giới nào vượt trần 15% (cao nhất 9,6%) | `results/v6/R6/HN_locked.json` |
+| Sàng lọc 3 ứng viên | **Xong 10:44.** L4-FB-PU, L4-PU-E2-AR, L3-PU đều hợp lệ (J 0,698; 0,689; 0,687; recall 89 đến 90%; B 57 đến 60%; trần 0 trên 8 thế giới) | `results/v6/R6/screening_summary.json` |
+| Tầng chọn (20 thế giới, 5 seed, 3 ứng viên) | **Đang chạy từ 10:44**, ước khoảng 35 giờ, dự kiến xong khoảng 22:00 ngày 24/10 | `work/r6_master.log` |
+| Cold | Không theo đuổi trong v6 | đăng ký v6 mục 3 |
+
+Điều chưa biết: chốt chặn thật chỉ xét sau tầng chọn trên 20 thế giới; kinh nghiệm v4 cho thấy điểm niêm phong thường thấp hơn nhiều so với phát triển. Mô hình v6 dựa vào kho phản hồi dùng chung "hợp lệ" giữa các khách; đó là điều kiện sản phẩm.
+
+---
+
 
 ## Vòng v5, R2 đã xong và chốt chặn trước niêm phong KHÔNG ĐẠT (cập nhật 2026-10-22 17:45)
 
