@@ -1,0 +1,28 @@
+{
+  "tp": 221,
+  "positives": 238,
+  "branch_tp": 3,
+  "branch_positives": 3,
+  "hard_negative_alerts": 248,
+  "hard_negatives": 4068,
+  "alerts": 2916,
+  "world": 1008,
+  "candidate": "L4-FB-PU",
+  "fits": [
+    {
+      "validation_ap": 0.7444886610992371,
+      "num_leaves": 15,
+      "trees": 400,
+      "source_train_rows": 329663,
+      "source_worlds": 19,
+      "observed_train_positives": 6256,
+      "PU_weight": 0.1,
+      "model_seed": 0
+    }
+  ],
+  "seconds": 92.85999999999967,
+  "dataset_seconds": 16.140000000000327,
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "owner_override",
+  "flags_sha256": "ad0bce748697a4aad56c7fc1c83e516111314555bbceff89be5625cd606699ff"
+}
