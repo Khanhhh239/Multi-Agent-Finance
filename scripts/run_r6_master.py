@@ -46,18 +46,27 @@ def run(args, step):
     log(f"DONE {step}")
 
 
-def parallel(jobs, step):
-    log(f"START {step}: {len(jobs)} workers")
+MAX_PARALLEL = 2     # 3 concurrent fits exceeded 16 GB RAM (commit 34 of 38 GB, paging 5000+/s): scheduling only
+
+
+def parallel(jobs, step, limit=MAX_PARALLEL):
+    """Run at most `limit` workers at a time; a finished worker is replaced by the next job."""
+    log(f"START {step}: {len(jobs)} workers, at most {limit} at once")
     state(step=step, status="running")
-    procs = []
-    for k, args in enumerate(jobs):
-        out = (ROOT / "work" / f"r6_{step}_{k}.log").open("a", encoding="utf-8")
-        procs.append((subprocess.Popen([PY, *args], cwd=ROOT, stdout=out, stderr=subprocess.STDOUT, env=ENV), out))
-        time.sleep(20)                      # stagger dataset construction peaks
-    codes = []
-    for proc, out in procs:
-        codes.append(proc.wait())
-        out.close()
+    pending, running, codes = list(enumerate(jobs)), [], []
+    while pending or running:
+        while pending and len(running) < limit:
+            k, args = pending.pop(0)
+            out = (ROOT / "work" / f"r6_{step}_{k}.log").open("a", encoding="utf-8")
+            running.append((subprocess.Popen([PY, *args], cwd=ROOT, stdout=out, stderr=subprocess.STDOUT, env=ENV), out))
+            time.sleep(20)                  # stagger dataset construction peaks
+        for item in list(running):
+            code = item[0].poll()
+            if code is not None:
+                item[1].close()
+                codes.append(code)
+                running.remove(item)
+        time.sleep(5)
     if any(codes):
         state(step=step, status="failed", exit_codes=codes)
         log(f"FAILED {step} exit={codes}")
