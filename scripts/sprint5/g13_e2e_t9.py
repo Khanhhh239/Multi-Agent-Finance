@@ -26,7 +26,8 @@ MODEL = "MC-copula-t (T1+T4+T5)"
 VISIBLE = pd.Timestamp("2023-07-01")
 VERSION = "g13-e2e-t9v2-tgt3-v1"
 SOFT_CONFIDENCE = 0.8     # đăng ký trước (G13_SOFT_LABELS_PREREG.md mục 1)
-VARIANTS = {"v2soft": "T9 v2 + nhãn mềm", "v2": "T9 v2", "sprint3": "T9 sprint3", "oracle": "nhãn thật", "v2fill": "T9 v2 + nhãn thật cho phần thiếu (ablation)",
+REVIEW_POLICY = "leftover"  # chọn trên nguồn (G13_REVIEW_QUEUE_PREREG.md mục 1)
+VARIANTS = {"v2rev5": "T9 v2 + duyệt 5/tuần + nhãn mềm", "v2rev2": "T9 v2 + duyệt 2/tuần + nhãn mềm", "v2soft": "T9 v2 + nhãn mềm", "v2": "T9 v2", "sprint3": "T9 sprint3", "oracle": "nhãn thật", "v2fill": "T9 v2 + nhãn thật cho phần thiếu (ablation)",
             "v2fill50": "T9 v2 + nhãn thật cho 50% phần thiếu", "v2fill80": "T9 v2 + nhãn thật cho 80% phần thiếu"}
 
 
@@ -51,12 +52,20 @@ def build(variant):
     prep = prepare(source, bank, inv, cust, model, label_end)
     links = links_for(source, prep, cfg)
     asg = pd.concat([a for *_, a, _ in prep])
+    review_stats = None
+    if variant.startswith("v2rev"):
+        # B1: kế toán duyệt b giao dịch/DN/tuần theo chính sách đã chọn trên nguồn (leftover), người duyệt hoàn hảo (cận trên).
+        from agent1.models.t9_review_queue import simulate_review
+        truth = pd.read_parquet(SYNTH / WORLD / "payments.parquet", columns=["txn_id", "invoice_id", "amount", "pay_date_true"])
+        truth = truth[truth.txn_id.isin(bank.txn_id)]
+        links, review_stats = simulate_review(links, bank, truth, per_week=int(variant[len("v2rev"):]), policy=REVIEW_POLICY)
+        print(variant, "review", review_stats, flush=True)
     original = SYNTH / WORLD
     invoices = pd.read_parquet(original / "invoices.parquet")
     invoices = invoices[invoices.issue_date >= VISIBLE].copy()
     labelled = build_bank_labels(invoices, links)
     labelled["paid_date_true"] = labelled.pop("paid_date_est")      # tên cột nội bộ T1; giá trị là nhãn ƯỚC LƯỢNG
-    if variant == "v2soft":
+    if variant == "v2soft" or variant.startswith("v2rev"):
         # Nhãn mềm: chỉ cho hoá đơn T9 bỏ sót; không thay liên kết T9. Ngày = ngày giao dịch tất toán theo phân bổ FIFO theo khách.
         from agent1.models.t9_soft_labels import soft_fifo_labels
         soft = soft_fifo_labels(links, bank, inv, asg, min_confidence=SOFT_CONFIDENCE)
