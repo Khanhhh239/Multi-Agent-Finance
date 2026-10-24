@@ -159,7 +159,13 @@ def run(data, out, config, week, company_id=None, profile=None):
             from .v6_model import V6Scorer
             base_v6 = Path(config).resolve().parent if isinstance(config, (str, Path)) else ROOT
             scorer = V6Scorer.load((base_v6 / cfg["v6_model_path"]).resolve(), cfg.get("v6_model_sha256"))
-            v6_score, v6_sha = scorer.score(det._transform(deploy)), scorer.sha256
+            from .target_signals import TargetSignals as _Signals    # v6 needs the autoencoder and isolation-forest ranks
+            own = _Signals(with_ae=True, with_if=True)                  # whatever the primary profile computes
+            own.fit(train)
+            frame6 = own.transform(deploy)
+            wide = frame6.select_dtypes("float64").columns
+            frame6[wide] = frame6[wide].astype(np.float32)
+            v6_score, v6_sha = scorer.score(frame6), scorer.sha256
             v6_status = "used_as_secondary_score"
         except Exception as error:           # degrade gracefully (e.g. cold profile lacks the unsupervised columns)
             v6_status = f"skipped: {type(error).__name__}"

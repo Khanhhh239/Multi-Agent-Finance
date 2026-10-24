@@ -25,6 +25,15 @@ Nói đúng với khách: công cụ **gợi ý thứ tự những chỗ đáng 
 
 Thứ tự đề nghị: P3 và P4 trước (anh cầm đi hỏi được ngay), rồi P1, P2, P5.
 
+### 2a. Tình trạng (cập nhật 2026-10-24 21:00)
+
+| Mã | Trạng thái | Cách dùng |
+|---|---|---|
+| P1 | **Xong** | `results/v6/v6_secondary_score.joblib` (1,5 MB, SHA-256 `117d2075...ed5`, huấn luyện lại bằng `scripts/train_v6_model.py` trong 5 phút). Thêm vào cấu hình tuần hai khóa `v6_model_path` và `v6_model_sha256`; kết quả là hai cột phụ `v6_score`, `v6_percentile` trong `alerts.csv` và khóa `v6_secondary_score` trong `report.json`. **Không đổi cảnh báo nào** (có kiểm thử). Chạy thử đầu-cuối trên một công ty phát triển mất 40 giây. Mô hình tự tính hai tín hiệu không nhãn từ lịch sử công ty nên chạy được cả ở chế độ `cold`. Ghi chú: 285 trên 300 cột đặc trưng khớp giá trị với đường nghiên cứu; 11 cột là điểm hạng không nhãn tính trên lịch sử công ty thay vì cả thế giới (đúng thiết kế S2) |
+| P2 | **Xong** | `python scripts/domain_distance.py --data <thư mục xuất> --company C001 --week 2026-W10 --out kq.json`; AUC trên 0,9 thì chạy luật và độ lệch, không dựa điểm v6 |
+| P3, P4 | **Xong** | `templates/yeu_cau_tep_xuat.md`, `templates/gioi_thieu_don_vi_ke_toan.md` (cần luật sư duyệt) |
+| P5 | **Xong** | `python scripts/export_feedback_labels.py --db ... --approval-ref <số hiệu phê duyệt pháp lý> --salt-file <tệp muối> --out ...`; từ chối chạy nếu thiếu số hiệu hoặc muối; chưa dùng cho đến khi luật sư duyệt |
+
 ## 3. Việc chỉ con người làm được
 
 | Việc | Ai | Ghi chú |
