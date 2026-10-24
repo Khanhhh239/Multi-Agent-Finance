@@ -1,0 +1,38 @@
+{
+  "data_origin": "dữ liệu tổng hợp",
+  "findings": [
+    {
+      "txn_type": "bad_debt_writeoff",
+      "column": "applied_invoice_id",
+      "filled_rows": 3,
+      "empty_rows": 373,
+      "fraud_rate_filled": 1.0,
+      "fraud_rate_empty": 0.038,
+      "fraud_share_filled": 0.176
+    },
+    {
+      "txn_type": "bad_debt_writeoff",
+      "column": "collector_id",
+      "filled_rows": 3,
+      "empty_rows": 373,
+      "fraud_rate_filled": 1.0,
+      "fraud_rate_empty": 0.038,
+      "fraud_share_filled": 0.176
+    },
+    {
+      "txn_type": "sales_return",
+      "column": "applied_invoice_id",
+      "filled_rows": 3,
+      "empty_rows": 350,
+      "fraud_rate_filled": 1.0,
+      "fraud_rate_empty": 0.023,
+      "fraud_share_filled": 0.273
+    }
+  ],
+  "new": [],
+  "baseline_worlds": [
+    1001,
+    1010,
+    1020
+  ]
+}

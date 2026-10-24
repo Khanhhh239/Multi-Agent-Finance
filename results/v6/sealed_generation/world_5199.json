@@ -1,0 +1,291 @@
+{
+  "status": "validated",
+  "seed": 5199,
+  "checks": {
+    "V1": "passed",
+    "V2": "passed",
+    "V3": "passed",
+    "V4": "passed",
+    "V5": "passed",
+    "V6": "passed",
+    "V7": "passed",
+    "V8": "passed",
+    "V9": "passed",
+    "V10": "passed",
+    "V11": "passed",
+    "V12": "passed"
+  },
+  "validation": {
+    "status": "passed",
+    "rows": 200000,
+    "fraud_rows": 802,
+    "fraud_rate": 0.00401,
+    "cases": 167,
+    "schemes": 40,
+    "scheme_split_gaps": {
+      "overbilling_excess_payment": [
+        "train",
+        "validation"
+      ],
+      "duplicate_payment": [
+        "train",
+        "validation"
+      ],
+      "altered_payee": [
+        "train",
+        "validation"
+      ],
+      "split_payments": [
+        "train"
+      ],
+      "ghost_employee": [
+        "train"
+      ],
+      "payroll_padding": [
+        "train"
+      ],
+      "terminated_still_paid": [
+        "train"
+      ],
+      "fake_bonus_list": [
+        "train",
+        "validation"
+      ],
+      "off_cycle_payroll": [
+        "train",
+        "validation"
+      ],
+      "expense_fictitious": [
+        "train"
+      ],
+      "expense_duplicate_claim": [
+        "train",
+        "validation"
+      ],
+      "advance_unsettled": [
+        "train",
+        "validation"
+      ],
+      "receivable_lapping": [
+        "validation"
+      ],
+      "false_refund": [
+        "train",
+        "validation"
+      ],
+      "cash_larceny": [
+        "validation"
+      ],
+      "inventory_theft": [
+        "train"
+      ],
+      "kickback_overpricing": [
+        "validation"
+      ],
+      "price_creep": [
+        "validation"
+      ],
+      "bid_rotation": [
+        "train",
+        "validation"
+      ],
+      "period_end_adjustment": [
+        "train",
+        "validation"
+      ],
+      "fictitious_revenue_cutoff": [
+        "validation"
+      ],
+      "owner_override_transfer": [
+        "train",
+        "validation"
+      ],
+      "vendor_burst": [
+        "train",
+        "validation"
+      ]
+    },
+    "companies": 50,
+    "companies_with_fraud": 23,
+    "perpetrator_level": {
+      "manager": 96,
+      "employee": 58,
+      "owner_executive": 13
+    },
+    "collusion": {
+      "2": 32,
+      "1": 89,
+      "3+": 46
+    },
+    "concealment": {
+      "L2": 83,
+      "L1": 17,
+      "L0": 67
+    },
+    "acfe_branch_cases": {
+      "skimming": 26,
+      "expense": 19,
+      "payroll": 17,
+      "corruption": 42,
+      "noncash": 21,
+      "financial_statement": 12,
+      "billing": 18,
+      "payment_tampering": 5,
+      "cash_larceny": 5,
+      "owner_override": 2
+    },
+    "rows_per_scheme": {
+      "invoice_mill": 21,
+      "unrecorded_sales_skimming": 36,
+      "undisclosed_related_vendor": 46,
+      "payment_priority_bribe": 65,
+      "severance_inflation": 9,
+      "truck_outside_hauling": 100,
+      "related_dealer_credit": 27,
+      "fake_referral_commission": 29,
+      "inflated_trip_settlement": 63,
+      "ar_skim_writedown": 44,
+      "period_end_cutoff_shift": 54,
+      "shell_vendor": 17,
+      "kickback_overpricing": 17,
+      "receivable_lapping": 22,
+      "bank_detail_switch": 6,
+      "related_asset_disposal": 22,
+      "vendor_refund_diverted": 9,
+      "fictitious_revenue_cutoff": 4,
+      "cash_larceny": 27,
+      "expense_padding": 26,
+      "personal_purchase": 22,
+      "price_creep": 18,
+      "expense_fictitious": 22,
+      "inventory_theft": 14,
+      "terminated_still_paid": 7,
+      "ghost_employee": 4,
+      "split_payments": 10,
+      "payroll_padding": 8,
+      "off_cycle_payroll": 3,
+      "duplicate_payment": 3,
+      "bid_rotation": 8,
+      "vendor_burst": 6,
+      "false_refund": 16,
+      "overbilling_excess_payment": 3,
+      "owner_override_transfer": 2,
+      "expense_duplicate_claim": 5,
+      "period_end_adjustment": 1,
+      "altered_payee": 1,
+      "fake_bonus_list": 4,
+      "advance_unsettled": 1
+    },
+    "decoys": {
+      "legit_bulk_purchase": 197,
+      "tet_bonus_payroll": 710,
+      "dissolved_customer_writeoff": 124,
+      "weekend_operations": 771,
+      "new_legitimate_vendor": 769,
+      "long_approval_delay": 769,
+      "round_recurring_payment": 771,
+      "historical_valid_invoice": 768,
+      "legit_sales_return": 342,
+      "verified_bank_change": 771,
+      "declared_related_party": 769,
+      "legitimate_self_approval": 771,
+      "periodic_utility_lag": 622,
+      "legit_offcycle_payroll": 47,
+      "legitimate_installments": 769,
+      "legit_bonus_run": 2721,
+      "scrap_asset_disposal": 204,
+      "severance_formula_paid": 101,
+      "registered_referrer_commission": 315,
+      "legitimate_period_close": 768,
+      "remote_employee_payroll": 768,
+      "hauling_service_invoiced": 228,
+      "reactivated_customer_commission": 112,
+      "legit_affiliate_payment": 231,
+      "depreciation_group_change": 415,
+      "layoff_wave_severance": 521,
+      "legit_director_advance": 280,
+      "trip_extended_incident": 188,
+      "urgent_sunday_delivery": 556,
+      "seasonal_credit_policy": 940,
+      "legit_final_settlement": 137,
+      "seasonal_peak_trips": 1068,
+      "early_payment_discount": 432,
+      "uniform_slow_payment": 431,
+      "contract_deposit_forfeit": 136,
+      "deposit_settled_by_invoice": 150,
+      "supplier_defect_discount": 490,
+      "structured_debt_extension": 228,
+      "legit_inventory_writeoff": 352,
+      "post_period_bonus_decision": 126,
+      "approved_advance_extension": 768,
+      "approved_advance_writeoff": 768,
+      "legit_bad_debt_writeoff": 297,
+      "legit_price_increase": 371,
+      "year_end_bonus_payroll": 726
+    },
+    "payroll_after_resignation": {
+      "legit_final_settlement": 137,
+      "severance_inflation": 9,
+      "terminated_still_paid": 7
+    },
+    "txn_types": {
+      "stock_purchase": 13439,
+      "cogs": 12926,
+      "sales_invoice": 19474,
+      "material_purchase": 5376,
+      "selling_expense": 10506,
+      "cash_expense": 24132,
+      "vendor_payment": 40441,
+      "payroll": 38295,
+      "tools_purchase": 524,
+      "material_issue": 476,
+      "rent": 1989,
+      "equipment_purchase": 83,
+      "adjustment": 2449,
+      "advance_issue": 3635,
+      "cash_withdrawal": 1814,
+      "sales_return": 353,
+      "vat_offset": 399,
+      "tax_payment": 809,
+      "customer_receipt": 17250,
+      "depreciation": 1211,
+      "inventory_writeoff": 402,
+      "advance_settlement": 2096,
+      "advance_review": 769,
+      "advance_writeoff": 768,
+      "bad_debt_writeoff": 376,
+      "customer_refund": 8
+    },
+    "accounting_status": "passed",
+    "shortcut_audit": {
+      "type_only": 0.797362310514951,
+      "type_plus_nuisance": 0.7911003716141004,
+      "gain": -0.006261938900850583
+    }
+  },
+  "seconds": 73.15600000000268,
+  "data_origin": "dữ liệu tổng hợp",
+  "file_hashes": {
+    "account_flow_edges.csv": "3f330c230ab8ade655b67f8dac47e4a71b1a879955cd0e7e475c9aca5a6feac1",
+    "advance_events.csv": "e3cbd370c006a98788d95e19511aa20e2d632e2fb46be2d89ee48ab45e9d5fba",
+    "advances.csv": "21f983e336af3b3e883a3d17e0171ad92c74b05821ec8697ab86cf91c2d48e3e",
+    "attendance.csv": "d1a9bece0c7798980aa0d504dbe527557d3d64499977e62ea143c48b8d999898",
+    "bank_account_changes.csv": "f6576f620b24f2eb0b563d67dabee1ececb685189c66b6d98a8d27001900bba9",
+    "calendar.csv": "7296fea023dd9d6bd4db421d982b767bc7a4e82c2aecbb698c11eac54a252192",
+    "companies.csv": "346eabcb4647604b6a2e56207579b0f824dbe80339ada046c33b8895485b1352",
+    "customers.csv": "89eeaf018d3b053509375ea2a7c4fbb8d1921237041a68ac848018cb85d57009",
+    "document_links.csv": "c5504522b6e8cf3768483354b8803301233d93af9fbe262cee6efb416cb1cfd1",
+    "employees.csv": "808c4a1f12a2ae3ef6155762182c809ca77a86225eaf6653e5c6034bea490f59",
+    "entity_links.csv": "7e9ca42a43f5449750e97980dced2e754510a4930c7a4a9cffdd10a7d9f6027d",
+    "features.csv": "03edbb0fe09e76f8e56e092881fafb604a2650d88ead3fc31c98d783992c18f4",
+    "invoices.csv": "3c7bbdd2155ca658f5e456ba8c7c7c9ed366af39502ee693b6d93a54df1841f1",
+    "journal_documents.csv": "2e17ac47f3f6d7709c54109f87e1f9a501c8137b585a7d909529f918092a619f",
+    "journal_lines.csv": "57bf30c668a41f9ef5ee6b7205e027a77c8d8f0b6260787d7cec09f9a8489a56",
+    "labels.csv": "012d880f527e3b6c74fc84861d65d77a0c075a2b11d45a3ea4821ea0aca35580",
+    "splits.csv": "6c0815aff5bfc567be393a4a00e3b91295d1cde66b19a867aa1c67c45e58cde9",
+    "transactions.csv": "3202041141724e70b3ff62dcdb2d333baf23c364b93fea9cc4f62bb38a16b255",
+    "truth_cases.csv": "bd92d1278aaa19fc5016dec39be189b9b9e31c925e7399b4b9ec71f2fe36b640",
+    "vendor_status_history.csv": "e00080eb5ffb493366fa94ced738ae9b0031881ec541c709e2325bbf639afffc",
+    "vendors.csv": "73557747c2163377b3d47c8f8f46d910283a6abb9232b635cf3ed17b1b6bf51b"
+  }
+}
