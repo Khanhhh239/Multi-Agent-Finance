@@ -44,6 +44,13 @@ Quy tắc hợp lệ, định nghĩa R, B, Q, J, 20% thế giới thấp nhất 
 - **Rủi ro đã nêu cho chủ dự án:** ở sàng lọc, ba ứng viên chỉ cách nhau 0,011 J; bỏ một ứng viên có thể bỏ lỡ lựa chọn đơn giản hơn. Chủ dự án chấp nhận.
 - Mã: tham số `--drop` của giai đoạn `select`, bộ điều phối `scripts/run_r6_master.py` truyền `--drop L3-PU`.
 
+## 3b. Quyết định mã hóa R3 (v6.2, 2026-10-24, chủ dự án đồng ý phương án đơn giản nhất, ghi trước khi viết mã mã hóa)
+
+Chốt chặn trước niêm phong v6 đã đạt (07:49 ngày 2026-10-24). Hai việc còn mở của R3 được quyết như sau:
+- **Kịch bản dài hơn kỳ test:** vụ được **cắt trong kỳ test** (giữ cách gán vụ vào một kỳ của bộ sinh và cách chấm đã đăng ký). Giai đoạn sau của vụ nằm ngoài kỳ (ví dụ xóa nợ cuối cùng của KB10) không được sinh; ghi rõ trong hồ sơ mã hóa.
+- **Kế hoạch mã hóa:** chấp nhận `independent_scenarios/encoding_plan_v5.md`. **Không thêm bảng hay trường mới.** KB06 (tài sản cố định) và KB07 (xe tải) được mã hóa bản rút gọn bằng lược đồ hiện có; mọi phần không thể hiện được bằng lược đồ hiện có được liệt kê trong `independent_scenarios/encoding_notes_v5.md` (cái gì bỏ, vì sao) và gửi tác giả để biết, không để sửa kịch bản.
+- Mã hóa đúng ý văn xuôi đã khóa (SHA-256 `3723fb9d...02cc`); không chỉnh độ khó cho thuận lợi với bộ phát hiện. Mọi ca hợp lệ giống tuân theo mục Làm rõ thực thi R3 của đăng ký v5.
+
 ## 4. Chốt chặn và cổng
 
 Chốt chặn trước niêm phong S2: R trung bình ít nhất 65%, B trung bình ít nhất 40%, R của thế giới tệ nhất ít nhất 50%, trần 15%, **giống hệt v5 mục 5**. Cổng niêm phong sau R4: **giống hệt v5 mục 5** (chung 60%, kịch bản mới 35%, từng thế giới 45%, lệch phát triển không quá 15 điểm, trần 15%).
