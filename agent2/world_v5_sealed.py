@@ -18,11 +18,14 @@ from sme_fraud.generate import WINDOWS, parse
 from .world_v4_schemes import SCHEMES, SPLIT_WEIGHTS, NotApplicable
 from .world_v4_sealed import WorldV4Sealed
 from .world_v5_dev import WorldV5Development, development_config
+from .world_v5_scenarios import NEW_DECOYS_V5 as _DECOYS
+from .world_v5_scenarios import NOVEL_V5 as _NOVEL
+from .world_v5_scenarios import ScenarioMixin
 
 SEALED_SEEDS = (5101, 5102, 5103, 5104)
 DRY_RUN_SEED = 5199
-NOVEL_V5: dict = {}          # name -> (ACFE branch, weight, roles, Vietnamese reference); filled from the prose
-NEW_DECOYS_V5: tuple = ()    # hard_negative_type names of the author's legitimate look-alikes
+NOVEL_V5: dict = dict(_NOVEL)     # name -> (ACFE branch, weight, roles, reference); encoded from the locked prose (v6.2)
+NEW_DECOYS_V5: tuple = tuple(_DECOYS)    # hard_negative_type names of the author's legitimate look-alikes
 NOVEL_SHARE = .40            # share of additional cases drawn from the novel catalogue (as in sealed v4)
 MIN_TEST_CASES_PER_NOVEL = 3
 MIN_TEST_CASES_PER_WORLD = 40
@@ -45,7 +48,7 @@ def sealed_config(seed):
             'data_origin': 'dữ liệu tổng hợp', 'sealed': seed != DRY_RUN_SEED}
 
 
-class WorldV5Sealed(WorldV5Development):
+class WorldV5Sealed(ScenarioMixin, WorldV5Development):
     catalog = {**SCHEMES, **NOVEL_V5}
 
     def inject_fraud(self):

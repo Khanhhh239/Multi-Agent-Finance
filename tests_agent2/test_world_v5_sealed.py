@@ -60,7 +60,8 @@ def test_dry_run_v13_flags_only_separations_new_to_development():
     assert run.new_separations(found, base) == [{"txn_type": "rent", "column": "vendor_id"}]
 
 
-def test_empty_catalogue_and_unregistered_seeds_are_refused():
+def test_empty_catalogue_and_unregistered_seeds_are_refused(monkeypatch):
+    monkeypatch.setattr(S, 'NOVEL_V5', {})
     with pytest.raises(RuntimeError, match='NOVEL_V5 is empty'):
         S.WorldV5Sealed(SMALL).finalize()
     with pytest.raises(ValueError, match='fixed in advance'):
