@@ -50,3 +50,18 @@ def test_freeze_refuses_when_pre_seal_gate_failed(tmp_path, monkeypatch):
     with pytest.raises(SystemExit, match="pre-seal gate did not pass"):
         S.freeze()
     assert not (tmp_path / "frozen.json").exists()
+
+
+def test_freeze_for_v6_records_h_and_needs_no_cold_file(tmp_path, monkeypatch):
+    import json
+    monkeypatch.setattr(S, "R2", tmp_path)
+    monkeypatch.setattr(S, "FROZEN", tmp_path / "frozen.json")
+    (tmp_path / "selection_summary.json").write_text(json.dumps(
+        {"gate": {"passed": True}, "chosen": "L4-FB-PU", "w": .1, "hn": .5,
+         "candidates": {"L4-FB-PU": {"R_mean": .88}}}), encoding="utf-8")
+    frozen = S.freeze()
+    assert frozen["supervised"] == "L4-FB-PU" and frozen["hn"] == .5 and frozen["w"] == .1
+    assert frozen["cold"] is None and frozen["fraction"] == .1 and frozen["dev_S2_recall_mean"] == .88
+    assert set(frozen["hashes"]) >= {"agent2/sealed_v5.py", "agent2/world_v5_scenarios.py"}
+    with pytest.raises(SystemExit, match="already frozen"):
+        S.freeze()

@@ -1,9 +1,10 @@
 """R4: freeze the selected v5 configuration and evaluate the sealed v5 worlds exactly once (dữ liệu tổng hợp).
 
-freeze  -> results/v5/v5_frozen.json: chosen supervised candidate, chosen Cold, PU weight, subsampling fraction,
+freeze  -> results/v6/v6_frozen.json (v6 round, registration 11_dang_ky_truoc_v6.md): chosen supervised candidate, PU weight w,
+           hard-negative weight h, subsampling fraction,
            development S2 recall of the chosen candidate (for the dev-gap gate), SHA-256 of every agent2/ and
            sme_fraud/ module. Refuses if the pre-seal gate did not pass.
-evaluate -> results/v5/sealed_v5.json: refuses to run twice or when any hashed module changed. The final S2 model
+evaluate -> results/v6/sealed_v6.json: refuses to run twice or when any hashed module changed. The final S2 model
            is trained on ALL twenty development worlds (train split, validation for the leaf choice), five seeds
            averaged; the sealed target only provides label-free history to its own matrices.
 Registered gates (R1 v1.1 section 5): V5-S2 mean recall >= 60%, novel >= 35%, each world >= 45%,
@@ -24,9 +25,10 @@ from .metrics import tie_break, weekly_alerts
 from .runtime_v5 import limit_memory, write_json
 from .screen_v5 import SourcePool, cold_scores
 
-R2 = Path('results/v5/R2')
-FROZEN = Path('results/v5/v5_frozen.json')
-OUT = Path('results/v5/sealed_v5.json')
+R2 = Path('results/v6/R6')     # name kept for the tests; the v6 round's selection results
+FRACTION = .1                  # registered negative-subsampling fraction (v1.2), used by every v6 fit
+FROZEN = Path('results/v6/v6_frozen.json')
+OUT = Path('results/v6/sealed_v6.json')
 
 
 def code_hashes(root=Path('.')):
@@ -38,14 +40,14 @@ def freeze():
     if FROZEN.exists():
         raise SystemExit(f'{FROZEN} exists; the configuration is already frozen')
     sel = json.loads((R2 / 'selection_summary.json').read_text(encoding='utf-8'))
-    cold = json.loads((R2 / 'cold_selection.json').read_text(encoding='utf-8'))
+    cold_path = R2 / 'cold_selection.json'          # v6 does not run Cold; an older file is honoured if present
+    cold = json.loads(cold_path.read_text(encoding='utf-8')) if cold_path.exists() else {'gate': None, 'chosen': None}
     if not sel['gate']['passed']:
         raise SystemExit('pre-seal gate did not pass: sealed v5 worlds must not be generated or scored')
     chosen = sel['chosen']
-    master = json.loads((R2 / 'master_state.json').read_text(encoding='utf-8'))
     frozen = {'supervised': chosen, 'cold': cold['chosen'] if cold['gate'] and cold['gate']['passed'] else None,
-              'cold_gate_passed': bool(cold['gate'] and cold['gate']['passed']), 'w': sel['w'],
-              'fraction': master['fraction'], 'dev_S2_recall_mean': sel['candidates'][chosen]['R_mean'],
+              'cold_gate_passed': bool(cold['gate'] and cold['gate']['passed']), 'w': sel['w'], 'hn': sel.get('hn'),
+              'fraction': FRACTION, 'dev_S2_recall_mean': sel['candidates'][chosen]['R_mean'],
               'hashes': code_hashes(), 'data_origin': 'dữ liệu tổng hợp'}
     write_json(FROZEN, frozen)
     return frozen
@@ -81,7 +83,7 @@ def evaluate(dev_matrices: Path, sealed_matrices: Path, sealed_seeds, novel, new
         tdir = sealed_matrices / f's{seed}'
         te = pd.read_parquet(tdir / 'test.parquet')
         pool = SourcePool(seed, dev_matrices, base, frozen['fraction'], target_dir=tdir)
-        scores = np.mean([pool.fit_score(None, frozen['w'], s)[0] for s in range(5)], axis=0)
+        scores = np.mean([pool.fit_score(None, frozen['w'], s, frozen.get('hn'))[0] for s in range(5)], axis=0)
         del pool
         if kind.endswith('2plus1'):
             _, cold = cold_scores(sealed_matrices, seed, 'Cold-Rules-E2')

@@ -3,8 +3,8 @@
   python scripts/run_sealed_v5.py generate      # dry-run seed 5199 then 5101-5104: generate, validate V1-V12, hash
   python scripts/run_sealed_v5.py prepare       # base + change matrices into work/v5_sealed_matrices
   python scripts/run_sealed_v5.py dryrun        # V13 field-presence audit on 5199, then full evaluation path on 5199
-                                                #   -> results/v5/sealed_v5_dryrun.json
-  python scripts/run_sealed_v5.py evaluate      # ONE run on 5101-5104 -> results/v5/sealed_v5.json
+                                                #   -> results/v6/sealed_v6_dryrun.json
+  python scripts/run_sealed_v5.py evaluate      # ONE run on 5101-5104 -> results/v6/sealed_v6.json
 Sealed world folders are named v5dev_s<seed> only because the preparation code expects that prefix.
 """
 import json
@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 DATA = ROOT / "work" / "data_sealed_v5"
-GEN = ROOT / "results" / "v5" / "sealed_generation"
+GEN = ROOT / "results" / "v6" / "sealed_generation"
 MAT = ROOT / "work" / "v5_sealed_matrices"
 SEEDS = [5199, 5101, 5102, 5103, 5104]
 
@@ -86,7 +86,7 @@ def main():
     elif stage == "prepare_one":
         prepare_one(int(sys.argv[2]))
     elif stage == "generate":
-        if not (ROOT / "results" / "v5" / "v5_frozen.json").exists():
+        if not (ROOT / "results" / "v6" / "v6_frozen.json").exists():
             raise SystemExit("freeze first: sealed worlds are generated only after the pre-seal gate passed")
         for seed in SEEDS:                         # each world in its own bounded process
             sub([__file__, "world", str(seed)])
@@ -95,10 +95,10 @@ def main():
             sub([__file__, "prepare_one", str(seed)])
     elif stage == "dryrun":
         audit_dry_run()
-        sub(["-m", "agent2.sealed_v5", "evaluate", "--seeds", "5199", "--out", "results/v5/sealed_v5_dryrun.json",
+        sub(["-m", "agent2.sealed_v5", "evaluate", "--seeds", "5199", "--out", "results/v6/sealed_v6_dryrun.json",
              "--sealed-matrices", str(MAT)])
     elif stage == "evaluate":
-        if not (ROOT / "results" / "v5" / "sealed_v5_dryrun.json").exists():
+        if not (ROOT / "results" / "v6" / "sealed_v6_dryrun.json").exists():
             raise SystemExit("run the dry run first")
         sub(["-m", "agent2.sealed_v5", "evaluate", "--sealed-matrices", str(MAT)])
     print(json.dumps({"stage": stage, "status": "done"}))
