@@ -1,6 +1,6 @@
-# Trạng thái Agent 2 (cập nhật 2026-10-24 08:10)
+# Trạng thái Agent 2 (cập nhật 2026-10-24 16:10)
 
-## Vòng v6: chốt chặn trước niêm phong ĐẠT (mở theo chỉ đạo bằng lời của chủ dự án, vòng cuối)
+## Vòng v6 KẾT THÚC: chốt chặn trước niêm phong đạt, cổng niêm phong S2 trượt một điều kiện (vòng cuối, không có v7)
 
 Mọi số là **dữ liệu tổng hợp**. Kết luận v5 (chốt chặn không đạt) giữ nguyên. Đăng ký: `05_ke_hoach_giao_viec/11_dang_ky_truoc_v6.md`, ghi trước khi viết mã.
 
@@ -10,7 +10,8 @@ Mọi số là **dữ liệu tổng hợp**. Kết luận v5 (chốt chặn khô
 | Khóa h (8 thế giới, L4-FB-PU) | **Xong 09:02 ngày 23/10.** h = 0,5 (J 0,698; 0,697; 0,680 cho h = 0,5; 1; 2). Cả ba h hợp lệ, không thế giới nào vượt trần 15% (cao nhất 9,6%) | `results/v6/R6/HN_locked.json` |
 | Sàng lọc 3 ứng viên | **Xong 10:44.** L4-FB-PU, L4-PU-E2-AR, L3-PU đều hợp lệ (J 0,698; 0,689; 0,687; recall 89 đến 90%; B 57 đến 60%; trần 0 trên 8 thế giới) | `results/v6/R6/screening_summary.json` |
 | Tầng chọn (20 thế giới, 5 seed; L3-PU bị loại theo v6.1) | **XONG 07:49 ngày 24/10. Chốt chặn trước niêm phong ĐẠT.** Chọn L4-FB-PU (J 0,687; recall chung 88,4%; B 60,1%; thế giới tệ nhất 80,7%; cảnh báo nhầm cao nhất 10,4% trên cả 20 thế giới, dưới trần 15%). L4-PU-E2-AR J 0,682, trong ngưỡng gần hòa 0,01. Ngưỡng 65/40/50 đều đạt | `12_ket_qua_R6_v6.md`, `results/v6/R6/selection_summary.json` |
-| Việc tiếp theo | R3, R4 (sinh 4 thế giới niêm phong + 1 thử khô, chấm một lần) **chờ chủ dự án quyết hai việc**: cách xử lý kịch bản dài hơn kỳ test, và chấp nhận kế hoạch mã hóa; `sealed_v5.freeze` còn đọc kết quả R2 của v5 nên phải trỏ sang R6 trước | `independent_scenarios/encoding_plan_v5.md` |
+| R3 mã hóa kịch bản, sinh 4 thế giới niêm phong + 1 thử khô | **Xong 15:22 ngày 24/10.** 12/12 kiểm định V1 đến V12 đạt cho cả 5 thế giới; V13 trên thử khô không có tách biệt mới | `agent2/world_v5_scenarios.py`, `encoding_notes_v5.md`, `results/v6/sealed_generation/` |
+| R4 chấm niêm phong, một lần | **Xong 15:54 ngày 24/10. S2 TRƯỢT một cổng.** Đạt: recall chung 64,5% (từ 60%), kịch bản mới 41,2% (từ 35%), thế giới thấp nhất 58,9% (từ 45%), báo nhầm cao nhất 12,8% (dưới 15%). Trượt: lệch với phát triển 23,9 điểm (tối đa 15). Giữ nguyên, không chấm lại, không mở v7 | `13_ket_qua_niem_phong_v6.md`, `results/v6/sealed_v6.json` |
 | Cold | Không theo đuổi trong v6 | đăng ký v6 mục 3 |
 
 Điều chưa biết: chốt chặn thật chỉ xét sau tầng chọn trên 20 thế giới; kinh nghiệm v4 cho thấy điểm niêm phong thường thấp hơn nhiều so với phát triển. Mô hình v6 dựa vào kho phản hồi dùng chung "hợp lệ" giữa các khách; đó là điều kiện sản phẩm.
