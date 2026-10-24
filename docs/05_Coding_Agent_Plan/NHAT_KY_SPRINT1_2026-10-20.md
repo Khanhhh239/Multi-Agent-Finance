@@ -305,3 +305,13 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - Hệ quả cho việc tiếp: G13 và G15 cùng đòi **tăng độ phủ nhãn mà giữ precision**; không phải chỉnh chính sách cảnh báo nữa.
 - **Ablation (21:10):** nhãn T9 v2 + nhãn thật cho phần thiếu ⇒ báo giả **0,87** [0,47; 1,30] (T9 v2: 2,71; nhãn thật: 0,90). **Xác nhận: độ phủ nhãn là đòn bẩy chính của G13.**
   Việc tiếp cho T9 (G13 + G15 cùng đòi): tăng độ phủ nhãn mà giữ precision; chưa biết độ phủ tối thiểu đủ dùng (ablation chỉ thử 100%).
+
+## 21. Nhãn mềm T9 và G13 đạt trên tgt5 (agent1-Khanh, 24/10/2026)
+
+- Phiên trước bị cắt: chuỗi `tgt5` chết vì lỗi `fork` (cạn tài nguyên), thí nghiệm độ phủ 50% bị cắt giữa chừng. Chạy lại bằng một chuỗi duy nhất `scripts/sprint5/g13_all_chain.sh` (tuần tự, nhường RAM).
+- **Nhãn mềm** (`agent1/models/t9_soft_labels.py`, đăng ký trước `G13_SOFT_LABELS_PREREG.md`, commit `fbe3f62`): phần tiền dư của giao dịch đã biết khách → hoá đơn chưa nhãn theo hạn sớm nhất, bỏ qua hoá đơn đã đóng trong sổ cái. Đo nguồn: độ phủ 74,6% → 90,9%; 1/3 nhãn mềm sai > 14 ngày. Ngưỡng 0,8 chọn trên nguồn theo quy tắc ghi trước.
+- **tgt5 (niêm phong, 20 sự kiện, 30 công ty), đo một lần:** T9 v2 báo giả **2,007** [1,24; 2,74]; **T9 v2 + nhãn mềm 0,769 [0,37; 1,17]**, phát hiện 0,90, độ sớm 8,0; nhãn thật 0,334. Độ phủ nhãn 60,6% → 94,8%; nhãn mềm riêng: MAE 14,2 ngày, 27% sai > 14 ngày.
+  ⇒ **`G13_tgt5` đạt ở điểm ước lượng** (CI trên 1,17 chạm ngưỡng, chỉ 20 sự kiện). Dòng G13 chính thức (tgt, nhãn T9 cũ) vẫn trượt — việc chuyển sang đường nhãn mềm là quyết định của chủ dự án.
+- **Ablation độ phủ nhãn thật (tgt3, phần T9 v2 bỏ sót):** điền 50% → báo giả **2,07**; 80% → **1,37**; 100% → 0,87 (T9 v2 gốc 2,71). Cần độ phủ rất cao (≥ ~95%) khi nhãn là thật.
+  Nhãn mềm đạt 0,77 ở độ phủ 94,8% dù có sai số lớn: hai thí nghiệm chung một điểm — **độ phủ quyết định**, nhưng khác thế giới nên không so trực tiếp từng con số.
+- Việc kế tiếp: lặp lại nhãn mềm trên `tgt3` (đang chạy, không niêm phong) để xem độ ổn định; cần ablation tách "biết hoá đơn đã trả" khỏi "biết ngày" để hiểu cơ chế.

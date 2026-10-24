@@ -136,7 +136,7 @@ def score():
         ci = firm_bootstrap(t, cash, "q", ch["tau"], ch["k"], 91)
         rows.append(dict(variant=label, world=WORLD, tau=ch["tau"], k=ch["k"], brier_13w=float(((t.q - t.y13) ** 2).mean()),
                          **m, **ci, policy_frozen_on="src", measurement_version=VERSION))
-    out = pd.DataFrame(rows); out.to_csv(RES / "alert_policy_tgt3.csv", index=False)
+    out = pd.DataFrame(rows); out.to_csv(RES / f"alert_policy_{WORLD}.csv", index=False)
     print(out[["variant", "n_events", "detected_at_least_4w", "detected_ci_low", "detected_ci_high", "median_lead_weeks",
                "false_alarms_per_firm_year", "fa_ci_low", "fa_ci_high", "brier_13w"]].round(3).to_string(index=False))
 

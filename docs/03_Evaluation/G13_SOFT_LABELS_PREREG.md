@@ -35,4 +35,22 @@ Nhánh chính đạt nếu: sự kiện > 0, phát hiện ≥ 4 tuần ≥ 0,70,
 - Giới hạn: một bộ đích (30 công ty); `tgt5` không có bản XML (hoá đơn quan sát lấy từ bảng gốc, như `tgt3`).
 
 ## 5. Kết quả
-_Điền sau khi chạy._
+Chạy 24/10/2026 (`outputs/g13/e2e_tgt5/alert_policy_tgt5.csv`, `g13-e2e-t9v2-tgt5-v1`; đăng ký trước commit `fbe3f62` lúc 10:35 ngày 23/10, `tgt5` sinh sau đó). 30 công ty, 123.928 hoá đơn, **20 sự kiện thiếu tiền**, chính sách đóng băng (τ = 0,30, k = 1), CI bootstrap theo công ty:
+
+| Nhánh | Hoá đơn đã trả có nhãn | Sai số nhãn (MAE ngày) | Phát hiện ≥4 tuần [CI] | Độ sớm | Báo giả/công ty-năm [CI] | Brier 13 tuần |
+|---|---|---|---|---|---|---|
+| T9 v2 (đối chứng) | 60,6% | 0,81 | 0,90 [0,69; 1,00] | 11,5 | **2,007 [1,24; 2,74]** | 0,138 |
+| **T9 v2 + nhãn mềm (chính)** | **94,8%** | 5,64 | **0,90 [0,69; 1,00]** | 8,0 | **0,769 [0,37; 1,17]** | **0,071** |
+| Nhãn thật (cận trên) | 100% | 0 | 0,75 [0,59; 1,00] | 5,5 | 0,334 [0,07; 0,67] | 0,070 |
+
+**Cổng `G13_tgt5` (nhánh chính): ĐẠT ở điểm ước lượng** (phát hiện 0,90 ≥ 0,70; độ sớm 8,0 ≥ 4; báo giả 0,769 ≤ 1,0). Đây là lần đầu G13 đạt trên đường ước lượng, trên bộ đích niêm phong chưa từng dùng.
+
+**Chính xác về nhãn mềm trên `tgt5`:** 18.864 hoá đơn được thêm nhãn mềm; trong đó MAE 14,2 ngày, 63% sai ≤ 7 ngày, **27% sai > 14 ngày** (khớp với đo trên nguồn: ~1/3 lệch xa).
+Dù vậy báo giả giảm 2,007 → 0,769 và Brier giảm 0,138 → 0,071 (ngang nhãn thật 0,070).
+
+**Đọc kết quả (đối chiếu với mục 4 viết trước):**
+- Kỳ vọng "báo giả nhánh chính < T9 v2 rõ rệt" **đúng**. Kịch bản xấu ghi trước ("phần lệch > 14 ngày làm hỏng lợi ích") **không xảy ra**: độ phủ lợi nhiều hơn sai số hại.
+- **Giả thuyết cơ chế (chưa kiểm):** T1 có thể cần chủ yếu biết hoá đơn đã được trả (ra khỏi nhóm "còn mở") và thời điểm xấp xỉ; nhãn lệch vài tuần có thể vẫn hữu ích hơn nhãn thiếu. Chưa có ablation tách phần "biết đã trả" khỏi "biết ngày".
+- **Giới hạn nên nói to:** (1) chỉ **20 sự kiện**, CI trên của báo giả 1,17 vượt ngưỡng 1,0 ⇒ đạt sát ngưỡng, chưa vững; (2) một bộ đích; (3) phát hiện/độ sớm của nhãn thật thấp hơn (0,75 / 5,5) do ít sự kiện, không nên so với nhánh khác;
+  (4) nhánh nhãn mềm đo trên nhãn mềm sinh từ dữ liệu quan sát được, nhưng khoảng 1/3 nhãn mềm sai nhiều: người dùng thật có thể thấy nhãn đó vì chúng là dự đoán, cần đánh dấu "ước lượng" trong sản phẩm.
+- Lặp lại trên `tgt3` (không niêm phong, để kiểm tra độ ổn định) xem mục 6.
