@@ -1,6 +1,6 @@
 # Hiểu toàn bộ dự án Agent 2 trong một tệp
 
-Cập nhật 2026-10-22 (17:45, sau khi R2 xong). Tệp này viết cho người **không cần biết lập trình**. Mục tiêu: đọc xong bạn kể lại được dự án cho người khác nghe, và biết hôm nay đang ở đâu.
+Cập nhật 2026-10-24 (16:10, sau khi chấm niêm phong v6). Phần 7.5 là kết quả cuối; các phần khác đến Phần 7.4 mô tả diễn biến v5. Tệp này viết cho người **không cần biết lập trình**. Mục tiêu: đọc xong bạn kể lại được dự án cho người khác nghe, và biết hôm nay đang ở đâu.
 
 Mọi con số là **dữ liệu tổng hợp** (dữ liệu do chương trình tự sinh), trừ khi có ghi rõ khác. Không con số nào là kết quả trên doanh nghiệp thật.
 
@@ -334,6 +334,22 @@ R2 xong
          +-- Báo cáo 09_ket_qua_niem_phong_v5.md đã viết
          +-- Trình hướng đổi hướng: dịch vụ rà soát cho đơn vị kế toán
 ```
+
+---
+
+### 7.5 Kết quả cuối: vòng v6 (cập nhật 2026-10-24)
+
+Sau v5 trượt chốt chặn, vòng v6 sửa đúng nguyên nhân (dạy mô hình bằng các ca hợp lệ đã được xác nhận) và **đạt chốt chặn trước niêm phong**. Thi thật (4 bộ dữ liệu mới, chấm một lần):
+
+| Điều kiện | Kết quả | Yêu cầu | |
+|---|---:|---:|:-:|
+| Bắt gian lận chung | 64,5% | từ 60% | Đạt |
+| Bắt loại gian lận mới | 41,2% | từ 35% | Đạt |
+| Bộ dữ liệu thấp nhất | 58,9% | từ 45% | Đạt |
+| Báo nhầm | 12,8% | dưới 15% | Đạt |
+| Không chênh quá xa so với lúc thi thử (88,4%) | chênh 23,9 điểm | không quá 15 | **Trượt** |
+
+**Kết luận chính thức: trượt cổng niêm phong vì một điều kiện.** Không chấm lại, không có v7. Điều rút ra: khi gặp dữ liệu mới, hệ thống bắt được khoảng 64% gian lận (không phải 88%), và rất khác nhau giữa các loại: có loại bắt gần hết, có loại gần như không bắt được. Báo cáo: `03_danh_gia_va_hieu_qua_kinh_te/13_ket_qua_niem_phong_v6.md`.
 
 ---
 
