@@ -108,3 +108,11 @@ Không đổi cổng sau khi xem kết quả để "cho đạt". Đây là đề
 | Rất tốt | Thêm: G13 đạt trên dữ liệu thật với hàng chờ duyệt; tỉ lệ số HĐ trong CK đo được và T9 được chỉnh theo đó |
 
 **Điều KHÔNG phải mục tiêu:** đạt 18/18 cổng trên dữ liệu sinh. Đó là thước đo hệ thống chạy đúng, không phải thước đo giá trị cho doanh nghiệp.
+
+---
+
+## Cập nhật 24/10 tối: kết quả B1 và quy tắc dừng đã kích hoạt
+- B1 xong: duyệt 5/tuần đạt sát trên `tgt6` (0,970) nhưng trượt `tgt3` (1,371) ⇒ **dừng tối ưu G13 trên dữ liệu sinh** đúng quy tắc mục 2B.
+- Cũng thấy: với nhãn thật, báo giả đã 0,90–0,94 ở hai thế giới khó ⇒ phần còn lại của G13 nằm ở mô hình dòng tiền/thế giới, không còn ở nhãn.
+- Hàng chờ duyệt vẫn là **thiết kế sản phẩm nên giữ** (giảm 19–24% báo giả so với chỉ nhãn mềm với ~3 lượt duyệt/DN/tuần).
+- **Ưu tiên kế tiếp chuyển hẳn sang mũi A** (dữ liệu thật). B2, B3 chỉ làm nếu có thời gian rảnh; không mở thêm vòng tối ưu G13 trên dữ liệu sinh.

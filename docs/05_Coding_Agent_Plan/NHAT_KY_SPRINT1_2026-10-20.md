@@ -316,3 +316,12 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
   Nhãn mềm đạt 0,77 ở độ phủ 94,8% dù có sai số lớn: hai thí nghiệm chung một điểm — **độ phủ quyết định**, nhưng khác thế giới nên không so trực tiếp từng con số.
 - Việc kế tiếp: lặp lại nhãn mềm trên `tgt3` (đang chạy, không niêm phong) để xem độ ổn định; cần ablation tách "biết hoá đơn đã trả" khỏi "biết ngày" để hiểu cơ chế.
 - **Lặp lại nhãn mềm trên `tgt3` (không niêm phong): báo giả 2,709 → 1,806 [1,14; 2,54], Brier 0,114 (= nhãn thật 0,115) nhưng VẪN > 1 ⇒ KHÔNG đạt.** Hai thế giới: tgt5 đạt sát ngưỡng (0,769), tgt3 trượt (1,806). Kết luận: nhãn mềm giảm 33–62% báo giả, **chưa giải được G13 một cách vững**. `G13_SOFT_LABELS_PREREG.md` mục 6.
+
+## 22. Mũi B1 — hàng chờ duyệt thông minh; áp quy tắc dừng G13 (agent1-Khanh, 24/10/2026)
+
+- `agent1/models/t9_review_queue.py` (+ `tests/test_t9_review_queue.py`): mô phỏng kế toán duyệt b giao dịch/DN/tuần, người duyệt hoàn hảo (cận trên).
+- Chọn trên nguồn: chính sách `leftover` (tiền chưa giải thích lớn nhất trước) thắng ngẫu nhiên; duyệt 5/tuần ≈ 2,8 lượt thực/DN/tuần ⇒ độ phủ 95,2%, MAE nhãn 0,26 ngày.
+- Đăng ký trước `G13_REVIEW_QUEUE_PREREG.md` (commit `faa93e0`, trước khi có `tgt6`, seed 6606).
+- **`tgt6` (31 sự kiện): duyệt 5/tuần báo giả 0,970 [0,64; 1,31] (đạt sát), nhãn thật 0,937. Lặp lại `tgt3`: 1,371 (trượt; nhãn thật 0,903).**
+- **Quy tắc dừng áp dụng:** G13 không đạt vững trên hai thế giới ⇒ dừng tối ưu G13 trên dữ liệu sinh; G13 chuyển sang "chờ dữ liệu thật" (mũi A).
+- Phát hiện mới: với nhãn thật, báo giả 0,90–0,94 ở `tgt3`/`tgt6` ⇒ tiêu chí ≤ 1,0 nằm sát trần của mô hình dòng tiền trên các thế giới khó; không còn là chuyện nhãn.

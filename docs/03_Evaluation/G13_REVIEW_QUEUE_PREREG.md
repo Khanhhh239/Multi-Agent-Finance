@@ -35,4 +35,24 @@
 - Giới hạn: người duyệt hoàn hảo (người thật sẽ sai, chậm); `tgt6` không có XML (như `tgt3`, `tgt5`).
 
 ## 5. Kết quả
-_Điền sau khi chạy._
+Chạy 24/10/2026 (`outputs/g13/e2e_tgt6/alert_policy_tgt6.csv`, `outputs/g13/e2e_tgt3/alert_policy_tgt3.csv`; đăng ký trước commit `faa93e0` lúc 14:52, `tgt6` sinh sau đó).
+
+**`tgt6` (niêm phong, 30 công ty, 31 sự kiện):**
+
+| Nhánh | Hàng chờ được duyệt | Phát hiện | Báo giả/công ty-năm [CI] | Brier |
+|---|---|---|---|---|
+| T9 v2 + nhãn mềm (b = 0) | 0% | 0,839 | 1,204 [0,74; 1,74] | 0,087 |
+| + duyệt 2/tuần | 51% | 0,806 | 1,070 [0,70; 1,51] | 0,086 |
+| **+ duyệt 5/tuần (chính)** | **83%** | **0,806** | **0,970 [0,64; 1,31]** | 0,085 |
+| Nhãn thật (cận trên) | — | 0,806 | 0,937 [0,50; 1,47] | 0,085 |
+
+**Lặp lại `tgt3` (46 sự kiện):** duyệt 5/tuần (89% hàng chờ) ⇒ báo giả **1,371 [0,84; 2,08]**; so với chỉ nhãn mềm 1,806, T9 v2 2,709, nhãn thật 0,903.
+
+**Kết quả theo tiêu chí đăng ký trước:** `G13_tgt6` **đạt sát ngưỡng** (0,970 ≤ 1; CI trên 1,31). Lặp lại `tgt3` **trượt** (1,371). ⇒ **Không vững** ⇒ áp **quy tắc dừng**: dừng tối ưu G13 trên dữ liệu sinh.
+
+**Đọc kết quả:**
+- Hàng chờ duyệt giúp đều đặn ở cả hai thế giới: so với chỉ nhãn mềm, báo giả giảm 19% (`tgt6`) và 24% (`tgt3`). Trên `tgt6`, duyệt 5/tuần gần như bằng nhãn thật (0,970 so với 0,937).
+- **Phát hiện quan trọng mới:** ngay cả với **nhãn thật**, báo giả là 0,94 (`tgt6`), 0,90 (`tgt3`) — sát ngưỡng 1,0. Ở các thế giới này, **mô hình dự báo dòng tiền tự nó chỉ vừa đủ** cho tiêu chí G13. Phần còn lại không còn là chuyện nhãn.
+  (Các thế giới khác với nhãn thật: `tgt` 0,57, `tgt2` 0,75, `tgt5` 0,33.) ⇒ Trên dữ liệu sinh, trần của G13 khoảng 0,3–0,9 tuỳ thế giới; tiêu chí ≤ 1,0 nằm ở mép trần.
+- Trên `tgt3`, khoảng cách còn lại so với nhãn thật (1,37 so với 0,90) **có thể** do 11% hàng chờ chưa duyệt và nhãn mềm sai — giả thuyết, chưa tách bằng ablation.
+- **Ý nghĩa sản phẩm:** với ~3 lượt duyệt/doanh nghiệp/tuần (người duyệt hoàn hảo), cảnh báo đạt mức gần nhãn thật trên một thế giới và cải thiện rõ trên thế giới kia. Đây là thiết kế đáng mang vào chạy bóng; câu trả lời cuối phải đến từ dữ liệu thật.

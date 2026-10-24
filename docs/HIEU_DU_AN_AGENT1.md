@@ -1,4 +1,4 @@
-# Hiểu toàn bộ dự án Agent 1 — bản dễ nhớ (cập nhật 24/10/2026)
+# Hiểu toàn bộ dự án Agent 1 — bản dễ nhớ (cập nhật 24/10/2026, chiều)
 
 > Mục tiêu của tài liệu này: đọc một lần (khoảng 40 phút) là nắm được **dự án làm gì, làm bằng cách nào, đã tới đâu, tin được tới mức nào, và việc tiếp theo là gì**.
 > Mọi con số lấy từ kết quả đã đo trong `outputs/` và `docs/03_Evaluation/GATES_CURRENT.md`. Chỗ nào chưa chắc, tài liệu nói rõ là chưa chắc.
@@ -290,6 +290,8 @@ Cảnh báo = khi xác suất thiếu hụt vượt ngưỡng, báo trước ≥
 | **`tgt5` niêm phong** | T9 v2 (phủ 60,6%) | 0,90 | 2,01 | Trượt |
 | **`tgt5` niêm phong** | **T9 v2 + nhãn mềm (phủ 94,8%)** | 0,90 | **0,77** | **Đạt sát ngưỡng** (20 sự kiện, CI trên 1,17) |
 | `tgt3` (lặp lại, không niêm phong) | T9 v2 + nhãn mềm (phủ 93,8%) | 0,80 | **1,81** | **Trượt**, nhưng giảm 33% so với 2,71 |
+| **`tgt6` niêm phong** | T9 v2 + **kế toán duyệt ~3 giao dịch/DN/tuần** + nhãn mềm | 0,81 | **0,97** | **Đạt sát ngưỡng** (nhãn thật: 0,94) |
+| `tgt3` (lặp lại) | T9 v2 + duyệt ~3/DN/tuần + nhãn mềm | 0,83 | **1,37** | **Trượt** (nhãn thật: 0,90) |
 
 **Cách đọc, theo từng bước:**
 1. Có nhãn thật thì chính sách cảnh báo **đạt** (trên cả 3 bộ đích). Vậy chính sách không phải vấn đề.
@@ -300,6 +302,8 @@ Cảnh báo = khi xác suất thiếu hụt vượt ngưỡng, báo trước ≥
 **Hình ảnh dễ nhớ:** hoá đơn đã trả mà không có nhãn giống như tiền đã vào ví nhưng sổ vẫn ghi "chưa thu". Hệ thống tưởng còn thiếu tiền nên báo động nhầm.
 
 **Nhãn mềm là gì?** Khi biết *khách nào* chuyển tiền (mô hình gán khách rất chắc) nhưng không biết *hoá đơn nào*, hệ thống phân bổ phần tiền dư cho các hoá đơn chưa có nhãn của khách đó, theo thứ tự hạn sớm nhất. Ngày nhãn có thể lệch (khoảng 1/3 nhãn mềm sai hơn 14 ngày) nhưng độ phủ nhãn tăng từ khoảng 60% lên 94%.
+
+**Hàng chờ duyệt thông minh (24/10):** kế toán chỉ duyệt các giao dịch còn nhiều tiền chưa giải thích nhất, khoảng 3 lượt/doanh nghiệp/tuần. Giảm thêm 19–24% báo giả so với chỉ nhãn mềm. Đạt sát trên `tgt6`, trượt trên `tgt3` ⇒ theo quy tắc dừng đã ghi trước, **dừng tối ưu G13 trên dữ liệu sinh**. Phát hiện kèm theo: ngay cả nhãn thật cũng cho báo giả 0,90–0,94 ở hai thế giới khó, tức tiêu chí ≤ 1 nằm sát trần của mô hình dòng tiền.
 
 **Kết luận thận trọng về nhãn mềm:** đúng hướng ở **cả hai** thế giới (giảm 33–62% báo giả, Brier ngang nhãn thật), nhưng chỉ **1/2 thế giới đạt cổng**. Vì vậy G13 vẫn chưa thể coi là đã giải một cách vững. Phải đánh dấu nhãn mềm là "ước lượng" trong sản phẩm.
 
