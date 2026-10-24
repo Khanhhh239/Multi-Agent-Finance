@@ -18,6 +18,7 @@ Chủ dự án đã giao vòng mới: [hậu kiểm R0](../03_danh_gia_va_hieu_q
 | **C** | [03_pha_C_san_pham_hoa.md](03_pha_C_san_pham_hoa.md) | Đường ống v4 hoàn chỉnh, bộ nhận dữ liệu, dịch vụ, lý do tiếng Việt, hiệu năng | A (song song với B) |
 | **D** | [04_pha_D_du_lieu_mo_rong_va_doc_lap.md](04_pha_D_du_lieu_mo_rong_va_doc_lap.md) | Mở rộng bộ sinh, quy mô lớn, thế giới niêm phong độc lập, nền thật | A |
 | **E** | [05_pha_E_thi_diem_va_phap_ly.md](05_pha_E_thi_diem_va_phap_ly.md) | Thí điểm 3 đến 5 doanh nghiệp, pháp lý, đo kinh tế thật | C |
+| **E+** | [10_ke_hoach_chuan_bi_thi_diem_sau_v6.md](10_ke_hoach_chuan_bi_thi_diem_sau_v6.md) | Việc máy làm ngay, việc cần người, điều kiện bắt đầu thí điểm sau v6 | E |
 | | [06_checklist_va_lich.md](06_checklist_va_lich.md) | Danh sách việc, công ước tính, định nghĩa hoàn thành | |
 | | [07_cam_bay_va_meo.md](07_cam_bay_va_meo.md) | Lỗi đã gặp, mẹo | |
 
