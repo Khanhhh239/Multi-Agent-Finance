@@ -315,3 +315,4 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - **Ablation độ phủ nhãn thật (tgt3, phần T9 v2 bỏ sót):** điền 50% → báo giả **2,07**; 80% → **1,37**; 100% → 0,87 (T9 v2 gốc 2,71). Cần độ phủ rất cao (≥ ~95%) khi nhãn là thật.
   Nhãn mềm đạt 0,77 ở độ phủ 94,8% dù có sai số lớn: hai thí nghiệm chung một điểm — **độ phủ quyết định**, nhưng khác thế giới nên không so trực tiếp từng con số.
 - Việc kế tiếp: lặp lại nhãn mềm trên `tgt3` (đang chạy, không niêm phong) để xem độ ổn định; cần ablation tách "biết hoá đơn đã trả" khỏi "biết ngày" để hiểu cơ chế.
+- **Lặp lại nhãn mềm trên `tgt3` (không niêm phong): báo giả 2,709 → 1,806 [1,14; 2,54], Brier 0,114 (= nhãn thật 0,115) nhưng VẪN > 1 ⇒ KHÔNG đạt.** Hai thế giới: tgt5 đạt sát ngưỡng (0,769), tgt3 trượt (1,806). Kết luận: nhãn mềm giảm 33–62% báo giả, **chưa giải được G13 một cách vững**. `G13_SOFT_LABELS_PREREG.md` mục 6.

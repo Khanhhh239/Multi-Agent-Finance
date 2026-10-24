@@ -1,4 +1,4 @@
-# Hiểu toàn bộ dự án Agent 1 — bản dễ nhớ (cập nhật cuối 22/10/2026, tối)
+# Hiểu toàn bộ dự án Agent 1 — bản dễ nhớ (cập nhật 24/10/2026)
 
 > Mục tiêu của tài liệu này: đọc một lần (khoảng 40 phút) là nắm được **dự án làm gì, làm bằng cách nào, đã tới đâu, tin được tới mức nào, và việc tiếp theo là gì**.
 > Mọi con số lấy từ kết quả đã đo trong `outputs/` và `docs/03_Evaluation/GATES_CURRENT.md`. Chỗ nào chưa chắc, tài liệu nói rõ là chưa chắc.
@@ -286,6 +286,10 @@ Cảnh báo = khi xác suất thiếu hụt vượt ngưỡng, báo trước ≥
 | `tgt3` | T9 cũ (phủ 69,8%) | 0,83 | 2,41 | Trượt |
 | `tgt3` | thật (phủ 100%) | 0,80 | **0,90** | Đạt điểm ước lượng |
 | `tgt3` | **T9 v2 + nhãn thật chỉ cho phần thiếu** | 0,80 | **0,87** | Đạt điểm ước lượng |
+| `tgt3` | T9 v2 + nhãn thật cho 50% / 80% phần thiếu | 0,83 / 0,80 | 2,07 / 1,37 | Trượt |
+| **`tgt5` niêm phong** | T9 v2 (phủ 60,6%) | 0,90 | 2,01 | Trượt |
+| **`tgt5` niêm phong** | **T9 v2 + nhãn mềm (phủ 94,8%)** | 0,90 | **0,77** | **Đạt sát ngưỡng** (20 sự kiện, CI trên 1,17) |
+| `tgt3` (lặp lại, không niêm phong) | T9 v2 + nhãn mềm (phủ 93,8%) | 0,80 | **1,81** | **Trượt**, nhưng giảm 33% so với 2,71 |
 
 **Cách đọc, theo từng bước:**
 1. Có nhãn thật thì chính sách cảnh báo **đạt** (trên cả 3 bộ đích). Vậy chính sách không phải vấn đề.
@@ -294,6 +298,10 @@ Cảnh báo = khi xác suất thiếu hụt vượt ngưỡng, báo trước ≥
 4. **Thí nghiệm quyết định:** giữ nguyên nhãn T9 v2, chỉ điền nhãn thật vào chỗ thiếu ⇒ báo giả về 0,87. Vậy thiếu nhãn chiếm khoảng 3/4 báo giả.
 
 **Hình ảnh dễ nhớ:** hoá đơn đã trả mà không có nhãn giống như tiền đã vào ví nhưng sổ vẫn ghi "chưa thu". Hệ thống tưởng còn thiếu tiền nên báo động nhầm.
+
+**Nhãn mềm là gì?** Khi biết *khách nào* chuyển tiền (mô hình gán khách rất chắc) nhưng không biết *hoá đơn nào*, hệ thống phân bổ phần tiền dư cho các hoá đơn chưa có nhãn của khách đó, theo thứ tự hạn sớm nhất. Ngày nhãn có thể lệch (khoảng 1/3 nhãn mềm sai hơn 14 ngày) nhưng độ phủ nhãn tăng từ khoảng 60% lên 94%.
+
+**Kết luận thận trọng về nhãn mềm:** đúng hướng ở **cả hai** thế giới (giảm 33–62% báo giả, Brier ngang nhãn thật), nhưng chỉ **1/2 thế giới đạt cổng**. Vì vậy G13 vẫn chưa thể coi là đã giải một cách vững. Phải đánh dấu nhãn mềm là "ước lượng" trong sản phẩm.
 
 Đã thử và loại: gộp các đợt cảnh báo bị tách nhỏ (không đổi được đánh đổi giữa phát hiện và báo giả).
 
@@ -342,7 +350,7 @@ Cổng = điều kiện nghiệm thu đã **viết trước** và **không đổ
 | G10 | T4 thắng trên dữ liệu thật | ✅ Đạt |
 | G11 | Quy tắc được **chuyên gia** xác minh | ⏸ **Ngoài phạm vi** (cần chuyên gia) |
 | G12 | Dải số dư E2E cov80 75–85% | ✅ Đạt |
-| G13 | Cảnh báo thiếu tiền | ❌ trên `tgt` (2,08) và `tgt3` (2,71); đạt khi có nhãn thật (0,57–0,90) |
+| G13 | Cảnh báo thiếu tiền | ❌ cổng chính thức (`tgt` 2,08; `tgt3` 2,71). Với nhãn mềm: ✔ `tgt5` (0,77, sát ngưỡng) nhưng ❌ `tgt3` (1,81). Đạt khi có nhãn thật (0,33–0,90) |
 | G14 | Phát hiện đổi hành vi (≥ 0,5 phát hiện, ≤ 0,5 báo giả) | ❌ cổng cũ. ✔ bản mới (CUSUM + nghỉ 60 ngày) trên `tgt2`+`tgt3`: 0,576 / 0,431, đạt điểm ước lượng, **không có CI, sát ngưỡng** |
 | G15 | T9 ghép sao kê (F1 ≥ 0,8, precision ≥ 0,95...) | ❌ F1 0,706 |
 | G16 | T0 phát hiện lỗi dữ liệu chèn sẵn | ✅ Đạt |

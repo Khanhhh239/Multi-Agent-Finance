@@ -53,4 +53,27 @@ Dù vậy báo giả giảm 2,007 → 0,769 và Brier giảm 0,138 → 0,071 (ng
 - **Giả thuyết cơ chế (chưa kiểm):** T1 có thể cần chủ yếu biết hoá đơn đã được trả (ra khỏi nhóm "còn mở") và thời điểm xấp xỉ; nhãn lệch vài tuần có thể vẫn hữu ích hơn nhãn thiếu. Chưa có ablation tách phần "biết đã trả" khỏi "biết ngày".
 - **Giới hạn nên nói to:** (1) chỉ **20 sự kiện**, CI trên của báo giả 1,17 vượt ngưỡng 1,0 ⇒ đạt sát ngưỡng, chưa vững; (2) một bộ đích; (3) phát hiện/độ sớm của nhãn thật thấp hơn (0,75 / 5,5) do ít sự kiện, không nên so với nhánh khác;
   (4) nhánh nhãn mềm đo trên nhãn mềm sinh từ dữ liệu quan sát được, nhưng khoảng 1/3 nhãn mềm sai nhiều: người dùng thật có thể thấy nhãn đó vì chúng là dự đoán, cần đánh dấu "ước lượng" trong sản phẩm.
-- Lặp lại trên `tgt3` (không niêm phong, để kiểm tra độ ổn định) xem mục 6.
+- Lặp lại trên `tgt3` (không niêm phong, để kiểm tra độ ổn định): xem mục 6 — **kết quả không đạt cổng**.
+
+## 6. Lặp lại trên `tgt3` (24/10/2026; KHÔNG niêm phong: đã dùng cho G13 trước đó, chỉ để kiểm tra độ ổn định; cùng cấu hình, ngưỡng 0,8 đã đóng băng)
+
+| Nhánh (46 sự kiện, 30 công ty) | Hoá đơn đã trả có nhãn | Phát hiện | Báo giả/công ty-năm [CI] | Brier 13 tuần |
+|---|---|---|---|---|
+| T9 v2 | 59,5% | 0,848 | 2,709 [1,97; 3,45] | 0,181 |
+| **T9 v2 + nhãn mềm** | **93,8%** | 0,804 | **1,806 [1,14; 2,54]** | **0,114** |
+| Nhãn thật | 100% | 0,804 | 0,903 [0,53; 1,30] | 0,115 |
+
+**Kết quả: nhãn mềm giảm báo giả 33% (2,71 → 1,81) và đưa Brier về mức nhãn thật (0,114 so với 0,115), nhưng báo giả 1,81 VẪN > 1,0 ⇒ KHÔNG đạt G13 trên `tgt3`** (CI dưới 1,14 cũng > 1).
+
+**Tổng hợp hai thế giới (cùng cấu hình đóng băng, không chỉnh gì giữa hai lần):**
+
+| | T9 v2 | + nhãn mềm | Nhãn thật | Mức bù của nhãn mềm |
+|---|---|---|---|---|
+| `tgt5` (niêm phong, 20 sự kiện) | 2,007 | **0,769** | 0,334 | 1,24 / 1,67 điểm (74%) |
+| `tgt3` (46 sự kiện) | 2,709 | **1,806** | 0,903 | 0,90 / 1,81 điểm (50%) |
+
+**Đọc kết quả:**
+- Hướng nhất quán ở cả hai thế giới: **độ phủ giúp lớn** (giảm 33–62% báo giả), và Brier ngang nhãn thật. Giả thuyết "độ phủ là đòn bẩy chính" được hai thế giới ủng hộ.
+- Nhãn mềm **chưa đủ** để đạt cổng một cách đáng tin: **1/2 thế giới đạt** (`tgt5`, sát ngưỡng với CI trên 1,17; `tgt3` trượt rõ). Phần báo giả còn lại so với nhãn thật (0,9–1,3 điểm trên `tgt3`) có thể do ~1/3 nhãn mềm lệch xa (không kiểm riêng phần này).
+- **Kết luận thận trọng:** nhãn mềm là cải thiện thật và đáng đưa vào luồng, nhưng **không** được coi là đã giải G13. G13 vẫn ở trạng thái "chưa đạt một cách vững".
+- Hướng nâng tiếp (chưa làm): lọc nhãn mềm theo mức tin cậy riêng (ví dụ chỉ giữ nhãn mềm của khách có lịch sử trả đều), hoặc đánh dấu nhãn mềm là "ước lượng" và để T1 giảm trọng số chúng; cần đăng ký trước và một bộ đích mới.
