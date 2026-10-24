@@ -1,0 +1,68 @@
+{
+  "tp": 171,
+  "positives": 222,
+  "branch_tp": 7,
+  "branch_positives": 40,
+  "hard_negative_alerts": 410,
+  "hard_negatives": 4879,
+  "alerts": 4696,
+  "world": 1020,
+  "candidate": "L4-PU-E2-AR",
+  "fits": [
+    {
+      "validation_ap": 0.7685524799610105,
+      "num_leaves": 15,
+      "trees": 400,
+      "source_train_rows": 329224,
+      "source_worlds": 19,
+      "observed_train_positives": 5847,
+      "PU_weight": 0.1,
+      "model_seed": 0
+    },
+    {
+      "validation_ap": 0.7733514532495491,
+      "num_leaves": 15,
+      "trees": 400,
+      "source_train_rows": 329224,
+      "source_worlds": 19,
+      "observed_train_positives": 5847,
+      "PU_weight": 0.1,
+      "model_seed": 1
+    },
+    {
+      "validation_ap": 0.7808937366515569,
+      "num_leaves": 15,
+      "trees": 400,
+      "source_train_rows": 329224,
+      "source_worlds": 19,
+      "observed_train_positives": 5847,
+      "PU_weight": 0.1,
+      "model_seed": 2
+    },
+    {
+      "validation_ap": 0.7716523297948572,
+      "num_leaves": 15,
+      "trees": 400,
+      "source_train_rows": 329224,
+      "source_worlds": 19,
+      "observed_train_positives": 5847,
+      "PU_weight": 0.1,
+      "model_seed": 3
+    },
+    {
+      "validation_ap": 0.7742051445992808,
+      "num_leaves": 15,
+      "trees": 400,
+      "source_train_rows": 329224,
+      "source_worlds": 19,
+      "observed_train_positives": 5847,
+      "PU_weight": 0.1,
+      "model_seed": 4
+    }
+  ],
+  "seconds": 118.56199999999808,
+  "dataset_seconds": 7.89100000000326,
+  "data_origin": "dữ liệu tổng hợp",
+  "protocol": "payroll",
+  "flags_sha256": "0fde1a1d5a419f0980b716fbad395d107926efce8efdc74901a47fd64f78971e"
+}

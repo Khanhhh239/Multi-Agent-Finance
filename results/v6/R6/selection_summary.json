@@ -1,0 +1,67 @@
+{
+  "w": 0.1,
+  "hn": 0.5,
+  "chosen": "L4-FB-PU",
+  "candidates": {
+    "L4-FB-PU": {
+      "J": 0.6873155652135686,
+      "Q_min": 0.6730923668870736,
+      "Q_mean": 0.7427822779534665,
+      "R_mean": 0.8844376109002289,
+      "R_min": 0.8068669527896996,
+      "B_mean": 0.601126945006704,
+      "B_min": 0.5140967573743833,
+      "eligible": true,
+      "tail_worlds": [
+        1014,
+        1012,
+        1003,
+        1018
+      ]
+    },
+    "L4-PU-E2-AR": {
+      "J": 0.6822785879025403,
+      "Q_min": 0.6757936966687563,
+      "Q_mean": 0.7395559775637068,
+      "R_mean": 0.8868110184280436,
+      "R_min": 0.8197424892703863,
+      "B_mean": 0.5923009366993701,
+      "B_min": 0.5149418608420534,
+      "eligible": true,
+      "tail_worlds": [
+        1014,
+        1020,
+        1012,
+        1018
+      ]
+    }
+  },
+  "gate": {
+    "passed": true,
+    "checks": {
+      "R_mean": {
+        "value": 0.8844376109002289,
+        "minimum": 0.65,
+        "passed": true
+      },
+      "B_mean": {
+        "value": 0.601126945006704,
+        "minimum": 0.4,
+        "passed": true
+      },
+      "R_min": {
+        "value": 0.8068669527896996,
+        "minimum": 0.5,
+        "passed": true
+      },
+      "hard_negative_limit": {
+        "passed": true,
+        "maximum_per_world_protocol": 0.15
+      }
+    },
+    "cold": false,
+    "decision": "continue",
+    "data_origin": "dữ liệu tổng hợp"
+  },
+  "data_origin": "dữ liệu tổng hợp"
+}

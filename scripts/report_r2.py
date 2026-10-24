@@ -123,7 +123,9 @@ def main():
           "R1 v1.2. R = recall@B3 ở S2; B = trung bình recall các nhánh ACFE bị ẩn (gộp nhánh nhỏ); Q = (R + B) / 2; "
           "J = trung bình Q của 20% thế giới thấp nhất.", ""]
     pu = load("PU_locked.json")
-    if pu:
+    if pu and "J" not in pu:
+        md += ["## 1. Trọng số PU", "", f"w = {pu['w']} kế thừa từ vòng v5 (trạng thái `{pu['status']}`), không chọn lại.", ""]
+    elif pu:
         md += ["## 1. Chọn trọng số PU (L4-FB-PU, 8 thế giới sàng lọc, seed 0)", "",
                "| w | J | Hợp lệ |", "|---:|---:|:-:|"]
         md += [f"| {w} | {pct(pu['J'][w])} | {'Có' if pu['eligible'][w] else 'Không'} |" for w in pu["J"]]
@@ -140,8 +142,11 @@ def main():
         md += ["", f"Khóa: **h = {hn['h']}** (trạng thái `{hn['status']}`).", ""]
     sc = load("screening_summary.json")
     if sc:
-        md += ["## 2. Sàng lọc 4 ứng viên có giám sát", "", table(sc["candidates"], cols),
-               f"Ba ứng viên vào tầng chọn: **{', '.join(sc['roster']['supervised']) or 'không có'}**.", ""]
+        md += [f"## 2. Sàng lọc {len(sc['candidates'])} ứng viên có giám sát", "", table(sc["candidates"], cols),
+               f"Vào tầng chọn theo kết quả sàng lọc: **{', '.join(sc['roster']['supervised']) or 'không có'}**.", ""]
+        if ROUND["name"] == "v6":
+            md += ["Theo sửa đổi v6.1 của đăng ký (chủ dự án chỉ đạo, ghi trước mọi kết quả tầng chọn), `L3-PU` bị loại khỏi tầng chọn vì thời gian chạy; "
+                   "chỉ `L4-FB-PU` và `L4-PU-E2-AR` được chạy ở tầng chọn.", ""]
     cold = load("cold_selection.json")
     if cold:
         md += ["## 3. Cold (không nhãn), 20 thế giới", "", table(cold["candidates"], cols[:6] + cols[6:]),
