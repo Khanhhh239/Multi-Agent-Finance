@@ -325,3 +325,15 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - **`tgt6` (31 sự kiện): duyệt 5/tuần báo giả 0,970 [0,64; 1,31] (đạt sát), nhãn thật 0,937. Lặp lại `tgt3`: 1,371 (trượt; nhãn thật 0,903).**
 - **Quy tắc dừng áp dụng:** G13 không đạt vững trên hai thế giới ⇒ dừng tối ưu G13 trên dữ liệu sinh; G13 chuyển sang "chờ dữ liệu thật" (mũi A).
 - Phát hiện mới: với nhãn thật, báo giả 0,90–0,94 ở `tgt3`/`tgt6` ⇒ tiêu chí ≤ 1,0 nằm sát trần của mô hình dòng tiền trên các thế giới khó; không còn là chuyện nhãn.
+
+## 23. A1/A2 + sửa hai lỗ hổng bảo mật trước khi xin dữ liệu thật (agent1-Khanh, 24/10/2026)
+
+- **A1** `docs/06_Pilot/01_GOI_DU_LIEU_CAN_XIN.md` (PDF `Downloads/agent1_goi_du_lieu.pdf`): gửi được ngay.
+- **A2** `docs/06_Pilot/02_CAM_KET_BAO_MAT.md` (PDF `Downloads/agent1_cam_ket_bao_mat_NHAP.pdf`): còn chờ pháp chế (Nghị định 13/2023/NĐ-CP).
+- **Khoá tách khỏi dữ liệu** (`agent1_service/api.py::key_directory`): `AGENT1_KEY_DIR`, mặc định thư mục anh em `<data>-keys`; tự chuyển `encryption.key`/`api-token.txt` kiểu cũ;
+  từ chối nếu thư mục khoá nằm trong thư mục dữ liệu; báo lỗi nếu hai bản khoá khác nhau (không tự chọn).
+- **Ẩn danh HMAC khi nạp** (`agent1_service/ingest/privacy.py`): mã định danh băm nguyên chuỗi; tên và nội dung CK băm từng từ sau `norm_name` (mã chỉ gồm chữ cái);
+  giữ số hoá đơn, tiền tố ngân hàng, từ thanh toán chung. Áp dụng ở `/ingest`, `/ingest/file`, `/promises`; `/whatif` nhận cả mã gốc. Tắt cho nghiên cứu: `AGENT1_PSEUDONYMIZE=0`.
+- **Kiểm tra T9 không hỏng** (`scripts/pilot/privacy_t9_parity.py`, tgt3): precision 0,962 → 0,963; recall 0,557 → 0,550; F1 0,706 → 0,700 (−0,6 điểm). Chấp nhận được.
+- Kiểm thử: `tests/test_privacy_ingest.py` (5 ca); toàn bộ 373 đạt.
+- Còn lại: công cụ cho doanh nghiệp tự dựng bảng đối chiếu mã ↔ tên (`pseudonym_map` có sẵn); ghi rõ ai giữ khoá; pháp chế rà soát.

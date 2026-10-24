@@ -17,11 +17,11 @@ Bên B **không**: bán, chia sẻ, cho thuê Dữ liệu; liên hệ khách hà
 
 ### Điều 3. Biện pháp bảo vệ
 1. **Lưu trữ cục bộ:** Dữ liệu lưu trên máy của Bên B, không đưa lên dịch vụ đám mây công cộng hay máy chủ bên thứ ba.
-2. **Mã hoá:** từng bản ghi được mã hoá trước khi ghi vào cơ sở dữ liệu (mã hoá đối xứng Fernet). Khoá mã hoá được lưu tách khỏi thư mục dữ liệu.
-   *[Ghi chú nội bộ, xoá trước khi gửi: hiện `encryption.key` nằm CÙNG thư mục `.state` với `agent1.db` (`agent1_service/api.py` dòng 63–65) — phải chuyển trước khi ký, xem việc phải làm #2.]*
+2. **Mã hoá:** từng bản ghi được mã hoá trước khi ghi vào cơ sở dữ liệu (mã hoá đối xứng Fernet). Khoá mã hoá được lưu ở thư mục riêng, tách khỏi thư mục dữ liệu; hệ thống từ chối khởi động nếu hai thư mục trùng nhau.
 3. **Kiểm soát truy cập:** chỉ người có khoá truy cập (token) mới đọc được qua giao diện; nhật ký ghi lại loại thao tác và số lượng bản ghi.
-4. **Ẩn danh trước khi phân tích:** tên khách hàng, tên người chuyển tiền và mã số thuế đối tác được thay bằng mã ẩn danh (HMAC-SHA256 với khoá bí mật) **trước khi nạp vào hệ thống**.
-   *[Ghi chú nội bộ, xoá trước khi gửi: hàm ẩn danh có sẵn tại `agent1_service/ingest/privacy.py` nhưng CHƯA được gắn vào bước nạp — phải hoàn thành trước lần nạp đầu tiên, xem mục "Việc phải làm" cuối tài liệu.]*
+4. **Ẩn danh khi nạp:** mã khách hàng, mã số thuế, tên khách hàng, tên người chuyển tiền, và các từ là tên trong nội dung chuyển khoản được thay bằng mã ẩn danh
+   (HMAC-SHA256 với khoá bí mật riêng) **ngay ở bước nạp, trước khi lưu**. Số hoá đơn và các từ thanh toán chung ("TT", "HD"...) trong nội dung chuyển khoản được giữ nguyên để ghép tiền.
+   Bảng đối chiếu mã ẩn danh ↔ tên thật **không được lưu ở phía Bên B**; Bên A được cung cấp công cụ và khoá để tự dựng bảng này khi đọc báo cáo.
 5. **Kênh truyền:** chỉ nhận file qua kênh có mật khẩu/mã hoá do hai bên thống nhất; không nhận qua email không mã hoá.
 6. **Không có bên thứ ba:** không dùng dịch vụ AI hay phân tích bên ngoài để xử lý Dữ liệu thô của Bên A.
 
@@ -60,8 +60,9 @@ Cam kết có hiệu lực từ ngày ký đến khi Dữ liệu đã được x
 
 | # | Việc | Trạng thái |
 |---|---|---|
-| 1 | Gắn `anonymize()` (HMAC, khoá ≥ 32 byte, lưu tách) vào bước nạp: tên khách, tên người chuyển, MST đối tác — giữ nguyên nội dung chuyển khoản trừ tên người | **Chưa làm** (giao coding agent, mũi A3) |
-| 2 | Lưu khoá Fernet và khoá HMAC tách khỏi thư mục dữ liệu (hiện `encryption.key` nằm cùng `.state/` với `agent1.db`); ghi rõ ai giữ khoá | **Chưa làm — Điều 3.2 đang chưa đúng với hiện trạng** |
+| 1 | Gắn ẩn danh HMAC vào bước nạp (`/ingest`, `/ingest/file`, `/promises`; `/whatif` nhận cả mã gốc) | **Xong 24/10** — `agent1_service/ingest/privacy.py`, `tests/test_privacy_ingest.py`; kiểm tra T9 không giảm: `outputs/pilot/privacy_t9_parity.csv` |
+| 2 | Lưu khoá Fernet, khoá HMAC, token tách khỏi thư mục dữ liệu (`AGENT1_KEY_DIR`, mặc định `<data>-keys`; tự chuyển khoá cũ; từ chối nếu nằm trong thư mục dữ liệu) | **Xong 24/10** (mã); còn phải ghi rõ ai giữ khoá và đặt `AGENT1_KEY_DIR` sang thiết bị khác khi triển khai |
+| 2b | Công cụ cho Bên A dựng bảng đối chiếu mã ↔ tên (`pseudonym_map` có sẵn; cần script/CSV giao Bên A) | Chưa làm |
 | 3 | Kiểm thử quy trình xoá (`DELETE /data`) và mẫu biên bản xác nhận xoá | Mã xoá có sẵn; biên bản chưa có |
 | 4 | Pháp chế rà soát bản cam kết (Nghị định 13/2023/NĐ-CP) | Chưa làm (chủ dự án) |
 | 5 | Thống nhất kênh nhận file có mã hoá | Chưa làm |

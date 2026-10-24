@@ -53,16 +53,39 @@ class ScenarioRequest(BaseModel):
     shift_out:ExpenseShift|None=None
 
 
-def create_app(state_dir=None,token=None,firm_id=None,engine=run):
+def key_directory(state_dir,key_dir=None):
+    """Thư mục khoá TÁCH khỏi thư mục dữ liệu (cam kết bảo mật Điều 3.2). Mặc định: thư mục anh em `<data>-keys`;
+    triển khai thật nên đặt AGENT1_KEY_DIR sang ổ/thiết bị khác. Từ chối nếu nằm trong thư mục dữ liệu."""
+    data=Path(state_dir).resolve()
+    keys=Path(key_dir or os.environ.get('AGENT1_KEY_DIR') or data.parent/(data.name+'-keys')).resolve()
+    if keys==data or data in keys.parents:raise ValueError('Thư mục khoá không được nằm trong thư mục dữ liệu')
+    keys.mkdir(parents=True,exist_ok=True)
+    # Di chuyển khoá kiểu cũ (nằm cùng agent1.db) sang thư mục khoá; không tự chọn nếu hai bản khác nhau.
+    for name in ('encryption.key','api-token.txt'):
+        old,new=data/name,keys/name
+        if old.exists():
+            if new.exists() and new.read_bytes()!=old.read_bytes():raise ValueError(f'{name} có hai bản khác nhau; cần xử lý tay')
+            if not new.exists():new.write_bytes(old.read_bytes())
+            old.unlink()
+    return keys
+
+
+def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None):
     directory=Path(state_dir or os.environ.get('AGENT1_STATE_DIR','.state'));directory.mkdir(parents=True,exist_ok=True)
+    keys=key_directory(directory,key_dir)
     token=token or os.environ.get('AGENT1_API_TOKEN')
     if not token:
-        token_file=directory/'api-token.txt'
+        token_file=keys/'api-token.txt'
         if not token_file.exists(): token_file.write_text(secrets.token_urlsafe(32),encoding='utf-8')
         token=token_file.read_text(encoding='utf-8').strip()
-    key_file=directory/'encryption.key'
+    key_file=keys/'encryption.key'
     if not key_file.exists():key_file.write_bytes(Fernet.generate_key())
     store=Store(directory/'agent1.db',key_file.read_bytes())
+    # Ẩn danh HMAC ở bước nạp (Điều 3.4). Tắt chỉ cho nghiên cứu cục bộ: AGENT1_PSEUDONYMIZE=0.
+    pseudonymize=os.environ.get('AGENT1_PSEUDONYMIZE','1')!='0'
+    pseudo_file=keys/'pseudonym.key'
+    if not pseudo_file.exists():pseudo_file.write_bytes(secrets.token_bytes(32))
+    pseudo_key=pseudo_file.read_bytes()
     firm_id=firm_id or os.environ.get('AGENT1_FIRM_ID','F000')
     last={}
     @asynccontextmanager
@@ -116,6 +139,9 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run):
                     try:
                         if pd.isna(pd.Timestamp(row[col])):raise ValueError()
                     except (ValueError,TypeError):raise HTTPException(422,'Ngày không hợp lệ')
+            if pseudonymize:
+                from .ingest.privacy import pseudonymize_row
+                row=pseudonymize_row(row,pseudo_key)
             identifier=row.get(ALLOWED[body.table]) if ALLOWED[body.table] else row.get('id',uuid.uuid4().hex)
             if not identifier:raise HTTPException(422,'Thiếu khoá bản ghi')
             row['id']=str(identifier);records.append(row)
@@ -159,6 +185,9 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run):
         except (ValueError,TypeError):raise HTTPException(422,'Ngày hứa trả không hợp lệ')
         row=body.model_dump();row.update(id=uuid.uuid4().hex,firm_id=firm,kept=None)
         row.update(made_date=made.isoformat(),promised_date=promised.isoformat())
+        if pseudonymize:
+            from .ingest.privacy import pseudonymize_row
+            row=pseudonymize_row(row,pseudo_key)
         store.put(firm,'promises',[row]);return dict(id=row['id'],status='recorded_pending_outcome')
 
     @app.post('/forecast')
@@ -211,12 +240,17 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run):
     def whatif(body:ScenarioRequest,firm=Depends(authorize)):
         if firm not in last:raise HTTPException(409,'Cần chạy dự báo nghiên cứu trước')
         shift=body.shift_out
-        if body.delay_customer is not None and not last[firm]['open_df'].customer_id.eq(body.delay_customer).any():
+        customer=body.delay_customer
+        if customer is not None and pseudonymize and not last[firm]['open_df'].customer_id.eq(customer).any():
+            # Người dùng có thể nhập mã khách gốc; dữ liệu lưu mã đã ẩn danh.
+            from .ingest.privacy import pseudo_id
+            customer=pseudo_id(customer,pseudo_key)
+        if customer is not None and not last[firm]['open_df'].customer_id.eq(customer).any():
             raise HTTPException(422,'Khách không có hoá đơn mở trong dự báo này')
         if body.delay_customer is None and shift is None and body.revenue_drop is None:
             raise HTTPException(422,'Cần chọn thay đổi trong kịch bản')
         try:
-            result=what_if(last[firm],delay_customer=body.delay_customer,delay_weeks=body.delay_weeks,revenue_drop=body.revenue_drop,
+            result=what_if(last[firm],delay_customer=customer,delay_weeks=body.delay_weeks,revenue_drop=body.revenue_drop,
                 shift_out=(shift.from_week-1,shift.to_week-1,shift.amount) if shift else None)
         except ValueError as e:raise HTTPException(422,str(e))
         result['quantiles']=result['quantiles'].tolist();return result
