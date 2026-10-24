@@ -12,6 +12,8 @@ Các mẫu:
 4. [Chèn có kiểm soát](kich_ban_chen_co_kiem_soat.md).
 5. [Phiếu phản hồi](phieu_phan_hoi.md).
 6. [Phỏng vấn](phong_van.md).
+7. [Yêu cầu tệp xuất từ phần mềm kế toán](yeu_cau_tep_xuat.md) (soạn 2026-10-24, gửi đơn vị kế toán).
+8. [Giới thiệu ngắn cho đơn vị kế toán](gioi_thieu_don_vi_ke_toan.md) (soạn 2026-10-24).
 
 Trước khi nhận dữ liệu thật cần có xác nhận bằng văn bản của người phụ trách pháp lý về: vai trò từng bên, căn cứ xử lý, thông tin và lựa chọn cần cung cấp cho người liên quan, hồ sơ đánh giá tác động nếu áp dụng, lưu trữ, bên xử lý phụ, chuyển dữ liệu, xử lý sự cố, trách nhiệm khi cảnh báo sai và quy định bảo mật kế toán. Chưa có các xác nhận này thì chỉ dùng dữ liệu tổng hợp.
 
