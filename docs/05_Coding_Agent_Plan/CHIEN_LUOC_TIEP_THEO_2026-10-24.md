@@ -116,3 +116,11 @@ Không đổi cổng sau khi xem kết quả để "cho đạt". Đây là đề
 - Cũng thấy: với nhãn thật, báo giả đã 0,90–0,94 ở hai thế giới khó ⇒ phần còn lại của G13 nằm ở mô hình dòng tiền/thế giới, không còn ở nhãn.
 - Hàng chờ duyệt vẫn là **thiết kế sản phẩm nên giữ** (giảm 19–24% báo giả so với chỉ nhãn mềm với ~3 lượt duyệt/DN/tuần).
 - **Ưu tiên kế tiếp chuyển hẳn sang mũi A** (dữ liệu thật). B2, B3 chỉ làm nếu có thời gian rảnh; không mở thêm vòng tối ưu G13 trên dữ liệu sinh.
+
+## Cập nhật 24/10: A1 xong, A2 bản nháp
+- **A1** `docs/06_Pilot/01_GOI_DU_LIEU_CAN_XIN.md` (+ PDF `agent1_goi_du_lieu.pdf`): dữ liệu tối thiểu (XML hoá đơn 12–18 tháng, sao kê cùng kỳ, số dư đầu kỳ, chi cố định), nên có, việc hằng tuần, không cần gửi, danh sách kiểm tra. Gửi được ngay.
+- **A2** `docs/06_Pilot/02_CAM_KET_BAO_MAT.md` (+ PDF `agent1_cam_ket_bao_mat_NHAP.pdf`, có dấu BẢN NHÁP). **Chưa được ký** cho tới khi:
+  1. pháp chế rà soát (Nghị định 13/2023/NĐ-CP);
+  2. gắn ẩn danh HMAC vào bước nạp (hàm có sẵn trong `agent1_service/ingest/privacy.py` nhưng chưa dùng);
+  3. chuyển `encryption.key` ra khỏi thư mục `.state/` (hiện nằm cùng `agent1.db`, `agent1_service/api.py` dòng 63–65).
+  Việc 2–3 giao coding agent cùng mũi A3.
