@@ -153,6 +153,17 @@ def run(data, out, config, week, company_id=None, profile=None):
     timer = time.perf_counter()
     det = OperationalV4Detector(config, profile).fit(train, valid)
     flags, score, _ = det.alerts(deploy)
+    v6_status, v6_score, v6_sha = "not_configured", None, None
+    if cfg.get("v6_model_path"):             # secondary information only: never changes which rows are alerted
+        try:
+            from .v6_model import V6Scorer
+            base_v6 = Path(config).resolve().parent if isinstance(config, (str, Path)) else ROOT
+            scorer = V6Scorer.load((base_v6 / cfg["v6_model_path"]).resolve(), cfg.get("v6_model_sha256"))
+            v6_score, v6_sha = scorer.score(det._transform(deploy)), scorer.sha256
+            v6_status = "used_as_secondary_score"
+        except Exception as error:           # degrade gracefully (e.g. cold profile lacks the unsupervised columns)
+            v6_status = f"skipped: {type(error).__name__}"
+    v6_columns = {} if v6_score is None else {"v6_score": v6_score[flags], "v6_percentile": V6Scorer.percentile(v6_score)[flags]}
     from .feedback_v4 import vectors, aggregate, apply as apply_feedback
     feedback_matrix = vectors(deploy, det.signals.entity)
     feedback_sha256 = None
@@ -198,7 +209,7 @@ def run(data, out, config, week, company_id=None, profile=None):
     cases["explanation_vi"] = cases.reason
     cases.assign(transaction_ids=cases.transaction_ids.map(json.dumps), feedback_vector=cases.feedback_vector.map(json.dumps)).to_csv(out / "cases.csv", index=False, encoding="utf-8-sig")
     queue.to_csv(out / "case_queue.csv", index=False, encoding="utf-8-sig")
-    deploy.loc[flags, ["company_id", "transaction_id", "posted_at", "txn_type", "amount_vnd", "rule_ids", "explanation_vi"]].assign(ranking_score=score[flags]).to_csv(out / "alerts.csv", index=False, encoding="utf-8-sig")
+    deploy.loc[flags, ["company_id", "transaction_id", "posted_at", "txn_type", "amount_vnd", "rule_ids", "explanation_vi"]].assign(ranking_score=score[flags], **v6_columns).to_csv(out / "alerts.csv", index=False, encoding="utf-8-sig")
     with (out / "explanations.jsonl").open("w", encoding="utf-8") as stream:
         for line in evidence:
             stream.write(json.dumps(clean(line), ensure_ascii=False, allow_nan=False) + "\n")
@@ -209,7 +220,8 @@ def run(data, out, config, week, company_id=None, profile=None):
               "training_data_kind": "none" if det.profile == "cold" else "synthetic", "input_data_kind": cfg.get("input_data_kind", "unspecified"),
               "explanation_numbers_supported": True, "ranking_only_explanations": fallback,
               "priority_score_is_fraud_probability": False, "input_report": input_report,
-              "change_observations": change_status, "timing_seconds": times, "median_alert_ranking_score": float(np.median(score[flags])) if flags.any() else None}
+              "change_observations": change_status, "v6_secondary_score": v6_status, "v6_model_sha256": v6_sha,
+              "timing_seconds": times, "median_alert_ranking_score": float(np.median(score[flags])) if flags.any() else None}
     report['feedback_sha256'] = feedback_sha256
     report['policy_variant'] = 'unvalidated_feedback' if feedback_sha256 else 'frozen'
     if feedback_sha256:
