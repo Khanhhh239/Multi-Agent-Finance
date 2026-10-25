@@ -109,7 +109,8 @@ def build_items(rows,identity,profile,issues):
         for name,raw,blocks in observations:
             if name=='vat':
                 variants=vat_values(raw)
-                if not variants: issues.append(ExtractionIssue(code='UNPARSEABLE_VAT',field_path=prefix,message='VAT label could not be parsed.'))
+                if not variants: issues.append(ExtractionIssue(code='UNPARSEABLE_VAT',field_path=prefix,message='VAT label could not be parsed.',
+                    block_refs=tuple(b.block_id for b in blocks)))
                 for treatment,rate in variants:
                     by['vat_treatment'].append(make_candidate(prefix+'.vat_treatment',raw,treatment,blocks))
                     if rate is not None: by['vat_rate'].append(make_candidate(prefix+'.vat_rate',raw,rate,blocks))

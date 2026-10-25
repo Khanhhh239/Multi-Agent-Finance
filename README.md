@@ -1,5 +1,7 @@
 # Agent 3 — Tax Compliance Assistant
 
+**OCR quality — 25/10:** thêm bộ tiếp nhận/khóa dataset và benchmark pipeline thật, so sánh baseline/candidate; đọc lại ô số lượng, đơn giá, thành tiền và thuế trên UI. Giữ review thủ công; chưa thay model mặc định hoặc nghiệm thu accuracy trên dữ liệu độc lập. [Hướng dẫn và phần còn chờ dữ liệu](docs/agent3/plans/OCR_QUALITY_IMPLEMENTATION.md).
+
 **Nhập liệu và diễn giải — 21/10:** có thể bổ sung dòng bị OCR bỏ sót bằng cách kéo vùng nguồn, xóa dòng nhận nhầm có lý do và xem lại lịch sử. Đọc lại thêm crop rộng/phóng to trong ngân sách; gán bên bán/bên mua theo vùng hai cột; hướng dẫn mở đúng phần cần xử lý và số liệu thời gian trên UI. Khởi động lại `OPEN_AGENT3.cmd`, Ctrl+F5. Chưa bật auto-accept hoặc nghiệm thu accuracy. [Hướng dẫn và kiểm thử 5 hạng mục](docs/agent3/plans/evidence/capture_upgrade_20261021/REPORT.md).
 
 **OCR coverage — 19/10:** thêm đọc đối chứng theo vùng, fallback tự động trong ngân sách, bảng lặp/tiếp nối và sửa lỗi cleanup khi worker Windows timeout. Profile DPI/deskew/tiling thử nghiệm mở bằng `OPEN_AGENT3_OCR_LAB.cmd` trên DB riêng; cấu hình toàn trang mặc định chưa đổi vì chưa vượt gate chất lượng/thời gian. [Báo cáo và kiểm thử](docs/agent3/plans/evidence/ocr_coverage_v1/REPORT.md).

@@ -1,10 +1,43 @@
 """Parse a regional observation, preserving abstention and exact identifiers."""
 import re
-from ..canonicalization.normalize import key
+from ..canonicalization.normalize import key,money_values,vat_values
 from ..extraction.invoice_fields import ALIASES,clean_label,labelled,normalize_field,values_on_page
 
 TYPED_PATHS=frozenset(('invoice.number','invoice.series','invoice.issue_date','currency',
     'totals.net','totals.vat','totals.gross','parties.seller.tax_id','parties.buyer.tax_id'))
+
+ITEM_TYPED_FIELDS=frozenset(('quantity','unit_price','net','vat_treatment','vat_rate'))
+
+
+def item_field(path):
+    parts=path.split('.')
+    return parts[2] if len(parts)==3 and parts[0]=='items' and parts[1] and parts[2] in ITEM_TYPED_FIELDS else None
+
+
+def is_typed(path):
+    return path in TYPED_PATHS or item_field(path) is not None
+
+
+def item_read(path,texts,profile):
+    """One observed cell only; no arithmetic, digit repair or rate guessing."""
+    from ..extraction.tables import ITEM_ALIASES
+    name=item_field(path)
+    target='vat' if name in ('vat_treatment','vat_rate') else name
+    values=[]
+    for text in texts:
+        found,raw=labelled(text.strip(),ITEM_ALIASES)
+        if found and found!=target:return None
+        raw=raw if found else text.strip()
+        if raw:values.append(raw)
+    # Multiple nonempty value boxes may be competing columns; never join digits.
+    if len(values)!=1:return None
+    if target=='vat':
+        choices=vat_values(values[0])
+        if len(choices)!=1:return None
+        treatment,rate=choices[0]
+        return treatment if name=='vat_treatment' else rate
+    choices=money_values(values[0],profile.number_locale)
+    return choices[0] if len(choices)==1 else None
 
 
 def semantic(path):
@@ -19,8 +52,12 @@ def recovery_refs(path,artifact,normalized):
     """
     target=semantic(path);refs=[]
     for issue in artifact.issues:
-        if issue.code=='UNPARSEABLE_FIELD' and issue.field_path==target:
+        if ((issue.code in ('UNPARSEABLE_FIELD','UNPARSEABLE_ITEM') and issue.field_path==target)
+                or (issue.code=='UNPARSEABLE_VAT' and item_field(path) in ('vat_treatment','vat_rate')
+                    and issue.field_path==path.rsplit('.',1)[0])):
             refs.extend((None,b) for b in issue.block_refs)
+    # Other fields on this row are not evidence for an absent numeric cell.
+    if item_field(path):return set(refs)
     for page in normalized.pages:
         for method in ('NATIVE_TEXT','OCR'):
             selected=tuple(b for b in page.blocks if any(o.method==method for o in b.origins))
@@ -33,6 +70,7 @@ def recovery_refs(path,artifact,normalized):
 
 def typed_read(path,texts,profile):
     """Return one fully parsed value or abstain; no substring digit salvage."""
+    if item_field(path):return item_read(path,texts,profile)
     target=semantic(path)
     if (path.startswith('totals.') or path.endswith('.tax_id') or path=='invoice.issue_date') and len(texts)>1 and sum(bool(normalize_field(target,t.strip(),profile)) for t in texts)>1:
         return None  # Two complete values are competitors, not digit groups.

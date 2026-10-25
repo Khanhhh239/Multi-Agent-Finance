@@ -62,6 +62,27 @@ class RegionTests(unittest.TestCase):
         self.assertTrue(self.read(self.command.model_copy(update={'reader':'expanded'}))['cache_hit'])
         self.assertEqual(self.reader.calls,2)
 
+    def test_pdf_detail_uses_bounded_original_source_and_keeps_evidence(self):
+        before=self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id)
+        primary=self.read()
+        command=self.command.model_copy(update={'reader':'pdf_detail'})
+        result=self.read(command)
+        self.assertEqual(result['reader'],'pdf_detail');self.assertEqual(result['status'],'CANDIDATE')
+        self.assertNotEqual(primary['recovery_id'],result['recovery_id'])
+        self.assertEqual(primary['observations'][0]['evidence'],result['observations'][0]['evidence'])
+        for observation in result['observations']:
+            self.assertIsNone(observation['resize_scale']);self.assertEqual(observation['pdf_render']['render_dpi'],300)
+        self.assertTrue(self.read(command)['cache_hit']);self.assertEqual(self.reader.calls,2)
+        self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id),before)
+
+    def test_pdf_render_timeout_never_calls_recognizer_or_changes_record(self):
+        from src.ingestion.models import IngestionError
+        command=self.command.model_copy(update={'reader':'pdf_detail'})
+        with patch('src.ingestion.sandbox.run_bounded',side_effect=IngestionError('WORKER_TIMEOUT','Synthetic timeout',retryable=True)):
+            with self.assertRaises(ReviewError) as err:self.read(command)
+        self.assertEqual(err.exception.code,'WORKER_TIMEOUT');self.assertEqual(self.reader.calls,0)
+        self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id).revision,1)
+
     def test_scope_readonly_stale_and_unsupported_do_not_call_model(self):
         for context in (self.f.ctx.model_copy(update={'tenant_id':'other'}),self.f.ctx.model_copy(update={'permissions':frozenset({'READ'})})):
             with self.assertRaises((KeyError,PermissionError)):self.read(ctx=context)
@@ -92,6 +113,26 @@ class RegionTests(unittest.TestCase):
         result=self.read(RegionCommand(expected_record_revision=1,field_path='invoice.issue_date'))
         self.assertEqual(result['status'],'NEEDS_REVIEW');self.assertEqual(result['parse_status'],'REJECTED')
         self.assertIsNone(result['suggested_value']);self.assertIn('31/02/2025',[o['text'] for o in result['observations']])
+
+    def test_item_cell_reread_is_typed_cached_and_only_applied_by_review(self):
+        before=self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id)
+        prefix='items.'+before.items[0].item_id
+        from src.review.contracts import Change
+        for name,raw,want in [('net','9007199254740993','9007199254740993'),('vat_rate','0%','0')]:
+            command=RegionCommand(expected_record_revision=1,field_path=prefix+'.'+name)
+            _,regions=plan_regions(before,self.artifact,self.normalized,command.field_path)
+            label='Thành tiền:' if name=='net' else 'Thuế suất:'
+            self.reader.text=lambda request,value=raw,count=len(regions),title=label: title if count>1 and Path(request.image_path).name=='line-0.png' else value
+            result=self.read(command)
+            self.assertEqual(result['status'],'CANDIDATE');self.assertEqual(result['parse_status'],'VALID')
+            self.assertEqual(result['suggested_value'],want)
+            self.assertEqual(self.read(command)['recovery_id'],result['recovery_id'])
+            self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,before.record_id),before)
+        command=self.f.command([Change(field_path=prefix+'.net',new_value='9007199254740993')])
+        self.f.correct(command,'numeric-reviewed-save')
+        after=self.f.repo.base.record(self.f.ctx,self.f.payer,before.record_id)
+        self.assertEqual(str(after.items[0].net.value),'9007199254740993')
+        self.assertEqual(after.items[0].net.confidence_basis,'HUMAN_CONFIRMED')
 
     def test_comparison_is_separately_pinned_and_cannot_choose_arbitrary_model(self):
         primary=self.read()

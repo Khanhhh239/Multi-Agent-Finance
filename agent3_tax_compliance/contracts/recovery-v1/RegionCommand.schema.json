@@ -17,7 +17,8 @@
       "enum": [
         "primary",
         "comparison",
-        "expanded"
+        "expanded",
+        "pdf_detail"
       ],
       "title": "Reader",
       "type": "string"
