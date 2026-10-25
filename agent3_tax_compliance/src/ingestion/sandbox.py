@@ -1,8 +1,36 @@
 """Parser process limits. Fail closed if the OS refuses the memory constraint."""
 import os
 import subprocess
+import time
+import tempfile
+from contextlib import contextmanager
 
 from .models import IngestionError
+
+
+@contextmanager
+def worker_workspace(prefix):
+    """Allow bounded Windows file-handle release without masking timeout."""
+    directory=tempfile.TemporaryDirectory(prefix=prefix);original=None
+    try:
+        yield directory.name
+    except BaseException as error:
+        original=error
+        raise
+    finally:
+        deadline=time.monotonic()+5
+        while True:
+            try:directory.cleanup();break
+            except OSError:
+                # Job ActiveProcesses can reach zero shortly before Windows
+                # releases its file locks; tempfile's recursive fallback then
+                # turns PermissionError into misleading NotADirectoryError.
+                if time.monotonic()>=deadline:
+                    if original is None:raise IngestionError('WORKER_RESOURCE_ERROR','Worker temporary output could not be cleaned.')
+                    import logging
+                    logging.getLogger(__name__).warning('Worker workspace cleanup delayed; retaining original failure')
+                    break
+                time.sleep(.05)
 
 
 def _windows_job(process, memory_mb, max_processes=2):
@@ -33,8 +61,27 @@ def _windows_job(process, memory_mb, max_processes=2):
     if (not kernel.SetInformationJobObject(handle,9,ctypes.byref(limits),ctypes.sizeof(limits))
             or not kernel.AssignProcessToJobObject(handle,wintypes.HANDLE(int(process._handle)))):
         error=ctypes.WinError(ctypes.get_last_error()); kernel.CloseHandle(handle); raise error
-    def close(): kernel.CloseHandle(handle)
     kernel.QueryInformationJobObject.argtypes=[wintypes.HANDLE,ctypes.c_int,ctypes.c_void_p,wintypes.DWORD,ctypes.c_void_p]
+    kernel.TerminateJobObject.argtypes=[wintypes.HANDLE,wintypes.UINT]
+    class Accounting(ctypes.Structure):
+        _fields_=[(name,ctypes.c_longlong) for name in ('User','Kernel','PeriodUser','PeriodKernel')]+[
+            (name,wintypes.DWORD) for name in ('PageFaults','TotalProcesses','ActiveProcesses','TerminatedProcesses')]
+    def close():
+        # Killing the Windows venv redirector alone leaves its interpreter
+        # alive until job close. KILL_ON_JOB_CLOSE is asynchronous: wait for
+        # the owned descendants to release response files before temp cleanup.
+        try:
+            if not kernel.TerminateJobObject(handle,1):raise ctypes.WinError(ctypes.get_last_error())
+            deadline=time.monotonic()+5
+            while True:
+                info=Accounting()
+                if not kernel.QueryInformationJobObject(handle,1,ctypes.byref(info),ctypes.sizeof(info),None):
+                    raise ctypes.WinError(ctypes.get_last_error())
+                if not info.ActiveProcesses:break
+                if time.monotonic()>=deadline:
+                    raise IngestionError('WORKER_RESOURCE_ERROR','Timed out terminating the owned worker job.')
+                time.sleep(.01)
+        finally:kernel.CloseHandle(handle)
     def peak_memory():
         observed=Extended()
         if not kernel.QueryInformationJobObject(handle,9,ctypes.byref(observed),ctypes.sizeof(observed),None):

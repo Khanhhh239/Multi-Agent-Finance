@@ -1,0 +1,84 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "operation": {
+      "enum": [
+        "ADD",
+        "DELETE"
+      ],
+      "title": "Operation",
+      "type": "string"
+    },
+    "item_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Item Id",
+      "type": "string"
+    },
+    "page_index": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Page Index"
+    },
+    "bbox": {
+      "anyOf": [
+        {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Bbox"
+    },
+    "values": {
+      "additionalProperties": {
+        "maxLength": 10000,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Values",
+      "type": "object"
+    }
+  },
+  "required": [
+    "operation",
+    "item_id"
+  ],
+  "title": "ItemOperation",
+  "type": "object"
+}

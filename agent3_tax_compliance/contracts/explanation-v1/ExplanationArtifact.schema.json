@@ -173,6 +173,51 @@
       "title": "Claim",
       "type": "object"
     },
+    "GuideAction": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "target": {
+          "enum": [
+            "data",
+            "business",
+            "tax"
+          ],
+          "title": "Target",
+          "type": "string"
+        },
+        "field_paths": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Field Paths",
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "reason",
+        "steps",
+        "target"
+      ],
+      "title": "GuideAction",
+      "type": "object"
+    },
     "NaturalDraft": {
       "additionalProperties": false,
       "properties": {
@@ -256,6 +301,14 @@
         "warning": {
           "title": "Warning",
           "type": "string"
+        },
+        "actions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/GuideAction"
+          },
+          "title": "Actions",
+          "type": "array"
         }
       },
       "required": [

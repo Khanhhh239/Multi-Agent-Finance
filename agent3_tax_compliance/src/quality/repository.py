@@ -27,7 +27,14 @@ def verified_events(db,record):
         if not row: continue
         if digest(row['payload'].encode())!=row['sha256']: raise ValueError('review proof integrity failure')
         event=json.loads(row['payload'])
-        if all(any(c['field_path']==path and c['after']==field.model_dump(mode='json') for c in event['changes']) for path,field in fields):
+        def matches(path,field):
+            for c in event['changes']:
+                if c['field_path']==path and c['after']==field.model_dump(mode='json'):return True
+                if c['field_path']=='items' and path.startswith('items.'):
+                    _,iid,name=path.split('.')
+                    if any(i['item_id']==iid and i.get(name)==field.model_dump(mode='json') for i in c['after']['rows']):return True
+            return False
+        if all(matches(path,field) for path,field in fields):
             proofs.add(event_id)
     return tuple(sorted(proofs))
 

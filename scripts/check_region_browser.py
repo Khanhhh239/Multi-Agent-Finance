@@ -24,7 +24,7 @@ def main():
     server=uvicorn.Server(uvicorn.Config(create_app(f.fixture.settings),host='127.0.0.1',port=port,log_level='error'))
     thread=threading.Thread(target=server.run,daemon=True);checks=[];errors=[];posts=[]
     try:
-        with patch('src.recovery.api.RegionRecovery',return_value=case.service),sync_playwright() as pw:
+        with patch('src.recovery.api.RegionRecovery',return_value=case.service),patch('src.recovery.regions.WorkerClient',return_value=case.reader),sync_playwright() as pw:
             thread.start()
             for _ in range(100):
                 if server.started:break
@@ -75,8 +75,8 @@ def main():
             other=page.locator('.field').filter(has=page.get_by_label('MST người bán',exact=True))
             other.get_by_role('button',name='Xem nguồn',exact=True).click()
             held[0].continue_();page.unroute(pattern)
-            expect(page.locator('#reread-region')).to_be_hidden()
-            checks.append('Switching to another field hides the feature and fences a late response')
+            expect(page.locator('#region-output')).to_be_empty()
+            checks.append('Switching to another field clears output and fences a late response')
             # XSS strings are displayed literally. No HTML is created from OCR.
             case.reader.text='<img src=x onerror=alert(1)>'
             source.get_by_role('button',name='Xem nguồn',exact=True).click()
@@ -86,6 +86,59 @@ def main():
                 expect(page.locator('#region-output')).to_contain_text('<img src=x',timeout=20000)
             assert page.locator('#region-output img').count()==0
             checks.append('Untrusted recognition text remains text and cannot create HTML')
+            case.reader.text='Comparison observation'
+            page.locator('#compare-region').click()
+            expect(page.locator('#region-output')).to_contain_text('Bộ đọc đối chứng',timeout=20000)
+            assert all(r.model_id=='vietocr_region_wide' for r in case.reader.requests)
+            assert f.repo.base.record(f.ctx,f.payer,f.record.record_id).revision==2
+            checks.append('Comparison reader is explicitly selected, separately cached and does not replace saved data')
+            page.locator('#pdf-detail-region').click()
+            expect(page.locator('#region-output')).to_contain_text('Vùng PDF gốc 300 DPI',timeout=20000)
+            assert f.repo.base.record(f.ctx,f.payer,f.record.record_id).revision==2
+            checks.append('PDF detail uses the bounded original-source renderer and preserves the saved revision')
+            # Typed values arrive in canonical format, then use the same exact
+            # date/Decimal display function as the normal correction form.
+            for label,text,want in [('Ngày lập','Ngày lập: 30/06/2025','30/06/2025'),
+                                    ('Tổng thanh toán','Tổng thanh toán: 9007199254740993','9.007.199.254.740.993')]:
+                page.reload()
+                page.locator('#token').fill(f.fixture.token);page.locator('#payer').fill(f.payer)
+                page.get_by_role('button',name='Kết nối',exact=True).click()
+                page.locator('[data-record="'+f.record.record_id+'"]').click()
+                expect(page.locator('#page-image')).to_be_visible()
+                case.reader.text=lambda request,observed=text: (observed.split(': ',1)[0]+':'
+                    if Path(request.image_path).name=='line-0.png' else observed.split(': ',1)[1])
+                row=page.locator('.field').filter(has=page.get_by_label(label,exact=True))
+                row.get_by_role('button',name='Xem nguồn',exact=True).click()
+                page.locator('#reread-region').click()
+                expect(page.locator('#region-output').get_by_role('button',name='Đưa vào bản nháp',exact=True)).to_be_visible(timeout=20000)
+                old=f.repo.base.record(f.ctx,f.payer,f.record.record_id)
+                page.locator('#region-output').get_by_role('button',name='Đưa vào bản nháp',exact=True).click()
+                expect(row.locator('input:not([type=checkbox])')).to_have_value(want)
+                assert f.repo.base.record(f.ctx,f.payer,f.record.record_id)==old
+                checks.append('Typed '+label+' reread creates a correctly formatted draft without changing saved data')
+            # Numeric table cells use canonical Decimal strings, including zero
+            # rates; only the reviewed save may modify the stored record.
+            for name,raw,want in [('net','9007199254740993','9.007.199.254.740.993'),('vat_rate','0%','0')]:
+                page.reload()
+                page.locator('#token').fill(f.fixture.token);page.locator('#payer').fill(f.payer)
+                page.get_by_role('button',name='Kết nối',exact=True).click()
+                page.locator('[data-record="'+f.record.record_id+'"]').click()
+                expect(page.locator('#page-image')).to_be_visible()
+                page.get_by_role('button',name='Chi tiết dòng 1',exact=True).click()
+                prefix='items.'+f.record.items[0].item_id+'.'+name
+                from src.recovery.regions import plan_regions
+                current_record=f.repo.base.record(f.ctx,f.payer,f.record.record_id)
+                _,regions=plan_regions(current_record,case.artifact,case.normalized,prefix)
+                label='Thành tiền:' if name=='net' else 'Thuế suất:'
+                case.reader.text=lambda request,count=len(regions),value=raw,title=label: title if count>1 and Path(request.image_path).name=='line-0.png' else value
+                cell=page.locator('.items-table .field').nth(3 if name=='net' else 5)
+                cell.get_by_role('button',name='Xem nguồn',exact=True).click()
+                page.locator('#reread-region').click()
+                expect(page.locator('#region-output').get_by_role('button',name='Đưa vào bản nháp',exact=True)).to_be_visible(timeout=20000)
+                page.locator('#region-output').get_by_role('button',name='Đưa vào bản nháp',exact=True).click()
+                expect(cell.locator('input:not([type=checkbox])')).to_have_value(want)
+                assert f.repo.base.record(f.ctx,f.payer,f.record.record_id)==current_record
+                checks.append('Numeric table '+name+' reread produces a formatted draft without modifying CFR')
             for width in (390,1440):
                 page.set_viewport_size({'width':width,'height':1000})
                 page.screenshot(path=str(out/f'width-{width}.png'),full_page=True)

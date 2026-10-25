@@ -1,5 +1,13 @@
 # Agent 3 — Tax Compliance Assistant
 
+**OCR quality — 25/10:** thêm bộ tiếp nhận/khóa dataset và benchmark pipeline thật, so sánh baseline/candidate; đọc lại ô số lượng, đơn giá, thành tiền và thuế trên UI. Giữ review thủ công; chưa thay model mặc định hoặc nghiệm thu accuracy trên dữ liệu độc lập. [Hướng dẫn và phần còn chờ dữ liệu](docs/agent3/plans/OCR_QUALITY_IMPLEMENTATION.md).
+
+**Nhập liệu và diễn giải — 21/10:** có thể bổ sung dòng bị OCR bỏ sót bằng cách kéo vùng nguồn, xóa dòng nhận nhầm có lý do và xem lại lịch sử. Đọc lại thêm crop rộng/phóng to trong ngân sách; gán bên bán/bên mua theo vùng hai cột; hướng dẫn mở đúng phần cần xử lý và số liệu thời gian trên UI. Khởi động lại `OPEN_AGENT3.cmd`, Ctrl+F5. Chưa bật auto-accept hoặc nghiệm thu accuracy. [Hướng dẫn và kiểm thử 5 hạng mục](docs/agent3/plans/evidence/capture_upgrade_20261021/REPORT.md).
+
+**OCR coverage — 19/10:** thêm đọc đối chứng theo vùng, fallback tự động trong ngân sách, bảng lặp/tiếp nối và sửa lỗi cleanup khi worker Windows timeout. Profile DPI/deskew/tiling thử nghiệm mở bằng `OPEN_AGENT3_OCR_LAB.cmd` trên DB riêng; cấu hình toàn trang mặc định chưa đổi vì chưa vượt gate chất lượng/thời gian. [Báo cáo và kiểm thử](docs/agent3/plans/evidence/ocr_coverage_v1/REPORT.md).
+
+**Độ phủ trường OCR — round 3, 19/10:** đọc lại thêm MST, số/ký hiệu, ngày, tiền tệ và tổng tiền từ vùng lỗi có căn cứ, kể cả khi parser cũ không tạo được candidate. Giữ parser nghiêm ngặt và bản nháp cần đối chiếu; chưa tự xác nhận. Model thật cứu được cả 4 trường từng trống trong nhóm lỗi dev được chọn, tên vẫn còn lỗi. [Phạm vi, số liệu và kiểm thử](docs/agent3/plans/evidence/field_coverage_round3/REPORT.md).
+
 **Tự phục hồi OCR + diễn giải rõ hơn — 19/10:** bật **Tự kiểm tra và diễn giải** để hệ thống chẩn đoán, đọc lại vùng lỗi có giới hạn và chuẩn bị gợi ý. Bấm **Đưa các gợi ý được chọn vào bản nháp**, đối chiếu rồi lưu; dữ liệu đã xác nhận được bảo vệ. Diễn giải hiển thị đã đọc/thiếu/việc cần làm; thiếu căn cứ thì Qwen chỉ nói về chất lượng dữ liệu. [Báo cáo hiện tại, kiểm thử và cách chạy lại](docs/agent3/plans/evidence/automation_20261019_v2/REPORT.md).
 
 **Đọc lại vùng chữ — 19/10:** ở **Xem nguồn**, có thể đọc lại tên/địa chỉ/mô tả hàng bằng VietOCR beam search; với dòng hàng mở **Chi tiết** trước. Kết quả là ứng viên, chỉ vào bản nháp khi người dùng chọn và cần lưu sau đối chiếu. Giữ nguyên OCR/hồ sơ cũ, có cache và giới hạn tài nguyên. [Cách dùng, kiểm thử thật và phạm vi còn thiếu](docs/agent3/plans/evidence/region_recovery_20261019_v1/REPORT.md). Vẫn thuộc nhánh OCR trong PLAN_06.

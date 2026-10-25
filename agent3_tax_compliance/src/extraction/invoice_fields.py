@@ -25,6 +25,9 @@ TRANSLATIONS = re.compile(r'\s*\(\s*(?:Seller|Buyer|Tax\s*code|Address|Serial(?:
 
 
 def clean_label(text):
+    # Known OCR variants of the English address gloss only. Never fuzzy-edit
+    # the actual address or accept an arbitrary parenthetical label.
+    text=re.sub(r'\(\s*(?:Addres|Addrass)\s*\)', ' ', text, flags=re.I)
     return TRANSLATIONS.sub(' ',text).strip()
 
 
@@ -90,8 +93,8 @@ def labelled(text, aliases):
         if label=='so': continue  # Never match "Số lượng", account numbers, etc.
         # OCR may merge label + value without a colon. Compare complete label
         # prefixes at whitespace boundaries, retaining offsets in the raw text.
-        for boundary in re.finditer(r'\s+',text[:128]):
-            if key(text[:boundary.start()])==label:
+        for boundary in reversed(list(re.finditer(r'\s+',text[:128]))):
+            if key(clean_label(text[:boundary.start()]))==label:
                 return path,text[boundary.end():].strip()
     return None,None
 
@@ -107,6 +110,27 @@ def right_values(refs,fragments):
         if ox0>=x1-.003 and min(y1,oy1)-max(y0,oy0)>.5*min(y1-y0,oy1-oy0):
             result.append((ox0,raw.lstrip(':：').strip(),blocks))
     return sorted(result,key=lambda row:row[0])
+
+
+def party_role(box,anchors,party_end):
+    """Assign a block to an explicit party region; ambiguous geometry abstains.
+
+    Side-by-side panels use their column starts. Stacked sections use the last
+    preceding anchor. Reading order never decides between two party columns.
+    """
+    if not box or box[1]>=party_end:return None
+    eligible=[(r,b) for r,b in anchors if b[1]<=box[1]+.003]
+    if not eligible:return None
+    opposing=[(a,b) for a in eligible for b in eligible if a[0]!=b[0] and abs(a[1][0]-b[1][0])>.28 and abs(a[1][1]-b[1][1])<.08]
+    if opposing:
+        left,right=sorted(opposing[0],key=lambda a:a[1][0])
+        boundary=(left[1][0]+right[1][0])/2
+        # A block spanning both columns cannot establish a unique party role.
+        if box[0]<boundary<box[2] and box[2]-box[0]>.5:return None
+        return right[0] if box[0]>=boundary else left[0]
+    eligible.sort(key=lambda a:(-a[1][1],abs(a[1][0]-box[0])))
+    if len(eligible)>1 and eligible[0][0]!=eligible[1][0] and abs(eligible[0][1][1]-eligible[1][1][1])<.003:return None
+    return eligible[0][0]
 
 def values_on_page(page, aliases=ALIASES, sections=False):
     fragments=logical_fragments(page)
@@ -147,7 +171,9 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                     if (box and nbox and 0<=box[1]-nbox[3]<.05 and abs(nbox[0]-box[0])<.03
                             and re.match(r'^(cong ty|chi nhanh|tap doan|ban quan ly)\b',key(name))
                             and ':' not in name):
-                        issuer[i]=(j,name,name_refs);break
+                        issuer[i]=(j,name,name_refs)
+                        if not any(r=='seller' for r,_ in role_anchors):role_anchors.append(('seller',nbox))
+                        break
     context=None
     for index,(raw,blocks) in enumerate(fragments):
         text=key(clean_label(raw))
@@ -161,13 +187,12 @@ def values_on_page(page, aliases=ALIASES, sections=False):
         label_raw=re.sub(r'^\d+(?:[.,]\d+)?\s*%\s+(?=Tiền thuế)', '',raw,flags=re.I)
         path,inline=labelled(label_raw,aliases)
         if sections and path in ('seller.name','buyer.name'): context=path.split('.')[0]
-        if path is None and sections and context and (not bounds(blocks) or bounds(blocks)[1]<party_end):
-            box=bounds(blocks);role=context
-            eligible=[(r,b) for r,b in role_anchors if box and b[1]<=box[1]+.003 and b[0]<=box[0]+.03]
-            if eligible:role=min(eligible,key=lambda entry:box[1]-entry[1][1]+.3*abs(box[0]-entry[1][0]))[0]
-            path,inline=labelled(raw,{
-                role+'.tax_id':('mst','ma so thue','tax id'),
-                role+'.name':('ten don vi','name'),role+'.address':('dia chi','address')})
+        if path is None and sections and (context or role_anchors) and (not bounds(blocks) or bounds(blocks)[1]<party_end):
+            box=bounds(blocks);role=party_role(box,role_anchors,party_end) if role_anchors and box else context
+            if role:
+                path,inline=labelled(raw,{
+                    role+'.tax_id':('mst','ma so thue','tax id'),
+                    role+'.name':('ten don vi','name'),role+'.address':('dia chi','address')})
         if path is None:
             if sections:
                 # OCR can append a single closing parenthesis after a complete
@@ -175,6 +200,10 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                 # extra digits; date_values still validates the calendar date.
                 match=re.fullmatch(r'ngay\s+(\d{1,2})\s+thang\s+(\d{1,2})\s+nam\s+(\d{4})\s*\)?',text)
                 if match: yield 'invoice.issue_date','/'.join(match.groups()),blocks
+                elif re.match(r'^ngay\s+\d{1,2}\s+thang\s+\d{1,2}\s+nam\s+\d{4}\b',text):
+                    # Keep the invalid observation for targeted recovery. The
+                    # strict parser rejects trailing words/digits as before.
+                    yield 'invoice.issue_date',raw,blocks
             continue
         if inline:
             yield path,inline,blocks
@@ -188,6 +217,9 @@ def values_on_page(page, aliases=ALIASES, sections=False):
             if other_blocks==blocks: continue
             other_box=bounds(other_blocks)
             if not other_box: continue
+            if sections and path.startswith(('seller.','buyer.')) and role_anchors:
+                assigned=party_role(other_box,role_anchors,party_end)
+                if assigned!=path.split('.')[0]:continue
             ox0,oy0,ox1,oy1=other_box
             overlap=min(y1,oy1)-max(y0,oy0)
             if ox0>=x1-0.003 and overlap>0.5*min(y1-y0,oy1-oy0):
@@ -209,13 +241,15 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                 if (x1<=ox0<=x1+.25 and abs((oy0+oy1-y0-y1)/2)<=height
                         and money_values(value,'AUTO')):
                     yield path,value.strip(),blocks+value_blocks
-        elif path in ('seller.name','buyer.name','invoice.series','invoice.number','invoice.issue_date'):
+        elif path in ('seller.name','buyer.name','seller.tax_id','buyer.tax_id',
+                      'seller.address','buyer.address','invoice.series','invoice.number','invoice.issue_date'):
             # A name may be below its explicit label. Never cross a page,
             # column, another field label or a distant vertical gap.
             below=[]
             for value,value_blocks in fragments:
                 other=bounds(value_blocks)
                 if not other: continue
+                if sections and path.startswith(('seller.','buyer.')) and role_anchors and party_role(other,role_anchors,party_end)!=path.split('.')[0]:continue
                 ox0,oy0,ox1,oy1=other
                 if abs(ox0-x0)<.015 and 0<=oy0-y1<=1.5*(y1-y0):
                     below.append((oy0,value,value_blocks))

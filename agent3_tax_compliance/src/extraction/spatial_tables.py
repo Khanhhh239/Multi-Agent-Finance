@@ -26,10 +26,10 @@ def header_name(raw):
     return None
 
 
-def discover_spatial(page):
+def spatial_headers(page):
     fragments=logical_fragments(page)
     descriptions=[(raw,refs) for raw,refs in fragments if header_name(raw)=='description' and bounds(refs)]
-    if not descriptions:return []
+    if not descriptions:return {}
     first=descriptions[0];first_box=bounds(first[1]);y=(first_box[1]+first_box[3])/2
     headers={}
     for raw,refs in fragments:
@@ -37,12 +37,19 @@ def discover_spatial(page):
         if box and name and abs((box[1]+box[3])/2-y)<.04:
             # Prefer Vietnamese first occurrence over the translated subheader.
             headers.setdefault(name,(raw,refs))
-    if not all(name in headers for name in ('description','net')):return []
-    if not any(name in headers for name in ('quantity','unit_price','vat')):return []
+    if not all(name in headers for name in ('description','net')):return {}
+    if not any(name in headers for name in ('quantity','unit_price','vat')):return {}
+    return headers
+
+
+def _discover_once(page,inherited_headers=None):
+    fragments=logical_fragments(page)
+    current=spatial_headers(page);headers=current or inherited_headers
+    if not headers:return []
     columns=sorted(headers,key=lambda name:bounds(headers[name][1])[0])
     centers={name:(bounds(headers[name][1])[0]+bounds(headers[name][1])[2])/2 for name in columns}
     cuts=[(centers[a]+centers[b])/2 for a,b in zip(columns,columns[1:])]
-    top=max(bounds(refs)[3] for _,refs in headers.values())
+    top=max(bounds(refs)[3] for _,refs in headers.values()) if current else 0.
     body=[]
     for raw,refs in fragments:
         box=bounds(refs)
@@ -117,3 +124,23 @@ def discover_spatial(page):
             obs=[(name,raw,bs) for name,raw,bs in obs if name!='description']+[('description',description,refs)]
         result.append((anchor,obs))
     return result
+
+
+def discover_spatial(page,inherited_headers=None):
+    """Partition repeated headers; never merge two table bodies by proximity."""
+    anchors=[]
+    for raw,refs in logical_fragments(page):
+        box=bounds(refs)
+        if box and header_name(raw)=='description':
+            if not anchors or box[1]-anchors[-1]>.06:anchors.append(box[1])
+    if len(anchors)<2:return _discover_once(page,inherited_headers)
+    boundaries=[0.]
+    for y in anchors[1:]:
+        starts=[bounds(refs)[1] for raw,refs in logical_fragments(page)
+                if bounds(refs) and header_name(raw) and abs(bounds(refs)[1]-y)<.04]
+        boundaries.append(min(starts) if starts else y)
+    boundaries.append(1.01);rows=[]
+    for low,high in zip(boundaries,boundaries[1:]):
+        selected=tuple(b for b in page.blocks if b.evidence and low<=b.evidence.bbox[1]<high)
+        rows.extend(_discover_once(page.model_copy(update={'blocks':selected})))
+    return rows

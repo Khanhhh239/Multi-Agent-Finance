@@ -22,7 +22,7 @@ class Reader:
             **{k:getattr(r,k) for k in ('request_id','source_id','document_id','page_id','page_index','image_hash','model_config_version','runtime_sha256')},
             engine_versions={'test':'1'},result=BenchmarkResult(schema_version='1.1',run_id=r.request_id,model_id=r.model_id,
                 output_mode='full_page_text',image_id=Path(r.image_path).name,image_width=r.image_width,image_height=r.image_height,
-                load_time_ms=0,inference_time_ms=1,document_text_raw=self.text)) for r in requests]
+                load_time_ms=0,inference_time_ms=1,document_text_raw=self.text(r) if callable(self.text) else self.text)) for r in requests]
 
 
 class RegionTests(unittest.TestCase):
@@ -53,11 +53,41 @@ class RegionTests(unittest.TestCase):
         self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id),before)
         self.assertEqual(self.f.repo.extraction.get(self.f.ctx,self.f.payer,self.artifact.artifact_id),self.artifact)
 
+    def test_expanded_crop_has_distinct_cache_scale_and_original_evidence(self):
+        primary=self.read();expanded=self.read(self.command.model_copy(update={'reader':'expanded'}))
+        self.assertEqual(expanded['reader'],'expanded');self.assertNotEqual(primary['recovery_id'],expanded['recovery_id'])
+        self.assertEqual(primary['observations'][0]['evidence'],expanded['observations'][0]['evidence'])
+        self.assertEqual(expanded['observations'][0]['resize_scale'],2)
+        self.assertTrue(all(r.image_width>0 and r.image_height>0 for r in self.reader.requests))
+        self.assertTrue(self.read(self.command.model_copy(update={'reader':'expanded'}))['cache_hit'])
+        self.assertEqual(self.reader.calls,2)
+
+    def test_pdf_detail_uses_bounded_original_source_and_keeps_evidence(self):
+        before=self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id)
+        primary=self.read()
+        command=self.command.model_copy(update={'reader':'pdf_detail'})
+        result=self.read(command)
+        self.assertEqual(result['reader'],'pdf_detail');self.assertEqual(result['status'],'CANDIDATE')
+        self.assertNotEqual(primary['recovery_id'],result['recovery_id'])
+        self.assertEqual(primary['observations'][0]['evidence'],result['observations'][0]['evidence'])
+        for observation in result['observations']:
+            self.assertIsNone(observation['resize_scale']);self.assertEqual(observation['pdf_render']['render_dpi'],300)
+        self.assertTrue(self.read(command)['cache_hit']);self.assertEqual(self.reader.calls,2)
+        self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id),before)
+
+    def test_pdf_render_timeout_never_calls_recognizer_or_changes_record(self):
+        from src.ingestion.models import IngestionError
+        command=self.command.model_copy(update={'reader':'pdf_detail'})
+        with patch('src.ingestion.sandbox.run_bounded',side_effect=IngestionError('WORKER_TIMEOUT','Synthetic timeout',retryable=True)):
+            with self.assertRaises(ReviewError) as err:self.read(command)
+        self.assertEqual(err.exception.code,'WORKER_TIMEOUT');self.assertEqual(self.reader.calls,0)
+        self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id).revision,1)
+
     def test_scope_readonly_stale_and_unsupported_do_not_call_model(self):
         for context in (self.f.ctx.model_copy(update={'tenant_id':'other'}),self.f.ctx.model_copy(update={'permissions':frozenset({'READ'})})):
             with self.assertRaises((KeyError,PermissionError)):self.read(ctx=context)
         for command,code in ((self.command.model_copy(update={'expected_record_revision':2}),'REVISION_CONFLICT'),
-                             (self.command.model_copy(update={'field_path':'totals.gross'}),'REGION_UNSUPPORTED'),
+                             (self.command.model_copy(update={'field_path':'derived.counterparty'}),'REGION_UNSUPPORTED'),
                              (self.command.model_copy(update={'field_path':'items.nonexistent.description'}),'INVALID_FIELD')):
             with self.assertRaises(ReviewError) as err:self.read(command)
             self.assertEqual(err.exception.code,code)
@@ -66,6 +96,53 @@ class RegionTests(unittest.TestCase):
     def test_blank_and_partial_recognition_abstain(self):
         self.reader.text=' '
         result=self.read();self.assertEqual(result['status'],'NEEDS_REVIEW');self.assertIsNone(result['suggested_value'])
+
+    def test_typed_rereads_parse_canonical_values_and_never_mutate_cfr(self):
+        original=self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id)
+        for path,label,value,want in [('invoice.issue_date','Ngày lập:','30/06/2025','2025-06-30'),
+            ('totals.gross','Tổng thanh toán:','9007199254740993','9007199254740993'),
+            ('parties.seller.tax_id','MST người bán:','0312662961-002','0312662961002')]:
+            self.reader.text=lambda request,lab=label,val=value: lab if Path(request.image_path).name=='line-0.png' else val
+            result=self.read(RegionCommand(expected_record_revision=1,field_path=path))
+            self.assertEqual(result['status'],'CANDIDATE');self.assertEqual(result['parse_status'],'VALID')
+            self.assertEqual(result['suggested_value'],want);self.assertEqual(result['value_format'],'CANONICAL')
+            self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id),original)
+
+    def test_bad_typed_reread_keeps_observation_but_offers_no_value(self):
+        self.reader.text=lambda request: 'Ngày lập:' if Path(request.image_path).name=='line-0.png' else '31/02/2025'
+        result=self.read(RegionCommand(expected_record_revision=1,field_path='invoice.issue_date'))
+        self.assertEqual(result['status'],'NEEDS_REVIEW');self.assertEqual(result['parse_status'],'REJECTED')
+        self.assertIsNone(result['suggested_value']);self.assertIn('31/02/2025',[o['text'] for o in result['observations']])
+
+    def test_item_cell_reread_is_typed_cached_and_only_applied_by_review(self):
+        before=self.f.repo.base.record(self.f.ctx,self.f.payer,self.f.record.record_id)
+        prefix='items.'+before.items[0].item_id
+        from src.review.contracts import Change
+        for name,raw,want in [('net','9007199254740993','9007199254740993'),('vat_rate','0%','0')]:
+            command=RegionCommand(expected_record_revision=1,field_path=prefix+'.'+name)
+            _,regions=plan_regions(before,self.artifact,self.normalized,command.field_path)
+            label='Thành tiền:' if name=='net' else 'Thuế suất:'
+            self.reader.text=lambda request,value=raw,count=len(regions),title=label: title if count>1 and Path(request.image_path).name=='line-0.png' else value
+            result=self.read(command)
+            self.assertEqual(result['status'],'CANDIDATE');self.assertEqual(result['parse_status'],'VALID')
+            self.assertEqual(result['suggested_value'],want)
+            self.assertEqual(self.read(command)['recovery_id'],result['recovery_id'])
+            self.assertEqual(self.f.repo.base.record(self.f.ctx,self.f.payer,before.record_id),before)
+        command=self.f.command([Change(field_path=prefix+'.net',new_value='9007199254740993')])
+        self.f.correct(command,'numeric-reviewed-save')
+        after=self.f.repo.base.record(self.f.ctx,self.f.payer,before.record_id)
+        self.assertEqual(str(after.items[0].net.value),'9007199254740993')
+        self.assertEqual(after.items[0].net.confidence_basis,'HUMAN_CONFIRMED')
+
+    def test_comparison_is_separately_pinned_and_cannot_choose_arbitrary_model(self):
+        primary=self.read()
+        with patch('src.recovery.regions.WorkerClient',return_value=self.reader):
+            result=self.read(self.command.model_copy(update={'reader':'comparison'}))
+            again=self.read(self.command.model_copy(update={'reader':'comparison'}))
+        self.assertEqual(result['model_id'],'vietocr_region_wide');self.assertEqual(result['reader'],'comparison')
+        self.assertNotEqual(result['recovery_id'],primary['recovery_id']);self.assertTrue(again['cache_hit'])
+        self.assertTrue(all(r.model_id=='vietocr_region_wide' for r in self.reader.requests))
+        with self.assertRaises(ValidationError):RegionCommand(expected_record_revision=1,field_path=self.command.field_path,reader='arbitrary')
 
     def test_cache_commit_race_returns_persisted_winner_not_unstored_id(self):
         winner=self.read();self.reader.text='Losing concurrent observation'

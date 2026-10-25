@@ -1,17 +1,61 @@
 {
-  "profile_version":"ppocrv6-vietocr-runtime-v1",
-  "model_id":"ppocrv6_vietocr",
-  "adapter":"ppocrv6_vietocr",
-  "interpreter":"envs/ppocrv6_vietocr/Scripts/python.exe",
-  "distributions":["paddleocr","paddlepaddle","torch","torchvision","vietocr","Pillow","numpy"],
-  "source_files":["src/adapters/vietocr_adapter.py","src/adapters/paddle_common.py"],
-  "assets":["artifacts/models/ppocrv6_medium/detection/inference.pdiparams","artifacts/models/ppocrv6_medium/detection/inference.json","artifacts/models/ppocrv6_medium/detection/inference.yml","artifacts/models/vietocr/transformerocr.pth","artifacts/models/vietocr/config/base.yml","artifacts/models/vietocr/config/vgg-transformer.yml"],
-  "environment":{"FLAGS_use_mkldnn":"0","PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK":"True","OMP_NUM_THREADS":"1","MKL_NUM_THREADS":"1","OPENBLAS_NUM_THREADS":"1","NUMEXPR_NUM_THREADS":"1","HF_HUB_OFFLINE":"1","TRANSFORMERS_OFFLINE":"1"},
-  "adapter_config":{
-    "device":"cpu",
-    "detector":{"text_detection_model_dir":"artifacts/models/ppocrv6_medium/detection","use_doc_orientation_classify":false,"enable_mkldnn":false,"hybrid_cpu_threads":1},
-    "recognizer":{"config_name":"vgg_transformer","base_config_path":"artifacts/models/vietocr/config/base.yml","architecture_config_path":"artifacts/models/vietocr/config/vgg-transformer.yml","weights":"artifacts/models/vietocr/transformerocr.pth","cpu_threads":1}
+  "profile_version": "ppocrv6-vietocr-runtime-v1",
+  "model_id": "ppocrv6_vietocr",
+  "adapter": "ppocrv6_vietocr",
+  "interpreter": "envs/ppocrv6_vietocr/Scripts/python.exe",
+  "distributions": [
+    "paddleocr",
+    "paddlepaddle",
+    "torch",
+    "torchvision",
+    "vietocr",
+    "Pillow",
+    "numpy"
+  ],
+  "source_files": [
+    "src/adapters/vietocr_adapter.py",
+    "src/adapters/paddle_common.py",
+    "src/adapters/coverage_geometry.py"
+  ],
+  "assets": [
+    "artifacts/models/ppocrv6_medium/detection/inference.pdiparams",
+    "artifacts/models/ppocrv6_medium/detection/inference.json",
+    "artifacts/models/ppocrv6_medium/detection/inference.yml",
+    "artifacts/models/vietocr/transformerocr.pth",
+    "artifacts/models/vietocr/config/base.yml",
+    "artifacts/models/vietocr/config/vgg-transformer.yml"
+  ],
+  "environment": {
+    "FLAGS_use_mkldnn": "0",
+    "PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK": "True",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
   },
-  "path_parameters":["detector.text_detection_model_dir","recognizer.base_config_path","recognizer.architecture_config_path","recognizer.weights"],
-  "max_processes":2
+  "adapter_config": {
+    "device": "cpu",
+    "detector": {
+      "text_detection_model_dir": "artifacts/models/ppocrv6_medium/detection",
+      "use_doc_orientation_classify": false,
+      "enable_mkldnn": false,
+      "hybrid_cpu_threads": 1
+    },
+    "recognizer": {
+      "config_name": "vgg_transformer",
+      "base_config_path": "artifacts/models/vietocr/config/base.yml",
+      "architecture_config_path": "artifacts/models/vietocr/config/vgg-transformer.yml",
+      "weights": "artifacts/models/vietocr/transformerocr.pth",
+      "cpu_threads": 1
+    }
+  },
+  "path_parameters": [
+    "detector.text_detection_model_dir",
+    "recognizer.base_config_path",
+    "recognizer.architecture_config_path",
+    "recognizer.weights"
+  ],
+  "max_processes": 2
 }

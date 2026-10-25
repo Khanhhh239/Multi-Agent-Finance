@@ -62,10 +62,15 @@ class AutomationReview:
         ctx.require(ctx.tenant_id,payer,'WRITE')
         record,plan,key,_=self.inspect(ctx,payer,rid)
         if record.revision!=command.expected_record_revision:raise ReviewError('REVISION_CONFLICT','Hóa đơn đã đổi; tải lại trước khi tự phục hồi.',409,record.revision)
-        runtime='NOT_USED';inventory_error=None
+        runtime='NOT_USED';inventory_error=None;comparison_ready=False
+        spare=plan['max_crops']-plan['scheduled_crops']
         if plan['scheduled_fields']:
             try:runtime=self.region.client.inventory()['runtime_sha256']
             except Exception:runtime='UNAVAILABLE';inventory_error='MODEL_UNAVAILABLE'
+            if not inventory_error and spare and hasattr(self.region,'comparison_runtime'):
+                try:
+                    runtime=sha([runtime,self.region.comparison_runtime()]);comparison_ready=True
+                except Exception:pass  # Comparison failure must not block primary reads.
         binding=sha([key,runtime]);scope=(ctx.tenant_id,payer,binding)
         with closing(self.db()) as db,db:
             db.execute('BEGIN IMMEDIATE')
@@ -88,6 +93,27 @@ class AutomationReview:
                     if inventory_error:raise ReviewError(inventory_error,'Bộ đọc chưa sẵn sàng.',503)
                     result=self.region.read(ctx,payer,rid,RegionCommand(expected_record_revision=record.revision,field_path=entry['field_path']))
                     item.update(state='PROCESSED',recovery=result,selection=select_candidate(fields[entry['field_path']],entry,result))
+                    if (result.get('status')=='NEEDS_REVIEW' and entry['crop_count']<=spare):
+                        spare-=entry['crop_count']
+                        try:
+                            expanded=self.region.read(ctx,payer,rid,RegionCommand(expected_record_revision=record.revision,
+                                field_path=entry['field_path'],reader='expanded'))
+                            item['expanded']=expanded
+                            if expanded.get('status')=='CANDIDATE':
+                                item.update(primary_recovery=result,recovery=expanded,
+                                    selection=select_candidate(fields[entry['field_path']],entry,expanded))
+                                result=expanded
+                        except Exception:item['expanded_error']='EXPANDED_UNAVAILABLE'
+                    if (comparison_ready and result.get('status')=='NEEDS_REVIEW' and entry['crop_count']<=spare):
+                        spare-=entry['crop_count'];comparison_ready=False
+                        try:
+                            other=self.region.read(ctx,payer,rid,RegionCommand(expected_record_revision=record.revision,
+                                field_path=entry['field_path'],reader='comparison'))
+                            item['comparison']=other
+                            if other.get('status')=='CANDIDATE':
+                                item.update(primary_recovery=result,recovery=other,
+                                    selection=select_candidate(fields[entry['field_path']],entry,other))
+                        except Exception:item['comparison_error']='COMPARISON_UNAVAILABLE'
                 except ReviewError as exc:
                     item.update(state='ERROR',reason=exc.code);errors.append({'field_path':entry['field_path'],'code':exc.code})
                 except Exception:

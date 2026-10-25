@@ -5,7 +5,7 @@ from ..quality.completeness import flatten
 from .regions import supported,plan_regions
 from ..review.contracts import ReviewError
 
-VERSION='recovery-policy-v1'
+VERSION='recovery-policy-v3'
 MAX_FIELDS=2
 MAX_CROPS=4
 
@@ -42,7 +42,14 @@ def diagnose(record,artifact,normalized):
                 entry.update(state='ELIGIBLE',reason=None,crop_count=len(regions));eligible.append(entry)
             except ReviewError as exc:entry['reason']=exc.code
         entries.append(entry)
-    eligible.sort(key=lambda e:(0 if 'REPEATED_SUFFIX' in e['issue_codes'] else 1,e['field_path']))
+    # Adding table readers must not let alphabetic items.* consume both slots
+    # before missing invoice identifiers or totals can be reread.
+    def priority(entry):
+        path=entry['field_path']
+        critical=path.endswith('.tax_id') or path=='invoice.number' or path.startswith('totals.')
+        return (0 if critical else 1,0 if 'SOURCE_CONFLICT' in entry['issue_codes'] else 1,
+                0 if 'REPEATED_SUFFIX' in entry['issue_codes'] else 1,path)
+    eligible.sort(key=priority)
     used=0;selected=0
     for entry in eligible:
         if selected>=MAX_FIELDS or used+entry['crop_count']>MAX_CROPS:

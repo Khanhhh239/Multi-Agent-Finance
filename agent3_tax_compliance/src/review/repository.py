@@ -206,7 +206,10 @@ class ReviewRepository:
             event=self.checked_event(row)
             if sha(data)!=event['before_sha256'] or data['revision']!=event['before_revision']: raise ValueError('event chain mismatch')
             for change in event['changes']:
-                if change['field_path']=='item_discovery_status':
+                if change['field_path']=='items':
+                    if {'rows':data['items']}!=change['before']:raise ValueError('before items mismatch')
+                    data['items']=change['after']['rows']
+                elif change['field_path']=='item_discovery_status':
                     if data['item_discovery_status']!=change['before']: raise ValueError('before mismatch')
                     data['item_discovery_status']=change['after']
                 else:

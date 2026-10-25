@@ -8,7 +8,7 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 
-from ...ingestion.sandbox import run_bounded
+from ...ingestion.sandbox import run_bounded,worker_workspace
 from ...ingestion.models import IngestionError
 from .protocol import OCRBridgeResponse, OCRError, correlate
 from .registry import EngineRegistry, confined, adapter_config
@@ -91,7 +91,7 @@ class WorkerClient:
             if req.runtime_sha256!=runtime['runtime_sha256'] or req.model_config_version!=config.version or req.model_id!=config.model_id:
                 raise OCRError('PROTOCOL_ERROR','Request runtime/config mismatch')
         self.verify_runtime()
-        with worker_slot(slot_timeout), tempfile.TemporaryDirectory(prefix='capture-ocr-') as directory:
+        with worker_slot(slot_timeout), worker_workspace(prefix='capture-ocr-') as directory:
             output=Path(directory)/'responses.jsonl'
             engine_config=adapter_config(self.profile,self.root,config)
             payload=dict(config=engine_config,distributions=list(self.profile.distributions),requests_jsonl='\n'.join(r.model_dump_json() for r in requests),

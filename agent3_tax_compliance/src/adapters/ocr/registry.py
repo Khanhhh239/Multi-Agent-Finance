@@ -1,5 +1,6 @@
 """Declarative runtime profiles; application/normalizer never import engine code."""
 import json
+import os
 from pathlib import Path
 from typing import Any
 from pydantic import Field
@@ -64,5 +65,8 @@ def adapter_config(profile,root,config):
 
 def load_default_config():
     pointer=json.loads((CONFIG_ROOT/'default.json').read_text(encoding='utf-8'))
-    path=confined(CONFIG_ROOT,pointer['config'])
+    selected=os.environ.get('AGENT3_OCR_PROFILE')
+    if selected and (not selected.replace('_','').replace('-','').isalnum() or len(selected)>96):
+        raise OCRError('BAD_INPUT','Invalid local OCR profile')
+    path=confined(CONFIG_ROOT,(selected+'.json') if selected else pointer['config'])
     return OCRConfig.model_validate_json(path.read_text(encoding='utf-8'))

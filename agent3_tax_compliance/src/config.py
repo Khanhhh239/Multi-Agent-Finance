@@ -54,6 +54,9 @@ class Settings(Contract):
         if not staging.is_absolute():
             staging=PROJECT/staging
         return cls(database_path=path,staging_directory=staging,
+                   render_dpi=int(os.environ.get('CAPTURE_RENDER_DPI',150)),
+                   max_render_pixels=int(os.environ.get('CAPTURE_MAX_RENDER_PIXELS',8_000_000)),
+                   max_document_pixels=int(os.environ.get('CAPTURE_MAX_DOCUMENT_PIXELS',40_000_000)),
                    max_upload_bytes=int(os.environ.get('CAPTURE_MAX_UPLOAD_BYTES',20*1024*1024)),
                    max_pages=int(os.environ.get('CAPTURE_MAX_PAGES',40)),
                    worker_timeout_seconds=float(os.environ.get('CAPTURE_WORKER_TIMEOUT_SECONDS',45)),

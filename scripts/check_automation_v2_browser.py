@@ -78,6 +78,10 @@ def main():
             page.locator('#run-region-recovery').click();expect(page.locator('#run-region-recovery')).to_be_disabled();assert held
             page.locator('[data-record="'+f.record_id+'"]').click();held[0].continue_();page.unroute(pattern)
             expect(page.locator('#apply-recovery-recommendations')).to_be_hidden()
+            # Hidden apply is set immediately by record-loading; it does not
+            # mean the asynchronous diagnostic GET has finished rendering.
+            page.wait_for_function('() => !state.loadingRecord && !recoveryQueue.busy')
+            expect(page.locator('#recovery-queue-status')).to_contain_text('0 gợi ý')
             checks.append('Reloading a record fences a late recovery response and cannot apply old suggestions')
             queue.exhausted=True
             if not page.locator('#run-region-recovery').is_visible():page.locator('#recovery-queue > summary').click()
