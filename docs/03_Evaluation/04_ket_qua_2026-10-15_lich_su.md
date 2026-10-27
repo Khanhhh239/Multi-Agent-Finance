@@ -2,7 +2,7 @@
 
 # 4. Kết quả đã đo (ngày 15/10/2026)
 
-Nguồn số: `outputs/**/*.csv` (bảng đầy đủ tự sinh bằng `scripts/make_report.py` → `docs/RESULTS_TABLES.md`). Mọi kết quả ghi tầng bằng chứng:
+Nguồn số: `outputs/**/*.csv` (bảng đầy đủ tự sinh bằng `scripts/make_report.py` → `docs/03_Evaluation/04_ket_qua_hien_co.md`). Mọi kết quả ghi tầng bằng chứng:
 **[Tổng hợp]** · **[Thật]** (dữ liệu thật tương tự, không phải SME VN).
 
 > Kết quả [Tổng hợp] đo hệ thống xử lý được tình huống đã chèn, **không** chứng minh hiệu quả trên DN thật.

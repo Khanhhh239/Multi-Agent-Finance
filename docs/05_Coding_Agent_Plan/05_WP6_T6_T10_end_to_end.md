@@ -1,5 +1,7 @@
 # WP-6 · T6 Monte Carlo + ACI + T10 + đầu-cuối (cổng chính G12, G13)
 
+> **Hồ sơ kế hoạch từ 15/10/2026.** Các trạng thái, lệnh và danh sách việc dưới đây phản ánh thời điểm lập; đọc [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md) trước khi dùng.
+
 **Hiện trạng**: `agent1/models/t6_cash.py` (simulate, collection_kernel, ACI) và `scripts/run_t6.py` đã viết, **chưa được chạy xác nhận** (script được đưa vào chuỗi `run_rest.sh`, kết quả có thể chưa tồn tại). Bạn là người đầu tiên chạy và sửa lỗi đầu-cuối. Cổng: cov80 số dư ∈ [75,85]%, thắng 4 đối chứng, lead time ≥4 tuần.
 
 ## WP-6.1 Làm cho `run_t6.py` chạy được và sạch — P0

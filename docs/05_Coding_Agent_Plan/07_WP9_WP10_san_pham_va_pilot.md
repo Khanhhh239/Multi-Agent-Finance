@@ -1,5 +1,7 @@
 # WP-9 Sản phẩm · WP-10 Chuẩn bị pilot (T13)
 
+> **Hồ sơ kế hoạch từ 15/10/2026.** Các trạng thái, lệnh và danh sách việc dưới đây phản ánh thời điểm lập; đọc [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md) trước khi dùng.
+
 Làm sau khi G1/G2/G5/G9/G11/G12 ổn định (xem 08). Mục tiêu: một sản phẩm tối thiểu dùng được với DN thật (chạy song song, không can thiệp).
 
 ---

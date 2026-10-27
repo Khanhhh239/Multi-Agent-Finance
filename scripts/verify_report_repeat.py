@@ -13,7 +13,7 @@ def fingerprints(paths):
 
 
 def main():
-    paths=[ROOT/p for p in ['docs/RESULTS_TABLES.md','docs/03_Evaluation/04_ket_qua_hien_co.md',
+    paths=[ROOT/p for p in ['docs/03_Evaluation/04_ket_qua_hien_co.md',
         'docs/03_Evaluation/GATES_CURRENT.md','docs/03_Evaluation/KET_QUA_CHUA_DAT.md',
         'docs/05_Coding_Agent_Plan/TIEN_DO_TRIEN_KHAI.md','outputs/implementation/work_packages.csv',
         'outputs/implementation/gates.csv','outputs/t1/DA_hypotheses.csv']]

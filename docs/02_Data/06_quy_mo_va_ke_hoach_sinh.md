@@ -1,5 +1,9 @@
 # 6. Quy mô dữ liệu và kế hoạch sinh dữ liệu lớn
 
+**Cập nhật 27/10/2026:** mục 6.1 dưới đây là mốc dữ liệu cũ. Bộ synthetic cuối
+đã sinh 160 doanh nghiệp train, 80 validation, 80 test và 1.424.342 hóa đơn;
+xem [báo cáo 23](23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md).
+
 ## 6.1 Quy mô hiện có
 
 | Thế giới | Công ty | Khách | Hoá đơn | Thanh toán | Giao dịch NH | Lời hứa | Chi | Giai đoạn |

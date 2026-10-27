@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "commit": "70c0ceb0653161f70535b4c8b9fb3cee63b7405f",
+  "source_code_sha256": "a0dbcbe6df9c7552da84c1a043e56e02d1c9542ae0daf8a793f4b4d45dcc49cd",
+  "source_data_sha256": {
+    "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+    "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+    "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+  },
+  "split_protocol": {
+    "origin": "2024-07-01",
+    "label_horizon_days": 120,
+    "train_stride_days": 28,
+    "eval_stride_days": 28
+  },
+  "worlds": [
+    {
+      "name": "v3_final_20261027_train_000",
+      "role": "train",
+      "manifest_sha256": "5f730b5e201b9d82d253218e3f0c2953e3927a102e7c6b0d7fdc6b6d8573cfba"
+    },
+    {
+      "name": "v3_final_20261027_train_001",
+      "role": "train",
+      "manifest_sha256": "62c45fe88353a2be2d89eeb71fea1d86d80bfea4a5a995956dd2cf6366964cce"
+    },
+    {
+      "name": "v3_final_20261027_train_002",
+      "role": "train",
+      "manifest_sha256": "d4d425a2d1f977bd95f44986d33ae3e1c2dd586d27ec10aabd215ba5acc5076b"
+    },
+    {
+      "name": "v3_final_20261027_train_003",
+      "role": "train",
+      "manifest_sha256": "c8d07bf59042f73385961f457ff73e6527b8eb41cce2b21af84347301591dcd7"
+    },
+    {
+      "name": "v3_final_20261027_validation_000",
+      "role": "validation",
+      "manifest_sha256": "60da2dfc4f6bdb87b84786f0459e12d1e8e9715d3662fe82161b975e1bb7c6e6"
+    },
+    {
+      "name": "v3_final_20261027_validation_001",
+      "role": "validation",
+      "manifest_sha256": "8b5fda649b3410d7f5356bab3345b2e6270c7af0ae13b7383a26346f4113d767"
+    },
+    {
+      "name": "v3_final_20261027_test_000",
+      "role": "test",
+      "manifest_sha256": "68f14dbdf47c544abd0df81cef3493e086328d4a41645453e5c1e6a73f4f24c8"
+    },
+    {
+      "name": "v3_final_20261027_test_001",
+      "role": "test",
+      "manifest_sha256": "0151905a7c5c44cad642260edcf26dbc39ca2a25c5bc1b5fd99117e2639afab2"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "source_code_sha256": "e3d8843fc8794cdd50b92f423078544f3e5db00a22a08c2cf26cde15c35baa05",
+  "same_firms_sha256": true,
+  "pre_2025_firm_years_equal": 144,
+  "pre_2025_issued_invoice_core_rows_equal_as_multiset": 75598,
+  "ratio_2025_2024": {
+    "v3_releasecheck_r2_control_94319": 0.3953188581364524,
+    "v3_releasecheck_r2_control_94319_neutral2025": 0.9081584411763705
+  },
+  "overdue_open_ar_2025": {
+    "v3_releasecheck_r2_control_94319": 0.5499456508876249,
+    "v3_releasecheck_r2_control_94319_neutral2025": 0.43650937359478986
+  },
+  "declining_firms_2025": {
+    "v3_releasecheck_r2_control_94319": 24,
+    "v3_releasecheck_r2_control_94319_neutral2025": 19
+  }
+}

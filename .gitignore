@@ -16,7 +16,26 @@ __pycache__/
 data/raw/
 data/interim/
 data/processed/
+data/T*/raw/
+data/T*/interim/
+data/T*/processed/
+# Local T1 research files not tracked on this branch
+research/references/data-checks/t1/t1_adjacent_source_research.json
+research/references/data-checks/t1/t1_erpnext_source_research.json
+research/references/data-checks/t1/t1_global_b2g_source_research.json
+research/references/data-checks/t1/t1_late_only_augmentation.json
+research/references/data-checks/t1/t1_public_b2g_v01.json
+research/references/data-checks/t1/t1_public_no_access_research.json
+research/references/data-checks/t1/t1_real_ar_source_research.json
+scripts/data_audit/build_t1_late_only_augmentation.py
+scripts/data_audit/build_t1_public_b2g_dataset.py
+scripts/data_audit/research_t1_adjacent_sources.py
+scripts/data_audit/research_t1_erpnext_sources.py
+scripts/data_audit/research_t1_global_b2g_sources.py
+scripts/data_audit/research_t1_public_no_access_sources.py
+tests/test_t1_public_b2g.py
 data/synthetic/*/*.parquet
+!data/synthetic/v3_final_20261027_*/*.parquet
 data/synthetic/*/.parts/
 data/synthetic/dr_comparison_v1/
 data/synthetic/*/einvoice_xml/
@@ -27,6 +46,7 @@ outputs/t9/sprint3/source_reconciler/
 outputs/t1/scaling_models/
 outputs/t6/policy_models/
 tmp/pdfs/
+docs/tmp/pdfs/
 outputs/t6/collection_policy_v1_credit_residual_legacy/T1_oracle_policy.txt
 *.log
 outputs/t9/supply_shock_2022/source_model/*.txt

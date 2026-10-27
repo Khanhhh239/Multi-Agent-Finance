@@ -1,6 +1,13 @@
-# 2. Dữ liệu thật đang dùng (đã crawl, có SHA-256)
+# 2. Dữ liệu thật đã dùng trong các thí nghiệm trước (có SHA-256)
 
-Tổng ~1,5 GB tại `data/raw/`. Bộ nạp: `agent1/data/real_loaders.py`; cache: `data/interim/*.parquet`.
+> **Hồ sơ thí nghiệm, không phải danh mục file hiện có.** Manifest ngày 14/10
+> ghi 8 nguồn và khoảng 1,5 GB dữ liệu đã tải; bản lưu ở
+> [MANIFEST_RAW_8_SOURCES_2026-10-14_ARCHIVE.json](MANIFEST_RAW_8_SOURCES_2026-10-14_ARCHIVE.json).
+> Trong workspace ngày 27/10, `data/raw/MANIFEST.json` và file thô chỉ còn
+> **WDI Việt Nam và OxCGRT**; 6 nguồn còn lại cần tải lại và kiểm hash trước khi
+> chạy lại thí nghiệm. Các thống kê bên dưới là kết quả lịch sử, không chứng minh
+> file thô hoặc cache hiện có. Bộ nạp: `agent1/data/real_loaders.py`.
+
 Thang tin cậy: A = chính thức/bình duyệt; B = uy tín nhưng có hạn chế phương pháp; C = cộng đồng, nguồn gốc không rõ.
 
 ## 2.1 Tổng quan
@@ -86,10 +93,10 @@ Thang tin cậy: A = chính thức/bình duyệt; B = uy tín nhưng có hạn c
 | T1 thời điểm trả | Customer Invoices, BPI 2019 | Train/test theo thời gian, mốc B0/B1 | Phương pháp hazard có thắng mốc trên dữ liệu thật? |
 | T2 nợ xấu | SBA 7(a) | Train FY≤2016, test FY2018–2022 | Xác suất hiếm có được hiệu chỉnh? PR-AUC? |
 | T4 doanh thu mới | Online Retail II | Rolling-origin 26 tuần cuối | LightGBM/Chronos/mốc: ai thắng trên dữ liệu thật? |
-| T6 khoảng dự báo | Berka | Dòng tiền ròng tuần → độ phủ khoảng | Khoảng có đạt độ phủ trên chuỗi tiền thật? (chưa chạy — kế hoạch 05) |
-| T7 điểm gãy | Berka, OxCGRT | Phân đoạn/CUSUM trên chuỗi thật | Phát hiện thay đổi chế độ thật? (chưa chạy) |
+| T6 khoảng dự báo | Berka | Dòng tiền ròng tuần → độ phủ khoảng | Kết quả đã lưu trong `outputs/berka/`; muốn chạy lại phải khôi phục nguồn thô. |
+| T7 điểm gãy | Berka, OxCGRT | Phân đoạn/CUSUM trên chuỗi thật | Kết quả lịch sử trong `outputs/`; không suy ra hiệu năng với SME Việt Nam. |
 | T12 độ trung thực | UK PPR, Customer Invoices | So dấu hiệu cấu trúc | Máy phát có "thật" hơn trọng số cố định? |
-# Bổ sung đối chiếu công khai ngày 20/10/2026
+## Bổ sung đối chiếu công khai ngày 20/10/2026
 
 Đã đọc BCTC chính chủ SMC 2024, TCM 2022 và NTP 2024 để kiểm tra DSO/DPO mô tả,
 không hiệu chỉnh máy phát. Xem [phạm vi, trang nguồn và giới hạn mẫu](09_vn_listed_spot_check.md).

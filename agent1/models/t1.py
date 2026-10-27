@@ -23,7 +23,7 @@ import pandas as pd
 import lightgbm as lgb
 
 from .. import calendar_vn as cal
-from .features import FEATURES
+from .features import FEATURES, validate_feature_columns
 
 K = 13
 CAP = 120.0
@@ -77,6 +77,7 @@ Z_CLIP = 5.0  # HazardLR: kẹp đặc trưng chuẩn hoá để không ngoại 
 
 def expand(df: pd.DataFrame, train=True, feats=FEATURES):
     """Khai triển hoá đơn x tuần. train=True: chỉ tuần còn rủi ro & nhãn biết được; y = trả trong tuần k."""
+    validate_feature_columns(feats)
     X0 = df[feats].astype("float32").values
     parts, ys, idx = [], [], []
     rem = df["remaining"].values if "remaining" in df else np.full(len(df), np.inf)
@@ -121,7 +122,8 @@ class HazardGBM:
         if params:
             self.p.update(params)
         self.rounds = rounds
-        self.feats = feats
+        validate_feature_columns(feats)
+        self.feats = list(feats)
         self.booster = None
 
     def fit(self, df, weight=None, valid=None, init_model=None, rounds=None):
@@ -196,7 +198,8 @@ class HazardLR:
     name = "DH-LR"
 
     def __init__(self, feats=FEATURES):
-        self.feats = feats
+        validate_feature_columns(feats)
+        self.feats = list(feats)
 
     def fit(self, df, weight=None, max_rows=600_000):
         from sklearn.linear_model import LogisticRegression
@@ -299,7 +302,8 @@ class QuantileLGBM:
     name = "QLGBM"
 
     def __init__(self, feats=FEATURES, rounds=350, alphas=(.05, .1, .2, .3, .5, .7, .8, .9, .95)):
-        self.feats, self.rounds, self.models = feats, rounds, {}
+        validate_feature_columns(feats)
+        self.feats, self.rounds, self.models = list(feats), rounds, {}
         self.alphas = np.asarray(alphas, float)
         if not (np.all(np.diff(self.alphas) > 0) and np.all((self.alphas > 0) & (self.alphas < 1))):
             raise ValueError('alphas phải tăng nghiêm ngặt trong (0,1)')
@@ -332,7 +336,8 @@ class AFT:
     name = "XGB-AFT"
 
     def __init__(self, feats=FEATURES, rounds=300, dist="normal", scale=0.3):
-        self.feats, self.rounds, self.dist, self.scale = feats, rounds, dist, scale
+        validate_feature_columns(feats)
+        self.feats, self.rounds, self.dist, self.scale = list(feats), rounds, dist, scale
 
     def fit(self, df, weight=None):
         import xgboost as xgb
@@ -438,7 +443,8 @@ class CureGBM:
     name = "Cure-GBM"
 
     def __init__(self, feats=FEATURES, rounds=400):
-        self.feats, self.rounds = feats, rounds
+        validate_feature_columns(feats)
+        self.feats, self.rounds = list(feats), rounds
 
     def fit(self, df, weight=None, calibration=None):
         d = df[(df["event"] == 1) | (df["bad_known"] == 1)]

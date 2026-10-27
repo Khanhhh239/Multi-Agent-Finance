@@ -1,5 +1,10 @@
 # 4. Máy phát dữ liệu tổng hợp SME Việt Nam (T12)
 
+**Cập nhật 27/10/2026:** runner phát hành nội bộ hiện dùng RNG v3; AP nhà cung
+cấp có nhóm trả ngay theo xác suất mô phỏng 20%, ngày đến hạn và ngày trả riêng;
+baseline/stress được gán trước khi sinh. Cohort đã khóa và giới hạn đối chiếu
+SME thực được ghi ở [báo cáo 23](23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md).
+
 Mã: `agent1/synth/world.py` (+ `names.py`, `einvoice.py`, `fidelity.py`, `agent1/calendar_vn.py`).
 Dựng: `scripts/build_worlds.py`. Đây là **mô phỏng tác tử có cấu trúc nhân quả**, không phải bộ lấy mẫu độc lập từ các
 phân phối biên — thì mới tạo được tương quan thật (cùng sốc thanh khoản, cùng chạy lương, cùng Tết).
@@ -49,8 +54,7 @@ ra thuộc tính tiềm ẩn từ quan sát.
 
 ## 4.4 L2 — Khách hàng (đơn vị hành vi)
 
-Số khách/công ty: logNormal(trung vị 60, σ=0,6) kẹp [8, 400]. Trọng số doanh thu Pareto(α=1,5)+1 → top-10 khách chiếm
-≈54% (src), ≈70% (tgt). Thời gian quan hệ: 55% có từ đầu, còn lại bắt đầu ngẫu nhiên; tuổi thọ ~Exp(6 năm)+180 ngày.
+Số khách tiềm năng/công ty: logNormal(trung vị 60, σ=0,6) kẹp [8, 400]. Trọng số doanh thu Pareto(α=1,5)+1; tỷ trọng top-10 ≈54% (src cũ), ≈70% (tgt cũ) là số đo lịch sử, không là mục tiêu đã hiệu chỉnh lại. Khoảng 72% pool hoạt động từ đầu. Mỗi tuần, khách có thể gia nhập, tạm rời hoặc quay lại theo thanh khoản hiện tại, tăng trưởng công ty và stress cầu; xem [kiểm toán sau sửa](15_SUA_VONG_DOI_KHACH_VA_HARD_CASE_2026-10-26.md). `start_day`/`end_day` trong bảng xuất là biên đầu/cuối tham gia thực hiện; các khoảng gián đoạn nằm trong `events`.
 
 | Thuộc tính | Phân phối / quy tắc | Ý nghĩa |
 |---|---|---|
@@ -76,20 +80,20 @@ Số khách/công ty: logNormal(trung vị 60, σ=0,6) kẹp [8, 400]. Trọng s
 ### Thanh khoản và vỡ nợ của khách
 
 ```
-idio_c,t  : AR(1) phương sai 1, hệ số ρ_c
-L_c,t = (idio_c,t + β_c · F_t / sd(F)) / sqrt(1 + β_c²)  −  1,2 · β_c · S_t,   S_t = covid_sens·covid_t + crunch_sens·crunch_t
-hazard tuần  h_c,t = h0_ngành · frailty_c · exp(0,7·max(−L_c,t, 0) + 1,0·S_t)   (kẹp 0,2; 0 trong 26 tuần đầu quan hệ)
+idio_c,t  : AR(1) phương sai 1, hệ số ρ_c; a_c = clip(idio_sd_c/0,165; 0,4; 1,6)
+L_c,t = (a_c·idio_c,t + β_c · F_t / sd(F)) / sqrt(a_c² + β_c²)  −  1,2 · β_c · S_t  −  các kênh sốc tiếp xúc,   S_t = covid_sens·covid_t + crunch_sens·crunch_t
+hazard tuần  h_c,t = h0_ngành · frailty_c · exp(0,7·max(−L_c,t, 0) + 1,0·S_t)   (kẹp 0,2; không rút sự kiện trong 26 tuần đầu thế giới; chỉ ở khách đang hoạt động)
 h0_ngành = 1 − (1 − 0,06·pd_mult·bad_ngành/0,03)^{1/52}
 ```
 
-Khách vỡ nợ **ngừng phát sinh hoá đơn 14 ngày trước** sự kiện (DN ngừng bán chịu). `pd_mult` là hệ số hiệu chỉnh tự động.
+Việc ngừng nhận đơn bán chịu dùng **tín hiệu tín dụng quan sát ở tuần hiện tại** (thanh khoản khách cộng nhiễu đo lường): hai tuần liên tiếp dưới −1,4 thì giữ bán; hai tuần liên tiếp trên −0,6 thì mở lại. Sự kiện vỡ nợ giữa tuần khiến bên bán giữ đơn trong 26 tuần kế tiếp; sau đó chỉ mở lại nếu tín hiệu tín dụng cho phép. Khách có thể vỡ nợ lần nữa sau thời gian hồi phục. Các thay đổi được ghi vào `events`; `customers.default_date` giữ lần đầu để tương thích. Tuần vỡ nợ tương lai không được dùng để dừng bán trước sự kiện. `pd_mult` là hệ số hiệu chỉnh tự động.
 
 ## 4.5 L3 — Hoá đơn
 
 - **Doanh thu tuần** `R_t = (doanh thu/52)·e^{g·t/52}·mùa_vụ_ngành[tháng]·hệ_số_Tết·e^{AR(1)}·(1 − 0,6·covid_sens·covid_t)·(1 − 0,35·crunch_sens·crunch_t)`.
   Hệ số Tết theo tuần: −2: ×1,15; −1: ×1,25; tuần nghỉ: ×0,35; tuần cuối nghỉ: ×0,45; +1: ×0,7.
   Mùa vụ theo ngành (12 hệ số/ngành), ví dụ thép đỉnh tháng 12 (1,4), đáy tháng 7 (0,8).
-- **Số hoá đơn** khách c tuần t ~ Poisson(`share_c · R_t / ticket_c`); **giá trị** `ticket_c · logNormal(0; 0,75)`, làm tròn 1.000đ.
+- **Đơn được nhận** đầu tuần t lấy từ `R_t` cùng nhiễu đơn hiện tại và trọng số các khách chưa bị giữ bán. Cùng lượng đơn này quyết định cường độ sinh hóa đơn theo khách và mức bổ sung hàng tồn; hóa đơn riêng lẻ vẫn có nhiễu giá trị. **Giá trị** mỗi hóa đơn v1 = `ticket_c · logNormal(0; 0,75)`, làm tròn 1.000đ.
 - **Ngày lập**: thứ 2–6 mỗi ngày 19%, thứ 7 5% (60% được giữ); không lập vào ngày nghỉ lễ; khách gộp cuối tháng dồn về ngày làm việc cuối tháng.
 - **VAT**: 10%; 8% khi nằm trong các đợt giảm thuế (trừ ngành kim loại). Số hoá đơn đánh theo ký hiệu năm (`C25TAA`),
   MST hợp lệ (chữ số kiểm tra), tên pháp nhân kiểu VN.
@@ -98,18 +102,11 @@ Khách vỡ nợ **ngừng phát sinh hoá đơn 14 ngày trước** sự kiện
 
 Với mỗi hoá đơn, theo thứ tự:
 
-1. **Đúng hạn?** `logit = ontime_logit_c + 0,6·L_c(due) − 1,2·S(due)`.
-2. **Sớm**: nếu đúng hạn và `early_p` → trả sớm `U(0,2; 0,9)×min(kỳ hạn, 40)` ngày; ngược lại trả 0–3 ngày trước hạn.
-3. **Trễ**: `exp(log(med_c · e^{−0,25 L}·(1 + 0,8 S)) + σ_c·N(0,1)) + 1` ngày; **cực trễ** (xác suất `ultra_p·(1+2S+max(−L,0))`).
-4. **Điểm gãy riêng khách**, **tranh chấp** (+U(15,75) ngày, 60% có giảm trừ 5–30% giá trị), **COD** (0–3 ngày).
-5. **Suy giảm trước vỡ nợ**: HĐ đáo hạn trong 120 ngày trước sự kiện chậm thêm U(10,40) ngày.
-6. **Bám lịch trả của khách**: nếu "đúng hạn" → ngày chạy thanh toán gần nhất *trước* hạn (nếu còn sau ngày lập, ≤16 ngày); ngược lại ngày chạy kế tiếp; luôn dịch về ngày làm việc.
-7. **Tết**: nếu hạn rơi vào cửa sổ Tết, với xác suất `tet_settle_p·clip(1+L, 0,2; 1,5)·0,6` chốt trước kỳ nghỉ 1–6 ngày; ngược lại nếu rơi sau kỳ nghỉ thì lùi 0–5 ngày.
-8. **Thứ Bảy** (Napas 24/7): 1,2% lệnh chuyển về thứ Bảy.
-9. **Vỡ nợ**: HĐ chưa trả khi khách vỡ nợ → nợ xấu; thêm 12% HĐ tranh chấp không giải quyết → xoá nợ; **25%** nợ xấu thu hồi
-   20–50% sau 120–360 ngày; ngày xoá sổ sau 180–400 ngày.
-10. **Trả một phần**: xác suất `partial_p·(1 + 1,5·max(−L,0))` (kẹp 0,6): đợt 1 = 30–70% (làm tròn), đợt 2 sau 10–45 ngày,
-    15% số đợt 2 trả thiếu 1–10%.
+1. Khả năng trả đúng hạn vẫn lấy `ontime_logit_c + 0,6·L_c(due) − 1,2·S(due)`; lịch trả sớm, Tết, ngày chạy thanh toán và COD áp dụng cho khoản được trả ngay.
+2. Hóa đơn còn mở sau hạn đi vào quá trình **mỗi tuần**. Khi lịch chạy thanh toán của khách rơi trong tuần, xác suất trả là `1 − exp[−7·exp(0,7·L_c,t − 0,25·S_t)/max(late_med_c,3)]` (kẹp 0,95). Đuôi cực trễ nhân cường độ với `0,18`. Nếu tuần `t` chưa trả, tuần `t+1` đọc thanh khoản mới; ngày trả không được cố định ở ngày đến hạn.
+3. Nếu trả một phần (xác suất phụ thuộc thanh khoản tuần trả), phần còn lại cũng đi qua cơ hội trả theo tuần từ ít nhất bảy ngày sau. 15% đợt cuối có thể trả thiếu; phần dư vẫn mở.
+4. Khi khách vỡ nợ đã xảy ra hoặc tranh chấp còn treo sau 180 ngày, không sinh khoản trả thông thường sau mốc đó. Có thể thu hồi 20–50% phần chưa trả sau 30–120 ngày; xóa sổ phần còn lại sau 180–300 ngày nếu ngày này nằm trong cửa sổ quan sát.
+5. Tại `observation_end`, chỉ hóa đơn đã trả đủ, đóng bằng credit note hoặc đã xóa sổ mới có kết cục xác nhận. Hóa đơn còn mở nhận `outcome_status_at_end="censored"`; `is_bad_debt` chỉ đúng khi xóa sổ đã xảy ra. T1 kiểm duyệt theo `label_end`, không dùng khoản chưa biết kết cục làm nhãn nợ xấu. Ngày credit note được quyết định từ ngày lập/đến hạn, không lấy ngày trả tương lai.
 
 ## 4.7 L5 — Quan sát: sao kê, sổ cái, lời hứa, chi
 
@@ -124,17 +121,73 @@ giải ngân vay, "CK" không rõ.
 (30% sang tháng sau 0–3 ngày). Khi không hằng ngày, 50% khách có **phân bổ FIFO sai**: các ngày ghi sổ được gán cho hoá
 đơn theo thứ tự lập. Kết quả: ngày ghi sổ lệch ngày tiền về trung bình 12,6 ngày (tgt).
 
-**Lời hứa trả (T8).** Tại mốc 7/21/45/75 ngày sau hạn, với xác suất = cường độ đòi nợ của công ty, ghi lời hứa: nếu khách
-"giữ lời" (xác suất = độ tin cậy) và còn ≤60 ngày nữa mới trả → ngày hứa = ngày trả thật + N(0; 1,5); ngược lại ngày hứa
-sớm hơn thực tế (lời hứa không thực hiện). Lời hứa được giữ khi |hứa − thật| ≤ 3 ngày.
+**Lời hứa trả (T8).** Tại mốc 7/21/45/75 ngày sau hạn, chỉ gọi khi hóa đơn vẫn còn công nợ theo thanh toán và credit note **đã xảy ra** ở ngày gọi. Ngày hứa lấy từ độ tin cậy, mức trễ thường lệ của khách và nhiễu mới, không đọc ngày trả thật. Kết quả `kept` được đối chiếu sau đó với tiền trả và công nợ còn lại trong cửa sổ ±3 ngày; credit note/xóa nợ đơn thuần không được tính là giữ lời hứa trả tiền. Chế độ `noisy` vẫn thêm nhiễu ngày và kiểu hứa.
 
-**Chi (T5, qua `calendar_vn.py`).** NCC (mua trước bán 2 tuần, giá vốn = 1 − biên − 1,3×tỷ lệ lương − chi phí chung; kỳ hạn NCC
+**Chi (T5, qua `calendar_vn.py`).** NCC: `inventory_weekly` lưu đơn đã nhận ở đầu tuần, tồn đầu, mua vào, giá vốn đơn được thực hiện và tồn cuối. Mua tuần `t` dùng đơn tuần `t`, tồn đầu tuần và trung bình đơn đã biết; không đọc `R[t+2]`. Đơn là proxy tổng hợp theo tuần, có chung nguồn với lượng hóa đơn nhưng chưa liên kết từng hóa đơn hay SKU. Giá vốn = 1 − biên − 1,3×tỷ lệ lương − chi phí chung; kỳ hạn NCC
 {0,15,30,45,60}; ngày chạy chi theo 4 mẫu); lương ròng (gross × 89,5%), BHXH (32%) hạn cuối tháng; VAT (tháng nếu
 doanh thu >50 tỷ, quý nếu không; hạn 20 tháng sau / cuối tháng đầu quý sau, dịch ngày nghỉ); TNDN tạm nộp (20% × biên ×
 doanh thu quý, hạn 30 tháng đầu quý sau); môn bài 30/01 (bỏ từ 2026); thuê; lãi vay; tiện ích; thưởng tháng 13 trước Tết;
 capex bất thường ~Poisson(1,5/năm). Các ngày đều dịch về ngày làm việc.
 
-**Số dư.** `balance = đệm + Σ(thu − chi) − rút lợi nhuận` mỗi ngày → ground truth T6.
+**Nhãn tất toán và công nợ.** `paid_date_true` là ngày dòng tiền đã trả đủ `amount_gross − credit_note`
+sau khi credit note có hiệu lực. Tên đợt trả `kind="final"` không tự tạo nhãn trả đủ: nếu vẫn thiếu tiền,
+`remaining_amount > 0` và hóa đơn còn mở. Credit note đóng hết công nợ mà không có tiền vào được gắn
+`closure_type="credit_note"`, không có `paid_date_true`; phần còn thiếu bị xóa nợ được ghi riêng ở
+`writeoff_amount`, `closure_type="writeoff"`. `paid_amount` đo tiền quy về giá trị nghĩa vụ hóa đơn; khi có
+FX, `cash_received_amount` giữ số tiền chuyển trước phí, còn `payments.fx_adjustment` ghi chênh lệch tỷ giá.
+`WorldConfig.accounting_version=6` đánh dấu đường sốc tích hợp và metadata công bố vĩ mô trên phiên bản nhãn, quyết định nhân quả và kiểm duyệt; các kết quả trên thế giới cũ phải được
+đánh giá lại sau khi sinh dữ liệu mới.
+
+**Episode sốc tích hợp.** `WorldConfig.shock_schedule` nhận các `ShockEpisode(family, start,
+rise_weeks, peak_weeks, recovery_weeks, severity, industries, regions, reference_event)`;
+`family` thuộc `demand`, `supply`, `price`, `credit`. Ngày bắt đầu là thứ Hai. Mỗi episode có
+tuần thường, tăng, đỉnh và hồi phục; nhiều episode có thể chồng lấn trong **một thế giới**.
+`shock_truth.parquet` lưu đường tuần, loại, pha và phạm vi để kiểm toán, không phải đầu vào mô hình.
+`firms` và `customers` có bốn mức phơi nhiễm ẩn riêng, rút bằng luồng RNG tách khỏi giao dịch;
+ngành/vùng ngoài phạm vi nhận tác động 0. Hệ số cường độ và truyền dẫn là **giả định synthetic**,
+chưa phải ước lượng nhân quả từ dữ liệu Việt Nam.
+
+- Cầu: giảm lượng đơn qua phơi nhiễm của bên bán và từng bên mua; bên mua thiếu đơn suy giảm thanh khoản.
+- Cung: giảm phần đơn có thể đáp ứng, tăng giá đầu vào và gây áp lực thanh khoản bên mua.
+- Giá: tăng giá bán trên hóa đơn và giá mua nhà cung cấp theo hệ số khác nhau; độ nhạy giá của khách giảm số lượng đặt.
+- Tín dụng: giảm thanh khoản khách, tăng ngưỡng bên bán quyết định giữ đơn, tăng chi phí phục vụ khoản vay và giảm giải ngân nhiễu.
+
+`inventory_weekly` lưu `demand_orders`, `supply_capacity`, `sale_price_index`,
+`input_cost_index`; mua hàng tuần dùng đơn đã đặt, giá bán và giá đầu vào **trong tuần đó**.
+Thanh khoản khách tuần đi vào xác suất trả của hóa đơn còn mở; thu tiền và chi phí đi vào
+`daily_cash.balance`. `shock_truth` và phơi nhiễm ẩn chỉ phục vụ sinh dữ liệu, kiểm toán.
+Mặc định `shock_schedule=[]` giữ thế giới không có episode mới; cần đặt lịch rõ ràng khi sinh bộ tích hợp.
+
+**Ranh giới đặc trưng tại ngày dự báo `T`.** `SnapshotBuilder.model_snapshot(T)` chỉ trả
+về các cột trong `MODEL_VISIBLE_COLUMNS` (`agent1/models/features.py`): khóa hóa đơn/công ty/khách,
+`cutoff`, ngày lập/hạn, số tiền gốc và còn mở tính từ giao dịch **đến T**, `top1`/`top2`
+cho lịch thanh toán, `BASELINE_QUANTILES` và danh sách `FEATURES` T1. Khóa và cột ngữ cảnh
+phục vụ ghép, tính tiền và lịch tuần; chỉ `FEATURES` được đưa vào estimator mặc định.
+Các ablation `f_resid_7d`, `no_due`, `c_disp_eb` phải chọn rõ ở pipeline nghiên cứu;
+chúng không tự xuất hiện trong view T1 mặc định. Mọi tên đặc trưng mới ngoài allowlist bị từ chối,
+kể cả tên chưa từng có trong danh sách cấm. Bảng nhãn huấn luyện vẫn chứa `label_date`,
+`writeoff_date`, kết cục và cửa sổ kiểm duyệt để tạo `y`; phép chiếu đầu vào `X` loại các cột đó.
+Không nối bảng `shock_truth`, phơi nhiễm bên mua/bán, ngày trả tương lai hoặc kết cục vào view.
+
+`macro.parquet` có `week`, `published_date` và `covid_source`. Máy sinh đặt ngày công bố giả định
+**14 ngày sau đầu tuần**; đó là quy ước synthetic thận trọng, không phải ngày công bố lịch sử
+được kiểm chứng. `published_macro_as_of(macro, T)` chỉ trả chỉ báo `covid_stress` của tuần đã
+công bố tại `T` khi nguồn là OxCGRT; không trả `common_factor`, `credit_crunch` (trạng thái ẩn),
+episode hoặc giá trị từ `synthetic_fallback`. T1 mặc định hiện không dùng macro làm feature;
+muốn đưa chỉ báo thật vào model cuối phải kiểm tra ngày công bố/vintage từ nguồn trước.
+
+**Số dư.** `daily_cash.balance` là số dư của **tài khoản ngân hàng vận hành được quan sát**, không phải
+tổng tiền hợp nhất của doanh nghiệp. Mỗi giao dịch sao kê có `cash_flow_class`, `in_balance_window` và
+`balance_effect`; đây là cột kiểm toán, không phải đặc trưng mô hình. Thu khách sau phí vào `inflow_ar`;
+`opening_balance` và ngưỡng rút vốn dùng `buffer_days × opening_daily_outflow`. Mức chi/ngày ban đầu tính từ quy mô doanh thu đầu kỳ, giá vốn, nhân sự, thuê và lãi vay đã biết khi mở kỳ; không dùng trung bình các khoản chi thực hiện đến hết 2025.
+lãi/hoàn cọc/giao dịch chưa phân loại vào thu khác;
+giải ngân vay vào `inflow_financing`. Chuyển nội bộ và nộp tiền mặt làm tăng **tài khoản này** nhưng không
+được xem là doanh thu hay tăng tổng tiền toàn doanh nghiệp; chúng có cột riêng trong `daily_cash`.
+Các giao dịch sau ngày kết thúc thế giới chỉ phục vụ nhãn thanh toán về sau, không thuộc cửa sổ số dư T6.
+Chi NCC, lương, thuế và rút vốn chủ nằm ở `outflows`/`owner_draw`. Bộ kiểm tra đối chiếu từng
+`balance_effect` với giao dịch gốc, tổng theo ngày/loại với `daily_cash`, và đường số dư lũy kế.
+Lịch trả gốc/lãi của **các lần giải ngân nhiễu mới** và tài khoản nguồn của chuyển nội bộ/nộp tiền mặt
+chưa được sinh thành sổ đối ứng; không diễn giải `balance` là thanh khoản hợp nhất của công ty.
 
 ## 4.8 Hiệu chỉnh tự động (`scripts/build_worlds.py::calibrate`)
 

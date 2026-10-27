@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "world": "v3_final_20261027_train_001",
+  "seed": 95319,
+  "config": {
+    "name": "v3_final_20261027_train_001",
+    "seed": 95319,
+    "start": "2019-01-01",
+    "end": "2025-12-31",
+    "n_firms": 40,
+    "tail": "coface",
+    "industry_mix": {
+      "steel_metals": 0.2,
+      "textile_clothing": 0.2,
+      "plastic_rubber": 0.2,
+      "wholesale": 0.2,
+      "food_processing": 0.1,
+      "services": 0.1
+    },
+    "posting_mode_p": [
+      0.45,
+      0.3,
+      0.25
+    ],
+    "payrun_p": [
+      0.34,
+      0.07,
+      0.07,
+      0.06,
+      0.06,
+      0.12,
+      0.08,
+      0.08,
+      0.07,
+      0.05
+    ],
+    "late_scale": 0.9,
+    "dispute_scale": 1.0,
+    "n_cust_median": 60.0,
+    "revenue_median": 40000000000.0,
+    "memo_invoice_no_p": [
+      2.0,
+      2.0
+    ],
+    "ontime_shift": {
+      "steel_metals": 1.5852874021663275,
+      "textile_clothing": 1.0254328453817796,
+      "plastic_rubber": 0.4981237163147021,
+      "wholesale": 0.9554614515383556,
+      "food_processing": 0.8536614581650509,
+      "services": 0.748668172289366
+    },
+    "pd_mult": {
+      "steel_metals": 1.954499983273107,
+      "textile_clothing": 4.267202900663197,
+      "plastic_rubber": 2.382829554266311,
+      "wholesale": 3.8283931925208767,
+      "food_processing": 3.1096513347049903,
+      "services": 5.2324558945666295
+    },
+    "write_xml": 0,
+    "cod_mult": 1.8,
+    "cash_cap_days": 60.0,
+    "promises_mode": "legacy",
+    "rng_version": 3,
+    "supplier_cash_firm_p": 0.2,
+    "macro_regime": "stress",
+    "season_override": null,
+    "hard_case": null,
+    "accounting_version": 6,
+    "shock_schedule": [
+      {
+        "family": "demand",
+        "start": "2019-10-21",
+        "rise_weeks": 2,
+        "peak_weeks": 4,
+        "recovery_weeks": 8,
+        "severity": 1.1,
+        "industries": [],
+        "regions": [],
+        "reference_event": "synthetic_v3_assumption"
+      },
+      {
+        "family": "supply",
+        "start": "2021-05-03",
+        "rise_weeks": 2,
+        "peak_weeks": 4,
+        "recovery_weeks": 8,
+        "severity": 1.0,
+        "industries": [],
+        "regions": [],
+        "reference_event": "synthetic_v3_assumption"
+      },
+      {
+        "family": "price",
+        "start": "2022-11-21",
+        "rise_weeks": 2,
+        "peak_weeks": 4,
+        "recovery_weeks": 8,
+        "severity": 0.8,
+        "industries": [],
+        "regions": [],
+        "reference_event": "synthetic_v3_assumption"
+      }
+    ],
+    "customer_realism": false,
+    "realism": "v1"
+  },
+  "config_sha256": "1937e14031c1606b132bb6073506d3845e15862b2cefb7766a898bf10514e335",
+  "commit": "70c0ceb0653161f70535b4c8b9fb3cee63b7405f",
+  "source_code_sha256": "a0dbcbe6df9c7552da84c1a043e56e02d1c9542ae0daf8a793f4b4d45dcc49cd",
+  "source_data_sha256": {
+    "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+    "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+    "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+  },
+  "tables_sha256": {
+    "bank_txns.parquet": "9c1cb1297324e162297ad70f99e29e23017c153f2fc69bec635cae84644026d5",
+    "customers.parquet": "2504cfd329a6600ee7bacb986d54419b28b7ef81cf7cb8a5a87b48545891c898",
+    "daily_cash.parquet": "c1f0cfee07c29b8aa4eda4c3e4e85980f6f2306434c5658f5ca8ef8da9515f39",
+    "events.parquet": "7916d9c0a026103eb70572d0a7f4c23ce6f0f51dc4fbd540e5bddb0260048b63",
+    "firms.parquet": "9f8b1a3833e5a748a3634a47ba866f7c2eb87d0d4359445b40bb7fa175e1e758",
+    "inventory_weekly.parquet": "ed69921dffcf5e2684d6e7fbfbdfe6b32b9c6789f946d262ddd3a3d249b37758",
+    "invoices.parquet": "15204538d5bffc6bd66596e320606b63d5f15a05a29bcf6572f97f4fd16061c4",
+    "macro.parquet": "54714ced75b73fb4f1be792e5e10c26b86ff1e3d9979018eb85eb10f8ee52f5e",
+    "outflows.parquet": "a3c9a12c1598c3d2fa57f5b59bd87e4cc81845ad3444df5307dca0ab14b512e2",
+    "payments.parquet": "d7da474f7a7ab0dd748d5c141502e43f40248ec2e1830077d71bc8c7c59dd91f",
+    "promises.parquet": "1656f8687490b91feb0306adb52e6e789b933c01c7a00f4a18a84fe7301a3e30",
+    "shock_truth.parquet": "6410c61472257b31af3e8e1111ea4547103bbc51a2edfeddbc33712516c26729"
+  }
+}

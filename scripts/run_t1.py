@@ -22,7 +22,8 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from agent1.paths import SYNTH, PROCESSED, OUT  # noqa: E402
 from agent1.threads import NT  # noqa: E402
-from agent1.models.features import SnapshotBuilder, add_labels, FEATURES, BASELINE_QUANTILES  # noqa: E402
+from agent1.models.features import (SnapshotBuilder, add_labels, FEATURES, BASELINE_QUANTILES,
+                                    model_snapshot_view)  # noqa: E402
 from agent1.eval.cluster import mean_ci  # noqa: E402
 from agent1.eval.strata import assign_strata  # noqa: E402
 from agent1.models import t1  # noqa: E402
@@ -62,16 +63,17 @@ def snapshots(name, cutoffs, label_col="paid_date_true", visible_from=None, tag=
         return pd.read_parquet(p)
     inv, pay, prom = load_world(name)
     sb = SnapshotBuilder(inv, pay if use_payments else None, prom if use_promises else None, label_col=label_col)
-    keep = list(dict.fromkeys(["invoice_id", "firm_id", "customer_id", "cutoff", "issue_date", "due_date", "label_date",
-                               "writeoff_date", "amount_gross", "amount_open", "is_bad_debt", "top1", "top2"] + FEATURES + BASELINE_QUANTILES))
     parts = []
-    # Bỏ cột thô và hạ float trước khi ghép; tránh giữ hàng trăm bản tên/MST/metadata.
+    # Explicit model view plus separate supervised outcomes. New raw columns
+    # cannot silently enter a cache or an estimator.
     for i, cutoff in enumerate(cutoffs):
         part = sb.snapshot(cutoff, visible_from=visible_from, firms=firms)
         if part.empty:
             continue
-        part['amount_open'] = part.amount_gross * (1 - part.paid_frac_so_far.fillna(0))
-        part = part[[c for c in keep if c in part]].copy()
+        visible = model_snapshot_view(part, cutoff)
+        outcome_columns = ['label_date', 'writeoff_date', 'is_bad_debt', 'outcome_status_at_end']
+        outcomes = part[[c for c in outcome_columns if c in part]]
+        part = pd.concat([visible, outcomes], axis=1)
         numeric = [c for c in part.select_dtypes('number').columns if c in FEATURES + BASELINE_QUANTILES
                    or c in ['amount_gross', 'amount_open']]
         part[numeric] = part[numeric].astype('float32')
@@ -437,6 +439,8 @@ def exp_D(O="2024-07-01"):
                                                 visible_from="2019-01-01", tag="test_full")
         te = Sx[(Sx["cutoff"] >= O) & (Sx["cutoff"] < O + pd.Timedelta(days=364))]
         te = te[te["days_past_due"] > 0]  # câu hỏi T2 có ý nghĩa với khoản đã quá hạn
+        if 'outcome_status_at_end' in te:
+            te = te[te['outcome_status_at_end'] != 'censored']
         y = te["is_bad_debt"].astype(int).values
         # quy tắc TT48/2019: trích lập theo tuổi quá hạn (6-12 tháng 30%, 1-2 năm 50%, 2-3 năm 70%, >3 năm 100%)
         dpd = te["days_past_due"].values

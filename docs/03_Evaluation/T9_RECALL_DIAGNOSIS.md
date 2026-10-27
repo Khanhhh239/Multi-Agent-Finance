@@ -17,9 +17,12 @@
 Cổng G15: F1 ≥ 0,80 **(0,796, trượt 0,004)**, precision ≥ 0,95 **(0,925, trượt)**, tự động ≥ 0,6 (đạt), MAE ≤ 3 ngày (đạt).
 ⇒ Vấn đề chính trên tgt là **precision giảm 3 điểm** so với nguồn, không phải recall. Hard case `retention` khó nhất.
 
-## 2. Phân rã lỗi theo nhóm (bộ ghép CŨ `ML_subset`, file `outputs/t9/t9_links_tgt.parquet`)
+## 2. Phân rã lỗi theo nhóm (bộ ghép CŨ `ML_subset`)
 
-Phương pháp triển khai không lưu file liên kết theo giao dịch cho tgt, nên phân rã dưới đây dùng bộ ghép cũ (recall 0,57).
+Phân rã cũ từng dùng `outputs/t9/t9_links_tgt.parquet`, nhưng file này không
+còn trong workspace ngày 27/10/2026. Phương pháp triển khai không lưu file liên
+kết theo giao dịch cho tgt, nên phân rã dưới đây dùng bộ ghép cũ (recall 0,57)
+và hiện không thể tái tính từ artifact đó.
 Các mẫu hình nhiều khả năng vẫn đúng một phần với phương pháp mới, nhưng **cần đo lại** khi phương pháp triển khai xuất liên kết.
 
 | Yếu tố | Nhóm | Recall (bộ cũ) | Số liên kết |

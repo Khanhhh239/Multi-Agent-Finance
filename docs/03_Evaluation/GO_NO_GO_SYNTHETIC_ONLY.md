@@ -1,5 +1,7 @@
 # Go / No-go khi CHỈ có dữ liệu tổng hợp (agent1-Khanh, 21/10/2026)
 
+> **Quyết định lịch sử của giai đoạn 21/10.** Các mục “đang chạy/chờ” bên dưới ghi trạng thái khi lập bản này. Trạng thái cổng mới nhất trong repo đọc ở [GATES_CURRENT.md](GATES_CURRENT.md); pilot thật vẫn **NO-GO**.
+
 > Bối cảnh: chưa có dữ liệu doanh nghiệp Việt Nam thật. Tài liệu này chốt **luồng kỹ thuật** và **luật an toàn khi chạy**,
 > không chốt "mô hình chính xác X% với doanh nghiệp thật". Số trên dữ liệu tổng hợp chỉ chứng minh luồng chạy đúng và học được
 > giả định chúng ta đặt vào; không chứng minh giả định đúng.
@@ -11,7 +13,7 @@
 | Luồng chạy end-to-end, tái lập, không rò rỉ nhãn | **Chứng minh** (kiểm thử + giao thức chọn trên nguồn) | pytest, `outputs/e2e/` |
 | Mô hình không thua mốc B1d trên dữ liệu AR thật (không phải VN) | **Chứng minh có giới hạn**: Customer Invoices +14,4% [11,7; 17,4]; BPI +6,5% [2,1; 11,0]; mô hình thuần DH-GBM thua B1d 62,5% trên BPI | `outputs/t1/real_v2/` |
 | Khoảng dự báo đúng độ phủ | **Chưa**: G3 trượt (cov80 0,867 / 0,844, khoảng hơi rộng) | `outputs/t1/G3/` |
-| Cảnh báo thiếu hụt tiền dùng được | **Chờ**: G13 v2 đang chạy; tgt chỉ 16 sự kiện | `G13_ALERT_POLICY.md` |
+| Cảnh báo thiếu hụt tiền dùng được | **Chưa đạt cổng hiện hành**: G13 trượt trên `tgt`; kết quả `tgt2` dùng nhãn oracle chỉ là tham khảo | [GATES_CURRENT.md](GATES_CURRENT.md), [G13_ALERT_POLICY.md](G13_ALERT_POLICY.md) |
 | Dữ liệu tổng hợp giống SME VN | **Không kiểm chứng được**: bộ thật tham chiếu 6 công ty, CI AUC rộng 0,3–0,6 | `docs/02_Data/10_realism_v2.md` |
 | Hoạt động tốt với doanh nghiệp VN thật | **Không chứng minh** | — |
 

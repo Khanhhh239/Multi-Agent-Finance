@@ -1,5 +1,7 @@
 # WP-D · Dữ liệu — vector hoá máy phát, hard case, sinh lớn, dữ liệu thật bổ sung
 
+> **Hồ sơ kế hoạch từ 15/10/2026.** Các trạng thái, lệnh và danh sách việc dưới đây phản ánh thời điểm lập; đọc [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md) trước khi dùng.
+
 Tham chiếu: 02_Data/04–07. Mã: `agent1/synth/world.py`, `scripts/build_worlds.py`, `agent1/synth/fidelity.py`.
 
 ---

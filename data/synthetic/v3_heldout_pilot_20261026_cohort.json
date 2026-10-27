@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "commit": "70c0ceb0653161f70535b4c8b9fb3cee63b7405f",
+  "source_code_sha256": "ca205ab5749a7476d8083fc0a528ed745e9a8b6bcc52f419673c87c07f1b7a56",
+  "source_data_sha256": {
+    "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+    "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+    "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+  },
+  "split_protocol": {
+    "origin": "2024-07-01",
+    "label_horizon_days": 120,
+    "train_stride_days": 28,
+    "eval_stride_days": 28
+  },
+  "worlds": [
+    {
+      "name": "v3_heldout_pilot_20261026_train_000",
+      "role": "train",
+      "manifest_sha256": "025b3a95aabb5067d7ca7c0b377c2a57891c4e63f57bbe8bc149d8875277e5eb"
+    },
+    {
+      "name": "v3_heldout_pilot_20261026_validation_000",
+      "role": "validation",
+      "manifest_sha256": "60bf515cb8e8604347634393bfee211bcbc8aabac85ae8a9ec8b09b93c9e8622"
+    },
+    {
+      "name": "v3_heldout_pilot_20261026_test_000",
+      "role": "test",
+      "manifest_sha256": "b5ebcc5bdeddd4746ee6477e4123f3bd68d79b394c3a66b7771a5b042f6cc129"
+    },
+    {
+      "name": "v3_heldout_pilot_20261026_test_001",
+      "role": "test",
+      "manifest_sha256": "1a85f5f6ad8227f60bd3eede3dc07a6302f0e112c1e9bd439ad6c4dd09d6d31a"
+    }
+  ]
+}

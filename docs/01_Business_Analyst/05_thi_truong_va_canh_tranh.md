@@ -1,5 +1,9 @@
 # 5. Thị trường, cạnh tranh và cách thị trường đánh giá
 
+> **Ảnh chụp nghiên cứu tại thời điểm lập tài liệu.** TAM/SAM/SOM, giá và các
+> nhận định về đối thủ bên dưới gồm giả định hoặc thông tin có thể thay đổi;
+> kiểm nguồn và ngày công bố trước khi dùng cho quyết định thương mại.
+
 ## 5.1 Quy mô thị trường (top-down, ghi rõ giả định)
 
 | Tầng | Cách tính | Ước lượng |

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 # Ablation 2: độ phủ nhãn tối thiểu đủ dùng — điền nhãn thật cho 50% và 80% phần T9 v2 bỏ sót. Tuần tự, nhường RAM.
 cd "$(dirname "$0")/../.."
 export PYTHONUTF8=1 AGENT1_THREADS=4 OMP_NUM_THREADS=4

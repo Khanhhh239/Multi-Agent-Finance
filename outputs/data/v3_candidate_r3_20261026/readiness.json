@@ -1,0 +1,430 @@
+{
+  "full_2019_2025_window": true,
+  "external_macro_inputs_present": true,
+  "scenario_holdout_present": true,
+  "min_2025_to_2019_revenue_ratio": 0.8527792656981791,
+  "worlds": [
+    {
+      "world": "v3_candidate_r3_20261026_train_000",
+      "manifest_sha256": "b3c780a7e8548d9267904411ad7af9c02af3a5a0a2c7c303b5b15e840018fd6b",
+      "firms": 24,
+      "customers": 1901,
+      "invoices": 91146,
+      "source_data_sha256": {
+        "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+        "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+        "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+      },
+      "macro_source_counts": {
+        "oxcgrt": 366
+      },
+      "all_year_credit_value_share": 0.6499466297265952,
+      "all_year_outcomes_on_known_credit": {
+        "ontime": 0.6159461601785448,
+        "overdue": 0.3286845223925783,
+        "bad_debt": 0.05536931742887698,
+        "avg_term_days": 39.7501990241081
+      },
+      "negative_balance_firm_day_share": 0.10471255377395385,
+      "customer_default_events": 3231,
+      "invoice_count_2025_to_2019": 1.1087727071333628,
+      "net_revenue_ratio_2025_to_2019": 1.12395629517125,
+      "years": {
+        "2019": {
+          "invoices": 13542,
+          "active_customers": 1357,
+          "invoice_net_to_nominal_revenue": 1.0368479157967927,
+          "credit_value_share": 0.6564257328120592,
+          "credit_count_share": 0.5449712007089056,
+          "censored_credit_value_share": 0.016062804117524834,
+          "negative_balance_firm_day_share": 0.06095890410958904
+        },
+        "2020": {
+          "invoices": 12259,
+          "active_customers": 1294,
+          "invoice_net_to_nominal_revenue": 0.9279761550960103,
+          "credit_value_share": 0.6375007892974265,
+          "credit_count_share": 0.5315278570845909,
+          "censored_credit_value_share": 0.009697309474708402,
+          "negative_balance_firm_day_share": 0.037682149362477234
+        },
+        "2021": {
+          "invoices": 9430,
+          "active_customers": 1245,
+          "invoice_net_to_nominal_revenue": 0.6652011937553646,
+          "credit_value_share": 0.6116979207623201,
+          "credit_count_share": 0.5191940615058325,
+          "censored_credit_value_share": 0.01346850152512531,
+          "negative_balance_firm_day_share": 0.06004566210045662
+        },
+        "2022": {
+          "invoices": 11713,
+          "active_customers": 1208,
+          "invoice_net_to_nominal_revenue": 0.9625318383741321,
+          "credit_value_share": 0.6727324693495037,
+          "credit_count_share": 0.5518654486468026,
+          "censored_credit_value_share": 0.01203702617431599,
+          "negative_balance_firm_day_share": 0.057648401826484015
+        },
+        "2023": {
+          "invoices": 15068,
+          "active_customers": 1298,
+          "invoice_net_to_nominal_revenue": 1.1395749867519314,
+          "credit_value_share": 0.6608189452552252,
+          "credit_count_share": 0.5447305548181577,
+          "censored_credit_value_share": 0.015090889693605345,
+          "negative_balance_firm_day_share": 0.21940639269406392
+        },
+        "2024": {
+          "invoices": 14119,
+          "active_customers": 1250,
+          "invoice_net_to_nominal_revenue": 1.0971562851453713,
+          "credit_value_share": 0.648863806078676,
+          "credit_count_share": 0.5496848218712374,
+          "censored_credit_value_share": 0.018856755256527368,
+          "negative_balance_firm_day_share": 0.16336520947176686
+        },
+        "2025": {
+          "invoices": 15015,
+          "active_customers": 1231,
+          "invoice_net_to_nominal_revenue": 1.1653717420949954,
+          "credit_value_share": 0.6478470852960111,
+          "credit_count_share": 0.5419247419247419,
+          "censored_credit_value_share": 0.23527845201483052,
+          "negative_balance_firm_day_share": 0.1339041095890411
+        }
+      },
+      "industry_outcomes_on_known_credit": {
+        "food_processing": {
+          "ontime": 0.5988468436159502,
+          "overdue": 0.32792167340378614,
+          "bad_debt": 0.07323148298026365,
+          "avg_term_days": 29.76987145792772
+        },
+        "plastic_rubber": {
+          "ontime": 0.5686507137036062,
+          "overdue": 0.39735349326014535,
+          "bad_debt": 0.0339957930362484,
+          "avg_term_days": 46.6773709467498
+        },
+        "services": {
+          "ontime": 0.6125336582459474,
+          "overdue": 0.352704793998176,
+          "bad_debt": 0.034761547755876594,
+          "avg_term_days": 36.716118430095364
+        },
+        "steel_metals": {
+          "ontime": 0.6026846229094767,
+          "overdue": 0.38619532811324464,
+          "bad_debt": 0.01112004897727875,
+          "avg_term_days": 42.02639858596935
+        },
+        "textile_clothing": {
+          "ontime": 0.6751707174060907,
+          "overdue": 0.258279757809059,
+          "bad_debt": 0.06654952478485038,
+          "avg_term_days": 39.595151346386515
+        },
+        "wholesale": {
+          "ontime": 0.559225173642437,
+          "overdue": 0.37395516844624505,
+          "bad_debt": 0.06681965791131798,
+          "avg_term_days": 37.935617780125085
+        }
+      }
+    },
+    {
+      "world": "v3_candidate_r3_20261026_train_001",
+      "manifest_sha256": "a1194284c2bd9d6e12411953a13d09e8ad4bf686f8831520ded3d087cf858b96",
+      "firms": 24,
+      "customers": 1424,
+      "invoices": 104315,
+      "source_data_sha256": {
+        "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+        "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+        "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+      },
+      "macro_source_counts": {
+        "oxcgrt": 366
+      },
+      "all_year_credit_value_share": 0.6278984236697314,
+      "all_year_outcomes_on_known_credit": {
+        "ontime": 0.5504333828667581,
+        "overdue": 0.35745608615456376,
+        "bad_debt": 0.09211053097867812,
+        "avg_term_days": 39.62486157994499
+      },
+      "negative_balance_firm_day_share": 0.1020727414939382,
+      "customer_default_events": 2034,
+      "invoice_count_2025_to_2019": 1.5034197777144485,
+      "net_revenue_ratio_2025_to_2019": 1.4676628812464858,
+      "years": {
+        "2019": {
+          "invoices": 14036,
+          "active_customers": 1056,
+          "invoice_net_to_nominal_revenue": 1.1809916657970376,
+          "credit_value_share": 0.6551987738165882,
+          "credit_count_share": 0.5990310629809062,
+          "censored_credit_value_share": 0.012858832201231322,
+          "negative_balance_firm_day_share": 0.04121004566210046
+        },
+        "2020": {
+          "invoices": 8819,
+          "active_customers": 961,
+          "invoice_net_to_nominal_revenue": 0.718523249626416,
+          "credit_value_share": 0.6275286565324086,
+          "credit_count_share": 0.5765959859394489,
+          "censored_credit_value_share": 0.01102512309977361,
+          "negative_balance_firm_day_share": 0.01923952641165756
+        },
+        "2021": {
+          "invoices": 8422,
+          "active_customers": 944,
+          "invoice_net_to_nominal_revenue": 0.6693577379791738,
+          "credit_value_share": 0.6084756095681791,
+          "credit_count_share": 0.5670862028021848,
+          "censored_credit_value_share": 0.01574044856933391,
+          "negative_balance_firm_day_share": 0.14965753424657535
+        },
+        "2022": {
+          "invoices": 14125,
+          "active_customers": 1026,
+          "invoice_net_to_nominal_revenue": 1.2269929028378352,
+          "credit_value_share": 0.6198635374883078,
+          "credit_count_share": 0.5614867256637168,
+          "censored_credit_value_share": 0.016000686023624897,
+          "negative_balance_firm_day_share": 0.09668949771689497
+        },
+        "2023": {
+          "invoices": 17853,
+          "active_customers": 1054,
+          "invoice_net_to_nominal_revenue": 1.4322394437284773,
+          "credit_value_share": 0.595670149529617,
+          "credit_count_share": 0.5516159749061782,
+          "censored_credit_value_share": 0.016648603635680638,
+          "negative_balance_firm_day_share": 0.16529680365296803
+        },
+        "2024": {
+          "invoices": 19958,
+          "active_customers": 1083,
+          "invoice_net_to_nominal_revenue": 1.6452721278754416,
+          "credit_value_share": 0.6319794249667485,
+          "credit_count_share": 0.5812205631826837,
+          "censored_credit_value_share": 0.030207351898331344,
+          "negative_balance_firm_day_share": 0.15152550091074682
+        },
+        "2025": {
+          "invoices": 21102,
+          "active_customers": 1079,
+          "invoice_net_to_nominal_revenue": 1.7332976309517671,
+          "credit_value_share": 0.6453813449340441,
+          "credit_count_share": 0.5776229741256753,
+          "censored_credit_value_share": 0.2733032828455071,
+          "negative_balance_firm_day_share": 0.09098173515981735
+        }
+      },
+      "industry_outcomes_on_known_credit": {
+        "food_processing": {
+          "ontime": 0.4556437801196964,
+          "overdue": 0.39979379454648745,
+          "bad_debt": 0.14456242533381608,
+          "avg_term_days": 34.375262502343965
+        },
+        "plastic_rubber": {
+          "ontime": 0.5389630685263664,
+          "overdue": 0.38773701532459326,
+          "bad_debt": 0.0732999161490403,
+          "avg_term_days": 47.475415138325076
+        },
+        "services": {
+          "ontime": 0.5723520148822192,
+          "overdue": 0.34799789439722656,
+          "bad_debt": 0.0796500907205542,
+          "avg_term_days": 33.348861626831585
+        },
+        "steel_metals": {
+          "ontime": 0.6988157095453921,
+          "overdue": 0.27656907730207414,
+          "bad_debt": 0.024615213152533764,
+          "avg_term_days": 44.663049277622115
+        },
+        "textile_clothing": {
+          "ontime": 0.5722863354118167,
+          "overdue": 0.31668642380104983,
+          "bad_debt": 0.11102724078713343,
+          "avg_term_days": 41.30106386161343
+        },
+        "wholesale": {
+          "ontime": 0.5370292343543871,
+          "overdue": 0.3831682712270299,
+          "bad_debt": 0.07980249441858295,
+          "avg_term_days": 40.67645977030378
+        }
+      }
+    },
+    {
+      "world": "v3_candidate_r3_20261026_validation_000",
+      "manifest_sha256": "41ec3ec3521eced8dd48567fd91d681a384c7b2a6ac9df01a878f9a8433cb387",
+      "firms": 24,
+      "customers": 1740,
+      "invoices": 69154,
+      "source_data_sha256": {
+        "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+        "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+        "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+      },
+      "macro_source_counts": {
+        "oxcgrt": 366
+      },
+      "all_year_credit_value_share": 0.6046687034329818,
+      "all_year_outcomes_on_known_credit": {
+        "ontime": 0.6345820277719199,
+        "overdue": 0.3311572427167038,
+        "bad_debt": 0.034260729511376355,
+        "avg_term_days": 41.270976831798706
+      },
+      "negative_balance_firm_day_share": 0.09915591187589623,
+      "customer_default_events": 2165,
+      "invoice_count_2025_to_2019": 0.9507278835386338,
+      "net_revenue_ratio_2025_to_2019": 0.8527792656981791,
+      "years": {
+        "2019": {
+          "invoices": 8930,
+          "active_customers": 1177,
+          "invoice_net_to_nominal_revenue": 1.1547176741045944,
+          "credit_value_share": 0.6227322594659377,
+          "credit_count_share": 0.5260918253079507,
+          "censored_credit_value_share": 0.008817963801889777,
+          "negative_balance_firm_day_share": 0.047031963470319633
+        },
+        "2020": {
+          "invoices": 8929,
+          "active_customers": 1105,
+          "invoice_net_to_nominal_revenue": 1.149493562399846,
+          "credit_value_share": 0.6215082149015647,
+          "credit_count_share": 0.5364542501959906,
+          "censored_credit_value_share": 0.01150212976639526,
+          "negative_balance_firm_day_share": 0.0692167577413479
+        },
+        "2021": {
+          "invoices": 8599,
+          "active_customers": 1112,
+          "invoice_net_to_nominal_revenue": 1.2055700227955426,
+          "credit_value_share": 0.6235638772261083,
+          "credit_count_share": 0.5113385277357833,
+          "censored_credit_value_share": 0.011879125287976362,
+          "negative_balance_firm_day_share": 0.029908675799086758
+        },
+        "2022": {
+          "invoices": 10895,
+          "active_customers": 1169,
+          "invoice_net_to_nominal_revenue": 1.3844633594294318,
+          "credit_value_share": 0.598185542688671,
+          "credit_count_share": 0.527581459385039,
+          "censored_credit_value_share": 0.01634913159490494,
+          "negative_balance_firm_day_share": 0.03961187214611872
+        },
+        "2023": {
+          "invoices": 10151,
+          "active_customers": 1036,
+          "invoice_net_to_nominal_revenue": 1.066047213099895,
+          "credit_value_share": 0.5816592320922856,
+          "credit_count_share": 0.5195547236725446,
+          "censored_credit_value_share": 0.0242441941621604,
+          "negative_balance_firm_day_share": 0.22454337899543378
+        },
+        "2024": {
+          "invoices": 13160,
+          "active_customers": 1140,
+          "invoice_net_to_nominal_revenue": 1.5660267303036957,
+          "credit_value_share": 0.5951241264191602,
+          "credit_count_share": 0.5351063829787234,
+          "censored_credit_value_share": 0.028436679017178258,
+          "negative_balance_firm_day_share": 0.18567850637522768
+        },
+        "2025": {
+          "invoices": 8490,
+          "active_customers": 870,
+          "invoice_net_to_nominal_revenue": 0.9847192902116252,
+          "credit_value_share": 0.58929930218923,
+          "credit_count_share": 0.4840989399293286,
+          "censored_credit_value_share": 0.22178949442336537,
+          "negative_balance_firm_day_share": 0.09794520547945205
+        }
+      },
+      "industry_outcomes_on_known_credit": {
+        "food_processing": {
+          "ontime": 0.678737467433006,
+          "overdue": 0.31415135695983193,
+          "bad_debt": 0.007111175607162116,
+          "avg_term_days": 43.85697263059347
+        },
+        "plastic_rubber": {
+          "ontime": 0.5546957589853623,
+          "overdue": 0.3854735853163645,
+          "bad_debt": 0.05983065569827316,
+          "avg_term_days": 46.948568864089594
+        },
+        "services": {
+          "ontime": 0.7611133164316427,
+          "overdue": 0.2044826746782486,
+          "bad_debt": 0.03440400889010873,
+          "avg_term_days": 42.14322020937766
+        },
+        "steel_metals": {
+          "ontime": 0.6405423805038811,
+          "overdue": 0.337693425989193,
+          "bad_debt": 0.021764193506925954,
+          "avg_term_days": 40.263363515581084
+        },
+        "textile_clothing": {
+          "ontime": 0.5890991187328832,
+          "overdue": 0.35316281393872617,
+          "bad_debt": 0.057738067328390576,
+          "avg_term_days": 43.39460815879947
+        },
+        "wholesale": {
+          "ontime": 0.6270476498236961,
+          "overdue": 0.33796425293765375,
+          "bad_debt": 0.03498809723865013,
+          "avg_term_days": 35.76307460158597
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "scenario_holdout": {
+    "train_validation_families": [
+      "demand",
+      "price",
+      "supply"
+    ],
+    "heldout_families": [
+      "credit"
+    ],
+    "test_scenarios": [
+      {
+        "world": "v3_candidate_r3_20261026_test_000",
+        "families": [
+          "credit"
+        ],
+        "reference_events": [
+          "heldout_credit_only_v1"
+        ],
+        "active_heldout_weeks_at_eval": 15
+      },
+      {
+        "world": "v3_candidate_r3_20261026_test_001",
+        "families": [
+          "credit",
+          "price"
+        ],
+        "reference_events": [
+          "heldout_price_credit_compound_v1"
+        ],
+        "active_heldout_weeks_at_eval": 16
+      }
+    ],
+    "passed": true
+  }
+}

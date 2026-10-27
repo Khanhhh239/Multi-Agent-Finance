@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gom mọi CSV kết quả trong outputs/ thành bảng Markdown (docs/RESULTS_TABLES.md) — số liệu không chép tay."""
+"""Gom CSV kết quả vào báo cáo Evaluation — số liệu không chép tay."""
 import sys
 from pathlib import Path
 import json
@@ -134,7 +134,7 @@ def main():
         summary = c.groupby('world').agg(checks=('passed', 'size'), passed=('passed', 'sum')).reset_index()
         summary['failed'] = summary['checks'] - summary['passed']
         summary.to_csv(OUT / 'wp0/world_contract_summary.csv', index=False)
-    parts = ["# Bảng kết quả (sinh tự động bởi scripts/make_report.py)\n"]
+    parts = []
     for title, f, cols in SECTIONS:
         p = OUT / f
         completed_protocol=None
@@ -184,11 +184,9 @@ def main():
             ci_cols = ['pinball_ci_low', 'pinball_ci_high', 'improvement_pct', 'improvement_ci_low', 'improvement_ci_high', 'n_firms', 'bootstrap_n']
             df = df[[c for c in dict.fromkeys(cols + ci_cols) if c in df.columns]]
         parts.append(f"## {title}\n\nNguồn: `outputs/{f}`\n\n{note}\n\n{md(df)}\n")
-    (ROOT / "docs" / "RESULTS_TABLES.md").write_text("\n".join(parts), encoding="utf-8")
-    print("wrote docs/RESULTS_TABLES.md")
     path = ROOT / 'docs/03_Evaluation/04_ket_qua_hien_co.md'
     start, end = '<!-- AUTO:IMPLEMENTATION_RESULTS -->', '<!-- /AUTO:IMPLEMENTATION_RESULTS -->'
-    generated = start + '\n\n' + '\n'.join(parts[1:]) + '\n' + end
+    generated = start + '\n\n' + '\n'.join(parts) + '\n' + end
     existing = path.read_text(encoding='utf-8')
     if start in existing and end in existing:
         left, tail = existing.split(start, 1)

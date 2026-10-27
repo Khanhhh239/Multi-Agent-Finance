@@ -1,5 +1,7 @@
 # Hiểu toàn bộ dự án Agent 1 — bản dễ nhớ (cập nhật 24/10/2026, chiều)
 
+> **Ảnh chụp ngày 24/10/2026.** Dùng tài liệu này để hiểu kiến trúc và lịch sử kết quả; các mục “hiện tại”, số World và cổng trong thân bài không thay [hướng dẫn nguồn hiện hành](AI_READING_GUIDE.md).
+
 > Mục tiêu của tài liệu này: đọc một lần (khoảng 40 phút) là nắm được **dự án làm gì, làm bằng cách nào, đã tới đâu, tin được tới mức nào, và việc tiếp theo là gì**.
 > Mọi con số lấy từ kết quả đã đo trong `outputs/` và `docs/03_Evaluation/GATES_CURRENT.md`. Chỗ nào chưa chắc, tài liệu nói rõ là chưa chắc.
 

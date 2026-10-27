@@ -1,0 +1,21 @@
+{
+  "worlds": [
+    "v3_releasecheck_r2_control_94317",
+    "v3_releasecheck_r2_control_94318",
+    "v3_releasecheck_r2_control_94319",
+    "v3_releasecheck_r2_control_94320",
+    "v3_releasecheck_r2_control_94321",
+    "v3_releasecheck_r2_control_94322",
+    "v3_releasecheck_r2_control_94323",
+    "v3_releasecheck_r2_control_94324",
+    "v3_releasecheck_r2_control_94325",
+    "v3_releasecheck_r2_control_94326"
+  ],
+  "commit": "70c0ceb0653161f70535b4c8b9fb3cee63b7405f",
+  "source_code_sha256": "e3d8843fc8794cdd50b92f423078544f3e5db00a22a08c2cf26cde15c35baa05",
+  "source_data_sha256": {
+    "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+    "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+    "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+  }
+}

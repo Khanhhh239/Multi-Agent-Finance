@@ -1,0 +1,104 @@
+{
+  "name": "v3_candidate_r4_20261026_validation_000",
+  "seed": 94320,
+  "start": "2019-01-01",
+  "end": "2025-12-31",
+  "n_firms": 24,
+  "tail": "atradius",
+  "industry_mix": {
+    "steel_metals": 0.2,
+    "textile_clothing": 0.2,
+    "plastic_rubber": 0.2,
+    "wholesale": 0.2,
+    "food_processing": 0.1,
+    "services": 0.1
+  },
+  "posting_mode_p": [
+    0.45,
+    0.3,
+    0.25
+  ],
+  "payrun_p": [
+    0.34,
+    0.07,
+    0.07,
+    0.06,
+    0.06,
+    0.12,
+    0.08,
+    0.08,
+    0.07,
+    0.05
+  ],
+  "late_scale": 1.0,
+  "dispute_scale": 1.0,
+  "n_cust_median": 60.0,
+  "revenue_median": 40000000000.0,
+  "memo_invoice_no_p": [
+    2.0,
+    2.0
+  ],
+  "ontime_shift": {
+    "steel_metals": 1.5852874021663275,
+    "textile_clothing": 1.0254328453817796,
+    "plastic_rubber": 0.4981237163147021,
+    "wholesale": 0.9554614515383556,
+    "food_processing": 0.8536614581650509,
+    "services": 0.748668172289366
+  },
+  "pd_mult": {
+    "steel_metals": 1.954499983273107,
+    "textile_clothing": 4.267202900663197,
+    "plastic_rubber": 2.382829554266311,
+    "wholesale": 3.8283931925208767,
+    "food_processing": 3.1096513347049903,
+    "services": 5.2324558945666295
+  },
+  "write_xml": 0,
+  "cod_mult": 1.8,
+  "cash_cap_days": 60.0,
+  "promises_mode": "legacy",
+  "rng_version": 3,
+  "supplier_cash_firm_p": 0.2,
+  "macro_regime": "baseline",
+  "season_override": null,
+  "hard_case": null,
+  "accounting_version": 6,
+  "shock_schedule": [
+    {
+      "family": "demand",
+      "start": "2019-10-21",
+      "rise_weeks": 2,
+      "peak_weeks": 4,
+      "recovery_weeks": 8,
+      "severity": 1.1,
+      "industries": [],
+      "regions": [],
+      "reference_event": "synthetic_v3_assumption"
+    },
+    {
+      "family": "supply",
+      "start": "2021-05-03",
+      "rise_weeks": 2,
+      "peak_weeks": 4,
+      "recovery_weeks": 8,
+      "severity": 1.0,
+      "industries": [],
+      "regions": [],
+      "reference_event": "synthetic_v3_assumption"
+    },
+    {
+      "family": "price",
+      "start": "2022-11-21",
+      "rise_weeks": 2,
+      "peak_weeks": 4,
+      "recovery_weeks": 8,
+      "severity": 0.8,
+      "industries": [],
+      "regions": [],
+      "reference_event": "synthetic_v3_assumption"
+    }
+  ],
+  "customer_realism": false,
+  "realism": "v1"
+}

@@ -1,5 +1,7 @@
 # WP-4 T9 · WP-5 T5 · WP-7 T7 · WP-8 T8
 
+> **Hồ sơ kế hoạch từ 15/10/2026.** Các trạng thái, lệnh và danh sách việc dưới đây phản ánh thời điểm lập; đọc [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md) trước khi dùng.
+
 ---
 
 ## WP-4 · T9 khớp sao kê — thiết kế lai quy tắc + ML (P0)

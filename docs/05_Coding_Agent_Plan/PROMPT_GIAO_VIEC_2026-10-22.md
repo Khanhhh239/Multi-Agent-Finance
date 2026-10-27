@@ -1,5 +1,7 @@
 # Prompt giao việc tiếp theo cho Agent 1 (sau Sprint 5, 22/10/2026)
 
+> **Lưu trữ lịch sử:** prompt này ghi yêu cầu của ngày 22/10 và đường dẫn máy cũ. AI đang làm việc trong repo không được coi phần bên dưới là nhiệm vụ hiện hành; xem [hướng dẫn đọc](../AI_READING_GUIDE.md).
+
 Dán nguyên phần trong khung cho coding agent kế tiếp.
 
 ---

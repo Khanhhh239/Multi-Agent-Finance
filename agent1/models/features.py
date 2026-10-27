@@ -41,7 +41,7 @@ class StationaryFeatures:
         result.loc[short,['issue_month','cut_month']]=np.nan
         return result
 
-FEATURES = [
+APPROVED_T1_FEATURES = (
     # hoá đơn
     "log_amount_rel", "term_days", "age_days", "days_to_due", "days_past_due", "is_overdue", "issue_month",
     "due_dom", "due_dow", "paid_frac_so_far", "has_due",
@@ -57,7 +57,65 @@ FEATURES = [
     "f_n_hist", "f_delay_mean", "f_resid_28d", "f_resid_trend", "f_open_n",
     # lịch
     "days_to_tet", "cut_month", "due_near_tet",
-]
+)
+FEATURES = list(APPROVED_T1_FEATURES)
+
+# These are the only T1 columns that may enter an estimator. Research ablations
+# must be registered here before they can be used; arbitrary extra columns in a
+# synthetic world are never automatically promoted to model features.
+OPTIONAL_FEATURES = ("f_resid_7d", "no_due", "c_disp_eb")
+ALLOWED_MODEL_FEATURES = frozenset((*APPROVED_T1_FEATURES, *OPTIONAL_FEATURES))
+MODEL_CONTEXT = ("invoice_id", "firm_id", "customer_id", "cutoff", "issue_date",
+                 "due_date", "amount_gross", "amount_open", "top1", "top2")
+MODEL_VISIBLE_COLUMNS = (*MODEL_CONTEXT, *FEATURES, *BASELINE_QUANTILES)
+
+
+def validate_feature_columns(columns):
+    """Fail closed: a new raw/latent/outcome column needs an explicit policy review."""
+    names = list(columns)
+    unknown = set(names) - ALLOWED_MODEL_FEATURES
+    if unknown:
+        raise ValueError(f'Đặc trưng cấm hoặc chưa được duyệt: {sorted(unknown)}')
+    if len(names) != len(set(names)):
+        raise ValueError('Danh sách đặc trưng có cột trùng')
+
+
+def model_snapshot_view(snapshot: pd.DataFrame, cutoff) -> pd.DataFrame:
+    """Only information available at cutoff; drops every unregistered raw column."""
+    validate_feature_columns(FEATURES)
+    T = pd.Timestamp(cutoff)
+    if pd.isna(T):
+        raise ValueError('Ngày dự báo cutoff không hợp lệ')
+    if snapshot.empty:
+        return pd.DataFrame(columns=MODEL_VISIBLE_COLUMNS)
+    if 'cutoff' not in snapshot:
+        raise ValueError('Thiếu ngày dự báo cutoff')
+    dates = pd.to_datetime(snapshot['cutoff'], errors='coerce')
+    if dates.isna().any() or not dates.eq(T).all():
+        raise ValueError('Snapshot chứa ngày dự báo khác cutoff')
+    required = set(MODEL_CONTEXT[:8]) | set(FEATURES)
+    missing = required - set(snapshot)
+    if missing:
+        raise ValueError(f'Snapshot thiếu cột được phép: {sorted(missing)}')
+    issued = pd.to_datetime(snapshot['issue_date'], errors='coerce')
+    if issued.isna().any() or (issued > T).any():
+        raise ValueError('Snapshot chứa hóa đơn chưa phát hành tại cutoff')
+    return snapshot.loc[:, [name for name in MODEL_VISIBLE_COLUMNS if name in snapshot]].copy()
+
+
+def published_macro_as_of(macro: pd.DataFrame, cutoff) -> pd.DataFrame:
+    """Latest published public indicator; generator-only macro state stays hidden."""
+    required = {'week', 'published_date', 'covid_source', 'covid_stress'}
+    if required - set(macro):
+        raise ValueError(f'Macro thiếu cột công bố: {sorted(required - set(macro))}')
+    T = pd.Timestamp(cutoff)
+    weeks = pd.to_datetime(macro['week'], errors='coerce')
+    published = pd.to_datetime(macro['published_date'], errors='coerce')
+    if pd.isna(T) or weeks.isna().any() or published.isna().any() or (published < weeks + pd.Timedelta(days=7)).any():
+        raise ValueError('Ngày công bố macro không hợp lệ')
+    visible = macro.loc[(published <= T) & (weeks <= T) & macro['covid_source'].eq('oxcgrt'),
+                        ['week', 'published_date', 'covid_stress']]
+    return visible.sort_values(['published_date', 'week']).tail(1).copy()
 
 
 def _dom_next(dom_from: np.ndarray, targets: np.ndarray) -> np.ndarray:
@@ -89,12 +147,21 @@ class SnapshotBuilder:
                      'ledger_post_date' if label_col == 'ledger_clear_date' else 'est_pay_date')
             if pdate not in payments:
                 raise ValueError(f'Thiếu cột ngày quan sát {pdate} cho {label_col}')
-            p = payments[["invoice_id", pdate, "amount", "kind"]].rename(columns={pdate: "pdate"})
-            p = p[p["kind"].isin(["partial"])]
+            invoice_key = 'ledger_invoice_id' if label_col == 'ledger_clear_date' and 'ledger_invoice_id' in payments else 'invoice_id'
+            columns = [invoice_key, pdate, 'amount']
+            if 'fx_adjustment' in payments:
+                columns.append('fx_adjustment')
+            p = payments[columns].rename(columns={invoice_key: 'invoice_id', pdate: 'pdate'})
+            p['face_amount'] = p['amount'] - p['fx_adjustment'] if 'fx_adjustment' in p else p['amount']
             self.pay = p.merge(inv[["invoice_id", "amount_gross"]], on="invoice_id")
         self.prom = promises.copy() if promises is not None and len(promises) else None
         self.hl = ewm_halflife
         self.eb_k = eb_k
+
+    # --------------------------------------------------------------------------------------------
+    def model_snapshot(self, T, visible_from=None, firms=None) -> pd.DataFrame:
+        """Forecast-facing view; outcomes remain available only to label builders."""
+        return model_snapshot_view(self.snapshot(T, visible_from=visible_from, firms=firms), T)
 
     # --------------------------------------------------------------------------------------------
     def snapshot(self, T, visible_from=None, firms=None) -> pd.DataFrame:
@@ -108,7 +175,12 @@ class SnapshotBuilder:
         issued = vis["issue_date"] <= T
         settled = vis["label_date"].notna() & (vis["label_date"] <= T)
         written = vis["writeoff_date"].notna() & (vis["writeoff_date"] <= T)
-        op = vis[issued & ~settled & ~written].copy()
+        if {'credit_note', 'credit_note_date'} <= set(vis.columns):
+            credit_known = pd.to_datetime(vis['credit_note_date']) <= T
+            credited_out = credit_known & vis['credit_note'].ge(vis['amount_gross'] - 1.)
+        else:
+            credited_out = pd.Series(False, index=vis.index)
+        op = vis[issued & ~settled & ~written & ~credited_out].copy()
         if op.empty:
             return op
         hist = vis[settled].copy()
@@ -130,10 +202,16 @@ class SnapshotBuilder:
         op["due_dow"] = op["due_date"].dt.dayofweek
         if self.pay is not None:
             pp = self.pay[(self.pay["pdate"] <= T) & self.pay["invoice_id"].isin(op["invoice_id"])]
-            frac = (pp.groupby("invoice_id")["amount"].sum() / pp.groupby("invoice_id")["amount_gross"].first())
-            op["paid_frac_so_far"] = op["invoice_id"].map(frac).fillna(0.0).clip(0, 1)
+            paid = op['invoice_id'].map(pp.groupby('invoice_id')['face_amount'].sum()).fillna(0.)
+            op["paid_frac_so_far"] = (paid / op['amount_gross']).clip(0, 1)
         else:
+            paid = pd.Series(0., index=op.index)
             op["paid_frac_so_far"] = np.nan
+        if {'credit_note', 'credit_note_date'} <= set(op.columns):
+            credit = op['credit_note'].where(pd.to_datetime(op['credit_note_date']) <= T, 0.).fillna(0.)
+        else:
+            credit = pd.Series(0., index=op.index)
+        op['amount_open'] = (op['amount_gross'] - paid - credit).clip(lower=0.)
         # ---------------- công ty
         f = hist.assign(delay_clipped=hist['delay'].clip(-60, 180)).groupby("firm_id").agg(
             f_n_hist=("delay", "size"), f_delay_mean=("delay_clipped", 'mean'))

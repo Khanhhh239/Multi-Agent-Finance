@@ -1,0 +1,47 @@
+{
+  "source_code_sha256": "a0dbcbe6df9c7552da84c1a043e56e02d1c9542ae0daf8a793f4b4d45dcc49cd",
+  "rng_version": 3,
+  "supplier_cash_firm_p": 0.2,
+  "supplier_cash_firm_p_basis": "explicit simulation assumption; not a Vietnamese SME estimate",
+  "baseline_common_factor": "weekly Student-t AR(1) path clipped to [-0.8, 0.8]",
+  "stress_common_factor": "unclipped path capped above by fixed -0.6 sine wave in final calendar year; worse paths unchanged",
+  "assignment_rule": "train and validation even ordinal baseline, odd ordinal stress; tests baseline",
+  "worlds": [
+    {
+      "name": "v3_candidate_r5_20261026_train_000",
+      "role": "train",
+      "seed": 94318,
+      "macro_regime": "baseline"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_train_001",
+      "role": "train",
+      "seed": 94319,
+      "macro_regime": "stress"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_validation_000",
+      "role": "validation",
+      "seed": 94320,
+      "macro_regime": "baseline"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_validation_001",
+      "role": "validation",
+      "seed": 94321,
+      "macro_regime": "stress"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_test_000",
+      "role": "test",
+      "seed": 94322,
+      "macro_regime": "baseline"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_test_001",
+      "role": "test",
+      "seed": 94323,
+      "macro_regime": "baseline"
+    }
+  ]
+}

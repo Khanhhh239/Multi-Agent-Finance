@@ -1,5 +1,7 @@
 # 1. Hiện trạng, môi trường và quy ước
 
+> **Hồ sơ kế hoạch từ 15/10/2026.** Các trạng thái, lệnh và danh sách việc dưới đây phản ánh thời điểm lập; đọc [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md) trước khi dùng.
+
 ## 1.1 Bản đồ mã (đã có)
 
 ```
@@ -31,7 +33,7 @@ scripts/
   build_worlds.py     hiệu chỉnh + dựng src/tgt/sens_uk/sens_coface
   run_t1.py           exp A,B,C,D,E (E gồm F) ; run_t2_t3.py ; run_t4.py ; run_t6.py ; run_t7.py ; run_t9.py
   run_all_t1.sh, run_rest.sh   chạy tuần tự
-  make_report.py      gom CSV → docs/RESULTS_TABLES.md
+  make_report.py      gom CSV → docs/03_Evaluation/04_ket_qua_hien_co.md
   roi_calc.py         ROI (docs/03_Evaluation/06)
   realism_audit.py    kiểm tra bộ hoá đơn (từ Phần 7)
 tests/test_t0_t5.py   15 kiểm thử

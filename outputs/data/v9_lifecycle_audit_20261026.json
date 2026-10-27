@@ -1,0 +1,15 @@
+{
+  "controls": [],
+  "hard_cases": {
+    "heterogeneity": {
+      "customer_between_variance_share": 0.6136942416029909
+    },
+    "lumpy_customer": {
+      "firms_in_40_60_share": 12,
+      "firm_count": 12,
+      "min_share": 0.4409317362256798,
+      "median_share": 0.47823275904752677,
+      "max_share": 0.5832444676960111
+    }
+  }
+}

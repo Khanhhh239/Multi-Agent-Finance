@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "commit": "70c0ceb0653161f70535b4c8b9fb3cee63b7405f",
+  "source_code_sha256": "a0dbcbe6df9c7552da84c1a043e56e02d1c9542ae0daf8a793f4b4d45dcc49cd",
+  "source_data_sha256": {
+    "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+    "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+    "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+  },
+  "split_protocol": {
+    "origin": "2024-07-01",
+    "label_horizon_days": 120,
+    "train_stride_days": 28,
+    "eval_stride_days": 28
+  },
+  "worlds": [
+    {
+      "name": "v3_candidate_r5_20261026_train_000",
+      "role": "train",
+      "manifest_sha256": "e78320c29ce4398ba98bf9e3407425e295a8c02d8a6cdd50566717d7910911a7"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_train_001",
+      "role": "train",
+      "manifest_sha256": "65fc31e04bf03c8dcb07cc8b9f9195089220d1b1b62bd17742c83c94ea7b68be"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_validation_000",
+      "role": "validation",
+      "manifest_sha256": "9ddab4c5ec494ef1f3975a2e0c3028f3b3fbfb239613bb5481bd37d2e7f11894"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_validation_001",
+      "role": "validation",
+      "manifest_sha256": "2ec7407d497180b229186957ece3aa2cc9392c5e5947372c4cf629a8e3d2cc91"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_test_000",
+      "role": "test",
+      "manifest_sha256": "5483e9e8b6058608615a5ff972c71438913a1e1f4210290b2d61ead727f590ef"
+    },
+    {
+      "name": "v3_candidate_r5_20261026_test_001",
+      "role": "test",
+      "manifest_sha256": "77d16a53b8a65923e43a97191f7c794dd95d3fee6325c211b097c97da569497d"
+    }
+  ]
+}

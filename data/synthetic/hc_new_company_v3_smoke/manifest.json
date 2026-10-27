@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "world": "hc_new_company_v3_smoke",
+  "seed": 901,
+  "config": {
+    "name": "hc_new_company_v3_smoke",
+    "seed": 901,
+    "start": "2025-01-01",
+    "end": "2025-12-31",
+    "n_firms": 1,
+    "tail": "atradius",
+    "industry_mix": {
+      "steel_metals": 0.2,
+      "textile_clothing": 0.2,
+      "plastic_rubber": 0.2,
+      "wholesale": 0.2,
+      "food_processing": 0.1,
+      "services": 0.1
+    },
+    "posting_mode_p": [
+      0.45,
+      0.3,
+      0.25
+    ],
+    "payrun_p": [
+      0.34,
+      0.07,
+      0.07,
+      0.06,
+      0.06,
+      0.12,
+      0.08,
+      0.08,
+      0.07,
+      0.05
+    ],
+    "late_scale": 1.0,
+    "dispute_scale": 1.0,
+    "n_cust_median": 60.0,
+    "revenue_median": 40000000000.0,
+    "memo_invoice_no_p": [
+      2.0,
+      2.0
+    ],
+    "ontime_shift": {},
+    "pd_mult": {},
+    "write_xml": 0,
+    "cod_mult": 1.8,
+    "cash_cap_days": 60.0,
+    "promises_mode": "legacy",
+    "rng_version": 2,
+    "season_override": null,
+    "hard_case": "new_company",
+    "accounting_version": 6,
+    "shock_schedule": [],
+    "customer_realism": false,
+    "realism": "v1"
+  },
+  "config_sha256": "2c676f19de85a7b456a78234472e519aec4b06fadcb0d229b8058234b9a6a2f6",
+  "commit": "70c0ceb0653161f70535b4c8b9fb3cee63b7405f",
+  "source_code_sha256": "d312547c3137131baa058b951347d256ddc9483ce14d8eb2ec56f05efbcfbed5",
+  "source_data_sha256": {
+    "calibration": null,
+    "oxcgrt": null,
+    "wdi": null
+  },
+  "tables_sha256": {
+    "bank_txns.parquet": "95ff42831290b7c73dbe26ec975d2c67ccf0060c6716da4e3b95dd1d8e319349",
+    "customers.parquet": "aa270bcd266c57e1be81a1aa1b529b0b4cb46b7cdf725e4f0633b87c107da689",
+    "daily_cash.parquet": "e2fbc8d98346b4f5851201fc1c6a8b3d367f73d8c2036d78513bca5100af36ed",
+    "events.parquet": "e31dff56ecb67d2e27619dab1f35ddf192505f9c27cbd8ad6842d207784d7200",
+    "firms.parquet": "0dc791f38225ea3b115bb49234b8e0f5ff211b8401716f015d1adaeeaca20943",
+    "inventory_weekly.parquet": "1b5a92a00a4fcf3eaf4da0b5e5e0b6c8cd8230768dcfd0e2a04542798a8c2a05",
+    "invoices.parquet": "72c1f6229811de6a1f4df08adf84cc4e67791be234b41966cfd18b8c735ef972",
+    "macro.parquet": "097f36876a4531389aa1b3c2af3d71a55c04050609610612970b8ce9223a35de",
+    "outflows.parquet": "241d8c570b496a55747efd2f56dc17530d9b5076567d79624402df1c5861bffd",
+    "payments.parquet": "bf0d7a51a99d120dc65962a8a5446391ddb2590b004d249bb891db494072c28e",
+    "promises.parquet": "855603b7aebbc76e59281a05823e20231ffb6d10074c129b68b4ef5efb14544e",
+    "shock_truth.parquet": "0f9b5b0e9fd561a76e4dc16b7bd87a52749cecd4002907bd5d2e369cfe759447"
+  }
+}

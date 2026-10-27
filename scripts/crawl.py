@@ -9,6 +9,7 @@ Payment Times Úc) được in ở mục MANUAL, không tự động.
   python scripts/crawl.py --only wdi_vn,oxcgrt,uk_ppr,online_retail_ii,berka,customer_invoices
   python scripts/crawl.py --only sba_7a          # ~436 MB
   python scripts/crawl.py --only bpi2019         # ~729 MB, có kiểm MD5
+  python scripts/crawl.py --only customer_invoices --customer-invoices-file path/to/Dataset.csv
 """
 import argparse
 import hashlib
@@ -69,8 +70,7 @@ SOURCES = {
                     role="T1 thời gian thanh toán hoá đơn thật (phía phải trả), T9 bằng chứng ghi sổ theo lô"),
     "customer_invoices": dict(files=[("https://raw.githubusercontent.com/SkywalkerHub/Payment-Date-Prediction/main/Dataset.csv",
                                       "customer_invoices/Dataset.csv")],
-                              license="không rõ (bản sao GitHub của Kaggle pradumn203)", local_fallback=
-                              r"C:\Users\Admin\Downloads\invoice_prediction\data\dataset.csv",
+                              license="không rõ (bản sao GitHub của Kaggle pradumn203)",
                               role="T1 bộ AR giống ERP (độ tin cậy C) — chỉ để thử phương pháp"),
 }
 
@@ -144,6 +144,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--only", default="")
+    ap.add_argument("--customer-invoices-file", type=Path,
+                    help="Local Dataset.csv fallback if the customer_invoices URL fails")
     a = ap.parse_args()
     keys = list(SOURCES) + ["wdi_vn"]
     if a.list or not a.only:
@@ -171,8 +173,8 @@ def main():
                     try:
                         paths.append(fetch(url, RAW / rel))
                     except Exception as e:  # noqa: BLE001
-                        fb = spec.get("local_fallback")
-                        if not fb or not Path(fb).exists():
+                        fb = a.customer_invoices_file if k == "customer_invoices" else None
+                        if not fb or not fb.is_file():
                             raise
                         print("  [fallback] %s -> copy local %s (%s)" % (rel, fb, e))
                         (RAW / rel).parent.mkdir(parents=True, exist_ok=True)

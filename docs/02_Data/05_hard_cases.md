@@ -8,9 +8,9 @@ Mỗi hard case cần: *cách sinh*, *nhãn đi kèm*, *cách đo*.
 | # | Hard case | Mô tả | Cách sinh | Nhãn | Cách đo | TT |
 |---|---|---|---|---|---|---|
 | H1 | Khách trả đúng theo lịch riêng | Ngày 10 & 25 hằng tháng, thứ Năm hằng tuần… | `payrun` 10 mẫu | `customers.payrun` | WAPE thu theo tuần, AUC biến "ngày chạy rơi vào tuần k" | ✅ |
-| H2 | Khách mới, chưa có lịch sử (cold start) | <3 hoá đơn đã đóng | `start_day` ngẫu nhiên | `c_n_hist` | Phân tầng lỗi theo `c_n_hist` | ✅ (đo chưa tách tầng) |
+| H2 | Khách mới, chưa có lịch sử (cold start) | <3 hoá đơn đã đóng | sự kiện `customer_acquired` theo tuần, có khách tạm rời và quay lại | `c_n_hist`, `events` | Phân tầng lỗi theo `c_n_hist` | ✅ (đo chưa tách tầng) |
 | H3 | Điểm gãy riêng khách | Từ ngày D mọi HĐ chậm thêm 8–25 ngày | 10% khách | `events` | Tỷ lệ phát hiện / độ trễ / báo giả (T7) | ✅ |
-| H4 | Suy giảm trước vỡ nợ | HĐ đáo hạn trong 120 ngày trước vỡ nợ chậm thêm 10–40 ngày | tự động | `customers.default_date` | P(nợ xấu) tăng trước sự kiện | ✅ |
+| H4 | Suy giảm trước vỡ nợ | HĐ đáo hạn trước vỡ nợ chịu thanh khoản yếu và hazard trả theo tuần | tự động | `events` chứa mọi lần vỡ nợ; `customers.default_date` chỉ lần đầu | P(nợ xấu) tăng trước sự kiện | ✅ (chưa đo riêng theo lần lặp) |
 | H5 | Vỡ nợ tương quan | Cụm khách vỡ nợ khi thị trường căng | hazard theo `S_t` và `F_t` | `events` | Phân bố số vỡ nợ/tuần (dispersion > Poisson) | ✅ |
 | H6 | Trễ cực dài (>180 ngày) | Đuôi Pareto | `ultra_p`, `tail=coface` | `invoices.ultra_late` | Độ phủ P90; hiệu chỉnh đuôi | ✅ |
 | H7 | Tranh chấp kéo dài + giảm trừ | +15–75 ngày, credit note | `dispute_p` | `invoices.dispute, credit_note` | AUC tranh chấp; sai số tiền kỳ vọng | ✅ |

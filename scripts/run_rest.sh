@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 # Chạy phần còn lại tuần tự, giới hạn luồng (máy dùng chung). Mỗi bước ghi log riêng.
 cd "$(dirname "$0")/.."
 export AGENT1_THREADS=${AGENT1_THREADS:-4} OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 MKL_NUM_THREADS=2

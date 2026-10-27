@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "world": "v3_final_20261027_test_001",
+  "seed": 95325,
+  "config": {
+    "name": "v3_final_20261027_test_001",
+    "seed": 95325,
+    "start": "2019-01-01",
+    "end": "2025-12-31",
+    "n_firms": 40,
+    "tail": "coface",
+    "industry_mix": {
+      "steel_metals": 0.2,
+      "textile_clothing": 0.2,
+      "plastic_rubber": 0.2,
+      "wholesale": 0.2,
+      "food_processing": 0.1,
+      "services": 0.1
+    },
+    "posting_mode_p": [
+      0.45,
+      0.3,
+      0.25
+    ],
+    "payrun_p": [
+      0.34,
+      0.07,
+      0.07,
+      0.06,
+      0.06,
+      0.12,
+      0.08,
+      0.08,
+      0.07,
+      0.05
+    ],
+    "late_scale": 0.9,
+    "dispute_scale": 1.0,
+    "n_cust_median": 60.0,
+    "revenue_median": 40000000000.0,
+    "memo_invoice_no_p": [
+      2.0,
+      2.0
+    ],
+    "ontime_shift": {
+      "steel_metals": 1.5852874021663275,
+      "textile_clothing": 1.0254328453817796,
+      "plastic_rubber": 0.4981237163147021,
+      "wholesale": 0.9554614515383556,
+      "food_processing": 0.8536614581650509,
+      "services": 0.748668172289366
+    },
+    "pd_mult": {
+      "steel_metals": 1.954499983273107,
+      "textile_clothing": 4.267202900663197,
+      "plastic_rubber": 2.382829554266311,
+      "wholesale": 3.8283931925208767,
+      "food_processing": 3.1096513347049903,
+      "services": 5.2324558945666295
+    },
+    "write_xml": 0,
+    "cod_mult": 1.8,
+    "cash_cap_days": 60.0,
+    "promises_mode": "legacy",
+    "rng_version": 3,
+    "supplier_cash_firm_p": 0.2,
+    "macro_regime": "baseline",
+    "season_override": null,
+    "hard_case": null,
+    "accounting_version": 6,
+    "shock_schedule": [
+      {
+        "family": "price",
+        "start": "2024-07-29",
+        "rise_weeks": 3,
+        "peak_weeks": 4,
+        "recovery_weeks": 10,
+        "severity": 0.9,
+        "industries": [],
+        "regions": [],
+        "reference_event": "heldout_price_credit_compound_v1"
+      },
+      {
+        "family": "credit",
+        "start": "2024-07-29",
+        "rise_weeks": 3,
+        "peak_weeks": 4,
+        "recovery_weeks": 10,
+        "severity": 1.1,
+        "industries": [],
+        "regions": [],
+        "reference_event": "heldout_price_credit_compound_v1"
+      }
+    ],
+    "customer_realism": false,
+    "realism": "v1"
+  },
+  "config_sha256": "af965d699d62e32b989f9408add0e2a78014b5d8e6219e9f04874a7107b7c409",
+  "commit": "70c0ceb0653161f70535b4c8b9fb3cee63b7405f",
+  "source_code_sha256": "a0dbcbe6df9c7552da84c1a043e56e02d1c9542ae0daf8a793f4b4d45dcc49cd",
+  "source_data_sha256": {
+    "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+    "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+    "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26"
+  },
+  "tables_sha256": {
+    "bank_txns.parquet": "d071dd8c019568a9a14bb813f495099fdb42ac29cec8a85abc313bb86d1bcef5",
+    "customers.parquet": "feab9f3a8949a15d31a9304b6771a136b0186765906e92060a187cfc41cd6512",
+    "daily_cash.parquet": "f3a5736c23aea46919e7e0bdc4117b5fdfffd161ecebe5784eefd15c41e2e7fa",
+    "events.parquet": "a2cb5ced6ef436eb2d9d61b587519ba6bdebe64121c81aa9befbfaf950faa0ac",
+    "firms.parquet": "7385405362e18da2d0833e490cbf9edf3a4729f7f24d1489195327ea128494f4",
+    "inventory_weekly.parquet": "54338c79a45cbc1a82a0bd9a77b736c274c8400bf6351b28310097569d38e069",
+    "invoices.parquet": "af6b660c18f5adfbbab7569c49e4f83a7fbab56807b7b67f593f3591ff503774",
+    "macro.parquet": "a284d2e9bdffe18365ee98fba500e15c444fe0afba01c6ae600ebcf79cd72737",
+    "outflows.parquet": "874cd8d12313948ed37f47927d3733e3316ff3a9d263b2dfaaa26fa721d5ada3",
+    "payments.parquet": "f0a54a23036022541269d417a19a1feb962de2b4c52a1e26976d66c490478c8b",
+    "promises.parquet": "df41bc27d80f10dcd542039a6d150e7eb08487531abc684fcef5869a2045f92e",
+    "shock_truth.parquet": "d89d67951d36a61ede2e2ab1f56c6f430f392fd2b8dbc5d2d093bfc1db11b061"
+  }
+}

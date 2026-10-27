@@ -1,5 +1,9 @@
 # Chạy lại hazard sau sửa tuần bị kiểm duyệt — 21/10/2026
 
+> **Giao thức theo thời điểm 21/10.** Một số script, cache và log được nhắc bên
+> dưới không còn trên đĩa ngày 27/10; dùng CSV/báo cáo hiện có để đọc kết quả,
+> và kiểm file thực tế trước khi dùng lệnh của kế hoạch này.
+
 Nguồn sự thật: nhật ký Sprint 1 và yêu cầu bàn giao ngày 21/10. Không sửa
 `expand`, `HazardLR._prep` hoặc `scripts/sprint1/run_real_v2.py`.
 Hash hai file khoá được lưu ở `outputs/implementation/fullweek_protected.json`.

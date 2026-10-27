@@ -1,5 +1,7 @@
 # 5. Chi phí xây dựng và vận hành (phía nhà cung cấp sản phẩm)
 
+> **Ước tính kế hoạch tại thời điểm lập, không phải hiện trạng triển khai.** Danh sách “phần còn lại” bên dưới đã cũ ở những mục như API/dashboard; xem [tiến độ hiện hành](../05_Coding_Agent_Plan/TIEN_DO_TRIEN_KHAI.md) trước khi lập kế hoạch mới.
+
 **Mọi đơn giá lương/hạ tầng dưới đây là giả định của người lập (mặt bằng VN 2026, cần thay bằng báo giá thật).**
 Tính bằng triệu đồng (tr) trừ khi ghi khác. Công thức ở cuối file để tính lại khi đổi giả định.
 

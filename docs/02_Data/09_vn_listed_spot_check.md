@@ -1,6 +1,10 @@
 # Đối chiếu độc lập BCTC doanh nghiệp niêm yết
 
 Đọc ngày 20/10/2026. Chỉ dùng mô tả, không dùng để chỉnh máy phát.
+
+> **Hồ sơ lịch sử:** các PDF `data/raw/vn_listed/` không có trong workspace ngày
+> 27/10/2026. `vn_listed_inputs.json` và CSV kết quả vẫn còn, nhưng không thể
+> xác minh lại việc chép số từ PDF cho tới khi tải lại đúng bản nguồn và kiểm hash.
 Đầu vào chép từ trang PDF đã render trong `vn_listed_inputs.json`; mã tính
 trong `scripts/run_vn_listed_check.py`. Kết quả và hash PDF ở
 `outputs/data/vn_listed_accounting.csv`, so máy phát ở
@@ -39,5 +43,5 @@ hoá đơn hoặc thời gian trả trung bình.
 Ba DN-kỳ ở hai năm khác nhau, một DN mỗi ngành, báo cáo hợp nhất của DN
 lớn không đại diện SME. Không bootstrap ba DN này thành CI theo ngành,
 nên không đặt cổng dung sai sau khi thấy số. Còn mẫu nhiều DN,
-nhiều kỳ trước khi nghiệm thu WP-D4.4 đầy đủ. Dữ liệu thô giữ trong
-`data/raw/vn_listed/`, có MANIFEST/SHA-256, không đưa vào Git.
+nhiều kỳ trước khi nghiệm thu WP-D4.4 đầy đủ. Manifest/CSV lịch sử có SHA-256
+của các PDF; file PDF thô không nằm trong workspace hiện tại.

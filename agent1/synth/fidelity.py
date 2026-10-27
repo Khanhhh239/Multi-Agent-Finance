@@ -27,6 +27,8 @@ def _between_share(x: pd.Series, keys: pd.Series) -> float:
 def value_outcomes(inv: pd.DataFrame) -> pd.DataFrame:
     """Tỷ trọng theo GIÁ TRỊ: đúng hạn / quá hạn / nợ xấu (định nghĩa Atradius), chỉ hoá đơn bán chịu."""
     d = inv[inv["term_days"] > 0].copy()
+    if 'outcome_status_at_end' in d:
+        d = d[d['outcome_status_at_end'] != 'censored']
     d["late"] = (d["days_late_true"] > 0) & ~d["is_bad_debt"]
     d["ontime"] = ~d["late"] & ~d["is_bad_debt"]
     d["v"] = d["amount_gross"]

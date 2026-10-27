@@ -1,5 +1,7 @@
 # 3. Cổng nghiệm thu (GO / NO-GO)
 
+> **Bảng trạng thái lịch sử ngày 15/10/2026.** Giữ ngưỡng và kết quả tại thời điểm lập; không dùng cột trạng thái bên dưới để kết luận hiện nay. Đọc [GATES_CURRENT.md](GATES_CURRENT.md) và CSV bằng chứng tương ứng.
+
 Ngưỡng là **đề xuất thiết kế** (không có nguồn bên ngoài), đặt trước khi xem kết quả tập kiểm tra giữ lại. Trạng thái
 cập nhật ngày 15/10/2026 từ `outputs/` — "CHƯA ĐO" nghĩa là mã có, thí nghiệm chưa chạy xong.
 

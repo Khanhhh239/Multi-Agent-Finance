@@ -1,7 +1,14 @@
 # PHÒNG KẾ TOÁN SỐ — PHẦN 2: KIẾN TRÚC & PHẦN 3: KẾ HOẠCH THỰC THI (BẢN CHI TIẾT)
+
+> **Đề xuất kiến trúc cho toàn bộ phòng kế toán số, gồm Agent 1–4.** Đây là
+> thiết kế và giả thuyết, không phải danh mục chức năng đã triển khai trong repo
+> Agent 1. Các số thị trường, liên kết ngoài và quy định pháp lý phải kiểm lại
+> tại thời điểm sử dụng. Phần 1 được nhắc dưới đây không nằm trong repo;
+> trạng thái Agent 1 đọc ở [hướng dẫn tài liệu](AI_READING_GUIDE.md).
+
 ## Kiến trúc tối ưu có chứng minh · Kế hoạch từng bước: cách làm, dữ liệu, model, train/inference
 
-> Tiếp nối [Phần 1 — Nghiên cứu vấn đề](DIGITAL_ACCOUNTING_PART1_PROBLEM_RESEARCH.md). Mọi lựa chọn đều có: **lý do chọn → phương án bị loại và vì sao → nguồn (paper/GitHub/production) → số liệu**. Phần 3 viết ở mức chi tiết "đọc là code lại được": từng bước có mô tả thuật toán, tham số, dataset kèm link, chế độ train/inference và tiêu chí nghiệm thu.
+> Tiếp nối Phần 1 — Nghiên cứu vấn đề (tài liệu này không nằm trong repo). Mọi lựa chọn đều có: **lý do chọn → phương án bị loại và vì sao → nguồn (paper/GitHub/production) → số liệu**. Phần 3 viết ở mức chi tiết "đọc là code lại được": từng bước có mô tả thuật toán, tham số, dataset kèm link, chế độ train/inference và tiêu chí nghiệm thu.
 
 ---
 
@@ -631,4 +638,4 @@ Bộ 100 câu hỏi CEO viết cùng cố vấn, chia: 30 tra số đơn, 20 so 
 | Hệ thống | Red-team: injection qua diễn giải | 100% bị chặn |
 
 ---
-*Phần 2–3 nối tiếp [Phần 1](DIGITAL_ACCOUNTING_PART1_PROBLEM_RESEARCH.md). Mục tiêu ở 3.9 là target thiết kế (chưa phải kết quả); mọi benchmark bên ngoài có link nguồn tại chỗ. Pháp lý VN cần đối chiếu văn bản gốc trước khi nộp hồ sơ chính thức.*
+*Phần 2–3 nối tiếp Phần 1 (không nằm trong repo). Mục tiêu ở 3.9 là target thiết kế (chưa phải kết quả); mọi benchmark bên ngoài có link nguồn tại chỗ. Pháp lý VN cần đối chiếu văn bản gốc trước khi nộp hồ sơ chính thức.*

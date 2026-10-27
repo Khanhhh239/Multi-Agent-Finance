@@ -1,5 +1,12 @@
 # Agent 1 — Thẻ dữ liệu (Data Card)
 
+> **Ảnh chụp dữ liệu giai đoạn đầu.** Bảng bốn World và tám nguồn bên dưới
+> không phải tồn kho ngày 27/10/2026: file thô hiện chỉ còn WDI và OxCGRT.
+> Manifest tám nguồn đã chuyển thành [hồ sơ lịch sử](02_Data/MANIFEST_RAW_8_SOURCES_2026-10-14_ARCHIVE.json).
+> Để dùng bộ train synthetic cuối, đọc [báo cáo 23](02_Data/23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md)
+> và [cohort JSON](../data/synthetic/v3_final_20261027_cohort.json); trạng thái
+> pilot đọc ở [cổng hiện hành](03_Evaluation/GATES_CURRENT.md).
+
 Dữ liệu của Agent 1 theo **ba tầng** (Phần 5, mục 0). Mỗi tầng chỉ được dùng cho đúng loại kết luận của nó:
 
 | Tầng | Nội dung | Được kết luận gì |

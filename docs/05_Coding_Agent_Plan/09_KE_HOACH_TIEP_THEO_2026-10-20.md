@@ -1,5 +1,7 @@
 # Kế hoạch tiếp theo cho Agent 1 (rà soát ngày 20/10/2026)
 
+> **Kế hoạch lịch sử.** Các số cổng và mục “hiện tại” là ảnh chụp ngày 20/10; đọc [cổng hiện hành](../03_Evaluation/GATES_CURRENT.md) và [tiến độ](TIEN_DO_TRIEN_KHAI.md) trước khi giao việc mới.
+
 Người rà soát: agent1-Khanh (kiến trúc). Đầu vào: `TIEN_DO_TRIEN_KHAI.md`, `03_Evaluation/GATES_CURRENT.md`,
 `03_Evaluation/KET_QUA_CHUA_DAT.md`, các CSV trong `outputs/`. File này **thay thứ tự ưu tiên** của `08_thu_tu_va_lich.md`
 cho giai đoạn tới; các gói việc cũ vẫn là tham chiếu.
@@ -104,7 +106,7 @@ Hiện tại hybrid: precision 0,940, recall 0,610, F1 0,740, tự động 0,70.
 
 ### Sprint 6 — Đóng gói và đồng bộ
 1. Chốt `measurement_version` cuối; chạy `scripts/run_plan.py` toàn chuỗi; `make_report.py`.
-2. Rút gọn `03_Evaluation/04_ket_qua_hien_co.md` thành một bảng "luận điểm → bằng chứng → trạng thái"; chuyển bảng chi tiết sang `RESULTS_TABLES.md`.
+2. Khi lập kế hoạch, dự kiến rút gọn `03_Evaluation/04_ket_qua_hien_co.md` và chuyển bảng chi tiết sang file riêng. Hiện bảng chi tiết được giữ ngay trong `04_ket_qua_hien_co.md`; bản sao `RESULTS_TABLES.md` đã bỏ.
 3. Cập nhật `00_INDEX.md`: bỏ các con số cũ (v1) đã bị thay, đặc biệt dòng "ensemble giảm MAE 17% trên dữ liệu thật" (không còn đúng).
 4. Commit + push lên nhánh `agent1-Khanh` (không đưa dữ liệu thô, parquet, `.state`, token).
 

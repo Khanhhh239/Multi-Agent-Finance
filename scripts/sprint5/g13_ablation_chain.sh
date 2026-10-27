@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 # Ablation chẩn đoán G13: nhãn T9 v2 + điền nhãn thật cho phần thiếu. Tuần tự, nhường RAM.
 cd "$(dirname "$0")/../.."
 export PYTHONUTF8=1 AGENT1_THREADS=4 OMP_NUM_THREADS=4

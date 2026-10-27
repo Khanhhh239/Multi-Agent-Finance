@@ -9,4 +9,5 @@ try {
     & $taskPython -u scripts/build_multiworld.py --generate *> outputs/multiworld_build.log
     if ($LASTEXITCODE -ne 0) { throw 'Multiworld generation failed' }
     & $taskPython scripts/world_registry.py
+    if ($LASTEXITCODE -ne 0) { throw 'World registry validation failed' }
 } finally { Pop-Location }

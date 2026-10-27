@@ -35,7 +35,7 @@ def merge_shards(parts, target):
     target.mkdir(parents=True,exist_ok=True)
     for table_path in sorted(parts[0].glob('*.parquet')):
         name=table_path.name
-        sources=parts[:1] if name=='macro.parquet' else parts
+        sources=parts[:1] if name in {'macro.parquet', 'shock_truth.parquet'} else parts
         schemas=[pq.ParquetFile(part/name).schema_arrow for part in sources]
         fields=[]
         for field in schemas[0]:

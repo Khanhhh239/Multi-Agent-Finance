@@ -5,6 +5,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from .world import World, WorldConfig
+from .shocks import ShockEpisode
+from ..data.accounting import derive_invoice_accounting, mark_bank_balance_window, mark_observed_outcomes
 from ..data.contracts import validate_world
 
 CASES=['lumpy_customer','group_payer','heterogeneity','cod_realistic','discount_early','retention',
@@ -16,6 +18,11 @@ class HardCaseWorld(World):
         if case not in CASES:raise ValueError('Hard case không hợp lệ')
         self.case=case
         cfg.hard_case=case
+        if case=='supply_shock':
+            cfg.shock_schedule=[*cfg.shock_schedule, ShockEpisode(
+                family='supply',start='2022-10-03',rise_weeks=1,peak_weeks=6,
+                recovery_weeks=2,severity=1.5,industries=('steel_metals',),
+                reference_event='synthetic_supply_hard_case')]
         self.annotations=[]
         super().__init__(cfg)
 
@@ -25,12 +32,19 @@ class HardCaseWorld(World):
     def make_customers(self,firm):
         c=super().make_customers(firm);r=self.noise(firm,1)
         if self.case=='lumpy_customer':
-            anchor=float(r.uniform(.4,.6));rest=c.weight.to_numpy(copy=True);rest[0]=0
+            # Contracted anchor demand is fixed before the first sale. Other
+            # customers enter and leave normally; no future invoice totals are read.
+            anchor=float(r.uniform(.37,.44));rest=c.weight.to_numpy(copy=True);rest[0]=0
             c['weight']=rest/rest.sum()*(1-anchor);c.loc[0,'weight']=anchor;c['is_anchor']=c.index==0
             c.loc[0,['start_day','end_day']]=[0,(self.end-self.start).days+1]
         elif self.case=='heterogeneity':
-            base=np.clip(r.beta(.8,.8,len(c)),.005,.995)
-            c['ontime_logit']=np.log(base/(1-base));c['late_med']*=r.lognormal(0,.95,len(c))
+            segment=r.choice(4,len(c),p=[.20,.30,.30,.20])
+            base=np.array([.02,.18,.82,.985])[segment]
+            c['ontime_logit']=np.log(base/(1-base))+r.normal(0,.35,len(c))
+            c['late_med']*=np.array([7.5,2.8,.5,.2])[segment]*r.lognormal(0,.35,len(c))
+            # A customer's stable payment-run practice is known when credit is
+            # granted and delays the earliest eligible execution week.
+            c['minimum_payment_lag_days']=np.array([30,10,0,0])[segment]
         elif self.case=='cod_realistic':
             order=r.permutation(len(c));expected=c.weight.to_numpy()/c.ticket.to_numpy()
             mass=expected[order].cumsum()/expected.sum();selected=order[mass<=.25]
@@ -42,22 +56,8 @@ class HardCaseWorld(World):
             c.loc[c.discount_eligible,'term_days']=30
         return c
 
-    def make_invoices(self,firm,cust):
-        inv=super().make_invoices(firm,cust)
-        if self.case=='lumpy_customer':
-            # Điều kiện hard case là tỷ trọng doanh thu thực hiện, không phải trọng số
-            # bị chuẩn hoá lại khi khách khác vào/ra thị trường.
-            anchor=inv.ci.eq(0);share=float(cust.loc[0,'weight'])
-            target=inv.loc[~anchor,'net'].sum()*share/(1-share)
-            inv.loc[anchor,'net']=np.maximum(1000.,np.round(inv.loc[anchor,'net']*target/inv.loc[anchor,'net'].sum(),-3))
-        return inv
-
-    def customer_paths(self,firm,cust):
-        L,default,stress=super().customer_paths(firm,cust)
-        if self.case=='supply_shock' and firm['industry']=='steel_metals':
-            mask=(self.weeks>=pd.Timestamp('2022-10-03'))&(self.weeks<pd.Timestamp('2022-11-28'))
-            L[:,mask]-=1.5;stress=stress.copy();stress[mask]+=1
-        return L,default,stress
+    def make_invoices(self,firm,cust,credit_hold=None,activity=None):
+        return super().make_invoices(firm,cust,credit_hold,activity)
 
     def settle(self,firm,cust,inv,L,default,stress):
         inv,pay=super().settle(firm,cust,inv,L,default,stress);r=self.noise(firm,2)
@@ -70,6 +70,7 @@ class HardCaseWorld(World):
             pay=pd.concat([pay,early],ignore_index=True)
             inv['discount_taken']=mask
             inv.loc[mask,'credit_note']=inv.loc[mask,'amount_gross']-discounted
+            inv.loc[mask,'credit_note_i']=early.day_i.to_numpy()
             inv.loc[mask,'partial']=False
         elif self.case=='retention':
             inv['retention_amount']=0.;inv['retention_due_i']=-1
@@ -138,19 +139,26 @@ class HardCaseWorld(World):
             sums=pay.groupby('txn_id').amount.sum()
             mask=bank.txn_id.isin(sums.index)
             bank.loc[mask,'amount']=bank.loc[mask,'txn_id'].map(sums)-bank.loc[mask,'fee_deducted']
-            inv['paid_amount']=inv.invoice_id.map(pay.groupby('invoice_id').amount.sum()).fillna(0.)
+            bank=mark_bank_balance_window(bank,self.start,self.end)
             rates.rename_axis('date').rename('fx_rate').to_frame().to_parquet(directory/'fx_rates.parquet')
         elif self.case=='credit_note':
             r=np.random.default_rng(np.random.SeedSequence([self.cfg.seed,798]))
             selected=r.random(len(inv))<.03
             mapping={iid:iid+'-REPLACED' for iid in inv.loc[selected,'invoice_id']}
+            originals=inv.loc[selected].copy()
+            originals['credit_note']=originals['amount_gross']
+            originals['credit_note_date']=originals['issue_date']
+            originals['writeoff_date']=pd.NaT
+            originals['adjusts_invoice_id']=pd.NA
+            originals['adjustment_type']='cancelled_original'
             inv['adjusts_invoice_id']=inv.invoice_id.where(selected)
-            inv['adjustment_type']=np.where(selected,'replacement','original')
+            inv['adjustment_type']=np.where(selected,'replacement','unchanged')
             for table,columns in [(inv,['invoice_id']),(pay,['invoice_id','ledger_invoice_id'])]:
                 for c in columns:table[c]=table[c].map(mapping).fillna(table[c])
             inv.loc[selected,'invoice_no']=(inv.loc[selected,'invoice_no'].astype(int)+50000000).astype(str)
             promises_path=directory/'promises.parquet';prom=pd.read_parquet(promises_path)
             prom['invoice_id']=prom.invoice_id.map(mapping).fillna(prom.invoice_id);prom.to_parquet(promises_path,index=False)
+            inv=pd.concat([inv,originals],ignore_index=True)
         elif self.case=='supply_shock':
             firms=pd.read_parquet(directory/'firms.parquet')
             affected=firms[firms.industry=='steel_metals']
@@ -158,6 +166,9 @@ class HardCaseWorld(World):
                 date=pd.Timestamp('2022-10-03'),end_date=pd.Timestamp('2022-11-28'),magnitude=-1.5) for f in affected.itertuples()])
             events=pd.read_parquet(directory/'events.parquet')
             if len(extra):pd.concat([events,extra],ignore_index=True).to_parquet(directory/'events.parquet',index=False)
+        for column, values in derive_invoice_accounting(inv,pay).items():
+            inv[column]=values
+        inv=mark_observed_outcomes(inv,self.end)
         inv.to_parquet(directory/'invoices.parquet',index=False)
         pay.to_parquet(directory/'payments.parquet',index=False)
         bank.to_parquet(directory/'bank_txns.parquet',index=False)

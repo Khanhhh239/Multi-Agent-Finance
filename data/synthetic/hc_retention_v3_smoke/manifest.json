@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "world": "hc_retention_v3_smoke",
+  "seed": 901,
+  "config": {
+    "name": "hc_retention_v3_smoke",
+    "seed": 901,
+    "start": "2023-01-01",
+    "end": "2024-12-31",
+    "n_firms": 1,
+    "tail": "atradius",
+    "industry_mix": {
+      "steel_metals": 0.2,
+      "textile_clothing": 0.2,
+      "plastic_rubber": 0.2,
+      "wholesale": 0.2,
+      "food_processing": 0.1,
+      "services": 0.1
+    },
+    "posting_mode_p": [
+      0.45,
+      0.3,
+      0.25
+    ],
+    "payrun_p": [
+      0.34,
+      0.07,
+      0.07,
+      0.06,
+      0.06,
+      0.12,
+      0.08,
+      0.08,
+      0.07,
+      0.05
+    ],
+    "late_scale": 1.0,
+    "dispute_scale": 1.0,
+    "n_cust_median": 60.0,
+    "revenue_median": 40000000000.0,
+    "memo_invoice_no_p": [
+      2.0,
+      2.0
+    ],
+    "ontime_shift": {},
+    "pd_mult": {},
+    "write_xml": 0,
+    "cod_mult": 1.8,
+    "cash_cap_days": 60.0,
+    "promises_mode": "legacy",
+    "rng_version": 2,
+    "season_override": null,
+    "hard_case": "retention",
+    "accounting_version": 6,
+    "shock_schedule": [],
+    "customer_realism": false,
+    "realism": "v1"
+  },
+  "config_sha256": "5169589f9c8beaa4cf1e78f45778396653386c214c55da5d53cfe663232285cd",
+  "commit": "70c0ceb0653161f70535b4c8b9fb3cee63b7405f",
+  "source_code_sha256": "d312547c3137131baa058b951347d256ddc9483ce14d8eb2ec56f05efbcfbed5",
+  "source_data_sha256": {
+    "calibration": null,
+    "oxcgrt": null,
+    "wdi": null
+  },
+  "tables_sha256": {
+    "bank_txns.parquet": "ded929e954e3cedba5eba0c763132acdd175b6db1710c7c358dd2d908cbc47f0",
+    "customers.parquet": "7356cae27e5d0dc6bb26a8bfaeee2ce9c81b1970d8cf0effffa0b661539f9581",
+    "daily_cash.parquet": "c6fbeefaf1274269e1ef31e9e71e4cf70c283138d5b59623438c67838997d6c3",
+    "events.parquet": "27441e4e4dbdcf9937790a7c949092fc14ec80d7d155ced43addd2f8d2e7c6a8",
+    "firms.parquet": "be6dfada60bb718008fab4d689399dd3a00a747cd5dac0d37593a9fd8147571c",
+    "inventory_weekly.parquet": "c254e935d3db866565228d0e53a096e4f4d9c654702e6f9b09e23f515228021c",
+    "invoices.parquet": "72fadb38ee2af8cde83eaa95a039a390e8c76703dd9d79214e47bbb14fffdc42",
+    "macro.parquet": "bc9917655a70957454e3ea8c40e50d09ab66614b8c785f9948047c16a57c96ae",
+    "outflows.parquet": "6557863b9c282c3d6fd7ddd798072fa4c69930938fc95b54a1335406dc075926",
+    "payments.parquet": "012e9243df88fa183e4d1cb897cd8c72e6fde69f51e557761f9c6a8bba21a9ed",
+    "promises.parquet": "55c5c051d1b09041c731e22ae4cc3215ebd042078833e20163a0c7ce116fd655",
+    "shock_truth.parquet": "0f9b5b0e9fd561a76e4dc16b7bd87a52749cecd4002907bd5d2e369cfe759447"
+  }
+}

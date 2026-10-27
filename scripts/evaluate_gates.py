@@ -178,10 +178,11 @@ def main():
     if propagation is not None and set(propagation.horizon)=={'w1-4','w5-13'}:
         set_gate('G18',propagation.target_met.all(),'Điểm ước lượng: T9 thu hẹp >=50% khoảng cách WAPE với oracle ở cả hai chân trời; CI xa còn rộng, không bảo đảm cho mọi DN',
                  'outputs/t1/T9_T1_gap_reduction.csv')
-    df=pd.DataFrame(rows.values());df.to_csv(OUT/'implementation/gates.csv',index=False)
+    df=pd.DataFrame(rows.values())
     # Quyết định của chủ dự án 22/10/2026: chưa có dữ liệu thật/chuyên gia ⇒ cổng cần chuyên gia (G11) ra khỏi phạm vi giai đoạn
     # chỉ-dữ-liệu-tổng-hợp. KHÔNG tính là đạt: dòng giữ trạng thái 'out_of_scope', pilot THẬT vẫn đòi G11.
     df.loc[df.gate=='G11',['status','reason']]=['out_of_scope','Ngoài phạm vi giai đoạn dữ liệu tổng hợp (cần chuyên gia xác minh quy tắc; chủ dự án quyết 22/10/2026). Pilot thật vẫn yêu cầu.']
+    df.to_csv(OUT/'implementation/gates.csv',index=False)
     required=['G1','G2','G5','G9','G11','G12','G13','G15','G16']
     synthetic_required=[g for g in required if g!='G11']
     ready=df.set_index('gate').loc[required,'status'].eq('passed').all()

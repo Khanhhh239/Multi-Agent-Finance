@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 # Chạy tuần tự các thí nghiệm nặng với số luồng giới hạn (máy dùng chung)
 cd "$(dirname "$0")/.."
 export AGENT1_THREADS=${AGENT1_THREADS:-6} OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4

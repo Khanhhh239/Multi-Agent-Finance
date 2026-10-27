@@ -1,5 +1,7 @@
 # Chương trình chạy thử "Trợ lý Dòng tiền" — Dữ liệu cần doanh nghiệp cung cấp
 
+> **Bản đề xuất chuẩn bị pilot, chưa phải chương trình đã được chấp thuận hoặc triển khai.** Trạng thái pilot thật hiện là [NO-GO](../03_Evaluation/GATES_CURRENT.md); rà soát lại điều kiện trước khi gửi bản này cho doanh nghiệp.
+
 > Tài liệu gửi doanh nghiệp tham gia chạy thử. Bản 1.0, 24/10/2026. Đi kèm: **Cam kết bảo mật dữ liệu** (`02_CAM_KET_BAO_MAT.md`).
 
 ## 1. Chương trình là gì (một đoạn)

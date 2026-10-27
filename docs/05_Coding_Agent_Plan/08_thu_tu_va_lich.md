@@ -1,5 +1,7 @@
 # Thứ tự, phụ thuộc, mốc và tiêu chí hoàn thành
 
+> **Hồ sơ kế hoạch từ 15/10/2026.** Các trạng thái, lệnh và danh sách việc dưới đây phản ánh thời điểm lập; đọc [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md) trước khi dùng.
+
 ## 8.1 Đồ thị phụ thuộc
 
 ```

@@ -1,5 +1,7 @@
 # WP-0 Nền tảng · WP-1 Cải tiến T1
 
+> **Hồ sơ kế hoạch từ 15/10/2026.** Các trạng thái, lệnh và danh sách việc dưới đây phản ánh thời điểm lập; đọc [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md) trước khi dùng.
+
 Mỗi bước: **file** → **việc** → **cách làm** → **kiểm**. Ưu tiên P0.
 
 ---

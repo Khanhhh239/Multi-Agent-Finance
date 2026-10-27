@@ -1,0 +1,9 @@
+world,role,n,missing_seller_mst,missing_buyer_mst,missing_symbol,missing_invoice_no,missing_issue_date,missing_amount_net,missing_vat,missing_amount_gross,missing_currency,bad_seller_mst,bad_buyer_mst,bad_issue_date,due_before_issue,sum_mismatch,bad_vat_rate,negative_amount,duplicate_key,bad_currency,any_error
+v3_final_20261027_train_000,train,146848,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+v3_final_20261027_train_001,train,166407,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+v3_final_20261027_train_002,train,222342,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+v3_final_20261027_train_003,train,173707,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+v3_final_20261027_validation_000,validation,173917,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+v3_final_20261027_validation_001,validation,162263,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+v3_final_20261027_test_000,test,152162,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+v3_final_20261027_test_001,test,226696,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

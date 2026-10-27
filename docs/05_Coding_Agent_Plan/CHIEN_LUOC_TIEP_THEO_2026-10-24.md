@@ -1,5 +1,11 @@
 # Chiến lược phát triển Agent 1 từ 24/10/2026
 
+> **Quyết định và ưu tiên tại thời điểm 24/10.** Các câu “tiếp theo” trong thân
+> bài giữ để truy vết lý do đổi hướng; chúng không giao việc mới. Đọc
+> [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md), [cổng](../03_Evaluation/GATES_CURRENT.md)
+> và [bộ synthetic cuối](../02_Data/23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md)
+> trước khi chọn việc tiếp theo.
+
 > Viết sau khi đo xong sprint 5–6. Mọi nhận định dựa trên kết quả đã ghi trong `docs/03_Evaluation/` và nhật ký mục 8–21.
 > Người quyết định: chủ dự án. Người thực hiện: agent1-Khanh và coding agent kế tiếp.
 

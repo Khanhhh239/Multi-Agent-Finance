@@ -1,0 +1,20 @@
+{
+  "pre_firm_year_equal": true,
+  "pre_invoice_issuance_equal": true,
+  "pre_invoice_credit_note_equal": true,
+  "pre_invoice_count": 75598,
+  "pre_credit_note_count": {
+    "v3_releasecheck_r3b_94319_base": 710,
+    "v3_releasecheck_r3b_94319_neutral2025": 710
+  },
+  "v3_releasecheck_r3b_94319_base": {
+    "revenue_2025_2024": 0.3953188581364524,
+    "declining_firms": 24,
+    "overdue_ar_open": 0.5438645188515634
+  },
+  "v3_releasecheck_r3b_94319_neutral2025": {
+    "revenue_2025_2024": 0.9081584411763705,
+    "declining_firms": 19,
+    "overdue_ar_open": 0.4098727345822948
+  }
+}
