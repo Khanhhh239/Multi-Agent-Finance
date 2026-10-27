@@ -1,0 +1,16 @@
+[
+  {
+    "cohort": "001",
+    "transactions": 20559,
+    "employee_revision_changed_fields": {},
+    "contact_feature_mismatches": 0,
+    "examples": []
+  },
+  {
+    "cohort": "003",
+    "transactions": 20523,
+    "employee_revision_changed_fields": {},
+    "contact_feature_mismatches": 0,
+    "examples": []
+  }
+]

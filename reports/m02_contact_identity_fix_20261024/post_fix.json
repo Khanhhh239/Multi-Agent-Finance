@@ -1,0 +1,146 @@
+{
+  "stage": "post_fix",
+  "modules": [
+    {
+      "module": "test_feature_contact_identity",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.406,
+      "details": []
+    },
+    {
+      "module": "test_rules",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 74.859,
+      "details": []
+    },
+    {
+      "module": "test_graph_history",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.032,
+      "details": []
+    },
+    {
+      "module": "test_b2_company_transfer",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.64,
+      "details": []
+    },
+    {
+      "module": "test_b4_evidence_timing",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.578,
+      "details": []
+    },
+    {
+      "module": "test_feature_evidence_timing",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.141,
+      "details": []
+    },
+    {
+      "module": "test_feature_model_sync",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 17.484,
+      "details": []
+    },
+    {
+      "module": "test_train_source_model",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.844,
+      "details": []
+    },
+    {
+      "module": "test_shadow_scoring",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.344,
+      "details": []
+    },
+    {
+      "module": "test_causality",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 11.687,
+      "details": []
+    },
+    {
+      "module": "test_noise_policy",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.563,
+      "details": []
+    },
+    {
+      "module": "test_spec_policy",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.422,
+      "details": []
+    },
+    {
+      "module": "test_bank_identity_controls",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.656,
+      "details": []
+    },
+    {
+      "module": "test_payment_evidence",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.297,
+      "details": []
+    },
+    {
+      "module": "test_tax_risk",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.469,
+      "details": []
+    }
+  ],
+  "tests": 232,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 141.422
+}

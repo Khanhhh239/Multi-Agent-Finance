@@ -1,0 +1,37 @@
+{
+  "protected_files": 2418,
+  "protected_drift": [],
+  "changed_code": [
+    "sme_fraud/case_admission.py",
+    "sme_fraud/case_queue.py",
+    "sme_fraud/cash_controls.py",
+    "sme_fraud/if_discovery_review.py",
+    "sme_fraud/p2_control_cases.py",
+    "sme_fraud/rules.py",
+    "tests/test_cash_controls.py",
+    "review_ui/review_explanations.js"
+  ],
+  "added_code": [
+    "sme_fraud/cash_limit_priority.py",
+    "sme_fraud/rebuild_source_cache.py",
+    "tests/rr09_ui.test.js",
+    "tests/test_rebuild_source_cache.py",
+    "tests/test_rr09_priority.py"
+  ],
+  "feature_contract_unchanged": true,
+  "code_sha256": {
+    "sme_fraud/case_admission.py": "b19ccf776e950ba4c8ba2c7f582d5c3aa3ba0ca256dab4f9719bc8cf1a0ae5f0",
+    "sme_fraud/case_queue.py": "6e44df9b6c11bb39c4f7ae2267f63dec21aa89f4c6ceda8feb8a7e818e5ed5bc",
+    "sme_fraud/cash_controls.py": "7a6f9a57e200b04bd6324da05c62777940b47bdb6e9caf2fcf2bb6282c565882",
+    "sme_fraud/if_discovery_review.py": "12655edc211f29e8a6de012147f4e580483a4fa6d47668bbe8205a97a0b8bbd7",
+    "sme_fraud/p2_control_cases.py": "037e6903e3b51797c8b443135a73e9180f026a5d87d88f37a7885d4a8406b3fc",
+    "sme_fraud/rules.py": "fe7503850dc8ee81da30af80d83eb9f3d90c8c5466f43b0c1eb1df78a91f0d00",
+    "tests/test_cash_controls.py": "2b1a9806af508a11a3f43a7bf892be57a35231e8bb4ef9d2dc142954fb080638",
+    "review_ui/review_explanations.js": "ad03f182deea0731c68f098f1ff4b9503ddc6dbf9db8bc4ce1ed2d32b4173659",
+    "sme_fraud/cash_limit_priority.py": "4d59cf03ea63529fd261efee99e5e41d03c421275753bea5fcc3ac0087246d5f",
+    "sme_fraud/rebuild_source_cache.py": "9886e591c1322cf34a72beddb922a118b611fbe1a6f23c65a82fdb717d7d4baf",
+    "tests/rr09_ui.test.js": "5d462ae75cdb73803e5e77fa6c61a002ccb5b0eb0b95ecb23913533348660b6d",
+    "tests/test_rebuild_source_cache.py": "70c8b06fe5c966e0997e789c03e018c71133a480d3220eebbe5f4a173732a6c9",
+    "tests/test_rr09_priority.py": "c0be74c4f1fd0f5eb765b08510e2d34154a1032a9ea296c2ef39177ade69013c"
+  }
+}

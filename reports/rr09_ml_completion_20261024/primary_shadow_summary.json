@@ -1,0 +1,50 @@
+{
+  "runs": [
+    {
+      "tag": "001",
+      "evaluation_rows": 5934,
+      "if_document_reviews": 11,
+      "mandatory_pins": 1086,
+      "mandatory_displacements": 0,
+      "budget_violations": 0,
+      "baseline_common_work_delayed": 0,
+      "max_delay_days": 0,
+      "baseline_transaction_work_reviews": 116,
+      "full_if_coverage": 63,
+      "missing_or_partial": 53,
+      "coverage_reasons": {
+        "full_evaluation_scored": 63,
+        "historical_only_unscored": 53
+      },
+      "source_defects": {},
+      "selected_review_data_errors": 0
+    },
+    {
+      "tag": "003",
+      "evaluation_rows": 5877,
+      "if_document_reviews": 29,
+      "mandatory_pins": 1091,
+      "mandatory_displacements": 0,
+      "budget_violations": 0,
+      "baseline_common_work_delayed": 1,
+      "max_delay_days": 26,
+      "baseline_transaction_work_reviews": 164,
+      "full_if_coverage": 69,
+      "missing_or_partial": 95,
+      "coverage_reasons": {
+        "full_evaluation_scored": 69,
+        "historical_only_unscored": 95
+      },
+      "source_defects": {},
+      "selected_review_data_errors": 0
+    }
+  ],
+  "evaluation_rows": 11811,
+  "if_document_reviews": 40,
+  "mandatory_displacements": 0,
+  "budget_violations": 0,
+  "baseline_common_work_delayed": 1,
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "actionable_gain": null
+}

@@ -39,4 +39,4 @@ CLI trả mã khác 0 khi bị chặn, không thêm kết luận hoặc làm h�
 
 Báo cáo lịch sử chưa có DB/liên kết chỉ được ghi `information_gap`; kết luận cuối phải qua một ReviewStore đã chuẩn bị. Phân bổ ngân sách của web giữ như hiện tại; thay đổi này thống nhất cổng quyết định và nhật ký, chưa thêm cơ chế đăng nhập hay thay tên nhập thành danh tính đã xác thực.
 
-[Biên bản kiểm chứng](../../reports/operational_reliability_20261019.md).
+[Biên bản kiểm chứng](../../docs/reports/operations/operational_reliability_20261019.md).

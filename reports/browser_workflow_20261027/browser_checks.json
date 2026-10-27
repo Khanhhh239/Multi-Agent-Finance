@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-27",
+  "method": "Chrome extension, cua_repl DOM actions and screenshots",
+  "synthetic_only": true,
+  "real_accounts_created": 0,
+  "independent_human_reviews": 0,
+  "minutes_are_simulated": true,
+  "checks": [
+    {
+      "id": "B01",
+      "scope": "RC_2",
+      "observed": "Mở Bằng chứng, bung dấu hiệu P1; thấy T2, tổng thanh toán 2 triệu và hóa đơn 1 triệu.",
+      "status": "passed"
+    },
+    {
+      "id": "B02",
+      "scope": "RC_1",
+      "observed": "Kế toán viên gửi; chuyển Chờ kiểm tra cuối, chưa tạo kết luận cuối.",
+      "status": "passed"
+    },
+    {
+      "id": "B03",
+      "scope": "RC_1, RC_2",
+      "observed": "Kế toán trưởng trả lại; người rà thấy đúng lý do, người trả và chứng từ cần bổ sung.",
+      "status": "passed"
+    },
+    {
+      "id": "B04",
+      "scope": "RC_2",
+      "observed": "Kế toán viên gửi lại sau trả hồ sơ bằng viewport 360×800.",
+      "status": "passed"
+    },
+    {
+      "id": "B05",
+      "scope": "RC_1",
+      "observed": "Kế toán trưởng khác người rà chốt hợp lệ bằng viewport 390×844.",
+      "status": "passed"
+    },
+    {
+      "id": "B06",
+      "scope": "RC_2",
+      "observed": "Giám đốc khác người rà chốt sau bổ sung.",
+      "status": "passed"
+    },
+    {
+      "id": "B07",
+      "scope": "RC_1",
+      "observed": "Kế toán viên mở lại hồ sơ đã chốt: thấy người chốt, căn cứ, phút từng bước và không có biểu mẫu ghi.",
+      "status": "passed"
+    },
+    {
+      "id": "B08",
+      "scope": "RC_3",
+      "observed": "Yêu cầu tài liệu còn mở chặn chốt; lỗi tại biểu mẫu, giữ nội dung nhập.",
+      "status": "passed"
+    },
+    {
+      "id": "B09",
+      "scope": "RC_3",
+      "observed": "Đã nhận tài liệu vẫn chặn chốt; có cảnh báo còn yêu cầu chưa rà xong.",
+      "status": "passed"
+    },
+    {
+      "id": "B10",
+      "scope": "RC_3",
+      "observed": "Sau bước Đã rà lại tài liệu, giám đốc chốt được.",
+      "status": "passed"
+    },
+    {
+      "id": "B11",
+      "scope": "RC_4",
+      "observed": "Kế toán viên cập nhật sau khi tab người kiểm tra đã mở; tab cũ bị từ chối do phiên bản.",
+      "status": "passed"
+    },
+    {
+      "id": "B12",
+      "scope": "RC_4",
+      "observed": "Lỗi phiên bản giữ bản nháp, focus lỗi; tải lại thấy bản rà mới và có thể thao tác tiếp.",
+      "status": "passed"
+    },
+    {
+      "id": "B13",
+      "scope": "RC_5",
+      "observed": "Danh tính rỗng: xem hồ sơ được, không có textarea hoặc nút ghi trong phần rà soát.",
+      "status": "passed"
+    },
+    {
+      "id": "B14",
+      "scope": "RC_7 → SC_F3",
+      "observed": "Danh tính C001 bị từ chối hồ sơ C002, chi tiết cũ được xóa; mở hồ sơ hợp lệ kế tiếp được.",
+      "status": "passed"
+    },
+    {
+      "id": "B15",
+      "scope": "RC_5 ↔ RC_6",
+      "observed": "Back về RC_5, Forward về RC_6, reload vẫn RC_6.",
+      "status": "passed"
+    },
+    {
+      "id": "B16",
+      "scope": "SC_F3",
+      "observed": "Xem dải PC-2025 số 7; xác nhận thiếu bằng chứng giữ mở; kế toán viên gửi bổ sung rồi giám đốc chốt.",
+      "status": "passed"
+    },
+    {
+      "id": "B17",
+      "scope": "RC_2",
+      "observed": "360×800: pageWidth 345 ≤ innerWidth 360; ô nhập rộng 279,33px; quyết định một cột, nút cao 44px.",
+      "status": "passed"
+    },
+    {
+      "id": "B18",
+      "scope": "RC_1, RC_4",
+      "observed": "390×844: pageWidth 375 ≤ innerWidth 390; kết luận và lỗi phiên bản đọc được, không tràn ngang.",
+      "status": "passed"
+    },
+    {
+      "id": "B19",
+      "scope": "Hướng dẫn",
+      "observed": "Modal hướng dẫn có xem bằng chứng → kế toán viên gửi → người khác chốt/trả → xử lý phiên bản cũ.",
+      "status": "passed"
+    },
+    {
+      "id": "B20",
+      "scope": "RC_3",
+      "observed": "Gửi trống bị HTML validation chặn tại radio; lý do và số phút đều không hợp lệ.",
+      "status": "passed"
+    },
+    {
+      "id": "B21",
+      "scope": "RC_3",
+      "observed": "Chọn Cần bổ sung nhưng không ghi tài liệu thiếu bị chặn tại giao diện với lỗi cụ thể.",
+      "status": "passed"
+    }
+  ],
+  "check_count": 21,
+  "console_error_entries": 0,
+  "scope_limit": "Focused two-stage business workflow; not a rerun of the whole historical 39-sample/17-flow suite. Desktop and viewport emulation, not physical mobile devices or other browsers.",
+  "viewports": [
+    {
+      "width": 360,
+      "height": 800,
+      "pageWidth": 345
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "pageWidth": 375
+    }
+  ],
+  "desktop_observed_widths": [
+    1204,
+    1280
+  ]
+}

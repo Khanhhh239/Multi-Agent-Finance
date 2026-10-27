@@ -1,0 +1,692 @@
+[
+  {
+    "rule_id": "A1",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "A1",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "A1",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "A2",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 4,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "A2",
+        "intrinsic_points": 4,
+        "points": 4,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 4,
+        "rule_ids": "A2",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "A3",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "A3",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "A3",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "A4",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 3,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "A4",
+        "intrinsic_points": 3,
+        "points": 3,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 3,
+        "rule_ids": "A4",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "A5",
+    "scope": "transaction",
+    "expected_priority": null,
+    "expected_sla_hours": null,
+    "row_rule_score": 0,
+    "row_admitted": 0,
+    "hits": [
+      {
+        "rule_id": "A5",
+        "intrinsic_points": 3,
+        "points": 0,
+        "hard_trigger": 0,
+        "scoring_role": "context"
+      }
+    ],
+    "queue": []
+  },
+  {
+    "rule_id": "A6",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "A6",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "A6",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "B1",
+    "scope": "transaction",
+    "expected_priority": "cao_nhat",
+    "expected_sla_hours": 24,
+    "row_rule_score": 20,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "B1",
+        "intrinsic_points": 20,
+        "points": 20,
+        "hard_trigger": 1,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "cao_nhat",
+        "case_type": "transaction",
+        "max_score": 20,
+        "rule_ids": "B1",
+        "sla_hours": 24.0
+      }
+    ]
+  },
+  {
+    "rule_id": "B2",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "B2",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "B2",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "B3",
+    "scope": "transaction",
+    "expected_priority": null,
+    "expected_sla_hours": null,
+    "row_rule_score": 0,
+    "row_admitted": 0,
+    "hits": [
+      {
+        "rule_id": "B3",
+        "intrinsic_points": 8,
+        "points": 0,
+        "hard_trigger": 0,
+        "scoring_role": "context"
+      }
+    ],
+    "queue": []
+  },
+  {
+    "rule_id": "B4",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 10,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "B4",
+        "intrinsic_points": 10,
+        "points": 10,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 10,
+        "rule_ids": "B4",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "B5",
+    "scope": "transaction",
+    "expected_priority": null,
+    "expected_sla_hours": null,
+    "row_rule_score": 0,
+    "row_admitted": 0,
+    "hits": [
+      {
+        "rule_id": "B5",
+        "intrinsic_points": 3,
+        "points": 0,
+        "hard_trigger": 0,
+        "scoring_role": "master_quality"
+      }
+    ],
+    "queue": []
+  },
+  {
+    "rule_id": "B6",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "B6",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "B6",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "B7",
+    "scope": "transaction",
+    "expected_priority": "cao_nhat",
+    "expected_sla_hours": 24,
+    "row_rule_score": 20,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "B7",
+        "intrinsic_points": 20,
+        "points": 20,
+        "hard_trigger": 1,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "cao_nhat",
+        "case_type": "transaction",
+        "max_score": 20,
+        "rule_ids": "B7",
+        "sla_hours": 24.0
+      }
+    ]
+  },
+  {
+    "rule_id": "C1",
+    "scope": "transaction",
+    "expected_priority": null,
+    "expected_sla_hours": null,
+    "row_rule_score": 0,
+    "row_admitted": 0,
+    "hits": [
+      {
+        "rule_id": "C1",
+        "intrinsic_points": 1,
+        "points": 0,
+        "hard_trigger": 0,
+        "scoring_role": "context"
+      }
+    ],
+    "queue": []
+  },
+  {
+    "rule_id": "C2",
+    "scope": "transaction",
+    "expected_priority": "cao_nhat",
+    "expected_sla_hours": 24,
+    "row_rule_score": 20,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "C2",
+        "intrinsic_points": 20,
+        "points": 20,
+        "hard_trigger": 1,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "cao_nhat",
+        "case_type": "transaction",
+        "max_score": 20,
+        "rule_ids": "C2",
+        "sla_hours": 24.0
+      }
+    ]
+  },
+  {
+    "rule_id": "C3",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "C3",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "C3",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "C4",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "C4",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "C4",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "E1",
+    "scope": "transaction",
+    "expected_priority": "cao_nhat",
+    "expected_sla_hours": 24,
+    "row_rule_score": 20,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "E1",
+        "intrinsic_points": 20,
+        "points": 20,
+        "hard_trigger": 1,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "cao_nhat",
+        "case_type": "transaction",
+        "max_score": 20,
+        "rule_ids": "E1",
+        "sla_hours": 24.0
+      }
+    ]
+  },
+  {
+    "rule_id": "E2",
+    "scope": "transaction",
+    "expected_priority": "cao_nhat",
+    "expected_sla_hours": 24,
+    "row_rule_score": 20,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "E2",
+        "intrinsic_points": 20,
+        "points": 20,
+        "hard_trigger": 1,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "cao_nhat",
+        "case_type": "transaction",
+        "max_score": 20,
+        "rule_ids": "E2",
+        "sla_hours": 24.0
+      }
+    ]
+  },
+  {
+    "rule_id": "E3",
+    "scope": "transaction",
+    "expected_priority": null,
+    "expected_sla_hours": null,
+    "row_rule_score": 0,
+    "row_admitted": 0,
+    "hits": [
+      {
+        "rule_id": "E3",
+        "intrinsic_points": 3,
+        "points": 0,
+        "hard_trigger": 0,
+        "scoring_role": "master_quality"
+      }
+    ],
+    "queue": []
+  },
+  {
+    "rule_id": "E4",
+    "scope": "transaction",
+    "expected_priority": null,
+    "expected_sla_hours": null,
+    "row_rule_score": 0,
+    "row_admitted": 0,
+    "hits": [
+      {
+        "rule_id": "B5",
+        "intrinsic_points": 3,
+        "points": 0,
+        "hard_trigger": 0,
+        "scoring_role": "master_quality"
+      }
+    ],
+    "queue": []
+  },
+  {
+    "rule_id": "F1",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "F1",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "F1",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "F2",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "F2",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "F2",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "F3",
+    "scope": "series:PAY_2025",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 0,
+    "row_admitted": 0,
+    "hits": [],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "source",
+        "max_score": 0,
+        "rule_ids": "F3",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "F4",
+    "scope": "invoice:AR1",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 0,
+    "row_admitted": 0,
+    "hits": [],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "source",
+        "max_score": 0,
+        "rule_ids": "F4",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "P1",
+    "scope": "transaction",
+    "expected_priority": "cao_nhat",
+    "expected_sla_hours": 24,
+    "row_rule_score": 28,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "P1",
+        "intrinsic_points": 20,
+        "points": 20,
+        "hard_trigger": 1,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "cao_nhat",
+        "case_type": "transaction",
+        "max_score": 28,
+        "rule_ids": "A1|P1",
+        "sla_hours": 24.0
+      }
+    ]
+  },
+  {
+    "rule_id": "P2",
+    "scope": "transaction",
+    "expected_priority": "thap",
+    "expected_sla_hours": 720,
+    "row_rule_score": 14,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "P2",
+        "intrinsic_points": 14,
+        "points": 14,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "thap",
+        "case_type": "transaction",
+        "max_score": 14,
+        "rule_ids": "P2",
+        "sla_hours": 720.0
+      }
+    ]
+  },
+  {
+    "rule_id": "T1",
+    "scope": "transaction",
+    "expected_priority": "trung_binh",
+    "expected_sla_hours": 168,
+    "row_rule_score": 8,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "T1",
+        "intrinsic_points": 8,
+        "points": 8,
+        "hard_trigger": 0,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "trung_binh",
+        "case_type": "transaction",
+        "max_score": 8,
+        "rule_ids": "T1",
+        "sla_hours": 168.0
+      }
+    ]
+  },
+  {
+    "rule_id": "T2",
+    "scope": "transaction",
+    "expected_priority": "cao_nhat",
+    "expected_sla_hours": 24,
+    "row_rule_score": 20,
+    "row_admitted": 1,
+    "hits": [
+      {
+        "rule_id": "T2",
+        "intrinsic_points": 20,
+        "points": 20,
+        "hard_trigger": 1,
+        "scoring_role": "transaction"
+      }
+    ],
+    "queue": [
+      {
+        "priority": "cao_nhat",
+        "case_type": "transaction",
+        "max_score": 20,
+        "rule_ids": "T1|T2",
+        "sla_hours": 24.0
+      }
+    ]
+  }
+]

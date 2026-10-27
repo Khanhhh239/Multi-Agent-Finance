@@ -63,10 +63,12 @@ def select_disagreements(original,experimental,cohort,scope_index,seed):
     return chosen
 
 
-def prepare_discovery_review(discovery_root,output,*,seed=20261022):
+def prepare_discovery_review(discovery_root,output,*,seed=20261022,comparison_root=None,source_root=None):
     discovery_root,output=guarded(discovery_root),guarded(output)
     output_guard(output,discovery_root,discovery_root/'unused-model')
     root=Path(__file__).resolve().parents[1]
+    comparison_root=guarded(comparison_root or root/'reports/ml_shadow_comparison_20261022')
+    source_root=guarded(source_root or root/'data/synthetic_sources_20261017_v2')
     inputs={};chosen={};tables={}
     for path in (Path(__file__).resolve(),Path(__file__).resolve().with_name('independent_ml_review.py')):
         inputs[str(path)]=sha(path)
@@ -80,13 +82,13 @@ def prepare_discovery_review(discovery_root,output,*,seed=20261022):
         for path,h in read_json(target/'analysis_plan.json')['input_sha256'].items():
             if sha(guarded(path))!=h:raise ValueError('Source/comparison binding changed before review export')
             inputs[path]=h
-        original_root=root/'reports/ml_shadow_comparison_20261022'/cohort
+        original_root=comparison_root/cohort
         original=read_csv(original_root/'budget_5/selections.private.csv')
         experimental=read_csv(target/'budget_5_share_20_cost_20/selections.private.csv')
         scope_rows=read_csv(original_root/'review_union.blind.csv')
         scope_index={(r['case_id'],r['case_scope_hash']):r for r in scope_rows}
         chosen.update(select_disagreements(original,experimental,tag,scope_index,seed))
-        source=root/'data/synthetic_sources_20261017_v2'/cohort
+        source=source_root/cohort
         tables[tag]=load_tables(source)
         tx={r['transaction_id']:r for r in tables[tag]['transactions']}
         reviewed_docs=set()

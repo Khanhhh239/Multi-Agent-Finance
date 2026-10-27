@@ -1,53 +1,58 @@
-# Agent 2 Sang — bản nguồn ngày 23/10/2026
+# Agent 2 Sang — bản nguồn ngày 27/10/2026
 
-Mã nguồn của workspace `agent22` được đồng bộ vào nhánh **`agent2-Sang`**. [README](../README.md) ghi phạm vi nghiệp vụ; [RELEASES.md](../RELEASES.md) hướng dẫn cài sạch, backup, nâng cấp và khôi phục bằng runtime phù hợp.
+Nhánh **`agent2-Sang`** chứa mã nguồn được đồng bộ từ workspace `agent22`. Bắt đầu từ [trạng thái dự án](STATUS.md), [backlog](BACKLOG.md) và [hướng dẫn phát triển](DEVELOPMENT.md). Tài liệu nghiệp vụ, ML, app và vận hành nằm trong [mục lục báo cáo](reports/README.md).
 
-## Nội dung cập nhật
+## Nội dung mới
 
-- Bộ luật, đồ thị quan hệ, ngưỡng động, nguồn thuế/tiền mặt và công cụ đồng bộ.
-- ReviewStore, quản lý hồ sơ/yêu cầu tài liệu, lịch công việc, thông báo giả lập và cổng kết luận chung web/CLI.
-- Sao lưu/khôi phục, tác vụ backup, quản lý phiên bản và gói phát hành có checksum.
-- Giao diện bằng chứng, P2, điều hướng và thư viện Cytoscape được ghim phiên bản kèm giấy phép.
-- Huấn luyện IF theo cửa sổ thời gian, kiểm toán model/phạm vi dữ liệu, so sánh shadow, kiểm tra phép gộp và quy trình rà độc lập.
-- Test Python/JavaScript, schema, mẫu cấu hình và báo cáo kiểm chứng đến ngày 23/10.
+- Sửa bằng chứng theo cutoff, định danh liên hệ và quan hệ nhân viên/công ty; cập nhật feature contract v4, 194 feature.
+- Phân tầng ưu tiên RR09, thêm nguồn đối chứng và ma trận test luật.
+- Quy trình kế toán viên rà, kế toán trưởng/giám đốc khác người chốt hoặc trả lại; kiểm soát công ty, phiên bản hồ sơ và nhật ký.
+- Thông báo theo vai trò, chống trùng, nhắc hạn và lịch sử gửi; ví dụ cấu hình vẫn dùng mô phỏng/template.
+- Guard giới hạn trì hoãn baseline trong thử nghiệm IF, cùng báo cáo kiểm chứng.
+- Sắp xếp lại tài liệu trong `docs/`; các đường dẫn cũ được chuyển hoặc giữ file chỉ dẫn theo thay đổi của workspace.
 
-Trạng thái sửa lỗi UI nằm tại [browser_acceptance_status_20261021.md](../reports/browser_acceptance_status_20261021.md). Báo cáo giữ riêng kết quả kiểm thử tự động, thao tác browser và các mục nghiệm thu còn chờ.
-
-Phần ML mới được mô tả tại [tương thích nguồn/model](../reports/model_source_sync_20261022.md), [discovery shadow](../reports/ml_if_discovery_shadow_20261022.md) và [rà sơ bộ của trợ lý](../reports/ml_assistant_review_20261023.md). Các nhận định của trợ lý chưa thay cho kết luận độc lập của người rà; kết quả lợi ích ML và phút rà thực tế vẫn chờ xác nhận.
+Các kết quả nghiệp vụ chi tiết và giới hạn nghiệm thu được giữ trong từng báo cáo. IF tiếp tục chạy shadow; tài khoản thật, gửi–nhận thông báo thật và rà ML độc lập vẫn theo trạng thái trong tài liệu dự án.
 
 ## Cài từ mã nguồn và kiểm thử
 
-Profile web/backup đã kiểm chứng dùng **CPython 3.12, Windows x64**:
+Profile web/backup đã kiểm chứng dùng CPython 3.12 trên Windows x64:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-review-lock.txt
+$env:PYTHONPATH = "$PWD;$PWD/tests"
 New-Item -ItemType Directory -Force .runtime | Out-Null
 .\.venv\Scripts\python.exe -B -m unittest discover -s tests -v
 ```
 
-Với Node.js đã cài, chạy các kiểm tra VM/DOM riêng:
-
-Các kiểm tra dùng fixture mô phỏng cố định tại `tests/fixtures/` (32 tình huống/73 giao dịch), có SHA256 của nguồn; không cần dataset gốc để chạy các kiểm tra này.
+Với Node.js đã cài, chạy các bộ VM/DOM:
 
 ```powershell
-node tests/review_evidence_ui.test.js
-node tests/review_workflow_ui.test.js
-node tests/review_navigation_ui.test.js
+Get-ChildItem tests -Filter '*.test.js' | ForEach-Object {
+    node $_.FullName
+    if ($LASTEXITCODE -ne 0) { throw "Kiểm thử lỗi: $($_.Name)" }
+}
 ```
 
-`requirements.txt` mô tả phụ thuộc tổng quát; `requirements-lock.txt` giữ profile benchmark lịch sử. Không thay hai profile này cho nhau khi cần mở model/backup đã khóa hợp đồng runtime. Xem README và từng ví dụ trong `examples/` để sinh dữ liệu và mở demo bằng thư mục đầu ra mới.
+Kiểm chứng trên bản nguồn chuẩn bị đưa lên Git ngày 27/10: **1273 ca Python đạt**, 0 lỗi/failure/skip; **92 kiểm tra JavaScript đạt** trong 7 bộ. Bộ Python chạy với profile `requirements-review-lock.txt`.
 
-Các test web/backup tự tạo bộ đối chứng P2 khai báo sẵn trong thư mục tạm riêng; không cần mở dataset của máy phát triển và không thay cấu hình mặc định của ứng dụng.
+Log của lần đồng bộ được giữ cục bộ trong `.runtime/github_update_20261027_*`. Các kiểm tra JavaScript là VM/DOM; lần đồng bộ Git này không chạy lại nghiệm thu Chrome. Bộ kiểm thử sử dụng fixture tổng hợp và thư mục tạm riêng, không cần mang dataset phát triển lên Git.
 
-Kiểm chứng ngày 23/10: **154 ca Python đạt** thuộc 12 module test ML mới và liên quan, chạy trên bản nguồn chuẩn bị đưa lên Git với fixture tổng hợp. Không chạy lại toàn bộ suite web/backup hoặc đánh giá lại dataset phát triển trong lần đồng bộ này. Log được giữ cục bộ tại `.runtime/github_update_20261023_ml_tests.log`.
+`requirements.txt` mô tả phụ thuộc tổng quát. `requirements-lock.txt` giữ profile benchmark/model lịch sử; không dùng thay profile web/backup khi cần mở model hoặc backup đã khóa hợp đồng runtime. Xem [hướng dẫn phát hành](../RELEASES.md) và ví dụ tương ứng trước khi sử dụng artifact.
 
-Kiểm chứng trước đó, ngày 21/10: 663 ca Python đạt trong lượt kiểm tra toàn bộ; 34 ca web/P2/backup được chạy lại sau khi tách fixture và đều đạt. Ba bộ JavaScript đạt 22 + 14 + 12 kiểm tra. Log được giữ cục bộ trong `.runtime/github_update_20261021_*`.
+## Demo chỉ từ bản nguồn
+
+Lệnh `.runtime/review_roles_20261024/serve.py` trong README dành cho workspace phát triển có sẵn snapshot và database. Để thử giao diện với fixture và danh tính mô phỏng từ bản Git mới, sau khi cài thư viện và đặt `PYTHONPATH` như trên:
+
+```powershell
+.\.venv\Scripts\python.exe -B tests/review_browser_fixture.py `
+    --workspace .runtime/browser_workflow_20261027/github_demo
+```
+
+Mở các địa chỉ loopback mà launcher in ra cho kế toán viên, kế toán trưởng, giám đốc và người xem. Đây là môi trường QA với dữ liệu tổng hợp, danh tính cố định và thông báo giả lập. Các kết quả thao tác không thay cho rà độc lập trên nguồn thật.
 
 ## Phạm vi lưu trên Git
 
-Bản nguồn gồm Python/PowerShell, HTML/CSS/JavaScript, tài liệu, schema, cấu hình mẫu, CSV chỉ chứa header và các báo cáo/JSON tổng hợp. Thư viện browser trong `review_ui/vendor/` có manifest SHA256 và giấy phép đi kèm.
+Bản nguồn gồm Python/PowerShell, UI, test/fixture, tài liệu, schema, cấu hình mẫu, CSV chỉ chứa header, báo cáo Markdown và JSON tổng hợp/kiểm chứng. Thư viện browser và fixture JSON được giữ đúng byte theo manifest/checksum.
 
-Dataset, model, SQLite, runtime, wheelhouse/gói cài đặt, ảnh/trace browser và kết quả chi tiết từng dòng được giữ cục bộ. Một số liên kết từ biên bản tới artifact đó chỉ có nội dung trong môi trường đã chạy; đọc phạm vi và kết luận trực tiếp trong từng báo cáo. Mẫu cấu hình thông báo lấy thông tin xác thực từ biến môi trường.
-
-Với các đợt rà ML mới, Git lưu báo cáo Markdown và JSON tổng hợp/kiểm chứng; các bộ evidence, dossier JSON theo phiếu, mapping private và gói reviewer đầy đủ vẫn nằm trong môi trường cục bộ. Có thể tạo lại bằng công cụ và ví dụ tương ứng khi có nguồn phù hợp.
+Dataset/cache, model, SQLite, môi trường Python, wheelhouse, gói cài đặt, ảnh/trace browser, mapping private và JSON bằng chứng chi tiết theo phiếu được giữ cục bộ. Một số liên kết trong báo cáo tới artifact này chỉ dùng được tại môi trường đã chạy; mã và ví dụ đi kèm mô tả cách sinh lại vào thư mục mới. Script dọn tài liệu được lưu như mã nguồn và không được chạy trong lần đồng bộ này.

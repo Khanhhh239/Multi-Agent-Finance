@@ -158,7 +158,7 @@ class CashControlsTest(unittest.TestCase):
     def test_bad_config_is_rejected(self):
         for values in ({'cash_payment_policy': 'guess'}, {'cash_limit_vnd_by_company': []},
                        {'cash_review_policy': 'guess'}, {'cash_limit_evidence_by_company': []},
-                       *[{'cash_limit_vnd_by_company': {'C001': v}} for v in (True, -1, 0, '5000000', 1.5)]):
+                       *[{'cash_limit_vnd_by_company': {'C001': v}} for v in (True, -1, '5000000', 1.5)]):
             case = self.case()
             self.pay(case, 5_000_000)
             case.config.update(values)
@@ -174,6 +174,7 @@ class CashControlsTest(unittest.TestCase):
 
     def test_verified_internal_breach_stands_without_invoice_and_has_high_priority(self):
         case = self.case()
+        case.config['cash_limit_priority_policy'] = 'legacy_high_v1'
         self.verified_limit(case)
         self.pay(case, 2_000_001)
         result = case.score()

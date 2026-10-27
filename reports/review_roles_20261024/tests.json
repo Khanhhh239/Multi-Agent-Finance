@@ -1,0 +1,96 @@
+{
+  "modules": [
+    {
+      "module": "test_review_roles",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_review_workflow",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_review",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_feedback",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_review_decision_gate",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_information_requests",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_sprint14_notifications",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_case_identity",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_review_backup",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_independent_ml_review",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_rr09_priority",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    }
+  ],
+  "tests": 149,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0
+}

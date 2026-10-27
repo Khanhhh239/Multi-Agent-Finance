@@ -17,7 +17,14 @@ from .p2_controls_server import P2Routes
 WEB_ROOT = Path(__file__).resolve().parents[1] / 'review_ui'
 
 
-def make_server(store, port=8765, qa=False, instance_id='', notifications=None, p2_controls=None):
+def make_server(store, port=8765, qa=False, instance_id='', notifications=None, p2_controls=None,
+                review_workflow=None, identity_provider=None):
+    if review_workflow is None:
+        from .review_roles import SETTING
+        with store.connection() as db:configured=db.execute('SELECT value FROM settings WHERE key=?',(SETTING,)).fetchone()
+        if configured:
+            from .review_workflow import TwoStageReview
+            review_workflow=TwoStageReview(store)
     csrf = secrets.token_urlsafe(32)
     from .notifications import Notifications
     default_notifications = notifications is None
@@ -26,6 +33,27 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
     controls_store = p2_controls
     class Handler(P2Routes, BaseHTTPRequestHandler):
         p2_controls, p2_csrf = controls_store, csrf
+        def review_principal(self):
+            from .review_roles import ReviewPrincipal
+            principal=identity_provider(self) if identity_provider else None
+            if principal is not None and not isinstance(principal,ReviewPrincipal):
+                raise PermissionError('Danh tính đăng nhập không hợp lệ.')
+            return principal
+
+        def workflow_permission(self,action,company=None):
+            from .review_roles import require_permission
+            return require_permission(self.review_principal(),action,company)
+        def notification_status(self,scenario,principal=None,offset=0):
+            result=notifications.status(scenario,company_ids=principal.company_ids if principal else None,offset=offset)
+            if not review_workflow:
+                # The historical anonymous UI must not expose destinations or
+                # identities, including copies nested inside delivery history.
+                def public(value):
+                    if isinstance(value,dict):return {k:public(v) for k,v in value.items() if not k.startswith('recipient')}
+                    if isinstance(value,list):return [public(v) for v in value]
+                    return value
+                result=public(result)
+            return result
         def respond(self, status, body, content_type='application/json; charset=utf-8', extra=None):
             if isinstance(body, (dict, list)):
                 body = json.dumps(body, ensure_ascii=False).encode('utf-8')
@@ -72,6 +100,7 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                     return
                 assets = {'/': ('index.html', 'text/html; charset=utf-8'), '/app.js': ('app.js', 'text/javascript; charset=utf-8'),
                           '/review_explanations.js': ('review_explanations.js', 'text/javascript; charset=utf-8'),
+                          '/review_workflow.js': ('review_workflow.js', 'text/javascript; charset=utf-8'),
                           '/styles.css': ('styles.css', 'text/css; charset=utf-8'),
                           '/case_graph.js': ('case_graph.js', 'text/javascript; charset=utf-8'),
                           '/vendor/cytoscape.min.js': ('vendor/cytoscape.min.js', 'text/javascript; charset=utf-8')}
@@ -82,16 +111,26 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                     self.respond(200, dict(status='ok', application='sme-case-review', qa=qa, instance_id=instance_id))
                 elif path == '/api/meta':
                     self.respond(200, store.metadata() | dict(csrf_token=csrf, qa=qa, notification_mode=notifications.mode,
-                                                            p2_controls_available=self.p2_controls is not None))
+                                                            p2_controls_available=self.p2_controls is not None)
+                        | (dict(review_workflow=review_workflow.policy(self.review_principal())) if review_workflow else {}))
                 elif path == '/api/notifications':
-                    self.respond(200, notifications.status(query.get('scenario', '003')))
+                    principal=self.review_principal() if review_workflow else None
+                    if review_workflow and principal is None:
+                        raise PermissionError('Đăng nhập để xem thông báo trong phạm vi công ty của bạn.')
+                    result=self.notification_status(query.get('scenario', '003'),principal,offset=int(query.get('offset','0')))
+                    result['can_preview']=not review_workflow or principal.role in {'chief_accountant','director'}
+                    self.respond(200,result)
                 elif path == '/api/cases':
                     self.respond(200, store.list_cases(query.get('scenario', '003'), company=query.get('company', ''),
                         status=query.get('status', 'active'), priority=query.get('priority', ''), rule=query.get('rule', ''),
                         query=query.get('q', ''), offset=int(query.get('offset', 0)), limit=int(query.get('limit', 30)), daily=query.get('daily') == '1',
                         category=query.get('category', '')))
                 elif path == '/api/case':
-                    self.respond(200, store.detail(query.get('scenario', '003'), query.get('id', '')))
+                    scenario,case_id=query.get('scenario','003'),query.get('id','')
+                    detail=store.detail(scenario,case_id)
+                    if review_workflow and not detail['case'].get('archived'):
+                        detail['review_workflow']=review_workflow.state(scenario,case_id,self.review_principal())
+                    self.respond(200,detail)
                 elif path == '/api/transaction':
                     self.respond(200, store.transaction(query.get('scenario', '003'), query.get('id', '')))
                 elif path == '/api/entity-graph':
@@ -156,6 +195,33 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                 if not isinstance(body, dict):
                     raise ValueError('Nội dung yêu cầu phải là một đối tượng.')
                 scenario = body.get('scenario', '003')
+                if review_workflow and path.startswith('/api/review-workflow/'):
+                    principal=self.review_principal();case_id=body.get('case_id','')
+                    values={k:v for k,v in body.items() if k not in {'scenario','case_id'}}
+                    if path=='/api/review-workflow/primary':
+                        result=review_workflow.submit(scenario,case_id,principal,values)
+                    elif path in {'/api/review-workflow/finalize','/api/review-workflow/return'}:
+                        result=review_workflow.final_action(scenario,case_id,principal,values,action=path.rsplit('/',1)[1])
+                    else:raise KeyError('Unknown review workflow action')
+                    self.respond(200,result);return
+                if review_workflow:
+                    if path=='/api/feedback':
+                        raise PermissionError('Kết luận được ghi qua hai bước: kế toán viên rà, kế toán trưởng hoặc giám đốc chốt.')
+                    action={'/api/admit':'primary','/api/information-requests':'information_request',
+                            '/api/budget':'budget','/api/notifications/preview':'notification_preview',
+                            '/api/p2-controls/review':'uat_note'}.get(path)
+                    if action:
+                        company=(store.detail(scenario,body.get('case_id',''))['case']['company_id']
+                                 if path in {'/api/admit','/api/information-requests'} else None)
+                        principal=self.workflow_permission(action,company)
+                        if action=='budget' and not {
+                            r['company_id'] for r in store.metadata()['companies']}<=set(principal.company_ids):
+                            raise PermissionError('Thao tác toàn bộ không gian cần quyền trên toàn bộ các công ty trong không gian.')
+                        if action=='uat_note':
+                            control=self.p2_controls.detail(body.get('control_id',''))
+                            for row in control['transactions']:self.workflow_permission(action,row['company_id'])
+                        if path=='/api/information-requests':body['actor']=principal.display_name
+                        if path=='/api/p2-controls/review':body['reviewer']=principal.display_name
                 if path == '/api/p2-controls/review' and self.p2_controls is not None:
                     result = self.p2_controls.save_review(body)
                 elif path == '/api/admit':
@@ -171,9 +237,10 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                 elif path == '/api/notifications/preview':
                     if not notifications.config['dry_run']:
                         raise PermissionError('Chỉ chạy giả lập qua giao diện. Worker gửi thật cần cấu hình riêng.')
-                    notifications.plan(scenario)
-                    notifications.dispatch()
-                    result = notifications.status(scenario)
+                    scope=self.review_principal().company_ids if review_workflow else None
+                    notifications.plan(scenario,company_ids=scope)
+                    notifications.dispatch(company_ids=scope)
+                    result = self.notification_status(scenario,self.review_principal() if review_workflow else None)|dict(can_preview=True)
                 elif path == '/api/shutdown':
                     self.respond(200, dict(status='stopping'))
                     threading.Thread(target=self.server.shutdown, daemon=True).start()
@@ -203,6 +270,7 @@ def main():
     parser.add_argument('--prepare-only', action='store_true')
     parser.add_argument('--qa', action='store_true')
     parser.add_argument('--instance-id', default='')
+    parser.add_argument('--two-stage-review',action='store_true',help='Kế toán viên rà; kế toán trưởng hoặc giám đốc chốt, chờ tích hợp đăng nhập')
     parser.add_argument('--notification-config', type=Path)
     parser.add_argument('--p2-controls', action='store_true', help='Mount the verified P2 UAT module at /p2-controls')
     parser.add_argument('--p2-controls-database', type=Path, default=Path('.runtime/p2_controls_web/reviews.sqlite3'))
@@ -228,7 +296,12 @@ def main():
         from .p2_controls_server import SOURCE, REPORT
         from .p2_controls_web import P2Controls
         controls = P2Controls(SOURCE, REPORT, args.p2_controls_database)
-    server = make_server(store, args.port, args.qa, args.instance_id, Notifications(store, config), p2_controls=controls)
+    workflow=None
+    if args.two_stage_review:
+        from .review_workflow import TwoStageReview
+        workflow=TwoStageReview(store)
+    server = make_server(store, args.port, args.qa, args.instance_id, Notifications(store, config),
+                         p2_controls=controls,review_workflow=workflow)
     print(f'Review UI ready: http://127.0.0.1:{server.server_port}', flush=True)
     try:
         server.serve_forever()

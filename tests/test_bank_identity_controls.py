@@ -217,7 +217,7 @@ class BankIdentityControlsTest(unittest.TestCase):
                         link_type='bank_account', observed_at=stamp(case.at - timedelta(days=1))))
                 case.pay(vendor=vendors[-1])
                 case.score()
-                self.assertEqual(case.features[-1]['linked_vendor_count'], expected)
+                self.assertEqual(case.features[-1]['linked_vendor_count_current'], expected)
 
     def test_unique_synthetic_accounts_remain_usable_without_bank_codes(self):
         case, rows = self.payments(['', ''], accounts=['BANK_SYN_ACCOUNT_1'] * 2)

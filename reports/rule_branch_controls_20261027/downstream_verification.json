@@ -1,0 +1,1358 @@
+{
+  "source_commitment_verified": true,
+  "expected_commitment_verified": true,
+  "no_rescoring": true,
+  "source_conditions_not_fraud_labels": true,
+  "controls": 186,
+  "checks": [
+    {
+      "control_id": "C4_2026102701_001",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_002",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_004",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_006",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_007",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_008",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_009",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_010",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_011",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_012",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_013",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_015",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_017",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102701_018",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_001",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_002",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_004",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_006",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_007",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_008",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_009",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_010",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_011",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_012",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_013",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_015",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_017",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "C4_2026102702_018",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_001",
+      "points": 20,
+      "intrinsic_points": 20,
+      "hard_trigger": true,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_002",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_004",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_006",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_007",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_008",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_009",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_010",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_011",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_012",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_013",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_015",
+      "points": 20,
+      "intrinsic_points": 20,
+      "hard_trigger": true,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_017",
+      "points": 20,
+      "intrinsic_points": 20,
+      "hard_trigger": true,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102701_018",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_001",
+      "points": 20,
+      "intrinsic_points": 20,
+      "hard_trigger": true,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_002",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_004",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_006",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_007",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_008",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_009",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_010",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_011",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_012",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_013",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_015",
+      "points": 20,
+      "intrinsic_points": 20,
+      "hard_trigger": true,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_017",
+      "points": 20,
+      "intrinsic_points": 20,
+      "hard_trigger": true,
+      "passed": true
+    },
+    {
+      "control_id": "E2_2026102702_018",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_001",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_002",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_004",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_006",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_007",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_008",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_009",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_010",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_011",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_012",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_013",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_015",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102701_017",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_001",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_002",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_004",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_006",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_007",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_008",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_009",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_010",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_011",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_012",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_013",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_015",
+      "points": 8,
+      "intrinsic_points": 8,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F2_2026102702_017",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_001",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_002",
+      "points": 0,
+      "intrinsic_points": 3,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_004",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_006",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_007",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_008",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_009",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_010",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_011",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_012",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_013",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_015",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102701_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_001",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_002",
+      "points": 0,
+      "intrinsic_points": 3,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_004",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_006",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_007",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_008",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_009",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_010",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_011",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_012",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_013",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_015",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F3_2026102702_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_001",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_002",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_004",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_006",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_007",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_008",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_009",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_010",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_011",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_012",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_015",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_017",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_018",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_019",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_020",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_021",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_022",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_023",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_024",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102701_025",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_001",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_002",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_003",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_004",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_005",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_006",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_007",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_008",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_009",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_010",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_011",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_012",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_014",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_015",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_016",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_017",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_018",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_019",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_020",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_021",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_022",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_023",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_024",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    },
+    {
+      "control_id": "F4_2026102702_025",
+      "points": 0,
+      "intrinsic_points": 0,
+      "hard_trigger": false,
+      "passed": true
+    }
+  ],
+  "groups": [
+    {
+      "rule_id": "C4",
+      "transactions": 36,
+      "features": 36,
+      "feature_columns": 194,
+      "journal_documents": 72,
+      "journal_balanced": true,
+      "synthetic_gate_preserved": true
+    },
+    {
+      "rule_id": "E2",
+      "transactions": 36,
+      "features": 36,
+      "feature_columns": 194,
+      "journal_documents": 72,
+      "journal_balanced": true,
+      "synthetic_gate_preserved": true
+    },
+    {
+      "rule_id": "F2",
+      "transactions": 34,
+      "features": 34,
+      "feature_columns": 194,
+      "journal_documents": 34,
+      "journal_balanced": true,
+      "synthetic_gate_preserved": true
+    },
+    {
+      "rule_id": "F3",
+      "transactions": 32,
+      "features": 32,
+      "feature_columns": 194,
+      "journal_documents": 32,
+      "journal_balanced": true,
+      "synthetic_gate_preserved": true
+    },
+    {
+      "rule_id": "F4",
+      "transactions": 68,
+      "features": 68,
+      "feature_columns": 194,
+      "journal_documents": 66,
+      "journal_balanced": true,
+      "synthetic_gate_preserved": true
+    }
+  ]
+}

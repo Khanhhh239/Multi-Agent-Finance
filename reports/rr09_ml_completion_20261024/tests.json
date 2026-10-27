@@ -1,0 +1,192 @@
+{
+  "modules": [
+    {
+      "module": "test_rr09_priority",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_rebuild_source_cache",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_cash_controls",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_cash_review_flow",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_p2_control_suite",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_split_pattern_admission",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_review",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_sprint14_notifications",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_review_capacity",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_compare_shadow",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_if_discovery",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_if_discovery_review",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_independent_ml_review",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_current_relationship_features",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_train_source_model",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_shadow_scoring",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_feature_model_sync",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_b4_evidence_timing",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_b2_company_transfer",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_feature_evidence_timing",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_feature_contact_identity",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_noise_policy",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    },
+    {
+      "module": "test_rules",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "details": []
+    }
+  ],
+  "tests": 327,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0
+}

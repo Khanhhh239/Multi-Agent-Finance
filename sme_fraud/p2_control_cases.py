@@ -83,6 +83,10 @@ def declarations():
 def build_control(spec):
     c = Case()
     config = deepcopy(DEFAULT_CONFIG)
+    # This versioned Oct-18 fixture declares the original high-priority policy.
+    # RR09-v1 is covered by its own new boundary/integration suite; replaying
+    # these historical declarations must not silently adopt new defaults.
+    config['cash_limit_priority_policy'] = 'legacy_high_v1'
     settings = spec['settings']
     returns = []
     def pay(amount, at=AT, *, invoice=True, bank=False, vendor=False, **fields):

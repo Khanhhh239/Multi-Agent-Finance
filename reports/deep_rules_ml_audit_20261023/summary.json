@@ -1,0 +1,104 @@
+{
+  "verified_at": "2026-10-23T10:47:43.983049+00:00",
+  "existing_tests": 669,
+  "existing_test_modules": 51,
+  "existing_test_failures": 0,
+  "existing_test_errors": 0,
+  "existing_test_skips": 0,
+  "edge_probes": 9,
+  "edge_expectation_violations": 7,
+  "edge_probe_errors": 0,
+  "confirmed_code_defect_groups": 4,
+  "semantic_consistency_groups": 1,
+  "known_open_policy_gaps": [
+    "RR09"
+  ],
+  "actual_evaluation_scores_replayed": 11811,
+  "actual_score_max_absolute_delta": 0,
+  "original_models_refitted": 0,
+  "frozen_sources_or_labels_parsed_outside_allowed_reporting_inputs": false,
+  "blocked_frozen_reads": [],
+  "protected_files": 2250,
+  "protected_drift": [],
+  "existing_code_drift": [],
+  "core_fixes_applied": false,
+  "fixture_note": "Existing tests may create/read toy labels or paths named 005 inside temporary fixtures; real frozen labels/oracle/holdout data were not parsed or scored. Opaque preservation hashing is separate.",
+  "current_source_impact_limit": "No mismatches in the independent as-of phone/address scan on 41,082 cached reporting rows. This does not verify every feature or prove the late-evidence and revision cases safe on new SME exports.",
+  "findings": [
+    {
+      "id": "R01",
+      "kind": "confirmed_code_defect",
+      "priority": "high",
+      "title": "B4 uses late goods-receipt evidence to suppress an earlier warning",
+      "code": [
+        "sme_fraud/rules.py:761",
+        "sme_fraud/rules.py:763"
+      ],
+      "probes": [
+        "B4_future_goods_receipt_cannot_suppress_past_alert"
+      ]
+    },
+    {
+      "id": "R02",
+      "kind": "confirmed_code_defect",
+      "priority": "high",
+      "title": "B2 retains an employee in the previous company contact index after a transfer",
+      "code": [
+        "sme_fraud/rules.py:449",
+        "sme_fraud/rules.py:451",
+        "sme_fraud/rules.py:729"
+      ],
+      "probes": [
+        "B2_does_not_match_staff_transferred_out_of_company"
+      ]
+    },
+    {
+      "id": "M01",
+      "kind": "confirmed_code_defect",
+      "priority": "high",
+      "title": "Features use support documents and invoice amounts not available at the transaction cutoff",
+      "code": [
+        "sme_fraud/features.py:194",
+        "sme_fraud/features.py:231",
+        "sme_fraud/features.py:245"
+      ],
+      "probes": [
+        "future_support_documents_do_not_change_past_features",
+        "future_invoice_gross_not_known_at_payment"
+      ]
+    },
+    {
+      "id": "M02",
+      "kind": "confirmed_code_defect",
+      "priority": "medium",
+      "title": "Empty phone/address values are counted as employee-vendor matches",
+      "code": [
+        "sme_fraud/features.py:159",
+        "sme_fraud/features.py:237",
+        "sme_fraud/features.py:238"
+      ],
+      "probes": [
+        "missing_contacts_must_not_match"
+      ]
+    },
+    {
+      "id": "M03",
+      "kind": "semantic_consistency_gap",
+      "priority": "medium",
+      "title": "Contact counters and feature graph retain retired master relationships",
+      "code": [
+        "sme_fraud/features.py:147",
+        "sme_fraud/features.py:159",
+        "sme_fraud/features.py:167",
+        "sme_fraud/features.py:240"
+      ],
+      "probes": [
+        "retired_employee_contacts_must_not_remain_current_matches",
+        "feature_graph_retires_replaced_vendor_phone"
+      ],
+      "qualification": "Current-state expectations were used in these two probes. Historical relationship features may be intentional; current versus historical meaning must be explicit and versioned before changing them."
+    }
+  ],
+  "regression_started_at": "2026-10-23T09:28:35.867442+00:00",
+  "regression_finished_at": "2026-10-23T09:36:18.024014+00:00"
+}

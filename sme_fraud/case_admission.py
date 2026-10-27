@@ -1,4 +1,5 @@
 """Human-review admission is distinct from numeric risk and hard triggers."""
+from .cash_limit_priority import POLICY, handling_priority
 SPLIT_PATTERN_POLICY = 'split_patterns_v1'
 SPLIT_REVIEW_RULES = frozenset({'A2', 'A4'})
 
@@ -21,5 +22,10 @@ def admission(hits, score, hard, config):
     basis = ('hard_trigger' if hard else 'score_threshold' if score >= config.get('operational_score', 7)
              else 'split_pattern' if rules else '')
     priority = ('cao_nhat' if hard else 'cao' if score >= 14 else 'trung_binh' if basis else 'thap')
+    priority, detail = handling_priority(hits, score, hard, config, priority, bool(rules))
+    if detail and not basis:
+        basis = 'verified_internal_breach'
     return dict(operational_alert=int(bool(basis)), priority=priority,
-                admission_basis=basis, review_rule_ids='|'.join(rules))
+                admission_basis=basis, review_rule_ids='|'.join(rules),
+                **(detail or dict(handling_priority_policy=config.get('cash_limit_priority_policy', POLICY),
+                                 independent_rule_score=score, priority_basis='existing_rule_priority')))

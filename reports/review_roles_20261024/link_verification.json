@@ -1,0 +1,38 @@
+[
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "review_roles_20261024/tests.json"
+  },
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "review_roles_20261024/ui_tests.json"
+  },
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "review_roles_20261024/app_verification.json"
+  },
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "review_roles_20261024/ml_review_workspace/public/README.md"
+  },
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "review_roles_20261024/ml_role_status.json"
+  },
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "../examples/review_roles/README.md"
+  },
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "review_roles_20261024/role_policy.json"
+  },
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "../.runtime/review_roles_20261024/run_app.ps1"
+  },
+  {
+    "document": "reports\\review_roles_20261024.md",
+    "target": "review_roles_20261024/verification.json"
+  }
+]

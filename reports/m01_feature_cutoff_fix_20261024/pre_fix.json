@@ -1,0 +1,117 @@
+{
+  "stage": "pre_fix",
+  "modules": [
+    {
+      "module": "test_feature_evidence_timing",
+      "tests": 18,
+      "failures": 11,
+      "errors": 13,
+      "skipped": 0,
+      "seconds": 2.844,
+      "details": [
+        {
+          "test": "test_conflicting_or_rebound_revisions_are_rejected_including_future (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_conflicting_or_rebound_revisions_are_rejected_including_future) (changes={'status': 'revoked'})",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 174, in test_conflicting_or_rebound_revisions_are_rejected_including_future\n    with self.assertRaisesRegex(ValueError, 'Conflicting|binding'):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n"
+        },
+        {
+          "test": "test_conflicting_or_rebound_revisions_are_rejected_including_future (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_conflicting_or_rebound_revisions_are_rejected_including_future) (changes={'vendor_id': 'OTHER', 'observed_at': '2025-08-14T11:00:00+07:00'})",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 174, in test_conflicting_or_rebound_revisions_are_rejected_including_future\n    with self.assertRaisesRegex(ValueError, 'Conflicting|binding'):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n"
+        },
+        {
+          "test": "test_future_document_values_cannot_change_historical_feature_vector (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_document_values_cannot_change_historical_feature_vector)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 48, in test_future_document_values_cannot_change_historical_feature_vector\n    self.assertEqual(self.feature(case), before)\nAssertionError: {'tra[453 chars]nt': 2, 'goods_receipt_verified': 1, 'has_vend[3856 chars]': 0} != {'tra[453 chars]nt': 0, 'goods_receipt_verified': 0, 'has_vend[3856 chars]': 0}\nDiff is 5115 characters long. Set self.maxDiff to None to see it.\n"
+        },
+        {
+          "test": "test_future_invoice_masks_all_dependent_monetary_features (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_invoice_masks_all_dependent_monetary_features)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 69, in test_future_invoice_masks_all_dependent_monetary_features\n    case, row = self.case(invoice_issued_at='2025-08-14T11:00:00+07:00', invoice_gross_vnd=0)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 23, in case\n    case.score()  # Ordinary accounting enrichment once; never read fixture truth.\n    ^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\rule_audit_cases.py\", line 91, in score\n    enrich_accounting(self.tables, 20261013)\n  File \"D:\\agent22\\sme_fraud\\accounting.py\", line 282, in enrich_accounting\n    purchase_doc = document(purchase,\"invoice_accrual\",purchase_at,\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\accounting.py\", line 160, in document\n    assert amount>0 and pair_supported(debit,credit,purpose,framework), (purpose,debit,credit,framework)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('invoice_accrual', '156', '331', 'TT200')\n"
+        },
+        {
+          "test": "test_invalid_new_timestamps_are_rejected (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invalid_new_timestamps_are_rejected) (name='invoice_observed_at')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 181, in test_invalid_new_timestamps_are_rejected\n    with self.subTest(name=name), self.assertRaisesRegex(ValueError, name):\n                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n"
+        },
+        {
+          "test": "test_invalid_new_timestamps_are_rejected (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invalid_new_timestamps_are_rejected) (name='goods_receipt_verified_at')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 181, in test_invalid_new_timestamps_are_rejected\n    with self.subTest(name=name), self.assertRaisesRegex(ValueError, name):\n                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n"
+        },
+        {
+          "test": "test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing) (gross=0)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 95, in test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing\n    case, row = self.case(invoice_gross_vnd=gross)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 23, in case\n    case.score()  # Ordinary accounting enrichment once; never read fixture truth.\n    ^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\rule_audit_cases.py\", line 91, in score\n    enrich_accounting(self.tables, 20261013)\n  File \"D:\\agent22\\sme_fraud\\accounting.py\", line 282, in enrich_accounting\n    purchase_doc = document(purchase,\"invoice_accrual\",purchase_at,\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\accounting.py\", line 160, in document\n    assert amount>0 and pair_supported(debit,credit,purpose,framework), (purpose,debit,credit,framework)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('invoice_accrual', '156', '331', 'TT200')\n"
+        },
+        {
+          "test": "test_known_invoice_revision_wins_over_later_raw_and_document_values (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_known_invoice_revision_wins_over_later_raw_and_document_values)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 116, in test_known_invoice_revision_wins_over_later_raw_and_document_values\n    self.assertEqual(self.feature(case), before)\nAssertionError: {'tra[987 chars]s': 17.21670797, 'invoice_payment_ratio': 0.3,[3322 chars]': 0} != {'tra[987 chars]s': 16.99356443, 'invoice_payment_ratio': 0.37[3326 chars]': 0}\nDiff is 5460 characters long. Set self.maxDiff to None to see it.\n"
+        },
+        {
+          "test": "test_late_verification_does_not_set_receipt_flag (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_late_verification_does_not_set_receipt_flag)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 156, in test_late_verification_does_not_set_receipt_flag\n    self.assertEqual((f['support_doc_count'], f['goods_receipt_verified']), (1, 0))\nAssertionError: Tuples differ: (2, 1) != (1, 0)\n\nFirst differing element 0:\n2\n1\n\n- (2, 1)\n+ (1, 0)\n"
+        },
+        {
+          "test": "test_new_columns_are_finite_and_source_is_not_mutated (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_new_columns_are_finite_and_source_is_not_mutated)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 188, in test_new_columns_are_finite_and_source_is_not_mutated\n    self.assertTrue(set(FLAGS) <= set(FEATURE_DESCRIPTIONS))\nAssertionError: False is not true\n"
+        },
+        {
+          "test": "test_old_feature_artifact_is_rejected_by_fresh_cache_contract (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_old_feature_artifact_is_rejected_by_fresh_cache_contract)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 201, in test_old_feature_artifact_is_rejected_by_fresh_cache_contract\n    self.assertFalse(model_compatibility(old, meta, 'runtime')['compatible'])\nAssertionError: True is not false\n"
+        },
+        {
+          "test": "test_document_cutoff_is_inclusive_and_one_second_late_is_excluded (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_document_cutoff_is_inclusive_and_one_second_late_is_excluded) (seconds=-1)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 57, in test_document_cutoff_is_inclusive_and_one_second_late_is_excluded\n    self.assertEqual((f['support_doc_count'], f['goods_receipt_verified'], f['support_docs_known']),\n                                                                           ~^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'support_docs_known'\n"
+        },
+        {
+          "test": "test_document_cutoff_is_inclusive_and_one_second_late_is_excluded (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_document_cutoff_is_inclusive_and_one_second_late_is_excluded) (seconds=0)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 57, in test_document_cutoff_is_inclusive_and_one_second_late_is_excluded\n    self.assertEqual((f['support_doc_count'], f['goods_receipt_verified'], f['support_docs_known']),\n                                                                           ~^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'support_docs_known'\n"
+        },
+        {
+          "test": "test_document_cutoff_is_inclusive_and_one_second_late_is_excluded (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_document_cutoff_is_inclusive_and_one_second_late_is_excluded) (seconds=1)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 57, in test_document_cutoff_is_inclusive_and_one_second_late_is_excluded\n    self.assertEqual((f['support_doc_count'], f['goods_receipt_verified'], f['support_docs_known']),\n                                                                           ~^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'support_docs_known'\n"
+        },
+        {
+          "test": "test_document_revisions_are_selected_before_status_and_order_does_not_matter (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_document_revisions_are_selected_before_status_and_order_does_not_matter)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 128, in test_document_revisions_are_selected_before_status_and_order_does_not_matter\n    self.assertEqual((before['support_doc_count'], before['goods_receipt_verified'], before['support_docs_known']), (1, 1, 1))\n                                                                                     ~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'support_docs_known'\n"
+        },
+        {
+          "test": "test_future_issue_date_is_excluded_even_if_observation_claims_known (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_issue_date_is_excluded_even_if_observation_claims_known)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 83, in test_future_issue_date_is_excluded_even_if_observation_claims_known\n    self.assertEqual((f['invoice_log_gross'], f['invoice_known'], f['registry_risky_at_invoice']), (0, 0, 0))\n                                              ~^^^^^^^^^^^^^^^^^\nKeyError: 'invoice_known'\n"
+        },
+        {
+          "test": "test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing) (gross=12000000)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 99, in test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing\n    self.assertEqual(f['invoice_known'], 1)\n                     ~^^^^^^^^^^^^^^^^^\nKeyError: 'invoice_known'\n"
+        },
+        {
+          "test": "test_known_revocation_cannot_fall_back_to_positive_final_scalar (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_known_revocation_cannot_fall_back_to_positive_final_scalar)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 138, in test_known_revocation_cannot_fall_back_to_positive_final_scalar\n    self.assertEqual((f['support_doc_count'], f['goods_receipt_verified'], f['invoice_known']), (0, 0, 0))\n                                                                           ~^^^^^^^^^^^^^^^^^\nKeyError: 'invoice_known'\n"
+        },
+        {
+          "test": "test_missing_invoice_components_do_not_create_arithmetic_anomaly (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_missing_invoice_components_do_not_create_arithmetic_anomaly)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 165, in test_missing_invoice_components_do_not_create_arithmetic_anomaly\n    self.assertEqual((f['invoice_known'], f['invoice_components_known'], f['linked_input_vat_known']), (1, 0, 0))\n                      ~^^^^^^^^^^^^^^^^^\nKeyError: 'invoice_known'\n"
+        },
+        {
+          "test": "test_old_issue_date_does_not_make_late_observation_available (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_old_issue_date_does_not_make_late_observation_available)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 90, in test_old_issue_date_does_not_make_late_observation_available\n    self.assertEqual((f['invoice_log_gross'], f['invoice_known']), (0, 0))\n                                              ~^^^^^^^^^^^^^^^^^\nKeyError: 'invoice_known'\n"
+        },
+        {
+          "test": "test_untimed_document_values_are_missing_and_distinct_from_observed_zero (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_untimed_document_values_are_missing_and_distinct_from_observed_zero)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 63, in test_untimed_document_values_are_missing_and_distinct_from_observed_zero\n    self.assertEqual((missing['support_doc_count'], missing['goods_receipt_verified'], missing['support_docs_known']), (0, 0, 0))\n                                                                                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'support_docs_known'\n"
+        },
+        {
+          "test": "test_untimed_invoice_amount_is_missing (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_untimed_invoice_amount_is_missing)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 104, in test_untimed_invoice_amount_is_missing\n    self.assertEqual((f['invoice_log_gross'], f['invoice_known']), (0, 0))\n                                              ~^^^^^^^^^^^^^^^^^\nKeyError: 'invoice_known'\n"
+        },
+        {
+          "test": "test_wrong_company_or_vendor_document_cannot_supply_feature_values (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_wrong_company_or_vendor_document_cannot_supply_feature_values) (changes={'company_id': 'C002'})",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 147, in test_wrong_company_or_vendor_document_cannot_supply_feature_values\n    self.assertEqual((f['support_doc_count'], f['goods_receipt_verified'], f['support_docs_known']), (0, 0, 0))\n                                                                           ~^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'support_docs_known'\n"
+        },
+        {
+          "test": "test_wrong_company_or_vendor_document_cannot_supply_feature_values (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_wrong_company_or_vendor_document_cannot_supply_feature_values) (changes={'vendor_id': 'WRONG_VENDOR'})",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 147, in test_wrong_company_or_vendor_document_cannot_supply_feature_values\n    self.assertEqual((f['support_doc_count'], f['goods_receipt_verified'], f['support_docs_known']), (0, 0, 0))\n                                                                           ~^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'support_docs_known'\n"
+        }
+      ]
+    }
+  ],
+  "tests": 18,
+  "failures": 11,
+  "errors": 13,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 2.844
+}

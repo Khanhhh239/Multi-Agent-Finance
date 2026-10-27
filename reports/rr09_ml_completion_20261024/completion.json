@@ -1,0 +1,22 @@
+{
+  "rr09_status": "implemented_verified_in_new_local_app",
+  "ml_technical_status": "v4_refreshed_and_shadow_verified",
+  "ml_independent_review_status": "unassigned",
+  "independent_reviews": 0,
+  "prepared_review_units": 74,
+  "legacy_packet_units": 128,
+  "actual_review_minutes": null,
+  "actionable_gain": null,
+  "source_evidence_timing": "four_availability_flags_unknown_across_41082_observations",
+  "primary_shadow_baseline_delayed_reviews": 1,
+  "primary_shadow_max_baseline_delay_days": 26,
+  "if_mode": "shadow",
+  "python_tests": 327,
+  "renderer_checks": 25,
+  "rr09_controls_passed": 20,
+  "protected_files": 2418,
+  "protected_drift": [],
+  "local_links_checked": 15,
+  "application_url": "http://127.0.0.1:8774/",
+  "browser_visual_qa": false
+}

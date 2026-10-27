@@ -1,0 +1,733 @@
+{
+  "synthetic_only": true,
+  "events": [
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "RC_1",
+      "company_id": "C001",
+      "case_scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG: đã đối chiếu hóa đơn HD001 và bút toán, không có chi trùng trong mẫu test.",
+        "missing_evidence": "",
+        "active_minutes": 2,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": ""
+      },
+      "previous_hash": "",
+      "event_hash": "acf867f1d2dee3a7f269150afd3aa8a2835df6bfa11958947c9d5694c4707c90"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "returned",
+      "scenario": "003",
+      "case_id": "RC_1",
+      "company_id": "C001",
+      "case_scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46",
+      "actor": {
+        "user_id": "SIM_CHIEF02",
+        "person_id": "SIM_PERSON02",
+        "display_name": "MÔ PHỎNG · Kế toán trưởng Bình",
+        "role": "chief_accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": null,
+        "reason": "MÔ PHỎNG: cần đối chiếu thêm chứng từ ngân hàng trước khi kết luận.",
+        "missing_evidence": "MÔ PHỎNG: sao kê giao dịch T1.",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "acf867f1d2dee3a7f269150afd3aa8a2835df6bfa11958947c9d5694c4707c90"
+      },
+      "previous_hash": "acf867f1d2dee3a7f269150afd3aa8a2835df6bfa11958947c9d5694c4707c90",
+      "event_hash": "61589b5183e4d2e071b29aa2da6a1b9f74358b3e82ad7cb0d1feefbb81aa2ab5"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "RC_1",
+      "company_id": "C001",
+      "case_scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG: đã bổ sung sao kê T1 và đối chiếu lại với hóa đơn HD001.",
+        "missing_evidence": "",
+        "active_minutes": 1.5,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": ""
+      },
+      "previous_hash": "61589b5183e4d2e071b29aa2da6a1b9f74358b3e82ad7cb0d1feefbb81aa2ab5",
+      "event_hash": "f71c5a895536c344b6675c3c08afaad7471ff6d5def8f681269f82cbcd6f43c3"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_requested",
+      "scenario": "003",
+      "case_id": "RC_1",
+      "company_id": "C001",
+      "case_scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46",
+      "actor": {
+        "user_id": "SIM_CHIEF02",
+        "person_id": "SIM_PERSON02",
+        "display_name": "MÔ PHỎNG · Kế toán trưởng Bình",
+        "role": "chief_accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG: kiểm tra lại sao kê và hóa đơn HD001, chấp thuận kết quả hợp lệ.",
+        "missing_evidence": "",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "f71c5a895536c344b6675c3c08afaad7471ff6d5def8f681269f82cbcd6f43c3"
+      },
+      "previous_hash": "f71c5a895536c344b6675c3c08afaad7471ff6d5def8f681269f82cbcd6f43c3",
+      "event_hash": "28ae4f27519ef58588c28e1cc79268a92476e600ccfa74456e9dca9f1165d7d1"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalized",
+      "scenario": "003",
+      "case_id": "RC_1",
+      "company_id": "C001",
+      "case_scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46",
+      "actor": {
+        "user_id": "SIM_CHIEF02",
+        "person_id": "SIM_PERSON02",
+        "display_name": "MÔ PHỎNG · Kế toán trưởng Bình",
+        "role": "chief_accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "primary_event_hash": "f71c5a895536c344b6675c3c08afaad7471ff6d5def8f681269f82cbcd6f43c3",
+        "intent_hash": "28ae4f27519ef58588c28e1cc79268a92476e600ccfa74456e9dca9f1165d7d1",
+        "feedback_event_hash": "f50de41372d6997791506037b1726b8424883d678057a0fd7cbb05f33db70717",
+        "decision": "false_positive"
+      },
+      "previous_hash": "28ae4f27519ef58588c28e1cc79268a92476e600ccfa74456e9dca9f1165d7d1",
+      "event_hash": "c573acbcce13a78e509158c112be6d43d018b436eef1801caa454c5ad7678d6a"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "RC_2",
+      "company_id": "C001",
+      "case_scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "non_compliance",
+        "reason": "MÔ PHỎNG RC_2: đề xuất kiểm tra kiểm soát thanh toán theo hóa đơn HD001.",
+        "missing_evidence": "",
+        "active_minutes": 2,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": ""
+      },
+      "previous_hash": "c573acbcce13a78e509158c112be6d43d018b436eef1801caa454c5ad7678d6a",
+      "event_hash": "5f5373eab4e7988a1d0e098bc967683127b1e2368971d00e4e00ba8f889dd0c6"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "returned",
+      "scenario": "003",
+      "case_id": "RC_2",
+      "company_id": "C001",
+      "case_scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167",
+      "actor": {
+        "user_id": "SIM_CHIEF02",
+        "person_id": "SIM_PERSON02",
+        "display_name": "MÔ PHỎNG · Kế toán trưởng Bình",
+        "role": "chief_accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": null,
+        "reason": "MÔ PHỎNG RC_2: kiểm tra lại khoản chi, ghi rõ căn cứ phê duyệt trước khi gửi lại.",
+        "missing_evidence": "MÔ PHỎNG: phê duyệt khoản chi T2.",
+        "active_minutes": 0.5,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "5f5373eab4e7988a1d0e098bc967683127b1e2368971d00e4e00ba8f889dd0c6"
+      },
+      "previous_hash": "5f5373eab4e7988a1d0e098bc967683127b1e2368971d00e4e00ba8f889dd0c6",
+      "event_hash": "6c0db193457abe40134ebd9d03e93b585a515d7e3612e237488a93b4b657a28f"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "RC_2",
+      "company_id": "C001",
+      "case_scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG RC_2: đã xem phê duyệt T2, đối chiếu với hóa đơn HD001 và cập nhật đề xuất.",
+        "missing_evidence": "",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": ""
+      },
+      "previous_hash": "6c0db193457abe40134ebd9d03e93b585a515d7e3612e237488a93b4b657a28f",
+      "event_hash": "187998e9102f2764dbbf88c06ce95f5c520d1320b7fff2ca2b93068cd51fec0b"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_requested",
+      "scenario": "003",
+      "case_id": "RC_2",
+      "company_id": "C001",
+      "case_scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG RC_2: đã kiểm tra bằng chứng bổ sung, chốt kết luận hợp lệ.",
+        "missing_evidence": "",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "187998e9102f2764dbbf88c06ce95f5c520d1320b7fff2ca2b93068cd51fec0b"
+      },
+      "previous_hash": "187998e9102f2764dbbf88c06ce95f5c520d1320b7fff2ca2b93068cd51fec0b",
+      "event_hash": "2ac47153f382496da29c68cec42b95aca559c0ae6e7cb6882dce7b8609faca48"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalized",
+      "scenario": "003",
+      "case_id": "RC_2",
+      "company_id": "C001",
+      "case_scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "primary_event_hash": "187998e9102f2764dbbf88c06ce95f5c520d1320b7fff2ca2b93068cd51fec0b",
+        "intent_hash": "2ac47153f382496da29c68cec42b95aca559c0ae6e7cb6882dce7b8609faca48",
+        "feedback_event_hash": "b794f87cdd2e09d1e602b151f90733ed40abe9ad9c5de1af334516a6d5475cc6",
+        "decision": "false_positive"
+      },
+      "previous_hash": "2ac47153f382496da29c68cec42b95aca559c0ae6e7cb6882dce7b8609faca48",
+      "event_hash": "819560fb37190af65530d04d86a5f43097d6dc1f7a699dcfe209d1ecd8f8105d"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "RC_3",
+      "company_id": "C001",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG RC_3: gửi bản rà để kiểm tra chặn chốt khi tài liệu còn thiếu.",
+        "missing_evidence": "",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": ""
+      },
+      "previous_hash": "819560fb37190af65530d04d86a5f43097d6dc1f7a699dcfe209d1ecd8f8105d",
+      "event_hash": "53a67c5a44fef3581008d68dc0df6cc1dd8d5112f1f3888d9122c519f4ce514c"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_requested",
+      "scenario": "003",
+      "case_id": "RC_3",
+      "company_id": "C001",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG RC_3: thử chốt khi yêu cầu tài liệu chưa được rà lại.",
+        "missing_evidence": "",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "53a67c5a44fef3581008d68dc0df6cc1dd8d5112f1f3888d9122c519f4ce514c"
+      },
+      "previous_hash": "53a67c5a44fef3581008d68dc0df6cc1dd8d5112f1f3888d9122c519f4ce514c",
+      "event_hash": "b9db7678e25d1725f4f1595fb26691e4c30bf9da6437c7004986fa9a8ceb3464"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_failed",
+      "scenario": "003",
+      "case_id": "RC_3",
+      "company_id": "C001",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "intent_hash": "b9db7678e25d1725f4f1595fb26691e4c30bf9da6437c7004986fa9a8ceb3464"
+      },
+      "previous_hash": "b9db7678e25d1725f4f1595fb26691e4c30bf9da6437c7004986fa9a8ceb3464",
+      "event_hash": "84da70e22e499d75b9007bbac7b19084263d5afc81487735c0326db1c8fe074b"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_requested",
+      "scenario": "003",
+      "case_id": "RC_3",
+      "company_id": "C001",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG RC_3: thử chốt khi tài liệu đã nhận nhưng chưa rà lại.",
+        "missing_evidence": "",
+        "active_minutes": 0.5,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "53a67c5a44fef3581008d68dc0df6cc1dd8d5112f1f3888d9122c519f4ce514c"
+      },
+      "previous_hash": "84da70e22e499d75b9007bbac7b19084263d5afc81487735c0326db1c8fe074b",
+      "event_hash": "3acde360113dc4724d1bb0e3267aa594e6ab8c3cc157392f5d5ce078a924e383"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_failed",
+      "scenario": "003",
+      "case_id": "RC_3",
+      "company_id": "C001",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "intent_hash": "3acde360113dc4724d1bb0e3267aa594e6ab8c3cc157392f5d5ce078a924e383"
+      },
+      "previous_hash": "3acde360113dc4724d1bb0e3267aa594e6ab8c3cc157392f5d5ce078a924e383",
+      "event_hash": "41cf5f9363b0c265b584a4cf1a1168683dcd6dc56256510d6a3698854bb64c11"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_requested",
+      "scenario": "003",
+      "case_id": "RC_3",
+      "company_id": "C001",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG RC_3: tài liệu đã nhận và rà lại, đủ căn cứ chốt hợp lệ.",
+        "missing_evidence": "",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "53a67c5a44fef3581008d68dc0df6cc1dd8d5112f1f3888d9122c519f4ce514c"
+      },
+      "previous_hash": "41cf5f9363b0c265b584a4cf1a1168683dcd6dc56256510d6a3698854bb64c11",
+      "event_hash": "d5becb705d9d00f71b4e0368d810592af143608ad527e3bb6b9228d10a994542"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalized",
+      "scenario": "003",
+      "case_id": "RC_3",
+      "company_id": "C001",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "primary_event_hash": "53a67c5a44fef3581008d68dc0df6cc1dd8d5112f1f3888d9122c519f4ce514c",
+        "intent_hash": "d5becb705d9d00f71b4e0368d810592af143608ad527e3bb6b9228d10a994542",
+        "feedback_event_hash": "ef61f53d513db2ba273e4f8a30e338d3a75c7a57104d338a84e824ae3b0a254a",
+        "decision": "false_positive"
+      },
+      "previous_hash": "d5becb705d9d00f71b4e0368d810592af143608ad527e3bb6b9228d10a994542",
+      "event_hash": "ea85c251c5b7458d518dfc6d730e74ff33a690562638f5456f40636a01de7a91"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "RC_4",
+      "company_id": "C001",
+      "case_scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG RC_4: bản rà lần một để thử xung đột tab.",
+        "missing_evidence": "",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": ""
+      },
+      "previous_hash": "ea85c251c5b7458d518dfc6d730e74ff33a690562638f5456f40636a01de7a91",
+      "event_hash": "2bc7244f42a95e959fa0fdce37b11d30783422d5258c3bab493f1fd38f585270"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "RC_4",
+      "company_id": "C001",
+      "case_scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG RC_4: bản rà cập nhật sau khi tab người kiểm tra đã mở.",
+        "missing_evidence": "",
+        "active_minutes": 0.5,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": ""
+      },
+      "previous_hash": "2bc7244f42a95e959fa0fdce37b11d30783422d5258c3bab493f1fd38f585270",
+      "event_hash": "be89784a980a9845fefb7d62a13c846aae87a8b301355c9e0e22457482a82655"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "SC_F3",
+      "company_id": "C001",
+      "case_scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "information_gap",
+        "reason": "MÔ PHỎNG SC_F3: cần sổ gốc để đối chiếu số chứng từ còn trống.",
+        "missing_evidence": "MÔ PHỎNG: sổ gốc PC-2025 số 7.",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": ""
+      },
+      "previous_hash": "be89784a980a9845fefb7d62a13c846aae87a8b301355c9e0e22457482a82655",
+      "event_hash": "31368d7084c3f80fe4fbca0253b48b7ca28af25b5623ea4be80f9726df9a523c"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_requested",
+      "scenario": "003",
+      "case_id": "SC_F3",
+      "company_id": "C001",
+      "case_scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "information_gap",
+        "reason": "MÔ PHỎNG SC_F3: đồng ý cần sổ gốc, giữ hồ sơ chờ bổ sung.",
+        "missing_evidence": "MÔ PHỎNG: sổ gốc PC-2025 số 7.",
+        "active_minutes": 0.5,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "31368d7084c3f80fe4fbca0253b48b7ca28af25b5623ea4be80f9726df9a523c"
+      },
+      "previous_hash": "31368d7084c3f80fe4fbca0253b48b7ca28af25b5623ea4be80f9726df9a523c",
+      "event_hash": "060e87ec7cba286a300393f1d1e305861e17c6236081f22c530d56b319b604a4"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalized",
+      "scenario": "003",
+      "case_id": "SC_F3",
+      "company_id": "C001",
+      "case_scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "primary_event_hash": "31368d7084c3f80fe4fbca0253b48b7ca28af25b5623ea4be80f9726df9a523c",
+        "intent_hash": "060e87ec7cba286a300393f1d1e305861e17c6236081f22c530d56b319b604a4",
+        "feedback_event_hash": "9393b856d190278311f442911ccb5167e4ebb33fb65a2115bc8b104cddad7359",
+        "decision": "information_gap"
+      },
+      "previous_hash": "060e87ec7cba286a300393f1d1e305861e17c6236081f22c530d56b319b604a4",
+      "event_hash": "7d6b2fc7669234ad1f23ace45c359e7bd5e8b2bc05c926f3a20bddcd30e419f6"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "primary_submitted",
+      "scenario": "003",
+      "case_id": "SC_F3",
+      "company_id": "C001",
+      "case_scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1",
+      "actor": {
+        "user_id": "SIM_ACC01",
+        "person_id": "SIM_PERSON01",
+        "display_name": "MÔ PHỎNG · Kế toán viên An",
+        "role": "accountant"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG SC_F3: đã đối chiếu sổ gốc số 7, giải trình được khoảng trống.",
+        "missing_evidence": "",
+        "active_minutes": 1,
+        "timing_method": "measured_stopwatch",
+        "feedback_hash": "9393b856d190278311f442911ccb5167e4ebb33fb65a2115bc8b104cddad7359"
+      },
+      "previous_hash": "7d6b2fc7669234ad1f23ace45c359e7bd5e8b2bc05c926f3a20bddcd30e419f6",
+      "event_hash": "bf513dc936f27964aa58aa7b8d06dab04e8a4bd7a242b74df065f64cdeb28e88"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalization_requested",
+      "scenario": "003",
+      "case_id": "SC_F3",
+      "company_id": "C001",
+      "case_scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "decision": "false_positive",
+        "reason": "MÔ PHỎNG SC_F3: kiểm tra sổ gốc và bản rà bổ sung, chốt hợp lệ.",
+        "missing_evidence": "",
+        "active_minutes": 0.5,
+        "timing_method": "measured_stopwatch",
+        "primary_event_hash": "bf513dc936f27964aa58aa7b8d06dab04e8a4bd7a242b74df065f64cdeb28e88"
+      },
+      "previous_hash": "bf513dc936f27964aa58aa7b8d06dab04e8a4bd7a242b74df065f64cdeb28e88",
+      "event_hash": "d4be247448196672f668e66fd1ecfdce6dc4d18dc7a4bd5c53b7b116b2756940"
+    },
+    {
+      "version": "accountant-review-final-approval-v1",
+      "kind": "finalized",
+      "scenario": "003",
+      "case_id": "SC_F3",
+      "company_id": "C001",
+      "case_scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1",
+      "actor": {
+        "user_id": "SIM_DIR03",
+        "person_id": "SIM_PERSON03",
+        "display_name": "MÔ PHỎNG · Giám đốc Chi",
+        "role": "director"
+      },
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "data": {
+        "primary_event_hash": "bf513dc936f27964aa58aa7b8d06dab04e8a4bd7a242b74df065f64cdeb28e88",
+        "intent_hash": "d4be247448196672f668e66fd1ecfdce6dc4d18dc7a4bd5c53b7b116b2756940",
+        "feedback_event_hash": "ba9dc74e44e35f60bf9b60b382fcef86c0782d730c22cdac60d8bd4f10ee3f2f",
+        "decision": "false_positive"
+      },
+      "previous_hash": "d4be247448196672f668e66fd1ecfdce6dc4d18dc7a4bd5c53b7b116b2756940",
+      "event_hash": "dc1740922cb2737e61b18d5c157e0106db7316e3e7ee4fb4991d361467419282"
+    }
+  ],
+  "feedback": [
+    {
+      "case_id": "RC_1",
+      "decision": "false_positive",
+      "reviewer": "MÔ PHỎNG · Kế toán trưởng Bình",
+      "reason": "MÔ PHỎNG: kiểm tra lại sao kê và hóa đơn HD001, chấp thuận kết quả hợp lệ.",
+      "reviewed_at": "2026-10-27T10:00:00+07:00",
+      "previous_hash": "",
+      "case_scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46",
+      "workflow_approval_id": "28ae4f27519ef58588c28e1cc79268a92476e600ccfa74456e9dca9f1165d7d1",
+      "event_hash": "f50de41372d6997791506037b1726b8424883d678057a0fd7cbb05f33db70717"
+    },
+    {
+      "case_id": "RC_2",
+      "decision": "false_positive",
+      "reviewer": "MÔ PHỎNG · Giám đốc Chi",
+      "reason": "MÔ PHỎNG RC_2: đã kiểm tra bằng chứng bổ sung, chốt kết luận hợp lệ.",
+      "reviewed_at": "2026-10-27T10:00:00+07:00",
+      "previous_hash": "f50de41372d6997791506037b1726b8424883d678057a0fd7cbb05f33db70717",
+      "case_scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167",
+      "workflow_approval_id": "2ac47153f382496da29c68cec42b95aca559c0ae6e7cb6882dce7b8609faca48",
+      "event_hash": "b794f87cdd2e09d1e602b151f90733ed40abe9ad9c5de1af334516a6d5475cc6"
+    },
+    {
+      "case_id": "RC_3",
+      "decision": "false_positive",
+      "reviewer": "MÔ PHỎNG · Giám đốc Chi",
+      "reason": "MÔ PHỎNG RC_3: tài liệu đã nhận và rà lại, đủ căn cứ chốt hợp lệ.",
+      "reviewed_at": "2026-10-27T10:00:00+07:00",
+      "previous_hash": "b794f87cdd2e09d1e602b151f90733ed40abe9ad9c5de1af334516a6d5475cc6",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "workflow_approval_id": "d5becb705d9d00f71b4e0368d810592af143608ad527e3bb6b9228d10a994542",
+      "event_hash": "ef61f53d513db2ba273e4f8a30e338d3a75c7a57104d338a84e824ae3b0a254a"
+    },
+    {
+      "case_id": "SC_F3",
+      "decision": "information_gap",
+      "reviewer": "MÔ PHỎNG · Giám đốc Chi",
+      "reason": "MÔ PHỎNG SC_F3: đồng ý cần sổ gốc, giữ hồ sơ chờ bổ sung.",
+      "reviewed_at": "2026-10-27T10:00:00+07:00",
+      "previous_hash": "ef61f53d513db2ba273e4f8a30e338d3a75c7a57104d338a84e824ae3b0a254a",
+      "case_scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1",
+      "workflow_approval_id": "060e87ec7cba286a300393f1d1e305861e17c6236081f22c530d56b319b604a4",
+      "event_hash": "9393b856d190278311f442911ccb5167e4ebb33fb65a2115bc8b104cddad7359"
+    },
+    {
+      "case_id": "SC_F3",
+      "decision": "false_positive",
+      "reviewer": "MÔ PHỎNG · Giám đốc Chi",
+      "reason": "MÔ PHỎNG SC_F3: kiểm tra sổ gốc và bản rà bổ sung, chốt hợp lệ.",
+      "reviewed_at": "2026-10-27T10:00:00+07:00",
+      "previous_hash": "9393b856d190278311f442911ccb5167e4ebb33fb65a2115bc8b104cddad7359",
+      "case_scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1",
+      "workflow_approval_id": "d4be247448196672f668e66fd1ecfdce6dc4d18dc7a4bd5c53b7b116b2756940",
+      "event_hash": "ba9dc74e44e35f60bf9b60b382fcef86c0782d730c22cdac60d8bd4f10ee3f2f"
+    }
+  ],
+  "document_requests": [
+    {
+      "request_id": "DR_38808289f55146bc91cfb0bd801ec3bc",
+      "scenario": "003",
+      "company_id": "C001",
+      "case_id": "RC_3",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "created_at": "2026-10-27T10:00:00+07:00",
+      "owner": "MÔ PHỎNG · bộ phận kế toán",
+      "requested_documents": "MÔ PHỎNG: sao kê giao dịch T3",
+      "due_at": "2026-10-28T10:00:00+07:00",
+      "status": "open",
+      "evidence_refs": [],
+      "id": 1,
+      "action": "create",
+      "actor": "MÔ PHỎNG · Kế toán viên An",
+      "reason": "MÔ PHỎNG: cần sao kê để đối chiếu thanh toán.",
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "previous_hash": "",
+      "event_hash": "a19227b513350a8fd9d96dcaf00acb96c10e1c33a2008da52da443984d5a1679"
+    },
+    {
+      "request_id": "DR_38808289f55146bc91cfb0bd801ec3bc",
+      "scenario": "003",
+      "company_id": "C001",
+      "case_id": "RC_3",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "created_at": "2026-10-27T10:00:00+07:00",
+      "owner": "MÔ PHỎNG · bộ phận kế toán",
+      "requested_documents": "MÔ PHỎNG: sao kê giao dịch T3",
+      "due_at": "2026-10-28T10:00:00+07:00",
+      "status": "received",
+      "evidence_refs": [
+        "SIM_BANK_T3"
+      ],
+      "id": 2,
+      "action": "receive",
+      "actor": "MÔ PHỎNG · Kế toán viên An",
+      "reason": "MÔ PHỎNG: đã nhận tham chiếu sao kê T3.",
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "previous_hash": "a19227b513350a8fd9d96dcaf00acb96c10e1c33a2008da52da443984d5a1679",
+      "event_hash": "f06d12808d6036c47431bb2cf9e6cda0b9f988cec5711548cff0c1ff1cb03c5f"
+    },
+    {
+      "request_id": "DR_38808289f55146bc91cfb0bd801ec3bc",
+      "scenario": "003",
+      "company_id": "C001",
+      "case_id": "RC_3",
+      "case_scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21",
+      "created_at": "2026-10-27T10:00:00+07:00",
+      "owner": "MÔ PHỎNG · bộ phận kế toán",
+      "requested_documents": "MÔ PHỎNG: sao kê giao dịch T3",
+      "due_at": "2026-10-28T10:00:00+07:00",
+      "status": "reviewed",
+      "evidence_refs": [
+        "SIM_BANK_T3"
+      ],
+      "id": 3,
+      "action": "review",
+      "actor": "MÔ PHỎNG · Kế toán viên An",
+      "reason": "MÔ PHỎNG: đã rà lại tham chiếu SIM_BANK_T3 và đối chiếu T3.",
+      "event_at": "2026-10-27T10:00:00+07:00",
+      "previous_hash": "f06d12808d6036c47431bb2cf9e6cda0b9f988cec5711548cff0c1ff1cb03c5f",
+      "event_hash": "508a56de81023f17ad1c35f2efa0954927cb6145a409186274f978f8db2c4447"
+    }
+  ]
+}

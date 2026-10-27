@@ -1,0 +1,44 @@
+{
+  "version": "rule-branch-controls-20261027-v1",
+  "is_synthetic": true,
+  "seeds": [
+    2026102701,
+    2026102702
+  ],
+  "variant_count": 98,
+  "controls": 196,
+  "transactions": 206,
+  "matched": 196,
+  "mismatches": [],
+  "by_rule": {
+    "C4": {
+      "variants": 18,
+      "controls": 36,
+      "matched": 36
+    },
+    "E2": {
+      "variants": 19,
+      "controls": 38,
+      "matched": 38
+    },
+    "F2": {
+      "variants": 17,
+      "controls": 34,
+      "matched": 34
+    },
+    "F3": {
+      "variants": 18,
+      "controls": 36,
+      "matched": 36
+    },
+    "F4": {
+      "variants": 26,
+      "controls": 52,
+      "matched": 52
+    }
+  },
+  "rejected_source_controls": 10,
+  "models_fitted_or_scored": 0,
+  "independent_human_reviews": 0,
+  "real_source_acceptance": "awaiting_real_data"
+}

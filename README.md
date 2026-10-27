@@ -1,218 +1,45 @@
 # Multi-Agent Finance — Agent 2 (Sang)
 
-Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **23/10/2026**. Xem [hướng dẫn cài và kiểm thử](docs/AGENT2_GITHUB.md), [cài đặt/nâng cấp/khôi phục](RELEASES.md) và [trạng thái sửa lỗi nghiệm thu UI](reports/browser_acceptance_status_20261021.md).
+Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **27/10/2026**. Xem [hướng dẫn bản nguồn trên Git](docs/AGENT2_GITHUB.md), [trạng thái dự án](docs/STATUS.md) và [hướng dẫn phát triển](docs/DEVELOPMENT.md).
 
-## Dữ liệu tổng hợp gian lận tài chính SME Việt Nam
+## Sổ Soát — trợ lý rà soát giao dịch SME
 
-**Đóng gói phiên bản:** [Hướng dẫn cài sạch, lưu runtime cũ, nâng cấp và rollback](RELEASES.md). Profile web/backup dùng `requirements-review-lock.txt`; các định dạng schema/backup và hợp đồng ML giữ phiên bản riêng.
+Ứng dụng kết hợp luật nghiệp vụ, đồ thị quan hệ và Isolation Forest để lập hàng đợi hồ sơ cần rà. Workspace hiện dùng dữ liệu mô phỏng; IF tiếp tục chạy shadow.
 
-**ML — discovery shadow 22/10/2026:** đã thử mở admission ngoài baseline với tối đa 1/5 suất sau pin bắt buộc, giữ trần 5/120. Chọn thêm 38 chứng từ có 0 điểm giao dịch luật; 809 lượt bắt buộc giữ đủ, 0 vượt ngân sách. Có 23 lượt baseline chậm tối đa 4 ngày và thêm 760 phút ước tính; quota 40% không mở thêm đầu mối. 71 kiểm thử đạt, 1.482 tệp bảo toàn không đổi; gói rà mù mới 128 phiếu đang chờ người thực hiện. [Kết quả và giới hạn](reports/ml_if_discovery_shadow_20261022.md), [protocol/cách chạy](examples/ml_if_discovery_shadow/README.md).
+## Bắt đầu tại đây
 
-**ML — kiểm tra gộp max 22/10/2026:** đã phân tích quy mô/công ty/nghiệp vụ trên 1.148 tập thành viên đủ IF và kiểm tra thêm mỗi hồ sơ/cụm không trùng giao dịch một lần. Tương quan quy mô–max rõ hơn ở hồ sơ đã mở rộng; chưa chứng minh ưu tiên sai hoặc lợi ích của phép gộp khác. Giữ max và thứ tự hiện tại; 55 kiểm thử đạt, 1.447 tệp bảo toàn không đổi. [Kết quả và giới hạn](reports/ml_if_aggregation_20261022.md), [cách chạy](examples/ml_if_aggregation/README.md).
-
-**ML — độ phủ IF 22/10/2026:** đã truy đủ 515/1.659 lượt baseline thiếu điểm: 454 lượt chỉ có lịch sử và 61 lượt trộn calibration/evaluation; không phát hiện lỗi dữ liệu. Giữ tỷ lệ toàn bộ 68,96%; 11.811/11.811 giao dịch evaluation có điểm hợp lệ. Không chấm thêm train/calibration; 62 kiểm thử đạt, 1.424 tệp bảo toàn không đổi. [Phân loại, mẫu số và bằng chứng từng lượt](reports/ml_if_coverage_20261022.md), [cách chạy audit](examples/ml_if_coverage/README.md).
-
-**ML — bộ rà độc lập 22/10/2026:** đã chuẩn bị 69 phiếu có bằng chứng theo cutoff: 37 mẫu bất đồng và 32 mẫu tham chiếu ngẫu nhiên, trộn/ẩn nhánh và điểm IF. Có phiếu primary, phân xử, phút đo thực tế và validator; 30 kiểm thử liên quan đạt, 1.269 tệp bảo toàn không đổi. Người rà/người phân xử chưa được phân công, outcome và phút thực tế vẫn trống. [Gói giao reviewer và trạng thái](reports/ml_independent_review_20261022.md), [cách chuẩn bị/nhập](examples/ml_independent_review/README.md). Chưa có kết luận độc lập hoặc lợi ích ML được xác nhận.
-
-**ML — so sánh shadow cùng ngân sách 22/10/2026:** đã chạy IF trên 11.811 giao dịch evaluation của 001/003 và so với baseline rules + graph + A5 theo cutoff từng ngày. Ở mức 5 hồ sơ/120 phút, IF đổi tập được chọn tại 15 cặp công ty/ngày; ở mức 10/240, tập được chọn giống baseline. 88 kiểm thử đạt, 0 vi phạm ngân sách/đẩy suất bắt buộc đã chọn, 1.240 tệp bảo toàn không đổi. Chưa có review độc lập nên chưa kết luận lợi ích. [Kết quả, giới hạn và phiếu rà](reports/ml_shadow_comparison_20261022.md), [cách chạy](examples/ml_shadow_comparison/README.md).
-
-**ML — tương thích nguồn mới 22/10/2026:** đã huấn luyện hai IF mới cho `synthetic-source-world-v1` từ cache 190 feature đúng hợp đồng, với cửa sổ train/calibration/evaluation tách riêng. Hai lượt shadow trên 11.811 giao dịch evaluation cho cùng hash; 45 kiểm thử liên quan đạt và 1.215 tệp bảo toàn không đổi. Model cũ tiếp tục bị chặn; hàng đợi giữ nguyên. [Kết quả và model](reports/model_source_sync_20261022.md), [cách huấn luyện/chấm](examples/ml_source_model/README.md). Chưa nghiệm thu SME thật hoặc lợi ích vận hành.
-
-**ML — kiểm toán cửa sổ 22/10/2026:** đã đối chiếu [membership của 41.082 giao dịch](reports/ml_temporal_split_20261022.md): train năm 2024, calibration nửa đầu 2025, evaluation nửa cuối 2025; 0 ID giao nhau và fingerprint train/calibration khớp model đã lưu. 61 kiểm thử đạt; audit không fit/chấm lại model, 1.232 tệp bảo toàn không đổi. Cửa sổ evaluation đã được chấm kỹ thuật trước đó, chưa phải đánh giá giữ kín trên SME thật.
-
-**Vận hành — 19/10/2026:** đã bổ sung [sao lưu/khôi phục và cổng kết luận chung web/CLI](reports/operational_reliability_20261019.md). SQLite, audit, định danh và liên kết kho được phục hồi sang thư mục mới; cả web/CLI chặn kết luận cuối khi còn yêu cầu tài liệu mở/đã nhận. [Cách sao lưu](examples/review_backup/README.md), [cách dùng CLI](examples/review_decision_gate/README.md). Bản phục hồi chỉ dùng thông báo giả lập, không tự dispatch.
-
-**Sao lưu tự động — 19/10/2026:** đã đăng ký lịch **02:00 mỗi ngày**, giữ **30 ngày/tối thiểu 3 bản tốt**, gồm ReviewStore và 4 journal P2. Có trạng thái lỗi, retention giới hạn trong đúng kho và diễn tập phục hồi đủ dữ liệu. [Kết quả kiểm chứng](reports/backup_automation_20261019.md), [cách vận hành](examples/review_backup/automation.md). Tác vụ chạy khi máy bật và tài khoản hiện tại đăng nhập.
-
-**Bước 2 rà hồ sơ — 19/10/2026:** đã triển khai RR04–RR08 và RR10: phiên bản/thời điểm chứng từ, giải thích trả nhiều đợt/ngoại lệ/điểm, chi gốc–hoàn–đảo và tab Bổ sung tài liệu có người phụ trách, hạn vận hành, nhận → rà lại → kết luận có lý do. [Biên bản kỹ thuật](reports/step2_review_20261019.md), [hướng dẫn dùng thử](examples/case_review_workflow/README.md). 597 kiểm thử Python và 32 kiểm tra JavaScript đạt; giữ nguyên điểm/ngưỡng và 1.209 tệp khóa. Browser/kế toán độc lập và RR09 còn chờ.
-
-**ML — runner chỉ xuất điểm 19/10/2026:** sau [audit 2 model/4 cache](reports/ml_pilot_readiness_20261019.md), đã có [runner cache và biên bản kỹ thuật](reports/ml_shadow_runner_20261019.md), [cách chạy](examples/ml_shadow_runner/README.md). 28 kiểm thử liên quan đạt; chạy lặp hai cache validation cũ, tổng 50.000 dòng, cho cùng hash kết quả. Model vẫn từ chối định dạng nguồn mới; chưa nối shadow nguồn SME thật, xác minh tách cửa sổ train/calibration/đánh giá hoặc chứng minh lợi ích vận hành. Protocol/review độc lập tiếp tục chờ; hàng đợi, ngưỡng và model giữ nguyên.
-
-**UI bằng chứng/P2 — 19/10/2026:** đã sửa A4 null, hiện bằng chứng C4/E2 và nguồn F1, thống nhất nhãn ngoại tệ chưa xác minh VND; bổ sung mốc chứng từ và tóm tắt chi gốc–hoàn–đảo. [Bản trước/sau, 19 kiểm tra JavaScript và 27 kiểm thử Python liên quan](reports/ui_evidence_repairs_20261019.md). Có phiếu P2 cho kế toán độc lập và phiếu chờ quyết định RR09; chưa coi test/UAT trợ lý là nghiệm thu độc lập. Nguồn, điểm và ngưỡng giữ nguyên.
-
-**Web đối chứng P2 — 18/10/2026:** đã có giao diện đủ 32 tình huống/73 giao dịch, gồm cả dòng không có P2; xem chứng từ, kỳ vọng, hàng đợi và lưu nghiệm thu riêng. Chạy `python -B -m sme_fraud.p2_controls_server --port 8767`, mở `http://127.0.0.1:8767/p2-controls`; hoặc thêm `--p2-controls` vào Case Management để có menu cùng cổng. [Cách dùng](examples/p2_controls_web/README.md), [585 kiểm thử và biên bản nghiệm thu kỹ thuật](reports/p2_controls_web_20261018.md). Chưa nghiệm thu trực quan browser hoặc bởi kế toán độc lập.
-
-**A5 — đo độ phủ thực tế 18/10/2026:** đã bổ sung bản đo theo từng giao dịch, trạng thái thiếu mẫu trên UI và đối chứng A5 cùng cấu hình hiện tại. Đủ lịch sử trên nhóm có nguồn: **89,25% (001)** và **90,46% (003)**; tính trên toàn bộ giao dịch: **56,71%/60,47%**. A5 có thêm hit nhưng đối chứng giữ nguyên số hồ sơ, thành viên vận hành và mức ưu tiên hồ sơ. Giữ nguyên ngưỡng. [Số liệu, hồ sơ cần rà và kiểm chứng](reports/a5_coverage_20261018.md), [cách mở snapshot web có bản đo](examples/a5_coverage/README.md).
-
-**Bộ đối chứng P2 riêng 18/10/2026:** đã bổ sung [32 tình huống, 73 giao dịch và ma trận kỳ vọng](reports/p2_controls_20261018.md) cho hóa đơn đầy đủ/thiếu, trả nhiều đợt, hoàn/đảo, định kỳ và hạn mức nội bộ. Bộ đối chứng phát hiện và sửa P2 tiếp nhận dòng thu tiền mặt còn mang loại chi; chấm lại cùng nguồn đã khóa đạt 73/73. [Nguồn, cấu trúc thư mục và lệnh chạy lại](examples/p2_controls/README.md). Bộ 001/003 cùng holdout 005 giữ nguyên.
-
-**P2 — phân loại bằng chứng 18/10/2026:** mặc định mới `cash_review_policy=evidence_v2`: thiếu dữ kiện 0 điểm, giữ yêu cầu bổ sung ưu tiên thấp; đủ thông tin hóa đơn để đối chiếu 8 điểm; vượt hạn mức nội bộ có xác minh đúng thời điểm 14 điểm. UI có nhóm yêu cầu bổ sung và các trường cần cung cấp. [Kết quả chạy lại 001/003](reports/cash_review_p2_20261018.md), [cấu hình và điều kiện xác minh](examples/cash_review/README.md). Các trọng số phục vụ ưu tiên rà soát, chưa hiệu chỉnh trên dữ liệu thật.
-
-**Diễn tập xuyên suốt 18/10/2026:** đã chạy lại [pipeline mới trên 001/003](reports/pipeline_rehearsal_20261018.md): 41.082 giao dịch từ nguồn → rules → NetworkX → ngưỡng động → hàng đợi → kết luận → thông báo giả lập. 1.216 điều kiện nguồn khớp kỳ vọng; kết luận/outbox giữ qua restart, không gửi tin ra ngoài. Hàng đợi tăng lên 556/594 hồ sơ nên cần rà P2/A5; holdout 005 chưa chấm, Gate nguồn thật vẫn `awaiting_real_data`.
-
-**Sprint 1.4:** đã tích hợp [Cytoscape, kết luận nhanh, ưu tiên hôm nay và luồng Zalo/Email giả lập](reports/case_management_sprint_1_4.md). Có SMTP/OA adapters, webhook receiver, worker và outbox theo ngân sách 5/10 hồ sơ. [Bản mẫu](reports/case_management_20261018/verification.json) giữ nguồn gốc và không gửi tin ra ngoài; tài liệu có lệnh mở UI riêng. Chưa nghiệm thu browser hoặc dịch vụ gửi thật.
-
-**Sprint 1.3:** đã bổ sung [ngưỡng động theo công ty–tài khoản, P95/P99/μ+kσ, cửa sổ 30/60/90 ngày và chu kỳ tháng](reports/dynamic_thresholds_sprint_1_3.md). Baseline A5 mặc định dùng rolling-account; có bảng CSV/JSON riêng theo công ty và job cập nhật định kỳ. Báo cáo ghi thứ tự các file nên đọc, lệnh chạy và phạm vi nghiệm thu; chưa bật lịch nền hoặc hiệu chỉnh trên SME thật.
-
-**Sprint 1.2:** đã có [module đồ thị NetworkX sáu loại thực thể, JSON/API và đồng bộ định kỳ](reports/entity_graph_sprint_1_2.md). Module giữ lịch sử/as-of, tách theo công ty và trả rõ quan hệ cần đối chiếu; UI có cửa sổ mạng lưới từ hồ sơ. Cần kiểm tra trực quan UI và triển khai lịch nền theo môi trường sử dụng.
-
-**Đối chiếu thư viện quy tắc ngày 17/10/2026:** đã bổ sung P2 rà soát chi tiền mặt theo ngưỡng thời gian và nguồn danh sách thuế theo MST cho B4. Tổng hiện tại 35 mã kiểm tra; [bảng đối chiếu yêu cầu và 20 quy tắc nghiệp vụ](reports/core_rule_requirements_20261017.md) giải thích vai trò/giới hạn từng phần. [Header, importer và config mẫu](examples/tax_risk_sources/README.md). Đã chạy P2 trên hai bộ nguồn mô phỏng 001/003 trong lượt diễn tập trên; chưa nạp danh sách thuế thật hoặc nghiệm thu chất lượng trên SME thật.
-
-Bộ sinh dữ liệu và benchmark Isolation Forest cho 5 doanh nghiệp SME giả lập. Mọi tên, MST, tài khoản, SĐT và địa chỉ là token tổng hợp, không phải dữ liệu của người hoặc doanh nghiệp thật. Các tỷ lệ 0,1%, 0,3%, 0,5% là kịch bản thử theo yêu cầu, **không phải số liệu đo tỷ lệ gian lận tại Việt Nam**.
-
-Phiên bản dữ liệu hiện tại là **v2**, đã sửa biểu diễn kế toán theo TT133/TT200 cho kỳ 2024–2025. Xem [đối chiếu định khoản](reports/accounting_review.md). Bản v1 được giữ trong `outputs/sme_fraud_v1.zip`; `outputs/sme_fraud_v2.zip` là snapshot dữ liệu kế toán v2 và pipeline IF trước khi bổ sung bộ luật.
-
-Đã bổ sung pipeline bộ luật từ [rule_class_1.md](rule_class_1.md): 6 nhóm A–F, 31 quy tắc chi tiết và P1/T1/T2 cho thanh toán trùng/tạm ứng. Xem [phạm vi triển khai và cách chạy](reports/rules_implementation.md), [benchmark Rules/Graph/IF](reports/rules/summary_vi.md). Các rule thiếu dữ liệu được ghi rõ; cảnh báo có bằng chứng, hàng đợi hồ sơ và CLI lưu phản hồi người rà soát. Gói `outputs/sme_fraud_v2_rules.zip` chứa dữ liệu v2, mã và báo cáo mới; ZIP v2 trước đó được giữ nguyên.
-
-Đã có **giao diện rà soát MVP chạy cục bộ**: bộ lọc hồ sơ, bằng chứng/định khoản, sơ đồ quan hệ, ngân sách 5–10 hồ sơ/công ty/ngày và lưu kết luận có lịch sử. Chạy `python start_review.py`, rồi mở `http://127.0.0.1:8765`. Xem [hướng dẫn UI và phạm vi kiểm chứng](reports/review_ui.md). Gói `outputs/sme_fraud_v2_review.zip` gồm dữ liệu, nguồn UI và báo cáo; không chứa cache hay phản hồi của người dùng. Đây là MVP chưa có đăng nhập/phân quyền, chưa kiểm tra trực quan trong browser và chưa thử dữ liệu SME thật.
-
-Ưu tiên hiện tại là **audit và hoàn thiện luật trước khi phát triển ML tiếp**. [Rule Audit 31 rule](reports/rule_audit/summary_vi.md) có bảng từng rule, 31 báo cáo chi tiết, TP/FP/precision/FPR theo ba tỷ lệ và ba kỳ, hard negatives, chồng lặp và tác động bỏ từng rule khỏi hàng đợi. [Phương pháp và cách chạy audit](reports/rule_audit_method.md) giải thích phạm vi đo được và 51 tình huống đối chứng. Đợt audit giữ nguyên dataset, detector và ngưỡng; chưa phải bản sửa luật.
-
-**Đợt sửa 1 đã hoàn thành B7/E1/A2**: [logic và schema nguồn HR/hợp đồng](reports/rule_repairs_phase1.md), [kết quả chấm lại ba bộ dữ liệu](reports/rule_repairs/phase1/summary_vi.md). Chạy độc lập `python -m sme_fraud.run_rule_repairs --output reports/rule_repairs/phase1_new`; pipeline này chỉ chấm rules, không dùng ML. Snapshot audit/benchmark cũ được giữ để đối chiếu; hàng đợi mới nằm trong `reports/rule_repairs/phase1` và có lệnh mở UI riêng trong báo cáo.
-
-**Đợt 2 đã triển khai nguồn nhiễu/cộng điểm**: [cơ chế điểm, nguồn ca/PO/chứng từ và kiểm thử](reports/rule_repairs_phase2.md), [so sánh validation/test](reports/rule_repairs/phase2/summary_vi.md). E3/B5/E4 là kiểm tra master riêng, B5/E4 chung bằng chứng; C1/A5/B3 là ngữ cảnh có điều kiện. A1 hỗ trợ trả góp xen kẽ và nguồn đơn mua đã xác minh; A5 thử baseline log/MAD trên validation. Chạy `python -m sme_fraud.run_noise_reduction --output reports/rule_repairs/phase2_new`; không train hoặc chấm ML. Snapshot mới có lệnh UI riêng trong báo cáo và có file liệt kê TP bị mất để đánh giá đánh đổi.
-
-**Đợt 3 đã thống nhất mô tả và phạm vi rule**: [quyết định, nguồn F1/ngân hàng/căn cước và đối chứng](reports/rule_repairs_phase3.md), [kết quả so với đợt 2](reports/rule_repairs/phase3/summary_vi.md). A3 có nhánh 2 khoản/3 ngày/85%; A4 dùng tháng lịch; A5 chỉ đuôi cao; B1 tách master khỏi chi NCC; B3 xét lần phát sinh kinh tế đầu tiên; F1 chỉ góp điểm khi đủ nguồn xác nhận. `rule_class_1.md` cũng ghi rõ C1 vận hành thứ Bảy và C2 tự duyệt trong quyền. Chạy `python -m sme_fraud.run_spec_alignment --output reports/rule_repairs/phase3_new`; engine mặc định phase3, runner lịch sử ghim legacy. Chưa tự bổ sung nguồn còn thiếu hoặc triển khai ML tiếp.
-
-**Đợt 4 đã bổ sung nguồn và đánh giá độc lập**: [schema nguồn, logic C4/E2/F2/F3/F4 và phạm vi kết luận](reports/rule_repairs_phase4.md), [đối chứng/Benford/seed SME mới](reports/rule_repairs/phase4/summary_vi.md). 301 case theo 7 seed, 56 thử nghiệm cửa sổ/336 phép đối chiếu nhóm D, 350.000 dòng SME mới ở 0,1%–0,5%. Mặc định `evidence_policy=phase4`; nguồn thiếu vẫn not_evaluable/information_gap. Source/window labels tách khỏi fraud labels; chưa nghiệm thu SME thật hoặc chuyển sang ML. Có [CSV header mẫu](examples/phase4_sources) và `python -m sme_fraud.source_snapshot` để kiểm tra F3/F4 theo cutoff mà không tạo giao dịch giả.
-
-**Đợt 5 đã ràng buộc bằng chứng nghĩa vụ chi cho A1/A2/A4**: [chính sách, schema, đối chứng và giới hạn](reports/rule_payment_evidence.md). Ngoại lệ phải gắn đúng yêu cầu chi, PO, hóa đơn, hợp đồng hoặc lịch định kỳ đã duyệt và không vượt tổng tiền được phép. Theo quyết định nghiệp vụ, thiếu hồ sơ vẫn giữ cảnh báo hiện tại; snapshot validation chưa có các nguồn mới nên hàng đợi không đổi. Có [CSV header mẫu](examples/payment_evidence_sources) để tích hợp dữ liệu ERP/AP thật.
-
-**Đợt 6 đã hoàn thiện nguồn thẩm quyền C2/C3 và ngoại lệ B6**: [chính sách, schema, đối chứng và giới hạn](reports/rule_authority_dormancy.md). C2 đọc quyền tự duyệt/ủy quyền theo phạm vi, C3 đọc cấp thẩm quyền thật khi có coverage đầy đủ, B6 đối chiếu lịch năm/mùa và tổng tiền trong kỳ. Thiếu nguồn vẫn dùng hành vi hiện tại. Có [CSV header mẫu thẩm quyền](examples/authority_sources) và lịch thanh toán trong [nguồn nghĩa vụ chi](examples/payment_evidence_sources).
-
-## Bộ dữ liệu đã sinh
-
-| Thư mục | Tổng quan sát | Gian lận | Tỷ lệ | Hard negatives hợp lệ |
-| --- | ---: | ---: | ---: | ---: |
-| `data/sme_fraud_001` | 100.000 | 100 | 0,1% | 5.000 |
-| `data/sme_fraud_003` | 100.000 | 300 | 0,3% | 5.000 |
-| `data/sme_fraud_005` | 100.000 | 500 | 0,5% | 5.000 |
-
-Một quan sát là một giao dịch đã duyệt/ghi sổ hoặc một lần rà soát tạm ứng. `advance_review` là sự kiện phi tài chính, mang số dư cần kiểm tra trong `amount_vnd`, có `is_financial_entry=0` và **không có dòng sổ cái**. Tỷ lệ gian lận tính trên toàn bộ quan sát. Lọc `is_financial_entry=1` trước khi cộng dòng tiền hoặc chỉ đánh giá bút toán; khi đó phải tính lại tỷ lệ gian lận của tập đã lọc.
-
-V2 bổ sung chứng từ kế toán hỗ trợ trong `journal_documents.csv` và `journal_lines.csv`: ghi nhận hóa đơn trước khi trả tiền, ghi nhận chi phí lương trước khi trả lương, tập hợp chi phí vào 154, chuyển khoản phải thu và dự phòng trước xóa nợ. Chứng từ hỗ trợ không thêm dòng train hoặc nhãn; file `labels.csv` và `splits.csv` được giữ nguyên byte so với v1. Không dùng tổng số dòng sổ cái làm mẫu số prevalence.
-
-Mỗi bộ có 50.000 train, 25.000 validation, 25.000 test. Ngưỡng nghiệp vụ, ngành, mức tiền, lịch làm việc và lịch lễ là giả định mô phỏng có thể chỉnh trong mã nguồn. Đây là dữ liệu để phát triển và kiểm tra pipeline, cần hiệu chỉnh phân phối theo dữ liệu SME thật trước khi suy ra hiệu quả triển khai.
-
-## Sáu nhóm gian lận
-
-| `fraud_type` | Biến thể và bằng chứng mô phỏng |
+| Bạn cần | Tài liệu |
 | --- | --- |
-| `ghost_vendor` | NCC trùng TK/SĐT/địa chỉ với nhân viên; pháp nhân mới thành lập có quan hệ NCC → người đại diện → SĐT → nhân viên; nhân viên ma nhận lương vào tài khoản dùng chung với nhân viên khác và không có chấm công. |
-| `split_payments` | Khoản cận 90–99,5% hạn mức; khoản phân tán 42–88% hạn mức qua nhiều ngày; nhiều NCC có TK khác nhau nhưng chung SĐT. Hạn mức theo người lập có nhiều mức 5, 20, 50 triệu đồng. |
-| `duplicate_payment` | Trả đầy đủ một hóa đơn rồi trả lại cùng NCC, số hóa đơn và số tiền; đôi khi tạo mã hóa đơn ERP khác để che việc trùng. Lần trả gốc là ngữ cảnh hợp lệ. |
-| `period_end_adjustment` | Điều chỉnh cuối tháng, lập/duyệt cùng người, vào cuối tuần và giờ muộn; có cả ghi tăng doanh thu hoặc chuyển chi phí. |
-| `risky_invoice` | Hóa đơn phát hành sau ngày NCC ngừng hoạt động/bỏ trốn theo lịch sử trạng thái tổng hợp; có tình huống thông tin chỉ được công bố sau giao dịch. |
-| `long_outstanding_advance` | Rà soát khoản chưa hoàn ứng sau hạn 60–150 ngày hoặc xóa sổ số dư thiếu chứng từ; có giải ngân trước đó và lịch sử số dư, gia hạn, thanh toán. |
+| Biết phần nào đã xong, phần nào còn thiếu | [Trạng thái dự án](docs/STATUS.md) |
+| Chọn công việc tiếp theo | [Danh sách việc cần làm](docs/BACKLOG.md) |
+| Tìm tài liệu và hiểu cấu trúc thư mục | [Mục lục dự án](docs/README.md) |
+| Chạy app, kiểm thử hoặc phát triển | [Hướng dẫn phát triển](docs/DEVELOPMENT.md) |
+| Tra báo cáo chi tiết | [Mục lục báo cáo theo chủ đề](docs/reports/README.md) |
+| Cài đặt, nâng cấp hoặc khôi phục | [Hướng dẫn phát hành](RELEASES.md) |
 
-Để giữ sáu nhóm chính, nhân viên ma là biến thể `ghost_employee_payroll` của nhóm đối tượng ma `ghost_vendor`. Trên dữ liệu nghiệp vụ, lương luôn dùng `employee_id`, tài khoản 334/112, **không dùng `vendor_id`**.
+## Mở bản demo hiện tại
 
-Không phải mọi dòng gian lận đều khác biệt rõ ngay lúc xuất hiện. Khoản đầu của một chuỗi chia nhỏ có thể chưa bất thường; trạng thái NCC công bố sau đó chưa được biết lúc thanh toán; thông đồng vẫn có thể đủ giấy tờ. Nhãn thể hiện ý đồ/kết quả được cài trong mô phỏng, còn đặc trưng chỉ phản ánh bằng chứng có thể quan sát. Không gán nhãn gian lận tự động chỉ vì một dấu hiệu rủi ro xuất hiện.
-
-## Dữ liệu hợp lệ và hard negatives
-
-Nền có thanh toán NCC, mua hàng, nguyên vật liệu, bán hàng, thu tiền khách hàng, tiền mặt, lương, giá vốn, thuê nhà, khấu hao, thiết bị/công cụ, thuế, chi phí bán hàng và chu trình tạm ứng. Có các tài khoản 111, 112, 131, 1331, 1332, 1388, 141, 152, 153, 154, 155, 156, 211, 214, 2293, 331, 334, 335, 3331, 511, 632 và chi phí theo chế độ kế toán.
-
-`C001/C005` dùng TT200, `C002/C003/C004` dùng TT133. Sổ cái TT133 dùng 6421 cho bán hàng, 6422 cho quản lý; TT200 dùng 641/642 và có bước 621/622 → 154 khi phù hợp. Features gộp 641/642/6421/6422 thành nhóm chi phí 642 và có biến `framework_tt133`; không còn `debit_641`/`credit_641` độc lập. Cặp `pair_*` là multi-hot theo mọi cặp xuất hiện trong bút toán, gồm dòng VAT; tần suất lịch sử của cặp chính chỉ tính từ quá khứ.
-
-`recipient_account` chỉ phản ánh bên nhận khi có dòng tiền. Với ghi nhận công nợ, xuất vật tư, khấu hao, xóa nợ…, trường này để trống và `payment_channel=journal`. `counterparty_account` lưu thông tin đối tác riêng. Thu tiền khách hàng vào tài khoản của công ty.
-
-Số tiền dùng phân phối lognormal theo ngành, có chi định kỳ tròn và một số giao dịch lớn hợp lệ. Giờ muộn và cuối tuần có xác suất khác ngày thường, thứ 7 khác chủ nhật. Độ trễ duyệt là hỗn hợp lognormal và đuôi dài nhiều ngày. Các tỷ lệ này là cấu hình sinh, không phải ước lượng thực địa.
-
-5% số quan sát được cài làm hard negatives riêng và mang nhãn 0, gồm:
-
-- Đổi TK NCC có callback, người duyệt và thời điểm xác minh trước thanh toán.
-- Tự duyệt trong hạn mức cho phép; điều chỉnh cuối kỳ vào cuối tuần, tự duyệt hợp lệ và đủ chứng từ.
-- Vận hành cuối tuần, chi thuê nhà tròn, duyệt trễ nhiều ngày.
-- Hai đợt thanh toán cùng số tiền và cùng hóa đơn nhưng tổng chỉ bằng giá trị hóa đơn.
-- NCC mới nhưng có giao nhận; bên liên quan đã công bố; thanh toán hóa đơn hợp lệ trước khi NCC ngừng hoạt động.
-- Lương nhân viên từ xa không có lượt chấm công nhưng có bằng chứng làm việc thay thế.
-- Tạm ứng được gia hạn trước hạn, xóa sổ có phê duyệt và hồ sơ hỗ trợ.
-
-Một số trường hợp hợp lệ vẫn có thể bị IF xếp là bất thường. Báo cáo đo riêng FPR trên từng loại hard negative để nhìn thấy việc này.
-
-## Các file trong mỗi bộ
-
-| File | Cách dùng |
-| --- | --- |
-| `transactions.csv` | Dữ liệu nghiệp vụ không chứa nhãn, vụ việc hay tên kịch bản. ID giao dịch được tráo ngẫu nhiên độc lập với gian lận. |
-| `features.csv` | Ma trận số dành cho IF; chỉ `transaction_id` là khóa. **Bỏ khóa này khỏi X**. Danh sách đặc trưng cho phép nằm trong `manifest.json`. |
-| `labels.csv` | `is_fraud`, loại, biến thể, `case_id`, vai trò dòng trong vụ việc, loại hard negative, khả năng quan sát. Chỉ dùng đánh giá/đối chiếu. |
-| `splits.csv` | Ánh xạ ID sang train/validation/test theo thời gian. |
-| `companies.csv`, `vendors.csv`, `customers.csv`, `employees.csv` | Danh mục doanh nghiệp, NCC, khách hàng, nhân viên giả lập. Đọc `recorded_at` để truy vấn theo thời điểm. |
-| `invoices.csv` | Hóa đơn gồm giá chưa thuế, VAT, tổng tiền; có hóa đơn mua và bán. Thuế suất 10% là giả định minh họa cho nhóm hàng/dịch vụ được mô phỏng, không xác định quyền khấu trừ theo pháp luật thuế. |
-| `journal_documents.csv`, `journal_lines.csv` | Chứng từ và bút toán nhiều dòng, Nợ=Có. `transaction_id` chỉ có ở chứng từ chính được chấm điểm; chứng từ hỗ trợ có `is_scored_observation=0` và ID chứng từ riêng. |
-| `document_links.csv`, `account_flow_edges.csv` | Liên kết chứng từ và cạnh Có → Nợ theo luồng ghi nhận kế toán, có thời điểm quan sát và định danh nhân viên/NCC/hóa đơn. Đây là luồng sổ cái, không đồng nghĩa chuyển tiền ngân hàng. |
-| `vendor_status_history.csv`, `bank_account_changes.csv` | Lịch sử có cả thời điểm hiệu lực, quan sát và xác minh. Không lấy trạng thái cuối kỳ để điền ngược quá khứ. |
-| `entity_links.csv`, `attendance.csv` | Cạnh đồ thị đã biết và chấm công lũy kế đã quan sát đến ngày 25 của tháng. |
-| `advances.csv`, `advance_events.csv` | Giải ngân, hạn gốc, gia hạn, thanh toán và xóa sổ. Không đưa trạng thái quyết toán tương lai vào X. |
-| `calendar.csv` | Các ngày lễ minh họa, có nguồn `illustrative_simulation_calendar`; không phải lịch nghỉ lễ đầy đủ theo luật. |
-| `manifest.json`, `data_dictionary.json`, `validation.json` | Cấu hình, số lượng/tỷ lệ theo split, checksum, danh sách/định nghĩa đặc trưng và kết quả kiểm tra. |
-| `accounting_validation.json`, `accounting_change_log.json` | Đối chiếu chế độ kế toán, VAT, liên kết chứng từ và thống kê thay đổi so với v1. |
-
-CSV có UTF-8 BOM để mở tiếng Việt trong Excel; số VND lưu dạng số nguyên, không kèm dấu phân cách hoặc đơn vị. Đọc các mã/tài khoản bằng `dtype=str` khi cần giữ chúng là định danh.
-
-## Chia tập và chống rò rỉ
-
-- Train: 01/01/2024–31/12/2024; validation: 01/01/2025–30/06/2025; test: 01/07/2025–31/12/2025, múi giờ UTC+7.
-- Cả dòng gian lận lẫn dòng hỗ trợ của một `case_id` nằm trong một split. Mỗi SME có thể xuất hiện qua cả ba kỳ; đây là bài toán theo dõi SME đã biết, không phải thử trên công ty hoàn toàn mới.
-- Thời điểm chấm điểm là `posted_at`, sau khi đã lập và duyệt. Mô hình hiện tại không dùng để chặn giao dịch trước phê duyệt; muốn chấm trước duyệt phải bỏ các đặc trưng chưa có.
-- Cửa sổ 3/7/30 ngày và baseline tiền chỉ dùng giao dịch có `posted_at` trước dòng hiện tại. Các dòng cùng thời điểm không thấy nhau khi tạo đặc trưng.
-- Đồ thị, nhân sự, chấm công, lịch sử NCC, đổi TK và gia hạn chỉ dùng bản ghi đã quan sát. Tình trạng hóa đơn được đối chiếu cả ngày phát hành lẫn ngày trả tiền.
-- IF fit trên toàn bộ train có lẫn tỷ lệ gian lận thấp, không dùng `y`, không bỏ gian lận dựa trên nhãn và không cân bằng/SMOTE test.
-- Ngưỡng lấy từ phân vị điểm validation chưa gán nhãn theo ngân sách cảnh báo 0,1/0,3/0,5%. Không chọn ngưỡng bằng nhãn hoặc phân vị test. Ngân sách cảnh báo không phải tỷ lệ gian lận.
-- Điểm là `-model.score_samples(X)`: cao hơn nghĩa là bất thường hơn. `contamination="auto"` chỉ phục vụ cơ chế ngưỡng mặc định của sklearn; benchmark dùng ngưỡng validation riêng.
-
-## Chạy lại
-
-Python 3.10+; bộ sinh và kiểm tra cấu trúc chỉ cần thư viện chuẩn. Phần train cần các gói trong `requirements.txt`.
-`requirements-lock.txt` ghi phiên bản đã dùng cho benchmark này để tái lập kết quả trong môi trường tương thích.
+Từ thư mục dự án, dùng môi trường Python đã cài các thư viện của dự án:
 
 ```powershell
-python -m pip install -r requirements.txt
-python -m sme_fraud.generate --output data/my_sme_003 --rows 100000 --fraud-rate 0.003 --seed 42 --companies 5
-python -m sme_fraud.validate --data data/my_sme_003
-python -m sme_fraud.evaluate --data data/my_sme_003 --output reports/my_sme_003 --alert-budget 0.003
-python -m unittest discover -s tests -v
+python -B .runtime/review_roles_20261024/serve.py
 ```
 
-Sau các bản sửa luật, cache/model cũ thiếu hợp đồng ngữ nghĩa sẽ bị từ chối khi chấm mới. Để dựng lại ba snapshot chuẩn và chỉ chấm train/validation, dùng `python -B -m sme_fraud.sync_feature_model --output reports/feature_model_sync_20261017 --jobs 4`. Lượt này đã hoàn tất; khi đổi mã/cấu hình hãy chọn thư mục output mới. Xem [kết quả đồng bộ, kiểm tra tương thích và các ca cần rà tiếp](reports/rule_feature_model_sync.md). Lệnh `evaluate` thông thường phía trên vẫn là benchmark có chấm test.
+Sau khi máy chủ báo sẵn sàng, mở **http://127.0.0.1:8774/**. Bản demo dùng snapshot RR09/ML v4 và bộ đối chứng RR09 riêng. Hướng dẫn chi tiết, đường dẫn Python của máy này và cách chạy từ CLI nằm trong [hướng dẫn phát triển](docs/DEVELOPMENT.md).
 
-Đã có [chính sách nhận riêng mẫu chia nhỏ A2/A4](reports/rule_split_pattern_admission.md), giữ điểm và hard trigger; chấm riêng bản sửa bằng `python -B -m sme_fraud.run_split_pattern_review --output reports/split_pattern_admission_20261017_v2`. Báo cáo ghi cả TP được thu hồi, FP và tải hồ sơ tăng; chưa thay đổi database rà soát vận hành.
+Vai trò đã chuẩn bị: **kế toán viên rà → kế toán trưởng hoặc giám đốc chốt**. Tài khoản và đăng nhập sẽ làm sau theo lựa chọn của người dùng; hiện chưa đăng nhập chỉ xem được. Thông báo đang ở chế độ giả lập.
 
-Nghiệm thu các rule cần nguồn HR/ERP/công nợ thật dùng quy trình hai bước dưới đây. Bước `prepare` tạo phiếu chấm mù và khóa hash dự đoán; bước `evaluate` chỉ chấp nhận khi coverage, review độc lập và ngưỡng phê duyệt đều hợp lệ.
+## Cấu trúc chính
 
-```powershell
-python -m sme_fraud.real_source_acceptance prepare --data data/sme_real_export --from 2025-01-01T00:00:00+07:00 --as-of 2025-12-31T23:59:59+07:00 --criteria reviews/acceptance_criteria.json --output reports/real_acceptance/prepared
-python -m sme_fraud.real_source_acceptance evaluate --data data/sme_real_export --prepared reports/real_acceptance/prepared --reviews reviews/review_conclusions.csv --coverage reviews/coverage_attestations.csv --criteria reviews/acceptance_criteria.json --output reports/real_acceptance/result
+```text
+sme_fraud/    Mã Python: luật, feature, ML, API và vận hành
+review_ui/    Giao diện web
+tests/        Kiểm thử và fixture
+examples/     Cấu hình mẫu, schema nguồn và hướng dẫn từng chức năng
+docs/         Trạng thái, việc cần làm và tài liệu theo chủ đề
+reports/      Snapshot kết quả, model, phiếu rà và bằng chứng kiểm chứng
+data/         Nguồn dữ liệu và cache
+.runtime/     Môi trường, database và script chạy cục bộ
 ```
 
-Xem [phương pháp nghiệm thu nguồn thật](reports/rule_source_acceptance.md). Các dataset generator trong repository không thể nhận trạng thái `accepted` từ quy trình này.
-
-`--fraud-rate 0.001` là 0,1%, `0.005` là 0,5%. Với tỷ lệ thấp, dùng số quan sát đủ để có tối thiểu 48 dòng gian lận cho các biến thể. Generator không ghi đè thư mục dữ liệu/báo cáo đã có nội dung; dùng tên mới cho một seed hoặc cấu hình mới.
-
-Trong máy hiện tại, Python nằm trong runtime Codex và sklearn đã được cài riêng vào `.runtime/site-packages`. Có thể dùng `./run_benchmark.ps1 -OutputRoot data/new_run -ReportRoot reports/new_run` để tự tìm Python và sinh/kiểm tra/train cả ba tỷ lệ. Script này không tự tải hay cài thêm thư viện.
-
-Ví dụ lấy đúng X:
-
-```python
-import json
-import pandas as pd
-from sklearn.ensemble import IsolationForest
-
-folder = "data/sme_fraud_003"
-meta = json.load(open(f"{folder}/manifest.json", encoding="utf-8"))
-features = pd.read_csv(f"{folder}/features.csv")
-split = pd.read_csv(f"{folder}/splits.csv").set_index("transaction_id")["split"]
-mask = features["transaction_id"].map(split).eq("train")
-X_train = features.loc[mask, meta["feature_columns"]]
-model = IsolationForest(n_estimators=300, max_samples=2048,
-                        contamination="auto", random_state=42, n_jobs=-1)
-model.fit(X_train)  # Không join labels.csv vào X.
-```
-
-## Đánh giá và giới hạn
-
-Mỗi thư mục `reports/sme_fraud_00x` có `report_vi.md`, `metrics.json`, điểm từng dòng test, đường precision–recall rút gọn và model đã fit. Mô hình lưu kèm thứ tự đặc trưng và ngưỡng để tái sử dụng.
-
-Kết quả v2 nằm trong `reports/summary_vi.md`, đã fit lại với ma trận đặc trưng mới và báo cáo riêng FPR theo TT133/TT200. Model v1 không tương thích với thứ tự/số cột của v2. Việc sửa định khoản không đảm bảo IF đạt chất lượng vận hành; cần đánh giá trên dữ liệu thật và kiểm tra từng hard negative.
-
-Metric chính là Average Precision (AP), precision/recall ở ngưỡng validation, precision@25/50/100/250, recall theo sáu nhóm/biến thể/vụ việc và FPR trên hard negatives. AP từ `average_precision_score` không đồng nhất với diện tích PR tích phân hình thang. ROC-AUC chỉ là số tham khảo.
-
-Ở 0,1%, test chỉ có 25 dòng gian lận, mỗi nhóm khoảng 4–5 dòng. Một seed không đủ để kết luận chắc về từng nhóm. Báo cáo có khoảng Wilson mô tả theo dòng; các dòng cùng vụ có tương quan, nên khoảng này không thay thế khoảng tin cậy bootstrap theo vụ. Muốn ước lượng ổn hơn, tăng quy mô và chạy nhiều seed, đánh giá cả công ty chưa thấy.
-
-Các mẫu kế toán có VAT nhiều dòng và liên kết sản xuất/công nợ nhưng chưa đối chiếu số dư đầu-cuối kỳ hoặc lập bộ BCTC đầy đủ. Mẫu thiết bị giả định mỗi hóa đơn là một vật thể độc lập: dưới 30 triệu giá chưa thuế đi vào 153, thiết bị đủ tiêu chí giả định đi vào 211. Chưa mô phỏng PIT/BHXH, khấu hao theo từng tài sản hoặc xác định đủ điều kiện hoàn/khấu trừ VAT. Trạng thái NCC là tổng hợp, không truy vấn cơ quan thuế. Cặp đúng và chứng từ cân bằng vẫn có thể là giao dịch khống.
-
-`pair_supported_for_scenario` kiểm tra mẫu nghiệp vụ được hỗ trợ, không phải danh sách đầy đủ mọi cặp được phép bởi pháp luật. Không tự kết luận một cặp hiếm hoặc ngoài mẫu là gian lận. TT99 áp dụng cho năm tài chính bắt đầu từ 01/01/2026; v2 giữ phạm vi lịch sử 2024–2025, chưa triển khai TT99.
-
-Nguồn phương pháp: [IsolationForest và hướng điểm/ngưỡng](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html), [tránh data leakage](https://scikit-learn.org/stable/common_pitfalls.html), [đánh giá theo thời gian](https://scikit-learn.org/stable/modules/cross_validation.html), [Average Precision](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html). Phân phối, hạn mức và nhãn nghiệp vụ trong bộ này là giả định sinh dữ liệu, không được dẫn từ các tài liệu sklearn.
+Các đường dẫn snapshot đang được app/kiểm thử sử dụng được giữ nguyên. Quy ước lưu tài liệu mới nằm trong [mục lục dự án](docs/README.md).

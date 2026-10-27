@@ -11,7 +11,9 @@
   "notes": [
     "All identifiers are strings and must remain stable across revisions.",
     "Revisions keep the same ID and immutable business binding, with a later observed_at.",
-    "Blank optional bindings never act as proof. Numeric bank accounts require recipient_bank_code."
+    "Blank optional bindings never act as proof. Numeric bank accounts require recipient_bank_code.",
+    "ML features select transaction_documents revisions by observed_at before filtering status; known revocations cannot fall back to final transaction scalars.",
+    "Invoice monetary features need invoice_issued_at and an observation timestamp at/before the scoring cutoff. Missing net/VAT/linked VAT stays unknown; never infer these from a later transaction snapshot."
   ],
   "tables": {
     "payment_requests": {
@@ -26,7 +28,7 @@
     },
     "transaction_documents": {
       "required": ["record_id", "company_id", "vendor_id", "transaction_id", "document_type", "status", "evidence_id", "verifier_id", "verified_at", "observed_at"],
-      "optional": ["invoice_number", "invoice_gross_vnd", "contract_id"],
+      "optional": ["invoice_number", "invoice_gross_vnd", "contract_id", "invoice_id", "invoice_issued_at", "invoice_net_vnd", "invoice_vat_vnd", "linked_input_vat_vnd"],
       "statuses": ["verified", "revoked", "unverified", "pending", "rejected"]
     },
     "supplier_payment_agreements": {

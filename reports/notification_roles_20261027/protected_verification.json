@@ -1,0 +1,42 @@
+{
+  "protected_files": 10396,
+  "authorized_changes": {
+    "docs/BACKLOG.md": {
+      "before": "f4c440a747efc0657a7e55dca136122f12025559ce86c9193967b043a82a516f",
+      "after": "fc2a38d35d55a286b49b7765af04233d165c1bbbb918f1ea219f0744d4ce1122"
+    },
+    "docs/DEVELOPMENT.md": {
+      "before": "8a26ecc642a544b362b210b56d2b9ab505ddcb1df3df458ec70347dab4cfa616",
+      "after": "24c2df05019ff2b0644ad20048fc7839371c1188f365054bba0361100affab12"
+    },
+    "docs/STATUS.md": {
+      "before": "d27514b3bb711e3801b404ea72732041b491469b013cf858211e0c938e51b5d0",
+      "after": "045e20f7e5ada1e0a2512645ac408809fe9c0b5a934febdbcb31a5316ff69f87"
+    },
+    "docs/reports/README.md": {
+      "before": "419ce4a3b63201e2196fc529aca3fa241083ee6a685fc720fd05744fc38476db",
+      "after": "a1186376aaf62b4fcab96ce3233746cd579496542d449889209b7436c863f820"
+    },
+    "docs/reports/app/README.md": {
+      "before": "2efe083b9e6d6f798c47a6ffdeb8f66679070d69b3aa1bedb5d44202d7d0d361",
+      "after": "253efe69fff6c845a7fe8a7d97f5f1ebcfe0669a20bf3b56e342d5bbbdf3257c"
+    },
+    "review_ui/app.js": {
+      "before": "f7f0de9df1e74a5e8864dd0b9d1e3a6cebdeabcfa6109f52ddc0ceafa451953a",
+      "after": "5f7bf7aff03c5bea9fa6cf68e15a870fcef43983a438283b3aceb4861dd2316a"
+    },
+    "review_ui/styles.css": {
+      "before": "5d3442c77fba3b5ec205388d3b99d1b8cb76d12eab8a664ee1c7d90245eb7fb9",
+      "after": "4d34ef8262342faec5d2117dcee79f8c0d9a5ffb701412c90fdee66374239cd0"
+    },
+    "sme_fraud/notifications.py": {
+      "before": "2d7307cb7cc3a642c2897df2ee506d536bc46a5a23e232a749c1e48bafea5f12",
+      "after": "614575bdbd0b4bd1e4a08ad2502ea5b7c7ecf2d51702e10898b80be637ec9e7e"
+    },
+    "sme_fraud/review_server.py": {
+      "before": "15ded7423292476a02c59ef1c9e20881257305046638c8a123a6ce874d280b67",
+      "after": "786745acb361c5665e89bd921949843ce8d3076811194b820f7574affc1dd5b1"
+    }
+  },
+  "unexpected_changes": {}
+}

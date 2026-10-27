@@ -1,6 +1,6 @@
 # Sao lưu/khôi phục Case Management
 
-[Công cụ](../../sme_fraud/review_backup.py) sao lưu SQLite bằng `Connection.backup()`, cùng nhật ký kết luận, định danh hồ sơ và các nguồn/snapshot cần cho web. [Biên bản kiểm chứng](../../reports/operational_reliability_20261019.md).
+[Công cụ](../../sme_fraud/review_backup.py) sao lưu SQLite bằng `Connection.backup()`, cùng nhật ký kết luận, định danh hồ sơ và các nguồn/snapshot cần cho web. [Biên bản kiểm chứng](../../docs/reports/operations/operational_reliability_20261019.md).
 
 **Bổ sung 19/10:** [Sao lưu tự động và gói tổng hợp P2](automation.md) dùng `sme_fraud.backup_job`: lịch 02:00, giữ 30 ngày/tối thiểu 3 bản tốt, trạng thái lỗi và phục hồi cả các journal P2 riêng. Hướng dẫn dưới đây vẫn dành cho gói ReviewStore v1; gói tổng hợp dùng CLI riêng và không thay các bản sao cũ.
 

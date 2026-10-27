@@ -1,5 +1,6 @@
 """Cash purchase screening; a review flag is not a VAT deduction decision."""
 from datetime import datetime, timedelta, timezone
+from .cash_limit_priority import POLICY as LIMIT_PRIORITY_POLICY, LEGACY_POLICY as LEGACY_LIMIT_PRIORITY, limit_priority
 
 
 VN = timezone(timedelta(hours=7))
@@ -82,6 +83,8 @@ def _cash_payment_evidence(row, config):
 
 
 def validate_review_config(config):
+    if config.get('cash_limit_priority_policy', LIMIT_PRIORITY_POLICY) not in {LIMIT_PRIORITY_POLICY, LEGACY_LIMIT_PRIORITY}:
+        raise ValueError('Invalid cash limit priority policy')
     if config['cash_review_policy'] not in {REVIEW_POLICY, LEGACY_REVIEW_POLICY}:
         raise ValueError('Invalid cash evidence review policy')
     evidence = config['cash_limit_evidence_by_company']
@@ -136,6 +139,15 @@ def cash_payment_check(row, config):
     invoice_ready = not any(field.startswith('invoice_') for field in missing)
     if internal_status == 'verified_breach':
         category, points, priority = 'verified_internal_breach', 14, 'cao'
+        if config.get('cash_limit_priority_policy', LIMIT_PRIORITY_POLICY) == LIMIT_PRIORITY_POLICY:
+            tier = limit_priority(proof['cash_amount_vnd'], internal)
+            priority = tier['tier_priority']
+            # The independent VAT/document branch keeps its medium handling floor.
+            # Its eight points are not stacked on top of the breach's 14 points.
+            vat_floor = bool(vat_reasons and invoice_ready and proof.get('evidence_status') != 'information_gap')
+            if vat_floor and priority == 'thap':
+                priority = 'trung_binh'
+            proof.update(limit_priority=tier, vat_document_priority_floor='trung_binh' if vat_floor else '')
         summary = 'Chi tiền mặt vượt hạn mức nội bộ có nguồn và xác minh tại thời điểm chi'
         action = 'Đối chiếu quyết định hạn mức, phê duyệt ngoại lệ và chứng từ chi.'
     elif vat_reasons and invoice_ready and proof.get('evidence_status') != 'information_gap':

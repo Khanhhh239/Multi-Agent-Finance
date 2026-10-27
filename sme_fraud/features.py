@@ -7,6 +7,9 @@ from itertools import groupby
 
 from .generate import PAIRS, parse
 from .temporal_evidence import BankChangeHistory, bank_change_state, bank_identity, EmployeeHistory
+from .feature_evidence import FeatureEvidence
+from .identity import normalize
+from .identity_graph import UnionFind, KnownGraph, master_versions
 from .accounting import (NORMALISED_ACCOUNTS, PAIR_VOCABULARY, ACCOUNTING_FEATURE_DESCRIPTIONS,
                         accounting_features, normalise_account)
 
@@ -22,22 +25,29 @@ BASE_DESCRIPTIONS = {
     "created_off_hours": "Giờ lập <8 hoặc >=19", "period_end_distance": "Số ngày từ ngày ghi sổ tới cuối tháng",
     "approval_log_hours": "log1p(giờ duyệt - giờ lập); chỉ chấm sau duyệt/ghi sổ",
     "self_approved": "Người lập = người duyệt", "self_approval_permitted": "Tự duyệt trong hạn mức nhân sự",
-    "support_doc_count": "Số chứng từ đã có khi ghi sổ", "goods_receipt_verified": "Bằng chứng nhận hàng đã xác minh",
+    "support_doc_count": "Số chứng từ khả dụng tại cutoff; thiếu thời điểm biết=0, xem support_docs_known",
+    "goods_receipt_verified": "Giao nhận/nghiệm thu đã xác minh và đã biết tại cutoff",
+    "support_docs_known": "Có snapshot chứng từ gắn giao dịch đã biết tại cutoff; phân biệt thiếu với số lượng 0",
     "has_vendor": "Có NCC", "has_customer": "Có khách hàng", "has_employee_recipient": "Có nhân viên nhận tiền",
     "is_financial_entry": "1=bút toán tiền/sổ cái, 0=rà soát tạm ứng phi tài chính",
     "vendor_age_log_days": "log1p(tuổi pháp nhân vào thời điểm ghi sổ), không có NCC=0",
     "vendor_tenure_log_days": "log1p(số ngày từ onboard NCC đến ghi sổ)",
     "employee_bank_overlap": "Ngân hàng + TK thụ hưởng NCC trùng snapshot nhân sự hiện hành đã biết trong SME",
-    "employee_phone_overlap": "SĐT NCC trùng nhân sự đã biết", "employee_address_overlap": "Địa chỉ NCC trùng nhân sự đã biết",
+    "employee_phone_overlap_current": "SĐT NCC trùng master nhân sự hiện hành cùng SME tại posted_at; cùng chuẩn B2, không giữ khóa đã thay/gỡ",
+    "employee_address_overlap_current": "Địa chỉ NCC trùng master nhân sự hiện hành cùng SME tại posted_at; cùng chuẩn B2, không giữ khóa đã thay/gỡ",
     "related_party_disclosed": "Khai báo bên liên quan đã tồn tại trước chấm điểm",
-    "graph_employee_count": "Số nhân viên trong thành phần liên thông NCC theo TK/SĐT/người đại diện đã quan sát",
-    "linked_vendor_count": "Số NCC trong thành phần liên thông đã quan sát; địa chỉ không được dùng làm cạnh mạnh",
+    "graph_employee_count_current": "Số nhân viên hiện thuộc SME trong thành phần NCC của graph hiệu lực tại posted_at; thay/gỡ cạnh, không tích lũy liên hệ lịch sử",
+    "linked_vendor_count_current": "Số NCC hiện thuộc SME trong thành phần graph hiệu lực tại posted_at, gồm chính NCC; địa chỉ không là cạnh mạnh",
     "recipient_employee_bank_count": "Số nhân viên hiện hành cùng ngân hàng + TK thụ hưởng; thiếu định danh không ghép",
     "registry_risky_now": "Trạng thái gần nhất đã công bố và có hiệu lực là ceased/abandoned",
     "registry_risky_at_invoice": "Trạng thái rủi ro có hiệu lực trước ngày hóa đơn theo thông tin đã biết",
     "bank_changed_recently": "Đổi TK đã quan sát/có hiệu lực trong 14 ngày, đúng ngân hàng + TK nhận; thiếu định danh=0",
     "bank_change_verified": "Đổi TK gần đây đúng ngân hàng + TK nhận, callback gắn đúng sự kiện và duyệt độc lập đã biết",
-    "invoice_log_gross": "log1p(tổng giá trị hóa đơn)", "invoice_payment_ratio": "Lần thanh toán hiện tại / tổng hóa đơn",
+    "invoice_log_gross": "log1p(tổng hóa đơn đã phát hành và đã biết tại cutoff); thiếu=0 kèm invoice_known",
+    "invoice_known": "Có số tiền hóa đơn trong snapshot đã biết, ngày phát hành không sau cutoff",
+    "invoice_components_known": "Net và VAT của cùng snapshot hóa đơn khả dụng; thiếu không suy thành sai lệch số học",
+    "linked_input_vat_known": "VAT đầu vào liên kết có trong cùng snapshot hóa đơn đã biết",
+    "invoice_payment_ratio": "Lần thanh toán hiện tại / tổng hóa đơn khả dụng tại cutoff",
     "prior_invoice_payment_count": "Số lần trả hóa đơn cùng công ty+NCC+số HĐ trước hiện tại",
     "cumulative_invoice_payment_ratio": "(Tổng đã trả trước + lần hiện tại) / tổng HĐ; 0 nếu không thanh toán",
     "prior_same_amount_30d": "Số thanh toán cùng NCC+số tiền trong 30 ngày trước hiện tại",
@@ -68,35 +78,6 @@ FEATURE_DESCRIPTIONS.update({f"{side}_{a}":f"One-hot tài khoản {side} {a}" fo
 FEATURE_DESCRIPTIONS.update({f"pair_{d}_{c}":f"Cặp chuẩn hóa Nợ {d}/Có {c} xuất hiện trong bút toán nhiều dòng, gồm VAT; nhóm chi phí 642 dùng chung TT133/TT200" for d,c in PAIR_VOCABULARY})
 
 
-class UnionFind:
-    def __init__(self):
-        self.parent, self.size, self.employees, self.vendors = {}, {}, {}, {}
-
-    def add(self, node, employee=False, vendor=False):
-        if node not in self.parent:
-            self.parent[node], self.size[node] = node, 1
-            self.employees[node], self.vendors[node] = int(employee), int(vendor)
-
-    def root(self, node):
-        if node not in self.parent:
-            self.add(node)
-        while node!=self.parent[node]:
-            self.parent[node] = self.parent[self.parent[node]]
-            node = self.parent[node]
-        return node
-
-    def join(self, left, right):
-        l, r = self.root(left), self.root(right)
-        if l==r:
-            return
-        if self.size[l]<self.size[r]:
-            l, r = r, l
-        self.parent[r] = l
-        self.size[l] += self.size[r]
-        self.employees[l] += self.employees[r]
-        self.vendors[l] += self.vendors[r]
-
-
 class Stream:
     def __init__(self, rows, column="observed_at"):
         self.rows = sorted(rows, key=lambda r: r[column])
@@ -118,15 +99,16 @@ def build_features(tables):
     from .exception_validation import validated_tables
     tables = validated_tables(tables)
     transactions = sorted(tables["transactions"], key=lambda r:(r["posted_at"],r["transaction_id"]))
-    employee_stream = Stream(tables["employees"], "recorded_at")
-    vendor_stream = Stream(tables["vendors"], "recorded_at")
+    employee_stream = Stream(master_versions(tables['employees'], 'employee_id'), 'recorded_at')
+    vendor_stream = Stream(master_versions(tables['vendors'], 'vendor_id'), 'recorded_at')
     streams = {name:Stream(tables.get(name, [])) for name in (
         "entity_links", "attendance", "vendor_status_history", "advance_events")}
     bank_changes = BankChangeHistory(tables.get('bank_account_changes', []))
     employee_history = EmployeeHistory(tables['employees'])
+    evidence = FeatureEvidence(tables.get('transaction_documents', []), employee_history)
     advance_stream = Stream(tables.get("advances", []), "recorded_at")
     holiday_dates = {r["date"] for r in tables["calendar"]}
-    graph = defaultdict(UnionFind)
+    graph = KnownGraph()
     employees, vendors, advances = {}, {}, {}
     employee_tokens = defaultdict(Counter)
     attendance, statuses = {}, defaultdict(list)
@@ -143,28 +125,34 @@ def build_features(tables):
     features = []
     for now, batch_iterator in groupby(transactions, key=lambda r:r["posted_at"]):
         batch = list(batch_iterator)
+        evidence.advance(now)
+        invoice_keys = {}
         for e in employee_stream.until(now):
             previous = employees.get(e['employee_id'])
             if previous:
-                old_identity = bank_identity(previous['bank_account'], previous.get('bank_code', ''))
-                if old_identity:
-                    employee_tokens[(previous['company_id'], 'bank_account')][old_identity] -= 1
+                for field in ('bank_account', 'phone', 'address'):
+                    old_identity = (bank_identity(previous.get(field), previous.get('bank_code', ''))
+                                    if field == 'bank_account' else normalize(previous.get(field), field))
+                    if old_identity:
+                        counter = employee_tokens[(previous['company_id'], field)]
+                        counter[old_identity] -= 1
+                        if counter[old_identity] <= 0:
+                            del counter[old_identity]
             employees[e["employee_id"]] = e
-            g = graph[e["company_id"]]
-            g.add(e["employee_id"], employee=True)
+            graph.apply_master(e, e['employee_id'], previous, role='employee')
             identity = bank_identity(e['bank_account'], e.get('bank_code', ''))
             if identity:
                 employee_tokens[(e['company_id'], 'bank_account')][identity] += 1
             for field in ("phone", "address"):
-                employee_tokens[(e["company_id"], field)][e[field]] += 1
+                token = normalize(e.get(field), field)
+                if token:
+                    employee_tokens[(e["company_id"], field)][token] += 1
         for v in vendor_stream.until(now):
+            previous = vendors.get(v['vendor_id'])
             vendors[v["vendor_id"]] = v
-            graph[v["company_id"]].add(v["vendor_id"], vendor=True)
+            graph.apply_master(v, v['vendor_id'], previous, role='vendor')
         for edge in streams["entity_links"].until(now):
-            target = (bank_identity(edge['target_id'], edge.get('bank_code', ''))
-                      if edge['link_type'] == 'bank_account' else edge['target_id'])
-            if target:
-                graph[edge["company_id"]].join(edge["source_id"], target)
+            graph.apply_link(edge)
         for event in streams["attendance"].until(now):
             attendance[(event["employee_id"],event["payroll_period"])] = event
         for event in streams["vendor_status_history"].until(now):
@@ -185,18 +173,26 @@ def build_features(tables):
         for r in batch:
             cid, vid, eid, creator = r["company_id"],r["vendor_id"],r["employee_id"],r["creator_id"]
             v, e = vendors.get(vid), employees.get(eid)
+            vendor_phone = normalize(v.get('phone'), 'phone') if v else ''
+            vendor_address = normalize(v.get('address'), 'address') if v else ''
             user = employees[creator]
             created = parse(r["created_at"])
             amount, limit = int(r["amount_vnd"]), int(r["approval_limit_vnd"])
             log_amount = math.log1p(amount)
             is_payment = r["txn_type"]=="vendor_payment"
-            key = (cid, vid, r["invoice_number"])
-            invoice_gross = int(r["invoice_gross_vnd"])
-            g = graph[cid]
-            root = g.root(vid) if v else None
+            available = evidence.snapshot(r, now)
+            key = (cid, vid, available['invoice_number']) if available['invoice_known'] and available['invoice_number'] else None
+            invoice_keys[r['transaction_id']] = key
+            invoice_gross = available['invoice_gross_vnd']
+            graph_employees, graph_vendors = graph.counts(cid, vid) if v else (0, 0)
             known_status = [s for s in statuses.get(vid, []) if s["effective_at"]<=now]
             current = max(known_status, key=lambda s:s["effective_at"]) if known_status else None
-            invoice_status = [s for s in known_status if s["effective_at"]<=r["invoice_issued_at"]]
+            # The legacy invoice date is a transaction-header reference; explicit
+            # late observations/future issue dates cannot qualify its status.
+            issued_at = available['invoice_issued_at'] if available['invoice_known'] else r['invoice_issued_at']
+            reference_observed = r.get('invoice_observed_at', now)
+            reference_known = available['invoice_known'] or bool(reference_observed and reference_observed <= now)
+            invoice_status = [s for s in known_status if reference_known and issued_at and issued_at <= now and s['effective_at'] <= issued_at]
             issuer = max(invoice_status, key=lambda s:s["effective_at"]) if invoice_status else None
             change = bank_changes.current(cid, vid, now)
             changed_recently, verified = bank_change_state(change, r, employee_history, now)
@@ -228,23 +224,25 @@ def build_features(tables):
                 approval_log_hours=math.log1p(max(0,(parse(r["approved_at"])-created).total_seconds()/3600)),
                 self_approved=int(creator==r["approver_id"]),
                 self_approval_permitted=int(creator==r["approver_id"] and amount<=int(user["self_approval_limit_vnd"])),
-                support_doc_count=int(r["support_doc_count"]), goods_receipt_verified=int(r["goods_receipt_verified"]),
+                support_doc_count=available['support_doc_count'], goods_receipt_verified=available['goods_receipt_verified'],
+                support_docs_known=available['support_docs_known'], invoice_known=available['invoice_known'],
+                invoice_components_known=available['invoice_components_known'], linked_input_vat_known=available['linked_input_vat_known'],
                 has_vendor=int(bool(v)), has_customer=int(bool(r["customer_id"])), has_employee_recipient=int(bool(e)),
                 is_financial_entry=int(r["is_financial_entry"]),
                 vendor_age_log_days=math.log1p(max(0,(at-parse(v["registered_at"])).days)) if v else 0,
                 vendor_tenure_log_days=math.log1p(max(0,(at-parse(v["onboarded_at"])).days)) if v else 0,
                 employee_bank_overlap=int(bool(v and employee_bank_count)),
-                employee_phone_overlap=int(bool(v and employee_tokens[(cid,"phone")][v["phone"]])),
-                employee_address_overlap=int(bool(v and employee_tokens[(cid,"address")][v["address"]])),
+                employee_phone_overlap_current=int(bool(vendor_phone and employee_tokens[(cid,'phone')][vendor_phone] > 0)),
+                employee_address_overlap_current=int(bool(vendor_address and employee_tokens[(cid,'address')][vendor_address] > 0)),
                 related_party_disclosed=int(bool(v and v["related_party_disclosed_at"] and v["related_party_disclosed_at"]<=now)),
-                graph_employee_count=g.employees[root] if root else 0, linked_vendor_count=g.vendors[root] if root else 0,
+                graph_employee_count_current=graph_employees, linked_vendor_count_current=graph_vendors,
                 recipient_employee_bank_count=employee_bank_count if e else 0,
                 registry_risky_now=int(bool(current and current["status"]!="active")),
                 registry_risky_at_invoice=int(bool(issuer and issuer["status"]!="active")),
                 bank_changed_recently=int(changed_recently), bank_change_verified=int(verified),
                 invoice_log_gross=math.log1p(invoice_gross), invoice_payment_ratio=amount/invoice_gross if invoice_gross else 0,
-                prior_invoice_payment_count=invoice_count[key] if is_payment else 0,
-                cumulative_invoice_payment_ratio=(invoice_paid[key]+amount)/invoice_gross if is_payment and invoice_gross else 0,
+                prior_invoice_payment_count=invoice_count[key] if is_payment and key else 0,
+                cumulative_invoice_payment_ratio=((invoice_paid[key] if key else 0)+amount)/invoice_gross if is_payment and invoice_gross else 0,
                 prior_same_amount_30d=len(same), recipient_count_3d=len(recipient),
                 recipient_sum_limit_3d=sum(item[1] for item in recipient)/limit,
                 creator_count_7d=len(creator_7d), creator_sum_limit_7d=sum(item[1] for item in creator_7d)/limit,
@@ -263,10 +261,17 @@ def build_features(tables):
             f.update({f"type_{t}":int(r["txn_type"]==t) for t in PAIRS})
             framework = companies[cid]['accounting_framework']
             pair_key = (cid,normalise_account(r['debit_account'],framework),normalise_account(r['credit_account'],framework))
-            af = accounting_features(r,[l for l in journal_lines[r['transaction_id']] if l['posted_at']<=now],
+            accounting_row = dict(r, **{name: available[name] for name in ('invoice_gross_vnd', 'invoice_net_vnd',
+                                  'invoice_vat_vnd', 'linked_input_vat_vnd', 'evidence_on_file')})
+            af = accounting_features(accounting_row,[l for l in journal_lines[r['transaction_id']] if l['posted_at']<=now],
                                      companies[cid],pair_counts[pair_key],company_financial_counts[cid])
+            if not available['invoice_components_known']:
+                af.update(invoice_vat_fraction=0, vat_invoice_arithmetic_gap=0)
+            if not available['linked_input_vat_known']:
+                af['linked_input_vat_fraction'] = 0
             f.update(af)
-            features.append({k:round(value, 8) if isinstance(value,float) else value for k,value in f.items()})
+            features.append({k: round(f[k], 8) if isinstance(f[k], float) else f[k]
+                             for k in ('transaction_id', *FEATURE_DESCRIPTIONS)})
         for r in batch:
             cid, amount, limit = r["company_id"],int(r["amount_vnd"]),int(r["approval_limit_vnd"])
             if int(r['is_financial_entry']):
@@ -274,9 +279,10 @@ def build_features(tables):
                 pair_counts[(cid,normalise_account(r['debit_account'],framework),normalise_account(r['credit_account'],framework))] += 1
                 company_financial_counts[cid] += 1
             if r["txn_type"]=="vendor_payment":
-                key = (cid,r["vendor_id"],r["invoice_number"])
-                invoice_paid[key] += amount
-                invoice_count[key] += 1
+                key = invoice_keys[r['transaction_id']]
+                if key:
+                    invoice_paid[key] += amount
+                    invoice_count[key] += 1
                 same_amount[(cid,r["vendor_id"],amount)].append(now)
                 recipient_identity = bank_identity(r['recipient_account'], r.get('recipient_bank_code', ''))
                 if recipient_identity:

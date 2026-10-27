@@ -1,0 +1,10 @@
+{
+  "status": "unassigned",
+  "primary_reviewer_id": null,
+  "adjudicator_id": null,
+  "user_response": "chưa phân công",
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "legacy_packet_units": 128,
+  "new_v4_packet_units": 74
+}

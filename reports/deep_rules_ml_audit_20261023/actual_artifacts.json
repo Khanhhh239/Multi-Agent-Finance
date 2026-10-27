@@ -1,0 +1,46 @@
+[
+  {
+    "cohort": "001",
+    "source_conditions": {
+      "late_support_documents": 0,
+      "support_timestamp_field_present": false,
+      "future_invoice_dates": 0,
+      "employee_additional_revisions": 8,
+      "vendor_additional_revisions": 0,
+      "employee_empty_phone": 0,
+      "employee_empty_address": 0,
+      "vendor_empty_phone": 0,
+      "vendor_empty_address": 0,
+      "transaction_currencies": {
+        "VND": 20559
+      }
+    },
+    "evaluation_rows": 5934,
+    "models_fitted": 0,
+    "score_max_absolute_delta": 0.0,
+    "temporal_provenance_verified": true,
+    "source_conditions_limit": "Absence of triggering fields in these frozen sources does not establish correctness on future SME exports."
+  },
+  {
+    "cohort": "003",
+    "source_conditions": {
+      "late_support_documents": 0,
+      "support_timestamp_field_present": false,
+      "future_invoice_dates": 0,
+      "employee_additional_revisions": 8,
+      "vendor_additional_revisions": 0,
+      "employee_empty_phone": 0,
+      "employee_empty_address": 0,
+      "vendor_empty_phone": 0,
+      "vendor_empty_address": 0,
+      "transaction_currencies": {
+        "VND": 20523
+      }
+    },
+    "evaluation_rows": 5877,
+    "models_fitted": 0,
+    "score_max_absolute_delta": 0.0,
+    "temporal_provenance_verified": true,
+    "source_conditions_limit": "Absence of triggering fields in these frozen sources does not establish correctness on future SME exports."
+  }
+]

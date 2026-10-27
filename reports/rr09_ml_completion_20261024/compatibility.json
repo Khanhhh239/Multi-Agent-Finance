@@ -1,0 +1,36 @@
+[
+  {
+    "cohort": "sme_fraud_001",
+    "old_model_sha256": "6c2f9313fd9888437734c5894fdbc96bd6e283370031ba91ecc408387657a4a7",
+    "old_model_rejected": {
+      "compatible": false,
+      "reasons": [
+        "ordered_columns_mismatch",
+        "semantic_provenance_missing_or_mismatched",
+        "estimator_input_width_mismatch"
+      ],
+      "feature_contract_fingerprint": "2a1b8322fb1886c8ff2e0ab5ccaff3db9fb533046e2dbf55b4003ef2d97afc7f"
+    },
+    "old_cache_rejection": "Manifest ordered feature columns mismatch",
+    "new_model_sha256": "99317c42765e89d388f14ee8d410fc39253e6e82d0496d862407c6c5d884a9b9",
+    "new_model_compatible": true,
+    "new_feature_count": 194
+  },
+  {
+    "cohort": "sme_fraud_003",
+    "old_model_sha256": "a54f91bea581d5abb2f49339c062cedb068d21a0b724876e33a7593aa4b188b7",
+    "old_model_rejected": {
+      "compatible": false,
+      "reasons": [
+        "ordered_columns_mismatch",
+        "semantic_provenance_missing_or_mismatched",
+        "estimator_input_width_mismatch"
+      ],
+      "feature_contract_fingerprint": "2a1b8322fb1886c8ff2e0ab5ccaff3db9fb533046e2dbf55b4003ef2d97afc7f"
+    },
+    "old_cache_rejection": "Manifest ordered feature columns mismatch",
+    "new_model_sha256": "92c92aefa745edbda7bacc81d8721ad2a21ed531f8f9448b1d792389eb321e35",
+    "new_model_compatible": true,
+    "new_feature_count": 194
+  }
+]

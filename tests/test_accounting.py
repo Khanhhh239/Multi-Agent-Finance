@@ -1,4 +1,5 @@
 import unittest
+import copy
 from collections import defaultdict
 
 from sme_fraud.accounting import normalise_account,pair_supported,expense_account
@@ -80,7 +81,11 @@ class AccountingTest(unittest.TestCase):
         self.assertTrue(pair_supported('642','335','expense_accrual','TT200'))
 
     def test_features_include_current_writeoff_evidence_and_vat_lines(self):
-        features={r['transaction_id']:r for r in build_features(self.tables)}
+        known = copy.deepcopy(self.tables)
+        for row in known['transactions']:
+            row['support_docs_observed_at'] = row['posted_at']
+            row['invoice_observed_at'] = max(row['posted_at'], row['invoice_issued_at'])
+        features={r['transaction_id']:r for r in build_features(known)}
         for r in self.transactions.values():
             f=features[r['transaction_id']]
             if r['txn_type']=='advance_writeoff':
@@ -92,6 +97,13 @@ class AccountingTest(unittest.TestCase):
             if r['is_financial_entry']:
                 self.assertEqual(f['pair_supported_for_scenario'],1)
                 self.assertEqual(f['journal_balance_difference_ratio'],0)
+
+    def test_untimed_writeoff_proof_is_missing_for_ml(self):
+        features={r['transaction_id']:r for r in build_features(self.tables)}
+        for row in self.transactions.values():
+            if row['txn_type'] == 'advance_writeoff':
+                self.assertEqual(features[row['transaction_id']]['support_docs_known'], 0)
+                self.assertEqual(features[row['transaction_id']]['advance_writeoff_evidence_missing'], 1)
 
 
 if __name__=='__main__':

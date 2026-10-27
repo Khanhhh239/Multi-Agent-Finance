@@ -22,7 +22,7 @@ from .review_decision_gate import BINDING_FILE,assert_binding,read_binding,write
 ROOT=Path(__file__).resolve().parents[1]
 VERSION='case-management-backup-v1'
 RUNTIME_FILES=('review_backup.py','review_store.py','review_support.py','case_identity.py','information_requests.py',
-               'feedback.py','review_capacity.py','entity_graph.py','review_decision_gate.py')
+               'feedback.py','review_capacity.py','entity_graph.py','review_decision_gate.py','review_roles.py','review_workflow.py')
 SIDE_FILES=('case_identity.json','feedback_audit.jsonl','case_review_states.csv',BINDING_FILE)
 MANIFEST='backup_manifest.json'
 
@@ -129,6 +129,10 @@ def metadata_rows(db):
 
 def snapshot_state(db,reports,scenarios):
     events=InformationRequests.history(db)
+    from .review_roles import SETTING,VERSION as ROLE_VERSION,workflow_events
+    role_policy=db.execute('SELECT value FROM settings WHERE key=?',(SETTING,)).fetchone()
+    if role_policy and role_policy[0]!=ROLE_VERSION:raise ValueError('Unsupported review role policy in backup')
+    role_events=workflow_events(db) if role_policy else []
     bindings=set();snapshots={}
     for tag in scenarios:
         report=guarded(reports/('sme_fraud_'+tag))
@@ -152,7 +156,11 @@ def snapshot_state(db,reports,scenarios):
             identity_sha256=sha(report/'case_identity.json'),binding_id=binding['binding_id'])
     if any((e['scenario'],e['company_id'],e['case_scope_hash']) not in bindings for e in events):
         raise ValueError('Document request history is not bound to a backed-up snapshot scope')
-    return dict(snapshots=snapshots,request_events=len(events),request_head=events[-1]['event_hash'] if events else '')
+    if any((e['scenario'],e['company_id'],e['case_scope_hash']) not in bindings for e in role_events):
+        raise ValueError('Review workflow history is not bound to a backed-up snapshot scope')
+    return dict(snapshots=snapshots,request_events=len(events),request_head=events[-1]['event_hash'] if events else '',
+        review_role_policy=role_policy[0] if role_policy else None,workflow_events=len(role_events),
+        workflow_head=role_events[-1]['event_hash'] if role_events else '')
 
 
 def copy_checked(source,target):

@@ -1,0 +1,81 @@
+{
+  "source_sha256": "88aea83b675b6f5fcbde96683539f098b50b26084cf8976d237cd2445768070c",
+  "baseline_modules": [
+    "test_evidence_policy",
+    "test_rule_boundaries",
+    "test_rule_matrix_routing",
+    "test_spec_policy",
+    "test_synthetic_sources",
+    "test_evidence_evaluation"
+  ],
+  "baseline_tests": 214,
+  "after_modules": [
+    "test_rule_branch_controls"
+  ],
+  "after_tests": 101,
+  "before_lines": 210,
+  "additional_lines": [
+    110,
+    146,
+    179,
+    180,
+    219,
+    228
+  ],
+  "before_transitions": 302,
+  "additional_transitions": [
+    [
+      109,
+      110
+    ],
+    [
+      110,
+      104
+    ],
+    [
+      145,
+      146
+    ],
+    [
+      146,
+      142
+    ],
+    [
+      178,
+      179
+    ],
+    [
+      179,
+      180
+    ],
+    [
+      180,
+      169
+    ],
+    [
+      215,
+      214
+    ],
+    [
+      218,
+      219
+    ],
+    [
+      219,
+      217
+    ],
+    [
+      227,
+      228
+    ],
+    [
+      228,
+      226
+    ],
+    [
+      241,
+      240
+    ]
+  ],
+  "interpretation": "Observed transitions relative to the listed 214 existing source tests, not all tests, exhaustive branch coverage, or real-world accuracy."
+}

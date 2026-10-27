@@ -1,0 +1,45 @@
+{
+  "transferred_employee": "E0000011",
+  "remaining_employee": "E0000012",
+  "transfer_at": "2025-08-13T11:00:00+07:00",
+  "before_hits": [
+    {
+      "transaction_id": "AUDIT_0000",
+      "company_id": "C001",
+      "detected_at": "2025-08-12T11:00:00+07:00",
+      "rule_id": "B2",
+      "rule_name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+      "points": 8,
+      "hard_trigger": 0,
+      "suppressed_reason": "",
+      "evidence": {
+        "direct_matches": {
+          "phone": [
+            "E0000011"
+          ]
+        },
+        "field_count": 1,
+        "related_party_disclosed": false
+      },
+      "related_transaction_ids": [],
+      "graph_path": [
+        {
+          "source": "entity:V0000013",
+          "target": "phone:B2TRANSFERPHONE",
+          "link_type": "phone",
+          "observed_at": "2023-01-01T00:00:00+07:00"
+        },
+        {
+          "source": "entity:E0000011",
+          "target": "phone:B2TRANSFERPHONE",
+          "link_type": "phone",
+          "observed_at": "2023-01-01T00:00:00+07:00"
+        }
+      ],
+      "intrinsic_points": 8,
+      "scoring_role": "transaction",
+      "evidence_id": "B2_0db43b392e49e003df46"
+    }
+  ],
+  "after_hits": []
+}

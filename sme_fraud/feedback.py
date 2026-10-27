@@ -94,7 +94,8 @@ def _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at
     actual=latest.get(case_id,{}).get('event_hash','')
     if expected_hash is not None and expected_hash!=actual:
         raise RuntimeError('Hồ sơ vừa có kết luận mới. Tải lại hồ sơ trước khi lưu.')
-    check_decision(directory,lineage['current'].get(case_id,cases[case_id]),decision,expected_database=expected_database)
+    workflow_reference=check_decision(directory,lineage['current'].get(case_id,cases[case_id]),decision,
+                                      expected_database=expected_database,reviewer=reviewer.strip())
     stamp = reviewed_at or datetime.now(timezone(timedelta(hours=7))).isoformat(timespec='seconds')
     when = datetime.fromisoformat(stamp)
     if when.tzinfo is None or when < datetime.fromisoformat(cases[case_id]['last_seen_at']):
@@ -104,6 +105,7 @@ def _record_feedback(directory, case_id, decision, reviewer, reason, reviewed_at
     event = dict(case_id=case_id, decision=decision, reviewer=reviewer.strip(), reason=reason.strip(),
                  reviewed_at=stamp, previous_hash=events[-1]['event_hash'] if events else '',
                  case_scope_hash=scope_hash(lineage['current'].get(case_id, cases[case_id])))
+    if workflow_reference:event['workflow_approval_id']=workflow_reference
     event['event_hash'] = event_hash(event)
     with audit_path.open('a', encoding='utf-8') as stream:
         stream.write(json.dumps(event, ensure_ascii=False) + '\n')

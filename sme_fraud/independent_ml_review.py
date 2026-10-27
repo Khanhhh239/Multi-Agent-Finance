@@ -399,9 +399,8 @@ def validate_reviews(prepared, primary_path, adjudication_path, output):
         if not p.get('primary_reviewer_id') or not a.get('adjudicator_id'):
             pending_ids.append(rid);continue
         try:
-            if (not assignment.get('primary_reviewer_id') or not assignment.get('adjudicator_id')
-                or p['primary_reviewer_id']!=assignment['primary_reviewer_id']
-                or a['adjudicator_id']!=assignment['adjudicator_id'] or p['primary_reviewer_id']==a['adjudicator_id']
+            from .review_roles import validate_ml_review_pair
+            if (not validate_ml_review_pair(assignment,rid,p['primary_reviewer_id'],a['adjudicator_id'])
                 or any(token in identifier.upper() for identifier in (p['primary_reviewer_id'],a['adjudicator_id'])
                        for token in ('ASSISTANT','BOT','AUTOMATION','SIM_'))):
                 raise ValueError('Different assigned human reviewers are required')

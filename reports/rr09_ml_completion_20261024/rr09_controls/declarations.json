@@ -1,0 +1,142 @@
+[
+  {
+    "control_id": "RR09_BELOW",
+    "limit_vnd": 2000000,
+    "amount_vnd": 1999999,
+    "category": null,
+    "priority": ""
+  },
+  {
+    "control_id": "RR09_EQUAL",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2000000,
+    "category": null,
+    "priority": ""
+  },
+  {
+    "control_id": "RR09_ONE_DONG",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2000001,
+    "category": "verified_internal_breach",
+    "priority": "thap"
+  },
+  {
+    "control_id": "RR09_RATIO_LOW_BELOW",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2019999,
+    "category": "verified_internal_breach",
+    "priority": "thap"
+  },
+  {
+    "control_id": "RR09_RATIO_LOW_EQUAL",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2020000,
+    "category": "verified_internal_breach",
+    "priority": "trung_binh"
+  },
+  {
+    "control_id": "RR09_RATIO_LOW_ABOVE",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2020001,
+    "category": "verified_internal_breach",
+    "priority": "trung_binh"
+  },
+  {
+    "control_id": "RR09_RATIO_HIGH_BELOW",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2199999,
+    "category": "verified_internal_breach",
+    "priority": "trung_binh"
+  },
+  {
+    "control_id": "RR09_RATIO_HIGH_EQUAL",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2200000,
+    "category": "verified_internal_breach",
+    "priority": "cao"
+  },
+  {
+    "control_id": "RR09_RATIO_HIGH_ABOVE",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2200001,
+    "category": "verified_internal_breach",
+    "priority": "cao"
+  },
+  {
+    "control_id": "RR09_ABS_LOW_BELOW",
+    "limit_vnd": 100000000,
+    "amount_vnd": 100099999,
+    "category": "verified_internal_breach",
+    "priority": "thap"
+  },
+  {
+    "control_id": "RR09_ABS_LOW_EQUAL",
+    "limit_vnd": 100000000,
+    "amount_vnd": 100100000,
+    "category": "verified_internal_breach",
+    "priority": "trung_binh"
+  },
+  {
+    "control_id": "RR09_ABS_LOW_ABOVE",
+    "limit_vnd": 100000000,
+    "amount_vnd": 100100001,
+    "category": "verified_internal_breach",
+    "priority": "trung_binh"
+  },
+  {
+    "control_id": "RR09_ABS_HIGH_BELOW",
+    "limit_vnd": 100000000,
+    "amount_vnd": 100999999,
+    "category": "verified_internal_breach",
+    "priority": "trung_binh"
+  },
+  {
+    "control_id": "RR09_ABS_HIGH_EQUAL",
+    "limit_vnd": 100000000,
+    "amount_vnd": 101000000,
+    "category": "verified_internal_breach",
+    "priority": "cao"
+  },
+  {
+    "control_id": "RR09_ABS_HIGH_ABOVE",
+    "limit_vnd": 100000000,
+    "amount_vnd": 101000001,
+    "category": "verified_internal_breach",
+    "priority": "cao"
+  },
+  {
+    "control_id": "RR09_ZERO_LIMIT",
+    "limit_vnd": 0,
+    "amount_vnd": 1,
+    "category": "verified_internal_breach",
+    "priority": "cao"
+  },
+  {
+    "control_id": "RR09_UNVERIFIED",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2000001,
+    "category": "information_request",
+    "priority": "thap"
+  },
+  {
+    "control_id": "RR09_FUTURE_VERIFICATION",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2000001,
+    "category": "information_request",
+    "priority": "thap"
+  },
+  {
+    "control_id": "RR09_EXPIRED",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2000001,
+    "category": "information_request",
+    "priority": "thap"
+  },
+  {
+    "control_id": "RR09_FOREIGN",
+    "limit_vnd": 2000000,
+    "amount_vnd": 2000001,
+    "category": "information_request",
+    "priority": "thap"
+  }
+]

@@ -1,6 +1,6 @@
 # Rà hồ sơ và yêu cầu bổ sung tài liệu
 
-Đã triển khai ngày 19/10/2026 cho web cục bộ. Quy tắc, trọng số, chính sách tiếp nhận và ngưỡng A5 giữ nguyên. [Biên bản kỹ thuật và các phần còn chờ](../../reports/step2_review_20261019.md).
+Đã triển khai ngày 19/10/2026 cho web cục bộ. Quy tắc, trọng số, chính sách tiếp nhận và ngưỡng A5 giữ nguyên. [Biên bản kỹ thuật và các phần còn chờ](../../docs/reports/app/step2_review_20261019.md).
 
 ## Thử bản demo riêng
 

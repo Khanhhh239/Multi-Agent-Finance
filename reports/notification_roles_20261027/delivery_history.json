@@ -1,0 +1,3150 @@
+[
+  {
+    "sequence": 1,
+    "job_id": "77aceb255678a3d247975533ffba8ef0aa52f821896eafe4f559b856c8b04b5e",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "chief@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Có kết quả chờ kiểm tra",
+        "body": "Công ty C001 · Có kết quả chờ kiểm tra.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_1 · http://127.0.0.1:8796/#scenario=003&case=RC_1",
+        "case_refs": [
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Có kết quả chờ kiểm tra",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ]
+      }
+    },
+    "previous_hash": "",
+    "event_hash": "cb1ee4969f8a055e29dca5af01e624c7d5ad365ee07e3e1ca48fb12d4f97f8cf"
+  },
+  {
+    "sequence": 2,
+    "job_id": "74d49e3cbadf4d59faf93bf5f355118b35827e2af0236f115881cf805f926ec4",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_CHIEF",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Có kết quả chờ kiểm tra",
+        "body": "Công ty C001 · Có kết quả chờ kiểm tra.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_1 · http://127.0.0.1:8796/#scenario=003&case=RC_1",
+        "case_refs": [
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Có kết quả chờ kiểm tra",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ]
+      }
+    },
+    "previous_hash": "cb1ee4969f8a055e29dca5af01e624c7d5ad365ee07e3e1ca48fb12d4f97f8cf",
+    "event_hash": "5db9902a830c41b6463d0153fdf1986677578d6ba0a14f7428320737a1427c76"
+  },
+  {
+    "sequence": 3,
+    "job_id": "aaa7ac7e11131b628fc6e187e854e31c3914e0dd6f5a31f54f11cd1f2d4dc519",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ được trả lại",
+        "body": "Công ty C001 · Hồ sơ được trả lại.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_2 · http://127.0.0.1:8796/#scenario=003&case=RC_2",
+        "case_refs": [
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ được trả lại",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "5db9902a830c41b6463d0153fdf1986677578d6ba0a14f7428320737a1427c76",
+    "event_hash": "34d02dd2465f24221eb5215ca9914be22850760ea809e7a60c2c51f633e00d9a"
+  },
+  {
+    "sequence": 4,
+    "job_id": "29066f803a9f9601c5f8a7f915abf1e7e121b025e6da479616f101dbbf5665bf",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ được trả lại",
+        "body": "Công ty C001 · Hồ sơ được trả lại.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_2 · http://127.0.0.1:8796/#scenario=003&case=RC_2",
+        "case_refs": [
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ được trả lại",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "34d02dd2465f24221eb5215ca9914be22850760ea809e7a60c2c51f633e00d9a",
+    "event_hash": "03681f62356d19f16115c64f3d171a9534c26c1c3492e238e940f121575f656c"
+  },
+  {
+    "sequence": 5,
+    "job_id": "402968bc7760930048bfe25a646c47b2bbe55ea5a07c32ee35089afe0916ae78",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Đã kiểm tra kết quả",
+        "body": "Công ty C001 · Đã kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_3 · http://127.0.0.1:8796/#scenario=003&case=RC_3",
+        "case_refs": [
+          {
+            "case_id": "RC_3",
+            "scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Đã kiểm tra kết quả",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "03681f62356d19f16115c64f3d171a9534c26c1c3492e238e940f121575f656c",
+    "event_hash": "c719848f034c940e1f9a9285dba96b00c7ba95bf0dbe313c7dfc7ed458a9e640"
+  },
+  {
+    "sequence": 6,
+    "job_id": "330765d9be370d831de82a2035906d7444c8ed7393b76baf08122a05ecd78c1b",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Đã kiểm tra kết quả",
+        "body": "Công ty C001 · Đã kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_3 · http://127.0.0.1:8796/#scenario=003&case=RC_3",
+        "case_refs": [
+          {
+            "case_id": "RC_3",
+            "scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Đã kiểm tra kết quả",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "c719848f034c940e1f9a9285dba96b00c7ba95bf0dbe313c7dfc7ed458a9e640",
+    "event_hash": "ba6e7dfdf2784707b479cbb9226cbd25c2d7626b58de2b679ff6dbb643017475"
+  },
+  {
+    "sequence": 7,
+    "job_id": "c3f5cfffb562556ac6d02339f35ec115e20a78075e7e9dc508d702592a4113e4",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "dir@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Đã kiểm tra kết quả",
+        "body": "Công ty C001 · Đã kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_3 · http://127.0.0.1:8796/#scenario=003&case=RC_3",
+        "case_refs": [
+          {
+            "case_id": "RC_3",
+            "scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Đã kiểm tra kết quả",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "ba6e7dfdf2784707b479cbb9226cbd25c2d7626b58de2b679ff6dbb643017475",
+    "event_hash": "cfc0bb1752ab3b96a3a7cd607b03f1589b04e29c562cfd203c5d308b7fb88633"
+  },
+  {
+    "sequence": 8,
+    "job_id": "56575ce9c20d6fe3cc2e85416e313837db075ea9b1e10788d5bbaf46dce98891",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_DIR",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Đã kiểm tra kết quả",
+        "body": "Công ty C001 · Đã kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_3 · http://127.0.0.1:8796/#scenario=003&case=RC_3",
+        "case_refs": [
+          {
+            "case_id": "RC_3",
+            "scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Đã kiểm tra kết quả",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "cfc0bb1752ab3b96a3a7cd607b03f1589b04e29c562cfd203c5d308b7fb88633",
+    "event_hash": "06df1894a64c7112a49252d5f068c082b2ef9479368c5108218518a293eab9ed"
+  },
+  {
+    "sequence": 9,
+    "job_id": "25a88e5ed0218ab7a1b68dbd8cb675a784724fcd250dce51760732edeaf080ca",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Tài liệu đã nhận, cần rà lại",
+        "body": "Công ty C001 · Tài liệu đã nhận, cần rà lại.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Tài liệu đã nhận, cần rà lại",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "06df1894a64c7112a49252d5f068c082b2ef9479368c5108218518a293eab9ed",
+    "event_hash": "4f1e91755dd90037f0afcfb593683221434d20d5f22e26f39e0c37f9b970a709"
+  },
+  {
+    "sequence": 10,
+    "job_id": "fc5965853ab702d5fcc95d25c7a607a14e42b0fc934d3baba1ef9fed3edd7c87",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Tài liệu đã nhận, cần rà lại",
+        "body": "Công ty C001 · Tài liệu đã nhận, cần rà lại.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Tài liệu đã nhận, cần rà lại",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "4f1e91755dd90037f0afcfb593683221434d20d5f22e26f39e0c37f9b970a709",
+    "event_hash": "c5e30f5c0d121a7bd77a1c150d6c55c4521d4e6af8b91d24cabab354ad96c5b2"
+  },
+  {
+    "sequence": 11,
+    "job_id": "df6fe8cf6ce17c4efbd375419a6635c9d754ed27608297b6f67811e46e9b2b80",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "chief@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn kiểm tra kết quả",
+        "body": "Công ty C001 · Quá hạn kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-26T08:00:00+07:00 (giờ Việt Nam).\nRC_1 · http://127.0.0.1:8796/#scenario=003&case=RC_1",
+        "case_refs": [
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn kiểm tra kết quả",
+        "due_at": "2026-10-26T08:00:00+07:00",
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ]
+      }
+    },
+    "previous_hash": "c5e30f5c0d121a7bd77a1c150d6c55c4521d4e6af8b91d24cabab354ad96c5b2",
+    "event_hash": "00c46f675ff1f224060ac072db07bde36e655d973934cb70f5e11708b30b2909"
+  },
+  {
+    "sequence": 12,
+    "job_id": "902133209e72154594eeeed1489f7ec5c5b96fb8d7dae3682bfd961392669cd5",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_CHIEF",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn kiểm tra kết quả",
+        "body": "Công ty C001 · Quá hạn kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-26T08:00:00+07:00 (giờ Việt Nam).\nRC_1 · http://127.0.0.1:8796/#scenario=003&case=RC_1",
+        "case_refs": [
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn kiểm tra kết quả",
+        "due_at": "2026-10-26T08:00:00+07:00",
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ]
+      }
+    },
+    "previous_hash": "00c46f675ff1f224060ac072db07bde36e655d973934cb70f5e11708b30b2909",
+    "event_hash": "39432f3292620b949199756e69fad5554dcf25f9e4b5412ef81807541c0abb18"
+  },
+  {
+    "sequence": 13,
+    "job_id": "2f8c965ea2f11ced552a49e59acc2d27f0498905ac13eb02565b06be49bfa465",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn rà bổ sung",
+        "body": "Công ty C001 · Quá hạn rà bổ sung.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-26T08:00:00+07:00 (giờ Việt Nam).\nRC_2 · http://127.0.0.1:8796/#scenario=003&case=RC_2",
+        "case_refs": [
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn rà bổ sung",
+        "due_at": "2026-10-26T08:00:00+07:00",
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "39432f3292620b949199756e69fad5554dcf25f9e4b5412ef81807541c0abb18",
+    "event_hash": "650dee16f5bd45d35aee6201d5eab082711e6c478c07e9e572c0fe6c732fc2b8"
+  },
+  {
+    "sequence": 14,
+    "job_id": "cf8679ee5327cb94165e0bdb4822c3301eb8e7f51e1d68b5c75c68a0d8e0875b",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn rà bổ sung",
+        "body": "Công ty C001 · Quá hạn rà bổ sung.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-26T08:00:00+07:00 (giờ Việt Nam).\nRC_2 · http://127.0.0.1:8796/#scenario=003&case=RC_2",
+        "case_refs": [
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn rà bổ sung",
+        "due_at": "2026-10-26T08:00:00+07:00",
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "650dee16f5bd45d35aee6201d5eab082711e6c478c07e9e572c0fe6c732fc2b8",
+    "event_hash": "52942cdc26d6e440939a066882e786166328e3421452b8e763f4b3417aaa7486"
+  },
+  {
+    "sequence": 15,
+    "job_id": "cecb31e5de0b93df6952ee4a9b8caa4d3dd08107faaf6bd128d80864dd9f2c9b",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn bổ sung tài liệu",
+        "body": "Công ty C001 · Quá hạn bổ sung tài liệu.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-25T08:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn bổ sung tài liệu",
+        "due_at": "2026-10-25T08:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "52942cdc26d6e440939a066882e786166328e3421452b8e763f4b3417aaa7486",
+    "event_hash": "0e692e9e9222293b8bc465380c331579f525c828dd92b55196f286b1373878d9"
+  },
+  {
+    "sequence": 16,
+    "job_id": "cadd2ab514b3ff9c547f44e919e32641ebaad7a79d5bb2a5a2c2bb72ed030def",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn bổ sung tài liệu",
+        "body": "Công ty C001 · Quá hạn bổ sung tài liệu.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-25T08:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn bổ sung tài liệu",
+        "due_at": "2026-10-25T08:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "0e692e9e9222293b8bc465380c331579f525c828dd92b55196f286b1373878d9",
+    "event_hash": "0762ff9ce85e869349f0afb1cf35896fe4ee5b4aa8b06b201f0a48793f4864e1"
+  },
+  {
+    "sequence": 17,
+    "job_id": "080d4b16f63a52db1c1efb457d27723453003ad8610ba56c787c177430ae43d7",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "dir@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn bổ sung tài liệu",
+        "body": "Công ty C001 · Quá hạn bổ sung tài liệu.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-25T08:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn bổ sung tài liệu",
+        "due_at": "2026-10-25T08:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "0762ff9ce85e869349f0afb1cf35896fe4ee5b4aa8b06b201f0a48793f4864e1",
+    "event_hash": "bec0a3950ba240c7bc4d59931bb0bf189aad19f1fbfa1dce7785f12660af2a4f"
+  },
+  {
+    "sequence": 18,
+    "job_id": "171d97b6676ee7498eb7a6ce02d4c17d01d11d8ba06460b6932e2dad3ee7df0e",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_DIR",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn bổ sung tài liệu",
+        "body": "Công ty C001 · Quá hạn bổ sung tài liệu.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-25T08:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn bổ sung tài liệu",
+        "due_at": "2026-10-25T08:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "bec0a3950ba240c7bc4d59931bb0bf189aad19f1fbfa1dce7785f12660af2a4f",
+    "event_hash": "fe240196ad84741d04db741c9a5cc93b58dfa26d725c72018c43cff6cb476646"
+  },
+  {
+    "sequence": 19,
+    "job_id": "221376db2b71f92cbd2086cd3bb05bb44b67f402b0dd2e85ae0e177728df5fdc",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-07T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_5 · http://127.0.0.1:8796/#scenario=003&case=RC_5",
+        "case_refs": [
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-07T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "fe240196ad84741d04db741c9a5cc93b58dfa26d725c72018c43cff6cb476646",
+    "event_hash": "556ca9e952a64260a0e60f442c1fb8d74743570cad7b7f4636ab745e2f27fa5b"
+  },
+  {
+    "sequence": 20,
+    "job_id": "c1e91cc73e75979a76f8bc49aac35c2b2b492bda044e60e47b0ed73df6ea48b1",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-07T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_5 · http://127.0.0.1:8796/#scenario=003&case=RC_5",
+        "case_refs": [
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-07T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "556ca9e952a64260a0e60f442c1fb8d74743570cad7b7f4636ab745e2f27fa5b",
+    "event_hash": "9ba228b9e24b58d74ae0abc85e59ed50e7b9d59069529c2b9b927f37c92fabc5"
+  },
+  {
+    "sequence": 21,
+    "job_id": "64395a036b84dcc0c0bb02f8480d9593b6ed479d683b009eb538a1b95b27ea52",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "dir@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-07T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_5 · http://127.0.0.1:8796/#scenario=003&case=RC_5",
+        "case_refs": [
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-07T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "9ba228b9e24b58d74ae0abc85e59ed50e7b9d59069529c2b9b927f37c92fabc5",
+    "event_hash": "57d710b381000eeb81a06e7188549f8a3bbd9756a98b346d4b7d41652a0ada6d"
+  },
+  {
+    "sequence": 22,
+    "job_id": "78502032d2a3c3d9709cbe7ed3fa597b3424e4507f5e2ca32e03cc8b8d6cceb7",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_DIR",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-07T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_5 · http://127.0.0.1:8796/#scenario=003&case=RC_5",
+        "case_refs": [
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-07T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "57d710b381000eeb81a06e7188549f8a3bbd9756a98b346d4b7d41652a0ada6d",
+    "event_hash": "1ae94f4171c198721dddd7d67988727f07cd574df8ced3bbe8a5c00b4cd6b275"
+  },
+  {
+    "sequence": 23,
+    "job_id": "7fba4bb106b66fd945f5ccbb126366171c64387ba155880c8f7ed72818ecf97b",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-08T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_6 · http://127.0.0.1:8796/#scenario=003&case=RC_6",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-08T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "1ae94f4171c198721dddd7d67988727f07cd574df8ced3bbe8a5c00b4cd6b275",
+    "event_hash": "07616c6bd0f6385cb7ff90ad7cb4f76314ad0a8dfdf65f258c93b16793a7a044"
+  },
+  {
+    "sequence": 24,
+    "job_id": "ab105a05be382ff3604a0c903683e0e32881fd68e41bb0d6e53a745671ce49bb",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-08T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_6 · http://127.0.0.1:8796/#scenario=003&case=RC_6",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-08T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "07616c6bd0f6385cb7ff90ad7cb4f76314ad0a8dfdf65f258c93b16793a7a044",
+    "event_hash": "9f6ace468223be399aa0850bb4966e8911d132aee016bef5847a35b29acb35c6"
+  },
+  {
+    "sequence": 25,
+    "job_id": "6a86cce444d281d071c82d946da4935e862f98376cc6b40138542bf96c749aa9",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "dir@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-08T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_6 · http://127.0.0.1:8796/#scenario=003&case=RC_6",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-08T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "9f6ace468223be399aa0850bb4966e8911d132aee016bef5847a35b29acb35c6",
+    "event_hash": "2e5d0ef0240f3d0e893e4c1985790d515c16881fdf03b6e0fc07448854792dd4"
+  },
+  {
+    "sequence": 26,
+    "job_id": "5b927c4de8e7c102995b422330d1d19be57609fb96477b4b23b3ec573cab349c",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_DIR",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-08T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_6 · http://127.0.0.1:8796/#scenario=003&case=RC_6",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-08T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "2e5d0ef0240f3d0e893e4c1985790d515c16881fdf03b6e0fc07448854792dd4",
+    "event_hash": "ff6ea6bc922aab4d1b64317819ed4e964effd14aa8dafe4825802d72dd386063"
+  },
+  {
+    "sequence": 27,
+    "job_id": "2c3343a830f392abbd71d31c3a32d90531c6f0c8d5a598fa9ab2f9b35a6904da",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-27T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F3 · http://127.0.0.1:8796/#scenario=003&case=SC_F3",
+        "case_refs": [
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-27T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "ff6ea6bc922aab4d1b64317819ed4e964effd14aa8dafe4825802d72dd386063",
+    "event_hash": "f5af4450f43f37a29a899a3032a1c032149bd64c78df648a3de4d2fb4876aa5b"
+  },
+  {
+    "sequence": 28,
+    "job_id": "5288f6bd702f165a8c429b80cd42a018f7fe834bc816fcc1e3456b09ab6ef871",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-27T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F3 · http://127.0.0.1:8796/#scenario=003&case=SC_F3",
+        "case_refs": [
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-27T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "f5af4450f43f37a29a899a3032a1c032149bd64c78df648a3de4d2fb4876aa5b",
+    "event_hash": "4c0b95f31d04f17d8cafdda120b5446d7348963a77b1ef630fdc958741bc27dd"
+  },
+  {
+    "sequence": 29,
+    "job_id": "534ed2bcaf9e93aa9d6afc7f956a30f0ab81e80f6a86cdbb4e4740843f1d3aa0",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "dir@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-27T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F3 · http://127.0.0.1:8796/#scenario=003&case=SC_F3",
+        "case_refs": [
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-27T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "4c0b95f31d04f17d8cafdda120b5446d7348963a77b1ef630fdc958741bc27dd",
+    "event_hash": "e21ff928cb53dc2eb361294d79da43cf52c41223b1bf71336ad875ac6a20e4d0"
+  },
+  {
+    "sequence": 30,
+    "job_id": "2bd0781cf487ad7ab25f25771bb6ffe37c7e1b478a08ee72fba5094d8e98d54f",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_DIR",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-27T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F3 · http://127.0.0.1:8796/#scenario=003&case=SC_F3",
+        "case_refs": [
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-27T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "e21ff928cb53dc2eb361294d79da43cf52c41223b1bf71336ad875ac6a20e4d0",
+    "event_hash": "9884825e3efc1571828afc026c10ed817bf3deb23908d401ed6835de5c904e89"
+  },
+  {
+    "sequence": 31,
+    "job_id": "e2c167cf9c0da1b845b5cc9a5544fd8317a28383acd4a8bd5db27f8324cb97da",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "acc@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-09-03T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F4 · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-09-03T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "9884825e3efc1571828afc026c10ed817bf3deb23908d401ed6835de5c904e89",
+    "event_hash": "b4a77ac982db2c8f69017468ee4bc2b63a28675e50c12280f1c469abdad92899"
+  },
+  {
+    "sequence": 32,
+    "job_id": "1ed611373dcced72230b2c801eee6306df057cfb7122321466b3ed658a49b9ba",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_ACC",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-09-03T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F4 · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-09-03T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "b4a77ac982db2c8f69017468ee4bc2b63a28675e50c12280f1c469abdad92899",
+    "event_hash": "cb0774332060846eafe41aae217f00d23cfecc05110ecbf21735f638a406a85e"
+  },
+  {
+    "sequence": 33,
+    "job_id": "e9d2cdd2539208a1c93aac1af2858be95aa7c3eea29257933c76488e285d6d49",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "dir@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-09-03T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F4 · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-09-03T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "cb0774332060846eafe41aae217f00d23cfecc05110ecbf21735f638a406a85e",
+    "event_hash": "34eddec62fde6d949910ebc2536fe9d64421786575ef976a229acde3ada10429"
+  },
+  {
+    "sequence": 34,
+    "job_id": "560b20bb104a38b3dc2ab71c9b12c5a588f29c16b451a14132eedb6f321efa4b",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_DIR",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-09-03T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F4 · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-09-03T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "34eddec62fde6d949910ebc2536fe9d64421786575ef976a229acde3ada10429",
+    "event_hash": "3e1734449193f83dde08a0dc75034f4903c42234c54b52f031a23272f29efd18"
+  },
+  {
+    "sequence": 35,
+    "job_id": "5e4248a8a82ac952d7a1bea9bf7b11df8e62148042aa1bcc4e73358ee54990ec",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "email",
+      "recipient": "chief@example.invalid",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Tóm tắt tuần",
+        "body": "Công ty C001. Đang mở 7 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày.\nDấu hiệu cần rà soát, chưa phải kết luận gian lận.\nRC_6 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_6\nRC_5 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_5\nRC_4 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_4\nRC_2 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_2\nRC_1 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_1\nSC_F3 · thông thường · http://127.0.0.1:8796/#scenario=003&case=SC_F3\nSC_F4 · thông thường · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          },
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          },
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          },
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          },
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          },
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          },
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 7,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ],
+        "event_label": "Tóm tắt tuần",
+        "policy_version": "notification-roles-20261027-v1"
+      }
+    },
+    "previous_hash": "3e1734449193f83dde08a0dc75034f4903c42234c54b52f031a23272f29efd18",
+    "event_hash": "c040afb1e53d141f6251debde63380c221bcc501c1d51e9e000956a7bbc35d36"
+  },
+  {
+    "sequence": 36,
+    "job_id": "4d913213e9c837065f6540c156e622ef64b8b61e0447b31d4aedf60d4e1f07e0",
+    "kind": "queued",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "channel": "zalo",
+      "recipient": "SIM_CHIEF",
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Tóm tắt tuần",
+        "body": "Công ty C001. Đang mở 7 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày.\nDấu hiệu cần rà soát, chưa phải kết luận gian lận.\nRC_6 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_6\nRC_5 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_5\nRC_4 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_4\nRC_2 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_2\nRC_1 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_1\nSC_F3 · thông thường · http://127.0.0.1:8796/#scenario=003&case=SC_F3\nSC_F4 · thông thường · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          },
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          },
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          },
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          },
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          },
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          },
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 7,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ],
+        "event_label": "Tóm tắt tuần",
+        "policy_version": "notification-roles-20261027-v1"
+      }
+    },
+    "previous_hash": "c040afb1e53d141f6251debde63380c221bcc501c1d51e9e000956a7bbc35d36",
+    "event_hash": "0a6e4f14d203fa0a7fe9399ddd0fd967a57950819db867f34284eb9b1649b4a2"
+  },
+  {
+    "sequence": 37,
+    "job_id": "080d4b16f63a52db1c1efb457d27723453003ad8610ba56c787c177430ae43d7",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn bổ sung tài liệu",
+        "body": "Công ty C001 · Quá hạn bổ sung tài liệu.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-25T08:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn bổ sung tài liệu",
+        "due_at": "2026-10-25T08:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "0a6e4f14d203fa0a7fe9399ddd0fd967a57950819db867f34284eb9b1649b4a2",
+    "event_hash": "b089215a34146356ac48c3b618a003fb85087f0a08c58b930a9ed11059aa234f"
+  },
+  {
+    "sequence": 38,
+    "job_id": "080d4b16f63a52db1c1efb457d27723453003ad8610ba56c787c177430ae43d7",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:080d4b16f63a52db1c1efb457d27723453003ad8610ba56c787c177430ae43d7",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "b089215a34146356ac48c3b618a003fb85087f0a08c58b930a9ed11059aa234f",
+    "event_hash": "104e228eb7e8872c385c8c9703f1900011a85ab3cf86dbf8aba00b05ba2dc4b2"
+  },
+  {
+    "sequence": 39,
+    "job_id": "171d97b6676ee7498eb7a6ce02d4c17d01d11d8ba06460b6932e2dad3ee7df0e",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn bổ sung tài liệu",
+        "body": "Công ty C001 · Quá hạn bổ sung tài liệu.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-25T08:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn bổ sung tài liệu",
+        "due_at": "2026-10-25T08:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "104e228eb7e8872c385c8c9703f1900011a85ab3cf86dbf8aba00b05ba2dc4b2",
+    "event_hash": "b09aee916e74c44bfe09372ac957750f3ac43cc91afb18312376701811a869b9"
+  },
+  {
+    "sequence": 40,
+    "job_id": "171d97b6676ee7498eb7a6ce02d4c17d01d11d8ba06460b6932e2dad3ee7df0e",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:171d97b6676ee7498eb7a6ce02d4c17d01d11d8ba06460b6932e2dad3ee7df0e",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "b09aee916e74c44bfe09372ac957750f3ac43cc91afb18312376701811a869b9",
+    "event_hash": "f0651b7265cd6356b41578903031f399fc5958a5696bb2ed68f6c753e5ee5276"
+  },
+  {
+    "sequence": 41,
+    "job_id": "1ed611373dcced72230b2c801eee6306df057cfb7122321466b3ed658a49b9ba",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-09-03T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F4 · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-09-03T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "f0651b7265cd6356b41578903031f399fc5958a5696bb2ed68f6c753e5ee5276",
+    "event_hash": "a5713f733261831aec5b3ae6ac51561e78bfdfc5c49027c54eaabcd15df0be91"
+  },
+  {
+    "sequence": 42,
+    "job_id": "1ed611373dcced72230b2c801eee6306df057cfb7122321466b3ed658a49b9ba",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:1ed611373dcced72230b2c801eee6306df057cfb7122321466b3ed658a49b9ba",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "a5713f733261831aec5b3ae6ac51561e78bfdfc5c49027c54eaabcd15df0be91",
+    "event_hash": "8faf0546fa5449eb394f884cefc79607eecf705f84afb4e2763500008529b650"
+  },
+  {
+    "sequence": 43,
+    "job_id": "221376db2b71f92cbd2086cd3bb05bb44b67f402b0dd2e85ae0e177728df5fdc",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-07T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_5 · http://127.0.0.1:8796/#scenario=003&case=RC_5",
+        "case_refs": [
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-07T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "8faf0546fa5449eb394f884cefc79607eecf705f84afb4e2763500008529b650",
+    "event_hash": "ccf7a8e20974cfd80248e99abcda63ed97ea61b2ddd4417cca6d9b60471b0532"
+  },
+  {
+    "sequence": 44,
+    "job_id": "221376db2b71f92cbd2086cd3bb05bb44b67f402b0dd2e85ae0e177728df5fdc",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:221376db2b71f92cbd2086cd3bb05bb44b67f402b0dd2e85ae0e177728df5fdc",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "ccf7a8e20974cfd80248e99abcda63ed97ea61b2ddd4417cca6d9b60471b0532",
+    "event_hash": "aaf3729269a7559d42be8c72210e11a15c3e17a0db8e9f13f3769d1dc1144a31"
+  },
+  {
+    "sequence": 45,
+    "job_id": "25a88e5ed0218ab7a1b68dbd8cb675a784724fcd250dce51760732edeaf080ca",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Tài liệu đã nhận, cần rà lại",
+        "body": "Công ty C001 · Tài liệu đã nhận, cần rà lại.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Tài liệu đã nhận, cần rà lại",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "aaf3729269a7559d42be8c72210e11a15c3e17a0db8e9f13f3769d1dc1144a31",
+    "event_hash": "e64d4bc08a9ecf69d205972577551c78a46b0844cd84abf8605bd7812105369d"
+  },
+  {
+    "sequence": 46,
+    "job_id": "25a88e5ed0218ab7a1b68dbd8cb675a784724fcd250dce51760732edeaf080ca",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:25a88e5ed0218ab7a1b68dbd8cb675a784724fcd250dce51760732edeaf080ca",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "e64d4bc08a9ecf69d205972577551c78a46b0844cd84abf8605bd7812105369d",
+    "event_hash": "6617fd6f497b17be6e7f04a0cb7b4f0447acb2124ca6573a1b844b129e66e5e0"
+  },
+  {
+    "sequence": 47,
+    "job_id": "29066f803a9f9601c5f8a7f915abf1e7e121b025e6da479616f101dbbf5665bf",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ được trả lại",
+        "body": "Công ty C001 · Hồ sơ được trả lại.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_2 · http://127.0.0.1:8796/#scenario=003&case=RC_2",
+        "case_refs": [
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ được trả lại",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "6617fd6f497b17be6e7f04a0cb7b4f0447acb2124ca6573a1b844b129e66e5e0",
+    "event_hash": "808ce4ed5c837cb42cdf13bcc0c7ba2b75d9d4b6534ea81609024fefc10b6782"
+  },
+  {
+    "sequence": 48,
+    "job_id": "29066f803a9f9601c5f8a7f915abf1e7e121b025e6da479616f101dbbf5665bf",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:29066f803a9f9601c5f8a7f915abf1e7e121b025e6da479616f101dbbf5665bf",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "808ce4ed5c837cb42cdf13bcc0c7ba2b75d9d4b6534ea81609024fefc10b6782",
+    "event_hash": "84ede1bdb5ae84df946b7945bccaf3b2cddca82dfc38609a56dc026314955ee8"
+  },
+  {
+    "sequence": 49,
+    "job_id": "2bd0781cf487ad7ab25f25771bb6ffe37c7e1b478a08ee72fba5094d8e98d54f",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-27T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F3 · http://127.0.0.1:8796/#scenario=003&case=SC_F3",
+        "case_refs": [
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-27T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "84ede1bdb5ae84df946b7945bccaf3b2cddca82dfc38609a56dc026314955ee8",
+    "event_hash": "a028585cab6fdb520b0e11734fd4b58744872fe43abf146473775fc2fa0e26bf"
+  },
+  {
+    "sequence": 50,
+    "job_id": "2bd0781cf487ad7ab25f25771bb6ffe37c7e1b478a08ee72fba5094d8e98d54f",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:2bd0781cf487ad7ab25f25771bb6ffe37c7e1b478a08ee72fba5094d8e98d54f",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "a028585cab6fdb520b0e11734fd4b58744872fe43abf146473775fc2fa0e26bf",
+    "event_hash": "921588f6946df0b0a91736b835eb7f14a9636e0af34ece591fc856606eb60039"
+  },
+  {
+    "sequence": 51,
+    "job_id": "2c3343a830f392abbd71d31c3a32d90531c6f0c8d5a598fa9ab2f9b35a6904da",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-27T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F3 · http://127.0.0.1:8796/#scenario=003&case=SC_F3",
+        "case_refs": [
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-27T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "921588f6946df0b0a91736b835eb7f14a9636e0af34ece591fc856606eb60039",
+    "event_hash": "46b11bf48c06ad1082da3bf90c5db93500b383361a9104cc5f72f4e16eddcd4a"
+  },
+  {
+    "sequence": 52,
+    "job_id": "2c3343a830f392abbd71d31c3a32d90531c6f0c8d5a598fa9ab2f9b35a6904da",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:2c3343a830f392abbd71d31c3a32d90531c6f0c8d5a598fa9ab2f9b35a6904da",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "46b11bf48c06ad1082da3bf90c5db93500b383361a9104cc5f72f4e16eddcd4a",
+    "event_hash": "6ec8dcfbbcf017afb72b4ed0e31ce191d197befc3b91348b58a767670604ee05"
+  },
+  {
+    "sequence": 53,
+    "job_id": "2f8c965ea2f11ced552a49e59acc2d27f0498905ac13eb02565b06be49bfa465",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn rà bổ sung",
+        "body": "Công ty C001 · Quá hạn rà bổ sung.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-26T08:00:00+07:00 (giờ Việt Nam).\nRC_2 · http://127.0.0.1:8796/#scenario=003&case=RC_2",
+        "case_refs": [
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn rà bổ sung",
+        "due_at": "2026-10-26T08:00:00+07:00",
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "6ec8dcfbbcf017afb72b4ed0e31ce191d197befc3b91348b58a767670604ee05",
+    "event_hash": "1474be5ce43e9d6ebf44e02fa73f29689fb015916332cff2bb4fa2545c9e967e"
+  },
+  {
+    "sequence": 54,
+    "job_id": "2f8c965ea2f11ced552a49e59acc2d27f0498905ac13eb02565b06be49bfa465",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:2f8c965ea2f11ced552a49e59acc2d27f0498905ac13eb02565b06be49bfa465",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "1474be5ce43e9d6ebf44e02fa73f29689fb015916332cff2bb4fa2545c9e967e",
+    "event_hash": "f771ce576fbe0dc293b308d04daad97caef1532e77430c6f1409cc4e9a5abe95"
+  },
+  {
+    "sequence": 55,
+    "job_id": "330765d9be370d831de82a2035906d7444c8ed7393b76baf08122a05ecd78c1b",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Đã kiểm tra kết quả",
+        "body": "Công ty C001 · Đã kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_3 · http://127.0.0.1:8796/#scenario=003&case=RC_3",
+        "case_refs": [
+          {
+            "case_id": "RC_3",
+            "scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Đã kiểm tra kết quả",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "f771ce576fbe0dc293b308d04daad97caef1532e77430c6f1409cc4e9a5abe95",
+    "event_hash": "f240b05482699e1f3a253e3be27df221d1251c3d457b1774e9c3b74b1cb472e4"
+  },
+  {
+    "sequence": 56,
+    "job_id": "330765d9be370d831de82a2035906d7444c8ed7393b76baf08122a05ecd78c1b",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:330765d9be370d831de82a2035906d7444c8ed7393b76baf08122a05ecd78c1b",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "f240b05482699e1f3a253e3be27df221d1251c3d457b1774e9c3b74b1cb472e4",
+    "event_hash": "a75950546e374556e08fe572a91273e22a9534bee651dae05ce790db7a71e86c"
+  },
+  {
+    "sequence": 57,
+    "job_id": "402968bc7760930048bfe25a646c47b2bbe55ea5a07c32ee35089afe0916ae78",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Đã kiểm tra kết quả",
+        "body": "Công ty C001 · Đã kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_3 · http://127.0.0.1:8796/#scenario=003&case=RC_3",
+        "case_refs": [
+          {
+            "case_id": "RC_3",
+            "scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Đã kiểm tra kết quả",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "a75950546e374556e08fe572a91273e22a9534bee651dae05ce790db7a71e86c",
+    "event_hash": "752744c1aff0ec3edaeaec04fd55839d9f0d3903ab1451712f61d73583e06c6a"
+  },
+  {
+    "sequence": 58,
+    "job_id": "402968bc7760930048bfe25a646c47b2bbe55ea5a07c32ee35089afe0916ae78",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:402968bc7760930048bfe25a646c47b2bbe55ea5a07c32ee35089afe0916ae78",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "752744c1aff0ec3edaeaec04fd55839d9f0d3903ab1451712f61d73583e06c6a",
+    "event_hash": "2eb6f5e6fccb996ab97f24f77f87d8c221e337ca4d0665e90f52c1bae9f8fb9d"
+  },
+  {
+    "sequence": 59,
+    "job_id": "4d913213e9c837065f6540c156e622ef64b8b61e0447b31d4aedf60d4e1f07e0",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Tóm tắt tuần",
+        "body": "Công ty C001. Đang mở 7 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày.\nDấu hiệu cần rà soát, chưa phải kết luận gian lận.\nRC_6 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_6\nRC_5 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_5\nRC_4 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_4\nRC_2 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_2\nRC_1 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_1\nSC_F3 · thông thường · http://127.0.0.1:8796/#scenario=003&case=SC_F3\nSC_F4 · thông thường · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          },
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          },
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          },
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          },
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          },
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          },
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 7,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ],
+        "event_label": "Tóm tắt tuần",
+        "policy_version": "notification-roles-20261027-v1"
+      }
+    },
+    "previous_hash": "2eb6f5e6fccb996ab97f24f77f87d8c221e337ca4d0665e90f52c1bae9f8fb9d",
+    "event_hash": "364f4b70fa68686c4f51b15701b5b3f7c4a06e3bf49051da052a9c3e224eba86"
+  },
+  {
+    "sequence": 60,
+    "job_id": "4d913213e9c837065f6540c156e622ef64b8b61e0447b31d4aedf60d4e1f07e0",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:4d913213e9c837065f6540c156e622ef64b8b61e0447b31d4aedf60d4e1f07e0",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "364f4b70fa68686c4f51b15701b5b3f7c4a06e3bf49051da052a9c3e224eba86",
+    "event_hash": "57a0abe42733316a78dc63a57d6e837597f2160d868e29810db58d5c4105688f"
+  },
+  {
+    "sequence": 61,
+    "job_id": "5288f6bd702f165a8c429b80cd42a018f7fe834bc816fcc1e3456b09ab6ef871",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-27T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F3 · http://127.0.0.1:8796/#scenario=003&case=SC_F3",
+        "case_refs": [
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-27T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "57a0abe42733316a78dc63a57d6e837597f2160d868e29810db58d5c4105688f",
+    "event_hash": "e4cde537e03b00341486e21e04a555cc029a32673c7ec124b97e7c62a07128e6"
+  },
+  {
+    "sequence": 62,
+    "job_id": "5288f6bd702f165a8c429b80cd42a018f7fe834bc816fcc1e3456b09ab6ef871",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:5288f6bd702f165a8c429b80cd42a018f7fe834bc816fcc1e3456b09ab6ef871",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "e4cde537e03b00341486e21e04a555cc029a32673c7ec124b97e7c62a07128e6",
+    "event_hash": "a5d44bd7e9d7e885316a548951d99d1883e119a796fb66bd9e7fddf902729441"
+  },
+  {
+    "sequence": 63,
+    "job_id": "534ed2bcaf9e93aa9d6afc7f956a30f0ab81e80f6a86cdbb4e4740843f1d3aa0",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-27T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F3 · http://127.0.0.1:8796/#scenario=003&case=SC_F3",
+        "case_refs": [
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-27T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "a5d44bd7e9d7e885316a548951d99d1883e119a796fb66bd9e7fddf902729441",
+    "event_hash": "66b2356fb5cb3896e8f838b943a7f74ce38b9af7e80d21404b2adf269a4f9f61"
+  },
+  {
+    "sequence": 64,
+    "job_id": "534ed2bcaf9e93aa9d6afc7f956a30f0ab81e80f6a86cdbb4e4740843f1d3aa0",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:534ed2bcaf9e93aa9d6afc7f956a30f0ab81e80f6a86cdbb4e4740843f1d3aa0",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "66b2356fb5cb3896e8f838b943a7f74ce38b9af7e80d21404b2adf269a4f9f61",
+    "event_hash": "db4457d615f4244f14a9ea52b71c2703b8747cfbde109150bda7ca2f41b89988"
+  },
+  {
+    "sequence": 65,
+    "job_id": "560b20bb104a38b3dc2ab71c9b12c5a588f29c16b451a14132eedb6f321efa4b",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-09-03T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F4 · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-09-03T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "db4457d615f4244f14a9ea52b71c2703b8747cfbde109150bda7ca2f41b89988",
+    "event_hash": "ede12ef34ffc1aa64baa06c18c8148b919e162bf9f93a038becd589e1b28bade"
+  },
+  {
+    "sequence": 66,
+    "job_id": "560b20bb104a38b3dc2ab71c9b12c5a588f29c16b451a14132eedb6f321efa4b",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:560b20bb104a38b3dc2ab71c9b12c5a588f29c16b451a14132eedb6f321efa4b",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "ede12ef34ffc1aa64baa06c18c8148b919e162bf9f93a038becd589e1b28bade",
+    "event_hash": "b8356b228ae337dfe631a6984f75c622725c9cae1b291edd5f4a35a8469eed6e"
+  },
+  {
+    "sequence": 67,
+    "job_id": "56575ce9c20d6fe3cc2e85416e313837db075ea9b1e10788d5bbaf46dce98891",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Đã kiểm tra kết quả",
+        "body": "Công ty C001 · Đã kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_3 · http://127.0.0.1:8796/#scenario=003&case=RC_3",
+        "case_refs": [
+          {
+            "case_id": "RC_3",
+            "scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Đã kiểm tra kết quả",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "b8356b228ae337dfe631a6984f75c622725c9cae1b291edd5f4a35a8469eed6e",
+    "event_hash": "bf3e66831a702a372e43b19689887a08acf3ab9b41392b6216054bb470ed8b88"
+  },
+  {
+    "sequence": 68,
+    "job_id": "56575ce9c20d6fe3cc2e85416e313837db075ea9b1e10788d5bbaf46dce98891",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:56575ce9c20d6fe3cc2e85416e313837db075ea9b1e10788d5bbaf46dce98891",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "bf3e66831a702a372e43b19689887a08acf3ab9b41392b6216054bb470ed8b88",
+    "event_hash": "22bfe0c2acc130adb6d33fb27606ee61f03b4180d7959627051ff442e6f99d73"
+  },
+  {
+    "sequence": 69,
+    "job_id": "5b927c4de8e7c102995b422330d1d19be57609fb96477b4b23b3ec573cab349c",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-08T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_6 · http://127.0.0.1:8796/#scenario=003&case=RC_6",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-08T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "22bfe0c2acc130adb6d33fb27606ee61f03b4180d7959627051ff442e6f99d73",
+    "event_hash": "7ce83c627dc8b412455e6711f0e58e89193525550f32ac1af76270bcddb4f962"
+  },
+  {
+    "sequence": 70,
+    "job_id": "5b927c4de8e7c102995b422330d1d19be57609fb96477b4b23b3ec573cab349c",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:5b927c4de8e7c102995b422330d1d19be57609fb96477b4b23b3ec573cab349c",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "7ce83c627dc8b412455e6711f0e58e89193525550f32ac1af76270bcddb4f962",
+    "event_hash": "9b53c3db2b4256c453f0a2d4b661bf9114809ace3599705a150e47fb22ed96ec"
+  },
+  {
+    "sequence": 71,
+    "job_id": "5e4248a8a82ac952d7a1bea9bf7b11df8e62148042aa1bcc4e73358ee54990ec",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Tóm tắt tuần",
+        "body": "Công ty C001. Đang mở 7 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày.\nDấu hiệu cần rà soát, chưa phải kết luận gian lận.\nRC_6 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_6\nRC_5 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_5\nRC_4 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_4\nRC_2 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_2\nRC_1 · cao nhất · http://127.0.0.1:8796/#scenario=003&case=RC_1\nSC_F3 · thông thường · http://127.0.0.1:8796/#scenario=003&case=SC_F3\nSC_F4 · thông thường · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          },
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          },
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          },
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          },
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          },
+          {
+            "case_id": "SC_F3",
+            "scope_hash": "180799031f795a60014a1acab54bd2d288e09553c8336d021d937e06e36f21c1"
+          },
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 7,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ],
+        "event_label": "Tóm tắt tuần",
+        "policy_version": "notification-roles-20261027-v1"
+      }
+    },
+    "previous_hash": "9b53c3db2b4256c453f0a2d4b661bf9114809ace3599705a150e47fb22ed96ec",
+    "event_hash": "9654e8e8dfbec6d83395d97ff8c5864eff589b0a6ed44a28b60853e6ea03e355"
+  },
+  {
+    "sequence": 72,
+    "job_id": "5e4248a8a82ac952d7a1bea9bf7b11df8e62148042aa1bcc4e73358ee54990ec",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:5e4248a8a82ac952d7a1bea9bf7b11df8e62148042aa1bcc4e73358ee54990ec",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "9654e8e8dfbec6d83395d97ff8c5864eff589b0a6ed44a28b60853e6ea03e355",
+    "event_hash": "32330aa6bfaa64a1c1fbff1e63c68a8fcfe70f4572ba5ba144321823ef1a2d3b"
+  },
+  {
+    "sequence": 73,
+    "job_id": "64395a036b84dcc0c0bb02f8480d9593b6ed479d683b009eb538a1b95b27ea52",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-07T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_5 · http://127.0.0.1:8796/#scenario=003&case=RC_5",
+        "case_refs": [
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-07T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "32330aa6bfaa64a1c1fbff1e63c68a8fcfe70f4572ba5ba144321823ef1a2d3b",
+    "event_hash": "634d849e981ee4099feabd06760673c29a049e988c512ee3fae8c942be013171"
+  },
+  {
+    "sequence": 74,
+    "job_id": "64395a036b84dcc0c0bb02f8480d9593b6ed479d683b009eb538a1b95b27ea52",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:64395a036b84dcc0c0bb02f8480d9593b6ed479d683b009eb538a1b95b27ea52",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "634d849e981ee4099feabd06760673c29a049e988c512ee3fae8c942be013171",
+    "event_hash": "c2a1509214deada534656816aaaf28723251465f13f4cc46eb143252ebe4e60a"
+  },
+  {
+    "sequence": 75,
+    "job_id": "6a86cce444d281d071c82d946da4935e862f98376cc6b40138542bf96c749aa9",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-08T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_6 · http://127.0.0.1:8796/#scenario=003&case=RC_6",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-08T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "c2a1509214deada534656816aaaf28723251465f13f4cc46eb143252ebe4e60a",
+    "event_hash": "dd35fd2a1816e2c7ef70492979591fb9f76ee8d82be9efcb07aa1642d546803d"
+  },
+  {
+    "sequence": 76,
+    "job_id": "6a86cce444d281d071c82d946da4935e862f98376cc6b40138542bf96c749aa9",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:6a86cce444d281d071c82d946da4935e862f98376cc6b40138542bf96c749aa9",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "dd35fd2a1816e2c7ef70492979591fb9f76ee8d82be9efcb07aa1642d546803d",
+    "event_hash": "b8ce998262f1650870d8cde24c1dbc676ac152823bb3ee7622171caae3bd55dd"
+  },
+  {
+    "sequence": 77,
+    "job_id": "74d49e3cbadf4d59faf93bf5f355118b35827e2af0236f115881cf805f926ec4",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Có kết quả chờ kiểm tra",
+        "body": "Công ty C001 · Có kết quả chờ kiểm tra.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_1 · http://127.0.0.1:8796/#scenario=003&case=RC_1",
+        "case_refs": [
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Có kết quả chờ kiểm tra",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ]
+      }
+    },
+    "previous_hash": "b8ce998262f1650870d8cde24c1dbc676ac152823bb3ee7622171caae3bd55dd",
+    "event_hash": "adb35354353d2fe27424ff6fd2a3206efc5577538db1e8fe2453896e171fc8ad"
+  },
+  {
+    "sequence": 78,
+    "job_id": "74d49e3cbadf4d59faf93bf5f355118b35827e2af0236f115881cf805f926ec4",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:74d49e3cbadf4d59faf93bf5f355118b35827e2af0236f115881cf805f926ec4",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "adb35354353d2fe27424ff6fd2a3206efc5577538db1e8fe2453896e171fc8ad",
+    "event_hash": "99dd7cf71b085c180ce2c8633afc90ecfbc17d119d07244e80d4b33e28e938b9"
+  },
+  {
+    "sequence": 79,
+    "job_id": "77aceb255678a3d247975533ffba8ef0aa52f821896eafe4f559b856c8b04b5e",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Có kết quả chờ kiểm tra",
+        "body": "Công ty C001 · Có kết quả chờ kiểm tra.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_1 · http://127.0.0.1:8796/#scenario=003&case=RC_1",
+        "case_refs": [
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Có kết quả chờ kiểm tra",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ]
+      }
+    },
+    "previous_hash": "99dd7cf71b085c180ce2c8633afc90ecfbc17d119d07244e80d4b33e28e938b9",
+    "event_hash": "35cbc11b7e3e7e0e7d7d13c963777e84cde6e3bac8a4015814f4e420ded5a406"
+  },
+  {
+    "sequence": 80,
+    "job_id": "77aceb255678a3d247975533ffba8ef0aa52f821896eafe4f559b856c8b04b5e",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:77aceb255678a3d247975533ffba8ef0aa52f821896eafe4f559b856c8b04b5e",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "35cbc11b7e3e7e0e7d7d13c963777e84cde6e3bac8a4015814f4e420ded5a406",
+    "event_hash": "bd06bcf987286f7f3aee0032124276653df762f34c84bdd72482f384f613d057"
+  },
+  {
+    "sequence": 81,
+    "job_id": "78502032d2a3c3d9709cbe7ed3fa597b3424e4507f5e2ca32e03cc8b8d6cceb7",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-07T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_5 · http://127.0.0.1:8796/#scenario=003&case=RC_5",
+        "case_refs": [
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-07T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "bd06bcf987286f7f3aee0032124276653df762f34c84bdd72482f384f613d057",
+    "event_hash": "97db61c89487d0ccde12a104358ecf4272b784ed4fd6c12b3007b625753ad0e6"
+  },
+  {
+    "sequence": 82,
+    "job_id": "78502032d2a3c3d9709cbe7ed3fa597b3424e4507f5e2ca32e03cc8b8d6cceb7",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:78502032d2a3c3d9709cbe7ed3fa597b3424e4507f5e2ca32e03cc8b8d6cceb7",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "97db61c89487d0ccde12a104358ecf4272b784ed4fd6c12b3007b625753ad0e6",
+    "event_hash": "8718f5929051aabf77177479697452f869c4fcdc8efbb43c79590fdb61224c81"
+  },
+  {
+    "sequence": 83,
+    "job_id": "7fba4bb106b66fd945f5ccbb126366171c64387ba155880c8f7ed72818ecf97b",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-08T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_6 · http://127.0.0.1:8796/#scenario=003&case=RC_6",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-08T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "8718f5929051aabf77177479697452f869c4fcdc8efbb43c79590fdb61224c81",
+    "event_hash": "87d9afdca7a107aed8f7a9c562551314270dabd2b8f2b22cd7e05baceca543e8"
+  },
+  {
+    "sequence": 84,
+    "job_id": "7fba4bb106b66fd945f5ccbb126366171c64387ba155880c8f7ed72818ecf97b",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:7fba4bb106b66fd945f5ccbb126366171c64387ba155880c8f7ed72818ecf97b",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "87d9afdca7a107aed8f7a9c562551314270dabd2b8f2b22cd7e05baceca543e8",
+    "event_hash": "c64f9e322811df9767180a37acad59e847586f8db64ace8bced44467ff7fcb66"
+  },
+  {
+    "sequence": 85,
+    "job_id": "902133209e72154594eeeed1489f7ec5c5b96fb8d7dae3682bfd961392669cd5",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn kiểm tra kết quả",
+        "body": "Công ty C001 · Quá hạn kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-26T08:00:00+07:00 (giờ Việt Nam).\nRC_1 · http://127.0.0.1:8796/#scenario=003&case=RC_1",
+        "case_refs": [
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn kiểm tra kết quả",
+        "due_at": "2026-10-26T08:00:00+07:00",
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ]
+      }
+    },
+    "previous_hash": "c64f9e322811df9767180a37acad59e847586f8db64ace8bced44467ff7fcb66",
+    "event_hash": "c114eda620b3453eb6822a6108e9802af0ddbb7d4b36137c4d29624a1425cb00"
+  },
+  {
+    "sequence": 86,
+    "job_id": "902133209e72154594eeeed1489f7ec5c5b96fb8d7dae3682bfd961392669cd5",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:902133209e72154594eeeed1489f7ec5c5b96fb8d7dae3682bfd961392669cd5",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "c114eda620b3453eb6822a6108e9802af0ddbb7d4b36137c4d29624a1425cb00",
+    "event_hash": "09feb4b912e64b948502997bb962d34397b9c3eca5722756cadf7420e112a2cd"
+  },
+  {
+    "sequence": 87,
+    "job_id": "aaa7ac7e11131b628fc6e187e854e31c3914e0dd6f5a31f54f11cd1f2d4dc519",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ được trả lại",
+        "body": "Công ty C001 · Hồ sơ được trả lại.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_2 · http://127.0.0.1:8796/#scenario=003&case=RC_2",
+        "case_refs": [
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ được trả lại",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "09feb4b912e64b948502997bb962d34397b9c3eca5722756cadf7420e112a2cd",
+    "event_hash": "6b5da1d69fd6f418bfac6f9da82307fbc3f3f73785e6b9442bb837946acc2b60"
+  },
+  {
+    "sequence": 88,
+    "job_id": "aaa7ac7e11131b628fc6e187e854e31c3914e0dd6f5a31f54f11cd1f2d4dc519",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:aaa7ac7e11131b628fc6e187e854e31c3914e0dd6f5a31f54f11cd1f2d4dc519",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "6b5da1d69fd6f418bfac6f9da82307fbc3f3f73785e6b9442bb837946acc2b60",
+    "event_hash": "4b6d8f7dd0a6da47f8accdc65e903b6f3ab5d1b7c58a8ed97729742e82677c17"
+  },
+  {
+    "sequence": 89,
+    "job_id": "ab105a05be382ff3604a0c903683e0e32881fd68e41bb0d6e53a745671ce49bb",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-08T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_6 · http://127.0.0.1:8796/#scenario=003&case=RC_6",
+        "case_refs": [
+          {
+            "case_id": "RC_6",
+            "scope_hash": "51e2e1ebdc4468c09ca85e1d8f6a4b2a57a0358480676e315ea78ea772d243a3"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-08T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "4b6d8f7dd0a6da47f8accdc65e903b6f3ab5d1b7c58a8ed97729742e82677c17",
+    "event_hash": "a27ad310eac7c12bfa022db5cfbba6d9f1d24587ab0847ed7315f3457dcb7656"
+  },
+  {
+    "sequence": 90,
+    "job_id": "ab105a05be382ff3604a0c903683e0e32881fd68e41bb0d6e53a745671ce49bb",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:ab105a05be382ff3604a0c903683e0e32881fd68e41bb0d6e53a745671ce49bb",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "a27ad310eac7c12bfa022db5cfbba6d9f1d24587ab0847ed7315f3457dcb7656",
+    "event_hash": "82c9d78b40dc875a6e27468bd3e34d433205aa518ca0dbdfdff30c779fed94e4"
+  },
+  {
+    "sequence": 91,
+    "job_id": "c1e91cc73e75979a76f8bc49aac35c2b2b492bda044e60e47b0ed73df6ea48b1",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-08-07T12:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_5 · http://127.0.0.1:8796/#scenario=003&case=RC_5",
+        "case_refs": [
+          {
+            "case_id": "RC_5",
+            "scope_hash": "51b1f54f72622998c780b3baf5c86cdd722849aebdd2a66774d20664a31eaf90"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-08-07T12:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "82c9d78b40dc875a6e27468bd3e34d433205aa518ca0dbdfdff30c779fed94e4",
+    "event_hash": "5267efc743f29d3750aaf5638911f3e86eee707f8adced6b847d6ae2df9caf7b"
+  },
+  {
+    "sequence": 92,
+    "job_id": "c1e91cc73e75979a76f8bc49aac35c2b2b492bda044e60e47b0ed73df6ea48b1",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:c1e91cc73e75979a76f8bc49aac35c2b2b492bda044e60e47b0ed73df6ea48b1",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "5267efc743f29d3750aaf5638911f3e86eee707f8adced6b847d6ae2df9caf7b",
+    "event_hash": "fe03195279c32df6713d601341892d3187983ef85f7800fc9d020ebe8aa6a34d"
+  },
+  {
+    "sequence": 93,
+    "job_id": "c3f5cfffb562556ac6d02339f35ec115e20a78075e7e9dc508d702592a4113e4",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Đã kiểm tra kết quả",
+        "body": "Công ty C001 · Đã kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_3 · http://127.0.0.1:8796/#scenario=003&case=RC_3",
+        "case_refs": [
+          {
+            "case_id": "RC_3",
+            "scope_hash": "2a172197d2f335f78bb271b3940b5935f093064157482e62c4ccc3e8067e6b21"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Đã kiểm tra kết quả",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "fe03195279c32df6713d601341892d3187983ef85f7800fc9d020ebe8aa6a34d",
+    "event_hash": "f3de2b4286ec849ef20699e1021bcbad4f53892953030879428b50941c9bd4c9"
+  },
+  {
+    "sequence": 94,
+    "job_id": "c3f5cfffb562556ac6d02339f35ec115e20a78075e7e9dc508d702592a4113e4",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:c3f5cfffb562556ac6d02339f35ec115e20a78075e7e9dc508d702592a4113e4",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "f3de2b4286ec849ef20699e1021bcbad4f53892953030879428b50941c9bd4c9",
+    "event_hash": "76c2d7e1499f9d1a0c7302abc4ac2c984d31c3985b905f7ef75adadade337fc7"
+  },
+  {
+    "sequence": 95,
+    "job_id": "cadd2ab514b3ff9c547f44e919e32641ebaad7a79d5bb2a5a2c2bb72ed030def",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn bổ sung tài liệu",
+        "body": "Công ty C001 · Quá hạn bổ sung tài liệu.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-25T08:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn bổ sung tài liệu",
+        "due_at": "2026-10-25T08:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "76c2d7e1499f9d1a0c7302abc4ac2c984d31c3985b905f7ef75adadade337fc7",
+    "event_hash": "aa64dedcbb5db93e5dc598194d478c1fe245c6732043f2ae76d0a9ac64481297"
+  },
+  {
+    "sequence": 96,
+    "job_id": "cadd2ab514b3ff9c547f44e919e32641ebaad7a79d5bb2a5a2c2bb72ed030def",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:cadd2ab514b3ff9c547f44e919e32641ebaad7a79d5bb2a5a2c2bb72ed030def",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "aa64dedcbb5db93e5dc598194d478c1fe245c6732043f2ae76d0a9ac64481297",
+    "event_hash": "eb541a9d74a58d906544c1f05a2cffab23252ae8735a144e3cad22729bf7c15e"
+  },
+  {
+    "sequence": 97,
+    "job_id": "cecb31e5de0b93df6952ee4a9b8caa4d3dd08107faaf6bd128d80864dd9f2c9b",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn bổ sung tài liệu",
+        "body": "Công ty C001 · Quá hạn bổ sung tài liệu.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-25T08:00:00+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn bổ sung tài liệu",
+        "due_at": "2026-10-25T08:00:00+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "eb541a9d74a58d906544c1f05a2cffab23252ae8735a144e3cad22729bf7c15e",
+    "event_hash": "5c1019b2bd99290dbce822d0d543959abef626bf5c909fedd8f50096a1e8b42b"
+  },
+  {
+    "sequence": 98,
+    "job_id": "cecb31e5de0b93df6952ee4a9b8caa4d3dd08107faaf6bd128d80864dd9f2c9b",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:cecb31e5de0b93df6952ee4a9b8caa4d3dd08107faaf6bd128d80864dd9f2c9b",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "5c1019b2bd99290dbce822d0d543959abef626bf5c909fedd8f50096a1e8b42b",
+    "event_hash": "85e68ed4c03ae65fded497787438b5adec81a7737764dfdbdad7230268108876"
+  },
+  {
+    "sequence": 99,
+    "job_id": "cf8679ee5327cb94165e0bdb4822c3301eb8e7f51e1d68b5c75c68a0d8e0875b",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn rà bổ sung",
+        "body": "Công ty C001 · Quá hạn rà bổ sung.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-26T08:00:00+07:00 (giờ Việt Nam).\nRC_2 · http://127.0.0.1:8796/#scenario=003&case=RC_2",
+        "case_refs": [
+          {
+            "case_id": "RC_2",
+            "scope_hash": "8931b6427d0892bf10e5310af313719195cf8f3ea76cb86950870ef08925c167"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn rà bổ sung",
+        "due_at": "2026-10-26T08:00:00+07:00",
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "85e68ed4c03ae65fded497787438b5adec81a7737764dfdbdad7230268108876",
+    "event_hash": "794df4ac46a327e936f6371097caa8a7347ad73a2cb63644491dcab962fe4d99"
+  },
+  {
+    "sequence": 100,
+    "job_id": "cf8679ee5327cb94165e0bdb4822c3301eb8e7f51e1d68b5c75c68a0d8e0875b",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:cf8679ee5327cb94165e0bdb4822c3301eb8e7f51e1d68b5c75c68a0d8e0875b",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "794df4ac46a327e936f6371097caa8a7347ad73a2cb63644491dcab962fe4d99",
+    "event_hash": "38ece141baa14117c8307ca4ef2b3bbf4c7d6c5390cee6415e0cba034470d9bf"
+  },
+  {
+    "sequence": 101,
+    "job_id": "df6fe8cf6ce17c4efbd375419a6635c9d754ed27608297b6f67811e46e9b2b80",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Quá hạn kiểm tra kết quả",
+        "body": "Công ty C001 · Quá hạn kiểm tra kết quả.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2026-10-26T08:00:00+07:00 (giờ Việt Nam).\nRC_1 · http://127.0.0.1:8796/#scenario=003&case=RC_1",
+        "case_refs": [
+          {
+            "case_id": "RC_1",
+            "scope_hash": "2116a08f26215e02c081fa747e35180465e5b35647917a716163457e4787db46"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Quá hạn kiểm tra kết quả",
+        "due_at": "2026-10-26T08:00:00+07:00",
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "CHIEF",
+            "person_id": "P2",
+            "role": "chief_accountant",
+            "display_name": "MÔ PHỎNG CHIEF"
+          }
+        ]
+      }
+    },
+    "previous_hash": "38ece141baa14117c8307ca4ef2b3bbf4c7d6c5390cee6415e0cba034470d9bf",
+    "event_hash": "14cef034ebfb4ac250a0496a19106a94da119e86c2fa48cc227d8dc44d7f6637"
+  },
+  {
+    "sequence": 102,
+    "job_id": "df6fe8cf6ce17c4efbd375419a6635c9d754ed27608297b6f67811e46e9b2b80",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:df6fe8cf6ce17c4efbd375419a6635c9d754ed27608297b6f67811e46e9b2b80",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "14cef034ebfb4ac250a0496a19106a94da119e86c2fa48cc227d8dc44d7f6637",
+    "event_hash": "4843ae44f05cc010e7579b619189d6135956def228bfafd927c23d6cd1f9c284"
+  },
+  {
+    "sequence": 103,
+    "job_id": "e2c167cf9c0da1b845b5cc9a5544fd8317a28383acd4a8bd5db27f8324cb97da",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-09-03T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F4 · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-09-03T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "4843ae44f05cc010e7579b619189d6135956def228bfafd927c23d6cd1f9c284",
+    "event_hash": "165038b9d9ecdea6814745309870bc4b3ebc90a59f036bd886c8d5c44f9b3a16"
+  },
+  {
+    "sequence": 104,
+    "job_id": "e2c167cf9c0da1b845b5cc9a5544fd8317a28383acd4a8bd5db27f8324cb97da",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:e2c167cf9c0da1b845b5cc9a5544fd8317a28383acd4a8bd5db27f8324cb97da",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "165038b9d9ecdea6814745309870bc4b3ebc90a59f036bd886c8d5c44f9b3a16",
+    "event_hash": "63ca603479756a7a21319fc58cdf5de24cfe1bce2167df82194284bf98f1f4f7"
+  },
+  {
+    "sequence": 105,
+    "job_id": "e9d2cdd2539208a1c93aac1af2858be95aa7c3eea29257933c76488e285d6d49",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Hồ sơ quá hạn rà soát",
+        "body": "Công ty C001 · Hồ sơ quá hạn rà soát.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nHạn xử lý: 2025-09-03T23:59:59+07:00 (giờ Việt Nam).\nĐã đến mốc báo giám đốc theo chính sách nhắc quá hạn.\nSC_F4 · http://127.0.0.1:8796/#scenario=003&case=SC_F4",
+        "case_refs": [
+          {
+            "case_id": "SC_F4",
+            "scope_hash": "eec79603ff7083a8ffc956780a522546ac3c567340b4dda860e41ec93118f14c"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Hồ sơ quá hạn rà soát",
+        "due_at": "2025-09-03T23:59:59+07:00",
+        "escalated": true,
+        "recipient_users": [
+          {
+            "user_id": "DIR",
+            "person_id": "P3",
+            "role": "director",
+            "display_name": "MÔ PHỎNG DIR"
+          }
+        ]
+      }
+    },
+    "previous_hash": "63ca603479756a7a21319fc58cdf5de24cfe1bce2167df82194284bf98f1f4f7",
+    "event_hash": "b307b3d769283e427a8dbaae3ec9d96a076b69238e4dbfb13e0332086d5df767"
+  },
+  {
+    "sequence": 106,
+    "job_id": "e9d2cdd2539208a1c93aac1af2858be95aa7c3eea29257933c76488e285d6d49",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:e9d2cdd2539208a1c93aac1af2858be95aa7c3eea29257933c76488e285d6d49",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "b307b3d769283e427a8dbaae3ec9d96a076b69238e4dbfb13e0332086d5df767",
+    "event_hash": "812cdd66ba669041b55c6c451f92d750936a77b9b5f9342520abb3fe1f8ac5a0"
+  },
+  {
+    "sequence": 107,
+    "job_id": "fc5965853ab702d5fcc95d25c7a607a14e42b0fc934d3baba1ef9fed3edd7c87",
+    "kind": "attempt_started",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "payload": {
+        "subject": "[GIẢ LẬP] Sổ Soát · C001 · Tài liệu đã nhận, cần rà lại",
+        "body": "Công ty C001 · Tài liệu đã nhận, cần rà lại.\nMở hồ sơ để đối chiếu bằng chứng và thực hiện bước tiếp theo.\nRC_4 · http://127.0.0.1:8796/#scenario=003&case=RC_4",
+        "case_refs": [
+          {
+            "case_id": "RC_4",
+            "scope_hash": "2530d4fbe209e269b452c74d88f92fa7c78c0bc7f6ae0dea5f9f81d5d1f614e8"
+          }
+        ],
+        "as_of": "2026-10-27T10:00:00+07:00",
+        "total_open": 0,
+        "policy_version": "notification-roles-20261027-v1",
+        "event_label": "Tài liệu đã nhận, cần rà lại",
+        "due_at": null,
+        "escalated": false,
+        "recipient_users": [
+          {
+            "user_id": "ACC",
+            "person_id": "P1",
+            "role": "accountant",
+            "display_name": "MÔ PHỎNG ACC"
+          }
+        ]
+      }
+    },
+    "previous_hash": "812cdd66ba669041b55c6c451f92d750936a77b9b5f9342520abb3fe1f8ac5a0",
+    "event_hash": "f9ab107a9f827f7e71e1a1ef779400dd91d9b612a13d8cccb2c78934354e737d"
+  },
+  {
+    "sequence": 108,
+    "job_id": "fc5965853ab702d5fcc95d25c7a607a14e42b0fc934d3baba1ef9fed3edd7c87",
+    "kind": "simulated",
+    "event_at": "2026-10-27T10:00:00+07:00",
+    "data": {
+      "attempt": 1,
+      "provider_id": "simulation:fc5965853ab702d5fcc95d25c7a607a14e42b0fc934d3baba1ef9fed3edd7c87",
+      "error_code": "",
+      "next_at": "2026-10-27T10:00:00+07:00"
+    },
+    "previous_hash": "f9ab107a9f827f7e71e1a1ef779400dd91d9b612a13d8cccb2c78934354e737d",
+    "event_hash": "6f20751f883d07c531641d7b6a7cfdcf857fb7dad2d1adcf0e018959a29ed3a8"
+  }
+]

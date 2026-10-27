@@ -58,6 +58,10 @@ for _name, _spec in _payment['tables'].items():
              window_start_mmdd='mmdd', window_end_mmdd='mmdd',
              document_type=('invoice', 'goods_receipt', 'service_acceptance', 'purchase_order', 'contract', 'delivery_receipt'))
 
+PROFILES['transaction_documents']['fields'].update(
+    invoice_issued_at='timestamp?', invoice_net_vnd='integer?', invoice_vat_vnd='integer?',
+    linked_input_vat_vnd='integer?')
+
 _evidence = json.loads(Path(__file__).with_name('evidence_sources.schema.json').read_text(encoding='utf-8'))
 for _name, _spec in _evidence['tables'].items():
     _profile(_name, _spec['fields'][0], _spec['fields'][1:], approved=_spec.get('approved', False))
@@ -112,6 +116,8 @@ PROFILES['transactions'] = dict(identity='transaction_id', required=('transactio
     'evidence_on_file': 'flag', 'goods_receipt_verified': 'flag', 'is_financial_entry': 'flag',
     'support_doc_count': 'integer', 'invoice_gross_vnd': 'integer', 'amount_vnd': 'integer',
     'approval_limit_vnd': 'positive', 'support_docs_observed_at': 'timestamp',
+    'invoice_observed_at': 'timestamp?', 'goods_receipt_verified_at': 'timestamp?',
+    'invoice_net_vnd': 'integer', 'invoice_vat_vnd': 'integer', 'linked_input_vat_vnd': 'integer',
     'created_at': 'timestamp', 'approved_at': 'timestamp', 'posted_at': 'timestamp',
     'invoice_issued_at': 'timestamp?'})
 

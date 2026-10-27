@@ -60,7 +60,7 @@ def bind_store(db,directory,database,scenario):
     return write_binding(directory,binding)
 
 
-def check_decision(directory,case,decision,*,expected_database=None):
+def check_decision(directory,case,decision,*,expected_database=None,reviewer=None):
     """Called under feedback_lock until the decision has been appended and fsynced."""
     try:binding=read_binding(directory)
     except RuntimeError:
@@ -84,3 +84,5 @@ def check_decision(directory,case,decision,*,expected_database=None):
                 e['company_id']==case['company_id'] and e['case_scope_hash']==current_scope}
         if decision!='information_gap' and any(e['status'] in ACTIVE for e in latest.values()):
             raise RuntimeError('Còn yêu cầu tài liệu đang mở/đã nhận. Rà lại hoặc hủy có lý do trước khi kết luận.')
+        from .review_roles import check_finalization_grant
+        return check_finalization_grant(db,database,case,decision,reviewer)

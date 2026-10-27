@@ -1,0 +1,48 @@
+{
+  "version": "if-discovery-shadow-v1",
+  "cohorts": [
+    "001",
+    "003"
+  ],
+  "primary": {
+    "daily_slots": 5,
+    "daily_minutes": 120,
+    "discovery_share_percent": 20,
+    "if_review_estimated_minutes": 20
+  },
+  "budgets": [
+    {
+      "slots": 5,
+      "minutes": 120
+    },
+    {
+      "slots": 10,
+      "minutes": 240
+    }
+  ],
+  "discovery_shares_percent": [
+    0,
+    20,
+    40
+  ],
+  "if_review_costs_minutes": [
+    20,
+    30
+  ],
+  "zero_share_control_cost_minutes": 20,
+  "threshold": "Frozen calibration threshold; no evaluation retuning or below-threshold fallback",
+  "quota": "At most share_percent times total daily slots; draw only from capacity remaining after mandatory pins",
+  "baseline_remainder": "Existing baseline ordering, no additional IF reranking",
+  "mandatory": "Preserve frozen baseline-selected cao_nhat and nontransaction work still pending; extra pending hard work precedes discovery",
+  "candidate": "Evaluation-only IF score >= frozen threshold; transaction and document have never appeared in admitted baseline scope before the daily cutoff",
+  "document_key": "company plus invoice_id, else journal_document_id, else transaction_id",
+  "case_unit": "One IF lead transaction per document; highest available IF score; one review per document per study arm",
+  "dedup": "Exclude admitted baseline transaction/context/evidence members and invoice source scopes cumulatively; stop pending IF lead when baseline absorbs its document",
+  "subsequent_baseline": "Do not auto-complete later baseline work after an IF review; record additional review effort and overlap",
+  "causality": "All eligibility and ordering use observations strictly before next Vietnam midnight; future baseline admission annotated only after selection",
+  "outcomes": "No independent outcomes or measured minutes inferred; pending human review",
+  "model_fit": false,
+  "model_scored": false,
+  "production_queue_write": false,
+  "seed": 20261022
+}

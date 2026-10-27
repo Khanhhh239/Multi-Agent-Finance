@@ -1,10 +1,10 @@
 # Sao lưu tự động ReviewStore và nghiệm thu P2
 
-Để giữ đúng code/schema cho backup và nâng cấp, xem [gói phát hành và hướng dẫn chuyển phiên bản](../../RELEASES.md), cùng [bằng chứng cài sạch/mở backup cũ](../../reports/release_20261019.md). Các gói v1 vẫn dùng kiểm tra runtime hiện có; không sửa manifest để ép tương thích.
+Để giữ đúng code/schema cho backup và nâng cấp, xem [gói phát hành và hướng dẫn chuyển phiên bản](../../RELEASES.md), cùng [bằng chứng cài sạch/mở backup cũ](../../docs/reports/operations/release_20261019.md). Các gói v1 vẫn dùng kiểm tra runtime hiện có; không sửa manifest để ép tương thích.
 
 Lịch đã chọn: **02:00 hằng ngày, Asia/Saigon; giữ 30 ngày và ít nhất 3 bản thành công**. Tác vụ Windows mang tên `Agent22-ReviewBackup`, dùng Python nền và tài khoản hiện tại, quyền thông thường, không lưu mật khẩu. Có bật `StartWhenAvailable` cho lịch bị lỡ; không đánh thức máy. Máy cần bật và tài khoản chạy phải đăng nhập để tác vụ có ngữ cảnh chạy.
 
-Định nghĩa tác vụ và bằng chứng thực thi nằm trong [báo cáo](../../reports/backup_automation_20261019.md). Config thực tế: `.runtime/backup_automation_20261019/job.json`. Công cụ không tự đoán DB P2 hoặc cấu hình ngày làm việc của web: các nguồn và lịch được liệt kê rõ trong config.
+Định nghĩa tác vụ và bằng chứng thực thi nằm trong [báo cáo](../../docs/reports/operations/backup_automation_20261019.md). Config thực tế: `.runtime/backup_automation_20261019/job.json`. Công cụ không tự đoán DB P2 hoặc cấu hình ngày làm việc của web: các nguồn và lịch được liệt kê rõ trong config.
 
 ## Phạm vi
 

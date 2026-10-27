@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-27",
+  "policy_version": "notification-roles-20261027-v1",
+  "status": "passed",
+  "python_tests": 140,
+  "new_python_tests": 38,
+  "javascript_checks": 92,
+  "new_javascript_tests": 12,
+  "chrome_checks": 11,
+  "simulated_outbox_jobs": 36,
+  "delivery_history_events": 108,
+  "distinct_company_cases": 8,
+  "mode": "dry_run",
+  "external_notifications_sent": 0,
+  "real_accounts_created": 0,
+  "independent_ml_reviews_added": 0,
+  "models_fitted_or_rescored": 0,
+  "production_database_used": false,
+  "live_delivery_verified": false,
+  "protected_files": 10396,
+  "unexpected_changes": 0,
+  "limitation": "Live Email/Zalo acceptance, real accounts/recipients, other browsers and physical devices remain unverified."
+}

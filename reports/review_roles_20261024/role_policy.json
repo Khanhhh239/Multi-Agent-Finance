@@ -1,0 +1,51 @@
+{
+  "version": "accountant-review-final-approval-v1",
+  "status": "roles_configured_accounts_pending",
+  "role_labels": {
+    "accountant": "Kế toán viên",
+    "chief_accountant": "Kế toán trưởng",
+    "director": "Giám đốc"
+  },
+  "permissions": {
+    "primary": [
+      "accountant"
+    ],
+    "finalize": [
+      "chief_accountant",
+      "director"
+    ],
+    "return": [
+      "chief_accountant",
+      "director"
+    ],
+    "information_request": [
+      "accountant"
+    ],
+    "budget": [
+      "chief_accountant",
+      "director"
+    ],
+    "notification_preview": [
+      "chief_accountant",
+      "director"
+    ],
+    "uat_note": [
+      "accountant",
+      "chief_accountant",
+      "director"
+    ]
+  },
+  "primary_roles": [
+    "accountant"
+  ],
+  "final_roles": [
+    "chief_accountant",
+    "director"
+  ],
+  "final_approval_requirement": "one_chief_accountant_or_director_different_person",
+  "same_person_finalization_allowed": false,
+  "source": "User chose accountant for first review, chief accountant or director for final review; login will be added later",
+  "accounts_created": 0,
+  "login_implemented": false,
+  "real_reviews_created": 0
+}

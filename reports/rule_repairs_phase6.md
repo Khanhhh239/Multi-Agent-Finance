@@ -1,5 +1,5 @@
-# Đợt 6 — thẩm quyền C2/C3 và ngoại lệ B6
+# Tài liệu đã được sắp xếp lại
 
-Đã bổ sung ma trận thẩm quyền có coverage cho C2/C3 và lịch thanh toán theo mùa/năm có trần kỳ cho B6. Xem [chính sách, schema, đối chứng và giới hạn](rule_authority_dormancy.md).
+Xem [tài liệu thay thế](rule_authority_dormancy.md).
 
-Thiếu coverage thẩm quyền hoặc lịch B6 vẫn giữ hành vi hiện tại. Validation cũ không có nguồn mới nên hàng đợi không đổi; cần nguồn IAM/ERP thật để đo mức giảm nhiễu.
+Bản báo cáo cũ đã được chuyển hoặc gộp. File chỉ dẫn này chờ xoá vì quyền Windows; xem [hướng dẫn dọn cuối](../docs/history/cleanup_20261027.md).

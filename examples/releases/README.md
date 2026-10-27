@@ -1,6 +1,6 @@
 # Dùng gói phát hành đã kiểm chứng
 
-[Hướng dẫn đầy đủ](../../RELEASES.md) có trong gói tại `app/RELEASES.md`. [Biên bản nghiệm thu kỹ thuật](../../reports/release_20261019.md) ghi rõ phạm vi đã kiểm chứng.
+[Hướng dẫn đầy đủ](../../RELEASES.md) có trong gói tại `app/RELEASES.md`. [Biên bản nghiệm thu kỹ thuật](../../docs/reports/operations/release_20261019.md) ghi rõ phạm vi đã kiểm chứng.
 
 Gói chính: `.publish/releases/sme-review-0.1.0-win64-py312.zip`, kèm file `.sha256`. Profile web/backup: Windows x64, CPython 3.12; thư viện được khóa theo `requirements-review-lock.txt`, tải thành wheel và ghi SHA256 trong `requirements.lock` của gói. Môi trường đã kiểm chứng dùng Python 3.12.7. Gói không kèm dữ liệu/model hoặc Python hệ thống.
 

@@ -1,0 +1,18 @@
+{
+  "captured_at": "2026-10-23T18:32:17.004326+00:00",
+  "protected_files": 2283,
+  "protected_drift": [],
+  "changed_code": [
+    "sme_fraud/rules.py"
+  ],
+  "added_code": [
+    "tests/test_b2_company_transfer.py"
+  ],
+  "feature_contract_unchanged": true,
+  "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1",
+  "rules_change_limited_to_company_transfer_patch": true,
+  "code_sha256": {
+    "sme_fraud/rules.py": "f9061f8f016e296c1f5875d88578f5c00224a32477fc56b0042a849b687a5e69",
+    "tests/test_b2_company_transfer.py": "b38dc3e0e8785acbc87c58076b2123febe784dc816bfd3335e5febdde308266c"
+  }
+}

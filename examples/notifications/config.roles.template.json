@@ -1,0 +1,16 @@
+{
+  "dry_run": true,
+  "replay_existing": false,
+  "daily_budget": 10,
+  "weekly_weekday": 0,
+  "weekly_hour": 8,
+  "case_url": "http://127.0.0.1:8774/",
+  "max_attempts": 4,
+  "reminders": {
+    "review_due_hours": 48,
+    "rework_due_hours": 48,
+    "repeat_hours": 24,
+    "escalate_after_hours": 48
+  },
+  "role_recipients": {}
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "scenario": "budget_5_share_0_cost_20",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_5_share_20_cost_20",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_5_share_20_cost_30",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_5_share_40_cost_20",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_5_share_40_cost_30",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_10_share_0_cost_20",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_10_share_20_cost_20",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_10_share_20_cost_30",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_10_share_40_cost_20",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  },
+  {
+    "scenario": "budget_10_share_40_cost_30",
+    "legacy_outputs_identical": {
+      "summary.json": true,
+      "daily.csv": true,
+      "selections.private.csv": true
+    },
+    "guarded_zero_delay": true
+  }
+]

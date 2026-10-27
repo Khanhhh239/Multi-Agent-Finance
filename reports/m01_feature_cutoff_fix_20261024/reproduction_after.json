@@ -1,0 +1,59 @@
+{
+  "late_documents": {
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "observed_at": "2025-08-14T11:00:00+07:00",
+    "full_feature_vector_unchanged": true,
+    "before": {
+      "support_doc_count": 0,
+      "goods_receipt_verified": 0,
+      "support_docs_known": 0
+    },
+    "after": {
+      "support_doc_count": 0,
+      "goods_receipt_verified": 0,
+      "support_docs_known": 0
+    }
+  },
+  "future_invoice": {
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "issued_at": "2025-08-14T11:00:00+07:00",
+    "observed_at": "2025-08-14T11:00:00+07:00",
+    "full_feature_vector_unchanged": true,
+    "before": {
+      "invoice_log_gross": 0.0,
+      "invoice_payment_ratio": 0,
+      "cumulative_invoice_payment_ratio": 0,
+      "invoice_vat_fraction": 0,
+      "linked_input_vat_fraction": 0,
+      "vat_invoice_arithmetic_gap": 0,
+      "invoice_known": 0,
+      "invoice_components_known": 0,
+      "linked_input_vat_known": 0
+    },
+    "after": {
+      "invoice_log_gross": 0.0,
+      "invoice_payment_ratio": 0,
+      "cumulative_invoice_payment_ratio": 0,
+      "invoice_vat_fraction": 0,
+      "linked_input_vat_fraction": 0,
+      "vat_invoice_arithmetic_gap": 0,
+      "invoice_known": 0,
+      "invoice_components_known": 0,
+      "linked_input_vat_known": 0
+    }
+  },
+  "known_at_cutoff": {
+    "support_doc_count": 2,
+    "goods_receipt_verified": 1,
+    "support_docs_known": 1,
+    "invoice_log_gross": 16.30041729,
+    "invoice_payment_ratio": 0.75,
+    "cumulative_invoice_payment_ratio": 0.75,
+    "invoice_vat_fraction": 0.16666667,
+    "linked_input_vat_fraction": 0.16666667,
+    "vat_invoice_arithmetic_gap": 0.0,
+    "invoice_known": 1,
+    "invoice_components_known": 1,
+    "linked_input_vat_known": 1
+  }
+}

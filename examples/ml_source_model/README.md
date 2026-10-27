@@ -44,7 +44,7 @@ Model mới buộc scope suy luận nằm trong cửa sổ evaluation và các c
 
 ## Kiểm toán phân vùng thực tế
 
-`sme_fraud.audit_model_windows` đối chiếu cache gốc với model và bản ghi huấn luyện, xuất membership theo từng ID cùng fingerprint/count của ba cửa sổ. Không fit hay chấm điểm; không ghi đè output cũ. Cần đủ dữ liệu của các công ty khai báo trong cả ba cửa sổ để hoàn tất audit. [Kết quả 41.082 giao dịch và cách chạy](../../reports/ml_temporal_split_20261022.md).
+`sme_fraud.audit_model_windows` đối chiếu cache gốc với model và bản ghi huấn luyện, xuất membership theo từng ID cùng fingerprint/count của ba cửa sổ. Không fit hay chấm điểm; không ghi đè output cũ. Cần đủ dữ liệu của các công ty khai báo trong cả ba cửa sổ để hoàn tất audit. [Kết quả 41.082 giao dịch và cách chạy](../../docs/reports/ml/ml_temporal_split_20261022.md).
 
 Khoảng thời gian luôn bao gồm đầu và loại trừ cuối; đúng 01/01/2025 chuyển sang calibration, đúng 01/07/2025 chuyển sang evaluation. Phân chia dùng `posted_at` và so bằng UTC; ngày trong kế hoạch mẫu là 00:00 giờ Việt Nam. Threshold được chọn từ calibration trước khi chấm evaluation. Không dùng kết quả evaluation để chọn lại model/threshold rồi báo như đánh giá giữ kín; cửa sổ đã xem cần được ghi nhận đúng vai trò trong lần thử tiếp theo.
 

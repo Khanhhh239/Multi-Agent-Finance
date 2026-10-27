@@ -1,0 +1,119 @@
+{
+  "version": "source-cache-if-v1",
+  "dataset": "D:\\agent22\\.runtime\\m01_feature_cutoff_fix_20261024\\smoke_cache",
+  "dataset_version": "m01-causal-smoke-fixture-v1",
+  "data_origin": "synthetic_process_simulation",
+  "feature_contract_fingerprint": "219c233e3eaca51ec667a4593a3e28f93bd9bd73dd697bef55a75f7b7d1b581f",
+  "sklearn_version": "1.9.1",
+  "compatibility": {
+    "compatible": true,
+    "reasons": [],
+    "feature_contract_fingerprint": "219c233e3eaca51ec667a4593a3e28f93bd9bd73dd697bef55a75f7b7d1b581f"
+  },
+  "model_parameters": {
+    "n_estimators": 16,
+    "max_samples": 12,
+    "contamination": "auto",
+    "random_state": 20261024,
+    "n_jobs": 1
+  },
+  "temporal_provenance": {
+    "version": "chronological-model-windows-v1",
+    "plan": {
+      "company_ids": [
+        "C001"
+      ],
+      "source_ref": "SIM_M01_TECHNICAL_SMOKE",
+      "train": {
+        "start_at": "2024-01-01T00:00:00+07:00",
+        "end_at": "2025-01-01T00:00:00+07:00"
+      },
+      "calibration": {
+        "start_at": "2025-01-01T00:00:00+07:00",
+        "end_at": "2025-07-01T00:00:00+07:00"
+      },
+      "evaluation": {
+        "start_at": "2025-07-01T00:00:00+07:00",
+        "end_at": "2026-01-01T00:00:00+07:00"
+      }
+    },
+    "window_end_exclusive": true,
+    "source_manifest_sha256": "276c1f3db8813208c8911ce27bb5b3296411301faab1944364453a96943bc8d3",
+    "input_sha256": {
+      "advances.csv": "19bba4020a3a6fcd6270558538a66888124e5859b5754a7be505cf923c72015e",
+      "advance_events.csv": "19bba4020a3a6fcd6270558538a66888124e5859b5754a7be505cf923c72015e",
+      "attendance.csv": "da2cf43c2e796c9d0335d3caafbd1181b3d276ea985c2ab46a7bc73cfb117919",
+      "bank_account_changes.csv": "19bba4020a3a6fcd6270558538a66888124e5859b5754a7be505cf923c72015e",
+      "calendar.csv": "7296fea023dd9d6bd4db421d982b767bc7a4e82c2aecbb698c11eac54a252192",
+      "companies.csv": "cb8ccccae40ba1c7683c3414082e0d020dcda9fda2a41aba8303118dfdc6bb4a",
+      "customers.csv": "534937d4c1c0fc406fc9b43160b445dc87ead032ebbdbe64b1d1eeaf8e6e3a7d",
+      "employees.csv": "88c055acf58d59ba317d4f0f9d25ce16ae8d034863e4f70f8aa42d7ac6a80c63",
+      "entity_links.csv": "6c08a4975d0560126f56766ec5d9dcf66c90d29cdb3f5e469011d132e4f43962",
+      "features.csv": "10335a69a2cb0841f9e4710b9a0638a00fbaecf4caa64848dcefdc18929378ce",
+      "journal_documents.csv": "01f532c38d0e394fbd041895d0adfc0be5b6f0f499968559b204451f4a9ec134",
+      "journal_lines.csv": "5e7b1d113fc64294f6fd0a48ab0e5f5d00815c96c19d7d6212a4b0755eca4f5d",
+      "transactions.csv": "43f07f0823d478776438dbb4605b4b2f48f714bdee40292c81e904fc56ea12e4",
+      "vendors.csv": "ee228efec6d69207aa3d0567e6e6c75a1ded857657a4d5ea28dd425d28de225b",
+      "vendor_status_history.csv": "54ca74e4fe93f378879a34dad96a7cbc974ac98ecd7950ca13e2d7dfc526d7e3"
+    },
+    "train": {
+      "scope": {
+        "company_ids": [
+          "C001"
+        ],
+        "source_ref": "SIM_M01_TECHNICAL_SMOKE",
+        "start_at": "2024-01-01T00:00:00+07:00",
+        "end_at": "2025-01-01T00:00:00+07:00"
+      },
+      "rows": 12,
+      "company_rows": {
+        "C001": 12
+      },
+      "min_posted_at": "2024-01-12T11:00:00+07:00",
+      "max_posted_at": "2024-12-12T11:00:00+07:00",
+      "feature_fingerprint": "b984114edf9113638dcbd016cd56263813ca809fbe43c43bd9a294a0e5f84f61",
+      "transaction_ids_sha256": "b9f3987b46664b4e647b4b46b70e45b2a8ba1ad9ba429f06b4ee840f31c4d538"
+    },
+    "calibration": {
+      "scope": {
+        "company_ids": [
+          "C001"
+        ],
+        "source_ref": "SIM_M01_TECHNICAL_SMOKE",
+        "start_at": "2025-01-01T00:00:00+07:00",
+        "end_at": "2025-07-01T00:00:00+07:00"
+      },
+      "rows": 6,
+      "company_rows": {
+        "C001": 6
+      },
+      "min_posted_at": "2025-01-12T11:00:00+07:00",
+      "max_posted_at": "2025-06-12T11:00:00+07:00",
+      "feature_fingerprint": "733fe435cd51ad97b88c1e54d067acc94b5988ec82477ba3d36eb09cdbfa1d9a",
+      "transaction_ids_sha256": "d1210f71855a1f5ccaaf4c3de1c3ed564e762efa1a12559886412f868d57ff3c"
+    },
+    "evaluation_rows_used_for_fit_or_calibration": 0,
+    "fingerprint": "e91a2d8b064bc124c51c4a8ce00d27ea7a832fae6b929cc1de1c7071baec2f9b"
+  },
+  "calibration": {
+    "alert_budget": 0.003,
+    "threshold": 0.6427735834035951,
+    "method": "higher_quantile_of_unlabelled_calibration_scores"
+  },
+  "models_fitted": 1,
+  "labels_loaded": false,
+  "splits_loaded": false,
+  "oracle_loaded": false,
+  "feature_rebuild": false,
+  "existing_model_or_manifest_modified": false,
+  "evaluation_rows_scored": 0,
+  "queue_changed": false,
+  "external_notifications": 0,
+  "holdout_005_loaded_or_scored": false,
+  "operational_benefit_measured": false,
+  "gates": {
+    "real_source": "awaiting_accepted_real_data",
+    "benefit": "not_measured"
+  },
+  "model_sha256": "749aefd5a3bd425ddf624072bdf71e0c8573a34ce9b9fce00985367a92cda48d"
+}

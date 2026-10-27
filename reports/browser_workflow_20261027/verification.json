@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-27",
+  "status": "passed",
+  "scope": "Two-stage business UI with simulated identities in an isolated fixture",
+  "python_tests": 78,
+  "javascript_checks": 80,
+  "new_javascript_tests": 21,
+  "chrome_checks": 21,
+  "browser": "Chrome",
+  "narrow_viewports": [
+    "360x800",
+    "390x844"
+  ],
+  "real_accounts_created": 0,
+  "real_handling_minutes": 0,
+  "independent_human_reviews": 0,
+  "model_fits": 0,
+  "production_database_used": false,
+  "external_messages_sent": 0,
+  "protected_files": 10372,
+  "unexpected_protected_changes": 0,
+  "remaining": "Real login deferred; broader historical/browser/device acceptance and real ML review are separate."
+}

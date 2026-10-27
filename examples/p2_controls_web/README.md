@@ -31,4 +31,4 @@ Nguồn và kết quả phải khớp manifest/commitment. Nhật ký được g
 
 Luồng web đọc kết quả detector đã khóa, không chấm lại hoặc sửa kỳ vọng khi mở trang, không gửi thông báo. Các ghi chú kiểm thử tự động nằm ở `.runtime/p2_controls_web_20261018/integration.sqlite3`, tách khỏi database mặc định dành cho bạn.
 
-[Biên bản kiểm chứng và giới hạn](../../reports/p2_controls_web_20261018.md) · [Nguồn và quy trình chấm bộ đối chứng](../p2_controls/README.md).
+[Biên bản kiểm chứng và giới hạn](../../docs/reports/app/p2_controls_web_20261018.md) · [Nguồn và quy trình chấm bộ đối chứng](../p2_controls/README.md).

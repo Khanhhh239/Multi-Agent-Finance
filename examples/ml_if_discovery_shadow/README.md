@@ -1,12 +1,16 @@
 # Shadow mở admission ngoài baseline bằng IF
 
-Nhánh riêng dùng điểm evaluation đã khóa, không load/fit/chấm model, không viết queue hoặc kết luận nghiệp vụ. Dùng môi trường trong `requirements-lock.txt`; đọc [protocol](protocol.json) và [kết quả](../../reports/ml_if_discovery_shadow_20261022.md).
+Nhánh riêng dùng điểm evaluation đã khóa, không load/fit/chấm model, không viết queue hoặc kết luận nghiệp vụ. Bản mới dùng [giao thức giữ ngày baseline](delay_guard_protocol.json), giới hạn **0 ngày trễ thêm so với đối chứng**. [Kết quả mới](../../docs/reports/ml/if_delay_guard_20261027.md) ghi cả đánh đổi thời gian chờ IF; [giao thức v1](protocol.json) giữ riêng để tái hiện nghiên cứu trước guard.
 
 ```powershell
-python -B -m sme_fraud.compare_if_discovery --dataset data/synthetic_sources_20261017_v2/sme_fraud_001 --baseline reports/pipeline_rehearsal_20261018_v2/sme_fraud_001 --comparison reports/ml_shadow_comparison_20261022/sme_fraud_001 --coverage reports/ml_if_coverage_20261022/sme_fraud_001 --protocol examples/ml_if_discovery_shadow/protocol.json --output reports/my_if_discovery_001
+python -B -m sme_fraud.compare_if_discovery --dataset reports/rr09_ml_completion_20261024/ml_v4/cache/sme_fraud_001 --baseline reports/rr09_ml_completion_20261024/ml_v4/baseline/sme_fraud_001 --comparison reports/rr09_ml_completion_20261024/ml_v4/comparison/sme_fraud_001 --coverage reports/rr09_ml_completion_20261024/ml_v4/coverage/sme_fraud_001 --protocol examples/ml_if_discovery_shadow/delay_guard_protocol.json --output reports/my_if_guard_001
 ```
 
-Đổi 001 thành 003 cho cohort kia; luôn dùng output mới. Runner xác minh commitment nguồn/điểm/model/coverage/case builder. Chạy đối chứng 0%, quota 20%/40%, chi phí IF 20/30 phút, ở cả 5/120 và 10/240. Ngưỡng lấy từ training record đã khóa; không dùng evaluation để đổi ngưỡng.
+Đổi 001 thành 003 cho cohort kia; luôn dùng output mới. Dùng môi trường trong [hướng dẫn phát triển](../../docs/DEVELOPMENT.md). Runner xác minh commitment nguồn/điểm/model/coverage/case builder. Chạy đối chứng 0%, quota 20%/40%, chi phí IF 20/30 phút, ở cả 5/120 và 10/240. Ngưỡng lấy từ training record đã khóa; không dùng evaluation để đổi ngưỡng.
+
+Mỗi ngày giữ sức chứa cho mọi lượt baseline được chọn bởi đối chứng tại cùng cutoff; các lượt đã hoàn tất không bị nhận lại. Sau đó mới dùng số suất và phút còn lại cho IF, giảm quota khi cần. Không đọc lịch baseline ngày tương lai để quyết định hôm nay. Đây là giới hạn trễ tăng thêm do IF, không phải giới hạn chờ tuyệt đối hoặc cam kết sửa mọi SLA quá hạn có sẵn. Các khoảng grace dương chưa được chính sách này hỗ trợ.
+
+Trong output v2, `legacy_controls/` chạy lại nhánh không guard để đối chiếu. Dùng giao thức v1 cũ nếu cần tái hiện lịch sử; giao thức đó không tự có giới hạn trì hoãn mới. Ngày baseline tham chiếu và phần trễ thêm trong selections là chú thích hậu kiểm, không dùng thông tin tương lai khi chọn.
 
 Ứng viên là giao dịch vượt ngưỡng, ngoài phạm vi giao dịch/chứng từ baseline đã thấy tại cutoff. Một giao dịch đại diện mỗi chứng từ theo invoice → journal document → transaction; một lần rà/chứng từ/nhánh. Phần còn lại giữ thứ tự baseline. Giữ các pin hard/nontransaction và mọi giới hạn suất/phút. Lượt IF không tự hoàn tất công việc baseline về sau.
 

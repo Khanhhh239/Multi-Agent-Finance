@@ -29,4 +29,4 @@ python -B -m sme_fraud.review_server --data-root data/synthetic_sources_20261017
 
 Mở `http://127.0.0.1:8766`: nút **Phạm vi quy tắc** hiển thị độ phủ với tử số/mẫu số; hồ sơ và chi tiết nghiệp vụ hiển thị số mẫu, phạm vi tài khoản và trạng thái thiếu mẫu. Snapshot cũ hiển thị chưa có bản đo. Snapshot mới không sao chép kết luận cũ; runner không gửi thông báo.
 
-Lần chạy chuẩn: [báo cáo](../../reports/a5_coverage_20261018.md).
+Lần chạy chuẩn: [báo cáo](../../docs/reports/rules/a5_coverage_20261018.md).

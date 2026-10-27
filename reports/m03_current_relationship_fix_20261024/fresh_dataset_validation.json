@@ -1,0 +1,33 @@
+{
+  "fresh_synthetic_fixture_only": true,
+  "rows": 10000,
+  "seed": 20261024,
+  "availability_timestamps_attested_in_fresh_fixture": true,
+  "temporary_generated_labels_used_for_structural_validation_only": true,
+  "frozen_labels_or_holdout_read": false,
+  "validation": {
+    "status": "passed",
+    "observations": 10000,
+    "fraud_rows": 50,
+    "hard_negatives": 500,
+    "balanced_financial_documents": 9959,
+    "case_count": 605,
+    "checks": [
+      "exact_prevalence",
+      "foreign_keys",
+      "chronology",
+      "case_split_isolation",
+      "balanced_journal",
+      "no_payroll_vendor",
+      "numeric_features",
+      "label_isolation",
+      "scenario_evidence",
+      "file_checksums",
+      "accounting_framework",
+      "compound_vat_entries",
+      "production_flow",
+      "writeoff_reclassification",
+      "auxiliary_document_chronology"
+    ]
+  }
+}

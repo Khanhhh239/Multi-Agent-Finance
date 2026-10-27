@@ -1,0 +1,10 @@
+{
+  "status": "verified",
+  "commitment_drift": [],
+  "documents_checked": 6,
+  "local_links_checked": 84,
+  "missing_local_links": [],
+  "matrix_snapshot_matches_fixture": true,
+  "business_tests": 607,
+  "cited_tests_all_passed": true
+}

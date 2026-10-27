@@ -1,0 +1,35 @@
+{
+  "model_technical_status": "compatible_and_shadow_replayed",
+  "source_evidence_timing_status": "unavailable_for_all_four_evidence_availability_flags",
+  "source_rows": 41082,
+  "counts": [
+    {
+      "cohort": "sme_fraud_001",
+      "rows": 20559,
+      "support_docs_known": 0,
+      "invoice_known": 0,
+      "invoice_components_known": 0,
+      "linked_input_vat_known": 0
+    },
+    {
+      "cohort": "sme_fraud_003",
+      "rows": 20523,
+      "support_docs_known": 0,
+      "invoice_known": 0,
+      "invoice_components_known": 0,
+      "linked_input_vat_known": 0
+    }
+  ],
+  "impact": "Document/invoice features are masked, not certified absent; models are technical replays with reduced observed evidence",
+  "independent_review_status": "unassigned",
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "baseline_review_delay_days": 26,
+  "operational_benefit_status": "not_proven",
+  "if_mode": "shadow",
+  "next_required": [
+    "Obtain source evidence observation times from verifiable records, without backfilling guessed dates",
+    "Assign independent primary reviewer and a different adjudicator",
+    "Resolve acceptable baseline-delay tradeoff before enabling IF discovery in operations"
+  ]
+}

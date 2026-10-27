@@ -20,6 +20,28 @@ from .review_capacity import ReviewCapacity
 from .shadow_scoring import guarded, instant, output_guard
 
 VERSION='if-discovery-shadow-v1'
+GUARDED_VERSION='if-discovery-shadow-v2'
+
+
+def delay_guard_limit(settings):
+    """v1 is the pinned control; v2 reserves the reference baseline review day.
+
+    A positive grace needs a different capacity proof because tomorrow's
+    mandatory arrivals are unknown. It is not silently promised by this policy.
+    """
+    if settings.get('version')==VERSION:
+        if 'baseline_delay_guard' in settings:
+            raise ValueError('A delay guard requires the v2 protocol')
+        return None
+    expected=dict(max_additional_days=0,reference='same_cutoff_frozen_baseline_review_day',
+                  action='reserve_baseline_before_if',calendar='all_calendar_days',
+                  if_capacity='remaining_slots_and_minutes_after_baseline_reservation')
+    guard=settings.get('baseline_delay_guard')
+    if (settings.get('version')!=GUARDED_VERSION or not isinstance(guard,dict)
+            or guard!=expected or type(guard.get('max_additional_days')) is not int
+            or settings.get('candidate_identity_version')!=VERSION):
+        raise ValueError('Use the explicit zero-additional-day baseline reservation protocol')
+    return 0
 
 
 def document_key(row):
@@ -121,7 +143,9 @@ def prepare_frames(snapshots,transactions,scores,rules,threshold,cohort,findings
     return frames,list(audit.values()),first_baseline
 
 
-def select_mixed(tasks,capacity,pins,leads,quota,if_minutes):
+def select_mixed(tasks,capacity,pins,leads,quota,if_minutes,*,protected=(),audit=None):
+    if type(quota) is not int or quota<0 or type(if_minutes) is not int or if_minutes<=0:
+        raise ValueError('IF quota and estimated minutes must be nonnegative/positive integers')
     chosen=[];used=0;case_ids=set();keys=set()
     def add(task,origin):
         nonlocal used
@@ -135,9 +159,16 @@ def select_mixed(tasks,capacity,pins,leads,quota,if_minutes):
     for task in sorted(pins,key=lambda t:baseline_key(t['case'])):
         if not add(task,'baseline'):
             raise ValueError('Mandatory baseline work does not fit')
+    for task in sorted(protected,key=lambda t:baseline_key(t['case'])):
+        if task['key'] not in keys and not add(task,'baseline'):
+            raise ValueError('Frozen baseline reservation does not fit the shared capacity')
     for task in sorted(tasks,key=lambda t:baseline_key(t['case'])):
         if task['case']['priority']=='cao_nhat' and task['key'] not in keys:
             add(task,'baseline')
+    if audit is not None:
+        audit.update(reserved_baseline_work=len(chosen),reserved_baseline_minutes=used,
+            if_slot_cap_after_reservation=min(quota,capacity.slots-len(chosen),
+                                              (capacity.minutes-used)//if_minutes))
     discovery=0
     for case in sorted(leads,key=lambda c:(-c['if_score'],instant(c['opened_at']),c['case_id'])):
         if discovery>=quota:
@@ -153,9 +184,14 @@ def select_mixed(tasks,capacity,pins,leads,quota,if_minutes):
     return chosen
 
 
-def simulate(frames,frozen_rows,transactions,first_baseline,*,slots,share,if_minutes):
+def simulate(frames,frozen_rows,transactions,first_baseline,*,slots,share,if_minutes,
+             max_additional_baseline_days=None):
     if share not in (0,20,40) or if_minutes not in (20,30):
         raise ValueError('Use the precommitted discovery shares and cost scenarios')
+    if max_additional_baseline_days is not None and (
+            type(max_additional_baseline_days) is not int or max_additional_baseline_days!=0):
+        raise ValueError('Only the proven zero-additional-day baseline guard is supported')
+    guarded_delay=max_additional_baseline_days is not None
     capacity=ReviewCapacity.ui(slots)
     quota=slots*share//100
     led=dict(done=set(),case_ids=set());reviewed_docs=set();reviewed_if_txs=set()
@@ -176,7 +212,35 @@ def simulate(frames,frozen_rows,transactions,first_baseline,*,slots,share,if_min
                 elif row['work_key'] in led['done']:mandatory_done+=1
                 else:raise ValueError('Mandatory scope is absent and was not completed')
             leads=[c for c in snap['leads'] if c['company_id']==company and (company,c['document_key']) not in reviewed_docs]
-            chosen=select_mixed(available,capacity,pins,leads,quota,if_minutes)
+            protected=[];already_done=0;audit={}
+            if guarded_delay:
+                # Only today's same-cutoff reference decision reserves capacity.
+                # Future baseline rows never supply a deadline to this selector.
+                for row in frozen:
+                    task=indexed.get(row['work_key'])
+                    if task is not None:
+                        if (task['case']['case_id']!=row['case_id'] or
+                                row.get('case_scope_hash',task['case']['production_scope_hash'])!=task['case']['production_scope_hash']):
+                            raise ValueError('Guarded baseline reservation has a different case binding')
+                        protected.append(task)
+                    elif row['work_key'] in led['done']:
+                        already_done+=1
+                    else:
+                        raise ValueError('Guarded baseline reservation is absent and not completed')
+            chosen=select_mixed(available,capacity,pins,leads,quota,if_minutes,
+                                protected=protected,audit=audit if guarded_delay else None)
+            if guarded_delay:
+                reference_keys={row['work_key'] for row in frozen}
+                chosen_keys={task['key'] for task in chosen if task['origin']=='baseline'}
+                if reference_keys-chosen_keys-led['done']:
+                    raise AssertionError('Zero-day baseline reservation was missed')
+                without_guard=select_mixed(available,capacity,pins,leads,quota,if_minutes)
+                audit.update(baseline_delay_limit_days=0,baseline_reference_already_done=already_done,
+                    baseline_reference_reserved=len(protected),
+                    if_reviews_without_guard_today=sum(t['origin']=='if_only' for t in without_guard),
+                    if_reviews_removed_by_guard=max(0,sum(t['origin']=='if_only' for t in without_guard)
+                                                     -sum(t['origin']=='if_only' for t in chosen)),
+                    baseline_reference_unreviewed=0)
             basekeys={t['key'] for t in chosen if t['origin']=='baseline'}
             if not {t['key'] for t in pins}<=basekeys:raise AssertionError('Mandatory displacement')
             used=sum(t['minutes'] for t in chosen)
@@ -196,6 +260,8 @@ def simulate(frames,frozen_rows,transactions,first_baseline,*,slots,share,if_min
                 baseline_deferred_same_day=len(frozenkeys-basekeys),baseline_advanced_or_other=len(basekeys-frozenkeys),
                 pending_baseline=len(remaining),pending_baseline_minutes=sum(t['minutes'] for t in remaining),
                 pending_if_documents=len(leads)-sum(t['origin']=='if_only' for t in chosen)))
+            if guarded_delay:
+                daily[-1].update(audit)
             totals.update(mandatory_pins=len(pins),mandatory_already_done=mandatory_done)
             for rank,task in enumerate(chosen,1):
                 case=task['case'];origin=task['origin'];members=ids(case['transaction_ids'])
@@ -212,6 +278,11 @@ def simulate(frames,frozen_rows,transactions,first_baseline,*,slots,share,if_min
                     txn_type=case.get('txn_type',''),baseline_rule_score=case.get('baseline_rule_score',''),
                     baseline_signal_class=case.get('baseline_signal_class',''),context_only_hits=case.get('context_only_hits',''),
                     first_baseline_document_cutoff='')
+                if guarded_delay:
+                    due=case.get('sla_due_at','') if origin=='baseline' else ''
+                    record.update(frozen_baseline_review_day='',additional_baseline_delay_days='',
+                        baseline_sla_due_at=due,baseline_sla_late_calendar_days=(
+                            max(0,(snap['day']-instant(due).astimezone(TZ).date()).days) if due else ''))
                 if origin=='if_only':
                     doc=(company,case['document_key'])
                     if doc in reviewed_docs:raise AssertionError('Repeated unchanged IF document review')
@@ -224,10 +295,20 @@ def simulate(frames,frozen_rows,transactions,first_baseline,*,slots,share,if_min
                     led['done'].add(task['key']);led['case_ids'].add(case['case_id'])
                 selected.append(record)
     base=[r for r in selected if r['origin']=='baseline'];discoveries=[r for r in selected if r['origin']=='if_only']
-    frozen=[r for r in frozen_rows if r['arm']=='baseline']
+    reference_stamps={(snap['day'].isoformat(),company) for snap in frames for company in snap['companies']}
+    frozen=[r for r in frozen_rows if r['arm']=='baseline' and (not guarded_delay or
+             (r['day'],r['company_id']) in reference_stamps)]
     by_key={r['work_key']:r for r in frozen};alt_key={r['work_key']:r for r in base}
     common=set(by_key)&set(alt_key)
     delays=[(date.fromisoformat(alt_key[k]['day'])-date.fromisoformat(by_key[k]['day'])).days for k in common]
+    if guarded_delay:
+        if set(by_key)-set(alt_key) or any(delay>0 for delay in delays):
+            raise AssertionError('The guarded trial missed or delayed frozen baseline work')
+        for row in base:
+            reference=by_key.get(row['work_key'])
+            if reference is not None:
+                row.update(frozen_baseline_review_day=reference['day'],
+                    additional_baseline_delay_days=(date.fromisoformat(row['day'])-date.fromisoformat(reference['day'])).days)
     last_day=frames[-1]['day'].isoformat()
     eligible_docs={(c['company_id'],c['document_key']) for snap in frames for c in snap['leads']}
     summary=dict(daily_slots=slots,daily_minutes=capacity.minutes,share_percent=share,if_estimated_minutes=if_minutes,
@@ -250,6 +331,19 @@ def simulate(frames,frozen_rows,transactions,first_baseline,*,slots,share,if_min
         pending_baseline_at_end=sum(r['pending_baseline'] for r in daily if r['day']==last_day),
         pending_if_at_end=sum(r['pending_if_documents'] for r in daily if r['day']==last_day),
         zero_share_reproduces_frozen_baseline=share==0,independent_reviews=0,actionable_gain=None,actual_review_minutes=None)
+    if guarded_delay:
+        summary.update(baseline_delay_guard=dict(max_additional_days=0,
+            reference='same_cutoff_frozen_baseline_review_day',enforced=True),
+            baseline_reference_unreviewed=0,
+            guard_reduced_if_company_days=sum(r['if_reviews_removed_by_guard']>0 for r in daily),
+            guard_removed_if_review_opportunities=sum(r['if_reviews_removed_by_guard'] for r in daily),
+            max_baseline_wait_days=max([0,*[r['wait_days'] for r in base]]),
+            max_frozen_baseline_wait_days=max([0,*[int(r.get('wait_days') or 0) for r in frozen]]),
+            max_if_wait_days=max([0,*[r['wait_days'] for r in discoveries]]),
+            baseline_selected_sla_late_calendar_count=sum(
+                isinstance(r['baseline_sla_late_calendar_days'],int) and r['baseline_sla_late_calendar_days']>0 for r in base),
+            baseline_selected_max_sla_late_calendar_days=max(
+                [0,*[r['baseline_sla_late_calendar_days'] for r in base if isinstance(r['baseline_sla_late_calendar_days'],int)]]))
     return dict(summary=summary,selections=selected,daily=daily)
 
 
@@ -272,13 +366,20 @@ def run_discovery(dataset,baseline,comparison,coverage,output,*,protocol):
     for path in (Path(__file__).resolve(),Path(__file__).resolve().with_name('compare_shadow.py')):inputs[str(path)]=sha(path)
     prior=read_json(coverage/'summary.json');metadata=read_json(dataset/'manifest.json')
     settings=read_json(protocol);plan=read_json(comparison/'evaluation_plan.json');run=read_json(comparison/'if_scores/run.json')
+    guard_limit=delay_guard_limit(settings)
     tag=dataset.name.removeprefix('sme_fraud_')
     if (tag not in {'001','003'} or metadata.get('role')!='reporting' or metadata.get('is_synthetic') is not True
             or prior['status']!='coverage_explained' or guarded(prior['dataset'])!=dataset
-            or guarded(prior['comparison'])!=comparison or settings['version']!=VERSION
+            or guarded(prior['comparison'])!=comparison
             or settings['discovery_shares_percent']!=[0,20,40] or settings['if_review_costs_minutes']!=[20,30]
             or run['manifest_sha256']!=sha(dataset/'manifest.json')):
         raise ValueError('Discovery requires the precommitted synthetic reporting protocol and unchanged coverage audit')
+    if guard_limit is not None and (
+            settings.get('budgets')!=[dict(slots=5,minutes=120),dict(slots=10,minutes=240)]
+            or settings.get('primary')!=dict(daily_slots=5,daily_minutes=120,discovery_share_percent=20,if_review_estimated_minutes=20)
+            or settings.get('model_fit') is not False or settings.get('model_scored') is not False
+            or settings.get('production_queue_write') is not False):
+        raise ValueError('The guarded trial must retain the frozen capacity and shadow-only protocol')
     training=read_json(guarded(run['model_path']).parent/'training_run.json')
     threshold=float(training['calibration']['threshold'])
     output.mkdir(parents=True)
@@ -296,21 +397,29 @@ def run_discovery(dataset,baseline,comparison,coverage,output,*,protocol):
     frames,audit,first_baseline=prepare_frames(snapshots,transactions,scores,rules,threshold,tag,
         json_lines(baseline/'evidence_findings.jsonl'),json_lines(baseline/'rule_hits.jsonl'))
     write_csv(output/'above_threshold_candidates.private.csv',audit,list(audit[0]) if audit else ['transaction_id'])
-    results=[]
+    results=[];legacy_results=[]
     for slots in (5,10):
         frozen=read_csv(comparison/f'budget_{slots}/selections.private.csv')
         for share in (0,20,40):
             for cost in ((20,) if share==0 else (20,30)):
                 name=f'budget_{slots}_share_{share}_cost_{cost}'
-                result=simulate(frames,frozen,transactions,first_baseline,slots=slots,share=share,if_minutes=cost)
+                result=simulate(frames,frozen,transactions,first_baseline,slots=slots,share=share,if_minutes=cost,
+                                max_additional_baseline_days=guard_limit)
                 target=output/name;target.mkdir()
                 write_json(target/'summary.json',result['summary'])
                 for file,rows in (('selections.private.csv',result['selections']),('daily.csv',result['daily'])):
                     write_csv(target/file,rows,list(rows[0]))
                 results.append(dict(scenario=name,**result['summary']))
+                if guard_limit is not None:
+                    control=simulate(frames,frozen,transactions,first_baseline,slots=slots,share=share,if_minutes=cost)
+                    control_target=output/'legacy_controls'/name;control_target.mkdir(parents=True)
+                    write_json(control_target/'summary.json',control['summary'])
+                    for file,rows in (('selections.private.csv',control['selections']),('daily.csv',control['daily'])):
+                        write_csv(control_target/file,rows,list(rows[0]))
+                    legacy_results.append(dict(scenario=name,**control['summary']))
                 print(tag+' '+name+': '+str(result['summary']['if_document_reviews'])+' IF-only document reviews',flush=True)
     if any(sha(p)!=h for p,h in inputs.items()):raise ValueError('Frozen inputs changed during discovery shadow')
-    summary=dict(version=VERSION,cohort=tag,mode='synthetic_technical_discovery_shadow',calibration_threshold=threshold,
+    summary=dict(version=settings['version'],cohort=tag,mode='synthetic_technical_discovery_shadow',calibration_threshold=threshold,
         evaluation_scores=len(scores),above_threshold_transactions=len(audit),
         above_threshold_ever_outside_baseline_transactions=sum(bool(r['first_eligible_cutoff']) for r in audit),
         novel_documents_ever_eligible=len({(r['company_id'],r['document_key']) for r in audit if r['first_eligible_cutoff']}),
@@ -321,6 +430,10 @@ def run_discovery(dataset,baseline,comparison,coverage,output,*,protocol):
             'Subsequent baseline admission is annotated retrospectively and never gates prior selection',
             'Later baseline work is charged again without automatic completion from an IF study review',
             'Technical synthetic replay, not independently useful anomalies or real SME benefit'])
+    if guard_limit is not None:
+        summary.update(candidate_identity_version=VERSION,baseline_delay_guard=settings['baseline_delay_guard'],
+                       legacy_scenarios=legacy_results)
+        summary['limitations'].append('Zero additional calendar days versus the same-cutoff frozen baseline; absolute backlog/SLA lateness can pre-exist and IF can wait longer')
     write_json(output/'summary.json',summary)
     write_json(output/'predictions_frozen.json',{p.relative_to(output).as_posix():sha(p) for p in output.rglob('*') if p.is_file()})
     return summary

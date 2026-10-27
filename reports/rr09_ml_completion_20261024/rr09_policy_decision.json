@@ -1,0 +1,38 @@
+{
+  "version": "rr09-v1",
+  "status": "implemented_verified_in_new_local_runs",
+  "authorization": "User requested completion after the concrete proposal and retained-score approach were explained",
+  "low": {
+    "excess_vnd_exclusive": 100000,
+    "ratio_exclusive": "1/100",
+    "combination": "AND"
+  },
+  "high": {
+    "excess_vnd_inclusive": 1000000,
+    "ratio_inclusive": "1/10",
+    "combination": "OR"
+  },
+  "precedence": [
+    "high",
+    "low",
+    "otherwise_medium"
+  ],
+  "zero_limit": "positive_payment_high_ratio_not_applicable",
+  "materiality": "per_payment_excess_vnd_and_limit_ratio",
+  "verified_breach_points": 14,
+  "queue_admission": "retained_even_when_handling_priority_is_low",
+  "final_priority": "max(rr09_tier,applicable_vat_document_medium_floor,independent_rules_with_existing_recurrence)",
+  "independent_scoring": "exclude_P2_from_family_aggregation_keep_other_rules_and_existing_recurrence",
+  "sla_calendar_hours": {
+    "cao_nhat": 24,
+    "cao": 48,
+    "trung_binh": 168,
+    "thap": 720
+  },
+  "scope": "companies_with_explicit_verified_cash_limit_known_and_effective_at_payment",
+  "application": "versioned_new_analysis_runs_not_retroactive_snapshot_overwrite",
+  "legacy_replay": "legacy_high_v1",
+  "new_repeat_thresholds": false,
+  "new_exception_waivers": false,
+  "real_sme_threshold_calibration": false
+}

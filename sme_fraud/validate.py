@@ -85,7 +85,7 @@ def validate(directory: Path):
         if l["variant"]=="repeated_full_invoice":
             assert float(f["cumulative_invoice_payment_ratio"])>1 and int(f["prior_invoice_payment_count"])>=1, "Duplicate evidence"
         if l["variant"]=="new_shell_two_hop":
-            assert int(f["graph_employee_count"])>=1, "Hidden two-hop link absent"
+            assert int(f["graph_employee_count_current"])>=1, "Hidden two-hop link absent"
         if l["variant"]=="ghost_employee_payroll":
             assert int(f["recipient_employee_bank_count"])>=2 and int(f["attendance_known"]) and not int(f["attendance_days"]), "Ghost employee evidence"
         if l["variant"]=="overdue_unsettled":

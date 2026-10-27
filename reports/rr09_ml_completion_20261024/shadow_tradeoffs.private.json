@@ -1,0 +1,202 @@
+{
+  "delayed_baseline_work": [
+    {
+      "cohort": "003",
+      "case_id": "RC_71f9d98838c10e2c",
+      "work_key": "abc81666319ef96f088f7128d527ea211c3115430cf37acf6ab9c3d70c363470",
+      "case_type": "transaction",
+      "priority": "trung_binh",
+      "baseline_day": "2025-07-07",
+      "if_discovery_day": "2025-08-02",
+      "delay_days": 26,
+      "work_type": "initial_review",
+      "rule_ids": "A4",
+      "estimated_minutes": 20
+    }
+  ],
+  "sensitivity_summaries": [
+    {
+      "cohort": "001",
+      "scenario": "budget_5_share_0_cost_20",
+      "if_document_reviews": 0,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_5_share_20_cost_20",
+      "if_document_reviews": 11,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_5_share_20_cost_30",
+      "if_document_reviews": 11,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_5_share_40_cost_20",
+      "if_document_reviews": 11,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_5_share_40_cost_30",
+      "if_document_reviews": 11,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_10_share_0_cost_20",
+      "if_document_reviews": 0,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_10_share_20_cost_20",
+      "if_document_reviews": 11,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_10_share_20_cost_30",
+      "if_document_reviews": 11,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_10_share_40_cost_20",
+      "if_document_reviews": 11,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "001",
+      "scenario": "budget_10_share_40_cost_30",
+      "if_document_reviews": 11,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_5_share_0_cost_20",
+      "if_document_reviews": 0,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_5_share_20_cost_20",
+      "if_document_reviews": 29,
+      "baseline_common_work_delayed": 1,
+      "max_common_baseline_delay_days": 26,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_5_share_20_cost_30",
+      "if_document_reviews": 29,
+      "baseline_common_work_delayed": 2,
+      "max_common_baseline_delay_days": 11,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_5_share_40_cost_20",
+      "if_document_reviews": 29,
+      "baseline_common_work_delayed": 2,
+      "max_common_baseline_delay_days": 26,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_5_share_40_cost_30",
+      "if_document_reviews": 29,
+      "baseline_common_work_delayed": 2,
+      "max_common_baseline_delay_days": 27,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_10_share_0_cost_20",
+      "if_document_reviews": 0,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_10_share_20_cost_20",
+      "if_document_reviews": 29,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_10_share_20_cost_30",
+      "if_document_reviews": 29,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_10_share_40_cost_20",
+      "if_document_reviews": 29,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    },
+    {
+      "cohort": "003",
+      "scenario": "budget_10_share_40_cost_30",
+      "if_document_reviews": 29,
+      "baseline_common_work_delayed": 0,
+      "max_common_baseline_delay_days": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0
+    }
+  ],
+  "actual_useful_outcomes_available": false,
+  "measured_effort_available": false,
+  "interpretation": "Slot/budget compliance does not guarantee no delay or useful discoveries; keep shadow"
+}

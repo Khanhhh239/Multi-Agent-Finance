@@ -2,7 +2,7 @@
 
 **Đã có giao diện web nghiệm thu:** đủ 32 tình huống/73 giao dịch, xem cả dòng không phát sinh P2, chứng từ và kỳ vọng; lưu kết quả nghiệm thu riêng. [Lệnh mở và cách dùng](../p2_controls_web/README.md).
 
-Nguồn hoàn chỉnh: [data/p2_controls_20261018_v2](../../data/p2_controls_20261018_v2/manifest.json). [Báo cáo kết quả](../../reports/p2_controls_20261018.md).
+Nguồn hoàn chỉnh: [data/p2_controls_20261018_v2](../../data/p2_controls_20261018_v2/manifest.json). [Báo cáo kết quả](../../docs/reports/rules/p2_controls_20261018.md).
 
 32 tình huống, 73 giao dịch, chia thành sáu nhóm:
 

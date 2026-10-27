@@ -1,0 +1,29 @@
+{
+  "stage": "graph_pre_fix",
+  "modules": [
+    {
+      "module": "test_b2_company_transfer",
+      "tests": 12,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.829,
+      "details": [
+        {
+          "test": "test_old_company_mirror_at_transfer_time_cannot_restore_departed_staff_edges (test_b2_company_transfer.B2CompanyTransferTest.test_old_company_mirror_at_transfer_time_cannot_restore_departed_staff_edges)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_b2_company_transfer.py\", line 191, in test_old_company_mirror_at_transfer_time_cannot_restore_departed_staff_edges\n    self.assertEqual(self.hits(case.score(), later), [])\nAssertionError: Lists differ: [{'transaction_id': 'AUDIT_0000', 'company[981 chars]1f'}] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n{'transaction_id': 'AUDIT_0000', 'company_id': 'C001', 'detected_at': '2025-08-14T11:00:00+07:00', 'rule_id': 'B2', 'rule_name': 'Thông tin hoặc người đại diện NCC liên kết nhân viên', 'points': 8, 'hard_trigger': 0, 'suppressed_reason': '', 'evidence': {'direct_matches': {}, 'field_count': 0, 'related_party_disclosed': False}, 'related_transaction_ids': [], 'graph_path': [{'source': 'entity:V0000013', 'target': 'phone:B2TRANSFERPHONE', 'link_type': 'phone', 'observed_at': '2023-01-01T00:00:00+07:00'}, {'source': 'entity:E0000011', 'target': 'phone:B2TRANSFERPHONE', 'link_type': 'phone', 'observed_at': '2025-08-13T11:00:00+07:00'}, {'source': 'entity:E0000011', 'target': 'bank_account:BANKSYN0000011', 'link_type': 'bank_account', 'observed_at': '2025-08-13T11:00:00+07:00'}, {'source': 'entity:E0000012', 'target': 'bank_account:BANKSYN0000011', 'link_type': 'bank_account', 'observed_at': '2023-01-01T00:00:00+07:00'}], 'intrinsic_points': 8, 'scoring_role': 'transaction', 'evidence_id': 'B2_4522066bee935a290b1f'}\n\nDiff is 1419 characters long. Set self.maxDiff to None to see it.\n"
+        },
+        {
+          "test": "test_transferred_employee_cannot_bridge_old_company_graph_to_current_staff (test_b2_company_transfer.B2CompanyTransferTest.test_transferred_employee_cannot_bridge_old_company_graph_to_current_staff)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_b2_company_transfer.py\", line 181, in test_transferred_employee_cannot_bridge_old_company_graph_to_current_staff\n    self.assertEqual(self.hits(after, later), [])\nAssertionError: Lists differ: [{'transaction_id': 'AUDIT_0001', 'company[981 chars]14'}] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n{'transaction_id': 'AUDIT_0001', 'company_id': 'C001', 'detected_at': '2025-08-14T11:00:00+07:00', 'rule_id': 'B2', 'rule_name': 'Thông tin hoặc người đại diện NCC liên kết nhân viên', 'points': 8, 'hard_trigger': 0, 'suppressed_reason': '', 'evidence': {'direct_matches': {}, 'field_count': 0, 'related_party_disclosed': False}, 'related_transaction_ids': [], 'graph_path': [{'source': 'entity:V0000013', 'target': 'phone:B2TRANSFERPHONE', 'link_type': 'phone', 'observed_at': '2023-01-01T00:00:00+07:00'}, {'source': 'entity:E0000011', 'target': 'phone:B2TRANSFERPHONE', 'link_type': 'phone', 'observed_at': '2023-01-01T00:00:00+07:00'}, {'source': 'entity:E0000011', 'target': 'bank_account:BANKSYN0000011', 'link_type': 'bank_account', 'observed_at': '2023-01-01T00:00:00+07:00'}, {'source': 'entity:E0000012', 'target': 'bank_account:BANKSYN0000011', 'link_type': 'bank_account', 'observed_at': '2023-01-01T00:00:00+07:00'}], 'intrinsic_points': 8, 'scoring_role': 'transaction', 'evidence_id': 'B2_9f8666e42393cf465414'}\n\nDiff is 1419 characters long. Set self.maxDiff to None to see it.\n"
+        }
+      ]
+    }
+  ],
+  "tests": 12,
+  "failures": 2,
+  "errors": 0,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 2.829
+}

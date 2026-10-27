@@ -1,0 +1,427 @@
+[
+  {
+    "path": "reports/backup_automation_20261019.md",
+    "sha256": "84b412bcd5eb6453e0f44d3dd34aa2bc7ac05aacaf5995181bf7b97d76efee50",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/browser_acceptance_20261020.md",
+    "sha256": "cc771d1ad364f5e2c659a7c39e0d10fc995ea01f139aaa43c9d8d3c676aa9395",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/browser_acceptance_status_20261021.md",
+    "sha256": "ef79375577ba92b670c9da5bc0c0a1101d24b958c15bf4e09ab92f2ecb022617",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/bug01_recheck_20261021.md",
+    "sha256": "742c31546666d8e4d2e12af4614fbac63098151f7cbebd6943245f3516278130",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/dynamic_thresholds_sprint_1_3.md",
+    "sha256": "502cb7657b57752e0b8899970ecbd94395d82493831afeb9002aad5109e1f181",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/entity_graph_sprint_1_2.md",
+    "sha256": "e8be0fdc1c7e900083dd0aad7d7bd5f783478041c25ea1a36fd99b235e7c6d8e",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/ml_if_discovery_shadow_20261022.md",
+    "sha256": "76296b5bede55669dd07a8208f364985f97895e7222ddb0bbc95699e260d7410",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/ml_pilot_readiness_20261019.md",
+    "sha256": "70097d7c583c296d8ed94e5f5b6ff81b1a31669a2c2e8f0611c238e7cb48813b",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/ml_shadow_runner_20261019.md",
+    "sha256": "24d8e164b25143997b473a8e2f81dcffaa4c260a60c6a7ec9e0f59f539aaf00f",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/ml_temporal_split_20261022.md",
+    "sha256": "405de393f00948c5d1e42e4944eb9b9a755fb68adf4654915dec2f20d7ef97db",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/model_source_sync_20261022.md",
+    "sha256": "adbc053e0214d3fb8629e13e1335dbf4d56408f3572401d6cc3118184319c52b",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/navigation_retest_20261021.md",
+    "sha256": "55f6181b42d7b26882b00cec6efc63be02a65a60bc400ff8e31ad3748074e6b9",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/operational_reliability_20261019.md",
+    "sha256": "1ae3378aa77767527fd96ec29594fc7fb2c2c767098032dd4fc8c0f23b2a0cdc",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/p2_controls_web_20261018.md",
+    "sha256": "5537e76da7ca98bc8ac02ae9d7632f92f49804e3a40eadb27562c3198846f990",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/recur_a5_retest_20261020.md",
+    "sha256": "f9ee158ddc603ff535496c29681290eb8b1a8f0c69fcaf82520dae6e2364895e",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/release_20261019.md",
+    "sha256": "5fab4e521d4b1b1826eb3f42ec4404a6f3483ec3b08c8fde177d6aa820671b01",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/roadmap_20261018.md",
+    "sha256": "e38b6a2fa42603cde076705744d35e866c1b4af16af6f00131ad71a482d27aa4",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/rule_audit_method.md",
+    "sha256": "e569996f25df9a921608452e2f69b2e0bdbdd9f106321880a8b7615d5b13d5cd",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/step2_review_20261019.md",
+    "sha256": "d45d1b2a8fb335fb14b969c876d85df91bf27f59e5e3cb04c66947edba5a8d16",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/ui_evidence_repairs_20261019.md",
+    "sha256": "67f905797cf6249e6bf8c677d33d6548767ebc5685c5ae454d8e7b8afe1d4a07",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/wf13_retest_20261021.md",
+    "sha256": "58627844ae446ba0ffa18ad2650b5fe66100273b1013efe2051bdab66716d454",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/wf17_retest_20261021.md",
+    "sha256": "1074545b53bca34576cf1ca7e4af19ac583af9807d548e35dc73bd63d2f0aa11",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/browser_acceptance_20261019.md",
+    "sha256": "ef79375577ba92b670c9da5bc0c0a1101d24b958c15bf4e09ab92f2ecb022617",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/bug01_retest_20261020.md",
+    "sha256": "742c31546666d8e4d2e12af4614fbac63098151f7cbebd6943245f3516278130",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/project_status_20261023.md",
+    "sha256": "4fbb8f923cda482480fc8cea0ace0c083ae90ad4fb7f98aad3ab164fb6b04323",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/rr09_policy_20261019.md",
+    "sha256": "c97cb8d28f288c133ff8fb69d267c4133da3f2e83cb2a61e7cdb2201227fe703",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/rule_repairs_phase5.md",
+    "sha256": "b5b8302ff5d89959de62227de653a606eb38caf40047a747e2f52facf8221729",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/rule_repairs_phase6.md",
+    "sha256": "199d818a61ad5b2c076f7532396046c98260cd05f4696db752d1652759c44cc4",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/rule_repairs_phase7.md",
+    "sha256": "cc41390c44d8489058500de79ac944eb62b996db1ecde4e76aaec2d01d4ee2a4",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "reports/step1_status_20261019.md",
+    "sha256": "4fbb8f923cda482480fc8cea0ace0c083ae90ad4fb7f98aad3ab164fb6b04323",
+    "kind": "document_redirect"
+  },
+  {
+    "path": "sme_fraud/__pycache__/accounting.cpython-312.pyc",
+    "sha256": "cc3197f5f1d40091df22c12b00d1de0d6db128721dafdde9b825070da65ed5ba",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/aggregate_challenge.cpython-312.pyc",
+    "sha256": "4d2286773eab3def2debaab88726c4d1266adefcbbdade660d1ecd9dd5fb7cc8",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/audit_accounting.cpython-312.pyc",
+    "sha256": "0753bcc2814f3536a192a0cd4965cdeac6d3d616973b999632df2e196867adf8",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/audit_rules.cpython-312.pyc",
+    "sha256": "b364cf0eebbd3a2137b82ecb007469f65267a46adfb5c4ebf120ddb053aaa2eb",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/authority_policy.cpython-312.pyc",
+    "sha256": "423842f4d2c80b766f1c5ff96d8cc649d299da61b677186fddb9277816e45ab3",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/benford.cpython-312.pyc",
+    "sha256": "6c27ac8c7367fe07f0ebd75bdc5556c5a7caa5a8c609d089ca440240b1fd4c7a",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/case_queue.cpython-312.pyc",
+    "sha256": "ecffc86b74647b00aac78650052e4f8b70c153c3ceabdd4ab730291cec7445fc",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/evaluate.cpython-312.pyc",
+    "sha256": "9d21905bc53ddb1445ce521f2218f823fa43aa7d4d622f57f523ef287220c288",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/evidence_cases.cpython-312.pyc",
+    "sha256": "593182a686d71cdeaf797a4975a28398f415b828363cae3a75b27604194fbde5",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/evidence_evaluation.cpython-312.pyc",
+    "sha256": "8f2aa0273ba94902333bb2446bdd303acece72ead855cecb4b19a3ba7a29a1c9",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/evidence_policy.cpython-312.pyc",
+    "sha256": "ab6c59bc0072e94727e9308aa5d89ed08c1db5b17efb5e2aa87b680a8fceb5ad",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/features.cpython-312.pyc",
+    "sha256": "1521d265db0838579eff1a25d3afbcfdab8afcebaf05bb3d642b91a0673bfa39",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/feedback.cpython-312.pyc",
+    "sha256": "63dccef0263f8002f2cbd037910a7898e3e183c226c7f74d23209977bbd4aa98",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/generate.cpython-312.pyc",
+    "sha256": "876989e7660d3ffddbde9de4af71145dcc802a865e146420048ecc82ac46e4a7",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/migrate.cpython-312.pyc",
+    "sha256": "46e9bab407beb4c3fbb01b9fe94a39bb7ddabccc74eab2c0fb2d81710c3a98d9",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/name_challenge.cpython-312.pyc",
+    "sha256": "66b0e63f0e0eb6f20285451441f7121460c9d9499cb8d77beb538c624b479d6f",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/noise_policy.cpython-312.pyc",
+    "sha256": "7f835c961f9f637e332250619cd7dc70898b53446ae385036203471f81be1d9b",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/payment_evidence.cpython-312.pyc",
+    "sha256": "671240b8d735d8e8dc7add0ea248d609538275b82894f8e6427dc73810df996a",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/rebuild_features.cpython-312.pyc",
+    "sha256": "a75db9e15205d127c502ed8e5bf4c628f8758eed92150c43206ab4330e020158",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/review_server.cpython-312.pyc",
+    "sha256": "0b74339130505dee096873ee5b9d1460e34147811d303207a35fba5a099fbcec",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/review_store.cpython-312.pyc",
+    "sha256": "9bc4dcaacd21ecbc562eee6e8e1a2905f149518201b0f00edcefe1ca7a940fb4",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/rules.cpython-312.pyc",
+    "sha256": "e21e30da8ec9f3b559c258f94346e65b1ebb3bf6baec315cc36eed56fdce7f96",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/rule_audit.cpython-312.pyc",
+    "sha256": "66db1d534ca29d70d30c99f076bc79cfedb5092a41c51faa822f98d8f6e0d09e",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/rule_audit_cases.cpython-312.pyc",
+    "sha256": "17e39f513538d8348d7149327ac2a0e21c356962dd99a84ecfd003ab1395a35c",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/rule_audit_policy.cpython-312.pyc",
+    "sha256": "bb5bd7a567870f7414d62211feaf1e3e0dc6be871322861f288fd495cff78611",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/run_evidence_evaluation.cpython-312.pyc",
+    "sha256": "f2e29703dc915c85568dd674e28256dca17ce7f47d4df957f65d506adfd567e8",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/run_noise_reduction.cpython-312.pyc",
+    "sha256": "825bc6cc842c2c50d3380b4684a1e4d1f6668389fd1fc45c27a57854761065e6",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/run_rules.cpython-312.pyc",
+    "sha256": "5fb487c0093788b2dc77fe214d5422c7de561eae3bda08979dbcdf4e7915f31f",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/run_rule_repairs.cpython-312.pyc",
+    "sha256": "59d594423d80031bb8f1913fbd63e6b1ae24cbc144ccaf2b84ac1638120c7d42",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/run_spec_alignment.cpython-312.pyc",
+    "sha256": "39072670409ae204bdb16a4f6994339b0f23c6504c8304e91a123ae1199119a5",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/source_snapshot.cpython-312.pyc",
+    "sha256": "d0939c4e843cd6882753bbbe164cd0629cc3e2167dc308d32c8e06848c8d057d",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/spec_policy.cpython-312.pyc",
+    "sha256": "5b4f830356ad171c3da5ccf26a59ba0bd99a16187ba1d30a42ce3202a8c18158",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/summarise.cpython-312.pyc",
+    "sha256": "e468e6c9e1e7bc9c90939d626b3a84ea43c54d02cdeba6d00b1f03fb8cae9992",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/summarise_rules.cpython-312.pyc",
+    "sha256": "a9fb00cc94b714f146de0228219662e1e484cb00cc87bf263cbb39d0fc3ac6d8",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/temporal_evidence.cpython-312.pyc",
+    "sha256": "de040cfb9b3e3870de3e25bac4469025a0012e25ecbdea472959ac7920d09eb6",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/validate.cpython-312.pyc",
+    "sha256": "09d0f87d67c9a6d69730b663c3e669124c95c5c4d48c877d54b21edce72ec564",
+    "kind": "bytecode"
+  },
+  {
+    "path": "sme_fraud/__pycache__/__init__.cpython-312.pyc",
+    "sha256": "9e329b563be780285e9c3388b15f5368b079d538dd3a224ec42ecddd85ce5d28",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_accounting.cpython-312.pyc",
+    "sha256": "c82aa62649e9797afefcbcb3fd1cf1879102c587d07e6dd0e6d643b801793f1d",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_aggregate_challenge.cpython-312.pyc",
+    "sha256": "10c7888aa73cb2c8bbc4c97713214cb22641d807b2466d36c6c76c77ac738a83",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_authority_and_dormancy.cpython-312.pyc",
+    "sha256": "86d9d005c706b95c1cafb9127e06093dc533e1a767b6f3ea18b97777c892f5ac",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_benford.cpython-312.pyc",
+    "sha256": "e764b27d8a2073a1e7b14d3fbc660ae019fb1980f4166fabba21e053679660f8",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_causality.cpython-312.pyc",
+    "sha256": "e2d710f39cb30f22928f3c8a7d89109e206073ed2e1255ee2789e9f9019760a9",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_evidence_evaluation.cpython-312.pyc",
+    "sha256": "dd286645df5ffa9158a225382a1f6c366abf0807681fb6a6b9edb3124d90aaa2",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_evidence_policy.cpython-312.pyc",
+    "sha256": "0a535feff8a9945e8e0e23d9a35f1673b6e3cba307f6f9f16f368c4a61862f5b",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_feedback.cpython-312.pyc",
+    "sha256": "d5e548775fb5c63da95a97b2fe9cf57b08b3c8de1edab9c0c19b7b7ce503e435",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_graph_history.cpython-312.pyc",
+    "sha256": "a5597d1ea3d89dadcf2026bb3ed0b22f312a1ca9cd4836e3216ebd5ab1d1d693",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_noise_policy.cpython-312.pyc",
+    "sha256": "3c83d0a6e27d1f8811cf3bd4eef29c7691ee85e98489582cecb5fbfb527e0580",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_payment_evidence.cpython-312.pyc",
+    "sha256": "6f82ec3aba4f39aa95e91de7522ceeecc211d651fd707a6163661ae5d1149cb3",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_review.cpython-312.pyc",
+    "sha256": "029d3bb4c2f1f6444f9ebd5f6d6b01065b5d76a454d07807b0b983fd1c8bb382",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_rules.cpython-312.pyc",
+    "sha256": "fe760dfd68ab5d626d0dd426849ce929f14b0bd34e674d485b3cca5c3caceca3",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_rule_audit.cpython-312.pyc",
+    "sha256": "5a8a40f44bddf7a6e49fd33b306a34b122b7dd9bf4d086c28e77f55545bb4d86",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_rule_repairs.cpython-312.pyc",
+    "sha256": "eb651a989cead4e1adca8c29c985f9d633af3641dd4c89a883051bf2ce9990e8",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_source_snapshot.cpython-312.pyc",
+    "sha256": "9a7802924be49e78408a005ed5b914a1b9a6069c74f5156bdbfe50ef26766d8c",
+    "kind": "bytecode"
+  },
+  {
+    "path": "tests/__pycache__/test_spec_policy.cpython-312.pyc",
+    "sha256": "3fed2efb02925289533b90e3e79c782c571f27bf087f8f146c4dceb0602793e9",
+    "kind": "bytecode"
+  },
+  {
+    "path": ".runtime/__pycache__/verify_payment_evidence.cpython-312.pyc",
+    "sha256": "fd07534e6322781fc5c78a4248c6e6de5c4cd183b67cd5214ddc0cdd7f21dde0",
+    "kind": "bytecode"
+  }
+]

@@ -1,0 +1,3036 @@
+{
+  "stage": "fixture design before final evaluation plan was frozen",
+  "original_probe": [
+    {
+      "rule_id": "C4",
+      "variant": "positive",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "authorized",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "late_source",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "cancel_after_action",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "end_boundary",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "checker_on_leave",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "both_actions_one_authorized",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "leave_start_at_action",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "leave_starts_after_action",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "permission_ends_at_action",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "permission_wrong_action",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "permission_revoked_before",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "permission_revoked_after",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "leave_revoked_before",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "missing_action_proof",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "wrong_action_actor",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "permission_known_after_action",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "C4",
+      "variant": "master_updated_after_action",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_34bd209f637092b0",
+          "company_id": "C001",
+          "entity": "cluster:4e12224022b7e279c7b3d2db",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "C4",
+          "explanation_vi": "Thao tác trong kỳ nghỉ phép chính thức",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"entity:P0000013\", \"entity:V0000013\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "2c39a6a9b1978a3a2b7bd5f49f701067bf5c56597677f5683b6f3811f23c8268"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "positive",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "cao_nhat",
+        "sla_hours": 24
+      },
+      "queue": [
+        {
+          "case_id": "RC_54c4fe6b825cb9b7",
+          "company_id": "C001",
+          "entity": "employee:E0000011",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "cao_nhat",
+          "max_score": 20,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "E2",
+          "explanation_vi": "Lương sau chấm dứt hợp đồng",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "hard_trigger",
+          "review_rule_ids": "",
+          "cluster_members": "[\"employee:E0000011\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-13T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "da199e346a1e755d2821d88d98672a605655fba11e0c16183b1b878580e49466"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "final_payment",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "missing_period",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "rehire",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "late_source",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "approved_backpay",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "approved_severance",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "approved_bonus",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "bonus_for_later_service",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "final_amount_short_one",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "settlement_wrong_employee",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "settlement_wrong_period",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "self_approved_settlement",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "termination_effective_today",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "rehire_known_after_cutoff",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "cao_nhat",
+        "sla_hours": 24
+      },
+      "queue": [
+        {
+          "case_id": "RC_54c4fe6b825cb9b7",
+          "company_id": "C001",
+          "entity": "employee:E0000011",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "cao_nhat",
+          "max_score": 20,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "E2",
+          "explanation_vi": "Lương sau chấm dứt hợp đồng",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "hard_trigger",
+          "review_rule_ids": "",
+          "cluster_members": "[\"employee:E0000011\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-13T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "da199e346a1e755d2821d88d98672a605655fba11e0c16183b1b878580e49466"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "termination_revoked_before",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "settlement_known_at_cutoff",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "cao_nhat",
+        "sla_hours": 24
+      },
+      "queue": [
+        {
+          "case_id": "RC_54c4fe6b825cb9b7",
+          "company_id": "C001",
+          "entity": "employee:E0000011",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "cao_nhat",
+          "max_score": 20,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "E2",
+          "explanation_vi": "Lương sau chấm dứt hợp đồng",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "hard_trigger",
+          "review_rule_ids": "",
+          "cluster_members": "[\"employee:E0000011\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-13T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "da199e346a1e755d2821d88d98672a605655fba11e0c16183b1b878580e49466"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "settlement_known_after_cutoff",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "E2",
+      "variant": "reversed_service_period",
+      "passed": false,
+      "actual": "rejected",
+      "expected": null,
+      "error": "Invalid payroll_settlements/PAY.service_period_end: must not precede service_period_start"
+    },
+    {
+      "rule_id": "F2",
+      "variant": "positive",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_a65bd18d556b9cfd",
+          "company_id": "C001",
+          "entity": "maker:E0000003",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "F2",
+          "explanation_vi": "Quản lý ghi đè quy trình",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"maker:E0000003\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "686e65d22abf5e4c604ed8a1f6a0a7e6ba90d44079b709f2a82b9b8b0fdc5f01"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "authorized",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "completed",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "missing_policy",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "control_not_required",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "override_wrong_role",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_a65bd18d556b9cfd",
+          "company_id": "C001",
+          "entity": "maker:E0000003",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "F2",
+          "explanation_vi": "Quản lý ghi đè quy trình",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"maker:E0000003\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "686e65d22abf5e4c604ed8a1f6a0a7e6ba90d44079b709f2a82b9b8b0fdc5f01"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "role_promoted_after_action",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_a65bd18d556b9cfd",
+          "company_id": "C001",
+          "entity": "maker:E0000003",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "F2",
+          "explanation_vi": "Quản lý ghi đè quy trình",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"maker:E0000003\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "686e65d22abf5e4c604ed8a1f6a0a7e6ba90d44079b709f2a82b9b8b0fdc5f01"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "override_at_cap",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "override_above_cap_one",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_a65bd18d556b9cfd",
+          "company_id": "C001",
+          "entity": "maker:E0000003",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "F2",
+          "explanation_vi": "Quản lý ghi đè quy trình",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"maker:E0000003\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "686e65d22abf5e4c604ed8a1f6a0a7e6ba90d44079b709f2a82b9b8b0fdc5f01"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "policy_known_at_action",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "policy_known_after_action",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "pending_override",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "cancelled_override",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "expired_policy",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "authorized_and_unauthorized",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "RC_a65bd18d556b9cfd",
+          "company_id": "C001",
+          "entity": "maker:E0000003",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 8,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[\"AUDIT_0000\"]",
+          "rule_ids": "F2",
+          "explanation_vi": "Quản lý ghi đè quy trình",
+          "batch_event_ids": "[]",
+          "case_type": "transaction",
+          "source_scope": "",
+          "source_status": "",
+          "estimated_minutes": 20,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "admission_basis": "score_threshold",
+          "review_rule_ids": "",
+          "cluster_members": "[\"maker:E0000003\"]",
+          "identity_version": "component-members-v1",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_opened_at_simulation_policy",
+          "observation_count": 1,
+          "scope_hash": "686e65d22abf5e4c604ed8a1f6a0a7e6ba90d44079b709f2a82b9b8b0fdc5f01"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "authorized_and_unknown",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F2",
+      "variant": "override_without_proof",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "positive",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_5e17b10549ad69df",
+          "company_id": "C001",
+          "entity": "source:series:PAY_2025",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F3",
+          "explanation_vi": "Dải số chứng từ có khoảng trống chưa giải trình",
+          "case_type": "source",
+          "source_scope": "series:PAY_2025",
+          "source_status": "evaluated",
+          "estimated_minutes": 30,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "a7ec383616b328a8118d97842c164b70abb97cb3df170934279f884147954a6f"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "duplicate",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "cancelled_gap",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "not_closed",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "late_cancel",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_5e17b10549ad69df",
+          "company_id": "C001",
+          "entity": "source:series:PAY_2025",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F3",
+          "explanation_vi": "Dải số chứng từ có khoảng trống chưa giải trình",
+          "case_type": "source",
+          "source_scope": "series:PAY_2025",
+          "source_status": "evaluated",
+          "estimated_minutes": 30,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "a7ec383616b328a8118d97842c164b70abb97cb3df170934279f884147954a6f"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "missing_cancel_coverage",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_5e17b10549ad69df",
+          "company_id": "C001",
+          "entity": "source:series:PAY_2025",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F3",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá dải số chứng từ",
+          "case_type": "source",
+          "source_scope": "series:PAY_2025",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_due_at": "2025-09-26T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "04470da939033302aa799d69678d6be205add645f68025d715694cefd9bb6fad"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "continuous_series",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "duplicate_log_same_document",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "cancelled_duplicate_document",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "draft_duplicate_peer",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "future_duplicate_peer",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "duplicate_peer_other_series",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "cancellation_other_series",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_5e17b10549ad69df",
+          "company_id": "C001",
+          "entity": "source:series:PAY_2025",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F3",
+          "explanation_vi": "Dải số chứng từ có khoảng trống chưa giải trình",
+          "case_type": "source",
+          "source_scope": "series:PAY_2025",
+          "source_status": "evaluated",
+          "estimated_minutes": 30,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "a7ec383616b328a8118d97842c164b70abb97cb3df170934279f884147954a6f"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "revoked_cancellation",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_5e17b10549ad69df",
+          "company_id": "C001",
+          "entity": "source:series:PAY_2025",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F3",
+          "explanation_vi": "Dải số chứng từ có khoảng trống chưa giải trình",
+          "case_type": "source",
+          "source_scope": "series:PAY_2025",
+          "source_status": "evaluated",
+          "estimated_minutes": 30,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "a7ec383616b328a8118d97842c164b70abb97cb3df170934279f884147954a6f"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "register_known_at_cutoff",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "register_known_after_cutoff",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_5e17b10549ad69df",
+          "company_id": "C001",
+          "entity": "source:series:PAY_2025",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F3",
+          "explanation_vi": "Dải số chứng từ có khoảng trống chưa giải trình",
+          "case_type": "source",
+          "source_scope": "series:PAY_2025",
+          "source_status": "evaluated",
+          "estimated_minutes": 30,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "a7ec383616b328a8118d97842c164b70abb97cb3df170934279f884147954a6f"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F3",
+      "variant": "inverted_series_range",
+      "passed": true,
+      "actual": "rejected",
+      "expected": "rejected",
+      "error": "Invalid document_series/PAY_2025.closed_through_number: must not precede start_number"
+    },
+    {
+      "rule_id": "F3",
+      "variant": "oversize_series_range",
+      "passed": true,
+      "actual": "rejected",
+      "expected": "rejected",
+      "error": "Invalid document_series/PAY_2025.closed_through_number: declared range exceeds 100000"
+    },
+    {
+      "rule_id": "F4",
+      "variant": "positive",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Công nợ hóa đơn quá hạn còn dư và chưa có giải trình",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "evaluated",
+          "estimated_minutes": 25,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "1d271db68609c0806cc31e6cc8a1a1db0c99eeb3ab67a9b47816d3371bebad55"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "fully_paid",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "partial",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-11T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Công nợ hóa đơn quá hạn còn dư và chưa có giải trình",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "evaluated",
+          "estimated_minutes": 25,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-18T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "58eac070ef5fdbaf32c85402414bd909e858ef6190d384723b1108deb7655fe6"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "explanation",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "missing_coverage",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_due_at": "2025-09-26T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "cba83e562979e8bdf8271c1039432ea49998935c822bc382a017ff75d602fd26"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "overallocated",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-11T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-18T11:00:00+07:00",
+          "sla_due_at": "2025-09-25T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "80abb60c4e9960cd20d82c147d06737472e2cf39f15a8281c1501ed0614eaf40"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "future_receipt",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Công nợ hóa đơn quá hạn còn dư và chưa có giải trình",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "evaluated",
+          "estimated_minutes": 25,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "1d271db68609c0806cc31e6cc8a1a1db0c99eeb3ab67a9b47816d3371bebad55"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "overdue_exactly_60_days",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "overdue_61_days",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Công nợ hóa đơn quá hạn còn dư và chưa có giải trình",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "evaluated",
+          "estimated_minutes": 25,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "1d271db68609c0806cc31e6cc8a1a1db0c99eeb3ab67a9b47816d3371bebad55"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "invoice_due_today",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "zero_invoice_amount",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_due_at": "2025-09-26T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "cba83e562979e8bdf8271c1039432ea49998935c822bc382a017ff75d602fd26"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "cancelled_invoice",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "invoice_due_before_issue",
+      "passed": false,
+      "actual": "rejected",
+      "expected": null,
+      "error": "Invalid receivable_invoices/AR1.due_at: must not precede issued_at"
+    },
+    {
+      "rule_id": "F4",
+      "variant": "receipt_wrong_customer",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-11T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-18T11:00:00+07:00",
+          "sla_due_at": "2025-09-25T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "80abb60c4e9960cd20d82c147d06737472e2cf39f15a8281c1501ed0614eaf40"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "allocation_other_invoice",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-11T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Công nợ hóa đơn quá hạn còn dư và chưa có giải trình",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "evaluated",
+          "estimated_minutes": 25,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-18T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "58eac070ef5fdbaf32c85402414bd909e858ef6190d384723b1108deb7655fe6"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "unverified_allocation",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-11T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Công nợ hóa đơn quá hạn còn dư và chưa có giải trình",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "evaluated",
+          "estimated_minutes": 25,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-18T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "58eac070ef5fdbaf32c85402414bd909e858ef6190d384723b1108deb7655fe6"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "receipt_nonfinancial",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-11T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-18T11:00:00+07:00",
+          "sla_due_at": "2025-09-25T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "80abb60c4e9960cd20d82c147d06737472e2cf39f15a8281c1501ed0614eaf40"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "receipt_journal_only",
+      "actual": false,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [],
+      "checks": {
+        "condition": false,
+        "queue": false
+      },
+      "passed": false
+    },
+    {
+      "rule_id": "F4",
+      "variant": "verification_before_receipt",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-11T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-18T11:00:00+07:00",
+          "sla_due_at": "2025-09-25T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "80abb60c4e9960cd20d82c147d06737472e2cf39f15a8281c1501ed0614eaf40"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "unknown_verifier",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-11T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-18T11:00:00+07:00",
+          "sla_due_at": "2025-09-25T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "80abb60c4e9960cd20d82c147d06737472e2cf39f15a8281c1501ed0614eaf40"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "coverage_starts_too_late",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_due_at": "2025-09-26T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "cba83e562979e8bdf8271c1039432ea49998935c822bc382a017ff75d602fd26"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "coverage_known_after_cutoff",
+      "actual": null,
+      "expected": null,
+      "route_expected": {
+        "queued": true,
+        "priority": "thap",
+        "sla_hours": 336
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "thap",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Thiếu coverage hoặc bằng chứng nguồn để đánh giá công nợ hóa đơn",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "information_gap",
+          "estimated_minutes": 35,
+          "requires_rereview": 1,
+          "rereview_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_due_at": "2025-09-26T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "cba83e562979e8bdf8271c1039432ea49998935c822bc382a017ff75d602fd26"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "expired_explanation",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Công nợ hóa đơn quá hạn còn dư và chưa có giải trình",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "evaluated",
+          "estimated_minutes": 25,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "1d271db68609c0806cc31e6cc8a1a1db0c99eeb3ab67a9b47816d3371bebad55"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "revoked_explanation",
+      "actual": true,
+      "expected": true,
+      "route_expected": {
+        "queued": true,
+        "priority": "trung_binh",
+        "sla_hours": 168
+      },
+      "queue": [
+        {
+          "case_id": "SC_82033db7cb997a72",
+          "company_id": "C001",
+          "entity": "source:invoice:AR1",
+          "opened_at": "2025-09-12T11:00:00+07:00",
+          "last_seen_at": "2025-09-12T11:00:00+07:00",
+          "priority": "trung_binh",
+          "max_score": 0,
+          "owner_id": "",
+          "status": "new",
+          "conclusion": "",
+          "reviewer_note": "",
+          "transaction_ids": "[]",
+          "rule_ids": "F4",
+          "explanation_vi": "Công nợ hóa đơn quá hạn còn dư và chưa có giải trình",
+          "case_type": "source",
+          "source_scope": "invoice:AR1",
+          "source_status": "evaluated",
+          "estimated_minutes": 25,
+          "requires_rereview": 0,
+          "rereview_due_at": "",
+          "sla_due_at": "2025-09-19T11:00:00+07:00",
+          "sla_basis": "calendar_hours_from_source_finding_policy",
+          "observation_count": 1,
+          "admission_basis": "",
+          "review_rule_ids": "",
+          "identity_version": "component-members-v1",
+          "cluster_members": "[]",
+          "batch_event_ids": "[]",
+          "scope_hash": "1d271db68609c0806cc31e6cc8a1a1db0c99eeb3ab67a9b47816d3371bebad55"
+        }
+      ],
+      "checks": {
+        "condition": true,
+        "queue": true,
+        "priority": true,
+        "sla": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "explanation_expires_at_cutoff",
+      "actual": false,
+      "expected": false,
+      "route_expected": {
+        "queued": false,
+        "priority": null,
+        "sla_hours": null
+      },
+      "queue": [],
+      "checks": {
+        "condition": true,
+        "queue": true
+      },
+      "passed": true
+    },
+    {
+      "rule_id": "F4",
+      "variant": "allocation_id_binding_conflict",
+      "passed": true,
+      "actual": "rejected",
+      "expected": "rejected",
+      "error": "Source identity changed binding: ('C001', 'ALLOC')"
+    }
+  ],
+  "corrections": [
+    {
+      "control": "E2/reversed_service_period",
+      "resolution": "Existing schema rejects end before start; classify as rejected input, not unknown."
+    },
+    {
+      "control": "F4/invoice_due_before_issue",
+      "resolution": "Existing schema rejects due before issue; classify as rejected input, not unknown."
+    },
+    {
+      "control": "F4/receipt_journal_only",
+      "resolution": "Accounting template restored bank channel; apply journal-only source challenge after template generation."
+    }
+  ],
+  "business_rule_code_changed": false,
+  "criteria_changed_after_final_batch": false
+}

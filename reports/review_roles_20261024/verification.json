@@ -1,0 +1,37 @@
+{
+  "protected_artifacts": 2966,
+  "protected_drift": [],
+  "feature_contract_unchanged": true,
+  "changed_code": [
+    "sme_fraud/feedback.py",
+    "sme_fraud/independent_ml_review.py",
+    "sme_fraud/review_backup.py",
+    "sme_fraud/review_decision_gate.py",
+    "sme_fraud/review_server.py",
+    "review_ui/app.js",
+    "review_ui/index.html"
+  ],
+  "added_code": [
+    "review_ui/review_workflow.js",
+    "sme_fraud/review_roles.py",
+    "sme_fraud/review_workflow.py",
+    "tests/review_roles_ui.test.js",
+    "tests/test_review_roles.py",
+    "tests/test_review_workflow.py"
+  ],
+  "code_sha256": {
+    "sme_fraud/feedback.py": "3d343a480555e6083381ec2cfd94cbeb0651b4e85187ee43147b2634464a109c",
+    "sme_fraud/independent_ml_review.py": "dc72b362982bb0aee34716d609fe4feecd4cbe7692e90dca247c0ce6d78ff565",
+    "sme_fraud/review_backup.py": "444108fa1af6452575c21d9c77cf746e23f260b46985c7f68cc1d8059bace036",
+    "sme_fraud/review_decision_gate.py": "c0886bf7d87ac26534c087ece688178fc9c42758172ffdabe5700c49fd0738c8",
+    "sme_fraud/review_server.py": "15ded7423292476a02c59ef1c9e20881257305046638c8a123a6ce874d280b67",
+    "review_ui/app.js": "5cc5aa9cfa57de94423ea461b1c990f6345b0bd596fde037f2612d180e6b2f64",
+    "review_ui/index.html": "12602a509fad472027742b959c2e41a130e0458d59e5991e248a077a7813de9f",
+    "review_ui/review_workflow.js": "c387d99a526bb560c4bee050bb0c19d09dea6f5a0ddd5f024275de724fde5ecc",
+    "sme_fraud/review_roles.py": "d3aa0d6ded99ed64a493b954f31b1995eaeda91ea06849a28a67832ea6af71a3",
+    "sme_fraud/review_workflow.py": "6c67d38fc58b797d6366f7f32f7816c680d2fc95c84774dc6e05e6bb4b967909",
+    "tests/review_roles_ui.test.js": "956ed0fbc1ed84eb1df1253af2207074d7099c9ca7ba4c72a06667f51e7dd5c7",
+    "tests/test_review_roles.py": "05b65b73987a6670128415231f07226f3a53bb7e52800d3652fb04a1fca450c5",
+    "tests/test_review_workflow.py": "e3f98acc0b6efc7c59c5997929d4a37d970a0dce2e81a21ff2e028f45f2974a5"
+  }
+}

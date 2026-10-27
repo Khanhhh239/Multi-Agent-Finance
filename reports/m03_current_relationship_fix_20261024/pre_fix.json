@@ -1,0 +1,109 @@
+{
+  "stage": "pre_fix",
+  "modules": [
+    {
+      "module": "test_current_relationship_features",
+      "tests": 19,
+      "failures": 22,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.969,
+      "details": [
+        {
+          "test": "test_bank_code_replacement_also_splits_old_graph_component (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_bank_code_replacement_also_splits_old_graph_component)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 106, in test_bank_code_replacement_also_splits_old_graph_component\n    self.assertEqual(self.f(case,last)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_changes_at_cutoff_apply_to_entire_simultaneous_batch (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_changes_at_cutoff_apply_to_entire_simultaneous_batch)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 148, in test_changes_at_cutoff_apply_to_entire_simultaneous_batch\n    for row in batch:self.assertEqual((self.f(case,row)['employee_phone_overlap'],self.f(case,row)['employee_address_overlap'],self.f(case,row)['graph_employee_count']),(0,0,0))\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_conflicting_employee_or_vendor_snapshots_are_rejected (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_conflicting_employee_or_vendor_snapshots_are_rejected) (role='vendor')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 203, in test_conflicting_employee_or_vendor_snapshots_are_rejected\n    with self.assertRaisesRegex(ValueError,'Conflicting'):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n"
+        },
+        {
+          "test": "test_disconnected_vendors_split_linked_vendor_count (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_disconnected_vendors_split_linked_vendor_count)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 176, in test_disconnected_vendors_split_linked_vendor_count\n    self.assertEqual([self.f(case,r)['linked_vendor_count'] for r in (first,second)],[1,1])\nAssertionError: Lists differ: [2, 2] != [1, 1]\n\nFirst differing element 0:\n2\n1\n\n- [2, 2]\n+ [1, 1]\n"
+        },
+        {
+          "test": "test_employee_clear_retires_old_tokens (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_employee_clear_retires_old_tokens)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 63, in test_employee_clear_retires_old_tokens\n    self.assertEqual((self.f(case,later)['employee_phone_overlap'],self.f(case,later)['employee_address_overlap']),(0,0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_employee_replacement_retires_phone_address_and_graph (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_employee_replacement_retires_phone_address_and_graph)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 46, in test_employee_replacement_retires_phone_address_and_graph\n    self.assertEqual((self.f(case,later)['employee_phone_overlap'],self.f(case,later)['employee_address_overlap'],self.f(case,later)['graph_employee_count']),(0,0,0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_explicit_current_schema_has_no_ambiguous_or_unbounded_history_aliases (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_explicit_current_schema_has_no_ambiguous_or_unbounded_history_aliases)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 207, in test_explicit_current_schema_has_no_ambiguous_or_unbounded_history_aliases\n    self.assertTrue(set(RENAMED.values())<=set(FEATURE_DESCRIPTIONS))\nAssertionError: False is not true\n"
+        },
+        {
+          "test": "test_external_link_replacement_and_revocation_are_current (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_external_link_replacement_and_revocation_are_current) (status='active')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 129, in test_external_link_replacement_and_revocation_are_current\n    self.assertEqual(self.f(case,last)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_external_link_replacement_and_revocation_are_current (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_external_link_replacement_and_revocation_are_current) (status='revoked')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 129, in test_external_link_replacement_and_revocation_are_current\n    self.assertEqual(self.f(case,last)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_external_link_replacement_and_revocation_are_current (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_external_link_replacement_and_revocation_are_current) (status='deleted')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 129, in test_external_link_replacement_and_revocation_are_current\n    self.assertEqual(self.f(case,last)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_external_link_replacement_and_revocation_are_current (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_external_link_replacement_and_revocation_are_current) (status='inactive')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 129, in test_external_link_replacement_and_revocation_are_current\n    self.assertEqual(self.f(case,last)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_master_snapshot_relationships_work_without_link_mirrors (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_master_snapshot_relationships_work_without_link_mirrors)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 189, in test_master_snapshot_relationships_work_without_link_mirrors\n    self.assertEqual(self.f(case,row)['graph_employee_count'],1)\nAssertionError: 0 != 1\n"
+        },
+        {
+          "test": "test_old_or_equal_time_mirrors_do_not_resurrect_cleared_master (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_old_or_equal_time_mirrors_do_not_resurrect_cleared_master) (mirror_days=0)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 167, in test_old_or_equal_time_mirrors_do_not_resurrect_cleared_master\n    self.assertEqual(self.f(case,last)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_old_or_equal_time_mirrors_do_not_resurrect_cleared_master (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_old_or_equal_time_mirrors_do_not_resurrect_cleared_master) (mirror_days=1)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 167, in test_old_or_equal_time_mirrors_do_not_resurrect_cleared_master\n    self.assertEqual(self.f(case,last)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_representative_replacement_removes_old_two_hop_path (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_representative_replacement_removes_old_two_hop_path)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 115, in test_representative_replacement_removes_old_two_hop_path\n    self.assertEqual(self.f(case,last)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_revoking_old_target_does_not_cancel_current_replacement (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_revoking_old_target_does_not_cancel_current_replacement)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 141, in test_revoking_old_target_does_not_cancel_current_replacement\n    self.assertEqual([self.f(case,r)['graph_employee_count'] for r in (first,middle,last)],[1,1,0])\nAssertionError: Lists differ: [1, 1, 1] != [1, 1, 0]\n\nFirst differing element 2:\n1\n0\n\n- [1, 1, 1]\n?        ^\n\n+ [1, 1, 0]\n?        ^\n\n"
+        },
+        {
+          "test": "test_shared_contact_survives_for_remaining_current_employee (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_shared_contact_survives_for_remaining_current_employee)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 70, in test_shared_contact_survives_for_remaining_current_employee\n    self.assertEqual(self.f(case,earlier)['graph_employee_count'],2)\nAssertionError: 1 != 2\n"
+        },
+        {
+          "test": "test_transfer_back_restores_membership_without_double_counting (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_transfer_back_restores_membership_without_double_counting)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 93, in test_transfer_back_restores_membership_without_double_counting\n    self.assertEqual([self.f(case,row)['graph_employee_count'] for row in (first,middle,last)],[1,0,1])\nAssertionError: Lists differ: [1, 1, 1] != [1, 0, 1]\n\nFirst differing element 1:\n1\n0\n\n- [1, 1, 1]\n?     ^\n\n+ [1, 0, 1]\n?     ^\n\n"
+        },
+        {
+          "test": "test_transfer_removes_old_company_membership_and_matches_new_company (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_transfer_removes_old_company_membership_and_matches_new_company)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 83, in test_transfer_removes_old_company_membership_and_matches_new_company\n    self.assertEqual((self.f(case,old)['employee_phone_overlap'],self.f(case,old)['employee_address_overlap'],self.f(case,old)['graph_employee_count']),(0,0,0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_vendor_replacement_or_clear_splits_graph (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_vendor_replacement_or_clear_splits_graph) (replacement='M03_NEW_VENDOR_PHONE')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 56, in test_vendor_replacement_or_clear_splits_graph\n    self.assertEqual(self.f(case,later)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_vendor_replacement_or_clear_splits_graph (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_vendor_replacement_or_clear_splits_graph) (replacement='')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 56, in test_vendor_replacement_or_clear_splits_graph\n    self.assertEqual(self.f(case,later)['graph_employee_count'],0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_vendor_transfer_removes_old_company_vendor_membership (test_current_relationship_features.CurrentRelationshipFeaturesTest.test_vendor_transfer_removes_old_company_vendor_membership)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_current_relationship_features.py\", line 185, in test_vendor_transfer_removes_old_company_vendor_membership\n    self.assertEqual([self.f(case,r)['linked_vendor_count'] for r in (first,last)],[2,1])\nAssertionError: Lists differ: [2, 2] != [2, 1]\n\nFirst differing element 1:\n2\n1\n\n- [2, 2]\n?     ^\n\n+ [2, 1]\n?     ^\n\n"
+        }
+      ]
+    }
+  ],
+  "tests": 19,
+  "failures": 22,
+  "errors": 0,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 2.985
+}

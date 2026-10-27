@@ -9,6 +9,7 @@ from .temporal_evidence import EmployeeHistory
 from .case_identity import IDENTITY_VERSION, scope_hash, values
 from .case_admission import admission
 from .a4_pattern_queue import ENTITY_QUEUE, A4_PATTERN_TRIAL, prepare_arrivals, finish_cases
+from .cash_limit_priority import PRIORITIES, SLA_HOURS
 
 
 def owner_at(staff, company, at):
@@ -249,7 +250,7 @@ def review_queue(result, tables, *, policy=ENTITY_QUEUE):
         case['identity_version'] = IDENTITY_VERSION
         case['cluster_members'] = json.dumps(sorted(case.get('cluster_members', [])))
         if case['case_type'] != 'source':
-            hours = {'cao_nhat': 24, 'cao': 48, 'trung_binh': 168, 'thap': 720}[case['priority']]
+            hours = SLA_HOURS[case['priority']]
             case['sla_due_at'] = (parse(case['opened_at']) + timedelta(hours=hours)).isoformat()
             case['sla_basis'] = 'calendar_hours_from_opened_at_simulation_policy'
             case['observation_count'] = len(case['transaction_ids'])
@@ -258,5 +259,5 @@ def review_queue(result, tables, *, policy=ENTITY_QUEUE):
         case['rule_ids'] = '|'.join(sorted(case['rule_ids']))
         case['batch_event_ids'] = json.dumps(sorted(case.get('batch_event_ids', [])))
         case['scope_hash'] = scope_hash(case)
-    cases.sort(key=lambda r: (-r['max_score'], r['opened_at'], r['case_id']))
+    cases.sort(key=lambda r: (-PRIORITIES[r['priority']], -r['max_score'], r['opened_at'], r['case_id']))
     return cases, events

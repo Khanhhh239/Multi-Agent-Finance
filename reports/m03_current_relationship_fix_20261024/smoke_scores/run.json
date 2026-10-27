@@ -1,0 +1,67 @@
+{
+  "version": "score-only-cache-v1",
+  "mode": "technical_cache_replay",
+  "scope": {
+    "company_ids": [
+      "C001"
+    ],
+    "source_ref": "SIM_M03_TECHNICAL_SMOKE",
+    "start_at": "2025-07-01T00:00:00+07:00",
+    "end_at": "2026-01-01T00:00:00+07:00"
+  },
+  "scope_end_exclusive": true,
+  "dataset": "D:\\agent22\\.runtime\\m03_current_relationship_fix_20261024\\smoke_cache",
+  "dataset_version": "m03-current-smoke-fixture-v1",
+  "data_origin": "synthetic_process_simulation",
+  "manifest_sha256": "2f7c9ac9ff2d07cc698ea6719780b3cdfa59c84a4f5d2a61147d062ab46af015",
+  "input_sha256": {
+    "advances.csv": "19bba4020a3a6fcd6270558538a66888124e5859b5754a7be505cf923c72015e",
+    "advance_events.csv": "19bba4020a3a6fcd6270558538a66888124e5859b5754a7be505cf923c72015e",
+    "attendance.csv": "da2cf43c2e796c9d0335d3caafbd1181b3d276ea985c2ab46a7bc73cfb117919",
+    "bank_account_changes.csv": "19bba4020a3a6fcd6270558538a66888124e5859b5754a7be505cf923c72015e",
+    "calendar.csv": "7296fea023dd9d6bd4db421d982b767bc7a4e82c2aecbb698c11eac54a252192",
+    "companies.csv": "cb8ccccae40ba1c7683c3414082e0d020dcda9fda2a41aba8303118dfdc6bb4a",
+    "customers.csv": "534937d4c1c0fc406fc9b43160b445dc87ead032ebbdbe64b1d1eeaf8e6e3a7d",
+    "employees.csv": "7dce184094f3cb53a750e34e9f8d97a3e06abb8d3160f26e59065fda103de28d",
+    "entity_links.csv": "e328f21002a4b7fc3da467a391d9ea95bdefe5bcf3ac0e9f76a434856549e82a",
+    "features.csv": "274d2ba93f5cda5fcc5a27efaaee4c1b758fb1c7dfa306447c9a3884caa3f1d8",
+    "journal_documents.csv": "e04cbe5c63d9596f86bccc6e2795521ed2497a5bb17d0dfce9828769f439b684",
+    "journal_lines.csv": "81cf24d7ac35b41efff1fdee9d16bb21b51d9e6141e6a060d32dadee8ef0f46c",
+    "transactions.csv": "918cd2faa84515f452771016a2e28a8bd2c035db89184905141f14a17851a8d8",
+    "vendors.csv": "4815135b1008ab030442a2da55bd162dc3bdb06c90bbc4fdd42f8baf23e40280",
+    "vendor_status_history.csv": "54ca74e4fe93f378879a34dad96a7cbc974ac98ecd7950ca13e2d7dfc526d7e3"
+  },
+  "model_path": "D:\\agent22\\reports\\m03_current_relationship_fix_20261024\\smoke_model\\isolation_forest.joblib",
+  "model_sha256": "f5a22dde18ab7880446d642d37e39260059b32ce92aa3aa62b791cd221f97f44",
+  "feature_contract_fingerprint": "2a1b8322fb1886c8ff2e0ab5ccaff3db9fb533046e2dbf55b4003ef2d97afc7f",
+  "sklearn_version": "1.9.1",
+  "training_feature_fingerprint": "5f4980b41c02232ad42a3a60468291dd38acfdc04e4cbbeec971e215e30af929",
+  "compatibility": {
+    "compatible": true,
+    "reasons": [],
+    "feature_contract_fingerprint": "2a1b8322fb1886c8ff2e0ab5ccaff3db9fb533046e2dbf55b4003ef2d97afc7f"
+  },
+  "rows_scored": 6,
+  "score_direction": "higher_is_more_anomalous",
+  "models_fitted": 0,
+  "labels_loaded": false,
+  "splits_loaded": false,
+  "feature_rebuild": false,
+  "threshold_changed": false,
+  "queue_changed": false,
+  "external_notifications": 0,
+  "holdout_005_loaded_or_scored": false,
+  "source_acceptance_verified": false,
+  "model_training_window_disjointness_verified": true,
+  "operational_benefit_measured": false,
+  "independent_review": false,
+  "gates": {
+    "real_source": "awaiting_accepted_real_data",
+    "protocol": "awaiting_business_approval",
+    "temporal_model_provenance": "verified_declared_windows",
+    "benefit": "not_measured"
+  },
+  "temporal_provenance_fingerprint": "df02745215914074e4fec0c2a6cb0edd7d1eee158588188c7de6028361209ec8",
+  "run_id": "3a4ab050a6204dd92900adc3d8f5b26d60d44fd8fb26250805db0056b37e7899",
+  "scores_sha256": "7bd3998b6161c213bc0ffc16bd085063aa631e5f07378b3608e240291015195c"
+}

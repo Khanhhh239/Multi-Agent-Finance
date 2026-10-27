@@ -1,0 +1,17 @@
+{
+  "captured_at": "2026-10-23T18:21:04.684296+00:00",
+  "protected_files": 2273,
+  "protected_drift": [],
+  "changed_code": [
+    "sme_fraud/rules.py"
+  ],
+  "added_code": [
+    "tests/test_b4_evidence_timing.py"
+  ],
+  "feature_contract_unchanged": true,
+  "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1",
+  "code_sha256": {
+    "sme_fraud/rules.py": "364dae4c87f3774e7782ebd0198d9ccb698fa36dd04ddadc5682b4b8fe4dec47",
+    "tests/test_b4_evidence_timing.py": "97b39772ef89527b0ec0e70ef0ec3efc65aaf531b56b3f4ea58dfc3393dedfdb"
+  }
+}

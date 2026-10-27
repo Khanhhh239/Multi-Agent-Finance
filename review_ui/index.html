@@ -8,6 +8,7 @@
   <script src="/vendor/cytoscape.min.js" defer></script>
   <script src="/case_graph.js" defer></script>
   <script src="/review_explanations.js" defer></script>
+  <script src="/review_workflow.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -35,6 +36,7 @@
       </div>
     </section>
     <div id="notice" class="notice hidden" role="status"></div>
+    <div id="review-workflow-status" class="source-banner hidden" aria-live="polite"></div>
     <section class="stats" aria-label="Tổng quan hồ sơ">
       <article><span>Tồn đọng</span><strong id="stat-new">—</strong><small>Hồ sơ giao dịch và nguồn đang mở</small><i class="stat-icon blue">▤</i></article>
       <article><span>Ưu tiên cao</span><strong id="stat-high">—</strong><small>Cần đối chiếu trước</small><i class="stat-icon amber">!</i></article>

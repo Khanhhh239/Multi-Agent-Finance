@@ -1,0 +1,33 @@
+{
+  "version": "if-discovery-shadow-v2",
+  "candidate_identity_version": "if-discovery-shadow-v1",
+  "cohorts": ["001", "003"],
+  "primary": {"daily_slots": 5, "daily_minutes": 120, "discovery_share_percent": 20, "if_review_estimated_minutes": 20},
+  "budgets": [{"slots": 5, "minutes": 120}, {"slots": 10, "minutes": 240}],
+  "discovery_shares_percent": [0, 20, 40],
+  "if_review_costs_minutes": [20, 30],
+  "zero_share_control_cost_minutes": 20,
+  "baseline_delay_guard": {
+    "max_additional_days": 0,
+    "reference": "same_cutoff_frozen_baseline_review_day",
+    "action": "reserve_baseline_before_if",
+    "calendar": "all_calendar_days",
+    "if_capacity": "remaining_slots_and_minutes_after_baseline_reservation"
+  },
+  "threshold": "Frozen calibration threshold; no evaluation retuning or below-threshold fallback",
+  "quota": "Upper bound only; reduce the IF quota to fit baseline reservations, slot limits and minute limits",
+  "baseline_remainder": "Existing baseline ordering, no IF reranking of baseline tasks",
+  "mandatory": "Keep frozen baseline-selected cao_nhat and nontransaction work; additional pending hard work precedes IF after reference-day reservations",
+  "candidate": "Evaluation-only IF score >= frozen threshold; transaction and document never appeared in observed baseline scope before cutoff",
+  "document_key": "company plus invoice_id, else journal_document_id, else transaction_id",
+  "case_unit": "One highest-scored available lead per document, one IF review per document",
+  "dedup": "Cumulative baseline membership/context/evidence and invoice source scopes block rediscovery",
+  "subsequent_baseline": "Later baseline review is charged separately, never auto-completed by an IF lead",
+  "causality": "Only today's counterfactual baseline selections reserve today's capacity; future reference selections never gate current decisions",
+  "delay_interpretation": "Zero additional calendar days relative to the frozen baseline review day; does not promise zero absolute waiting time or correct an already-late baseline SLA",
+  "outcomes": "Independent outcomes and actual review minutes remain unavailable",
+  "model_fit": false,
+  "model_scored": false,
+  "production_queue_write": false,
+  "seed": 20261022
+}

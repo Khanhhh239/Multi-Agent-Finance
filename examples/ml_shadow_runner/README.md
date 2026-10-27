@@ -1,8 +1,8 @@
 # Runner ML chỉ xuất điểm từ feature cache
 
-Module: [shadow_scoring.py](../../sme_fraud/shadow_scoring.py). Runner kiểm tra cache/model hiện có, chọn công ty và khoảng thời gian rồi xuất điểm Isolation Forest vào thư mục mới. Không gọi `fit`, dựng lại feature, đọc nhãn/splits, chọn ngưỡng hoặc sửa hàng đợi/kết luận/thông báo. [Biên bản kiểm chứng](../../reports/ml_shadow_runner_20261019.md).
+Module: [shadow_scoring.py](../../sme_fraud/shadow_scoring.py). Runner kiểm tra cache/model hiện có, chọn công ty và khoảng thời gian rồi xuất điểm Isolation Forest vào thư mục mới. Không gọi `fit`, dựng lại feature, đọc nhãn/splits, chọn ngưỡng hoặc sửa hàng đợi/kết luận/thông báo. [Biên bản kiểm chứng](../../docs/reports/ml/ml_shadow_runner_20261019.md).
 
-**Cập nhật 22/10/2026:** đã có [hai model mới tương thích `synthetic-source-world-v1`](../../reports/model_source_sync_20261022.md) và [luồng huấn luyện riêng](../ml_source_model/README.md). Khi artifact có provenance mới, runner bắt buộc scope nằm trong evaluation đã khai báo và kiểm tra tách cửa sổ với train/calibration; model cũ vẫn giữ trạng thái thời gian chưa xác minh.
+**Cập nhật 22/10/2026:** đã có [hai model mới tương thích `synthetic-source-world-v1`](../../docs/reports/ml/model_source_sync_20261022.md) và [luồng huấn luyện riêng](../ml_source_model/README.md). Khi artifact có provenance mới, runner bắt buộc scope nằm trong evaluation đã khai báo và kiểm tra tách cửa sổ với train/calibration; model cũ vẫn giữ trạng thái thời gian chưa xác minh.
 
 ## Thử trên mô phỏng
 

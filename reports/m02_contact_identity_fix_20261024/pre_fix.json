@@ -1,0 +1,137 @@
+{
+  "stage": "pre_fix",
+  "modules": [
+    {
+      "module": "test_feature_contact_identity",
+      "tests": 15,
+      "failures": 26,
+      "errors": 3,
+      "skipped": 0,
+      "seconds": 2.406,
+      "details": [
+        {
+          "test": "test_address_case_accents_and_separators_match_like_b2 (test_feature_contact_identity.FeatureContactIdentityTest.test_address_case_accents_and_separators_match_like_b2)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 101, in test_address_case_accents_and_separators_match_like_b2\n    self.assertEqual(self.feature(case)['employee_address_overlap'], 1)\nAssertionError: 0 != 1\n"
+        },
+        {
+          "test": "test_address_links_do_not_create_a_strong_graph_relationship (test_feature_contact_identity.FeatureContactIdentityTest.test_address_links_do_not_create_a_strong_graph_relationship)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 128, in test_address_links_do_not_create_a_strong_graph_relationship\n    self.assertEqual(self.feature(case)['graph_employee_count'], 0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_all_empty_employee_and_vendor_contacts_do_not_overlap (test_feature_contact_identity.FeatureContactIdentityTest.test_all_empty_employee_and_vendor_contacts_do_not_overlap)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 45, in test_all_empty_employee_and_vendor_contacts_do_not_overlap\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']), (0, 0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_contact_tokens_cannot_collide_with_entity_ids_in_graph (test_feature_contact_identity.FeatureContactIdentityTest.test_contact_tokens_cannot_collide_with_entity_ids_in_graph)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 144, in test_contact_tokens_cannot_collide_with_entity_ids_in_graph\n    self.assertEqual(self.feature(case)['graph_employee_count'], 0)\nAssertionError: 1 != 0\n"
+        },
+        {
+          "test": "test_empty_whitespace_punctuation_and_null_values_never_match (test_feature_contact_identity.FeatureContactIdentityTest.test_empty_whitespace_punctuation_and_null_values_never_match) (value='')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 55, in test_empty_whitespace_punctuation_and_null_values_never_match\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']), (0, 0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_empty_whitespace_punctuation_and_null_values_never_match (test_feature_contact_identity.FeatureContactIdentityTest.test_empty_whitespace_punctuation_and_null_values_never_match) (value=' \\t\\n')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 55, in test_empty_whitespace_punctuation_and_null_values_never_match\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']), (0, 0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_empty_whitespace_punctuation_and_null_values_never_match (test_feature_contact_identity.FeatureContactIdentityTest.test_empty_whitespace_punctuation_and_null_values_never_match) (value=' .-_:/ ')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 55, in test_empty_whitespace_punctuation_and_null_values_never_match\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']), (0, 0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_empty_whitespace_punctuation_and_null_values_never_match (test_feature_contact_identity.FeatureContactIdentityTest.test_empty_whitespace_punctuation_and_null_values_never_match) (value=None)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 55, in test_empty_whitespace_punctuation_and_null_values_never_match\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']), (0, 0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_non_string_contacts_are_unusable_without_implicit_conversion (test_feature_contact_identity.FeatureContactIdentityTest.test_non_string_contacts_are_unusable_without_implicit_conversion) (value=0)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 76, in test_non_string_contacts_are_unusable_without_implicit_conversion\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']), (0, 0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_non_string_contacts_are_unusable_without_implicit_conversion (test_feature_contact_identity.FeatureContactIdentityTest.test_non_string_contacts_are_unusable_without_implicit_conversion) (value=123456789)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 76, in test_non_string_contacts_are_unusable_without_implicit_conversion\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']), (0, 0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_non_string_contacts_are_unusable_without_implicit_conversion (test_feature_contact_identity.FeatureContactIdentityTest.test_non_string_contacts_are_unusable_without_implicit_conversion) (value=True)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 76, in test_non_string_contacts_are_unusable_without_implicit_conversion\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']), (0, 0))\nAssertionError: Tuples differ: (1, 1) != (0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n+ (0, 0)\n"
+        },
+        {
+          "test": "test_normalized_phone_edges_find_the_real_employee (test_feature_contact_identity.FeatureContactIdentityTest.test_normalized_phone_edges_find_the_real_employee)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 121, in test_normalized_phone_edges_find_the_real_employee\n    self.assertEqual(self.feature(case)['graph_employee_count'], 1)\nAssertionError: 0 != 1\n"
+        },
+        {
+          "test": "test_phone_country_code_and_formatting_match_like_b2 (test_feature_contact_identity.FeatureContactIdentityTest.test_phone_country_code_and_formatting_match_like_b2) (employee='0912 345 678', vendor='+84 912.345.678')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 92, in test_phone_country_code_and_formatting_match_like_b2\n    self.assertEqual(self.feature(case)['employee_phone_overlap'], 1)\nAssertionError: 0 != 1\n"
+        },
+        {
+          "test": "test_phone_country_code_and_formatting_match_like_b2 (test_feature_contact_identity.FeatureContactIdentityTest.test_phone_country_code_and_formatting_match_like_b2) (employee='0912345678', vendor='0084-912-345-678')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 92, in test_phone_country_code_and_formatting_match_like_b2\n    self.assertEqual(self.feature(case)['employee_phone_overlap'], 1)\nAssertionError: 0 != 1\n"
+        },
+        {
+          "test": "test_placeholder_contacts_never_become_direct_or_graph_evidence (test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence) (value='N/A')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 66, in test_placeholder_contacts_never_become_direct_or_graph_evidence\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap'], f['graph_employee_count']), (0, 0, 0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_placeholder_contacts_never_become_direct_or_graph_evidence (test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence) (value='NULL')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 66, in test_placeholder_contacts_never_become_direct_or_graph_evidence\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap'], f['graph_employee_count']), (0, 0, 0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_placeholder_contacts_never_become_direct_or_graph_evidence (test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence) (value='None')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 66, in test_placeholder_contacts_never_become_direct_or_graph_evidence\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap'], f['graph_employee_count']), (0, 0, 0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_placeholder_contacts_never_become_direct_or_graph_evidence (test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence) (value='nan')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 66, in test_placeholder_contacts_never_become_direct_or_graph_evidence\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap'], f['graph_employee_count']), (0, 0, 0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_placeholder_contacts_never_become_direct_or_graph_evidence (test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence) (value='UNKNOWN')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 66, in test_placeholder_contacts_never_become_direct_or_graph_evidence\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap'], f['graph_employee_count']), (0, 0, 0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_placeholder_contacts_never_become_direct_or_graph_evidence (test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence) (value='không có')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 66, in test_placeholder_contacts_never_become_direct_or_graph_evidence\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap'], f['graph_employee_count']), (0, 0, 0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_placeholder_contacts_never_become_direct_or_graph_evidence (test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence) (value='chưa có')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 66, in test_placeholder_contacts_never_become_direct_or_graph_evidence\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap'], f['graph_employee_count']), (0, 0, 0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_placeholder_contacts_never_become_direct_or_graph_evidence (test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence) (value='not available')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 66, in test_placeholder_contacts_never_become_direct_or_graph_evidence\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap'], f['graph_employee_count']), (0, 0, 0))\nAssertionError: Tuples differ: (1, 1, 1) != (0, 0, 0)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1, 1)\n+ (0, 0, 0)\n"
+        },
+        {
+          "test": "test_same_width_v2_model_cannot_score_v3_contact_semantics (test_feature_contact_identity.FeatureContactIdentityTest.test_same_width_v2_model_cannot_score_v3_contact_semantics)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 169, in test_same_width_v2_model_cannot_score_v3_contact_semantics\n    self.assertEqual(result['reasons'],['semantic_provenance_missing_or_mismatched'])\nAssertionError: Lists differ: [] != ['semantic_provenance_missing_or_mismatched']\n\nSecond list contains 1 additional elements.\nFirst extra element 0:\n'semantic_provenance_missing_or_mismatched'\n\n- []\n+ ['semantic_provenance_missing_or_mismatched']\n"
+        },
+        {
+          "test": "test_synthetic_tokens_and_non_contact_normalization_remain_supported (test_feature_contact_identity.FeatureContactIdentityTest.test_synthetic_tokens_and_non_contact_normalization_remain_supported)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 151, in test_synthetic_tokens_and_non_contact_normalization_remain_supported\n    self.assertEqual(normalize('0000000000','phone'),'')\nAssertionError: '0000000000' != ''\n- 0000000000\n\n"
+        },
+        {
+          "test": "test_valid_same_contact_survives_while_the_other_field_is_empty (test_feature_contact_identity.FeatureContactIdentityTest.test_valid_same_contact_survives_while_the_other_field_is_empty) (field='phone')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 112, in test_valid_same_contact_survives_while_the_other_field_is_empty\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']),\nAssertionError: Tuples differ: (1, 1) != (1, 0)\n\nFirst differing element 1:\n1\n0\n\n- (1, 1)\n?     ^\n\n+ (1, 0)\n?     ^\n\n"
+        },
+        {
+          "test": "test_valid_same_contact_survives_while_the_other_field_is_empty (test_feature_contact_identity.FeatureContactIdentityTest.test_valid_same_contact_survives_while_the_other_field_is_empty) (field='address')",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 112, in test_valid_same_contact_survives_while_the_other_field_is_empty\n    self.assertEqual((f['employee_phone_overlap'], f['employee_address_overlap']),\nAssertionError: Tuples differ: (1, 1) != (0, 1)\n\nFirst differing element 0:\n1\n0\n\n- (1, 1)\n?  ^\n\n+ (0, 1)\n?  ^\n\n"
+        },
+        {
+          "test": "test_missing_contact_columns_are_unavailable (test_feature_contact_identity.FeatureContactIdentityTest.test_missing_contact_columns_are_unavailable)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 83, in test_missing_contact_columns_are_unavailable\n    f=self.feature(case)\n      ^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 33, in feature\n    return build_features(case.tables)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\features.py\", line 169, in build_features\n    employee_tokens[(e[\"company_id\"], field)][e[field]] += 1\n                                              ~^^^^^^^\nKeyError: 'phone'\n"
+        },
+        {
+          "test": "test_non_string_contacts_are_unusable_without_implicit_conversion (test_feature_contact_identity.FeatureContactIdentityTest.test_non_string_contacts_are_unusable_without_implicit_conversion) (value={'raw': 'phone'})",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 75, in test_non_string_contacts_are_unusable_without_implicit_conversion\n    f=self.feature(case)\n      ^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 33, in feature\n    return build_features(case.tables)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\features.py\", line 169, in build_features\n    employee_tokens[(e[\"company_id\"], field)][e[field]] += 1\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^\nTypeError: unhashable type: 'dict'\n"
+        },
+        {
+          "test": "test_non_string_contacts_are_unusable_without_implicit_conversion (test_feature_contact_identity.FeatureContactIdentityTest.test_non_string_contacts_are_unusable_without_implicit_conversion) (value=['phone'])",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 75, in test_non_string_contacts_are_unusable_without_implicit_conversion\n    f=self.feature(case)\n      ^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\tests\\test_feature_contact_identity.py\", line 33, in feature\n    return build_features(case.tables)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\features.py\", line 169, in build_features\n    employee_tokens[(e[\"company_id\"], field)][e[field]] += 1\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^\nTypeError: unhashable type: 'list'\n"
+        }
+      ]
+    }
+  ],
+  "tests": 15,
+  "failures": 26,
+  "errors": 3,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 2.422
+}

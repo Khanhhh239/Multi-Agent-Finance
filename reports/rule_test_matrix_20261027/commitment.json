@@ -1,0 +1,18 @@
+{
+  "sme_fraud/rules.py": "b3736044d3c9cd7d40df7dc3711409ae87e0d2bd05c3bbc884bf190e3663d8e8",
+  "tests/fixtures/rule_test_matrix.json": "1f84277c1da97bdfad6d55bbe3ce88f64df74dce5d1c4959fc069d790fbc3eeb",
+  "docs/reports/rules/rule_test_matrix_20261027.md": "6201396396b4441f8edbdafd19e084add568172ddd106b38dcd6ff0d5431f773",
+  "tests/rule_matrix_cases.py": "aa4f18a23439f123b6267d9630e74c254813b8e8ac955b7dbf12b515fa16197f",
+  "tests/test_rule_matrix_routing.py": "4494c77519297b9af399b260a2d6f26c0bc448fef44421c7363a8c0db1a99522",
+  "tests/test_rule_boundaries.py": "b2fce4c93cfca6eec5a392303f313b2858894df3c8f9d06acaa4446e05c9a3cc",
+  "tests/test_rule_statistics_matrix.py": "a97c5c31b42d6530f28ec0204aaff316bc28ed18a9c809bac6635160e0abf74f",
+  "tests/test_rule_matrix_manifest.py": "77c079657278520b8343ed7a4dd17ba30f565d26347e4edc4ce3257ee56be2e1",
+  "reports/rule_test_matrix_20261027/matrix.json": "1f84277c1da97bdfad6d55bbe3ce88f64df74dce5d1c4959fc069d790fbc3eeb",
+  "reports/rule_test_matrix_20261027/protected_verification.json": "73066dff990d222e16a9e026b66d3a63883b21ca7e7907635ebe1dcd65c2dc15",
+  "reports/rule_test_matrix_20261027/regressions_before_fix.json": "73f0de554be371964370a998b27905079f4793f4b7495c4aa3776b4c234b3569",
+  "reports/rule_test_matrix_20261027/routing_controls.json": "7b1b136a579bd407d95305e7622c1ca9c5f9b4e4574cad724260ca4cc8acc09a",
+  "reports/rule_test_matrix_20261027/rules_change.patch": "09902af1702413b32fbec22c42adf87b6de1f47935cd1df70b8e2abb76855886",
+  "reports/rule_test_matrix_20261027/summary.json": "c151197fda65ff186179b2cdf4a479e20597c73d9e8ea6b608004c86135e36dd",
+  "reports/rule_test_matrix_20261027/test_results.json": "3b21c00ea58411402c85a275aac2fb7448fad5ed157c333a6247f429d831bfb8",
+  "reports/rule_test_matrix_20261027/verification.json": "48fbb42759772a2b155b132bc1e72d95f109d0a4388a3bafad9d22a6908cdc57"
+}

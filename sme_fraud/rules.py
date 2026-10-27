@@ -6,18 +6,18 @@ import csv
 import hashlib
 import json
 import math
-import re
-import unicodedata
 from collections import Counter, defaultdict, deque
 from difflib import SequenceMatcher
 from functools import lru_cache
 from itertools import groupby
 from pathlib import Path
 
-from .features import FEATURE_DESCRIPTIONS, Stream, UnionFind, build_features
+from .identity import normalize
+
+from .features import FEATURE_DESCRIPTIONS, Stream, build_features
 from .generate import parse as _parse
 from .exception_validation import validated_tables
-from .case_identity import component_key
+from .identity_graph import KnownGraph, master_versions
 from .temporal_evidence import (BankChangeHistory, ObservedVersions, bank_change_evidence,
                                 approved_evidence, paid_leave_entitlement)
 from .noise_policy import (name_key, name_similarity, evidence_id, independent_requests,
@@ -29,6 +29,7 @@ from .authority_policy import ApprovalAuthority
 from .batch_controls import BatchControls
 from .evidence_policy import EvidencePolicy, SOURCES as EVIDENCE_SOURCES, REQUIRED as EVIDENCE_REQUIRED, required_columns
 from .cash_controls import CASH_POLICY, cash_payment_check, REVIEW_POLICY, validate_review_config
+from .cash_limit_priority import POLICY as LIMIT_PRIORITY_POLICY
 from .tax_risk import TaxRiskHistory
 from .dynamic_thresholds import DynamicThresholds, ThresholdPolicy, timestamp as threshold_timestamp
 from .threshold_sources import extract_observations
@@ -85,6 +86,7 @@ DEFAULT_CONFIG.update(evidence_policy='phase4', receivable_overdue_days=60)
 DEFAULT_CONFIG.update(split_pattern_policy='split_patterns_v1')
 DEFAULT_CONFIG.update(cash_payment_policy=CASH_POLICY, cash_limit_vnd_by_company={})
 DEFAULT_CONFIG.update(cash_review_policy=REVIEW_POLICY, cash_limit_evidence_by_company={})
+DEFAULT_CONFIG.update(cash_limit_priority_policy=LIMIT_PRIORITY_POLICY)
 DEFAULT_CONFIG.update(amount_baseline='rolling_account', dynamic_window_days=90, dynamic_method='p99',
                       dynamic_min_samples=20, dynamic_sigma_k=3., dynamic_cycle_enabled=True,
                       dynamic_cycle_radius_days=2, dynamic_cycle_learning_days=180, dynamic_min_cycle_months=3)
@@ -98,21 +100,6 @@ OPTIONAL_INPUT_TABLES = ('payroll_entitlements', 'supplier_payment_agreements', 
 OPTIONAL_INPUT_TABLES += tuple(EVIDENCE_SOURCES)
 OPTIONAL_INPUT_TABLES += ('tax_risk_history',)
 OPTIONAL_INPUT_TABLES += ('journal_documents', 'journal_lines')
-
-
-@lru_cache(maxsize=100000)
-def normalize(value, kind='text'):
-    """Preserve identifiers/leading zeros; never turn missing values into matches."""
-    value = str(value or '').strip().upper().replace('Đ', 'D')
-    value = ''.join(c for c in unicodedata.normalize('NFD', value)
-                    if unicodedata.category(c) != 'Mn')
-    value = re.sub(r'[^A-Z0-9]', '', value)
-    if kind == 'phone' and value.isdigit():
-        if value.startswith('0084') and len(value) == 13:
-            value = '0' + value[4:]
-        elif value.startswith('84') and len(value) == 11:
-            value = '0' + value[2:]
-    return value
 
 
 def invoice_payment_key(row):
@@ -220,99 +207,6 @@ def long_installment_exception(row, group, invoice_history, contract_history, ag
                     same_contract=same_contract, invoice_cumulative_paid_vnd=cumulative)
 
 
-class KnownGraph:
-    """Current identity slots, with replaceable edges and as-of evidence paths.
-
-    A (company, source, kind) slot has one current bank/phone/representative.
-    Empty targets are retained as tombstones so old mirrored links cannot return.
-    At the same observed timestamp a master snapshot outranks its link mirror.
-    """
-    def __init__(self):
-        self.groups = defaultdict(UnionFind)
-        self.adjacency = defaultdict(lambda: defaultdict(dict))
-        self.current = defaultdict(dict)
-        self.identities = defaultdict(dict)
-        self.dirty = set()
-
-    @staticmethod
-    @lru_cache(maxsize=100000)
-    def node(value, kind):
-        return f'{kind}:{normalize(value, kind)}'
-
-    def replace(self, cid, left, right, at, kind, *, master=False):
-        if not left or left.endswith(':'):
-            return
-        if right and right.endswith(':'):
-            right = ''
-        slot = (left, kind)
-        previous = self.current[cid].get(slot)
-        rank = (at, int(master))
-        if previous:
-            previous_rank, previous_edge = previous
-            if rank < previous_rank:
-                return
-            if rank == previous_rank:
-                if right != previous_edge['target']:
-                    raise ValueError(f'Conflicting graph identity at {at}: {cid}/{left}/{kind}')
-                return
-        edge = dict(source=left, target=right, link_type=kind, observed_at=at)
-        self.current[cid][slot] = (rank, edge)
-        self.dirty.add(cid)
-
-    def group(self, cid):
-        # Union-find cannot split a component. Rebuild only after source changes,
-        # after the entire observation batch, from the surviving current edges.
-        if cid in self.dirty:
-            group, adjacency = UnionFind(), defaultdict(dict)
-            edges = sorted((edge for _, edge in self.current[cid].values()),
-                           key=lambda e: (e['source'], e['link_type'], e['target'], e['observed_at']))
-            for edge in edges:
-                left, right = edge['source'], edge['target']
-                if not right:
-                    continue
-                group.join(left, right)
-                adjacency[left][right] = edge
-                adjacency[right][left] = edge
-            self.groups[cid], self.adjacency[cid] = group, adjacency
-            members = defaultdict(list)
-            for node in group.parent:
-                if node.startswith('entity:'):
-                    members[group.root(node)].append(node)
-            self.identities[cid] = {root: (component_key(cid, nodes), tuple(sorted(nodes)))
-                                    for root, nodes in members.items()}
-            self.dirty.remove(cid)
-        return self.groups[cid]
-
-    def identity(self, cid, node):
-        root = self.group(cid).root(node)
-        if root not in self.identities[cid]:
-            self.identities[cid][root] = component_key(cid, [node]), (node,)
-        return self.identities[cid][root]
-
-    def revoke(self, cid, left, right, at, kind):
-        previous = self.current[cid].get((left, kind))
-        # A cancellation naming an old value must not cancel its replacement.
-        # An empty target explicitly clears the entire current identity slot.
-        if right and previous and previous[1]['target'] not in {'', right}:
-            return
-        self.replace(cid, left, '', at, kind)
-
-    def path(self, cid, start, targets, max_depth=6):
-        self.group(cid)
-        pending, seen = deque([(start, [])]), {start}
-        while pending:
-            node, path = pending.popleft()
-            if node in targets and node != start:
-                return path
-            if len(path) >= max_depth:
-                continue
-            for other, edge in sorted(self.adjacency[cid][node].items()):
-                if other not in seen:
-                    seen.add(other)
-                    pending.append((other, path + [edge]))
-        return []
-
-
 def rule_coverage():
     """Coverage is capability, not a claim that no hits means no fraud."""
     gaps = {
@@ -351,9 +245,9 @@ def score_rules(tables, config=None, features=None):
         raise ValueError('Invalid cash payment policy')
     cash_limits = cfg['cash_limit_vnd_by_company']
     if not isinstance(cash_limits, dict) or any(
-            not isinstance(company, str) or not company.strip() or type(value) is not int or value <= 0
+            not isinstance(company, str) or not company.strip() or type(value) is not int or value < 0
             for company, value in cash_limits.items()):
-        raise ValueError('Internal cash limits require company IDs and positive integer VND amounts')
+        raise ValueError('Internal cash limits require company IDs and nonnegative integer VND amounts')
     validate_review_config(cfg)
     if cfg['split_pattern_policy'] not in {'disabled', SPLIT_PATTERN_POLICY}:
         raise ValueError('Invalid split-pattern review policy')
@@ -375,7 +269,8 @@ def score_rules(tables, config=None, features=None):
     feature_map = {r['transaction_id']: r for r in features}
     if len(feature_map) != len(features) or set(feature_map) != {r['transaction_id'] for r in rows}:
         raise ValueError('Causal features must map one-to-one to observations')
-    masters = {name: Stream(tables[name], 'recorded_at') for name in ('employees', 'vendors')}
+    masters = {name: Stream(master_versions(tables[name], 'employee_id' if name == 'employees' else 'vendor_id'), 'recorded_at')
+               for name in ('employees', 'vendors')}
     links = Stream(tables['entity_links'])
     bank_changes = BankChangeHistory(tables.get('bank_account_changes', []))
     entitlements = ObservedVersions(tables.get('payroll_entitlements', []), 'entitlement_id')
@@ -429,6 +324,10 @@ def score_rules(tables, config=None, features=None):
     previous_risk = defaultdict(deque)
     companies = {r['company_id']: r for r in tables['companies']}
     holidays = {r['date'] for r in tables['calendar'] if int(r.get('is_holiday', 1))}
+    writeoff_sources = defaultdict(list)
+    for event in tables['advance_events']:
+        if event['event_type'] == 'writeoff' and event.get('transaction_id'):
+            writeoff_sources[event['transaction_id']].append(event)
     scores, hits, master_name_quality, master_identity_findings = [], [], [], []
     identity_seen = set()
     for now, batch_iter in groupby(rows, key=lambda r: r['posted_at']):
@@ -446,9 +345,10 @@ def score_rules(tables, config=None, features=None):
                 key = item['employee_id'] if name == 'employees' else item['vendor_id']
                 target, index = (staff, employee_index) if name == 'employees' else (vendors, vendor_index)
                 old = target.get(key)
+                graph.apply_master(item, key, old, typed_bank=phase3)
                 for field in ('bank_account', 'phone', 'address', 'national_id'):
                     if old:
-                        index[(cid, field, normalize(old.get(field), field))].discard(key)
+                        index[(old['company_id'], field, normalize(old.get(field), field))].discard(key)
                     token = normalize(item.get(field), field)
                     if token:
                         index[(cid, field, token)].add(key)
@@ -469,17 +369,6 @@ def score_rules(tables, config=None, features=None):
                         if issue:
                             master_name_quality.append(dict(company_id=cid, vendor_id=key, recorded_at=item['recorded_at'],
                                                             name=item['name'], issue=issue))
-                # Each master row is a snapshot, including cleared identity fields.
-                # Mirrored links at/before this version must not resurrect old data.
-                for field in ('bank_account', 'phone', 'representative_id'):
-                    if field == 'representative_id' and field not in item:
-                        continue
-                    kind = 'representative' if field == 'representative_id' else field
-                    token = bank_identity(item.get(field, ''), item.get('bank_code', '')) if phase3 and field == 'bank_account' else item.get(field, '')
-                    right_kind = 'entity' if kind == 'representative' else kind
-                    target = graph.node(token, right_kind) if normalize(token, right_kind) else ''
-                    graph.replace(cid, graph.node(key, 'entity'), target,
-                                  item['recorded_at'], kind, master=True)
         if phase3:
             for vendor_id, vendor in vendors.items():
                 if vendor_id not in changed_vendor_ids and vendor['company_id'] not in staff_changed_companies:
@@ -497,19 +386,7 @@ def score_rules(tables, config=None, features=None):
                         master_identity_findings.append(dict(rule_id='B1', evidence_id=key, company_id=vendor['company_id'],
                             observed_at=now, scoring_role='master_quality', points=0, evidence=proof))
         for edge in links.until(now):
-            if edge['link_type'] not in {'bank_account', 'phone', 'representative'}:
-                continue
-            status = edge.get('status', 'active') or 'active'
-            if status not in {'active', 'revoked', 'deleted', 'inactive'}:
-                raise ValueError(f'Invalid graph link status: {status}')
-            right_kind = 'entity' if edge['link_type'] == 'representative' else edge['link_type']
-            target = bank_identity(edge['target_id'], edge.get('bank_code', '')) if phase3 and right_kind == 'bank_account' else edge['target_id']
-            right = graph.node(target, right_kind) if normalize(target, right_kind) else ''
-            source = graph.node(edge['source_id'], 'entity')
-            if status == 'active':
-                graph.replace(edge['company_id'], source, right, edge['observed_at'], edge['link_type'])
-            elif not edge['target_id'] or right:
-                graph.revoke(edge['company_id'], source, right, edge['observed_at'], edge['link_type'])
+            graph.apply_link(edge, typed_bank=phase3)
         bank_changes.advance(now)
         entitlements.advance(now)
         agreements.advance(now)
@@ -654,7 +531,11 @@ def score_rules(tables, config=None, features=None):
                                    branch='short_2_85pct' if short_branch else 'long_3_100pct', linkage='bank_phone_representative'),
                          [r['transaction_id'] for r in chosen],
                          graph.path(cid, node, {graph.node(x, 'entity') for x in chosen_others}))
-                if gross > 0 and gross % 1000 and amount % 1000 == 0 and amount > gross + 1:
+                # An explicitly later invoice cannot establish over-rounding at
+                # payment time. Undated legacy headers retain their old contract.
+                invoice_at_cutoff = all(not row.get(field) or row[field] <= now
+                                        for field in ('invoice_issued_at', 'invoice_observed_at'))
+                if invoice_at_cutoff and gross > 0 and gross % 1000 and amount % 1000 == 0 and amount > gross + 1:
                     emit('A6', dict(payment_vnd=amount, invoice_gross_vnd=gross, difference_vnd=amount - gross))
             # Invoice obligations apply to both cash and bank disbursements,
             # independently of whether a recipient bank account was supplied.
@@ -726,7 +607,9 @@ def score_rules(tables, config=None, features=None):
                     emit('B1', dict(employee_ids=b1_ambiguous, recipient_account=row['recipient_account'],
                         evidence_status='bank_institution_missing', recipient_bank_code=row.get('recipient_bank_code', '')), weight=0)
                     current_hits[-1].update(hard_trigger=0, scoring_role='context')
-                matches = {field: sorted(employee_index[(cid, field, normalize(v.get(field), field))])
+                matches = {field: sorted(employee_id
+                                        for employee_id in employee_index[(cid, field, normalize(v.get(field), field))]
+                                        if staff.get(employee_id, {}).get('company_id') == cid)
                            for field in ('phone', 'address') if normalize(v.get(field), field)}
                 matches = {k: value for k, value in matches.items() if value}
                 targets = {graph.node(e, 'entity') for e, employee in staff.items() if employee['company_id'] == cid}
@@ -759,8 +642,11 @@ def score_rules(tables, config=None, features=None):
                     emit('B4', dict(invoice_issued_at=row['invoice_issued_at'], risky_at_invoice=1,
                                    registry_risky_now=int(feature['registry_risky_now'])))
                 elif feature['registry_risky_now']:
+                    # Legacy rows without this optional timestamp assume proof at posting.
+                    receipt_observed_at = row.get('support_docs_observed_at', row['posted_at'])
+                    receipt_known = int(row['goods_receipt_verified']) and receipt_observed_at <= now
                     emit('B4', dict(invoice_issued_at=row['invoice_issued_at'], risky_at_invoice=0, registry_risky_now=1),
-                         weight=3, suppressed='Hóa đơn trước trạng thái rủi ro, có xác nhận giao nhận' if int(row['goods_receipt_verified']) else '')
+                         weight=3, suppressed='Hóa đơn trước trạng thái rủi ro, có xác nhận giao nhận' if receipt_known else '')
                 duplicates = {field: sorted(vendor_index[(cid, field, normalize(v.get(field), field))] - {vid})
                               for field in ('bank_account', 'phone', 'address') if normalize(v.get(field), field)}
                 duplicates = {k: value for k, value in duplicates.items() if value}
@@ -861,11 +747,24 @@ def score_rules(tables, config=None, features=None):
                      suppressed='Trong quyền tự duyệt và có hồ sơ đối chiếu' if self_approved and permitted and int(row['support_doc_count']) >= 2 else '')
                 if phase3:
                     current_hits[-1]['scoring_role'] = 'context'
+            # A final flag learned later cannot clear a historical warning.
+            # An undated writeoff header needs a bound source known at cutoff.
+            writeoff_docs_known = row.get('support_docs_observed_at', now) <= now
+            writeoff_supported = bool(int(row['evidence_on_file']) and writeoff_docs_known)
+            if row['txn_type'] == 'advance_writeoff' and 'support_docs_observed_at' not in row:
+                # Enrichment may have copied the final event flag into the row.
+                # Rebind that proof to its source and observation time before use.
+                known_writeoff = max((event for event in writeoff_sources.get(tid, [])
+                    if event['company_id'] == cid and event['advance_id'] == row['advance_id']
+                    and event['observed_at'] <= now),
+                    key=lambda event: (event['observed_at'], event['event_id']), default=None)
+                writeoff_supported = bool(writeoff_docs_known and known_writeoff
+                                         and int(known_writeoff['evidence_on_file']))
             if row['advance_id'] and feature['advance_open_fraction'] > 0 and feature['advance_overdue_days'] > cfg['advance_grace_days']:
                 emit('T1', dict(advance_id=row['advance_id'], overdue_days=int(feature['advance_overdue_days']),
                                open_fraction=feature['advance_open_fraction'], extension_known=int(feature['advance_extension_known'])),
-                     suppressed='Xóa nợ có hồ sơ tại thời điểm ghi sổ' if row['txn_type'] == 'advance_writeoff' and int(row['evidence_on_file']) else '')
-            if row['txn_type'] == 'advance_writeoff' and not int(row['evidence_on_file']):
+                     suppressed='Xóa nợ có hồ sơ tại thời điểm ghi sổ' if row['txn_type'] == 'advance_writeoff' and writeoff_supported else '')
+            if row['txn_type'] == 'advance_writeoff' and not writeoff_supported:
                 emit('T2', dict(advance_id=row['advance_id'], evidence_on_file=0,
                                prior_balance_fraction=feature['advance_open_fraction']))
             if evidence_policy:
@@ -972,6 +871,7 @@ def score_rules(tables, config=None, features=None):
             record.update(status='disabled' if cfg['cash_payment_policy'] == 'disabled' else 'implemented',
                           cash_payment_policy=cfg['cash_payment_policy'],
                           cash_review_policy=cfg['cash_review_policy'],
+                          cash_limit_priority_policy=cfg['cash_limit_priority_policy'],
                           scoring_role='evidence_classified',
                           note='Rà soát chi mua bằng tiền mặt: ngưỡng VAT theo thời điểm, giá trị hóa đơn và hạn mức nội bộ. Không tự kết luận loại khấu trừ; chưa gộp nhiều hóa đơn cùng ngày.')
         if record['rule_id'] == 'B4':

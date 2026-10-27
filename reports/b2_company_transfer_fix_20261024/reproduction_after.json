@@ -1,0 +1,65 @@
+{
+  "employee_id": "E0000011",
+  "old_company": "C001",
+  "new_company": "C002",
+  "transfer_recorded_at": "2025-08-13T11:00:00+07:00",
+  "before_transfer_posted_at": "2025-08-12T11:00:00+07:00",
+  "after_transfer_posted_at": "2025-08-14T11:00:00+07:00",
+  "historical_b2_hit_unchanged": true,
+  "historical_b2_points": 3,
+  "old_company_b2_points": 0,
+  "new_company_b2_points": 3,
+  "historical_b2_hits": [
+    {
+      "transaction_id": "AUDIT_0000",
+      "company_id": "C001",
+      "detected_at": "2025-08-12T11:00:00+07:00",
+      "rule_id": "B2",
+      "rule_name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+      "points": 3,
+      "hard_trigger": 0,
+      "suppressed_reason": "",
+      "evidence": {
+        "direct_matches": {
+          "phone": [
+            "E0000011"
+          ]
+        },
+        "field_count": 1,
+        "related_party_disclosed": false
+      },
+      "related_transaction_ids": [],
+      "graph_path": [],
+      "intrinsic_points": 3,
+      "scoring_role": "transaction",
+      "evidence_id": "B2_0db43b392e49e003df46"
+    }
+  ],
+  "old_company_b2_hits": [],
+  "new_company_b2_hits": [
+    {
+      "transaction_id": "AUDIT_0002",
+      "company_id": "C002",
+      "detected_at": "2025-08-14T11:00:00+07:00",
+      "rule_id": "B2",
+      "rule_name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+      "points": 3,
+      "hard_trigger": 0,
+      "suppressed_reason": "",
+      "evidence": {
+        "direct_matches": {
+          "phone": [
+            "E0000011"
+          ]
+        },
+        "field_count": 1,
+        "related_party_disclosed": false
+      },
+      "related_transaction_ids": [],
+      "graph_path": [],
+      "intrinsic_points": 3,
+      "scoring_role": "transaction",
+      "evidence_id": "B2_036304db6e14321f2a39"
+    }
+  ]
+}

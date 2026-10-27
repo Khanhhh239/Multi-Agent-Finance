@@ -1,0 +1,13 @@
+"use strict";
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const context=vm.createContext({Intl,Date});
+new vm.Script(fs.readFileSync('review_ui/review_explanations.js','utf8')).runInContext(context);
+context.hit={points:14,evidence:{review_priority:'thap',limit_priority:{version:'rr09-v1',limit_vnd:2000000,excess_vnd:1,excess_ratio:1/2000000}}};
+const html=vm.runInContext('ReviewExplanations.cashSentence(hit)',context);
+assert.match(html,/Số tiền vượt/);assert.match(html,/Tỷ lệ vượt/);assert.match(html,/0,00005/);
+assert.match(html,/Ưu tiên xử lý P2/);assert.match(html,/Thấp/);assert.match(html,/rr09-v1/);assert.match(html,/14/);
+context.hit.evidence.limit_priority.limit_vnd=0;context.hit.evidence.limit_priority.excess_ratio=null;
+assert.match(vm.runInContext('ReviewExplanations.cashSentence(hit)',context),/Không áp dụng/);
+context.hit.evidence.limit_priority.version='<script>unsafe</script>';
+assert.doesNotMatch(vm.runInContext('ReviewExplanations.cashSentence(hit)',context),/<script>/);
+console.log(JSON.stringify({tests:3,failures:0}));

@@ -1,0 +1,124 @@
+{
+  "synthetic_only": true,
+  "mode": "dry_run",
+  "real_notifications_sent": 0,
+  "real_accounts_created": 0,
+  "independent_human_reviews": 0,
+  "job_count": 36,
+  "delivery_event_count": 108,
+  "repeated_preview_did_not_add_jobs_or_attempts": true,
+  "audit_hash_chain_and_head_verified": true,
+  "company_scoping_verified": true,
+  "used_cases_by_company": {
+    "C001": 8
+  },
+  "notification_budget": 10,
+  "by_kind": {
+    "case_overdue": {
+      "jobs": 16,
+      "targets": [
+        "SIM_ACC",
+        "SIM_DIR",
+        "acc@example.invalid",
+        "dir@example.invalid"
+      ],
+      "cases": [
+        "RC_5",
+        "RC_6",
+        "SC_F3",
+        "SC_F4"
+      ]
+    },
+    "documents_overdue": {
+      "jobs": 4,
+      "targets": [
+        "SIM_ACC",
+        "SIM_DIR",
+        "acc@example.invalid",
+        "dir@example.invalid"
+      ],
+      "cases": [
+        "RC_4"
+      ]
+    },
+    "documents_received": {
+      "jobs": 2,
+      "targets": [
+        "SIM_ACC",
+        "acc@example.invalid"
+      ],
+      "cases": [
+        "RC_4"
+      ]
+    },
+    "review_finalized": {
+      "jobs": 4,
+      "targets": [
+        "SIM_ACC",
+        "SIM_DIR",
+        "acc@example.invalid",
+        "dir@example.invalid"
+      ],
+      "cases": [
+        "RC_3"
+      ]
+    },
+    "review_overdue": {
+      "jobs": 2,
+      "targets": [
+        "SIM_CHIEF",
+        "chief@example.invalid"
+      ],
+      "cases": [
+        "RC_1"
+      ]
+    },
+    "review_returned": {
+      "jobs": 2,
+      "targets": [
+        "SIM_ACC",
+        "acc@example.invalid"
+      ],
+      "cases": [
+        "RC_2"
+      ]
+    },
+    "review_submitted": {
+      "jobs": 2,
+      "targets": [
+        "SIM_CHIEF",
+        "chief@example.invalid"
+      ],
+      "cases": [
+        "RC_1"
+      ]
+    },
+    "rework_overdue": {
+      "jobs": 2,
+      "targets": [
+        "SIM_ACC",
+        "acc@example.invalid"
+      ],
+      "cases": [
+        "RC_2"
+      ]
+    },
+    "weekly": {
+      "jobs": 2,
+      "targets": [
+        "SIM_CHIEF",
+        "chief@example.invalid"
+      ],
+      "cases": [
+        "RC_1",
+        "RC_2",
+        "RC_4",
+        "RC_5",
+        "RC_6",
+        "SC_F3",
+        "SC_F4"
+      ]
+    }
+  },
+  "live_delivery_verified": false
+}

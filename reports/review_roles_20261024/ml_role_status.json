@@ -1,0 +1,13 @@
+{
+  "prepared_units": 74,
+  "roles_configured": true,
+  "accounts_created": 0,
+  "primary_reviewer_id": null,
+  "adjudicator_id": null,
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "original_packet_unchanged": true,
+  "original_zip_sha256": "98ae0264fcfe2140bcb1bc33d70c59d25a56890d6514fd508b9d069b148fc8d3",
+  "copied_zip_sha256": "98ae0264fcfe2140bcb1bc33d70c59d25a56890d6514fd508b9d069b148fc8d3",
+  "role_workspace": "reports\\review_roles_20261024\\ml_review_workspace"
+}

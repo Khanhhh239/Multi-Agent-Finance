@@ -3,9 +3,17 @@ import hashlib
 import json
 from pathlib import Path
 
-VERSION = 'causal-evidence-20261016-v1'
+VERSION = 'causal-evidence-20261024-v4'
+RELATIONSHIP_SEMANTICS = dict(
+    version='current-relationships-v1', state='current_as_of_posted_at',
+    current_features=['employee_phone_overlap_current', 'employee_address_overlap_current',
+                      'graph_employee_count_current', 'linked_vendor_count_current'],
+    historical_features=[], historical_window_days=None,
+    master_time='recorded_at', link_time='observed_at', cutoff_inclusive=True,
+    master_precedes_equal_time_mirror=True, graph_membership='current_company_members_only')
 IMPLEMENTATION = ('feature_contract.py', 'features.py', 'accounting.py', 'generate.py',
-                  'temporal_evidence.py', 'exception_validation.py',
+                  'temporal_evidence.py', 'exception_validation.py', 'feature_evidence.py', 'identity.py',
+                  'identity_graph.py', 'case_identity.py',
                   'payment_evidence.schema.json', 'evidence_sources.schema.json')
 
 
@@ -27,6 +35,7 @@ def current_contract():
     root = Path(__file__).resolve().parent
     contract = dict(version=VERSION, columns=list(FEATURE_DESCRIPTIONS),
                     descriptions=FEATURE_DESCRIPTIONS, dtype='float32', finite=True,
+                    relationship_semantics=RELATIONSHIP_SEMANTICS,
                     implementation_sha256={name: sha(root / name) for name in IMPLEMENTATION})
     return dict(contract, fingerprint=digest(contract))
 

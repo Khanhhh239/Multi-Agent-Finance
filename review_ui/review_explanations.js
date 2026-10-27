@@ -38,6 +38,10 @@ globalThis.ReviewExplanations=(()=>{
   }
   function cashSentence(hit){
     const p=hit.evidence||{};
+    if(p.limit_priority){
+      const t=p.limit_priority,labels={thap:"Thấp",trung_binh:"Trung bình",cao:"Cao",cao_nhat:"Cao nhất"};
+      return facts([["Hạn mức nội bộ",money(t.limit_vnd)],["Số tiền vượt",money(t.excess_vnd)],["Tỷ lệ vượt",t.excess_ratio==null?"Không áp dụng (hạn mức 0)":new Intl.NumberFormat("vi-VN",{style:"percent",maximumFractionDigits:6}).format(t.excess_ratio)],["Điểm P2",hit.points],["Ưu tiên xử lý P2",labels[p.review_priority]||p.review_priority],["Chính sách phân tầng",t.version]])+"<p>Điểm lưu bằng chứng vượt hạn mức. Ưu tiên xử lý theo mức vượt, nhu cầu rà chứng từ VAT và các tín hiệu độc lập; hồ sơ vẫn được giữ để rà.</p>";
+    }
     if(p.review_category!=="vat_document_review")return "";
     return `<p>Khoản chi hiện tại ${esc(money(p.cash_amount_vnd))}; tổng hóa đơn ${esc(money(p.invoice_gross_vnd))}; mốc đối chiếu trong snapshot ${esc(money(p.vat_non_cash_threshold_vnd))}. ${Number(p.cash_amount_vnd)<Number(p.vat_non_cash_threshold_vnd)&&Number(p.invoice_gross_vnd)>=Number(p.vat_non_cash_threshold_vnd)?"P2 cần đối chiếu vì tổng hóa đơn đạt mốc, dù đợt chi hiện tại nhỏ hơn mốc.":"Cần đối chiếu hóa đơn gốc và chứng từ thanh toán."} Đây chưa phải kết luận quyền khấu trừ hoặc gian lận.</p>`;
   }
@@ -65,11 +69,11 @@ globalThis.ReviewExplanations=(()=>{
     const members=ids(caseRow.transaction_ids),rows=scores.filter(s=>members.includes(s.transaction_id));
     const hard=hits.filter(h=>Number(h.hard_trigger)&&Number(h.points)>0).map(h=>h.rule_id);
     const basis=caseRow.case_type==="information_request"?"Yêu cầu bổ sung dữ kiện, chưa phải kết luận rủi ro đã xác minh.":String(caseRow.admission_basis||"").includes("split_pattern")?"Nhận để rà mẫu chia nhỏ theo chính sách A2/A4, dù điểm có thể dưới ngưỡng thông thường.":hard.length?`Có căn cứ độc lập bắt buộc rà: ${[...new Set(hard)].join(", ")}; mức ưu tiên không chỉ do A5.`:"Theo chính sách tiếp nhận của snapshot; đối chiếu quy tắc và bằng chứng độc lập.";
-    return `<div class="source-block"><strong>Căn cứ vào hàng đợi và điểm ưu tiên</strong>${facts([["Điểm hồ sơ theo snapshot",caseRow.max_score],["Căn cứ tiếp nhận",basis]])}${rows.map(r=>{
+    return `<div class="source-block"><strong>Căn cứ vào hàng đợi, điểm và ưu tiên xử lý</strong>${facts([["Điểm hồ sơ theo snapshot",caseRow.max_score],["Ưu tiên xử lý",({thap:"Thấp",trung_binh:"Trung bình",cao:"Cao",cao_nhat:"Cao nhất"})[caseRow.priority]||caseRow.priority],["Căn cứ tiếp nhận",basis]])}${rows.map(r=>{
       const positive=hits.filter(h=>h.transaction_id===r.transaction_id&&Number(h.points)>0&&!h.suppressed_reason),groups={};
       for(const h of positive){const family=["B5","E4","E3"].includes(h.rule_id)?"Chất lượng danh mục":h.rule_id[0];groups[family]=Math.max(groups[family]||0,Number(h.points));}
       return `<details><summary>${esc(r.transaction_id)} · ${esc(r.rule_score)} điểm</summary>${facts([["Điểm nền theo nguồn",r.base_score??"Chưa có"],["Điểm lặp lại theo nguồn",r.recurrence_points??"Chưa có"],["Điểm từng quy tắc",positive.map(h=>`${h.rule_id}: ${h.points}`).join("; ")||"Không có"],["Mỗi nhóm lấy điểm cao nhất",Object.entries(groups).map(([k,v])=>`${k}: ${v}`).join("; ")||"Không có"]])}</details>`;
-    }).join("")||"<p>Snapshot này chưa có bảng điểm giao dịch để phân rã; không tự suy điểm còn thiếu.</p>"}<p>Không cộng cơ học mọi hit hoặc mọi giao dịch thành điểm hồ sơ. Điểm dùng để ưu tiên rà, không phải xác suất gian lận.</p></div>`;
+    }).join("")||"<p>Snapshot này chưa có bảng điểm giao dịch để phân rã; không tự suy điểm còn thiếu.</p>"}<p>Không cộng cơ học mọi hit hoặc mọi giao dịch thành điểm hồ sơ. Hàng đợi dùng mức ưu tiên xử lý rồi mới đến điểm trong cùng mức. Điểm không phải xác suất gian lận.</p></div>`;
   }
   function invoiceVersions(invoice,versions,cutoff){
     const matching=(versions||[]).filter(r=>r.company_id===invoice.company_id&&r.invoice_id===invoice.invoice_id);
