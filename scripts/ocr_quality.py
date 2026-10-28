@@ -142,6 +142,7 @@ def run(args):
             'model_inference_calls':0,'fresh_database_per_case':True,'workload_controlled':args.dedicated_machine,'cases':[]}
     write(out/'manifest.json',manifest)
     for entry in selected:
+        print(json.dumps({'case_id':entry['case_id'],'state':'STARTING','index':len(report['cases'])+1,'total':len(selected)}),flush=True)
         folder=out/entry['case_id'];folder.mkdir()
         try:row=execute_case(entry,folder,config,args.render_dpi)
         except Exception as error:

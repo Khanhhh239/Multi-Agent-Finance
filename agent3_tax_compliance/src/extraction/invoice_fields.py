@@ -8,7 +8,7 @@ ALIASES = {
  'seller.name': ('ten nguoi ban','don vi ban hang','seller name'),
  'seller.tax_id': ('mst nguoi ban','ma so thue nguoi ban','seller tax id'),
  'seller.address': ('dia chi nguoi ban','seller address'),
- 'buyer.name': ('ten nguoi mua','don vi mua hang','buyer name','ho ten nguoi mua hang','ten khach hang'),
+ 'buyer.name': ('ten nguoi mua','nguoi mua','don vi mua hang','buyer name','ho ten nguoi mua hang','ten khach hang'),
  'buyer.tax_id': ('mst nguoi mua','ma so thue nguoi mua','buyer tax id'),
  'buyer.address': ('dia chi nguoi mua','buyer address'),
  'invoice.number': ('so hoa don','invoice number','invoice no','so'),
@@ -28,6 +28,8 @@ def clean_label(text):
     # Known OCR variants of the English address gloss only. Never fuzzy-edit
     # the actual address or accept an arbitrary parenthetical label.
     text=re.sub(r'\(\s*(?:Addres|Addrass)\s*\)', ' ', text, flags=re.I)
+    text=re.sub(r'\(\s*Co\.\s*name\s*\)', ' ',text,flags=re.I)
+    text=re.sub(r'\(\s*Company\s+name\s*\)', ' ',text,flags=re.I)
     return TRANSLATIONS.sub(' ',text).strip()
 
 
@@ -83,6 +85,51 @@ def logical_fragments(page):
     return [(fragment_text(group),tuple(group)) for group in groups]
 
 
+def header_key(text):
+    """Whitespace/line wrapping tolerance for labels only, never field values."""
+    stripped=re.sub(r'\([^)]*\)', ' ',text)
+    if not stripped.strip():stripped=text.strip().strip('()')
+    return ''.join(c for c in key(stripped) if c.isalnum())
+
+
+def header_observations(page,aliases):
+    """Assemble complete known column labels from bounded vertical fragments."""
+    fragments=logical_fragments(page)
+    names={header_key(label):name for name,labels in aliases.items() for label in labels}
+    names.pop('',None)
+    prefixes={label[:i] for label in names for i in range(1,len(label)+1)}
+    prepared=[(i,raw,refs,header_key(raw),bounds(refs)) for i,(raw,refs) in enumerate(fragments)]
+    observations=[]
+    for index,raw,refs,token,box in prepared:
+        if not token or not box or token not in prefixes:continue
+        matches=[];frontier=[(token,raw,refs,box,frozenset({index}))]
+        for _ in range(4):
+            following=[]
+            for text,printed,blocks,last,used in frontier:
+                if text in names:matches.append((len(text),names[text],printed,blocks))
+                for other_index,more,more_refs,addition,other in prepared:
+                    if other_index in used:continue
+                    if not addition or not other:continue
+                    combined=text+addition
+                    if combined not in prefixes:continue
+                    overlap=min(last[2],other[2])-max(last[0],other[0])
+                    width=min(last[2]-last[0],other[2]-other[0])
+                    gap=other[1]-last[3]
+                    height=min(last[3]-last[1],other[3]-other[1])
+                    if (overlap>.4*width and abs((last[0]+last[2]-other[0]-other[2])/2)<.05
+                            and -.5*height<=gap<=max(.012,1.2*(last[3]-last[1]))
+                            and (other[1]+other[3]-last[1]-last[3])/2>.4*height):
+                        following.append((combined,printed+' '+more,blocks+more_refs,other,used|{other_index}))
+            # Bound branching on noisy/overlapping OCR. Never search a whole
+            # page combinatorially merely to force a recognized label.
+            frontier=following[:16]
+            if not frontier:break
+        if matches:
+            _,name,printed,blocks=max(matches,key=lambda match:match[0])
+            observations.append((name,printed,tuple({b.block_id:b for b in blocks}.values())))
+    return observations
+
+
 def labelled(text, aliases):
     # Translations are removed from the label only, never from the value.
     parts=re.split(r'[:：]',text,maxsplit=1)
@@ -90,7 +137,7 @@ def labelled(text, aliases):
     pairs=sorted(((path,key(label)) for path,labels in aliases.items() for label in labels),key=lambda p:len(p[1]),reverse=True)
     for path,label in pairs:
         if normalized==label: return path,parts[1].strip() if len(parts)==2 else ''
-        if label=='so': continue  # Never match "Số lượng", account numbers, etc.
+        if label in ('so','nguoi mua','don vi'): continue  # Section labels require exact matches.
         # OCR may merge label + value without a colon. Compare complete label
         # prefixes at whitespace boundaries, retaining offsets in the raw text.
         for boundary in reversed(list(re.finditer(r'\s+',text[:128]))):
@@ -134,7 +181,7 @@ def party_role(box,anchors,party_end):
 
 def values_on_page(page, aliases=ALIASES, sections=False):
     fragments=logical_fragments(page)
-    table_tops=[bounds(refs)[1] for raw,refs in fragments if bounds(refs) and key(raw) in ('stt','ten hang hoa, dich vu','dien giai')]
+    table_tops=[bounds(refs)[1] for raw,refs in fragments if bounds(refs) and header_key(raw) in ('stt','tenhanghoadichvu','diengiai')]
     party_end=min(table_tops) if table_tops else 1.
     role_anchors=[]
     if sections:
@@ -186,13 +233,18 @@ def values_on_page(page, aliases=ALIASES, sections=False):
         # A rate and the next VAT label sometimes share a single font run.
         label_raw=re.sub(r'^\d+(?:[.,]\d+)?\s*%\s+(?=Tiền thuế)', '',raw,flags=re.I)
         path,inline=labelled(label_raw,aliases)
+        if (path=='buyer.name' and key(clean_label(label_raw.split(':',1)[0]))=='nguoi mua'
+                and bounds(blocks) and bounds(blocks)[1]>=party_end):continue
+        if (path=='invoice.number' and key(clean_label(label_raw.split(':',1)[0]))=='so'
+                and bounds(blocks) and any(top<=bounds(blocks)[1]<=top+.08 for top in table_tops)):
+            continue  # A wrapped quantity column is not an invoice identifier.
         if sections and path in ('seller.name','buyer.name'): context=path.split('.')[0]
         if path is None and sections and (context or role_anchors) and (not bounds(blocks) or bounds(blocks)[1]<party_end):
             box=bounds(blocks);role=party_role(box,role_anchors,party_end) if role_anchors and box else context
             if role:
                 path,inline=labelled(raw,{
                     role+'.tax_id':('mst','ma so thue','tax id'),
-                    role+'.name':('ten don vi','name'),role+'.address':('dia chi','address')})
+                    role+'.name':('ten don vi','don vi','name'),role+'.address':('dia chi','address')})
         if path is None:
             if sections:
                 # OCR can append a single closing parenthesis after a complete
@@ -226,6 +278,10 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                 if labelled(other_raw,aliases)[0] is None:
                     candidates.append((ox0,other_raw,other_blocks))
         if candidates:
+            # Multiple financial columns require their explicit column band;
+            # proximity alone cannot identify which amount is the total.
+            if path.startswith('totals.') and path!='totals.net' and sum(bool(money_values(value,'AUTO')) for _,value,_ in candidates)>1:
+                continue
             _,value,value_blocks=min(candidates,key=lambda entry:entry[0])
             yield path,value.strip().lstrip(':：').strip(),blocks+value_blocks
         elif path.startswith('totals.'):
@@ -255,23 +311,24 @@ def values_on_page(page, aliases=ALIASES, sections=False):
                     below.append((oy0,value,value_blocks))
             if below:
                 _,value,value_blocks=min(below,key=lambda entry:entry[0])
-                generic={'ignore':('mst','ma so thue','dia chi','so tai khoan','ngan hang','ten don vi','ho ten nguoi mua hang','ten khach hang')}
+                generic={'ignore':('mst','ma so thue','dia chi','so tai khoan','ngan hang','ten don vi','don vi','ho ten nguoi mua hang','ten khach hang')}
                 if labelled(value,aliases)[0] is None and labelled(value,generic)[0] is None:
                     yield path,value.strip(),blocks+value_blocks
 
 
 def extend_address(raw,refs,page):
     """Continue only adjacent, aligned address text; stop at the next label."""
-    values=[b for b in refs if len(b.text_raw.strip())>12 and key(b.text_raw.strip()) in key(raw)]
+    values=value_blocks(raw,refs)
     box=bounds(values or refs)
     if not box:return raw,refs
+    label_left=bounds(refs)[0]
     used={b.block_id for b in refs}
     for _ in range(5):
         nearby=[]
         for text,blocks in logical_fragments(page):
             other=bounds(blocks)
             if not other or any(b.block_id in used for b in blocks):continue
-            if abs(other[0]-box[0])<.02 and -.002<=other[1]-box[3]<=1.2*(box[3]-box[1]):
+            if min(abs(other[0]-box[0]),abs(other[0]-label_left))<.02 and -.002<=other[1]-box[3]<=1.2*(box[3]-box[1]):
                 nearby.append((other[1],text,blocks,other))
         if not nearby:break
         _,text,blocks,other=min(nearby,key=lambda entry:entry[0])
@@ -279,13 +336,57 @@ def extend_address(raw,refs,page):
         raw+=' '+text.strip();refs+=blocks;used.update(b.block_id for b in blocks);box=other
     return raw,refs
 
+
+def value_blocks(raw,refs):
+    """Find value spans even when the native PDF emits one block per word."""
+    values=[b for b in refs if any(c.isalnum() for c in b.text_raw)
+            and key(b.text_raw.strip()) in key(raw)]
+    # Isolated words shared with a label/anchor cannot locate a whole value.
+    # Inline label+value spans retain their full original box as before.
+    return values if values and key(fragment_text(values))==key(raw) else []
+
+
+def extend_name(raw,refs,page):
+    box=bounds(value_blocks(raw,refs) or refs)
+    if not box:return raw,refs
+    used={b.block_id for b in refs}
+    for _ in range(4):
+        nearby=[]
+        for text,blocks in logical_fragments(page):
+            other=bounds(blocks)
+            if (other and not any(b.block_id in used for b in blocks)
+                    and abs(other[0]-box[0])<.02
+                    and -.002<=other[1]-box[3]<=1.2*(box[3]-box[1])):
+                nearby.append((other[1],text,blocks,other))
+        if not nearby:break
+        _,text,blocks,other=min(nearby,key=lambda row:row[0])
+        # A native font span can fuse the name tail with the next tax label.
+        boundary=re.search(r'(?:Mã\s+số\s+thuế|MST|Tax\s+code)\s*[:：]',text,re.I)
+        tail=text[:boundary.start()].strip() if boundary else text.strip()
+        # Unlabelled issuer addresses often immediately follow the legal name.
+        # Keep administrative address prose out of that name continuation.
+        normalized_tail=key(tail)
+        address_parts=sum(token in normalized_tail for token in ('phuong ','quan ','thanh pho ','duong ','khu do thi '))
+        if re.search(r'\d',tail) and address_parts>=2:break
+        generic={'stop':('dia chi','address','ten don vi','don vi','mst','ma so thue','so tai khoan','dien thoai','hinh thuc thanh toan')}
+        if not tail or ':' in tail or labelled(tail,ALIASES)[0] or labelled(tail,generic)[0] or header_key(tail) in ('stt','tenhanghoadichvu'):break
+        if not any(c.isalpha() for c in tail):break
+        raw+=' '+tail;refs+=blocks;used.update(b.block_id for b in blocks);box=other
+        if boundary:break
+    return raw,refs
+
 def normalize_field(path,raw,profile):
+    if path.endswith('.name') and not any(c.isalpha() for c in raw):return ()
+    if path.endswith('.name') and header_key(raw) in ('thuesuatgtgt','thuesuat','tenhanghoadichvu','donvitinh','soluong','dongia','thanhtien'):return ()
     if path.endswith('tax_id'): return tax_values(raw)
     if path=='invoice.issue_date': return date_values(raw,profile.date_order)
     if path.startswith('totals.') or path.endswith(('.net','.quantity','.unit_price')):
         return money_values(raw,profile.number_locale)
     if path=='currency': return currency_values(raw)
     if path=='expected_rows': return (raw,) if re.fullmatch(r'[0-9]{1,5}',raw) else ()
+    if path=='invoice.number':
+        value=raw.strip()
+        return (value,) if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9/._-]{0,31}',value) else ()
     if path=='invoice.series':
         value=re.sub(r'\s+','',raw)
         if re.match(r'^[1-9][CK]\d{2}',value,re.I) and not re.fullmatch(r'[1-9][CK]\d{2}[A-Z]{3}',value,re.I): return ()
@@ -296,33 +397,51 @@ def normalize_field(path,raw,profile):
 def summary_values(page):
     """Read multi-column totals only under explicit financial column headers."""
     labels={
-        'totals.net':('tri gia chua thue gtgt','thanh tien truoc thue gtgt','tien dich vu','amount excluding vat','total before vat'),
+        'totals.net':('tri gia chua thue gtgt','tong chua thue gtgt','cong tien hang','thanh tien truoc thue gtgt','thanh tien truoc thue','thanh tien','tien dich vu','amount excluding vat','total before vat'),
         'totals.vat':('tien thue gtgt','tien thue','vat amount'),
-        'totals.gross':('tien thanh toan','cong tien thanh toan','payment amount','total amount','cong'),
+        'totals.gross':('tien thanh toan','tong tien thanh toan','gia tri thanh toan','cong tien thanh toan','thanh tien sau thue','thanh tien sau thue gtgt','payment amount','total amount','cong'),
     }
     fragments=logical_fragments(page)
+    headings=header_observations(page,labels)
     for raw,refs in fragments:
         text=key(raw);box=bounds(refs)
         if not box or not (text.startswith(('tong cong','tong tien thanh toan')) or text=='cong'):continue
         numbers=[entry for entry in right_values(refs,fragments) if money_values(entry[1],'AUTO')]
         if len(numbers)<2:continue
-        observations=[]
-        for path,names in labels.items():
-            headings=[]
-            for title,blocks in fragments:
-                header=bounds(blocks)
-                if not header or not 0<box[1]-header[3]<.35:continue
-                normalized=key(title).strip('() ')
-                if normalized not in names:continue
-                center=(header[0]+header[2])/2
-                value=min(numbers,key=lambda row:abs((bounds(row[2])[0]+bounds(row[2])[2])/2-center))
-                vbox=bounds(value[2]);vcenter=(vbox[0]+vbox[2])/2
-                if header[0]-.02<=vcenter<=header[2]+.02:
-                    headings.append((header[3],value,blocks))
-            if headings:
-                _,(_,value,blocks),headers=max(headings,key=lambda entry:entry[0])
-                observations.append((path,value,refs+headers+blocks))
-        if len(observations)==3:yield from observations
+        eligible={name:[] for name in labels}
+        for name,_,blocks in headings:
+            header=bounds(blocks)
+            if header and 0<box[1]-header[3]<.35:eligible[name].append((header,blocks))
+        bands=[]
+        for net in eligible['totals.net']:
+            for vat in eligible['totals.vat']:
+                for gross in eligible['totals.gross']:
+                    group=(net,vat,gross)
+                    centers=[((b[0]+b[2])/2,(b[1]+b[3])/2) for b,_ in group]
+                    if (centers[0][0]<centers[1][0]<centers[2][0]
+                            and max(y for _,y in centers)-min(y for _,y in centers)<.035):
+                        bands.append(group)
+        if not bands:continue
+        # Use a coherent, most recent summary band. A right-aligned amount can
+        # lie beyond its short heading; column boundaries, not nearest text or
+        # a distant item-table heading, determine which printed total it is.
+        band=max(bands,key=lambda group:max(b[3] for b,_ in group))
+        # Item totals may also print a discount column before the financial
+        # trio. A number left of the net heading is not a second net amount.
+        numbers=[entry for entry in numbers
+                 if sum(bounds(entry[2])[::2])/2>=band[0][0][0]-.005]
+        if len(numbers)>3:continue
+        centers=[(b[0]+b[2])/2 for b,_ in band]
+        cuts=[(a+b)/2 for a,b in zip(centers,centers[1:])]
+        numbers.sort(key=lambda entry:bounds(entry[2])[0])
+        for index,(_,value,blocks) in enumerate(numbers):
+            value_box=bounds(blocks)
+            # Three explicitly labelled columns and three observed amounts
+            # establish printed order even when headings are short/centred
+            # and values are aligned against each column's right border.
+            column=index if len(numbers)==3 else sum((value_box[0]+value_box[2])/2>cut for cut in cuts)
+            path=tuple(labels)[column]
+            yield path,value,refs+band[column][1]+blocks
 
 def extract_headers(document,profile,issues):
     observations={p:[] for p in ALIASES}
@@ -337,6 +456,7 @@ def extract_headers(document,profile,issues):
         for view in views or (page,):
             for path,raw,blocks in (*values_on_page(view,sections=True),*summary_values(view)):
                 if path.endswith('.address'):raw,blocks=extend_address(raw,blocks,view)
+                if path.endswith('.name'):raw,blocks=extend_name(raw,blocks,view)
                 normalized=normalize_field(path,raw,profile)
                 if not normalized:
                     issues.append(ExtractionIssue(code='UNPARSEABLE_FIELD',field_path=path,

@@ -1,0 +1,56 @@
+{
+  "profile_version": "round3_crop_wide-v1",
+  "model_id": "round3_crop_wide",
+  "adapter": "ppocrv6_vietocr",
+  "interpreter": "envs/ppocrv6_vietocr/Scripts/python.exe",
+  "distributions": [
+    "torch",
+    "torchvision",
+    "vietocr",
+    "Pillow",
+    "numpy"
+  ],
+  "source_files": [
+    "src/adapters/vietocr_adapter.py",
+    "src/adapters/paddle_common.py",
+    "src/adapters/recognition_crops.py",
+    "src/adapters/coverage_geometry.py"
+  ],
+  "assets": [
+    "artifacts/models/vietocr/transformerocr.pth",
+    "artifacts/models/vietocr/config/base.yml",
+    "artifacts/models/vietocr/config/vgg-transformer.yml"
+  ],
+  "environment": {
+    "FLAGS_use_mkldnn": "0",
+    "PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK": "True",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "adapter_config": {
+    "device": "cpu",
+    "recognizer": {
+      "config_name": "vgg_transformer",
+      "base_config_path": "artifacts/models/vietocr/config/base.yml",
+      "architecture_config_path": "artifacts/models/vietocr/config/vgg-transformer.yml",
+      "weights": "artifacts/models/vietocr/transformerocr.pth",
+      "cpu_threads": 1,
+      "split_long_lines": false,
+      "max_line_aspect": 14,
+      "max_line_parts": 4,
+      "beamsearch": false,
+      "image_max_width": 1024
+    },
+    "recognition_only": true
+  },
+  "path_parameters": [
+    "recognizer.base_config_path",
+    "recognizer.architecture_config_path",
+    "recognizer.weights"
+  ],
+  "max_processes": 2
+}

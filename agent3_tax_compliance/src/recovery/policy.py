@@ -4,8 +4,9 @@ import unicodedata
 from ..quality.completeness import flatten
 from .regions import supported,plan_regions
 from ..review.contracts import ReviewError
+from ..canonicalization.normalize import exact_sum
 
-VERSION='recovery-policy-v3'
+VERSION='recovery-policy-v4'
 MAX_FIELDS=2
 MAX_CROPS=4
 
@@ -27,13 +28,27 @@ def deduplicated_tail(text):
 def diagnose(record,artifact,normalized):
     entries=[];eligible=[]
     conflicts={b.block_id for p in normalized.pages for b in p.blocks if b.conflict_with}
-    for path,field in flatten(record).items():
+    blocks={b.block_id:b for p in normalized.pages for b in p.blocks}
+    fields=flatten(record)
+    totals=tuple(fields.get('totals.'+name) for name in ('net','vat','gross'))
+    mismatch=all(f is not None and f.status=='PRESENT' and f.value is not None for f in totals) and exact_sum((totals[0].value,totals[1].value))!=totals[2].value
+    for path,field in fields.items():
         if field.confidence_basis=='HUMAN_CONFIRMED' or field.status=='NOT_APPLICABLE':continue
         codes=[]
         if field.status in ('MISSING','AMBIGUOUS'):codes.append('FIELD_'+getattr(field.status,'value',str(field.status)))
         if deduplicated_tail(field.value):codes.append('REPEATED_SUFFIX')
         if '\ufffd' in str(field.value or ''):codes.append('UNREADABLE_CHARACTER')
         if any(e.block_id in conflicts for e in field.provenance.evidence):codes.append('SOURCE_CONFLICT')
+        if path.endswith('.name') and field.status=='PRESENT' and not any(c.isalpha() for c in str(field.value or '')):
+            codes.append('NONALPHABETIC_NAME')
+        if mismatch and path.startswith('totals.'):codes.append('TOTAL_ARITHMETIC_MISMATCH')
+        if path.endswith(('.name','.address','.description')):
+            for evidence in field.provenance.evidence:
+                block=blocks.get(evidence.block_id)
+                if not block or not block.evidence or not any(o.method=='OCR' for o in block.origins):continue
+                x0,y0,x1,y1=block.evidence.bbox
+                if len(block.text_raw)>40 and (x1-x0)/max(y1-y0,.001)>40:
+                    codes.append('LONG_OCR_LINE');break
         if not codes:continue
         entry={'field_path':path,'issue_codes':codes,'state':'REVIEW','reason':'UNSUPPORTED_FIELD','crop_count':0}
         if supported(path):

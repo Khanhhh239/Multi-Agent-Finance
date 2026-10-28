@@ -1,39 +1,64 @@
 """Bounded table fallback. Missing tax columns never imply a tax treatment."""
 import re
-from .invoice_fields import logical_fragments,bounds,fragment_text
+from .invoice_fields import logical_fragments,bounds,fragment_text,header_key,header_observations
 from ..canonicalization.normalize import key,money_values
 
 LABELS={
     'description':('ten hang hoa, dich vu','ten hang hoa dich vu','ten hang hoa','dien giai','description','name of goods and services','name of goods services'),
-    'quantity':('so luong','so luong tb','quantity','qty'),
+    'quantity':('so luong','so luong tb','quantity','qty','sl'),
     'unit_price':('don gia','unit price'),
-    'net':('thanh tien','thanh tien truoc thue','tien dich vu','net amount','amount before vat'),
-    'vat':('thue suat','thue suat gtgt','thue suat(%)','vat rate'),
+    'net':('thanh tien','thanh tien truoc thue','thanh tien chua co thue gtgt','thanh tien truoc thue gtgt','tien dich vu','net amount','amount before vat'),
+    'vat':('thue suat','thue suat gtgt','thue suat(%)','vat rate','tax rate'),
     '_unit':('don vi tinh','donvitinh','dvt','unit'),
     '_sequence':('stt','no.'),
     '_vat_amount':('tien thue','tien thue gtgt','vat amount'),
-    '_gross':('thanh tien sau thue','thanh tien sau thue gtgt'),
-    '_discount':('tong so tien chiet khau','total discount'),
+    '_gross':('thanh tien sau thue','thanh tien sau thue gtgt','thanh tien co thue gtgt'),
+    '_discount':('tong so tien chiet khau','tong tien chiet khau','total discount'),
 }
 STOP=('cong tien','tong cong','tong tien','tong thanh toan','cong truoc thue','subtotal','grand total',
-      'so tien viet','so tien bang','nguoi mua','nguoi ban','thue suat gtgt:', 'tong hop')
+      'so tien viet','so tien bang','nguoi mua','nguoi ban','thue suat gtgt:', 'tong hop',
+      'loai khong chiu thue','loai thue suat')
 
 
 def header_name(raw):
-    normalized=key(raw).strip('() ')
+    normalized=header_key(raw)
     for name,labels in LABELS.items():
-        if normalized in labels:return name
+        if normalized and normalized in (header_key(label) for label in labels):return name
     return None
 
 
+def column_bounds(entry):
+    """Estimate layout only for two explicit labels fused by OCR.
+
+    The original blocks/evidence remain unchanged; these sub-boxes are used
+    exclusively to locate column boundaries, never as observed value evidence.
+    """
+    raw,refs=entry
+    box=bounds(refs)
+    if box and refs:
+        original=fragment_text(refs)
+        if key(original) in ('thue suat tien thue gtgt','thue suat tien thue') and raw in original:
+            start=original.index(raw);width=box[2]-box[0]
+            return (box[0]+width*start/len(original),box[1],
+                    box[0]+width*(start+len(raw))/len(original),box[3])
+    return box
+
+
 def spatial_headers(page):
-    fragments=logical_fragments(page)
-    descriptions=[(raw,refs) for raw,refs in fragments if header_name(raw)=='description' and bounds(refs)]
+    observations=header_observations(page,LABELS)
+    for raw,refs in logical_fragments(page):
+        if key(raw) in ('thue suat tien thue gtgt','thue suat tien thue'):
+            words=list(re.finditer(r'\S+',raw))
+            if len(words) in (4,5):
+                split=words[2].start()
+                observations.extend((('vat',raw[:split].strip(),refs),
+                                     ('_vat_amount',raw[split:].strip(),refs)))
+    descriptions=[(raw,refs) for name,raw,refs in observations if name=='description' and bounds(refs)]
     if not descriptions:return {}
     first=descriptions[0];first_box=bounds(first[1]);y=(first_box[1]+first_box[3])/2
     headers={}
-    for raw,refs in fragments:
-        box=bounds(refs);name=header_name(raw)
+    for name,raw,refs in observations:
+        box=bounds(refs)
         if box and name and abs((box[1]+box[3])/2-y)<.04:
             # Prefer Vietnamese first occurrence over the translated subheader.
             headers.setdefault(name,(raw,refs))
@@ -46,8 +71,8 @@ def _discover_once(page,inherited_headers=None):
     fragments=logical_fragments(page)
     current=spatial_headers(page);headers=current or inherited_headers
     if not headers:return []
-    columns=sorted(headers,key=lambda name:bounds(headers[name][1])[0])
-    centers={name:(bounds(headers[name][1])[0]+bounds(headers[name][1])[2])/2 for name in columns}
+    columns=sorted(headers,key=lambda name:column_bounds(headers[name])[0])
+    centers={name:(column_bounds(headers[name])[0]+column_bounds(headers[name])[2])/2 for name in columns}
     cuts=[(centers[a]+centers[b])/2 for a,b in zip(columns,columns[1:])]
     top=max(bounds(refs)[3] for _,refs in headers.values()) if current else 0.
     body=[]
@@ -59,6 +84,9 @@ def _discover_once(page,inherited_headers=None):
         normalized=key(raw)
         if normalized.startswith(STOP) or normalized in ('cong','tong'):break
         body.append((raw,refs,box))
+    from .spatial_row_alignment import align_amount_rows
+    aligned=align_amount_rows(headers,body,columns,cuts,header_name)
+    if aligned is not None:return aligned
     bands=[]
     for entry in sorted(body,key=lambda row:((row[2][1]+row[2][3])/2,row[2][0])):
         raw,refs,box=entry;center=(box[1]+box[3])/2
@@ -81,21 +109,38 @@ def _discover_once(page,inherited_headers=None):
         desc=text('description')
         borrowed=False
         if not desc and money_values(text('net'),'AUTO'):
+            # Detached formula/header fragments or split amount tails must
+            # not borrow a nearby description and manufacture another row.
+            has_sequence=bool(re.fullmatch(r'\d+',text('_sequence').strip()))
+            has_measure=bool(money_values(text('quantity'),'AUTO') or money_values(text('unit_price'),'AUTO'))
+            if not has_sequence and not has_measure:continue
             nearby=[]
             for raw,refs,box in body:
                 col=columns[sum((box[0]+box[2])/2>cut for cut in cuts)]
                 distance=abs((box[1]+box[3])/2-band_y)
-                if col=='description' and distance<.025 and len(raw.strip())>1 and not header_name(raw):
+                if (col=='description' and distance<.025 and len(raw.strip())>1 and not header_name(raw)
+                        and not re.fullmatch(r'[()0-9= x+*/.,-]+',raw.strip())):
                     nearby.append((distance,raw,refs))
             if nearby:
                 _,desc,refs=min(nearby,key=lambda row:row[0]);cells['description']=[(desc,refs)];borrowed=True
-        if not desc or header_name(desc) or re.fullmatch(r'[()0-9= x+*/.-]+',desc):continue
+        if not desc or header_name(desc):continue
+        if re.fullmatch(r'[()0-9= x+*/.-]+',desc):
+            # A date can be the final line of a service-period description.
+            # Keep its observed text for the nearest established row only.
+            if re.fullmatch(r'\d{1,2}/\d{1,2}/\d{4}',desc.strip()):
+                description_lines.append((band_y,desc,tuple(b for _,bs in cells['description'] for b in bs)))
+            continue
         sequence=text('_sequence').strip()
         if sequence and not re.fullmatch(r'\d+',sequence):continue
         if len(desc.strip())<=1:continue
         if not borrowed:description_lines.append((band_y,desc,tuple(b for _,bs in cells['description'] for b in bs)))
         net=text('net')
         numeric=bool(money_values(net,'AUTO'))
+        # A printed sequence plus observed quantity/price can establish a row
+        # even when its amount is unreadable. Preserve that missing cell;
+        # never invent its value by multiplying quantity and price.
+        numeric|=bool(sequence and re.fullmatch(r'\d+',sequence) and re.fullmatch(r'[A-Za-z0-9.,+-]+',net.strip())
+                      and money_values(text('quantity'),'AUTO') and money_values(text('unit_price'),'AUTO'))
         # Wrapped descriptions may precede or follow the line carrying money.
         if numeric:
             obs=[]

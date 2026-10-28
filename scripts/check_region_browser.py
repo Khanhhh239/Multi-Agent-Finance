@@ -71,7 +71,12 @@ def main():
             held=[];pattern='**/reread-region?*'
             page.route(pattern,lambda route:held.append(route));page.locator('#reread-region').click()
             expect(page.locator('#reread-region')).to_be_disabled()
-            assert held
+            # Disabling is synchronous UI state; interception arrives on a
+            # later browser event. Pump events until that request is held.
+            deadline=time.monotonic()+5
+            while not held and time.monotonic()<deadline:
+                page.wait_for_timeout(25)
+            assert held,'The reread request was not intercepted within five seconds'
             other=page.locator('.field').filter(has=page.get_by_label('MST người bán',exact=True))
             other.get_by_role('button',name='Xem nguồn',exact=True).click()
             held[0].continue_();page.unroute(pattern)

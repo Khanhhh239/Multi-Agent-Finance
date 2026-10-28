@@ -73,6 +73,8 @@
 !agent3_tax_compliance/tests/fixtures/**/*.jsonl
 
 # Agent 3 runtime data and old local diagnostics
+/invoice_test/
+/labels_invoice_test_*.json
 /agent3_tax_compliance/data/
 /agent3_tax_compliance/ocr_debug_output.txt
 /agent3_tax_compliance/ocr_log.txt

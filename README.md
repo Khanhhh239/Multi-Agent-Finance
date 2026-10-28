@@ -1,5 +1,57 @@
 # Agent 3 — Tax Compliance Assistant
 
+## Cập nhật OCR — 28/10/2026
+
+Đã cải thiện gán bên bán/bên mua, nối tên và địa chỉ nhiều dòng, căn cột/dòng
+bảng hàng và đọc VAT có in theo từng dòng. Recovery ghép các word span thành
+vùng đọc đủ dòng, giữ bằng chứng gốc và giới hạn tài nguyên; các gợi ý vẫn cần
+người dùng đối chiếu, không tự ghi đè dữ liệu đã xác nhận.
+
+- **Bộ phát triển:** 28 hóa đơn, 706 trường được gán nhãn; tăng từ **535 lên
+  565 trường đúng (80,03%)**, còn 32 trường điền sai và 109 trường thiếu/mơ hồ.
+  Không làm hỏng trường trước đó đúng. Nhãn còn DRAFT và đã dùng để sửa hệ thống,
+  nên đây không phải độ chính xác trên dữ liệu độc lập hay production.
+- **Mẫu mới:** đã chạy riêng 4 PDF công khai (6 trang) và 1 PNG tạo từ cùng một
+  hóa đơn. Hai PDF có che số tiền được xét riêng; nhãn do agent tự kiểm tra,
+  chưa có reviewer độc lập. Vẫn có lỗi phân tách hóa đơn và lấy số dưới lớp che
+  PDF. Mẫu nhỏ này chưa đủ điều kiện nghiệm thu.
+- **Kiểm chứng phần mềm:** 582 test Python đạt; 9 kiểm tra cú pháp JavaScript,
+  2 kiểm tra Node và 4 nhóm hồi quy Chrome đạt. Benchmark crop chưa cho thấy
+  cấu hình mới đủ tốt để thay model mặc định. Chưa đạt mục tiêu DEV 90% và chưa
+  bật auto-accept.
+
+[Báo cáo triển khai, kết quả từng mẫu và giới hạn](docs/agent3/plans/OCR_ACCURACY_ROUND3_IMPLEMENTATION_20261028.md)
+· [Kế hoạch OCR round 3](docs/agent3/plans/PLAN_OCR_ACCURACY_ROUND3_20261028.md)
+· [Số liệu tổng hợp](docs/agent3/plans/evidence/ocr_accuracy_round3_20261028/summary.json)
+
+### Chạy kiểm tra OCR và đối chiếu kết quả
+
+Từ thư mục gốc, trên máy đã có môi trường và model theo hướng dẫn runtime bên dưới:
+
+```powershell
+.\RUN_INVOICE_TEST.cmd
+.\RUN_OCR_ACCURACY.cmd --help
+```
+
+`RUN_INVOICE_TEST.cmd` xử lý mẫu trong `invoice_test`, tạo HTML đối chiếu ảnh và
+cho xuất nhãn để chấm lỗi. HTML chỉ dựng một hóa đơn mỗi lần, hỗ trợ lưu bản nháp,
+chuyển trang và zoom. [Hướng dẫn chuẩn bị PDF, chọn trang và chấm lỗi](docs/agent3/plans/INVOICE_TEST_RUNBOOK.md).
+`RUN_OCR_ACCURACY.cmd` cung cấp audit nhãn, benchmark crop có giới hạn và khóa
+candidate/dataset trước khi đánh giá mẫu mới; xem lệnh trong báo cáo triển khai.
+Mỗi lần chạy dùng một run ID mới để giữ kết quả cũ.
+
+Trên workspace đã chạy đánh giá, các báo cáo hiện tại nằm ở:
+
+- `invoice_test/results/invoice_accuracy_round3_release/review.html`: bộ phát triển mới nhất.
+- `invoice_test/results/invoice_public_holdout_eval_20261028/review.html`: ảnh nguồn và trạng thái trường của mẫu mới.
+
+Hóa đơn, nhãn, crop, kết quả HTML, database, môi trường và model không được đưa
+lên Git; bản clone mới cần chuẩn bị dữ liệu riêng. Ưu tiên tiếp theo là xử lý
+ranh giới hóa đơn, lớp che PDF và thiếu số lượng/đơn giá, sau đó đánh giá lại trên
+bộ mẫu lớn hơn có nhãn được kiểm tra độc lập.
+
+### Các mốc triển khai trước
+
 **OCR quality — 25/10:** thêm bộ tiếp nhận/khóa dataset và benchmark pipeline thật, so sánh baseline/candidate; đọc lại ô số lượng, đơn giá, thành tiền và thuế trên UI. Giữ review thủ công; chưa thay model mặc định hoặc nghiệm thu accuracy trên dữ liệu độc lập. [Hướng dẫn và phần còn chờ dữ liệu](docs/agent3/plans/OCR_QUALITY_IMPLEMENTATION.md).
 
 **Nhập liệu và diễn giải — 21/10:** có thể bổ sung dòng bị OCR bỏ sót bằng cách kéo vùng nguồn, xóa dòng nhận nhầm có lý do và xem lại lịch sử. Đọc lại thêm crop rộng/phóng to trong ngân sách; gán bên bán/bên mua theo vùng hai cột; hướng dẫn mở đúng phần cần xử lý và số liệu thời gian trên UI. Khởi động lại `OPEN_AGENT3.cmd`, Ctrl+F5. Chưa bật auto-accept hoặc nghiệm thu accuracy. [Hướng dẫn và kiểm thử 5 hạng mục](docs/agent3/plans/evidence/capture_upgrade_20261021/REPORT.md).

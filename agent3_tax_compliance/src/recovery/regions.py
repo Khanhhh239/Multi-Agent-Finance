@@ -8,6 +8,7 @@ import tempfile
 import threading
 import time
 import unicodedata
+from .line_regions import line_regions,region_box
 from pathlib import Path
 from uuid import uuid4
 from typing import Literal
@@ -24,7 +25,7 @@ from ..adapters.ocr.protocol import OCRConfig, OCRBridgeRequest, OCRError, corre
 from ..adapters.ocr.worker_client import WorkerClient
 from .field_reads import is_typed,item_field,recovery_refs,typed_read,text_read
 
-POLICY='region-fields-v3'
+POLICY='region-fields-v4'
 MODEL='vietocr_region_v1'
 COMPARISON_MODEL='vietocr_region_wide'
 _SLOT=threading.BoundedSemaphore(1)
@@ -35,7 +36,7 @@ def implementation_sha():
     paths=[Path(__file__),Path(__file__).with_name('field_reads.py'),
            Path(__file__).parents[1]/'ingestion/pdf_region.py',
            Path(__file__).parents[1]/'extraction/invoice_fields.py',
-           Path(__file__).parents[1]/'extraction/tables.py',
+           Path(__file__).parents[1]/'extraction/tables.py',Path(__file__).with_name('line_regions.py'),
            Path(__file__).parents[1]/'canonicalization/normalize.py',
            *(root/name for name in ('protocol.py','worker_client.py','registry.py'))]
     return sha({p.name:digest(p.read_bytes()) for p in paths})
@@ -79,26 +80,28 @@ def plan_regions(record,artifact,normalized,path):
                 selected[(index,identifier)]=(p,b)
     if not selected:
         raise ReviewError('REGION_NO_EVIDENCE','Chưa có vùng chữ đáng tin cậy. Cần đối chiếu toàn trang hoặc xử lý riêng.')
-    if len(selected)>4:
+    if len(selected)>128:
         raise ReviewError('REGION_BUDGET','Trường có hơn 4 vùng chữ; cần xử lý riêng thay vì đọc thiếu một phần.')
     # Detector output order is not necessarily visual order. Joining a value
     # before its label prevents even a correct reread from being parsed.
     ordered=sorted(selected.values(),key=lambda v:(v[0].page_index,v[1].evidence.bbox[1],v[1].evidence.bbox[0]))
+    if len(ordered)>4:ordered=line_regions(ordered)
+    if len(ordered)>4:raise ReviewError('REGION_BUDGET','Trường có hơn 4 dòng nguồn; không đọc thiếu một phần.')
     # Small vertical jitter is common for same-line label/value boxes.
     lines=[]
     for p,b in ordered:
-        box=b.evidence.bbox
+        box=region_box(b)
         if lines:
-            other=lines[-1][0][1].evidence.bbox
+            other=region_box(lines[-1][0][1])
             overlap=min(box[3],other[3])-max(box[1],other[1])
         if lines and p.page_index==lines[-1][0][0].page_index and overlap>.5*min(box[3]-box[1],other[3]-other[1]):lines[-1].append((p,b))
         else:lines.append([(p,b)])
-    ordered=[entry for line in lines for entry in sorted(line,key=lambda v:v[1].evidence.bbox[0])]
+    ordered=[entry for line in lines for entry in sorted(line,key=lambda v:region_box(v[1])[0])]
     for (pa,a),(pb,b) in zip(ordered,ordered[1:]):
-        if pa.page_index!=pb.page_index or b.evidence.bbox[1]-a.evidence.bbox[3]>.04:
+        if pa.page_index!=pb.page_index or region_box(b)[1]-region_box(a)[3]>.04:
             raise ReviewError('REGION_CONFLICT','Các vùng nguồn rời nhau; cần chọn đúng ứng viên trước khi đọc lại để tránh ghép nhầm bên bán/bên mua.')
     for p,b in ordered:
-        x0,y0,x1,y1=b.evidence.bbox
+        x0,y0,x1,y1=region_box(b)
         # A line recognizer must not receive a whole table/page or multiline block.
         if y1-y0>.08 or (x1-x0)*(y1-y0)>.08:
             raise ReviewError('REGION_NOT_LINE','Vùng nguồn quá lớn cho bộ đọc từng dòng. Cần tách vùng trước.')
@@ -181,7 +184,7 @@ class RegionRecovery:
                         raw=self.repo.ingestion.render(ctx,payer,artifact.ingestion_id,page.page_index)
                         if digest(raw)!=page.image_hash:raise ValueError('region page hash mismatch')
                         with Image.open(io.BytesIO(raw)) as image:
-                            box=crop_box(block.evidence.bbox,*image.size,expanded=True)
+                            box=crop_box(region_box(block),*image.size,expanded=True)
                             boxes.append({'page_index':page.page_index,'bbox':[box[0]/image.width,box[1]/image.height,box[2]/image.width,box[3]/image.height]})
                     payload={'source':str(source_path),'output':directory,'regions':boxes,'sha256':source.sha256}
                     try:
@@ -195,7 +198,7 @@ class RegionRecovery:
                     raw=self.repo.ingestion.render(ctx,payer,artifact.ingestion_id,page.page_index)
                     if digest(raw)!=page.image_hash:raise ValueError('region page hash mismatch')
                     with Image.open(io.BytesIO(raw)) as image:
-                        box=crop_box(block.evidence.bbox,*image.size,expanded=command.reader in ('expanded','pdf_detail'))
+                        box=crop_box(region_box(block),*image.size,expanded=command.reader in ('expanded','pdf_detail'))
                         scale=2 if command.reader=='expanded' else 1
                         path=Path(directory)/f'line-{index}.png'
                         width,height=(detail[index]['width'],detail[index]['height']) if detail else ((box[2]-box[0])*scale,(box[3]-box[1])*scale)
@@ -214,6 +217,7 @@ class RegionRecovery:
                         image_hash=image_hash,image_path=str(path.resolve()),image_width=width,image_height=height,
                         model_config_version=config.version,runtime_sha256=runtime,model_id=model,timeout_seconds=config.timeout_seconds))
                     observations.append({'block_id':block.block_id,'original_text':block.text_raw,'evidence':block.evidence.model_dump(mode='json'),
+                        'source_evidence':[b.evidence.model_dump(mode='json') for b in getattr(block,'source_blocks',(block,))],
                         'crop_pixel_box':box,'page_size':image.size,'crop_sha256':image_hash,'resize_scale':None if detail else scale,
                         'pdf_render':detail[index] if detail else None})
                 try:responses=client.run_batch(requests,config,slot_timeout=0)

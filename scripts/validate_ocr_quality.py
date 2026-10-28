@@ -22,7 +22,7 @@ def main():
     commands += [('javascript-syntax-'+path.name,['node','--check',str(path)],APP) for path in sorted((APP/'src/review/static').glob('*.js'))]
     commands += [(name,['node','tests/review/'+name],APP) for name in ('review_client.test.js','explanation_client.test.js')]
     commands += [(name,[sys.executable,str(ROOT/'scripts'/name)],ROOT) for name in
-                 ('check_region_browser.py','check_automation_v2_browser.py','check_capture_upgrade_browser.py')]
+                 ('check_region_browser.py','check_automation_v2_browser.py','check_capture_upgrade_browser.py','check_invoice_test_browser.py')]
     for name,command,cwd in commands:
         result=subprocess.run(command,cwd=cwd,capture_output=True,encoding='utf-8',errors='replace')
         (out/(name+'.log')).write_text(result.stdout+result.stderr,encoding='utf-8')
