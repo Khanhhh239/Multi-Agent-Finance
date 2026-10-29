@@ -1,0 +1,222 @@
+{
+  "scope": "Fresh sequential DEV pipeline; self-reviewed unchanged references; not independent holdout or controlled latency",
+  "run_id": "invoice_visibility_serial_20261029",
+  "completed": true,
+  "cases": [
+    {
+      "case_id": "web-imall",
+      "sha256": "95b51644f038b13f2a6daf51ed77babb3cb04a8b594f57a2542625179b98b05d",
+      "state": "REVIEW",
+      "error_code": null,
+      "before_correct": 1,
+      "correct": 10,
+      "labeled": 19,
+      "wrong_present": 0,
+      "printed_labeled": 18,
+      "printed_correct": 9,
+      "masked_numeric_absence_slots": 0,
+      "unexpected_present_in_masked_numeric_slots": 0,
+      "segmentation": "SINGLE_CANDIDATE",
+      "timings": [
+        {
+          "stage": "ocr_page",
+          "route": "HYBRID",
+          "elapsed_seconds": 220.2243049999961,
+          "page_index": 0,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1501863936
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 38429.96700000367,
+          "stage_timings_ms": {
+            "detection": 45807.50149999221,
+            "recognition": 130207.60869998776
+          },
+          "inference_ms": 176089.181000003
+        }
+      ],
+      "elapsed_seconds": 224.45404810000036,
+      "model_assets_match_previous_run": true,
+      "pages": [
+        {
+          "page_index": 0,
+          "route": "HYBRID",
+          "native_blocks": 131,
+          "render_sha256": "0377082a1cf1cb3b41e0855edc2676fd8476ecf9388b5918e4dbad99969aa344"
+        }
+      ],
+      "critical_wrong_present_paths": []
+    },
+    {
+      "case_id": "web-khang_vu",
+      "sha256": "9fa018917c7373218e95f18b9525901f0ef1a70b4fb289afcb971de886459727",
+      "state": "REVIEW",
+      "error_code": null,
+      "before_correct": 32,
+      "correct": 35,
+      "labeled": 49,
+      "wrong_present": 0,
+      "printed_labeled": 22,
+      "printed_correct": 8,
+      "masked_numeric_absence_slots": 15,
+      "unexpected_present_in_masked_numeric_slots": 0,
+      "segmentation": "SINGLE_CANDIDATE",
+      "timings": [
+        {
+          "stage": "ocr_page",
+          "route": "OCR",
+          "elapsed_seconds": 200.06701369999791,
+          "page_index": 0,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1522221056
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 49012.315100000706,
+          "stage_timings_ms": {
+            "detection": 40805.95300000277,
+            "recognition": 105599.3049999961
+          },
+          "inference_ms": 146528.8784000004
+        },
+        {
+          "stage": "ocr_page",
+          "route": "HYBRID",
+          "elapsed_seconds": 174.20642950000183,
+          "page_index": 1,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1525817344
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 33997.440299994196,
+          "stage_timings_ms": {
+            "detection": 48962.108399995486,
+            "recognition": 86821.36210000317
+          },
+          "inference_ms": 135852.2690999962
+        }
+      ],
+      "elapsed_seconds": 380.5446322999924,
+      "model_assets_match_previous_run": true,
+      "pages": [
+        {
+          "page_index": 0,
+          "route": "OCR",
+          "native_blocks": 0,
+          "render_sha256": "88e57ad07deb752a11210dc86a21602a7b2fae6e7e385a3fd9202e0578897b5e"
+        },
+        {
+          "page_index": 1,
+          "route": "HYBRID",
+          "native_blocks": 91,
+          "render_sha256": "bdc1a60513fa099331874a27f5b6309cbd9145130f8422eae455f9f661f3d007"
+        }
+      ],
+      "critical_wrong_present_paths": []
+    },
+    {
+      "case_id": "web-micro_precision",
+      "sha256": "7aff0ead785b9a68c7d620f95baf5e7ef36301a75353c4475fe97127082916bd",
+      "state": "REVIEW",
+      "error_code": null,
+      "before_correct": 24,
+      "correct": 28,
+      "labeled": 43,
+      "wrong_present": 1,
+      "printed_labeled": 19,
+      "printed_correct": 4,
+      "masked_numeric_absence_slots": 13,
+      "unexpected_present_in_masked_numeric_slots": 0,
+      "segmentation": "SINGLE_CANDIDATE",
+      "timings": [
+        {
+          "stage": "ocr_page",
+          "route": "OCR",
+          "elapsed_seconds": 211.3824375999975,
+          "page_index": 0,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1543036928
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 31179.530599998543,
+          "stage_timings_ms": {
+            "detection": 32568.322699997225,
+            "recognition": 143741.13000000943
+          },
+          "inference_ms": 176349.19690000243
+        },
+        {
+          "stage": "ocr_page",
+          "route": "OCR",
+          "elapsed_seconds": 92.99372420000145,
+          "page_index": 1,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1524699136
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 23496.99279999186,
+          "stage_timings_ms": {
+            "detection": 15017.26609999605,
+            "recognition": 50985.820899993996
+          },
+          "inference_ms": 66029.0854999912
+        }
+      ],
+      "elapsed_seconds": 307.4473186999967,
+      "model_assets_match_previous_run": true,
+      "pages": [
+        {
+          "page_index": 0,
+          "route": "OCR",
+          "native_blocks": 0,
+          "render_sha256": "9cacca860bc57d9fac0a713987659f808446e5a086911582e0c646f5a7086715"
+        },
+        {
+          "page_index": 1,
+          "route": "OCR",
+          "native_blocks": 0,
+          "render_sha256": "cb87c01fe1749d3887f30c740a84cd57cbeb37e475e6444d8131e3762387f59a"
+        }
+      ],
+      "critical_wrong_present_paths": [
+        "invoice.number"
+      ]
+    }
+  ],
+  "workload_controlled": false,
+  "report_sha256": "6ab3279030e12a14f4cbbfb738d08ebb1670ef5dbf3e2225266bb472758d60e0",
+  "model_or_timeout_default_changed": false,
+  "release_approved": false,
+  "visible_renders_match_source_audit": true,
+  "verification": {
+    "passed": true,
+    "python_tests": 152,
+    "suites": [
+      "ocr",
+      "quality",
+      "recovery"
+    ],
+    "validation_sha256": "5ee9bfd4a4e4fd32e3f40197b9e996d3c5bc01ded99e3c0f5dd859894d35f058",
+    "browser": {
+      "passed": true,
+      "cases": 3,
+      "images_loaded": 5,
+      "page_errors": [],
+      "desktop_mobile_no_overflow": true
+    }
+  }
+}

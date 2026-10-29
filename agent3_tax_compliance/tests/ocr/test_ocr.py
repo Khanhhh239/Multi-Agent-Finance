@@ -139,6 +139,42 @@ class OCRTests(unittest.TestCase):
                 with self.assertRaises(OCRError): client.run_batch([self.req],self.config)
                 self.assertEqual(invoke.call_count,calls)
 
+    def test_timeout_retains_stage_progress_without_returning_partial_text(self):
+        client=WorkerClient();client._runtime={'runtime_sha256':'a'*64,'engine_versions':{}}
+        def timeout(command,wire,*args,**kwargs):
+            payload=json.loads(wire)
+            Path(payload['progress_path']).write_text(json.dumps({
+                'stage':'RECOGNITION_CROP','completed_regions':3,'total_regions':74,
+                'elapsed_ms':120000,'detection_ms':60000}),encoding='utf-8')
+            raise IngestionError('WORKER_TIMEOUT','Synthetic deadline',retryable=True)
+        with patch.object(client,'verify_runtime'),patch('src.adapters.ocr.worker_client.run_bounded',side_effect=timeout):
+            with self.assertRaises(OCRError) as caught:client.run_batch([self.req],self.config)
+        self.assertEqual(caught.exception.issue.code,'WORKER_TIMEOUT')
+        self.assertEqual(len(client.metrics_history),self.config.max_attempts)
+        self.assertEqual(client.metrics_history[-1]['progress']['completed_regions'],3)
+
+    def test_retry_does_not_reuse_previous_attempt_progress(self):
+        client=WorkerClient();client._runtime={'runtime_sha256':'a'*64,'engine_versions':{}}
+        calls=[]
+        def timeout(command,wire,*args,**kwargs):
+            path=Path(json.loads(wire)['progress_path']);calls.append(1)
+            self.assertFalse(path.exists())
+            if len(calls)==1:path.write_text('{"stage":"DETECTION"}',encoding='utf-8')
+            raise IngestionError('WORKER_TIMEOUT','Synthetic deadline',retryable=True)
+        with patch.object(client,'verify_runtime'),patch('src.adapters.ocr.worker_client.run_bounded',side_effect=timeout):
+            with self.assertRaises(OCRError):client.run_batch([self.req],self.config)
+        self.assertNotIn('progress',client.metrics_history[-1])
+
+    def test_malformed_diagnostics_do_not_hide_worker_failure(self):
+        client=WorkerClient();client._runtime={'runtime_sha256':'a'*64,'engine_versions':{}}
+        def crash(command,wire,*args,**kwargs):
+            Path(json.loads(wire)['progress_path']).write_text('not-json',encoding='utf-8')
+            raise IngestionError('WORKER_RESOURCE_ERROR','Synthetic crash')
+        with patch.object(client,'verify_runtime'),patch('src.adapters.ocr.worker_client.run_bounded',side_effect=crash):
+            with self.assertRaises(OCRError) as caught:client.run_batch([self.req],self.config)
+        self.assertEqual(caught.exception.issue.code,'WORKER_CRASH')
+        self.assertNotIn('progress',client.metrics_history[-1])
+
     def test_output_limit_and_wrong_page_rejected_without_retry(self):
         client=WorkerClient();client._runtime={'runtime_sha256':'a'*64,'engine_versions':{}}
         for mode in ('too-large','wrong-page'):

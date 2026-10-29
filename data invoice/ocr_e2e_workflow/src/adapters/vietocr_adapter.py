@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
+from time import perf_counter
 
 import numpy as np
 from PIL import Image
@@ -19,6 +20,7 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
     location_support = True
 
     def load_model(self) -> None:
+        self.progress('TORCH_IMPORT')
         import torch
         from vietocr.tool.config import Cfg
         from vietocr.tool.predictor import Predictor
@@ -29,6 +31,7 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
         self.detector = None
         self.orientation_classifier = None
         if not self.recognition_only:
+            self.progress('PADDLE_IMPORT')
             from paddleocr import DocImgOrientationClassification, TextDetection
 
             detector_config = self.config.get("detector", {})
@@ -52,6 +55,7 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
                 if option in detector_config:
                     detection_kwargs[option] = detector_config[option]
             # VietOCR handles recognition; avoid loading Paddle's recognizer.
+            self.progress('DETECTOR_LOAD')
             self.detector = TextDetection(**detection_kwargs)
 
             if detector_config.get("use_doc_orientation_classify", False):
@@ -93,6 +97,7 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
             if not 32 <= width <= 2048:
                 raise ValueError('image_max_width must be 32..2048')
             viet_config["dataset"]["image_max_width"] = width
+        self.progress('RECOGNIZER_LOAD')
         self.recognizer = Predictor(viet_config)
 
     def _orientation(self, image: Image.Image) -> tuple[int, float | None]:
@@ -136,6 +141,8 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
             270: Image.Transpose.ROTATE_270,
         }.get(angle)
         oriented_image = processed.transpose(transpose) if transpose else processed
+        self.progress('DETECTION',load_time_ms=self.load_time_ms)
+        detection_started=perf_counter()
         results = self.detector.predict(np.asarray(oriented_image))
         detections = paddle_result_to_detections(results)
         tile_metadata={'tiles':0,'added_boxes':0}
@@ -145,11 +152,17 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
                 with oriented_image.crop(tile) as region:
                     tile_results.append((tile,paddle_result_to_detections(self.detector.predict(np.asarray(region)))))
             detections,tile_metadata=add_tiles(detections,tile_results,oriented_image.size)
+        detection_ms=(perf_counter()-detection_started)*1000
+        recognition_started=perf_counter()
+        self.progress('RECOGNITION',total_regions=len(detections),completed_regions=0,detection_ms=detection_ms)
         recognition_errors = 0
         split_detections = 0
         recognition_segments = []
         recognizer_config = self.config.get("recognizer", {})
-        for detection in detections:
+        for region_index,detection in enumerate(detections):
+            if region_index%10==0:
+                self.progress('RECOGNITION',total_regions=len(detections),completed_regions=region_index,
+                              detection_ms=detection_ms,recognition_ms=(perf_counter()-recognition_started)*1000)
             oriented_polygon = detection["polygon"]
             if self.detection_only:
                 detection['polygon']=map_polygon(polygon_to_original(oriented_polygon,processed.size,angle),back,image.size)
@@ -162,6 +175,10 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
                 min(oriented_image.width, int(max(xs)) + 1),
                 min(oriented_image.height, int(max(ys)) + 1),
             )
+            self.progress('RECOGNITION_CROP',total_regions=len(detections),completed_regions=region_index,
+                          load_time_ms=self.load_time_ms,detection_ms=detection_ms,
+                          recognition_ms=(perf_counter()-recognition_started)*1000,
+                          crop_width=box[2]-box[0],crop_height=box[3]-box[1])
             if box[2] <= box[0] or box[3] <= box[1]:
                 detection["text_raw"] = ""
                 recognition_errors += 1
@@ -226,6 +243,7 @@ class PPOCRV6VietOCRAdapter(BaseAdapter):
                 "recognizer_backend": "VietOCR",
                 "detection_only": self.detection_only,
                 "recognition_errors": recognition_errors,
+                "stage_timings_ms": {"detection":detection_ms,"recognition":(perf_counter()-recognition_started)*1000},
                 "split_detections": split_detections,
                 "recognition_segments": recognition_segments,
                 "coverage_geometry": preparation,

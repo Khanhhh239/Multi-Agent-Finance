@@ -6,6 +6,7 @@ The response file is bounded while writing and lives in a private parent temp di
 import hashlib
 import json
 import sys
+import time
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -15,6 +16,19 @@ def main():
     if len(wire)>1024*1024: return 2
     payload=json.loads(wire)
     config=payload['config']
+    started=time.perf_counter()
+    def progress(stage,**metrics):
+        if not payload.get('progress_path'):return
+        target=Path(payload['progress_path'])
+        temporary=target.with_suffix('.tmp')
+        try:
+            temporary.write_text(json.dumps({'stage':stage,'elapsed_ms':(time.perf_counter()-started)*1000,
+                                             **metrics},allow_nan=False),encoding='utf-8')
+            temporary.replace(target)
+        except OSError:
+            pass  # Diagnostic IO must not prevent recognition.
+    config['_progress']=progress
+    progress('WORKER_IMPORTS')
     requests=[json.loads(line) for line in payload['requests_jsonl'].splitlines() if line]
     if not 1<=len(requests)<=64: return 2
     from src.adapters import create_adapter
@@ -25,7 +39,9 @@ def main():
     adapter=None
     initialization_failed=False
     try:
+        progress('MODEL_INITIALIZATION')
         adapter=create_adapter(config,requests[0]['request_id'])
+        progress('MODEL_READY',load_time_ms=adapter.load_time_ms)
     except Exception as exc:
         initialization_failed=True
         initialization_kind=type(exc).__name__
@@ -51,7 +67,9 @@ def main():
                     with Image.open(path) as image:
                         if image.size!=(req['image_width'],req['image_height']): raise ValueError('size')
                     adapter.run_id=req['request_id']
+                    progress('PAGE_INFERENCE')
                     result=adapter.predict(path).to_dict()
+                    progress('PAGE_COMPLETE',load_time_ms=adapter.load_time_ms,inference_time_ms=result['inference_time_ms'])
                     if config['adapter']=='ppocrv6_vietocr':
                         result['metadata']['confidence_semantics']=('UNAVAILABLE' if config.get('recognition_only') else 'DETECTION_SCORE_NOT_TEXT_CONFIDENCE')
                     if result['error']:

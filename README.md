@@ -1,5 +1,20 @@
 # Agent 3 — Tax Compliance Assistant
 
+## Chẩn đoán timeout và chạy lại pipeline — 29/10/2026
+
+Đã chạy tuần tự **3 hóa đơn / 5 trang**, hoàn tất không timeout với giới hạn
+600 giây hiện có; thời gian OCR từng trang khoảng **93–220 giây**. Runtime có
+mốc đo tải model, detection và recognition; khi lỗi, giữ lại bước cuối và tiến
+độ crop để chẩn đoán. Model và tham số nhận dạng mặc định không đổi.
+
+Trong lượt này, **28 ô số bị che không bị điền giá trị**. Số hóa đơn của
+Micro Precision vẫn bị đọc sai và nhiều trường chữ còn thiếu, nên chưa đạt điều kiện
+phát hành tự động. Đây là mẫu DEV đã dùng sửa mã, chưa phải accuracy độc lập
+hay cam kết latency. [Kết quả, thời gian và giới hạn](docs/agent3/plans/OCR_RUNTIME_DIAGNOSTICS_20261029.md).
+HTML mới trên workspace: `invoice_test/results/invoice_visibility_serial_20261029/review.html`.
+Khởi động lại app/worker để dùng runtime mới; chạy OCR riêng trước khi chạy
+validator hoặc benchmark model khác.
+
 ## Phân tách hóa đơn và lớp che PDF — 29/10/2026
 
 Đã tách lỗi đọc bất đồng trong cùng một ô số hóa đơn khỏi lỗi ranh giới nhiều

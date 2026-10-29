@@ -93,13 +93,15 @@ class WorkerClient:
         self.verify_runtime()
         with worker_slot(slot_timeout), worker_workspace(prefix='capture-ocr-') as directory:
             output=Path(directory)/'responses.jsonl'
+            progress=Path(directory)/'progress.json'
             engine_config=adapter_config(self.profile,self.root,config)
             payload=dict(config=engine_config,distributions=list(self.profile.distributions),requests_jsonl='\n'.join(r.model_dump_json() for r in requests),
-                         output=str(output),max_output_bytes=config.max_output_bytes)
+                         output=str(output),progress_path=str(progress),max_output_bytes=config.max_output_bytes)
             last=None
             for attempt in range(config.max_attempts):
                 try:
                     if output.exists(): output.unlink()
+                    if progress.exists(): progress.unlink()
                     self.last_metrics=run_bounded([str(self.python),'-m','src.bridge_worker'],json.dumps(payload).encode(),
                                 config.timeout_seconds*len(requests),config.memory_mb,self.root,
                                 max_processes=self.profile.max_processes,environment=self.profile.environment)
@@ -122,5 +124,10 @@ class WorkerClient:
                 except OCRError as exc: last=exc
                 except (ValueError,TypeError): last=OCRError('PROTOCOL_ERROR','Invalid worker response')
                 except OSError: last=OCRError('TRANSIENT_IO','Unable to stage worker output',True)
+                diagnostic={'attempt':attempt+1,'error_code':last.issue.code}
+                if progress.is_file() and progress.stat().st_size<=4096:
+                    try:diagnostic['progress']=json.loads(progress.read_text(encoding='utf-8'))
+                    except (ValueError,OSError):pass
+                self.metrics_history.append(diagnostic)
                 if not last.issue.retryable: break
             raise last

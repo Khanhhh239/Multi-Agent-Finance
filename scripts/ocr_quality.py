@@ -62,6 +62,7 @@ def execute_case(entry,out,config,render_dpi):
                             'page_index':requests[0].page_index,'worker_metrics':client.metrics_history[-1:],
                             'lifecycle':'NEW_WORKER_PER_PAGE','cached':False,
                             'model_load_ms':responses[0].result.load_time_ms if responses and responses[0].result else None,
+                            'stage_timings_ms':responses[0].result.metadata.get('stage_timings_ms') if responses and responses[0].result else None,
                             'inference_ms':responses[0].result.inference_time_ms if responses and responses[0].result else None})
     client.run_batch=measured
     bridge=OCRBridge(settings,config,client)

@@ -26,6 +26,10 @@ class BaseAdapter(ABC):
     def load_model(self) -> None:
         raise NotImplementedError
 
+    def progress(self, stage, **metrics):
+        callback=self.config.get('_progress')
+        if callback is not None:callback(stage,**metrics)
+
     @abstractmethod
     def infer(self, image_path: Path) -> dict[str, Any]:
         raise NotImplementedError
