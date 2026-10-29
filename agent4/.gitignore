@@ -7,7 +7,3 @@ data/*.duckdb*
 data/*ground_truth.json
 artifacts/
 data/traces/
-eval/data/*.jsonl
-eval/results/
-eval/.sealed/
-eval/data/manifest*.json

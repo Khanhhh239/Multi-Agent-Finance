@@ -5,24 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "agent4-cfo"
 version = "0.2.0"
-description = "Vietnamese CFO assistant with a deterministic financial engine"
+description = "Synthetic financial data foundation for Agent 4"
 requires-python = ">=3.11"
 dependencies = ["duckdb>=1.0", "pandas>=2.0", "numpy>=1.26"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "hypothesis>=6.100", "ruff>=0.8"]
-agent = ["httpx>=0.27", "rank-bm25>=0.2.2", "sqlglot>=25", "rich>=13.7", "jsonschema>=4.20"]
-api = ["fastapi>=0.110", "uvicorn>=0.29"]
-ml = ["sentence-transformers>=3"]
+dev = ["pytest>=8", "ruff>=0.8"]
 
 [tool.setuptools.packages.find]
-include = ["agent4*", "eval*"]
+include = ["agent4*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
 pythonpath = ["."]
-markers = ["llm: requires a running local Ollama", "slow: regenerates full synthetic data"]
-
-[tool.setuptools.package-data]
-"agent4.agent" = ["data/*.jonl", "data/*.yml", "data/*.json"]
+markers = ["slow: regenerates full synthetic data"]
