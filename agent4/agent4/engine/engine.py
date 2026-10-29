@@ -208,7 +208,7 @@ class ExecutionEngine:
     def resolve_entity(self, kind: str, value: str) -> list[str]:
         """Resolve a code or a (partial, accent-insensitive) name to codes."""
         value = str(value).strip()
-        if kind in ("customer", "vendor"):
+        if kind in ("customer", "vendor"):  
             ptype = "CUSTOMER" if kind == "customer" else "VENDOR"
             pool = {c: p["name"] for c, p in self.partners.items() if p["type"] == ptype}
         else:

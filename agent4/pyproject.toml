@@ -25,4 +25,4 @@ pythonpath = ["."]
 markers = ["llm: requires a running local Ollama", "slow: regenerates full synthetic data"]
 
 [tool.setuptools.package-data]
-"agent4.agent" = ["data/*.jsonl", "data/*.yml", "data/*.json"]
+"agent4.agent" = ["data/*.jonl", "data/*.yml", "data/*.json"]
