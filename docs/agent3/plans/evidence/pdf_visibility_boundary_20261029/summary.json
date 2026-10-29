@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-29",
+  "changes": [
+    "Same-location invoice-number disagreements remain field-level AMBIGUOUS candidates, without blocking other fields.",
+    "Visible PDF annotation appearances preserved in full-page and region rendering.",
+    "Native text withheld on pages with annotations/widgets or later overlapping filled paths/images; visible OCR only."
+  ],
+  "dev_replay": {
+    "cases": 28,
+    "labeled": 706,
+    "correct": 565,
+    "wrong_present": 32,
+    "missing_or_ambiguous": 109,
+    "previously_correct_regressions": 0,
+    "scope": "Frozen OCR extraction replay with original DRAFT references; no fresh-reader accuracy claim"
+  },
+  "source_audit": {
+    "passed": true,
+    "results": [
+      {
+        "case_id": "web-imall",
+        "mode": "FROZEN_OCR_EXTRACTION_ONLY",
+        "before": "REVIEW_SPLIT",
+        "after": "SINGLE_CANDIDATE",
+        "number_status": "AMBIGUOUS",
+        "candidates_preserved": 2
+      },
+      {
+        "case_id": "web-micro_precision",
+        "mode": "FROZEN_OCR_EXTRACTION_ONLY",
+        "before": "REVIEW_SPLIT",
+        "after": "SINGLE_CANDIDATE",
+        "number_status": "AMBIGUOUS",
+        "candidates_preserved": 4
+      },
+      {
+        "case_id": "imall",
+        "page": 0,
+        "source_sha256": "95b51644f038b13f2a6daf51ed77babb3cb04a8b594f57a2542625179b98b05d",
+        "route": "HYBRID",
+        "native_blocks": 131,
+        "annotation_count": 0,
+        "visible_render_exact": true,
+        "render_sha256": "0377082a1cf1cb3b41e0855edc2676fd8476ecf9388b5918e4dbad99969aa344"
+      },
+      {
+        "case_id": "khang_vu",
+        "page": 0,
+        "source_sha256": "9fa018917c7373218e95f18b9525901f0ef1a70b4fb289afcb971de886459727",
+        "route": "OCR",
+        "native_blocks": 0,
+        "annotation_count": 14,
+        "visible_render_exact": true,
+        "render_sha256": "88e57ad07deb752a11210dc86a21602a7b2fae6e7e385a3fd9202e0578897b5e"
+      },
+      {
+        "case_id": "khang_vu",
+        "page": 1,
+        "source_sha256": "9fa018917c7373218e95f18b9525901f0ef1a70b4fb289afcb971de886459727",
+        "route": "HYBRID",
+        "native_blocks": 91,
+        "annotation_count": 0,
+        "visible_render_exact": true,
+        "render_sha256": "bdc1a60513fa099331874a27f5b6309cbd9145130f8422eae455f9f661f3d007"
+      },
+      {
+        "case_id": "khang_vu",
+        "mode": "REGIONAL_RENDER",
+        "visible_pixels_exact": true
+      },
+      {
+        "case_id": "micro_precision",
+        "page": 0,
+        "source_sha256": "7aff0ead785b9a68c7d620f95baf5e7ef36301a75353c4475fe97127082916bd",
+        "route": "OCR",
+        "native_blocks": 0,
+        "annotation_count": 7,
+        "visible_render_exact": true,
+        "render_sha256": "9cacca860bc57d9fac0a713987659f808446e5a086911582e0c646f5a7086715"
+      },
+      {
+        "case_id": "micro_precision",
+        "page": 1,
+        "source_sha256": "7aff0ead785b9a68c7d620f95baf5e7ef36301a75353c4475fe97127082916bd",
+        "route": "OCR",
+        "native_blocks": 0,
+        "annotation_count": 4,
+        "visible_render_exact": true,
+        "render_sha256": "cb87c01fe1749d3887f30c740a84cd57cbeb37e475e6444d8131e3762387f59a"
+      },
+      {
+        "case_id": "micro_precision",
+        "mode": "REGIONAL_RENDER",
+        "visible_pixels_exact": true
+      },
+      {
+        "case_id": "unity",
+        "page": 0,
+        "source_sha256": "dc1796819ed24bd936ecb400e31565485515c2fdf73e2c0edde8d0f02641b41c",
+        "route": "HYBRID",
+        "native_blocks": 93,
+        "annotation_count": 0,
+        "visible_render_exact": true,
+        "render_sha256": "d4e2d214e81bbe83ebc9c76bc3f90d8267c6d4c6b730646d7895877e14eb66c6"
+      }
+    ],
+    "audit_sha256": "de4232ce72e57e1f01540b40e9bf5bc8d71d2f77403c9df421130e193ce34f6f"
+  },
+  "verification": {
+    "passed": true,
+    "python_tests": 593,
+    "javascript_syntax_checks": 9,
+    "node_checks": 2,
+    "chrome_regressions": 4,
+    "verification_sha256": "e59451ce0d1ba4786b3d9fd021fdf6446aff7fe682860176e025dbfc597e15c4"
+  },
+  "fresh_ocr": {
+    "state": "ABORTED",
+    "first_case": "web-imall",
+    "error": "OCR_FAILED",
+    "page_timeout_seconds": 600,
+    "remaining_cases": "INTERRUPTED_NOT_SCORED",
+    "accuracy_validated": false,
+    "workload_controlled": false
+  },
+  "migration": "Re-ingest old masked sources in fresh runs; existing artifacts and confirmed fields are not rewritten.",
+  "release_approved": false,
+  "auto_accept_enabled": false
+}

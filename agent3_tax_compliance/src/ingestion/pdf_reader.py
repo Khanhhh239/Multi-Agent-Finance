@@ -7,6 +7,7 @@ from time import perf_counter
 
 from .models import DocumentArtifact, Geometry, IngestionError, PageArtifact, TextBlock
 from .preprocess import bbox, compose, exif_transform, inverse
+from .pdf_visibility import requires_visual_ocr
 from ..domain.evidence import Evidence
 
 STAMP=dict(config_version='ingestion-v1',creator='pdf-reader',stage='ingestion-read')
@@ -114,6 +115,11 @@ def read_pdf(path,output,identity,settings):
                 if rect: image_rectangles.append(rect)
             route,regions,reasons,ratio,text_area,image_area=page_route(
                 [v[1] for v in visible],[v[3] for v in visible],image_rectangles,invisible,settings.route_policy)
+            if requires_visual_ocr(page,spans):
+                visible=[]
+                route,regions='OCR',((0.,0.,1.,1.),)
+                reasons=('PDF_VISUAL_OVERLAY_REQUIRES_OCR','NATIVE_TEXT_WITHHELD_FOR_VISUAL_REVIEW')
+                ratio,text_area=0.,0.
             order=sorted(range(len(visible)),key=lambda i:(round(visible[i][2][1],1),visible[i][2][0],visible[i][0]))
             ranks={item:rank for rank,item in enumerate(order)}
             blocks=[]
@@ -136,7 +142,7 @@ def read_pdf(path,output,identity,settings):
             table=horizontal>=2 and vertical>=2
             if table: reasons+=('TABLE_STRUCTURE_PRESENT',)
             if blocks: reasons+=('READING_ORDER_HEURISTIC_RETAIN_SOURCE_ORDER',)
-            pixmap=page.get_pixmap(matrix=fitz.Matrix(scale,scale),colorspace=fitz.csRGB,alpha=False,annots=False)
+            pixmap=page.get_pixmap(matrix=fitz.Matrix(scale,scale),colorspace=fitz.csRGB,alpha=False,annots=True)
             # PyMuPDF rounds bounds; validate actual dimensions before materializing PNG bytes.
             checked_pixels(pixmap.width,pixmap.height,settings,total-width*height)
             png=pixmap.tobytes('png'); bytes_written+=len(png)

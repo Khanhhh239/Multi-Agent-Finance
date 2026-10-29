@@ -1,5 +1,22 @@
 # Agent 3 — Tax Compliance Assistant
 
+## Phân tách hóa đơn và lớp che PDF — 29/10/2026
+
+Đã tách lỗi đọc bất đồng trong cùng một ô số hóa đơn khỏi lỗi ranh giới nhiều
+hóa đơn: giữ các giá trị ở trạng thái mơ hồ để duyệt, cho phép xem các trường
+còn lại; các vùng số hóa đơn riêng biệt có xung đột vẫn yêu cầu xác nhận tách.
+Ảnh toàn trang và crop nay giữ annotation. Trang có annotation hoặc lớp phủ lên
+text chuyển sang OCR từ ảnh hiển thị, không ghép native text bên dưới.
+
+Kiểm chứng: **593 test Python**, 9 kiểm tra cú pháp JavaScript, 2 kiểm tra Node
+và 4 nhóm hồi quy Chrome đạt; đã đối chiếu 6 trang PDF thật và crop có lớp che.
+
+Replay extraction trên bộ phát triển giữ **565/706 trường đúng**; con số này
+không đánh giá lại recognizer hay PDF reader mới. Lượt OCR thật bổ sung gặp
+timeout 600 giây nên chưa có kết luận độ chính xác đầu cuối. Dữ liệu cũ và các
+giá trị đã xác nhận không bị ghi đè; muốn kiểm tra lại PDF có che, tạo lượt nhập
+mới từ bản gốc. [Thay đổi, kiểm chứng và giới hạn](docs/agent3/plans/OCR_PDF_VISIBILITY_AND_BOUNDARIES_20261029.md).
+
 ## Cập nhật OCR — 28/10/2026
 
 Đã cải thiện gán bên bán/bên mua, nối tên và địa chỉ nhiều dòng, căn cột/dòng

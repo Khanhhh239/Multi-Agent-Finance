@@ -23,7 +23,7 @@ class IngestionError(Exception):
 
 
 class RoutePolicy(Contract):
-    version: Identifier = 'route-v1.1'
+    version: Identifier = 'route-v1.2'
     min_alphanumeric: int = Field(default=20,ge=1)
     min_valid_glyph_ratio: float = Field(default=0.98,ge=0,le=1)
     min_text_coverage: float = Field(default=0.0005,ge=0,le=1)

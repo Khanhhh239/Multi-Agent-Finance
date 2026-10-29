@@ -28,7 +28,7 @@ def render_regions(source,output,regions,expected_sha256):
             height=math.ceil(clip.y1*scale)-math.floor(clip.y0*scale)
             pixels=width*height;total+=pixels
             if pixels<=0 or pixels>1_000_000 or total>2_000_000:raise ValueError('Region pixel budget exceeded')
-            pixmap=page.get_pixmap(matrix=fitz.Matrix(scale,scale),clip=clip,colorspace=fitz.csRGB,alpha=False,annots=False)
+            pixmap=page.get_pixmap(matrix=fitz.Matrix(scale,scale),clip=clip,colorspace=fitz.csRGB,alpha=False,annots=True)
             if pixmap.width*pixmap.height>pixels:raise ValueError('Unexpected render geometry')
             path=output/f'line-{index}.png';pixmap.save(path)
             results.append({'width':pixmap.width,'height':pixmap.height,'render_dpi':dpi,

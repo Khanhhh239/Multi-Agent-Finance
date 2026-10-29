@@ -11,6 +11,7 @@ from .contracts import ExtractionArtifact,ExtractionProfile,ExtractionIssue,Segm
 from .invoice_fields import extract_headers
 from .tables import discover_rows,build_items
 from .vat_group_builder import build_groups
+from .segmentation import competing_invoice_headers
 
 def implementation_sha():
     root=Path(__file__).resolve().parents[1]
@@ -23,10 +24,10 @@ def canonicalize(document,source_format,master,profile,identity,*,record_id,arti
     if (document.tenant_id,document.taxpayer_id,document.taxpayer_master_revision)!=(master.tenant_id,master.taxpayer_id,master.revision):
         raise ValueError('document/master scope mismatch')
     issues=[];fields,candidates=extract_headers(document,profile,issues)
-    numbers={c.normalized_value for c in candidates if c.semantic_field=='invoice.number'}
-    segmentation=Segmentation(status='REVIEW_SPLIT' if len(numbers)>1 else 'SINGLE_CANDIDATE',
+    split=competing_invoice_headers(candidates)
+    segmentation=Segmentation(status='REVIEW_SPLIT' if split else 'SINGLE_CANDIDATE',
         page_groups=tuple((p.page_index,) for p in document.pages),
-        reason='Competing invoice numbers require boundary confirmation.' if len(numbers)>1 else 'No conflicting labelled invoice numbers; review still required.')
+        reason='Distinct invoice header locations have conflicting readings; boundary confirmation required.' if split else 'No conflicting distinct invoice headers; competing readings of one header still require field review.')
     record=None;manifest=None;groups=()
     if segmentation.status=='SINGLE_CANDIDATE':
         rows=discover_rows(document,issues)

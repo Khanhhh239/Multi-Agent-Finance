@@ -10,6 +10,7 @@ import sys
 import tempfile
 import time
 import unittest
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
@@ -223,12 +224,16 @@ os._exit(73)
     def test_timeout_retry_budget_is_finite(self):
         service=IngestionService(self.settings.model_copy(update={'worker_timeout_seconds':0.001,'max_attempts':2}))
         view=self.submit(service=service)
-        outcome=service.work_one(CTX,'payer-a',view.ingestion_id)
-        self.assertEqual(outcome.issue.code,'WORKER_TIMEOUT'); self.assertTrue(outcome.issue.retryable)
-        service.repository.retry(CTX,'payer-a',view.ingestion_id)
-        outcome=service.work_one(CTX,'payer-a',view.ingestion_id)
-        self.assertEqual(outcome.attempts,2); self.assertFalse(outcome.issue.retryable)
-        with self.assertRaises(IngestionError): service.repository.retry(CTX,'payer-a',view.ingestion_id)
+        # Exercise retry accounting with a definite worker timeout. A 1 ms
+        # real parser deadline depends on when Windows schedules the parent.
+        with patch('src.ingestion.service.run_bounded',side_effect=IngestionError(
+                'WORKER_TIMEOUT','Synthetic worker deadline exceeded.',retryable=True)):
+            outcome=service.work_one(CTX,'payer-a',view.ingestion_id)
+            self.assertEqual(outcome.issue.code,'WORKER_TIMEOUT'); self.assertTrue(outcome.issue.retryable)
+            service.repository.retry(CTX,'payer-a',view.ingestion_id)
+            outcome=service.work_one(CTX,'payer-a',view.ingestion_id)
+            self.assertEqual(outcome.attempts,2); self.assertFalse(outcome.issue.retryable)
+            with self.assertRaises(IngestionError): service.repository.retry(CTX,'payer-a',view.ingestion_id)
 
     def test_authenticated_upload_status_document_render_and_raw(self):
         headers={'Authorization':'Bearer '+TOKEN,'Idempotency-Key':'http-1','Content-Type':'application/pdf','X-Filename':'invoice.pdf'}
