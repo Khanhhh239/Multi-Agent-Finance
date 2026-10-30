@@ -7,7 +7,7 @@ from time import perf_counter
 
 from .models import DocumentArtifact, Geometry, IngestionError, PageArtifact, TextBlock
 from .preprocess import bbox, compose, exif_transform, inverse
-from .pdf_visibility import requires_visual_ocr
+from .pdf_visibility import native_visibility
 from ..domain.evidence import Evidence
 
 STAMP=dict(config_version='ingestion-v1',creator='pdf-reader',stage='ingestion-read')
@@ -96,10 +96,12 @@ def read_pdf(path,output,identity,settings):
             spans=page.get_texttrace()
             if len(spans)>2000 or sum(len(s.get('chars',())) for s in spans)>settings.max_page_characters:
                 raise IngestionError('LIMIT_EXCEEDED','PDF text budget exceeded.')
+            visibility=native_visibility(page,spans)
             visible=[]; invisible=0
             for number,span in enumerate(spans):
                 if span.get('type')==3 or span.get('opacity',1)<0.05:
                     invisible+=1; continue
+                if number not in visibility.safe_indices:continue
                 text=''.join(chr(ch[0]) if 0<=ch[0]<=0x10ffff else '\ufffd' for ch in span['chars'])
                 region=normalized(span['bbox'],matrix,width,height)
                 if text.strip() and region:
@@ -115,11 +117,16 @@ def read_pdf(path,output,identity,settings):
                 if rect: image_rectangles.append(rect)
             route,regions,reasons,ratio,text_area,image_area=page_route(
                 [v[1] for v in visible],[v[3] for v in visible],image_rectangles,invisible,settings.route_policy)
-            if requires_visual_ocr(page,spans):
+            if route=='OCR':
+                # Selective visibility does not override native glyph/coverage
+                # trust policy. Unusable native text must not enter fusion.
                 visible=[]
-                route,regions='OCR',((0.,0.,1.,1.),)
-                reasons=('PDF_VISUAL_OVERLAY_REQUIRES_OCR','NATIVE_TEXT_WITHHELD_FOR_VISUAL_REVIEW')
-                ratio,text_area=0.,0.
+                text_area=0.
+            if visibility.requires_ocr:
+                route,regions=('HYBRID' if visible else 'OCR'),((0.,0.,1.,1.),)
+                reasons=('PDF_VISUAL_OVERLAY_REQUIRES_OCR','PDF_OCCLUDED_NATIVE_WITHHELD',
+                         'PDF_UNOCCLUDED_NATIVE_RETAINED' if visible else 'NATIVE_TEXT_WITHHELD_FOR_VISUAL_REVIEW')
+                if visibility.whole_page_fallback:reasons+=('PDF_VISIBILITY_WHOLE_PAGE_FALLBACK',)
             order=sorted(range(len(visible)),key=lambda i:(round(visible[i][2][1],1),visible[i][2][0],visible[i][0]))
             ranks={item:rank for rank,item in enumerate(order)}
             blocks=[]

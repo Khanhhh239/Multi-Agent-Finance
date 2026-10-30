@@ -1,0 +1,255 @@
+{
+  "scope": "Fresh sequential DEV pipeline; self-reviewed unchanged references; not independent holdout or controlled latency",
+  "run_id": "invoice_visible_native_20261030",
+  "completed": true,
+  "cases": [
+    {
+      "case_id": "web-imall",
+      "sha256": "95b51644f038b13f2a6daf51ed77babb3cb04a8b594f57a2542625179b98b05d",
+      "state": "REVIEW",
+      "error_code": null,
+      "before_correct": 10,
+      "correct": 12,
+      "labeled": 19,
+      "wrong_present": 0,
+      "printed_labeled": 18,
+      "printed_correct": 11,
+      "masked_numeric_absence_slots": 0,
+      "unexpected_present_in_masked_numeric_slots": 0,
+      "segmentation": "SINGLE_CANDIDATE",
+      "timings": [
+        {
+          "stage": "ocr_page",
+          "route": "HYBRID",
+          "elapsed_seconds": 85.4596211000171,
+          "page_index": 0,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1566040064
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 17867.05279999296,
+          "stage_timings_ms": {
+            "detection": 12533.501900004921,
+            "recognition": 51171.06289998628
+          },
+          "inference_ms": 63735.668000008445
+        }
+      ],
+      "elapsed_seconds": 89.10613560001366,
+      "model_assets_match_previous_run": true,
+      "pages": [
+        {
+          "page_index": 0,
+          "route": "HYBRID",
+          "native_blocks": 131,
+          "render_sha256": "0377082a1cf1cb3b41e0855edc2676fd8476ecf9388b5918e4dbad99969aa344",
+          "annotation_count": 0,
+          "native_mask_intersections": 0
+        }
+      ],
+      "invoice_number_status": "AMBIGUOUS",
+      "critical_wrong_present_paths": [],
+      "ground_truth_number_available_as_candidate": true
+    },
+    {
+      "case_id": "web-khang_vu",
+      "sha256": "9fa018917c7373218e95f18b9525901f0ef1a70b4fb289afcb971de886459727",
+      "state": "REVIEW",
+      "error_code": null,
+      "before_correct": 35,
+      "correct": 36,
+      "labeled": 49,
+      "wrong_present": 0,
+      "printed_labeled": 22,
+      "printed_correct": 9,
+      "masked_numeric_absence_slots": 15,
+      "unexpected_present_in_masked_numeric_slots": 0,
+      "segmentation": "SINGLE_CANDIDATE",
+      "timings": [
+        {
+          "stage": "ocr_page",
+          "route": "HYBRID",
+          "elapsed_seconds": 79.8914303999918,
+          "page_index": 0,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1525141504
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 15319.384900009027,
+          "stage_timings_ms": {
+            "detection": 14179.653500003042,
+            "recognition": 47384.10969998222
+          },
+          "inference_ms": 61589.38310001395
+        },
+        {
+          "stage": "ocr_page",
+          "route": "HYBRID",
+          "elapsed_seconds": 74.22896430001128,
+          "page_index": 1,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1534803968
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 14430.973199981963,
+          "stage_timings_ms": {
+            "detection": 14540.536099986639,
+            "recognition": 40863.736700004665
+          },
+          "inference_ms": 55436.427199980244
+        }
+      ],
+      "elapsed_seconds": 159.57723979998264,
+      "model_assets_match_previous_run": true,
+      "pages": [
+        {
+          "page_index": 0,
+          "route": "HYBRID",
+          "native_blocks": 120,
+          "render_sha256": "88e57ad07deb752a11210dc86a21602a7b2fae6e7e385a3fd9202e0578897b5e",
+          "annotation_count": 14,
+          "native_mask_intersections": 0
+        },
+        {
+          "page_index": 1,
+          "route": "HYBRID",
+          "native_blocks": 91,
+          "render_sha256": "bdc1a60513fa099331874a27f5b6309cbd9145130f8422eae455f9f661f3d007",
+          "annotation_count": 0,
+          "native_mask_intersections": 0
+        }
+      ],
+      "invoice_number_status": "PRESENT",
+      "critical_wrong_present_paths": [],
+      "ground_truth_number_available_as_candidate": true
+    },
+    {
+      "case_id": "web-micro_precision",
+      "sha256": "7aff0ead785b9a68c7d620f95baf5e7ef36301a75353c4475fe97127082916bd",
+      "state": "REVIEW",
+      "error_code": null,
+      "before_correct": 28,
+      "correct": 29,
+      "labeled": 43,
+      "wrong_present": 0,
+      "printed_labeled": 19,
+      "printed_correct": 5,
+      "masked_numeric_absence_slots": 13,
+      "unexpected_present_in_masked_numeric_slots": 0,
+      "segmentation": "SINGLE_CANDIDATE",
+      "timings": [
+        {
+          "stage": "ocr_page",
+          "route": "HYBRID",
+          "elapsed_seconds": 110.02496500001871,
+          "page_index": 0,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1535684608
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 18167.803100019228,
+          "stage_timings_ms": {
+            "detection": 17521.696799987694,
+            "recognition": 70879.99700001092
+          },
+          "inference_ms": 88432.79940000502
+        },
+        {
+          "stage": "ocr_page",
+          "route": "HYBRID",
+          "elapsed_seconds": 92.43655080001918,
+          "page_index": 1,
+          "worker_metrics": [
+            {
+              "peak_job_memory_bytes": 1524707328
+            }
+          ],
+          "lifecycle": "NEW_WORKER_PER_PAGE",
+          "cached": false,
+          "model_load_ms": 18295.84700000123,
+          "stage_timings_ms": {
+            "detection": 15666.880499979015,
+            "recognition": 54166.80959999212
+          },
+          "inference_ms": 69966.46659998805
+        }
+      ],
+      "elapsed_seconds": 208.8934220999945,
+      "model_assets_match_previous_run": true,
+      "pages": [
+        {
+          "page_index": 0,
+          "route": "HYBRID",
+          "native_blocks": 126,
+          "render_sha256": "9cacca860bc57d9fac0a713987659f808446e5a086911582e0c646f5a7086715",
+          "annotation_count": 7,
+          "native_mask_intersections": 0
+        },
+        {
+          "page_index": 1,
+          "route": "HYBRID",
+          "native_blocks": 118,
+          "render_sha256": "cb87c01fe1749d3887f30c740a84cd57cbeb37e475e6444d8131e3762387f59a",
+          "annotation_count": 4,
+          "native_mask_intersections": 0
+        }
+      ],
+      "invoice_number_status": "AMBIGUOUS",
+      "critical_wrong_present_paths": [],
+      "ground_truth_number_available_as_candidate": true
+    }
+  ],
+  "workload_controlled": false,
+  "report_sha256": "8fe157e62e21080823ab0bc2ff1760a411066e70d0a5b960e188d110712b786e",
+  "model_or_timeout_default_changed": false,
+  "release_approved": false,
+  "retained_native_blocks_on_annotated_pages": 364,
+  "verification": {
+    "passed": true,
+    "python_tests": 603,
+    "javascript_syntax_checks": 9,
+    "node_checks": 2,
+    "chrome_regressions": 4,
+    "validation_sha256": "21e0cf46a389de76e619aaa97ec3e9d41d4c64f42ab93f6ee8580af602589c5b",
+    "report_browser": {
+      "passed": true,
+      "cases": 3,
+      "images_loaded": 5,
+      "leading_zero_candidates_preserved": true,
+      "page_errors": [],
+      "desktop_mobile_no_overflow": true
+    }
+  },
+  "dev_extraction_replay": {
+    "scope": "Frozen original OCR and unchanged DRAFT development labels; not fresh-reader accuracy",
+    "cases": 28,
+    "labeled": 706,
+    "before_correct": 565,
+    "correct": 571,
+    "wrong_present": 32,
+    "missing_or_ambiguous": 103,
+    "previously_correct_regressions": 0,
+    "model_inference_calls": 0
+  },
+  "full_dev_reader_replay": {
+    "state": "INCOMPLETE",
+    "cases_replayed": 4,
+    "cases_requiring_fresh_ocr": 24,
+    "not_an_acceptance_score": true,
+    "report_sha256": "e93d2e92379d9585fe55858dfd2007bae7db8c5a631a6746840ddf39e77c5fa7"
+  },
+  "route_policy_version": "route-v1.3",
+  "auto_accept_enabled": false
+}

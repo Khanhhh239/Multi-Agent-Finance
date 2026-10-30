@@ -5,10 +5,10 @@ from .candidates import make_candidate, choose
 from .contracts import ExtractionIssue
 
 ALIASES = {
- 'seller.name': ('ten nguoi ban','don vi ban hang','seller name'),
+ 'seller.name': ('ten nguoi ban','don vi ban hang','don vi ban','seller name'),
  'seller.tax_id': ('mst nguoi ban','ma so thue nguoi ban','seller tax id'),
  'seller.address': ('dia chi nguoi ban','seller address'),
- 'buyer.name': ('ten nguoi mua','nguoi mua','don vi mua hang','buyer name','ho ten nguoi mua hang','ten khach hang'),
+ 'buyer.name': ('ten nguoi mua','nguoi mua','don vi mua hang','don vi mua','buyer name','ho ten nguoi mua hang','ten khach hang'),
  'buyer.tax_id': ('mst nguoi mua','ma so thue nguoi mua','buyer tax id'),
  'buyer.address': ('dia chi nguoi mua','buyer address'),
  'invoice.number': ('so hoa don','invoice number','invoice no','so'),
@@ -137,7 +137,7 @@ def labelled(text, aliases):
     pairs=sorted(((path,key(label)) for path,labels in aliases.items() for label in labels),key=lambda p:len(p[1]),reverse=True)
     for path,label in pairs:
         if normalized==label: return path,parts[1].strip() if len(parts)==2 else ''
-        if label in ('so','nguoi mua','don vi'): continue  # Section labels require exact matches.
+        if label in ('so','nguoi mua','don vi','don vi ban','don vi mua'): continue  # Section labels require exact matches.
         # OCR may merge label + value without a colon. Compare complete label
         # prefixes at whitespace boundaries, retaining offsets in the raw text.
         for boundary in reversed(list(re.finditer(r'\s+',text[:128]))):

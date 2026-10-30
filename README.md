@@ -1,5 +1,33 @@
 # Agent 3 — Tax Compliance Assistant
 
+## Giữ text PDF ngoài vùng che — 30/10/2026
+
+Đã giữ lại native text ở các span nằm ngoài vùng che xác định được, thay vì bỏ
+toàn bộ text của trang có annotation. Span giao vùng che bị loại nguyên vẹn,
+không giữ một phần số tiền; kiểu annotation không xác định được vẫn dùng OCR
+toàn trang. Nhãn ngắn `Đơn vị bán/Đơn vị mua` được nhận diện chính xác theo vai trò.
+
+Kiểm chứng đạt **603 test Python**, 9 kiểm tra cú pháp JavaScript, 2 kiểm tra Node
+và 4 nhóm hồi quy Chrome; HTML kết quả cũng qua kiểm tra ảnh và desktop/mobile.
+
+Ba hóa đơn / năm trang chạy mới đạt lần lượt **12/19, 36/49 và 29/43 trường đúng**,
+không có trường điền sai trong lượt này. **28 ô số bị che không bị điền giá trị**;
+364 native block trên ba trang có annotation được giữ lại và không giao vùng che.
+Số hóa đơn Micro Precision chuyển từ điền sai sang **mơ hồ**, giữ cả ứng viên
+PDF và OCR với nguyên số 0 đầu để người dùng đối chiếu, không tự chọn đáp án.
+
+Replay extraction trên 28 hồ sơ DEV tăng **565 → 571/706 trường đúng (80,88%)**,
+không làm hỏng trường trước đó đúng. Đây là OCR cố định và nhãn DRAFT đã dùng
+phát triển; chưa phải đánh giá đầy đủ reader mới. Replay reader từ cache từ chối
+24 hồ sơ thiếu OCR lưu sẵn; chúng không được tính là đã chạy đạt. Model, timeout,
+quy tắc thuế và auto-accept không thay đổi; vẫn còn nhiều trường thiếu/mơ hồ.
+
+[Thay đổi, kiểm chứng và giới hạn](docs/agent3/plans/OCR_VISIBLE_NATIVE_20261030.md)
+· [Số liệu lượt chạy mới](docs/agent3/plans/evidence/visible_native_20261030/summary.json).
+Trên workspace, mở `invoice_test/results/invoice_visible_native_20261030/review.html`.
+Khởi động lại bằng `STOP_AGENT3.cmd` rồi `OPEN_AGENT3.cmd` và tạo lượt nhập mới
+từ bản gốc để áp dụng policy `route-v1.3`; dữ liệu đã xác nhận không bị ghi đè.
+
 ## Chẩn đoán timeout và chạy lại pipeline — 29/10/2026
 
 Đã chạy tuần tự **3 hóa đơn / 5 trang**, hoàn tất không timeout với giới hạn
