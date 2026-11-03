@@ -12,3 +12,8 @@ def test_mixed_offsets_are_normalized_to_vietnam_business_date():
 def test_vietnam_dayfirst_without_timezone_is_preserved():
     result=local_dates(pd.Series(['03/04/2024','15/03/2024']))
     assert result.tolist()==[pd.Timestamp('2024-04-03'),pd.Timestamp('2024-03-15')]
+
+
+def test_iso_date_is_year_first_even_in_dayfirst_erp_column():
+    result=local_dates(pd.Series(['2024-02-01','03/04/2024']))
+    assert result.tolist()==[pd.Timestamp('2024-02-01'),pd.Timestamp('2024-04-03')]

@@ -3,6 +3,7 @@ import pandas as pd
 from fastapi.testclient import TestClient
 from agent1_service.api import create_app
 from agent1.models.t6_cash import simulate
+from agent1.synth.names import make_mst
 
 
 def test_service_expense_scenario_conserves_cash_and_rejects_unknown_customer(tmp_path,monkeypatch):
@@ -17,8 +18,11 @@ def test_service_expense_scenario_conserves_cash_and_rejects_unknown_customer(tm
         return result,args
     app=create_app(tmp_path,token='secret',engine=engine)
     headers={'Authorization':'Bearer secret'}
+    rng=np.random.default_rng(9)
     tables={
-        'invoices':[dict(invoice_id='i',customer_id='c',invoice_no='1',issue_date='2024-01-01',due_date='2024-02-01',amount_gross=1000)],
+        'invoices':[dict(invoice_id='i',customer_id='c',seller_mst=make_mst(rng),buyer_mst=make_mst(rng),
+                         symbol='1C24TAA',invoice_no='1',issue_date='2024-01-01',due_date='2024-02-01',
+                             amount_net=1000,vat=100,amount_gross=1100,currency='VND',available_on='2024-01-01')],
         'bank_txns':[dict(txn_id='t',value_date='2024-02-01',amount=1000,memo='i')],
         'customers':[dict(customer_id='c',short='C')],
         'outflows':[dict(date='2024-07-01',amount=100,category='rent')],

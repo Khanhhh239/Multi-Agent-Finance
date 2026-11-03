@@ -8,6 +8,7 @@ from cryptography.fernet import Fernet
 
 class Store:
     def __init__(self,path,key):
+        self.path=Path(path).resolve()
         Path(path).parent.mkdir(parents=True,exist_ok=True)
         self.connection=sqlite3.connect(path,check_same_thread=False)
         self.lock=threading.RLock()
@@ -17,12 +18,17 @@ class Store:
         self.connection.commit()
 
     def put(self,firm,kind,records):
+        self.put_many(firm,{kind:records})
+
+    def put_many(self,firm,batches):
+        """Commit related T0 records in one SQLite transaction."""
         with self.lock,self.connection:
-            for row in records:
-                identifier=str(row['id'])
-                payload=self.cipher.encrypt(json.dumps(row,ensure_ascii=False,allow_nan=False).encode())
-                self.connection.execute('INSERT OR REPLACE INTO records VALUES (?,?,?,?)',(firm,kind,identifier,payload))
-            self.connection.execute('INSERT INTO audit(firm,action,count) VALUES (?,?,?)',(firm,'put:'+kind,len(records)))
+            for kind,records in batches.items():
+                for row in records:
+                    identifier=str(row['id'])
+                    payload=self.cipher.encrypt(json.dumps(row,ensure_ascii=False,allow_nan=False).encode())
+                    self.connection.execute('INSERT OR REPLACE INTO records VALUES (?,?,?,?)',(firm,kind,identifier,payload))
+                self.connection.execute('INSERT INTO audit(firm,action,count) VALUES (?,?,?)',(firm,'put:'+kind,len(records)))
 
     def get(self,firm,kind):
         with self.lock:

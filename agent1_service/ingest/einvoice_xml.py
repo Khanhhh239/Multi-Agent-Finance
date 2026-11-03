@@ -3,10 +3,8 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 from defusedxml import ElementTree as SafeET
 from defusedxml.common import DefusedXmlException
-import io
 import pandas as pd
-from agent1.synth.einvoice import parse_xml
-from agent1.data.schema import quality_gate
+from .invoices import validate_invoices
 
 
 def read_invoice_xml(content, firm_id, *, validate=True):
@@ -22,18 +20,39 @@ def read_invoice_xml(content, firm_id, *, validate=True):
     version=root.findtext('.//TTChung/PBan')
     if version not in {'2.0.0','2.0.1','2.1.0'}:
         raise ValueError(f'Chưa hỗ trợ PBan={version}')
-    row=parse_xml(io.BytesIO(ET.tostring(root)))
+    def get(path):
+        return root.findtext(path)
+    due=None
+    for field in root.findall('.//TTin'):
+        if field.findtext('TTruong')=='HanThanhToan':
+            due=field.findtext('DLieu')
+    row=dict(invoice_key=root.find('DLHDon').get('Id') if root.find('DLHDon') is not None else None,
+             symbol=get('DLHDon/TTChung/KHHDon'),invoice_no=get('DLHDon/TTChung/SHDon'),
+             issue_date=get('DLHDon/TTChung/NLap'),currency=get('DLHDon/TTChung/DVTTe'),
+             seller_mst=get('DLHDon/NDHDon/NBan/MST'),buyer_mst=get('DLHDon/NDHDon/NMua/MST'),
+             buyer_name=get('DLHDon/NDHDon/NMua/Ten'),
+             amount_net=get('DLHDon/NDHDon/TToan/TgTCThue'),
+             vat=get('DLHDon/NDHDon/TToan/TgTThue'),
+             amount_gross=get('DLHDon/NDHDon/TToan/TgTTTBSo'),due_date=due)
     row['firm_id']=firm_id
     row['invoice_id']=row.pop('invoice_key') or f"{row['seller_mst']}-{row['symbol']}-{row['invoice_no']}"
     row['customer_id']=str(row['buyer_mst'])
     row['document_version']=version
-    row['adjustment_type']=root.findtext('.//TTHDLQuan/TCHDon')
-    row['adjusts_invoice_id']=root.findtext('.//TTHDLQuan/SHDCLQuan')
+    related=root.find('.//TTChung/TTHDLQuan')
+    nature=related.findtext('TCHDon') if related is not None else None
+    if nature not in (None,'1','2'):
+        raise ValueError(f'Chưa hỗ trợ tính chất hóa đơn TCHDon={nature}')
+    row['adjustment_type']={'1':'replacement','2':'adjustment'}.get(nature)
+    if nature:
+        row['adjusts_symbol']=related.findtext('KHHDCLQuan')
+        row['adjusts_invoice_no']=related.findtext('SHDCLQuan')
+        row['adjusts_issue_date']=related.findtext('NLHDCLQuan')
+        if not row['adjusts_symbol'] or not row['adjusts_invoice_no'] or not row['adjusts_issue_date']:
+            raise ValueError('Hóa đơn liên quan thiếu ký hiệu, số hoặc ngày lập')
     row['issue_date']=pd.Timestamp(row['issue_date'])
     row['due_date']=pd.Timestamp(row['due_date']) if row['due_date'] else pd.NaT
     row['term_days']=(row['due_date']-row['issue_date']).days if pd.notna(row['due_date']) else 0
     if validate:
-        errors=quality_gate(pd.DataFrame([row]),today=pd.Timestamp.now(tz='Asia/Ho_Chi_Minh').tz_localize(None).normalize())
-        if errors.any_error.iloc[0]:
-            raise ValueError('Hoá đơn không đạt cổng chất lượng: '+','.join(errors.columns[errors.iloc[0]]))
+        row['available_on']=pd.Timestamp.now(tz='Asia/Ho_Chi_Minh').date().isoformat()
+        validate_invoices([row],source='xml',today=pd.Timestamp.now(tz='Asia/Ho_Chi_Minh').tz_localize(None).normalize())
     return row

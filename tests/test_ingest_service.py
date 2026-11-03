@@ -46,5 +46,5 @@ def test_xml_namespace_roundtrip_and_entity_rejection():
                         amount_net=1000000.,amount_gross=1100000.,vat_rate=.1,term_days=30,currency='VND'))
     content=invoice_to_xml(inv,seller,buyer).replace(b'<HDon>',b'<HDon xmlns="urn:test">')
     row=read_invoice_xml(content,'F000')
-    assert row['amount_gross']==1100000 and row['invoice_id']=='i'
+    assert row['amount_gross']=='1100000' and row['invoice_id']=='i'
     with pytest.raises(ValueError):read_invoice_xml(b'<!DOCTYPE x [<!ENTITY test "x">]><HDon/>','F000')
