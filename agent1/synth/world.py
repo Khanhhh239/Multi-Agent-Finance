@@ -697,9 +697,8 @@ class World:
         unfinished = (pay < 0) | (part & (pay2 < 0))
         bad_event = unfinished & (stop_i <= end_i)
         bad_origin = np.maximum(stop_i, due)
-        writeoff_day = C.snap_bd(np.minimum(bad_origin, end_i) + r.integers(180, 301, n))
-        writeoff_day = np.where(bad_event & (writeoff_day <= end_i), writeoff_day, -1)
-        bad = writeoff_day >= 0
+        writeoff_candidate = C.snap_bd(np.minimum(bad_origin, end_i) + r.integers(180, 301, n))
+        writeoff_day = np.where(bad_event & (writeoff_candidate <= end_i), writeoff_candidate, -1)
         recov = bad_event & (r.random(n) < 0.25)
         recov_frac = np.where(recov, r.uniform(0.2, 0.5, n), 0)
         recov_day = C.snap_bd(np.minimum(bad_origin, end_i) + r.integers(30, 121, n))
@@ -721,11 +720,31 @@ class World:
         k = np.arange(n)
         full = (pay >= 0) & ~part
         second = part & (pay2 >= 0)
+        residual = np.maximum(gross - a1 - a2, 0.)
+        needs_third = short_pay & second & (residual > 1.)
+        pay3 = np.full(n, -1, dtype=int)
+        if needs_third.any():
+            # Keep this draw separate from the existing settlement streams.
+            third_week_rng = np.random.default_rng(np.random.SeedSequence([self.cfg.seed, fid, 43]))
+            pay3[needs_third] = weekly_payment_dates(
+                C, self.week0_i, ci[needs_third], pay2[needs_third] + 7,
+                L, sec_stress, cust['late_med'].to_numpy()[ci[needs_third]],
+                cust['payrun'].to_numpy()[ci[needs_third]],
+                stop_i[needs_third], end_i, third_week_rng)
+        third = needs_third & (pay3 >= 0)
+        # A stopped residual is written off on a dated event; a residual still
+        # awaiting payment at the observation end remains right-censored.
+        residual_stopped = needs_third & (pay3 < 0) & (stop_i <= end_i)
+        writeoff_day = np.where(residual_stopped & (writeoff_candidate <= end_i),
+                                writeoff_candidate, writeoff_day)
+        bad = writeoff_day >= 0
         recovered_amount = np.round(np.maximum(gross - np.where(part, a1, 0.), 0.) * recov_frac, -3)
         pays = pd.concat([
             pd.DataFrame({"k": k[full], "day_i": pay[full], "amount": gross[full], "kind": "full"}),
             pd.DataFrame({"k": k[part], "day_i": pay[part], "amount": a1[part], "kind": "partial"}),
-            pd.DataFrame({"k": k[second], "day_i": pay2[second], "amount": a2[second], "kind": "final"}),
+            pd.DataFrame({"k": k[second], "day_i": pay2[second], "amount": a2[second],
+                          "kind": np.where(needs_third[second], "partial", "final")}),
+            pd.DataFrame({"k": k[third], "day_i": pay3[third], "amount": residual[third], "kind": "final"}),
             pd.DataFrame({"k": k[recov], "day_i": recov_day[recov], "amount": recovered_amount[recov],
                           "kind": "recovery"}),
         ], ignore_index=True).sort_values(["day_i", "k"]).reset_index(drop=True)
