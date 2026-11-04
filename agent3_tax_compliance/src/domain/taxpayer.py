@@ -15,6 +15,10 @@ class TaxpayerMaster(Stamped):
     effective_from: date
     effective_to: date | None = None
     provenance_reference: str = Field(min_length=1)
+    # Registered identity, used only to cross-check the buyer block of purchase invoices.
+    # Optional: when absent the check reports UNAVAILABLE instead of passing.
+    legal_name: Annotated[str, Field(min_length=1, max_length=500)] | None = None
+    registered_address: Annotated[str, Field(min_length=1, max_length=1000)] | None = None
 
     @model_validator(mode='after')
     def interval(self):

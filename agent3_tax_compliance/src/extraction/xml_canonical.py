@@ -5,6 +5,7 @@ Fields claim `xml-signed-v1` only when the seller signature verified; the qualit
 signature from the raw source bytes before it grants DETERMINISTIC_VERIFIED.
 """
 import re
+from datetime import date
 from decimal import Decimal, InvalidOperation
 
 from ..canonicalization.derive import derived_field, rederive, sha
@@ -14,6 +15,7 @@ from ..domain.evidence import Provenance
 from ..domain.field import FieldObject
 from .contracts import ExtractionArtifact, ExtractionIssue, Segmentation
 from .vat_group_builder import build_groups
+from .xml_context import buyer_profile_issues
 from .xml_invoice import extract
 
 XML_OCR_KEY = 'xml-direct-v1'  # sentinel stored where OCR-derived artifacts keep their OCR config key
@@ -150,6 +152,10 @@ def canonicalize_xml(raw, master, profile, identity, *, tenant_id, taxpayer_id, 
             issues.append(ExtractionIssue(code=check.code, message=check.note or check.code))
         elif check.status == 'UNCHECKED':
             issues.append(ExtractionIssue(code=check.code.replace('XML_CHECK_', 'XML_UNCHECKED_'), message=check.note or check.code))
+    on_date = None
+    if DATE.fullmatch(inv.fields['issue_date'].value or ''):
+        on_date = date.fromisoformat(inv.fields['issue_date'].value)
+    issues.extend(buyer_profile_issues(inv.fields, master, relations, on_date))  # pure function of the pinned master
     issues.extend(extra_issues)  # observations made against stored state (duplicates) are explicit replay inputs
     record = CanonicalFinancialRecord(
         config_version=profile.version, creator=ADAPTER, stage='canonicalization', created_at=created_at, record_id=record_id, revision=1,

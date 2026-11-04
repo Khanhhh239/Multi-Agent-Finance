@@ -22,7 +22,9 @@ MASTER = TaxpayerMaster(**STAMP, tenant_id='tenant-a', taxpayer_id='payer-a', re
                         effective_from=date(2026, 1, 1), provenance_reference='synthetic')
 
 
-class XmlPipelineTests(unittest.TestCase):
+class PipelineBase(unittest.TestCase):
+    master = MASTER
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -32,7 +34,7 @@ class XmlPipelineTests(unittest.TestCase):
         self.settings = Settings(database_path=root / 'capture.sqlite3', staging_directory=root / 'staging', auth_grants=(grant,))
         self.jobs = CaptureJobs(self.settings)
         self.jobs.base.initialize()
-        self.jobs.base.add_taxpayer(CTX, MASTER)
+        self.jobs.base.add_taxpayer(CTX, self.master)
         self.service = IngestionService(self.settings)
 
     def upload(self, raw, key='xml-key', mime='application/xml', name='inv.xml'):
@@ -45,6 +47,8 @@ class XmlPipelineTests(unittest.TestCase):
         job = self.jobs.enqueue(CTX, 'payer-a', view.ingestion_id)
         return view, self.jobs.work_one(CTX, 'payer-a', job['job_id'])
 
+
+class XmlPipelineTests(PipelineBase):
     def test_signed_invoice_flows_to_review_without_ocr(self):
         view, job = self.run_job(fx.signed_invoice())
         self.assertEqual(job['state'], 'REVIEW', job)

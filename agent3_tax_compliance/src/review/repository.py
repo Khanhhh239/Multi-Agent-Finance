@@ -193,13 +193,14 @@ class ReviewRepository:
             row=db.execute('SELECT ocr_config_key FROM cfr_extractions WHERE tenant_id=? AND taxpayer_id=? AND artifact_id=?',
                 (ctx.tenant_id,payer,artifact.artifact_id)).fetchone()
         from ..extraction.xml_canonical import XML_OCR_KEY,canonicalize_xml
+        from ..extraction.xml_context import stored_observations
         if row['ocr_config_key']==XML_OCR_KEY:
             if artifact.normalized_input_sha256!=artifact.input_sha256: raise ValueError('structured input binding mismatch')
             initial=canonicalize_xml(self.base.source(ctx,payer,current.source_id)[1],self.base.taxpayer(ctx,payer,current.taxpayer_master_revision),
                 artifact.profile,artifact.identity_map,tenant_id=artifact.tenant_id,taxpayer_id=artifact.taxpayer_id,ingestion_id=artifact.ingestion_id,
                 source_id=artifact.source_id,document_id=artifact.document_id,input_sha256=artifact.input_sha256,record_id=artifact.record.record_id,
                 artifact_id=artifact.artifact_id,created_at=artifact.created_at,extractor_sha256=artifact.extractor_sha256,
-                extra_issues=tuple(i for i in artifact.issues if i.code=='XML_CHECK_DUPLICATE'))
+                extra_issues=stored_observations(artifact.issues))
         else:
             normalized=self.extraction.ocr.get(ctx,payer,artifact.ingestion_id,row['ocr_config_key'])['result']
             document=self.ingestion.document(ctx,payer,artifact.ingestion_id)

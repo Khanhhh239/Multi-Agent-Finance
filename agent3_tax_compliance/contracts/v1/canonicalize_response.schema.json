@@ -114,38 +114,6 @@
       "title": "Candidate[Annotated[date, BeforeValidator]]",
       "type": "object"
     },
-    "Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____0-9__10____0-9__3__-_0-9__3__________": {
-      "additionalProperties": false,
-      "properties": {
-        "candidate_id": {
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[A-Za-z0-9_.:-]+$",
-          "title": "Candidate Id",
-          "type": "string"
-        },
-        "raw_value": {
-          "title": "Raw Value",
-          "type": "string"
-        },
-        "value": {
-          "pattern": "^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$",
-          "title": "Value",
-          "type": "string"
-        },
-        "provenance": {
-          "$ref": "#/$defs/Provenance"
-        }
-      },
-      "required": [
-        "candidate_id",
-        "raw_value",
-        "value",
-        "provenance"
-      ],
-      "title": "Candidate[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$')])]]",
-      "type": "object"
-    },
     "Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__3________": {
       "additionalProperties": false,
       "properties": {
@@ -176,6 +144,38 @@
         "provenance"
       ],
       "title": "Candidate[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[A-Z]{3}$')])]]",
+      "type": "object"
+    },
+    "Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern______0-9__10____0-9__3__-_0-9__3_____0-9__12_________": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "pattern": "^(?:[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?|[0-9]{12})$",
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^(?:[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?|[0-9]{12})$')])]]",
       "type": "object"
     },
     "Candidate_Literal__INPUT____OUTPUT___": {
@@ -989,196 +989,6 @@
       "title": "FieldObject[Annotated[date, BeforeValidator]]",
       "type": "object"
     },
-    "FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____0-9__10____0-9__3__-_0-9__3__________": {
-      "additionalProperties": false,
-      "allOf": [
-        {
-          "else": {
-            "properties": {
-              "value": {
-                "type": "null"
-              }
-            }
-          },
-          "if": {
-            "properties": {
-              "status": {
-                "const": "PRESENT"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "not": {
-                  "type": "null"
-                }
-              }
-            },
-            "required": [
-              "value"
-            ]
-          }
-        },
-        {
-          "else": {
-            "properties": {
-              "confidence": {
-                "type": "null"
-              }
-            }
-          },
-          "if": {
-            "properties": {
-              "confidence_basis": {
-                "const": "CALIBRATED"
-              }
-            },
-            "required": [
-              "confidence_basis"
-            ]
-          },
-          "then": {
-            "properties": {
-              "confidence": {
-                "maximum": 1,
-                "minimum": 0,
-                "type": "number"
-              },
-              "provenance": {
-                "properties": {
-                  "calibration_version": {
-                    "minLength": 1,
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "calibration_version"
-                ]
-              }
-            },
-            "required": [
-              "confidence"
-            ]
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "confidence_basis": {
-                "const": "DETERMINISTIC"
-              }
-            },
-            "required": [
-              "confidence_basis"
-            ]
-          },
-          "then": {
-            "properties": {
-              "provenance": {
-                "properties": {
-                  "deterministic_policy_version": {
-                    "minLength": 1,
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "deterministic_policy_version"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "confidence_basis": {
-                "const": "HUMAN_CONFIRMED"
-              }
-            },
-            "required": [
-              "confidence_basis"
-            ]
-          },
-          "then": {
-            "properties": {
-              "provenance": {
-                "properties": {
-                  "review_event_id": {
-                    "minLength": 1,
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "review_event_id"
-                ]
-              }
-            }
-          }
-        }
-      ],
-      "properties": {
-        "value": {
-          "anyOf": [
-            {
-              "pattern": "^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Value"
-        },
-        "status": {
-          "$ref": "#/$defs/FieldStatus"
-        },
-        "confidence": {
-          "anyOf": [
-            {
-              "maximum": 1,
-              "minimum": 0,
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Confidence"
-        },
-        "confidence_basis": {
-          "$ref": "#/$defs/ConfidenceBasis",
-          "default": "UNAVAILABLE"
-        },
-        "source": {
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[A-Za-z0-9_.:-]+$",
-          "title": "Source",
-          "type": "string"
-        },
-        "provenance": {
-          "$ref": "#/$defs/Provenance"
-        },
-        "candidates": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____0-9__10____0-9__3__-_0-9__3__________"
-          },
-          "title": "Candidates",
-          "type": "array"
-        }
-      },
-      "required": [
-        "status",
-        "source",
-        "provenance"
-      ],
-      "title": "FieldObject[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$')])]]",
-      "type": "object"
-    },
     "FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__3________": {
       "additionalProperties": false,
       "allOf": [
@@ -1367,6 +1177,196 @@
         "provenance"
       ],
       "title": "FieldObject[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[A-Z]{3}$')])]]",
+      "type": "object"
+    },
+    "FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern______0-9__10____0-9__3__-_0-9__3_____0-9__12_________": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "pattern": "^(?:[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?|[0-9]{12})$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern______0-9__10____0-9__3__-_0-9__3_____0-9__12_________"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^(?:[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?|[0-9]{12})$')])]]",
       "type": "object"
     },
     "FieldObject_Literal__INPUT____OUTPUT___": {
@@ -2131,7 +2131,7 @@
         "tax_id": {
           "anyOf": [
             {
-              "$ref": "#/$defs/FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____0-9__10____0-9__3__-_0-9__3__________"
+              "$ref": "#/$defs/FieldObject_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern______0-9__10____0-9__3__-_0-9__3_____0-9__12_________"
             },
             {
               "type": "null"

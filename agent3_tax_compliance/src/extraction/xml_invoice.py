@@ -141,6 +141,11 @@ def extract(raw: bytes, today: date | None = None) -> XmlInvoice:
                                ('net_total', tot, f'{P}/NDHDon/TToan', 'TgTCThue'), ('vat_total', tot, f'{P}/NDHDon/TToan', 'TgTThue'),
                                ('gross_total', tot, f'{P}/NDHDon/TToan', 'TgTTTBSo'), ('gross_words', tot, f'{P}/NDHDon/TToan', 'TgTTTBChu')):
         fields[key] = _f(el, base, tag)
+    related = tt.find('TTHDLQuan')  # present only on replacement / adjustment invoices (Decision 1450, TTChung/TTHDLQuan)
+    for key, tag in (('related_nature', 'TCHDon'), ('related_type', 'LHDCLQuan'), ('related_template', 'KHMSHDCLQuan'),
+                     ('related_symbol', 'KHHDCLQuan'), ('related_number', 'SHDCLQuan'), ('related_date', 'NLHDCLQuan'),
+                     ('related_note', 'GChu')):
+        fields[key] = _f(related, f'{P}/TTChung/TTHDLQuan', tag)
     items = []
     for i, h in enumerate(d.findall('NDHDon/DSHHDVu/HHDVu'), 1):
         b = f'{P}/NDHDon/DSHHDVu/HHDVu[{i}]'
@@ -167,6 +172,20 @@ def _guards(root, d, fl, items, groups, sigs, today) -> list[Check]:
         res.append(Check(code, 'PASS' if ok else level, note))
 
     one = Decimal(1)
+    # V10 replacement / adjustment reference must be well formed (stored-state lookups live in xml_context)
+    if d.find('TTChung/TTHDLQuan') is not None:
+        try:
+            rel_date = datetime.strptime(v('related_date') or '', '%Y-%m-%d').date()
+        except ValueError:
+            rel_date = None
+        try:
+            own_date = datetime.strptime(v('issue_date') or '', '%Y-%m-%d').date()
+        except ValueError:
+            own_date = None
+        complete = all(v(k) for k in ('related_template', 'related_symbol', 'related_number'))
+        add('XML_CHECK_RELATED_INVOICE',
+            v('related_nature') in ('1', '2') and complete and rel_date is not None and (own_date is None or rel_date <= own_date),
+            'related invoice reference incomplete, unreadable or dated after this invoice')
     # V2 arithmetic
     for it in items:
         q, p, disc, net = (_dec(it[k].value) for k in ('quantity', 'unit_price', 'discount', 'net'))

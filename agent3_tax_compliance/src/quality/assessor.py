@@ -86,6 +86,10 @@ def assess(artifact,record,policy,scope,*,assessment_id,created_at,implementatio
             issues.append(issue(extraction_issue.code,extraction_issue.field_path,extraction_issue.message,severity='ERROR',
                 classification='INVALID_SOURCE_CONTENT',action='VERIFY_SOURCE'))
             continue
+        if extraction_issue.code.startswith('XML_REVIEW_'):
+            issues.append(issue(extraction_issue.code,extraction_issue.field_path,extraction_issue.message,severity='WARNING',
+                classification='UNKNOWN',action='VERIFY_SOURCE'))
+            continue
         if extraction_issue.code.startswith('XML_UNCHECKED_'):
             issues.append(issue(extraction_issue.code,extraction_issue.field_path,extraction_issue.message,severity='INFO',
                 classification='UNKNOWN',action='VERIFY_SOURCE'))
