@@ -1,0 +1,75 @@
+{
+  "checks": [
+    {
+      "name": "repeat_preview_no_duplicate_jobs_attempts_or_events",
+      "passed": true
+    },
+    {
+      "name": "only_dry_run_jobs",
+      "passed": true
+    },
+    {
+      "name": "no_real_delivery_or_provider_acceptance",
+      "passed": true
+    },
+    {
+      "name": "workflow_hash_chain_verified",
+      "passed": true
+    },
+    {
+      "name": "delivery_hash_chain_verified",
+      "passed": true
+    },
+    {
+      "name": "stale_final_reason_never_committed",
+      "passed": true
+    },
+    {
+      "name": "budget_003_C001_2026-10-29",
+      "passed": true
+    },
+    {
+      "name": "budget_003_C002_2026-10-29",
+      "passed": true
+    },
+    {
+      "name": "budget_003_C003_2026-10-29",
+      "passed": true
+    },
+    {
+      "name": "budget_003_C004_2026-10-29",
+      "passed": true
+    },
+    {
+      "name": "budget_003_C005_2026-10-29",
+      "passed": true
+    },
+    {
+      "name": "budget_003_C006_2026-10-29",
+      "passed": true
+    },
+    {
+      "name": "budget_003_C007_2026-10-29",
+      "passed": true
+    },
+    {
+      "name": "budget_003_C008_2026-10-29",
+      "passed": true
+    },
+    {
+      "name": "sqlite_integrity",
+      "passed": true
+    },
+    {
+      "name": "sqlite_foreign_keys",
+      "passed": true
+    }
+  ],
+  "jobs": 174,
+  "delivery_events": 522,
+  "workflow_events": 12,
+  "preview_seconds": 13.094,
+  "external_messages_sent": 0,
+  "independent_reviews": 0,
+  "actual_review_minutes": null
+}

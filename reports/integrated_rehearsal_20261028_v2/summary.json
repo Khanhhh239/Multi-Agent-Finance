@@ -1,0 +1,41 @@
+{
+  "status": "technical_integration_passed",
+  "version": "integrated-rehearsal-20261028-v1",
+  "source_transactions": 41082,
+  "cases": 1211,
+  "evaluation_rows": 11811,
+  "guarded_scenarios": 20,
+  "app": {
+    "api_checks": 32,
+    "app_cases": 1211,
+    "workflow_event_kinds": {
+      "primary_submitted": 2,
+      "returned": 1,
+      "finalization_requested": 1,
+      "finalized": 1
+    },
+    "simulated_jobs": 26,
+    "external_messages_sent": 0
+  },
+  "models_fitted": 0,
+  "threshold_retuned": false,
+  "if_mode": "shadow",
+  "if_operational_queue_write": false,
+  "forbidden_access_attempts": [],
+  "holdout_005_loaded": false,
+  "source_timestamps_modified": false,
+  "real_accounts_created": 0,
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "ml_operational_benefit": "not_proven",
+  "real_source_acceptance": "awaiting_real_data",
+  "browser_acceptance": "not_verified_tool_timeouts",
+  "orchestration": "Frozen detectors from unchanged runner, complete read-only parallel detail validation, identical production API verifier",
+  "seconds_since_plan_frozen": 3842.867,
+  "python_tests": 208,
+  "javascript_checks": 92,
+  "integrated_http_checks": 42,
+  "primary_baseline_work_reviews": 2425,
+  "primary_if_documents": 40,
+  "diagnostics_records": 6718
+}

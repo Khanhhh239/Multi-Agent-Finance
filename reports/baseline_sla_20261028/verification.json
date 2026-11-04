@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "version": "baseline-sla-audit-20261028-v1",
+  "scenario_count": 22,
+  "tests": 63,
+  "new_tests": 16,
+  "frozen_baselines_exact": 4,
+  "frozen_selected_work_5_120": 2425,
+  "legacy_max_wait_days": [
+    21,
+    27
+  ],
+  "actual_eligible_queue_max_days": [
+    20,
+    26
+  ],
+  "scheduled_rereviews": 348,
+  "scheduled_rereview_queue_wait_max_days": 0,
+  "wait_days_identity": {
+    "legacy": 5064,
+    "pending_queue": 3881,
+    "before_eligibility": 1183,
+    "off_queue": 0
+  },
+  "selected_case_sla_definitely_late_by_day": 995,
+  "already_late_before_eligibility_day": 969,
+  "selected_late_after_entire_first_eligible_day_with_headroom": 20,
+  "selected_late_with_deadline_inside_first_eligible_day": 6,
+  "highest_priority_selected": 32,
+  "highest_priority_max_eligible_wait": 0,
+  "pending_work_at_end": 180,
+  "awaiting_information_without_pending_review": 677,
+  "unreviewed_superseded_scopes": 65,
+  "protected_prior_files": 11128,
+  "unexpected_prior_changes": 0,
+  "models_loaded": 0,
+  "models_fitted": 0,
+  "if_scores_loaded": false,
+  "rules_rescored": false,
+  "production_policy_changed": false,
+  "source": "synthetic retrospective frozen study",
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "sla_completion_verified": false,
+  "real_staffing_capacity_verified": false,
+  "caveats": [
+    "SLA statuses describe selection-day intervals, not actual completion times",
+    "Different capacity/initial-history arms can create/coalesce different work scopes",
+    "Precleared opening history is hypothetical and changes continued-review costs",
+    "No national holidays, real observation/arrival latency or human review times inferred"
+  ]
+}

@@ -6,6 +6,8 @@ Các báo cáo ghi kết quả theo mốc thực hiện. Số liệu và giới 
 
 | Tài liệu | File |
 | --- | --- |
+| [Nghiệm thu bản tích hợp — 39 mẫu/17 luồng, màn hình nhỏ, offline/restart — 29/10/2026](release_acceptance_20261029.md) | `release_acceptance_20261029.md` |
+| [Tích hợp luật/IF shadow/app/thông báo — HTTP đạt, browser chưa xác nhận — 28/10/2026](integrated_rehearsal_20261028.md) | `integrated_rehearsal_20261028.md` |
 | [Thông báo theo vai trò/công ty — chống trùng, nhắc quá hạn và lịch sử — 27/10/2026](notification_roles_20261027.md) | `notification_roles_20261027.md` |
 | [Luồng hai cấp — Chrome desktop/360px/390px, danh tính mô phỏng — 27/10/2026](browser_workflow_20261027.md) | `browser_workflow_20261027.md` |
 | [Nghiệm thu Chrome — kết quả ngày 20/10/2026](browser_acceptance_20261020.md) | `browser_acceptance_20261020.md` |

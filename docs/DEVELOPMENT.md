@@ -1,6 +1,6 @@
 # Chạy app và phát triển
 
-Chạy lệnh từ thư mục gốc `D:\agent22`. Hướng dẫn này dùng bản demo RR09/ML v4 đã chuẩn bị; [dữ liệu benchmark cũ](development/synthetic_data.md) có mục đích riêng.
+Chạy lệnh từ thư mục gốc `D:\agent22`. Bản tích hợp mới nằm trong `reports/integrated_rehearsal_20261028_v2/`; demo RR09/ML v4 ngày 24/10 giữ riêng để tham chiếu. [Dữ liệu benchmark cũ](development/synthetic_data.md) có mục đích riêng.
 
 ## Python và thư viện
 
@@ -12,7 +12,21 @@ $projectPython = 'C:\Users\Technical Support\.cache\codex-runtimes\codex-primary
 
 Script demo hiện có tự thêm thư viện cục bộ trong `.runtime/site-packages`. Máy mới cần môi trường Python và thư viện theo profile thích hợp: `requirements-review-lock.txt` cho web/backup đã kiểm chứng; `requirements-lock.txt` là profile benchmark lịch sử. Cài ngoại tuyến theo [RELEASES](../RELEASES.md).
 
-## Bản demo hiện tại
+## Bản tích hợp hiện tại — 28/10
+
+```powershell
+$env:PYTHONPATH = "$PWD;.runtime/site-packages"
+& $projectPython -X utf8 -B -m sme_fraud.integrated_rehearsal serve `
+  --output reports/integrated_rehearsal_20261028_v2 --base-port 8821
+```
+
+Mở **http://127.0.0.1:8821/** cho kế toán viên C001; cổng **8822** cho kế toán trưởng, **8823** cho giám đốc, **8824** cho chưa đăng nhập. Danh tính và mọi kết luận/phút trong lượt test là mô phỏng; đây không phải đăng nhập thật. Nếu đúng tiến trình đã chạy thì dùng lại, không khởi tạo writer thứ hai trên database này.
+
+Nguồn/cache ở `source/`, detector mới ở `baseline/`, IF shadow ở `comparison/coverage/discovery/`, database riêng ở `app/review.sqlite3` bên trong workspace này. App dùng bản sao baseline, IF không tự thêm hồ sơ vận hành. Đồng hồ test cố định 28/10/2026 10:00 +07:00 trên nguồn 2024–2025; thông báo bắt buộc giả lập.
+
+[Biên bản tích hợp](reports/app/integrated_rehearsal_20261028.md) ghi rõ 1.211 detail, 42 kiểm tra HTTP, giới hạn browser và profile nguồn hỗ trợ. [Hướng dẫn runner](../examples/integrated_rehearsal/README.md) có lệnh chạy mới vào output chưa tồn tại. Bộ P2/RR09 UAT riêng vẫn ở demo tham chiếu dưới đây.
+
+## Demo ngày 24/10 để tham chiếu
 
 ```powershell
 & $projectPython -B .runtime/review_roles_20261024/serve.py

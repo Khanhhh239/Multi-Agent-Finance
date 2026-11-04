@@ -1,0 +1,6 @@
+{
+  "status": "not_verified_in_this_run",
+  "reason": "Computer-use connection timed out on two attempts",
+  "successful_browser_actions": 0,
+  "alternative_checks": "Actual loopback HTTP API plus JavaScript renderer tests; not browser acceptance"
+}

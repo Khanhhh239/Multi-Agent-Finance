@@ -42,3 +42,15 @@ test('chief can run dry preview and see policy/default deadlines',async()=>{cons
 test('live page cannot trigger transport from UI',async()=>assert.doesNotMatch(await modal({mode:'live',can_preview:true}),/id="notification-preview"/));
 test('missing recipient is surfaced without creating accounts',async()=>{const html=await modal({});assert.match(html,/RC_2/);assert.match(html,/chưa có người nhận phù hợp/);assert.match(html,/không tự gán tài khoản/);});
 test('budget gap and unverified real delivery are explicit',async()=>{const html=await modal({routing_gaps:[{company_id:'C001',case_id:'RC_4',kind:'review_submitted',reason:'daily_budget'}]});assert.match(html,/chờ ngân sách ngày/);assert.match(html,/chưa có biên bản xác nhận gửi–nhận thực tế/);});
+test('failed preview exposes the error inside its dialog and enables explicit retry',async()=>{
+ const e=environment(path.resolve('review_ui/app.js'));e.context.result={...response(),can_preview:true};
+ e.eval('api=async()=>result;showModal=(title,html)=>{document.getElementById("modal-body").innerHTML=html;document.getElementById("modal").open=true;};');
+ await e.eval('notificationsModal()');
+ e.nodes['notification-error']= {className:'notice hidden',textContent:'',focus(){this.focused=true;}};
+ e.eval('api=async()=>{throw new Error("Mất kết nối với ứng dụng.");};');
+ await e.nodes['notification-preview'].handlers.click();
+ assert.equal(e.nodes['notification-preview'].disabled,false);
+ assert.equal(e.nodes['notification-error'].textContent,'Mất kết nối với ứng dụng.');
+ assert.equal(e.nodes['notification-error'].className,'notice');
+ assert.equal(e.nodes['notification-error'].focused,true);
+});

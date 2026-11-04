@@ -1,0 +1,287 @@
+{
+  "checks": [
+    {
+      "name": "health_8841",
+      "passed": true
+    },
+    {
+      "name": "health_8842",
+      "passed": true
+    },
+    {
+      "name": "health_8843",
+      "passed": true
+    },
+    {
+      "name": "health_8844",
+      "passed": true
+    },
+    {
+      "name": "health_8845",
+      "passed": true
+    },
+    {
+      "name": "finalized_case_closed",
+      "passed": true
+    },
+    {
+      "name": "finalized_gap_remains_open",
+      "passed": true
+    },
+    {
+      "name": "accountant_cannot_finalize",
+      "passed": true
+    },
+    {
+      "name": "chief_cannot_submit_primary",
+      "passed": true
+    },
+    {
+      "name": "anonymous_cannot_write_review",
+      "passed": true
+    },
+    {
+      "name": "anonymous_cannot_read_notification_destinations",
+      "passed": true
+    },
+    {
+      "name": "case_company_scope_enforced",
+      "passed": true
+    },
+    {
+      "name": "repeat_preview_idempotent",
+      "passed": true
+    },
+    {
+      "name": "workflow_chain_verified",
+      "passed": true
+    },
+    {
+      "name": "delivery_chain_verified",
+      "passed": true
+    },
+    {
+      "name": "dry_only",
+      "passed": true
+    },
+    {
+      "name": "no_live_provider_delivery",
+      "passed": true
+    },
+    {
+      "name": "fake_destinations_only",
+      "passed": true
+    },
+    {
+      "name": "stale_reason_not_committed",
+      "passed": true
+    },
+    {
+      "name": "five_cases_per_company_day",
+      "passed": true
+    },
+    {
+      "name": "integrity",
+      "passed": true
+    },
+    {
+      "name": "foreign_keys",
+      "passed": true
+    },
+    {
+      "name": "requests_resolved",
+      "passed": true
+    },
+    {
+      "name": "p2_sqlite_integrity",
+      "passed": true
+    },
+    {
+      "name": "32_controls_readable",
+      "passed": true
+    },
+    {
+      "name": "32_uat_notes_passed",
+      "passed": true
+    },
+    {
+      "name": "p2_stale_note_not_committed",
+      "passed": true
+    },
+    {
+      "name": "browser_download_exactly_five_limits",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_FULL_BELOW",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_FULL_EQUAL",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_FULL_ABOVE",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_OLD_BELOW",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_OLD_EQUAL",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_FULL_BANK",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_NO_INVOICE",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_NO_DATE",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_NO_GROSS",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_NO_IDENTITY",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_FUTURE_INVOICE",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_INSTALL_CASH",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_INSTALL_SMALL",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_INSTALL_MIXED",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_INSTALL_SAME_TIME",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_INSTALL_GAP",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_REFUND_FULL",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_REFUND_PART",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_REFUND_BANK",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_REVERSAL_JOURNAL",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_RECEIPT_UNLINKED",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_REFUND_MULTI",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_RECUR_SMALL",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_RECUR_BANK",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_RECUR_CASH",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_RECUR_GAP",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_RECUR_A5",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_LIMIT_VERIFIED",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_LIMIT_UNVERIFIED",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_LIMIT_FUTURE",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_LIMIT_EXPIRED",
+      "passed": true
+    },
+    {
+      "name": "sample_P2_LIMIT_FOREIGN",
+      "passed": true
+    },
+    {
+      "name": "sample_A5_001_TX_3103d5f23fde8b1a6f",
+      "passed": true
+    },
+    {
+      "name": "sample_A5_001_TX_ac2d5e5d289dc9227b",
+      "passed": true
+    },
+    {
+      "name": "sample_A5_001_cold_information_request",
+      "passed": true
+    },
+    {
+      "name": "sample_A5_001_cold_operational",
+      "passed": true
+    },
+    {
+      "name": "sample_A5_003_TX_60bac87c93f578f6c3",
+      "passed": true
+    },
+    {
+      "name": "sample_A5_003_cold_information_request",
+      "passed": true
+    },
+    {
+      "name": "sample_A5_003_cold_operational",
+      "passed": true
+    },
+    {
+      "name": "detector_files_in_qa_unchanged",
+      "passed": true
+    }
+  ],
+  "passed": 68,
+  "jobs": 174,
+  "statuses": {
+    "simulated": 174
+  },
+  "delivery_events": 522,
+  "workflow_events": 15,
+  "preview_pair_seconds": 2.938,
+  "external_messages_sent": 0,
+  "independent_reviews": 0,
+  "actual_review_minutes": null
+}

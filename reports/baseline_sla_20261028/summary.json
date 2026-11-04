@@ -1,0 +1,2071 @@
+{
+  "version": "baseline-sla-audit-20261028-v1",
+  "status": "diagnostic_audit_complete_policy_unchanged",
+  "cohorts": [
+    {
+      "cohort": "001",
+      "opening": [
+        {
+          "company_id": "C001",
+          "scopes": 19,
+          "minutes": 495,
+          "minimum_5_120_working_days": 5,
+          "sla_already_before_start": 17
+        },
+        {
+          "company_id": "C002",
+          "scopes": 69,
+          "minutes": 2230,
+          "minimum_5_120_working_days": 19,
+          "sla_already_before_start": 65
+        },
+        {
+          "company_id": "C003",
+          "scopes": 69,
+          "minutes": 1990,
+          "minimum_5_120_working_days": 17,
+          "sla_already_before_start": 65
+        },
+        {
+          "company_id": "C004",
+          "scopes": 34,
+          "minutes": 845,
+          "minimum_5_120_working_days": 8,
+          "sla_already_before_start": 32
+        },
+        {
+          "company_id": "C005",
+          "scopes": 39,
+          "minutes": 995,
+          "minimum_5_120_working_days": 9,
+          "sla_already_before_start": 37
+        },
+        {
+          "company_id": "C006",
+          "scopes": 29,
+          "minutes": 720,
+          "minimum_5_120_working_days": 6,
+          "sla_already_before_start": 26
+        },
+        {
+          "company_id": "C007",
+          "scopes": 15,
+          "minutes": 405,
+          "minimum_5_120_working_days": 4,
+          "sla_already_before_start": 12
+        },
+        {
+          "company_id": "C008",
+          "scopes": 18,
+          "minutes": 495,
+          "minimum_5_120_working_days": 5,
+          "sla_already_before_start": 16
+        }
+      ],
+      "reference_reproductions": [
+        {
+          "slots": 5,
+          "selected_rows": 1186,
+          "exact_reference_fields": [
+            "day",
+            "company_id",
+            "work_key",
+            "case_id",
+            "case_scope_hash",
+            "priority",
+            "baseline_score",
+            "rank",
+            "work_type",
+            "estimated_minutes",
+            "wait_days",
+            "case_type",
+            "awaiting_information"
+          ],
+          "passed": true
+        },
+        {
+          "slots": 10,
+          "selected_rows": 1245,
+          "exact_reference_fields": [
+            "day",
+            "company_id",
+            "work_key",
+            "case_id",
+            "case_scope_hash",
+            "priority",
+            "baseline_score",
+            "rank",
+            "work_type",
+            "estimated_minutes",
+            "wait_days",
+            "case_type",
+            "awaiting_information"
+          ],
+          "passed": true
+        }
+      ],
+      "scenarios": {
+        "baseline_5_120": {
+          "scenario": {
+            "name": "baseline_5_120",
+            "slots": 5,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1186,
+          "selected_minutes": 26396,
+          "selected_by_work_type": {
+            "initial_review": 567,
+            "scheduled_rereview": 172,
+            "continued_review": 447
+          },
+          "reported_max_wait_days": 21,
+          "max_eligibility_elapsed_days": 20,
+          "max_pending_wait_days": 20,
+          "clock_offset_work": 119,
+          "clock_offset_days": 559,
+          "pending_wait_days": 1739,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 344,
+          "nonopening_selected_max_pending_wait": 20,
+          "pending_at_end": 91,
+          "pending_minutes_at_end": 2443,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 475,
+            "definitely_on_time": 696,
+            "same_day_uncertain": 15
+          },
+          "task_sla_selected": {
+            "definitely_late": 484,
+            "definitely_on_time": 634,
+            "same_day_uncertain": 68
+          },
+          "selected_deadline_already_due_before_window": 376,
+          "selected_deadline_already_due_before_eligibility": 463,
+          "newly_definitely_late_selected": 12,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1186,
+            "superseded": 28,
+            "pending_at_end": 91
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 28
+          },
+          "blocked_task_days": {
+            "both_limits": 525,
+            "slots_only": 147,
+            "minutes_only": 1278
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 101,
+          "backlog_days_with_unused_slots": 64,
+          "backlog_days_with_unused_minutes": 89,
+          "case_slot_utilization": 0.1611413043478261,
+          "minute_utilization": 0.1494338768115942,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null
+        },
+        "slots_10_120": {
+          "scenario": {
+            "name": "slots_10_120",
+            "slots": 10,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1204,
+          "selected_minutes": 26756,
+          "selected_by_work_type": {
+            "initial_review": 574,
+            "scheduled_rereview": 172,
+            "continued_review": 458
+          },
+          "reported_max_wait_days": 21,
+          "max_eligibility_elapsed_days": 20,
+          "max_pending_wait_days": 20,
+          "clock_offset_work": 119,
+          "clock_offset_days": 543,
+          "pending_wait_days": 1668,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 344,
+          "nonopening_selected_max_pending_wait": 20,
+          "pending_at_end": 74,
+          "pending_minutes_at_end": 2098,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 484,
+            "definitely_on_time": 704,
+            "same_day_uncertain": 16
+          },
+          "task_sla_selected": {
+            "definitely_late": 494,
+            "definitely_on_time": 642,
+            "same_day_uncertain": 68
+          },
+          "selected_deadline_already_due_before_window": 377,
+          "selected_deadline_already_due_before_eligibility": 472,
+          "newly_definitely_late_selected": 12,
+          "awaiting_information_reviewed_base_scopes": 343,
+          "awaiting_information_without_pending_review": 343,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1204,
+            "superseded": 27,
+            "pending_at_end": 74
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 27
+          },
+          "blocked_task_days": {
+            "minutes_only": 1858
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 98,
+          "backlog_days_with_unused_slots": 98,
+          "backlog_days_with_unused_minutes": 78,
+          "case_slot_utilization": 0.08179347826086956,
+          "minute_utilization": 0.15147192028985507,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1185,
+            "reference_only_work": 1,
+            "alternative_only_work": 19,
+            "earlier": 101,
+            "later": 8,
+            "maximum_additional_days": 5,
+            "mandatory_reference": {
+              "not_selected": 1,
+              "selected_later": 8
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "minutes_5_240": {
+          "scenario": {
+            "name": "minutes_5_240",
+            "slots": 5,
+            "minutes": 240,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1197,
+          "selected_minutes": 26583,
+          "selected_by_work_type": {
+            "initial_review": 567,
+            "scheduled_rereview": 175,
+            "continued_review": 455
+          },
+          "reported_max_wait_days": 15,
+          "max_eligibility_elapsed_days": 14,
+          "max_pending_wait_days": 14,
+          "clock_offset_work": 116,
+          "clock_offset_days": 470,
+          "pending_wait_days": 1368,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 346,
+          "nonopening_selected_max_pending_wait": 14,
+          "pending_at_end": 91,
+          "pending_minutes_at_end": 2443,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 473,
+            "definitely_on_time": 708,
+            "same_day_uncertain": 16
+          },
+          "task_sla_selected": {
+            "definitely_late": 480,
+            "definitely_on_time": 644,
+            "same_day_uncertain": 73
+          },
+          "selected_deadline_already_due_before_window": 379,
+          "selected_deadline_already_due_before_eligibility": 463,
+          "newly_definitely_late_selected": 10,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1197,
+            "superseded": 20,
+            "pending_at_end": 91
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 20
+          },
+          "blocked_task_days": {
+            "slots_only": 1535
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 76,
+          "backlog_days_with_unused_slots": 0,
+          "backlog_days_with_unused_minutes": 76,
+          "case_slot_utilization": 0.1626358695652174,
+          "minute_utilization": 0.07524626358695652,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1185,
+            "reference_only_work": 1,
+            "alternative_only_work": 12,
+            "earlier": 219,
+            "later": 8,
+            "maximum_additional_days": 2,
+            "mandatory_reference": {
+              "not_selected": 1,
+              "selected_later": 8
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "capacity_10_240": {
+          "scenario": {
+            "name": "capacity_10_240",
+            "slots": 10,
+            "minutes": 240,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1245,
+          "selected_minutes": 27740,
+          "selected_by_work_type": {
+            "initial_review": 598,
+            "scheduled_rereview": 175,
+            "continued_review": 472
+          },
+          "reported_max_wait_days": 10,
+          "max_eligibility_elapsed_days": 9,
+          "max_pending_wait_days": 9,
+          "clock_offset_work": 115,
+          "clock_offset_days": 293,
+          "pending_wait_days": 690,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 346,
+          "nonopening_selected_max_pending_wait": 9,
+          "pending_at_end": 51,
+          "pending_minutes_at_end": 1396,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 470,
+            "definitely_on_time": 757,
+            "same_day_uncertain": 18
+          },
+          "task_sla_selected": {
+            "definitely_late": 479,
+            "definitely_on_time": 689,
+            "same_day_uncertain": 77
+          },
+          "selected_deadline_already_due_before_window": 379,
+          "selected_deadline_already_due_before_eligibility": 469,
+          "newly_definitely_late_selected": 1,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1245,
+            "superseded": 12,
+            "pending_at_end": 51
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 12
+          },
+          "blocked_task_days": {
+            "slots_only": 93,
+            "both_limits": 238,
+            "minutes_only": 458
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 43,
+          "backlog_days_with_unused_slots": 22,
+          "backlog_days_with_unused_minutes": 34,
+          "case_slot_utilization": 0.08457880434782608,
+          "minute_utilization": 0.07852128623188406,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1185,
+            "reference_only_work": 1,
+            "alternative_only_work": 60,
+            "earlier": 349,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 1,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "opening_precleared_5_120": {
+          "scenario": {
+            "name": "opening_precleared_5_120",
+            "slots": 5,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": true,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 867,
+          "selected_minutes": 17603,
+          "selected_by_work_type": {
+            "continued_review": 480,
+            "initial_review": 275,
+            "scheduled_rereview": 112
+          },
+          "reported_max_wait_days": 1,
+          "max_eligibility_elapsed_days": 1,
+          "max_pending_wait_days": 1,
+          "clock_offset_work": 49,
+          "clock_offset_days": 49,
+          "pending_wait_days": 5,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 2,
+          "nonopening_selected_max_pending_wait": 1,
+          "pending_at_end": 91,
+          "pending_minutes_at_end": 2443,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_on_time": 721,
+            "definitely_late": 133,
+            "same_day_uncertain": 13
+          },
+          "task_sla_selected": {
+            "definitely_on_time": 656,
+            "definitely_late": 135,
+            "same_day_uncertain": 76
+          },
+          "selected_deadline_already_due_before_window": 54,
+          "selected_deadline_already_due_before_eligibility": 133,
+          "newly_definitely_late_selected": 0,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 867,
+            "pending_at_end": 91
+          },
+          "removed_scope_events": {},
+          "blocked_task_days": {
+            "minutes_only": 5,
+            "slots_only": 91
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 12,
+          "backlog_days_with_unused_slots": 4,
+          "backlog_days_with_unused_minutes": 12,
+          "case_slot_utilization": 0.11779891304347827,
+          "minute_utilization": 0.09965466485507246,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 844,
+            "reference_only_work": 342,
+            "alternative_only_work": 23,
+            "earlier": 44,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 297,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 8,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "opening_precleared_10_240": {
+          "scenario": {
+            "name": "opening_precleared_10_240",
+            "slots": 10,
+            "minutes": 240,
+            "order": "baseline",
+            "opening_precleared": true,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 907,
+          "selected_minutes": 18650,
+          "selected_by_work_type": {
+            "continued_review": 489,
+            "initial_review": 306,
+            "scheduled_rereview": 112
+          },
+          "reported_max_wait_days": 1,
+          "max_eligibility_elapsed_days": 0,
+          "max_pending_wait_days": 0,
+          "clock_offset_work": 49,
+          "clock_offset_days": 49,
+          "pending_wait_days": 0,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 2,
+          "nonopening_selected_max_pending_wait": 0,
+          "pending_at_end": 51,
+          "pending_minutes_at_end": 1396,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_on_time": 752,
+            "definitely_late": 142,
+            "same_day_uncertain": 13
+          },
+          "task_sla_selected": {
+            "definitely_on_time": 687,
+            "definitely_late": 144,
+            "same_day_uncertain": 76
+          },
+          "selected_deadline_already_due_before_window": 54,
+          "selected_deadline_already_due_before_eligibility": 142,
+          "newly_definitely_late_selected": 0,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 907,
+            "pending_at_end": 51
+          },
+          "removed_scope_events": {},
+          "blocked_task_days": {
+            "slots_only": 51
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 8,
+          "backlog_days_with_unused_slots": 0,
+          "backlog_days_with_unused_minutes": 8,
+          "case_slot_utilization": 0.06161684782608696,
+          "minute_utilization": 0.052790987318840576,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 844,
+            "reference_only_work": 342,
+            "alternative_only_work": 63,
+            "earlier": 49,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 297,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 8,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "fifo_priority_mandatory_pinned": {
+          "scenario": {
+            "name": "fifo_priority_mandatory_pinned",
+            "slots": 5,
+            "minutes": 120,
+            "order": "fifo",
+            "opening_precleared": false,
+            "pin_mode": "original",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1186,
+          "selected_minutes": 26396,
+          "selected_by_work_type": {
+            "initial_review": 567,
+            "scheduled_rereview": 172,
+            "continued_review": 447
+          },
+          "reported_max_wait_days": 21,
+          "max_eligibility_elapsed_days": 20,
+          "max_pending_wait_days": 20,
+          "clock_offset_work": 119,
+          "clock_offset_days": 559,
+          "pending_wait_days": 1739,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 344,
+          "nonopening_selected_max_pending_wait": 20,
+          "pending_at_end": 91,
+          "pending_minutes_at_end": 2443,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 475,
+            "definitely_on_time": 696,
+            "same_day_uncertain": 15
+          },
+          "task_sla_selected": {
+            "definitely_late": 484,
+            "definitely_on_time": 634,
+            "same_day_uncertain": 68
+          },
+          "selected_deadline_already_due_before_window": 376,
+          "selected_deadline_already_due_before_eligibility": 463,
+          "newly_definitely_late_selected": 12,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1186,
+            "superseded": 28,
+            "pending_at_end": 91
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 28
+          },
+          "blocked_task_days": {
+            "both_limits": 525,
+            "slots_only": 147,
+            "minutes_only": 1278
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 101,
+          "backlog_days_with_unused_slots": 64,
+          "backlog_days_with_unused_minutes": 89,
+          "case_slot_utilization": 0.1611413043478261,
+          "minute_utilization": 0.1494338768115942,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1186,
+            "reference_only_work": 0,
+            "alternative_only_work": 0,
+            "earlier": 0,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "edf_priority_mandatory_pinned": {
+          "scenario": {
+            "name": "edf_priority_mandatory_pinned",
+            "slots": 5,
+            "minutes": 120,
+            "order": "edf",
+            "opening_precleared": false,
+            "pin_mode": "original",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1186,
+          "selected_minutes": 26389,
+          "selected_by_work_type": {
+            "initial_review": 566,
+            "scheduled_rereview": 172,
+            "continued_review": 448
+          },
+          "reported_max_wait_days": 21,
+          "max_eligibility_elapsed_days": 20,
+          "max_pending_wait_days": 20,
+          "clock_offset_work": 119,
+          "clock_offset_days": 559,
+          "pending_wait_days": 1739,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 344,
+          "nonopening_selected_max_pending_wait": 20,
+          "pending_at_end": 91,
+          "pending_minutes_at_end": 2450,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 476,
+            "definitely_on_time": 695,
+            "same_day_uncertain": 15
+          },
+          "task_sla_selected": {
+            "definitely_late": 485,
+            "definitely_on_time": 633,
+            "same_day_uncertain": 68
+          },
+          "selected_deadline_already_due_before_window": 376,
+          "selected_deadline_already_due_before_eligibility": 464,
+          "newly_definitely_late_selected": 12,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1186,
+            "superseded": 28,
+            "pending_at_end": 91
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 28
+          },
+          "blocked_task_days": {
+            "both_limits": 526,
+            "slots_only": 146,
+            "minutes_only": 1278
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 101,
+          "backlog_days_with_unused_slots": 64,
+          "backlog_days_with_unused_minutes": 90,
+          "case_slot_utilization": 0.1611413043478261,
+          "minute_utilization": 0.1493942481884058,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1185,
+            "reference_only_work": 1,
+            "alternative_only_work": 1,
+            "earlier": 7,
+            "later": 6,
+            "maximum_additional_days": 2,
+            "mandatory_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "edf_priority_hard_only_diagnostic": {
+          "scenario": {
+            "name": "edf_priority_hard_only_diagnostic",
+            "slots": 5,
+            "minutes": 120,
+            "order": "edf",
+            "opening_precleared": false,
+            "pin_mode": "hard_only",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1185,
+          "selected_minutes": 26383,
+          "selected_by_work_type": {
+            "initial_review": 566,
+            "scheduled_rereview": 173,
+            "continued_review": 446
+          },
+          "reported_max_wait_days": 20,
+          "max_eligibility_elapsed_days": 20,
+          "max_pending_wait_days": 20,
+          "clock_offset_work": 119,
+          "clock_offset_days": 557,
+          "pending_wait_days": 1736,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 344,
+          "nonopening_selected_max_pending_wait": 20,
+          "pending_at_end": 91,
+          "pending_minutes_at_end": 2450,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 476,
+            "definitely_on_time": 694,
+            "same_day_uncertain": 15
+          },
+          "task_sla_selected": {
+            "definitely_late": 485,
+            "definitely_on_time": 632,
+            "same_day_uncertain": 68
+          },
+          "selected_deadline_already_due_before_window": 377,
+          "selected_deadline_already_due_before_eligibility": 464,
+          "newly_definitely_late_selected": 12,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1185,
+            "superseded": 30,
+            "pending_at_end": 91
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 30
+          },
+          "blocked_task_days": {
+            "both_limits": 521,
+            "slots_only": 147,
+            "minutes_only": 1298
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 102,
+          "backlog_days_with_unused_slots": 65,
+          "backlog_days_with_unused_minutes": 87,
+          "case_slot_utilization": 0.1610054347826087,
+          "minute_utilization": 0.14936028079710145,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1180,
+            "reference_only_work": 6,
+            "alternative_only_work": 5,
+            "earlier": 40,
+            "later": 23,
+            "maximum_additional_days": 9,
+            "mandatory_reference": {
+              "not_selected": 5,
+              "selected_later": 17
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "unbounded_diagnostic": {
+          "scenario": {
+            "name": "unbounded_diagnostic",
+            "slots": 5,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": true
+          },
+          "selected_work": 1309,
+          "selected_minutes": 29318,
+          "selected_by_work_type": {
+            "initial_review": 632,
+            "scheduled_rereview": 176,
+            "continued_review": 501
+          },
+          "reported_max_wait_days": 1,
+          "max_eligibility_elapsed_days": 0,
+          "max_pending_wait_days": 0,
+          "clock_offset_work": 113,
+          "clock_offset_days": 113,
+          "pending_wait_days": 0,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 353,
+          "nonopening_selected_max_pending_wait": 0,
+          "pending_at_end": 0,
+          "pending_minutes_at_end": 0,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 485,
+            "definitely_on_time": 811,
+            "same_day_uncertain": 13
+          },
+          "task_sla_selected": {
+            "definitely_late": 493,
+            "definitely_on_time": 740,
+            "same_day_uncertain": 76
+          },
+          "selected_deadline_already_due_before_window": 388,
+          "selected_deadline_already_due_before_eligibility": 485,
+          "newly_definitely_late_selected": 0,
+          "awaiting_information_reviewed_base_scopes": 376,
+          "awaiting_information_without_pending_review": 376,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1309
+          },
+          "removed_scope_events": {},
+          "blocked_task_days": {},
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 0,
+          "backlog_days_with_unused_slots": 0,
+          "backlog_days_with_unused_minutes": 0,
+          "case_slot_utilization": null,
+          "minute_utilization": null,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1186,
+            "reference_only_work": 0,
+            "alternative_only_work": 123,
+            "earlier": 350,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "weekdays_5_120_diagnostic": {
+          "scenario": {
+            "name": "weekdays_5_120_diagnostic",
+            "slots": 5,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": true,
+            "unbounded": false
+          },
+          "selected_work": 1145,
+          "selected_minutes": 25759,
+          "selected_by_work_type": {
+            "initial_review": 567,
+            "scheduled_rereview": 170,
+            "continued_review": 408
+          },
+          "reported_max_wait_days": 28,
+          "max_eligibility_elapsed_days": 28,
+          "max_pending_wait_days": 28,
+          "clock_offset_work": 120,
+          "clock_offset_days": 757,
+          "pending_wait_days": 2644,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 339,
+          "nonopening_selected_max_pending_wait": 28,
+          "pending_at_end": 91,
+          "pending_minutes_at_end": 2443,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 497,
+            "definitely_on_time": 637,
+            "same_day_uncertain": 11
+          },
+          "task_sla_selected": {
+            "definitely_late": 510,
+            "definitely_on_time": 583,
+            "same_day_uncertain": 52
+          },
+          "selected_deadline_already_due_before_window": 373,
+          "selected_deadline_already_due_before_eligibility": 465,
+          "newly_definitely_late_selected": 32,
+          "awaiting_information_reviewed_base_scopes": 342,
+          "awaiting_information_without_pending_review": 342,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1145,
+            "superseded": 67,
+            "pending_at_end": 91
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 67
+          },
+          "blocked_task_days": {
+            "both_limits": 540,
+            "slots_only": 147,
+            "minutes_only": 1328,
+            "non_working_day": 963
+          },
+          "company_days": 1472,
+          "working_company_days": 1056,
+          "backlog_company_days": 309,
+          "backlog_days_with_unused_slots": 67,
+          "backlog_days_with_unused_minutes": 91,
+          "case_slot_utilization": 0.2168560606060606,
+          "minute_utilization": 0.20327493686868686,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1145,
+            "reference_only_work": 41,
+            "alternative_only_work": 0,
+            "earlier": 1,
+            "later": 428,
+            "maximum_additional_days": 10,
+            "mandatory_reference": {
+              "not_selected": 40,
+              "selected_later": 415
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        }
+      }
+    },
+    {
+      "cohort": "003",
+      "opening": [
+        {
+          "company_id": "C001",
+          "scopes": 21,
+          "minutes": 585,
+          "minimum_5_120_working_days": 5,
+          "sla_already_before_start": 20
+        },
+        {
+          "company_id": "C002",
+          "scopes": 19,
+          "minutes": 445,
+          "minimum_5_120_working_days": 4,
+          "sla_already_before_start": 19
+        },
+        {
+          "company_id": "C003",
+          "scopes": 98,
+          "minutes": 2985,
+          "minimum_5_120_working_days": 25,
+          "sla_already_before_start": 93
+        },
+        {
+          "company_id": "C004",
+          "scopes": 24,
+          "minutes": 610,
+          "minimum_5_120_working_days": 6,
+          "sla_already_before_start": 21
+        },
+        {
+          "company_id": "C005",
+          "scopes": 44,
+          "minutes": 1110,
+          "minimum_5_120_working_days": 10,
+          "sla_already_before_start": 39
+        },
+        {
+          "company_id": "C006",
+          "scopes": 57,
+          "minutes": 1360,
+          "minimum_5_120_working_days": 12,
+          "sla_already_before_start": 56
+        },
+        {
+          "company_id": "C007",
+          "scopes": 19,
+          "minutes": 520,
+          "minimum_5_120_working_days": 5,
+          "sla_already_before_start": 16
+        },
+        {
+          "company_id": "C008",
+          "scopes": 46,
+          "minutes": 1150,
+          "minimum_5_120_working_days": 10,
+          "sla_already_before_start": 42
+        }
+      ],
+      "reference_reproductions": [
+        {
+          "slots": 5,
+          "selected_rows": 1239,
+          "exact_reference_fields": [
+            "day",
+            "company_id",
+            "work_key",
+            "case_id",
+            "case_scope_hash",
+            "priority",
+            "baseline_score",
+            "rank",
+            "work_type",
+            "estimated_minutes",
+            "wait_days",
+            "case_type",
+            "awaiting_information"
+          ],
+          "passed": true
+        },
+        {
+          "slots": 10,
+          "selected_rows": 1309,
+          "exact_reference_fields": [
+            "day",
+            "company_id",
+            "work_key",
+            "case_id",
+            "case_scope_hash",
+            "priority",
+            "baseline_score",
+            "rank",
+            "work_type",
+            "estimated_minutes",
+            "wait_days",
+            "case_type",
+            "awaiting_information"
+          ],
+          "passed": true
+        }
+      ],
+      "scenarios": {
+        "baseline_5_120": {
+          "scenario": {
+            "name": "baseline_5_120",
+            "slots": 5,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1239,
+          "selected_minutes": 27468,
+          "selected_by_work_type": {
+            "initial_review": 611,
+            "scheduled_rereview": 176,
+            "continued_review": 452
+          },
+          "reported_max_wait_days": 27,
+          "max_eligibility_elapsed_days": 26,
+          "max_pending_wait_days": 26,
+          "clock_offset_work": 120,
+          "clock_offset_days": 624,
+          "pending_wait_days": 2142,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 376,
+          "nonopening_selected_max_pending_wait": 26,
+          "pending_at_end": 89,
+          "pending_minutes_at_end": 2405,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 520,
+            "definitely_on_time": 711,
+            "same_day_uncertain": 8
+          },
+          "task_sla_selected": {
+            "definitely_late": 528,
+            "definitely_on_time": 647,
+            "same_day_uncertain": 64
+          },
+          "selected_deadline_already_due_before_window": 413,
+          "selected_deadline_already_due_before_eligibility": 506,
+          "newly_definitely_late_selected": 14,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1239,
+            "superseded": 37,
+            "pending_at_end": 89
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 37
+          },
+          "blocked_task_days": {
+            "slots_only": 232,
+            "both_limits": 1223,
+            "minutes_only": 942
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 103,
+          "backlog_days_with_unused_slots": 48,
+          "backlog_days_with_unused_minutes": 92,
+          "case_slot_utilization": 0.16834239130434783,
+          "minute_utilization": 0.15550271739130433,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null
+        },
+        "slots_10_120": {
+          "scenario": {
+            "name": "slots_10_120",
+            "slots": 10,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1258,
+          "selected_minutes": 27874,
+          "selected_by_work_type": {
+            "initial_review": 619,
+            "scheduled_rereview": 177,
+            "continued_review": 462
+          },
+          "reported_max_wait_days": 26,
+          "max_eligibility_elapsed_days": 25,
+          "max_pending_wait_days": 25,
+          "clock_offset_work": 121,
+          "clock_offset_days": 607,
+          "pending_wait_days": 2047,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 378,
+          "nonopening_selected_max_pending_wait": 24,
+          "pending_at_end": 73,
+          "pending_minutes_at_end": 2061,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 530,
+            "definitely_on_time": 719,
+            "same_day_uncertain": 9
+          },
+          "task_sla_selected": {
+            "definitely_late": 538,
+            "definitely_on_time": 655,
+            "same_day_uncertain": 65
+          },
+          "selected_deadline_already_due_before_window": 416,
+          "selected_deadline_already_due_before_eligibility": 516,
+          "newly_definitely_late_selected": 14,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1258,
+            "superseded": 35,
+            "pending_at_end": 73
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 35
+          },
+          "blocked_task_days": {
+            "minutes_only": 2276
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 101,
+          "backlog_days_with_unused_slots": 101,
+          "backlog_days_with_unused_minutes": 79,
+          "case_slot_utilization": 0.08546195652173913,
+          "minute_utilization": 0.15780117753623188,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1235,
+            "reference_only_work": 4,
+            "alternative_only_work": 23,
+            "earlier": 124,
+            "later": 6,
+            "maximum_additional_days": 3,
+            "mandatory_reference": {
+              "not_selected": 4,
+              "selected_later": 6
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "minutes_5_240": {
+          "scenario": {
+            "name": "minutes_5_240",
+            "slots": 5,
+            "minutes": 240,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1249,
+          "selected_minutes": 27663,
+          "selected_by_work_type": {
+            "initial_review": 611,
+            "scheduled_rereview": 179,
+            "continued_review": 459
+          },
+          "reported_max_wait_days": 20,
+          "max_eligibility_elapsed_days": 19,
+          "max_pending_wait_days": 19,
+          "clock_offset_work": 122,
+          "clock_offset_days": 535,
+          "pending_wait_days": 1831,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 378,
+          "nonopening_selected_max_pending_wait": 17,
+          "pending_at_end": 89,
+          "pending_minutes_at_end": 2405,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 523,
+            "definitely_on_time": 716,
+            "same_day_uncertain": 10
+          },
+          "task_sla_selected": {
+            "definitely_late": 530,
+            "definitely_on_time": 652,
+            "same_day_uncertain": 67
+          },
+          "selected_deadline_already_due_before_window": 416,
+          "selected_deadline_already_due_before_eligibility": 510,
+          "newly_definitely_late_selected": 13,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1249,
+            "superseded": 30,
+            "pending_at_end": 89
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 30
+          },
+          "blocked_task_days": {
+            "slots_only": 2035,
+            "both_limits": 10
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 88,
+          "backlog_days_with_unused_slots": 0,
+          "backlog_days_with_unused_minutes": 88,
+          "case_slot_utilization": 0.16970108695652175,
+          "minute_utilization": 0.07830332880434783,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1236,
+            "reference_only_work": 3,
+            "alternative_only_work": 13,
+            "earlier": 161,
+            "later": 13,
+            "maximum_additional_days": 8,
+            "mandatory_reference": {
+              "not_selected": 3,
+              "selected_later": 13
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "capacity_10_240": {
+          "scenario": {
+            "name": "capacity_10_240",
+            "slots": 10,
+            "minutes": 240,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1309,
+          "selected_minutes": 28989,
+          "selected_by_work_type": {
+            "initial_review": 643,
+            "scheduled_rereview": 180,
+            "continued_review": 486
+          },
+          "reported_max_wait_days": 13,
+          "max_eligibility_elapsed_days": 13,
+          "max_pending_wait_days": 13,
+          "clock_offset_work": 121,
+          "clock_offset_days": 311,
+          "pending_wait_days": 940,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 384,
+          "nonopening_selected_max_pending_wait": 9,
+          "pending_at_end": 49,
+          "pending_minutes_at_end": 1341,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 520,
+            "definitely_on_time": 779,
+            "same_day_uncertain": 10
+          },
+          "task_sla_selected": {
+            "definitely_late": 531,
+            "definitely_on_time": 709,
+            "same_day_uncertain": 69
+          },
+          "selected_deadline_already_due_before_window": 418,
+          "selected_deadline_already_due_before_eligibility": 513,
+          "newly_definitely_late_selected": 7,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1309,
+            "superseded": 11,
+            "pending_at_end": 49
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 11
+          },
+          "blocked_task_days": {
+            "both_limits": 375,
+            "slots_only": 227,
+            "minutes_only": 425
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 47,
+          "backlog_days_with_unused_slots": 19,
+          "backlog_days_with_unused_minutes": 43,
+          "case_slot_utilization": 0.0889266304347826,
+          "minute_utilization": 0.08205672554347826,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1239,
+            "reference_only_work": 0,
+            "alternative_only_work": 70,
+            "earlier": 377,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "opening_precleared_5_120": {
+          "scenario": {
+            "name": "opening_precleared_5_120",
+            "slots": 5,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": true,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 891,
+          "selected_minutes": 18242,
+          "selected_by_work_type": {
+            "continued_review": 489,
+            "initial_review": 283,
+            "scheduled_rereview": 119
+          },
+          "reported_max_wait_days": 1,
+          "max_eligibility_elapsed_days": 0,
+          "max_pending_wait_days": 0,
+          "clock_offset_work": 56,
+          "clock_offset_days": 56,
+          "pending_wait_days": 0,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 0,
+          "nonopening_selected_max_pending_wait": 0,
+          "pending_at_end": 89,
+          "pending_minutes_at_end": 2405,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_on_time": 740,
+            "definitely_late": 142,
+            "same_day_uncertain": 9
+          },
+          "task_sla_selected": {
+            "definitely_on_time": 672,
+            "definitely_late": 147,
+            "same_day_uncertain": 72
+          },
+          "selected_deadline_already_due_before_window": 58,
+          "selected_deadline_already_due_before_eligibility": 142,
+          "newly_definitely_late_selected": 0,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 891,
+            "superseded": 1,
+            "pending_at_end": 89
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 1
+          },
+          "blocked_task_days": {
+            "slots_only": 90
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 9,
+          "backlog_days_with_unused_slots": 0,
+          "backlog_days_with_unused_minutes": 9,
+          "case_slot_utilization": 0.12105978260869565,
+          "minute_utilization": 0.10327219202898551,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 863,
+            "reference_only_work": 376,
+            "alternative_only_work": 28,
+            "earlier": 44,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 289,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 8,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "opening_precleared_10_240": {
+          "scenario": {
+            "name": "opening_precleared_10_240",
+            "slots": 10,
+            "minutes": 240,
+            "order": "baseline",
+            "opening_precleared": true,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 932,
+          "selected_minutes": 19324,
+          "selected_by_work_type": {
+            "continued_review": 498,
+            "initial_review": 315,
+            "scheduled_rereview": 119
+          },
+          "reported_max_wait_days": 1,
+          "max_eligibility_elapsed_days": 0,
+          "max_pending_wait_days": 0,
+          "clock_offset_work": 56,
+          "clock_offset_days": 56,
+          "pending_wait_days": 0,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 0,
+          "nonopening_selected_max_pending_wait": 0,
+          "pending_at_end": 49,
+          "pending_minutes_at_end": 1341,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_on_time": 773,
+            "definitely_late": 150,
+            "same_day_uncertain": 9
+          },
+          "task_sla_selected": {
+            "definitely_on_time": 705,
+            "definitely_late": 155,
+            "same_day_uncertain": 72
+          },
+          "selected_deadline_already_due_before_window": 59,
+          "selected_deadline_already_due_before_eligibility": 150,
+          "newly_definitely_late_selected": 0,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 932,
+            "pending_at_end": 49
+          },
+          "removed_scope_events": {},
+          "blocked_task_days": {
+            "slots_only": 49
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 8,
+          "backlog_days_with_unused_slots": 0,
+          "backlog_days_with_unused_minutes": 8,
+          "case_slot_utilization": 0.06331521739130434,
+          "minute_utilization": 0.054698822463768115,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 863,
+            "reference_only_work": 376,
+            "alternative_only_work": 69,
+            "earlier": 44,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 289,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 8,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "fifo_priority_mandatory_pinned": {
+          "scenario": {
+            "name": "fifo_priority_mandatory_pinned",
+            "slots": 5,
+            "minutes": 120,
+            "order": "fifo",
+            "opening_precleared": false,
+            "pin_mode": "original",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1239,
+          "selected_minutes": 27468,
+          "selected_by_work_type": {
+            "initial_review": 611,
+            "scheduled_rereview": 176,
+            "continued_review": 452
+          },
+          "reported_max_wait_days": 27,
+          "max_eligibility_elapsed_days": 26,
+          "max_pending_wait_days": 26,
+          "clock_offset_work": 120,
+          "clock_offset_days": 624,
+          "pending_wait_days": 2142,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 376,
+          "nonopening_selected_max_pending_wait": 26,
+          "pending_at_end": 89,
+          "pending_minutes_at_end": 2405,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 520,
+            "definitely_on_time": 711,
+            "same_day_uncertain": 8
+          },
+          "task_sla_selected": {
+            "definitely_late": 528,
+            "definitely_on_time": 647,
+            "same_day_uncertain": 64
+          },
+          "selected_deadline_already_due_before_window": 413,
+          "selected_deadline_already_due_before_eligibility": 506,
+          "newly_definitely_late_selected": 14,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1239,
+            "superseded": 37,
+            "pending_at_end": 89
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 37
+          },
+          "blocked_task_days": {
+            "slots_only": 232,
+            "both_limits": 1223,
+            "minutes_only": 942
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 103,
+          "backlog_days_with_unused_slots": 48,
+          "backlog_days_with_unused_minutes": 92,
+          "case_slot_utilization": 0.16834239130434783,
+          "minute_utilization": 0.15550271739130433,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1239,
+            "reference_only_work": 0,
+            "alternative_only_work": 0,
+            "earlier": 0,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "edf_priority_mandatory_pinned": {
+          "scenario": {
+            "name": "edf_priority_mandatory_pinned",
+            "slots": 5,
+            "minutes": 120,
+            "order": "edf",
+            "opening_precleared": false,
+            "pin_mode": "original",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1239,
+          "selected_minutes": 27468,
+          "selected_by_work_type": {
+            "initial_review": 611,
+            "scheduled_rereview": 176,
+            "continued_review": 452
+          },
+          "reported_max_wait_days": 27,
+          "max_eligibility_elapsed_days": 26,
+          "max_pending_wait_days": 26,
+          "clock_offset_work": 120,
+          "clock_offset_days": 624,
+          "pending_wait_days": 2142,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 376,
+          "nonopening_selected_max_pending_wait": 26,
+          "pending_at_end": 89,
+          "pending_minutes_at_end": 2405,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 520,
+            "definitely_on_time": 711,
+            "same_day_uncertain": 8
+          },
+          "task_sla_selected": {
+            "definitely_late": 528,
+            "definitely_on_time": 647,
+            "same_day_uncertain": 64
+          },
+          "selected_deadline_already_due_before_window": 413,
+          "selected_deadline_already_due_before_eligibility": 506,
+          "newly_definitely_late_selected": 14,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1239,
+            "superseded": 37,
+            "pending_at_end": 89
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 37
+          },
+          "blocked_task_days": {
+            "slots_only": 231,
+            "both_limits": 1224,
+            "minutes_only": 942
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 103,
+          "backlog_days_with_unused_slots": 48,
+          "backlog_days_with_unused_minutes": 91,
+          "case_slot_utilization": 0.16834239130434783,
+          "minute_utilization": 0.15550271739130433,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1239,
+            "reference_only_work": 0,
+            "alternative_only_work": 0,
+            "earlier": 28,
+            "later": 21,
+            "maximum_additional_days": 4,
+            "mandatory_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "edf_priority_hard_only_diagnostic": {
+          "scenario": {
+            "name": "edf_priority_hard_only_diagnostic",
+            "slots": 5,
+            "minutes": 120,
+            "order": "edf",
+            "opening_precleared": false,
+            "pin_mode": "hard_only",
+            "weekdays": false,
+            "unbounded": false
+          },
+          "selected_work": 1238,
+          "selected_minutes": 27455,
+          "selected_by_work_type": {
+            "initial_review": 611,
+            "scheduled_rereview": 176,
+            "continued_review": 451
+          },
+          "reported_max_wait_days": 27,
+          "max_eligibility_elapsed_days": 26,
+          "max_pending_wait_days": 26,
+          "clock_offset_work": 120,
+          "clock_offset_days": 618,
+          "pending_wait_days": 2150,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 376,
+          "nonopening_selected_max_pending_wait": 25,
+          "pending_at_end": 89,
+          "pending_minutes_at_end": 2405,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 520,
+            "definitely_on_time": 710,
+            "same_day_uncertain": 8
+          },
+          "task_sla_selected": {
+            "definitely_late": 528,
+            "definitely_on_time": 646,
+            "same_day_uncertain": 64
+          },
+          "selected_deadline_already_due_before_window": 413,
+          "selected_deadline_already_due_before_eligibility": 506,
+          "newly_definitely_late_selected": 14,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1238,
+            "superseded": 38,
+            "pending_at_end": 89
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 38
+          },
+          "blocked_task_days": {
+            "slots_only": 224,
+            "both_limits": 1222,
+            "minutes_only": 961
+          },
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 104,
+          "backlog_days_with_unused_slots": 52,
+          "backlog_days_with_unused_minutes": 93,
+          "case_slot_utilization": 0.16820652173913042,
+          "minute_utilization": 0.15542912137681159,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1238,
+            "reference_only_work": 1,
+            "alternative_only_work": 0,
+            "earlier": 43,
+            "later": 34,
+            "maximum_additional_days": 6,
+            "mandatory_reference": {
+              "not_selected": 1,
+              "selected_later": 13
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "unbounded_diagnostic": {
+          "scenario": {
+            "name": "unbounded_diagnostic",
+            "slots": 5,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": false,
+            "unbounded": true
+          },
+          "selected_work": 1371,
+          "selected_minutes": 30551,
+          "selected_by_work_type": {
+            "initial_review": 675,
+            "scheduled_rereview": 182,
+            "continued_review": 514
+          },
+          "reported_max_wait_days": 1,
+          "max_eligibility_elapsed_days": 0,
+          "max_pending_wait_days": 0,
+          "clock_offset_work": 119,
+          "clock_offset_days": 119,
+          "pending_wait_days": 0,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 390,
+          "nonopening_selected_max_pending_wait": 0,
+          "pending_at_end": 0,
+          "pending_minutes_at_end": 0,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 531,
+            "same_day_uncertain": 13,
+            "definitely_on_time": 827
+          },
+          "task_sla_selected": {
+            "definitely_late": 540,
+            "same_day_uncertain": 76,
+            "definitely_on_time": 755
+          },
+          "selected_deadline_already_due_before_window": 428,
+          "selected_deadline_already_due_before_eligibility": 531,
+          "newly_definitely_late_selected": 0,
+          "awaiting_information_reviewed_base_scopes": 368,
+          "awaiting_information_without_pending_review": 368,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1371
+          },
+          "removed_scope_events": {},
+          "blocked_task_days": {},
+          "company_days": 1472,
+          "working_company_days": 1472,
+          "backlog_company_days": 0,
+          "backlog_days_with_unused_slots": 0,
+          "backlog_days_with_unused_minutes": 0,
+          "case_slot_utilization": null,
+          "minute_utilization": null,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1239,
+            "reference_only_work": 0,
+            "alternative_only_work": 132,
+            "earlier": 379,
+            "later": 0,
+            "maximum_additional_days": 0,
+            "mandatory_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 0
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        },
+        "weekdays_5_120_diagnostic": {
+          "scenario": {
+            "name": "weekdays_5_120_diagnostic",
+            "slots": 5,
+            "minutes": 120,
+            "order": "baseline",
+            "opening_precleared": false,
+            "pin_mode": "none",
+            "weekdays": true,
+            "unbounded": false
+          },
+          "selected_work": 1177,
+          "selected_minutes": 26354,
+          "selected_by_work_type": {
+            "initial_review": 611,
+            "scheduled_rereview": 175,
+            "continued_review": 391
+          },
+          "reported_max_wait_days": 37,
+          "max_eligibility_elapsed_days": 37,
+          "max_pending_wait_days": 37,
+          "clock_offset_work": 121,
+          "clock_offset_days": 851,
+          "pending_wait_days": 3151,
+          "off_queue_gap_days": 0,
+          "opening_work_selected": 372,
+          "nonopening_selected_max_pending_wait": 37,
+          "pending_at_end": 89,
+          "pending_minutes_at_end": 2405,
+          "pending_max_wait_lower": 0,
+          "case_sla_selected": {
+            "definitely_late": 524,
+            "definitely_on_time": 642,
+            "same_day_uncertain": 11
+          },
+          "task_sla_selected": {
+            "definitely_late": 543,
+            "definitely_on_time": 581,
+            "same_day_uncertain": 53
+          },
+          "selected_deadline_already_due_before_window": 411,
+          "selected_deadline_already_due_before_eligibility": 505,
+          "newly_definitely_late_selected": 19,
+          "awaiting_information_reviewed_base_scopes": 335,
+          "awaiting_information_without_pending_review": 335,
+          "awaiting_information_with_pending_rereview": 0,
+          "dispositions": {
+            "reviewed": 1177,
+            "superseded": 98,
+            "pending_at_end": 89
+          },
+          "removed_scope_events": {
+            "superseded_unreviewed_scope_events": 98
+          },
+          "blocked_task_days": {
+            "slots_only": 232,
+            "both_limits": 1243,
+            "minutes_only": 996,
+            "non_working_day": 1123
+          },
+          "company_days": 1472,
+          "working_company_days": 1056,
+          "backlog_company_days": 304,
+          "backlog_days_with_unused_slots": 55,
+          "backlog_days_with_unused_minutes": 97,
+          "case_slot_utilization": 0.22291666666666668,
+          "minute_utilization": 0.20797032828282827,
+          "policy_changed": false,
+          "models_fitted": 0,
+          "actual_review_minutes": null,
+          "versus_baseline_5_120": {
+            "common_selected_work": 1175,
+            "reference_only_work": 64,
+            "alternative_only_work": 2,
+            "earlier": 0,
+            "later": 450,
+            "maximum_additional_days": 12,
+            "mandatory_reference": {
+              "not_selected": 63,
+              "selected_later": 415
+            },
+            "hard_reference": {
+              "not_selected": 0,
+              "selected_later": 2
+            },
+            "caveat": "Different capacities/opening history can expose or coalesce different scopes; differences are not additive causal shares"
+          }
+        }
+      }
+    }
+  ],
+  "scenarios": 22,
+  "frozen_baselines_exactly_reproduced": 4,
+  "models_loaded": 0,
+  "models_fitted": 0,
+  "if_scores_loaded": false,
+  "rules_rescored": false,
+  "production_policy_changed": false,
+  "source": "synthetic retrospective snapshots",
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "sla_completion_verified": false,
+  "limitations": "Same scope coalescing and effort rules as frozen reference; expose different selected universes and right censoring"
+}

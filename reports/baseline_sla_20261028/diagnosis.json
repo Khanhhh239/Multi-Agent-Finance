@@ -1,0 +1,493 @@
+{
+  "cohorts": [
+    {
+      "cohort": "001",
+      "wait_decomposition": {
+        "reported_sum": 2298,
+        "eligible_queue_sum": 1739,
+        "readiness_clock_offset_sum": 559,
+        "off_queue_gap_sum": 0,
+        "identity_verified": true
+      },
+      "work_types": {
+        "continued_review": {
+          "count": 447,
+          "reported_max": 3,
+          "eligible_max": 3,
+          "offset_sum": 0
+        },
+        "initial_review": {
+          "count": 567,
+          "reported_max": 20,
+          "eligible_max": 20,
+          "offset_sum": 0
+        },
+        "scheduled_rereview": {
+          "count": 172,
+          "reported_max": 21,
+          "eligible_max": 0,
+          "offset_sum": 559
+        }
+      },
+      "priorities": {
+        "cao_nhat": {
+          "work": 16,
+          "max_eligible_wait": 0,
+          "definitely_late": 8,
+          "already_late_at_entry_day_start": 8
+        },
+        "thap": {
+          "work": 1031,
+          "max_eligible_wait": 20,
+          "definitely_late": 385,
+          "already_late_at_entry_day_start": 373
+        },
+        "trung_binh": {
+          "work": 139,
+          "max_eligible_wait": 2,
+          "definitely_late": 82,
+          "already_late_at_entry_day_start": 82
+        }
+      },
+      "selected_work_categories": {
+        "opening_scope": {
+          "count": 344,
+          "max_eligible_wait": 20,
+          "initial_reviews": 281
+        },
+        "new_scope_of_opening_case": {
+          "count": 78,
+          "max_eligible_wait": 18,
+          "initial_reviews": 11
+        },
+        "in_window_case": {
+          "count": 764,
+          "max_eligible_wait": 20,
+          "initial_reviews": 275
+        }
+      },
+      "late_case_sla_debt_classes": {
+        "inherited_deadline_of_opening_case": 376,
+        "new_lateness_after_eligibility": 12,
+        "deadline_already_expired_before_work_eligibility": 87
+      },
+      "late_case_sla_status_at_first_eligibility_day": {
+        "definitely_late": 463,
+        "definitely_on_time": 11,
+        "same_day_uncertain": 1
+      },
+      "maximum_wait_traces": [
+        {
+          "case_id": "SC_ff5a6bd29fc70525",
+          "company_id": "C002",
+          "work_type": "scheduled_rereview",
+          "day": "2025-07-22",
+          "first_pending_day": "2025-07-22",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "21",
+          "pending_wait_days": "0",
+          "wait_clock_offset_days": "21",
+          "opened_at": "2025-06-12T18:00:00+07:00",
+          "sla_due_at": "2025-06-26T18:00:00+07:00",
+          "task_deadline": "2025-06-19T18:00:00+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-21"
+        },
+        {
+          "case_id": "SC_730bc6dcc063502b",
+          "company_id": "C002",
+          "work_type": "scheduled_rereview",
+          "day": "2025-07-21",
+          "first_pending_day": "2025-07-21",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "20",
+          "pending_wait_days": "0",
+          "wait_clock_offset_days": "20",
+          "opened_at": "2025-06-09T10:26:27+07:00",
+          "sla_due_at": "2025-06-23T10:26:27+07:00",
+          "task_deadline": "2025-06-16T10:26:27+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-20"
+        },
+        {
+          "case_id": "SC_b5f2bf153a6736bd",
+          "company_id": "C002",
+          "work_type": "scheduled_rereview",
+          "day": "2025-07-21",
+          "first_pending_day": "2025-07-21",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "20",
+          "pending_wait_days": "0",
+          "wait_clock_offset_days": "20",
+          "opened_at": "2025-06-09T18:00:00+07:00",
+          "sla_due_at": "2025-06-23T18:00:00+07:00",
+          "task_deadline": "2025-06-16T18:00:00+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-20"
+        },
+        {
+          "case_id": "SC_ff5a6bd29fc70525",
+          "company_id": "C002",
+          "work_type": "initial_review",
+          "day": "2025-07-21",
+          "first_pending_day": "2025-07-01",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "20",
+          "pending_wait_days": "20",
+          "wait_clock_offset_days": "0",
+          "opened_at": "2025-06-12T18:00:00+07:00",
+          "sla_due_at": "2025-06-26T18:00:00+07:00",
+          "task_deadline": "2025-06-26T18:00:00+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-21"
+        },
+        {
+          "case_id": "SC_c5b45cbae63bb288",
+          "company_id": "C002",
+          "work_type": "initial_review",
+          "day": "2025-07-22",
+          "first_pending_day": "2025-07-02",
+          "recorded_ready_day": "2025-07-02",
+          "wait_days": "20",
+          "pending_wait_days": "20",
+          "wait_clock_offset_days": "0",
+          "opened_at": "2025-07-02T18:00:00+07:00",
+          "sla_due_at": "2025-07-16T18:00:00+07:00",
+          "task_deadline": "2025-07-16T18:00:00+07:00",
+          "opening_work": "False",
+          "initial_review_day": "2025-07-22"
+        },
+        {
+          "case_id": "SC_730bc6dcc063502b",
+          "company_id": "C002",
+          "work_type": "initial_review",
+          "day": "2025-07-20",
+          "first_pending_day": "2025-07-01",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "19",
+          "pending_wait_days": "19",
+          "wait_clock_offset_days": "0",
+          "opened_at": "2025-06-09T10:26:27+07:00",
+          "sla_due_at": "2025-06-23T10:26:27+07:00",
+          "task_deadline": "2025-06-23T10:26:27+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-20"
+        }
+      ],
+      "opening_load": [
+        {
+          "company_id": "C001",
+          "scopes": 19,
+          "minutes": 495,
+          "minimum_5_120_working_days": 5,
+          "sla_already_before_start": 17
+        },
+        {
+          "company_id": "C002",
+          "scopes": 69,
+          "minutes": 2230,
+          "minimum_5_120_working_days": 19,
+          "sla_already_before_start": 65
+        },
+        {
+          "company_id": "C003",
+          "scopes": 69,
+          "minutes": 1990,
+          "minimum_5_120_working_days": 17,
+          "sla_already_before_start": 65
+        },
+        {
+          "company_id": "C004",
+          "scopes": 34,
+          "minutes": 845,
+          "minimum_5_120_working_days": 8,
+          "sla_already_before_start": 32
+        },
+        {
+          "company_id": "C005",
+          "scopes": 39,
+          "minutes": 995,
+          "minimum_5_120_working_days": 9,
+          "sla_already_before_start": 37
+        },
+        {
+          "company_id": "C006",
+          "scopes": 29,
+          "minutes": 720,
+          "minimum_5_120_working_days": 6,
+          "sla_already_before_start": 26
+        },
+        {
+          "company_id": "C007",
+          "scopes": 15,
+          "minutes": 405,
+          "minimum_5_120_working_days": 4,
+          "sla_already_before_start": 12
+        },
+        {
+          "company_id": "C008",
+          "scopes": 18,
+          "minutes": 495,
+          "minimum_5_120_working_days": 5,
+          "sla_already_before_start": 16
+        }
+      ],
+      "censored_at_end": {
+        "work": 91,
+        "max_wait_lower": 0,
+        "sla_status": {
+          "definitely_late": 25,
+          "definitely_on_time": 66
+        }
+      },
+      "known_rereviews_after_last_daily_selection": 0,
+      "note": "Opening/work history counterfactuals are not additive causal shares; day-level selection is not SLA completion"
+    },
+    {
+      "cohort": "003",
+      "wait_decomposition": {
+        "reported_sum": 2766,
+        "eligible_queue_sum": 2142,
+        "readiness_clock_offset_sum": 624,
+        "off_queue_gap_sum": 0,
+        "identity_verified": true
+      },
+      "work_types": {
+        "continued_review": {
+          "count": 452,
+          "reported_max": 4,
+          "eligible_max": 4,
+          "offset_sum": 0
+        },
+        "initial_review": {
+          "count": 611,
+          "reported_max": 26,
+          "eligible_max": 26,
+          "offset_sum": 0
+        },
+        "scheduled_rereview": {
+          "count": 176,
+          "reported_max": 27,
+          "eligible_max": 0,
+          "offset_sum": 624
+        }
+      },
+      "priorities": {
+        "cao_nhat": {
+          "work": 16,
+          "max_eligible_wait": 0,
+          "definitely_late": 8,
+          "already_late_at_entry_day_start": 8
+        },
+        "thap": {
+          "work": 1033,
+          "max_eligible_wait": 26,
+          "definitely_late": 385,
+          "already_late_at_entry_day_start": 371
+        },
+        "trung_binh": {
+          "work": 190,
+          "max_eligible_wait": 6,
+          "definitely_late": 127,
+          "already_late_at_entry_day_start": 127
+        }
+      },
+      "selected_work_categories": {
+        "opening_scope": {
+          "count": 376,
+          "max_eligible_wait": 26,
+          "initial_reviews": 318
+        },
+        "new_scope_of_opening_case": {
+          "count": 83,
+          "max_eligible_wait": 22,
+          "initial_reviews": 10
+        },
+        "in_window_case": {
+          "count": 780,
+          "max_eligible_wait": 26,
+          "initial_reviews": 283
+        }
+      },
+      "late_case_sla_debt_classes": {
+        "inherited_deadline_of_opening_case": 413,
+        "new_lateness_after_eligibility": 14,
+        "deadline_already_expired_before_work_eligibility": 93
+      },
+      "late_case_sla_status_at_first_eligibility_day": {
+        "definitely_late": 506,
+        "same_day_uncertain": 5,
+        "definitely_on_time": 9
+      },
+      "maximum_wait_traces": [
+        {
+          "case_id": "SC_c54398721fe03601",
+          "company_id": "C003",
+          "work_type": "scheduled_rereview",
+          "day": "2025-07-28",
+          "first_pending_day": "2025-07-28",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "27",
+          "pending_wait_days": "0",
+          "wait_clock_offset_days": "27",
+          "opened_at": "2025-06-09T10:56:16+07:00",
+          "sla_due_at": "2025-06-23T10:56:16+07:00",
+          "task_deadline": "2025-06-16T10:56:16+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-27"
+        },
+        {
+          "case_id": "SC_8a8dbf242cd5cee4",
+          "company_id": "C003",
+          "work_type": "scheduled_rereview",
+          "day": "2025-07-28",
+          "first_pending_day": "2025-07-28",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "27",
+          "pending_wait_days": "0",
+          "wait_clock_offset_days": "27",
+          "opened_at": "2025-06-13T18:00:00+07:00",
+          "sla_due_at": "2025-06-27T18:00:00+07:00",
+          "task_deadline": "2025-06-20T18:00:00+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-27"
+        },
+        {
+          "case_id": "SC_478db7e37f9aee92",
+          "company_id": "C003",
+          "work_type": "scheduled_rereview",
+          "day": "2025-07-27",
+          "first_pending_day": "2025-07-27",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "26",
+          "pending_wait_days": "0",
+          "wait_clock_offset_days": "26",
+          "opened_at": "2025-06-07T10:03:11+07:00",
+          "sla_due_at": "2025-06-21T10:03:11+07:00",
+          "task_deadline": "2025-06-14T10:03:11+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-26"
+        },
+        {
+          "case_id": "SC_c54398721fe03601",
+          "company_id": "C003",
+          "work_type": "initial_review",
+          "day": "2025-07-27",
+          "first_pending_day": "2025-07-01",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "26",
+          "pending_wait_days": "26",
+          "wait_clock_offset_days": "0",
+          "opened_at": "2025-06-09T10:56:16+07:00",
+          "sla_due_at": "2025-06-23T10:56:16+07:00",
+          "task_deadline": "2025-06-23T10:56:16+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-27"
+        },
+        {
+          "case_id": "SC_8a8dbf242cd5cee4",
+          "company_id": "C003",
+          "work_type": "initial_review",
+          "day": "2025-07-27",
+          "first_pending_day": "2025-07-01",
+          "recorded_ready_day": "2025-07-01",
+          "wait_days": "26",
+          "pending_wait_days": "26",
+          "wait_clock_offset_days": "0",
+          "opened_at": "2025-06-13T18:00:00+07:00",
+          "sla_due_at": "2025-06-27T18:00:00+07:00",
+          "task_deadline": "2025-06-27T18:00:00+07:00",
+          "opening_work": "True",
+          "initial_review_day": "2025-07-27"
+        },
+        {
+          "case_id": "SC_3647aa7ad52a854e",
+          "company_id": "C003",
+          "work_type": "initial_review",
+          "day": "2025-07-31",
+          "first_pending_day": "2025-07-05",
+          "recorded_ready_day": "2025-07-05",
+          "wait_days": "26",
+          "pending_wait_days": "26",
+          "wait_clock_offset_days": "0",
+          "opened_at": "2025-07-05T10:26:48+07:00",
+          "sla_due_at": "2025-07-19T10:26:48+07:00",
+          "task_deadline": "2025-07-19T10:26:48+07:00",
+          "opening_work": "False",
+          "initial_review_day": "2025-07-31"
+        }
+      ],
+      "opening_load": [
+        {
+          "company_id": "C001",
+          "scopes": 21,
+          "minutes": 585,
+          "minimum_5_120_working_days": 5,
+          "sla_already_before_start": 20
+        },
+        {
+          "company_id": "C002",
+          "scopes": 19,
+          "minutes": 445,
+          "minimum_5_120_working_days": 4,
+          "sla_already_before_start": 19
+        },
+        {
+          "company_id": "C003",
+          "scopes": 98,
+          "minutes": 2985,
+          "minimum_5_120_working_days": 25,
+          "sla_already_before_start": 93
+        },
+        {
+          "company_id": "C004",
+          "scopes": 24,
+          "minutes": 610,
+          "minimum_5_120_working_days": 6,
+          "sla_already_before_start": 21
+        },
+        {
+          "company_id": "C005",
+          "scopes": 44,
+          "minutes": 1110,
+          "minimum_5_120_working_days": 10,
+          "sla_already_before_start": 39
+        },
+        {
+          "company_id": "C006",
+          "scopes": 57,
+          "minutes": 1360,
+          "minimum_5_120_working_days": 12,
+          "sla_already_before_start": 56
+        },
+        {
+          "company_id": "C007",
+          "scopes": 19,
+          "minutes": 520,
+          "minimum_5_120_working_days": 5,
+          "sla_already_before_start": 16
+        },
+        {
+          "company_id": "C008",
+          "scopes": 46,
+          "minutes": 1150,
+          "minimum_5_120_working_days": 10,
+          "sla_already_before_start": 42
+        }
+      ],
+      "censored_at_end": {
+        "work": 89,
+        "max_wait_lower": 0,
+        "sla_status": {
+          "definitely_late": 24,
+          "definitely_on_time": 65
+        }
+      },
+      "known_rereviews_after_last_daily_selection": 0,
+      "note": "Opening/work history counterfactuals are not additive causal shares; day-level selection is not SLA completion"
+    }
+  ],
+  "reference_daily_aggregates_exact": true,
+  "production_policy_changed": false,
+  "models_or_rules_recomputed": false
+}

@@ -43,7 +43,18 @@ async function applyP2Location(force=false){
   await loadControls();if(generation!==state.opening)return;
   await openControl(id,tx,{updateLocation:false});
 }
-async function api(path,body){const response=await fetch(path,body===undefined?{}:{method:"POST",headers:{"Content-Type":"application/json","X-CSRF-Token":state.meta.csrf_token},body:JSON.stringify(body)});const result=await response.json();if(!response.ok)throw new Error(result.error||"Chưa thực hiện được thao tác.");return result;}
+async function api(path,body){
+  let response;
+  try{response=await fetch(path,body===undefined?{}:{method:"POST",headers:{"Content-Type":"application/json","X-CSRF-Token":state.meta.csrf_token},body:JSON.stringify(body)});}
+  catch{throw new Error("Mất kết nối với ứng dụng. Nội dung đang nhập vẫn được giữ. Khi kết nối trở lại, kiểm tra lịch sử trước khi gửi lại.");}
+  let result;
+  try{result=await response.json();}catch{throw new Error("Ứng dụng trả về dữ liệu chưa đọc được. Kiểm tra kết nối và lịch sử trước khi thử lại thao tác.");}
+  if(!response.ok&&response.status===403&&body!==undefined&&["Phiên đã thay đổi. Tải lại trang để tiếp tục.","Phiên làm việc đã thay đổi. Tải lại trang để tiếp tục."].includes(result.error)){
+    state.meta=await api("/api/p2-controls/meta");
+    throw new Error("Phiên làm việc vừa thay đổi và đã được nạp lại. Kiểm tra nội dung, lịch sử và thử lại thao tác.");
+  }
+  if(!response.ok)throw new Error(result.error||"Chưa thực hiện được thao tác.");return result;
+}
 function notice(message,success=false){$("uat-notice").textContent=message;$("uat-notice").className="notice"+(success?" success":"");}
 function params(){return new URLSearchParams({group:$("uat-group").value,category:$("uat-category").value,verdict:$("uat-verdict").value,q:$("uat-search").value});}
 function reviewBadge(review){const verdict=review?.verdict||"unreviewed";return `<span class="uat-badge ${esc(verdict)}">${esc(verdictNames[verdict]||"Chưa nghiệm thu")}</span>`;}

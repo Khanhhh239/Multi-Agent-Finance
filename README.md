@@ -1,6 +1,6 @@
 # Multi-Agent Finance — Agent 2 (Sang)
 
-Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **27/10/2026**. Xem [hướng dẫn bản nguồn trên Git](docs/AGENT2_GITHUB.md), [trạng thái dự án](docs/STATUS.md) và [hướng dẫn phát triển](docs/DEVELOPMENT.md).
+Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **04/11/2026**. Xem [hướng dẫn bản nguồn trên Git](docs/AGENT2_GITHUB.md), [trạng thái dự án](docs/STATUS.md) và [hướng dẫn phát triển](docs/DEVELOPMENT.md).
 
 ## Sổ Soát — trợ lý rà soát giao dịch SME
 

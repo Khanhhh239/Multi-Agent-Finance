@@ -57,9 +57,19 @@ async function quickFeedback(decision) {
 }
 
 async function api(path, body) {
-  const response = await fetch(path, body === undefined ? {} : {method:"POST", headers:{"Content-Type":"application/json", "X-CSRF-Token":state.meta.csrf_token}, body:JSON.stringify(body)});
-  const result = await response.json();
+  let response;
+  try { response = await fetch(path, body === undefined ? {} : {method:"POST", headers:{"Content-Type":"application/json", "X-CSRF-Token":state.meta.csrf_token}, body:JSON.stringify(body)}); }
+  catch { throw new Error("Mất kết nối với ứng dụng. Nội dung đang nhập vẫn được giữ. Khi kết nối trở lại, kiểm tra lịch sử trước khi gửi lại."); }
+  let result;
+  try { result = await response.json(); }
+  catch { throw new Error("Ứng dụng trả về dữ liệu chưa đọc được. Kiểm tra kết nối và lịch sử trước khi thử lại thao tác."); }
   if(response.ok&&path==="/api/meta"&&result.review_workflow?.enabled&&globalThis.ReviewWorkflowUI)ReviewWorkflowUI.policy(result.review_workflow);
+  if(!response.ok&&response.status===403&&body!==undefined&&result.error==="Phiên làm việc đã thay đổi. Tải lại trang để tiếp tục.") {
+    // Refresh only the read-only session metadata. Never replay a write after
+    // a network failure or a server restart; the user reviews and retries it.
+    state.meta=await api("/api/meta");
+    throw new Error("Phiên làm việc vừa thay đổi và đã được nạp lại. Kiểm tra nội dung, lịch sử và thử lại thao tác.");
+  }
   if (!response.ok) throw new Error(result.error || "Chưa thực hiện được thao tác.");
   return result;
 }
@@ -143,7 +153,7 @@ function renderDetail() {
   if(row.archived) $("feedback-form").remove();
   else if(state.meta?.review_workflow?.enabled) {
     ReviewWorkflowUI.render($("feedback-form"),{...data.review_workflow,active_request_count:data.information_requests?.active_count||0},{scenario:state.scenario,caseId:row.case_id,api,notice,
-      reload:async()=>{await openCase(row.case_id,{updateLocation:false});},
+      reload:async()=>{try{state.meta=await api("/api/meta");await openCase(row.case_id,{updateLocation:false});}catch(error){notice(error.message);}},
       saved:async(action)=>{await openCase(row.case_id,{updateLocation:false});await loadQueue();
         $("feedback-form")?.querySelector('.workflow-status')?.focus();
         notice(action==="return"?"Đã trả lại hồ sơ. Kế toán viên cần bổ sung và gửi lại.":action==="finalize"?"Đã chốt kết luận qua hai cấp.":"Đã gửi kết quả để kiểm tra cuối.",true);}});
@@ -403,13 +413,14 @@ async function notificationsModal(run=false,offset=0) {
     const gaps=(result.routing_gaps||[]).map(g=>`<li>${esc(g.company_id)} · ${esc(g.case_id)} · ${esc(policy?.events?.[g.kind]||g.kind)}: ${g.reason==="recipient_unassigned"?"chưa có người nhận phù hợp":"chờ ngân sách ngày"}</li>`).join("");
     const roleNote=policy?.enabled?`<details class="notification-policy"><summary>Sự kiện và người nhận</summary><p>Hồ sơ ưu tiên → kế toán viên. Kết quả chờ kiểm tra → kế toán trưởng khác người rà; nếu không có thì giám đốc. Trả lại/kết quả kiểm tra → người đã rà. Nghi vấn hoặc vi phạm → báo thêm giám đốc khác người chốt. Tài liệu đã nhận/quá hạn → kế toán viên. Tóm tắt tuần → kế toán trưởng, hoặc giám đốc.</p><p>Kiểm tra kết quả: ${esc(reminders.review_due_hours)} giờ; rà bổ sung: ${esc(reminders.rework_due_hours)} giờ. Nhắc mỗi ${esc(reminders.repeat_hours)} giờ, báo thêm giám đốc sau ${esc(reminders.escalate_after_hours)} giờ quá hạn. Hạn hồ sơ và hạn tài liệu lấy từ đúng nguồn của từng loại.</p><p>Không có người nhận phù hợp thì ghi chờ cấu hình, không tự gán tài khoản hoặc địa chỉ. Hồ sơ đổi bước/đổi bằng chứng được kiểm tra lại trước lúc gửi.</p></details>`:"";
     showModal("Thông báo Zalo / Email",`<div class="integrity">${result.mode==="dry_run"?"GIẢ LẬP · Không gửi ra ngoài":"Worker gửi thật được cấu hình riêng"}</div><p>Email/Zalo chưa có biên bản xác nhận gửi–nhận thực tế. Trạng thái dịch vụ chấp nhận tách riêng phản hồi đã nhận/đã xem.</p><p>Tối đa ${result.daily_case_limit} hồ sơ / công ty / ngày, dùng chung cho các sự kiện, hai kênh và tóm tắt tuần. Một hồ sơ có thể có nhiều sự kiện. Đã chọn hôm nay: ${esc(Object.entries(result.used_by_company).map(([c,n])=>c+": "+n).join(" · ")||"0")}.</p><p>Tóm tắt tuần từ thứ ${result.weekly_weekday===6?"Chủ nhật":result.weekly_weekday+2}, ${result.weekly_hour}:00 (giờ Việt Nam). Hủy cảnh báo/nhắc việc không còn phù hợp; kết quả vừa chốt vẫn được báo đúng người rà.</p>${roleNote}${gaps?`<div class="notification-gaps"><strong>Thông báo đang chờ xử lý</strong><ul>${gaps}</ul></div>`:""}<p>${esc(Object.entries(result.counts).map(([status,count])=>(notificationStatuses[status]||status)+": "+count).join(" · "))}</p>${result.mode==="dry_run"&&result.can_preview!==false?'<button id="notification-preview" class="primary-button">Chạy luồng giả lập</button>':""}<div class="notification-jobs">${result.items.map(notificationJob).join("")||'<p class="graph-caption">Chưa có thông báo trong phạm vi công ty của bạn.</p>'}</div>`);
+    $("modal-body").insertAdjacentHTML("afterbegin",'<p id="notification-error" class="notice hidden" role="alert" tabindex="-1"></p>');
     $("modal-body").querySelectorAll(".notification-job a").forEach(link=>link.addEventListener("click",()=>$("modal").close()));
     const pageOffset=result.offset??0,pageLimit=result.limit??30,total=result.total??result.items.length;
     $("modal-body").insertAdjacentHTML("beforeend",`<div class="pagination"><span>${total?pageOffset+1:0}–${pageOffset+result.items.length} / ${total} thông báo</span><div><button type="button" id="notifications-previous" class="icon-button" aria-label="Thông báo mới hơn" ${pageOffset===0?"disabled":""}>←</button><button type="button" id="notifications-next" class="icon-button" aria-label="Thông báo cũ hơn" ${pageOffset+pageLimit>=total?"disabled":""}>→</button></div></div>`);
     $("notifications-previous").addEventListener("click",()=>notificationsModal(false,Math.max(0,pageOffset-pageLimit)));
     $("notifications-next").addEventListener("click",()=>notificationsModal(false,pageOffset+pageLimit));
-    $("notification-preview")?.addEventListener("click",async()=>{$("notification-preview").disabled=true;await notificationsModal(true);});
-  } catch(error){notice(error.message);}
+    $("notification-preview")?.addEventListener("click",async()=>{const button=$("notification-preview");button.disabled=true;try{await notificationsModal(true);}finally{button.disabled=false;}});
+  } catch(error){notice(error.message);if(run&&$("modal").open&&$("notification-error")){const element=$("notification-error");element.textContent=error.message;element.className="notice";element.focus();}}
 }
 async function coverageModal(){try{const [coverage,a5]=await Promise.all([api("/api/coverage?scenario="+state.scenario),api("/api/a5-coverage?scenario="+state.scenario)]);showModal("Phạm vi các quy tắc",`${a5CoverageSummary(a5)}<p>Một số quy tắc chưa đủ nguồn để đánh giá. Không có dữ liệu không đồng nghĩa với không có vi phạm.</p>${coverage.map(row=>`<div class="coverage-item"><span class="coverage-status">${{implemented:"Đã triển khai",partial:"Có giới hạn",not_evaluable:"Thiếu dữ liệu"}[row.status]}</span><strong>${esc(row.rule_id)} · ${esc(row.name)}</strong><small>${esc(row.note|| (row.scope==="aggregate_diagnostic"?"Chẩn đoán theo tập giao dịch, không cộng điểm từng giao dịch.":"Đánh giá từ thông tin đã biết tại thời điểm nghiệp vụ."))}</small></div>`).join("")}`);}catch(error){notice(error.message);}}
 async function boot(){try{state.meta=await api("/api/meta");$("p2-controls-nav")?.classList.toggle("hidden",!state.meta.p2_controls_available);state.scenario=state.meta.default_scenario;$("scenario").innerHTML=state.meta.scenarios.map(tag=>`<option value="${tag}">Mô phỏng ${(Number(tag)/10).toLocaleString("vi-VN")}%</option>`).join("");$("scenario").value=state.scenario;$("budget").value=state.meta.daily_budget;$("company").innerHTML='<option value="">Tất cả công ty</option>'+state.meta.companies.map(row=>`<option value="${esc(row.company_id)}">${esc(row.company_id)} · ${esc(row.name)}</option>`).join("");$("environment-label").textContent=state.meta.qa?"KIỂM THỬ GIAO DIỆN":"Dữ liệu mô phỏng · 2024–2025";state.coverage=await api("/api/coverage?scenario="+state.scenario);$("rule").innerHTML='<option value="">Mọi quy tắc</option>'+state.coverage.filter(row=>["transaction","source_diagnostic"].includes(row.scope)&&row.status!=="not_evaluable"&&row.scoring_role!=="master_quality").map(row=>`<option value="${esc(row.rule_id)}">${esc(row.rule_id)} · ${esc(row.name)}</option>`).join("");caseRouteReady=true;await applyCaseLocation(true);}catch(error){notice(error.message);$("case-list").innerHTML='<div class="empty-state">Chưa nạp được hàng đợi. Kiểm tra thông báo phía trên và thử Làm mới.</div>';}}

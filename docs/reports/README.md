@@ -4,6 +4,9 @@ Tiến độ hiện tại nằm ở [STATUS](../STATUS.md); việc tiếp theo n
 
 ## Biên bản gần nhất
 
+- [Nghiệm thu app tích hợp — 39 mẫu/17 luồng, màn hình nhỏ, offline/restart — 29/10](app/release_acceptance_20261029.md).
+- [Tồn đầu kỳ, công suất, đồng hồ chờ và SLA của baseline — 28/10](operations/baseline_sla_20261028.md).
+- [Tích hợp luật → IF shadow → app → thông báo trên workspace mới — 28/10](app/integrated_rehearsal_20261028.md).
 - [Sinh nguồn và kiểm tra độ phủ C4/E2/F2/F3/F4 — 27/10](rules/rule_branch_controls_20261027.md).
 - [Thông báo theo vai trò/công ty, nhắc quá hạn và lịch sử gửi — 27/10](app/notification_roles_20261027.md).
 - [Giao diện nghiệp vụ hai cấp — Chrome desktop, 360px và 390px — 27/10](app/browser_workflow_20261027.md).

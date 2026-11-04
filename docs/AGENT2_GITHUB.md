@@ -1,8 +1,12 @@
-# Agent 2 Sang — bản nguồn ngày 27/10/2026
+# Agent 2 Sang — bản nguồn ngày 04/11/2026
 
 Nhánh **`agent2-Sang`** chứa mã nguồn được đồng bộ từ workspace `agent22`. Bắt đầu từ [trạng thái dự án](STATUS.md), [backlog](BACKLOG.md) và [hướng dẫn phát triển](DEVELOPMENT.md). Tài liệu nghiệp vụ, ML, app và vận hành nằm trong [mục lục báo cáo](reports/README.md).
 
 ## Nội dung mới
+
+- [Runner tích hợp](../examples/integrated_rehearsal/README.md) và [audit tồn đọng/SLA](../examples/baseline_sla_audit/README.md), cùng báo cáo đối chiếu đầu vào và kết quả.
+- Giao diện giữ bản nháp khi lỗi mạng, nạp lại phiên bằng GET khi cần và phục hồi nút/hộp thông báo sau lỗi.
+- [Báo cáo nghiệm thu app 29/10](reports/app/release_acceptance_20261029.md) và tài liệu trạng thái/backlog mới nhất. Bộ nguồn tích hợp và dữ liệu QA chi tiết tiếp tục lưu cục bộ.
 
 - Sửa bằng chứng theo cutoff, định danh liên hệ và quan hệ nhân viên/công ty; cập nhật feature contract v4, 194 feature.
 - Phân tầng ưu tiên RR09, thêm nguồn đối chứng và ma trận test luật.
@@ -34,9 +38,11 @@ Get-ChildItem tests -Filter '*.test.js' | ForEach-Object {
 }
 ```
 
-Kiểm chứng trên bản nguồn chuẩn bị đưa lên Git ngày 27/10: **1273 ca Python đạt**, 0 lỗi/failure/skip; **92 kiểm tra JavaScript đạt** trong 7 bộ. Bộ Python chạy với profile `requirements-review-lock.txt`.
+Kiểm chứng bản đồng bộ ngày 04/11: **135 ca Python liên quan đạt** thuộc 8 module về runner tích hợp, audit SLA, shadow/discovery, phân quyền, quy trình rà và thông báo; **104 kiểm tra JavaScript đạt** trong 8 bộ. Không có lỗi/failure/skip. Bộ Python dùng profile `requirements-review-lock.txt`; lần này không chạy lại toàn bộ suite.
 
-Log của lần đồng bộ được giữ cục bộ trong `.runtime/github_update_20261027_*`. Các kiểm tra JavaScript là VM/DOM; lần đồng bộ Git này không chạy lại nghiệm thu Chrome. Bộ kiểm thử sử dụng fixture tổng hợp và thư mục tạm riêng, không cần mang dataset phát triển lên Git.
+Lượt kiểm tra toàn bộ trước đó, ngày 27/10, đạt **1273 ca Python**; JavaScript khi đó đạt 92 kiểm tra trong 7 bộ.
+
+Log của lần đồng bộ được giữ cục bộ trong `.runtime/github_update_20261104_*`. Các kiểm tra JavaScript là VM/DOM; lần đồng bộ Git này không chạy lại nghiệm thu Chrome. Bộ kiểm thử sử dụng fixture tổng hợp và thư mục tạm riêng, không cần mang dataset phát triển lên Git.
 
 `requirements.txt` mô tả phụ thuộc tổng quát. `requirements-lock.txt` giữ profile benchmark/model lịch sử; không dùng thay profile web/backup khi cần mở model hoặc backup đã khóa hợp đồng runtime. Xem [hướng dẫn phát hành](../RELEASES.md) và ví dụ tương ứng trước khi sử dụng artifact.
 
