@@ -16,7 +16,7 @@ from ..domain.field import FieldObject
 from .contracts import ExtractionArtifact, ExtractionIssue, Segmentation
 from .vat_group_builder import build_groups
 from .xml_context import buyer_profile_issues
-from .xml_invoice import extract
+from .xml_invoice import extract, is_note
 
 XML_OCR_KEY = 'xml-direct-v1'  # sentinel stored where OCR-derived artifacts keep their OCR config key
 ADAPTER = 'xml-extractor-v1'
@@ -52,7 +52,8 @@ def row_anchor(index):
 def anchors(raw: bytes):
     from .xml_signature import safe_parse
     root = safe_parse(raw)
-    return [row_anchor(i) for i, _ in enumerate(root.findall('DLHDon/NDHDon/DSHHDVu/HHDVu'), 1)]
+    return [row_anchor(i) for i, h in enumerate(root.findall('DLHDon/NDHDon/DSHHDVu/HHDVu'), 1)
+            if (h.findtext('TChat') or '').strip() != '4']  # note lines are not items
 
 
 def _fields(inv):
@@ -146,7 +147,8 @@ def canonicalize_xml(raw, master, profile, identity, *, tenant_id, taxpayer_id, 
         raise ValueError('identity map does not cover current row anchors')
     ids = {e.anchor_id: e.item_id for e in identity.entries}
     parties, invoice, totals, currency, issues = _fields(inv)
-    items = tuple(_item(inv, row, ids[row_anchor(i)], i) for i, row in enumerate(inv.items, 1))
+    goods = [row for row in inv.items if not is_note(row)]
+    items = tuple(_item(inv, row, ids[row_anchor(row['position'].value)], n) for n, row in enumerate(goods, 1))
     for check in inv.checks:
         if check.status in ('ERROR', 'WARN'):
             issues.append(ExtractionIssue(code=check.code, message=check.note or check.code))

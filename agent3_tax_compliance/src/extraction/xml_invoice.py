@@ -11,6 +11,7 @@ from decimal import Decimal, InvalidOperation
 from .xml_signature import SignatureResult, safe_parse, verify_invoice_signatures
 
 VAT_RATES = ('0%', '5%', '8%', '10%', 'KCT', 'KKKNT')
+NO_TAX_RATES = ('0%', 'KCT', 'KKKNT')
 FIDELITY_SIGNED = 'xml-signed-v1'
 FIDELITY_UNSIGNED = 'xml-unsigned-v1'
 WEIGHTS = (31, 29, 23, 19, 17, 13, 7, 5, 3)
@@ -113,6 +114,10 @@ def parse_qr(s: str) -> dict:
     return out
 
 
+def is_note(row) -> bool:
+    return row['kind'].value == '4'
+
+
 def _f(el, base, tag):
     node = el.find(tag) if el is not None else None
     value = node.text.strip() if node is not None and node.text and node.text.strip() else None
@@ -149,8 +154,11 @@ def extract(raw: bytes, today: date | None = None) -> XmlInvoice:
     items = []
     for i, h in enumerate(d.findall('NDHDon/DSHHDVu/HHDVu'), 1):
         b = f'{P}/NDHDon/DSHHDVu/HHDVu[{i}]'
-        items.append({k: _f(h, b, t) for k, t in (('line', 'STT'), ('description', 'THHDVu'), ('unit', 'DVTinh'),
-                      ('quantity', 'SLuong'), ('unit_price', 'DGia'), ('discount', 'STCKhau'), ('net', 'ThTien'), ('rate', 'TSuat'))})
+        row = {k: _f(h, b, t) for k, t in (('line', 'STT'), ('kind', 'TChat'), ('description', 'THHDVu'), ('unit', 'DVTinh'),
+               ('quantity', 'SLuong'), ('unit_price', 'DGia'), ('discount_rate', 'TLCKhau'), ('discount', 'STCKhau'),
+               ('net', 'ThTien'), ('rate', 'TSuat'))}
+        row['position'] = XmlField(i, b)
+        items.append(row)
     groups = []
     for i, g in enumerate(tot.findall('THTTLTSuat/LTSuat'), 1):
         b = f'{P}/NDHDon/TToan/THTTLTSuat/LTSuat[{i}]'
@@ -172,6 +180,7 @@ def _guards(root, d, fl, items, groups, sigs, today) -> list[Check]:
         res.append(Check(code, 'PASS' if ok else level, note))
 
     one = Decimal(1)
+    goods = [it for it in items if not is_note(it)]  # TChat=4 note lines carry no amount (Decision 1450)
     # V10 replacement / adjustment reference must be well formed (stored-state lookups live in xml_context)
     if d.find('TTChung/TTHDLQuan') is not None:
         try:
@@ -187,30 +196,36 @@ def _guards(root, d, fl, items, groups, sigs, today) -> list[Check]:
             v('related_nature') in ('1', '2') and complete and rel_date is not None and (own_date is None or rel_date <= own_date),
             'related invoice reference incomplete, unreadable or dated after this invoice')
     # V2 arithmetic
-    for it in items:
+    for it in goods:
         q, p, disc, net = (_dec(it[k].value) for k in ('quantity', 'unit_price', 'discount', 'net'))
+        rate_pct = _dec(it['discount_rate'].value)
         if q is None or p is None or net is None:
             res.append(Check('XML_CHECK_ARITH_LINE', 'UNCHECKED', f"line {it['line'].value}: quantity/price/amount missing"))
         else:
+            if disc is None and rate_pct is not None:
+                disc = q * p * rate_pct / 100  # percentage discount without an amount (TLCKhau only)
             add('XML_CHECK_ARITH_LINE', abs(q * p - (disc or 0) - net) <= one, f"line {it['line'].value}")
     net_total, vat_total, gross = _dec(v('net_total')), _dec(v('vat_total')), _dec(v('gross_total'))
     if None in (net_total, vat_total, gross):
         res.append(Check('XML_CHECK_TOTALS_PRESENT', 'ERROR', 'a total is missing or unreadable'))
         return res
-    line_nets = [_dec(i['net'].value) for i in items]
+    line_nets = [_dec(i['net'].value) for i in goods]
     add('XML_CHECK_ARITH_SUM', None not in line_nets and sum(line_nets) == net_total, 'sum of lines vs pre-tax total')
     for g in groups:
         rate = (g['rate'].value or '').rstrip('%')
         base, vat = _dec(g['base'].value), _dec(g['vat'].value)
         if rate.replace('.', '', 1).isdigit() and base is not None and vat is not None:
             add('XML_CHECK_ARITH_VAT_GROUP', abs(base * Decimal(rate) / 100 - vat) <= one, f"group {g['rate'].value}")
-    group_vats = [_dec(g['vat'].value) for g in groups]
+    group_vats = [_dec(g['vat'].value) if g['vat'].value is not None or g['rate'].value not in NO_TAX_RATES else Decimal(0)
+                  for g in groups]  # exempt groups need not carry a tax amount
     if groups:
         add('XML_CHECK_ARITH_VAT_SUM', None not in group_vats and sum(group_vats) == vat_total, 'sum of group VAT vs VAT total')
     add('XML_CHECK_ARITH_GROSS', net_total + vat_total == gross, 'pre-tax + VAT vs payable total')
     # V1 amount in words vs number
     words = words_to_int(v('gross_words') or '') if v('gross_words') else None
-    if words is None:
+    if (v('currency') or 'VND') != 'VND':
+        res.append(Check('XML_CHECK_WORDS', 'UNCHECKED', f"amount in words not compared for currency {v('currency')}"))
+    elif words is None:
         res.append(Check('XML_CHECK_WORDS', 'ERROR', 'amount in words missing or not readable'))
     else:
         add('XML_CHECK_WORDS', Decimal(words) == gross, f'words {words} vs number {gross}')
@@ -233,13 +248,13 @@ def _guards(root, d, fl, items, groups, sigs, today) -> list[Check]:
         add('XML_CHECK_SYMBOL_YEAR', int(m.group(2)) == issued.year % 100, f'{m.group(2)} vs {issued.year}')
     add('XML_CHECK_NUMBER', (v('number') or '').isdigit(), v('number') or '')
     # V8 rates
-    for it in items:
+    for it in goods:
         add('XML_CHECK_VAT_RATE', it['rate'].value in VAT_RATES, f"line {it['line'].value}: {it['rate'].value}")
     # authority code on coded invoices
     mc = root.find('MCCQT')
     code_len = len(mc.text.strip()) if mc is not None and mc.text else 0
     if sym.startswith('C'):
-        add('XML_CHECK_AUTHORITY_CODE', code_len == 34, f'{code_len} characters')
+        add('XML_CHECK_AUTHORITY_CODE', code_len in (34, 23), f'{code_len} characters (34, or 23 for cash-register invoices per Decision 1510)')
     # QR cross-check
     qr = root.find('DLQRCode')
     if qr is not None and qr.text:
@@ -266,7 +281,10 @@ def _guards(root, d, fl, items, groups, sigs, today) -> list[Check]:
             add('XML_CHECK_SIGNATURE_DATE', s.signing_time.date() >= issued, 'signed before issue date')
     if sym.startswith('C'):
         c = sigs['tax_authority']
-        add('XML_CHECK_SIGNATURE_AUTHORITY', c.verified, 'authority signature absent or invalid' if not c.verified else '')
+        if not c.present and len(sym) > 3 and sym[3] == 'M':
+            res.append(Check('XML_CHECK_SIGNATURE_AUTHORITY', 'UNCHECKED', 'cash-register invoice: authority signature requirement not established'))
+        else:
+            add('XML_CHECK_SIGNATURE_AUTHORITY', c.verified, 'authority signature absent or invalid' if not c.verified else '')
     res.append(Check('XML_CHECK_CERT_CHAIN', 'UNCHECKED', 'certificate chain and revocation are not verified'))
     res.append(Check('XML_CHECK_SELLER_STATUS', 'UNCHECKED', 'seller status on the tax portal is not verified'))
     return res
