@@ -14,6 +14,7 @@ Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **04/11/20
 | Chọn công việc tiếp theo | [Danh sách việc cần làm](docs/BACKLOG.md) |
 | Tìm tài liệu và hiểu cấu trúc thư mục | [Mục lục dự án](docs/README.md) |
 | Chạy app, kiểm thử hoặc phát triển | [Hướng dẫn phát triển](docs/DEVELOPMENT.md) |
+| Cập nhật dữ liệu và cố định ML cho từng doanh nghiệp | [Dữ liệu & ML](examples/company_ml/README.md) |
 | Tra báo cáo chi tiết | [Mục lục báo cáo theo chủ đề](docs/reports/README.md) |
 | Cài đặt, nâng cấp hoặc khôi phục | [Hướng dẫn phát hành](RELEASES.md) |
 

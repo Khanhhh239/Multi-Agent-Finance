@@ -22,7 +22,8 @@ from .review_decision_gate import BINDING_FILE,assert_binding,read_binding,write
 ROOT=Path(__file__).resolve().parents[1]
 VERSION='case-management-backup-v1'
 RUNTIME_FILES=('review_backup.py','review_store.py','review_support.py','case_identity.py','information_requests.py',
-               'feedback.py','review_capacity.py','entity_graph.py','review_decision_gate.py','review_roles.py','review_workflow.py')
+               'feedback.py','review_capacity.py','entity_graph.py','review_decision_gate.py','review_roles.py','review_workflow.py',
+               'company_ml.py','ml_estimators.py')
 SIDE_FILES=('case_identity.json','feedback_audit.jsonl','case_review_states.csv',BINDING_FILE)
 MANIFEST='backup_manifest.json'
 

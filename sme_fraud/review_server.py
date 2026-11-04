@@ -11,6 +11,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+# Load ML libraries from the selected environment before legacy CLI helpers
+# can add their local benchmark fallback to sys.path.
+from .company_ml import CompanyML
 from .review_store import ReviewStore
 from .p2_controls_server import P2Routes
 
@@ -29,6 +32,7 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
     from .notifications import Notifications
     default_notifications = notifications is None
     notifications = notifications or Notifications(store)
+    company_ml = CompanyML(store)
 
     controls_store = p2_controls
     class Handler(P2Routes, BaseHTTPRequestHandler):
@@ -99,6 +103,9 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                 if self.p2_controls is not None and self.controls_get(path, query):
                     return
                 assets = {'/': ('index.html', 'text/html; charset=utf-8'), '/app.js': ('app.js', 'text/javascript; charset=utf-8'),
+                          '/company-ml': ('company_ml.html', 'text/html; charset=utf-8'),
+                          '/company_ml.js': ('company_ml.js', 'text/javascript; charset=utf-8'),
+                          '/company_ml.css': ('company_ml.css', 'text/css; charset=utf-8'),
                           '/review_explanations.js': ('review_explanations.js', 'text/javascript; charset=utf-8'),
                           '/review_workflow.js': ('review_workflow.js', 'text/javascript; charset=utf-8'),
                           '/styles.css': ('styles.css', 'text/css; charset=utf-8'),
@@ -109,6 +116,10 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                     self.respond(200, (WEB_ROOT / filename).read_bytes(), mime)
                 elif path == '/api/health':
                     self.respond(200, dict(status='ok', application='sme-case-review', qa=qa, instance_id=instance_id))
+                elif path == '/api/company-ml':
+                    self.respond(200, company_ml.overview(self.review_principal(), query.get('scenario')))
+                elif path == '/api/company-ml/status':
+                    self.respond(200, company_ml.status(query.get('scenario','003'), query.get('company',''), self.review_principal()))
                 elif path == '/api/meta':
                     self.respond(200, store.metadata() | dict(csrf_token=csrf, qa=qa, notification_mode=notifications.mode,
                                                             p2_controls_available=self.p2_controls is not None)
@@ -189,12 +200,26 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                 if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
                     raise ValueError('Chỉ nhận nội dung JSON.')
                 length = int(self.headers.get('Content-Length', 0))
-                if not 0 < length <= 16_384:
+                if not 0 < length <= (2_000_000 if path == '/api/company-ml/data-update' else 16_384):
                     raise ValueError('Nội dung yêu cầu không hợp lệ hoặc quá dài.')
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body, dict):
                     raise ValueError('Nội dung yêu cầu phải là một đối tượng.')
                 scenario = body.get('scenario', '003')
+                if path.startswith('/api/company-ml/'):
+                    action = path.rsplit('/',1)[1]
+                    methods = {'data-update':(company_ml.update_data, {'expected_revision','labels_text'}),
+                               'evaluate':(company_ml.evaluate, {'expected_revision','algorithm','train_end','calibration_end','alert_budget'}),
+                               'activate':(company_ml.activate, {'version_id','expected_active','expected_revision','rollback'}),
+                               'keep':(company_ml.keep, {'expected_active','expected_revision'}),
+                               'score':(company_ml.score, {'expected_active','expected_revision'})}
+                    if action not in methods:raise KeyError('Không tìm thấy thao tác cấu hình ML.')
+                    method, fields = methods[action]
+                    if set(body)-fields-{'scenario','company_id'}:raise ValueError('Trường cấu hình ML không được hỗ trợ.')
+                    required = fields-({'labels_text'} if action=='data-update' else {'rollback'} if action=='activate' else set())
+                    if not required <= set(body):raise ValueError('Thiếu phiên bản dữ liệu hoặc thông tin cấu hình ML.')
+                    self.respond(200, method(scenario,body.get('company_id',''),self.review_principal(),
+                                            **{k:body[k] for k in fields if k in body}));return
                 if review_workflow and path.startswith('/api/review-workflow/'):
                     principal=self.review_principal();case_id=body.get('case_id','')
                     values={k:v for k,v in body.items() if k not in {'scenario','case_id'}}
@@ -256,6 +281,7 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
             print(f'HTTP {self.command} {urlsplit(self.path).path}', flush=True)
 
     server = ThreadingHTTPServer(('127.0.0.1', port), Handler)
+    server.company_ml = company_ml
     if default_notifications:
         notifications.config['case_url'] = f'http://127.0.0.1:{server.server_port}/'
     return server

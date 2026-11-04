@@ -1,5 +1,7 @@
 # Chạy app và phát triển
 
+**Dữ liệu & ML theo doanh nghiệp:** mở `/company-ml` trên máy chủ web mới. Quy trình cập nhật nguồn đã kết nối → đánh giá → xác nhận phiên bản → chấm bằng model cố định được mô tả tại [hướng dẫn Company ML](../examples/company_ml/README.md). Có demo riêng ở cổng 8851/8852, không dùng database đang vận hành. Quyền ghi vẫn cần danh tính máy chủ; không tạo đăng nhập mới trong chức năng này.
+
 Chạy lệnh từ thư mục gốc `D:\agent22`. Bản tích hợp mới nằm trong `reports/integrated_rehearsal_20261028_v2/`; demo RR09/ML v4 ngày 24/10 giữ riêng để tham chiếu. [Dữ liệu benchmark cũ](development/synthetic_data.md) có mục đích riêng.
 
 ## Python và thư viện

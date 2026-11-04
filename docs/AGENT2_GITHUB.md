@@ -2,6 +2,14 @@
 
 Nhánh **`agent2-Sang`** chứa mã nguồn được đồng bộ từ workspace `agent22`. Bắt đầu từ [trạng thái dự án](STATUS.md), [backlog](BACKLOG.md) và [hướng dẫn phát triển](DEVELOPMENT.md). Tài liệu nghiệp vụ, ML, app và vận hành nằm trong [mục lục báo cáo](reports/README.md).
 
+## Company ML theo doanh nghiệp
+
+Mở **Dữ liệu & ML** trên web (`/company-ml`): cập nhật nguồn đã kết nối → đánh giá ứng viên → xác nhận/giữ/quay lại phiên bản → chấm bằng pipeline cố định. Mỗi doanh nghiệp lưu riêng model, tiền xử lý, ngưỡng và lịch sử; cập nhật dữ liệu không tự fit hoặc đổi model.
+
+Có Isolation Forest, Autoencoder, ECOD với tham chiếu cố định, LOF novelty và CatBoost tùy chọn. CatBoost cần nhãn đã xác nhận và thư viện trong `requirements-company-ml.txt`. Quyền ghi cần danh tính máy chủ xác thực, vai trò kế toán trưởng/giám đốc và đúng công ty. Luồng mới vẫn ở shadow; chưa có upload CSV kế toán thô/ERP hoặc tích hợp đăng nhập mới.
+
+[Hướng dẫn đầy đủ, cài thư viện và demo cách ly](../examples/company_ml/README.md). Demo Company ML tự sinh fixture; không cần bộ nguồn kế toán phát triển. Không mang database, dữ liệu doanh nghiệp, artifact đã fit, tệp nhãn hoặc dependency runtime lên Git.
+
 ## Nội dung mới
 
 - [Runner tích hợp](../examples/integrated_rehearsal/README.md) và [audit tồn đọng/SLA](../examples/baseline_sla_audit/README.md), cùng báo cáo đối chiếu đầu vào và kết quả.
@@ -38,7 +46,9 @@ Get-ChildItem tests -Filter '*.test.js' | ForEach-Object {
 }
 ```
 
-Kiểm chứng bản đồng bộ ngày 04/11: **135 ca Python liên quan đạt** thuộc 8 module về runner tích hợp, audit SLA, shadow/discovery, phân quyền, quy trình rà và thông báo; **104 kiểm tra JavaScript đạt** trong 8 bộ. Không có lỗi/failure/skip. Bộ Python dùng profile `requirements-review-lock.txt`; lần này không chạy lại toàn bộ suite.
+Kiểm chứng lần đồng bộ Company ML: **88 test Python liên quan đạt**, **116 kiểm tra JavaScript đạt** trong 10 bộ, không lỗi/failure/skip. Chạy trên bản nguồn chuẩn bị đưa lên Git; có kiểm tra cả năm adapter, quyền/công ty, dữ liệu theo thời gian, xung đột hai phiên và backup/restore model. Không chạy lại toàn bộ suite hoặc nghiệm thu trực quan Chrome trong lần đồng bộ này. Log cục bộ: `.runtime/company_ml_publish_20261104_*`.
+
+Lần đồng bộ trước trong ngày 04/11 (runner tích hợp/UI): **135 ca Python liên quan đạt** thuộc 8 module về runner tích hợp, audit SLA, shadow/discovery, phân quyền, quy trình rà và thông báo; **104 kiểm tra JavaScript đạt** trong 8 bộ. Không có lỗi/failure/skip. Bộ Python dùng profile `requirements-review-lock.txt`; lần này không chạy lại toàn bộ suite.
 
 Lượt kiểm tra toàn bộ trước đó, ngày 27/10, đạt **1273 ca Python**; JavaScript khi đó đạt 92 kiểm tra trong 7 bộ.
 
