@@ -1,0 +1,57 @@
+version: "1"
+prompt_version: metric-selection-v1
+
+embedding:
+  provider: hashing
+  model: hashing-v1
+  dimensions: 768
+  cache_enabled: true
+  cache_path: .cache/metric_selection_index.npz
+
+retrieval:
+  dense_enabled: true
+  lexical_enabled: true
+  fusion_method: rrf
+  dense_top_k: 15
+  lexical_top_k: 15
+  fusion_top_k: 20
+  rrf_k: 60
+  mention_retrieval_enabled: false
+
+expansion:
+  enabled: true
+  max_hops: 1
+  max_candidates: 30
+  relationship_path: config/metric_relationships.yaml
+
+reranking:
+  metadata_enabled: true
+  cross_encoder_enabled: false
+  final_top_k: 12
+  metadata_weight: 1.0
+  cross_encoder_weight: 0.4
+
+fewshot:
+  enabled: true
+  strategy: adaptive
+  min_examples: 0
+  max_examples: 4
+  initial_pool_size: 15
+  example_bank_path: data/example_bank.jsonl
+  alpha: 1.0
+  beta: 0.5
+  gamma: 0.5
+  delta: 0.25
+
+llm:
+  provider: ollama
+  base_url: http://localhost:11434
+  model: qwen3:8b
+  temperature: 0
+  timeout_s: 180
+  max_retries: 1
+
+evaluation:
+  save_traces: true
+  report_per_category: true
+  random_seed: 20261101

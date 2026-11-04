@@ -1,0 +1,341 @@
+{
+  "$defs": {
+    "ComparisonDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End"
+        },
+        "mode": {
+          "enum": [
+            "previous_period",
+            "year_over_year",
+            "custom"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start"
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "title": "ComparisonDraft",
+      "type": "object"
+    },
+    "FilterDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "eq",
+            "neq",
+            "in",
+            "gte",
+            "lte",
+            "between"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "values": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Values",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field",
+        "operator",
+        "values"
+      ],
+      "title": "FilterDraft",
+      "type": "object"
+    },
+    "SortDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "direction": {
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "metric_id": {
+          "title": "Metric Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metric_id",
+        "direction"
+      ],
+      "title": "SortDraft",
+      "type": "object"
+    },
+    "TimeDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "As Of"
+        },
+        "end": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "End"
+        },
+        "grain": {
+          "anyOf": [
+            {
+              "enum": [
+                "day",
+                "week",
+                "month",
+                "quarter",
+                "year"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Grain"
+        },
+        "mode": {
+          "enum": [
+            "range",
+            "as_of",
+            "none"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Start"
+        }
+      },
+      "required": [
+        "mode",
+        "start",
+        "end",
+        "as_of",
+        "grain"
+      ],
+      "title": "TimeDraft",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "comparison": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ComparisonDraft"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dimensions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Dimensions",
+      "type": "array"
+    },
+    "filters": {
+      "items": {
+        "$ref": "#/$defs/FilterDraft"
+      },
+      "maxItems": 20,
+      "title": "Filters",
+      "type": "array"
+    },
+    "metric_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Metric Ids",
+      "type": "array"
+    },
+    "operation": {
+      "anyOf": [
+        {
+          "enum": [
+            "aggregate",
+            "timeseries",
+            "breakdown",
+            "rank",
+            "compare"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Operation"
+    },
+    "plan_version": {
+      "const": "1.0",
+      "title": "Plan Version",
+      "type": "string"
+    },
+    "question_for_user": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Question For User"
+    },
+    "reason_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Reason Code"
+    },
+    "sort": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SortDraft"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "ready",
+        "needs_clarification",
+        "unsupported"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "time": {
+      "$ref": "#/$defs/TimeDraft"
+    },
+    "top_k": {
+      "anyOf": [
+        {
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Top K"
+    },
+    "unresolved_slots": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unresolved Slots",
+      "type": "array"
+    },
+    "view": {
+      "anyOf": [
+        {
+          "enum": [
+            "mgmt",
+            "tax"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "View"
+    }
+  },
+  "required": [
+    "plan_version",
+    "status",
+    "metric_ids",
+    "time",
+    "dimensions",
+    "filters",
+    "view",
+    "operation",
+    "sort",
+    "top_k",
+    "comparison",
+    "question_for_user",
+    "unresolved_slots",
+    "reason_code"
+  ],
+  "title": "SemanticPlanDraft",
+  "type": "object"
+}
