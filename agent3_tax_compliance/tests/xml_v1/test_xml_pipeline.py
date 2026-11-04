@@ -121,5 +121,32 @@ class XmlPipelineTests(unittest.TestCase):
         self.assertEqual(untouched.reliability, 'DETERMINISTIC_VERIFIED')
 
 
+    def test_same_invoice_submitted_twice_is_flagged_as_duplicate_and_replays(self):
+        from src.review.correction_service import CorrectionService
+        raw = fx.signed_invoice()
+        _, first = self.run_job(raw, 'dup-1')
+        _, second = self.run_job(raw, 'dup-2')
+        q1 = self.jobs.quality.get(CTX, 'payer-a', first['assessment_id'])
+        q2 = self.jobs.quality.get(CTX, 'payer-a', second['assessment_id'])
+        self.assertNotIn('XML_CHECK_DUPLICATE', {i.code for i in q1.issues})
+        dup = [i for i in q2.issues if i.code == 'XML_CHECK_DUPLICATE']
+        self.assertEqual(len(dup), 1)
+        self.assertEqual(dup[0].severity, 'ERROR')
+        self.assertIn(first['record_id'], dup[0].message)
+        self.assertTrue(CorrectionService(self.settings).rebuild(CTX, 'payer-a', second['record_id'])['verified'])
+
+
+    def test_view_groups_checks_and_never_reports_external_checks_as_ok(self):
+        _, ok = self.run_job(fx.signed_invoice(), 'grp-1')
+        groups = {g['group']: g for g in self.jobs.view(CTX, 'payer-a', ok['record_id'])['check_groups']}
+        self.assertEqual({k: groups[k]['status'] for k in ('amounts', 'invoice', 'tax_ids', 'signature')},
+                         {'amounts': 'OK', 'invoice': 'OK', 'tax_ids': 'OK', 'signature': 'OK'})
+        self.assertEqual(groups['authority']['status'], 'UNAVAILABLE')
+        _, bad = self.run_job(fx.signed_invoice().replace(b'<TgTTTBSo>2200000<', b'<TgTTTBSo>22000000<'), 'grp-2')
+        groups = {g['group']: g for g in self.jobs.view(CTX, 'payer-a', bad['record_id'])['check_groups']}
+        self.assertEqual(groups['amounts']['status'], 'FAIL')
+        self.assertEqual(groups['signature']['status'], 'FAIL')
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -23,7 +23,7 @@ def main():
             results["probes"].append({"name": name, "error_type": type(exc).__name__, "message": str(exc)})
 
     root = Path(__file__).resolve().parents[1]
-    model = json.loads((root / "agent3_tax_compliance/config/zen/LUAT67_ARTICLE9_v1.json").read_text(encoding="utf-8"))
+    model = json.loads((root / "agent3_tax_compliance/legacy/config/zen/LUAT67_ARTICLE9_v1.json").read_text(encoding="utf-8"))
     # Match the existing adapter's 0.53 normalization, without changing the source JDM.
     for node in model["nodes"]:
         if node["type"] != "decisionTableNode":

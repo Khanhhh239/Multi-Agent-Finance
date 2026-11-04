@@ -22,6 +22,27 @@ TAX_CODE = re.compile(r'^(?:[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?|[0-9]{12})$')
 DATE = re.compile(r'^\d{4}-\d{2}-\d{2}$')
 
 
+def duplicate_key(raw: bytes):
+    """Identity of an invoice for duplicate detection: seller tax id, template+symbol, number."""
+    f = extract(raw).fields
+    values = (f['seller_tax_id'].value, (f['template'].value or '') + (f['symbol'].value or ''), f['number'].value)
+    return values if all(values) else None
+
+
+def duplicate_issues(db, ctx, payer, ingestion_id, raw):
+    key = duplicate_key(raw)
+    if key is None:
+        return ()
+    rows = db.execute("SELECT json_extract(payload,'$.record.record_id') AS record_id FROM cfr_extractions "
+                      "WHERE tenant_id=? AND taxpayer_id=? AND ingestion_id!=? "
+                      "AND json_extract(payload,'$.record.parties.seller.tax_id.value')=? "
+                      "AND json_extract(payload,'$.record.invoice.series.value')=? "
+                      "AND json_extract(payload,'$.record.invoice.number.value')=? ORDER BY rowid",
+                      (ctx.tenant_id, payer, ingestion_id, *key)).fetchall()
+    return tuple(ExtractionIssue(code='XML_CHECK_DUPLICATE', field_path='invoice.number',
+                                 message=f'Same seller, symbol and number were already captured as record {r["record_id"]}.') for r in rows)
+
+
 def row_anchor(index):
     return f'xml:HHDVu:{index}'
 
@@ -115,7 +136,7 @@ def _item(inv, row, item_id, number):
 
 
 def canonicalize_xml(raw, master, profile, identity, *, tenant_id, taxpayer_id, ingestion_id, source_id, document_id, input_sha256,
-                     record_id, artifact_id, created_at, extractor_sha256, relations=()):
+                     record_id, artifact_id, created_at, extractor_sha256, relations=(), extra_issues=()):
     inv = extract(raw, today=created_at.date())
     if (tenant_id, taxpayer_id) != (master.tenant_id, master.taxpayer_id):
         raise ValueError('document/master scope mismatch')
@@ -129,6 +150,7 @@ def canonicalize_xml(raw, master, profile, identity, *, tenant_id, taxpayer_id, 
             issues.append(ExtractionIssue(code=check.code, message=check.note or check.code))
         elif check.status == 'UNCHECKED':
             issues.append(ExtractionIssue(code=check.code.replace('XML_CHECK_', 'XML_UNCHECKED_'), message=check.note or check.code))
+    issues.extend(extra_issues)  # observations made against stored state (duplicates) are explicit replay inputs
     record = CanonicalFinancialRecord(
         config_version=profile.version, creator=ADAPTER, stage='canonicalization', created_at=created_at, record_id=record_id, revision=1,
         tenant_id=tenant_id, taxpayer_id=taxpayer_id, taxpayer_master_revision=master.revision, source_id=source_id,

@@ -4,7 +4,7 @@ from ..persistence.repository import digest
 from ..domain.envelope import SourceEnvelope
 from .contracts import ExtractionArtifact,ExtractionProfile
 from .service import extract,implementation_sha
-from .xml_canonical import XML_OCR_KEY,anchors,canonicalize_xml
+from .xml_canonical import XML_OCR_KEY,anchors,canonicalize_xml,duplicate_issues
 from ..canonicalization.identity import allocate
 
 class ExtractionRepository:
@@ -39,7 +39,8 @@ class ExtractionRepository:
             if previous: return self.get(ctx,payer,previous['artifact_id'])
             artifact=canonicalize_xml(raw,master,profile,allocate(anchors(raw)),tenant_id=ctx.tenant_id,taxpayer_id=payer,ingestion_id=ingestion_id,
                 source_id=ing.source_id,document_id=ing.document_id,input_sha256=source.sha256,record_id='cfr-'+uuid4().hex,
-                artifact_id='extract-'+uuid4().hex,created_at=datetime.now(timezone.utc),extractor_sha256=implementation_sha())
+                artifact_id='extract-'+uuid4().hex,created_at=datetime.now(timezone.utc),extractor_sha256=implementation_sha(),
+                extra_issues=duplicate_issues(db,ctx,payer,ingestion_id,raw))
             artifact=ExtractionArtifact.model_validate_json(artifact.model_dump_json())
             record=artifact.record
             db.execute('INSERT INTO records VALUES(?,?,?,?,?)',(ctx.tenant_id,payer,record.record_id,record.source_id,1))

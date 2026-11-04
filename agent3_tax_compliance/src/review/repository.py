@@ -54,9 +54,13 @@ class ReviewRepository:
                 (ctx.tenant_id,payer,a.ingestion_id)).fetchone()
         if job and json.loads(job['payload']).get('record_id',r.record_id)!=r.record_id:
             job=None
+        extra={}
+        if r.source_format.value=='INVOICE_XML':
+            from ..extraction.xml_report import check_groups
+            extra['check_groups']=check_groups(self.base.source(ctx,payer,r.source_id)[1],a.created_at,a.issues)
         return envelope(record=r.model_dump(mode='json'),extraction_artifact_id=a.artifact_id,ingestion_id=a.ingestion_id,
             candidates=[c.model_dump(mode='json') for c in a.candidates],assessment=q.model_dump(mode='json'),
-            page_count=len(pages),limitations=self.limitations(),capture_job={k:job[k] for k in ('job_id','state')} if job else None)
+            page_count=len(pages),limitations=self.limitations(),capture_job={k:job[k] for k in ('job_id','state')} if job else None,**extra)
 
     @staticmethod
     def limitations():
@@ -194,7 +198,8 @@ class ReviewRepository:
             initial=canonicalize_xml(self.base.source(ctx,payer,current.source_id)[1],self.base.taxpayer(ctx,payer,current.taxpayer_master_revision),
                 artifact.profile,artifact.identity_map,tenant_id=artifact.tenant_id,taxpayer_id=artifact.taxpayer_id,ingestion_id=artifact.ingestion_id,
                 source_id=artifact.source_id,document_id=artifact.document_id,input_sha256=artifact.input_sha256,record_id=artifact.record.record_id,
-                artifact_id=artifact.artifact_id,created_at=artifact.created_at,extractor_sha256=artifact.extractor_sha256)
+                artifact_id=artifact.artifact_id,created_at=artifact.created_at,extractor_sha256=artifact.extractor_sha256,
+                extra_issues=tuple(i for i in artifact.issues if i.code=='XML_CHECK_DUPLICATE'))
         else:
             normalized=self.extraction.ocr.get(ctx,payer,artifact.ingestion_id,row['ocr_config_key'])['result']
             document=self.ingestion.document(ctx,payer,artifact.ingestion_id)
