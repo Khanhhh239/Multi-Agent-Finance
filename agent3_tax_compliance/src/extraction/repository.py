@@ -4,6 +4,8 @@ from ..persistence.repository import digest
 from ..domain.envelope import SourceEnvelope
 from .contracts import ExtractionArtifact,ExtractionProfile
 from .service import extract,implementation_sha
+from .xml_canonical import XML_OCR_KEY,anchors,canonicalize_xml
+from ..canonicalization.identity import allocate
 
 class ExtractionRepository:
     def __init__(self,settings):
@@ -19,6 +21,35 @@ class ExtractionRepository:
         if not row: raise KeyError('extraction not found')
         if digest(row['payload'].encode())!=row['sha256']: raise ValueError('extraction integrity failure')
         return ExtractionArtifact.model_validate_json(row['payload'])
+
+    def work_xml(self,ctx,payer,ingestion_id,profile=None):
+        from datetime import datetime,timezone
+        from uuid import uuid4
+        ctx.require(ctx.tenant_id,payer,'WRITE')
+        profile=profile or ExtractionProfile()
+        ing=self.ingestion.get(ctx,payer,ingestion_id)
+        source,raw=self.base.source(ctx,payer,ing.source_id)
+        if source.sha256!=ing.input_sha256: raise ValueError('ingestion/source hash mismatch')
+        master=self.base.taxpayer(ctx,payer,source.taxpayer_master_revision)
+        key=sha({'source':source.sha256,'profile':profile.model_dump(mode='json'),'master':sha(master.model_dump(mode='json')),'extractor':implementation_sha()})
+        scope=(ctx.tenant_id,payer,ingestion_id,XML_OCR_KEY,key)
+        with self.ingestion.db() as db:
+            db.execute('BEGIN IMMEDIATE')
+            previous=db.execute('SELECT artifact_id FROM cfr_extractions WHERE tenant_id=? AND taxpayer_id=? AND ingestion_id=? AND ocr_config_key=? AND extraction_key=?',scope).fetchone()
+            if previous: return self.get(ctx,payer,previous['artifact_id'])
+            artifact=canonicalize_xml(raw,master,profile,allocate(anchors(raw)),tenant_id=ctx.tenant_id,taxpayer_id=payer,ingestion_id=ingestion_id,
+                source_id=ing.source_id,document_id=ing.document_id,input_sha256=source.sha256,record_id='cfr-'+uuid4().hex,
+                artifact_id='extract-'+uuid4().hex,created_at=datetime.now(timezone.utc),extractor_sha256=implementation_sha())
+            artifact=ExtractionArtifact.model_validate_json(artifact.model_dump_json())
+            record=artifact.record
+            db.execute('INSERT INTO records VALUES(?,?,?,?,?)',(ctx.tenant_id,payer,record.record_id,record.source_id,1))
+            self.base._insert_revision(db,record)
+            self.base._audit(db,ctx,ctx.tenant_id,payer,'RECORD_CREATED',digest(record.model_dump_json().encode()),record)
+            raw_json=artifact.model_dump_json()
+            db.execute('INSERT INTO cfr_extractions VALUES(?,?,?,?,?,?,?,?)',(*scope,artifact.artifact_id,raw_json,digest(raw_json.encode())))
+            self.ingestion._event(db,ctx,payer,ingestion_id,'CFR_EXTRACTED',source.sha256,
+                {'artifact_id':artifact.artifact_id,'extraction_key':key,'review_required':True,'structured_source':True})
+            return artifact
 
     def work(self,ctx,payer,ingestion_id,ocr_config_key,profile=None):
         ctx.require(ctx.tenant_id,payer,'WRITE')

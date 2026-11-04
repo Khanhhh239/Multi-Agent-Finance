@@ -8,6 +8,7 @@ from ..persistence.repository import digest
 from .contracts import QualityAssessment,QualityPolicy,CalibrationScope,CalibrationArtifact
 from .policy import load_policy
 from .assessor import assess
+from ..extraction.xml_canonical import XML_OCR_KEY
 
 def implementation_sha():
     root=Path(__file__).resolve().parent
@@ -38,6 +39,11 @@ def verified_events(db,record):
             proofs.add(event_id)
     return tuple(sorted(proofs))
 
+def verified_xml_fidelity(raw):
+    """Re-verify the seller signature from the raw source; the artifact is never trusted to say so itself."""
+    from ..extraction.xml_signature import safe_parse,verify_invoice_signatures
+    return ('xml-signed-v1',) if verify_invoice_signatures(safe_parse(raw))['seller'].verified else ()
+
 def replay(inputs,assessment):
     from ..extraction.contracts import ExtractionArtifact
     from ..domain.cfr import CanonicalFinancialRecord
@@ -52,6 +58,7 @@ def replay(inputs,assessment):
         QualityPolicy.model_validate(inputs['policy']),CalibrationScope.model_validate(inputs['scope']),
         assessment_id=assessment.assessment_id,created_at=assessment.created_at,implementation_sha256=inputs['implementation_sha256'],
         calibrations=tuple(CalibrationArtifact.model_validate(c) for c in inputs['calibrations']),
+        verified_fidelity_policies=tuple(inputs.get('verified_fidelity_policies',())),
         verified_review_events=tuple(inputs.get('verified_review_events',())))
 
 class QualityRepository:
@@ -89,15 +96,24 @@ class QualityRepository:
         with self.ingestion.db() as db:
             row=db.execute('SELECT ocr_config_key FROM cfr_extractions WHERE tenant_id=? AND taxpayer_id=? AND artifact_id=?',
                 (ctx.tenant_id,payer,artifact_id)).fetchone()
-        normalized=self.extraction.ocr.get(ctx,payer,artifact.ingestion_id,row['ocr_config_key'])['result']
-        if sha(normalized.model_dump(mode='json'))!=artifact.normalized_input_sha256: raise ValueError('normalized input hash mismatch')
-        scope=CalibrationScope(field_family='*',document_family=artifact.profile.version,engine_id=normalized.ocr_config.model_id,
-            engine_config_version=normalized.ocr_config.version,engine_runtime_sha256=normalized.runtime_sha256,
-            preprocess_version=normalized.ocr_config.preprocess_version,extractor_sha256=artifact.extractor_sha256,
-            score_kind='DETECTION' if normalized.ocr_config.model_id=='ppocrv6_vietocr' else 'UNAVAILABLE')
+        verified_fidelity=()
+        if row['ocr_config_key']==XML_OCR_KEY:
+            if artifact.normalized_input_sha256!=artifact.input_sha256: raise ValueError('structured input hash mismatch')
+            scope=CalibrationScope(field_family='*',document_family=artifact.profile.version,engine_id='xml-direct',
+                engine_config_version='xml-extractor-v1',engine_runtime_sha256=artifact.extractor_sha256,preprocess_version='none',
+                extractor_sha256=artifact.extractor_sha256,score_kind='UNAVAILABLE')
+            verified_fidelity=verified_xml_fidelity(self.base.source(ctx,payer,artifact.source_id)[1])
+        else:
+            normalized=self.extraction.ocr.get(ctx,payer,artifact.ingestion_id,row['ocr_config_key'])['result']
+            if sha(normalized.model_dump(mode='json'))!=artifact.normalized_input_sha256: raise ValueError('normalized input hash mismatch')
+            scope=CalibrationScope(field_family='*',document_family=artifact.profile.version,engine_id=normalized.ocr_config.model_id,
+                engine_config_version=normalized.ocr_config.version,engine_runtime_sha256=normalized.runtime_sha256,
+                preprocess_version=normalized.ocr_config.preprocess_version,extractor_sha256=artifact.extractor_sha256,
+                score_kind='DETECTION' if normalized.ocr_config.model_id=='ppocrv6_vietocr' else 'UNAVAILABLE')
         inputs={'artifact':artifact.model_dump(mode='json'),'record':record.model_dump(mode='json') if record else None,
             'policy':policy.model_dump(mode='json'),'scope':scope.model_dump(mode='json'),'calibrations':[],
             'implementation_sha256':implementation_sha()}
+        if verified_fidelity: inputs['verified_fidelity_policies']=list(verified_fidelity)
         if record:
             with self.ingestion.db() as db:
                 # Read-only v5 historical databases have no review table.
@@ -116,7 +132,8 @@ class QualityRepository:
                 (ctx.tenant_id,payer,key)).fetchone()
             if previous: return self.get(ctx,payer,previous['assessment_id'])
             assessment=assess(artifact,record,policy,scope,assessment_id='quality-'+uuid4().hex,created_at=datetime.now(timezone.utc),
-                implementation_sha256=inputs['implementation_sha256'],verified_review_events=tuple(inputs.get('verified_review_events',())))
+                implementation_sha256=inputs['implementation_sha256'],verified_fidelity_policies=tuple(inputs.get('verified_fidelity_policies',())),
+                verified_review_events=tuple(inputs.get('verified_review_events',())))
             raw=assessment.model_dump_json();input_raw=json.dumps(inputs,sort_keys=True,ensure_ascii=False,separators=(',',':'))
             db.execute('INSERT INTO quality_assessments VALUES(?,?,?,?,?,?,?,?,?)',
                 (ctx.tenant_id,payer,artifact_id,key,assessment.assessment_id,raw,digest(raw.encode()),input_raw,digest(input_raw.encode())))

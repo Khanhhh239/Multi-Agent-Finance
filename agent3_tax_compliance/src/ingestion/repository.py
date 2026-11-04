@@ -184,6 +184,26 @@ class IngestionRepository:
             self._event(db,ctx,payer,identifier,'DOCUMENT_AND_EXTRACTION_COMMITTED',row['sha256'],{'document_sha256':sha})
         return True
 
+    def complete_xml(self,ctx,payer,identifier,token):
+        """Structured XML has no rendered pages; the immutable source bytes are the evidence."""
+        ctx.require(ctx.tenant_id,payer,'WRITE')
+        with self.db() as db:
+            db.execute('BEGIN IMMEDIATE'); row=self._row(db,ctx,payer,identifier)
+            if row['status']!='PROCESSING' or row['lease_token']!=token:
+                return False
+            db.execute("UPDATE ingestions SET status='SUCCEEDED',lease_token=NULL,lease_until=NULL,issue=NULL WHERE tenant_id=? AND taxpayer_id=? AND ingestion_id=?",
+                       (ctx.tenant_id,payer,identifier))
+            self._event(db,ctx,payer,identifier,'XML_SOURCE_COMMITTED',row['sha256'],{'structured':True})
+        return True
+
+    def page_indices(self,ctx,payer,identifier):
+        """Page numbers of the rendered document; empty for structured sources."""
+        try:
+            return [p.page_index for p in self.document(ctx,payer,identifier).pages]
+        except IngestionError as error:
+            if error.issue.code!='NOT_FOUND': raise
+            return []
+
     def document(self,ctx,payer,identifier):
         ctx.require(ctx.tenant_id,payer)
         with self.db() as db:

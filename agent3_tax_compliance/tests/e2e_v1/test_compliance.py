@@ -208,7 +208,7 @@ class ComplianceTests(unittest.TestCase):
     def test_reports_immutable_and_schema_version_nine(self):
         result=self.run_evaluation()
         with self.workflow.ingestion.db() as db:
-            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],9)
+            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0],10)
             with self.assertRaises(sqlite3.IntegrityError):db.execute('DELETE FROM evaluation_reports')
         payload=result.report.model_dump(mode='json');payload['explanation']['verdict']='FAIL'
         with self.assertRaises(ValidationError):EvaluationReport.model_validate(payload)

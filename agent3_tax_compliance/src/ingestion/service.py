@@ -6,7 +6,8 @@ import tempfile
 from uuid import uuid4
 
 from ..config import PROJECT
-from ..domain.envelope import SourceEnvelope
+from ..domain.envelope import SourceEnvelope, SourceFormat
+from ..extraction.xml_signature import safe_parse
 from .detector import detect
 from .models import DocumentArtifact, IngestionError, IngestionIssue
 from .repository import IngestionRepository
@@ -55,6 +56,16 @@ class IngestionService:
         view=self.repository.get(ctx,payer,identifier)
         try:
             envelope,raw=self.repository.base.source(ctx,payer,view.source_id)
+            if envelope.detected_format==SourceFormat.INVOICE_XML:
+                try:
+                    root=safe_parse(raw)
+                except Exception:
+                    root=None
+                if root is None or root.tag!='HDon' or root.find('DLHDon') is None:
+                    raise IngestionError('CORRUPT_DOCUMENT','The XML is malformed or is not a Vietnamese e-invoice (root HDon).',status=422,
+                                         retryable=False,next_action='Submit the original signed XML file issued by the seller.')
+                self.repository.complete_xml(ctx,payer,identifier,token)
+                return self.repository.get(ctx,payer,identifier)
             settings=self.settings.model_dump(mode='json',include=set(WORKER_KEYS))
             identity=dict(tenant_id=ctx.tenant_id,taxpayer_id=payer,taxpayer_master_revision=envelope.taxpayer_master_revision,
                 ingestion_id=identifier,source_id=view.source_id,document_id=view.document_id,

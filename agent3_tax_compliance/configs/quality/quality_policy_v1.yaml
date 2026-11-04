@@ -4,7 +4,7 @@
   "threshold_status": "TBD_INSUFFICIENT_DATA",
   "threshold_owner": "UNASSIGNED_REQUIRES_BUSINESS_OWNER",
   "thresholds": {"tax_id": null, "issue_date": null, "money": null, "other": null},
-  "fidelity_policies": [],
+  "fidelity_policies": ["xml-signed-v1"],
   "profiles": [
     {"version":"invoice-quality-v1","record_type":"INVOICE",
      "expected_fields":["parties.seller.name","parties.seller.tax_id","parties.buyer.name","parties.buyer.tax_id","invoice.number","invoice.issue_date","currency","totals.net","totals.vat","totals.gross"],

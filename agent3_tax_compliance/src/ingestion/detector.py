@@ -2,6 +2,7 @@ from pathlib import PurePosixPath, PureWindowsPath
 from ..domain.envelope import SourceFormat
 from .models import IngestionError
 
+BOM_WS=b'\xef\xbb\xbf \t\r\n'
 SUPPORTED={SourceFormat.PDF:('application/pdf',{'.pdf'}),
            SourceFormat.IMAGE:('image/png',{'.png'})}
 
@@ -20,6 +21,9 @@ def detect(header: bytes, mime: str, filename: str | None = None):
         detected,actual,suffixes=SourceFormat.IMAGE,'image/png',{'.png'}
     elif header.startswith(b'\xff\xd8\xff'):
         detected,actual,suffixes=SourceFormat.IMAGE,'image/jpeg',{'.jpg','.jpeg'}
+    elif (header.lstrip(BOM_WS).startswith(b'<') and b'<HDon' in header
+          and b'<!DOCTYPE' not in header.upper() and b'<!ENTITY' not in header.upper()):
+        detected,actual,suffixes=SourceFormat.INVOICE_XML,'application/xml',{'.xml'}
     else:
         if header.startswith((b'PK\x03\x04',b'PK\x05\x06',b'PK\x07\x08')):
             label='ZIP/XLSX container'
@@ -30,9 +34,10 @@ def detect(header: bytes, mime: str, filename: str | None = None):
         else:
             label=SourceFormat.UNKNOWN.value
         raise IngestionError('UNSUPPORTED_FORMAT',f'Unsupported signature: {label}.',status=415,
-                             next_action='Submit PDF, PNG or JPEG; other adapters belong to later plans.')
+                             next_action='Submit PDF, PNG, JPEG or a Vietnamese e-invoice XML (root HDon); other adapters belong to later plans.')
     declared=mime.split(';',1)[0].strip().lower()
-    if declared not in (actual,'application/octet-stream'):
+    accepted=(actual,'application/octet-stream')+(('text/xml',) if detected==SourceFormat.INVOICE_XML else ())
+    if declared not in accepted:
         raise IngestionError('FORMAT_MISMATCH','Declared MIME does not match signature.',status=415)
     if filename and PurePosixPath(filename).suffix.lower() not in suffixes:
         raise IngestionError('FORMAT_MISMATCH','Filename extension does not match signature.',status=415)

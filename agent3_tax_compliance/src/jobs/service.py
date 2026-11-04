@@ -2,6 +2,7 @@ import json
 import time
 from uuid import uuid4
 from ..canonicalization.derive import sha
+from ..domain.envelope import SourceFormat
 from ..ingestion.service import IngestionService
 from ..adapters.ocr.bridge import OCRBridge,config_key
 from ..review.repository import ReviewRepository,envelope,raw_json
@@ -97,13 +98,16 @@ class CaptureJobs(ReviewRepository):
                 error.retryable=bool(ing.issue and ing.issue.retryable)
                 raise error
             self.transition(ctx,payer,job_id,'EXTRACTING',token=token)
-            # Failed OCR attempts are immutable; retry uses a new version/key, retaining history.
-            if job['attempts']>1:
-                bridge=OCRBridge(self.settings,bridge.config.model_copy(update={'version':bridge.config.version+'-retry-'+job_id[-8:]+'-'+str(job['attempts'])}),bridge.client)
-            result=bridge.work_one(ctx,payer,identifier)
-            if not result.get('result') or result['result'].status=='FAILED': raise ReviewError('OCR_FAILED','OCR failed; inspect worker/model or request a clearer source.',409)
-            key=config_key(bridge.config,bridge.client.inventory()['runtime_sha256'])
-            artifact=self.extraction.work(ctx,payer,identifier,key,profile)
+            if self.ingestion.base.source(ctx,payer,ing.source_id)[0].detected_format==SourceFormat.INVOICE_XML:
+                artifact=self.extraction.work_xml(ctx,payer,identifier,profile)
+            else:
+                # Failed OCR attempts are immutable; retry uses a new version/key, retaining history.
+                if job['attempts']>1:
+                    bridge=OCRBridge(self.settings,bridge.config.model_copy(update={'version':bridge.config.version+'-retry-'+job_id[-8:]+'-'+str(job['attempts'])}),bridge.client)
+                result=bridge.work_one(ctx,payer,identifier)
+                if not result.get('result') or result['result'].status=='FAILED': raise ReviewError('OCR_FAILED','OCR failed; inspect worker/model or request a clearer source.',409)
+                key=config_key(bridge.config,bridge.client.inventory()['runtime_sha256'])
+                artifact=self.extraction.work(ctx,payer,identifier,key,profile)
             self.transition(ctx,payer,job_id,'ASSESSING',token=token,updates={'extraction_artifact_id':artifact.artifact_id})
             quality=self.quality.work(ctx,payer,artifact.artifact_id)
             if artifact.record: self.ensure_tasks(ctx,payer,artifact.record.record_id)

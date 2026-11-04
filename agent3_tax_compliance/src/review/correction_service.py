@@ -20,7 +20,7 @@ class CorrectionService(ReviewRepository):
         # Read pinned immutable inputs before acquiring the write lock; head is checked again inside it.
         record,artifact,previous_q=self.head_context(ctx,payer,command.record_id)
         master=self.base.taxpayer(ctx,payer,record.taxpayer_master_revision)
-        doc=self.ingestion.document(ctx,payer,artifact.ingestion_id)
+        page_indices=self.ingestion.page_indices(ctx,payer,artifact.ingestion_id)
         previous_inputs=self.quality.inputs(ctx,payer,previous_q.assessment_id)
         now=datetime.now(timezone.utc);event_id='review-'+uuid4().hex
         with self.ingestion.db() as db:
@@ -43,7 +43,7 @@ class CorrectionService(ReviewRepository):
                 if any(any(c['field_path']=='items' and any(i['item_id']==op.item_id for side in ('before','after') for i in (c[side] or {}).get('rows',[]))
                            for c in self.checked_event(row)['changes']) for row in history):
                     raise ReviewError('ITEM_ID_CONFLICT','Mã dòng đã dùng trong lịch sử; hãy tạo dòng mới.')
-            updated,changes,manifest,affected=apply(record,artifact,master,command,event_id,[p.page_index for p in doc.pages],now)
+            updated,changes,manifest,affected=apply(record,artifact,master,command,event_id,page_indices,now)
             # Store fully validated canonical field payloads, including Decimal/date normalization.
             fields=flatten(updated)
             for change in changes:
@@ -51,10 +51,12 @@ class CorrectionService(ReviewRepository):
             proofs=verified_events(db,updated)+(event_id,)
             policy=load_policy();scope_model=CalibrationScope.model_validate(previous_inputs['scope'])
             q=assess(artifact,updated,policy,scope_model,assessment_id='quality-'+uuid4().hex,created_at=now,
-                implementation_sha256=implementation_sha(),verified_review_events=proofs)
+                implementation_sha256=implementation_sha(),verified_fidelity_policies=tuple(previous_inputs.get('verified_fidelity_policies',())),
+                verified_review_events=proofs)
             inputs={'artifact':artifact.model_dump(mode='json'),'record':updated.model_dump(mode='json'),
                 'policy':policy.model_dump(mode='json'),'scope':scope_model.model_dump(mode='json'),'calibrations':[],
                 'implementation_sha256':implementation_sha(),'verified_review_events':list(proofs)}
+            if previous_inputs.get('verified_fidelity_policies'): inputs['verified_fidelity_policies']=list(previous_inputs['verified_fidelity_policies'])
             event=dict(schema_version='1.0.0',config_version='review-v1',creator='correction-service',stage='review',created_at=now.isoformat(),
                 event_id=event_id,tenant_id=ctx.tenant_id,taxpayer_id=payer,record_id=command.record_id,actor_id=ctx.actor_id,
                 task_id=command.task_id,reason=command.reason,before_revision=record.revision,after_revision=updated.revision,

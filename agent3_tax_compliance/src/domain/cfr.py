@@ -8,7 +8,7 @@ from .envelope import SourceFormat
 from .field import FieldObject
 from .money import ExactDecimal
 
-TaxCode = Annotated[str, Field(pattern=r'^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$')]
+TaxCode = Annotated[str, Field(pattern=r'^(?:[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?|[0-9]{12})$')]
 Currency = Annotated[str, Field(pattern=r'^[A-Z]{3}$')]
 
 

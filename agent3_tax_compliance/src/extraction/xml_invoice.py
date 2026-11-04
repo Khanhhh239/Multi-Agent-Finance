@@ -137,6 +137,7 @@ def extract(raw: bytes, today: date | None = None) -> XmlInvoice:
                                ('seller_name', nb, f'{P}/NDHDon/NBan', 'Ten'), ('seller_tax_id', nb, f'{P}/NDHDon/NBan', 'MST'),
                                ('seller_address', nb, f'{P}/NDHDon/NBan', 'DChi'), ('seller_bank_account', nb, f'{P}/NDHDon/NBan', 'STKNHang'),
                                ('buyer_name', nm, f'{P}/NDHDon/NMua', 'Ten'), ('buyer_tax_id', nm, f'{P}/NDHDon/NMua', 'MST'),
+                               ('buyer_address', nm, f'{P}/NDHDon/NMua', 'DChi'),
                                ('net_total', tot, f'{P}/NDHDon/TToan', 'TgTCThue'), ('vat_total', tot, f'{P}/NDHDon/TToan', 'TgTThue'),
                                ('gross_total', tot, f'{P}/NDHDon/TToan', 'TgTTTBSo'), ('gross_words', tot, f'{P}/NDHDon/TToan', 'TgTTTBChu')):
         fields[key] = _f(el, base, tag)

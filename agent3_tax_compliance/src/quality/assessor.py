@@ -82,6 +82,14 @@ def assess(artifact,record,policy,scope,*,assessment_id,created_at,implementatio
     else:
         overall=critical=coverage((),{});issues.append(issue('REVIEW_SPLIT',None,'Document boundaries require confirmation before assessing fields.',action='REVIEW_SPLIT'))
     for extraction_issue in artifact.issues:
+        if extraction_issue.code.startswith('XML_CHECK_'):
+            issues.append(issue(extraction_issue.code,extraction_issue.field_path,extraction_issue.message,severity='ERROR',
+                classification='INVALID_SOURCE_CONTENT',action='VERIFY_SOURCE'))
+            continue
+        if extraction_issue.code.startswith('XML_UNCHECKED_'):
+            issues.append(issue(extraction_issue.code,extraction_issue.field_path,extraction_issue.message,severity='INFO',
+                classification='UNKNOWN',action='VERIFY_SOURCE'))
+            continue
         if extraction_issue.code.startswith('UNPARSEABLE'):
             path=extraction_issue.field_path
             if path and path.startswith(('seller.','buyer.')): path='parties.'+path

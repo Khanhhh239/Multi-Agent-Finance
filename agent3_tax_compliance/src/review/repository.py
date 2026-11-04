@@ -48,7 +48,7 @@ class ReviewRepository:
 
     def view(self,ctx,payer,record_id):
         r,a,q=self.head_context(ctx,payer,record_id)
-        doc=self.ingestion.document(ctx,payer,a.ingestion_id)
+        pages=self.ingestion.page_indices(ctx,payer,a.ingestion_id)
         with self.ingestion.db() as db:
             job=db.execute('SELECT job_id,state,payload FROM capture_jobs WHERE tenant_id=? AND taxpayer_id=? AND ingestion_id=?',
                 (ctx.tenant_id,payer,a.ingestion_id)).fetchone()
@@ -56,7 +56,7 @@ class ReviewRepository:
             job=None
         return envelope(record=r.model_dump(mode='json'),extraction_artifact_id=a.artifact_id,ingestion_id=a.ingestion_id,
             candidates=[c.model_dump(mode='json') for c in a.candidates],assessment=q.model_dump(mode='json'),
-            page_count=len(doc.pages),limitations=self.limitations(),capture_job={k:job[k] for k in ('job_id','state')} if job else None)
+            page_count=len(pages),limitations=self.limitations(),capture_job={k:job[k] for k in ('job_id','state')} if job else None)
 
     @staticmethod
     def limitations():
@@ -158,8 +158,8 @@ class ReviewRepository:
     def grant(self,ctx,payer,artifact_id,page_index,ttl=120):
         ctx.require(ctx.tenant_id,payer)
         if not 1<=ttl<=300: raise ReviewError('TTL','Evidence expiry must be 1–300 seconds.')
-        artifact=self.extraction.get(ctx,payer,artifact_id);doc=self.ingestion.document(ctx,payer,artifact.ingestion_id)
-        if page_index not in {p.page_index for p in doc.pages}: raise KeyError('page not found')
+        artifact=self.extraction.get(ctx,payer,artifact_id)
+        if page_index not in set(self.ingestion.page_indices(ctx,payer,artifact.ingestion_id)): raise KeyError('page not found')
         token=self.sign({'scope':[ctx.tenant_id,payer,ctx.actor_id,artifact_id,page_index],'exp':time.time()+ttl})
         return envelope(token=token,expires_in=ttl,page_index=page_index)
 
@@ -188,13 +188,21 @@ class ReviewRepository:
         with self.ingestion.db() as db:
             row=db.execute('SELECT ocr_config_key FROM cfr_extractions WHERE tenant_id=? AND taxpayer_id=? AND artifact_id=?',
                 (ctx.tenant_id,payer,artifact.artifact_id)).fetchone()
-        normalized=self.extraction.ocr.get(ctx,payer,artifact.ingestion_id,row['ocr_config_key'])['result']
-        document=self.ingestion.document(ctx,payer,artifact.ingestion_id)
-        if sha(normalized.model_dump(mode='json'))!=artifact.normalized_input_sha256 or normalized.document_artifact_sha256!=digest(document.model_dump_json().encode()):
-            raise ValueError('normalized/document binding mismatch')
-        initial=canonicalize(normalized,source.detected_format,self.base.taxpayer(ctx,payer,current.taxpayer_master_revision),
-            artifact.profile,artifact.identity_map,record_id=artifact.record.record_id,artifact_id=artifact.artifact_id,
-            created_at=artifact.created_at,extractor_sha256=artifact.extractor_sha256)
+        from ..extraction.xml_canonical import XML_OCR_KEY,canonicalize_xml
+        if row['ocr_config_key']==XML_OCR_KEY:
+            if artifact.normalized_input_sha256!=artifact.input_sha256: raise ValueError('structured input binding mismatch')
+            initial=canonicalize_xml(self.base.source(ctx,payer,current.source_id)[1],self.base.taxpayer(ctx,payer,current.taxpayer_master_revision),
+                artifact.profile,artifact.identity_map,tenant_id=artifact.tenant_id,taxpayer_id=artifact.taxpayer_id,ingestion_id=artifact.ingestion_id,
+                source_id=artifact.source_id,document_id=artifact.document_id,input_sha256=artifact.input_sha256,record_id=artifact.record.record_id,
+                artifact_id=artifact.artifact_id,created_at=artifact.created_at,extractor_sha256=artifact.extractor_sha256)
+        else:
+            normalized=self.extraction.ocr.get(ctx,payer,artifact.ingestion_id,row['ocr_config_key'])['result']
+            document=self.ingestion.document(ctx,payer,artifact.ingestion_id)
+            if sha(normalized.model_dump(mode='json'))!=artifact.normalized_input_sha256 or normalized.document_artifact_sha256!=digest(document.model_dump_json().encode()):
+                raise ValueError('normalized/document binding mismatch')
+            initial=canonicalize(normalized,source.detected_format,self.base.taxpayer(ctx,payer,current.taxpayer_master_revision),
+                artifact.profile,artifact.identity_map,record_id=artifact.record.record_id,artifact_id=artifact.artifact_id,
+                created_at=artifact.created_at,extractor_sha256=artifact.extractor_sha256)
         if initial!=artifact: raise ValueError('initial extraction replay mismatch')
         # Revision 1 is pinned to the immutable extraction. Later observed changes come only from events.
         data=artifact.record.model_dump(mode='json')
