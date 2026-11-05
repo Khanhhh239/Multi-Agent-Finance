@@ -7,6 +7,7 @@ prov-chapter, prov-section, prov-article, prov-clause, prov-item, prov-content. 
 import html as htmllib
 import json
 import re
+import unicodedata
 from dataclasses import dataclass, field
 from xml.etree import ElementTree
 
@@ -80,7 +81,7 @@ def flight_text(page_html: str) -> str:
             out.append(json.loads('"' + c + '"'))
         except json.JSONDecodeError:
             continue
-    return ''.join(out)
+    return unicodedata.normalize('NFC', ''.join(out))   # some pages carry decomposed diacritics
 
 
 def _json_object_at(text: str, start: int):

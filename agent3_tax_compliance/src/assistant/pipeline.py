@@ -10,7 +10,9 @@ Workspace layout (all files are exported by the enterprise itself; nothing conne
 """
 import calendar as cal
 import hashlib
+from dataclasses import replace
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 
 from .intake import is_mt940, read_mt940
@@ -51,6 +53,20 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
     return out
 
 
+def apply_not_claimed(items: list, decisions: dict) -> list:
+    """An invoice the reviewer decided not to claim carries no deduction risk. Its items stay in the report as INFO with
+    the decision written into the detail, so the audit trail shows who decided and why; they leave the totals."""
+    out = []
+    for it in items:
+        ds = [decisions.get(k) for k in it.invoice_keys]
+        if it.status != 'INFO' and ds and all(d and d['action'] == 'NOT_CLAIMED' for d in ds):
+            note = '; '.join(f'{d["evidence"]} (quyết định của {d["by"]})' for d in ds)
+            it = replace(it, status='INFO', amount=Decimal(0),
+                         detail=f'{it.detail} Đã quyết định không kê khai khấu trừ: {note}.'.strip())
+        out.append(it)
+    return out
+
+
 def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | None = None, extra_decisions: dict | None = None) -> Report:
     ws = Path(workspace)
     as_of = as_of or date.today()
@@ -72,6 +88,7 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
     portal = read_portal_list(portal_file, pack) if portal_file.exists() else None
     matches = match_payments(invoices, txns, pack.thresholds, decisions)
     items, flags = evaluate(invoices, matches, pack, ruleset, bad1 + bad2, portal)
+    items = apply_not_claimed(items, decisions)
     items.sort(key=lambda it: (STATUS_ORDER[it.status], -it.amount, it.code, it.invoice_keys))
     dates = [i.issue_date for i in invoices if i.issue_date]
     meta = dict(workspace=ws.name, company=pack.legal_name, tax_code=pack.tax_code, simulated=pack.simulated, as_of=as_of,

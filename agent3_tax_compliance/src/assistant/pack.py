@@ -77,30 +77,37 @@ def _threshold(values: dict, key: str):
         return default
     value = values[key]
     if default is not None and direction == 'lower' and value > default:
-        raise PackError(f'threshold {key}={value} is looser than the core default {default}; a pack may only tighten')
+        raise PackError(f'ngưỡng {key}={value} lỏng hơn mặc định {default}; gói của doanh nghiệp chỉ được làm chặt hơn')
     return value
 
 
 def load_pack(path: Path) -> Pack:
     data = json.loads(Path(path).read_text(encoding='utf-8'))
-    prof = data['profile']
-    if not mst_checksum_ok(prof['tax_code']):
-        raise PackError('profile tax_code fails the tax-code checksum')
+    prof = data.get('profile') or {}
+    allowed = {'tax_code', 'legal_name', 'registered_address', 'vat_method', 'filing_period', 'industry'}
+    if set(prof) - allowed:
+        raise PackError(f'hồ sơ có trường không xác định: {sorted(set(prof) - allowed)}')
+    if not mst_checksum_ok(str(prof.get('tax_code', ''))):
+        raise PackError('mã số thuế không đúng (sai số kiểm tra hoặc độ dài)')
+    if not str(prof.get('legal_name', '')).strip():
+        raise PackError('cần tên doanh nghiệp đúng như trên giấy đăng ký thuế')
+    if prof.get('vat_method', 'DEDUCTION') not in ('DEDUCTION', 'DIRECT'):
+        raise PackError('phương pháp tính thuế giá trị gia tăng phải là DEDUCTION (khấu trừ) hoặc DIRECT (trực tiếp)')
     if prof.get('filing_period', 'MONTH') not in ('MONTH', 'QUARTER'):
-        raise PackError('filing_period must be MONTH or QUARTER')
+        raise PackError('kỳ khai phải là MONTH (tháng) hoặc QUARTER (quý)')
     unknown = set(data.get('thresholds', {})) - set(CORE_THRESHOLDS)
     if unknown:
-        raise PackError(f'unknown thresholds: {sorted(unknown)}')
+        raise PackError(f'ngưỡng không xác định: {sorted(unknown)}')
     thresholds = {k: _threshold(data.get('thresholds', {}), k) for k in CORE_THRESHOLDS}
     if thresholds['non_cash_threshold_override'] is not None:
         thresholds['non_cash_threshold_override'] = Decimal(str(thresholds['non_cash_threshold_override']))
     for p in data.get('policies', []):
         if set(p) - {'id', 'flag', 'min_gross', 'description_contains', 'seller_tax_ids'}:
-            raise PackError(f'policy {p.get("id")} uses a field that is not allowed; policies may only add flags')
+            raise PackError(f'chính sách {p.get("id")} dùng trường không được phép; chính sách chỉ được thêm cờ')
     lists = []
     for r in data.get('reference_lists', []):
         if not r.get('as_of'):
-            raise PackError(f'reference list {r.get("name")} has no as_of date')
+            raise PackError(f'danh sách tham chiếu {r.get("name")} thiếu ngày (as_of)')
         lists.append(ReferenceList(r['name'], date.fromisoformat(r['as_of']), frozenset(r['tax_ids']), r.get('source', '')))
     return Pack(
         version=int(data.get('pack_version', 1)), tax_code=prof['tax_code'], legal_name=prof['legal_name'],

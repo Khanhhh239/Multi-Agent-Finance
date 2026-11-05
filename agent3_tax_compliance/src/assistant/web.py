@@ -1,0 +1,342 @@
+"""Agent 3 web application: local API plus the static interface built from webui/.
+
+  python -m src.assistant.web            # http://127.0.0.1:8640
+
+Binds to 127.0.0.1 only. Files are sent as raw request bodies (no multipart dependency). Every enterprise has its own
+workspace folder under data/workspaces/<id> with the layout described in pipeline.py.
+"""
+import dataclasses
+import json
+import re
+import shutil
+import threading
+from datetime import date
+from pathlib import Path
+
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+
+from ..lawbase.store import Corpus
+from ..lawbase.sync import DEFAULT_DB as LAW_DB, running_sync, sync as law_sync
+from . import pipeline, qa, report as report_mod
+from .input_schema import FILES, guide
+from .intake import IntakeError, extract_zip, suggest_mapping
+from .pack import PackError, load_pack
+from .synth import generate as generate_demo
+
+PROJECT = Path(__file__).resolve().parents[2]
+WORKSPACES = PROJECT / 'data/workspaces'
+STATIC = Path(__file__).resolve().parent / 'static'
+ID = re.compile(r'^[a-z0-9][a-z0-9-]{1,40}$')
+
+app = FastAPI(title='Agent 3 - Trợ lý thuế')
+_law_job = dict(running=False, done=0, last='', result=None, error=None)
+_lock = threading.Lock()
+
+
+def _json(obj, status=200):
+    return JSONResponse(json.loads(json.dumps(obj, default=report_mod._default, ensure_ascii=False)), status_code=status)
+
+
+def ws_path(wid: str) -> Path:
+    if not ID.match(wid):
+        raise HTTPException(400, 'mã không gian làm việc không hợp lệ')
+    p = WORKSPACES / wid
+    if not p.exists():
+        raise HTTPException(404, 'không có không gian làm việc này')
+    return p
+
+
+def _pack_data(ws: Path) -> dict:
+    return json.loads((ws / 'pack.json').read_text(encoding='utf-8'))
+
+
+def _save_pack(ws: Path, data: dict):
+    tmp = ws / 'pack.json.tmp'
+    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+    try:
+        load_pack(tmp)                                   # the same invariants as the pipeline: tighten only, add flags only
+    except PackError as e:
+        tmp.unlink()
+        raise HTTPException(422, str(e))
+    tmp.replace(ws / 'pack.json')
+
+
+def _as_of(ws: Path) -> date:
+    labels = ws / 'labels.json'
+    if labels.exists():
+        return date.fromisoformat(json.loads(labels.read_text(encoding='utf-8'))['as_of'])
+    return date.today()
+
+
+# ----------------------------------------------------------------------------- input guide and workspaces
+@app.get('/api/schema')
+def schema():
+    return guide()
+
+
+@app.get('/api/workspaces')
+def list_workspaces():
+    WORKSPACES.mkdir(parents=True, exist_ok=True)
+    out = []
+    for p in sorted(WORKSPACES.iterdir()):
+        if (p / 'pack.json').exists():
+            d = _pack_data(p)
+            files = {f['key']: len(list((p / f['folder']).glob('*'))) if f['folder'] and (p / f['folder']).exists() else 0 for f in FILES}
+            out.append(dict(id=p.name, name=d['profile']['legal_name'], tax_code=d['profile']['tax_code'], simulated=d.get('simulated', False),
+                            files=files, has_report=(p / 'out' / 'report.json').exists()))
+    return out
+
+
+@app.post('/api/workspaces')
+async def create_workspace(request: Request):
+    body = await request.json()
+    wid = re.sub(r'[^a-z0-9-]', '-', (body.get('id') or body.get('profile', {}).get('tax_code') or '').lower()).strip('-')
+    if not ID.match(wid):
+        raise HTTPException(400, 'cần mã số thuế hoặc mã không gian làm việc')
+    p = WORKSPACES / wid
+    if p.exists():
+        raise HTTPException(409, 'đã có không gian làm việc này')
+    p.mkdir(parents=True)
+    try:
+        _save_pack(p, dict(pack_version=1, profile=body['profile'], bank_formats=body.get('bank_formats', []), thresholds={},
+                           policies=[], reference_lists=[]))
+    except HTTPException:
+        shutil.rmtree(p)
+        raise
+    return dict(id=wid)
+
+
+@app.post('/api/demo')
+def create_demo():
+    p = WORKSPACES / 'mo-phong-minh-an'
+    generate_demo(p)
+    return dict(id=p.name)
+
+
+@app.get('/api/workspaces/{wid}/pack')
+def get_pack(wid: str):
+    return _pack_data(ws_path(wid))
+
+
+@app.put('/api/workspaces/{wid}/pack')
+async def put_pack(wid: str, request: Request):
+    ws = ws_path(wid)
+    _save_pack(ws, await request.json())
+    return dict(ok=True)
+
+
+@app.put('/api/workspaces/{wid}/files/{kind}')
+async def upload(wid: str, kind: str, name: str, request: Request):
+    ws = ws_path(wid)
+    spec = next((f for f in FILES if f['key'] == kind and f['folder']), None)
+    if not spec:
+        raise HTTPException(400, 'loại tệp không hợp lệ')
+    clean = re.sub(r'[^\w.\-]', '_', Path(name).name)
+    suffix = Path(clean).suffix.lower()
+    if suffix not in spec['accept']:
+        raise HTTPException(415, f'chỉ nhận {", ".join(spec["accept"])}')
+    raw = await request.body()
+    if len(raw) > 300 * 1024 * 1024:
+        raise HTTPException(413, 'tệp quá lớn')
+    folder = ws / spec['folder']
+    folder.mkdir(parents=True, exist_ok=True)
+    try:
+        if suffix == '.zip':
+            names = extract_zip(raw, folder)
+        else:
+            target = folder / ('purchase_list' + suffix if kind == 'portal_list' else clean)
+            target.write_bytes(raw)
+            names = [target.name]
+    except IntakeError as e:
+        raise HTTPException(422, str(e))
+    return dict(saved=names)
+
+
+@app.get('/api/workspaces/{wid}/files/{kind}')
+def list_files(wid: str, kind: str):
+    ws = ws_path(wid)
+    spec = next((f for f in FILES if f['key'] == kind and f['folder']), None)
+    if not spec:
+        raise HTTPException(400, 'loại tệp không hợp lệ')
+    folder = ws / spec['folder']
+    return sorted(p.name for p in folder.glob('*')) if folder.exists() else []
+
+
+@app.post('/api/workspaces/{wid}/bank/suggest')
+def bank_suggest(wid: str, name: str):
+    ws = ws_path(wid)
+    path = ws / 'bank' / re.sub(r'[^\w.\-]', '_', Path(name).name)
+    if not path.exists():
+        raise HTTPException(404, 'không có tệp sao kê này')
+    try:
+        return suggest_mapping(path)
+    except (IntakeError, ValueError) as e:
+        raise HTTPException(422, str(e))
+
+
+@app.post('/api/workspaces/{wid}/bank/formats')
+async def bank_save_format(wid: str, request: Request):
+    ws = ws_path(wid)
+    fmt = await request.json()
+    data = _pack_data(ws)
+    data['bank_formats'] = [f for f in data.get('bank_formats', []) if f['name'] != fmt['name']] + [fmt]
+    _save_pack(ws, data)
+    return dict(ok=True, formats=len(data['bank_formats']))
+
+
+# ----------------------------------------------------------------------------- analysis, review, questions
+def _run(ws: Path):
+    try:
+        rep = pipeline.run(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
+    except Exception as e:  # noqa: BLE001 - shown to the user, never hidden
+        raise HTTPException(422, f'{type(e).__name__}: {e}')
+    report_mod.write(rep, ws / 'out')
+    return rep
+
+
+@app.post('/api/workspaces/{wid}/run')
+def run(wid: str):
+    rep = _run(ws_path(wid))
+    return _json(dataclasses.asdict(rep))
+
+
+@app.get('/api/workspaces/{wid}/report')
+def get_report(wid: str):
+    p = ws_path(wid) / 'out' / 'report.json'
+    if not p.exists():
+        raise HTTPException(404, 'chưa chạy phân tích')
+    return JSONResponse(json.loads(p.read_text(encoding='utf-8')))
+
+
+@app.get('/api/workspaces/{wid}/report.html')
+def get_report_html(wid: str):
+    p = ws_path(wid) / 'out' / 'report.html'
+    if not p.exists():
+        raise HTTPException(404, 'chưa chạy phân tích')
+    return FileResponse(p, media_type='text/html')
+
+
+@app.post('/api/workspaces/{wid}/decisions')
+async def add_decision(wid: str, request: Request):
+    ws = ws_path(wid)
+    d = await request.json()
+    if d.get('action') not in ('PAYMENT_EVIDENCE_ATTACHED', 'NOT_CLAIMED') or not d.get('evidence') or not d.get('by') or not d.get('invoice_key'):
+        raise HTTPException(422, 'cần mã hóa đơn, thao tác, chứng từ và người duyệt')
+    path = ws / 'decisions.json'
+    items = json.loads(path.read_text(encoding='utf-8')) if path.exists() else []
+    items = [x for x in items if x['invoice_key'] != d['invoice_key']] + [dict(invoice_key=d['invoice_key'], action=d['action'],
+                                                                               evidence=d['evidence'], by=d['by'], at=date.today().isoformat())]
+    path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding='utf-8')
+    rep = _run(ws)
+    return _json(dict(totals=rep.totals, decisions=len(items)))
+
+
+@app.post('/api/workspaces/{wid}/ask')
+async def ask(wid: str, request: Request):
+    ws = ws_path(wid)
+    body = await request.json()
+    rep = pipeline.run(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
+    ans = qa.answer(body['question'], qa.Context(ws, pipeline.DEFAULT_RULESET, _as_of(ws), rep, LAW_DB if LAW_DB.exists() else None))
+    return _json(dataclasses.asdict(ans))
+
+
+# ----------------------------------------------------------------------------- legal corpus
+@app.get('/api/law/status')
+def law_status():
+    if not LAW_DB.exists():
+        return dict(stats=None, job=_law_job)
+    c = Corpus(LAW_DB)
+    try:
+        job = dict(_law_job)
+        other = running_sync(LAW_DB)
+        if other and not job['running']:                 # a sync started from the command line or another process
+            job.update(running=True, external=True, done=other.get('done', 0), last=other.get('last') or '')
+        return _json(dict(stats=c.stats(), job=job,
+                          changes=[dict(r) for r in c.db.execute('SELECT ch.snapshot_id, ch.kind, ch.detail, d.doc_num FROM changes ch '
+                                                                 'LEFT JOIN documents d USING(doc_id) ORDER BY snapshot_id DESC LIMIT 30')]))
+    finally:
+        c.close()
+
+
+@app.get('/api/law/search')
+def law_search(q: str, as_of: str | None = None, k: int = 10):
+    if not LAW_DB.exists():
+        raise HTTPException(404, 'chưa có kho luật; hãy đồng bộ')
+    c = Corpus(LAW_DB)
+    try:
+        return [dict(doc_id=r['doc_id'], doc_num=r['doc_num'], doc_type=r['doc_type'], path=r['path'], text=c.unit_text(r['doc_id'], r['prov_id']),
+                     eff_from=r['eff_from'], status=r['status_name'], score=round(r['rank'], 3), url=c.db.execute(
+                         'SELECT url FROM documents WHERE doc_id=?', (r['doc_id'],)).fetchone()[0])
+                for r in c.search(q, date.fromisoformat(as_of) if as_of else date.today(), k)]
+    finally:
+        c.close()
+
+
+@app.get('/api/law/docs')
+def law_docs(q: str = ''):
+    c = Corpus(LAW_DB)
+    try:
+        rows = c.db.execute("SELECT d.doc_id, d.doc_num, d.doc_type, d.title, d.issue_date, d.eff_from, d.eff_to, d.status_name, d.n_provisions, "
+                            "d.n_chunks, d.structure, d.url, d.indexed, d.core, v.eff_to AS ended_on, v.by_doc_num AS ended_by "
+                            "FROM documents d LEFT JOIN validity v USING(doc_id) WHERE (d.doc_num LIKE ? OR d.title LIKE ?) "
+                            "ORDER BY d.indexed DESC, d.issue_date DESC LIMIT 400", (f'%{q}%', f'%{q}%'))
+        return [dict(r) for r in rows]
+    finally:
+        c.close()
+
+
+@app.get('/api/law/docs/{doc_id}')
+def law_doc(doc_id: str):
+    c = Corpus(LAW_DB)
+    try:
+        d = c.db.execute('SELECT * FROM documents WHERE doc_id=?', (doc_id,)).fetchone()
+        if not d:
+            raise HTTPException(404, 'không có văn bản')
+        provs = [dict(r) for r in c.db.execute('SELECT prov_id, level, label, heading, text FROM provisions WHERE doc_id=? ORDER BY ord', (doc_id,))]
+        v = c.db.execute('SELECT v.*, (SELECT path FROM chunks k WHERE k.doc_id=v.by_doc_id AND k.prov_id=v.by_prov_id LIMIT 1) AS by_path '
+                         'FROM validity v WHERE v.doc_id=?', (doc_id,)).fetchone()
+        notes = [dict(r) for r in c.db.execute('SELECT by_doc_num, kind, quote FROM validity_notes WHERE doc_id=?', (doc_id,))]
+        return dict(doc=dict(d), provisions=provs, ended=dict(v) if v else None, validity_notes=notes)
+    finally:
+        c.close()
+
+
+@app.post('/api/law/sync')
+def law_sync_start(core_only: bool = False):
+    with _lock:
+        if _law_job['running']:
+            return _law_job
+        if running_sync(LAW_DB):
+            raise HTTPException(409, 'một lần đồng bộ khác đang chạy (từ dòng lệnh); chờ xong rồi thử lại')
+        _law_job.update(running=True, done=0, last='', result=None, error=None)
+
+    def work():
+        try:
+            rep = law_sync(core_only=core_only, progress=lambda n, m: _law_job.update(done=n, last=f'{m["doc_type"]} {m["doc_num"]}'))
+            _law_job['result'] = dict(fetched=rep.fetched, unchanged=rep.unchanged, failed=len(rep.failed), changes=len(rep.changes))
+        except Exception as e:  # noqa: BLE001
+            _law_job['error'] = f'{type(e).__name__}: {e}'
+        finally:
+            _law_job['running'] = False
+    threading.Thread(target=work, daemon=True).start()
+    return _law_job
+
+
+# ----------------------------------------------------------------------------- static interface
+if STATIC.exists():
+    app.mount('/assets', StaticFiles(directory=STATIC / 'assets'), name='assets')
+
+
+@app.get('/')
+def index():
+    page = STATIC / 'index.html'
+    if not page.exists():
+        return JSONResponse(dict(error='chưa dựng giao diện: cd webui && npm install && npm run build'), status_code=503)
+    return FileResponse(page, headers={'Cache-Control': 'no-cache'})
+
+
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host='127.0.0.1', port=8640)

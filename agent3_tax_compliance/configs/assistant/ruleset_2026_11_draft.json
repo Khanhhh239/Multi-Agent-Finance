@@ -1,164 +1,164 @@
 {
-  "version": "assistant-ruleset-2026-11-05b",
-  "status": "DRAFT",
-  "status_note": "Chưa có chuyên gia thuế duyệt. Căn cứ ghi kèm mức kiểm chứng; phần lớn đã đối chiếu văn bản gốc trong kho luật.",
-  "parameters": {
-    "NON_CASH_THRESHOLD": [
-      {
-        "from": null,
-        "to": "2025-07-01",
-        "value": "20000000",
-        "basis": "Ngưỡng 20 triệu đồng áp dụng trước 01/7/2025 (thứ cấp)"
-      },
-      {
-        "from": "2025-07-01",
-        "to": null,
-        "value": "5000000",
-        "basis": "Điều 26 và khoản 3 Điều 26 Nghị định 181/2025/NĐ-CP (văn bản hợp nhất 18/VBHN-BTC): từ 05 triệu đồng đã gồm thuế GTGT; mua nhiều lần cùng ngày cộng dồn (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
-        "refs": [
-          [
-            "18/VBHN-BTC",
-            "Điều 26",
-            null
-          ],
-          [
-            "18/VBHN-BTC",
-            "Điều 26",
-            "Khoản 3"
-          ],
-          [
-            "48/2024/QH15",
-            "Điều 14",
-            "Khoản 2"
-          ]
-        ]
-      }
-    ],
-    "UNDERDECLARATION_PENALTY_RATE": [
-      {
-        "from": null,
-        "to": null,
-        "value": "0.20",
-        "basis": "Khoản 1 Điều 16 Nghị định 125/2020/NĐ-CP (văn bản hợp nhất 27/2026/VBHN-NĐ-BTC): phạt 20% số tiền thuế khai thiếu (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
-        "refs": [
-          [
-            "27/2026/VBHN-NĐ-BTC",
-            "Điều 16",
-            "Khoản 1"
-          ]
-        ]
-      }
-    ],
-    "VAT_RETURN_DUE_MONTHLY_DAY": [
-      {
-        "from": null,
-        "to": "2026-07-01",
-        "value": "20",
-        "basis": "Điều 44 Luật Quản lý thuế 2019 (thứ cấp)"
-      },
-      {
-        "from": "2026-07-01",
-        "to": null,
-        "value": "20",
-        "basis": "Khoản 2 Điều 10 Nghị định 252/2026/NĐ-CP: chậm nhất ngày thứ 20 của tháng tiếp theo (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
-        "refs": [
-          [
-            "252/2026/NĐ-CP",
-            "Điều 10",
-            "Khoản 2"
-          ]
-        ]
-      }
-    ],
-    "VAT_RETURN_DUE_QUARTERLY": [
-      {
-        "from": null,
-        "to": "2026-07-01",
-        "value": "LAST_DAY_OF_FIRST_MONTH_OF_NEXT_QUARTER",
-        "basis": "Điều 44 Luật Quản lý thuế 2019 (thứ cấp)"
-      },
-      {
-        "from": "2026-07-01",
-        "to": null,
-        "value": "LAST_DAY_OF_FIRST_MONTH_OF_NEXT_QUARTER",
-        "basis": "Khoản 3 Điều 10 Nghị định 252/2026/NĐ-CP: ngày cuối cùng của tháng đầu của quý tiếp theo (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
-        "refs": [
-          [
-            "252/2026/NĐ-CP",
-            "Điều 10",
-            "Khoản 3"
-          ]
-        ]
-      }
-    ],
-    "LATE_PAYMENT_RATE_PER_DAY": [
-      {
-        "from": "2026-07-01",
-        "to": null,
-        "value": "0.0003",
-        "basis": "Điểm a khoản 2 Điều 16 Luật Quản lý thuế 108/2025/QH15: 0,03%/ngày (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
-        "refs": [
-          [
-            "108/2025/QH15",
-            "Điều 16",
-            "Khoản 2"
-          ]
-        ]
-      }
+ "version": "assistant-ruleset-2026-11-05c",
+ "status": "DRAFT",
+ "status_note": "Chưa có chuyên gia thuế duyệt. Căn cứ ghi kèm mức kiểm chứng; phần lớn đã đối chiếu văn bản gốc trong kho luật.",
+ "parameters": {
+  "NON_CASH_THRESHOLD": [
+   {
+    "from": null,
+    "to": "2025-07-01",
+    "value": "20000000",
+    "basis": "Ngưỡng 20 triệu đồng áp dụng trước 01/7/2025 (thứ cấp)"
+   },
+   {
+    "from": "2025-07-01",
+    "to": null,
+    "value": "5000000",
+    "basis": "Điều 26 và khoản 3 Điều 26 Nghị định 181/2025/NĐ-CP (nội dung giữ nguyên trong văn bản hợp nhất 18/VBHN-BTC ngày 04/06/2026): từ 05 triệu đồng đã gồm thuế GTGT; mua nhiều lần cùng ngày cộng dồn (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
+    "refs": [
+     [
+      "181/2025/NĐ-CP",
+      "Điều 26",
+      null
+     ],
+     [
+      "181/2025/NĐ-CP",
+      "Điều 26",
+      "Khoản 3"
+     ],
+     [
+      "48/2024/QH15",
+      "Điều 14",
+      "Khoản 2"
+     ]
     ]
+   }
+  ],
+  "UNDERDECLARATION_PENALTY_RATE": [
+   {
+    "from": null,
+    "to": null,
+    "value": "0.20",
+    "basis": "Khoản 1 Điều 16 Nghị định 125/2020/NĐ-CP (văn bản hợp nhất 27/2026/VBHN-NĐ-BTC): phạt 20% số tiền thuế khai thiếu (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
+    "refs": [
+     [
+      "27/2026/VBHN-NĐ-BTC",
+      "Điều 16",
+      "Khoản 1"
+     ]
+    ]
+   }
+  ],
+  "VAT_RETURN_DUE_MONTHLY_DAY": [
+   {
+    "from": null,
+    "to": "2026-07-01",
+    "value": "20",
+    "basis": "Điều 44 Luật Quản lý thuế 2019 (thứ cấp)"
+   },
+   {
+    "from": "2026-07-01",
+    "to": null,
+    "value": "20",
+    "basis": "Khoản 2 Điều 10 Nghị định 252/2026/NĐ-CP: chậm nhất ngày thứ 20 của tháng tiếp theo (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
+    "refs": [
+     [
+      "252/2026/NĐ-CP",
+      "Điều 10",
+      "Khoản 2"
+     ]
+    ]
+   }
+  ],
+  "VAT_RETURN_DUE_QUARTERLY": [
+   {
+    "from": null,
+    "to": "2026-07-01",
+    "value": "LAST_DAY_OF_FIRST_MONTH_OF_NEXT_QUARTER",
+    "basis": "Điều 44 Luật Quản lý thuế 2019 (thứ cấp)"
+   },
+   {
+    "from": "2026-07-01",
+    "to": null,
+    "value": "LAST_DAY_OF_FIRST_MONTH_OF_NEXT_QUARTER",
+    "basis": "Khoản 3 Điều 10 Nghị định 252/2026/NĐ-CP: ngày cuối cùng của tháng đầu của quý tiếp theo (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
+    "refs": [
+     [
+      "252/2026/NĐ-CP",
+      "Điều 10",
+      "Khoản 3"
+     ]
+    ]
+   }
+  ],
+  "LATE_PAYMENT_RATE_PER_DAY": [
+   {
+    "from": "2026-07-01",
+    "to": null,
+    "value": "0.0003",
+    "basis": "Điểm a khoản 2 Điều 16 Luật Quản lý thuế 108/2025/QH15: 0,03%/ngày (văn bản gốc, CSDL quốc gia về pháp luật (vbpl.vn), đọc ngày 05/11/2026)",
+    "refs": [
+     [
+      "108/2025/QH15",
+      "Điều 16",
+      "Khoản 2"
+     ]
+    ]
+   }
+  ]
+ },
+ "rules": {
+  "R01_PAYMENT_EVIDENCE": {
+   "title": "Hóa đơn từ ngưỡng thanh toán không dùng tiền mặt chưa có chứng từ chuyển khoản",
+   "action": "Đính kèm chứng từ chuyển khoản; nếu đã trả tiền mặt thì không kê khai khấu trừ thuế đầu vào của hóa đơn này"
   },
-  "rules": {
-    "R01_PAYMENT_EVIDENCE": {
-      "title": "Hóa đơn từ ngưỡng thanh toán không dùng tiền mặt chưa có chứng từ chuyển khoản",
-      "action": "Đính kèm chứng từ chuyển khoản; nếu đã trả tiền mặt thì không kê khai khấu trừ thuế đầu vào của hóa đơn này"
-    },
-    "R02_SAME_DAY_CUMULATIVE": {
-      "title": "Mua nhiều lần trong ngày cùng người bán, tổng từ ngưỡng, có hóa đơn chưa có chứng từ chuyển khoản",
-      "action": "Kiểm tra các hóa đơn trong ngày; hóa đơn trả tiền mặt không được khấu trừ"
-    },
-    "R03_AMBIGUOUS_PAYMENT": {
-      "title": "Có giao dịch ngân hàng cùng số tiền nhưng không xác định được là trả cho người bán này",
-      "action": "Xác nhận giao dịch có đúng là trả cho hóa đơn này và đúng tài khoản người bán"
-    },
-    "R04_INVOICE_INTEGRITY": {
-      "title": "Tệp hóa đơn không qua được kiểm tra toàn vẹn (chữ ký, số học, số tiền bằng chữ)",
-      "action": "Tải lại tệp XML gốc từ cổng hóa đơn điện tử hoặc liên hệ người bán; chưa khấu trừ cho tới khi xác minh"
-    },
-    "R05_DUPLICATE": {
-      "title": "Hóa đơn bị nhập trùng",
-      "action": "Chỉ giữ một bản; không khấu trừ hai lần"
-    },
-    "R06_REPLACED_ORIGINAL": {
-      "title": "Hóa đơn gốc đã bị thay thế nhưng vẫn có trong dữ liệu khấu trừ",
-      "action": "Bỏ khấu trừ hóa đơn gốc, chỉ dùng hóa đơn thay thế"
-    },
-    "R06_ADJUSTED": {
-      "title": "Hóa đơn có hóa đơn điều chỉnh đi kèm",
-      "action": "Kiểm tra số kê khai đã phản ánh phần điều chỉnh"
-    },
-    "R07_BUYER_TAX_ID": {
-      "title": "Mã số thuế người mua trên hóa đơn không phải của doanh nghiệp",
-      "action": "Yêu cầu người bán lập hóa đơn điều chỉnh hoặc thay thế; chưa khấu trừ"
-    },
-    "R07_BUYER_NAME": {
-      "title": "Tên hoặc địa chỉ người mua khác hồ sơ doanh nghiệp",
-      "action": "Đối chiếu với giấy đăng ký thuế; nếu sai thì yêu cầu người bán điều chỉnh"
-    },
-    "R08_RISKY_SELLER": {
-      "title": "Người bán có trong danh sách rủi ro về hóa đơn đã tải",
-      "action": "Rà soát giao dịch, chuẩn bị hồ sơ chứng minh giao dịch có thật (hợp đồng, giao nhận, thanh toán)"
-    },
-    "R09_NOT_ON_PORTAL": {
-      "title": "Hóa đơn có tệp XML nhưng không có trong bảng kê tải từ cổng hóa đơn điện tử",
-      "action": "Tra cứu lại hóa đơn trên cổng; nếu không tồn tại thì không khấu trừ"
-    },
-    "R09_UNCAPTURED": {
-      "title": "Bảng kê của cổng có hóa đơn mua vào nhưng chưa có tệp XML",
-      "action": "Tải tệp XML để kiểm tra và kê khai nếu đủ điều kiện"
-    },
-    "R11_VENDOR_OUTLIER": {
-      "title": "Số tiền lệch xa thông lệ của người bán",
-      "action": "Kiểm tra hợp đồng và giao nhận của hóa đơn này"
-    }
+  "R02_SAME_DAY_CUMULATIVE": {
+   "title": "Mua nhiều lần trong ngày cùng người bán, tổng từ ngưỡng, có hóa đơn chưa có chứng từ chuyển khoản",
+   "action": "Kiểm tra các hóa đơn trong ngày; hóa đơn trả tiền mặt không được khấu trừ"
+  },
+  "R03_AMBIGUOUS_PAYMENT": {
+   "title": "Có giao dịch ngân hàng cùng số tiền nhưng không xác định được là trả cho người bán này",
+   "action": "Xác nhận giao dịch có đúng là trả cho hóa đơn này và đúng tài khoản người bán"
+  },
+  "R04_INVOICE_INTEGRITY": {
+   "title": "Tệp hóa đơn không qua được kiểm tra toàn vẹn (chữ ký, số học, số tiền bằng chữ)",
+   "action": "Tải lại tệp XML gốc từ cổng hóa đơn điện tử hoặc liên hệ người bán; chưa khấu trừ cho tới khi xác minh"
+  },
+  "R05_DUPLICATE": {
+   "title": "Hóa đơn bị nhập trùng",
+   "action": "Chỉ giữ một bản; không khấu trừ hai lần"
+  },
+  "R06_REPLACED_ORIGINAL": {
+   "title": "Hóa đơn gốc đã bị thay thế nhưng vẫn có trong dữ liệu khấu trừ",
+   "action": "Bỏ khấu trừ hóa đơn gốc, chỉ dùng hóa đơn thay thế"
+  },
+  "R06_ADJUSTED": {
+   "title": "Hóa đơn có hóa đơn điều chỉnh đi kèm",
+   "action": "Kiểm tra số kê khai đã phản ánh phần điều chỉnh"
+  },
+  "R07_BUYER_TAX_ID": {
+   "title": "Mã số thuế người mua trên hóa đơn không phải của doanh nghiệp",
+   "action": "Yêu cầu người bán lập hóa đơn điều chỉnh hoặc thay thế; chưa khấu trừ"
+  },
+  "R07_BUYER_NAME": {
+   "title": "Tên hoặc địa chỉ người mua khác hồ sơ doanh nghiệp",
+   "action": "Đối chiếu với giấy đăng ký thuế; nếu sai thì yêu cầu người bán điều chỉnh"
+  },
+  "R08_RISKY_SELLER": {
+   "title": "Người bán có trong danh sách rủi ro về hóa đơn đã tải",
+   "action": "Rà soát giao dịch, chuẩn bị hồ sơ chứng minh giao dịch có thật (hợp đồng, giao nhận, thanh toán)"
+  },
+  "R09_NOT_ON_PORTAL": {
+   "title": "Hóa đơn có tệp XML nhưng không có trong bảng kê tải từ cổng hóa đơn điện tử",
+   "action": "Tra cứu lại hóa đơn trên cổng; nếu không tồn tại thì không khấu trừ"
+  },
+  "R09_UNCAPTURED": {
+   "title": "Bảng kê của cổng có hóa đơn mua vào nhưng chưa có tệp XML",
+   "action": "Tải tệp XML để kiểm tra và kê khai nếu đủ điều kiện"
+  },
+  "R11_VENDOR_OUTLIER": {
+   "title": "Số tiền lệch xa thông lệ của người bán",
+   "action": "Kiểm tra hợp đồng và giao nhận của hóa đơn này"
   }
+ }
 }

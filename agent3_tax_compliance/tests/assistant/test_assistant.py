@@ -187,3 +187,13 @@ def test_law_change_impact_respects_effective_dates(ws, rep):
         i.key == it.invoice_keys[0] and i.issue_date.month == 7 for i in rep.invoices)]
     assert july_cash and all(it.invoice_keys[0] not in removed for it in july_cash)
     assert res['delta'] < 0
+
+
+def test_not_claimed_decision_removes_risk_but_keeps_audit_trail(ws, rep):
+    dup = next(it for it in rep.items if it.code == 'R05_DUPLICATE')
+    key = dup.invoice_keys[0]
+    decided = pipeline.run(ws, pipeline.DEFAULT_RULESET, AS_OF, extra_decisions={
+        key: dict(invoice_key=key, action='NOT_CLAIMED', evidence='Bản trùng, không đưa vào tờ khai', by='Kế toán trưởng')})
+    after = [it for it in decided.items if key in it.invoice_keys and it.code == 'R05_DUPLICATE']
+    assert after and all(it.status == 'INFO' and it.amount == 0 and 'Kế toán trưởng' in it.detail for it in after)
+    assert decided.totals['at_risk_vat'] == rep.totals['at_risk_vat'] - dup.amount

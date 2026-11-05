@@ -1,0 +1,81 @@
+/* Layout and the few things Carbon leaves to the product. Colours come from Carbon theme tokens. */
+body { margin: 0; background: var(--cds-background); color: var(--cds-text-primary); }
+.app { margin-left: 16rem; padding: 4rem 2rem 4rem; min-height: 100vh; box-sizing: border-box; max-width: 100rem; }
+.side { top: 3rem; width: 16rem; display: flex; flex-direction: column; }
+.side .cds--side-nav__items { flex: 1; overflow-y: auto; }
+.side-foot { padding: 1rem; font-size: 0.75rem; line-height: 1.33; color: var(--cds-text-secondary); border-top: 1px solid var(--cds-border-subtle); }
+.cds--side-nav__link[aria-current='page'] { background: var(--cds-layer-selected); }
+.cds--side-nav__link[aria-current='page']::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--cds-border-interactive); }
+.cds--side-nav__link { position: relative; }
+.menu-toggle { display: none; }
+.ws-picker { display: flex; align-items: center; height: 3rem; }
+.ws-select { height: 3rem; border: 0; padding: 0 1rem; background: var(--cds-background); color: var(--cds-text-primary);
+  font: inherit; font-size: 0.875rem; max-width: 22rem; border-left: 1px solid var(--cds-border-subtle); cursor: pointer; }
+.ws-select:focus { outline: 2px solid var(--cds-focus); outline-offset: -2px; }
+
+h1.page { font-size: 2rem; font-weight: 400; line-height: 1.25; margin: 0 0 0.5rem; }
+p.lead { color: var(--cds-text-secondary); margin: 0 0 2rem; max-width: 48rem; }
+h2.section { font-size: 1.25rem; font-weight: 400; margin: 2.5rem 0 1rem; }
+.muted { color: var(--cds-text-secondary); }
+.small { font-size: 0.75rem; }
+.mono { font-family: 'IBM Plex Mono', Menlo, Consolas, monospace; font-size: 0.8125rem; }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1px; background: var(--cds-border-subtle); border: 1px solid var(--cds-border-subtle); }
+.kpi { background: var(--cds-layer); padding: 1rem; min-height: 7rem; display: flex; flex-direction: column; justify-content: space-between; }
+.kpi .label { font-size: 0.875rem; color: var(--cds-text-secondary); }
+.kpi .value { font-size: 2rem; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.kpi .value.risk { color: var(--cds-support-error); }
+.kpi .value.warn { color: var(--cds-text-primary); border-left: 4px solid var(--cds-support-warning); padding-left: 0.5rem; }
+.kpi .sub { font-size: 0.75rem; color: var(--cds-text-secondary); }
+
+.bar { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin: 1rem 0; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 2rem; }
+.panel { background: var(--cds-layer); border: 1px solid var(--cds-border-subtle); padding: 1rem 1rem 1.25rem; margin-bottom: 1rem; }
+.panel h3 { font-size: 1rem; font-weight: 600; margin: 0 0 0.5rem; }
+.panel ol, .panel ul { margin: 0.25rem 0 0.75rem 1.25rem; padding: 0; }
+.panel li { margin: 0.125rem 0; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem 1.5rem; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--cds-border-subtle); }
+.table-wrap .cds--data-table { width: 100%; }
+.cds--data-table td { vertical-align: top; }
+tr.clickable { cursor: pointer; }
+tr.clickable:hover td { background: var(--cds-layer-hover); }
+.cell-title { font-weight: 600; }
+.steps { display: flex; border-bottom: 1px solid var(--cds-border-subtle); margin-bottom: 1.5rem; flex-wrap: wrap; }
+.steps a { padding: 0.75rem 1rem; color: var(--cds-text-secondary); text-decoration: none; border-bottom: 2px solid transparent; font-size: 0.875rem; }
+.steps a.on { color: var(--cds-text-primary); border-bottom-color: var(--cds-border-interactive); }
+.steps a .n { display: inline-block; width: 1.25rem; font-variant-numeric: tabular-nums; color: var(--cds-text-helper); }
+.drop { border: 1px dashed var(--cds-border-strong); padding: 1rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; background: var(--cds-field); }
+.drop.over { border-color: var(--cds-border-interactive); background: var(--cds-highlight); }
+.chips { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.answer { border-left: 3px solid var(--cds-border-interactive); padding: 0.75rem 1rem; background: var(--cds-layer); margin: 0.75rem 0; }
+.answer.user { border-left-color: var(--cds-border-strong); background: transparent; }
+.cite { font-size: 0.75rem; color: var(--cds-text-secondary); margin-top: 0.5rem; }
+.cite a { color: var(--cds-link-primary); }
+.law-prov { padding: 0.25rem 0; line-height: 1.5; }
+.law-prov.l1, .law-prov.l2 { font-weight: 600; margin-top: 1rem; }
+.law-prov.l3 { font-weight: 600; margin-top: 0.75rem; }
+.law-prov.l4 { padding-left: 1rem; }
+.law-prov.l5 { padding-left: 2rem; }
+.drawer { position: fixed; top: 3rem; right: 0; bottom: 0; width: min(40rem, 100%); background: var(--cds-layer); border-left: 1px solid var(--cds-border-subtle);
+  box-shadow: -2px 0 6px rgba(0,0,0,.2); z-index: 8000; overflow-y: auto; padding: 1.5rem; box-sizing: border-box; }
+.drawer h2 { font-size: 1.25rem; font-weight: 400; margin: 0 4.5rem 1rem 0; }
+.drawer .close { position: absolute; top: 1rem; right: 1rem; }
+dl.kv { display: grid; grid-template-columns: 11rem 1fr; gap: 0.25rem 1rem; margin: 0 0 1rem; font-size: 0.875rem; }
+dl.kv dt { color: var(--cds-text-secondary); }
+dl.kv dd { margin: 0; }
+.notice { margin: 0 0 1rem; }
+.empty { padding: 2rem; text-align: center; color: var(--cds-text-secondary); border: 1px dashed var(--cds-border-subtle); }
+
+@media (max-width: 66rem) {
+  .app { margin-left: 0; padding: 4rem 1rem 3rem; }
+  .side { transform: translateX(-100%); transition: transform 110ms; z-index: 7000; }
+  body.nav-open .side { transform: none; }
+  .menu-toggle { display: flex; }
+  .grid2 { grid-template-columns: 1fr; }
+  .ws-select { max-width: 11rem; }
+}
+.drawer h3 { font-size: 0.875rem; font-weight: 600; letter-spacing: 0.16px; margin: 1.5rem 0 0.5rem; color: var(--cds-text-primary); }
+.drawer p { margin: 0 0 0.5rem; font-size: 0.875rem; line-height: 1.43; }
+.drawer .close { z-index: 1; }

@@ -7,6 +7,7 @@ import unicodedata
 from datetime import date, datetime, timezone
 from pathlib import Path
 
+from .validity import SCHEMA as VALIDITY_SCHEMA
 from .vbpl import ParsedDoc, chunks
 
 SCHEMA = """
@@ -52,10 +53,11 @@ class Corpus:
         self.db = sqlite3.connect(self.path, timeout=60)
         self.db.row_factory = sqlite3.Row
         self.db.execute('PRAGMA busy_timeout=60000')
-        if not self.db.execute("SELECT 1 FROM sqlite_master WHERE name='chunks_fts'").fetchone():
-            self.db.executescript(SCHEMA)
-        try:
-            self.db.execute('PRAGMA journal_mode=WAL')      # readers do not block the sync writer
+        if not self.db.execute("SELECT 1 FROM sqlite_master WHERE name='validity'").fetchone():
+            self.db.executescript(SCHEMA + VALIDITY_SCHEMA)
+        try:                                                # readers do not block the sync writer; switching needs a lock,
+            if self.db.execute('PRAGMA journal_mode').fetchone()[0].lower() != 'wal':   # so only switch once
+                self.db.execute('PRAGMA journal_mode=WAL')
         except sqlite3.OperationalError:
             pass
 
@@ -130,13 +132,17 @@ class Corpus:
         terms = sorted(set(toks) | set(folded) | set(bigrams(toks).split()))
         match = ' OR '.join('"' + t.replace('"', '') + '"' for t in terms)
         sql = ('SELECT c.chunk_id, c.doc_id, c.prov_id, c.path, c.text, d.doc_num, d.title, d.doc_type, d.eff_from, d.eff_to, d.status_name, '
-               'd.review_status, d.issue_date, bm25(chunks_fts, 0, 2.0, 1.0, 0.6, 1.6) AS score FROM chunks_fts JOIN chunks c USING(chunk_id) '
-               'JOIN documents d ON d.doc_id=c.doc_id WHERE chunks_fts MATCH ?')
+               'd.review_status, d.issue_date, v.eff_to AS ended_on, v.by_doc_num AS ended_by, '
+               'bm25(chunks_fts, 0, 2.0, 1.0, 0.6, 1.6) AS score FROM chunks_fts JOIN chunks c USING(chunk_id) '
+               'JOIN documents d ON d.doc_id=c.doc_id LEFT JOIN validity v ON v.doc_id=d.doc_id '
+               'LEFT JOIN stale_provisions s ON s.doc_id=c.doc_id AND s.prov_id=c.prov_id WHERE chunks_fts MATCH ?')
         args = [match]
         if as_of:
             # A document without an effective date (typically a consolidated text) counts from its issue date.
-            sql += " AND COALESCE(d.eff_from, d.issue_date, '0000') <= ? AND (d.eff_to IS NULL OR d.eff_to > ?)"
-            args += [as_of.isoformat(), as_of.isoformat()]
+            # An end date read from a replacing act (table validity) counts as much as the one the source site gives.
+            sql += (" AND COALESCE(d.eff_from, d.issue_date, '0000') <= ? AND (d.eff_to IS NULL OR d.eff_to > ?)"
+                    " AND (v.eff_to IS NULL OR v.eff_to > ?) AND (s.ended_on IS NULL OR s.ended_on > ?)")
+            args += [as_of.isoformat()] * 4
         if doc_ids:
             sql += f' AND c.doc_id IN ({",".join("?" * len(doc_ids))})'
             args += doc_ids
@@ -186,6 +192,8 @@ class Corpus:
         q = lambda s: self.db.execute(s).fetchone()[0]  # noqa: E731
         return dict(documents=q('SELECT COUNT(*) FROM documents'), indexed=q('SELECT COUNT(*) FROM documents WHERE indexed=1'),
                     provisions=q('SELECT COUNT(*) FROM provisions'), chunks=q('SELECT COUNT(*) FROM chunks'),
-                    in_force=q("SELECT COUNT(*) FROM documents WHERE status_name LIKE 'Còn hiệu lực%'"),
+                    in_force=q("SELECT COUNT(*) FROM documents d LEFT JOIN validity v USING(doc_id) WHERE d.indexed=1 AND d.status_name LIKE 'Còn hiệu lực%' "
+                              "AND v.eff_to IS NULL AND (d.eff_to IS NULL OR d.eff_to > date('now'))"),
                     with_issues=q("SELECT COUNT(*) FROM documents WHERE notes != '[]'"),
+                    ended_by_later_act=q('SELECT COUNT(*) FROM validity'),
                     last_snapshot=dict(self.db.execute('SELECT * FROM snapshots ORDER BY snapshot_id DESC LIMIT 1').fetchone() or {}))
