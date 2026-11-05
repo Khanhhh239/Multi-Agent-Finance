@@ -192,3 +192,15 @@ def test_verifier_regrounds_a_true_claim_on_the_sentence_that_supports_it():
     raw = _j.dumps(dict(answer=[dict(text='Ngưỡng mới là 02 tỷ đồng.', sources=['P1'], quote='Doanh thu năm làm căn cứ')]))
     kept, dropped, _, _ = verify(raw, [p1, p2], 'Nghị định 141/2026 sửa ngưỡng doanh thu của hộ kinh doanh thành bao nhiêu?')
     assert not kept                                             # a number no passage supports is never regrounded
+
+
+def test_verifier_drops_a_sentence_that_only_repeats_the_question():
+    import json as _j
+    from src.lawbase.rag import Passage, verify
+    p = Passage('P1', '252/2026/NĐ-CP', 'Nghị định', 'Nghị định 252/2026/NĐ-CP > Điều 24 > Khoản 2', 'u', None, None,
+                'Thời hạn tạm nộp quý chậm nhất là ngày cuối cùng của tháng đầu của quý tiếp theo quý phát sinh nghĩa vụ thuế.')
+    q = 'Thời hạn tạm nộp thuế thu nhập doanh nghiệp theo quý là khi nào?'
+    raw = _j.dumps(dict(answer=[dict(text=q, sources=['P1'], quote='Thời hạn tạm nộp quý chậm nhất'),
+                                 dict(text='Chậm nhất là ngày cuối cùng của tháng đầu của quý tiếp theo.', sources=['P1'], quote='ngày cuối cùng của tháng đầu của quý tiếp theo')]))
+    kept, dropped, _, _ = verify(raw, [p], q)
+    assert [k['text'] for k in kept] == ['Chậm nhất là ngày cuối cùng của tháng đầu của quý tiếp theo.'] and 'lặp lại' in dropped[0]['reason']

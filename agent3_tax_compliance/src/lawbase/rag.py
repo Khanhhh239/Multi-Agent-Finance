@@ -117,6 +117,12 @@ def topic_coverage(question: str, cited: list) -> float:
     return len(terms & have) / len(terms)
 
 
+def _echo(text: str, question: str) -> bool:
+    """The model repeated the question instead of answering it."""
+    a, b = set(fold(text).split()), set(fold(question).split())
+    return bool(a) and len(a & b) / len(a | b) >= 0.8
+
+
 def _numbers_ok(text: str, cited: list) -> set:
     return numbers(text) - numbers(' '.join(f'{p.path} {p.doc_num} {p.text}' for p in cited))   # document number lives in the path
 
@@ -138,7 +144,7 @@ def reground(text: str, passages: list[Passage], min_overlap: float = 0.5):
     return (best[1], best[2]) if best else None
 
 
-def verify(raw: str, passages: list[Passage], question: str = '', min_topic: float = 0.6) -> tuple[list, list, bool, str]:
+def verify(raw: str, passages: list[Passage], question: str = '', min_topic: float = 0.5) -> tuple[list, list, bool, str]:
     data = json.loads(raw)
     by_id = {p.pid: p for p in passages}
     kept, dropped = [], []
@@ -147,6 +153,9 @@ def verify(raw: str, passages: list[Passage], question: str = '', min_topic: flo
         cited = [by_id[x] for x in srcs if x in by_id]
         if not cited or len(cited) != len(srcs):
             dropped.append(dict(text=text, reason='mã đoạn không có trong ngữ cảnh'))
+            continue
+        if question and (text.strip().endswith('?') or _echo(text, question)):
+            dropped.append(dict(text=text, reason='câu chỉ lặp lại câu hỏi, không trả lời'))
             continue
         quote_ok = bool(quote) and norm(quote) in norm(' '.join(p.text for p in cited))
         if not quote_ok or _numbers_ok(text, cited):
