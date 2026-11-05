@@ -204,3 +204,45 @@ def test_verifier_drops_a_sentence_that_only_repeats_the_question():
                                  dict(text='Chậm nhất là ngày cuối cùng của tháng đầu của quý tiếp theo.', sources=['P1'], quote='ngày cuối cùng của tháng đầu của quý tiếp theo')]))
     kept, dropped, _, _ = verify(raw, [p], q)
     assert [k['text'] for k in kept] == ['Chậm nhất là ngày cuối cùng của tháng đầu của quý tiếp theo.'] and 'lặp lại' in dropped[0]['reason']
+
+
+def test_verifier_drops_an_amount_that_belongs_to_another_case_of_the_same_article():
+    import json as _j
+    from src.lawbase.rag import Passage, verify
+    k2 = Passage('P1', '27/2026/VBHN-NĐ-BTC', 'Văn bản hợp nhất', '27/2026/VBHN-NĐ-BTC > Điều 26 > Khoản 2', 'u', None, None,
+                 'Điều 26. Xử phạt hành vi làm mất, cháy, hỏng hóa đơn: 2. Phạt tiền từ 3.000.000 đồng đến 5.000.000 đồng đối với hành vi làm mất, cháy, hỏng hóa đơn đã lập (liên giao cho khách hàng) trong quá trình sử dụng.')
+    k3 = Passage('P2', '27/2026/VBHN-NĐ-BTC', 'Văn bản hợp nhất', '27/2026/VBHN-NĐ-BTC > Điều 26 > Khoản 3', 'u', None, None,
+                 'Điều 26. Xử phạt hành vi làm mất, cháy, hỏng hóa đơn: 3. Phạt tiền từ 4.000.000 đồng đến 8.000.000 đồng đối với một trong các hành vi sau đây: a) Làm mất, cháy, hỏng hóa đơn đã lập trong trường hợp chưa lưu trữ dữ liệu.')
+    q = 'Làm mất hóa đơn đã lập giao cho khách hàng trong quá trình sử dụng bị phạt bao nhiêu?'
+    wrong = _j.dumps(dict(answer=[dict(text='Phạt tiền từ 4.000.000 đồng đến 8.000.000 đồng.', sources=['P2'], quote='Phạt tiền từ 4.000.000 đồng đến 8.000.000 đồng')]))
+    kept, dropped, _, _ = verify(wrong, [k2, k3], q)
+    assert not kept and dropped                                    # rejected (topic or case check)
+    right = _j.dumps(dict(answer=[dict(text='Phạt tiền từ 3.000.000 đồng đến 5.000.000 đồng.', sources=['P1'], quote='Phạt tiền từ 3.000.000 đồng đến 5.000.000 đồng')]))
+    kept, dropped, _, _ = verify(right, [k2, k3], q)
+    assert kept
+
+
+def test_phrase_amendment_is_applied_to_the_amended_provision(tmp_path):
+    import sqlite3
+    from datetime import date
+    from src.lawbase import validity as V
+    from src.lawbase.rag import apply_phrase_amendments
+    db = sqlite3.connect(tmp_path / 'c.sqlite3')
+    db.executescript("""CREATE TABLE documents(doc_id TEXT PRIMARY KEY, doc_num TEXT, title TEXT, eff_from TEXT, issue_date TEXT, indexed INTEGER);
+                        CREATE TABLE provisions(doc_id TEXT, prov_id TEXT, text TEXT, parent TEXT);""" + V.SCHEMA)
+    db.executemany('INSERT INTO documents VALUES(?,?,?,?,?,1)', [
+        ('nd68', '68/2026/NĐ-CP', 'Nghị định số 68/2026/NĐ-CP về hộ kinh doanh', '2026-03-05', '2026-03-05'),
+        ('nd141', '141/2026/NĐ-CP', 'Nghị định số 141/2026/NĐ-CP sửa đổi Nghị định 68/2026', '2026-01-01', '2026-04-29')])
+    db.executemany('INSERT INTO provisions VALUES(?,?,?,?)', [
+        ('nd141', 'd1', 'Điều 1. Sửa đổi, bổ sung một số điều của Nghị định số 68/2026/NĐ-CP', None),
+        ('nd141', 'k1', '1. Sửa đổi cụm từ “500 triệu đồng” thành “01 tỷ đồng” tại Điều 3, Điều 4, khoản 1 Điều 8 Nghị định số 68/2026/NĐ-CP.', 'd1')])
+    rows = V.phrase_amendments(db)
+    assert {(r[0], r[1]) for r in rows} == {('nd68', 'Điều 3'), ('nd68', 'Điều 4'), ('nd68', 'Điều 8')}
+    db.executemany('INSERT INTO phrase_amendments VALUES(?,?,?,?,?,?,?)', rows)
+
+    class C:
+        pass
+    c = C(); c.db = db
+    out = apply_phrase_amendments(c, 'nd68', 'Nghị định 68/2026/NĐ-CP > Điều 3. Thuế GTGT > Khoản 1',
+                                  'Hộ kinh doanh có doanh thu năm từ 500 triệu đồng trở xuống không chịu thuế.', date(2026, 11, 5))
+    assert '01 tỷ đồng' in out and '500 triệu' not in out.split('[Lưu ý')[0] and '141/2026/NĐ-CP' in out

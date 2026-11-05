@@ -43,7 +43,51 @@ CREATE TABLE IF NOT EXISTS validity(doc_id TEXT PRIMARY KEY, eff_to TEXT, by_doc
 CREATE TABLE IF NOT EXISTS validity_notes(doc_id TEXT, by_doc_id TEXT, by_prov_id TEXT, by_doc_num TEXT, kind TEXT, quote TEXT);
 CREATE TABLE IF NOT EXISTS stale_provisions(doc_id TEXT, prov_id TEXT, ended_on TEXT, target_doc_id TEXT, target_num TEXT,
   PRIMARY KEY(doc_id, prov_id));
+CREATE TABLE IF NOT EXISTS phrase_amendments(doc_id TEXT, article TEXT, old TEXT, new TEXT, by_doc_num TEXT, by_prov_id TEXT, eff_from TEXT);
 """
+# "1. Sửa đổi cụm từ “500 triệu đồng” thành “01 tỷ đồng” tại Điều 3, Điều 4, khoản 1 Điều 8 ... Nghị định số 68/2026/NĐ-CP."
+PHRASE_RE = re.compile(r'(?:Sửa\s+đổi|Thay\s+thế|Thay)\s+cụm\s+từ\s*[“"]([^”"]{2,80})[”"]\s*(?:thành|bằng)(?:\s+cụm\s+từ)?\s*[“"]([^”"]{1,120})[”"]\s*tại\s+(.+)', re.I | re.S)
+
+
+def phrase_amendments(db: sqlite3.Connection) -> list[tuple]:
+    """(target doc_id, article label, old phrase, new phrase, amending doc number, provision, effective date).
+
+    The target act is the number in the clause itself or in its article heading ("Sửa đổi, bổ sung một số điều của Nghị
+    định số 68/2026/NĐ-CP"). A consolidated text of the target issued before the amending act gets the same correction;
+    one issued after it already contains the new wording."""
+    cols = {r[1] for r in db.execute('PRAGMA table_info(documents)')}
+    issue = 'issue_date' if 'issue_date' in cols else 'eff_from'
+    docs = {r[0]: r for r in db.execute(f'SELECT doc_id, doc_num, title, eff_from, {issue} FROM documents')}
+    by_num = {}
+    for d in docs.values():
+        if d[1]:
+            by_num.setdefault(norm_num(d[1]), []).append(d[0])
+    out = []
+    rows = db.execute("""SELECT p.doc_id, p.prov_id, p.text, p.parent FROM provisions p JOIN documents d USING(doc_id)
+                         WHERE d.indexed=1 AND d.eff_from IS NOT NULL AND p.text LIKE '%cụm từ%'""").fetchall()
+    for doc_id, prov_id, text, parent in rows:
+        m = PHRASE_RE.search(text or '')
+        if not m:
+            continue
+        old, new, places = m.group(1).strip(), m.group(2).strip(), m.group(3)
+        nums = NUM_RE.findall(places)
+        if not nums and parent:
+            head = db.execute('SELECT text FROM provisions WHERE doc_id=? AND prov_id=?', (doc_id, parent)).fetchone()
+            nums = NUM_RE.findall(head[0]) if head else []
+        if not nums:
+            continue
+        target = norm_num(nums[-1])
+        arts = sorted(set(re.findall(r'Điều\s+(\d+[a-zđ]?)', places)))
+        amending = docs[doc_id]
+        targets = list(by_num.get(target, []))
+        targets += [d[0] for d in docs.values() if 'VBHN' in (d[1] or '') and consolidated_base(d[2]) and norm_num(consolidated_base(d[2])) == target
+                    and (d[4] or '') < (amending[4] or '')]
+        for t in targets:
+            if t == doc_id:
+                continue
+            for a in arts:
+                out.append((t, f'Điều {a}', old, new, amending[1], prov_id, amending[3]))
+    return out
 
 
 @dataclass
@@ -269,7 +313,10 @@ def derive(db: sqlite3.Connection) -> dict:
     db.executemany('INSERT INTO validity_notes VALUES(?,?,?,?,?,?)', notes)
     stale = stale_articles(db, {k: v[0] for k, v in full.items()})
     db.executemany('INSERT OR REPLACE INTO stale_provisions VALUES(?,?,?,?,?)', stale)
+    db.execute('DELETE FROM phrase_amendments')
+    phrases = phrase_amendments(db)
+    db.executemany('INSERT INTO phrase_amendments VALUES(?,?,?,?,?,?,?)', phrases)
     db.commit()
     changed = [(k, before.get(k), v[0]) for k, v in full.items() if before.get(k) != v[0]]
     changed += [(k, before[k], None) for k in before if k not in full]
-    return dict(ended=len(full), partial_notes=len(notes), stale_provisions=len(stale), changed=changed)
+    return dict(ended=len(full), partial_notes=len(notes), stale_provisions=len(stale), phrase_amendments=len(phrases), changed=changed)

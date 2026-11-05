@@ -78,6 +78,26 @@ class RagAnswer:
         return asdict(self)
 
 
+def apply_phrase_amendments(corpus: Corpus, doc_id: str, path: str, text: str, as_of: date) -> str:
+    """Read a provision as amended by later "sửa đổi cụm từ ... thành ..." clauses in force on as_of, and say so."""
+    m = re.search(r'> (Điều \d+[a-zđ]?)\b', path or '')
+    if not m:
+        return text
+    try:
+        rows = corpus.db.execute('SELECT old, new, by_doc_num, eff_from FROM phrase_amendments WHERE doc_id=? AND article=?',
+                                 (doc_id, m.group(1))).fetchall()
+    except Exception:  # noqa: BLE001 - table appears with the first validity run
+        return text
+    notes = []
+    for old, new, by_num, eff in rows:
+        if eff and eff > as_of.isoformat():
+            continue
+        if old in text:
+            text = text.replace(old, new)
+            notes.append(f'cụm từ “{old}” đã được sửa thành “{new}” theo {by_num}' + (f', hiệu lực từ {eff}' if eff else ''))
+    return text + (f' [Lưu ý: {"; ".join(notes)}.]' if notes else '')
+
+
 def pack(corpus: Corpus, question: str, as_of: date, k: int = 8, budget_tokens: int = 7000, doc_ids: list[str] | None = None) -> list[Passage]:
     """Top units in rank order until the token budget is used. A unit too long for the rest of the budget is replaced by
     its best-matching piece, marked partial; nothing is cut silently."""
@@ -90,6 +110,7 @@ def pack(corpus: Corpus, question: str, as_of: date, k: int = 8, budget_tokens: 
         if used + len(text) > budget:
             continue
         url = corpus.db.execute('SELECT url FROM documents WHERE doc_id=?', (h['doc_id'],)).fetchone()[0]
+        text = apply_phrase_amendments(corpus, h['doc_id'], h['path'], text, as_of)
         out.append(Passage(f'P{len(out) + 1}', h['doc_num'], h['doc_type'], h['path'], url, h['eff_from'], h['status_name'], text, partial))
         used += len(text) + len(h['path']) + 80
     return out
@@ -121,6 +142,30 @@ def _echo(text: str, question: str) -> bool:
     """The model repeated the question instead of answering it."""
     a, b = set(fold(text).split()), set(fold(question).split())
     return bool(a) and len(a & b) / len(a | b) >= 0.8
+
+
+def _numbers_off_case(text: str, cited: list, question: str, min_case: float = 0.4) -> list[str]:
+    """Numbers of the answer whose own sentence in the cited text is about another case than the question.
+
+    A clause often lists several cases with different amounts ("khoản 2: làm mất hóa đơn ... 3.000.000"; "khoản 3: 4.000.000
+    ... các hành vi sau đây"). For every number of the answer (except those already in the question or in the document
+    number), the sentence of the cited text that holds it must contain at least min_case of the question's topic terms;
+    the best such sentence counts. Article headings are separate sentences, so they do not vouch for a clause."""
+    terms = topic_terms(question)
+    if not terms:
+        return []
+    skip = numbers(question) | numbers(' '.join(f'{p.path} {p.doc_num}' for p in cited))
+    want = [n for n in numbers(text) if n not in skip and len(n.replace('.', '').replace(',', '')) > 1]
+    sents = [sg for p in cited for sg in re.split(r'(?<=[.;:])\s+|\s+(?=[a-zđ]\)\s)', p.text) if sg.strip()]
+    off = []
+    for n in want:
+        holders = [sg for sg in sents if n in numbers(sg)]
+        if not holders:
+            continue
+        best = max(len(terms & set(fold(sg).split())) / len(terms) for sg in holders)
+        if best < min_case:
+            off.append(n)
+    return off
 
 
 def _numbers_ok(text: str, cited: list) -> set:
@@ -178,6 +223,10 @@ def verify(raw: str, passages: list[Passage], question: str = '', min_topic: flo
         cov = topic_coverage(question, cited)
         if question and cov < min_topic:
             dropped.append(dict(text=text, reason=f'điều khoản được dẫn không nói về chủ đề câu hỏi (phủ {cov:.0%} từ khóa)'))
+            continue
+        off = _numbers_off_case(text, cited, question) if question else []
+        if off:
+            dropped.append(dict(text=text, reason=f'số {", ".join(off)} có trong điều khoản nhưng thuộc trường hợp khác với câu hỏi'))
             continue
         kept.append(dict(text=text, quote=quote, sources=srcs,
                          citations=[dict(pid=p.pid, doc_num=p.doc_num, path=p.path, url=p.url) for p in cited]))
