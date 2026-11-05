@@ -1,0 +1,184 @@
+{
+  "version": "lawbase-eval-2026-11-05",
+  "note": "Đáp án được đối chiếu tận tay với nguyên văn trong kho (vbpl.vn) ngày 05/11/2026. expected: bất kỳ điều khoản nào trong danh sách đều đúng. must_contain: chuỗi phải có trong câu trả lời khi không từ chối.",
+  "questions": [
+    {
+      "id": "Q01",
+      "q": "Mức tính tiền chậm nộp tiền thuế là bao nhiêu mỗi ngày?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "108/2025/QH15",
+          "Điều 16",
+          "Khoản 2"
+        ]
+      ],
+      "must_contain": [
+        "0,03%"
+      ]
+    },
+    {
+      "id": "Q02",
+      "q": "Thời hạn nộp hồ sơ khai thuế đối với loại thuế khai theo tháng là khi nào?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "252/2026/NĐ-CP",
+          "Điều 10",
+          "Khoản 2"
+        ]
+      ],
+      "must_contain": [
+        "20"
+      ]
+    },
+    {
+      "id": "Q03",
+      "q": "Khai sai căn cứ tính thuế dẫn đến thiếu số thuế phải nộp thì bị phạt bao nhiêu?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "27/2026/VBHN-NĐ-BTC",
+          "Điều 16",
+          "Khoản 1"
+        ]
+      ],
+      "must_contain": [
+        "20%"
+      ]
+    },
+    {
+      "id": "Q04",
+      "q": "Thời điểm lập hóa đơn khi bán hàng hóa là lúc nào?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "254/2026/NĐ-CP",
+          "Điều 9",
+          "Khoản 1"
+        ],
+        [
+          "18/VBHN-BTC",
+          "Điều 9",
+          "Khoản 1"
+        ]
+      ],
+      "must_contain": [
+        "quyền sở hữu"
+      ]
+    },
+    {
+      "id": "Q05",
+      "q": "Doanh nghiệp có tổng doanh thu năm không quá 3 tỷ đồng áp dụng thuế suất thuế thu nhập doanh nghiệp bao nhiêu?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "67/2025/QH15",
+          "Điều 10",
+          "Khoản 2"
+        ],
+        [
+          "113/VBHN-VPQH",
+          "Điều 10",
+          "Khoản 2"
+        ],
+        [
+          "61/VBHN-VPQH",
+          "Điều 10",
+          "Khoản 2"
+        ]
+      ],
+      "must_contain": [
+        "15%"
+      ]
+    },
+    {
+      "id": "Q06",
+      "q": "Điều kiện khấu trừ thuế giá trị gia tăng đầu vào gồm những gì?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "48/2024/QH15",
+          "Điều 14",
+          "Khoản 2"
+        ],
+        [
+          "12/VBHN-VPQH",
+          "Điều 14",
+          "Khoản 2"
+        ],
+        [
+          "114/VBHN-VPQH",
+          "Điều 14",
+          "Khoản 2"
+        ]
+      ],
+      "must_contain": [
+        "không dùng tiền mặt"
+      ]
+    },
+    {
+      "id": "Q07",
+      "q": "Nghị định 141/2026 sửa ngưỡng doanh thu của hộ kinh doanh trong Nghị định 68/2026 thành bao nhiêu?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "141/2026/NĐ-CP",
+          "Điều 1",
+          null
+        ]
+      ],
+      "must_contain": [
+        "01 tỷ"
+      ]
+    },
+    {
+      "id": "Q08",
+      "q": "Doanh nghiệp có tổng doanh thu năm trên 3 tỷ đến 50 tỷ đồng chịu thuế suất thu nhập doanh nghiệp bao nhiêu?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "67/2025/QH15",
+          "Điều 10",
+          "Khoản 3"
+        ],
+        [
+          "113/VBHN-VPQH",
+          "Điều 10",
+          "Khoản 3"
+        ],
+        [
+          "61/VBHN-VPQH",
+          "Điều 10",
+          "Khoản 3"
+        ]
+      ],
+      "must_contain": [
+        "17%"
+      ]
+    },
+    {
+      "id": "Q09",
+      "q": "Lập hóa đơn không đúng thời điểm khi bán hàng hóa với 1 số hóa đơn bị phạt thế nào?",
+      "as_of": "2026-11-05",
+      "expected": [
+        [
+          "27/2026/VBHN-NĐ-BTC",
+          "Điều 24",
+          "Khoản 2"
+        ]
+      ],
+      "must_contain": [
+        "500.000"
+      ]
+    },
+    {
+      "id": "Q10",
+      "q": "Thuế suất thuế nhập khẩu ưu đãi đặc biệt đối với xe ô tô nguyên chiếc là bao nhiêu?",
+      "as_of": "2026-11-05",
+      "expected": [],
+      "must_contain": [],
+      "expect_abstain": true
+    }
+  ]
+}
