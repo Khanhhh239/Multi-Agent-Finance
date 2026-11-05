@@ -1,5 +1,19 @@
 /* Layout and the few things Carbon leaves to the product. Colours come from Carbon theme tokens. */
-body { margin: 0; background: var(--cds-background); color: var(--cds-text-primary); }
+/* Be Vietnam Pro: drawn for Vietnamese diacritics, bundled locally (no network at run time). */
+:root { --app-font: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; }
+html, body, button, input, select, textarea, .cds--btn, .cds--text-input, .cds--select-input, .cds--label, .cds--tag, .cds--data-table,
+.cds--side-nav__link-text, .cds--header__name, .cds--inline-notification__title, .cds--inline-notification__subtitle, h1, h2, h3, p, li, dd, dt, td, th {
+  font-family: var(--app-font) !important; }
+body { margin: 0; background: var(--cds-background); color: var(--cds-text-primary); font-size: 0.9375rem; line-height: 1.5;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+.mono, code { font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace !important; }
+td.num, .kpi .value { font-variant-numeric: tabular-nums; }
+.drawer ul, .drawer ol { margin: 0 0 0.5rem 1.25rem; padding: 0; font-size: 0.875rem; line-height: 1.5; }
+details.guide { border: 1px solid var(--cds-border-subtle); background: var(--cds-layer); margin: 0 0 1rem; }
+details.guide summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 500; color: var(--cds-link-primary); }
+details.guide .guide-body { padding: 0 1rem 0.75rem; font-size: 0.875rem; }
+details.guide ol, details.guide ul { margin: 0.25rem 0 0.75rem 1.25rem; padding: 0; }
+.plain { background: var(--cds-layer-accent, #e8e8e8); border-left: 3px solid var(--cds-support-info, #0043ce); padding: 0.75rem 1rem; margin: 0 0 1rem; font-size: 0.9375rem; }
 .app { margin-left: 16rem; padding: 4rem 2rem 4rem; min-height: 100vh; box-sizing: border-box; max-width: 100rem; }
 .side { top: 3rem; width: 16rem; display: flex; flex-direction: column; }
 .side .cds--side-nav__items { flex: 1; overflow-y: auto; }
@@ -13,9 +27,9 @@ body { margin: 0; background: var(--cds-background); color: var(--cds-text-prima
   font: inherit; font-size: 0.875rem; max-width: 22rem; border-left: 1px solid var(--cds-border-subtle); cursor: pointer; }
 .ws-select:focus { outline: 2px solid var(--cds-focus); outline-offset: -2px; }
 
-h1.page { font-size: 2rem; font-weight: 400; line-height: 1.25; margin: 0 0 0.5rem; }
+h1.page { font-size: 1.875rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.25; margin: 0 0 0.5rem; }
 p.lead { color: var(--cds-text-secondary); margin: 0 0 2rem; max-width: 48rem; }
-h2.section { font-size: 1.25rem; font-weight: 400; margin: 2.5rem 0 1rem; }
+h2.section { font-size: 1.125rem; font-weight: 600; margin: 2.5rem 0 1rem; }
 .muted { color: var(--cds-text-secondary); }
 .small { font-size: 0.75rem; }
 .mono { font-family: 'IBM Plex Mono', Menlo, Consolas, monospace; font-size: 0.8125rem; }

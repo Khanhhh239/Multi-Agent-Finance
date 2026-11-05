@@ -128,4 +128,5 @@ def suggest_mapping(path: Path, preview_rows: int = 5) -> dict:
                                 description=str(get('description'))[:80]))
         except ValueError as e:
             preview.append(dict(error=str(e)[:80]))
-    return dict(format=fmt, header_row=head + 1, missing=sorted(set(BANK_SYNONYMS) - set(found)), preview=preview)
+    return dict(format=fmt, header_row=head + 1, missing=sorted(set(BANK_SYNONYMS) - set(found)), preview=preview,
+                headers=[str(c) for c in header if str(c).strip()])

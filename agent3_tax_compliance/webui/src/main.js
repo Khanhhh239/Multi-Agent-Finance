@@ -1,7 +1,11 @@
 import '@carbon/styles/css/styles.min.css';
+import '@fontsource/be-vietnam-pro/400.css';
+import '@fontsource/be-vietnam-pro/500.css';
+import '@fontsource/be-vietnam-pro/600.css';
 import './app.css';
 import { $, app, esc, loadWorkspaces, notice, state, store } from './core.js';
-import { pageIntake, pageOverview, pageReview } from './pages_work.js';
+import { pageIntake } from './pages_intake.js';
+import { pageOverview, pageReview } from './pages_work.js';
 import { pageAsk, pageBank, pageCalendar, pageInvoices, pageLaw, pageSettings } from './pages_more.js';
 
 const NAV = [

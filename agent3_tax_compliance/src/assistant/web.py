@@ -11,6 +11,7 @@ import re
 import shutil
 import threading
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
@@ -21,7 +22,9 @@ from ..lawbase.store import Corpus
 from ..lawbase.sync import DEFAULT_DB as LAW_DB, running_sync, sync as law_sync
 from . import pipeline, qa, report as report_mod
 from .input_schema import FILES, guide
+from . import inbox
 from .intake import IntakeError, extract_zip, suggest_mapping
+from .rules import load_ruleset, param
 from .pack import PackError, load_pack
 from .synth import generate as generate_demo
 
@@ -184,6 +187,50 @@ async def bank_save_format(wid: str, request: Request):
     data['bank_formats'] = [f for f in data.get('bank_formats', []) if f['name'] != fmt['name']] + [fmt]
     _save_pack(ws, data)
     return dict(ok=True, formats=len(data['bank_formats']))
+
+
+@app.put('/api/workspaces/{wid}/inbox')
+async def inbox_upload(wid: str, name: str, request: Request):
+    """One drop zone: the file (or every member of a zip) is classified and stored where it belongs."""
+    ws = ws_path(wid)
+    raw = await request.body()
+    if len(raw) > 300 * 1024 * 1024:
+        raise HTTPException(413, 'tệp quá lớn')
+    clean = re.sub(r'[^\w.\-]', '_', Path(name).name)
+    pack = load_pack(ws / 'pack.json')
+    try:
+        return dict(files=inbox.ingest(ws, clean, raw, pack.tax_code, pack))
+    except IntakeError as e:
+        raise HTTPException(422, str(e))
+
+
+@app.get('/api/workspaces/{wid}/details/{kind}')
+def file_details(wid: str, kind: str):
+    ws = ws_path(wid)
+    if kind not in inbox.KIND_FOLDER:
+        raise HTTPException(400, 'loại tệp không hợp lệ')
+    return _json(inbox.file_details(ws, kind, load_pack(ws / 'pack.json'), _as_of(ws)))
+
+
+@app.post('/api/workspaces/{wid}/bank/preview')
+async def bank_preview(wid: str, name: str, request: Request):
+    ws = ws_path(wid)
+    path = ws / 'bank' / re.sub(r'[^\w.\-]', '_', Path(name).name)
+    if not path.exists():
+        raise HTTPException(404, 'không có tệp sao kê này')
+    try:
+        return inbox.preview_with(path, await request.json())
+    except (IntakeError, ValueError, TypeError) as e:
+        raise HTTPException(422, str(e))
+
+
+@app.get('/api/workspaces/{wid}/coverage')
+def coverage(wid: str):
+    ws = ws_path(wid)
+    as_of = _as_of(ws)
+    pack = load_pack(ws / 'pack.json')
+    threshold = pack.thresholds.get('non_cash_threshold_override') or param(load_ruleset(pipeline.DEFAULT_RULESET), 'NON_CASH_THRESHOLD', as_of)[0]
+    return _json(inbox.coverage(ws, pack, as_of, Decimal(str(threshold))))
 
 
 # ----------------------------------------------------------------------------- analysis, review, questions
