@@ -1,6 +1,7 @@
 // Overview, data intake and the review queue.
 import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, needWorkspace, notice, post, put,
   state, store, table, tag } from './core.js';
+import { aiToolbar, explainBox } from './pages_ai.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 
@@ -68,6 +69,7 @@ export async function pageReview() {
   const items = rep.items.filter((it) => filter === 'all' || it.status === filter);
   const count = (s) => rep.items.filter((i) => i.status === s).length;
   app().innerHTML = `<h1 class="page">Việc cần xử lý</h1><p class="lead">Xếp theo số tiền. Mở từng dòng để xem căn cứ và ghi quyết định; mọi quyết định cần chứng từ và tên người duyệt, và được ghi lại.</p>
+    <div id="ai-tools"></div>
     <div class="bar">${[['all', `Tất cả (${rep.items.length})`], ['AT_RISK', `Có nguy cơ (${count('AT_RISK')})`], ['REVIEW', `Cần xem xét (${count('REVIEW')})`], ['OPPORTUNITY', `Bỏ sót (${count('OPPORTUNITY')})`]]
       .map(([k, l]) => `<a class="cds--btn cds--btn--${k === filter ? 'secondary' : 'ghost'} cds--btn--sm" href="#/viec?loc=${k}">${esc(l)}</a>`).join('')}</div>
     ${table(['Trạng thái', 'Hóa đơn', 'Người bán', 'Lý do', { label: 'Số tiền', num: true }], items.map((it) => {
@@ -75,16 +77,17 @@ export async function pageReview() {
       return `<tr class="clickable" data-item="${rep.items.indexOf(it)}"><td>${tag(it.status)}</td><td>${esc(invLabel(inv) || it.invoice_keys[0])}<div class="muted small">${dmy(inv?.issue_date)}</div></td>
         <td>${esc(inv?.seller_name || '')}</td><td><span class="cell-title">${esc(it.title)}</span><div class="muted small">${esc(it.detail)}</div></td><td class="num">${money(it.amount)}</td></tr>`;
     }))}`;
-  app().querySelectorAll('[data-item]').forEach((tr) => { tr.onclick = () => openItem(rep.items[Number(tr.dataset.item)]); });
+  app().querySelectorAll('[data-item]').forEach((tr) => { tr.onclick = () => openItem(rep.items[Number(tr.dataset.item)], Number(tr.dataset.item)); });
+  aiToolbar($('#ai-tools'));
 }
 
-function openItem(it) {
+function openItem(it, index) {
   const inv = invoiceOf(it.invoice_keys[0]);
   const match = state.report.matches.find((m) => m.invoice_keys.includes(it.invoice_keys[0]));
   const canDecide = it.status === 'AT_RISK' || it.status === 'REVIEW';
   const payment = /^R0[123]_/.test(it.code);
   $('#modal-root').innerHTML = `<aside class="drawer" role="dialog" aria-label="Chi tiết"><button class="cds--btn cds--btn--ghost cds--btn--sm close" id="close" type="button">Đóng</button>
-    <h2>${esc(it.title)}</h2>${tag(it.status)}
+    <h2>${esc(it.title)}</h2>${tag(it.status)}<div id="plain" style="margin-top:1rem"></div>
     <h3 class="section" style="margin-top:1.5rem">Hóa đơn</h3>
     <dl class="kv"><dt>Số hóa đơn</dt><dd>${esc(invLabel(inv) || it.invoice_keys[0])}</dd><dt>Người bán</dt><dd>${esc(inv?.seller_name || '')} <span class="muted">MST ${esc(inv?.seller_tax_id || '')}</span></dd>
     <dt>Ngày lập</dt><dd>${dmy(inv?.issue_date)}</dd><dt>Tổng thanh toán</dt><dd>${money(inv?.gross)}</dd><dt>Thuế giá trị gia tăng</dt><dd>${money(inv?.vat)}</dd>
@@ -98,6 +101,7 @@ function openItem(it) {
       ${field({ key: 'by', label: 'Người duyệt', required: true, example: 'Kế toán trưởng' })}</div>
       <div class="bar">${button('Lưu quyết định và chạy lại', 'primary', 'type="submit"')}<span id="dmsg"></span></div></form>` : ''}</aside>`;
   $('#close').onclick = () => { $('#modal-root').innerHTML = ''; };
+  if (Number.isInteger(index)) explainBox($('#plain'), index);
   const form = $('#decide');
   if (form) {
     form.onsubmit = async (e) => {

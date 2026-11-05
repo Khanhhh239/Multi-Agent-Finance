@@ -384,6 +384,9 @@ def index():
     return FileResponse(page, headers={'Cache-Control': 'no-cache'})
 
 
+from . import web_ai  # noqa: E402,F401  (registers the AI, dossier and law-alert endpoints)
+
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host='127.0.0.1', port=8640)
+    # Load by module name: run as __main__, this file is a second copy of the module and web_ai attaches to the named one.
+    uvicorn.run('src.assistant.web:app', host='127.0.0.1', port=8640)

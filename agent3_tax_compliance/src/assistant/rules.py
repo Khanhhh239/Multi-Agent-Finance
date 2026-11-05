@@ -36,6 +36,9 @@ def param(ruleset: dict, name: str, on: date | None):
     return None
 
 
+LOW_VOLUME_MAX_NUMBER, LOW_VOLUME_FROM_MONTH, LOW_VOLUME_MIN_GROSS = 10, 4, Decimal(20_000_000)
+
+
 def _item(ruleset, code, status, invoices, amount, basis, detail='', evidence=(), suffix=''):
     meta = ruleset['rules'][code + suffix] if code + suffix in ruleset['rules'] else ruleset['rules'][code]
     tag = f'[{ruleset["status"]}, {ruleset["version"]}]'
@@ -147,6 +150,19 @@ def evaluate(invoices: list[InvoiceFact], matches: list[Match], pack: Pack, rule
                                detail=f'{vn(i.gross)} đồng so với {len(prior)} hóa đơn trước của người bán'))
         if i.gross:
             prior.append(i.gross)
+
+    # Low-volume seller (signal, never money at risk). Invoice numbers restart at 1 every 1 January within each symbol
+    # (Phụ lục, mục 2 điểm a Nghị định 254/2026/NĐ-CP), so a small number late in the year means the seller has issued very
+    # few invoices under that symbol: a pattern of invoice-issuing shell companies described in the VAT-fraud literature.
+    for i in originals:
+        if i.role != 'PURCHASE' or not i.issue_date or not (i.number or '').isdigit() or not i.gross:
+            continue
+        if int(i.number) <= LOW_VOLUME_MAX_NUMBER and i.issue_date.month >= LOW_VOLUME_FROM_MONTH and i.gross >= LOW_VOLUME_MIN_GROSS:
+            items.append(_item(ruleset, 'R13_LOW_VOLUME_SELLER', 'REVIEW', [i], Decimal(0),
+                               ['Phụ lục, mục 2 điểm a Nghị định 254/2026/NĐ-CP: số hóa đơn bắt đầu từ số 1 vào ngày 01/01 hàng năm, liên tục trong cùng ký hiệu (văn bản gốc, vbpl.vn)',
+                                'Dấu hiệu rủi ro tham khảo nghiên cứu phát hiện hóa đơn khống, không phải quy định xử phạt'],
+                               detail=f'hóa đơn số {int(i.number)} của ký hiệu {i.template or ""}{i.symbol or ""} lập ngày {i.issue_date:%d/%m/%Y}, '
+                                      f'trị giá {vn(i.gross)} đồng: người bán mới lập khoảng {int(i.number)} hóa đơn của ký hiệu này trong năm'))
 
     for i in originals:                                   # internal policies: add flags only
         for pol in pack.policies:

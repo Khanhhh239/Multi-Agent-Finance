@@ -56,7 +56,7 @@ def test_file_status_mapping_preview_and_coverage(env):
     bank_a = next((demo / 'bank').glob('*.csv'))
     c.put(f'/api/workspaces/{wid}/inbox?name={bank_a.name}', content=bank_a.read_bytes())
     det = c.get(f'/api/workspaces/{wid}/details/purchase_xml').json()
-    assert len(det) == 44 and all(d['date'] for d in det if d['ok'])
+    assert len(det) == 47 and all(d['date'] for d in det if d['ok'])
     bank = c.get(f'/api/workspaces/{wid}/details/bank').json()
     assert bank[0]['ok'] is False and 'Nhận dạng cột' in bank[0]['errors'][0]          # no saved format yet
     s = c.post(f'/api/workspaces/{wid}/bank/suggest?name={bank_a.name}').json()

@@ -78,10 +78,10 @@ class RagAnswer:
         return asdict(self)
 
 
-def pack(corpus: Corpus, question: str, as_of: date, k: int = 8, budget_tokens: int = 7000) -> list[Passage]:
+def pack(corpus: Corpus, question: str, as_of: date, k: int = 8, budget_tokens: int = 7000, doc_ids: list[str] | None = None) -> list[Passage]:
     """Top units in rank order until the token budget is used. A unit too long for the rest of the budget is replaced by
     its best-matching piece, marked partial; nothing is cut silently."""
-    hits = corpus.search(question, as_of, k)
+    hits = corpus.search(question, as_of, k, doc_ids)
     budget = int(budget_tokens * CHARS_PER_TOKEN)
     out, used = [], 0
     for h in hits:
@@ -124,11 +124,11 @@ def verify(raw: str, passages: list[Passage]) -> tuple[list, list, bool, str]:
 
 
 def answer(corpus: Corpus, question: str, as_of: date | None = None, llm: Ollama | None = None, min_coverage: float = 0.35,
-           k: int = 8, budget_tokens: int = 7000) -> RagAnswer:
+           k: int = 8, budget_tokens: int = 7000, doc_ids: list[str] | None = None) -> RagAnswer:
     as_of = as_of or date.today()
-    passages = pack(corpus, question, as_of, k, budget_tokens)
+    passages = pack(corpus, question, as_of, k, budget_tokens, doc_ids)
     res = RagAnswer(question, as_of.isoformat(), 'ABSTAIN', passages=[asdict(p) for p in passages])
-    top = corpus.search(question, as_of, 1)
+    top = corpus.search(question, as_of, 1, doc_ids)
     res.stats['retrieval_top_coverage'] = round(top[0]['coverage'], 3) if top else 0
     if not passages or res.stats['retrieval_top_coverage'] < min_coverage:
         res.note = 'Kho văn bản không có đoạn đủ liên quan để trả lời; hãy hỏi chuyên gia hoặc tra Chatbot AI của Cục Thuế.'

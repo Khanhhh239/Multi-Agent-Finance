@@ -1,5 +1,5 @@
 {
- "version": "assistant-ruleset-2026-11-05c",
+ "version": "assistant-ruleset-2026-11-05d",
  "status": "DRAFT",
  "status_note": "Chưa có chuyên gia thuế duyệt. Căn cứ ghi kèm mức kiểm chứng; phần lớn đã đối chiếu văn bản gốc trong kho luật.",
  "parameters": {
@@ -159,6 +159,14 @@
   "R11_VENDOR_OUTLIER": {
    "title": "Số tiền lệch xa thông lệ của người bán",
    "action": "Kiểm tra hợp đồng và giao nhận của hóa đơn này"
+  },
+  "R12_ITEM_PURPOSE": {
+   "title": "Hàng hóa có thể không phục vụ kinh doanh",
+   "action": "Xác nhận mục đích sử dụng; nếu là chi cho cá nhân thì không kê khai khấu trừ và không tính vào chi phí được trừ"
+  },
+  "R13_LOW_VOLUME_SELLER": {
+   "title": "Người bán phát hành rất ít hóa đơn trong năm",
+   "action": "Kiểm tra người bán còn hoạt động, đối chiếu hợp đồng, giao nhận hàng và chứng từ thanh toán trước khi kê khai"
   }
  }
 }

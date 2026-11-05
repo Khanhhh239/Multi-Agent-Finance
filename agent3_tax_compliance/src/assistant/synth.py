@@ -308,6 +308,25 @@ def generate(out: Path, seed: int = 7) -> dict:
     # S17 negative control: reviewer attached evidence from an account not loaded.
     f17, num17, g17 = b.invoice(V['V07'], date(2026, 9, 3), [('Quạt công nghiệp', 5, 2000000)], note='S17 đối chứng: người duyệt đã đính kèm ủy nhiệm chi')
 
+    # S18 a line that does not look like business use (found only by the AI layer, A1); paid by transfer.
+    f18, num18, g18 = b.invoice(V['V07'], date(2026, 9, 8), [('Điện thoại di động iPhone 16 Pro Max 256GB', 1, 32000000), ('Máy khoan bê tông Bosch GBH 2-26', 1, 3500000)],
+                                note='S18 dòng hàng có thể không phục vụ kinh doanh (chỉ lớp AI phát hiện)')
+    b.pay(date(2026, 9, 10), g18, V['V07'])
+
+    # S19 low-volume seller: invoice number 3 of its symbol in September, large amount, paid by transfer.
+    v12 = Seller('V12', 'Công ty TNHH Thương mại Dịch vụ Hưng Phát', valid_tax_id('031288877'), f'1120{rng.randint(10**8, 10**9 - 1)}', 'K26TLL', '10%', counter=2)
+    _make_cert(v12)
+    V['V12'] = v12
+    f19, num19, g19 = b.invoice(v12, date(2026, 9, 24), [('Thép hình I200', 4000, 15000)], labels=['R13_LOW_VOLUME_SELLER'],
+                                note='S19 người bán mới lập rất ít hóa đơn trong năm')
+    b.pay(date(2026, 9, 27), g19, v12, signal='name')
+
+    # S20 paid from the owner's other account; only the free-text note names the seller (found only by the AI layer, A2).
+    f20, num20, g20 = b.invoice(V['V09'], date(2026, 9, 14), [('Sửa chữa cẩu trục kho', 1, 12500000)], labels=['R03_AMBIGUOUS_PAYMENT'],
+                                note='S20 chỉ nội dung chuyển khoản nhắc tên người bán (lớp AI đề xuất ghép, người duyệt xác nhận)')
+    b.pay(date(2026, 9, 19), g20, account='0451000' + str(rng.randint(100000, 999999)), name='TRAN THI B',
+          desc='ck tien sua cau truc kho cho co khi an phu')
+
     # Noise: customer receipts, salaries, utilities.
     for m in months:
         b.pay(date(2026, m, 10), 45000000, account='0011002233', name='NGUYEN VAN A VA CAC NHAN VIEN', desc=f'Tra luong thang {m - 1}')

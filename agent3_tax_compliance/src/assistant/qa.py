@@ -65,7 +65,34 @@ def _inv(report, key):
     return next((i for i in report.invoices if i.key == key and not i.duplicate_of), None)
 
 
+LAW_CUES = ('theo dieu', 'can cu', 'quy dinh nao', 'tai sao', 'vi sao', 'sua the nao', 'xu ly the nao', 'lam the nao', 'bi phat',
+            'dieu nao', 'luat nao', 'nghi dinh nao', 'co sao khong', 'phai lam gi')
+
+
+def _with_law(ctx: Context, ans: Answer, topics: list[str]) -> Answer:
+    """A6: numbers from the data branch stay as they are; the legal basis comes from the corpus with the grounded-answer
+    checks (quote must be verbatim, numbers must be in the cited provisions). Nothing is added when nothing passes."""
+    grounded = _lawbase(ctx, '; '.join(dict.fromkeys(topics))[:400]) if topics else None
+    if not grounded or grounded.mode != 'LLM_VERIFIED':
+        return ans
+    law = ' '.join(f'{s["text"]} [{_cite(s)}]' for s in grounded.sentences)
+    return Answer('DATA+POLICY', f'{ans.text} Căn cứ trong kho luật: {law}', facts=ans.facts + [grounded.to_dict()],
+                  citations=ans.citations + sorted({_cite(s) for s in grounded.sentences}))
+
+
 def answer(question: str, ctx: Context) -> Answer:
+    q = fold(question)
+    if any(w in q for w in LAW_CUES):
+        base = _answer(question, ctx)
+        if base.branch == 'DATA' and base.facts:
+            topics = [f'{it.title}. {it.action}' for it in ctx.report.items
+                      if any(k in it.invoice_keys for f in base.facts for k in ([f.get('key')] if f.get('key') else f.get('invoices', [])))]
+            return _with_law(ctx, base, topics[:3])
+        return base
+    return _answer(question, ctx)
+
+
+def _answer(question: str, ctx: Context) -> Answer:
     q = fold(question)
     r = ctx.report
     nums = _numbers(q)

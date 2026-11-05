@@ -151,8 +151,10 @@ def consolidated_base(title: str) -> str | None:
     return nums[0] if nums else None
 
 
-AMEND_ARTICLE_RE = re.compile(r'sửa\s+đổi,?\s+bổ\s+sung[^.;:]{0,60}?\bcủa\s+(Luật|Nghị\s+định|Thông\s+tư|Pháp\s+lệnh)\s+([^,;:.()]+?)'
+AMEND_ARTICLE_RE = re.compile(r'sửa\s+đổi,?\s+bổ\s+sung[^.;:]{0,60}?(?:\bcủa\s+|\btại\s+|\s)(Luật|Nghị\s+định|Thông\s+tư|Pháp\s+lệnh)\s+([^,;:.()]+?)'
                               rf'(?:\s+số\s+({NUM}))?(?=\s*(?:[,;:.()]|như\s+sau|$))', re.I)
+# "Điều 3. Sửa đổi, bổ sung Thông tư số 219/2013/TT-BTC ngày 31/12/2013 ...": the number right after the act type.
+AMEND_NUM_RE = re.compile(rf'sửa\s+đổi,?\s+bổ\s+sung[^.;:]{{0,60}}?(?:Luật|Nghị\s+định|Thông\s+tư|Pháp\s+lệnh)(?:\s+[^\d,;:()]{{0,60}}?)?\s+số\s+({NUM})', re.I)
 
 
 def act_name(title: str) -> str:
@@ -173,7 +175,8 @@ def stale_articles(db: sqlite3.Connection, ends: dict) -> list[tuple]:
         return min(cands) if cands else None
 
     out = []
-    amending = [d for d in docs.values() if 'sua doi' in fold(d[2]) and d[3]]
+    # Every dated act is scanned: an act amending another often says so only in its articles, not in its title.
+    amending = [d for d in docs.values() if d[3]]
     for a_id, _, _, a_from, _, _ in amending:
         provs = db.execute('SELECT prov_id, level, text, parent FROM provisions WHERE doc_id=? ORDER BY ord', (a_id,)).fetchall()
         children = {}
@@ -182,19 +185,23 @@ def stale_articles(db: sqlite3.Connection, ends: dict) -> list[tuple]:
         for pid, level, text, _ in provs:
             if level != 3:
                 continue
-            m = AMEND_ARTICLE_RE.search((text or '')[:400])
-            if not m:
+            head = (text or '')[:400]
+            mn = AMEND_NUM_RE.search(head)
+            m = AMEND_ARTICLE_RE.search(head)
+            if not (mn or m):
                 continue
-            kind, name, num = m.group(1), m.group(2), m.group(3)
+            kind, name, num = (None, None, mn.group(1)) if mn else (m.group(1), m.group(2), m.group(3))
             if num:
                 targets = [t for t in by_num.get(norm_num(num), []) if t != a_id]
             else:
                 want = fold(f'{kind} {name}')
                 same = [d for d in docs.values() if d[0] != a_id and act_name(d[2]) == want and d[3] and d[3] <= a_from]
                 targets = [max(same, key=lambda d: d[3])[0]] if same else []
-            if len(targets) != 1 or not end_of(targets[0]):
+            # The same act can be stored twice (the source lists "219/2013/TT-BTC" and "219/2013/TT- BTC"): same number,
+            # same act. It is stale only when every stored copy has an end date; the latest one counts.
+            if not targets or len({norm_num(docs[t][1]) for t in targets}) != 1 or any(not end_of(t) for t in targets):
                 continue
-            t = targets[0]
+            t = max(targets, key=end_of)
             stack = [pid]
             while stack:
                 cur = stack.pop()

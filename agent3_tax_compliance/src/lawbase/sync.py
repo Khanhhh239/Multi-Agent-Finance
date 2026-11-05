@@ -112,6 +112,10 @@ def sync(scope_path: Path = DEFAULT_SCOPE, db_path: Path = DEFAULT_DB, cache_dir
                 rep.failed.append(dict(url=loc, error=str(e)[:200]))
                 corpus.log(loc, 'FAILED', str(e)[:200])
                 continue
+            m = doc.meta
+            if m.get('eff_to') and m.get('eff_to') < (m.get('eff_from') or m.get('issue_date') or '0000'):
+                doc.notes.append(f'ngày hết hiệu lực trên nguồn ({m["eff_to"]}) sớm hơn ngày có hiệu lực; bỏ qua, dùng ngày đọc từ văn bản thay thế')
+                m['eff_to'] = None
             searchable, why = index_decision(doc.meta, core, scope)
             if why:
                 doc.notes.append(f'không đưa vào tìm kiếm: {why}')

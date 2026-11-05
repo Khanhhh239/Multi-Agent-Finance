@@ -1,0 +1,18 @@
+{
+ "note": "Nhãn viết tay cho doanh nghiệp bán buôn vật liệu xây dựng (ngành 4663). flag=true: cần người xem vì có thể không phục vụ kinh doanh; false: rõ ràng phục vụ kinh doanh; null: ranh giới, không chấm.",
+ "industry": ["4663 Bán buôn vật liệu xây dựng"],
+ "lines": [
+  ["Xi măng PCB40 bao 50kg", false], ["Thép cuộn D8", false], ["Gạch đặc A1", false], ["Cát vàng xây tô", false], ["Sơn chống thấm 5L", false],
+  ["Cước vận chuyển hàng Hà Nội - Bắc Ninh", false], ["Tiền điện tháng 8", false], ["Cước internet cáp quang doanh nghiệp", false],
+  ["Thuê kho bãi tháng 9", false], ["Giấy in A4 Double A", false], ["Phần mềm kế toán bản quyền 1 năm", false], ["Bảo dưỡng xe tải Hino", false],
+  ["Dầu diesel 0.05S", false], ["Găng tay bảo hộ lao động", false], ["Máy trộn bê tông 250 lít", false], ["Bàn làm việc văn phòng", false],
+  ["Máy in laser HP", false], ["Pallet gỗ kê hàng", false], ["Phí kiểm định cân điện tử", false], ["Ống nhựa PVC phi 90", false],
+  ["Nước hoa Chanel No.5 100ml", true], ["Túi xách nữ Louis Vuitton", true], ["Tour du lịch Phú Quốc 4 ngày cho gia đình", true],
+  ["Vé xem phim CGV", true], ["Sữa bột trẻ em Meiji số 9", true], ["Đồ chơi lego cho bé", true], ["Đồng hồ Rolex Datejust", true],
+  ["Học phí tiếng Anh cho con", true], ["Thức ăn cho chó mèo", true], ["Mỹ phẩm dưỡng da Sulwhasoo", true], ["Váy dạ hội nữ", true],
+  ["Ghế massage toàn thân Okia", true],
+  ["Điện thoại di động iPhone 16 Pro Max 256GB", null], ["Máy tính xách tay Dell Latitude", null], ["Rượu vang Pháp", null],
+  ["Tivi Samsung 85 inch", null], ["Xe máy Honda SH 160i", null], ["Điều hòa Daikin 12000BTU", null], ["Bánh trung thu biếu khách hàng", null],
+  ["Hàng hóa", null]
+ ]
+}

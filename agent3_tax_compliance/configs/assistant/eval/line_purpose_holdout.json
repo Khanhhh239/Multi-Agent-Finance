@@ -1,0 +1,14 @@
+{
+ "note": "Tập giữ lại, viết trước khi chạy câu lệnh v2; không dùng để chỉnh câu lệnh. Cùng ngành 4663.",
+ "industry": ["4663 Bán buôn vật liệu xây dựng"],
+ "lines": [
+  ["Đá 1x2 xây dựng", false], ["Keo dán gạch Weber", false], ["Thay lốp xe nâng hàng", false], ["Mực in máy photocopy", false],
+  ["Phí bảo hiểm cháy nổ kho hàng", false], ["Dịch vụ kế toán thuê ngoài tháng 9", false], ["Camera giám sát kho", false],
+  ["Nước uống đóng bình cho văn phòng", false], ["Phí đăng kiểm xe tải", false], ["Quần áo đồng phục công nhân", false],
+  ["Bộ lưu điện UPS cho máy chủ", false], ["Tôn lạnh mạ màu 0.4mm", false],
+  ["Nhẫn kim cương 1 carat", true], ["Gói spa chăm sóc sắc đẹp 10 buổi", true], ["Vé máy bay du lịch Nhật Bản cho vợ con", true],
+  ["Máy chơi game PlayStation 5", true], ["Giày thể thao Nike Air Jordan", true], ["Tã bỉm em bé Merries", true],
+  ["Thẻ hội viên phòng gym cá nhân", true], ["Kính mát Ray-Ban", true],
+  ["Máy pha cà phê văn phòng", null], ["Quà Tết biếu đối tác", null], ["Ô tô Toyota Camry", null], ["Dịch vụ khác", null]
+ ]
+}

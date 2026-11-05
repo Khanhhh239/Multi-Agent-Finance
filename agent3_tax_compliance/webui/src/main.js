@@ -7,10 +7,11 @@ import { $, app, esc, loadWorkspaces, notice, state, store } from './core.js';
 import { pageIntake } from './pages_intake.js';
 import { pageOverview, pageReview } from './pages_work.js';
 import { pageAsk, pageBank, pageCalendar, pageInvoices, pageLaw, pageSettings } from './pages_more.js';
+import { pageDossier, pageVat } from './pages_ai.js';
 
 const NAV = [
   ['#/', 'Tổng quan', pageOverview], ['#/nap', 'Nạp dữ liệu', pageIntake], ['#/viec', 'Việc cần xử lý', pageReview], ['#/hoa-don', 'Hóa đơn', pageInvoices],
-  ['#/ngan-hang', 'Ngân hàng', pageBank], ['#/lich', 'Lịch thuế', pageCalendar], ['#/hoi', 'Hỏi đáp', pageAsk], ['#/luat', 'Kho luật', pageLaw],
+  ['#/ngan-hang', 'Ngân hàng', pageBank], ['#/so-lieu', 'Số liệu thuế GTGT', pageVat], ['#/giai-trinh', 'Giải trình', pageDossier], ['#/lich', 'Lịch thuế', pageCalendar], ['#/hoi', 'Hỏi đáp', pageAsk], ['#/luat', 'Kho luật', pageLaw],
   ['#/cai-dat', 'Cài đặt', pageSettings],
 ];
 

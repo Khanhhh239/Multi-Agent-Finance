@@ -1,6 +1,7 @@
 // Invoices, bank, calendar, questions, legal corpus and enterprise settings.
 import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put,
   state, table, tag } from './core.js';
+import { bankProposals, lawAlerts, riskImport } from './pages_ai.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 
@@ -27,13 +28,14 @@ export async function pageBank() {
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Ngân hàng</h1>${notice('info', 'Chưa phân tích')}`; return; }
   const usedBy = new Map(rep.matches.flatMap((m) => m.txn_ids.map((t) => [t, m])));
-  app().innerHTML = `<h1 class="page">Ngân hàng</h1><p class="lead">${rep.transactions.length} giao dịch từ các tệp sao kê. Một khoản chi chỉ được ghép khi đúng số tiền và có dấu hiệu nhận ra người bán (tài khoản, tên hoặc mã số thuế, số hóa đơn).</p>
+  app().innerHTML = `<h1 class="page">Ngân hàng</h1><p class="lead">${rep.transactions.length} giao dịch từ các tệp sao kê. Một khoản chi chỉ được ghép khi đúng số tiền và có dấu hiệu nhận ra người bán (tài khoản, tên hoặc mã số thuế, số hóa đơn).</p><div id="props"></div>
     ${table(['Ngày', 'Chiều', { label: 'Số tiền', num: true }, 'Đối ứng', 'Nội dung', 'Ghép với hóa đơn', 'Nguồn'], rep.transactions.map((t) => {
       const m = usedBy.get(t.txn_id);
       return `<tr><td>${dmy(t.booked)}</td><td>${t.direction === 'OUT' ? 'Chi' : 'Thu'}</td><td class="num">${money(t.amount)}</td>
         <td>${esc(t.counterparty_name || '')}<div class="muted small mono">${esc(t.counterparty_account || '')}</div></td><td>${esc(t.description)}</td>
         <td>${m ? `${m.invoice_keys.map((k) => esc(invLabel(invoiceOf(k)))).join(', ')}<div class="muted small">${m.status === 'MATCHED' ? 'Đã ghép' : 'Mơ hồ'}</div>` : ''}</td><td class="muted small">${esc(t.source)}</td></tr>`;
     }))}`;
+  bankProposals($('#props'));
 }
 
 export async function pageCalendar() {
@@ -98,6 +100,7 @@ export async function pageLaw() {
     <div class="kpi"><span class="label">Hết hiệu lực theo văn bản thay thế</span><span class="value">${s ? s.ended_by_later_act ?? 0 : 0}</span><span class="sub">đọc từ điều khoản hiệu lực thi hành của văn bản mới</span></div></div>
     <div class="bar">${button(st.job.running ? 'Đang đồng bộ' : 'Đồng bộ kho luật', 'primary', `id="sync" ${st.job.running ? 'disabled' : ''}`)}${button('Chỉ văn bản lõi', 'tertiary', `id="sync-core" ${st.job.running ? 'disabled' : ''}`)}
     <span>${st.job.error ? notice('error', 'Lỗi đồng bộ', st.job.error) : ''}</span></div>
+    <div id="alerts"></div>
     <h2 class="section">Tìm trong kho</h2><form id="lsearch" class="bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
     <label class="cds--label" for="lq">Nội dung</label><input class="cds--text-input" id="lq" placeholder="Ví dụ: thời hạn nộp hồ sơ khai thuế theo quý"></div>
     <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="lasof">Ngày áp dụng</label><input class="cds--text-input" id="lasof" type="date" value="${new Date().toISOString().slice(0, 10)}"></div>
@@ -109,6 +112,7 @@ export async function pageLaw() {
   };
   $('#sync').onclick = () => startSync('');
   $('#sync-core').onclick = () => startSync('?core_only=true');
+  lawAlerts($('#alerts')).catch(() => {});
   if (st.job.running) setTimeout(() => { if (location.hash.startsWith('#/luat') && !hashParams().get('doc')) rerender(); }, 5000);
   $('#lsearch').onsubmit = async (e) => {
     e.preventDefault();
@@ -155,7 +159,8 @@ export async function pageSettings() {
       <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="ref-date">Ngày của danh sách</label><input class="cds--text-input" id="ref-date" name="as_of" type="date" required></div>
       ${field({ key: 'source', label: 'Nguồn', example: 'Công văn số ... của Cục Thuế' })}
       <div class="cds--form-item"><label class="cds--label" for="ref-ids">Mã số thuế, mỗi dòng một mã</label><textarea class="cds--text-area" id="ref-ids" name="tax_ids" rows="4"></textarea></div></div>
-      <div class="bar">${button('Thêm danh sách', 'secondary', 'type="submit"')}<span id="refmsg"></span></div></form>`;
+      <div class="bar">${button('Thêm danh sách', 'secondary', 'type="submit"')}<span id="refmsg"></span></div></form><div id="riskimp"></div>`;
+  riskImport($('#riskimp'));
   $('#th').onsubmit = (e) => {
     e.preventDefault();
     const f = Object.fromEntries(new FormData(e.target).entries());

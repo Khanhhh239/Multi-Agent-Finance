@@ -123,3 +123,17 @@ def test_list_of_expired_decrees_from_254_2026():
     got = [(f.target, f.kind) for f, _ in V.read_replace_clause(head, items, '2026-07-01')]
     assert got == [('123/2020/NĐ-CP', 'FULL'), ('41/2022/NĐ-CP', 'PARTIAL'), ('70/2025/NĐ-CP', 'FULL')]
     assert V.read_clause(head, '2026-07-01') == []       # no number before "hết hiệu lực": not read twice
+
+
+def test_amendment_of_an_act_stored_twice_goes_stale_when_both_copies_ended(tmp_path):
+    db = _db(tmp_path)
+    db.executemany("INSERT INTO documents VALUES(?,?,?,?,?,?,?)", [
+        ('t219a', '219/2013/TT-BTC', 'Thông tư số 219/2013/TT-BTC Hướng dẫn thi hành Luật Thuế giá trị gia tăng', '2014-01-01', 1, '2025-07-01', 'Thông tư'),
+        ('t219b', '219/2013/TT- BTC', 'Thông tư số 219/2013/TT- BTC Hướng dẫn thi hành Luật Thuế giá trị gia tăng', '2014-01-01', 0, '2025-07-01', 'Thông tư'),
+        ('t26', '26/2015/TT-BTC', 'Thông tư số 26/2015/TT-BTC Hướng dẫn về thuế giá trị gia tăng', '2015-01-01', 1, None, 'Thông tư')])
+    db.executemany("INSERT INTO provisions VALUES('t26',?,?,?,?,?)", [
+        ('d1', 'Điều 1. Sửa đổi, bổ sung một số điều của Thông tư số 219/2013/TT-BTC ngày 31/12/2013 như sau:', 3, None, 1),
+        ('d1k5', '5. Trường hợp mua hàng hóa, dịch vụ có giá trị dưới hai mươi triệu đồng', 4, 'd1', 2)])
+    V.derive(db)
+    stale = dict(db.execute("SELECT prov_id, ended_on FROM stale_provisions WHERE doc_id='t26'").fetchall())
+    assert stale == {'d1': '2025-07-01', 'd1k5': '2025-07-01'}

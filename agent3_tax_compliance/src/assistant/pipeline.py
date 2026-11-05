@@ -10,6 +10,7 @@ Workspace layout (all files are exported by the enterprise itself; nothing conne
 """
 import calendar as cal
 import hashlib
+import json
 from dataclasses import replace
 from datetime import date
 from decimal import Decimal
@@ -53,6 +54,29 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
     return out
 
 
+def purpose_items(ws: Path, invoices: list, ruleset: dict) -> list:
+    """R12 from recorded AI line labels (ws/ai/line_labels.json, written by the classify job). The labels are an input
+    with model and version recorded; only verified labels saying "not business use" become review items, never money."""
+    from .ai import flagged
+    from .rules import _item
+    path = ws / 'ai' / 'line_labels.json'
+    if not path.exists():
+        return []
+    labels = json.loads(path.read_text(encoding='utf-8'))
+    out = []
+    for inv in invoices:
+        rec = labels.get(inv.key)
+        if inv.role != 'PURCHASE' or not rec or inv.duplicate_of:
+            continue
+        hits = flagged(rec['labels'])
+        if hits:
+            out.append(_item(ruleset, 'R12_ITEM_PURPOSE', 'REVIEW', [inv], Decimal(0),
+                             [f'Phân loại dòng hàng bằng mô hình {rec["model"]} chạy trên máy ({rec["version"]}), đã qua kiểm tra nhãn; người duyệt quyết định',
+                              'Điểm a khoản 1 Điều 14 Luật Thuế GTGT 48/2024/QH15: khấu trừ thuế đầu vào của hàng hóa, dịch vụ sử dụng cho sản xuất, kinh doanh hàng hóa, dịch vụ chịu thuế; điểm a khoản 1 Điều 9 Luật Thuế TNDN 67/2025/QH15: khoản chi được trừ phải thực tế phát sinh, liên quan đến hoạt động sản xuất kinh doanh (văn bản gốc, vbpl.vn)'],
+                             detail='; '.join(f'{h["line"]}: {h["reason"]}' for h in hits)))
+    return out
+
+
 def apply_not_claimed(items: list, decisions: dict) -> list:
     """An invoice the reviewer decided not to claim carries no deduction risk. Its items stay in the report as INFO with
     the decision written into the detail, so the audit trail shows who decided and why; they leave the totals."""
@@ -88,6 +112,7 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
     portal = read_portal_list(portal_file, pack) if portal_file.exists() else None
     matches = match_payments(invoices, txns, pack.thresholds, decisions)
     items, flags = evaluate(invoices, matches, pack, ruleset, bad1 + bad2, portal)
+    items += purpose_items(ws, invoices, ruleset)
     items = apply_not_claimed(items, decisions)
     items.sort(key=lambda it: (STATUS_ORDER[it.status], -it.amount, it.code, it.invoice_keys))
     dates = [i.issue_date for i in invoices if i.issue_date]
