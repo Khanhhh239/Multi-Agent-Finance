@@ -197,3 +197,12 @@ def test_not_claimed_decision_removes_risk_but_keeps_audit_trail(ws, rep):
     after = [it for it in decided.items if key in it.invoice_keys and it.code == 'R05_DUPLICATE']
     assert after and all(it.status == 'INFO' and it.amount == 0 and 'Kế toán trưởng' in it.detail for it in after)
     assert decided.totals['at_risk_vat'] == rep.totals['at_risk_vat'] - dup.amount
+
+
+def test_calendar_has_cit_deadlines_and_moves_deadlines_off_weekends(ws, rep):
+    cal = {c['period']: c for c in rep.calendar}
+    vat_aug = cal['Tờ khai thuế GTGT tháng 08/2026']
+    assert vat_aug['due'] == date(2026, 9, 21) and vat_aug['moved_from'] == date(2026, 9, 20)        # 20/09/2026 is a Sunday
+    q3 = cal['Tạm nộp thuế TNDN quý 3/2026']
+    assert q3['due'] == date(2026, 11, 2) and 'Điều 24' in q3['basis'] and '245/2026' in q3['extension']
+    assert cal['Quyết toán thuế TNDN năm 2026']['due'] == date(2027, 3, 31)

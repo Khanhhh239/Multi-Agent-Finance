@@ -1,5 +1,5 @@
 {
- "version": "assistant-ruleset-2026-11-05d",
+ "version": "assistant-ruleset-2026-11-05e",
  "status": "DRAFT",
  "status_note": "Chưa có chuyên gia thuế duyệt. Căn cứ ghi kèm mức kiểm chứng; phần lớn đã đối chiếu văn bản gốc trong kho luật.",
  "parameters": {
@@ -102,6 +102,56 @@
       "108/2025/QH15",
       "Điều 16",
       "Khoản 2"
+     ]
+    ]
+   }
+  ],
+  "CIT_PROVISIONAL_DUE": [
+   {
+    "from": "2026-07-01",
+    "to": null,
+    "value": "LAST_DAY_OF_FIRST_MONTH_OF_NEXT_QUARTER",
+    "basis": "Khoản 2 Điều 24 Nghị định 252/2026/NĐ-CP: thời hạn tạm nộp quý chậm nhất là ngày cuối cùng của tháng đầu của quý tiếp theo; điểm a khoản 3: tổng tạm nộp 4 quý không thấp hơn 80% số phải nộp theo quyết toán năm (văn bản gốc, vbpl.vn, đọc ngày 05/11/2026)",
+    "refs": [
+     [
+      "252/2026/NĐ-CP",
+      "Điều 24",
+      "Khoản 2"
+     ],
+     [
+      "252/2026/NĐ-CP",
+      "Điều 24",
+      "Khoản 3"
+     ]
+    ]
+   }
+  ],
+  "CIT_FINALIZATION_DUE": [
+   {
+    "from": "2026-07-01",
+    "to": null,
+    "value": "LAST_DAY_OF_THIRD_MONTH_AFTER_PERIOD",
+    "basis": "Điểm a khoản 5 Điều 10 Nghị định 252/2026/NĐ-CP: hồ sơ khai quyết toán thuế chậm nhất là ngày cuối cùng của tháng thứ 03 kể từ ngày kết thúc kỳ quyết toán thuế (văn bản gốc, vbpl.vn, đọc ngày 05/11/2026)",
+    "refs": [
+     [
+      "252/2026/NĐ-CP",
+      "Điều 10",
+      "Khoản 5"
+     ]
+    ]
+   }
+  ],
+  "DEADLINE_DAY_OFF_SHIFT": [
+   {
+    "from": "2026-07-01",
+    "to": null,
+    "value": "NEXT_WORKING_DAY",
+    "basis": "Khoản 7 Điều 3 Nghị định 252/2026/NĐ-CP: hạn trùng ngày nghỉ theo quy định thì tính là ngày làm việc liền kề sau ngày nghỉ đó (văn bản gốc, vbpl.vn, đọc ngày 05/11/2026)",
+    "refs": [
+     [
+      "252/2026/NĐ-CP",
+      "Điều 3",
+      "Khoản 7"
      ]
     ]
    }

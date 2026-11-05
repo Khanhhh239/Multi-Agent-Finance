@@ -14,7 +14,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import date
 
 from .llm import CHARS_PER_TOKEN, ContextOverflow, LLMUnavailable, Ollama
-from .store import Corpus
+from .store import STOP, Corpus, fold, tokens
 
 SYSTEM = (
     'Bạn là trợ lý tra cứu pháp luật thuế Việt Nam. Chỉ được dùng các đoạn văn bản [P1], [P2]... được cung cấp. '
@@ -100,7 +100,28 @@ def render(passages: list[Passage]) -> str:
                        f'{" | (một phần của khoản)" if p.partial else ""}\n{p.text}' for p in passages)
 
 
-def verify(raw: str, passages: list[Passage]) -> tuple[list, list, bool, str]:
+# Words of every tax question; they say nothing about the topic, so the topic check ignores them.
+GENERIC = {'thue', 'bao', 'nhieu', 'gi', 'nao', 'nhu', 'the', 'quy', 'dinh', 'muc', 'doi', 'voi', 'co', 'khong', 'phai', 'nam', 'ngay',
+           'thang', 'so', 'tien', 'theo', 'trong', 'duoc', 'bi', 'la', 'khi', 'nghi', 'luat', 'thong', 'tu', 'van', 'ban', 'dieu', 'khoan'}
+
+
+def topic_terms(question: str) -> set[str]:
+    return {fold(t) for t in tokens(question) if t not in STOP and not t.isdigit() and fold(t) not in GENERIC and len(fold(t)) > 1}
+
+
+def topic_coverage(question: str, cited: list) -> float:
+    terms = topic_terms(question)
+    if not terms:
+        return 1.0
+    have = set(fold(' '.join(f'{p.path} {p.text}' for p in cited)).split())
+    return len(terms & have) / len(terms)
+
+
+def _numbers_ok(text: str, cited: list) -> set:
+    return numbers(text) - numbers(' '.join(f'{p.path} {p.doc_num} {p.text}' for p in cited))   # document number lives in the path
+
+
+def verify(raw: str, passages: list[Passage], question: str = '', min_topic: float = 0.6) -> tuple[list, list, bool, str]:
     data = json.loads(raw)
     by_id = {p.pid: p for p in passages}
     kept, dropped = [], []
@@ -110,13 +131,23 @@ def verify(raw: str, passages: list[Passage]) -> tuple[list, list, bool, str]:
         if not cited or len(cited) != len(srcs):
             dropped.append(dict(text=text, reason='mã đoạn không có trong ngữ cảnh'))
             continue
-        body = ' '.join(p.text for p in cited)
-        if not quote or norm(quote) not in norm(body):
+        quote_ok = bool(quote) and norm(quote) in norm(' '.join(p.text for p in cited))
+        if not quote_ok or _numbers_ok(text, cited):
+            # The model often names the wrong passage for a correct sentence. Re-attribute deterministically when the
+            # quote is verbatim in other passages that also hold every number; the checks below still apply.
+            alt = [p for p in passages if quote and norm(quote) in norm(p.text)]
+            if alt and not _numbers_ok(text, alt):
+                cited, srcs, quote_ok = alt, [p.pid for p in alt], True
+        if not quote_ok:
             dropped.append(dict(text=text, reason='trích dẫn không khớp nguyên văn'))
             continue
-        extra = numbers(text) - numbers(' '.join(f'{p.path} {p.doc_num} {p.text}' for p in cited))   # document number lives in the path
+        extra = _numbers_ok(text, cited)
         if extra:
             dropped.append(dict(text=text, reason=f'số không có trong căn cứ: {sorted(extra)}'))
+            continue
+        cov = topic_coverage(question, cited)
+        if question and cov < min_topic:
+            dropped.append(dict(text=text, reason=f'điều khoản được dẫn không nói về chủ đề câu hỏi (phủ {cov:.0%} từ khóa)'))
             continue
         kept.append(dict(text=text, quote=quote, sources=srcs,
                          citations=[dict(pid=p.pid, doc_num=p.doc_num, path=p.path, url=p.url) for p in cited]))
@@ -138,7 +169,7 @@ def answer(corpus: Corpus, question: str, as_of: date | None = None, llm: Ollama
     try:
         raw, stats = llm.chat(SYSTEM, user, SCHEMA)
         res.stats.update(stats)
-        kept, dropped, abstain, missing = verify(raw, passages)
+        kept, dropped, abstain, missing = verify(raw, passages, question)
     except (LLMUnavailable, ContextOverflow, json.JSONDecodeError) as e:
         kept, dropped, abstain, missing = [], [], False, ''
         res.note = f'Không dùng được mô hình ({type(e).__name__}: {str(e)[:160]}); trả về nguyên văn các đoạn liên quan.'

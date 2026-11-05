@@ -12,7 +12,7 @@ import calendar as cal
 import hashlib
 import json
 from dataclasses import replace
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from pathlib import Path
 
@@ -34,6 +34,10 @@ def input_digest(ws: Path) -> str:
     return h.hexdigest()
 
 
+# Fixed public holidays (Tết and yearly substitute days off are announced each year; the pack may list them in days_off).
+FIXED_DAYS_OFF = {(1, 1), (4, 30), (5, 1), (9, 2)}
+
+
 def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
     periods = sorted({(i.issue_date.year, i.issue_date.month) for i in invoices if i.issue_date})
     out = []
@@ -48,9 +52,38 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
             ny, first = (y + 1, 1) if q == 4 else (y, q * 3 + 1)
             out.append(dict(period=f'Quý {q}/{y}', due=date(ny, first, cal.monthrange(ny, first)[1]), basis=basis))
     for e in out:
+        e['period'] = f'Tờ khai thuế GTGT {e["period"].lower()}'
+    # Corporate income tax: quarterly provisional payment and the annual finalization (calendar-year fiscal period assumed).
+    prov = param(ruleset, 'CIT_PROVISIONAL_DUE', as_of) if 'CIT_PROVISIONAL_DUE' in ruleset['parameters'] else None
+    fin = param(ruleset, 'CIT_FINALIZATION_DUE', as_of) if 'CIT_FINALIZATION_DUE' in ruleset['parameters'] else None
+    if prov:
+        for y, q in sorted({(y, (m - 1) // 3 + 1) for y, m in periods}):
+            ny, first = (y + 1, 1) if q == 4 else (y, q * 3 + 1)
+            e = dict(period=f'Tạm nộp thuế TNDN quý {q}/{y}', due=date(ny, first, cal.monthrange(ny, first)[1]), basis=prov[1])
+            if (y, q) in ((2026, 2), (2026, 3)):
+                e['extension'] = ('Có thể được gia hạn (quý II/2026: 03 tháng, quý III/2026: 02 tháng) nếu thuộc đối tượng của '
+                                  'Nghị định 245/2026/NĐ-CP, khoản 2 Điều 2; phải nộp giấy đề nghị gia hạn')
+            out.append(e)
+    if fin:
+        for y in sorted({y for y, _ in periods}):
+            out.append(dict(period=f'Quyết toán thuế TNDN năm {y}', due=date(y + 1, 3, 31), basis=fin[1]))
+    shift = param(ruleset, 'DEADLINE_DAY_OFF_SHIFT', as_of) if 'DEADLINE_DAY_OFF_SHIFT' in ruleset['parameters'] else None
+    extra_days_off = {date.fromisoformat(d) for d in getattr(pack, 'days_off', ())}
+    for e in out:
+        if shift:
+            legal = e['due']
+            while legal.weekday() >= 5 or (legal.month, legal.day) in FIXED_DAYS_OFF or legal in extra_days_off:
+                legal += timedelta(days=1)
+            if legal != e['due']:
+                e['moved_from'], e['due'] = e['due'], legal
+                e['basis'] += f'; {shift[1]}'
+    out.sort(key=lambda e: e['due'])
+    for e in out:
         days = (e['due'] - as_of).days
         e['status'] = f'còn {days} ngày' if days >= 0 else f'hạn đã qua {-days} ngày, kiểm tra đã nộp chưa'
-        e['note'] = 'Chưa dời hạn khi trùng ngày nghỉ'
+        e['note'] = ((f'Dời từ {e["moved_from"]:%d/%m/%Y} vì trùng ngày nghỉ. ' if e.get('moved_from') else '')
+                     + 'Đã tính thứ Bảy, Chủ nhật và các ngày lễ cố định; nghỉ Tết và nghỉ bù hằng năm cần nhập trong gói'
+                     + (f'. {e["extension"]}' if e.get('extension') else ''))
     return out
 
 

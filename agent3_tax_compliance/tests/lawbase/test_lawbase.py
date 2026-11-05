@@ -160,3 +160,19 @@ def test_fallbacks_extractive_and_abstain(corpus):
 def test_context_overflow_is_refused_before_calling_the_model():
     with pytest.raises(ContextOverflow):
         Ollama(num_ctx=1024).chat('x' * 3000, 'y' * 3000)
+
+
+def test_verifier_recites_the_right_passage_and_refuses_off_topic_answers():
+    import json as _j
+    from src.lawbase.rag import Passage, verify
+    p1 = Passage('P1', '398/2026/NĐ-CP', 'Nghị định', 'Nghị định 398/2026/NĐ-CP > Điều 2', 'u', None, None, 'Giảm 30% số thuế thu nhập cá nhân phải nộp.')
+    p2 = Passage('P2', '141/2026/NĐ-CP', 'Nghị định', 'Nghị định 141/2026/NĐ-CP > Điều 1', 'u', None, None,
+                 'Sửa đổi cụm từ “500 triệu đồng” thành “01 tỷ đồng” đối với hộ kinh doanh, cá nhân kinh doanh có doanh thu.')
+    raw = _j.dumps(dict(answer=[dict(text='Ngưỡng doanh thu hộ kinh doanh được sửa thành 01 tỷ đồng.', sources=['P1'],
+                                      quote='thành “01 tỷ đồng” đối với hộ kinh doanh')]))
+    kept, dropped, _, _ = verify(raw, [p1, p2], 'Nghị định 141/2026 sửa ngưỡng doanh thu của hộ kinh doanh thành bao nhiêu?')
+    assert kept and kept[0]['sources'] == ['P2'] and not dropped
+    p3 = Passage('P3', '67/2025/QH15', 'Luật', 'Luật 67/2025/QH15 > Điều 10', 'u', None, None, 'Thuế suất ưu đãi 0% áp dụng cho dự án đặc biệt.')
+    raw = _j.dumps(dict(answer=[dict(text='Thuế suất là 0%.', sources=['P3'], quote='Thuế suất ưu đãi 0%')]))
+    kept, dropped, _, _ = verify(raw, [p3], 'Thuế suất thuế nhập khẩu ưu đãi đặc biệt đối với xe ô tô nguyên chiếc là bao nhiêu?')
+    assert not kept and 'chủ đề' in dropped[0]['reason']
