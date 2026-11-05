@@ -144,3 +144,19 @@ input.decl { height: 2rem; max-width: 12rem; }
 .cfg-nav a { font-size: .875rem; color: var(--cds-link-primary); text-decoration: none; }
 section.cfg { scroll-margin-top: 6rem; }
 @media (max-width: 66rem) { .welcome-grid { grid-template-columns: 1fr; } }
+
+.preset { align-items: flex-start; }
+.preset.on { border-color: var(--cds-border-interactive); background: #f6f9ff; }
+.preset-body { flex: 1; display: flex; flex-direction: column; gap: .375rem; }
+.preset-head { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.preset-edit { display: grid; grid-template-columns: 2fr 1fr 2fr; gap: .5rem; }
+.preset-edit label { display: flex; flex-direction: column; gap: .125rem; font-size: .75rem; color: var(--cds-text-secondary); }
+.preset-edit input { height: 2rem; font-size: .8125rem; }
+.preset:not(.on) .preset-edit { display: none; }
+.badge-fit { background: #defbe6; color: #0e6027; font-size: .75rem; padding: .0625rem .5rem; border-radius: 1rem; font-weight: 600; }
+.badge-rec { background: #e8f0fe; color: #0043ce; font-size: .75rem; padding: .0625rem .5rem; border-radius: 1rem; }
+.sub-h { font-size: 1rem; font-weight: 600; margin: 1.25rem 0 .5rem; }
+.taxcheck { font-size: .8125rem; margin-top: .25rem; }
+.taxcheck.ok { color: #0e6027; }
+.taxcheck.bad { color: #da1e28; }
+@media (max-width: 66rem) { .preset-edit { grid-template-columns: 1fr; } }

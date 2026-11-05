@@ -4,6 +4,41 @@ import { riskImport } from './pages_ai.js';
 import { toast } from './ux.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
+const POLICY_FIELDS = ['id', 'flag', 'min_gross', 'description_contains'];
+const cleanPolicy = (p) => Object.fromEntries(POLICY_FIELDS.filter((k) => p[k] !== undefined && p[k] !== '' && !(Array.isArray(p[k]) && !p[k].length)).map((k) => [k, p[k]]));
+
+// One editable policy card: tick to apply, and change the reminder text, the amount and the item words.
+function policyCard(p, i, checked, prefix = 'pol') {
+  return `<div class="preset ${checked ? 'on' : ''}" data-card="${i}"><input type="checkbox" data-${prefix}="${i}" ${checked ? 'checked' : ''} aria-label="Áp dụng">
+    <div class="preset-body"><div class="preset-head"><strong>${esc(p.flag)}</strong>${p.industry_fit ? '<span class="badge-fit">Gợi ý cho ngành của bạn</span>' : p.recommended ? '<span class="badge-rec">Nên dùng</span>' : ''}${p.group ? `<span class="muted small">${esc(p.group)}</span>` : ''}</div>
+    <div class="preset-edit">
+      <label>Nội dung nhắc<input class="cds--text-input" data-f="flag" value="${esc(p.flag)}"></label>
+      <label>Áp dụng từ số tiền (đồng)<input class="cds--text-input" data-f="min_gross" inputmode="numeric" value="${p.min_gross ?? ''}" placeholder="mọi số tiền"></label>
+      <label>Khi tên hàng có (cách nhau dấu phẩy)<input class="cds--text-input" data-f="description_contains" value="${esc((p.description_contains || []).join(', '))}" placeholder="mọi hàng hóa"></label></div></div></div>`;
+}
+
+function readCard(card) {
+  const g = (f) => card.querySelector(`[data-f="${f}"]`).value.trim();
+  const amount = Number(g('min_gross').replace(/\D/g, '')) || undefined;
+  return { flag: g('flag'), min_gross: amount, description_contains: g('description_contains').split(',').map((x) => x.trim()).filter(Boolean) };
+}
+
+// Live offline check of a tax code (format and check digit) under the input.
+export function bindTaxCheck(input, box, onResult) {
+  if (!input) return;
+  let t = null;
+  const run = async () => {
+    const v = input.value.trim();
+    if (!v) { box.innerHTML = ''; onResult?.(null); return; }
+    try {
+      const r = await api(`/api/check-tax-id?mst=${encodeURIComponent(v)}`);
+      box.innerHTML = `<div class="taxcheck ${r.ok ? 'ok' : 'bad'}">${r.ok ? '✓' : '✗'} ${esc(r.reason)}</div>`;
+      onResult?.(r);
+    } catch { box.innerHTML = ''; }
+  };
+  input.addEventListener('input', () => { clearTimeout(t); t = setTimeout(run, 300); });
+  run();
+}
 const MONTHS = Array.from({ length: 12 }, (_, i) => [String(i + 1), `Tháng ${i + 1}`]);
 
 // ---------------------------------------------------------------- welcome: the fixed framework before any enterprise
@@ -49,23 +84,41 @@ export async function openWorkspace(id, hash = '#/') {
 // ---------------------------------------------------------------- set-up wizard
 export async function pageSetup() {
   state.schema ||= await api('/api/schema');
-  const presets = await api('/api/presets');
+  let presets = null;
+  let presetsKey = null;
   const others = state.workspaces;
-  const d = { profile: {}, policies: [], thresholds: {}, ai_categories: [], days_off: [], copy_from: '' };
+  const d = { profile: {}, policies: [], custom: [], picked: null, edits: {}, thresholds: {}, ai_categories: [], days_off: [], copy_from: '' };
+  let taxCheck = null;
   let step = Math.max(0, Math.min(5, Number(new URLSearchParams(location.hash.split('?')[1] || '').get('buoc') || 1) - 1));
   const steps = ['Hồ sơ', 'Quy định chi tiêu', 'Ngưỡng nội bộ', 'Nhóm hàng đặc thù', 'Ngày nghỉ', 'Xác nhận'];
   const draw = () => {
     const nav = `<nav class="steps">${steps.map((s, i) => `<a class="${i === step ? 'on' : ''}" ${i < step ? `data-step="${i}" href="javascript:void 0"` : ''}><span class="n">${i + 1}</span>${esc(s)}</a>`).join('')}</nav>`;
     let body = '';
+    if (step === 1) {
+      const key = (d.profile.industry || []).join(';');
+      if (!presets || presetsKey !== key) {
+        api(`/api/presets?industry=${encodeURIComponent(key)}`).then((r) => {
+          presets = r.policies; presetsKey = key;
+          if (d.picked === null) d.picked = new Set(presets.filter((x) => x.recommended).map((x) => x.id));
+          draw();
+        });
+        app().innerHTML = `<h1 class="page">Thiết lập doanh nghiệp</h1>${loading('Đang chọn gợi ý theo ngành nghề')}`;
+        return;
+      }
+    }
     if (step === 0) {
-      body = `<p class="muted">Thông tin trên giấy chứng nhận đăng ký thuế. Kỳ khai và năm tài chính quyết định lịch hạn nộp.</p>
+      body = `<p class="muted">Thông tin trên giấy chứng nhận đăng ký thuế. Kỳ khai và năm tài chính quyết định lịch hạn nộp. Ngành nghề (mã VSIC) dùng để gợi ý quy định chi tiêu ở bước sau.</p>
         <div class="form-grid">${state.schema.profile.map((f) => field(f, d.profile[f.key] ?? (f.type === 'choice' ? f.choices[0][0] : ''))).join('')}
         ${field({ key: 'fiscal_year_end_month', label: 'Năm tài chính kết thúc vào tháng', type: 'choice', required: true, choices: MONTHS, help: 'Đa số doanh nghiệp là tháng 12 (năm dương lịch). Hạn quyết toán là ngày cuối tháng thứ 3 sau tháng này.' }, String(d.profile.fiscal_year_end_month || 12))}
         ${others.length ? field({ key: 'copy_from', label: 'Sao chép cấu hình từ doanh nghiệp khác', type: 'choice', choices: [['', 'Không sao chép'], ...others.map((w) => [w.id, w.name])], help: 'Lấy mẫu sao kê, quy định chi tiêu, ngưỡng, nhóm hàng đặc thù, ngày nghỉ; hồ sơ và dữ liệu vẫn riêng.' }, d.copy_from) : ''}</div>`;
     } else if (step === 1) {
-      body = `<p class="muted">Chọn các quy định chi tiêu nội bộ doanh nghiệp đang áp dụng. Mỗi quy định chỉ thêm nhắc nhở cho kế toán, không làm thay đổi kết quả theo luật.</p>
-        <div class="preset-list">${presets.policies.map((p, i) => `<label class="preset"><input type="checkbox" data-preset="${i}" ${d.policies.some((x) => x.id === p.id) ? 'checked' : ''}>
-          <span><strong>${esc(p.flag)}</strong><span class="muted small">${p.min_gross ? `từ ${money(p.min_gross)}` : ''}${p.description_contains ? ` khi tên hàng có: ${p.description_contains.map(esc).join(', ')}` : ''}</span></span></label>`).join('')}</div>`;
+      const codes = (d.profile.industry || []).map((x) => (String(x).match(/^\s*(\d{2,5})/) || [])[1]).filter(Boolean);
+      body = `<p class="muted">Quy định chi tiêu nội bộ: mỗi quy định chỉ thêm nhắc nhở cho kế toán khi gặp hóa đơn phù hợp, không làm thay đổi kết quả theo luật.
+        ${codes.length ? `Đã đánh dấu sẵn các mục gợi ý cho ngành ${codes.map(esc).join(', ')}.` : 'Chưa có ngành nghề ở bước 1 nên chỉ gợi ý các mục chung.'} Sửa nội dung, số tiền, từ khóa theo quy chế của doanh nghiệp.</p>
+        <div class="preset-list">${presets.map((p, i) => policyCard({ ...p, ...(d.edits[p.id] || {}) }, i, d.picked.has(p.id))).join('')}</div>
+        <h3 class="sub-h">Quy định riêng của doanh nghiệp</h3>
+        <div id="custom-list">${d.custom.map((c, i) => policyCard({ ...c, recommended: false }, i, true, 'cus')).join('') || '<p class="muted small">Chưa có. Ví dụ: "Mua văn phòng phẩm từ 1 triệu cần phiếu đề xuất" khi tên hàng có "giấy, bút, mực in".</p>'}</div>
+        <div class="bar">${button('Thêm quy định riêng', 'ghost', 'id="add-pol"')}</div>`;
     } else if (step === 2) {
       body = `<p class="muted">Ngưỡng của doanh nghiệp chỉ được chặt hơn luật. Để trống để dùng mức theo luật.</p><div class="form-grid">
         ${field({ key: 'match_days_after_invoice', label: 'Số ngày tối đa từ ngày hóa đơn đến ngày thanh toán', example: '90 (không quá 90)', help: 'Khoản chi trả quá số ngày này sau hóa đơn sẽ không được tự ghép.' }, d.thresholds.match_days_after_invoice ?? '')}
@@ -94,6 +147,13 @@ export async function pageSetup() {
       <div class="bar">${step > 0 ? button('Quay lại', 'ghost', 'id="back"') : button('Hủy', 'ghost', 'data-go="#/"')}${button(step === steps.length - 1 ? 'Tạo doanh nghiệp' : 'Tiếp tục', 'primary', 'type="submit"')}</div></form>`;
     app().querySelectorAll('[data-step]').forEach((a) => { a.onclick = () => { collect(); step = Number(a.dataset.step); draw(); }; });
     if ($('#back')) $('#back').onclick = () => { collect(); step -= 1; draw(); };
+    app().querySelectorAll('[data-pol],[data-cus]').forEach((c) => { c.onchange = () => c.closest('[data-card]').classList.toggle('on', c.checked); });
+    if ($('#add-pol')) $('#add-pol').onclick = () => { collect(); d.custom.push({ flag: 'Quy định mới: sửa nội dung nhắc', description_contains: [] }); draw(); };
+    if (step === 0) {
+      const tax = $('#f-tax_code');
+      if (tax && !$('#mst-msg')) tax.closest('.cds--form-item').insertAdjacentHTML('beforeend', '<div id="mst-msg"></div>');
+      bindTaxCheck(tax, $('#mst-msg'), (r) => { taxCheck = r; });
+    }
     if ($('#add-cat')) $('#add-cat').onclick = () => { collect(); if (d.ai_categories.length < 10) d.ai_categories.push({ name: '', description: '' }); draw(); };
     $('#setup').onsubmit = async (e) => {
       e.preventDefault();
@@ -118,9 +178,18 @@ export async function pageSetup() {
       v.industry = (v.industry || '').split(';').map((s) => s.trim()).filter(Boolean);
       v.fiscal_year_end_month = Number(v.fiscal_year_end_month || 12);
       d.profile = v;
-      if (!/^\d{10}(-\d{3})?$/.test(v.tax_code || '') || !(v.legal_name || '').trim()) { toast('Cần mã số thuế 10 hoặc 13 số và tên doanh nghiệp', '', 'error'); return false; }
+      if (taxCheck && !taxCheck.ok) { toast('Mã số thuế chưa hợp lệ', taxCheck.reason, 'error'); return false; }
+      if (!(v.legal_name || '').trim()) { toast('Cần tên doanh nghiệp đúng như trên giấy đăng ký thuế', '', 'error'); return false; }
     } else if (step === 1) {
-      d.policies = [...f.querySelectorAll('[data-preset]')].filter((c) => c.checked).map((c) => presets.policies[Number(c.dataset.preset)]);
+      d.picked = new Set();
+      f.querySelectorAll('[data-pol]').forEach((c) => {
+        const p = presets[Number(c.dataset.pol)];
+        d.edits[p.id] = readCard(c.closest('[data-card]'));
+        if (c.checked) d.picked.add(p.id);
+      });
+      d.custom = [...f.querySelectorAll('[data-cus]')].filter((c) => c.checked).map((c) => readCard(c.closest('[data-card]'))).filter((c) => c.flag);
+      d.policies = [...presets.filter((p) => d.picked.has(p.id)).map((p) => cleanPolicy({ id: p.id, ...d.edits[p.id] })),
+        ...d.custom.map((c, i) => cleanPolicy({ id: `RIENG_${i + 1}`, ...c }))];
     } else if (step === 2) {
       const v = Object.fromEntries(new FormData(f).entries());
       d.thresholds = {};
@@ -146,7 +215,8 @@ export async function pageSetup() {
 export async function pageConfig() {
   if (!state.ws) { location.hash = '#/'; return; }
   state.schema ||= await api('/api/schema');
-  const [pack, presets, history] = await Promise.all([api(`/api/workspaces/${state.ws}/pack`), api('/api/presets'), api(`/api/workspaces/${state.ws}/pack/history`)]);
+  const [pack, history] = await Promise.all([api(`/api/workspaces/${state.ws}/pack`), api(`/api/workspaces/${state.ws}/pack/history`)]);
+  const presets = { policies: (await api(`/api/presets?industry=${encodeURIComponent((pack.profile.industry || []).join(';'))}`)).policies };
   const save = async (next, msg) => {
     try { await put(`/api/workspaces/${state.ws}/pack?by=${encodeURIComponent(store.get('agent3.reviewer') || '')}`, next); toast(msg || 'Đã lưu cấu hình', 'Chạy lại phân tích để áp dụng'); await loadWorkspaces(); rerender(); }
     catch (err) { toast('Không lưu được', err.message, 'error'); }
@@ -165,7 +235,7 @@ export async function pageConfig() {
       <td class="mono">${esc(f.columns.debit)}</td><td class="mono">${esc(f.columns.credit || '')}</td><td>${f.thousands === '.' ? '1.234.567' : '1,234,567'}</td><td>${button('Xóa', 'ghost', `data-delfmt="${i}"`)}</td></tr>`), 'Chưa có mẫu. Nạp sao kê rồi bấm Nhận dạng cột.') + `<div class="bar">${button('Thêm mẫu từ tệp sao kê', 'ghost', 'data-go="#/nap?b=bank"')}</div>`)}
     ${sec('bang-ke', 'Cột của bảng kê cổng thuế', 'Khi cổng hóa đơn điện tử đổi mẫu tệp xuất, chọn lại cột ở đây; không cần sửa tệp.', '<div id="portal-map"><div class="bar">' + button('Đọc tiêu đề bảng kê đã nạp', 'ghost', 'id="portal-load"') + '</div></div>')}
     ${sec('quy-dinh', 'Quy định chi tiêu nội bộ', 'Chỉ thêm nhắc nhở cho kế toán, không thay đổi kết quả theo luật.', `<div class="preset-list">${presets.policies.map((p, i) => `<label class="preset"><input type="checkbox" data-preset="${i}" ${(pack.policies || []).some((x) => x.id === p.id) ? 'checked' : ''}>
-      <span><strong>${esc(p.flag)}</strong><span class="muted small">${p.min_gross ? `từ ${money(p.min_gross)}` : ''}${p.description_contains ? ` khi tên hàng có: ${p.description_contains.map(esc).join(', ')}` : ''}</span></span></label>`).join('')}
+      <span><strong>${esc(p.flag)}</strong>${p.industry_fit ? '<span class="badge-fit">Gợi ý cho ngành của bạn</span>' : ''}<span class="muted small">${p.min_gross ? `từ ${money(p.min_gross)}` : ''}${p.description_contains ? ` khi tên hàng có: ${p.description_contains.map(esc).join(', ')}` : ''}</span></span></label>`).join('')}
       ${(pack.policies || []).filter((x) => !presets.policies.some((p) => p.id === x.id)).map((x) => `<label class="preset"><input type="checkbox" checked data-custom="${esc(x.id)}"><span><strong>${esc(x.flag)}</strong><span class="muted small">quy định riêng</span></span></label>`).join('')}</div>
       <form id="f-pol" style="margin-top:.75rem"><div class="form-grid">${field({ key: 'flag', label: 'Thêm quy định riêng: nội dung nhắc', example: 'Mua văn phòng phẩm từ 1 triệu cần phiếu đề xuất' })}${field({ key: 'min_gross', label: 'Áp dụng từ số tiền (đồng)', example: '1000000' })}${field({ key: 'description_contains', label: 'Tên hàng có chứa (cách nhau dấu chấm phẩy)', example: 'giấy; bút; mực in' })}</div>
       <div class="bar">${button('Lưu quy định', 'primary', 'type="submit"')}</div></form>`)}
@@ -181,6 +251,8 @@ export async function pageConfig() {
       <div class="bar">${button('Lưu ngày nghỉ', 'primary', 'type="submit"')}</div></form>`)}
     ${sec('rui-ro', 'Danh sách doanh nghiệp rủi ro', 'Người bán trong danh sách sẽ được gắn cờ cần xem; luôn ghi ngày và nguồn.', table(['Tên danh sách', 'Ngày', { label: 'Số mã số thuế', num: true }, 'Nguồn'], (pack.reference_lists || []).map((r) => `<tr><td>${esc(r.name)}</td><td>${dmy(r.as_of)}</td><td class="num">${r.tax_ids.length}</td><td>${esc(r.source || '')}</td></tr>`), 'Chưa có.') + '<div id="riskimp"></div>')}
     ${sec('lich-su', 'Lịch sử thay đổi cấu hình', 'Ai đổi phần nào, lúc nào.', table(['Thời điểm', 'Người', 'Phần thay đổi'], history.slice(0, 30).map((h) => `<tr><td>${esc(h.at.replace('T', ' '))}</td><td>${esc(h.by)}</td><td>${h.created ? 'Tạo doanh nghiệp' : esc(h.changed.join(', '))}</td></tr>`), 'Chưa có thay đổi nào được ghi.'))}`;
+  const tax = $('#f-tax_code');
+  if (tax) { tax.closest('.cds--form-item').insertAdjacentHTML('beforeend', '<div id="mst-msg2"></div>'); bindTaxCheck(tax, $('#mst-msg2')); }
   app().querySelectorAll('[data-jump]').forEach((a) => { a.onclick = () => document.getElementById(a.dataset.jump).scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   $('#f-profile').onsubmit = (e) => {
     e.preventDefault();
@@ -191,7 +263,7 @@ export async function pageConfig() {
   };
   app().querySelectorAll('[data-delfmt]').forEach((b) => { b.onclick = () => save({ ...pack, bank_formats: pack.bank_formats.filter((_, i) => i !== Number(b.dataset.delfmt)) }, 'Đã xóa mẫu sao kê'); });
   const policiesFromChecks = () => [
-    ...presets.policies.filter((p, i) => app().querySelector(`[data-preset="${i}"]`).checked),
+    ...presets.policies.filter((p, i) => app().querySelector(`[data-preset="${i}"]`).checked).map((p) => cleanPolicy({ ...p, ...((pack.policies || []).find((x) => x.id === p.id) || {}) })),
     ...(pack.policies || []).filter((x) => !presets.policies.some((p) => p.id === x.id) && app().querySelector(`[data-custom="${x.id}"]`)?.checked)];
   $('#f-pol').onsubmit = (e) => {
     e.preventDefault();

@@ -176,19 +176,60 @@ def portal_suggest(wid: str):
                             issue_date='Ngày lập', vat='Tổng tiền thuế', gross='Tổng tiền thanh toán'))
 
 
-# Ready-made internal policies the set-up wizard offers; each only adds a flag.
+# Ready-made internal policies the set-up wizard offers; each only adds a reminder flag, never changes a legal result.
+# "for": industry code prefixes (VSIC, first two digits) for which the policy is recommended; empty = every enterprise.
 POLICY_PRESETS = [
-    dict(id='TIEP_KHACH', flag='Chi tiếp khách cần giấy đề nghị thanh toán và danh sách khách', description_contains=['tiếp khách', 'nhà hàng', 'ăn uống'], min_gross=2000000),
-    dict(id='QUA_TANG', flag='Quà tặng, quà biếu cần danh sách người nhận và mục đích', description_contains=['quà', 'biếu']),
-    dict(id='CONG_TAC', flag='Công tác phí cần quyết định cử đi công tác', description_contains=['vé máy bay', 'khách sạn', 'công tác']),
-    dict(id='XANG_DAU', flag='Xăng dầu cần định mức và nhật ký xe', description_contains=['xăng', 'dầu diesel', 'nhiên liệu']),
-    dict(id='TAI_SAN', flag='Hàng từ 30 triệu đồng có thể là tài sản cố định: kiểm tra cách hạch toán', min_gross=30000000),
+    dict(id='TIEP_KHACH', flag='Chi tiếp khách cần giấy đề nghị thanh toán và danh sách khách', description_contains=['tiếp khách', 'nhà hàng', 'ăn uống'], min_gross=2000000, group='Chung', **{'for': []}),
+    dict(id='QUA_TANG', flag='Quà tặng, quà biếu cần danh sách người nhận và mục đích', description_contains=['quà', 'biếu'], group='Chung', **{'for': []}),
+    dict(id='CONG_TAC', flag='Công tác phí cần quyết định cử đi công tác', description_contains=['vé máy bay', 'khách sạn', 'công tác'], group='Chung', **{'for': []}),
+    dict(id='TAI_SAN', flag='Hàng từ 30 triệu đồng có thể là tài sản cố định: kiểm tra cách hạch toán', min_gross=30000000, group='Chung', **{'for': []}),
+    dict(id='XANG_DAU', flag='Xăng dầu cần định mức và nhật ký xe', description_contains=['xăng', 'dầu diesel', 'nhiên liệu'], group='Vận tải, xây dựng, thương mại', **{'for': ['49', '41', '42', '43', '46', '52']}),
+    dict(id='THIET_BI_CNTT', flag='Thiết bị công nghệ thông tin cần biên bản bàn giao cho người hoặc bộ phận sử dụng', description_contains=['máy tính', 'laptop', 'máy chủ', 'server', 'điện thoại', 'máy tính bảng'], group='Công nghệ thông tin', **{'for': ['58', '61', '62', '63']}),
+    dict(id='DICH_VU_NUOC_NGOAI', flag='Phần mềm, dịch vụ đám mây mua của tổ chức nước ngoài: lưu hợp đồng, chứng từ thanh toán và kiểm tra nghĩa vụ thuế khi mua dịch vụ từ nước ngoài', description_contains=['license', 'bản quyền', 'cloud', 'đám mây', 'subscription', 'aws', 'azure', 'google workspace'], group='Công nghệ thông tin', **{'for': ['58', '61', '62', '63']}),
+    dict(id='PHAN_MEM_TRA_TRUOC', flag='Bản quyền phần mềm trả trước nhiều năm: phân bổ chi phí theo thời gian sử dụng', description_contains=['bản quyền', 'license'], min_gross=20000000, group='Công nghệ thông tin', **{'for': ['58', '62', '63']}),
+    dict(id='NGUYEN_LIEU', flag='Nguyên liệu mua của người bán không có hóa đơn cần lập bảng kê thu mua', description_contains=['thịt', 'cá', 'rau', 'gạo', 'trái cây'], group='Nhà hàng, ăn uống', **{'for': ['56', '55', '10']}),
+    dict(id='VAN_CHUYEN', flag='Cước vận chuyển cần hợp đồng hoặc biên bản giao nhận kèm theo', description_contains=['vận chuyển', 'cước'], min_gross=5000000, group='Vận tải, xây dựng, thương mại', **{'for': ['41', '42', '43', '46', '47']}),
+    dict(id='SUA_CHUA_LON', flag='Sửa chữa từ 50 triệu đồng: kiểm tra có làm tăng nguyên giá tài sản không', description_contains=['sửa chữa', 'cải tạo', 'nâng cấp'], min_gross=50000000, group='Chung', **{'for': []}),
 ]
 
 
+def _industry_codes(industry: list[str]) -> set[str]:
+    return {m.group(1)[:2] for x in industry or [] for m in [re.match(r'\s*(\d{2,5})', str(x))] if m}
+
+
 @app.get('/api/presets')
-def presets():
-    return dict(policies=POLICY_PRESETS)
+def presets(industry: str = ''):
+    """Presets, each marked recommended when it fits one of the enterprise's industry codes or applies to everyone."""
+    codes = _industry_codes([x for x in industry.split(';') if x.strip()])
+    out = []
+    for p in POLICY_PRESETS:
+        fit = bool(set(p['for']) & codes)
+        out.append(dict(p, recommended=fit or (not p['for'] and p['id'] in ('TIEP_KHACH', 'TAI_SAN')), industry_fit=fit))
+    out.sort(key=lambda p: (not p['industry_fit'], not p['recommended']))
+    return dict(policies=out, industry_codes=sorted(codes))
+
+
+@app.get('/api/check-tax-id')
+def check_tax_id(mst: str):
+    """Offline check of a tax code: format and check digit. Whether it is registered and active can only be looked up on the
+    tax authority's portal, which this local application does not call."""
+    from ..extraction.xml_invoice import mst_checksum_ok
+    raw = (mst or '').strip()
+    digits = raw.replace('-', '')
+    if not digits:
+        return dict(ok=False, reason='Chưa nhập mã số thuế')
+    if not digits.isdigit():
+        return dict(ok=False, reason='Mã số thuế chỉ gồm chữ số (chi nhánh có thêm dấu gạch: 0123456789-001)')
+    if len(digits) == 12:
+        return dict(ok=True, reason='Đúng dạng số định danh cá nhân 12 số (dùng thay mã số thuế cá nhân, hộ kinh doanh)', kind='personal')
+    if len(digits) not in (10, 13):
+        return dict(ok=False, reason=f'Mã số thuế doanh nghiệp có 10 số, chi nhánh 13 số; bạn nhập {len(digits)} số')
+    if not mst_checksum_ok(digits):
+        return dict(ok=False, reason='Sai số kiểm tra (chữ số thứ 10): có thể gõ nhầm một chữ số')
+    kind = 'branch' if len(digits) == 13 else 'enterprise'
+    return dict(ok=True, kind=kind, reason=('Đúng định dạng và số kiểm tra' + (' (mã chi nhánh)' if kind == 'branch' else '')
+                                            + '. Muốn chắc mã đang hoạt động, tra cứu trên cổng của cơ quan thuế.'))
+
 
 
 @app.put('/api/workspaces/{wid}/files/{kind}')
