@@ -75,7 +75,7 @@ def parse_amount(value, thousands='.', decimal=',') -> Decimal | None:
     try:
         return Decimal(s)
     except InvalidOperation:
-        raise SourceError(f'amount not readable: {value!r}')
+        raise SourceError(f'không đọc được số tiền: {value!r}')
 
 
 def parse_date(value, fmt) -> date:
@@ -87,7 +87,7 @@ def parse_date(value, fmt) -> date:
             return datetime.strptime(text, f).date()
         except ValueError:
             continue
-    raise SourceError(f'date not readable: {value!r}')
+    raise SourceError(f'không đọc được ngày: {value!r} (kiểm tra cách viết ngày trong mẫu sao kê)')
 
 
 # ----------------------------------------------------------------------------- bank statements
@@ -118,7 +118,7 @@ def read_bank_statement(path: Path, pack: Pack) -> list[BankTxn]:
             debit = parse_amount(cell('debit'), fmt.thousands, fmt.decimal) or Decimal(0)
             credit = parse_amount(cell('credit'), fmt.thousands, fmt.decimal) or Decimal(0)
             if debit and credit:
-                raise SourceError(f'{path.name}:{n} has both debit and credit')
+                raise SourceError(f'{path.name} dòng {n}: có cả ghi nợ và ghi có trên cùng một dòng; kiểm tra lại cột tiền')
             if not debit and not credit:
                 continue
             out.append(BankTxn(
@@ -128,7 +128,7 @@ def read_bank_statement(path: Path, pack: Pack) -> list[BankTxn]:
                 counterparty_name=str(cell('counterparty_name')).strip() or None,
                 description=str(cell('description')).strip(), source=f'{path.name} dòng {n} ({fmt.name})'))
         return out
-    raise SourceError(f'{path.name}: no bank format in the pack matches its header (tried {errors})')
+    raise SourceError(f'{path.name}: chưa có mẫu sao kê khớp tiêu đề cột của tệp (đã thử {errors or "không có mẫu nào"})')
 
 
 # ----------------------------------------------------------------------------- invoices
@@ -191,7 +191,7 @@ def read_portal_list(path: Path, pack: Pack) -> list[dict]:
     fmt = BankFormat(name='portal', columns=cols)
     head, idx = _find_header(rows, fmt)
     if head is None:
-        raise SourceError(f'{Path(path).name}: portal list header not found; set portal_columns in the pack')
+        raise SourceError(f'{Path(path).name}: không thấy dòng tiêu đề của bảng kê cổng thuế (cần các cột MST người bán, ký hiệu, số hóa đơn, ngày lập)')
     out = []
     for n, row in enumerate(rows[head + 1:], head + 2):
         if not any(str(c).strip() for c in row):

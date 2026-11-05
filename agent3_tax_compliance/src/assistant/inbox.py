@@ -133,7 +133,7 @@ def file_details(ws: Path, kind: str, pack: Pack, as_of: date) -> list[dict]:
                 rows = read_portal_list(p, pack)
                 out.append(dict(file=p.name, ok=True, rows=len(rows)))
         except (SourceError, IntakeError, ValueError) as e:
-            hint = ' Bấm Nhận dạng cột rồi lưu mẫu sao kê.' if kind == 'bank' and 'no bank format' in str(e) else ''
+            hint = ' Bấm Nhận dạng cột rồi lưu mẫu sao kê.' if kind == 'bank' and 'chưa có mẫu sao kê' in str(e) else ''
             out.append(dict(file=p.name, ok=False, errors=[f'{str(e)[:160]}{hint}']))
     return out
 

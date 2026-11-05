@@ -2,6 +2,9 @@
 import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, needWorkspace, notice, post, put,
   state, store, table, tag } from './core.js';
 import { aiToolbar, explainBox } from './pages_ai.js';
+import { deadlineBanner, freshBanner, nextSteps, toast } from './ux.js';
+
+const itemId = (it) => `${it.code}|${it.invoice_keys.join(',')}`;
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 
@@ -38,7 +41,7 @@ export async function pageOverview() {
   const files = ws.files;
   const period = rep?.meta.period ? ` Dữ liệu từ ${dmy(rep.meta.period[0])} đến ${dmy(rep.meta.period[1])}.` : '';
   app().innerHTML = `<h1 class="page">${esc(ws.name)}</h1><p class="lead">MST ${esc(ws.tax_code)}.${ws.simulated ? ' Dữ liệu mô phỏng, không phải doanh nghiệp thật.' : ''}${rep ? ` Phân tích ngày ${dmy(rep.meta.as_of)}.${period}` : ''}</p>
-    ${rep ? '' : notice('info', 'Chưa có kết quả phân tích', 'Nạp hóa đơn và sao kê rồi bấm Chạy phân tích.')}
+    <div id="fresh"></div>${deadlineBanner(rep, rep ? new Date(rep.meta.as_of) : new Date())}<div id="next"></div>
     <div class="kpis">
       <div class="kpi"><span class="label">Thuế đầu vào có nguy cơ bị loại</span><span class="value risk">${t ? money(t.at_risk_vat) : '—'}</span><span class="sub">${t ? `${t.at_risk_invoices} hóa đơn` : ''}</span></div>
       <div class="kpi"><span class="label">Ước tính phạt tối đa nếu bị xác định khai sai</span><span class="value">${t ? money(t.penalty_estimate) : '—'}</span><span class="sub">${t ? `${Math.round(t.penalty_rate * 100)}% số thuế khai thiếu` : ''}</span></div>
@@ -55,6 +58,8 @@ export async function pageOverview() {
       <dl class="kv"><dt>Hóa đơn mua vào</dt><dd>${files.purchase_xml} tệp</dd><dt>Hóa đơn bán ra</dt><dd>${files.sales_xml} tệp</dd><dt>Sao kê</dt><dd>${files.bank} tệp</dd><dt>Bảng kê cổng thuế</dt><dd>${files.portal_list ? 'có' : 'chưa có'}</dd></dl>
       ${button('Nạp thêm dữ liệu', 'ghost', 'data-go="#/nap"')}</div>
       <h2 class="section">Hạn gần nhất</h2>${table(['Kỳ', 'Hạn', 'Tình trạng'], (rep?.calendar || []).slice(-3).reverse().map((c) => `<tr><td>${esc(c.period)}</td><td>${dmy(c.due)}</td><td>${esc(c.status)}</td></tr>`), 'Chưa có.')}</div></div>`;
+  freshBanner($('#fresh'));
+  nextSteps(ws, rep).then((h) => { const el = $('#next'); if (el) el.innerHTML = h; });
   $('#run').onclick = async () => {
     $('#run-msg').innerHTML = loading('Đang phân tích');
     try { await post(`/api/workspaces/${state.ws}/run`); await loadWorkspaces(); rerender(); } catch (err) { $('#run-msg').innerHTML = notice('error', 'Phân tích không chạy được', err.message); }
@@ -66,19 +71,41 @@ export async function pageReview() {
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Việc cần xử lý</h1>${notice('info', 'Chưa phân tích', 'Chạy phân tích ở trang Tổng quan.')}`; return; }
   const filter = hashParams().get('loc') || 'all';
+  const months = [...new Set(rep.invoices.filter((i) => i.issue_date).map((i) => i.issue_date.slice(0, 7)))].sort();
   const items = rep.items.filter((it) => filter === 'all' || it.status === filter);
   const count = (s) => rep.items.filter((i) => i.status === s).length;
   app().innerHTML = `<h1 class="page">Việc cần xử lý</h1><p class="lead">Xếp theo số tiền. Mở từng dòng để xem căn cứ và ghi quyết định; mọi quyết định cần chứng từ và tên người duyệt, và được ghi lại.</p>
-    <div id="ai-tools"></div>
+    <div id="fresh"></div><div id="ai-tools"></div>
     <div class="bar">${[['all', `Tất cả (${rep.items.length})`], ['AT_RISK', `Có nguy cơ (${count('AT_RISK')})`], ['REVIEW', `Cần xem xét (${count('REVIEW')})`], ['OPPORTUNITY', `Bỏ sót (${count('OPPORTUNITY')})`]]
-      .map(([k, l]) => `<a class="cds--btn cds--btn--${k === filter ? 'secondary' : 'ghost'} cds--btn--sm" href="#/viec?loc=${k}">${esc(l)}</a>`).join('')}</div>
+      .map(([k, l]) => `<a class="cds--btn cds--btn--${k === filter ? 'secondary' : 'ghost'} cds--btn--sm" href="#/viec?loc=${k}">${esc(l)}</a>`).join('')}
+      <input class="cds--text-input filter-input" id="q" placeholder="Tìm số hóa đơn, người bán, lý do" aria-label="Tìm việc">
+      <select class="cds--select-input filter-select" id="month" aria-label="Lọc theo tháng"><option value="">Mọi tháng</option>${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}</select>
+      <span class="muted small" id="shown"></span></div>
     ${table(['Trạng thái', 'Hóa đơn', 'Người bán', 'Lý do', { label: 'Số tiền', num: true }], items.map((it) => {
       const inv = invoiceOf(it.invoice_keys[0]);
-      return `<tr class="clickable" data-item="${rep.items.indexOf(it)}"><td>${tag(it.status)}</td><td>${esc(invLabel(inv) || it.invoice_keys[0])}<div class="muted small">${dmy(inv?.issue_date)}</div></td>
+      return `<tr class="clickable" tabindex="0" data-item="${rep.items.indexOf(it)}" data-month="${(inv?.issue_date || '').slice(0, 7)}" data-text="${esc(`${invLabel(inv)} ${inv?.seller_name || ''} ${it.title} ${it.detail}`.toLowerCase())}"><td>${tag(it.status)}</td><td>${esc(invLabel(inv) || it.invoice_keys[0])}<div class="muted small">${dmy(inv?.issue_date)}</div></td>
         <td>${esc(inv?.seller_name || '')}</td><td><span class="cell-title">${esc(it.title)}</span><div class="muted small">${esc(it.detail)}</div></td><td class="num">${money(it.amount)}</td></tr>`;
     }))}`;
-  app().querySelectorAll('[data-item]').forEach((tr) => { tr.onclick = () => openItem(rep.items[Number(tr.dataset.item)], Number(tr.dataset.item)); });
+  const rows = [...app().querySelectorAll('[data-item]')];
+  rows.forEach((tr) => {
+    tr.onclick = () => openItem(rep.items[Number(tr.dataset.item)], Number(tr.dataset.item));
+    tr.onkeydown = (e) => { if (e.key === 'Enter') tr.click(); };
+  });
+  const applyFilter = () => {
+    const q = $('#q').value.trim().toLowerCase(); const m = $('#month').value;
+    let n = 0;
+    rows.forEach((tr) => { const ok = (!q || tr.dataset.text.includes(q)) && (!m || tr.dataset.month === m); tr.hidden = !ok; n += ok; });
+    $('#shown').textContent = q || m ? `${n} việc khớp` : '';
+  };
+  $('#q').oninput = applyFilter; $('#month').onchange = applyFilter;
   aiToolbar($('#ai-tools'));
+  freshBanner($('#fresh'));
+  let want = null;
+  try { want = sessionStorage.getItem('agent3.openNext'); sessionStorage.removeItem('agent3.openNext'); } catch { /* private mode */ }
+  if (want) {
+    const idx = rep.items.findIndex((it) => itemId(it) === want);
+    if (idx >= 0) openItem(rep.items[idx], idx);
+  }
 }
 
 function openItem(it, index) {
@@ -98,8 +125,8 @@ function openItem(it, index) {
       ${field({ key: 'action', label: 'Quyết định', type: 'choice', required: true, choices: payment ? [['PAYMENT_EVIDENCE_ATTACHED', 'Đã có chứng từ thanh toán không dùng tiền mặt'], ['NOT_CLAIMED', 'Không kê khai khấu trừ hóa đơn này']]
         : [['NOT_CLAIMED', 'Không kê khai khấu trừ hóa đơn này']], help: payment ? '' : 'Với loại rủi ro này, chứng từ thanh toán không khắc phục được; cần hóa đơn thay thế hoặc điều chỉnh từ người bán, hoặc không kê khai.' }, payment ? 'PAYMENT_EVIDENCE_ATTACHED' : 'NOT_CLAIMED')}
       ${field({ key: 'evidence', label: 'Chứng từ hoặc lý do', required: true, example: 'Ủy nhiệm chi số 5521 ngày 05/09/2026' })}
-      ${field({ key: 'by', label: 'Người duyệt', required: true, example: 'Kế toán trưởng' })}</div>
-      <div class="bar">${button('Lưu quyết định và chạy lại', 'primary', 'type="submit"')}<span id="dmsg"></span></div></form>` : ''}</aside>`;
+      ${field({ key: 'by', label: 'Người duyệt', required: true, example: 'Kế toán trưởng' }, store.get('agent3.reviewer') || '')}</div>
+      <div class="bar">${button('Lưu và mở việc tiếp theo', 'primary', 'type="submit" data-next="1"')}${button('Lưu', 'secondary', 'type="submit"')}<span id="dmsg"></span></div></form>` : ''}</aside>`;
   $('#close').onclick = () => { $('#modal-root').innerHTML = ''; };
   if (Number.isInteger(index)) explainBox($('#plain'), index);
   const form = $('#decide');
@@ -107,7 +134,17 @@ function openItem(it, index) {
     form.onsubmit = async (e) => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(form).entries());
-      try { await post(`/api/workspaces/${state.ws}/decisions`, { ...d, invoice_key: it.invoice_keys[0] }); $('#modal-root').innerHTML = ''; rerender(); }
+      store.set('agent3.reviewer', d.by);
+      const goNext = e.submitter && e.submitter.dataset.next;
+      const open = state.report.items.filter((x) => (x.status === 'AT_RISK' || x.status === 'REVIEW') && itemId(x) !== itemId(it) && !x.invoice_keys.includes(it.invoice_keys[0]));
+      const after = open[open.indexOf(open.find((x) => state.report.items.indexOf(x) > index)) ] || open[0];
+      $('#dmsg').innerHTML = '<span class="muted">Đang lưu và chạy lại...</span>';
+      try {
+        const r = await post(`/api/workspaces/${state.ws}/decisions`, { ...d, invoice_key: it.invoice_keys[0] });
+        toast('Đã lưu quyết định', `Thuế có nguy cơ còn ${Number(r.totals.at_risk_vat).toLocaleString('vi-VN')} đ`);
+        if (goNext && after) { try { sessionStorage.setItem('agent3.openNext', itemId(after)); } catch { /* private mode */ } }
+        $('#modal-root').innerHTML = ''; rerender();
+      }
       catch (err) { $('#dmsg').innerHTML = notice('error', 'Không lưu được', err.message); }
     };
   }

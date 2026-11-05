@@ -25,7 +25,9 @@ async function route() {
   renderNav(cur);
   document.body.classList.remove('nav-open');
   $('#modal-root').innerHTML = '';
-  const page = (NAV.find(([h]) => h === cur) || NAV[0])[2];
+  const entry = NAV.find(([h]) => h === cur) || NAV[0];
+  const page = entry[2];
+  document.title = `${entry[1]} · Agent 3 Trợ lý thuế`;
   try { await page(); } catch (err) { app().innerHTML = notice('error', 'Có lỗi khi tải trang', err.message); }
   app().focus({ preventScroll: true });
 }
@@ -44,4 +46,5 @@ $('.theme-toggle').onclick = () => {
   store.set('agent3.theme', next);
 };
 window.addEventListener('hashchange', route);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('#modal-root').innerHTML) $('#modal-root').innerHTML = ''; });
 loadWorkspaces().then(route).catch((err) => { app().innerHTML = notice('error', 'Không kết nối được máy chủ Agent 3', err.message); });

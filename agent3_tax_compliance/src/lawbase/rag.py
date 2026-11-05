@@ -121,6 +121,23 @@ def _numbers_ok(text: str, cited: list) -> set:
     return numbers(text) - numbers(' '.join(f'{p.path} {p.doc_num} {p.text}' for p in cited))   # document number lives in the path
 
 
+def reground(text: str, passages: list[Passage], min_overlap: float = 0.5):
+    """The sentence of a retrieved passage that holds every number of the claim and most of its words, with its passage.
+    Used when the model's own quote does not support the claim; the found sentence becomes the quote shown to the user."""
+    nums = numbers(text)
+    words = {fold(t) for t in tokens(text) if t not in STOP}
+    best = None
+    for p in passages:
+        for sent in re.split(r'(?<=[.;:])\s+', p.text):
+            if not nums or nums - numbers(f'{sent} {p.path} {p.doc_num}'):     # the document number lives in the path
+                continue
+            have = set(fold(sent).split())
+            score = len(words & have) / len(words) if words else 0
+            if score >= min_overlap and (best is None or score > best[0]):
+                best = (score, sent.strip(), p)
+    return (best[1], best[2]) if best else None
+
+
 def verify(raw: str, passages: list[Passage], question: str = '', min_topic: float = 0.6) -> tuple[list, list, bool, str]:
     data = json.loads(raw)
     by_id = {p.pid: p for p in passages}
@@ -138,6 +155,10 @@ def verify(raw: str, passages: list[Passage], question: str = '', min_topic: flo
             alt = [p for p in passages if quote and norm(quote) in norm(p.text)]
             if alt and not _numbers_ok(text, alt):
                 cited, srcs, quote_ok = alt, [p.pid for p in alt], True
+            else:
+                found = reground(text, passages)
+                if found:
+                    quote, cited, srcs, quote_ok = found[0], [found[1]], [found[1].pid], True
         if not quote_ok:
             dropped.append(dict(text=text, reason='trích dẫn không khớp nguyên văn'))
             continue

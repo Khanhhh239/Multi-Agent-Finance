@@ -124,7 +124,16 @@ export async function pageIntake() {
       <details class="guide"><summary>Lấy các tệp này ở đâu</summary><div class="guide-body">${kinds.map((k) => `<p class="cell-title">${esc(k.label)}</p><ol>${k.how.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>`).join('')}</div></details>`;
     bindDrop(async (files) => {
       const recs = await sendAll(files, `/api/workspaces/${state.ws}/inbox`);
-      $('#up').innerHTML = `${uploadResult(recs)}<div class="bar">${button('Kiểm tra dữ liệu và chạy phân tích', 'primary', 'data-go="#/nap?b=chay"')}</div>`;
+      $('#up').innerHTML = `${uploadResult(recs)}<div id="autorun">${loading('Đang tự chạy phân tích với dữ liệu mới')}</div>`;
+      if (recs.some((r) => r.kind)) {
+        try {
+          const rep = await post(`/api/workspaces/${state.ws}/run`);
+          const cov = await api(`/api/workspaces/${state.ws}/coverage`);
+          $('#autorun').innerHTML = notice('success', 'Đã phân tích xong', `${rep.items.length} việc; thuế có nguy cơ ${money(rep.totals.at_risk_vat)}`)
+            + cov.filter((w) => w.level === 'warning').map((w) => notice('warning', w.title, w.detail)).join('')
+            + `<div class="bar">${button('Xem việc cần xử lý', 'primary', 'data-go="#/viec"')}${button('Về tổng quan', 'ghost', 'data-go="#/"')}</div>`;
+        } catch (err) { $('#autorun').innerHTML = notice('error', 'Phân tích chưa chạy được', err.message); }
+      } else { $('#autorun').innerHTML = ''; }
     });
     return;
   }

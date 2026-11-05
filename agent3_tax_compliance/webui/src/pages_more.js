@@ -47,16 +47,34 @@ export async function pageCalendar() {
 
 export async function pageAsk() {
   if (needWorkspace()) return;
-  const history = [];
-  const samples = ['Tháng 8 có bao nhiêu thuế có nguy cơ bị loại?', 'Hạn nộp tờ khai khi nào?', 'Mức tính tiền chậm nộp là bao nhiêu mỗi ngày?', 'Lập hóa đơn không đúng thời điểm bị phạt thế nào?'];
-  app().innerHTML = `<h1 class="page">Hỏi đáp</h1><p class="lead">Câu hỏi về dữ liệu doanh nghiệp được trả lời từ kết quả phân tích. Câu hỏi về quy định được trả lời từ kho luật: mỗi câu phải trích nguyên văn điều khoản và qua kiểm tra căn cứ; không qua thì hệ thống trích nguyên văn hoặc từ chối. Câu cần phán đoán được chuyển chuyên gia.</p>
-    <div class="bar">${samples.map((q) => `<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>
-    <div id="chat"></div><form id="ask" class="bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
-    <label class="cds--label" for="q">Câu hỏi</label><input class="cds--text-input" id="q" name="q" autocomplete="off" placeholder="Ví dụ: hóa đơn số 340 có vấn đề gì?"></div>${button('Hỏi', 'primary', 'type="submit"')}</form>`;
+  const key = `agent3.chat.${state.ws}`;
+  let history = [];
+  try { history = JSON.parse(sessionStorage.getItem(key) || '[]'); } catch { history = []; }
+  const save = () => { try { sessionStorage.setItem(key, JSON.stringify(history.slice(-30))); } catch { /* private mode */ } };
+  const groups = [['Về dữ liệu của doanh nghiệp (trả lời ngay)', ['Tháng 8 có bao nhiêu thuế có nguy cơ bị loại?', 'Hóa đơn số 340 có vấn đề gì, vì sao?', 'Hạn nộp tờ khai khi nào?']],
+    ['Về quy định (mô hình trên máy đọc luật, 30 đến 60 giây)', ['Mức tính tiền chậm nộp là bao nhiêu mỗi ngày?', 'Lập hóa đơn không đúng thời điểm bị phạt thế nào?', 'Điều kiện khấu trừ thuế giá trị gia tăng đầu vào gồm những gì?']]];
+  app().innerHTML = `<h1 class="page">Hỏi đáp</h1><p class="lead">Câu hỏi về dữ liệu được trả lời từ kết quả phân tích. Câu hỏi về quy định được trả lời từ kho luật: mỗi câu phải trích nguyên văn điều khoản và qua kiểm tra căn cứ; không qua thì hệ thống trích nguyên văn hoặc từ chối. Câu cần phán đoán được chuyển chuyên gia.</p>
+    ${groups.map(([g, qs]) => `<p class="muted small" style="margin:.75rem 0 .25rem">${esc(g)}</p><div class="chips">${qs.map((q) => `<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm chip-q" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>`).join('')}
+    <div id="chat"></div><div id="pending"></div>
+    <form id="ask" class="bar ask-bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
+    <label class="cds--label" for="q">Câu hỏi (Enter để gửi)</label><input class="cds--text-input" id="q" name="q" autocomplete="off" placeholder="Ví dụ: hóa đơn số 340 có vấn đề gì?"></div>${button('Hỏi', 'primary', 'type="submit"')}
+    ${history.length ? button('Xóa lịch sử', 'ghost', 'id="clear"') : ''}</form>`;
   const chat = $('#chat');
+  const draw = () => { chat.innerHTML = history.join(''); };
+  draw();
+  let busy = false;
   const ask = async (q) => {
-    history.push(`<div class="answer user"><strong>${esc(q)}</strong></div>`);
-    chat.innerHTML = history.join('') + loading('Đang trả lời; câu hỏi về quy định có thể mất 20 đến 60 giây với mô hình chạy trên máy');
+    if (busy) return;
+    busy = true;
+    history.push(`<div class="answer user"><strong>${esc(q)}</strong></div>`); draw();
+    const t0 = Date.now();
+    const policy = !/hóa đơn số|\d{3,}|tháng \d|hạn nộp|người bán|bao nhiêu thuế/i.test(q);
+    const tick = () => {
+      const s = Math.round((Date.now() - t0) / 1000);
+      $('#pending').innerHTML = loading(policy && s > 2 ? `Đang tìm điều khoản và để mô hình trên máy đọc (${s} giây); câu trả lời được kiểm tra căn cứ trước khi hiện` : `Đang trả lời (${s} giây)`);
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
     try {
       const a = await post(`/api/workspaces/${state.ws}/ask`, { question: q });
       const rag = a.facts?.find((f) => f && f.passages);
@@ -64,15 +82,21 @@ export async function pageAsk() {
         ? rag.sentences.flatMap((s) => s.citations).filter((c, i, arr) => arr.findIndex((x) => x.path === c.path) === i)
           .map((c) => `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.doc_num)}</a>: ${esc(c.path.split(' > ').slice(1).join(' > '))}`)
         : a.citations.map(esc);
-      history.push(`<div class="answer"><div class="chips">${tag(a.branch)}${rag ? tag(rag.mode) : ''}</div><p style="margin:.5rem 0 0">${esc(a.text)}</p>
+      history.push(`<div class="answer"><div class="chips">${tag(a.branch)}${rag ? tag(rag.mode) : ''}<span class="muted small">${Math.round((Date.now() - t0) / 1000)} giây</span></div><p style="margin:.5rem 0 0">${esc(a.text)}</p>
         ${cites.length ? `<div class="cite">Căn cứ: ${cites.join('; ')}</div>` : ''}
-        ${rag?.dropped?.length ? `<div class="cite">${rag.dropped.length} câu của mô hình bị loại vì không có căn cứ.</div>` : ''}
-        ${rag?.stats?.seconds ? `<div class="cite">${esc(rag.stats.model)}, ${rag.stats.prompt_tokens} token ngữ cảnh, ${rag.stats.seconds} giây.</div>` : ''}</div>`);
+        ${rag?.dropped?.length ? `<div class="cite">${rag.dropped.length} câu của mô hình bị loại vì không có căn cứ.</div>` : ''}</div>`);
     } catch (err) { history.push(notice('error', 'Không trả lời được', err.message)); }
-    chat.innerHTML = history.join('');
+    clearInterval(timer);
+    $('#pending').innerHTML = '';
+    busy = false;
+    save();
+    draw();
+    $('#q').focus();
   };
   $('#ask').onsubmit = (e) => { e.preventDefault(); const q = $('#q').value.trim(); if (q) { $('#q').value = ''; ask(q); } };
   app().querySelectorAll('[data-q]').forEach((b) => { b.onclick = () => ask(b.dataset.q); });
+  if ($('#clear')) $('#clear').onclick = () => { history = []; save(); rerender(); };
+  $('#q').focus();
 }
 
 export async function pageLaw() {

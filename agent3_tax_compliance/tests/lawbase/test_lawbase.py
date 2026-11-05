@@ -176,3 +176,19 @@ def test_verifier_recites_the_right_passage_and_refuses_off_topic_answers():
     raw = _j.dumps(dict(answer=[dict(text='Thuế suất là 0%.', sources=['P3'], quote='Thuế suất ưu đãi 0%')]))
     kept, dropped, _, _ = verify(raw, [p3], 'Thuế suất thuế nhập khẩu ưu đãi đặc biệt đối với xe ô tô nguyên chiếc là bao nhiêu?')
     assert not kept and 'chủ đề' in dropped[0]['reason']
+
+
+def test_verifier_regrounds_a_true_claim_on_the_sentence_that_supports_it():
+    import json as _j
+    from src.lawbase.rag import Passage, verify
+    p1 = Passage('P1', '398/2026/NĐ-CP', 'Nghị định', 'Nghị định 398/2026/NĐ-CP > Điều 3', 'u', None, None,
+                 'Doanh thu năm làm căn cứ thực hiện theo Nghị định số 68/2026/NĐ-CP được sửa đổi bởi Nghị định số 141/2026/NĐ-CP.')
+    p2 = Passage('P2', '141/2026/NĐ-CP', 'Nghị định', 'Nghị định 141/2026/NĐ-CP > Điều 1', 'u', None, None,
+                 'Sửa đổi, bổ sung Nghị định 68/2026: 1. Sửa đổi cụm từ “500 triệu đồng” thành “01 tỷ đồng” đối với ngưỡng doanh thu của hộ kinh doanh.')
+    raw = _j.dumps(dict(answer=[dict(text='Nghị định 141/2026 sửa ngưỡng doanh thu hộ kinh doanh thành 01 tỷ đồng.', sources=['P1'],
+                                      quote='Doanh thu năm làm căn cứ thực hiện theo Nghị định số 68/2026/NĐ-CP')]))
+    kept, dropped, _, _ = verify(raw, [p1, p2], 'Nghị định 141/2026 sửa ngưỡng doanh thu của hộ kinh doanh thành bao nhiêu?')
+    assert kept and kept[0]['sources'] == ['P2'] and '01 tỷ đồng' in kept[0]['quote']
+    raw = _j.dumps(dict(answer=[dict(text='Ngưỡng mới là 02 tỷ đồng.', sources=['P1'], quote='Doanh thu năm làm căn cứ')]))
+    kept, dropped, _, _ = verify(raw, [p1, p2], 'Nghị định 141/2026 sửa ngưỡng doanh thu của hộ kinh doanh thành bao nhiêu?')
+    assert not kept                                             # a number no passage supports is never regrounded

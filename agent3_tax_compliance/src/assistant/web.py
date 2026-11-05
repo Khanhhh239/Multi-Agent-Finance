@@ -249,6 +249,17 @@ def run(wid: str):
     return _json(dataclasses.asdict(rep))
 
 
+@app.get('/api/workspaces/{wid}/freshness')
+def freshness(wid: str):
+    """Whether the last analysis still reflects the files and decisions on disk."""
+    ws = ws_path(wid)
+    p = ws / 'out' / 'report.json'
+    if not p.exists():
+        return dict(analysed=False, stale=True)
+    meta = json.loads(p.read_text(encoding='utf-8'))['meta']
+    return dict(analysed=True, stale=meta.get('input_sha256') != pipeline.input_digest(ws), as_of=meta.get('as_of'))
+
+
 @app.get('/api/workspaces/{wid}/report')
 def get_report(wid: str):
     p = ws_path(wid) / 'out' / 'report.json'
