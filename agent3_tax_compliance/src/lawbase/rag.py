@@ -141,30 +141,46 @@ def topic_coverage(question: str, cited: list) -> float:
 def _echo(text: str, question: str) -> bool:
     """The model repeated the question instead of answering it."""
     a, b = set(fold(text).split()), set(fold(question).split())
-    return bool(a) and len(a & b) / len(a | b) >= 0.8
+    adds_number = bool(numbers(text) - numbers(question))   # "... là 15%" reuses the question's words but answers it
+    return bool(a) and not adds_number and len(a & b) / len(a | b) >= 0.8
 
 
-def _numbers_off_case(text: str, cited: list, question: str, min_case: float = 0.4) -> list[str]:
-    """Numbers of the answer whose own sentence in the cited text is about another case than the question.
+def _kind(s: str) -> set:
+    t = fold(s).split()
+    return {k for k, ok in (('pct', '%' in s), ('vnd', 'dong' in t), ('times', 'lan' in t), ('days', 'ngay' in t),
+                            ('months', 'thang' in t)) if ok}
 
-    A clause often lists several cases with different amounts ("khoản 2: làm mất hóa đơn ... 3.000.000"; "khoản 3: 4.000.000
-    ... các hành vi sau đây"). For every number of the answer (except those already in the question or in the document
-    number), the sentence of the cited text that holds it must contain at least min_case of the question's topic terms;
-    the best such sentence counts. Article headings are separate sentences, so they do not vouch for a clause."""
+
+def _numbers_off_case(text: str, cited: list, question: str, passages: list | None = None, min_case: float = 0.4,
+                      rival_case: float = 0.6) -> list[str]:
+    """Numbers of the answer that belong to another case than the question.
+
+    A clause often lists several cases with different amounts ("khoản 2: làm mất hóa đơn ... giao cho khách hàng 3.000.000";
+    "khoản 3: 4.000.000 ... đối với một trong các hành vi sau đây:"). A number is kept when the sentence holding it covers
+    at least min_case of the question's topic terms. A number in a lead-in sentence ("... sau đây:"), whose case sits in the
+    points below, is kept unless another retrieved sentence with the same kind of number (amount, percent, times, days)
+    covers the question clearly better (rival_case): then the answer took the amount of a neighbouring case."""
     terms = topic_terms(question)
     if not terms:
         return []
-    skip = numbers(question) | numbers(' '.join(f'{p.path} {p.doc_num}' for p in cited))
+    pool = passages or cited
+    skip = numbers(question) | numbers(' '.join(f'{p.path} {p.doc_num}' for p in pool))
     want = [n for n in numbers(text) if n not in skip and len(n.replace('.', '').replace(',', '')) > 1]
-    sents = [sg for p in cited for sg in re.split(r'(?<=[.;:])\s+|\s+(?=[a-zđ]\)\s)', p.text) if sg.strip()]
+    split = lambda t: [sg for sg in re.split(r'(?<=[.;:])\s+|\s+(?=[a-zđ]\)\s)', t) if sg.strip()]  # noqa: E731
+    cov = lambda sg: len(terms & set(fold(sg).split())) / len(terms)  # noqa: E731
+    own_sents = [sg for p in cited for sg in split(p.text)]
+    all_sents = [sg for p in pool for sg in split(p.text)]
     off = []
     for n in want:
-        holders = [sg for sg in sents if n in numbers(sg)]
-        if not holders:
+        holders = [sg for sg in own_sents if n in numbers(sg)]
+        if not holders or max(cov(sg) for sg in holders) >= min_case:
             continue
-        best = max(len(terms & set(fold(sg).split())) / len(terms) for sg in holders)
-        if best < min_case:
-            off.append(n)
+        lead = any(sg.rstrip().endswith(':') or 'sau đây' in sg for sg in holders)
+        kinds = set().union(*(_kind(sg) for sg in holders))
+        rivals = [cov(sg) for sg in all_sents if (numbers(sg) - skip) and not sg.rstrip().endswith(':') and (_kind(sg) & kinds)]
+        if lead and not any(r >= rival_case for r in rivals):
+            continue
+        off.append(n)
     return off
 
 
@@ -224,7 +240,7 @@ def verify(raw: str, passages: list[Passage], question: str = '', min_topic: flo
         if question and cov < min_topic:
             dropped.append(dict(text=text, reason=f'điều khoản được dẫn không nói về chủ đề câu hỏi (phủ {cov:.0%} từ khóa)'))
             continue
-        off = _numbers_off_case(text, cited, question) if question else []
+        off = _numbers_off_case(text, cited, question, passages) if question else []
         if off:
             dropped.append(dict(text=text, reason=f'số {", ".join(off)} có trong điều khoản nhưng thuộc trường hợp khác với câu hỏi'))
             continue
