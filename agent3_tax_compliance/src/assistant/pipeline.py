@@ -13,6 +13,7 @@ import hashlib
 from datetime import date
 from pathlib import Path
 
+from .intake import is_mt940, read_mt940
 from .matching import match_payments
 from .models import Report
 from .pack import load_decisions, load_pack
@@ -62,7 +63,10 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
     invoices = purchases + sales
     txns = []
     for p in sorted((ws / 'bank').glob('*')) if (ws / 'bank').exists() else []:
-        if p.suffix.lower() in ('.csv', '.xlsx'):
+        raw = p.read_bytes() if p.is_file() else b''
+        if p.suffix.lower() in ('.sta', '.mt940') or (p.suffix.lower() == '.txt' and is_mt940(raw)):
+            txns.extend(read_mt940(raw, p.name))
+        elif p.suffix.lower() in ('.csv', '.xlsx'):
             txns.extend(read_bank_statement(p, pack))
     portal_file = ws / 'portal' / 'purchase_list.csv'
     portal = read_portal_list(portal_file, pack) if portal_file.exists() else None

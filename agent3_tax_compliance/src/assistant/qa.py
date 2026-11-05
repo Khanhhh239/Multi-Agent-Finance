@@ -31,6 +31,24 @@ class Context:
     ruleset_path: Path
     as_of: date
     report: Report
+    lawbase_db: Path | None = None     # when set, policy and judgment questions are answered from the legal corpus
+    llm: object = None                 # optional client for grounded answers (default: local qwen3:8b through Ollama)
+
+
+def _lawbase(ctx: Context, question: str):
+    if not ctx.lawbase_db or not Path(ctx.lawbase_db).exists():
+        return None
+    from ..lawbase import rag
+    from ..lawbase.store import Corpus
+    corpus = Corpus(ctx.lawbase_db)
+    try:
+        return rag.answer(corpus, question, ctx.as_of, ctx.llm)
+    finally:
+        corpus.close()
+
+
+def _cite(s: dict) -> str:
+    return '; '.join(f'{c["doc_num"]}, {c["path"].split(" > ", 1)[-1]}' for c in s['citations'])
 
 
 def _month(q: str):
@@ -55,11 +73,17 @@ def answer(question: str, ctx: Context) -> Answer:
     if any(w in q for w in ('tiep khach', 'co duoc tru', 'chi phi hop ly', 'hop ly khong', 'duoc tinh vao chi phi')) and not nums:
         ruleset = load_ruleset(ctx.ruleset_path)
         thr = param(ruleset, 'NON_CASH_THRESHOLD', ctx.as_of)
-        return Answer('JUDGMENT', 'Câu hỏi này cần người có chuyên môn kết luận; hệ thống không tự trả lời được hay không. '
+        refs = _lawbase(ctx, question)
+        extra = []
+        if refs and refs.mode != 'ABSTAIN':
+            extra = [f'{s["text"]} ({_cite(s)})' for s in refs.sentences]
+        return Answer('JUDGMENT', ('Câu hỏi này cần người có chuyên môn kết luận; hệ thống không tự trả lời được hay không. '
                       'Các điều kiện thường phải xét: khoản chi thực tế phát sinh và phục vụ sản xuất kinh doanh; có hóa đơn, chứng từ hợp pháp; '
                       f'từ {money(thr[0])} phải có chứng từ thanh toán không dùng tiền mặt; không thuộc nhóm khoản chi không được trừ. '
-                      'Hãy chuẩn bị hóa đơn, chứng từ thanh toán và giấy tờ chứng minh mục đích chi, rồi hỏi chuyên gia thuế.',
-                      citations=[thr[1], 'Điều kiện chi phí được trừ: Nghị định 320/2025/NĐ-CP (thứ cấp, chưa đọc văn bản gốc)'])
+                      'Hãy chuẩn bị hóa đơn, chứng từ thanh toán và giấy tờ chứng minh mục đích chi, rồi hỏi chuyên gia thuế.')
+                      + (' Các điều khoản liên quan trong kho luật: ' + ' '.join(extra) if extra else ''),
+                      facts=[refs.to_dict()] if refs else [],
+                      citations=[thr[1], 'Điều 9 và Điều 10 Nghị định 320/2025/NĐ-CP (văn bản hợp nhất 19/VBHN-BTC) về khoản chi được trừ và không được trừ'])
 
     if 'neu' in q and any(w in q for w in ('bo sung', 'chung tu', 'chuyen khoan', 'uy nhiem chi')) and nums:
         keys = [i.key for i in r.invoices if i.number and i.number.isdigit() and str(int(i.number)) in nums and not i.duplicate_of]
@@ -131,7 +155,16 @@ def answer(question: str, ctx: Context) -> Answer:
         return Answer('DATA', f'Hạn nộp tờ khai thuế giá trị gia tăng theo kỳ khai trong hồ sơ: {rows}. {r.calendar[0]["note"] if r.calendar else ""}',
                       citations=[r.calendar[0]['basis']] if r.calendar else [])
 
-    if any(w in q for w in ('dieu kien', 'quy dinh', 'la gi', 'nguong', 'luat')):
+    policy_words = ('dieu kien', 'quy dinh', 'la gi', 'nguong', 'luat', 'muc phat', 'bi phat', 'thue suat', 'thoi han', 'tien cham nop',
+                    'thoi diem lap', 'nghi dinh', 'thong tu')
+    if any(w in q for w in policy_words):
+        grounded = _lawbase(ctx, question)
+        if grounded is not None:
+            if grounded.mode == 'ABSTAIN':
+                return Answer('POLICY', 'Kho luật không có căn cứ đủ để trả lời câu này. ' + grounded.note, facts=[grounded.to_dict()])
+            prefix = '' if grounded.mode == 'LLM_VERIFIED' else 'Trích nguyên văn (mô hình không trả lời được hoặc không qua kiểm tra): '
+            return Answer('POLICY', prefix + ' '.join(f'{s["text"]} [{_cite(s)}]' for s in grounded.sentences),
+                          facts=[grounded.to_dict()], citations=sorted({_cite(s) for s in grounded.sentences}))
         ruleset = load_ruleset(ctx.ruleset_path)
         thr = param(ruleset, 'NON_CASH_THRESHOLD', ctx.as_of)
         return Answer('POLICY', f'Theo bộ luật đang dùng (trạng thái {ruleset["status"]}): hóa đơn mua vào từ {money(thr[0])} phải có chứng từ '

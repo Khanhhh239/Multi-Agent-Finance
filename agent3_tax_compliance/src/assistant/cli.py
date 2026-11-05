@@ -57,7 +57,8 @@ def main(argv=None):
               f'có thể bỏ sót {money(t["opportunity_vat"])}.')
         print('Báo cáo:', paths['html'])
     elif a.cmd == 'ask':
-        ans = qa.answer(a.question, qa.Context(ws, Path(a.ruleset), as_of, rep))
+        from ..lawbase.sync import DEFAULT_DB as LAWBASE_DB
+        ans = qa.answer(a.question, qa.Context(ws, Path(a.ruleset), as_of, rep, LAWBASE_DB if LAWBASE_DB.exists() else None))
         print(f'[{ans.branch}] {ans.text}')
         for c in ans.citations:
             print('  căn cứ:', c)
