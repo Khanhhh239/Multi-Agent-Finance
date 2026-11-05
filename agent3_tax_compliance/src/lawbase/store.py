@@ -47,7 +47,7 @@ def now() -> str:
 
 
 class Corpus:
-    hybrid = False                                       # semantic retrieval (bge-m3) fused with keywords; set per instance
+    hybrid = True                                        # semantic retrieval (bge-m3) fused with keywords; set per instance
 
     def __init__(self, path: Path):
         self.path = Path(path)

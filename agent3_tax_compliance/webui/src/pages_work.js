@@ -131,6 +131,11 @@ export async function pageReview() {
     const idx = rep.items.findIndex((it) => itemId(it) === want);
     if (idx >= 0) openItem(rep.items[idx], idx);
   }
+  const deep = hashParams().get('open');                 // link to one item: #/viec?open=R12_ITEM_PURPOSE (first of that code)
+  if (deep && !want) {
+    const idx = rep.items.findIndex((it) => it.code === deep || itemId(it) === deep);
+    if (idx >= 0) openItem(rep.items[idx], idx);
+  }
 }
 
 export function decisionChoices(it) {

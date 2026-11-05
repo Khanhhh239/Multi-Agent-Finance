@@ -127,3 +127,5 @@ tr.clickable:focus { outline: 2px solid var(--cds-focus); outline-offset: -2px; 
 .bulk { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding: .75rem; background: #edf5ff; border: 1px solid #a6c8ff; margin: 0 0 .75rem; position: sticky; top: 3rem; z-index: 5; }
 td.pickcell { width: 2rem; }
 input.decl { height: 2rem; max-width: 12rem; }
+
+.bulk[hidden], [hidden] { display: none !important; }
