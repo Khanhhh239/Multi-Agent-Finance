@@ -69,6 +69,9 @@ class Pack:
     reference_lists: list[ReferenceList] = field(default_factory=list)
     portal_columns: dict | None = None
     simulated: bool = False
+    fiscal_year_end_month: int = 12                     # month in which the fiscal year ends (12 = calendar year)
+    days_off: tuple[str, ...] = ()                       # Tết and substitute days off announced each year (YYYY-MM-DD)
+    ai_categories: tuple = ()                            # extra business categories the AI should know, (name, description)
 
 
 def _threshold(values: dict, key: str):
@@ -84,7 +87,7 @@ def _threshold(values: dict, key: str):
 def load_pack(path: Path) -> Pack:
     data = json.loads(Path(path).read_text(encoding='utf-8'))
     prof = data.get('profile') or {}
-    allowed = {'tax_code', 'legal_name', 'registered_address', 'vat_method', 'filing_period', 'industry'}
+    allowed = {'tax_code', 'legal_name', 'registered_address', 'vat_method', 'filing_period', 'industry', 'fiscal_year_end_month'}
     if set(prof) - allowed:
         raise PackError(f'hồ sơ có trường không xác định: {sorted(set(prof) - allowed)}')
     if not mst_checksum_ok(str(prof.get('tax_code', ''))):
@@ -116,7 +119,41 @@ def load_pack(path: Path) -> Pack:
         bank_formats=[BankFormat(**b) for b in data.get('bank_formats', [])], thresholds=thresholds,
         policies=[Policy(p['id'], p['flag'], Decimal(str(p['min_gross'])) if p.get('min_gross') is not None else None,
                          tuple(p.get('description_contains', ())), tuple(p.get('seller_tax_ids', ()))) for p in data.get('policies', [])],
-        reference_lists=lists, portal_columns=data.get('portal_columns'), simulated=bool(data.get('simulated', False)))
+        reference_lists=lists, portal_columns=data.get('portal_columns'), simulated=bool(data.get('simulated', False)),
+        fiscal_year_end_month=_fy_month(prof.get('fiscal_year_end_month', 12)), days_off=_days_off(data.get('days_off', [])),
+        ai_categories=_ai_categories(data.get('ai_categories', [])))
+
+
+def _fy_month(v) -> int:
+    try:
+        m = int(v)
+    except (TypeError, ValueError):
+        raise PackError('tháng kết thúc năm tài chính phải là số từ 1 đến 12')
+    if not 1 <= m <= 12:
+        raise PackError('tháng kết thúc năm tài chính phải là số từ 1 đến 12')
+    return m
+
+
+def _days_off(values) -> tuple:
+    out = []
+    for v in values:
+        try:
+            out.append(date.fromisoformat(str(v)).isoformat())
+        except ValueError:
+            raise PackError(f'ngày nghỉ không hợp lệ: {v} (cần dạng YYYY-MM-DD)')
+    return tuple(sorted(set(out)))
+
+
+def _ai_categories(values) -> tuple:
+    out = []
+    for c in values:
+        name, desc = str(c.get('name', '')).strip(), str(c.get('description', '')).strip()
+        if not name or not desc:
+            raise PackError('mỗi nhóm hàng riêng cần tên và mô tả')
+        if len(out) >= 10:
+            raise PackError('tối đa 10 nhóm hàng riêng')
+        out.append((name[:60], desc[:200]))
+    return tuple(out)
 
 
 def load_decisions(path: Path) -> dict:

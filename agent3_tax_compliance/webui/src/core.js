@@ -55,10 +55,11 @@ export const hashParams = () => new URLSearchParams(location.hash.split('?')[1] 
 
 export async function loadWorkspaces() {
   state.workspaces = await api('/api/workspaces');
-  if (!state.workspaces.find((w) => w.id === state.ws)) state.ws = state.workspaces[0]?.id || null;
-  $('#ws-select').innerHTML = state.workspaces.length
-    ? state.workspaces.map((w) => `<option value="${esc(w.id)}" ${w.id === state.ws ? 'selected' : ''}>${esc(w.name)}${w.simulated ? ' (mô phỏng)' : ''}</option>`).join('')
-    : '<option value="">Chưa có doanh nghiệp</option>';
+  // No enterprise is opened by default: the first screen is the fixed framework until the user picks or sets one up.
+  if (!state.workspaces.find((w) => w.id === state.ws)) state.ws = null;
+  $('#ws-select').innerHTML = `<option value="" ${state.ws ? '' : 'selected'}>${state.workspaces.length ? 'Chọn doanh nghiệp' : 'Chưa có doanh nghiệp'}</option>`
+    + state.workspaces.map((w) => `<option value="${esc(w.id)}" ${w.id === state.ws ? 'selected' : ''}>${esc(w.name)}${w.simulated ? ' (mô phỏng)' : ''}</option>`).join('')
+    + '<option value="__new">+ Thêm doanh nghiệp</option>';
 }
 
 export async function loadReport() {
@@ -73,6 +74,6 @@ export const invLabel = (i) => (i ? `${i.template || ''}${i.symbol || ''}/${i.nu
 
 export function needWorkspace() {
   if (state.ws) return false;
-  app().innerHTML = `<h1 class="page">Chưa có doanh nghiệp</h1><p class="lead">Tạo hồ sơ doanh nghiệp ở trang Tổng quan trước.</p>${button('Về Tổng quan', 'primary', 'data-go="#/"')}`;
+  app().innerHTML = `<h1 class="page">Chưa chọn doanh nghiệp</h1><p class="lead">Chọn doanh nghiệp ở ô góc trên bên phải, hoặc thiết lập doanh nghiệp mới.</p>${button('Thiết lập doanh nghiệp', 'primary', 'data-go="#/thiet-lap"')}${button('Về trang đầu', 'ghost', 'data-go="#/"')}`;
   return true;
 }

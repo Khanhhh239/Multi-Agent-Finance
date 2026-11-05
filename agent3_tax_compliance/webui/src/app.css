@@ -129,3 +129,18 @@ td.pickcell { width: 2rem; }
 input.decl { height: 2rem; max-width: 12rem; }
 
 .bulk[hidden], [hidden] { display: none !important; }
+
+.welcome-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1rem; }
+.welcome-main { border-left: 4px solid var(--cds-border-interactive); }
+.welcome-steps { margin: .5rem 0 0 1.25rem; padding: 0; line-height: 1.7; }
+.fixed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .75rem; }
+.fixed-card { border: 1px solid var(--cds-border-subtle); background: var(--cds-layer); padding: .75rem 1rem; display: flex; flex-direction: column; gap: .25rem; }
+.preset-list { display: grid; gap: .5rem; }
+.preset { display: flex; gap: .75rem; align-items: flex-start; padding: .625rem .75rem; border: 1px solid var(--cds-border-subtle); background: var(--cds-layer); cursor: pointer; }
+.preset span { display: flex; flex-direction: column; gap: .125rem; }
+.preset input { margin-top: .25rem; }
+.cat-row { margin-bottom: .5rem; }
+.cfg-nav { display: flex; flex-wrap: wrap; gap: .25rem 1rem; padding: .5rem 0 .75rem; border-bottom: 1px solid var(--cds-border-subtle); position: sticky; top: 3rem; background: var(--cds-background); z-index: 4; }
+.cfg-nav a { font-size: .875rem; color: var(--cds-link-primary); text-decoration: none; }
+section.cfg { scroll-margin-top: 6rem; }
+@media (max-width: 66rem) { .welcome-grid { grid-template-columns: 1fr; } }

@@ -2,6 +2,7 @@
 import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, needWorkspace, notice, post, put,
   state, store, table, tag } from './core.js';
 import { aiToolbar, explainBox } from './pages_ai.js';
+import { pageWelcome } from './pages_config.js';
 import { deadlineBanner, freshBanner, nextSteps, sellerWatch, toast } from './ux.js';
 
 const itemId = (it) => `${it.code}|${it.invoice_keys.join(',')}`;
@@ -9,7 +10,8 @@ const itemId = (it) => `${it.code}|${it.invoice_keys.join(',')}`;
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 
 export async function pageOverview() {
-  if (!state.ws) {
+  if (!state.ws) { await pageWelcome(); return; }
+  if (false) {
     state.schema ||= await api('/api/schema');
     app().innerHTML = `<h1 class="page">Bắt đầu</h1>
       <p class="lead">Agent 3 đọc hóa đơn điện tử, sao kê ngân hàng và bảng kê của doanh nghiệp, đối chiếu với luật thuế theo đúng ngày, rồi chỉ ra khoản thuế có nguy cơ bị loại, căn cứ và việc cần làm. Mọi dữ liệu xử lý trên máy này.</p>

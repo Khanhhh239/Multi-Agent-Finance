@@ -65,8 +65,14 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
                                   'Nghị định 245/2026/NĐ-CP, khoản 2 Điều 2; phải nộp giấy đề nghị gia hạn')
             out.append(e)
     if fin:
-        for y in sorted({y for y, _ in periods}):
-            out.append(dict(period=f'Quyết toán thuế TNDN năm {y}', due=date(y + 1, 3, 31), basis=fin[1]))
+        fy_end = getattr(pack, 'fiscal_year_end_month', 12)
+        ends = sorted({(y if m <= fy_end else y + 1) for y, m in periods})   # fiscal year that each month belongs to
+        for y in ends:
+            last = date(y, fy_end, cal.monthrange(y, fy_end)[1])
+            dm = fy_end + 3
+            dy, dm = (y + (dm - 1) // 12, (dm - 1) % 12 + 1)
+            label = f'năm {y}' if fy_end == 12 else f'năm tài chính kết thúc {last:%d/%m/%Y}'
+            out.append(dict(period=f'Quyết toán thuế TNDN {label}', due=date(dy, dm, cal.monthrange(dy, dm)[1]), basis=fin[1]))
     shift = param(ruleset, 'DEADLINE_DAY_OFF_SHIFT', as_of) if 'DEADLINE_DAY_OFF_SHIFT' in ruleset['parameters'] else None
     extra_days_off = {date.fromisoformat(d) for d in getattr(pack, 'days_off', ())}
     for e in out:

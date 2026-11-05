@@ -95,7 +95,9 @@ async def ai_explain(wid: str, request: Request):
 def ai_classify(wid: str):
     ws = ws_path(wid)
     rep = _report(ws)
-    industry = json.loads((ws / 'pack.json').read_text(encoding='utf-8'))['profile'].get('industry', [])
+    pack_data = json.loads((ws / 'pack.json').read_text(encoding='utf-8'))
+    industry = pack_data['profile'].get('industry', [])
+    extra = tuple((c['name'], c['description']) for c in pack_data.get('ai_categories', []))
     invs = [i for i in rep['invoices'] if i['role'] == 'PURCHASE' and not i.get('duplicate_of') and i.get('descriptions')]
 
     def work(job):
@@ -104,7 +106,7 @@ def ai_classify(wid: str):
         path = ws / 'ai' / 'line_labels.json'
         labels = _read(path, {})
         for n, inv in enumerate(invs, 1):
-            labels[inv['key']] = ai_mod.classify_lines(model, inv, industry)
+            labels[inv['key']] = ai_mod.classify_lines(model, inv, industry, extra)
             job['done'] = n
             if n % 5 == 0 or n == len(invs):
                 _write(path, labels)

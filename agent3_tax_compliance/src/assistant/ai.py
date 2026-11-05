@@ -127,19 +127,28 @@ CLASSIFY_SCHEMA = {'type': 'object', 'properties': {'lines': {'type': 'array', '
     'required': ['index', 'category', 'business_use', 'reason']}}}, 'required': ['lines']}
 
 
-def classify_lines(ai: AI, invoice: dict, industry: list[str]) -> dict:
-    """Labels for the lines of one purchase invoice. Lines whose label fails verification are returned as UNVERIFIED."""
+def classify_lines(ai: AI, invoice: dict, industry: list[str], extra: tuple = ()) -> dict:
+    """Labels for the lines of one purchase invoice. Lines whose label fails verification are returned as UNVERIFIED.
+    extra: the enterprise's own business categories (name, description); they count as business use."""
     lines = [d for d in invoice.get('descriptions', []) if d]
+    cats = dict(CATEGORIES)
+    for name, desc in extra:
+        cats['RIENG_' + fold(name).upper().replace(' ', '_')[:30]] = f'{desc} (nhóm riêng của doanh nghiệp, phục vụ kinh doanh)'
+    system = CLASSIFY_SYSTEM if not extra else CLASSIFY_SYSTEM.replace(
+        'Trả về JSON', 'Nhóm riêng của doanh nghiệp: ' + '; '.join(f'{k}: {v}' for k, v in cats.items() if k.startswith('RIENG_')) + '\nTrả về JSON')
+    schema = CLASSIFY_SCHEMA if not extra else {**CLASSIFY_SCHEMA, 'properties': {'lines': {'type': 'array', 'items': {
+        **CLASSIFY_SCHEMA['properties']['lines']['items'], 'properties': {**CLASSIFY_SCHEMA['properties']['lines']['items']['properties'],
+                                                                        'category': {'type': 'string', 'enum': list(cats)}}}}}}
     payload = dict(nganh_nghe_dang_ky=industry or ['không ghi'], nguoi_ban=invoice.get('seller_name'),
                    dong_hang=[dict(index=i, ten_hang=d) for i, d in enumerate(lines)])
-    out, stats = ai.ask('classify_lines', 'v2', CLASSIFY_SYSTEM, payload, CLASSIFY_SCHEMA, 120 + 90 * len(lines))
+    out, stats = ai.ask('classify_lines', 'v2', system, payload, schema, 120 + 90 * len(lines))
     got = {}
     for r in out.get('lines', []):
         i = r.get('index')
         if not isinstance(i, int) or not 0 <= i < len(lines) or i in got:
             continue
         name_tokens = {t for t in fold(lines[i]).split() if len(t) > 2}
-        ok = r.get('category') in CATEGORIES and r.get('business_use') in ('CO', 'KHONG', 'KHONG_RO') and r.get('reason') \
+        ok = r.get('category') in cats and r.get('business_use') in ('CO', 'KHONG', 'KHONG_RO') and r.get('reason') \
             and (not name_tokens or name_tokens & set(fold(r['reason']).split()))
         got[i] = dict(line=lines[i], category=r.get('category'), business_use=r.get('business_use'), reason=(r.get('reason') or '')[:300],
                       verified=bool(ok))

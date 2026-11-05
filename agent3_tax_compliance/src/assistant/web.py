@@ -10,7 +10,7 @@ import json
 import re
 import shutil
 import threading
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
 
@@ -55,7 +55,15 @@ def _pack_data(ws: Path) -> dict:
     return json.loads((ws / 'pack.json').read_text(encoding='utf-8'))
 
 
-def _save_pack(ws: Path, data: dict):
+def _pack_diff(old: dict, new: dict) -> list[str]:
+    labels = dict(profile='hồ sơ', bank_formats='mẫu sao kê', thresholds='ngưỡng nội bộ', policies='chính sách nội bộ',
+                  reference_lists='danh sách rủi ro', portal_columns='cột bảng kê cổng thuế', days_off='ngày nghỉ',
+                  ai_categories='nhóm hàng riêng cho AI')
+    return [labels.get(k, k) for k in sorted(set(old) | set(new)) if k not in ('pack_version',) and old.get(k) != new.get(k)]
+
+
+def _save_pack(ws: Path, data: dict, by: str = ''):
+    old = json.loads((ws / 'pack.json').read_text(encoding='utf-8')) if (ws / 'pack.json').exists() else {}
     tmp = ws / 'pack.json.tmp'
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
     try:
@@ -64,6 +72,13 @@ def _save_pack(ws: Path, data: dict):
         tmp.unlink()
         raise HTTPException(422, str(e))
     tmp.replace(ws / 'pack.json')
+    changed = _pack_diff(old, data)
+    if changed:                                          # who changed which part of the configuration, and when
+        hist_path = ws / 'pack_history.json'
+        hist = json.loads(hist_path.read_text(encoding='utf-8')) if hist_path.exists() else []
+        hist.append(dict(at=datetime.now().isoformat(timespec='seconds'), by=by or 'không ghi', changed=changed,
+                         created=not old))
+        hist_path.write_text(json.dumps(hist[-200:], ensure_ascii=False, indent=1), encoding='utf-8')
 
 
 def _as_of(ws: Path) -> date:
@@ -102,9 +117,18 @@ async def create_workspace(request: Request):
     if p.exists():
         raise HTTPException(409, 'đã có không gian làm việc này')
     p.mkdir(parents=True)
+    data = dict(pack_version=1, profile=body['profile'], bank_formats=body.get('bank_formats', []), thresholds=body.get('thresholds', {}),
+                policies=body.get('policies', []), reference_lists=body.get('reference_lists', []), days_off=body.get('days_off', []),
+                ai_categories=body.get('ai_categories', []))
+    src_id = body.get('copy_from')
+    if src_id:                                           # reuse another enterprise's set-up; profile and decisions stay its own
+        src = ws_path(src_id)
+        sd = _pack_data(src)
+        for k in ('bank_formats', 'thresholds', 'policies', 'reference_lists', 'portal_columns', 'ai_categories', 'days_off'):
+            if sd.get(k) and not body.get(k):
+                data[k] = sd[k]
     try:
-        _save_pack(p, dict(pack_version=1, profile=body['profile'], bank_formats=body.get('bank_formats', []), thresholds={},
-                           policies=[], reference_lists=[]))
+        _save_pack(p, data, body.get('by', ''))
     except HTTPException:
         shutil.rmtree(p)
         raise
@@ -124,10 +148,47 @@ def get_pack(wid: str):
 
 
 @app.put('/api/workspaces/{wid}/pack')
-async def put_pack(wid: str, request: Request):
+async def put_pack(wid: str, request: Request, by: str = ''):
     ws = ws_path(wid)
-    _save_pack(ws, await request.json())
+    _save_pack(ws, await request.json(), by)
     return dict(ok=True)
+
+
+@app.get('/api/workspaces/{wid}/pack/history')
+def pack_history(wid: str):
+    p = ws_path(wid) / 'pack_history.json'
+    return list(reversed(json.loads(p.read_text(encoding='utf-8')))) if p.exists() else []
+
+
+@app.post('/api/workspaces/{wid}/portal/suggest')
+def portal_suggest(wid: str):
+    """Header row of the loaded portal list, so the user can map its columns when the portal changes its layout."""
+    from .sources import DEFAULT_PORTAL_COLUMNS, read_table
+    ws = ws_path(wid)
+    files = sorted((ws / 'portal').glob('purchase_list.*')) if (ws / 'portal').exists() else []
+    if not files:
+        raise HTTPException(404, 'chưa nạp bảng kê cổng thuế')
+    rows = read_table(files[0])
+    head = max(rows[:30], key=lambda r: sum(bool(str(c).strip()) for c in r), default=[])
+    current = _pack_data(ws).get('portal_columns') or DEFAULT_PORTAL_COLUMNS
+    return dict(headers=[str(c) for c in head if str(c).strip()], current=current,
+                fields=dict(seller_tax_id='Mã số thuế người bán', template='Ký hiệu mẫu số', symbol='Ký hiệu hóa đơn', number='Số hóa đơn',
+                            issue_date='Ngày lập', vat='Tổng tiền thuế', gross='Tổng tiền thanh toán'))
+
+
+# Ready-made internal policies the set-up wizard offers; each only adds a flag.
+POLICY_PRESETS = [
+    dict(id='TIEP_KHACH', flag='Chi tiếp khách cần giấy đề nghị thanh toán và danh sách khách', description_contains=['tiếp khách', 'nhà hàng', 'ăn uống'], min_gross=2000000),
+    dict(id='QUA_TANG', flag='Quà tặng, quà biếu cần danh sách người nhận và mục đích', description_contains=['quà', 'biếu']),
+    dict(id='CONG_TAC', flag='Công tác phí cần quyết định cử đi công tác', description_contains=['vé máy bay', 'khách sạn', 'công tác']),
+    dict(id='XANG_DAU', flag='Xăng dầu cần định mức và nhật ký xe', description_contains=['xăng', 'dầu diesel', 'nhiên liệu']),
+    dict(id='TAI_SAN', flag='Hàng từ 30 triệu đồng có thể là tài sản cố định: kiểm tra cách hạch toán', min_gross=30000000),
+]
+
+
+@app.get('/api/presets')
+def presets():
+    return dict(policies=POLICY_PRESETS)
 
 
 @app.put('/api/workspaces/{wid}/files/{kind}')

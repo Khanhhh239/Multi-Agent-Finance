@@ -154,7 +154,8 @@ def consolidated_base(title: str) -> str | None:
 AMEND_ARTICLE_RE = re.compile(r'sửa\s+đổi,?\s+bổ\s+sung[^.;:]{0,60}?(?:\bcủa\s+|\btại\s+|\s)(Luật|Nghị\s+định|Thông\s+tư|Pháp\s+lệnh)\s+([^,;:.()]+?)'
                               rf'(?:\s+số\s+({NUM}))?(?=\s*(?:[,;:.()]|như\s+sau|$))', re.I)
 # "Điều 3. Sửa đổi, bổ sung Thông tư số 219/2013/TT-BTC ngày 31/12/2013 ...": the number right after the act type.
-AMEND_NUM_RE = re.compile(rf'sửa\s+đổi,?\s+bổ\s+sung[^.;:]{{0,60}}?(?:Luật|Nghị\s+định|Thông\s+tư|Pháp\s+lệnh)(?:\s+[^\d,;:()]{{0,60}}?)?\s+số\s+({NUM})', re.I)
+AMEND_NUM_RE = re.compile(rf'(?:sửa\s+đổi,?\s+bổ\s+sung|sửa\s+đổi|bổ\s+sung|thay\s+thế)[^.;:]{{0,60}}?(?:Luật|Nghị\s+định|Thông\s+tư|Pháp\s+lệnh)(?:\s+[^\d,;:()]{{0,60}}?)?\s+số\s+({NUM})', re.I)
+# "Điều 17. Bổ sung Điều 12a, Thông tư số 156/2013/TT-BTC như sau": an article that only adds to (or only amends) an act.
 
 
 def act_name(title: str) -> str:
