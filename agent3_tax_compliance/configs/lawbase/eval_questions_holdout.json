@@ -1,0 +1,28 @@
+{
+ "version": "lawbase-holdout-2026-11-05",
+ "note": "Tập giữ lại, viết ngày 05/11/2026 trước khi chạy thử truy xuất ngữ nghĩa và không dùng để chỉnh hệ thống. Đáp án đối chiếu với nguyên văn điều khoản trong kho (vbpl.vn). Người soạn: nhóm phát triển, chưa có chuyên gia thuế bên ngoài duyệt.",
+ "questions": [
+  {"id": "H01", "q": "Thời hạn nộp hồ sơ khai thuế đối với loại thuế khai theo quý là khi nào?", "as_of": "2026-11-05", "expected": [["252/2026/NĐ-CP", "Điều 10", "Khoản 3"]], "must_contain": ["ngày cuối cùng của tháng đầu"]},
+  {"id": "H02", "q": "Loại thuế khai theo từng lần phát sinh phải nộp hồ sơ khai thuế chậm nhất vào ngày nào?", "as_of": "2026-11-05", "expected": [["252/2026/NĐ-CP", "Điều 10", "Khoản 1"]], "must_contain": ["10"]},
+  {"id": "H03", "q": "Thời hạn nộp hồ sơ khai quyết toán thuế năm là bao lâu sau khi kết thúc kỳ quyết toán?", "as_of": "2026-11-05", "expected": [["252/2026/NĐ-CP", "Điều 10", "Khoản 5"]], "must_contain": ["03"]},
+  {"id": "H04", "q": "Thời hạn tạm nộp thuế thu nhập doanh nghiệp theo quý là khi nào?", "as_of": "2026-11-05", "expected": [["252/2026/NĐ-CP", "Điều 24", "Khoản 2"]], "must_contain": ["tháng đầu"]},
+  {"id": "H05", "q": "Tổng số thuế đã tạm nộp của 4 quý không được thấp hơn bao nhiêu phần trăm số thuế phải nộp theo quyết toán năm?", "as_of": "2026-11-05", "expected": [["252/2026/NĐ-CP", "Điều 24", "Khoản 3"]], "must_contain": ["80%"]},
+  {"id": "H06", "q": "Thuế suất thuế thu nhập doanh nghiệp phổ thông là bao nhiêu phần trăm?", "as_of": "2026-11-05", "expected": [["67/2025/QH15", "Điều 10", "Khoản 1"], ["113/VBHN-VPQH", "Điều 10", "Khoản 1"], ["61/VBHN-VPQH", "Điều 10", "Khoản 1"]], "must_contain": ["20%"]},
+  {"id": "H07", "q": "Cung cấp dịch vụ có thu tiền trước thì thời điểm lập hóa đơn là lúc nào?", "as_of": "2026-11-05", "expected": [["254/2026/NĐ-CP", "Điều 9", "Khoản 2"]], "must_contain": ["thu tiền"]},
+  {"id": "H08", "q": "Trường hợp giao hàng nhiều lần thì phải lập hóa đơn như thế nào?", "as_of": "2026-11-05", "expected": [["254/2026/NĐ-CP", "Điều 9", "Khoản 3"]], "must_contain": ["mỗi lần giao hàng"]},
+  {"id": "H09", "q": "Nộp hồ sơ khai thuế quá thời hạn từ 01 ngày đến 30 ngày bị phạt tiền bao nhiêu?", "as_of": "2026-11-05", "expected": [["27/2026/VBHN-NĐ-BTC", "Điều 13", "Khoản 2"]], "must_contain": ["2.000.000"]},
+  {"id": "H10", "q": "Hành vi trốn thuế có tình tiết giảm nhẹ bị phạt bao nhiêu lần số thuế trốn?", "as_of": "2026-11-05", "expected": [["27/2026/VBHN-NĐ-BTC", "Điều 17", "Khoản 1"]], "must_contain": ["1 lần"]},
+  {"id": "H11", "q": "Hành vi cho, bán hóa đơn bị phạt tiền bao nhiêu?", "as_of": "2026-11-05", "expected": [["27/2026/VBHN-NĐ-BTC", "Điều 22", "Khoản 2"]], "must_contain": ["20.000.000"]},
+  {"id": "H12", "q": "Sử dụng hóa đơn không hợp pháp bị phạt tiền bao nhiêu?", "as_of": "2026-11-05", "expected": [["27/2026/VBHN-NĐ-BTC", "Điều 28", "Khoản 1"]], "must_contain": ["20.000.000"]},
+  {"id": "H13", "q": "Thời gian gia hạn nộp thuế thu nhập doanh nghiệp tạm nộp của quý III năm 2026 là bao lâu?", "as_of": "2026-11-05", "expected": [["245/2026/NĐ-CP", "Điều 2", "Khoản 2"]], "must_contain": ["02 tháng"]},
+  {"id": "H14", "q": "Người nộp thuế khai sai nhưng đã tự khai bổ sung và nộp đủ tiền thuế trước khi cơ quan thuế công bố quyết định kiểm tra thì có bị xử phạt không?", "as_of": "2026-11-05", "expected": [["108/2025/QH15", "Điều 44", "Khoản 2"]], "must_contain": ["khai bổ sung"]},
+  {"id": "H15", "q": "Sau bao nhiêu ngày kể từ ngày hết thời hạn nộp thuế mà người nộp thuế chưa nộp thì cơ quan thuế thông báo tiền thuế nợ và tiền chậm nộp?", "as_of": "2026-11-05", "expected": [["108/2025/QH15", "Điều 16", "Khoản 4"]], "must_contain": ["30 ngày"]},
+  {"id": "H16", "q": "Ngày cuối cùng của thời hạn nộp hồ sơ khai thuế trùng với ngày nghỉ thì tính thế nào?", "as_of": "2026-11-05", "expected": [["252/2026/NĐ-CP", "Điều 3", "Khoản 7"]], "must_contain": ["ngày làm việc"]},
+  {"id": "H17", "q": "Hàng hóa, dịch vụ mua vào từ bao nhiêu tiền thì phải có chứng từ thanh toán không dùng tiền mặt?", "as_of": "2026-11-05", "expected": [["181/2025/NĐ-CP", "Điều 26", null], ["18/VBHN-BTC", "Điều 26", null]], "must_contain": ["05 triệu"]},
+  {"id": "H18", "q": "Mua hàng của một người nộp thuế nhiều lần trong cùng một ngày, mỗi lần dưới 5 triệu đồng thì khấu trừ thế nào?", "as_of": "2026-11-05", "expected": [["181/2025/NĐ-CP", "Điều 26", "Khoản 3"], ["18/VBHN-BTC", "Điều 26", "Khoản 3"]], "must_contain": ["cùng một ngày"]},
+  {"id": "H19", "q": "Hộ kinh doanh có doanh thu năm trên bao nhiêu thì phải áp dụng hóa đơn điện tử?", "as_of": "2026-11-05", "expected": [["141/2026/NĐ-CP", "Điều 1", null]], "must_contain": ["01 tỷ"]},
+  {"id": "H20", "q": "Thuế suất 17% thuế thu nhập doanh nghiệp áp dụng cho doanh nghiệp có doanh thu như thế nào?", "as_of": "2026-11-05", "expected": [["67/2025/QH15", "Điều 10", "Khoản 3"], ["113/VBHN-VPQH", "Điều 10", "Khoản 3"], ["61/VBHN-VPQH", "Điều 10", "Khoản 3"]], "must_contain": ["50 tỷ"]},
+  {"id": "H21", "q": "Mức thuế bảo vệ môi trường đối với xăng là bao nhiêu đồng một lít?", "as_of": "2026-11-05", "expected": [], "must_contain": [], "expect_abstain": true},
+  {"id": "H22", "q": "Lệ phí trước bạ khi đăng ký ô tô con lần đầu là bao nhiêu phần trăm?", "as_of": "2026-11-05", "expected": [], "must_contain": [], "expect_abstain": true}
+ ]
+}

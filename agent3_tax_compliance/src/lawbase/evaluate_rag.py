@@ -24,9 +24,9 @@ def hit(passages, expected):
     return False
 
 
-def run(db=DEFAULT_DB, think=False, out=sys.stdout):
+def run(db=DEFAULT_DB, think=False, out=sys.stdout, questions=QUESTIONS):
     corpus = Corpus(db)
-    qs = json.loads(QUESTIONS.read_text(encoding='utf-8'))['questions']
+    qs = json.loads(Path(questions).read_text(encoding='utf-8'))['questions']
     llm = Ollama(think=think)
     rows = []
     for q in qs:
@@ -55,5 +55,6 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('--db', default=str(DEFAULT_DB))
     p.add_argument('--think', action='store_true')
+    p.add_argument('--questions', default=str(QUESTIONS))
     a = p.parse_args()
-    run(Path(a.db), a.think)
+    run(Path(a.db), a.think, questions=a.questions)

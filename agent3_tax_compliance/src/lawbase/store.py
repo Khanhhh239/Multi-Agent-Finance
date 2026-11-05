@@ -47,6 +47,8 @@ def now() -> str:
 
 
 class Corpus:
+    hybrid = False                                       # semantic retrieval (bge-m3) fused with keywords; set per instance
+
     def __init__(self, path: Path):
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -146,8 +148,21 @@ class Corpus:
         if doc_ids:
             sql += f' AND c.doc_id IN ({",".join("?" * len(doc_ids))})'
             args += doc_ids
+        filters_sql, filters_args = sql.split('WHERE chunks_fts MATCH ?', 1)[1], args[1:]
         sql += ' ORDER BY score LIMIT 200'
         rows = [dict(r) for r in self.db.execute(sql, args)]
+        dense = {}
+        if self.hybrid:
+            from .dense import nearest
+            dense = dict(nearest(self.db, query, 60))
+            missing = [cid for cid in dense if cid not in {r['chunk_id'] for r in rows}]
+            if missing:                                   # semantic candidates the keyword index missed, same date filters
+                extra = ('SELECT c.chunk_id, c.doc_id, c.prov_id, c.path, c.text, d.doc_num, d.title, d.doc_type, d.eff_from, d.eff_to, d.status_name, '
+                         'd.review_status, d.issue_date, v.eff_to AS ended_on, v.by_doc_num AS ended_by, 0.0 AS score FROM chunks c '
+                         'JOIN documents d ON d.doc_id=c.doc_id LEFT JOIN validity v ON v.doc_id=d.doc_id '
+                         'LEFT JOIN stale_provisions s ON s.doc_id=c.doc_id AND s.prov_id=c.prov_id '
+                         f'WHERE c.chunk_id IN ({",".join("?" * len(missing))}) AND d.indexed=1' + filters_sql)
+                rows += [dict(r) for r in self.db.execute(extra, missing + filters_args)]
         for r in rows:                                   # bm25 is negative: more negative is better
             r['rank'] = -r['score'] * self.TYPE_BOOST.get(r['doc_type'], 0.9)
             if as_of and r['status_name'] and 'Hết hiệu lực toàn bộ' in r['status_name'] and not r['eff_to']:
@@ -158,8 +173,14 @@ class Corpus:
             c_uni, c_bi = set(ct), set(bigrams(ct).split())
             r['coverage'] = (len(q_uni & c_uni) / len(q_uni) + 2 * (len(q_bi & c_bi) / len(q_bi) if q_bi else 0)) / 3
         top = max((r['rank'] for r in rows), default=1) or 1
-        for r in rows:
-            r['rank'] = 0.4 * r['rank'] / top + 0.6 * r['coverage']
+        if dense:
+            lo, hi = min(dense.values()), max(dense.values())
+            for r in rows:                               # weights fixed before measuring, not tuned on the held-out set
+                d = (dense[r['chunk_id']] - lo) / (hi - lo) if r['chunk_id'] in dense and hi > lo else 0.0
+                r['rank'] = 0.25 * r['rank'] / top + 0.35 * d + 0.4 * r['coverage']
+        else:
+            for r in rows:
+                r['rank'] = 0.4 * r['rank'] / top + 0.6 * r['coverage']
         rows.sort(key=lambda r: -r['rank'])
         out, seen, versions = [], set(), {}
         for r in rows:                                   # one entry per clause: split pieces of the same unit are merged later
