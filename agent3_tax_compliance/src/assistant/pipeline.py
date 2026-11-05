@@ -96,17 +96,39 @@ def purpose_items(ws: Path, invoices: list, ruleset: dict) -> list:
     if not path.exists():
         return []
     labels = json.loads(path.read_text(encoding='utf-8'))
+    ok_path = ws / 'ai' / 'confirmed_lines.json'
+    confirmed = set(json.loads(ok_path.read_text(encoding='utf-8'))) if ok_path.exists() else set()
     out = []
     for inv in invoices:
         rec = labels.get(inv.key)
         if inv.role != 'PURCHASE' or not rec or inv.duplicate_of:
             continue
-        hits = flagged(rec['labels'])
+        hits = [h for h in flagged(rec['labels']) if h['line'] not in confirmed]
         if hits:
             out.append(_item(ruleset, 'R12_ITEM_PURPOSE', 'REVIEW', [inv], Decimal(0),
                              [f'Phân loại dòng hàng bằng mô hình {rec["model"]} chạy trên máy ({rec["version"]}), đã qua kiểm tra nhãn; người duyệt quyết định',
                               'Điểm a khoản 1 Điều 14 Luật Thuế GTGT 48/2024/QH15: khấu trừ thuế đầu vào của hàng hóa, dịch vụ sử dụng cho sản xuất, kinh doanh hàng hóa, dịch vụ chịu thuế; điểm a khoản 1 Điều 9 Luật Thuế TNDN 67/2025/QH15: khoản chi được trừ phải thực tế phát sinh, liên quan đến hoạt động sản xuất kinh doanh (văn bản gốc, vbpl.vn)'],
                              detail='; '.join(f'{h["line"]}: {h["reason"]}' for h in hits)))
+    return out
+
+
+def receipt_items(invoices: list, txns: list, ruleset: dict) -> list:
+    """R14: a customer receipt with no sales invoice of the same amount nearby. Only when sales invoices were loaded,
+    otherwise every receipt would be flagged. Review only; never money."""
+    from .rules import _item
+    sales = [i for i in invoices if i.role == 'SALE' and i.issue_date and i.gross is not None and not i.duplicate_of]
+    if not sales:
+        return []
+    out = []
+    for t in txns:
+        if t.direction != 'IN':
+            continue
+        near = [i for i in sales if abs(i.gross - t.amount) <= 1 and -60 <= (t.booked - i.issue_date).days <= 5]
+        if not near:
+            out.append(_item(ruleset, 'R14_RECEIPT_WITHOUT_SALES_INVOICE', 'REVIEW', [], Decimal(0),
+                             ['Khoản 1 và khoản 2 Điều 9 Nghị định 254/2026/NĐ-CP: hàng hóa lập hóa đơn khi chuyển giao quyền sở hữu; dịch vụ thu tiền trước hoặc trong khi cung cấp thì lập hóa đơn tại thời điểm thu tiền (văn bản gốc, vbpl.vn)'],
+                             detail=f'{t.booked:%d/%m/%Y}: nhận {int(t.amount):,} đồng từ {t.counterparty_name or "không rõ"} ({t.description}); không thấy hóa đơn bán ra cùng số tiền trong 60 ngày trước đó'.replace(',', '.'),
+                             evidence=[t.txn_id]))
     return out
 
 
@@ -116,6 +138,10 @@ def apply_not_claimed(items: list, decisions: dict) -> list:
     out = []
     for it in items:
         ds = [decisions.get(k) for k in it.invoice_keys]
+        if it.status == 'REVIEW' and ds and all(d and d['action'] == 'CONFIRMED_OK' for d in ds):
+            note = '; '.join(f'{d["evidence"]} (xác nhận của {d["by"]})' for d in ds)
+            out.append(replace(it, status='INFO', amount=Decimal(0), detail=f'{it.detail} Người duyệt đã xác nhận không có vấn đề: {note}.'.strip()))
+            continue
         if it.status != 'INFO' and ds and all(d and d['action'] == 'NOT_CLAIMED' for d in ds):
             note = '; '.join(f'{d["evidence"]} (quyết định của {d["by"]})' for d in ds)
             it = replace(it, status='INFO', amount=Decimal(0),
@@ -146,6 +172,7 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
     matches = match_payments(invoices, txns, pack.thresholds, decisions)
     items, flags = evaluate(invoices, matches, pack, ruleset, bad1 + bad2, portal)
     items += purpose_items(ws, invoices, ruleset)
+    items += receipt_items(invoices, txns, ruleset)
     items = apply_not_claimed(items, decisions)
     items.sort(key=lambda it: (STATUS_ORDER[it.status], -it.amount, it.code, it.invoice_keys))
     dates = [i.issue_date for i in invoices if i.issue_date]
@@ -159,5 +186,14 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
                              'Chứng từ thanh toán chỉ tìm trong sao kê đã nạp; tiền mặt và sao kê thiếu sẽ hiện là chưa có chứng từ',
                              'Không có dữ liệu trực tiếp của cơ quan thuế (tình trạng người bán, thông báo phát hành)',
                              'Ước tính phạt là mức tối đa nếu bị xác định khai sai, chưa gồm tiền chậm nộp'])
+    calendar = filing_calendar(pack, invoices, ruleset, as_of)
+    by_key = {i.key: i for i in invoices}
+    for c in calendar:                                     # open work that changes what goes into this return
+        if not c['period'].startswith('Tờ khai thuế GTGT tháng'):
+            continue
+        mm, yy = c['period'][-7:].split('/')
+        open_items = [it for it in items if it.status in ('AT_RISK', 'REVIEW') and it.invoice_keys and by_key.get(it.invoice_keys[0])
+                      and by_key[it.invoice_keys[0]].issue_date and f'{by_key[it.invoice_keys[0]].issue_date:%m/%Y}' == f'{mm}/{yy}']
+        c['open_items'] = len(open_items)
     return Report(meta=meta, invoices=invoices, transactions=txns, matches=matches, items=items,
-                  totals=totals(items, ruleset, as_of), calendar=filing_calendar(pack, invoices, ruleset, as_of), policy_flags=flags)
+                  totals=totals(items, ruleset, as_of), calendar=calendar, policy_flags=flags)

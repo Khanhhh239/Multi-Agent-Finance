@@ -42,7 +42,7 @@ export async function pageCalendar() {
   if (needWorkspace()) return;
   const rep = await loadReport();
   app().innerHTML = `<h1 class="page">Lịch thuế</h1><p class="lead">Hạn nộp tờ khai thuế giá trị gia tăng theo kỳ khai, tạm nộp thuế thu nhập doanh nghiệp theo quý và quyết toán năm; căn cứ đọc từ kho luật và được kiểm tra còn hiệu lực. Hạn chưa dời khi trùng ngày nghỉ.</p>
-    ${table(['Kỳ', 'Hạn nộp', 'Tình trạng', 'Căn cứ'], (rep?.calendar || []).map((c) => `<tr><td>${esc(c.period)}</td><td>${dmy(c.due)}</td><td>${esc(c.status)}${c.extension ? `<div class="muted small">${esc(c.extension)}</div>` : ''}</td><td class="muted small">${esc(c.basis)}</td></tr>`), 'Chưa có dữ liệu.')}`;
+    ${table(['Kỳ', 'Hạn nộp', 'Tình trạng', 'Căn cứ'], (rep?.calendar || []).map((c) => `<tr><td>${esc(c.period)}</td><td>${dmy(c.due)}</td><td>${esc(c.status)}${c.open_items ? `<div><a href="#/viec" class="risk-text">còn ${c.open_items} việc chưa xử lý của kỳ này</a></div>` : ''}${c.extension ? `<div class="muted small">${esc(c.extension)}</div>` : ''}</td><td class="muted small">${esc(c.basis)}</td></tr>`), 'Chưa có dữ liệu.')}`;
 }
 
 export async function pageAsk() {

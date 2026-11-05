@@ -125,7 +125,7 @@ def load_decisions(path: Path) -> dict:
         return {}
     out = {}
     for d in json.loads(Path(path).read_text(encoding='utf-8')):
-        if d.get('action') not in ('PAYMENT_EVIDENCE_ATTACHED', 'NOT_CLAIMED') or not d.get('evidence') or not d.get('by'):
+        if d.get('action') not in ('PAYMENT_EVIDENCE_ATTACHED', 'NOT_CLAIMED', 'CONFIRMED_OK') or not d.get('evidence') or not d.get('by'):
             raise PackError(f'decision for {d.get("invoice_key")} needs action, evidence and by')
         out[d['invoice_key']] = d
     return out

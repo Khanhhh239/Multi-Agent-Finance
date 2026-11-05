@@ -316,9 +316,18 @@ def vat_summary(wid: str):
             r['at_risk'] += risk.get(i['key'], Decimal(0))
             r['review'] += int(i['key'] in review and i['key'] not in risk)
     out = []
+    declared = _read(ws / 'declared.json', {})
+    prev = None
     for p, r in sorted(rows.items(), key=lambda kv: (kv[0][-4:], kv[0])):
         safe = r['input_vat'] - r['at_risk']
-        out.append(dict(period=p, **r, input_safe=safe, net=r['output_vat'] - safe))
+        row = dict(period=p, **r, input_safe=safe, net=r['output_vat'] - safe, declared=declared.get(p))
+        if row['declared']:
+            dv = row['declared']
+            row['diff_output'] = (Decimal(dv['output_vat']) - r['output_vat']) if 'output_vat' in dv else None
+            row['diff_input'] = (Decimal(dv['input_vat']) - safe) if 'input_vat' in dv else None
+        row['risk_change'] = (r['at_risk'] - prev['at_risk']) if prev else None
+        out.append(row)
+        prev = r
     return _json(dict(period_kind=period_kind, rows=out, note='Bảng số liệu tham khảo để lập tờ khai; chưa ghi mã chỉ tiêu vì mẫu tờ khai hiện hành chưa được đọc từ kho luật. '
                       'Thuế đầu vào an toàn = tổng thuế đầu vào trừ phần có nguy cơ bị loại; phần cần xem vẫn tính vào an toàn cho tới khi người duyệt quyết định. Bản nhập trùng của một hóa đơn không được tính, nên tổng có nguy cơ ở đây không gồm thuế của bản trùng.'))
 
@@ -343,3 +352,131 @@ async def risk_list(wid: str, name: str, as_of: str, request: Request, source: s
     data['reference_lists'] = [r for r in data.get('reference_lists', []) if r['name'] != name] + [dict(name=name, as_of=as_of, source=source, tax_ids=good)]
     _save_pack(ws, data)
     return dict(ok=True, tax_ids=len(good), rejected=[t for t in found if t not in good][:20])
+
+
+# ----------------------------------------------------------------------------- A3: exposure per item
+@app.get('/api/workspaces/{wid}/exposure')
+def exposure(wid: str):
+    """For each item at risk: what a voluntary correction costs now versus being found by the tax office."""
+    from decimal import Decimal
+    from .rules import load_ruleset, param
+    from . import pipeline as pl
+    ws = ws_path(wid)
+    rep = _report(ws)
+    as_of = date.fromisoformat(rep['meta']['as_of'])
+    rs = load_ruleset(pl.DEFAULT_RULESET)
+    rate, rate_basis = param(rs, 'UNDERDECLARATION_PENALTY_RATE', as_of)
+    late = param(rs, 'LATE_PAYMENT_RATE_PER_DAY', as_of)
+    selfc = param(rs, 'SELF_CORRECTION_NO_PENALTY', as_of)
+    due = {c['period'][-7:]: date.fromisoformat(str(c['due'])) for c in rep['calendar'] if c['period'].startswith('Tờ khai thuế GTGT tháng')}
+    invs = {i['key']: i for i in rep['invoices']}
+    out = {}
+    for n, it in enumerate(rep['items']):
+        if it['status'] != 'AT_RISK' or not it['invoice_keys']:
+            continue
+        inv = invs.get(it['invoice_keys'][0])
+        if not inv or not inv.get('issue_date'):
+            continue
+        d = due.get(f'{inv["issue_date"][5:7]}/{inv["issue_date"][:4]}')
+        amount = Decimal(str(it['amount']))
+        days = max(0, (as_of - d).days) if d else 0
+        interest = (amount * Decimal(late[0]) * days).quantize(Decimal(1)) if late else Decimal(0)
+        out[n] = dict(amount=amount, due=d, days_late=days, interest=interest, penalty=(amount * Decimal(rate)).quantize(Decimal(1)),
+                      declared=bool(d and as_of > d), basis=[rate_basis, late[1] if late else '', selfc[1] if selfc else ''])
+    return _json(out)
+
+
+# ----------------------------------------------------------------------------- A1: declared figures versus invoices
+@app.get('/api/workspaces/{wid}/declared')
+def declared_get(wid: str):
+    return _read(ws_path(wid) / 'declared.json', {})
+
+
+@app.put('/api/workspaces/{wid}/declared')
+async def declared_put(wid: str, request: Request):
+    ws = ws_path(wid)
+    body = await request.json()
+    clean = {}
+    for period, v in body.items():
+        row = {}
+        for k in ('output_vat', 'input_vat'):
+            if v.get(k) not in (None, ''):
+                try:
+                    row[k] = int(str(v[k]).replace('.', '').replace(',', '').strip())
+                except ValueError:
+                    raise HTTPException(422, f'{period}: số không hợp lệ ở {k}')
+        if row:
+            clean[period] = row
+    _write(ws / 'declared.json', clean)
+    return dict(ok=True, periods=len(clean))
+
+
+# ----------------------------------------------------------------------------- B1: bulk decisions
+@app.post('/api/workspaces/{wid}/decisions/bulk')
+async def decisions_bulk(wid: str, request: Request):
+    ws = ws_path(wid)
+    d = await request.json()
+    keys = [k for k in d.get('invoice_keys', []) if k]
+    if not keys or d.get('action') not in ('PAYMENT_EVIDENCE_ATTACHED', 'NOT_CLAIMED', 'CONFIRMED_OK') or not d.get('evidence') or not d.get('by'):
+        raise HTTPException(422, 'cần chọn hóa đơn, thao tác, chứng từ hoặc lý do và người duyệt')
+    path = ws / 'decisions.json'
+    items = [x for x in _read(path, []) if x['invoice_key'] not in keys]
+    items += [dict(invoice_key=k, action=d['action'], evidence=d['evidence'], by=d['by'], at=date.today().isoformat()) for k in keys]
+    _write(path, items)
+    _remember_confirmed(ws, keys, d['action'])
+    rep = _run(ws)
+    return _json(dict(totals=rep.totals, decisions=len(keys)))
+
+
+def _remember_confirmed(ws: Path, keys: list, action: str):
+    """C3: a line a reviewer confirmed as business use is not flagged by the AI again, on any invoice."""
+    if action != 'CONFIRMED_OK':
+        return
+    labels = _read(ws / 'ai' / 'line_labels.json', {})
+    lines = {h['line'] for k in keys for h in ai_mod.flagged(labels.get(k, {}).get('labels', []))}
+    if lines:
+        path = ws / 'ai' / 'confirmed_lines.json'
+        _write(path, sorted(set(_read(path, [])) | lines))
+
+
+@app.post('/api/workspaces/{wid}/decisions/remember')
+async def decisions_remember(wid: str, request: Request):
+    d = await request.json()
+    _remember_confirmed(ws_path(wid), [d.get('invoice_key')], d.get('action'))
+    return dict(ok=True)
+
+
+# ----------------------------------------------------------------------------- B2: Excel export
+@app.get('/api/workspaces/{wid}/export/{kind}.xlsx')
+def export_xlsx(wid: str, kind: str):
+    from .synth import _write_xlsx
+    ws = ws_path(wid)
+    rep = _report(ws)
+    invs = {i['key']: i for i in rep['invoices']}
+    if kind == 'viec-can-xu-ly':
+        rows = [['Trạng thái', 'Mã', 'Việc', 'Hóa đơn', 'Ngày', 'Người bán', 'MST người bán', 'Số thuế (đồng)', 'Chi tiết', 'Việc cần làm', 'Căn cứ']]
+        for it in rep['items']:
+            i = invs.get(it['invoice_keys'][0]) if it['invoice_keys'] else {}
+            i = i or {}
+            rows.append([it['status'], it['code'], it['title'], f'{i.get("template") or ""}{i.get("symbol") or ""}/{i.get("number") or ""}' if i else '',
+                         i.get('issue_date') or '', i.get('seller_name') or '', i.get('seller_tax_id') or '', int(float(it['amount'])),
+                         it.get('detail', ''), it.get('action', ''), ' | '.join(it.get('basis', []))])
+    elif kind == 'hoa-don':
+        rows = [['Vai trò', 'Hóa đơn', 'Ngày', 'Người bán', 'MST người bán', 'Người mua', 'Tiền hàng', 'Thuế', 'Tổng thanh toán', 'Lỗi kiểm tra', 'Tệp']]
+        for i in rep['invoices']:
+            rows.append(['Mua vào' if i['role'] == 'PURCHASE' else 'Bán ra', f'{i.get("template") or ""}{i.get("symbol") or ""}/{i.get("number") or ""}',
+                         i.get('issue_date') or '', i.get('seller_name') or '', i.get('seller_tax_id') or '', i.get('buyer_name') or '',
+                         int(float(i['net'])) if i.get('net') is not None else '', int(float(i['vat'])) if i.get('vat') is not None else '',
+                         int(float(i['gross'])) if i.get('gross') is not None else '', ', '.join(i.get('guard_errors', [])), i['file']])
+    elif kind == 'quyet-dinh':
+        rows = [['Hóa đơn', 'Thao tác', 'Chứng từ hoặc lý do', 'Người duyệt', 'Ngày ghi']]
+        for d in _read(ws / 'decisions.json', []):
+            i = invs.get(d['invoice_key'], {})
+            rows.append([f'{i.get("template") or ""}{i.get("symbol") or ""}/{i.get("number") or ""} {i.get("seller_name") or ""}'.strip() or d['invoice_key'],
+                         d['action'], d['evidence'], d['by'], d.get('at', '')])
+    else:
+        raise HTTPException(404, 'không có bảng này')
+    out = ws / 'out' / f'{kind}.xlsx'
+    out.parent.mkdir(parents=True, exist_ok=True)
+    _write_xlsx(out, [[str(c) if not isinstance(c, (int, float)) else c for c in r] for r in rows])
+    return FileResponse(out, filename=f'{kind}.xlsx', media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

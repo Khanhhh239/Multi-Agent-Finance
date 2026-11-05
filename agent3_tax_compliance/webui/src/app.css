@@ -120,3 +120,10 @@ tr.clickable:focus { outline: 2px solid var(--cds-focus); outline-offset: -2px; 
 .chip-q { white-space: normal; text-align: left; height: auto; min-height: 2rem; }
 .ask-bar { position: sticky; bottom: 0; background: var(--cds-background); padding: .75rem 0; margin-bottom: 0; }
 @media (max-width: 66rem) { .banner { flex-direction: column; align-items: flex-start; } .steps-head { flex-direction: column; align-items: flex-start; } }
+
+.exposure table.mini { width: 100%; border-collapse: collapse; margin: .25rem 0 .5rem; font-size: .875rem; }
+.exposure table.mini td { padding: .375rem .5rem .375rem 0; border-bottom: 1px solid var(--cds-border-subtle); vertical-align: top; }
+.risk-text { color: #da1e28; }
+.bulk { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding: .75rem; background: #edf5ff; border: 1px solid #a6c8ff; margin: 0 0 .75rem; position: sticky; top: 3rem; z-index: 5; }
+td.pickcell { width: 2rem; }
+input.decl { height: 2rem; max-width: 12rem; }

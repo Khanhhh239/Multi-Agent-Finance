@@ -1,5 +1,6 @@
 // The controlled AI layer in the interface: plain explanations, line classification, bank-text proposals,
 // explanation letter and dossier, law alerts, VAT figures. AI output is always labelled and verified; people decide.
+import { toast } from './ux.js';
 import { $, api, app, button, dmy, esc, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, state, store, table, tag } from './core.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
@@ -95,11 +96,26 @@ export async function pageVat() {
   if (needWorkspace()) return;
   let v;
   try { v = await api(`/api/workspaces/${state.ws}/vat-summary`); } catch (err) { app().innerHTML = `<h1 class="page">Số liệu thuế GTGT</h1>${notice('info', 'Chưa phân tích', err.message)}`; return; }
+  const diff = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? tag('LLM_VERIFIED', 'Khớp') : `<span class="risk-text">${Number(x) > 0 ? '+' : ''}${money(x)}</span>`);
+  const change = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? 'không đổi' : `${Number(x) > 0 ? 'tăng' : 'giảm'} ${money(Math.abs(Number(x)))}`);
   app().innerHTML = `<h1 class="page">Số liệu thuế giá trị gia tăng theo kỳ</h1><p class="lead">${esc(v.note)}</p>
-    ${table(['Kỳ', { label: 'Thuế đầu ra', num: true }, { label: 'Thuế đầu vào', num: true }, { label: 'Có nguy cơ bị loại', num: true }, { label: 'Đầu vào an toàn', num: true }, { label: 'Phải nộp (ước tính)', num: true }, 'Hóa đơn'],
+    ${table(['Kỳ', { label: 'Thuế đầu ra', num: true }, { label: 'Thuế đầu vào', num: true }, { label: 'Có nguy cơ bị loại', num: true }, 'So với kỳ trước', { label: 'Đầu vào an toàn', num: true }, { label: 'Phải nộp (ước tính)', num: true }, 'Hóa đơn'],
       v.rows.map((r) => `<tr><td>${esc(r.period)}</td><td class="num">${money(r.output_vat)}</td><td class="num">${money(r.input_vat)}</td><td class="num">${Number(r.at_risk) ? `<strong>${money(r.at_risk)}</strong>` : money(0)}</td>
-        <td class="num">${money(r.input_safe)}</td><td class="num">${money(r.net)}</td><td class="muted small">${r.purchases} mua vào, ${r.sales} bán ra${r.review ? `, ${r.review} cần xem` : ''}</td></tr>`))}
+        <td class="muted small">${change(r.risk_change)}</td><td class="num">${money(r.input_safe)}</td><td class="num">${money(r.net)}</td><td class="muted small">${r.purchases} mua vào, ${r.sales} bán ra${r.review ? `, ${r.review} cần xem` : ''}</td></tr>`))}
+    <h2 class="section">Đối chiếu với số đã khai</h2>
+    <p class="muted">Nhập số thuế đầu ra và đầu vào đã khai trên tờ khai của từng kỳ (lấy từ tờ khai đã nộp). Hệ thống so với số tính từ hóa đơn: chênh lệch đầu ra là dấu hiệu khai thiếu doanh thu hoặc sót hóa đơn; đầu vào khai cao hơn phần an toàn là phần có thể bị loại.</p>
+    <form id="decl">${table(['Kỳ', 'Đầu ra đã khai', 'Chênh lệch đầu ra', 'Đầu vào đã khai', 'Chênh lệch so với đầu vào an toàn'], v.rows.map((r) => `<tr><td>${esc(r.period)}</td>
+      <td><input class="cds--text-input decl" data-p="${esc(r.period)}" data-k="output_vat" value="${r.declared?.output_vat ?? ''}" placeholder="vd 20.000.000" inputmode="numeric"></td><td>${diff(r.diff_output)}</td>
+      <td><input class="cds--text-input decl" data-p="${esc(r.period)}" data-k="input_vat" value="${r.declared?.input_vat ?? ''}" placeholder="vd 15.084.000" inputmode="numeric"></td><td>${diff(r.diff_input)}</td></tr>`))}
+      <div class="bar">${button('Lưu và đối chiếu', 'primary', 'type="submit"')}</div></form>
     ${v.rows.some((r) => !r.sales) ? notice('info', 'Chưa có hóa đơn bán ra ở một số kỳ', 'Số phải nộp ước tính sẽ âm nếu thiếu thuế đầu ra; nạp hóa đơn bán ra để số liệu đầy đủ.') : ''}`;
+  $('#decl').onsubmit = async (e) => {
+    e.preventDefault();
+    const body = {};
+    app().querySelectorAll('.decl').forEach((i) => { if (i.value.trim()) { body[i.dataset.p] ||= {}; body[i.dataset.p][i.dataset.k] = i.value.trim(); } });
+    try { await api(`/api/workspaces/${state.ws}/declared`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); toast('Đã lưu số đã khai'); rerender(); }
+    catch (err) { toast('Không lưu được', err.message, 'error'); }
+  };
 }
 
 // ---------------------------------------------------------------- A5 law alerts (law page)

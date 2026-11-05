@@ -61,3 +61,21 @@ export async function nextSteps(ws, rep) {
   return `<div class="steps-card"><div class="steps-head"><h3>Tiến độ kỳ này</h3>${next ? `<a class="cds--btn cds--btn--primary cds--btn--sm" href="${next[2]}">Làm tiếp: ${esc(next[0])}</a>` : '<span class="muted small">Đã xong các bước</span>'}</div>
     <ol class="checklist">${steps.map(([label, done, href, note]) => `<li class="${done ? 'done' : ''}"><a href="${href}"><span class="dot">${done ? '✓' : ''}</span><span>${esc(label)}</span></a><span class="muted small">${esc(note)}</span></li>`).join('')}</ol></div>`;
 }
+
+// A5: sellers that appear on a risk list since this browser last looked.
+export function sellerWatch(el, rep) {
+  if (!el || !rep) return;
+  const key = `agent3.seenRisky.${state.ws}`;
+  const now = [...new Set(rep.items.filter((i) => i.code === 'R08_RISKY_SELLER').map((i) => i.invoice_keys[0].split('|')[0]))];
+  let seen = null;
+  try { seen = JSON.parse(localStorage.getItem(key) || 'null'); } catch { seen = null; }
+  const fresh = seen ? now.filter((t) => !seen.includes(t)) : now;
+  if (fresh.length) {
+    const names = fresh.map((t) => rep.invoices.find((i) => i.seller_tax_id === t)?.seller_name || t);
+    const n = rep.items.filter((i) => i.code === 'R08_RISKY_SELLER' && fresh.includes(i.invoice_keys[0].split('|')[0])).length;
+    el.innerHTML = `<div class="banner banner-danger"><div><strong>${seen ? 'Người bán mới xuất hiện trong danh sách rủi ro' : 'Người bán đang nằm trong danh sách rủi ro'}</strong>
+      <div class="small">${names.map(esc).join(', ')}: ${n} hóa đơn cần kiểm tra hợp đồng, giao nhận và thanh toán trước khi kê khai.</div></div>
+      <div class="chips"><a class="cds--btn cds--btn--primary cds--btn--sm" href="#/viec?loc=REVIEW">Xem các hóa đơn</a><button type="button" class="cds--btn cds--btn--ghost cds--btn--sm" id="seen-ok">Đã biết</button></div></div>`;
+    $('#seen-ok').onclick = () => { try { localStorage.setItem(key, JSON.stringify(now)); } catch { /* private mode */ } el.innerHTML = ''; };
+  } else { el.innerHTML = ''; }
+}

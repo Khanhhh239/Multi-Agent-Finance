@@ -280,13 +280,16 @@ def get_report_html(wid: str):
 async def add_decision(wid: str, request: Request):
     ws = ws_path(wid)
     d = await request.json()
-    if d.get('action') not in ('PAYMENT_EVIDENCE_ATTACHED', 'NOT_CLAIMED') or not d.get('evidence') or not d.get('by') or not d.get('invoice_key'):
+    if d.get('action') not in ('PAYMENT_EVIDENCE_ATTACHED', 'NOT_CLAIMED', 'CONFIRMED_OK') or not d.get('evidence') or not d.get('by') or not d.get('invoice_key'):
         raise HTTPException(422, 'cần mã hóa đơn, thao tác, chứng từ và người duyệt')
     path = ws / 'decisions.json'
     items = json.loads(path.read_text(encoding='utf-8')) if path.exists() else []
     items = [x for x in items if x['invoice_key'] != d['invoice_key']] + [dict(invoice_key=d['invoice_key'], action=d['action'],
                                                                                evidence=d['evidence'], by=d['by'], at=date.today().isoformat())]
     path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding='utf-8')
+    if d['action'] == 'CONFIRMED_OK':
+        from .web_ai import _remember_confirmed
+        _remember_confirmed(ws, [d['invoice_key']], d['action'])
     rep = _run(ws)
     return _json(dict(totals=rep.totals, decisions=len(items)))
 

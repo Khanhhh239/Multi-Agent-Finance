@@ -90,7 +90,8 @@ class Seller:
 @dataclass
 class Scenario:
     labels: dict = field(default_factory=dict)
-    payments: list = field(default_factory=list)    # (date, amount, account, name, description, bank)
+    payments: list = field(default_factory=list)
+    sales: dict = field(default_factory=dict)          # the company's own sales invoices    # (date, amount, account, name, description, bank)
     files: dict = field(default_factory=dict)
 
 
@@ -171,7 +172,7 @@ def _write_xlsx(path: Path, rows: list[list]):
         if isinstance(v, int):
             return f'<c r="{ref}"><v>{v}</v></c>'
         return f'<c r="{ref}" t="inlineStr"><is><t>{escape(str(v))}</t></is></c>'
-    cols = 'ABCDEFGHIJ'
+    cols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     sheet = ''.join(f'<row r="{r}">' + ''.join(cell(f'{cols[c]}{r}', v) for c, v in enumerate(row)) + '</row>' for r, row in enumerate(rows, 1))
     parts = {
         '[Content_Types].xml': '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
@@ -327,6 +328,18 @@ def generate(out: Path, seed: int = 7) -> dict:
     b.pay(date(2026, 9, 19), g20, account='0451000' + str(rng.randint(100000, 999999)), name='TRAN THI B',
           desc='ck tien sua cau truc kho cho co khi an phu')
 
+    # Sales: the company's own invoices to a customer, paid by transfer; S21 a receipt with no sales invoice.
+    own = Seller('MA', company['legal_name'], company['tax_code'], '0123456789', 'C26TMA', '10%', counter=40)
+    _make_cert(own)
+    customer = (valid_tax_id('010555444'), 'Công ty TNHH Xây dựng Khách hàng Mô phỏng')
+    sales_paid = []
+    for m in (7, 8):
+        fs, _, gs = b.invoice(own, date(2026, m, 24), [('Xi măng PCB40 bao 50kg', 1000, 100000)], buyer_tax_id=customer[0], buyer_name=customer[1])
+        b.sc.sales[fs] = b.sc.files.pop(fs)
+        b.sc.labels.pop(fs)
+        sales_paid.append((date(2026, m, 26), gs))
+    sales_paid.append((date(2026, 9, 26), 120000000))       # S21: money received, no sales invoice
+
     # Noise: customer receipts, salaries, utilities.
     for m in months:
         b.pay(date(2026, m, 10), 45000000, account='0011002233', name='NGUYEN VAN A VA CAC NHAN VIEN', desc=f'Tra luong thang {m - 1}')
@@ -344,8 +357,11 @@ def generate(out: Path, seed: int = 7) -> dict:
             rows_a.append([day.strftime('%d/%m/%Y'), f'FT{n:06d}', desc, _fmt(amount), '', acc, nm])
         else:
             rows_b.append([day.isoformat(), f'B{n:05d}', desc, amount, '', acc, nm])
-    for m in months:
-        rows_a.append([date(2026, m, 26).strftime('%d/%m/%Y'), f'IN{m}', 'Khach hang thanh toan', '', _fmt(120000000), '0099887766', 'CONG TY KHACH HANG'])
+    for k, (day, amount) in enumerate(sales_paid, 1):
+        rows_a.append([day.strftime('%d/%m/%Y'), f'IN{k}', 'Khach hang thanh toan', '', _fmt(amount), '0099887766', 'CONG TY KHACH HANG'])
+    (out / 'invoices' / 'sales').mkdir(parents=True, exist_ok=True)
+    for name, raw in sorted(b.sc.sales.items()):
+        (out / 'invoices' / 'sales' / name).write_bytes(raw)
     rows_a.append(['', '', 'Tổng cộng', '', '', '', ''])
     import csv
     with open(out / 'bank' / 'saoke_nganhang_A.csv', 'w', encoding='utf-8-sig', newline='') as fh:
