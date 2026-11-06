@@ -19,8 +19,8 @@ Priorities:
 
 Consult relevant documentation when needed:
 - `docs/architecture.md`: system architecture.
-- `docs/contracts.md`: module interfaces.
-- `docs/metrics.md`: metric definitions.
+- `contracts.md`: module interfaces.
+- `agent4/engine/metrics.py`: metric definitions.
 - `docs/evaluation.md`: benchmark methodology.
 - `README.md`: setup and development commands.
 
