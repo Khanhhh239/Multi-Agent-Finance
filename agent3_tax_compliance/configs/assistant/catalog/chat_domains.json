@@ -1,0 +1,394 @@
+{
+ "version": "2026-11-06a",
+ "note": "Danh mục các miền trả lời của trợ lý hỏi đáp. Bộ định tuyến, trang hướng dẫn và bộ kiểm thử cùng đọc tệp này. Chỉ thêm miền khi đã có hàm trả lời tương ứng trong src/assistant/chat/handlers.py.",
+ "groups": [
+  {"id": "TONG_QUAN", "title": "Rủi ro và tình hình chung"},
+  {"id": "TRA_CUU", "title": "Tra cứu hóa đơn, người bán"},
+  {"id": "SO_LIEU", "title": "Số liệu mua vào, bán ra, thuế phải nộp"},
+  {"id": "THANH_TOAN", "title": "Thanh toán và sao kê ngân hàng"},
+  {"id": "HAN_PHAT", "title": "Hạn nộp, tiền chậm nộp, tiền phạt"},
+  {"id": "VIEC_LAM", "title": "Việc cần làm và dữ liệu"},
+  {"id": "LUAT", "title": "Quy định pháp luật"}
+ ],
+ "domains": [
+  {
+   "id": "risk_total", "group": "TONG_QUAN",
+   "title": "Tổng thuế có nguy cơ bị loại",
+   "what": "Tổng thuế GTGT đầu vào có nguy cơ không được khấu trừ, số hóa đơn và các nhóm lý do; lọc được theo tháng, quý, năm.",
+   "limits": "Chỉ tính trên dữ liệu đã nạp; không phải kết luận của cơ quan thuế.",
+   "params": ["period"],
+   "guide": ["Thuế đầu vào có nguy cơ bị loại là bao nhiêu?", "Quý này có bao nhiêu thuế có nguy cơ?", "Tháng trước có bao nhiêu hóa đơn có vấn đề?"],
+   "examples": [
+    "Có bao nhiêu thuế có nguy cơ bị loại?",
+    "Tổng thuế đầu vào có thể không được khấu trừ là bao nhiêu",
+    "tháng 9 rủi ro bao nhiêu tiền",
+    "Quý 3 có bao nhiêu hóa đơn bị cảnh báo",
+    "năm nay có thể mất bao nhiêu tiền thuế",
+    "tình hình rủi ro thuế hiện tại thế nào",
+    "có bao nhiêu tiền thuế đang gặp nguy",
+    "số thuế không được khấu trừ dự kiến",
+    "tóm tắt các vấn đề của kỳ này",
+    "kỳ này công ty có ổn không"
+   ]
+  },
+  {
+   "id": "missed_deduction", "group": "TONG_QUAN",
+   "title": "Thuế có thể đang bỏ sót chưa khấu trừ",
+   "what": "Hóa đơn có trên bảng kê cổng thuế nhưng chưa có trong dữ liệu kê khai, và số thuế có thể đang bỏ sót.",
+   "limits": "Cần đã nạp bảng kê hóa đơn mua vào từ cổng thuế.",
+   "params": ["period"],
+   "guide": ["Có hóa đơn nào đang bỏ sót chưa khấu trừ không?"],
+   "examples": [
+    "có hóa đơn nào bị bỏ sót không",
+    "thuế đầu vào nào mình chưa kê khai",
+    "hóa đơn có trên cổng thuế mà chưa có tệp XML",
+    "có khoản nào có thể được khấu trừ thêm không",
+    "bỏ sót bao nhiêu tiền thuế",
+    "hóa đơn nào người bán đã lập mà mình chưa nhận"
+   ]
+  },
+  {
+   "id": "top_risks", "group": "TONG_QUAN",
+   "title": "Các hóa đơn rủi ro lớn nhất",
+   "what": "Danh sách hóa đơn có số thuế có nguy cơ lớn nhất, kèm lý do và việc cần làm.",
+   "limits": "",
+   "params": ["period", "top_n"],
+   "guide": ["5 hóa đơn rủi ro lớn nhất là những hóa đơn nào?", "Nên xử lý hóa đơn nào trước?"],
+   "examples": [
+    "hóa đơn nào rủi ro nhất",
+    "liệt kê 5 hóa đơn có vấn đề lớn nhất",
+    "những khoản nào nguy hiểm nhất",
+    "hóa đơn nào có số thuế bị loại cao nhất",
+    "top 10 hóa đơn cần xử lý",
+    "khoản lớn nhất có nguy cơ là gì"
+   ]
+  },
+  {
+   "id": "by_issue", "group": "TONG_QUAN",
+   "title": "Hóa đơn theo loại vấn đề",
+   "what": "Các hóa đơn mắc một loại vấn đề cụ thể: chưa có chứng từ chuyển khoản, trả tiền mặt, mua nhiều lần trong ngày, nhập trùng, sai mã số thuế người mua, không có trên cổng thuế, người bán trong danh sách rủi ro, người bán ít hóa đơn, hàng không phục vụ kinh doanh, hóa đơn bị thay thế hoặc điều chỉnh, lỗi chữ ký, số tiền bất thường.",
+   "limits": "",
+   "params": ["issue", "period"],
+   "guide": ["Hóa đơn nào chưa có chứng từ chuyển khoản?", "Có hóa đơn nào bị nhập trùng không?", "Hóa đơn nào ghi sai mã số thuế của công ty?"],
+   "examples": [
+    "hóa đơn nào trả bằng tiền mặt",
+    "những hóa đơn chưa có chứng từ thanh toán qua ngân hàng",
+    "có hóa đơn trùng không",
+    "hóa đơn nào ghi sai mã số thuế người mua",
+    "người bán nào nằm trong danh sách rủi ro",
+    "có mua nhiều lần trong một ngày để né ngưỡng không",
+    "hàng hóa nào không phục vụ kinh doanh",
+    "hóa đơn nào không có trên cổng thuế",
+    "có hóa đơn nào bị thay thế không",
+    "hóa đơn nào sai chữ ký số",
+    "người bán nào phát hành rất ít hóa đơn",
+    "liệt kê các hóa đơn mua đồ cá nhân"
+   ]
+  },
+  {
+   "id": "invoice_lookup", "group": "TRA_CUU",
+   "title": "Tra cứu một hóa đơn",
+   "what": "Thông tin một hóa đơn theo số: người bán, ngày, số tiền, tình trạng thanh toán, các cảnh báo, việc cần làm; hỏi thêm 'vì sao' hoặc 'căn cứ' thì kèm điều khoản trong kho luật.",
+   "limits": "Cần ghi số hóa đơn. Nhiều người bán có cùng số thì liệt kê tất cả.",
+   "params": ["invoice_number"],
+   "guide": ["Hóa đơn số <số hóa đơn> có vấn đề gì?", "Vì sao hóa đơn số <số hóa đơn> bị cảnh báo, căn cứ điều nào?"],
+   "examples": [
+    "hóa đơn số 123 có vấn đề gì",
+    "hd 45 thế nào",
+    "kiểm tra giúp hóa đơn 00000768",
+    "vì sao hóa đơn 396 bị loại",
+    "hóa đơn số 12 đã thanh toán chưa",
+    "cho tôi biết về hóa đơn 4",
+    "tình trạng hóa đơn số 611",
+    "hóa đơn 536 căn cứ điều nào"
+   ]
+  },
+  {
+   "id": "seller_lookup", "group": "TRA_CUU",
+   "title": "Tra cứu một người bán",
+   "what": "Một người bán (theo mã số thuế hoặc tên): số hóa đơn, tổng tiền, thuế có nguy cơ, các cảnh báo.",
+   "limits": "Cần ghi mã số thuế hoặc tên đủ để phân biệt.",
+   "params": ["seller"],
+   "guide": ["Người bán <tên hoặc mã số thuế> có rủi ro gì?", "Đã mua của <tên người bán> bao nhiêu tiền?"],
+   "examples": [
+    "người bán 0312345678 có rủi ro gì",
+    "nhà cung cấp Phương Nam thế nào",
+    "mình mua của công ty Mây Việt bao nhiêu tiền",
+    "công ty An Khang có vấn đề gì không",
+    "các hóa đơn của Minh Phát",
+    "kiểm tra nhà cung cấp mã số thuế 0101234567"
+   ]
+  },
+  {
+   "id": "top_sellers", "group": "TRA_CUU",
+   "title": "Xếp hạng người bán",
+   "what": "Người bán có nhiều thuế có nguy cơ nhất, hoặc người bán mua nhiều tiền nhất trong kỳ.",
+   "limits": "",
+   "params": ["period", "top_n", "rank_by"],
+   "guide": ["Người bán nào rủi ro nhất?", "Mua nhiều nhất của nhà cung cấp nào?"],
+   "examples": [
+    "nhà cung cấp nào rủi ro nhất",
+    "người bán nào có nhiều hóa đơn bị cảnh báo nhất",
+    "mua của ai nhiều tiền nhất",
+    "top 5 nhà cung cấp lớn nhất",
+    "xếp hạng người bán theo giá trị mua vào",
+    "nhà cung cấp nào cần chú ý"
+   ]
+  },
+  {
+   "id": "purchase_summary", "group": "SO_LIEU",
+   "title": "Tổng mua vào và thuế đầu vào",
+   "what": "Số hóa đơn mua vào, tổng tiền trước thuế, thuế GTGT đầu vào, phần an toàn và phần có nguy cơ, theo kỳ.",
+   "limits": "Chỉ gồm các hóa đơn XML đã nạp.",
+   "params": ["period"],
+   "guide": ["Tổng thuế đầu vào quý này là bao nhiêu?", "Tháng này mua vào bao nhiêu hóa đơn?"],
+   "examples": [
+    "tổng thuế đầu vào là bao nhiêu",
+    "tháng 8 mua vào bao nhiêu tiền",
+    "có bao nhiêu hóa đơn mua vào",
+    "chi phí mua hàng quý 3",
+    "thuế GTGT đầu vào được khấu trừ an toàn",
+    "tổng giá trị hóa đơn đầu vào năm nay"
+   ]
+  },
+  {
+   "id": "sales_summary", "group": "SO_LIEU",
+   "title": "Doanh thu bán ra và thuế đầu ra",
+   "what": "Số hóa đơn bán ra, doanh thu trước thuế, thuế GTGT đầu ra theo kỳ, khách hàng lớn nhất.",
+   "limits": "Chỉ gồm các hóa đơn bán ra đã nạp.",
+   "params": ["period"],
+   "guide": ["Doanh thu quý này là bao nhiêu?", "Thuế đầu ra tháng trước bao nhiêu?"],
+   "examples": [
+    "doanh thu tháng 9 là bao nhiêu",
+    "tổng thuế đầu ra",
+    "đã xuất bao nhiêu hóa đơn bán ra",
+    "doanh số quý 3",
+    "khách hàng nào mua nhiều nhất",
+    "bán được bao nhiêu tiền năm nay"
+   ]
+  },
+  {
+   "id": "vat_payable", "group": "SO_LIEU",
+   "title": "Thuế GTGT phải nộp ước tính",
+   "what": "Thuế đầu ra trừ thuế đầu vào an toàn theo từng kỳ khai; so với số đã khai nếu đã nhập.",
+   "limits": "Số tham khảo để lập tờ khai, chưa gồm thuế còn được khấu trừ chuyển từ kỳ trước.",
+   "params": ["period"],
+   "guide": ["Kỳ này phải nộp bao nhiêu thuế GTGT?", "Số đã khai có khớp với hóa đơn không?"],
+   "examples": [
+    "kỳ này phải nộp bao nhiêu thuế giá trị gia tăng",
+    "thuế GTGT phải nộp quý 3",
+    "ước tính số thuế phải nộp",
+    "số đã khai có khớp với hóa đơn không",
+    "chênh lệch giữa tờ khai và dữ liệu hóa đơn",
+    "được hoàn thuế hay phải nộp thêm"
+   ]
+  },
+  {
+   "id": "bank_matching", "group": "THANH_TOAN",
+   "title": "Tình trạng đối chiếu sao kê",
+   "what": "Bao nhiêu hóa đơn đã ghép được chứng từ ngân hàng, bao nhiêu chưa, bao nhiêu giao dịch cần xác nhận.",
+   "limits": "Chỉ tìm trong sao kê đã nạp.",
+   "params": ["period"],
+   "guide": ["Đã đối chiếu được bao nhiêu hóa đơn với sao kê?", "Còn giao dịch nào cần xác nhận?"],
+   "examples": [
+    "đã ghép được bao nhiêu hóa đơn với sao kê",
+    "còn bao nhiêu giao dịch ngân hàng chưa xác định",
+    "đối chiếu ngân hàng tới đâu rồi",
+    "hóa đơn nào chưa tìm thấy thanh toán",
+    "giao dịch nào cần xác nhận",
+    "sao kê có khớp với hóa đơn không"
+   ]
+  },
+  {
+   "id": "receipts_no_invoice", "group": "THANH_TOAN",
+   "title": "Tiền khách trả chưa có hóa đơn bán ra",
+   "what": "Các khoản tiền vào tài khoản chưa đối chiếu được với hóa đơn bán ra (có thể phải lập hóa đơn khi thu tiền).",
+   "limits": "Cần đã nạp sao kê và hóa đơn bán ra.",
+   "params": ["period"],
+   "guide": ["Có khoản tiền khách trả nào chưa xuất hóa đơn không?"],
+   "examples": [
+    "có khoản tiền khách trả nào chưa xuất hóa đơn",
+    "tiền vào tài khoản chưa có hóa đơn bán ra",
+    "khách tạm ứng mà chưa lập hóa đơn",
+    "khoản thu nào chưa khớp hóa đơn",
+    "có bỏ sót xuất hóa đơn không"
+   ]
+  },
+  {
+   "id": "deadlines", "group": "HAN_PHAT",
+   "title": "Hạn nộp tờ khai và nộp thuế",
+   "what": "Hạn nộp tờ khai GTGT, tạm nộp và quyết toán thuế TNDN theo kỳ khai của doanh nghiệp, đã dời nếu trùng ngày nghỉ.",
+   "limits": "Ngày nghỉ lấy theo lịch nghỉ trong danh mục và ngày nghỉ riêng của doanh nghiệp.",
+   "params": ["period"],
+   "guide": ["Hạn nộp tờ khai gần nhất là khi nào?", "Khi nào phải quyết toán thuế TNDN?"],
+   "examples": [
+    "hạn nộp tờ khai khi nào",
+    "còn bao nhiêu ngày nữa phải nộp thuế",
+    "hạn quyết toán thuế thu nhập doanh nghiệp",
+    "tạm nộp thuế TNDN quý 3 hạn ngày nào",
+    "lịch nộp thuế sắp tới",
+    "deadline nộp tờ khai quý này"
+   ]
+  },
+  {
+   "id": "penalty_exposure", "group": "HAN_PHAT",
+   "title": "Tiền phạt và tiền chậm nộp ước tính của doanh nghiệp",
+   "what": "Với các khoản có nguy cơ: số thuế, tiền chậm nộp tính tới hôm nay, mức phạt tối đa nếu cơ quan thuế phát hiện, so với tự khai bổ sung.",
+   "limits": "Ước tính theo tham số trong bộ luật; chưa phải quyết định xử phạt.",
+   "params": ["period"],
+   "guide": ["Nếu bị phát hiện thì có thể bị phạt bao nhiêu?", "Tự khai bổ sung bây giờ thì mất bao nhiêu?"],
+   "examples": [
+    "nếu bị cơ quan thuế phát hiện thì phạt bao nhiêu",
+    "tiền chậm nộp của công ty đến nay là bao nhiêu",
+    "tự kê khai bổ sung thì tốn bao nhiêu",
+    "rủi ro bị phạt của mình là bao nhiêu",
+    "ước tính tiền phạt",
+    "nên tự sửa hay chờ"
+   ]
+  },
+  {
+   "id": "what_if_evidence", "group": "HAN_PHAT",
+   "title": "Giả định bổ sung chứng từ",
+   "what": "Chạy lại phân tích với giả định đã có chứng từ chuyển khoản cho một hoặc vài hóa đơn, cho biết thuế có nguy cơ giảm bao nhiêu.",
+   "limits": "Kết quả giả định, không ghi vào dữ liệu.",
+   "params": ["invoice_number"],
+   "guide": ["Nếu bổ sung chứng từ chuyển khoản cho hóa đơn <số> thì còn bao nhiêu?"],
+   "examples": [
+    "nếu bổ sung chứng từ chuyển khoản cho hóa đơn 396 thì còn bao nhiêu",
+    "giả sử hóa đơn 768 đã chuyển khoản thì sao",
+    "có ủy nhiệm chi cho hóa đơn 12 thì rủi ro giảm bao nhiêu",
+    "nếu tìm được chứng từ thanh toán hóa đơn 45",
+    "bổ sung chứng từ cho hd 4 và 5 thì còn lại bao nhiêu"
+   ]
+  },
+  {
+   "id": "next_actions", "group": "VIEC_LAM",
+   "title": "Việc nên làm tiếp",
+   "what": "Các việc cần xử lý xếp theo số tiền và hạn nộp gần nhất, kèm số việc còn mở.",
+   "limits": "",
+   "params": ["period"],
+   "guide": ["Hôm nay nên làm gì trước?", "Còn bao nhiêu việc chưa xử lý?"],
+   "examples": [
+    "giờ tôi nên làm gì",
+    "việc nào cần ưu tiên",
+    "còn bao nhiêu việc chưa xử lý",
+    "trước khi nộp tờ khai cần làm gì",
+    "danh sách việc cần làm",
+    "bước tiếp theo là gì"
+   ]
+  },
+  {
+   "id": "data_status", "group": "VIEC_LAM",
+   "title": "Dữ liệu đã nạp và còn thiếu",
+   "what": "Đã nạp bao nhiêu hóa đơn mua vào, bán ra, giao dịch ngân hàng, bảng kê cổng thuế; kỳ dữ liệu; tệp lỗi; còn thiếu gì.",
+   "limits": "",
+   "params": [],
+   "guide": ["Đã nạp đủ dữ liệu chưa?", "Còn thiếu dữ liệu gì?"],
+   "examples": [
+    "đã nạp những dữ liệu gì",
+    "còn thiếu dữ liệu nào",
+    "dữ liệu từ tháng mấy đến tháng mấy",
+    "có tệp nào lỗi không đọc được",
+    "có bao nhiêu giao dịch ngân hàng",
+    "đã có bảng kê cổng thuế chưa"
+   ]
+  },
+  {
+   "id": "decisions_log", "group": "VIEC_LAM",
+   "title": "Các quyết định đã ghi nhận",
+   "what": "Những cảnh báo đã được người duyệt xử lý: không kê khai, đã bổ sung chứng từ, xác nhận phục vụ kinh doanh; ai và khi nào.",
+   "limits": "",
+   "params": [],
+   "guide": ["Đã xử lý những hóa đơn nào?", "Ai đã xác nhận các quyết định?"],
+   "examples": [
+    "đã xử lý những hóa đơn nào",
+    "các quyết định đã ghi",
+    "hóa đơn nào đã chọn không kê khai",
+    "ai đã duyệt",
+    "lịch sử xác nhận"
+   ]
+  },
+  {
+   "id": "company_profile", "group": "VIEC_LAM",
+   "title": "Hồ sơ và cấu hình doanh nghiệp",
+   "what": "Mã số thuế, tên, phương pháp tính thuế, kỳ khai, năm tài chính, ngành nghề, quy định chi tiêu đang áp dụng.",
+   "limits": "Muốn sửa cấu hình phải vào trang quản trị có mật khẩu.",
+   "params": [],
+   "guide": ["Công ty đang khai thuế theo tháng hay quý?", "Đang áp dụng những quy định chi tiêu nào?"],
+   "examples": [
+    "công ty khai theo tháng hay quý",
+    "phương pháp tính thuế của công ty",
+    "mã số thuế công ty là gì",
+    "đang bật những quy định chi tiêu nào",
+    "năm tài chính kết thúc tháng mấy",
+    "ngành nghề đăng ký"
+   ]
+  },
+  {
+   "id": "law_question", "group": "LUAT",
+   "title": "Hỏi về quy định thuế, hóa đơn",
+   "what": "Tìm điều khoản đang có hiệu lực trong kho luật và trả lời có trích nguyên văn: thuế suất, điều kiện khấu trừ, thời điểm lập hóa đơn, mức phạt, tiền chậm nộp, hồ sơ, thời hạn theo luật.",
+   "limits": "Mất 30 đến 60 giây. Không qua kiểm tra căn cứ thì chỉ trích nguyên văn hoặc từ chối. Không thay ý kiến tư vấn chính thức.",
+   "params": [],
+   "guide": ["Điều kiện khấu trừ thuế GTGT đầu vào là gì?", "Lập hóa đơn không đúng thời điểm bị phạt thế nào?", "Mức tính tiền chậm nộp là bao nhiêu mỗi ngày?"],
+   "examples": [
+    "điều kiện khấu trừ thuế giá trị gia tăng đầu vào",
+    "lập hóa đơn sai thời điểm bị phạt bao nhiêu",
+    "tiền chậm nộp tính bao nhiêu phần trăm một ngày",
+    "thuế suất 5% áp dụng cho hàng hóa nào",
+    "thời điểm lập hóa đơn khi cung cấp dịch vụ",
+    "hóa đơn điện tử phải có những nội dung gì",
+    "quy định về thanh toán không dùng tiền mặt",
+    "hộ kinh doanh có phải xuất hóa đơn không",
+    "theo luật thì bao lâu phải nộp tờ khai quý",
+    "xử phạt khai sai dẫn đến thiếu thuế"
+   ]
+  },
+  {
+   "id": "judgment", "group": "LUAT",
+   "title": "Câu hỏi cần chuyên môn kết luận",
+   "what": "Khoản chi có được trừ, có được khấu trừ hay không trong một tình huống cụ thể: hệ thống liệt kê điều kiện cần xét và điều khoản liên quan, không tự kết luận.",
+   "limits": "Không đưa ra kết luận được hay không được.",
+   "params": [],
+   "guide": ["Chi tiếp khách này có được tính vào chi phí được trừ không?"],
+   "examples": [
+    "chi tiếp khách này có được trừ không",
+    "khoản này có được tính vào chi phí hợp lý không",
+    "mua xe cho giám đốc có được khấu trừ không",
+    "chi quà tết cho nhân viên có được trừ không",
+    "chi phí này có hợp lệ không",
+    "trường hợp của tôi có bị truy thu không"
+   ]
+  },
+  {
+   "id": "help", "group": "VIEC_LAM",
+   "title": "Trợ lý trả lời được gì",
+   "what": "Danh sách các loại câu hỏi trợ lý trả lời được.",
+   "limits": "",
+   "params": [],
+   "guide": ["Bạn trả lời được những gì?"],
+   "examples": [
+    "bạn làm được gì",
+    "tôi có thể hỏi gì",
+    "hướng dẫn sử dụng",
+    "giúp tôi"
+   ]
+  }
+ ],
+ "issues": [
+  {"codes": ["R01_PAYMENT_EVIDENCE"], "name": "chưa có chứng từ chuyển khoản (hóa đơn từ ngưỡng)", "words": ["tien mat", "chuyen khoan", "chung tu thanh toan", "chung tu ngan hang", "uy nhiem chi", "chua thanh toan", "thanh toan qua ngan hang", "khong dung tien mat"]},
+  {"codes": ["R02_SAME_DAY_CUMULATIVE"], "name": "mua nhiều lần trong ngày cùng người bán", "words": ["nhieu lan", "trong ngay", "cung ngay", "chia nho", "tach hoa don", "ne nguong"]},
+  {"codes": ["R03_AMBIGUOUS_PAYMENT"], "name": "giao dịch ngân hàng chưa xác định được", "words": ["mo ho", "chua xac dinh", "can xac nhan giao dich"]},
+  {"codes": ["R04_INVOICE_INTEGRITY"], "name": "tệp hóa đơn lỗi toàn vẹn (chữ ký, số học)", "words": ["chu ky", "chu ky so", "toan ven", "sai so hoc", "bang chu"]},
+  {"codes": ["R05_DUPLICATE"], "name": "hóa đơn nhập trùng", "words": ["trung", "nhap hai lan", "ban sao"]},
+  {"codes": ["R06_REPLACED_ORIGINAL", "R06_ADJUSTED"], "name": "hóa đơn bị thay thế hoặc điều chỉnh", "words": ["thay the", "dieu chinh"]},
+  {"codes": ["R07_BUYER_TAX_ID", "R07_BUYER_NAME"], "name": "sai mã số thuế, tên hoặc địa chỉ người mua", "words": ["sai ma so thue", "ma so thue nguoi mua", "sai ten", "sai dia chi", "ghi nham"]},
+  {"codes": ["R08_RISKY_SELLER"], "name": "người bán trong danh sách rủi ro", "words": ["danh sach rui ro", "bo dia chi", "doanh nghiep ma", "cong ty ma"]},
+  {"codes": ["R09_NOT_ON_PORTAL"], "name": "không có trên bảng kê cổng thuế", "words": ["khong co tren cong", "khong co tren bang ke", "cong thue khong co"]},
+  {"codes": ["R09_UNCAPTURED"], "name": "có trên cổng thuế nhưng chưa có tệp XML", "words": ["chua co xml", "chua co tep", "bo sot"]},
+  {"codes": ["R11_VENDOR_OUTLIER"], "name": "số tiền lệch xa thông lệ của người bán", "words": ["bat thuong", "lech", "khac thuong"]},
+  {"codes": ["R12_ITEM_PURPOSE"], "name": "hàng hóa có thể không phục vụ kinh doanh", "words": ["ca nhan", "khong phuc vu kinh doanh", "do dung gia dinh", "xa xi", "giai tri"]},
+  {"codes": ["R13_LOW_VOLUME_SELLER"], "name": "người bán phát hành rất ít hóa đơn", "words": ["it hoa don", "nguoi ban moi", "rat it"]},
+  {"codes": ["R14_RECEIPT_WITHOUT_SALES_INVOICE"], "name": "tiền khách trả chưa có hóa đơn bán ra", "words": ["chua xuat hoa don", "tam ung", "tien khach tra"]}
+ ]
+}

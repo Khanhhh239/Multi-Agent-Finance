@@ -1,0 +1,139 @@
+{
+ "note": "Bộ câu hỏi đánh giá bộ định tuyến hỏi đáp. Viết độc lập với các câu ví dụ trong chat_domains.json. Phần holdout được khóa bằng commit trước khi chỉnh bộ định tuyến; chỉ dùng phần dev để chỉnh. domain NONE nghĩa là phải từ chối (ngoài phạm vi).",
+ "items": [
+  {"split": "dev", "q": "Tổng cộng có bao nhiêu tiền thuế đầu vào có khả năng bị loại?", "domain": "risk_total"},
+  {"split": "holdout", "q": "Cho tôi con số thuế GTGT có nguy cơ không được khấu trừ của tháng 8", "domain": "risk_total", "period": {"month": 8}},
+  {"split": "dev", "q": "Quý 3 năm 2026 rủi ro thuế ra sao?", "domain": "risk_total", "period": {"quarter": 3, "year": 2026}},
+  {"split": "holdout", "q": "Hiện tại công ty có đang gặp rủi ro thuế nào không", "domain": "risk_total"},
+  {"split": "dev", "q": "Bao nhiêu hóa đơn đang có cảnh báo?", "domain": "risk_total"},
+  {"split": "holdout", "q": "tháng 7 có vấn đề gì không", "domain": "risk_total", "period": {"month": 7}},
+  {"split": "dev", "q": "Tình hình hóa đơn đầu vào kỳ này có ổn không?", "domain": "risk_total"},
+  {"split": "holdout", "q": "Nếu nộp tờ khai bây giờ thì có bao nhiêu thuế có thể bị loại", "domain": "risk_total"},
+
+  {"split": "dev", "q": "Có thuế đầu vào nào mình quên chưa khấu trừ không?", "domain": "missed_deduction"},
+  {"split": "holdout", "q": "Hóa đơn nào có trên cổng hóa đơn điện tử mà chưa nạp vào?", "domain": "missed_deduction"},
+  {"split": "dev", "q": "Mình đang bỏ lỡ bao nhiêu tiền thuế được khấu trừ", "domain": "missed_deduction"},
+  {"split": "holdout", "q": "có hóa đơn đầu vào nào chưa được ghi nhận không", "domain": "missed_deduction"},
+
+  {"split": "dev", "q": "Ba hóa đơn có vấn đề nặng nhất là gì?", "domain": "top_risks", "top_n": 3},
+  {"split": "holdout", "q": "Nên ưu tiên xử lý những hóa đơn nào", "domain": "top_risks"},
+  {"split": "dev", "q": "Hóa đơn có số thuế nguy cơ cao nhất", "domain": "top_risks"},
+  {"split": "holdout", "q": "Liệt kê giúp tôi 10 hóa đơn rủi ro cao nhất quý 3", "domain": "top_risks", "top_n": 10, "period": {"quarter": 3}},
+
+  {"split": "dev", "q": "Những hóa đơn nào thanh toán tiền mặt?", "domain": "by_issue", "issue": "R01_PAYMENT_EVIDENCE"},
+  {"split": "holdout", "q": "Có hóa đơn nào chưa chuyển khoản không", "domain": "by_issue", "issue": "R01_PAYMENT_EVIDENCE"},
+  {"split": "dev", "q": "Có hóa đơn nào bị nhập hai lần không?", "domain": "by_issue", "issue": "R05_DUPLICATE"},
+  {"split": "holdout", "q": "Kiểm tra trùng hóa đơn giúp tôi", "domain": "by_issue", "issue": "R05_DUPLICATE"},
+  {"split": "dev", "q": "Hóa đơn nào người bán ghi nhầm mã số thuế công ty mình?", "domain": "by_issue", "issue": "R07_BUYER_TAX_ID"},
+  {"split": "holdout", "q": "Có hóa đơn nào sai thông tin người mua không", "domain": "by_issue", "issue": "R07_BUYER_TAX_ID"},
+  {"split": "dev", "q": "Có mua đồ dùng cá nhân không?", "domain": "by_issue", "issue": "R12_ITEM_PURPOSE"},
+  {"split": "holdout", "q": "Hàng nào có vẻ không dùng cho công ty", "domain": "by_issue", "issue": "R12_ITEM_PURPOSE"},
+  {"split": "dev", "q": "Nhà cung cấp nào bị cơ quan thuế đưa vào danh sách bỏ địa chỉ kinh doanh?", "domain": "by_issue", "issue": "R08_RISKY_SELLER"},
+  {"split": "holdout", "q": "Có mua của doanh nghiệp nằm trong danh sách rủi ro không", "domain": "by_issue", "issue": "R08_RISKY_SELLER"},
+  {"split": "dev", "q": "Có trường hợp chia nhỏ hóa đơn trong một ngày không?", "domain": "by_issue", "issue": "R02_SAME_DAY_CUMULATIVE"},
+  {"split": "holdout", "q": "Mua nhiều lần cùng ngày của một người bán", "domain": "by_issue", "issue": "R02_SAME_DAY_CUMULATIVE"},
+  {"split": "dev", "q": "Hóa đơn nào có tệp XML mà cổng thuế không có?", "domain": "by_issue", "issue": "R09_NOT_ON_PORTAL"},
+  {"split": "holdout", "q": "Người bán nào mới thành lập, xuất rất ít hóa đơn", "domain": "by_issue", "issue": "R13_LOW_VOLUME_SELLER"},
+  {"split": "dev", "q": "Có hóa đơn nào chữ ký số không hợp lệ?", "domain": "by_issue", "issue": "R04_INVOICE_INTEGRITY"},
+  {"split": "holdout", "q": "Hóa đơn nào đã bị người bán thay thế", "domain": "by_issue", "issue": "R06_REPLACED_ORIGINAL"},
+
+  {"split": "dev", "q": "Hóa đơn 396 thế nào?", "domain": "invoice_lookup", "invoice_number": "396"},
+  {"split": "holdout", "q": "Xem giúp tôi hóa đơn số 768", "domain": "invoice_lookup", "invoice_number": "768"},
+  {"split": "dev", "q": "Tại sao hóa đơn 264 bị cảnh báo, theo quy định nào?", "domain": "invoice_lookup", "invoice_number": "264"},
+  {"split": "holdout", "q": "HĐ số 00000611 có ổn không", "domain": "invoice_lookup", "invoice_number": "611"},
+  {"split": "dev", "q": "hóa đơn 4 đã trả tiền chưa", "domain": "invoice_lookup", "invoice_number": "4"},
+  {"split": "holdout", "q": "Hóa đơn 536 vì sao cần xem lại", "domain": "invoice_lookup", "invoice_number": "536"},
+
+  {"split": "dev", "q": "Công ty Toàn Cầu có những hóa đơn nào?", "domain": "seller_lookup", "seller": "toan cau"},
+  {"split": "holdout", "q": "Nhà cung cấp Mây Việt có rủi ro gì không", "domain": "seller_lookup", "seller": "may viet"},
+  {"split": "dev", "q": "Tổng tiền đã mua của Phương Nam", "domain": "seller_lookup", "seller": "phuong nam"},
+  {"split": "holdout", "q": "Hưng Thịnh bán cho mình bao nhiêu hóa đơn", "domain": "seller_lookup", "seller": "hung thinh"},
+
+  {"split": "dev", "q": "Người bán nào đáng lo nhất?", "domain": "top_sellers"},
+  {"split": "holdout", "q": "Nhà cung cấp nào mình mua nhiều tiền nhất quý 3", "domain": "top_sellers", "period": {"quarter": 3}},
+  {"split": "dev", "q": "Top 3 nhà cung cấp theo giá trị", "domain": "top_sellers", "top_n": 3},
+  {"split": "holdout", "q": "Xếp hạng nhà cung cấp theo rủi ro", "domain": "top_sellers"},
+
+  {"split": "dev", "q": "Tháng 9 tổng tiền mua vào là bao nhiêu?", "domain": "purchase_summary", "period": {"month": 9}},
+  {"split": "holdout", "q": "Thuế đầu vào quý 3 tổng cộng", "domain": "purchase_summary", "period": {"quarter": 3}},
+  {"split": "dev", "q": "Có tất cả bao nhiêu hóa đơn đầu vào?", "domain": "purchase_summary"},
+  {"split": "holdout", "q": "Chi mua hàng tháng 7 bao nhiêu", "domain": "purchase_summary", "period": {"month": 7}},
+
+  {"split": "dev", "q": "Doanh thu quý 3 bao nhiêu?", "domain": "sales_summary", "period": {"quarter": 3}},
+  {"split": "holdout", "q": "Tháng 8 bán ra được bao nhiêu", "domain": "sales_summary", "period": {"month": 8}},
+  {"split": "dev", "q": "Thuế GTGT đầu ra tổng là bao nhiêu?", "domain": "sales_summary"},
+  {"split": "holdout", "q": "Khách hàng lớn nhất của công ty là ai", "domain": "sales_summary"},
+
+  {"split": "dev", "q": "Quý 3 phải nộp bao nhiêu thuế GTGT?", "domain": "vat_payable", "period": {"quarter": 3}},
+  {"split": "holdout", "q": "Ước tính thuế giá trị gia tăng phải đóng kỳ này", "domain": "vat_payable"},
+  {"split": "dev", "q": "Số trên tờ khai đã nộp có lệch với hóa đơn không?", "domain": "vat_payable"},
+  {"split": "holdout", "q": "Kỳ này còn được khấu trừ hay phải nộp thêm", "domain": "vat_payable"},
+
+  {"split": "dev", "q": "Bao nhiêu hóa đơn đã khớp với sao kê ngân hàng?", "domain": "bank_matching"},
+  {"split": "holdout", "q": "Còn giao dịch nào chưa rõ trả cho ai không", "domain": "bank_matching"},
+  {"split": "dev", "q": "Tiến độ đối chiếu ngân hàng", "domain": "bank_matching"},
+  {"split": "holdout", "q": "Hóa đơn nào chưa thấy tiền đi ra trong sao kê", "domain": "bank_matching"},
+
+  {"split": "dev", "q": "Khách chuyển tiền mà mình chưa xuất hóa đơn có không?", "domain": "receipts_no_invoice"},
+  {"split": "holdout", "q": "Có khoản tạm ứng nào của khách chưa lập hóa đơn", "domain": "receipts_no_invoice"},
+  {"split": "dev", "q": "Tiền về tài khoản không khớp với hóa đơn bán ra", "domain": "receipts_no_invoice"},
+  {"split": "holdout", "q": "Có thu tiền mà quên xuất hóa đơn không", "domain": "receipts_no_invoice"},
+
+  {"split": "dev", "q": "Bao giờ phải nộp tờ khai thuế GTGT?", "domain": "deadlines"},
+  {"split": "holdout", "q": "Hạn chót quyết toán thuế TNDN năm 2026", "domain": "deadlines", "period": {"year": 2026}},
+  {"split": "dev", "q": "Sắp tới có hạn nộp thuế nào không?", "domain": "deadlines"},
+  {"split": "holdout", "q": "Còn mấy ngày đến hạn nộp tờ khai quý 3", "domain": "deadlines", "period": {"quarter": 3}},
+
+  {"split": "dev", "q": "Nếu bị thanh tra phát hiện thì công ty bị phạt khoảng bao nhiêu?", "domain": "penalty_exposure"},
+  {"split": "holdout", "q": "Tiền chậm nộp của mình tính đến hôm nay", "domain": "penalty_exposure"},
+  {"split": "dev", "q": "Khai bổ sung ngay thì mất bao nhiêu tiền", "domain": "penalty_exposure"},
+  {"split": "holdout", "q": "Rủi ro phạt tối đa của công ty", "domain": "penalty_exposure"},
+
+  {"split": "dev", "q": "Nếu có ủy nhiệm chi cho hóa đơn 396 thì rủi ro còn bao nhiêu?", "domain": "what_if_evidence", "invoice_number": "396"},
+  {"split": "holdout", "q": "Giả sử hóa đơn 768 có chứng từ chuyển khoản thì sao", "domain": "what_if_evidence", "invoice_number": "768"},
+  {"split": "dev", "q": "Bổ sung chứng từ thanh toán cho hóa đơn 408 thì giảm được bao nhiêu", "domain": "what_if_evidence", "invoice_number": "408"},
+  {"split": "holdout", "q": "Nếu tìm được chứng từ ngân hàng của hóa đơn 714 thì còn lại bao nhiêu thuế có nguy cơ", "domain": "what_if_evidence", "invoice_number": "714"},
+
+  {"split": "dev", "q": "Bây giờ tôi cần làm gì trước?", "domain": "next_actions"},
+  {"split": "holdout", "q": "Việc gì gấp nhất hôm nay", "domain": "next_actions"},
+  {"split": "dev", "q": "Còn mấy việc chưa xử lý?", "domain": "next_actions"},
+  {"split": "holdout", "q": "Cần chuẩn bị gì trước khi nộp tờ khai", "domain": "next_actions"},
+
+  {"split": "dev", "q": "Dữ liệu đã đủ chưa?", "domain": "data_status"},
+  {"split": "holdout", "q": "Đã tải lên bao nhiêu hóa đơn rồi", "domain": "data_status"},
+  {"split": "dev", "q": "Có file nào bị lỗi không đọc được không?", "domain": "data_status"},
+  {"split": "holdout", "q": "Còn thiếu sao kê tháng nào không", "domain": "data_status"},
+
+  {"split": "dev", "q": "Những hóa đơn nào đã được quyết định không kê khai?", "domain": "decisions_log"},
+  {"split": "holdout", "q": "Ai đã xác nhận các cảnh báo", "domain": "decisions_log"},
+  {"split": "dev", "q": "Các cảnh báo đã xử lý xong", "domain": "decisions_log"},
+
+  {"split": "dev", "q": "Công ty mình kê khai theo quý phải không?", "domain": "company_profile"},
+  {"split": "holdout", "q": "Đang áp dụng quy định chi tiêu nội bộ nào", "domain": "company_profile"},
+  {"split": "dev", "q": "Năm tài chính của công ty kết thúc khi nào?", "domain": "company_profile"},
+
+  {"split": "dev", "q": "Thời điểm lập hóa đơn khi bán hàng hóa là lúc nào?", "domain": "law_question"},
+  {"split": "holdout", "q": "Luật quy định mức phạt khai sai làm thiếu số thuế phải nộp thế nào", "domain": "law_question"},
+  {"split": "dev", "q": "Mức tiền chậm nộp theo Luật Quản lý thuế là bao nhiêu?", "domain": "law_question"},
+  {"split": "holdout", "q": "Hàng hóa nào được giảm thuế GTGT", "domain": "law_question"},
+  {"split": "dev", "q": "Hóa đơn từ bao nhiêu tiền thì phải thanh toán không dùng tiền mặt mới được khấu trừ?", "domain": "law_question"},
+  {"split": "holdout", "q": "Hộ kinh doanh nộp thuế theo phương pháp nào", "domain": "law_question"},
+  {"split": "dev", "q": "Khi nào phải lập hóa đơn điều chỉnh?", "domain": "law_question"},
+  {"split": "holdout", "q": "Chậm nộp tờ khai bị phạt bao nhiêu", "domain": "law_question"},
+
+  {"split": "dev", "q": "Mua điện thoại cho giám đốc dùng có được khấu trừ không?", "domain": "judgment"},
+  {"split": "holdout", "q": "Chi du lịch cho nhân viên có được tính vào chi phí được trừ không", "domain": "judgment"},
+  {"split": "dev", "q": "Khoản chi tiếp khách 7 triệu này có hợp lệ không?", "domain": "judgment"},
+  {"split": "holdout", "q": "Trường hợp này có bị truy thu thuế không", "domain": "judgment"},
+
+  {"split": "dev", "q": "Trợ lý có thể giúp những gì?", "domain": "help"},
+  {"split": "holdout", "q": "Tôi hỏi được những câu nào", "domain": "help"},
+
+  {"split": "dev", "q": "Thời tiết Hà Nội hôm nay thế nào?", "domain": "NONE"},
+  {"split": "holdout", "q": "Viết cho tôi một bài thơ về mùa thu", "domain": "NONE"},
+  {"split": "dev", "q": "Giá vàng hôm nay bao nhiêu", "domain": "NONE"},
+  {"split": "holdout", "q": "Đặt vé máy bay đi Đà Nẵng giúp tôi", "domain": "NONE"},
+  {"split": "dev", "q": "Cách nấu phở bò", "domain": "NONE"},
+  {"split": "holdout", "q": "Tỷ giá đô la hôm nay", "domain": "NONE"}
+ ]
+}
