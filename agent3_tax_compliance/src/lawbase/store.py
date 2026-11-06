@@ -49,7 +49,9 @@ def now() -> str:
 class Corpus:
     hybrid = True                                        # semantic retrieval (bge-m3) fused with keywords; set per instance
     dense_backend = 'bge-m3'                             # or 'vn' (Vietnamese fine-tune); chosen by measurement
-    rerank = False                                       # cross-encoder over the top candidates; chosen by measurement
+    # cross-encoder over the top candidates: on 54 questions it raised first-place hits from 39 to 45 (bge-m3 hybrid alone);
+    # the Vietnamese fine-tuned embedding did not beat bge-m3 here, so it stays off. Off when the model folder is missing.
+    rerank = (Path(__file__).resolve().parents[2] / 'models/Vietnamese_Reranker').exists()
 
     def __init__(self, path: Path):
         self.path = Path(path)
