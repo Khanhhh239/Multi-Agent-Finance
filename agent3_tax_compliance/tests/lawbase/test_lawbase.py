@@ -246,3 +246,12 @@ def test_phrase_amendment_is_applied_to_the_amended_provision(tmp_path):
     out = apply_phrase_amendments(c, 'nd68', 'Nghị định 68/2026/NĐ-CP > Điều 3. Thuế GTGT > Khoản 1',
                                   'Hộ kinh doanh có doanh thu năm từ 500 triệu đồng trở xuống không chịu thuế.', date(2026, 11, 5))
     assert '01 tỷ đồng' in out and '500 triệu' not in out.split('[Lưu ý')[0] and '141/2026/NĐ-CP' in out
+
+
+def test_polarity_clash_catches_negated_article_headings():
+    from src.lawbase.store import polarity_clash
+    q = 'Khai sai căn cứ tính thuế dẫn đến thiếu số thuế phải nộp thì bị phạt bao nhiêu?'
+    assert polarity_clash(q, 'NĐ > Điều 16. Xử phạt hành vi khai sai không dẫn đến thiếu số tiền thuế phải nộp > Khoản 3')
+    assert not polarity_clash(q, 'NĐ > Điều 17. Xử phạt hành vi khai sai dẫn đến thiếu số tiền thuế phải nộp > Khoản 1')
+    assert not polarity_clash('khai sai không dẫn đến thiếu thuế bị phạt bao nhiêu',
+                              'NĐ > Điều 16. Xử phạt hành vi khai sai không dẫn đến thiếu số tiền thuế > Khoản 3')

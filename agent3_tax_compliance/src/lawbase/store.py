@@ -46,6 +46,20 @@ def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec='seconds')
 
 
+def polarity_clash(question: str, path: str) -> str | None:
+    """The provision's heading negates a phrase the question asks about positively, e.g. the question says "khai sai dẫn
+    đến thiếu số thuế" and the article is about "khai sai không dẫn đến thiếu số thuế". Returns the phrase, or None.
+    Word overlap and cross-encoders both rate such pairs as close; the penalties differ completely."""
+    q = f' {fold(question)} '
+    head = fold(path.split(' > ')[-2] if ' > ' in path else path)
+    for m in re.finditer(r'\bkhong ((?:[a-z]+ ){2,4}[a-z]+)', head):
+        words = m.group(1).split()[:4]
+        phrase = ' '.join(words[:3])
+        if f' {phrase} ' in q and f' khong {phrase} ' not in q:
+            return phrase
+    return None
+
+
 class Corpus:
     hybrid = True                                        # semantic retrieval (bge-m3) fused with keywords; set per instance
     dense_backend = 'bge-m3'                             # or 'vn' (Vietnamese fine-tune); chosen by measurement
@@ -194,6 +208,8 @@ class Corpus:
                 lo, hi = min(sc), max(sc)
                 for r, s in zip(head, sc):               # date and type logic stay; the cross-encoder decides most of the order
                     r['rank'] = 0.7 * ((s - lo) / (hi - lo) if hi > lo else 0) + 0.3 * r['rank']
+                    if polarity_clash(query, r['path']):   # cross-encoders miss negation ("không dẫn đến thiếu thuế")
+                        r['rank'] *= 0.3
                 rows = sorted(head, key=lambda r: -r['rank']) + rows[30:]
             except Exception:  # noqa: BLE001 - the reranker is optional
                 pass

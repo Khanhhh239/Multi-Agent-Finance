@@ -14,7 +14,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import date
 
 from .llm import CHARS_PER_TOKEN, ContextOverflow, LLMUnavailable, Ollama
-from .store import STOP, Corpus, fold, tokens
+from .store import STOP, Corpus, fold, polarity_clash, tokens
 
 SYSTEM = (
     'Bạn là trợ lý tra cứu pháp luật thuế Việt Nam. Chỉ được dùng các đoạn văn bản [P1], [P2]... được cung cấp. '
@@ -239,6 +239,10 @@ def verify(raw: str, passages: list[Passage], question: str = '', min_topic: flo
         cov = topic_coverage(question, cited)
         if question and cov < min_topic:
             dropped.append(dict(text=text, reason=f'điều khoản được dẫn không nói về chủ đề câu hỏi (phủ {cov:.0%} từ khóa)'))
+            continue
+        clash = next((c for c in (polarity_clash(question, p.path) for p in cited) if c), None) if question else None
+        if clash:
+            dropped.append(dict(text=text, reason=f'điều khoản được dẫn nói về trường hợp "không {clash}", câu hỏi hỏi trường hợp ngược lại'))
             continue
         off = _numbers_off_case(text, cited, question, passages) if question else []
         if off:
