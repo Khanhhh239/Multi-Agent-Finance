@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-06",
+  "data_contract": "agent1-observed-cash-v2",
+  "scope": "Five remaining T0/T9/T1 audit repairs requested by the user",
+  "resolved_audit": "outputs/implementation/t0_t9_t1_remaining_audit_2026-11-06.json",
+  "resolved_findings": [
+    "A01",
+    "A02",
+    "A03",
+    "A04",
+    "A05"
+  ],
+  "tests": {
+    "tests": 640,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2,
+    "passed": 638
+  },
+  "new_regression_cases": 34,
+  "duration_seconds": 254.071,
+  "test_command": "python -m pytest tests -q --junitxml=outputs/implementation/t0_t9_t1_audit_fixes_regression_2026-11-06.xml",
+  "junit_report": "outputs/implementation/t0_t9_t1_audit_fixes_regression_2026-11-06.xml",
+  "junit_sha256": "baa26d2397fa13c0479dd998f445c4c6b77b46cf4b7780d5c9395f76b830e3a1",
+  "environment": {
+    "python": "3.13.9",
+    "sqlite": "3.53.3"
+  },
+  "checks": {
+    "ruff_critical": true,
+    "git_diff_check": true,
+    "upstream_hashes_preserved": true
+  },
+  "covered_behaviors": [
+    "All admitted shared date fields are canonical Vietnam dates; malformed required dates fail before storage",
+    "New and legacy timestamp promises coexist without breaking shared snapshots or real inference",
+    "Legacy date views do not rewrite encrypted source rows or historical versions",
+    "Same-source same-version retries compare all normalized business facts and reject changes atomically",
+    "XML/ERP retries compare source-specific payloads after canonical merging",
+    "Invoice revisions cannot make accepted receipts precede issue date or inherit another customer",
+    "Conflicting revisions remain retained while snapshot fails clearly; ledger history and reversal stay accessible",
+    "Writeoffs retain original customer/document scope; ordinary due-date revision remains allowed",
+    "Legacy writeoff scope is inferred only from retained unambiguous history; missing or same-day ambiguous scope requires reversal and review",
+    "Late-known pre-origin partial receipts exclude affected historical origins without rewriting original features",
+    "Partial receipts known at origin reduce the training cash amount to the remaining balance",
+    "Model signature includes date normalization; old incompatible artifacts require retraining"
+  ],
+  "collection_note": "An initial pytest invocation without the tests/ scope discovered external ERPNext/Odoo fixture tests under data/ and failed for missing frappe/odoo. The final report covers the complete project tests/ suite.",
+  "limitations": [
+    "No actual enterprise model retraining or activation was performed; genuine historical evidence and sufficient valid data are required",
+    "Legacy merged-source records without retained per-source payloads require a newer version for unverifiable retries",
+    "Daily knowledge resolution cannot infer the order of same-day ambiguous legacy revisions and writeoff decisions",
+    "Technical regression only; no new real-domain forecast efficacy or matching-quality claim"
+  ],
+  "pilot_ready": false,
+  "v6_activated": false,
+  "source_sha256": {
+    "agent1_service/api.py": "3137a7fe92a3e842155813d89655b0445f649b02269efb5c64a96b3720284d10",
+    "agent1_service/ingest/dates.py": "e54dfebe3eddf4682a5b57c74b927ea2cc80afacaccc4c8ea11cd26f0ad26df4",
+    "agent1_service/ingest/invoices.py": "03e8f12220a22d8b81444ed8b22ce7cde3f71b2e4d9280a4baa1b4cbf797439b",
+    "agent1_service/model_registry.py": "49549aa911b1edbd856b6c1ab84b8f5c6f60d48f1bd3987479ecb0487e3ba545",
+    "agent1_service/README.md": "7a5f15edb0600115f89d4c6966a4734d1a1923417656ed0f3d378e94e2de0c09",
+    "tests/test_t0_t9_t1_repairs.py": "1495dc613466f4e676ca57988312cf6457fc2835e47b5c7f23b608eddbb85963",
+    "agent1/reconciliation/__init__.py": "b9aa2d200a41b158e18b4bf472cd4e7c6409218d450d8217caf88dd83b5302ac",
+    "agent1/reconciliation/_thang/__init__.py": "c98780e38138647e5234fe9339b5d4f70f2c9289044920d7962b49503c9b6fdc",
+    "agent1/reconciliation/_thang/allocation.py": "4348242d8d98f5e65efb5a7d77e36c05dcd4f64ec5bb4b8a8474b706fd68fcfe",
+    "agent1/reconciliation/_thang/balances.py": "526a80b4f1f7753871a552614f092d3069e81145a3d3f56a18254bf0bf59b76c",
+    "agent1/reconciliation/_thang/constrained.py": "3f07298671aae377e033580c0e5869b5115bb4954ef503ec0c29057776ee0f10",
+    "agent1/reconciliation/_thang/data.py": "4c9cadf02ab01447ad7ac434767cb7b88257b627919b0ea4fe10602c7dbf5a88",
+    "agent1/reconciliation/_thang/fx.py": "315901e7e2fac84684a93341e553ef57f444dde74bfedcd3f597427e81752c93",
+    "agent1/reconciliation/_thang/ledger.py": "4ca66538e45610f84c225a7f5892c6497c39c8469e39c553f9467328d9e2e655",
+    "agent1/reconciliation/_thang/matching.py": "5b0a53cc53fe128acaf256c9a9d0db0d8258e227eb234f1d279708cf474a9ffd",
+    "agent1/reconciliation/ledger.py": "500fa9601788769d474c94e67c24b7714f18fafe7f3758295f933408b5e6ad32",
+    "agent1/reconciliation/operations.py": "7c7b9504a440d0cd7228eba3b70aa0e74c87acf0f10424f0493e85e1d7654529",
+    "agent1/reconciliation/pipeline.py": "88f48fa166239e82350d6a0bae068911b67338442e0dda8e0df9fedaa8e7eccf"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "scope": "T0 Khanh -> constrained T9 Thang + encrypted local decision ledger -> observed task views -> training/forecast/monitoring APIs",
+  "source_commit": "89c144ba3b3d2e7d79d8cb70dc7baf99dc319268",
+  "data_contract": "agent1-observed-cash-v1",
+  "tests": {
+    "tests": 586,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2
+  },
+  "junit_report": "outputs/implementation/t9_canonical_runtime_tests.xml",
+  "junit_sha256": "01210bb8c8dd76b4a29366d18e0e9d8543ee162176d26d41898f990dc0ac8914",
+  "checks": {
+    "ruff_critical": true,
+    "dashboard_javascript_syntax": true,
+    "dashboard_dom_ids": true,
+    "pip_check": true
+  },
+  "visual_ui_verified": false,
+  "visual_ui_limitation": "Browser host unavailable; Windows CUA stopped because it could not determine Chrome URL confidently. No further UI actions performed.",
+  "pilot_ready": false,
+  "quality_claim": "Technical regression only; no new real-domain matching quality or forecast-efficacy claim; existing gates and V6 activation unchanged.",
+  "source_sha256": {
+    ".gitattributes": "dc0ef1fda04ed2555df5fcee26b85f52e0bd3102efff56b9b2fcb5b4489e6df0",
+    "agent1/jobs/retrain.py": "08e22dd2ff21e5231509d39982f582ce3e718a65e7dfb3f0be5d46f91e5678a5",
+    "agent1/reconciliation/__init__.py": "22d4467e518da1951e0acc98dff122a318b03cd0820a7e00851ed5af1b22f341",
+    "agent1/reconciliation/_thang/__init__.py": "c98780e38138647e5234fe9339b5d4f70f2c9289044920d7962b49503c9b6fdc",
+    "agent1/reconciliation/_thang/allocation.py": "4348242d8d98f5e65efb5a7d77e36c05dcd4f64ec5bb4b8a8474b706fd68fcfe",
+    "agent1/reconciliation/_thang/balances.py": "526a80b4f1f7753871a552614f092d3069e81145a3d3f56a18254bf0bf59b76c",
+    "agent1/reconciliation/_thang/constrained.py": "3f07298671aae377e033580c0e5869b5115bb4954ef503ec0c29057776ee0f10",
+    "agent1/reconciliation/_thang/data.py": "4c9cadf02ab01447ad7ac434767cb7b88257b627919b0ea4fe10602c7dbf5a88",
+    "agent1/reconciliation/_thang/fx.py": "315901e7e2fac84684a93341e553ef57f444dde74bfedcd3f597427e81752c93",
+    "agent1/reconciliation/_thang/ledger.py": "4ca66538e45610f84c225a7f5892c6497c39c8469e39c553f9467328d9e2e655",
+    "agent1/reconciliation/_thang/matching.py": "5b0a53cc53fe128acaf256c9a9d0db0d8258e227eb234f1d279708cf474a9ffd",
+    "agent1/reconciliation/_thang/provenance.json": "891051bb1a958980993ed8834a2e62037128d5c8aec16770c6d6c5374d72bba1",
+    "agent1/reconciliation/ledger.py": "d9d9a04e971bdd16d0721932b81a052348a8cc1b47252290b5dcc0a660793dfd",
+    "agent1/reconciliation/operations.py": "9891e0c823064152e7c73d8223239ce65a0f91bfe0611497fa50e6b72336600d",
+    "agent1/reconciliation/pipeline.py": "39ebcec7fcc735932fc5a6b2552e7178caf8e2b0bd8d90116e2e6c15c8678ded",
+    "agent1_service/api.py": "7c6a56fef7737025600c98ea12dce214368f00581b63ee466e653731766f999f",
+    "agent1_service/jobs/nightly.py": "e214971fdd71a9679994f2b62a094c265d01f9530de4428687207ad68080dd05",
+    "agent1_service/jobs/weekly.py": "238ae85871433ce2d72635aea4bd0ffb22c4073f25567e6baf50a1f424f2dd74",
+    "agent1_service/model_registry.py": "25fa3e5a07316a6800e6193d2c3169a648152df88237ffdb464bcbc16ae18131",
+    "agent1_service/README.md": "8e9f1b247f0eb7f7c04ad909382d89e33cfbef2edfcc55fc05688bb1e86d35e4",
+    "agent1_service/ui/index.html": "2c158f167249d78d201700c5d10ef88a2af5e6779088db40bbccfb65de94772f",
+    "docs/04_AI_Methods/07_t7_t9_t10.md": "b0e42e978c1fb62906c4b8a225731d0fd86583c720ec9283a9e9eaf5c56e3ecf",
+    "docs/AI_READING_GUIDE.md": "5ba3ff6b8ff66a98fc92ee545692a45f72f488faf70ebe1d56f298966d0922ea",
+    "README.md": "f3b3f00d5d4de13425c4cf5601b79badd7d213a4ca072c2823407e9d6523f419",
+    "tests/test_observed_reconciliation.py": "e7da35bb5bd363a48645379dac571c8128bddc1cef0d46aa3ded499561da1ca0",
+    "tests/test_world_shards.py": "43790eace2ce998899b23c0584238c0501eb7fda25925291ae6efad6e6f18199"
+  }
+}

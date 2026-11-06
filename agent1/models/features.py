@@ -164,7 +164,7 @@ class SnapshotBuilder:
         return model_snapshot_view(self.snapshot(T, visible_from=visible_from, firms=firms), T)
 
     # --------------------------------------------------------------------------------------------
-    def snapshot(self, T, visible_from=None, firms=None) -> pd.DataFrame:
+    def snapshot(self, T, visible_from=None, firms=None, *, observed_open_ids=None) -> pd.DataFrame:
         T = pd.Timestamp(T)
         inv = self.inv if firms is None else self.inv[self.inv["firm_id"].isin(firms)]
         vis = inv if visible_from is None else inv[inv["issue_date"] >= pd.Timestamp(visible_from)]
@@ -180,7 +180,13 @@ class SnapshotBuilder:
             credited_out = credit_known & vis['credit_note'].ge(vis['amount_gross'] - 1.)
         else:
             credited_out = pd.Series(False, index=vis.index)
-        op = vis[issued & ~settled & ~written & ~credited_out].copy()
+        is_open = ~settled & ~written & ~credited_out
+        if observed_open_ids is not None:
+            # The service supplies the exact ledger state at T, including
+            # mixed cash/noncash closures and integral VND residuals. Never
+            # infer this mask from research columns containing future outcomes.
+            is_open = vis['invoice_id'].isin(observed_open_ids)
+        op = vis[issued & is_open].copy()
         if op.empty:
             return op
         hist = vis[settled].copy()

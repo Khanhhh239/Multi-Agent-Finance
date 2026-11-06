@@ -9,41 +9,70 @@ from agent1.models.t6_cash import K
 
 
 def run(invoices,bank,customers,promises,outflows,cutoff,balance, *, seed=7,model_cache=None,evaluation_label_mode='reconciled',
-        aci_state=None):
+        aci_state=None,observed_source=None):
     """aci_state: trạng thái ACI của doanh nghiệp (dict, {} cho lần đầu). Có thì dải công bố là copula-t + ACI và
     result['aci_state'] là trạng thái mới cần lưu; None giữ dải copula-t gốc (cho script nghiên cứu cũ)."""
     start=time.monotonic(); T=pd.Timestamp(cutoff)
-    inv=invoices[invoices.issue_date<=T].copy()
-    observed_bank=bank[bank.value_date<=T].copy()
-    rec=api.Reconciler()
-    if model_cache is not None and 'offline_links' in model_cache:
+    inv=invoices.copy();inv['issue_date']=pd.to_datetime(inv.issue_date)
+    inv=inv[inv.issue_date<=T]
+    observed_bank=bank.copy();observed_bank['value_date']=pd.to_datetime(observed_bank.value_date)
+    observed_bank=observed_bank[observed_bank.value_date<=T]
+    if observed_source is not None:
+        from agent1.reconciliation.pipeline import ObservedSnapshotBuilder
+        if evaluation_label_mode != 'reconciled':
+            raise ValueError('Dịch vụ chỉ dùng nhãn từ lịch sử đối soát đã ghi nhận')
+        view=observed_source.task_tables(T)
+        inv=view['invoices'];links=view['links']
+        observed_bank=pd.DataFrame(view['bank'])
+        customers=view['customers'];promises=view['promises'];outflows=view['outflows']
+        labelled=inv.copy()
+        builder=ObservedSnapshotBuilder(observed_source)
+        if len(outflows) and 'available_on' in outflows:
+            outflows=outflows[pd.to_datetime(outflows.available_on)<=T].copy()
+        pending=observed_source.propose(T)
+        queue=pd.DataFrame(pending['decisions'])
+        if len(queue):queue=queue[queue.status.ne('auto')]
+        review_count=sum(d['status']!='unmatched' or d['reason']!='non_ar_bank_movement' for d in pending['decisions'])
+    elif model_cache is not None and 'offline_links' in model_cache:
         links=model_cache['offline_links']
         links=links[links.est_pay_date<=T]
         queue=model_cache['offline_queue']
         queue=queue[queue.txn_id.isin(observed_bank.txn_id)]
     else:
+        # Historical experiment compatibility only. API runtime always supplies
+        # observed_source and never routes through this fitted reconciler.
+        rec=api.Reconciler()
         links,queue=rec.reconcile(observed_bank,inv,customers)
-    labelled=api.build_bank_labels(inv,links)
-    if evaluation_label_mode=='truth':
-        labelled['paid_date_est']=inv['paid_date_true']
-    elif evaluation_label_mode=='ledger':
-        labelled['paid_date_est']=inv['ledger_clear_date']
-    elif evaluation_label_mode!='reconciled':
-        raise ValueError('evaluation_label_mode không hợp lệ')
-    labelled['writeoff_date']=pd.NaT
-    builder=api.SnapshotBuilder(labelled,links,promises,label_col='paid_date_est')
+    if observed_source is None:
+        labelled=api.build_bank_labels(inv,links)
+        if evaluation_label_mode=='truth':
+            labelled['paid_date_est']=inv['paid_date_true']
+        elif evaluation_label_mode=='ledger':
+            labelled['paid_date_est']=inv['ledger_clear_date']
+        elif evaluation_label_mode!='reconciled':
+            raise ValueError('evaluation_label_mode không hợp lệ')
+        if 'writeoff_date' not in labelled:labelled['writeoff_date']=pd.NaT
+        builder=api.SnapshotBuilder(labelled,links,promises,label_col='paid_date_est')
+    if inv.empty:raise ValueError('Không có hóa đơn tại ngày cắt')
     cal_start=T-pd.Timedelta(days=183)
     cuts=pd.date_range(max(inv.issue_date.min()+pd.Timedelta(days=60),T-pd.Timedelta(days=730)),cal_start-pd.Timedelta(days=1),freq='14D')
     cached=model_cache is not None and 't1' in model_cache
-    train=builder.build(cuts,label_end=cal_start) if not cached else pd.DataFrame()
+    # Fitting is retained only for explicit offline research callers. Live
+    # forecast consumes a selected artifact or the deterministic B1d baseline.
+    allow_fit=observed_source is None
+    train=builder.build(cuts,label_end=cal_start) if allow_fit and not cached else pd.DataFrame()
     snapshot=builder.snapshot(T)
-    if snapshot.empty:
+    if snapshot.empty and observed_source is None:
         raise ValueError('Không có hoá đơn mở tại cutoff')
-    snapshot['amount_open']=snapshot.amount_gross*(1-snapshot.paid_frac_so_far.fillna(0))
+    if snapshot.empty:
+        snapshot=pd.DataFrame({'invoice_id':pd.Series(dtype=str),'customer_id':pd.Series(dtype=str),
+                               'amount_open':pd.Series(dtype=float)})
     trained=cached and model_cache['t1'] is not None
-    if trained:
+    if snapshot.empty:
+        P=np.zeros((0,K));trained=False
+    elif trained:
         model=model_cache['t1'];P,_=api.pmf_from_hazard(model.hazards(snapshot))
-    elif not cached and len(train)>=100 and train.event.nunique()>1:
+    elif allow_fit and not cached and len(train)>=100 and train.event.nunique()>1:
         model=api.HazardGBM(dict(min_data_in_leaf=30,num_leaves=31),rounds=200).fit(train)
         P,_=api.pmf_from_hazard(model.hazards(snapshot)); trained=True
     else:
@@ -55,7 +84,7 @@ def run(invoices,bank,customers,promises,outflows,cutoff,balance, *, seed=7,mode
         weekly=weekly.reindex(pd.date_range(weekly.index.min(),weekly.index.max(),freq='7D'),fill_value=0.)
     completed=weekly[weekly.index+pd.Timedelta(days=6)<=T]
     rq=None
-    if len(completed)>=40:
+    if len(completed)>=40 and (allow_fit or model_cache is not None and model_cache.get('t4') is not None):
         X,y,_=make_rows(completed.to_numpy(),completed.index,True,list(range(20,len(completed)-13)))
         if len(X):
             if model_cache is not None and model_cache.get('t4') is not None:model4=model_cache['t4']
@@ -91,7 +120,13 @@ def run(invoices,bank,customers,promises,outflows,cutoff,balance, *, seed=7,mode
     if len(ranked):ranked['customer_id']=ranked.invoice_id.map(snapshot.set_index('invoice_id').customer_id)
     result=dict(cutoff=str(T.date()),band=rows,shortfall_4w=float((samples[:,:4].min(1)<0).mean()),
         shortfall_13w=float((samples.min(1)<0).mean()),collections=ranked.to_dict('records'),
-        auto_txn_coverage=links.txn_id.nunique()/max(len(observed_bank),1),review_count=len(queue),
+        auto_txn_coverage=links.txn_id.nunique()/max(len(observed_bank),1),
+        review_count=review_count if observed_source is not None else len(queue),
         model='tenant-HazardGBM' if trained else 'B1d-fallback',seconds=time.monotonic()-start,
+        new_revenue_included=rq is not None,
         evidence_type='experimental_observed_data_pipeline',seed=seed,**band_extra)
+    if observed_source is not None:
+        result.update(data_contract=view['contract_version'],data_snapshot=view['snapshot_hash'],
+                      reconciliation='accepted_ledger',writeoff_count=int(labelled.writeoff_date.notna().sum()),
+                      missing_history=builder.missing_windows)
     return result,args

@@ -12,11 +12,24 @@ from itertools import groupby
 import pandas as pd
 
 from agent1.data.schema import REQUIRED, quality_gate
-from .dates import local_dates
+from .dates import local_dates, normalize_date_fields
 from .money import SCALES, major, minor
 
 BUSINESS_KEY = ('seller_mst', 'symbol', 'invoice_no')
 LIFECYCLE = {'replacement', 'adjustment'}
+TRANSPORT_FIELDS = {
+    'id', 'source', 'sources', 'source_ids', 'source_versions', 'source_payloads',
+    'source_lineage', 'source_file', 'source_row', 'source_sha256', 'revision',
+    'available_on', 'known_at', 'ingested_on',
+}
+
+
+def _business_payload(row):
+    """Source-specific facts, before XML/ERP merging or reference resolution."""
+    payload = {k: v for k, v in row.items() if k not in TRANSPORT_FIELDS and v is not None}
+    if row.get('due_date') and row.get('issue_date'):
+        payload['term_days'] = (pd.Timestamp(row['due_date']) - pd.Timestamp(row['issue_date'])).days
+    return payload
 
 
 def _date(value):
@@ -44,8 +57,8 @@ def validate_invoices(rows, *, source, today=None):
         missing = sorted(k for k in required if k not in row or row[k] is None or str(row[k]).strip() == '')
         if missing:
             raise ValueError(f'{location}: hóa đơn thiếu trường chuẩn: {missing}')
-        d = dict(row)
         try:
+            d = normalize_date_fields(row, required=('issue_date', 'available_on'))
             d['available_on'] = _available_on(d.get('available_on'))
             version = d.get('record_version', 1)
             if type(version) is not int or version < 1:
@@ -75,6 +88,8 @@ def validate_invoices(rows, *, source, today=None):
             raise ValueError(f'{location}: giá trị hóa đơn không hợp lệ')
         d['issue_date'] = _date(d['issue_date'])
         d['due_date'] = _date(d.get('due_date'))
+        if d['due_date']:
+            d['term_days'] = (pd.Timestamp(d['due_date']) - pd.Timestamp(d['issue_date'])).days
         if not d['issue_date']:
             raise ValueError(f'{location}: ngày lập hóa đơn không hợp lệ')
         if d['available_on'] < d['issue_date']:
@@ -120,6 +135,11 @@ def _same_date(left, right):
     return _date(left) == _date(right)
 
 
+def _known_on(row):
+    dates = [_date(row.get(field)) for field in ('available_on', 'known_at')]
+    return max((value for value in dates if value is not None), default=None)
+
+
 def _kind(row):
     value = row.get('adjustment_type')
     return None if value is None or pd.isna(value) else value
@@ -159,6 +179,7 @@ def reconcile_invoices(existing, incoming):
         if old is None:
             row['id'] = row['invoice_id']
             row['source_versions'] = {row['source']: row['record_version']}
+            row['source_payloads'] = {row['source']: _business_payload(row)}
             row['revision'] = 1
             all_rows[row['invoice_id']] = row
             keys[key] = row['invoice_id']
@@ -172,16 +193,18 @@ def reconcile_invoices(existing, incoming):
         previous_version = versions.get(row['source'])
         if previous_version is not None and row['record_version'] < previous_version:
             raise ValueError('Phiên bản chứng từ đi lùi')
-        if row['available_on'] < old.get('available_on', old['issue_date']):
-            raise ValueError('Ngày hệ thống nhận của phiên bản đi lùi')
         same_source_revision = previous_version is not None and row['record_version'] > previous_version
         if previous_version == row['record_version'] and row['source'] in old.get('sources', [old.get('source')]):
-            compared = ('seller_mst', 'buyer_mst', 'symbol', 'invoice_no', 'issue_date',
-                        'amount_net', 'vat', 'amount_gross', 'currency', 'adjustment_type',
-                        'adjusts_invoice_no', 'adjusts_symbol', 'adjusts_issue_date')
-            if all(old.get(c) == row.get(c) for c in compared):
+            prior_payload = old.get('source_payloads', {}).get(row['source'])
+            if prior_payload is None and len(versions) == 1:
+                # A legacy single-source row can still be compared faithfully.
+                prior_payload = _business_payload(normalize_date_fields(old))
+            if prior_payload is not None and prior_payload == _business_payload(row):
                 continue
-            raise ValueError('Cùng nguồn và phiên bản nhưng nội dung hóa đơn khác')
+            raise ValueError('Không xác nhận được nội dung giống nhau cho cùng nguồn và record_version; '
+                             'cần tăng record_version khi sửa hóa đơn')
+        if row['available_on'] < old.get('available_on', old['issue_date']):
+            raise ValueError('Ngày hệ thống nhận của phiên bản đi lùi')
         if old.get('currency') != row['currency']:
             raise ValueError(f'Hóa đơn {row["invoice_id"]} khác tiền tệ giữa các nguồn')
         for col in ('amount_gross', 'amount_net', 'vat'):
@@ -222,6 +245,7 @@ def reconcile_invoices(existing, incoming):
         merged['source_ids'] = {**old.get('source_ids', {}), row['source']: row['invoice_id']}
         merged['source_lineage'] = {**old.get('source_lineage', {}), **row['source_lineage']}
         merged['source_versions'] = {**versions, row['source']: row['record_version']}
+        merged['source_payloads'] = {**old.get('source_payloads', {}), row['source']: _business_payload(row)}
         merged['revision'] = old.get('revision', 1) + 1
         merged['available_on'] = row['available_on']
         merged['ingested_on'] = row.get('ingested_on')
@@ -271,7 +295,7 @@ def validate_cancellations(existing, incoming, invoices):
     seen = {r['event_id'] for r in existing}
     result = list(existing)
     for event in incoming:
-        e = dict(event)
+        e = normalize_date_fields(event, required=('event_date', 'available_on'))
         if e.get('event_type') != 'cancel' or not e.get('event_id') or not e.get('invoice_id'):
             raise ValueError('Sự kiện hủy cần event_id, invoice_id và event_type=cancel')
         e['invoice_id'] = aliases.get(e['invoice_id'], e['invoice_id'])
@@ -283,7 +307,9 @@ def validate_cancellations(existing, incoming, invoices):
             raise ValueError('Ngày hoặc hóa đơn được hủy không hợp lệ')
         if e['event_id'] in seen:
             old = next(r for r in result if r['event_id'] == e['event_id'])
-            if old != e:
+            ignored = {'id', 'ingested_on'}
+            if ({k: v for k, v in old.items() if k not in ignored} !=
+                    {k: v for k, v in e.items() if k not in ignored}):
                 raise ValueError('Trùng event_id với nội dung khác')
             continue
         if e['event_date'] < _date(by_id[e['invoice_id']]['issue_date']):
@@ -299,13 +325,14 @@ def effective_invoices(invoices, events=(), cutoff=None):
     limit = _date(cutoff) if cutoff is not None else None
     selected = {}
     for row in invoices:
-        if limit is not None and row.get('available_on') and _date(row['available_on']) > limit:
+        known = _known_on(row)
+        if limit is not None and known is not None and known > limit:
             continue
         key = row['invoice_id']
         if key not in selected or row.get('revision', 1) > selected[key].get('revision', 1):
             selected[key] = dict(row)
     records = list(selected.values())
-    events = [e for e in events if limit is None or not e.get('available_on') or _date(e['available_on']) <= limit]
+    events = [e for e in events if limit is None or _known_on(e) is None or _known_on(e) <= limit]
     if not records:
         return pd.DataFrame(records)
     if not any(_kind(r) for r in records) and not events:

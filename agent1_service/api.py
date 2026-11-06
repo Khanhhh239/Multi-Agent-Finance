@@ -1,6 +1,7 @@
 """API local có xác thực, cô lập một DN và cổng NO-GO mặc định."""
 from contextlib import asynccontextmanager
 import hmac
+import inspect
 import json
 import os
 from pathlib import Path
@@ -17,7 +18,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel,Field
 from .store import Store
 from .jobs.nightly import run
-from .ingest.dates import local_dates
+from .ingest.dates import local_dates, normalize_date_fields
 from agent1.api_surface import what_if,scenario_library
 
 ALLOWED={'invoices':'invoice_id','invoice_events':'event_id','bank_txns':'txn_id','customers':'customer_id','promises':None,'outflows':None,'cash_balances':'date'}
@@ -39,6 +40,44 @@ class PromiseRequest(BaseModel):
 class IngestRequest(BaseModel):
     table:str
     records:list[dict]=Field(max_length=100000)
+
+
+class ReconciliationRun(BaseModel):
+    model_config={'extra':'forbid'}
+    cutoff:str
+
+
+class AllocationInput(BaseModel):
+    model_config={'extra':'forbid'}
+    txn_id:str=Field(min_length=1)
+    invoice_id:str=Field(min_length=1)
+    amount_minor:int=Field(strict=True,gt=0)
+
+
+class ReconciliationAccept(BaseModel):
+    model_config={'extra':'forbid'}
+    idempotency_key:str=Field(min_length=1,max_length=200)
+    reviewed_by:str=Field(min_length=1,max_length=200)
+    proposal_id:str|None=None
+    allocations:list[AllocationInput]|None=Field(default=None,max_length=2000)
+    note:str=Field(default='',max_length=2000)
+
+
+class ReconciliationReverse(BaseModel):
+    model_config={'extra':'forbid'}
+    idempotency_key:str=Field(min_length=1,max_length=200)
+    decision_id:str=Field(min_length=1)
+    reviewed_by:str=Field(min_length=1,max_length=200)
+    note:str=Field(min_length=1,max_length=2000)
+
+
+class WriteoffInput(BaseModel):
+    model_config={'extra':'forbid'}
+    idempotency_key:str=Field(min_length=1,max_length=200)
+    invoice_id:str=Field(min_length=1)
+    effective_on:str
+    reviewed_by:str=Field(min_length=1,max_length=200)
+    source_ref:str=Field(min_length=1,max_length=2000)
 
 
 class ExpenseShift(BaseModel):
@@ -92,6 +131,8 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
     account_registry_path=bank_accounts_file or registry_path(directory,keys)
     def bank_registry():
         return load_account_registry(account_registry_path,firm_id)
+    from agent1.reconciliation.pipeline import ObservedSource
+    observed_source=ObservedSource(store,firm_id,bank_accounts_file=account_registry_path)
     last={}
     @asynccontextmanager
     async def lifespan(_):
@@ -158,9 +199,16 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
                 raise HTTPException(422,str(error)) from error
             return dict(accepted=len(body.records))
         records=[]
+        bank_existing={r['txn_id']:r for r in store.get(firm,'bank_txns')} if body.table=='bank_txns' else {}
+        bank_seen=set()
         for row in body.records:
             if row.get('firm_id',firm)!=firm:raise HTTPException(403,'Dữ liệu thuộc DN khác')
-            row=dict(row,firm_id=firm)
+            explicit_known=row.get('available_on') or row.get('known_at')
+            try:row=normalize_date_fields(dict(row,firm_id=firm))
+            except (ValueError,TypeError) as error:raise HTTPException(422,str(error)) from error
+            from agent1.reconciliation.pipeline import day,today
+            try:row['available_on']=day(row.get('available_on') or row.get('known_at') or today())
+            except (ValueError,TypeError):raise HTTPException(422,'available_on phải là YYYY-MM-DD')
             required={
                 'bank_txns': {'txn_id','value_date','amount','memo'},
                 'customers': {'customer_id','short'},
@@ -177,17 +225,38 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
             for col in required:
                 if 'date' in col:
                     try:
-                        if pd.isna(pd.Timestamp(row[col])):raise ValueError()
+                        if not row[col]:raise ValueError()
                     except (ValueError,TypeError):raise HTTPException(422,'Ngày không hợp lệ')
             if pseudonymize:
                 from .ingest.privacy import pseudonymize_row
                 row=pseudonymize_row(row,pseudo_key)
+            if body.table=='bank_txns':
+                from agent1.reconciliation.pipeline import money
+                if row['txn_id'] in bank_seen:raise HTTPException(422,'Trùng txn_id trong lô nhập')
+                bank_seen.add(row['txn_id'])
+                old=bank_existing.get(row['txn_id'])
+                if old and not explicit_known:row['available_on']=old.get('available_on',row['available_on'])
+                if row['available_on']<row['value_date']:raise HTTPException(422,'Ngày biết giao dịch trước ngày ngân hàng')
+                row.setdefault('currency','VND');row.setdefault('direction','in');row.setdefault('counterparty','')
+                try:
+                    if 'amount_minor' in row and (type(row['amount_minor']) is not int or
+                        row['amount_minor']!=money({'amount':row['amount'],'currency':row['currency']})):
+                        raise ValueError('Major/minor amount mismatch')
+                    row['amount_minor']=money(row)
+                except (ValueError,TypeError):raise HTTPException(422,'Tiền giao dịch phải nguyên theo đơn vị nhỏ nhất')
+                if old:
+                    fields=('value_date','memo','counterparty','customer_id','cash_flow_class','available_on',
+                            'known_at','remittance','account_id','statement_id')
+                    same=money(old)==row['amount_minor'] and old.get('currency','VND')==row['currency'] and old.get('direction','in')==row['direction']
+                    same=same and all(old.get(k,'' if k=='counterparty' else None)==row.get(k) for k in fields)
+                    if not same:raise HTTPException(422,'Giao dịch đã nhập là bất biến; cần đối chiếu nguồn trước khi sửa')
+                    continue
             identifier=row.get(ALLOWED[body.table]) if ALLOWED[body.table] else row.get('id',uuid.uuid4().hex)
             if not identifier:raise HTTPException(422,'Thiếu khoá bản ghi')
             row['id']=str(identifier);records.append(row)
         try:store.put(firm,body.table,records)
-        except (ValueError,TypeError):raise HTTPException(422,'Bản ghi chứa giá trị không hợp lệ')
-        return dict(accepted=len(records))
+        except (ValueError,TypeError) as error:raise HTTPException(422,str(error)) from error
+        return dict(accepted=len(body.records))
 
     @app.post('/ingest')
     async def ingest(request:Request,firm=Depends(authorize)):
@@ -196,7 +265,8 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
             body=IngestRequest.model_validate(loads_json(await request.body()))
         except (ValueError,TypeError) as error:
             raise HTTPException(422,str(error)) from error
-        return ingest_records(body,firm)
+        with store.lock:
+            return ingest_records(body,firm)
 
     @app.post('/ingest/file')
     async def ingest_file(file:UploadFile=File(...),kind:str=Form(...),bank:str=Form(default='vcb'),mapping:str=Form(default='{}'),
@@ -283,11 +353,12 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
     @app.post('/promises')
     def promises(body:PromiseRequest,firm=Depends(authorize)):
         try:
-            made,promised=local_dates(pd.Series([body.made_date,body.promised_date]),dayfirst=False)
-            if pd.isna(made) or pd.isna(promised) or promised<made:raise ValueError()
+            row=normalize_date_fields(body.model_dump(),required=('made_date','promised_date'))
+            if row['promised_date']<row['made_date']:raise ValueError()
         except (ValueError,TypeError):raise HTTPException(422,'Ngày hứa trả không hợp lệ')
-        row=body.model_dump();row.update(id=uuid.uuid4().hex,firm_id=firm,kept=None)
-        row.update(made_date=made.isoformat(),promised_date=promised.isoformat())
+        row.update(id=uuid.uuid4().hex,firm_id=firm,kept=None)
+        from agent1.reconciliation.pipeline import today
+        row['available_on']=today()
         if pseudonymize:
             from .ingest.privacy import pseudonymize_row
             row=pseudonymize_row(row,pseudo_key)
@@ -331,18 +402,24 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
                 raise HTTPException(422,'Dự báo hiện tính bằng VND; cần quy đổi tỷ giá có nguồn trước khi dùng sao kê ngoại tệ')
         if len(promises):
             promises=promises[promises.invoice_id.isin(tables['invoices'].invoice_id)].copy()
-            for c in ('made_date','promised_date'):promises[c]=pd.to_datetime(promises[c])
+            for c in ('made_date','promised_date'):promises[c]=local_dates(promises[c],dayfirst=False)
         else:promises=None
         try:
             cache=None;version=None
             if engine is run:
                 from .model_registry import load
                 model,version=load(store,firm,body.cutoff)
-                if model is not None:cache={'t1':model}
+                cache={'t1':model}
             kwargs={'model_cache':cache} if engine is run else {}
             if engine is run:
                 # Dải công bố = copula-t + ACI; trạng thái ACI giữ theo doanh nghiệp qua các lần dự báo.
                 previous=store.get(firm,'aci_state');kwargs['aci_state']=previous[-1] if previous else {}
+                if 'observed_source' in inspect.signature(engine).parameters:
+                    kwargs['observed_source']=observed_source
+                    # Task-specific views share knowledge cutoff and tenant.
+                    for kind in ('customers','outflows'):
+                        if 'available_on' in tables[kind]:
+                            tables[kind]=tables[kind][tables[kind].available_on<=body.cutoff].copy()
             result,args=engine(tables['invoices'],tables['bank_txns'],tables['customers'],promises,tables['outflows'],body.cutoff,body.balance,**kwargs)
             state=result.pop('aci_state',None)
             if state is not None:store.put(firm,'aci_state',[dict(state,id='current')])
@@ -359,6 +436,68 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
     def models(firm=Depends(authorize)):
         from .model_registry import summaries
         return summaries(store,firm)
+
+    @app.post('/models/deactivate')
+    def model_deactivate(firm=Depends(authorize)):
+        from .model_registry import deactivate
+        deactivate(store,firm)
+        return dict(deactivated=True,research_only=True)
+
+    async def reconciliation_body(request,model):
+        from .ingest.strict_files import loads_json
+        try:return model.model_validate(loads_json(await request.body()))
+        except (ValueError,TypeError) as error:raise HTTPException(422,str(error)) from error
+
+    @app.post('/reconciliation/run')
+    async def reconciliation_run(request:Request,firm=Depends(authorize)):
+        from agent1.reconciliation.operations import propose
+        body=await reconciliation_body(request,ReconciliationRun)
+        try:return propose(observed_source,body.cutoff)
+        except (ValueError,TypeError,KeyError) as error:raise HTTPException(422,str(error)) from error
+
+    @app.post('/reconciliation/accept')
+    async def reconciliation_accept(request:Request,firm=Depends(authorize)):
+        from agent1.reconciliation.operations import accept
+        body=await reconciliation_body(request,ReconciliationAccept)
+        try:
+            return accept(observed_source,body.idempotency_key,body.reviewed_by,proposal_id=body.proposal_id,
+                          allocations=[a.model_dump() for a in body.allocations] if body.allocations else None,note=body.note)
+        except (ValueError,TypeError,KeyError) as error:raise HTTPException(422,str(error)) from error
+
+    @app.post('/reconciliation/reverse')
+    async def reconciliation_reverse(request:Request,firm=Depends(authorize)):
+        from agent1.reconciliation.operations import reverse
+        body=await reconciliation_body(request,ReconciliationReverse)
+        try:return reverse(observed_source,body.idempotency_key,body.decision_id,body.reviewed_by,body.note)
+        except (ValueError,TypeError,KeyError) as error:raise HTTPException(422,str(error)) from error
+
+    @app.post('/reconciliation/writeoffs')
+    async def reconciliation_writeoff(request:Request,firm=Depends(authorize)):
+        from agent1.reconciliation.operations import writeoff
+        body=await reconciliation_body(request,WriteoffInput)
+        try:return writeoff(observed_source,body.idempotency_key,body.invoice_id,body.effective_on,body.reviewed_by,body.source_ref)
+        except (ValueError,TypeError,KeyError) as error:raise HTTPException(422,str(error)) from error
+
+    @app.get('/snapshot')
+    def snapshot(cutoff:str,firm=Depends(authorize)):
+        try:
+            view=observed_source.task_tables(cutoff)
+            return dict(contract_version=view['contract_version'],cutoff=view['cutoff'],snapshot_hash=view['snapshot_hash'],
+                        invoices=json.loads(view['invoices'].to_json(orient='records',date_format='iso')),
+                        cash_allocations=json.loads(view['links'].to_json(orient='records',date_format='iso')),
+                        customers=json.loads(view['customers'].to_json(orient='records',date_format='iso')),
+                        promises=json.loads(view['promises'].to_json(orient='records',date_format='iso')),
+                        obligations=json.loads(view['outflows'].to_json(orient='records',date_format='iso')),
+                        decisions=view['gold']['decisions'],writeoffs=view['gold']['writeoffs'],research_only=True)
+        except (ValueError,TypeError,KeyError) as error:raise HTTPException(422,str(error)) from error
+
+    @app.get('/reconciliation/history')
+    def reconciliation_history(cutoff:str,firm=Depends(authorize)):
+        try:
+            gold=observed_source.ledger.gold(cutoff)
+            return dict(cutoff=cutoff,decisions=gold['decisions'],writeoffs=gold['writeoffs'],
+                        snapshot_hash=gold['snapshot_hash'],research_only=True)
+        except (ValueError,TypeError,KeyError) as error:raise HTTPException(422,str(error)) from error
 
     @app.get('/monitoring')
     def monitoring(firm=Depends(authorize)):

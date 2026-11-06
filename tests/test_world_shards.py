@@ -13,5 +13,5 @@ def test_sharding_preserves_world_values_and_global_payment_keys(tmp_path):
     assert validate_world(merged).passed.all()
     for table in whole.glob('*.parquet'):
         pd.testing.assert_frame_equal(pd.read_parquet(table),pd.read_parquet(merged/table.name),check_dtype=False)
-    with pytest.raises(ValueError,match='RNG v2'):
+    with pytest.raises(ValueError,match='RNG.*công ty'):
         World(WorldConfig(n_firms=2,rng_version=1)).run(tmp_path/'invalid',verbose=False,firm_indices=[1])

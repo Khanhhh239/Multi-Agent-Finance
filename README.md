@@ -10,6 +10,32 @@ mô hình T1–T10, đối soát ngân hàng, thí nghiệm thích nghi miền v
 [kết quả chưa đạt](docs/03_Evaluation/KET_QUA_CHUA_DAT.md) để xem bằng chứng từ CSV.
 Các tài liệu lịch sử không thay các bảng hiện hành này.
 
+Luồng dịch vụ hiện tại: **T0 nhập/kiểm/giữ nguồn → T9 phân bổ có ràng buộc,
+duyệt và ledger → snapshot theo ngày đã biết → train/dự báo/giám sát → T10/API
+cho Agent 4**. T9 dùng lõi từ `agent1-Thắng@89c144b`; T0 Khánh được giữ lại.
+Xem [hợp đồng và thao tác đối soát](agent1_service/README.md#luong-t0-t9-thong-nhat).
+Thay đổi này không nâng cổng pilot hoặc kích hoạt ứng viên T1 V6.
+
+Runtime v2 giữ phiên bản khách hàng/lời hứa/lịch chi, kiểm tra khách của phân
+bổ đã duyệt và tách ngày thu tiền khỏi ngày đóng do giảm trừ. Train chạy qua
+job riêng; dự báo dùng model đã chọn hoặc B1d. Validation T1 chấm cả nhóm
+chưa trả có đủ theo dõi, cùng baseline tại các mốc 7/28/56/91 ngày.
+
+Để dựng lại bộ mẫu theo luồng này, job retrain có chế độ `--prepare-only`
+lưu train/validation mã hóa từ kho nguồn, tách khỏi bước fit và chọn model;
+xem [hướng dẫn dựng dữ liệu](agent1_service/README.md#phiên-bản-mô-hình-và-giám-sát-local).
+[Đợt rà soát và dọn artifact ngày 06/11](outputs/maintenance/t0_t9_t1_rebuild_cleanup_20261106.json)
+ghi rõ cấu hình đã xóa, dữ liệu nghiên cứu còn giữ và phần đang thiếu nguồn
+doanh nghiệp để dựng mẫu. Không coi dữ liệu mock là lịch sử duyệt T9 thật.
+
+[Rà soát bổ sung ngày 06/11](outputs/maintenance/t0_t9_t1_final_review_20261106.json)
+kiểm tra ngày biết muộn, trạng thái mở trước khi tổng hợp đặc trưng, dư nợ
+1 đồng và retry giao dịch.
+[Kiểm tra tiếp trước khi push](outputs/maintenance/t0_t9_t1_publish_followup_20261106.json)
+bổ sung chọn phiên bản/hủy hóa đơn theo ngày biết và retry sự kiện hủy.
+[Mô tả thay đổi](outputs/maintenance/t0_t9_t1_change_description_20261106.md)
+ghi phạm vi, bằng chứng kiểm thử và giới hạn dữ liệu thực tế.
+
 ## Cài đặt và kiểm tra trên Windows
 
 Python 3.12, PowerShell, tại thư mục dự án:
@@ -85,6 +111,7 @@ Docker cần daemon hoạt động. Kiểm tra local không thay UAT của ngư�
 |---|---|
 | `agent1/data`, `agent1/synth` | Nạp dữ liệu, hợp đồng, máy phát và tình huống khó |
 | `agent1/models`, `agent1/eval` | Đặc trưng as-of, mô hình, chỉ số và bootstrap theo công ty |
+| `agent1/reconciliation` | Lõi T9 từ Thắng, ledger mã hoá và view quan sát dùng chung |
 | `agent1/rules` | Quy tắc có phiên bản, nguồn và trạng thái xác minh |
 | `agent1_service`, `agent1/jobs` | API/UI local, lưu trữ, retrain và giám sát |
 | `scripts`, `tests` | Các giao thức thực nghiệm và kiểm thử |

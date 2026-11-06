@@ -9,19 +9,20 @@ import time
 import numpy as np
 import pandas as pd
 
-from agent1.models.features import SnapshotBuilder
-from agent1.models.t1 import HazardGBM,quantiles_from_hazard,QS
-from agent1.models.t9_recon import Reconciler
-from agent1.models.reconciliation_pipeline import build_bank_labels
+from agent1.models.t1 import HazardGBM,quantiles_from_hazard,QS,b1_dist,cdf_from_quantiles
+from agent1.models.features import MODEL_VISIBLE_COLUMNS
+from agent1.eval.observed_t1 import horizon_metrics
+from agent1.reconciliation.pipeline import ObservedSource,ObservedSnapshotBuilder
 from agent1_service.ingest.dates import local_dates
 from agent1_service.store import Store
-from agent1_service.model_registry import register,activate
+from agent1_service.model_registry import register,activate,code_signature
 
 
 def observed_tables(store,firm,cutoff):
     cutoff=pd.Timestamp(cutoff);result={}
     for kind in ['invoices','bank_txns','customers','promises']:
-        data=pd.DataFrame(store.get(firm,kind))
+        records=store.as_of(firm,kind,cutoff) if kind in {'customers','promises'} else store.get(firm,kind)
+        data=pd.DataFrame(records)
         for col in data.columns:
             if 'date' in col:data[col]=local_dates(data[col],dayfirst=False)
         date={'invoices':'issue_date','bank_txns':'value_date','promises':'made_date'}.get(kind)
@@ -56,40 +57,89 @@ def observed_tables(store,firm,cutoff):
         result['promises']=result['promises'][result['promises'].invoice_id.isin(result['invoices'].invoice_id)]
     # Chỉ giữ khách đã xuất hiện trên hoá đơn quan sát được.
     result['customers']=result['customers'][result['customers'].customer_id.isin(result['invoices'].customer_id)]
+    for kind in ('bank_txns','customers','promises'):
+        frame=result[kind]
+        if len(frame) and 'available_on' in frame:
+            result[kind]=frame[pd.to_datetime(frame.available_on)<=cutoff].copy()
     return result
 
 
-def train_candidate(store,firm,cutoff,reason,*,rounds=200,max_rows=40000):
-    start=time.monotonic();T=pd.Timestamp(cutoff)
-    if reason not in {'psi','coverage','scheduled','manual'}:raise ValueError('Lý do retrain không hợp lệ')
+def prepare_training_data(store,firm,cutoff):
+    """Rebuild both roles through the same reviewed, knowledge-time source."""
+    T=pd.Timestamp(cutoff)
     tables=observed_tables(store,firm,T)
-    links,_=Reconciler().reconcile(tables['bank_txns'],tables['invoices'],tables['customers'])
-    inv=build_bank_labels(tables['invoices'],links);inv['writeoff_date']=pd.NaT
-    prom=tables['promises']
-    if len(prom):
-        # Chưa có kết quả hứa được đối chiếu: không tin cột kept do người nhập gửi.
-        prom=prom.copy();prom['kept']=np.nan
-    builder=SnapshotBuilder(inv,links,prom if len(prom) else None,label_col='paid_date_est')
+    source=ObservedSource(store,firm)
+    view=source.view(T);inv=view['invoices']
+    builder=ObservedSnapshotBuilder(source)
     train_end=T-pd.Timedelta(days=120)
     cuts=pd.date_range(max(inv.issue_date.min()+pd.Timedelta(days=60),T-pd.Timedelta(days=730)),train_end-pd.Timedelta(days=7),freq='14D')
     if not len(cuts):raise ValueError('Chưa đủ lịch sử và khoảng cách nhãn 120 ngày')
     train=builder.build(cuts,label_end=train_end)
+    train_gaps=list(getattr(builder,'missing_windows',[]))
+    validation=builder.build([train_end],label_end=T)
+    fingerprints={k:hashlib.sha256(v.to_json(orient='split',date_format='iso').encode()).hexdigest() for k,v in tables.items()}
+    return dict(train=train,validation=validation,firm_id=firm,available_at=T.isoformat(),
+                training_label_end=train_end.isoformat(),label_mode='accepted_ledger',
+                data_contract=view['contract_version'],data_snapshot=view['snapshot_hash'],
+                data_hash=hashlib.sha256(json.dumps(fingerprints,sort_keys=True).encode()).hexdigest(),
+                missing_windows=dict(train=train_gaps,validation=list(getattr(builder,'missing_windows',[]))))
+
+
+def export_training_data(store,firm,cutoff,output):
+    """Export encrypted, versioned samples; never train, activate, or rewrite T0."""
+    output=Path(output)
+    if output.exists():raise ValueError('Thư mục dataset đã tồn tại; cần tên phiên bản mới')
+    prepared=prepare_training_data(store,firm,cutoff)
+    labels=('label_date','writeoff_date','remaining','obs_window','time_obs','event')
+    columns=list(dict.fromkeys((*MODEL_VISIBLE_COLUMNS,*labels)))
+    payloads={}
+    records={}
+    for role in ('train','validation'):
+        frame=prepared[role]
+        frame=frame.loc[:,[c for c in columns if c in frame]].copy()
+        content=frame.to_parquet(index=False)
+        encrypted=store.cipher.encrypt(content)
+        payloads[role+'.parquet.enc']=encrypted
+        records[role]=dict(file=role+'.parquet.enc',rows=len(frame),
+                           events=int(frame.event.sum()) if len(frame) else 0,
+                           columns=list(frame.columns),plaintext_sha256=hashlib.sha256(content).hexdigest(),
+                           encrypted_sha256=hashlib.sha256(encrypted).hexdigest())
+    train=prepared['train']
+    ready=len(train)>=100 and train.event.nunique()>=2
+    manifest={k:v for k,v in prepared.items() if k not in {'train','validation'}}
+    manifest.update(schema_version=1,code_signature=code_signature(),files=records,
+                    trainable=bool(ready),status='prepared' if ready else 'insufficient_mature_labels',
+                    trained=False,activated=False,encryption='Fernet; same tenant key as source store',
+                    limitation='observed_ledger_only;no_synthetic_or_backdated_approvals;not_pilot_acceptance')
+    output.mkdir(parents=True,exist_ok=False)
+    for name,payload in payloads.items():(output/name).write_bytes(payload)
+    (output/'dataset.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8')
+    return manifest
+
+
+def train_candidate(store,firm,cutoff,reason,*,rounds=200,max_rows=40000):
+    start=time.monotonic()
+    if reason not in {'psi','coverage','scheduled','manual'}:raise ValueError('Lý do retrain không hợp lệ')
+    prepared=prepare_training_data(store,firm,cutoff)
+    train=prepared['train'];validation=prepared['validation']
     if len(train)<100 or train.event.nunique()<2:raise ValueError('Chưa đủ nhãn đã chín để huấn luyện')
     train=train.sample(min(len(train),max_rows),random_state=7)
     model=HazardGBM(dict(min_data_in_leaf=30,num_leaves=31),rounds=rounds).fit(train)
-    validation=builder.build([train_end],label_end=T)
     known=validation[(validation.event==1)&(validation.remaining<=120)] if len(validation) else validation
-    metrics=dict(validation_rows=len(validation),resolved_rows=len(known),resolved_only=True)
+    H=model.hazards(validation) if len(validation) else np.empty((0,13))
+    cdf=1-np.cumprod(1-H,axis=1)
+    baseline=cdf_from_quantiles(b1_dist(validation)) if len(validation) else np.empty((0,13))
+    metrics=horizon_metrics(validation,cdf,baseline)
+    metrics['resolved_rows']=len(known)
+    # Retain resolved-only timing scores strictly as secondary diagnostics.
     if len(known):
         q=quantiles_from_hazard(model.hazards(known));error=known.remaining.to_numpy()[:,None]-q
         metrics['pinball_resolved']=float(np.maximum(np.asarray(QS)*error,(np.asarray(QS)-1)*error).mean())
         metrics['cov80_resolved']=float(np.mean((known.remaining>=q[:,0])&(known.remaining<=q[:,2])))
-    fingerprints={k:hashlib.sha256(v.to_json(orient='split',date_format='iso').encode()).hexdigest() for k,v in tables.items()}
-    metadata=dict(firm_id=firm,available_at=T.isoformat(),training_label_end=train_end.isoformat(),
-                  data_hash=hashlib.sha256(json.dumps(fingerprints,sort_keys=True).encode()).hexdigest(),
+    metadata=dict({k:v for k,v in prepared.items() if k not in {'train','validation'}},
                   reason=reason,n_rows=len(train),rounds=rounds,parameters=model.p,metrics=metrics,
-                  label_mode='observed_rule_reconciliation',seconds=time.monotonic()-start,
-                  limitation='local_research;resolved_validation_survivorship;not_pilot_acceptance')
+                  seconds=time.monotonic()-start,
+                  limitation='local_research;complete_horizon_followup_only;noncash_censoring_may_be_informative;not_pilot_acceptance')
     return register(store,firm,model,metadata,train.sample(min(1000,len(train)),random_state=7))
 
 
@@ -97,12 +147,24 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--firm',required=True)
     parser.add_argument('--reason',required=True,choices=['psi','coverage','scheduled','manual'])
     parser.add_argument('--cutoff',required=True);parser.add_argument('--state',default=os.environ.get('AGENT1_STATE_DIR','.state'))
-    parser.add_argument('--activate',action='store_true');args=parser.parse_args()
+    parser.add_argument('--activate',action='store_true')
+    parser.add_argument('--prepare-only',action='store_true')
+    parser.add_argument('--dataset-output',type=Path)
+    args=parser.parse_args()
+    if args.prepare_only and (args.activate or args.dataset_output is None):
+        parser.error('--prepare-only cần --dataset-output và không đi cùng --activate')
+    if args.dataset_output is not None and not args.prepare_only:
+        parser.error('--dataset-output chỉ dùng với --prepare-only')
     directory=Path(args.state)
-    if not (directory/'encryption.key').exists():raise ValueError('Kho dữ liệu chưa được khởi tạo')
-    store=Store(directory/'agent1.db',(directory/'encryption.key').read_bytes())
+    if not (directory/'agent1.db').is_file():
+        raise ValueError('Chưa có agent1.db nguồn; không tạo kho rỗng hoặc dữ liệu giả để retrain')
+    key_dir=Path(os.environ.get('AGENT1_KEY_DIR') or directory.parent/(directory.name+'-keys'))
+    key_file=key_dir/'encryption.key'
+    if not key_file.exists():key_file=directory/'encryption.key'
+    if not key_file.exists():raise ValueError('Kho dữ liệu chưa được khởi tạo')
+    store=Store(directory/'agent1.db',key_file.read_bytes())
     try:
-        result=train_candidate(store,args.firm,args.cutoff,args.reason)
+        result=export_training_data(store,args.firm,args.cutoff,args.dataset_output) if args.prepare_only else train_candidate(store,args.firm,args.cutoff,args.reason)
         if args.activate:activate(store,args.firm,result['id'])
         print(json.dumps(result,ensure_ascii=False,allow_nan=False))
     finally:store.connection.close()

@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-06",
+  "scope": "Follow-up review and publication checkpoint for integrated T0/T9/T1",
+  "status": "reviewed_and_tested;ready_to_commit_and_push",
+  "previous_review": "outputs/maintenance/t0_t9_t1_final_review_20261106.json",
+  "findings": [
+    {
+      "id": "F01",
+      "area": "T0/T9/T1",
+      "problem": "Invoice lifecycle selection and cancellation could apply before later known_at despite earlier available_on",
+      "fix": "Central effective_invoices uses the later of both knowledge dates for invoice revisions and cancellation events",
+      "regressions": 2,
+      "status": "fixed"
+    },
+    {
+      "id": "F02",
+      "area": "T0",
+      "problem": "Identical cancellation retries conflicted because stored rows include an internal id",
+      "fix": "Compare immutable cancellation payload without server-generated id/ingested_on; retain original event and reject changed business facts",
+      "regressions": 2,
+      "status": "fixed"
+    }
+  ],
+  "verification": {
+    "full_suite": {
+      "tests": 658,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 2,
+      "passed": 656
+    },
+    "duration_seconds": 317.793,
+    "junit_report": "outputs/implementation/t0_t9_t1_publish_followup_regression_20261106.xml",
+    "junit_sha256": "ad3e2532bdf3b6e76608ef5c44f95ea40ac723c16263a543abc4d3e05d9c65ac",
+    "new_cases_junit": "outputs/implementation/t0_t9_t1_publish_followup_new_cases_20261106.xml",
+    "related_tests_junit": "outputs/implementation/t0_t9_t1_publish_followup_targeted_20261106.xml",
+    "ruff_critical": true,
+    "git_diff_check": true,
+    "dashboard_javascript_syntax": true,
+    "dashboard_dom_references": true,
+    "changed_file_credential_pattern_check": true,
+    "vendor_source_hashes_verified": 8,
+    "retained_research_model_hashes_verified": 18,
+    "skips": [
+      {
+        "test": "test_xml_roundtrip_matches_table",
+        "reason": "chưa sinh thế giới tgt"
+      },
+      {
+        "test": "test_quality_gate_detects_injected_errors",
+        "reason": "chưa sinh thế giới tgt"
+      }
+    ],
+    "staged_git_diff_check": true,
+    "byte_preserved_crlf_whitespace_attributes": true
+  },
+  "source_code_signature": "97de021b5624758944b130bfdf2896265cc0ed06ca0c78f9c9346a9e3dbb0b58",
+  "source_sha256": {
+    "agent1_service/ingest/invoices.py": "b888a0dd7582d574081f60f14fd8cfcc096e6f406d02282d5e90c9862ee6e411",
+    "tests/test_t0_t9_t1_repairs.py": "3880a2a9ae6702e5ad7b6543bd959a93acc3f44e05f4f8b6c84876769dd6c579",
+    "agent1_service/README.md": "acd2102ced9431e49c9decad47e513bf27d122b22722738b8faf4c67e1c0f946",
+    "README.md": "5530c2bcb89b96a807248aa06f3bf18e6e572f1c7631940451c633aced380513",
+    "outputs/maintenance/t0_t9_t1_change_description_20261106.md": "eb5c198667af447f9f7c50f3cad2330123e376ea39631007c92e90e8c8094bd8",
+    ".gitattributes": "49dff81fcab934f3d82ee02e467554a477a1a42219670dd2b96a997b0790793a"
+  },
+  "description": "outputs/maintenance/t0_t9_t1_change_description_20261106.md",
+  "git_checkpoint": {
+    "branch": "agent1-Khanh",
+    "head_before_commit": "8c2aa0af1cc20faa23f292aa3cf02b4a7fdebc21",
+    "commit_and_push_authorized": true,
+    "committed_at_checkpoint": false,
+    "pushed_at_checkpoint": false
+  },
+  "limitations": [
+    "No enterprise data is available; no enterprise dataset or model trained or activated",
+    "Technical regressions do not prove domain accuracy or pilot readiness; NO_GO retained",
+    "Browser visual UAT not performed; dashboard checks are static",
+    "Two skips require the absent tgt XML fixtures; existing dependency deprecation warnings remain"
+  ]
+}

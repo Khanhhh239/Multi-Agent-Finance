@@ -2,6 +2,14 @@
 
 **Cập nhật 06/11/2026.** Thư mục `docs/` chứa cả đặc tả, kế hoạch, kết quả đã đo và ảnh chụp lịch sử. Ngày trong tên file là ngày của **lần đo hoặc quyết định đó**, không tự biến nó thành kết luận hiện hành.
 
+**Luồng dịch vụ vừa tích hợp:** giữ T0 Khánh, dùng constrained flow/ledger từ
+T0 Thắng cho T9 và snapshot theo ngày biết. Đọc [hợp đồng runtime](../agent1_service/README.md#luong-t0-t9-thong-nhat).
+Các CSV/gate T9 cũ vẫn là bằng chứng của pipeline cũ; ứng viên V6 chưa được
+kích hoạt. Audit đầu vào V6 ngày 05/11 vẫn giữ đúng phạm vi lịch sử của nó.
+Runtime v2 bổ sung lịch sử quan sát T0, kiểm tra khách của phân bổ, nhãn đóng
+do giảm trừ, tách train khỏi dự báo và validation có nhóm chưa trả đủ theo dõi.
+Đây là sửa hợp đồng và kiểm thử kỹ thuật, không phải số đo chất lượng miền thật.
+
 ## Tình trạng sau dọn dữ liệu và gộp tài liệu 06/11/2026
 
 [Data README](02_Data/README.md) ghi tồn kho còn giữ và tài liệu đã gộp;

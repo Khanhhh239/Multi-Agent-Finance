@@ -1,0 +1,1247 @@
+{
+  "databases": [
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-final/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-final/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-final/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-final/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-final/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21-final/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21-final/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21-final/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21-final/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21-final/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-final/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-final/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-final/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-final/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-final/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/fiscus/bank_reconciliation_001.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/fiscus/bank_reconciliation_002.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/fiscus/bank_reconciliation_003.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/fiscus/bank_reconciliation_004.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ledger/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/verification-v4-2026-10-21/ledger.sqlite",
+      "bytes": 12288
+    },
+    {
+      "path": "data/T0/processed/verification-v4-2026-10-21-verified/ledger.sqlite",
+      "bytes": 12288
+    }
+  ],
+  "models": [
+    {
+      "path": "outputs/analysis/t1_khanh_vs_v6_20261105/khanh_refit_model.txt",
+      "bytes": 4241790
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/cash_model.txt",
+      "bytes": 384275
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/model.txt",
+      "bytes": 1737041
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/models/aug_both.txt",
+      "bytes": 1749340
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/models/aug_v6.txt",
+      "bytes": 1745269
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/models/behavior.txt",
+      "bytes": 1739131
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/models/both.txt",
+      "bytes": 1741520
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/models/industry.txt",
+      "bytes": 1739783
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/models/v6.txt",
+      "bytes": 1737041
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/candidates/20000/model.txt",
+      "bytes": 4286498
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/20000/model.txt",
+      "bytes": 4286498
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/200000/model.txt",
+      "bytes": 5089435
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/50000/model.txt",
+      "bytes": 4692059
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/model.txt",
+      "bytes": 4286498
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/candidates/200000/model.txt",
+      "bytes": 5089435
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/candidates/50000/model.txt",
+      "bytes": 4692059
+    },
+    {
+      "path": "outputs/data/v4_shortpay_4shock_20261028/model.txt",
+      "bytes": 731411
+    },
+    {
+      "path": "outputs/data/v5_competing_risks_53w_20261028/model.txt",
+      "bytes": 1296500
+    }
+  ],
+  "output_parquets": [
+    {
+      "path": "outputs/analysis/t1_credit_context_20261105/candidate_context.parquet",
+      "bytes": 1619839
+    },
+    {
+      "path": "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v4_shortpay_4shock_20261028_test_000.parquet",
+      "bytes": 758380
+    },
+    {
+      "path": "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v4_shortpay_4shock_20261028_test_001.parquet",
+      "bytes": 1877329
+    },
+    {
+      "path": "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v4_shortpay_4shock_20261028_validation_000.parquet",
+      "bytes": 1597601
+    },
+    {
+      "path": "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v4_shortpay_4shock_20261028_validation_001.parquet",
+      "bytes": 1677814
+    },
+    {
+      "path": "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v6_holdout_20261101_000.parquet",
+      "bytes": 690128
+    },
+    {
+      "path": "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v6_holdout_20261101_001.parquet",
+      "bytes": 1831398
+    },
+    {
+      "path": "outputs/analysis/t1_v6_diagnosis_20261105_r2/diagnostic_anchor_context.parquet",
+      "bytes": 107416
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/features/v4_shortpay_4shock_20261028_test_000.parquet",
+      "bytes": 190906
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/features/v4_shortpay_4shock_20261028_test_001.parquet",
+      "bytes": 464126
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/features/v4_shortpay_4shock_20261028_validation_000.parquet",
+      "bytes": 429885
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/features/v4_shortpay_4shock_20261028_validation_001.parquet",
+      "bytes": 431287
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/features/v6_holdout_20261101_000.parquet",
+      "bytes": 175562
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/features/v6_holdout_20261101_001.parquet",
+      "bytes": 448732
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/predictions/v4_shortpay_4shock_20261028_test_000.parquet",
+      "bytes": 1882362
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/predictions/v4_shortpay_4shock_20261028_test_001.parquet",
+      "bytes": 4626337
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/predictions/v4_shortpay_4shock_20261028_validation_000.parquet",
+      "bytes": 3970683
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/predictions/v4_shortpay_4shock_20261028_validation_001.parquet",
+      "bytes": 4179192
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/predictions/v6_holdout_20261101_000.parquet",
+      "bytes": 1710951
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/predictions/v6_holdout_20261101_001.parquet",
+      "bytes": 4543914
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/cache/train_v4_shortpay_4shock_20261028_train_000.parquet",
+      "bytes": 7293121
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/cache/train_v4_shortpay_4shock_20261028_train_001.parquet",
+      "bytes": 8091284
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/cache/train_v4_shortpay_4shock_20261028_train_002.parquet",
+      "bytes": 7094844
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/cache/train_v4_shortpay_4shock_20261028_train_003.parquet",
+      "bytes": 7633814
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/evaluation_predictions/v4_shortpay_4shock_20261028_test_000.parquet",
+      "bytes": 560767
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/evaluation_predictions/v4_shortpay_4shock_20261028_test_001.parquet",
+      "bytes": 1361555
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/evaluation_predictions/v4_shortpay_4shock_20261028_validation_000.parquet",
+      "bytes": 1177326
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/evaluation_predictions/v4_shortpay_4shock_20261028_validation_001.parquet",
+      "bytes": 1238748
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/evaluation_predictions/v6_holdout_20261101_000.parquet",
+      "bytes": 507377
+    },
+    {
+      "path": "outputs/data/t1_competing_v6_20261101/evaluation_predictions/v6_holdout_20261101_001.parquet",
+      "bytes": 1329825
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/augmented_fit.parquet",
+      "bytes": 12927524
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/fit.parquet",
+      "bytes": 31879653
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/source_validation.parquet",
+      "bytes": 1626341
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/augmentation_parts/0.parquet",
+      "bytes": 6606987
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/augmentation_parts/1.parquet",
+      "bytes": 6262347
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_000/buyer_industry.parquet",
+      "bytes": 19716
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_000/coverage.parquet",
+      "bytes": 78530
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_000/invoices.parquet",
+      "bytes": 1869720
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_000/ledger_entries.parquet",
+      "bytes": 2344569
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_000/seller_industry.parquet",
+      "bytes": 4112
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_001/buyer_industry.parquet",
+      "bytes": 21367
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_001/coverage.parquet",
+      "bytes": 78530
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_001/invoices.parquet",
+      "bytes": 1540803
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_001/ledger_entries.parquet",
+      "bytes": 1902259
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_aug_supported_001/seller_industry.parquet",
+      "bytes": 4111
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_000/buyer_industry.parquet",
+      "bytes": 19031
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_000/coverage.parquet",
+      "bytes": 78530
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_000/invoices.parquet",
+      "bytes": 1291222
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_000/ledger_entries.parquet",
+      "bytes": 1562049
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_000/seller_industry.parquet",
+      "bytes": 4036
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_001/buyer_industry.parquet",
+      "bytes": 22304
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_001/coverage.parquet",
+      "bytes": 78530
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_001/invoices.parquet",
+      "bytes": 1530640
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_001/ledger_entries.parquet",
+      "bytes": 1882201
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_001/seller_industry.parquet",
+      "bytes": 4036
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_002/buyer_industry.parquet",
+      "bytes": 21174
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_002/coverage.parquet",
+      "bytes": 78530
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_002/invoices.parquet",
+      "bytes": 1784321
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_002/ledger_entries.parquet",
+      "bytes": 2211150
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_002/seller_industry.parquet",
+      "bytes": 4057
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_003/buyer_industry.parquet",
+      "bytes": 20423
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_003/coverage.parquet",
+      "bytes": 78530
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_003/invoices.parquet",
+      "bytes": 1321678
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_003/ledger_entries.parquet",
+      "bytes": 1649774
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/practical_v6_20261105_fresh_003/seller_industry.parquet",
+      "bytes": 4057
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/buyer_industry.parquet",
+      "bytes": 35556
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/coverage.parquet",
+      "bytes": 115840
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/invoices.parquet",
+      "bytes": 2980837
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/ledger_entries.parquet",
+      "bytes": 3636116
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/seller_industry.parquet",
+      "bytes": 4341
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/buyer_industry.parquet",
+      "bytes": 37175
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/coverage.parquet",
+      "bytes": 115840
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/invoices.parquet",
+      "bytes": 3314463
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/ledger_entries.parquet",
+      "bytes": 4124946
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/seller_industry.parquet",
+      "bytes": 4343
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/buyer_industry.parquet",
+      "bytes": 37261
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/coverage.parquet",
+      "bytes": 115840
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/invoices.parquet",
+      "bytes": 2579697
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/ledger_entries.parquet",
+      "bytes": 3131241
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/seller_industry.parquet",
+      "bytes": 4342
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/buyer_industry.parquet",
+      "bytes": 36777
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/coverage.parquet",
+      "bytes": 115840
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/invoices.parquet",
+      "bytes": 3252583
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/ledger_entries.parquet",
+      "bytes": 3998600
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/seller_industry.parquet",
+      "bytes": 4342
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/fresh/aug_both.parquet",
+      "bytes": 1533127
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/fresh/aug_v6.parquet",
+      "bytes": 1529109
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/fresh/behavior.parquet",
+      "bytes": 1545843
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/fresh/both.parquet",
+      "bytes": 1557075
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/fresh/industry.parquet",
+      "bytes": 1544403
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/fresh/v6.parquet",
+      "bytes": 1546851
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/sensitivity/both_industry_missing.parquet",
+      "bytes": 1555203
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/source/aug_both.parquet",
+      "bytes": 1038468
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/source/aug_v6.parquet",
+      "bytes": 1039181
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/source/behavior.parquet",
+      "bytes": 1056086
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/source/both.parquet",
+      "bytes": 1071161
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/source/industry.parquet",
+      "bytes": 1056110
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/predictions/source/v6.parquet",
+      "bytes": 1058126
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/practical_v6_20261105_fresh_000_fresh.parquet",
+      "bytes": 701860
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/practical_v6_20261105_fresh_001_fresh.parquet",
+      "bytes": 629801
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/practical_v6_20261105_fresh_002_fresh.parquet",
+      "bytes": 891231
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/practical_v6_20261105_fresh_003_fresh.parquet",
+      "bytes": 407179
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_000_fit.parquet",
+      "bytes": 8051157
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_000_validation.parquet",
+      "bytes": 453552
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_001_fit.parquet",
+      "bytes": 8418328
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_001_validation.parquet",
+      "bytes": 557594
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_002_fit.parquet",
+      "bytes": 7583892
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_002_validation.parquet",
+      "bytes": 404406
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_003_fit.parquet",
+      "bytes": 8144176
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_003_validation.parquet",
+      "bytes": 424180
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 74226
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 12302
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 118227
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 29115
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 78029
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 13078
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 90090
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 20087
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_select_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 127916
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_select_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 30861
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_select_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 153224
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_select_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 42161
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_select_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 137851
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_select_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 38931
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_select_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 100765
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_select_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 21575
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 6789248
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 2559385
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 7057429
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 2750218
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 6456223
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 2624054
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 6901128
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 2473369
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 74226
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 12302
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 118227
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 29115
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 78029
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 13078
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 90090
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 20087
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_select_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 127916
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_select_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 30861
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_select_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 153224
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_select_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 42161
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_select_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 137851
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_select_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 38931
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_select_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 100765
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_select_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 21575
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 6789248
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 2559385
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 7057429
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 2750218
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 6456223
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 2624054
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 6901128
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 2473369
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 74226
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 12302
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 118227
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 29115
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 78029
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 13078
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 90090
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 20087
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_select_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 135218
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_select_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 34815
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_select_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 156839
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_select_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 42401
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_select_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 135716
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_select_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 39731
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_select_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 115523
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_select_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 27478
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "bytes": 6789248
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "bytes": 2559385
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "bytes": 7057429
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "bytes": 2750218
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "bytes": 6456223
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "bytes": 2624054
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "bytes": 6901128
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "bytes": 2473369
+    },
+    {
+      "path": "outputs/data/v5_competing_risks_53w_20261028/event_table.parquet",
+      "bytes": 1814732
+    }
+  ],
+  "state_directories": [],
+  "configs": [
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_cohort.json",
+      "bytes": 2237
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_aug_supported_000/config.json",
+      "bytes": 2782
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_aug_supported_000/manifest.json",
+      "bytes": 4800
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_aug_supported_001/config.json",
+      "bytes": 2780
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_aug_supported_001/manifest.json",
+      "bytes": 4798
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_fresh_000/config.json",
+      "bytes": 2229
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_fresh_000/manifest.json",
+      "bytes": 4201
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_fresh_001/config.json",
+      "bytes": 2226
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_fresh_001/manifest.json",
+      "bytes": 4198
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_fresh_002/config.json",
+      "bytes": 2529
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_fresh_002/manifest.json",
+      "bytes": 4523
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_fresh_003/config.json",
+      "bytes": 2175
+    },
+    {
+      "path": "data/synthetic/practical_v6_20261105_fresh_003/manifest.json",
+      "bytes": 4141
+    },
+    {
+      "path": "data/synthetic/unified_v2_holdout_20261104_000/config.json",
+      "bytes": 3843
+    },
+    {
+      "path": "data/synthetic/unified_v2_holdout_20261104_000/manifest.json",
+      "bytes": 6032
+    },
+    {
+      "path": "data/synthetic/unified_v2_holdout_20261104_001/config.json",
+      "bytes": 3666
+    },
+    {
+      "path": "data/synthetic/unified_v2_holdout_20261104_001/manifest.json",
+      "bytes": 5843
+    },
+    {
+      "path": "data/synthetic/unified_v2_holdout_20261104_002/config.json",
+      "bytes": 3278
+    },
+    {
+      "path": "data/synthetic/unified_v2_holdout_20261104_002/manifest.json",
+      "bytes": 5423
+    },
+    {
+      "path": "data/synthetic/unified_v2_holdout_20261104_003/config.json",
+      "bytes": 3278
+    },
+    {
+      "path": "data/synthetic/unified_v2_holdout_20261104_003/manifest.json",
+      "bytes": 5423
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_smoke/config.json",
+      "bytes": 3282
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_smoke/manifest.json",
+      "bytes": 5425
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_test_000/config.json",
+      "bytes": 3845
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_test_000/manifest.json",
+      "bytes": 6035
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_test_001/config.json",
+      "bytes": 3668
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_test_001/manifest.json",
+      "bytes": 5846
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_train_000/config.json",
+      "bytes": 3278
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_train_000/manifest.json",
+      "bytes": 5425
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_train_001/config.json",
+      "bytes": 3279
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_train_001/manifest.json",
+      "bytes": 5426
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_train_002/config.json",
+      "bytes": 3283
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_train_002/manifest.json",
+      "bytes": 5430
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_train_003/config.json",
+      "bytes": 3276
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_train_003/manifest.json",
+      "bytes": 5423
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_validation_000/config.json",
+      "bytes": 3286
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_validation_000/manifest.json",
+      "bytes": 5438
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_validation_001/config.json",
+      "bytes": 3286
+    },
+    {
+      "path": "data/synthetic/v4_shortpay_4shock_20261028_validation_001/manifest.json",
+      "bytes": 5438
+    },
+    {
+      "path": "data/synthetic/v6_holdout_20261101_000/config.json",
+      "bytes": 3836
+    },
+    {
+      "path": "data/synthetic/v6_holdout_20261101_000/manifest.json",
+      "bytes": 6017
+    },
+    {
+      "path": "data/synthetic/v6_holdout_20261101_001/config.json",
+      "bytes": 3659
+    },
+    {
+      "path": "data/synthetic/v6_holdout_20261101_001/manifest.json",
+      "bytes": 5828
+    },
+    {
+      "path": "experiments/unified_collection_v2/fixtures/accounting_regression/manifest.json",
+      "bytes": 537
+    },
+    {
+      "path": "outputs/analysis/t1_khanh_vs_v6_detail_20261105/share/MANIFEST.json",
+      "bytes": 6474
+    },
+    {
+      "path": "outputs/analysis/t1_v6_final_vs_khanh_20261105/share/MANIFEST.json",
+      "bytes": 3263
+    },
+    {
+      "path": "outputs/analysis/t1_v6_vs_khanh_only_20261105/share/MANIFEST.json",
+      "bytes": 1019
+    },
+    {
+      "path": "outputs/implementation/publish_manifest.json",
+      "bytes": 202858
+    },
+    {
+      "path": "outputs/t1/scaling_data_manifest.json",
+      "bytes": 1849
+    }
+  ]
+}

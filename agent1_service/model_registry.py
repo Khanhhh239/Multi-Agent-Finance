@@ -13,8 +13,11 @@ from agent1.models.features import FEATURES
 
 def code_signature():
     root=Path(__file__).resolve().parents[1]
-    return hashlib.sha256(b''.join((root/p).read_bytes() for p in
-        ['agent1/models/features.py','agent1/models/t1.py','agent1/calendar_vn.py'])).hexdigest()
+    paths=[root/p for p in ['agent1/models/features.py','agent1/models/t1.py','agent1/calendar_vn.py',
+                           'agent1_service/ingest/invoices.py','agent1_service/ingest/dates.py','agent1_service/store.py',
+                           'agent1_service/jobs/nightly.py','agent1/jobs/retrain.py','agent1/eval/observed_t1.py']]
+    paths+=sorted((root/'agent1/reconciliation').rglob('*.py'))
+    return hashlib.sha256(b''.join(p.read_bytes() for p in paths)).hexdigest()
 
 
 def register(store,firm,model,metadata,reference):
@@ -49,6 +52,13 @@ def activate(store,firm,version):
     if not any(r['id']==version for r in store.get(firm,'model_registry')):
         raise ValueError('Không tìm thấy phiên bản của DN')
     store.put(firm,'model_active',[dict(id='active',version=version,research_only=True)])
+
+
+def deactivate(store,firm):
+    """Keep artifacts for audit, remove only the selection for this tenant."""
+    with store.lock,store.connection:
+        store.connection.execute('DELETE FROM records WHERE firm=? AND kind=?',(firm,'model_active'))
+        store.connection.execute('INSERT INTO audit(firm,action,count) VALUES (?,?,?)',(firm,'model:deactivate',1))
 
 
 def summaries(store,firm):
