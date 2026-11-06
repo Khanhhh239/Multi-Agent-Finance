@@ -46,7 +46,7 @@ fewshot:
 llm:
   provider: ollama
   base_url: http://localhost:11434
-  model: qwen3:8b
+  model: qwen3:4b
   temperature: 0
   timeout_s: 180
   max_retries: 1

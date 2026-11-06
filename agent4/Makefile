@@ -1,40 +1,116 @@
 PYTHON ?= python
 
-.PHONY: lint typecheck test-unit test-finance test-integration test-security test-e2e eval demo test-all contracts capabilities
+PYTEST := $(PYTHON) -m pytest
+RUFF := $(PYTHON) -m ruff
+EVAL_RUNNER := $(PYTHON) vals/run_eval.py
+
+EVAL_DATASET ?= data/eval/contract_benchmark_questions.jsonl
+EVAL_CONFIG ?= config/selection.yaml
+EVAL_MODE ?= e2e
+EVAL_SPLIT ?= dev
+CHECK_PATHS ?= agent4 tests scripts vals
+
+.DEFAULT_GOAL := help
+
+.PHONY: help install-dev format format-check lint typecheck \
+	test test-core test-selection test-planning test-sql test-answer \
+	test-security test-benchmark verify ci eval-validate eval
+
+help:
+	@echo "Codex verification commands"
+	@echo "  make install-dev       Install the package with development tools"
+	@echo "  make format            Format Python sources and tests"
+	@echo "  make format-check      Check formatting without changing files"
+	@echo "  make lint              Run Ruff lint checks"
+	@echo "  make typecheck         Run the configured compile-time check"
+	@echo "  make test              Run the complete test suite"
+	@echo "  make test-core         Run M0 contract tests"
+	@echo "  make test-selection    Run M1 contract tests"
+	@echo "  make test-planning     Run M2 contract tests"
+	@echo "  make test-sql          Run M3 contract tests"
+	@echo "  make test-answer       Run M4.1 contract tests"
+	@echo "  make test-security     Run the security suite"
+	@echo "  make test-benchmark    Run benchmark-runner tests"
+	@echo "  make verify            Run format, lint, compile and full tests"
+	@echo "  make eval-validate     Validate eval data only; not a quality eval"
+	@echo "  make eval ...          Run a real development evaluation"
+	@echo ""
+	@echo "Evaluation example:"
+	@echo "  make eval ADAPTER=package.module:predict MODEL_VERSION=model:rev \\"
+	@echo "    PROMPT_VERSION=prompt-v1 OUTPUT_DIR=reports/eval/run-name"
+	@echo ""
+	@echo "Focused static checks:"
+	@echo "  make lint CHECK_PATHS='agent4/core tests/contracts/test_intake_auth_catalog.py'"
+
+install-dev:
+	$(PYTHON) -m pip install -e '.[dev]'
+
+format:
+	$(RUFF) format $(CHECK_PATHS)
+
+format-check:
+	$(RUFF) format --check $(CHECK_PATHS)
 
 lint:
-	ruff check agent4 tests scripts
+	$(RUFF) check $(CHECK_PATHS)
 
+# No static type checker is configured yet; preserve the existing compile-time gate.
 typecheck:
-	$(PYTHON) -m compileall -q agent4 scripts
+	$(PYTHON) -m compileall -q agent4 scripts vals
 
-test-unit:
-	pytest -q tests/unit tests/text2sql/test_catalog_contracts.py tests/text2sql/test_validator.py tests/text2sql/test_compiler_security.py
+test:
+	$(PYTEST) -q tests
 
-test-finance:
-	pytest -q tests/text2sql/test_finance.py
+test-core:
+	$(PYTEST) -q tests/contracts/test_intake_auth_catalog.py
 
-test-integration:
-	pytest -q tests/integration tests/text2sql/test_service_api.py
+test-selection:
+	$(PYTEST) -q \
+		tests/contracts/test_retrieval_and_fewshot.py \
+		tests/contracts/test_selection_and_metric_validation.py
+
+test-planning:
+	$(PYTEST) -q tests/contracts/test_planning_and_plan_validation.py
+
+test-sql:
+	$(PYTEST) -q tests/contracts/test_compiler_safety_execution.py
+
+test-answer:
+	$(PYTEST) -q tests/contracts/test_result_answer_response.py
 
 test-security:
-	pytest -q tests/text2sql/test_compiler_security.py tests/text2sql/test_service_api.py -k 'injection or auth or readiness or unsafe or forbidden'
+	$(PYTEST) -q tests/security
 
-test-e2e:
-	pytest -q tests/text2sql/test_service_api.py
+test-benchmark:
+	$(PYTEST) -q tests/benchmark
 
+verify: format-check lint typecheck test
+
+ci: verify
+
+# Dataset/schema validation is intentionally separate from behavioral evaluation.
+eval-validate:
+	$(EVAL_RUNNER) --dataset "$(EVAL_DATASET)" --split "$(EVAL_SPLIT)" --validate-only
+
+# Required variables:
+#   MODEL_VERSION, PROMPT_VERSION, OUTPUT_DIR
+#   exactly one of ADAPTER or PREDICTIONS
+# Optional variables:
+#   BASELINE, THRESHOLDS, EVAL_EXTRA
 eval:
-	$(PYTHON) scripts/benchmark_retrieval.py data/eval/test.jsonl --output reports/eval/retrieval_metrics.json
-	$(PYTHON) scripts/benchmark_text2sql.py
-
-demo:
-	$(PYTHON) scripts/demo_text2sql.py
-
-contracts:
-	$(PYTHON) scripts/export_contracts.py
-
-capabilities:
-	$(PYTHON) scripts/generate_capability_matrix.py
-
-test-all: lint typecheck test-unit test-finance test-integration test-security test-e2e
-	pytest -q
+	@if [ -z "$(MODEL_VERSION)" ]; then echo "MODEL_VERSION is required" >&2; exit 2; fi
+	@if [ -z "$(PROMPT_VERSION)" ]; then echo "PROMPT_VERSION is required" >&2; exit 2; fi
+	@if [ -z "$(OUTPUT_DIR)" ]; then echo "OUTPUT_DIR is required" >&2; exit 2; fi
+	@if [ -z "$(ADAPTER)$(PREDICTIONS)" ]; then echo "Set ADAPTER or PREDICTIONS" >&2; exit 2; fi
+	@if [ -n "$(ADAPTER)" ] && [ -n "$(PREDICTIONS)" ]; then echo "Set only one of ADAPTER or PREDICTIONS" >&2; exit 2; fi
+	$(EVAL_RUNNER) \
+		--dataset "$(EVAL_DATASET)" \
+		--config "$(EVAL_CONFIG)" \
+		--mode "$(EVAL_MODE)" \
+		--split "$(EVAL_SPLIT)" \
+		$(if $(strip $(ADAPTER)),--adapter "$(ADAPTER)",--predictions "$(PREDICTIONS)") \
+		--model-version "$(MODEL_VERSION)" \
+		--prompt-version "$(PROMPT_VERSION)" \
+		--output-dir "$(OUTPUT_DIR)" \
+		$(if $(strip $(BASELINE)),--baseline "$(BASELINE)") \
+		$(if $(strip $(THRESHOLDS)),--thresholds "$(THRESHOLDS)") $(EVAL_EXTRA)

@@ -1,10 +1,5 @@
-"""Safe Vietnamese financial text-to-SQL application layer.
+"""Minimal package init preserving contract models for vals/run_eval.py."""
 
-The public boundary is intentionally plan based: model/user text never reaches
-the SQL compiler.  Only :class:`ValidatedPlan` objects can be compiled.
-"""
+from .models import AuthContext, FilterDraft, SemanticPlanDraft
 
-from .api import create_app
-from .service import QueryService, build_default_service
-
-__all__ = ["QueryService", "build_default_service", "create_app"]
+__all__ = ["AuthContext", "FilterDraft", "SemanticPlanDraft"]

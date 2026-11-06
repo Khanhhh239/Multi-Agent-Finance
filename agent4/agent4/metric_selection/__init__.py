@@ -1,13 +1,6 @@
-"""Natural-language to validated financial metric selection pipeline."""
+"""Minimal package init preserving config and errors for vals/run_eval.py."""
 
 from .config import MetricSelectionConfig, load_config
-from .pipeline import MetricSelectionPipeline
-from .schemas import MetricSelectionRequest, MetricSelectionResult
+from .errors import ConfigurationError
 
-__all__ = [
-    "MetricSelectionConfig",
-    "MetricSelectionPipeline",
-    "MetricSelectionRequest",
-    "MetricSelectionResult",
-    "load_config",
-]
+__all__ = ["ConfigurationError", "MetricSelectionConfig", "load_config"]
