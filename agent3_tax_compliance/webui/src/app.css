@@ -187,3 +187,5 @@ section.cfg { scroll-margin-top: 6rem; }
 .pager { justify-content: center; }
 .quick-links { display: flex; flex-wrap: wrap; gap: 1rem; margin: .25rem 0 1rem; font-size: .875rem; }
 .quick-links a { color: var(--cds-link-primary, #0f62fe); }
+
+.banner-info { background: #edf5ff; border-left: 3px solid #0f62fe; }

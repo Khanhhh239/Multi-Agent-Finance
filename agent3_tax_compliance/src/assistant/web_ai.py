@@ -415,6 +415,48 @@ def _remember_confirmed(ws: Path, keys: list, action: str):
         _write(path, sorted(set(_read(path, [])) | lines))
 
 
+@app.get('/api/workspaces/{wid}/decisions/suggest')
+def decisions_suggest(wid: str, key: str, code: str):
+    """A decision proposed from the reviewer's own earlier decisions: same rule family, and the same seller or (for item
+    purpose) a line that reads alike. Only prefills the form; the reviewer still checks the evidence and saves."""
+    from ..extraction.xml_context import fold, similarity
+    ws = ws_path(wid)
+    rep = _report(ws)
+    past = _read(ws / 'decisions.json', [])
+    if not past:
+        return dict(suggestion=None)
+    invs = {i['key']: i for i in rep['invoices']}
+    target = invs.get(key)
+    if not target:
+        return dict(suggestion=None)
+    fam = code.split('_')[0]
+    codes_of = {}
+    for it in rep['items']:
+        for k in it['invoice_keys']:
+            codes_of.setdefault(k, set()).add(it['code'].split('_')[0])
+    best, why = None, ''
+    for d in reversed(past):
+        k = d['invoice_key']
+        if k == key or k not in invs or fam not in codes_of.get(k, set()):
+            continue
+        other = invs[k]
+        if other.get('seller_tax_id') and other.get('seller_tax_id') == target.get('seller_tax_id'):
+            best, why = d, f'cùng người bán {other.get("seller_name")}, cùng loại cảnh báo'
+            break
+        if fam == 'R12':
+            a = ' '.join(other.get('descriptions') or [])
+            b = ' '.join(target.get('descriptions') or [])
+            if a and b and similarity(fold(a), fold(b)) >= 0.6:
+                best, why = d, 'tên hàng gần giống, cùng loại cảnh báo'
+                break
+    if not best:
+        return dict(suggestion=None)
+    o = invs[best['invoice_key']]
+    return dict(suggestion=dict(action=best['action'], evidence=best.get('evidence', ''), by=best.get('by', ''),
+                                because=f'Giống quyết định cho hóa đơn {o.get("number")} của {o.get("seller_name")} '
+                                        f'({best.get("at", "")}): {why}. Kiểm tra chứng từ của hóa đơn này trước khi lưu.'))
+
+
 @app.post('/api/workspaces/{wid}/decisions/remember')
 async def decisions_remember(wid: str, request: Request):
     d = await request.json()

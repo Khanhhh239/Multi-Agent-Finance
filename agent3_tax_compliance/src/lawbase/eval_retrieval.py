@@ -12,7 +12,12 @@ from .rag import pack
 from .store import Corpus
 from .sync import DEFAULT_DB, PROJECT
 
-SETS = {'phát triển': PROJECT / 'configs/lawbase/eval_questions.json', 'giữ lại': PROJECT / 'configs/lawbase/eval_questions_holdout.json'}
+SETS = {'phát triển': PROJECT / 'configs/lawbase/eval_questions.json', 'giữ lại': PROJECT / 'configs/lawbase/eval_questions_holdout.json',
+        'giữ lại 2': PROJECT / 'configs/lawbase/eval_questions_holdout2.json'}
+CONFIGS = [('từ khóa', dict(hybrid=False)), ('lai bge-m3', dict(hybrid=True, dense_backend='bge-m3')),
+           ('lai Vietnamese_Embedding', dict(hybrid=True, dense_backend='vn')),
+           ('lai bge-m3 + reranker', dict(hybrid=True, dense_backend='bge-m3', rerank=True)),
+           ('lai Vietnamese_Embedding + reranker', dict(hybrid=True, dense_backend='vn', rerank=True))]
 
 
 def first_rank(passages, expected):
@@ -27,14 +32,14 @@ def main():
     c = Corpus(DEFAULT_DB)
     for name, path in SETS.items():
         qs = [q for q in json.loads(path.read_text(encoding='utf-8'))['questions'] if q['expected']]
-        for hybrid in (False, True):
-            c.hybrid = hybrid
+        for label, cfg in CONFIGS:
+            c.hybrid, c.dense_backend, c.rerank = cfg.get('hybrid'), cfg.get('dense_backend', 'bge-m3'), cfg.get('rerank', False)
             ranks = [first_rank([p.__dict__ for p in pack(c, q['q'], date.fromisoformat(q['as_of']))], q['expected']) for q in qs]
             hits = sum(r is not None for r in ranks)
             top1 = sum(r == 1 for r in ranks)
             mrr = sum(1 / r for r in ranks if r) / len(ranks)
             miss = [q['id'] for q, r in zip(qs, ranks) if r is None]
-            print(f'{name:10} {"lai (từ khóa + ngữ nghĩa)" if hybrid else "từ khóa":28} trúng {hits}/{len(qs)}  đứng đầu {top1}/{len(qs)}  MRR {mrr:.3f}  trượt {miss}')
+            print(f'{name:10} {label:38} trúng {hits}/{len(qs)}  đứng đầu {top1}/{len(qs)}  MRR {mrr:.3f}  trượt {miss}')
 
 
 if __name__ == '__main__':

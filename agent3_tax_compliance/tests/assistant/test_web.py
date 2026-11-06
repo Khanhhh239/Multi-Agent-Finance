@@ -77,3 +77,20 @@ def test_index_is_not_cached(client):
     r = client.get('/')
     if r.status_code == 200:
         assert r.headers['cache-control'] == 'no-cache'
+
+
+def test_decision_suggestion_comes_from_an_earlier_decision_on_the_same_seller(client):
+    wid = client.post('/api/demo').json()['id']
+    rep = client.post(f'/api/workspaces/{wid}/run').json()
+    invs = {i['key']: i for i in rep['invoices']}
+    by_seller = {}
+    for it in rep['items']:
+        if it['status'] in ('AT_RISK', 'REVIEW') and it['invoice_keys'] and it['invoice_keys'][0] in invs:
+            by_seller.setdefault((it['code'].split('_')[0], invs[it['invoice_keys'][0]]['seller_tax_id']), []).append(it)
+    pair = next(v for v in by_seller.values() if len({x['invoice_keys'][0] for x in v}) >= 2)   # the demo has such a pair (R02)
+    first, second = pair[0], next(x for x in pair if x['invoice_keys'][0] != pair[0]['invoice_keys'][0])
+    url = f'/api/workspaces/{wid}/decisions/suggest?key={second["invoice_keys"][0]}&code={second["code"]}'
+    assert client.get(url).json()['suggestion'] is None
+    client.post(f'/api/workspaces/{wid}/decisions', json=dict(invoice_key=first['invoice_keys'][0], action='NOT_CLAIMED', evidence='trả tiền mặt', by='kt'))
+    s = client.get(url).json()['suggestion']
+    assert s['action'] == 'NOT_CLAIMED' and 'cùng người bán' in s['because']

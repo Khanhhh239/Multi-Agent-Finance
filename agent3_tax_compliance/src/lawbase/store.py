@@ -48,6 +48,8 @@ def now() -> str:
 
 class Corpus:
     hybrid = True                                        # semantic retrieval (bge-m3) fused with keywords; set per instance
+    dense_backend = 'bge-m3'                             # or 'vn' (Vietnamese fine-tune); chosen by measurement
+    rerank = False                                       # cross-encoder over the top candidates; chosen by measurement
 
     def __init__(self, path: Path):
         self.path = Path(path)
@@ -154,7 +156,7 @@ class Corpus:
         dense = {}
         if self.hybrid:
             from .dense import nearest
-            dense = dict(nearest(self.db, query, 60))
+            dense = dict(nearest(self.db, query, 60, self.dense_backend))
             missing = [cid for cid in dense if cid not in {r['chunk_id'] for r in rows}]
             if missing:                                   # semantic candidates the keyword index missed, same date filters
                 extra = ('SELECT c.chunk_id, c.doc_id, c.prov_id, c.path, c.text, d.doc_num, d.title, d.doc_type, d.eff_from, d.eff_to, d.status_name, '
@@ -182,6 +184,17 @@ class Corpus:
             for r in rows:
                 r['rank'] = 0.4 * r['rank'] / top + 0.6 * r['coverage']
         rows.sort(key=lambda r: -r['rank'])
+        if self.rerank and rows:
+            from .dense import rerank_scores
+            head = rows[:30]
+            try:
+                sc = rerank_scores(query, [f"{r['path']}\n{r['text']}"[:1500] for r in head])
+                lo, hi = min(sc), max(sc)
+                for r, s in zip(head, sc):               # date and type logic stay; the cross-encoder decides most of the order
+                    r['rank'] = 0.7 * ((s - lo) / (hi - lo) if hi > lo else 0) + 0.3 * r['rank']
+                rows = sorted(head, key=lambda r: -r['rank']) + rows[30:]
+            except Exception:  # noqa: BLE001 - the reranker is optional
+                pass
         out, seen, versions = [], set(), {}
         for r in rows:                                   # one entry per clause: split pieces of the same unit are merged later
             key = (r['doc_id'], r['prov_id'])

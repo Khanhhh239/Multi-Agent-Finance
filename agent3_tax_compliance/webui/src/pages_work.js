@@ -200,7 +200,7 @@ function openItem(it, index) {
     <dt>Chứng từ ngân hàng</dt><dd>${match ? `${match.status === 'MATCHED' ? 'Đã ghép' : 'Mơ hồ'}. ${esc(match.note)}` : 'Chưa ghép được'}</dd><dt>Tệp</dt><dd class="mono">${esc(inv?.file || '')}</dd></dl>
     <div id="exposure"></div><h3>Chi tiết</h3><p>${esc(it.detail)}</p><h3>Việc cần làm</h3><p>${esc(it.action)}</p>
     <h3>Căn cứ</h3><ul>${it.basis.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>
-    ${canDecide ? `<h3 class="section">Ghi quyết định</h3><form id="decide"><div class="form-grid">
+    ${canDecide ? `<h3 class="section">Ghi quyết định</h3><div id="suggest"></div><form id="decide"><div class="form-grid">
       ${field({ key: 'action', label: 'Quyết định', type: 'choice', required: true, choices: decisionChoices(it), help: decisionHelp(it) }, decisionChoices(it)[0][0])}
       ${field({ key: 'evidence', label: 'Chứng từ hoặc lý do', required: true, example: 'Ủy nhiệm chi số 5521 ngày 05/09/2026' })}
       ${field({ key: 'by', label: 'Người duyệt', required: true, example: 'Kế toán trưởng' }, store.get('agent3.reviewer') || '')}</div>
@@ -210,6 +210,21 @@ function openItem(it, index) {
   if (it.status === 'AT_RISK' && Number.isInteger(index)) exposureBox($('#exposure'), index);
   const form = $('#decide');
   if (form) {
+    api(`/api/workspaces/${state.ws}/decisions/suggest?key=${encodeURIComponent(it.invoice_keys[0])}&code=${encodeURIComponent(it.code)}`).then((r) => {
+      const s = r.suggestion;
+      if (!s || !$('#suggest')) return;
+      const ok = decisionChoices(it).some(([v]) => v === s.action);
+      if (!ok) return;
+      $('#suggest').innerHTML = `<div class="banner banner-info"><div><strong>Gợi ý từ quyết định trước</strong><div class="small">${esc(s.because)}</div></div>
+        <button type="button" class="cds--btn cds--btn--ghost cds--btn--sm" id="use-sugg">Điền theo gợi ý</button></div>`;
+      $('#use-sugg').onclick = () => {
+        form.querySelector('[name=action]').value = s.action;
+        form.querySelector('[name=evidence]').value = '';
+        form.querySelector('[name=evidence]').placeholder = `Lần trước: ${s.evidence}`;
+        if (!form.querySelector('[name=by]').value) form.querySelector('[name=by]').value = s.by;
+        form.querySelector('[name=evidence]').focus();
+      };
+    }).catch(() => {});
     form.onsubmit = async (e) => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(form).entries());

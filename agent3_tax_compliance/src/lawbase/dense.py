@@ -16,6 +16,60 @@ URL = 'http://127.0.0.1:11434/api/embed'
 SCHEMA = 'CREATE TABLE IF NOT EXISTS chunk_vec(chunk_id TEXT PRIMARY KEY, vec BLOB)'
 _cache = {}
 
+# Second backend: a Vietnamese fine-tune of bge-m3 (AITeamVN/Vietnamese_Embedding, local copy in models/), run with
+# sentence-transformers. Its vectors live in their own table so both can be compared on the same questions.
+from pathlib import Path as _Path  # noqa: E402
+VN_DIR = _Path(__file__).resolve().parents[2] / 'models/Vietnamese_Embedding'
+VN_TABLE = 'chunk_vec_vn'
+RERANK_DIR = _Path(__file__).resolve().parents[2] / 'models/Vietnamese_Reranker'
+_st = {}
+
+
+def _vn_model():
+    if 'emb' not in _st:
+        import torch
+        from sentence_transformers import SentenceTransformer
+        m = SentenceTransformer(str(VN_DIR), device='cuda' if torch.cuda.is_available() else 'cpu')
+        m.max_seq_length = 512
+        if m.device.type == 'cuda':
+            m.half()
+        _st['emb'] = m
+    return _st['emb']
+
+
+def embed_vn(texts: list[str]) -> np.ndarray:
+    v = _vn_model().encode(texts, batch_size=16, normalize_embeddings=True, convert_to_numpy=True, show_progress_bar=False)
+    return v.astype(np.float32)
+
+
+def rerank_scores(query: str, texts: list[str]) -> list[float]:
+    """Cross-encoder relevance (AITeamVN/Vietnamese_Reranker, a fine-tune of bge-reranker-v2-m3)."""
+    if 'rr' not in _st:
+        import torch
+        from sentence_transformers import CrossEncoder
+        _st['rr'] = CrossEncoder(str(RERANK_DIR), device='cuda' if torch.cuda.is_available() else 'cpu', max_length=512)
+        if _st['rr'].model.device.type == 'cuda':
+            _st['rr'].model.half()
+    return [float(x) for x in _st['rr'].predict([(query, t) for t in texts], batch_size=16, show_progress_bar=False)]
+
+
+def build_vn(db_path, batch: int = 64, progress=print):
+    db = sqlite3.connect(db_path, timeout=60)
+    db.execute(f'CREATE TABLE IF NOT EXISTS {VN_TABLE}(chunk_id TEXT PRIMARY KEY, vec BLOB)')
+    todo = db.execute(f"""SELECT c.chunk_id, c.path, c.text FROM chunks c JOIN documents d USING(doc_id)
+                         LEFT JOIN {VN_TABLE} v USING(chunk_id) WHERE d.indexed=1 AND v.chunk_id IS NULL""").fetchall()
+    t0 = time.time()
+    for k in range(0, len(todo), batch):
+        part = todo[k:k + batch]
+        vecs = embed_vn([f'{p}\n{t}'[:2000] for _, p, t in part])
+        db.executemany(f'INSERT OR REPLACE INTO {VN_TABLE} VALUES(?,?)', [(cid, v.tobytes()) for (cid, _, _), v in zip(part, vecs)])
+        db.commit()
+        if progress and (k // batch) % 40 == 0:
+            progress(f'{k + len(part)}/{len(todo)} đoạn, {time.time() - t0:.0f} giây')
+    db.close()
+    _cache.pop(VN_TABLE, None)
+    return len(todo)
+
 
 def embed(texts: list[str], timeout: int = 300) -> np.ndarray:
     if len(texts) > 64:                                   # the server rejects very large batches
@@ -40,29 +94,30 @@ def build(db_path, batch: int = 32, progress=print):
         if progress and (k // batch) % 20 == 0:
             progress(f'{k + len(part)}/{len(todo)} đoạn, {time.time() - t0:.0f} giây')
     db.close()
-    _cache.clear()
+    _cache.pop('chunk_vec', None)
     return len(todo)
 
 
-def _matrix(db):
+def _matrix(db, table='chunk_vec'):
     """All vectors in memory once per process (27k x 1024 floats, about 110 MB)."""
-    n = db.execute('SELECT COUNT(*) FROM chunk_vec').fetchone()[0] if db.execute(
-        "SELECT 1 FROM sqlite_master WHERE name='chunk_vec'").fetchone() else 0
+    n = db.execute(f'SELECT COUNT(*) FROM {table}').fetchone()[0] if db.execute(
+        "SELECT 1 FROM sqlite_master WHERE name=?", (table,)).fetchone() else 0
     if not n:
         return None, None
-    if _cache.get('n') != n:
-        rows = db.execute('SELECT chunk_id, vec FROM chunk_vec').fetchall()
-        _cache.update(n=n, ids=[r[0] for r in rows], mat=np.frombuffer(b''.join(r[1] for r in rows), dtype=np.float32).reshape(len(rows), -1))
-    return _cache['ids'], _cache['mat']
+    c = _cache.setdefault(table, {})
+    if c.get('n') != n:
+        rows = db.execute(f'SELECT chunk_id, vec FROM {table}').fetchall()
+        c.update(n=n, ids=[r[0] for r in rows], mat=np.frombuffer(b''.join(r[1] for r in rows), dtype=np.float32).reshape(len(rows), -1))
+    return c['ids'], c['mat']
 
 
-def nearest(db, query: str, k: int = 60) -> list[tuple[str, float]]:
+def nearest(db, query: str, k: int = 60, backend: str = 'bge-m3') -> list[tuple[str, float]]:
     """(chunk_id, cosine) of the k nearest chunks, or [] when no vectors are built or the model is not running."""
-    ids, mat = _matrix(db)
+    ids, mat = _matrix(db, VN_TABLE if backend == 'vn' else 'chunk_vec')
     if ids is None:
         return []
     try:
-        q = embed([query], timeout=60)[0]
+        q = embed_vn([query])[0] if backend == 'vn' else embed([query], timeout=60)[0]
     except Exception:  # noqa: BLE001 - semantic search is optional; keyword search still answers
         return []
     sims = mat @ q
@@ -73,5 +128,7 @@ def nearest(db, query: str, k: int = 60) -> list[tuple[str, float]]:
 if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
     from .sync import DEFAULT_DB
+    if sys.argv[1:] == ['build-vn']:
+        print('đã thêm', build_vn(DEFAULT_DB), 'vectơ')
     if sys.argv[1:] == ['build']:
         print('đã thêm', build(DEFAULT_DB), 'vectơ')
