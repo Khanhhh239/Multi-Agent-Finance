@@ -230,39 +230,13 @@ def dossier_file(wid: str, name: str):
 
 
 # ----------------------------------------------------------------------------- A5: law alerts
-# Title words that make a change relevant to a small or medium enterprise, and words of public-sector topics that do not.
-SME_TOPICS = ('thue gia tri gia tang', 'thu nhap doanh nghiep', 'thu nhap ca nhan', 'hoa don', 'chung tu', 'quan ly thue', 'ho kinh doanh',
-              'giam thue', 'mien thue', 'gia han', 'khau tru', 'hoan thue', 'xu phat', 'ke toan doanh nghiep', 'che do ke toan',
-              'doanh nghiep nho va vua', 'nop thue', 'khai thue', 'thuong mai dien tu', 'tieu thu dac biet')
-SME_NOISE = ('thi hanh an', 'ngan sach nha nuoc', 'kho bac', 'du tru quoc gia', 'quoc phong', 'oda', 'hanh chinh su nghiep', 'vay, tra no',
-             'vay tra no', 'cong chuc', 'trang phuc', 'phu hieu', 'ngan hang nha nuoc', 'to chuc tin dung', 'boi duong')
-
-
 @app.get('/api/law/alerts')
 def law_alerts(days_back: int = 150, days_ahead: int = 180):
+    """Relevance by meaning against the topics of the shared catalog (law_topics.json, admin page)."""
     if not LAW_DB.exists():
         return []
-    today = date.today()
-    lo, hi = (today - timedelta(days=days_back)).isoformat(), (today + timedelta(days=days_ahead)).isoformat()
-    c = Corpus(LAW_DB)
-    try:
-        new = [dict(r, kind='EFFECTIVE') for r in c.db.execute(
-            """SELECT d.doc_id, d.doc_type, d.doc_num, d.title, d.eff_from AS day, d.url FROM documents d
-               WHERE d.indexed=1 AND d.doc_type IN ('Luật','Nghị định','Thông tư','Nghị quyết') AND d.eff_from BETWEEN ? AND ?
-               ORDER BY d.eff_from DESC""", (lo, hi))]
-        ended = [dict(r, kind='ENDED') for r in c.db.execute(
-            """SELECT d.doc_id, d.doc_type, d.doc_num, d.title, v.eff_to AS day, d.url, v.by_doc_num FROM validity v JOIN documents d USING(doc_id)
-               WHERE v.eff_to BETWEEN ? AND ? AND d.doc_type NOT LIKE 'Văn bản hợp nhất%' ORDER BY v.eff_to DESC""", (lo, hi))]
-        from ..extraction.xml_context import fold
-        def relevant(r):
-            t = fold(r['title'])
-            if any(w in t for w in SME_NOISE):
-                return 0
-            return sum(w in t for w in SME_TOPICS)
-        rows = [dict(r, relevance=relevant(r)) for r in new + ended]
-        return sorted([r for r in rows if r['relevance'] > 0], key=lambda r: (-r['relevance'], r['day']), reverse=False)
-    finally:
-        c.close()
+    from .catalog import law_alerts as alerts
+    return _json(alerts(LAW_DB, date.today(), days_back, days_ahead))
 
 
 @app.post('/api/law/alerts/{doc_id}/summary')

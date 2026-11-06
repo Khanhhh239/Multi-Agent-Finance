@@ -105,7 +105,7 @@ def explain(ai: AI | None, item: dict, invoice: dict | None) -> Explanation:
 
 
 # ----------------------------------------------------------------------------- A1: line purpose
-CATEGORIES = {
+CATEGORIES_DEFAULT = {
     'HANG_HOA_KINH_DOANH': 'hàng mua để bán lại, nguyên vật liệu cho sản xuất',
     'CONG_CU_TAI_SAN': 'máy móc, công cụ, thiết bị, tài sản dùng cho hoạt động kinh doanh',
     'DICH_VU_VAN_HANH': 'điện, nước, viễn thông, thuê mặt bằng, vận chuyển, sửa chữa, văn phòng phẩm, phần mềm',
@@ -113,13 +113,23 @@ CATEGORIES = {
     'CA_NHAN': 'đồ dùng cá nhân hoặc gia đình, hàng xa xỉ, không thấy phục vụ kinh doanh',
     'KHONG_RO': 'tên hàng quá chung chung, không đủ để nhận định',
 }
-CLASSIFY_SYSTEM = """Bạn là kế toán thuế. Với từng dòng hàng trên một hóa đơn mua vào của doanh nghiệp, chọn đúng một nhóm và cho biết
+def _categories():
+    """Item groups from the shared catalog (admin page); the built-in list only when the catalog cannot be read."""
+    try:
+        from .catalog import ai_categories
+        return ai_categories() or CATEGORIES_DEFAULT
+    except Exception:  # noqa: BLE001
+        return CATEGORIES_DEFAULT
+
+
+CATEGORIES = CATEGORIES_DEFAULT
+CLASSIFY_SYSTEM_HEAD = """Bạn là kế toán thuế. Với từng dòng hàng trên một hóa đơn mua vào của doanh nghiệp, chọn đúng một nhóm và cho biết
 hàng đó có phục vụ hoạt động của doanh nghiệp hay không (CO, KHONG, KHONG_RO). Lý do ngắn, phải nhắc tới tên hàng.
 Phục vụ hoạt động của doanh nghiệp gồm cả hàng đúng ngành nghề lẫn mọi chi phí vận hành: văn phòng và đồ dùng văn phòng, phần mềm,
 dịch vụ thuê ngoài, xe và phương tiện, sửa chữa, bảo dưỡng, bảo hiểm, bảo hộ lao động, kho bãi. Ngành nghề chỉ dùng để nhận ra hàng
 lạ so với hoạt động. Chỉ trả KHONG khi hàng rõ ràng dành cho cá nhân, gia đình, giải trí, chăm sóc sắc đẹp hoặc xa xỉ.
 Chỉ nhận định từ tên hàng, người bán và ngành nghề trong dữ kiện; không suy diễn thêm. Khi không đủ thông tin, chọn KHONG_RO.
-Các nhóm: """ + '; '.join(f'{k}: {v}' for k, v in CATEGORIES.items()) + """
+Các nhóm: {cats}
 Trả về JSON {"lines": [{"index": số thứ tự dòng, "category": nhóm, "business_use": "CO|KHONG|KHONG_RO", "reason": "..."}]}."""
 CLASSIFY_SCHEMA = {'type': 'object', 'properties': {'lines': {'type': 'array', 'items': {'type': 'object', 'properties': {
     'index': {'type': 'integer'}, 'category': {'type': 'string', 'enum': list(CATEGORIES)},
@@ -131,12 +141,14 @@ def classify_lines(ai: AI, invoice: dict, industry: list[str], extra: tuple = ()
     """Labels for the lines of one purchase invoice. Lines whose label fails verification are returned as UNVERIFIED.
     extra: the enterprise's own business categories (name, description); they count as business use."""
     lines = [d for d in invoice.get('descriptions', []) if d]
-    cats = dict(CATEGORIES)
+    base = _categories()
+    cats = dict(base)
     for name, desc in extra:
         cats['RIENG_' + fold(name).upper().replace(' ', '_')[:30]] = f'{desc} (nhóm riêng của doanh nghiệp, phục vụ kinh doanh)'
-    system = CLASSIFY_SYSTEM if not extra else CLASSIFY_SYSTEM.replace(
+    head = CLASSIFY_SYSTEM_HEAD.replace('{cats}', '; '.join(f'{k}: {v}' for k, v in base.items()))
+    system = head if not extra else head.replace(
         'Trả về JSON', 'Nhóm riêng của doanh nghiệp: ' + '; '.join(f'{k}: {v}' for k, v in cats.items() if k.startswith('RIENG_')) + '\nTrả về JSON')
-    schema = CLASSIFY_SCHEMA if not extra else {**CLASSIFY_SCHEMA, 'properties': {'lines': {'type': 'array', 'items': {
+    schema = {**CLASSIFY_SCHEMA, 'properties': {'lines': {'type': 'array', 'items': {
         **CLASSIFY_SCHEMA['properties']['lines']['items'], 'properties': {**CLASSIFY_SCHEMA['properties']['lines']['items']['properties'],
                                                                         'category': {'type': 'string', 'enum': list(cats)}}}}}}
     payload = dict(nganh_nghe_dang_ky=industry or ['không ghi'], nguoi_ban=invoice.get('seller_name'),

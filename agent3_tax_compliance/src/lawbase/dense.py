@@ -18,6 +18,8 @@ _cache = {}
 
 
 def embed(texts: list[str], timeout: int = 300) -> np.ndarray:
+    if len(texts) > 64:                                   # the server rejects very large batches
+        return np.vstack([embed(texts[k:k + 64], timeout) for k in range(0, len(texts), 64)])
     req = urllib.request.Request(URL, data=json.dumps(dict(model=MODEL, input=texts)).encode(), headers={'Content-Type': 'application/json'})
     out = json.loads(urllib.request.urlopen(req, timeout=timeout).read())['embeddings']
     v = np.asarray(out, dtype=np.float32)

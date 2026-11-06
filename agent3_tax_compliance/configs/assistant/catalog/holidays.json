@@ -1,0 +1,75 @@
+{
+ "version": "2026-11-06a",
+ "note": "Ngày nghỉ lễ dùng để dời hạn nộp hồ sơ thuế khi hạn trùng ngày nghỉ. Thứ Bảy, Chủ nhật luôn được tính. Ngày \"verified\": false là phương án đã công bố trên báo, cần đối chiếu thông báo chính thức của Bộ Nội vụ và sửa tại trang quản trị nếu khác.",
+ "fixed": [
+  {
+   "month": 1,
+   "day": 1,
+   "name": "Tết Dương lịch"
+  },
+  {
+   "month": 4,
+   "day": 30,
+   "name": "Ngày Chiến thắng"
+  },
+  {
+   "month": 5,
+   "day": 1,
+   "name": "Quốc tế Lao động"
+  },
+  {
+   "month": 9,
+   "day": 2,
+   "name": "Quốc khánh"
+  }
+ ],
+ "years": {
+  "2026": [
+   {
+    "date": "2026-02-16",
+    "name": "Tết Nguyên đán Bính Ngọ",
+    "verified": false
+   },
+   {
+    "date": "2026-02-17",
+    "name": "Tết Nguyên đán Bính Ngọ",
+    "verified": false
+   },
+   {
+    "date": "2026-02-18",
+    "name": "Tết Nguyên đán Bính Ngọ",
+    "verified": false
+   },
+   {
+    "date": "2026-02-19",
+    "name": "Tết Nguyên đán Bính Ngọ",
+    "verified": false
+   },
+   {
+    "date": "2026-02-20",
+    "name": "Tết Nguyên đán Bính Ngọ",
+    "verified": false
+   },
+   {
+    "date": "2026-04-27",
+    "name": "Giỗ Tổ Hùng Vương (nghỉ bù vì 26/4 là Chủ nhật)",
+    "verified": false
+   },
+   {
+    "date": "2026-08-31",
+    "name": "Quốc khánh (nghỉ thêm)",
+    "verified": false
+   },
+   {
+    "date": "2026-09-01",
+    "name": "Quốc khánh (nghỉ thêm)",
+    "verified": false
+   }
+  ],
+  "2027": []
+ },
+ "sources": [
+  "https://tuoitre.vn/chi-tiet-so-ngay-nghi-trong-cac-dip-le-nam-2026-20251231230420433.htm",
+  "https://hatinh.gov.vn/vi/bai-viet/lich-nghi-le-gio-to-hung-vuong-304-15-quoc-khanh-29-nam-2026"
+ ]
+}

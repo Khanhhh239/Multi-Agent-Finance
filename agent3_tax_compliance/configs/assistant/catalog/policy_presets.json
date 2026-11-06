@@ -1,0 +1,176 @@
+{
+ "version": "2026-11-06a",
+ "note": "Quy định chi tiêu nội bộ gợi ý khi thiết lập doanh nghiệp. Mỗi quy định chỉ thêm nhắc nhở, không đổi kết quả theo luật. \"for\": hai chữ số đầu mã ngành VSIC được gợi ý; để trống là gợi ý cho mọi doanh nghiệp; \"recommended\": đánh dấu sẵn cho mọi doanh nghiệp.",
+ "presets": [
+  {
+   "id": "TIEP_KHACH",
+   "flag": "Chi tiếp khách cần giấy đề nghị thanh toán và danh sách khách",
+   "description_contains": [
+    "tiếp khách",
+    "nhà hàng",
+    "ăn uống"
+   ],
+   "min_gross": 2000000,
+   "group": "Chung",
+   "for": [],
+   "recommended": true
+  },
+  {
+   "id": "QUA_TANG",
+   "flag": "Quà tặng, quà biếu cần danh sách người nhận và mục đích",
+   "description_contains": [
+    "quà",
+    "biếu"
+   ],
+   "group": "Chung",
+   "for": [],
+   "recommended": false
+  },
+  {
+   "id": "CONG_TAC",
+   "flag": "Công tác phí cần quyết định cử đi công tác",
+   "description_contains": [
+    "vé máy bay",
+    "khách sạn",
+    "công tác"
+   ],
+   "group": "Chung",
+   "for": [],
+   "recommended": false
+  },
+  {
+   "id": "TAI_SAN",
+   "flag": "Hàng từ 30 triệu đồng có thể là tài sản cố định: kiểm tra cách hạch toán",
+   "min_gross": 30000000,
+   "group": "Chung",
+   "for": [],
+   "recommended": true
+  },
+  {
+   "id": "XANG_DAU",
+   "flag": "Xăng dầu cần định mức và nhật ký xe",
+   "description_contains": [
+    "xăng",
+    "dầu diesel",
+    "nhiên liệu"
+   ],
+   "group": "Vận tải, xây dựng, thương mại",
+   "for": [
+    "49",
+    "41",
+    "42",
+    "43",
+    "46",
+    "52"
+   ],
+   "recommended": false
+  },
+  {
+   "id": "THIET_BI_CNTT",
+   "flag": "Thiết bị công nghệ thông tin cần biên bản bàn giao cho người hoặc bộ phận sử dụng",
+   "description_contains": [
+    "máy tính",
+    "laptop",
+    "máy chủ",
+    "server",
+    "điện thoại",
+    "máy tính bảng"
+   ],
+   "group": "Công nghệ thông tin",
+   "for": [
+    "58",
+    "61",
+    "62",
+    "63"
+   ],
+   "recommended": false
+  },
+  {
+   "id": "DICH_VU_NUOC_NGOAI",
+   "flag": "Phần mềm, dịch vụ đám mây mua của tổ chức nước ngoài: lưu hợp đồng, chứng từ thanh toán và kiểm tra nghĩa vụ thuế khi mua dịch vụ từ nước ngoài",
+   "description_contains": [
+    "license",
+    "bản quyền",
+    "cloud",
+    "đám mây",
+    "subscription",
+    "aws",
+    "azure",
+    "google workspace"
+   ],
+   "group": "Công nghệ thông tin",
+   "for": [
+    "58",
+    "61",
+    "62",
+    "63"
+   ],
+   "recommended": false
+  },
+  {
+   "id": "PHAN_MEM_TRA_TRUOC",
+   "flag": "Bản quyền phần mềm trả trước nhiều năm: phân bổ chi phí theo thời gian sử dụng",
+   "description_contains": [
+    "bản quyền",
+    "license"
+   ],
+   "min_gross": 20000000,
+   "group": "Công nghệ thông tin",
+   "for": [
+    "58",
+    "62",
+    "63"
+   ],
+   "recommended": false
+  },
+  {
+   "id": "NGUYEN_LIEU",
+   "flag": "Nguyên liệu mua của người bán không có hóa đơn cần lập bảng kê thu mua",
+   "description_contains": [
+    "thịt",
+    "cá",
+    "rau",
+    "gạo",
+    "trái cây"
+   ],
+   "group": "Nhà hàng, ăn uống",
+   "for": [
+    "56",
+    "55",
+    "10"
+   ],
+   "recommended": false
+  },
+  {
+   "id": "VAN_CHUYEN",
+   "flag": "Cước vận chuyển cần hợp đồng hoặc biên bản giao nhận kèm theo",
+   "description_contains": [
+    "vận chuyển",
+    "cước"
+   ],
+   "min_gross": 5000000,
+   "group": "Vận tải, xây dựng, thương mại",
+   "for": [
+    "41",
+    "42",
+    "43",
+    "46",
+    "47"
+   ],
+   "recommended": false
+  },
+  {
+   "id": "SUA_CHUA_LON",
+   "flag": "Sửa chữa từ 50 triệu đồng: kiểm tra có làm tăng nguyên giá tài sản không",
+   "description_contains": [
+    "sửa chữa",
+    "cải tạo",
+    "nâng cấp"
+   ],
+   "min_gross": 50000000,
+   "group": "Chung",
+   "for": [],
+   "recommended": false
+  }
+ ]
+}

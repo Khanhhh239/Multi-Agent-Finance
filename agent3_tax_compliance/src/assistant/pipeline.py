@@ -34,8 +34,6 @@ def input_digest(ws: Path) -> str:
     return h.hexdigest()
 
 
-# Fixed public holidays (Tết and yearly substitute days off are announced each year; the pack may list them in days_off).
-FIXED_DAYS_OFF = {(1, 1), (4, 30), (5, 1), (9, 2)}
 
 
 def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
@@ -74,11 +72,13 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
             label = f'năm {y}' if fy_end == 12 else f'năm tài chính kết thúc {last:%d/%m/%Y}'
             out.append(dict(period=f'Quyết toán thuế TNDN {label}', due=date(dy, dm, cal.monthrange(dy, dm)[1]), basis=fin[1]))
     shift = param(ruleset, 'DEADLINE_DAY_OFF_SHIFT', as_of) if 'DEADLINE_DAY_OFF_SHIFT' in ruleset['parameters'] else None
-    extra_days_off = {date.fromisoformat(d) for d in getattr(pack, 'days_off', ())}
+    from .catalog import days_off
+    fixed_off, dated_off = days_off()                     # shared holiday catalog (admin page), plus the enterprise's own days off
+    extra_days_off = dated_off | {date.fromisoformat(d) for d in getattr(pack, 'days_off', ())}
     for e in out:
         if shift:
             legal = e['due']
-            while legal.weekday() >= 5 or (legal.month, legal.day) in FIXED_DAYS_OFF or legal in extra_days_off:
+            while legal.weekday() >= 5 or (legal.month, legal.day) in fixed_off or legal in extra_days_off:
                 legal += timedelta(days=1)
             if legal != e['due']:
                 e['moved_from'], e['due'] = e['due'], legal
@@ -88,7 +88,7 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
         days = (e['due'] - as_of).days
         e['status'] = f'còn {days} ngày' if days >= 0 else f'hạn đã qua {-days} ngày, kiểm tra đã nộp chưa'
         e['note'] = ((f'Dời từ {e["moved_from"]:%d/%m/%Y} vì trùng ngày nghỉ. ' if e.get('moved_from') else '')
-                     + 'Đã tính thứ Bảy, Chủ nhật và các ngày lễ cố định; nghỉ Tết và nghỉ bù hằng năm cần nhập trong gói'
+                     + 'Đã tính thứ Bảy, Chủ nhật và lịch nghỉ lễ trong danh mục dùng chung (sửa ở trang quản trị)'
                      + (f'. {e["extension"]}' if e.get('extension') else ''))
     return out
 

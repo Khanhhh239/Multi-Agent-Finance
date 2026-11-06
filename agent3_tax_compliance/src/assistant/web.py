@@ -176,35 +176,21 @@ def portal_suggest(wid: str):
                             issue_date='Ngày lập', vat='Tổng tiền thuế', gross='Tổng tiền thanh toán'))
 
 
-# Ready-made internal policies the set-up wizard offers; each only adds a reminder flag, never changes a legal result.
-# "for": industry code prefixes (VSIC, first two digits) for which the policy is recommended; empty = every enterprise.
-POLICY_PRESETS = [
-    dict(id='TIEP_KHACH', flag='Chi tiếp khách cần giấy đề nghị thanh toán và danh sách khách', description_contains=['tiếp khách', 'nhà hàng', 'ăn uống'], min_gross=2000000, group='Chung', **{'for': []}),
-    dict(id='QUA_TANG', flag='Quà tặng, quà biếu cần danh sách người nhận và mục đích', description_contains=['quà', 'biếu'], group='Chung', **{'for': []}),
-    dict(id='CONG_TAC', flag='Công tác phí cần quyết định cử đi công tác', description_contains=['vé máy bay', 'khách sạn', 'công tác'], group='Chung', **{'for': []}),
-    dict(id='TAI_SAN', flag='Hàng từ 30 triệu đồng có thể là tài sản cố định: kiểm tra cách hạch toán', min_gross=30000000, group='Chung', **{'for': []}),
-    dict(id='XANG_DAU', flag='Xăng dầu cần định mức và nhật ký xe', description_contains=['xăng', 'dầu diesel', 'nhiên liệu'], group='Vận tải, xây dựng, thương mại', **{'for': ['49', '41', '42', '43', '46', '52']}),
-    dict(id='THIET_BI_CNTT', flag='Thiết bị công nghệ thông tin cần biên bản bàn giao cho người hoặc bộ phận sử dụng', description_contains=['máy tính', 'laptop', 'máy chủ', 'server', 'điện thoại', 'máy tính bảng'], group='Công nghệ thông tin', **{'for': ['58', '61', '62', '63']}),
-    dict(id='DICH_VU_NUOC_NGOAI', flag='Phần mềm, dịch vụ đám mây mua của tổ chức nước ngoài: lưu hợp đồng, chứng từ thanh toán và kiểm tra nghĩa vụ thuế khi mua dịch vụ từ nước ngoài', description_contains=['license', 'bản quyền', 'cloud', 'đám mây', 'subscription', 'aws', 'azure', 'google workspace'], group='Công nghệ thông tin', **{'for': ['58', '61', '62', '63']}),
-    dict(id='PHAN_MEM_TRA_TRUOC', flag='Bản quyền phần mềm trả trước nhiều năm: phân bổ chi phí theo thời gian sử dụng', description_contains=['bản quyền', 'license'], min_gross=20000000, group='Công nghệ thông tin', **{'for': ['58', '62', '63']}),
-    dict(id='NGUYEN_LIEU', flag='Nguyên liệu mua của người bán không có hóa đơn cần lập bảng kê thu mua', description_contains=['thịt', 'cá', 'rau', 'gạo', 'trái cây'], group='Nhà hàng, ăn uống', **{'for': ['56', '55', '10']}),
-    dict(id='VAN_CHUYEN', flag='Cước vận chuyển cần hợp đồng hoặc biên bản giao nhận kèm theo', description_contains=['vận chuyển', 'cước'], min_gross=5000000, group='Vận tải, xây dựng, thương mại', **{'for': ['41', '42', '43', '46', '47']}),
-    dict(id='SUA_CHUA_LON', flag='Sửa chữa từ 50 triệu đồng: kiểm tra có làm tăng nguyên giá tài sản không', description_contains=['sửa chữa', 'cải tạo', 'nâng cấp'], min_gross=50000000, group='Chung', **{'for': []}),
-]
-
-
 def _industry_codes(industry: list[str]) -> set[str]:
     return {m.group(1)[:2] for x in industry or [] for m in [re.match(r'\s*(\d{2,5})', str(x))] if m}
 
 
 @app.get('/api/presets')
 def presets(industry: str = ''):
-    """Presets, each marked recommended when it fits one of the enterprise's industry codes or applies to everyone."""
+    """Spending-policy presets from the shared catalog (configs/assistant/catalog/policy_presets.json, edited on the
+    protected settings page). A preset is recommended when it fits one of the enterprise's industry codes, or is marked
+    recommended for everyone."""
+    from .catalog import policy_presets
     codes = _industry_codes([x for x in industry.split(';') if x.strip()])
     out = []
-    for p in POLICY_PRESETS:
-        fit = bool(set(p['for']) & codes)
-        out.append(dict(p, recommended=fit or (not p['for'] and p['id'] in ('TIEP_KHACH', 'TAI_SAN')), industry_fit=fit))
+    for p in policy_presets():
+        fit = bool(set(p.get('for', [])) & codes)
+        out.append(dict(p, recommended=fit or bool(p.get('recommended')), industry_fit=fit))
     out.sort(key=lambda p: (not p['industry_fit'], not p['recommended']))
     return dict(policies=out, industry_codes=sorted(codes))
 
@@ -336,9 +322,28 @@ def coverage(wid: str):
 
 
 # ----------------------------------------------------------------------------- analysis, review, questions
+_REPORTS = {}
+
+
+def _cached_report(ws: Path):
+    """The analysis result for the current inputs. Recomputed only when a file of the workspace, the ruleset, the shared
+    catalogs or the analysis date changes; with hundreds of invoices a rerun takes seconds, a cache hit milliseconds."""
+    from . import catalog
+    key = (str(ws), pipeline.input_digest(ws), str(_as_of(ws)), pipeline.DEFAULT_RULESET.stat().st_mtime,
+           catalog.path('holidays').stat().st_mtime)
+    hit = _REPORTS.get(str(ws))
+    if hit and hit[0] == key:
+        return hit[1], True
+    rep = pipeline.run(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
+    _REPORTS[str(ws)] = (key, rep)
+    return rep, False
+
+
 def _run(ws: Path):
     try:
-        rep = pipeline.run(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
+        rep, cached = _cached_report(ws)
+        if cached and (ws / 'out' / 'report.json').exists():
+            return rep
     except Exception as e:  # noqa: BLE001 - shown to the user, never hidden
         raise HTTPException(422, f'{type(e).__name__}: {e}')
     report_mod.write(rep, ws / 'out')
@@ -400,9 +405,30 @@ async def add_decision(wid: str, request: Request):
 async def ask(wid: str, request: Request):
     ws = ws_path(wid)
     body = await request.json()
-    rep = pipeline.run(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
-    ans = qa.answer(body['question'], qa.Context(ws, pipeline.DEFAULT_RULESET, _as_of(ws), rep, LAW_DB if LAW_DB.exists() else None))
-    return _json(dataclasses.asdict(ans))
+    from .chat import engine
+    rep = _run(ws)
+    ctx = engine.ChatContext(ws, pipeline.DEFAULT_RULESET, _as_of(ws), rep, LAW_DB if LAW_DB.exists() else None)
+    q = str(body.get('question', '')).strip()[:500]
+    if not q:
+        raise HTTPException(422, 'câu hỏi rỗng')
+    try:
+        return engine.answer(q, ctx, body.get('domain'))
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+
+
+@app.get('/api/chat/guide')
+def chat_guide():
+    from .chat import engine
+    return engine.guide()
+
+
+@app.get('/api/workspaces/{wid}/chat/suggestions')
+def chat_suggestions(wid: str):
+    from .chat import engine
+    ws = ws_path(wid)
+    rep = _run(ws)
+    return engine.suggestions(engine.ChatContext(ws, pipeline.DEFAULT_RULESET, _as_of(ws), rep, None))
 
 
 # ----------------------------------------------------------------------------- legal corpus
