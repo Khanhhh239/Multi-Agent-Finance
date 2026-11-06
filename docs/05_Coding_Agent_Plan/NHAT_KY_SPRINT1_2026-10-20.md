@@ -1,7 +1,13 @@
 # Nhật ký Sprint 1 — T1 trên dữ liệu thật (agent1-Khanh, 20/10/2026)
 
+> **Nhật ký thực thi 20–24/10/2026; biên tập liên kết 06/11/2026.** Các câu
+> giao việc, tiến trình “đang chạy”, lệnh máy cũ và commit/push bên dưới là
+> bối cảnh lịch sử. Không thực thi lại chúng từ việc đọc nhật ký. Bảng số,
+> CI, thời gian và kết luận theo ngày được giữ nguyên; dữ liệu World nguồn
+> đời đầu hiện đã xóa.
+
 Mục đích: ghi lại **đã làm gì, tìm ra gì, sửa gì, còn gì** để coding agent khác tiếp tục mà không phải chẩn đoán lại.
-Kế hoạch gốc: [09_KE_HOACH_TIEP_THEO_2026-10-20.md](09_KE_HOACH_TIEP_THEO_2026-10-20.md) — Sprint 1 (1.1, 1.2, 1.3).
+Kế hoạch gốc: [CHIEN_LUOC_TIEP_THEO_2026-10-24.md](CHIEN_LUOC_TIEP_THEO_2026-10-24.md#ke-hoach-20261020) — Sprint 1 (1.1, 1.2, 1.3).
 
 ## 1. Phát hiện
 
@@ -111,13 +117,13 @@ dùng hiệu chỉnh khoảng ở T6/ACI thay vào đó.
   nếu thua ⇒ kích hoạt luật dừng của Sprint 1 (B1d + CQR cho AR kỳ hạn ngắn).
 
 ## 6. Prompt giao cho coding agent khác
-Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1–6). agent1-Khanh giữ: kết luận BPI v2 và G13.
+Xem [NHAT_KY_SPRINT1_2026-10-20.md](NHAT_KY_SPRINT1_2026-10-20.md#giao-viec-2122) (Việc 1–6). agent1-Khanh giữ: kết luận BPI v2 và G13.
 
 ### 6b. Chuẩn bị chạy lại 21/10/2026
 
 - Đã sao lưu 181 CSV cũ dưới đuôi `.legacy_expand.csv`, manifest SHA-256 ở `outputs/implementation/legacy_expand_backups.json`. Không đổi `expand`, `HazardLR._prep`, script v2; kiểm hash trước/sau từng job.
 - Đăng ký C-v2 trong luồng chính. G5/G6 đọc BLEND v2, giữ G5_v1/G6_v1. Thêm B1 reference cùng 17.922 hàng CI: pinball 1,8978065592; G5/G6 mới đạt theo tiêu chí người giao việc, không thay ngưỡng. Registry: `outputs/implementation/real_v2_gate_registration.json`.
-- P4/G3/P5 đã chuẩn bị mã và kiểm thử, **chưa coi là hoàn tất phép đo**. Thiết kế và lệnh: `docs/04_AI_Methods/13_fullweek_refresh_2026-10-21.md`.
+- P4/G3/P5 đã chuẩn bị mã và kiểm thử, **chưa coi là hoàn tất phép đo**. Thiết kế và lệnh: `docs/04_AI_Methods/02_t1_hazard_thoi_diem_tra.md#fullweek-20261021`.
 - Rà soát trước lượt P4/T9 ngày 21/10: P4 chuyển float64 → float32 đúng như v2 trước cả hai nhánh, tránh khác biệt độ chính xác số làm nhiễu ablation. Cache T9 cũ thiếu `training_firms`; P5 dùng cache nguồn riêng, học đúng 12 DN nguồn năm 2023/hiệu chỉnh 2024H1 và lưu provenance trước khi chọn 28 DN ngoài tập học. Kiểm thử liên quan đạt (18 ca đặc trưng/cổng/CQR/xuất bản; 11 ca provenance/đối soát). Chưa có kết quả P4/P5 để kết luận; không đổi ba vùng mã khóa.
 - Bộ đếm hàng scaling đã sửa theo tuần quan sát đủ, có kiểm thử sự kiện trong tuần bị cắt. CSV E2E cuối chỉ phát marker fullweek sau cả nhánh oracle; CSV chạy dở lưu riêng để không đánh thức bộ chờ sớm.
 - Máy dùng chung, RAM có lúc <1 GiB. `fullweek_refresh.py` đợi >=3 GiB trước từng job, 4 luồng; không dừng Agent4. `fullweek_finish.py` chạy P4/T9-source-policy sau đủ chuỗi 18 job; G3 đã có thể đo nhẹ trực tiếp sau A. C-v2 đã có CSV expand mới nên chỉ đăng ký job/tích hợp cổng; P4 tái lập mốc BLEND, không huấn luyện thêm LR/QLGBM v2 ngoài nhu cầu. G13 để agent1-Khanh.
@@ -308,7 +314,7 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 
 ## 21. Nhãn mềm T9 và G13 đạt trên tgt5 (agent1-Khanh, 24/10/2026)
 
-- Phiên trước bị cắt: chuỗi `tgt5` chết vì lỗi `fork` (cạn tài nguyên), thí nghiệm độ phủ 50% bị cắt giữa chừng. Chạy lại bằng một chuỗi duy nhất `scripts/sprint5/g13_all_chain.sh` (tuần tự, nhường RAM).
+- Phiên trước bị cắt: chuỗi `tgt5` chết vì lỗi `fork` (cạn tài nguyên), thí nghiệm độ phủ 50% bị cắt giữa chừng. Khi đó chạy lại bằng một chuỗi duy nhất `scripts/sprint5/g13_all_chain.sh` (tuần tự, nhường RAM). Launcher này đã xóa trong đợt dọn 06/11/2026; tên file được giữ ở đây để ghi nhận lịch sử.
 - **Nhãn mềm** (`agent1/models/t9_soft_labels.py`, đăng ký trước `G13_SOFT_LABELS_PREREG.md`, commit `fbe3f62`): phần tiền dư của giao dịch đã biết khách → hoá đơn chưa nhãn theo hạn sớm nhất, bỏ qua hoá đơn đã đóng trong sổ cái. Đo nguồn: độ phủ 74,6% → 90,9%; 1/3 nhãn mềm sai > 14 ngày. Ngưỡng 0,8 chọn trên nguồn theo quy tắc ghi trước.
 - **tgt5 (niêm phong, 20 sự kiện, 30 công ty), đo một lần:** T9 v2 báo giả **2,007** [1,24; 2,74]; **T9 v2 + nhãn mềm 0,769 [0,37; 1,17]**, phát hiện 0,90, độ sớm 8,0; nhãn thật 0,334. Độ phủ nhãn 60,6% → 94,8%; nhãn mềm riêng: MAE 14,2 ngày, 27% sai > 14 ngày.
   ⇒ **`G13_tgt5` đạt ở điểm ước lượng** (CI trên 1,17 chạm ngưỡng, chỉ 20 sự kiện). Dòng G13 chính thức (tgt, nhãn T9 cũ) vẫn trượt — việc chuyển sang đường nhãn mềm là quyết định của chủ dự án.
@@ -337,3 +343,30 @@ Xem [PROMPT_GIAO_VIEC_2026-10-21.md](PROMPT_GIAO_VIEC_2026-10-21.md) (Việc 1�
 - **Kiểm tra T9 không hỏng** (`scripts/pilot/privacy_t9_parity.py`, tgt3): precision 0,962 → 0,963; recall 0,557 → 0,550; F1 0,706 → 0,700 (−0,6 điểm). Chấp nhận được.
 - Kiểm thử: `tests/test_privacy_ingest.py` (5 ca); toàn bộ 373 đạt.
 - Còn lại: công cụ cho doanh nghiệp tự dựng bảng đối chiếu mã ↔ tên (`pseudonym_map` có sẵn); ghi rõ ai giữ khoá; pháp chế rà soát.
+
+
+<a id="giao-viec-2122"></a>
+
+## Phụ lục — bối cảnh bàn giao ngày 21–22/10
+
+Hai prompt bàn giao đã được gộp ngày 06/11; tên gốc
+`PROMPT_GIAO_VIEC_2026-10-21.md` và `PROMPT_GIAO_VIEC_2026-10-22.md` chỉ là
+định danh hồ sơ lịch sử, không phải file còn dùng để giao việc.
+
+- **21/10:** yêu cầu sửa báo cáo/CSV sang fullweek, giữ bản legacy; C-v2,
+  P4 và G3 có tiêu chí đã đăng ký. Phần này được giữ ở
+  [phương pháp T1/fullweek](../04_AI_Methods/02_t1_hazard_thoi_diem_tra.md#fullweek-20261021)
+  và [T9 source-policy](../04_AI_Methods/07_t7_t9_t10.md#t9-source-policy).
+  Các vùng `expand`, `HazardLR._prep`, `run_real_v2.py` bị khóa trong lần
+  đo đó; đây không phải lệnh cấm sửa code cho mọi công việc tương lai.
+- **22/10:** G11 được đưa ngoài phạm vi giai đoạn synthetic, không tính
+  là đạt và pilot thật vẫn yêu cầu. Tgt/tgt2/tgt3 đã xem; T9 v2 thiếu
+  recall, source-only selection và test mới được ghi trong
+  [Sprint 6 prereg](../03_Evaluation/SPRINT6_PREREG_2026-10-22.md),
+  [T9 diagnosis](../03_Evaluation/T9_RECALL_DIAGNOSIS.md) và
+  [G13 nhãn T9 v2](../03_Evaluation/G13_E2E_T9V2_PREREG.md).
+  Dải ACI đã có trong dịch vụ là một thay đổi riêng; không đồng nghĩa G13/G15 đạt.
+
+Các số đo và đính chính tiếp theo ở các mục 13–23 phía trên. Hai prompt
+không có phép đo độc lập ngoài những hồ sơ này; đường dẫn máy cũ, lệnh
+điều phối/publish, phân công và nhắc commit đã bỏ khỏi phần bàn giao.

@@ -1,0 +1,41 @@
+{
+  "scope": "source accessibility audit; no prediction-quality claim",
+  "n_v6_snapshot": 64,
+  "n_v6_week": 7,
+  "n_research_context": 19,
+  "access_counts": {
+    "internal": 10,
+    "conditional_internal": 47,
+    "known_calendar": 8,
+    "conditional_not_ingested": 6,
+    "hypothetical_unavailable": 5,
+    "conditional_dated_source": 14
+  },
+  "practical_context_features": [
+    "buyer_industry_steel_metals",
+    "buyer_industry_textile_clothing",
+    "buyer_industry_plastic_rubber",
+    "buyer_industry_wholesale",
+    "buyer_industry_food_processing",
+    "buyer_industry_services",
+    "buyer_industry_unknown",
+    "seller_industry_steel_metals",
+    "seller_industry_textile_clothing",
+    "seller_industry_plastic_rubber",
+    "seller_industry_wholesale",
+    "seller_industry_food_processing",
+    "seller_industry_services",
+    "seller_industry_unknown"
+  ],
+  "excluded_hypothetical_macro_features": [
+    "macro_credit_restricted_share",
+    "macro_credit_delta",
+    "macro_credit_age_days",
+    "macro_credit_missing",
+    "macro_credit_delta_missing"
+  ],
+  "protected_files_checked": 129,
+  "changed_protected_files": [],
+  "fit_or_calibration_performed": false,
+  "limitation": "Source requirements are audited; actual ERP/CRM sources have not been connected"
+}

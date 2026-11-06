@@ -1,9 +1,8 @@
 # 4. Máy phát dữ liệu tổng hợp SME Việt Nam (T12)
 
-**Cập nhật 27/10/2026:** runner phát hành nội bộ hiện dùng RNG v3; AP nhà cung
-cấp có nhóm trả ngay theo xác suất mô phỏng 20%, ngày đến hạn và ngày trả riêng;
-baseline/stress được gán trước khi sinh. Cohort đã khóa và giới hạn đối chiếu
-SME thực được ghi ở [báo cáo 23](23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md).
+> **Output đã nghỉ lưu ngày 06/11/2026:** các đường dẫn output v3 và release-gate được nêu trong tài liệu này đã xóa theo yêu cầu. Số đo và mô tả dưới đây là hồ sơ lịch sử, không còn artifact gốc để xác minh/tái lập. Báo cáo riêng của v3 và hồ sơ dọn dữ liệu cũng đã xóa.
+
+**Cập nhật tài liệu 06/11/2026:** cohort v4 còn giữ và được dùng cho v5/v6; xem [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md). Dữ liệu v3, lifecycle và các World cấu hình đời đầu đã được xóa. Mô tả máy phát và các giả định vẫn phục vụ việc hiểu/tạo World mới; các số đo đời đầu bên dưới là lịch sử.
 
 Mã: `agent1/synth/world.py` (+ `names.py`, `einvoice.py`, `fidelity.py`, `agent1/calendar_vn.py`).
 Dựng: `scripts/build_worlds.py`. Đây là **mô phỏng tác tử có cấu trúc nhân quả**, không phải bộ lấy mẫu độc lập từ các
@@ -54,7 +53,7 @@ ra thuộc tính tiềm ẩn từ quan sát.
 
 ## 4.4 L2 — Khách hàng (đơn vị hành vi)
 
-Số khách tiềm năng/công ty: logNormal(trung vị 60, σ=0,6) kẹp [8, 400]. Trọng số doanh thu Pareto(α=1,5)+1; tỷ trọng top-10 ≈54% (src cũ), ≈70% (tgt cũ) là số đo lịch sử, không là mục tiêu đã hiệu chỉnh lại. Khoảng 72% pool hoạt động từ đầu. Mỗi tuần, khách có thể gia nhập, tạm rời hoặc quay lại theo thanh khoản hiện tại, tăng trưởng công ty và stress cầu; xem [kiểm toán sau sửa](15_SUA_VONG_DOI_KHACH_VA_HARD_CASE_2026-10-26.md). `start_day`/`end_day` trong bảng xuất là biên đầu/cuối tham gia thực hiện; các khoảng gián đoạn nằm trong `events`.
+Số khách tiềm năng/công ty: logNormal(trung vị 60, σ=0,6) kẹp [8, 400]. Trọng số doanh thu Pareto(α=1,5)+1; tỷ trọng top-10 ≈54% (src cũ), ≈70% (tgt cũ) là số đo lịch sử, không là mục tiêu đã hiệu chỉnh lại. Khoảng 72% pool hoạt động từ đầu. Mỗi tuần, khách có thể gia nhập, tạm rời hoặc quay lại theo thanh khoản hiện tại, tăng trưởng công ty và stress cầu; xem [kiểm toán sau sửa](18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md#sua-vong-doi). `start_day`/`end_day` trong bảng xuất là biên đầu/cuối tham gia thực hiện; các khoảng gián đoạn nằm trong `events`.
 
 | Thuộc tính | Phân phối / quy tắc | Ý nghĩa |
 |---|---|---|
@@ -206,3 +205,99 @@ Sai số còn lại (xem `docs/DATA_CARD.md`): đúng hạn 54–57% (đích 58%
 | Độ tin cậy lời hứa Beta(4,2) | Giá trị T8 | Thu thập thật |
 | Khách đồng nhất hơn thật (phương sai do khách 0,20 vs 0,60 ở bộ ERP tham chiếu) | Mô hình tổng hợp đánh giá thấp lợi ích đặc trưng khách | Tăng dị biệt giữa khách (kế hoạch 05) |
 | ~50% hoá đơn là COD (theo số lượng; 41% theo giá trị) | Quá nhiều hoá đơn tức thời | Giảm `cod_mult`, hiệu chỉnh đúng tỷ trọng theo số lượng |
+
+
+<a id="runner-manifest-split"></a>
+
+## 4.10 Runner, manifest và split
+
+Phần này gộp đặc tả runner trước đây ở báo cáo 13. Runner chung là
+`scripts/build_final_train.py`; bộ v4 có runner riêng
+`scripts/build_v4_shortpay_4shock.py`. Thứ tự cổng là **kiểm nguồn → smoke →
+kiểm smoke → sinh và kiểm từng World → readiness → khóa split → train →
+đánh giá**. Các điểm dừng `sources`, `validate_smoke`, `audit_worlds` cho phép
+kiểm đầu vào trước khi train. Chỉ tiếp tục prefix cũ nếu config, nguồn, mã
+và hash dữ liệu khớp; thay cấu hình phải dùng prefix mới.
+
+Ở runner chung, readiness cho kỳ đủ 2019–2025 chặn khóa split nếu thiếu
+OxCGRT/WDI, train/validation có doanh thu thuần 2025/2019 dưới 0,6 hoặc
+thiếu episode giữ riêng cho test. **0,6 là ngưỡng phát hiện sụp đổ nội bộ**,
+không phải tiêu chuẩn thị trường. Outcome test không dùng để chỉnh máy
+phát; manifest/config/lịch shock vẫn được kiểm trước khi khóa.
+
+Manifest từng World lưu seed, `WorldConfig`, hash config, commit nền,
+hash mã, hash calibration/OxCGRT/WDI và SHA-256 từng bảng. Nguồn không có
+được ghi `null`; calibration phải hợp lệ. Registry từ chối World thiếu
+Parquet. Cohort khóa World/seed/vai trò, mốc thời gian, cửa sổ nhãn và nhịp
+snapshot; không đổi vai trò khi dùng lại cohort. Train chỉ đọc `train_*`,
+validation dùng chọn cấu hình, test chỉ dùng đánh giá sau khi chốt.
+
+Cohort hiện còn dùng: [cohort v4](../../data/synthetic/v4_shortpay_4shock_20261028_cohort.json).
+Cấu hình, lệnh tái lập và snapshot đúng phiên bản đọc trong
+[báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
+Lệnh mặc định v3 trong các script lịch sử không còn đầu vào; không dùng
+chúng như hướng dẫn chạy lại hiện tại.
+
+<a id="heldout-pilot"></a>
+
+### Thiết kế held-out và pilot ngày 26/10/2026
+
+`scripts/build_final_train.py` nay đưa các episode **cầu, cung, giá** vào train/validation và giữ họ **tín dụng** ngoài hai vai trò đó. `test_000` dùng siết tín dụng đơn lẻ (rise 1, peak 6, recovery 9 tuần; severity 1,3). `test_001` dùng tín dụng kết hợp tăng giá (rise 3, peak 4, recovery 10 tuần; severity lần lượt 1,1 và 0,9), bắt đầu sau Test A bốn tuần. Hai lịch bắt đầu sau mốc chia `origin` và có `reference_event` riêng. Cường độ, độ dài và cơ chế kết hợp là **giả định thử nghiệm synthetic**, chưa phải ước lượng thị trường Việt Nam. Test B giữ riêng tổ hợp cơ chế, không phải một họ shock thứ hai độc lập.
+
+Runner kiểm `shock_truth` thực tế: họ giữ kín phải vắng mặt ở cả train và validation, hai test phải khác lịch và mỗi test phải có tuần shock giữ kín trong cửa sổ cutoff đánh giá. `readiness.json` trước lúc khóa split chỉ chứa outcome audit của train/validation; test chỉ được kiểm manifest, config và lịch shock, tránh nhìn kết cục test để chỉnh máy phát. Cổng held-out cũng áp dụng cho cửa sổ smoke ngắn. Test được sinh bằng seed và manifest riêng, chỉ được dùng để đánh giá sau khi chốt model.
+
+Phạm vi giữ kín là **episode `ShockEpisode('credit')`**, không phải mọi dạng khó khăn tín dụng: đường `credit_crunch` nền 2022–2023 vẫn có trong các World train. Do đó phép thử đo khả năng chuyển sang một episode tín dụng mới và tổ hợp giá–tín dụng, không chứng minh mô hình chưa từng thấy bất kỳ tín hiệu tín dụng nào.
+
+Pilot kiểm kỹ thuật `v3_heldout_pilot_20261026` gồm 1 train, 1 validation, 2 test, 2 doanh nghiệp/World, 2023–2024, seed 97001–97004. Cohort đã khóa tại `data/synthetic/v3_heldout_pilot_20261026_cohort.json`; chi tiết tại `outputs/data/v3_heldout_pilot_20261026/readiness.json`. Cổng held-out **đạt**: train/validation có `demand, supply, price`; `credit` chỉ ở test; Test A có 10 tuần và Test B có 6 tuần tín dụng hoạt động trong cửa sổ đánh giá. Pilot này **không chạy train**, không kiểm cổng xu hướng đủ 2019–2025, không phải bộ train cuối.
+
+Thiết kế/pilot trên là hồ sơ 26/10, không phải phép đo mới. Dữ liệu pilot
+và cohort JSON đã xóa ngày 06/11; kết quả readiness đã lưu vẫn là bằng
+chứng kỹ thuật của lần chạy đó. Hai file test `tests/test_final_pipeline.py`
+và `tests/test_shock_episodes.py` từng ghi nhận **12 passed** trong đợt này;
+không chạy lại trong đợt dọn tài liệu.
+
+<a id="quy-mo"></a>
+
+## 4.11 Quy mô và cách mở rộng
+
+Phần này thay tài liệu quy mô rời trước đây. Quy mô bộ còn giữ lấy từ
+cohort và [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md), không
+lấy từ bảng `src/tgt` lịch sử bên dưới. Kế hoạch tăng quy mô cần định trước
+số World, seed, công ty, phân tầng ngành/đuôi và vai trò đánh giá; giữ
+macro chung trong mỗi World để giữ phụ thuộc, dùng seed khác giữa World.
+
+Sinh theo World/shard độc lập, tránh trùng khóa khi ghép; ghi config,
+manifest và hash nguồn. Không loại shard sau khi xem chỉ số chỉ để ép
+phân phối khớp một khảo sát. Dải mẫu, tiêu chí và cách xử lý lỗi hợp đồng
+phải định trước; World test không dùng để chọn lại máy phát hoặc model.
+
+Đo tốc độ cũ là **3 công ty / 17.825 hóa đơn khoảng 20 giây**. Ước lượng
+20–30 phút/triệu hóa đơn và 150 MB Parquet/triệu hóa đơn trước đây chỉ là
+ngoại suy, chưa phải benchmark quy mô lớn hoặc cam kết tài nguyên hiện tại.
+Đo runtime/RAM trên phiên bản và schema dự định dùng trước khi lập ngân sách.
+Không suy từ số hóa đơn ra số mẫu độc lập; đánh giá/bootstrap theo công ty
+hoặc World phù hợp với câu hỏi. Chỉ sinh XML mẫu nếu cần kiểm T0.
+
+Sau mỗi lần sinh: kiểm contract kế toán/ngày, rò rỉ feature as-of,
+manifest, phân phối theo năm/ngành/seed và kiểm thử liên quan. Nguồn thật
+cho tiền huấn luyện/hiệu chỉnh cần có giấy phép, ngày biết và chia thời gian
+riêng; mô hình hóa các bước này không đồng nghĩa đã có dữ liệu SME thật.
+
+### Quy mô các World đời đầu — chỉ để đối chiếu
+
+Các World trong bảng sau đã bị xóa; đây là số ghi nhận trước đây, không
+phải tồn kho 06/11/2026. Không dùng chúng để chọn cohort train hiện tại.
+
+| Thế giới | Công ty | Khách | Hoá đơn | Thanh toán | Giao dịch NH | Lời hứa | Chi | Giai đoạn |
+|---|---|---|---|---|---|---|---|---|
+| `src` | 40 | 3.427 | 193.469 | 202.810 | 188.260 | 44.327 | 35.217 | 2019-01 → 2025-12 |
+| `tgt` | 14 | 617 | 41.762 | 43.778 | 39.512 | 13.255 | 12.164 | cùng |
+| `sens_uk` | 12 | 772 | 89.031 | 93.290 | 82.959 | 16.350 | 10.767 | cùng |
+| `sens_coface` | 12 | 594 | 70.583 | 72.280 | 65.346 | 15.631 | 10.542 | cùng |
+| **Tổng** | **78** | **5.410** | **394.845** | 412.158 | 376.077 | 89.563 | 68.690 | |
+
+Dữ liệu thật đã chuẩn hoá: ~0,9 triệu dòng (BPI 211k + Customer Invoices 50k + SBA 638k) và 0,4 triệu tài khoản-tuần
+(Berka), 7.738 điểm chuỗi tuần (Online Retail).
+
+Số liệu mô tả của từng thế giới: tỷ lệ nợ xấu theo số HĐ 2,2% (src), 2,8% (tgt); tranh chấp 1,5% / 2,2%; trả một phần
+6,5% / 6,9%; cực trễ 0,48% / 0,42% (coface 2,49%); COD 50% / 38% (theo số lượng).

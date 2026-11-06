@@ -1,30 +1,53 @@
-# 04 · AI Methods — Phương pháp, pipeline và thí nghiệm
+# 04 · AI Methods — Phương pháp theo phiên bản
 
-> Đây là bản đồ **thiết kế và phương pháp**. Để biết nhánh nào đã chạy và đạt cổng nào, đối chiếu [kết quả hiện hành](../03_Evaluation/04_ket_qua_hien_co.md), [cổng hiện hành](../03_Evaluation/GATES_CURRENT.md) và mã nguồn.
+**Cập nhật 06/11/2026.** Tài liệu phương pháp giải thích mô hình/contract;
+[kết quả Evaluation](../03_Evaluation/README.md) ghi số đo, lựa chọn và
+[cổng sản phẩm](../03_Evaluation/GATES_CURRENT.md). Có mô tả hoặc code không
+đồng nghĩa đã tích hợp, qua gate hoặc có dữ liệu SME thật để kiểm chứng.
 
-Góc nhìn: AI engineer / researcher. Nói rõ **mô hình nào, vì sao, tham số nào, đã chứng minh gì, còn phải thí nghiệm gì**.
+## T1 v5/v6, practical và unified v2
 
-| File | Nội dung |
+| Tài liệu | Phạm vi |
 |---|---|
-| [01_pipeline_he_thong.md](01_pipeline_he_thong.md) | Kiến trúc đầu-cuối, luồng dữ liệu, chống rò rỉ, vận hành (batch/retrain/giám sát), vị trí LLM |
-| [02_t1_hazard_thoi_diem_tra.md](02_t1_hazard_thoi_diem_tra.md) | T1: thiết kế chi tiết hazard rời rạc, đặc trưng, tham số, lượng phân vị, ensemble, CQR |
-| [03_t2_t3_t8_xac_suat_hoa_don.md](03_t2_t3_t8_xac_suat_hoa_don.md) | T2 cure, T3 tranh chấp/trả một phần, T8 lời hứa |
-| [04_t4_t5_thu_moi_va_chi.md](04_t4_t5_thu_moi_va_chi.md) | T4 doanh thu mới (LightGBM toàn cục + Chronos), T5 bộ máy quy tắc |
-| [05_domain_adaptation.md](05_domain_adaptation.md) | Chuyển từ tổng hợp/nguồn sang SME đích: bất biến miền, 5 chiến lược, thiết kế thí nghiệm |
-| [06_t6_monte_carlo_conformal.md](06_t6_monte_carlo_conformal.md) | T6 mô phỏng copula-t, ACI, đối chứng, kịch bản |
-| [07_t7_t9_t10.md](07_t7_t9_t10.md) | Điểm gãy, khớp sao kê, giải thích và khuyến nghị |
-| [08_thi_nghiem_de_xuat.md](08_thi_nghiem_de_xuat.md) | Danh mục giả thuyết/thí nghiệm cần làm thêm (kèm lý do, thiết kế, tiêu chí) |
-| [09_tham_so_va_toi_uu.md](09_tham_so_va_toi_uu.md) | Bảng siêu tham số, tối ưu tốc độ/bộ nhớ, bẫy kỹ thuật đã gặp |
-| [09_promise_chat_review.md](09_promise_chat_review.md) | Đặc tả thu lời hứa từ chat với người duyệt, tách khỏi bảng siêu tham số 09 |
-| [10_cash_baselines.md](10_cash_baselines.md) | ETS/ARIMA và đối chứng thêm cho dự báo số dư |
-| [11_extended_obligations.md](11_extended_obligations.md) | Lịch nghĩa vụ bổ sung từ hồ sơ, hợp đồng và giới hạn kiểm chứng pháp lý |
-| [12_new_ablations.md](12_new_ablations.md) | Các phép đo bổ sung và ablation theo giao thức riêng |
-| [13_fullweek_refresh_2026-10-21.md](13_fullweek_refresh_2026-10-21.md) | Kế hoạch/chứng cứ chạy lại hazard ngày 21/10; một số script/log lịch sử không còn trên đĩa |
-| [T0_T10_PHUONG_PHAP_VA_KET_QUA_SYNTHETIC_2026-10-25.md](T0_T10_PHUONG_PHAP_VA_KET_QUA_SYNTHETIC_2026-10-25.md) | Ảnh chụp phương pháp và kết quả trên synthetic ở commit 25/10 |
+| [Competing risks v5/v6](T1_COMPETING_RISKS_V5_V6.md) | Công thức, event/risk set, feature/calibration/cash head; v6 gốc 64 feature |
+| [Protocol practical P0–P4](T1_V6_PRACTICAL_FEATURES_PROTOCOL_2026-11-05.md) | Ngành + ledger, 93 feature; selector, amendment và fresh đã khóa; giữ nguyên protocol |
+| [B2B feature access](T1_V6_B2B_FEATURE_ACCESS_2026-11-05.md) | Đầu vào doanh nghiệp có thể biết, tenant/known_at, khoảng cách tới luồng thật |
+| [Contract unified v2/r3](UNIFIED_COLLECTION_V2_CONTRACT_2026-11-04.md) | Tiền bank/AR, thứ tự thời gian, streams và source gate; giữ nguyên contract |
 
-**Tinh thần thiết kế (5 điều):**
-1. *Mô hình hoá từng hoá đơn rồi tổng hợp* — phân phối theo tuần cho từng hoá đơn (hazard), sau đó cộng bằng mô phỏng có tương quan.
-2. *Mốc đơn giản phải bị thắng* — mọi khối có đối chứng bắt buộc; không giữ mô hình phức tạp không thắng.
-3. *Nhãn đúng, đặc trưng as-of, kiểm duyệt đúng* — ba nguyên nhân chính của kết quả đẹp giả.
-4. *Bất biến miền + thích nghi nhanh* — vì không có dữ liệu thật SME VN ở quy mô lớn.
-5. *Con số do mô hình định lượng, lời do LLM* — LLM không sinh số.
+Không trộn T1 nhị phân 13 tuần, V6 gốc, nhánh `both` 93 feature và unified
+như cùng một model. Cash head gốc chưa được train lại cho nhánh 93 feature.
+Protocol/preregistration cần giữ để kiểm tiêu chí trước khi xem test.
+
+## Pipeline gốc, đối chứng và giao thức bổ sung
+
+| Tài liệu | Nội dung sau gộp |
+|---|---|
+| [Pipeline và T0](01_pipeline_he_thong.md) | Luồng gốc, as-of, LLM, đề xuất vận hành và phạm vi quality gate |
+| [T1 nhị phân / Khánh](02_t1_hazard_thoi_diem_tra.md) | 13 tuần, feature, đuôi/quantile; sửa mô tả fullweek theo code và gộp đăng ký C-v2/P4/G3 |
+| [T2/T3/T8](03_t2_t3_t8_xac_suat_hoa_don.md) | Cure khác Write-off, EB, reliability; gộp giao thức SBA macro |
+| [T4/T5](04_t4_t5_thu_moi_va_chi.md) | Doanh thu, lịch chi; gộp nghĩa vụ từ hồ sơ, known_at và chống tính trùng |
+| [Domain adaptation](05_domain_adaptation.md) | DA1–DA7, DR và IW ngoài công ty; gộp mô tả cùng ngân sách và giới hạn |
+| [T6 và đối chứng](06_t6_monte_carlo_conformal.md) | Copula/ACI gốc; gộp copula hai nhân tố, ETS/ARIMA/B0/Chronos Tiny |
+| [T7/T9/T10](07_t7_t9_t10.md) | Điểm gãy, khớp tiền, giải thích; gộp T9 sốc cung, T7→T6, chính sách thu nợ và đăng ký source-policy |
+| [Giả thuyết thí nghiệm](08_thi_nghiem_de_xuat.md) | Danh mục mã X/tiêu chí ban đầu và nơi tra phép thử đã có; không phải backlog phải chạy toàn bộ |
+| [Hiệu năng và bẫy kỹ thuật](09_tham_so_va_toi_uu.md) | Giữ số đo/ước lượng và kinh nghiệm; bỏ bảng tham số lặp để tra theo đúng model/protocol |
+| [Duyệt lời hứa từ chat](09_promise_chat_review.md) | Luồng nháp/người duyệt/API riêng; chưa có giao diện trích xuất chat được kiểm UAT |
+
+Các số và nhận định trong bản thiết kế gốc được ghi rõ là lịch sử. Nhiều
+World `src/tgt`, hard-case, DR/config đời đầu và toàn bộ `data/T1/` đã xóa;
+trước khi chạy lệnh cũ phải kiểm [tồn kho dữ liệu](../02_Data/README.md),
+manifest và snapshot mã. Không tái sinh/fit chỉ để làm mới cách trình bày.
+Các nguồn luật trong đặc tả T5 là hồ sơ đối chiếu trước đây, không xác nhận
+hiệu lực hiện tại hay thay kiểm tra chuyên gia.
+
+## Nghiên cứu lịch sử còn giá trị
+
+| Tài liệu | Lý do giữ |
+|---|---|
+| [T0–T10 ngày 25/10](T0_T10_PHUONG_PHAP_VA_KET_QUA_SYNTHETIC_2026-10-25.md) | Giữ toàn bộ bảng kết quả và giới hạn theo ngày; phần mô tả phương pháp lặp chuyển về tài liệu từng T |
+| [Hướng thống nhất T1→T6 ngày 03/11](T1_T6_UNIFIED_DIRECTION_REVIEW_2026-11-03.md) | Audit sai khác tất toán/thu từng phần, support nhãn và throughput; giải thích vì sao thử unified |
+| [Khảo sát tín dụng prototype](T1_V6_CREDIT_CONTEXT_RESEARCH_2026-11-05.md) | Thiết kế phép đo và audit độ trễ công bố; giải thích vì sao không dùng năm macro feature. Đề xuất fit đã được thay bằng protocol practical |
+
+Giữ các số đo không thắng và giới hạn để tránh lặp lại lựa chọn đã loại.
+Bảng phương pháp/siêu tham số không thay protocol của lần chạy; không cộng
+điểm từ các estimand/World hoặc phiên bản khác nhau.

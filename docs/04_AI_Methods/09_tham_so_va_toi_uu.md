@@ -1,31 +1,26 @@
-# 9. Tham số, tối ưu hiệu năng và bẫy kỹ thuật
+# 9. Hiệu năng, môi trường và bẫy kỹ thuật
 
-## 9.1 Bảng siêu tham số hiện tại
+> **Biên tập 06/11/2026:** thời gian và giới hạn tài nguyên bên dưới là đo/ước lượng trong bối cảnh cũ, không phải benchmark mới hoặc cam kết latency. Phần tối ưu là đề xuất cần kiểm chứng, chưa được áp dụng chỉ vì tài liệu được gộp.
 
-| Khối | Tham số | Giá trị | Ghi chú tối ưu |
-|---|---|---|---|
-| Snapshot | tần suất | 7 ngày (train dùng 14 ngày) | 14 ngày giảm 50% dữ liệu, ít mất thông tin vì HĐ lặp |
-| | visible_from | M tháng | thí nghiệm B |
-| | EB k | 4 | X14 học k |
-| | nửa đời EWM | 90 ngày | thử 45/90/180 |
-| T1 hazard | leaves / min_data / lr | 63 / 200 / 0,05 | X11 |
-| | rounds | 600 | early stopping |
-| | tuần K | 13 | đuôi hình học sau đó |
-| | cap | 120 ngày | đồng bộ với nhãn |
-| T1 QLGBM | leaves / lr / rounds | 63 / 0,1 / 350 | giảm để nhanh |
-| T1 AFT | σ / depth / rounds | 0,3 / 6 / 300 | σ rất nhạy (xem bẫy) |
-| CQR | α | 0,2 | cửa sổ ≥63 ngày, cách test ≥120 ngày |
-| T2 | leaves / min_data / λ₂ / rounds | 31 / 200 / 10 / 400 | isotonic nếu ECE > 0,02 |
-| T4 | lags / leaves / min_data / rounds | 13 / 31 / 50 / 500 | |
-| T6 | n_sim | 1.000 (kịch bản 600) | CRN (common random numbers) cho so sánh kịch bản |
-| | ρ, ν | chọn trên nguồn, 4 | X32 |
-| | ACI γ | 0,01 | tăng ×3 ở chế độ khủng hoảng |
-| T7 | cửa sổ PIT | 40 lần trả | |
-| | CUSUM k,h | 0,25; 5 | |
-| T9 | top-k tên | 4 (+2 theo nội dung) | |
-| | ngưỡng p | 0,5 | tăng 0,9 + hàng chờ |
-| | dung sai tiền | 25.000đ | theo phí |
-| Thread | `AGENT1_THREADS` | 6 | máy dùng chung |
+## 9.1 Tra tham số theo đúng phiên bản
+
+Bảng siêu tham số lặp trước đây đã bỏ để tránh coi cấu hình Khánh 13 tuần
+là cấu hình v6 hoặc unified hiện tại. Các bản chạy khóa tham số trong
+protocol/train metadata; không suy tham số từ một bảng “hiện tại” chung.
+
+| Phiên bản / khối | Nguồn định nghĩa |
+|---|---|
+| T1 nhị phân Khánh/pipeline cũ | [T1 hazard](02_t1_hazard_thoi_diem_tra.md), `agent1/models/t1.py` và protocol của benchmark |
+| V5 / V6 gốc | [Phương pháp v5/v6](T1_COMPETING_RISKS_V5_V6.md), protocol trong package từng thử nghiệm |
+| V6 ngành + ledger, 93 feature | [Protocol P0–P4](T1_V6_PRACTICAL_FEATURES_PROTOCOL_2026-11-05.md) và `final_selection.lock.json` |
+| Unified v2/r3 | [Contract v2](UNIFIED_COLLECTION_V2_CONTRACT_2026-11-04.md), `experiments/unified_collection_v2/protocol.json` |
+| T2/T3/T8 | [Xác suất hóa đơn](03_t2_t3_t8_xac_suat_hoa_don.md) |
+| T4/T5 | [Doanh thu và lịch chi](04_t4_t5_thu_moi_va_chi.md) |
+| T6 / T7 / T9 | [Mô phỏng](06_t6_monte_carlo_conformal.md), [điểm gãy/đối soát](07_t7_t9_t10.md) và protocol riêng |
+
+Tần suất snapshot, cửa sổ nhãn, EB/EWM, số đường MC, seed và ngân sách
+thread cũng thuộc giao thức từng lần chạy. Không chuyển các giá trị cũ
+sang mô hình mới mà không ghi nhận thay đổi.
 
 ## 9.2 Hiệu năng đã đo / ước lượng
 
@@ -50,7 +45,7 @@
 6. **CDF từ phân vị** không công bằng với hazard (X3).
 7. **Số mô tả thời gian trong SBA**: `EXEMPT` (xem 03_t2).
 8. **Tiền xử lý Python ngày/tháng**: `sed` trên file Windows với dấu Unicode — đọc bằng `encoding="utf-8"`.
-9. **Kết nối Python:** môi trường mặc định của máy lỗi; dùng venv `Agent1/.venv` (tạo từ `codex-primary-runtime` Python 3.12).
+9. **Môi trường Python:** workspace hiện có `.venv/Scripts/python.exe`; không dùng đường dẫn `Agent1/.venv` của môi trường cũ. Ghi môi trường thực tế của lần chạy, không giả định venv có thể chuyển nguyên sang máy khác.
 
 ## 9.4 Tối ưu đề xuất khi mở rộng
 

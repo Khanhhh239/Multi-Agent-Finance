@@ -1,4 +1,6 @@
-# 2. T1 — Thời điểm thanh toán: hazard rời rạc (mô hình chính)
+# 2. T1 — Hazard nhị phân 13 tuần và đối chứng Khánh
+
+> **Phạm vi sau gộp 06/11/2026:** Tài liệu này mô tả T1 nhị phân 13 tuần, dùng làm đối chứng Khánh/pipeline cũ. Phương pháp v5/v6 53 tuần đọc ở [tài liệu chung](T1_COMPETING_RISKS_V5_V6.md); bản 93 feature đọc ở [protocol practical](T1_V6_PRACTICAL_FEATURES_PROTOCOL_2026-11-05.md). Công thức fullweek đã đối chiếu lại code; các số đo/đề xuất gốc vẫn thuộc lần chạy cũ.
 
 Mã: `agent1/models/t1.py` (`HazardGBM`, `expand`, `quantiles_from_hazard`), `agent1/models/features.py`.
 
@@ -21,7 +23,18 @@ Với hoá đơn *i* tại ngày cắt *T*, tuần *k* = 1..13 (7 ngày):
 `h_ik = P(trả trong tuần k | chưa trả tới đầu tuần k, x_i(T), w_ik)`; 
 `S_ik = Π_{j≤k}(1 − h_ij)`; `P_ik = S_{i,k−1}·h_ik`; `F_ik = 1 − S_ik`.
 
-**Khai triển dữ liệu (`expand`):** mỗi (hoá đơn, snapshot) sinh tối đa 13 hàng. Hàng (i,k) có mặt khi `time_obs > 7(k−1)` (còn rủi ro) *và* nhãn biết được: sự kiện xảy ra tuần *k* hoặc `time_obs ≥ 7k`. `y=1` nếu `event ∧ ⌈remaining/7⌉ = k`.
+**Khai triển dữ liệu (`expand`):** mỗi (hóa đơn, snapshot) sinh tối đa 13 hàng.
+Với `FULL_WEEK_ONLY` bật và có `obs_window`, hàng (i,k) chỉ có mặt khi
+`time_obs > 7(k−1)` **và** `obs_window ≥ 7k`; `obs_window` là cửa sổ quan sát
+hành chính `label_end − cutoff`, biết cho cả dòng có sự kiện.
+`y=1` nếu `event ∧ ⌈remaining/7⌉ = k`. Tuần bị cắt dở không giữ riêng các
+sự kiện đã xảy ra rồi bỏ các dòng chưa có sự kiện, vì sẽ gây thiên lệch.
+
+Điều kiện cũ `event_trong_tuần_k OR time_obs ≥ 7k` chỉ còn là nhánh legacy
+khi tắt fullweek hoặc thiếu `obs_window`. Các bảng dựng bằng `add_labels`
+có trường này; không lấy công thức legacy làm mô tả mặc định. Đối chiếu
+[`expand`](../../agent1/models/t1.py) và
+[`add_labels`](../../agent1/models/features.py).
 
 **Từ hazard ra phân vị (`quantiles_from_hazard`):** tìm tuần đầu mà `F ≥ q` và nội suy tuyến tính trong tuần; nếu `F_13 < q`, dùng đuôi hình học
 `h_tail = clip(mean(h_10..13), 0,02; 0,6)`: `tuần = log((1−q)/S_13)/log(1−h_tail)`; chặn ở **120 ngày**. `E[T]` = Σ P_ik·(7(k−1)+3,5) + S_13·120.
@@ -47,7 +60,7 @@ Quan trọng nhất theo `gain` (miền `src`, gốc 2024-07; `outputs/t1/dh_gbm
 thiết kế. **Cảnh báo:** `promised_in_k`/`days_to_promised` xếp cao vì trong máy phát lời hứa của khách "giữ lời" bám sát ngày trả thật
 (σ=1,5 ngày) → có thể quá lạc quan so với thực tế (kiểm bằng thí nghiệm E và dữ liệu thật T13).
 
-## 2.4 Tham số (hiện tại)
+## 2.4 Tham số của bản nhị phân trong đối chứng
 
 | Tham số | Giá trị | Ghi chú |
 |---|---|---|
@@ -67,7 +80,7 @@ thiết kế. **Cảnh báo:** `promised_in_k`/`days_to_promised` xếp cao vì 
 
 - **Ensemble DH-GBM + QLGBM** = trung bình phân vị (Vincentization). Trên Customer Invoices cho kết quả tốt nhất (MAE 2,29; pinball 0,819), vì QLGBM có độ phân giải ngày, DH-GBM có phân phối đúng.
 - **CQR** (Romano et al. 2019): `q̂` = phân vị mức `⌈(n+1)(1−α)⌉/n` của `E_i = max(q_lo − y, y − q_hi)` trên cửa sổ hiệu chỉnh; mở rộng/thu hẹp khoảng đối xứng. Hữu ích cho mô hình thiếu phủ (QLGBM, AFT, ensemble: cov 0,53→0,79).
-- **Quan sát chưa giải thích:** với DH-GBM, hàng "+CQR" cho kết quả *giống hệt* hàng không CQR (q̂≈0). Phải kiểm tra (WP-1.3): có thể do khoảng của DH-GBM quá dư (cov 0,86–0,89) nên q̂ ≤ 0 và đoạn hiệu chỉnh bị chặn; cần cho phép **thu hẹp** (q̂ âm) hoặc dùng hiệu chỉnh hai phía với α_lo, α_hi tách biệt.
+- **Quan sát trong bảng cũ, trước các phép thử CQR bổ sung:** với DH-GBM, hàng "+CQR" cho kết quả *giống hệt* hàng không CQR (q̂≈0). Phải kiểm tra (WP-1.3): có thể do khoảng của DH-GBM quá dư (cov 0,86–0,89) nên q̂ ≤ 0 và đoạn hiệu chỉnh bị chặn; cần cho phép **thu hẹp** (q̂ âm) hoặc dùng hiệu chỉnh hai phía với α_lo, α_hi tách biệt.
 
 ## 2.6 Điểm mạnh / điểm yếu đã quan sát
 
@@ -78,7 +91,7 @@ thiết kế. **Cảnh báo:** `promised_in_k`/`days_to_promised` xếp cao vì 
 | BPI 2019 (thật, không có hạn) | DH-GBM đơn **kém** (pinball 8,78 vs B1d 5,07); ensemble hoà (5,10) | thiếu `days_to_due` ⇒ mất đặc trưng chủ lực; quy trình duyệt lô; hazard nhận ít thông tin hơn |
 | Khách mới (ít lịch sử) | chưa phân tầng | cần phân tầng theo `c_n_hist` (WP-1.5) |
 
-## 2.7 Cải tiến đề xuất (chi tiết ở 08_thi_nghiem_de_xuat)
+## 2.7 Các đề xuất ban đầu và bằng chứng tiếp nối
 
 1. Ràng buộc đơn điệu (monotone constraints): hazard tăng theo `c_late_share`... để ổn định ngoài miền.
 2. Early stopping + tối ưu siêu tham số bằng pinball trên cửa sổ hiệu chỉnh (Optuna).
@@ -86,3 +99,55 @@ thiết kế. **Cảnh báo:** `promised_in_k`/`days_to_promised` xếp cao vì 
 4. Bayes phân tầng cho khách (thay EB cố định k=4): ước lượng k theo ngành/khối lượng.
 5. Tách hazard thành 2 phần "đúng hạn" + "trễ" (mixture) để học điểm tập trung ngay quanh ngày hạn.
 6. Đa nhiệm (trả một phần, tranh chấp) chia sẻ biểu diễn.
+
+
+<a id="fullweek-20261021"></a>
+
+## 2.8 Giao thức fullweek và đăng ký bổ sung ngày 21/10/2026
+
+Phần này gộp nội dung còn giá trị kiểm toán của tài liệu fullweek cũ.
+Lỗi từng giữ sự kiện ở tuần chưa đủ quan sát đã được sửa trong `expand`;
+không trộn CSV legacy với kết quả hậu tố `-fullweek`. **181 CSV cũ** được
+kê trong [manifest backup](../../outputs/implementation/legacy_expand_backups.json);
+hash vùng khóa ở [fullweek_protected.json](../../outputs/implementation/fullweek_protected.json).
+Kết quả và tiến trình gốc đọc ở
+[nhật ký Sprint 1](../05_Coding_Agent_Plan/NHAT_KY_SPRINT1_2026-10-20.md),
+[fullweek_refresh.json](../../outputs/implementation/fullweek_refresh.json) và
+[fullweek_code_verification.json](../../outputs/implementation/fullweek_code_verification.json).
+
+Chuỗi 18 job/điều phối chờ RAM và publish clone riêng là cách vận hành tại
+thời điểm 21/10, không phải hướng dẫn chạy hiện tại. Các script/cache/log
+có thể đã vắng; dữ liệu World đời đầu đã xóa. Giữ thông tin giao thức và
+bằng chứng, bỏ lệnh khởi chạy điều phối/publish đã hết mục đích sử dụng.
+Không có hoạt động train, commit hoặc push trong đợt gộp tài liệu này.
+
+### Tiêu chí đã ghi trước phép đo
+
+- `C-v2`: script gốc khoá nguyên trạng. `real_v2_b1_reference.py` chỉ tính
+  mốc B1 trên đúng cohort CI; không huấn luyện hay đổi BLEND. G5: BLEND giảm
+  pinball >=10% so B1 và CI thấp vs B1d >0 trên CI. G6: cả CI/BPI có CI cao
+  >=0 và điểm >=-2%. G5_v1/G6_v1 giữ để kiểm toán. Registry tiêu chí ở
+  `outputs/implementation/real_v2_gate_registration.json`.
+  CSV v2 của Sprint 1 đã có expand mới nên không thuộc 18 job phải chạy lại;
+  không huấn luyện lại toàn bộ LR/QLGBM của v2 chỉ để đăng ký job. Mốc BLEND
+  sẽ được tái lập trong ablation P4 và kiểm chênh lệch <=0,5%.
+- `P4`: `StationaryFeatures` fit phân vị 99 từ train; log1p số lịch sử/tuổi
+  khách; ẩn tháng lịch nếu tuổi lịch sử DN <24 tháng theo lịch. Hai gốc A,
+  B M12, CI/BPI v2 dùng cùng cohort/budget/params. Fine-tune giữ cùng biến
+  đổi của mô hình nguồn. CI/BPI chuyển các cột float64 sang float32 đúng
+  giao thức v2 trước cả hai nhánh để tránh nhiễu do độ chính xác số. CI cặp
+  300 lần theo DN; CI/BPI dùng cụm khách như
+  giao thức v2. Mặc định vẫn tắt. Tiêu chí: không xấu >1% ở đâu và cải thiện
+  >=2% ở ít nhất một bộ thật; không chọn thêm phép biến đổi theo test.
+- `G3`: từ dự báo A nguồn đóng băng, so khoảng thô, CQR hai phía toàn cục,
+  Mondrian theo đã quá hạn / hạn 0–14 / 15–42 / >42 ngày. Mỗi nhóm >=100
+  hàng calibration; nhóm ít hoặc chưa thấy dùng offset toàn cục. Cho phép
+  offset âm để thu hẹp; không lấy q-hat từ mô hình chọn dữ liệu thật ngắn.
+  Tiêu chí: hai gốc cov80 75–85%, IS80 không tăng so CQR toàn cục.
+
+Phần đăng ký `T9-source-policy` được gộp vào
+[giao thức T9 nguồn](07_t7_t9_t10.md#t9-source-policy).
+Các tiêu chí trên là hồ sơ trước chạy; trạng thái P4/G3/G5/G6 và T9 đọc từ
+CSV/protocol ở Evaluation. C-v2 có giao thức expand mới riêng; không tính
+việc đăng ký nó như một lần retrain LR/QLGBM mới. G13 và các yêu cầu UAT,
+chuyên gia, pilot không được coi là đã hoàn tất từ việc có code hoặc test.

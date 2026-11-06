@@ -1,0 +1,10 @@
+{
+  "experiments/t1_competing_v6/__init__.py": "82571be649a25b919f2a7b549430eab4cc31a3b962e068634ecc3007c39241a7",
+  "experiments/t1_competing_v6/calibration.py": "b805c319e88d3ff59142431e13324f7663bbeff30eb0ffdcb35c748515b6dfdb",
+  "experiments/t1_competing_v6/core.py": "0401bbb2271f32663ae3e256aae5e6b428bb8c4f10da0c9d80b0fbcf6a204626",
+  "experiments/t1_competing_v6/features.py": "bc020c1326ae3d57aab9404943ecf200d10c2829b88d8e04af61c2282e248170",
+  "experiments/t1_competing_v6/metrics.py": "59de9b453162522e5c0c93bde0342fb895e8dd0d52b73ccd7de73c38c8ec615d",
+  "experiments/t1_competing_v6/run.py": "cad77d3190600dfece8865e86197df1ae4046486229c19ecaadcee89e85826c0",
+  "experiments/t1_competing_v6/protocol.json": "3344e75eb223dc4b1031bfe873f7a985cf149e7c2948267ed35cfc79535a70a1",
+  "experiments/t1_competing_v6/requirements.txt": "469a26d95e7fbb98ffb233760cc473cea23b7887cf7144e567e1210bdde5a3da"
+}

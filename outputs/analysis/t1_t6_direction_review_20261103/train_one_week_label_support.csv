@@ -1,0 +1,5 @@
+world,anchors,zero,partial,full,paid_terminal,writeoff_terminal,credit_terminal,receipt_and_writeoff_same_week,receipts_exceed_start_balance
+v4_shortpay_4shock_20261028_train_000,50000,43808,759,5433,5433,198,0,0,0
+v4_shortpay_4shock_20261028_train_001,50000,44919,507,4574,4574,196,0,0,0
+v4_shortpay_4shock_20261028_train_002,50000,44502,577,4921,4921,200,0,0,0
+v4_shortpay_4shock_20261028_train_003,50000,43034,705,6261,6261,176,0,0,0

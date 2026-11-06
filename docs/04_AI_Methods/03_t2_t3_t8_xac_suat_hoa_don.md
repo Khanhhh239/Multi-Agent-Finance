@@ -1,5 +1,7 @@
 # 3. T2 · T3 · T8 — Những xác suất cấp hoá đơn khác
 
+> **Phạm vi sau gộp 06/11/2026:** Các bảng T2/T3 và cấu hình gốc là lịch sử của pipeline cũ; CureGBM không đồng nghĩa Write-off trong 365 ngày của v6. Đọc kết quả/protocol theo phiên bản ở Evaluation; các bảng SBA chứa EXEMPT không phải bằng chứng nghiệm thu mới.
+
 ## 3.1 T2 — Không bao giờ trả (cure) và nợ xấu
 
 **Khung:** mô hình chữa lành hỗn hợp (Tong, Mues & Thomas 2012): `S(t) = π + (1 − π)·S_u(t)` với `π` = xác suất *không bao giờ* trả
@@ -38,6 +40,8 @@ nợ, `f_resid`); số trên dữ liệu thật sẽ thấp hơn.
 1. `TermInMonths` chiếm 56% gain; kỳ hạn >120 tháng (BĐS, 148k khoản) có tỷ lệ xoá nợ 0,03–0,13% — phần lớn AUC cao đến từ việc nhận diện *khoản BĐS dài hạn an toàn*.
 2. **Nhãn bị che:** 144.908 khoản `LoanStatus = EXEMPT` (đang hoạt động, kết cục không công bố) luôn có y=0 → nhãn âm giả. Cần loại hoặc xử lý như kiểm duyệt (WP-2.2) trước khi tuyên bố AUC; PR-AUC 0,21 (15,7× nền) là con số nên dùng, cùng độ lệch hiệu chỉnh theo năm (FY2022: dự báo 0,92% vs thực 1,91%).
 
+Trong mô tả ngày 25/10, luồng T6 có bật T2 còn kiểm trường hợp xác suất nợ xấu mâu thuẫn với xác suất chưa trả của T1. Đây là cơ chế của pipeline T1/T2 cũ, không phải một lượt lấy mẫu T2 bổ sung cho competing risks hoặc unified.
+
 ## 3.2 T3 — Tranh chấp và trả một phần
 
 - Dự đoán **tại ngày lập** (không dùng thông tin sau): `c_disp_eb`, `c_part_eb` (tỷ lệ lịch sử khách, co về tiền nghiệm với 20 quan sát giả), `c_late_eb`, `log_amt_rel`, `term_days`, `c_n`.
@@ -65,5 +69,38 @@ nên EB đủ; LightGBM chỉ thêm nhiễu. Giữ mô hình EB cho T3 trừ khi
 - **Đưa vào mô hình:** `has_promise`, `days_to_promised`, `promise_overdue`, `c_promise_rel`, `c_promise_n` và biến tuần `promised_in_k`; GBM tự học
   "lời hứa của khách tin cậy dịch phân phối về tuần hứa".
 - **Hiển thị:** nhãn nguồn số liệu ("theo cam kết của khách, độ tin cậy 0,82"), không ẩn mô hình.
-- **Thí nghiệm E** (đang chạy): so DH-GBM có/không đặc trưng lời hứa trên `src` 2024-07→12; chỉ số MAE P50 trên HĐ có lời hứa.
+- **Thiết kế thí nghiệm E ban đầu:** so DH-GBM có/không đặc trưng lời hứa trên `src` 2024-07→12; chỉ số MAE P50 trên HĐ có lời hứa.
 - **Rủi ro:** dữ liệu lời hứa tổng hợp theo giả định `Beta(4,2)`; giá trị thật phải đo ở T13. Cần quy trình ghi lời hứa ít nhập liệu nhất (một tin nhắn → Agent 4 phân tích).
+
+
+<a id="t8-history"></a>
+
+### T8: công thức trong builder và phép đo reliability riêng
+
+**Mô tả đã ghi ngày 25/10/2026:** API lưu lời hứa gắn với hoá đơn/khách, ngày ghi nhận, ngày hứa và số tiền; khi dự báo tại `T`, chỉ lấy bản ghi đã có tới `T`. Đặc trưng độ tin cậy đang đưa vào T1 là `(số lần giữ lời + 4)/(số lời hứa đã xác minh + 6)` cho từng khách (tiền nghiệm Beta(4,2)); chỉ đếm lời hứa đã qua ngày hứa cộng 3 ngày và đã biết kết cục, nên khách chưa có lịch sử nhận mức dự phòng 4/6. T1 còn dùng cờ có lời hứa, khoảng cách tới ngày hứa, trạng thái quá hẹn và biến `promised_in_k` để điều chỉnh xác suất thu từng tuần. Mô hình `PromiseReliability` có trọng số gần đây (nửa đời 90 ngày) và co về tỷ lệ doanh nghiệp là phép đánh giá độ tin cậy riêng, chưa phải công thức `c_promise_rel` của T1. Quy trình trích lời hứa từ chat và cho người duyệt xác nhận mới ở mức đặc tả, chưa có giao diện trích xuất chat; phép thử sáu đặc trưng bổ sung cũng chưa đạt G17 chắc chắn.
+
+Luồng nháp chat, xác minh và lưu API đọc tại
+[đặc tả duyệt lời hứa](09_promise_chat_review.md). Đặc tả này giữ riêng vì
+mô tả quy trình nhập liệu, không trùng vai trò của mô hình xác suất T8.
+Các số MAE/Brier và trạng thái G17 tra ở Evaluation hoặc hồ sơ 25/10;
+không diễn giải phép đo reliability thành chất lượng trích xuất chat.
+
+<a id="sba-macro"></a>
+
+## 3.4 Chu kỳ SBA tại ngày phê duyệt
+
+Gộp giao thức từ tài liệu ablation bổ sung ngày 06/11/2026. Đây là mô tả
+của các lần chạy đã lưu, không phải lần đo mới hoặc yêu cầu chạy hiện nay.
+
+`scripts/run_sba_macro.py` đối chiếu cùng LightGBM/isotonic có và không có
+tỷ lệ charge-off của cohort phê duyệt trong [T−2 năm, T−1 năm), quy mô cohort
+và cờ thiếu lịch sử. Thông tin charge-off chỉ vào đặc trưng sau ngày xảy ra
+cộng 90 ngày. Đây là giả định độ trễ công bố, chưa có dữ liệu vintage SBA.
+Mẫu số dùng mọi ngày phê duyệt hợp lệ; không lọc bằng trạng thái khoản vay
+cuối kỳ. Không dùng tỷ lệ charge-off cùng năm hoặc nhãn ba năm của cohort
+cũ chưa chín. Lãi suất ban đầu vốn đã có trong hai nhánh.
+
+Train FY≤2013, calibration FY2014, test FY2018–2022; nhãn ba năm đã chín
+trước test. Chạy drop/keep/censor EXEMPT, báo cáo theo kỳ hạn và FY. CI Brier
+lấy mẫu theo proxy tên/địa chỉ người vay, không phải định danh doanh nghiệp
+được xác nhận. Số liệu lấy từ `outputs/t2_t3/sba_macro_*.csv`.

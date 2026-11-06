@@ -1,1 +1,18 @@
 data/synthetic/v3_final_20261027_*/*.parquet filter=lfs diff=lfs merge=lfs -text
+
+# Preserve bytes used by frozen research SHA-256 checks across checkouts.
+/analysis/** -text
+/experiments/** -text
+/data/synthetic/v4_shortpay_4shock_20261028_cohort.json -text
+/data/synthetic/v4_shortpay_4shock_20261028_design.json -text
+/data/synthetic/v4_shortpay_4shock_20261028_*/** -text
+/data/synthetic/v6_holdout_20261101_*/** -text
+/data/synthetic/practical_v6_20261105_*/** -text
+/data/synthetic/unified_v2_holdout_20261104_*/** -text
+/outputs/data/t1_*/** -text
+/outputs/data/v4_shortpay_4shock_20261028/** -text
+/outputs/data/v5_competing_risks_53w_20261028/** -text
+/outputs/data/unified_collection_v2_*/** -text
+/outputs/analysis/** -text
+/outputs/maintenance/** -text
+/outputs/t1/v4_shortpay_4shock_20261028_inference_2025-12-31/** -text

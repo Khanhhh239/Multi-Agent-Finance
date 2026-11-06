@@ -1,5 +1,7 @@
 # 5. Domain adaptation — từ dữ liệu nguồn sang doanh nghiệp đích
 
+> **Phạm vi sau gộp 06/11/2026:** DA1–DA7 và các ngân sách dưới đây thuộc các protocol lịch sử, không phải khuyến nghị tự động fine-tune bản v6 đã chốt. Phép đo DR/IW được gộp vào cuối tài liệu; dữ liệu World đời đầu đã xóa.
+
 ## 5.1 Bài toán
 
 Sản phẩm sẽ gặp DN mới chỉ có **M tháng** lịch sử (HĐĐT bắt buộc từ 07/2022 ⇒ phổ biến 12–36 tháng; khi mới onboard có thể chỉ 3–6 tháng).
@@ -75,3 +77,45 @@ WAPE của T1 dồn số dư hoá đơn đang mở vào tuần tất toán theo 
 - *Rò rỉ miền đích:* `tgt` niêm phong; siêu tham số chọn trên `src`.
 - *Giả thuyết "tổng hợp → thật":* kết quả trên `tgt` chỉ là tầng 3; muốn kết luận tầng 1 phải chạy S0/S3 trên Customer Invoices/BPI (đã có S0 ở
   thí nghiệm C) và trên DN thật (T13).
+
+
+<a id="ablation-dr-iw"></a>
+
+## 5.7 Phép đo DR và IW đã lưu
+
+Gộp giao thức từ tài liệu ablation bổ sung ngày 06/11/2026. Đây là mô tả
+của các lần chạy đã lưu, không phải lần đo mới hoặc yêu cầu chạy hiện nay.
+
+### Domain randomization cùng số công ty và hoá đơn
+
+`scripts/build_dr_comparison.py` sinh một thế giới ×400 DN và 20 thế giới
+×20 DN. `scripts/run_dr_comparison.py` khớp số hoá đơn từng cặp công ty
+trước khi tính đặc trưng; hai nhánh cùng tối đa 40k snapshot, 300 vòng.
+Nguồn chốt 2024-07-01 cho ba miền tổng hợp; nguồn chốt riêng 2019-10-01
+cho CustomerInvoices, không huấn luyện nguồn tương lai để chấm dữ liệu thật.
+Mỗi nhánh có đủ 400 DN. Dữ liệu thật chỉ có bốn cụm công ty nên CI cần được
+hiểu trong phạm vi mẫu nhỏ này, không đại diện SME Việt Nam.
+
+Lượt đầu bị ngắt trong lúc chuẩn bị nguồn 2019. Cache đã hoàn tất chỉ được
+chuyển khi hash toàn bộ phụ thuộc và manifest khớp bản gốc lưu riêng;
+protocol ghi hash các cache được dùng lại. Lượt tiếp theo lưu snapshot theo
+từng mảnh, kiểm hash khi phục hồi. Kiểm thử ngắt giữa chừng đối chiếu với
+lượt liền mạch xác nhận cùng kết quả. Ba miền tổng hợp không đạt mức giảm
+pinball 5%; dữ liệu thật vượt mức đó trong CI cặp theo công ty. Kết quả
+chi tiết lấy từ `outputs/t1/DR/decisions.csv`; không tự áp dụng DR và không
+suy ra độ bất định giữa nhiều seed sinh nguồn từ một thiết kế seed.
+
+### IW dự đoán ngoài công ty
+
+`scripts/run_iw_oof.py` đối chiếu pooled, IW dự đoán trên mẫu đã học và IW
+với bốn fold giữ lại nguyên DN trong từng miền. Chỉ dùng snapshot trước
+2024-07-01; nhãn miền không phải kết quả thanh toán. Cùng 40k nguồn/tối đa
+40k đích, M6, 300 vòng và trọng số đích của DA-paired. Bộ phân loại miền
+200 vòng và clip xác suất/trọng số giữ như thí nghiệm gốc.
+
+Đây là ablation thăm dò sau khi chẩn đoán trọng số cũ gần như đồng nhất;
+không phải lần xác nhận cuối trên miền đích chưa từng được xem. OOF ngăn
+dự đoán lại công ty trong fold đã học, nhưng không bảo đảm hai phân phối
+chồng lấn hoặc tỷ lệ mật độ đã được hiệu chỉnh. Báo cáo AUC ngoài công ty,
+ESS và CI pinball trong `outputs/t1/IW_oof/`; không đổi kết luận DA4 gốc
+hoặc đưa vào chính sách onboarding bằng kết quả test này.

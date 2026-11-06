@@ -1,0 +1,46 @@
+{
+  "status": "hypothetical measurement feasibility; NOT a preregistered model result",
+  "base_design": {
+    "series_id": "synthetic_credit_restriction_survey_v1",
+    "panel_size": 128,
+    "response_probability": 0.8,
+    "baseline_logit": -2.0,
+    "pressure_loading": 1.2,
+    "respondent_sd": 0.4,
+    "release_error_sd": 0.25,
+    "publication_lag_days": 15,
+    "ingestion_lag_days": 1,
+    "seed": 20261105
+  },
+  "world_seed_rule": "base survey seed + world seed; separate from World RNG",
+  "industry_knowledge_assumption": "fixed KYC classification known from first observed invoice",
+  "max_reference_age_days": 62,
+  "min_respondents": 30,
+  "estimator_features": [
+    "macro_credit_restricted_share",
+    "macro_credit_delta",
+    "macro_credit_age_days",
+    "macro_credit_missing",
+    "macro_credit_delta_missing",
+    "buyer_industry_steel_metals",
+    "buyer_industry_textile_clothing",
+    "buyer_industry_plastic_rubber",
+    "buyer_industry_wholesale",
+    "buyer_industry_food_processing",
+    "buyer_industry_services",
+    "buyer_industry_unknown",
+    "seller_industry_steel_metals",
+    "seller_industry_textile_clothing",
+    "seller_industry_plastic_rubber",
+    "seller_industry_wholesale",
+    "seller_industry_food_processing",
+    "seller_industry_services",
+    "seller_industry_unknown"
+  ],
+  "source_code_sha256": {
+    "analysis/audit_t1_credit_context.py": "7eb822489fab71b6c09c476adf0bbecaf1dcb0d46f717a6d894827ddd92bd29b",
+    "experiments/t1_credit_context/__init__.py": "56dca7dbc7e89c8ab175bb4f37561743518a14c848e3b6db4f8cec53c2f10c6b",
+    "experiments/t1_credit_context/features.py": "5e31d614364973d71cfe5047168cecbdfdf4b984966636b8a9d2ae081ae95066",
+    "experiments/t1_credit_context/observations.py": "fbbb13f8011d9082e78c87c554b8b38fa6b7ded2b8257385136769ef7b440a3e"
+  }
+}

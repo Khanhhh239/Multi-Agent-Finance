@@ -1,0 +1,200 @@
+{
+  "anchor_budget": 20000,
+  "rounds": 160,
+  "transition_rows": 148338,
+  "features": [
+    "origin_log_amount_rel",
+    "origin_term_days",
+    "origin_age_days",
+    "origin_days_to_due",
+    "origin_days_past_due",
+    "origin_is_overdue",
+    "origin_issue_month",
+    "origin_due_dom",
+    "origin_due_dow",
+    "origin_paid_frac_so_far",
+    "origin_has_due",
+    "origin_c_n_hist",
+    "origin_c_delay_mean",
+    "origin_c_delay_med",
+    "origin_c_delay_std",
+    "origin_c_delay_eb",
+    "origin_c_delay_ewm",
+    "origin_c_late_share",
+    "origin_c_late30_share",
+    "origin_c_last_delay",
+    "origin_c_trend",
+    "origin_c_days_since_last_pay",
+    "origin_c_tenure_days",
+    "origin_c_life_med",
+    "origin_c_payrun_strength",
+    "origin_c_days_due_to_payrun",
+    "origin_c_dow_strength",
+    "origin_c_amount_rel_med",
+    "origin_c_open_n",
+    "origin_c_open_share",
+    "origin_c_open_overdue_n",
+    "origin_c_max_dpd",
+    "origin_c_pay_30d",
+    "origin_has_promise",
+    "origin_days_to_promised",
+    "origin_promise_overdue",
+    "origin_c_promise_rel",
+    "origin_c_promise_n",
+    "origin_f_n_hist",
+    "origin_f_delay_mean",
+    "origin_f_resid_28d",
+    "origin_f_resid_trend",
+    "origin_f_open_n",
+    "origin_days_to_tet",
+    "origin_cut_month",
+    "origin_due_near_tet",
+    "origin_c_closed_n_asof",
+    "origin_c_writeoff_n_asof",
+    "origin_c_writeoff_rate_eb_v6",
+    "origin_c_writeoff_180d_n",
+    "origin_f_writeoff_rate_asof",
+    "origin_f_writeoff_180d_rate",
+    "origin_c_overdue30_amount_share",
+    "origin_c_overdue60_amount_share",
+    "origin_c_overdue90_amount_share",
+    "origin_f_overdue90_amount_share",
+    "origin_c_open_amount_rel_v6",
+    "origin_i_payment_count_asof",
+    "origin_i_days_since_receipt",
+    "origin_i_receipt_frac_28d",
+    "origin_i_receipt_frac_90d",
+    "origin_i_credit_frac_known",
+    "origin_i_remaining_frac",
+    "origin_i_has_receipt",
+    "week_k",
+    "week_dtd_k",
+    "week_due_in_k",
+    "week_bd_in_k",
+    "week_tet_in_k",
+    "week_payrun_in_k",
+    "week_promised_in_k",
+    "remaining_origin_ratio",
+    "cash_origin_ratio",
+    "credit_origin_ratio",
+    "receipt_weeks",
+    "weeks_since_receipt",
+    "last_cash_origin_ratio"
+  ],
+  "vocabulary": [
+    {
+      "key": [
+        0,
+        0,
+        0
+      ],
+      "cash_fraction": 0.0,
+      "credit_fraction": 0.0,
+      "status": 0,
+      "train_rows": 132528
+    },
+    {
+      "key": [
+        0,
+        0,
+        2
+      ],
+      "cash_fraction": 0.0,
+      "credit_fraction": 0.0,
+      "status": 2,
+      "train_rows": 1021
+    },
+    {
+      "key": [
+        0,
+        1,
+        0
+      ],
+      "cash_fraction": 0.0,
+      "credit_fraction": 0.12102615520251699,
+      "status": 0,
+      "train_rows": 14
+    },
+    {
+      "key": [
+        0,
+        2,
+        0
+      ],
+      "cash_fraction": 0.0,
+      "credit_fraction": 0.28064296733739197,
+      "status": 0,
+      "train_rows": 5
+    },
+    {
+      "key": [
+        1,
+        0,
+        0
+      ],
+      "cash_fraction": 0.22170115733769308,
+      "credit_fraction": 0.0,
+      "status": 0,
+      "train_rows": 63
+    },
+    {
+      "key": [
+        2,
+        0,
+        0
+      ],
+      "cash_fraction": 0.3878690607550072,
+      "credit_fraction": 0.0,
+      "status": 0,
+      "train_rows": 948
+    },
+    {
+      "key": [
+        3,
+        0,
+        0
+      ],
+      "cash_fraction": 0.6024349580397047,
+      "credit_fraction": 0.0,
+      "status": 0,
+      "train_rows": 642
+    },
+    {
+      "key": [
+        4,
+        0,
+        0
+      ],
+      "cash_fraction": 0.9459038105338267,
+      "credit_fraction": 0.0,
+      "status": 0,
+      "train_rows": 290
+    },
+    {
+      "key": [
+        5,
+        0,
+        1
+      ],
+      "cash_fraction": 1.0,
+      "credit_fraction": 0.0,
+      "status": 1,
+      "train_rows": 12827
+    }
+  ],
+  "credit_only_learned": false,
+  "fit_roles": [
+    "train"
+  ],
+  "class_weighting": false,
+  "performance": {
+    "seconds": 37.25195149998763,
+    "rss_baseline_mib": 498.96484375,
+    "rss_peak_sampled_mib": 712.15234375,
+    "rss_increment_sampled_mib": 213.1875,
+    "sampling_seconds": 0.05
+  },
+  "model_sha256": "6ea711313d4931d712949f5d739b067792f4c2a002ffa08c2869ccf75be0e7ee",
+  "calibration_sha256": "ca25ca392d6190e1b2ef9d4d115a22b0e8dc01d750a84d967e84b2b4d740382c",
+  "unsupported_source_calibration_rows": 0
+}

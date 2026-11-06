@@ -1,0 +1,368 @@
+[
+  {
+    "kind": "minimum_wage",
+    "value": [
+      4180000,
+      3710000,
+      3250000,
+      2920000
+    ],
+    "effective_from": "2019-01-01",
+    "effective_to": "2019-12-31",
+    "source": "157/2018/ND-CP",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "minimum_wage",
+    "value": [
+      4420000,
+      3920000,
+      3430000,
+      3070000
+    ],
+    "effective_from": "2020-01-01",
+    "effective_to": "2022-06-30",
+    "source": "90/2019/ND-CP",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "minimum_wage",
+    "value": [
+      4680000,
+      4160000,
+      3640000,
+      3250000
+    ],
+    "effective_from": "2022-07-01",
+    "effective_to": "2024-06-30",
+    "source": "38/2022/ND-CP",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "minimum_wage",
+    "value": [
+      4960000,
+      4410000,
+      3860000,
+      3450000
+    ],
+    "effective_from": "2024-07-01",
+    "effective_to": "2025-12-31",
+    "source": "74/2024/ND-CP",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "minimum_wage",
+    "value": [
+      5310000,
+      4730000,
+      4140000,
+      3700000
+    ],
+    "effective_from": "2026-01-01",
+    "effective_to": null,
+    "source": "293/2025/ND-CP",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_reduction",
+    "value": 0.08,
+    "effective_from": "2022-02-01",
+    "effective_to": "2022-12-31",
+    "source": "Nghi quyet giam VAT theo lich su trong calendar_vn; can ra soat phu luc loai tru",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_reduction",
+    "value": 0.08,
+    "effective_from": "2023-07-01",
+    "effective_to": "2023-12-31",
+    "source": "Nghi quyet giam VAT theo lich su trong calendar_vn; can ra soat phu luc loai tru",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_reduction",
+    "value": 0.08,
+    "effective_from": "2024-01-01",
+    "effective_to": "2024-06-30",
+    "source": "Nghi quyet giam VAT theo lich su trong calendar_vn; can ra soat phu luc loai tru",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_reduction",
+    "value": 0.08,
+    "effective_from": "2024-07-01",
+    "effective_to": "2024-12-31",
+    "source": "Nghi quyet giam VAT theo lich su trong calendar_vn; can ra soat phu luc loai tru",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_reduction",
+    "value": 0.08,
+    "effective_from": "2025-01-01",
+    "effective_to": "2025-06-30",
+    "source": "Nghi quyet giam VAT theo lich su trong calendar_vn; can ra soat phu luc loai tru",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_reduction",
+    "value": 0.08,
+    "effective_from": "2025-07-01",
+    "effective_to": "2026-12-31",
+    "source": "Nghi quyet giam VAT theo lich su trong calendar_vn; can ra soat phu luc loai tru",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_base",
+    "value": 0.1,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "Quy uoc mo phong hien co, can doi chieu",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_excluded_industries",
+    "value": [
+      "steel_metals"
+    ],
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "Quy uoc mo phong hien co, can doi chieu",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "social_insurance_employer",
+    "value": 0.215,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "QD595/QD-BHXH; xap xi mo phong, chua xet mien giam theo giai doan",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "social_insurance_employee",
+    "value": 0.105,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "QD595/QD-BHXH",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "monthly_vat_threshold",
+    "value": 50000000000.0,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "126/2020/ND-CP Dieu 9; can kiem phien ban sau 2026",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "vat_monthly_day",
+    "value": 20,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "38/2019/QH14 Dieu 44; giu hanh vi lich su",
+    "source_url": "https://vanban.chinhphu.vn/?pageid=27160&docid=197312",
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "cit_provisional_day",
+    "value": 30,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "126/2020/ND-CP Dieu 8",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "cit_final_month",
+    "value": 3,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "38/2019/QH14 Dieu 44",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "license_fee_day",
+    "value": 30,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "126/2020/ND-CP",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "license_fee_capital_threshold",
+    "value": 10000000000.0,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "Quy uoc mo phong hien co, can doi chieu",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "license_fee_low",
+    "value": 2000000.0,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "Quy uoc mo phong hien co, can doi chieu",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "license_fee_high",
+    "value": 3000000.0,
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "Quy uoc mo phong hien co, can doi chieu",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "license_fee_abolished",
+    "value": "2026-01-01",
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "198/2025/QH15",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "lunar_new_year",
+    "value": {
+      "2018": "2018-02-16",
+      "2019": "2019-02-05",
+      "2020": "2020-01-25",
+      "2021": "2021-02-12",
+      "2022": "2022-02-01",
+      "2023": "2023-01-22",
+      "2024": "2024-02-10",
+      "2025": "2025-01-29",
+      "2026": "2026-02-17",
+      "2027": "2027-02-06"
+    },
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "Lich Tet lich su; 2027 can xac nhan",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "tet_break",
+    "value": {
+      "2018": [
+        "2018-02-14",
+        "2018-02-20"
+      ],
+      "2019": [
+        "2019-02-02",
+        "2019-02-10"
+      ],
+      "2020": [
+        "2020-01-23",
+        "2020-01-29"
+      ],
+      "2021": [
+        "2021-02-10",
+        "2021-02-16"
+      ],
+      "2022": [
+        "2022-01-29",
+        "2022-02-06"
+      ],
+      "2023": [
+        "2023-01-20",
+        "2023-01-26"
+      ],
+      "2024": [
+        "2024-02-08",
+        "2024-02-14"
+      ],
+      "2025": [
+        "2025-01-25",
+        "2025-02-02"
+      ],
+      "2026": [
+        "2026-02-14",
+        "2026-02-22"
+      ],
+      "2027": [
+        "2027-02-04",
+        "2027-02-10"
+      ]
+    },
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "Lich nghi trong ban cu; 2027 can xac nhan",
+    "source_url": null,
+    "verified": false,
+    "reviewed_on": null
+  },
+  {
+    "kind": "provisioning_months",
+    "value": [
+      [
+        6,
+        0.3
+      ],
+      [
+        12,
+        0.5
+      ],
+      [
+        24,
+        0.7
+      ],
+      [
+        36,
+        1.0
+      ]
+    ],
+    "effective_from": "2018-01-01",
+    "effective_to": null,
+    "source": "48/2019/TT-BTC Dieu 6; can kiem van ban thay the nam 2026",
+    "source_url": "https://m-portal.mof.gov.vn/hoidapcstc/home/cthoidap/118779",
+    "verified": false,
+    "reviewed_on": null
+  }
+]

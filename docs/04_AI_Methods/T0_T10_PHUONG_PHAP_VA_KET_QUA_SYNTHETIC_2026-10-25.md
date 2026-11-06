@@ -1,5 +1,7 @@
 # T0–T10: hệ thống làm gì và đã đạt gì trên dữ liệu tổng hợp?
 
+> **Hồ sơ kết quả 25/10, rút phần phương pháp lặp ngày 06/11/2026.** Các bảng và nhận xét kết quả giữ nguyên. `src/tgt`, `big_*` và hard-case nguồn đã xóa. Các lỗi generator mô tả bên dưới thuộc phiên bản cũ; trạng thái sau sửa xem [tổng kết máy phát](../02_Data/18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md), không coi lỗi cũ là kết luận về v4 hiện còn.
+
 **Trạng thái ngày 25/10/2026 · branch `agent1-Khanh` · commit `70c0ceb`.** Đây là bản giải thích kết quả đã có, không phải chứng nhận hệ thống dùng được cho doanh nghiệp thật. Những số đo từ thí nghiệm cũ được đánh dấu rõ.
 
 ## 1. Đọc nhanh toàn bộ hệ thống
@@ -77,13 +79,13 @@ Các đoạn **Phương pháp hiện tại** mô tả cách tính đã có trong
 
 ### T0 — Kiểm tra đầu vào
 
-**Phương pháp hiện tại:** Bộ nạp đọc XML hoá đơn điện tử (phiên bản 2.0.0/2.0.1/2.1.0), bảng kế toán và sao kê; chuẩn hoá định danh, ngày, tiền trước khi chuyển cho các T sau. Với hoá đơn, `quality_gate` kiểm từng dòng bằng quy tắc, không học máy: thiếu trường bắt buộc; chữ số kiểm tra MST người bán/người mua; ngày lập không hợp lệ, hạn trước ngày lập; `tiền trước thuế + VAT ≠ tổng tiền` (dung sai 1.000đ); thuế suất ngoài tập cho phép; tiền không dương; trùng bộ `(MST người bán, ký hiệu, số hoá đơn)`; tiền tệ không hỗ trợ. Kết quả là bảng cờ lỗi theo dòng để chặn hoặc yêu cầu sửa đầu vào. XML còn bị giới hạn kích thước và chặn DTD/thực thể; thông tin hoá đơn thay thế/điều chỉnh được đọc ra, nhưng chuỗi tham chiếu chưa được kiểm tra đầy đủ.
+**Phương pháp của khối T0:** xem [tài liệu phương pháp](01_pipeline_he_thong.md#t0-scope). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả:** Với 200 lỗi được cố ý chèn vào dữ liệu thử, T0 nhận ra đủ và không báo nhầm trong bộ sạch: precision **1,00**, recall **1,00**, tỷ lệ báo lỗi sạch **0,00**. Cổng G16 đạt. Đây là điểm trên các lỗi đã thiết kế để thử, chưa đo mọi dạng lỗi trong file doanh nghiệp thật.
 
 ### T1 — Dự báo khi nào hoá đơn mở sẽ được trả
 
-**Phương pháp hiện tại:** Ở mỗi ngày cắt, tạo một bản ghi cho từng hoá đơn đã lập nhưng còn dư; chỉ dùng thanh toán, lời hứa và lịch sử khách đã biết đến ngày đó. Đặc trưng gồm tuổi nợ, khoảng cách tới hạn, tỷ lệ đã thu, số tiền so với mức thường của doanh nghiệp, độ trễ và nhịp trả quen thuộc của khách, công nợ đang mở, tín hiệu trễ chung và Tết. `DH-GBM` (LightGBM hazard rời rạc) khai triển mỗi bản ghi thành tối đa 13 hàng, mỗi hàng ứng với một tuần còn khả năng được trả; hoá đơn còn mở vẫn đóng góp các tuần đã quan sát mà không bị gán nhầm là “đã trả”. Mỗi hàng còn có thông tin biết trước của tuần tương lai như hạn trả, số ngày làm việc, ngày khách thường chuyển khoản và ngày đã hứa. Hazard có điều kiện từng tuần được nhân với xác suất còn chưa trả để ra xác suất thu ở từng tuần; từ đó suy ra phân vị ngày trả và phần xác suất ngoài 13 tuần. `B1d` dùng phân vị thời gian trả trong lịch sử khách làm mốc so sánh; CQR và fine-tune là các nhánh đánh giá riêng, chưa thay mô hình chính.
+**Phương pháp của khối T1:** xem [tài liệu phương pháp](02_t1_hazard_thoi_diem_tra.md). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả trên `src`:**
 
@@ -96,19 +98,18 @@ Các đoạn **Phương pháp hiện tại** mô tả cách tính đã có trong
 
 ### T2 — Ước lượng khả năng không thu được nợ
 
-**Phương pháp hiện tại:** Chọn các hoá đơn còn mở và đã quá hạn tại ngày cắt. `CureGBM` là bộ phân loại LightGBM ước lượng `P(nợ xấu | thông tin biết tại ngày cắt)` từ tuổi nợ, đặc trưng khách và doanh nghiệp cùng loại đặc trưng của T1; khi huấn luyện chỉ lấy trường hợp đã biết kết cục trả hết hoặc xoá nợ trước ngày kết thúc nhãn, không tự gán hoá đơn còn mở là nợ xấu. Trong mô phỏng có bật T2, T6 lấy mẫu nhánh không trả theo xác suất này và dùng phân phối tuần T1 cho nhánh có trả; mã còn có phép kiểm tra khi xác suất nợ xấu mâu thuẫn với xác suất còn chưa trả của T1. Lịch trích lập theo tuổi nợ là mốc quy tắc để so sánh, không phải nhãn huấn luyện.
+**Phương pháp của khối T2:** xem [tài liệu phương pháp](03_t2_t3_t8_xac_suat_hoa_don.md). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả cũ trên synthetic:** Cure-GBM có PR-AUC **0,965** và Brier **0,048** ở `src`; khi chuyển sang `tgt` là **0,976/0,053**. Bảng này **chưa được chạy xác nhận sau khi sửa cách lấy dữ liệu theo ngày và tuần dự báo**. Vì vậy đây là lịch sử tham khảo, chưa phải bằng chứng nghiệm thu mới. G8 là một phép kiểm khác trên dữ liệu SBA thật và hiện chưa đạt.
 
 ### T3 — Nhận diện tranh chấp hoặc trả một phần
-Vâ
-**Phương pháp hiện tại:** Tại ngày lập hoá đơn, đếm các hoá đơn trước của cùng khách đã biết kết cục; tính riêng tỷ lệ tranh chấp và tỷ lệ trả một phần. Mỗi tỷ lệ được co về tỷ lệ nền bằng tiền nghiệm tương đương 20 quan sát để khách mới không nhận dự báo  cực đoan. Các biến số tiền tương đối, kỳ hạn và tỷ lệ trả trễ được tạo để thử LightGBM, nhưng phương pháp giữ lại là tỷ lệ lịch sử khách đã co (EB). T3 trả hai xác suất ở cấp hoá đơn; nhánh đưa thêm tín hiệu tranh chấp vào T1 đã thử nhưng chưa dùng mặc định.
+**Phương pháp của khối T3:** xem [tài liệu phương pháp](03_t2_t3_t8_xac_suat_hoa_don.md). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả trên 4.536 hoá đơn `tgt`:** Với tranh chấp, EB đạt AUC **0,667**, LightGBM **0,526**; với trả một phần, EB **0,718**, LightGBM **0,678**. Thêm đặc trưng tranh chấp từ T3 vào T1 còn làm pinball của nhóm tranh chấp `tgt` **xấu 3,11%**. Vì vậy nhánh này chưa được đưa vào T1 mặc định.
 
 ### T4 — Dự báo doanh thu chưa có hoá đơn
 
-**Phương pháp hiện tại:** Gom doanh thu đã quan sát thành chuỗi tuần. `GlobalQuantileLGBM` học chung nhiều doanh nghiệp, tạo một hàng cho mỗi chân trời 1–13 tuần; doanh thu và 13 độ trễ gần nhất được chia cho trung bình 13 tuần của chính doanh nghiệp để mô hình dùng chung các quy mô tiền. Đầu vào còn có xu hướng 4/26 tuần, tuần cùng kỳ năm trước, mùa, Tết và chân trời `h`; ba mô hình LightGBM phân vị cho P10/P50/P90, sau đó CQR dùng cửa sổ hiệu chỉnh tách khỏi huấn luyện để chỉnh khoảng P10–P90. Chronos-Bolt zero-shot và trung bình phân vị với LightGBM là các cấu hình đã so, nên bảng kết quả ghi rõ cấu hình thắng ở từng bộ. T6 không coi toàn bộ doanh thu dự kiến là tiền về ngay: doanh thu mới được trải theo phân bố độ trễ thu tiền ước lượng từ lịch sử hoá đơn doanh nghiệp.
+**Phương pháp của khối T4:** xem [tài liệu phương pháp](04_t4_t5_thu_moi_va_chi.md). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả:**
 
@@ -121,13 +122,13 @@ Sai số SPL càng thấp càng tốt. G9/G10 đạt theo các phép kiểm đã
 
 ### T5 — Xếp lịch các khoản chi đã biết
 
-**Phương pháp hiện tại:** Bộ quy tắc chọn phiên bản có hiệu lực tại kỳ cần tính, rồi tạo lịch ngày và số tiền từ hồ sơ doanh nghiệp: lương/BHXH theo kỳ lương; VAT và TNDN theo kỳ kê khai và **số thuế đã cung cấp**; thuê, lãi và gốc vay theo điều khoản/hợp đồng. Ngày rơi vào ngày nghỉ được dời tới ngày làm việc kế tiếp hoặc trước đó theo từng quy tắc; ví dụ BHXH dùng ngày làm việc trước. Phần nghĩa vụ mở rộng giữ `known_at`, nguồn hồ sơ, trạng thái xác minh và ngày đến hạn: chỉ đưa khoản đã biết tại ngày cắt vào lịch, hoàn VAT chỉ là dòng thu khi đã có quyết định phê duyệt. Lịch mở rộng đã được kiểm thử riêng nhưng chưa tự động cộng vào T6 vì cần đối chiếu khoản trùng và xác minh quy tắc.
+**Phương pháp của khối T5:** xem [tài liệu phương pháp](04_t4_t5_thu_moi_va_chi.md#nghia-vu-bo-sung). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả:** **18/18** tình huống nghĩa vụ mở rộng và **54** ca nghiệp vụ cho **27** phiên bản quy tắc chạy đúng theo cấu hình kiểm thử. Tuy nhiên **27/27 quy tắc chưa được chuyên gia xác minh**; lịch mở rộng cũng chưa được cộng mặc định vào T6 vì có nguy cơ tính trùng. G11 được để ngoài phạm vi giai đoạn chỉ dữ liệu tổng hợp; pilot thật vẫn cần xác minh.
 
 ### T6 — Dự báo số dư và nguy cơ thiếu tiền 13 tuần
 
-**Phương pháp hiện tại:** Mỗi đường Monte Carlo lấy tuần thu của từng hoá đơn mở từ phân phối 13 tuần T1; một nhân tố sốc Student-t chung và nhiễu riêng làm các khoản thu có thể cùng trễ, với mức tương quan chọn trên bộ nguồn theo điểm khoảng dự báo. Nếu có xác suất nợ xấu T2, mô phỏng có thể rẽ nhánh không thu trong chân trời. Với doanh thu mới T4, lấy mẫu theo P10/P50/P90 rồi trải tiền thu bằng phân bố thời gian thu của hoá đơn doanh nghiệp trong 365 ngày đã biết; phần chi gồm lịch đã biết T5 và khoản chi bất thường lấy mẫu từ tần suất/giá trị lịch sử. Cộng dòng thu trừ chi vào số dư đầu kỳ cho từng tuần, lấy P10/P50/P90 của các đường và tỷ lệ đường có `min(số dư tuần) < 0` làm rủi ro thiếu tiền. `ACI` cập nhật mức cắt khoảng riêng theo chân trời **sau khi** số dư thật của chân trời đó lộ diện; đây là hiệu chỉnh dải, không sửa các khoản thu/chi gốc.
+**Phương pháp của khối T6:** xem [tài liệu phương pháp](06_t6_monte_carlo_conformal.md). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Hai mức kiểm tra cần tách:**
 
@@ -142,19 +143,19 @@ Một thử nghiệm tiếp theo cho kế toán duyệt tối đa 5 giao dịch/
 
 ### T7 — Phát hiện khách đổi thói quen trả tiền
 
-**Phương pháp hiện tại:** Với từng khách, chỉ sau ít nhất 8 lần trả, so độ trễ của khoản mới với tối đa 40 khoản trước đó; đổi thứ hạng thực nghiệm của độ trễ thành điểm chuẩn hoá `z` (PIT), để các khách có phân phối trả đúng hạn/trả trễ khác nhau vẫn so được. `CUSUM` một phía cộng dồn các `z` dương sau khi trừ độ lệch cho phép, báo khi vượt ngưỡng rồi đặt lại; ngưỡng chọn trên `src`. Page–Hinkley, BOCPD và trung bình trượt là đối chứng. Tín hiệu báo động chỉ là dấu hiệu khách đổi hành vi; nhánh dùng nó để điều khiển T6 đã thử riêng, chưa chứng minh cải thiện độ phủ.
+**Phương pháp của khối T7:** xem [tài liệu phương pháp](07_t7_t9_t10.md). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả:** CUSUM phát hiện **52,4%** điểm gãy trong 180 ngày, trễ trung vị **50 ngày**, nhưng báo nhầm **0,633 lần/khách/năm**, vượt giới hạn **0,5**. Phương pháp Page–Hinkley báo nhầm ít hơn (**0,424**) nhưng chỉ phát hiện **42,9%**. Nhánh điều khiển T6 gần như không cải thiện độ phủ trong hai giai đoạn khủng hoảng đã thử (**0,659** và **0,633**). G14 chưa đạt.
 
 ### T8 — Đánh giá lời hứa trả tiền
 
-**Phương pháp hiện tại:** API lưu lời hứa gắn với hoá đơn/khách, ngày ghi nhận, ngày hứa và số tiền; khi dự báo tại `T`, chỉ lấy bản ghi đã có tới `T`. Đặc trưng độ tin cậy đang đưa vào T1 là `(số lần giữ lời + 4)/(số lời hứa đã xác minh + 6)` cho từng khách (tiền nghiệm Beta(4,2)); chỉ đếm lời hứa đã qua ngày hứa cộng 3 ngày và đã biết kết cục, nên khách chưa có lịch sử nhận mức dự phòng 4/6. T1 còn dùng cờ có lời hứa, khoảng cách tới ngày hứa, trạng thái quá hẹn và biến `promised_in_k` để điều chỉnh xác suất thu từng tuần. Mô hình `PromiseReliability` có trọng số gần đây (nửa đời 90 ngày) và co về tỷ lệ doanh nghiệp là phép đánh giá độ tin cậy riêng, chưa phải công thức `c_promise_rel` của T1. Quy trình trích lời hứa từ chat và cho người duyệt xác nhận mới ở mức đặc tả, chưa có giao diện trích xuất chat; phép thử sáu đặc trưng bổ sung cũng chưa đạt G17 chắc chắn.
+**Phương pháp của khối T8:** xem [tài liệu phương pháp](03_t2_t3_t8_xac_suat_hoa_don.md#t8-history). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả:** Với lời hứa synthetic sạch, dùng lời hứa làm sai số ngày của nhóm có lời hứa giảm từ **13,85** xuống **11,24** ngày (**18,8%**). Khi lời hứa bị làm nhiễu, sai số giảm từ **13,90** xuống **12,85** ngày (**7,6%**), thấp hơn ngưỡng cải thiện 10% của G17. Nhánh thử thêm sáu đặc trưng đạt **10,83%** theo điểm ước lượng, nhưng khoảng bất định **8,16–13,01%** còn cắt qua ngưỡng; G17 chính thức vẫn chưa đạt. Chưa có lời hứa người thật để kiểm tra.
 
 ### T9 — Ghép giao dịch ngân hàng với hoá đơn
 
-**Phương pháp hiện tại:** Xử lý giao dịch tiền vào theo ngày trên sao kê, đồng thời chỉ xét hoá đơn đã lập, còn dư và các bút toán/điều chỉnh đã biết tới ngày giao dịch. Trước tiên tự ghép nếu nội dung chỉ rõ nhóm số hoá đơn có tổng dư khớp, hoặc chỉ có một hoá đơn khớp số tiền (dung sai 25.000đ). Với phần còn lại, sinh ứng viên khách từ tên/nội dung đã chuẩn hoá, số hoá đơn và mức khớp tiền; LightGBM chấm xác suất đúng khách rồi thử nhóm hoá đơn có tổng dư bằng tiền chuyển. Nếu điểm thấp hoặc nhiều cách phân bổ hợp lệ, giữ giao dịch trong hàng chờ duyệt; liên kết tự động được trừ dần khỏi dư nợ, ngày tất toán ước lượng chỉ xuất hiện khi tổng phân bổ đủ tiền. Bản v2 đã chọn trên `src` giới hạn nhóm hoá đơn **đoán** tối đa 2 và tắt nhánh phân bổ có trọng số hazard/FIFO; hàng chờ duyệt tối đa 5 lượt/tuần mới là phép mô phỏng với người duyệt luôn đúng, chưa phải năng suất người thật.
+**Phương pháp của khối T9:** xem [tài liệu phương pháp](07_t7_t9_t10.md). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả:** Bản lai quy tắc + mô hình trên `tgt` ghép đúng **94,0%** các liên kết đã tự làm (precision), nhưng chỉ tìm được **61,0%** liên kết thật (recall), F1 **0,740**. Sai số ngày thu ước lượng **1,45 ngày**, so **12,6 ngày** nếu dùng ngày gạch sổ. Bản T9 v2 chọn trước trên `src` có kết quả:
 
@@ -168,7 +169,7 @@ T9 v2 chưa đạt đồng thời precision ≥0,95 và F1 ≥0,80 của G15. H�
 
 ### T10 — Giải thích và thử phương án hành động
 
-**Phương pháp hiện tại:** Với một hoá đơn tại ngày cắt, lấy đóng góp đặc trưng từ LightGBM hazard T1 cho tuần đầu và diễn đạt các yếu tố tăng/giảm khả năng thu sớm. Để xếp thứ tự thu nợ, chọn trước tối đa 50 hoá đơn theo `dư nợ × P(chưa thu trong 2 tuần)`, rồi chạy lại T6 với từng hoá đơn giả định **thu đủ ngay tuần đầu**; `ΔP(thiếu tiền)` là chênh lệch so với cùng mô phỏng gốc, có thể chia cho giờ công nếu dữ liệu có sẵn. Chức năng “nếu như” thay độ trễ của một khách, dịch khoản chi hoặc giảm doanh thu rồi lấy lại dải số dư/rủi ro; thư viện stress test còn có tất cả khách trễ 30/60 ngày, khách lớn nhất không trả và doanh thu giảm 30% theo kịch bản tất định. Các chênh lệch này là tác động **giả định trong mô hình**, chưa phải hiệu quả gọi nợ ngoài đời.
+**Phương pháp của khối T10:** xem [tài liệu phương pháp](07_t7_t9_t10.md). Các số bên dưới giữ nguyên phạm vi/phiên bản ngày 25/10; không gán cấu hình hoặc kết quả tiếp nối trong tài liệu phương pháp cho lần đo này.
 
 **Kết quả:** Đã tạo được ví dụ dải số dư, danh sách hoá đơn và kịch bản. Trong ví dụ F001 ngày 18/11/2024, rủi ro thiếu tiền đã là **1,0** cả trước lẫn sau kịch bản, nên chênh lệch rủi ro của các hoá đơn ưu tiên bằng **0**; ví dụ này không đo hiệu quả toàn hệ thống. Mô phỏng chính sách thu nợ cho thay đổi DSO khoảng **−0,44/−0,28/−0,28 ngày** ở ba giả định phản hồi, nhưng các khoảng bất định đều chứa 0. Chưa chứng minh giảm thiếu tiền, tác động nhân quả hoặc lợi nhuận đầu tư.
 

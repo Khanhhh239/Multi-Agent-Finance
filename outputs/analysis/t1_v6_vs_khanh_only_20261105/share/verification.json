@@ -1,0 +1,27 @@
+{
+  "source_results_sha256": {
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/summary.json": "1bf7621905f6dc5e0ccba7d7baeeb6472ed0e200cc7c47a54bedb6e8e7cab100",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/scores.csv": "cf2933ac95c0cb98a0def00a1cc72ad2537a6ef1d0d8a052352c886388a62a85",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/aggregate_scores.csv": "aefc9df9666b324c192c8a90c2cc4e934b881dc185aeac944cef9c033990324b",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/primary_by_world.csv": "7590c1e87cdc96abf9a93ddb466faabce2516c0ed71fdd0e6a11983cc8797d4a",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/bootstrap.csv": "5602f7b2f2fcefb89854084fbb9055ad2dc641b6e11871e39f6b40cd63578125",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/quantiles_restricted120.csv": "d608baabdb6fd730628c1ac93b97db666a0eb8aae4f7c0ada80e05e9413efb63",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/slices_equal_world.csv": "5827da18067d7efc27fb45e96e0dc5b9e4f38087f536225b361b2f214a3005ac",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/protocol.lock.json": "f0443a16aaa6e8b9440fbb78878414bb60ca7b41d83feaeeae12c9b2358215e4",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/verification.json": "ecf0995b7aa3be76fd72a4f7e5c2a782be7748d9e1bf8e3d019ebd2294f932a9",
+    "outputs/analysis/t1_v6_final_vs_khanh_20261105/report_review.json": "ddd4ed9e6f64411a4a72e81997fa12f00d9f866322186ea69b4d959f7b07d4b9"
+  },
+  "original_results_unchanged": true,
+  "only_two_models_in_score_tables": true,
+  "report_sha256": "3263afb48cd0049a1ea46daf6cfced444333addcb79aab743acb7c04d8116b73",
+  "history_path": "docs\\03_Evaluation\\T1_V6_PROGRESS_VS_KHANH_RESEARCH_FREEZE_DETAIL_2026-11-05.md",
+  "history_sha256": "fbe26840b6823126c24c66fa286a67606a660117c6104466b3b615a6b1a4efa1",
+  "new_training_or_prediction": false,
+  "prior_tests": {
+    "tests": 70,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "prior_protected_files_unchanged": 144
+}

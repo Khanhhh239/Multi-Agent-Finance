@@ -1,0 +1,91 @@
+{
+  "reason": "Conservatively mark customers with invoices predating complete ledger coverage as missing; fix before first extended-feature fit",
+  "hypothesis_or_selection_rule_changed": false,
+  "original_preparation_code_sha256": {
+    "experiments\\t1_v6_practical\\__init__.py": "6ab9f9579e080ceefe934f798dafd1b81d7d381777a3e9d2aaa72cb480f2c7c3",
+    "experiments\\t1_v6_practical\\design.py": "4a4f9ad1fe3984ffc135522686981e1d37dc90c1e5a349febdd3f8d39c334252",
+    "experiments\\t1_v6_practical\\ledger.py": "e4869d25af969583953dc1c30942c5451120273d1f03a0c61b6fb2786123d6b1",
+    "experiments\\t1_v6_practical\\model.py": "fec651d57b5cb7df233edc5feed9dc0f91c7efdc4020f170c43587836a3ad850",
+    "experiments\\t1_v6_practical\\run.py": "9130c0f5c07a5b01e55bf1faeabc5ba4921d5feb7f2c9257dc4e1004efc2a5b0",
+    "experiments\\t1_v6_practical\\sidecars.py": "50e9eb9ef52acac49e72af6302606c70e80e3ab30557deaab8741b2ab46c5ff8",
+    "experiments\\t1_credit_context\\practical.py": "513cde4eaf5c7dcf28ce17a67f0cfa0d814acea453a7aac9049694c1bca39402",
+    "experiments\\t1_credit_context\\features.py": "5e31d614364973d71cfe5047168cecbdfdf4b984966636b8a9d2ae081ae95066"
+  },
+  "current_code_sha256": {
+    "experiments\\t1_v6_practical\\__init__.py": "6ab9f9579e080ceefe934f798dafd1b81d7d381777a3e9d2aaa72cb480f2c7c3",
+    "experiments\\t1_v6_practical\\design.py": "4a4f9ad1fe3984ffc135522686981e1d37dc90c1e5a349febdd3f8d39c334252",
+    "experiments\\t1_v6_practical\\ledger.py": "c8b4f7e9f9b166fe4a822b5c5addbac3d87a2fedc71c0e07fca6dd1aecc07c35",
+    "experiments\\t1_v6_practical\\model.py": "fec651d57b5cb7df233edc5feed9dc0f91c7efdc4020f170c43587836a3ad850",
+    "experiments\\t1_v6_practical\\run.py": "94425f28c9cd0fa781bbe2ef0a03ab6a3d9b8b3be85b6763064cd132d3a4c011",
+    "experiments\\t1_v6_practical\\sidecars.py": "50e9eb9ef52acac49e72af6302606c70e80e3ab30557deaab8741b2ab46c5ff8",
+    "experiments\\t1_credit_context\\practical.py": "513cde4eaf5c7dcf28ce17a67f0cfa0d814acea453a7aac9049694c1bca39402",
+    "experiments\\t1_credit_context\\features.py": "5e31d614364973d71cfe5047168cecbdfdf4b984966636b8a9d2ae081ae95066"
+  },
+  "reused_input_proof": [
+    {
+      "world": "v4_shortpay_4shock_20261028_train_000",
+      "earliest_invoice": "2019-01-02 00:00:00",
+      "coverage_start": "2019-01-02 00:00:00",
+      "uncovered_customer_guard_can_affect_rows": false
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_train_001",
+      "earliest_invoice": "2019-01-02 00:00:00",
+      "coverage_start": "2019-01-02 00:00:00",
+      "uncovered_customer_guard_can_affect_rows": false
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_train_002",
+      "earliest_invoice": "2019-01-02 00:00:00",
+      "coverage_start": "2019-01-02 00:00:00",
+      "uncovered_customer_guard_can_affect_rows": false
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_train_003",
+      "earliest_invoice": "2019-01-02 00:00:00",
+      "coverage_start": "2019-01-02 00:00:00",
+      "uncovered_customer_guard_can_affect_rows": false
+    }
+  ],
+  "baseline_sha256_equals_original": true,
+  "reused_files": {
+    "prepared\\v4_shortpay_4shock_20261028_train_000_fit.parquet": "5cac1cbb21a66f5c547855fa0e0398b47934d93c23af7f802f999615fd75692c",
+    "prepared\\v4_shortpay_4shock_20261028_train_000_fit.sha256.json": "773f66d7cc4d27567e163061967677a55711499d94fae866c16e95b18af00b32",
+    "prepared\\v4_shortpay_4shock_20261028_train_000_validation.parquet": "798248f5a48bb336d98c0b42760c444dba728398e4a4c8c559bfd45623fb32b3",
+    "prepared\\v4_shortpay_4shock_20261028_train_000_validation.sha256.json": "cd853138ba503ec48db8e945e4e71536595359cd60bec4044d9ab44b3aaba1e7",
+    "prepared\\v4_shortpay_4shock_20261028_train_001_fit.parquet": "71b416a838d882c99b6dd0b957ba8b08def720dd2c36c22f34763ae0668a83e7",
+    "prepared\\v4_shortpay_4shock_20261028_train_001_fit.sha256.json": "e4733d0c9783fb5afc843755b9c20193de71c68fca73090ad249d5aba4464952",
+    "prepared\\v4_shortpay_4shock_20261028_train_001_validation.parquet": "26e51a7ad965dbab19e23864b7a5e9eca291531c0d40964d6693f947e8634e19",
+    "prepared\\v4_shortpay_4shock_20261028_train_001_validation.sha256.json": "115be6a10c8f4bab41cdeb06e20f789a56be9c1490dacc61da83e39bcd8dfa45",
+    "prepared\\v4_shortpay_4shock_20261028_train_002_fit.parquet": "4160f16658edc6ca6f5015bbbcfc23d27778a0d8a841a00f29979ac35494993f",
+    "prepared\\v4_shortpay_4shock_20261028_train_002_fit.sha256.json": "e11e5490733e5bbc03052612c573f5ecb08dfeabf88bc00e1722a888c3ea57fc",
+    "prepared\\v4_shortpay_4shock_20261028_train_002_validation.parquet": "b0b4d0306480d2f40258987cfec34b391849f1ae7e72362e6f748c0b96bba7ae",
+    "prepared\\v4_shortpay_4shock_20261028_train_002_validation.sha256.json": "352bf8941d9368a6e54bee18f6e51281896bc03fdc671c760ec239bd1f42dea8",
+    "prepared\\v4_shortpay_4shock_20261028_train_003_fit.parquet": "25386744ae017248c1aa731be6c8d74bcef4eb39a68cf76082021b0f43400214",
+    "prepared\\v4_shortpay_4shock_20261028_train_003_fit.sha256.json": "29df21931ebcbff04953da86c4028246c570452b2b3db6b2c2c04c5bf966ae61",
+    "prepared\\v4_shortpay_4shock_20261028_train_003_validation.parquet": "21f4a8c030b2dc5228f0ef63f82af210a0ecbc446bb91bfcd1adaaea266eb70b",
+    "prepared\\v4_shortpay_4shock_20261028_train_003_validation.sha256.json": "bf8f6bba360e317d4b3039f8476447b7690128681c06f5a672dda831c4784732",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_000\\buyer_industry.parquet": "b01f569e809be62d06e943b182681e8667dac9fc6f08467e65cb17ca78b4b9f4",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_000\\coverage.parquet": "525b4b82efd118c6c6207019385217aa651fe8e03249c70ec38cbaffbad7f255",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_000\\invoices.parquet": "d571949d2dafcb4a74921f1d902cd5fbab2532e678b247e189a08aaf0609f111",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_000\\ledger_entries.parquet": "369e483dfac5c7f5bc1c96dc04b742d76b801506497bc76aedb1e794eb83f3c9",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_000\\seller_industry.parquet": "3a527051d1075b10d2b08f3170ba572c415e8c84e29f8fda641683e71a3d0916",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_001\\buyer_industry.parquet": "36a6bafb7fcc3501f89c6e2d908f301099b6141073348258b78258fc162fa3b4",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_001\\coverage.parquet": "525b4b82efd118c6c6207019385217aa651fe8e03249c70ec38cbaffbad7f255",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_001\\invoices.parquet": "ff01b06c6688b89ea2b005c8ef4ec838f526e483d4e068844f9c10620027e90d",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_001\\ledger_entries.parquet": "a194eef7c2e767a924bb9eddece6da182ee83b747937b10269c33cfb4a8b2a18",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_001\\seller_industry.parquet": "f6a65e5cc203192dbff6a14c2c4f495c8a525ddb10f64a802044d6a8dfee3690",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_002\\buyer_industry.parquet": "6da6bbf1bbc54b669fd48b2082bb712f22b8cc3e90a49191cfcc1c1f7ba4c41d",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_002\\coverage.parquet": "525b4b82efd118c6c6207019385217aa651fe8e03249c70ec38cbaffbad7f255",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_002\\invoices.parquet": "795c43858c00bea90e6b5b543825431bdfb4d4bae070257b1657282b2923be56",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_002\\ledger_entries.parquet": "32448e097ac955685e16406bfacc6ef26d346e54e2b9823c4863b8b2565a80a2",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_002\\seller_industry.parquet": "1c709a050d2d499fe21fe0e6ea701d64d38e35064406a40ec044a6b0d62eb904",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_003\\buyer_industry.parquet": "e0b46e080a7607b113277379c6aa62954089525710bde15b2b32c9dcc5cd25fd",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_003\\coverage.parquet": "525b4b82efd118c6c6207019385217aa651fe8e03249c70ec38cbaffbad7f255",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_003\\invoices.parquet": "f99c646df2b22778074f28bf3337782cfc58acdb465c80ecdfc6010b84cf9291",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_003\\ledger_entries.parquet": "7aa96e8b1cb52f6d34fca346d0cc27c3ef09c7707f5a96efb88a79f447ff2864",
+    "observed_sidecars\\v4_shortpay_4shock_20261028_train_003\\seller_industry.parquet": "65d5101f4650218bf4bd19b9953f5f26d184fd79eb1e29c6830ce9a79fccd9f9",
+    "models\\v6.json": "593ff0b52240b8f8ca77aa3ada8e7b2b29cf4ccf5ae138b02bd41d846f82cf74",
+    "models\\v6.txt": "9375373bcf413618642cb12f39c7d9a63bb5f24bac24a7c64b9e2eb54f95db44"
+  }
+}

@@ -526,7 +526,7 @@ docs/
 ├── 04_AI_Methods/                      pipeline và mô hình từng trạm
 └── 05_Coding_Agent_Plan/
     ├── NHAT_KY_SPRINT1_2026-10-20.md   nhật ký thực thi (mục 8–16 là mới nhất)
-    └── PROMPT_GIAO_VIEC_2026-10-22.md  việc giao agent kế tiếp
+    └── PHAM_VI_WP_VA_TIEU_CHI_GOC.md  phạm vi gốc sau gộp; bàn giao cũ ở nhật ký
 
 outputs/   kết quả CSV (sinh ra bởi mã)     scripts/sprint5/   mã đợt gần nhất
 agent1/    thư viện mô hình                 agent1_service/    API + dashboard

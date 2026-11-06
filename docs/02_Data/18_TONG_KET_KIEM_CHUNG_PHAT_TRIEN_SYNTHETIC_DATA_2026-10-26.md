@@ -1,12 +1,15 @@
 # Tổng kết và kiểm chứng máy phát dữ liệu synthetic — Agent 1
 
+> **Output đã nghỉ lưu ngày 06/11/2026:** các đường dẫn output v3 và release-gate được nêu trong tài liệu này đã xóa theo yêu cầu. Số đo và mô tả dưới đây là hồ sơ lịch sử, không còn artifact gốc để xác minh/tái lập. Báo cáo riêng của v3 và hồ sơ dọn dữ liệu cũng đã xóa.
+
+> **Tình trạng 06/11/2026:** dữ liệu v3/lifecycle/hard-case gốc đã xóa; các kết quả bên dưới giữ nguyên thời điểm đo. Báo cáo v4 ở [báo cáo 25](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md) mô tả cohort dùng cho v5/v6. Các nhận định “mới nhất/hiện tại” trong phần lịch sử chỉ có nghĩa tại thời điểm lập báo cáo.
+
 **Cập nhật 27/10/2026:** bộ cuối `v3_final_20261027` đã sinh 320 doanh nghiệp,
 1.424.342 hóa đơn trong 8 World, khóa split, train và evaluate. **GO kỹ thuật
 cho train synthetic theo giả định**, chưa xác nhận độ sát AR/AP với SME Việt Nam
-vì không có ledger độc lập. Xem [báo cáo 23](23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md)
-để dùng kết luận mới nhất. [Báo cáo 22](22_COHORT_SYNTHETIC_DA_KHOA_2026-10-27.md)
-ghi cohort ứng viên đã kiểm trước khi sinh toàn bộ; các bảng dưới đây là lịch
-sử kiểm chứng các phiên bản trước.
+vì không có ledger độc lập. Các báo cáo riêng về cohort ứng viên và bộ cuối
+v3 đã xóa; các bảng dưới đây là lịch sử kiểm chứng các phiên bản trước.
+Cohort hiện dùng được mô tả trong [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
 
 ## 1. Cách đọc và phạm vi kiểm chứng
 
@@ -59,6 +62,26 @@ Bốn kênh sốc mới là **cầu** (đơn hàng), **cung** (khả năng giao 
 | Feature/train có thể lộ kết quả tương lai; thiếu manifest và split cố định | Cột cấm kiểu danh sách, script cũ gắn tên World | Chỉ cho phép cột feature đã duyệt, cắt dữ liệu tại ngày dự báo; hash World và khóa vai trò train/validation/test | features.py:44–118; world_manifest.py:36–182; build_final_train.py:21–199 | Test cột ẩn, thời điểm công bố, sửa manifest và shock lọt train [S9]–[S11] | **Có cổng kỹ thuật.** Macro as-of chưa là feature T1 mặc định; chưa có cohort final. |
 | Chưa biết phân phối có giống SME Việt Nam không | Tham số phần lớn là giả định hoặc neo theo khảo sát khác mẫu | Mới lập kế hoạch hiệu chỉnh và kiểm số theo năm/ngành/seed | audit_existing_world_metrics.py:27–95 | Bảng v5 và 10 seed là kiểm nội bộ [S12], [S14], [S18] | **Chưa giải quyết.** |
 
+<a id="sua-vong-doi"></a>
+
+### 4.1. Chi tiết bản sửa vòng đời ngày 26/10
+
+Các quy tắc sau thuộc bản sửa được báo cáo ngày 26/10, được gộp từ báo cáo
+15; chúng là giả định synthetic, không phải tham số ước lượng thị trường.
+
+1. `make_customers` tạo một pool khách tiềm năng, khoảng 72% có thể mua từ đầu. `customer_activity` quyết định theo từng tuần: khách mới vào, khách tạm rời, khách quay lại. Xác suất chuyển trạng thái phụ thuộc thanh khoản hiện tại, tăng trưởng doanh nghiệp và stress cầu hiện tại. Các mức nền 0,25%/tuần rời đi và 0,8%/tuần gia nhập/quay lại **là giả định synthetic**, chưa phải ước lượng Việt Nam. Đơn hàng chỉ được sinh khi khách đang hoạt động và không bị giữ tín dụng. Trọng số doanh thu được chuẩn hóa một lần theo nhóm hoạt động ở tuần đầu; không dùng số khách hoặc doanh thu tương lai để chuẩn hóa từng tuần. Event ghi `customer_acquired`, `customer_churned`, `customer_returned`.
+2. Vỡ nợ nay có thể tái diễn sau ít nhất 26 tuần hồi phục. Người bán dừng cấp tín dụng 26 tuần sau mỗi sự kiện; tín hiệu tín dụng xấu có thể giữ lâu hơn và hồi phục khi tín hiệu tốt. Hóa đơn chỉ chịu ảnh hưởng của **sự kiện vỡ nợ kế tiếp sau ngày lập**, nên lần vỡ nợ đã qua không làm nợ xấu mọi hóa đơn mới. Sự kiện sau ngày kết thúc quan sát bị loại. `customers.default_week/default_date` lưu **lần đầu** để tương thích; `events.parquet` là nhật ký đầy đủ các lần. `idio_sd` của khách nay tham gia phương trình thanh khoản.
+3. `heterogeneity` chia khách thành bốn nhóm kỷ luật trả khác nhau, thay đổi logit đúng hạn, trung vị thanh toán trễ và lịch sớm nhất có thể thực hiện thanh toán muộn (0, 10 hoặc 30 ngày). Lịch này được gán trước khi sinh hóa đơn và chỉ đi vào thời điểm bắt đầu quá trình thanh toán theo tuần; không sửa kết quả sau khi biết ngày tiền về.
+4. `lumpy_customer` gán anchor và trọng số trước khi sinh đơn. Anchor có hợp đồng mua dài hạn, các khách khác vẫn vào/ra. Xóa hẳn bước ép tỷ trọng dựa trên tổng doanh thu toàn kỳ. `weekly_booked_orders`, mua vào và tồn kho dùng cùng đơn đặt được sinh theo tuần. Dải 40–60% là kiểm tra trên nhiều công ty, không là cam kết cứng cho mọi lần rút ngẫu nhiên.
+
+Seed 94317 ghi 383 khách mới, 1.085 lần rời tạm, 723 lần quay lại và 2.096 sự kiện vỡ nợ qua cả kỳ. Các seed khác cũng có cả ba luồng khách. Trên seed này, sự kiện vỡ nợ còn xuất hiện trong 2025 (285), thay vì giảm gần hết do giới hạn một lần/khách. Tỷ lệ nợ xấu của hóa đơn **phát hành trong 2025** vẫn bị kiểm duyệt phải và độ trễ xóa nợ, nên không dùng nó để hiệu chỉnh trực tiếp.
+
+Nợ xấu theo **giá trị bán chịu đã có kết cục, gộp cả kỳ**, lần lượt là
+**2,9%; 5,4%; 5,5%** ở seed 94317–94319. Pool khách hữu hạn và hazard
+vòng đời chưa được hiệu chỉnh độc lập. Đây không phải tỷ lệ mất nợ cuối
+cùng của hóa đơn phát hành năm 2025. Bảng doanh thu/khách và kết quả hai
+hard case dùng chung mục 5.1 bên dưới; không tạo thêm một phép đo.
+
 ## 5. Các con số nói gì?
 
 ### 5.1. Doanh thu và số khách trước/sau sửa
@@ -78,27 +101,20 @@ Hard case v9 cho chỉ số khác biệt thời gian trả giữa khách **0,614
 
 ### 5.2. Mười seed và trường hợp 94319
 
-Mười World không có episode mới gồm **ba World v5** (94317–94319) và **bảy World v6** (94320–94326). Cấu hình chỉ khác tên/seed, ba nguồn đầu vào có cùng hash. Tuy nhiên, hash của **toàn bộ mã Python** khác giữa hai đợt, nên chưa xem đây là một bộ phát hành mã bất biến chung [S14], [S20].
-
-- **1/10** World có doanh thu 2025 thấp hơn 2019; **0/10** thấp hơn mốc 0,6 của cổng phát hiện sụp đổ.
-- **4/10** có ít khách phát sinh hóa đơn hơn năm 2019; **4/10** có doanh thu 2025 thấp hơn 2024.
-- Tỷ số doanh thu 2025/2019 nhỏ nhất, trung vị, lớn nhất là **0,886 / 1,579 / 1,886**. Mười seed chưa đủ để ước xác suất sụt giảm trên thị trường.
+Bảng từng seed, thống kê mười World và mẫu ba World ban đầu đã gộp tại
+[báo cáo kiểm toán 19](19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md).
+Ba seed v5 là tập con của mười seed; các lô ban đầu khác hash toàn bộ mã.
 
 Seed **94319** đặc biệt đáng kiểm tra: doanh thu 2025 chỉ bằng **39,5%** năm 2024. CSV năm/ngành cho thấy cả **6 ngành** đều giảm, với tỷ số khoảng **0,33–0,43**; mỗi ngành chỉ có 2–5 công ty. Báo cáo 17 còn ghi trung vị tỷ số theo công ty khoảng 0,424 và nhân tố thị trường chung năm 2025 là −1,114; hai con số cuối **chưa tính lại trực tiếp từ Parquet** trong lượt rà soát này. Hiện chưa đủ bằng chứng để gọi đó là lỗi cấu trúc hay một kịch bản biến động hợp lý. Cần giữ nguyên công ty/khách rồi đổi riêng đường nhân tố chung, và xem kết quả theo từng công ty/tuần [S1], [S15], [S20].
 
-### 5.3. Tình hình bán chịu, thu nợ và tiền mặt năm 2025
+### 5.3. Mẫu số AR và giới hạn đối chiếu
 
-Bảng này chỉ dùng **ba World v5 không có episode sốc mới**. “Bán chịu” là **giá trị** hóa đơn có kỳ hạn trên tổng giá trị hóa đơn phát hành năm 2025. “Kỳ hạn” là bình quân theo giá trị của nhóm bán chịu. “Thu đủ P50” là số ngày **trung vị** từ lập hóa đơn đến nhận đủ tiền của các hóa đơn bán chịu **đã tất toán trong năm**; khoản còn mở không nằm trong mẫu này. “Nợ quá hạn” là **số dư đã quá hạn tại 31/12/2025** chia cho toàn bộ công nợ còn mở cùng ngày. “Ngày tài khoản âm” tính theo ngày × doanh nghiệp của tài khoản vận hành mô phỏng. P90 là mốc mà 90% quan sát nằm dưới hoặc bằng; P90 tuổi nợ ở dưới được tính theo trọng số số dư [S12], [S15].
+Định nghĩa, bảng bán chịu/thu nợ/tiền mặt và phần theo ngành đọc một chỗ
+ở [báo cáo 19](19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md).
+Không đánh đồng trả trễ trên hóa đơn đã tất toán, AR mở đang quá hạn và
+nợ xấu đã chốt. Các số này không phải những phép đo độc lập để cộng gộp.
 
-| Seed v5 | Bán chịu theo giá trị | Kỳ hạn bình quân | Thu đủ P50 | Nợ quá hạn / công nợ mở | Ngày tài khoản âm |
-|---|---:|---:|---:|---:|---:|
-| 94317 | 71,4% | 42,8 ngày | 42 ngày | 33,6% | 19,3% |
-| 94318 | 67,7% | 45,3 ngày | 43 ngày | 41,1% | 6,6% |
-| 94319 | 68,5% | 37,9 ngày | 44 ngày | 55,6% | 13,6% |
-
-Trong hóa đơn đã thu đủ trong năm, tỷ lệ **giá trị trả trễ** lần lượt là **37,1% / 40,5% / 48,5%**. P90 tuổi nợ quá hạn, có trọng số theo số dư, là **259 / 234 / 424 ngày**. Ở mức ngành, mỗi seed chỉ có khoảng 2–5 doanh nghiệp/ngành; các phân vị theo ngành vì thế dễ dao động [S12], [S15].
-
-Khảo sát Atradius Việt Nam 2025 nêu **65%** doanh số B2B bán chịu và kỳ hạn bình quân **45 ngày**, nhưng chỉ phỏng vấn **300 người thuộc ba ngành thép, dệt may, nhựa/cao su** trong nửa cuối quý II. Khảo sát không cung cấp cùng mẫu hóa đơn, ngày chốt và cách tính nợ quá hạn như bảng v5. Sự gần nhau về vài con số **chưa xác nhận dữ liệu synthetic đại diện cho SME Việt Nam**. Cuối 2025, **21,5–26,2% giá trị hóa đơn bán chịu phát hành trong năm** ở ba World v5 vẫn chưa có kết cục cuối cùng; nhóm đó không được tự coi là nợ xấu hoặc là đã trả đúng hạn [S13]–[S15], [S18].
+Khảo sát Atradius Việt Nam 2025 nêu**65%** doanh số B2B bán chịu và kỳ hạn bình quân **45 ngày**, nhưng chỉ phỏng vấn **300 người thuộc ba ngành thép, dệt may, nhựa/cao su** trong nửa cuối quý II. Khảo sát không cung cấp cùng mẫu hóa đơn, ngày chốt và cách tính nợ quá hạn như bảng v5. Sự gần nhau về vài con số **chưa xác nhận dữ liệu synthetic đại diện cho SME Việt Nam**. Cuối 2025, **21,5–26,2% giá trị hóa đơn bán chịu phát hành trong năm** ở ba World v5 vẫn chưa có kết cục cuối cùng; nhóm đó không được tự coi là nợ xấu hoặc là đã trả đúng hạn [S13]–[S15], [S18].
 
 ## 6. Các cú sốc thị trường đã được thử ra sao?
 
@@ -130,13 +146,13 @@ Mức “giữ riêng” hiện áp dụng cho **episode tín dụng mới**. Tr
 | S10 | [`scripts/build_final_train.py`](../../scripts/build_final_train.py):21–120, 138–201; [`scripts/train_manifest.py`](../../scripts/train_manifest.py):20–119; [`tests/test_final_pipeline.py`](../../tests/test_final_pipeline.py):34–154 | Held-out, cổng readiness, split, T1 train/eval, các ca test. |
 | S11 | [`scripts/world_registry.py`](../../scripts/world_registry.py):13–40 | Registry kiểm bảng, contract và manifest. |
 | S12 | [`scripts/audit_existing_world_metrics.py`](../../scripts/audit_existing_world_metrics.py):27–95; [`outputs/data/v5_existing_world_metrics_20261026.csv`](../../outputs/data/v5_existing_world_metrics_20261026.csv):2–148 | Công thức và bảng năm/ngành; 147 hàng dữ liệu. |
-| S13 | [`scripts/audit_train_readiness.py`](../../scripts/audit_train_readiness.py):21–69; [`outputs/data/v3_readiness_public_macro_20261026.json`](../../outputs/data/v3_readiness_public_macro_20261026.json); [`outputs/data/v3_readiness_20261026.json`](../../outputs/data/v3_readiness_20261026.json) | Mẫu số xu hướng, v3 public/fallback và tích hợp. JSON dùng khóa đối tượng, không gán số dòng bất ổn. |
+| S13 | [`scripts/audit_train_readiness.py`](../../scripts/audit_train_readiness.py):21–69; `outputs/data/v3_readiness_public_macro_20261026.json` (đường dẫn lịch sử `outputs/data/v3_readiness_public_macro_20261026.json`, đã xóa 06/11/2026); `outputs/data/v3_readiness_20261026.json` (đường dẫn lịch sử `outputs/data/v3_readiness_20261026.json`, đã xóa 06/11/2026) | Mẫu số xu hướng, v3 public/fallback và tích hợp. JSON dùng khóa đối tượng, không gán số dòng bất ổn. |
 | S14 | [`outputs/data/v5_lifecycle_audit_20261026.json`](../../outputs/data/v5_lifecycle_audit_20261026.json); [`outputs/data/v6_lifecycle_audit_20261026.json`](../../outputs/data/v6_lifecycle_audit_20261026.json); [`outputs/data/v6_multiseed_trend_20261026.csv`](../../outputs/data/v6_multiseed_trend_20261026.csv):2–11 | Ba + bảy seed, nguồn metric theo năm. |
-| S15 | [`scripts/audit_lifecycle_fix.py`](../../scripts/audit_lifecycle_fix.py):42–83; [`outputs/data/v9_lifecycle_audit_20261026.json`](../../outputs/data/v9_lifecycle_audit_20261026.json); [`docs/02_Data/15_SUA_VONG_DOI_KHACH_VA_HARD_CASE_2026-10-26.md`](15_SUA_VONG_DOI_KHACH_VA_HARD_CASE_2026-10-26.md):5–37; [`docs/02_Data/16_KIEM_TOAN_CHI_SO_V5_TU_DU_LIEU_HIEN_CO_2026-10-26.md`](16_KIEM_TOAN_CHI_SO_V5_TU_DU_LIEU_HIEN_CO_2026-10-26.md):3–45 | Hard case v9, cách đo và giới hạn audit v5. |
+| S15 | [`scripts/audit_lifecycle_fix.py`](../../scripts/audit_lifecycle_fix.py):42–83; [`outputs/data/v9_lifecycle_audit_20261026.json`](../../outputs/data/v9_lifecycle_audit_20261026.json); [`docs/02_Data/18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md`](18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md#sua-vong-doi); [`docs/02_Data/19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md`](19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md#ba-world-v5) | Hard case v9, cách đo và giới hạn audit v5. |
 | S16 | [`docs/02_Data/12_KIEM_TOAN_KICH_BAN_SINH_DU_LIEU_CU_2026-10-25.md`](12_KIEM_TOAN_KICH_BAN_SINH_DU_LIEU_CU_2026-10-25.md):5–93; [`docs/04_AI_Methods/T0_T10_PHUONG_PHAP_VA_KET_QUA_SYNTHETIC_2026-10-25.md`](../04_AI_Methods/T0_T10_PHUONG_PHAP_VA_KET_QUA_SYNTHETIC_2026-10-25.md):56–72 | Lỗi và benchmark lịch sử, không dùng làm kết quả World mới. |
 | S17 | [`docs/02_Data/14_KIEM_TOAN_SAU_SUA_VA_QUYET_DINH_TRAIN_2026-10-26.md`](14_KIEM_TOAN_SAU_SUA_VA_QUYET_DINH_TRAIN_2026-10-26.md):7–75 | Kiểm toán v3 trước sửa vòng đời, sốc và hard case. |
 | S18 | [`docs/02_Data/11_KE_HOACH_SOC_THI_TRUONG_TICH_HOP_2026-10-25.md`](11_KE_HOACH_SOC_THI_TRUONG_TICH_HOP_2026-10-25.md):3–18, 90–119, 123–153 | Kế hoạch nguồn Việt Nam, template, tiêu chí thực tế và giới hạn. |
 | S19 | [`outputs/data/hard_case_fidelity_v3_full.csv`](../../outputs/data/hard_case_fidelity_v3_full.csv):2–20; [`outputs/data/hard_cases_v3.csv`](../../outputs/data/hard_cases_v3.csv):2–13; [`docs/02_Data/14_KIEM_TOAN_SAU_SUA_VA_QUYET_DINH_TRAIN_2026-10-26.md`](14_KIEM_TOAN_SAU_SUA_VA_QUYET_DINH_TRAIN_2026-10-26.md):36–75 | Điểm v3 và hạn chế đã báo cáo. |
-| S20 | [`outputs/data/v3_heldout_pilot_20261026/readiness.json`](../../outputs/data/v3_heldout_pilot_20261026/readiness.json); [`data/synthetic/v3_heldout_pilot_20261026_cohort.json`](../../data/synthetic/v3_heldout_pilot_20261026_cohort.json); [`docs/02_Data/17_HELDOUT_SHOCK_VA_KIEM_TRA_NHIEU_SEED_2026-10-26.md`](17_HELDOUT_SHOCK_VA_KIEM_TRA_NHIEU_SEED_2026-10-26.md):3–37 | Pilot held-out, 10 seed và cảnh báo 94319. |
+| S20 | `outputs/data/v3_heldout_pilot_20261026/readiness.json` (đường dẫn lịch sử `outputs/data/v3_heldout_pilot_20261026/readiness.json`, đã xóa 06/11/2026); `data/synthetic/v3_heldout_pilot_20261026_cohort.json` (đường dẫn lịch sử `data/synthetic/v3_heldout_pilot_20261026_cohort.json`, đã xóa 06/11/2026); [`docs/02_Data/19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md`](19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md#xu-huong-muoi-seed) | Pilot held-out, 10 seed và cảnh báo 94319. |
 
 **Cách đọc đường dẫn dữ liệu:** CSV có số dòng vật lý (header ở dòng 1); JSON và Parquet được tham chiếu theo tên tệp/khóa vì số dòng JSON có thể đổi khi định dạng lại và Parquet không có dòng văn bản. Các số dòng mã/tài liệu nêu trên là vị trí thực tế của working tree khi lập báo cáo.

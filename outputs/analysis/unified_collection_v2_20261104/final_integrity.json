@@ -1,0 +1,30 @@
+{
+  "locked_source_unchanged": true,
+  "protected_files_unchanged": 540,
+  "fresh_manifests_verified": 4,
+  "weight_reuse_hashes_verified": true,
+  "local_document_links_valid": true,
+  "input_csv_sha256": {
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/ar_company_scores.csv": "8e6a855b37abe61d3c9ac8b3c59a1f2f66b90a16f91cc3e0da8f3c8c4630522f",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/ar_summary.csv": "842ddea0d6efc167f2d2a6de0fa0815de141630d2cff171d6563cc69baa16903",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/common_components.csv": "1c81329f64ebe8fda3350569e8c02e1cbe299ce04190ac8410f9804f8ec86962",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/company_bootstrap.csv": "55c39b0c5ac9761edc5da0d26ea183103292df4edca4c10486851557ceb8e4cd",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/company_scores.csv": "23cd8e545d6b4e3dbaf21d46fe66b29eebb00b85a67b9101ddbbfcd4272483df",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/mc_scores.csv": "50a27ef1cb5a03e33f509ff3b4f99717bdf4891b2b93115d0093f0f0a4de6de8",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/outcome_support.csv": "4f7691ddef2d6df8cfcb70a54122500fd39199ca127c25a72eeaafe77e7b0213",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/rollout_audit.csv": "de9701003d020642762f3a8a5ecf507d47d501bd24694ee1151d98907bbd1b3a",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/summary.csv": "3c0d9b98237e6652f3863d60ad4eb162f675e6ad9eebe27826799e4f66c93be1",
+    "outputs/data/unified_collection_v2_20261104_r3/source_bank/weekly_predictions.csv": "a55520753369fe6776a60a0398309c932291404120d7b0f4622da53eb0b65e5d",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/ar_company_scores.csv": "2986a2d7d50f7fe322c12e6e91ecacccefb6a9a92dea6384d33eda704a9ee49e",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/ar_summary.csv": "f4dd35fdd6f2b5e30e0d677a8c6e290e0664b4905e4360ee98640e1f0454a9e3",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/common_components.csv": "a23199e81c8c092bec1aba1e9249a7c6c1112eabffb5a66c70ee36d9e3f31a99",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/company_bootstrap.csv": "09f2432a74b0d9252b30a5167085b68a358abbd9e0fe03e8bc268afc066322a4",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/company_scores.csv": "a3806cd67b25890058ef4d87543ed411cb7c3b82382ef6f2c4447c8c1f19495b",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/mc_scores.csv": "4dbfa677634724fd1390bfb0570aa74dbde1a83a1946b6b02e024250d0f0d0ce",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/outcome_support.csv": "6261dea2ecd58241a76263b408da59a33fd0537f7b7de1090d2dcfa788d3ba45",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/rollout_audit.csv": "33e1f628d480a79894d9279781aaddba1e43e430146ca43fe4ccdf778f46588e",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/summary.csv": "4df26c0eefce8eb07aa56f1d8e50b9930d07dae395f6909eb6d91b1510dacf30",
+    "outputs/data/unified_collection_v2_20261104_r3/fresh_test/weekly_predictions.csv": "87c9c23af798ece41e6df294e35fcd2c6aaea3a034f492271596c4d90785c9fa"
+  },
+  "tests_passed": 57
+}

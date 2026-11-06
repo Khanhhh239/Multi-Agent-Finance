@@ -1,0 +1,16 @@
+{
+  "benchmark_scope": "existing v6 hazard model; not a benchmark of the proposed transition model",
+  "rows": 100000,
+  "features": 71,
+  "classes": 3,
+  "threads": 4,
+  "seconds": [
+    1.7764360999999553,
+    1.8122656000005009,
+    1.7879166000002442
+  ],
+  "median_seconds": 1.7879166000002442,
+  "naive_26m_rows_linear_projection_seconds": 464.8583160000635,
+  "one_week_2m_float32_feature_matrix_mib": 541.68701171875,
+  "excludes": "feature updates, model with more classes, copula sampling, reductions, early closure, grouping and caching"
+}

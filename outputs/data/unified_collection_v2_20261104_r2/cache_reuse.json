@@ -1,0 +1,19 @@
+{
+  "source": "outputs/data/unified_collection_v2_20261104",
+  "source_protocol_sha256": "e7ead22126472895c8ecfc79f582c8c314c47d0c984577d22dd9e8e1394ae95e",
+  "manifests": {
+    "calibration_fit_v4_shortpay_4shock_20261028_train_000.json": "61ce079c589b1cf818689214f19224f9da813518091907b65888e1bfc2824282",
+    "calibration_fit_v4_shortpay_4shock_20261028_train_001.json": "72a1a72d192dbdf3d88d1b5d23088a07e4bf1746baa0135db629e6024ad8095e",
+    "calibration_fit_v4_shortpay_4shock_20261028_train_002.json": "fb134195aa59841adfde38ef402569ace138e342a3fe44e3edf822781d8cb983",
+    "calibration_fit_v4_shortpay_4shock_20261028_train_003.json": "de7ca6764af878d7745ea28cd36e73e7b7500c64e7fa52a17bf84f8f74d068dc",
+    "calibration_select_v4_shortpay_4shock_20261028_train_000.json": "a75f8b25a7720d4fea81b53a552275b53320fdb389a6e445c8d5122e73107625",
+    "calibration_select_v4_shortpay_4shock_20261028_train_001.json": "dc486f0fd16e88e65e9a894d3be44b0d409bc98075398c93e7797a9f02b83ccc",
+    "calibration_select_v4_shortpay_4shock_20261028_train_002.json": "631a4056c70be867d7d77e333ccf38a7a6ce430ffa52142504371eb79224621a",
+    "calibration_select_v4_shortpay_4shock_20261028_train_003.json": "55d31b71d22daedf23b1a3f21f18d5e4c34355837c5870eb69e4dfd877edcef4",
+    "fit_v4_shortpay_4shock_20261028_train_000.json": "ec3ac189eda4b786a7aca4292c8e6d0e01ef4fe5d6d974a5236fe2ea4a3a2366",
+    "fit_v4_shortpay_4shock_20261028_train_001.json": "843ed20e3a20025952945114b80be6c5d85c9c84b2067f1eb4b6ed63206d5e07",
+    "fit_v4_shortpay_4shock_20261028_train_002.json": "1b9ecebd178cda388caca399c33f94b03c97f5111a53d424861a47601418fb96",
+    "fit_v4_shortpay_4shock_20261028_train_003.json": "36073b075253ac5a8a39c0b6233acaefab521f66bf72b76584bb571f73408f0d"
+  },
+  "scope": "immutable labeled input caches only; model weights refitted"
+}

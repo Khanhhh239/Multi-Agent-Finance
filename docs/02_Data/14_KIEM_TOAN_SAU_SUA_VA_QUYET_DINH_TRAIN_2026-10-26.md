@@ -1,6 +1,10 @@
 # Kiểm toán sau sửa máy phát và quyết định về bộ train (26/10/2026)
 
-> Đây là ảnh chụp kiểm toán **trước** đợt sửa vòng đời khách hàng và hai hard case cùng ngày. Kết quả tái sinh sau sửa nằm ở [báo cáo 15](15_SUA_VONG_DOI_KHACH_VA_HARD_CASE_2026-10-26.md). Các con số cũ bên dưới được giữ để so sánh, không phải trạng thái mới nhất.
+> **Output đã nghỉ lưu ngày 06/11/2026:** các đường dẫn output v3 và release-gate được nêu trong tài liệu này đã xóa theo yêu cầu. Số đo và mô tả dưới đây là hồ sơ lịch sử, không còn artifact gốc để xác minh/tái lập. Báo cáo riêng của v3 và hồ sơ dọn dữ liệu cũng đã xóa.
+
+> **Tình trạng dữ liệu 06/11/2026:** các World v3/lifecycle/đời đầu liên quan đã xóa; đây là tài liệu lịch sử, không phải tồn kho hoặc hướng dẫn chạy ngay. Số đo trong tài liệu giữ theo thời điểm ghi nhận; output v3 và release-gate đã xóa. Cohort dùng cho v5/v6 xem [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
+
+> Đây là ảnh chụp kiểm toán **trước** đợt sửa vòng đời khách hàng và hai hard case cùng ngày. Kết quả tái sinh sau sửa nằm ở [báo cáo 15](18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md#sua-vong-doi). Các con số cũ bên dưới được giữ để so sánh, không phải trạng thái mới nhất.
 
 **Kết luận: NO-GO cho bộ train cuối cùng.** Các bản sửa về thứ tự thời gian, đối soát tiền và kiểm duyệt đã qua kiểm thử; bốn kênh sốc mới có tác động đo được. Tuy nhiên một thế giới **không có episode mới** vẫn suy giảm doanh thu và số khách rất mạnh qua 2019–2025. Tôi đã tải OxCGRT/WDI công khai và sinh lại đối chứng: lỗi suy giảm vẫn còn. Các hệ số sốc chưa hiệu chỉnh bằng vi dữ liệu Việt Nam, và thiết kế test chưa giữ riêng một họ sốc. Khóa train trên dữ liệu này sẽ học một xu thế do máy phát tạo ra rồi gọi nhầm là thị trường. Cổng runner mới dừng trước `lock_split` khi bộ đủ 2019–2025 không qua kiểm tra nội bộ.
 

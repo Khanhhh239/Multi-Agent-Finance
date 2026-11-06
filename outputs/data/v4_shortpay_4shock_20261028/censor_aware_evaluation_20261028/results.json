@@ -1,0 +1,322 @@
+{
+  "protocol": "complete 120-day follow-up; binary Brier/logloss/AUC/ECE10; finite-quantile CDF crossing; resolved-only pinball",
+  "cohort": "data\\synthetic\\v4_shortpay_4shock_20261028_cohort.json",
+  "cohort_sha256": "b8448695225b78ca29f202f7167def653aaf515c1adc03fc62d281365eef0155",
+  "model_sha256": "70bee43bc0f0247d5041466a6ecdb7fde2692cf5b0b31d4c7dfaa215f7439a38",
+  "training_source_code_sha256": "5e4422d889d8e7b3764582b9ec1e8440fd11f7f0a284f023edb96950119551f2",
+  "evaluator_sha256": "8e5fbfbf53903d1e6c14c7b387a880547d02dea14313ae6316a87f7e59d39e75",
+  "label_horizon_days": 120,
+  "worlds": [
+    {
+      "world": "v4_shortpay_4shock_20261028_validation_000",
+      "role": "validation",
+      "n": 70203,
+      "n_unique_invoices": 24474,
+      "min_followup_days": 128.0,
+      "quantiles": {
+        "n": 70203,
+        "n_resolved_by_horizon": 40237,
+        "resolved_share": 0.5731521444952495,
+        "selection_warning": "Exact-time losses condition on payment by horizon",
+        "q10": {
+          "n_finite": 68060,
+          "n_capped": 2143,
+          "finite_fraction": 0.9694742389926356,
+          "observed_cdf_at_finite_quantile": 0.07637378783426388,
+          "target_cdf": 0.1,
+          "cdf_gap": -0.023626212165736127,
+          "resolved_only_pinball": 3.5371095926023886
+        },
+        "q50": {
+          "n_finite": 42535,
+          "n_capped": 27668,
+          "finite_fraction": 0.605885788356623,
+          "observed_cdf_at_finite_quantile": 0.5637475020571294,
+          "target_cdf": 0.5,
+          "cdf_gap": 0.06374750205712942,
+          "resolved_only_pinball": 13.968278501797348
+        },
+        "q90": {
+          "n_finite": 12223,
+          "n_capped": 57980,
+          "finite_fraction": 0.17410936854550374,
+          "observed_cdf_at_finite_quantile": 0.8967520248711446,
+          "target_cdf": 0.9,
+          "cdf_gap": -0.0032479751288554404,
+          "resolved_only_pinball": 7.133647619207401
+        },
+        "finite_q10_q90_interval": {
+          "n": 12223,
+          "observed_coverage": 0.8232839728380921,
+          "nominal_coverage": 0.8,
+          "scope": "Only rows with Q90 below horizon; not full-cohort coverage"
+        },
+        "capped_q90_paid_by_horizon_rate": 0.4982062780269058,
+        "numeric_interval_hit_by_horizon": 0.49345469566827627,
+        "legacy_clipped_label_coverage": 0.9078814295685369,
+        "legacy_false_hits_from_censoring": 29094
+      },
+      "probability_4w": {
+        "horizon_days": 28,
+        "n": 70203,
+        "n_paid_by_horizon": 20093,
+        "observed_rate": 0.2862128399071265,
+        "predicted_mean": 0.2817030910081679,
+        "calibration_gap": -0.004509748898958554,
+        "brier": 0.13010654976660932,
+        "brier_climatology_reference": 0.2042950501794241,
+        "log_loss": 0.4019442254224585,
+        "ece10": 0.0069589121356818315,
+        "auc": 0.8648808727900595
+      },
+      "probability_13w": {
+        "horizon_days": 91,
+        "n": 70203,
+        "n_paid_by_horizon": 37068,
+        "observed_rate": 0.5280116234348959,
+        "predicted_mean": 0.5199202705394755,
+        "calibration_gap": -0.0080913528954204,
+        "brier": 0.15113794718176035,
+        "brier_climatology_reference": 0.24921534895254158,
+        "log_loss": 0.45969535416327034,
+        "ece10": 0.01723649811082717,
+        "auc": 0.8591931282161558
+      }
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_validation_001",
+      "role": "validation",
+      "n": 64646,
+      "n_unique_invoices": 25534,
+      "min_followup_days": 128.0,
+      "quantiles": {
+        "n": 64646,
+        "n_resolved_by_horizon": 41969,
+        "resolved_share": 0.6492126349658138,
+        "selection_warning": "Exact-time losses condition on payment by horizon",
+        "q10": {
+          "n_finite": 63099,
+          "n_capped": 1547,
+          "finite_fraction": 0.9760696717507658,
+          "observed_cdf_at_finite_quantile": 0.08142759790171002,
+          "target_cdf": 0.1,
+          "cdf_gap": -0.01857240209828999,
+          "resolved_only_pinball": 3.1504742269412214
+        },
+        "q50": {
+          "n_finite": 44572,
+          "n_capped": 20074,
+          "finite_fraction": 0.6894780806237045,
+          "observed_cdf_at_finite_quantile": 0.5577716952346765,
+          "target_cdf": 0.5,
+          "cdf_gap": 0.05777169523467651,
+          "resolved_only_pinball": 12.605936615575969
+        },
+        "q90": {
+          "n_finite": 16467,
+          "n_capped": 48179,
+          "finite_fraction": 0.25472573709123536,
+          "observed_cdf_at_finite_quantile": 0.8964595858383434,
+          "target_cdf": 0.9,
+          "cdf_gap": -0.0035404141616566243,
+          "resolved_only_pinball": 7.045502061905266
+        },
+        "finite_q10_q90_interval": {
+          "n": 16467,
+          "observed_coverage": 0.8236472945891784,
+          "nominal_coverage": 0.8,
+          "scope": "Only rows with Q90 below horizon; not full-cohort coverage"
+        },
+        "capped_q90_paid_by_horizon_rate": 0.5497000767969448,
+        "numeric_interval_hit_by_horizon": 0.5585496395755345,
+        "legacy_clipped_label_coverage": 0.8941465829285647,
+        "legacy_false_hits_from_censoring": 21695
+      },
+      "probability_4w": {
+        "horizon_days": 28,
+        "n": 64646,
+        "n_paid_by_horizon": 21434,
+        "observed_rate": 0.3315595705844136,
+        "predicted_mean": 0.3278855859635761,
+        "calibration_gap": -0.0036739846208375115,
+        "brier": 0.14239872209759058,
+        "brier_climatology_reference": 0.22162782173829285,
+        "log_loss": 0.4341000758200317,
+        "ece10": 0.0068601084087726825,
+        "auc": 0.8570673410056308
+      },
+      "probability_13w": {
+        "horizon_days": 91,
+        "n": 64646,
+        "n_paid_by_horizon": 39066,
+        "observed_rate": 0.6043065309531912,
+        "predicted_mean": 0.5904268090645026,
+        "calibration_gap": -0.013879721888688579,
+        "brier": 0.1446725043821102,
+        "brier_climatology_reference": 0.23912014760051098,
+        "log_loss": 0.4459191263318471,
+        "ece10": 0.019545537381635933,
+        "auc": 0.859019699606612
+      }
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_test_000",
+      "role": "test",
+      "n": 39961,
+      "n_unique_invoices": 17151,
+      "min_followup_days": 128.0,
+      "quantiles": {
+        "n": 39961,
+        "n_resolved_by_horizon": 25795,
+        "resolved_share": 0.6455043667575886,
+        "selection_warning": "Exact-time losses condition on payment by horizon",
+        "q10": {
+          "n_finite": 38657,
+          "n_capped": 1304,
+          "finite_fraction": 0.9673681839793798,
+          "observed_cdf_at_finite_quantile": 0.07204387303722483,
+          "target_cdf": 0.1,
+          "cdf_gap": -0.027956126962775177,
+          "resolved_only_pinball": 2.744500292542358
+        },
+        "q50": {
+          "n_finite": 28563,
+          "n_capped": 11398,
+          "finite_fraction": 0.7147719026050399,
+          "observed_cdf_at_finite_quantile": 0.5388789692959423,
+          "target_cdf": 0.5,
+          "cdf_gap": 0.038878969295942256,
+          "resolved_only_pinball": 10.512726021182864
+        },
+        "q90": {
+          "n_finite": 14547,
+          "n_capped": 25414,
+          "finite_fraction": 0.36402992918095145,
+          "observed_cdf_at_finite_quantile": 0.8882931188561215,
+          "target_cdf": 0.9,
+          "cdf_gap": -0.011706881143878523,
+          "resolved_only_pinball": 6.40530619230889
+        },
+        "finite_q10_q90_interval": {
+          "n": 14547,
+          "observed_coverage": 0.8124011823743728,
+          "nominal_coverage": 0.8,
+          "scope": "Only rows with Q90 below horizon; not full-cohort coverage"
+        },
+        "capped_q90_paid_by_horizon_rate": 0.48020775950263633,
+        "numeric_interval_hit_by_horizon": 0.5590700933410074,
+        "legacy_clipped_label_coverage": 0.8896424013413078,
+        "legacy_false_hits_from_censoring": 13210
+      },
+      "probability_4w": {
+        "horizon_days": 28,
+        "n": 39961,
+        "n_paid_by_horizon": 13829,
+        "observed_rate": 0.3460624108505793,
+        "predicted_mean": 0.3502219572642202,
+        "calibration_gap": 0.004159546413640858,
+        "brier": 0.13397125743175664,
+        "brier_climatology_reference": 0.22630321864686415,
+        "log_loss": 0.4082238806675334,
+        "ece10": 0.010861693248469908,
+        "auc": 0.8795032377991366
+      },
+      "probability_13w": {
+        "horizon_days": 91,
+        "n": 39961,
+        "n_paid_by_horizon": 24397,
+        "observed_rate": 0.6105202572508196,
+        "predicted_mean": 0.6153568713248367,
+        "calibration_gap": 0.004836614074017143,
+        "brier": 0.12455501860152982,
+        "brier_climatology_reference": 0.23778527273721267,
+        "log_loss": 0.39283969917983624,
+        "ece10": 0.019889767340525964,
+        "auc": 0.8869901599965626
+      }
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_test_001",
+      "role": "test",
+      "n": 78376,
+      "n_unique_invoices": 28663,
+      "min_followup_days": 128.0,
+      "quantiles": {
+        "n": 78376,
+        "n_resolved_by_horizon": 48869,
+        "resolved_share": 0.6235199550882924,
+        "selection_warning": "Exact-time losses condition on payment by horizon",
+        "q10": {
+          "n_finite": 75616,
+          "n_capped": 2760,
+          "finite_fraction": 0.9647851383076452,
+          "observed_cdf_at_finite_quantile": 0.09054961912822683,
+          "target_cdf": 0.1,
+          "cdf_gap": -0.009450380871773176,
+          "resolved_only_pinball": 3.5319954180756246
+        },
+        "q50": {
+          "n_finite": 47557,
+          "n_capped": 30819,
+          "finite_fraction": 0.6067801367765643,
+          "observed_cdf_at_finite_quantile": 0.6082385348108585,
+          "target_cdf": 0.5,
+          "cdf_gap": 0.10823853481085854,
+          "resolved_only_pinball": 14.16398797119206
+        },
+        "q90": {
+          "n_finite": 13850,
+          "n_capped": 64526,
+          "finite_fraction": 0.17671225885475145,
+          "observed_cdf_at_finite_quantile": 0.9184837545126354,
+          "target_cdf": 0.9,
+          "cdf_gap": 0.018483754512635397,
+          "resolved_only_pinball": 7.2326088676338065
+        },
+        "finite_q10_q90_interval": {
+          "n": 13850,
+          "observed_coverage": 0.8492418772563177,
+          "nominal_coverage": 0.8,
+          "scope": "Only rows with Q90 below horizon; not full-cohort coverage"
+        },
+        "capped_q90_paid_by_horizon_rate": 0.5531103741127608,
+        "numeric_interval_hit_by_horizon": 0.530315402674288,
+        "legacy_clipped_label_coverage": 0.8982341533122384,
+        "legacy_false_hits_from_censoring": 28836
+      },
+      "probability_4w": {
+        "horizon_days": 28,
+        "n": 78376,
+        "n_paid_by_horizon": 23767,
+        "observed_rate": 0.3032433397978973,
+        "predicted_mean": 0.26940056976002985,
+        "calibration_gap": -0.03384277003786745,
+        "brier": 0.13179861998522285,
+        "brier_climatology_reference": 0.2112868166661143,
+        "log_loss": 0.4067597751627955,
+        "ece10": 0.03384277003786744,
+        "auc": 0.8721742249478808
+      },
+      "probability_13w": {
+        "horizon_days": 91,
+        "n": 78376,
+        "n_paid_by_horizon": 45389,
+        "observed_rate": 0.5791186077370624,
+        "predicted_mean": 0.5211698497385132,
+        "calibration_gap": -0.05794875799854915,
+        "brier": 0.147491119497385,
+        "brier_climatology_reference": 0.24374024590974885,
+        "log_loss": 0.4521812012645111,
+        "ece10": 0.06201606979767057,
+        "auc": 0.8682079079055431
+      }
+    }
+  ],
+  "limits": [
+    "Synthetic only",
+    "Repeated invoice snapshots are correlated",
+    "Capped quantiles are not exact 120-day payment dates",
+    "Resolved-only pinball excludes invoices still open at day 120",
+    "No long-horizon Q90 validation from 120-day follow-up"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "report_sha256": "ee7c06d347312cd3a9c621347682941a5b80e5eb53cff9af73b6f6b8db45dc24",
+  "standalone_report_sha256": "fa35948144afb45e9f727e1351a75990fec97b5689d229f487fd351afff4c364",
+  "bundle_sha256": "8b35117f4a271c65c697ca86f7b4573c100a5524f59388dc42c46401ae38a94c",
+  "bundle_files": 47,
+  "bundle_bytes": 810198,
+  "direct_report_links_checked": 16,
+  "original_benchmark_csv_unchanged": true,
+  "format_checks": "tables and local links passed",
+  "report_scope": "two model versions only; additional slices descriptive; no retraining or reselection"
+}

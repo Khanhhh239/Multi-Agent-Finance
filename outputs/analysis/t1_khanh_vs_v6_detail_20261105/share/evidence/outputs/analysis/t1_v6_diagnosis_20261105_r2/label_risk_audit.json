@@ -1,0 +1,157 @@
+[
+  {
+    "scope": "v4_shortpay_4shock_20261028_train_000",
+    "n_snapshots": 50000,
+    "unique_invoices": 24987,
+    "min_obs_days": 378,
+    "admin_censored": 5,
+    "open_at_365": 869,
+    "partial_admin_week_snapshots": 0,
+    "weekly_rows": 575909,
+    "weekly_labels": {
+      "open": 526738,
+      "paid": 38950,
+      "writeoff": 10221,
+      "credit_note": 0
+    },
+    "checks": {
+      "label_time_mismatches": 0,
+      "label_cause_mismatches": 0,
+      "label_observation_mismatches": 0,
+      "core_label_mismatches": 0,
+      "events_at_or_before_cutoff": 0,
+      "not_yet_issued": 0,
+      "duplicate_snapshot_keys": 0,
+      "label_end_beyond_source": 0,
+      "raw_paid_writeoff_conflicts": 0,
+      "raw_paid_date_cash_credit_mismatches": 0,
+      "raw_writeoff_amount_mismatches": 0,
+      "raw_payments_after_writeoff": 0,
+      "actual_expand_order_or_label_mismatches": 0
+    }
+  },
+  {
+    "scope": "v4_shortpay_4shock_20261028_train_001",
+    "n_snapshots": 50000,
+    "unique_invoices": 25183,
+    "min_obs_days": 378,
+    "admin_censored": 850,
+    "open_at_365": 3076,
+    "partial_admin_week_snapshots": 0,
+    "weekly_rows": 756956,
+    "weekly_labels": {
+      "open": 709951,
+      "paid": 37160,
+      "writeoff": 9845,
+      "credit_note": 0
+    },
+    "checks": {
+      "label_time_mismatches": 0,
+      "label_cause_mismatches": 0,
+      "label_observation_mismatches": 0,
+      "core_label_mismatches": 0,
+      "events_at_or_before_cutoff": 0,
+      "not_yet_issued": 0,
+      "duplicate_snapshot_keys": 0,
+      "label_end_beyond_source": 0,
+      "raw_paid_writeoff_conflicts": 0,
+      "raw_paid_date_cash_credit_mismatches": 0,
+      "raw_writeoff_amount_mismatches": 0,
+      "raw_payments_after_writeoff": 0,
+      "actual_expand_order_or_label_mismatches": 0
+    }
+  },
+  {
+    "scope": "v4_shortpay_4shock_20261028_train_002",
+    "n_snapshots": 50000,
+    "unique_invoices": 21710,
+    "min_obs_days": 378,
+    "admin_censored": 189,
+    "open_at_365": 2309,
+    "partial_admin_week_snapshots": 0,
+    "weekly_rows": 711175,
+    "weekly_labels": {
+      "open": 663398,
+      "paid": 36530,
+      "writeoff": 11247,
+      "credit_note": 0
+    },
+    "checks": {
+      "label_time_mismatches": 0,
+      "label_cause_mismatches": 0,
+      "label_observation_mismatches": 0,
+      "core_label_mismatches": 0,
+      "events_at_or_before_cutoff": 0,
+      "not_yet_issued": 0,
+      "duplicate_snapshot_keys": 0,
+      "label_end_beyond_source": 0,
+      "raw_paid_writeoff_conflicts": 0,
+      "raw_paid_date_cash_credit_mismatches": 0,
+      "raw_writeoff_amount_mismatches": 0,
+      "raw_payments_after_writeoff": 0,
+      "actual_expand_order_or_label_mismatches": 0
+    }
+  },
+  {
+    "scope": "v4_shortpay_4shock_20261028_train_003",
+    "n_snapshots": 50000,
+    "unique_invoices": 28148,
+    "min_obs_days": 378,
+    "admin_censored": 450,
+    "open_at_365": 1324,
+    "partial_admin_week_snapshots": 0,
+    "weekly_rows": 545669,
+    "weekly_labels": {
+      "open": 496942,
+      "paid": 39912,
+      "writeoff": 8815,
+      "credit_note": 0
+    },
+    "checks": {
+      "label_time_mismatches": 0,
+      "label_cause_mismatches": 0,
+      "label_observation_mismatches": 0,
+      "core_label_mismatches": 0,
+      "events_at_or_before_cutoff": 0,
+      "not_yet_issued": 0,
+      "duplicate_snapshot_keys": 0,
+      "label_end_beyond_source": 0,
+      "raw_paid_writeoff_conflicts": 0,
+      "raw_paid_date_cash_credit_mismatches": 0,
+      "raw_writeoff_amount_mismatches": 0,
+      "raw_payments_after_writeoff": 0,
+      "actual_expand_order_or_label_mismatches": 0
+    }
+  },
+  {
+    "scope": "test_000",
+    "n_snapshots": 5772,
+    "unique_invoices": 5772,
+    "min_obs_days": 380,
+    "admin_censored": 9,
+    "open_at_365": 60,
+    "partial_admin_week_snapshots": 0,
+    "weekly_rows": 67406,
+    "weekly_labels": {
+      "open": 61687,
+      "paid": 4539,
+      "writeoff": 1180,
+      "credit_note": 0
+    },
+    "checks": {
+      "label_time_mismatches": 0,
+      "label_cause_mismatches": 0,
+      "label_observation_mismatches": 0,
+      "core_label_mismatches": 0,
+      "events_at_or_before_cutoff": 0,
+      "not_yet_issued": 0,
+      "duplicate_snapshot_keys": 0,
+      "label_end_beyond_source": 0,
+      "raw_paid_writeoff_conflicts": 0,
+      "raw_paid_date_cash_credit_mismatches": 0,
+      "raw_writeoff_amount_mismatches": 0,
+      "raw_payments_after_writeoff": 0,
+      "actual_expand_order_or_label_mismatches": 0
+    }
+  }
+]

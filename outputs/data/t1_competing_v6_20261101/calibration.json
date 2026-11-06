@@ -1,0 +1,207 @@
+{
+  "active_causes": [
+    0,
+    1,
+    2
+  ],
+  "bands": [
+    4,
+    13,
+    26,
+    53
+  ],
+  "parameters": [
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "selected": "identity",
+  "selection_audit": {
+    "role": "source_train_calibration_selection_firms",
+    "improved_joint_brier": false,
+    "all_short_paid_guards_passed": true,
+    "scores": [
+      {
+        "world": "v4_shortpay_4shock_20261028_train_000",
+        "day": 28,
+        "raw_brier": 0.27276745163162386,
+        "calibrated_brier": 0.2729586578410298
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_000",
+        "day": 91,
+        "raw_brier": 0.19332758663915617,
+        "calibrated_brier": 0.1953403152301314
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_000",
+        "day": 180,
+        "raw_brier": 0.13195342766449508,
+        "calibrated_brier": 0.1332943214495024
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_000",
+        "day": 365,
+        "raw_brier": 0.10899528350108992,
+        "calibrated_brier": 0.10852668665768654
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_001",
+        "day": 28,
+        "raw_brier": 0.30020660937292004,
+        "calibrated_brier": 0.2992991604552678
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_001",
+        "day": 91,
+        "raw_brier": 0.2018385018118186,
+        "calibrated_brier": 0.20078677647926169
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_001",
+        "day": 180,
+        "raw_brier": 0.1467249153917524,
+        "calibrated_brier": 0.14569776252865435
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_001",
+        "day": 365,
+        "raw_brier": 0.12460424382590905,
+        "calibrated_brier": 0.12455831297287014
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_002",
+        "day": 28,
+        "raw_brier": 0.3130165959699076,
+        "calibrated_brier": 0.31169836068619367
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_002",
+        "day": 91,
+        "raw_brier": 0.2352320302122749,
+        "calibrated_brier": 0.2391927669516453
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_002",
+        "day": 180,
+        "raw_brier": 0.13883398304318506,
+        "calibrated_brier": 0.1414767979140927
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_002",
+        "day": 365,
+        "raw_brier": 0.08814317728693086,
+        "calibrated_brier": 0.0897641842253251
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_003",
+        "day": 28,
+        "raw_brier": 0.33889212976463456,
+        "calibrated_brier": 0.340415108099805
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_003",
+        "day": 91,
+        "raw_brier": 0.24188147041012492,
+        "calibrated_brier": 0.24461083960418872
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_003",
+        "day": 180,
+        "raw_brier": 0.14557775004777468,
+        "calibrated_brier": 0.14809611436298195
+      },
+      {
+        "world": "v4_shortpay_4shock_20261028_train_003",
+        "day": 365,
+        "raw_brier": 0.09928128586430801,
+        "calibrated_brier": 0.10044574990304979
+      }
+    ]
+  },
+  "n_fit_anchors": 8939,
+  "n_selection_anchors": 10454,
+  "candidate": {
+    "active_causes": [
+      0,
+      1,
+      2
+    ],
+    "bands": [
+      4,
+      13,
+      26,
+      53
+    ],
+    "parameters": [
+      [
+        -0.11057267899303948,
+        0.02866765379839415,
+        0.07865340817851246
+      ],
+      [
+        -0.08129315068569003,
+        -0.03902207208591645,
+        -0.016416103710022324
+      ],
+      [
+        -0.03387208887340275,
+        -0.061773313066114346,
+        -0.06051036805038669
+      ],
+      [
+        -0.10117587169808676,
+        -0.26478467522470495,
+        -0.014612190092864066
+      ]
+    ],
+    "selected": "candidate",
+    "fit_diagnostics": [
+      {
+        "end_week": 4,
+        "risk_rows": 29444,
+        "converged": true,
+        "objective": 0.24044564382350192,
+        "initial_objective": 0.24158521995582555
+      },
+      {
+        "end_week": 13,
+        "risk_rows": 30118,
+        "converged": true,
+        "objective": 0.24708850228731055,
+        "initial_objective": 0.2478801205044182
+      },
+      {
+        "end_week": 26,
+        "risk_rows": 21771,
+        "converged": true,
+        "objective": 0.1536982874300101,
+        "initial_objective": 0.1538778098556523
+      },
+      {
+        "end_week": 53,
+        "risk_rows": 19342,
+        "converged": true,
+        "objective": 0.21508996927533394,
+        "initial_objective": 0.21544657283630872
+      }
+    ]
+  }
+}

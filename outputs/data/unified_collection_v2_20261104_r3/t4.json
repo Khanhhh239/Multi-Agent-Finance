@@ -1,0 +1,10 @@
+{
+  "rows": 59904,
+  "fit_end": "2025-01-06",
+  "hashes": {
+    "t4_q10.txt": "1d2ffc712cbad248c78914a9b556c4e560b77a368d593c6c346b46cc997a9e5c",
+    "t4_q50.txt": "04a59b90049e82a9b032dd71587db7c30232f5fb986a30dd50983a1135ff97cb",
+    "t4_q90.txt": "ff057b8ff64c6550d30dee5b9d4efeb1fdeab60343760d60e94a448f36d912d0"
+  },
+  "week_contract": "Tuesday-Monday, consistent train and inference"
+}

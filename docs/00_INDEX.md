@@ -2,9 +2,9 @@
 
 **Bắt đầu tại [hướng dẫn đọc cho AI](AI_READING_GUIDE.md)** để phân biệt kết luận hiện hành với kế hoạch và kết quả lịch sử.
 
-> **Cập nhật 27/10/2026:** mục “Tóm tắt một trang” bên dưới là ảnh chụp trạng thái
-> ngày 22/10/2026, không phải kết luận mới nhất. Bộ train synthetic cuối và giới
-> hạn của nó được ghi tại [báo cáo dữ liệu 23](02_Data/23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md).
+> **Cập nhật 06/11/2026:** mục “Tóm tắt một trang” bên dưới là ảnh chụp trạng thái
+> ngày 22/10/2026, không phải kết luận mới nhất. Bộ train synthetic hiện dùng và giới
+> hạn của nó được ghi tại [báo cáo v4](02_Data/25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
 > Trạng thái nghiệm thu sản phẩm và pilot đọc ở
 > [cổng hiện hành](03_Evaluation/GATES_CURRENT.md).
 
@@ -17,7 +17,7 @@ code tham chiếu `invoice_prediction/` và nhánh `agent1-Thắng`.
 | [02_Data](02_Data/README.md) | Data scientist / data analyst | Dữ liệu thật dùng/không dùng, máy phát tổng hợp, hard case, quy mô, bộ đánh giá |
 | [03_Evaluation](03_Evaluation/README.md) | Tester, BA đánh giá | Metric kỹ thuật + kinh tế, cổng nghiệm thu, kết quả hiện có, chi phí, ROI trước/sau |
 | [04_AI_Methods](04_AI_Methods/README.md) | AI engineer / researcher | Pipeline, mô hình từng T, domain adaptation, thí nghiệm, tham số |
-| [05_Coding_Agent_Plan](05_Coding_Agent_Plan/README.md) | Kiến trúc sư / người giao việc | Kế hoạch từng gói việc cho coding agent tiếp theo |
+| [05_Coding_Agent_Plan](05_Coding_Agent_Plan/README.md) | Kiến trúc sư / người giao việc | Phạm vi WP gốc, nhật ký thực thi và quyết định theo thời điểm |
 | [06_Pilot](06_Pilot/01_GOI_DU_LIEU_CAN_XIN.md) | Chuẩn bị thử nghiệm với doanh nghiệp | Dữ liệu cần xin và cam kết bảo mật |
 
 ## Tóm tắt lịch sử ngày 22/10/2026

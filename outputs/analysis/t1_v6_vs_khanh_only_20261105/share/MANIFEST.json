@@ -1,0 +1,13 @@
+{
+  "aggregate_scores.csv": "fd0cdfe62da7d3463211378612b19a54399ad30a54e3ea7c82408d44a1db1134",
+  "bootstrap.csv": "efef7d5d2c595781118ae19f047c490991b216f788fb877dfebd368d7dc1704d",
+  "comparison_protocol.json": "b639a5adb0d0de98809c562abb2b78a83e3175da294df78b0460faec7520178e",
+  "comparison_summary.json": "e9a60801ab0422138d56f34eaea4234b25eefb5eae5586d2f428346f5884f988",
+  "primary_by_world.csv": "18e728572078e8ff5427fee986b888251fb22def5c3e1e6f9e0091a85aa0652f",
+  "quantiles_restricted120.csv": "eecc4b3141954d78e11384529242e7e10d567324ea438170921034e6b3a2c547",
+  "README.md": "8aad12d44b30ca45955dc00195a111d98de36a5687095d6bb48d1ac628eac692",
+  "scores.csv": "107626bd5ccf411595cae06e357246ec9555a6b3bf8f0ed330c6c2f6d594c422",
+  "slices_equal_world.csv": "9d86e531a2299c6ce7516dca1f348e566b8b771931570a94d15d21093da60689",
+  "T1_V6_VS_KHANH.md": "4ac87d3350010579d73087d522c58ac808af5097b43cba7dec34546b77325ab3",
+  "verification.json": "722f06af5daf0b5514283fccc9dd60fbb9337ace0fb01deea0693877f42c05b0"
+}

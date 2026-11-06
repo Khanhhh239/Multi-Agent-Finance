@@ -1,45 +1,52 @@
-# 02 · Data — Chiến lược và đặc tả dữ liệu cho Agent 1
+# 02 · Data — Dữ liệu hiện còn và lịch sử kiểm chứng
 
-> **Đọc kết luận mới nhất về bộ train synthetic ở [báo cáo 23](23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md).** Báo cáo 11–22 ghi kế hoạch, đối chứng và các lần sửa theo thời gian; một kết luận NO-GO của cohort cũ không phủ định GO kỹ thuật của cohort cuối. GO kỹ thuật không chứng minh dữ liệu giống SME Việt Nam hoặc cho phép pilot thật.
+**Cập nhật 06/11/2026.** Cohort dùng cho T1 v5/v6 là
+[cohort v4](../../data/synthetic/v4_shortpay_4shock_20261028_cohort.json),
+được mô tả trong [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
+GO kỹ thuật của synthetic không xác nhận phân phối SME Việt Nam hoặc cho phép pilot thật.
 
-Góc nhìn: data scientist / data analyst. Trả lời: dữ liệu nào dùng, dữ liệu nào không và vì sao, bộ tổng hợp được
-làm ra thế nào, quy mô, hard case, bộ đánh giá từng năng lực.
+## Dữ liệu hiện còn trong phạm vi nghiên cứu
 
-| File | Nội dung | Đọc khi |
-|---|---|---|
-| [01_chien_luoc_du_lieu.md](01_chien_luoc_du_lieu.md) | Ba tầng dữ liệu, cách kết hợp thật + tổng hợp, quy tắc chống ảo tưởng | Cần nắm bức tranh |
-| [02_du_lieu_that_dung.md](02_du_lieu_that_dung.md) | 8 nguồn thật của các thí nghiệm trước: mô tả, cột, thống kê, vai trò, hạn chế; hiện chỉ còn WDI/OxCGRT trên đĩa | Cần tra nguồn và kết quả lịch sử |
-| [03_du_lieu_khong_dung.md](03_du_lieu_khong_dung.md) | Nguồn đã khảo sát nhưng không dùng / chưa dùng, lý do, phân tích sơ | Cần biết vì sao loại |
-| [04_may_phat_tong_hop.md](04_may_phat_tong_hop.md) | Máy phát SME VN: kiến trúc, quy tắc sinh từng thực thể, tham số, hiệu chỉnh | Cần hiểu/mở rộng máy phát |
-| [05_hard_cases.md](05_hard_cases.md) | Danh mục tình huống khó (đã chèn / còn thiếu), cách sinh và cách đo | Cần thiết kế kiểm thử |
-| [06_quy_mo_va_ke_hoach_sinh.md](06_quy_mo_va_ke_hoach_sinh.md) | Quy mô hiện có, kế hoạch sinh dữ liệu rất lớn, cấu hình, chi phí tính toán | Cần sinh thêm dữ liệu |
-| [07_bo_danh_gia.md](07_bo_danh_gia.md) | Bộ đánh giá riêng từng năng lực và đánh giá chung, quy tắc niêm phong | Cần chạy benchmark |
-| [08_tai_lieu_tham_khao.md](08_tai_lieu_tham_khao.md) | Paper/nguồn tham khảo cho dữ liệu và máy phát, ánh xạ vào thiết kế | Cần trích dẫn |
-| [09_vn_listed_spot_check.md](09_vn_listed_spot_check.md) | Đối chiếu DSO/DPO trên ba báo cáo niêm yết; PDF gốc hiện vắng trên đĩa | Cần xem phép đối chiếu lịch sử và giới hạn |
-| [10_realism_v2.md](10_realism_v2.md) | C2ST tách đặc trưng thiết kế/hành vi, khớp cửa sổ quan sát, máy phát `realism=v2`; vì sao dừng chỉnh máy phát (22/10/2026) | Cần biết dữ liệu tổng hợp giống thật tới đâu |
-| [11_KE_HOACH_SOC_THI_TRUONG_TICH_HOP_2026-10-25.md](11_KE_HOACH_SOC_THI_TRUONG_TICH_HOP_2026-10-25.md) | Kế hoạch cú sốc tích hợp, nguồn tham chiếu và cổng độ thực tế | Cần phân biệt kế hoạch với phần đã triển khai |
-| [12_KIEM_TOAN_KICH_BAN_SINH_DU_LIEU_CU_2026-10-25.md](12_KIEM_TOAN_KICH_BAN_SINH_DU_LIEU_CU_2026-10-25.md) | Kiểm toán lỗi và giới hạn của máy phát cũ | Cần tra nguyên nhân trước sửa |
-| [13_RUNNER_V3_MANIFEST_VA_SPLIT.md](13_RUNNER_V3_MANIFEST_VA_SPLIT.md) | Runner v3, hash từng bảng, registry chặn thiếu Parquet và split cố định theo thế giới | Cần sinh/train bộ v3 |
-| [14_KIEM_TOAN_SAU_SUA_VA_QUYET_DINH_TRAIN_2026-10-26.md](14_KIEM_TOAN_SAU_SUA_VA_QUYET_DINH_TRAIN_2026-10-26.md) | Kiểm lại phân phối, sốc và 12 hard case trên dữ liệu tái sinh; quyết định NO-GO bộ train cuối | Trước khi khóa split/train |
-| [15_SUA_VONG_DOI_KHACH_VA_HARD_CASE_2026-10-26.md](15_SUA_VONG_DOI_KHACH_VA_HARD_CASE_2026-10-26.md) | Sửa vòng đời khách, vỡ nợ lặp lại, `heterogeneity` và `lumpy_customer`; kiểm lại ba seed và hai hard case | Khi cần kết quả sau sửa |
-| [16_KIEM_TOAN_CHI_SO_V5_TU_DU_LIEU_HIEN_CO_2026-10-26.md](16_KIEM_TOAN_CHI_SO_V5_TU_DU_LIEU_HIEN_CO_2026-10-26.md) | Doanh thu, khách, bán chịu, ngày trả, tuổi nợ quá hạn và số dư tiền trên ba World v5 đã có | Khi cần kiểm chỉ số theo năm/ngành |
-| [17_HELDOUT_SHOCK_VA_KIEM_TRA_NHIEU_SEED_2026-10-26.md](17_HELDOUT_SHOCK_VA_KIEM_TRA_NHIEU_SEED_2026-10-26.md) | Hai kịch bản shock test giữ riêng và kiểm xu hướng doanh thu/khách trên 10 seed | Trước khi chốt cohort train cuối |
-| [18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md](18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md) | Tổng kết theo phiên bản, đối chiếu mã/dữ liệu, trạng thái lỗi và readiness | Cần kết luận kiểm chứng toàn bộ quá trình |
-| [19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md](19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md) | Tính lại doanh thu, khách, bán chịu, ngày trả, tuổi nợ và tiền mặt trên 10 World theo năm/ngành | Cần kiểm toán chỉ số sau khi sinh thêm seed |
-| [20_COHORT_UNG_VIEN_V3_VA_KIEM_TOAN_2026-10-26.md](20_COHORT_UNG_VIEN_V3_VA_KIEM_TOAN_2026-10-26.md) | Cohort ứng viên RNG v1 và kiểm kỹ thuật trước khóa split | Cần xem kết quả ứng viên ban đầu |
-| [21_KIEM_CHUNG_AR_AP_VA_DO_BEN_SEED_2026-10-26.md](21_KIEM_CHUNG_AR_AP_VA_DO_BEN_SEED_2026-10-26.md) | Đối chiếu AR/AP độc lập, phát lại 10 seed, phản thực vĩ mô và cohort RNG v2/v3 trước khi sửa AP | Cần lịch sử kiểm chứng đến r3 |
-| [22_COHORT_SYNTHETIC_DA_KHOA_2026-10-27.md](22_COHORT_SYNTHETIC_DA_KHOA_2026-10-27.md) | Cohort ứng viên RNG v3 đã sửa AP, định trước baseline/stress, khóa split và train/evaluate | Cần lịch sử kiểm chứng trước khi sinh bộ cuối |
-| [23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md](23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md) | Bộ cuối 320 doanh nghiệp, 1.424.342 hóa đơn, kiểm AR/AP, khóa split và train/evaluate | Cần trạng thái bộ train synthetic mới nhất |
+- `data/raw/MANIFEST.json`: WDI Việt Nam và OxCGRT; `data/synthetic/calibration_fit.json` còn giữ.
+- Cohort v4: 8 World chính và 1 smoke; 2 holdout của v6 ngày 01/11.
+- Practical v6: 2 World augmentation supported và 4 fresh; unified v2: 4 holdout.
+- `data/T0/` còn dữ liệu/bằng chứng lịch sử riêng. **Toàn bộ `data/T1/` đã xóa** theo yêu cầu.
+- Dữ liệu/cohort v3, lifecycle, hard-case cũ và các thư mục chỉ còn config/báo cáo đã xóa.
 
-**Phân biệt ba bản kê:** `data/raw/MANIFEST.json` mô tả 2 nguồn thô hiện có;
-[manifest 8 nguồn ngày 14/10](MANIFEST_RAW_8_SOURCES_2026-10-14_ARCHIVE.json)
-là lịch sử; [worlds_registry.csv](worlds_registry.csv) kê 61 World cũ, hiện
-chỉ còn cấu hình/báo cáo ở các thư mục đó, không có Parquet giao dịch. Registry
-này **không** phải danh sách World dùng để train cuối. Split cuối đọc ở
-[cohort JSON](../../data/synthetic/v3_final_20261027_cohort.json).
-[vn_listed_inputs.json](vn_listed_inputs.json) lưu số chép từ ba BCTC để tái tính
-DSO/DPO, chưa có người kiểm tra thứ hai.
+Output release-gate và các bộ v3 candidate/final/pilot/readiness/inference đã
+xóa theo yêu cầu. Các báo cáo riêng về ứng viên, bộ train cuối và inference
+v3 cùng hồ sơ dọn dữ liệu cũng đã xóa. Artifact v4, v5/v6, practical v6 và
+unified v2 vẫn giữ; dùng các nguồn hiện hành bên dưới.
 
-Vị trí dữ liệu và mã: `data/raw/`, `data/interim/`, `data/synthetic/`,
-`agent1/data/`, `agent1/synth/`, `scripts/crawl.py`, `scripts/build_worlds.py`.
-Thẻ dữ liệu cô đọng: [../DATA_CARD.md](../DATA_CARD.md).
+## Chiến lược và đặc tả dùng tiếp
+
+| Tài liệu | Nội dung |
+|---|---|
+| [Chiến lược dữ liệu](01_chien_luoc_du_lieu.md) | Ba tầng bằng chứng, cách kết hợp nguồn, lược đồ T0 |
+| [Nguồn thật từng dùng](02_du_lieu_that_dung.md) | Nguồn, cột, vai trò và hạn chế của các thí nghiệm trước; không phải tồn kho hiện tại |
+| [Nguồn đã loại/hoãn](03_du_lieu_khong_dung.md) | Lý do khảo sát để tránh làm lại và điều kiện xem xét sau này |
+| [Máy phát, runner và quy mô](04_may_phat_tong_hop.md) | Kiến trúc, as-of, manifest/split, held-out và mở rộng; đã gộp tài liệu quy mô/runner rời |
+| [Danh mục hard case](05_hard_cases.md) | Đặc tả tình huống và cách đo; giữ đặc tả không có nghĩa các World cũ còn trên đĩa |
+| [Bộ đánh giá](07_bo_danh_gia.md) | Benchmark từng năng lực, đầu-cuối và quy tắc niêm phong |
+| [Tài liệu tham khảo](08_tai_lieu_tham_khao.md) | Nguồn hiệu chỉnh, phương pháp và mức độ đã đọc |
+| [Bộ v4 sau sửa short-pay](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md) | Cohort nguồn cho v5/v6, retrain, inference và giới hạn |
+
+## Lịch sử có giá trị đối chiếu
+
+| Tài liệu | Lý do giữ |
+|---|---|
+| [Đối chiếu BCTC niêm yết](09_vn_listed_spot_check.md) | Số DSO/DPO độc lập và giới hạn mẫu; PDF gốc cần tải lại |
+| [Realism v2 và C2ST](10_realism_v2.md) | Giải thích khác biệt thiết kế/hành vi và vì sao dừng chỉnh theo C2ST |
+| [Kế hoạch shock 25/10](11_KE_HOACH_SOC_THI_TRUONG_TICH_HOP_2026-10-25.md) | Nguồn thiết kế, giả thuyết và phần chưa triển khai; không phải kết quả đã chạy |
+| [Kiểm toán máy phát cũ](12_KIEM_TOAN_KICH_BAN_SINH_DU_LIEU_CU_2026-10-25.md) | Nguyên nhân lỗi nhân quả/kế toán trước sửa |
+| [Kiểm toán sau sửa ban đầu](14_KIEM_TOAN_SAU_SUA_VA_QUYET_DINH_TRAIN_2026-10-26.md) | Số đo trước sửa vòng đời và quyết định NO-GO tại thời điểm đó |
+| [Tổng kết máy phát và sửa vòng đời](18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md) | Lịch sử sửa lỗi; đã gộp cơ chế và số đo riêng của báo cáo 15 |
+| [Kiểm toán mười World](19_KIEM_TOAN_CHI_SO_10_WORLD_2026-10-26.md) | Một nơi cho định nghĩa, bảng ba/mười World, ngành và từng seed; đã gộp báo cáo 16 và phần nhiều seed của 17 |
+
+[Manifest 8 nguồn ngày 14/10](MANIFEST_RAW_8_SOURCES_2026-10-14_ARCHIVE.json)
+và [registry 61 World cũ](worlds_registry.csv) là bản kê lịch sử, không phải
+nguồn đang có hoặc split train hiện tại. [vn_listed_inputs.json](vn_listed_inputs.json)
+giữ số chép từ BCTC để tính lại DSO/DPO, chưa có kiểm tra chép số độc lập thứ hai.
+
+Mã: `agent1/data/`, `agent1/synth/`, `scripts/`. Thẻ dữ liệu
+[DATA_CARD](../DATA_CARD.md) là mô tả giai đoạn cũ; trạng thái còn trên đĩa dùng mục đầu trang này.

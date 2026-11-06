@@ -25,7 +25,7 @@ Lệnh kiểm: `.venv/Scripts/python.exe scripts/check_rules.py --asof 2026-10-1
 Thêm lịch nhận số từ hồ sơ/hợp đồng cho TNCN, nhà thầu, hoàn VAT, thưởng,
 thuê nhiều bậc và gốc/lãi vay. Chưa suy ra số thuế hoặc tự đặt ngày hoàn.
 Nguồn chính thức và phạm vi áp dụng được ghi trong
-[đặc tả lịch bổ sung](04_AI_Methods/11_extended_obligations.md).
+[đặc tả lịch bổ sung](04_AI_Methods/04_t4_t5_thu_moi_va_chi.md#nghia-vu-bo-sung).
 
 Đã phát hiện Luật 108/2025/QH15 và NĐ252/2026 thay đổi khung quản lý thuế
 từ 2026; TT80/2021 có sửa đổi TT94/2025. Giữ `verified=false`, chưa coi

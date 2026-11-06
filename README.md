@@ -31,11 +31,12 @@ Giảm số luồng khi máy dùng chung; các thí nghiệm lớn cần kiểm 
 
 ## Chạy thí nghiệm
 
-Đợt chạy lại 21/10/2026 sau sửa `expand`: dùng
-`.venv/Scripts/python.exe -u scripts/sprint1/fullweek_refresh.py` cho đúng
-chuỗi 18 job, chờ RAM >=3 GiB và ghi nhật ký trước/sau. Xem
-[thiết kế fullweek](docs/04_AI_Methods/13_fullweek_refresh_2026-10-21.md).
-Job `C-v2` dùng giao thức thật mới; `C` chỉ còn để kiểm toán v1.
+Đợt chạy lại fullweek ngày 21/10/2026 là hồ sơ lịch sử; giao thức và
+đăng ký P4/G3 đã gộp tại
+[phương pháp T1](docs/04_AI_Methods/02_t1_hazard_thoi_diem_tra.md#fullweek-20261021).
+Không coi chuỗi điều phối 18 job cũ là lệnh khởi chạy hiện tại. `C-v2` có
+giao thức thật mới; `C` chỉ dùng kiểm toán v1. Một số đầu vào cũ đã xóa;
+kiểm [tồn kho dữ liệu](docs/02_Data/README.md) và protocol trước khi chạy job.
 
 ```powershell
 .\.venv\Scripts\python.exe scripts/run_plan.py --jobs tests,report --fail-fast
@@ -49,11 +50,15 @@ có thể mất nhiều giờ; tuning và scaling tốn đáng kể tài nguyên
 exit code, hash mã và nhật ký trong `outputs/implementation/`.
 Smoke E2E lưu riêng; kết quả đầy đủ nằm trong `outputs/e2e/e2e_metrics.csv`.
 Không dùng dữ liệu kiểm tra miền đích để chọn tham số hoặc chính sách onboarding.
-Các phép đo bổ sung và giới hạn ở [SBA/T7/chính sách/copula](docs/04_AI_Methods/12_new_ablations.md),
-[lịch nghĩa vụ từ hồ sơ](docs/04_AI_Methods/11_extended_obligations.md) và
+Các phép đo bổ sung và giới hạn đã gộp tại
+[SBA](docs/04_AI_Methods/03_t2_t3_t8_xac_suat_hoa_don.md#sba-macro),
+[DR/IW](docs/04_AI_Methods/05_domain_adaptation.md#ablation-dr-iw),
+[T7/T9/chính sách](docs/04_AI_Methods/07_t7_t9_t10.md),
+[copula và đối chứng T6](docs/04_AI_Methods/06_t6_monte_carlo_conformal.md),
+[lịch nghĩa vụ từ hồ sơ](docs/04_AI_Methods/04_t4_t5_thu_moi_va_chi.md#nghia-vu-bo-sung) và
 [đối chiếu BCTC niêm yết](docs/02_Data/09_vn_listed_spot_check.md).
 
-Khi cần dựng dữ liệu ban đầu, xem [data card](docs/DATA_CARD.md) và các script
+Khi cần dựng dữ liệu mới, xem [tồn kho và thiết kế dữ liệu](docs/02_Data/README.md), [data card lịch sử](docs/DATA_CARD.md) và các script
 `crawl.py`, `build_worlds.py`, `build_multiworld.py`, `build_big.py`.
 Không tự chấp nhận điều khoản Kaggle hoặc điền danh tính SEC; hai nguồn này đang được tạm bỏ.
 Không ghi đè bộ dữ liệu hiện có bằng cấu hình khác.
@@ -84,7 +89,7 @@ Docker cần daemon hoạt động. Kiểm tra local không thay UAT của ngư�
 | `agent1_service`, `agent1/jobs` | API/UI local, lưu trữ, retrain và giám sát |
 | `scripts`, `tests` | Các giao thức thực nghiệm và kiểm thử |
 | `outputs` | CSV kết quả, metadata, hình và nhật ký |
-| `docs/05_Coding_Agent_Plan` | Kế hoạch gốc và sổ tiến độ sinh tự động |
+| `docs/05_Coding_Agent_Plan` | Phạm vi WP, nhật ký/quyết định lịch sử và tiến độ sinh từ hồ sơ |
 
 Sau khi các job kết thúc, chạy `python scripts/make_report.py` để sinh lại tài liệu từ CSV.
 Số ca kiểm thử đọc từ `outputs/implementation/test_summary.csv`; không giữ số đếm thủ công trong README.

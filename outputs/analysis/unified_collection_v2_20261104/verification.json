@@ -1,0 +1,27 @@
+{
+  "source_sha256": "5fe7013c1f736a0ebe0640a811abb211ef0f26f2454369ee54bc31ab671442d2",
+  "cohort_checks": {
+    "source_bank": {
+      "company_model_origins": 64,
+      "weekly_rows": 832,
+      "mc_rows": 192,
+      "max_bank_identity_error_vnd": 1.52587890625e-05,
+      "max_ar_identity_error_vnd": 1.078410138966035e-07,
+      "max_end_to_end_seconds": 3.390747800003737,
+      "max_case_rss_sampled_mib": 640.6484375
+    },
+    "fresh_test": {
+      "company_model_origins": 128,
+      "weekly_rows": 1664,
+      "mc_rows": 384,
+      "max_bank_identity_error_vnd": 3.0517578125e-05,
+      "max_ar_identity_error_vnd": 1.2733258891728386e-07,
+      "max_end_to_end_seconds": 4.917486399994232,
+      "max_case_rss_sampled_mib": 544.84765625
+    }
+  },
+  "experiment_source_unchanged": true,
+  "protected_files": 540,
+  "decision": "insufficient_evidence_to_replace_v6",
+  "scope": "read saved results only; no model fitting, selection or holdout forecasts"
+}

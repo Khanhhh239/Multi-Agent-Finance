@@ -1,0 +1,17 @@
+{
+  "report_sha256": "fbe26840b6823126c24c66fa286a67606a660117c6104466b3b615a6b1a4efa1",
+  "tests": {
+    "tests": 70,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "maximum_recomputed_paid_score_difference": 0.0,
+  "observation_code_matches_prior_code_lock": true,
+  "protected_files_checked": 144,
+  "changed_protected_files": [],
+  "bundle_sha256": "75805bc7d1ea181dba292e57e86092028e512114efee19a15aac5a97376669bb",
+  "bundle_bytes": 188183,
+  "direct_report_links_verified": 16,
+  "manifest_files_verified": 23
+}

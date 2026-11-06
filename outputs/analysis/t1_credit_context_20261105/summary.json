@@ -1,0 +1,77 @@
+{
+  "scope": "synthetic measurement feasibility, not evidence of forecast improvement",
+  "population_stats": [
+    {
+      "scope": "test_000_diagnostic",
+      "n": 5772,
+      "known_share_min": 0.12380952380952381,
+      "known_share_max": 0.34579439252336447,
+      "missing_n": 0,
+      "credit_active_at_cutoff_n": 3079,
+      "credit_active_in_reference_n": 1568,
+      "current_credit_not_in_reference_n": 2942
+    },
+    {
+      "scope": "train_fit",
+      "n": 200000,
+      "known_share_min": 0.029411764705882353,
+      "known_share_max": 0.4044943820224719,
+      "missing_n": 0,
+      "credit_active_at_cutoff_n": 13033,
+      "credit_active_in_reference_n": 15618,
+      "current_credit_not_in_reference_n": 4200
+    }
+  ],
+  "test_share_outside_train_measurement_range": 0.0,
+  "test_july_anchors": 2942,
+  "measurement_coupling": [
+    {
+      "world": "v4_shortpay_4shock_20261028_train_000",
+      "n_months": 84,
+      "n_credit_active_months": 4,
+      "mean_measured_active": 0.24032698286026624,
+      "mean_measured_calm": 0.12751819410856732,
+      "pearson_with_reference_oracle": 0.49521295692325595
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_train_001",
+      "n_months": 84,
+      "n_credit_active_months": 5,
+      "mean_measured_active": 0.20873707381543216,
+      "mean_measured_calm": 0.13960225382867666,
+      "pearson_with_reference_oracle": 0.46978635393522267
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_train_002",
+      "n_months": 84,
+      "n_credit_active_months": 5,
+      "mean_measured_active": 0.23441357775591923,
+      "mean_measured_calm": 0.12607035589192336,
+      "pearson_with_reference_oracle": 0.6996646306268212
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_train_003",
+      "n_months": 84,
+      "n_credit_active_months": 5,
+      "mean_measured_active": 0.2445074943182366,
+      "mean_measured_calm": 0.1391066693760102,
+      "pearson_with_reference_oracle": 0.6795364292146387
+    },
+    {
+      "world": "v4_shortpay_4shock_20261028_test_000",
+      "n_months": 84,
+      "n_credit_active_months": 9,
+      "mean_measured_active": 0.2286732220603304,
+      "mean_measured_calm": 0.13124733215703951,
+      "pearson_with_reference_oracle": 0.6267699322916481
+    }
+  ],
+  "verification": {
+    "fit_or_calibration_performed": false,
+    "v6_model_sha256": "9375373bcf413618642cb12f39c7d9a63bb5f24bac24a7c64b9e2eb54f95db44",
+    "protected_file_count": 129,
+    "changed_protected_files": [],
+    "candidate_feature_count": 19,
+    "oracle_columns_in_candidate": []
+  }
+}

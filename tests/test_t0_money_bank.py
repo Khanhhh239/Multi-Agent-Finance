@@ -9,6 +9,7 @@ from agent1.synth.names import make_mst
 from agent1_service.api import create_app
 from agent1_service.ingest.money import minor
 from agent1_service.ingest.invoices import effective_invoices
+from agent1.jobs.retrain import observed_tables
 import numpy as np
 import pandas as pd
 
@@ -168,6 +169,18 @@ def test_registry_expansion_exposes_missing_account_in_existing_period(tmp_path,
         coverage=client.get('/bank/coverage',headers=headers).json()
         assert coverage['verified'] is False
         assert coverage['missing_from']=={'B':'2024-03-01'}
+
+
+def test_retraining_refuses_statement_when_registry_disappears(tmp_path,bank_registry,monkeypatch):
+    registry_file=bank_registry()
+    monkeypatch.setenv('AGENT1_BANK_ACCOUNTS_FILE',str(registry_file))
+    app=create_app(tmp_path,token='secret')
+    raw='Ngày giao dịch,Số tiền ghi có,Số tiền ghi nợ,Nội dung\n15/03/2024,100,0,thu\n'
+    with TestClient(app) as client:
+        assert _upload(client,raw,_statement(debits='0')).status_code==200
+        registry_file.unlink()
+        with pytest.raises(ValueError,match='danh mục tài khoản'):
+            observed_tables(app.state.store,'F000','2024-03-31')
 
 
 def test_statement_checks_both_sides_and_account_coverage(tmp_path,monkeypatch,bank_registry):

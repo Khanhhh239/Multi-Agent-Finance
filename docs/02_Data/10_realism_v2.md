@@ -1,5 +1,7 @@
 # 10. Realism v2 và C2ST tách đặc trưng (Sprint 4, 21/10/2026)
 
+> **Tình trạng dữ liệu 06/11/2026:** các World v3/lifecycle/đời đầu liên quan đã xóa; đây là tài liệu lịch sử, không phải tồn kho hoặc hướng dẫn chạy ngay. Kết quả đã lưu được giữ để đối chiếu. Cohort dùng cho v5/v6 xem [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
+
 ## 10.1 Vấn đề
 C2ST gốc (`structural-company-split-v1`) cho AUC 0,996–0,997: bộ phân loại tách được dữ liệu tổng hợp khỏi bộ AR giống ERP
 (Customer Invoices) gần như hoàn hảo. Đặc trưng phân biệt chính là `term_days` (gain 618k), tiếp theo `late_days`, `log_amount_rel`.

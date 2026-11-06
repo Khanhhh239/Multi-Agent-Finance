@@ -1,0 +1,32 @@
+{
+  "baseline": "native HazardGBM default refit; not recovered pushed booster",
+  "baseline_sha256": "d3d87a8e887185d5e288fafcb291fa9b3bac5da5696521d9ba13113997b6ffa3",
+  "v6_sha256": "9375373bcf413618642cb12f39c7d9a63bb5f24bac24a7c64b9e2eb54f95db44",
+  "evaluation_anchors": 65221,
+  "worlds": 6,
+  "primary": {
+    "metric": "Paid Brier mean of days 28 and 91; equal weight per World",
+    "khanh": 0.14121726176914778,
+    "v6": 0.1388550480491239,
+    "improvement_pct": 1.6727513976906416,
+    "delta_v6_minus_khanh": -0.0023622137200238758,
+    "ci_low": -0.0034182063397645646,
+    "ci_high": -0.0012714797027793604,
+    "point_winner": "v6",
+    "resampling": "1000 firm resamples within each fixed World, then equal-World mean; not uncertainty across new economies"
+  },
+  "worlds_v6_better_primary": 6,
+  "v6_prediction_max_abs_difference_from_saved": 0.0,
+  "protected_files_checked": 100,
+  "changed_protected_files": [],
+  "protocol_sha256": "dfdc438c232645fe9cb1e42e02e8d96b02da05b0652ac32881982e8495083256",
+  "limitations": [
+    "retrospective paired benchmark; every evaluation World has already been inspected; not fresh confirmation",
+    "exact same V6 fit anchors/order and values of the common 46 features; not a full replay of old ingestion",
+    "comparison of model versions including native configuration; not isolated component attribution",
+    "binary Paid scores only; no padded-zero Write-off scores for legacy T1",
+    "post91 legacy tail is geometric extrapolation, not a fitted 53-week model",
+    "restricted quantile metric is for min(time-to-paid,120), not uncapped time-to-payment",
+    "cash comparison uses T1 full-payment proxy, not the complete legacy T6 pipeline"
+  ]
+}

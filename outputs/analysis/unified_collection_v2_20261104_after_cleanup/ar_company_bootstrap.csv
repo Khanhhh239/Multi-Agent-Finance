@@ -1,0 +1,9 @@
+scope,world,unified_minus_v6,ci_low,ci_high,company_clusters,scope_of_ci
+source_bank,v4_shortpay_4shock_20261028_train_000,-0.005750630529260438,-0.011865009052042927,0.001044490109326235,4,companies within this World only
+source_bank,v4_shortpay_4shock_20261028_train_001,0.009928647652963325,0.006565034401741424,0.013292260904185225,4,companies within this World only
+source_bank,v4_shortpay_4shock_20261028_train_002,7.796366641223736e-05,-0.008836513042120952,0.008992440374945426,4,companies within this World only
+source_bank,v4_shortpay_4shock_20261028_train_003,0.0027116437320979367,-0.012047335549524349,0.014415198543501252,4,companies within this World only
+fresh_test,unified_v2_holdout_20261104_000,-0.0015664626572530634,-0.009118106781517707,0.006455093197846,8,companies within this World only
+fresh_test,unified_v2_holdout_20261104_001,0.0034808353965282836,-0.0028425980934586696,0.011992019591006433,8,companies within this World only
+fresh_test,unified_v2_holdout_20261104_002,0.020843222772973145,0.010827531246942426,0.03131572392668986,8,companies within this World only
+fresh_test,unified_v2_holdout_20261104_003,0.0031955089032708055,-0.0034244791519811423,0.01258693153797964,8,companies within this World only

@@ -1,0 +1,9 @@
+{
+  "research_passed": false,
+  "decision": "stop_before_fresh_test",
+  "reason": "source AR gate or full-budget performance failed",
+  "source_gate": false,
+  "performance_gate": true,
+  "service_changed": false,
+  "product_gates_changed": false
+}

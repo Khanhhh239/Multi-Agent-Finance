@@ -1,5 +1,7 @@
 # 1. Pipeline hệ thống đầu-cuối
 
+> **Phạm vi sau gộp 06/11/2026:** Đây là kiến trúc pipeline nhị phân/T2/T6 và đề xuất vận hành gốc. Ứng viên v6/unified là các luồng nghiên cứu riêng, chưa tự thay kiến trúc dịch vụ. Phần T0 bên dưới bổ sung mô tả đã ghi ngày 25/10.
+
 ## 1.1 Sơ đồ
 
 ```
@@ -61,3 +63,10 @@ agent1/models/t4_revenue.py      T4   | agent1/models/t6_cash.py   T6 (simulate,
 agent1/models/t7_changepoint.py  T7   | agent1/models/t9_recon.py  T9
 agent1/eval/metrics.py           đo   | scripts/run_*.py           thí nghiệm
 ```
+
+
+<a id="t0-scope"></a>
+
+## 1.6 T0 — phạm vi bộ nạp và cổng chất lượng ghi nhận ngày 25/10
+
+**Mô tả đã ghi ngày 25/10/2026:** Bộ nạp đọc XML hoá đơn điện tử (phiên bản 2.0.0/2.0.1/2.1.0), bảng kế toán và sao kê; chuẩn hoá định danh, ngày, tiền trước khi chuyển cho các T sau. Với hoá đơn, `quality_gate` kiểm từng dòng bằng quy tắc, không học máy: thiếu trường bắt buộc; chữ số kiểm tra MST người bán/người mua; ngày lập không hợp lệ, hạn trước ngày lập; `tiền trước thuế + VAT ≠ tổng tiền` (dung sai 1.000đ); thuế suất ngoài tập cho phép; tiền không dương; trùng bộ `(MST người bán, ký hiệu, số hoá đơn)`; tiền tệ không hỗ trợ. Kết quả là bảng cờ lỗi theo dòng để chặn hoặc yêu cầu sửa đầu vào. XML còn bị giới hạn kích thước và chặn DTD/thực thể; thông tin hoá đơn thay thế/điều chỉnh được đọc ra, nhưng chuỗi tham chiếu chưa được kiểm tra đầy đủ.

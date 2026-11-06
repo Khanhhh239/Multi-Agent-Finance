@@ -1,0 +1,18 @@
+{
+  "tests": {
+    "tests": 65,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "baseline_model_sha256_equal": true,
+  "initial_fresh_design_unchanged": true,
+  "fresh_receipts_match_frozen_selection": true,
+  "no_fresh_reselection": true,
+  "protected_files_checked": 203,
+  "changed_protected_files": [],
+  "protocol_sha256": "0d8b7246efb42f9fdd858ebfa15c7bf011d98c28422afbe27af61c0ed3bddb96",
+  "selection_sha256": "783f5ced7b8bf0999c2b3bb48017841eafa3f8ac54f62aa434cbcc71b4931e18",
+  "report_sha256": "1a0f381f5df16d7c52bb93bb05cbb56bcac89d6a26e53847167555251fa52d19",
+  "source_snapshot_sha256": "9dce10ff8010cad4fa30c572b31c52daf2aae903c976630302c915afd28935a6"
+}

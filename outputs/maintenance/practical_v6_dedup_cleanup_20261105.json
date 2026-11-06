@@ -1,0 +1,416 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "timezone": "Asia/Saigon",
+  "status": "completed",
+  "authorized_scope": "User-approved cleanup stages 2 and 3 only: three empty directories, development smoke, exact practical-v6 duplicates. Keep both historical locks and all r2 artifacts.",
+  "duplicate_payloads": [
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/data.lock.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/data.lock.json",
+      "sha256": "4474188c9d57334fa870ae61e54136f7be90190a754637c694c55f85d743cb2d",
+      "bytes": 178
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/environment.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/environment.json",
+      "sha256": "a5dc55fd6308017d8548a205eac0e19db20bca01e16d22e65314e4be6b1f094b",
+      "bytes": 111
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/fit.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/fit.parquet",
+      "sha256": "8ce8700534062170e8eaa6d85c076b2954d301909e1aaa086b4a1e4f0ec06a8a",
+      "bytes": 31879653
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/fit.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/fit.sha256.json",
+      "sha256": "e189214cfd300adbd07e494ebddcf63b2721b345e9ba0c875c8acf7388aec4e5",
+      "bytes": 98
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/preservation_before.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/preservation_before.json",
+      "sha256": "42b3783846c89fe7b16b6c272d45e280f648edc3576752da7f3a8910aa52f452",
+      "bytes": 25963
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/source_frame_protocol.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/source_frame_protocol.json",
+      "sha256": "f4a4e2d27f54abaf2d666752f8639ba3b9208f25bab155a718e91d09b3935736",
+      "bytes": 3449
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/source_provenance.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/source_provenance.json",
+      "sha256": "5830044d8f95fbe92c6507ceccc20870b8c7aee4cbe2dceefe9c284161b1af16",
+      "bytes": 429
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/source_validation.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/source_validation.parquet",
+      "sha256": "1d826b0263a37f3228a643ce06bae098c098a4b2594e9e086ae8d5d07c6b0e32",
+      "bytes": 1626341
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/source_validation.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/source_validation.sha256.json",
+      "sha256": "20f3fe37f269c694febd0e64082121e8d1d08ab875afc43a38606bc6d82d4dee",
+      "bytes": 97
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/models/v6.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/models/v6.json",
+      "sha256": "593ff0b52240b8f8ca77aa3ada8e7b2b29cf4ccf5ae138b02bd41d846f82cf74",
+      "bytes": 1637
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/models/v6.txt",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/models/v6.txt",
+      "sha256": "9375373bcf413618642cb12f39c7d9a63bb5f24bac24a7c64b9e2eb54f95db44",
+      "bytes": 1737041
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_000/buyer_industry.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/buyer_industry.parquet",
+      "sha256": "b01f569e809be62d06e943b182681e8667dac9fc6f08467e65cb17ca78b4b9f4",
+      "bytes": 35556
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_000/coverage.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/coverage.parquet",
+      "sha256": "525b4b82efd118c6c6207019385217aa651fe8e03249c70ec38cbaffbad7f255",
+      "bytes": 115840
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_000/invoices.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/invoices.parquet",
+      "sha256": "d571949d2dafcb4a74921f1d902cd5fbab2532e678b247e189a08aaf0609f111",
+      "bytes": 2980837
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_000/ledger_entries.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/ledger_entries.parquet",
+      "sha256": "369e483dfac5c7f5bc1c96dc04b742d76b801506497bc76aedb1e794eb83f3c9",
+      "bytes": 3636116
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_000/seller_industry.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_000/seller_industry.parquet",
+      "sha256": "3a527051d1075b10d2b08f3170ba572c415e8c84e29f8fda641683e71a3d0916",
+      "bytes": 4341
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_001/buyer_industry.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/buyer_industry.parquet",
+      "sha256": "36a6bafb7fcc3501f89c6e2d908f301099b6141073348258b78258fc162fa3b4",
+      "bytes": 37175
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_001/coverage.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/coverage.parquet",
+      "sha256": "525b4b82efd118c6c6207019385217aa651fe8e03249c70ec38cbaffbad7f255",
+      "bytes": 115840
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_001/invoices.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/invoices.parquet",
+      "sha256": "ff01b06c6688b89ea2b005c8ef4ec838f526e483d4e068844f9c10620027e90d",
+      "bytes": 3314463
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_001/ledger_entries.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/ledger_entries.parquet",
+      "sha256": "a194eef7c2e767a924bb9eddece6da182ee83b747937b10269c33cfb4a8b2a18",
+      "bytes": 4124946
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_001/seller_industry.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_001/seller_industry.parquet",
+      "sha256": "f6a65e5cc203192dbff6a14c2c4f495c8a525ddb10f64a802044d6a8dfee3690",
+      "bytes": 4343
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_002/buyer_industry.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/buyer_industry.parquet",
+      "sha256": "6da6bbf1bbc54b669fd48b2082bb712f22b8cc3e90a49191cfcc1c1f7ba4c41d",
+      "bytes": 37261
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_002/coverage.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/coverage.parquet",
+      "sha256": "525b4b82efd118c6c6207019385217aa651fe8e03249c70ec38cbaffbad7f255",
+      "bytes": 115840
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_002/invoices.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/invoices.parquet",
+      "sha256": "795c43858c00bea90e6b5b543825431bdfb4d4bae070257b1657282b2923be56",
+      "bytes": 2579697
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_002/ledger_entries.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/ledger_entries.parquet",
+      "sha256": "32448e097ac955685e16406bfacc6ef26d346e54e2b9823c4863b8b2565a80a2",
+      "bytes": 3131241
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_002/seller_industry.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_002/seller_industry.parquet",
+      "sha256": "1c709a050d2d499fe21fe0e6ea701d64d38e35064406a40ec044a6b0d62eb904",
+      "bytes": 4342
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_003/buyer_industry.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/buyer_industry.parquet",
+      "sha256": "e0b46e080a7607b113277379c6aa62954089525710bde15b2b32c9dcc5cd25fd",
+      "bytes": 36777
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_003/coverage.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/coverage.parquet",
+      "sha256": "525b4b82efd118c6c6207019385217aa651fe8e03249c70ec38cbaffbad7f255",
+      "bytes": 115840
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_003/invoices.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/invoices.parquet",
+      "sha256": "f99c646df2b22778074f28bf3337782cfc58acdb465c80ecdfc6010b84cf9291",
+      "bytes": 3252583
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_003/ledger_entries.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/ledger_entries.parquet",
+      "sha256": "7aa96e8b1cb52f6d34fca346d0cc27c3ef09c7707f5a96efb88a79f447ff2864",
+      "bytes": 3998600
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_003/seller_industry.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/observed_sidecars/v4_shortpay_4shock_20261028_train_003/seller_industry.parquet",
+      "sha256": "65d5101f4650218bf4bd19b9953f5f26d184fd79eb1e29c6830ce9a79fccd9f9",
+      "bytes": 4342
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_000_fit.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_000_fit.parquet",
+      "sha256": "5cac1cbb21a66f5c547855fa0e0398b47934d93c23af7f802f999615fd75692c",
+      "bytes": 8051157
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_000_fit.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_000_fit.sha256.json",
+      "sha256": "773f66d7cc4d27567e163061967677a55711499d94fae866c16e95b18af00b32",
+      "bytes": 97
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_000_validation.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_000_validation.parquet",
+      "sha256": "798248f5a48bb336d98c0b42760c444dba728398e4a4c8c559bfd45623fb32b3",
+      "bytes": 453552
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_000_validation.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_000_validation.sha256.json",
+      "sha256": "cd853138ba503ec48db8e945e4e71536595359cd60bec4044d9ab44b3aaba1e7",
+      "bytes": 96
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_001_fit.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_001_fit.parquet",
+      "sha256": "71b416a838d882c99b6dd0b957ba8b08def720dd2c36c22f34763ae0668a83e7",
+      "bytes": 8418328
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_001_fit.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_001_fit.sha256.json",
+      "sha256": "e4733d0c9783fb5afc843755b9c20193de71c68fca73090ad249d5aba4464952",
+      "bytes": 97
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_001_validation.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_001_validation.parquet",
+      "sha256": "26e51a7ad965dbab19e23864b7a5e9eca291531c0d40964d6693f947e8634e19",
+      "bytes": 557594
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_001_validation.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_001_validation.sha256.json",
+      "sha256": "115be6a10c8f4bab41cdeb06e20f789a56be9c1490dacc61da83e39bcd8dfa45",
+      "bytes": 96
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_002_fit.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_002_fit.parquet",
+      "sha256": "4160f16658edc6ca6f5015bbbcfc23d27778a0d8a841a00f29979ac35494993f",
+      "bytes": 7583892
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_002_fit.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_002_fit.sha256.json",
+      "sha256": "e11e5490733e5bbc03052612c573f5ecb08dfeabf88bc00e1722a888c3ea57fc",
+      "bytes": 97
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_002_validation.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_002_validation.parquet",
+      "sha256": "b0b4d0306480d2f40258987cfec34b391849f1ae7e72362e6f748c0b96bba7ae",
+      "bytes": 404406
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_002_validation.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_002_validation.sha256.json",
+      "sha256": "352bf8941d9368a6e54bee18f6e51281896bc03fdc671c760ec239bd1f42dea8",
+      "bytes": 96
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_003_fit.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_003_fit.parquet",
+      "sha256": "25386744ae017248c1aa731be6c8d74bcef4eb39a68cf76082021b0f43400214",
+      "bytes": 8144176
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_003_fit.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_003_fit.sha256.json",
+      "sha256": "29df21931ebcbff04953da86c4028246c570452b2b3db6b2c2c04c5bf966ae61",
+      "bytes": 97
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_003_validation.parquet",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_003_validation.parquet",
+      "sha256": "21f4a8c030b2dc5228f0ef63f82af210a0ecbc446bb91bfcd1adaaea266eb70b",
+      "bytes": 424180
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/prepared/v4_shortpay_4shock_20261028_train_003_validation.sha256.json",
+      "retained_path": "outputs/data/t1_v6_practical_20261105_r2/prepared/v4_shortpay_4shock_20261028_train_003_validation.sha256.json",
+      "sha256": "bf8f6bba360e317d4b3039f8476447b7690128681c06f5a672dda831c4784732",
+      "bytes": 96
+    }
+  ],
+  "preserved_historical_locks": [
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/code.lock.json",
+      "sha256": "3fc14f89b9b5082af319fedfb6b4a01aa23304c67d0e347893f2dd4400ab9548",
+      "bytes": 916
+    },
+    {
+      "path": "outputs/data/t1_v6_practical_20261105/protocol.lock.json",
+      "sha256": "1f002fc492967938a1a8308863c1b6792a6afc6153570f6b501f139b13f509a0",
+      "bytes": 19371
+    }
+  ],
+  "removed_smoke_files": [
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/accounting_regression.json",
+      "sha256": "a1bfeb67ad32b7465cd661fcf0fbbe6bd410f2e3dd4dae66af03d6ab8cb2f81a",
+      "bytes": 935
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/candidates/300/calibration.json",
+      "sha256": "97903e5a9f2f55640ae048b0046f9ff1ed8db0dfb600efbef83cf7c042c59dc5",
+      "bytes": 133
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/candidates/300/model.txt",
+      "sha256": "880639d1b372c02f3e671a008eb307fdbab6109cefb3edee9d7196b9d3ec7e2a",
+      "bytes": 96293
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/candidates/300/train.json",
+      "sha256": "8d4d8699a8c68d1d3af27e06afdb19ac830710d2c5706376007d2e421d5dfd9f",
+      "bytes": 1354
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/ar_company_scores.csv",
+      "sha256": "1315c384dce42920ea71907182b2062056af6e5008d6895af2636944df1478c0",
+      "bytes": 463
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/ar_summary.csv",
+      "sha256": "dfeb85e1eecf110ea1594ab6bd3a02669358c39516b66922becc41ca00dc915b",
+      "bytes": 373
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/common_components.csv",
+      "sha256": "dee8eebd325bf3fb8ec908506d9a63386d33687fbff9e5f02821d3c3b6067432",
+      "bytes": 411
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/company_bootstrap.csv",
+      "sha256": "294140395ae988aeb0549085d76bd8796440afbcf5a1120d79224386ad923ab6",
+      "bytes": 1129
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/company_scores.csv",
+      "sha256": "83a975c14b3b7a5bc838bbd639dc6f19bf74efb87fdca76c29c9d8165ad3de31",
+      "bytes": 669
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/mc_scores.csv",
+      "sha256": "5c7a51ec7a6f3a78ccf1cd2784a1050a729d91fde63f894d4784ac76101afdfd",
+      "bytes": 900
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/outcome_support.csv",
+      "sha256": "98fbef3c066d13e208a37900460e8636472fcdaa0ce1d586fd3fa4345cbab354",
+      "bytes": 140
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/rollout_audit.csv",
+      "sha256": "74c63b6b0e39a4fc19285e436b24c926103a9d55f06a39ab13ebf4c36c97d61f",
+      "bytes": 428
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/summary.csv",
+      "sha256": "83ea90b0db9f084785fbbda251b7c029ed8dbcdb5161804105baf302d191cdd6",
+      "bytes": 408
+    },
+    {
+      "path": "outputs/analysis/unified_v2_development_smoke/fresh_test/weekly_predictions.csv",
+      "sha256": "251501c73fd0f6b6ea9bf2dc0610a350d7a82a4cfdba602a5344ef47701cedd5",
+      "bytes": 6564
+    }
+  ],
+  "smoke_accounting_retained_path": "outputs/data/unified_collection_v2_20261104_r3/accounting_regression.json",
+  "smoke_accounting_sha256": "a1bfeb67ad32b7465cd661fcf0fbbe6bd410f2e3dd4dae66af03d6ab8cb2f81a",
+  "empty_directories": [
+    "data/synthetic/practical_v6_20261105_aug_000",
+    "data/synthetic/practical_v6_20261105_aug_001",
+    ".pytest_cache/non_t1_wheels"
+  ],
+  "duplicate_files": 47,
+  "duplicate_bytes": 96959034,
+  "smoke_files": 14,
+  "smoke_bytes": 110200,
+  "unaffected_files_before": 7069,
+  "restore_instructions": [
+    "For each duplicate_payloads entry, resolve path and retained_path strictly inside this workspace; reject symlinks/reparse points.",
+    "Verify retained_path SHA-256 equals sha256; refuse an existing destination with different content.",
+    "Create missing destination parent directories and copy retained_path to path; verify destination SHA-256.",
+    "Smoke files were intentionally removed as disposable development output; only accounting_regression.json has an equivalent retained copy listed above."
+  ],
+  "pruned_duplicate_directories": [
+    "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_000",
+    "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_001",
+    "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_002",
+    "outputs/data/t1_v6_practical_20261105/observed_sidecars/v4_shortpay_4shock_20261028_train_003",
+    "outputs/data/t1_v6_practical_20261105/observed_sidecars",
+    "outputs/data/t1_v6_practical_20261105/prepared",
+    "outputs/data/t1_v6_practical_20261105/models"
+  ],
+  "verification": {
+    "passed": true,
+    "unaffected_files_sha256_verified": 7069,
+    "retained_duplicate_copies_verified": 47,
+    "historical_locks_preserved": [
+      "code.lock.json",
+      "protocol.lock.json"
+    ],
+    "deleted_files": 61,
+    "deleted_content_bytes": 97069234,
+    "deleted_content_mib": 92.57,
+    "retrained_models": false,
+    "production_configuration_changed": false
+  }
+}

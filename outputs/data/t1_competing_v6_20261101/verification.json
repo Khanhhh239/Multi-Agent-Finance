@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "unit_tests": 20,
+  "unit_test_failures": 0,
+  "protected_pipeline_files": 162,
+  "additional_protected_files": 8,
+  "shared_v4_code_unchanged": true,
+  "source_snapshot_entries": 8,
+  "fresh_parquet_tables_verified": 24,
+  "baseline_comparison_rows_matched": 48,
+  "max_baseline_metric_difference": 1.1102230246251565e-16,
+  "inference_rows": 39377,
+  "inference_probability_and_cash_invariants": true,
+  "errors": [],
+  "aggregate_summary_sha256": "220623ebe65294ff5cd4cece47c8f0e56a3b4e8f084a328405765618ec94e572"
+}

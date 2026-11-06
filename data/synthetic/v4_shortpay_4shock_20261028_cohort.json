@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "commit": "08a7c5862547602c7c03df76766f5d153d778bf2",
+  "source_code_sha256": "5e4422d889d8e7b3764582b9ec1e8440fd11f7f0a284f023edb96950119551f2",
+  "source_data_sha256": {
+    "calibration": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+    "oxcgrt": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+    "wdi": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+    "shock_design": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a"
+  },
+  "split_protocol": {
+    "origin": "2024-07-01",
+    "label_horizon_days": 120,
+    "train_stride_days": 28,
+    "eval_stride_days": 28
+  },
+  "worlds": [
+    {
+      "name": "v4_shortpay_4shock_20261028_train_000",
+      "role": "train",
+      "manifest_sha256": "e316bf81f70ec059ff975634c4168ba01afe887ebcb2511992d76a83ce379f2b"
+    },
+    {
+      "name": "v4_shortpay_4shock_20261028_train_001",
+      "role": "train",
+      "manifest_sha256": "2d71fa68f619c898e9d2d7606941b09a2fac2b2a9808c7c0ccfd5ec06ebf4ef8"
+    },
+    {
+      "name": "v4_shortpay_4shock_20261028_train_002",
+      "role": "train",
+      "manifest_sha256": "afcb03283ce0e853fdc3f0190445bcfed8ab8899ba4e83249fc8f444590a90ea"
+    },
+    {
+      "name": "v4_shortpay_4shock_20261028_train_003",
+      "role": "train",
+      "manifest_sha256": "912dca0ed9fcda4f4bd5c4b2bae7d20daeca8bad540df20e38253e072b13a52a"
+    },
+    {
+      "name": "v4_shortpay_4shock_20261028_validation_000",
+      "role": "validation",
+      "manifest_sha256": "686aceb99299bc45c659bee51bc6ad38631462f37de6d76cce266cdf660cffd4"
+    },
+    {
+      "name": "v4_shortpay_4shock_20261028_validation_001",
+      "role": "validation",
+      "manifest_sha256": "9f18a17cd9b494acc3642068e1aa159af28d3daf5f00cb26034ffb2d74cd3be0"
+    },
+    {
+      "name": "v4_shortpay_4shock_20261028_test_000",
+      "role": "test",
+      "manifest_sha256": "7e5378ad023a95609caf8d6a38985c2ca507f61fff30ed3445ea9a9c650d7078"
+    },
+    {
+      "name": "v4_shortpay_4shock_20261028_test_001",
+      "role": "test",
+      "manifest_sha256": "e0c6a5d58cda3c94326c4522c8671a2030e3bae2f4c51d4cd8535060a42fa6f1"
+    }
+  ]
+}

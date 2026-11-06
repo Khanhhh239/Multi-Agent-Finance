@@ -1,9 +1,15 @@
-# Chiến lược phát triển Agent 1 từ 24/10/2026
+# Quyết định đổi hướng Agent 1 ngày 20–24/10/2026
+
+> **Gộp hồ sơ ngày 06/11/2026:** giữ lý do/giả thuyết/luật dừng theo từng ngày;
+> bỏ lịch hai tuần, sở hữu file, lệnh đồng bộ/publish và phân công đã hết thời điểm.
+> Các ưu tiên A/B/C là quyết định lịch sử, không phải yêu cầu thực hiện hiện nay.
+> Nghiên cứu T1 hiện tại đọc ở [báo cáo chốt Khánh–v6](../03_Evaluation/T1_V6_PROGRESS_VS_KHANH_2026-11-05.md).
+> Cohort còn dùng ở [báo cáo v4](../02_Data/25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
 
 > **Quyết định và ưu tiên tại thời điểm 24/10.** Các câu “tiếp theo” trong thân
 > bài giữ để truy vết lý do đổi hướng; chúng không giao việc mới. Đọc
 > [tiến độ hiện hành](TIEN_DO_TRIEN_KHAI.md), [cổng](../03_Evaluation/GATES_CURRENT.md)
-> và [bộ synthetic cuối](../02_Data/23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md)
+> và [bộ synthetic v4](../02_Data/25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md)
 > trước khi chọn việc tiếp theo.
 
 > Viết sau khi đo xong sprint 5–6. Mọi nhận định dựa trên kết quả đã ghi trong `docs/03_Evaluation/` và nhật ký mục 8–21.
@@ -80,31 +86,6 @@ Không đổi cổng sau khi xem kết quả để "cho đạt". Đây là đề
 
 ---
 
-## 3. Lịch hai tuần đầu
-
-| Ngày | Mũi A (dữ liệu thật) | Mũi B (T9 → sản phẩm) | Mũi C |
-|---|---|---|---|
-| 1–2 | A1, A2: gói dữ liệu + cam kết bảo mật | B1: mô phỏng hàng chờ duyệt (đăng ký trước) | Chủ dự án đọc bảng mục 2C, quyết |
-| 3–5 | A5: liên hệ doanh nghiệp | B1 đo trên `tgt3`/`tgt5`; B3 mô phỏng tỉ lệ số HĐ | Cập nhật `evaluate_gates.py` theo quyết định (giữ dòng cũ) |
-| 6–8 | A3: kịch bản nạp một doanh nghiệp | B2: đăng ký trước → sinh `tgt6` → đo một lần | — |
-| 9–10 | A4: bảng theo dõi chạy bóng | Tổng hợp; áp quy tắc dừng | Báo cáo cổng mới |
-
-**Mốc kiểm tra ngày 10:** (i) có ít nhất 1 doanh nghiệp đồng ý chia sẻ dữ liệu? (ii) G13 đạt trên cả 2 thế giới với luồng có hàng chờ duyệt? Nếu (i) không, toàn bộ nỗ lực tiếp theo dồn vào mũi A; kỹ thuật chỉ bảo trì.
-
----
-
-## 4. Phân công để không đụng nhau
-
-| Người | Sở hữu file | Việc |
-|---|---|---|
-| agent1-Khanh | `agent1/models/t9_soft_labels.py`, `agent1/eval/alert_policy.py`, `scripts/sprint5/`, tài liệu đánh giá | B1, B2, B3 (mô phỏng), A1, A2, tài liệu |
-| Coding agent kế tiếp | `agent1_service/` (nạp, store, API), `scripts/sprint6/`, `t9_fast.py`, `features.py` | A3, A4, B4; **đẩy sprint6 lên git trước tiên** |
-| Chủ dự án | — | A5 (tìm doanh nghiệp), quyết bảng mục 2C |
-
-**Quy ước chung:** mọi đo lường mới đăng ký trước và commit trước khi sinh bộ đích; chạy tuần tự qua `scripts/sprint5/wait_ram_then.sh`; chỉ chép file của mình vào `.publish-repo`; `fetch` trước khi `push`.
-
----
-
 ## 5. Thước đo thành công của giai đoạn tới
 
 | Mức | Định nghĩa |
@@ -130,3 +111,71 @@ Không đổi cổng sau khi xem kết quả để "cho đạt". Đây là đề
   2. gắn ẩn danh HMAC vào bước nạp (hàm có sẵn trong `agent1_service/ingest/privacy.py` nhưng chưa dùng);
   3. chuyển `encryption.key` ra khỏi thư mục `.state/` (hiện nằm cùng `agent1.db`, `agent1_service/api.py` dòng 63–65).
   Việc 2–3 giao coding agent cùng mũi A3.
+
+
+<a id="ke-hoach-20261020"></a>
+
+## Phụ lục — chẩn đoán và đề xuất ngày 20/10
+
+Gộp phần có giá trị giải thích lựa chọn từ kế hoạch sprint 20/10. Các số
+8/18 cổng, 295 test và bảng hồi quy dưới đây **thuộc thời điểm 20/10**,
+trước sửa fullweek/giao thức v2; không phải trạng thái hiện nay.
+
+### 1.1 Trạng thái
+- 295 kiểm thử đạt ở hai môi trường; E2E đủ 14 DN × 52 tuần; 3,5 triệu hoá đơn nguồn lớn; dịch vụ local có.
+- Cổng: **đạt 8/18** (G1, G2, G4, G9, G10, G12, G16, G18); **chưa đạt 10** (G3, G5, G6, G7, G8, G11, G13, G14, G15, G17). Pilot: NO-GO.
+
+### 1.2 Bốn vấn đề lớn (theo mức nghiêm trọng)
+
+| # | Vấn đề | Bằng chứng | Vì sao nghiêm trọng |
+|---|---|---|---|
+| **V1** | **Trên dữ liệu thật, mô hình thua mốc đơn giản B1d** (sau khi sửa as-of/CDF) | Customer Invoices: pinball DH-GBM 1,501 / ensemble 1,543 vs B1d **1,455**. BPI: DH-GBM **15,09** vs B1d **4,80**, cov80 0,10 | Luận điểm sản phẩm "hơn cách làm hiện tại trên dữ liệu thật" hiện **sai**. Mọi kết quả thắng đều chỉ trên tổng hợp |
+| **V2** | **Có dấu hiệu lỗi, không phải chỉ mô hình yếu** | DH-LR trên Customer Invoices: MAE **105 ngày**, cov80 **0,0001**; DH-GBM BPI xấu đi từ 8,78 (v1) lên 15,09 (v3) | Kết quả không hợp lý ⇒ phải sửa trước mọi thí nghiệm mới |
+| **V3** | **Khoảng cách tổng hợp → thật** | C2ST AUC 0,996 (đặc trưng phân biệt chính: `term_days` ≫ `late_days` > `log_amount_rel`); mô hình học trên tổng hợp đạt 2,20–3,34 trên Customer Invoices vs B1d 1,40 | Tiền huấn luyện tổng hợp chưa chuyển được sang dữ liệu thật; DR 20 thế giới giúp rõ (3,34 → 2,20) nhưng chưa đủ |
+| **V4** | **Cảnh báo thiếu hụt chưa dùng được** (G13) | 4 tuần: chỉ bắt 25% sự kiện trước ≥4 tuần, báo giả 2,4/DN-năm; 13 tuần: bắt 94% nhưng báo giả 2,65/DN-năm | Đây là đầu ra người dùng thấy; báo giả >1/DN-năm sẽ làm người dùng tắt cảnh báo |
+
+### 1.3 Nhận xét về cách làm
+Phiên trước đã chạy rất nhiều ablation (~60 bảng CSV), đa số kết luận "not_demonstrated" với cải thiện ±1–2%. **Lợi ích biên đã
+cạn**; tiếp tục mở rộng ablation sẽ không đưa sản phẩm tới GO. Giai đoạn tới tập trung **sửa lỗi, đứng vững trên dữ liệu thật,
+cảnh báo dùng được**, mỗi sprint có **luật dừng**.
+
+### 1.4 Phân loại 10 cổng chưa đạt
+
+| Loại | Cổng | Ai xử lý |
+|---|---|---|
+| A. Sửa được bằng kỹ thuật | G3, G5, G6, G13, G15, G14 | Coding agent (Sprint 1–4) |
+| B. Giả thuyết đã bị bác bỏ — cần chủ dự án quyết định có viết lại cổng không | G7 (fine-tune ≥10%), G17 (lời hứa ≥10%), G8 (SBA) | Người giao việc (mục 4) |
+| C. Cần con người / bên ngoài | G11 (chuyên gia xác minh 27 quy tắc), UAT 3 người, pilot, Docker daemon | Người giao việc |
+
+### Luật dừng và những phép thử tiếp nối
+
+- **Luật dừng:** nếu sau 1.1–1.3 vẫn thua B1d trên Customer Invoices với CI loại trừ 0 ⇒ ghi kết luận: *"với AR kiểu ERP kỳ hạn ngắn, dùng B1d + CQR; hazard chỉ bật khi DN có hạn thanh toán và nhịp trả rõ"*, cập nhật docs, chuyển Sprint 2.
+
+Sprint 1 sau đó không kích hoạt luật dừng; số trước/sau và BLEND đọc trong
+[nhật ký Sprint 1](NHAT_KY_SPRINT1_2026-10-20.md). Các yêu cầu G3/G13,
+T9 và C2ST có protocol/phương pháp tiếp nối riêng ở
+[Evaluation](../03_Evaluation/README.md) và [AI Methods](../04_AI_Methods/README.md).
+Không giữ lại lịch Sprint 1→6 hoặc prompt “dán nguyên văn” như việc phải chạy lại.
+
+### Các đề xuất đổi gate tại thời điểm 20/10
+
+Các hàng dưới đây là **đề xuất/chờ quyết định lúc đó**, không là bằng
+chứng đã được chấp thuận. Quyết định G11 ngày 22/10 được ghi riêng trong
+nhật ký; những gate khác không được tự sửa để phù hợp điểm đã xem.
+
+| # | Câu hỏi | Khuyến nghị |
+|---|---|---|
+| D1 | G7 (fine-tune ≥10%) đã bị bác bỏ. Viết lại thành "chính sách onboarding không tệ hơn zero-shot (CI)"? | Đồng ý, ghi rõ là cổng **viết lại sau khi xem kết quả** |
+| D2 | G17 (lời hứa ≥10%) chưa đạt (−7,2% sạch). Giữ cổng, hay chuyển T8 thành tính năng "không bắt buộc cho pilot"? | Chuyển sang không bắt buộc; đo lại trên lời hứa thật ở pilot |
+| D3 | G8 SBA: dữ liệu cho vay Mỹ có còn là cổng pilot? | Giữ làm bằng chứng phương pháp, bỏ khỏi điều kiện GO |
+| D4 | Chấp nhận kết luận "B1d + CQR cho AR kỳ hạn ngắn" nếu Sprint 1 không thắng? | Chấp nhận — trung thực hơn và vẫn có giá trị sản phẩm (T6, T9, T5) |
+| D5 | G11: ai là chuyên gia kế toán/thuế xác minh 27 quy tắc? | Cần người thật; agent chỉ chuẩn bị bảng đối chiếu |
+| D6 | UAT 3 người, đối tác pilot, bật Docker daemon | Việc của người giao việc |
+
+### Giới hạn của các khẳng định trong chiến lược cũ
+
+Các câu như “quy tắc theo số hóa đơn luôn đúng 100%” thuộc ý tưởng sản
+phẩm lúc lập kế hoạch, không là phép đo độ chính xác ngoài thực tế.
+Sự sẵn sàng bậc 0 hay các mốc tìm doanh nghiệp không chứng minh đã có đối
+tác, quyền triển khai hoặc kết quả pilot. Điều kiện hiện hành phải đối
+chiếu gate, dữ liệu và phạm vi công việc mới được giao.

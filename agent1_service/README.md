@@ -54,7 +54,7 @@ VND/JPY (0 chữ số thập phân) hoặc USD/EUR/CNY (2 chữ số); các trư
 được chuẩn hóa thành chuỗi. Sai độ chính xác tiền tệ, NaN/Infinity và lệch
 giữa hai nguồn bị chặn bằng phép so số nguyên. Chỉ góc nhìn đưa vào mô hình
 mới chuyển thành số thực. Mô hình hiện tính bằng VND; hóa đơn hoặc sao kê
-ngoại tệ được nhập T0 nhưng bị chặn khi dự báo cho đến khi có
+ngoại tệ được nhập T0 nhưng bị chặn khi dự báo/huấn luyện cho đến khi có
 quy đổi tỷ giá có nguồn.
 
 Mỗi hóa đơn và sự kiện hủy có `available_on` là ngày dữ liệu đã sẵn cho hệ
@@ -64,7 +64,7 @@ theo chứng cứ nguồn; API chưa tự xác thực chứng cứ ngày lịch 
 không được trước ngày lập hóa đơn/sự kiện.
 `record_version` là số nguyên dương cho phiên bản dữ liệu hóa đơn, mặc định 1;
 bản sửa cùng nguồn phải tăng số phiên bản. Lịch sử phiên bản được giữ trong
-kho mã hóa và dự báo tại ngày cắt chỉ thấy phiên bản đã nhận đến
+kho mã hóa và dự báo/huấn luyện tại ngày cắt chỉ thấy phiên bản đã nhận đến
 ngày đó. Trường `document_version` của XML là phiên bản định dạng XML, khác
 với `record_version`.
 
@@ -107,7 +107,7 @@ giao dịch (kể cả ghi nợ) được giữ trong `bank_entries`; chỉ giao
 được đưa vào `bank_txns` cho mô hình. `GET /bank/coverage` báo tài khoản hoặc
 đoạn kỳ còn thiếu so với danh mục đã duyệt; các sao kê cũ chưa gắn bằng chứng
 duyệt được báo là chưa tin cậy và cần nhập lại. Khi đã có sao kê
-kiểm chứng, dự báo chỉ dùng giao dịch thuộc sao kê đó và chặn
+kiểm chứng, dự báo và huấn luyện chỉ dùng giao dịch thuộc sao kê đó và chặn
 nếu phạm vi đến ngày cắt chưa đủ. `available_on` của file (mặc định ngày
 nhập) cũng áp cho kỳ và giao dịch; nhập lịch sử phải khai báo ngày sao kê đã
 sẵn có, không trước ngày cuối kỳ. Hash và xác nhận của người kiểm duyệt giúp
@@ -116,7 +116,7 @@ hành file hay chứng minh hồ sơ nguồn đã liệt kê đủ tài khoản.
 JSON cũ vẫn phục vụ nghiên cứu nhưng không xác nhận phạm vi sao kê.
 
 XML `TCHDon=1` được hiểu là thay thế; `TCHDon=2` là khoản điều chỉnh **có dấu**.
-Tham chiếu phải xác định duy nhất hóa đơn đã nhập. Dự báo dùng
+Tham chiếu phải xác định duy nhất hóa đơn đã nhập. Dự báo và huấn luyện dùng
 giá trị công nợ có hiệu lực tại ngày cắt, không cộng riêng hóa đơn bị thay thế
 hoặc bản điều chỉnh. Sự kiện hủy đã xác nhận được nhập qua `/ingest` với
 `table="invoice_events"` và bản ghi gồm `event_id`, `invoice_id`,

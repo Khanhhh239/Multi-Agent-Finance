@@ -1,0 +1,39 @@
+{
+  "version": "v4_shortpay_4shock_20261028",
+  "basis": "Synthetic replay assumptions informed by docs/02_Data/11_KE_HOACH_SOC_THI_TRUONG_TICH_HOP_2026-10-25.md; no event-specific SME payment calibration",
+  "observation_window": ["2019-01-01", "2025-12-31"],
+  "split_origin": "2024-07-01",
+  "training_replays": [
+    {
+      "reference_event": "vn_2008_2009_export_demand_replay_assumption",
+      "replay_start": "2019-10-21",
+      "episodes": [{"family": "demand", "severity": 1.1, "rise_weeks": 2, "peak_weeks": 4, "recovery_weeks": 8, "industries": ["textile_clothing", "steel_metals", "plastic_rubber"]}],
+      "limit": "Industry exposure is a proxy; export share is not observed per buyer."
+    },
+    {
+      "reference_event": "vn_2011_2012_inflation_credit_replay_assumption",
+      "replay_start": "2021-03-01",
+      "episodes": [
+        {"family": "price", "severity": 0.8, "rise_weeks": 3, "peak_weeks": 5, "recovery_weeks": 10},
+        {"family": "credit", "severity": 0.9, "rise_weeks": 3, "peak_weeks": 5, "recovery_weeks": 10}
+      ],
+      "limit": "Price and credit pressures are design values, not measured invoice effects."
+    },
+    {
+      "reference_event": "vn_2015_2016_drought_salt_replay_assumption",
+      "replay_start": "2022-02-07",
+      "episodes": [{"family": "supply", "severity": 1.0, "rise_weeks": 2, "peak_weeks": 6, "recovery_weeks": 10, "industries": ["food_processing", "wholesale"]}],
+      "limit": "Supply-chain proxy only; World regions are not Vietnamese provinces."
+    },
+    {
+      "reference_event": "vn_2026_energy_replay_assumption",
+      "replay_start": "2023-07-03",
+      "episodes": [{"family": "price", "severity": 1.0, "rise_weeks": 2, "peak_weeks": 5, "recovery_weeks": 10, "industries": ["steel_metals", "plastic_rubber", "wholesale", "food_processing"]}],
+      "limit": "A hypothetical replay before 2026; recovery and firm-level pass-through are assumptions."
+    }
+  ],
+  "test_replays": [
+    {"reference_event": "v4_test_multichannel_2024_assumption", "replay_start": "2024-07-01", "episodes": [{"family": "demand", "severity": 1.3, "rise_weeks": 1, "peak_weeks": 6, "recovery_weeks": 9}, {"family": "credit", "severity": 1.1, "rise_weeks": 2, "peak_weeks": 6, "recovery_weeks": 9}]},
+    {"reference_event": "v4_test_energy_2025_assumption", "replay_start": "2025-03-03", "episodes": [{"family": "price", "severity": 1.25, "rise_weeks": 2, "peak_weeks": 7, "recovery_weeks": 10, "industries": ["steel_metals", "plastic_rubber", "wholesale", "food_processing"]}]}
+  ]
+}

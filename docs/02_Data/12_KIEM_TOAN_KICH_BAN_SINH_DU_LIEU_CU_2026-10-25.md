@@ -1,5 +1,7 @@
 # Kiểm toán các kịch bản sinh dữ liệu cũ (25/10/2026)
 
+> **Tình trạng dữ liệu 06/11/2026:** các World v3/lifecycle/đời đầu liên quan đã xóa; đây là tài liệu lịch sử, không phải tồn kho hoặc hướng dẫn chạy ngay. Kết quả đã lưu được giữ để đối chiếu. Cohort dùng cho v5/v6 xem [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
+
 **Phạm vi:** branch `agent1-Khanh`, mã hiện có trong `agent1/synth/world.py`, `agent1/synth/hard_cases.py`, các cấu hình và báo cáo đã lưu. Đây là **kiểm toán máy phát**, chưa sửa code, chưa sinh lại dữ liệu và chưa chứng minh chất lượng trên hóa đơn B2B thật của Việt Nam.
 
 ## Cách đọc kết luận

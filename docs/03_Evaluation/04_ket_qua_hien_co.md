@@ -1,5 +1,11 @@
 # Kết quả hiện hành
 
+> **Phạm vi đọc 06/11/2026:** đây là các kết quả pipeline triển khai được
+> tổng hợp từ CSV, gồm cả phép đo lịch sử. Các World nguồn đời đầu và
+> `data/T1/` đã xóa; bảng còn giữ không có nghĩa mọi đầu vào để chạy lại
+> vẫn còn. Kết quả v5/v6, practical và unified v2 có báo cáo riêng trong
+> [mục lục Evaluation](README.md); không tự gán trạng thái gate cũ cho ứng viên mới.
+
 Bảng dưới được sinh trực tiếp từ CSV bởi `scripts/make_report.py`. Các phép đo có
 `measurement_version`; CI lấy mẫu lại theo công ty (hoặc đơn vị cụm được ghi rõ).
 Một số mục còn thiếu giao thức hoặc thí nghiệm; không coi việc có mã là đã nghiệm thu.

@@ -40,6 +40,7 @@ data/synthetic/*/.parts/
 data/synthetic/dr_comparison_v1/
 data/synthetic/*/einvoice_xml/
 outputs/**/*.parquet
+outputs/**/cache/
 outputs/**/*.log
 outputs/t9/source_reconciler/
 outputs/t9/sprint3/source_reconciler/

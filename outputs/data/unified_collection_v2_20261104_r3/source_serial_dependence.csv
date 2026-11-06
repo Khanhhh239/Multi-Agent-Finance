@@ -1,0 +1,5 @@
+world,adjacent_company_weeks,lag1_residual_correlation,scope
+v4_shortpay_4shock_20261028_train_000,96,0.04449264754793279,descriptive conditional residual diagnostic on at-risk invoices; no persistent factor silently added
+v4_shortpay_4shock_20261028_train_001,96,-0.0023246290859379975,descriptive conditional residual diagnostic on at-risk invoices; no persistent factor silently added
+v4_shortpay_4shock_20261028_train_002,96,-0.059467907411194315,descriptive conditional residual diagnostic on at-risk invoices; no persistent factor silently added
+v4_shortpay_4shock_20261028_train_003,96,-0.01225944189468058,descriptive conditional residual diagnostic on at-risk invoices; no persistent factor silently added

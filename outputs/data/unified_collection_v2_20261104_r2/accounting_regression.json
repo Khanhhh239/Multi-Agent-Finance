@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "world": "unified_v1_holdout_20261104_001",
+      "firm_id": "F000",
+      "cutoff": "2024-10-07",
+      "fee_bridge_max_error_vnd": 0.0,
+      "complete_actual_ledger_max_error_vnd": 0.0,
+      "oracle_daily_policy_max_error_vnd": 0.0,
+      "oracle_week13_balance": -361507975.5413804,
+      "true_week13_balance": -361507975.5413804,
+      "oracle_detects_actual_shortfall": true
+    },
+    {
+      "world": "unified_v1_holdout_20261104_001",
+      "firm_id": "F003",
+      "cutoff": "2024-10-07",
+      "fee_bridge_max_error_vnd": 0.0,
+      "complete_actual_ledger_max_error_vnd": 0.0,
+      "oracle_daily_policy_max_error_vnd": 0.0,
+      "oracle_week13_balance": -538265404.5948536,
+      "true_week13_balance": -538265404.5948536,
+      "oracle_detects_actual_shortfall": true
+    }
+  ],
+  "scope": "accounting regression with known future raw flows only; never a forecast score"
+}

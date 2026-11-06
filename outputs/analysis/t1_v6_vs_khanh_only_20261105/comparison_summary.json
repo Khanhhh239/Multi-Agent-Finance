@@ -1,0 +1,20 @@
+{
+  "models": [
+    "khanh_refit",
+    "v6_final"
+  ],
+  "anchors": 65221,
+  "worlds": 6,
+  "primary": {
+    "khanh": 0.14121726176914778,
+    "v6_final": 0.13895846529696707,
+    "improvement_vs_khanh_pct": 1.5995186734843014,
+    "delta_vs_khanh": -0.0022587964721807186,
+    "ci_low": -0.0033942328613101,
+    "ci_high": -0.0010369837224537015
+  },
+  "brier365_improvement_pct": 26.53506987427152,
+  "worlds_v6_better_primary": 5,
+  "restricted_pinball120_improvement_pct": 2.5650097575984243,
+  "restricted_median_mae_reduction_days": 0.27360827036467583
+}

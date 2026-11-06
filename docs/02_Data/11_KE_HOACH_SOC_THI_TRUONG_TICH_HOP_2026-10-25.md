@@ -1,6 +1,8 @@
 # Kế hoạch sinh dữ liệu synthetic có cú sốc thị trường tích hợp
 
-> **Ảnh chụp kế hoạch ngày 25/10/2026.** Các câu “chưa triển khai” và danh mục lỗi dưới đây mô tả thời điểm lập kế hoạch; xem [báo cáo 23](23_BO_TRAIN_SYNTHETIC_CUOI_2026-10-27.md) cho bộ train cuối và [báo cáo 18](18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md) cho lịch sử sửa lỗi.
+> **Tình trạng dữ liệu 06/11/2026:** các World v3/lifecycle/đời đầu liên quan đã xóa; đây là tài liệu lịch sử, không phải tồn kho hoặc hướng dẫn chạy ngay. Kết quả đã lưu được giữ để đối chiếu. Cohort dùng cho v5/v6 xem [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md).
+
+> **Ảnh chụp kế hoạch ngày 25/10/2026.** Các câu “chưa triển khai” và danh mục lỗi dưới đây mô tả thời điểm lập kế hoạch; xem [báo cáo v4](25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md) cho bộ train hiện dùng và [báo cáo 18](18_TONG_KET_KIEM_CHUNG_PHAT_TRIEN_SYNTHETIC_DATA_2026-10-26.md) cho lịch sử sửa lỗi.
 
 Ngày lập: 25/10/2026. Trạng thái: **kế hoạch và rà soát nguồn/code; chưa có vi dữ liệu hóa đơn Việt Nam để hiệu chỉnh tác động thanh toán, chưa triển khai, chưa sinh dữ liệu mới**.
 

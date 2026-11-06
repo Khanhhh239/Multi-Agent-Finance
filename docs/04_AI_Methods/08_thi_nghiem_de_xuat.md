@@ -1,7 +1,27 @@
 # 8. Thí nghiệm đề xuất (giả thuyết → thiết kế → tiêu chí)
 
+> **Danh mục giả thuyết ban đầu, cập nhật cách đọc 06/11/2026.** Giữ mã X/tiêu chí để truy vết; không coi toàn bộ bảng là việc chưa làm hoặc lệnh giao việc hiện tại. Nhiều phép thử đã có kết quả, một số chưa có bằng chứng hoàn tất. Không sửa tiêu chí ban đầu theo điểm test.
+
 Phần "tôi nghĩ vậy nhưng chưa chứng minh". Mỗi mục có: **Giả thuyết**, **Lý do tin**, **Thiết kế**, **Tiêu chí**, **Ưu tiên** (P0 phải làm trước pilot; P1 nên; P2 thăm dò).
 Mã gói việc tương ứng ở 05_Coding_Agent_Plan.
+
+## Bằng chứng tiếp nối đã có trong repo
+
+| Nhóm giả thuyết | Nơi tra trạng thái/kết quả |
+|---|---|
+| X1 — SBA/EXEMPT | `outputs/t2_t3/t2_sba_variants.csv`; [SBA và macro](03_t2_t3_t8_xac_suat_hoa_don.md#sba-macro) |
+| X2 — CQR | [Đăng ký G3/fullweek](02_t1_hazard_thoi_diem_tra.md#fullweek-20261021); kết quả và gate ở Evaluation |
+| X4 — seed | `outputs/t1/A_seed_stability.csv`, `A_seed_cv.csv` |
+| X10–X14 và tuning | `outputs/t1/T1_variant_decisions.csv`, `T1_variants_protocol.json`; không suy mọi hướng đều đã được thử |
+| DA/X20/X22 | `outputs/t1/DA_hypotheses.csv`, `DR/decisions.csv`; [DR/IW](05_domain_adaptation.md#ablation-dr-iw) |
+| X30/X31/X33 và đối chứng T6 | [T6](06_t6_monte_carlo_conformal.md), [bảng kết quả](../03_Evaluation/04_ket_qua_hien_co.md) |
+| X34/X35/X53 | [T7/T9/T10 và các phép đo bổ sung](07_t7_t9_t10.md) |
+| X44 — BCTC | [Đối chiếu niêm yết](../02_Data/09_vn_listed_spot_check.md) |
+
+Đường dẫn kết quả chỉ xác nhận có hồ sơ để đọc; trạng thái hoàn tất và
+kết luận phải đối chiếu protocol/CSV tương ứng. Các hàng còn lại không
+được tự ghi “chưa làm” hoặc “đã xong” nếu chưa có bằng chứng. Dữ liệu nguồn
+lịch sử có thể đã xóa; các giả thuyết không tự trở thành yêu cầu sinh lại.
 
 ## Nhóm A — Đánh giá và hạ rủi ro của kết quả hiện có (P0)
 

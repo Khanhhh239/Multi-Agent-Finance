@@ -1,0 +1,2016 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "timezone": "Asia/Saigon",
+  "status": "completed",
+  "method": "hardlink_to_r3",
+  "scope": "Replace byte-identical r1/r2 files with hard links to matching r3 files. Preserve every historical path, byte content, unique file and existing preservation manifest.",
+  "duplicate_payloads": [
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/accounting_regression.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/accounting_regression.json",
+      "sha256": "a1bfeb67ad32b7465cd661fcf0fbbe6bd410f2e3dd4dae66af03d6ab8cb2f81a",
+      "bytes": 935,
+      "original_file_id": "3377699720550719",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:22.656092+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:22.660096+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000.json",
+      "sha256": "61ce079c589b1cf818689214f19224f9da813518091907b65888e1bfc2824282",
+      "bytes": 737,
+      "original_file_id": "4222124650682707",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:29.504304+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:29.504304+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "sha256": "7dcbf87903ace348719336aa6d40f8ed3e7b3b787821dd64a09a612ba4d45d4a",
+      "bytes": 74226,
+      "original_file_id": "3377699720550732",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:28.608937+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:28.628680+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "sha256": "4cd3d645bfa2008cfd80f85644f1c6ebfad1bcb0c17b82216e2b3547e9f41940",
+      "bytes": 12302,
+      "original_file_id": "6473924464367954",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:29.481886+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:29.492350+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "sha256": "406d86307bf8211b809d53377052291388340ca9121fac60849061c0a684bb52",
+      "bytes": 21872,
+      "original_file_id": "3377699720550735",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:29.451299+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:29.452307+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "sha256": "0e8d565e3ccdeed89cd5f166b73f347f1b1b1f47aff519c9ee3f3b5d18ca1a67",
+      "bytes": 14624,
+      "original_file_id": "4222124650682705",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:29.468109+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:29.468109+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "sha256": "09ddd4dc689164c69af221b20e5f567fe6d2d82524607b5b9bf53acfbe2572e6",
+      "bytes": 279176,
+      "original_file_id": "3096224743840077",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:29.436394+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:29.440583+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001.json",
+      "sha256": "72a1a72d192dbdf3d88d1b5d23088a07e4bf1746baa0135db629e6024ad8095e",
+      "bytes": 738,
+      "original_file_id": "4222124650682748",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:39.927770+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:39.928965+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "sha256": "072b8988a7efc81a56dd31c77f903fd097d7ab44bff639c08f13839e0bd1de2a",
+      "bytes": 118227,
+      "original_file_id": "31243722414905708",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:38.758759+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:38.782221+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "sha256": "a06bacae668000132c7cb1799ec7a78b0fa49cc3240949e6902e4986c8297e38",
+      "bytes": 29115,
+      "original_file_id": "4222124650682747",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:39.895250+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:39.911459+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "sha256": "f7f6aecf24e6a778b74526f0a329b81b713e636367f354c5491f3389a77ab263",
+      "bytes": 118136,
+      "original_file_id": "3377699720550777",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:39.848743+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:39.849742+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "sha256": "94ab766cc501370f4256d23d811a3939220116a29b7df45d7db3ce1f4c8b50f8",
+      "bytes": 78800,
+      "original_file_id": "3377699720550778",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:39.875036+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:39.876108+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "sha256": "6a0a1eb4aae577a6f3378f0ffa44b8cbeecc07dbaa521f2a943ad53aad20796a",
+      "bytes": 1514564,
+      "original_file_id": "2814749767129458",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:39.832186+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:39.834707+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002.json",
+      "sha256": "fb134195aa59841adfde38ef402569ace138e342a3fe44e3edf822781d8cb983",
+      "bytes": 738,
+      "original_file_id": "1970324836997899",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:50.689632+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:50.689632+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "sha256": "8a30f17335edca6ac59ec71e3aed288897ac4436100fe9aaf7e60f6a52a89842",
+      "bytes": 78029,
+      "original_file_id": "5348024557525397",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:49.717242+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:49.745923+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "sha256": "f601ef4078a15967ad5822bb71fd7ed40a042a0fc28ed1a9e666b8606f54146e",
+      "bytes": 13078,
+      "original_file_id": "2251799813708554",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:50.657767+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:50.675591+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "sha256": "165c4b677091e35213dea5b2c99c9ba9ccb45b22ccdb293c1850432340391c97",
+      "bytes": 43352,
+      "original_file_id": "3377699720550807",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:50.619263+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:50.619946+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "sha256": "35fdd0df33efea626ea268ce36822fecfe7c7ca0776c73d341dd483b311a5a1d",
+      "bytes": 28944,
+      "original_file_id": "41376821576489532",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:50.639288+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:50.640397+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "sha256": "eb2c7afa29a3edf57d224ccd7965ba788c5e59a3cef2b906d6d0c9316023103e",
+      "bytes": 554836,
+      "original_file_id": "4785074604104086",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:50.602971+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:50.607234+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003.json",
+      "sha256": "de7ca6764af878d7745ea28cd36e73e7b7500c64e7fa52a17bf84f8f74d068dc",
+      "bytes": 738,
+      "original_file_id": "1970324836997918",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:21:00.761665+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:21:00.762663+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "sha256": "5850c2e456fe95f4d4fcb9d3ad804dfe200e85c4bdf822432f2e5a435e2dada7",
+      "bytes": 90090,
+      "original_file_id": "2251799813708568",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:59.609068+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:59.630098+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "sha256": "32ec570204a87fa2fe037138e1eb7524ec74b31ec38f86e738262e80a8ca24fd",
+      "bytes": 20087,
+      "original_file_id": "1688849860287260",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:21:00.732666+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:21:00.745012+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "sha256": "3067228d9fe4f0deb43fc2a306bdc29b3733582bfb9e8f34abe83782883db5ea",
+      "bytes": 75560,
+      "original_file_id": "1970324836997914",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:21:00.690234+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:21:00.691916+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "sha256": "a4be1298731f9f99d3077988d97cb641ed536be363f2aaaf2f1a250c2237ad66",
+      "bytes": 50416,
+      "original_file_id": "1970324836997915",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:21:00.713723+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:21:00.713723+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "sha256": "7b35a4c44aac14535afc526f60a01a46a16765c8fa478163dbf1206430a9a6d4",
+      "bytes": 968172,
+      "original_file_id": "1970324836997913",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:21:00.671849+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:21:00.675871+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000.json",
+      "sha256": "ec3ac189eda4b786a7aca4292c8e6d0e01ef4fe5d6d974a5236fe2ea4a3a2366",
+      "bytes": 680,
+      "original_file_id": "3659174697261387",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:27.784434+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:27.784434+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "sha256": "db17516456227fdc1431933a6913a452a7564b05ca8cf1a0120bc3ef8894d827",
+      "bytes": 6789248,
+      "original_file_id": "3377699720550721",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:23.900693+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:24.283900+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "sha256": "2832633dfdb133d722eb64fc2d44a11451bd0619b3b9143851c683cb27579554",
+      "bytes": 2559385,
+      "original_file_id": "5629499534235978",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:27.464674+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:27.768734+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "sha256": "ceb630539341409a8cb1cbff8d4c7e06b411c6402507d7ac7bd2cac842fe810f",
+      "bytes": 8682368,
+      "original_file_id": "3377699720550723",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:27.409857+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:27.413817+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "sha256": "d005e108b616a1f14a8fdc4e6575fd712631e52d007a6c47caeb6f49d7b3a96b",
+      "bytes": 5788288,
+      "original_file_id": "3096224743840068",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:27.440087+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:27.442791+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "sha256": "fe7915d89f6ec79a85897dea4b0add1c63c06d3cea59c5a601f90547963401fc",
+      "bytes": 111422208,
+      "original_file_id": "3377699720550722",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:27.020679+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:27.141525+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001.json",
+      "sha256": "843ed20e3a20025952945114b80be6c5d85c9c84b2067f1eb4b6ed63206d5e07",
+      "bytes": 680,
+      "original_file_id": "2814749767129450",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:37.636393+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:37.637393+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "sha256": "e374af72bccbcf52d27819f01c74c4a38df7179f05802e61aa0f0728ab81fc44",
+      "bytes": 7057429,
+      "original_file_id": "4222124650682723",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:33.566575+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:33.935427+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "sha256": "135ec33633737f097f0657af686db485acb1b0ec7d9b9cd46e99a81c97fb8ff5",
+      "bytes": 2750218,
+      "original_file_id": "3096224743840105",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:37.301008+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:37.619239+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "sha256": "6a3b5b7350d599d2ccbb462478a49d1b8fded803ef742d183fcb2bf760e80525",
+      "bytes": 9677792,
+      "original_file_id": "4222124650682726",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:37.243457+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:37.247835+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "sha256": "deac34f9284fef174193eb846776f9634324a70fb74abbcf1fcb412fab0414a1",
+      "bytes": 6451904,
+      "original_file_id": "1970324836997479",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:37.273296+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:37.276518+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "sha256": "fb45fb698abff1db5a7cb747574fe50100eb6d904154af8fcd1166cde7524ab3",
+      "bytes": 124196816,
+      "original_file_id": "3096224743840100",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:36.896318+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:37.036397+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002.json",
+      "sha256": "1b9ecebd178cda388caca399c33f94b03c97f5111a53d424861a47601418fb96",
+      "bytes": 680,
+      "original_file_id": "3940649673972113",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:48.816598+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:48.816598+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "sha256": "ea290f438459ffcd925c23093befb632a0a0ff456272c6d26b300680a2bccb79",
+      "bytes": 6456223,
+      "original_file_id": "4503599627393420",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:44.754196+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:45.194407+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "sha256": "37ab02ab79bba6efcbdb2b156c8ffb8e86072fdd6d25b553612e1179a95c72d9",
+      "bytes": 2624054,
+      "original_file_id": "3659174697261456",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:48.451149+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:48.797271+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "sha256": "1056d4e8eafd502e03408360c80b53cee79288dcf9fed3f4fd4b497cf7dc086d",
+      "bytes": 9459728,
+      "original_file_id": "4503599627393422",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:48.383507+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:48.389439+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "sha256": "55054b0ceecc14eecdc72c16e1787355d1c81b6becdf7c72175664b4bafe5523",
+      "bytes": 6306528,
+      "original_file_id": "3377699720550799",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:48.419013+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:48.422850+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "sha256": "6f7378a3e9343ef35e6f99b68b8f7597df124570f86083189f201a6b7304e471",
+      "bytes": 121398328,
+      "original_file_id": "4503599627393421",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:48.016164+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:48.147716+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003.json",
+      "sha256": "36073b075253ac5a8a39c0b6233acaefab521f66bf72b76584bb571f73408f0d",
+      "bytes": 680,
+      "original_file_id": "1970324836997911",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:58.670416+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:58.671431+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "sha256": "e2b54ced070b82c4783efb682515ef755db6210a37955c97c2daa1e659089823",
+      "bytes": 6901128,
+      "original_file_id": "1970324836997906",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:54.785560+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:55.181154+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "sha256": "007cc8d30d79c66352ef123d27eb152e96deb89303e14a376d1ffce55048fb84",
+      "bytes": 2473369,
+      "original_file_id": "1970324836997910",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:58.358599+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:58.652005+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "sha256": "928d714b5afd7cedcc07116bd70f7710113e676683bce64ec9fc21379d776b7a",
+      "bytes": 8129312,
+      "original_file_id": "1970324836997908",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:58.306693+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:58.309702+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "sha256": "8b39b29e6d0897aee06586818460adc50f319f0ad05827397439417d073042a6",
+      "bytes": 5419584,
+      "original_file_id": "1970324836997909",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:58.334081+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:58.336332+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "sha256": "02bbe38b9e11ae3e26d64004867a245f59ebeb366a57f94cbf647bfa76cfa937",
+      "bytes": 104324656,
+      "original_file_id": "1970324836997907",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:58.026859+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:58.131052+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/candidates/20000/label_support.csv",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/label_support.csv",
+      "sha256": "b808fa318b3954a9a2b8b6c8dab8eef7051b8a00855cc0df140781987a9424d1",
+      "bytes": 1834,
+      "original_file_id": "2533274790419250",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:21:41.596722+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:21:41.597734+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/candidates/20000/model.txt",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/model.txt",
+      "sha256": "6ea711313d4931d712949f5d739b067792f4c2a002ffa08c2869ccf75be0e7ee",
+      "bytes": 4286498,
+      "original_file_id": "2251799813708593",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:21:41.488634+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:21:41.490704+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/environment.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/environment.json",
+      "sha256": "5e8f56ad346b37171922b1053981739a3930717a9d0acb37f58c246c1e60fa70",
+      "bytes": 186,
+      "original_file_id": "3096224743840061",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:20:22.209249+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:20:22.209249+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/accounting_regression.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/accounting_regression.json",
+      "sha256": "a1bfeb67ad32b7465cd661fcf0fbbe6bd410f2e3dd4dae66af03d6ab8cb2f81a",
+      "bytes": 935,
+      "original_file_id": "1970324836999099",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:17.253263+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:17.253263+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000.json",
+      "sha256": "61ce079c589b1cf818689214f19224f9da813518091907b65888e1bfc2824282",
+      "bytes": 737,
+      "original_file_id": "2251799813708780",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.983975+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.983975+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "sha256": "7dcbf87903ace348719336aa6d40f8ed3e7b3b787821dd64a09a612ba4d45d4a",
+      "bytes": 74226,
+      "original_file_id": "3377699720551389",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.971367+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.971367+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "sha256": "4cd3d645bfa2008cfd80f85644f1c6ebfad1bcb0c17b82216e2b3547e9f41940",
+      "bytes": 12302,
+      "original_file_id": "3377699720551403",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.981936+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.981936+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "sha256": "406d86307bf8211b809d53377052291388340ca9121fac60849061c0a684bb52",
+      "bytes": 21872,
+      "original_file_id": "2251799813708777",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.976418+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.977418+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "sha256": "0e8d565e3ccdeed89cd5f166b73f347f1b1b1f47aff519c9ee3f3b5d18ca1a67",
+      "bytes": 14624,
+      "original_file_id": "3377699720551402",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.979418+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.979418+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "sha256": "09ddd4dc689164c69af221b20e5f567fe6d2d82524607b5b9bf53acfbe2572e6",
+      "bytes": 279176,
+      "original_file_id": "2533274790419432",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.974418+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.974418+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001.json",
+      "sha256": "72a1a72d192dbdf3d88d1b5d23088a07e4bf1746baa0135db629e6024ad8095e",
+      "bytes": 738,
+      "original_file_id": "1970324836998131",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.003171+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.004171+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "sha256": "072b8988a7efc81a56dd31c77f903fd097d7ab44bff639c08f13839e0bd1de2a",
+      "bytes": 118227,
+      "original_file_id": "2533274790419437",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.987976+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.987976+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "sha256": "a06bacae668000132c7cb1799ec7a78b0fa49cc3240949e6902e4986c8297e38",
+      "bytes": 29115,
+      "original_file_id": "1970324836998129",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.002172+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.002172+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "sha256": "f7f6aecf24e6a778b74526f0a329b81b713e636367f354c5491f3389a77ab263",
+      "bytes": 118136,
+      "original_file_id": "1970324836998127",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.996572+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.996572+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "sha256": "94ab766cc501370f4256d23d811a3939220116a29b7df45d7db3ce1f4c8b50f8",
+      "bytes": 78800,
+      "original_file_id": "1970324836998128",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.999572+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.999572+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "sha256": "6a0a1eb4aae577a6f3378f0ffa44b8cbeecc07dbaa521f2a943ad53aad20796a",
+      "bytes": 1514564,
+      "original_file_id": "1970324836998126",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.992572+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.993575+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002.json",
+      "sha256": "fb134195aa59841adfde38ef402569ace138e342a3fe44e3edf822781d8cb983",
+      "bytes": 738,
+      "original_file_id": "2251799813708795",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.020325+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.020325+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "sha256": "8a30f17335edca6ac59ec71e3aed288897ac4436100fe9aaf7e60f6a52a89842",
+      "bytes": 78029,
+      "original_file_id": "2814749767130101",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.007727+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.007727+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "sha256": "f601ef4078a15967ad5822bb71fd7ed40a042a0fc28ed1a9e666b8606f54146e",
+      "bytes": 13078,
+      "original_file_id": "2533274790419449",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.019325+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.019325+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "sha256": "165c4b677091e35213dea5b2c99c9ba9ccb45b22ccdb293c1850432340391c97",
+      "bytes": 43352,
+      "original_file_id": "1970324836998135",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.013328+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.014326+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "sha256": "35fdd0df33efea626ea268ce36822fecfe7c7ca0776c73d341dd483b311a5a1d",
+      "bytes": 28944,
+      "original_file_id": "1970324836998136",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.016325+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.016325+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "sha256": "eb2c7afa29a3edf57d224ccd7965ba788c5e59a3cef2b906d6d0c9316023103e",
+      "bytes": 554836,
+      "original_file_id": "1970324836998134",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.011274+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.011274+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003.json",
+      "sha256": "de7ca6764af878d7745ea28cd36e73e7b7500c64e7fa52a17bf84f8f74d068dc",
+      "bytes": 738,
+      "original_file_id": "2251799813708801",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.038481+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.039481+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "sha256": "5850c2e456fe95f4d4fcb9d3ad804dfe200e85c4bdf822432f2e5a435e2dada7",
+      "bytes": 90090,
+      "original_file_id": "2251799813708796",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.024883+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.024883+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "sha256": "32ec570204a87fa2fe037138e1eb7524ec74b31ec38f86e738262e80a8ca24fd",
+      "bytes": 20087,
+      "original_file_id": "2251799813708800",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.037481+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.037481+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "sha256": "3067228d9fe4f0deb43fc2a306bdc29b3733582bfb9e8f34abe83782883db5ea",
+      "bytes": 75560,
+      "original_file_id": "2251799813708798",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.031430+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.031430+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "sha256": "a4be1298731f9f99d3077988d97cb641ed536be363f2aaaf2f1a250c2237ad66",
+      "bytes": 50416,
+      "original_file_id": "2533274790419455",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.033483+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.034481+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "sha256": "7b35a4c44aac14535afc526f60a01a46a16765c8fa478163dbf1206430a9a6d4",
+      "bytes": 968172,
+      "original_file_id": "3096224743840765",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.027883+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.028883+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000.json",
+      "sha256": "ec3ac189eda4b786a7aca4292c8e6d0e01ef4fe5d6d974a5236fe2ea4a3a2366",
+      "bytes": 680,
+      "original_file_id": "1970324836998182",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.589182+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.589182+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "sha256": "db17516456227fdc1431933a6913a452a7564b05ca8cf1a0120bc3ef8894d827",
+      "bytes": 6789248,
+      "original_file_id": "1970324836998175",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.147931+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.151315+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "sha256": "2832633dfdb133d722eb64fc2d44a11451bd0619b3b9143851c683cb27579554",
+      "bytes": 2559385,
+      "original_file_id": "2251799813708837",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.586182+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.588181+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "sha256": "ceb630539341409a8cb1cbff8d4c7e06b411c6402507d7ac7bd2cac842fe810f",
+      "bytes": 8682368,
+      "original_file_id": "2251799813708835",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.555068+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.560070+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "sha256": "d005e108b616a1f14a8fdc4e6575fd712631e52d007a6c47caeb6f49d7b3a96b",
+      "bytes": 5788288,
+      "original_file_id": "2251799813708836",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.574653+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.577653+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "sha256": "fe7915d89f6ec79a85897dea4b0add1c63c06d3cea59c5a601f90547963401fc",
+      "bytes": 111422208,
+      "original_file_id": "1688849860287520",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.382499+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.525873+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001.json",
+      "sha256": "843ed20e3a20025952945114b80be6c5d85c9c84b2067f1eb4b6ed63206d5e07",
+      "bytes": 680,
+      "original_file_id": "2251799813709741",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.115191+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.116192+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "sha256": "e374af72bccbcf52d27819f01c74c4a38df7179f05802e61aa0f0728ab81fc44",
+      "bytes": 7057429,
+      "original_file_id": "1970324836998184",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.609851+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:15.613377+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "sha256": "135ec33633737f097f0657af686db485acb1b0ec7d9b9cd46e99a81c97fb8ff5",
+      "bytes": 2750218,
+      "original_file_id": "3377699720552362",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.112160+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.113189+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "sha256": "6a3b5b7350d599d2ccbb462478a49d1b8fded803ef742d183fcb2bf760e80525",
+      "bytes": 9677792,
+      "original_file_id": "5348024557526951",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.074909+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.079910+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "sha256": "deac34f9284fef174193eb846776f9634324a70fb74abbcf1fcb412fab0414a1",
+      "bytes": 6451904,
+      "original_file_id": "1970324836999080",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.099002+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.102624+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "sha256": "fb45fb698abff1db5a7cb747574fe50100eb6d904154af8fcd1166cde7524ab3",
+      "bytes": 124196816,
+      "original_file_id": "1970324836998187",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:15.885474+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.040455+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002.json",
+      "sha256": "1b9ecebd178cda388caca399c33f94b03c97f5111a53d424861a47601418fb96",
+      "bytes": 680,
+      "original_file_id": "1970324836999091",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.612178+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.613180+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "sha256": "ea290f438459ffcd925c23093befb632a0a0ff456272c6d26b300680a2bccb79",
+      "bytes": 6456223,
+      "original_file_id": "1970324836999086",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.134669+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.138739+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "sha256": "37ab02ab79bba6efcbdb2b156c8ffb8e86072fdd6d25b553612e1179a95c72d9",
+      "bytes": 2624054,
+      "original_file_id": "1970324836999090",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.609607+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.611140+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "sha256": "1056d4e8eafd502e03408360c80b53cee79288dcf9fed3f4fd4b497cf7dc086d",
+      "bytes": 9459728,
+      "original_file_id": "1970324836999088",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.572783+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.577783+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "sha256": "55054b0ceecc14eecdc72c16e1787355d1c81b6becdf7c72175664b4bafe5523",
+      "bytes": 6306528,
+      "original_file_id": "1970324836999089",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.596934+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.599933+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "sha256": "6f7378a3e9343ef35e6f99b68b8f7597df124570f86083189f201a6b7304e471",
+      "bytes": 121398328,
+      "original_file_id": "1970324836999087",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.394090+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.540514+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003.json",
+      "sha256": "36073b075253ac5a8a39c0b6233acaefab521f66bf72b76584bb571f73408f0d",
+      "bytes": 680,
+      "original_file_id": "1970324836999097",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:17.062351+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:17.062351+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "sha256": "e2b54ced070b82c4783efb682515ef755db6210a37955c97c2daa1e659089823",
+      "bytes": 6901128,
+      "original_file_id": "1970324836999092",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.633639+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.636641+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "sha256": "007cc8d30d79c66352ef123d27eb152e96deb89303e14a376d1ffce55048fb84",
+      "bytes": 2473369,
+      "original_file_id": "9007199254765496",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:17.058724+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:17.059725+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "sha256": "928d714b5afd7cedcc07116bd70f7710113e676683bce64ec9fc21379d776b7a",
+      "bytes": 8129312,
+      "original_file_id": "1970324836999094",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:17.025983+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:17.030339+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "sha256": "8b39b29e6d0897aee06586818460adc50f319f0ad05827397439417d073042a6",
+      "bytes": 5419584,
+      "original_file_id": "1970324836999095",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:17.044965+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:17.048116+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "sha256": "02bbe38b9e11ae3e26d64004867a245f59ebeb366a57f94cbf647bfa76cfa937",
+      "bytes": 104324656,
+      "original_file_id": "1970324836999093",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:16.872144+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:16.997314+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/20000/label_support.csv",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/label_support.csv",
+      "sha256": "b808fa318b3954a9a2b8b6c8dab8eef7051b8a00855cc0df140781987a9424d1",
+      "bytes": 1834,
+      "original_file_id": "1970324836999103",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:55.326257+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:55.327255+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/20000/model.txt",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/model.txt",
+      "sha256": "6ea711313d4931d712949f5d739b067792f4c2a002ffa08c2869ccf75be0e7ee",
+      "bytes": 4286498,
+      "original_file_id": "1970324836999102",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:55.182554+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:55.185596+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/200000/label_support.csv",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/200000/label_support.csv",
+      "sha256": "3d8f68b0d52389ab784e2abb70fb483e22901395488b219c31b010e1435f10c8",
+      "bytes": 1903,
+      "original_file_id": "1970324836999368",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:31:15.760555+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:31:15.761194+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/200000/model.txt",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/200000/model.txt",
+      "sha256": "57a2f0a8c05557e3987ab02f6a1400f88a18f25b3d193f7081c499356b040a12",
+      "bytes": 5089435,
+      "original_file_id": "1970324836999367",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:31:15.225571+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:31:15.227705+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/50000/label_support.csv",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/50000/label_support.csv",
+      "sha256": "faa9a337991ab1f19db4e9d0f5c9565753256164b497fd3de48af62e13721f62",
+      "bytes": 1849,
+      "original_file_id": "1970324836999111",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:26:21.820720+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:26:21.820720+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/50000/model.txt",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/50000/model.txt",
+      "sha256": "13337d59426f47819d2bf7f91752158ed60d71acbdae1f158c1ffc3df13b2406",
+      "bytes": 4692059,
+      "original_file_id": "1970324836999110",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:26:21.606520+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:26:21.608264+00:00",
+      "original_attributes": 32
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/environment.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/environment.json",
+      "sha256": "5e8f56ad346b37171922b1053981739a3930717a9d0acb37f58c246c1e60fa70",
+      "bytes": 186,
+      "original_file_id": "3096224743840699",
+      "original_link_count": 1,
+      "original_creation_time_utc": "2026-11-04T01:24:14.748806+00:00",
+      "original_last_write_time_utc": "2026-11-04T01:24:14.749806+00:00",
+      "original_attributes": 32
+    }
+  ],
+  "duplicate_files": 108,
+  "duplicate_content_bytes": 1144479838,
+  "historical_directory_file_counts": {
+    "unified_collection_v2_20261104": 84,
+    "unified_collection_v2_20261104_r2": 112,
+    "unified_collection_v2_20261104_r3": 133
+  },
+  "preservation_manifest_path": "outputs/maintenance/unified_v1_removal_20261104.json",
+  "preservation_manifest_sha256": "a6de0fb90c8ef33eb2d7f6e157caaf56e18b18e6ef9b7cd0c3633ef6f2bbdafe",
+  "protected_artifact_files_before": 399,
+  "management_script": "scripts/manage_unified_v2_duplicates.ps1",
+  "management_script_sha256": "556ea76291a62c68131b66b98f0616aee750277cc0a71f3d459b57dcc0f662f7",
+  "commands": {
+    "verify": ".\\scripts\\manage_unified_v2_duplicates.ps1",
+    "preview_compact": ".\\scripts\\manage_unified_v2_duplicates.ps1 -Action Compact -WhatIf",
+    "restore_independent_copies": ".\\scripts\\manage_unified_v2_duplicates.ps1 -Action Restore",
+    "restore_one": ".\\scripts\\manage_unified_v2_duplicates.ps1 -Action Restore -RelativePath <exact path from duplicate_payloads>"
+  },
+  "storage_contract": "Hard-linked paths share one physical file. Treat frozen artifacts as immutable. Use Restore before editing one historical copy in place. Restore requires approximately duplicate_content_bytes additional storage.",
+  "r3_originals_modified": false,
+  "hardlink_identity_after": [
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/accounting_regression.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/accounting_regression.json",
+      "shared_file_id": "2814749767131478",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000.json",
+      "shared_file_id": "3377699720552724",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "shared_file_id": "156781562027860239",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "shared_file_id": "3096224743842067",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "shared_file_id": "4503599627395345",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "shared_file_id": "3096224743842066",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "shared_file_id": "6473924464369936",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001.json",
+      "shared_file_id": "2533274790420764",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "shared_file_id": "3096224743842069",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "shared_file_id": "3377699720552731",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "shared_file_id": "2814749767131416",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "shared_file_id": "2533274790420762",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "shared_file_id": "2814749767131414",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002.json",
+      "shared_file_id": "7036874417791268",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "shared_file_id": "2533274790420765",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "shared_file_id": "2533274790420771",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "shared_file_id": "3377699720552737",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "shared_file_id": "3377699720552738",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "shared_file_id": "2533274790420766",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003.json",
+      "shared_file_id": "3096224743842091",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "shared_file_id": "7036874417791269",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "shared_file_id": "2814749767131433",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "shared_file_id": "2533274790420775",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "shared_file_id": "3096224743842088",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "shared_file_id": "2533274790420774",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000.json",
+      "shared_file_id": "3096224743842098",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "shared_file_id": "3096224743842093",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "shared_file_id": "3096224743842097",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "shared_file_id": "3096224743842095",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "shared_file_id": "3096224743842096",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "shared_file_id": "3096224743842094",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001.json",
+      "shared_file_id": "3377699720552768",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "shared_file_id": "3096224743842099",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "shared_file_id": "3377699720552767",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "shared_file_id": "9007199254765879",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "shared_file_id": "3940649673974076",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "shared_file_id": "3659174697263414",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002.json",
+      "shared_file_id": "2814749767131463",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "shared_file_id": "3377699720552769",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "shared_file_id": "2251799813710150",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "shared_file_id": "3096224743842116",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "shared_file_id": "2814749767131461",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "shared_file_id": "3377699720552771",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003.json",
+      "shared_file_id": "3659174697263441",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "shared_file_id": "2814749767131464",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "shared_file_id": "2814749767131472",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "shared_file_id": "2814749767131470",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "shared_file_id": "2814749767131471",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/cache/fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "shared_file_id": "2533274790420810",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/candidates/20000/label_support.csv",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/label_support.csv",
+      "shared_file_id": "2251799813710229",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/candidates/20000/model.txt",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/model.txt",
+      "shared_file_id": "2251799813710228",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104/environment.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/environment.json",
+      "shared_file_id": "2814749767131403",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/accounting_regression.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/accounting_regression.json",
+      "shared_file_id": "2814749767131478",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000.json",
+      "shared_file_id": "3377699720552724",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "shared_file_id": "156781562027860239",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "shared_file_id": "3096224743842067",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "shared_file_id": "4503599627395345",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "shared_file_id": "3096224743842066",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "shared_file_id": "6473924464369936",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001.json",
+      "shared_file_id": "2533274790420764",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "shared_file_id": "3096224743842069",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "shared_file_id": "3377699720552731",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "shared_file_id": "2814749767131416",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "shared_file_id": "2533274790420762",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "shared_file_id": "2814749767131414",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002.json",
+      "shared_file_id": "7036874417791268",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "shared_file_id": "2533274790420765",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "shared_file_id": "2533274790420771",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "shared_file_id": "3377699720552737",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "shared_file_id": "3377699720552738",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "shared_file_id": "2533274790420766",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003.json",
+      "shared_file_id": "3096224743842091",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "shared_file_id": "7036874417791269",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "shared_file_id": "2814749767131433",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "shared_file_id": "2533274790420775",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "shared_file_id": "3096224743842088",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/calibration_fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "shared_file_id": "2533274790420774",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000.json",
+      "shared_file_id": "3096224743842098",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_anchors.parquet",
+      "shared_file_id": "3096224743842093",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_detail.parquet",
+      "shared_file_id": "3096224743842097",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_keys.npy",
+      "shared_file_id": "3096224743842095",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_pairs.npy",
+      "shared_file_id": "3096224743842096",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_000_x.npy",
+      "shared_file_id": "3096224743842094",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001.json",
+      "shared_file_id": "3377699720552768",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_anchors.parquet",
+      "shared_file_id": "3096224743842099",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_detail.parquet",
+      "shared_file_id": "3377699720552767",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_keys.npy",
+      "shared_file_id": "9007199254765879",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_pairs.npy",
+      "shared_file_id": "3940649673974076",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_001_x.npy",
+      "shared_file_id": "3659174697263414",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002.json",
+      "shared_file_id": "2814749767131463",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_anchors.parquet",
+      "shared_file_id": "3377699720552769",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_detail.parquet",
+      "shared_file_id": "2251799813710150",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_keys.npy",
+      "shared_file_id": "3096224743842116",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_pairs.npy",
+      "shared_file_id": "2814749767131461",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_002_x.npy",
+      "shared_file_id": "3377699720552771",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003.json",
+      "shared_file_id": "3659174697263441",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_anchors.parquet",
+      "shared_file_id": "2814749767131464",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_detail.parquet",
+      "shared_file_id": "2814749767131472",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_keys.npy",
+      "shared_file_id": "2814749767131470",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_pairs.npy",
+      "shared_file_id": "2814749767131471",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/cache/fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/cache/fit_v4_shortpay_4shock_20261028_train_003_x.npy",
+      "shared_file_id": "2533274790420810",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/20000/label_support.csv",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/label_support.csv",
+      "shared_file_id": "2251799813710229",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/20000/model.txt",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/20000/model.txt",
+      "shared_file_id": "2251799813710228",
+      "link_count": 3
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/200000/label_support.csv",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/200000/label_support.csv",
+      "shared_file_id": "2251799813710243",
+      "link_count": 2
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/200000/model.txt",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/200000/model.txt",
+      "shared_file_id": "2533274790420898",
+      "link_count": 2
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/50000/label_support.csv",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/50000/label_support.csv",
+      "shared_file_id": "2251799813710236",
+      "link_count": 2
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/candidates/50000/model.txt",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/candidates/50000/model.txt",
+      "shared_file_id": "2251799813710235",
+      "link_count": 2
+    },
+    {
+      "path": "outputs/data/unified_collection_v2_20261104_r2/environment.json",
+      "retained_path": "outputs/data/unified_collection_v2_20261104_r3/environment.json",
+      "shared_file_id": "2814749767131403",
+      "link_count": 3
+    }
+  ],
+  "verification": {
+    "passed": true,
+    "protected_files_sha256_verified": 399,
+    "historical_file_inventories_unchanged": {
+      "unified_collection_v2_20261104": 84,
+      "unified_collection_v2_20261104_r2": 112,
+      "unified_collection_v2_20261104_r3": 133
+    },
+    "hardlinked_duplicate_paths_verified": 108,
+    "redundant_content_bytes_consolidated": 1144479838,
+    "redundant_content_mib_consolidated": 1091.46,
+    "logical_files_deleted": 0,
+    "historical_snapshots": {
+      "unified_collection_v2_20261104": {
+        "frozen_source_snapshot_verified": true,
+        "snapshot_files": 108,
+        "active_source_matches_snapshot": false
+      },
+      "unified_collection_v2_20261104_r2": {
+        "frozen_source_snapshot_verified": true,
+        "snapshot_files": 108,
+        "active_source_matches_snapshot": false
+      }
+    },
+    "r3_saved_run": {
+      "frozen_source_snapshot_verified": true,
+      "snapshot_files": 108,
+      "active_source_matches_snapshot": false,
+      "artifact_files_verified": 133,
+      "decision": {
+        "research_passed": false,
+        "decision": "insufficient_evidence_to_replace_v6",
+        "latency_passed": true,
+        "accounting_passed": true,
+        "checks": [
+          {
+            "world": "unified_v2_holdout_20261104_000",
+            "criterion": "crps_5pct",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_000",
+            "criterion": "brier_4",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_000",
+            "criterion": "brier_13",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_000",
+            "criterion": "coverage",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_000",
+            "criterion": "interval_score",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_001",
+            "criterion": "crps_5pct",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_001",
+            "criterion": "brier_4",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_001",
+            "criterion": "brier_13",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_001",
+            "criterion": "coverage",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_001",
+            "criterion": "interval_score",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_002",
+            "criterion": "crps_5pct",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_002",
+            "criterion": "brier_4",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_002",
+            "criterion": "brier_13",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_002",
+            "criterion": "coverage",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_002",
+            "criterion": "interval_score",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_003",
+            "criterion": "crps_5pct",
+            "passed": false
+          },
+          {
+            "world": "unified_v2_holdout_20261104_003",
+            "criterion": "brier_4",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_003",
+            "criterion": "brier_13",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_003",
+            "criterion": "coverage",
+            "passed": true
+          },
+          {
+            "world": "unified_v2_holdout_20261104_003",
+            "criterion": "interval_score",
+            "passed": true
+          }
+        ],
+        "service_changed": false,
+        "product_gates_changed": false,
+        "ar_crps_not_worse_each_world": false
+      },
+      "scope": "read saved results only; no training or new holdout forecasts"
+    },
+    "existing_preservation_manifest_unchanged": true,
+    "single_file_compact_restore_roundtrip_passed": true,
+    "no_backup_files_remain": true,
+    "models_retrained": false,
+    "production_configuration_changed": false
+  }
+}

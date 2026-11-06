@@ -27,8 +27,33 @@ def observed_tables(store,firm,cutoff):
         date={'invoices':'issue_date','bank_txns':'value_date','promises':'made_date'}.get(kind)
         if date and len(data):data=data[data[date]<=cutoff]
         result[kind]=data
+    statements=store.get(firm,'bank_statements')
+    if statements:
+        from agent1_service.ingest.bank_statement import statement_scope
+        from agent1_service.ingest.bank_accounts import load_account_registry,registry_path
+        registry=load_account_registry(registry_path(store.path.parent),firm)
+        visible=[s for s in statements if s.get('available_on',s['period_end'])<=str(cutoff.date())]
+        coverage=statement_scope(visible,min(s['period_start'] for s in statements),str(cutoff.date()),registry)
+        if not coverage['verified']:
+            raise ValueError(f'Phạm vi sao kê chưa đầy đủ tại ngày cắt: {coverage.get("missing_from",coverage.get("reason"))}')
+        result['bank_txns']=result['bank_txns'][result['bank_txns'].statement_id.isin(
+            {s['statement_id'] for s in visible}) &
+            (result['bank_txns'].available_on<=str(cutoff.date()))].copy()
+        if any(s['currency']!='VND' for s in visible):
+            raise ValueError('Huấn luyện hiện tính bằng VND; cần quy đổi tỷ giá có nguồn cho sao kê ngoại tệ')
+    from agent1_service.ingest.invoices import effective_invoices
+    if len(result['invoices']):
+        versions=store.get(firm,'invoice_versions')
+        result['invoices']=effective_invoices(versions or store.get(firm,'invoices'),store.get(firm,'invoice_events'),cutoff)
+        for col in result['invoices'].columns:
+            if 'date' in col:
+                result['invoices'][col]=local_dates(result['invoices'][col],dayfirst=False)
+        if 'currency' in result['invoices'] and not result['invoices'].currency.eq('VND').all():
+            raise ValueError('Huấn luyện hiện tính bằng VND; cần quy đổi tỷ giá có nguồn cho hóa đơn ngoại tệ')
     if any(result[k].empty for k in ['invoices','bank_txns','customers']):
         raise ValueError('Cần hoá đơn, giao dịch và khách hàng trước cutoff')
+    if len(result['promises']):
+        result['promises']=result['promises'][result['promises'].invoice_id.isin(result['invoices'].invoice_id)]
     # Chỉ giữ khách đã xuất hiện trên hoá đơn quan sát được.
     result['customers']=result['customers'][result['customers'].customer_id.isin(result['invoices'].customer_id)]
     return result

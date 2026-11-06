@@ -1,0 +1,30 @@
+{
+  "scope": "post-hoc descriptive analysis of frozen paired predictions; no fit, tuning or reselection",
+  "weighting": "equal nonempty Worlds within each slice; cash weighted by actual receipts",
+  "missing_due_dates": 0,
+  "anchors": 65221,
+  "benchmark_protocol_sha256": "dfdc438c232645fe9cb1e42e02e8d96b02da05b0652ac32881982e8495083256",
+  "benchmark_verification_sha256": "8f18db6a88c64331d69e8d6656d54ddbcc2c89383b6c9e47cc5cb0521c443b45",
+  "script_sha256": "4b605e99685dff42940fae6d58a705cc534b314e065e305c1992d47403fa1239",
+  "input_sha256": {
+    "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v4_shortpay_4shock_20261028_validation_000.parquet": "a36be7ca4c32d1542e27314659d3e4543c06d0091f5a7ae88f08e51545ac5b40",
+    "data/synthetic/v4_shortpay_4shock_20261028_validation_000/invoices.parquet": "8a4ba8d67674d2f7d20ba825882faffee52333c9b14ed4cc5a3bca4b080d4df9",
+    "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v4_shortpay_4shock_20261028_validation_001.parquet": "9918658b19efa905cb82268f971ad8a05d13adabaa7aae24e4fc59ec31634b3e",
+    "data/synthetic/v4_shortpay_4shock_20261028_validation_001/invoices.parquet": "e73a96b5b5a65c1ef4bddd57373e9a86dc61207fa9f2590731cd513acd83543b",
+    "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v4_shortpay_4shock_20261028_test_000.parquet": "eb6f97b34754107753490a0268a495cd85e2cb61bd89aa1219c88df3a0e88621",
+    "data/synthetic/v4_shortpay_4shock_20261028_test_000/invoices.parquet": "fa709cd36e34633d86373e1406532cd6ef0add9de3e5745b0483eb10f2971d24",
+    "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v4_shortpay_4shock_20261028_test_001.parquet": "f8fa057c79b5f51be236fc8cc1b2f239f947d4e1006d0ad076a42c29976393e7",
+    "data/synthetic/v4_shortpay_4shock_20261028_test_001/invoices.parquet": "e3624f4b82a4861616854b8b7006a74f0d2c3ad76381d198a939d228ece5d19e",
+    "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v6_holdout_20261101_000.parquet": "2761a20073fb6366dbf61bf532adf19cd2f5a6b8b9f844a63db90111302f5545",
+    "data/synthetic/v6_holdout_20261101_000/invoices.parquet": "9e4b2255015479ee61b7ad3a4dbeef5a83d76cbfdce89425249dc1e1c1c60fc2",
+    "outputs/analysis/t1_khanh_vs_v6_20261105/predictions/v6_holdout_20261101_001.parquet": "6e50eebe59f4a96fd9d6f3d179d54201ead4a6e381d7b2ae0e05f266972b4ada",
+    "data/synthetic/v6_holdout_20261101_001/invoices.parquet": "b3a2acad36ba8eb797513936eaf462ee1d759479cb195169199ef40098614737"
+  },
+  "output_sha256": {
+    "paired_by_world_horizon.csv": "014e0c29a7c9eacf25c237867b210065afb15e341c81babf70b2ac6a6657595a",
+    "slices_by_world.csv": "cb12dfd0de9ff9edf4e29e3c2af5b9ee533bd7063285c9d479abd7583682ebdd",
+    "slices_equal_world.csv": "eda26ca14be51157541c93d9c19b5042b3e30eb9a7cac5db260e91a7e50f5545",
+    "cash_aggregate.csv": "d2d710fc9bcbb9d78373ace25f951c6d01ca99fd91fe68092e0272f4dbc6d70a",
+    "model_sizes.csv": "7bd2d8b23c7f1408997f8de8d69b352cb59fe591130c58bc07e343c8f8da30be"
+  }
+}

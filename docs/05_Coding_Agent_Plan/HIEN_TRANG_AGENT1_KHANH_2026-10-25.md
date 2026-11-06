@@ -1,5 +1,11 @@
 # Hiện trạng codebase trên `agent1-Khanh` — 25/10/2026
 
+> **Ảnh chụp ngày 25/10, không phải kiểm tra máy hiện tại.** Các nhận định
+> về PATH/venv, working tree, remote, đường dẫn khóa và Docker dưới đây
+> chỉ có nghĩa tại phiên kiểm tra đó; không biến chúng thành lỗi cần sửa
+> hôm nay. Commit `70c0ceb` còn có giá trị xác định baseline Khánh. Model
+> nghiên cứu v5/v6 và quyết định 05/11 đọc ở Evaluation, không suy từ mốc này.
+
 Đây là ảnh chụp trạng thái repository tại commit `70c0ceb` (`Security before real data: keys outside the data dir, HMAC pseudonymisation at ingest`). Branch local đang theo dõi `origin/agent1-Khanh` và không có commit đi trước/đi sau theo thông tin Git local. Chưa thực hiện `fetch`, nên chưa xác nhận trạng thái mới nhất trên remote.
 
 ## Trạng thái làm việc

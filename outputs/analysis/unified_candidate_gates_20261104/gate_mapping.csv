@@ -1,0 +1,19 @@
+gate,required_for_real_pilot,required_for_synthetic_stage,official_existing_pipeline_status,candidate_status,reason,official_evidence
+G1,True,True,passed,not_measured_for_candidate,Need matched B1 and candidate cash WAPE on the same two source origins; CRPS vs v6 is a different test.,outputs/t1/A_rolling_origin_src.csv
+G2,True,True,passed,not_measured_for_candidate,Need weekly paid IBS vs B1 on the same risk set; four-state Brier at 91 days is not IBS.,outputs/t1/A_rolling_origin_src.csv
+G3,False,False,failed,not_measured_for_candidate,Need source-fitted Mondrian CQR vs global CQR; finite-horizon competing-risk quantiles need an explicit tail policy.,outputs/t1/G3/metrics.csv
+G4,False,False,failed,fails_mapped_diagnostic,Equal-width ECE recomputed here; one old test World exceeds .05. Original two-source-origin protocol still missing.,outputs/t1/A_rolling_origin_src.csv
+G5,True,True,passed,not_measured_for_candidate,Real-domain BLEND results do not validate v6; AR real-data evaluation required.,outputs/t1/real_v2/C_real_v2.csv
+G6,False,False,passed,not_measured_for_candidate,Real-domain BLEND results do not validate v6; matched real baselines required.,outputs/t1/real_v2/C_real_v2.csv
+G7,False,False,failed,not_measured_for_candidate,v6 source-to-target adaptation has not been measured.,outputs/t1/B_domain_adaptation_tgt.csv
+G8,False,False,failed,not_measured_for_candidate,SBA loan default and invoice finite-horizon write-off are different targets; no transfer of G8 evidence.,outputs/t2_t3/t2_sba_variants.csv
+G9,True,True,passed,not_measured_for_candidate,T4 family is reused but these refitted weights need G9 baseline comparisons.,outputs/t4/t4_revenue_forecast.csv
+G10,False,False,passed,not_measured_for_candidate,These T4 weights have no matched real retail-domain gate evidence.,outputs/t4/t4_revenue_forecast.csv
+G11,True,False,out_of_scope,out_of_scope_synthetic_only,Expert rule verification remains required for real pilot; out of scope for synthetic stage only.,outputs/rules/rules_review.csv
+G12,True,True,passed,fails_mapped_diagnostic,"Raw bank coverage misses .75-.85; ACI, four baselines and estimated T9 labels are missing from this composition.",outputs/e2e/e2e_metrics.csv
+G13,True,True,failed,not_measured_for_candidate,"Candidate has only two origins, no alert-episode backtest; legacy G13 also fails false-alarm budget.",outputs/e2e/protocol/alert_policy_v2.csv
+G14,False,False,failed,not_measured_for_candidate,No candidate T7 integration/backtest; unchanged legacy result is failed.,outputs/t7/t7_changepoint.csv
+G15,True,True,failed,failed_unchanged_component,Unchanged required T9 component fails F1/precision; v6 cannot fix reconciliation coverage by itself.,outputs/t9/sprint3/target_metrics.csv
+G16,True,True,passed,existing_component_pass_only,Existing T0 component evidence remains passed; verify its boundary again with the new input contract.,outputs/wp0/T0_quality_metrics.csv
+G17,False,False,failed,not_measured_for_candidate,No v6 promise ablation under the registered protocol.,outputs/t1/EF_t8_t9*.csv
+G18,False,False,passed,not_measured_for_candidate,No matched v6 estimated-T9 versus ledger/oracle ablation.,outputs/t1/T9_T1_gap_reduction.csv

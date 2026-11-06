@@ -1,0 +1,43 @@
+{
+  "selected": "both",
+  "primary_selected": "both",
+  "augmentation_triggered": true,
+  "n_original_fit": 200000,
+  "n_source_validation": 10666,
+  "n_fresh_anchors": 15466,
+  "fresh_company_count": 80,
+  "fresh_checks": [
+    {
+      "world": "practical_v6_20261105_fresh_000",
+      "paid_ece_pass": false,
+      "writeoff_gap365_pass": true,
+      "short_paid_brier_pass": true
+    },
+    {
+      "world": "practical_v6_20261105_fresh_001",
+      "paid_ece_pass": true,
+      "writeoff_gap365_pass": true,
+      "short_paid_brier_pass": true
+    },
+    {
+      "world": "practical_v6_20261105_fresh_002",
+      "paid_ece_pass": false,
+      "writeoff_gap365_pass": true,
+      "short_paid_brier_pass": true
+    },
+    {
+      "world": "practical_v6_20261105_fresh_003",
+      "paid_ece_pass": false,
+      "writeoff_gap365_pass": false,
+      "short_paid_brier_pass": true
+    }
+  ],
+  "all_fresh_research_checks_pass": false,
+  "fresh_selection_performed": false,
+  "test_000_observations_loaded_for_modeling": false,
+  "service_model_changed": false,
+  "protected_files_checked": 203,
+  "changed_protected_files": [],
+  "evidence": "synthetic incremental-feature study, conditional on legacy v6 baseline inputs; not SME validation",
+  "original_v6_model_sha256": "9375373bcf413618642cb12f39c7d9a63bb5f24bac24a7c64b9e2eb54f95db44"
+}
