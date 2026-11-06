@@ -202,3 +202,12 @@ def test_catalog_save_validates_and_records_history(tmp_path, monkeypatch):
     with pytest.raises(catalog.CatalogError):
         catalog.save('holidays', dict(h, years={'2027': [dict(date='2026-01-05', name='sai năm')]}), 'kt')
     catalog._cache.clear()
+
+
+def test_everyday_words_do_not_name_a_seller(ctx):
+    # "chưa có" folds to "chua co", the same as "Sửa chữa Cơ khí ..." in the demo's seller list
+    p = extract('Quý 3 có những hóa đơn nào chưa có chứng từ chuyển khoản?', ctx.report, ctx.catalog, AS_OF)
+    assert p.seller is None
+    inv = next(i for i in ctx.report.invoices if i.role == 'PURCHASE' and 'An Phú' in (i.seller_name or ''))
+    p = extract('Nhà cung cấp An Phú có rủi ro gì?', ctx.report, ctx.catalog, AS_OF)
+    assert p.seller == inv.seller_tax_id

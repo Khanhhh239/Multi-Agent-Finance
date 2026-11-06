@@ -16,6 +16,11 @@ NAME_FORMS = ('trach nhiem huu han', 'mot thanh vien', 'co phan', 'cong ty', 'tn
               'cua hang', 'ho kinh doanh', 'viet nam', 'thuong mai dich vu', 'thuong mai', 'dich vu', 'san xuat', 'xuat nhap khau',
               'thiet bi', 'ky thuat', 'cong nghe', 'giai phap', 'he thong', 'phan mem', 'dau tu', 'phat trien')
 NAME_STOP = {'tm', 'dv', 'xnk', 'va'}
+# Everyday words (unaccented) that also occur inside company names; two of them in a row are not a name.
+COMMON_WORDS = {'chua', 'co', 'khi', 'la', 'cua', 'cho', 'nhung', 'nao', 'khong', 'da', 'duoc', 'bi', 'se', 'thi', 'ma', 'den', 'tu',
+                'tai', 've', 'voi', 'hoa', 'don', 'mua', 'ban', 'tien', 'thue', 'nam', 'thang', 'quy', 'ngay', 'gi', 'bao', 'nhieu', 'tong',
+                'hang', 'hoa', 'dau', 'ra', 'vao', 'moi', 'cu', 'lai', 'con', 'nay', 'do', 'kia', 'hon', 'nhat', 'mot', 'hai', 'ba', 'so',
+                'chung', 'chuyen', 'khoan', 'toi', 'ta'}
 LAW_CUES = ('vi sao', 'tai sao', 'can cu', 'dieu nao', 'quy dinh nao', 'theo luat', 'theo quy dinh', 'dieu khoan', 'luat nao',
             'nghi dinh nao', 'thong tu nao')
 
@@ -158,7 +163,9 @@ def seller(q: str, invoices) -> tuple[str | None, str | None]:
     for tax, words in names.items():
         # an adjacent pair of the name's own words ("an khang", "phuong nam"), or one word unique to this seller written
         # right after "công ty" / "nhà cung cấp"; loose common words ("dien", "dung", "thanh") never identify a seller
-        pairs = sum(f' {a} {b} ' in qtext for a, b in zip(words, words[1:]) if '|' not in (a, b))
+        # a pair made only of everyday words does not name anyone: "chưa có" folds to the same "chua co" as "Sửa chữa Cơ khí"
+        pairs = sum(f' {a} {b} ' in qtext for a, b in zip(words, words[1:])
+                    if '|' not in (a, b) and not (a in COMMON_WORDS and b in COMMON_WORDS))
         single = sum(1 for w in words if w != '|' and len(w) >= 3 and counts[w] == 1 and w in named)
         s = pairs * 2 + single
         if s > score:
