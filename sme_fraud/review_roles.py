@@ -17,6 +17,7 @@ PERMISSIONS={
     'budget':frozenset({'chief_accountant','director'}),
     'notification_preview':frozenset({'chief_accountant','director'}),
     'ml_manage':frozenset({'chief_accountant','director'}),
+    'ml_review':frozenset(LABELS),
     'uat_note':frozenset(LABELS)}
 _grant=ContextVar('trusted_review_finalization',default=None)
 

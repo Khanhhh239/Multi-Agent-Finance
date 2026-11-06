@@ -1,14 +1,22 @@
 # Chọn pipeline ML riêng cho doanh nghiệp
 
+Phiên local dùng chính hiện tại: **http://127.0.0.1:8765/company-ml**, nhập tệp tại `/data-import`, phiếu rà tại `/ml-reviews`. Chạy lại bằng `python -B start_review.py`; cấu hình lưu sẵn trên máy này. Các cổng demo riêng trong phần lịch sử đã dừng sau [lượt hợp nhất 07/11](../../docs/reports/app/unified_local_20261107.md).
+
+Phiếu rà đã có trên **`/ml-reviews`**: xem dữ kiện không lộ tên model, ghi căn cứ/hành động, đo thời gian có tạm dừng và lưu kết quả theo người rà. [Hướng dẫn và cấu hình gói](../../docs/reports/ml/ml_review_web_20261105.md).
+
+Để so sánh các thuật toán trên **cùng kỳ và cùng số giao dịch rà** của từng doanh nghiệp, dùng [runner so sánh và phiếu ghi nhận hữu ích/phút kiểm tra](../../docs/reports/ml/company_ml_comparison_20261104.md). Lượt demo đã chạy bốn thuật toán cho C001/C002; CatBoost không chạy vì thiếu nhãn train đủ điều kiện. Kết quả hữu ích và thời gian người rà còn chờ phiếu thực tế, không suy từ số cảnh báo hoặc thời gian máy chạy.
+
 Trong web, mở **Dữ liệu & ML** hoặc `/company-ml`:
 
 1. Chọn doanh nghiệp và bộ dữ liệu.
-2. **Cập nhật & kiểm tra dữ liệu**: nạp cache nguồn đã kết nối vào không gian ML riêng. Model đang dùng không đổi.
+2. Chọn **Nhập dữ liệu từ CSV / Excel** để tải giao dịch, kiểm tra lỗi, chuẩn hóa và tạo feature trước khi lưu; hoặc **Cập nhật & kiểm tra dữ liệu** để nạp cache nguồn đã kết nối. Model đang dùng không đổi. [Quy trình nhập và giới hạn](../../docs/reports/ml/data_import_20261104.md).
 3. Chọn thuật toán, kỳ train/calibration và tỷ lệ cảnh báo tham chiếu; chạy đánh giá ứng viên.
 4. Đối chiếu kết quả rồi **Xác nhận dùng vN**. Ứng viên chưa được xác nhận không thay model đang dùng.
 5. Chạy ML bằng phiên bản đang dùng. Có thể chọn giữ phiên bản hoặc quay lại một phiên bản từng kích hoạt.
 
 Kế toán trưởng/giám đốc được máy chủ xác thực và cấp đúng công ty mới được ghi. Kế toán viên được xem trong phạm vi công ty. Không nhận vai trò/danh tính từ JSON hoặc các header do giao diện tự đặt. Khi chưa có tích hợp đăng nhập, bản app thông thường chỉ xem cấu hình; demo bên dưới cấp danh tính QA cố định riêng.
+
+Giao diện kiểm tra điều kiện từ backend khi đổi kỳ train/calibration hoặc dữ liệu: CatBoost chỉ mở nếu mọi dòng train có nhãn đã xác minh, biết trước ranh giới và có cả hai lớp; nút chấm/giữ bị khóa nếu model không tương thích. Có lý do và độ phủ nhãn hiển thị ngay trên form. [Chi tiết và kiểm thử ngày 05/11](../../docs/reports/ml/company_ml_readiness_20261105.md). Cần khởi động lại server cũ để có API kiểm tra mới.
 
 ## Cài thư viện
 
@@ -19,6 +27,8 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-review-lock.txt
 # Bổ sung khi muốn sử dụng CatBoost:
 .\.venv\Scripts\python.exe -m pip install -r requirements-company-ml.txt
+# Bổ sung để nhập Excel .xlsx (CSV dùng thư viện chuẩn):
+.\.venv\Scripts\python.exe -m pip install -r requirements-data-import.txt
 $env:PYTHONPATH = "$PWD;$PWD/tests"
 ```
 
@@ -26,9 +36,9 @@ Bốn adapter đầu sử dụng numpy/scipy/sklearn của môi trường hiện
 
 ## Nguồn đầu vào
 
-Bước cập nhật trên web đọc `data_root/sme_fraud_<scenario>/` được cấu hình ở máy chủ. Cần `manifest.json`, `transactions.csv`, `features.csv` đúng hợp đồng feature hiện tại, checksum hợp lệ và ID khớp. Đây là cập nhật từ nguồn đã kết nối, chưa phải màn hình upload CSV kế toán thô hoặc kết nối ERP. Dữ liệu từng doanh nghiệp được lọc theo `company_id`; holdout 005 bị từ chối trước khi đọc.
+Bước cập nhật nguồn kết nối đọc `data_root/sme_fraud_<scenario>/` được cấu hình ở máy chủ. Cần `manifest.json`, `transactions.csv`, `features.csv` đúng hợp đồng feature hiện tại, checksum hợp lệ và ID khớp. Để nhập giao dịch CSV/Excel theo mẫu, mở `/data-import`: xem lỗi và bản chuẩn hóa trước khi xác nhận thay thế toàn bộ tập ML của doanh nghiệp. Luồng nhập dùng danh mục kết nối, chưa tự ánh xạ ERP hoặc nhập thêm lịch sử bằng chứng. Dữ liệu từng doanh nghiệp được lọc theo `company_id`; holdout 005 bị từ chối trước khi đọc.
 
-Web không tự sửa nguồn, dựng lại feature hoặc sửa snapshot detector. Cache cũ cần được dựng lại bằng quy trình nguồn phù hợp trước khi nạp. Những thiếu hụt bằng chứng đã được mã hóa trong hợp đồng feature được giữ nguyên.
+Luồng nạp nguồn kết nối không sửa nguồn hoặc dựng lại feature. Luồng CSV/Excel tạo feature cho tập nhập trong không gian ML riêng, không sửa snapshot detector. Cache kết nối cũ vẫn cần dựng lại bằng quy trình nguồn phù hợp trước khi nạp. Những thiếu hụt bằng chứng được giữ nguyên và nêu trước khi lưu.
 
 CSV nhãn tùy chọn chọn tại bước cập nhật có đúng các cột:
 
@@ -38,7 +48,9 @@ company_id,transaction_id,label,reviewer_id,reviewed_at,evidence_ref,verified
 
 `label=0`: hợp lệ; `label=1`: gian lận đã xác nhận. `verified=1`; người rà và căn cứ không trống; thời điểm rà có múi giờ, sau giao dịch và không ở tương lai. Chỉ nhập nhãn thuộc công ty/giao dịch hiện có, không trùng. Nguồn nhãn này do bên nhập chịu trách nhiệm xác nhận; phần mềm không biến việc tải CSV thành nghiệm thu độc lập. Không tự đọc `labels.csv`, `splits.csv`, oracle hoặc biến điểm luật thành nhãn.
 
-Khi cập nhật mà không chọn tệp nhãn, chỉ giữ nhãn cũ nếu cùng bộ dữ liệu, cùng hợp đồng và giao dịch/feature không đổi. CatBoost cần đủ hai lớp trong train, nhãn cho mọi dòng train và thời điểm biết nhãn trước cuối kỳ train. Precision/recall chỉ được tính trên các dòng evaluation đã có nhãn; thiếu mẫu số giữ null và không suy rộng thành chất lượng thực địa.
+Khi cập nhật từ nguồn kết nối, chỉ giữ nhãn cũ nếu cùng bộ dữ liệu, cùng hợp đồng và giao dịch/feature không đổi; CSV nhãn kèm theo được gộp và bị chặn nếu xung đột. Khi thay thế tập giao dịch CSV/Excel, nhãn cũ không được giữ. Để bổ sung nhãn cho tập ML hiện hành, chọn CSV nhãn ở bước 1, xem trước rồi bấm **Lưu nhãn**: giao dịch/feature/model đang dùng giữ nguyên, các nhãn không có trong tệp được giữ lại. Nhãn trùng cả kết luận và nguồn rà không tạo revision mới. Khác kết luận, người rà, thời điểm hoặc căn cứ là xung đột: chọn giữ nhãn cũ hoặc sửa theo tệp, nhập lý do và xác nhận. Xem trước hết hiệu lực khi nội dung CSV hoặc revision thay đổi; tệp rỗng không xóa nhãn. [Chi tiết bản sửa 06/11](../../docs/reports/ml/company_ml_labels_20261106.md).
+
+CatBoost cần đủ hai lớp trong train, nhãn cho mọi dòng train và thời điểm biết nhãn trước cuối kỳ train. Precision/recall chỉ được tính trên các dòng evaluation đã có nhãn; thiếu mẫu số giữ null và không suy rộng thành chất lượng thực địa.
 
 ## Năm pipeline
 
@@ -81,4 +93,4 @@ Launcher từ chối ghi đè một workspace không có marker QA đúng loại
 node --test tests/company_ml_ui.test.js
 ```
 
-Kiểm chứng bản triển khai ngày 04/11/2026: 88 test Python liên quan (gồm 26 test Company ML/API mới), 116 kiểm tra JavaScript trong 10 bộ (12 kiểm tra Company ML mới), không lỗi/skip. Cả năm adapter đã fit, serialize/nạp lại và chấm bằng code thật trên fixture; CatBoost 1.2.10 được cài trong môi trường test cục bộ. API, luồng DOM và giữ bản nháp khi mất kết nối đã kiểm tra tự động. Chưa xác minh trực quan Chrome/viewport do công cụ điều khiển trình duyệt lỗi điều hướng; không gộp kết quả này với nghiệm thu Chrome lịch sử của app cũ.
+Kiểm chứng bản triển khai ngày 04/11/2026: 88 test Python liên quan (gồm 26 test Company ML/API mới), 116 kiểm tra JavaScript trong 10 bộ (12 kiểm tra Company ML mới), không lỗi/skip. Cả năm adapter đã fit, serialize/nạp lại và chấm bằng code thật trên fixture; CatBoost 1.2.10 được cài trong môi trường test cục bộ. API, luồng DOM và giữ bản nháp khi mất kết nối đã kiểm tra tự động. Sau đó đã chạy **50 kiểm tra trên Chrome headless qua Playwright**, gồm thao tác web cho C001/IF v3, C002/ECOD v1, dữ liệu nguồn tăng thật một dòng mỗi công ty, giữ model/điểm cũ khi cập nhật và reload, viewport desktop/390px và quyền chỉ xem. [Biên bản và bằng chứng cục bộ](../../docs/reports/ml/company_ml_demo_20261104.md). Phạm vi hai luồng này không thay cho nghiệm thu toàn app, trình duyệt khác hoặc dữ liệu thật.

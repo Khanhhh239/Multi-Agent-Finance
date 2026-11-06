@@ -25,3 +25,4 @@ dialog{width:min(830px,92vw);border:1px solid var(--border);padding:22px;border-
 @media(max-width:1220px){#review-workflow-status{margin-inline:20px}}
 @media(max-width:480px){#review-workflow-status{margin-inline:15px}.workflow-decisions .decision-options{grid-template-columns:1fr}.workflow-actions button{width:100%}.feedback-form:has(.workflow-status) input,.feedback-form:has(.workflow-status) textarea{font-size:16px}.detail-tabs{overflow-x:auto}.detail-tabs button{flex-shrink:0;min-height:44px}.workflow-record{padding:11px}}
 @media(max-width:480px){#notifications-mobile{display:block}.cy-graph{height:270px}.cy-network{height:330px}.quick-feedback button{flex-basis:100%}}
+a.nav-item{text-decoration:none}

@@ -1,5 +1,17 @@
 # Chạy app và phát triển
 
+## Phiên local dùng chính
+
+Chạy `python -B start_review.py`, rồi mở **http://127.0.0.1:8765/**. Launcher tự đọc `.runtime/review/server_8765.config.json`: nguồn hồ sơ hiện có, database `.runtime/review/sprint14_demo.sqlite3`, môi trường ML và danh tính quản lý demo. Gọi lại khi đúng phiên đang chạy sẽ dùng phiên đó. Dừng bằng `python -B start_review.py --stop`; launcher đối chiếu instance trước khi dừng.
+
+Các màn hình `/data-import`, `/company-ml`, `/ml-reviews` và hàng đợi `/` cùng địa chỉ này. Các cổng 8853/8854, 8859/8860, 8861/8862 đã dừng sau khi hợp nhất; database và bằng chứng kiểm thử vẫn giữ trên đĩa. [Biên bản chuyển và khôi phục](reports/app/unified_local_20261107.md).
+
+**Phiếu rà ML:** `/ml-reviews` giữ đủ 12 phiếu đã chuẩn bị, có lưu nháp/kết quả và đồng hồ máy chủ. Khi dựng server khác có thể kết nối gói bằng `ml_review_roots` hoặc `--ml-review-comparison`. Các đợt kiểm thử ghi kết quả dùng database riêng. [Hướng dẫn và cách triển khai](reports/ml/ml_review_web_20261105.md).
+
+**So sánh model riêng từng doanh nghiệp:** dùng `python -B -m sme_fraud.company_ml_comparison run`, khóa cùng kỳ và số giao dịch rà cho mọi model; chỉ đọc snapshot SQLite và xuất gói riêng. Lệnh `collect` ghi nhận phiếu hữu ích/phút rà do người dùng xác nhận. CatBoost bị loại nếu thiếu nhãn train đã xác minh đúng thời điểm và hai lớp. [Hướng dẫn và kết quả demo](reports/ml/company_ml_comparison_20261104.md). Đây là công cụ CLI, chưa thêm màn hình rà so sánh mới.
+
+**Nhập CSV/Excel:** cài thêm `requirements-data-import.txt`, mở `/data-import` trên server mới. Chọn doanh nghiệp, tải tệp theo mẫu, kiểm tra/chuẩn hóa, đọc lỗi và cảnh báo trước khi lưu rồi chuyển sang chọn ML. [Đặc tả, giới hạn và kiểm thử](reports/ml/data_import_20261104.md). Demo riêng: `python -B tests/data_import_demo.py --port 8853` (8853 kế toán trưởng QA; 8854 chỉ xem). Môi trường review và `PYTHONPATH` cần có thư mục gốc cùng `tests`, tương tự demo Company ML.
+
 **Dữ liệu & ML theo doanh nghiệp:** mở `/company-ml` trên máy chủ web mới. Quy trình cập nhật nguồn đã kết nối → đánh giá → xác nhận phiên bản → chấm bằng model cố định được mô tả tại [hướng dẫn Company ML](../examples/company_ml/README.md). Có demo riêng ở cổng 8851/8852, không dùng database đang vận hành. Quyền ghi vẫn cần danh tính máy chủ; không tạo đăng nhập mới trong chức năng này.
 
 Chạy lệnh từ thư mục gốc `D:\agent22`. Bản tích hợp mới nằm trong `reports/integrated_rehearsal_20261028_v2/`; demo RR09/ML v4 ngày 24/10 giữ riêng để tham chiếu. [Dữ liệu benchmark cũ](development/synthetic_data.md) có mục đích riêng.

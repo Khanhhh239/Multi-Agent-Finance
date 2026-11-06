@@ -2,12 +2,17 @@
 
 [Mục lục báo cáo](../README.md) · [Trạng thái hiện tại](../../STATUS.md)
 
-**Mới nhất:** [Guard giữ ngày baseline: trễ thêm 26 → 0 ngày, cùng ngân sách](if_delay_guard_20261027.md).
+**Mới nhất:** [Phiếu rà ML trên web, căn cứ/hành động và đồng hồ — 05/11/2026](ml_review_web_20261105.md).
 
 Các báo cáo ghi kết quả theo mốc thực hiện. Số liệu và giới hạn ở bản cũ không tự đại diện cho phiên bản mới.
 
 | Tài liệu | File |
 | --- | --- |
+| [Phiếu rà ML trên web và đo thời gian kiểm tra — 05/11/2026](ml_review_web_20261105.md) | `ml_review_web_20261105.md` |
+| [Khóa/mở CatBoost theo kỳ train, kiểm tra model trước chấm — 05/11/2026](company_ml_readiness_20261105.md) | `company_ml_readiness_20261105.md` |
+| [So sánh model và phiếu ghi nhận hữu ích/phút rà — 04/11/2026](company_ml_comparison_20261104.md) | `company_ml_comparison_20261104.md` |
+| [Nhập CSV/Excel và tạo feature theo doanh nghiệp — 04/11/2026](data_import_20261104.md) | `data_import_20261104.md` |
+| [Thử trọn luồng Company ML trên demo — 04/11/2026](company_ml_demo_20261104.md) | `company_ml_demo_20261104.md` |
 | [IF tìm đầu mối ngoài baseline — shadow 22/10/2026](ml_if_discovery_shadow_20261022.md) | `ml_if_discovery_shadow_20261022.md` |
 | [ML — kiểm tra sẵn sàng cho pilot, 19/10/2026](ml_pilot_readiness_20261019.md) | `ml_pilot_readiness_20261019.md` |
 | [ML: runner chỉ xuất điểm — 19/10/2026](ml_shadow_runner_20261019.md) | `ml_shadow_runner_20261019.md` |

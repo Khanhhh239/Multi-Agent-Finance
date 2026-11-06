@@ -4,6 +4,14 @@ Tiến độ hiện tại nằm ở [STATUS](../STATUS.md); việc tiếp theo n
 
 ## Biên bản gần nhất
 
+- [Hợp nhất hàng đợi, nhập dữ liệu, ML và phiếu rà tại cổng 8765 — 07/11](app/unified_local_20261107.md).
+- [Khóa chính xác tập bằng chứng và ngăn phiếu thừa 12 → 13 — 06/11](ml/ml_review_packet_lock_20261106.md).
+- [Bổ sung nhãn giữ nhãn cũ và xử lý xung đột có xác nhận — 06/11](ml/company_ml_labels_20261106.md).
+- [Phiếu rà ML trên web: căn cứ, hành động và đồng hồ — 05/11](ml/ml_review_web_20261105.md).
+- [Đồng bộ điều kiện CatBoost và tương thích model giữa UI/backend — 05/11](ml/company_ml_readiness_20261105.md).
+- [So sánh model riêng từng công ty, cùng kỳ/cùng ngân sách, phiếu hữu ích/phút rà — 04/11](ml/company_ml_comparison_20261104.md).
+- [Nhập CSV/Excel, giải thích lỗi trước lưu và chuyển sang chọn ML — 04/11](ml/data_import_20261104.md).
+- [Company ML: C001 Isolation Forest / C002 ECOD, cập nhật dữ liệu giữ model — 04/11](ml/company_ml_demo_20261104.md).
 - [Nghiệm thu app tích hợp — 39 mẫu/17 luồng, màn hình nhỏ, offline/restart — 29/10](app/release_acceptance_20261029.md).
 - [Tồn đầu kỳ, công suất, đồng hồ chờ và SLA của baseline — 28/10](operations/baseline_sla_20261028.md).
 - [Tích hợp luật → IF shadow → app → thông báo trên workspace mới — 28/10](app/integrated_rehearsal_20261028.md).

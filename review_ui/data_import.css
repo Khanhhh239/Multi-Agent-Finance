@@ -1,0 +1,11 @@
+#import-file{padding:12px;border:1px dashed #9caab5;border-radius:8px;background:#f8fafb;width:100%}
+#import-schema code{overflow-wrap:anywhere;white-space:normal}
+#import-errors td:last-child{min-width:240px}
+#import-errors td{vertical-align:top}
+#import-errors td:nth-child(n+3){white-space:normal;min-width:240px}
+#import-warnings{border-left:3px solid #bc8c25;padding-left:18px;margin:20px 0}
+.ack{display:flex;align-items:flex-start;gap:10px;margin:18px 0;line-height:1.6}
+.ack input{width:auto;margin-top:6px;flex-shrink:0}
+#import-references p{overflow-wrap:anywhere}
+#import-rows table{font-size:13px}
+@media(max-width:600px){.steps{display:block}.steps li{margin:8px 0}.selectors{display:grid}}

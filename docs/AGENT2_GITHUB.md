@@ -1,74 +1,80 @@
-# Agent 2 Sang — bản nguồn ngày 04/11/2026
+# Agent 2 Sang — bản nguồn ngày 07/11/2026
 
-Nhánh **`agent2-Sang`** chứa mã nguồn được đồng bộ từ workspace `agent22`. Bắt đầu từ [trạng thái dự án](STATUS.md), [backlog](BACKLOG.md) và [hướng dẫn phát triển](DEVELOPMENT.md). Tài liệu nghiệp vụ, ML, app và vận hành nằm trong [mục lục báo cáo](reports/README.md).
+Nhánh làm việc là **`agent2-Sang`** trong repo Multi-Agent-Finance. Bắt đầu từ [trạng thái dự án](STATUS.md), [hướng dẫn phát triển](DEVELOPMENT.md) và [báo cáo hợp nhất phiên local](reports/app/unified_local_20261107.md).
 
-## Company ML theo doanh nghiệp
+## Nội dung cập nhật
 
-Mở **Dữ liệu & ML** trên web (`/company-ml`): cập nhật nguồn đã kết nối → đánh giá ứng viên → xác nhận/giữ/quay lại phiên bản → chấm bằng pipeline cố định. Mỗi doanh nghiệp lưu riêng model, tiền xử lý, ngưỡng và lịch sử; cập nhật dữ liệu không tự fit hoặc đổi model.
+- Nhập CSV/Excel theo doanh nghiệp, kiểm tra lỗi theo dòng/cột, xem bản chuẩn hóa và tạo 194 feature trước khi xác nhận lưu, chuyển sang chọn ML đúng công ty.
+- Isolation Forest, Autoencoder, ECOD, LOF và CatBoost có nhãn xác minh; điều kiện dùng CatBoost theo đúng kỳ train, kiểm tương thích model trước khi giữ/chấm.
+- So sánh cùng kỳ/cùng ngân sách, phiếu rà trên web với căn cứ/hành động, đồng hồ máy chủ, lưu nháp và tổng hợp theo quyền/phạm vi.
+- Bổ sung nhãn giữ nhãn không liên quan, xem trước xung đột, quyết định giữ/sửa kèm lý do/xác nhận và lịch sử trước/sau.
+- Khóa chính xác tập bằng chứng theo manifest/model/dòng chọn; tệp thừa, thiếu hoặc thay đổi trong lúc đọc bị chặn.
+- Một phiên local ở **8765** cho hàng đợi, nhập dữ liệu, chọn ML và phiếu rà. Profile khởi động lưu riêng tại máy; có kiểm tra và chuyển nguyên tử phần ML vào database hồ sơ đang dùng.
 
-Có Isolation Forest, Autoencoder, ECOD với tham chiếu cố định, LOF novelty và CatBoost tùy chọn. CatBoost cần nhãn đã xác nhận và thư viện trong `requirements-company-ml.txt`. Quyền ghi cần danh tính máy chủ xác thực, vai trò kế toán trưởng/giám đốc và đúng công ty. Luồng mới vẫn ở shadow; chưa có upload CSV kế toán thô/ERP hoặc tích hợp đăng nhập mới.
+Các tính năng ML tiếp tục ở shadow. Phiên local đã cấu hình dùng danh tính quản lý **mô phỏng** do máy chủ cấp; không tự tạo tài khoản đăng nhập thật hoặc nghiệm thu độc lập.
 
-[Hướng dẫn đầy đủ, cài thư viện và demo cách ly](../examples/company_ml/README.md). Demo Company ML tự sinh fixture; không cần bộ nguồn kế toán phát triển. Không mang database, dữ liệu doanh nghiệp, artifact đã fit, tệp nhãn hoặc dependency runtime lên Git.
+## Workspace đang dùng và bản Git
 
-## Nội dung mới
+Lệnh `python -B start_review.py` trong README dành cho workspace đã có dữ liệu và `.runtime/review/server_8765.config.json`. Profile, database, artifact, gói phiếu đã khóa và các đường dẫn môi trường cụ thể của máy này không được đưa lên Git. Khi chỉ clone mã nguồn, dùng fixture tổng hợp bên dưới hoặc tự cung cấp nguồn/schema và cấu hình triển khai phù hợp.
 
-- [Runner tích hợp](../examples/integrated_rehearsal/README.md) và [audit tồn đọng/SLA](../examples/baseline_sla_audit/README.md), cùng báo cáo đối chiếu đầu vào và kết quả.
-- Giao diện giữ bản nháp khi lỗi mạng, nạp lại phiên bằng GET khi cần và phục hồi nút/hộp thông báo sau lỗi.
-- [Báo cáo nghiệm thu app 29/10](reports/app/release_acceptance_20261029.md) và tài liệu trạng thái/backlog mới nhất. Bộ nguồn tích hợp và dữ liệu QA chi tiết tiếp tục lưu cục bộ.
+Không có 1.146 hồ sơ hoặc gói 12 phiếu của workspace phát triển trong bản clone. Các con số trong biên bản là kết quả đối chiếu local; mã và test đi kèm có thể sinh dữ liệu mô phỏng mới vào thư mục riêng.
 
-- Sửa bằng chứng theo cutoff, định danh liên hệ và quan hệ nhân viên/công ty; cập nhật feature contract v4, 194 feature.
-- Phân tầng ưu tiên RR09, thêm nguồn đối chứng và ma trận test luật.
-- Quy trình kế toán viên rà, kế toán trưởng/giám đốc khác người chốt hoặc trả lại; kiểm soát công ty, phiên bản hồ sơ và nhật ký.
-- Thông báo theo vai trò, chống trùng, nhắc hạn và lịch sử gửi; ví dụ cấu hình vẫn dùng mô phỏng/template.
-- Guard giới hạn trì hoãn baseline trong thử nghiệm IF, cùng báo cáo kiểm chứng.
-- Sắp xếp lại tài liệu trong `docs/`; các đường dẫn cũ được chuyển hoặc giữ file chỉ dẫn theo thay đổi của workspace.
+## Cài và chạy từ mã nguồn
 
-Các kết quả nghiệp vụ chi tiết và giới hạn nghiệm thu được giữ trong từng báo cáo. IF tiếp tục chạy shadow; tài khoản thật, gửi–nhận thông báo thật và rà ML độc lập vẫn theo trạng thái trong tài liệu dự án.
-
-## Cài từ mã nguồn và kiểm thử
-
-Profile web/backup đã kiểm chứng dùng CPython 3.12 trên Windows x64:
+Profile đã kiểm chứng dùng CPython 3.12:
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-review-lock.txt
+.\.venv\Scripts\python.exe -m pip install -r requirements-review-lock.txt -r requirements-data-import.txt
+# Tùy chọn, chỉ cần khi thử CatBoost:
+.\.venv\Scripts\python.exe -m pip install -r requirements-company-ml.txt
 $env:PYTHONPATH = "$PWD;$PWD/tests"
-New-Item -ItemType Directory -Force .runtime | Out-Null
-.\.venv\Scripts\python.exe -B -m unittest discover -s tests -v
+$env:PYTHONDONTWRITEBYTECODE = '1'
 ```
 
-Với Node.js đã cài, chạy các bộ VM/DOM:
+Tạo demo mới từ fixture tổng hợp. Đoạn này dừng nếu thư mục đã tồn tại để giữ nguyên công việc trước:
 
 ```powershell
-Get-ChildItem tests -Filter '*.test.js' | ForEach-Object {
-    node $_.FullName
-    if ($LASTEXITCODE -ne 0) { throw "Kiểm thử lỗi: $($_.Name)" }
-}
+@'
+from pathlib import Path
+from test_data_import import import_fixture, upload_rows, csv_bytes, xlsx_bytes
+root = Path('.runtime/github_demo_20261107')
+if root.exists():
+    raise FileExistsError('Chọn thư mục demo mới; không ghi đè dữ liệu cũ.')
+root.mkdir(parents=True)
+store, _ = import_fixture(root)
+store.prepare()
+for company in ('C001', 'C002'):
+    rows = upload_rows(company, count=30)
+    (root / f'SIMULATED_{company}.csv').write_bytes(csv_bytes(rows))
+    (root / f'SIMULATED_{company}.xlsx').write_bytes(xlsx_bytes(rows))
+'@ | .\.venv\Scripts\python.exe -B -
+
+.\.venv\Scripts\python.exe -B -m sme_fraud.review_server `
+    --data-root .runtime/github_demo_20261107/data `
+    --reports-root .runtime/github_demo_20261107/reports `
+    --database .runtime/github_demo_20261107/review.sqlite3 `
+    --port 8765 --qa --demo-ml-manager
 ```
 
-Kiểm chứng lần đồng bộ Company ML: **88 test Python liên quan đạt**, **116 kiểm tra JavaScript đạt** trong 10 bộ, không lỗi/failure/skip. Chạy trên bản nguồn chuẩn bị đưa lên Git; có kiểm tra cả năm adapter, quyền/công ty, dữ liệu theo thời gian, xung đột hai phiên và backup/restore model. Không chạy lại toàn bộ suite hoặc nghiệm thu trực quan Chrome trong lần đồng bộ này. Log cục bộ: `.runtime/company_ml_publish_20261104_*`.
+Mở `http://127.0.0.1:8765/data-import`, chọn C001/C002 và tệp mẫu tương ứng. Có thể kiểm tra, xác nhận nhập rồi đánh giá/kích hoạt/chấm model. Demo mới chưa có model được kích hoạt hoặc gói phiếu đã khóa; dùng [runner so sánh](reports/ml/company_ml_comparison_20261104.md) để sinh gói khi đã có dữ liệu phù hợp. Cờ `--demo-ml-manager` chỉ hoạt động cùng `--qa`; bản chạy thông thường vẫn cần danh tính được máy chủ xác thực.
 
-Lần đồng bộ trước trong ngày 04/11 (runner tích hợp/UI): **135 ca Python liên quan đạt** thuộc 8 module về runner tích hợp, audit SLA, shadow/discovery, phân quyền, quy trình rà và thông báo; **104 kiểm tra JavaScript đạt** trong 8 bộ. Không có lỗi/failure/skip. Bộ Python dùng profile `requirements-review-lock.txt`; lần này không chạy lại toàn bộ suite.
+## Kiểm thử
 
-Lượt kiểm tra toàn bộ trước đó, ngày 27/10, đạt **1273 ca Python**; JavaScript khi đó đạt 92 kiểm tra trong 7 bộ.
-
-Log của lần đồng bộ được giữ cục bộ trong `.runtime/github_update_20261104_*`. Các kiểm tra JavaScript là VM/DOM; lần đồng bộ Git này không chạy lại nghiệm thu Chrome. Bộ kiểm thử sử dụng fixture tổng hợp và thư mục tạm riêng, không cần mang dataset phát triển lên Git.
-
-`requirements.txt` mô tả phụ thuộc tổng quát. `requirements-lock.txt` giữ profile benchmark/model lịch sử; không dùng thay profile web/backup khi cần mở model hoặc backup đã khóa hợp đồng runtime. Xem [hướng dẫn phát hành](../RELEASES.md) và ví dụ tương ứng trước khi sử dụng artifact.
-
-## Demo chỉ từ bản nguồn
-
-Lệnh `.runtime/review_roles_20261024/serve.py` trong README dành cho workspace phát triển có sẵn snapshot và database. Để thử giao diện với fixture và danh tính mô phỏng từ bản Git mới, sau khi cài thư viện và đặt `PYTHONPATH` như trên:
+Để chạy đầy đủ bộ kiểm thử bên dưới, cài cả `requirements-company-ml.txt`; các ca kiểm điều kiện train CatBoost dùng profile có thư viện này. Ứng dụng vẫn hỗ trợ bốn thuật toán còn lại khi không cài CatBoost.
 
 ```powershell
-.\.venv\Scripts\python.exe -B tests/review_browser_fixture.py `
-    --workspace .runtime/browser_workflow_20261027/github_demo
+.\.venv\Scripts\python.exe -B -m unittest test_unified_local test_ml_review_packets test_company_ml_labels test_ml_review_web test_ml_review_api test_company_ml_readiness test_company_ml_comparison test_data_import test_company_ml test_company_ml_web test_review test_review_roles test_review_workflow test_feature_model_sync test_shadow_scoring test_review_backup -q
+$uiTests = Get-ChildItem tests -Filter '*test.js' | Select-Object -ExpandProperty FullName
+node --test $uiTests
 ```
 
-Mở các địa chỉ loopback mà launcher in ra cho kế toán viên, kế toán trưởng, giám đốc và người xem. Đây là môi trường QA với dữ liệu tổng hợp, danh tính cố định và thông báo giả lập. Các kết quả thao tác không thay cho rà độc lập trên nguồn thật.
+Lượt hợp nhất local đạt **211 test Python**, **146 kiểm tra JavaScript**, **30/30 kiểm tra Playwright**. Các bộ JavaScript cũ có script tự báo số kiểm tra chi tiết bên trong; Node báo 92 test entry. Phạm vi và bằng chứng nằm trong [biên bản hợp nhất](reports/app/unified_local_20261107.md); kiểm thử trình duyệt live cần đúng workspace đã sinh, không chạy test có ghi dữ liệu lên phiên dùng chính.
 
-## Phạm vi lưu trên Git
+Lần đồng bộ Git **07/11/2026** đã chạy lại **211 test Python thuộc 16 module, 146 kiểm tra JavaScript** trên chính bản nguồn chuẩn bị công bố, không lỗi hoặc skip. Thử thêm demo mới chỉ từ bản Git đạt **9 kiểm tra** về route/quyền, preview 194 feature và lưu CSV/XLSX cho C001/C002. Đây là bộ hồi quy liên quan; chưa chạy lại toàn bộ suite hoặc Playwright trong lượt đồng bộ này. Log chỉ giữ local tại `.runtime/github_update_20261107_*` trong bản clone dùng để công bố.
 
-Bản nguồn gồm Python/PowerShell, UI, test/fixture, tài liệu, schema, cấu hình mẫu, CSV chỉ chứa header, báo cáo Markdown và JSON tổng hợp/kiểm chứng. Thư viện browser và fixture JSON được giữ đúng byte theo manifest/checksum.
+## Phạm vi đưa lên Git
 
-Dataset/cache, model, SQLite, môi trường Python, wheelhouse, gói cài đặt, ảnh/trace browser, mapping private và JSON bằng chứng chi tiết theo phiếu được giữ cục bộ. Một số liên kết trong báo cáo tới artifact này chỉ dùng được tại môi trường đã chạy; mã và ví dụ đi kèm mô tả cách sinh lại vào thư mục mới. Script dọn tài liệu được lưu như mã nguồn và không được chạy trong lần đồng bộ này.
+Có mã Python/PowerShell, UI, test/fixture tổng hợp, schema, cấu hình mẫu, CSV chỉ có header, Markdown và JSON tổng hợp đã chọn. Giữ nguyên thư viện browser/license theo manifest.
+
+Không đưa dataset/cache, model đã fit, SQLite, môi trường Python, wheel, thông tin xác thực, cấu hình máy, kết quả người rà hoặc bằng chứng chi tiết riêng tư lên Git. Các liên kết tới `.runtime` trong biên bản là bằng chứng local và không có sẵn sau khi clone.

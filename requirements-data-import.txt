@@ -1,0 +1,3 @@
+# CSV uses the standard library; XLSX requires hardened XML parsing.
+openpyxl==3.1.5
+defusedxml==0.7.1

@@ -21,7 +21,7 @@ WEB_ROOT = Path(__file__).resolve().parents[1] / 'review_ui'
 
 
 def make_server(store, port=8765, qa=False, instance_id='', notifications=None, p2_controls=None,
-                review_workflow=None, identity_provider=None):
+                review_workflow=None, identity_provider=None, ml_review_roots=()):
     if review_workflow is None:
         from .review_roles import SETTING
         with store.connection() as db:configured=db.execute('SELECT value FROM settings WHERE key=?',(SETTING,)).fetchone()
@@ -33,6 +33,10 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
     default_notifications = notifications is None
     notifications = notifications or Notifications(store)
     company_ml = CompanyML(store)
+    from .data_import import DataImport
+    data_import = DataImport(company_ml)
+    from .ml_review_web import MLReview
+    ml_reviews = MLReview(store,ml_review_roots,qa=qa)
 
     controls_store = p2_controls
     class Handler(P2Routes, BaseHTTPRequestHandler):
@@ -106,6 +110,12 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                           '/company-ml': ('company_ml.html', 'text/html; charset=utf-8'),
                           '/company_ml.js': ('company_ml.js', 'text/javascript; charset=utf-8'),
                           '/company_ml.css': ('company_ml.css', 'text/css; charset=utf-8'),
+                          '/data-import': ('data_import.html', 'text/html; charset=utf-8'),
+                          '/data_import.js': ('data_import.js', 'text/javascript; charset=utf-8'),
+                          '/data_import.css': ('data_import.css', 'text/css; charset=utf-8'),
+                          '/ml-reviews': ('ml_reviews.html', 'text/html; charset=utf-8'),
+                          '/ml_reviews.js': ('ml_reviews.js', 'text/javascript; charset=utf-8'),
+                          '/ml_reviews.css': ('ml_reviews.css', 'text/css; charset=utf-8'),
                           '/review_explanations.js': ('review_explanations.js', 'text/javascript; charset=utf-8'),
                           '/review_workflow.js': ('review_workflow.js', 'text/javascript; charset=utf-8'),
                           '/styles.css': ('styles.css', 'text/css; charset=utf-8'),
@@ -118,8 +128,29 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                     self.respond(200, dict(status='ok', application='sme-case-review', qa=qa, instance_id=instance_id))
                 elif path == '/api/company-ml':
                     self.respond(200, company_ml.overview(self.review_principal(), query.get('scenario')))
+                elif path == '/api/ml-reviews':
+                    self.respond(200,ml_reviews.overview(self.review_principal()))
+                elif path == '/api/ml-reviews/units':
+                    self.respond(200,ml_reviews.units(query.get('packet',''),self.review_principal(),query.get('company','')))
+                elif path == '/api/ml-reviews/detail':
+                    self.respond(200,ml_reviews.detail(query.get('packet',''),query.get('review',''),self.review_principal()))
+                elif path == '/api/ml-reviews/summary':
+                    self.respond(200,ml_reviews.summary(query.get('packet',''),self.review_principal()))
+                elif path == '/api/ml-reviews/export':
+                    self.respond(200,ml_reviews.export(query.get('packet',''),self.review_principal()),'text/csv; charset=utf-8',
+                                 {'Content-Disposition':'attachment; filename="ml_human_reviews.csv"'})
                 elif path == '/api/company-ml/status':
                     self.respond(200, company_ml.status(query.get('scenario','003'), query.get('company',''), self.review_principal()))
+                elif path == '/api/company-ml/readiness':
+                    self.respond(200, company_ml.readiness(query.get('scenario','003'),query.get('company',''),self.review_principal(),
+                        train_end=query.get('train_end',''),calibration_end=query.get('calibration_end',''),
+                        expected_revision=query.get('expected_revision'),expected_active=query.get('expected_active')))
+                elif path == '/api/data-import/context':
+                    self.respond(200, data_import.context(query.get('scenario','003'), query.get('company',''), self.review_principal()))
+                elif path == '/api/data-import/template':
+                    company_ml._company(query.get('scenario','003'), query.get('company',''), self.review_principal())
+                    self.respond(200, data_import.template(), 'text/csv; charset=utf-8',
+                                 {'Content-Disposition':'attachment; filename="transactions_template.csv"'})
                 elif path == '/api/meta':
                     self.respond(200, store.metadata() | dict(csrf_token=csrf, qa=qa, notification_mode=notifications.mode,
                                                             p2_controls_available=self.p2_controls is not None)
@@ -200,15 +231,40 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                 if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
                     raise ValueError('Chỉ nhận nội dung JSON.')
                 length = int(self.headers.get('Content-Length', 0))
-                if not 0 < length <= (2_000_000 if path == '/api/company-ml/data-update' else 16_384):
+                limit = 14_100_000 if path == '/api/data-import/preview' else 2_000_000 if path in {'/api/company-ml/data-update','/api/company-ml/labels-update','/api/company-ml/labels-preview'} else 128_000 if path=='/api/ml-reviews/save' else 16_384
+                if not 0 < length <= limit:
                     raise ValueError('Nội dung yêu cầu không hợp lệ hoặc quá dài.')
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body, dict):
                     raise ValueError('Nội dung yêu cầu phải là một đối tượng.')
                 scenario = body.get('scenario', '003')
+                if path.startswith('/api/ml-reviews/'):
+                    action=path.rsplit('/',1)[1]
+                    fields={'timer':{'expected_revision','action','timer_token'},
+                            'save':{'expected_revision','form','submit','acknowledge'}}
+                    if action not in fields:raise KeyError('Không tìm thấy thao tác phiếu rà ML.')
+                    required={'expected_revision','action'} if action=='timer' else {'expected_revision','form'}
+                    if set(body)-fields[action]-{'packet_id','review_id'} or not required<=set(body):
+                        raise ValueError('Thiếu hoặc có trường phiếu rà không được hỗ trợ.')
+                    method=ml_reviews.timer if action=='timer' else ml_reviews.save
+                    self.respond(200,method(body.get('packet_id',''),body.get('review_id',''),self.review_principal(),
+                        **{k:body[k] for k in fields[action] if k in body}));return
+                if path.startswith('/api/data-import/'):
+                    action=path.rsplit('/',1)[1]
+                    methods={'preview':(data_import.preview,{'filename','content_base64','expected_revision','date_order','encoding','delimiter'}),
+                             'commit':(data_import.commit,{'token','acknowledge'})}
+                    if action not in methods: raise KeyError('Không tìm thấy thao tác nhập dữ liệu.')
+                    method,fields=methods[action]
+                    required={'filename','content_base64','expected_revision'} if action=='preview' else fields
+                    if set(body)-fields-{'scenario','company_id'} or not required<=set(body):
+                        raise ValueError('Thiếu thông tin hoặc có trường nhập dữ liệu không được hỗ trợ.')
+                    self.respond(200,method(scenario,body.get('company_id',''),self.review_principal(),
+                                            **{k:body[k] for k in fields if k in body}));return
                 if path.startswith('/api/company-ml/'):
                     action = path.rsplit('/',1)[1]
                     methods = {'data-update':(company_ml.update_data, {'expected_revision','labels_text'}),
+                               'labels-preview':(company_ml.preview_labels, {'expected_revision','labels_text'}),
+                               'labels-update':(company_ml.update_labels, {'expected_revision','labels_text','conflict_policy','preview_hash','acknowledge','reason'}),
                                'evaluate':(company_ml.evaluate, {'expected_revision','algorithm','train_end','calibration_end','alert_budget'}),
                                'activate':(company_ml.activate, {'version_id','expected_active','expected_revision','rollback'}),
                                'keep':(company_ml.keep, {'expected_active','expected_revision'}),
@@ -216,7 +272,8 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                     if action not in methods:raise KeyError('Không tìm thấy thao tác cấu hình ML.')
                     method, fields = methods[action]
                     if set(body)-fields-{'scenario','company_id'}:raise ValueError('Trường cấu hình ML không được hỗ trợ.')
-                    required = fields-({'labels_text'} if action=='data-update' else {'rollback'} if action=='activate' else set())
+                    optional = {'labels_text'} if action=='data-update' else {'rollback'} if action=='activate' else {'conflict_policy','preview_hash','acknowledge','reason'} if action=='labels-update' else set()
+                    required = fields-optional
                     if not required <= set(body):raise ValueError('Thiếu phiên bản dữ liệu hoặc thông tin cấu hình ML.')
                     self.respond(200, method(scenario,body.get('company_id',''),self.review_principal(),
                                             **{k:body[k] for k in fields if k in body}));return
@@ -282,9 +339,22 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
 
     server = ThreadingHTTPServer(('127.0.0.1', port), Handler)
     server.company_ml = company_ml
+    server.ml_reviews = ml_reviews
+    server.data_import = data_import
     if default_notifications:
         notifications.config['case_url'] = f'http://127.0.0.1:{server.server_port}/'
     return server
+
+
+def demo_ml_manager(store,*,qa):
+    """An explicit server-owned identity for local QA; never a real login."""
+    if qa is not True:raise ValueError('Danh tính quản lý demo chỉ dùng trong phiên --qa.')
+    from .review_roles import ReviewPrincipal
+    with store.connection() as db:
+        companies=tuple(row[0] for row in db.execute('SELECT DISTINCT company_id FROM companies ORDER BY company_id'))
+    if not companies:raise ValueError('Phiên demo chưa có doanh nghiệp để cấp phạm vi nhập dữ liệu.')
+    return ReviewPrincipal('LOCAL_DEMO_MANAGER','LOCAL_DEMO_PERSON','MÔ PHỎNG · Quản lý phiên local',
+                           'chief_accountant',companies)
 
 
 def main():
@@ -295,9 +365,11 @@ def main():
     parser.add_argument('--port', type=int, default=8765)
     parser.add_argument('--prepare-only', action='store_true')
     parser.add_argument('--qa', action='store_true')
+    parser.add_argument('--demo-ml-manager',action='store_true',help='Danh tính quản lý mô phỏng cố định trên máy chủ; chỉ dùng cùng --qa')
     parser.add_argument('--instance-id', default='')
     parser.add_argument('--two-stage-review',action='store_true',help='Kế toán viên rà; kế toán trưởng hoặc giám đốc chốt, chờ tích hợp đăng nhập')
     parser.add_argument('--notification-config', type=Path)
+    parser.add_argument('--ml-review-comparison',type=Path,action='append',default=[],help='Gói so sánh đã khóa để nhập phiếu rà ML; có thể lặp lại')
     parser.add_argument('--p2-controls', action='store_true', help='Mount the verified P2 UAT module at /p2-controls')
     parser.add_argument('--p2-controls-database', type=Path, default=Path('.runtime/p2_controls_web/reviews.sqlite3'))
     parser.add_argument('--working-weekdays', default='0,1,2,3,4,5,6',
@@ -305,6 +377,7 @@ def main():
     parser.add_argument('--non-working-date', action='append', default=[],
                         help='Explicit YYYY-MM-DD review closure; may be repeated')
     args = parser.parse_args()
+    if args.demo_ml_manager and not args.qa:parser.error('--demo-ml-manager chỉ được dùng cùng --qa')
     from .review_capacity import ReviewCalendar
     try:
         calendar = ReviewCalendar(tuple(int(value) for value in args.working_weekdays.split(',')),
@@ -326,8 +399,10 @@ def main():
     if args.two_stage_review:
         from .review_workflow import TwoStageReview
         workflow=TwoStageReview(store)
+    actor=demo_ml_manager(store,qa=args.qa) if args.demo_ml_manager else None
     server = make_server(store, args.port, args.qa, args.instance_id, Notifications(store, config),
-                         p2_controls=controls,review_workflow=workflow)
+                         p2_controls=controls,review_workflow=workflow,ml_review_roots=args.ml_review_comparison,
+                         identity_provider=(lambda request:actor) if actor else None)
     print(f'Review UI ready: http://127.0.0.1:{server.server_port}', flush=True)
     try:
         server.serve_forever()
