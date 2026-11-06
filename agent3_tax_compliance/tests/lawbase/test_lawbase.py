@@ -255,3 +255,11 @@ def test_polarity_clash_catches_negated_article_headings():
     assert not polarity_clash(q, 'NĐ > Điều 17. Xử phạt hành vi khai sai dẫn đến thiếu số tiền thuế phải nộp > Khoản 1')
     assert not polarity_clash('khai sai không dẫn đến thiếu thuế bị phạt bao nhiêu',
                               'NĐ > Điều 16. Xử phạt hành vi khai sai không dẫn đến thiếu số tiền thuế > Khoản 3')
+
+
+def test_yes_no_answer_must_be_stated_in_the_quote():
+    from src.lawbase.rag import yesno_unsupported
+    q = 'Chuyển quyền sử dụng đất có chịu thuế giá trị gia tăng không?'
+    assert yesno_unsupported(q, 'Chuyển quyền sử dụng đất có chịu thuế giá trị gia tăng.', 'thời điểm xác định thuế giá trị gia tăng là ...')
+    assert not yesno_unsupported(q, 'Không chịu thuế giá trị gia tăng.', 'Đối tượng không chịu thuế: 7. Chuyển quyền sử dụng đất')
+    assert not yesno_unsupported('Mức phạt là bao nhiêu?', 'Phạt 20%.', 'phạt 20%')

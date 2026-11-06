@@ -205,6 +205,32 @@ def reground(text: str, passages: list[Passage], min_overlap: float = 0.5):
     return (best[1], best[2]) if best else None
 
 
+def yesno_unsupported(question: str, text: str, quote: str) -> str | None:
+    """For a yes/no question ("... có chịu thuế giá trị gia tăng không?"), an answer that says yes or no must find the
+    same predicate, with the same polarity, in its verbatim quote. Catches a conclusion drawn from a provision that only
+    mentions the topic (e.g. the timing of VAT used to claim that land-use transfers are taxable). Returns the
+    predicate when unsupported."""
+    plain = lambda s: ' '.join(re.sub(r'[^a-z0-9]+', ' ', fold(s)).split())  # noqa: E731
+    q = plain(question)
+    m = re.search(r'\bco ((?:[a-z]+ ){1,8}?[a-z]+) khong$', q)
+    if not m:
+        return None
+    words = m.group(1).split()
+    key = ' '.join(words[:2])
+    a, qt = f' {plain(text)} ', f' {plain(quote)} '
+    neg_a = f' khong {key} ' in a or f' khong duoc {key} ' in a
+    pos_a = f' {key} ' in a and not neg_a
+    if not (neg_a or pos_a):
+        return None                                      # the sentence makes no yes/no claim on the predicate
+    neg_q = f' khong {key} ' in qt or f' khong duoc {key} ' in qt
+    pos_q = f' {key} ' in qt.replace(f' khong {key} ', ' ')
+    if neg_a and not neg_q:
+        return f'không {key}'
+    if pos_a and not pos_q:
+        return key
+    return None
+
+
 def verify(raw: str, passages: list[Passage], question: str = '', min_topic: float = 0.5) -> tuple[list, list, bool, str]:
     data = json.loads(raw)
     by_id = {p.pid: p for p in passages}
@@ -243,6 +269,10 @@ def verify(raw: str, passages: list[Passage], question: str = '', min_topic: flo
         clash = next((c for c in (polarity_clash(question, p.path) for p in cited) if c), None) if question else None
         if clash:
             dropped.append(dict(text=text, reason=f'điều khoản được dẫn nói về trường hợp "không {clash}", câu hỏi hỏi trường hợp ngược lại'))
+            continue
+        claim = yesno_unsupported(question, text, quote) if question else None
+        if claim:
+            dropped.append(dict(text=text, reason=f'câu trả lời có hoặc không ("{claim}") không có trong đoạn trích dẫn'))
             continue
         off = _numbers_off_case(text, cited, question, passages) if question else []
         if off:
