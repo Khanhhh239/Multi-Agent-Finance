@@ -334,10 +334,10 @@ def vat_payable(ctx, p, q):
             + (f'ước tính phải nộp {money(net)}.' if net >= 0 else f'ước tính còn được khấu trừ chuyển kỳ sau {money(-net)}.')
             + ' Đây là số tham khảo: chưa gồm thuế còn được khấu trừ của kỳ trước và các khoản điều chỉnh khác trên tờ khai.')
     if any(r['declared'] != 'chưa nhập' for r in rows):
-        text += ' Cột "Đã khai" lấy từ số liệu đã nhập ở trang Tổng quan.'
+        text += ' Cột "Đã khai" lấy từ số liệu đã nhập ở trang Số liệu thuế GTGT.'
     return ChatAnswer('vat_payable', text, rows, [('period', 'Kỳ'), ('output', 'Thuế đầu ra'), ('input', 'Đầu vào an toàn'),
                                                  ('net', 'Phải nộp (nếu dương)'), ('declared', 'Đã khai')],
-                      facts=[dict(period=last_k, net=str(net))], links=[('Mở Tổng quan', '#/tong-quan')])
+                      facts=[dict(period=last_k, net=str(net))], links=[('Mở Số liệu thuế GTGT', '#/so-lieu')])
 
 
 # ----------------------------------------------------------------------------- THANH_TOAN

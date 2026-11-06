@@ -22,7 +22,7 @@ from ...extraction.xml_context import fold
 PROJECT = Path(__file__).resolve().parents[3]
 CATALOG = PROJECT / 'configs/assistant/catalog/chat_domains.json'
 INDEX = PROJECT / 'data/chat_index.npz'
-ROUTER_MODEL = 'qwen3:8b'      # measured on the dev split: 8b 58/59, 4b instruct 55/59 as tie-breaker
+ROUTER_MODEL = 'qwen3:4b-instruct-2507-q4_K_M'   # same accuracy as qwen3:8b on dev and holdout, about 10 times faster (fits the 6 GB GPU)
 
 ACCEPT = 0.55        # stage-1 probability accepted without the model
 MARGIN = 0.20        # and ahead of the runner-up by at least this
@@ -67,6 +67,8 @@ class Router:
             return
         rows = [(d['id'], t) for d in self.catalog['domains'] for t in d['examples'] + d.get('examples_generated', []) + d.get('guide', [])
                 if '<' not in t]
+        # people often type without diacritics: every example is also learned in its unaccented form
+        rows += [(d, fold(t)) for d, t in rows if fold(t) != t.lower()]
         key = hashlib.sha256(json.dumps(rows, ensure_ascii=False).encode()).hexdigest()[:16]
         if self.index_path.exists():
             z = np.load(self.index_path, allow_pickle=False)
@@ -90,7 +92,8 @@ class Router:
 
     def scores(self, question: str) -> list[tuple[str, float]]:
         clf = self._head()
-        v = self.embed([question])[0]
+        from .params import expand
+        v = self.embed([expand(question)])[0]
         pr = clf.predict_proba(v[None, :])[0]
         return sorted(((str(d), float(x)) for d, x in zip(clf.classes_, pr)), key=lambda kv: -kv[1])
 
@@ -103,10 +106,11 @@ class Router:
         system = ('Bạn phân loại câu hỏi của kế toán doanh nghiệp vào đúng một loại. Chỉ chọn trong danh sách. '
                   'Câu hỏi về số liệu, hóa đơn, người bán, hạn nộp, tiền phạt của chính doanh nghiệp là loại dữ liệu; '
                   'câu hỏi luật quy định thế nào nói chung là law_question; hỏi một khoản cụ thể có được trừ hay không là judgment. '
-                  'Không liên quan đến thuế, hóa đơn, kế toán của doanh nghiệp thì chọn NONE. Trả về JSON {"domain": "..."}.')
+                  'help chỉ dành cho câu hỏi về chính trợ lý (hỏi được gì, dùng thế nào). Không liên quan đến thuế, hóa đơn, kế toán của doanh nghiệp (dịch thuật, thời tiết, giải trí, tài chính cá nhân) thì chọn NONE. Trả về JSON {"domain": "..."}.')
         user = 'Các loại:\n' + '\n'.join(f'- {d}: {self.domains[d]["title"]}. {self.domains[d]["what"]}' for d in shortlist) + \
                f'\n- NONE: ngoài phạm vi\n\nCâu hỏi: {question}'
         schema = {'type': 'object', 'properties': {'domain': {'type': 'string', 'enum': options}}, 'required': ['domain']}
+        user = user.replace(f'Câu hỏi: {question}', f'Câu hỏi: {__import__("src.assistant.chat.params", fromlist=["expand"]).expand(question)}')
         raw, _ = self._llm.chat(system, user, schema, num_predict=30)
         d = json.loads(raw).get('domain')
         return d if d in options else None
@@ -119,19 +123,33 @@ class Router:
         if has_num and any(w in q for w in ('neu', 'gia su', 'gia dinh')) and any(
                 w in q for w in ('chung tu', 'chuyen khoan', 'uy nhiem chi', 'thanh toan', 'ngan hang')):
             return 'what_if_evidence'
-        if params.invoice_numbers_found and top in ('by_issue', 'risk_total', 'top_risks', 'bank_matching') and 'hoa don' in q:
+        if params.invoice_numbers_found and 'invoice_lookup' in [d for d, _ in ranked[:3]] and 'hoa don' in q:
             return 'invoice_lookup'
+        own = any(w in q for w in ('cong ty', 'minh', 'cua toi', 'chung toi', 'doanh nghiep toi', 'neu bi', 'cua cong ty', 'hien tai', 'den nay', 'hom nay'))
+        cites_law = any(w in q for w in ('theo luat', 'luat quan ly thue', 'theo nghi dinh', 'theo thong tu', 'phap luat quy dinh', 'luat quy dinh'))
+        if cites_law and 'law_question' in [d for d, _ in ranked[:3]] and not params.invoice_numbers_found:
+            return 'law_question'
+        if top == 'penalty_exposure' and not own and 'law_question' in [d for d, _ in ranked[:3]]:
+            return 'law_question'
         if params.seller and not params.invoice_numbers_found and top not in (
                 'what_if_evidence', 'law_question', 'law_updates', 'judgment', 'deadlines', 'help', 'company_profile'):
             return 'seller_lookup'
         if params.seller and top in ('purchase_summary', 'by_issue', 'risk_total', 'decisions_log', 'invoice_lookup') and not params.invoice_numbers_found:
             return 'seller_lookup'
-        if params.issue and top in ('risk_total', 'top_risks') and not any(w in q for w in ('tong', 'bao nhieu tien')):
+        top3 = [d for d, _ in ranked[:3]]
+        judging = any(w in q for w in ('co duoc', 'duoc tru', 'duoc khau tru', 'hop le khong', 'hop ly khong'))
+        asks_law = any(w in q for w in ('luat', 'quy dinh', 'nghi dinh', 'thong tu', 'dieu kien', 'bao nhieu tien thi', 'nguong'))
+        if params.issue and 'by_issue' in top3 and not judging and not asks_law and any(
+                w in q for w in ('hoa don nao', 'nhung hoa don', 'co hoa don', 'liet ke', 'khoan nao', 'nguoi ban nao', 'nha cung cap nao', 'ncc nao', 'co mua', 'hang nao')):
             return 'by_issue'
         return None
 
     def route(self, question: str, params=None) -> Route:
+        from .params import ABBREV
+        import re as _re
         q = fold(question)
+        for pat, rep in ABBREV:
+            q = _re.sub(pat, rep, q)
         try:
             ranked = self.scores(question)
         except Exception as e:  # noqa: BLE001 - embedding server down: say so, use the plain word fallback

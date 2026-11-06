@@ -12,15 +12,48 @@ export async function pageInvoices() {
   const matched = new Map(rep.matches.flatMap((m) => m.invoice_keys.map((k) => [k, m])));
   const risk = new Map();
   rep.items.forEach((it) => it.invoice_keys.forEach((k) => risk.set(k, [...(risk.get(k) || []), it])));
-  app().innerHTML = `<h1 class="page">Hóa đơn</h1><p class="lead">${rep.invoices.length} hóa đơn đọc từ tệp XML. Cột Toàn vẹn cho biết chữ ký số và các kiểm tra số liệu của khung cố định.</p>
-    ${table(['Hóa đơn', 'Ngày', 'Người bán', { label: 'Tổng thanh toán', num: true }, { label: 'Thuế', num: true }, 'Toàn vẹn', 'Thanh toán', 'Cảnh báo'], rep.invoices.map((i) => {
-      const m = matched.get(i.key);
-      const its = risk.get(i.key) || [];
-      const integrity = i.guard_errors.length ? tag('AT_RISK', `Lỗi ${i.guard_errors.length}`) : i.signed ? tag('LLM_VERIFIED', 'Chữ ký hợp lệ') : tag('INFO', 'Không ký');
-      return `<tr><td>${esc(invLabel(i))}${i.duplicate_of ? ' <span class="muted small">(bản trùng)</span>' : ''}</td><td>${dmy(i.issue_date)}</td><td>${esc(i.seller_name)}</td>
-        <td class="num">${money(i.gross)}</td><td class="num">${money(i.vat)}</td><td>${integrity}</td>
-        <td>${m ? (m.status === 'MATCHED' ? 'Đã ghép' : 'Mơ hồ') : '<span class="muted">Chưa ghép</span>'}</td><td><div class="chips">${its.map((x) => tag(x.status, x.code.split('_')[0])).join('')}</div></td></tr>`;
-    }))}`;
+  const months = [...new Set(rep.invoices.filter((i) => i.issue_date).map((i) => i.issue_date.slice(0, 7)))].sort();
+  const worst = (i) => { const its = (risk.get(i.key) || []).filter((x) => x.status !== 'INFO'); return its.some((x) => x.status === 'AT_RISK') ? 'AT_RISK' : its.some((x) => x.status === 'REVIEW') ? 'REVIEW' : its.length ? 'OTHER' : 'OK'; };
+  const PAGE = 50;
+  let page = 0;
+  app().innerHTML = `<h1 class="page">Hóa đơn</h1><p class="lead">${rep.invoices.length} hóa đơn đọc từ tệp XML. Lọc, tìm và xem theo trang 50 dòng; bấm tiêu đề cột để sắp xếp; bấm dòng có cảnh báo để xử lý.</p>
+    <div class="bar"><select class="cds--select-input filter-select" id="role" aria-label="Loại hóa đơn"><option value="">Mua vào và bán ra</option><option value="PURCHASE">Mua vào</option><option value="SALE">Bán ra</option></select>
+      <select class="cds--select-input filter-select" id="st" aria-label="Tình trạng"><option value="">Mọi tình trạng</option><option value="AT_RISK">Có nguy cơ</option><option value="REVIEW">Cần xem xét</option><option value="OK">Không cảnh báo</option><option value="UNPAID">Chưa ghép thanh toán</option></select>
+      <select class="cds--select-input filter-select" id="mon" aria-label="Tháng"><option value="">Mọi tháng</option>${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}</select>
+      <input class="cds--text-input filter-input" id="iq" placeholder="Tìm số hóa đơn, người bán, mã số thuế, tên hàng" aria-label="Tìm hóa đơn">
+      <span class="muted small" id="icount"></span>
+      <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx">Xuất Excel</a></div>
+    <div id="ilist"></div>`;
+  let sort = ['issue_date', -1];
+  const keyOf = { issue_date: (i) => i.issue_date || '', gross: (i) => Number(i.gross || 0), vat: (i) => Number(i.vat || 0), seller: (i) => (i.role === 'SALE' ? i.buyer_name : i.seller_name) || '' };
+  const paint = () => {
+    const role = $('#role').value; const st = $('#st').value; const mon = $('#mon').value; const q = $('#iq').value.trim().toLowerCase();
+    const view = rep.invoices.filter((i) => (!role || i.role === role) && (!mon || (i.issue_date || '').startsWith(mon))
+      && (!st || (st === 'UNPAID' ? i.role === 'PURCHASE' && !matched.get(i.key) : worst(i) === st))
+      && (!q || `${invLabel(i)} ${i.number} ${i.seller_name} ${i.seller_tax_id} ${i.buyer_name || ''} ${(i.descriptions || []).join(' ')}`.toLowerCase().includes(q)))
+      .sort((x, y) => { const a = keyOf[sort[0]](x); const b = keyOf[sort[0]](y); return (a > b ? 1 : a < b ? -1 : 0) * sort[1]; });
+    const pages = Math.max(1, Math.ceil(view.length / PAGE));
+    page = Math.min(page, pages - 1);
+    const th = (k, l, num) => `<th class="${num ? 'num ' : ''}sortable" data-sort="${k}"><div class="cds--table-header-label">${esc(l)}${sort[0] === k ? (sort[1] > 0 ? ' ▲' : ' ▼') : ''}</div></th>`;
+    $('#icount').textContent = `${view.length} hóa đơn`;
+    $('#ilist').innerHTML = view.length ? `<div class="table-wrap"><table class="cds--data-table cds--data-table--md"><thead><tr><th>Hóa đơn</th>${th('issue_date', 'Ngày')}${th('seller', 'Người bán hoặc người mua')}${th('gross', 'Tổng thanh toán', true)}${th('vat', 'Thuế', true)}<th>Toàn vẹn</th><th>Thanh toán</th><th>Cảnh báo</th></tr></thead><tbody>
+      ${view.slice(page * PAGE, page * PAGE + PAGE).map((i) => {
+        const m = matched.get(i.key);
+        const its = (risk.get(i.key) || []).filter((x) => x.status !== 'INFO');
+        const integrity = i.guard_errors.length ? tag('AT_RISK', `Lỗi ${i.guard_errors.length}`) : i.signed ? tag('LLM_VERIFIED', 'Chữ ký hợp lệ') : tag('INFO', 'Không ký');
+        return `<tr class="${its.length ? 'clickable' : ''}" ${its.length ? `data-go="#/viec?open=${esc(i.key)}"` : ''}><td>${esc(invLabel(i))}${i.duplicate_of ? ' <span class="muted small">(bản trùng)</span>' : ''}<div class="muted small">${i.role === 'SALE' ? 'Bán ra' : 'Mua vào'}</div></td><td>${dmy(i.issue_date)}</td>
+          <td>${esc(i.role === 'SALE' ? i.buyer_name : i.seller_name)}</td><td class="num">${money(i.gross)}</td><td class="num">${money(i.vat)}</td><td>${integrity}</td>
+          <td>${i.role === 'SALE' ? '' : m ? (m.status === 'MATCHED' ? 'Đã ghép' : 'Cần xác nhận') : '<span class="muted">Chưa ghép</span>'}</td><td><div class="chips">${its.map((x) => tag(x.status, x.title.length > 40 ? `${x.title.slice(0, 38)}…` : x.title)).join('')}</div></td></tr>`;
+      }).join('')}</tbody></table></div>
+      <div class="bar pager">${button('Trang trước', 'ghost', `id="prev" ${page === 0 ? 'disabled' : ''}`)}<span class="small">Trang ${page + 1} / ${pages}</span>${button('Trang sau', 'ghost', `id="next" ${page >= pages - 1 ? 'disabled' : ''}`)}</div>`
+      : '<div class="empty">Không có hóa đơn nào khớp.</div>';
+    if ($('#prev')) $('#prev').onclick = () => { page -= 1; paint(); };
+    if ($('#next')) $('#next').onclick = () => { page += 1; paint(); };
+    app().querySelectorAll('[data-sort]').forEach((h) => { h.onclick = () => { sort = [h.dataset.sort, sort[0] === h.dataset.sort ? -sort[1] : -1]; paint(); }; });
+  };
+  ['role', 'st', 'mon'].forEach((id) => { $(`#${id}`).onchange = () => { page = 0; paint(); }; });
+  $('#iq').oninput = () => { page = 0; paint(); };
+  paint();
 }
 
 export async function pageBank() {

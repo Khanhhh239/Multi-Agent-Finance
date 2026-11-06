@@ -51,6 +51,7 @@ export async function pageOverview() {
       <div class="kpi"><span class="label">Có thể đang bỏ sót khấu trừ</span><span class="value">${t ? money(t.opportunity_vat) : '—'}</span><span class="sub">hóa đơn trên cổng thuế chưa có tệp</span></div>
     </div>
     <div class="bar">${button('Chạy phân tích', 'primary', 'id="run"')}${rep ? `<a class="cds--btn cds--btn--tertiary cds--btn--md" href="/api/workspaces/${esc(state.ws)}/report.html" target="_blank" rel="noopener">Mở báo cáo để in</a><a class="cds--btn cds--btn--ghost cds--btn--md" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx">Xuất danh sách hóa đơn</a><a class="cds--btn cds--btn--ghost cds--btn--md" href="/api/workspaces/${esc(state.ws)}/export/quyet-dinh.xlsx">Xuất nhật ký quyết định</a>` : ''}<span id="run-msg"></span></div>
+    <div class="quick-links"><a href="#/so-lieu">Số liệu thuế GTGT theo kỳ</a><a href="#/lich">Lịch thuế</a><a href="#/ngan-hang">Giao dịch ngân hàng</a><a href="#/giai-trinh">Soạn giải trình</a><a href="#/luat">Kho luật và tin luật mới</a></div>
     <div class="grid2"><div><h2 class="section">Việc lớn nhất cần xử lý</h2>
       ${table(['Trạng thái', 'Hóa đơn', 'Lý do', { label: 'Số tiền', num: true }], (rep?.items || []).slice(0, 6).map((it) => {
         const inv = invoiceOf(it.invoice_keys[0]);
@@ -90,13 +91,28 @@ export async function pageReview() {
       <input class="cds--text-input filter-input" id="bulk-ev" placeholder="Chứng từ hoặc lý do chung">
       <input class="cds--text-input filter-input" id="bulk-by" placeholder="Người duyệt" value="${esc(store.get('agent3.reviewer') || '')}">
       ${button('Ghi cho các việc đã chọn', 'primary', 'id="bulk-go"')}</div>
-    ${table(['', 'Trạng thái', 'Hóa đơn', 'Người bán', 'Lý do', { label: 'Số tiền', num: true }], items.map((it) => {
-      const inv = invoiceOf(it.invoice_keys[0]);
-      return `<tr class="clickable" tabindex="0" data-item="${rep.items.indexOf(it)}" data-month="${(inv?.issue_date || '').slice(0, 7)}" data-text="${esc(`${invLabel(inv)} ${inv?.seller_name || ''} ${it.title} ${it.detail}`.toLowerCase())}"><td class="pickcell">${(it.status === 'AT_RISK' || it.status === 'REVIEW') && it.invoice_keys.length ? `<input type="checkbox" class="bulk-pick" data-idx="${rep.items.indexOf(it)}" aria-label="Chọn">` : ''}</td><td>${tag(it.status)}</td><td>${esc(invLabel(inv) || it.invoice_keys[0])}<div class="muted small">${dmy(inv?.issue_date)}</div></td>
-        <td>${esc(inv?.seller_name || '')}</td><td><span class="cell-title">${esc(it.title)}</span><div class="muted small">${esc(it.detail)}</div></td><td class="num">${money(it.amount)}</td></tr>`;
-    }))}`;
-  const rows = [...app().querySelectorAll('[data-item]')];
-  const picks = [...app().querySelectorAll('.bulk-pick')];
+    <div id="groups"></div><div id="list"></div>`;
+  // Grouped by issue first, then a paged list: stays usable with hundreds or thousands of invoices.
+  const PAGE = 50;
+  let shown = PAGE;
+  let code = hashParams().get('nhom') || '';
+  const idxOf = new Map(rep.items.map((it, i) => [it, i]));
+  const textOf = (it) => { const inv = invoiceOf(it.invoice_keys[0]); return `${invLabel(inv)} ${inv?.seller_name || ''} ${it.title} ${it.detail}`.toLowerCase(); };
+  const monthOf = (it) => (invoiceOf(it.invoice_keys[0])?.issue_date || '').slice(0, 7);
+  const groups = {};
+  items.forEach((it) => { const g = groups[it.code] ||= { title: it.title, status: it.status, n: 0, amount: 0 }; g.n += 1; g.amount += Number(it.amount || 0); });
+  const paintGroups = () => {
+    $('#groups').innerHTML = `<div class="group-chips">${Object.entries(groups).sort((x, y) => y[1].amount - x[1].amount || y[1].n - x[1].n).map(([c, g]) => `<button type="button" class="group-chip ${c === code ? 'on' : ''}" data-code="${esc(c)}">
+      ${tag(g.status)}<span class="gc-title">${esc(g.title)}</span><span class="gc-n">${g.n} việc${g.amount ? `, ${money(g.amount)}` : ''}</span></button>`).join('')}
+      ${code ? '<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm" data-code="">Bỏ lọc nhóm</button>' : ''}</div>`;
+  };
+  const rowTpl = (it) => {
+    const inv = invoiceOf(it.invoice_keys[0]);
+    const i = idxOf.get(it);
+    return `<tr class="clickable" tabindex="0" data-item="${i}"><td class="pickcell">${(it.status === 'AT_RISK' || it.status === 'REVIEW') && it.invoice_keys.length ? `<input type="checkbox" class="bulk-pick" data-idx="${i}" aria-label="Chọn">` : ''}</td><td>${tag(it.status)}</td><td>${esc(invLabel(inv) || it.invoice_keys[0] || '')}<div class="muted small">${dmy(inv?.issue_date)}</div></td>
+      <td>${esc(inv?.seller_name || '')}</td><td><span class="cell-title">${esc(it.title)}</span><div class="muted small">${esc(it.detail)}</div></td><td class="num">${money(it.amount)}</td></tr>`;
+  };
+  let picks = [];
   const syncBulk = () => {
     const chosen = picks.filter((c) => c.checked).map((c) => rep.items[Number(c.dataset.idx)]);
     $('#bulk').hidden = !chosen.length;
@@ -105,7 +121,23 @@ export async function pageReview() {
     const common = chosen.map(decisionChoices).reduce((acc, ch) => acc.filter(([v]) => ch.some(([w]) => w === v)));
     $('#bulk-action').innerHTML = common.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join('');
   };
-  picks.forEach((c) => { c.onclick = (e) => e.stopPropagation(); c.onchange = syncBulk; });
+  const paint = () => {
+    const q = $('#q').value.trim().toLowerCase(); const m = $('#month').value;
+    const view = items.filter((it) => (!code || it.code === code) && (!q || textOf(it).includes(q)) && (!m || monthOf(it) === m));
+    $('#shown').textContent = q || m || code ? `${view.length} việc khớp` : `${view.length} việc`;
+    $('#list').innerHTML = table(['', 'Trạng thái', 'Hóa đơn', 'Người bán', 'Lý do', { label: 'Số tiền', num: true }], view.slice(0, shown).map(rowTpl), 'Không có việc nào khớp.')
+      + (view.length > shown ? `<div class="bar"><span class="muted small">Đang hiện ${shown} trên ${view.length} việc</span>${button(`Hiện thêm ${Math.min(PAGE, view.length - shown)} việc`, 'ghost', 'id="more"')}${button('Hiện tất cả', 'ghost', 'id="all"')}</div>` : '');
+    picks = [...app().querySelectorAll('.bulk-pick')];
+    picks.forEach((c) => { c.onclick = (e) => e.stopPropagation(); c.onchange = syncBulk; });
+    app().querySelectorAll('[data-item]').forEach((tr) => {
+      tr.onclick = () => openItem(rep.items[Number(tr.dataset.item)], Number(tr.dataset.item));
+      tr.onkeydown = (e) => { if (e.key === 'Enter') tr.click(); };
+    });
+    if ($('#more')) $('#more').onclick = () => { shown += PAGE; paint(); };
+    if ($('#all')) $('#all').onclick = () => { shown = view.length; paint(); };
+    syncBulk();
+  };
+  $('#groups').addEventListener('click', (e) => { const g = e.target.closest('[data-code]'); if (!g) return; code = g.dataset.code; shown = PAGE; paintGroups(); paint(); });
   $('#bulk-go').onclick = async () => {
     const chosen = picks.filter((c) => c.checked).map((c) => rep.items[Number(c.dataset.idx)]);
     const body = { invoice_keys: [...new Set(chosen.map((x) => x.invoice_keys[0]))], action: $('#bulk-action').value, evidence: $('#bulk-ev').value.trim(), by: $('#bulk-by').value.trim() };
@@ -114,17 +146,8 @@ export async function pageReview() {
     try { const r = await post(`/api/workspaces/${state.ws}/decisions/bulk`, body); toast(`Đã ghi ${r.decisions} quyết định`, `Thuế có nguy cơ còn ${Number(r.totals.at_risk_vat).toLocaleString('vi-VN')} đ`); rerender(); }
     catch (err) { toast('Không ghi được', err.message, 'error'); }
   };
-  rows.forEach((tr) => {
-    tr.onclick = () => openItem(rep.items[Number(tr.dataset.item)], Number(tr.dataset.item));
-    tr.onkeydown = (e) => { if (e.key === 'Enter') tr.click(); };
-  });
-  const applyFilter = () => {
-    const q = $('#q').value.trim().toLowerCase(); const m = $('#month').value;
-    let n = 0;
-    rows.forEach((tr) => { const ok = (!q || tr.dataset.text.includes(q)) && (!m || tr.dataset.month === m); tr.hidden = !ok; n += ok; });
-    $('#shown').textContent = q || m ? `${n} việc khớp` : '';
-  };
-  $('#q').oninput = applyFilter; $('#month').onchange = applyFilter;
+  $('#q').oninput = () => { shown = PAGE; paint(); }; $('#month').onchange = () => { shown = PAGE; paint(); };
+  paintGroups(); paint();
   aiToolbar($('#ai-tools'));
   freshBanner($('#fresh'));
   let want = null;
@@ -135,7 +158,7 @@ export async function pageReview() {
   }
   const deep = hashParams().get('open');                 // link to one item: #/viec?open=R12_ITEM_PURPOSE (first of that code)
   if (deep && !want) {
-    const idx = rep.items.findIndex((it) => it.code === deep || itemId(it) === deep);
+    const idx = rep.items.findIndex((it) => it.code === deep || itemId(it) === deep || it.invoice_keys.includes(deep));
     if (idx >= 0) openItem(rep.items[idx], idx);
   }
 }

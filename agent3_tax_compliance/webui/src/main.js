@@ -6,16 +6,26 @@ import './app.css';
 import { $, app, esc, loadWorkspaces, notice, state, store } from './core.js';
 import { pageIntake } from './pages_intake.js';
 import { pageOverview, pageReview } from './pages_work.js';
-import { pageAsk, pageBank, pageCalendar, pageInvoices, pageLaw } from './pages_more.js';
+import { pageBank, pageCalendar, pageInvoices, pageLaw } from './pages_more.js';
+import { pageAsk } from './pages_ask.js';
+import { adminOnly, pageAdminHistory, pageAdminHome, pageCatalog } from './pages_admin.js';
 import { pageDossier, pageVat } from './pages_ai.js';
 import { pageConfig, pageSetup } from './pages_config.js';
 
+// Five places for daily work. Everything that changes configuration lives under #/quan-tri behind the administrator
+// password (gear icon in the header); detail pages open from links inside these five.
 const NAV = [
   ['#/', 'Tổng quan', pageOverview], ['#/nap', 'Nạp dữ liệu', pageIntake], ['#/viec', 'Việc cần xử lý', pageReview], ['#/hoa-don', 'Hóa đơn', pageInvoices],
-  ['#/ngan-hang', 'Ngân hàng', pageBank], ['#/so-lieu', 'Số liệu thuế GTGT', pageVat], ['#/giai-trinh', 'Giải trình', pageDossier], ['#/lich', 'Lịch thuế', pageCalendar], ['#/hoi', 'Hỏi đáp', pageAsk], ['#/luat', 'Kho luật', pageLaw],
-  ['#/cai-dat', 'Cấu hình doanh nghiệp', pageConfig],
+  ['#/hoi', 'Hỏi đáp', pageAsk],
 ];
-const HIDDEN = [['#/thiet-lap', 'Thiết lập doanh nghiệp', pageSetup]];
+const HIDDEN = [
+  ['#/ngan-hang', 'Ngân hàng', pageBank], ['#/so-lieu', 'Số liệu thuế GTGT', pageVat], ['#/giai-trinh', 'Giải trình', pageDossier],
+  ['#/lich', 'Lịch thuế', pageCalendar], ['#/luat', 'Kho luật', pageLaw], ['#/tin-luat', 'Kho luật', pageLaw],
+  ['#/quan-tri', 'Quản trị', adminOnly(pageAdminHome)], ['#/quan-tri/doanh-nghiep', 'Cấu hình doanh nghiệp', adminOnly(pageConfig)],
+  ['#/quan-tri/danh-muc', 'Danh mục dùng chung', adminOnly(pageCatalog)], ['#/quan-tri/kho-luat', 'Kho luật', adminOnly(pageLaw)],
+  ['#/quan-tri/lich-su', 'Lịch sử thay đổi', adminOnly(pageAdminHistory)], ['#/thiet-lap', 'Thiết lập doanh nghiệp', adminOnly(pageSetup)],
+  ['#/cai-dat', 'Cấu hình doanh nghiệp', adminOnly(pageConfig)],
+];
 
 function renderNav(cur) {
   $('#nav').innerHTML = NAV.map(([href, label]) => `<li class="cds--side-nav__item"><a class="cds--side-nav__link" href="${href}" ${href === cur ? 'aria-current="page"' : ''}>

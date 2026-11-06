@@ -504,7 +504,9 @@
     "hạn quyết toán thuế thu nhập doanh nghiệp",
     "tạm nộp thuế TNDN quý 3 hạn ngày nào",
     "lịch nộp thuế sắp tới",
-    "deadline nộp tờ khai quý này"
+    "deadline nộp tờ khai quý này",
+    "bao giờ phải nộp tờ khai",
+    "ngày nào phải nộp thuế"
    ],
    "examples_generated": [
     "hạn nộp tờ khai gtgt quý 4 năm nay",
@@ -541,7 +543,9 @@
     "tự kê khai bổ sung thì tốn bao nhiêu",
     "rủi ro bị phạt của mình là bao nhiêu",
     "ước tính tiền phạt",
-    "nên tự sửa hay chờ"
+    "nên tự sửa hay chờ",
+    "công ty mình có thể bị phạt bao nhiêu",
+    "tiền chậm nộp của mình hiện tại"
    ],
    "examples_generated": [
     "nếu không khai bổ sung thì phạt bao nhiêu",
@@ -647,7 +651,9 @@
     "có bao nhiêu giao dịch ngân hàng",
     "đã có bảng kê cổng thuế chưa",
     "đã tải lên bao nhiêu tệp",
-    "đã upload bao nhiêu hóa đơn rồi"
+    "đã upload bao nhiêu hóa đơn rồi",
+    "sao kê còn thiếu tháng nào",
+    "thiếu dữ liệu tháng nào"
    ],
    "examples_generated": [
     "Còn thiếu dữ liệu nào trong kỳ báo cáo tháng 5?",
@@ -761,7 +767,9 @@
     "theo luật thì bao lâu phải nộp tờ khai quý",
     "xử phạt khai sai dẫn đến thiếu thuế",
     "hộ kinh doanh khai thuế thế nào",
-    "doanh nghiệp mới thành lập áp dụng phương pháp tính thuế nào"
+    "doanh nghiệp mới thành lập áp dụng phương pháp tính thuế nào",
+    "chậm nộp hồ sơ khai thuế thì bị xử phạt thế nào",
+    "mức phạt khi không lập hóa đơn"
    ],
    "examples_generated": [
     "hđ điện tử có bắt buộc phải in ra không",
@@ -938,7 +946,10 @@
    "words": [
     "trung",
     "nhap hai lan",
-    "ban sao"
+    "ban sao",
+    "hai lan",
+    "nap trung",
+    "nhap trung"
    ]
   },
   {

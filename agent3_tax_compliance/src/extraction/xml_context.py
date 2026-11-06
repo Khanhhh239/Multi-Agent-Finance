@@ -9,6 +9,7 @@ through `extra_issues`; buyer checks depend only on the pinned taxpayer master a
 
 Thresholds are engineering proposals pending calibration on real vendor history and tax-expert review.
 """
+import functools
 import re
 import unicodedata
 from datetime import datetime
@@ -34,11 +35,17 @@ def stored_observations(issues):
     return tuple(i for i in issues if i.code.startswith(STORED_PREFIXES))
 
 
-def fold(text):
+@functools.lru_cache(maxsize=65536)
+def _fold(text):
     """Diacritic-insensitive, case-insensitive, punctuation-free form of a Vietnamese text."""
     t = unicodedata.normalize('NFD', (text or '').replace('đ', 'd').replace('Đ', 'D'))
     t = ''.join(c for c in t if unicodedata.category(c) != 'Mn')
     return ' '.join(re.sub(r'[^a-z0-9]+', ' ', t.casefold()).split())
+
+
+def fold(text):
+    """Diacritic-insensitive, case-insensitive, punctuation-free form of a Vietnamese text (memoised)."""
+    return _fold(text if isinstance(text, str) else (text or ''))
 
 
 def similarity(a, b):

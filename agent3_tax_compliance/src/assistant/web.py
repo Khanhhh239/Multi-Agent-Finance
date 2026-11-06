@@ -34,6 +34,23 @@ STATIC = Path(__file__).resolve().parent / 'static'
 ID = re.compile(r'^[a-z0-9][a-z0-9-]{1,40}$')
 
 app = FastAPI(title='Agent 3 - Trợ lý thuế')
+from . import admin as _admin  # noqa: E402
+_admin.install(app)
+
+
+def _warm_up():
+    """Load the question router (embeddings of the example questions, classifier head) and the small routing model in the
+    background at start, so the first question does not wait for them."""
+    try:
+        from .chat import engine
+        r = engine.router()
+        r._head()
+        r._ask_model('khởi động', [next(iter(r.domains))])
+    except Exception:  # noqa: BLE001 - the first question will retry and report any real failure
+        pass
+
+
+threading.Thread(target=_warm_up, daemon=True).start()
 _law_job = dict(running=False, done=0, last='', result=None, error=None)
 _lock = threading.Lock()
 
@@ -531,4 +548,5 @@ from . import web_ai  # noqa: E402,F401  (registers the AI, dossier and law-aler
 if __name__ == '__main__':
     import uvicorn
     # Load by module name: run as __main__, this file is a second copy of the module and web_ai attaches to the named one.
-    uvicorn.run('src.assistant.web:app', host='127.0.0.1', port=8640)
+    import os
+    uvicorn.run('src.assistant.web:app', host='127.0.0.1', port=int(os.environ.get('AGENT3_PORT', 8640)))

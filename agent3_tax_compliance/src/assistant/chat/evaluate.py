@@ -19,7 +19,8 @@ EVAL = PROJECT / 'configs/assistant/eval/chat_router.json'
 
 
 def run(split='dev', ws=PROJECT / 'data/eval_ws/saoviet', as_of=date(2026, 11, 6), router=None, out=print):
-    items = [x for x in json.loads(EVAL.read_text(encoding='utf-8'))['items'] if split == 'all' or x['split'] == split]
+    src = EVAL.with_name(f'chat_router_{split}.json') if split in ('holdout2', 'holdout3') else EVAL
+    items = [x for x in json.loads(src.read_text(encoding='utf-8'))['items'] if split == 'all' or x['split'] == split]
     rep = pipeline.run(Path(ws), pipeline.DEFAULT_RULESET, as_of)
     router = router or Router()
     ok_dom = ok_all = 0

@@ -11,10 +11,11 @@ from ...extraction.xml_context import fold
 
 ROMAN = {'i': 1, 'ii': 2, 'iii': 3, 'iv': 4}
 NUM_WORDS = {'mot': 1, 'hai': 2, 'ba': 3, 'bon': 4, 'tu': 4, 'nam': 5, 'sau': 6, 'bay': 7, 'tam': 8, 'chin': 9, 'muoi': 10}
-# Words that every company name carries; they cannot identify a seller.
-NAME_STOP = {'cong', 'ty', 'tnhh', 'co', 'phan', 'cp', 'mtv', 'mot', 'thanh', 'vien', 'dich', 'vu', 'thuong', 'mai', 'san', 'xuat',
-             'tm', 'dv', 'xnk', 'xuat', 'nhap', 'khau', 'tap', 'doan', 'chi', 'nhanh', 'cua', 'hang', 'doanh', 'nghiep', 'tu', 'nhan',
-             'va', 'thiet', 'bi', 'ky', 'thuat', 'cong', 'nghe', 'giai', 'phap', 'he', 'thong', 'phan', 'mem'}
+# Legal-form phrases and business-type words that many company names carry; they cannot identify a seller.
+NAME_FORMS = ('trach nhiem huu han', 'mot thanh vien', 'co phan', 'cong ty', 'tnhh', 'mtv', 'cp', 'chi nhanh', 'tap doan', 'doanh nghiep tu nhan',
+              'cua hang', 'ho kinh doanh', 'viet nam', 'thuong mai dich vu', 'thuong mai', 'dich vu', 'san xuat', 'xuat nhap khau',
+              'thiet bi', 'ky thuat', 'cong nghe', 'giai phap', 'he thong', 'phan mem', 'dau tu', 'phat trien')
+NAME_STOP = {'tm', 'dv', 'xnk', 'va'}
 LAW_CUES = ('vi sao', 'tai sao', 'can cu', 'dieu nao', 'quy dinh nao', 'theo luat', 'theo quy dinh', 'dieu khoan', 'luat nao',
             'nghi dinh nao', 'thong tu nao')
 
@@ -123,7 +124,7 @@ def invoice_numbers(q: str) -> list[str]:
 
 
 def top_n(q: str) -> int | None:
-    m = re.search(r'top\s*(\d{1,2})', q) or re.search(r'(\d{1,2})\s*(?:hoa don|nguoi ban|nha cung cap|khoan|khach)', q)
+    m = re.search(r'top\s*(\d{1,2})', q) or re.search(r'(\d{1,2})\s*(?:hoa don|hd|nguoi ban|nha cung cap|ncc|khoan|khach)\b', q)
     if m:
         return max(1, min(50, int(m.group(1))))
     m = re.search(r'\b(' + '|'.join(NUM_WORDS) + r')\s*(?:hoa don|nguoi ban|nha cung cap|khoan|khach)', q)
@@ -141,18 +142,24 @@ def seller(q: str, invoices) -> tuple[str | None, str | None]:
             return t, sellers[t]
     best, score = None, 0
     qtext = f' {" ".join(re.findall(r"[a-z0-9]+", q))} '
-    names = {tax: [w for w in re.findall(r'[a-z0-9]+', fold(name).replace('viet nam', ' ')) if w not in NAME_STOP and len(w) > 1]
-             for tax, name in sellers.items()}
+    def name_words(name):
+        t = f' {fold(name)} '
+        for f in NAME_FORMS:
+            t = t.replace(f' {f} ', ' | ')
+        return [w for w in re.findall(r'[a-z0-9|]+', t) if (w == '|' or (w not in NAME_STOP and len(w) > 1))]
+    names = {tax: name_words(name) for tax, name in sellers.items()}
     counts = {}
     for ws in names.values():
         for w in set(ws):
             counts[w] = counts.get(w, 0) + 1
-    asks_seller = any(w in q for w in ('cong ty', 'nha cung cap', 'nguoi ban', 'ncc', 'cua hang', 'mua cua', 'ben '))
+    # words written right after "công ty", "nhà cung cấp", "người bán", "bên", "của hàng"
+    named = set(re.findall(r'(?:cong ty|nha cung cap|nguoi ban|ben|cua hang|mua cua)\s+([a-z0-9]+)', q)) - {
+        'minh', 'toi', 'chung', 'ta', 'nay', 'do', 'nao', 'ghi', 'co', 'da', 'khong', 'xuat', 'lap', 'ban', 'moi'}
     for tax, words in names.items():
-        # an adjacent pair of the name's own words ("an khang", "phuong nam"), or one long word unique to this seller
-        # when the question is plainly about a seller; loose common words ("dien", "dung") never identify a seller
-        pairs = sum(f' {a} {b} ' in qtext for a, b in zip(words, words[1:]))
-        single = sum(1 for w in words if len(w) >= 5 and counts[w] == 1 and f' {w} ' in qtext) if asks_seller else 0
+        # an adjacent pair of the name's own words ("an khang", "phuong nam"), or one word unique to this seller written
+        # right after "công ty" / "nhà cung cấp"; loose common words ("dien", "dung", "thanh") never identify a seller
+        pairs = sum(f' {a} {b} ' in qtext for a, b in zip(words, words[1:]) if '|' not in (a, b))
+        single = sum(1 for w in words if w != '|' and len(w) >= 3 and counts[w] == 1 and w in named)
         s = pairs * 2 + single
         if s > score:
             best, score = tax, s
@@ -168,8 +175,26 @@ def issue(q: str, catalog_issues: list) -> tuple[list, str | None]:
     return (list(best['codes']), best['name']) if best else ([], None)
 
 
+ABBREV = [(r'\bhd\b', 'hoa don'), (r'\bncc\b', 'nha cung cap'), (r'\bmst\b', 'ma so thue'), (r'\bgtgt\b', 'gia tri gia tang'),
+          (r'\btndn\b', 'thu nhap doanh nghiep'), (r'\btncn\b', 'thu nhap ca nhan'), (r'\bdn\b', 'doanh nghiep'), (r'\bck\b', 'chuyen khoan'),
+          (r'\bunc\b', 'uy nhiem chi'), (r'\bsk\b', 'sao ke'), (r'\bko\b|\bk\b|\bkh\b', 'khong')]
+ABBREV_VI = [(r'\b[hH][đĐ]\b', 'hóa đơn'), (r'\b[nN][cC][cC]\b', 'nhà cung cấp'), (r'\b[mM][sS][tT]\b', 'mã số thuế'), (r'\b[gG][tT][gG][tT]\b', 'giá trị gia tăng'),
+             (r'\b[tT][nN][dD][nN]\b', 'thu nhập doanh nghiệp'), (r'\b[tT][nN][cC][nN]\b', 'thu nhập cá nhân'), (r'\b[hH][dD]\b', 'hóa đơn'),
+             (r'\b[kK][oO]\b', 'không'), (r'\b[cC][kK]\b', 'chuyển khoản')]
+
+
+def expand(question: str) -> str:
+    """Spell out the abbreviations accountants type (hđ, ncc, mst, gtgt, tndn, ck, ko), keeping the rest as written."""
+    out = question
+    for pat, rep in ABBREV_VI:
+        out = re.sub(pat, rep, out)
+    return out
+
+
 def extract(question: str, report, catalog: dict, as_of: date) -> Params:
     q = fold(question)
+    for pat, rep in ABBREV:
+        q = re.sub(pat, rep, q)
     p = Params()
     p.period = period(q, report.invoices, as_of)
     p.invoice_numbers = invoice_numbers(q)
