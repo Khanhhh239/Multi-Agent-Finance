@@ -43,14 +43,30 @@ def embed_vn(texts: list[str]) -> np.ndarray:
 
 
 def rerank_scores(query: str, texts: list[str]) -> list[float]:
-    """Cross-encoder relevance (AITeamVN/Vietnamese_Reranker, a fine-tune of bge-reranker-v2-m3)."""
+    """Cross-encoder relevance (AITeamVN/Vietnamese_Reranker, a fine-tune of bge-reranker-v2-m3).
+
+    The model waits in main memory and borrows the GPU only while scoring (about 1 GB, under a second), then gives it
+    back: kept resident it pushed the answering model (qwen3:8b, same 6 GB card) half onto the CPU and answers took
+    two to three times longer."""
+    import torch
     if 'rr' not in _st:
-        import torch
         from sentence_transformers import CrossEncoder
-        _st['rr'] = CrossEncoder(str(RERANK_DIR), device='cuda' if torch.cuda.is_available() else 'cpu', max_length=512)
-        if _st['rr'].model.device.type == 'cuda':
-            _st['rr'].model.half()
-    return [float(x) for x in _st['rr'].predict([(query, t) for t in texts], batch_size=16, show_progress_bar=False)]
+        _st['rr'] = CrossEncoder(str(RERANK_DIR), device='cpu', max_length=512)
+        _st['rr'].model.half()
+    m = _st['rr']
+    pairs = [(query, t) for t in texts]
+    if not torch.cuda.is_available():
+        m.model.float()
+        return [float(x) for x in m.predict(pairs, batch_size=16, show_progress_bar=False)]
+    try:
+        m.model.to('cuda')
+        m._target_device = torch.device('cuda')
+        out = m.predict(pairs, batch_size=16, show_progress_bar=False)
+    finally:
+        m.model.to('cpu')
+        m._target_device = torch.device('cpu')
+        torch.cuda.empty_cache()
+    return [float(x) for x in out]
 
 
 def build_vn(db_path, batch: int = 64, progress=print):

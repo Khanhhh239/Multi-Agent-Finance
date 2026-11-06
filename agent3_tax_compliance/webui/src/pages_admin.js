@@ -62,7 +62,7 @@ export async function pageAdminHome() {
   app().innerHTML = `<h1 class="page">Quản trị</h1><p class="lead">Mọi thay đổi ở đây được kiểm tra hợp lệ, ghi phiên bản và lưu vào lịch sử (ai sửa, khi nào, sửa gì). Danh mục dùng chung áp dụng cho mọi doanh nghiệp; cấu hình doanh nghiệp chỉ áp dụng cho doanh nghiệp đang chọn.</p>
     <div class="grid2"><div class="panel"><h3>Doanh nghiệp</h3><p class="muted">${state.workspaces.length} doanh nghiệp. Đang chọn: ${esc(state.workspaces.find((w) => w.id === state.ws)?.name || 'chưa chọn')}.</p>
       <div class="bar">${button('Cấu hình doanh nghiệp đang chọn', 'primary', 'data-go="#/quan-tri/doanh-nghiep"')}${button('Thêm doanh nghiệp', 'tertiary', 'data-go="#/thiet-lap"')}</div></div>
-    <div class="panel"><h3>Danh mục dùng chung</h3><ul class="plain">${cats.map((c) => `<li><a href="#/quan-tri/danh-muc?ten=${c.name}">${esc(NAMES[c.name] || c.name)}</a> <span class="muted small">phiên bản ${esc(c.version)}</span></li>`).join('')}</ul></div></div>
+    <div class="panel"><h3>Danh mục dùng chung</h3><ul class="list-plain">${cats.map((c) => `<li><a href="#/quan-tri/danh-muc?ten=${c.name}">${esc(NAMES[c.name] || c.name)}</a> <span class="muted small">phiên bản ${esc(c.version)}</span></li>`).join('')}</ul></div></div>
     <div class="panel narrow"><h3>Đổi mật khẩu quản trị</h3><form id="pwchg"><div class="form-grid">
       <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="old">Mật khẩu hiện tại</label><input class="cds--text-input" id="old" type="password" autocomplete="current-password"></div>
       <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="new">Mật khẩu mới</label><input class="cds--text-input" id="new" type="password" autocomplete="new-password"></div></div>
@@ -153,7 +153,7 @@ export async function pageCatalog() {
     <form id="cat-form"><div id="cat-body">${ed.render(data)}</div>
     <div class="bar sticky-save"><input class="cds--text-input filter-input" id="by" placeholder="Người sửa" value="${esc(store.get('agent3.reviewer') || '')}" required>
     ${button('Lưu danh mục', 'primary', 'type="submit"')}<span id="cat-msg"></span></div></form>
-    ${history.length ? `<h2 class="section">Lịch sử</h2><ul class="plain small">${history.map((h) => `<li>${esc(h.at.replace('T', ' '))}: ${esc(h.by)} ${esc(JSON.stringify(h.summary))}</li>`).join('')}</ul>` : ''}`;
+    ${history.length ? `<h2 class="section">Lịch sử</h2><ul class="list-plain small">${history.map((h) => `<li>${esc(h.at.replace('T', ' '))}: ${esc(h.by)} ${esc(JSON.stringify(h.summary))}</li>`).join('')}</ul>` : ''}`;
   const body = $('#cat-body');
   body.addEventListener('click', (e) => {
     if (e.target.closest('.del-row')) e.target.closest('tr').remove();
@@ -186,7 +186,7 @@ export async function pageAdminHistory() {
   let packHist = [];
   if (state.ws) { try { packHist = await api(`/api/workspaces/${state.ws}/pack/history`); } catch { packHist = []; } }
   app().innerHTML = `<h1 class="page">Lịch sử thay đổi</h1><h2 class="section">Danh mục dùng chung</h2>
-    ${all.length ? `<ul class="plain small">${all.map((h) => `<li>${esc(h.at.replace('T', ' '))}: <strong>${esc(h.label)}</strong>, ${esc(h.by)}, ${esc(JSON.stringify(h.summary))}</li>`).join('')}</ul>` : '<p class="muted">Chưa có thay đổi.</p>'}
+    ${all.length ? `<ul class="list-plain small">${all.map((h) => `<li>${esc(h.at.replace('T', ' '))}: <strong>${esc(h.label)}</strong>, ${esc(h.by)}, ${esc(JSON.stringify(h.summary))}</li>`).join('')}</ul>` : '<p class="muted">Chưa có thay đổi.</p>'}
     <h2 class="section">Cấu hình doanh nghiệp đang chọn</h2>
-    ${packHist.length ? `<ul class="plain small">${packHist.slice().reverse().map((h) => `<li>${esc((h.at || '').replace('T', ' '))}: ${esc(h.by || '')} ${esc(JSON.stringify(h.changes || h.diff || h))}</li>`).join('')}</ul>` : '<p class="muted">Chưa có thay đổi.</p>'}`;
+    ${packHist.length ? `<ul class="list-plain small">${packHist.slice().reverse().map((h) => `<li>${esc((h.at || '').replace('T', ' '))}: ${esc(h.by || '')} ${esc(JSON.stringify(h.changes || h.diff || h))}</li>`).join('')}</ul>` : '<p class="muted">Chưa có thay đổi.</p>'}`;
 }
