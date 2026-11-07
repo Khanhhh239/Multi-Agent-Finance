@@ -12,7 +12,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from . import impact, pipeline, qa, report, synth
+from . import impact, pipeline, report, synth
 from .evaluate import evaluate
 from .report import money
 
@@ -58,9 +58,12 @@ def main(argv=None):
         print('Báo cáo:', paths['html'])
     elif a.cmd == 'ask':
         from ..lawbase.sync import DEFAULT_DB as LAWBASE_DB
-        ans = qa.answer(a.question, qa.Context(ws, Path(a.ruleset), as_of, rep, LAWBASE_DB if LAWBASE_DB.exists() else None))
-        print(f'[{ans.branch}] {ans.text}')
-        for c in ans.citations:
+        from .chat import engine
+        ans = engine.answer(a.question, engine.ChatContext(ws, Path(a.ruleset), as_of, rep, LAWBASE_DB if LAWBASE_DB.exists() else None))
+        print(f'[{ans["branch"]}] {ans["text"]}')
+        for r in ans.get('rows', [])[:20]:
+            print('  ', ' | '.join(str(r.get(k, '')) for k, _ in ans['columns']))
+        for c in ans['citations']:
             print('  căn cứ:', c)
     elif a.cmd == 'impact':
         after = pipeline.run(ws, Path(a.ruleset_after), as_of)

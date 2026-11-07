@@ -207,14 +207,6 @@ def invoice_lookup(ctx, p, q):
         facts.append(dict(key=inv.key, items=[it.code for it in its]))
     ans = ChatAnswer('invoice_lookup', ' '.join(parts), facts=facts, citations=sorted(cites),
                      links=[('Xem trong Việc cần xử lý', f'#/viec?open={found[0].key}')])
-    if p.wants_law:
-        topics = [f'{it.title}. {it.action}' for it in rep.items if any(inv.key in it.invoice_keys for inv in found)][:3]
-        grounded = ctx.law(' ; '.join(dict.fromkeys(topics))[:400]) if topics else None
-        if grounded and grounded.mode == 'LLM_VERIFIED':
-            ans.text += ' Căn cứ trong kho luật: ' + ' '.join(f'{s["text"]} [{_cite(s)}]' for s in grounded.sentences)
-            ans.citations += sorted({_cite(s) for s in grounded.sentences})
-            ans.facts.append(grounded.to_dict())
-            ans.branch = 'DATA+POLICY'
     return ans
 
 

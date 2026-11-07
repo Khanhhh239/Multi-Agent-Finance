@@ -86,3 +86,19 @@ def test_the_same_bank_statement_dropped_twice_is_kept_once(tmp_path):
     assert first[0]['kind'] == 'bank'
     assert second[0].get('duplicate') and 'đã nạp trước đó' in second[0]['reason']
     assert len(list((ws / 'bank').glob('*'))) == before        # the demo already holds this very file, so nothing new was stored
+
+
+def test_dropping_the_same_invoice_file_twice_changes_nothing_but_a_renamed_copy_is_kept_for_the_duplicate_rule(tmp_path):
+    from src.assistant.inbox import ingest
+    from src.assistant.pack import load_pack
+    from src.assistant import synth
+    ws = tmp_path / 'ws'
+    synth.generate(ws, seed=3)
+    pack = load_pack(ws / 'pack.json')
+    src = sorted((ws / 'invoices' / 'purchase').glob('*.xml'))[0]
+    raw = src.read_bytes()
+    count = len(list((ws / 'invoices' / 'purchase').glob('*.xml')))
+    again = ingest(ws, src.name, raw, pack.tax_code, pack)
+    assert again[0].get('duplicate') and len(list((ws / 'invoices' / 'purchase').glob('*.xml'))) == count
+    ingest(ws, 'ban_sao_khac_ten.xml', raw, pack.tax_code, pack)
+    assert len(list((ws / 'invoices' / 'purchase').glob('*.xml'))) == count + 1

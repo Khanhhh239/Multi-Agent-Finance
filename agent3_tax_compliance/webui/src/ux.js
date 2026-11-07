@@ -49,7 +49,7 @@ export async function nextSteps(ws, rep) {
   try { ai = await api(`/api/workspaces/${state.ws}/ai`); } catch { /* model status is optional */ }
   const open = (rep?.items || []).filter((i) => i.status === 'AT_RISK' || i.status === 'REVIEW').length;
   const steps = [
-    ['Hồ sơ doanh nghiệp', true, '#/nap?b=ho-so', 'Đã có'],
+    ['Hồ sơ doanh nghiệp', true, '#/quan-tri/doanh-nghiep', 'Đã có'],
     ['Hóa đơn mua vào (XML)', files.purchase_xml > 0, '#/nap?b=nhanh', files.purchase_xml ? `${files.purchase_xml} tệp` : 'Bắt buộc'],
     ['Sao kê ngân hàng', files.bank > 0, '#/nap?b=nhanh', files.bank ? `${files.bank} tệp` : 'Nên có: thiếu thì mọi hóa đơn từ ngưỡng bị báo chưa có chứng từ'],
     ['Bảng kê từ cổng thuế', files.portal_list > 0, '#/nap?b=nhanh', files.portal_list ? 'Đã có' : 'Nên có: để phát hiện hóa đơn bỏ sót'],

@@ -116,8 +116,10 @@ export async function pageIntake() {
   const pack = await api(`/api/workspaces/${state.ws}/pack`);
   const ws = state.workspaces.find((w) => w.id === state.ws);
   const kinds = state.schema.files.filter((f) => f.folder);
-  const step = hashParams().get('b') || (Object.values(ws?.files || {}).some((n) => n) ? 'chay' : 'nhanh');
-  const steps = [['nhanh', 'Nạp nhanh'], ['ho-so', 'Hồ sơ'], ...kinds.map((f) => [f.key, `${f.label} (${ws?.files?.[f.key] ?? 0})`]), ['chay', 'Kiểm tra và chạy']];
+  const total = Object.values(ws?.files || {}).reduce((a, n) => a + (Number(n) || 0), 0);
+  const asked = hashParams().get('b');
+  const step = asked === 'chay' ? 'chay' : asked === 'nhanh' ? 'nhanh' : asked ? 'da-nap' : (total ? 'chay' : 'nhanh');
+  const steps = [['nhanh', 'Nạp tệp'], ['da-nap', `Tệp đã nạp (${total})`], ['chay', 'Kiểm tra và chạy']];
   const header = `<h1 class="page">Nạp dữ liệu</h1><p class="lead">Doanh nghiệp tự xuất tệp từ cổng hóa đơn điện tử, ngân hàng điện tử và phần mềm đang dùng. Hệ thống không đăng nhập thay doanh nghiệp và không gửi dữ liệu ra ngoài máy này.</p>
     <nav class="steps">${steps.map(([k, l], i) => `<a href="#/nap?b=${k}" class="${k === step ? 'on' : ''}"><span class="n">${i + 1}</span>${esc(l)}</a>`).join('')}</nav>`;
 
@@ -127,6 +129,9 @@ export async function pageIntake() {
       <details class="guide"><summary>Lấy các tệp này ở đâu</summary><div class="guide-body">${kinds.map((k) => `<p class="cell-title">${esc(k.label)}</p><ol>${k.how.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>`).join('')}</div></details>`;
     bindDrop(async (files) => {
       const recs = await sendAll(files, `/api/workspaces/${state.ws}/inbox`);
+      const now = Object.values(state.workspaces.find((w) => w.id === state.ws)?.files || {}).reduce((a, n) => a + (Number(n) || 0), 0);
+      const tab = app().querySelector('.steps a[href="#/nap?b=da-nap"]');
+      if (tab) tab.lastChild.textContent = `Tệp đã nạp (${now})`;
       $('#up').innerHTML = `${uploadResult(recs)}<div id="autorun">${loading('Đang tự chạy phân tích với dữ liệu mới')}</div>`;
       if (recs.some((r) => r.kind)) {
         try {
@@ -138,18 +143,6 @@ export async function pageIntake() {
         } catch (err) { $('#autorun').innerHTML = notice('error', 'Phân tích chưa chạy được', err.message); }
       } else { $('#autorun').innerHTML = ''; }
     });
-    return;
-  }
-  if (step === 'ho-so') {
-    app().innerHTML = `${header}<form id="profile"><div class="form-grid">${state.schema.profile.map((f) => field(f, pack.profile[f.key] ?? '')).join('')}</div>
-      <div class="bar">${button('Lưu hồ sơ', 'primary', 'type="submit"')}<span id="pmsg"></span></div></form>`;
-    $('#profile').onsubmit = async (e) => {
-      e.preventDefault();
-      const prof = Object.fromEntries(new FormData(e.target).entries());
-      prof.industry = (prof.industry || '').split(';').map((s) => s.trim()).filter(Boolean);
-      try { await put(`/api/workspaces/${state.ws}/pack`, { ...pack, profile: { ...pack.profile, ...prof } }); $('#pmsg').innerHTML = notice('success', 'Đã lưu hồ sơ'); await loadWorkspaces(); }
-      catch (err) { $('#pmsg').innerHTML = notice('error', 'Không lưu được', err.message); }
-    };
     return;
   }
   if (step === 'chay') {
@@ -166,19 +159,15 @@ export async function pageIntake() {
     } catch (err) { $('#cov').innerHTML = notice('error', 'Không kiểm tra được', err.message); }
     return;
   }
-  const spec = kinds.find((f) => f.key === step);
-  app().innerHTML = `${header}${guideBox(spec, !(ws?.files?.[step]))}${dropZone(spec.accept.join(','), `hoặc kéo thả vào đây. Nhận: ${spec.accept.join(', ')}`)}
-    <h2 class="section">Tệp đã nạp</h2><div id="det">${loading('Đang đọc từng tệp')}</div><div id="suggest"></div>`;
-  bindDrop(async (files) => {
-    const recs = await sendAll(files, `/api/workspaces/${state.ws}/files/${step}`);
-    await pageIntake();
-    $('#up').innerHTML = notice('info', 'Đã nạp', recs.map((r) => `${r.file}${r.kind ? '' : ': ' + r.reason}`).join('; '));
-  });
-  try {
-    const rows = await api(`/api/workspaces/${state.ws}/details/${step}`);
-    $('#det').innerHTML = detailsTable(step, rows);
-    app().querySelectorAll('[data-suggest]').forEach((b) => { b.onclick = () => mappingEditor(b.dataset.suggest); });
-  } catch (err) { $('#det').innerHTML = notice('error', 'Không đọc được danh sách tệp', err.message); }
+  // "Tệp đã nạp": every kind in one page, each with its file-by-file reading status
+  app().innerHTML = `${header}${kinds.map((k) => `<h2 class="section">${esc(k.label)} (${ws?.files?.[k.key] ?? 0})</h2><div id="det-${k.key}">${loading('Đang đọc từng tệp')}</div>`).join('')}<div id="suggest"></div>`;
+  await Promise.all(kinds.map(async (k) => {
+    try {
+      const rows = await api(`/api/workspaces/${state.ws}/details/${k.key}`);
+      $(`#det-${k.key}`).innerHTML = detailsTable(k.key, rows);
+    } catch (err) { $(`#det-${k.key}`).innerHTML = notice('error', 'Không đọc được danh sách tệp', err.message); }
+  }));
+  app().querySelectorAll('[data-suggest]').forEach((b) => { b.onclick = () => mappingEditor(b.dataset.suggest); });
 }
 
 export const KIND_LABELS = KIND_LABEL;

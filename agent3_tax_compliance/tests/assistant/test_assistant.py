@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from lxml import html as lhtml
 
-from src.assistant import impact, pipeline, qa, report, synth
+from src.assistant import impact, pipeline, report, synth
 from src.assistant.evaluate import evaluate
 from src.assistant.matching import match_payments
 from src.assistant.models import BankTxn, InvoiceFact
@@ -163,19 +163,6 @@ def test_report_files_render(ws, rep, tmp_path):
     assert 'Dữ liệu mô phỏng' in doc.text_content() and 'DRAFT' in doc.text_content()
     assert report.money(rep.totals['at_risk_vat']) in doc.text_content()
     assert json.loads(paths['json'].read_text(encoding='utf-8'))['totals']['at_risk_vat'] == str(rep.totals['at_risk_vat'])
-
-
-def test_questions_route_to_the_right_branch_and_use_report_numbers(ws, rep):
-    ctx = qa.Context(ws, pipeline.DEFAULT_RULESET, AS_OF, rep)
-    a = qa.answer('Có bao nhiêu thuế có nguy cơ bị loại?', ctx)
-    assert a.branch == 'DATA' and report.money(rep.totals['at_risk_vat']) in a.text
-    assert qa.answer('Chi tiếp khách này có được trừ không?', ctx).branch == 'JUDGMENT'
-    assert qa.answer('Điều kiện khấu trừ là gì?', ctx).branch == 'POLICY'
-    cash = next(it for it in rep.items if it.code == 'R01_PAYMENT_EVIDENCE')
-    number = cash.invoice_keys[0].split('|')[-1]
-    w = qa.answer(f'Nếu bổ sung chứng từ chuyển khoản cho hóa đơn {number} thì còn bao nhiêu?', ctx)
-    expected_after = rep.totals['at_risk_vat'] - cash.amount
-    assert report.money(expected_after) in w.text and 'giả định' in w.text.lower()   # a what-if must say it is hypothetical
 
 
 def test_law_change_impact_respects_effective_dates(ws, rep):

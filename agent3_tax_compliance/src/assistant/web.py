@@ -21,7 +21,7 @@ from fastapi.staticfiles import StaticFiles
 
 from ..lawbase.store import Corpus
 from ..lawbase.sync import DEFAULT_DB as LAW_DB, running_sync, sync as law_sync
-from . import pipeline, qa, report as report_mod
+from . import pipeline, report as report_mod
 from .input_schema import FILES, guide
 from . import inbox
 from .intake import IntakeError, extract_zip, suggest_mapping
@@ -460,7 +460,10 @@ async def add_decision(wid: str, request: Request):
 @app.post('/api/workspaces/{wid}/ask')
 async def ask(wid: str, request: Request):
     ws = ws_path(wid)
-    body = await request.json()
+    try:
+        body = await request.json()
+    except ValueError:
+        raise HTTPException(422, 'nội dung gửi lên không phải JSON UTF-8')
     from .chat import engine
     rep = _run(ws)
     ctx = engine.ChatContext(ws, pipeline.DEFAULT_RULESET, _as_of(ws), rep, LAW_DB if LAW_DB.exists() else None)

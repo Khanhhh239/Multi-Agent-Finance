@@ -104,8 +104,12 @@ def ingest(ws: Path, name: str, raw: bytes, tax_code: str, pack: Pack) -> list[d
             if kind:
                 folder = ws / KIND_FOLDER[kind]
                 folder.mkdir(parents=True, exist_ok=True)
-                same = _same_content(folder, p.read_bytes()) if kind == 'bank' else None   # invoice copies stay: rule R05 reports them
-                if same is not None:                       # the same statement dropped twice: keep one copy, do not double the transactions
+                # The same file dropped again is kept once, so a second drop does not double the data. A bank statement is the same
+                # statement whatever its name; an invoice only when the name matches too, because a copy under another name is
+                # what rule R05 (duplicate invoice) exists to report.
+                data = p.read_bytes()
+                same = _same_content(folder, data) if kind == 'bank' else (folder / n if (folder / n).exists() and (folder / n).read_bytes() == data else None)
+                if same is not None:
                     rec.update(saved_as=same.name, reason=f'{reason}; tệp này đã nạp trước đó (trùng nội dung với {same.name}), giữ một bản', duplicate=True)
                     out.append(rec)
                     continue

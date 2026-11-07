@@ -7,7 +7,7 @@ from decimal import Decimal
 
 import pytest
 
-from src.assistant import qa, synth
+from src.assistant import synth
 from src.assistant.input_schema import FILES, PROFILE_FIELDS
 from src.assistant.intake import IntakeError, extract_zip, is_mt940, read_mt940, suggest_mapping
 
@@ -93,6 +93,8 @@ def test_policy_question_is_answered_from_the_legal_corpus(tmp_path, monkeypatch
         def chat(self, system, user, schema=None, num_predict=900):
             return json.dumps(dict(abstain=False, answer=[dict(text='Mức tính tiền chậm nộp là 0,03%/ngày.', sources=['P1'],
                                                                 quote='Mức tính tiền chậm nộp bằng 0,03%/ngày')])), {}
-    ctx = qa.Context(tmp_path, tmp_path / 'none.json', date(2026, 11, 5), report=None, lawbase_db=db, llm=FakeLLM())
-    a = qa.answer('Quy định mức tính tiền chậm nộp mỗi ngày là gì?', ctx)
+    from src.assistant.chat import engine
+    from src.assistant.chat.handlers import HANDLERS
+    ctx = engine.ChatContext(tmp_path, tmp_path / 'none.json', date(2026, 11, 5), report=None, lawbase_db=db, llm=FakeLLM())
+    a = HANDLERS['law_question'](ctx, None, 'Quy định mức tính tiền chậm nộp mỗi ngày là gì?')
     assert a.branch == 'POLICY' and '0,03%' in a.text and '108/2025/QH15' in a.text

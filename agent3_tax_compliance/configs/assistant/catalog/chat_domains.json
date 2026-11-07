@@ -198,7 +198,7 @@
    "id": "invoice_lookup",
    "group": "TRA_CUU",
    "title": "Tra cứu một hóa đơn",
-   "what": "Thông tin một hóa đơn theo số: người bán, ngày, số tiền, tình trạng thanh toán, các cảnh báo, việc cần làm; hỏi thêm 'vì sao' hoặc 'căn cứ' thì kèm điều khoản trong kho luật.",
+   "what": "Thông tin một hóa đơn theo số: người bán, ngày, số tiền, tình trạng thanh toán, các cảnh báo, việc cần làm và căn cứ pháp lý của từng cảnh báo (điều khoản đã được kiểm tra khi đồng bộ kho luật). Trả lời ngay.",
    "limits": "Cần ghi số hóa đơn. Nhiều người bán có cùng số thì liệt kê tất cả.",
    "params": [
     "invoice_number"
