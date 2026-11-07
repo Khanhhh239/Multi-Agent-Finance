@@ -6,7 +6,7 @@ let guideCache = null;
 
 function guideHtml(g) {
   return `<details class="guide" id="guide"><summary>Trợ lý trả lời được gì (${g.groups.reduce((n, x) => n + x.domains.length, 0)} loại câu hỏi)</summary>
-    <p class="muted small">Danh sách này sinh ra từ đúng danh mục mà trợ lý dùng để hiểu câu hỏi, nên chỉ có những loại câu trợ lý thật sự trả lời được. Bấm một câu ví dụ để hỏi.</p>
+    <p class="muted small">Bấm một câu ví dụ để hỏi ngay.</p>
     ${g.groups.map((grp) => `<details class="guide-group"><summary>${esc(grp.title)} <span class="muted small">(${grp.domains.length})</span></summary>
       ${grp.domains.map((d) => `<div class="guide-domain"><strong>${esc(d.title)}</strong><div class="small">${esc(d.what)}</div>
         ${d.limits ? `<div class="muted small">Giới hạn: ${esc(d.limits)}</div>` : ''}
@@ -40,9 +40,9 @@ function answerHtml(q, a, secs) {
     .map((x) => `<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm alt-q" data-q="${esc(q)}" data-domain="${esc(x.domain)}">${esc(x.title)}</button>`).join('')}</div>` : '';
   const how = { SEMANTIC: 'nhận dạng theo nghĩa', STRUCTURE: 'nhận dạng theo số hóa đơn, tên người bán trong câu', MODEL: 'mô hình trên máy chọn loại câu hỏi',
     CHOSEN_BY_USER: 'loại do bạn chọn', REFUSED: 'không nhận dạng được', KEYWORD_FALLBACK: 'nhận dạng theo từ (máy chủ mô hình chưa chạy)' }[a.route?.method] || '';
-  return `<div class="answer"><div class="chips">${tag(a.branch === 'REFUSED' ? 'ABSTAIN' : a.branch, a.branch === 'REFUSED' ? 'Không trả lời' : a.branch === 'HELP' ? 'Hướng dẫn' : undefined)}${rag ? tag(rag.mode) : ''}
+  return `<div class="answer msg-bot"><div class="chips ans-head">${tag(a.branch === 'REFUSED' ? 'ABSTAIN' : a.branch, a.branch === 'REFUSED' ? 'Không trả lời' : a.branch === 'HELP' ? 'Hướng dẫn' : undefined)}${rag ? tag(rag.mode) : ''}
     <span class="muted small">${secs} giây${how ? `; ${esc(how)}` : ''}</span></div>${understood(a)}
-    <p style="margin:.5rem 0 0">${esc(a.text)}</p>${tableHtml}
+    <p class="ans-text">${esc(a.text)}</p>${tableHtml}
     ${cites.length ? `<div class="cite">Căn cứ: ${cites.join('; ')}</div>` : ''}
     ${rag?.dropped?.length ? `<div class="cite">${rag.dropped.length} câu của mô hình bị loại vì không có căn cứ.</div>` : ''}
     ${(a.links || []).length ? `<div class="chips">${a.links.map(([l, h]) => `<a class="cds--btn cds--btn--ghost cds--btn--sm" href="${esc(h)}">${esc(l)}</a>`).join('')}</div>` : ''}
@@ -55,13 +55,13 @@ export async function pageAsk() {
   let history = [];
   try { history = JSON.parse(sessionStorage.getItem(key) || '[]'); } catch { history = []; }
   const save = () => { try { sessionStorage.setItem(key, JSON.stringify(history.slice(-30))); } catch { /* private mode */ } };
-  app().innerHTML = `<h1 class="page">Hỏi đáp</h1><p class="lead">Hỏi bằng lời thường về số liệu của doanh nghiệp hoặc về quy định. Số liệu lấy từ kết quả phân tích; câu về quy định phải trích nguyên văn điều khoản còn hiệu lực. Câu ngoài phạm vi hoặc chưa rõ thì trợ lý từ chối, không đoán.</p>
-    <div id="guide-box">${loading('Đang tải hướng dẫn')}</div>
-    <div class="chips" id="sugg"></div>
-    <div id="chat"></div><div id="pending"></div>
+  app().innerHTML = `<h1 class="page">Hỏi đáp</h1><p class="lead">Hỏi bằng lời thường về số liệu của doanh nghiệp hoặc về quy định. Câu ngoài phạm vi thì trợ lý từ chối, không đoán.</p>
+    <div class="ask-wrap"><div id="sugg" class="sugg"></div>
+    <div id="chat" class="chat"></div><div id="pending"></div>
     <form id="ask" class="bar ask-bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
     <label class="cds--label" for="q">Câu hỏi (Enter để gửi)</label><input class="cds--text-input" id="q" name="q" autocomplete="off" maxlength="500" placeholder="Ví dụ: quý này có bao nhiêu thuế có nguy cơ?"></div>${button('Hỏi', 'primary', 'type="submit"')}
-    ${history.length ? button('Xóa lịch sử', 'ghost', 'id="clear"') : ''}</form>`;
+    ${history.length ? button('Xóa lịch sử', 'ghost', 'id="clear"') : ''}</form>
+    <div id="guide-box">${loading('Đang tải hướng dẫn')}</div></div>`;
   const chat = $('#chat');
   const draw = () => { chat.innerHTML = history.join(''); };
   draw();
@@ -69,7 +69,7 @@ export async function pageAsk() {
   const ask = async (q, domain) => {
     if (busy || !q) return;
     busy = true;
-    history.push(`<div class="answer user"><strong>${esc(q)}</strong>${domain ? ' <span class="muted small">(chọn lại loại câu hỏi)</span>' : ''}</div>`); draw();
+    history.push(`<div class="msg-user"><div>${esc(q)}${domain ? ' <span class="small">(đã chọn lại loại câu hỏi)</span>' : ''}</div></div>`); draw();
     const t0 = Date.now();
     const tick = () => {
       const s = Math.round((Date.now() - t0) / 1000);
@@ -102,6 +102,6 @@ export async function pageAsk() {
   } catch (err) { $('#guide-box').innerHTML = notice('error', 'Không tải được hướng dẫn', err.message); }
   try {
     const s = await api(`/api/workspaces/${state.ws}/chat/suggestions`);
-    $('#sugg').innerHTML = `<span class="muted small">Gợi ý từ dữ liệu của doanh nghiệp:</span>${s.map((q) => `<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm chip-q" data-q="${esc(q)}">${esc(q)}</button>`).join('')}`;
+    $('#sugg').innerHTML = `<div class="muted small">Thử hỏi:</div><div class="chips">${s.slice(0, 5).map((q) => `<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm chip-q" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;
   } catch { $('#sugg').innerHTML = ''; }
 }

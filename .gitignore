@@ -110,3 +110,7 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 /agent3_tax_compliance/models/
+
+# Agent 3: demo files and documentation are meant to be committed
+!/agent3_tax_compliance/demo/**
+!/agent3_tax_compliance/tai_lieu/**
