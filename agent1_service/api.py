@@ -137,6 +137,7 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
     @asynccontextmanager
     async def lifespan(_):
         yield
+        if hasattr(app.state,'company_executor'):app.state.company_executor.shutdown(wait=True)
         store.connection.close()
     app=FastAPI(title='Agent 1 — Trợ lý dòng tiền',lifespan=lifespan)
 
@@ -543,10 +544,17 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
 
     @app.delete('/data')
     def delete(firm=Depends(authorize)):
-        store.delete_firm(firm);last.pop(firm,None);return dict(deleted=True)
+        with app.state.company_mutex:
+            if firm in app.state.company_running:raise HTTPException(409,'Chờ huấn luyện hoàn tất trước khi xóa doanh nghiệp')
+            store.delete_firm(firm);last.pop(firm,None);return dict(deleted=True)
 
     @app.get('/',response_class=HTMLResponse)
     def home():
+        return (Path(__file__).parent/'ui/workspace/index.html').read_text(encoding='utf-8')
+    @app.get('/research',response_class=HTMLResponse,include_in_schema=False)
+    def research_home():
         return (Path(__file__).parent/'ui/index.html').read_text(encoding='utf-8')
     app.state.store=store
+    from .workspace.api import install
+    install(app,store,authorize,firm_id)
     return app

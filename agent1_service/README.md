@@ -1,4 +1,225 @@
-# Dịch vụ local Agent 1
+# Agent1 — Không gian dòng tiền cho doanh nghiệp
+
+## Luồng doanh nghiệp (07/11/2026)
+
+[Bắt đầu từ README](../README.md) · [Bàn giao kỹ thuật](../docs/HANDOFF.md) · [Sổ tay PDF](../docs/06_Pilot/pdf/So-tay-Agent1.pdf).
+
+Định hướng: một khung thích nghi cho từng doanh nghiệp, chọn phương pháp bằng lịch sử
+của chính doanh nghiệp. Dữ liệu tổng hợp chỉ thử phần mềm. Mã nằm ở
+`agent1/adaptive/`, `agent1_service/workspace/` và `agent1_service/ui/workspace/`.
+Không thay các thí nghiệm hoặc kết luận NO_GO của bộ nghiên cứu cũ.
+
+Đã tham chiếu nhánh [agent1-Thắng](https://github.com/Khanhhh239/Multi-Agent-Finance/tree/agent1-Th%E1%BA%AFng),
+commit `89c144ba3b3d2e7d79d8cb70dc7baf99dc319268`: giữ hợp đồng ngày biết thông tin,
+nhãn thanh toán, censoring và không suy missing = unpaid. Đây là lớp triển khai mới
+trên workspace Agent1 hiện tại; **không phải tuyên bố đã merge toàn bộ T0 của nhánh đó**.
+
+### Chạy trên Windows
+
+```powershell
+# Tại gốc dự án; Python 3.12
+py -3.12 -m venv .venv  # chỉ khi chưa có
+.\.venv\Scripts\python.exe -m pip install -r requirements-service.txt
+.\scripts\start-business.ps1
+```
+
+Mở `http://127.0.0.1:8011/workspace` (trang `/` cũng mở giao diện mới).
+Khóa truy cập tự tạo ở `.state-business-keys/api-token.txt`; dán vào nút **Kết nối**.
+Không gửi khóa trong URL, Git, ảnh hoặc báo cáo. Khóa chỉ giữ trong bộ nhớ trình duyệt;
+tải lại trang cần kết nối lại. `-Company TEN_DN -Port 8012` đổi mã/cổng của triển khai.
+Mỗi triển khai phục vụ **một doanh nghiệp**; dùng thư mục dữ liệu, khóa và tiến trình
+riêng cho doanh nghiệp khác. Không đổi `Company` để giả lập SaaS nhiều tenant trên cùng kho.
+
+Docker: `docker compose -f compose.business.yaml up --build -d`.
+Compose này bắt đầu từ kho rỗng, không seed synthetic; volume dữ liệu và khóa riêng,
+cổng chỉ bind loopback. Khóa ở `/keys/api-token.txt` trong container. Tắt bằng
+`docker compose -f compose.business.yaml down` (không thêm `-v` nếu muốn giữ dữ liệu).
+Docker cần daemon hoạt động; kiểm thử Python local không thay cho kiểm thử container.
+
+### Hai giai đoạn sử dụng
+
+1. **Thiết lập:** nạp hóa đơn → nạp thanh toán → nạp lịch chi → xem lỗi/ghép cột →
+   xác nhận lưu → xác nhận phạm vi thanh toán → kiểm định → xem chỉ số → chọn phiên bản.
+2. **Vận hành:** nhập ngày dự báo, số dư thực tế và ngưỡng cảnh báo → dự báo 1–52 tuần
+   (mặc định 13) → xem khoản cần chú ý và tuần thiếu tiền → thử kịch bản → xuất Excel
+   với ba sheet: kết quả, kế hoạch tuần và khoản cần chú ý. Mỗi tháng nạp dữ liệu mới và
+   kiểm định lại; phiên bản cũ tiếp tục dùng cho đến khi người phụ trách chọn bản mới.
+
+Không đủ lịch sử vẫn dùng dự báo điều khoản/lịch sử; không tự tạo nhãn, tự sinh dữ liệu
+để đủ ngưỡng hoặc tự kích hoạt phiên bản mới. Danh sách phiên bản cho phép quay về bản cũ.
+Nếu dữ liệu thay đổi sau khi học, API và giao diện báo cần xem xét kiểm định lại.
+
+### Hợp đồng đầu vào SME
+
+CSV UTF-8 hoặc XLSX, cho chọn sheet (mặc định sheet đầu); ≤5 MB/file, ≤50.000 dòng, ZIP XLSX giải nén ≤30 MB.
+Worker học local giới hạn 50.000 hóa đơn. Mã là chuỗi ổn định; giữ số 0 đầu bằng kiểu
+Text trong Excel. File không được có dòng tổng cộng. Tên cột Việt/Anh tự nhận diện;
+người dùng có thể ghép lại trước khi lưu.
+
+| Bảng | Trường bắt buộc | Trường bổ sung |
+|---|---|---|
+| `invoices` | `invoice_id`, `customer_id`, `issue_date`, `due_date`, `amount` | `known_at`, `currency` (VND) |
+| `payments` | `payment_id`, `invoice_id`, `payment_date`, `amount` | `known_at, bank_id` |
+| `bank` | `bank_id, account, date, direction, amount` | `known_at, component` |
+| `statements` | `statement_id, account, start_date, end_date, opening_balance, closing_balance` | `known_at` |
+| `actions` | `event_id, invoice_id, date, kind` | `known_at, promise_date` |
+| `outflows` | `expense_id`, `date`, `amount`, `category`, `known_at` | — |
+
+- Chọn rõ ngày `dd/mm/yyyy`, `yyyy-mm-dd` hoặc `dd-mm-yy`; ngày Excel bản địa được đọc trực tiếp.
+- Chọn số Việt Nam `1.500.000,50` hoặc số thuần `1500000.50`; không đoán dấu phân cách.
+- Tiền dương, hữu hạn; chỉ VND. Không tự quy đổi FX, xử lý âm/hoàn tiền/thu thừa.
+- `known_at` là ngày thông tin sẵn có, không phải ngày tải lên. Khi thiếu trên hóa đơn/
+  thanh toán, giả định bằng ngày nghiệp vụ và hiện cảnh báo; kiểm định dựa vào giả định này.
+  Lịch chi bắt buộc có `known_at` vì ngày chi có thể ở tương lai.
+- Một khoản chuyển khoản phân bổ nhiều hóa đơn phải tách thành dòng với mã thanh toán riêng.
+  Một hóa đơn trả nhiều lần giữ đủ các phần. Tổng thu không vượt giá trị hóa đơn.
+- Nhập hóa đơn trước thanh toán. Dòng lỗi chặn **cả lần lưu**; không âm thầm bỏ lỗi.
+- Cùng ID là cập nhật thay thế, ID mới là thêm. Xem trước nêu số dòng bị cập nhật;
+  nếu dữ liệu đổi giữa xem trước và lưu, trả 409 để tránh ghi đè.
+- Mỗi lần lưu tạo snapshot bất biến và hash dữ liệu. Xóa bản ghi nhập nhầm tạo snapshot mới,
+  không xóa lịch sử kiểm toán. Cần xóa thanh toán liên quan trước khi xóa hóa đơn.
+- Mẫu có tiền tố `DEMO_`; worker chỉ học trên bộ mẫu trong kho `DEMO_` khởi động với `-DemoTraining`.
+  Xem sáu bảng thực hành tại [Đại Phát](../pilot/demo_dai_phat).
+- Phải xác nhận đã có đầy đủ các khoản thu đến ngày chốt trước **cả học và dự báo**.
+  Đây là xác nhận của người cung cấp dữ liệu, không phải kiểm toán sao kê tự động.
+
+### Bag of methods thực thi
+
+Danh mục duy trì trong `agent1/adaptive/methods.py::CATALOG`; toàn bộ fit/predict chạy
+ở máy chủ. API khách hàng trả chất lượng và phiên bản, không trả estimator, trọng số,
+mã nguồn hoặc bảng chọn phương pháp. Người vận hành có thể xem catalog/code này.
+
+| Mã nội bộ | Loại | Cách hoạt động / preset |
+|---|---|---|
+| `due` | Quy tắc | Ngày đến hạn; khoản quá hạn chỉ có xác suất thu ở độ tuổi có lịch sử hỗ trợ |
+| `customer` | Hybrid | Trung vị trễ khách, co về doanh nghiệp với 5 quan sát giả; mốc so sánh |
+| `survival` | Thống kê | Hazard thực nghiệm theo tuổi hóa đơn, giữ khoản chưa trả trong risk set |
+| `logistic` | Có giám sát | Logistic hazard + StandardScaler, C=1 |
+| `logistic_regularized` | Có giám sát | Logistic hazard, C=0.1 |
+| `forest` | Bagging | Random Forest 100 cây, depth=10, leaf≥15 |
+| `forest_shallow` | Bagging | Random Forest, depth=5 |
+| `extra` | Bagging | Extra Trees 100 cây, depth=12, leaf≥12 |
+| `hist` | Boosting | Histogram GBM 100 vòng, 15 lá, L2=5 |
+| `hist_regularized` | Boosting | Histogram GBM, L2=10 |
+| `lightgbm` | Boosting | LightGBM 100 vòng, 15 lá, leaf≥30 |
+| `xgboost` | Boosting | XGBoost 100 vòng, depth=3, learning rate=.05 |
+| `spline` | Thống kê | Logistic trên spline của tuổi nợ |
+| `neural` | DL hóa đơn | Hazard MLP (32,16), tối thiểu 1.000 hóa đơn, 200 tất toán, 20 khách trong tập học |
+| `neural_wide`, `neural_deep` | DL hóa đơn | Hai cấu hình MLP riêng (64,32) và (64,32,16), cùng điều kiện dữ liệu |
+| `blend` | Ensemble | Ứng viên + mốc lịch sử; trọng số chọn trong {0,.25,.5,.75,1} |
+
+Có 16 cấu hình hóa đơn và 1 cơ chế ensemble. Lưới cấu hình được khóa trước,
+chọn phương pháp và trọng số bằng tập validation của doanh nghiệp. Có thể thêm
+ứng viên qua `Method` cùng kiểm thử và quy tắc kiểm định. Bag chuỗi tiền riêng có
+baseline, mô hình thống kê, ensemble và GRU/LSTM hoặc Chronos khi đủ điều kiện
+dữ liệu và phụ thuộc. Xem [cấu hình chạy](../docs/HANDOFF.md#cấu-hình-cần-biết).
+
+Đặc trưng: log số tiền, kỳ hạn, trễ khách co về doanh nghiệp, trễ doanh nghiệp,
+log số lần tất toán trước đó; thêm tuổi tuần và khoảng tới hạn cho hazard.
+Các thống kê chỉ dùng hóa đơn/thanh toán đã được biết **trước lúc phát hành** hóa đơn
+được dự báo. Không dùng ID làm đặc trưng ghi nhớ. Hazard chỉ dùng tuần quan sát đầy đủ
+(tối đa 52 tuần); không sửa `t1.py::expand` hoặc giao thức `run_real_v2.py` cũ.
+Tất toán là thời điểm tổng phần thu đủ giá trị hóa đơn; các lần trả nhỏ vẫn giảm công nợ.
+
+### Giao thức chọn và nghiệm thu phiên bản
+
+Với ngày chốt T, cắt theo **thời gian**, không chia ngẫu nhiên:
+
+1. Học trên thông tin quan sát đến T−112 ngày (≥60 hóa đơn, ≥20 tất toán).
+2. Hiệu chỉnh bằng hóa đơn phát hành trong (T−112, T−84], nhãn quan sát tới T−56
+   (≥20 hóa đơn). Chọn phương pháp và trọng số bằng Brier trả đủ trong 28 ngày.
+3. Học lại tới T−56; kiểm tra ứng viên duy nhất trên hóa đơn trong (T−56, T−28],
+   nhãn quan sát tới T (≥20). Tập này chỉ làm cổng chấp nhận, không chọn lại phương án.
+4. Nếu Brier ứng viên không tốt bằng mốc, phiên bản dùng mốc. Sau đó học lại bằng dữ liệu
+   quan sát đến T, lưu artifact, hash snapshot, cửa sổ đánh giá và kết quả trước khi refit.
+5. Người phụ trách xem báo cáo rồi kích hoạt. Mọi kết quả còn mang `pilot_ready=false`.
+
+Hóa đơn được ghi nhận sau ngày phát hành loại khỏi đánh giá tại gốc phát hành để tránh
+giả vờ biết trước. Nhãn gồm cả hóa đơn chưa trả đủ sau 28 ngày, không chỉ các khoản đã trả.
+API báo Brier ứng viên/mốc, Brier theo tiền, log loss, tỷ lệ trả thực/dự báo, cải thiện và
+bootstrap ghép cặp theo khách hàng (1.000 mẫu, seed 7). Ít hơn 10 nhóm khách hàng thì
+gắn `ci_reliable=false`. Cổng chấp nhận dùng điểm ước lượng, **không chứng minh thắng có ý nghĩa
+thống kê**. Một cửa sổ audit không thay cho monitoring nhiều kỳ trên dữ liệu thật.
+
+### API cho Agent4
+
+Kế toán tạo và lưu bằng `POST /v1/predict`. Agent4 dùng token chỉ đọc để lấy `GET /v1/forecasts` và `GET /v1/forecasts/{id}`.
+
+```json
+{
+  "cutoff": "2026-11-05",
+  "opening_balance": 250000000,
+  "horizon_weeks": 13,
+  "cash_floor": 200000000,
+  "confirmed_weeks": [1, 2, 3],
+  "payments_complete": true,
+  "delay_days": 0,
+  "expense_multiplier": 1
+}
+```
+
+Trả `weeks` (thu, chi, số dư, P10/P90), `collections`, `alerts`, `model_version`,
+`dataset_hash`, `stale_model`, `assumptions`, `scenario`, `pilot_ready`.
+Không gửi giao dịch hay nhắc nợ. Ngày dự báo không được trước ngày chốt của phiên bản học.
+Kịch bản chậm thu làm tròn lên số tuần, hệ số chi nhân lịch chi đã biết.
+
+| Endpoint | Mục đích |
+|---|---|
+| `GET /v1/workspace` | Số lượng dữ liệu, tiến độ job, báo cáo phiên bản, trạng thái stale |
+| `GET /v1/templates/{kind}` | Tải mẫu CSV |
+| `POST /v1/imports/preview` | Multipart file, kind, mapping JSON, date_format, number_format |
+| `POST /v1/imports/{id}/commit` | Lưu snapshot đã kiểm tra |
+| `DELETE /v1/records/{kind}/{id}` | Xóa bản ghi khỏi snapshot hiện tại |
+| `POST /v1/training` | `{asof, payments_complete}` → 202 job ID; poll workspace |
+| `POST /v1/models/{id}/activate` | Chọn bản mới hoặc quay về bản cũ |
+| `POST /v1/predict` | Kế toán tạo dự báo/kịch bản đã lưu |
+| `GET /v1/forecasts/{id}/xlsx` | Tải Excel của dự báo đã lưu |
+
+Job chạy riêng qua executor một worker; request vẫn trả ngay. Khởi động lại máy chủ
+đánh dấu job dở dang là lỗi có thể chạy lại, không giả báo hoàn thành. Xóa toàn DN qua
+API cũ bị chặn khi worker đang chạy. Không chạy nhiều process uvicorn trên cùng kho:
+mutex hàng chờ là trong tiến trình. Tác vụ lớn cần ít nhất 3 GiB RAM hệ thống trống
+trước khi chạy. Worker tách tiến trình có giới hạn RSS mặc định 2 GiB và không có
+giới hạn tổng thời gian. Chưa hỗ trợ khôi phục checkpoint khi mất điện.
+
+### Bảo mật và giới hạn triển khai
+
+SQLite mã hóa từng payload bằng Fernet; khóa nằm ngoài thư mục dữ liệu. Snapshot, preview,
+phiên bản và forecast đều được mã hóa. Không tải mô hình từ file người dùng. Artifact pickle
+chỉ do worker nội bộ tạo, lưu trong bản ghi xác thực mã hóa; phụ thuộc phiên bản thư viện
+đã khóa và cần quản trị backup/di trú. Không cung cấp endpoint tải artifact ra trình duyệt.
+
+HTML/JS chỉ là ứng dụng khách; trọng số nằm phía Python. Người quản trị máy chủ vẫn có thể
+xem code/khóa. Cần TLS, quản lý danh tính, phân quyền, quota/rate limit, giám sát và chính sách
+lưu trữ khi triển khai ra Internet. Phiên bản này là **dịch vụ local một doanh nghiệp**,
+chưa là SaaS nhiều doanh nghiệp có SSO/RBAC. Snapshot/preview được giữ lại, chưa có TTL tự dọn.
+Không tự gửi dữ liệu tới nhà cung cấp AI, CDN, font bên ngoài hay analytics.
+
+Phạm vi chính là công nợ mở và lịch chi đã biết. Phần hoạt động và hóa đơn bán chịu mới
+chỉ được cộng khi có dữ liệu, phiên bản đủ điều kiện và đã chọn phạm vi này; tối đa 13 tuần
+đầu. Lịch chi chưa nạp vẫn cần rà soát, kể cả khi dự báo trả giá trị chi bằng 0.
+Chưa xử lý FX, tín dụng ngân hàng, hoàn tiền và lịch trả góp chi tiết. P10/P90 là dải mô
+phỏng; độ phủ dòng tiền chưa có bằng chứng trên SME thật. Brier 4 tuần đo xác suất tất toán.
+
+### Giao diện và nguồn mở
+
+Thiết kế riêng dạng sổ điều hành: màu giấy/đen xanh, serif hỗ trợ tiếng Việt, bảng công nợ,
+quy trình ghép cột, trạng thái trống, phiên bản có rollback, biểu đồ tương tác và xuất Excel.
+Không cần npm để chạy. Tài nguyên được vendored tại `ui/workspace/vendor`, gồm giấy phép:
+
+- [Tabler Icons v3.31.0](https://github.com/tabler/tabler-icons/tree/v3.31.0): SVG, MIT.
+- [uPlot v1.6.32](https://github.com/leeoniya/uPlot/tree/1.6.32): biểu đồ, MIT.
+- [Lora / Google Fonts](https://github.com/google/fonts/tree/main/ofl/lora): font, SIL OFL.
+
+Đã kiểm nguồn ngày 05/11/2026. Không sao chép cả template dashboard hay branding bên thứ ba.
+Font/icon/chart nằm local; license kèm theo. Kiểm tra `node --check agent1_service/ui/workspace/app.js`
+và `.\.venv\Scripts\python.exe -m pytest tests/adaptive -q` trước khi thay luồng.
+Kiểm thử fixture chỉ chứng minh code hoạt động; không là phép chọn phương pháp cho khách.
+
+## Dịch vụ nghiên cứu cũ — legacy
+
+Phần dưới phục vụ tái lập nghiên cứu trước định hướng doanh nghiệp. Dashboard cũ tại
+`/research`; `/forecast` cũ giữ cổng NO_GO. Không dùng seed_demo để khởi tạo khách hàng thật.
 
 ## Chạy Python
 
@@ -13,7 +234,7 @@ $env:AGENT1_DEMO_DIR='data/synthetic/tgt'
 .\.venv\Scripts\python.exe -m uvicorn agent1_service.main:app --host 127.0.0.1 --port 8000
 ```
 
-Mở `http://127.0.0.1:8000`. Khoá truy cập tự tạo ở `.state/api-token.txt`;
+Mở `http://127.0.0.1:8000/research`. Khoá truy cập tự tạo ở `.state-keys/api-token.txt`;
 nhập khoá vào ô dashboard hoặc gửi header `Authorization: Bearer ...`.
 Không đưa khoá vào URL, Git hoặc ảnh chụp màn hình.
 
@@ -25,7 +246,7 @@ trước khi khởi động. Kết quả vẫn mang nhãn nghiên cứu và chư
 
 Khi Docker engine hoạt động: `docker compose up --build -d`.
 Compose nạp công ty F000 từ thế giới `tgt` vào SQLite mã hoá trên volume riêng,
-chỉ mở cổng trên loopback. Đọc token bằng lệnh `docker compose exec agent1 cat /state/api-token.txt`.
+chỉ mở cổng trên loopback. Đọc token bằng lệnh `docker compose exec agent1 cat /keys/api-token.txt`.
 Lần kiểm hiện tại trên Windows chưa xây/chạy container do Docker daemon không hoạt động;
 đã kiểm dịch vụ bằng TestClient và Python local.
 
@@ -337,3 +558,16 @@ Tác vụ weekly tính PSI và độ phủ trên số dư thực tế đúng cu�
 thiếu số dư được báo thiếu bằng chứng. Ngưỡng PSI >0,1 hoặc bốn lượt độ phủ liên tiếp
 ngoài [0,7;0,9] yêu cầu xem xét retrain. Tác vụ này chưa tự tạo lịch trên hệ điều hành.
 Dashboard hiển thị báo cáo đã lưu, phiên bản và cảnh báo local.
+
+
+## Vận hành pilot SME
+
+Xem [bộ pilot](../pilot/BO_PILOT_SME.md) và [sổ nghiệm thu](../pilot/quyet_dinh.md). Mỗi DN dùng tiến trình, thư mục CSDL, khóa mã hóa và token riêng. Đặt các token đọc riêng biệt bằng `AGENT1_AGENT4_TOKEN`, `AGENT1_VIEWER_TOKEN`; không tái sử dụng giữa các DN hoặc với token quản trị. Thu hồi bằng cách xóa/đổi biến và khởi động lại. Quyền đọc chỉ mở danh sách và bản dự báo đã lưu. Kế toán giữ quyền nhập, chạy, kích hoạt và đối chiếu.
+
+Đối soát: `GET /v1/reconciliation`, `POST /v1/allocations`. Tra kết quả với `GET /v1/forecasts/{id}/actuals?asof=YYYY-MM-DD`; thêm `payments_complete=true` chỉ khi đã kiểm tra đủ thu đến ngày chấm để lấy precision–coverage danh sách thu nợ. Đầu ra có sai số bằng VND, độ phủ, độ rộng, báo giả/bỏ sót, hash dữ liệu thực tế. Ngày tạo sau ngày chốt đánh dấu hồi cứu. Công nợ trả từng phần chỉ có mô hình tiền riêng khi có ≥20 lịch sử tương đồng; dải mô phỏng gốc chưa được hiệu chỉnh.
+
+Với sao kê đã đối soát liên tục ≥104 tuần, so mốc cùng kỳ 52 tuần với GBM cho hai nhóm bán thu ngay/chi biến đổi. Chọn `try_deep_cash` để xét Chronos local (thư mục `AGENT1_CHRONOS_DIR`) và GRU Gaussian tự hồi quy khi đủ 156 tuần; `AGENT1_DL_DEVICE=cpu` mặc định. Ba gốc hiệu chỉnh 13 tuần và một kỳ kiểm tra độc lập; phải chọn `include_operating` mới đưa dự báo này vào kế hoạch. Với hóa đơn bán chịu sắp phát hành, chỉ cộng dòng thu riêng khi có đủ hóa đơn trưởng thành liên kết sao kê và ứng viên vượt mốc không cộng ở kỳ kiểm tra. Nếu thiếu bằng chứng, giao diện ghi phần này chưa được tính.
+
+Sao lưu: `python -m agent1_service.workspace.recovery backup DATA/agent1.db BACKUP/agent1.db --key-file KEYS/encryption.key`. Khôi phục: đổi lệnh thành `restore BACKUP/agent1.db NEW/agent1.db` với cùng khóa. Đích phải mới. Chép khóa mã hóa và khóa bí danh vào kho khóa riêng; cấp token mới khi phục hồi. So hash kế hoạch cũ trên bản khôi phục trước khi dùng. Thống nhất hạn lưu trước pilot: giữ snapshot/model/forecast đang được dẫn chứng tới khi nghiệm thu; có thể xóa toàn bộ DN theo thủ tục quản trị đã có sau khi hết hạn. Xóa bản ghi làm việc không xóa lịch sử hoặc các bản sao; người giữ bản sao chịu trách nhiệm xóa bản sao/khóa đến hạn.
+
+Tác vụ ≥10.000 hóa đơn hoặc bật DL dòng tiền chạy trong tiến trình tách biệt, chỉ nhận khi có ≥3 GiB RAM trống. Không giới hạn tổng thời gian huấn luyện; biến cũ `AGENT1_TRAIN_SECONDS` không còn được sử dụng. Giữ giới hạn 2.048 MiB RSS (`AGENT1_TRAIN_MIB`) và cập nhật tiến độ mỗi 15 giây; ép chạy tách biệt cho tác vụ nhỏ bằng `AGENT1_ISOLATE_TRAINING=1`. Có thể xóa phiên bản chưa dùng qua trang kiểm định; phiên bản đang phục vụ hoặc đã có kế hoạch tham chiếu bị khóa.

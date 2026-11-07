@@ -1,123 +1,82 @@
-# Agent 1 — Trợ lý dòng tiền
+# Agent1 · Trợ lý dòng tiền cho doanh nghiệp
 
-Dự án nghiên cứu dự báo thu tiền và số dư 13 tuần, gồm máy phát dữ liệu SME Việt Nam,
-mô hình T1–T10, đối soát ngân hàng, thí nghiệm thích nghi miền và dịch vụ local.
-**Chưa hoàn thành toàn bộ kế hoạch 01–08; trạng thái nghiệm thu hiện tại là NO_GO.**
+Workspace local để nạp sổ kế toán, chọn mô hình theo lịch sử doanh nghiệp và lập kế hoạch thu chi. Kỳ dự báo tùy chọn **1–52 tuần**, mặc định **13 tuần**. Có kịch bản thu chậm, biến động chi, rủi ro theo khách và xuất Excel ba sheet.
 
-Đọc [tiến độ triển khai](docs/05_Coding_Agent_Plan/TIEN_DO_TRIEN_KHAI.md) để biết phần đã đo và phần còn thiếu;
-[cổng hiện hành](docs/03_Evaluation/GATES_CURRENT.md) để xem điều kiện nghiệm thu;
-[kết quả hiện có](docs/03_Evaluation/04_ket_qua_hien_co.md) và
-[kết quả chưa đạt](docs/03_Evaluation/KET_QUA_CHUA_DAT.md) để xem bằng chứng từ CSV.
-Các tài liệu lịch sử không thay các bảng hiện hành này.
+## Bắt đầu
 
-Luồng dịch vụ hiện tại: **T0 nhập/kiểm/giữ nguồn → T9 phân bổ có ràng buộc,
-duyệt và ledger → snapshot theo ngày đã biết → train/dự báo/giám sát → T10/API
-cho Agent 4**. T9 dùng lõi từ `agent1-Thắng@89c144b`; T0 Khánh được giữ lại.
-Xem [hợp đồng và thao tác đối soát](agent1_service/README.md#luong-t0-t9-thong-nhat).
-Thay đổi này không nâng cổng pilot hoặc kích hoạt ứng viên T1 V6.
-
-Runtime v2 giữ phiên bản khách hàng/lời hứa/lịch chi, kiểm tra khách của phân
-bổ đã duyệt và tách ngày thu tiền khỏi ngày đóng do giảm trừ. Train chạy qua
-job riêng; dự báo dùng model đã chọn hoặc B1d. Validation T1 chấm cả nhóm
-chưa trả có đủ theo dõi, cùng baseline tại các mốc 7/28/56/91 ngày.
-
-Để dựng lại bộ mẫu theo luồng này, job retrain có chế độ `--prepare-only`
-lưu train/validation mã hóa từ kho nguồn, tách khỏi bước fit và chọn model;
-xem [hướng dẫn dựng dữ liệu](agent1_service/README.md#phiên-bản-mô-hình-và-giám-sát-local).
-[Đợt rà soát và dọn artifact ngày 06/11](outputs/maintenance/t0_t9_t1_rebuild_cleanup_20261106.json)
-ghi rõ cấu hình đã xóa, dữ liệu nghiên cứu còn giữ và phần đang thiếu nguồn
-doanh nghiệp để dựng mẫu. Không coi dữ liệu mock là lịch sử duyệt T9 thật.
-
-[Rà soát bổ sung ngày 06/11](outputs/maintenance/t0_t9_t1_final_review_20261106.json)
-kiểm tra ngày biết muộn, trạng thái mở trước khi tổng hợp đặc trưng, dư nợ
-1 đồng và retry giao dịch.
-[Kiểm tra tiếp trước khi push](outputs/maintenance/t0_t9_t1_publish_followup_20261106.json)
-bổ sung chọn phiên bản/hủy hóa đơn theo ngày biết và retry sự kiện hủy.
-[Mô tả thay đổi](outputs/maintenance/t0_t9_t1_change_description_20261106.md)
-ghi phạm vi, bằng chứng kiểm thử và giới hạn dữ liệu thực tế.
-
-## Cài đặt và kiểm tra trên Windows
-
-Python 3.12, PowerShell, tại thư mục dự án:
+Yêu cầu Git, Python 3.12 và PowerShell. Nếu đã clone nhánh `agent1-Khanh`, bắt đầu từ lệnh tạo `.venv`.
 
 ```powershell
+git clone --branch agent1-Khanh --single-branch https://github.com/Khanhhh239/Multi-Agent-Finance.git
+cd Multi-Agent-Finance
 py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-$env:PYTHONUTF8='1'
-$env:AGENT1_THREADS='4'
-$env:OMP_NUM_THREADS='4'
-$env:OPENBLAS_NUM_THREADS='1'
-.\.venv\Scripts\python.exe -m pytest tests -q --junitxml=outputs/implementation/tests.xml
-.\.venv\Scripts\python.exe -m ruff check agent1 agent1_service scripts tests --select E9,F63,F7,F82
+.\.venv\Scripts\python.exe -m pip install -r requirements-service.txt
+.\scripts\start-business.ps1 -Port 8011 -Company SME
 ```
 
-`requirements.txt` khoá phụ thuộc trực tiếp; `requirements-lock.txt` ghi môi trường đầy đủ.
-Chronos/PyTorch là nhánh tuỳ chọn trong `requirements-forecast.txt`; kết quả nếu đã hoàn tất nằm ở `outputs/t6/chronos/`.
-Giảm số luồng khi máy dùng chung; các thí nghiệm lớn cần kiểm tra RAM và dung lượng trước khi chạy.
+Mở **http://127.0.0.1:8011/workspace**. Khóa kết nối nằm trong `.state-business-keys/api-token.txt`. Với doanh nghiệp có mã khác, script in đúng đường dẫn thư mục khóa trên màn hình khởi động.
 
-## Chạy thí nghiệm
-
-Đợt chạy lại fullweek ngày 21/10/2026 là hồ sơ lịch sử; giao thức và
-đăng ký P4/G3 đã gộp tại
-[phương pháp T1](docs/04_AI_Methods/02_t1_hazard_thoi_diem_tra.md#fullweek-20261021).
-Không coi chuỗi điều phối 18 job cũ là lệnh khởi chạy hiện tại. `C-v2` có
-giao thức thật mới; `C` chỉ dùng kiểm toán v1. Một số đầu vào cũ đã xóa;
-kiểm [tồn kho dữ liệu](docs/02_Data/README.md) và protocol trước khi chạy job.
+## Thử toàn bộ luồng bằng Đại Phát
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/run_plan.py --jobs tests,report --fail-fast
-.\.venv\Scripts\python.exe scripts/run_plan.py --jobs T8-reliability,T3-T1,DA-paired --fail-fast
-.\.venv\Scripts\python.exe scripts/run_plan.py --jobs SBA-macro,regime-cash,collection-policy,policy-comparisons --fail-fast
-.\.venv\Scripts\python.exe scripts/run_plan.py --jobs rules-business-cases,obligation-cases --fail-fast
+.\scripts\start-business.ps1 -Port 8012 -Company DEMO_DAIPHAT -DemoTraining
 ```
 
-Danh sách job ở `scripts/run_plan.py`. Lệnh không có `--jobs` chạy cả chuỗi lớn,
-có thể mất nhiều giờ; tuning và scaling tốn đáng kể tài nguyên. Mỗi job ghi trạng thái,
-exit code, hash mã và nhật ký trong `outputs/implementation/`.
-Smoke E2E lưu riêng; kết quả đầy đủ nằm trong `outputs/e2e/e2e_metrics.csv`.
-Không dùng dữ liệu kiểm tra miền đích để chọn tham số hoặc chính sách onboarding.
-Các phép đo bổ sung và giới hạn đã gộp tại
-[SBA](docs/04_AI_Methods/03_t2_t3_t8_xac_suat_hoa_don.md#sba-macro),
-[DR/IW](docs/04_AI_Methods/05_domain_adaptation.md#ablation-dr-iw),
-[T7/T9/chính sách](docs/04_AI_Methods/07_t7_t9_t10.md),
-[copula và đối chứng T6](docs/04_AI_Methods/06_t6_monte_carlo_conformal.md),
-[lịch nghĩa vụ từ hồ sơ](docs/04_AI_Methods/04_t4_t5_thu_moi_va_chi.md#nghia-vu-bo-sung) và
-[đối chiếu BCTC niêm yết](docs/02_Data/09_vn_listed_spot_check.md).
+Mở **http://127.0.0.1:8012/workspace#data** và kết nối bằng khóa trong `.state-business-firm-DEMO_DAIPHAT-data-keys/api-token.txt`. Nạp sáu CSV từ [pilot/demo_dai_phat](pilot/demo_dai_phat) theo thứ tự số. Chọn ngày trong file `yyyy-mm-dd` và số tiền `plain`. Giao diện và Excel hiển thị `dd-mm-yy`.
 
-Khi cần dựng dữ liệu mới, xem [tồn kho và thiết kế dữ liệu](docs/02_Data/README.md), [data card lịch sử](docs/DATA_CARD.md) và các script
-`crawl.py`, `build_worlds.py`, `build_multiworld.py`, `build_big.py`.
-Không tự chấp nhận điều khoản Kaggle hoặc điền danh tính SEC; hai nguồn này đang được tạm bỏ.
-Không ghi đè bộ dữ liệu hiện có bằng cấu hình khác.
-
-## Dịch vụ local
-
-Xem [hướng dẫn dịch vụ](agent1_service/README.md) cho nhập XML/CSV/Excel, token,
-dashboard, registry mô hình và giám sát. Lệnh khởi động sau khi đã có thế giới `tgt`:
-
-```powershell
-$env:AGENT1_DEMO_DIR='data/synthetic/tgt'
-.\.venv\Scripts\python.exe -m agent1_service.seed_demo
-.\.venv\Scripts\python.exe -m uvicorn agent1_service.main:app --host 127.0.0.1 --port 8000
-```
-
-Mở `http://127.0.0.1:8000`, dùng token trong `.state/api-token.txt`.
-Dữ liệu và registry được mã hoá trong SQLite; không chia sẻ token hoặc thư mục `.state`.
-Mặc định dự báo trả `409 NO_GO`; chế độ nghiên cứu local cần cấu hình rõ trong hướng dẫn dịch vụ.
-Docker cần daemon hoạt động. Kiểm tra local không thay UAT của người dùng hoặc pilot doanh nghiệp thật.
-
-## Cấu trúc và tái lập báo cáo
-
-| Thư mục | Nội dung |
+| Thao tác | Giá trị diễn tập |
 |---|---|
-| `agent1/data`, `agent1/synth` | Nạp dữ liệu, hợp đồng, máy phát và tình huống khó |
-| `agent1/models`, `agent1/eval` | Đặc trưng as-of, mô hình, chỉ số và bootstrap theo công ty |
-| `agent1/reconciliation` | Lõi T9 từ Thắng, ledger mã hoá và view quan sát dùng chung |
-| `agent1/rules` | Quy tắc có phiên bản, nguồn và trạng thái xác minh |
-| `agent1_service`, `agent1/jobs` | API/UI local, lưu trữ, retrain và giám sát |
-| `scripts`, `tests` | Các giao thức thực nghiệm và kiểm thử |
-| `outputs` | CSV kết quả, metadata, hình và nhật ký |
-| `docs/05_Coding_Agent_Plan` | Phạm vi WP, nhật ký/quyết định lịch sử và tiến độ sinh từ hồ sơ |
+| Ngày chốt kiểm định và dự báo | `31-10-26` |
+| Số dư đầu kỳ | `425000000` VND |
+| Ngưỡng cảnh báo | `200000000` VND |
+| Chạy gốc | 13 tuần, Kế hoạch gốc |
+| So sánh | Chạy gốc 26 tuần rồi chọn Thu chậm thêm 28 ngày |
 
-Sau khi các job kết thúc, chạy `python scripts/make_report.py` để sinh lại tài liệu từ CSV.
-Số ca kiểm thử đọc từ `outputs/implementation/test_summary.csv`; không giữ số đếm thủ công trong README.
-Không commit dữ liệu thô, parquet tổng hợp, cache hoặc bí mật. Kết quả tổng hợp chưa chứng minh hiệu quả trên DN thật.
+Hướng dẫn có **12 bước và 13 ảnh web**, gồm nhập file, xem điểm, chọn phiên bản, thử kịch bản và xuất Excel. [Đọc PDF mới nhất](docs/06_Pilot/pdf/So-tay-Agent1.pdf) · [Bản Markdown](docs/06_Pilot/SO_TAY_AGENT1.md).
+
+Dữ liệu Đại Phát là synthetic. Bản huấn luyện minh họa có Brier 4 tuần 0,0949 so với mốc 0,1341 trên 82 hóa đơn audit. Khoảng tin cậy cải thiện chứa 0. Xem [bằng chứng và giới hạn](docs/HANDOFF.md).
+
+## Người nhận bàn giao
+
+| Nơi đọc | Nội dung |
+|---|---|
+| [docs/HANDOFF.md](docs/HANDOFF.md) | Kiến trúc, luồng dữ liệu, cấu hình, kiểm tra và phần còn thiếu |
+| [agent1_service/README.md](agent1_service/README.md) | API, phân quyền, phục hồi và dịch vụ nghiên cứu |
+| [docs/06_Pilot/pdf/So-tay-Agent1.pdf](docs/06_Pilot/pdf/So-tay-Agent1.pdf) | Thực hành cho kế toán và người vận hành |
+| [pilot/demo_dai_phat](pilot/demo_dai_phat) | Sáu CSV mô phỏng, manifest và file lỗi để thử nhập liệu |
+| [docs/06_Pilot/RA_SOAT_WORKSPACE_DONG_TIEN.md](docs/06_Pilot/RA_SOAT_WORKSPACE_DONG_TIEN.md) | Đối chiếu yêu cầu sản phẩm và các tính năng còn thiếu |
+
+## Kiểm tra
+
+```powershell
+$env:PYTHONUTF8='1'
+$env:OMP_NUM_THREADS='2'
+.\.venv\Scripts\python.exe -m pytest tests/adaptive -q
+.\.venv\Scripts\python.exe -m pytest tests -q
+```
+
+GRU/LSTM và Chronos dùng phụ thuộc tùy chọn trong `requirements-forecast.txt`. Chỉ cài khi cần kiểm định nhánh chuỗi tiền mở rộng. MLP hóa đơn dùng scikit-learn. `AGENT1_DL_DEVICE` mặc định `cpu`. Chronos cần thư mục trọng số local `AGENT1_CHRONOS_DIR`.
+
+## Cấu trúc
+
+```text
+agent1/adaptive/          Học, kiểm định và dự báo riêng theo doanh nghiệp
+agent1_service/workspace/ API workspace, worker, xuất Excel, phục hồi
+agent1_service/ui/        Giao diện và tài nguyên dùng local
+scripts/start-business.ps1 Điểm khởi động trên Windows
+scripts/business/        Sinh demo, kiểm tra và dựng tài liệu
+pilot/demo_dai_phat/      Dữ liệu diễn tập đã gắn mã DEMO_
+docs/06_Pilot/pdf/        PDF bàn giao mới nhất
+tests/adaptive/          Kiểm thử luồng SME
+agent1/models/           Mô hình và thí nghiệm nghiên cứu
+```
+
+Các tài liệu nghiên cứu nằm trong thư mục `docs/01_…` đến `docs/05_…`. Đọc [chỉ mục nghiên cứu](docs/00_INDEX.md) và [cổng nghiệm thu](docs/03_Evaluation/GATES_CURRENT.md) khi làm việc với pipeline nghiên cứu.
+
+## Vận hành và dữ liệu riêng
+
+Tác vụ lớn cần ít nhất **3 GiB RAM hệ thống trống** trước khi bắt đầu. Worker giữ giới hạn RSS mặc định 2 GiB. Huấn luyện không giới hạn tổng thời gian, tiến độ cập nhật mỗi 15 giây. Để máy và dịch vụ hoạt động trong lúc học.
+
+Workspace demo tự tạo mật khẩu báo cáo ngẫu nhiên trong thư mục khóa nếu chưa có. Báo cáo HTML mã hóa được lưu dưới `outputs/private-training-reports/`. Có thể đổi thư mục bằng `AGENT1_REPORT_DIR`. Khóa API, mật khẩu, CSDL và trọng số do máy nhận tạo riêng. `.gitignore` loại các file này khỏi Git.
+
+Luồng nghiên cứu T0/T9/T1 đã tích hợp lõi đối soát từ agent1-Thắng cùng lịch sử quan sát có duyệt. Xem mục “Luồng T0–T9 thống nhất” trong [tài liệu dịch vụ](agent1_service/README.md). Workspace SME dùng các endpoint `/v1/` riêng và cùng kho lưu mã hóa.

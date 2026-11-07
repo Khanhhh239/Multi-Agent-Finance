@@ -1,0 +1,2 @@
+bank_id,account,date,direction,amount,known_at,component
+DEMO_BANK100,DEMO_TK,02/10/2026,thu,100000000,02/10/2026,other

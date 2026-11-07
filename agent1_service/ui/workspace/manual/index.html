@@ -1,0 +1,180 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hướng dẫn sử dụng Agent1</title><style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f6f4ed;color:#172e27;font:17px/1.65 'Segoe UI',Arial,sans-serif}main{max-width:1120px;background:#fffefa;margin:auto;padding:32px clamp(16px,5vw,65px) 64px}h1,h2,h3{line-height:1.22;color:#123c30;text-wrap:balance}h1{font-family:Georgia,serif;font-size:clamp(31px,5vw,57px);margin:24px 0}h2{font-size:32px;margin-top:52px;border-top:2px solid #30604e;padding-top:24px}h3{font-size:23px;margin-top:38px}p,li{max-width:93ch}a{color:#125a46}nav{display:flex;flex-wrap:wrap;gap:8px 24px;border-bottom:1px solid #cad6cb;padding:0 0 15px}nav a{font-weight:600}code{background:#f0f2ed;padding:.1em .3em;overflow-wrap:anywhere}table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.5}th,td{text-align:left;vertical-align:top;padding:12px;border-bottom:1px solid #cad6cb}th{background:#183e32;color:white}td:first-child{font-weight:650;width:20%}tbody tr:nth-child(even){background:#f4f7f1}figure{margin:18px 0 24px;padding:12px;border:1px solid #ccdad0;border-radius:6px;background:#f7f9f5}figure img{display:block;max-width:100%;height:auto;margin:auto}figcaption{margin:10px 0 0;text-align:center;font-size:14px;color:#3d554b}.money-figure{padding:10px 20px;background:#edf3e8;border-left:5px solid #56815a}.money-figure p{display:flex;flex-wrap:wrap;align-items:center;gap:7px 12px}.money-figure b{min-width:95px}.money-figure span,.money-figure strong{padding:6px 10px;background:white;border:1px solid #c1d3c3}.money-figure strong{background:#184632;color:white}footer{margin-top:40px;font-size:14px;color:#485b50}ul{padding-left:24px}.table-frame{overflow-x:auto}
+@media(max-width:650px){body{font-size:16px}main{padding:18px 14px}h2{font-size:25px}.table-frame table{min-width:690px}figure{padding:5px}}
+@media print{body,main{background:white;padding:0;font-size:10pt}nav{display:none}table{font-size:8.7pt}tr,figure,.money-figure{break-inside:avoid}h2,h3{break-after:avoid}figure img{max-height:16cm}a{color:inherit}}
+figure svg{display:block;width:100%;height:auto;max-width:100%;max-height:480px;margin:auto}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f2ed;padding:10px 12px}
+</style><main><nav aria-label="Mục lục"><a href="#buoc-1-mo-kho-ai-phat-va-ket-noi">Bước 1</a><a href="#buoc-2-giai-nen-va-chon-ung-bang">Bước 2</a><a href="#buoc-3-kiem-tra-roi-xac-nhan-luu-tung-file">Bước 3</a><a href="#buoc-4-kiem-tra-khoan-thu-con-cho-ghep">Bước 4</a><a href="#buoc-5-tao-luot-kiem-inh">Bước 5</a><a href="#buoc-6-oc-iem-va-chon-phien-ban">Bước 6</a><a href="#buoc-7-lap-ke-hoach-goc-13-tuan">Bước 7</a><a href="#buoc-8-oc-bieu-o-va-bang-tung-tuan">Bước 8</a><a href="#buoc-9-xem-danh-sach-khoan-can-chu-y">Bước 9</a><a href="#buoc-10-so-sanh-kich-ban-26-tuan">Bước 10</a><a href="#buoc-11-tu-at-gia-inh-va-pham-vi">Bước 11</a><a href="#buoc-12-xuat-excel-va-mo-ke-hoach-cu">Bước 12</a></nav><h1 id="huong-dan-su-dung-agent1">Hướng dẫn sử dụng Agent1</h1>
+<h3 id="buoc-1-mo-kho-ai-phat-va-ket-noi">Bước 1 · Mở kho Đại Phát và kết nối</h3>
+<ol>
+<li>Mở <a href="http://127.0.0.1:8012/workspace#data">Dữ liệu doanh nghiệp</a> trên máy chạy Agent1.</li>
+<li>Bấm <strong>Kết nối</strong>. Mở file <code>api-token.txt</code> trong thư mục <code>.state-business-firm-DEMO_DAIPHAT-data-keys</code> dưới thư mục repo, sao chép mã vào ô <strong>Khóa truy cập</strong>, rồi bấm <strong>Kết nối →</strong>.</li>
+<li>Xác nhận thanh trên cùng hiện <strong>MÔI TRƯỜNG DEMO · ĐƯỢC PHÉP TRAIN</strong>. Nếu thấy số lượng dữ liệu đã đủ theo bước 2, có thể đi tiếp tới bước 4.</li>
+</ol>
+<figure data-shot="10-connect.png"><svg role="img" aria-label="Hình 1. Hộp kết nối và ô nhập khóa truy cập của workspace Đại Phát." width="505" height="365" viewBox="375 175 505 365"><defs><clipPath id="view-10-connect"><rect x="375" y="175" width="505" height="365"/></clipPath></defs><image href="img/10-connect.png" width="1265" height="712" clip-path="url(#view-10-connect)"/></svg><figcaption>Hình 1. Hộp kết nối và ô nhập khóa truy cập của workspace Đại Phát.</figcaption></figure>
+<p>Khóa truy cập do kho Đại Phát cấp. Báo cáo huấn luyện đã mã hóa dùng mật khẩu báo cáo được cấp riêng. Nếu dịch vụ đã tắt, quản trị viên có thể khởi động lại bằng lệnh sau từ thư mục Agent1.</p>
+<pre><code class="language-text">.\scripts\start-business.ps1 -Port 8012 -Company DEMO_DAIPHAT -DemoTraining
+</code></pre>
+<h3 id="buoc-2-giai-nen-va-chon-ung-bang">Bước 2 · Giải nén và chọn đúng bảng</h3>
+<p>Trong thư mục repo, mở <strong>pilot → demo_dai_phat</strong> để lấy sáu CSV. Nếu tải ZIP từ web, giải nén trước khi nạp. Bạn cũng có thể lấy ZIP bằng nút tải đầu vào Đại Phát trên trang <strong>Dữ liệu</strong>. Lần lượt nạp theo thứ tự dưới đây để các mã tham chiếu đã tồn tại khi nạp thanh toán và nhật ký.</p>
+<div class="table-frame"><table>
+<thead>
+<tr>
+<th>File cần chọn</th>
+<th>Loại bảng trên web</th>
+<th style="text-align: right;">Số dòng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01_invoices.csv</code></td>
+<td>Hóa đơn bán hàng</td>
+<td style="text-align: right;">12.780</td>
+</tr>
+<tr>
+<td><code>02_bank.csv</code></td>
+<td>Dòng sao kê ngân hàng</td>
+<td style="text-align: right;">17.642</td>
+</tr>
+<tr>
+<td><code>03_payments.csv</code></td>
+<td>Khoản thanh toán đã nhận</td>
+<td style="text-align: right;">16.258</td>
+</tr>
+<tr>
+<td><code>04_statements.csv</code></td>
+<td>Kỳ sao kê và số dư</td>
+<td style="text-align: right;">142</td>
+</tr>
+<tr>
+<td><code>05_outflows.csv</code></td>
+<td>Lịch chi đã biết</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr>
+<td><code>06_actions.csv</code></td>
+<td>Nhật ký thu nợ và lời hứa</td>
+<td style="text-align: right;">5.001</td>
+</tr>
+</tbody>
+</table></div>
+<p>Với cả sáu file, đặt <strong>Ngày trong file</strong> là <strong>Năm - tháng - ngày · 2026-12-31</strong> và <strong>Số tiền trong file</strong> là <strong>Không phân cách · 1500000.50</strong>. Đây là định dạng của CSV gốc. Bảng kết quả hiển thị ngày dạng <code>dd-mm-yy</code>.</p>
+<figure data-shot="11-import.png"><svg role="img" aria-label="Hình 2. File 01_invoices.csv đã chọn cùng loại Hóa đơn bán hàng và hai định dạng phù hợp." width="615" height="463" viewBox="209 59 615 463"><defs><clipPath id="view-11-import"><rect x="209" y="59" width="615" height="463"/></clipPath></defs><image href="img/11-import.png" width="1265" height="712" clip-path="url(#view-11-import)"/></svg><figcaption>Hình 2. File 01_invoices.csv đã chọn cùng loại Hóa đơn bán hàng và hai định dạng phù hợp.</figcaption></figure>
+<h3 id="buoc-3-kiem-tra-roi-xac-nhan-luu-tung-file">Bước 3 · Kiểm tra rồi xác nhận lưu từng file</h3>
+<ol>
+<li>Chọn <strong>loại bảng</strong> và <strong>định dạng</strong>, bấm vùng chọn file rồi mở một CSV theo bảng ở bước 2.</li>
+<li>Bấm <strong>Kiểm tra file →</strong>. Rà soát cột được nhận diện, số dòng hợp lệ và vài dòng mẫu. Nếu chỉnh ánh xạ cột, bấm kiểm tra lại.</li>
+<li>Khi kết quả hợp lệ, bấm <strong>Xác nhận lưu dữ liệu</strong>. Chờ thông báo đã lưu, sau đó chọn loại bảng tiếp theo.</li>
+<li>Sau file thứ sáu, so số lượng trên trang <strong>Dữ liệu</strong> với bảng ở bước 2.</li>
+</ol>
+<figure data-shot="12-preview.png"><svg role="img" aria-label="Hình 3. Kết quả kiểm tra hóa đơn và nút Xác nhận lưu dữ liệu. Ảnh chụp ở kho đã nạp nên hiện 12.780 dòng cập nhật theo cùng mã." width="1019" height="320" viewBox="209 113 1019 320"><defs><clipPath id="view-12-preview"><rect x="209" y="113" width="1019" height="320"/></clipPath></defs><image href="img/12-preview.png" width="1265" height="712" clip-path="url(#view-12-preview)"/></svg><figcaption>Hình 3. Kết quả kiểm tra hóa đơn và nút Xác nhận lưu dữ liệu. Ảnh chụp ở kho đã nạp nên hiện 12.780 dòng cập nhật theo cùng mã.</figcaption></figure>
+<p>Nếu báo thiếu <strong>Mã thanh toán</strong>, <strong>Mã hóa đơn</strong> hoặc <strong>Ngày tiền về</strong> khi đang mở <code>05_outflows.csv</code>, đổi loại bảng sang <strong>Lịch chi đã biết</strong> rồi kiểm tra lại. Nếu báo lỗi ngày hoặc tiền, kiểm tra hai ô định dạng trước khi sửa file. Khi nạp lần đầu vào kho trống, số dòng cập nhật theo mã cũ thường bằng 0.</p>
+<h3 id="buoc-4-kiem-tra-khoan-thu-con-cho-ghep">Bước 4 · Kiểm tra khoản thu còn chờ ghép</h3>
+<p>Trong <strong>Dữ liệu</strong>, tìm <strong>Kiểm tra khoản thu chưa ghép hóa đơn</strong> rồi bấm <strong>Kiểm tra khoản còn chưa ghép</strong>. Bộ Đại Phát cố ý để <strong>6 khoản, tổng 42.000.000 đồng</strong>, cho bạn tập đọc hàng chờ. Các liên kết trong <code>03_payments.csv</code> đã được ghi nhận khi lưu file.</p>
+<figure data-shot="13-pending.png"><svg role="img" aria-label="Hình 4. Hàng chờ hiện sáu khoản cùng nút nạp CSV bổ sung hoặc ghép riêng từng khoản." width="1019" height="470" viewBox="209 213 1019 470"><defs><clipPath id="view-13-pending"><rect x="209" y="213" width="1019" height="470"/></clipPath></defs><image href="img/13-pending.png" width="1265" height="712" clip-path="url(#view-13-pending)"/></svg><figcaption>Hình 4. Hàng chờ hiện sáu khoản cùng nút nạp CSV bổ sung hoặc ghép riêng từng khoản.</figcaption></figure>
+<ul>
+<li><strong>Chưa biết hóa đơn nào</strong> → để khoản đó chờ xác minh. Bạn có thể đi tiếp với bộ demo.</li>
+<li><strong>Đã biết nhiều khoản</strong> → dùng <strong>Nạp CSV thanh toán bổ sung</strong>. Giữ mã thanh toán cũ khi cập nhật.</li>
+<li><strong>Cần xử lý một ngoại lệ</strong> → bấm <strong>Ghép khoản này</strong>. Kiểm tra mã sao kê và số tiền điền sẵn, chọn đúng hóa đơn, rồi mới lưu.</li>
+</ul>
+<h3 id="buoc-5-tao-luot-kiem-inh">Bước 5 · Tạo lượt kiểm định</h3>
+<ol>
+<li>Mở <strong>Quản lý → Phiên bản &amp; kiểm định</strong> ở thanh điều hướng. Nếu đã có phiên bản ngày <strong>31-10-26</strong> và muốn dùng lại, xem bước 6.</li>
+<li>Trong <strong>Tạo phiên bản mới</strong>, nhập <strong>31-10-26</strong> vào <strong>Ngày chốt dữ liệu</strong>. Tích xác nhận đã nạp đủ thanh toán sau khi kiểm tra sáu bảng.</li>
+<li>Giữ tùy chọn học mặc định cho bài thực hành, bấm <strong>Bắt đầu kiểm định</strong> và theo dõi trạng thái phía dưới. Khi thấy <strong>Đã hoàn tất</strong>, kết quả phiên bản xuất hiện ở cột bên cạnh.</li>
+</ol>
+<figure data-shot="15-train.png"><svg role="img" aria-label="Hình 5. Form tạo phiên bản với ngày chốt, ô xác nhận và nút bắt đầu." width="581" height="557" viewBox="0 73 581 557"><defs><clipPath id="view-15-train"><rect x="0" y="73" width="581" height="557"/></clipPath></defs><image href="img/15-train.png" width="1265" height="712" clip-path="url(#view-15-train)"/></svg><figcaption>Hình 5. Form tạo phiên bản với ngày chốt, ô xác nhận và nút bắt đầu.</figcaption></figure>
+<p>Bộ lớn cần ít nhất <strong>3 GiB RAM trống</strong> để khởi động. Lượt học có thể chạy nhiều giờ và tiếp tục khi bạn chuyển mục trên web. Giữ máy và dịch vụ hoạt động. Khi job báo lỗi, đọc bước đang chạy và thông báo ở lượt mới nhất trước khi thử lại.</p>
+<h3 id="buoc-6-oc-iem-va-chon-phien-ban">Bước 6 · Đọc điểm và chọn phiên bản</h3>
+<p>Phiên bản minh họa trên Đại Phát có <strong>12.459 hóa đơn học</strong>, <strong>81 hóa đơn validation</strong> và <strong>82 hóa đơn audit</strong>. Brier 4 tuần của ứng viên là <strong>0,0949</strong>, mốc lịch sử là <strong>0,1341</strong>. Điểm giảm khoảng <strong>29,3%</strong> trên mẫu kiểm tra. Khoảng tin cậy của mức cải thiện vẫn chứa 0, nên cần thêm kỳ kiểm tra để đánh giá độ ổn định.</p>
+<figure data-shot="16-version.png"><svg role="img" aria-label="Hình 6. Thẻ phiên bản đang sử dụng, điểm ứng viên, mốc lịch sử và số hóa đơn kiểm tra." width="648" height="354" viewBox="579 231 648 354"><defs><clipPath id="view-16-version"><rect x="579" y="231" width="648" height="354"/></clipPath></defs><image href="img/16-version.png" width="1265" height="712" clip-path="url(#view-16-version)"/></svg><figcaption>Hình 6. Thẻ phiên bản đang sử dụng, điểm ứng viên, mốc lịch sử và số hóa đơn kiểm tra.</figcaption></figure>
+<p>Bấm <strong>Sử dụng phiên bản này</strong> ở thẻ cần chọn. Dấu <strong>Đang sử dụng</strong> xác nhận phiên bản đã được kích hoạt. Sang <strong>Dự báo</strong> và lập kế hoạch mới để áp dụng.</p>
+<p><strong>Tải báo cáo kiểm định</strong> trên web xuất bản tóm tắt JSON. Báo cáo HTML có mật khẩu nằm trong <strong>outputs → private-training-reports</strong> trong thư mục repo. Mở bằng trình duyệt và nhập mật khẩu trong file <code>report-password.txt</code> ở thư mục khóa doanh nghiệp để xem ứng viên, cấu hình, chia tập và điểm chi tiết. Lượt minh họa là phiên bản đã lưu trước khi khôi phục ngân sách neural 100 vòng cho những lượt sau.</p>
+<h3 id="buoc-7-lap-ke-hoach-goc-13-tuan">Bước 7 · Lập kế hoạch gốc 13 tuần</h3>
+<p>Mở <strong>Dự báo</strong> và điền các trường trong bảng. Giữ <strong>Phạm vi và tùy chọn</strong> ở mặc định trong lần đầu. Hệ thống dùng công nợ còn mở và lịch chi đã nhập.</p>
+<div class="table-frame"><table>
+<thead>
+<tr>
+<th>Trường</th>
+<th>Giá trị nhập</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ngày dự báo</td>
+<td><code>31-10-26</code></td>
+</tr>
+<tr>
+<td>Số tuần</td>
+<td><code>13</code></td>
+</tr>
+<tr>
+<td>Số dư đầu kỳ (VND)</td>
+<td><code>425000000</code></td>
+</tr>
+<tr>
+<td>Ngưỡng cảnh báo (VND)</td>
+<td><code>200000000</code></td>
+</tr>
+<tr>
+<td>Kịch bản</td>
+<td><strong>Kế hoạch gốc</strong></td>
+</tr>
+<tr>
+<td>Đã nạp đủ thanh toán đến ngày dự báo</td>
+<td>Tích sau khi đã lưu đủ dữ liệu demo</td>
+</tr>
+</tbody>
+</table></div>
+<figure data-shot="17-forecast-form.png"><svg role="img" aria-label="Hình 7. Form dự báo đã điền đúng ngày, kỳ, số dư và ngưỡng theo bộ Đại Phát." width="293" height="486" viewBox="207 131 293 486"><defs><clipPath id="view-17-forecast-form"><rect x="207" y="131" width="293" height="486"/></clipPath></defs><image href="img/17-forecast-form.png" width="1265" height="712" clip-path="url(#view-17-forecast-form)"/></svg><figcaption>Hình 7. Form dự báo đã điền đúng ngày, kỳ, số dư và ngưỡng theo bộ Đại Phát.</figcaption></figure>
+<p>Bấm <strong>Lập dự báo</strong>. Khi có kết quả, tiêu đề ghi <strong>13 tuần · 31-10-26</strong>. Nếu dùng phiên bản đã kích hoạt, nhãn kết quả hiện <strong>PHIÊN BẢN RIÊNG</strong>. Nút <strong>?</strong> giải thích ngưỡng cảnh báo.</p>
+<h3 id="buoc-8-oc-bieu-o-va-bang-tung-tuan">Bước 8 · Đọc biểu đồ và bảng từng tuần</h3>
+<p>Bắt đầu từ <strong>Dự thu</strong>, <strong>Dự chi</strong> và <strong>Số dư thấp nhất</strong>. Đường xanh cho biết số dư kỳ vọng. Dải P10/P90 biểu thị vùng số dư mô phỏng quanh đường này. Di chuột lên biểu đồ để xem giá trị tại một tuần cụ thể.</p>
+<figure data-shot="18-base-result.png"><svg role="img" aria-label="Hình 8. Kết quả kế hoạch gốc 13 tuần với biểu đồ số dư và phần giả định thu gọn." width="714" height="509" viewBox="512 201 714 509"><defs><clipPath id="view-18-base-result"><rect x="512" y="201" width="714" height="509"/></clipPath></defs><image href="img/18-base-result.png" width="1265" height="712" clip-path="url(#view-18-base-result)"/></svg><figcaption>Hình 8. Kết quả kế hoạch gốc 13 tuần với biểu đồ số dư và phần giả định thu gọn.</figcaption></figure>
+<p>Xuống <strong>Kế hoạch từng tuần</strong> để kiểm tra ngày kết thúc tuần, dự thu, dự chi, số dư, dải mô phỏng và xác suất dưới ngưỡng. Cuộn ngang để xem các cột bên phải nếu cửa sổ hẹp. Mở <strong>Phạm vi, giả định và thời gian tính</strong> để xem lịch chi thiếu, phần hoạt động đã được tính và thời gian xử lý.</p>
+<figure data-shot="19-weekly.png"><svg role="img" aria-label="Hình 9. Bảng từng tuần hiển thị ngày dạng dd-mm-yy và số tiền VND." width="714" height="342" viewBox="512 326 714 342"><defs><clipPath id="view-19-weekly"><rect x="512" y="326" width="714" height="342"/></clipPath></defs><image href="img/19-weekly.png" width="1265" height="712" clip-path="url(#view-19-weekly)"/></svg><figcaption>Hình 9. Bảng từng tuần hiển thị ngày dạng dd-mm-yy và số tiền VND.</figcaption></figure>
+<h3 id="buoc-9-xem-danh-sach-khoan-can-chu-y">Bước 9 · Xem danh sách khoản cần chú ý</h3>
+<p>Cuộn xuống <strong>Khoản cần chú ý</strong>. Kiểm tra hóa đơn, mã khách, dư nợ và hạn trả. Các cột tiếp theo ghi lời hứa, tranh chấp, lý do và xác suất tất toán 4 tuần. Dùng số dư còn phải thu để đối chiếu với sổ.</p>
+<figure data-shot="20-collections.png"><svg role="img" aria-label="Hình 10. Danh sách các khoản cần chú ý dưới bảng kế hoạch từng tuần." width="714" height="339" viewBox="512 325 714 339"><defs><clipPath id="view-20-collections"><rect x="512" y="325" width="714" height="339"/></clipPath></defs><image href="img/20-collections.png" width="1265" height="712" clip-path="url(#view-20-collections)"/></svg><figcaption>Hình 10. Danh sách các khoản cần chú ý dưới bảng kế hoạch từng tuần.</figcaption></figure>
+<p>Ví dụ, hóa đơn có tranh chấp được ghi <strong>Chờ giải quyết tranh chấp</strong>. Khoản có ngày hứa đã đến hạn nên được kiểm tra với lịch sử thực hiện của khách. Danh sách hỗ trợ chọn việc cần xem trước. Metric thu hồi hiện đo mức bao phủ công nợ còn mở trong top 10, chưa đo số tiền tăng thu sau liên hệ.</p>
+<h3 id="buoc-10-so-sanh-kich-ban-26-tuan">Bước 10 · So sánh kịch bản 26 tuần</h3>
+<ol>
+<li>Trở lại form. Đổi <strong>Số tuần</strong> thành <strong>26</strong>, chọn <strong>Kế hoạch gốc</strong>, giữ ngày <strong>31-10-26</strong>, số dư <strong>425000000</strong> và ngưỡng <strong>200000000</strong>. Bấm <strong>Lập dự báo</strong>.</li>
+<li>Sau khi kết quả gốc xuất hiện, đổi <strong>Kịch bản</strong> sang <strong>Thu chậm thêm 28 ngày</strong>. Giữ các trường còn lại rồi bấm <strong>Lập dự báo</strong> lần nữa.</li>
+<li>Đọc dòng <strong>So với kế hoạch gốc</strong>. Trong lượt chụp, dự thu giảm khoảng <strong>649,9 triệu</strong>, chi giữ nguyên, số dư thấp nhất giảm khoảng <strong>1,4 tỷ</strong> xuống <strong>âm 496,4 triệu</strong>.</li>
+</ol>
+<figure data-shot="22-scenario.png"><svg role="img" aria-label="Hình 11. Kết quả kịch bản thu chậm 28 ngày, chênh lệch so với kế hoạch gốc cùng kỳ 26 tuần." width="714" height="505" viewBox="512 202 714 505"><defs><clipPath id="view-22-scenario"><rect x="512" y="202" width="714" height="505"/></clipPath></defs><image href="img/22-scenario.png" width="1265" height="712" clip-path="url(#view-22-scenario)"/></svg><figcaption>Hình 11. Kết quả kịch bản thu chậm 28 ngày, chênh lệch so với kế hoạch gốc cùng kỳ 26 tuần.</figcaption></figure>
+<p>Để hiện so sánh, hai lượt cần cùng ngày chốt, số tuần, số dư đầu, ngưỡng, phiên bản và phạm vi tính. Sau khi đổi một trong các trường này, chạy lại <strong>Kế hoạch gốc</strong> với cùng thông số rồi mới chạy kịch bản.</p>
+<h3 id="buoc-11-tu-at-gia-inh-va-pham-vi">Bước 11 · Tự đặt giả định và phạm vi</h3>
+<p>Chọn <strong>Tự đặt giả định</strong> trong ô <strong>Kịch bản</strong>. Bạn có thể nhập <strong>Thu chậm 14 ngày</strong>, <strong>Thay đổi chi 10%</strong> và chọn một mã khách cần thử. Để trống mã khách sẽ áp dụng chậm trả cho mọi khách. Số ngày chậm được làm tròn lên theo tuần. Dấu âm ở thay đổi chi dùng để giảm chi.</p>
+<figure data-shot="21-custom.png"><svg role="img" aria-label="Hình 12. Các ô xuất hiện khi chọn Tự đặt giả định, với ví dụ 14 ngày và tăng chi 10%." width="287" height="272" viewBox="209 274 287 272"><defs><clipPath id="view-21-custom"><rect x="209" y="274" width="287" height="272"/></clipPath></defs><image href="img/21-custom.png" width="1265" height="712" clip-path="url(#view-21-custom)"/></svg><figcaption>Hình 12. Các ô xuất hiện khi chọn Tự đặt giả định, với ví dụ 14 ngày và tăng chi 10%.</figcaption></figure>
+<ul>
+<li><strong>Rủi ro chung theo khách</strong> mô phỏng việc nhiều hóa đơn của cùng khách chịu cùng biến động.</li>
+<li><strong>Các tuần đã xác nhận lịch chi</strong> nhận số tuần cách nhau bằng dấu phẩy. Nếu không có khoản chi và tuần chưa xác nhận, bảng ghi <strong>Chưa biết</strong>.</li>
+<li><strong>Ước lượng dòng tiền hoạt động</strong> dùng phiên bản đủ điều kiện sao kê. Với kỳ dài hơn 13 tuần, nhánh này chỉ áp dụng cho 13 tuần đầu. Mở phần giả định trong kết quả để xem phạm vi.</li>
+</ul>
+<h3 id="buoc-12-xuat-excel-va-mo-ke-hoach-cu">Bước 12 · Xuất Excel và mở kế hoạch cũ</h3>
+<p>Khi đã thấy kết quả đúng kỳ và đúng kịch bản, bấm <strong>Xuất Excel ↓</strong> ở góc phải trang <strong>Kế hoạch dòng tiền</strong>. File có đuôi <code>.xlsx</code>. Kỳ 26 tuần ngày 31-10-26 có tên dạng <code>agent1-ke-hoach-31-10-26-26t.xlsx</code>.</p>
+<figure data-shot="23-export.png"><svg role="img" aria-label="Hình 13. Vị trí nút Kế hoạch đã lưu và Xuất Excel trên trang dự báo." width="1019" height="53" viewBox="209 134 1019 53"><defs><clipPath id="view-23-export"><rect x="209" y="134" width="1019" height="53"/></clipPath></defs><image href="img/23-export.png" width="1265" height="712" clip-path="url(#view-23-export)"/></svg><figcaption>Hình 13. Vị trí nút Kế hoạch đã lưu và Xuất Excel trên trang dự báo.</figcaption></figure>
+<div class="table-frame"><table>
+<thead>
+<tr>
+<th>Sheet</th>
+<th>Nội dung cần kiểm tra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kết quả dự báo</strong></td>
+<td>Ngày chốt, số tuần, số dư đầu kỳ, ngưỡng, số dư thấp nhất, kịch bản, thời gian tính và mã phiên bản.</td>
+</tr>
+<tr>
+<td><strong>Kế hoạch từng tuần</strong></td>
+<td>Mỗi tuần một dòng với thu, chi, số dư, P10/P90 và tình trạng lịch chi. Bản 26 tuần có 26 dòng dữ liệu.</td>
+</tr>
+<tr>
+<td><strong>Khoản cần chú ý</strong></td>
+<td>Hóa đơn, khách, tiền còn phải thu, hạn, lời hứa, tranh chấp và chỉ số rủi ro nếu có.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Để mở lại một lượt, chọn <strong>Kế hoạch đã lưu → Tải danh sách</strong>, bấm bản cần xem rồi xuất Excel từ bản đó. Trong <strong>Đối chiếu với sao kê thực tế</strong>, chọn ngày đã có sao kê đối soát và bấm <strong>Đối chiếu kế hoạch</strong>. Bộ Đại Phát chốt sao kê tại <strong>31-10-26</strong>. Muốn chấm sai số cho các tuần sau ngày này cần bổ sung sao kê thực tế tương ứng.</p><footer>Agent1 · Bản ngày 07-11-26 · Ảnh chụp từ kho Đại Phát.</footer></main></html>

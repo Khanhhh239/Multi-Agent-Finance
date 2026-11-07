@@ -1,0 +1,3 @@
+invoice_id,customer_id,issue_date,due_date,amount,known_at,currency
+DEMO_30,DEMO_KH,01/09/2026,30/09/2026,30000000,01/09/2026,VND
+DEMO_70,DEMO_KH,01/09/2026,30/09/2026,70000000,01/09/2026,VND

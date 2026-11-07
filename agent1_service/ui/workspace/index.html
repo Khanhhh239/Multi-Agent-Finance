@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Agent1 · Sổ điều hành dòng tiền</title>
+    <link rel="icon" href="/workspace-assets/vendor/chart-line.svg" />
+    <link rel="stylesheet" href="/workspace-assets/vendor/uPlot.min.css" />
+    <link rel="stylesheet" href="/workspace-assets/style.css" />
+    <script defer src="/workspace-assets/vendor/uPlot.iife.min.js"></script>
+    <script defer src="/workspace-assets/app.js"></script>
+  <link rel="stylesheet" href="/workspace-assets/ledger.css" />
+  <link rel="stylesheet" href="/workspace-assets/workbench.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Đến nội dung</a>
+    <aside class="rail">
+      <a class="brand" href="/workspace"
+        ><span class="brandmark">a₁</span
+        ><span>AGENT<span class="brandline">TRỢ LÝ DÒNG TIỀN</span></span></a
+      >
+      <nav aria-label="Điều hướng chính">
+        <button data-view="forecast"><img src="/workspace-assets/vendor/chart-line.svg" alt="">Dự báo</button>
+        <button data-view="data"><img src="/workspace-assets/vendor/database-import.svg" alt="">Dữ liệu</button>
+        <details class="nav-more">
+          <summary>Quản lý</summary>
+          <button data-view="overview">Tổng quan</button>
+          <button data-view="training">Phiên bản & kiểm định</button>
+          <button data-view="guide">Hướng dẫn</button>
+        </details>
+      </nav>
+      <div class="company">
+        <span class="avatar">DN</span>
+        <div>
+          <b id="company-name">Doanh nghiệp của bạn</b
+          ><small id="connection-state">Chưa kết nối</small>
+        </div>
+        <button
+          id="connect-open"
+          title="Kết nối doanh nghiệp"
+          aria-label="Kết nối doanh nghiệp"
+        >
+          ↗
+        </button>
+      </div>
+    </aside>
+    <div class="shell">
+      <header class="topbar">
+        <div>
+          <span class="top-label">SỔ ĐIỀU HÀNH</span
+          ><span class="divider">/</span><span id="breadcrumb">Tổng quan</span>
+        </div>
+        <div class="top-actions">
+          <span class="badge" id="mode-badge">KHÔNG GIAN RIÊNG</span
+          ><button id="connect-top" class="link-button">Kết nối</button
+          ><button
+            id="refresh"
+            class="icon-button"
+            aria-label="Làm mới dữ liệu"
+          >
+            <img src="/workspace-assets/vendor/refresh.svg" alt="" /></button
+          ><button id="logout" class="link-button" hidden>Ngắt kết nối</button>
+        </div>
+      </header>
+      <main id="main" tabindex="-1">
+        <div id="notice" role="status" aria-live="polite" hidden></div>
+        <section class="view" id="view-overview">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow" id="today">KHÔNG GIAN DOANH NGHIỆP</div>
+              <h1>Tình hình dòng tiền</h1>
+
+            </div>
+          </div>
+          <div class="entry-choice">
+            <article><h2>Bắt đầu với doanh nghiệp của bạn</h2><p>Dùng sổ công nợ, các khoản đã thu và lịch chi của doanh nghiệp để lập kế hoạch dòng tiền.</p><button class="button primary" data-view="data">Thiết lập doanh nghiệp của tôi</button></article>
+            <article><h2>Xem thử trước</h2><p>Khám phá Đại Phát: 12.780 hóa đơn, 120 khách hàng, sổ ngân hàng và bốn kịch bản dòng tiền có sẵn.</p><a class="button" href="/workspace-assets/dai-phat.html">Xem thử với dữ liệu mô phỏng →</a></article>
+          </div>
+          <div class="metrics">
+            <div>
+              <span>CÔNG NỢ ĐANG MỞ</span><strong id="kpi-outstanding">—</strong
+              ><small id="kpi-invoices">Chưa lập dự báo</small>
+            </div>
+            <div>
+              <span>SỐ DƯ THẤP NHẤT DỰ KIẾN</span
+              ><strong id="kpi-balance">—</strong
+              ><small id="kpi-horizon">VND</small>
+            </div>
+            <div>
+              <span>HÓA ĐƠN ĐÃ NẠP</span><strong id="kpi-records">—</strong
+              ><small id="kpi-payments">Dữ liệu của doanh nghiệp</small>
+            </div>
+          </div>
+          <div class="overview-grid">
+            <article class="paper chart-paper">
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">TẦM NHÌN 13 TUẦN</span>
+                  <h2>Đường đi của dòng tiền</h2>
+                </div>
+                <span class="small-badge">VND</span>
+              </div>
+              <div id="overview-chart" class="chart-slot">
+                <div class="empty-chart">
+                  <div class="chart-grid"></div>
+                  <div class="empty-copy">
+                    <span class="round-icon">↗</span>
+                    <h3>Bắt đầu từ những con số của bạn</h3>
+                    <p>
+                      Nạp hóa đơn và thanh toán để nhìn thấy<br />kế hoạch dòng
+                      tiền đầu tiên.
+                    </p>
+                    <button class="link-button" data-view="data">
+                      Chuẩn bị dữ liệu <span>→</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-foot">
+                <span class="dot"></span>Số dư dự kiến<span class="muted"
+                  >Chỉ hiển thị kết quả từ dữ liệu đã nạp</span
+                >
+              </div>
+              <p class="helper">
+                Dải P10–P90 là mô phỏng, chưa hiệu chỉnh độ phủ.
+              </p>
+            </article>
+            <aside class="onboarding">
+              <span class="eyebrow">BẮT ĐẦU CÙNG AGENT1</span>
+              <h2>Một lần thiết lập.<br />Mỗi tháng tốt hơn.</h2>
+              <ol>
+                <li>
+                  <span>01</span>
+                  <div>
+                    <b>Nạp sổ của doanh nghiệp</b>
+                    <p>CSV hoặc Excel. Ghép cột ngay trên màn hình.</p>
+                  </div>
+                </li>
+                <li>
+                  <span>02</span>
+                  <div>
+                    <b>Kiểm định trên lịch sử</b>
+                    <p>So sánh các phương án bằng dữ liệu riêng của bạn.</p>
+                  </div>
+                </li>
+                <li>
+                  <span>03</span>
+                  <div>
+                    <b>Chủ động kế hoạch thu chi</b>
+                    <p>Xem dự báo, thử tình huống và cập nhật dữ liệu mới.</p>
+                  </div>
+                </li>
+              </ol>
+              <button data-view="guide">
+                Xem hướng dẫn 5 phút <span>↗</span>
+              </button>
+            </aside>
+          </div>
+          <article class="paper next-step">
+            <span class="number-stamp">01—03</span>
+            <div>
+              <h3 id="next-title">Dữ liệu đúng là khởi đầu tốt nhất.</h3>
+              <p id="next-copy">
+                Bạn chỉ cần sổ hóa đơn, các khoản đã thu và lịch chi dự kiến.
+                Không cần biết lập trình.
+              </p>
+            </div>
+            <button class="button" data-view="guide">Xem mẫu dữ liệu →</button>
+          </article>
+        </section>
+
+        <section class="view" id="view-data" hidden>
+          <div class="page-heading compact">
+            <div>
+              <div class="eyebrow">02 / DỮ LIỆU DOANH NGHIỆP</div>
+              <h1>Sổ dữ liệu doanh nghiệp</h1>
+              <a href="/workspace-assets/demo-dai-phat-input-train.zip" download>Tải đầu vào Đại Phát · 6 CSV + hướng dẫn train</a>
+              <p>
+                Chọn file, ghép cột, kiểm tra rồi mới lưu. File gốc của bạn được
+                giữ nguyên.
+              </p>
+            </div>
+            <button class="button" data-view="guide">
+              Quy cách dữ liệu ↗
+            </button>
+          </div>
+          <div class="data-counts" id="data-counts"></div>
+          <div class="step-strip">
+            <span class="selected">1. Chọn dữ liệu</span
+            ><span>2. Kiểm tra & ghép cột</span><span>3. Xác nhận lưu</span>
+          </div>
+          <div class="split-layout">
+            <article class="paper">
+              <form id="import-form">
+                <label id="sheet-label" hidden
+                  >Sheet Excel<select id="sheet-name"></select
+                ></label>
+                <div class="section-heading">
+                  <h2>Nạp một bảng dữ liệu</h2>
+                  <span class="small-badge">CSV / XLSX</span>
+                </div>
+                <label
+                  >Bạn muốn nạp bảng nào?<select id="table-kind">
+                    <option value="invoices">Hóa đơn bán hàng</option>
+                    <option value="bank">Dòng sao kê ngân hàng</option>
+                    <option value="statements">Kỳ sao kê và số dư</option>
+                    <option value="payments">Khoản thanh toán đã nhận</option>
+                    <option value="actions">Nhật ký thu nợ và lời hứa</option>
+                    <option value="outflows">Lịch chi đã biết</option>
+                  </select></label
+                >
+                <div class="two-fields">
+                  <label
+                    >Ngày trong file<select id="date-format">
+                      <option value="%d/%m/%Y">
+                        Ngày / tháng / năm · 31/12/2026
+                      </option>
+                      <option value="%d-%m-%y">Ngày - tháng - năm · 31-12-26</option>
+                      <option value="%Y-%m-%d">
+                        Năm - tháng - ngày · 2026-12-31
+                      </option>
+                    </select></label
+                  ><label
+                    >Số tiền trong file<select id="number-format">
+                      <option value="vi-VN">Việt Nam · 1.500.000,50</option>
+                      <option value="plain">
+                        Không phân cách · 1500000.50
+                      </option>
+                    </select></label
+                  >
+                </div>
+                <label class="drop-zone" id="drop-zone" for="import-file"
+                  ><img
+                    src="/workspace-assets/vendor/file-spreadsheet.svg"
+                    alt="" /><b id="file-label"
+                    >Kéo file vào đây, hoặc bấm để chọn</b
+                  ><span>Tối đa 5 MB · CSV UTF-8 hoặc Excel (.xlsx)</span
+                  ><input
+                    type="file"
+                    id="import-file"
+                    accept=".csv,.xlsx"
+                    required
+                /></label>
+                <div class="form-actions">
+                  <button
+                    type="button"
+                    class="link-button"
+                    id="download-template"
+                  >
+                    <img
+                      src="/workspace-assets/vendor/download.svg"
+                      alt=""
+                    />Tải file mẫu</button
+                  ><button type="submit" class="button primary">
+                    Kiểm tra file →
+                  </button>
+                </div>
+                <div id="mapping-panel" hidden>
+                  <hr />
+                  <h3>Ghép cột trong file của bạn</h3>
+                  <p class="muted">
+                    Kiểm tra lại các cột được nhận diện. Thay đổi rồi bấm “Kiểm
+                    tra file”.
+                  </p>
+                  <div id="mapping-fields" class="mapping-fields"></div>
+                </div>
+              </form>
+            </article>
+            <details class="side-explainer"><summary>ⓘ Quy tắc nạp sổ</summary>
+              <span class="eyebrow">MỘT VÀI ĐIỀU CẦN BIẾT</span>
+              <h2>Dễ nạp.<br />Rõ từng dòng.</h2>
+              <dl>
+                <dt>Không cần đổi tên cột</dt>
+                <dd>
+                  Hệ thống nhận diện tên tiếng Việt và cho bạn ghép cột thủ
+                  công.
+                </dd>
+                <dt>Nạp hóa đơn trước thanh toán</dt>
+                <dd>
+                  Mỗi khoản thu cần mã hóa đơn để xác định đúng công nợ. Một hóa
+                  đơn có thể có nhiều lần thu.
+                </dd>
+                <dt>Cập nhật bằng cùng mã</dt>
+                <dd>
+                  Bản ghi có cùng mã sẽ được thay thế. Mã mới được thêm vào; dữ
+                  liệu khác giữ nguyên.
+                </dd>
+                <dt>Ngày ghi nhận là gì?</dt>
+                <dd>
+                  Ngày doanh nghiệp biết thông tin đó. Lịch chi tương lai cần
+                  ngày này để không nhìn trước tương lai khi kiểm định.
+                </dd>
+              </dl>
+            </details>
+          </div>
+          <article class="paper">
+            <h2>Kiểm tra khoản thu chưa ghép hóa đơn</h2>
+            <details class="form-options"><summary>ⓘ Khi nào cần ghép thêm?</summary><p>Thanh toán đã có mã hóa đơn và mã dòng sao kê trong CSV được ghi nhận khi nạp file. Bạn không cần nhập lại ở đây.</p>
+            <p>Nếu đã biết các hóa đơn cần ghép, nạp bảng thanh toán bổ sung bằng CSV để xử lý hàng loạt. Giữ cùng mã thanh toán khi cập nhật bản ghi cũ; một khoản chuyển cho nhiều hóa đơn có thể có nhiều dòng phân bổ.</p></details>
+            <button class="button primary" id="import-allocations">Nạp CSV thanh toán bổ sung</button>
+            <button class="button" id="load-pending">Kiểm tra khoản còn chưa ghép</button>
+            <div id="pending-rows" class="table-scroll" aria-live="polite"></div>
+            <details id="manual-allocation" hidden>
+              <summary>Ghép riêng một khoản (tùy chọn)</summary>
+              <p>Chỉ ghép khi đã xác định đúng hóa đơn. Chưa xác định được thì để lại chờ kiểm tra; không cần điền form để tiếp tục.</p>
+            <form id="allocate-form">
+              <div class="two-fields">
+                <label
+                  >Mã dòng sao kê<input required id="allocate-bank" /></label
+                ><label
+                  >Mã thanh toán (giữ cùng mã khi sửa)<input
+                    required
+                    id="allocate-id" /></label
+                ><label
+                  >Mã hóa đơn<input required id="allocate-invoice" /></label
+                ><label
+                  >Số tiền phân bổ<input
+                    required
+                    id="allocate-amount"
+                    type="number"
+                    min=".01"
+                    step=".01"
+                /></label>
+              </div>
+              <button class="button">Lưu phân bổ</button>
+            </form>
+            </details>
+          </article>
+          <article id="preview-panel" class="paper preview-panel" hidden>
+            <div class="section-heading">
+              <div>
+                <span class="eyebrow">KẾT QUẢ KIỂM TRA</span>
+                <h2 id="preview-title">Bản xem trước</h2>
+              </div>
+              <button class="button primary" id="commit-import" disabled>
+                Xác nhận lưu dữ liệu
+              </button>
+            </div>
+            <div id="import-warnings"></div>
+            <button class="button" id="all-errors" hidden>
+              Tải toàn bộ lỗi
+            </button>
+            <div id="changed-rows" class="table-scroll"></div>
+            <div id="import-errors" role="alert"></div>
+            <div class="table-scroll" id="preview-table"></div>
+          </article>
+          <details class="paper correction">
+            <summary>Sửa hoặc xóa một bản ghi nhập nhầm</summary>
+            <p>
+              Nạp lại cùng mã để cập nhật. Khi xóa, lịch sử phiên bản dữ liệu
+              vẫn được giữ để kiểm toán. Xóa thanh toán liên quan trước khi xóa
+              hóa đơn.
+            </p>
+            <form id="delete-record">
+              <div class="two-fields">
+                <label
+                  >Bảng<select id="delete-kind">
+                    <option value="invoices">Hóa đơn</option>
+                    <option value="bank">Dòng sao kê ngân hàng</option>
+                    <option value="statements">Kỳ sao kê và số dư</option>
+                    <option value="payments">Thanh toán</option>
+                    <option value="actions">Nhật ký thu nợ và lời hứa</option>
+                    <option value="outflows">Lịch chi</option>
+                  </select></label
+                ><label
+                  >Mã bản ghi<input
+                    id="delete-id"
+                    required
+                    placeholder="Ví dụ: HD001"
+                /></label>
+              </div>
+              <button class="button danger" type="submit">
+                Xóa bản ghi này
+              </button>
+            </form>
+          </details>
+        </section>
+
+        <section class="view" id="view-training" hidden>
+          <div class="page-heading compact">
+            <div>
+              <div class="eyebrow">03 / THIẾT LẬP & KIỂM ĐỊNH</div>
+              <h1>Phiên bản dự báo</h1>
+              <p>
+                Chọn phương án bằng lịch sử riêng. Chỉ đưa vào sử dụng khi bạn
+                đã xem kết quả.
+              </p>
+            </div>
+          </div>
+          <div class="split-layout">
+            <article class="paper">
+              <div class="section-heading">
+                <h2>Tạo phiên bản mới</h2>
+
+              </div>
+
+              <form id="train-form">
+
+                <label
+                  >Ngày chốt dữ liệu<input
+                    type="text" placeholder="dd-mm-yy" maxlength="10"
+                    id="train-asof"
+                    required /><small id="train-date-hint"></small></label
+                ><label class="check-row"
+                  ><input type="checkbox" id="train-complete" required /><span
+                    >Tôi xác nhận đã nạp đầy đủ thanh toán đến ngày chốt. Hóa
+                    đơn còn thiếu thanh toán trong bảng thực sự chưa được tất
+                    toán.</span
+                  ></label
+                >
+                <details class="train-options"><summary>Điều kiện dữ liệu và tùy chọn học</summary><label class="check-row"
+                  ><input type="checkbox" id="try-deep" />Kiểm định mở rộng cho
+                  bán thu ngay và chi biến đổi nếu đủ lịch sử sao kê</label
+                ><p class="helper">
+                  Cần ít nhất 60 hóa đơn trước ngày chốt 112 ngày (20 đã tất
+                  toán), và 20 hóa đơn ở mỗi cửa sổ kiểm định. Thiếu lịch sử?
+                  Bạn vẫn có thể lập dự báo theo điều khoản và lịch sử hiện có.
+                </p></details>
+                <button class="button primary" id="train-button">
+                  Bắt đầu kiểm định <span>↗</span>
+                </button>
+              </form>
+              <div id="jobs" aria-live="polite"></div>
+            </article>
+            <article class="paper versions">
+            <div class="section-heading">
+              <div>
+                <span class="eyebrow">CÓ THỂ QUAY LẠI</span>
+                <h2>Phiên bản của doanh nghiệp</h2>
+              </div>
+              <button class="button" id="export-report">
+                Tải báo cáo kiểm định ↓
+              </button>
+            </div>
+
+            <div id="versions-list"><p>Kết nối doanh nghiệp để xem các phiên bản đã lưu.</p></div>
+          </article>
+          </div>
+          </section>
+
+        <section class="view" id="view-forecast" hidden>
+          <div class="page-heading compact forecast-toolbar">
+            <h1>Kế hoạch dòng tiền</h1>
+            <div class="forecast-actions">
+              <details class="history-menu">
+                <summary class="button">Kế hoạch đã lưu</summary>
+                <div class="history-list">
+                  <button class="button" id="saved-plans">Tải danh sách</button>
+                  <div id="plans-list"></div>
+                </div>
+              </details>
+              <button class="button" id="export-forecast" disabled>Xuất Excel ↓</button>
+            </div>
+          </div>
+          <div class="forecast-workbench">
+            <article class="paper forecast-inputs">
+              <h2>Lập kế hoạch</h2>
+              <form id="forecast-form">
+                <div class="two-fields">
+                  <label>Ngày dự báo<input id="forecast-cutoff" placeholder="dd-mm-yy" maxlength="10" required></label>
+                  <label>Số tuần<input id="horizon-weeks" type="number" min="1" max="52" step="1" value="13" required></label>
+                </div>
+                <label>Số dư đầu kỳ (VND)<input id="opening-balance" type="number" required step="0.01" placeholder="Nhập theo sao kê"></label>
+                <div>
+                  <div class="label-help">
+                    <label for="cash-floor">Ngưỡng cảnh báo (VND)</label>
+                    <details class="field-help"><summary aria-label="Giải thích ngưỡng cảnh báo">?</summary><p>Cảnh báo khi số dư dự kiến dưới ngưỡng này hoặc ít nhất 25% đường mô phỏng xuống dưới ngưỡng.</p></details>
+                  </div>
+                  <input id="cash-floor" type="number" step="0.01" value="0">
+                </div>
+                <label>Kịch bản<select id="scenario-preset">
+                  <option value="base">Kế hoạch gốc</option>
+                  <option value="delay14">Thu chậm thêm 14 ngày</option>
+                  <option value="delay28">Thu chậm thêm 28 ngày</option>
+                  <option value="cost25">Chi theo lịch tăng 25%</option>
+                  <option value="stress">Rủi ro tập trung theo khách</option>
+                  <option value="custom">Tự đặt giả định</option>
+                </select></label>
+                <fieldset id="scenario-custom" hidden>
+                  <legend>Giả định kịch bản</legend>
+                  <div class="two-fields">
+                    <label>Thu chậm (ngày)<input id="delay-days" type="number" min="0" max="90" step="1" value="0" required></label>
+                    <label>Thay đổi chi (%)<input id="expense-change" type="number" min="-100" max="200" step="1" value="0" required></label>
+                  </div>
+                  <label>Mã khách chịu ảnh hưởng<input id="delay-customer" list="forecast-customers" placeholder="Để trống áp dụng mọi khách"><datalist id="forecast-customers"></datalist></label>
+                  <label class="check-row"><input type="checkbox" id="common-risk">Mô phỏng rủi ro chung theo khách</label>
+                </fieldset>
+                <details class="form-options">
+                  <summary>Phạm vi và tùy chọn</summary>
+                  <label>Các tuần đã xác nhận lịch chi<input id="confirmed-weeks" placeholder="Ví dụ 1,2,3"></label>
+                  <label class="check-row"><input type="checkbox" id="include-operating">Ước lượng dòng tiền hoạt động</label>
+                  <details class="field-help"><summary aria-label="Giải thích phạm vi dự báo">?</summary><p>Tuần trống chưa xác nhận có lịch chi chưa biết. Ước lượng hoạt động dùng phiên bản đủ dữ liệu sao kê, tối đa 13 tuần đầu. Thu chậm được làm tròn lên theo tuần.</p></details>
+                </details>
+                <label class="check-row"><input type="checkbox" id="forecast-complete" required>Đã nạp đủ thanh toán đến ngày dự báo</label>
+                <button type="submit" class="button primary" id="forecast-submit">Lập dự báo</button>
+              </form>
+            </article>
+            <div class="forecast-results">
+              <div class="paper forecast-empty" id="forecast-empty">
+                <h2>Chưa có kế hoạch</h2><p>Chọn kỳ dự báo và nhập số dư đầu kỳ để bắt đầu.</p>
+              </div>
+              <div id="forecast-output" hidden>
+                <article class="paper">
+                  <div class="section-heading forecast-heading">
+                    <h2 id="forecast-period">Kết quả dự báo</h2>
+                    <span class="small-badge" id="forecast-mode"></span>
+                  </div>
+                  <div id="forecast-totals" class="forecast-totals"></div>
+                  <div id="forecast-comparison"></div>
+                  <div id="forecast-chart" class="chart-slot"></div>
+                  <div id="forecast-alerts"></div>
+                  <details class="form-options"><summary>ⓘ Phạm vi, giả định và thời gian tính</summary><div id="forecast-assumptions" class="assumptions"></div></details>
+                </article>
+                <article class="paper"><h2>Kế hoạch từng tuần</h2><div id="forecast-table" class="table-scroll"></div></article>
+                <article class="paper collection-paper"><h2>Khoản cần chú ý</h2><div id="collections-table" class="table-scroll"></div></article>
+                <details class="paper"><summary>Đối chiếu với sao kê thực tế</summary>
+                  <label>Ngày chốt sao kê<input id="actuals-date" placeholder="dd-mm-yy" maxlength="10"></label>
+                  <button type="button" class="button" id="compare-actuals">Đối chiếu kế hoạch</button>
+                  <div id="actuals-result" role="status" class="table-scroll"></div>
+                </details>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-guide" hidden>
+          <div class="page-heading compact">
+            <div>
+              <div class="eyebrow">HƯỚNG DẪN / 5 PHÚT CHUẨN BỊ</div>
+              <h1>Chuẩn bị dữ liệu doanh nghiệp</h1>
+              <a class="button" href="/workspace-assets/manual/index.html" target="_blank" rel="noopener">Hướng dẫn từng bước có ảnh</a>
+              <a class="button" href="/workspace-assets/agent1-pilot.zip" download>Tải bộ diễn tập cho kế toán (.zip)</a>
+              <p>
+                Xuất file từ phần mềm kế toán hoặc chọn mẫu cho loại sổ cần nạp.
+              </p>
+            </div>
+          </div>
+          <div class="guide-grid">
+            <article class="paper">
+              <span class="chapter">01</span>
+              <h2>Hóa đơn bán hàng</h2>
+              <p>
+                Một dòng cho mỗi hóa đơn. Dùng mã ổn định, không đổi giữa các
+                lần cập nhật.
+              </p>
+              <ul>
+                <li>Mã hóa đơn, mã khách hàng</li>
+                <li>Ngày lập, hạn thanh toán</li>
+                <li>Giá trị phải thu, đồng tiền VND</li>
+                <li>Ngày ghi nhận nếu khác ngày lập</li>
+              </ul>
+              <button class="button template-link" data-kind="invoices">
+                Tải mẫu hóa đơn ↓
+              </button>
+            </article>
+            <article class="paper">
+              <span class="chapter">02</span>
+              <h2>Tiền đã nhận</h2>
+              <p>Một dòng cho mỗi phần tiền được phân bổ vào một hóa đơn.</p>
+              <ul>
+                <li>Mã thanh toán duy nhất, mã hóa đơn</li>
+                <li>Ngày tiền về và số tiền đã thu</li>
+                <li>Ngày ghi nhận khi thông tin đến muộn</li>
+                <li>Trả nhiều lần: giữ từng lần riêng biệt</li>
+              </ul>
+              <button class="button template-link" data-kind="payments">
+                Tải mẫu thanh toán ↓
+              </button>
+            </article>
+            <article class="paper">
+              <span class="chapter">03</span>
+              <h2>Lịch chi đã biết</h2>
+              <p>
+                Lương, thuê nhà, nhà cung cấp, thuế… đã có kế hoạch vào ngày dự
+                báo.
+              </p>
+              <ul>
+                <li>Mã khoản chi, ngày chi dự kiến</li>
+                <li>Số tiền và loại chi</li>
+                <li>Ngày doanh nghiệp biết khoản chi</li>
+                <li>Chỉ nạp khoản phải chi, không gộp tiền thu</li>
+              </ul>
+              <button class="button template-link" data-kind="outflows">
+                Tải mẫu lịch chi ↓
+              </button>
+            </article>
+          </div>
+          <article class="paper">
+            <h2>Sao kê và số dư kỳ</h2>
+            <p>
+              Nạp dòng sao kê trước. Mỗi giao dịch có mã riêng, bí danh tài
+              khoản, ngày, chiều thu hoặc chi và số tiền dương. Một khoản thu có
+              thể ghép dần với nhiều hóa đơn; phần chưa ghép vẫn là tiền ngân
+              hàng. Dùng cash_sale cho bán thu ngay, variable_cost cho chi biến
+              đổi; giao dịch còn lại dùng other.
+            </p>
+            <button class="button template-link" data-kind="bank">
+              Tải mẫu sao kê ↓
+            </button>
+            <button class="button template-link" data-kind="statements">
+              Tải mẫu số dư kỳ ↓
+            </button>
+            <p>
+              Để đối chiếu dự báo, nạp kỳ có số dư đầu, cuối và đủ mọi dòng ngân
+              hàng. Chỉ chấm các tuần có sao kê của tất cả tài khoản trong kế
+              hoạch.
+            </p>
+          </article>
+          <article class="paper">
+            <h2>Ghi nhận kết quả thu nợ</h2>
+            <p>
+              Nhập mã sự kiện và mã hóa đơn. Dùng contact (đã liên hệ), skip
+              (hoãn 7 ngày), promise (nhập ngày khách hứa), dispute (tranh
+              chấp), resolved (hết tranh chấp) hoặc write_off (đã xóa nợ). Sửa
+              bằng cách nạp lại đúng mã và duyệt thay đổi.
+            </p>
+            <button class="button template-link" data-kind="actions">
+              Tải mẫu nhật ký ↓
+            </button>
+          </article>
+          <article class="paper faq">
+            <h2>Trước khi bấm kiểm định</h2>
+            <details open>
+              <summary>Dữ liệu ít hoặc còn thiếu thì sao?</summary>
+              <p>
+                Nạp đủ thanh toán trước khi xác nhận phạm vi dữ liệu. Không coi
+                ô trống là “chưa trả”. Nếu lịch sử chưa đủ để học, dùng dự báo
+                theo điều khoản/lịch sử hiện có, rồi cập nhật mỗi tháng. Đừng
+                tạo dữ liệu giả để lấp chỗ trống.
+              </p>
+            </details>
+            <details>
+              <summary>File mẫu có dùng để huấn luyện không?</summary>
+              <p>
+                Có, trong workspace DEMO_DAIPHAT (cổng 8012). Bộ Đại Phát được phép train, chia tập theo thời gian, tuning và validation. Kết quả chỉ dùng thử luồng. Workspace doanh nghiệp thật vẫn từ chối dòng DEMO_. Sau khi train xong, báo cáo chi tiết được lưu dưới dạng HTML mã hóa trong Downloads/Agent1_Tai_lieu_va_Data_Demo/Ket_qua_train; mở file và nhập mật khẩu đã cấu hình.
+              </p>
+            </details>
+            <details>
+              <summary>Một khoản chuyển khoản trả cho nhiều hóa đơn?</summary>
+              <p>
+                Tách thành các dòng phân bổ, mỗi dòng có mã riêng, cùng ngày
+                thanh toán và mã hóa đơn tương ứng. Tổng các dòng đã ghép không
+                được vượt khoản thực thu. Xác minh phân bổ trước khi nạp; luồng
+                này không tự đoán quan hệ từ sao kê.
+              </p>
+            </details>
+            <details>
+              <summary>Điều chỉnh, hủy hóa đơn hoặc thu thừa?</summary>
+              <p>
+                Sửa tại nguồn rồi nạp lại cùng mã. Khoản thu thừa, hoàn tiền và
+                hóa đơn hủy cần đối soát ở hệ thống kế toán trước; importer sẽ
+                chặn số âm và tổng thu vượt giá trị hóa đơn. Xóa bản ghi nhập
+                nhầm trong mục Dữ liệu.
+              </p>
+            </details>
+            <details>
+              <summary>Ai xem được dữ liệu và mô hình?</summary>
+              <p>
+                Dữ liệu và phiên bản học được lưu mã hóa trên máy chủ của đơn vị
+                triển khai. Khóa truy cập chỉ giữ trong bộ nhớ phiên trình
+                duyệt. Trình duyệt nhận kết quả và chỉ số kiểm định, không nhận
+                trọng số hoặc mã nguồn mô hình. Người quản trị máy chủ có quyền
+                truy cập hệ thống; đây không phải cơ chế giấu mã với chủ máy.
+              </p>
+            </details>
+            <details>
+              <summary>Cập nhật hàng tháng như thế nào?</summary>
+              <p>
+                Nạp hóa đơn và khoản thu mới bằng mã ổn định. Nếu đã có phiên
+                bản học, giao diện nhắc kiểm định lại. Phiên bản mới không tự
+                thay phiên bản cũ: bạn xem kết quả, chọn sử dụng và có thể quay
+                về bản trước.
+              </p>
+            </details>
+          </article>
+        </section>
+        <footer>
+          <span
+            >AGENT1 <span class="footer-dot">·</span> Sổ điều hành dòng
+            tiền</span
+          ><span>Dữ liệu riêng. Kiểm định riêng. Quyết định của bạn.</span>
+        </footer>
+      </main>
+    </div>
+    <dialog id="connect-dialog">
+      <form id="connect-form">
+        <span class="eyebrow">KHÔNG GIAN DOANH NGHIỆP</span>
+        <h2>Kết nối sổ của bạn.</h2>
+        <p>
+          Nhập khóa truy cập do quản trị viên cung cấp. Khóa chỉ được giữ trong
+          phiên này.
+        </p>
+        <label
+          >Khóa truy cập<input
+            id="token-input"
+            type="password"
+            required
+            autocomplete="off"
+            placeholder="Dán khóa truy cập"
+            spellcheck="false"
+        /></label>
+        <p id="connect-error" class="error-text" role="alert"></p>
+        <div class="form-actions">
+          <button type="button" class="button" id="connect-cancel">
+            Để sau</button
+          ><button type="submit" class="button primary">Kết nối →</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

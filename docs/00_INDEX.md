@@ -1,5 +1,7 @@
 # Agent 1 — Trợ lý Dòng tiền (Cash-Flow Copilot) · Bộ tài liệu
 
+**Bàn giao workspace SME 07/11/2026:** [chạy từ repo](../README.md), [sổ tay PDF có ảnh](06_Pilot/pdf/So-tay-Agent1.pdf) và [tài liệu kỹ thuật](HANDOFF.md). Phần bên dưới là chỉ mục nghiên cứu.
+
 **Bắt đầu tại [hướng dẫn đọc cho AI](AI_READING_GUIDE.md)** để phân biệt kết luận hiện hành với kế hoạch và kết quả lịch sử.
 
 > **Cập nhật 06/11/2026:** mục “Tóm tắt một trang” bên dưới là ảnh chụp trạng thái

@@ -1,9 +1,11 @@
-.venv*
-.git
-.state
-data
-outputs
-docs
-__pycache__
+# Send only application inputs to the builder. Excludes all tenant stores, keys and checkouts.
+**
+!Dockerfile
+!requirements.txt
+!requirements-service.txt
+!agent1/
+!agent1/**
+!agent1_service/
+!agent1_service/**
 **/__pycache__
-*.log
+**/*.pyc

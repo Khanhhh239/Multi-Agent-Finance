@@ -1,0 +1,23 @@
+services:
+  agent1:
+    build: .
+    ports:
+      - "127.0.0.1:8011:8000"
+    environment:
+      AGENT1_FIRM_ID: "${AGENT1_FIRM_ID:-SME}"
+      AGENT1_STATE_DIR: /state
+      AGENT1_KEY_DIR: /keys
+      AGENT1_RESEARCH_MODE: "0"
+      AGENT1_AGENT4_TOKEN: "${AGENT1_AGENT4_TOKEN:-}"
+      AGENT1_VIEWER_TOKEN: "${AGENT1_VIEWER_TOKEN:-}"
+      AGENT1_TRAIN_MIB: "${AGENT1_TRAIN_MIB:-2048}"
+      AGENT1_THREADS: "4"
+      OMP_NUM_THREADS: "4"
+      OPENBLAS_NUM_THREADS: "1"
+    volumes:
+      - agent1-business-state:/state
+      - agent1-business-keys:/keys
+    restart: unless-stopped
+volumes:
+  agent1-business-state:
+  agent1-business-keys:

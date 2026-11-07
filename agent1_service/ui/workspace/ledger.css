@@ -1,0 +1,23 @@
+/* Workbench navigation and typography shared by all company views. */
+.entry-choice{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;margin:20px 0 28px}.entry-choice article{padding:20px 24px;background:white;border:1px solid #cbd3d5;display:flex;flex-direction:column;align-items:flex-start}.entry-choice article:first-child{border-left:4px solid #185849}.entry-choice p{flex:1}.entry-choice .button{text-decoration:none}@media(max-width:700px){.entry-choice{grid-template-columns:1fr}}
+:root{--paper:#f5f6f7;--white:#fff;--ink:#202b32;--muted:#56646b;--line:#d8dee0;--green:#185849}
+body{font-family:"Segoe UI",Tahoma,Arial,sans-serif}
+.rail{position:relative;inset:auto;width:100%;height:auto;background:#223138;color:#fff;display:flex;flex-direction:row;align-items:center;gap:20px;padding:0 clamp(16px,3vw,52px);overflow:visible}
+.rail .brand{padding:0;gap:8px;font-size:16px;letter-spacing:.025em}.rail .brandmark{font:600 25px/1 "Segoe UI",sans-serif}.rail .brandline,.rail .company,.rail .brand>span:nth-child(2){display:none}
+.rail nav{display:flex;gap:0;min-width:0}.rail nav button,.rail .guide-link{width:auto;border:0;border-radius:0;margin:0;padding:17px 13px;font:500 14px/20px "Segoe UI",sans-serif;color:#e4edef;white-space:nowrap}
+.rail nav button.active{background:#34474e;box-shadow:inset 0 -3px #b2d3bd;color:white}.rail nav img,.rail .guide-link img{display:none}.rail .guide-link{display:block;margin-left:auto}
+.shell{margin-left:0}.topbar{height:45px;padding:0 clamp(16px,3vw,52px);background:white;border-bottom:1px solid var(--line)}
+main{max-width:1330px;margin:0 auto;padding:26px clamp(16px,3vw,52px) 0}
+.view .page-heading{margin-bottom:20px}.page-heading .eyebrow,.chapter,.versions .eyebrow{display:none}
+.view h1,.view h2,.view h3,dialog h2,.view .metrics strong,.data-counts b,.audit-metrics strong,.empty-copy h3{font-family:"Segoe UI",Tahoma,Arial,sans-serif;font-variant-numeric:tabular-nums}
+.view h1{font-size:clamp(27px,3vw,36px);line-height:1.18;font-weight:650;letter-spacing:-.035em;margin:0 0 8px}
+.view h2,.chart-paper h2,.guide-grid h2{font-size:20px;line-height:1.35;letter-spacing:-.02em;font-weight:620}
+.view .page-heading p{font:400 14px/1.55 "Segoe UI",sans-serif;margin:0;max-width:78ch}
+th,td,.metrics,.audit-metrics{font-variant-numeric:tabular-nums}td:has(+td){border-color:var(--line)}
+#view-training .split-layout{display:grid;grid-template-columns:minmax(300px,.8fr) minmax(0,1.4fr);gap:0;background:white;border-block:1px solid #aab7bb}
+#view-training .paper{border:0;border-radius:0;margin:0;padding:22px 26px;background:transparent}
+#view-training .versions{border-left:1px solid var(--line);align-self:stretch}
+#view-training .section-heading{padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:14px;flex-wrap:wrap}
+#view-training .train-options{border-block:1px solid var(--line);margin:18px 0;padding:10px 0}
+#view-training .train-options summary{font-size:13px;cursor:pointer}#train-form input[type=date]{max-width:240px;display:block}
+@media(max-width:850px){.rail{flex-wrap:wrap;gap:0;padding:0 12px}.rail .brand{height:35px}.rail nav{order:3;flex:1 0 100%;overflow-x:auto}.rail nav button{padding:10px;font-size:13px}.rail .guide-link{padding:7px;font-size:12px}.rail .brand>span:nth-child(2){display:inline}.rail .brandline{display:none}#view-training .split-layout{display:flex;flex-direction:column}#view-training .paper{width:100%;padding:16px}#view-training .versions{border-left:0;border-top:1px solid var(--line)}}

@@ -1,0 +1,2 @@
+﻿invoice_id,customer_id,issue_date,due_date,amount,currency,known_at
+DEMO_DP201501000,DP-KH008,2015-01-01,2010-01-01,11000000,VND,2015-01-01

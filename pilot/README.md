@@ -3,6 +3,8 @@
 Agent 1 dự báo dòng tiền 13 tuần và hỗ trợ đối soát, ưu tiên thu nợ, kịch bản căng thẳng.
 Hiệu quả trên doanh nghiệp Việt Nam phải được đo trong pilot, không suy từ tổng hợp.
 
+Bắt đầu tại [bộ pilot A04/A12](BO_PILOT_SME.md): bài thử cho 5 kế toán, phiếu quan sát, nhật ký chạy song song và biên bản quyết định.
+
 ## Tuyển và dữ liệu
 
 Đề xuất DN có ít nhất 10 lao động, bán chịu B2B, dùng hoá đơn điện tử và có ít nhất 12 tháng lịch sử.
