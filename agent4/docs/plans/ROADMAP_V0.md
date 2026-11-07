@@ -58,41 +58,55 @@ flowchart LR
 ---
 
 ### Milestone 1: Governed Metric Selection Pipeline (Local Qwen) (M1)
-> **Mục tiêu:** Xây dựng hệ thống truy hồi metric đa tầng (Dense + Lexical + RRF), Dynamic Few-shot, trích xuất metric bằng mô hình local Qwen 4B và chốt chặn Metrics Validation authority.
+> **Mục tiêu:** Thiết lập đường cơ sở Full-Catalog (`E0`), xây dựng chỉ mục vector cục bộ (`.npz`), truy hồi lai đa tầng (Dense + Lexical + RRF + Metadata Rerank — `E1`, `E2`), Dynamic Few-shot (`E3`, `E4`), trích xuất metric bằng mô hình local `Qwen3:4b`, chốt chặn `Metrics Validator` (Contract 15), và cơ chế phục hồi có giới hạn (`Bounded Recovery` — `E5`). Chi tiết xem tại [docs/plans/metrics_selection.md](metrics_selection.md) và [docs/metric_selection_evaluation.md](../metric_selection_evaluation.md).
 
-#### Issue M1.1: Multi-stage Metric Retrieval & Fusion
+#### Issue M1.0 (M1-S1): Catalog Adapter, Local Qwen Selector, Deterministic Validator & Full-Catalog Baseline (`E0`)
+- **Module:** `agent4/metric_selection/`
+- **File đích:** `catalog_adapter.py`, `llm_selector.py`, `validator.py`, `eval_adapter.py`, `config.py`
+- **Contract ID:** `metric.catalog.v1` (adapter), `metric.selection.llm.v1` (Contract 14), `metric.validation.v1` (Contract 15)
+- **Tasks chi tiết:**
+  - **Task M1.0.1 (Catalog Adapter):** Ánh xạ 66 `MetricDef` trong `agent4/engine/metrics.py` (`REGISTRY`) sang `MetricCatalog` (`metric.catalog.v1`) trong khi vẫn bảo toàn 15 definitions mặc định cho bộ contract test v1.
+  - **Task M1.0.2 (LLM Selector & Draft Sanitizer):** Xây dựng `LLMMetricSelector` (`Qwen3:4b` qua Ollama + deterministic test double) và `validate_llm_selection_draft()` chặn mọi câu lệnh SQL, công thức, tên bảng/cột vật lý.
+  - **Task M1.0.3 (Metrics Validation Gate):** Hiện thực hóa `validate_metrics()` với đầy đủ 8 bước kiểm định (Contract 15).
+  - **Task M1.0.4 (Baseline `E0` & Verification):** Chuyển `tests/contracts/test_selection_and_metric_validation.py` sang gọi code production (`7/7` pass) và chạy thực nghiệm **Baseline `E0` (Full Catalog $\rightarrow$ Qwen3:4b $\rightarrow$ Validator)** qua `vals/run_eval.py`.
+
+#### Issue M1.1a (M1-S2): Embedding Provider, Document Builder & Persisted Offline Vector Index
+- **Module:** `agent4/metric_selection/`
+- **File đích:** `embedding.py`, `index.py`, `config.py`
+- **Contract ID:** `metric.embedding-provider.v1` (Contract 5), `metric.document-builder.v1` (Contract 6)
+- **Tasks chi tiết:**
+  - **Task M1.1a.1 (Document Builder):** Hiện thực hóa `build_metric_documents()` cho các metric `status == "approved"`, không chứa SQL hay dữ liệu giao dịch.
+  - **Task M1.1a.2 (Configurable Embedding Provider):** Hỗ trợ `qwen3-embedding:0.6b` qua Ollama và deterministic hashing provider cho offline tests; xử lý đúng lỗi `retrieval_unavailable` (`retryable=True`).
+  - **Task M1.1a.3 (Offline NumPy Index):** Hiện thực hóa `MetricVectorIndex` (`.npz` + JSON metadata) hỗ trợ `build_index`, `load_index`, `rebuild_index`, và `is_index_stale` theo `catalog_hash`.
+  - **Task M1.1a.4 (Verification):** Pass `3/3` tests trong `TestEmbeddingAndDocumentBuilderContracts` trên code production.
+
+#### Issue M1.1 (M1-S3): Online Hybrid Metric Retrieval & Fusion (`E1`, `E2`)
 - **Module:** `agent4/metric_selection/`
 - **File đích:** `dense.py`, `lexical.py`, `fusion.py`, `rerank.py`, `orchestrator.py`
-- **Contract ID:** `metric.embedding-provider.v1`, `metric.document-builder.v1`, `metric.retrieval.*.v1`
+- **Contract ID:** `metric.retrieval.dense.v1`, `lexical.v1`, `fusion.v1`, `rerank.v1`, `orchestrator.v1` (Contracts 7–11)
 - **Tasks chi tiết:**
-  - **Task M1.1.1 (Embedding & Doc Builder):** Hiện thực hóa `EmbeddingProvider` và `build_metric_documents()` sinh document nghiệp vụ không chứa SQL hay số liệu tài chính.
-  - **Task M1.1.2 (Dense & Lexical Retrievers):** Xây dựng `dense_retrieve()` (so khớp vector chuẩn hóa) và `lexical_retrieve()` (khớp alias, từ khóa, BM25). Cả hai chỉ trả về metric có trong Catalog.
-  - **Task M1.1.3 (RRF Fusion):** Triển khai `fuse_candidates()` sử dụng thuật toán Reciprocal Rank Fusion ($1 / (60 + rank)$), deduplicate theo `metric_id`, bảo lưu `dense_score`, `lexical_score`, và gán `retrieval_sources`.
-  - **Task M1.1.4 (Metadata Reranker):** Triển khai `rerank_candidates()` chấm điểm tương thích view (`view_compatibility`), ngôn ngữ (`language_match`), và độ khớp alias (`label_match`). Reranker không được tự ý thêm candidate mới.
-  - **Task M1.1.5 (Retrieval Orchestrator):** Ghép nối luồng retrieval trả về 3 trạng thái chuẩn: `candidates_found`, `empty_candidates`, `retrieval_unavailable` (khi embedding model offline).
+  - **Task M1.1.1 (Dense & Lexical Retrievers):** Xây dựng `dense_retrieve()` (cosine similarity trên vector chuẩn hóa) và `lexical_retrieve()` (khớp nhãn, `aliases`/`synonyms`, token chuẩn hóa).
+  - **Task M1.1.2 (RRF Fusion & Metadata Reranker):** Triển khai `fuse_candidates()` ($k=60$) và `rerank_candidates()` (`label_match`, `view_compatibility`, `language_match`).
+  - **Task M1.1.3 (Retrieval Orchestrator):** Triển khai `orchestrate_retrieval()` trả về 3 trạng thái chuẩn (`candidates_found`, `empty_candidates`, `retrieval_unavailable`).
+  - **Task M1.1.4 (Verification & Experiments `E1`, `E2`):** Pass `5/5` tests trong `TestMetricRetrievalPipelineContracts`; chạy thực nghiệm `E1` (Dense) và `E2` (Hybrid) tại $K \in \{5, 10, 12, 15\}$, đánh giá `Complete Gold Set Recall@K` và đối chiếu với `E0`.
 
-#### Issue M1.2: Dynamic Few-shot Retrieval & Bank Governance
+#### Issue M1.2 (M1-S4): Dynamic Few-shot Retrieval, Bank Governance & Ablation (`E3`, `E4`)
 - **Module:** `agent4/metric_selection/`
 - **File đích:** `agent4/metric_selection/fewshot.py`
-- **Contract ID:** `fewshot.example-bank.v1`, `fewshot.retrieval.dynamic.v1`
+- **Contract ID:** `fewshot.example-bank.v1` (Contract 12), `fewshot.retrieval.dynamic.v1` (Contract 13)
 - **Tasks chi tiết:**
-  - **Task M1.2.1 (Example Bank):** Xây dựng kho ví dụ mẫu chuẩn hóa với `quality_status: "approved"`, đã kiểm duyệt sạch không chứa prompt injection hay raw transaction.
-  - **Task M1.2.2 (Compatible-Only Selector):** Hiện thực hóa bộ lọc `compatible_only=True`, bắt buộc ràng buộc bất biến:
-    $$\text{example.expected\_selection.metric\_ids} \subseteq \text{candidate\_metric\_ids}$$
-  - **Task M1.2.3 (Budget & Self-Exclusion):** Kiểm soát `token_budget` (mặc định 2500 tokens), giới hạn `max_examples`, và loại trừ chính câu hỏi hiện tại.
+  - **Task M1.2.1 (Example Bank Governance):** Hỗ trợ `DEFAULT_FEWSHOT_BANK` và bộ nạp chuẩn hóa `data/example_bank.jsonl`, lọc `quality_status == "approved"` và chặn prompt injection.
+  - **Task M1.2.2 (Multi-Strategy Few-shot Retriever):** Hỗ trợ các chiến lược `zero`, `static`, `similarity`, `coverage`, `hybrid` với bất biến bắt buộc $\text{example.metric\_ids} \subseteq \text{candidate\_metric\_ids}$ (`compatible_only=True`), `self-exclusion`, và `token_budget`.
+  - **Task M1.2.3 (Verification & Ablation `E3`, `E4`):** Pass `3/3` tests trong `TestDynamicFewShotContracts` (đạt 11/11 toàn file `test_retrieval_and_fewshot.py`) và chạy thực nghiệm `E3` (Static Few-shot) vs `E4` (Dynamic Few-shot).
 
-#### Issue M1.3: Local Qwen Metric Extraction & Metrics Validation Authority
+#### Issue M1.3 (M1-S5): Bounded Recovery, End-to-End Selection Integration & Submission Gate (`E5`)
 - **Module:** `agent4/metric_selection/`
-- **File đích:** `agent4/metric_selection/llm_selector.py`, `agent4/metric_selection/validator.py`
-- **Contract ID:** `metric.selection.llm.v1`, `metric.validation.v1`
+- **File đích:** `recovery.py`, `orchestrator.py`, `llm_selector.py`, `validator.py`, `config/selection.yaml`
+- **Contract ID:** Toàn bộ Contracts 5 $\rightarrow$ 15
 - **Tasks chi tiết:**
-  - **Task M1.3.1 (LLM Selector Client):** Xây dựng client kết nối mô hình Qwen 4B cục bộ (qua Ollama REST API hoặc vLLM/OpenAI endpoint). Thiết lập System Prompt ép model trả về JSON schema chuẩn (`status`, `metric_ids`, `clarification_question`, `unsupported_reason`), không được sinh SQL, công thức hay tên bảng.
-  - **Task M1.3.2 (LLM Output Sanitizer):** Kiểm tra và từ chối ngay lập tức nếu output LLM chứa các từ khóa SQL DML/DDL hoặc tên bảng vật lý (`gl_wide`, `v_mgmt`).
-  - **Task M1.3.3 (Metrics Validation Gate):** Thiết lập `validate_metrics()` làm chốt chặn tối cao:
-    - Kiểm tra $\text{selected\_metric\_ids} \subseteq \text{candidate\_metric\_ids} \subseteq \text{catalog\_metric\_ids}$.
-    - Kiểm tra quyền truy cập View (`mgmt`, `tax`, `gl`) của user.
-    - Kiểm tra xung đột `period_type` (chặn kết hợp metric `flow` và `snapshot`).
-  - **Task M1.3.4 (Verification Test):** Chạy và pass 100% các bài test trong [tests/contracts/test_retrieval_and_fewshot.py](file:///home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/tests/contracts/test_retrieval_and_fewshot.py) và [tests/contracts/test_selection_and_metric_validation.py](file:///home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/tests/contracts/test_selection_and_metric_validation.py).
+  - **Task M1.3.1 (Bounded Recovery):** Triển khai `recovery.py` xử lý có giới hạn (`max_retries <= 1`) các tình huống `empty_candidates`, `retrieval_unavailable`, lỗi JSON schema, và mở rộng ứng viên có kiểm soát mà tuyệt đối không đi vòng qua `validate_metrics()`.
+  - **Task M1.3.2 (Full Verification & Experiment `E5`):** Pass toàn bộ **18/18 contract tests** của Module 2 trên code production, chạy thực nghiệm `E5`, tổng hợp bảng so sánh `E0`–`E5`, và khóa cấu hình `config/selection.yaml`.
+
 
 ---
 
