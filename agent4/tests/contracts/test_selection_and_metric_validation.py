@@ -7,13 +7,32 @@ from __future__ import annotations
 
 import pytest
 
-from tests.contract_harness import (
-    ContractError,
-    MetricCatalog,
-    build_auth_context,
-    validate_llm_selection_draft,
-    validate_metrics,
-)
+from agent4.core import build_auth_context
+from agent4.core.catalog import MetricCatalog
+from agent4.core.errors import ContractError
+from agent4.metric_selection import validate_llm_selection_draft, validate_metrics
+
+
+@pytest.fixture
+def catalog() -> MetricCatalog:
+    return MetricCatalog()
+
+
+@pytest.fixture
+def analyst_auth() -> dict:
+    return _auth(["mgmt"])
+
+
+@pytest.fixture
+def cfo_auth() -> dict:
+    return _auth(["mgmt", "tax", "gl"])
+
+
+def _auth(views: list[str]) -> dict:
+    return build_auth_context(
+        idp_claims={"user_id": "u-finance", "tenant_id": "minh-phat", "roles": ["analyst"]},
+        server_policy={"allowed_views": views, "policy_version": "v1"},
+    )
 
 
 class TestLLMMetricSelectionContract:
@@ -57,7 +76,9 @@ class TestLLMMetricSelectionContract:
 class TestMetricsValidationContract:
     """Contract 15: metric.validation.v1 (Ultimate authority for metrics)."""
 
-    def test_metrics_validation_happy_path(self, catalog: MetricCatalog, analyst_auth: dict) -> None:
+    def test_metrics_validation_happy_path(
+        self, catalog: MetricCatalog, analyst_auth: dict
+    ) -> None:
         retrieval_result = {
             "status": "candidates_found",
             "candidates": [
@@ -75,7 +96,10 @@ class TestMetricsValidationContract:
         assert validated["status"] == "validated"
         assert validated["metric_ids"] == ["net_profit_margin"]
         assert validated["catalog_hash"] == catalog.get_catalog_hash()
-        assert "month" in validated["validated_capabilities"]["net_profit_margin"]["supported_dimensions"]
+        assert (
+            "month"
+            in validated["validated_capabilities"]["net_profit_margin"]["supported_dimensions"]
+        )
 
     def test_subset_invariant_rejects_metric_outside_candidates(
         self, catalog: MetricCatalog, analyst_auth: dict
@@ -108,7 +132,10 @@ class TestMetricsValidationContract:
                     "clarification_question": None,
                     "unsupported_reason": None,
                 },
-                {"status": "candidates_found", "candidates": [{"metric_id": "ebitda_custom_invented", "rank": 1}]},
+                {
+                    "status": "candidates_found",
+                    "candidates": [{"metric_id": "ebitda_custom_invented", "rank": 1}],
+                },
                 catalog,
                 analyst_auth,
             )
@@ -123,7 +150,10 @@ class TestMetricsValidationContract:
                     "clarification_question": None,
                     "unsupported_reason": None,
                 },
-                {"status": "candidates_found", "candidates": [{"metric_id": "experimental_cash_burn", "rank": 1}]},
+                {
+                    "status": "candidates_found",
+                    "candidates": [{"metric_id": "experimental_cash_burn", "rank": 1}],
+                },
                 catalog,
                 analyst_auth,
             )
@@ -138,7 +168,10 @@ class TestMetricsValidationContract:
                     "clarification_question": None,
                     "unsupported_reason": None,
                 },
-                {"status": "candidates_found", "candidates": [{"metric_id": "unverified_custom_kpi", "rank": 1}]},
+                {
+                    "status": "candidates_found",
+                    "candidates": [{"metric_id": "unverified_custom_kpi", "rank": 1}],
+                },
                 catalog,
                 analyst_auth,
             )
@@ -149,7 +182,10 @@ class TestMetricsValidationContract:
     ) -> None:
         retrieval_result = {
             "status": "candidates_found",
-            "candidates": [{"metric_id": "operating_expense", "rank": 1}, {"metric_id": "cash_balance", "rank": 2}],
+            "candidates": [
+                {"metric_id": "operating_expense", "rank": 1},
+                {"metric_id": "cash_balance", "rank": 2},
+            ],
         }
         llm_opex = {
             "status": "resolved",
@@ -198,7 +234,9 @@ class TestMetricsValidationContract:
             validate_metrics(llm_opex, retrieval_result, catalog, restricted_auth)
         assert e_forb_metric.value.code == "forbidden_metric"
 
-    def test_incompatible_period_types_rejected(self, catalog: MetricCatalog, analyst_auth: dict) -> None:
+    def test_incompatible_period_types_rejected(
+        self, catalog: MetricCatalog, analyst_auth: dict
+    ) -> None:
         # Combining 'net_revenue' (flow) and 'cash_balance' (snapshot) must raise incompatible_metrics
         retrieval_result = {
             "status": "candidates_found",

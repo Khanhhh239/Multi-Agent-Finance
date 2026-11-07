@@ -440,6 +440,8 @@ empty_candidates
 retrieval_unavailable
 ```
 
+Ở chế độ full catalog, candidate được xếp theo thứ tự catalog sau khi lọc quyền truy cập, với `retrieval_sources=["catalog_full"]`. Các trường score, embedding và phiên bản index là `null` khi tầng tương ứng không chạy.
+
 ## 12. Dynamic Few-shot Example Bank Contract
 
 **Contract ID:** `fewshot.example-bank.v1`
@@ -588,6 +590,7 @@ fewshot_unavailable
 - Không tạo metric mới.
 - Không tự thay đổi view, tenant hoặc role.
 - LLM output luôn phải qua Metrics Validation.
+- `metric_ids` gồm các định danh duy nhất. Trạng thái `ambiguous` và `unsupported` phải có danh sách rỗng. Tin nhắn nếu có phải đúng với trạng thái tương ứng.
 
 ### Status
 
@@ -645,6 +648,7 @@ Ngoài ra phải kiểm tra:
 - Metric có source/handler được kiểm chứng.
 - Các metric có period type tương thích.
 - Dimension và operation có capability tương ứng.
+- `ambiguous` trả `needs_clarification` cùng câu hỏi làm rõ. `unsupported` và bản nháp `resolved` không có metric đều trả lỗi `unsupported_metric`.
 
 ### Errors
 

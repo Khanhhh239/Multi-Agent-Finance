@@ -1,4 +1,5 @@
 """Versioned configuration loading for the metric-selection pipeline."""
+
 from __future__ import annotations
 
 import hashlib
@@ -28,6 +29,7 @@ class EmbeddingConfig(StrictModel):
 
 
 class RetrievalConfig(StrictModel):
+    mode: Literal["full_catalog", "dense_only", "hybrid", "lexical_only"] = "full_catalog"
     dense_enabled: bool = True
     lexical_enabled: bool = True
     fusion_method: Literal["rrf"] = "rrf"
@@ -39,7 +41,7 @@ class RetrievalConfig(StrictModel):
 
     @model_validator(mode="after")
     def at_least_one_retriever(self) -> RetrievalConfig:
-        if not self.dense_enabled and not self.lexical_enabled:
+        if self.mode != "full_catalog" and not self.dense_enabled and not self.lexical_enabled:
             raise ValueError("at least one retrieval method must be enabled")
         return self
 
@@ -60,8 +62,8 @@ class RerankingConfig(StrictModel):
 
 
 class FewshotConfig(StrictModel):
-    enabled: bool = True
-    strategy: Literal["zero", "static", "similarity", "coverage", "adaptive"] = "adaptive"
+    enabled: bool = False
+    strategy: Literal["zero", "static", "similarity", "coverage", "adaptive"] = "zero"
     min_examples: int = Field(default=0, ge=0)
     max_examples: int = Field(default=4, ge=0)
     initial_pool_size: int = Field(default=15, ge=1)
@@ -81,10 +83,11 @@ class FewshotConfig(StrictModel):
 class LLMSelectionConfig(StrictModel):
     provider: Literal["ollama", "mock"] = "ollama"
     base_url: str = "http://localhost:11434"
-    model: str = "qwen3:8b"
+    model: str = "qwen3:4b"
     temperature: float = Field(default=0.0, ge=0)
-    timeout_s: float = Field(default=180.0, gt=0)
-    max_retries: int = Field(default=1, ge=0, le=3)
+    timeout_s: float = Field(default=360.0, gt=0)
+    max_retries: int = Field(default=0, ge=0, le=3)
+    context_window: int = Field(default=8192, ge=1)
 
 
 class EvaluationConfig(StrictModel):
@@ -117,23 +120,21 @@ def load_config(path: str | Path | None = None) -> MetricSelectionConfig:
         )
         expansion = config.expansion.model_copy(
             update={
-                "relationship_path": _absolute_project_path(
-                    config.expansion.relationship_path
-                ),
+                "relationship_path": _absolute_project_path(config.expansion.relationship_path),
             }
         )
         fewshot = config.fewshot.model_copy(
             update={
-                "example_bank_path": _absolute_project_path(
-                    config.fewshot.example_bank_path
-                ),
+                "example_bank_path": _absolute_project_path(config.fewshot.example_bank_path),
             }
         )
         return config.model_copy(
             update={"embedding": embedding, "expansion": expansion, "fewshot": fewshot}
         )
     except (OSError, yaml.YAMLError, ValueError) as exc:
-        raise ConfigurationError(f"Cannot load metric-selection config {config_path}: {exc}") from exc
+        raise ConfigurationError(
+            f"Cannot load metric-selection config {config_path}: {exc}"
+        ) from exc
 
 
 def _absolute_project_path(path: Path) -> Path:
