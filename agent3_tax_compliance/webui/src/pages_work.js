@@ -83,6 +83,7 @@ export async function pageReview() {
     <div class="bar">${[['all', `Tất cả (${rep.items.length})`], ['AT_RISK', `Có nguy cơ (${count('AT_RISK')})`], ['REVIEW', `Cần xem xét (${count('REVIEW')})`], ['OPPORTUNITY', `Bỏ sót (${count('OPPORTUNITY')})`]]
       .map(([k, l]) => `<a class="cds--btn cds--btn--${k === filter ? 'secondary' : 'ghost'} cds--btn--sm" href="#/viec?loc=${k}">${esc(l)}</a>`).join('')}
       <input class="cds--text-input filter-input" id="q" placeholder="Tìm số hóa đơn, người bán, lý do" aria-label="Tìm việc">
+      <select class="cds--select-input filter-select" id="group" aria-label="Lọc theo vấn đề"></select>
       <select class="cds--select-input filter-select" id="month" aria-label="Lọc theo tháng"><option value="">Mọi tháng</option>${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}</select>
       <span class="muted small" id="shown"></span>
       <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/viec-can-xu-ly.xlsx">Xuất Excel</a></div>
@@ -91,7 +92,7 @@ export async function pageReview() {
       <input class="cds--text-input filter-input" id="bulk-ev" placeholder="Chứng từ hoặc lý do chung">
       <input class="cds--text-input filter-input" id="bulk-by" placeholder="Người duyệt" value="${esc(store.get('agent3.reviewer') || '')}">
       ${button('Ghi cho các việc đã chọn', 'primary', 'id="bulk-go"')}</div>
-    <div id="groups"></div><div id="list"></div>`;
+    <div id="list"></div>`;
   // Grouped by issue first, then a paged list: stays usable with hundreds or thousands of invoices.
   const PAGE = 50;
   let shown = PAGE;
@@ -102,9 +103,8 @@ export async function pageReview() {
   const groups = {};
   items.forEach((it) => { const g = groups[it.code] ||= { title: it.title, status: it.status, n: 0, amount: 0 }; g.n += 1; g.amount += Number(it.amount || 0); });
   const paintGroups = () => {
-    $('#groups').innerHTML = `<div class="group-chips">${Object.entries(groups).sort((x, y) => y[1].amount - x[1].amount || y[1].n - x[1].n).map(([c, g]) => `<button type="button" class="group-chip ${c === code ? 'on' : ''}" data-code="${esc(c)}">
-      ${tag(g.status)}<span class="gc-title">${esc(g.title)}</span><span class="gc-n">${g.n} việc${g.amount ? `, ${money(g.amount)}` : ''}</span></button>`).join('')}
-      ${code ? '<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm" data-code="">Bỏ lọc nhóm</button>' : ''}</div>`;
+    const opts = Object.entries(groups).sort((x, y) => y[1].amount - x[1].amount || y[1].n - x[1].n);
+    $('#group').innerHTML = `<option value="">Mọi vấn đề</option>${opts.map(([c, g]) => `<option value="${esc(c)}" ${c === code ? 'selected' : ''}>${esc(g.title)} (${g.n})</option>`).join('')}`;
   };
   const rowTpl = (it) => {
     const inv = invoiceOf(it.invoice_keys[0]);
@@ -137,7 +137,7 @@ export async function pageReview() {
     if ($('#all')) $('#all').onclick = () => { shown = view.length; paint(); };
     syncBulk();
   };
-  $('#groups').addEventListener('click', (e) => { const g = e.target.closest('[data-code]'); if (!g) return; code = g.dataset.code; shown = PAGE; paintGroups(); paint(); });
+  $('#group').onchange = () => { code = $('#group').value; shown = PAGE; paint(); };
   $('#bulk-go').onclick = async () => {
     const chosen = picks.filter((c) => c.checked).map((c) => rep.items[Number(c.dataset.idx)]);
     const body = { invoice_keys: [...new Set(chosen.map((x) => x.invoice_keys[0]))], action: $('#bulk-action').value, evidence: $('#bulk-ev').value.trim(), by: $('#bulk-by').value.trim() };
