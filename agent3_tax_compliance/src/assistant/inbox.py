@@ -73,6 +73,12 @@ def classify(path: Path, tax_code: str, pack: Pack) -> tuple[str | None, str]:
     return None, f'không nhận loại tệp {suffix or "không đuôi"}'
 
 
+def _same_content(folder: Path, raw: bytes) -> Path | None:
+    import hashlib
+    h = hashlib.sha256(raw).hexdigest()
+    return next((p for p in folder.glob('*') if p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest() == h), None)
+
+
 def _unique(folder: Path, name: str) -> Path:
     dest, n = folder / name, 1
     while dest.exists():
@@ -98,6 +104,11 @@ def ingest(ws: Path, name: str, raw: bytes, tax_code: str, pack: Pack) -> list[d
             if kind:
                 folder = ws / KIND_FOLDER[kind]
                 folder.mkdir(parents=True, exist_ok=True)
+                same = _same_content(folder, p.read_bytes()) if kind == 'bank' else None   # invoice copies stay: rule R05 reports them
+                if same is not None:                       # the same statement dropped twice: keep one copy, do not double the transactions
+                    rec.update(saved_as=same.name, reason=f'{reason}; tệp này đã nạp trước đó (trùng nội dung với {same.name}), giữ một bản', duplicate=True)
+                    out.append(rec)
+                    continue
                 dest = folder / 'purchase_list.csv' if kind == 'portal_list' and p.suffix.lower() == '.csv' else (
                     folder / f'purchase_list{p.suffix.lower()}' if kind == 'portal_list' else _unique(folder, n))
                 shutil.move(str(p), dest)

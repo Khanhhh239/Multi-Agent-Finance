@@ -212,7 +212,13 @@ def bank_proposals(ai: AI, txns: list[dict], invoices: list[dict], used_txns: se
         in_text = fold(quoted) and fold(quoted) in fold(text)
         sim = max(similarity(quoted, inv['seller_name'] or ''),
                   similarity(quoted, re.sub(r'(?i)c[oô]ng ty|tnhh|c[oổ] ph[aầ]n|cp|mtv|th[uư][oơ]ng m[aạ]i|d[iị]ch v[uụ]', ' ', inv['seller_name'] or '')))
-        if in_text and sim >= 0.34:
+        generic = {'cong', 'ty', 'tnhh', 'co', 'phan', 'cp', 'mtv', 'thuong', 'mai', 'dich', 'vu', 'san', 'xuat', 'tm', 'dv'}
+        qwords = [w for w in fold(quoted).split() if w not in generic]
+        name_words = set(fold(inv['seller_name'] or '').split())
+        # every distinctive word of the quoted phrase is a word of the seller's name ("nhat tin" in "Bảo trì Hệ thống Nhất Tín"),
+        # which a character-level similarity underrates when the name is long
+        contained = bool(qwords) and all(w in name_words for w in qwords) and sum(len(w) for w in qwords) >= 5
+        if in_text and (sim >= 0.34 or contained):
             out.append(dict(txn_id=t['txn_id'], invoice_key=inv['key'], seller_name=inv['seller_name'], invoice_number=inv.get('number'),
                             amount=str(amount), booked=str(booked), description=t.get('description'), counterparty_name=t.get('counterparty_name'),
                             name_in_text=quoted, similarity=round(sim, 2), reason=(res.get('reason') or '')[:240], source=t.get('source')))

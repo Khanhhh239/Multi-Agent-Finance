@@ -48,9 +48,10 @@ BANK_SYNONYMS = {
     'credit': ['so tien ghi co', 'ghi co', 'phat sinh co', 'co', 'credit', 'deposit', 'so tien gui', 'thu', 'tien vao'],
     'description': ['noi dung', 'dien giai', 'mo ta', 'noi dung giao dich', 'remark', 'description', 'details', 'narrative', 'transaction details'],
     'counterparty_account': ['so tai khoan doi ung', 'tai khoan doi ung', 'so tk doi ung', 'tk doi ung', 'beneficiary account', 'account no',
-                             'so tai khoan nguoi nhan', 'counterparty account'],
+                             'so tai khoan nguoi nhan', 'counterparty account', 'so tai khoan thu huong', 'tai khoan thu huong', 'tk thu huong'],
     'counterparty_name': ['ten don vi doi ung', 'ten doi ung', 'don vi doi ung', 'ten tai khoan doi ung', 'beneficiary name', 'counterparty name',
-                          'ten nguoi nhan', 'nguoi huong'],
+                          'ten nguoi nhan', 'nguoi huong', 'ten don vi thu huong', 'don vi thu huong', 'ten nguoi thu huong', 'thu huong',
+                          'ten tai khoan thu huong', 'ten doi tac'],
 }
 
 

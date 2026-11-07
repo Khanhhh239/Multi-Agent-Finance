@@ -77,3 +77,15 @@ def test_letter_paragraph_citing_law_needs_a_verbatim_quote(tmp_path):
     out = ai.draft_letter(model(tmp_path, [reply]), dict(legal_name='A', tax_code='0109999982'), facts, passages, '')
     assert [p['text'] for p in out['paragraphs']] == ['Doanh nghiệp đã có chứng từ thanh toán không dùng tiền mặt.']
     assert 'nguyên văn' in out['dropped'][0]['reason']
+
+
+def test_bank_proposal_accepts_a_short_name_that_is_part_of_a_long_company_name(tmp_path):
+    txns = [dict(txn_id='t1', direction='OUT', amount='15000000', booked='2026-09-10', description='chuyen tien bao tri phong may cho nhat tin',
+                 counterparty_name='NGUYEN VAN GIAM DOC', source='sk dòng 19')]
+    invs = [dict(key='k1', seller_name='Công ty TNHH Bảo trì Hệ thống Nhất Tín', number='536', gross='15000000', issue_date='2026-09-06')]
+    props = ai.bank_proposals(model(tmp_path, [dict(candidate=0, name_in_text='nhat tin', reason='nhắc tên người bán')]), txns, invs, set(), set())
+    assert [p['invoice_key'] for p in props] == ['k1']
+    # a generic phrase that is in the name of every company is not enough
+    txns[0]['description'] = 'chuyen tien cong ty'
+    none = ai.bank_proposals(model(tmp_path, [dict(candidate=0, name_in_text='cong ty', reason='đoán')]), txns, invs, set(), set())
+    assert none == []

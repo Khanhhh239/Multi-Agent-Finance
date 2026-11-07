@@ -94,3 +94,24 @@ def test_decision_suggestion_comes_from_an_earlier_decision_on_the_same_seller(c
     client.post(f'/api/workspaces/{wid}/decisions', json=dict(invoice_key=first['invoice_keys'][0], action='NOT_CLAIMED', evidence='trả tiền mặt', by='kt'))
     s = client.get(url).json()['suggestion']
     assert s['action'] == 'NOT_CLAIMED' and 'cùng người bán' in s['because']
+
+
+def test_unknown_bank_layout_is_recognised_on_upload_and_then_readable(client, tmp_path):
+    from src.assistant.synth import _write_xlsx
+    wid = client.post('/api/workspaces', json=dict(profile=dict(tax_code='0109999982', legal_name='Công ty thử', vat_method='DEDUCTION',
+                                                                 filing_period='QUARTER'))).json()['id']
+    rows = [['NGÂN HÀNG THỬ - SAO KÊ'], ['Số tài khoản: 123'], [],
+            ['Ngày hiệu lực', 'Diễn giải', 'Phát sinh Nợ', 'Phát sinh Có', 'TK đối ứng', 'Tên đơn vị thụ hưởng'],
+            ['05/08/2026', 'TT HD 12', '5.500.000', '', '111222', 'CONG TY ABC'],
+            ['06/08/2026', 'Thu tien', '', '2.000.000', '333444', 'KHACH A']]
+    path = tmp_path / 'sk.xlsx'
+    _write_xlsx(path, rows)
+    rec = client.put(f'/api/workspaces/{wid}/inbox?name=sk.xlsx', content=path.read_bytes()).json()['files'][0]
+    assert rec['kind'] == 'bank' and rec['auto_format']['columns']['counterparty_name'] == 'Tên đơn vị thụ hưởng'
+    detail = client.get(f'/api/workspaces/{wid}/details/bank').json()
+    assert detail[0]['ok'] and detail[0]['rows'] == 2
+    # a statement without a recognisable money column is left for the manual step, nothing is saved
+    rows2 = [['Ngày', 'Ghi chú'], ['05/08/2026', 'x']]
+    _write_xlsx(path, rows2)
+    rec2 = client.put(f'/api/workspaces/{wid}/inbox?name=sk2.xlsx', content=path.read_bytes()).json()['files'][0]
+    assert 'auto_format' not in rec2

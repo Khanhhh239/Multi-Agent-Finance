@@ -54,7 +54,7 @@ def test_file_status_mapping_preview_and_coverage(env):
     for p in sorted((demo / 'invoices' / 'purchase').glob('*.xml')):
         c.put(f'/api/workspaces/{wid}/inbox?name={p.name}', content=p.read_bytes())
     bank_a = next((demo / 'bank').glob('*.csv'))
-    c.put(f'/api/workspaces/{wid}/inbox?name={bank_a.name}', content=bank_a.read_bytes())
+    c.put(f'/api/workspaces/{wid}/files/bank?name={bank_a.name}', content=bank_a.read_bytes())   # direct upload: no automatic layout recognition
     det = c.get(f'/api/workspaces/{wid}/details/purchase_xml').json()
     assert len(det) == 47 and all(d['date'] for d in det if d['ok'])
     bank = c.get(f'/api/workspaces/{wid}/details/bank').json()
@@ -70,3 +70,19 @@ def test_file_status_mapping_preview_and_coverage(env):
     assert c.get(f'/api/workspaces/{wid}/details/bank').json()[0]['ok'] is True
     titles = [w['title'] for w in c.get(f'/api/workspaces/{wid}/coverage').json()]
     assert not any('chưa đọc được' in t for t in titles) and any('bảng kê' in t for t in titles)
+
+
+def test_the_same_bank_statement_dropped_twice_is_kept_once(tmp_path):
+    from src.assistant.inbox import ingest
+    from src.assistant.pack import load_pack
+    from src.assistant import synth
+    ws = tmp_path / 'ws'
+    synth.generate(ws, seed=3)
+    pack = load_pack(ws / 'pack.json')
+    raw = next((ws / 'bank').glob('*.csv')).read_bytes()
+    before = len(list((ws / 'bank').glob('*')))
+    first = ingest(ws, 'sao_ke_moi.csv', raw, pack.tax_code, pack)
+    second = ingest(ws, 'sao_ke_moi_lan_2.csv', raw, pack.tax_code, pack)
+    assert first[0]['kind'] == 'bank'
+    assert second[0].get('duplicate') and 'đã nạp trước đó' in second[0]['reason']
+    assert len(list((ws / 'bank').glob('*'))) == before        # the demo already holds this very file, so nothing new was stored

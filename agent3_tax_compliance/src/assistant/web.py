@@ -7,6 +7,7 @@ workspace folder under data/workspaces/<id> with the layout described in pipelin
 """
 import dataclasses
 import json
+import os
 import re
 import shutil
 import threading
@@ -24,12 +25,13 @@ from . import pipeline, qa, report as report_mod
 from .input_schema import FILES, guide
 from . import inbox
 from .intake import IntakeError, extract_zip, suggest_mapping
+from .sources import read_bank_statement
 from .rules import load_ruleset, param
 from .pack import PackError, load_pack
 from .synth import generate as generate_demo
 
 PROJECT = Path(__file__).resolve().parents[2]
-WORKSPACES = PROJECT / 'data/workspaces'
+WORKSPACES = Path(os.environ.get('AGENT3_WORKSPACES') or PROJECT / 'data/workspaces')   # the override is only for interface tests
 STATIC = Path(__file__).resolve().parent / 'static'
 ID = re.compile(r'^[a-z0-9][a-z0-9-]{1,40}$')
 
@@ -304,9 +306,46 @@ async def inbox_upload(wid: str, name: str, request: Request):
     clean = re.sub(r'[^\w.\-]', '_', Path(name).name)
     pack = load_pack(ws / 'pack.json')
     try:
-        return dict(files=inbox.ingest(ws, clean, raw, pack.tax_code, pack))
+        files = inbox.ingest(ws, clean, raw, pack.tax_code, pack)
     except IntakeError as e:
         raise HTTPException(422, str(e))
+    for rec in files:
+        if rec.get('kind') == 'bank' and rec.get('saved_as'):
+            _auto_bank_format(ws, rec)
+    return dict(files=files)
+
+
+def _auto_bank_format(ws: Path, rec: dict):
+    """A statement of a bank the pack has no layout for: recognise the columns from the header and save the layout, so the
+    person does not have to. Only when the date, the money and the description columns are found and the first rows
+    parse; otherwise nothing is saved and the file shows the manual 'Nhận dạng cột' step. The saved layout is named after
+    the file, listed under the pack's bank layouts and visible in the history."""
+    path = ws / 'bank' / rec['saved_as']
+    pack = load_pack(ws / 'pack.json')
+    try:
+        if path.suffix.lower() in ('.sta', '.mt940'):
+            return
+        read_bank_statement(path, pack)
+        return                                           # already readable with a known layout
+    except Exception as e:  # noqa: BLE001
+        if 'chưa có mẫu sao kê' not in str(e):
+            return
+    try:
+        sug = suggest_mapping(path)
+    except Exception:  # noqa: BLE001
+        return
+    cols = sug['format']['columns']
+    ok_rows = [r for r in sug['preview'] if 'error' not in r]
+    if not ({'date', 'debit', 'description'} <= set(cols)) or 'credit' not in cols or len(ok_rows) < len(sug['preview']) or not ok_rows:
+        return
+    fmt = dict(sug['format'], name=f'Tự nhận dạng: {Path(rec["saved_as"]).stem}'[:60])
+    data = _pack_data(ws)
+    data['bank_formats'] = [f for f in data.get('bank_formats', []) if f['name'] != fmt['name']] + [fmt]
+    try:
+        _save_pack(ws, data, by='tự nhận dạng khi nạp tệp')
+    except HTTPException:
+        return
+    rec['auto_format'] = dict(name=fmt['name'], columns=cols, missing=sug['missing'])
 
 
 @app.get('/api/workspaces/{wid}/details/{kind}')

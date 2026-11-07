@@ -29,7 +29,10 @@ function uploadResult(records) {
   const counts = Object.entries(used.reduce((a, r) => ({ ...a, [r.label]: (a[r.label] || 0) + 1 }), {})).map(([k, v]) => `${v} ${k.toLowerCase()}`).join(', ');
   const rejected = records.filter((r) => !r.kind);
   const warned = used.filter((r) => /vẫn nạp để kiểm tra/.test(r.reason));
+  const auto = used.filter((r) => r.auto_format);
   return `${used.length ? notice('success', `Đã nhận ${used.length} tệp`, counts) : ''}
+    ${auto.map((r) => notice('info', `Sao kê ${r.file}: đã tự nhận dạng cột`, `Ngày: ${r.auto_format.columns.date}; ghi nợ: ${r.auto_format.columns.debit}; ghi có: ${r.auto_format.columns.credit}; nội dung: ${r.auto_format.columns.description}`
+      + `${r.auto_format.columns.counterparty_name ? `; tên đối ứng: ${r.auto_format.columns.counterparty_name}` : '; chưa thấy cột tên đối ứng'}. Kiểm tra lại ở bước Sao kê ngân hàng nếu cần.`)).join('')}
     ${warned.length ? notice('warning', `${warned.length} hóa đơn ghi sai mã số thuế doanh nghiệp`, warned.map((r) => `${r.file}: ${r.reason}`).join('; ')) : ''}
     ${rejected.length ? `<div class="panel"><h3>${rejected.length} tệp không dùng</h3>${table(['Tệp', 'Lý do'], rejected.map((r) => `<tr><td class="mono">${esc(r.file)}</td><td>${esc(r.reason)}</td></tr>`))}</div>` : ''}`;
 }

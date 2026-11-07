@@ -62,9 +62,8 @@ def polarity_clash(question: str, path: str) -> str | None:
 
 class Corpus:
     hybrid = True                                        # semantic retrieval (bge-m3) fused with keywords; set per instance
-    dense_backend = 'bge-m3'                             # or 'vn' (Vietnamese fine-tune); chosen by measurement
     # cross-encoder over the top candidates: on 54 questions it raised first-place hits from 39 to 45 (bge-m3 hybrid alone);
-    # the Vietnamese fine-tuned embedding did not beat bge-m3 here, so it stays off. Off when the model folder is missing.
+    # (a Vietnamese fine-tuned embedding was measured too and did not beat bge-m3, so it was dropped). Off without the model folder.
     rerank = (Path(__file__).resolve().parents[2] / 'models/Vietnamese_Reranker').exists()
 
     def __init__(self, path: Path):
@@ -172,7 +171,7 @@ class Corpus:
         dense = {}
         if self.hybrid:
             from .dense import nearest
-            dense = dict(nearest(self.db, query, 60, self.dense_backend))
+            dense = dict(nearest(self.db, query, 60))
             missing = [cid for cid in dense if cid not in {r['chunk_id'] for r in rows}]
             if missing:                                   # semantic candidates the keyword index missed, same date filters
                 extra = ('SELECT c.chunk_id, c.doc_id, c.prov_id, c.path, c.text, d.doc_num, d.title, d.doc_type, d.eff_from, d.eff_to, d.status_name, '
