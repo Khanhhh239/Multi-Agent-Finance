@@ -110,7 +110,7 @@ def compare(database,output,*,companies,scenario,windows,review_count,calibratio
             or not 1<=review_count<=1000 or type(calibration_rate) not in (int,float)
             or not 0<calibration_rate<=.2 or source_kind not in {'synthetic_demo','business','unspecified'}):
         raise ValueError('Chọn doanh nghiệp không trùng, ngân sách 1–1.000 giao dịch và tỷ lệ calibration (0,20%].')
-    algorithms=list(ALGORITHMS) if algorithms is None else algorithms
+    algorithms=[a for a in ALGORITHMS if a!='bag_injection'] if algorithms is None else algorithms   # bag_injection only when asked for
     if not algorithms or len(set(algorithms))!=len(algorithms) or any(a not in ALGORITHMS for a in algorithms):
         raise ValueError('Danh sách thuật toán không hợp lệ.')
     snapshots=read_snapshots(database,companies,scenario)
@@ -143,7 +143,7 @@ def compare(database,output,*,companies,scenario,windows,review_count,calibratio
                 models.append(dict(meta,status='skipped',reason=reason));continue
             y=np.asarray([labels[records[i]['transaction_id']]['label'] for i in train]) if algorithm=='catboost' else None
             started=time.perf_counter()
-            estimator=CompanyEstimator(algorithm).fit(x[train],y)
+            estimator=CompanyEstimator(algorithm).fit(x[train],y,**({'columns':snapshot['metadata'].get('columns')} if algorithm=='bag_injection' else {}))
             threshold=float(np.quantile(estimator.score(x[cal]),1-calibration_rate,method='higher'))
             scores=estimator.score(x[test]);seconds=time.perf_counter()-started
             order=sorted(range(len(test)),key=lambda j:(-float(scores[j]),digest([seed,company,records[test[j]]['transaction_id']])))

@@ -17,6 +17,7 @@ from sklearn.preprocessing import StandardScaler
 ALGORITHMS = {
     'isolation_forest': 'Isolation Forest', 'autoencoder': 'Autoencoder',
     'ecod': 'ECOD', 'lof': 'Local Outlier Factor (LOF)', 'catboost': 'CatBoost',
+    'bag_injection': 'Túi phương pháp (chọn theo tiêm gian lận)',
 }
 
 
@@ -64,8 +65,14 @@ class CompanyEstimator:
             raise ValueError('Thuật toán ML không được hỗ trợ.')
         self.algorithm = algorithm
 
-    def fit(self, x, y=None):
+    def fit(self, x, y=None, columns=None):
         x = matrix(x)
+        if self.algorithm == 'bag_injection':      # chooses among label-free methods by injecting patterns into this company's rows
+            from .bag_of_methods import BagOfMethods
+            self.width_ = x.shape[1]
+            self.model_ = BagOfMethods().fit(x, columns)
+            self.diagnostics_ = self.model_.diagnostics_
+            return self
         if len(x) < 5:
             raise ValueError('Cần ít nhất 5 dòng train trước khi huấn luyện.')
         self.width_ = x.shape[1]
@@ -101,6 +108,8 @@ class CompanyEstimator:
         x = matrix(x)
         if x.shape[1] != self.width_:
             raise ValueError('Số feature không khớp phiên bản ML.')
+        if self.algorithm == 'bag_injection':
+            return np.asarray(self.model_.score(x), dtype=float)
         z = self.scaler_.transform(x) if self.scaler_ is not None else x
         if self.algorithm in {'isolation_forest', 'lof'}:
             scores = -self.model_.score_samples(z)

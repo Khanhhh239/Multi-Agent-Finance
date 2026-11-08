@@ -16,11 +16,22 @@ from sme_fraud.review_roles import ReviewPrincipal
 from company_ml_fixture import CHIEF, ACCOUNTANT, fixture, label_text, bind_cache
 
 
+class StubBag:
+    """Module-level so the artifact can be pickled and reloaded by the evaluation guard."""
+    seen=None
+
+    def fit(self,x,columns):
+        StubBag.seen=list(columns);self.diagnostics_={'kind':'stub'};return self
+
+    def score(self,x):
+        return np.arange(len(x),dtype=float)
+
+
 class EstimatorTest(unittest.TestCase):
     def test_all_five_fit_reload_and_score_with_fixed_batch_reference(self):
         rng=np.random.RandomState(42); x=rng.normal(size=(30,4)); future=rng.normal(size=(5,4))
         for info in catalog():
-            if not info['installed']:continue
+            if not info['installed'] or info['id']=='bag_injection':continue   # needs column names and 60+ rows: tests/test_bag_of_methods.py
             with self.subTest(algorithm=info['id']):
                 model=CompanyEstimator(info['id']).fit(x,np.arange(30)%2)
                 before=model.score(future)
@@ -80,11 +91,19 @@ class CompanyMLTest(unittest.TestCase):
     def test_all_available_algorithms_are_real_versioned_candidates(self):
         self.update(label_text(self.records))
         for info in catalog():
-            if info['installed']:
+            if info['installed'] and info['id']!='bag_injection':   # needs 60+ train rows; wiring is tested separately
                 state=self.evaluate(info['id'])
                 self.assertEqual(state['versions'][0]['algorithm'],info['id'])
                 self.activate();self.assertGreater(self.score()['run']['rows'],0)
-        self.assertEqual(len(self.status()['versions']),sum(c['installed'] for c in catalog()))
+        self.assertEqual(len(self.status()['versions']),sum(c['installed'] and c['id']!='bag_injection' for c in catalog()))
+
+    def test_bag_injection_receives_column_names_and_its_diagnostics_are_stored(self):
+        self.update()
+        with patch('sme_fraud.bag_of_methods.BagOfMethods',StubBag):
+            state=self.evaluate('bag_injection')
+        self.assertEqual(StubBag.seen,state['data']['columns'])
+        self.assertEqual(state['versions'][0]['algorithm'],'bag_injection')
+        self.assertEqual(state['versions'][0]['diagnostics']['kind'],'stub')
 
     def test_update_keeps_active_version_and_predictions_without_refitting(self):
         self.update();self.evaluate();self.activate();old=self.score()

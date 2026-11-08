@@ -418,7 +418,7 @@ class CompanyML:
                     raise ValueError(eligibility['reason'])
                 y = np.asarray([labels[records[i]['transaction_id']]['label'] for i in train])
             started = time.perf_counter()
-            estimator = CompanyEstimator(algorithm).fit(x[train], y)
+            estimator = CompanyEstimator(algorithm).fit(x[train], y, **({'columns': data['columns']} if algorithm == 'bag_injection' else {}))
             calibration_scores = estimator.score(x[cal])
             threshold = float(np.quantile(calibration_scores, 1-alert_budget, method='higher'))
             scores = estimator.score(x[test]); predicted = scores > threshold
@@ -448,7 +448,7 @@ class CompanyML:
                 train_rows=len(train), calibration_rows=len(cal), evaluation_rows=len(test),
                 evaluation_alerts=int(predicted.sum()), evaluation_alert_rate=float(predicted.mean()),
                 labelled_evaluation_rows=len(known), precision=precision, recall=recall, seconds=round(elapsed, 3),
-                converged=getattr(estimator, 'converged_', True),
+                converged=getattr(estimator, 'converged_', True), diagnostics=getattr(estimator, 'diagnostics_', None),
                 training_ids_sha256=digest([records[i]['transaction_id'] for i in train]))
             with self.store.connection() as db:
                 db.execute('BEGIN IMMEDIATE')
