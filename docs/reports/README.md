@@ -2,6 +2,8 @@
 
 Tiến độ hiện tại nằm ở [STATUS](../STATUS.md); việc tiếp theo nằm ở [BACKLOG](../BACKLOG.md).
 
+[Báo cáo tổng quan Agent 2 — 07/11/2026](app/agent2_overview_20261107.md): mục tiêu, kiến trúc, luật/ML, giao diện, dữ liệu demo, kiểm thử và hướng phát triển.
+
 ## Biên bản gần nhất
 
 - [Hợp nhất hàng đợi, nhập dữ liệu, ML và phiếu rà tại cổng 8765 — 07/11](app/unified_local_20261107.md).

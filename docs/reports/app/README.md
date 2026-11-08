@@ -6,6 +6,7 @@ Các báo cáo ghi kết quả theo mốc thực hiện. Số liệu và giới 
 
 | Tài liệu | File |
 | --- | --- |
+| [Tổng quan Agent 2 — kiến trúc, chức năng, kiểm thử và giới hạn — 07/11/2026](agent2_overview_20261107.md) | `agent2_overview_20261107.md` |
 | [Nghiệm thu bản tích hợp — 39 mẫu/17 luồng, màn hình nhỏ, offline/restart — 29/10/2026](release_acceptance_20261029.md) | `release_acceptance_20261029.md` |
 | [Tích hợp luật/IF shadow/app/thông báo — HTTP đạt, browser chưa xác nhận — 28/10/2026](integrated_rehearsal_20261028.md) | `integrated_rehearsal_20261028.md` |
 | [Thông báo theo vai trò/công ty — chống trùng, nhắc quá hạn và lịch sử — 27/10/2026](notification_roles_20261027.md) | `notification_roles_20261027.md` |

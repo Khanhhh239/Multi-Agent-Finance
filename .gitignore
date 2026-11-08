@@ -55,3 +55,6 @@ Thumbs.db
 !examples/bank_identity_sources/*.csv
 
 !examples/tax_risk_sources/*.csv
+
+# Synthetic company ML demo transactions.
+!examples/company_ml/demo_data_20261107/*.csv

@@ -7,6 +7,7 @@
 | Nhóm | Điểm bắt đầu |
 | --- | --- |
 | Tổng quan | [README dự án](../README.md), [trạng thái](STATUS.md), [backlog](BACKLOG.md) |
+| Sử dụng và demo | [Hướng dẫn từng bước](HUONG_DAN_SU_DUNG_VA_DEMO.md), [bộ CSV/Excel mẫu](../examples/company_ml/demo_data_20261107/README.md) |
 | Phát triển | [Chạy app và kiểm thử](DEVELOPMENT.md) |
 | Sản phẩm | [Yêu cầu sản phẩm](product/requirements.md), [roadmap tham chiếu](product/roadmap_reference.md) |
 | Luật | [Đặc tả đang được bộ audit sử dụng](../rule_class_1.md), [nghiên cứu tham chiếu](product/rule_research.md) |

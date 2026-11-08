@@ -1,6 +1,6 @@
 # Multi-Agent Finance — Agent 2 (Sang)
 
-Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **07/11/2026**. Xem [hướng dẫn bản nguồn trên Git](docs/AGENT2_GITHUB.md), [trạng thái dự án](docs/STATUS.md) và [hướng dẫn phát triển](docs/DEVELOPMENT.md).
+Nhánh làm việc: **`agent2-Sang`**. Đồng bộ tài liệu và bộ demo ngày **08/11/2026**. Xem [hướng dẫn bản nguồn trên Git](docs/AGENT2_GITHUB.md), [trạng thái dự án](docs/STATUS.md) và [hướng dẫn phát triển](docs/DEVELOPMENT.md).
 
 ## Sổ Soát — trợ lý rà soát giao dịch SME
 
@@ -10,6 +10,9 @@ Nhánh làm việc: **`agent2-Sang`**. Đồng bộ mã nguồn ngày **07/11/20
 
 | Bạn cần | Tài liệu |
 | --- | --- |
+| Đọc tổng quan kiến trúc, chức năng và giới hạn Agent 2 | [Báo cáo tổng quan](docs/reports/app/agent2_overview_20261107.md) |
+| Làm theo từng bước sử dụng và trình bày demo | [Hướng dẫn sử dụng và demo](docs/HUONG_DAN_SU_DUNG_VA_DEMO.md) |
+| Tải bộ CSV/Excel C001/C002 và tệp thử lỗi | [Bộ dữ liệu demo](examples/company_ml/demo_data_20261107/README.md) |
 | Biết phần nào đã xong, phần nào còn thiếu | [Trạng thái dự án](docs/STATUS.md) |
 | Chọn công việc tiếp theo | [Danh sách việc cần làm](docs/BACKLOG.md) |
 | Tìm tài liệu và hiểu cấu trúc thư mục | [Mục lục dự án](docs/README.md) |
