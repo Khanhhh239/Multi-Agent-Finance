@@ -1,0 +1,21 @@
+{
+  "rule_id": "R-UNIFORM-CAP",
+  "effective_from": "2015-08-06",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "category",
+      "operator": "==",
+      "value": "uniform_expense"
+    },
+    {
+      "field": "uniform_cash_per_person",
+      "operator": ">",
+      "value": 5000000
+    }
+  ],
+  "verdict": "FAIL",
+  "fixable": false,
+  "fix_hint": "Chi trang phục bằng tiền cho người lao động vượt quá 05 triệu đồng/người/năm sẽ bị loại khỏi chi phí được trừ khi tính thuế TNDN.",
+  "citation": "Điểm 2.7 Khoản 2 Điều 4 Thông tư 96/2015/TT-BTC"
+}

@@ -1,0 +1,1 @@
+PASS client: DOM IDs, field identity, exempt VAT, signed image/bbox, memory auth, safe text, conflict and reset.

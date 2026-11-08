@@ -1,0 +1,38 @@
+{
+  "checked_on": "2026-10-16",
+  "scope": "Source fidelity/retrieval date+scope contracts and existing integration; not legal accuracy",
+  "suites": [
+    {
+      "suite": "explanation",
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 102,
+  "passed": true,
+  "implementation_sha256": "ba66e847472c924af25833ed13f5117355ee982c05990ed8b3a1bc08af4e3a04",
+  "corpus_sha256": "1e07a57ef55533fda729e8ae5c84bd0f0a718677b08b7988aadd55ee8e126e1a",
+  "v1_workflow_replay_hash_unchanged": true,
+  "v1_workflow_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "source_fidelity_review": "CODEX_VISUAL_AGAINST_PRIMARY_PDF",
+  "independent_legal_approval": false,
+  "retrieval_accuracy": "NOT_ESTIMATED: required-context retrieval is not a semantic ranking benchmark",
+  "real_model_inference": "NOT_RUN",
+  "tax_rules_release": "DRAFT_UNCHANGED"
+}

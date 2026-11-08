@@ -1,0 +1,396 @@
+{
+  "$defs": {
+    "EvaluationUnit": {
+      "additionalProperties": false,
+      "properties": {
+        "unit_type": {
+          "enum": [
+            "RECORD",
+            "ITEM",
+            "VAT_GROUP"
+          ],
+          "title": "Unit Type",
+          "type": "string"
+        },
+        "unit_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Unit Id",
+          "type": "string"
+        },
+        "item_refs": {
+          "default": [],
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "title": "Item Refs",
+          "type": "array"
+        },
+        "discovery": {
+          "enum": [
+            "COMPLETE",
+            "INCOMPLETE",
+            "UNKNOWN"
+          ],
+          "title": "Discovery",
+          "type": "string"
+        }
+      },
+      "required": [
+        "unit_type",
+        "unit_id",
+        "discovery"
+      ],
+      "title": "EvaluationUnit",
+      "type": "object"
+    },
+    "LegalBasis": {
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "locator"
+      ],
+      "title": "LegalBasis",
+      "type": "object"
+    },
+    "PredicateTrace": {
+      "additionalProperties": false,
+      "properties": {
+        "policy": {
+          "title": "Policy",
+          "type": "string"
+        },
+        "field_paths": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Field Paths",
+          "type": "array"
+        },
+        "state": {
+          "enum": [
+            "MATCH",
+            "NO_MATCH",
+            "UNKNOWN"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "policy",
+        "state",
+        "reason"
+      ],
+      "title": "PredicateTrace",
+      "type": "object"
+    },
+    "RulePlanEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rule Version"
+        },
+        "unit": {
+          "$ref": "#/$defs/EvaluationUnit"
+        },
+        "selection": {
+          "enum": [
+            "MATCH",
+            "NO_MATCH",
+            "UNKNOWN"
+          ],
+          "title": "Selection",
+          "type": "string"
+        },
+        "applicability": {
+          "enum": [
+            "MATCH",
+            "NO_MATCH",
+            "UNKNOWN"
+          ],
+          "title": "Applicability",
+          "type": "string"
+        },
+        "capability": {
+          "enum": [
+            "SUPPORTED",
+            "UNSUPPORTED",
+            "UNKNOWN"
+          ],
+          "title": "Capability",
+          "type": "string"
+        },
+        "eligibility": {
+          "enum": [
+            "ELIGIBLE",
+            "NOT_EVALUATED_MISSING_INPUT",
+            "NOT_EVALUATED_LOW_CONFIDENCE",
+            "NOT_EVALUATED_INVALID_EXTRACTION",
+            "OUT_OF_SCOPE_FOR_SOURCE",
+            "NOT_APPLICABLE",
+            "REVIEW_REQUIRED",
+            "NOT_EVALUATED_UNKNOWN_APPLICABILITY",
+            "NOT_EVALUATED_PLANNING_ERROR"
+          ],
+          "title": "Eligibility",
+          "type": "string"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "next_action": {
+          "enum": [
+            "NONE",
+            "HUMAN_REVIEW",
+            "REQUEST_DATA",
+            "REEXTRACT",
+            "RETRY",
+            "OPERATOR",
+            "COLLECT_OTHER_SOURCE"
+          ],
+          "title": "Next Action",
+          "type": "string"
+        },
+        "review_required": {
+          "title": "Review Required",
+          "type": "boolean"
+        },
+        "traces": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/PredicateTrace"
+          },
+          "title": "Traces",
+          "type": "array"
+        },
+        "legal_basis": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/LegalBasis"
+          },
+          "title": "Legal Basis",
+          "type": "array"
+        }
+      },
+      "required": [
+        "rule_id",
+        "rule_version",
+        "unit",
+        "selection",
+        "applicability",
+        "capability",
+        "eligibility",
+        "reasons",
+        "next_action",
+        "review_required"
+      ],
+      "title": "RulePlanEntry",
+      "type": "object"
+    },
+    "VersionPin": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "sha256"
+      ],
+      "title": "VersionPin",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "evaluation_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Evaluation Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "taxpayer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Taxpayer Id",
+      "type": "string"
+    },
+    "record_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "record_revision": {
+      "minimum": 1,
+      "title": "Record Revision",
+      "type": "integer"
+    },
+    "taxpayer_master_revision": {
+      "minimum": 1,
+      "title": "Taxpayer Master Revision",
+      "type": "integer"
+    },
+    "record_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Record Sha256",
+      "type": "string"
+    },
+    "implementation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Implementation Sha256",
+      "type": "string"
+    },
+    "pins": {
+      "items": {
+        "$ref": "#/$defs/VersionPin"
+      },
+      "title": "Pins",
+      "type": "array"
+    },
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/RulePlanEntry"
+      },
+      "title": "Entries",
+      "type": "array"
+    },
+    "engine_calls": {
+      "const": 0,
+      "default": 0,
+      "title": "Engine Calls",
+      "type": "integer"
+    },
+    "technical_only": {
+      "const": true,
+      "default": true,
+      "title": "Technical Only",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "evaluation_id",
+    "tenant_id",
+    "taxpayer_id",
+    "record_id",
+    "record_revision",
+    "taxpayer_master_revision",
+    "record_sha256",
+    "implementation_sha256",
+    "pins",
+    "entries"
+  ],
+  "title": "RulePlan",
+  "type": "object"
+}

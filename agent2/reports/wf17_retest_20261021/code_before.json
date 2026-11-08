@@ -1,0 +1,10 @@
+{
+  "examples/browser_acceptance/run_demo.py": "e031bf10aeca4c9e520306637776d8c7160ef661298fe9a8fb9c28553898d468",
+  "examples/browser_acceptance/README.md": "625e79dec5c3a9a24950859246a740fbf27d95068225dada5cbd2d45af869ac4",
+  "sme_fraud/review_server.py": "cb5c83a7cd810cd28b86eb6c110a399c4711ee4090e0332b8b573b25376006cb",
+  "sme_fraud/notifications.py": "60052ddfda89ca58d07f2f6b6a20420417634f0a0cb9738b0de90ae5803ef424",
+  "review_ui/app.js": "7b46d3b3306bb5b3af283d0b7d1b19433e2589dd0bfb96aa7c515260104f9f60",
+  "tests/test_sprint14_api.py": "a36779280a0cfd9109fb9bac8682e78accac619a6e26eabee45f9e19d34fa2dc",
+  "tests/test_sprint14_notifications.py": "6ae1b878af0e235afb56b859ea6c284a8ee0beae349684268fd4e016000edf27",
+  "tests/review_workflow_ui.test.js": "794548658b5e9ce63bdacffccd10077e32a984053b72b493a31367fb8344b2d9"
+}

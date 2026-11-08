@@ -1,0 +1,154 @@
+{
+  "candidate_unchanged_after_freeze": true,
+  "source_files_validated_at_end": true,
+  "dev": {
+    "labeled": 706,
+    "previous_correct": 535,
+    "correct": 565,
+    "wrong_present": 32,
+    "missing_or_ambiguous": 109,
+    "previously_correct_regressions": 0,
+    "labels": "DRAFT_USED_FOR_TUNING"
+  },
+  "public_source_check": {
+    "unique_invoices": 4,
+    "cases": [
+      {
+        "case_id": "web-unity",
+        "sha256": "dc1796819ed24bd936ecb400e31565485515c2fdf73e2c0edde8d0f02641b41c",
+        "page_count": 1,
+        "elapsed_seconds": 168.20869220000168,
+        "group": "unredacted_pdf",
+        "labeled": 19,
+        "correct": 15,
+        "wrong_present": 1,
+        "missing_or_ambiguous": 3,
+        "printed_labeled": 16,
+        "printed_correct": 12,
+        "absence_labeled": 3,
+        "absence_correct": 3,
+        "unexpected_present_for_absent": 0,
+        "segmentation": "SINGLE_CANDIDATE",
+        "whole_invoice_correct": false
+      },
+      {
+        "case_id": "web-imall",
+        "sha256": "95b51644f038b13f2a6daf51ed77babb3cb04a8b594f57a2542625179b98b05d",
+        "page_count": 1,
+        "elapsed_seconds": 202.89942970000266,
+        "group": "unredacted_pdf",
+        "labeled": 19,
+        "correct": 1,
+        "wrong_present": 0,
+        "missing_or_ambiguous": 18,
+        "printed_labeled": 18,
+        "printed_correct": 0,
+        "absence_labeled": 1,
+        "absence_correct": 1,
+        "unexpected_present_for_absent": 0,
+        "segmentation": "REVIEW_SPLIT",
+        "whole_invoice_correct": false
+      },
+      {
+        "case_id": "web-khang_vu",
+        "sha256": "9fa018917c7373218e95f18b9525901f0ef1a70b4fb289afcb971de886459727",
+        "page_count": 2,
+        "elapsed_seconds": 443.61454439999943,
+        "group": "redacted_negative",
+        "labeled": 49,
+        "correct": 32,
+        "wrong_present": 16,
+        "missing_or_ambiguous": 1,
+        "printed_labeled": 22,
+        "printed_correct": 20,
+        "absence_labeled": 27,
+        "absence_correct": 12,
+        "unexpected_present_for_absent": 15,
+        "segmentation": "SINGLE_CANDIDATE",
+        "whole_invoice_correct": false
+      },
+      {
+        "case_id": "web-micro_precision",
+        "sha256": "7aff0ead785b9a68c7d620f95baf5e7ef36301a75353c4475fe97127082916bd",
+        "page_count": 2,
+        "elapsed_seconds": 386.56527410000126,
+        "group": "redacted_negative",
+        "labeled": 43,
+        "correct": 24,
+        "wrong_present": 0,
+        "missing_or_ambiguous": 19,
+        "printed_labeled": 19,
+        "printed_correct": 0,
+        "absence_labeled": 24,
+        "absence_correct": 24,
+        "unexpected_present_for_absent": 0,
+        "segmentation": "REVIEW_SPLIT",
+        "whole_invoice_correct": false
+      },
+      {
+        "case_id": "web-unity-scan150",
+        "sha256": "d4e2d214e81bbe83ebc9c76bc3f90d8267c6d4c6b730646d7895877e14eb66c6",
+        "page_count": 1,
+        "elapsed_seconds": 180.61498779999965,
+        "group": "derived_png",
+        "labeled": 19,
+        "correct": 11,
+        "wrong_present": 2,
+        "missing_or_ambiguous": 6,
+        "printed_labeled": 16,
+        "printed_correct": 8,
+        "absence_labeled": 3,
+        "absence_correct": 3,
+        "unexpected_present_for_absent": 0,
+        "segmentation": "SINGLE_CANDIDATE",
+        "whole_invoice_correct": false
+      }
+    ],
+    "independent_label_review": false,
+    "layout_independent": false,
+    "representative_sample": false
+  },
+  "benchmark": [
+    {
+      "arm": "baseline",
+      "correct": 4,
+      "labeled": 12
+    },
+    {
+      "arm": "width",
+      "correct": 2,
+      "labeled": 12
+    },
+    {
+      "arm": "beam",
+      "correct": 2,
+      "labeled": 12
+    },
+    {
+      "arm": "pdf300",
+      "correct": 4,
+      "labeled": 12
+    },
+    {
+      "arm": "production",
+      "correct": 3,
+      "labeled": 12
+    }
+  ],
+  "verification": {
+    "python_tests": 582,
+    "passed": true
+  },
+  "latency_workload_controlled": false,
+  "release_approved": false,
+  "default_model_promoted": false,
+  "known_limitations": [
+    "Small public source check with self-reviewed references; not production accuracy.",
+    "Two PDFs use black Highlight annotations; ingestion renders annots=False. Negative results must not imply safe redaction handling.",
+    "Recovery flags only 1 of 32 known wrong-present fields and also 8 correct-present fields.",
+    "Proposed page-5 address label revision withdrawn; original labels remain authoritative DRAFT references."
+  ],
+  "report_sha256": "f7f56315deb661229c75677911953e5a28bebb008ace639392881c2763fd252e",
+  "extractor_sha256": "4d636ef0bfec05e944d5c2b27c599b01308fab411dae5419c0fefc43264d5a74",
+  "recovery_sha256": "c3234af432326a5e16221c1267bb87387975e787f4362772c53cd73270b2ec1b"
+}

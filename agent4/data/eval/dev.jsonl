@@ -1,0 +1,4 @@
+{"id":"dev_001","question":"Tỷ lệ lãi ròng trên doanh thu kỳ này?","gold_metric_ids":["net_margin_pct"],"gold_status":"resolved","category":"amount_vs_ratio","group_id":"net_margin"}
+{"id":"dev_002","question":"Hóa đơn phải trả nào sắp tới hạn?","gold_metric_ids":["ap_due_soon"],"gold_status":"resolved","category":"specialized_vs_generic","group_id":"ap_due"}
+{"id":"dev_003","question":"Cho tôi xem lợi nhuận","gold_metric_ids":[],"gold_status":"ambiguous","category":"ambiguous_metric","group_id":"profit_ambiguous"}
+{"id":"dev_004","question":"Tỷ giá USD/VND hôm nay?","gold_metric_ids":[],"gold_status":"unsupported","category":"unsupported_metric","group_id":"fx_unsupported"}

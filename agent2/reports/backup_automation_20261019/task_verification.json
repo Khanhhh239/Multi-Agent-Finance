@@ -1,0 +1,14 @@
+﻿{
+    "task_name":  "Agent22-ReviewBackup",
+    "state":  "Ready",
+    "trigger_count":  1,
+    "last_run":  "2026-10-19T21:35:43.0000000+07:00",
+    "last_result":  0,
+    "next_run":  "2026-10-20T02:00:00.0000000+07:00",
+    "run_id":  "run-20261019T143548Z-652aef27",
+    "job_status":  "success",
+    "bundle":  "D:\\agent22\\.runtime\\scheduled_review_backups\\run-20261019T143548Z-652aef27",
+    "verification_trigger_removed":  true,
+    "daily_at":  "02:00",
+    "timezone":  "Asia/Saigon"
+}

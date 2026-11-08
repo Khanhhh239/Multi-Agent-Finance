@@ -1,0 +1,118 @@
+[
+  {
+    "step": "01_invalid_case",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=SIM_CASE_DOES_NOT_EXIST",
+    "detail": "Hồ sơ rà soát\n\nChưa mở được hồ sơ. Kiểm tra thông báo phía trên, hoặc chọn hồ sơ khác trong hàng đợi.",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": false,
+    "queue": "● Cao nhất\n21điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng\n\nC003 · 1 nghiệp vụ · Chưa rà soát\nC1E2\n9/2/2025\nRC_4fa2eaa50c0d41d5\n● Cao nhất\n21điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng\n\nC001 · 1 nghiệp vụ · Chưa rà soát\nC1E2\n19/2/2025\nRC_b8e286f40dab8fba\n● Cao nhất\n21điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng\n\nC007 · 1 nghiệp vụ · Chưa rà soát\nC1E2\n10/3/2025\nRC_615843744fd0e37f\n● Cao nhất\n21điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng\n\nC004 · 1 nghiệp vụ · Chưa rà soát\nC1E2\n15/6/2025\nRC_fd3b5774a2d5f1fa\n● Cao nhất\n21điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng\n\nC006 · 1 nghiệp vụ · Chưa rà soát\nC1E2\n18/7/2025\nRC_721246413e1ac288\n● Cao nhất\n21điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng\n\nC006 · 1 nghiệp vụ · Chưa rà soát\nC1E2\n15/8/2025\nRC_9699fb73faa36131\n● Cao nhất\n21điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng\n\nC001 · 1 nghiệp vụ · Chưa rà soát\nC1E2\n18/8/2025\nRC_da5b5ddd4b87845f\n● Cao nhất\n21điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng\n\nC008 · 1 nghiệp vụ · Chưa rà soát\nC1E2\n15/10/2025\nRC_d186e9c9a994bb1f\n● Cao nhất\n20điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLương sau chấm dứt hợp đồng\n\nC004 · 1 nghiệp vụ · Chưa rà soát\nE2\n19/2/2025\nRC_44efef175ded587b\n● Cao nhất\n20điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLương sau chấm dứt hợp đồng\n\nC005 · 1 nghiệp vụ · Chưa rà soát\nE2\n11/3/2025\nRC_237c8841f1ec138c\n● Cao nhất\n20điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLương sau chấm dứt hợp đồng\n\nC008 · 1 nghiệp vụ · Chưa rà soát\nE2\n11/3/2025\nRC_0e823c3a6787362d\n● Cao nhất\n20điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLương sau chấm dứt hợp đồng\n\nC002 · 1 nghiệp vụ · Chưa rà soát\nE2\n14/6/2025\nRC_5eb1f662cdbd2265\n● Cao nhất\n20điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLương sau chấm dứt hợp đồng\n\nC002 · 1 nghiệp vụ · Chưa rà soát\nE2\n16/7/2025\nRC_64ae6616f8b879e7\n● Cao nhất\n20điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLương sau chấm dứt hợp đồng\n\nC005 · 1 nghiệp vụ · Chưa rà soát\nE2\n17/7/2025\nRC_c86f4cb15b6c0501\n● Cao nhất\n20điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLương sau chấm dứt hợp đồng\n\nC003 · 1 nghiệp vụ · Chưa rà soát\nE2\n18/7/2025\nRC_e252d67947aa0dc2\n● Cao nhất\n20điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nLương sau chấm dứt hợp đồng\n\nC007 · 1 nghiệp vụ · Chưa rà soát\nE2\n14/11/2025\nRC_b417450696430bfa\n● Trung bình\n11điểm\nNghiệp vụ cần đối chiếu bổ sung\n\nSố tiền tròn lệch baseline lịch sử; Lập hoặc duyệt ngoài lịch vận hành; Thao tác trong kỳ nghỉ phép chính thức\n\nC003 · 1 nghiệp vụ · Chưa rà soát\nA5C1C4\n9/4/2025\nRC_18adf5be97ee0e84\nĐã phân bổ 20 phút ✓\n● Trung bình\n11điểm\nPhê duyệt hoặc điều chỉnh cần đối chiếu\n\nSố tiền tròn lệch baseline lịch sử; Điều chỉnh thủ công sát khóa sổ và trọng yếu\n\nC008 · 1 nghiệp vụ · Chưa rà soát\nA5F1\n28/8/2025\nRC_963dc712d016c11d\nĐã phân bổ 20 phút ✓\n● Trung bình\n10điểm\nPhê duyệt hoặc điều chỉnh cần đối chiếu\n\nLập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu\n\nC004 · 2 nghiệp vụ · Chưa rà soát\nC1F1\n30/8/2025\nRC_d3782da51933cac4\n● Trung bình\n10điểm\nPhê duyệt hoặc điều chỉnh cần đối chiếu\n\nLập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu\n\nC002 · 2 nghiệp vụ · Chưa rà soát\nC1F1\n27/9/2025\nRC_e6c00cef6a07a22e",
+    "search": "",
+    "selected": [],
+    "total": "40"
+  },
+  {
+    "step": "02_refresh_invalid",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=SIM_CASE_DOES_NOT_EXIST",
+    "cardCount": 20,
+    "detail": "Hồ sơ rà soát\n\nChưa mở được hồ sơ. Kiểm tra thông báo phía trên, hoặc chọn hồ sơ khác trong hàng đợi.",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": true,
+    "search": "",
+    "selected": [],
+    "total": "40"
+  },
+  {
+    "step": "03_empty_search",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=SIM_CASE_DOES_NOT_EXIST",
+    "cardCount": 0,
+    "detail": "Hồ sơ rà soát\n\nChưa mở được hồ sơ. Kiểm tra thông báo phía trên, hoặc chọn hồ sơ khác trong hàng đợi.",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": true,
+    "search": "SIM_CASE_DOES_NOT_EXIST",
+    "selected": [],
+    "total": "0"
+  },
+  {
+    "step": "04_refresh_empty",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=SIM_CASE_DOES_NOT_EXIST",
+    "cardCount": 0,
+    "detail": "Hồ sơ rà soát\n\nChưa mở được hồ sơ. Kiểm tra thông báo phía trên, hoặc chọn hồ sơ khác trong hàng đợi.",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": true,
+    "search": "SIM_CASE_DOES_NOT_EXIST",
+    "selected": [],
+    "total": "0"
+  },
+  {
+    "step": "05_clear_search",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=SIM_CASE_DOES_NOT_EXIST",
+    "cardCount": 20,
+    "detail": "Hồ sơ rà soát\n\nChưa mở được hồ sơ. Kiểm tra thông báo phía trên, hoặc chọn hồ sơ khác trong hàng đợi.",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": true,
+    "search": "",
+    "selected": [],
+    "total": "40"
+  },
+  {
+    "step": "06_C4_recovered",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_18adf5be97ee0e84",
+    "cardCount": 20,
+    "detail": "● Ưu tiên trung bình\nRC_18adf5be97ee0e84\nNghiệp vụ cần đối chiếu bổ sung\nC003 · 1 nghiệp vụ\nMở 9/4/2025\nChưa rà soát\n11\nĐiểm ưu tiên rà soát\nChi trả trong hồ sơ: 102.187.000 ₫\nTổng quan\nGiao dịch\nBằng chứng\nBổ sung tài liệu\nNhật ký\nCăn cứ vào hàng đợi và điểm ưu tiên\nĐiểm hồ sơ theo snapshot\n11\nCăn cứ tiếp nhận\nTheo chính sách tiếp nhận của snapshot; đối chiếu quy tắc và bằng chứng độc lập.\nTX_3103d5f23fde8b1a6f · 11 điểm\n\nKhông cộng cơ học mọi hit hoặc mọi giao dịch thành điểm hồ sơ. Điểm dùng để ưu tiên rà, không phải xác suất gian lận.\n\nThời điểm hóa đơn · TX_3103d5f23fde8b1a6f\nA5 · 1/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)\nSố tiền tròn lệch baseline lịch sử; Lập hoặc duyệt ngoài lịch vận hành; Thao tác trong kỳ nghỉ phép chính thức.\nQuan hệ cần đối chiếu\n−\n+\nĐặt lại\nĐối tác / nghiệp vụ\nTK / SĐT\nNhân sự\nMở mạng lưới thực thể liên quan →\nChọn một nút để xem chi tiết. Có thể phóng to và kéo sơ đồ.\nBằng chứng chính\nC4\nThao tác trong kỳ nghỉ phép chính thức\n+8 điểm\nThao tác cần đối chiếu\nNhân viên thao tác\nE0000418\nThao tác\nLập bút toán\nThời điểm thao tác\n06:03 09/04/2025\nMã hành động\nACT_8356be3430d352c8c0\nKỳ nghỉ bắt đầu\n13:13 08/04/2025\nKỳ nghỉ kết thúc\n13:13 10/04/2025\nMã kỳ nghỉ\nLEAVE_65472385b304fde0be\nNguồn thao tác\nNguồn nghỉ phép\n\nChưa thấy quyền làm việc trong kỳ nghỉ phù hợp trong bằng chứng của thao tác này.\n\nCác mốc lấy từ snapshot bằng chứng của lần đánh giá. Đối chiếu người thực hiện và quyền làm việc; dấu hiệu này chưa phải kết luận gian lận.\n\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nA5\nSố tiền tròn lệch baseline lịch sử\n+3 điểm\nSố tiền được so sánh\n102.187.000 ₫\nNgưỡng lịch sử tại lúc ghi sổ\n69.986.200 ₫\nMẫu lịch sử\n44 / tối thiểu 20 mẫu trong 90 ngày\nPhép đo\nDòng tiền chi\nPhạm vi\nC003 · TK 331\nCách tính\nPhân vị 99\nChu kỳ\nToàn bộ ngày; chưa dùng ngưỡng chu kỳ riêng\n\nNgưỡng chỉ dùng lịch sử đã biết trước giao dịch. Chi phí ghi Nợ có thể là trích trước, không đồng nghĩa đã chi tiền. A5 cần căn cứ độc lập; thiếu mẫu hoặc không có hit chưa chứng minh hợp lệ.\n\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nC1\nLập hoặc duyệt ngoài lịch vận hành\n+1 điểm\nThời điểm lập\n06:03 09/04/2025\nThời điểm duyệt\n13:13 09/04/2025\nCó vận hành thứ Bảy\n0\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nXem toàn bộ 4 dấu hiệu và ngoại lệ →\nGhi nhận kết luận rà soát\nLưu kết luận sau khi đối chiếu. Phần còn thiếu có thể tiếp tục bổ sung ở lần rà soát sau.\nXác nhận nghi vấn\nHợp lệ / báo động giả\nCần bổ sung bằng chứng\nVi phạm kiểm soát\nXác nhận gian lận\nNgười rà soát\nLý do nhanh\nChọn lý do đã kiểm tra…\nChứng từ chưa giải trình được dấu hiệu\nQuan hệ cần chuyển kiểm tra sâu\nChứng từ và nghĩa vụ chi khớp\nĐúng thẩm quyền, có phê duyệt\nXác nhận nghi vấn\nBỏ qua, hợp lệ\nLý do / chứng từ đã đối chiếu\nMỗi lần lưu được ghi vào lịch sử.\nHồ sơ thiếu bằng chứng tiếp tục mở và tính công tái rà soát.\nLưu kết luận →",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": true,
+    "search": "",
+    "selected": [
+      "RC_18adf5be97ee0e84"
+    ],
+    "total": "40"
+  },
+  {
+    "step": "07_C4_reload",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_18adf5be97ee0e84",
+    "cardCount": 20,
+    "detail": "● Ưu tiên trung bình\nRC_18adf5be97ee0e84\nNghiệp vụ cần đối chiếu bổ sung\nC003 · 1 nghiệp vụ\nMở 9/4/2025\nChưa rà soát\n11\nĐiểm ưu tiên rà soát\nChi trả trong hồ sơ: 102.187.000 ₫\nTổng quan\nGiao dịch\nBằng chứng\nBổ sung tài liệu\nNhật ký\nCăn cứ vào hàng đợi và điểm ưu tiên\nĐiểm hồ sơ theo snapshot\n11\nCăn cứ tiếp nhận\nTheo chính sách tiếp nhận của snapshot; đối chiếu quy tắc và bằng chứng độc lập.\nTX_3103d5f23fde8b1a6f · 11 điểm\n\nKhông cộng cơ học mọi hit hoặc mọi giao dịch thành điểm hồ sơ. Điểm dùng để ưu tiên rà, không phải xác suất gian lận.\n\nThời điểm hóa đơn · TX_3103d5f23fde8b1a6f\nA5 · 1/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)\nSố tiền tròn lệch baseline lịch sử; Lập hoặc duyệt ngoài lịch vận hành; Thao tác trong kỳ nghỉ phép chính thức.\nQuan hệ cần đối chiếu\n−\n+\nĐặt lại\nĐối tác / nghiệp vụ\nTK / SĐT\nNhân sự\nMở mạng lưới thực thể liên quan →\nChọn một nút để xem chi tiết. Có thể phóng to và kéo sơ đồ.\nBằng chứng chính\nC4\nThao tác trong kỳ nghỉ phép chính thức\n+8 điểm\nThao tác cần đối chiếu\nNhân viên thao tác\nE0000418\nThao tác\nLập bút toán\nThời điểm thao tác\n06:03 09/04/2025\nMã hành động\nACT_8356be3430d352c8c0\nKỳ nghỉ bắt đầu\n13:13 08/04/2025\nKỳ nghỉ kết thúc\n13:13 10/04/2025\nMã kỳ nghỉ\nLEAVE_65472385b304fde0be\nNguồn thao tác\nNguồn nghỉ phép\n\nChưa thấy quyền làm việc trong kỳ nghỉ phù hợp trong bằng chứng của thao tác này.\n\nCác mốc lấy từ snapshot bằng chứng của lần đánh giá. Đối chiếu người thực hiện và quyền làm việc; dấu hiệu này chưa phải kết luận gian lận.\n\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nA5\nSố tiền tròn lệch baseline lịch sử\n+3 điểm\nSố tiền được so sánh\n102.187.000 ₫\nNgưỡng lịch sử tại lúc ghi sổ\n69.986.200 ₫\nMẫu lịch sử\n44 / tối thiểu 20 mẫu trong 90 ngày\nPhép đo\nDòng tiền chi\nPhạm vi\nC003 · TK 331\nCách tính\nPhân vị 99\nChu kỳ\nToàn bộ ngày; chưa dùng ngưỡng chu kỳ riêng\n\nNgưỡng chỉ dùng lịch sử đã biết trước giao dịch. Chi phí ghi Nợ có thể là trích trước, không đồng nghĩa đã chi tiền. A5 cần căn cứ độc lập; thiếu mẫu hoặc không có hit chưa chứng minh hợp lệ.\n\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nC1\nLập hoặc duyệt ngoài lịch vận hành\n+1 điểm\nThời điểm lập\n06:03 09/04/2025\nThời điểm duyệt\n13:13 09/04/2025\nCó vận hành thứ Bảy\n0\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nXem toàn bộ 4 dấu hiệu và ngoại lệ →\nGhi nhận kết luận rà soát\nLưu kết luận sau khi đối chiếu. Phần còn thiếu có thể tiếp tục bổ sung ở lần rà soát sau.\nXác nhận nghi vấn\nHợp lệ / báo động giả\nCần bổ sung bằng chứng\nVi phạm kiểm soát\nXác nhận gian lận\nNgười rà soát\nLý do nhanh\nChọn lý do đã kiểm tra…\nChứng từ chưa giải trình được dấu hiệu\nQuan hệ cần chuyển kiểm tra sâu\nChứng từ và nghĩa vụ chi khớp\nĐúng thẩm quyền, có phê duyệt\nXác nhận nghi vấn\nBỏ qua, hợp lệ\nLý do / chứng từ đã đối chiếu\nMỗi lần lưu được ghi vào lịch sử.\nHồ sơ thiếu bằng chứng tiếp tục mở và tính công tái rà soát.\nLưu kết luận →",
+    "notice": "",
+    "noticeHidden": true,
+    "search": "",
+    "selected": [
+      "RC_18adf5be97ee0e84"
+    ],
+    "total": "40"
+  },
+  {
+    "step": "08_C4_to_invalid",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=SIM_CASE_DOES_NOT_EXIST",
+    "cardCount": 20,
+    "detail": "Hồ sơ rà soát\n\nChưa mở được hồ sơ. Kiểm tra thông báo phía trên, hoặc chọn hồ sơ khác trong hàng đợi.",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": false,
+    "search": "",
+    "selected": [],
+    "total": "40"
+  },
+  {
+    "step": "09_invalid_reload",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=SIM_CASE_DOES_NOT_EXIST",
+    "cardCount": 20,
+    "detail": "Hồ sơ rà soát\n\nChưa mở được hồ sơ. Kiểm tra thông báo phía trên, hoặc chọn hồ sơ khác trong hàng đợi.",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": false,
+    "search": "",
+    "selected": [],
+    "total": "40"
+  },
+  {
+    "step": "10_C4_recovered_again",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_18adf5be97ee0e84",
+    "cardCount": 20,
+    "detail": "● Ưu tiên trung bình\nRC_18adf5be97ee0e84\nNghiệp vụ cần đối chiếu bổ sung\nC003 · 1 nghiệp vụ\nMở 9/4/2025\nChưa rà soát\n11\nĐiểm ưu tiên rà soát\nChi trả trong hồ sơ: 102.187.000 ₫\nTổng quan\nGiao dịch\nBằng chứng\nBổ sung tài liệu\nNhật ký\nCăn cứ vào hàng đợi và điểm ưu tiên\nĐiểm hồ sơ theo snapshot\n11\nCăn cứ tiếp nhận\nTheo chính sách tiếp nhận của snapshot; đối chiếu quy tắc và bằng chứng độc lập.\nTX_3103d5f23fde8b1a6f · 11 điểm\n\nKhông cộng cơ học mọi hit hoặc mọi giao dịch thành điểm hồ sơ. Điểm dùng để ưu tiên rà, không phải xác suất gian lận.\n\nThời điểm hóa đơn · TX_3103d5f23fde8b1a6f\nA5 · 1/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)\nSố tiền tròn lệch baseline lịch sử; Lập hoặc duyệt ngoài lịch vận hành; Thao tác trong kỳ nghỉ phép chính thức.\nQuan hệ cần đối chiếu\n−\n+\nĐặt lại\nĐối tác / nghiệp vụ\nTK / SĐT\nNhân sự\nMở mạng lưới thực thể liên quan →\nChọn một nút để xem chi tiết. Có thể phóng to và kéo sơ đồ.\nBằng chứng chính\nC4\nThao tác trong kỳ nghỉ phép chính thức\n+8 điểm\nThao tác cần đối chiếu\nNhân viên thao tác\nE0000418\nThao tác\nLập bút toán\nThời điểm thao tác\n06:03 09/04/2025\nMã hành động\nACT_8356be3430d352c8c0\nKỳ nghỉ bắt đầu\n13:13 08/04/2025\nKỳ nghỉ kết thúc\n13:13 10/04/2025\nMã kỳ nghỉ\nLEAVE_65472385b304fde0be\nNguồn thao tác\nNguồn nghỉ phép\n\nChưa thấy quyền làm việc trong kỳ nghỉ phù hợp trong bằng chứng của thao tác này.\n\nCác mốc lấy từ snapshot bằng chứng của lần đánh giá. Đối chiếu người thực hiện và quyền làm việc; dấu hiệu này chưa phải kết luận gian lận.\n\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nA5\nSố tiền tròn lệch baseline lịch sử\n+3 điểm\nSố tiền được so sánh\n102.187.000 ₫\nNgưỡng lịch sử tại lúc ghi sổ\n69.986.200 ₫\nMẫu lịch sử\n44 / tối thiểu 20 mẫu trong 90 ngày\nPhép đo\nDòng tiền chi\nPhạm vi\nC003 · TK 331\nCách tính\nPhân vị 99\nChu kỳ\nToàn bộ ngày; chưa dùng ngưỡng chu kỳ riêng\n\nNgưỡng chỉ dùng lịch sử đã biết trước giao dịch. Chi phí ghi Nợ có thể là trích trước, không đồng nghĩa đã chi tiền. A5 cần căn cứ độc lập; thiếu mẫu hoặc không có hit chưa chứng minh hợp lệ.\n\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nC1\nLập hoặc duyệt ngoài lịch vận hành\n+1 điểm\nThời điểm lập\n06:03 09/04/2025\nThời điểm duyệt\n13:13 09/04/2025\nCó vận hành thứ Bảy\n0\n13:13 09/04/2025 · TX_3103d5f23fde8b1a6f\nXem toàn bộ 4 dấu hiệu và ngoại lệ →\nGhi nhận kết luận rà soát\nLưu kết luận sau khi đối chiếu. Phần còn thiếu có thể tiếp tục bổ sung ở lần rà soát sau.\nXác nhận nghi vấn\nHợp lệ / báo động giả\nCần bổ sung bằng chứng\nVi phạm kiểm soát\nXác nhận gian lận\nNgười rà soát\nLý do nhanh\nChọn lý do đã kiểm tra…\nChứng từ chưa giải trình được dấu hiệu\nQuan hệ cần chuyển kiểm tra sâu\nChứng từ và nghĩa vụ chi khớp\nĐúng thẩm quyền, có phê duyệt\nXác nhận nghi vấn\nBỏ qua, hợp lệ\nLý do / chứng từ đã đối chiếu\nMỗi lần lưu được ghi vào lịch sử.\nHồ sơ thiếu bằng chứng tiếp tục mở và tính công tái rà soát.\nLưu kết luận →",
+    "notice": "Không tìm thấy hồ sơ trong bộ dữ liệu này. Kiểm tra mã hồ sơ hoặc chọn hồ sơ khác trong hàng đợi.",
+    "noticeHidden": true,
+    "search": "",
+    "selected": [
+      "RC_18adf5be97ee0e84"
+    ],
+    "total": "40"
+  }
+]

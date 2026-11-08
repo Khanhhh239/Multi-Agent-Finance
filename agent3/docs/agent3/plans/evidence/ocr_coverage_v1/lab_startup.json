@@ -1,0 +1,11 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Enhanced profile resolves from trusted local configuration",
+    "200 DPI settings reach the application",
+    "Separate lab database is provisioned without touching the normal review database",
+    "Review HTML serves successfully"
+  ],
+  "model_inference_run": false,
+  "scope": "In-process HTTP/profile startup smoke; not an OCR accuracy test"
+}

@@ -1,0 +1,22 @@
+{
+  "protected_files": 11128,
+  "authorized_changes": {
+    "docs/BACKLOG.md": {
+      "before": "a3c7898112d2b8aeaf9c94769b14bd4f6cd6566e7dd99c789519a6586b4b6f3e",
+      "after": "57f677f1e59d689b9551f2fbda3adc86cfe648a04fb27278d351a20d5345248a"
+    },
+    "docs/STATUS.md": {
+      "before": "c94d2703041cd04bfa08dca029f0a85b679028fd0e1dc11bd1df2af6b1e55ef4",
+      "after": "567af7e668f27e1dc8b65306365a6bd4b722be3b8df29fa27e3ffdd5c47b7834"
+    },
+    "docs/reports/README.md": {
+      "before": "c6315c2929f88dffb31826af49da0d43714d614606d16fa049b3c761464c75a3",
+      "after": "6d6de08b5e3ec510aa0c543372680b54ac22dba865f17a89b6656c722155a978"
+    },
+    "docs/reports/operations/README.md": {
+      "before": "bbfab2cf10c9e5fd70d6533ce3cf10314c0157b2db153fb08c3a262c2ef6ee59",
+      "after": "03db738d98f8d2e0de606ad41a360d93b25fc6bc8a172ab57c75e4cec8e33a90"
+    }
+  },
+  "unexpected_changes": {}
+}

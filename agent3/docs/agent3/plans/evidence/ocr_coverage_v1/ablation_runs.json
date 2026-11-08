@@ -1,0 +1,151 @@
+{
+  "scope": "3 previously used DEV invoice groups; correlated DPI variants; no holdout/autoaccept claim",
+  "cold_warm": "Fresh subprocess/model load per cache miss; load_ms and inference_ms reported separately; cached elapsed is not a latency sample",
+  "rows": [
+    {
+      "variant": "base150",
+      "model_id": "ppocrv6_vietocr",
+      "dpi": 150,
+      "case_id": "charity_2023-p1",
+      "input_sha256": "bef9950d4bdf2826b3640b4a59d8609dddd7a2825e7ce466642c9fd85fa6d345",
+      "render_sha256": "cfc471150d267cdf851d8b0e335443e7a79536f44c2a1e4e3667bd4b2dd0ea75",
+      "runtime_sha256": "cad9ea6773c971bcf9baaddf886a627bb9014ece7d79bbf08cb33bfbc3f615ff",
+      "extractor_sha256": "251c44ce16934301cfcce282f5ef7bc63bc13dddd49a6d32a077369b5550e3d2",
+      "cache_hit": false,
+      "load_ms": 21257.13579999956,
+      "inference_ms": 160806.51579999994,
+      "block_count": 67,
+      "coverage": {
+        "tiles": 0,
+        "added_boxes": 0
+      },
+      "deskew": {
+        "angle": 0.0,
+        "gain": 1.0,
+        "input_to_processed": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "processed_to_input": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "status": "COMPLETE",
+      "labeled": 11,
+      "correct": 7,
+      "wrong_present": 2,
+      "missing_or_ambiguous": 2,
+      "fields": [
+        {
+          "field_path": "parties.seller.tax_id",
+          "correct": true,
+          "present": true,
+          "wrong_present": false
+        },
+        {
+          "field_path": "parties.buyer.tax_id",
+          "correct": false,
+          "present": false,
+          "wrong_present": false
+        },
+        {
+          "field_path": "invoice.number",
+          "correct": true,
+          "present": true,
+          "wrong_present": false
+        },
+        {
+          "field_path": "invoice.series",
+          "correct": false,
+          "present": false,
+          "wrong_present": false
+        },
+        {
+          "field_path": "invoice.issue_date",
+          "correct": true,
+          "present": true,
+          "wrong_present": false
+        },
+        {
+          "field_path": "currency",
+          "correct": true,
+          "present": true,
+          "wrong_present": false
+        },
+        {
+          "field_path": "totals.net",
+          "correct": true,
+          "present": true,
+          "wrong_present": false
+        },
+        {
+          "field_path": "totals.vat",
+          "correct": true,
+          "present": true,
+          "wrong_present": false
+        },
+        {
+          "field_path": "totals.gross",
+          "correct": true,
+          "present": true,
+          "wrong_present": false
+        },
+        {
+          "field_path": "parties.seller.name",
+          "correct": false,
+          "present": true,
+          "wrong_present": true
+        },
+        {
+          "field_path": "parties.buyer.name",
+          "correct": false,
+          "present": true,
+          "wrong_present": true
+        }
+      ],
+      "item_count_correct": true,
+      "elapsed_seconds": 187.08492449999994
+    },
+    {
+      "variant": "beam200",
+      "model_id": "ppocrv6_vietocr_beam",
+      "dpi": 200,
+      "case_id": "charity_2023-p1",
+      "status": "FAILED",
+      "error_type": "OCRError",
+      "error_code": "WORKER_TIMEOUT",
+      "timeout_seconds": 30,
+      "elapsed_seconds": 30.344723299999714
+    },
+    {
+      "variant": "deskew200",
+      "model_id": "ppocrv6_vietocr_deskew",
+      "dpi": 200,
+      "case_id": "charity_2023-p1",
+      "status": "FAILED",
+      "error_type": "NotADirectoryError",
+      "elapsed_seconds": 241.1762901000002
+    },
+    {
+      "variant": "tiles200",
+      "model_id": "ppocrv6_vietocr_tiles",
+      "dpi": 200,
+      "case_id": "charity_2023-p1",
+      "status": "FAILED",
+      "error_type": "NotADirectoryError",
+      "elapsed_seconds": 240.67784410000058
+    }
+  ],
+  "input_group_count": 1,
+  "planned_input_groups": 3,
+  "all_expected_complete": false
+}

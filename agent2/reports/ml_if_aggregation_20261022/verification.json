@@ -1,0 +1,54 @@
+{
+  "status": "max_member_diagnostics_complete_no_policy_change",
+  "date": "2026-10-22",
+  "tests": {
+    "successful": true,
+    "tests_run": 55,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_if_aggregation.py",
+      "test_if_aggregation_dependence.py",
+      "test_if_coverage.py",
+      "test_compare_shadow.py"
+    ],
+    "seconds": 1.14
+  },
+  "protected_files": 1447,
+  "protected_files_unchanged": true,
+  "models_fitted": 0,
+  "observations_scored": 0,
+  "models_deserialized": 0,
+  "aggregation_changed": false,
+  "ranking_changed": false,
+  "training_or_calibration_scored": false,
+  "labels_or_oracle_loaded": false,
+  "holdout_005_access": "opaque_hash_only_during_preservation_checks",
+  "queue_changed": false,
+  "reviewer_packet_changed": false,
+  "independent_outcomes_added": 0,
+  "external_sends": 0,
+  "code_sha256": {
+    "sme_fraud/audit_if_aggregation.py": "505ef2b0ebc9a6bcdd0b3db77aabfb8a68596e59d2d1e2e8e7b58886ab4eef39",
+    "tests/test_if_aggregation.py": "f96a4ef86a8a602c289353d25faf5f1cb812031dcc85c2aae4defe67c718bfec",
+    "sme_fraud/audit_if_aggregation_dependence.py": "fa35845e8b4f264837b42f3b0dfc8319c6e25edc576e7609cb322e25b4f34aa7",
+    "tests/test_if_aggregation_dependence.py": "6972012f23c9689c1f703fcfb05168913fe10645e0b5909567c75765ffabc380"
+  },
+  "initial_tests": {
+    "successful": true,
+    "tests_run": 50,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_if_aggregation.py",
+      "test_if_coverage.py",
+      "test_compare_shadow.py"
+    ],
+    "seconds": 1.078
+  },
+  "dependence_sensitivity_complete": true,
+  "member_bindings_and_causal_reference_pools_verified": true,
+  "documentation_links_verified": true
+}

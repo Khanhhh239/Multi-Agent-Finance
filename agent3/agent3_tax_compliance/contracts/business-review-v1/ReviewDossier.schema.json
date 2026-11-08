@@ -1,0 +1,566 @@
+{
+  "$defs": {
+    "DailyPurchases": {
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "complete": {
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "verification_reference": {
+          "minLength": 1,
+          "title": "Verification Reference",
+          "type": "string"
+        },
+        "purchases": {
+          "items": {
+            "$ref": "#/$defs/PurchaseEvidence"
+          },
+          "title": "Purchases",
+          "type": "array"
+        }
+      },
+      "required": [
+        "version",
+        "complete",
+        "verification_reference",
+        "purchases"
+      ],
+      "title": "DailyPurchases",
+      "type": "object"
+    },
+    "DailyReview": {
+      "additionalProperties": false,
+      "properties": {
+        "ledger": {
+          "$ref": "#/$defs/DailyPurchases"
+        },
+        "evidence_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "ledger",
+        "evidence_ids"
+      ],
+      "title": "DailyReview",
+      "type": "object"
+    },
+    "DocumentProof": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "relative_path": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Relative Path",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "INVOICE",
+            "PRODUCT_CATALOGUE",
+            "CONTRACT",
+            "BANK_STATEMENT",
+            "CASH_RECEIPT",
+            "OTHER"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "relative_path",
+        "sha256",
+        "kind"
+      ],
+      "title": "DocumentProof",
+      "type": "object"
+    },
+    "InvoiceReview": {
+      "additionalProperties": false,
+      "properties": {
+        "invoice_kind": {
+          "enum": [
+            "VAT",
+            "SALE",
+            "OTHER"
+          ],
+          "title": "Invoice Kind",
+          "type": "string"
+        },
+        "form": {
+          "enum": [
+            "ORDINARY",
+            "SPECIAL",
+            "UNKNOWN"
+          ],
+          "title": "Form",
+          "type": "string"
+        },
+        "vat_method": {
+          "anyOf": [
+            {
+              "enum": [
+                "DEDUCTION",
+                "DIRECT"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vat Method"
+        },
+        "claim_input_vat": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Claim Input Vat"
+        },
+        "seller_tax_id_observed": {
+          "default": "UNKNOWN",
+          "enum": [
+            "PRESENT_VALUE",
+            "CONFIRMED_ABSENT",
+            "UNKNOWN"
+          ],
+          "title": "Seller Tax Id Observed",
+          "type": "string"
+        },
+        "document_complete": {
+          "default": false,
+          "title": "Document Complete",
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "invoice_kind",
+        "form",
+        "evidence_ids"
+      ],
+      "title": "InvoiceReview",
+      "type": "object"
+    },
+    "PaymentReview": {
+      "additionalProperties": false,
+      "properties": {
+        "case": {
+          "enum": [
+            "STANDARD",
+            "SPECIAL",
+            "UNKNOWN"
+          ],
+          "title": "Case",
+          "type": "string"
+        },
+        "settlement": {
+          "default": "UNKNOWN",
+          "enum": [
+            "VERIFIED_NON_CASH",
+            "VERIFIED_CASH",
+            "UNSETTLED",
+            "UNKNOWN"
+          ],
+          "title": "Settlement",
+          "type": "string"
+        },
+        "method": {
+          "default": "UNKNOWN",
+          "enum": [
+            "BANK_TRANSFER",
+            "CARD",
+            "CASH",
+            "CASH_DEPOSIT_TO_SELLER",
+            "UNKNOWN"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "seller_tax_id": {
+          "pattern": "^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$",
+          "title": "Seller Tax Id",
+          "type": "string"
+        },
+        "buyer_tax_id": {
+          "pattern": "^[0-9]{10}(?:[0-9]{3}|-[0-9]{3})?$",
+          "title": "Buyer Tax Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "VND",
+          "default": "VND",
+          "title": "Currency",
+          "type": "string"
+        },
+        "amount": {
+          "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+          "title": "Amount",
+          "type": "string"
+        },
+        "execution_confirmed": {
+          "default": false,
+          "title": "Execution Confirmed",
+          "type": "boolean"
+        },
+        "full_settlement": {
+          "default": false,
+          "title": "Full Settlement",
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "case",
+        "seller_tax_id",
+        "buyer_tax_id",
+        "amount",
+        "evidence_ids"
+      ],
+      "title": "PaymentReview",
+      "type": "object"
+    },
+    "ProductReview": {
+      "additionalProperties": false,
+      "description": "Record-specific classification; printed VAT is deliberately not a classification input.",
+      "properties": {
+        "item_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Item Id",
+          "type": "string"
+        },
+        "product_code": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Product Code",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "base_vat_rate": {
+          "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+          "title": "Base Vat Rate",
+          "type": "string"
+        },
+        "annex_i": {
+          "enum": [
+            "EXCLUDED",
+            "NOT_EXCLUDED",
+            "UNKNOWN"
+          ],
+          "title": "Annex I",
+          "type": "string"
+        },
+        "annex_ii": {
+          "enum": [
+            "EXCLUDED",
+            "NOT_EXCLUDED",
+            "UNKNOWN"
+          ],
+          "title": "Annex Ii",
+          "type": "string"
+        },
+        "legal_context_checked": {
+          "default": false,
+          "title": "Legal Context Checked",
+          "type": "boolean"
+        },
+        "classification_rationale": {
+          "maxLength": 4000,
+          "minLength": 20,
+          "title": "Classification Rationale",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "item_id",
+        "product_code",
+        "effective_from",
+        "effective_to",
+        "base_vat_rate",
+        "annex_i",
+        "annex_ii",
+        "classification_rationale",
+        "evidence_ids"
+      ],
+      "title": "ProductReview",
+      "type": "object"
+    },
+    "PurchaseEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "taxpayer_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Taxpayer Id",
+          "type": "string"
+        },
+        "record_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Record Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "issue_date": {
+          "format": "date",
+          "title": "Issue Date",
+          "type": "string"
+        },
+        "seller_tax_id": {
+          "pattern": "^[0-9]{10}(?:[0-9]{3})?$",
+          "title": "Seller Tax Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "VND",
+          "default": "VND",
+          "title": "Currency",
+          "type": "string"
+        },
+        "gross": {
+          "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+          "title": "Gross",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "taxpayer_id",
+        "record_id",
+        "revision",
+        "input_sha256",
+        "issue_date",
+        "seller_tax_id",
+        "gross"
+      ],
+      "title": "PurchaseEvidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "business-review-v1",
+      "default": "business-review-v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "review_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Review Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "taxpayer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Taxpayer Id",
+      "type": "string"
+    },
+    "record_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "record_revision": {
+      "minimum": 1,
+      "title": "Record Revision",
+      "type": "integer"
+    },
+    "record_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Record Sha256",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "reviewed_at": {
+      "format": "date-time",
+      "title": "Reviewed At",
+      "type": "string"
+    },
+    "review_reference": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Review Reference",
+      "type": "string"
+    },
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/DocumentProof"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Documents",
+      "type": "array"
+    },
+    "invoice": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/InvoiceReview"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "products": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ProductReview"
+      },
+      "maxItems": 1000,
+      "title": "Products",
+      "type": "array"
+    },
+    "payment": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PaymentReview"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "daily": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DailyReview"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "review_id",
+    "tenant_id",
+    "taxpayer_id",
+    "record_id",
+    "record_revision",
+    "record_sha256",
+    "reviewer_id",
+    "reviewed_at",
+    "review_reference",
+    "documents"
+  ],
+  "title": "ReviewDossier",
+  "type": "object"
+}

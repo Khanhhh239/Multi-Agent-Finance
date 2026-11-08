@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "fatura-mapped-v1",
+  "seed": 20261011,
+  "source_root": "data invoice/plan00_incoming/FATURA2/invoices_dataset_final",
+  "output_root": "data invoice/plan00_local/fatura_v1",
+  "template_split_counts": {"dev": 30, "calibration": 10, "test": 10},
+  "previously_inspected_templates": [1,7,10,17,47,50],
+  "pilot_templates": 25,
+  "pilot_instances": [0,100],
+  "coordinate_policy": "original bottom-left -> image top-left; verify against HF pixel boxes within 1.1 px",
+  "geometry_tolerance_px": 1.1,
+  "permission_basis": "FATURA_PUBLIC_DOWNLOAD_TERMS_NOT_CONFIRMED",
+  "auto_acceptance_enabled": false,
+  "accuracy_evaluation_eligible": false,
+  "aliases": {
+    "seller.name": ["SELLER_NAME"],
+    "buyer.name": ["BUYER", "BILL_TO"],
+    "invoice.issue_date": ["DATE"],
+    "invoice.number": ["NUMBER"],
+    "totals.gross": ["TOTAL"],
+    "totals.net": ["SUB_TOTAL"],
+    "totals.vat": ["TAX"]
+  }
+}

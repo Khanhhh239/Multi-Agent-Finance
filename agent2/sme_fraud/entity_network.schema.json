@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Company-scoped entity network v1",
+  "type": "object",
+  "required": ["directed", "multigraph", "graph", "nodes", "links", "findings", "scope"],
+  "properties": {
+    "directed": {"const": false},
+    "multigraph": {"const": true},
+    "graph": {
+      "type": "object",
+      "required": ["schema_version", "company_id", "as_of"],
+      "properties": {
+        "schema_version": {"const": "entity-network-v1"},
+        "company_id": {"type": "string", "minLength": 1},
+        "as_of": {"type": "string", "format": "date-time"}
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "label"],
+        "properties": {
+          "id": {"type": "string"},
+          "type": {"enum": ["employee", "vendor", "bank_account", "phone", "address", "tax_code"]},
+          "label": {"type": "string"},
+          "entity_id": {"type": "string"},
+          "matchable": {"type": "boolean"}
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "target", "key", "id", "relation", "strength", "observed_at", "evidence"],
+        "properties": {
+          "source": {"type": "string"},
+          "target": {"type": "string"},
+          "key": {"type": "string"},
+          "id": {"type": "string"},
+          "relation": {"enum": ["bank_account", "phone", "address", "tax_code"]},
+          "strength": {"enum": ["identity_match", "unconfirmed_identity", "weak_context"]},
+          "observed_at": {"type": "string", "format": "date-time"},
+          "evidence": {
+            "type": "object",
+            "required": ["source_table", "source_id", "source_sha256", "observed_at"],
+            "properties": {
+              "source_table": {"enum": ["employees", "vendors", "entity_links"]},
+              "source_id": {"type": "string"},
+              "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "observed_at": {"type": "string", "format": "date-time"}
+            }
+          }
+        }
+      }
+    },
+    "findings": {"type": "array", "items": {"type": "object"}},
+    "scope": {
+      "type": "object",
+      "required": ["company_id", "as_of", "context_only", "truncated", "returned_nodes", "findings_complete"],
+      "properties": {
+        "company_id": {"type": "string"},
+        "as_of": {"type": "string", "format": "date-time"},
+        "context_only": {"const": true},
+        "truncated": {"type": "boolean"},
+        "returned_nodes": {"type": "integer", "minimum": 0},
+        "findings_complete": {"type": "boolean"}
+      }
+    }
+  }
+}

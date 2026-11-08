@@ -1,0 +1,16 @@
+{
+  "rule_id": "R-NO-BIZ",
+  "effective_from": "2015-08-06",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "is_business_related",
+      "operator": "==",
+      "value": false
+    }
+  ],
+  "verdict": "FAIL",
+  "fixable": false,
+  "fix_hint": "Chi phí phát sinh không liên quan trực tiếp đến hoạt động sản xuất, kinh doanh của doanh nghiệp sẽ bị loại toàn bộ.",
+  "citation": "Khoản 1 Điều 4 Thông tư 96/2015/TT-BTC (Sửa đổi, bổ sung Khoản 1 Điều 6 Thông tư 78/2014/TT-BTC)"
+}

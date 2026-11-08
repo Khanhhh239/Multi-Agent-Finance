@@ -1,0 +1,22 @@
+{
+  "dry_run": true,
+  "replay_existing": true,
+  "daily_budget": 10,
+  "weekly_weekday": 0,
+  "weekly_hour": 8,
+  "case_url": "http://127.0.0.1:8796/",
+  "max_attempts": 4,
+  "reminders": {
+    "review_due_hours": 48,
+    "rework_due_hours": 48,
+    "repeat_hours": 24,
+    "escalate_after_hours": 48
+  },
+  "role_recipients": {
+    "C001": [
+      {"user_id":"ACC","person_id":"P1","display_name":"MÔ PHỎNG ACC","role":"accountant","channels":{"email":["acc@example.invalid"],"zalo":["SIM_ACC"]}},
+      {"user_id":"CHIEF","person_id":"P2","display_name":"MÔ PHỎNG CHIEF","role":"chief_accountant","channels":{"email":["chief@example.invalid"],"zalo":["SIM_CHIEF"]}},
+      {"user_id":"DIR","person_id":"P3","display_name":"MÔ PHỎNG DIR","role":"director","channels":{"email":["dir@example.invalid"],"zalo":["SIM_DIR"]}}
+    ]
+  }
+}

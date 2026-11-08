@@ -1,0 +1,501 @@
+- complementary:
+  - link "S Sổ Soát KIỂM SOÁT NỘI BỘ":
+    - /url: /
+    - generic: S
+    - text: Sổ Soát
+    - generic: KIỂM SOÁT NỘI BỘ
+  - generic: KHÔNG GIAN LÀM VIỆC
+  - button "▤ Hồ sơ rà soát":
+    - generic: ▤
+    - text: Hồ sơ rà soát
+  - button "◇ Phạm vi quy tắc":
+    - generic: ◇
+    - text: Phạm vi quy tắc
+  - link "✓ Đối chứng P2":
+    - /url: /p2-controls
+    - generic: ✓
+    - text: Đối chứng P2
+  - button "✉ Thông báo":
+    - generic: ✉
+    - text: Thông báo
+  - button "ⓘ Hướng dẫn sử dụng":
+    - generic: ⓘ
+    - text: Hướng dẫn sử dụng
+  - text: Bản thử nội bộ
+  - generic: Dữ liệu tổng hợp 2024–2025
+- main:
+  - generic: Kiểm soát nội bộ / Hồ sơ rà soát
+  - generic: KIỂM THỬ GIAO DIỆN
+  - generic: TỪ CẢNH BÁO ĐẾN BẰNG CHỨNG
+  - heading "Hồ sơ cần rà soát" [level=1]
+  - paragraph: Đối chiếu nghiệp vụ, ghi nhận kết luận và theo dõi phần còn thiếu.
+  - text: Bộ dữ liệu
+  - combobox "Bộ dữ liệu":
+    - option "Mô phỏng 0,1%" [selected]
+    - option "Mô phỏng 0,3%"
+  - text: Ngân sách / ngày / công ty
+  - combobox "Ngân sách rà soát":
+    - option "5 lượt / 120 phút" [selected]
+    - option "10 lượt / 240 phút"
+  - status: Đã lưu kết luận và lý do vào lịch sử hồ sơ.
+  - region "Tổng quan hồ sơ":
+    - article:
+      - generic: Tồn đọng
+      - strong: "584"
+      - text: Hồ sơ giao dịch và nguồn đang mở
+      - generic: ▤
+    - article:
+      - generic: Ưu tiên cao
+      - strong: "16"
+      - text: Cần đối chiếu trước
+      - generic: "!"
+    - article:
+      - generic: Chờ bổ sung
+      - strong: "328"
+      - text: Còn thiếu bằng chứng
+      - generic: ◷
+    - article:
+      - generic: Đã kết luận
+      - strong: "0"
+      - text: Có lý do và người rà soát
+      - generic: ✓
+  - region "Bộ lọc hồ sơ":
+    - checkbox "Ưu tiên hôm nay" [checked]
+    - text: Ưu tiên hôm nay
+    - generic: ⌕
+    - textbox "Tìm hồ sơ":
+      - /placeholder: Tìm mã hồ sơ, đối tượng hoặc nội dung…
+    - combobox "Công ty":
+      - option "Tất cả công ty" [selected]
+      - option "C001 · An Phúc Trading C001"
+      - option "C002 · An Phúc Manufacturing C002"
+      - option "C003 · Minh Lộ Services C003"
+      - option "C004 · Vân Hải Retail C004"
+      - option "C005 · Vân Hải Logistics C005"
+      - option "C006 · Minh Lộ Trading C006"
+      - option "C007 · Vân Hải Manufacturing C007"
+      - option "C008 · Minh Lộ Services C008"
+    - combobox "Trạng thái":
+      - option "Đang xử lý" [selected]
+      - option "Chưa rà soát"
+      - option "Chờ bổ sung"
+      - option "Đã kết luận"
+      - option "Tất cả trạng thái"
+    - combobox "Mức ưu tiên":
+      - option "Mọi mức ưu tiên" [selected]
+      - option "Cao nhất"
+      - option "Cao"
+      - option "Trung bình"
+      - option "Thấp"
+    - combobox "Nhóm hồ sơ":
+      - option "Mọi nhóm hồ sơ" [selected]
+      - option "Rà soát nghiệp vụ"
+      - option "Yêu cầu bổ sung P2"
+    - combobox "Quy tắc":
+      - option "Mọi quy tắc" [selected]
+      - option "A1 · Chia nhỏ cùng người nhận trong 3 ngày"
+      - option "A2 · Chia nhỏ cùng người lập/người nhận trong 30 ngày"
+      - option "A3 · Chia nhỏ qua cụm người nhận liên kết"
+      - option "A4 · Người lập có nhiều khoản cận hạn mức"
+      - option "A5 · Số tiền tròn lệch baseline lịch sử"
+      - option "A6 · Thanh toán làm tròn vượt hóa đơn gốc"
+      - option "B1 · Tài khoản hoặc căn cước NCC trùng nhân viên"
+      - option "B2 · Thông tin hoặc người đại diện NCC liên kết nhân viên"
+      - option "B3 · NCC mới thành lập nhận giao dịch lớn đầu tiên"
+      - option "B4 · Trạng thái người phát hành hóa đơn rủi ro"
+      - option "B6 · NCC ngủ đông nhận khoản lớn"
+      - option "B7 · Đổi tài khoản gần ngày thanh toán chưa xác minh"
+      - option "C1 · Lập hoặc duyệt ngoài lịch vận hành"
+      - option "C2 · Tự duyệt vượt quyền được cấp"
+      - option "C3 · Duyệt dưới 60 giây ở cấp thẩm quyền cao"
+      - option "C4 · Thao tác trong kỳ nghỉ phép chính thức"
+      - option "E1 · Lương không có chấm công hoặc bằng chứng thay thế"
+      - option "E2 · Lương sau chấm dứt hợp đồng"
+      - option "F1 · Điều chỉnh thủ công sát khóa sổ và trọng yếu"
+      - option "F2 · Quản lý ghi đè quy trình"
+      - option "F3 · Khoảng trống/trùng số chứng từ"
+      - option "F4 · Doanh thu/công nợ kéo dài chưa đối chiếu tiền"
+      - option "P1 · Thanh toán vượt tổng giá trị cùng hóa đơn"
+      - option "P2 · Chi tiền mặt cần rà soát hạn mức và chứng từ VAT"
+      - option "T1 · Tạm ứng còn dư nợ quá hạn"
+      - option "T2 · Xóa nợ tạm ứng thiếu hồ sơ"
+    - button "Xuất CSV": ↓ CSV
+  - heading "Hàng đợi ưu tiên 40" [level=2]
+  - button "Làm mới ↻"
+  - generic: Tồn 584 hồ sơ / 16.685 phút; 144 hồ sơ nguồn, 376 chờ tái rà soát. Đã phân bổ 4 lượt / 70 phút cho các công ty đang hiển thị; hạn mức mỗi công ty 5 lượt / 120 phút/ngày.
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C003 · 1 nghiệp vụ · Chưa rà soát C1E2 9/2/2025 RC_4fa2eaa50c0d41d5":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 9/2/2025
+    - generic: RC_4fa2eaa50c0d41d5
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C001 · 1 nghiệp vụ · Chưa rà soát C1E2 19/2/2025 RC_b8e286f40dab8fba":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C001 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 19/2/2025
+    - generic: RC_b8e286f40dab8fba
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C007 · 1 nghiệp vụ · Chưa rà soát C1E2 10/3/2025 RC_615843744fd0e37f":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C007 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 10/3/2025
+    - generic: RC_615843744fd0e37f
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C004 · 1 nghiệp vụ · Chưa rà soát C1E2 15/6/2025 RC_fd3b5774a2d5f1fa":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C004 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 15/6/2025
+    - generic: RC_fd3b5774a2d5f1fa
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C006 · 1 nghiệp vụ · Chưa rà soát C1E2 18/7/2025 RC_721246413e1ac288":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C006 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 18/7/2025
+    - generic: RC_721246413e1ac288
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C006 · 1 nghiệp vụ · Chưa rà soát C1E2 15/8/2025 RC_9699fb73faa36131":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C006 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 15/8/2025
+    - generic: RC_9699fb73faa36131
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C001 · 1 nghiệp vụ · Chưa rà soát C1E2 18/8/2025 RC_da5b5ddd4b87845f":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C001 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 18/8/2025
+    - generic: RC_da5b5ddd4b87845f
+  - button "● Cao nhất 21điểm Nghiệp vụ cần đối chiếu bổ sung Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng C008 · 1 nghiệp vụ · Chưa rà soát C1E2 15/10/2025 RC_d186e9c9a994bb1f":
+    - generic: ● Cao nhất
+    - generic: 21điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Lương sau chấm dứt hợp đồng
+    - generic: C008 · 1 nghiệp vụ · Chưa rà soát
+    - generic: C1E2
+    - generic: 15/10/2025
+    - generic: RC_d186e9c9a994bb1f
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C004 · 1 nghiệp vụ · Chưa rà soát E2 19/2/2025 RC_44efef175ded587b":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C004 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 19/2/2025
+    - generic: RC_44efef175ded587b
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C005 · 1 nghiệp vụ · Chưa rà soát E2 11/3/2025 RC_237c8841f1ec138c":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C005 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 11/3/2025
+    - generic: RC_237c8841f1ec138c
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C008 · 1 nghiệp vụ · Chưa rà soát E2 11/3/2025 RC_0e823c3a6787362d":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C008 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 11/3/2025
+    - generic: RC_0e823c3a6787362d
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C002 · 1 nghiệp vụ · Chưa rà soát E2 14/6/2025 RC_5eb1f662cdbd2265":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C002 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 14/6/2025
+    - generic: RC_5eb1f662cdbd2265
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C002 · 1 nghiệp vụ · Chưa rà soát E2 16/7/2025 RC_64ae6616f8b879e7":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C002 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 16/7/2025
+    - generic: RC_64ae6616f8b879e7
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C005 · 1 nghiệp vụ · Chưa rà soát E2 17/7/2025 RC_c86f4cb15b6c0501":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C005 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 17/7/2025
+    - generic: RC_c86f4cb15b6c0501
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C003 · 1 nghiệp vụ · Chưa rà soát E2 18/7/2025 RC_e252d67947aa0dc2":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 18/7/2025
+    - generic: RC_e252d67947aa0dc2
+  - button "● Cao nhất 20điểm Nghiệp vụ cần đối chiếu bổ sung Lương sau chấm dứt hợp đồng C007 · 1 nghiệp vụ · Chưa rà soát E2 14/11/2025 RC_b417450696430bfa":
+    - generic: ● Cao nhất
+    - generic: 20điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Lương sau chấm dứt hợp đồng
+    - generic: C007 · 1 nghiệp vụ · Chưa rà soát
+    - generic: E2
+    - generic: 14/11/2025
+    - generic: RC_b417450696430bfa
+  - button "● Trung bình 11điểm Nghiệp vụ cần đối chiếu bổ sung Số tiền tròn lệch baseline lịch sử; Lập hoặc duyệt ngoài lịch vận hành; Thao tác trong kỳ nghỉ phép chính thức C003 · 1 nghiệp vụ · Chưa rà soát A5C1C4 9/4/2025 RC_18adf5be97ee0e84 Đã phân bổ 20 phút ✓":
+    - generic: ● Trung bình
+    - generic: 11điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Số tiền tròn lệch baseline lịch sử; Lập hoặc duyệt ngoài lịch vận hành; Thao tác trong kỳ nghỉ phép chính thức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A5C1C4
+    - generic: 9/4/2025
+    - generic: RC_18adf5be97ee0e84
+    - generic: Đã phân bổ 20 phút ✓
+  - button "● Trung bình 11điểm Phê duyệt hoặc điều chỉnh cần đối chiếu Số tiền tròn lệch baseline lịch sử; Điều chỉnh thủ công sát khóa sổ và trọng yếu C008 · 1 nghiệp vụ · Chưa rà soát A5F1 28/8/2025 RC_963dc712d016c11d Đã phân bổ 20 phút ✓":
+    - generic: ● Trung bình
+    - generic: 11điểm
+    - generic: Phê duyệt hoặc điều chỉnh cần đối chiếu
+    - paragraph: Số tiền tròn lệch baseline lịch sử; Điều chỉnh thủ công sát khóa sổ và trọng yếu
+    - generic: C008 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A5F1
+    - generic: 28/8/2025
+    - generic: RC_963dc712d016c11d
+    - generic: Đã phân bổ 20 phút ✓
+  - button "● Trung bình 10điểm Phê duyệt hoặc điều chỉnh cần đối chiếu Lập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu C004 · 2 nghiệp vụ · Chưa rà soát C1F1 30/8/2025 RC_d3782da51933cac4":
+    - generic: ● Trung bình
+    - generic: 10điểm
+    - generic: Phê duyệt hoặc điều chỉnh cần đối chiếu
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu
+    - generic: C004 · 2 nghiệp vụ · Chưa rà soát
+    - generic: C1F1
+    - generic: 30/8/2025
+    - generic: RC_d3782da51933cac4
+  - button "● Trung bình 10điểm Phê duyệt hoặc điều chỉnh cần đối chiếu Lập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu C002 · 2 nghiệp vụ · Chưa rà soát C1F1 27/9/2025 RC_e6c00cef6a07a22e":
+    - generic: ● Trung bình
+    - generic: 10điểm
+    - generic: Phê duyệt hoặc điều chỉnh cần đối chiếu
+    - paragraph: Lập hoặc duyệt ngoài lịch vận hành; Điều chỉnh thủ công sát khóa sổ và trọng yếu
+    - generic: C002 · 2 nghiệp vụ · Chưa rà soát
+    - generic: C1F1
+    - generic: 27/9/2025
+    - generic: RC_e6c00cef6a07a22e
+  - generic: 1–20 / 40 hồ sơ
+  - button "Trang trước" [disabled]: ←
+  - button "Trang sau": →
+  - region "Chi tiết hồ sơ":
+    - generic: ● Ưu tiên thấp
+    - generic: IR_30749635120c8936
+    - heading "Chi tiền mặt · Cần bổ sung bằng chứng" [level=2]
+    - generic: C003 · 1 nghiệp vụ
+    - generic: Mở 1/1/2024
+    - generic: Chờ bổ sung
+    - generic: "0"
+    - text: Điểm ưu tiên rà soát
+    - strong: "Chi trả trong hồ sơ: 55.814.000 ₫"
+    - navigation "Các phần hồ sơ":
+      - button "Tổng quan"
+      - button "Giao dịch"
+      - button "Bằng chứng"
+      - button "Bổ sung tài liệu"
+      - button "Nhật ký"
+    - generic: ✓ Nhật ký kết luận đã kiểm tra tính liên tục.
+    - generic: Kết luận của người rà soát
+    - strong: Cần bổ sung bằng chứng
+    - text: "SIM_BROWSER_UAT WF11 tab A: kết thúc thử bằng trạng thái cần bổ sung; nguồn chứng từ vẫn mô phỏng, không chứng nhận hợp lệ."
+    - text: ASSISTANT_BROWSER_SIM · 08:58 20/10/2026
+    - strong: Xác nhận nghi vấn
+    - text: "SIM_BROWSER_UAT WF09: kết luận mô phỏng chỉ để thử cổng sau khi mọi yêu cầu đã rà/hủy; không phải xác nhận gian lận hay nghiệm thu kế toán độc lập."
+    - text: ASSISTANT_BROWSER_SIM · 08:57 20/10/2026
+    - strong: Cần bổ sung bằng chứng
+    - text: "SIM_BROWSER_UAT WF06: tiếp tục theo dõi thiếu hóa đơn và thẩm quyền; nhận tài liệu chưa đồng nghĩa hợp lệ. Không đổi điểm 0."
+    - text: ASSISTANT_BROWSER_SIM · 08:55 20/10/2026
+    - generic: Lịch sử cảnh báo mô phỏng
+    - strong: Mở hồ sơ
+    - text: Ưu tiên Thấp · 0 điểm
+    - text: 18:00 01/01/2024 · TX_dbd850ec19e61c624a
+    - generic: "Hạn rà soát gợi ý từ snapshot: 18:00 31/01/2024. Đây là lịch của dữ liệu mô phỏng."
+    - heading "Ghi nhận kết luận rà soát" [level=3]
+    - generic: Lưu kết luận sau khi đối chiếu. Phần còn thiếu có thể tiếp tục bổ sung ở lần rà soát sau.
+    - radio "Xác nhận nghi vấn"
+    - text: Xác nhận nghi vấn
+    - radio "Hợp lệ / báo động giả"
+    - text: Hợp lệ / báo động giả
+    - radio "Cần bổ sung bằng chứng" [checked]
+    - text: Cần bổ sung bằng chứng
+    - radio "Vi phạm kiểm soát"
+    - text: Vi phạm kiểm soát
+    - radio "Xác nhận gian lận"
+    - text: Xác nhận gian lận
+    - text: Người rà soát
+    - textbox "Người rà soát":
+      - /placeholder: Họ và tên người thực hiện
+      - text: ASSISTANT_BROWSER_SIM
+    - text: Lý do nhanh
+    - combobox "Lý do nhanh":
+      - option "Chọn lý do đã kiểm tra…" [selected]
+      - option "Chứng từ chưa giải trình được dấu hiệu"
+      - option "Quan hệ cần chuyển kiểm tra sâu"
+      - option "Chứng từ và nghĩa vụ chi khớp"
+      - option "Đúng thẩm quyền, có phê duyệt"
+    - button "Xác nhận nghi vấn"
+    - button "Bỏ qua, hợp lệ"
+    - text: Lý do / chứng từ đã đối chiếu
+    - textbox "Lý do / chứng từ đã đối chiếu":
+      - /placeholder: Nêu nội dung đã kiểm tra hoặc bằng chứng cần bổ sung…
+    - text: Mỗi lần lưu được ghi vào lịch sử.
+    - text: Hồ sơ thiếu bằng chứng tiếp tục mở và tính công tái rà soát.
+    - button "Lưu kết luận →"
+  - generic: Điểm dùng để ưu tiên rà soát. Cảnh báo cần được đối chiếu chứng từ trước khi kết luận.
+- dialog:
+  - heading "Thông báo Zalo / Email" [level=2]
+  - button "Đóng": ×
+  - generic: GIẢ LẬP · Không gửi ra ngoài
+  - paragraph: "Tối đa 5 hồ sơ / công ty / ngày, dùng chung cho hai kênh và tóm tắt tuần. Đã chọn hôm nay: C008: 5 · C003: 5 · C005: 5 · C006: 5 · C004: 5 · C007: 5 · C002: 5 · C001: 5."
+  - paragraph: Tóm tắt tuần từ thứ 2, 8:00 (giờ Việt Nam). Hồ sơ đóng được loại trước lúc gửi.
+  - button "Chạy luồng giả lập"
+  - article:
+    - strong: C004 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C004. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_44efef175ded587b · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_44efef175ded587b
+  - article:
+    - strong: C003 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C003. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_4fa2eaa50c0d41d5 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_4fa2eaa50c0d41d5
+  - article:
+    - strong: C007 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C007. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_b417450696430bfa · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_b417450696430bfa
+  - article:
+    - strong: C003 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C003. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_e252d67947aa0dc2 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_e252d67947aa0dc2
+  - article:
+    - strong: C004 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C004. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_fd3b5774a2d5f1fa · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_fd3b5774a2d5f1fa
+  - article:
+    - strong: C003 · Zalo OA · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C003. Đang mở 111 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_4fa2eaa50c0d41d5 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_4fa2eaa50c0d41d5 RC_e252d67947aa0dc2 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_e252d67947aa0dc2 RC_18adf5be97ee0e84 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_18adf5be97ee0e84 RC_846bcb2bbdd300d2 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_846bcb2bbdd300d2 RC_48a3d1db0e333f09 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_48a3d1db0e333f09
+  - article:
+    - strong: C006 · Email · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C006. Đang mở 68 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_721246413e1ac288 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_721246413e1ac288 RC_9699fb73faa36131 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_9699fb73faa36131 RC_a499b3c5a22c0c72 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_a499b3c5a22c0c72 RC_484e6245b21b383b · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_484e6245b21b383b RC_292eb2eeae01744c · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_292eb2eeae01744c
+  - article:
+    - strong: C006 · Zalo OA · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C006. Đang mở 68 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_721246413e1ac288 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_721246413e1ac288 RC_9699fb73faa36131 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_9699fb73faa36131 RC_a499b3c5a22c0c72 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_a499b3c5a22c0c72 RC_484e6245b21b383b · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_484e6245b21b383b RC_292eb2eeae01744c · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_292eb2eeae01744c
+  - article:
+    - strong: C002 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C002. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_5eb1f662cdbd2265 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_5eb1f662cdbd2265
+  - article:
+    - strong: C001 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C001. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_da5b5ddd4b87845f · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_da5b5ddd4b87845f
+  - article:
+    - strong: C001 · Email · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C001. Đang mở 58 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_b8e286f40dab8fba · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_b8e286f40dab8fba RC_da5b5ddd4b87845f · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_da5b5ddd4b87845f RC_e5b7f65ead1dc668 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_e5b7f65ead1dc668 RC_6e136bed8bb5e90d · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_6e136bed8bb5e90d RC_707ec9d49589630f · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_707ec9d49589630f
+  - article:
+    - strong: C001 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C001. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_b8e286f40dab8fba · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_b8e286f40dab8fba
+  - article:
+    - strong: C008 · Email · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C008. Đang mở 55 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_d186e9c9a994bb1f · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_d186e9c9a994bb1f RC_0e823c3a6787362d · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_0e823c3a6787362d RC_963dc712d016c11d · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_963dc712d016c11d RC_af2286f74a09c827 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_af2286f74a09c827 RC_effc4dad4c8c0346 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_effc4dad4c8c0346
+  - article:
+    - strong: C005 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C005. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_c86f4cb15b6c0501 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_c86f4cb15b6c0501
+  - article:
+    - strong: C004 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C004. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_44efef175ded587b · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_44efef175ded587b
+  - article:
+    - strong: C003 · Email · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C003. Đang mở 111 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_4fa2eaa50c0d41d5 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_4fa2eaa50c0d41d5 RC_e252d67947aa0dc2 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_e252d67947aa0dc2 RC_18adf5be97ee0e84 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_18adf5be97ee0e84 RC_846bcb2bbdd300d2 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_846bcb2bbdd300d2 RC_48a3d1db0e333f09 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_48a3d1db0e333f09
+  - article:
+    - strong: C008 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C008. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_0e823c3a6787362d · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_0e823c3a6787362d
+  - article:
+    - strong: C005 · Zalo OA · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C005. Đang mở 68 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_237c8841f1ec138c · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_237c8841f1ec138c RC_c86f4cb15b6c0501 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_c86f4cb15b6c0501 RC_f618bdd832936413 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_f618bdd832936413 RC_aacea6557511b66e · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_aacea6557511b66e RC_f1690f64c207e6a7 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_f1690f64c207e6a7
+  - article:
+    - strong: C005 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C005. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_c86f4cb15b6c0501 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_c86f4cb15b6c0501
+  - article:
+    - strong: C002 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C002. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_5eb1f662cdbd2265 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_5eb1f662cdbd2265
+  - article:
+    - strong: C008 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C008. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_0e823c3a6787362d · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_0e823c3a6787362d
+  - article:
+    - strong: C003 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C003. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_e252d67947aa0dc2 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_e252d67947aa0dc2
+  - article:
+    - strong: C002 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C002. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_64ae6616f8b879e7 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_64ae6616f8b879e7
+  - article:
+    - strong: C005 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C005. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_237c8841f1ec138c · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_237c8841f1ec138c
+  - article:
+    - strong: C001 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C001. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_da5b5ddd4b87845f · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_da5b5ddd4b87845f
+  - article:
+    - strong: C006 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C006. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_721246413e1ac288 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_721246413e1ac288
+  - article:
+    - strong: C005 · Email · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C005. Đang mở 68 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_237c8841f1ec138c · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_237c8841f1ec138c RC_c86f4cb15b6c0501 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_c86f4cb15b6c0501 RC_f618bdd832936413 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_f618bdd832936413 RC_aacea6557511b66e · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_aacea6557511b66e RC_f1690f64c207e6a7 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_f1690f64c207e6a7
+  - article:
+    - strong: C004 · Email · Tóm tắt tuần
+    - generic: Đã giả lập
+    - generic: Công ty C004. Đang mở 64 hồ sơ; dưới đây là các hồ sơ trong ngân sách ngày. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_fd3b5774a2d5f1fa · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_fd3b5774a2d5f1fa RC_44efef175ded587b · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_44efef175ded587b RC_d3782da51933cac4 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_d3782da51933cac4 RC_c194e2e4a4ed86c5 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_c194e2e4a4ed86c5 RC_acf16fdb1cd4f0a6 · thông thường · http://127.0.0.1:8765/#scenario=001&case=RC_acf16fdb1cd4f0a6
+  - article:
+    - strong: C007 · Email · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C007. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_b417450696430bfa · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_b417450696430bfa
+  - article:
+    - strong: C006 · Zalo OA · Ưu tiên cao
+    - generic: Đã giả lập
+    - generic: Công ty C006. Có hồ sơ cần đối chiếu sớm. Dấu hiệu cần rà soát, chưa phải kết luận gian lận. RC_9699fb73faa36131 · cao nhất · http://127.0.0.1:8765/#scenario=001&case=RC_9699fb73faa36131

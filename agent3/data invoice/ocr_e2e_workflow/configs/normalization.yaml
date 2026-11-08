@@ -1,0 +1,8 @@
+unicode_form: NFC
+strip: true
+collapse_whitespace: true
+casefold: false
+normalize_smart_quotes: true
+normalize_dashes: true
+remove_diacritics_for_diagnostic_only: true
+

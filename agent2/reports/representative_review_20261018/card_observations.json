@@ -1,0 +1,72 @@
+[
+  {
+    "review_id": "A5_001_TX_3103d5f23fde8b1a6f",
+    "rule": "A5",
+    "rendered": true,
+    "known_fields": [],
+    "text": " A5 Số tiền tròn lệch baseline lịch sử +3 điểm Số tiền đo 102.187.000 ₫ Ngưỡng tại thời điểm ghi sổ 69.986.200 ₫ Lịch sử 44 / tối thiểu 20 mẫu trong 90 ngày Phạm vi C003 · TK 331 · cash_outflow · payables Phương pháp p99 Chu kỳ Toàn bộ ngày (chưa dùng ngưỡng chu kỳ riêng) Chỉ dùng lịch sử đã biết trước giao dịch. A5 là tín hiệu ngữ cảnh, cần bằng chứng độc lập. 13:13 09/04/2025 · TX_3103d5f23fde8b1a6f "
+  },
+  {
+    "review_id": "A5_001_TX_3103d5f23fde8b1a6f",
+    "rule": "C1",
+    "rendered": true,
+    "known_fields": [
+      "created_at",
+      "approved_at",
+      "saturday_operations"
+    ],
+    "text": " C1 Lập hoặc duyệt ngoài lịch vận hành +1 điểm Thời điểm lập 06:03 09/04/2025 Thời điểm duyệt 13:13 09/04/2025 Có vận hành thứ Bảy 0 13:13 09/04/2025 · TX_3103d5f23fde8b1a6f "
+  },
+  {
+    "review_id": "A5_001_TX_3103d5f23fde8b1a6f",
+    "rule": "C4",
+    "rendered": true,
+    "known_fields": [],
+    "text": " C4 Thao tác trong kỳ nghỉ phép chính thức +8 điểm 13:13 09/04/2025 · TX_3103d5f23fde8b1a6f "
+  },
+  {
+    "review_id": "A5_001_TX_ac2d5e5d289dc9227b",
+    "rule": "A5",
+    "rendered": true,
+    "known_fields": [],
+    "text": " A5 Số tiền tròn lệch baseline lịch sử +3 điểm Số tiền đo 56.693.000 ₫ Ngưỡng tại thời điểm ghi sổ 18.709.908 ₫ Lịch sử 52 / tối thiểu 20 mẫu trong 90 ngày Phạm vi C008 · TK 6422 · expense_debit · general_expense Phương pháp p99 Chu kỳ Toàn bộ ngày (chưa dùng ngưỡng chu kỳ riêng) Chỉ dùng lịch sử đã biết trước giao dịch. A5 là tín hiệu ngữ cảnh, cần bằng chứng độc lập. 10:06 28/08/2025 · TX_ac2d5e5d289dc9227b "
+  },
+  {
+    "review_id": "A5_001_TX_ac2d5e5d289dc9227b",
+    "rule": "F1",
+    "rendered": true,
+    "known_fields": [
+      "materiality_vnd",
+      "days_before_close",
+      "amount_vnd"
+    ],
+    "text": " F1 Điều chỉnh thủ công sát khóa sổ và trọng yếu +8 điểm Mức trọng yếu 17.238.000 ₫ Ngày trước khóa sổ 3.6382 Giá trị nghiệp vụ 56.693.000 ₫ 10:06 28/08/2025 · TX_ac2d5e5d289dc9227b "
+  },
+  {
+    "review_id": "A5_001_cold_operational",
+    "rule": "C4",
+    "rendered": true,
+    "known_fields": [],
+    "text": " C4 Thao tác trong kỳ nghỉ phép chính thức +8 điểm 15:34 20/08/2025 · TX_211bf3453a6679bad2 "
+  },
+  {
+    "review_id": "A5_003_TX_60bac87c93f578f6c3",
+    "rule": "A5",
+    "rendered": true,
+    "known_fields": [],
+    "text": " A5 Số tiền tròn lệch baseline lịch sử +3 điểm Số tiền đo 31.815.000 ₫ Ngưỡng tại thời điểm ghi sổ 30.625.000 ₫ Lịch sử 168 / tối thiểu 20 mẫu trong 90 ngày Phạm vi C002 · TK 334 · cash_outflow · payroll Phương pháp p99 Chu kỳ Toàn bộ ngày (chưa dùng ngưỡng chu kỳ riêng) Chỉ dùng lịch sử đã biết trước giao dịch. A5 là tín hiệu ngữ cảnh, cần bằng chứng độc lập. 15:56 16/10/2025 · TX_60bac87c93f578f6c3 "
+  },
+  {
+    "review_id": "A5_003_TX_60bac87c93f578f6c3",
+    "rule": "E2",
+    "rendered": true,
+    "known_fields": [],
+    "text": " E2 Lương sau chấm dứt hợp đồng +20 điểm 15:56 16/10/2025 · TX_60bac87c93f578f6c3 "
+  },
+  {
+    "review_id": "A5_003_cold_operational",
+    "rule": "A4",
+    "rendered": false,
+    "error": "Cannot convert undefined or null to object"
+  }
+]

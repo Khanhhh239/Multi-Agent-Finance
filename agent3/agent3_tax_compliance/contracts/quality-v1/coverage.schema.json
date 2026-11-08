@@ -1,0 +1,53 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "expected": {
+      "minimum": 0,
+      "title": "Expected",
+      "type": "integer"
+    },
+    "denominator": {
+      "minimum": 0,
+      "title": "Denominator",
+      "type": "integer"
+    },
+    "present": {
+      "minimum": 0,
+      "title": "Present",
+      "type": "integer"
+    },
+    "excluded_not_applicable": {
+      "minimum": 0,
+      "title": "Excluded Not Applicable",
+      "type": "integer"
+    },
+    "excluded_not_provided": {
+      "minimum": 0,
+      "title": "Excluded Not Provided",
+      "type": "integer"
+    },
+    "ratio": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Ratio"
+    }
+  },
+  "required": [
+    "expected",
+    "denominator",
+    "present",
+    "excluded_not_applicable",
+    "excluded_not_provided",
+    "ratio"
+  ],
+  "title": "Coverage",
+  "type": "object"
+}

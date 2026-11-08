@@ -1,0 +1,3522 @@
+[
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_1_cases_45_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_train_calendar_days_research_1_cases_45_minutes.jsonl",
+    "budget_per_company_day": 1,
+    "capacity_minutes_per_company_day": 45,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 193,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_3_cases_135_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_train_calendar_days_research_3_cases_135_minutes.jsonl",
+    "budget_per_company_day": 3,
+    "capacity_minutes_per_company_day": 135,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 2,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_5_cases_225_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_train_calendar_days_research_5_cases_225_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 225,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 0,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "ui_5_cases_120_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "before_split_admission_train_calendar_days_ui_5_cases_120_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 120,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 0,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "ui_10_cases_240_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "before_split_admission_train_calendar_days_ui_10_cases_240_minutes.jsonl",
+    "budget_per_company_day": 10,
+    "capacity_minutes_per_company_day": 240,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 0,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_1_cases_45_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_train_weekdays_mon_fri_research_1_cases_45_minutes.jsonl",
+    "budget_per_company_day": 1,
+    "capacity_minutes_per_company_day": 45,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 8,
+    "peak_backlog_work_items": 8,
+    "peak_backlog_minutes": 160,
+    "carryover_work_items": 400,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_3_cases_135_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_train_weekdays_mon_fri_research_3_cases_135_minutes.jsonl",
+    "budget_per_company_day": 3,
+    "capacity_minutes_per_company_day": 135,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 171,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_5_cases_225_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_train_weekdays_mon_fri_research_5_cases_225_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 225,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 167,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "ui_5_cases_120_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "before_split_admission_train_weekdays_mon_fri_ui_5_cases_120_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 120,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 167,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "ui_10_cases_240_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "before_split_admission_train_weekdays_mon_fri_ui_10_cases_240_minutes.jsonl",
+    "budget_per_company_day": 10,
+    "capacity_minutes_per_company_day": 240,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 772,
+    "transaction_cases": 772,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 772,
+    "total_demand_work_items": 772,
+    "total_demand_minutes": 16425,
+    "admitted_cases": 772,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 90,
+    "carryover_work_items": 167,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 772,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_1_cases_45_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_validation_calendar_days_research_1_cases_45_minutes.jsonl",
+    "budget_per_company_day": 1,
+    "capacity_minutes_per_company_day": 45,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 140,
+    "carryover_work_items": 76,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_3_cases_135_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_validation_calendar_days_research_3_cases_135_minutes.jsonl",
+    "budget_per_company_day": 3,
+    "capacity_minutes_per_company_day": 135,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 5,
+    "peak_backlog_work_items": 5,
+    "peak_backlog_minutes": 100,
+    "carryover_work_items": 2,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_5_cases_225_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_validation_calendar_days_research_5_cases_225_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 225,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 80,
+    "carryover_work_items": 0,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "ui_5_cases_120_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "before_split_admission_validation_calendar_days_ui_5_cases_120_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 120,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 80,
+    "carryover_work_items": 0,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "ui_10_cases_240_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "before_split_admission_validation_calendar_days_ui_10_cases_240_minutes.jsonl",
+    "budget_per_company_day": 10,
+    "capacity_minutes_per_company_day": 240,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 80,
+    "carryover_work_items": 0,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_1_cases_45_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_validation_weekdays_mon_fri_research_1_cases_45_minutes.jsonl",
+    "budget_per_company_day": 1,
+    "capacity_minutes_per_company_day": 45,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 140,
+    "carryover_work_items": 181,
+    "backlog_at_period_end_work_items": 3,
+    "backlog_at_period_end_minutes": 65,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 2,
+        "minutes": 45,
+        "drain_completion_date": "2025-07-02",
+        "drain_calendar_days": 2
+      },
+      {
+        "company_id": "C002",
+        "work_items": 1,
+        "minutes": 20,
+        "drain_completion_date": "2025-07-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 371,
+    "reviewed_after_period": 3,
+    "drain_completion_date": "2025-07-02",
+    "drain_calendar_days": 2,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_3_cases_135_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_validation_weekdays_mon_fri_research_3_cases_135_minutes.jsonl",
+    "budget_per_company_day": 3,
+    "capacity_minutes_per_company_day": 135,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 5,
+    "peak_backlog_work_items": 5,
+    "peak_backlog_minutes": 100,
+    "carryover_work_items": 87,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_5_cases_225_minutes",
+    "profile_kind": "research",
+    "admissions_file": "before_split_admission_validation_weekdays_mon_fri_research_5_cases_225_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 225,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 80,
+    "carryover_work_items": 85,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "ui_5_cases_120_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "before_split_admission_validation_weekdays_mon_fri_ui_5_cases_120_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 120,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 80,
+    "carryover_work_items": 85,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "before_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "ui_10_cases_240_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "before_split_admission_validation_weekdays_mon_fri_ui_10_cases_240_minutes.jsonl",
+    "budget_per_company_day": 10,
+    "capacity_minutes_per_company_day": 240,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 374,
+    "transaction_cases": 374,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 374,
+    "total_demand_work_items": 374,
+    "total_demand_minutes": 7945,
+    "admitted_cases": 374,
+    "backlog_cases": 4,
+    "peak_backlog_work_items": 4,
+    "peak_backlog_minutes": 80,
+    "carryover_work_items": 85,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 374,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_1_cases_45_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_train_calendar_days_research_1_cases_45_minutes.jsonl",
+    "budget_per_company_day": 1,
+    "capacity_minutes_per_company_day": 45,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 13,
+    "peak_backlog_work_items": 13,
+    "peak_backlog_minutes": 295,
+    "carryover_work_items": 551,
+    "backlog_at_period_end_work_items": 5,
+    "backlog_at_period_end_minutes": 105,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 2,
+        "minutes": 40,
+        "drain_completion_date": "2025-01-02",
+        "drain_calendar_days": 2
+      },
+      {
+        "company_id": "C002",
+        "work_items": 1,
+        "minutes": 20,
+        "drain_completion_date": "2025-01-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 2,
+        "minutes": 45,
+        "drain_completion_date": "2025-01-02",
+        "drain_calendar_days": 2
+      }
+    ],
+    "reviewed_within_period": 1239,
+    "reviewed_after_period": 5,
+    "drain_completion_date": "2025-01-02",
+    "drain_calendar_days": 2,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_3_cases_135_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_train_calendar_days_research_3_cases_135_minutes.jsonl",
+    "budget_per_company_day": 3,
+    "capacity_minutes_per_company_day": 135,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 165,
+    "carryover_work_items": 61,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 1244,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_5_cases_225_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_train_calendar_days_research_5_cases_225_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 225,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 165,
+    "carryover_work_items": 7,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 1244,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "ui_5_cases_120_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "after_split_admission_train_calendar_days_ui_5_cases_120_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 120,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 165,
+    "carryover_work_items": 7,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 1244,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "ui_10_cases_240_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "after_split_admission_train_calendar_days_ui_10_cases_240_minutes.jsonl",
+    "budget_per_company_day": 10,
+    "capacity_minutes_per_company_day": 240,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 165,
+    "carryover_work_items": 0,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 1244,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_1_cases_45_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_train_weekdays_mon_fri_research_1_cases_45_minutes.jsonl",
+    "budget_per_company_day": 1,
+    "capacity_minutes_per_company_day": 45,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 34,
+    "peak_backlog_work_items": 34,
+    "peak_backlog_minutes": 715,
+    "carryover_work_items": 837,
+    "backlog_at_period_end_work_items": 47,
+    "backlog_at_period_end_minutes": 995,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 22,
+        "minutes": 465,
+        "drain_completion_date": "2025-01-30",
+        "drain_calendar_days": 30
+      },
+      {
+        "company_id": "C002",
+        "work_items": 20,
+        "minutes": 425,
+        "drain_completion_date": "2025-01-28",
+        "drain_calendar_days": 28
+      },
+      {
+        "company_id": "C003",
+        "work_items": 1,
+        "minutes": 20,
+        "drain_completion_date": "2025-01-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C004",
+        "work_items": 1,
+        "minutes": 20,
+        "drain_completion_date": "2025-01-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C005",
+        "work_items": 3,
+        "minutes": 65,
+        "drain_completion_date": "2025-01-03",
+        "drain_calendar_days": 3
+      }
+    ],
+    "reviewed_within_period": 1197,
+    "reviewed_after_period": 47,
+    "drain_completion_date": "2025-01-30",
+    "drain_calendar_days": 30,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_3_cases_135_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_train_weekdays_mon_fri_research_3_cases_135_minutes.jsonl",
+    "budget_per_company_day": 3,
+    "capacity_minutes_per_company_day": 135,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 9,
+    "peak_backlog_work_items": 9,
+    "peak_backlog_minutes": 205,
+    "carryover_work_items": 346,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 1244,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_5_cases_225_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_train_weekdays_mon_fri_research_5_cases_225_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 225,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 9,
+    "peak_backlog_work_items": 9,
+    "peak_backlog_minutes": 205,
+    "carryover_work_items": 286,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 1244,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "ui_5_cases_120_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "after_split_admission_train_weekdays_mon_fri_ui_5_cases_120_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 120,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 9,
+    "peak_backlog_work_items": 9,
+    "peak_backlog_minutes": 205,
+    "carryover_work_items": 286,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 1244,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "train",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "ui_10_cases_240_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "after_split_admission_train_weekdays_mon_fri_ui_10_cases_240_minutes.jsonl",
+    "budget_per_company_day": 10,
+    "capacity_minutes_per_company_day": 240,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2024-12-31",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 1244,
+    "transaction_cases": 1244,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 1244,
+    "total_demand_work_items": 1244,
+    "total_demand_minutes": 27175,
+    "admitted_cases": 1244,
+    "backlog_cases": 9,
+    "peak_backlog_work_items": 9,
+    "peak_backlog_minutes": 205,
+    "carryover_work_items": 274,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2024-12-31",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 1244,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2024-12-31",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_1_cases_45_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_validation_calendar_days_research_1_cases_45_minutes.jsonl",
+    "budget_per_company_day": 1,
+    "capacity_minutes_per_company_day": 45,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 10,
+    "peak_backlog_work_items": 10,
+    "peak_backlog_minutes": 225,
+    "carryover_work_items": 246,
+    "backlog_at_period_end_work_items": 9,
+    "backlog_at_period_end_minutes": 185,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 4,
+        "minutes": 80,
+        "drain_completion_date": "2025-07-04",
+        "drain_calendar_days": 4
+      },
+      {
+        "company_id": "C002",
+        "work_items": 2,
+        "minutes": 40,
+        "drain_completion_date": "2025-07-02",
+        "drain_calendar_days": 2
+      },
+      {
+        "company_id": "C003",
+        "work_items": 1,
+        "minutes": 20,
+        "drain_completion_date": "2025-07-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C004",
+        "work_items": 2,
+        "minutes": 45,
+        "drain_completion_date": "2025-07-02",
+        "drain_calendar_days": 2
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 599,
+    "reviewed_after_period": 9,
+    "drain_completion_date": "2025-07-04",
+    "drain_calendar_days": 4,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_3_cases_135_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_validation_calendar_days_research_3_cases_135_minutes.jsonl",
+    "budget_per_company_day": 3,
+    "capacity_minutes_per_company_day": 135,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 160,
+    "carryover_work_items": 42,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 608,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "research_5_cases_225_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_validation_calendar_days_research_5_cases_225_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 225,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 160,
+    "carryover_work_items": 7,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 608,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "ui_5_cases_120_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "after_split_admission_validation_calendar_days_ui_5_cases_120_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 120,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 160,
+    "carryover_work_items": 7,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 608,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "calendar_days",
+    "capacity_profile": "ui_10_cases_240_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "after_split_admission_validation_calendar_days_ui_10_cases_240_minutes.jsonl",
+    "budget_per_company_day": 10,
+    "capacity_minutes_per_company_day": 240,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 7,
+    "peak_backlog_work_items": 7,
+    "peak_backlog_minutes": 160,
+    "carryover_work_items": 0,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 608,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_1_cases_45_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_validation_weekdays_mon_fri_research_1_cases_45_minutes.jsonl",
+    "budget_per_company_day": 1,
+    "capacity_minutes_per_company_day": 45,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 22,
+    "peak_backlog_work_items": 22,
+    "peak_backlog_minutes": 475,
+    "carryover_work_items": 392,
+    "backlog_at_period_end_work_items": 55,
+    "backlog_at_period_end_minutes": 1145,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 12,
+        "minutes": 245,
+        "drain_completion_date": "2025-07-16",
+        "drain_calendar_days": 16
+      },
+      {
+        "company_id": "C002",
+        "work_items": 13,
+        "minutes": 260,
+        "drain_completion_date": "2025-07-17",
+        "drain_calendar_days": 17
+      },
+      {
+        "company_id": "C003",
+        "work_items": 3,
+        "minutes": 60,
+        "drain_completion_date": "2025-07-03",
+        "drain_calendar_days": 3
+      },
+      {
+        "company_id": "C004",
+        "work_items": 8,
+        "minutes": 165,
+        "drain_completion_date": "2025-07-10",
+        "drain_calendar_days": 10
+      },
+      {
+        "company_id": "C005",
+        "work_items": 19,
+        "minutes": 415,
+        "drain_completion_date": "2025-07-25",
+        "drain_calendar_days": 25
+      }
+    ],
+    "reviewed_within_period": 553,
+    "reviewed_after_period": 55,
+    "drain_completion_date": "2025-07-25",
+    "drain_calendar_days": 25,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_3_cases_135_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_validation_weekdays_mon_fri_research_3_cases_135_minutes.jsonl",
+    "budget_per_company_day": 3,
+    "capacity_minutes_per_company_day": 135,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 8,
+    "peak_backlog_work_items": 8,
+    "peak_backlog_minutes": 175,
+    "carryover_work_items": 166,
+    "backlog_at_period_end_work_items": 9,
+    "backlog_at_period_end_minutes": 185,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 4,
+        "minutes": 80,
+        "drain_completion_date": "2025-07-02",
+        "drain_calendar_days": 2
+      },
+      {
+        "company_id": "C002",
+        "work_items": 2,
+        "minutes": 40,
+        "drain_completion_date": "2025-07-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C003",
+        "work_items": 1,
+        "minutes": 20,
+        "drain_completion_date": "2025-07-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C004",
+        "work_items": 2,
+        "minutes": 45,
+        "drain_completion_date": "2025-07-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 599,
+    "reviewed_after_period": 9,
+    "drain_completion_date": "2025-07-02",
+    "drain_calendar_days": 2,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "research_5_cases_225_minutes",
+    "profile_kind": "research",
+    "admissions_file": "after_split_admission_validation_weekdays_mon_fri_research_5_cases_225_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 225,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 8,
+    "peak_backlog_work_items": 8,
+    "peak_backlog_minutes": 175,
+    "carryover_work_items": 124,
+    "backlog_at_period_end_work_items": 2,
+    "backlog_at_period_end_minutes": 40,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 2,
+        "minutes": 40,
+        "drain_completion_date": "2025-07-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 606,
+    "reviewed_after_period": 2,
+    "drain_completion_date": "2025-07-01",
+    "drain_calendar_days": 1,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "ui_5_cases_120_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "after_split_admission_validation_weekdays_mon_fri_ui_5_cases_120_minutes.jsonl",
+    "budget_per_company_day": 5,
+    "capacity_minutes_per_company_day": 120,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 8,
+    "peak_backlog_work_items": 8,
+    "peak_backlog_minutes": 175,
+    "carryover_work_items": 124,
+    "backlog_at_period_end_work_items": 2,
+    "backlog_at_period_end_minutes": 40,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 2,
+        "minutes": 40,
+        "drain_completion_date": "2025-07-01",
+        "drain_calendar_days": 1
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 606,
+    "reviewed_after_period": 2,
+    "drain_completion_date": "2025-07-01",
+    "drain_calendar_days": 1,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  },
+  {
+    "snapshot": "after_split_admission",
+    "period": "validation",
+    "calendar_name": "weekdays_mon_fri",
+    "capacity_profile": "ui_10_cases_240_minutes",
+    "profile_kind": "ui",
+    "admissions_file": "after_split_admission_validation_weekdays_mon_fri_ui_10_cases_240_minutes.jsonl",
+    "budget_per_company_day": 10,
+    "capacity_minutes_per_company_day": 240,
+    "capacity_contract": "review-capacity-v1",
+    "review_calendar": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    },
+    "diagnostic_labels_provided": false,
+    "period_end": "2025-06-30",
+    "unit": "review_work_items_with_carryover",
+    "total_cases": 608,
+    "transaction_cases": 608,
+    "source_cases": 0,
+    "excluded_cases_after_period": 0,
+    "excluded_rereviews_after_period": 0,
+    "rereview_work_items": 0,
+    "total_work_items": 608,
+    "total_demand_work_items": 608,
+    "total_demand_minutes": 13310,
+    "admitted_cases": 608,
+    "backlog_cases": 8,
+    "peak_backlog_work_items": 8,
+    "peak_backlog_minutes": 175,
+    "carryover_work_items": 114,
+    "backlog_at_period_end_work_items": 0,
+    "backlog_at_period_end_minutes": 0,
+    "period_end_by_company": [
+      {
+        "company_id": "C001",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C002",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C003",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C004",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      },
+      {
+        "company_id": "C005",
+        "work_items": 0,
+        "minutes": 0,
+        "drain_completion_date": "2025-06-30",
+        "drain_calendar_days": 0
+      }
+    ],
+    "reviewed_within_period": 608,
+    "reviewed_after_period": 0,
+    "drain_completion_date": "2025-06-30",
+    "drain_calendar_days": 0,
+    "drain_limit_reached": false,
+    "unschedulable_work_items": [],
+    "backlog_end_work_items": 0,
+    "useful_cases": 0,
+    "precision": null,
+    "policy": "Opening rank and final-snapshot effort; explicit slot/minute limits and local work calendar; period-end backlog is distinct from subsequent drain. Oversized work is not split automatically."
+  }
+]

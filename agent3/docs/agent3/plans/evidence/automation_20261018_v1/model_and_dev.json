@@ -1,0 +1,280 @@
+{
+  "real_model": {
+    "mode": "NATURAL_DRAFT",
+    "elapsed_seconds": 152.657,
+    "compact_bytes": 1745,
+    "paragraphs": 3,
+    "mechanical_checks": "PASS",
+    "semantic_review_required": true,
+    "legal_accuracy": "NOT_EVALUATED"
+  },
+  "dev_replay": {
+    "checked_on": "2026-10-18",
+    "scope": "Read-only cached OCR dev replay; no runtime OCR, independent labels or holdout accuracy.",
+    "extractor_sha256": "ea1aaed8a931b672f52900c474defc26886b165dd06a5ddaddb53cccfddb14f6",
+    "cases": [
+      {
+        "case_id": "dev-01",
+        "input_sha256": "6145352fe5c7a96c320cb7b86027db03dafaa78375188a32cc371bf80187f62d",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 0,
+        "after_items": 1,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "AMBIGUOUS_FIELD",
+          "TABLE_NOT_DISCOVERED",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "AMBIGUOUS_FIELD",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "b21ea922614d761b1b852ca627a5f933a9754431185df7265d666cbb87f1393b",
+        "item_evidence_present": true
+      },
+      {
+        "case_id": "dev-02",
+        "input_sha256": "91fa147734842b0e7e1316edea7928e89b212bc5274954de621463905f876347",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 2,
+        "after_items": 2,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "b21ea922614d761b1b852ca627a5f933a9754431185df7265d666cbb87f1393b",
+        "item_evidence_present": true
+      },
+      {
+        "case_id": "dev-03",
+        "input_sha256": "97f444dae9a64dc288f92255bd6d8682045b60ad218d725ff897744c82c03cbb",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 1,
+        "after_items": 1,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "HYBRID_TABLE_REVIEW",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "HYBRID_TABLE_REVIEW",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "b21ea922614d761b1b852ca627a5f933a9754431185df7265d666cbb87f1393b",
+        "item_evidence_present": true
+      },
+      {
+        "case_id": "dev-04",
+        "input_sha256": "43a0cd8fcf21e681b3c7dea5a6492dfcbc4085614a684a2a2d947e2f1ed2f91c",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 2,
+        "after_items": 2,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "b21ea922614d761b1b852ca627a5f933a9754431185df7265d666cbb87f1393b",
+        "item_evidence_present": true
+      },
+      {
+        "case_id": "dev-05",
+        "input_sha256": "0ac672e07fb93d246bc387e55eab15b68f33b34d013b43ac3076f7748b9cb87e",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 1,
+        "after_items": 1,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "UNPARSEABLE_FIELD",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "UNPARSEABLE_FIELD",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "6c34220266ecb934e09a80dd05010c357933111f2e062f8a693a7a86b6515368",
+        "item_evidence_present": true
+      },
+      {
+        "case_id": "dev-06",
+        "input_sha256": "43a0cd8fcf21e681b3c7dea5a6492dfcbc4085614a684a2a2d947e2f1ed2f91c",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 2,
+        "after_items": 2,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "6c34220266ecb934e09a80dd05010c357933111f2e062f8a693a7a86b6515368",
+        "item_evidence_present": true
+      },
+      {
+        "case_id": "dev-07",
+        "input_sha256": "01a244e61fe41444d916f5ebca314e444fd12c0e10d7688a9bbb79303655b39a",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 0,
+        "after_items": 1,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "TABLE_NOT_DISCOVERED",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "HYBRID_TABLE_REVIEW",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "9d742525e07fdac5bfd11e0866f5738f389bb91bca40b01c2f533e7c5ac8f4ba",
+        "item_evidence_present": true
+      },
+      {
+        "case_id": "dev-08",
+        "input_sha256": "01a244e61fe41444d916f5ebca314e444fd12c0e10d7688a9bbb79303655b39a",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 0,
+        "after_items": 1,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "TABLE_NOT_DISCOVERED",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "HYBRID_TABLE_REVIEW",
+          "AMBIGUOUS_FIELD",
+          "AMBIGUOUS_FIELD",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+        "item_evidence_present": true
+      },
+      {
+        "case_id": "dev-09",
+        "input_sha256": "2176aee05d0a407e0736ce628cd8fddba63025a26d83cd036d73dbc81e7818eb",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 1,
+        "after_items": 1,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "UNPARSEABLE_FIELD",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "UNPARSEABLE_FIELD",
+          "UNPARSEABLE_FIELD",
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+        "item_evidence_present": false
+      },
+      {
+        "case_id": "dev-10",
+        "input_sha256": "4567b56403e37f389e1ebe5985dfab92186c8384b5018f8dde74d7ef600b51fe",
+        "label_status": "NOT_ANNOTATED",
+        "split": "DEV_ALREADY_USED_FOR_FIXES",
+        "before_items": 1,
+        "after_items": 1,
+        "item_status": "UNKNOWN",
+        "before_issues": [
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "after_issues": [
+          "ITEM_DISCOVERY_UNKNOWN",
+          "UNKNOWN_DIRECTION"
+        ],
+        "old_extractor_sha256": "6d74def93595a8ccf89713f52918ecdf628158e4d98d3fdaae3b3f1549191674",
+        "item_evidence_present": true
+      }
+    ],
+    "auto_accept": "DISABLED"
+  },
+  "independent_holdout": "PENDING",
+  "automatic_acceptance": "DISABLED",
+  "rule_approval": "PENDING"
+}

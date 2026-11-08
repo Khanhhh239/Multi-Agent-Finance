@@ -1,0 +1,32 @@
+{
+  "status": "coverage_explained_without_rescoring",
+  "date": "2026-10-22",
+  "tests": {
+    "successful": true,
+    "tests_run": 62,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_if_coverage.py",
+      "test_compare_shadow.py",
+      "test_model_windows.py",
+      "test_shadow_scoring.py"
+    ],
+    "seconds": 3.313
+  },
+  "protected_files": 1424,
+  "protected_files_unchanged": true,
+  "models_fitted": 0,
+  "observations_scored": 0,
+  "training_or_calibration_scored": false,
+  "labels_or_oracle_loaded": false,
+  "holdout_005_access": "opaque_hash_only_during_preservation_checks",
+  "queue_changed": false,
+  "reviewer_packet_changed": false,
+  "external_sends": 0,
+  "code_sha256": {
+    "sme_fraud/audit_if_coverage.py": "eeb48dbfa26e9ceb45fa2546d6f9bf330975c08936a187528f4515f6e51aaf7c",
+    "tests/test_if_coverage.py": "a22d3da5f6ac017ddbb5cfbb58d241a10b923a03ed074ffb60fed13d7aa3e8f4"
+  }
+}

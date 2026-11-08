@@ -1,0 +1,21 @@
+{
+  ".runtime/b2_company_transfer_fix_20261024/check_graph_transfer.py": "3d478e2c04535ca88008ce9f0061a324cacd290a0eaed1e15f2ef514beaa3041",
+  ".runtime/b2_company_transfer_fix_20261024/finalize.py": "8aa9f9b727e62408b4de61e3cf9689ce4e02e2aa9b2ce3b2bf105c0ed1c73de4",
+  ".runtime/b2_company_transfer_fix_20261024/prove_fix.py": "987552956f4a05c02e9ef390da3e174ac0a07a45c5452d847e47802f464e01ef",
+  ".runtime/b2_company_transfer_fix_20261024/verify.py": "1b82fb6a5a63bff5e6e43e3d129484d84314779c2691efa6d01e0eac0907b1f7",
+  "reports/b2_company_transfer_fix_20261024/before.json": "309b7a94125597890c2debcb53050cd340c5aeadb9e0b067ab9968861160f7cd",
+  "reports/b2_company_transfer_fix_20261024/final_fix.json": "5377282390fc4765a7e757e95bdc68e0b3d8987e94e59205574493e8963370f1",
+  "reports/b2_company_transfer_fix_20261024/final_fix.log": "475d7cc3d741ea15e8d176e4c0c6c7caf4a7cdafe2c7380a20d918fadad2f495",
+  "reports/b2_company_transfer_fix_20261024/graph_bridge_after.json": "124323e58aeaf091e14f65cdf37c52b8c14064f7decf9a1967901a0aa51a22d7",
+  "reports/b2_company_transfer_fix_20261024/graph_bridge_before.json": "32ace8603e8cf37c010ba69083f8f403c2f6c7c1e154eb2a65f5a9a0d13d9574",
+  "reports/b2_company_transfer_fix_20261024/graph_pre_fix.json": "b8bd4f0293edc3a961c52dfdd38846b934e16241f65914e82e5e0fab9a452520",
+  "reports/b2_company_transfer_fix_20261024/graph_pre_fix.log": "7efbfb756480945856e6ba18d8e9befc99bb58025b36b7358dbd7330dfb6b254",
+  "reports/b2_company_transfer_fix_20261024/post_fix.json": "3c05b076e99b311373aef9d5bb7dc5aba6fcfa6ba611cf317074f91fa1f2772d",
+  "reports/b2_company_transfer_fix_20261024/post_fix.log": "a88c7d9a36c316587250dc98182c2e96b5cac1a99fd3bb3350910183c49551b9",
+  "reports/b2_company_transfer_fix_20261024/pre_fix.json": "5b3834f0b67098830d1019fd59b4965875efb72678baf2cddb8fba475d015d7a",
+  "reports/b2_company_transfer_fix_20261024/pre_fix.log": "e559695bf2d03609905efb1768958ea4d75c0bec2162fdd3c9075bfef24fdb3e",
+  "reports/b2_company_transfer_fix_20261024/protected_inputs.json": "5f320a4820df88dec45c941d54e63601fe2bcb637995ffb0c431342ba4b4f6eb",
+  "reports/b2_company_transfer_fix_20261024/reproduction_after.json": "adad5a0bb1293b78512b40eb60ec1e75c6b504dded8c9410374838d6bfc139a9",
+  "reports/b2_company_transfer_fix_20261024/verification.json": "e16b8f97eae6e0385c038375e32836d5b41b439abdb1764a5e5f9cf9c22ea0c2",
+  "reports/b2_company_transfer_fix_20261024.md": "801715e5dfce06d4f022459b718935981cd75c3b7b4e5278be6865751d326c2b"
+}

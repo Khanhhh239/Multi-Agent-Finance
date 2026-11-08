@@ -1,0 +1,84 @@
+{
+  "checked_on": "2026-10-16",
+  "support_to_exclusive": "2026-10-17",
+  "support_policy": "Technical catalog freshness window through source-review date; not statutory expiry",
+  "legal_registry_version": "legal-registry-20261016-v2",
+  "ruleset_version": "technical-draft-ruleset-20261016-v2",
+  "package_version": "technical-draft-20261016-v2",
+  "taxonomy_version": "vat-taxonomy-draft-v2",
+  "corpus_version": "legal-excerpts-20261016-v2",
+  "corpus_sha256": "d18da96bef7f26ab18fa9c7a9f2780bab7cc574e8d40c192e7ec05cd2e689b46",
+  "coverage": [
+    {
+      "rule_id": "INV_CONTENT_001",
+      "version": "content-2022-v2",
+      "publication": "DRAFT",
+      "from_date": "2022-07-01",
+      "to_exclusive": "2025-06-01",
+      "missing_bases": []
+    },
+    {
+      "rule_id": "INV_CONTENT_001",
+      "version": "content-2025-v2",
+      "publication": "DRAFT",
+      "from_date": "2025-06-01",
+      "to_exclusive": "2026-07-01",
+      "missing_bases": []
+    },
+    {
+      "rule_id": "INV_CONTENT_001",
+      "version": "content-2026-v2",
+      "publication": "DRAFT",
+      "from_date": "2026-07-01",
+      "to_exclusive": "2026-10-17",
+      "missing_bases": []
+    },
+    {
+      "rule_id": "VAT_NON_CASH_PAYMENT_001",
+      "version": "payment-pre144-v2",
+      "publication": "DRAFT",
+      "from_date": "2025-07-01",
+      "to_exclusive": "2026-06-20",
+      "missing_bases": []
+    },
+    {
+      "rule_id": "VAT_NON_CASH_PAYMENT_001",
+      "version": "payment-post144-v2",
+      "publication": "DRAFT",
+      "from_date": "2026-06-20",
+      "to_exclusive": "2026-10-17",
+      "missing_bases": []
+    },
+    {
+      "rule_id": "VAT_RATE_001",
+      "version": "vat-2025-v2",
+      "publication": "DRAFT",
+      "from_date": "2025-07-01",
+      "to_exclusive": "2026-01-01",
+      "missing_bases": []
+    },
+    {
+      "rule_id": "VAT_RATE_001",
+      "version": "vat-2026-v2",
+      "publication": "DRAFT",
+      "from_date": "2026-01-01",
+      "to_exclusive": "2026-10-17",
+      "missing_bases": []
+    }
+  ],
+  "model_count": 7,
+  "indexed_annex_pages": 73,
+  "taxonomy_mapping_count": 0,
+  "source_review_not_legal_approval": true,
+  "archive_byte_pins": {
+    "legal_registry_v1.json": "f23134644191b1f31789744a014d41d9e70a2da21b624620b154ef25351cd68e",
+    "ruleset_v1.json": "9c5b7446f50207478ff12f144bd8fe3c415bbcb6bbd5ad104b19ac1d74ee48c6",
+    "taxonomy_v1.json": "8f8c91ffefedb5b24b56f01a543e1d93c2833880b4164d7aa5c92a5bd6b9488d",
+    "model_manifest_v1.json": "fcce8a877a942966e7cf6f5527fc1811c53193baec8ee276c983a41a6954cb9a"
+  },
+  "mvp_scope": {
+    "INVOICE_CONTENT": "Seller tax-ID presence check only, VAT backend-confirmed invoices; not all Article 10 content",
+    "PAYMENT_EVIDENCE": "STANDARD cases only; deferred/installment and other special cases remain outside execution MVP",
+    "VAT_RATE": "DEDUCTION method, TAXABLE_RATE, independently classified REDUCTION_CANDIDATE only; not a general rate checker"
+  }
+}

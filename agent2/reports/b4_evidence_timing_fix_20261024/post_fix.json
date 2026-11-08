@@ -1,0 +1,74 @@
+{
+  "stage": "post_fix",
+  "modules": [
+    {
+      "module": "test_b4_evidence_timing",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.219,
+      "details": []
+    },
+    {
+      "module": "test_tax_risk",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.218,
+      "details": []
+    },
+    {
+      "module": "test_rule_repairs",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 6.188,
+      "details": []
+    },
+    {
+      "module": "test_noise_policy",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.969,
+      "details": []
+    },
+    {
+      "module": "test_spec_policy",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 5.39,
+      "details": []
+    },
+    {
+      "module": "test_exception_validation",
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.828,
+      "details": []
+    },
+    {
+      "module": "test_rules",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 92.891,
+      "details": []
+    }
+  ],
+  "tests": 127,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 117.703
+}

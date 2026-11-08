@@ -1,0 +1,18 @@
+{
+  "protected_files": 10372,
+  "authorized_changes": {
+    "review_ui/app.js": {
+      "before": "5cc5aa9cfa57de94423ea461b1c990f6345b0bd596fde037f2612d180e6b2f64",
+      "after": "f7f0de9df1e74a5e8864dd0b9d1e3a6cebdeabcfa6109f52ddc0ceafa451953a"
+    },
+    "review_ui/review_workflow.js": {
+      "before": "c387d99a526bb560c4bee050bb0c19d09dea6f5a0ddd5f024275de724fde5ecc",
+      "after": "0732c6a122e4b2284d75cf823576a951012f25c057d2123fa7ae840991b36e9e"
+    },
+    "review_ui/styles.css": {
+      "before": "324d1b46c5e497aafa9ff8029db3299e7c2c233014721f6bd015ca1c9cb8a0d2",
+      "after": "5d3442c77fba3b5ec205388d3b99d1b8cb76d12eab8a664ee1c7d90245eb7fb9"
+    }
+  },
+  "unexpected_changes": {}
+}

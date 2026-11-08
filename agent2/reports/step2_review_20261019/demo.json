@@ -1,0 +1,16 @@
+{
+  "scenarios": [
+    "001",
+    "003"
+  ],
+  "cases": 7,
+  "p2_controls": 32,
+  "p2_transactions": 73,
+  "simulated_requests": 3,
+  "real_independent_reviews": 0,
+  "detector_rescoring": false,
+  "external_notifications": 0,
+  "demo_database": "D:\\agent22\\.runtime\\step2_review_20261019\\demo.sqlite3",
+  "demo_reports": "D:\\agent22\\.runtime\\step2_review_20261019\\demo_reports",
+  "url": "http://127.0.0.1:8769"
+}

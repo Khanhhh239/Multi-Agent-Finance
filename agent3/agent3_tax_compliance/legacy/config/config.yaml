@@ -1,0 +1,30 @@
+app:
+  env: development
+  log_level: INFO
+
+database:
+  db_type: sqlite
+  db_path: d:/financial/agent3_tax_compliance/data/database/tax_compliance.db
+
+rules:
+  rules_dir: d:/financial/agent3_tax_compliance/config/rules
+
+extraction:
+  llm:
+    provider: openai
+    model: gpt-4o-mini
+    temperature: 0.0
+    max_retries: 3
+    self_consistency_runs: 2
+  ocr:
+    enabled: true
+
+rag:
+  corpus_dir: d:/financial/agent3_tax_compliance/data/corpus
+  chunk_size: 500
+  chunk_overlap: 50
+  embedding:
+    model: sentence-transformers/all-MiniLM-L6-v2 # fallback or default local if needed, BGE-M3 for production
+  vector_db:
+    path: d:/financial/agent3_tax_compliance/data/database/vector_store.db
+  citation_threshold: 0.95

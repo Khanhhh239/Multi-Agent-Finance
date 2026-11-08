@@ -1,0 +1,245 @@
+{
+  "run_id": "invoice_extract_rows_20261028_v3",
+  "evaluation_mode": "FROZEN_OCR_EXTRACTION_REPLAY",
+  "extractor_sha256": "d0adfa4dd31ab17de9c643085407f5af4ce3796982db0507a8f363d1f3b72288",
+  "manifest_sha256": "0a2fbeaf51ad9f59c017a91fd72ee2c461795e8d560462bf6cccf4734a93a596",
+  "metrics": {
+    "previous": {
+      "cases": 28,
+      "labeled": 706,
+      "correct": 489,
+      "wrong_present": 42,
+      "missing_or_ambiguous": 175,
+      "rows": 48
+    },
+    "candidate": {
+      "cases": 28,
+      "labeled": 706,
+      "correct": 535,
+      "wrong_present": 43,
+      "missing_or_ambiguous": 128,
+      "rows": 57
+    }
+  },
+  "comparison_previous": {
+    "errors_before": 217,
+    "errors_after": 171,
+    "relative_error_reduction": 0.2119815668202765,
+    "new_critical_wrong_present": [],
+    "gates": {
+      "error_reduction_30pct": false,
+      "complete_label_coverage": false,
+      "no_new_critical_wrong_present": true,
+      "no_table_regression": true,
+      "no_address_regression": true,
+      "latency": false,
+      "no_processing_failures": true
+    },
+    "technical_gate_passed": false,
+    "quality_acceptance": "PENDING",
+    "release_approved": false
+  },
+  "comparison_original": {
+    "errors_before": 381,
+    "errors_after": 171,
+    "relative_error_reduction": 0.5511811023622047,
+    "new_critical_wrong_present": [],
+    "gates": {
+      "error_reduction_30pct": true,
+      "complete_label_coverage": false,
+      "no_new_critical_wrong_present": true,
+      "no_table_regression": true,
+      "no_address_regression": true,
+      "latency": false,
+      "no_processing_failures": true
+    },
+    "technical_gate_passed": false,
+    "quality_acceptance": "PENDING",
+    "release_approved": false
+  },
+  "previously_correct_field_regressions": [],
+  "individual_case_row_counts_match_draft_labels": true,
+  "independent_holdout": false,
+  "labels_status": "DRAFT",
+  "model_inference_calls": 0,
+  "latency_evaluated": false,
+  "release_approved": false,
+  "synthetic_regressions": {
+    "python_tests": 566,
+    "passed": true,
+    "checks": [
+      {
+        "name": "contracts",
+        "passed": true,
+        "python_tests": 22
+      },
+      {
+        "name": "ingestion",
+        "passed": true,
+        "python_tests": 25
+      },
+      {
+        "name": "ocr",
+        "passed": true,
+        "python_tests": 36
+      },
+      {
+        "name": "extraction_v1",
+        "passed": true,
+        "python_tests": 81,
+        "final_log": "extraction_v1_final_81.log",
+        "final_log_sha256": "11f737c58b4a68a185a580af7c8018e2a168029dae9bc73b5b67e03238122c99",
+        "resolved_failure": "Translated heading regression was fixed; full extraction suite rerun on final code"
+      },
+      {
+        "name": "quality",
+        "passed": true,
+        "python_tests": 53
+      },
+      {
+        "name": "review",
+        "passed": true,
+        "python_tests": 42
+      },
+      {
+        "name": "planning",
+        "passed": true,
+        "python_tests": 39
+      },
+      {
+        "name": "rules_v1",
+        "passed": true,
+        "python_tests": 65
+      },
+      {
+        "name": "e2e_v1",
+        "passed": true,
+        "python_tests": 17
+      },
+      {
+        "name": "explanation",
+        "passed": true,
+        "python_tests": 64
+      },
+      {
+        "name": "legal_v2",
+        "passed": true,
+        "python_tests": 28
+      },
+      {
+        "name": "business_review",
+        "passed": true,
+        "python_tests": 44
+      },
+      {
+        "name": "recovery",
+        "passed": true,
+        "python_tests": 50
+      },
+      {
+        "name": "javascript-syntax-app.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "javascript-syntax-automation.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "javascript-syntax-business.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "javascript-syntax-compliance.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "javascript-syntax-explanation.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "javascript-syntax-insights.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "javascript-syntax-items.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "javascript-syntax-region.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "javascript-syntax-workflow.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "review_client.test.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "explanation_client.test.js",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "check_region_browser.py",
+        "passed": true,
+        "python_tests": 0,
+        "final_log": "check_region_browser_final.log",
+        "final_log_sha256": "9ead06ec3959a0fd1300dca564490de39e781c9944d704fa4c829ce4d5fddff1",
+        "resolved_failure": "Test now waits for actual browser route interception, after UI disabled state"
+      },
+      {
+        "name": "check_automation_v2_browser.py",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "check_capture_upgrade_browser.py",
+        "passed": true,
+        "python_tests": 0
+      },
+      {
+        "name": "check_invoice_test_browser.py",
+        "passed": true,
+        "python_tests": 0
+      }
+    ],
+    "original_failed_checks": [
+      "check_region_browser.py",
+      "extraction_v1"
+    ]
+  },
+  "html_checks": {
+    "result": "PASS",
+    "checks": [
+      "HTTP preview loads an embedded source image and mounts only one invoice",
+      "All 28 invoices and continuation pages load without growing the DOM",
+      "Draft values survive invoice navigation and refresh in an isolated browser profile",
+      "Money and VAT display preserve exact decimal strings",
+      "Tabs and zoom work without rebuilding all invoice editors",
+      "Desktop and mobile fit the viewport without horizontal page overflow"
+    ],
+    "measurements": {
+      "after": {
+        "nodes": 285,
+        "images": 1,
+        "loaded": 1
+      },
+      "open_seconds": 0.7792153999998845
+    },
+    "page_errors": [],
+    "scope": "Existing invoice outputs read only; HTTP, isolated Chrome profile, no OCR or capture mutation"
+  },
+  "scope": "DEV frozen-OCR extraction replay and separately reported synthetic regressions; no holdout or latency claim"
+}

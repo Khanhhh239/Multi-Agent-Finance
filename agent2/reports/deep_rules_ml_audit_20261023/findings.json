@@ -1,0 +1,75 @@
+[
+  {
+    "id": "R01",
+    "kind": "confirmed_code_defect",
+    "priority": "high",
+    "title": "B4 uses late goods-receipt evidence to suppress an earlier warning",
+    "code": [
+      "sme_fraud/rules.py:761",
+      "sme_fraud/rules.py:763"
+    ],
+    "probes": [
+      "B4_future_goods_receipt_cannot_suppress_past_alert"
+    ]
+  },
+  {
+    "id": "R02",
+    "kind": "confirmed_code_defect",
+    "priority": "high",
+    "title": "B2 retains an employee in the previous company contact index after a transfer",
+    "code": [
+      "sme_fraud/rules.py:449",
+      "sme_fraud/rules.py:451",
+      "sme_fraud/rules.py:729"
+    ],
+    "probes": [
+      "B2_does_not_match_staff_transferred_out_of_company"
+    ]
+  },
+  {
+    "id": "M01",
+    "kind": "confirmed_code_defect",
+    "priority": "high",
+    "title": "Features use support documents and invoice amounts not available at the transaction cutoff",
+    "code": [
+      "sme_fraud/features.py:194",
+      "sme_fraud/features.py:231",
+      "sme_fraud/features.py:245"
+    ],
+    "probes": [
+      "future_support_documents_do_not_change_past_features",
+      "future_invoice_gross_not_known_at_payment"
+    ]
+  },
+  {
+    "id": "M02",
+    "kind": "confirmed_code_defect",
+    "priority": "medium",
+    "title": "Empty phone/address values are counted as employee-vendor matches",
+    "code": [
+      "sme_fraud/features.py:159",
+      "sme_fraud/features.py:237",
+      "sme_fraud/features.py:238"
+    ],
+    "probes": [
+      "missing_contacts_must_not_match"
+    ]
+  },
+  {
+    "id": "M03",
+    "kind": "semantic_consistency_gap",
+    "priority": "medium",
+    "title": "Contact counters and feature graph retain retired master relationships",
+    "code": [
+      "sme_fraud/features.py:147",
+      "sme_fraud/features.py:159",
+      "sme_fraud/features.py:167",
+      "sme_fraud/features.py:240"
+    ],
+    "probes": [
+      "retired_employee_contacts_must_not_remain_current_matches",
+      "feature_graph_retires_replaced_vendor_phone"
+    ],
+    "qualification": "Current-state expectations were used in these two probes. Historical relationship features may be intentional; current versus historical meaning must be explicit and versioned before changing them."
+  }
+]

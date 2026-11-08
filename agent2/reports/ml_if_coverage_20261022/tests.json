@@ -1,0 +1,14 @@
+{
+  "successful": true,
+  "tests_run": 62,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "patterns": [
+    "test_if_coverage.py",
+    "test_compare_shadow.py",
+    "test_model_windows.py",
+    "test_shadow_scoring.py"
+  ],
+  "seconds": 3.313
+}

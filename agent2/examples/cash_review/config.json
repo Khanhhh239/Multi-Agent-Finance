@@ -1,0 +1,17 @@
+{
+  "cash_payment_policy": "vn_vat_v1",
+  "cash_review_policy": "evidence_v2",
+  "cash_limit_vnd_by_company": {
+    "C001": 2000000
+  },
+  "cash_limit_evidence_by_company": {
+    "C001": {
+      "limit_vnd": 2000000,
+      "source_ref": "SYNTHETIC_POLICY_APPROVED_001",
+      "verified_by": "SYNTHETIC_REVIEWER",
+      "verified_at": "2024-01-01T09:00:00+07:00",
+      "effective_from": "2024-01-01T00:00:00+07:00",
+      "effective_to": ""
+    }
+  }
+}

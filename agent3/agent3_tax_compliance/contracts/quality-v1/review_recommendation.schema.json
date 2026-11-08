@@ -1,0 +1,47 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "recommendation_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Recommendation Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "field_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Field Path"
+    },
+    "action": {
+      "title": "Action",
+      "type": "string"
+    },
+    "issue_refs": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Issue Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "recommendation_id",
+    "reason",
+    "field_path",
+    "action",
+    "issue_refs"
+  ],
+  "title": "ReviewRecommendation",
+  "type": "object"
+}

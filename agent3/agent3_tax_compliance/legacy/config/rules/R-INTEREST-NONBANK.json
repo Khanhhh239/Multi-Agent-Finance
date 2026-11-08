@@ -1,0 +1,21 @@
+{
+  "rule_id": "R-INTEREST-NONBANK",
+  "effective_from": "2015-08-06",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "loan_source_type",
+      "operator": "==",
+      "value": "non_credit_institution"
+    },
+    {
+      "field": "interest_rate",
+      "operator": ">",
+      "value_field": "max_allowed_interest_rate"
+    }
+  ],
+  "verdict": "FAIL",
+  "fixable": false,
+  "fix_hint": "Phần chi trả lãi tiền vay cho các đối tượng không phải là tổ chức tín dụng vượt quá 150% mức lãi suất cơ bản do Ngân hàng Nhà nước Việt Nam công bố tại thời điểm vay không được tính vào chi phí được trừ.",
+  "citation": "Điểm 2.17 Khoản 2 Điều 4 Thông tư 96/2015/TT-BTC"
+}

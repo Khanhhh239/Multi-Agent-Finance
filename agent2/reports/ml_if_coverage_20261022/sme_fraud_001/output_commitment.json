@@ -1,0 +1,8 @@
+{
+  "coverage_breakdown.csv": "95f3bcc613ad8e516c6e05ed0772eeb813fb3e7624eee80bb99c363e79c8c558",
+  "input_commitment.json": "cd8c254e3c4463eaefcffe45dcd2031817b51d44269dd3e6c713bdd740e21ca8",
+  "selected_member_coverage.private.csv": "a3d59a14b96e58daed29f8c21c61d1e39813c0ecf2aa17345f77bc78f3edd4a5",
+  "selected_review_coverage.private.csv": "cf59cfc250c8ba77999cbee36d988ba9b314e54dea82a858b29aff0e0bdc8f0a",
+  "source_member_coverage.csv": "d75181acab1038519f33ada23b0cd2bd0df105ae191a0c21dc7c6a2e76b275f6",
+  "summary.json": "9ba46217f7d27cba5bf3a21a015f16910a2e6c328f508609e3356f376b559138"
+}

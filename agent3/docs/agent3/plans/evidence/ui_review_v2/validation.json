@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "date": "2026-10-14",
+  "python_suites": {
+    "contracts": 22,
+    "ingestion": 23,
+    "ocr": 27,
+    "extraction_v1": 40,
+    "quality": 34,
+    "review": 32
+  },
+  "python_total": 178,
+  "javascript_syntax": "PASS",
+  "dom_harness": "PASS including exact Decimal, Vietnamese dates/rates, KCT draft restoration, candidate view/apply separation, auth and conflict draft",
+  "chrome": {
+    "result": "PASS",
+    "checks": [
+      "Upload enqueues job; actual local worker automatically reaches review",
+      "Evidence highlights and zoom; inspecting a candidate does not edit input",
+      "Decimal comma/grouping input saves and reloads exactly",
+      "Concurrent correction keeps draft and requires explicit reapply before saving",
+      "Mobile tabs work; no horizontal body overflow at 390px",
+      "Readable history and JSON export reflect saved revision and exact decimals",
+      "Opening a saved record clears stale candidates and source text"
+    ],
+    "page_errors": []
+  },
+  "public_cyberbill_run": "PASS: actual worker OCR, seller tax ID and one row; separate earlier browser run",
+  "launcher": {
+    "cmd_start": "PASS",
+    "reopen_reuses_existing_session": "PASS",
+    "loopback_url": "http://127.0.0.1:8000/review",
+    "auto_worker_alive": true,
+    "clipboard_copy": "PASS observed at startup",
+    "unauthenticated_runtime_status": 401,
+    "test_session_stop": "PASS"
+  },
+  "user_acceptance": "PENDING",
+  "production_readiness": false
+}

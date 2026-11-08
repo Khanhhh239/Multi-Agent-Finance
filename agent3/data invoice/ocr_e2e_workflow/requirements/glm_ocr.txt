@@ -1,0 +1,4 @@
+glmocr[selfhosted]>=0.1.5
+Pillow>=12.1.0
+PyYAML==6.0.3
+tqdm>=4.66,<5

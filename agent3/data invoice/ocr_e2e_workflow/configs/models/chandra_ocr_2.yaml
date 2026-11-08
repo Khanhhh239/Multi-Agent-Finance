@@ -1,0 +1,9 @@
+model_id: chandra_ocr_2
+adapter: chandra
+output_mode: structured_document
+python: "envs/chandra_ocr_2/Scripts/python.exe"
+model_name: datalab-to/chandra-ocr-2
+command: ["chandra", "{input}", "{output_dir}", "--method", "hf"]
+temperature: 0
+requires_gpu: true
+license_review_required: true

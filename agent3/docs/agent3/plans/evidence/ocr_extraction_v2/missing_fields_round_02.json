@@ -1,0 +1,277 @@
+{
+  "parent_plan": "PLAN_06",
+  "label_status": "SELF_CHECK_NOT_INDEPENDENT",
+  "extractor_sha256": "b21ea922614d761b1b852ca627a5f933a9754431185df7265d666cbb87f1393b",
+  "aggregates": [
+    {
+      "run_id": "plan06_default_missing_fields_fix_01",
+      "mode": "native_only",
+      "documents": 8,
+      "counts": {
+        "CORRECT": 80
+      }
+    },
+    {
+      "run_id": "plan06_default_missing_fields_fix_01",
+      "mode": "scan",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 23,
+        "MISSING": 4,
+        "WRONG_PRESENT": 4
+      }
+    },
+    {
+      "run_id": "plan06_default_missing_fields_fix_01",
+      "mode": "hybrid",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 27,
+        "AMBIGUOUS": 4
+      }
+    },
+    {
+      "run_id": "plan06_missing_fields_fix_02",
+      "mode": "native_only",
+      "documents": 8,
+      "counts": {
+        "CORRECT": 80
+      }
+    },
+    {
+      "run_id": "plan06_missing_fields_fix_02",
+      "mode": "scan",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 26,
+        "MISSING": 3,
+        "WRONG_PRESENT": 2
+      }
+    },
+    {
+      "run_id": "plan06_missing_fields_fix_02",
+      "mode": "hybrid",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 29,
+        "AMBIGUOUS": 2
+      }
+    }
+  ],
+  "changes": {
+    "plan06_default_missing_fields_fix_01": [
+      {
+        "case": "charity_2023-p1",
+        "mode": "scan",
+        "field": "totals.vat",
+        "before": "MISSING",
+        "after": "CORRECT"
+      },
+      {
+        "case": "software_kct-p1",
+        "mode": "scan",
+        "field": "parties.seller.name",
+        "before": "MISSING",
+        "after": "CORRECT"
+      },
+      {
+        "case": "viettel_adjustment-p1",
+        "mode": "native_only",
+        "field": "totals.gross",
+        "before": "MISSING",
+        "after": "CORRECT"
+      }
+    ],
+    "plan06_missing_fields_fix_02": [
+      {
+        "case": "charity_2023-p1",
+        "mode": "scan",
+        "field": "totals.vat",
+        "before": "MISSING",
+        "after": "CORRECT"
+      },
+      {
+        "case": "software_kct-p1",
+        "mode": "scan",
+        "field": "invoice.issue_date",
+        "before": "MISSING",
+        "after": "CORRECT"
+      },
+      {
+        "case": "software_kct-p1",
+        "mode": "scan",
+        "field": "parties.seller.name",
+        "before": "MISSING",
+        "after": "CORRECT"
+      },
+      {
+        "case": "viettel_adjustment-p1",
+        "mode": "native_only",
+        "field": "totals.gross",
+        "before": "MISSING",
+        "after": "CORRECT"
+      }
+    ]
+  },
+  "region_experiments": [
+    {
+      "case": "charity_2023-p1",
+      "field": "parties.buyer.tax_id",
+      "dpi": 150,
+      "decode": "greedy",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 1.621724800002994,
+      "crop_sha256": "d70484af570526e49a8300a1108249ef05d3c65d55983e1b29fa867bf2ffb54d"
+    },
+    {
+      "case": "charity_2023-p1",
+      "field": "parties.buyer.tax_id",
+      "dpi": 300,
+      "decode": "greedy",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 1.614501600000949,
+      "crop_sha256": "ccb9138606cccd1d4f1fd4d6a51e93d3f167c1e376ac1dd252a8a469fdebeab7"
+    },
+    {
+      "case": "charity_2023-p1",
+      "field": "parties.buyer.tax_id",
+      "dpi": 450,
+      "decode": "greedy",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 1.8373917999997502,
+      "crop_sha256": "1289e03d8eff6b08468bb3f96b60e129f5a392cb9f1cc32b16ec229b7845b4ee"
+    },
+    {
+      "case": "charity_2023-p1",
+      "field": "invoice.series",
+      "dpi": 150,
+      "decode": "greedy",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 1.5275343999965116,
+      "crop_sha256": "6aacfd5a6e54cc078c9e94e018ae5aaefce5e737e7122810d0e52d50b36e8fab"
+    },
+    {
+      "case": "charity_2023-p1",
+      "field": "invoice.series",
+      "dpi": 300,
+      "decode": "greedy",
+      "outcome": "CORRECT_PARSED",
+      "elapsed_seconds": 1.463748599999235,
+      "crop_sha256": "0259fa76120f28a5a6f28c43658237f94c9db4971afcf13586188563da3050c0"
+    },
+    {
+      "case": "charity_2023-p1",
+      "field": "invoice.series",
+      "dpi": 450,
+      "decode": "greedy",
+      "outcome": "CORRECT_PARSED",
+      "elapsed_seconds": 1.4066541000065627,
+      "crop_sha256": "5765d399996117e50aff69e6002b8dcb561c00be6c05f431c451cc5dfe4c6fc5"
+    },
+    {
+      "case": "software_kct-p1",
+      "field": "parties.seller.tax_id",
+      "dpi": 150,
+      "decode": "greedy",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 0.9592754000041168,
+      "crop_sha256": "a3dd7c5cbf3aba4e518afad51ca212bc29d413db87ccc5fd3811ef3736e3f01a"
+    },
+    {
+      "case": "software_kct-p1",
+      "field": "parties.seller.tax_id",
+      "dpi": 300,
+      "decode": "greedy",
+      "outcome": "CORRECT_PARSED",
+      "elapsed_seconds": 0.9812046999941231,
+      "crop_sha256": "9eb966215ae89b42f3f2d71129de1c770cd6f28f66087bd4448f483a2825c34b"
+    },
+    {
+      "case": "software_kct-p1",
+      "field": "parties.seller.tax_id",
+      "dpi": 450,
+      "decode": "greedy",
+      "outcome": "CORRECT_PARSED",
+      "elapsed_seconds": 0.9620519000018248,
+      "crop_sha256": "80b1f6b72d53e4601dc238c72db92a55068dca5d2ed70931364df67e23afea57"
+    },
+    {
+      "case": "software_kct-p1",
+      "field": "invoice.issue_date",
+      "dpi": 150,
+      "decode": "greedy",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 3.5559049000003142,
+      "crop_sha256": "3d7ac3e1faf7149835a891148a2a3b8d0eedf2a8bcd7c32f7c60b81fdcd29f85"
+    },
+    {
+      "case": "software_kct-p1",
+      "field": "invoice.issue_date",
+      "dpi": 300,
+      "decode": "greedy",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 3.482313199994678,
+      "crop_sha256": "09695c87fe885649ecd13aaffd7158f8ec5fec002f4d0a4f36b167005bd9fabf"
+    },
+    {
+      "case": "software_kct-p1",
+      "field": "invoice.issue_date",
+      "dpi": 450,
+      "decode": "greedy",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 3.476733299998159,
+      "crop_sha256": "90c64342278a69d9a39d77d1591d1c5aeda6ea73203a9498fc511b52128a2444"
+    },
+    {
+      "case": "charity_2023-p1",
+      "field": "parties.buyer.tax_id",
+      "dpi": 300,
+      "decode": "beam",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 2.964547900002799,
+      "crop_sha256": "ccb9138606cccd1d4f1fd4d6a51e93d3f167c1e376ac1dd252a8a469fdebeab7"
+    },
+    {
+      "case": "charity_2023-p1",
+      "field": "invoice.series",
+      "dpi": 300,
+      "decode": "beam",
+      "outcome": "CORRECT_PARSED",
+      "elapsed_seconds": 1.946347400000377,
+      "crop_sha256": "0259fa76120f28a5a6f28c43658237f94c9db4971afcf13586188563da3050c0"
+    },
+    {
+      "case": "software_kct-p1",
+      "field": "parties.seller.tax_id",
+      "dpi": 300,
+      "decode": "beam",
+      "outcome": "CORRECT_PARSED",
+      "elapsed_seconds": 1.181636699999217,
+      "crop_sha256": "9eb966215ae89b42f3f2d71129de1c770cd6f28f66087bd4448f483a2825c34b"
+    },
+    {
+      "case": "software_kct-p1",
+      "field": "invoice.issue_date",
+      "dpi": 300,
+      "decode": "beam",
+      "outcome": "UNRESOLVED",
+      "elapsed_seconds": 5.49489370000083,
+      "crop_sha256": "09695c87fe885649ecd13aaffd7158f8ec5fec002f4d0a4f36b167005bd9fabf"
+    }
+  ],
+  "region_recovery_in_runtime": false,
+  "experimental_split_default": false,
+  "remaining": [
+    "four missing fields on default OCR; three on split OCR",
+    "two case-sensitive name mismatches on split OCR",
+    "runtime region recovery",
+    "new-template evaluation and UI self acceptance"
+  ],
+  "tests": {
+    "extraction": 50,
+    "quality": 34,
+    "review": 32,
+    "total": 116,
+    "status": "PASS"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "checked_at": "2026-10-13T08:00:24.598952+00:00",
+  "result": "PASS",
+  "test_suites": [
+    {
+      "directory": "agent3_tax_compliance/tests/contracts",
+      "tests": 22,
+      "result": "PASS",
+      "command": "python -m unittest discover -s tests/contracts -q"
+    },
+    {
+      "directory": "agent3_tax_compliance/tests/ingestion",
+      "tests": 23,
+      "result": "PASS",
+      "command": "python -m unittest discover -s tests/ingestion -q"
+    },
+    {
+      "directory": "agent3_tax_compliance/tests/ocr",
+      "tests": 27,
+      "result": "PASS",
+      "command": "python -m unittest discover -s tests/ocr -q"
+    },
+    {
+      "directory": "agent3_tax_compliance/tests/extraction_v1",
+      "tests": 40,
+      "result": "PASS",
+      "command": "python -m unittest discover -s tests/extraction_v1 -q"
+    },
+    {
+      "directory": "agent3_tax_compliance/tests/quality",
+      "tests": 34,
+      "result": "PASS",
+      "command": "python -m unittest discover -s tests/quality -q"
+    },
+    {
+      "directory": "agent3_tax_compliance/tests/review",
+      "tests": 27,
+      "result": "PASS",
+      "command": "python -m unittest discover -s tests/review -q"
+    }
+  ],
+  "total_tests": 173,
+  "comparison_fingerprint_matches_current_code": true,
+  "negative_multi_invoice": {
+    "pages": 2,
+    "segmentation": "REVIEW_SPLIT",
+    "record_created": false
+  },
+  "git_diff_check": "PASS",
+  "browser_acceptance": "NOT_RUN",
+  "labels_independently_human_adjudicated": false
+}

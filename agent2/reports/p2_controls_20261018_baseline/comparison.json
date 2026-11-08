@@ -1,0 +1,2210 @@
+[
+  {
+    "control_id": "FULL_BELOW",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "FULL_BELOW",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "FULL_BELOW",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "FULL_EQUAL",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "FULL_EQUAL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "FULL_EQUAL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "FULL_ABOVE",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "FULL_ABOVE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "FULL_ABOVE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "OLD_BELOW",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "OLD_BELOW",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "OLD_BELOW",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "OLD_EQUAL",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "OLD_EQUAL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "OLD_EQUAL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "FULL_BANK",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "FULL_BANK",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "FULL_BANK",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "NO_INVOICE",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "NO_INVOICE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "NO_INVOICE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "NO_DATE",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "NO_DATE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "NO_DATE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "NO_GROSS",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "NO_GROSS",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "NO_GROSS",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "NO_IDENTITY",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "NO_IDENTITY",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "NO_IDENTITY",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "FUTURE_INVOICE",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "FUTURE_INVOICE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "FUTURE_INVOICE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_CASH",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "INSTALL_CASH",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "INSTALL_CASH",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_34bd209f637092b0"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_CASH",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "INSTALL_CASH",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "INSTALL_CASH",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_34bd209f637092b0"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_SMALL",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "INSTALL_SMALL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "INSTALL_SMALL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_SMALL",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "INSTALL_SMALL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "INSTALL_SMALL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_MIXED",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "INSTALL_MIXED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "INSTALL_MIXED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_MIXED",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "INSTALL_MIXED",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "INSTALL_MIXED",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_82655da5fa34fc2f"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_SAME_TIME",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "INSTALL_SAME_TIME",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "INSTALL_SAME_TIME",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_34bd209f637092b0"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_SAME_TIME",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "INSTALL_SAME_TIME",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "INSTALL_SAME_TIME",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_34bd209f637092b0"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_GAP",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "INSTALL_GAP",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "INSTALL_GAP",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_18d0511a8930b21d"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "INSTALL_GAP",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "INSTALL_GAP",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "INSTALL_GAP",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_18d0511a8930b21d"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REFUND_FULL",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "REFUND_FULL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "REFUND_FULL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REFUND_FULL",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "REFUND_FULL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "REFUND_FULL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_edc6bcf7a3044544"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {
+      "p2_present": {
+        "expected": false,
+        "actual": true
+      },
+      "category": {
+        "expected": null,
+        "actual": "information_request"
+      },
+      "case_types": {
+        "expected": [],
+        "actual": [
+          "information_request"
+        ]
+      },
+      "priorities": {
+        "expected": [],
+        "actual": [
+          "thap"
+        ]
+      }
+    }
+  },
+  {
+    "control_id": "REFUND_PART",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "REFUND_PART",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "REFUND_PART",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REFUND_PART",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "REFUND_PART",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "REFUND_PART",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REFUND_BANK",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "REFUND_BANK",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "REFUND_BANK",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REFUND_BANK",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "REFUND_BANK",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "REFUND_BANK",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REVERSAL_JOURNAL",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "REVERSAL_JOURNAL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "REVERSAL_JOURNAL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REVERSAL_JOURNAL",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "REVERSAL_JOURNAL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "REVERSAL_JOURNAL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECEIPT_UNLINKED",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "RECEIPT_UNLINKED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECEIPT_UNLINKED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {
+      "p2_present": {
+        "expected": false,
+        "actual": true
+      },
+      "category": {
+        "expected": null,
+        "actual": "information_request"
+      },
+      "case_types": {
+        "expected": [],
+        "actual": [
+          "information_request"
+        ]
+      },
+      "priorities": {
+        "expected": [],
+        "actual": [
+          "thap"
+        ]
+      }
+    }
+  },
+  {
+    "control_id": "REFUND_MULTI",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "REFUND_MULTI",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "REFUND_MULTI",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REFUND_MULTI",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "REFUND_MULTI",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "REFUND_MULTI",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "REFUND_MULTI",
+    "transaction_id": "AUDIT_0002",
+    "expected": {
+      "control_id": "REFUND_MULTI",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "REFUND_MULTI",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_SMALL",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "RECUR_SMALL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_SMALL",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_SMALL",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "RECUR_SMALL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_SMALL",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_SMALL",
+    "transaction_id": "AUDIT_0002",
+    "expected": {
+      "control_id": "RECUR_SMALL",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_SMALL",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_BANK",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "RECUR_BANK",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_BANK",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_BANK",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "RECUR_BANK",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_BANK",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_BANK",
+    "transaction_id": "AUDIT_0002",
+    "expected": {
+      "control_id": "RECUR_BANK",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_BANK",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_CASH",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "RECUR_CASH",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "RECUR_CASH",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_CASH",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "RECUR_CASH",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "RECUR_CASH",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_e21a00d283c3282a"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_CASH",
+    "transaction_id": "AUDIT_0002",
+    "expected": {
+      "control_id": "RECUR_CASH",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_type": "transaction",
+      "priority": "trung_binh"
+    },
+    "actual": {
+      "control_id": "RECUR_CASH",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": true,
+      "category": "vat_document_review",
+      "points": 8,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "trung_binh"
+      ],
+      "case_ids": [
+        "RC_e21a00d283c3282a"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": [
+        "C1"
+      ]
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_GAP",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "RECUR_GAP",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "RECUR_GAP",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_GAP",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "RECUR_GAP",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "RECUR_GAP",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_edc6bcf7a3044544"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_GAP",
+    "transaction_id": "AUDIT_0002",
+    "expected": {
+      "control_id": "RECUR_GAP",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "RECUR_GAP",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_edc6bcf7a3044544"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0001",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0001",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0002",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0002",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0003",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0003",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0003",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0004",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0004",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0004",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0005",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0005",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0005",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0006",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0006",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0006",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0007",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0007",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0007",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0008",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0008",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0008",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0009",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0009",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0009",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0010",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0010",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0010",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0011",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0011",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0011",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0012",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0012",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0012",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0013",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0013",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0013",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0014",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0014",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0014",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0015",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0015",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0015",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0016",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0016",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0016",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0017",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0017",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0017",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0018",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0018",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0018",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0019",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0019",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0019",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0020",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0020",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0020",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0021",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0021",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": ""
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0021",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "RECUR_A5",
+    "transaction_id": "AUDIT_0022",
+    "expected": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0022",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_type": "",
+      "priority": "",
+      "a5_suppressed": true
+    },
+    "actual": {
+      "control_id": "RECUR_A5",
+      "transaction_id": "AUDIT_0022",
+      "p2_present": false,
+      "category": null,
+      "points": 0,
+      "case_types": [],
+      "priorities": [],
+      "case_ids": [],
+      "operational_alert": 0,
+      "a5_suppressed": true,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "LIMIT_VERIFIED",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "LIMIT_VERIFIED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "verified_internal_breach",
+      "points": 14,
+      "case_type": "transaction",
+      "priority": "cao"
+    },
+    "actual": {
+      "control_id": "LIMIT_VERIFIED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "verified_internal_breach",
+      "points": 14,
+      "case_types": [
+        "transaction"
+      ],
+      "priorities": [
+        "cao"
+      ],
+      "case_ids": [
+        "RC_a65bd18d556b9cfd"
+      ],
+      "operational_alert": 1,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "LIMIT_UNVERIFIED",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "LIMIT_UNVERIFIED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "LIMIT_UNVERIFIED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "LIMIT_FUTURE",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "LIMIT_FUTURE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "LIMIT_FUTURE",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "LIMIT_EXPIRED",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "LIMIT_EXPIRED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "LIMIT_EXPIRED",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  },
+  {
+    "control_id": "LIMIT_FOREIGN",
+    "transaction_id": "AUDIT_0000",
+    "expected": {
+      "control_id": "LIMIT_FOREIGN",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_type": "information_request",
+      "priority": "thap"
+    },
+    "actual": {
+      "control_id": "LIMIT_FOREIGN",
+      "transaction_id": "AUDIT_0000",
+      "p2_present": true,
+      "category": "information_request",
+      "points": 0,
+      "case_types": [
+        "information_request"
+      ],
+      "priorities": [
+        "thap"
+      ],
+      "case_ids": [
+        "IR_349188156a783afc"
+      ],
+      "operational_alert": 0,
+      "a5_suppressed": false,
+      "other_positive_rules": []
+    },
+    "differences": {}
+  }
+]

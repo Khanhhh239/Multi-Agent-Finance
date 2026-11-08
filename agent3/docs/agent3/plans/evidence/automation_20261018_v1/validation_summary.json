@@ -1,0 +1,227 @@
+{
+  "checked_on": "2026-10-18",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 51,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "explanation",
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "legal_v2",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "business_review",
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "recovery",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 448,
+  "implementation_sha256": "5e2bd172bf7399de9f8e74d60e93d7bf547043199ea862d286543201b75d9416",
+  "legacy_workflow_implementation_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "source_sha256": {
+    "src/business_review/__init__.py": "8de60cd2775548685db528b1b0cd21ee4d9487bd4ef3e1737aa4952c10b40fee",
+    "src/business_review/api.py": "cb4e71199b5998d18c10d229b48775ab7946c9a58b1efc11e633f80d55f5f66c",
+    "src/business_review/cli.py": "56bcc892dd18ed776e8dba5e46ecab66e5146cb2ae2abea70edf57d30d5066be",
+    "src/business_review/contracts.py": "7faeb61289f27a227e1903269dfe19c22a2b98e09988a8bd7802fa8e5f14c4d6",
+    "src/business_review/evidence.py": "f20b0bdbc5bb117ed95f164bc933341a6be159c3cb975c1d019e55a26c637776",
+    "src/business_review/repository.py": "d8be7a5292f645cb9cf23039a031d247ce538767c693688abef3eed6e33a8230",
+    "src/business_review/service.py": "acf2c263009595ba4b6ae3e52d901547d7a92f10026e84f7e58aafbfafabe3ae",
+    "src/business_review/web.py": "07ae4d845051f4de2412d66216b221ca4e203fbafc5a4b1633b1c2c16ceb5863",
+    "configs/business_review/capability_reviewed_capture_v1.json": "2d33299b740c2f21763c3246c416e15b944d228cf963293af790e2e4dbae0949",
+    "configs/business_review/dossier.template.json": "ac723785974a576441db603ddd90034af196302964f73f8e2805c4fa8f1af648"
+  },
+  "legacy_replay_code_unchanged": true,
+  "scope": "Synthetic operator review in real HTTP/SQLite/Chrome, regression and native ZEN fixtures; no legal or bank-document accuracy claim.",
+  "real_product_mappings": "PENDING_NO_PRODUCT_DOSSIERS",
+  "legal_release": "NOT_APPROVED",
+  "passed": true,
+  "javascript": [
+    {
+      "command": "node --check src/review/static/app.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/business.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/compliance.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/explanation.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/workflow.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/automation.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/review_client.test.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/explanation_client.test.js",
+      "passed": true
+    }
+  ],
+  "browser": [
+    {
+      "name": "automation",
+      "passed": true,
+      "checks": 10
+    },
+    {
+      "name": "workflow",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "business",
+      "passed": true,
+      "checks": 12
+    },
+    {
+      "name": "compliance",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "name": "explanation",
+      "passed": true,
+      "checks": 5
+    }
+  ],
+  "browser_checks": 40,
+  "ui_source_sha256": {
+    "src/review/static/app.js": "fcf91b6ac686eefb296edf05f41cf0ce33b062666a2df2ee0c7dd3a46fafb130",
+    "src/review/static/automation.js": "4057e933a9e9a7ae1f290fb88c2b54f1a6ad133bfa2033cde43b4d65619281a2",
+    "src/review/static/business.css": "88dffa6ea97e07450a20e57a56b7f782e870c524d823f04257bcca9d917af1f5",
+    "src/review/static/business.js": "f710e3405a6f73cdbf32f72da7e142f2d6dba891f84b033dde0827b5836cea51",
+    "src/review/static/compliance.css": "961389c3e6535ff378de0fc07f85d04b40daf662363f7f00fb8fabdb2a4c8790",
+    "src/review/static/compliance.js": "a00f7c845ec73c7b6ab06a9fd6540553d7d6641a1a41019e608749d717a2c73a",
+    "src/review/static/explanation.js": "bcefb070cb594bc6713b39cfd30bbdb4cb419d3444c9fc91b76a9000f4bd233f",
+    "src/review/static/index.html": "3175bca0a4db7841c47202cf4dce9ed57d5ed975639ae9082fec2464429ed86c",
+    "src/review/static/style.css": "6aa20a5a88ba4218ada82c5e21b03b9c64189fd00f00244048c39c5b0482390e",
+    "src/review/static/workflow.css": "4549c9c5a665b0c6e334992426d9a31ce315c0ae3ab72b1d67da730eb2fb82a8",
+    "src/review/static/workflow.js": "f3d686d145599d5131ae5248771853d84198ce75b22963422b583044bc99df5b"
+  },
+  "final_verification": "After frontend loading-race fix, all JS and five Chrome suites repeated; Python suite previously passed 448 tests. Only whitespace changed in Python after that suite. Natural draft source metadata was then collapsed into details; explanation syntax/client and automation/explanation Chrome suites repeated PASS.",
+  "backend_source_sha256": {
+    "src/explanation_v2/__init__.py": "fff14743a913c25ee1d00744d541fdc9180e28700a6a9bbd7abc6b7a16f363cc",
+    "src/explanation_v2/api.py": "67d42dcea77231c86a22b83602c8139f4ea3ad45489e161ad6287fa4b76e55a5",
+    "src/explanation_v2/cli.py": "31c095c7f7c87493165be9ba007ef51fcd3a192befa50d2b24bf94a04204bb5f",
+    "src/explanation_v2/context_builder.py": "7949ddf7c209f42565f5444b846cd525be7c18311b8773b8ff3b4bcc9bd3563d",
+    "src/explanation_v2/contracts.py": "afeb6d23dbdc837b6e70a793296926000fd345c04c665300138d077bf29955cf",
+    "src/explanation_v2/llm.py": "137b12562ec1bd2549fd0045f61732a4574935140389bb868a6b376535022e83",
+    "src/explanation_v2/natural.py": "5e765c356aff642acf7cd1faa13b44bbf6428287887c9020967a6002850ffc40",
+    "src/explanation_v2/retrieval.py": "5216eba339516b1ddb0d70bb8c5aacfbfa318efdd8723f7064da2bee3b11d4ae",
+    "src/explanation_v2/selection.py": "7a48d726bc96fc3d67cb2ea48f8260a7eaf9d43c0c60a1636106cf61145ddcc9",
+    "src/explanation_v2/service.py": "a2953df03dd818d8ff4a7c4fa2e19bcbb5aea36c5d9a2f9f7679b11f7bafcafd",
+    "src/explanation_v2/validator.py": "1f55d3906902324ee26a5823bd1d26473bb8d48dc978ddd335c2297f4d861a01",
+    "src/recovery/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/recovery/api.py": "6ef47414d3ba4dde8ad16185591a0214b95a59a6a8ebf4f25ad41a85332f25af",
+    "src/extraction/__init__.py": "288a76f4b96ec2e4ff8990c0dc71e92bf3cc8bc11123aeb1b44a6d28478b704b",
+    "src/extraction/api.py": "e33b0b5e574858d676ab2de9a5db89c0c2939fbca3e176f910651b6f5d76a3df",
+    "src/extraction/candidates.py": "c7bbc4ae5f636450e0d932218f1d60b17e72440e67453faf4ee3f349bdcc4705",
+    "src/extraction/cli.py": "bd969d5ae5b1a222dc2c56823b754f127b8d4ae90381456979162ac9597dda52",
+    "src/extraction/contracts.py": "0862729697544d10182199e142afe58eabc755f25b236c67f142af0953b8e15e",
+    "src/extraction/evidence.py": "3cccd201c5ca562ae88cbc4f026cfed83420251a89ea5bbd80afeb756889914c",
+    "src/extraction/invoice_fields.py": "a5c7666d0795e49d12d66d3b3d0609b820778f7e4df5d3049872d78adf39d11d",
+    "src/extraction/llm_extractor.py": "92ceba779f4eaa6e1cebdbc8addf5a0cc2e10ab1243ab604e5945a5f0ab4ab1c",
+    "src/extraction/ocr_pipeline.py": "6e5f3e57f2b27394107aff5a9c0f1b1dae97e0cbebce1a950c966f27fa342aa5",
+    "src/extraction/repository.py": "c2a4c48c51ba65c453456b731c22726bb58ac31f0ef755ccb44af1db5b8c3513",
+    "src/extraction/service.py": "a75b96b9503f05306721f909a3f0f57b5ab217d9e891b11b5c22bf0293750037",
+    "src/extraction/spatial_tables.py": "10def67395c6bbe304b67830f311a63073af54521f73156c4c6307235ff8482b",
+    "src/extraction/tables.py": "7b75731b802a111a26da738fc3d3dfc4406c0f8b36d47a5eca89a1f89e8fc300",
+    "src/extraction/vat_group_builder.py": "cc4e4d6eacf8dcf1b594331ae55b6135fcd7d8af795e49f5341b175a246c34c9",
+    "src/review/__init__.py": "7980774f2fd829a9aca4a5e4ef2a86e0ce2d33c5cb5a7fa3e095b6e632f99f90",
+    "src/review/api.py": "90086b3128b542d36aaeba1a6b69306646fd6c4ee342ad40dc482a8f8db969f7",
+    "src/review/contracts.py": "0cc7ef51e33c59d2532f3c004c5f5943bd0c2b29421967626c89c9e8772f2905",
+    "src/review/correction_service.py": "458e5d0562b5c331a4b74792f4aa56d14fb276fd8229f5cd69c274bb58233428",
+    "src/review/repository.py": "62b5689e40a1273222379c7c34d5db077b4f36cf7149a697e8b09ceac6e89768",
+    "src/review/revision_reprocessor.py": "77563ca06db2d4036bd8e3febac1bed31b4b0f31e9f18f8db4ac8e429bece6fc"
+  }
+}

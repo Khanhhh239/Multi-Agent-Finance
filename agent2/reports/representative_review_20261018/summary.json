@@ -1,0 +1,42 @@
+{
+  "status": "qualitative_review_completed",
+  "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+  "reviewed_at": "2026-10-18T13:35:58.208120+00:00",
+  "review_units": 27,
+  "p2_controls": 20,
+  "actual_cases_001_003": 7,
+  "p2_source_transactions": 51,
+  "p2_queue_case_objects": 18,
+  "newly_scored_a5_cases": 3,
+  "cold_a5_cases": 4,
+  "verdict_counts": {
+    "passed": 10,
+    "needs_fix": 16,
+    "needs_information": 1
+  },
+  "priority_assessments": {
+    "not_applicable": 4,
+    "reasonable": 16,
+    "conditional": 6,
+    "needs_owner_decision": 1
+  },
+  "clarity_assessments": {
+    "clear": 11,
+    "needs_edit": 15,
+    "blocked": 1
+  },
+  "backlog_items": 10,
+  "independent_human_reviews": 0,
+  "blind_review": false,
+  "financial_fraud_precision": null,
+  "browser_visual_qa": false,
+  "rendered_card_failures": 1,
+  "production_code_changed": false,
+  "threshold_changed": false,
+  "operational_feedback_written": false,
+  "user_uat_database_written": false,
+  "protected_files": 1209,
+  "protected_inputs_unchanged": true,
+  "holdout_005_scored": false,
+  "external_messages_sent": 0
+}

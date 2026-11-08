@@ -1,0 +1,18 @@
+{
+  "profile_id": "pdf_ocr_v1",
+  "version": "1.0.0",
+  "adapter_id": "OCRDocumentAdapter",
+  "adapter_version": "ocr-layout-v1",
+  "source_formats": [
+    "PDF",
+    "IMAGE"
+  ],
+  "supported_families": [
+    "INVOICE_CONTENT",
+    "VAT_RATE"
+  ],
+  "unsupported_families": [
+    "PAYMENT_EVIDENCE"
+  ],
+  "absence_fidelity_policies": []
+}

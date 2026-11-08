@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "policy_status": "draft",
+  "approved_by": "",
+  "approved_at": "",
+  "rules": {
+    "F1": {"min_evaluable": 100, "min_condition_present": 20, "min_condition_absent": 50, "min_precision": 0.8, "min_recall": 0.8, "max_information_gap_rate": 0.05},
+    "C4": {"min_evaluable": 100, "min_condition_present": 20, "min_condition_absent": 50, "min_precision": 0.8, "min_recall": 0.8, "max_information_gap_rate": 0.05},
+    "E2": {"min_evaluable": 100, "min_condition_present": 20, "min_condition_absent": 50, "min_precision": 0.9, "min_recall": 0.9, "max_information_gap_rate": 0.05},
+    "F2": {"min_evaluable": 100, "min_condition_present": 20, "min_condition_absent": 50, "min_precision": 0.8, "min_recall": 0.8, "max_information_gap_rate": 0.05},
+    "F3": {"min_evaluable": 100, "min_condition_present": 20, "min_condition_absent": 50, "min_precision": 0.8, "min_recall": 0.8, "max_information_gap_rate": 0.05},
+    "F4": {"min_evaluable": 100, "min_condition_present": 20, "min_condition_absent": 50, "min_precision": 0.8, "min_recall": 0.8, "max_information_gap_rate": 0.05}
+  }
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "sample_id": "A5_001_TX_3103d5f23fde8b1a6f",
+    "case_id": "RC_18adf5be97ee0e84",
+    "scenario": "001",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_18adf5be97ee0e84",
+    "result": "PASS"
+  },
+  {
+    "sample_id": "A5_001_TX_ac2d5e5d289dc9227b",
+    "case_id": "RC_963dc712d016c11d",
+    "scenario": "001",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_963dc712d016c11d",
+    "result": "PASS"
+  },
+  {
+    "sample_id": "A5_001_cold_information_request",
+    "case_id": "IR_30749635120c8936",
+    "scenario": "001",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=IR_30749635120c8936",
+    "result": "PASS"
+  },
+  {
+    "sample_id": "A5_001_cold_operational",
+    "case_id": "RC_035196cd1b97a1e1",
+    "scenario": "001",
+    "url": "http://127.0.0.1:8771/#scenario=001&case=RC_035196cd1b97a1e1",
+    "result": "PASS"
+  },
+  {
+    "sample_id": "A5_003_TX_60bac87c93f578f6c3",
+    "case_id": "RC_b929346759d67338",
+    "scenario": "003",
+    "url": "http://127.0.0.1:8771/#scenario=003&case=RC_b929346759d67338",
+    "result": "PASS"
+  },
+  {
+    "sample_id": "A5_003_cold_information_request",
+    "case_id": "IR_c39bd6eef7d31a7c",
+    "scenario": "003",
+    "url": "http://127.0.0.1:8771/#scenario=003&case=IR_c39bd6eef7d31a7c",
+    "result": "PASS"
+  },
+  {
+    "sample_id": "A5_003_cold_operational",
+    "case_id": "RC_d3c7009ff2ea6dbf",
+    "scenario": "003",
+    "url": "http://127.0.0.1:8771/#scenario=003&case=RC_d3c7009ff2ea6dbf",
+    "result": "PASS"
+  }
+]

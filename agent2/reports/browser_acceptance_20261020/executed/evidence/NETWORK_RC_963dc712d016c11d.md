@@ -1,0 +1,262 @@
+- complementary:
+  - link "S Sổ Soát KIỂM SOÁT NỘI BỘ":
+    - /url: /
+    - generic: S
+    - text: Sổ Soát
+    - generic: KIỂM SOÁT NỘI BỘ
+  - generic: KHÔNG GIAN LÀM VIỆC
+  - button "▤ Hồ sơ rà soát":
+    - generic: ▤
+    - text: Hồ sơ rà soát
+  - button "◇ Phạm vi quy tắc":
+    - generic: ◇
+    - text: Phạm vi quy tắc
+  - link "✓ Đối chứng P2":
+    - /url: /p2-controls
+    - generic: ✓
+    - text: Đối chứng P2
+  - button "✉ Thông báo":
+    - generic: ✉
+    - text: Thông báo
+  - button "ⓘ Hướng dẫn sử dụng":
+    - generic: ⓘ
+    - text: Hướng dẫn sử dụng
+  - text: Bản thử nội bộ
+  - generic: Dữ liệu tổng hợp 2024–2025
+- main:
+  - generic: Kiểm soát nội bộ / Hồ sơ rà soát
+  - generic: KIỂM THỬ GIAO DIỆN
+  - generic: TỪ CẢNH BÁO ĐẾN BẰNG CHỨNG
+  - heading "Hồ sơ cần rà soát" [level=1]
+  - paragraph: Đối chiếu nghiệp vụ, ghi nhận kết luận và theo dõi phần còn thiếu.
+  - text: Bộ dữ liệu
+  - combobox "Bộ dữ liệu":
+    - option "Mô phỏng 0,1%" [selected]
+    - option "Mô phỏng 0,3%"
+  - text: Ngân sách / ngày / công ty
+  - combobox "Ngân sách rà soát":
+    - option "5 lượt / 120 phút" [selected]
+    - option "10 lượt / 240 phút"
+  - region "Tổng quan hồ sơ":
+    - article:
+      - generic: Tồn đọng
+      - strong: "584"
+      - text: Hồ sơ giao dịch và nguồn đang mở
+      - generic: ▤
+    - article:
+      - generic: Ưu tiên cao
+      - strong: "16"
+      - text: Cần đối chiếu trước
+      - generic: "!"
+    - article:
+      - generic: Chờ bổ sung
+      - strong: "328"
+      - text: Còn thiếu bằng chứng
+      - generic: ◷
+    - article:
+      - generic: Đã kết luận
+      - strong: "0"
+      - text: Có lý do và người rà soát
+      - generic: ✓
+  - region "Bộ lọc hồ sơ":
+    - checkbox "Ưu tiên hôm nay"
+    - text: Ưu tiên hôm nay
+    - generic: ⌕
+    - textbox "Tìm hồ sơ":
+      - /placeholder: Tìm mã hồ sơ, đối tượng hoặc nội dung…
+      - text: RC_963dc712d016c11d
+    - combobox "Công ty":
+      - option "Tất cả công ty" [selected]
+      - option "C001 · An Phúc Trading C001"
+      - option "C002 · An Phúc Manufacturing C002"
+      - option "C003 · Minh Lộ Services C003"
+      - option "C004 · Vân Hải Retail C004"
+      - option "C005 · Vân Hải Logistics C005"
+      - option "C006 · Minh Lộ Trading C006"
+      - option "C007 · Vân Hải Manufacturing C007"
+      - option "C008 · Minh Lộ Services C008"
+    - combobox "Trạng thái":
+      - option "Đang xử lý"
+      - option "Chưa rà soát"
+      - option "Chờ bổ sung"
+      - option "Đã kết luận"
+      - option "Tất cả trạng thái" [selected]
+    - combobox "Mức ưu tiên":
+      - option "Mọi mức ưu tiên" [selected]
+      - option "Cao nhất"
+      - option "Cao"
+      - option "Trung bình"
+      - option "Thấp"
+    - combobox "Nhóm hồ sơ":
+      - option "Mọi nhóm hồ sơ" [selected]
+      - option "Rà soát nghiệp vụ"
+      - option "Yêu cầu bổ sung P2"
+    - combobox "Quy tắc":
+      - option "Mọi quy tắc" [selected]
+      - option "A1 · Chia nhỏ cùng người nhận trong 3 ngày"
+      - option "A2 · Chia nhỏ cùng người lập/người nhận trong 30 ngày"
+      - option "A3 · Chia nhỏ qua cụm người nhận liên kết"
+      - option "A4 · Người lập có nhiều khoản cận hạn mức"
+      - option "A5 · Số tiền tròn lệch baseline lịch sử"
+      - option "A6 · Thanh toán làm tròn vượt hóa đơn gốc"
+      - option "B1 · Tài khoản hoặc căn cước NCC trùng nhân viên"
+      - option "B2 · Thông tin hoặc người đại diện NCC liên kết nhân viên"
+      - option "B3 · NCC mới thành lập nhận giao dịch lớn đầu tiên"
+      - option "B4 · Trạng thái người phát hành hóa đơn rủi ro"
+      - option "B6 · NCC ngủ đông nhận khoản lớn"
+      - option "B7 · Đổi tài khoản gần ngày thanh toán chưa xác minh"
+      - option "C1 · Lập hoặc duyệt ngoài lịch vận hành"
+      - option "C2 · Tự duyệt vượt quyền được cấp"
+      - option "C3 · Duyệt dưới 60 giây ở cấp thẩm quyền cao"
+      - option "C4 · Thao tác trong kỳ nghỉ phép chính thức"
+      - option "E1 · Lương không có chấm công hoặc bằng chứng thay thế"
+      - option "E2 · Lương sau chấm dứt hợp đồng"
+      - option "F1 · Điều chỉnh thủ công sát khóa sổ và trọng yếu"
+      - option "F2 · Quản lý ghi đè quy trình"
+      - option "F3 · Khoảng trống/trùng số chứng từ"
+      - option "F4 · Doanh thu/công nợ kéo dài chưa đối chiếu tiền"
+      - option "P1 · Thanh toán vượt tổng giá trị cùng hóa đơn"
+      - option "P2 · Chi tiền mặt cần rà soát hạn mức và chứng từ VAT"
+      - option "T1 · Tạm ứng còn dư nợ quá hạn"
+      - option "T2 · Xóa nợ tạm ứng thiếu hồ sơ"
+    - button "Xuất CSV": ↓ CSV
+  - heading "Hàng đợi ưu tiên 1" [level=2]
+  - button "Làm mới ↻"
+  - generic: Tồn 584 hồ sơ / 16.685 phút; 144 hồ sơ nguồn, 376 chờ tái rà soát. Đã phân bổ 4 lượt / 70 phút cho các công ty đang hiển thị; hạn mức mỗi công ty 5 lượt / 120 phút/ngày.
+  - button "● Trung bình 11điểm Phê duyệt hoặc điều chỉnh cần đối chiếu Số tiền tròn lệch baseline lịch sử; Điều chỉnh thủ công sát khóa sổ và trọng yếu C008 · 1 nghiệp vụ · Chưa rà soát A5F1 28/8/2025 RC_963dc712d016c11d Đã phân bổ 20 phút ✓" [pressed]:
+    - generic: ● Trung bình
+    - generic: 11điểm
+    - generic: Phê duyệt hoặc điều chỉnh cần đối chiếu
+    - paragraph: Số tiền tròn lệch baseline lịch sử; Điều chỉnh thủ công sát khóa sổ và trọng yếu
+    - generic: C008 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A5F1
+    - generic: 28/8/2025
+    - generic: RC_963dc712d016c11d
+    - generic: Đã phân bổ 20 phút ✓
+  - generic: 1–1 / 1 hồ sơ
+  - button "Trang trước" [disabled]: ←
+  - button "Trang sau" [disabled]: →
+  - region "Chi tiết hồ sơ":
+    - generic: ● Ưu tiên trung bình
+    - generic: RC_963dc712d016c11d
+    - heading "Phê duyệt hoặc điều chỉnh cần đối chiếu" [level=2]
+    - generic: C008 · 1 nghiệp vụ
+    - generic: Mở 28/8/2025
+    - generic: Chưa rà soát
+    - generic: "11"
+    - text: Điểm ưu tiên rà soát
+    - strong: Chủ yếu là bút toán hoặc rà soát số dư
+    - navigation "Các phần hồ sơ":
+      - button "Tổng quan"
+      - button "Giao dịch"
+      - button "Bằng chứng"
+      - button "Bổ sung tài liệu"
+      - button "Nhật ký"
+    - strong: Căn cứ vào hàng đợi và điểm ưu tiên
+    - generic: Điểm hồ sơ theo snapshot
+    - text: "11"
+    - generic: Căn cứ tiếp nhận
+    - text: Theo chính sách tiếp nhận của snapshot; đối chiếu quy tắc và bằng chứng độc lập.
+    - generic "TX_ac2d5e5d289dc9227b · 11 điểm"
+    - paragraph: Không cộng cơ học mọi hit hoặc mọi giao dịch thành điểm hồ sơ. Điểm dùng để ưu tiên rà, không phải xác suất gian lận.
+    - generic "A5 · 1/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)":
+      - strong: A5 · 1/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)
+    - generic: Số tiền tròn lệch baseline lịch sử; Điều chỉnh thủ công sát khóa sổ và trọng yếu.
+    - generic: Quan hệ cần đối chiếu
+    - button "Thu nhỏ sơ đồ": −
+    - button "Phóng to sơ đồ": +
+    - button "Đặt lại"
+    - group "Sơ đồ quan hệ của hồ sơ"
+    - generic: Đối tác / nghiệp vụ
+    - generic: TK / SĐT
+    - generic: Nhân sự
+    - button "Mở mạng lưới thực thể liên quan →"
+    - generic: Chọn một nút để xem chi tiết. Có thể phóng to và kéo sơ đồ.
+    - generic: Bằng chứng chính
+    - generic "F1 Điều chỉnh thủ công sát khóa sổ và trọng yếu +8 điểm":
+      - generic: F1
+      - text: Điều chỉnh thủ công sát khóa sổ và trọng yếu
+      - generic: +8 điểm
+    - strong: Có nguồn xác nhận nhập thủ công, lịch khóa sổ và mức trọng yếu
+    - generic: Giá trị bút toán
+    - text: 56.693.000 ₫
+    - generic: Mức trọng yếu
+    - text: 17.238.000 ₫
+    - generic: Nhập sổ lúc
+    - text: 08:41 28/08/2025
+    - generic: Khóa sổ lúc
+    - text: 23:59 31/08/2025
+    - generic: Cách thời điểm khóa sổ
+    - text: 3,64 ngày
+    - generic: Mã nhật ký nhập sổ
+    - text: AUD_37c5b8d37a9d83b4a3
+    - generic: Mã lịch khóa sổ
+    - text: CLOSE_4e3e579f42934ef64e
+    - generic: Mã chính sách trọng yếu
+    - text: MAT_79219e8e57f93abe93
+    - generic "Nhật ký nhập sổ"
+    - generic "Lịch khóa sổ"
+    - generic "Chính sách trọng yếu"
+    - paragraph: Tham chiếu lấy từ snapshot bằng chứng của lần đánh giá, không thay thế tài liệu gốc. Nhập thủ công gần khóa sổ chưa chứng minh bút toán sai.
+    - generic: 10:06 28/08/2025 · TX_ac2d5e5d289dc9227b
+    - generic "A5 Số tiền tròn lệch baseline lịch sử +3 điểm":
+      - generic: A5
+      - text: Số tiền tròn lệch baseline lịch sử
+      - generic: +3 điểm
+    - generic: Số tiền được so sánh
+    - text: 56.693.000 ₫
+    - generic: Ngưỡng lịch sử tại lúc ghi sổ
+    - text: 18.709.907,68 ₫
+    - generic: Mẫu lịch sử
+    - text: 52 / tối thiểu 20 mẫu trong 90 ngày
+    - generic: Phép đo
+    - text: Chi phí ghi Nợ
+    - generic: Phạm vi
+    - text: C008 · TK 6422
+    - generic: Cách tính
+    - text: Phân vị 99
+    - generic: Chu kỳ
+    - text: Toàn bộ ngày; chưa dùng ngưỡng chu kỳ riêng
+    - paragraph: Ngưỡng chỉ dùng lịch sử đã biết trước giao dịch. Chi phí ghi Nợ có thể là trích trước, không đồng nghĩa đã chi tiền. A5 cần căn cứ độc lập; thiếu mẫu hoặc không có hit chưa chứng minh hợp lệ.
+    - generic: 10:06 28/08/2025 · TX_ac2d5e5d289dc9227b
+    - button "Xem toàn bộ 2 dấu hiệu và ngoại lệ →"
+    - heading "Ghi nhận kết luận rà soát" [level=3]
+    - generic: Lưu kết luận sau khi đối chiếu. Phần còn thiếu có thể tiếp tục bổ sung ở lần rà soát sau.
+    - radio "Xác nhận nghi vấn"
+    - text: Xác nhận nghi vấn
+    - radio "Hợp lệ / báo động giả"
+    - text: Hợp lệ / báo động giả
+    - radio "Cần bổ sung bằng chứng"
+    - text: Cần bổ sung bằng chứng
+    - radio "Vi phạm kiểm soát"
+    - text: Vi phạm kiểm soát
+    - radio "Xác nhận gian lận"
+    - text: Xác nhận gian lận
+    - text: Người rà soát
+    - textbox "Người rà soát":
+      - /placeholder: Họ và tên người thực hiện
+      - text: ASSISTANT_BROWSER_SIM
+    - text: Lý do nhanh
+    - combobox "Lý do nhanh":
+      - option "Chọn lý do đã kiểm tra…" [selected]
+      - option "Chứng từ chưa giải trình được dấu hiệu"
+      - option "Quan hệ cần chuyển kiểm tra sâu"
+      - option "Chứng từ và nghĩa vụ chi khớp"
+      - option "Đúng thẩm quyền, có phê duyệt"
+    - button "Xác nhận nghi vấn"
+    - button "Bỏ qua, hợp lệ"
+    - text: Lý do / chứng từ đã đối chiếu
+    - textbox "Lý do / chứng từ đã đối chiếu":
+      - /placeholder: Nêu nội dung đã kiểm tra hoặc bằng chứng cần bổ sung…
+    - text: Mỗi lần lưu được ghi vào lịch sử.
+    - text: Hồ sơ thiếu bằng chứng tiếp tục mở và tính công tái rà soát.
+    - button "Lưu kết luận →"
+  - generic: Điểm dùng để ưu tiên rà soát. Cảnh báo cần được đối chiếu chứng từ trước khi kết luận.
+- dialog:
+  - heading "Mạng lưới thực thể liên quan" [level=2]
+  - button "Đóng" [active]: ×
+  - paragraph: Quan hệ tại 10:06 28/08/2025. Kéo nút, phóng to hoặc chọn nút/cạnh để xem dữ kiện.
+  - button "Vừa khung"
+  - group "Mạng lưới sáu loại thực thể"
+  - paragraph: 8 nút. Quan hệ chung định danh cần đối chiếu nghiệp vụ trước khi kết luận.
+  - generic: Chưa có nhóm trùng định danh đầy đủ trong phạm vi.

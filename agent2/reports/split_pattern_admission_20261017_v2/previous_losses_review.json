@@ -1,0 +1,166 @@
+[
+  {
+    "tag": "001",
+    "period": "validation",
+    "transaction_id": "T000038122",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2",
+    "first_related_detection": {
+      "transaction_id": "T000050567",
+      "detected_at": "2025-04-23T14:24:44+07:00",
+      "rule_id": "A2"
+    }
+  },
+  {
+    "tag": "001",
+    "period": "validation",
+    "transaction_id": "T000050567",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2",
+    "first_related_detection": null
+  },
+  {
+    "tag": "003",
+    "period": "train",
+    "transaction_id": "T000047394",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2|A4",
+    "first_related_detection": {
+      "transaction_id": "T000050973",
+      "detected_at": "2024-05-16T14:15:56+07:00",
+      "rule_id": "A2"
+    }
+  },
+  {
+    "tag": "003",
+    "period": "train",
+    "transaction_id": "T000050973",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2",
+    "first_related_detection": null
+  },
+  {
+    "tag": "003",
+    "period": "train",
+    "transaction_id": "T000004319",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2",
+    "first_related_detection": null
+  },
+  {
+    "tag": "003",
+    "period": "validation",
+    "transaction_id": "T000030084",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2|A4",
+    "first_related_detection": null
+  },
+  {
+    "tag": "003",
+    "period": "validation",
+    "transaction_id": "T000081861",
+    "fraud_type": "split_payments",
+    "variant": "near_limit_same_recipient",
+    "immediate_review": false,
+    "rule_score": 0,
+    "admission_basis": "",
+    "review_rule_ids": "",
+    "first_related_detection": {
+      "transaction_id": "T000019496",
+      "detected_at": "2025-06-04T13:20:13+07:00",
+      "rule_id": "A1"
+    }
+  },
+  {
+    "tag": "005",
+    "period": "train",
+    "transaction_id": "T000012669",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2|A4",
+    "first_related_detection": {
+      "transaction_id": "T000020628",
+      "detected_at": "2024-09-20T15:03:24+07:00",
+      "rule_id": "A4"
+    }
+  },
+  {
+    "tag": "005",
+    "period": "train",
+    "transaction_id": "T000076528",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2",
+    "first_related_detection": null
+  },
+  {
+    "tag": "005",
+    "period": "train",
+    "transaction_id": "T000068239",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2",
+    "first_related_detection": null
+  },
+  {
+    "tag": "005",
+    "period": "validation",
+    "transaction_id": "T000097222",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2",
+    "first_related_detection": {
+      "transaction_id": "T000064240",
+      "detected_at": "2025-02-15T10:51:53+07:00",
+      "rule_id": "A2"
+    }
+  },
+  {
+    "tag": "005",
+    "period": "validation",
+    "transaction_id": "T000064240",
+    "fraud_type": "split_payments",
+    "variant": "distributed_days",
+    "immediate_review": true,
+    "rule_score": 4,
+    "admission_basis": "split_pattern",
+    "review_rule_ids": "A2",
+    "first_related_detection": null
+  }
+]

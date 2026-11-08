@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "generator_sha256": "dc5237f8d62df0775a844f084ad5540eac517d488e911bb9225d88b78f933b47",
+  "config_sha256": "d1aaaa4116edb1be2df9722d338158867a08c67d8ea6d09d92ddaaa486cab8cc",
+  "font_sha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+  "versions": {
+    "PyMuPDF": "1.28.2",
+    "Pillow": "12.3.0"
+  },
+  "manifest_sha256": "4cf80012e6aebe3899ee92a91e43512163d7c0cd9161d0d29c76d2206449b9f1",
+  "split_sha256": "fa8e1dfdfe451cea16e1c1083b8feeedc710210f434431aa71d728c7890917ea",
+  "synthetic_documents": 30,
+  "synthetic_logical_documents": 10,
+  "synthetic_pages": 32,
+  "real_inventory_documents": 1153,
+  "hash_verification": {
+    "hash_match": 1153
+  },
+  "real_exact_duplicate_groups": 31,
+  "real_near_duplicate_candidate_pairs": 244,
+  "exact_duplicate_groups_crossing_legacy_splits": 8,
+  "known_variant_distances": {
+    "duplicate-resized.png": 0,
+    "duplicate-rotated.png": 0
+  },
+  "independent_annotation_review": "PENDING",
+  "gate": "PARTIAL_BLOCKED_REAL_DATA_AND_SECOND_REVIEW"
+}

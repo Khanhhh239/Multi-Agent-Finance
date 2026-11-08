@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-10-19T20:24:16.941332+07:00",
+  "scope": "Current cash-control baseline and draft integrity only; not implementation or acceptance of policy B",
+  "baseline_tests": {
+    "run": 24,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "successful": true
+  },
+  "policy_direction": "B_tier_priority_by_excess_and_materiality",
+  "approval_status": "not_approved",
+  "new_policy_implemented": false,
+  "new_policy_tests_executed": 0,
+  "pending_acceptance_case_groups": 16,
+  "protected_files_checked": 1209,
+  "protected_files_changed": [],
+  "runtime_files_unchanged": true,
+  "runtime_files_changed": [],
+  "declaration_hashes": {
+    "decision.json": "ae36c0508d1c8c35adb54c6aabd94ba16665e740e3f83c5b91c7bf7efc728e93",
+    "acceptance_plan.json": "c8d50f361dee537f8bd0f4b2947bc751ef0184ccc74360ec7ca1363c7818a396"
+  },
+  "technical_success": true,
+  "rr09_closed": false
+}

@@ -1,0 +1,10 @@
+{
+  "version": "admission-provenance-v2",
+  "files": {
+    "added_admissions_v2.csv": "eb276add2c7fe5e92b8b59094c50f1051be9ad15f91ffd139930de09ca2f1c56",
+    "admission_evidence.jsonl": "fa6170ebc720c50d0d763d08c3b49326000251db6d41e4dbbedcfc7bc0b74d52",
+    "membership_comparison.json": "257d901fea75f447910e57b3cc72689d24a7f9767f9cc93985bc4b59a20fdbf4"
+  },
+  "source_commitment_sha256": "a5f53e2021ea149dbbd2d1c74525d0c7182a87a7b23e4c6ba5328ba03f15c607",
+  "legacy_delta_sha256": "134d1d8f37854b4b6fb8327aae91c24eed22677039ee149aa631a906073ebc1f"
+}

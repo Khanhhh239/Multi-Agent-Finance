@@ -1,0 +1,19 @@
+{
+  "all_durable_rows_unchanged": true,
+  "tables": {
+    "review_workflow_events": true,
+    "information_request_events": true,
+    "notification_outbox": true,
+    "notification_delivery_events": true,
+    "notification_allocations": true,
+    "admissions": true
+  },
+  "before_counts": {
+    "review_workflow_events": 12,
+    "information_request_events": 8,
+    "notification_outbox": 174,
+    "notification_delivery_events": 374,
+    "notification_allocations": 40,
+    "admissions": 1
+  }
+}

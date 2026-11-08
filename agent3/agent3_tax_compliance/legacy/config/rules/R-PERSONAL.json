@@ -1,0 +1,16 @@
+{
+  "rule_id": "R-PERSONAL",
+  "effective_from": "2015-08-06",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "is_personal_expense",
+      "operator": "==",
+      "value": true
+    }
+  ],
+  "verdict": "REVIEW",
+  "fixable": false,
+  "fix_hint": "Chứng từ chi có dấu hiệu là chi phí tiêu dùng cá nhân cho thành viên công ty (như thẻ chơi golf, du lịch gia đình, ăn uống cá nhân). Cần giải trình mối quan hệ trực tiếp với hoạt động SXKD.",
+  "citation": "Khoản 2.11 và 2.21 Điều 4 Thông tư 96/2015/TT-BTC"
+}

@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "observations": 100000,
+  "evidence_hits": 123073,
+  "cases": 2821,
+  "operational_observations": 4013,
+  "models": {
+    "Rules": {
+      "average_precision": 0.6570572043647445,
+      "capacity_tp": 67,
+      "capacity_alerts": 75
+    },
+    "IF": {
+      "average_precision": 0.0532569441133927,
+      "capacity_tp": 8,
+      "capacity_alerts": 75
+    },
+    "Rules+Graph": {
+      "average_precision": 0.6699713668240059,
+      "capacity_tp": 67,
+      "capacity_alerts": 75
+    },
+    "Rules+Graph+IF": {
+      "average_precision": 0.5004204150805224,
+      "capacity_tp": 45,
+      "capacity_alerts": 75
+    }
+  },
+  "checks": [
+    "all_dataset_checksums",
+    "strictly_past_transaction_evidence",
+    "asof_graph_edges",
+    "suppression_points",
+    "queue_membership",
+    "saved_AP",
+    "validation_threshold_decisions",
+    "fixed_capacity_ranking"
+  ]
+}

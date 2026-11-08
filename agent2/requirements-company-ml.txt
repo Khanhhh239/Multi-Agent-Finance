@@ -1,0 +1,2 @@
+# Add to the existing review environment; the other four adapters use sklearn/numpy/scipy.
+catboost==1.2.10

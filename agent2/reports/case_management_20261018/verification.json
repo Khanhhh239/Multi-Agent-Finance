@@ -1,0 +1,48 @@
+{
+  "scenario": "003",
+  "mode": "dry_run",
+  "planned": {
+    "new_high_priority_cases": 25,
+    "daily_case_limit": 5,
+    "mode": "dry_run"
+  },
+  "delivered": {
+    "processed": 60,
+    "mode": "dry_run"
+  },
+  "company_count": 5,
+  "used_by_company": {
+    "C005": 5,
+    "C004": 5,
+    "C001": 5,
+    "C002": 5,
+    "C003": 5
+  },
+  "notification_counts": {
+    "simulated": 60
+  },
+  "jobs_by_kind": {
+    "high_priority": 50,
+    "weekly": 10
+  },
+  "daily_recommended_cases": 24,
+  "backlog_cases": 1146,
+  "original_source_hashes_unchanged": true,
+  "external_messages_sent": 0,
+  "case_report_sha256": {
+    "case_queue.csv": "99569553b700df499327a4ba9227ac09beaa70ba7cfab1acecfa80f32456bb11",
+    "rule_hits.jsonl": "620d9e638502f0d77556425e963ea57a55c8849a295e0a8bc151923bec051133",
+    "rule_coverage.json": "6d30d7c8c914ff5252057445bb753530e3648be8ce293e08834f9630b39ed088",
+    "case_events.csv": "98525af80b4e0e3060749cbea118304bbe7e75de83b6a60209db85e788961b50",
+    "batch_events.jsonl": "c7a872da6c5cd9a34cc36fdef44d9b664ff1e8e5d0eaaf88a9e549faef509664",
+    "evidence_findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "data_sha256": {
+    "transactions.csv": "820613514cde27ad73235ff20e6c56b13f639da4986a4751242583e8d50c7dfb",
+    "journal_documents.csv": "ae01a092896aea2d571dd3bc22d959788672c11d3e5329e04259cf047736ce0a",
+    "journal_lines.csv": "ebeed43cdf0f0c8636e8f093f2dffdccfbba590d96fb0c0a1dc3bed54b976ea9",
+    "companies.csv": "2d62ae6e3799122c7c6c8b134ea422828ee630c749e096d3e4e441163a6ef76b"
+  },
+  "mock_outbox": "notification_outbox.mock.json",
+  "daily_priority": "daily_priority.mock.json"
+}

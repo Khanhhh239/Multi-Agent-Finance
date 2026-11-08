@@ -1,0 +1,147 @@
+[
+  {
+    "case": "empty",
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "employee": {
+      "phone": "",
+      "address": ""
+    },
+    "vendor": {
+      "phone": "",
+      "address": ""
+    },
+    "feature": {
+      "employee_phone_overlap": 0,
+      "employee_address_overlap": 0,
+      "graph_employee_count": 0
+    },
+    "b2_points": 0,
+    "b2_hits": []
+  },
+  {
+    "case": "whitespace",
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "employee": {
+      "phone": "  ",
+      "address": "\t"
+    },
+    "vendor": {
+      "phone": "  ",
+      "address": "\t"
+    },
+    "feature": {
+      "employee_phone_overlap": 0,
+      "employee_address_overlap": 0,
+      "graph_employee_count": 0
+    },
+    "b2_points": 0,
+    "b2_hits": []
+  },
+  {
+    "case": "placeholder",
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "employee": {
+      "phone": "N/A",
+      "address": "không có"
+    },
+    "vendor": {
+      "phone": "N/A",
+      "address": "không có"
+    },
+    "feature": {
+      "employee_phone_overlap": 0,
+      "employee_address_overlap": 0,
+      "graph_employee_count": 0
+    },
+    "b2_points": 0,
+    "b2_hits": []
+  },
+  {
+    "case": "normalized_phone",
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "employee": {
+      "phone": "0912.345.678",
+      "address": "EMP_ONLY"
+    },
+    "vendor": {
+      "phone": "+84 912 345 678",
+      "address": "VENDOR_ONLY"
+    },
+    "feature": {
+      "employee_phone_overlap": 1,
+      "employee_address_overlap": 0,
+      "graph_employee_count": 1
+    },
+    "b2_points": 3,
+    "b2_hits": [
+      {
+        "transaction_id": "AUDIT_0000",
+        "company_id": "C001",
+        "detected_at": "2025-08-12T11:00:00+07:00",
+        "rule_id": "B2",
+        "rule_name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+        "points": 3,
+        "hard_trigger": 0,
+        "suppressed_reason": "",
+        "evidence": {
+          "direct_matches": {
+            "phone": [
+              "E0000011"
+            ]
+          },
+          "field_count": 1,
+          "related_party_disclosed": false
+        },
+        "related_transaction_ids": [],
+        "graph_path": [],
+        "intrinsic_points": 3,
+        "scoring_role": "transaction",
+        "evidence_id": "B2_0db43b392e49e003df46"
+      }
+    ]
+  },
+  {
+    "case": "normalized_address",
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "employee": {
+      "phone": "EMP_ONLY",
+      "address": " Số 12, Đường Ánh Dương "
+    },
+    "vendor": {
+      "phone": "VENDOR_ONLY",
+      "address": "SO12DUONGANHDUONG"
+    },
+    "feature": {
+      "employee_phone_overlap": 0,
+      "employee_address_overlap": 1,
+      "graph_employee_count": 0
+    },
+    "b2_points": 3,
+    "b2_hits": [
+      {
+        "transaction_id": "AUDIT_0000",
+        "company_id": "C001",
+        "detected_at": "2025-08-12T11:00:00+07:00",
+        "rule_id": "B2",
+        "rule_name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+        "points": 3,
+        "hard_trigger": 0,
+        "suppressed_reason": "",
+        "evidence": {
+          "direct_matches": {
+            "address": [
+              "E0000011"
+            ]
+          },
+          "field_count": 1,
+          "related_party_disclosed": false
+        },
+        "related_transaction_ids": [],
+        "graph_path": [],
+        "intrinsic_points": 3,
+        "scoring_role": "transaction",
+        "evidence_id": "B2_2f94c80a83a2fb895bfd"
+      }
+    ]
+  }
+]

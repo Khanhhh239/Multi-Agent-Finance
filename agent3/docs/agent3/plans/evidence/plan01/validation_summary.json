@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "foundation-v1",
+  "creator": "validate_foundation",
+  "stage": "gate-validation",
+  "created_at": "2026-10-11T13:42:57.317189+00:00",
+  "gate": "PASS",
+  "scope": "capture-foundation-v1",
+  "runtime": {
+    "python": "3.10.5 (tags/v3.10.5:f377153, Jun  6 2022, 16:14:13) [MSC v.1929 64 bit (AMD64)]",
+    "packages": {
+      "annotated-doc": "0.0.4",
+      "annotated-types": "0.7.0",
+      "anyio": "4.14.2",
+      "certifi": "2026.6.17",
+      "exceptiongroup": "1.3.1",
+      "fastapi": "0.139.2",
+      "h11": "0.16.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "idna": "3.18",
+      "pydantic": "2.13.4",
+      "pydantic-core": "2.46.4",
+      "starlette": "1.3.1",
+      "typing-extensions": "4.16.0",
+      "typing-inspection": "0.4.2"
+    }
+  },
+  "test_count": 22,
+  "tests_passed": true,
+  "json_schemas_checked": 17,
+  "valid_producer_consumer_examples": 7,
+  "invalid_examples_rejected_by_schema_and_domain": 4,
+  "isolated_dependency_files_verified": 438,
+  "legacy_hashes_before": {
+    "agent3_tax_compliance\\data\\database\\tax_compliance.db": "3242aa988e191c776f6b428c7a814107c19345b8c77e148d7a3e85198564edb3",
+    "agent3_tax_compliance\\data\\database\\vector_store.db": "fe44de14aef2479548d5069ce412d4a846b5a64cd8f514cd7316df9bb2762221"
+  },
+  "legacy_hashes_after": {
+    "agent3_tax_compliance\\data\\database\\tax_compliance.db": "3242aa988e191c776f6b428c7a814107c19345b8c77e148d7a3e85198564edb3",
+    "agent3_tax_compliance\\data\\database\\vector_store.db": "fe44de14aef2479548d5069ce412d4a846b5a64cd8f514cd7316df9bb2762221"
+  },
+  "source_sha256": {
+    "agent3_tax_compliance\\src\\domain\\base.py": "30772458506fd94b4ed96ef604dc491ed594b23053fb7a6faaa65e899b5006a3",
+    "agent3_tax_compliance\\src\\domain\\cfr.py": "9c93434cc4ab372967436d0259280798fcafd50154e65b500c298560c5f9d3df",
+    "agent3_tax_compliance\\src\\domain\\envelope.py": "b809deac6cabdbbf6a6da528ee51eab2c39a6496db15c9a45491068ee0da8a06",
+    "agent3_tax_compliance\\src\\domain\\events.py": "00a1d84696a98e0c83121d33d793f8c07f1bd9c2418ebd1743cdfd3de19c171e",
+    "agent3_tax_compliance\\src\\domain\\evidence.py": "225084c0602b1fc5f82ae607a7858c6f7a63de80cbffaaeb545d97a31227cd82",
+    "agent3_tax_compliance\\src\\domain\\field.py": "ad442e4412837fc189222996c346268a78ad2503b732d0baffa73814c2767e51",
+    "agent3_tax_compliance\\src\\domain\\interfaces.py": "a9e15cc97daa71776e60a8179899ebf10a18da2c28432a5752e66cfc1a70aefd",
+    "agent3_tax_compliance\\src\\domain\\money.py": "3280793f77a8bfc614a0ea5fc041208b3b7c6dd316ccae497bb1f6fb903d0b5a",
+    "agent3_tax_compliance\\src\\domain\\storage.py": "ed2bcf2dd017b72b5b66661b3fec212d3ef383dbb086e1b123cb535bce7dfa5b",
+    "agent3_tax_compliance\\src\\domain\\taxpayer.py": "29e25731dfd5d64b119c086e4c630cdf08e1cfc18cd0b8f3bd15cc2371f37fb9",
+    "agent3_tax_compliance\\src\\domain\\__init__.py": "3225d337a7aa2879b0a99699bdc496373197e846eab46898405a5a8c99c4b8d1",
+    "agent3_tax_compliance\\src\\persistence\\repository.py": "0a420bceb6ebcb8807e15b204d1f46cd0d9156f2c3ac0b4a218d52eb18b671b8",
+    "agent3_tax_compliance\\src\\persistence\\__init__.py": "d6a302c560263660ee9cfc9ab1e3e07114fa5952b20ffa221af0200a139c834f",
+    "agent3_tax_compliance\\src\\app.py": "6aa4bc6340a3b3775ae3756256ae777e6cc29012db4cbe9cb411096bf13ab642",
+    "agent3_tax_compliance\\src\\config.py": "7248d97d3ddc91ae346feadfd0002db376c601f239683d4fa3f1de4d921bc3dd",
+    "agent3_tax_compliance\\migrations\\001_foundation.sql": "7e7b6f6bdde2dcb401fa3699491315ef2bc16b82f09d9df562773a5f3d0c2ddc",
+    "agent3_tax_compliance\\tests\\contracts\\factories.py": "b879cb13184fc212274b40a8a347cfccc797c7c3188513ae262eda5b15e8a2f0",
+    "agent3_tax_compliance\\tests\\contracts\\test_foundation.py": "5eb4f7fca8d787ee474e68f233e8a71a47b2b1de251bf5d35f8903ecfeb28589",
+    "scripts\\bootstrap_foundation.py": "39e11c435d6fd4d7dfd593cb8c5658167d8707cc7a4eba450ea7288785281ca9",
+    "scripts\\export_foundation_contracts.py": "0646422254a073ba8acc3325bdc40db2060b00f5355506130e07b29e3dc06649",
+    "scripts\\validate_foundation.py": "8d58f827b2219b147b56ecf780487982576b6e3a22d0b1bbb5c826eaa517d1eb",
+    "agent3_tax_compliance\\requirements-foundation.lock": "4233e02cd9a4199e3e584e4149b65f14f0f5cb18e431c9da60ebadca9e8e2114"
+  },
+  "registry_sha256": "7d999e6174951b05e40a9dad4d039b36be1e0000565e4374befeb791a77d58f8",
+  "examples_sha256": "cda74ac502b5fc40406a31e336597669da5d5da5e29f27f47ab7424db872e78e",
+  "environment_snapshot_sha256": "23d696ba07eb62083bf0c159a5f7858f0559c5c23ce6e551803a4c5929de93e9",
+  "test_output_sha256": "f7b033520b41845ff703d050ac20210a148802573a8da0e9f109a2a51f809db1",
+  "limitations": [
+    "No OCR/ZEN ingestion implementation",
+    "No real-data accuracy certification",
+    "HTTP health only; trusted AccessContext injection required before data APIs",
+    "Offline dependency snapshot is Python 3.10.5 Windows specific",
+    "httpx TestClient deprecation warning; current pinned combination passes"
+  ]
+}

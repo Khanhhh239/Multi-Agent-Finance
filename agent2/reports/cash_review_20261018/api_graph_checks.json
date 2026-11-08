@@ -1,0 +1,34 @@
+[
+  {
+    "scenario": "001",
+    "company_id": "C001",
+    "scope": {
+      "company_id": "C001",
+      "as_of": "2025-12-31T23:59:59+07:00",
+      "context_only": true,
+      "components_scope": "returned_subgraph",
+      "truncated": false,
+      "candidate_nodes": 477,
+      "returned_nodes": 477,
+      "full_graph_nodes": 477,
+      "full_graph_edges": 373,
+      "findings_complete": true
+    }
+  },
+  {
+    "scenario": "003",
+    "company_id": "C001",
+    "scope": {
+      "company_id": "C001",
+      "as_of": "2025-12-31T23:59:59+07:00",
+      "context_only": true,
+      "components_scope": "returned_subgraph",
+      "truncated": false,
+      "candidate_nodes": 414,
+      "returned_nodes": 414,
+      "full_graph_nodes": 414,
+      "full_graph_edges": 324,
+      "findings_complete": true
+    }
+  }
+]

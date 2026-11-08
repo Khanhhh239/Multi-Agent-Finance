@@ -1,0 +1,91 @@
+# Chạy app và phát triển
+
+## Phiên local dùng chính
+
+Chạy `python -B start_review.py`, rồi mở **http://127.0.0.1:8765/**. Launcher tự đọc `.runtime/review/server_8765.config.json`: nguồn hồ sơ hiện có, database `.runtime/review/sprint14_demo.sqlite3`, môi trường ML và danh tính quản lý demo. Gọi lại khi đúng phiên đang chạy sẽ dùng phiên đó. Dừng bằng `python -B start_review.py --stop`; launcher đối chiếu instance trước khi dừng.
+
+Các màn hình `/data-import`, `/company-ml`, `/ml-reviews` và hàng đợi `/` cùng địa chỉ này. Các cổng 8853/8854, 8859/8860, 8861/8862 đã dừng sau khi hợp nhất; database và bằng chứng kiểm thử vẫn giữ trên đĩa. [Biên bản chuyển và khôi phục](reports/app/unified_local_20261107.md).
+
+**Phiếu rà ML:** `/ml-reviews` giữ đủ 12 phiếu đã chuẩn bị, có lưu nháp/kết quả và đồng hồ máy chủ. Khi dựng server khác có thể kết nối gói bằng `ml_review_roots` hoặc `--ml-review-comparison`. Các đợt kiểm thử ghi kết quả dùng database riêng. [Hướng dẫn và cách triển khai](reports/ml/ml_review_web_20261105.md).
+
+**So sánh model riêng từng doanh nghiệp:** dùng `python -B -m sme_fraud.company_ml_comparison run`, khóa cùng kỳ và số giao dịch rà cho mọi model; chỉ đọc snapshot SQLite và xuất gói riêng. Lệnh `collect` ghi nhận phiếu hữu ích/phút rà do người dùng xác nhận. CatBoost bị loại nếu thiếu nhãn train đã xác minh đúng thời điểm và hai lớp. [Hướng dẫn và kết quả demo](reports/ml/company_ml_comparison_20261104.md). Đây là công cụ CLI, chưa thêm màn hình rà so sánh mới.
+
+**Nhập CSV/Excel:** cài thêm `requirements-data-import.txt`, mở `/data-import` trên server mới. Chọn doanh nghiệp, tải tệp theo mẫu, kiểm tra/chuẩn hóa, đọc lỗi và cảnh báo trước khi lưu rồi chuyển sang chọn ML. [Đặc tả, giới hạn và kiểm thử](reports/ml/data_import_20261104.md). Demo riêng: `python -B tests/data_import_demo.py --port 8853` (8853 kế toán trưởng QA; 8854 chỉ xem). Môi trường review và `PYTHONPATH` cần có thư mục gốc cùng `tests`, tương tự demo Company ML.
+
+**Dữ liệu & ML theo doanh nghiệp:** mở `/company-ml` trên máy chủ web mới. Quy trình cập nhật nguồn đã kết nối → đánh giá → xác nhận phiên bản → chấm bằng model cố định được mô tả tại [hướng dẫn Company ML](../examples/company_ml/README.md). Có demo riêng ở cổng 8851/8852, không dùng database đang vận hành. Quyền ghi vẫn cần danh tính máy chủ; không tạo đăng nhập mới trong chức năng này.
+
+Chạy lệnh từ thư mục gốc `D:\agent22`. Bản tích hợp mới nằm trong `reports/integrated_rehearsal_20261028_v2/`; demo RR09/ML v4 ngày 24/10 giữ riêng để tham chiếu. [Dữ liệu benchmark cũ](development/synthetic_data.md) có mục đích riêng.
+
+## Python và thư viện
+
+Môi trường của máy này có Python tại:
+
+```powershell
+$projectPython = 'C:\Users\Technical Support\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
+```
+
+Script demo hiện có tự thêm thư viện cục bộ trong `.runtime/site-packages`. Máy mới cần môi trường Python và thư viện theo profile thích hợp: `requirements-review-lock.txt` cho web/backup đã kiểm chứng; `requirements-lock.txt` là profile benchmark lịch sử. Cài ngoại tuyến theo [RELEASES](../RELEASES.md).
+
+## Bản tích hợp hiện tại — 28/10
+
+```powershell
+$env:PYTHONPATH = "$PWD;.runtime/site-packages"
+& $projectPython -X utf8 -B -m sme_fraud.integrated_rehearsal serve `
+  --output reports/integrated_rehearsal_20261028_v2 --base-port 8821
+```
+
+Mở **http://127.0.0.1:8821/** cho kế toán viên C001; cổng **8822** cho kế toán trưởng, **8823** cho giám đốc, **8824** cho chưa đăng nhập. Danh tính và mọi kết luận/phút trong lượt test là mô phỏng; đây không phải đăng nhập thật. Nếu đúng tiến trình đã chạy thì dùng lại, không khởi tạo writer thứ hai trên database này.
+
+Nguồn/cache ở `source/`, detector mới ở `baseline/`, IF shadow ở `comparison/coverage/discovery/`, database riêng ở `app/review.sqlite3` bên trong workspace này. App dùng bản sao baseline, IF không tự thêm hồ sơ vận hành. Đồng hồ test cố định 28/10/2026 10:00 +07:00 trên nguồn 2024–2025; thông báo bắt buộc giả lập.
+
+[Biên bản tích hợp](reports/app/integrated_rehearsal_20261028.md) ghi rõ 1.211 detail, 42 kiểm tra HTTP, giới hạn browser và profile nguồn hỗ trợ. [Hướng dẫn runner](../examples/integrated_rehearsal/README.md) có lệnh chạy mới vào output chưa tồn tại. Bộ P2/RR09 UAT riêng vẫn ở demo tham chiếu dưới đây.
+
+## Demo ngày 24/10 để tham chiếu
+
+```powershell
+& $projectPython -B .runtime/review_roles_20261024/serve.py
+```
+
+Mở **http://127.0.0.1:8774/** sau thông báo sẵn sàng. Nếu cổng đã có đúng bản demo chạy thì dùng tiến trình đó; không khởi chạy thêm một writer vào cùng database.
+
+| Thành phần | Đường dẫn từ gốc dự án |
+| --- | --- |
+| Nguồn/cache v4 | `reports/rr09_ml_completion_20261024/ml_v4/cache/` |
+| Kết quả baseline hiện tại | `reports/rr09_ml_completion_20261024/ml_v4/baseline/` |
+| Model tương thích | `reports/rr09_ml_completion_20261024/ml_v4/models/` |
+| Database demo | `.runtime/rr09_ml_completion_20261024/review.sqlite3` |
+| Bộ đối chứng RR09 | `reports/rr09_ml_completion_20261024/rr09_controls/` |
+| Phiếu ML mù theo vai trò | `reports/review_roles_20261024/ml_review_workspace/` |
+
+Quyền ghi cần danh tính do máy chủ xác thực; chưa có tài khoản thực tế nên demo hiện ở chế độ xem. Xem [tích hợp vai trò](../examples/review_roles/README.md).
+
+Để thử thao tác kế toán viên → người kiểm tra bằng danh tính mô phỏng, dùng [môi trường browser riêng](reports/app/browser_workflow_20261027.md#môi-trường-và-cách-thử-lại), cổng 8791–8794 và database test riêng. Không nhập kết quả test vào demo 8774 hoặc gói rà ML.
+
+Thông báo hai cấp dùng [cấu hình theo vai trò](../examples/notifications/README.md), không dùng định dạng người nhận kiểu cũ khi gửi thật. Worker chạy riêng; giao diện chỉ chạy giả lập theo phạm vi công ty. Xem [nghiệm thu thông báo](reports/app/notification_roles_20261027.md) cho môi trường test riêng cổng 8795–8798 và bằng chứng lịch sử/chống trùng.
+
+Nếu muốn khởi tạo một workspace thử riêng bằng CLI, xem `python -B -m sme_fraud.review_server --help`; truyền rõ `--data-root`, `--reports-root`, `--database` và `--two-stage-review`. Bộ P2 mặc định của CLI là bộ lịch sử, khác bộ RR09 riêng trong script demo trên.
+
+## Kiểm thử
+
+Các bộ kiểm thử nằm trong `tests/`; chạy bộ liên quan tới thay đổi. Ví dụ kiểm tra các bản sửa gần nhất:
+
+```powershell
+$env:PYTHONPATH = "$PWD;.runtime/site-packages;tests"
+& $projectPython -B -m unittest test_b4_evidence_timing test_b2_company_transfer test_feature_evidence_timing test_feature_contact_identity test_current_relationship_features test_rr09_priority test_review_roles test_review_workflow
+```
+
+JavaScript có các bộ `tests/review_*_ui.test.js` và `tests/rr09_ui.test.js`, chạy bằng Node. Kiểm tra HTTP/renderer và kiểm tra thao tác trên browser là hai bằng chứng khác nhau; ghi rõ loại nào đã chạy.
+
+Bộ CSV/cache mới cho C4/E2/F2/F3/F4 và lệnh mở từng nhóm trong app nằm ở [hướng dẫn dữ liệu đối chứng](../data/rule_branch_controls_20261027/README.md). Chạy `test_rule_branch_controls` để kiểm tra 98 biến thể và export/roundtrip. [Báo cáo](reports/rules/rule_branch_controls_20261027.md) phân biệt độ phủ cũ, đối chứng bổ sung và nghiệm thu nguồn thật còn mở.
+
+[Ma trận kiểm thử luật](reports/rules/rule_test_matrix_20261027.md) ghi ID test cho từng mã/tình huống. Chạy phần ma trận và các ca biên mới:
+
+```powershell
+& $projectPython -B -m unittest test_rule_matrix_manifest test_rule_matrix_routing test_rule_boundaries test_rule_statistics_matrix
+```
+
+## Khi thêm kết quả mới
+
+Giữ dữ liệu/nhãn/holdout và kết quả đã khoá riêng khỏi việc sửa giao diện hoặc dọn tài liệu. Chạy mới vào một thư mục mới, không huấn luyện lại chỉ để hợp thức hoá độ phủ. Đọc [trạng thái](STATUS.md), [backlog](BACKLOG.md) và hướng dẫn từng module trong `examples/` trước khi chạy benchmark.
+
+Báo cáo diễn giải viết trong `docs/reports/<nhóm>/`; đầu ra lớn nằm trong `reports/<lượt_chạy>/`. Những đường dẫn lịch sử mà app, kiểm thử, manifest hoặc bộ đóng gói sử dụng được giữ tại chỗ và liên kết qua [mục lục báo cáo](reports/README.md).

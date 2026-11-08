@@ -1,0 +1,73 @@
+{
+  "version": "score-only-cache-v1",
+  "mode": "technical_cache_replay",
+  "scope": {
+    "company_ids": [
+      "C001",
+      "C002",
+      "C003",
+      "C004",
+      "C005"
+    ],
+    "start_at": "2025-01-01T00:00:00+07:00",
+    "end_at": "2025-07-01T00:00:00+07:00",
+    "source_ref": "SIM: existing validation cache; technical replay, not independent evaluation"
+  },
+  "scope_end_exclusive": true,
+  "dataset": "D:\\agent22\\data\\feature_model_sync_20261017\\sme_fraud_003",
+  "dataset_version": "2.1-feature-sync",
+  "data_origin": "not_attested",
+  "manifest_sha256": "00852d863850f10d18f25276db9295e3d4d91c48b88e14d99fbc514eab0b23d7",
+  "input_sha256": {
+    "companies.csv": "2d62ae6e3799122c7c6c8b134ea422828ee630c749e096d3e4e441163a6ef76b",
+    "employees.csv": "a11f650bbbc881a8feabd44294cae0ea279bcd288a62dd26248a4210284f25a0",
+    "entity_links.csv": "fdeb0bcda551ee9d4f596e02510c1409798efd7ab5b245eb3237b9ea8fd6e06a",
+    "attendance.csv": "1b97e7b3ca757cd50d1677fe2d5c381505f878a2e110871108292014d9402572",
+    "vendors.csv": "062472a9dee5015f95610f183ae8b3d68de4c31f301f7f82c8463f99cd74ef93",
+    "vendor_status_history.csv": "7baaaf5d9559ae8dc9ee103c0a3ea5db11dd4c45f13606db4ae01d96a0adb75f",
+    "customers.csv": "d0eb1793e6da102fb6c5e08f15dc3a1ab555cc01acdb76af305d23039ebeb989",
+    "calendar.csv": "7296fea023dd9d6bd4db421d982b767bc7a4e82c2aecbb698c11eac54a252192",
+    "advances.csv": "aee63a244c48baac222ef708c790b28da10b457de68874fa08164fd460810fae",
+    "advance_events.csv": "8d64a2cc46defa1023b4b08f194df873376830cb617230084708dc12b5b8c222",
+    "bank_account_changes.csv": "17d151430c5adeefab57358543c5078edb2744642ff55f929b747b326131a92b",
+    "transactions.csv": "820613514cde27ad73235ff20e6c56b13f639da4986a4751242583e8d50c7dfb",
+    "invoices.csv": "0e2cc83042fcd732bd4ca3ed108ed5b18e8b7964232c6de8bc5949be30ac1643",
+    "journal_lines.csv": "ebeed43cdf0f0c8636e8f093f2dffdccfbba590d96fb0c0a1dc3bed54b976ea9",
+    "journal_documents.csv": "ae01a092896aea2d571dd3bc22d959788672c11d3e5329e04259cf047736ce0a",
+    "document_links.csv": "7103a628245564a7449065e4c1ded80da6a2e69913f725365b49a69d8b3d3553",
+    "account_flow_edges.csv": "402fe9312a5ccdeb53245bae6a1a330ce93fd257e4ae21d32ae5cf8110ff4eae",
+    "features.csv": "9268547952c81de5a5d3b0c6a8e9e29356d6ee866e2d45131600039e0695a06d"
+  },
+  "model_path": "D:\\agent22\\reports\\feature_model_sync_20261017\\sme_fraud_003\\isolation_forest.joblib",
+  "model_sha256": "2a92b864e0717d147f9e8e2c8fadf28f2b017ab3bb849f8640966bfe4099a4c2",
+  "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1",
+  "sklearn_version": "1.9.1",
+  "training_feature_fingerprint": "4156b80200c308402077b86011d271f40b4a16beb7706be193317385374c2878",
+  "compatibility": {
+    "compatible": true,
+    "reasons": [],
+    "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1"
+  },
+  "rows_scored": 25000,
+  "score_direction": "higher_is_more_anomalous",
+  "models_fitted": 0,
+  "labels_loaded": false,
+  "splits_loaded": false,
+  "feature_rebuild": false,
+  "threshold_changed": false,
+  "queue_changed": false,
+  "external_notifications": 0,
+  "holdout_005_loaded_or_scored": false,
+  "source_acceptance_verified": false,
+  "model_training_window_disjointness_verified": false,
+  "operational_benefit_measured": false,
+  "independent_review": false,
+  "gates": {
+    "real_source": "awaiting_accepted_real_data",
+    "protocol": "awaiting_business_approval",
+    "temporal_model_provenance": "not_verified_by_this_runner",
+    "benefit": "not_measured"
+  },
+  "run_id": "3d7c137a945751eea22b9083cdf18dc6fbb66750a8e4e1d8476fb4d968a2d2f6",
+  "scores_sha256": "4e80adc4c185991c218746eda4d7c4073bf69abbab49d7770073bb9e588f8470"
+}

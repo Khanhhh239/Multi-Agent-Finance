@@ -1,0 +1,67 @@
+{
+  "relationship_semantics": {
+    "version": "current-relationships-v1",
+    "state": "current_as_of_posted_at",
+    "current_features": [
+      "employee_phone_overlap_current",
+      "employee_address_overlap_current",
+      "graph_employee_count_current",
+      "linked_vendor_count_current"
+    ],
+    "historical_features": [],
+    "historical_window_days": null,
+    "master_time": "recorded_at",
+    "link_time": "observed_at",
+    "cutoff_inclusive": true,
+    "master_precedes_equal_time_mirror": true,
+    "graph_membership": "current_company_members_only"
+  },
+  "renamed_features": {
+    "employee_phone_overlap": "employee_phone_overlap_current",
+    "employee_address_overlap": "employee_address_overlap_current",
+    "graph_employee_count": "graph_employee_count_current",
+    "linked_vendor_count": "linked_vendor_count_current"
+  },
+  "cases": [
+    {
+      "scenario": "employee_phone_address_change",
+      "before_posted_at": "2025-08-12T11:00:00+07:00",
+      "after_posted_at": "2025-08-14T11:00:00+07:00",
+      "before_current_features": {
+        "employee_phone_overlap_current": 1,
+        "employee_address_overlap_current": 1,
+        "graph_employee_count_current": 1,
+        "linked_vendor_count_current": 1
+      },
+      "after_current_features": {
+        "employee_phone_overlap_current": 0,
+        "employee_address_overlap_current": 0,
+        "graph_employee_count_current": 0,
+        "linked_vendor_count_current": 1
+      },
+      "b2_after_points": 0,
+      "historical_features_unchanged": true,
+      "historical_hits_unchanged": true
+    },
+    {
+      "scenario": "vendor_phone_change",
+      "before_posted_at": "2025-08-12T11:00:00+07:00",
+      "after_posted_at": "2025-08-14T11:00:00+07:00",
+      "before_current_features": {
+        "employee_phone_overlap_current": 1,
+        "employee_address_overlap_current": 0,
+        "graph_employee_count_current": 1,
+        "linked_vendor_count_current": 1
+      },
+      "after_current_features": {
+        "employee_phone_overlap_current": 0,
+        "employee_address_overlap_current": 0,
+        "graph_employee_count_current": 0,
+        "linked_vendor_count_current": 1
+      },
+      "b2_after_points": 0,
+      "historical_features_unchanged": true,
+      "historical_hits_unchanged": true
+    }
+  ]
+}

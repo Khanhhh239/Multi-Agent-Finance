@@ -1,0 +1,58 @@
+{
+  "successful": true,
+  "base_url": "http://127.0.0.1:8769",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 5763
+    },
+    {
+      "path": "/app.js",
+      "status": 200,
+      "bytes": 66613
+    },
+    {
+      "path": "/review_explanations.js",
+      "status": 200,
+      "bytes": 10441
+    },
+    {
+      "path": "/styles.css",
+      "status": 200,
+      "bytes": 18983
+    },
+    {
+      "path": "/p2-controls",
+      "status": 200,
+      "bytes": 4150
+    },
+    {
+      "path": "/p2_controls.js",
+      "status": 200,
+      "bytes": 26677
+    },
+    {
+      "path": "/api/p2-controls/meta",
+      "status": 200,
+      "bytes": 1449
+    },
+    {
+      "path": "/api/case?scenario=003&id=IR_c39bd6eef7d31a7c",
+      "status": 200,
+      "bytes": 78454
+    },
+    {
+      "path": "/api/case?scenario=001&id=IR_30749635120c8936",
+      "status": 200,
+      "bytes": 84797
+    },
+    {
+      "path": "/api/cases?scenario=003&status=awaiting_information",
+      "status": 200,
+      "bytes": 39199
+    }
+  ],
+  "notification_mode": "dry_run",
+  "browser_visual_qa": false
+}

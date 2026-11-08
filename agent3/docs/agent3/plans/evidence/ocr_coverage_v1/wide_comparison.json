@@ -1,0 +1,27 @@
+{
+  "scope": "One selected difficult DEV name crop, agent labels, no database writes or holdout claim",
+  "rows": [
+    {
+      "model_id": "vietocr_region_v1",
+      "runtime_sha256": "f28b9b95988d1c8c0ae5758ba29c7ea131433c87e06ca84535cfdd8828fa9619",
+      "crop_sha256": "59e29c4533b9a03725f65d2a671a5069113f4870373a42e8016bcdfae6caceea",
+      "labeled": 1,
+      "exact": 0,
+      "elapsed_seconds": 9.675056600000971,
+      "load_ms": 6059.8241000006965,
+      "inference_ms": 2193.9942999997584
+    },
+    {
+      "model_id": "vietocr_region_wide",
+      "runtime_sha256": "d015ed6104bcd44ca31a26bd9b0c18d3557dcc09d7d663ec8ca0647936e96454",
+      "crop_sha256": "59e29c4533b9a03725f65d2a671a5069113f4870373a42e8016bcdfae6caceea",
+      "labeled": 1,
+      "exact": 0,
+      "elapsed_seconds": 9.686316799999986,
+      "load_ms": 5713.880200000858,
+      "inference_ms": 2397.8917000004003
+    }
+  ],
+  "promotion_approved": false,
+  "comparison_uses_same_weights": true
+}

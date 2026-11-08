@@ -1,0 +1,307 @@
+{
+  "parent_plan": "PLAN_06",
+  "status": "IN_PROGRESS_TECHNICAL_SELF_CHECK",
+  "label_status": "SELF_CHECK_NOT_INDEPENDENT",
+  "hashes": {
+    "plan06_v20_frozen_01": "ac358dece540d0cbb11682bc9d0e29e9321ff0402d2e0a3c012d849484a18272",
+    "plan06_v21_split_full_01": "d8def37ffc305cd580a9843d790f2d1e5ff2fca2ca3871ed2aa6c9f089cdda33"
+  },
+  "aggregates": [
+    {
+      "phase": "binding_replay_same_frozen_inputs",
+      "mode": "hybrid",
+      "group": "public_pilot_dev",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 27,
+        "AMBIGUOUS": 4
+      }
+    },
+    {
+      "phase": "binding_replay_same_frozen_inputs",
+      "mode": "native_only",
+      "group": "public_pilot_dev",
+      "documents": 8,
+      "counts": {
+        "CORRECT": 80
+      }
+    },
+    {
+      "phase": "binding_replay_same_frozen_inputs",
+      "mode": "native_only",
+      "group": "training_unverified",
+      "documents": 1,
+      "counts": {
+        "CORRECT": 10
+      }
+    },
+    {
+      "phase": "binding_replay_same_frozen_inputs",
+      "mode": "scan",
+      "group": "public_pilot_dev",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 21,
+        "MISSING": 6,
+        "WRONG_PRESENT": 4
+      }
+    },
+    {
+      "phase": "plan06_v20_frozen_01",
+      "mode": "hybrid",
+      "group": "public_pilot_dev",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 27,
+        "AMBIGUOUS": 4
+      }
+    },
+    {
+      "phase": "plan06_v20_frozen_01",
+      "mode": "native_only",
+      "group": "public_pilot_dev",
+      "documents": 8,
+      "counts": {
+        "CORRECT": 79,
+        "MISSING": 1
+      }
+    },
+    {
+      "phase": "plan06_v20_frozen_01",
+      "mode": "native_only",
+      "group": "training_unverified",
+      "documents": 1,
+      "counts": {
+        "CORRECT": 10
+      }
+    },
+    {
+      "phase": "plan06_v20_frozen_01",
+      "mode": "scan",
+      "group": "public_pilot_dev",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 21,
+        "MISSING": 6,
+        "WRONG_PRESENT": 4
+      }
+    },
+    {
+      "phase": "plan06_v21_split_full_01",
+      "mode": "hybrid",
+      "group": "public_pilot_dev",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 29,
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "phase": "plan06_v21_split_full_01",
+      "mode": "native_only",
+      "group": "public_pilot_dev",
+      "documents": 8,
+      "counts": {
+        "CORRECT": 79,
+        "MISSING": 1
+      }
+    },
+    {
+      "phase": "plan06_v21_split_full_01",
+      "mode": "native_only",
+      "group": "training_unverified",
+      "documents": 1,
+      "counts": {
+        "CORRECT": 10
+      }
+    },
+    {
+      "phase": "plan06_v21_split_full_01",
+      "mode": "scan",
+      "group": "public_pilot_dev",
+      "documents": 3,
+      "counts": {
+        "CORRECT": 23,
+        "MISSING": 6,
+        "WRONG_PRESENT": 2
+      }
+    }
+  ],
+  "binding_changes": [
+    {
+      "case": "viettel_adjustment-p1",
+      "mode": "native_only",
+      "field": "totals.gross",
+      "before": "MISSING",
+      "after": "CORRECT"
+    }
+  ],
+  "charset": {
+    "status": "FAIL_CHARSET",
+    "missing_count": 88,
+    "model": "PP-OCRv6_medium_rec",
+    "artifact_hashes": {
+      "inference.json": "0b2e25e990bd072f1bf77d59d67d508bce6c4bd44af6624e0fb27d6da2cd00e8",
+      "inference.pdiparams": "1b01c79a914587933f615569e75de54f2e638ebb5d3f3b3c1b38c24ede8c7319",
+      "inference.yml": "991b700facf5b50a7de193468207d5f4255b538dde0d312ae3b7c7a9b6873129"
+    }
+  },
+  "normalizer_sanity": {
+    "PASS": 92,
+    "NOT_APPLICABLE": 60
+  },
+  "crop_width_ablation": [
+    {
+      "width": 512,
+      "edits": 15,
+      "characters": 78,
+      "cer": 0.19230769230769232,
+      "exact_match": false,
+      "inference_seconds": 5.31964169999992
+    },
+    {
+      "width": 768,
+      "edits": 24,
+      "characters": 78,
+      "cer": 0.3076923076923077,
+      "exact_match": false,
+      "inference_seconds": 3.4780522999935783
+    },
+    {
+      "width": 1024,
+      "edits": 35,
+      "characters": 78,
+      "cer": 0.44871794871794873,
+      "exact_match": false,
+      "inference_seconds": 3.0647447999945143
+    }
+  ],
+  "crop_split_ablation": [
+    {
+      "width": 512,
+      "split_lines": true,
+      "spans": [
+        [
+          0,
+          279
+        ],
+        [
+          279,
+          501
+        ],
+        [
+          501,
+          574
+        ]
+      ],
+      "edits": 1,
+      "characters": 78,
+      "cer": 0.01282051282051282,
+      "exact_match": false,
+      "inference_seconds": 3.416631200001575
+    }
+  ],
+  "fresh_latency": {
+    "plan06_v20_frozen_01": [
+      {
+        "case": "charity_2023-p1",
+        "wall_seconds": 168.56712259999767,
+        "lifecycle": "NEW_WORKER_PROCESS_PER_CALL",
+        "success": true,
+        "metrics": [
+          {
+            "peak_job_memory_bytes": 1534095360
+          }
+        ],
+        "model_load_ms": 20263.844099994458,
+        "inference_ms": 145403.64540000155
+      },
+      {
+        "case": "cyber_construction-p69",
+        "wall_seconds": 118.57763330000307,
+        "lifecycle": "NEW_WORKER_PROCESS_PER_CALL",
+        "success": true,
+        "metrics": [
+          {
+            "peak_job_memory_bytes": 1516912640
+          }
+        ],
+        "model_load_ms": 17626.312500004133,
+        "inference_ms": 98097.29840000364
+      },
+      {
+        "case": "software_kct-p1",
+        "wall_seconds": 161.08452039999975,
+        "lifecycle": "NEW_WORKER_PROCESS_PER_CALL",
+        "success": true,
+        "metrics": [
+          {
+            "peak_job_memory_bytes": 1514913792
+          }
+        ],
+        "model_load_ms": 14612.32839999866,
+        "inference_ms": 143705.07839999482
+      }
+    ],
+    "plan06_v21_split_full_01": [
+      {
+        "case": "charity_2023-p1",
+        "wall_seconds": 115.09760439999809,
+        "lifecycle": "NEW_WORKER_PROCESS_PER_CALL",
+        "success": true,
+        "metrics": [
+          {
+            "peak_job_memory_bytes": 1525841920
+          }
+        ],
+        "model_load_ms": 14145.927700003085,
+        "inference_ms": 98515.94199999818
+      },
+      {
+        "case": "cyber_construction-p69",
+        "wall_seconds": 109.86919109999872,
+        "lifecycle": "NEW_WORKER_PROCESS_PER_CALL",
+        "success": true,
+        "metrics": [
+          {
+            "peak_job_memory_bytes": 1517887488
+          }
+        ],
+        "model_load_ms": 14661.63090000191,
+        "inference_ms": 92628.47180000244
+      },
+      {
+        "case": "software_kct-p1",
+        "wall_seconds": 180.3584539000003,
+        "lifecycle": "NEW_WORKER_PROCESS_PER_CALL",
+        "success": true,
+        "metrics": [
+          {
+            "peak_job_memory_bytes": 1535066112
+          }
+        ],
+        "model_load_ms": 14399.503200002073,
+        "inference_ms": 163178.56979999488
+      }
+    ]
+  },
+  "remaining": [
+    "independent holdout labels",
+    "full read/layout oracles",
+    "batch warm baseline",
+    "UI self acceptance",
+    "statistical gates",
+    "V2-4 and V2-5"
+  ],
+  "tests": {
+    "extraction": 43,
+    "ocr": 28,
+    "quality": 34,
+    "review": 32,
+    "crop_geometry": 3,
+    "total": 140,
+    "status": "PASS",
+    "compile": "PASS",
+    "git_diff_check": "PASS"
+  }
+}

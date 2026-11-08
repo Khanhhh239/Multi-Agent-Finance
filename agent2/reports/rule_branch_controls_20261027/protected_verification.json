@@ -1,0 +1,26 @@
+{
+  "protected_files": 10418,
+  "authorized_changes": {
+    "docs/BACKLOG.md": {
+      "before": "fc2a38d35d55a286b49b7765af04233d165c1bbbb918f1ea219f0744d4ce1122",
+      "after": "0bea980ad5cb32e31373505fd1e3138070e07d4b6c7eb659f19a4355e540f231"
+    },
+    "docs/DEVELOPMENT.md": {
+      "before": "24c2df05019ff2b0644ad20048fc7839371c1188f365054bba0361100affab12",
+      "after": "ac0f3b68a56e872035dba2012d28c317caa4deba2a47883e647875fb728c18d0"
+    },
+    "docs/STATUS.md": {
+      "before": "045e20f7e5ada1e0a2512645ac408809fe9c0b5a934febdbcb31a5316ff69f87",
+      "after": "13ba4877923447b752bfe3031aaa6a7f8a3799c61e8b637bb2c5da58f80223b1"
+    },
+    "docs/reports/README.md": {
+      "before": "a1186376aaf62b4fcab96ce3233746cd579496542d449889209b7436c863f820",
+      "after": "ee80aa194ce8d001a864d720e1010f741ed7a079b9a83a71e481249b2253749d"
+    },
+    "docs/reports/rules/README.md": {
+      "before": "b83670784386598ddc2160c85b211742c2d7572090b6e8f99b4b25025c8f9640",
+      "after": "90f5953cb24065cba0c5881530f69396a9ec406dd53a3c4ba232580058f6f1d1"
+    }
+  },
+  "unexpected_changes": {}
+}

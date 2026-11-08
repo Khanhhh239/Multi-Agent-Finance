@@ -1,0 +1,9 @@
+{
+  "manifest_sha256": "945fc1a08a0c22564ad1ecf615667857cd84d0de2569a85aed0f70a4b4414ded",
+  "oracle_sha256": "9a141208805134d56eb0cdbd0592abf1e8070b630e4eb0752c5a9b039b27b892",
+  "registry_sha256": "37bc4c4831fb3e83c44c0000606fccde6c634824fc39324ed3348be1fdd3ed0a",
+  "role": "reporting",
+  "predictions_created": false,
+  "source_origin": "synthetic",
+  "human_reviewed_units": 0
+}

@@ -1,0 +1,1625 @@
+{
+  "previous_seven_dimensions_all_covered": true,
+  "interpretation": "Additional explicit controls and reproductions; not a claim that every detail was previously untested. No real-data acceptance.",
+  "rules": [
+    {
+      "rule_id": "C4",
+      "previous_dimensions": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C4_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C4_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Thay hồ sơ master không xoá phê duyệt nghỉ phép cũ.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_master_profile_update_does_not_erase_prior_leave_approval"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn HR/log không thể đánh giá C4; không suy từ tổng ngày nghỉ tháng.",
+          "tests": [
+            "test_rules.RulesTest.test_missing_operational_sources_are_reported"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Kết thúc nghỉ phép đúng lúc thao tác không bị tính vào khoảng nghỉ.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        }
+      },
+      "previous_downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C4_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C4_negative_no_rule_admission"
+        ]
+      },
+      "detail_controls": [
+        {
+          "variant": "positive",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_positive",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "authorized",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_authorized",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "late_source",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_late_source",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "cancel_after_action",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_cancel_after_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "end_boundary",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_end_boundary",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "checker_on_leave",
+          "dimension": "actor_binding",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_checker_on_leave",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "both_actions_one_authorized",
+          "dimension": "mixed_events",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_both_actions_one_authorized",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "leave_start_at_action",
+          "dimension": "boundary",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_leave_start_at_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "leave_starts_after_action",
+          "dimension": "boundary",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_leave_starts_after_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "permission_ends_at_action",
+          "dimension": "boundary",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_permission_ends_at_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "permission_wrong_action",
+          "dimension": "actor_binding",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_permission_wrong_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "permission_revoked_before",
+          "dimension": "revision",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_permission_revoked_before",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "permission_revoked_after",
+          "dimension": "revision",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_permission_revoked_after",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "leave_revoked_before",
+          "dimension": "revision",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "reports/rule_synthetic_source_readiness.md#revoked_before_action",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_leave_revoked_before",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "missing_action_proof",
+          "dimension": "missing_evidence",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_missing_action_proof",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "No signal without action/proof is not proof that the business condition was absent."
+        },
+        {
+          "variant": "wrong_action_actor",
+          "dimension": "actor_binding",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_wrong_action_actor",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "No signal without action/proof is not proof that the business condition was absent."
+        },
+        {
+          "variant": "permission_known_after_action",
+          "dimension": "late_evidence",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_permission_known_after_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "master_updated_after_action",
+          "dimension": "master_change",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_c4_master_updated_after_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        }
+      ],
+      "variants": 18,
+      "materialized_controls": 36,
+      "real_source_acceptance": "awaiting_real_data"
+    },
+    {
+      "rule_id": "E2",
+      "previous_dimensions": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu kỳ công không được hard trigger.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_post_termination_salary_confirmed_but_final_pay_and_missing_period_not_hard"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Ngày bắt đầu phục vụ bằng ngày chấm dứt chưa xác lập lương sau chấm dứt.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_e2_termination_day_is_not_confirmed_post_termination_service"
+          ]
+        }
+      },
+      "previous_downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: cao_nhat, SLA 24 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_negative_no_rule_admission"
+        ]
+      },
+      "detail_controls": [
+        {
+          "variant": "positive",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_positive",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "final_payment",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_final_payment",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "missing_period",
+          "dimension": "existing_control",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_missing_period",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "rehire",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_rehire",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "late_source",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_late_source",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "approved_backpay",
+          "dimension": "exception",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "reports/rule_synthetic_source_readiness.md#backpay",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_approved_backpay",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "approved_severance",
+          "dimension": "exception",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_approved_severance",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "approved_bonus",
+          "dimension": "exception",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_approved_bonus",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "bonus_for_later_service",
+          "dimension": "missing_evidence",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_bonus_for_later_service",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "final_amount_short_one",
+          "dimension": "boundary",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_final_amount_short_one",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "settlement_wrong_employee",
+          "dimension": "actor_binding",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_settlement_wrong_employee",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "settlement_wrong_period",
+          "dimension": "actor_binding",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_settlement_wrong_period",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "self_approved_settlement",
+          "dimension": "exception",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_self_approved_settlement",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "termination_effective_today",
+          "dimension": "boundary",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_termination_effective_today",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "rehire_known_after_cutoff",
+          "dimension": "late_evidence",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_rehire_known_after_cutoff",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "termination_revoked_before",
+          "dimension": "revision",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_termination_revoked_before",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "settlement_known_at_cutoff",
+          "dimension": "boundary",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_settlement_known_at_cutoff",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "settlement_known_after_cutoff",
+          "dimension": "late_evidence",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_settlement_known_after_cutoff",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "reversed_service_period",
+          "dimension": "input_rejection",
+          "expected": "rejected",
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_e2_reversed_service_period",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        }
+      ],
+      "variants": 19,
+      "materialized_controls": 38,
+      "real_source_acceptance": "awaiting_real_data"
+    },
+    {
+      "rule_id": "F2",
+      "previous_dimensions": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F2_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Vai trò quản lý lấy tại lúc override, không lấy hồ sơ về sau.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_override_role_is_read_at_action_not_at_later_posting"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn/coverage là unknown hoặc information_gap; không gán thành âm tính.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Bằng trần override được phép; vượt 1 đồng không được miễn.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_f2_approved_override_cap_is_inclusive"
+          ]
+        }
+      },
+      "previous_downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F2_negative_no_rule_admission"
+        ]
+      },
+      "detail_controls": [
+        {
+          "variant": "positive",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_positive",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "authorized",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_authorized",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "completed",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_completed",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "missing_policy",
+          "dimension": "existing_control",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_missing_policy",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "control_not_required",
+          "dimension": "exception",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_control_not_required",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "override_wrong_role",
+          "dimension": "actor_binding",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_override_wrong_role",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "role_promoted_after_action",
+          "dimension": "master_change",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_override_role_is_read_at_action_not_at_later_posting",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_role_promoted_after_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "override_at_cap",
+          "dimension": "boundary",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "test_rule_boundaries.RuleBoundaryTest.test_f2_approved_override_cap_is_inclusive",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_override_at_cap",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "override_above_cap_one",
+          "dimension": "boundary",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "test_rule_boundaries.RuleBoundaryTest.test_f2_approved_override_cap_is_inclusive",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_override_above_cap_one",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "policy_known_at_action",
+          "dimension": "boundary",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_policy_known_at_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "policy_known_after_action",
+          "dimension": "late_evidence",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_policy_known_after_action",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "pending_override",
+          "dimension": "not_applicable",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_pending_override",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "No signal without action/proof is not proof that the business condition was absent."
+        },
+        {
+          "variant": "cancelled_override",
+          "dimension": "revision",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "reports/rule_synthetic_source_readiness.md#cancelled_override",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_cancelled_override",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "expired_policy",
+          "dimension": "boundary",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_expired_policy",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "authorized_and_unauthorized",
+          "dimension": "mixed_events",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_authorized_and_unauthorized",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "authorized_and_unknown",
+          "dimension": "mixed_events",
+          "expected": null,
+          "scope": "transaction",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_authorized_override_does_not_cover_a_second_control_without_policy",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_authorized_and_unknown",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "override_without_proof",
+          "dimension": "missing_evidence",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f2_override_without_proof",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "No signal without action/proof is not proof that the business condition was absent."
+        }
+      ],
+      "variants": 17,
+      "materialized_controls": 34,
+      "real_source_acceptance": "awaiting_real_data"
+    },
+    {
+      "rule_id": "F3",
+      "previous_dimensions": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn/coverage là unknown hoặc information_gap; không gán thành âm tính.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Dải đóng tại cutoff được xét; đóng ở giây sau chưa có căn cứ kết luận.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_f3_series_closed_at_cutoff_is_available_but_next_second_is_not"
+          ]
+        }
+      },
+      "previous_downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở. Thiếu coverage: hồ sơ nguồn thấp, SLA 336 giờ, rà lại sau 7 ngày; không cộng điểm giao dịch.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_negative_no_rule_admission",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_source_information_gaps_keep_low_priority_rereview_and_sla"
+        ]
+      },
+      "detail_controls": [
+        {
+          "variant": "positive",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "series:PAY_2025",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_positive",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "duplicate",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "transaction",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_duplicate",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "cancelled_gap",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "series:PAY_2025",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_cancelled_gap",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "not_closed",
+          "dimension": "existing_control",
+          "expected": null,
+          "scope": "series:PAY_2025",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_not_closed",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "late_cancel",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "series:PAY_2025",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_late_cancel",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "missing_cancel_coverage",
+          "dimension": "existing_control",
+          "expected": null,
+          "scope": "series:PAY_2025",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_missing_cancel_coverage",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "continuous_series",
+          "dimension": "negative",
+          "expected": false,
+          "scope": "series:PAY_2025",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "reports/rule_synthetic_source_readiness.md#clean_series",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_continuous_series",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "duplicate_log_same_document",
+          "dimension": "identity",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_duplicate_log_same_document",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "cancelled_duplicate_document",
+          "dimension": "exception",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_cancelled_duplicate_document",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "draft_duplicate_peer",
+          "dimension": "identity",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_draft_duplicate_peer",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "future_duplicate_peer",
+          "dimension": "late_evidence",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_future_duplicate_peer",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "duplicate_peer_other_series",
+          "dimension": "scope",
+          "expected": false,
+          "scope": "transaction",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_duplicate_peer_other_series",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "cancellation_other_series",
+          "dimension": "scope",
+          "expected": true,
+          "scope": "series:PAY_2025",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_cancellation_other_series",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "revoked_cancellation",
+          "dimension": "revision",
+          "expected": true,
+          "scope": "series:PAY_2025",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_revoked_cancellation",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "register_known_at_cutoff",
+          "dimension": "boundary",
+          "expected": false,
+          "scope": "series:PAY_2025",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_register_known_at_cutoff",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "register_known_after_cutoff",
+          "dimension": "late_evidence",
+          "expected": true,
+          "scope": "series:PAY_2025",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_register_known_after_cutoff",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "inverted_series_range",
+          "dimension": "input_rejection",
+          "expected": "rejected",
+          "scope": "series:PAY_2025",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_inverted_series_range",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "oversize_series_range",
+          "dimension": "input_rejection",
+          "expected": "rejected",
+          "scope": "series:PAY_2025",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f3_oversize_series_range",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        }
+      ],
+      "variants": 18,
+      "materialized_controls": 36,
+      "real_source_acceptance": "awaiting_real_data"
+    },
+    {
+      "rule_id": "F4",
+      "previous_dimensions": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn/coverage là unknown hoặc information_gap; không gán thành âm tính.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Quá 60 ngày mới có tín hiệu; 60 và 61 ngày có kết quả khác.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_f4_sixty_days_is_not_overdue_signal_sixty_one_is"
+          ]
+        }
+      },
+      "previous_downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở. Thiếu coverage: hồ sơ nguồn thấp, SLA 336 giờ, rà lại sau 7 ngày; không cộng điểm giao dịch.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_negative_no_rule_admission",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_source_information_gaps_keep_low_priority_rereview_and_sla"
+        ]
+      },
+      "detail_controls": [
+        {
+          "variant": "positive",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_positive",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "fully_paid",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_fully_paid",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "partial",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_partial",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "explanation",
+          "dimension": "existing_control",
+          "expected": false,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_explanation",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "missing_coverage",
+          "dimension": "existing_control",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_missing_coverage",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "overallocated",
+          "dimension": "existing_control",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_overallocated",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "future_receipt",
+          "dimension": "existing_control",
+          "expected": true,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_predeclared_control",
+          "prior_reference": "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_future_receipt",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "overdue_exactly_60_days",
+          "dimension": "boundary",
+          "expected": false,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "test_rule_boundaries.RuleBoundaryTest.test_f4_sixty_days_is_not_overdue_signal_sixty_one_is",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_overdue_exactly_60_days",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "overdue_61_days",
+          "dimension": "boundary",
+          "expected": true,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "test_rule_boundaries.RuleBoundaryTest.test_f4_sixty_days_is_not_overdue_signal_sixty_one_is",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_overdue_61_days",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "invoice_due_today",
+          "dimension": "negative",
+          "expected": false,
+          "scope": "invoice:AR1",
+          "prior_status": "existing_test_or_rehearsal_reproduced",
+          "prior_reference": "reports/rule_synthetic_source_readiness.md#not_due",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_invoice_due_today",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "zero_invoice_amount",
+          "dimension": "missing_evidence",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_zero_invoice_amount",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "cancelled_invoice",
+          "dimension": "not_applicable",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_cancelled_invoice",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "invoice_due_before_issue",
+          "dimension": "input_rejection",
+          "expected": "rejected",
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_invoice_due_before_issue",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "receipt_wrong_customer",
+          "dimension": "scope",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_receipt_wrong_customer",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "allocation_other_invoice",
+          "dimension": "scope",
+          "expected": true,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_allocation_other_invoice",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "unverified_allocation",
+          "dimension": "missing_evidence",
+          "expected": true,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_unverified_allocation",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "receipt_nonfinancial",
+          "dimension": "invalid_linkage",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_receipt_nonfinancial",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "receipt_journal_only",
+          "dimension": "invalid_linkage",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_receipt_journal_only",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "verification_before_receipt",
+          "dimension": "late_evidence",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_verification_before_receipt",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "unknown_verifier",
+          "dimension": "actor_binding",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_unknown_verifier",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "coverage_starts_too_late",
+          "dimension": "missing_evidence",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_coverage_starts_too_late",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "coverage_known_after_cutoff",
+          "dimension": "late_evidence",
+          "expected": null,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_coverage_known_after_cutoff",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "expired_explanation",
+          "dimension": "boundary",
+          "expected": true,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_expired_explanation",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "revoked_explanation",
+          "dimension": "revision",
+          "expected": true,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_revoked_explanation",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "explanation_expires_at_cutoff",
+          "dimension": "boundary",
+          "expected": false,
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_explanation_expires_at_cutoff",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        },
+        {
+          "variant": "allocation_id_binding_conflict",
+          "dimension": "input_rejection",
+          "expected": "rejected",
+          "scope": "invoice:AR1",
+          "prior_status": "additional_explicit_detail",
+          "prior_reference": "",
+          "current_test": "test_rule_branch_controls.BranchControlTest.test_f4_allocation_id_binding_conflict",
+          "seeds": 2,
+          "materialized_controls": 2,
+          "status": "passed",
+          "interpretation": "Synthetic source-condition control; not a fraud conclusion."
+        }
+      ],
+      "variants": 26,
+      "materialized_controls": 52,
+      "real_source_acceptance": "awaiting_real_data"
+    }
+  ]
+}

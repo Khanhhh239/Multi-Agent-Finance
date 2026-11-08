@@ -1,0 +1,12 @@
+{
+  "successful": true,
+  "version": "0.1.0",
+  "new_note_preserved": true,
+  "all_operational_hashes_unchanged": true,
+  "logical_sha256": "e65730c5c15133ff533dd66f2a9ee8c29284e311b4667443ac3a232214156f74",
+  "method": "Checkpoint current data, restore into previous release through exact-runtime schema 8 -> 8 path, then cut over.",
+  "previous_pointer_rollback_remains_blocked_after_writes": true,
+  "branch": "D:\\agent22\\.runtime\\release_20261019\\deployment_postwrite",
+  "current_p2_notes": 1,
+  "historical_assistant_notes": 20
+}

@@ -1,0 +1,76 @@
+{
+  "status": "passed",
+  "version": "2.0",
+  "scored_observations": 20523,
+  "primary_financial_documents": 20523,
+  "auxiliary_documents": 9049,
+  "journal_documents": 29572,
+  "journal_lines": 65750,
+  "account_flow_edges": 36178,
+  "accounting_frameworks": {
+    "C001": "TT200",
+    "C002": "TT133",
+    "C003": "TT133",
+    "C004": "TT133",
+    "C005": "TT200",
+    "C006": "TT200",
+    "C007": "TT133",
+    "C008": "TT133"
+  },
+  "by_framework_and_purpose": {
+    "TT133/cash_expense": 2651,
+    "TT133/customer_receipt": 2752,
+    "TT133/expense_accrual": 439,
+    "TT133/invoice_accrual": 1240,
+    "TT133/material_issue": 122,
+    "TT133/material_purchase": 385,
+    "TT133/payroll": 4116,
+    "TT133/rent": 120,
+    "TT133/salary_accrual": 4116,
+    "TT133/sales_invoice": 2368,
+    "TT133/selling_expense": 630,
+    "TT133/stock_purchase": 321,
+    "TT133/vendor_payment": 1240,
+    "TT200/cash_expense": 943,
+    "TT200/cost_allocation": 415,
+    "TT200/customer_receipt": 548,
+    "TT200/equipment_purchase": 12,
+    "TT200/expense_accrual": 104,
+    "TT200/invoice_accrual": 792,
+    "TT200/payroll": 2364,
+    "TT200/rent": 72,
+    "TT200/salary_accrual": 2364,
+    "TT200/sales_invoice": 519,
+    "TT200/selling_expense": 127,
+    "TT200/tools_purchase": 20,
+    "TT200/vendor_payment": 792
+  },
+  "sources": [
+    {
+      "id": "TT200",
+      "title": "Thông tư 200/2014/TT-BTC",
+      "sections": "TK 133, 138, 141, 154, 229, 334, 335, 641, 642; Phụ lục tài khoản",
+      "url": "https://vbpl.moj.gov.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=66801",
+      "official_index": "https://congbao.chinhphu.vn/van-ban/thong-tu-so-200-2014-tt-btc-6697/3529.htm"
+    },
+    {
+      "id": "TT133",
+      "title": "Thông tư 133/2016/TT-BTC",
+      "sections": "TK 133, 138, 141, 154, 229, 334, 335, 642; Phụ lục 1",
+      "url": "https://vbpl.vn/TW/Pages/vbpq-toanvan.aspx?ItemID=113560",
+      "full_text_mirror": "https://lawplayer.com/vn/act/vn-vbpl-113560",
+      "official_index": "https://congbao.chinhphu.vn/van-ban/thong-tu-so-133-2016-tt-btc-21048.htm"
+    },
+    {
+      "id": "TT99_effective_date",
+      "title": "Bộ Tài chính: thời điểm áp dụng TT99/2025",
+      "url": "https://portal.mof.gov.vn/hoidapcstc/home/cthoidap/159102"
+    },
+    {
+      "id": "TT45_asset_criteria",
+      "title": "Bộ Tài chính: Điều 3 TT45/2013, tiêu chí TSCĐ",
+      "url": "https://qlg.mof.gov.vn/hoidapcstc/home/cthoidap/149525"
+    }
+  ],
+  "scope": "Scenario-specific historical 2024-2025 TT133/TT200 templates; balanced books do not establish authenticity or tax deductibility"
+}

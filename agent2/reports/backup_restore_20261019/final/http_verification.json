@@ -1,0 +1,16 @@
+{
+  "successful": true,
+  "url": "http://127.0.0.1:8770",
+  "case_counts": {
+    "001": 584,
+    "003": 627
+  },
+  "restored_cases": 1211,
+  "pending_request_visible": true,
+  "web_pending_final_status": 409,
+  "cli_pending_final_rejected": true,
+  "feedback_audit_unchanged": true,
+  "notification_mode": "dry_run",
+  "external_notifications": 0,
+  "browser_visual_qa": false
+}

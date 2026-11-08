@@ -1,0 +1,71 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "default": "tesseract-v1-psm3",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "model_id": {
+      "const": "tesseract",
+      "default": "tesseract",
+      "title": "Model Id",
+      "type": "string"
+    },
+    "language": {
+      "const": "vie+eng",
+      "default": "vie+eng",
+      "title": "Language",
+      "type": "string"
+    },
+    "psm": {
+      "default": 3,
+      "enum": [
+        3,
+        6,
+        11
+      ],
+      "title": "Psm",
+      "type": "integer"
+    },
+    "preprocess_version": {
+      "const": "render-identity-v1",
+      "default": "render-identity-v1",
+      "title": "Preprocess Version",
+      "type": "string"
+    },
+    "timeout_seconds": {
+      "default": 30,
+      "maximum": 120,
+      "minimum": 1,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    },
+    "memory_mb": {
+      "default": 512,
+      "maximum": 2048,
+      "minimum": 64,
+      "title": "Memory Mb",
+      "type": "integer"
+    },
+    "max_output_bytes": {
+      "default": 4194304,
+      "maximum": 16777216,
+      "minimum": 1024,
+      "title": "Max Output Bytes",
+      "type": "integer"
+    },
+    "max_attempts": {
+      "default": 2,
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Max Attempts",
+      "type": "integer"
+    }
+  },
+  "title": "OCRConfig",
+  "type": "object"
+}

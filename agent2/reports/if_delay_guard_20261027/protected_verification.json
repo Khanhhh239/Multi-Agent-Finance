@@ -1,0 +1,10 @@
+{
+  "protected_files": 10225,
+  "authorized_source_changes": {
+    "sme_fraud/compare_if_discovery.py": {
+      "before": "4041fb5b039a75b40a8309a0e762edb2d289b22631c6d6ebbb91d575bf55a0a3",
+      "after": "d5bf5144b1a7053a71ebf911504aa2aa7158625ae309ce239d9fde69758d2451"
+    }
+  },
+  "unexpected_changes": {}
+}

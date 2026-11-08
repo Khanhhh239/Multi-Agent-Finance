@@ -1,0 +1,465 @@
+{
+  "started_at": "2026-10-23T09:28:35.867442+00:00",
+  "modules": [
+    {
+      "module": "test_accounting",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 11.515,
+      "failure_details": []
+    },
+    {
+      "module": "test_causality",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 27.125,
+      "failure_details": []
+    },
+    {
+      "module": "test_rules",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 189.719,
+      "failure_details": []
+    },
+    {
+      "module": "test_rule_repairs",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 16.75,
+      "failure_details": []
+    },
+    {
+      "module": "test_rule_audit",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.016,
+      "failure_details": []
+    },
+    {
+      "module": "test_authority_and_dormancy",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 15.64,
+      "failure_details": []
+    },
+    {
+      "module": "test_authority_validation",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.141,
+      "failure_details": []
+    },
+    {
+      "module": "test_bank_identity_controls",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 11.203,
+      "failure_details": []
+    },
+    {
+      "module": "test_batch_controls",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.734,
+      "failure_details": []
+    },
+    {
+      "module": "test_benford",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.031,
+      "failure_details": []
+    },
+    {
+      "module": "test_core_rule_requirements",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.922,
+      "failure_details": []
+    },
+    {
+      "module": "test_cash_controls",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 14.344,
+      "failure_details": []
+    },
+    {
+      "module": "test_cash_review_flow",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.547,
+      "failure_details": []
+    },
+    {
+      "module": "test_graph_history",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.812,
+      "failure_details": []
+    },
+    {
+      "module": "test_entity_graph",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.047,
+      "failure_details": []
+    },
+    {
+      "module": "test_entity_graph_sync",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.203,
+      "failure_details": []
+    },
+    {
+      "module": "test_entity_graph_review",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.0,
+      "failure_details": []
+    },
+    {
+      "module": "test_feature_model_sync",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 5.703,
+      "failure_details": []
+    },
+    {
+      "module": "test_dynamic_thresholds",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.094,
+      "failure_details": []
+    },
+    {
+      "module": "test_dynamic_threshold_sources",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.312,
+      "failure_details": []
+    },
+    {
+      "module": "test_dynamic_threshold_sync",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.406,
+      "failure_details": []
+    },
+    {
+      "module": "test_noise_policy",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 6.375,
+      "failure_details": []
+    },
+    {
+      "module": "test_spec_policy",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 10.703,
+      "failure_details": []
+    },
+    {
+      "module": "test_exception_validation",
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.454,
+      "failure_details": []
+    },
+    {
+      "module": "test_evidence_policy",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 5.89,
+      "failure_details": []
+    },
+    {
+      "module": "test_evidence_evaluation",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.016,
+      "failure_details": []
+    },
+    {
+      "module": "test_payment_evidence",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 7.531,
+      "failure_details": []
+    },
+    {
+      "module": "test_p1_payments",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.328,
+      "failure_details": []
+    },
+    {
+      "module": "test_source_snapshot",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.125,
+      "failure_details": []
+    },
+    {
+      "module": "test_signer_history",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 12.031,
+      "failure_details": []
+    },
+    {
+      "module": "test_split_pattern_admission",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 8.891,
+      "failure_details": []
+    },
+    {
+      "module": "test_a4_pattern_queue",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.859,
+      "failure_details": []
+    },
+    {
+      "module": "test_a5_coverage",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.781,
+      "failure_details": []
+    },
+    {
+      "module": "test_case_identity",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 14.5,
+      "failure_details": []
+    },
+    {
+      "module": "test_admission_export",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.735,
+      "failure_details": []
+    },
+    {
+      "module": "test_aggregate_challenge",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.64,
+      "failure_details": []
+    },
+    {
+      "module": "test_real_source_acceptance",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.391,
+      "failure_details": []
+    },
+    {
+      "module": "test_synthetic_sources",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 7.531,
+      "failure_details": []
+    },
+    {
+      "module": "test_pipeline_rehearsal",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.344,
+      "failure_details": []
+    },
+    {
+      "module": "test_review_capacity",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.984,
+      "failure_details": []
+    },
+    {
+      "module": "test_shadow_scoring",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.313,
+      "failure_details": []
+    },
+    {
+      "module": "test_train_source_model",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 5.734,
+      "failure_details": []
+    },
+    {
+      "module": "test_model_windows",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.281,
+      "failure_details": []
+    },
+    {
+      "module": "test_compare_shadow",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.641,
+      "failure_details": []
+    },
+    {
+      "module": "test_if_coverage",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.234,
+      "failure_details": []
+    },
+    {
+      "module": "test_if_aggregation",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.282,
+      "failure_details": []
+    },
+    {
+      "module": "test_if_aggregation_dependence",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.015,
+      "failure_details": []
+    },
+    {
+      "module": "test_if_discovery",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.047,
+      "failure_details": []
+    },
+    {
+      "module": "test_if_discovery_review",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.047,
+      "failure_details": []
+    },
+    {
+      "module": "test_independent_ml_review",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.687,
+      "failure_details": []
+    },
+    {
+      "module": "test_assistant_evidence_review",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.125,
+      "failure_details": []
+    }
+  ],
+  "blocked_reads": []
+}

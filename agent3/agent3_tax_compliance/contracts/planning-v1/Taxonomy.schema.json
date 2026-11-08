@@ -1,0 +1,165 @@
+{
+  "$defs": {
+    "CategoryDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "category_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Category Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "legal_basis": {
+          "items": {
+            "$ref": "#/$defs/LegalBasis"
+          },
+          "minItems": 1,
+          "title": "Legal Basis",
+          "type": "array"
+        }
+      },
+      "required": [
+        "category_id",
+        "description",
+        "legal_basis"
+      ],
+      "title": "CategoryDefinition",
+      "type": "object"
+    },
+    "CategoryMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "mapping_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Mapping Id",
+          "type": "string"
+        },
+        "item_code": {
+          "title": "Item Code",
+          "type": "string"
+        },
+        "category_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Category Id",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "review_reference": {
+          "minLength": 1,
+          "title": "Review Reference",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "enum": [
+            "CATALOGUE",
+            "CONTRACT",
+            "HUMAN_CLASSIFICATION"
+          ],
+          "title": "Evidence Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mapping_id",
+        "item_code",
+        "category_id",
+        "effective_from",
+        "effective_to",
+        "evidence_reference",
+        "review_reference",
+        "evidence_kind"
+      ],
+      "title": "CategoryMapping",
+      "type": "object"
+    },
+    "LegalBasis": {
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "locator"
+      ],
+      "title": "LegalBasis",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "effective_from": {
+      "format": "date",
+      "title": "Effective From",
+      "type": "string"
+    },
+    "effective_to": {
+      "format": "date",
+      "title": "Effective To",
+      "type": "string"
+    },
+    "categories": {
+      "items": {
+        "$ref": "#/$defs/CategoryDefinition"
+      },
+      "title": "Categories",
+      "type": "array"
+    },
+    "mappings": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CategoryMapping"
+      },
+      "title": "Mappings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version",
+    "effective_from",
+    "effective_to",
+    "categories"
+  ],
+  "title": "Taxonomy",
+  "type": "object"
+}

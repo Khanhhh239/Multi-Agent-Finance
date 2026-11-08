@@ -1,0 +1,38 @@
+{
+  "version": "lawbase-scope-2026-11-05",
+  "source": {
+    "name": "Cơ sở dữ liệu quốc gia về pháp luật (Bộ Tư pháp)",
+    "base": "https://vbpl.vn",
+    "sitemap": "https://vbpl.vn/sitemap.xml",
+    "central_shards": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "user_agent": "Agent3-TaxAssistant/0.1 (thu thap tuan thu robots.txt, 1 yeu cau moi 2 giay)",
+    "min_interval_seconds": 2.0
+  },
+  "include_slug_any": ["thue", "hoa-don", "chung-tu", "ke-toan", "ho-kinh-doanh", "thanh-toan-khong-dung-tien-mat"],
+  "exclude_slug_any": ["hai-quan", "xuat-khau", "nhap-khau", "bien-gioi", "tai-nguyen", "bao-ve-moi-truong", "su-dung-dat",
+                       "truoc-ba", "tieu-thu-dac-biet"],
+  "include_types": ["luat", "nghi-dinh", "thong-tu", "nghi-quyet", "van-ban-hop-nhat", "thong-tu-lien-tich", "phap-lenh"],
+  "min_year": 2013,
+  "core_slug_contains": [
+    "luat-quan-ly-thue-so-108-2025-qh15",
+    "luat-thue-gia-tri-gia-tang-so-48-2024-qh15",
+    "luat-thue-thu-nhap-doanh-nghiep-so-67-2025-qh15",
+    "nghi-dinh-so-181-2025-nd-cp",
+    "nghi-dinh-so-320-2025-nd-cp",
+    "nghi-dinh-so-254-2026-nd-cp",
+    "nghi-dinh-so-252-2026-nd-cp",
+    "nghi-dinh-so-310-2025-nd-cp",
+    "nghi-dinh-so-68-2026-nd-cp",
+    "thong-tu-so-91-2026-tt-btc",
+    "thong-tu-so-89-2026-tt-btc",
+    "thong-tu-so-18-2026-tt-btc",
+    "thong-tu-99-2025-tt-btc",
+    "hop-nhat-nghi-dinh-so-123-2020-nd-cp",
+    "hop-nhat-nghi-dinh-so-125-2020-nd-cp",
+    "van-ban-hop-nhat-so-61-vbhn-vpqh-hop-nhat-luat-thue-thu-nhap-doanh-nghiep",
+    "quy-dinh-chi-tiet-thi-hanh-mot-so-dieu-cua-luat-thue-gia-tri-gia-tang",
+    "huong-dan-thi-hanh-luat-thue-thu-nhap-doanh-nghiep"
+  ],
+  "keep_expired_after": "2023-01-01",
+  "note": "Phạm vi cho doanh nghiệp nhỏ và vừa: giá trị gia tăng, thu nhập doanh nghiệp, thu nhập cá nhân từ tiền lương, quản lý thuế, hóa đơn chứng từ, xử phạt, kế toán, hộ kinh doanh."
+}

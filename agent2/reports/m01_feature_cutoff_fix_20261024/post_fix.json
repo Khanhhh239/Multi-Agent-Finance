@@ -1,0 +1,142 @@
+{
+  "stage": "post_fix",
+  "modules": [
+    {
+      "module": "test_feature_evidence_timing",
+      "tests": 18,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.063,
+      "details": [
+        {
+          "test": "test_future_invoice_masks_all_dependent_monetary_features (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_invoice_masks_all_dependent_monetary_features)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 69, in test_future_invoice_masks_all_dependent_monetary_features\n    case, row = self.case(invoice_issued_at='2025-08-14T11:00:00+07:00', invoice_gross_vnd=0)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 23, in case\n    case.score()  # Ordinary accounting enrichment once; never read fixture truth.\n    ^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\rule_audit_cases.py\", line 91, in score\n    enrich_accounting(self.tables, 20261013)\n  File \"D:\\agent22\\sme_fraud\\accounting.py\", line 282, in enrich_accounting\n    purchase_doc = document(purchase,\"invoice_accrual\",purchase_at,\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\accounting.py\", line 160, in document\n    assert amount>0 and pair_supported(debit,credit,purpose,framework), (purpose,debit,credit,framework)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('invoice_accrual', '156', '331', 'TT200')\n"
+        },
+        {
+          "test": "test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing (test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing) (gross=0)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 95, in test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing\n    case, row = self.case(invoice_gross_vnd=gross)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\tests\\test_feature_evidence_timing.py\", line 23, in case\n    case.score()  # Ordinary accounting enrichment once; never read fixture truth.\n    ^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\rule_audit_cases.py\", line 91, in score\n    enrich_accounting(self.tables, 20261013)\n  File \"D:\\agent22\\sme_fraud\\accounting.py\", line 282, in enrich_accounting\n    purchase_doc = document(purchase,\"invoice_accrual\",purchase_at,\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\accounting.py\", line 160, in document\n    assert amount>0 and pair_supported(debit,credit,purpose,framework), (purpose,debit,credit,framework)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('invoice_accrual', '156', '331', 'TT200')\n"
+        }
+      ]
+    },
+    {
+      "module": "test_feature_model_sync",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 7.062,
+      "details": []
+    },
+    {
+      "module": "test_train_source_model",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.282,
+      "details": []
+    },
+    {
+      "module": "test_shadow_scoring",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.89,
+      "details": []
+    },
+    {
+      "module": "test_model_windows",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.766,
+      "details": []
+    },
+    {
+      "module": "test_accounting",
+      "tests": 9,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.828,
+      "details": [
+        {
+          "test": "test_features_include_current_writeoff_evidence_and_vat_lines (test_accounting.AccountingTest.test_features_include_current_writeoff_evidence_and_vat_lines)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_accounting.py\", line 87, in test_features_include_current_writeoff_evidence_and_vat_lines\n    self.assertEqual(f['advance_writeoff_evidence_missing'],int(not r['evidence_on_file']))\nAssertionError: 1 != 0\n"
+        }
+      ]
+    },
+    {
+      "module": "test_causality",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 10.031,
+      "details": []
+    },
+    {
+      "module": "test_exception_validation",
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.625,
+      "details": []
+    },
+    {
+      "module": "test_payment_evidence",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.563,
+      "details": []
+    },
+    {
+      "module": "test_b4_evidence_timing",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.343,
+      "details": []
+    },
+    {
+      "module": "test_b2_company_transfer",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.0,
+      "details": []
+    },
+    {
+      "module": "test_graph_history",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.641,
+      "details": []
+    },
+    {
+      "module": "test_rules",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 63.313,
+      "details": []
+    }
+  ],
+  "tests": 182,
+  "failures": 3,
+  "errors": 0,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 104.407
+}

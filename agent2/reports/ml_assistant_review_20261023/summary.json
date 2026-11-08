@@ -1,0 +1,60 @@
+{
+  "status": "assistant_review_complete_human_review_pending",
+  "review_date_vn": "2026-10-23",
+  "assistant_reviewed_snapshots": 128,
+  "distinct_exact_source_scopes": 99,
+  "repeated_exact_scopes": 29,
+  "assistant_snapshot_status_counts": {
+    "not_identified": 63,
+    "insufficient_evidence": 60,
+    "observed_concern": 5
+  },
+  "assistant_exact_scope_status_counts": {
+    "not_identified": 55,
+    "insufficient_evidence": 40,
+    "observed_concern": 4
+  },
+  "targeted_document_request_snapshots": 65,
+  "assistant_proposed_action_snapshots": 5,
+  "assistant_proposed_action_exact_scopes": 4,
+  "validated_human_independent_reviews": 0,
+  "pending_human_reviews": 128,
+  "human_active_review_minutes": null,
+  "human_adjudication_minutes": null,
+  "assistant_batch_elapsed_wall_minutes": 19.0173,
+  "assistant_timed_batches": 11,
+  "assistant_timing_limit": "Measured elapsed batch intervals only, including tools/preparation; excludes other preparation/QA/reporting. No per-case or human active minutes.",
+  "original_scans_checked": 0,
+  "source_origin": "synthetic_process_simulation",
+  "independent_of_development": false,
+  "blind_to_arm_and_score": false,
+  "reviewer_assignment": "unassigned_user_confirmed",
+  "actionable_gain": null,
+  "fraud_precision": null,
+  "fraud_recall": null,
+  "model_changed": false,
+  "queue_changed": false,
+  "training_changed": false,
+  "production_labels_written": 0,
+  "protected_prior_files": 1830,
+  "protected_prior_files_unchanged": true,
+  "committed_public_files": 259,
+  "tests_run": 22,
+  "tests_passed": true,
+  "forms": {
+    "primary_reviews.csv": {
+      "rows": 128,
+      "completed": 0,
+      "sha256": "b405dfee3837795f73c4ba40d0338246bfea2f9c1eaf161948ca53d0f86f6002",
+      "unchanged": true
+    },
+    "adjudications.csv": {
+      "rows": 128,
+      "completed": 0,
+      "sha256": "7996489ea6932053580b2a3110bbdd174e049153965129e010c767971a047d1d",
+      "unchanged": true
+    }
+  },
+  "scope_definition": "Company alias + source_object + exact sorted member transaction IDs. Distinct scopes are not assumed statistically independent.",
+  "validated_at": "2026-10-22T17:46:26.360010+00:00"
+}

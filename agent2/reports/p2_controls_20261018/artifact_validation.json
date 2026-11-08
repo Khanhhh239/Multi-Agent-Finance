@@ -1,0 +1,35 @@
+{
+  "successful": true,
+  "controls": 32,
+  "observations_checked": 73,
+  "journal_documents_checked": 78,
+  "journal_lines_checked": 165,
+  "positive_receipt_rows_checked": 7,
+  "csv_files_checked": 165,
+  "protected_input_files": 417,
+  "protected_inputs_unchanged": true,
+  "same_predeclared_expectations_before_and_after_fix": true,
+  "categories": {
+    "no_p2": 43,
+    "vat_document_review": 15,
+    "information_request": 14,
+    "verified_internal_breach": 1
+  },
+  "locked_reporting_direction_checks": [
+    {
+      "scenario": "001",
+      "source_rows": 20559,
+      "matching_new_receipt_exclusions": 0,
+      "rules_scored": false
+    },
+    {
+      "scenario": "003",
+      "source_rows": 20523,
+      "matching_new_receipt_exclusions": 0,
+      "rules_scored": false
+    }
+  ],
+  "holdout_005_parsed": false,
+  "detector_executed": false,
+  "model_executed": false
+}

@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "scope": "Synthetic approved models; isolated temporary DB and actual local Chrome/ZEN",
+  "checks": [
+    "Synthetic reviewed capture executes native ZEN via evaluation API and renders scoped result",
+    "Rule source navigates to existing source viewer; citations remain links",
+    "Compliance export contains matching immutable revision and result",
+    "Unsaved draft is blocked; saved correction clears old revision result",
+    "Reevaluation after correction renders the new revision",
+    "Attempt history and mobile result layout at 390px"
+  ],
+  "page_errors": []
+}

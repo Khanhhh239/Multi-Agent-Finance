@@ -1,0 +1,34 @@
+D:\financial\agent3_tax_compliance\.venv\lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_branch_relation_and_effective_dates (test_extraction.ExtractionTests) ... ok
+test_conflicts_and_ocr_scores_never_become_field_confidence (test_extraction.ExtractionTests) ... ok
+test_dates_and_currency_no_hidden_defaults (test_extraction.ExtractionTests) ... ok
+test_direction_correction_invalidates_and_rederives (test_extraction.ExtractionTests) ... ok
+test_exact_arithmetic_beyond_context_precision (test_extraction.ExtractionTests) ... ok
+test_explicit_party_sections (test_extraction.ExtractionTests) ... ok
+test_geometry_column_table_and_continuation (test_extraction.ExtractionTests) ... ok
+test_hyphenated_branch_master_preserves_13_digits (test_extraction.ExtractionTests) ... ok
+test_identity_reorder_correction_explicit_reextraction (test_extraction.ExtractionTests) ... ok
+test_invalid_money_never_written_as_present (test_extraction.ExtractionTests) ... ok
+test_missing_pages_empty_items_and_mismatched_row_count (test_extraction.ExtractionTests) ... ok
+test_money_locales_signs_and_ambiguity (test_extraction.ExtractionTests) ... ok
+test_multipage_rows_preserved (test_extraction.ExtractionTests) ... ok
+test_no_rounding_and_total_mismatch_preserves_both (test_extraction.ExtractionTests) ... ok
+test_ocr_merged_labels_and_slash_spacing (test_extraction.ExtractionTests) ... ok
+test_parties_not_assigned_by_position_or_similar_name (test_extraction.ExtractionTests) ... ok
+test_pure_replay_schema_and_dag (test_extraction.ExtractionTests) ... ok
+test_split_and_merge_require_complete_lineage (test_extraction.ExtractionTests) ... ok
+test_two_invoices_never_merged (test_extraction.ExtractionTests) ... ok
+test_vat_kct_kkknt_zero_and_group_partition (test_extraction.ExtractionTests) ... ok
+test_wrong_master_rejected (test_extraction.ExtractionTests) ... ok
+test_atomic_idempotent_roundtrip (test_extraction.PersistenceTests) ... ok
+test_audit_failure_rolls_back_record_and_artifact (test_extraction.PersistenceTests) ... ok
+test_concurrent_calls_share_allocated_item_ids (test_extraction.PersistenceTests) ... ok
+test_evidence_rejects_wrong_document_and_hash (test_extraction.PersistenceTests) ... ok
+test_scoped_authenticated_api_and_evidence (test_extraction.PersistenceTests) ... ok
+test_tenant_denied_and_append_only (test_extraction.PersistenceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 3.673s
+
+OK

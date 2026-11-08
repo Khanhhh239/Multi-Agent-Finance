@@ -1,0 +1,33 @@
+{
+  "policy": {
+    "version": "rolling-account-v1",
+    "window_days": 90,
+    "method": "p99",
+    "minimum_samples": 20,
+    "sigma_k": 3.0,
+    "cycle_enabled": true,
+    "cycle_radius_days": 2,
+    "cycle_learning_days": 180,
+    "minimum_cycle_months": 3,
+    "quantile_interpolation": "linear",
+    "std_ddof": 1,
+    "windows": [
+      30,
+      60,
+      90
+    ],
+    "comparison": "strict_upper_tail",
+    "currency": "VND"
+  },
+  "sources": {
+    "ledger_available": true,
+    "observation_count": 26594,
+    "information_gaps": [],
+    "unit": "document_account_debit_or_separate_cash_payment",
+    "expense_prefixes": [
+      "6",
+      "8",
+      "154"
+    ]
+  }
+}

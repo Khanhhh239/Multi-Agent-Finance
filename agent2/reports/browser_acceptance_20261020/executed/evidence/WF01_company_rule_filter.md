@@ -1,0 +1,388 @@
+- complementary:
+  - link "S Sổ Soát KIỂM SOÁT NỘI BỘ":
+    - /url: /
+    - generic: S
+    - text: Sổ Soát
+    - generic: KIỂM SOÁT NỘI BỘ
+  - generic: KHÔNG GIAN LÀM VIỆC
+  - button "▤ Hồ sơ rà soát":
+    - generic: ▤
+    - text: Hồ sơ rà soát
+  - button "◇ Phạm vi quy tắc":
+    - generic: ◇
+    - text: Phạm vi quy tắc
+  - link "✓ Đối chứng P2":
+    - /url: /p2-controls
+    - generic: ✓
+    - text: Đối chứng P2
+  - button "✉ Thông báo":
+    - generic: ✉
+    - text: Thông báo
+  - button "ⓘ Hướng dẫn sử dụng":
+    - generic: ⓘ
+    - text: Hướng dẫn sử dụng
+  - text: Bản thử nội bộ
+  - generic: Dữ liệu tổng hợp 2024–2025
+- main:
+  - generic: Kiểm soát nội bộ / Hồ sơ rà soát
+  - generic: KIỂM THỬ GIAO DIỆN
+  - generic: TỪ CẢNH BÁO ĐẾN BẰNG CHỨNG
+  - heading "Hồ sơ cần rà soát" [level=1]
+  - paragraph: Đối chiếu nghiệp vụ, ghi nhận kết luận và theo dõi phần còn thiếu.
+  - text: Bộ dữ liệu
+  - combobox "Bộ dữ liệu":
+    - option "Mô phỏng 0,1%"
+    - option "Mô phỏng 0,3%" [selected]
+  - text: Ngân sách / ngày / công ty
+  - combobox "Ngân sách rà soát":
+    - option "5 lượt / 120 phút" [selected]
+    - option "10 lượt / 240 phút"
+  - region "Tổng quan hồ sơ":
+    - article:
+      - generic: Tồn đọng
+      - strong: "148"
+      - text: Hồ sơ giao dịch và nguồn đang mở
+      - generic: ▤
+    - article:
+      - generic: Ưu tiên cao
+      - strong: "2"
+      - text: Cần đối chiếu trước
+      - generic: "!"
+    - article:
+      - generic: Chờ bổ sung
+      - strong: "79"
+      - text: Còn thiếu bằng chứng
+      - generic: ◷
+    - article:
+      - generic: Đã kết luận
+      - strong: "0"
+      - text: Có lý do và người rà soát
+      - generic: ✓
+  - region "Bộ lọc hồ sơ":
+    - checkbox "Ưu tiên hôm nay"
+    - text: Ưu tiên hôm nay
+    - generic: ⌕
+    - textbox "Tìm hồ sơ":
+      - /placeholder: Tìm mã hồ sơ, đối tượng hoặc nội dung…
+    - combobox "Công ty":
+      - option "Tất cả công ty"
+      - option "C001 · An Phúc Trading C001"
+      - option "C002 · An Phúc Manufacturing C002"
+      - option "C003 · Minh Lộ Services C003" [selected]
+      - option "C004 · Vân Hải Retail C004"
+      - option "C005 · Vân Hải Logistics C005"
+      - option "C006 · Minh Lộ Trading C006"
+      - option "C007 · Vân Hải Manufacturing C007"
+      - option "C008 · Minh Lộ Services C008"
+    - combobox "Trạng thái":
+      - option "Đang xử lý"
+      - option "Chưa rà soát"
+      - option "Chờ bổ sung"
+      - option "Đã kết luận"
+      - option "Tất cả trạng thái" [selected]
+    - combobox "Mức ưu tiên":
+      - option "Mọi mức ưu tiên" [selected]
+      - option "Cao nhất"
+      - option "Cao"
+      - option "Trung bình"
+      - option "Thấp"
+    - combobox "Nhóm hồ sơ":
+      - option "Mọi nhóm hồ sơ" [selected]
+      - option "Rà soát nghiệp vụ"
+      - option "Yêu cầu bổ sung P2"
+    - combobox "Quy tắc":
+      - option "Mọi quy tắc"
+      - option "A1 · Chia nhỏ cùng người nhận trong 3 ngày"
+      - option "A2 · Chia nhỏ cùng người lập/người nhận trong 30 ngày"
+      - option "A3 · Chia nhỏ qua cụm người nhận liên kết"
+      - option "A4 · Người lập có nhiều khoản cận hạn mức" [selected]
+      - option "A5 · Số tiền tròn lệch baseline lịch sử"
+      - option "A6 · Thanh toán làm tròn vượt hóa đơn gốc"
+      - option "B1 · Tài khoản hoặc căn cước NCC trùng nhân viên"
+      - option "B2 · Thông tin hoặc người đại diện NCC liên kết nhân viên"
+      - option "B3 · NCC mới thành lập nhận giao dịch lớn đầu tiên"
+      - option "B4 · Trạng thái người phát hành hóa đơn rủi ro"
+      - option "B6 · NCC ngủ đông nhận khoản lớn"
+      - option "B7 · Đổi tài khoản gần ngày thanh toán chưa xác minh"
+      - option "C1 · Lập hoặc duyệt ngoài lịch vận hành"
+      - option "C2 · Tự duyệt vượt quyền được cấp"
+      - option "C3 · Duyệt dưới 60 giây ở cấp thẩm quyền cao"
+      - option "C4 · Thao tác trong kỳ nghỉ phép chính thức"
+      - option "E1 · Lương không có chấm công hoặc bằng chứng thay thế"
+      - option "E2 · Lương sau chấm dứt hợp đồng"
+      - option "F1 · Điều chỉnh thủ công sát khóa sổ và trọng yếu"
+      - option "F2 · Quản lý ghi đè quy trình"
+      - option "F3 · Khoảng trống/trùng số chứng từ"
+      - option "F4 · Doanh thu/công nợ kéo dài chưa đối chiếu tiền"
+      - option "P1 · Thanh toán vượt tổng giá trị cùng hóa đơn"
+      - option "P2 · Chi tiền mặt cần rà soát hạn mức và chứng từ VAT"
+      - option "T1 · Tạm ứng còn dư nợ quá hạn"
+      - option "T2 · Xóa nợ tạm ứng thiếu hồ sơ"
+    - button "Xuất CSV": ↓ CSV
+  - heading "Hàng đợi ưu tiên 31" [level=2]
+  - button "Làm mới ↻"
+  - generic: Tồn 148 hồ sơ / 4.630 phút; 18 hồ sơ nguồn, 85 chờ tái rà soát. Đã phân bổ 1 lượt / 10 phút cho công ty; hạn mức mỗi công ty 5 lượt / 120 phút/ngày.
+  - button "● Trung bình 9điểm Chuỗi khoản chi cần kiểm tra hạn mức Chia nhỏ cùng người nhận trong 3 ngày; Lập hoặc duyệt ngoài lịch vận hành C003 · 3 nghiệp vụ · Chưa rà soát A1A4C1 14/6/2025 BC_7188a314e1e351c0":
+    - generic: ● Trung bình
+    - generic: 9điểm
+    - generic: Chuỗi khoản chi cần kiểm tra hạn mức
+    - paragraph: Chia nhỏ cùng người nhận trong 3 ngày; Lập hoặc duyệt ngoài lịch vận hành
+    - generic: C003 · 3 nghiệp vụ · Chưa rà soát
+    - generic: A1A4C1
+    - generic: 14/6/2025
+    - generic: BC_7188a314e1e351c0
+  - button "● Trung bình 8điểm Phê duyệt hoặc điều chỉnh cần đối chiếu Điều chỉnh thủ công sát khóa sổ và trọng yếu C003 · 2 nghiệp vụ · Chưa rà soát A4F1 26/9/2025 RC_945de50a0e1a0c93":
+    - generic: ● Trung bình
+    - generic: 8điểm
+    - generic: Phê duyệt hoặc điều chỉnh cần đối chiếu
+    - paragraph: Điều chỉnh thủ công sát khóa sổ và trọng yếu
+    - generic: C003 · 2 nghiệp vụ · Chưa rà soát
+    - generic: A4F1
+    - generic: 26/9/2025
+    - generic: RC_945de50a0e1a0c93
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 10/1/2024 RC_d3c7009ff2ea6dbf Đã phân bổ 20 phút ✓" [pressed]:
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 10/1/2024
+    - generic: RC_d3c7009ff2ea6dbf
+    - generic: Đã phân bổ 20 phút ✓
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 18/1/2024 RC_f8a32f947dc61a29":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 18/1/2024
+    - generic: RC_f8a32f947dc61a29
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 24/4/2024 RC_8c57960f13b34ab7":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 24/4/2024
+    - generic: RC_8c57960f13b34ab7
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 28/4/2024 RC_b248a5e7bb8d31ae":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 28/4/2024
+    - generic: RC_b248a5e7bb8d31ae
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 18/5/2024 RC_9be5667b323b2746":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 18/5/2024
+    - generic: RC_9be5667b323b2746
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 26/6/2024 RC_8b82f2702615b340":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 26/6/2024
+    - generic: RC_8b82f2702615b340
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 16/7/2024 RC_dd5a185968891876":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 16/7/2024
+    - generic: RC_dd5a185968891876
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 2 nghiệp vụ · Chưa rà soát A4 27/7/2024 RC_d79e579039e5d05b":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 2 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 27/7/2024
+    - generic: RC_d79e579039e5d05b
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 2 nghiệp vụ · Chưa rà soát A4 20/9/2024 RC_463ec1633cca279c":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 2 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 20/9/2024
+    - generic: RC_463ec1633cca279c
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 23/9/2024 RC_65553fd5210888e0":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 23/9/2024
+    - generic: RC_65553fd5210888e0
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 24/9/2024 RC_7fdbf582da1a952f":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 24/9/2024
+    - generic: RC_7fdbf582da1a952f
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 25/10/2024 RC_5a327fb3157e9f68":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 25/10/2024
+    - generic: RC_5a327fb3157e9f68
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 28/10/2024 RC_0c4da9da368b5c9b":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 28/10/2024
+    - generic: RC_0c4da9da368b5c9b
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 30/11/2024 RC_f51edab171ed5ac6":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 30/11/2024
+    - generic: RC_f51edab171ed5ac6
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 2 nghiệp vụ · Chưa rà soát A4 18/12/2024 RC_0e90b1b28e03f3d9":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 2 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 18/12/2024
+    - generic: RC_0e90b1b28e03f3d9
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 30/12/2024 RC_f93df751d2b1f8f6":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 30/12/2024
+    - generic: RC_f93df751d2b1f8f6
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 17/3/2025 RC_0ccc8eee32488578":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 17/3/2025
+    - generic: RC_0ccc8eee32488578
+  - button "● Trung bình 3điểm Nghiệp vụ cần đối chiếu bổ sung Người lập có nhiều khoản cận hạn mức C003 · 1 nghiệp vụ · Chưa rà soát A4 17/3/2025 RC_1cf7f334fe0579c4":
+    - generic: ● Trung bình
+    - generic: 3điểm
+    - generic: Nghiệp vụ cần đối chiếu bổ sung
+    - paragraph: Người lập có nhiều khoản cận hạn mức
+    - generic: C003 · 1 nghiệp vụ · Chưa rà soát
+    - generic: A4
+    - generic: 17/3/2025
+    - generic: RC_1cf7f334fe0579c4
+  - generic: 1–20 / 31 hồ sơ
+  - button "Trang trước" [disabled]: ←
+  - button "Trang sau": →
+  - region "Chi tiết hồ sơ":
+    - generic: ● Ưu tiên trung bình
+    - generic: RC_d3c7009ff2ea6dbf
+    - heading "Nghiệp vụ cần đối chiếu bổ sung" [level=2]
+    - generic: C003 · 1 nghiệp vụ
+    - generic: Mở 10/1/2024
+    - generic: Chưa rà soát
+    - generic: "3"
+    - text: Điểm ưu tiên rà soát
+    - strong: "Chi trả trong hồ sơ: 17.145.000 ₫"
+    - navigation "Các phần hồ sơ":
+      - button "Tổng quan"
+      - button "Giao dịch"
+      - button "Bằng chứng"
+      - button "Bổ sung tài liệu"
+      - button "Nhật ký"
+    - strong: Căn cứ vào hàng đợi và điểm ưu tiên
+    - generic: Điểm hồ sơ theo snapshot
+    - text: "3"
+    - generic: Căn cứ tiếp nhận
+    - text: Nhận để rà mẫu chia nhỏ theo chính sách A2/A4, dù điểm có thể dưới ngưỡng thông thường.
+    - generic "TX_40bfce2fa18bcc16e7 · 3 điểm"
+    - paragraph: Không cộng cơ học mọi hit hoặc mọi giao dịch thành điểm hồ sơ. Điểm dùng để ưu tiên rà, không phải xác suất gian lận.
+    - generic "A5 · 0/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)":
+      - strong: A5 · 0/1 giao dịch có nguồn đủ lịch sử (1 giao dịch trong hồ sơ)
+    - generic: Người lập có nhiều khoản cận hạn mức.
+    - generic: Quan hệ cần đối chiếu
+    - button "Thu nhỏ sơ đồ": −
+    - button "Phóng to sơ đồ": +
+    - button "Đặt lại"
+    - group "Sơ đồ quan hệ của hồ sơ"
+    - generic: Đối tác / nghiệp vụ
+    - generic: TK / SĐT
+    - generic: Nhân sự
+    - button "Mở mạng lưới thực thể liên quan →"
+    - generic: Chọn một nút để xem chi tiết. Có thể phóng to và kéo sơ đồ.
+    - generic: Bằng chứng chính
+    - generic "A4 Người lập có nhiều khoản cận hạn mức +3 điểm":
+      - generic: A4
+      - text: Người lập có nhiều khoản cận hạn mức
+      - generic: +3 điểm
+    - generic: Kỳ tháng
+    - text: 2024-01
+    - generic: Số lần
+    - text: "3"
+    - generic: 10:36 10/01/2024 · TX_40bfce2fa18bcc16e7
+    - button "Đối chiếu 2 giao dịch ngữ cảnh →"
+    - button "Xem toàn bộ 2 dấu hiệu và ngoại lệ →"
+    - heading "Ghi nhận kết luận rà soát" [level=3]
+    - generic: Lưu kết luận sau khi đối chiếu. Phần còn thiếu có thể tiếp tục bổ sung ở lần rà soát sau.
+    - radio "Xác nhận nghi vấn"
+    - text: Xác nhận nghi vấn
+    - radio "Hợp lệ / báo động giả"
+    - text: Hợp lệ / báo động giả
+    - radio "Cần bổ sung bằng chứng"
+    - text: Cần bổ sung bằng chứng
+    - radio "Vi phạm kiểm soát"
+    - text: Vi phạm kiểm soát
+    - radio "Xác nhận gian lận"
+    - text: Xác nhận gian lận
+    - text: Người rà soát
+    - textbox "Người rà soát":
+      - /placeholder: Họ và tên người thực hiện
+      - text: ASSISTANT_BROWSER_SIM
+    - text: Lý do nhanh
+    - combobox "Lý do nhanh":
+      - option "Chọn lý do đã kiểm tra…" [selected]
+      - option "Chứng từ chưa giải trình được dấu hiệu"
+      - option "Quan hệ cần chuyển kiểm tra sâu"
+      - option "Chứng từ và nghĩa vụ chi khớp"
+      - option "Đúng thẩm quyền, có phê duyệt"
+    - button "Xác nhận nghi vấn"
+    - button "Bỏ qua, hợp lệ"
+    - text: Lý do / chứng từ đã đối chiếu
+    - textbox "Lý do / chứng từ đã đối chiếu":
+      - /placeholder: Nêu nội dung đã kiểm tra hoặc bằng chứng cần bổ sung…
+    - text: Mỗi lần lưu được ghi vào lịch sử.
+    - text: Hồ sơ thiếu bằng chứng tiếp tục mở và tính công tái rà soát.
+    - button "Lưu kết luận →"
+  - generic: Điểm dùng để ưu tiên rà soát. Cảnh báo cần được đối chiếu chứng từ trước khi kết luận.

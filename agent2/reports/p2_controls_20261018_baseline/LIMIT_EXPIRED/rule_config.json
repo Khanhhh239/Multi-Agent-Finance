@@ -1,0 +1,53 @@
+{
+  "short_days": 3,
+  "long_days": 30,
+  "short_total_ratio": 0.85,
+  "near_low": 0.8,
+  "near_high": 0.99,
+  "near_count": 3,
+  "baseline_min": 20,
+  "round_z": 2.0,
+  "vendor_new_days": 90,
+  "dormant_days": 180,
+  "bank_change_days": 14,
+  "close_days": 5,
+  "advance_grace_days": 0,
+  "operational_score": 7,
+  "materiality_vnd_by_company": {},
+  "high_approval_vnd": 50000000,
+  "fuzzy_similarity": 0.85,
+  "recurrence_cap": 3,
+  "enable_graph": true,
+  "noise_policy": "phase2",
+  "amount_baseline": "rolling_account",
+  "robust_z": 3.5,
+  "spec_policy": "phase3",
+  "near_period": "calendar_month",
+  "amount_tail": "upper",
+  "evidence_policy": "phase4",
+  "receivable_overdue_days": 60,
+  "split_pattern_policy": "split_patterns_v1",
+  "cash_payment_policy": "vn_vat_v1",
+  "cash_limit_vnd_by_company": {
+    "C001": 2000000
+  },
+  "cash_review_policy": "evidence_v2",
+  "cash_limit_evidence_by_company": {
+    "C001": {
+      "limit_vnd": 2000000,
+      "source_ref": "SYNTHETIC_APPROVED_CASH_LIMIT",
+      "verified_by": "SYNTHETIC_CFO",
+      "verified_at": "2024-01-01T09:00:00+07:00",
+      "effective_from": "2024-01-01T00:00:00+07:00",
+      "effective_to": "2025-08-12T11:00:00+07:00"
+    }
+  },
+  "dynamic_window_days": 90,
+  "dynamic_method": "p99",
+  "dynamic_min_samples": 20,
+  "dynamic_sigma_k": 3.0,
+  "dynamic_cycle_enabled": true,
+  "dynamic_cycle_radius_days": 2,
+  "dynamic_cycle_learning_days": 180,
+  "dynamic_min_cycle_months": 3
+}

@@ -1,0 +1,1 @@
+PASS: 15 historical PLAN_05 assessments replayed with exact pinned source; no migration or OCR execution.

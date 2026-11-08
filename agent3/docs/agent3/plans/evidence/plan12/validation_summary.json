@@ -1,0 +1,130 @@
+{
+  "checked_on": "2026-10-15",
+  "scope": "Technical synthetic contracts/native ZEN/local HTTP and browser; no LLM or legal accuracy claim",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "explanation",
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 343,
+  "javascript": [
+    {
+      "command": "node --check src/review/static/app.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/compliance.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/explanation.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/review_client.test.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/explanation_client.test.js",
+      "passed": true
+    }
+  ],
+  "browser": {
+    "result": "PASS",
+    "checks": [
+      "Default offline/template explanation on pinned evaluation without touching verdict",
+      "Validated claims and locator provenance rendered; provider is synthetic, not Qwen inference",
+      "Desktop/mobile 390px: no horizontal overflow, source references accessible",
+      "Unsaved correction cannot request explanation for a mismatched draft",
+      "Saving correction removes explanation of the previous revision"
+    ],
+    "page_errors": [],
+    "scope": "Synthetic invoice/native ZEN/real Chrome; LLM test double; no legal or model accuracy claim"
+  },
+  "implementation_sha256": "20c8d690373690f10585884a16449e75bfb9301c53ad9cdeda2433b0ab1d4cb3",
+  "source_sha256": {
+    "src/explanation_v2/__init__.py": "fff14743a913c25ee1d00744d541fdc9180e28700a6a9bbd7abc6b7a16f363cc",
+    "src/explanation_v2/api.py": "49ababfb7be2c3ac2d2e4fa25708d57aaf9f81dbd179d88ff3112b92a68073fa",
+    "src/explanation_v2/cli.py": "2c17623dbaba521024638f8faac1b5f82973ee4ef87585e178a988d9887d7f50",
+    "src/explanation_v2/context_builder.py": "4f94d34c041650e46ac926b1e013476e9172756760dd368ba0d170effb04ce42",
+    "src/explanation_v2/contracts.py": "994183872e2a1a6ebbe98d69e11f14aefc55277d6b817aa17b8e2cb014fa29bd",
+    "src/explanation_v2/llm.py": "c6572e7e0af7eaabb6576c4f7a319df1153c0290d8547ae8e4c103725523527f",
+    "src/explanation_v2/retrieval.py": "6a2d799165813a6d14167da20e85da00438f28caf0be3f9d521174b4966db18c",
+    "src/explanation_v2/service.py": "a2764e784f4f3eb2ad2cd0373bce918e6a9fb1a10d4fd6293e4fb31f95a875a6",
+    "src/explanation_v2/validator.py": "1f55d3906902324ee26a5823bd1d26473bb8d48dc978ddd335c2297f4d861a01",
+    "configs/explanation/corpus_v1.json": "1be0a726824381e982341f0ea14b0445c396073db41433c05c15662de750c550",
+    "configs/explanation/policy_v1.json": "a07b24d17430ba627bb9b9a57e9f2a1d7aba4dd0d2695ba563abdd78ee11e444"
+  },
+  "passed": true,
+  "legal_corpus_acceptance": "PENDING",
+  "real_model_inference": "NOT_RUN_NO_INSTALLED_PINNED_MODEL",
+  "readability_evaluation": "PENDING",
+  "production_release": "NOT_APPROVED"
+}

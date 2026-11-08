@@ -1,0 +1,23 @@
+{
+  "version": "independent-ml-review-v1",
+  "status": "pending_independent_reviews",
+  "prepared_units": 74,
+  "validated_independent_units": 0,
+  "known_actionable_outcomes": 0,
+  "unresolved_outcomes": 0,
+  "actionable_true": 0,
+  "missing_evidence_units": 0,
+  "measured_primary_minutes": null,
+  "measured_adjudication_minutes": null,
+  "reference_review_minutes": null,
+  "pending_units": 74,
+  "invalid_units": 0,
+  "errors": [],
+  "actionable_gain": null,
+  "fraud_precision": null,
+  "fraud_recall": null,
+  "real_sme_reviews": 0,
+  "source_origin": "synthetic_process_simulation",
+  "queue_changed": false,
+  "model_changed": false
+}

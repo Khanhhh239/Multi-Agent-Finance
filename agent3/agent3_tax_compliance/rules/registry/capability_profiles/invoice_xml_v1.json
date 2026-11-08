@@ -1,0 +1,17 @@
+{
+  "profile_id": "invoice_xml_v1",
+  "version": "1.0.0",
+  "adapter_id": "InvoiceXMLAdapter",
+  "adapter_version": "proposed-xml-v1",
+  "source_formats": [
+    "INVOICE_XML"
+  ],
+  "supported_families": [
+    "INVOICE_CONTENT",
+    "VAT_RATE"
+  ],
+  "unsupported_families": [
+    "PAYMENT_EVIDENCE"
+  ],
+  "absence_fidelity_policies": []
+}

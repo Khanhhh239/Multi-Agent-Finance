@@ -1,0 +1,297 @@
+{
+  "checked_on": "2026-10-21",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 57,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 42,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "explanation",
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "legal_v2",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "business_review",
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "recovery",
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 518,
+  "implementation_sha256": "5e2bd172bf7399de9f8e74d60e93d7bf547043199ea862d286543201b75d9416",
+  "legacy_workflow_implementation_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "source_sha256": {
+    "src/business_review/__init__.py": "8de60cd2775548685db528b1b0cd21ee4d9487bd4ef3e1737aa4952c10b40fee",
+    "src/business_review/api.py": "cb4e71199b5998d18c10d229b48775ab7946c9a58b1efc11e633f80d55f5f66c",
+    "src/business_review/cli.py": "56bcc892dd18ed776e8dba5e46ecab66e5146cb2ae2abea70edf57d30d5066be",
+    "src/business_review/contracts.py": "7faeb61289f27a227e1903269dfe19c22a2b98e09988a8bd7802fa8e5f14c4d6",
+    "src/business_review/evidence.py": "f20b0bdbc5bb117ed95f164bc933341a6be159c3cb975c1d019e55a26c637776",
+    "src/business_review/repository.py": "d8be7a5292f645cb9cf23039a031d247ce538767c693688abef3eed6e33a8230",
+    "src/business_review/service.py": "acf2c263009595ba4b6ae3e52d901547d7a92f10026e84f7e58aafbfafabe3ae",
+    "src/business_review/web.py": "07ae4d845051f4de2412d66216b221ca4e203fbafc5a4b1633b1c2c16ceb5863",
+    "configs/business_review/capability_reviewed_capture_v1.json": "2d33299b740c2f21763c3246c416e15b944d228cf963293af790e2e4dbae0949",
+    "configs/business_review/dossier.template.json": "ac723785974a576441db603ddd90034af196302964f73f8e2805c4fa8f1af648"
+  },
+  "legacy_replay_code_unchanged": true,
+  "scope": "Synthetic operator security/revision/evidence tests, HTTP/SQLite/Chrome and legacy native ZEN regression. No independent real-invoice or legal acceptance.",
+  "real_product_mappings": "PENDING_NO_PRODUCT_DOSSIERS",
+  "legal_release": "NOT_APPROVED",
+  "passed": true,
+  "javascript": [
+    {
+      "command": "node --check src/review/static/app.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/compliance.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/explanation.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/business.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/workflow.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/automation.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/region.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/review_client.test.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/explanation_client.test.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/items.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/insights.js",
+      "passed": true
+    }
+  ],
+  "browser": [
+    {
+      "name": "automation_v2",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "region",
+      "passed": true,
+      "checks": 10
+    },
+    {
+      "name": "automation",
+      "passed": true,
+      "checks": 10
+    },
+    {
+      "name": "workflow",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "business",
+      "passed": true,
+      "checks": 12
+    },
+    {
+      "name": "compliance",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "name": "explanation",
+      "passed": true,
+      "checks": 5
+    },
+    {
+      "name": "capture_upgrade",
+      "passed": true,
+      "checks": 8
+    }
+  ],
+  "browser_checks": 65,
+  "ui_source_sha256": {
+    "src/review/static/app.js": "25f8cbbfe6a63f1c889a17bd88523476db958cf9755cc2269546beceec04c8fb",
+    "src/review/static/automation.js": "185fca92921bc5cf0b7f8fc072ad9835278aa01d6e39e91d780f40441b1c6082",
+    "src/review/static/business.css": "88dffa6ea97e07450a20e57a56b7f782e870c524d823f04257bcca9d917af1f5",
+    "src/review/static/business.js": "f710e3405a6f73cdbf32f72da7e142f2d6dba891f84b033dde0827b5836cea51",
+    "src/review/static/compliance.css": "961389c3e6535ff378de0fc07f85d04b40daf662363f7f00fb8fabdb2a4c8790",
+    "src/review/static/compliance.js": "a00f7c845ec73c7b6ab06a9fd6540553d7d6641a1a41019e608749d717a2c73a",
+    "src/review/static/explanation.js": "bc9f21165881f2dee810fe49aa73c789b64360ab984140ac2f8b9e354366ac5a",
+    "src/review/static/index.html": "c89fea403bd707db61e0c20e8bcf42df717f8aa11a15379ea619d620fab6f219",
+    "src/review/static/insights.js": "b58286552b059d2ef539e2402b4bf2fa216c32aed72ceee6464701c78fadfd17",
+    "src/review/static/items.js": "bfff3169c7adb15e992d6dfbce7c48ed745dfc886758e4a588f35a06a67f6656",
+    "src/review/static/region.js": "21eba06dc126dba9431892c05fe9e0cb91825bc55c3ca353b304dca85a2f0d73",
+    "src/review/static/style.css": "2f8b0ae4028f7862f7c1c27de08473b853d538c16eda2dfe2bab40aedb2f1892",
+    "src/review/static/workflow.css": "f946f2f0dc25248e63481c9c65dee05dea9c264d0f14bb4e6b3467afbe3fa699",
+    "src/review/static/workflow.js": "f3d686d145599d5131ae5248771853d84198ce75b22963422b583044bc99df5b"
+  },
+  "implementation_files": {
+    "agent3_tax_compliance/src/review/__init__.py": "7980774f2fd829a9aca4a5e4ef2a86e0ce2d33c5cb5a7fa3e095b6e632f99f90",
+    "agent3_tax_compliance/src/review/api.py": "e618f35a29c82b2f89bf9071b9f09c675e448937da3df38db8c3d2f1acd603c6",
+    "agent3_tax_compliance/src/review/contracts.py": "b7b7ddc4e24734f5c4b7718017bdf8fe7d1bef851496721cd35f25c909dd0079",
+    "agent3_tax_compliance/src/review/correction_service.py": "ee039441d9c21e76301aef6fee3d1b58421533e6b043a5a17f5e1708f7884ad4",
+    "agent3_tax_compliance/src/review/insights.py": "8b9f363b38ac2f2a00a90771e9f29c7943259f573f088fd88c8b99345bb6f459",
+    "agent3_tax_compliance/src/review/repository.py": "a31b389cf85217a1672e9b4ab0266404f20873ebca9532ec5c83e35d3e502b60",
+    "agent3_tax_compliance/src/review/revision_reprocessor.py": "cb65bf4e4a3d2e00176884d50668ab70d3db8b01a22382abeb2fe0352be75d2b",
+    "agent3_tax_compliance/src/review/static/app.js": "25f8cbbfe6a63f1c889a17bd88523476db958cf9755cc2269546beceec04c8fb",
+    "agent3_tax_compliance/src/review/static/automation.js": "185fca92921bc5cf0b7f8fc072ad9835278aa01d6e39e91d780f40441b1c6082",
+    "agent3_tax_compliance/src/review/static/business.css": "88dffa6ea97e07450a20e57a56b7f782e870c524d823f04257bcca9d917af1f5",
+    "agent3_tax_compliance/src/review/static/business.js": "f710e3405a6f73cdbf32f72da7e142f2d6dba891f84b033dde0827b5836cea51",
+    "agent3_tax_compliance/src/review/static/compliance.css": "961389c3e6535ff378de0fc07f85d04b40daf662363f7f00fb8fabdb2a4c8790",
+    "agent3_tax_compliance/src/review/static/compliance.js": "a00f7c845ec73c7b6ab06a9fd6540553d7d6641a1a41019e608749d717a2c73a",
+    "agent3_tax_compliance/src/review/static/explanation.js": "bc9f21165881f2dee810fe49aa73c789b64360ab984140ac2f8b9e354366ac5a",
+    "agent3_tax_compliance/src/review/static/index.html": "c89fea403bd707db61e0c20e8bcf42df717f8aa11a15379ea619d620fab6f219",
+    "agent3_tax_compliance/src/review/static/insights.js": "b58286552b059d2ef539e2402b4bf2fa216c32aed72ceee6464701c78fadfd17",
+    "agent3_tax_compliance/src/review/static/items.js": "bfff3169c7adb15e992d6dfbce7c48ed745dfc886758e4a588f35a06a67f6656",
+    "agent3_tax_compliance/src/review/static/region.js": "21eba06dc126dba9431892c05fe9e0cb91825bc55c3ca353b304dca85a2f0d73",
+    "agent3_tax_compliance/src/review/static/style.css": "2f8b0ae4028f7862f7c1c27de08473b853d538c16eda2dfe2bab40aedb2f1892",
+    "agent3_tax_compliance/src/review/static/workflow.css": "f946f2f0dc25248e63481c9c65dee05dea9c264d0f14bb4e6b3467afbe3fa699",
+    "agent3_tax_compliance/src/review/static/workflow.js": "f3d686d145599d5131ae5248771853d84198ce75b22963422b583044bc99df5b",
+    "agent3_tax_compliance/src/recovery/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "agent3_tax_compliance/src/recovery/api.py": "ec7142c0b12c737535031896d0f32d58d22d8fa00ffcfba629be302f68bd1225",
+    "agent3_tax_compliance/src/recovery/automation.py": "3d798dcfe54bfae196409def3b695e95397aaa9cdf324e2680caa3c42cf28326",
+    "agent3_tax_compliance/src/recovery/field_reads.py": "4d33c0c5e1ebe8ef80a589b97a9c6b7484cbfd9bb41b900850a8c00515926182",
+    "agent3_tax_compliance/src/recovery/policy.py": "1640c48f35379ee9edd864c501502edab35676514e55dc444ea434933ee2eb98",
+    "agent3_tax_compliance/src/recovery/regions.py": "071b4021ff2b31385c3cd121a81724494860b9fa3f9f677a933992807e2f14f0",
+    "agent3_tax_compliance/src/explanation_v2/__init__.py": "fff14743a913c25ee1d00744d541fdc9180e28700a6a9bbd7abc6b7a16f363cc",
+    "agent3_tax_compliance/src/explanation_v2/api.py": "67d42dcea77231c86a22b83602c8139f4ea3ad45489e161ad6287fa4b76e55a5",
+    "agent3_tax_compliance/src/explanation_v2/cli.py": "31c095c7f7c87493165be9ba007ef51fcd3a192befa50d2b24bf94a04204bb5f",
+    "agent3_tax_compliance/src/explanation_v2/context_builder.py": "61702f2998e378beaf783289cab2826ebb8541239f1d1d387146db8afa0954a0",
+    "agent3_tax_compliance/src/explanation_v2/contracts.py": "cb9715236c0f947ff5e4a8840d6bf49b31612dee72cf2433042fa7378059e7fe",
+    "agent3_tax_compliance/src/explanation_v2/guide.py": "74b52603f70d93e0596f8e6b9beabaf54d71f56665094ca9d3a078d07c8a931a",
+    "agent3_tax_compliance/src/explanation_v2/llm.py": "10c2326fa4c2e61cd147f7fcc259d8c644037043351d26ca37a07940f26b22d0",
+    "agent3_tax_compliance/src/explanation_v2/natural.py": "fa64d0b57791388c94d716c91bbf44366b4596b32b368f69d8b31f6cc7744d30",
+    "agent3_tax_compliance/src/explanation_v2/retrieval.py": "5216eba339516b1ddb0d70bb8c5aacfbfa318efdd8723f7064da2bee3b11d4ae",
+    "agent3_tax_compliance/src/explanation_v2/selection.py": "7a48d726bc96fc3d67cb2ea48f8260a7eaf9d43c0c60a1636106cf61145ddcc9",
+    "agent3_tax_compliance/src/explanation_v2/service.py": "e271212fa9142a6495bc3387e245b4501317ca2dea504c043feb81c75def2a93",
+    "agent3_tax_compliance/src/explanation_v2/validator.py": "1f55d3906902324ee26a5823bd1d26473bb8d48dc978ddd335c2297f4d861a01",
+    "agent3_tax_compliance/src/extraction/__init__.py": "288a76f4b96ec2e4ff8990c0dc71e92bf3cc8bc11123aeb1b44a6d28478b704b",
+    "agent3_tax_compliance/src/extraction/api.py": "e33b0b5e574858d676ab2de9a5db89c0c2939fbca3e176f910651b6f5d76a3df",
+    "agent3_tax_compliance/src/extraction/candidates.py": "c7bbc4ae5f636450e0d932218f1d60b17e72440e67453faf4ee3f349bdcc4705",
+    "agent3_tax_compliance/src/extraction/cli.py": "bd969d5ae5b1a222dc2c56823b754f127b8d4ae90381456979162ac9597dda52",
+    "agent3_tax_compliance/src/extraction/contracts.py": "0862729697544d10182199e142afe58eabc755f25b236c67f142af0953b8e15e",
+    "agent3_tax_compliance/src/extraction/evidence.py": "3cccd201c5ca562ae88cbc4f026cfed83420251a89ea5bbd80afeb756889914c",
+    "agent3_tax_compliance/src/extraction/invoice_fields.py": "5ce05b3947b811f05d6c1bf1486e42bedf08ce5d2fd3323724b027a97517315e",
+    "agent3_tax_compliance/src/extraction/llm_extractor.py": "92ceba779f4eaa6e1cebdbc8addf5a0cc2e10ab1243ab604e5945a5f0ab4ab1c",
+    "agent3_tax_compliance/src/extraction/ocr_pipeline.py": "6e5f3e57f2b27394107aff5a9c0f1b1dae97e0cbebce1a950c966f27fa342aa5",
+    "agent3_tax_compliance/src/extraction/repository.py": "c2a4c48c51ba65c453456b731c22726bb58ac31f0ef755ccb44af1db5b8c3513",
+    "agent3_tax_compliance/src/extraction/service.py": "a75b96b9503f05306721f909a3f0f57b5ab217d9e891b11b5c22bf0293750037",
+    "agent3_tax_compliance/src/extraction/spatial_tables.py": "98c624efff6aae6762505a1e129a5f73c9292aa5b2cb500f7d822803dabbf2b9",
+    "agent3_tax_compliance/src/extraction/tables.py": "64e3af3ff56dcc745898307bdfbb877c4327672b70bab0bfbdb9426227b55a3f",
+    "agent3_tax_compliance/src/extraction/vat_group_builder.py": "cc4e4d6eacf8dcf1b594331ae55b6135fcd7d8af795e49f5341b175a246c34c9",
+    "agent3_tax_compliance/src/quality/__init__.py": "cc54a79b9aef821985ac222fcdca2b5e276896106715ba6cd867015da1eb1a3b",
+    "agent3_tax_compliance/src/quality/api.py": "b4b5f7694e6174d45906649a4050f8f03e07a251fc46cddbb62447ebcd6e86b6",
+    "agent3_tax_compliance/src/quality/assessor.py": "0f04d4adf678698c08e83c93aa4c450835b6c666c53214ff80f39b65dd60276f",
+    "agent3_tax_compliance/src/quality/calibration.py": "5ab3d3b94986f2293beda9184337953e204a7b9f646da2df213e3cd5397566f7",
+    "agent3_tax_compliance/src/quality/cli.py": "c81a6fe13d9fc9ead8806f48fa844c5a8fb5a88684e2c84dab460f2c7ce58b85",
+    "agent3_tax_compliance/src/quality/completeness.py": "63b5861c89e576d9052a7080d9d0f8cc37a7e046497f798fb1d6605029f2f361",
+    "agent3_tax_compliance/src/quality/contracts.py": "037772e037d7bf4fff2be5313c7522f1745e7f0b31bbfa1bb177f66dad5b2987",
+    "agent3_tax_compliance/src/quality/evaluation_split.py": "75e22991323f4022c7967cc8a00f55f28bc6e0e954fc3150a3ee673fe5d0804f",
+    "agent3_tax_compliance/src/quality/policy.py": "b819bf624305cb2a66fd009ad5509f0f2b7df6658c0f0dcbd207a5a6099bdde5",
+    "agent3_tax_compliance/src/quality/repository.py": "6b6fd33af745a18e7f17d9ac5ff39a61a0f20aa8dd584cd31e411d36c4e15138",
+    "agent3_tax_compliance/src/quality/validators.py": "a83464ca0ccf4f683a427855dbdf487c93b83d13d6672d094322b084a1c735ee"
+  },
+  "post_freeze_rechecks": [
+    {
+      "suite": "explanation",
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "included_in_unique_total": true,
+      "reason": "Recheck final per-section fact prompt after real Qwen probe"
+    }
+  ]
+}

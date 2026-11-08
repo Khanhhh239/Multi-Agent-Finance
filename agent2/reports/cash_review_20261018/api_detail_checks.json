@@ -1,0 +1,306 @@
+[
+  {
+    "scenario": "001",
+    "case_id": "RC_b8e286f40dab8fba",
+    "company_id": "C001",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000015460",
+        "debit_vnd": 19204000,
+        "credit_vnd": 19204000
+      },
+      {
+        "document_id": "JD000015459",
+        "debit_vnd": 19204000,
+        "credit_vnd": 19204000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_5eb1f662cdbd2265",
+    "company_id": "C002",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000020492",
+        "debit_vnd": 10635000,
+        "credit_vnd": 10635000
+      },
+      {
+        "document_id": "JD000020491",
+        "debit_vnd": 10635000,
+        "credit_vnd": 10635000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_4fa2eaa50c0d41d5",
+    "company_id": "C003",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000015134",
+        "debit_vnd": 19047000,
+        "credit_vnd": 19047000
+      },
+      {
+        "document_id": "JD000015133",
+        "debit_vnd": 19047000,
+        "credit_vnd": 19047000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_fd3b5774a2d5f1fa",
+    "company_id": "C004",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000020514",
+        "debit_vnd": 10531000,
+        "credit_vnd": 10531000
+      },
+      {
+        "document_id": "JD000020513",
+        "debit_vnd": 10531000,
+        "credit_vnd": 10531000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_237c8841f1ec138c",
+    "company_id": "C005",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000016407",
+        "debit_vnd": 8527000,
+        "credit_vnd": 8527000
+      },
+      {
+        "document_id": "JD000016406",
+        "debit_vnd": 8527000,
+        "credit_vnd": 8527000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_721246413e1ac288",
+    "company_id": "C006",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000021998",
+        "debit_vnd": 11349000,
+        "credit_vnd": 11349000
+      },
+      {
+        "document_id": "JD000021997",
+        "debit_vnd": 11349000,
+        "credit_vnd": 11349000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_615843744fd0e37f",
+    "company_id": "C007",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000016359",
+        "debit_vnd": 7732000,
+        "credit_vnd": 7732000
+      },
+      {
+        "document_id": "JD000016358",
+        "debit_vnd": 7732000,
+        "credit_vnd": 7732000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "001",
+    "case_id": "RC_d186e9c9a994bb1f",
+    "company_id": "C008",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000025945",
+        "debit_vnd": 18098000,
+        "credit_vnd": 18098000
+      },
+      {
+        "document_id": "JD000025944",
+        "debit_vnd": 18098000,
+        "credit_vnd": 18098000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_865066c5ce9e39b4",
+    "company_id": "C001",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000019000",
+        "debit_vnd": 14531000,
+        "credit_vnd": 14531000
+      },
+      {
+        "document_id": "JD000018999",
+        "debit_vnd": 14531000,
+        "credit_vnd": 14531000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_b929346759d67338",
+    "company_id": "C002",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000025985",
+        "debit_vnd": 31815000,
+        "credit_vnd": 31815000
+      },
+      {
+        "document_id": "JD000025984",
+        "debit_vnd": 31815000,
+        "credit_vnd": 31815000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_f4a881ba5ced7003",
+    "company_id": "C003",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000017851",
+        "debit_vnd": 13874000,
+        "credit_vnd": 13874000
+      },
+      {
+        "document_id": "JD000017850",
+        "debit_vnd": 13874000,
+        "credit_vnd": 13874000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_8b8c1880dbadaaa6",
+    "company_id": "C004",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000017895",
+        "debit_vnd": 8598000,
+        "credit_vnd": 8598000
+      },
+      {
+        "document_id": "JD000017894",
+        "debit_vnd": 8598000,
+        "credit_vnd": 8598000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_8871943e45475fa5",
+    "company_id": "C005",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000019091",
+        "debit_vnd": 14187000,
+        "credit_vnd": 14187000
+      },
+      {
+        "document_id": "JD000019089",
+        "debit_vnd": 14187000,
+        "credit_vnd": 14187000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_66d47e6bdacfa136",
+    "company_id": "C006",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000017804",
+        "debit_vnd": 6617000,
+        "credit_vnd": 6617000
+      },
+      {
+        "document_id": "JD000017803",
+        "debit_vnd": 6617000,
+        "credit_vnd": 6617000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_4113f7ddbef07adf",
+    "company_id": "C007",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000024651",
+        "debit_vnd": 11412000,
+        "credit_vnd": 11412000
+      },
+      {
+        "document_id": "JD000024650",
+        "debit_vnd": 11412000,
+        "credit_vnd": 11412000
+      }
+    ],
+    "source_case": false
+  },
+  {
+    "scenario": "003",
+    "case_id": "RC_36e44a90937922d8",
+    "company_id": "C008",
+    "network_nodes": 12,
+    "documents": [
+      {
+        "document_id": "JD000019086",
+        "debit_vnd": 19862000,
+        "credit_vnd": 19862000
+      },
+      {
+        "document_id": "JD000019085",
+        "debit_vnd": 19862000,
+        "credit_vnd": 19862000
+      }
+    ],
+    "source_case": false
+  }
+]

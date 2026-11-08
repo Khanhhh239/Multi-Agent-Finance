@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sổ Soát · Phiếu rà cảnh báo ML</title>
+  <link rel="stylesheet" href="/company_ml.css"><link rel="stylesheet" href="/ml_reviews.css">
+  <script src="/ml_reviews.js" defer></script>
+</head><body><main>
+  <header><a href="/company-ml">← Dữ liệu &amp; ML</a><span class="badge">Phiếu rà</span></header>
+  <h1>Rà cảnh báo ML</h1>
+  <p class="lead">Đối chiếu dữ kiện, ghi hành động có căn cứ và đo thời gian kiểm tra.</p>
+  <p id="review-notice" role="status" tabindex="-1" hidden></p>
+  <p id="review-access" class="note"></p>
+  <div class="selectors">
+    <label>Lượt đánh giá<select id="review-packet" disabled></select></label>
+    <label>Doanh nghiệp<select id="review-company" disabled></select></label>
+    <button id="review-reload" type="button" class="secondary" disabled>Tải lại phiếu</button>
+  </div>
+  <div class="review-layout">
+    <aside><section><h2>Danh sách phiếu</h2><p id="review-progress" class="hint"></p><div id="review-list"></div></section></aside>
+    <div>
+      <section id="review-detail" hidden>
+        <h2 id="review-title"></h2><p id="review-owner" class="hint"></p>
+        <p class="note">Tên model, điểm và thứ hạng được ẩn trong màn hình này để bạn nhận xét dựa trên dữ kiện. Hữu ích là có hành động nghiệp vụ cụ thể, chưa phải kết luận gian lận.</p>
+        <h3>Thời gian kiểm tra</h3>
+        <div class="timer-row"><output id="review-clock" aria-label="Thời gian kiểm tra">00:00:00</output><span id="review-timer-state"></span></div>
+        <button id="review-start" type="button" disabled>Bắt đầu / tiếp tục</button>
+        <button id="review-pause" type="button" class="secondary" disabled>Tạm dừng</button>
+        <button id="review-recover" type="button" class="secondary" hidden>Dừng phiên cũ để tiếp tục</button>
+        <p class="hint">Bấm bắt đầu trước khi đối chiếu dữ kiện. Đồng hồ tạm dừng khi chuyển sang tab khác. Mất kết nối quá 30 giây thì dừng phiên; phần thời gian chưa được máy chủ xác nhận không được tính.</p>
+        <div id="review-evidence" class="table-wrap"></div>
+        <div id="review-limits"></div>
+        <details><summary>Tham chiếu dữ kiện của phiếu</summary><p id="review-reference" class="hint"></p></details>
+      </section>
+      <section id="review-work" hidden>
+        <h2>Nhận xét &amp; hành động</h2>
+        <form id="review-form">
+          <label>Kết quả rà<select id="review-useful" required><option value="">Chọn kết quả</option><option value="yes">Hữu ích · có hành động cụ thể</option><option value="no">Không cần hành động · đã đủ căn cứ</option><option value="unknown">Chưa đủ căn cứ / cần thêm tài liệu</option></select></label>
+          <label>Hành động cần thực hiện<textarea id="review-action" maxlength="4000" rows="3" placeholder="Ví dụ: đối chiếu khoản trả trùng với chứng từ và yêu cầu điều chỉnh nếu được xác nhận."></textarea></label>
+          <label>Nhận xét, căn cứ và tài liệu còn thiếu<textarea id="review-rationale" maxlength="4000" rows="4" required></textarea></label>
+          <label>Tham chiếu chứng từ / dữ kiện<textarea id="review-refs" maxlength="4000" rows="2" required placeholder="Mã chứng từ, đường dẫn hồ sơ hoặc mã dữ kiện của phiếu đã đối chiếu."></textarea></label>
+          <label class="ack"><input id="review-ack" type="checkbox">Tôi đã trực tiếp rà dữ kiện, kiểm tra thời gian và xác nhận nội dung phiếu này.</label>
+          <div class="actions"><button id="review-draft" type="button" class="secondary" disabled>Lưu bản nháp</button><button id="review-submit" type="submit" disabled>Xác nhận đã rà</button></div>
+          <p id="review-save-state" class="hint">Nội dung chỉ được lưu khi bấm lưu bản nháp hoặc xác nhận đã rà.</p>
+        </form>
+      </section>
+    </div>
+  </div>
+  <section id="review-manager" hidden>
+    <h2>Tiến độ &amp; tổng hợp</h2>
+    <button id="review-summary" type="button" class="secondary">Xem tổng hợp</button>
+    <a id="review-export" href="#">Tải CSV phiếu trong phạm vi doanh nghiệp được cấp</a>
+    <div id="review-summary-body"></div>
+    <p class="hint">Bảng tên model chỉ mở khi hoàn tất các phiếu trong phạm vi tài khoản. Không tự chọn hoặc kích hoạt model từ kết quả rà.</p>
+  </section>
+</main></body></html>

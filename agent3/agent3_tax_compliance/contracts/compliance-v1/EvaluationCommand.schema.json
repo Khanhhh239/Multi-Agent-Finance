@@ -1,0 +1,28 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "expected_record_revision": {
+      "minimum": 1,
+      "title": "Expected Record Revision",
+      "type": "integer"
+    },
+    "version_policy": {
+      "const": "CURRENT_VERSIONS",
+      "default": "CURRENT_VERSIONS",
+      "title": "Version Policy",
+      "type": "string"
+    },
+    "reason": {
+      "default": "User requested scoped technical evaluation",
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "expected_record_revision"
+  ],
+  "title": "EvaluationCommand",
+  "type": "object"
+}

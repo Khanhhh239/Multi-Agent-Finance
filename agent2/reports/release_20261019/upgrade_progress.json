@@ -1,0 +1,43 @@
+{
+  "legacy_restore": {
+    "kind": "review",
+    "cases": 1211,
+    "http_probe": true,
+    "logical_sha256": "f45648e3128685a9f4913e162ee085017b450961d27cfee0d11dff8f40ac39c9",
+    "output": "D:\\agent22\\.runtime\\release_20261019\\legacy_v1_restored"
+  },
+  "initialize": {
+    "active": "c45e690b9d174b449ba59d82e0729c57",
+    "logical_sha256": "6b0f11248f6d7cefd10053f1c84212bcaf079510080383a45eb88ca09e35fff7"
+  },
+  "failed_upgrade": {
+    "active_unchanged": true,
+    "candidate_restore_and_http_passed_before_injection": true,
+    "recorded_action": "upgrade_failed_active_unchanged"
+  },
+  "successful_upgrade": {
+    "active": "acd4ea0551434e9a8c3bb4617fb0a831",
+    "previous": "c45e690b9d174b449ba59d82e0729c57",
+    "logical_sha256": "6b0f11248f6d7cefd10053f1c84212bcaf079510080383a45eb88ca09e35fff7",
+    "schema_transition": "8 -> 8; exact compatible backup runtime"
+  },
+  "managed_web": {
+    "real_http": true,
+    "dry_run": true,
+    "upgrade_and_rollback_blocked_while_running": true,
+    "matching_service_identity_shutdown": true
+  },
+  "rollback": {
+    "restored_version": "0.1.0",
+    "active": "c45e690b9d174b449ba59d82e0729c57",
+    "all_operational_hashes_unchanged": true
+  },
+  "postwrite_branch": {
+    "rollback_blocked": true,
+    "new_note_preserved": true,
+    "events": 1,
+    "event_hash": "be7097de1fb454e8815e1b38e3757e464f0091ffed7b6b77cb98ff0919e8497f",
+    "active_unchanged": true,
+    "path": "D:\\agent22\\.runtime\\release_20261019\\deployment_postwrite"
+  }
+}

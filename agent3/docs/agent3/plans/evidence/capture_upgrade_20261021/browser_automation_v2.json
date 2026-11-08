@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Opening a record loads diagnostics without invoking OCR automatically",
+    "Opt-in runs recovery queue before evaluation and explanation, with saved CFR unchanged",
+    "Deterministic read/missing/action guide accompanies the explicitly unapproved natural draft",
+    "Recommended proposals enter only the draft; drafts block further recovery writes",
+    "Reloading a record fences a late recovery response and cannot apply old suggestions",
+    "Exhausted retry budget is explained clearly and offers neither another retry nor an apply action",
+    "Recovery queue and guide fit mobile and desktop"
+  ],
+  "page_errors": [],
+  "scope": "Synthetic queue/provider, real Chrome/HTTP/evaluation/SQLite; no OCR or legal accuracy claim"
+}

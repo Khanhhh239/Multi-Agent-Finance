@@ -1,0 +1,12 @@
+{
+  "successful": true,
+  "tests_run": 27,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "patterns": [
+    "test_shadow_scoring.py",
+    "test_feature_model_sync.py"
+  ],
+  "seconds": 6.67
+}

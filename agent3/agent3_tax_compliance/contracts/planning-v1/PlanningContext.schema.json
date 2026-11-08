@@ -1,0 +1,1160 @@
+{
+  "$defs": {
+    "Candidate_Annotated_str__Strict_strict_True___": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Annotated[str, Strict(strict=True)]]",
+      "type": "object"
+    },
+    "Candidate_Union_Annotated_str__Strict_strict_True____Annotated_bool__Strict_strict_True____": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "title": "Value"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[Union[Annotated[str, Strict(strict=True)], Annotated[bool, Strict(strict=True)]]]",
+      "type": "object"
+    },
+    "ConfidenceBasis": {
+      "enum": [
+        "CALIBRATED",
+        "DETERMINISTIC",
+        "HUMAN_CONFIRMED",
+        "UNAVAILABLE"
+      ],
+      "title": "ConfidenceBasis",
+      "type": "string"
+    },
+    "ContextValue": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "enum": [
+            "context.vat_method",
+            "context.claim_input_vat",
+            "context.invoice_kind",
+            "context.payment_case",
+            "context.obligation_date"
+          ],
+          "title": "Path",
+          "type": "string"
+        },
+        "field": {
+          "$ref": "#/$defs/FieldObject_Union_Annotated_str__Strict_strict_True____Annotated_bool__Strict_strict_True____"
+        },
+        "quality": {
+          "$ref": "#/$defs/FieldQuality"
+        },
+        "verification_reference": {
+          "minLength": 1,
+          "title": "Verification Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "field",
+        "quality",
+        "verification_reference"
+      ],
+      "title": "ContextValue",
+      "type": "object"
+    },
+    "DailyPurchases": {
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "complete": {
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "verification_reference": {
+          "minLength": 1,
+          "title": "Verification Reference",
+          "type": "string"
+        },
+        "purchases": {
+          "items": {
+            "$ref": "#/$defs/PurchaseEvidence"
+          },
+          "title": "Purchases",
+          "type": "array"
+        }
+      },
+      "required": [
+        "version",
+        "complete",
+        "verification_reference",
+        "purchases"
+      ],
+      "title": "DailyPurchases",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "coordinate_system": {
+          "const": "NORMALIZED_TOP_LEFT",
+          "default": "NORMALIZED_TOP_LEFT",
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Span"
+        },
+        "transform_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transform Id"
+        }
+      },
+      "required": [
+        "source_id",
+        "document_id",
+        "page_index",
+        "bbox"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "FieldObject_Annotated_str__Strict_strict_True___": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Annotated_str__Strict_strict_True___"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Annotated[str, Strict(strict=True)]]",
+      "type": "object"
+    },
+    "FieldObject_Union_Annotated_str__Strict_strict_True____Annotated_bool__Strict_strict_True____": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "else": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "CALIBRATED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "provenance": {
+                "properties": {
+                  "calibration_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "calibration_version"
+                ]
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "DETERMINISTIC"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "deterministic_policy_version": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deterministic_policy_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence_basis": {
+                "const": "HUMAN_CONFIRMED"
+              }
+            },
+            "required": [
+              "confidence_basis"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "properties": {
+                  "review_event_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "review_event_id"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "status": {
+          "$ref": "#/$defs/FieldStatus"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "confidence_basis": {
+          "$ref": "#/$defs/ConfidenceBasis",
+          "default": "UNAVAILABLE"
+        },
+        "source": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "candidates": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Candidate_Union_Annotated_str__Strict_strict_True____Annotated_bool__Strict_strict_True____"
+          },
+          "title": "Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "source",
+        "provenance"
+      ],
+      "title": "FieldObject[Union[Annotated[str, Strict(strict=True)], Annotated[bool, Strict(strict=True)]]]",
+      "type": "object"
+    },
+    "FieldObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "observation_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Observation Id",
+          "type": "string"
+        },
+        "field_path": {
+          "title": "Field Path",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "PRESENT_VALUE",
+            "CONFIRMED_ABSENT",
+            "UNKNOWN"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "fidelity_policy": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Fidelity Policy",
+          "type": "string"
+        },
+        "validator_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Validator Version",
+          "type": "string"
+        },
+        "method": {
+          "enum": [
+            "COMPLETE_PARSE",
+            "HUMAN_REVIEW",
+            "OCR"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "document_complete": {
+          "title": "Document Complete",
+          "type": "boolean"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_record_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Record Id",
+          "type": "string"
+        },
+        "source_revision": {
+          "minimum": 1,
+          "title": "Source Revision",
+          "type": "integer"
+        },
+        "profile_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "profile_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Profile Version",
+          "type": "string"
+        },
+        "verification_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verification Reference"
+        }
+      },
+      "required": [
+        "observation_id",
+        "field_path",
+        "kind",
+        "fidelity_policy",
+        "validator_version",
+        "method",
+        "evidence_reference",
+        "document_complete",
+        "source_id",
+        "source_record_id",
+        "source_revision",
+        "profile_id",
+        "profile_version"
+      ],
+      "title": "FieldObservation",
+      "type": "object"
+    },
+    "FieldQuality": {
+      "additionalProperties": false,
+      "properties": {
+        "field_path": {
+          "title": "Field Path",
+          "type": "string"
+        },
+        "field_status": {
+          "title": "Field Status",
+          "type": "string"
+        },
+        "validation": {
+          "enum": [
+            "VALID",
+            "INVALID_SOURCE_CONTENT",
+            "UNKNOWN",
+            "NOT_CHECKED",
+            "NOT_APPLICABLE"
+          ],
+          "title": "Validation",
+          "type": "string"
+        },
+        "reliability": {
+          "enum": [
+            "CALIBRATED",
+            "DETERMINISTIC_VERIFIED",
+            "HUMAN_CONFIRMED",
+            "UNAVAILABLE"
+          ],
+          "title": "Reliability",
+          "type": "string"
+        },
+        "probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Probability"
+        },
+        "critical": {
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "eligible_within_policy": {
+          "default": false,
+          "title": "Eligible Within Policy",
+          "type": "boolean"
+        },
+        "auto_accepted": {
+          "const": false,
+          "default": false,
+          "title": "Auto Accepted",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "field_path",
+        "field_status",
+        "validation",
+        "reliability",
+        "critical"
+      ],
+      "title": "FieldQuality",
+      "type": "object"
+    },
+    "FieldStatus": {
+      "enum": [
+        "PRESENT",
+        "MISSING",
+        "AMBIGUOUS",
+        "NOT_PROVIDED_BY_SOURCE",
+        "NOT_APPLICABLE"
+      ],
+      "title": "FieldStatus",
+      "type": "string"
+    },
+    "ItemClassification": {
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Item Id",
+          "type": "string"
+        },
+        "item_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Code"
+        },
+        "category": {
+          "$ref": "#/$defs/FieldObject_Annotated_str__Strict_strict_True___"
+        },
+        "quality": {
+          "$ref": "#/$defs/FieldQuality"
+        },
+        "mapping_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mapping Id"
+        },
+        "evidence_kind": {
+          "enum": [
+            "CATALOGUE",
+            "CONTRACT",
+            "HUMAN_CLASSIFICATION"
+          ],
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "verification_reference": {
+          "minLength": 1,
+          "title": "Verification Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "category",
+        "quality",
+        "evidence_kind",
+        "verification_reference"
+      ],
+      "title": "ItemClassification",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Method",
+          "type": "string"
+        },
+        "adapter_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Adapter Version",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "calibration_version": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calibration Version"
+        },
+        "deterministic_policy_version": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deterministic Policy Version"
+        },
+        "review_event_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Event Id"
+        },
+        "derived_from": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Derived From",
+          "type": "array"
+        }
+      },
+      "required": [
+        "method",
+        "adapter_version"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    },
+    "PurchaseEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "taxpayer_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Taxpayer Id",
+          "type": "string"
+        },
+        "record_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Record Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "issue_date": {
+          "format": "date",
+          "title": "Issue Date",
+          "type": "string"
+        },
+        "seller_tax_id": {
+          "pattern": "^[0-9]{10}(?:[0-9]{3})?$",
+          "title": "Seller Tax Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "VND",
+          "default": "VND",
+          "title": "Currency",
+          "type": "string"
+        },
+        "gross": {
+          "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+          "title": "Gross",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "taxpayer_id",
+        "record_id",
+        "revision",
+        "input_sha256",
+        "issue_date",
+        "seller_tax_id",
+        "gross"
+      ],
+      "title": "PurchaseEvidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "default": "planning-context-v1",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "tenant_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "taxpayer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Taxpayer Id",
+      "type": "string"
+    },
+    "record_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "record_revision": {
+      "minimum": 1,
+      "title": "Record Revision",
+      "type": "integer"
+    },
+    "values": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ContextValue"
+      },
+      "title": "Values",
+      "type": "array"
+    },
+    "daily": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DailyPurchases"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "observations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/FieldObservation"
+      },
+      "title": "Observations",
+      "type": "array"
+    },
+    "classifications": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ItemClassification"
+      },
+      "title": "Classifications",
+      "type": "array"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "taxpayer_id",
+    "record_id",
+    "record_revision"
+  ],
+  "title": "PlanningContext",
+  "type": "object"
+}

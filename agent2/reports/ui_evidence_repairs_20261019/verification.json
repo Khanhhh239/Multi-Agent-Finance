@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-19",
+  "status": "implemented_and_technically_verified",
+  "issues": {
+    "RR01": "fixed_renderer",
+    "RR02": "implemented_snapshot_evidence",
+    "RR03": "fixed_currency_display",
+    "RR04": "UI_improved_source_version_design_pending",
+    "RR06": "UI_improved_independent_document_review_pending",
+    "RR09": "awaiting_business_owner_decision"
+  },
+  "javascript": {
+    "successful": true,
+    "check_count": 19,
+    "checks": [
+      "A4 real null window renders calendar month and count",
+      "Null numeric facts are missing, zero is still a value",
+      "C4 exposes both real actions, leave windows and source references",
+      "Authorized leave action displays the permission, without false missing warning",
+      "E2 exposes termination, regular salary, service period and both sources",
+      "E2 missing settlement stays explicitly unevaluable",
+      "F1 exposes audit, closing, policy references, observations and rounded days",
+      "Legacy evidence and missing F1 source keep their uncertainty",
+      "Stored source values are HTML escaped",
+      "Foreign ledger and transaction consistently avoid claiming verified VND or original USD amount",
+      "Currency annotations stay bound to company, document and invoice",
+      "Future invoice is explicitly excluded at payment time in both tabs",
+      "Late verification and expired limit display effective dates without changing points",
+      "Installments expose source-version ambiguity without asserting lookahead",
+      "Refund summary keeps original case and distinguishes full and partial returns",
+      "Journal reversal is never presented as proof of physical cash recovery",
+      "Original-transaction navigation works from the last refund row",
+      "Independent accounting acceptance is not inferred from UAT counts",
+      "All 32 frozen controls and all 73 transactions render; VND columns retain currency"
+    ],
+    "rendered_controls": 32,
+    "rendered_transactions": 73,
+    "rendered_documents": 78,
+    "browser_visual_qa": false
+  },
+  "python": {
+    "successful": true,
+    "tests_run": 27,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_review.py",
+      "test_cash_review_flow.py",
+      "test_sprint14_api.py",
+      "test_p2_controls_web.py"
+    ]
+  },
+  "protected_files": 1209,
+  "protected_files_unchanged": true,
+  "code_sha256": {
+    "review_ui/app.js": "ecba45cf9015cc8fe3349acfda138527ca92e0785b0864af3bd2ab3ada79f5b3",
+    "review_ui/p2_controls.js": "bfabd744a44cf94f351c1fc72320180c3ba92477159cc85cc5e176f85823ca85",
+    "review_ui/p2_controls.html": "75a9d65a2e177314709eeb616f1a9a145e905b69609a4a2551efa8ab7d133814",
+    "review_ui/p2_controls.css": "4130deebfd8b75f38cacc88f992b6e1d0a6b6e2d8a11875ec0bd563e0232b274",
+    "tests/review_evidence_ui.test.js": "4fccc1e2160030871f94ff62fdde33a453c2618aaae0edbcfb412b9b73975bcc",
+    "sme_fraud/rules.py": "802051faebd176efade79683170aaab5c66f5bc953739c7b74eea61d341938a1",
+    "sme_fraud/cash_controls.py": "c5dcb6f4e83e8893e44ab6753aa222400fda95c858949e45747292552b426222",
+    "sme_fraud/p2_controls_web.py": "74255e85373ff8fbd2921213b6a8f1785b8ef76143b781f6f652ba713d7c7148",
+    "sme_fraud/case_queue.py": "a2d8604fed99e88a3cd5282d6143533af8bc768f2740e02357a3c3ff7076b7fe"
+  },
+  "files_sha256": {
+    "before_after.html": "021bac4557fc1dda5f34b471b34a253f63403b4621f0d48546d676276ab1a106",
+    "cards_before_after.json": "c6cc5741d3710b02994c1901b0411aa6eba1185b5d3907d3a67889ae4c30b056",
+    "p2_before_after.json": "f318114271b1f07498ae64c40cb50cda66d24b38286997b71522fb79ec9db264",
+    "p2_independent_acceptance.md": "405fc757c09dd84e13a7d9d3dba03028a45bf4fb7affd3133017c9892f7083c7",
+    "preservation.json": "5dc7815f5034a2252b90ddd646caef55d0c1993f1a980cf00205497955f8f86a",
+    "rr09_policy_decision.md": "7c08bd8a749f5e044ebf9f3b6a82af1c787612f27df6b0512a3710a18bbb844c"
+  },
+  "live_p2": {
+    "url": "http://127.0.0.1:8767/p2-controls",
+    "http_status": 200,
+    "controls": 32,
+    "matched_transactions": 73,
+    "assets_match_current": true,
+    "user_review_count": 0
+  },
+  "scoring_changed": false,
+  "threshold_changed": false,
+  "source_changed": false,
+  "operational_feedback_written": false,
+  "user_uat_review_written": false,
+  "external_messages_sent": 0,
+  "holdout_005_scored": false,
+  "browser_visual_qa": false,
+  "independent_accounting_acceptance": "not_recorded",
+  "RR09_policy_approved": false
+}

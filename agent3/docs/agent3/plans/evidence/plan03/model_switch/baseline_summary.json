@@ -1,0 +1,299 @@
+{
+  "date": "2026-10-12",
+  "scope": "hybrid-model-switch-functional-v1",
+  "config": {
+    "version": "ppocrv6-vietocr-cpu-v1",
+    "model_id": "ppocrv6_vietocr",
+    "language": "vie+eng",
+    "psm": 3,
+    "preprocess_version": "render-identity-v1",
+    "timeout_seconds": 600,
+    "memory_mb": 6144,
+    "parameters": {},
+    "max_output_bytes": 4194304,
+    "max_attempts": 2
+  },
+  "runtime": {
+    "engine_versions": {
+      "python": "3.10.5",
+      "paddleocr": "3.7.0",
+      "paddlepaddle": "3.3.1",
+      "torch": "2.13.0",
+      "torchvision": "0.28.0",
+      "vietocr": "0.3.13",
+      "Pillow": "10.2.0",
+      "numpy": "1.26.4"
+    },
+    "files": {
+      "envs/ppocrv6_vietocr/Scripts/python.exe": "cf94f321857f68351ce733e0acd141b55433608a5d6d6ddb31c56e25c3f2bf5f",
+      "envs/ppocrv6_vietocr/pyvenv.cfg": "ca050378c254b314d65c7f579dcc0ceb5ac4fbd98ca5bdf7143512a9fcdf0fbc",
+      "artifacts/models/ppocrv6_medium/detection/inference.pdiparams": "85218d2e3d98f5a21c58b4220627be923a97aee5db3cc71f39536ab31ac53960",
+      "artifacts/models/ppocrv6_medium/detection/inference.json": "0f1a7ec35da36173529c7a60238b7f7919e3831929c3f700ad90ad4896adecd5",
+      "artifacts/models/ppocrv6_medium/detection/inference.yml": "7298d5ead546584af2504d03355f881ac7a7bc0eb1e282d3e159277c1d0af871",
+      "artifacts/models/vietocr/transformerocr.pth": "380512193a8b6cbf6fad80deacdc9b6939d10d473d199892fc6408d13775ea59",
+      "artifacts/models/vietocr/config/base.yml": "9c8283fadb950f06f5d3400475f80d5355700ff315c9c48b7875e6ea66647d1c",
+      "artifacts/models/vietocr/config/vgg-transformer.yml": "0df9feee197754c7381871e5dfd07c6f3e292a4853eece6f1af240923e57c907",
+      "src/adapters/vietocr_adapter.py": "d26b36ab1630784d0e506f5ba72ac34b0ba63052dad8fc5a6bb81afc1e174a98",
+      "src/adapters/paddle_common.py": "b11d22bd05634293c81b0d56c2da304506dd3eb71e8240367a0deddcfcd9e7cb",
+      "src/bridge_worker.py": "030df5e4d9dec63af95cd73127d166b64479c61128a2a789380a78a4a2305f8e",
+      "src/adapters/__init__.py": "dcaffb6372d89a11677564207e51b106d15e23f1b433c51e07e2e6c0296f99dd",
+      "src/adapters/base.py": "c35f6a8077fe5561a6bc0a2498040d99de1ff66b995f2a2fb7501d41bcfbcb61",
+      "src/contracts.py": "d3dc60cc9bee2c43626047b06ef2dd951c51afd9294ae64f2bd68b199273aafa",
+      "src/utils.py": "99085f0c46fd5c01e272f6bec3d6f6e75dd9c7cb7caa90edf7578ccb4ead769c",
+      "envs/ppocrv6_vietocr/Lib/site-packages/aistudio_sdk-0.3.9.dist-info/METADATA": "8aa0efed9d52cfda6dd56eda3129b783c8ccf1c433638404bbe6be0766ba4a29",
+      "envs/ppocrv6_vietocr/Lib/site-packages/aistudio_sdk-0.3.9.dist-info/RECORD": "2e92062b316b51630ea12cd07096822855131cf57e49efeae1656bbd7fc32087",
+      "envs/ppocrv6_vietocr/Lib/site-packages/albumentations-1.4.2.dist-info/METADATA": "4ac3328acadfbdd83c93d5eb15c85906728971e1bdabed66d0fbdf711897c7ee",
+      "envs/ppocrv6_vietocr/Lib/site-packages/albumentations-1.4.2.dist-info/RECORD": "d4ad19b71fde6a951372e87dca32ebfd19ffae14c76af0995f13265fd3fd7eca",
+      "envs/ppocrv6_vietocr/Lib/site-packages/bce_python_sdk-0.9.79.dist-info/METADATA": "de45befad45e90656f4c8d5517094a3ba541add322eb233ae9e67ef7abdeac7c",
+      "envs/ppocrv6_vietocr/Lib/site-packages/bce_python_sdk-0.9.79.dist-info/RECORD": "6bd60c407befc40092e3fa886dc53529dc52a371e57866ea54176a30ee5e4fad",
+      "envs/ppocrv6_vietocr/Lib/site-packages/chardet-7.6.0.dist-info/METADATA": "2c8577bdf827dd08a9ab4f5279bce3b0a06dad9445bf9b567a85ba9ae429e9a9",
+      "envs/ppocrv6_vietocr/Lib/site-packages/chardet-7.6.0.dist-info/RECORD": "782323cc307e215f9b594658c27aa64c26a52eb3a5421f0320a38263836c0527",
+      "envs/ppocrv6_vietocr/Lib/site-packages/crc32c-2.9.post0.dist-info/METADATA": "ce4203c3f3bf34b36887ce53a2066db5044db705d8a71df33f5df6d322dcc74a",
+      "envs/ppocrv6_vietocr/Lib/site-packages/crc32c-2.9.post0.dist-info/RECORD": "15cefa7dba0e8bf33f793e077a4cf884bf986cbfd95af350f58979bd1de45a3b",
+      "envs/ppocrv6_vietocr/Lib/site-packages/einops-0.2.0.dist-info/METADATA": "a2089ddddd65deed559187029d3c528fe9138cd5fd0b59d054d0a47f8ba9e80a",
+      "envs/ppocrv6_vietocr/Lib/site-packages/einops-0.2.0.dist-info/RECORD": "bc08993a3491c4c43912df65771b0655e021b0741c32e2d45012ec879f6a15fe",
+      "envs/ppocrv6_vietocr/Lib/site-packages/future-1.0.0.dist-info/METADATA": "30d35a50a3116d9026558ab9026ffed4db58675562102a526bc56c4235db913e",
+      "envs/ppocrv6_vietocr/Lib/site-packages/future-1.0.0.dist-info/RECORD": "5dd60170dd33b3d508049eb7356fa922f6ee8d485ce344d967d0fbd006401125",
+      "envs/ppocrv6_vietocr/Lib/site-packages/gdown-4.4.0.dist-info/METADATA": "25f666ab48ce6b07759407bb970f04bec349d8dd19978ac46bd12b37bf43941c",
+      "envs/ppocrv6_vietocr/Lib/site-packages/gdown-4.4.0.dist-info/RECORD": "fd37d9f3102918f3907552fd5d20881236ec38be082948f4473f604e6158b2ff",
+      "envs/ppocrv6_vietocr/Lib/site-packages/imagesize-2.0.1.dist-info/METADATA": "eded5ee1284519a4977ab73802efb9f5c732ff595abdb8a41fe73e6967070daf",
+      "envs/ppocrv6_vietocr/Lib/site-packages/imagesize-2.0.1.dist-info/RECORD": "48c93f193bd06031bd7128fcb9d996eb53d4c986d37d28489a8d153567a24cf6",
+      "envs/ppocrv6_vietocr/Lib/site-packages/imgaug-0.4.0.dist-info/METADATA": "9510e22fff91b0c2d5b59fcf7090bd9a13b328931ecdd95d4b7e6496e623dbe7",
+      "envs/ppocrv6_vietocr/Lib/site-packages/imgaug-0.4.0.dist-info/RECORD": "e3e889aeffa7f4a04671afa37bbddc9aa4ff495d159b8c9c54bfccc9e08eb72b",
+      "envs/ppocrv6_vietocr/Lib/site-packages/lmdb-2.3.0.dist-info/METADATA": "f51ddebdc28a7f005e2d5d36f641427996fcdad4458efac48198483201d4f557",
+      "envs/ppocrv6_vietocr/Lib/site-packages/lmdb-2.3.0.dist-info/RECORD": "3b15754c9df1a15fbaf63529d41878d7254fb4d267a8b88c1ef07c9269c34f98",
+      "envs/ppocrv6_vietocr/Lib/site-packages/modelscope-1.40.1.dist-info/METADATA": "977894e0aaa9699f111f5e0a30f633907e1626147f6d263b68c200039e3528a3",
+      "envs/ppocrv6_vietocr/Lib/site-packages/modelscope-1.40.1.dist-info/RECORD": "65fa27cbb8371417199ab0aef579a978029c2dc5113cab18655277480613312d",
+      "envs/ppocrv6_vietocr/Lib/site-packages/modelscope_hub-0.4.5.dist-info/METADATA": "b948cfbbc086585dd8d7a1b923301b10e2c18091aa4843f7246b5e1d06d9f8ea",
+      "envs/ppocrv6_vietocr/Lib/site-packages/modelscope_hub-0.4.5.dist-info/RECORD": "97a23a95ac3ded794759fca88a6a6200edea26f5ff0ab6641e036679ca90cace",
+      "envs/ppocrv6_vietocr/Lib/site-packages/numpy-1.26.4.dist-info/METADATA": "5a27a0e272b1f6e597acbbf58e8da39ae350b2318db8df4cf49d72518e62eebc",
+      "envs/ppocrv6_vietocr/Lib/site-packages/numpy-1.26.4.dist-info/RECORD": "b4b2f87c7cbd7b5abe91fd3be5d0811c4042cd29a3bf19286a2be2899dc5d779",
+      "envs/ppocrv6_vietocr/Lib/site-packages/opencv_contrib_python-4.10.0.84.dist-info/METADATA": "5f4c7d397dbc82ca5084cea55543b916aeeb4284995f7d534576089083bf570e",
+      "envs/ppocrv6_vietocr/Lib/site-packages/opencv_contrib_python-4.10.0.84.dist-info/RECORD": "cdbebfd9f7c17baca3faab4dc572f70759d99d0ef2d4cefc732d6f61945d8685",
+      "envs/ppocrv6_vietocr/Lib/site-packages/opt_einsum-3.3.0.dist-info/METADATA": "04b7df404a9019b5005bf28c83a9d9516a68faaf70accd022c805b79c1b7f2a3",
+      "envs/ppocrv6_vietocr/Lib/site-packages/opt_einsum-3.3.0.dist-info/RECORD": "192ca97b9fb65c53b9b09d0837cb8e198e8a23e75123bb9873fd1ff11480cfdc",
+      "envs/ppocrv6_vietocr/Lib/site-packages/paddleocr-3.7.0.dist-info/METADATA": "d01623d2a55baffb332a43d4ce83967c19090b0a3426753a59288e4def628371",
+      "envs/ppocrv6_vietocr/Lib/site-packages/paddleocr-3.7.0.dist-info/RECORD": "cb830fea16554c2ed6a3c750977abfe45f4ca8bcbb0c8fe5dc6ab5ed04759531",
+      "envs/ppocrv6_vietocr/Lib/site-packages/paddlepaddle-3.3.1.dist-info/METADATA": "b5c40fa225d2ffa8b3cb0e441a0d933ce9a7ef53e5ef0ee9de03732af7cc26b6",
+      "envs/ppocrv6_vietocr/Lib/site-packages/paddlepaddle-3.3.1.dist-info/RECORD": "3b28e05f483a8fe4674867c01b48fa036c01753fe2dc0f08eddd91c9696339c8",
+      "envs/ppocrv6_vietocr/Lib/site-packages/paddlex-3.7.2.dist-info/METADATA": "e4672eb9cee0db01355054a4a0201b88f01699da27f64114071d75ac5682cf80",
+      "envs/ppocrv6_vietocr/Lib/site-packages/paddlex-3.7.2.dist-info/RECORD": "2487c5a74d793bb401454895ab68e08aec1f783a207cc972a160545769e5f276",
+      "envs/ppocrv6_vietocr/Lib/site-packages/pillow-10.2.0.dist-info/METADATA": "faccf19734394cb14017e83f3e208e9f6d136f034cc776a6a055383845c027b5",
+      "envs/ppocrv6_vietocr/Lib/site-packages/pillow-10.2.0.dist-info/RECORD": "86229a50fdc4af5e824c6c6cc6625e42a0a36ff875cedd46004cc34fd4da8a2a",
+      "envs/ppocrv6_vietocr/Lib/site-packages/pip-22.0.4.dist-info/METADATA": "6c6b43cdd816d4017ddcdc77db249cefcc901ed1e43ab443d78e83beccfce423",
+      "envs/ppocrv6_vietocr/Lib/site-packages/pip-22.0.4.dist-info/RECORD": "902c4807aefe56d3a2cd81d6a00a57a03609a8ce96e6993f6419140a37651b99",
+      "envs/ppocrv6_vietocr/Lib/site-packages/py_cpuinfo-9.0.0.dist-info/METADATA": "ad115e96f84576861c5e75d760301b81d23143cfe25546b99541e01265379dc1",
+      "envs/ppocrv6_vietocr/Lib/site-packages/py_cpuinfo-9.0.0.dist-info/RECORD": "1c6058ad31c46e37dc343862ba8f08e67a44c2233711750819271c489e276e4e",
+      "envs/ppocrv6_vietocr/Lib/site-packages/pycryptodome-3.23.0.dist-info/METADATA": "3054c7b6ca96dfa8c968571921d169f91ac8ffa63686629d512dd50aa380bff1",
+      "envs/ppocrv6_vietocr/Lib/site-packages/pycryptodome-3.23.0.dist-info/RECORD": "677624ab9050b09f4705eecad663d52bf88a9e8dbaaf6648d8fe6c97d8fbc5d6",
+      "envs/ppocrv6_vietocr/Lib/site-packages/pypdfium2-5.13.0.dist-info/METADATA": "77230dd502a7693f2a713566263247dd13f8749b5677f5050f22d19bbe37ceba",
+      "envs/ppocrv6_vietocr/Lib/site-packages/pypdfium2-5.13.0.dist-info/RECORD": "90d2c7f473c0a98a0d36903daa75a2393253a943206075287b2bdc76d680a2c7",
+      "envs/ppocrv6_vietocr/Lib/site-packages/PySocks-1.7.1.dist-info/METADATA": "cdb40c8b38cf38e3f80e1122117db85d78cdad8b88c45f54194a4dd2e14307a6",
+      "envs/ppocrv6_vietocr/Lib/site-packages/PySocks-1.7.1.dist-info/RECORD": "bbdbd9fa28d35e642cf1e4ed3325b38e8d05c0c6279343d8c44a90b5133ad55f",
+      "envs/ppocrv6_vietocr/Lib/site-packages/PyYAML-6.0.2.dist-info/METADATA": "f65c17a933ab5cfb6cfa32362e8e54c2e680628d21891034059aa3721d168c09",
+      "envs/ppocrv6_vietocr/Lib/site-packages/PyYAML-6.0.2.dist-info/RECORD": "4f9f4086f531baaaeee50e00a169c16a7d273f12bb677082a269362efa2499e0",
+      "envs/ppocrv6_vietocr/Lib/site-packages/ruamel_yaml-0.19.1.dist-info/METADATA": "1ecd311518266882ede8804686f758255d6dff89a71a646bb6970a69615e39f6",
+      "envs/ppocrv6_vietocr/Lib/site-packages/ruamel_yaml-0.19.1.dist-info/RECORD": "910763e3b8dcb200546368cafba003b690179ea9c8a0ddc5e5dd0d19593b72a0",
+      "envs/ppocrv6_vietocr/Lib/site-packages/setuptools-58.1.0.dist-info/METADATA": "8e338b1b202ba568e5cf8253994fd312116bb8e393001463658a81cc95eeb390",
+      "envs/ppocrv6_vietocr/Lib/site-packages/setuptools-58.1.0.dist-info/RECORD": "228ff21c853d480a9d5d3fd59202924aea3b6f2281b686c1ddc586abc3211389",
+      "envs/ppocrv6_vietocr/Lib/site-packages/vietocr-0.3.13.dist-info/METADATA": "5eedf71b9354bc9de34305d0f17fbd6242b98404af4992052cb28c4ca1172b78",
+      "envs/ppocrv6_vietocr/Lib/site-packages/vietocr-0.3.13.dist-info/RECORD": "dc13e5ba8d0878703e206b5986dfaa91ca59a2f6828d6c4a85ba3236e801ed47"
+    },
+    "profile": {
+      "profile_version": "ppocrv6-vietocr-runtime-v1",
+      "model_id": "ppocrv6_vietocr",
+      "adapter": "ppocrv6_vietocr",
+      "interpreter": "envs/ppocrv6_vietocr/Scripts/python.exe",
+      "distributions": [
+        "paddleocr",
+        "paddlepaddle",
+        "torch",
+        "torchvision",
+        "vietocr",
+        "Pillow",
+        "numpy"
+      ],
+      "source_files": [
+        "src/adapters/vietocr_adapter.py",
+        "src/adapters/paddle_common.py"
+      ],
+      "assets": [
+        "artifacts/models/ppocrv6_medium/detection/inference.pdiparams",
+        "artifacts/models/ppocrv6_medium/detection/inference.json",
+        "artifacts/models/ppocrv6_medium/detection/inference.yml",
+        "artifacts/models/vietocr/transformerocr.pth",
+        "artifacts/models/vietocr/config/base.yml",
+        "artifacts/models/vietocr/config/vgg-transformer.yml"
+      ],
+      "environment": {
+        "FLAGS_use_mkldnn": "0",
+        "PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK": "True",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "adapter_config": {
+        "device": "cpu",
+        "detector": {
+          "text_detection_model_dir": "artifacts/models/ppocrv6_medium/detection",
+          "use_doc_orientation_classify": false,
+          "enable_mkldnn": false,
+          "hybrid_cpu_threads": 1
+        },
+        "recognizer": {
+          "config_name": "vgg_transformer",
+          "base_config_path": "artifacts/models/vietocr/config/base.yml",
+          "architecture_config_path": "artifacts/models/vietocr/config/vgg-transformer.yml",
+          "weights": "artifacts/models/vietocr/transformerocr.pth",
+          "cpu_threads": 1
+        }
+      },
+      "path_parameters": [
+        "detector.text_detection_model_dir",
+        "recognizer.base_config_path",
+        "recognizer.architecture_config_path",
+        "recognizer.weights"
+      ],
+      "max_processes": 2
+    },
+    "runtime_sha256": "d9bde29330b94db7bf8d3f8dee392c42c8d7dc9d0b176a3a5bc84c13b60a5928",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+    "available": true
+  },
+  "outcomes": [
+    {
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-image.png",
+      "input_sha256": "4a818ecc9bbd2486490eddaf1355f872e1ed57f8a69cf72b5a767a64b6f39040",
+      "case": "project-original",
+      "ingestion_id": "ingestion-16e9489ac2624728a0d12eb2328ce902",
+      "config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "status": "COMPLETE",
+      "pages": 1,
+      "routes": [
+        "OCR"
+      ],
+      "issues": [
+        null
+      ],
+      "blocks": 27,
+      "ocr_responses": 1,
+      "wall_ms": 26732.234700000845,
+      "worker_metrics": [
+        {
+          "peak_job_memory_bytes": 1380274176
+        }
+      ],
+      "artifact_path": "data invoice\\plan03_local\\model_switch\\ingestion-16e9489ac2624728a0d12eb2328ce902.extraction.json",
+      "artifact_sha256": "ede4852606dd19a991aa7c770d13d33d0621dfc42c83cbaee98ab786f04b3f41"
+    },
+    {
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-00-pdf_text.pdf",
+      "input_sha256": "4567b56403e37f389e1ebe5985dfab92186c8384b5018f8dde74d7ef600b51fe",
+      "case": "project-original",
+      "ingestion_id": "ingestion-f48d95020cfe42ccb8099d3d3d487d85",
+      "config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "status": "COMPLETE",
+      "pages": 1,
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "issues": [
+        null
+      ],
+      "blocks": 27,
+      "ocr_responses": 0,
+      "wall_ms": 18.410200005746447,
+      "worker_metrics": [],
+      "artifact_path": "data invoice\\plan03_local\\model_switch\\ingestion-f48d95020cfe42ccb8099d3d3d487d85.extraction.json",
+      "artifact_sha256": "b12a5b8203e4495df384ede12f8bbd08beb6a8c40deaf005a75b6dafdcacbb0b"
+    },
+    {
+      "source_path": "agent3_tax_compliance\\tests\\fixtures\\ocr\\functional_set_v1\\syn-08-pdf_image.pdf",
+      "input_sha256": "535f0caaae655f74e849490743ca6c4a87efe1659182e797b14fb20e4cccaaee",
+      "case": "project-original",
+      "ingestion_id": "ingestion-0ff29ac61fcc4130a4e15c5ba8412cfa",
+      "config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "status": "COMPLETE",
+      "pages": 2,
+      "routes": [
+        "OCR",
+        "OCR"
+      ],
+      "issues": [
+        null,
+        null
+      ],
+      "blocks": 40,
+      "ocr_responses": 2,
+      "wall_ms": 57191.7664000066,
+      "worker_metrics": [
+        {
+          "peak_job_memory_bytes": 1516339200
+        },
+        {
+          "peak_job_memory_bytes": 1518161920
+        }
+      ],
+      "artifact_path": "data invoice\\plan03_local\\model_switch\\ingestion-0ff29ac61fcc4130a4e15c5ba8412cfa.extraction.json",
+      "artifact_sha256": "ee19768ceaf8f7a66f1d4cd6070e9f8a9111c295c42c53b0613e3ced5c7b550c"
+    },
+    {
+      "source_path": "data invoice\\plan02_local\\functional_set_v2\\hybrid.pdf",
+      "input_sha256": "921db07080c986c930c68e874459a55cd1033e228d5247d92064414310c6505e",
+      "case": "hybrid",
+      "ingestion_id": "ingestion-319f8a601b574fa8a95ba22343d3b466",
+      "config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "status": "COMPLETE",
+      "pages": 1,
+      "routes": [
+        "HYBRID"
+      ],
+      "issues": [
+        null
+      ],
+      "blocks": 3,
+      "ocr_responses": 1,
+      "wall_ms": 24599.34760000033,
+      "worker_metrics": [
+        {
+          "peak_job_memory_bytes": 1382895616
+        }
+      ],
+      "artifact_path": "data invoice\\plan03_local\\model_switch\\ingestion-319f8a601b574fa8a95ba22343d3b466.extraction.json",
+      "artifact_sha256": "8c492863f9597f09aac2e13ccd845fd29c072a05a061471cc180ccba4285d607"
+    },
+    {
+      "source_path": "data invoice\\plan02_local\\functional_set_v2\\rotation-90.pdf",
+      "input_sha256": "f7c7c5ab975402f7cdefc9ef0fa35c77e543139e34a6c14bb45a1bbd75e375e7",
+      "case": "rotation-90",
+      "ingestion_id": "ingestion-c0910574bd0b4354a718ee55e5a30e1f",
+      "config_key": "87fc4b5a21e675420e36e19526b97b8a2f85d6df1c911df360b5b843471c1089",
+      "status": "COMPLETE",
+      "pages": 1,
+      "routes": [
+        "NATIVE_TEXT"
+      ],
+      "issues": [
+        null
+      ],
+      "blocks": 2,
+      "ocr_responses": 0,
+      "wall_ms": 14.551400003256276,
+      "worker_metrics": [],
+      "artifact_path": "data invoice\\plan03_local\\model_switch\\ingestion-c0910574bd0b4354a718ee55e5a30e1f.extraction.json",
+      "artifact_sha256": "078699b1893ccb58de946aa58ba870d8ad070ea1ceb489a5a08c8ae80e869e36"
+    }
+  ],
+  "restart_cache_reused": true,
+  "automatic_fallback": false,
+  "limitations": [
+    "Five synthetic integration documents only; no claim of better accuracy than Tesseract.",
+    "Detector scores are not VietOCR text confidence or calibrated field probabilities.",
+    "Orientation correction inside OCR disabled; raster transforms inherited from PLAN_02.",
+    "CPU model initialization occurs for each page subprocess; persistent model serving is future hardening."
+  ]
+}

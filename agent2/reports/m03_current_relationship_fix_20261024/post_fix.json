@@ -1,0 +1,191 @@
+{
+  "stage": "post_fix",
+  "modules": [
+    {
+      "module": "test_current_relationship_features",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.891,
+      "details": []
+    },
+    {
+      "module": "test_graph_history",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.781,
+      "details": []
+    },
+    {
+      "module": "test_case_identity",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 6.61,
+      "details": []
+    },
+    {
+      "module": "test_bank_identity_controls",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.234,
+      "details": []
+    },
+    {
+      "module": "test_b2_company_transfer",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.281,
+      "details": []
+    },
+    {
+      "module": "test_feature_contact_identity",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.875,
+      "details": []
+    },
+    {
+      "module": "test_b4_evidence_timing",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.469,
+      "details": []
+    },
+    {
+      "module": "test_feature_evidence_timing",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.938,
+      "details": []
+    },
+    {
+      "module": "test_causality",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 12.109,
+      "details": []
+    },
+    {
+      "module": "test_accounting",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 10.453,
+      "details": []
+    },
+    {
+      "module": "test_feature_model_sync",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 5.344,
+      "details": []
+    },
+    {
+      "module": "test_train_source_model",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.719,
+      "details": []
+    },
+    {
+      "module": "test_shadow_scoring",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.171,
+      "details": []
+    },
+    {
+      "module": "test_model_windows",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.0,
+      "details": []
+    },
+    {
+      "module": "test_noise_policy",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.329,
+      "details": []
+    },
+    {
+      "module": "test_spec_policy",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 4.125,
+      "details": []
+    },
+    {
+      "module": "test_payment_evidence",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.718,
+      "details": []
+    },
+    {
+      "module": "test_tax_risk",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.657,
+      "details": []
+    },
+    {
+      "module": "test_rule_repairs",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 5.828,
+      "details": []
+    },
+    {
+      "module": "test_rules",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 73.234,
+      "details": []
+    }
+  ],
+  "tests": 317,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 150.766
+}

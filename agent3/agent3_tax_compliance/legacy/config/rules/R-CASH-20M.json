@@ -1,0 +1,21 @@
+{
+  "rule_id": "R-CASH-20M",
+  "effective_from": "2015-08-06",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "amount",
+      "operator": ">=",
+      "value": 20000000
+    },
+    {
+      "field": "payment_method",
+      "operator": "==",
+      "value": "cash"
+    }
+  ],
+  "verdict": "FAIL",
+  "fixable": true,
+  "fix_hint": "Yêu cầu thanh toán lại bằng hình thức chuyển khoản (Ủy nhiệm chi).",
+  "citation": "Điều 4 Thông tư 96/2015/TT-BTC (Sửa đổi, bổ sung Khoản 1 Điều 6 Thông tư 78/2014/TT-BTC)"
+}

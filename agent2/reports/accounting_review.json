@@ -1,0 +1,102 @@
+{
+  "version": "2.0",
+  "status": "passed",
+  "sources": [
+    {
+      "id": "TT200",
+      "title": "Thông tư 200/2014/TT-BTC",
+      "sections": "TK 133, 138, 141, 154, 229, 334, 335, 641, 642; Phụ lục tài khoản",
+      "url": "https://vbpl.moj.gov.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=66801",
+      "official_index": "https://congbao.chinhphu.vn/van-ban/thong-tu-so-200-2014-tt-btc-6697/3529.htm"
+    },
+    {
+      "id": "TT133",
+      "title": "Thông tư 133/2016/TT-BTC",
+      "sections": "TK 133, 138, 141, 154, 229, 334, 335, 642; Phụ lục 1",
+      "url": "https://vbpl.vn/TW/Pages/vbpq-toanvan.aspx?ItemID=113560",
+      "full_text_mirror": "https://lawplayer.com/vn/act/vn-vbpl-113560",
+      "official_index": "https://congbao.chinhphu.vn/van-ban/thong-tu-so-133-2016-tt-btc-21048.htm"
+    },
+    {
+      "id": "TT99_effective_date",
+      "title": "Bộ Tài chính: thời điểm áp dụng TT99/2025",
+      "url": "https://portal.mof.gov.vn/hoidapcstc/home/cthoidap/159102"
+    },
+    {
+      "id": "TT45_asset_criteria",
+      "title": "Bộ Tài chính: Điều 3 TT45/2013, tiêu chí TSCĐ",
+      "url": "https://qlg.mof.gov.vn/hoidapcstc/home/cthoidap/149525"
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario": "001",
+      "status": "passed",
+      "observations": 100000,
+      "changed_observations": 57554,
+      "primary_documents": 99608,
+      "auxiliary_documents": 36097,
+      "journal_documents": 135705,
+      "journal_lines": 334795,
+      "account_flow_edges": 199090,
+      "labels_and_splits_byte_identical": {
+        "labels.csv": true,
+        "splits.csv": true
+      },
+      "accounting_frameworks": {
+        "C001": "TT200",
+        "C002": "TT133",
+        "C003": "TT133",
+        "C004": "TT133",
+        "C005": "TT200"
+      }
+    },
+    {
+      "scenario": "003",
+      "status": "passed",
+      "observations": 100000,
+      "changed_observations": 57436,
+      "primary_documents": 99591,
+      "auxiliary_documents": 36146,
+      "journal_documents": 135737,
+      "journal_lines": 334811,
+      "account_flow_edges": 199074,
+      "labels_and_splits_byte_identical": {
+        "labels.csv": true,
+        "splits.csv": true
+      },
+      "accounting_frameworks": {
+        "C001": "TT200",
+        "C002": "TT133",
+        "C003": "TT133",
+        "C004": "TT133",
+        "C005": "TT200"
+      }
+    },
+    {
+      "scenario": "005",
+      "status": "passed",
+      "observations": 100000,
+      "changed_observations": 57335,
+      "primary_documents": 99575,
+      "auxiliary_documents": 36210,
+      "journal_documents": 135785,
+      "journal_lines": 334876,
+      "account_flow_edges": 199091,
+      "labels_and_splits_byte_identical": {
+        "labels.csv": true,
+        "splits.csv": true
+      },
+      "accounting_frameworks": {
+        "C001": "TT200",
+        "C002": "TT133",
+        "C003": "TT133",
+        "C004": "TT133",
+        "C005": "TT200"
+      }
+    }
+  ],
+  "tests_passed": 15,
+  "model_reload_checks": "passed",
+  "scope": "Historical 2024-2025 scenario accounting, not a full statutory or tax audit"
+}

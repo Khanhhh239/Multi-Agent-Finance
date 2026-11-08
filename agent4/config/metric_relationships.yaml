@@ -1,0 +1,105 @@
+relationships:
+  - source: ar_balance
+    target: ar_by_customer
+    type: specialization
+    metadata: {group_by: customer, decision_tag: specialized_vs_generic}
+  - source: ar_balance
+    target: ar_by_salesperson
+    type: specialization
+    metadata: {group_by: salesperson, decision_tag: specialized_vs_generic}
+  - source: ap_balance
+    target: ap_by_vendor
+    type: specialization
+    metadata: {group_by: vendor, decision_tag: specialized_vs_generic}
+  - source: operating_expenses
+    target: expense_by_category
+    type: specialization
+    metadata: {group_by: cost_category, decision_tag: specialized_vs_generic}
+  - source: net_revenue
+    target: gross_revenue
+    type: confusable_with
+    metadata: {decision_tag: gross_vs_net}
+  - source: gross_profit
+    target: gross_margin_pct
+    type: confusable_with
+    metadata: {decision_tag: amount_vs_ratio}
+  - source: net_profit
+    target: net_margin_pct
+    type: confusable_with
+    metadata: {decision_tag: amount_vs_ratio}
+  - source: cash_and_equivalents
+    target: net_cash_flow
+    type: confusable_with
+    metadata: {decision_tag: snapshot_vs_flow}
+  - source: profit_before_tax
+    target: taxable_income
+    type: confusable_with
+    metadata: {decision_tag: accounting_vs_tax}
+  - source: income_tax_expense
+    target: cit_estimate
+    type: confusable_with
+    metadata: {decision_tag: accounting_vs_tax}
+  - source: salary_expense
+    target: labor_cost
+    type: confusable_with
+    metadata: {decision_tag: narrow_vs_broad_cost}
+  - source: dso
+    target: dso_actual
+    type: alternative_definition
+    metadata: {decision_tag: formula_vs_actual}
+  - source: ar_balance
+    target: ar_aging
+    type: related_concept
+    metadata: {decision_tag: balance_vs_aging}
+  - source: ar_aging
+    target: overdue_receivables
+    type: related_concept
+    metadata: {decision_tag: aging_vs_overdue}
+  - source: ap_balance
+    target: ap_due_soon
+    type: related_concept
+    metadata: {decision_tag: balance_vs_due}
+  - source: current_ratio
+    target: quick_ratio
+    type: confusable_with
+    metadata: {decision_tag: liquidity_ratio}
+  - source: debt_balance
+    target: debt_to_equity
+    type: confusable_with
+    metadata: {decision_tag: amount_vs_ratio}
+  - source: taxable_income
+    target: cit_estimate
+    type: related_concept
+    metadata: {decision_tag: tax_base_vs_tax_amount}
+  - source: net_revenue
+    target: goods_revenue
+    type: specialization
+    metadata: {decision_tag: specialized_vs_generic}
+  - source: net_revenue
+    target: service_revenue
+    type: specialization
+    metadata: {decision_tag: specialized_vs_generic}
+  - source: operating_expenses
+    target: selling_expenses
+    type: specialization
+    metadata: {decision_tag: specialized_vs_generic}
+  - source: operating_expenses
+    target: admin_expenses
+    type: specialization
+    metadata: {decision_tag: specialized_vs_generic}
+  - source: cash_and_equivalents
+    target: cash_coverage_days
+    type: related_concept
+    metadata: {decision_tag: balance_vs_runway}
+  - source: dso
+    target: cash_conversion_cycle
+    type: related_concept
+    metadata: {decision_tag: component_vs_cycle}
+  - source: dpo
+    target: cash_conversion_cycle
+    type: related_concept
+    metadata: {decision_tag: component_vs_cycle}
+  - source: dio
+    target: cash_conversion_cycle
+    type: related_concept
+    metadata: {decision_tag: component_vs_cycle}

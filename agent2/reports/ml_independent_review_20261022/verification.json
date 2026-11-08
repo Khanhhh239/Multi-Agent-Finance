@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-22",
+  "status": "blind_review_packet_ready_no_independent_outcomes_yet",
+  "tests": {
+    "successful": true,
+    "tests_run": 30,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_independent_ml_review.py",
+      "test_compare_shadow.py"
+    ],
+    "seconds": 1.313
+  },
+  "units": 69,
+  "sample_groups": {
+    "disagreement": 37,
+    "reference_common_selected": 16,
+    "reference_neither_selected": 16
+  },
+  "public_packet_blinding_verified": true,
+  "as_of_and_company_scope_verified": true,
+  "all_outcomes_and_measured_minutes_blank": true,
+  "reviewer_zip_sha256": "fd6e48e3ca00d12e0b39896f0aae38473cdcaa974ea0e7aa038ba3fdf903391c",
+  "protected_files": 1269,
+  "protected_files_unchanged": true,
+  "model_fit": false,
+  "model_scored": false,
+  "labels_or_oracle_loaded": false,
+  "holdout_005_access": "opaque_hash_only_during_preservation_checks",
+  "queue_changed": false,
+  "external_sends": 0,
+  "independent_reviews": 0,
+  "real_sme_reviews": 0,
+  "actual_review_minutes": null,
+  "actionable_gain": null,
+  "missing_inputs": [
+    "Assigned independent human primary reviewer",
+    "Different human adjudicator",
+    "Completed measured-time reviews"
+  ],
+  "code_sha256": {
+    "sme_fraud/independent_ml_review.py": "f13ef236bb21e1b4065fa5131fb67cafb6204fefef1c71ac68ecdddb5a16d350",
+    "tests/test_independent_ml_review.py": "6d009e7e81e093d6ec7a1229cdd0b8e3c2155a2f24789186ab543dffc6f86e8a"
+  }
+}

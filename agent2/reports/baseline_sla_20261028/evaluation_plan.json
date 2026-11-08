@@ -1,0 +1,169 @@
+{
+  "version": "baseline-sla-audit-20261028-v1",
+  "study": "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2",
+  "scope": {
+    "company_ids": [
+      "C001",
+      "C002",
+      "C003",
+      "C004",
+      "C005",
+      "C006",
+      "C007",
+      "C008"
+    ],
+    "source_ref": "synthetic-reporting-v4-20261024-raw-times-unchanged",
+    "start_at": "2025-07-01T00:00:00+07:00",
+    "end_at": "2026-01-01T00:00:00+07:00"
+  },
+  "scenarios": [
+    {
+      "name": "baseline_5_120",
+      "slots": 5,
+      "minutes": 120,
+      "order": "baseline",
+      "opening_precleared": false,
+      "pin_mode": "none",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "slots_10_120",
+      "slots": 10,
+      "minutes": 120,
+      "order": "baseline",
+      "opening_precleared": false,
+      "pin_mode": "none",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "minutes_5_240",
+      "slots": 5,
+      "minutes": 240,
+      "order": "baseline",
+      "opening_precleared": false,
+      "pin_mode": "none",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "capacity_10_240",
+      "slots": 10,
+      "minutes": 240,
+      "order": "baseline",
+      "opening_precleared": false,
+      "pin_mode": "none",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "opening_precleared_5_120",
+      "slots": 5,
+      "minutes": 120,
+      "order": "baseline",
+      "opening_precleared": true,
+      "pin_mode": "none",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "opening_precleared_10_240",
+      "slots": 10,
+      "minutes": 240,
+      "order": "baseline",
+      "opening_precleared": true,
+      "pin_mode": "none",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "fifo_priority_mandatory_pinned",
+      "slots": 5,
+      "minutes": 120,
+      "order": "fifo",
+      "opening_precleared": false,
+      "pin_mode": "original",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "edf_priority_mandatory_pinned",
+      "slots": 5,
+      "minutes": 120,
+      "order": "edf",
+      "opening_precleared": false,
+      "pin_mode": "original",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "edf_priority_hard_only_diagnostic",
+      "slots": 5,
+      "minutes": 120,
+      "order": "edf",
+      "opening_precleared": false,
+      "pin_mode": "hard_only",
+      "weekdays": false,
+      "unbounded": false
+    },
+    {
+      "name": "unbounded_diagnostic",
+      "slots": 5,
+      "minutes": 120,
+      "order": "baseline",
+      "opening_precleared": false,
+      "pin_mode": "none",
+      "weekdays": false,
+      "unbounded": true
+    },
+    {
+      "name": "weekdays_5_120_diagnostic",
+      "slots": 5,
+      "minutes": 120,
+      "order": "baseline",
+      "opening_precleared": false,
+      "pin_mode": "none",
+      "weekdays": true,
+      "unbounded": false
+    }
+  ],
+  "initial_state": "Unresolved pre-window scopes from a strict cutoff before evaluation start",
+  "wait_clocks": "Legacy ready clock, first actual pending eligibility, waiting-cutoff days and off-queue gaps reported separately",
+  "sla": "Case SLA and scheduled-rereview deadline retained; selected day is an interval, never a fabricated completion timestamp",
+  "pins": "Only same-day reference mandatory work gates pinned variants; no future selections used",
+  "opening_precleared": "Hypothetical prior completion of opening scopes and already-due rereviews; changes continued-review effort history",
+  "workload": "Same scope coalescing and effort rules as frozen reference; expose different selected universes and right censoring",
+  "if_scores_loaded": false,
+  "models_loaded": false,
+  "models_fitted": 0,
+  "rules_rescored": false,
+  "production_policy_changed": false,
+  "notifications_sent": 0,
+  "actual_review_minutes": null,
+  "code_sha256": {
+    "compare_shadow.py": "b1b925bcd6d0f0e35e9cd41832c479307acf5e4841ddcc30eb119c35039b986f",
+    "case_queue.py": "6e44df9b6c11bb39c4f7ae2267f63dec21aa89f4c6ceda8feb8a7e818e5ed5bc",
+    "case_identity.py": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+    "case_admission.py": "b19ccf776e950ba4c8ba2c7f582d5c3aa3ba0ca256dab4f9719bc8cf1a0ae5f0",
+    "temporal_evidence.py": "38ada11cc8b641f59606fa22ed9c3974c6f03898ac35347b095ca8aa5821ce75",
+    "a4_pattern_queue.py": "9bc9da578451ae458c45fffdf8412709d0ca57e9587cc09c48f4df4b240e5344",
+    "audit_baseline_sla.py": "b7de3644ac7152d09282277114a91dd36ae5cc330a98ebcadf0f3373bd370431"
+  },
+  "study_commitment_sha256": "61dc00e48fc4194d59ef818df41dfa3985b302e92e87dafe0d3ffc406252906f",
+  "input_sha256": {
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\source\\sme_fraud_001\\manifest.json": "51c277c1a8e6e3c2426f7f1704d6315e1ec3fa785111035c69f66b6e3d23ef11",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\source\\sme_fraud_001\\transactions.csv": "67f82f5795cc20e64009ca77aa1f1babd521147e530bd7895c594008f8d4001c",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\source\\sme_fraud_001\\employees.csv": "065d1687d9e80e244f01de19140b7551c1294475c5f018eeaa8737eb5e299582",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\baseline\\sme_fraud_001\\predictions_frozen.json": "e9713c089b2bae26d3619492067de65d0835cb6fff9e9294e82db928ccf12bea",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\comparison\\sme_fraud_001\\budget_5\\selections.private.csv": "b1851ee1b41dcd01b5854a3f7de91a5bab133de7e01574976240158953ff5ebc",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\comparison\\sme_fraud_001\\budget_10\\selections.private.csv": "bedd43f8e2ed8a7058fc869e01c73207a841d2c46e53297308c0a41a4bff4e13",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\source\\sme_fraud_003\\manifest.json": "50b5eb8f90fdb689016ac68b19ecc25c9412e87425fda71e783a3fbcd5623089",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\source\\sme_fraud_003\\transactions.csv": "6086785e93323dbb24eea51499dc4615008c5c25591a1478bd536d5d2e4617b6",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\source\\sme_fraud_003\\employees.csv": "44a36f1660b6badc419508a0db9328ffda894afb4ad269ec774a77bc3b26d0ad",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\baseline\\sme_fraud_003\\predictions_frozen.json": "f4bf2ef153d6dca3648eb99c0ed765e86e3528cdf89e73ebd2963134ea9f5ac4",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\comparison\\sme_fraud_003\\budget_5\\selections.private.csv": "38848d980c46f2259c354c697f76cc441b2557eea929a844767a5d5d48985891",
+    "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2\\comparison\\sme_fraud_003\\budget_10\\selections.private.csv": "c8b6629d9a042bff1cd7136fd07e37ab6fb83982518e91707c7e577aecbf3c7b"
+  },
+  "cached_frames": null
+}

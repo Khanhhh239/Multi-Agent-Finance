@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.cache/
+.hypothesis/
+*.egg-info/
+data/*.duckdb*
+data/*ground_truth.json
+artifacts/
+data/traces/
+START_CODING_AGENT.md
+01_IMPLEMENTER_MASTER.md
+AI_Fin_Text2SQL_Engineering_Pack/
+WORKLOG.md

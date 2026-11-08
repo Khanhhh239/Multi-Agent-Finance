@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Four accessible steps; data/source default; one current step",
+    "Keyboard selects step; empty explanation routes to tax; navigation preserves saved revision",
+    "Search filters loaded records without deleting them; compact upload opens by keyboard/native details",
+    "Line details expand/collapse without replacing editors or item IDs",
+    "Unsaved correction survives step changes and prevents tax evaluation",
+    "1024/768/390px: all steps fit, source/data tabs and action controls remain reachable",
+    "Audit action routes back to data; existing history remains accessible"
+  ],
+  "page_errors": [],
+  "scope": "Real Chrome/HTTP; synthetic records; no OCR, Qwen or tax accuracy claim."
+}

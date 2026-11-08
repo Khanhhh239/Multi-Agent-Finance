@@ -1,0 +1,149 @@
+[
+  {
+    "probe": "missing_contacts_must_not_match",
+    "passed": false,
+    "expected": {
+      "employee_phone_overlap": 0,
+      "employee_address_overlap": 0
+    },
+    "actual": {
+      "employee_phone_overlap": 1,
+      "employee_address_overlap": 1
+    },
+    "rule_B2_points": 0,
+    "source": "All employee and member-vendor phones/addresses explicitly empty"
+  },
+  {
+    "probe": "retired_employee_contacts_must_not_remain_current_matches",
+    "passed": false,
+    "expected": {
+      "employee_phone_overlap": 0,
+      "employee_address_overlap": 0
+    },
+    "actual": {
+      "employee_phone_overlap": 1,
+      "employee_address_overlap": 1
+    },
+    "first_features": {
+      "employee_phone_overlap": 1,
+      "employee_address_overlap": 1
+    },
+    "second_rule_B2_points": 0
+  },
+  {
+    "probe": "feature_graph_retires_replaced_vendor_phone",
+    "passed": false,
+    "expected": 0,
+    "actual": 1,
+    "first_count": 1,
+    "second_rule_B2_points": 0
+  },
+  {
+    "probe": "future_support_documents_do_not_change_past_features",
+    "passed": false,
+    "expected": {
+      "support_doc_count": 0,
+      "goods_receipt_verified": 0
+    },
+    "actual": {
+      "support_doc_count": 2,
+      "goods_receipt_verified": 1
+    },
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "support_docs_observed_at": "2025-08-14T11:00:00+07:00"
+  },
+  {
+    "probe": "B4_future_goods_receipt_cannot_suppress_past_alert",
+    "passed": false,
+    "expected": 3,
+    "actual": 0,
+    "baseline_points": 3,
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "support_docs_observed_at": "2025-08-14T11:00:00+07:00",
+    "after_hits": [
+      {
+        "transaction_id": "AUDIT_0000",
+        "company_id": "C001",
+        "detected_at": "2025-08-12T11:00:00+07:00",
+        "rule_id": "B4",
+        "rule_name": "Trạng thái người phát hành hóa đơn rủi ro",
+        "points": 0,
+        "hard_trigger": 0,
+        "suppressed_reason": "Hóa đơn trước trạng thái rủi ro, có xác nhận giao nhận",
+        "evidence": {
+          "invoice_issued_at": "2025-08-02T11:00:00+07:00",
+          "risky_at_invoice": 0,
+          "registry_risky_now": 1
+        },
+        "related_transaction_ids": [],
+        "graph_path": [],
+        "intrinsic_points": 0,
+        "scoring_role": "transaction",
+        "evidence_id": "B4_a61b20d652af28cd0392"
+      }
+    ]
+  },
+  {
+    "probe": "future_invoice_gross_not_known_at_payment",
+    "passed": false,
+    "expected": 0.0,
+    "actual": 16.30041729,
+    "posted_at": "2025-08-12T11:00:00+07:00",
+    "invoice_issued_at": "2025-08-13T11:00:00+07:00"
+  },
+  {
+    "probe": "mixed_source_offsets_rejected_before_lexical_history",
+    "passed": true,
+    "expected": "rejected_canonical_timezone",
+    "actual": "rejected_canonical_timezone"
+  },
+  {
+    "probe": "B2_does_not_match_staff_transferred_out_of_company",
+    "passed": false,
+    "expected": 0,
+    "actual": 3,
+    "old_company": "C001",
+    "new_company": "C002",
+    "after_hits": [
+      {
+        "transaction_id": "AUDIT_0001",
+        "company_id": "C001",
+        "detected_at": "2025-08-14T11:00:00+07:00",
+        "rule_id": "B2",
+        "rule_name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+        "points": 3,
+        "hard_trigger": 0,
+        "suppressed_reason": "",
+        "evidence": {
+          "direct_matches": {
+            "phone": [
+              "E0000011"
+            ]
+          },
+          "field_count": 1,
+          "related_party_disclosed": false
+        },
+        "related_transaction_ids": [],
+        "graph_path": [],
+        "intrinsic_points": 3,
+        "scoring_role": "transaction",
+        "evidence_id": "B2_484564061f700a4cd7bf"
+      }
+    ]
+  },
+  {
+    "probe": "RR09_current_behavior_confirmed_not_new_policy",
+    "passed": true,
+    "expected": {
+      "points": 14,
+      "priority": "cao"
+    },
+    "actual": {
+      "points": 14,
+      "priority": "cao"
+    },
+    "limit_vnd": 2000000,
+    "amount_vnd": 2000001,
+    "interpretation": "Known policy gap, still open; this check records current implementation, not acceptance of proposed tiering"
+  }
+]

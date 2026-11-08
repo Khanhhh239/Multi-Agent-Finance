@@ -1,0 +1,110 @@
+{
+  "checked_on": "2026-10-16",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "explanation",
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "legal_v2",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 384,
+  "javascript": [
+    {
+      "command": "node --check src/review/static/app.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/compliance.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/explanation.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/review_client.test.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/explanation_client.test.js",
+      "passed": true
+    }
+  ],
+  "legacy_workflow_implementation_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "scope": "Synthetic business cases and real native ZEN; source-linked data, not legal approval or real OCR accuracy",
+  "production_release": "NOT_APPROVED",
+  "taxonomy_product_mapping": "PENDING",
+  "passed": true
+}

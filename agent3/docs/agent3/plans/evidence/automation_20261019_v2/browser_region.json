@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Reread shows a separate candidate and original value without changing CFR or completeness",
+    "Repeated HTTP reread uses the pinned cache without another model call",
+    "Using a candidate creates only a draft; draft blocks another model request",
+    "Explicit reviewed save creates a new revision through the existing correction service",
+    "Switching to another field hides the feature and fences a late response",
+    "Untrusted recognition text remains text and cannot create HTML",
+    "Region controls fit desktop and mobile without horizontal page overflow"
+  ],
+  "page_errors": [],
+  "scope": "Synthetic data, reader double; real Chrome/HTTP/correction storage, no OCR accuracy claim"
+}

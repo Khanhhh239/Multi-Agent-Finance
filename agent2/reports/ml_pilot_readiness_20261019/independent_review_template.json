@@ -1,0 +1,24 @@
+{
+  "status": "empty_template_no_independent_reviews",
+  "unit": "Frozen case snapshot at a daily cutoff; ID is opaque to the reviewer",
+  "real_review_count": 0,
+  "fields": {
+    "review_unit_id": "Committed opaque identifier; no model/arm information",
+    "company_code": "Pseudonymous company code",
+    "cutoff_at": "Timezone-aware as-of timestamp",
+    "source_evidence_refs": "References to source evidence available at cutoff",
+    "condition_present": "true / false / null if not determinable",
+    "actionable": "true / false / null if not determinable; not a fraud label",
+    "missing_evidence": "List of documents or fields still required",
+    "reason": "Independent accounting explanation",
+    "review_minutes": "Measured active review time, not a synthetic estimate",
+    "primary_reviewer_id": "Accountant independent of development and model selection",
+    "reviewed_at": "Timezone-aware timestamp",
+    "adjudicator_id": "Different independent person",
+    "adjudication": "Confirmed conclusion or unresolved disagreement",
+    "adjudicated_at": "Timezone-aware timestamp",
+    "blind_to_arm_and_prediction": "true only if the reviewer has not seen arm/rank/model output"
+  },
+  "forbidden_review_packet_fields": ["ml_score", "arm", "baseline_rank", "candidate_rank", "selection_reason", "predicted_fraud"],
+  "rows": []
+}

@@ -1,0 +1,104 @@
+{
+  "version": "equal-capacity-if-shadow-v1",
+  "mode": "synthetic_technical_shadow_only",
+  "scope": {
+    "company_ids": [
+      "C001",
+      "C002",
+      "C003",
+      "C004",
+      "C005",
+      "C006",
+      "C007",
+      "C008"
+    ],
+    "source_ref": "SIM_SYNTHETIC_SOURCE_WORLD_V1_TECHNICAL_COMPATIBILITY",
+    "start_at": "2025-07-01T00:00:00+07:00",
+    "end_at": "2026-01-01T00:00:00+07:00"
+  },
+  "primary_capacity": {
+    "cases": 5,
+    "minutes": 120
+  },
+  "sensitivity_capacity": {
+    "cases": 10,
+    "minutes": 240
+  },
+  "calendar": "all_calendar_days_no_holidays_inferred",
+  "daily_cutoff": "next_Vietnam_midnight_exclusive",
+  "baseline_order": "priority DESC, rule_score DESC, opened_at, case_id",
+  "candidate_order": "IF maximum full-coverage member score within the same priority; missing slots anchored",
+  "mandatory": "Pin baseline-selected cao_nhat and nontransaction work still pending in the candidate arm",
+  "shared_initial_state": "All pre-existing unresolved baseline case scopes enter the starting backlog",
+  "scope_updates": "Coalesce unselected old versions into current scope; selected changed scope requires continued review",
+  "source_work_identity": "Same source evidence/episode stays one work scope; cutoff and derived overdue_days alone do not reopen it",
+  "information_gaps": "Simulated request/review once per work scope; park awaiting information; one existing scheduled rereview if due",
+  "effort": "Current as-of estimate; continued review max(10, ceil(base/2)); estimates are not measured human minutes",
+  "completion": "Study ledger only; no business conclusion or production feedback",
+  "labels_or_oracle_used": false,
+  "models_fitted": 0,
+  "production_queue_write": false,
+  "external_notifications": 0,
+  "real_protocol_approval": "not_asserted",
+  "actionable_gain_reportable": false,
+  "model_sha256": "a54f91bea581d5abb2f49339c062cedb068d21a0b724876e33a7593aa4b188b7",
+  "source_manifest_sha256": "b8d830c7ef989bb0b47039232df195c7e48202eea6529b05492c66edd1ca2163",
+  "baseline_input_sha256": {
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\predictions_frozen.json": "8570f7a421a57c1dfd2b91e31ecf5d40dd3b003128056394642c2811687fd765",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\rule_scores.csv": "a1d9213d7baf01b6f5c0f9acea57981e577a522c44e33660b0dcd89fab2e4c27",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\rule_hits.jsonl": "01023834c8de06857308f412cbed951788c14d635006596b6ed2d65d8d7d4ab0",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\case_queue.csv": "53b7d2059662289d16db4a4c1a0848f2652e2d1f79d060760f772f9d373699de",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\case_events.csv": "66544d7818524f6ecc6e6e9b50bd6599208c7af17ea1fad35d545085a4020914",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\batch_events.jsonl": "7acff26a7c791c459e6800d98dd7a3ae86dd0d3356811a1a8a0f210c5a701ac1",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\evidence_findings.jsonl": "e46109288916ec9972a20fe308173e0292e678832a689a32c44d9df481db8ab3",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\rule_config.json": "2e8e36a86a393bf0701ecd941ab2b0bfafd8e1c3ae77f804c5cd11b4dd979b76",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\rule_coverage.json": "9380f31254c901959cee650f029e87747cf2b9f438fceed07c42df03c7fc8ecc",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\predictions.json": "9553b62126b3d8e02cc03bcd1e6d609b35152bf341514f6fda8305b4702ca3d3",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\review_packet.csv": "4b97ffa8fafe6b74143141810bb0c2147bfe4f89fa5595658fcc5b42648978d7",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\dynamic_threshold_parameters.csv": "cad1253e8408e6e24977d23bb2b8b73b0ccc61eb7bc04a0339faf06ae38cf1e4",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\dynamic_threshold_parameters.json": "1bb48db8b4891f7ee56d13fea5eedb90d823dc9574bd9be06c5cf09fae0ba394",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\sme_fraud_003\\dynamic_threshold_policy.json": "b1ddba60dac61cc356e9f570bfa09bd6327de82eeb35bf43910da9c89207756c",
+    "D:\\agent22\\reports\\pipeline_rehearsal_20261018_v2\\evaluation_plan.json": "ddea307e35ded9106a39ce28b6ceb73e7a67c3ec0380b5d00477a6d1b72aa8e6"
+  },
+  "baseline_reconstruction": {
+    "policy": "current_case_builder_on_frozen_detector_outputs",
+    "code": {
+      "case_queue.py": {
+        "recorded_sha256": "7cc2fd193becae743a96d19f211dacfba5f90c18d4679607bd31ae02d9d90ca1",
+        "current_sha256": "a2d8604fed99e88a3cd5282d6143533af8bc768f2740e02357a3c3ff7076b7fe",
+        "unchanged": false
+      },
+      "case_identity.py": {
+        "recorded_sha256": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+        "current_sha256": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+        "unchanged": true
+      },
+      "case_admission.py": {
+        "recorded_sha256": "e6232de2ec3e85207daa64fa79c0b4388cde10af06efdfd83728cba5791c6a6a",
+        "current_sha256": "e6232de2ec3e85207daa64fa79c0b4388cde10af06efdfd83728cba5791c6a6a",
+        "unchanged": true
+      },
+      "temporal_evidence.py": {
+        "recorded_sha256": "38ada11cc8b641f59606fa22ed9c3974c6f03898ac35347b095ca8aa5821ce75",
+        "current_sha256": "38ada11cc8b641f59606fa22ed9c3974c6f03898ac35347b095ca8aa5821ce75",
+        "unchanged": true
+      },
+      "a4_pattern_queue.py": {
+        "recorded_sha256": "9bc9da578451ae458c45fffdf8412709d0ca57e9587cc09c48f4df4b240e5344",
+        "current_sha256": "9bc9da578451ae458c45fffdf8412709d0ca57e9587cc09c48f4df4b240e5344",
+        "unchanged": true
+      }
+    },
+    "frozen_final_cases": 594,
+    "frozen_final_scopes_reproduced": true,
+    "historical_intermediate_snapshots_available": false
+  },
+  "code_sha256": {
+    "D:\\agent22\\sme_fraud\\compare_shadow.py": "b1b925bcd6d0f0e35e9cd41832c479307acf5e4841ddcc30eb119c35039b986f",
+    "D:\\agent22\\sme_fraud\\case_queue.py": "a2d8604fed99e88a3cd5282d6143533af8bc768f2740e02357a3c3ff7076b7fe",
+    "D:\\agent22\\sme_fraud\\case_identity.py": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+    "D:\\agent22\\sme_fraud\\case_admission.py": "e6232de2ec3e85207daa64fa79c0b4388cde10af06efdfd83728cba5791c6a6a",
+    "D:\\agent22\\sme_fraud\\temporal_evidence.py": "38ada11cc8b641f59606fa22ed9c3974c6f03898ac35347b095ca8aa5821ce75",
+    "D:\\agent22\\sme_fraud\\a4_pattern_queue.py": "9bc9da578451ae458c45fffdf8412709d0ca57e9587cc09c48f4df4b240e5344"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "protected_files": 1209,
+  "protected_files_unchanged": true,
+  "mismatches": [],
+  "holdout_005_access": "opaque_hash_only_no_parsing_loading_scoring",
+  "detector_code": [
+    {
+      "file": "sme_fraud/rules.py",
+      "unchanged": true
+    },
+    {
+      "file": "sme_fraud/accounting.py",
+      "unchanged": true
+    },
+    {
+      "file": "sme_fraud/cash_controls.py",
+      "unchanged": true
+    },
+    {
+      "file": "sme_fraud/case_queue.py",
+      "unchanged": true
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "checked_on": "2026-10-15",
+  "scope": "PLAN_09 integration technical only; synthetic native capture and actual ZEN/Chrome",
+  "workflow_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 310,
+  "javascript": [
+    {
+      "command": "node --check src/review/static/app.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/compliance.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/review_client.test.js",
+      "passed": true
+    }
+  ],
+  "browser": "PASS",
+  "passed": true,
+  "legal_acceptance": "PENDING",
+  "frozen_legal_evaluation": "NOT_RUN_NO_APPROVED_RULES_OR_LEGAL_LABELS",
+  "sample_evaluation_id": "evaluation-fde86850f931478aa5fa61e81250330a",
+  "stage_seconds": {
+    "quality": 0.07057799999893177,
+    "planning": 0.04192679999687243,
+    "execution": 0.550722300002235,
+    "template": 0.008486000006087124
+  },
+  "latency_scope": "One synthetic integration sample; no SLA or p95 claim",
+  "release_manifest": "release_capture_compliance_v1.json"
+}

@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-22",
+  "status": "new_source_model_compatibility_verified_synthetic_only",
+  "tests": {
+    "successful": true,
+    "tests_run": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_train_source_model.py",
+      "test_shadow_scoring.py",
+      "test_feature_model_sync.py"
+    ],
+    "seconds": 4.781
+  },
+  "runs": [
+    {
+      "tag": "001",
+      "dataset_version": "synthetic-source-world-v1",
+      "model": "reports\\model_source_sync_20261022\\sme_fraud_001\\model\\isolation_forest.joblib",
+      "model_sha256": "6c2f9313fd9888437734c5894fdbc96bd6e283370031ba91ecc408387657a4a7",
+      "train_rows": 9321,
+      "calibration_rows": 5304,
+      "evaluation_rows_per_replay": 5934,
+      "compatible": true,
+      "temporal_disjointness_verified": true,
+      "replayed_exactly": true,
+      "scores_sha256": "3974c14c0280053c1e07d1d07112e6f096b202c7d8b8407c5f10b53a91a507d5",
+      "legacy_rejection": "IF model incompatible: dataset_format_version_mismatch"
+    },
+    {
+      "tag": "003",
+      "dataset_version": "synthetic-source-world-v1",
+      "model": "reports\\model_source_sync_20261022\\sme_fraud_003\\model\\isolation_forest.joblib",
+      "model_sha256": "a54f91bea581d5abb2f49339c062cedb068d21a0b724876e33a7593aa4b188b7",
+      "train_rows": 9289,
+      "calibration_rows": 5357,
+      "evaluation_rows_per_replay": 5877,
+      "compatible": true,
+      "temporal_disjointness_verified": true,
+      "replayed_exactly": true,
+      "scores_sha256": "f870674e591c3fe9f60aac36567fb5617a04f993f7ea1eb19b1769698d75d648",
+      "legacy_rejection": "IF model incompatible: dataset_format_version_mismatch"
+    }
+  ],
+  "models_fitted": 2,
+  "evaluation_rows": 11811,
+  "score_evaluations": 23622,
+  "protected_files": 1215,
+  "protected_files_unchanged": true,
+  "feature_contract_unchanged": true,
+  "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1",
+  "labels_or_splits_or_oracle_loaded_by_new_runner": false,
+  "feature_rebuild": false,
+  "holdout_005_access": "opaque_hash_only_during_preservation_checks",
+  "old_models_or_manifests_modified": false,
+  "queue_changed": false,
+  "external_notifications": 0,
+  "operational_benefit_measured": false,
+  "real_source_shadow_connected": false,
+  "code_sha256": {
+    "sme_fraud/train_source_model.py": "06adf1d6daf7667d45b4aa5d4d948dcd03e754fd253b13a34784fce4fbfc0a9b",
+    "sme_fraud/shadow_scoring.py": "ab209488872639bb836f2adff1094e273e48568379705fc8f2d57dcb5eebb634",
+    "tests/test_train_source_model.py": "91564e9a6353ed039bfc5e821c0d0d1bea2c73027ea439878eea2f5f9863b3f6"
+  },
+  "gates": {
+    "real_source": "awaiting_real_data",
+    "protocol": "draft_not_approved",
+    "operational_benefit": "not_measured"
+  }
+}

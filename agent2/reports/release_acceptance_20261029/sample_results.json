@@ -1,0 +1,275 @@
+[
+  {
+    "sample_id": "P2_FULL_BELOW",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_FULL_BELOW.json"
+  },
+  {
+    "sample_id": "P2_FULL_EQUAL",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_FULL_EQUAL.json"
+  },
+  {
+    "sample_id": "P2_FULL_ABOVE",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_FULL_ABOVE.json"
+  },
+  {
+    "sample_id": "P2_OLD_BELOW",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_OLD_BELOW.json"
+  },
+  {
+    "sample_id": "P2_OLD_EQUAL",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_OLD_EQUAL.json"
+  },
+  {
+    "sample_id": "P2_FULL_BANK",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_FULL_BANK.json"
+  },
+  {
+    "sample_id": "P2_NO_INVOICE",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_NO_INVOICE.json"
+  },
+  {
+    "sample_id": "P2_NO_DATE",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_NO_DATE.json"
+  },
+  {
+    "sample_id": "P2_NO_GROSS",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_NO_GROSS.json"
+  },
+  {
+    "sample_id": "P2_NO_IDENTITY",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_NO_IDENTITY.json"
+  },
+  {
+    "sample_id": "P2_FUTURE_INVOICE",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_FUTURE_INVOICE.json"
+  },
+  {
+    "sample_id": "P2_INSTALL_CASH",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_INSTALL_CASH.json"
+  },
+  {
+    "sample_id": "P2_INSTALL_SMALL",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_INSTALL_SMALL.json"
+  },
+  {
+    "sample_id": "P2_INSTALL_MIXED",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_INSTALL_MIXED.json"
+  },
+  {
+    "sample_id": "P2_INSTALL_SAME_TIME",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_INSTALL_SAME_TIME.json"
+  },
+  {
+    "sample_id": "P2_INSTALL_GAP",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_INSTALL_GAP.json"
+  },
+  {
+    "sample_id": "P2_REFUND_FULL",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_REFUND_FULL.json"
+  },
+  {
+    "sample_id": "P2_REFUND_PART",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_REFUND_PART.json"
+  },
+  {
+    "sample_id": "P2_REFUND_BANK",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_REFUND_BANK.json"
+  },
+  {
+    "sample_id": "P2_REVERSAL_JOURNAL",
+    "kind": "p2_control",
+    "transactions": 2,
+    "passed": true,
+    "evidence": "browser/P2_REVERSAL_JOURNAL.json"
+  },
+  {
+    "sample_id": "P2_RECEIPT_UNLINKED",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_RECEIPT_UNLINKED.json"
+  },
+  {
+    "sample_id": "P2_REFUND_MULTI",
+    "kind": "p2_control",
+    "transactions": 3,
+    "passed": true,
+    "evidence": "browser/P2_REFUND_MULTI.json"
+  },
+  {
+    "sample_id": "P2_RECUR_SMALL",
+    "kind": "p2_control",
+    "transactions": 3,
+    "passed": true,
+    "evidence": "browser/P2_RECUR_SMALL.json"
+  },
+  {
+    "sample_id": "P2_RECUR_BANK",
+    "kind": "p2_control",
+    "transactions": 3,
+    "passed": true,
+    "evidence": "browser/P2_RECUR_BANK.json"
+  },
+  {
+    "sample_id": "P2_RECUR_CASH",
+    "kind": "p2_control",
+    "transactions": 3,
+    "passed": true,
+    "evidence": "browser/P2_RECUR_CASH.json"
+  },
+  {
+    "sample_id": "P2_RECUR_GAP",
+    "kind": "p2_control",
+    "transactions": 3,
+    "passed": true,
+    "evidence": "browser/P2_RECUR_GAP.json"
+  },
+  {
+    "sample_id": "P2_RECUR_A5",
+    "kind": "p2_control",
+    "transactions": 23,
+    "passed": true,
+    "evidence": "browser/P2_RECUR_A5.json"
+  },
+  {
+    "sample_id": "P2_LIMIT_VERIFIED",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_LIMIT_VERIFIED.json"
+  },
+  {
+    "sample_id": "P2_LIMIT_UNVERIFIED",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_LIMIT_UNVERIFIED.json"
+  },
+  {
+    "sample_id": "P2_LIMIT_FUTURE",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_LIMIT_FUTURE.json"
+  },
+  {
+    "sample_id": "P2_LIMIT_EXPIRED",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_LIMIT_EXPIRED.json"
+  },
+  {
+    "sample_id": "P2_LIMIT_FOREIGN",
+    "kind": "p2_control",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/P2_LIMIT_FOREIGN.json"
+  },
+  {
+    "sample_id": "A5_001_TX_3103d5f23fde8b1a6f",
+    "kind": "case",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/A5_001_TX_3103d5f23fde8b1a6f.json"
+  },
+  {
+    "sample_id": "A5_001_TX_ac2d5e5d289dc9227b",
+    "kind": "case",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/A5_001_TX_ac2d5e5d289dc9227b.json"
+  },
+  {
+    "sample_id": "A5_001_cold_information_request",
+    "kind": "case",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/A5_001_cold_information_request.json"
+  },
+  {
+    "sample_id": "A5_001_cold_operational",
+    "kind": "case",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/A5_001_cold_operational.json"
+  },
+  {
+    "sample_id": "A5_003_TX_60bac87c93f578f6c3",
+    "kind": "case",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/A5_003_TX_60bac87c93f578f6c3.json"
+  },
+  {
+    "sample_id": "A5_003_cold_information_request",
+    "kind": "case",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/A5_003_cold_information_request.json"
+  },
+  {
+    "sample_id": "A5_003_cold_operational",
+    "kind": "case",
+    "transactions": 1,
+    "passed": true,
+    "evidence": "browser/A5_003_cold_operational.json"
+  }
+]

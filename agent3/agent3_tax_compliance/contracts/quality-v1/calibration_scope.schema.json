@@ -1,0 +1,69 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "field_family": {
+      "title": "Field Family",
+      "type": "string"
+    },
+    "document_family": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Document Family",
+      "type": "string"
+    },
+    "engine_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Engine Id",
+      "type": "string"
+    },
+    "engine_config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Engine Config Version",
+      "type": "string"
+    },
+    "engine_runtime_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Engine Runtime Sha256",
+      "type": "string"
+    },
+    "preprocess_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Preprocess Version",
+      "type": "string"
+    },
+    "extractor_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Extractor Sha256",
+      "type": "string"
+    },
+    "score_kind": {
+      "enum": [
+        "RECOGNITION",
+        "EXTRACTOR",
+        "DETECTION",
+        "UNAVAILABLE"
+      ],
+      "title": "Score Kind",
+      "type": "string"
+    }
+  },
+  "required": [
+    "field_family",
+    "document_family",
+    "engine_id",
+    "engine_config_version",
+    "engine_runtime_sha256",
+    "preprocess_version",
+    "extractor_sha256",
+    "score_kind"
+  ],
+  "title": "CalibrationScope",
+  "type": "object"
+}

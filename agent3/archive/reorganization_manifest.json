@@ -1,0 +1,72 @@
+﻿[
+    {
+        "source":  "DIGITAL_ACCOUNTING_PART1_PROBLEM_RESEARCH.md",
+        "destination":  "docs/research/DIGITAL_ACCOUNTING_PART1_PROBLEM_RESEARCH.md",
+        "sha256":  "D43BC5C7635C0E3E1C382B920BDE444F623396AC472E7765880BBF85BEFA8C4C"
+    },
+    {
+        "source":  "DIGITAL_ACCOUNTING_PART2_ARCH_PART3_PLAN.md",
+        "destination":  "docs/architecture/DIGITAL_ACCOUNTING_PART2_ARCH_PART3_PLAN.md",
+        "sha256":  "50FD9A3F2D8E929739F76ED81AD376779407AB4AE2ADB80F3CBCAD36D0628B35"
+    },
+    {
+        "source":  "AGENT3_PRODUCT_5_SECTIONS.md",
+        "destination":  "docs/agent3/AGENT3_PRODUCT_5_SECTIONS.md",
+        "sha256":  "3738B5D48486DDF65EE216C573586138BCA7F68BAC264169DF9D9E4DC101AB21"
+    },
+    {
+        "source":  "NEW_PLAN.md",
+        "destination":  "docs/agent3/NEW_PLAN.md",
+        "sha256":  "B8223A5874308F6424B109E47C915A45BD963CFCF702C890D184B3BA14C79A39"
+    },
+    {
+        "source":  "AGENT3_PLAN.md",
+        "destination":  "docs/agent3/AGENT3_PLAN.md",
+        "sha256":  "E8E01CC1FADB24074598CB287D13AE3A45FDF9713699334AE58F45F73A60D74F"
+    },
+    {
+        "source":  "PLAN.md",
+        "destination":  "docs/agent3/PLAN.md",
+        "sha256":  "16AAD8589001D40E3E484125054E94D3FE5BC326980DF48258098BF5E989C7D5"
+    },
+    {
+        "source":  "QuiTrinh(DonGianHoa).md",
+        "destination":  "docs/agent3/QuiTrinh(DonGianHoa).md",
+        "sha256":  "27D91C4E293B95A312E7A797CB620A1E4FCAC25D1978CFA80281B9AD9C821735"
+    },
+    {
+        "source":  "VILEGALBERT_TEST_PLAN_FOR_CODEX.md",
+        "destination":  "docs/research/VILEGALBERT_TEST_PLAN_FOR_CODEX.md",
+        "sha256":  "6CAD3A318BC64C3CEE2AE2977616AB12C4D6D8759BF04F69E07630F72425019C"
+    },
+    {
+        "source":  "Agent3.md",
+        "destination":  "docs/submission/Agent3.md",
+        "sha256":  "CE5D98285A30F66B6CB5F6D47E9B3BE84056A1ABC730145F45B60BA3F573120C"
+    },
+    {
+        "source":  "01-mau-nop-bai-du-thi-vong-1.docx",
+        "destination":  "docs/submission/01-mau-nop-bai-du-thi-vong-1.docx",
+        "sha256":  "983E3B637DC58B1809B2D6F2D5B2B5F651C3F495642E715A8CEE5945CC0E8C8F"
+    },
+    {
+        "source":  "compare_4_model_ocr.pdf",
+        "destination":  "docs/references/compare_4_model_ocr.pdf",
+        "sha256":  "CE14D466599CBD7E4BEDE731E8309368B98F7CEA5BB1E62402C76EB6D75F4235"
+    },
+    {
+        "source":  "kientruchethong.png",
+        "destination":  "docs/images/kientruchethong.png",
+        "sha256":  "0AD0946CFCD87139E8E94EEDDF6AACE6980CFB695D938F517BEB2C6820D3645D"
+    },
+    {
+        "source":  "input.md",
+        "destination":  "docs/examples/input.md",
+        "sha256":  "498D965F700A4BF61F8DB40482C7064DA24CA7925CA7517614E9DD7AEEC0515D"
+    },
+    {
+        "source":  "archive.zip",
+        "destination":  "archive/archive.zip",
+        "sha256":  "D95ABD517288A4F34CCB377898E7F427D45B07734C5AA79C9AC2BB04EBB98775"
+    }
+]

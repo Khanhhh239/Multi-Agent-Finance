@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "checked_date": "2026-10-11",
+  "pilot_logical_documents": 50,
+  "pilot_templates": 25,
+  "white_images_visually_inspected": 50,
+  "colored_images_visually_inspected": 0,
+  "curated_visual_fact_checks_passed": 41,
+  "review_notes_sha256": "d0f083bc4ce0b1cc820cdc46a460ffde2651671fb0c2996a89495f13552b95cc",
+  "script_sha256": "541518855743524a064db308ca024cf770e0c8b396f466271d76b66cd18196e3",
+  "mapped_manifest_sha256": "9ec844e927430ae44331ad268382bd8798803b72432c674178eced23c9e5ab90",
+  "review_type": "AI_HEADER_AND_PRINTED_VALUE_SPOT_CHECK_NOT_EXHAUSTIVE_TRANSCRIPTION",
+  "independent_human_review": "PENDING",
+  "accuracy_or_legal_compliance_claim": false,
+  "findings": [
+    {
+      "id": "INVOICE_ID_PREFIX",
+      "status": "FIXED_AND_REGRESSION_TESTED",
+      "detail": "Remove label ID after INVOICE; preserve the invoice identifier and leading zeros."
+    },
+    {
+      "id": "SHIP_TO_NOT_BUYER",
+      "status": "PRESERVED_AS_UNANNOTATED",
+      "templates": [
+        18,
+        30
+      ],
+      "detail": "SHIP_TO only is not sufficient to label billed buyer; keep NOT_ANNOTATED."
+    },
+    {
+      "id": "AMOUNT_DUE_NOT_TOTAL",
+      "status": "PRESERVED_AS_UNANNOTATED",
+      "templates": [
+        36,
+        37
+      ],
+      "detail": "Do not substitute AMOUNT_DUE or DUE_AMOUNT for a missing TOTAL label."
+    },
+    {
+      "id": "MISSING_CORE_HEADERS",
+      "status": "PARTIAL_LABELS_DISCLOSED",
+      "templates": [
+        1,
+        4,
+        11,
+        13,
+        20,
+        27,
+        30,
+        37,
+        50
+      ],
+      "detail": "No fabrication of seller, buyer, date or invoice number when the supported source label is absent."
+    },
+    {
+      "id": "AMBIGUOUS_CURRENCY",
+      "status": "PRESERVED_AS_UNANNOTATED",
+      "detail": "Dollar sign alone does not establish ISO currency; do not infer from address or language."
+    },
+    {
+      "id": "PRINTED_VALUES_NOT_LEGAL_TRUTH",
+      "status": "RAW_VALUES_PRESERVED",
+      "detail": "Some dates and arithmetic appear inconsistent in generated documents; mapping reflects printed values and does not repair source or assert compliance."
+    }
+  ]
+}

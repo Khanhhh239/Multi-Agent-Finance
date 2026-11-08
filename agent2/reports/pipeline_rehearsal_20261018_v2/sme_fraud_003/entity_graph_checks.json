@@ -1,0 +1,14 @@
+{
+  "node_types": {
+    "address": 917,
+    "bank_account": 949,
+    "employee": 554,
+    "phone": 933,
+    "tax_code": 395,
+    "vendor": 395
+  },
+  "company_paths_checked": 8,
+  "company_isolation": true,
+  "edge_foreign_keys": true,
+  "components_partition_nodes": true
+}

@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-27",
+  "browser": "Chrome",
+  "synthetic_only": true,
+  "checks": [
+    {
+      "id": "N01",
+      "observed": "Kế toán trưởng C001 có nút chạy giả lập; lần chạy tạo 36 job mô phỏng trong phạm vi C001.",
+      "status": "passed"
+    },
+    {
+      "id": "N02",
+      "observed": "Chạy lại không tăng 36 job; audit đối soát mỗi job vẫn đúng một lần thử.",
+      "status": "passed"
+    },
+    {
+      "id": "N03",
+      "observed": "Bản gửi kết quả hiển thị người nhận MÔ PHỎNG CHIEF, vai trò kế toán trưởng và đúng đích .invalid.",
+      "status": "passed"
+    },
+    {
+      "id": "N04",
+      "observed": "Mở lịch sử thấy xếp lịch → bắt đầu lần gửi → đã giả lập, giờ Việt Nam, số lần và mã mô phỏng.",
+      "status": "passed"
+    },
+    {
+      "id": "N05",
+      "observed": "Chính sách hiển thị mốc 48 giờ, nhắc 24 giờ, báo giám đốc sau 48 giờ quá hạn. Có các thẻ quá hạn và đích giám đốc.",
+      "status": "passed"
+    },
+    {
+      "id": "N06",
+      "observed": "Phân trang từ 1–30 sang 31–36 / 36, rồi quay lại trang trước được.",
+      "status": "passed"
+    },
+    {
+      "id": "N07",
+      "observed": "Liên kết từ thông báo mở đúng RC_1 trong tab kế toán trưởng và đóng modal.",
+      "status": "passed"
+    },
+    {
+      "id": "N08",
+      "observed": "Kế toán viên xem được lịch sử C001; không có nút chạy giả lập.",
+      "status": "passed"
+    },
+    {
+      "id": "N09",
+      "observed": "Chưa có danh tính bị từ chối xem lịch sử, có thông báo đăng nhập.",
+      "status": "passed"
+    },
+    {
+      "id": "N10",
+      "observed": "Viewport 360×800: pageWidth 345 ≤ innerWidth 360; dialog 310,67px; chữ thẻ 14px và nút mở lịch sử cao 44px. Không tràn ngang.",
+      "status": "passed"
+    },
+    {
+      "id": "N11",
+      "observed": "Tải lại và mở lại giữ 36 thông báo; nội dung nhận diện chưa nghiệm thu gửi–nhận thật hiển thị rõ. Hai tab xác thực không ghi nhận console error.",
+      "status": "passed"
+    }
+  ],
+  "check_count": 11,
+  "real_accounts_created": 0,
+  "real_notifications_sent": 0,
+  "physical_mobile_tested": false,
+  "viewport": {
+    "width": 360,
+    "height": 800,
+    "pageWidth": 345,
+    "dialogWidth": 310.6667
+  },
+  "verified_console_errors": {
+    "chief": [],
+    "accountant": []
+  },
+  "temporary_viewport_reset": true
+}

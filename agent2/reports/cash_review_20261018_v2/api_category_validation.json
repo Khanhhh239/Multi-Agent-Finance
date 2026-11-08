@@ -1,0 +1,23 @@
+{
+  "successful": true,
+  "cohorts": [
+    {
+      "scenario": "001",
+      "information_requests": 328,
+      "operational_and_source_cases": 256,
+      "csv_rows": 328,
+      "details_checked": 2
+    },
+    {
+      "scenario": "003",
+      "information_requests": 320,
+      "operational_and_source_cases": 307,
+      "csv_rows": 320,
+      "details_checked": 2
+    }
+  ],
+  "feedback_written": 0,
+  "admissions_written": 0,
+  "external_messages_sent": 0,
+  "browser_visual_qa": false
+}

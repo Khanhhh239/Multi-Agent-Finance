@@ -1,0 +1,44 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "default": "route-v1.1",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "min_alphanumeric": {
+      "default": 20,
+      "minimum": 1,
+      "title": "Min Alphanumeric",
+      "type": "integer"
+    },
+    "min_valid_glyph_ratio": {
+      "default": 0.98,
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Min Valid Glyph Ratio",
+      "type": "number"
+    },
+    "min_text_coverage": {
+      "default": 0.0005,
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Min Text Coverage",
+      "type": "number"
+    },
+    "hybrid_image_coverage": {
+      "default": 0.2,
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Hybrid Image Coverage",
+      "type": "number"
+    }
+  },
+  "title": "RoutePolicy",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:financial:ingestion:1.0.0:route_policy"
+}

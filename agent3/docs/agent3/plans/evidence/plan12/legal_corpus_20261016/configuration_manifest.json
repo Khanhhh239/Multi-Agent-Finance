@@ -1,0 +1,19 @@
+{
+  "config_version": "explanation-v2-1",
+  "corpus_version": "legal-excerpts-20261016-v1",
+  "chunk_count": 11,
+  "validated_through": "2026-10-16",
+  "required_context_chunks": 11,
+  "config_sha256": "bb8712fc2db1dff08b86b13572a0572b63326f075eae2f27854d4aa529b2dbba",
+  "corpus_sha256": "1e07a57ef55533fda729e8ae5c84bd0f0a718677b08b7988aadd55ee8e126e1a",
+  "implementation_sha256": "ba66e847472c924af25833ed13f5117355ee982c05990ed8b3a1bc08af4e3a04",
+  "valid": true,
+  "errors": [],
+  "corpus_acceptance": "REQUIRES_LABELED_RETRIEVAL_EVALUATION",
+  "model": "qwen3:8b",
+  "model_revision": "UNVERIFIED",
+  "llm_enabled": false,
+  "runtime": {
+    "status": "PROVIDER_UNAVAILABLE"
+  }
+}

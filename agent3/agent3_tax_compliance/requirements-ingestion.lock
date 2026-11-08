@@ -1,0 +1,6 @@
+# Additive to requirements-foundation.lock; Python 3.10.5 / Windows x64.
+PyMuPDF==1.28.2
+Pillow==12.3.0
+uvicorn==0.51.0
+click==8.4.2
+colorama==0.4.6

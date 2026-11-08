@@ -1,0 +1,126 @@
+{
+  "scope": "One DEV PDF, synthetic rotation is same invoice. Native font spans as proxy, not manual detection GT; no CER/field accuracy or false positive estimate.",
+  "rows": [
+    {
+      "model_id": "ppocrv6_detector_base",
+      "status": "COMPLETE",
+      "tilted_derivative": false,
+      "runtime_sha256": "1bd812fd57ad4e8aa86c607d39be3f97d51b7c991ed7809b4c1a21b0dc7638d2",
+      "input_sha256": "5fdee9c3f5e40f8a3182e27e88e8bc0125b2a71cef6fa8b4f7dd0bcf9ed5d6e5",
+      "native_span_count": 135,
+      "covered_native_spans": 135,
+      "detection_count": 67,
+      "geometry_normalization_passed": true,
+      "load_ms": 18481.273500000498,
+      "inference_ms": 17537.95910000008,
+      "coverage": {
+        "tiles": 0,
+        "added_boxes": 0
+      },
+      "deskew": {
+        "angle": 0.0,
+        "gain": 1.0,
+        "input_to_processed": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "processed_to_input": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "elapsed_seconds": 0.011164600000483915
+    },
+    {
+      "model_id": "ppocrv6_detector_base",
+      "status": "COMPLETE",
+      "tilted_derivative": true,
+      "runtime_sha256": "1bd812fd57ad4e8aa86c607d39be3f97d51b7c991ed7809b4c1a21b0dc7638d2",
+      "input_sha256": "6b255772270976f9cbd7072ae2a5a1e1d8b80298d38a2b9b18065d428f7e85e2",
+      "native_span_count": 135,
+      "covered_native_spans": 133,
+      "detection_count": 67,
+      "geometry_normalization_passed": true,
+      "load_ms": 18107.83209999954,
+      "inference_ms": 47645.18769999995,
+      "coverage": {
+        "tiles": 0,
+        "added_boxes": 0
+      },
+      "deskew": {
+        "angle": 0.0,
+        "gain": 1.0,
+        "input_to_processed": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "processed_to_input": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "elapsed_seconds": 68.38891760000115
+    },
+    {
+      "model_id": "ppocrv6_detector_tiles",
+      "status": "FAILED",
+      "error_type": "OCRError",
+      "elapsed_seconds": 180.25228269999934
+    },
+    {
+      "model_id": "ppocrv6_detector_deskew",
+      "status": "COMPLETE",
+      "tilted_derivative": true,
+      "runtime_sha256": "b12ddc2320980038274dc7dded38853b6d436afac9abe3875fb1264b590aaf36",
+      "input_sha256": "6b255772270976f9cbd7072ae2a5a1e1d8b80298d38a2b9b18065d428f7e85e2",
+      "native_span_count": 135,
+      "covered_native_spans": 135,
+      "detection_count": 67,
+      "geometry_normalization_passed": true,
+      "load_ms": 14128.390400000171,
+      "inference_ms": 13745.12440000035,
+      "coverage": {
+        "tiles": 0,
+        "added_boxes": 0
+      },
+      "deskew": {
+        "angle": -2.0,
+        "gain": 3.397039282938792,
+        "input_to_processed": [
+          0.9993908270190958,
+          -0.03489949670250097,
+          0.03489949670250097,
+          0.9993908270190958,
+          -0.0,
+          60.51572728213668
+        ],
+        "processed_to_input": [
+          0.9993908270190958,
+          0.03489949670250097,
+          -0.03489949670250097,
+          0.9993908270190958,
+          2.111968424732377,
+          -60.478862736156636
+        ]
+      },
+      "elapsed_seconds": 0.012382399998386973
+    }
+  ],
+  "default_promoted": false
+}

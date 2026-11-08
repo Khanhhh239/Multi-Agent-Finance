@@ -1,0 +1,52 @@
+[
+  {
+    "step": "01_invalid_case",
+    "result": "PASS",
+    "expected": "Vietnamese message, no stale details or loading indicator"
+  },
+  {
+    "step": "08_C4_to_invalid",
+    "result": "PASS",
+    "expected": "Vietnamese message, no stale details or loading indicator"
+  },
+  {
+    "step": "09_invalid_reload",
+    "result": "PASS",
+    "expected": "Vietnamese message, no stale details or loading indicator"
+  },
+  {
+    "step": "03_empty_search",
+    "result": "PASS",
+    "expected": "Empty queue in Vietnamese, including after refresh"
+  },
+  {
+    "step": "04_refresh_empty",
+    "result": "PASS",
+    "expected": "Empty queue in Vietnamese, including after refresh"
+  },
+  {
+    "step": "05_clear_search",
+    "result": "PASS",
+    "expected": "Clearing search restores queue"
+  },
+  {
+    "step": "06_C4_recovered",
+    "result": "PASS",
+    "expected": "C4 selection, detail and URL agree; error hidden"
+  },
+  {
+    "step": "07_C4_reload",
+    "result": "PASS",
+    "expected": "C4 selection, detail and URL agree; error hidden"
+  },
+  {
+    "step": "10_C4_recovered_again",
+    "result": "PASS",
+    "expected": "C4 selection, detail and URL agree; error hidden"
+  },
+  {
+    "step": "02_refresh_invalid",
+    "result": "PASS",
+    "expected": "Refresh retains usable queue and clear recovery guidance"
+  }
+]

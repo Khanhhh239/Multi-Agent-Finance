@@ -1,0 +1,23 @@
+{
+  "status": "roles_and_two_stage_workflow_configured_accounts_deferred",
+  "primary_role": "accountant",
+  "final_roles": [
+    "chief_accountant",
+    "director"
+  ],
+  "both_final_roles_required": false,
+  "self_finalization_allowed": false,
+  "accounts_created": 0,
+  "login_implemented": false,
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "python_tests": 149,
+  "renderer_checks": 56,
+  "protected_artifacts": 2966,
+  "protected_drift": [],
+  "feature_contract_unchanged": true,
+  "local_links_checked": 9,
+  "app": "http://127.0.0.1:8774/",
+  "anonymous_mode": "read_only",
+  "future_identity_interface": "server_side_identity_provider_returning_ReviewPrincipal"
+}

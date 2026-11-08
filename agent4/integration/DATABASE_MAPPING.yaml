@@ -1,0 +1,62 @@
+mapping_version: synthetic-duckdb-v2.1
+status: synthetic_verified_real_data_blocked
+database:
+  engine: DuckDB
+  version: "2.0.0 (runtime observed)"
+  dialect: duckdb
+  timezone: Asia/Ho_Chi_Minh
+  currency: VND
+  scale: DECIMAL(18,2)
+security:
+  readonly_role: "DuckDB read_only connection (application enforced)"
+  is_table_owner: "N/A embedded synthetic file"
+  has_bypassrls: "N/A; no RLS"
+  tenant_key: "MISSING — single synthetic tenant only"
+  row_security_mode: "BLOCKED for real-data acceptance"
+  allowed_views: [v_mgmt, v_tax]
+ledger:
+  source_relation:
+    mgmt: v_mgmt
+    tax: v_tax
+  primary_key: entry_id
+  journal_id: journal_id
+  line_id: entry_id
+  accounting_date: posting_date
+  account_code: account_code
+  debit_amount: debit_amount
+  credit_amount: credit_amount
+  source_document_type: source_document_type
+  is_opening_entry: "source_document_type = 'OPENING'"
+  is_closing_911_entry: is_closing
+  tenant_key: "MISSING"
+  view_key: "governed relation v_mgmt/v_tax"
+dimensions:
+  branch: branch_code
+  department: department_code
+  customer: "partner_code on customer-attributed GL lines"
+  vendor: "partner_code on vendor-attributed GL lines"
+  item: item_code
+  cost_category: cost_category
+  salesperson: "MISSING from v_gl; present only in ar_invoice"
+  account: account_code
+invoice_sources:
+  ar_open_invoice_relation: ar_invoice
+  ap_open_invoice_relation: ap_bill
+  due_date: due_date
+  allocation_relation: [ar_receipt, ar_adjustment, ap_payment]
+  vat_inclusive_amount: total_amount
+other_sources:
+  budgets: budget
+  payroll: payroll
+  loan_schedule: loan_schedule
+  tax_deductibility: tax_deductible
+capabilities:
+  generic_compiler_metrics: 46
+  generic_metrics_fixture_verified: 15
+  generic_metrics_executable_unverified: 31
+  custom_handlers_synthetic: 10
+  custom_handlers_blocked: 10
+metadata_evidence:
+  schema_inspection_report: docs/implementation/REPO_INVENTORY.md
+  source_sample_reconciliation: tests/text2sql/test_finance.py
+  owner_approval: "NOT PROVIDED — synthetic demonstrator only"

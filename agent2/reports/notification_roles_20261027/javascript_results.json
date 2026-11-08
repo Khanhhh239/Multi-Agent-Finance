@@ -1,0 +1,55 @@
+{
+  "checks": 92,
+  "failures": 0,
+  "suites": [
+    {
+      "file": "tests/notification_ui.test.js",
+      "checks": 12,
+      "exit_code": 0,
+      "output": "✔ event, company, actual configured role/name and destination are visible (44.3251ms)\n✔ history shows queue, attempt, simulation and original body (4.9493ms)\n✔ provider acceptance is distinct from receipt/read acknowledgement (4.5081ms)\n✔ uncertain outcome has no implicit resend button (5.7135ms)\n✔ retry history exposes next attempt time and sanitized code (5.0087ms)\n✔ all stored recipient/content/provider fields are escaped (4.0842ms)\n✔ old outbox explicitly discloses missing pre-migration history (3.4004ms)\n✔ accountant can see history but cannot run preview (5.3239ms)\n✔ chief can run dry preview and see policy/default deadlines (4.2566ms)\n✔ live page cannot trigger transport from UI (6.2478ms)\n✔ missing recipient is surfaced without creating accounts (5.8488ms)\n✔ budget gap and unverified real delivery are explicit (4.3374ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 304.6993\n",
+      "browser_visual_qa": false
+    },
+    {
+      "file": "tests/review_roles_ui.test.js",
+      "checks": 8,
+      "exit_code": 0,
+      "output": "{\"tests\":8,\"failures\":0}\n",
+      "browser_visual_qa": false
+    },
+    {
+      "file": "tests/review_navigation_ui.test.js",
+      "checks": 12,
+      "exit_code": 0,
+      "output": "{\n  \"successful\": true,\n  \"check_count\": 12,\n  \"checks\": [\n    \"Case selection writes scenario/id and reload route opens that case\",\n    \"Same-tab case hash switches dataset/detail; duplicate history events admit once\",\n    \"Scenario dropdown clears old case URL; back/forward restore matching selection\",\n    \"Late case response never displays or admits a superseded route\",\n    \"Invalid case or dataset clears previous evidence and feedback form\",\n    \"Failed case clears loading state and selecting a known case recovers\",\n    \"P2 cards and transaction picker update URL without losing review draft\",\n    \"P2 same-control Back/Forward selects transaction without refetching\",\n    \"P2 cross-control hashes clear stale filters and load only the new route\",\n    \"P2 late response cannot repopulate a cleared route\",\n    \"Invalid P2 transaction does not silently fall back to another transaction\",\n    \"A default P2 link canonicalizes in place and never manufactures an engine case\"\n  ],\n  \"browser_visual_qa\": false\n}\n",
+      "browser_visual_qa": false
+    },
+    {
+      "file": "tests/review_workflow_ui.test.js",
+      "checks": 14,
+      "exit_code": 0,
+      "output": "{\n  \"successful\": true,\n  \"check_count\": 14,\n  \"checks\": [\n    \"A1 installment explanation shows actual agreement and source, without exempting P2\",\n    \"Recurring A5 explains approval, P99 and expense accrual without treating no P2 as valid\",\n    \"Small cash installment explains invoice-total threshold\",\n    \"Unlinked receipts request payer and original evidence; journal returns never clear original\",\n    \"Invoice revisions distinguish first observation, current revision and later update\",\n    \"Late approval is historical context even if source was observed earlier\",\n    \"A4 admission and E2 hard trigger explain queue without changing score\",\n    \"Score decomposition shows source base and recurrence without adding correlated hits\",\n    \"Future invoice warning has no literal template expression\",\n    \"Main requests tab exposes owner, operational deadline and received-awaiting-review\",\n    \"Changed scope and archived requests remain read-only\",\n    \"Request submission posts scope and due time separately from risk\",\n    \"Late detail refresh cannot overwrite another selected case\",\n    \"Notification preview links are clickable while original payload stays separate and escaped\"\n  ],\n  \"browser_visual_qa\": false\n}\n",
+      "browser_visual_qa": false
+    },
+    {
+      "file": "tests/review_evidence_ui.test.js",
+      "checks": 22,
+      "exit_code": 0,
+      "output": "{\n  \"successful\": true,\n  \"check_count\": 22,\n  \"checks\": [\n    \"A4 real null window renders calendar month and count\",\n    \"Null numeric facts are missing, zero is still a value\",\n    \"C4 exposes both real actions, leave windows and source references\",\n    \"Authorized leave action displays the permission, without false missing warning\",\n    \"E2 exposes termination, regular salary, service period and both sources\",\n    \"E2 missing settlement stays explicitly unevaluable\",\n    \"F1 exposes audit, closing, policy references, observations and rounded days\",\n    \"Legacy evidence and missing F1 source keep their uncertainty\",\n    \"Stored source values are HTML escaped\",\n    \"Foreign ledger and transaction consistently avoid claiming verified VND or original USD amount\",\n    \"Currency annotations stay bound to company, document and invoice\",\n    \"NO_GROSS missing invoice total agrees between transaction and document tabs\",\n    \"Absent invoice totals stay missing, while ledger and refund zero remain values\",\n    \"No-P2 explanation does not compare an unknown invoice total to the threshold\",\n    \"Future invoice is explicitly excluded at payment time in both tabs\",\n    \"Late verification and expired limit display effective dates without changing points\",\n    \"Installments expose source-version ambiguity without asserting lookahead\",\n    \"Refund summary keeps original case and distinguishes full and partial returns\",\n    \"Journal reversal is never presented as proof of physical cash recovery\",\n    \"Original-transaction navigation works from the last refund row\",\n    \"Independent accounting acceptance is not inferred from UAT counts\",\n    \"All 32 frozen controls and all 73 transactions render; VND columns retain currency\"\n  ],\n  \"rendered_controls\": 32,\n  \"rendered_transactions\": 73,\n  \"rendered_documents\": 78,\n  \"browser_visual_qa\": false\n}\n",
+      "browser_visual_qa": false
+    },
+    {
+      "file": "tests/rr09_ui.test.js",
+      "checks": 3,
+      "exit_code": 0,
+      "output": "{\"tests\":3,\"failures\":0}\n",
+      "browser_visual_qa": false
+    },
+    {
+      "file": "tests/review_business_ui.test.js",
+      "checks": 21,
+      "exit_code": 0,
+      "output": "✔ returned review exposes checker, reason and missing documents safely (34.7241ms)\n✔ pending result is explicit and corrections are collapsed (0.9612ms)\n✔ final summary follows committed intent rather than a different later intent (1.5951ms)\n✔ finalized result is read only for accountant (0.7686ms)\n✔ finalized result is read only for chief_accountant (0.7429ms)\n✔ finalized result is read only for director (0.6654ms)\n✔ finalized result is read only for null (0.5866ms)\n✔ checker waits for resubmission after return (0.6414ms)\n✔ failed finalization retains its reason and handling minutes in history (1.1398ms)\n✔ open document requests are visible before a final decision (0.907ms)\n✔ approved information gap stays open for accountant rereview (2.3003ms)\n✔ anonymous view has no editing controls (1.8962ms)\n✔ missing evidence decision requires details before API call (1.4393ms)\n✔ reject invalid minutes 0 inline (0.4162ms)\n✔ reject invalid minutes -1 inline (0.3291ms)\n✔ reject invalid minutes 1441 inline (0.4067ms)\n✔ reject invalid minutes NaN inline (0.3237ms)\n✔ return does not accidentally validate a preselected information gap (1.8612ms)\n✔ request carries optimistic concurrency tokens and no client identity (0.35ms)\n✔ double click cannot send a duplicate while request is pending (0.4314ms)\n✔ failed/stale request keeps draft and exposes a reload action (0.4005ms)\nℹ tests 21\nℹ suites 0\nℹ pass 21\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 212.2301\n",
+      "browser_visual_qa": false
+    }
+  ]
+}

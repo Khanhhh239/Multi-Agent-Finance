@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-12",
+  "created_at": "2026-10-12T12:29:41.376017+00:00",
+  "gate": "PASS_MODEL_SWITCH_TECHNICAL_FUNCTIONAL",
+  "default_engine": "ppocrv6_vietocr",
+  "tests": {
+    "contracts": 22,
+    "ingestion": 23,
+    "ocr": 27
+  },
+  "total_tests": 72,
+  "schemas": 12,
+  "documents": 5,
+  "pages": 6,
+  "ocr_pages": 4,
+  "baseline_sha256": "dd57876aaffd56ffde68300cf5f9d1a57e8619a9f5819017c633a2ede1a3388b",
+  "source_sha256": {
+    "agent3_tax_compliance\\src\\adapters\\ocr\\api.py": "a8795809b43a91235d2bf847cfe85768dda34bf66b076326d02ef702ce07ec78",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\bridge.py": "18485d286297039cb70fa3a805d741712ed979503c3d60e6f791465f127a81dc",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\cli.py": "88f8612ef40c5b7a67f624e2ee1b0de577cf6bbfc343af3e6f23afc62edf39c7",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\layout_merge.py": "f712112d585dc3fd37bb1a0ac15c466314a9695298428de99cc424796b71d719",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\normalizer.py": "520076b898e6346be6ea064ed95e5551748085655345817628f3b6c7fbd76b36",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\protocol.py": "534fd23773be0160f12273e23b0e64c6bd0886582818a7f3ab91db3e615c16df",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\registry.py": "8c8819358988cb155b50d97ed3140ffdc308e90f97a5988d3cd5aecd4fde2b41",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\repository.py": "eda51d054a1f8900e5a4b7e121b66ea77ab22124c40f23701ca6e044e7c1c00f",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\worker_client.py": "391f59823d10e25837bc68219fcb0ad62a7e55b008946cb78320f9d2037a09fa",
+    "agent3_tax_compliance\\src\\adapters\\ocr\\__init__.py": "a4062cd6edc76c13da7e0960a4c000b599ab58aaeaebcbf75357a98b9a29c959",
+    "agent3_tax_compliance\\tests\\ocr\\test_ocr.py": "0fa4c878a4926b6f2c9420de69d2a589b1df60d27f2f788ca257e7e385d2c7e7",
+    "agent3_tax_compliance\\tests\\ocr\\test_registry.py": "a0a6bbf2f3f1d0cb6f63773900e4620adf06e406aaa53f77da2fdddc07d2f865",
+    "agent3_tax_compliance\\configs\\ocr\\default.json": "6e56f5537d605f9123cb17607135fa77b46cf69cf50ccbebfcc76d62d1e1cc5b",
+    "agent3_tax_compliance\\configs\\ocr\\ppocrv6_vietocr.json": "1bcda2f985c4b372c6fefa2dc8f82a63a3fd496fb2e56511911cfee2c4cdf125",
+    "agent3_tax_compliance\\configs\\ocr\\tesseract_psm11.json": "6fd1ec0fe7d3863e4d2d710c0be635de199de810380191cdfc038a82875bb62e",
+    "agent3_tax_compliance\\configs\\ocr\\tesseract_psm3.json": "c8e1fe35170a2e6907419e910b3da8a5b22bad558f4da375a8b0f20a1c55daa4",
+    "agent3_tax_compliance\\configs\\ocr\\tesseract_psm6.json": "9cbd5075b1b1b767a845f493a23f4d3915edd0e3ec749ae57e31038e51dd396d",
+    "agent3_tax_compliance\\configs\\ocr\\engines\\easyocr.json": "67f32cdbc460e2b0814123d83183fc2fecdf1da0796c8edc223e8091ad319308",
+    "agent3_tax_compliance\\configs\\ocr\\engines\\ppocrv6_medium.json": "80d0c6784ce4107ae670231210e4a821ec038364c58bdf95567e0150532654ac",
+    "agent3_tax_compliance\\configs\\ocr\\engines\\ppocrv6_vietocr.json": "b4aac09935b8d6aae55b24fb27e83e5e03a83291360aca5d9602024967bc7d58",
+    "agent3_tax_compliance\\configs\\ocr\\engines\\tesseract.json": "57fa85529292919552fafecad677fda4f1cafde1fbc1f56328da1bbfc53fb5f4",
+    "agent3_tax_compliance\\src\\ingestion\\sandbox.py": "8e1e6d90382678a2ce4e3620433abad5eaaaff7a64c3e9850fa6cf3be09e8fa3",
+    "data invoice\\ocr_e2e_workflow\\src\\bridge_worker.py": "030df5e4d9dec63af95cd73127d166b64479c61128a2a789380a78a4a2305f8e",
+    "scripts\\smoke_ocr_engine.py": "1bf96b696ebbd785b69d95da9cd5cbbfe29c6e82061953a6f5f2bc60050be804",
+    "scripts\\build_ocr_switch_baseline.py": "38e6e2bce0d0b7c12ba7b59f58c792eaa5879256e0d745eaa86cd8fc85e1a684",
+    "scripts\\validate_ocr_switch.py": "5aae3fc216095d1b22554eedfc0b97c4940ebcbe5aacf2b0fbc9231b9d76e93f",
+    "scripts\\export_ocr_contracts.py": "86999b8eddae779795f6983f23f280cb9e049c3d8fd2adcdaffab1a344c252f1"
+  },
+  "output_sha256": {
+    "contracts": "7e57311be9f0302e1117bd6bf71522d48ad198b1c6c58a305dd3ea803cfd9184",
+    "ingestion": "c13dcf77865d79973106020e83bd8c0cb2fa6a6b9fcd6da44bd60e83045942d7",
+    "ocr": "26495f087222a2e922a879ffe58c07a0f7d3b41f219afab134306ab954b6c51c"
+  },
+  "original_plan03_reports_unchanged": {
+    "docs\\agent3\\plans\\evidence\\plan03\\adapter_runtime_matrix.json": "637fc7282d78db0c6079c29d38aa51a925e80c864707569740e7223998d7ab58",
+    "docs\\agent3\\plans\\evidence\\plan03\\baseline_summary.json": "bfda02a1d47533f457ac6a657dee7fd00856444d9573a740153f2fd0db76ad9b",
+    "docs\\agent3\\plans\\evidence\\plan03\\validation_summary.json": "049a458c3664fc6abf4e52102bb095c5c589f261c11a78433ddb306feaabfa75"
+  },
+  "legacy_databases_unchanged": {
+    "agent3_tax_compliance\\data\\database\\tax_compliance.db": "3242aa988e191c776f6b428c7a814107c19345b8c77e148d7a3e85198564edb3",
+    "agent3_tax_compliance\\data\\database\\vector_store.db": "fe44de14aef2479548d5069ce412d4a846b5a64cd8f514cd7316df9bb2762221"
+  },
+  "limitations": [
+    "Five synthetic integration documents only; no claim of better accuracy than Tesseract.",
+    "Detector scores are not VietOCR text confidence or calibrated field probabilities.",
+    "Orientation correction inside OCR disabled; raster transforms inherited from PLAN_02.",
+    "CPU model initialization occurs for each page subprocess; persistent model serving is future hardening."
+  ]
+}

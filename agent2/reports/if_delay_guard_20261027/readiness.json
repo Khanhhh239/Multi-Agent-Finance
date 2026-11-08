@@ -1,0 +1,12 @@
+{
+  "delay_guard": "verified_on_same_frozen_inputs_and_budgets",
+  "max_additional_baseline_days": 0,
+  "if_mode": "shadow",
+  "baseline_absolute_wait_not_zero": true,
+  "existing_sla_lateness_not_resolved_by_if_guard": true,
+  "source_evidence_timing": "unchanged",
+  "independent_reviews": 0,
+  "operational_benefit": "not_proven",
+  "actual_review_minutes": null,
+  "review_packets": "Existing 74-unit packet remains the legacy pre-guard study; no outcomes transferred"
+}

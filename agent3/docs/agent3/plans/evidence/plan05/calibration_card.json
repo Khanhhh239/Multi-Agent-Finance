@@ -1,0 +1,29 @@
+{
+  "version": "calibration-unavailable-dq-v1",
+  "date": "2026-10-13",
+  "status": "UNAVAILABLE",
+  "production_enabled": false,
+  "fit_samples": 0,
+  "holdout_samples": 0,
+  "eligible_independent_samples": 0,
+  "insufficient_sample_groups": "ALL",
+  "brier": null,
+  "ece": null,
+  "thresholds": {
+    "tax_id": null,
+    "issue_date": null,
+    "money": null,
+    "other": null
+  },
+  "threshold_owner": "UNASSIGNED_REQUIRES_BUSINESS_OWNER",
+  "blocked_by": [
+    "DQ-01",
+    "DQ-02",
+    "DQ-03",
+    "DQ-05"
+  ],
+  "reason": "Only generated development labels and detection scores; no independent frozen calibration/holdout.",
+  "functional_implementation": "equal-width-smoothed-bins-v1; only validated within exact field/family/engine/preprocess/extractor scope.",
+  "reference": "https://scikit-learn.org/stable/modules/calibration",
+  "next_action": "Acquire permitted Vietnamese invoices, independent adjudication, grouped frozen FIT/HOLDOUT/TEST and an approved risk owner/target."
+}

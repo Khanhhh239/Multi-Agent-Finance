@@ -1,0 +1,9 @@
+model_id: glm_ocr
+adapter: glm_ocr
+output_mode: structured_document
+python: "envs/glm_ocr/Scripts/python.exe"
+mode: selfhosted
+model_name: glm-ocr
+model_dir: "artifacts/models/glm_ocr"
+temperature: 0
+requires_gpu: true

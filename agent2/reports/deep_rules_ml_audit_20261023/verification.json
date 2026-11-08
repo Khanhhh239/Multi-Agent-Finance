@@ -1,0 +1,27 @@
+{
+  "verified_at": "2026-10-23T10:47:43.983049+00:00",
+  "existing_tests": 669,
+  "existing_test_modules": 51,
+  "existing_test_failures": 0,
+  "existing_test_errors": 0,
+  "existing_test_skips": 0,
+  "edge_probes": 9,
+  "edge_expectation_violations": 7,
+  "edge_probe_errors": 0,
+  "confirmed_code_defect_groups": 4,
+  "semantic_consistency_groups": 1,
+  "known_open_policy_gaps": [
+    "RR09"
+  ],
+  "actual_evaluation_scores_replayed": 11811,
+  "actual_score_max_absolute_delta": 0,
+  "original_models_refitted": 0,
+  "frozen_sources_or_labels_parsed_outside_allowed_reporting_inputs": false,
+  "blocked_frozen_reads": [],
+  "protected_files": 2250,
+  "protected_drift": [],
+  "existing_code_drift": [],
+  "core_fixes_applied": false,
+  "fixture_note": "Existing tests may create/read toy labels or paths named 005 inside temporary fixtures; real frozen labels/oracle/holdout data were not parsed or scored. Opaque preservation hashing is separate.",
+  "current_source_impact_limit": "No mismatches in the independent as-of phone/address scan on 41,082 cached reporting rows. This does not verify every feature or prove the late-evidence and revision cases safe on new SME exports."
+}

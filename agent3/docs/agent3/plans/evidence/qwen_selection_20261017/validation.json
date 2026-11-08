@@ -1,0 +1,42 @@
+{
+  "checked_on": "2026-10-17",
+  "python_tests": 51,
+  "python_result": "PASS",
+  "browser": {
+    "result": "PASS",
+    "checks": [
+      "Default offline/template explanation on pinned evaluation without touching verdict",
+      "Validated claims and locator provenance rendered; provider is synthetic, not Qwen inference",
+      "Desktop/mobile 390px: no horizontal overflow, source references accessible",
+      "Unsaved correction cannot request explanation for a mismatched draft",
+      "Saving correction removes explanation of the previous revision"
+    ],
+    "page_errors": [],
+    "scope": "Synthetic invoice/native ZEN/real Chrome; LLM test double; no legal or model accuracy claim"
+  },
+  "real_model": {
+    "model": "qwen3:8b",
+    "elapsed_seconds": 106.078,
+    "context_bytes": 43942,
+    "compact_content_bytes": 1577,
+    "facts": 18,
+    "validated_claims": 18,
+    "passed": true,
+    "scope": "Local Qwen reproduction of previously rejected revision; not legal accuracy."
+  },
+  "legacy_workflow_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "legacy_workflow_unchanged": true,
+  "source_sha256": {
+    "src/explanation_v2/__init__.py": "fff14743a913c25ee1d00744d541fdc9180e28700a6a9bbd7abc6b7a16f363cc",
+    "src/explanation_v2/api.py": "49ababfb7be2c3ac2d2e4fa25708d57aaf9f81dbd179d88ff3112b92a68073fa",
+    "src/explanation_v2/cli.py": "31c095c7f7c87493165be9ba007ef51fcd3a192befa50d2b24bf94a04204bb5f",
+    "src/explanation_v2/context_builder.py": "7949ddf7c209f42565f5444b846cd525be7c18311b8773b8ff3b4bcc9bd3563d",
+    "src/explanation_v2/contracts.py": "cd70ac196cb86e82967dfbd8c964519b5cf6c16f79ce77235d0885242d6ed45b",
+    "src/explanation_v2/llm.py": "5329aaa996a95f2dfb3ddd853b20e3941f7626b06b10cbd86d04a30d233f98b2",
+    "src/explanation_v2/retrieval.py": "5216eba339516b1ddb0d70bb8c5aacfbfa318efdd8723f7064da2bee3b11d4ae",
+    "src/explanation_v2/selection.py": "7a48d726bc96fc3d67cb2ea48f8260a7eaf9d43c0c60a1636106cf61145ddcc9",
+    "src/explanation_v2/service.py": "645d7d78d983779d77fb7059ca22ace7f402871c228afda922f5332a5f85173c",
+    "src/explanation_v2/validator.py": "1f55d3906902324ee26a5823bd1d26473bb8d48dc978ddd335c2297f4d861a01"
+  },
+  "passed": true
+}

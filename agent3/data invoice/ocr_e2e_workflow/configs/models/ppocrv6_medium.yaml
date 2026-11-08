@@ -1,0 +1,19 @@
+model_id: ppocrv6_medium
+adapter: ppocrv6
+output_mode: boxes_and_text
+python: "envs/ppocrv6_medium/Scripts/python.exe"
+ocr_version: PP-OCRv6
+lang: vi
+device: cpu
+text_detection_model_dir: "artifacts/models/ppocrv6_medium/detection"
+text_recognition_model_dir: "artifacts/models/ppocrv6_medium/recognition"
+doc_orientation_classify_model_dir: "artifacts/models/ppocrv6_medium/doc_orientation"
+use_doc_orientation_classify: true
+use_doc_unwarping: false
+use_textline_orientation: false
+enable_mkldnn: false
+cpu_threads: 4
+environment:
+  FLAGS_use_mkldnn: "0"
+  PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: "True"
+dictionary_checksum: null

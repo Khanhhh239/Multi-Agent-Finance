@@ -1,0 +1,162 @@
+[
+  {
+    "scenario": "001",
+    "file": "a5_coverage.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "a5_evaluations.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "a5_evaluations.jsonl",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "accounting_validation.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "batch_events.jsonl",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "case_events.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "case_queue.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "comparison_previous.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "dynamic_threshold_parameters.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "dynamic_threshold_parameters.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "dynamic_threshold_policy.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "evidence_findings.jsonl",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "rule_config.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "rule_coverage.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "rule_hits.jsonl",
+    "unchanged": true
+  },
+  {
+    "scenario": "001",
+    "file": "rule_scores.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "a5_coverage.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "a5_evaluations.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "a5_evaluations.jsonl",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "accounting_validation.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "batch_events.jsonl",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "case_events.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "case_queue.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "comparison_previous.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "dynamic_threshold_parameters.csv",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "dynamic_threshold_parameters.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "dynamic_threshold_policy.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "evidence_findings.jsonl",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "rule_config.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "rule_coverage.json",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "rule_hits.jsonl",
+    "unchanged": true
+  },
+  {
+    "scenario": "003",
+    "file": "rule_scores.csv",
+    "unchanged": true
+  }
+]

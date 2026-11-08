@@ -1,0 +1,31 @@
+{
+  "synthetic_only": true,
+  "independent_human_reviews": 0,
+  "real_handling_minutes": 0,
+  "audit_hash_chains_verified": true,
+  "workflow_event_count": 25,
+  "feedback_event_count": 5,
+  "counts": {
+    "primary_submitted": 9,
+    "returned": 2,
+    "finalization_requested": 7,
+    "finalized": 5,
+    "finalization_failed": 2
+  },
+  "final_feedback_linkage_verified": true,
+  "different_person_verified": true,
+  "document_request_identity_verified": true,
+  "document_request_states": [
+    "open",
+    "received",
+    "reviewed"
+  ],
+  "closed_cases": [
+    "RC_1",
+    "RC_2",
+    "RC_3",
+    "SC_F3"
+  ],
+  "pending_updated_review": "RC_4",
+  "note": "All entered minutes are simulated test inputs, not independent review measurements."
+}

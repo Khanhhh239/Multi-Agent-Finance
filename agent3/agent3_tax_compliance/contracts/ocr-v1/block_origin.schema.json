@@ -1,0 +1,59 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "method": {
+      "enum": [
+        "NATIVE_TEXT",
+        "OCR"
+      ],
+      "title": "Method",
+      "type": "string"
+    },
+    "source_block_id": {
+      "title": "Source Block Id",
+      "type": "string"
+    },
+    "raw_score": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Raw Score"
+    },
+    "score_semantics": {
+      "default": "UNAVAILABLE",
+      "enum": [
+        "ENGINE_HEURISTIC_NOT_CALIBRATED",
+        "UNAVAILABLE"
+      ],
+      "title": "Score Semantics",
+      "type": "string"
+    },
+    "response_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Response Sha256"
+    }
+  },
+  "required": [
+    "method",
+    "source_block_id"
+  ],
+  "title": "BlockOrigin",
+  "type": "object"
+}

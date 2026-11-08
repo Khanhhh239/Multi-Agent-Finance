@@ -1,0 +1,53 @@
+{
+  "url": "http://127.0.0.1:8774",
+  "health": {
+    "status": "ok",
+    "application": "sme-case-review",
+    "qa": false,
+    "instance_id": "review-roles-20261024"
+  },
+  "policy": {
+    "enabled": true,
+    "version": "accountant-review-final-approval-v1",
+    "primary_roles": [
+      "accountant"
+    ],
+    "final_roles": [
+      "chief_accountant",
+      "director"
+    ],
+    "role_labels": {
+      "accountant": "Kế toán viên",
+      "chief_accountant": "Kế toán trưởng",
+      "director": "Giám đốc"
+    },
+    "same_person_finalization_allowed": false,
+    "identity_status": "awaiting_login_integration",
+    "principal": null,
+    "independent_ml_review_automatically_confirmed": false
+  },
+  "anonymous_read_only": true,
+  "forged_writes_rejected": [
+    {
+      "endpoint": "/api/review-workflow/primary",
+      "status": 403,
+      "rejected_without_authenticated_identity": true
+    },
+    {
+      "endpoint": "/api/feedback",
+      "status": 403,
+      "rejected_without_authenticated_identity": true
+    },
+    {
+      "endpoint": "/api/budget",
+      "status": 403,
+      "rejected_without_authenticated_identity": true
+    }
+  ],
+  "real_workflow_events": 0,
+  "real_accounts_created": 0,
+  "budget_unchanged": true,
+  "http_checks_passed": true,
+  "renderer_checks": 56,
+  "browser_visual_qa": false
+}

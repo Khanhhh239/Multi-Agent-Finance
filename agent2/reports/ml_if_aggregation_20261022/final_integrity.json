@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "full_member_sets_verified": 1148,
+  "frozen_input_and_output_commitments_verified": true,
+  "reference_cutoffs_and_composition_verified": true,
+  "dependence_profiles_verified": true,
+  "protected_files": 1447,
+  "protected_files_unchanged": true,
+  "tests": {
+    "successful": true,
+    "tests_run": 55,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "patterns": [
+      "test_if_aggregation.py",
+      "test_if_aggregation_dependence.py",
+      "test_if_coverage.py",
+      "test_compare_shadow.py"
+    ],
+    "seconds": 1.14
+  },
+  "documentation_sha256": {
+    "reports/ml_if_aggregation_20261022.md": "f7ed7face0f7b73e742d6e531431d66d782968e9214ecad8337b03e9895c9552",
+    "examples/ml_if_aggregation/README.md": "b48a0716356759495a3b4ea853cfea3726ada372ea6cdf911e6ca0706b18a7a2"
+  }
+}

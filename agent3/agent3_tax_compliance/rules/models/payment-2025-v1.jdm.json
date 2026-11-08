@@ -1,0 +1,77 @@
+{
+  "contentType": "application/vnd.gorules.decision",
+  "nodes": [
+    {
+      "id": "input",
+      "name": "Verified adapter facts",
+      "type": "inputNode",
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "table",
+      "name": "Explicit result table",
+      "type": "decisionTableNode",
+      "position": {
+        "x": 300,
+        "y": 0
+      },
+      "content": {
+        "hitPolicy": "first",
+        "inputs": [
+          {
+            "id": "non_cash_proof_verified",
+            "name": "non_cash_proof_verified",
+            "type": "expression",
+            "field": "facts.non_cash_proof_verified"
+          }
+        ],
+        "outputs": [
+          {
+            "id": "o_result",
+            "name": "result",
+            "type": "expression",
+            "field": "result"
+          }
+        ],
+        "rules": [
+          {
+            "_id": "fail-non_cash_proof_verified",
+            "non_cash_proof_verified": "== false",
+            "o_result": "\"FAIL\""
+          },
+          {
+            "_id": "pass-all",
+            "non_cash_proof_verified": "== true",
+            "o_result": "\"PASS\""
+          }
+        ]
+      }
+    },
+    {
+      "id": "output",
+      "name": "Outcome",
+      "type": "outputNode",
+      "position": {
+        "x": 600,
+        "y": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-in",
+      "type": "edge",
+      "sourceId": "input",
+      "targetId": "table"
+    },
+    {
+      "id": "edge-out",
+      "type": "edge",
+      "sourceId": "table",
+      "targetId": "output"
+    }
+  ]
+}

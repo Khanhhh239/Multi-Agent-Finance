@@ -1,0 +1,99 @@
+{
+  "policy": "a4_pattern_trial_v1",
+  "default_changed": false,
+  "test_scored": false,
+  "detector_scored": false,
+  "model_refitted": false,
+  "labels_used_for_policy": false,
+  "routing": "Only weak A4-only rows/batches; strong, hard, A2/mixed and mixed batches retain entity path",
+  "scope": "company + maker + calendar month + frozen A4 predicate configuration",
+  "required_invariants": [
+    "same operational members",
+    "same observation timestamps",
+    "same scores/hits/hard triggers",
+    "stable order-independent IDs",
+    "no feedback or assignment transfer across changed scope"
+  ],
+  "effort_assumptions": [
+    "existing 20-45 minute initial-review heuristic",
+    "sensitivity: retain total baseline minute demand by proportional allocation; no assumed minute savings"
+  ],
+  "acceptance_status": "awaiting_independent_review",
+  "reviewer_confirmed_units": 0,
+  "calendars": {
+    "calendar_days": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "non_working_dates": []
+    },
+    "weekdays_mon_fri": {
+      "working_weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "non_working_dates": []
+    }
+  },
+  "source_sha256": {
+    "sme_fraud\\a4_pattern_queue.py": "9bc9da578451ae458c45fffdf8412709d0ca57e9587cc09c48f4df4b240e5344",
+    "sme_fraud\\accounting.py": "a560e00f82bb16052e2582e33481a1c9aee9e77e3fffc17945c512c1ad35e9da",
+    "sme_fraud\\aggregate_challenge.py": "7b92c6aed2a53c88ea856dd7ad89fe87d7eb7d9a8763ed87ce8f5fc2f22e2057",
+    "sme_fraud\\audit_accounting.py": "22706f019f5ebaa96b9775072a3ee0a30272f7215a1a5284805a08ab4d93187a",
+    "sme_fraud\\audit_rules.py": "695f3f53101ae45eab4446044f02ff386e3291dc7f2fe51a9e37020d189910a4",
+    "sme_fraud\\authority_policy.py": "9a571e4043a63f4e3ffad6052f6d433c3f2b680710c4200ae909d4092fe5fd9b",
+    "sme_fraud\\batch_controls.py": "56f885bce5279256b55e37725510383739bc21762bfa53dd81c90d9786e31a61",
+    "sme_fraud\\benford.py": "df120ff1fd337eb1e17d2069e8496188bcc467456958594ce61e1a2fb209d8cd",
+    "sme_fraud\\case_admission.py": "e6232de2ec3e85207daa64fa79c0b4388cde10af06efdfd83728cba5791c6a6a",
+    "sme_fraud\\case_identity.py": "3052b374bc77c5b676dad6de42a8bd8aced1429d63bbb4daff78e3f768a342f1",
+    "sme_fraud\\case_queue.py": "7cc2fd193becae743a96d19f211dacfba5f90c18d4679607bd31ae02d9d90ca1",
+    "sme_fraud\\evaluate.py": "65eacd0041edff5987015171038861ba8617a88bc1b248a0a175057438f126bd",
+    "sme_fraud\\evidence_cases.py": "df290d6f5b59424c8a6e6235649af210355abcb62ebdf74420c12c408996ff6c",
+    "sme_fraud\\evidence_evaluation.py": "ea442bcb7d5b31654f3ef64a9099deb6b726dc280b7fd8d752dd5f52f653c940",
+    "sme_fraud\\evidence_policy.py": "88aea83b675b6f5fcbde96683539f098b50b26084cf8976d237cd2445768070c",
+    "sme_fraud\\exception_validation.py": "701c9c655b2d92add57876b494c6c75fb7f2b0e316b1612b9caf0cd5d1502aec",
+    "sme_fraud\\features.py": "669285a16f60ad9311f50fcffec3342fa84d1db237968f02efc55d6af1fc708c",
+    "sme_fraud\\feature_contract.py": "908781843fac5e794365fedb37afd104dd3916c2a3a903792372476a6bc1fd41",
+    "sme_fraud\\feedback.py": "1dfadb5449b82b8b3e44deff52d8760927cbd5299a6aca2c6457ea51031bef48",
+    "sme_fraud\\generate.py": "baadf45f61c710973ad9a458f2e6dbf3bd2eed8786a556389b9cbcbe37e72688",
+    "sme_fraud\\migrate.py": "3caf319c52628f19434a55a4c2dc7fa6b9b8ddd2fd254b0f3b45132768fba873",
+    "sme_fraud\\name_challenge.py": "be218793147f541ab0ca68e185b0deb39d0517c4012df905e98dda6fa78d45fc",
+    "sme_fraud\\noise_policy.py": "d907d8ee473afab695e1ce51121259f7bf06b062dc142f270980023e9b474570",
+    "sme_fraud\\payment_evidence.py": "95c892821279a0787a6be3eae4a33ea1bdfe6a7d281ef8ba601df809e9ad49ba",
+    "sme_fraud\\real_source_acceptance.py": "0357cae83bf12b637c67833c7002a39a8908e4ae25af79294dd2e504b88a2144",
+    "sme_fraud\\rebuild_features.py": "f14ee61308ce8d4ecc449eb694e66c1b6a6a888c874789c0f1a51a13484d8d51",
+    "sme_fraud\\replay_review_workload.py": "d827bdd11d02e29ce508029182df5141514793ab19fcccbad010d949fc601894",
+    "sme_fraud\\review_capacity.py": "67d69da7c8f9fdcfd0888eb54896f11bc6f7b8ab35664d3cb4b1617bd9d7ddf8",
+    "sme_fraud\\review_server.py": "7ed0b7b6d77f78a882765521952fd68bd8c8b20048033b43188f16e8859ad50b",
+    "sme_fraud\\review_store.py": "15afec08610974d93a4de8223a799b4065b86ecb783337f8fef3e1f81c974a24",
+    "sme_fraud\\rules.py": "942e15ddce6cdd8a6a97666c8ca74b354f54e197559f9cc0c9902cb70a61c3df",
+    "sme_fraud\\rule_audit.py": "46b12704dbf007bd14c96b1f3f364cb33e34b70f4ca02e78c53f10f92e97c23a",
+    "sme_fraud\\rule_audit_cases.py": "b95112e528823586531f37d15f1ad68e3225b8e140e075cbb7fa1ddc9690869e",
+    "sme_fraud\\rule_audit_policy.py": "e369059506fdce57fdca0ba3390f1dbae102732e8db7ebfd2773ba6b8aaade58",
+    "sme_fraud\\run_a4_pattern_trial.py": "4b60b94732ccf3cc8107a64477cdda4dc9602db426fe0802a60e84535572edfb",
+    "sme_fraud\\run_evidence_evaluation.py": "04c4a77d76e1a04970232c34dcd01fc942cc5b4d5571c9565e8938ca2d232ab1",
+    "sme_fraud\\run_noise_reduction.py": "b702f23ba3d62f1b6171b58c31ede1d302a2902d9c8e92c4859558eb78a261cd",
+    "sme_fraud\\run_rules.py": "fb3c4a30cf64f4ce92820927bb1b3422f54e06b6ca8e1fe96d97f3ae7582b430",
+    "sme_fraud\\run_rule_repairs.py": "9a841d7d3eb76291ec89452413373fb9046d294e94e6766d6a467fb86fde2b32",
+    "sme_fraud\\run_spec_alignment.py": "a8c77c27fd9fb10c334024fd34b16525ff0dab1d296764c772ee6495cf6d912a",
+    "sme_fraud\\run_split_pattern_review.py": "3274e089414c68a69c73e86bbe46b577bd6f531b3a77e5fb5cee97cc7ae19381",
+    "sme_fraud\\source_snapshot.py": "2a8c74427cbe99c56f59c53678401b28244b0d7fbe8b28b5606ad02a3403b728",
+    "sme_fraud\\spec_policy.py": "47526175e5d6108122a70315dcceefdfb1a480258a6fae285597f018ad360a92",
+    "sme_fraud\\summarise.py": "c32e40f47d17dc7d3e7a1a8e661376beefa335f0a2cae7cb290e91f350b111bc",
+    "sme_fraud\\summarise_rules.py": "e51065d0da5f7541bd0fd34bcb9a3817dea5494779ed40049c788e9aafc58387",
+    "sme_fraud\\sync_feature_model.py": "aad0eb4f197983025e318860af303bdc74c8e32a860b505865f947b0e905ed68",
+    "sme_fraud\\temporal_evidence.py": "38ada11cc8b641f59606fa22ed9c3974c6f03898ac35347b095ca8aa5821ce75",
+    "sme_fraud\\validate.py": "fdd44bebce380e915da50f85c5d0350d3249b2977a905f196ec0045322ed43e9",
+    "sme_fraud\\__init__.py": "462e8bede63cef0c4e73689a8ca449985f554f626e1e884ad8d5f5cf176881d0",
+    "review_ui/app.js": "3ad233c92b5b418a4fb354aa0dbc6e90f0cb086b2513105063f5948a3df8385e"
+  }
+}

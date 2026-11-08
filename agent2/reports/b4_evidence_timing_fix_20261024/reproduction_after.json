@@ -1,0 +1,157 @@
+{
+  "posted_at": "2025-08-12T11:00:00+07:00",
+  "support_docs_observed_at": "2025-08-14T11:00:00+07:00",
+  "future_flag_change": {
+    "before_b4_hit": {
+      "transaction_id": "AUDIT_0000",
+      "company_id": "C001",
+      "detected_at": "2025-08-12T11:00:00+07:00",
+      "rule_id": "B4",
+      "rule_name": "Trạng thái người phát hành hóa đơn rủi ro",
+      "points": 3,
+      "hard_trigger": 0,
+      "suppressed_reason": "",
+      "evidence": {
+        "invoice_issued_at": "2025-08-02T11:00:00+07:00",
+        "risky_at_invoice": 0,
+        "registry_risky_now": 1
+      },
+      "related_transaction_ids": [],
+      "graph_path": [],
+      "intrinsic_points": 3,
+      "scoring_role": "transaction",
+      "evidence_id": "B4_a61b20d652af28cd0392"
+    },
+    "after_b4_hit": {
+      "transaction_id": "AUDIT_0000",
+      "company_id": "C001",
+      "detected_at": "2025-08-12T11:00:00+07:00",
+      "rule_id": "B4",
+      "rule_name": "Trạng thái người phát hành hóa đơn rủi ro",
+      "points": 3,
+      "hard_trigger": 0,
+      "suppressed_reason": "",
+      "evidence": {
+        "invoice_issued_at": "2025-08-02T11:00:00+07:00",
+        "risky_at_invoice": 0,
+        "registry_risky_now": 1
+      },
+      "related_transaction_ids": [],
+      "graph_path": [],
+      "intrinsic_points": 3,
+      "scoring_role": "transaction",
+      "evidence_id": "B4_a61b20d652af28cd0392"
+    },
+    "historical_b4_hit_unchanged": true
+  },
+  "cases": [
+    {
+      "case": "known_before_posting",
+      "posted_at": "2025-08-12T11:00:00+07:00",
+      "support_docs_observed_at": "2025-08-11T11:00:00+07:00",
+      "expected_points": 0,
+      "actual_points": 0,
+      "b4_hit": {
+        "transaction_id": "AUDIT_0000",
+        "company_id": "C001",
+        "detected_at": "2025-08-12T11:00:00+07:00",
+        "rule_id": "B4",
+        "rule_name": "Trạng thái người phát hành hóa đơn rủi ro",
+        "points": 0,
+        "hard_trigger": 0,
+        "suppressed_reason": "Hóa đơn trước trạng thái rủi ro, có xác nhận giao nhận",
+        "evidence": {
+          "invoice_issued_at": "2025-08-02T11:00:00+07:00",
+          "risky_at_invoice": 0,
+          "registry_risky_now": 1
+        },
+        "related_transaction_ids": [],
+        "graph_path": [],
+        "intrinsic_points": 0,
+        "scoring_role": "transaction",
+        "evidence_id": "B4_a61b20d652af28cd0392"
+      }
+    },
+    {
+      "case": "known_at_posting",
+      "posted_at": "2025-08-12T11:00:00+07:00",
+      "support_docs_observed_at": "2025-08-12T11:00:00+07:00",
+      "expected_points": 0,
+      "actual_points": 0,
+      "b4_hit": {
+        "transaction_id": "AUDIT_0000",
+        "company_id": "C001",
+        "detected_at": "2025-08-12T11:00:00+07:00",
+        "rule_id": "B4",
+        "rule_name": "Trạng thái người phát hành hóa đơn rủi ro",
+        "points": 0,
+        "hard_trigger": 0,
+        "suppressed_reason": "Hóa đơn trước trạng thái rủi ro, có xác nhận giao nhận",
+        "evidence": {
+          "invoice_issued_at": "2025-08-02T11:00:00+07:00",
+          "risky_at_invoice": 0,
+          "registry_risky_now": 1
+        },
+        "related_transaction_ids": [],
+        "graph_path": [],
+        "intrinsic_points": 0,
+        "scoring_role": "transaction",
+        "evidence_id": "B4_a61b20d652af28cd0392"
+      }
+    },
+    {
+      "case": "known_one_second_after_posting",
+      "posted_at": "2025-08-12T11:00:00+07:00",
+      "support_docs_observed_at": "2025-08-12T11:00:01+07:00",
+      "expected_points": 3,
+      "actual_points": 3,
+      "b4_hit": {
+        "transaction_id": "AUDIT_0000",
+        "company_id": "C001",
+        "detected_at": "2025-08-12T11:00:00+07:00",
+        "rule_id": "B4",
+        "rule_name": "Trạng thái người phát hành hóa đơn rủi ro",
+        "points": 3,
+        "hard_trigger": 0,
+        "suppressed_reason": "",
+        "evidence": {
+          "invoice_issued_at": "2025-08-02T11:00:00+07:00",
+          "risky_at_invoice": 0,
+          "registry_risky_now": 1
+        },
+        "related_transaction_ids": [],
+        "graph_path": [],
+        "intrinsic_points": 3,
+        "scoring_role": "transaction",
+        "evidence_id": "B4_a61b20d652af28cd0392"
+      }
+    },
+    {
+      "case": "known_two_days_after_posting",
+      "posted_at": "2025-08-12T11:00:00+07:00",
+      "support_docs_observed_at": "2025-08-14T11:00:00+07:00",
+      "expected_points": 3,
+      "actual_points": 3,
+      "b4_hit": {
+        "transaction_id": "AUDIT_0000",
+        "company_id": "C001",
+        "detected_at": "2025-08-12T11:00:00+07:00",
+        "rule_id": "B4",
+        "rule_name": "Trạng thái người phát hành hóa đơn rủi ro",
+        "points": 3,
+        "hard_trigger": 0,
+        "suppressed_reason": "",
+        "evidence": {
+          "invoice_issued_at": "2025-08-02T11:00:00+07:00",
+          "risky_at_invoice": 0,
+          "registry_risky_now": 1
+        },
+        "related_transaction_ids": [],
+        "graph_path": [],
+        "intrinsic_points": 3,
+        "scoring_role": "transaction",
+        "evidence_id": "B4_a61b20d652af28cd0392"
+      }
+    }
+  ]
+}

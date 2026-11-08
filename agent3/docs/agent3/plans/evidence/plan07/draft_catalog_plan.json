@@ -1,0 +1,213 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "rule-planning-v1",
+  "creator": "rule-planner",
+  "stage": "planning",
+  "created_at": "2026-10-12T00:00:00Z",
+  "evaluation_id": "evaluation-1c983723336ff1a680c6dbd4d94d551f",
+  "tenant_id": "tenant-a",
+  "taxpayer_id": "payer-a",
+  "record_id": "cfr-70aca590b8b64437a963b68deebe323f",
+  "record_revision": 1,
+  "taxpayer_master_revision": 1,
+  "record_sha256": "dafc8f7ded621a1a783b4b61599c4e9c27c216c65643dcb177c2e639d02b36ca",
+  "implementation_sha256": "1218f2d2c8eca4e4fa197076f87f2879969861f2c1e7b5b1b1ee9b48e463cb5e",
+  "pins": [
+    {
+      "name": "ruleset",
+      "version": "technical-draft-ruleset-20261014-v1",
+      "sha256": "e594799cf71d7466f4b9becab655caec72bdbd3b65575875e5cb7441e1eb1a47"
+    },
+    {
+      "name": "legal",
+      "version": "legal-registry-20261014-v1",
+      "sha256": "e3ba867796fcff48d530fc951a49a89d12d44b7fc42994aec5ae2f8ebdf78979"
+    },
+    {
+      "name": "capability",
+      "version": "1",
+      "sha256": "1bec1b68f7c09236e1a99ca81c84dba3ffca5af7a7be56d1658e07450aa4162d"
+    },
+    {
+      "name": "taxonomy",
+      "version": "vat-taxonomy-draft-v1",
+      "sha256": "079f0d6bc8dc1397bf13e113db2b6ece3686cf50b9690f14539b5b6c22e689e3"
+    },
+    {
+      "name": "context",
+      "version": "planning-context-v1",
+      "sha256": "611614f3f983ebc776191077b4d64273d181ee7316ea5731094ae47f0ae445ad"
+    },
+    {
+      "name": "quality",
+      "version": "fixture",
+      "sha256": "abeeb39bcb4882d344ff87e0d5249c6cc799089fd126a4b5a7e0ba2d63ac04b4"
+    },
+    {
+      "name": "master",
+      "version": "1",
+      "sha256": "2a39d290f8f2a48ebc70adf4e4c1a0fe35efe7444d80b96b3e134c08dacf13bb"
+    }
+  ],
+  "entries": [
+    {
+      "rule_id": "INV_CONTENT_001",
+      "rule_version": "content-2025-v1",
+      "unit": {
+        "unit_type": "RECORD",
+        "unit_id": "cfr-70aca590b8b64437a963b68deebe323f",
+        "item_refs": [],
+        "discovery": "COMPLETE"
+      },
+      "selection": "MATCH",
+      "applicability": "MATCH",
+      "capability": "SUPPORTED",
+      "eligibility": "NOT_EVALUATED_PLANNING_ERROR",
+      "reasons": [
+        "RULE_OR_LEGAL_BASIS_NOT_APPROVED"
+      ],
+      "next_action": "OPERATOR",
+      "review_required": false,
+      "traces": [
+        {
+          "policy": "EQ",
+          "field_paths": [
+            "context.invoice_kind"
+          ],
+          "state": "MATCH",
+          "reason": "PREDICATE_EVALUATED",
+          "evidence_refs": []
+        }
+      ],
+      "legal_basis": [
+        {
+          "document_id": "ND123_2020",
+          "locator": "Article10.PENDING_REVIEW"
+        },
+        {
+          "document_id": "ND70_2025",
+          "locator": "Article1.PENDING_REVIEW"
+        }
+      ]
+    },
+    {
+      "rule_id": "VAT_NON_CASH_PAYMENT_001",
+      "rule_version": "payment-2026a-v1",
+      "unit": {
+        "unit_type": "RECORD",
+        "unit_id": "cfr-70aca590b8b64437a963b68deebe323f",
+        "item_refs": [],
+        "discovery": "COMPLETE"
+      },
+      "selection": "MATCH",
+      "applicability": "UNKNOWN",
+      "capability": "SUPPORTED",
+      "eligibility": "NOT_EVALUATED_PLANNING_ERROR",
+      "reasons": [
+        "RULE_OR_LEGAL_BASIS_NOT_APPROVED"
+      ],
+      "next_action": "OPERATOR",
+      "review_required": false,
+      "traces": [
+        {
+          "policy": "EQ",
+          "field_paths": [
+            "derived.invoice_direction"
+          ],
+          "state": "MATCH",
+          "reason": "PREDICATE_EVALUATED",
+          "evidence_refs": []
+        },
+        {
+          "policy": "EQ",
+          "field_paths": [
+            "context.vat_method"
+          ],
+          "state": "MATCH",
+          "reason": "PREDICATE_EVALUATED",
+          "evidence_refs": []
+        },
+        {
+          "policy": "EQ",
+          "field_paths": [
+            "context.claim_input_vat"
+          ],
+          "state": "MATCH",
+          "reason": "PREDICATE_EVALUATED",
+          "evidence_refs": []
+        },
+        {
+          "policy": "EQ",
+          "field_paths": [
+            "context.payment_case"
+          ],
+          "state": "MATCH",
+          "reason": "PREDICATE_EVALUATED",
+          "evidence_refs": []
+        },
+        {
+          "policy": "non-cash-scope-v1",
+          "field_paths": [
+            "totals.gross",
+            "currency",
+            "parties.seller.tax_id",
+            "invoice.issue_date"
+          ],
+          "state": "UNKNOWN",
+          "reason": "DAILY_PURCHASE_COMPLETENESS_UNKNOWN",
+          "evidence_refs": []
+        }
+      ],
+      "legal_basis": [
+        {
+          "document_id": "ND181_2025",
+          "locator": "Article26.pdf32-34"
+        },
+        {
+          "document_id": "ND359_2025",
+          "locator": "AMENDMENT_SCOPE_PENDING"
+        }
+      ]
+    },
+    {
+      "rule_id": "VAT_RATE_001",
+      "rule_version": "vat-2025-2026-v1",
+      "unit": {
+        "unit_type": "ITEM",
+        "unit_id": "item-7e00abc899ed42288f6fcd8f025978ba",
+        "item_refs": [
+          "item-7e00abc899ed42288f6fcd8f025978ba"
+        ],
+        "discovery": "COMPLETE"
+      },
+      "selection": "MATCH",
+      "applicability": "MATCH",
+      "capability": "SUPPORTED",
+      "eligibility": "NOT_EVALUATED_PLANNING_ERROR",
+      "reasons": [
+        "RULE_OR_LEGAL_BASIS_NOT_APPROVED"
+      ],
+      "next_action": "OPERATOR",
+      "review_required": false,
+      "traces": [
+        {
+          "policy": "EQ",
+          "field_paths": [
+            "context.invoice_kind"
+          ],
+          "state": "MATCH",
+          "reason": "PREDICATE_EVALUATED",
+          "evidence_refs": []
+        }
+      ],
+      "legal_basis": [
+        {
+          "document_id": "ND174_2025",
+          "locator": "Article1_APPENDICES_PENDING_REVIEW"
+        }
+      ]
+    }
+  ],
+  "engine_calls": 0,
+  "technical_only": true
+}

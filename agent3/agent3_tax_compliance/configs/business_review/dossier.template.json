@@ -1,0 +1,24 @@
+{
+  "schema_version": "business-review-v1",
+  "review_id": "REPLACE_REVIEW_ID",
+  "tenant_id": "REPLACE_TENANT",
+  "taxpayer_id": "REPLACE_TAXPAYER",
+  "record_id": "REPLACE_RECORD",
+  "record_revision": 1,
+  "record_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "reviewer_id": "REPLACE_AUTHENTICATED_ACTOR",
+  "reviewed_at": "2026-10-16T10:00:00+07:00",
+  "review_reference": "REPLACE_WITH_ACTUAL_REVIEW_REFERENCE",
+  "documents": [
+    {
+      "evidence_id": "invoice-source",
+      "relative_path": "invoice.pdf",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "kind": "INVOICE"
+    }
+  ],
+  "invoice": null,
+  "products": [],
+  "payment": null,
+  "daily": null
+}

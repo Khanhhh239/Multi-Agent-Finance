@@ -1,0 +1,156 @@
+{
+  "version": "if-coverage-audit-v1",
+  "status": "coverage_explained",
+  "dataset": "D:\\agent22\\data\\synthetic_sources_20261017_v2\\sme_fraud_003",
+  "comparison": "D:\\agent22\\reports\\ml_shadow_comparison_20261022\\sme_fraud_003",
+  "source_origin": "synthetic_process_simulation",
+  "windows": {
+    "company_ids": [
+      "C001",
+      "C002",
+      "C003",
+      "C004",
+      "C005",
+      "C006",
+      "C007",
+      "C008"
+    ],
+    "source_ref": "SIM_SYNTHETIC_SOURCE_WORLD_V1_TECHNICAL_COMPATIBILITY",
+    "train": {
+      "start_at": "2024-01-01T00:00:00+07:00",
+      "end_at": "2025-01-01T00:00:00+07:00"
+    },
+    "calibration": {
+      "start_at": "2025-01-01T00:00:00+07:00",
+      "end_at": "2025-07-01T00:00:00+07:00"
+    },
+    "evaluation": {
+      "start_at": "2025-07-01T00:00:00+07:00",
+      "end_at": "2026-01-01T00:00:00+07:00"
+    }
+  },
+  "summaries": {
+    "5": {
+      "baseline": {
+        "selected_work_reviews": 1243,
+        "transaction_work_reviews": 847,
+        "nontransaction_work_reviews": 396,
+        "full_if_coverage": 577,
+        "missing_or_partial": 270,
+        "full_fraction": 0.6812278630460449,
+        "reasons": {
+          "full_evaluation_scored": 577,
+          "historical_only_unscored": 244,
+          "mixed_history_evaluation": 26
+        },
+        "unscored_partition_signatures": {
+          "calibration": 97,
+          "calibration+evaluation": 26,
+          "train": 143,
+          "train+calibration": 4
+        },
+        "entirely_evaluation_work_reviews": 577,
+        "entirely_evaluation_full_fraction": 1.0,
+        "unique_transaction_case_ids": 448,
+        "unique_transaction_work_keys": 847
+      },
+      "if_shadow": {
+        "selected_work_reviews": 1242,
+        "transaction_work_reviews": 846,
+        "nontransaction_work_reviews": 396,
+        "full_if_coverage": 576,
+        "missing_or_partial": 270,
+        "full_fraction": 0.6808510638297872,
+        "reasons": {
+          "full_evaluation_scored": 576,
+          "historical_only_unscored": 244,
+          "mixed_history_evaluation": 26
+        },
+        "unscored_partition_signatures": {
+          "calibration": 97,
+          "calibration+evaluation": 26,
+          "train": 143,
+          "train+calibration": 4
+        },
+        "entirely_evaluation_work_reviews": 576,
+        "entirely_evaluation_full_fraction": 1.0,
+        "unique_transaction_case_ids": 448,
+        "unique_transaction_work_keys": 846
+      }
+    },
+    "10": {
+      "baseline": {
+        "selected_work_reviews": 1299,
+        "transaction_work_reviews": 857,
+        "nontransaction_work_reviews": 442,
+        "full_if_coverage": 580,
+        "missing_or_partial": 277,
+        "full_fraction": 0.676779463243874,
+        "reasons": {
+          "full_evaluation_scored": 580,
+          "historical_only_unscored": 247,
+          "mixed_history_evaluation": 30
+        },
+        "unscored_partition_signatures": {
+          "calibration": 100,
+          "calibration+evaluation": 30,
+          "train": 143,
+          "train+calibration": 4
+        },
+        "entirely_evaluation_work_reviews": 580,
+        "entirely_evaluation_full_fraction": 1.0,
+        "unique_transaction_case_ids": 448,
+        "unique_transaction_work_keys": 857
+      },
+      "if_shadow": {
+        "selected_work_reviews": 1299,
+        "transaction_work_reviews": 857,
+        "nontransaction_work_reviews": 442,
+        "full_if_coverage": 580,
+        "missing_or_partial": 277,
+        "full_fraction": 0.676779463243874,
+        "reasons": {
+          "full_evaluation_scored": 580,
+          "historical_only_unscored": 247,
+          "mixed_history_evaluation": 30
+        },
+        "unscored_partition_signatures": {
+          "calibration": 100,
+          "calibration+evaluation": 30,
+          "train": 143,
+          "train+calibration": 4
+        },
+        "entirely_evaluation_work_reviews": 580,
+        "entirely_evaluation_full_fraction": 1.0,
+        "unique_transaction_case_ids": 448,
+        "unique_transaction_work_keys": 857
+      }
+    }
+  },
+  "source_transactions": 20523,
+  "source_partition_counts": {
+    "train": 9289,
+    "calibration": 5357,
+    "evaluation": 5877
+  },
+  "source_feature_status": {
+    "valid": 20523
+  },
+  "evaluation_transactions": 5877,
+  "valid_evaluation_scores": 5877,
+  "source_defects": {},
+  "selected_review_data_errors": 0,
+  "models_fitted": 0,
+  "observations_scored": 0,
+  "training_or_calibration_scored": false,
+  "queue_changed": false,
+  "evaluation_window_changed": false,
+  "independent_outcomes_added": 0,
+  "coverage_policy": "All members must have valid evaluation scores; history keeps its baseline position",
+  "denominator": "Selected transaction review work, including continued reviews; not unique cases or transactions",
+  "limitations": [
+    "Source is simulated; data integrity does not prove detection or operational benefit",
+    "Historical-only and mixed cases remain outside full IF coverage",
+    "Evaluation contains earlier technical scores; no untouched field benchmark is asserted"
+  ]
+}

@@ -1,0 +1,10 @@
+# Cài từng package theo tài liệu chính thức và khóa revision trong config run.
+# HunyuanOCR-1.5: https://github.com/Tencent-Hunyuan/HunyuanOCR
+# Chandra OCR 2
+chandra-ocr[hf]>=2
+transformers>=5.3
+accelerate>=1.13
+Pillow==11.1.0
+PyYAML==6.0.3
+tqdm>=4.66,<5
+# dots.mocr: https://github.com/rednote-hilab/dots.mocr

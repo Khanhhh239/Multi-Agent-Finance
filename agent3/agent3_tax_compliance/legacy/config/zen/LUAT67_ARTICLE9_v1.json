@@ -1,0 +1,98 @@
+{
+  "contentType": "application/vnd.gorules.decision",
+  "nodes": [
+    {
+      "id": "input-article9",
+      "name": "Transaction tax facts",
+      "type": "inputNode",
+      "position": {"x": 80, "y": 160}
+    },
+    {
+      "id": "table-article9",
+      "name": "Điều 9 - Chi phí được trừ",
+      "type": "decisionTableNode",
+      "position": {"x": 420, "y": 160},
+      "content": {
+        "hitPolicy": "collect",
+        "inputs": [
+          {"id": "i_complete", "name": "Dữ liệu kiểm tra đầy đủ", "type": "expression", "field": "checks.input_complete"},
+          {"id": "i_business", "name": "Liên quan SXKD", "type": "expression", "field": "checks.is_business_related"},
+          {"id": "i_docs", "name": "Đủ hóa đơn chứng từ", "type": "expression", "field": "checks.has_legal_invoice_documents"},
+          {"id": "i_admin_fine", "name": "Tiền phạt hành chính", "type": "expression", "field": "checks.is_administrative_penalty"},
+          {"id": "i_reimbursed", "name": "Được bù đắp từ nguồn khác", "type": "expression", "field": "checks.is_reimbursed_from_other_source"},
+          {"id": "i_provision", "name": "Trích lập dự phòng đúng quy định", "type": "expression", "field": "checks.provision_compliant"},
+          {"id": "i_depreciation", "name": "Khấu hao đúng quy định", "type": "expression", "field": "checks.depreciation_compliant"},
+          {"id": "i_accrual", "name": "Trích trước đúng quy định", "type": "expression", "field": "checks.accrual_compliant"},
+          {"id": "i_owner_salary", "name": "Lương chủ DNTN hoặc chủ CT TNHH MTV cá nhân", "type": "expression", "field": "checks.is_disallowed_owner_salary"},
+          {"id": "i_founder_pay", "name": "Thù lao sáng lập viên", "type": "expression", "field": "checks.is_founder_remuneration"},
+          {"id": "i_founder_manage", "name": "Sáng lập viên trực tiếp điều hành", "type": "expression", "field": "checks.founder_directly_manages"},
+          {"id": "i_employee_unpaid", "name": "Khoản chi NLĐ chưa thực trả", "type": "expression", "field": "checks.employee_expense_unpaid"},
+          {"id": "i_employee_docs", "name": "Khoản chi NLĐ có hóa đơn chứng từ", "type": "expression", "field": "checks.employee_expense_has_documents"},
+          {"id": "i_missing_capital", "name": "Lãi vay tương ứng vốn điều lệ còn thiếu", "type": "expression", "field": "checks.interest_for_missing_charter_capital"},
+          {"id": "i_capitalized_interest", "name": "Lãi vay đã ghi vào giá trị đầu tư", "type": "expression", "field": "checks.interest_already_capitalized"},
+          {"id": "i_noncredit_interest", "name": "Lãi vay ngoài TCTD vượt BLDS", "type": "expression", "field": "checks.non_credit_interest_exceeds_civil_code_limit"},
+          {"id": "i_vat_deducted", "name": "GTGT đầu vào đã khấu trừ", "type": "expression", "field": "checks.vat_input_already_deducted"},
+          {"id": "i_cit", "name": "Thuế TNDN", "type": "expression", "field": "checks.is_corporate_income_tax"},
+          {"id": "i_revenue", "name": "Tương ứng doanh thu tính thuế", "type": "expression", "field": "checks.corresponds_to_taxable_revenue"},
+          {"id": "i_1b_exception", "name": "Ngoại lệ Điều 9.1.b", "type": "expression", "field": "checks.article9_1b_exception"},
+          {"id": "i_sponsor", "name": "Khoản tài trợ", "type": "expression", "field": "checks.is_sponsorship"},
+          {"id": "i_sponsor_allowed", "name": "Tài trợ thuộc Điều 9.1.b5", "type": "expression", "field": "checks.sponsorship_allowed_under_1_b5"},
+          {"id": "i_capex", "name": "Chi đầu tư tạo TSCĐ", "type": "expression", "field": "checks.is_capex_creating_fixed_asset"},
+          {"id": "i_equity", "name": "Chi trực tiếp giảm vốn CSH", "type": "expression", "field": "checks.is_direct_equity_reduction_cost"},
+          {"id": "i_needs_decree", "name": "Cần mức/ngoại lệ do Chính phủ quy định", "type": "expression", "field": "checks.requires_government_detail"}
+        ],
+        "outputs": [
+          {"id": "o_rule", "name": "Mã rule", "type": "expression", "field": "rule_id"},
+          {"id": "o_verdict", "name": "Kết luận", "type": "expression", "field": "verdict"},
+          {"id": "o_reason", "name": "Mã lý do", "type": "expression", "field": "reason_code"},
+          {"id": "o_fix", "name": "Hướng xử lý", "type": "expression", "field": "fix_hint"},
+          {"id": "o_ref", "name": "Căn cứ", "type": "expression", "field": "legal_ref"},
+          {"id": "o_page", "name": "Trang nguồn", "type": "expression", "field": "source_page"}
+        ],
+        "rules": [
+          {"_id":"r_missing","i_complete":"false","o_rule":"\"CIT67-A9-DATA\"","o_verdict":"\"REVIEW\"","o_reason":"\"MISSING_REQUIRED_FACTS\"","o_fix":"\"Bổ sung dữ liệu bắt buộc trước khi kết luận chi phí được trừ.\"","o_ref":"\"Khoản 1 Điều 9 Luật 67/2025/QH15\"","o_page":"7"},
+          {"_id":"r_business","i_business":"false","o_rule":"\"CIT67-A9-1A\"","o_verdict":"\"FAIL\"","o_reason":"\"NOT_BUSINESS_RELATED\"","o_fix":"\"Loại khoản chi hoặc bổ sung hồ sơ chứng minh quan hệ với hoạt động sản xuất, kinh doanh.\"","o_ref":"\"Điểm a khoản 1 và điểm a khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"7"},
+          {"_id":"r_docs","i_docs":"false","o_rule":"\"CIT67-A9-1C\"","o_verdict":"\"FAIL\"","o_reason":"\"MISSING_LEGAL_DOCUMENTS\"","o_fix":"\"Bổ sung hóa đơn, chứng từ hợp pháp và hồ sơ thanh toán theo quy định.\"","o_ref":"\"Điểm c khoản 1 và điểm a khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_admin","i_admin_fine":"true","o_rule":"\"CIT67-A9-2B\"","o_verdict":"\"FAIL\"","o_reason":"\"ADMINISTRATIVE_PENALTY\"","o_fix":"\"Hạch toán theo kế toán nhưng loại khỏi chi phí được trừ khi tính thuế TNDN.\"","o_ref":"\"Điểm b khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_reimbursed","i_reimbursed":"true","o_rule":"\"CIT67-A9-2C\"","o_verdict":"\"FAIL\"","o_reason":"\"REIMBURSED_FROM_OTHER_SOURCE\"","o_fix":"\"Loại phần chi đã được bù đắp bằng nguồn kinh phí khác.\"","o_ref":"\"Điểm c khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_provision","i_provision":"false","o_rule":"\"CIT67-A9-2E\"","o_verdict":"\"FAIL\"","o_reason":"\"NONCOMPLIANT_PROVISION\"","o_fix":"\"Điều chỉnh khoản dự phòng về đúng điều kiện và mức theo pháp luật về trích lập dự phòng.\"","o_ref":"\"Điểm đ khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_depreciation","i_depreciation":"false","o_rule":"\"CIT67-A9-2F\"","o_verdict":"\"FAIL\"","o_reason":"\"NONCOMPLIANT_DEPRECIATION\"","o_fix":"\"Điều chỉnh khấu hao về đúng đối tượng, phương pháp và mức theo quy định.\"","o_ref":"\"Điểm e khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_accrual","i_accrual":"false","o_rule":"\"CIT67-A9-2G\"","o_verdict":"\"FAIL\"","o_reason":"\"NONCOMPLIANT_ACCRUAL\"","o_fix":"\"Điều chỉnh khoản trích trước và hồ sơ liên quan theo quy định.\"","o_ref":"\"Điểm g khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_owner_salary","i_owner_salary":"true","o_rule":"\"CIT67-A9-2H-OWNER\"","o_verdict":"\"FAIL\"","o_reason":"\"DISALLOWED_OWNER_SALARY\"","o_fix":"\"Loại tiền lương, tiền công thuộc trường hợp chủ sở hữu bị loại theo luật.\"","o_ref":"\"Điểm h khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_founder","i_founder_pay":"true","i_founder_manage":"false","o_rule":"\"CIT67-A9-2H-FOUNDER\"","o_verdict":"\"FAIL\"","o_reason":"\"INACTIVE_FOUNDER_REMUNERATION\"","o_fix":"\"Loại thù lao trả cho sáng lập viên không trực tiếp tham gia điều hành sản xuất, kinh doanh.\"","o_ref":"\"Điểm h khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_employee_unpaid","i_employee_unpaid":"true","o_rule":"\"CIT67-A9-2H-UNPAID\"","o_verdict":"\"FAIL\"","o_reason":"\"EMPLOYEE_EXPENSE_NOT_PAID\"","o_fix":"\"Rà soát thời điểm thực trả và điều chỉnh khoản chi người lao động.\"","o_ref":"\"Điểm h khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_employee_docs","i_employee_docs":"false","o_rule":"\"CIT67-A9-2H-NODOC\"","o_verdict":"\"FAIL\"","o_reason":"\"EMPLOYEE_EXPENSE_MISSING_DOCUMENTS\"","o_fix":"\"Bổ sung hóa đơn, chứng từ cho khoản chi trả người lao động.\"","o_ref":"\"Điểm h khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_missing_capital","i_missing_capital":"true","o_rule":"\"CIT67-A9-2I-CAPITAL\"","o_verdict":"\"FAIL\"","o_reason":"\"INTEREST_FOR_MISSING_CHARTER_CAPITAL\"","o_fix":"\"Loại phần lãi vay tương ứng với phần vốn điều lệ còn thiếu.\"","o_ref":"\"Điểm i khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_capitalized_interest","i_capitalized_interest":"true","o_rule":"\"CIT67-A9-2I-CAPITALIZED\"","o_verdict":"\"FAIL\"","o_reason":"\"INTEREST_ALREADY_CAPITALIZED\"","o_fix":"\"Không ghi nhận lại vào chi phí phần lãi vay đã được vốn hóa vào giá trị đầu tư.\"","o_ref":"\"Điểm i khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_noncredit_interest","i_noncredit_interest":"true","o_rule":"\"CIT67-A9-2I-NONCREDIT\"","o_verdict":"\"FAIL\"","o_reason":"\"NON_CREDIT_INTEREST_OVER_CIVIL_CODE_LIMIT\"","o_fix":"\"Loại phần lãi vay ngoài tổ chức tín dụng vượt mức theo Bộ luật Dân sự.\"","o_ref":"\"Điểm i khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"8"},
+          {"_id":"r_vat","i_vat_deducted":"true","o_rule":"\"CIT67-A9-2L-VAT\"","o_verdict":"\"FAIL\"","o_reason":"\"DEDUCTED_INPUT_VAT_EXPENSE\"","o_fix":"\"Loại thuế GTGT đầu vào đã khấu trừ khỏi chi phí được trừ.\"","o_ref":"\"Điểm l khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"9"},
+          {"_id":"r_cit","i_cit":"true","o_rule":"\"CIT67-A9-2L-CIT\"","o_verdict":"\"FAIL\"","o_reason":"\"CORPORATE_INCOME_TAX_EXPENSE\"","o_fix":"\"Loại thuế thu nhập doanh nghiệp khỏi chi phí được trừ.\"","o_ref":"\"Điểm l khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"9"},
+          {"_id":"r_revenue","i_revenue":"false","i_1b_exception":"false","o_rule":"\"CIT67-A9-2M\"","o_verdict":"\"FAIL\"","o_reason":"\"NO_CORRESPONDING_TAXABLE_REVENUE\"","o_fix":"\"Loại khoản chi không tương ứng doanh thu tính thuế nếu không thuộc ngoại lệ khoản 1 Điều 9.\"","o_ref":"\"Điểm m khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"9"},
+          {"_id":"r_sponsor","i_sponsor":"true","i_sponsor_allowed":"false","o_rule":"\"CIT67-A9-2N\"","o_verdict":"\"FAIL\"","o_reason":"\"DISALLOWED_SPONSORSHIP\"","o_fix":"\"Loại khoản tài trợ không thuộc phạm vi điểm b5 khoản 1 Điều 9.\"","o_ref":"\"Điểm n khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"9"},
+          {"_id":"r_capex","i_capex":"true","o_rule":"\"CIT67-A9-2O-CAPEX\"","o_verdict":"\"FAIL\"","o_reason":"\"CAPEX_RECORDED_AS_EXPENSE\"","o_fix":"\"Ghi nhận vào nguyên giá tài sản cố định và phân bổ/khấu hao theo quy định.\"","o_ref":"\"Điểm o khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"9"},
+          {"_id":"r_equity","i_equity":"true","o_rule":"\"CIT67-A9-2O-EQUITY\"","o_verdict":"\"FAIL\"","o_reason":"\"DIRECT_EQUITY_REDUCTION_COST\"","o_fix":"\"Loại khoản chi liên quan trực tiếp đến việc giảm vốn chủ sở hữu.\"","o_ref":"\"Điểm o khoản 2 Điều 9 Luật 67/2025/QH15\"","o_page":"9"},
+          {"_id":"r_decree","i_needs_decree":"true","o_rule":"\"CIT67-A9-DETAIL\"","o_verdict":"\"REVIEW\"","o_reason":"\"REQUIRES_ND320_DETAIL\"","o_fix":"\"Đối chiếu mức, điều kiện hoặc ngoại lệ tại Nghị định 320/2025/NĐ-CP trước khi kết luận.\"","o_ref":"\"Khoản 3 Điều 9 Luật 67/2025/QH15\"","o_page":"9"}
+        ]
+      }
+    },
+    {
+      "id": "output-article9",
+      "name": "Article 9 findings",
+      "type": "outputNode",
+      "position": {"x": 820, "y": 160}
+    }
+  ],
+  "edges": [
+    {"id":"edge-input-table","type":"edge","sourceId":"input-article9","targetId":"table-article9"},
+    {"id":"edge-table-output","type":"edge","sourceId":"table-article9","targetId":"output-article9"}
+  ],
+  "meta": {
+    "ruleSetId": "CIT-LAW-67-2025-ARTICLE-9",
+    "version": "1.0.0",
+    "effectiveFrom": "2025-10-01",
+    "effectiveTo": null,
+    "sourceDocument": "67/2025/QH15",
+    "sourceSha256": "AE706468190AFE8D111DD0FCCF240E7A980EB002C5D0B5CB1CFE127D92F9C1CD",
+    "reviewStatus": "DRAFT_REQUIRES_TAX_EXPERT_REVIEW"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "comparison": "rolling_account vs log_mad; only amount_baseline differs; identical current P2 policy",
+  "historical_snapshot_a5_hits": 20,
+  "rolling_a5_hits": 219,
+  "matched_log_mad_a5_hits": 20,
+  "added_a5_hits": 205,
+  "removed_a5_hits": 6,
+  "added_scored_hits": 2,
+  "added_zero_point_hits": 203,
+  "added_suppressed_hits": 0,
+  "cases_containing_added_a5_hits": 39,
+  "operational_cases_containing_added_a5_hits": 3,
+  "before_cases": 584,
+  "after_cases": 584,
+  "added_case_scopes": 0,
+  "removed_case_scopes": 0,
+  "added_operational_transaction_ids": [],
+  "removed_operational_transaction_ids": [],
+  "priority_changes": [],
+  "removed_a5_transaction_ids": [
+    "TX_121911d939aa5d11c3",
+    "TX_26a70a4c0e80a85fd7",
+    "TX_7b189e6d787c2ec4dd",
+    "TX_853f89f762746a9dd8",
+    "TX_86048dbdcc31b0d1eb",
+    "TX_b97ba43ac4e791cad0"
+  ],
+  "conclusion": "Counts describe detector behavior, not false positives or fraud precision. Human document review remains required."
+}

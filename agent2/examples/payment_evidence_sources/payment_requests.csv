@@ -1,0 +1,1 @@
+request_id,company_id,vendor_id,purchase_order_id,contract_id,invoice_number,txn_type,total_vnd,status,evidence_on_file,evidence_id,approver_id,approved_at,observed_at,recipient_account,recipient_bank_code

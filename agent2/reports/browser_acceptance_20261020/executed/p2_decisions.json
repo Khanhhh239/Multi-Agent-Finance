@@ -1,0 +1,194 @@
+[
+  {
+    "id": "FULL_BELOW",
+    "result": "PASS",
+    "observed": "Dưới mốc 5 triệu; không phát sinh P2, không mở hồ sơ giả; nhãn không có P2 không chứng nhận hợp lệ.",
+    "issue_id": ""
+  },
+  {
+    "id": "FULL_EQUAL",
+    "result": "PASS",
+    "observed": "Đúng mốc 5 triệu; P2 8 điểm, ưu tiên trung bình; yêu cầu đối chiếu chứng từ/VAT, không kết luận quyền khấu trừ.",
+    "issue_id": ""
+  },
+  {
+    "id": "FULL_ABOVE",
+    "result": "PASS",
+    "observed": "Trên mốc snapshot; P2 8 điểm, có căn cứ tổng hóa đơn và hàng đợi rà nghiệp vụ.",
+    "issue_id": ""
+  },
+  {
+    "id": "OLD_BELOW",
+    "result": "PASS",
+    "observed": "Ngày giao dịch dùng mốc lịch sử 20 triệu; dưới mốc không phát sinh P2.",
+    "issue_id": ""
+  },
+  {
+    "id": "OLD_EQUAL",
+    "result": "PASS",
+    "observed": "Đúng mốc lịch sử 20 triệu; P2 8 điểm, không áp mốc mới hồi tố.",
+    "issue_id": ""
+  },
+  {
+    "id": "FULL_BANK",
+    "result": "PASS",
+    "observed": "Trả qua ngân hàng; không tạo P2 chi tiền mặt hoặc hồ sơ giả.",
+    "issue_id": ""
+  },
+  {
+    "id": "NO_INVOICE",
+    "result": "PASS",
+    "observed": "Thiếu thông tin hóa đơn; P2 0 điểm, yêu cầu bổ sung bằng chứng mức thấp, không tự coi là rủi ro đã xác minh.",
+    "issue_id": ""
+  },
+  {
+    "id": "NO_DATE",
+    "result": "PASS",
+    "observed": "Chỉ rõ thiếu ngày hóa đơn; 0 điểm và tuyến bổ sung dữ kiện.",
+    "issue_id": ""
+  },
+  {
+    "id": "NO_GROSS",
+    "result": "FAIL",
+    "observed": "BUG01: Giao dịch & P2 ghi giá trị hóa đơn Chưa có thông tin và thiếu tổng tiền; Chứng từ & liên kết lại ghi Giá trị hóa đơn 0 ₫. Mong đợi giữ trạng thái chưa có thông tin, không thay null bằng số 0.",
+    "issue_id": "BUG01"
+  },
+  {
+    "id": "NO_IDENTITY",
+    "result": "PASS",
+    "observed": "Chỉ rõ thiếu mã/số hóa đơn; 0 điểm và yêu cầu bổ sung, có căn cứ trường thiếu.",
+    "issue_id": ""
+  },
+  {
+    "id": "FUTURE_INVOICE",
+    "result": "PASS",
+    "observed": "Hóa đơn chỉ có lúc 12h sau khoản chi 11h; được giải thích theo thời điểm biết, giữ 0 điểm thiếu bằng chứng.",
+    "issue_id": ""
+  },
+  {
+    "id": "INSTALL_CASH",
+    "result": "PASS",
+    "observed": "Đã chọn cả 2 đợt; phân biệt khoản trả từng đợt và tổng hóa đơn 12 triệu; mỗi dòng P2 8, điểm hồ sơ không cộng cơ học.",
+    "issue_id": ""
+  },
+  {
+    "id": "INSTALL_SMALL",
+    "result": "PASS",
+    "observed": "Đã chọn 2 đợt; tổng hóa đơn dưới mốc, không sinh P2 giả.",
+    "issue_id": ""
+  },
+  {
+    "id": "INSTALL_MIXED",
+    "result": "PASS",
+    "observed": "Đã chọn 2 đợt; dòng ngân hàng không P2, tiền mặt 1 triệu trên hóa đơn 20 triệu có P2 8; ngoại lệ A1 không tự miễn P2.",
+    "issue_id": ""
+  },
+  {
+    "id": "INSTALL_SAME_TIME",
+    "result": "PASS",
+    "observed": "Đã chọn 2 khoản cùng thời điểm; giữ riêng giao dịch và cùng hóa đơn, không mất dòng trong hàng đợi.",
+    "issue_id": ""
+  },
+  {
+    "id": "INSTALL_GAP",
+    "result": "PASS",
+    "observed": "Đã chọn 2 đợt; có tổng tiền nhưng thiếu ngày phát hành, vẫn 0 điểm thiếu bằng chứng.",
+    "issue_id": ""
+  },
+  {
+    "id": "REFUND_FULL",
+    "result": "PASS",
+    "observed": "Đã chọn chi gốc và hoàn đủ; liên kết và số ròng 0 rõ, hồ sơ chi gốc vẫn còn để rà.",
+    "issue_id": ""
+  },
+  {
+    "id": "REFUND_PART",
+    "result": "PASS",
+    "observed": "Đã chọn chi và hoàn một phần; số hoàn/số còn lại hiển thị, không tự đóng hồ sơ gốc.",
+    "issue_id": ""
+  },
+  {
+    "id": "REFUND_BANK",
+    "result": "PASS",
+    "observed": "Đã chọn chi và hoàn qua ngân hàng; không tạo P2 chi tiền mặt giả.",
+    "issue_id": ""
+  },
+  {
+    "id": "REVERSAL_JOURNAL",
+    "result": "PASS",
+    "observed": "Đã chọn chi và bút toán đảo; giải thích đảo sổ không đồng nghĩa đã thu hồi tiền, giữ bằng chứng gốc.",
+    "issue_id": ""
+  },
+  {
+    "id": "RECEIPT_UNLINKED",
+    "result": "PASS",
+    "observed": "Thu tiền chưa nối nguồn gốc được giải thích là khoản thu, không phải chi; cần đối chiếu liên kết, không tạo P2 giả.",
+    "issue_id": ""
+  },
+  {
+    "id": "REFUND_MULTI",
+    "result": "PASS",
+    "observed": "Đã chọn cả 3 giao dịch; hai lần hoàn riêng và tổng/số ròng rõ, bằng chứng chi gốc vẫn giữ.",
+    "issue_id": ""
+  },
+  {
+    "id": "RECUR_SMALL",
+    "result": "PASS",
+    "observed": "Đã chọn 3 kỳ tiền mặt nhỏ; dưới mốc không P2; lịch định kỳ không được trình bày là xác nhận hóa đơn.",
+    "issue_id": ""
+  },
+  {
+    "id": "RECUR_BANK",
+    "result": "PASS",
+    "observed": "Đã chọn 3 kỳ trả ngân hàng; không sinh P2 chi tiền mặt.",
+    "issue_id": ""
+  },
+  {
+    "id": "RECUR_CASH",
+    "result": "PASS",
+    "observed": "Đã chọn 3 kỳ; lịch đã duyệt không miễn P2 đối chiếu VAT; mỗi kỳ 8 điểm, ngữ cảnh điểm hồ sơ được giải thích.",
+    "issue_id": ""
+  },
+  {
+    "id": "RECUR_GAP",
+    "result": "PASS",
+    "observed": "Đã chọn 3 kỳ; hợp đồng định kỳ không thay thế hóa đơn thiếu; 0 điểm và yêu cầu chứng từ cụ thể.",
+    "issue_id": ""
+  },
+  {
+    "id": "RECUR_A5",
+    "result": "FAIL",
+    "observed": "Đã chọn đủ 23 giao dịch. Dòng cuối A5 22/20 mẫu, ngưỡng 1 triệu, ngoại lệ lịch duyệt 3 triệu/as-of đúng. BUG01: dòng lịch sử AUDIT_0000 thiếu hóa đơn nhưng giải thích tổng hóa đơn đang có 0 ₫; mong đợi ghi chưa có thông tin.",
+    "issue_id": "BUG01"
+  },
+  {
+    "id": "LIMIT_VERIFIED",
+    "result": "PASS",
+    "observed": "Vượt hạn mức đã xác minh 2 triệu đúng 1 VND vẫn 14 điểm/Cao theo snapshot; RR09 chưa có phê duyệt, chỉ nghiệm thu hiện trạng kỹ thuật.",
+    "issue_id": ""
+  },
+  {
+    "id": "LIMIT_UNVERIFIED",
+    "result": "PASS",
+    "observed": "Chỉ có con số hạn mức, chưa xác minh; không nâng thành vi phạm đã xác minh, 0 điểm thiếu bằng chứng.",
+    "issue_id": ""
+  },
+  {
+    "id": "LIMIT_FUTURE",
+    "result": "PASS",
+    "observed": "Xác minh hạn mức sau thời điểm chi không dùng hồi tố; 0 điểm thiếu bằng chứng.",
+    "issue_id": ""
+  },
+  {
+    "id": "LIMIT_EXPIRED",
+    "result": "PASS",
+    "observed": "Hạn mức hết hiệu lực tại lúc chi không được coi đang hiệu lực; 0 điểm thiếu bằng chứng.",
+    "issue_id": ""
+  },
+  {
+    "id": "LIMIT_FOREIGN",
+    "result": "PASS",
+    "observed": "Nguồn USD và số VND chưa xác minh được phân biệt trong giao dịch và chứng từ; không so sánh ngoại tệ như VND đã xác minh.",
+    "issue_id": ""
+  }
+]

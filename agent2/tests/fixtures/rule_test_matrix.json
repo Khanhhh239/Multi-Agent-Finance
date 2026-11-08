@@ -1,0 +1,2270 @@
+{
+  "version": "rule-test-matrix-v1",
+  "date": "2026-10-27",
+  "dimensions": [
+    "positive",
+    "negative",
+    "boundary",
+    "missing_evidence",
+    "late_evidence",
+    "master_change",
+    "exception"
+  ],
+  "interpretation": "Curated business scenario coverage; not exhaustive combinations, code coverage, fraud accuracy or real-source acceptance.",
+  "rules": [
+    {
+      "rule_id": "A1",
+      "name": "Chia nhỏ cùng người nhận trong 3 ngày",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A1_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A1_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A1_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A1_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu hồ sơ nghĩa vụ chi không tự tạo miễn trừ; giữ cảnh báo hiện tại.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_missing_bound_sources_keeps_existing_alert_behavior"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Bằng chứng đến sau cutoff không được dùng để miễn cảnh báo trước đó.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_future_sources_do_not_rewrite_past_results",
+            "test_payment_evidence.PaymentEvidenceTest.test_future_revoked_wrong_vendor_or_wrong_recipient_request_does_not_suppress"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Chỉ miễn đúng nghĩa vụ, trần tổng và bằng chứng đã duyệt; không dùng lại ngân sách.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_same_approved_request_installments_under_caps_suppress_a1_and_a2"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Tổng đúng 85% và thấp hơn 1 đồng; cửa sổ 3 ngày bao gồm điểm biên.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_a1_total_equality_and_one_dong_below",
+            "test_batch_controls.BatchControlsTest.test_a1_short_window_boundary_is_inclusive"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A1_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A1_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "A2",
+      "name": "Chia nhỏ cùng người lập/người nhận trong 30 ngày",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A2_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A2_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A2_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu hồ sơ nghĩa vụ chi không tự tạo miễn trừ; giữ cảnh báo hiện tại.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_missing_bound_sources_keeps_existing_alert_behavior"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Bằng chứng đến sau cutoff không được dùng để miễn cảnh báo trước đó.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_future_sources_do_not_rewrite_past_results",
+            "test_payment_evidence.PaymentEvidenceTest.test_future_revoked_wrong_vendor_or_wrong_recipient_request_does_not_suppress"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Chỉ miễn đúng nghĩa vụ, trần tổng và bằng chứng đã duyệt; không dùng lại ngân sách.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_same_approved_request_installments_under_caps_suppress_a1_and_a2"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Tổng đúng hạn mức và thấp hơn 1 đồng; đúng 30 ngày và muộn 1 giây.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_a2_total_equality_and_one_dong_below",
+            "test_rule_boundaries.RuleBoundaryTest.test_a2_thirty_day_window_includes_exact_second_and_excludes_next"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A2_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "A3",
+      "name": "Chia nhỏ qua cụm người nhận liên kết",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A3_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A3_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Thay hoặc gỡ liên kết hiện hành phải tách lại cụm ở cửa sổ ngắn/dài.",
+          "tests": [
+            "test_graph_history.GraphHistoryTest.test_a3_short_component_splits_after_master_change",
+            "test_graph_history.GraphHistoryTest.test_a3_long_window_excludes_payments_of_disconnected_vendor"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Hai nhánh 3/30 ngày, tổng bằng hạn mức và lệch 1 đồng/giây.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_a3_long_window_and_total_boundaries",
+            "test_spec_policy.SpecPolicyTest.test_a3_short_branch_and_exact_three_day_boundary"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Địa chỉ đơn lẻ không đủ tạo cụm mạnh; thiếu liên kết không được suy thành quan hệ.",
+          "tests": [
+            "test_spec_policy.SpecPolicyTest.test_a3_below_total_limit_and_address_only_do_not_group"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Liên kết/master tương lai không thay đổi hit và đường quan hệ lịch sử.",
+          "tests": [
+            "test_graph_history.GraphHistoryTest.test_future_master_and_link_versions_preserve_past_scores_hits_and_paths"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Chính sách hiện tại không có whitelist miễn A3 bằng hồ sơ; địa chỉ đơn lẻ được loại ở điều kiện phạm vi, không phải miễn trừ chứng từ.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A3_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A3_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "A4",
+      "name": "Người lập có nhiều khoản cận hạn mức",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A4_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A4_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A4_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A4_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu hồ sơ nghĩa vụ chi không tự tạo miễn trừ; giữ cảnh báo hiện tại.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_missing_bound_sources_keeps_existing_alert_behavior"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Bằng chứng đến sau cutoff không được dùng để miễn cảnh báo trước đó.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_future_sources_do_not_rewrite_past_results",
+            "test_payment_evidence.PaymentEvidenceTest.test_future_revoked_wrong_vendor_or_wrong_recipient_request_does_not_suppress"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Chỉ miễn đúng nghĩa vụ, trần tổng và bằng chứng đã duyệt; không dùng lại ngân sách.",
+          "tests": [
+            "test_payment_evidence.PaymentEvidenceTest.test_a4_recurring_cap_cannot_be_reused_by_extra_or_equal_time_payment"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Khoảng cận hạn mức 80% đến 99% gồm hai đầu; tháng lịch không trộn với tháng trước.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_a4_near_limit_interval_is_inclusive",
+            "test_spec_policy.SpecPolicyTest.test_a4_calendar_month_and_explicit_rolling_option"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A4_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A4_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "A5",
+      "name": "Số tiền tròn lệch baseline lịch sử",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A5_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A5_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A5_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A5_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Ngưỡng P95/P99 là đuôi trên nghiêm ngặt; cửa sổ 30/60/90 ngày có biên chính xác.",
+          "tests": [
+            "test_dynamic_thresholds.DynamicThresholdsTest.test_linear_p95_p99_and_strict_upper_tail",
+            "test_dynamic_thresholds.DynamicThresholdsTest.test_30_60_90_day_boundaries_and_expiry_are_exact"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu lịch sử trả ngưỡng null; không thay bằng ngưỡng toàn cục.",
+          "tests": [
+            "test_dynamic_thresholds.DynamicThresholdsTest.test_cold_start_exports_null_effective_thresholds_not_global_defaults"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Quan sát muộn và số tiền tương lai không thay bằng chứng lịch sử.",
+          "tests": [
+            "test_dynamic_thresholds.DynamicThresholdsTest.test_future_values_and_late_observations_cannot_change_past_evidence"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Khoản định kỳ đã duyệt giữ ngoại lệ qua sửa tên người duyệt.",
+          "tests": [
+            "test_signer_history.SignerHistoryTest.test_recurring_round_amount_proof_survives_approver_revision"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Tín hiệu ngữ cảnh/chất lượng master: 0 điểm vận hành, không mở hồ sơ chỉ vì tín hiệu này.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A5_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A5_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "A6",
+      "name": "Thanh toán làm tròn vượt hóa đơn gốc",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A6_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A6_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A6_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A6_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Dung sai 1 đồng; yêu cầu tiền trả tròn nghìn và hoá đơn có số lẻ.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_a6_one_dong_tolerance_and_rounding_eligibility"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Không có tổng hoá đơn thì không xác lập vượt hoá đơn.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_a6_missing_invoice_total_is_unknown_not_overpayment"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Ngày phát hành/quan sát hoá đơn không được sau cutoff; đúng cutoff được dùng.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_a6_invoice_date_and_observation_must_not_be_after_cutoff"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Không có whitelist miễn vượt hoá đơn; dung sai 1 đồng và điều kiện làm tròn đã có ở kiểm tra biên.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A6_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_A6_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "B1",
+      "name": "Tài khoản hoặc căn cước NCC trùng nhân viên",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B1_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B1_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B1_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B1_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Số tài khoản giống nhau nhưng khác ngân hàng không phải cùng định danh; giữ số 0 đầu.",
+          "tests": [
+            "test_spec_policy.SpecPolicyTest.test_b1_bank_institution_distinguishes_identical_account_numbers"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu mã ngân hàng chỉ là đối chiếu chưa xác nhận, không hard trigger.",
+          "tests": [
+            "test_spec_policy.SpecPolicyTest.test_b1_bank_institution_distinguishes_identical_account_numbers"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nhân sự chưa được biết ở giao dịch trước không được hồi tố thành liên kết.",
+          "tests": [
+            "test_spec_policy.SpecPolicyTest.test_b1_existing_vendor_is_rechecked_when_employee_becomes_observed"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Không có cơ chế miễn trùng tài khoản/căn cước đã xác nhận chỉ bằng công bố liên quan; cần giữ đối chiếu độc lập.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: cao_nhat, SLA 24 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B1_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B1_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "B2",
+      "name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B2_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Chuyển công ty và sửa/xoá liên hệ phải gỡ chỉ mục công ty cũ.",
+          "tests": [
+            "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_removes_old_company_phone_and_address_in_both_modes",
+            "test_b2_company_transfer.B2CompanyTransferTest.test_same_company_replacement_or_clear_still_removes_old_contacts"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Một so với hai trường trực tiếp: 3/8 điểm; kiểm tra thay đổi admission tương ứng khi tắt graph.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b2_one_vs_two_direct_contacts_changes_strength_and_queue"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Định danh rỗng không thành quan hệ nhân viên.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b2_blank_contacts_are_not_employee_relationships"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Chuyển công ty trong tương lai không đổi cảnh báo quá khứ.",
+          "tests": [
+            "test_b2_company_transfer.B2CompanyTransferTest.test_future_transfer_does_not_rewrite_historical_scores_or_hits"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Quan hệ công bố trước giao dịch được miễn; công bố muộn không hồi tố.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b2_disclosure_cutoff_is_inclusive"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B2_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "B3",
+      "name": "NCC mới thành lập nhận giao dịch lớn đầu tiên",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B3_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B3_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B3_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B3_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Tuổi NCC dưới 90 ngày, tuổi âm và số tiền bằng hạn mức.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b3_age_and_large_payment_boundaries"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Cờ giao nhận và số chứng từ cuối cùng không thay được bộ chứng từ typed đã xác minh.",
+          "tests": [
+            "test_noise_policy.NoisePolicyTest.test_vendor_age_and_document_count_alone_are_not_hard_evidence"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Giao nhận chỉ quan sát sau cutoff không miễn phát hiện hiện tại.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b3_future_fulfilment_document_cannot_clear_current_finding"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Bộ hoá đơn, đơn mua và giao nhận đã xác minh tạo miễn trừ rõ.",
+          "tests": [
+            "test_noise_policy.NoisePolicyTest.test_verified_typed_fulfilment_exempts_new_vendor"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Tín hiệu ngữ cảnh/chất lượng master: 0 điểm vận hành, không mở hồ sơ chỉ vì tín hiệu này.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B3_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B3_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "B4",
+      "name": "Trạng thái người phát hành hóa đơn rủi ro",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B4_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B4_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B4_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B4_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Ngày hiệu lực so với ngày hoá đơn; ngày chứng từ bằng cutoff và muộn 1 giây.",
+          "tests": [
+            "test_tax_risk.TaxRiskTest.test_effective_interval_applies_to_invoice_date_not_payment_date",
+            "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_is_available_only_at_or_before_payment_cutoff"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu hoá đơn/MST hoặc nguồn khác công ty không tạo trùng danh sách thuế.",
+          "tests": [
+            "test_tax_risk.TaxRiskTest.test_other_company_missing_invoice_and_unknown_mst_do_not_match"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Công bố/quan sát sau cutoff không đổi hit; giao nhận muộn không giảm điểm lịch sử.",
+          "tests": [
+            "test_tax_risk.TaxRiskTest.test_publication_and_observation_after_cutoff_never_change_past_hits",
+            "test_b4_evidence_timing.B4EvidenceTimingTest.test_future_receipt_flag_change_cannot_change_historical_b4_hit"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Giao nhận chỉ miễn nhánh hoá đơn trước trạng thái rủi ro; không miễn rủi ro đã có khi phát hành.",
+          "tests": [
+            "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_cannot_suppress_registry_risk_already_present_at_invoice",
+            "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_cannot_suppress_tax_authority_listing"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B4_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B4_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "B5",
+      "name": "Nhiều NCC chung thông tin định danh",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B5_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B5_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Thay liên hệ hiện hành loại bản trùng ở giao dịch sau sửa.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b5_e4_current_master_contact_replacement_removes_duplicate"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Địa chỉ đơn lẻ là yếu; B5/E4 chung bằng chứng, không nhân đôi điểm.",
+          "tests": [
+            "test_noise_policy.NoisePolicyTest.test_b5_e4_are_one_evidence_with_address_and_disclosure_context"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Các token rỗng không tạo bản trùng.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b5_e4_blank_identifiers_do_not_create_master_duplicates"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Bản master tương lai không sửa danh sách trùng lịch sử.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B5_future_master_keeps_historical_results"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Đây là phát hiện chất lượng master, luôn 0 điểm giao dịch; công bố quan hệ là ngữ cảnh, không xoá dấu vết trùng.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Tín hiệu ngữ cảnh/chất lượng master: 0 điểm vận hành, không mở hồ sơ chỉ vì tín hiệu này.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B5_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B5_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "B6",
+      "name": "NCC ngủ đông nhận khoản lớn",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B6_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B6_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B6_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B6_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "180 ngày là điểm biên; số tiền phải lớn hơn P90, không chỉ bằng.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b6_idle_day_and_prior_p90_boundaries"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "19 quan sát không đủ lập P90 theo yêu cầu 20 mẫu.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b6_insufficient_history_does_not_invent_percentile"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Lịch mùa/năm sai kỳ, vượt trần hoặc chỉ được biết sau giao dịch không miễn.",
+          "tests": [
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_wrong_window_future_or_excess_schedule_does_not_suppress"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Lịch mùa/năm có duyệt và trong trần được miễn.",
+          "tests": [
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_approved_seasonal_or_annual_schedule_suppresses"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B6_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B6_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "B7",
+      "name": "Đổi tài khoản gần ngày thanh toán chưa xác minh",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B7_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B7_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Sửa hồ sơ người xác minh không làm mất callback lịch sử; công ty xét tại lúc ký.",
+          "tests": [
+            "test_signer_history.SignerHistoryTest.test_b7_name_revision_preserves_callback_and_bank_features",
+            "test_signer_history.SignerHistoryTest.test_b7_verifier_company_is_selected_at_callback"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Cửa sổ 14 ngày có ranh giới chính xác.",
+          "tests": [
+            "test_rule_repairs.RuleRepairsTest.test_b7_exact_14_day_boundary"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu ngân hàng ở đổi TK hoặc thanh toán phải là information gap.",
+          "tests": [
+            "test_bank_identity_controls.BankIdentityControlsTest.test_missing_change_or_payment_bank_is_an_explicit_gap"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Phiên bản callback chỉ được dùng từ lúc quan sát, không miễn giao dịch trước đó.",
+          "tests": [
+            "test_rule_repairs.RuleRepairsTest.test_b7_callback_revision_is_applied_only_when_observed"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Callback đúng TK/ngân hàng và người duyệt độc lập mới được miễn.",
+          "tests": [
+            "test_bank_identity_controls.BankIdentityControlsTest.test_same_bank_change_requires_valid_independent_callback"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: cao_nhat, SLA 24 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B7_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_B7_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "C1",
+      "name": "Lập hoặc duyệt ngoài lịch vận hành",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C1_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C1_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Vai trò người thao tác phải lấy tại thời điểm thao tác.",
+          "tests": [
+            "test_signer_history.SignerHistoryTest.test_shift_actor_role_is_selected_at_action_time"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Giờ 08:00 và 19:00; kiểm tra cả hành động lập và duyệt.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_c1_working_hour_boundaries_check_both_actions"
+          ]
+        },
+        "missing_evidence": {
+          "status": "not_applicable",
+          "note": "Không dùng chứng từ mua hàng/giao nhận; dùng lịch vận hành mặc định hoặc lịch được duyệt, không suy tính hợp lệ từ số chứng từ.",
+          "tests": []
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Lịch trực biết sau thao tác không hợp thức hoá hành động trước đó.",
+          "tests": [
+            "test_noise_policy.NoisePolicyTest.test_future_schedule_cannot_authorize_past_events"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Lịch làm việc được duyệt có thể cho phép cuối tuần/ca đêm.",
+          "tests": [
+            "test_noise_policy.NoisePolicyTest.test_schedule_authorizes_weekend_operations_without_inventing_exemptions"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Tín hiệu ngữ cảnh/chất lượng master: 0 điểm vận hành, không mở hồ sơ chỉ vì tín hiệu này.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C1_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C1_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "C2",
+      "name": "Tự duyệt vượt quyền được cấp",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C2_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Quyền tự duyệt xét tại lúc duyệt, không lấy hồ sơ thay đổi sau đó.",
+          "tests": [
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_fallback_uses_self_approval_limit_at_approval"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Bằng hạn mức tự duyệt được phép; vượt 1 đồng tạo hard trigger.",
+          "tests": [
+            "test_core_rule_requirements.CoreRuleRequirementsTest.test_approved_self_approval_keeps_auditable_exception",
+            "test_core_rule_requirements.CoreRuleRequirementsTest.test_unauthorized_self_approval_triggers_c2_independently"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu chứng cứ phê duyệt không cấp thêm quyền.",
+          "tests": [
+            "test_authority_validation.AuthorityValidationTest.test_missing_proof_does_not_grant_authority"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Ma trận/nhân sự tương lai không viết lại ngoại lệ và quyết định trước đó.",
+          "tests": [
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_future_matrix_does_not_rewrite_legacy_exception",
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_future_employee_revisions_do_not_rewrite_c2_or_c3"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Uỷ quyền có duyệt phải đúng phạm vi và độc lập.",
+          "tests": [
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_approved_delegation_is_scoped_and_independent"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: cao_nhat, SLA 24 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C2_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "C3",
+      "name": "Duyệt dưới 60 giây ở cấp thẩm quyền cao",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C3_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C3_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Công ty/cấp thẩm quyền xét tại thao tác, không tại ngày ghi sổ sau đó.",
+          "tests": [
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_actor_company_is_checked_at_action_not_posting"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "0/59 giây là nhanh, 60/61 giây không; proxy 50 triệu gồm điểm bằng.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_c3_fifty_nine_seconds_is_fast_sixty_is_not",
+            "test_rule_boundaries.RuleBoundaryTest.test_c3_amount_proxy_is_inclusive_at_fifty_million"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu ma trận giữ proxy đã công bố, không tự suy là cấp cao xác nhận.",
+          "tests": [
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_missing_matrix_keeps_amount_proxy"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Phiên bản nhân sự tương lai không đổi phân cấp duyệt quá khứ.",
+          "tests": [
+            "test_authority_and_dormancy.AuthorityAndDormancyTest.test_future_employee_revisions_do_not_rewrite_c2_or_c3"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Không có whitelist miễn duyệt quá nhanh; cấp chuẩn thay vì cấp cao là điều kiện phạm vi, đã có đối chứng âm.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C3_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C3_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "C4",
+      "name": "Thao tác trong kỳ nghỉ phép chính thức",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C4_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C4_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Thay hồ sơ master không xoá phê duyệt nghỉ phép cũ.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_master_profile_update_does_not_erase_prior_leave_approval"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn HR/log không thể đánh giá C4; không suy từ tổng ngày nghỉ tháng.",
+          "tests": [
+            "test_rules.RulesTest.test_missing_operational_sources_are_reported"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Kết thúc nghỉ phép đúng lúc thao tác không bị tính vào khoảng nghỉ.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C4_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_C4_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "D1",
+      "name": "Benford chữ số đầu",
+      "scope": "aggregate_diagnostic",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Can thiệp mô phỏng ở cửa sổ tạo tín hiệu tập; không gán gian lận cho từng dòng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng phân bố tự nhiên đủ mẫu được đánh giá âm tính.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_natural_counterparts_are_evaluated_negatives"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Kiểm tra ranh giới số mẫu và số quan sát kỳ vọng tối thiểu.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_minimum_population_and_expected_cell_count_boundaries"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu mẫu là not_evaluable, không tính thành âm tính đúng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_missing_sample_is_unknown_instead_of_a_negative"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Thêm dữ liệu kỳ sau không viết lại các cửa sổ đã đóng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_later_records_do_not_rewrite_any_closed_diagnostic_window"
+          ]
+        },
+        "master_change": {
+          "status": "not_applicable",
+          "note": "Không đọc master nhân sự/NCC; phân đoạn dùng thuộc tính giao dịch. Có test lịch sử kỳ và phân đoạn riêng.",
+          "tests": []
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Quần thể khoản cố định không bị ép áp dụng Benford.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_fixed_legitimate_population_is_not_forced_into_benford"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Chỉ aggregate_review_only và adds_transaction_score=False; không có ưu tiên/SLA hồ sơ giao dịch.",
+        "tests": [
+          "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+        ]
+      }
+    },
+    {
+      "rule_id": "D2",
+      "name": "Benford chữ số thứ hai",
+      "scope": "aggregate_diagnostic",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Can thiệp mô phỏng ở cửa sổ tạo tín hiệu tập; không gán gian lận cho từng dòng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng phân bố tự nhiên đủ mẫu được đánh giá âm tính.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_natural_counterparts_are_evaluated_negatives"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Kiểm tra ranh giới số mẫu và số quan sát kỳ vọng tối thiểu.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_minimum_population_and_expected_cell_count_boundaries"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu mẫu là not_evaluable, không tính thành âm tính đúng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_missing_sample_is_unknown_instead_of_a_negative"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Thêm dữ liệu kỳ sau không viết lại các cửa sổ đã đóng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_later_records_do_not_rewrite_any_closed_diagnostic_window"
+          ]
+        },
+        "master_change": {
+          "status": "not_applicable",
+          "note": "Không đọc master nhân sự/NCC; phân đoạn dùng thuộc tính giao dịch. Có test lịch sử kỳ và phân đoạn riêng.",
+          "tests": []
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Quần thể khoản cố định không bị ép áp dụng Benford.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_fixed_legitimate_population_is_not_forced_into_benford"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Chỉ aggregate_review_only và adds_transaction_score=False; không có ưu tiên/SLA hồ sơ giao dịch.",
+        "tests": [
+          "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+        ]
+      }
+    },
+    {
+      "rule_id": "D3",
+      "name": "Hai chữ số đầu sát hạn mức",
+      "scope": "aggregate_diagnostic",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Can thiệp mô phỏng ở cửa sổ tạo tín hiệu tập; không gán gian lận cho từng dòng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng phân bố tự nhiên đủ mẫu được đánh giá âm tính.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_natural_counterparts_are_evaluated_negatives"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Kiểm tra ranh giới số mẫu và số quan sát kỳ vọng tối thiểu.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_minimum_population_and_expected_cell_count_boundaries"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu mẫu là not_evaluable, không tính thành âm tính đúng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_missing_sample_is_unknown_instead_of_a_negative"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Thêm dữ liệu kỳ sau không viết lại các cửa sổ đã đóng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_later_records_do_not_rewrite_any_closed_diagnostic_window"
+          ]
+        },
+        "master_change": {
+          "status": "not_applicable",
+          "note": "Không đọc master nhân sự/NCC; phân đoạn dùng thuộc tính giao dịch. Có test lịch sử kỳ và phân đoạn riêng.",
+          "tests": []
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Quần thể khoản cố định không bị ép áp dụng Benford.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_fixed_legitimate_population_is_not_forced_into_benford"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Chỉ aggregate_review_only và adds_transaction_score=False; không có ưu tiên/SLA hồ sơ giao dịch.",
+        "tests": [
+          "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+        ]
+      }
+    },
+    {
+      "rule_id": "D4",
+      "name": "Đuôi số đặc biệt vượt baseline",
+      "scope": "aggregate_diagnostic",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Can thiệp mô phỏng ở cửa sổ tạo tín hiệu tập; không gán gian lận cho từng dòng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng phân bố tự nhiên đủ mẫu được đánh giá âm tính.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_natural_counterparts_are_evaluated_negatives"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Kiểm tra ranh giới số mẫu và số quan sát kỳ vọng tối thiểu.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_d4_needs_three_hundred_rows_in_both_time_windows"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu mẫu là not_evaluable, không tính thành âm tính đúng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_missing_sample_is_unknown_instead_of_a_negative"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Thêm dữ liệu kỳ sau không viết lại các cửa sổ đã đóng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_later_records_do_not_rewrite_any_closed_diagnostic_window"
+          ]
+        },
+        "master_change": {
+          "status": "not_applicable",
+          "note": "Không đọc master nhân sự/NCC; phân đoạn dùng thuộc tính giao dịch. Có test lịch sử kỳ và phân đoạn riêng.",
+          "tests": []
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "So sánh đuôi số theo nền thực nghiệm; không có cơ chế miễn theo hồ sơ cá biệt.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Chỉ aggregate_review_only và adds_transaction_score=False; không có ưu tiên/SLA hồ sơ giao dịch.",
+        "tests": [
+          "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+        ]
+      }
+    },
+    {
+      "rule_id": "D5",
+      "name": "MAD chữ số đầu",
+      "scope": "aggregate_diagnostic",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Can thiệp mô phỏng ở cửa sổ tạo tín hiệu tập; không gán gian lận cho từng dòng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng phân bố tự nhiên đủ mẫu được đánh giá âm tính.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_natural_counterparts_are_evaluated_negatives"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Kiểm tra ranh giới số mẫu và số quan sát kỳ vọng tối thiểu.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_minimum_population_and_expected_cell_count_boundaries"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu mẫu là not_evaluable, không tính thành âm tính đúng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_missing_sample_is_unknown_instead_of_a_negative"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Thêm dữ liệu kỳ sau không viết lại các cửa sổ đã đóng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_later_records_do_not_rewrite_any_closed_diagnostic_window"
+          ]
+        },
+        "master_change": {
+          "status": "not_applicable",
+          "note": "Không đọc master nhân sự/NCC; phân đoạn dùng thuộc tính giao dịch. Có test lịch sử kỳ và phân đoạn riêng.",
+          "tests": []
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Quần thể khoản cố định không bị ép áp dụng Benford.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_fixed_legitimate_population_is_not_forced_into_benford"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Chỉ aggregate_review_only và adds_transaction_score=False; không có ưu tiên/SLA hồ sơ giao dịch.",
+        "tests": [
+          "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+        ]
+      }
+    },
+    {
+      "rule_id": "D6",
+      "name": "Benford theo phân đoạn",
+      "scope": "aggregate_diagnostic",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Can thiệp mô phỏng ở cửa sổ tạo tín hiệu tập; không gán gian lận cho từng dòng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng phân bố tự nhiên đủ mẫu được đánh giá âm tính.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_natural_counterparts_are_evaluated_negatives"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Kiểm tra ranh giới số mẫu và số quan sát kỳ vọng tối thiểu.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_minimum_population_and_expected_cell_count_boundaries"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu mẫu là not_evaluable, không tính thành âm tính đúng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_missing_sample_is_unknown_instead_of_a_negative"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Thêm dữ liệu kỳ sau không viết lại các cửa sổ đã đóng.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_later_records_do_not_rewrite_any_closed_diagnostic_window"
+          ]
+        },
+        "master_change": {
+          "status": "not_applicable",
+          "note": "Không đọc master nhân sự/NCC; phân đoạn dùng thuộc tính giao dịch. Có test lịch sử kỳ và phân đoạn riêng.",
+          "tests": []
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Quần thể khoản cố định không bị ép áp dụng Benford.",
+          "tests": [
+            "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_fixed_legitimate_population_is_not_forced_into_benford"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Chỉ aggregate_review_only và adds_transaction_score=False; không có ưu tiên/SLA hồ sơ giao dịch.",
+        "tests": [
+          "test_rule_statistics_matrix.RuleStatisticsMatrixTest.test_all_six_positive_signals_keep_aggregate_scope"
+        ]
+      }
+    },
+    {
+      "rule_id": "E1",
+      "name": "Lương không có chấm công hoặc bằng chứng thay thế",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E1_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E1_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Công ty người ký xét tại lúc duyệt, không theo master cuối kỳ.",
+          "tests": [
+            "test_signer_history.SignerHistoryTest.test_e1_signer_company_is_selected_at_approval"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "0 so với 1 ngày công đã quan sát.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_e1_zero_vs_one_observed_work_day"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu hoặc chưa biết chấm công là unknown, không đồng nhất với 0 ngày.",
+          "tests": [
+            "test_rule_repairs.RuleRepairsTest.test_e1_missing_or_future_attendance_is_unknown_not_zero_days"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Duyệt nghỉ sau kỳ không miễn lương ở thời điểm trước đó.",
+          "tests": [
+            "test_rule_repairs.RuleRepairsTest.test_e1_future_leave_approval_does_not_change_past_result"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Nghỉ hưởng lương đủ kỳ/số tiền hoặc bằng chứng làm từ xa được xử lý riêng.",
+          "tests": [
+            "test_rule_repairs.RuleRepairsTest.test_e1_documented_full_period_paid_leave_is_suppressed",
+            "test_rule_repairs.RuleRepairsTest.test_e1_remote_exception_and_ghost_signal_remain_distinct"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: cao_nhat, SLA 24 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E1_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E1_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "E2",
+      "name": "Lương sau chấm dứt hợp đồng",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu kỳ công không được hard trigger.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_post_termination_salary_confirmed_but_final_pay_and_missing_period_not_hard"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Ngày bắt đầu phục vụ bằng ngày chấm dứt chưa xác lập lương sau chấm dứt.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_e2_termination_day_is_not_confirmed_post_termination_service"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: cao_nhat, SLA 24 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E2_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "E3",
+      "name": "Tên NCC tương tự",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E3_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E3_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Đổi tên hiện hành phải loại so khớp cũ.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_e3_current_master_name_change_removes_old_similarity"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Tương đồng phải lớn hơn ngưỡng, không bao gồm điểm bằng.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_e3_similarity_must_strictly_exceed_threshold"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Tên rỗng/không đủ thông tin là chất lượng nguồn, không tạo so khớp mờ.",
+          "tests": [
+            "test_noise_policy.NoisePolicyTest.test_generic_names_are_quality_gaps_not_fuzzy_matches"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Tên master tương lai không đổi phát hiện ở giao dịch trước.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E3_future_master_keeps_historical_results"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Đây là phát hiện chất lượng master 0 điểm, không phải kết luận gian lận; không có miễn trừ xoá vết tương đồng.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Tín hiệu ngữ cảnh/chất lượng master: 0 điểm vận hành, không mở hồ sơ chỉ vì tín hiệu này.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E3_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E3_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "E4",
+      "name": "NCC trùng định danh",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E4_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E4_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Thay liên hệ hiện hành loại bản trùng ở giao dịch sau sửa.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b5_e4_current_master_contact_replacement_removes_duplicate"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Địa chỉ đơn lẻ là yếu; B5/E4 chung bằng chứng, không nhân đôi điểm.",
+          "tests": [
+            "test_noise_policy.NoisePolicyTest.test_b5_e4_are_one_evidence_with_address_and_disclosure_context"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Các token rỗng không tạo bản trùng.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_b5_e4_blank_identifiers_do_not_create_master_duplicates"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Bản master tương lai không sửa danh sách trùng lịch sử.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E4_future_master_keeps_historical_results"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Đây là phát hiện chất lượng master, luôn 0 điểm giao dịch; công bố quan hệ là ngữ cảnh, không xoá dấu vết trùng.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Tín hiệu ngữ cảnh/chất lượng master: 0 điểm vận hành, không mở hồ sơ chỉ vì tín hiệu này.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E4_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_E4_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "F1",
+      "name": "Điều chỉnh thủ công sát khóa sổ và trọng yếu",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F1_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F1_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Đổi tên người ký không làm mất phê duyệt close/materiality lịch sử.",
+          "tests": [
+            "test_signer_history.SignerHistoryTest.test_close_and_materiality_approvals_survive_signer_revision"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Bằng ngưỡng trọng yếu không cảnh báo; ngoài cửa sổ khóa sổ không xác nhận.",
+          "tests": [
+            "test_spec_policy.SpecPolicyTest.test_f1_materiality_equality_and_outside_close_window"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn manual/closing/materiality chỉ có proxy 0 điểm hoặc không xác nhận.",
+          "tests": [
+            "test_spec_policy.SpecPolicyTest.test_f1_unconfirmed_month_end_proxy_never_contributes",
+            "test_spec_policy.SpecPolicyTest.test_f1_missing_unapproved_late_or_automatic_sources_do_not_confirm"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Chứng cứ manual/closing/materiality biết sau giao dịch không xác nhận hồi tố.",
+          "tests": [
+            "test_spec_policy.SpecPolicyTest.test_future_evidence_does_not_rewrite_past_scores"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Không có miễn trừ chung cho điều chỉnh đã xác nhận đủ nguồn/trọng yếu; nhánh proxy 0 điểm được kiểm tra ở thiếu nguồn.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F1_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F1_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "F2",
+      "name": "Quản lý ghi đè quy trình",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F2_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Vai trò quản lý lấy tại lúc override, không lấy hồ sơ về sau.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_override_role_is_read_at_action_not_at_later_posting"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn/coverage là unknown hoặc information_gap; không gán thành âm tính.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Bằng trần override được phép; vượt 1 đồng không được miễn.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_f2_approved_override_cap_is_inclusive"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F2_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "F3",
+      "name": "Khoảng trống/trùng số chứng từ",
+      "scope": "source_and_transaction",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn/coverage là unknown hoặc information_gap; không gán thành âm tính.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Dải đóng tại cutoff được xét; đóng ở giây sau chưa có căn cứ kết luận.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_f3_series_closed_at_cutoff_is_available_but_next_second_is_not"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở. Thiếu coverage: hồ sơ nguồn thấp, SLA 336 giờ, rà lại sau 7 ngày; không cộng điểm giao dịch.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F3_negative_no_rule_admission",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_source_information_gaps_keep_low_priority_rereview_and_sla"
+        ]
+      }
+    },
+    {
+      "rule_id": "F4",
+      "name": "Doanh thu/công nợ kéo dài chưa đối chiếu tiền",
+      "scope": "source",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_positive_priority_queue_sla",
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Nguồn đến sau cutoff không thay đổi kết luận trước đó.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_no_future_sources_or_truth_can_change_past_evidence"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu nguồn/coverage là unknown hoặc information_gap; không gán thành âm tính.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Đối chứng miễn/giải trình hợp lệ và trường hợp không đủ nguồn được tách riêng.",
+          "tests": [
+            "test_evidence_policy.EvidencePolicyTest.test_predeclared_business_controls"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Quá 60 ngày mới có tín hiệu; 60 và 61 ngày có kết quả khác.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_f4_sixty_days_is_not_overdue_signal_sixty_one_is"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở. Thiếu coverage: hồ sơ nguồn thấp, SLA 336 giờ, rà lại sau 7 ngày; không cộng điểm giao dịch.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_F4_negative_no_rule_admission",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_source_information_gaps_keep_low_priority_rereview_and_sla"
+        ]
+      }
+    },
+    {
+      "rule_id": "P1",
+      "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P1_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P1_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P1_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P1_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Tổng bằng hoá đơn, vượt 1 đồng và vượt 2 đồng; dung sai rõ.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_p1_cumulative_total_has_one_dong_tolerance"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Số hoá đơn rỗng không được gom thành một nghĩa vụ chung.",
+          "tests": [
+            "test_p1_payments.InvoicePaymentTest.test_blank_invoice_numbers_are_information_gaps_not_shared_invoices"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Thanh toán tương lai không làm lần trả trước thành trả trùng.",
+          "tests": [
+            "test_p1_payments.InvoicePaymentTest.test_future_cash_payment_does_not_rewrite_an_earlier_result"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Trả nhiều đợt chưa vượt tổng hoá đơn không phải thanh toán thừa.",
+          "tests": [
+            "test_p1_payments.InvoicePaymentTest.test_cash_installments_up_to_invoice_total_are_not_overpayments"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: cao_nhat, SLA 24 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P1_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P1_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "P2",
+      "name": "Chi tiền mặt cần rà soát hạn mức và chứng từ VAT",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P2_positive_priority_queue_sla",
+            "test_cash_controls.CashControlsTest.test_small_cash_installment_uses_gross_invoice_value"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P2_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P2_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Bằng hạn mức, vượt 1 đồng, biên tỷ lệ 1%/10% và trọng yếu tuyệt đối.",
+          "tests": [
+            "test_rr09_priority.RR09PriorityTest.test_at_and_below_limit_have_no_verified_breach",
+            "test_rr09_priority.RR09PriorityTest.test_ratio_boundaries_use_unrounded_integer_arithmetic",
+            "test_rr09_priority.RR09PriorityTest.test_absolute_boundaries_and_or_combination"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu chứng từ: 0 điểm rủi ro, hồ sơ bổ sung thấp với SLA 720 giờ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_p2_information_gap_keeps_zero_risk_and_low_priority_sla"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Hạn mức phải đúng công ty, đã xác minh và có hiệu lực tại giao dịch.",
+          "tests": [
+            "test_rr09_priority.RR09PriorityTest.test_limit_requires_same_company_known_verification_and_validity"
+          ]
+        },
+        "exception": {
+          "status": "not_applicable",
+          "note": "Không có whitelist miễn hạn mức đã xác minh; thiếu chứng từ/ngoại tệ chưa quy đổi là phân loại thiếu căn cứ, không phải miễn vi phạm.",
+          "tests": []
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: thap, SLA 720 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_P2_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "T1",
+      "name": "Tạm ứng còn dư nợ quá hạn",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T1_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T1_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T1_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T1_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Chứng từ xoá nợ biết sau cutoff không làm giảm cảnh báo trước đó.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_t1_t2_writeoff_documents_are_known_at_cutoff_or_remain_actionable",
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_future_document_flag_change_cannot_reduce_past_warning"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Quá hạn tính ngày nguyên và lớn hơn grace; tất toán cùng giây không xoá dư trước sự kiện.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_t1_due_and_grace_are_strict_whole_days",
+            "test_rule_boundaries.RuleBoundaryTest.test_t1_settlement_preserves_own_pre_event_balance"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Không có bản ghi tạm ứng thì không tự suy có dư nợ; thông tin này chưa chứng minh đã tất toán.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_t1_missing_advance_record_does_not_invent_debt"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Chỉ gia hạn đã biết mới lùi hạn; hồ sơ xoá nợ được xét tại cutoff.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_t1_only_known_extension_can_defer_review",
+            "test_rule_boundaries.RuleBoundaryTest.test_t1_t2_writeoff_documents_are_known_at_cutoff_or_remain_actionable"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: trung_binh, SLA 168 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T1_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T1_negative_no_rule_admission"
+        ]
+      }
+    },
+    {
+      "rule_id": "T2",
+      "name": "Xóa nợ tạm ứng thiếu hồ sơ",
+      "scope": "transaction_or_context",
+      "checks": {
+        "positive": {
+          "status": "covered",
+          "note": "Đối chứng dương từ nguồn thô, dùng chính sách hiện tại.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T2_positive_priority_queue_sla"
+          ]
+        },
+        "negative": {
+          "status": "covered",
+          "note": "Đối chứng nghiệp vụ không thoả điều kiện, không nhận hồ sơ theo luật này.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T2_negative_no_rule_admission"
+          ]
+        },
+        "master_change": {
+          "status": "covered",
+          "note": "Bản master tương lai không đổi quá khứ; người lập đã chuyển công ty không được chấm trong phạm vi cũ.",
+          "tests": [
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T2_future_master_keeps_historical_results",
+            "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T2_current_cross_company_maker_is_rejected"
+          ]
+        },
+        "late_evidence": {
+          "status": "covered",
+          "note": "Chứng từ xoá nợ biết sau cutoff không làm giảm cảnh báo trước đó.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_t1_t2_writeoff_documents_are_known_at_cutoff_or_remain_actionable",
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_future_document_flag_change_cannot_reduce_past_warning",
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_writeoff_source_event_must_be_observed_before_using_its_proof",
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_future_source_append_cannot_change_an_undated_header_decision"
+          ]
+        },
+        "boundary": {
+          "status": "covered",
+          "note": "Chỉ advance_writeoff thiếu bằng chứng mới hard trigger; dư trước chính sự kiện vẫn là 100%.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_writeoff_evidence_and_transaction_type",
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_writeoff_does_not_close_its_own_pre_event_balance"
+          ]
+        },
+        "missing_evidence": {
+          "status": "covered",
+          "note": "Thiếu hồ sơ xoá nợ là điều kiện cảnh báo, không phải một âm tính. Header chứng từ không có thời điểm cần bản writeoff đúng phạm vi đã biết trước cutoff; không suy từ sự tồn tại của bản ghi tương lai.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_writeoff_evidence_and_transaction_type"
+          ]
+        },
+        "exception": {
+          "status": "covered",
+          "note": "Có hồ sơ tại hoặc trước cutoff mới được loại cảnh báo thiếu hồ sơ.",
+          "tests": [
+            "test_rule_boundaries.RuleBoundaryTest.test_t1_t2_writeoff_documents_are_known_at_cutoff_or_remain_actionable",
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_writeoff_source_for_another_company_or_advance_cannot_exempt",
+            "test_rule_boundaries.RuleBoundaryTest.test_t2_dated_header_can_support_writeoff_without_a_separate_event"
+          ]
+        }
+      },
+      "downstream": {
+        "status": "covered",
+        "note": "Đối chứng dương đi qua hàng đợi thật: cao_nhat, SLA 24 giờ lịch; không trùng thành viên hoặc sự kiện mở.",
+        "tests": [
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T2_positive_priority_queue_sla",
+          "test_rule_matrix_routing.RuleRoutingMatrixTest.test_T2_negative_no_rule_admission"
+        ]
+      }
+    }
+  ]
+}

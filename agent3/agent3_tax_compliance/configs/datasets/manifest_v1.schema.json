@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PLAN_00 manifest row v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset_id", "version", "document_id", "sha256", "path", "document_family", "source_kind", "page_count", "permission_basis", "split", "template_group", "duplicate_family", "label_coverage", "annotation_version", "origin", "accuracy_evaluation_eligible", "limitations"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "document_id": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path": {"type": "string", "minLength": 1},
+    "document_family": {"enum": ["RECEIPT", "SYNTHETIC_INVOICE", "TAX_INVOICE", "UNKNOWN"]},
+    "source_kind": {"enum": ["PDF_TEXT", "PDF_IMAGE", "PDF_MIXED", "IMAGE"]},
+    "page_count": {"type": "integer", "minimum": 1},
+    "permission_basis": {"type": "string", "minLength": 1},
+    "split": {"enum": ["dev", "calibration", "test", "QUARANTINE"]},
+    "legacy_split": {"type": "string"},
+    "template_group": {"type": ["string", "null"]},
+    "duplicate_family": {"type": ["string", "null"]},
+    "label_coverage": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "annotation_version": {"type": "string", "minLength": 1},
+    "annotation_path": {"type": "string"},
+    "origin": {"enum": ["SYNTHETIC", "REAL_PUBLIC_DATASET", "REAL_PRIVATE"]},
+    "accuracy_evaluation_eligible": {"type": "boolean"},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {"if": {"properties": {"split": {"const": "QUARANTINE"}}}, "then": {"properties": {"accuracy_evaluation_eligible": {"const": false}}}},
+    {"if": {"properties": {"origin": {"const": "SYNTHETIC"}}}, "then": {"required": ["annotation_path"], "properties": {"accuracy_evaluation_eligible": {"const": false}, "template_group": {"type": "string"}, "duplicate_family": {"type": "string"}}}}
+  ]
+}

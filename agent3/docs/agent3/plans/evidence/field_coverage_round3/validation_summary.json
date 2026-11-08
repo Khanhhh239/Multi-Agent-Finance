@@ -1,0 +1,214 @@
+{
+  "checked_on": "2026-10-19",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 51,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "explanation",
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "legal_v2",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "business_review",
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "recovery",
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 487,
+  "implementation_sha256": "5e2bd172bf7399de9f8e74d60e93d7bf547043199ea862d286543201b75d9416",
+  "legacy_workflow_implementation_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "source_sha256": {
+    "src/business_review/__init__.py": "8de60cd2775548685db528b1b0cd21ee4d9487bd4ef3e1737aa4952c10b40fee",
+    "src/business_review/api.py": "cb4e71199b5998d18c10d229b48775ab7946c9a58b1efc11e633f80d55f5f66c",
+    "src/business_review/cli.py": "56bcc892dd18ed776e8dba5e46ecab66e5146cb2ae2abea70edf57d30d5066be",
+    "src/business_review/contracts.py": "7faeb61289f27a227e1903269dfe19c22a2b98e09988a8bd7802fa8e5f14c4d6",
+    "src/business_review/evidence.py": "f20b0bdbc5bb117ed95f164bc933341a6be159c3cb975c1d019e55a26c637776",
+    "src/business_review/repository.py": "d8be7a5292f645cb9cf23039a031d247ce538767c693688abef3eed6e33a8230",
+    "src/business_review/service.py": "acf2c263009595ba4b6ae3e52d901547d7a92f10026e84f7e58aafbfafabe3ae",
+    "src/business_review/web.py": "07ae4d845051f4de2412d66216b221ca4e203fbafc5a4b1633b1c2c16ceb5863",
+    "configs/business_review/capability_reviewed_capture_v1.json": "2d33299b740c2f21763c3246c416e15b944d228cf963293af790e2e4dbae0949",
+    "configs/business_review/dossier.template.json": "ac723785974a576441db603ddd90034af196302964f73f8e2805c4fa8f1af648"
+  },
+  "legacy_replay_code_unchanged": true,
+  "scope": "Synthetic operator review in real HTTP/SQLite/Chrome, regression and native ZEN fixtures; no legal or bank-document accuracy claim.",
+  "real_product_mappings": "PENDING_NO_PRODUCT_DOSSIERS",
+  "legal_release": "NOT_APPROVED",
+  "passed": true,
+  "javascript": [
+    {
+      "command": "node --check src/review/static/app.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/compliance.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/explanation.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/business.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/workflow.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/automation.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/region.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/review_client.test.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/explanation_client.test.js",
+      "passed": true
+    }
+  ],
+  "browser": [
+    {
+      "name": "automation_v2",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "region",
+      "passed": true,
+      "checks": 9
+    },
+    {
+      "name": "automation",
+      "passed": true,
+      "checks": 10
+    },
+    {
+      "name": "workflow",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "business",
+      "passed": true,
+      "checks": 12
+    },
+    {
+      "name": "compliance",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "name": "explanation",
+      "passed": true,
+      "checks": 5
+    }
+  ],
+  "browser_checks": 56,
+  "ui_source_sha256": {
+    "src/review/static/app.js": "e862c5af0e89f0f7ae848e77ede549938a916c884848841b694c54ed4762fcee",
+    "src/review/static/automation.js": "185fca92921bc5cf0b7f8fc072ad9835278aa01d6e39e91d780f40441b1c6082",
+    "src/review/static/business.css": "88dffa6ea97e07450a20e57a56b7f782e870c524d823f04257bcca9d917af1f5",
+    "src/review/static/business.js": "f710e3405a6f73cdbf32f72da7e142f2d6dba891f84b033dde0827b5836cea51",
+    "src/review/static/compliance.css": "961389c3e6535ff378de0fc07f85d04b40daf662363f7f00fb8fabdb2a4c8790",
+    "src/review/static/compliance.js": "a00f7c845ec73c7b6ab06a9fd6540553d7d6641a1a41019e608749d717a2c73a",
+    "src/review/static/explanation.js": "b13adc4f5067967b35a69f684114e25cff1e6db3336c1aa765b651f51a6efbce",
+    "src/review/static/index.html": "7bf20e0e92865f45e4c0dad5758bd3bbaddda91f5de4a6c39673d604eadd7d2f",
+    "src/review/static/region.js": "6a0ca59163b014dc07b607c915f4ffccfba2ffc3c46c4c17ae366c0c138ae2f9",
+    "src/review/static/style.css": "6aa20a5a88ba4218ada82c5e21b03b9c64189fd00f00244048c39c5b0482390e",
+    "src/review/static/workflow.css": "f946f2f0dc25248e63481c9c65dee05dea9c264d0f14bb4e6b3467afbe3fa699",
+    "src/review/static/workflow.js": "f3d686d145599d5131ae5248771853d84198ce75b22963422b583044bc99df5b"
+  },
+  "recovery_sha256": "17294e2907b626cc4381057eb266a8222ab08f261a26706b07f3752aa38be9d1",
+  "extractor_sha256": "4ac412d9e8fccd61319e02435910a58024528d0005f0b6917d32ead475a3c249",
+  "followup": {
+    "command": "python scripts/check_automation_v2_browser.py",
+    "passed": true,
+    "reason": "After record reload, wait for the pending readonly diagnostic GET before opening its panel; the first full run failed this browser test. No runtime code changed after the full run.",
+    "script_sha256": "533d82b12609d0bd68dbdb05010a14c34ff72e559ec2202552c58a98b6512390"
+  }
+}

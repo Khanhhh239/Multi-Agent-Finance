@@ -1,0 +1,88 @@
+"""Versioned diagnostics and conservative recommendations, never confirmations."""
+import re
+import unicodedata
+from ..quality.completeness import flatten
+from .regions import supported,plan_regions
+from ..review.contracts import ReviewError
+from ..canonicalization.normalize import exact_sum
+
+VERSION='recovery-policy-v4'
+MAX_FIELDS=2
+MAX_CROPS=4
+
+
+def text_key(text):
+    return ' '.join(unicodedata.normalize('NFC',str(text or '')).casefold().split())
+
+
+def deduplicated_tail(text):
+    words=str(text or '').split()
+    for size in range(min(4,len(words)//2),0,-1):
+        left=' '.join(words[-2*size:-size]);right=' '.join(words[-size:])
+        # Never propose removing repeated numbers or short company initials.
+        if text_key(left)==text_key(right) and len(re.sub(r'\W','',right))>=4 and not re.search(r'\d',right):
+            return ' '.join(words[:-size])
+    return None
+
+
+def diagnose(record,artifact,normalized):
+    entries=[];eligible=[]
+    conflicts={b.block_id for p in normalized.pages for b in p.blocks if b.conflict_with}
+    blocks={b.block_id:b for p in normalized.pages for b in p.blocks}
+    fields=flatten(record)
+    totals=tuple(fields.get('totals.'+name) for name in ('net','vat','gross'))
+    mismatch=all(f is not None and f.status=='PRESENT' and f.value is not None for f in totals) and exact_sum((totals[0].value,totals[1].value))!=totals[2].value
+    for path,field in fields.items():
+        if field.confidence_basis=='HUMAN_CONFIRMED' or field.status=='NOT_APPLICABLE':continue
+        codes=[]
+        if field.status in ('MISSING','AMBIGUOUS'):codes.append('FIELD_'+getattr(field.status,'value',str(field.status)))
+        if deduplicated_tail(field.value):codes.append('REPEATED_SUFFIX')
+        if '\ufffd' in str(field.value or ''):codes.append('UNREADABLE_CHARACTER')
+        if any(e.block_id in conflicts for e in field.provenance.evidence):codes.append('SOURCE_CONFLICT')
+        if path.endswith('.name') and field.status=='PRESENT' and not any(c.isalpha() for c in str(field.value or '')):
+            codes.append('NONALPHABETIC_NAME')
+        if mismatch and path.startswith('totals.'):codes.append('TOTAL_ARITHMETIC_MISMATCH')
+        if path.endswith(('.name','.address','.description')):
+            for evidence in field.provenance.evidence:
+                block=blocks.get(evidence.block_id)
+                if not block or not block.evidence or not any(o.method=='OCR' for o in block.origins):continue
+                x0,y0,x1,y1=block.evidence.bbox
+                if len(block.text_raw)>40 and (x1-x0)/max(y1-y0,.001)>40:
+                    codes.append('LONG_OCR_LINE');break
+        if not codes:continue
+        entry={'field_path':path,'issue_codes':codes,'state':'REVIEW','reason':'UNSUPPORTED_FIELD','crop_count':0}
+        if supported(path):
+            try:
+                _,regions=plan_regions(record,artifact,normalized,path)
+                entry.update(state='ELIGIBLE',reason=None,crop_count=len(regions));eligible.append(entry)
+            except ReviewError as exc:entry['reason']=exc.code
+        entries.append(entry)
+    # Adding table readers must not let alphabetic items.* consume both slots
+    # before missing invoice identifiers or totals can be reread.
+    def priority(entry):
+        path=entry['field_path']
+        critical=path.endswith('.tax_id') or path=='invoice.number' or path.startswith('totals.')
+        return (0 if critical else 1,0 if 'SOURCE_CONFLICT' in entry['issue_codes'] else 1,
+                0 if 'REPEATED_SUFFIX' in entry['issue_codes'] else 1,path)
+    eligible.sort(key=priority)
+    used=0;selected=0
+    for entry in eligible:
+        if selected>=MAX_FIELDS or used+entry['crop_count']>MAX_CROPS:
+            entry.update(state='DEFERRED',reason='RUN_BUDGET')
+        else:
+            entry['state']='SCHEDULED';selected+=1;used+=entry['crop_count']
+    return {'policy_version':VERSION,'max_fields':MAX_FIELDS,'max_crops':MAX_CROPS,'entries':entries,
+            'scheduled_fields':selected,'scheduled_crops':used,'human_confirmed_fields_skipped':True}
+
+
+def select_candidate(field,entry,recovery):
+    base={'decision':'REVIEW','reason':'UNPROVEN_CHANGE','selected_value':None,'review_required':True}
+    if field.confidence_basis=='HUMAN_CONFIRMED':return {**base,'reason':'HUMAN_VALUE_PROTECTED'}
+    if recovery.get('status')!='CANDIDATE' or not recovery.get('suggested_value'):return {**base,'reason':'INCOMPLETE_READ'}
+    value=recovery['suggested_value']
+    if text_key(value)==text_key(field.value):return {**base,'decision':'UNCHANGED','reason':'SAME_READING'}
+    expected=deduplicated_tail(field.value)
+    if ('REPEATED_SUFFIX' in entry['issue_codes'] and 'SOURCE_CONFLICT' not in entry['issue_codes']
+            and expected and text_key(value)==text_key(expected)):
+        return {**base,'decision':'RECOMMENDED','reason':'EXACT_SUFFIX_REPAIR','selected_value':value}
+    return base

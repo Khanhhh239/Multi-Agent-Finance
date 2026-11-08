@@ -1,0 +1,38 @@
+{
+  "protected_files": 11285,
+  "authorized_changes": {
+    "docs/BACKLOG.md": {
+      "before": "57f677f1e59d689b9551f2fbda3adc86cfe648a04fb27278d351a20d5345248a",
+      "after": "2423a534b1b39222229d599427ee02e305b2356b985c7a71e5e743589c5ea208"
+    },
+    "docs/STATUS.md": {
+      "before": "567af7e668f27e1dc8b65306365a6bd4b722be3b8df29fa27e3ffdd5c47b7834",
+      "after": "d1c53bdee7ed1371b7fd2c21218f3ab635f5f7c91deaea023c32a0437c2e5f07"
+    },
+    "docs/reports/README.md": {
+      "before": "6d6de08b5e3ec510aa0c543372680b54ac22dba865f17a89b6656c722155a978",
+      "after": "25b96ba838c93a0236d978f4e2f7e8d46d6293fec4753a14fb15921bd9ebbe29"
+    },
+    "docs/reports/app/README.md": {
+      "before": "0b0465aa7539a735a2a7bf37ed25d90520dd1c5a2c1d41525ae68178efdc9de3",
+      "after": "b13021f8085afa8d93e44cb3219016df86c8f330578142ba5ecf942c94929480"
+    },
+    "review_ui/app.js": {
+      "before": "5f7bf7aff03c5bea9fa6cf68e15a870fcef43983a438283b3aceb4861dd2316a",
+      "after": "3c06756382ff51a4c0851fdee7c1e6962f2709567e3fd6c7c0b0eb9bbc980c09"
+    },
+    "review_ui/p2_controls.js": {
+      "before": "342655d9652ad18b3998fa747b799d9159046c0ab6c696fd0c87b2189237ea38",
+      "after": "1ab712025bde85c3d5ab13a0c186bb0d04a550c2ad10aa4c5e13e4f83b6c8782"
+    },
+    "tests/notification_ui.test.js": {
+      "before": "a5101717ce650572be5c96f4094aa182a0d913d40d36ed4e3ea3c003d9292e64",
+      "after": "d1309a40208e7e3a5bd7d690abf3152dc8fc495232df82cab4a30cf1fd5503ed"
+    },
+    "tests/release_acceptance_fixture.py": {
+      "before": "d5584438664c8aa8f4428a94774f1219eaa3412387fe78128e2ae08fe23bee0a",
+      "after": "2e283f34d8bc8c862d892948c1d8eabc084b0c7d73231653191d664fc5644a7f"
+    }
+  },
+  "unexpected_changes": {}
+}

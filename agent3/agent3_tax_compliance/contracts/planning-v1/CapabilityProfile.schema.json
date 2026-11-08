@@ -1,0 +1,93 @@
+{
+  "$defs": {
+    "SourceFormat": {
+      "enum": [
+        "PDF",
+        "IMAGE",
+        "INVOICE_XML",
+        "EXCEL_TABULAR",
+        "EXCEL_GENERIC",
+        "BANK_STATEMENT",
+        "ERP_API",
+        "UNKNOWN_XML",
+        "UNKNOWN"
+      ],
+      "title": "SourceFormat",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "profile_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "adapter_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Adapter Id",
+      "type": "string"
+    },
+    "adapter_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Adapter Version",
+      "type": "string"
+    },
+    "source_formats": {
+      "items": {
+        "$ref": "#/$defs/SourceFormat"
+      },
+      "title": "Source Formats",
+      "type": "array"
+    },
+    "supported_families": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Supported Families",
+      "type": "array"
+    },
+    "unsupported_families": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Unsupported Families",
+      "type": "array"
+    },
+    "absence_fidelity_policies": {
+      "default": [],
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9_.:-]+$",
+        "type": "string"
+      },
+      "title": "Absence Fidelity Policies",
+      "type": "array"
+    }
+  },
+  "required": [
+    "profile_id",
+    "version",
+    "adapter_id",
+    "adapter_version",
+    "source_formats",
+    "supported_families"
+  ],
+  "title": "CapabilityProfile",
+  "type": "object"
+}

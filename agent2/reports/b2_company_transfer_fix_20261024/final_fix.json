@@ -1,0 +1,83 @@
+{
+  "stage": "final_fix",
+  "modules": [
+    {
+      "module": "test_b2_company_transfer",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.609,
+      "details": []
+    },
+    {
+      "module": "test_graph_history",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.907,
+      "details": []
+    },
+    {
+      "module": "test_bank_identity_controls",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.781,
+      "details": []
+    },
+    {
+      "module": "test_spec_policy",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 5.547,
+      "details": []
+    },
+    {
+      "module": "test_noise_policy",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.453,
+      "details": []
+    },
+    {
+      "module": "test_rule_repairs",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 5.109,
+      "details": []
+    },
+    {
+      "module": "test_b4_evidence_timing",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.516,
+      "details": []
+    },
+    {
+      "module": "test_rules",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 69.062,
+      "details": []
+    }
+  ],
+  "tests": 137,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 91.984
+}

@@ -1,0 +1,17 @@
+{
+  "profile_id": "bank_v1",
+  "version": "1.0.0",
+  "adapter_id": "BankStatementAdapter",
+  "adapter_version": "proposed-bank-v1",
+  "source_formats": [
+    "BANK_STATEMENT"
+  ],
+  "supported_families": [
+    "PAYMENT_EVIDENCE"
+  ],
+  "unsupported_families": [
+    "INVOICE_CONTENT",
+    "VAT_RATE"
+  ],
+  "absence_fidelity_policies": []
+}

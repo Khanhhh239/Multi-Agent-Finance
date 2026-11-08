@@ -1,0 +1,368 @@
+{
+  "$defs": {
+    "InvoiceReview": {
+      "additionalProperties": false,
+      "properties": {
+        "invoice_kind": {
+          "enum": [
+            "VAT",
+            "SALE",
+            "OTHER"
+          ],
+          "title": "Invoice Kind",
+          "type": "string"
+        },
+        "form": {
+          "enum": [
+            "ORDINARY",
+            "SPECIAL",
+            "UNKNOWN"
+          ],
+          "title": "Form",
+          "type": "string"
+        },
+        "vat_method": {
+          "anyOf": [
+            {
+              "enum": [
+                "DEDUCTION",
+                "DIRECT"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vat Method"
+        },
+        "claim_input_vat": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Claim Input Vat"
+        },
+        "seller_tax_id_observed": {
+          "default": "UNKNOWN",
+          "enum": [
+            "PRESENT_VALUE",
+            "CONFIRMED_ABSENT",
+            "UNKNOWN"
+          ],
+          "title": "Seller Tax Id Observed",
+          "type": "string"
+        },
+        "document_complete": {
+          "default": false,
+          "title": "Document Complete",
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "invoice_kind",
+        "form",
+        "evidence_ids"
+      ],
+      "title": "InvoiceReview",
+      "type": "object"
+    },
+    "LedgerCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "record_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Record Ids",
+          "type": "array"
+        },
+        "complete": {
+          "default": false,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "maxItems": 99,
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "record_ids",
+        "evidence_ids"
+      ],
+      "title": "LedgerCommand",
+      "type": "object"
+    },
+    "PaymentCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "case": {
+          "enum": [
+            "STANDARD",
+            "SPECIAL",
+            "UNKNOWN"
+          ],
+          "title": "Case",
+          "type": "string"
+        },
+        "settlement": {
+          "default": "UNKNOWN",
+          "enum": [
+            "VERIFIED_NON_CASH",
+            "VERIFIED_CASH",
+            "UNSETTLED",
+            "UNKNOWN"
+          ],
+          "title": "Settlement",
+          "type": "string"
+        },
+        "method": {
+          "default": "UNKNOWN",
+          "enum": [
+            "BANK_TRANSFER",
+            "CARD",
+            "CASH",
+            "CASH_DEPOSIT_TO_SELLER",
+            "UNKNOWN"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "amount": {
+          "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+          "title": "Amount",
+          "type": "string"
+        },
+        "execution_confirmed": {
+          "default": false,
+          "title": "Execution Confirmed",
+          "type": "boolean"
+        },
+        "full_settlement": {
+          "default": false,
+          "title": "Full Settlement",
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "maxItems": 99,
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "case",
+        "amount",
+        "evidence_ids"
+      ],
+      "title": "PaymentCommand",
+      "type": "object"
+    },
+    "ProductReview": {
+      "additionalProperties": false,
+      "description": "Record-specific classification; printed VAT is deliberately not a classification input.",
+      "properties": {
+        "item_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Item Id",
+          "type": "string"
+        },
+        "product_code": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Product Code",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "base_vat_rate": {
+          "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$",
+          "title": "Base Vat Rate",
+          "type": "string"
+        },
+        "annex_i": {
+          "enum": [
+            "EXCLUDED",
+            "NOT_EXCLUDED",
+            "UNKNOWN"
+          ],
+          "title": "Annex I",
+          "type": "string"
+        },
+        "annex_ii": {
+          "enum": [
+            "EXCLUDED",
+            "NOT_EXCLUDED",
+            "UNKNOWN"
+          ],
+          "title": "Annex Ii",
+          "type": "string"
+        },
+        "legal_context_checked": {
+          "default": false,
+          "title": "Legal Context Checked",
+          "type": "boolean"
+        },
+        "classification_rationale": {
+          "maxLength": 4000,
+          "minLength": 20,
+          "title": "Classification Rationale",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "item_id",
+        "product_code",
+        "effective_from",
+        "effective_to",
+        "base_vat_rate",
+        "annex_i",
+        "annex_ii",
+        "classification_rationale",
+        "evidence_ids"
+      ],
+      "title": "ProductReview",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "expected_record_revision": {
+      "minimum": 1,
+      "title": "Expected Record Revision",
+      "type": "integer"
+    },
+    "expected_review_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Expected Review Id"
+    },
+    "review_reference": {
+      "maxLength": 512,
+      "minLength": 3,
+      "title": "Review Reference",
+      "type": "string"
+    },
+    "confirmed": {
+      "title": "Confirmed",
+      "type": "boolean"
+    },
+    "invoice": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/InvoiceReview"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "products": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ProductReview"
+      },
+      "maxItems": 1000,
+      "title": "Products",
+      "type": "array"
+    },
+    "payment": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PaymentCommand"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "daily": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LedgerCommand"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "expected_record_revision",
+    "expected_review_id",
+    "review_reference",
+    "confirmed"
+  ],
+  "title": "SaveCommand",
+  "type": "object"
+}

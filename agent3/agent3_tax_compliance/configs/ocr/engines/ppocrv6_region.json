@@ -1,0 +1,48 @@
+{
+  "profile_version": "ppocrv6-region-v1",
+  "model_id": "ppocrv6_region",
+  "adapter": "ppocrv6",
+  "interpreter": "envs/ppocrv6_medium/Scripts/python.exe",
+  "distributions": [
+    "paddleocr",
+    "paddlepaddle",
+    "Pillow",
+    "numpy"
+  ],
+  "source_files": [
+    "src/adapters/ppocrv6_adapter.py",
+    "src/adapters/paddle_common.py"
+  ],
+  "assets": [
+    "artifacts/models/ppocrv6_medium/detection/inference.pdiparams",
+    "artifacts/models/ppocrv6_medium/detection/inference.json",
+    "artifacts/models/ppocrv6_medium/detection/inference.yml",
+    "artifacts/models/ppocrv6_medium/recognition/inference.pdiparams",
+    "artifacts/models/ppocrv6_medium/recognition/inference.json",
+    "artifacts/models/ppocrv6_medium/recognition/inference.yml"
+  ],
+  "environment": {
+    "FLAGS_use_mkldnn": "0",
+    "PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK": "True",
+    "OMP_NUM_THREADS": "1",
+    "HF_HUB_OFFLINE": "1"
+  },
+  "adapter_config": {
+    "ocr_version": "PP-OCRv6",
+    "lang": "vi",
+    "device": "cpu",
+    "text_detection_model_dir": "artifacts/models/ppocrv6_medium/detection",
+    "text_recognition_model_dir": "artifacts/models/ppocrv6_medium/recognition",
+    "use_doc_orientation_classify": false,
+    "use_doc_unwarping": false,
+    "use_textline_orientation": false,
+    "enable_mkldnn": false,
+    "cpu_threads": 1,
+    "recognition_only": true
+  },
+  "path_parameters": [
+    "text_detection_model_dir",
+    "text_recognition_model_dir"
+  ],
+  "max_processes": 2
+}

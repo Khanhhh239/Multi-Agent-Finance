@@ -1,0 +1,12 @@
+{
+  "noise_policy": "phase2",
+  "amount_baseline": "rolling_account",
+  "dynamic_window_days": 90,
+  "dynamic_method": "p99",
+  "dynamic_min_samples": 20,
+  "dynamic_sigma_k": 3.0,
+  "dynamic_cycle_enabled": true,
+  "dynamic_cycle_radius_days": 2,
+  "dynamic_cycle_learning_days": 180,
+  "dynamic_min_cycle_months": 3
+}

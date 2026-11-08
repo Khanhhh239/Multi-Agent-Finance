@@ -1,0 +1,19 @@
+{
+  "primary_if_reviews": 38,
+  "if_reviews_with_zero_point_context_hits": 33,
+  "if_wait_days_mean": 0.07894736842105263,
+  "if_wait_days_max": 2,
+  "if_transaction_types": {
+    "vendor_payment": 10,
+    "selling_expense": 3,
+    "sales_invoice": 1,
+    "tools_purchase": 7,
+    "equipment_purchase": 2,
+    "stock_purchase": 8,
+    "material_issue": 3,
+    "material_purchase": 4
+  },
+  "delayed_baseline_priorities": {
+    "trung_binh": 23
+  }
+}

@@ -1,0 +1,188 @@
+[
+  {
+    "id": "FULL_EQUAL",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho FULL_EQUAL. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:37.554Z"
+  },
+  {
+    "id": "FULL_ABOVE",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho FULL_ABOVE. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:38.808Z"
+  },
+  {
+    "id": "OLD_BELOW",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho OLD_BELOW. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:40.814Z"
+  },
+  {
+    "id": "OLD_EQUAL",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho OLD_EQUAL. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:43.202Z"
+  },
+  {
+    "id": "FULL_BANK",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho FULL_BANK. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:45.031Z"
+  },
+  {
+    "id": "NO_INVOICE",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho NO_INVOICE. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:46.154Z"
+  },
+  {
+    "id": "NO_DATE",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho NO_DATE. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:47.765Z"
+  },
+  {
+    "id": "NO_GROSS",
+    "result": "FAIL",
+    "status": "Đã lưu nghiệm thu cho NO_GROSS. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:50.368Z"
+  },
+  {
+    "id": "NO_IDENTITY",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho NO_IDENTITY. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:52.524Z"
+  },
+  {
+    "id": "FUTURE_INVOICE",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho FUTURE_INVOICE. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:58.828Z"
+  },
+  {
+    "id": "INSTALL_CASH",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho INSTALL_CASH. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:10:59.970Z"
+  },
+  {
+    "id": "INSTALL_SMALL",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho INSTALL_SMALL. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:01.994Z"
+  },
+  {
+    "id": "INSTALL_MIXED",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho INSTALL_MIXED. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:03.710Z"
+  },
+  {
+    "id": "INSTALL_SAME_TIME",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho INSTALL_SAME_TIME. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:05.264Z"
+  },
+  {
+    "id": "INSTALL_GAP",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho INSTALL_GAP. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:07.281Z"
+  },
+  {
+    "id": "REFUND_FULL",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho REFUND_FULL. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:08.438Z"
+  },
+  {
+    "id": "REFUND_PART",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho REFUND_PART. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:11.050Z"
+  },
+  {
+    "id": "REFUND_BANK",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho REFUND_BANK. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:18.323Z"
+  },
+  {
+    "id": "REVERSAL_JOURNAL",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho REVERSAL_JOURNAL. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:20.198Z"
+  },
+  {
+    "id": "RECEIPT_UNLINKED",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho RECEIPT_UNLINKED. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:22.345Z"
+  },
+  {
+    "id": "REFUND_MULTI",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho REFUND_MULTI. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:24.973Z"
+  },
+  {
+    "id": "RECUR_SMALL",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho RECUR_SMALL. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:27.443Z"
+  },
+  {
+    "id": "RECUR_BANK",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho RECUR_BANK. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:29.257Z"
+  },
+  {
+    "id": "RECUR_CASH",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho RECUR_CASH. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:30.992Z"
+  },
+  {
+    "id": "RECUR_GAP",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho RECUR_GAP. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:32.725Z"
+  },
+  {
+    "id": "RECUR_A5",
+    "result": "FAIL",
+    "status": "Đã lưu nghiệm thu cho RECUR_A5. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:38.980Z"
+  },
+  {
+    "id": "LIMIT_VERIFIED",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho LIMIT_VERIFIED. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:41.221Z"
+  },
+  {
+    "id": "LIMIT_UNVERIFIED",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho LIMIT_UNVERIFIED. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:43.216Z"
+  },
+  {
+    "id": "LIMIT_FUTURE",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho LIMIT_FUTURE. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:45.731Z"
+  },
+  {
+    "id": "LIMIT_EXPIRED",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho LIMIT_EXPIRED. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:47.309Z"
+  },
+  {
+    "id": "LIMIT_FOREIGN",
+    "result": "PASS",
+    "status": "Đã lưu nghiệm thu cho LIMIT_FOREIGN. Nguồn và kết quả P2 giữ nguyên.",
+    "at": "2026-10-20T02:11:49.324Z"
+  }
+]

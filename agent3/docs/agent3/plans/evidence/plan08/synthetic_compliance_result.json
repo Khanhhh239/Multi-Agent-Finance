@@ -1,0 +1,226 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "zen-execution-v1",
+  "creator": "rule-executor",
+  "stage": "rules",
+  "created_at": "2026-10-14T18:55:32.060561Z",
+  "execution_id": "execution-29cdefef669383dbef7237e8ef22fb38",
+  "evaluation_id": "evaluation-56e2e0ec54576e1d7580157e47b9048c",
+  "tenant_id": "tenant-a",
+  "taxpayer_id": "payer-a",
+  "record_id": "cfr-ce0be209c7ca4597be03f32aaa08a560",
+  "record_revision": 2,
+  "plan_sha256": "94c52b19854907eca5ca263d0204d7a507d9c11f85cb3c8bfc37cf1de21ff721",
+  "package_sha256": "14b91cb90dd969d985f3f054015363dbabcdb1eb9f8100f432d04448371ce39b",
+  "policy_sha256": "ad7ed1b6b21e6eddd25e37e0a083a98f73cb2282eb02b780c4fb03e2d66fd1bd",
+  "implementation_sha256": "09f6d10fd21184768ea16378a121350a04dd6d8ebd7ab0cd8126bbcfd38c9fa1",
+  "technical_only": true,
+  "outcomes": [
+    {
+      "schema_version": "1.0.0",
+      "config_version": "zen-execution-v1",
+      "creator": "rule-executor",
+      "stage": "rules",
+      "created_at": "2026-10-14T18:55:32.060561Z",
+      "key": {
+        "evaluation_id": "evaluation-56e2e0ec54576e1d7580157e47b9048c",
+        "record_revision": 2,
+        "rule_id": "TEST_RULE",
+        "rule_version": "v1",
+        "unit_type": "RECORD",
+        "unit_id": "cfr-ce0be209c7ca4597be03f32aaa08a560"
+      },
+      "execution_id": "execution-29cdefef669383dbef7237e8ef22fb38",
+      "tenant_id": "tenant-a",
+      "taxpayer_id": "payer-a",
+      "attempt_id": "attempt-9a2848e4f564aac7c361d23f953400c3",
+      "attempt_number": 1,
+      "context": {
+        "planning_eligibility": "ELIGIBLE",
+        "key": {
+          "evaluation_id": "evaluation-56e2e0ec54576e1d7580157e47b9048c",
+          "record_revision": 2,
+          "rule_id": "TEST_RULE",
+          "rule_version": "v1",
+          "unit_type": "RECORD",
+          "unit_id": "cfr-ce0be209c7ca4597be03f32aaa08a560"
+        },
+        "tenant_id": "tenant-a",
+        "taxpayer_id": "payer-a",
+        "record_sha256": "4e3a36a0818e840d6995b7c1cfa6a6341ff26b63bbf1a2640ef708dfc17c40c9",
+        "plan_sha256": "94c52b19854907eca5ca263d0204d7a507d9c11f85cb3c8bfc37cf1de21ff721",
+        "model_sha256": "206eb38c0adb907a0a13bc25d87f08804951a0037d7d2694358ba576539775d7",
+        "conditions": [
+          {
+            "condition_id": "seller_nonempty",
+            "value": true,
+            "origin": "ADAPTER",
+            "policy_version": "decimal-facts-v1",
+            "field_paths": [
+              "parties.seller.tax_id"
+            ],
+            "evidence_refs": [
+              "cfr:4e3a36a0818e840d6995b7c1cfa6a6341ff26b63bbf1a2640ef708dfc17c40c9:parties.seller.tax_id",
+              "provenance:aee84f80e56e865c4b02d7e4956e047fe6b72dec6d855c7c20e4a3e316702798",
+              "quality:39ac76a1d49aad1fe5c0a8477348d80a0eac2fc365748bc918e02c25e6006e80"
+            ],
+            "observed_json": "\"1234567890\"",
+            "expected_json": "null"
+          }
+        ]
+      },
+      "context_sha256": "2686326826da4d7f799f7fd62e07390161979fac4767891d7b9ab87c0034b022",
+      "package_sha256": "14b91cb90dd969d985f3f054015363dbabcdb1eb9f8100f432d04448371ce39b",
+      "model_sha256": "206eb38c0adb907a0a13bc25d87f08804951a0037d7d2694358ba576539775d7",
+      "engine_version": "0.53.0",
+      "execution_status": "SUCCEEDED",
+      "result": "PASS",
+      "error": null,
+      "trace": {
+        "raw_response_json": "{\"performance\":\"150.6µs\",\"result\":{\"result\":\"PASS\"},\"trace\":{\"input\":{\"id\":\"input\",\"input\":null,\"name\":\"Verified adapter facts\",\"order\":0,\"output\":{\"facts\":{\"seller_nonempty\":true}},\"performance\":\"18.9µs\",\"traceData\":null},\"output\":{\"id\":\"output\",\"input\":{\"result\":\"PASS\"},\"name\":\"Outcome\",\"order\":2,\"output\":null,\"performance\":\"1.6µs\",\"traceData\":null},\"table\":{\"id\":\"table\",\"input\":{\"facts\":{\"seller_nonempty\":true}},\"name\":\"Explicit result table\",\"order\":1,\"output\":{\"result\":\"PASS\"},\"performance\":\"101.7µs\",\"traceData\":{\"index\":1,\"reference_map\":{\"facts.seller_nonempty\":true},\"rule\":{\"_id\":\"pass-all\",\"facts.seller_nonempty[seller_nonempty]\":\"== true\"}}}}}",
+        "raw_sha256": "72188dc2d0d3654a586f11f945abc161873f815ebfaa5b669629c2f4dcca7619",
+        "matched_row_id": "pass-all",
+        "row_origin": "ENGINE",
+        "conditions": [
+          {
+            "condition_id": "seller_nonempty",
+            "value": true,
+            "origin": "ADAPTER",
+            "policy_version": "decimal-facts-v1",
+            "field_paths": [
+              "parties.seller.tax_id"
+            ],
+            "evidence_refs": [
+              "cfr:4e3a36a0818e840d6995b7c1cfa6a6341ff26b63bbf1a2640ef708dfc17c40c9:parties.seller.tax_id",
+              "provenance:aee84f80e56e865c4b02d7e4956e047fe6b72dec6d855c7c20e4a3e316702798",
+              "quality:39ac76a1d49aad1fe5c0a8477348d80a0eac2fc365748bc918e02c25e6006e80"
+            ],
+            "observed_json": "\"1234567890\"",
+            "expected_json": "null"
+          }
+        ]
+      }
+    }
+  ],
+  "attempts": [
+    {
+      "schema_version": "1.0.0",
+      "config_version": "zen-execution-v1",
+      "creator": "rule-executor",
+      "stage": "rules",
+      "created_at": "2026-10-14T18:55:32.060561Z",
+      "key": {
+        "evaluation_id": "evaluation-56e2e0ec54576e1d7580157e47b9048c",
+        "record_revision": 2,
+        "rule_id": "TEST_RULE",
+        "rule_version": "v1",
+        "unit_type": "RECORD",
+        "unit_id": "cfr-ce0be209c7ca4597be03f32aaa08a560"
+      },
+      "execution_id": "execution-29cdefef669383dbef7237e8ef22fb38",
+      "tenant_id": "tenant-a",
+      "taxpayer_id": "payer-a",
+      "attempt_id": "attempt-9a2848e4f564aac7c361d23f953400c3",
+      "attempt_number": 1,
+      "context": {
+        "planning_eligibility": "ELIGIBLE",
+        "key": {
+          "evaluation_id": "evaluation-56e2e0ec54576e1d7580157e47b9048c",
+          "record_revision": 2,
+          "rule_id": "TEST_RULE",
+          "rule_version": "v1",
+          "unit_type": "RECORD",
+          "unit_id": "cfr-ce0be209c7ca4597be03f32aaa08a560"
+        },
+        "tenant_id": "tenant-a",
+        "taxpayer_id": "payer-a",
+        "record_sha256": "4e3a36a0818e840d6995b7c1cfa6a6341ff26b63bbf1a2640ef708dfc17c40c9",
+        "plan_sha256": "94c52b19854907eca5ca263d0204d7a507d9c11f85cb3c8bfc37cf1de21ff721",
+        "model_sha256": "206eb38c0adb907a0a13bc25d87f08804951a0037d7d2694358ba576539775d7",
+        "conditions": [
+          {
+            "condition_id": "seller_nonempty",
+            "value": true,
+            "origin": "ADAPTER",
+            "policy_version": "decimal-facts-v1",
+            "field_paths": [
+              "parties.seller.tax_id"
+            ],
+            "evidence_refs": [
+              "cfr:4e3a36a0818e840d6995b7c1cfa6a6341ff26b63bbf1a2640ef708dfc17c40c9:parties.seller.tax_id",
+              "provenance:aee84f80e56e865c4b02d7e4956e047fe6b72dec6d855c7c20e4a3e316702798",
+              "quality:39ac76a1d49aad1fe5c0a8477348d80a0eac2fc365748bc918e02c25e6006e80"
+            ],
+            "observed_json": "\"1234567890\"",
+            "expected_json": "null"
+          }
+        ]
+      },
+      "context_sha256": "2686326826da4d7f799f7fd62e07390161979fac4767891d7b9ab87c0034b022",
+      "package_sha256": "14b91cb90dd969d985f3f054015363dbabcdb1eb9f8100f432d04448371ce39b",
+      "model_sha256": "206eb38c0adb907a0a13bc25d87f08804951a0037d7d2694358ba576539775d7",
+      "engine_version": "0.53.0",
+      "execution_status": "SUCCEEDED",
+      "result": "PASS",
+      "error": null,
+      "trace": {
+        "raw_response_json": "{\"performance\":\"150.6µs\",\"result\":{\"result\":\"PASS\"},\"trace\":{\"input\":{\"id\":\"input\",\"input\":null,\"name\":\"Verified adapter facts\",\"order\":0,\"output\":{\"facts\":{\"seller_nonempty\":true}},\"performance\":\"18.9µs\",\"traceData\":null},\"output\":{\"id\":\"output\",\"input\":{\"result\":\"PASS\"},\"name\":\"Outcome\",\"order\":2,\"output\":null,\"performance\":\"1.6µs\",\"traceData\":null},\"table\":{\"id\":\"table\",\"input\":{\"facts\":{\"seller_nonempty\":true}},\"name\":\"Explicit result table\",\"order\":1,\"output\":{\"result\":\"PASS\"},\"performance\":\"101.7µs\",\"traceData\":{\"index\":1,\"reference_map\":{\"facts.seller_nonempty\":true},\"rule\":{\"_id\":\"pass-all\",\"facts.seller_nonempty[seller_nonempty]\":\"== true\"}}}}}",
+        "raw_sha256": "72188dc2d0d3654a586f11f945abc161873f815ebfaa5b669629c2f4dcca7619",
+        "matched_row_id": "pass-all",
+        "row_origin": "ENGINE",
+        "conditions": [
+          {
+            "condition_id": "seller_nonempty",
+            "value": true,
+            "origin": "ADAPTER",
+            "policy_version": "decimal-facts-v1",
+            "field_paths": [
+              "parties.seller.tax_id"
+            ],
+            "evidence_refs": [
+              "cfr:4e3a36a0818e840d6995b7c1cfa6a6341ff26b63bbf1a2640ef708dfc17c40c9:parties.seller.tax_id",
+              "provenance:aee84f80e56e865c4b02d7e4956e047fe6b72dec6d855c7c20e4a3e316702798",
+              "quality:39ac76a1d49aad1fe5c0a8477348d80a0eac2fc365748bc918e02c25e6006e80"
+            ],
+            "observed_json": "\"1234567890\"",
+            "expected_json": "null"
+          }
+        ]
+      }
+    }
+  ],
+  "aggregate": {
+    "processing_status": "SUCCESS",
+    "coverage": "FULL",
+    "verdict": "PASS",
+    "review_required": false,
+    "counts": {
+      "selected": 1,
+      "not_applicable": 0,
+      "in_scope": 1,
+      "eligible": 1,
+      "evaluated": 1,
+      "blocked": 0,
+      "out_of_scope": 0,
+      "unknown_applicability": 0,
+      "unknown_capability": 0,
+      "unresolved": 0,
+      "discovery_blockers": 0,
+      "passed": 1,
+      "failed": 0,
+      "review": 0,
+      "errors": 0
+    },
+    "distinct_rules_selected": 1,
+    "distinct_rules_evaluated": 1,
+    "scope_exclusions": [],
+    "blocked_units": [],
+    "operational_errors": [],
+    "unresolved": [],
+    "discovery_blockers": [],
+    "contract_errors": [],
+    "reasons": [
+      "ALL_IN_SCOPE_UNITS_PASS"
+    ]
+  }
+}

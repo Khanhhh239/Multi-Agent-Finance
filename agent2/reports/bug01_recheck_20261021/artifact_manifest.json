@@ -1,0 +1,17 @@
+{
+  "01_NO_GROSS_transactions.jpg": "c1f10fec316d11d0895830806178908f9e82f6b66265c3fa9e44869be24c5e48",
+  "01_NO_GROSS_transactions.txt": "a911533b65ae7bc750b7d2a73c721e6383ff664e7c709d129a9541a6acf55170",
+  "02_NO_GROSS_documents.jpg": "e75ab9458e32f8fdfb8a7d0d9587936375775c85feab9e951fa326e33821505e",
+  "02_NO_GROSS_documents.txt": "65c76ec09a6508abcf90957cb00c7dc67023fa6d46021dddc110f097f9b36dae",
+  "02_NO_GROSS_invoice_visible.jpg": "19fc7fa15290be76a148f354077b466839a8067f267230b1d4f0e5545939fdb9",
+  "03_RECUR_A5_known_total.jpg": "fc014ce909378f44b1c07c54358c5d09527e5c6a442a0a6774e4b8f31eca1965",
+  "03_RECUR_A5_known_total.txt": "adff9af7ac18f4c371b367534548d1ce8e189fca47394311f4c25a00b96cd3ee",
+  "04_RECUR_A5_missing_total.jpg": "336216482f394d03cdf66106ad5a830e00d47f6ae2e81d7e52a95de7d44ec5f8",
+  "04_RECUR_A5_missing_total.txt": "93079256f071dd9ef0f5b6c5b4588e290faed3b8893d8cfa2fc8eccef4bda2e2",
+  "05_RECUR_A5_missing_reload.jpg": "27585e5334933c769fb7528a5d664407cc68c5c99c343a971c4daf7ae8a7fa49",
+  "05_RECUR_A5_missing_reload.txt": "91351615b6b5b2980dace7b60284c6011c73e4720ab461c623990549cc044647",
+  "browser_observations.json": "a175ccc64411e17fbd5a688eae1357580ffa6e99bd51000456cce930d72f0771",
+  "journals_after.json": "193f4e5311eaaa47354e808d3a50e173f4b0bed43ba6bd2d072b10ead4008b4e",
+  "journals_before.json": "bba4187ae2b06c6f3bdd542c0a729aca2152cec24d9b160c2d24196601823eb2",
+  "verification.json": "6fb680c59339d0b80ca4721a0a66bf16117359ea4f939d1b969c9ef71c3d80d7"
+}

@@ -1,0 +1,78 @@
+{
+  "checked_on": "2026-10-16",
+  "publication": "REFERENCE_ONLY_NOT_RUNTIME",
+  "independent_legal_approval": false,
+  "exclusions": [
+    "Registry/ruleset v1 still contains PENDING_REVIEW locators; these references do not bypass those gates.",
+    "ND174 appendices and product taxonomy mapping are not reviewed in full.",
+    "Historical ND123/ND70 excerpts are partial and cannot establish all invoice-content exceptions.",
+    "Drafts, press summaries and other websites are never substituted for primary PDF quotations."
+  ],
+  "provisions": [
+    {
+      "chunk_id": "REF-ND123-A10-4",
+      "document_id": "ND123_2020",
+      "provision_locator": "Điều 10 khoản 4 — người bán",
+      "source_pages": [14],
+      "provision_to": "2026-07-01",
+      "paragraphs": [
+        "4. Tên, địa chỉ, mã số thuế của người bán",
+        "Trên hóa đơn phải thể hiện tên, địa chỉ, mã số thuế của người bán theo đúng tên, địa chỉ, mã số thuế ghi tại giấy chứng nhận đăng ký doanh nghiệp, giấy chứng nhận đăng ký hoạt động chi nhánh, giấy chứng nhận đăng ký hộ kinh doanh, giấy chứng nhận đăng ký thuế, thông báo mã số thuế, giấy chứng nhận đăng ký đầu tư, giấy chứng nhận đăng ký hợp tác xã."
+      ]
+    },
+    {
+      "chunk_id": "REF-ND70-A1-7-a",
+      "document_id": "ND70_2025",
+      "provision_locator": "Điều 1 khoản 7 điểm a — sửa khoản 5 Điều 10",
+      "source_pages": [9],
+      "provision_to": "2026-07-01",
+      "paragraphs": [
+        "7. Sửa đổi, bổ sung khoản 5, điểm a khoản 6, khoản 9, điểm c khoản 14 Điều 10 và bổ sung điểm l vào khoản 14, bổ sung khoản 17 vào Điều 10 như sau:",
+        "a) Sửa đổi, bổ sung khoản 5 như sau:",
+        "“5. Tên, địa chỉ, mã số thuế hoặc mã số đơn vị có quan hệ với ngân sách hoặc số định danh cá nhân của người mua",
+        "a) Trường hợp người mua là cơ sở kinh doanh có mã số thuế thì tên, địa chỉ, mã số thuế của người mua thể hiện trên hóa đơn phải ghi theo đúng tại giấy chứng nhận đăng ký doanh nghiệp, giấy chứng nhận đăng ký hoạt động chi nhánh, giấy chứng nhận đăng ký hộ kinh doanh, giấy chứng nhận đăng ký thuế, thông báo mã số thuế, giấy chứng nhận đăng ký đầu tư, giấy chứng nhận đăng ký hợp tác xã; trường hợp người mua là đơn vị có quan hệ ngân sách thì tên, địa chỉ, mã số đơn vị có quan hệ ngân sách thể hiện trên hóa đơn phải ghi mã số đơn vị có quan hệ với ngân sách được cấp.",
+        "Trường hợp tên, địa chỉ người mua quá dài, trên hóa đơn người bán được viết ngắn gọn một số danh từ thông dụng như: \"Phường\" thành \"P\"; \"Quận\" thành \"Q\", \"Thành phố\" thành \"TP\", \"Việt Nam\" thành \"VN\" hoặc \"Cổ phần\" là \"CP\", \"Trách nhiệm Hữu hạn\" thành \"TNHH\", \"khu công nghiệp\" thành \"KCN\", \"sản xuất\" thành \"SX\", \"Chi nhánh\" thành \"CN\"... nhưng phải đảm bảo đầy đủ số nhà, tên đường phố, phường, xã, quận, huyện, thành phố, xác định được chính xác tên, địa chỉ doanh nghiệp và phù hợp với đăng ký kinh doanh, đăng ký thuế của doanh nghiệp.",
+        "b) Trường hợp người mua không có mã số thuế thì trên hóa đơn không phải thể hiện mã số thuế người mua. Một số trường hợp bán hàng hóa, cung cấp dịch vụ đặc thù cho người tiêu dùng là cá nhân quy định tại khoản 14 Điều này thì trên hóa đơn không phải thể hiện tên, địa chỉ người mua. Trường hợp bán hàng hóa, cung cấp dịch vụ cho khách hàng nước ngoài đến Việt Nam thì thông tin về địa chỉ người mua có thể được thay bằng thông tin về số hộ chiếu hoặc giấy tờ xuất nhập cảnh và quốc tịch của khách hàng nước ngoài. Trường hợp người mua cung cấp mã số thuế, số định danh cá nhân thì trên hóa đơn phải thể hiện mã số thuế, số định danh cá nhân.”"
+      ]
+    },
+    {
+      "chunk_id": "REF-ND359-A1-2",
+      "document_id": "ND359_2025",
+      "provision_locator": "Điều 1 khoản 2 — bãi bỏ khoản 3 Điều 37 và khoản 3 Điều 39",
+      "source_pages": [2],
+      "paragraphs": ["2. Bãi bỏ khoản 3 Điều 37 và khoản 3 Điều 39."]
+    },
+    {
+      "chunk_id": "REF-ND359-A2-1",
+      "document_id": "ND359_2025",
+      "provision_locator": "Điều 2 khoản 1 — hiệu lực",
+      "source_pages": [2],
+      "paragraphs": ["Điều 2. Điều khoản thi hành", "1. Nghị định này có hiệu lực thi hành từ ngày 01 tháng 01 năm 2026."]
+    },
+    {
+      "chunk_id": "REF-ND174-A1-1-2a",
+      "document_id": "ND174_2025",
+      "provision_locator": "Điều 1 khoản 1 và điểm a khoản 2 — chưa bao gồm các phụ lục",
+      "source_pages": [1, 2],
+      "provision_to": "2027-01-01",
+      "paragraphs": [
+        "Điều 1. Giảm thuế giá trị gia tăng",
+        "1. Giảm thuế giá trị gia tăng đối với các nhóm hàng hóa, dịch vụ đang áp dụng mức thuế suất 10%, trừ nhóm hàng hóa, dịch vụ sau:",
+        "a) Viễn thông, hoạt động tài chính, ngân hàng, chứng khoán, bảo hiểm, kinh doanh bất động sản, sản phẩm kim loại, sản phẩm khai khoáng (trừ than). Chi tiết tại Phụ lục I ban hành kèm theo Nghị định này.",
+        "b) Sản phẩm hàng hóa và dịch vụ chịu thuế tiêu thụ đặc biệt (trừ xăng). Chi tiết tại Phụ lục II ban hành kèm theo Nghị định này.",
+        "c) Việc giảm thuế giá trị gia tăng cho từng loại hàng hóa, dịch vụ quy định tại khoản 1 Điều này được áp dụng thống nhất tại các khâu nhập khẩu, sản xuất, gia công, kinh doanh thương mại.",
+        "Trường hợp hàng hóa, dịch vụ nêu tại các Phụ lục I và II ban hành kèm theo Nghị định này thuộc đối tượng không chịu thuế giá trị gia tăng hoặc đối tượng chịu thuế giá trị gia tăng 5% theo quy định của Luật Thuế giá trị gia tăng thì thực hiện theo quy định của Luật Thuế giá trị gia tăng và không được giảm thuế giá trị gia tăng.",
+        "2. Mức giảm thuế giá trị gia tăng:",
+        "a) Cơ sở kinh doanh tính thuế giá trị gia tăng theo phương pháp khấu trừ được áp dụng mức thuế suất thuế giá trị gia tăng 8% đối với hàng hóa, dịch vụ quy định tại khoản 1 Điều này."
+      ]
+    },
+    {
+      "chunk_id": "REF-ND174-A2-1",
+      "document_id": "ND174_2025",
+      "provision_locator": "Điều 2 khoản 1 — ngày hết hiệu lực theo bản gốc",
+      "source_pages": [3],
+      "provision_to": "2027-01-01",
+      "paragraphs": ["Điều 2. Điều khoản thi hành", "1. Nghị định này có hiệu lực thi hành từ ngày 01 tháng 7 năm 2025 đến hết ngày 31 tháng 12 năm 2026."]
+    }
+  ]
+}

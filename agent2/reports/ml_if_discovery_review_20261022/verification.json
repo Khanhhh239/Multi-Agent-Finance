@@ -1,0 +1,12 @@
+{
+  "status": "prepared_awaiting_human_review",
+  "units": 128,
+  "blinded_scores_arms_and_groups": true,
+  "source_company_and_cutoff_verified": true,
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "all_outcomes_blank": true,
+  "reviewer_zip_sha256": "0a37f6b9b7f1fe14d399cb0f5664e0097f4ce7c28c49d52e1a014f0ebfea3643",
+  "protected_files": 1482,
+  "protected_files_unchanged": true
+}

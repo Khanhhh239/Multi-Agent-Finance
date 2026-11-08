@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-19",
+  "status": "read_only_audit_and_draft_protocol_prepared",
+  "gates": {
+    "real_data": "awaiting_real_data",
+    "independent_review": "awaiting_independent_review",
+    "protocol": "draft_not_approved",
+    "real_source_shadow_runner": "not_implemented",
+    "operational_benefit": "not_measured"
+  },
+  "compatibility_pairs": 4,
+  "compatible_model_cache_pairs": 2,
+  "source_feature_cache_checks_passed": 4,
+  "incompatible_new_source_pairs": 2,
+  "incompatibility_reason": "dataset_format_version_mismatch",
+  "model_and_cache_input_files": 10,
+  "protected_files": 1209,
+  "protected_and_model_inputs_unchanged": true,
+  "production_code_unchanged": true,
+  "models_fitted": 0,
+  "rows_scored": 0,
+  "real_independent_review_rows": 0,
+  "files_sha256": {
+    "comparison_protocol.draft.json": "79400dd1c6fe1bbc2617a4ae903b75b11daaf0df8151dd6eee7b992a6a058125",
+    "compatibility_audit.json": "70f291a0411ad65302faecde1140328cead799bd552636c4409e23e26760c9a7",
+    "independent_review_template.json": "3bae1269bc4b587cfa6f8631b6d5471ee79a6a2fab552082780f8643b24c9149",
+    "protocol_review.md": "d39b479994da48f1d0a335e7c2fa7cb77e006c89c6626f7e495d0a89abbd7442"
+  },
+  "main_report_sha256": "5ef8ad7cea93ada892402f8e1f3ab456c2b4929c0f3c1f21e3998b9378d7e93d"
+}

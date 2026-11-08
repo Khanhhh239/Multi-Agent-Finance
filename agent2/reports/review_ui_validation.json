@@ -1,0 +1,33 @@
+{
+  "application": "case_review_mvp",
+  "service_url": "http://127.0.0.1:8765",
+  "snapshots": [
+    {
+      "scenario": "001",
+      "review_cases": 2561,
+      "sampled_cases": 25,
+      "balanced_documents": 64,
+      "evidence_signals": 112,
+      "all_original_dataset_checksums": "passed"
+    },
+    {
+      "scenario": "003",
+      "review_cases": 2701,
+      "sampled_cases": 25,
+      "balanced_documents": 78,
+      "evidence_signals": 137,
+      "all_original_dataset_checksums": "passed"
+    },
+    {
+      "scenario": "005",
+      "review_cases": 2821,
+      "sampled_cases": 25,
+      "balanced_documents": 116,
+      "evidence_signals": 196,
+      "all_original_dataset_checksums": "passed"
+    }
+  ],
+  "browser_visual_check": "not_run_no_connected_browser",
+  "human_feedback_written_by_agent": false,
+  "status": "api_checks_passed"
+}

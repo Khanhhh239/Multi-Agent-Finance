@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "FULL_BELOW",
+    "verdict": "passed",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Thông báo không phát sinh P2 và lưu ý chưa chứng nhận hợp lệ là dễ hiểu. Nên nói thêm giá trị thấp hơn ngưỡng 5.000.000 của snapshot để người đọc không phải so mẫu khác. Chứng từ cần đối chiếu: Bản hóa đơn gốc HD_CONTROL và phiếu chi để xác thực metadata; trong mẫu không thiếu trường hóa đơn bắt buộc. Ưu tiên: Không mở hồ sơ P2 là phù hợp với phạm vi kiểm tra của mẫu. Không suy rộng thành phê duyệt toàn bộ giao dịch. Tham chiếu: P2_FULL_BELOW / RR07",
+    "reviewed_at": "2026-10-18T13:35:56.204072+00:00",
+    "previous_hash": "",
+    "event_hash": "7966097a740d919672940c20e7314bd13a02631de5a8c4d4b6a15527970c49b6"
+  },
+  {
+    "id": 2,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "FULL_EQUAL",
+    "verdict": "passed",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Phân biệt đối chiếu chứng từ/VAT với kết luận gian lận là rõ. Nên ghi rõ 'bằng ngưỡng' để giải thích sự khác biệt với FULL_BELOW. Chứng từ cần đối chiếu: Hóa đơn gốc, phiếu chi và hồ sơ nghĩa vụ chi; việc đủ trường metadata chưa xác minh tính xác thực tài liệu. Ưu tiên: Trung bình là hợp lý cho yêu cầu đối chiếu đã có thông tin hóa đơn nhưng chưa có bằng chứng kết luận gian lận. Tham chiếu: P2_FULL_EQUAL",
+    "reviewed_at": "2026-10-18T13:35:56.212107+00:00",
+    "previous_hash": "7966097a740d919672940c20e7314bd13a02631de5a8c4d4b6a15527970c49b6",
+    "event_hash": "e7f4278e963a3e592d10d2b469e9068e1579291625b58429f7026b75081a2dc3"
+  },
+  {
+    "id": 3,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "FULL_BANK",
+    "verdict": "passed",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Kênh ngân hàng thể hiện rõ. Câu 'không phát sinh P2' đúng nhưng nên nói rõ do không thuộc nhánh chi tiền mặt. Chứng từ cần đối chiếu: Ủy nhiệm chi/sao kê, hóa đơn và phê duyệt nghĩa vụ chi. Mẫu cô lập P2, không chứng nhận đã kiểm tra mọi thẩm quyền khác. Ưu tiên: Không mở P2 là phù hợp. Không được xem đây là kết luận về các kiểm soát phê duyệt ngoài phạm vi mẫu. Tham chiếu: P2_FULL_BANK / RR07",
+    "reviewed_at": "2026-10-18T13:35:56.220333+00:00",
+    "previous_hash": "e7f4278e963a3e592d10d2b469e9068e1579291625b58429f7026b75081a2dc3",
+    "event_hash": "3bd9f04ff7292309d8b643af42c8aed72bf8909e489444881f895521d1d3838c"
+  },
+  {
+    "id": 4,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "NO_INVOICE",
+    "verdict": "passed",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Danh sách trường cần bổ sung và cách hiển thị giá trị chưa có thông tin là rõ; không tự chuyển thiếu hóa đơn thành nghi vấn có điểm. Chứng từ cần đối chiếu: Hóa đơn gốc có định danh, ngày phát hành và tổng tiền; Phiếu chi, bên nhận tiền và nội dung chi cụ thể Ưu tiên: Thấp/0 điểm hợp lý cho yêu cầu dữ liệu. Đây không phải kết luận khoản chi ít rủi ro hay hợp lệ. Tham chiếu: P2_NO_INVOICE",
+    "reviewed_at": "2026-10-18T13:35:56.236802+00:00",
+    "previous_hash": "3bd9f04ff7292309d8b643af42c8aed72bf8909e489444881f895521d1d3838c",
+    "event_hash": "2a2f5c19989b39f28eb660c839b9a37cfbe9f12263e0691250e5def12e34572d"
+  },
+  {
+    "id": 5,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "NO_DATE",
+    "verdict": "passed",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Trường ngày hóa đơn được chỉ ra trong danh sách thiếu. Giữ trạng thái cần bổ sung thay vì suy diễn ngày từ ngày chi là phù hợp. Chứng từ cần đối chiếu: Ngày phát hành và bản hóa đơn gốc HD_CONTROL; Nguồn/thời điểm chứng từ được biết trước khi đối chiếu lại Ưu tiên: Ưu tiên thấp của yêu cầu bổ sung là hợp lý khi chưa đủ mốc thời gian để đánh giá theo snapshot. Tham chiếu: P2_NO_DATE",
+    "reviewed_at": "2026-10-18T13:35:56.248429+00:00",
+    "previous_hash": "2a2f5c19989b39f28eb660c839b9a37cfbe9f12263e0691250e5def12e34572d",
+    "event_hash": "385f17f58074cc3542cb7c73cf7f10759bcde023b95199e450015aea4709f89c"
+  },
+  {
+    "id": 6,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "FUTURE_INVOICE",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Đúng logic thời điểm nhưng phần hóa đơn nguồn vẫn trình bày đầy đủ như tài liệu thông thường. Cần cảnh báo trực tiếp chênh lệch một giờ, thay vì chỉ ghi 'hóa đơn đã có lúc chi' trong danh sách cần bổ sung. Chứng từ cần đối chiếu: Chứng từ/nhật ký thể hiện tài liệu thực sự có trước 11:00; Giải trình thời điểm phát hành/nhập hóa đơn, không sửa ngày chỉ để khớp quy tắc Ưu tiên: Thấp/0 điểm phù hợp cho khoảng trống bằng chứng tại thời điểm chi; không dùng hóa đơn biết sau để kết luận quá khứ. Tham chiếu: P2_FUTURE_INVOICE / RR04",
+    "reviewed_at": "2026-10-18T13:35:56.263655+00:00",
+    "previous_hash": "385f17f58074cc3542cb7c73cf7f10759bcde023b95199e450015aea4709f89c",
+    "event_hash": "39b2909b62c726478f3f25814fa84bc4561211db91fbaf889fae7d7375dfbad1"
+  },
+  {
+    "id": 7,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "INSTALL_CASH",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Cần giải thích P2 được phát theo tổng hóa đơn chứ không chỉ số tiền từng đợt, và giải thích phần điểm lặp lại. Mốc recorded_at có dấu hiệu bị cập nhật theo đợt cuối trong bộ dựng nguồn; cần tách thời điểm biết đầu tiên với cập nhật sau. Chứng từ cần đối chiếu: Hóa đơn 12.000.000 VND và lịch thanh toán; Hai phiếu chi, số đã trả/còn phải trả; Lịch sử phiên bản hóa đơn chứng minh đã biết ở khoản đầu Ưu tiên: Trung bình là hợp lý cho đối chiếu thanh toán của hóa đơn. Chưa có cơ sở gọi hai khoản là cố ý chia nhỏ hoặc tự tăng mức ưu tiên. Tham chiếu: P2_INSTALL_CASH / RR04, RR05",
+    "reviewed_at": "2026-10-18T13:35:56.277848+00:00",
+    "previous_hash": "39b2909b62c726478f3f25814fa84bc4561211db91fbaf889fae7d7375dfbad1",
+    "event_hash": "34ebbcb21c0219e91043ece19acfeea99fd4aafc574270a2ce26cd9b5f4f1a7b"
+  },
+  {
+    "id": 8,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "INSTALL_MIXED",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Cần hiển thị tổng hợp hai kênh và lý do khoản tiền mặt 1.000.000 vẫn được đối chiếu theo hóa đơn. Câu ngoại lệ A1 hiện chưa cho người đọc xem đủ căn cứ thỏa thuận và tổng được phép. Chứng từ cần đối chiếu: Hóa đơn, sao kê đợt 19.000.000 và phiếu chi 1.000.000; AGR_CONTROL/CONTRACT_CONTROL và phê duyệt gắn đúng nghĩa vụ; Lịch sử biết hóa đơn trước đợt đầu Ưu tiên: Giữ trung bình cho P2 và không cộng nghi vấn chia nhỏ đã được giải trình là hợp lý trong mẫu; không chứng nhận nghĩa vụ chi là thật. Tham chiếu: P2_INSTALL_MIXED / RR04, RR05, RR08",
+    "reviewed_at": "2026-10-18T13:35:56.286179+00:00",
+    "previous_hash": "34ebbcb21c0219e91043ece19acfeea99fd4aafc574270a2ce26cd9b5f4f1a7b",
+    "event_hash": "c2a70b1d5f03ff05637096375fc32c4a5abbe50267170a3cfe4cbc9a3d627bf6"
+  },
+  {
+    "id": 9,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "REFUND_FULL",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Mặc định chọn dòng hoàn nên thông báo 'không mở hồ sơ' dễ bị hiểu là hồ sơ gốc đã xong. Cần bảng chi gốc/đã hoàn/còn lại và trạng thái hồ sơ gốc. Chứng từ cần đối chiếu: Phiếu chi gốc và phiếu thu hoàn đã đối chiếu sổ quỹ; Lý do hoàn, xác nhận nhận lại tiền và liên kết chứng từ; Giải trình để người rà quyết định xử lý hồ sơ gốc Ưu tiên: Trung bình tại lúc chi là hợp lý. Sau hoàn đủ cần tái rà hồ sơ bằng chứng hiện tại; chưa xác thực phiếu thu thì không tự hạ điểm hay xóa hit lịch sử. Tham chiếu: P2_REFUND_FULL / RR06",
+    "reviewed_at": "2026-10-18T13:35:56.298979+00:00",
+    "previous_hash": "c2a70b1d5f03ff05637096375fc32c4a5abbe50267170a3cfe4cbc9a3d627bf6",
+    "event_hash": "34eda05c7411a4ca0417fa79169b06217e7e0321372478421df37bcb7680f591"
+  },
+  {
+    "id": 10,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "REFUND_PART",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Thiếu tóm tắt đã hoàn 1.000.000 và số chi thuần 5.000.000; người dùng phải tự cộng sổ. Không được xem số chi thuần là căn cứ tự bù trừ VAT. Chứng từ cần đối chiếu: Phiếu chi 6.000.000 và phiếu thu hoàn 1.000.000; Biên bản/lý do hoàn và đối chiếu công nợ, hóa đơn liên quan Ưu tiên: Giữ đối chiếu trung bình là có cơ sở; việc hoàn một phần chưa tự giải trình điều kiện của khoản chi gốc. Tham chiếu: P2_REFUND_PART / RR06",
+    "reviewed_at": "2026-10-18T13:35:56.310572+00:00",
+    "previous_hash": "34eda05c7411a4ca0417fa79169b06217e7e0321372478421df37bcb7680f591",
+    "event_hash": "6ee812c8b23874375fccd83ca4e5a6b755b3ff6d3407f76b442b3f35180b9174"
+  },
+  {
+    "id": 11,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "REVERSAL_JOURNAL",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. UI hiển thị kênh 'journal' và dịch liên kết thành 'Hoàn tiền', dễ đánh đồng đảo sổ với thực thu tiền. Cần loại liên kết đảo riêng trong phiên bản nguồn tiếp theo và nhãn tiếng Việt. Chứng từ cần đối chiếu: Chứng từ đảo, phê duyệt và lý do điều chỉnh; Tham chiếu bút toán gốc; chỉ xác nhận thực thu nếu có bằng chứng dòng tiền riêng Ưu tiên: Giữ bằng chứng P2 quá khứ là đúng; ưu tiên xử lý hiện tại cần xem lý do đảo. Chưa đủ căn cứ coi khoản chi đã thực sự được hoàn tiền. Tham chiếu: P2_REVERSAL_JOURNAL / RR06",
+    "reviewed_at": "2026-10-18T13:35:56.318712+00:00",
+    "previous_hash": "6ee812c8b23874375fccd83ca4e5a6b755b3ff6d3407f76b442b3f35180b9174",
+    "event_hash": "cf9f9b6bffea2cdd6830505656f35c1d6bcf6631537d978acb40088b37d207ab"
+  },
+  {
+    "id": 12,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "RECEIPT_UNLINKED",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Không coi dòng thu là khoản chi mới là đúng. Thông báo chung chưa chỉ ra nhiệm vụ xác minh nguồn thu và nối khoản gốc. Chứng từ cần đối chiếu: Phiếu thu, bên nộp tiền và lý do thu; Chứng từ gốc hoặc giải trình vì sao chưa liên kết; Đối chiếu sổ quỹ và tài khoản chi phí Ưu tiên: Không mở P2 là hợp lý trong phạm vi chi tiền mặt. Tình trạng chưa nối nguồn gốc cần được theo dõi như yêu cầu dữ liệu riêng, không suy thành hợp lệ. Tham chiếu: P2_RECEIPT_UNLINKED / RR07",
+    "reviewed_at": "2026-10-18T13:35:56.332650+00:00",
+    "previous_hash": "cf9f9b6bffea2cdd6830505656f35c1d6bcf6631537d978acb40088b37d207ab",
+    "event_hash": "70c328eb7d478b2b59bcc23d833cbcde2fcf415687df7c2fd49b559f1bf15872"
+  },
+  {
+    "id": 13,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "RECUR_CASH",
+    "verdict": "passed",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Thể hiện rõ thỏa thuận định kỳ không tự miễn P2. Có thể cải thiện cách giải thích tổng điểm hồ sơ khi có ngữ cảnh và lặp lại. Chứng từ cần đối chiếu: Thỏa thuận định kỳ đã ký, hóa đơn từng kỳ, phiếu chi; Đối chiếu tiền thực trả với kỳ và mức đã duyệt Ưu tiên: Trung bình phù hợp cho đối chiếu chứng từ; không nâng thành gian lận chỉ vì khoản chi lặp lại hoặc phát sinh Chủ nhật. Tham chiếu: P2_RECUR_CASH / RR05",
+    "reviewed_at": "2026-10-18T13:35:56.342894+00:00",
+    "previous_hash": "70c328eb7d478b2b59bcc23d833cbcde2fcf415687df7c2fd49b559f1bf15872",
+    "event_hash": "b17125b65e35f481f0057d1a53524327a2d3f44a0dba587c1291d4f0fe6719c7"
+  },
+  {
+    "id": 14,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "RECUR_GAP",
+    "verdict": "passed",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Danh sách thiếu và phần thỏa thuận cho phép hiểu vì sao có hợp đồng vẫn cần hóa đơn. C1 ở khoản cuối giữ 0 điểm, không làm tăng nghi vấn từ khoảng trống dữ liệu. Chứng từ cần đối chiếu: Hóa đơn theo từng kỳ và phiếu chi; Đối chiếu thỏa thuận định kỳ với nội dung dịch vụ/thời gian phát sinh Ưu tiên: Yêu cầu bổ sung thấp/0 điểm hợp lý. Việc có thỏa thuận không thay thế tài liệu còn thiếu. Tham chiếu: P2_RECUR_GAP",
+    "reviewed_at": "2026-10-18T13:35:56.351113+00:00",
+    "previous_hash": "b17125b65e35f481f0057d1a53524327a2d3f44a0dba587c1291d4f0fe6719c7",
+    "event_hash": "5ef8acc8673fe337b52586487f578a9ef92d96ccb5255e128a8ea29c5247eb6b"
+  },
+  {
+    "id": 15,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "RECUR_A5",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Thỏa thuận hiển thị đủ mức và thời điểm, nhưng phần A5 của web P2 chỉ hiện câu ngoại lệ, chưa hiện 22 mẫu, ngưỡng và mã mẫu giải trình cạnh nhau. Chứng từ cần đối chiếu: Thỏa thuận 3.000.000 VND đã được duyệt trước giao dịch và hồ sơ thực hiện kỳ hiện tại; Nguồn lịch sử cùng phạm vi tài khoản để giải thích vì sao phát sinh tín hiệu thống kê Ưu tiên: Không mở hồ sơ A5 do ngoại lệ đã được khai báo là hợp lý trong mẫu. Không suy rằng mọi khoản định kỳ đều được miễn P2 hoặc đã hợp lệ thực tế. Tham chiếu: P2_RECUR_A5 / RR08",
+    "reviewed_at": "2026-10-18T13:35:56.365890+00:00",
+    "previous_hash": "5ef8acc8673fe337b52586487f578a9ef92d96ccb5255e128a8ea29c5247eb6b",
+    "event_hash": "879b42acd3ea82eaa390f3a4c707977477941d67b9c63a68d7409482c192225f"
+  },
+  {
+    "id": 16,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "LIMIT_VERIFIED",
+    "verdict": "needs_information",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Nguồn, người xác minh và lý do vượt được tách đúng với thiếu hóa đơn. Cần thể hiện số vượt 1 VND để người nghiệm thu đánh giá mức ưu tiên. Chứng từ cần đối chiếu: Quyết định hạn mức và nguyên tắc xử lý sai số/mức vượt nhỏ; Phê duyệt ngoại lệ nếu có; Hóa đơn và phiếu chi còn thiếu Ưu tiên: Cao/14 đúng cấu hình hiện tại nhưng tính hợp lý nghiệp vụ cho mức vượt 1 VND cần chủ kiểm soát quyết định. Không tự đổi trọng số hoặc ngưỡng trong đợt rà này. Tham chiếu: P2_LIMIT_VERIFIED / RR09",
+    "reviewed_at": "2026-10-18T13:35:56.377725+00:00",
+    "previous_hash": "879b42acd3ea82eaa390f3a4c707977477941d67b9c63a68d7409482c192225f",
+    "event_hash": "e37eb5fe72a430fd19a4242782c15225b2f1ca21fde3484bc6ed0b9d4510c13f"
+  },
+  {
+    "id": 17,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "LIMIT_UNVERIFIED",
+    "verdict": "passed",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Phân biệt 'chưa xác minh' với 'đã xác minh vượt hạn mức' rõ, không gọi chênh 1 VND là vi phạm đã biết. Chứng từ cần đối chiếu: Nguồn quyết định hạn mức, người và thời điểm xác minh, thời hạn hiệu lực; Hóa đơn/phiếu chi và phê duyệt ngoại lệ nếu có Ưu tiên: Thấp của yêu cầu bổ sung là hợp lý khi chưa đủ bằng chứng hạn mức có hiệu lực. Tham chiếu: P2_LIMIT_UNVERIFIED",
+    "reviewed_at": "2026-10-18T13:35:56.386655+00:00",
+    "previous_hash": "e37eb5fe72a430fd19a4242782c15225b2f1ca21fde3484bc6ed0b9d4510c13f",
+    "event_hash": "74701f59e5b4b63a006324f60edf95ef783caa9cfee623006d57df9e5ce4e421"
+  },
+  {
+    "id": 18,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "LIMIT_FUTURE",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Trạng thái đúng nhưng bản chứng minh bị trả về null nên người dùng không nhìn được mốc xác minh đến sau. Cần hiển thị mốc bị loại khỏi đánh giá, có nhãn không dùng làm bằng chứng quá khứ. Chứng từ cần đối chiếu: Nguồn xác minh hạn mức đã có tại thời điểm chi nếu tồn tại; Nhật ký thời điểm xác minh và hóa đơn/phiếu chi Ưu tiên: Giữ yêu cầu bổ sung thấp là hợp lý theo thời điểm, không dùng xác minh tương lai để chấm vi phạm quá khứ. Tham chiếu: P2_LIMIT_FUTURE / RR04",
+    "reviewed_at": "2026-10-18T13:35:56.399157+00:00",
+    "previous_hash": "74701f59e5b4b63a006324f60edf95ef783caa9cfee623006d57df9e5ce4e421",
+    "event_hash": "db7226d14a4f0425364b22f88828eef22504151ceee6ecc1fefc0f11d736dc74"
+  },
+  {
+    "id": 19,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "LIMIT_EXPIRED",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. UI nói ngoài hiệu lực nhưng chỉ hiện ngày xác minh, chưa hiện hiệu lực từ/đến và quy tắc mốc cuối; dễ nhầm với LIMIT_VERIFIED. Chứng từ cần đối chiếu: Quyết định hạn mức còn hiệu lực hoặc văn bản gia hạn; Thời điểm hiệu lực chính xác và hóa đơn/phiếu chi Ưu tiên: Thấp của yêu cầu bổ sung là hợp lý vì chưa có hạn mức áp dụng ở thời điểm này. Không coi bằng chứng hết hiệu lực là hạn mức hiện hành. Tham chiếu: P2_LIMIT_EXPIRED / RR04",
+    "reviewed_at": "2026-10-18T13:35:56.409096+00:00",
+    "previous_hash": "db7226d14a4f0425364b22f88828eef22504151ceee6ecc1fefc0f11d736dc74",
+    "event_hash": "e76c73926f25e2e528f12026b400a11718a99ac923cd51ca271dd0e3b184751d"
+  },
+  {
+    "id": 20,
+    "snapshot_id": "f5f86be13e6996f099921cb5e878ad1995dabfe5d5ff517db4f6f5c2e401a175",
+    "control_id": "LIMIT_FOREIGN",
+    "verdict": "needs_fix",
+    "reviewer": "ASSISTANT_SYNTHETIC_REVIEW",
+    "reason": "Rà định tính bởi trợ lý trên mô phỏng, không phải nghiệm thu kế toán độc lập. Phần giao dịch cảnh báo chưa xác minh VND là đúng, nhưng tab sổ trình bày cùng số như VND, tạo mâu thuẫn về đơn vị. Cần gắn trạng thái chưa xác minh cho sổ này và tách số nguyên tệ/giá trị quy đổi ở phiên bản nguồn sau. Chứng từ cần đối chiếu: Số nguyên tệ, đồng tiền, tỷ giá và thời điểm quy đổi từ nguồn xác minh; Giá trị VND đã đối chiếu cùng chứng từ gốc Ưu tiên: 0 điểm và tuyến bổ sung hợp lý vì chưa thể so với hạn mức VND. Cần ưu tiên sửa cách thể hiện đơn vị dữ liệu, không tự suy rằng 5.000.000 USD bằng 5.000.000 VND. Tham chiếu: P2_LIMIT_FOREIGN / RR03",
+    "reviewed_at": "2026-10-18T13:35:56.423051+00:00",
+    "previous_hash": "e76c73926f25e2e528f12026b400a11718a99ac923cd51ca271dd0e3b184751d",
+    "event_hash": "ed753e3362c9f64ffe5b74150ec7be178fd7c9e6df854c77923306a1e646abc1"
+  }
+]

@@ -1,0 +1,78 @@
+{
+  "successful": true,
+  "schedule": {
+    "daily_at": "02:00",
+    "timezone": "Asia/Saigon"
+  },
+  "retention": {
+    "days": 30,
+    "minimum_successful": 3
+  },
+  "task_name": "Agent22-ReviewBackup",
+  "actual_timed_trigger_verified": true,
+  "task_last_result": 0,
+  "next_run": "2026-10-20T02:00:00.0000000+07:00",
+  "temporary_trigger_removed": true,
+  "tests": {
+    "successful": true,
+    "tests": 668,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 524.8600000000006,
+    "failing_tests": []
+  },
+  "restore": {
+    "successful": true,
+    "backup": "D:\\agent22\\.runtime\\scheduled_review_backups\\run-20261019T143548Z-652aef27",
+    "restored": "D:\\agent22\\.runtime\\backup_automation_20261019\\restored",
+    "case_counts": {
+      "001": 584,
+      "003": 627
+    },
+    "all_main_tables_match": true,
+    "request_events": 6,
+    "feedback_events": {
+      "001": 0,
+      "003": 0
+    },
+    "p2_journals": {
+      "step2_uat": {
+        "history_events": 0,
+        "current_reviews": 0,
+        "all_tables_match": true
+      },
+      "browser_uat": {
+        "history_events": 0,
+        "current_reviews": 0,
+        "all_tables_match": true
+      },
+      "assistant_review": {
+        "history_events": 20,
+        "current_reviews": 20,
+        "all_tables_match": true
+      },
+      "p2_web": {
+        "history_events": 0,
+        "current_reviews": 0,
+        "all_tables_match": true
+      }
+    },
+    "p2_controls": 32,
+    "p2_transactions": 73,
+    "representative_case_http_checks": 7,
+    "protected_files_unchanged": 1209,
+    "notification_mode": "dry_run",
+    "external_messages_sent": 0,
+    "browser_visual_acceptance": false,
+    "independent_accounting_acceptance": false
+  },
+  "requests": 3,
+  "request_events": 6,
+  "healthy": true,
+  "protected_files_unchanged": 1209,
+  "external_messages_sent": 0,
+  "ui_visual_acceptance": false,
+  "independent_accounting_acceptance": false,
+  "limitation": "Interactive Windows task requires this account logged in and the computer on; StartWhenAvailable is enabled."
+}

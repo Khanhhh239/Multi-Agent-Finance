@@ -1,0 +1,34 @@
+{
+ "version": "2026-11-06a",
+ "note": "Nhóm hàng mà AI dùng khi phân loại dòng hàng trên hóa đơn mua vào. Nhóm CA_NHAN và KHONG_RO là nhóm hệ thống, không xóa được. Doanh nghiệp còn thêm được nhóm riêng trong cấu hình của mình.",
+ "system": [
+  "CA_NHAN",
+  "KHONG_RO"
+ ],
+ "categories": [
+  {
+   "id": "HANG_HOA_KINH_DOANH",
+   "description": "hàng mua để bán lại, nguyên vật liệu cho sản xuất"
+  },
+  {
+   "id": "CONG_CU_TAI_SAN",
+   "description": "máy móc, công cụ, thiết bị, tài sản dùng cho hoạt động kinh doanh"
+  },
+  {
+   "id": "DICH_VU_VAN_HANH",
+   "description": "điện, nước, viễn thông, thuê mặt bằng, vận chuyển, sửa chữa, văn phòng phẩm, phần mềm"
+  },
+  {
+   "id": "TIEP_KHACH",
+   "description": "ăn uống, quà tặng, tiếp khách, hội nghị"
+  },
+  {
+   "id": "CA_NHAN",
+   "description": "đồ dùng cá nhân hoặc gia đình, hàng xa xỉ, không thấy phục vụ kinh doanh"
+  },
+  {
+   "id": "KHONG_RO",
+   "description": "tên hàng quá chung chung, không đủ để nhận định"
+  }
+ ]
+}

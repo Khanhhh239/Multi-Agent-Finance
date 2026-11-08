@@ -1,0 +1,297 @@
+{
+  "status": "http_ready_browser_pending",
+  "checked_at": "2026-10-20T01:09:44.298258+00:00",
+  "base_url": "http://127.0.0.1:8771",
+  "isolated_instance": true,
+  "case_counts": {
+    "001": 584,
+    "003": 627
+  },
+  "p2_controls": 32,
+  "p2_transactions": 73,
+  "unique_sample_items": 39,
+  "assets_http_ready": 9,
+  "protected_files_unchanged": 1209,
+  "browser_verified": false,
+  "independent_accounting_acceptance": false,
+  "notification_mode": "dry_run",
+  "external_messages_sent": 0,
+  "limitation": "HTTP responses do not verify visible rendering, graph interaction or browser workflow.",
+  "sample_checks": [
+    {
+      "sample_id": "P2_FULL_BELOW",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_FULL_EQUAL",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_FULL_ABOVE",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_OLD_BELOW",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_OLD_EQUAL",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_FULL_BANK",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_NO_INVOICE",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_NO_DATE",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_NO_GROSS",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_NO_IDENTITY",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_FUTURE_INVOICE",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_INSTALL_CASH",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_INSTALL_SMALL",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_INSTALL_MIXED",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_INSTALL_SAME_TIME",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_INSTALL_GAP",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_REFUND_FULL",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_REFUND_PART",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_REFUND_BANK",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_REVERSAL_JOURNAL",
+      "http_ready": true,
+      "transactions": 2,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_RECEIPT_UNLINKED",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_REFUND_MULTI",
+      "http_ready": true,
+      "transactions": 3,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_RECUR_SMALL",
+      "http_ready": true,
+      "transactions": 3,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_RECUR_BANK",
+      "http_ready": true,
+      "transactions": 3,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_RECUR_CASH",
+      "http_ready": true,
+      "transactions": 3,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_RECUR_GAP",
+      "http_ready": true,
+      "transactions": 3,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_RECUR_A5",
+      "http_ready": true,
+      "transactions": 23,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_LIMIT_VERIFIED",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_LIMIT_UNVERIFIED",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_LIMIT_FUTURE",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_LIMIT_EXPIRED",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "P2_LIMIT_FOREIGN",
+      "http_ready": true,
+      "transactions": 1,
+      "current_technical_match": true
+    },
+    {
+      "sample_id": "A5_001_TX_3103d5f23fde8b1a6f",
+      "http_ready": true,
+      "transactions": 1,
+      "company_id": "C003",
+      "graph_nodes": 13,
+      "graph_links": 10,
+      "score": 11,
+      "priority": "trung_binh",
+      "request_states": []
+    },
+    {
+      "sample_id": "A5_001_TX_ac2d5e5d289dc9227b",
+      "http_ready": true,
+      "transactions": 1,
+      "company_id": "C008",
+      "graph_nodes": 8,
+      "graph_links": 6,
+      "score": 11,
+      "priority": "trung_binh",
+      "request_states": []
+    },
+    {
+      "sample_id": "A5_001_cold_information_request",
+      "http_ready": true,
+      "transactions": 1,
+      "company_id": "C003",
+      "graph_nodes": 8,
+      "graph_links": 6,
+      "score": 0,
+      "priority": "thap",
+      "request_states": [
+        "received"
+      ]
+    },
+    {
+      "sample_id": "A5_001_cold_operational",
+      "http_ready": true,
+      "transactions": 1,
+      "company_id": "C005",
+      "graph_nodes": 13,
+      "graph_links": 10,
+      "score": 8,
+      "priority": "trung_binh",
+      "request_states": []
+    },
+    {
+      "sample_id": "A5_003_TX_60bac87c93f578f6c3",
+      "http_ready": true,
+      "transactions": 1,
+      "company_id": "C002",
+      "graph_nodes": 12,
+      "graph_links": 9,
+      "score": 23,
+      "priority": "cao_nhat",
+      "request_states": []
+    },
+    {
+      "sample_id": "A5_003_cold_information_request",
+      "http_ready": true,
+      "transactions": 1,
+      "company_id": "C001",
+      "graph_nodes": 8,
+      "graph_links": 6,
+      "score": 0,
+      "priority": "thap",
+      "request_states": [
+        "open"
+      ]
+    },
+    {
+      "sample_id": "A5_003_cold_operational",
+      "http_ready": true,
+      "transactions": 1,
+      "company_id": "C003",
+      "graph_nodes": 8,
+      "graph_links": 6,
+      "score": 3,
+      "priority": "trung_binh",
+      "request_states": [
+        "reviewed"
+      ]
+    }
+  ]
+}

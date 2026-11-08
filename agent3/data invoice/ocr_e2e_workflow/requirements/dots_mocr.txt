@@ -1,0 +1,9 @@
+# Upstream currently documents Python 3.12 and installation from source.
+dots-mocr @ git+https://github.com/studio-dots-ai/dots.mocr.git
+torch>=2.7
+transformers>=4.51
+accelerate>=1.0
+qwen-vl-utils>=0.0.14
+Pillow>=10
+PyYAML==6.0.3
+tqdm>=4.66,<5

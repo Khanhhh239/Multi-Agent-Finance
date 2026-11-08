@@ -1,0 +1,36 @@
+{
+  "before_rules_sha256": "fe7503850dc8ee81da30af80d83eb9f3d90c8c5466f43b0c1eb1df78a91f0d00",
+  "reconstructed_blob_matches_original": true,
+  "tests_run": 4,
+  "failures": 5,
+  "errors": 0,
+  "records": {
+    "test_rule_boundaries.RuleBoundaryTest.test_a6_invoice_date_and_observation_must_not_be_after_cutoff (field='invoice_issued_at', offset=1)": "subtest_failed",
+    "test_rule_boundaries.RuleBoundaryTest.test_a6_invoice_date_and_observation_must_not_be_after_cutoff (field='invoice_observed_at', offset=1)": "subtest_failed",
+    "test_rule_boundaries.RuleBoundaryTest.test_t1_t2_writeoff_documents_are_known_at_cutoff_or_remain_actionable": "failed",
+    "test_rule_boundaries.RuleBoundaryTest.test_t2_future_document_flag_change_cannot_reduce_past_warning": "failed",
+    "test_rule_boundaries.RuleBoundaryTest.test_t2_writeoff_source_event_must_be_observed_before_using_its_proof": "failed"
+  },
+  "failure_details": [
+    [
+      "test_rule_boundaries.RuleBoundaryTest.test_a6_invoice_date_and_observation_must_not_be_after_cutoff (field='invoice_issued_at', offset=1)",
+      "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_rule_boundaries.py\", line 80, in test_a6_invoice_date_and_observation_must_not_be_after_cutoff\n    self.assertEqual(bool(target_hits(result, row, 'A6')), active)\nAssertionError: True != False\n"
+    ],
+    [
+      "test_rule_boundaries.RuleBoundaryTest.test_a6_invoice_date_and_observation_must_not_be_after_cutoff (field='invoice_observed_at', offset=1)",
+      "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_rule_boundaries.py\", line 80, in test_a6_invoice_date_and_observation_must_not_be_after_cutoff\n    self.assertEqual(bool(target_hits(result, row, 'A6')), active)\nAssertionError: True != False\n"
+    ],
+    [
+      "test_rule_boundaries.RuleBoundaryTest.test_t1_t2_writeoff_documents_are_known_at_cutoff_or_remain_actionable",
+      "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_rule_boundaries.py\", line 321, in test_t1_t2_writeoff_documents_are_known_at_cutoff_or_remain_actionable\n    self.assertEqual(bool(active), actionable, (code, offset))\nAssertionError: False != True : ('T1', 1)\n"
+    ],
+    [
+      "test_rule_boundaries.RuleBoundaryTest.test_t2_future_document_flag_change_cannot_reduce_past_warning",
+      "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_rule_boundaries.py\", line 336, in test_t2_future_document_flag_change_cannot_reduce_past_warning\n    self.assertEqual(target_hits(before, row, code), target_hits(after, row, code))\nAssertionError: Lists differ: [{'tr[159 chars]ts': 8, 'hard_trigger': 0, 'suppressed_reason'[251 chars]84'}] != [{'tr[159 chars]ts': 0, 'hard_trigger': 0, 'suppressed_reason'[287 chars]84'}]\n\nFirst differing element 0:\n{'tra[158 chars]ts': 8, 'hard_trigger': 0, 'suppressed_reason'[250 chars]d84'}\n{'tra[158 chars]ts': 0, 'hard_trigger': 0, 'suppressed_reason'[286 chars]d84'}\n\nDiff is 769 characters long. Set self.maxDiff to None to see it.\n"
+    ],
+    [
+      "test_rule_boundaries.RuleBoundaryTest.test_t2_writeoff_source_event_must_be_observed_before_using_its_proof",
+      "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_rule_boundaries.py\", line 344, in test_t2_writeoff_source_event_must_be_observed_before_using_its_proof\n    self.assertEqual(bool(target_hits(result, row, 'T2')), active)\nAssertionError: False != True\n"
+    ]
+  ]
+}

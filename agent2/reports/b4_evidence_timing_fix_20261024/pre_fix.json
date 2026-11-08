@@ -1,0 +1,41 @@
+{
+  "stage": "pre_fix",
+  "modules": [
+    {
+      "module": "test_b4_evidence_timing",
+      "tests": 9,
+      "failures": 5,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.359,
+      "details": [
+        {
+          "test": "test_future_receipt_flag_change_cannot_change_historical_b4_hit (test_b4_evidence_timing.B4EvidenceTimingTest.test_future_receipt_flag_change_cannot_change_historical_b4_hit)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_b4_evidence_timing.py\", line 57, in test_future_receipt_flag_change_cannot_change_historical_b4_hit\n    self.assertEqual(self.hit(case.score(), row), before)\nAssertionError: {'tra[174 chars]ts': 0, 'hard_trigger': 0, 'suppressed_reason'[311 chars]392'} != {'tra[174 chars]ts': 3, 'hard_trigger': 0, 'suppressed_reason'[257 chars]392'}\nDiff is 769 characters long. Set self.maxDiff to None to see it.\n"
+        },
+        {
+          "test": "test_late_receipt_keeps_three_points_in_both_policy_modes (test_b4_evidence_timing.B4EvidenceTimingTest.test_late_receipt_keeps_three_points_in_both_policy_modes) (legacy=False)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_b4_evidence_timing.py\", line 37, in test_late_receipt_keeps_three_points_in_both_policy_modes\n    self.assertEqual(hit['points'], 3)\nAssertionError: 0 != 3\n"
+        },
+        {
+          "test": "test_late_receipt_keeps_three_points_in_both_policy_modes (test_b4_evidence_timing.B4EvidenceTimingTest.test_late_receipt_keeps_three_points_in_both_policy_modes) (legacy=True)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_b4_evidence_timing.py\", line 37, in test_late_receipt_keeps_three_points_in_both_policy_modes\n    self.assertEqual(hit['points'], 3)\nAssertionError: 0 != 3\n"
+        },
+        {
+          "test": "test_later_payment_can_use_receipt_without_rewriting_earlier_payment (test_b4_evidence_timing.B4EvidenceTimingTest.test_later_payment_can_use_receipt_without_rewriting_earlier_payment)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_b4_evidence_timing.py\", line 69, in test_later_payment_can_use_receipt_without_rewriting_earlier_payment\n    self.assertEqual(self.hit(result, earlier)['points'], 3)\nAssertionError: 0 != 3\n"
+        },
+        {
+          "test": "test_receipt_is_available_only_at_or_before_payment_cutoff (test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_is_available_only_at_or_before_payment_cutoff) (seconds_from_payment=1)",
+          "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\tests\\test_b4_evidence_timing.py\", line 47, in test_receipt_is_available_only_at_or_before_payment_cutoff\n    self.assertEqual(hit['points'], expected)\nAssertionError: 0 != 3\n"
+        }
+      ]
+    }
+  ],
+  "tests": 9,
+  "failures": 5,
+  "errors": 0,
+  "skipped": 0,
+  "blocked_reads": [],
+  "elapsed_seconds": 2.359
+}

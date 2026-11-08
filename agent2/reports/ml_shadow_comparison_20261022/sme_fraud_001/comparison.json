@@ -1,0 +1,175 @@
+{
+  "version": "equal-capacity-if-shadow-v1",
+  "status": "technical_comparison_complete_awaiting_independent_review",
+  "plan_sha256": "e4130fe18217e750cd92c4aa52eaca8d501044188ae01be720886259a1b43900",
+  "scope": {
+    "company_ids": [
+      "C001",
+      "C002",
+      "C003",
+      "C004",
+      "C005",
+      "C006",
+      "C007",
+      "C008"
+    ],
+    "source_ref": "SIM_SYNTHETIC_SOURCE_WORLD_V1_TECHNICAL_COMPATIBILITY",
+    "start_at": "2025-07-01T00:00:00+07:00",
+    "end_at": "2026-01-01T00:00:00+07:00"
+  },
+  "shadow_rows": 5934,
+  "shadow_run_id": "6c3b43b5065302e2b43907fcac7e5c3ea54a15c7f03cc9084f5fa79e8b3a9344",
+  "scores_sha256": "3974c14c0280053c1e07d1d07112e6f096b202c7d8b8407c5f10b53a91a507d5",
+  "summaries": [
+    {
+      "daily_slots": 5,
+      "daily_minutes": 120,
+      "calendar": "all_calendar_days",
+      "company_days": 1472,
+      "active_company_days": 608,
+      "company_days_with_changed_selection": 5,
+      "company_days_with_changed_order": 52,
+      "mandatory_selected_scopes_pinned": 397,
+      "same_day_selection_overlap": 1186,
+      "baseline_only_selections": 7,
+      "candidate_only_selections": 7,
+      "mandatory_displacements": 0,
+      "budget_violations": 0,
+      "coverage_daily_case_snapshots": {
+        "missing_or_partial": 40112,
+        "full": 19522,
+        "outside_transaction_scope": 19687
+      },
+      "transaction_scope_sizes": {
+        "count": 59634,
+        "median": 2.0,
+        "maximum": 19
+      },
+      "arms": {
+        "baseline": {
+          "superseded_unreviewed_scopes": 11,
+          "withdrawn_unreviewed_scopes": 0,
+          "selected": 1193,
+          "estimated_minutes": 26516,
+          "backlog_case_days": 1953,
+          "mandatory_overflow": 0,
+          "peak_backlog_per_company": 64,
+          "wait_days": 2486,
+          "awaiting_information": 344,
+          "backlog_at_end": 91,
+          "backlog_minutes_at_end": 2431,
+          "unique_cases_selected": 540,
+          "awaiting_information_at_end": 16,
+          "mean_wait_days": 2.0838222967309306
+        },
+        "if_shadow": {
+          "superseded_unreviewed_scopes": 11,
+          "withdrawn_unreviewed_scopes": 0,
+          "selected": 1193,
+          "estimated_minutes": 26516,
+          "backlog_case_days": 1953,
+          "mandatory_overflow": 0,
+          "peak_backlog_per_company": 64,
+          "wait_days": 2486,
+          "awaiting_information": 344,
+          "backlog_at_end": 91,
+          "backlog_minutes_at_end": 2431,
+          "unique_cases_selected": 540,
+          "awaiting_information_at_end": 16,
+          "mean_wait_days": 2.0838222967309306
+        }
+      },
+      "common_review_work_scopes": 1193,
+      "common_scopes_earlier_by_if": 3,
+      "common_scopes_later_by_if": 4,
+      "max_common_scope_delay_days": 1,
+      "actionable_gain": null,
+      "fraud_precision": null,
+      "fraud_recall": null,
+      "independent_reviews": 0
+    },
+    {
+      "daily_slots": 10,
+      "daily_minutes": 240,
+      "calendar": "all_calendar_days",
+      "company_days": 1472,
+      "active_company_days": 579,
+      "company_days_with_changed_selection": 0,
+      "company_days_with_changed_order": 48,
+      "mandatory_selected_scopes_pinned": 443,
+      "same_day_selection_overlap": 1245,
+      "baseline_only_selections": 0,
+      "candidate_only_selections": 0,
+      "mandatory_displacements": 0,
+      "budget_violations": 0,
+      "coverage_daily_case_snapshots": {
+        "missing_or_partial": 40112,
+        "full": 19522,
+        "outside_transaction_scope": 19687
+      },
+      "transaction_scope_sizes": {
+        "count": 59634,
+        "median": 2.0,
+        "maximum": 19
+      },
+      "arms": {
+        "baseline": {
+          "superseded_unreviewed_scopes": 3,
+          "withdrawn_unreviewed_scopes": 0,
+          "selected": 1245,
+          "estimated_minutes": 27699,
+          "backlog_case_days": 784,
+          "mandatory_overflow": 0,
+          "peak_backlog_per_company": 60,
+          "wait_days": 1069,
+          "awaiting_information": 350,
+          "backlog_at_end": 51,
+          "backlog_minutes_at_end": 1418,
+          "unique_cases_selected": 569,
+          "awaiting_information_at_end": 16,
+          "mean_wait_days": 0.8586345381526105
+        },
+        "if_shadow": {
+          "superseded_unreviewed_scopes": 3,
+          "withdrawn_unreviewed_scopes": 0,
+          "selected": 1245,
+          "estimated_minutes": 27699,
+          "backlog_case_days": 784,
+          "mandatory_overflow": 0,
+          "peak_backlog_per_company": 60,
+          "wait_days": 1069,
+          "awaiting_information": 350,
+          "backlog_at_end": 51,
+          "backlog_minutes_at_end": 1418,
+          "unique_cases_selected": 569,
+          "awaiting_information_at_end": 16,
+          "mean_wait_days": 0.8586345381526105
+        }
+      },
+      "common_review_work_scopes": 1245,
+      "common_scopes_earlier_by_if": 0,
+      "common_scopes_later_by_if": 0,
+      "max_common_scope_delay_days": 0,
+      "actionable_gain": null,
+      "fraud_precision": null,
+      "fraud_recall": null,
+      "independent_reviews": 0
+    }
+  ],
+  "blind_review_units": 1245,
+  "independent_reviews": 0,
+  "actionable_gain": null,
+  "models_fitted": 0,
+  "queue_changed": false,
+  "labels_loaded": false,
+  "oracle_loaded": false,
+  "external_notifications": 0,
+  "holdout_005_loaded_or_scored": false,
+  "limitations": [
+    "Same daily capacity caps; spent minutes are simulated estimates, not measured effort",
+    "Daily cutoff is retrospective; no source ERP ingestion/arrival latency is measured",
+    "Case selections are study work scopes, not independently useful or fraudulent outcomes",
+    "No random reference sample or blinded adjudication has been executed in this technical run",
+    "Evaluation source was previously scored technically; no untouched field performance claim"
+  ]
+}

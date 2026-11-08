@@ -1,0 +1,860 @@
+{
+  "$defs": {
+    "Aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "processing_status": {
+          "enum": [
+            "SUCCESS",
+            "PARTIAL_ERROR",
+            "ERROR"
+          ],
+          "title": "Processing Status",
+          "type": "string"
+        },
+        "coverage": {
+          "enum": [
+            "FULL",
+            "PARTIAL",
+            "NONE"
+          ],
+          "title": "Coverage",
+          "type": "string"
+        },
+        "verdict": {
+          "anyOf": [
+            {
+              "enum": [
+                "PASS",
+                "PASS_WITHIN_SCOPE",
+                "FAIL",
+                "REVIEW",
+                "NO_VERDICT"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Verdict"
+        },
+        "review_required": {
+          "title": "Review Required",
+          "type": "boolean"
+        },
+        "counts": {
+          "$ref": "#/$defs/UnitCounts"
+        },
+        "distinct_rules_selected": {
+          "minimum": 0,
+          "title": "Distinct Rules Selected",
+          "type": "integer"
+        },
+        "distinct_rules_evaluated": {
+          "minimum": 0,
+          "title": "Distinct Rules Evaluated",
+          "type": "integer"
+        },
+        "scope_exclusions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Scope Exclusions",
+          "type": "array"
+        },
+        "blocked_units": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Blocked Units",
+          "type": "array"
+        },
+        "operational_errors": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Operational Errors",
+          "type": "array"
+        },
+        "unresolved": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Unresolved",
+          "type": "array"
+        },
+        "discovery_blockers": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/UnitIssue"
+          },
+          "title": "Discovery Blockers",
+          "type": "array"
+        },
+        "contract_errors": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Contract Errors",
+          "type": "array"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        }
+      },
+      "required": [
+        "processing_status",
+        "coverage",
+        "verdict",
+        "review_required",
+        "counts",
+        "distinct_rules_selected",
+        "distinct_rules_evaluated",
+        "reasons"
+      ],
+      "title": "Aggregate",
+      "type": "object"
+    },
+    "ConditionTrace": {
+      "additionalProperties": false,
+      "properties": {
+        "condition_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Condition Id",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "boolean"
+        },
+        "origin": {
+          "const": "ADAPTER",
+          "default": "ADAPTER",
+          "title": "Origin",
+          "type": "string"
+        },
+        "policy_version": {
+          "const": "decimal-facts-v1",
+          "default": "decimal-facts-v1",
+          "title": "Policy Version",
+          "type": "string"
+        },
+        "field_paths": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Field Paths",
+          "type": "array"
+        },
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "observed_json": {
+          "title": "Observed Json",
+          "type": "string"
+        },
+        "expected_json": {
+          "title": "Expected Json",
+          "type": "string"
+        }
+      },
+      "required": [
+        "condition_id",
+        "value",
+        "field_paths",
+        "evidence_refs",
+        "observed_json",
+        "expected_json"
+      ],
+      "title": "ConditionTrace",
+      "type": "object"
+    },
+    "EngineContext": {
+      "additionalProperties": false,
+      "properties": {
+        "planning_eligibility": {
+          "const": "ELIGIBLE",
+          "title": "Planning Eligibility",
+          "type": "string"
+        },
+        "key": {
+          "$ref": "#/$defs/EvaluationKey"
+        },
+        "tenant_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "taxpayer_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Taxpayer Id",
+          "type": "string"
+        },
+        "record_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Record Sha256",
+          "type": "string"
+        },
+        "plan_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Plan Sha256",
+          "type": "string"
+        },
+        "model_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Model Sha256",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "$ref": "#/$defs/ConditionTrace"
+          },
+          "minItems": 1,
+          "title": "Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "planning_eligibility",
+        "key",
+        "tenant_id",
+        "taxpayer_id",
+        "record_sha256",
+        "plan_sha256",
+        "model_sha256",
+        "conditions"
+      ],
+      "title": "EngineContext",
+      "type": "object"
+    },
+    "EvaluationKey": {
+      "additionalProperties": false,
+      "properties": {
+        "evaluation_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Evaluation Id",
+          "type": "string"
+        },
+        "record_revision": {
+          "minimum": 1,
+          "title": "Record Revision",
+          "type": "integer"
+        },
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "unit_type": {
+          "enum": [
+            "RECORD",
+            "ITEM",
+            "VAT_GROUP"
+          ],
+          "title": "Unit Type",
+          "type": "string"
+        },
+        "unit_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Unit Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evaluation_id",
+        "record_revision",
+        "rule_id",
+        "rule_version",
+        "unit_type",
+        "unit_id"
+      ],
+      "title": "EvaluationKey",
+      "type": "object"
+    },
+    "ExecutionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "retryable": {
+          "default": false,
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "next_action": {
+          "default": "OPERATOR",
+          "enum": [
+            "RETRY",
+            "OPERATOR",
+            "COLLECT_OTHER_SOURCE"
+          ],
+          "title": "Next Action",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ExecutionError",
+      "type": "object"
+    },
+    "ExecutionTrace": {
+      "additionalProperties": false,
+      "properties": {
+        "raw_response_json": {
+          "title": "Raw Response Json",
+          "type": "string"
+        },
+        "raw_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Raw Sha256",
+          "type": "string"
+        },
+        "matched_row_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Matched Row Id",
+          "type": "string"
+        },
+        "row_origin": {
+          "const": "ENGINE",
+          "default": "ENGINE",
+          "title": "Row Origin",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "$ref": "#/$defs/ConditionTrace"
+          },
+          "minItems": 1,
+          "title": "Conditions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "raw_response_json",
+        "raw_sha256",
+        "matched_row_id",
+        "conditions"
+      ],
+      "title": "ExecutionTrace",
+      "type": "object"
+    },
+    "RuleOutcome": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "config_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Config Version",
+          "type": "string"
+        },
+        "creator": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Creator",
+          "type": "string"
+        },
+        "stage": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Stage",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "key": {
+          "$ref": "#/$defs/EvaluationKey"
+        },
+        "execution_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Execution Id",
+          "type": "string"
+        },
+        "tenant_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "taxpayer_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Taxpayer Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "attempt_number": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Attempt Number",
+          "type": "integer"
+        },
+        "context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EngineContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "context_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Context Sha256"
+        },
+        "package_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Package Sha256",
+          "type": "string"
+        },
+        "model_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Sha256"
+        },
+        "engine_version": {
+          "const": "0.53.0",
+          "default": "0.53.0",
+          "title": "Engine Version",
+          "type": "string"
+        },
+        "execution_status": {
+          "enum": [
+            "SUCCEEDED",
+            "ERROR"
+          ],
+          "title": "Execution Status",
+          "type": "string"
+        },
+        "result": {
+          "anyOf": [
+            {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "REVIEW"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExecutionError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "trace": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExecutionTrace"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "config_version",
+        "creator",
+        "stage",
+        "key",
+        "execution_id",
+        "tenant_id",
+        "taxpayer_id",
+        "attempt_id",
+        "attempt_number",
+        "package_sha256",
+        "execution_status"
+      ],
+      "title": "RuleOutcome",
+      "type": "object"
+    },
+    "UnitCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "selected": {
+          "minimum": 0,
+          "title": "Selected",
+          "type": "integer"
+        },
+        "not_applicable": {
+          "minimum": 0,
+          "title": "Not Applicable",
+          "type": "integer"
+        },
+        "in_scope": {
+          "minimum": 0,
+          "title": "In Scope",
+          "type": "integer"
+        },
+        "eligible": {
+          "minimum": 0,
+          "title": "Eligible",
+          "type": "integer"
+        },
+        "evaluated": {
+          "minimum": 0,
+          "title": "Evaluated",
+          "type": "integer"
+        },
+        "blocked": {
+          "minimum": 0,
+          "title": "Blocked",
+          "type": "integer"
+        },
+        "out_of_scope": {
+          "minimum": 0,
+          "title": "Out Of Scope",
+          "type": "integer"
+        },
+        "unknown_applicability": {
+          "minimum": 0,
+          "title": "Unknown Applicability",
+          "type": "integer"
+        },
+        "unknown_capability": {
+          "minimum": 0,
+          "title": "Unknown Capability",
+          "type": "integer"
+        },
+        "unresolved": {
+          "minimum": 0,
+          "title": "Unresolved",
+          "type": "integer"
+        },
+        "discovery_blockers": {
+          "minimum": 0,
+          "title": "Discovery Blockers",
+          "type": "integer"
+        },
+        "passed": {
+          "minimum": 0,
+          "title": "Passed",
+          "type": "integer"
+        },
+        "failed": {
+          "minimum": 0,
+          "title": "Failed",
+          "type": "integer"
+        },
+        "review": {
+          "minimum": 0,
+          "title": "Review",
+          "type": "integer"
+        },
+        "errors": {
+          "minimum": 0,
+          "title": "Errors",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "selected",
+        "not_applicable",
+        "in_scope",
+        "eligible",
+        "evaluated",
+        "blocked",
+        "out_of_scope",
+        "unknown_applicability",
+        "unknown_capability",
+        "unresolved",
+        "discovery_blockers",
+        "passed",
+        "failed",
+        "review",
+        "errors"
+      ],
+      "title": "UnitCounts",
+      "type": "object"
+    },
+    "UnitIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvaluationKey"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "rule_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "unit_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Unit Id",
+          "type": "string"
+        },
+        "code": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Code",
+          "type": "string"
+        },
+        "next_action": {
+          "title": "Next Action",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "unit_id",
+        "code",
+        "next_action"
+      ],
+      "title": "UnitIssue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "execution_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "evaluation_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Evaluation Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "taxpayer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Taxpayer Id",
+      "type": "string"
+    },
+    "record_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "record_revision": {
+      "minimum": 1,
+      "title": "Record Revision",
+      "type": "integer"
+    },
+    "plan_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Plan Sha256",
+      "type": "string"
+    },
+    "package_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Package Sha256",
+      "type": "string"
+    },
+    "policy_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Policy Sha256",
+      "type": "string"
+    },
+    "implementation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Implementation Sha256",
+      "type": "string"
+    },
+    "technical_only": {
+      "const": true,
+      "default": true,
+      "title": "Technical Only",
+      "type": "boolean"
+    },
+    "outcomes": {
+      "items": {
+        "$ref": "#/$defs/RuleOutcome"
+      },
+      "title": "Outcomes",
+      "type": "array"
+    },
+    "attempts": {
+      "items": {
+        "$ref": "#/$defs/RuleOutcome"
+      },
+      "title": "Attempts",
+      "type": "array"
+    },
+    "aggregate": {
+      "$ref": "#/$defs/Aggregate"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "execution_id",
+    "evaluation_id",
+    "tenant_id",
+    "taxpayer_id",
+    "record_id",
+    "record_revision",
+    "plan_sha256",
+    "package_sha256",
+    "policy_sha256",
+    "implementation_sha256",
+    "outcomes",
+    "attempts",
+    "aggregate"
+  ],
+  "title": "ComplianceResult",
+  "type": "object"
+}

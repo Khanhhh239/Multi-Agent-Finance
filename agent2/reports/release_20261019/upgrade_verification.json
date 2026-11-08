@@ -1,0 +1,66 @@
+{
+  "successful": true,
+  "steps": {
+    "legacy_restore": {
+      "kind": "review",
+      "cases": 1211,
+      "http_probe": true,
+      "logical_sha256": "f45648e3128685a9f4913e162ee085017b450961d27cfee0d11dff8f40ac39c9",
+      "output": "D:\\agent22\\.runtime\\release_20261019\\legacy_v1_restored"
+    },
+    "initialize": {
+      "active": "c45e690b9d174b449ba59d82e0729c57",
+      "logical_sha256": "6b0f11248f6d7cefd10053f1c84212bcaf079510080383a45eb88ca09e35fff7"
+    },
+    "failed_upgrade": {
+      "active_unchanged": true,
+      "candidate_restore_and_http_passed_before_injection": true,
+      "recorded_action": "upgrade_failed_active_unchanged"
+    },
+    "successful_upgrade": {
+      "active": "acd4ea0551434e9a8c3bb4617fb0a831",
+      "previous": "c45e690b9d174b449ba59d82e0729c57",
+      "logical_sha256": "6b0f11248f6d7cefd10053f1c84212bcaf079510080383a45eb88ca09e35fff7",
+      "schema_transition": "8 -> 8; exact compatible backup runtime"
+    },
+    "managed_web": {
+      "real_http": true,
+      "dry_run": true,
+      "upgrade_and_rollback_blocked_while_running": true,
+      "matching_service_identity_shutdown": true
+    },
+    "rollback": {
+      "restored_version": "0.1.0",
+      "active": "c45e690b9d174b449ba59d82e0729c57",
+      "all_operational_hashes_unchanged": true
+    },
+    "postwrite_branch": {
+      "rollback_blocked": true,
+      "new_note_preserved": true,
+      "events": 1,
+      "event_hash": "be7097de1fb454e8815e1b38e3757e464f0091ffed7b6b77cb98ff0919e8497f",
+      "active_unchanged": true,
+      "path": "D:\\agent22\\.runtime\\release_20261019\\deployment_postwrite"
+    }
+  },
+  "active_version": "0.1.0",
+  "case_count": 1211,
+  "request_events": 6,
+  "p2_history_events": {
+    "step2_uat": 0,
+    "browser_uat": 0,
+    "assistant_review": 20,
+    "p2_web": 0
+  },
+  "old_backups_unchanged": true,
+  "protected_files_unchanged": 1209,
+  "backup_runtime_selected": "D:\\agent22\\.runtime\\release_20261019\\installations\\candidate011",
+  "migrations_supported": [
+    "review_schema_8_to_8_exact_runtime"
+  ],
+  "unsupported_schema_migrations": "blocked",
+  "notifications": "dry_run",
+  "external_messages_sent": 0,
+  "browser_visual_acceptance": false,
+  "independent_accounting_acceptance": false
+}

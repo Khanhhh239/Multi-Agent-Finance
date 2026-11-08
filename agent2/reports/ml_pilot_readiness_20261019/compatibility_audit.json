@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-19",
+  "status": "awaiting_real_data",
+  "current_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1",
+  "sklearn_version": "1.9.1",
+  "audit_rows": [
+    {
+      "tag": "001",
+      "dataset": "data\\feature_model_sync_20261017\\sme_fraud_001",
+      "dataset_version": "2.1-feature-sync",
+      "model": "reports\\feature_model_sync_20261017\\sme_fraud_001\\isolation_forest.joblib",
+      "model_dataset_version": "2.1-feature-sync",
+      "model_features": 190,
+      "cache_status": "compatible",
+      "cache_error": null,
+      "feature_content_verified": true,
+      "model_compatibility": {
+        "compatible": true,
+        "reasons": [],
+        "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1"
+      },
+      "data_origin": "synthetic_workspace_benchmark",
+      "real_source_accepted": false,
+      "rows_scored": 0
+    },
+    {
+      "tag": "001",
+      "dataset": "data\\synthetic_sources_20261017_v2\\sme_fraud_001",
+      "dataset_version": "synthetic-source-world-v1",
+      "model": "reports\\feature_model_sync_20261017\\sme_fraud_001\\isolation_forest.joblib",
+      "model_dataset_version": "2.1-feature-sync",
+      "model_features": 190,
+      "cache_status": "compatible",
+      "cache_error": null,
+      "feature_content_verified": true,
+      "model_compatibility": {
+        "compatible": false,
+        "reasons": [
+          "dataset_format_version_mismatch"
+        ],
+        "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1"
+      },
+      "data_origin": "synthetic_process_simulation",
+      "real_source_accepted": false,
+      "rows_scored": 0
+    },
+    {
+      "tag": "003",
+      "dataset": "data\\feature_model_sync_20261017\\sme_fraud_003",
+      "dataset_version": "2.1-feature-sync",
+      "model": "reports\\feature_model_sync_20261017\\sme_fraud_003\\isolation_forest.joblib",
+      "model_dataset_version": "2.1-feature-sync",
+      "model_features": 190,
+      "cache_status": "compatible",
+      "cache_error": null,
+      "feature_content_verified": true,
+      "model_compatibility": {
+        "compatible": true,
+        "reasons": [],
+        "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1"
+      },
+      "data_origin": "synthetic_workspace_benchmark",
+      "real_source_accepted": false,
+      "rows_scored": 0
+    },
+    {
+      "tag": "003",
+      "dataset": "data\\synthetic_sources_20261017_v2\\sme_fraud_003",
+      "dataset_version": "synthetic-source-world-v1",
+      "model": "reports\\feature_model_sync_20261017\\sme_fraud_003\\isolation_forest.joblib",
+      "model_dataset_version": "2.1-feature-sync",
+      "model_features": 190,
+      "cache_status": "compatible",
+      "cache_error": null,
+      "feature_content_verified": true,
+      "model_compatibility": {
+        "compatible": false,
+        "reasons": [
+          "dataset_format_version_mismatch"
+        ],
+        "feature_contract_fingerprint": "b7426e60ce2fee4f1fc7afac1d2ab2cb13072a6f02a0bf7595a1d69134e4bee1"
+      },
+      "data_origin": "synthetic_process_simulation",
+      "real_source_accepted": false,
+      "rows_scored": 0
+    }
+  ],
+  "real_data_available": false,
+  "independent_real_reviews": 0,
+  "operational_benefit_measured": false,
+  "operational_benefit": null,
+  "models_loaded": 2,
+  "models_fitted": 0,
+  "rows_scored": 0,
+  "labels_loaded": false,
+  "holdout_005_loaded_or_scored": false,
+  "queue_changed": false,
+  "threshold_changed": false,
+  "protected_files": 1209,
+  "protected_inputs_unchanged": true,
+  "model_and_cache_inputs_unchanged": true,
+  "input_sha256": {
+    "reports\\feature_model_sync_20261017\\sme_fraud_001\\isolation_forest.joblib": "71ce3b8f883bc76947a9ba58161def2d7375eddafbcb552f522ee1d854a3bbcb",
+    "data\\feature_model_sync_20261017\\sme_fraud_001\\manifest.json": "ff35146d0ab4f12c7276ba9dcb25d04e775dda99cf44f6653979ebf5d5b9e0f1",
+    "data\\feature_model_sync_20261017\\sme_fraud_001\\features.csv": "8585aa5db13ee5837f55d854c291704074abc85b458022324b5afddbb0dedb8e",
+    "data\\synthetic_sources_20261017_v2\\sme_fraud_001\\manifest.json": "1600bf6339d43fc7d8af04f4dfae2116caebccf0cb17dce7f33f80b5312c0de3",
+    "data\\synthetic_sources_20261017_v2\\sme_fraud_001\\features.csv": "56404cc0e452ad7be20cb8e964040e7a462fa475648894bbf94293d406512fd8",
+    "reports\\feature_model_sync_20261017\\sme_fraud_003\\isolation_forest.joblib": "2a92b864e0717d147f9e8e2c8fadf28f2b017ab3bb849f8640966bfe4099a4c2",
+    "data\\feature_model_sync_20261017\\sme_fraud_003\\manifest.json": "00852d863850f10d18f25276db9295e3d4d91c48b88e14d99fbc514eab0b23d7",
+    "data\\feature_model_sync_20261017\\sme_fraud_003\\features.csv": "9268547952c81de5a5d3b0c6a8e9e29356d6ee866e2d45131600039e0695a06d",
+    "data\\synthetic_sources_20261017_v2\\sme_fraud_003\\manifest.json": "b8d830c7ef989bb0b47039232df195c7e48202eea6529b05492c66edd1ca2163",
+    "data\\synthetic_sources_20261017_v2\\sme_fraud_003\\features.csv": "2ded7b368ce37193a324de8d83a53525d55fdea6243259cf7cd7d1995f06d92a"
+  }
+}

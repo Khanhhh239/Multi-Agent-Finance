@@ -1,0 +1,668 @@
+{
+  "$defs": {
+    "ConfidenceSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "present_count": {
+          "minimum": 0,
+          "title": "Present Count",
+          "type": "integer"
+        },
+        "calibrated_count": {
+          "minimum": 0,
+          "title": "Calibrated Count",
+          "type": "integer"
+        },
+        "calibrated_coverage": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Calibrated Coverage"
+        },
+        "mean": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Mean"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Minimum"
+        }
+      },
+      "required": [
+        "present_count",
+        "calibrated_count",
+        "calibrated_coverage",
+        "mean",
+        "minimum"
+      ],
+      "title": "ConfidenceSummary",
+      "type": "object"
+    },
+    "Coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "expected": {
+          "minimum": 0,
+          "title": "Expected",
+          "type": "integer"
+        },
+        "denominator": {
+          "minimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "present": {
+          "minimum": 0,
+          "title": "Present",
+          "type": "integer"
+        },
+        "excluded_not_applicable": {
+          "minimum": 0,
+          "title": "Excluded Not Applicable",
+          "type": "integer"
+        },
+        "excluded_not_provided": {
+          "minimum": 0,
+          "title": "Excluded Not Provided",
+          "type": "integer"
+        },
+        "ratio": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Ratio"
+        }
+      },
+      "required": [
+        "expected",
+        "denominator",
+        "present",
+        "excluded_not_applicable",
+        "excluded_not_provided",
+        "ratio"
+      ],
+      "title": "Coverage",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "coordinate_system": {
+          "const": "NORMALIZED_TOP_LEFT",
+          "default": "NORMALIZED_TOP_LEFT",
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Span"
+        },
+        "transform_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transform Id"
+        }
+      },
+      "required": [
+        "source_id",
+        "document_id",
+        "page_index",
+        "bbox"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "FieldQuality": {
+      "additionalProperties": false,
+      "properties": {
+        "field_path": {
+          "title": "Field Path",
+          "type": "string"
+        },
+        "field_status": {
+          "title": "Field Status",
+          "type": "string"
+        },
+        "validation": {
+          "enum": [
+            "VALID",
+            "INVALID_SOURCE_CONTENT",
+            "UNKNOWN",
+            "NOT_CHECKED",
+            "NOT_APPLICABLE"
+          ],
+          "title": "Validation",
+          "type": "string"
+        },
+        "reliability": {
+          "enum": [
+            "CALIBRATED",
+            "DETERMINISTIC_VERIFIED",
+            "HUMAN_CONFIRMED",
+            "UNAVAILABLE"
+          ],
+          "title": "Reliability",
+          "type": "string"
+        },
+        "probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Probability"
+        },
+        "critical": {
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "eligible_within_policy": {
+          "default": false,
+          "title": "Eligible Within Policy",
+          "type": "boolean"
+        },
+        "auto_accepted": {
+          "const": false,
+          "default": false,
+          "title": "Auto Accepted",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "field_path",
+        "field_status",
+        "validation",
+        "reliability",
+        "critical"
+      ],
+      "title": "FieldQuality",
+      "type": "object"
+    },
+    "QualityIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "field_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field Path"
+        },
+        "severity": {
+          "enum": [
+            "INFO",
+            "WARNING",
+            "ERROR"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "classification": {
+          "enum": [
+            "INVALID_EXTRACTION",
+            "INVALID_SOURCE_CONTENT",
+            "UNKNOWN",
+            "QUALITY"
+          ],
+          "title": "Classification",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "source_block_refs": {
+          "default": [],
+          "items": {
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "type": "string"
+          },
+          "title": "Source Block Refs",
+          "type": "array"
+        },
+        "action": {
+          "enum": [
+            "VERIFY_SOURCE",
+            "REQUEST_DATA",
+            "REEXTRACT",
+            "SELECT_CANDIDATE",
+            "CONFIRM_VALUE",
+            "REVIEW_SPLIT"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "classification",
+        "action",
+        "message"
+      ],
+      "title": "QualityIssue",
+      "type": "object"
+    },
+    "ReviewRecommendation": {
+      "additionalProperties": false,
+      "properties": {
+        "recommendation_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Recommendation Id",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "field_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Field Path"
+        },
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "issue_refs": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Issue Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "recommendation_id",
+        "reason",
+        "field_path",
+        "action",
+        "issue_refs"
+      ],
+      "title": "ReviewRecommendation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "assessment_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Assessment Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "taxpayer_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Taxpayer Id",
+      "type": "string"
+    },
+    "extraction_artifact_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Extraction Artifact Id",
+      "type": "string"
+    },
+    "extraction_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Extraction Sha256",
+      "type": "string"
+    },
+    "record_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Record Id"
+    },
+    "record_revision": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Record Revision"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "implementation_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Implementation Sha256",
+      "type": "string"
+    },
+    "policy_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "policy_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Policy Sha256",
+      "type": "string"
+    },
+    "profile_version": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Profile Version"
+    },
+    "calibration_versions": {
+      "default": [],
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9_.:-]+$",
+        "type": "string"
+      },
+      "title": "Calibration Versions",
+      "type": "array"
+    },
+    "calibration_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Calibration Sha256",
+      "type": "string"
+    },
+    "completeness": {
+      "$ref": "#/$defs/Coverage"
+    },
+    "critical_completeness": {
+      "$ref": "#/$defs/Coverage"
+    },
+    "confidence": {
+      "$ref": "#/$defs/ConfidenceSummary"
+    },
+    "fields": {
+      "items": {
+        "$ref": "#/$defs/FieldQuality"
+      },
+      "title": "Fields",
+      "type": "array"
+    },
+    "issues": {
+      "items": {
+        "$ref": "#/$defs/QualityIssue"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "recommendations": {
+      "items": {
+        "$ref": "#/$defs/ReviewRecommendation"
+      },
+      "title": "Recommendations",
+      "type": "array"
+    },
+    "review_required": {
+      "const": true,
+      "default": true,
+      "title": "Review Required",
+      "type": "boolean"
+    },
+    "disposition": {
+      "enum": [
+        "REVIEW",
+        "REQUEST_DATA",
+        "REEXTRACT",
+        "REVIEW_SPLIT"
+      ],
+      "title": "Disposition",
+      "type": "string"
+    },
+    "auto_accept_enabled": {
+      "const": false,
+      "default": false,
+      "title": "Auto Accept Enabled",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "assessment_id",
+    "tenant_id",
+    "taxpayer_id",
+    "extraction_artifact_id",
+    "extraction_sha256",
+    "record_id",
+    "record_revision",
+    "input_sha256",
+    "implementation_sha256",
+    "policy_version",
+    "policy_sha256",
+    "profile_version",
+    "calibration_sha256",
+    "completeness",
+    "critical_completeness",
+    "confidence",
+    "fields",
+    "issues",
+    "recommendations",
+    "disposition"
+  ],
+  "title": "QualityAssessment",
+  "type": "object"
+}

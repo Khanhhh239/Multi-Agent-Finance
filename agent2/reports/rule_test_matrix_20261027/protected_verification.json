@@ -1,0 +1,10 @@
+{
+  "protected_files": 10209,
+  "authorized_source_changes": {
+    "sme_fraud/rules.py": {
+      "before": "fe7503850dc8ee81da30af80d83eb9f3d90c8c5466f43b0c1eb1df78a91f0d00",
+      "after": "b3736044d3c9cd7d40df7dc3711409ae87e0d2bd05c3bbc884bf190e3663d8e8"
+    }
+  },
+  "unexpected_changes": {}
+}

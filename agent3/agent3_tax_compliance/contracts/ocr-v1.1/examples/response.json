@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "config_version": "ocr-layout-v1",
+  "creator": "synthetic-fixture",
+  "stage": "ocr",
+  "created_at": "2026-10-12T00:00:00Z",
+  "protocol_version": "ocr-bridge-1",
+  "request_id": "request-example",
+  "source_id": "source-example",
+  "document_id": "document-example",
+  "page_id": "page-example",
+  "page_index": 0,
+  "image_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "model_config_version": "ppocrv6-vietocr-cpu-v1",
+  "runtime_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "engine_versions": {
+    "engine": "synthetic-example"
+  },
+  "result": {
+    "schema_version": "1.1",
+    "run_id": "request-example",
+    "model_id": "ppocrv6_vietocr",
+    "output_mode": "boxes_and_text",
+    "image_id": "page.png",
+    "image_width": 100,
+    "image_height": 100,
+    "load_time_ms": 0.0,
+    "inference_time_ms": 1.0,
+    "document_text_raw": "SYNTHETIC",
+    "detections": [
+      {
+        "polygon": [
+          [
+            5.0,
+            5.0
+          ],
+          [
+            90.0,
+            5.0
+          ],
+          [
+            90.0,
+            20.0
+          ],
+          [
+            5.0,
+            20.0
+          ]
+        ],
+        "text_raw": "SYNTHETIC",
+        "confidence": 0.8,
+        "block_type": null,
+        "source_id": null
+      }
+    ],
+    "structured_blocks": [],
+    "error": null,
+    "metadata": {}
+  },
+  "issue": null
+}

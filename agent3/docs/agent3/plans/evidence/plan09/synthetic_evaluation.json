@@ -1,0 +1,225 @@
+{
+  "report": {
+    "schema_version": "1.0.0",
+    "config_version": "compliance-mvp-v1",
+    "creator": "compliance-workflow",
+    "stage": "evaluation",
+    "created_at": "2026-10-15T01:54:26.312391Z",
+    "evaluation_id": "evaluation-fde86850f931478aa5fa61e81250330a",
+    "tenant_id": "tenant-a",
+    "taxpayer_id": "payer-a",
+    "record_id": "cfr-86dd6f84bc6740a9814882407a5ce111",
+    "record_revision": 2,
+    "planning_evaluation_id": "evaluation-fb33aec0a3e44fefc4e67312902997b5",
+    "execution_id": "execution-1396ffa43fefeb8df120958d33ac3e5f",
+    "extraction_artifact_id": "extract-0dd45fa56ab643c08d108f92aa81b8ce",
+    "assessment_id": "quality-868b9cf2a4614c89bf8cd837196bbc6c",
+    "record_sha256": "3acd90ca26e60aa84e798c79a598ef0d1178a8b4d5f04bdb50dc0c51fe3d6980",
+    "source_sha256": "4567b56403e37f389e1ebe5985dfab92186c8384b5018f8dde74d7ef600b51fe",
+    "package_sha256": "14b91cb90dd969d985f3f054015363dbabcdb1eb9f8100f432d04448371ce39b",
+    "template_sha256": "c32b2c5d890de9149af6b7e7d4b1e157bb887836c0227313213e60738827eb90",
+    "implementation_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+    "pins": [
+      {
+        "name": "ruleset",
+        "version": "synthetic-approved-capture",
+        "sha256": "905f36dbab4492c9653184311008412251e1bad1c4dcc3415fdd2941affee10c"
+      },
+      {
+        "name": "legal",
+        "version": "fixture",
+        "sha256": "9fb146d6574729d16f4c97f45f047b6bc6a9637b60735d970f1b428b7e3c5a5f"
+      },
+      {
+        "name": "capability",
+        "version": "1.0.0",
+        "sha256": "2d3224a59528846a2d89c926fa03133c47eec273afe0cd70c0eb6f84c47b263b"
+      },
+      {
+        "name": "taxonomy",
+        "version": "fixture",
+        "sha256": "9859f81d3f1caf5d7916f539c81a3426e61501fc675be197352e726c599a7c73"
+      },
+      {
+        "name": "context",
+        "version": "planning-context-v1",
+        "sha256": "65fd50f3e8088b1e5dcfd393eea6084548095f1f6dce40532f94674eaee42308"
+      },
+      {
+        "name": "quality",
+        "version": "quality-manual-v1",
+        "sha256": "ed91198b06c96af4e19223f9558580118e43486ceb15d4c99611cbc4404dec0b"
+      },
+      {
+        "name": "master",
+        "version": "1",
+        "sha256": "e37871dbfa610d925c1a9a3db876ca52d261adfe063e7d097367d2e6c8ab79d0"
+      }
+    ],
+    "aggregate": {
+      "processing_status": "SUCCESS",
+      "coverage": "FULL",
+      "verdict": "PASS",
+      "review_required": false,
+      "counts": {
+        "selected": 1,
+        "not_applicable": 0,
+        "in_scope": 1,
+        "eligible": 1,
+        "evaluated": 1,
+        "blocked": 0,
+        "out_of_scope": 0,
+        "unknown_applicability": 0,
+        "unknown_capability": 0,
+        "unresolved": 0,
+        "discovery_blockers": 0,
+        "passed": 1,
+        "failed": 0,
+        "review": 0,
+        "errors": 0
+      },
+      "distinct_rules_selected": 1,
+      "distinct_rules_evaluated": 1,
+      "scope_exclusions": [],
+      "blocked_units": [],
+      "operational_errors": [],
+      "unresolved": [],
+      "discovery_blockers": [],
+      "contract_errors": [],
+      "reasons": [
+        "ALL_IN_SCOPE_UNITS_PASS"
+      ]
+    },
+    "explanation": {
+      "template_version": "compliance-template-vi-v1",
+      "title": "Các kiểm tra trong phạm vi đã đạt",
+      "text": "Tất cả đơn vị kiểm tra thuộc phạm vi và phiên bản đã chọn đều đạt. Kết quả không xác nhận mọi nghĩa vụ thuế của doanh nghiệp.",
+      "scope": "Chỉ áp dụng cho bản dữ liệu 2, planning evaluation-fb33aec0a3e44fefc4e67312902997b5, ruleset synthetic-approved-capture.",
+      "verdict": "PASS",
+      "notices": [
+        "Bản kỹ thuật: rule/model và mapping thực tế chưa được nghiệm thu pháp lý.",
+        "Chất lượng trích xuất, phạm vi kiểm tra và kết quả rule là các thông tin riêng."
+      ],
+      "next_actions": []
+    },
+    "technical_only": true,
+    "rule_results_total": 1,
+    "attempts_total": 1,
+    "stage_seconds": {
+      "quality": 0.07057799999893177,
+      "planning": 0.04192679999687243,
+      "execution": 0.550722300002235,
+      "template": 0.008486000006087124
+    }
+  },
+  "rule_results": [
+    {
+      "evaluation_id": "evaluation-fde86850f931478aa5fa61e81250330a",
+      "result_id": "unit-289955e624deb7b13e0d1f71",
+      "planning_evaluation_id": "evaluation-fb33aec0a3e44fefc4e67312902997b5",
+      "rule_id": "TEST_RULE",
+      "rule_version": "v1",
+      "unit_type": "RECORD",
+      "unit_id": "cfr-86dd6f84bc6740a9814882407a5ce111",
+      "item_refs": [],
+      "eligibility": "ELIGIBLE",
+      "applicability": "MATCH",
+      "capability": "SUPPORTED",
+      "review_required": false,
+      "execution_status": "SUCCEEDED",
+      "result": "PASS",
+      "error": null,
+      "attempt_id": "attempt-387b5a74e84f19fa6351f85b2c91794f",
+      "outcome_key": {
+        "evaluation_id": "evaluation-fb33aec0a3e44fefc4e67312902997b5",
+        "record_revision": 2,
+        "rule_id": "TEST_RULE",
+        "rule_version": "v1",
+        "unit_type": "RECORD",
+        "unit_id": "cfr-86dd6f84bc6740a9814882407a5ce111"
+      },
+      "reasons": [
+        "ALL_PLANNING_GATES_SATISFIED"
+      ],
+      "next_action": "NONE",
+      "explanation": "Đơn vị kiểm tra này đã đạt theo model và revision được pin.",
+      "citations": [
+        {
+          "document_id": "TEST_LAW",
+          "locator": "synthetic-article",
+          "official_url": "https://vanban.chinhphu.vn/",
+          "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "locator_reviewed": true
+        }
+      ],
+      "sources": [
+        {
+          "field_path": "parties.seller.tax_id",
+          "evidence": [
+            {
+              "source_id": "source-22520c36b59a454990bcf956f28a471e",
+              "document_id": "document-265402d577da40c785e045a0979ac076",
+              "page_index": 0,
+              "coordinate_system": "NORMALIZED_TOP_LEFT",
+              "bbox": [
+                0.06384408602150538,
+                0.13282369231453198,
+                0.18126936369044808,
+                0.1446945375187105
+              ],
+              "block_id": "block-7d8b380dc9da239ec7e5e38fc43413fc",
+              "span": [
+                0,
+                13
+              ],
+              "transform_id": "page-468adfcca3c5284e58912e68da1b1061-transform"
+            },
+            {
+              "source_id": "source-22520c36b59a454990bcf956f28a471e",
+              "document_id": "document-265402d577da40c785e045a0979ac076",
+              "page_index": 0,
+              "coordinate_system": "NORMALIZED_TOP_LEFT",
+              "bbox": [
+                0.43682795698924737,
+                0.13282369231453198,
+                0.5302444581062563,
+                0.1446945375187105
+              ],
+              "block_id": "block-7ae0c5f76cc8417a2b080a0dd230d11d",
+              "span": [
+                0,
+                10
+              ],
+              "transform_id": "page-468adfcca3c5284e58912e68da1b1061-transform"
+            }
+          ],
+          "reference": "cfr:3acd90ca26e60aa84e798c79a598ef0d1178a8b4d5f04bdb50dc0c51fe3d6980:parties.seller.tax_id"
+        }
+      ],
+      "trace": {
+        "raw_response_json": "{\"performance\":\"317.1µs\",\"result\":{\"result\":\"PASS\"},\"trace\":{\"input\":{\"id\":\"input\",\"input\":null,\"name\":\"Verified adapter facts\",\"order\":0,\"output\":{\"facts\":{\"seller_nonempty\":true}},\"performance\":\"37.4µs\",\"traceData\":null},\"output\":{\"id\":\"output\",\"input\":{\"result\":\"PASS\"},\"name\":\"Outcome\",\"order\":2,\"output\":null,\"performance\":\"5.2µs\",\"traceData\":null},\"table\":{\"id\":\"table\",\"input\":{\"facts\":{\"seller_nonempty\":true}},\"name\":\"Explicit result table\",\"order\":1,\"output\":{\"result\":\"PASS\"},\"performance\":\"207.2µs\",\"traceData\":{\"index\":1,\"reference_map\":{\"facts.seller_nonempty\":true},\"rule\":{\"_id\":\"pass-all\",\"facts.seller_nonempty[seller_nonempty]\":\"== true\"}}}}}",
+        "raw_sha256": "d5c2b3228e081ee013be4cc46068f10dfb48690af0e556798a584ffdbfbeade7",
+        "matched_row_id": "pass-all",
+        "row_origin": "ENGINE",
+        "conditions": [
+          {
+            "condition_id": "seller_nonempty",
+            "value": true,
+            "origin": "ADAPTER",
+            "policy_version": "decimal-facts-v1",
+            "field_paths": [
+              "parties.seller.tax_id"
+            ],
+            "evidence_refs": [
+              "cfr:3acd90ca26e60aa84e798c79a598ef0d1178a8b4d5f04bdb50dc0c51fe3d6980:parties.seller.tax_id",
+              "provenance:98719abd8d56ccf815772f0cd90ee96a6aacfd002ecc5dc305e4b23e3531f089",
+              "quality:39ac76a1d49aad1fe5c0a8477348d80a0eac2fc365748bc918e02c25e6006e80"
+            ],
+            "observed_json": "\"1234567890\"",
+            "expected_json": "null"
+          }
+        ]
+      }
+    }
+  ]
+}

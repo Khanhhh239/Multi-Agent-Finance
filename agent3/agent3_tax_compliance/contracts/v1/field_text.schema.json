@@ -1,0 +1,451 @@
+{
+  "$defs": {
+    "Candidate_str_": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "raw_value": {
+          "title": "Raw Value",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "raw_value",
+        "value",
+        "provenance"
+      ],
+      "title": "Candidate[str]",
+      "type": "object"
+    },
+    "ConfidenceBasis": {
+      "enum": [
+        "CALIBRATED",
+        "DETERMINISTIC",
+        "HUMAN_CONFIRMED",
+        "UNAVAILABLE"
+      ],
+      "title": "ConfidenceBasis",
+      "type": "string"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "coordinate_system": {
+          "const": "NORMALIZED_TOP_LEFT",
+          "default": "NORMALIZED_TOP_LEFT",
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Span"
+        },
+        "transform_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transform Id"
+        }
+      },
+      "required": [
+        "source_id",
+        "document_id",
+        "page_index",
+        "bbox"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "FieldStatus": {
+      "enum": [
+        "PRESENT",
+        "MISSING",
+        "AMBIGUOUS",
+        "NOT_PROVIDED_BY_SOURCE",
+        "NOT_APPLICABLE"
+      ],
+      "title": "FieldStatus",
+      "type": "string"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Method",
+          "type": "string"
+        },
+        "adapter_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Adapter Version",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "calibration_version": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calibration Version"
+        },
+        "deterministic_policy_version": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deterministic Policy Version"
+        },
+        "review_event_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Event Id"
+        },
+        "derived_from": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Derived From",
+          "type": "array"
+        }
+      },
+      "required": [
+        "method",
+        "adapter_version"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "else": {
+        "properties": {
+          "value": {
+            "type": "null"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "status": {
+            "const": "PRESENT"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "value": {
+            "not": {
+              "type": "null"
+            }
+          }
+        },
+        "required": [
+          "value"
+        ]
+      }
+    },
+    {
+      "else": {
+        "properties": {
+          "confidence": {
+            "type": "null"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "confidence_basis": {
+            "const": "CALIBRATED"
+          }
+        },
+        "required": [
+          "confidence_basis"
+        ]
+      },
+      "then": {
+        "properties": {
+          "confidence": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "provenance": {
+            "properties": {
+              "calibration_version": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "calibration_version"
+            ]
+          }
+        },
+        "required": [
+          "confidence"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "confidence_basis": {
+            "const": "DETERMINISTIC"
+          }
+        },
+        "required": [
+          "confidence_basis"
+        ]
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "properties": {
+              "deterministic_policy_version": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "deterministic_policy_version"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "confidence_basis": {
+            "const": "HUMAN_CONFIRMED"
+          }
+        },
+        "required": [
+          "confidence_basis"
+        ]
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "properties": {
+              "review_event_id": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "review_event_id"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "value": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Value"
+    },
+    "status": {
+      "$ref": "#/$defs/FieldStatus"
+    },
+    "confidence": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Confidence"
+    },
+    "confidence_basis": {
+      "$ref": "#/$defs/ConfidenceBasis",
+      "default": "UNAVAILABLE"
+    },
+    "source": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Source",
+      "type": "string"
+    },
+    "provenance": {
+      "$ref": "#/$defs/Provenance"
+    },
+    "candidates": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Candidate_str_"
+      },
+      "title": "Candidates",
+      "type": "array"
+    }
+  },
+  "required": [
+    "status",
+    "source",
+    "provenance"
+  ],
+  "title": "FieldObject[str]",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:financial:capture:1.0.0:field_text"
+}

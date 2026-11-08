@@ -1,0 +1,12 @@
+{
+  "version": "extraction-v1",
+  "schemas": {
+    "extraction_profile.schema.json": "8f439e96d2a222c6a2e95ec3ba7688438d71a27804f253026a6b4a0abc2d934a",
+    "extraction_candidate.schema.json": "6786f7201ffb2a38c21dab478c0a439d9985dc244b870559e6190a5b7c0008ac",
+    "identity_map.schema.json": "b16361fc18497f28eb7daeb26c8f687b8f533a5dbd64dce8f73226d214379e1c",
+    "derivation_manifest.schema.json": "986894ed1bb550cc033b532176fa69eb380377b71005deb9e89f9b541e510694",
+    "vat_group.schema.json": "4269a5afbebee68995e1f4aaf67245e59baa6cb06d6a841b73bd6e9757bb9e16",
+    "segmentation.schema.json": "73b678be6e855ecc6499beb583714f4a6d5f4aed33bb7d77f615b7e79ceb0706",
+    "extraction_artifact.schema.json": "87834e71ed2dc6798d3f9f865fd0fa02a6ea9a3ca10ba6d0c0bf910076b59cc6"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "profile_version":"tesseract-runtime-v1",
+  "model_id":"tesseract",
+  "adapter":"tesseract",
+  "interpreter":"envs/tesseract/Scripts/python.exe",
+  "distributions":["pytesseract","Pillow"],
+  "source_files":["src/adapters/tesseract_adapter.py"],
+  "assets":["tools/tesseract/tesseract.exe","tools/tesseract/tessdata/vie.traineddata","tools/tesseract/tessdata/eng.traineddata"],
+  "adapter_config":{"auto_orient":false,"tesseract_cmd":"tools/tesseract/tesseract.exe","tessdata_dir":"tools/tesseract/tessdata"},
+  "path_parameters":["tesseract_cmd","tessdata_dir"],
+  "max_processes":3
+}

@@ -1,0 +1,287 @@
+{
+  "checked_on": "2026-10-19",
+  "suites": [
+    {
+      "suite": "contracts",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ingestion",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "ocr",
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "extraction_v1",
+      "tests": 54,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "quality",
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "review",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "planning",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "rules_v1",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2e_v1",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "explanation",
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "legal_v2",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "business_review",
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "recovery",
+      "tests": 42,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total_tests": 504,
+  "implementation_sha256": "5e2bd172bf7399de9f8e74d60e93d7bf547043199ea862d286543201b75d9416",
+  "legacy_workflow_implementation_sha256": "f7f54d632a83f15e22d30662ce65dcd6a8180bfecabe55b8fb58633cacc18dd7",
+  "source_sha256": {
+    "src/business_review/__init__.py": "8de60cd2775548685db528b1b0cd21ee4d9487bd4ef3e1737aa4952c10b40fee",
+    "src/business_review/api.py": "cb4e71199b5998d18c10d229b48775ab7946c9a58b1efc11e633f80d55f5f66c",
+    "src/business_review/cli.py": "56bcc892dd18ed776e8dba5e46ecab66e5146cb2ae2abea70edf57d30d5066be",
+    "src/business_review/contracts.py": "7faeb61289f27a227e1903269dfe19c22a2b98e09988a8bd7802fa8e5f14c4d6",
+    "src/business_review/evidence.py": "f20b0bdbc5bb117ed95f164bc933341a6be159c3cb975c1d019e55a26c637776",
+    "src/business_review/repository.py": "d8be7a5292f645cb9cf23039a031d247ce538767c693688abef3eed6e33a8230",
+    "src/business_review/service.py": "acf2c263009595ba4b6ae3e52d901547d7a92f10026e84f7e58aafbfafabe3ae",
+    "src/business_review/web.py": "07ae4d845051f4de2412d66216b221ca4e203fbafc5a4b1633b1c2c16ceb5863",
+    "configs/business_review/capability_reviewed_capture_v1.json": "2d33299b740c2f21763c3246c416e15b944d228cf963293af790e2e4dbae0949",
+    "configs/business_review/dossier.template.json": "ac723785974a576441db603ddd90034af196302964f73f8e2805c4fa8f1af648"
+  },
+  "legacy_replay_code_unchanged": true,
+  "scope": "Synthetic operator review in real HTTP/SQLite/Chrome, regression and native ZEN fixtures; no legal or bank-document accuracy claim.",
+  "real_product_mappings": "PENDING_NO_PRODUCT_DOSSIERS",
+  "legal_release": "NOT_APPROVED",
+  "passed": true,
+  "javascript": [
+    {
+      "command": "node --check src/review/static/app.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/compliance.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/explanation.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/business.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/workflow.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/automation.js",
+      "passed": true
+    },
+    {
+      "command": "node --check src/review/static/region.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/review_client.test.js",
+      "passed": true
+    },
+    {
+      "command": "node tests/review/explanation_client.test.js",
+      "passed": true
+    }
+  ],
+  "browser": [
+    {
+      "name": "automation_v2",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "region",
+      "passed": true,
+      "checks": 10
+    },
+    {
+      "name": "automation",
+      "passed": true,
+      "checks": 10
+    },
+    {
+      "name": "workflow",
+      "passed": true,
+      "checks": 7
+    },
+    {
+      "name": "business",
+      "passed": true,
+      "checks": 12
+    },
+    {
+      "name": "compliance",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "name": "explanation",
+      "passed": true,
+      "checks": 5
+    }
+  ],
+  "browser_checks": 57,
+  "ui_source_sha256": {
+    "src/review/static/app.js": "e862c5af0e89f0f7ae848e77ede549938a916c884848841b694c54ed4762fcee",
+    "src/review/static/automation.js": "185fca92921bc5cf0b7f8fc072ad9835278aa01d6e39e91d780f40441b1c6082",
+    "src/review/static/business.css": "88dffa6ea97e07450a20e57a56b7f782e870c524d823f04257bcca9d917af1f5",
+    "src/review/static/business.js": "f710e3405a6f73cdbf32f72da7e142f2d6dba891f84b033dde0827b5836cea51",
+    "src/review/static/compliance.css": "961389c3e6535ff378de0fc07f85d04b40daf662363f7f00fb8fabdb2a4c8790",
+    "src/review/static/compliance.js": "a00f7c845ec73c7b6ab06a9fd6540553d7d6641a1a41019e608749d717a2c73a",
+    "src/review/static/explanation.js": "b13adc4f5067967b35a69f684114e25cff1e6db3336c1aa765b651f51a6efbce",
+    "src/review/static/index.html": "7bf20e0e92865f45e4c0dad5758bd3bbaddda91f5de4a6c39673d604eadd7d2f",
+    "src/review/static/region.js": "ba779691a0a0f1a553ec3bf1dde8f01bd39fb9861c48e1197f41cdaf371dd8d8",
+    "src/review/static/style.css": "6aa20a5a88ba4218ada82c5e21b03b9c64189fd00f00244048c39c5b0482390e",
+    "src/review/static/workflow.css": "f946f2f0dc25248e63481c9c65dee05dea9c264d0f14bb4e6b3467afbe3fa699",
+    "src/review/static/workflow.js": "f3d686d145599d5131ae5248771853d84198ce75b22963422b583044bc99df5b"
+  },
+  "coverage_source_sha256": {
+    "agent3_tax_compliance/configs/ocr/default.json": "6e56f5537d605f9123cb17607135fa77b46cf69cf50ccbebfcc76d62d1e1cc5b",
+    "agent3_tax_compliance/configs/ocr/engines/easyocr.json": "67f32cdbc460e2b0814123d83183fc2fecdf1da0796c8edc223e8091ad319308",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_detector_base.json": "6849c096ad6bb28e81a7c9689a12cc2f3d25a3629499fd74b64da8e81bf0418d",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_detector_deskew.json": "8ce4875e94e8a7552964d2c0f77c6f560df13caf391779c8f7ddb16a5908dc22",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_detector_tiles.json": "b30bcd628c09793f4ea49b126ff35e2182cd04e9b53e96a921c2f57f48232234",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_medium.json": "80d0c6784ce4107ae670231210e4a821ec038364c58bdf95567e0150532654ac",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_region.json": "692c6d9cd4af81335d192e784bda3fe160e17c3c520fd909ab80caf3e5d20e9c",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_vietocr.json": "aed6b93e1cd1892b7efebffbc2b186ee10983d7c3ad9899d342dffcc9e6db5c7",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_vietocr_beam.json": "e9182e9b12d3ad01c2ef2968e3f6fc3491577f2c6082cc1a50d2c358ef6ca971",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_vietocr_coverage.json": "e1d9a7998a6299dd5a935c17418fde3010a3e434b0ceffcff5093b4862809c65",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_vietocr_deskew.json": "fd660c4ececd3ba4c4b3028f3e15eaf4c7b1eb33611aea2a6202034f8b7f7a0d",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_vietocr_tiles.json": "c37d5bd04403148a12938fef3694ba8eabceceb8c3c530fb353b82ee7b403060",
+    "agent3_tax_compliance/configs/ocr/engines/ppocrv6_vietocr_v2_split.json": "ea1aa096c0d59a4f12fc93bc092535299cfd2310ccc5ff12b7acc387ef502942",
+    "agent3_tax_compliance/configs/ocr/engines/tesseract.json": "57fa85529292919552fafecad677fda4f1cafde1fbc1f56328da1bbfc53fb5f4",
+    "agent3_tax_compliance/configs/ocr/engines/vietocr_region_v1.json": "d3883561365c6650dd5cb8c678481c89fcee84c9cdffb9bbef07e8129b630fb5",
+    "agent3_tax_compliance/configs/ocr/engines/vietocr_region_wide.json": "4bd73e7f23fadb6b82018584cd0c2695d1147fcbe3c541bb600132c3fdb9d126",
+    "agent3_tax_compliance/configs/ocr/ppocrv6_vietocr.json": "1bcda2f985c4b372c6fefa2dc8f82a63a3fd496fb2e56511911cfee2c4cdf125",
+    "agent3_tax_compliance/configs/ocr/ppocrv6_vietocr_beam.json": "cbbfb290d09edf13831dad00e46547f077e3a6f0096928ff09153d12005f71c3",
+    "agent3_tax_compliance/configs/ocr/ppocrv6_vietocr_coverage.json": "9c19831277c71945174803550e97bcea14759d5ecbcadb96847bbf9485c768ab",
+    "agent3_tax_compliance/configs/ocr/ppocrv6_vietocr_deskew.json": "6c9ef1204bf218b8ff927bd8db7bfcb95d6ce66d49e77841a6d37bcb0a13ecea",
+    "agent3_tax_compliance/configs/ocr/ppocrv6_vietocr_tiles.json": "5379464727cee669b8bd50e8859666768aeffc3c89976c09b15cec4eada1f0f4",
+    "agent3_tax_compliance/configs/ocr/tesseract_psm11.json": "6fd1ec0fe7d3863e4d2d710c0be635de199de810380191cdfc038a82875bb62e",
+    "agent3_tax_compliance/configs/ocr/tesseract_psm3.json": "c8e1fe35170a2e6907419e910b3da8a5b22bad558f4da375a8b0f20a1c55daa4",
+    "agent3_tax_compliance/configs/ocr/tesseract_psm6.json": "9cbd5075b1b1b767a845f493a23f4d3915edd0e3ec749ae57e31038e51dd396d",
+    "agent3_tax_compliance/src/adapters/ocr/__init__.py": "a4062cd6edc76c13da7e0960a4c000b599ab58aaeaebcbf75357a98b9a29c959",
+    "agent3_tax_compliance/src/adapters/ocr/api.py": "a8795809b43a91235d2bf847cfe85768dda34bf66b076326d02ef702ce07ec78",
+    "agent3_tax_compliance/src/adapters/ocr/bridge.py": "18485d286297039cb70fa3a805d741712ed979503c3d60e6f791465f127a81dc",
+    "agent3_tax_compliance/src/adapters/ocr/cli.py": "88f8612ef40c5b7a67f624e2ee1b0de577cf6bbfc343af3e6f23afc62edf39c7",
+    "agent3_tax_compliance/src/adapters/ocr/layout_merge.py": "f712112d585dc3fd37bb1a0ac15c466314a9695298428de99cc424796b71d719",
+    "agent3_tax_compliance/src/adapters/ocr/normalizer.py": "520076b898e6346be6ea064ed95e5551748085655345817628f3b6c7fbd76b36",
+    "agent3_tax_compliance/src/adapters/ocr/protocol.py": "534fd23773be0160f12273e23b0e64c6bd0886582818a7f3ab91db3e615c16df",
+    "agent3_tax_compliance/src/adapters/ocr/registry.py": "ee8f8e9bbcc1dacc7e87bcecc7f2663cb511f2b00ddf7ea1f83033fbd479eda0",
+    "agent3_tax_compliance/src/adapters/ocr/repository.py": "eda51d054a1f8900e5a4b7e121b66ea77ab22124c40f23701ca6e044e7c1c00f",
+    "agent3_tax_compliance/src/adapters/ocr/worker_client.py": "a480cb85b90a90a01f419164051a72e279e33900fe487bdf6caa749b73bba6d6",
+    "agent3_tax_compliance/src/config.py": "34a20305b3f12e94075c29354dc7df70b06adb90a465ad784234dccc0b063993",
+    "agent3_tax_compliance/src/extraction/__init__.py": "288a76f4b96ec2e4ff8990c0dc71e92bf3cc8bc11123aeb1b44a6d28478b704b",
+    "agent3_tax_compliance/src/extraction/api.py": "e33b0b5e574858d676ab2de9a5db89c0c2939fbca3e176f910651b6f5d76a3df",
+    "agent3_tax_compliance/src/extraction/candidates.py": "c7bbc4ae5f636450e0d932218f1d60b17e72440e67453faf4ee3f349bdcc4705",
+    "agent3_tax_compliance/src/extraction/cli.py": "bd969d5ae5b1a222dc2c56823b754f127b8d4ae90381456979162ac9597dda52",
+    "agent3_tax_compliance/src/extraction/contracts.py": "0862729697544d10182199e142afe58eabc755f25b236c67f142af0953b8e15e",
+    "agent3_tax_compliance/src/extraction/evidence.py": "3cccd201c5ca562ae88cbc4f026cfed83420251a89ea5bbd80afeb756889914c",
+    "agent3_tax_compliance/src/extraction/invoice_fields.py": "9ffc92e1b87e4097724dfad353e8c567719a440c74a0b6dc93ee0ca1ca4fe84d",
+    "agent3_tax_compliance/src/extraction/llm_extractor.py": "92ceba779f4eaa6e1cebdbc8addf5a0cc2e10ab1243ab604e5945a5f0ab4ab1c",
+    "agent3_tax_compliance/src/extraction/ocr_pipeline.py": "6e5f3e57f2b27394107aff5a9c0f1b1dae97e0cbebce1a950c966f27fa342aa5",
+    "agent3_tax_compliance/src/extraction/repository.py": "c2a4c48c51ba65c453456b731c22726bb58ac31f0ef755ccb44af1db5b8c3513",
+    "agent3_tax_compliance/src/extraction/service.py": "a75b96b9503f05306721f909a3f0f57b5ab217d9e891b11b5c22bf0293750037",
+    "agent3_tax_compliance/src/extraction/spatial_tables.py": "98c624efff6aae6762505a1e129a5f73c9292aa5b2cb500f7d822803dabbf2b9",
+    "agent3_tax_compliance/src/extraction/tables.py": "64e3af3ff56dcc745898307bdfbb877c4327672b70bab0bfbdb9426227b55a3f",
+    "agent3_tax_compliance/src/extraction/vat_group_builder.py": "cc4e4d6eacf8dcf1b594331ae55b6135fcd7d8af795e49f5341b175a246c34c9",
+    "agent3_tax_compliance/src/ingestion/sandbox.py": "ec62f33c89cef00e9667d622d7f447e12f56c9745836bc2a34e13e828e39d1c8",
+    "agent3_tax_compliance/src/quality/evaluation_split.py": "75e22991323f4022c7967cc8a00f55f28bc6e0e954fc3150a3ee673fe5d0804f",
+    "agent3_tax_compliance/src/recovery/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "agent3_tax_compliance/src/recovery/api.py": "ec7142c0b12c737535031896d0f32d58d22d8fa00ffcfba629be302f68bd1225",
+    "agent3_tax_compliance/src/recovery/automation.py": "70f499ec04bb7279b6c9bc5a5cb53b196627103012f360c25898537a5760ee1b",
+    "agent3_tax_compliance/src/recovery/field_reads.py": "4d33c0c5e1ebe8ef80a589b97a9c6b7484cbfd9bb41b900850a8c00515926182",
+    "agent3_tax_compliance/src/recovery/policy.py": "1640c48f35379ee9edd864c501502edab35676514e55dc444ea434933ee2eb98",
+    "agent3_tax_compliance/src/recovery/regions.py": "59ac58a801258a6fa157f912c4c74115f6fe810221e00f6000153f68d52efaa8",
+    "data invoice/ocr_e2e_workflow/src/adapters/coverage_geometry.py": "0ff86cf41564b7b263a741cfd8d42a11ac1ed53443bd8d4739ca9a53bd509f4a",
+    "data invoice/ocr_e2e_workflow/src/adapters/ppocrv6_adapter.py": "f881ee475b82a2288a0661c2d2ad0b01c0bf310d84abfb3f327c8088b0d9bbe7",
+    "data invoice/ocr_e2e_workflow/src/adapters/vietocr_adapter.py": "8c5202ada825263ce0564d688d8ae4cd58a23c194dd9478e0638072927932fdf"
+  },
+  "additional_checks": {
+    "worker_crop_tests": {
+      "tests": 5,
+      "passed": true,
+      "command": "envs/ppocrv6_vietocr/Scripts/python.exe -m unittest discover -s tests -p test_recognition_crops.py -q"
+    },
+    "lab_startup": {
+      "checks": 4,
+      "passed": true,
+      "command": "python scripts/check_ocr_lab_launcher.py"
+    },
+    "real_model_timeout": {
+      "timeout_seconds": 30,
+      "error_code": "WORKER_TIMEOUT",
+      "cleanup_error_masked": false
+    },
+    "holdout_accuracy": "PENDING_UNSEEN_DATA",
+    "experimental_whole_page_promotion": false
+  }
+}

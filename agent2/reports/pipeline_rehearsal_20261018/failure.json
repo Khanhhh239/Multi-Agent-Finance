@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "stage_error": "KeyError",
+  "message": "'company_id'",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\agent22\\sme_fraud\\run_pipeline_rehearsal.py\", line 452, in run\n    summaries = [score_cohort(data_root,baseline,output,tag,plan) for tag in TAGS]\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\run_pipeline_rehearsal.py\", line 235, in score_cohort\n    graph_check = graph_checks(tables,graph_payload,CUTOFF)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\run_pipeline_rehearsal.py\", line 120, in graph_checks\n    if any(r['company_id'] != company for r in nodes.values()):\n       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\agent22\\sme_fraud\\run_pipeline_rehearsal.py\", line 120, in <genexpr>\n    if any(r['company_id'] != company for r in nodes.values()):\n           ~^^^^^^^^^^^^^^\nKeyError: 'company_id'\n",
+  "protected_inputs_unchanged": true,
+  "holdout_005_scored": false
+}

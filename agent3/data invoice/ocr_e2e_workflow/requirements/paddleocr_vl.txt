@@ -1,0 +1,6 @@
+paddleocr[doc-parser]>=3.7,<4
+paddlepaddle>=3.1,<4
+transformers>=4.51
+Pillow==11.1.0
+PyYAML==6.0.2
+tqdm>=4.66,<5

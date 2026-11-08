@@ -1,0 +1,16 @@
+{
+  "rule_id": "R-INVOICE-INFO",
+  "effective_from": "2020-07-01",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "has_valid_invoice_info",
+      "operator": "==",
+      "value": false
+    }
+  ],
+  "verdict": "FAIL",
+  "fixable": true,
+  "fix_hint": "Hóa đơn thiếu hoặc sai thông tin bắt buộc (tên người mua, mã số thuế người mua). Yêu cầu nhà cung cấp xuất hóa đơn thay thế hoặc hóa đơn điều chỉnh.",
+  "citation": "Nghị định 123/2020/NĐ-CP về hóa đơn, chứng từ và quy định xử lý hóa đơn có sai sót."
+}

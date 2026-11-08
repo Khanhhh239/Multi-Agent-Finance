@@ -1,0 +1,12 @@
+{
+  "status": "verified",
+  "local_links_checked": 61,
+  "missing_links": [],
+  "protected_source_before_matches": true,
+  "initial_commitment_drift": [],
+  "guarded_scenarios": 20,
+  "legacy_control_files_identical": 60,
+  "models_fitted": 0,
+  "observations_rescored": 0,
+  "production_queue_changed": false
+}

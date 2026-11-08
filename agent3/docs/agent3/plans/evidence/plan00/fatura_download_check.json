@@ -1,0 +1,193 @@
+{
+  "schema_version": "1.0.0",
+  "checked_date": "2026-10-11",
+  "source_url": "https://zenodo.org/records/10371464",
+  "script_sha256": "98f827c1844598a35177ceff43b8e16476ecaf4af8b09219549f5eeb8ff334b8",
+  "archive": {
+    "path": "data invoice/plan00_incoming/FATURA2.zip",
+    "size_bytes": 690717658,
+    "md5": "4c9404462f22c5241eb1a290a02eb2a2",
+    "expected_md5": "4c9404462f22c5241eb1a290a02eb2a2",
+    "md5_matches": true,
+    "sha256": "984e3812b8b7c632e668a2dd92afab5ae44631face24efe53e543910e5fca474",
+    "crc_pass": true,
+    "files": 50004
+  },
+  "extracted_files_match_archive": true,
+  "extra_extracted_files": 0,
+  "file_counts_by_extension": {
+    ".jpg": 20000,
+    ".csv": 3,
+    ".json": 30000,
+    ".txt": 1
+  },
+  "images_by_variant": {
+    "colored_images": 10000,
+    "images": 10000
+  },
+  "annotations_by_format": {
+    "layoutlm_HF_format": 10000,
+    "COCO_compatible_format": 10000,
+    "Original_Format": 10000
+  },
+  "logical_invoice_instances": 10000,
+  "templates": 50,
+  "instances_per_template_range": [
+    200,
+    200
+  ],
+  "documentation_files": [],
+  "original_field_presence": {
+    "BUYER": 6200,
+    "DATE": 9800,
+    "DUE_DATE": 5798,
+    "GSTIN_BUYER": 600,
+    "NUMBER": 8800,
+    "SELLER_ADDRESS": 8200,
+    "SELLER_NAME": 6800,
+    "SUB_TOTAL": 6797,
+    "TAX": 3800,
+    "TITLE": 7400,
+    "TOTAL": 8000,
+    "TOTAL_WORDS": 4000,
+    "GSTIN_SELLER": 1000,
+    "OTHER": 10000,
+    "SELLER_EMAIL": 4400,
+    "GST(1%)": 200,
+    "GST(20%)": 200,
+    "GST(18%)": 600,
+    "GST(12%)": 200,
+    "GST(5%)": 200,
+    "CONDITIONS": 2400,
+    "SEND_TO": 1800,
+    "SELLER_SITE": 1400,
+    "GST(9%)": 400,
+    "NOTE": 5200,
+    "PO_NUMBER": 1400,
+    "BILL_TO": 1600,
+    "DISCOUNT": 2400,
+    "PAYMENT_DETAILS": 2600,
+    "GSTIN": 1400,
+    "GST(7%)": 200,
+    "AMOUNT_DUE": 799
+  },
+  "original_class_keys": [
+    "AMOUNT_DUE",
+    "BILL_TO",
+    "BUYER",
+    "CONDITIONS",
+    "DATE",
+    "DISCOUNT",
+    "DUE_DATE",
+    "GST(1%)",
+    "GST(12%)",
+    "GST(18%)",
+    "GST(20%)",
+    "GST(5%)",
+    "GST(7%)",
+    "GST(9%)",
+    "GSTIN",
+    "GSTIN_BUYER",
+    "GSTIN_SELLER",
+    "INVOICE_INFO",
+    "LOGO",
+    "NOTE",
+    "NUMBER",
+    "OTHER",
+    "PAYMENT_DETAILS",
+    "PO_NUMBER",
+    "SELLER_ADDRESS",
+    "SELLER_EMAIL",
+    "SELLER_NAME",
+    "SELLER_SITE",
+    "SEND_TO",
+    "SUB_TOTAL",
+    "TABLE",
+    "TAX",
+    "TITLE",
+    "TOTAL",
+    "TOTAL_WORDS"
+  ],
+  "shape_examples": {
+    "colored_images": [
+      595,
+      841
+    ],
+    "layoutlm_HF_format": {
+      "keys": [
+        "path",
+        "ner_tags",
+        "words",
+        "bboxes"
+      ]
+    },
+    "COCO_compatible_format": {
+      "keys": [
+        "image_id",
+        "class_labels",
+        "boxes",
+        "orig_size"
+      ]
+    },
+    "Original_Format": {
+      "keys": [
+        "TABLE",
+        "INVOICE_INFO",
+        "BUYER",
+        "DATE",
+        "DUE_DATE",
+        "GSTIN_BUYER",
+        "NUMBER",
+        "SELLER_ADDRESS",
+        "SELLER_NAME",
+        "SUB_TOTAL",
+        "TAX",
+        "TITLE",
+        "TOTAL",
+        "TOTAL_WORDS",
+        "GSTIN_SELLER",
+        "OTHER",
+        "LOGO"
+      ]
+    },
+    "images": [
+      595,
+      841
+    ]
+  },
+  "annotation_issue_counts": {
+    "ORIGINAL_REVERSED_BBOX": 10000
+  },
+  "strat1_counts": {
+    "train": 7500,
+    "dev": 1250,
+    "test": 1250
+  },
+  "strat1_instance_overlap": {
+    "train_dev": 0,
+    "train_test": 0,
+    "dev_test": 0
+  },
+  "strat1_templates_per_split": {
+    "train": 50,
+    "dev": 50,
+    "test": 50
+  },
+  "strat2_template_counts": {
+    "train_inds": 40,
+    "dev_inds": 10,
+    "test_inds": 10
+  },
+  "strat2_dev_test_template_overlap": 10,
+  "download_integrity": "PASS",
+  "errors": [],
+  "license_status": "NOT_CONFIRMED_FROM_LOCAL_ARCHIVE_OR_RENDERED_RECORD",
+  "pipeline_imported": false,
+  "ocr_or_training_run": false,
+  "scope_limitations": [
+    "GENERATED_INTERNATIONAL_INVOICES_NOT_REAL_VIETNAMESE_TAX_INVOICES",
+    "NO_PDF",
+    "NO_INDEPENDENT_ANNOTATION_REVIEW",
+    "FORMAT_MAPPING_AND_COORDINATE_AUDIT_REQUIRED"
+  ]
+}

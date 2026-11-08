@@ -1,0 +1,193 @@
+{
+  "$defs": {
+    "DocumentPage": {
+      "additionalProperties": false,
+      "properties": {
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "NATIVE_TEXT",
+            "SCAN",
+            "IMAGE"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "transform": {
+          "$ref": "#/$defs/PageTransform"
+        }
+      },
+      "required": [
+        "page_index",
+        "kind",
+        "transform"
+      ],
+      "title": "DocumentPage",
+      "type": "object"
+    },
+    "PageTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "transform_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Transform Id",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "page_index": {
+          "minimum": 0,
+          "title": "Page Index",
+          "type": "integer"
+        },
+        "from_space": {
+          "enum": [
+            "PDF_POINTS",
+            "IMAGE_PIXELS"
+          ],
+          "title": "From Space",
+          "type": "string"
+        },
+        "to_space": {
+          "const": "NORMALIZED_TOP_LEFT",
+          "default": "NORMALIZED_TOP_LEFT",
+          "title": "To Space",
+          "type": "string"
+        },
+        "source_width": {
+          "exclusiveMinimum": 0,
+          "title": "Source Width",
+          "type": "number"
+        },
+        "source_height": {
+          "exclusiveMinimum": 0,
+          "title": "Source Height",
+          "type": "number"
+        },
+        "matrix": {
+          "maxItems": 6,
+          "minItems": 6,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Matrix",
+          "type": "array"
+        }
+      },
+      "required": [
+        "transform_id",
+        "source_id",
+        "page_index",
+        "from_space",
+        "source_width",
+        "source_height",
+        "matrix"
+      ],
+      "title": "PageTransform",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Config Version",
+      "type": "string"
+    },
+    "creator": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Creator",
+      "type": "string"
+    },
+    "stage": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Stage",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "source_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "document_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.:-]+$",
+      "title": "Document Id",
+      "type": "string"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "pages": {
+      "items": {
+        "$ref": "#/$defs/DocumentPage"
+      },
+      "minItems": 1,
+      "title": "Pages",
+      "type": "array"
+    }
+  },
+  "required": [
+    "config_version",
+    "creator",
+    "stage",
+    "source_id",
+    "document_id",
+    "input_sha256",
+    "pages"
+  ],
+  "title": "Document",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:financial:capture:1.0.0:document"
+}

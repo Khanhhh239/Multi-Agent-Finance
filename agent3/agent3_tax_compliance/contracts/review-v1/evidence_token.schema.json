@@ -1,0 +1,16 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "token": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Token",
+      "type": "string"
+    }
+  },
+  "required": [
+    "token"
+  ],
+  "title": "EvidenceToken",
+  "type": "object"
+}

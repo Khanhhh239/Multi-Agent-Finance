@@ -1,0 +1,72 @@
+[
+  {
+    "issue_id": "RR01", "urgency": 1, "kind": "rendering_bug", "title": "Thẻ A4 không xử lý window_days=null",
+    "evidence": "A5_003_cold_operational: gọi evidenceCard trên hit A4 thực tế phát sinh TypeError Cannot convert undefined or null to object. factValue đưa null vào Object.entries.",
+    "locations": ["review_ui/app.js: factValue", "review_ui/app.js: evidenceCard"],
+    "requested_change": "Xử lý null/giá trị không áp dụng; với A4 theo tháng hiển thị kỳ tháng thay cho số ngày null. Giữ nguyên predicate, điểm và admission A4.",
+    "acceptance": ["Thẻ A4 của RC_d3c7009ff2ea6dbf dựng được mà không có TypeError", "Hiển thị kỳ 2024-01 và 3 khoản, không hiển thị null hoặc 0 ngày", "Không làm thay đổi hàng đợi hoặc ngưỡng A5"]
+  },
+  {
+    "issue_id": "RR02", "urgency": 1, "kind": "evidence_visibility", "title": "Hiển thị bằng chứng quyết định ưu tiên C4/E2 và nguồn F1",
+    "evidence": "Thẻ C4 của hai hồ sơ và E2 của hồ sơ cao nhất chỉ hiện tên/điểm/thời gian, không có dữ kiện trong bằng chứng lồng. F1 chỉ hiện số tiền/trọng yếu/số ngày, thiếu nhật ký và nguồn quyết định.",
+    "locations": ["review_ui/app.js: evidenceCard", "review_ui/app.js: fields"],
+    "requested_change": "Thêm khối trình bày riêng C4/E2/F1: người thao tác, kỳ nghỉ/ủy quyền; quyết định chấm dứt, loại khoản chi và kỳ phục vụ; nguồn nhập thủ công, khóa sổ và chính sách trọng yếu. Gắn nhãn nguồn đã biết tại thời điểm đánh giá.",
+    "acceptance": ["C4 hiển thị hành động E0000418 và kỳ nghỉ 08–10/04/2025", "E2 hiển thị ngày chấm dứt 06/09/2025 và kỳ phục vụ 07/09–26/10/2025", "F1 cho xem AUD_37c5b8d37a9d83b4a3, CLOSE_4e3e579f42934ef64e và MAT_79219e8e57f93abe93"]
+  },
+  {
+    "issue_id": "RR03", "urgency": 1, "kind": "currency_semantics", "title": "Tách trạng thái quy đổi ngoại tệ khỏi cột sổ VND",
+    "evidence": "LIMIT_FOREIGN vừa ghi currency=USD, yêu cầu verified_vnd_amount, vừa có debit_vnd/credit_vnd 5.000.000 và tiêu đề sổ VND. P2 không chấm vượt hạn mức là đúng; phần trình bày sổ chưa thể hiện trạng thái chưa xác minh.",
+    "locations": ["review_ui/p2_controls.js: renderTab documents", "data/p2_controls_20261018_v2/LIMIT_FOREIGN/tables.json (chỉ đọc)"],
+    "requested_change": "Nêu rõ số sổ trong mẫu ngoại tệ chưa được xác minh quy đổi. Ở bộ nguồn phiên bản mới, tách số nguyên tệ, đồng tiền, số VND, tỷ giá và provenance xác minh; giữ nguyên bộ đối chứng đã khóa.",
+    "acceptance": ["Cả tab giao dịch và sổ của LIMIT_FOREIGN đều không hàm ý đã quy đổi VND", "Không tự gán tỷ giá hoặc so hạn mức VND khi thiếu xác minh", "Nguồn cũ và kết quả 0 điểm vẫn nguyên hash"]
+  },
+  {
+    "issue_id": "RR04", "urgency": 2, "kind": "temporal_provenance", "title": "Làm rõ tài liệu biết sau, hết hiệu lực và thời điểm biết hóa đơn đầu tiên",
+    "evidence": "FUTURE_INVOICE biết hóa đơn 12:00 sau chi 11:00; LIMIT_EXPIRED hết hiệu lực đúng lúc chi nhưng UI thiếu mốc hiệu lực. INSTALL_CASH/MIXED có invoice.recorded_at ở đợt sau trong khi giao dịch và liên kết đợt đầu đã mang thông tin hóa đơn. remember_invoice ghi đè bản invoice theo từng giao dịch.",
+    "locations": ["review_ui/p2_controls.js: cashEvidence", "sme_fraud/accounting.py: remember_invoice (phạm vi nguồn mô phỏng)"],
+    "requested_change": "Hiển thị mốc chi/biết/xác minh/hiệu lực và lý do tài liệu chưa được dùng. Thiết kế first_observed_at/phiên bản hoặc tách last_updated_at trong nguồn mới. Chưa kết luận detector dùng dữ liệu tương lai vì P2 đọc snapshot giao dịch đã có trường hóa đơn, không đọc recorded_at của invoices.",
+    "acceptance": ["Người rà nhìn được chênh 11:00/12:00 ở FUTURE_INVOICE", "Giải thích ranh giới hiệu lực loại trừ mốc cuối tại LIMIT_EXPIRED", "Có cách phân biệt biết hóa đơn đầu tiên với cập nhật đợt sau mà không sửa nguồn đã khóa"]
+  },
+  {
+    "issue_id": "RR05", "urgency": 2, "kind": "accounting_explanation", "title": "Giải thích theo số tiền thực tế, nghĩa vụ chi và căn cứ ưu tiên",
+    "evidence": "INSTALL_CASH có chi 3 triệu nhưng hóa đơn 12 triệu; max_score 9 khác P2 8. A5 có thuật ngữ cash_outflow/expense_debit và baseline; C4/C1 cùng nhóm không cộng chồng. Hồ sơ A4 3 điểm vào hàng đợi theo split_pattern.",
+    "locations": ["review_ui/p2_controls.js", "review_ui/app.js: headline, a5Threshold, renderDetail"],
+    "requested_change": "Dùng câu có số tiền chi, tổng hóa đơn, ngưỡng, căn cứ quy tắc và ngữ cảnh độc lập. Dịch loại phép đo, phân biệt dòng chi với chi phí trích trước, nêu căn cứ mở hồ sơ thay vì để người dùng suy từ tổng điểm.",
+    "acceptance": ["Giải thích được khoản chi 3 triệu vẫn cần đối chiếu hóa đơn 12 triệu", "Hồ sơ E2 cao nhất không được mô tả là chỉ do A5 vượt 3,89%", "Hồ sơ A4 3 điểm nêu tuyến rà mẫu, không bị nhầm là vượt ngưỡng điểm thông thường"]
+  },
+  {
+    "issue_id": "RR06", "urgency": 2, "kind": "refund_workflow", "title": "Tóm tắt chi gốc/hoàn/đảo và trạng thái hồ sơ gốc",
+    "evidence": "REFUND_FULL/PART chỉ hiển thị dòng hoàn không có P2 khi chọn dòng cuối; hồ sơ gốc vẫn có P2. REVERSAL_JOURNAL dùng kênh journal nhưng liên kết cash_return_of được dịch thành hoàn tiền.",
+    "locations": ["review_ui/p2_controls.js: renderTab", "sme_fraud/p2_control_cases.py: liên kết hoàn/đảo cho nguồn mới"],
+    "requested_change": "Thêm tóm tắt và liên kết hồ sơ gốc, phân biệt hoàn tiền thực với đảo sổ; chỉ đề xuất tái rà sau xác minh. Không xóa hit lịch sử hoặc tự bù trừ VAT.",
+    "acceptance": ["REFUND_FULL thấy chi 5 triệu, hoàn 5 triệu và hồ sơ gốc còn chờ xác minh", "REVERSAL_JOURNAL không bị khẳng định đã thực thu tiền chỉ vì có đảo sổ", "Bảo toàn bằng chứng quá khứ và cho người dùng chủ động ghi kết luận"]
+  },
+  {
+    "issue_id": "RR07", "urgency": 3, "kind": "negative_result_explanation", "title": "Giải thích vì sao không có P2 và hành động còn lại",
+    "evidence": "FULL_BELOW, FULL_BANK và RECEIPT_UNLINKED dùng thông báo chung. Trường hợp thu chưa nối gốc cần hành động khác với khoản dưới ngưỡng hoặc thanh toán ngân hàng.",
+    "locations": ["review_ui/p2_controls.js: no-P2 branch"],
+    "requested_change": "Hiển thị lý do ngoài phạm vi/không đạt điều kiện theo dữ kiện, giữ thông báo không phải chứng nhận hợp lệ. Với thu chưa liên kết, nêu nhiệm vụ xác định bên nộp và chứng từ gốc, không tạo P2 giả.",
+    "acceptance": ["Ba trường hợp có giải thích khác nhau và không được gọi chung là giao dịch hợp lệ", "Không mở thêm hồ sơ rủi ro P2 cho dòng thu"]
+  },
+  {
+    "issue_id": "RR08", "urgency": 2, "kind": "exception_visibility", "title": "Hiển thị đủ căn cứ ngoại lệ A1/A5",
+    "evidence": "INSTALL_MIXED có A1 được giải trình bằng AGR_CONTROL nhưng UI chủ yếu hiện câu miễn; RECUR_A5 không hiện 22 mẫu/P99 1 triệu và đối chiếu thỏa thuận 3 triệu ngay tại thẻ.",
+    "locations": ["review_ui/p2_controls.js: non-P2 evidence", "sme_fraud/p2_controls_web.py: detail payload"],
+    "requested_change": "Trình bày mã thỏa thuận, mức/tổng được phép, giao dịch gắn với nghĩa vụ, hiệu lực/phê duyệt, cùng thống kê A5 và mã mẫu định kỳ. Không dùng hợp đồng định kỳ để tự miễn P2.",
+    "acceptance": ["Người rà xem được vì sao A1 được giải trình ở INSTALL_MIXED", "RECUR_A5 thể hiện 3 triệu > P99 1 triệu nhưng khớp PAT_CONTROL đã duyệt", "RECUR_CASH/GAP vẫn giữ kết quả P2 đang có"]
+  },
+  {
+    "issue_id": "RR09", "urgency": 2, "kind": "business_priority_decision", "title": "Chốt cách ưu tiên khi vượt hạn mức đã xác minh chỉ 1 VND",
+    "evidence": "LIMIT_VERIFIED đúng cấu hình 14 điểm/cao với 2.000.001 so 2.000.000 VND. Mức vượt tuyệt đối chỉ 1 VND chưa được người nghiệp vụ nghiệm thu.",
+    "locations": ["Chính sách ưu tiên nội bộ; chưa thay cấu hình detector"],
+    "requested_change": "Chủ kiểm soát quyết định việc phân tầng theo trọng yếu, tần suất và ngoại lệ có phê duyệt. Ghi rõ số vượt trên UI; chưa tự đổi điểm hoặc thêm dung sai chỉ để giảm hồ sơ.",
+    "acceptance": ["Có quyết định nghiệp vụ được ghi nhận cho trường hợp sai khác rất nhỏ", "Đối chứng hiện tại được bảo toàn; mọi thay đổi chính sách phải có bộ đối chứng phiên bản mới"]
+  },
+  {
+    "issue_id": "RR10", "urgency": 3, "kind": "information_request_operations", "title": "Tách mức rủi ro khỏi thứ tự và hạn lấy tài liệu",
+    "evidence": "Hai hồ sơ cold-start 0 mẫu có P2 thiếu hóa đơn 0 điểm/thấp, số chi 55.814.000 và 21.738.000 VND. Không thể xem thấp là hợp lệ hoặc bỏ qua việc thu tài liệu.",
+    "locations": ["Luồng yêu cầu bổ sung; review_capacity/case UI khi có nghiệp vụ nghiệm thu"],
+    "requested_change": "Gắn người phụ trách, thời hạn và tuổi yêu cầu; cân nhắc thứ tự bổ sung theo giá trị/độ lâu sau khi có quyết định nghiệp vụ. Không tăng điểm A5 do thiếu mẫu hoặc tạo lịch sử giả.",
+    "acceptance": ["Phân biệt ưu tiên xử lý yêu cầu dữ liệu với điểm nghi vấn", "Người rà thấy A5 chưa đánh giá được và nhiệm vụ thu tài liệu còn mở", "Không diễn giải SLA của nguồn lịch sử mô phỏng như quá hạn thật hôm nay"]
+  }
+]

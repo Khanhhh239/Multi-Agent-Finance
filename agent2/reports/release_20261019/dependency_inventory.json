@@ -1,0 +1,109 @@
+{
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "executable": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "packages": {
+    "networkx": {
+      "version": "3.6.1",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "cloudpickle": {
+      "version": "3.1.0",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "narwhals": {
+      "version": "2.19.0",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "joblib": {
+      "version": "1.5.1",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "scipy": {
+      "version": "1.15.1",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "numpy": {
+      "version": "1.26.4",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "pandas": {
+      "version": "2.2.3",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "tzdata": {
+      "version": "2024.2",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "pytz": {
+      "version": "2024.2",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "python-dateutil": {
+      "version": "2.9.0.post0",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    },
+    "six": {
+      "version": "1.16.0",
+      "location": "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+    }
+  },
+  "mismatches": [
+    {
+      "name": "cloudpickle",
+      "declared": "cloudpickle==3.1.2",
+      "installed": "3.1.0"
+    },
+    {
+      "name": "narwhals",
+      "declared": "narwhals==2.27.1",
+      "installed": "2.19.0"
+    },
+    {
+      "name": "threadpoolctl",
+      "declared": "threadpoolctl==3.7.0",
+      "installed": "3.6.0"
+    },
+    {
+      "name": "joblib",
+      "declared": "joblib==1.6.0",
+      "installed": "1.5.1"
+    },
+    {
+      "name": "scipy",
+      "declared": "scipy==1.18.1",
+      "installed": "1.15.1"
+    },
+    {
+      "name": "scikit-learn",
+      "declared": "scikit-learn==1.9.1",
+      "installed": "1.8.0"
+    },
+    {
+      "name": "pandas",
+      "declared": "pandas==3.0.1",
+      "installed": "2.2.3"
+    },
+    {
+      "name": "numpy",
+      "declared": "numpy==2.5.4",
+      "installed": "1.26.4"
+    }
+  ],
+  "import_paths": [
+    "D:\\agent22\\.runtime\\release_20261019",
+    "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip",
+    "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\DLLs",
+    "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib",
+    "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312",
+    "C:\\Users\\Technical Support\\AppData\\Roaming\\Python\\Python312\\site-packages",
+    "C:\\Users\\Technical Support\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+  ]
+}

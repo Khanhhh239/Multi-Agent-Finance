@@ -1,0 +1,9 @@
+{
+  "failed_initial_workspace": "reports/integrated_rehearsal_20261028",
+  "initial_failure": "New runner did not load account_flow_edges for the accounting audit",
+  "correction": "Audit three additional manifest-attested accounting tables separately; keep rule input semantics unchanged",
+  "companion_unit_test": "IntegratedRehearsalTest.test_accounting_audit_reads_attested_extra_tables_without_changing_rule_tables",
+  "other_preflight_correction": "Canonicalize copied cache destination paths before provenance checks",
+  "previous_rule_or_model_implementation_changed": false,
+  "final_workspace": "D:\\agent22\\reports\\integrated_rehearsal_20261028_v2"
+}

@@ -1,0 +1,21 @@
+{
+  "rule_id": "R-CAR-1.6B",
+  "effective_from": "2015-08-06",
+  "effective_to": null,
+  "conditions": [
+    {
+      "field": "asset_type",
+      "operator": "==",
+      "value": "car_under_9_seats"
+    },
+    {
+      "field": "original_cost",
+      "operator": ">",
+      "value": 1600000000
+    }
+  ],
+  "verdict": "FAIL",
+  "fixable": false,
+  "fix_hint": "Phần trích khấu hao tương ứng với nguyên giá vượt trên 1,6 tỷ đồng đối với ô tô chở người từ 9 chỗ ngồi trở xuống không được tính vào chi phí được trừ khi xác định thuế TNDN.",
+  "citation": "Điểm 2.2 Khoản 2 Điều 4 Thông tư 96/2015/TT-BTC"
+}

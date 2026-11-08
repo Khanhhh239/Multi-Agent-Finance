@@ -1,0 +1,42 @@
+{
+  "synthetic_only": true,
+  "sqlite_under_runtime": true,
+  "groups": [
+    {
+      "rule_id": "C4",
+      "cases": 20,
+      "all_case_details_loaded": true,
+      "admissions": 0,
+      "real_reviews": 0
+    },
+    {
+      "rule_id": "E2",
+      "cases": 6,
+      "all_case_details_loaded": true,
+      "admissions": 0,
+      "real_reviews": 0
+    },
+    {
+      "rule_id": "F2",
+      "cases": 34,
+      "all_case_details_loaded": true,
+      "admissions": 0,
+      "real_reviews": 0
+    },
+    {
+      "rule_id": "F3",
+      "cases": 24,
+      "all_case_details_loaded": true,
+      "admissions": 0,
+      "real_reviews": 0
+    },
+    {
+      "rule_id": "F4",
+      "cases": 36,
+      "all_case_details_loaded": true,
+      "admissions": 0,
+      "real_reviews": 0
+    }
+  ],
+  "production_database_touched": false
+}

@@ -1,0 +1,1 @@
+Lượt kiểm tra đầu dừng trước khi xuất kết quả vì so sánh cấu trúc hit trong bộ nhớ với JSON đã lưu chưa chuẩn hóa tuple/list. Không dùng thư mục này làm bản đo hoặc snapshot web. Lượt sửa tiếp theo xuất sang thư mục mới và chỉ được nghiệm thu khi mọi phép đối chiếu đạt.

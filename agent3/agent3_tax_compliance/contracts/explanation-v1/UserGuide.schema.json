@@ -1,0 +1,90 @@
+{
+  "$defs": {
+    "GuideAction": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "target": {
+          "enum": [
+            "data",
+            "business",
+            "tax"
+          ],
+          "title": "Target",
+          "type": "string"
+        },
+        "field_paths": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Field Paths",
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "reason",
+        "steps",
+        "target"
+      ],
+      "title": "GuideAction",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "read_summary": {
+      "title": "Read Summary",
+      "type": "string"
+    },
+    "missing_items": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Items",
+      "type": "array"
+    },
+    "next_steps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Next Steps",
+      "type": "array"
+    },
+    "warning": {
+      "title": "Warning",
+      "type": "string"
+    },
+    "actions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/GuideAction"
+      },
+      "title": "Actions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "read_summary",
+    "missing_items",
+    "next_steps",
+    "warning"
+  ],
+  "title": "UserGuide",
+  "type": "object"
+}

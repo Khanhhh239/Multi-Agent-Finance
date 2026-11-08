@@ -1,0 +1,40 @@
+{
+  "scope": "One PDF render geometry/resource DEV experiment; no OCR field accuracy claim",
+  "rows": [
+    {
+      "dpi": 150,
+      "width": 1240,
+      "height": 1755,
+      "pixels": 2176200,
+      "elapsed_seconds": 0.5198499000007359,
+      "native_blocks": 135,
+      "same_native_block_ids": true,
+      "max_normalized_bbox_delta": 0.0,
+      "render_sha256": "cfc471150d267cdf851d8b0e335443e7a79536f44c2a1e4e3667bd4b2dd0ea75"
+    },
+    {
+      "dpi": 200,
+      "width": 1653,
+      "height": 2339,
+      "pixels": 3866367,
+      "elapsed_seconds": 0.5542098999994778,
+      "native_blocks": 135,
+      "same_native_block_ids": true,
+      "max_normalized_bbox_delta": 0.0003302688336478399,
+      "render_sha256": "5fdee9c3f5e40f8a3182e27e88e8bc0125b2a71cef6fa8b4f7dd0bcf9ed5d6e5"
+    },
+    {
+      "dpi": 300,
+      "width": 2480,
+      "height": 3509,
+      "pixels": 8702320,
+      "elapsed_seconds": 0.7636504000001878,
+      "native_blocks": 135,
+      "same_native_block_ids": true,
+      "max_normalized_bbox_delta": 0.00022014784893198414,
+      "render_sha256": "371f62e99a26ae8c69ef9a2d73a4676031f798b1f99d0d48dee2708cc8666762"
+    }
+  ],
+  "default_300dpi_limit_enforced": true,
+  "default_changed": false
+}

@@ -1,0 +1,10 @@
+model_id: hunyuan_ocr_1_5
+adapter: hunyuan_ocr
+output_mode: full_page_text
+python: "envs/hunyuan_ocr_1_5/Scripts/python.exe"
+model_name: tencent/HunyuanOCR
+temperature: 0
+max_new_tokens: 32768
+prompt: "提取文档图片中正文的所有信息用markdown格式表示，其中页眉、页脚部分忽略，表格用html格式表达，文档中公式用latex格式表示，按照阅读顺序组织进行解析。"
+requires_gpu: true
+license_review_required: true

@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-20T02:18:06.136921+00:00",
+  "browser_connected": true,
+  "sample_counts": {
+    "PASS": 37,
+    "FAIL": 2
+  },
+  "workflow_counts": {
+    "PASS": 12,
+    "FAIL": 4,
+    "BLOCKED": 1
+  },
+  "open_issues": 4,
+  "all_criteria_accepted": false,
+  "independent_accounting_acceptance": false,
+  "notification_mode": "dry_run",
+  "external_sent_jobs": 0,
+  "report": "report.md"
+}

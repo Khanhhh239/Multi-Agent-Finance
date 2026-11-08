@@ -1,0 +1,62 @@
+{
+  "version": "release-acceptance-20261029-v1",
+  "result": "passed_with_documented_scope",
+  "dataset": "integrated_rehearsal_20261028_v2",
+  "app_cases": 1211,
+  "historical_samples": 39,
+  "p2_controls": 32,
+  "p2_transactions": 73,
+  "historical_workflows": 17,
+  "workflows_passed": 17,
+  "browser_checks": 81,
+  "python_tests": 173,
+  "javascript_checks": 104,
+  "api_data_evidence_checks": 68,
+  "product_bugs_fixed": 3,
+  "viewports": [
+    {
+      "width": 360,
+      "height": 800
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "restart_persistence": {
+    "all_durable_rows_unchanged": true,
+    "tables": {
+      "review_workflow_events": true,
+      "information_request_events": true,
+      "notification_outbox": true,
+      "notification_delivery_events": true,
+      "notification_allocations": true,
+      "admissions": true
+    },
+    "before_counts": {
+      "review_workflow_events": 12,
+      "information_request_events": 8,
+      "notification_outbox": 174,
+      "notification_delivery_events": 374,
+      "notification_allocations": 40,
+      "admissions": 1
+    }
+  },
+  "simulated_jobs": 174,
+  "delivery_events": 522,
+  "workflow_events": 15,
+  "independent_reviews": 0,
+  "actual_review_minutes": null,
+  "real_accounts_created": 0,
+  "external_messages_sent": 0,
+  "ml_mode": "shadow_unchanged",
+  "source_detector_models_unchanged": true,
+  "unverified": [
+    "physical_mobile_devices",
+    "other_browser_engines",
+    "actual_email_zalo_delivery",
+    "real_login",
+    "independent_accounting_acceptance",
+    "ml_business_benefit"
+  ]
+}

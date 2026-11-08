@@ -1,0 +1,23 @@
+{
+  "url": "http://127.0.0.1:8774",
+  "rr09_url": "http://127.0.0.1:8774/p2-controls#control=RR09_ONE_DONG",
+  "health": {
+    "status": "ok",
+    "application": "sme-case-review",
+    "qa": false,
+    "instance_id": "rr09-ml-v4-20261024"
+  },
+  "cases_by_cohort": {
+    "001": 584,
+    "003": 627
+  },
+  "rr09_points": 14,
+  "rr09_priority": "thap",
+  "rr09_excess_vnd": 1,
+  "http_checks_passed": true,
+  "renderer_tests_passed": true,
+  "browser_visual_qa": false,
+  "browser_blocker": "CUA unable to load browser request-header policy on inventory and create-tab retry",
+  "user_feedback_entered": false,
+  "external_messages_sent": 0
+}
