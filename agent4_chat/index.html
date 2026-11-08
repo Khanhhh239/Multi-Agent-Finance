@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" data-agent="4">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Agent 4 Hỏi đáp số liệu</title>
 <link rel="stylesheet" href="/design/platform-theme.css">
 <link rel="stylesheet" href="chat.css">
+<script src="/design/platform-theme.js"></script>
 <script src="chat.js" defer></script>
 </head>
 <body>
@@ -13,22 +14,24 @@
   <aside class="side" aria-label="Gợi ý câu hỏi">
     <h2>Thử hỏi</h2>
     <ul class="suggest" id="suggest"></ul>
-    <h2>Chỉ tiêu có sẵn</h2>
-    <p class="muted" id="metric-count">Đang tải danh mục.</p>
-    <ul class="metrics" id="metrics"></ul>
-    <p class="note">Số liệu lấy từ kho dữ liệu mô phỏng của Agent 4, không phải sổ thật của doanh nghiệp.</p>
+    <details class="metric-catalog">
+      <summary>Chỉ tiêu có sẵn</summary>
+      <p class="muted" id="metric-count">Đang tải danh mục.</p>
+      <ul class="metrics" id="metrics"></ul>
+    </details>
   </aside>
 
   <section class="main">
     <ol class="thread" id="thread" aria-live="polite">
       <li class="intro">
+        <p class="data-badge">Kho dữ liệu mô phỏng</p>
         <h1>Hỏi số liệu tài chính</h1>
         <p>Đặt câu hỏi bằng tiếng Việt về doanh thu, lợi nhuận, công nợ hay dòng tiền. Agent 4 chuyển câu hỏi thành truy vấn đã kiểm tra, chạy trên kho chỉ đọc và cho biết nguồn số liệu.</p>
       </li>
     </ol>
     <form class="composer" id="composer">
       <label class="sr-only" for="question">Câu hỏi</label>
-      <textarea id="question" rows="1" placeholder="Ví dụ: Doanh thu thuần quý 3 năm 2026 là bao nhiêu?" required></textarea>
+      <textarea id="question" rows="1" placeholder="Nhập câu hỏi về số liệu…" required></textarea>
       <button type="submit" id="send">Gửi</button>
     </form>
   </section>

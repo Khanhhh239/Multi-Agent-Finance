@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" data-agent="2" class="compact-workbench">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,11 +10,11 @@
   <script src="/review_explanations.js" defer></script>
   <script src="/review_workflow.js" defer></script>
   <script src="/app.js" defer></script>
-<link rel="stylesheet" href="/platform-theme.css?v=1e35845d">
+<link rel="stylesheet" href="/platform-theme.css?v=720bf3b8">
 <script src="/platform-theme.js?v=ff3bf464"></script>
 </head>
 <body>
-  <aside class="sidebar">
+  <nav class="sidebar" aria-label="Nghiệp vụ soát giao dịch">
     <a class="brand" href="/"><span class="brand-mark">S</span><span>Sổ Soát<small>KIỂM SOÁT NỘI BỘ</small></span></a>
     <div class="workspace-label">KHÔNG GIAN LÀM VIỆC</div>
     <button class="nav-item active" id="queue-nav"><span>▤</span>Hồ sơ rà soát</button>
@@ -26,7 +26,7 @@
     <button class="nav-item" id="notifications-nav"><span>✉</span>Thông báo</button>
     <button class="nav-item" id="help-nav"><span>ⓘ</span>Hướng dẫn sử dụng</button>
     <div class="sidebar-bottom"><span class="local-dot"></span> Bản thử nội bộ<small>Dữ liệu tổng hợp 2024–2025</small></div>
-  </aside>
+  </nav>
   <main>
     <header class="topbar">
       <div class="breadcrumb">Kiểm soát nội bộ <span>/</span> Hồ sơ rà soát</div>
@@ -34,9 +34,8 @@
       <span class="simulation-badge" id="environment-label">Dữ liệu mô phỏng</span>
     </header>
     <section class="page-heading">
-      <div><div class="eyebrow">TỪ CẢNH BÁO ĐẾN BẰNG CHỨNG</div><h1>Hồ sơ cần rà soát</h1><p>Đối chiếu nghiệp vụ, ghi nhận kết luận và theo dõi phần còn thiếu.</p></div>
+      <div><div class="eyebrow">KIỂM SOÁT GIAO DỊCH</div><h1>Hồ sơ cần rà soát</h1><p>Đối chiếu nghiệp vụ, ghi nhận kết luận và theo dõi phần còn thiếu.</p></div>
       <div class="heading-controls">
-        <a class="icon-button" href="/company-ml">Dữ liệu &amp; ML</a>
         <label>Bộ dữ liệu<select id="scenario" aria-label="Bộ dữ liệu"></select></label>
         <label>Ngân sách / ngày / công ty<select id="budget" aria-label="Ngân sách rà soát"><option value="5">5 lượt / 120 phút</option><option value="10">10 lượt / 240 phút</option></select></label>
       </div>
@@ -44,14 +43,14 @@
     <div id="notice" class="notice hidden" role="status"></div>
     <div id="review-workflow-status" class="source-banner hidden" aria-live="polite"></div>
     <section class="stats" aria-label="Tổng quan hồ sơ">
-      <article><span>Tồn đọng</span><strong id="stat-new">—</strong><small>Hồ sơ giao dịch và nguồn đang mở</small><i class="stat-icon blue">▤</i></article>
-      <article><span>Ưu tiên cao</span><strong id="stat-high">—</strong><small>Cần đối chiếu trước</small><i class="stat-icon amber">!</i></article>
-      <article><span>Chờ bổ sung</span><strong id="stat-gap">—</strong><small>Còn thiếu bằng chứng</small><i class="stat-icon violet">◷</i></article>
-      <article><span>Đã kết luận</span><strong id="stat-closed">—</strong><small>Có lý do và người rà soát</small><i class="stat-icon green">✓</i></article>
+      <article><span>Tồn đọng</span><strong id="stat-new">—</strong><small>Hồ sơ giao dịch và nguồn đang mở</small></article>
+      <article><span>Ưu tiên cao</span><strong id="stat-high">—</strong><small>Cần đối chiếu trước</small></article>
+      <article><span>Chờ bổ sung</span><strong id="stat-gap">—</strong><small>Còn thiếu bằng chứng</small></article>
+      <article><span>Đã kết luận</span><strong id="stat-closed">—</strong><small>Có lý do và người rà soát</small></article>
     </section>
-    <section class="filters" aria-label="Bộ lọc hồ sơ">
+    <section class="filters case-filters" aria-label="Bộ lọc hồ sơ">
       <label class="daily-toggle"><input type="checkbox" id="daily-only" checked> Ưu tiên hôm nay</label>
-      <label class="search"><span>⌕</span><input id="search" placeholder="Tìm mã hồ sơ, đối tượng hoặc nội dung…" aria-label="Tìm hồ sơ"></label>
+      <label class="search"><span aria-hidden="true">⌕</span><input id="search" placeholder="Tìm mã hoặc nội dung hồ sơ…" aria-label="Tìm hồ sơ"></label>
       <select id="company" aria-label="Công ty"><option value="">Tất cả công ty</option></select>
       <select id="status" aria-label="Trạng thái"><option value="active">Đang xử lý</option><option value="new">Chưa rà soát</option><option value="awaiting_information">Chờ bổ sung</option><option value="closed">Đã kết luận</option><option value="all">Tất cả trạng thái</option></select>
       <select id="priority" aria-label="Mức ưu tiên"><option value="">Mọi mức ưu tiên</option><option value="cao_nhat">Cao nhất</option><option value="cao">Cao</option><option value="trung_binh">Trung bình</option><option value="thap">Thấp</option></select>
