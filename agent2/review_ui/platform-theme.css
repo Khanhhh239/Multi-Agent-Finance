@@ -15,15 +15,15 @@
 
 /* 2. Tokens. Sea teal is the one accent; lantern red, ochre and teal appear together only in the thin region line. */
 :root {
-  --kt-ink: #12263a;
-  --kt-text: #26343f;
-  --kt-muted: #5d6a75;
-  --kt-line: #d8dee3;
-  --kt-canvas: #f3f5f6;
+  --kt-ink: #142e33;
+  --kt-text: #263a3d;
+  --kt-muted: #526568;
+  --kt-line: #d5dfdc;
+  --kt-canvas: #f3f6f3;
   --kt-surface: #ffffff;
-  --kt-accent: #0d6e78;
-  --kt-accent-strong: #0a5961;
-  --kt-accent-soft: #e3f1f2;
+  --kt-accent: #096b66;
+  --kt-accent-strong: #075650;
+  --kt-accent-soft: #e1f0eb;
   --kt-lantern: #b23a2e;
   --kt-ochre: #c99a2e;
   --kt-ok: #17784b;
@@ -43,12 +43,12 @@ body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: 3px; z-i
 
 /* 4. Agent 1 (variables from agent1_service/ui/workspace/style.css) */
 :root {
-  --paper: #f3f5f6; --white: #ffffff; --ink: #12263a; --muted: #5d6a75; --line: #d8dee3;
-  --green: #0a5961; --lime: #e3f1f2; --amber: #946000; --red: #b42318;
+  --paper: var(--kt-canvas); --white: var(--kt-surface); --ink: var(--kt-ink); --muted: var(--kt-muted); --line: var(--kt-line);
+  --green: var(--kt-accent-strong); --lime: var(--kt-accent-soft); --amber: var(--kt-warn); --red: var(--kt-err);
 }
 
 /* 5. Agent 2 (variables from review_ui/styles.css) */
-:root { --blue: #0d6e78; --navy: #12263a; --border: #d8dee3; }
+:root { --blue: var(--kt-accent); --navy: var(--kt-ink); --border: var(--kt-line); }
 body .sidebar .nav-item.active { background: var(--kt-accent-soft); color: var(--kt-accent); }
 body .sidebar .nav-item:hover { background: var(--kt-canvas); }
 body .brand-mark { background: var(--kt-ink); border-radius: 6px; }
@@ -57,10 +57,10 @@ body .page-heading h1 { letter-spacing: -0.01em; font-weight: 600; }
 
 /* 6. Agent 3 (Carbon tokens; the theme class on <body> redefines them, so it is overridden too) */
 :root, body.cds--g10 {
-  --cds-interactive: #0d6e78; --cds-link-primary: #0d6e78; --cds-link-primary-hover: #0a5961;
-  --cds-button-primary: #0d6e78; --cds-button-primary-hover: #0a5961; --cds-button-primary-active: #08454c;
-  --cds-border-interactive: #0d6e78; --cds-focus: #0d6e78; --cds-layer-selected: #e3f1f2; --cds-text-primary: #12263a;
-  --cds-background: #f3f5f6;
+  --cds-interactive: var(--kt-accent); --cds-link-primary: var(--kt-accent); --cds-link-primary-hover: var(--kt-accent-strong);
+  --cds-button-primary: var(--kt-accent); --cds-button-primary-hover: var(--kt-accent-strong); --cds-button-primary-active: var(--kt-ink);
+  --cds-border-interactive: var(--kt-accent); --cds-focus: var(--kt-accent); --cds-layer-selected: var(--kt-accent-soft); --cds-text-primary: var(--kt-ink);
+  --cds-background: var(--kt-canvas);
 }
 .cds--header, .cds--header .cds--header__name { background: var(--kt-ink) !important; }
 .cds--header { border-bottom: 0 !important; }

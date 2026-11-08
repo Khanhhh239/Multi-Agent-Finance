@@ -23,6 +23,7 @@ Dữ liệu trong mọi bản chạy thử đều là dữ liệu mô phỏng. C
 ## 3. Nạp dữ liệu một lần, có mật khẩu (trang Nạp dữ liệu)
 
 - Một nơi thả tệp cho Agent 1, 2, 3. Portal nhận dạng tệp, chạy bước xem trước của agent nhận, chỉ ghi khi bấm "Niêm phong và ghi".
+- Hàng chờ được gắn với hồ sơ đang chọn lúc nạp. Khi đổi mã doanh nghiệp, portal hiển thị hàng chờ của mã mới. Khi sửa mã liên kết hoặc định dạng nhập, tệp cũ cần kiểm tra lại. Tệp chờ từ bản cũ chưa gắn hồ sơ cũng cần bấm "Kiểm tra lại" để gắn với hồ sơ đang mở.
 - Mật khẩu nạp dữ liệu đặt lần đầu ở trang này, lưu dạng băm scrypt trong `portal/workspace/intake_security.json`. Phiên 20 phút, sai 5 lần thì khóa 60 giây. Quên mật khẩu thì xóa tệp đó.
 - Mỗi lần ghi là một phiên bản của gói (`portal/workspace/batches.json`), có mã băm của danh sách tệp. Từ phiên bản thứ hai trở đi bắt buộc nhập lý do (ít nhất 10 ký tự).
 - Sau khi có gói niêm phong, sửa cấu hình doanh nghiệp cũng cần mở khóa.
@@ -33,11 +34,11 @@ Dữ liệu trong mọi bản chạy thử đều là dữ liệu mô phỏng. C
 
 ## 4. Giao diện chung
 
-- Một phông (Be Vietnam Pro, đóng gói sẵn, không gọi mạng; nặng nhất là 600), một màu nhấn xanh biển `#0d6e78`, thanh ba màu mảnh ở đầu trang.
+- Một phông (Be Vietnam Pro, đóng gói sẵn, không gọi mạng; nặng nhất là 600), màu nhấn xanh biển `#096b66` và thanh ba màu mảnh ở đầu trang. Agent 4 đọc cùng bộ biến trực tiếp từ portal.
 - Nguồn duy nhất là `design/platform-theme.css`. Sửa xong chạy `python design/sync.py`: lệnh chép vào từng agent, thêm hoặc làm mới thẻ liên kết có mã băm nội dung. `python design/sync.py --check` dùng để kiểm tra.
 - Agent 1 đổi biến `--green`, `--ink`... Agent 2 đổi `--blue`, `--navy`. Agent 3 đổi biến Carbon `--cds-*` (ghi đè cả trên `body.cds--g10`).
 - Agent 2 phục vụ tệp theme qua `agent2/sme_fraud/platform_theme.py`. Agent 1 và Agent 3 dùng thư mục tĩnh sẵn có.
-- Đã bỏ toàn bộ hình minh họa Hội An, Quy Nhơn, Quảng Ngãi theo yêu cầu của Khanh. Chưa có hình thay thế.
+- Trang Tổng quan dùng ảnh thật Hội An về đêm, Eo Gió ở Quy Nhơn và đảo Bé Lý Sơn ở Quảng Ngãi. Tệp WebP nằm trong `portal/static/places/`. Tác giả, ảnh gốc và giấy phép Wikimedia Commons nằm ở cuối trang Tổng quan.
 
 ## 5. Sửa trong code agent (đều không đổi hành vi khi chạy riêng)
 
@@ -47,7 +48,7 @@ Dữ liệu trong mọi bản chạy thử đều là dữ liệu mô phỏng. C
 
 ## 6. Còn thiếu, người nhận nên làm tiếp
 
-1. Chưa kiểm tra kỹ giao diện trên màn hình rộng. Cửa sổ xem trước lúc làm chỉ rộng khoảng 400 điểm ảnh, chưa xem kỹ bản máy tính của ba agent sau khi đổi theme.
+1. Đã kiểm tra Tổng quan trên Chrome từ 320 đến 1440 px, luồng nạp trên điện thoại và việc tải theme ở cả bốn khung agent. Còn kiểm thử chi tiết các màn hình nghiệp vụ bên trong từng agent.
 2. Chưa chạy bộ kiểm thử của Agent 2 và Agent 3 sau khi thêm theme. Chỉ chạy lại một bài kiểm tra tiêu đề bảo mật của Agent 1 (đạt).
 3. Agent 4 dùng kho demo cố định, chưa nhận tệp, chưa dùng hồ sơ doanh nghiệp.
 4. Doanh nghiệp tạo ở Agent 3 qua portal chưa có các quy định chi tiêu gợi ý sẵn. Agent 3 cần mật khẩu quản trị riêng, portal chỉ chuyển mật khẩu đó một lần.

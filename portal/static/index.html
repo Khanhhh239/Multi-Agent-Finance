@@ -1,8 +1,10 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" data-type="software">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="page-type" content="software">
+<meta name="site-kind" content="software">
 <title>Văn phòng kế toán số</title>
 <link rel="stylesheet" href="/design/platform-theme.css">
 <link rel="stylesheet" href="/app.css">
@@ -42,17 +44,45 @@
   <main class="content" id="content">
     <!-- Overview -->
     <section class="view" id="view-overview" aria-labelledby="h-overview">
-      <div class="page-head">
-        <h1 id="h-overview">Tổng quan</h1>
-        <p class="lead">Một hồ sơ doanh nghiệp, một lần nạp dữ liệu có mật khẩu, bốn agent dùng chung.</p>
+      <div class="overview-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Văn phòng kế toán số</p>
+          <h1 id="h-overview">Điều hành kế toán<br>trên một nền tảng</h1>
+          <p>Quản lý dòng tiền, soát giao dịch, kiểm tra thuế GTGT và hỏi đáp số liệu trong cùng một văn phòng.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#data">Nạp dữ liệu <span aria-hidden="true">↗</span></a>
+            <a class="hero-link" href="#config">Cấu hình doanh nghiệp</a>
+          </div>
+        </div>
+        <div class="photo-mosaic" aria-label="Ba địa danh miền Trung">
+          <div class="place place-hoi-an">
+            <img src="/places/hoi-an.webp" width="1200" height="800" alt="Đèn lồng phố cổ phản chiếu trên mặt nước về đêm" data-source="wikimedia-commons" data-subject="Hội An" fetchpriority="high">
+            <span>Hội An</span>
+          </div>
+          <div class="place place-quy-nhon">
+            <img src="/places/quy-nhon.webp" width="1200" height="643" alt="Vách đá và lối mòn nhìn ra biển ở Eo Gió" data-source="wikimedia-commons" data-subject="Eo Gió">
+            <span>Quy Nhơn</span>
+          </div>
+          <div class="place place-quang-ngai">
+            <img src="/places/quang-ngai.webp" width="1200" height="800" alt="Thuyền thúng bên bãi đá đen và nước xanh ở đảo Bé, Lý Sơn" data-source="wikimedia-commons" data-subject="Lý Sơn">
+            <span>Quảng Ngãi</span>
+          </div>
+        </div>
       </div>
+      <h2 class="section-title">Quy trình làm việc</h2>
       <ol class="steps" id="steps">
         <li data-step="config"><strong>Cấu hình doanh nghiệp</strong><span>Tên, mã số thuế, kỳ kê khai, định dạng tệp.</span><a href="#config">Mở cấu hình</a></li>
         <li data-step="agents"><strong>Bật các agent</strong><span>Agent nào tắt sẽ không nhận dữ liệu.</span><button type="button" id="start-all">Bật tất cả</button></li>
         <li data-step="data"><strong>Nạp gói dữ liệu</strong><span>Thả tệp một lần, niêm phong bằng mật khẩu.</span><a href="#data">Nạp dữ liệu</a></li>
       </ol>
-      <h2 class="section-title">Các agent</h2>
+      <h2 class="section-title">Không gian nghiệp vụ</h2>
       <div class="agents" id="agent-grid"></div>
+      <footer class="photo-credits">
+        Ảnh Wikimedia Commons (thu nhỏ, cắt khung hiển thị) ·
+        <a href="https://commons.wikimedia.org/wiki/File:2024-12-20_Night_in_Hoi_An.jpg">Alexkom000</a> <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> ·
+        <a href="https://commons.wikimedia.org/wiki/File:Eo_Gi%C3%B3_-_Nh%C6%A1n_L%C3%BD.jpg">Hưng Hồ Bá</a> <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> ·
+        <a href="https://commons.wikimedia.org/wiki/File:B%C3%A3i_t%E1%BA%AFm_%C4%91%E1%BA%A3o_b%C3%A9_L%C3%BD_S%C6%A1n.jpg">Đôi Ta Đi</a> <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+      </footer>
     </section>
 
     <!-- Config -->
@@ -133,11 +163,13 @@
       <div id="intake" hidden>
         <div class="page-head head-split">
           <div>
-            <h1>Nạp dữ liệu</h1>
-            <p class="lead">Một gói cho Agent 1, 2 và 3. Portal nhận dạng từng tệp, chạy kiểm tra của agent nhận, rồi niêm phong gói khi bạn bấm ghi.</p>
+            <h1 id="h-intake">Nạp dữ liệu</h1>
+            <p class="lead">Tệp được nhận dạng và kiểm tra theo mẫu của từng agent trước khi niêm phong.</p>
           </div>
           <div class="session"><span id="session-left"></span><button type="button" id="lock-now">Khóa lại</button></div>
         </div>
+
+        <p class="banner" id="intake-company"></p>
 
         <section class="package" aria-labelledby="h-package">
           <div class="package-head">
@@ -150,15 +182,16 @@
 
         <label class="drop" id="drop">
           <input type="file" id="file-input" multiple accept=".csv,.xlsx,.xml,.zip,.txt">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/></svg>
           <span class="drop-title">Thả tệp vào đây hoặc bấm để chọn</span>
           <span class="drop-sub">CSV, XLSX, XML hóa đơn điện tử, ZIP. Tối đa 300 MB mỗi tệp.</span>
         </label>
 
-        <h2 class="section-title">Hàng chờ</h2>
+        <h2 class="section-title">Hàng chờ kiểm tra và ghi</h2>
         <div class="table-wrap">
-          <table class="table" id="queue">
-            <thead><tr><th>Tệp</th><th>Nhận dạng</th><th>Kỳ dữ liệu</th><th>Kết quả kiểm tra</th><th class="right">Thao tác</th></tr></thead>
-            <tbody></tbody>
+          <table class="table" id="queue" role="table">
+            <thead role="rowgroup"><tr role="row"><th scope="col">Tệp</th><th scope="col">Nhận dạng</th><th scope="col">Kỳ dữ liệu</th><th scope="col">Kết quả kiểm tra</th><th scope="col" class="right">Thao tác</th></tr></thead>
+            <tbody role="rowgroup"></tbody>
           </table>
         </div>
         <p class="empty" id="queue-empty">Chưa có tệp nào chờ ghi.</p>
@@ -192,7 +225,7 @@
         <p class="empty" id="history-empty">Chưa niêm phong gói nào.</p>
 
         <details class="audit" id="audit">
-          <summary>Nhật ký không sửa được</summary>
+          <summary>Kiểm tra tính toàn vẹn của nhật ký</summary>
           <p class="hint" id="audit-status">Bấm để kiểm tra chuỗi nhật ký.</p>
           <table class="table compact"><thead><tr><th>Số</th><th>Thời điểm</th><th>Việc</th><th>Chi tiết</th></tr></thead><tbody></tbody></table>
         </details>
@@ -200,9 +233,12 @@
     </section>
 
     <!-- Agent frame -->
-    <section class="view agent-view" id="view-agent" hidden>
+    <section class="view agent-view" id="view-agent" aria-labelledby="agent-name" hidden>
       <div class="agent-bar">
-        <div class="agent-title"><span class="agent-no" id="agent-no"></span><h1 id="agent-name"></h1><span class="status" id="agent-status"></span></div>
+        <div>
+          <div class="agent-title"><span class="agent-no" id="agent-no"></span><h1 id="agent-name"></h1><span class="status" id="agent-status"></span></div>
+          <a class="agent-source" id="agent-source" href="#data"></a>
+        </div>
         <div class="agent-actions">
           <button type="button" id="agent-toggle"></button>
           <a id="agent-newtab" target="_blank" rel="noopener">Mở tab riêng</a>

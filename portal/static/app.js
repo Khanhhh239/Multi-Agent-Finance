@@ -3,7 +3,7 @@
   const $ = (id) => document.getElementById(id);
   const AGENT_LABEL = { agent1: "Agent 1", agent2: "Agent 2", agent3: "Agent 3", agent4: "Agent 4" };
   const STATE_TEXT = { running: "Đang chạy", starting: "Đang khởi động", stopped: "Đang tắt", "busy-port": "Cổng bị chiếm" };
-  const CHECK_TEXT = { ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua" };
+  const CHECK_TEXT = { ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua", stale: "Chờ kiểm tra lại" };
   let state = null;
   let currentAgent = null;
   let token = "";
@@ -146,7 +146,9 @@
       if (p[1] > r[1]) r[1] = p[1];
     };
     for (const r of state.pending) for (const aid of r.targets) add(aid, r.period);
-    for (const b of state.batches.filter((x) => x.company === state.company.code)) for (const f of b.files) for (const aid of Object.keys(f.results)) add(aid, f.period);
+    for (const b of state.batches) for (const f of b.files) {
+      for (const [aid, result] of Object.entries(f.results)) if (result.state === "done") add(aid, f.period);
+    }
     const list = Object.entries(ranges);
     if (list.length < 2) return "";
     const lo = list.map(([, r]) => r[0]).sort().pop();
@@ -156,17 +158,18 @@
   }
 
   function renderSlots() {
-    const groups = ["agent1", "agent2", "agent3"].map((aid) =>
+    const groups = state.agents.map(({ id: aid, name }) =>
       el("div", { class: "slot-group" },
-        el("h3", {}, AGENT_LABEL[aid] + " " + agentById(aid).name),
-        el("ul", {}, state.slots.filter((s) => s.agent === aid).map((s) =>
+        el("h3", {}, AGENT_LABEL[aid] + " · " + name),
+        aid === "agent4" ? el("p", { class: "hint" }, "Kho mô phỏng riêng. Tệp trong gói được chuyển đến Agent 1–3.") :
+          el("ul", {}, state.slots.filter((s) => s.agent === aid).map((s) =>
           el("li", {}, el("span", { class: "mark " + s.state }), s.label,
             el("span", { class: "slot-note" }, s.state === "sealed" ? "đã niêm phong" : s.state === "pending" ? "chờ ghi" : ""))))));
     $("slots").replaceChildren(...groups);
     const p = state.package;
     $("package-line").textContent = p
       ? "Phiên bản " + p.version + ", niêm phong " + stamp(p.sealed_at) + ", " + p.files + " tệp, mã " + p.manifest + (p.amendments ? ", đã sửa đổi " + p.amendments + " lần" : "")
-      : "Chưa niêm phong. Thiếu ô nào thì agent đó chạy với dữ liệu ít hơn.";
+      : "Chưa có phiên bản niêm phong.";
     const w = periodWarning();
     $("period-warning").hidden = !w;
     $("period-warning").textContent = w;
@@ -174,14 +177,14 @@
 
   function renderQueue() {
     const rows = state.pending.map((r) =>
-      el("tr", {},
-        el("td", {}, el("div", { class: "file-name" }, r.name), el("div", { class: "sub" }, sizeText(r.size) + ", thêm lúc " + r.added_at.slice(11, 16))),
-        el("td", {}, r.label, r.note && r.targets.length ? el("div", { class: "sub" }, r.note) : null),
-        el("td", { class: "sub" }, periodText(r.period)),
-        el("td", {}, checkLines(r)),
-        el("td", { class: "right" },
-          el("button", { type: "button", class: "link", onclick: () => recheck(r.id) }, "Kiểm tra lại"), " ",
-          el("button", { type: "button", class: "link", onclick: () => dropFile(r.id) }, "Bỏ"))));
+      el("tr", { role: "row" },
+        el("td", { role: "cell" }, el("div", { class: "file-name" }, r.name), el("div", { class: "sub" }, sizeText(r.size) + ", thêm lúc " + r.added_at.slice(11, 16))),
+        el("td", { role: "cell" }, r.label, r.note && r.targets.length ? el("div", { class: "sub" }, r.note) : null),
+        el("td", { role: "cell", class: "sub", "data-label": "Kỳ dữ liệu" }, periodText(r.period)),
+        el("td", { role: "cell" }, checkLines(r)),
+        el("td", { role: "cell", class: "right" }, el("div", { class: "queue-actions" },
+          el("button", { type: "button", class: "link", onclick: () => recheck(r.id) }, "Kiểm tra lại"),
+          el("button", { type: "button", class: "link", onclick: () => dropFile(r.id) }, "Bỏ")))));
     $("queue").tBodies[0].replaceChildren(...rows);
     $("queue-empty").hidden = rows.length > 0;
     const ready = state.pending.filter((r) => Object.values(r.checks || {}).some((c) => c.state === "ready"));
@@ -205,6 +208,7 @@
 
   function renderData() {
     const i = state.intake;
+    $("view-data").setAttribute("aria-labelledby", i.unlocked ? "h-intake" : "h-data");
     $("gate").hidden = i.unlocked;
     $("intake").hidden = !i.unlocked;
     if (!i.unlocked) {
@@ -219,6 +223,12 @@
       return;
     }
     $("session-left").textContent = "Đã mở khóa, còn " + Math.max(1, Math.round(i.seconds_left / 60)) + " phút";
+    const c = state.company;
+    $("intake-company").replaceChildren(c.code
+      ? el("strong", {}, c.legal_name + " · " + c.code)
+      : el("a", { href: "#config" }, "Lưu hồ sơ doanh nghiệp để nạp tệp"));
+    $("file-input").disabled = !c.code;
+    $("drop").hidden = !c.code;
     renderSlots();
     renderQueue();
   }
@@ -229,6 +239,11 @@
     $("agent-no").textContent = a.number;
     $("agent-name").textContent = a.name;
     $("agent-status").replaceChildren(el("span", { class: "dot " + a.state }), STATE_TEXT[a.state]);
+    const source = $("agent-source");
+    source.textContent = a.id === "agent4" ? "Nguồn số liệu: kho mô phỏng của Agent 4"
+      : state.company.code ? ["Hồ sơ " + state.company.code, state.package ? "Gói chung v" + state.package.version : "Chưa niêm phong"].join(" · ")
+        : "Cấu hình doanh nghiệp để nạp dữ liệu";
+    source.href = a.id !== "agent4" && !state.company.code ? "#config" : "#data";
     $("agent-newtab").href = a.url;
     $("agent-toggle").textContent = a.state === "running" || a.state === "starting" ? "Tắt agent" : "Bật agent";
     $("agent-toggle").hidden = !(a.owned || a.state === "stopped");
@@ -325,17 +340,24 @@
   }
 
   async function upload(files) {
+    const code = state?.company.code;
+    if (!code) return;
+    let uploaded = 0;
+    const failures = [];
     for (const file of files) {
       toast("Đang nhận dạng và kiểm tra " + file.name);
       try {
-        await api("/api/inbox?name=" + encodeURIComponent(file.name), { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" } });
+        const query = new URLSearchParams({ name: file.name, company: code });
+        await api("/api/inbox?" + query, { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" } });
+        uploaded++;
       } catch (err) {
-        toast(file.name + ": " + err.message, true);
-        if (err.locked) return;
+        failures.push(file.name + " — " + err.message);
+        if (err.locked) break;
       }
-      await refresh();
     }
-    toast("Đã kiểm tra " + files.length + " tệp. Xem kết quả rồi bấm niêm phong và ghi.");
+    await refresh();
+    toast(failures.length ? "Đã nhận " + uploaded + " tệp. " + failures.join(". ")
+      : "Đã kiểm tra " + uploaded + " tệp. Xem kết quả trước khi niêm phong.", failures.length > 0);
   }
 
   async function recheck(id) {
@@ -408,6 +430,7 @@
     try {
       const res = await api("/api/company", { method: "PUT", json: body });
       delete form.dataset.dirty;
+      await refresh();
       $("sync-result").replaceChildren(
         el("li", { class: "ok" }, "Đã lưu hồ sơ. Agent 1 và Agent 2 dùng mã " + res.company.code + " cho lần nạp tiếp theo."),
         ...Object.entries(res.sync).map(([aid, s]) => syncItem(aid, s)));
@@ -416,7 +439,6 @@
       $("sync-result").replaceChildren(el("li", { class: "error" }, err.message));
       toast(err.message, true);
     } finally { button.disabled = false; }
-    refresh();
   }
 
   // Agent 1 asks for its access key once it has loaded inside the frame.
@@ -436,6 +458,12 @@
   $("menu-toggle").addEventListener("click", () => {
     const open = $("sidebar").classList.toggle("open");
     $("menu-toggle").setAttribute("aria-expanded", String(open));
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && $("sidebar").classList.contains("open")) {
+      $("menu-toggle").click();
+      $("menu-toggle").focus();
+    }
   });
   $("company-form").addEventListener("submit", saveCompany);
   $("company-form").addEventListener("input", (e) => (e.currentTarget.dataset.dirty = "1"));

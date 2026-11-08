@@ -12,7 +12,7 @@ body { font: 400 14px/1.55 var(--font); color: var(--text); background: var(--su
 .muted { color: var(--muted); }
 
 .chat { display: grid; grid-template-columns: 280px minmax(0, 1fr); height: 100%; }
-.side { border-right: 1px solid var(--line); background: #f8f9fb; padding: 18px 16px; overflow: auto; }
+.side { border-right: 1px solid var(--line); background: var(--canvas); padding: 18px 16px; overflow: auto; }
 .side h2 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 8px; }
 .side h2 + * { margin-top: 0; }
 .suggest, .metrics { list-style: none; padding: 0; margin: 0 0 20px; display: flex; flex-direction: column; gap: 4px; }

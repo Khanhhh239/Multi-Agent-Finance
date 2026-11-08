@@ -237,12 +237,12 @@ def health(aid):
 def agent_state(aid):
     proc = PROCS.get(aid)
     owned = proc is not None and proc.poll() is None
-    up = health(aid)
-    if up:
+    listening = port_open(agent_port(aid))
+    if listening and health(aid):
         state = 'running'
     elif owned:
         state = 'starting'
-    elif port_open(agent_port(aid)):
+    elif listening:
         state = 'busy-port'
     else:
         state = 'stopped'
@@ -552,24 +552,45 @@ def slot_of(kind):
 
 
 def slots_state(pending_records):
-    sealed = {f.get('slot') for b in current_batches() for f in b['files'] if f.get('slot')}
+    sealed = {f.get('slot') for b in current_batches() for f in b['files']
+              if any(result.get('state') == 'done' for result in f.get('results', {}).values())}
     waiting = {r.get('slot') for r in pending_records
                if any(c.get('state') == 'ready' for c in r.get('checks', {}).values())}
     out = []
     for aid, key, label in SLOTS:
         s = f'{aid}:{key}'
-        out.append(dict(agent=aid, key=key, label=label, state='sealed' if s in sealed else 'pending' if s in waiting else 'empty'))
+        out.append(dict(agent=aid, key=key, label=label, state='pending' if s in waiting else 'sealed' if s in sealed else 'empty'))
     return out
 
 
 # ----------------------------------------------------------------------------------------------------------- inbox
+def intake_context():
+    c = company()
+    return {key: c[key] for key in ('code', 'agent2_company', 'tax_code', 'date_format', 'number_format')}
+
+
 def pending():
+    context = intake_context()
     out = []
     for meta in sorted(PENDING.glob('*.json')):
         record = read_json(meta, None)
-        if record:
-            out.append(record)
+        if not record:
+            continue
+        bound = record.get('intake_context')
+        if bound is not None and bound['code'] != context['code']:
+            continue
+        if bound != context:
+            record['checks'] = {aid: dict(state='stale', message='Cần kiểm tra lại với hồ sơ hiện tại.')
+                                for aid in record['targets']}
+        out.append(record)
     return sorted(out, key=lambda r: r['added_at'])
+
+
+def pending_file(fid, context):
+    record = read_json(PENDING / f'{fid}.json', None)
+    if record is None or record.get('intake_context', context)['code'] != context['code']:
+        raise KeyError('Không có tệp này trong hàng chờ của doanh nghiệp hiện tại.')
+    return record
 
 
 def history():
@@ -621,10 +642,14 @@ def period_of(name, raw, kind):
 
 
 def add_file(name, raw):
+    context = intake_context()
+    if not context['code']:
+        raise ValueError('Lưu hồ sơ doanh nghiệp trước khi nạp tệp.')
     clean = re.sub(r'[^\w.\-]', '_', Path(name).name)[:120] or 'tep'
     fid = uuid.uuid4().hex[:12]
     (PENDING / f'{fid}.bin').write_bytes(raw)
-    record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'), **classify(clean, raw))
+    record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'),
+                  intake_context=context, **classify(clean, raw))
     record['slot'] = slot_of(record['kind'])
     record['period'] = period_of(clean, raw, record['kind'])
     record['sha256'] = hashlib.sha256(raw).hexdigest()
@@ -634,11 +659,13 @@ def add_file(name, raw):
 
 
 def recheck(fid):
-    record = read_json(PENDING / f'{fid}.json', None)
-    if record is None:
-        raise KeyError('Không còn tệp này trong hàng chờ.')
+    context = intake_context()
+    if not context['code']:
+        raise ValueError('Lưu hồ sơ doanh nghiệp trước khi kiểm tra tệp.')
+    record = pending_file(fid, context)
     raw = (PENDING / f'{fid}.bin').read_bytes()
     record['checks'] = {aid: check(aid, record, raw) for aid in record['targets']}
+    record['intake_context'] = context
     write_json(PENDING / f'{fid}.json', record)
     return record
 
@@ -766,16 +793,18 @@ def ensure_agent3_workspace(password=None):
 
 def commit(fids, reason=''):
     """Write the checked files to their agents and record them as one sealed batch (version) of the company's package."""
-    c = company()
+    context = intake_context()
+    records = [pending_file(fid, context) for fid in dict.fromkeys(fids)]
+    if not context['code'] or any(r.get('intake_context') != context for r in records):
+        raise ValueError('Hồ sơ doanh nghiệp đã đổi. Kiểm tra lại các tệp trước khi ghi.')
     prior = current_batches()
     reason = (reason or '').strip()
     if prior and len(reason) < 10:
         raise ValueError('Gói đã được niêm phong. Bổ sung hoặc thay thế cần lý do, ít nhất 10 ký tự.')
     entries = []
-    for fid in fids:
-        record = read_json(PENDING / f'{fid}.json', None)
-        if record is None:
-            continue
+    completed = []
+    for record in records:
+        fid = record['id']
         raw = (PENDING / f'{fid}.bin').read_bytes()
         outcome = {}
         for aid in record['targets']:
@@ -821,20 +850,22 @@ def commit(fids, reason=''):
             entries.append(dict(name=record['name'], label=record['label'], size=record['size'], sha256=record.get('sha256')
                                 or hashlib.sha256(raw).hexdigest(), slot=record.get('slot', ''), period=record.get('period'),
                                 results=outcome))
-        if all(v['state'] in ('done', 'skipped') for v in outcome.values()):
-            remove_file(fid)
+            if all(v['state'] in ('done', 'skipped') for v in outcome.values()):
+                completed.append(fid)
     if not entries:
         raise ValueError('Không tệp nào được ghi. Xem kết quả kiểm tra của từng tệp.')
     manifest = hashlib.sha256('\n'.join(sorted(f'{e["name"]}:{e["sha256"]}' for e in entries)).encode('utf-8')).hexdigest()
-    batch = dict(id=uuid.uuid4().hex[:10], company=c['code'], version=len(prior) + 1, kind='bổ sung' if prior else 'gốc',
+    batch = dict(id=uuid.uuid4().hex[:10], company=context['code'], version=len(prior) + 1, kind='bổ sung' if prior else 'gốc',
                  sealed_at=time.strftime('%Y-%m-%d %H:%M:%S'), reason=reason, files=entries, manifest=manifest)
     with LOCK:
         write_json(BATCH_FILE, batches() + [batch])
-    audit('commit', dict(batch=batch['id'], version=batch['version'], company=c['code'], files=len(entries), manifest=manifest[:16],
+    audit('commit', dict(batch=batch['id'], version=batch['version'], company=batch['company'], files=len(entries), manifest=manifest[:16],
                          reason=reason))
+    for fid in completed:
+        remove_file(fid)
     # Files that failed only because they point at rows written just now (payments after invoices) pass on a new check.
     for record in pending():
-        if any(s.get('state') != 'ready' for s in record.get('checks', {}).values()):
+        if record.get('intake_context') == context and any(s.get('state') != 'ready' for s in record.get('checks', {}).values()):
             recheck(record['id'])
     return batch
 
@@ -885,8 +916,7 @@ class Handler(BaseHTTPRequestHandler):
         if folder.resolve() not in target.parents and target != folder.resolve() or not target.is_file():
             return self.send(404, {'error': 'Không có trang này.'})
         ctype = mimetypes.guess_type(target.name)[0] or 'application/octet-stream'
-        if target.suffix == '.woff2':
-            ctype = 'font/woff2'
+        ctype = {'.woff2': 'font/woff2', '.webp': 'image/webp'}.get(target.suffix, ctype)
         if ctype.startswith('text/') or ctype in ('application/javascript',):
             ctype += '; charset=utf-8'
         self.send(200, target.read_bytes(), ctype, {'Cache-Control': 'public, max-age=3600'} if target.suffix in ('.woff2', '.svg') else None)
@@ -926,7 +956,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, dict(company=company(), agents=[agent_state(a) for a in AGENTS], origin=ORIGIN,
                                            intake=dict(configured=configured(), unlocked=bool(left), seconds_left=left),
                                            package=package_summary(), slots=slots_state(recs), pending=recs,
-                                           batches=list(reversed(batches()))[:30] if left else []))
+                                           batches=list(reversed(current_batches()))[:30] if left else []))
             if path == '/api/intake/audit':
                 self.need_session()
                 return self.send(200, audit_check())
@@ -984,14 +1014,18 @@ class Handler(BaseHTTPRequestHandler):
             name = query.get('name', '')
             if not name:
                 raise ValueError('Thiếu tên tệp.')
+            if query.get('company', company()['code']) != company()['code']:
+                raise ValueError('Doanh nghiệp đã đổi. Tải lại trang trước khi nạp tệp.')
             record = add_file(name, self.body(300 * 1024 * 1024))
-            audit('upload', dict(name=record['name'], size=record['size'], sha256=record['sha256'][:16]))
+            audit('upload', dict(company=record['intake_context']['code'], name=record['name'], size=record['size'],
+                                 sha256=record['sha256'][:16]))
             return self.send(200, record)
         m = re.fullmatch(r'/api/inbox/([0-9a-f]{12})/(check|delete)', path)
         if method == 'POST' and m:
             self.need_session()
             fid, action = m.groups()
             if action == 'delete':
+                pending_file(fid, intake_context())
                 remove_file(fid)
                 audit('discard', dict(id=fid))
                 return self.send(200, dict(ok=True))
@@ -1010,13 +1044,20 @@ class Handler(BaseHTTPRequestHandler):
 
     def handle_one(self, method):
         try:
-            self.route(method)
+            path = urlsplit(self.path).path
+            if method != 'GET' and (path == '/api/company' or path == '/api/agent3/workspace' or path.startswith('/api/inbox')):
+                with LOCK:
+                    self.route(method)
+            else:
+                self.route(method)
         except AuthError as e:
             self.send(401, {'error': str(e), 'locked': True})
         except PermissionError as e:
             self.send(403, {'error': str(e)})
         except (ValueError, KeyError) as e:
             self.send(400, {'error': str(e).strip("'")})
+        except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError):
+            pass  # The browser navigated away before the response arrived.
         except Exception as e:  # noqa: BLE001
             self.send(500, {'error': f'Lỗi máy chủ portal: {e}'})
 
@@ -1033,7 +1074,7 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     autostart = '--start-all' in sys.argv
     server = ThreadingHTTPServer((HOST, CFG['port']), Handler)
-    print(f'Portal: {ORIGIN}  (Ctrl+C để dừng; các agent do portal bật sẽ dừng theo)')
+    print(f'Portal: {ORIGIN} (Ctrl+C to stop the portal and its agents)', flush=True)
     if autostart:
         for aid in AGENTS:
             try:
