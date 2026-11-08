@@ -5,6 +5,12 @@
   const local=value=>value?new Date(value).toLocaleString("sv-SE",{timeZone:"Asia/Ho_Chi_Minh"}).replace(" ","T").slice(0,16):"";
   const date=value=>value?new Date(value).toLocaleString("vi-VN",{timeZone:"Asia/Ho_Chi_Minh"}):"—";
   const labels={data_updated:"Cập nhật dữ liệu",evaluated:"Đánh giá ứng viên",activated:"Kích hoạt phiên bản",rolled_back:"Quay lại phiên bản",kept:"Giữ phiên bản",scored:"Chạy ML"};
+  function bagNote(d){
+    if(!d||d.kind!=="bag_of_methods_injection")return "";
+    const weak=Object.entries(d.recall_by_family).sort((a,b)=>a[1]-b[1]).filter(x=>x[1]<.5).slice(0,3)
+      .map(x=>escape((d.family_labels||{})[x[0]]||x[0])+" "+percent(x[1])).join("; ");
+    return `<br><small>Chọn: ${escape(d.chosen)} (${d.chosen_members.length} phương pháp) · bắt mẫu tiêm ${percent(d.recall_chosen_mean)} · họ chưa thấy ≈ ${percent(d.held_out_family_recall_estimate)} · độ tin cậy ${escape(d.reliability)}${weak?`<br>Yếu: ${weak}`:""}</small>`;
+  }
   function versionTable(data,algorithms,canManage){
     const names=Object.fromEntries(algorithms.map(a=>[a.id,a.label]));
     const used=new Set(data.history.filter(e=>["activated","rolled_back"].includes(e.action)).map(e=>e.details.version_id));
@@ -13,7 +19,7 @@
       const active=v.version_id===data.active_version,stale=v.data_revision!==data.data?.revision;
       const rollback=used.has(v.version_id)&&!active;
       const eligible=!active&&(!stale||rollback)&&canManage;
-      return `<tr class="${active?"active":""}"><td class="description"><strong>${escape(names[v.algorithm]||v.algorithm)} · v${v.number}</strong><br>${active?"Đang dùng":stale?"Đánh giá trên dữ liệu cũ":"Ứng viên chưa kích hoạt"}${v.converged===false?"<br>Chưa hội tụ · cần xem lại trước khi dùng":""}</td><td>${v.evaluation_rows} dòng<br><small>Từ ${escape(date(v.calibration_end))}</small></td><td>${v.evaluation_alerts} · ${percent(v.evaluation_alert_rate)}</td><td>${percent(v.precision)} / ${percent(v.recall)}<br><small>${v.labelled_evaluation_rows} dòng có nhãn</small></td><td>${escape(v.seconds)} giây</td><td>${active?"Đã cố định":`<button type="button" data-ml-version="${escape(v.version_id)}" data-rollback="${rollback}" ${eligible?"":"disabled"}>${rollback?"Quay lại":"Xác nhận dùng"} v${v.number}</button>`}</td></tr>`;
+      return `<tr class="${active?"active":""}"><td class="description"><strong>${escape(names[v.algorithm]||v.algorithm)} · v${v.number}</strong><br>${active?"Đang dùng":stale?"Đánh giá trên dữ liệu cũ":"Ứng viên chưa kích hoạt"}${v.converged===false?"<br>Chưa hội tụ · cần xem lại trước khi dùng":""}${bagNote(v.diagnostics)}</td><td>${v.evaluation_rows} dòng<br><small>Từ ${escape(date(v.calibration_end))}</small></td><td>${v.evaluation_alerts} · ${percent(v.evaluation_alert_rate)}</td><td>${percent(v.precision)} / ${percent(v.recall)}<br><small>${v.labelled_evaluation_rows} dòng có nhãn</small></td><td>${escape(v.seconds)} giây</td><td>${active?"Đã cố định":`<button type="button" data-ml-version="${escape(v.version_id)}" data-rollback="${rollback}" ${eligible?"":"disabled"}>${rollback?"Quay lại":"Xác nhận dùng"} v${v.number}</button>`}</td></tr>`;
     }).join("")}</tbody></table></div>`;
   }
   function scoreTable(result){

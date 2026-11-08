@@ -400,6 +400,7 @@ class BagOfMethods:
             recall_baseline_mean=float(table[BASELINE][2].mean()), recall_chosen_mean=float(table[chosen][2].mean()),
             held_out_family_recall_estimate=float(np.mean(held)), held_out_family_recall_min=float(np.min(held)),
             families_used=[FAMILIES[u].key for u in used], families_skipped=skipped, methods_failed=failed,
+            family_labels={FAMILIES[u].key: FAMILIES[u].label for u in used},
             methods=[dict(id=m, label=LABELS[m]) for m in names_ok],
             limits=['Mẫu gian lận là mẫu đã biết, viết trong không gian đặc trưng, không phải gian lận thật chưa phát hiện.',
                     'Sổ thật có thể đã chứa gian lận chưa bị phát hiện và được coi là bình thường.',

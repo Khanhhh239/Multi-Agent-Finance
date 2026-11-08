@@ -6,6 +6,7 @@ Tiến độ hiện tại nằm ở [STATUS](../STATUS.md); việc tiếp theo n
 
 ## Biên bản gần nhất
 
+- [Túi phương pháp chọn theo tiêm gian lận cho ML từng công ty — 08/11](ml/bag_of_methods_injection_20261108.md).
 - [Hợp nhất hàng đợi, nhập dữ liệu, ML và phiếu rà tại cổng 8765 — 07/11](app/unified_local_20261107.md).
 - [Khóa chính xác tập bằng chứng và ngăn phiếu thừa 12 → 13 — 06/11](ml/ml_review_packet_lock_20261106.md).
 - [Bổ sung nhãn giữ nhãn cũ và xử lý xung đột có xác nhận — 06/11](ml/company_ml_labels_20261106.md).
