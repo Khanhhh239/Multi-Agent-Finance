@@ -1,9 +1,8 @@
-/* Agent 4 chat. Same tokens as the portal so it sits inside the shell without a seam; edit freely. */
+/* Agent 4 chat. Tokens come from /design/platform-theme.css (shared with the portal and agents 1 to 3); edit freely. */
 :root {
-  --ink: #0f1b2d; --text: #253142; --muted: #5b6676; --line: #d9dee6; --line-strong: #c3cad5;
-  --canvas: #f2f4f7; --surface: #ffffff; --accent: #0b5cad; --accent-soft: #e7f0fa;
-  --ok: #17784b; --warn: #946000; --err: #b42318; --radius: 6px;
-  --font: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --ink: var(--kt-ink); --text: var(--kt-text); --muted: var(--kt-muted); --line: var(--kt-line); --line-strong: #c3cbd2;
+  --canvas: var(--kt-canvas); --surface: var(--kt-surface); --accent: var(--kt-accent); --accent-soft: var(--kt-accent-soft);
+  --ok: var(--kt-ok); --warn: var(--kt-warn); --err: var(--kt-err); --radius: 6px; --font: var(--kt-font);
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }

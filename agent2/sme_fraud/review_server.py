@@ -17,6 +17,7 @@ from urllib.parse import parse_qs, urlsplit
 from .company_ml import CompanyML
 from .review_store import ReviewStore
 from .p2_controls_server import P2Routes
+from .platform_theme import theme_assets
 
 WEB_ROOT = Path(__file__).resolve().parents[1] / 'review_ui'
 
@@ -122,6 +123,7 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
                           '/styles.css': ('styles.css', 'text/css; charset=utf-8'),
                           '/case_graph.js': ('case_graph.js', 'text/javascript; charset=utf-8'),
                           '/vendor/cytoscape.min.js': ('vendor/cytoscape.min.js', 'text/javascript; charset=utf-8')}
+                assets.update(theme_assets())
                 if path in assets:
                     filename, mime = assets[path]
                     self.respond(200, (WEB_ROOT / filename).read_bytes(), mime)

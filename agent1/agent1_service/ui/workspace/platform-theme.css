@@ -1,0 +1,71 @@
+/* Văn phòng kế toán số: one visual language for the portal and agents 1 to 3 (agent 4 chat uses it too).
+   Source of truth is design/platform-theme.css; design/sync.py copies it into each agent's static folder.
+   Sections: 1 fonts, 2 tokens, 3 shared rules, 4 Agent 1, 5 Agent 2, 6 Agent 3, 7 inside the portal frame. */
+
+/* 1. Be Vietnam Pro, bundled (no network). Heaviest bundled weight is 600. */
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 400; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-vietnamese-400.woff2") format("woff2"); unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 400; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-latin-ext-400.woff2") format("woff2"); unicode-range: U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 400; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-latin-400.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 500; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-vietnamese-500.woff2") format("woff2"); unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 500; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-latin-ext-500.woff2") format("woff2"); unicode-range: U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 500; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-latin-500.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 600; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-vietnamese-600.woff2") format("woff2"); unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 600; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-latin-ext-600.woff2") format("woff2"); unicode-range: U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: "Be Vietnam Pro"; font-weight: 600; font-style: normal; font-display: swap; src: url("platform-fonts/bvp-latin-600.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+/* 2. Tokens. Sea teal is the one accent; lantern red, ochre and teal appear together only in the thin region line. */
+:root {
+  --kt-ink: #12263a;
+  --kt-text: #26343f;
+  --kt-muted: #5d6a75;
+  --kt-line: #d8dee3;
+  --kt-canvas: #f3f5f6;
+  --kt-surface: #ffffff;
+  --kt-accent: #0d6e78;
+  --kt-accent-strong: #0a5961;
+  --kt-accent-soft: #e3f1f2;
+  --kt-lantern: #b23a2e;
+  --kt-ochre: #c99a2e;
+  --kt-ok: #17784b;
+  --kt-warn: #946000;
+  --kt-err: #b42318;
+  --kt-font: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+}
+
+/* 3. Shared rules */
+html, body, body *:not(code):not(pre):not(kbd):not(samp):not(.mono):not(svg):not(svg *) { font-family: var(--kt-font) !important; }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+td.num, .num, [data-num] { font-variant-numeric: tabular-nums; }
+body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 2147483000; pointer-events: none;
+  background: linear-gradient(90deg, var(--kt-lantern) 0 33.34%, var(--kt-ochre) 33.34% 66.67%, var(--kt-accent) 66.67% 100%); }
+:focus-visible { outline-color: var(--kt-accent); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+/* 4. Agent 1 (variables from agent1_service/ui/workspace/style.css) */
+:root {
+  --paper: #f3f5f6; --white: #ffffff; --ink: #12263a; --muted: #5d6a75; --line: #d8dee3;
+  --green: #0a5961; --lime: #e3f1f2; --amber: #946000; --red: #b42318;
+}
+
+/* 5. Agent 2 (variables from review_ui/styles.css) */
+:root { --blue: #0d6e78; --navy: #12263a; --border: #d8dee3; }
+body .sidebar .nav-item.active { background: var(--kt-accent-soft); color: var(--kt-accent); }
+body .sidebar .nav-item:hover { background: var(--kt-canvas); }
+body .brand-mark { background: var(--kt-ink); border-radius: 6px; }
+body .eyebrow, body .workspace-label, body .brand small { letter-spacing: 0.02em; }
+body .page-heading h1 { letter-spacing: -0.01em; font-weight: 600; }
+
+/* 6. Agent 3 (Carbon tokens; the theme class on <body> redefines them, so it is overridden too) */
+:root, body.cds--g10 {
+  --cds-interactive: #0d6e78; --cds-link-primary: #0d6e78; --cds-link-primary-hover: #0a5961;
+  --cds-button-primary: #0d6e78; --cds-button-primary-hover: #0a5961; --cds-button-primary-active: #08454c;
+  --cds-border-interactive: #0d6e78; --cds-focus: #0d6e78; --cds-layer-selected: #e3f1f2; --cds-text-primary: #12263a;
+  --cds-background: #f3f5f6;
+}
+.cds--header, .cds--header .cds--header__name { background: var(--kt-ink) !important; }
+.cds--header { border-bottom: 0 !important; }
+h1.page { font-weight: 600 !important; letter-spacing: -0.01em; }
+
+/* 7. Inside the portal frame: the portal owns data entry, so each agent's own import entry is hidden there */
+html.in-platform [data-platform-hide], html.in-platform a[href="#data"], html.in-platform [data-view="data"],
+html.in-platform a.nav-item[href="/data-import"], html.in-platform a[href="#/nap"] { display: none !important; }

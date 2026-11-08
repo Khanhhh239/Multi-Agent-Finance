@@ -2,3 +2,4 @@ portal/config.local.json
 portal/workspace/
 __pycache__/
 *.py[cod]
+agent3/agent3_tax_compliance/models

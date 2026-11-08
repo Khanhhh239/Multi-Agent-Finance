@@ -23,6 +23,8 @@ class P2Routes:
                   '/review_explanations.js': ('review_explanations.js', 'text/javascript; charset=utf-8'),
                   '/p2_controls.js': ('p2_controls.js', 'text/javascript; charset=utf-8'),
                   '/p2_controls.css': ('p2_controls.css', 'text/css; charset=utf-8')}
+        from .platform_theme import theme_assets
+        assets.update(theme_assets())
         store = self.p2_controls
         if path in assets:
             filename, mime = assets[path]

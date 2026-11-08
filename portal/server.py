@@ -15,6 +15,8 @@ Files are checked first (each agent's own preview) and written only when the per
 from __future__ import annotations
 
 import csv
+import hashlib
+import hmac
 import io
 import json
 import mimetypes
@@ -41,6 +43,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PORTAL = ROOT / 'portal'
 STATIC = PORTAL / 'static'
 CHAT = ROOT / 'agent4_chat'
+DESIGN = ROOT / 'design'
 HOST = '127.0.0.1'
 
 
@@ -81,6 +84,12 @@ def write_json(path, data):
     tmp = path.with_suffix('.tmp')
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding='utf-8')
     tmp.replace(path)
+
+
+
+
+class AuthError(Exception):
+    """The intake is locked: no valid password session."""
 
 
 # ----------------------------------------------------------------------------------------------------------- company
@@ -418,6 +427,141 @@ def classify(name, raw):
                 note='Không khớp mẫu Agent 1 hay Agent 2; gửi Agent 3 tự nhận dạng sao kê ngân hàng hoặc bảng kê cổng thuế.')
 
 
+# ----------------------------------------------------------------------------------------------------------- intake security
+SECURITY_FILE = WORK / 'intake_security.json'
+AUDIT_FILE = WORK / 'audit.jsonl'
+BATCH_FILE = WORK / 'batches.json'
+SESSIONS: dict[str, float] = {}
+SESSION_TTL = 20 * 60
+FAILS = {'n': 0, 'until': 0.0}
+
+
+def _scrypt(password, salt):
+    return hashlib.scrypt(password.encode('utf-8'), salt=salt, n=2 ** 14, r=8, p=1, dklen=32)
+
+
+def configured():
+    return SECURITY_FILE.exists()
+
+
+def audit(event, detail=None):
+    """Append-only log; each line carries the hash of the previous one, so edits or deletions are detectable."""
+    with LOCK:
+        lines = AUDIT_FILE.read_text(encoding='utf-8').splitlines() if AUDIT_FILE.exists() else []
+        prev = json.loads(lines[-1])['hash'] if lines else '0' * 64
+        entry = dict(seq=len(lines) + 1, at=time.strftime('%Y-%m-%d %H:%M:%S'), event=event, detail=detail or {}, prev=prev)
+        entry['hash'] = hashlib.sha256((prev + json.dumps({k: entry[k] for k in ('seq', 'at', 'event', 'detail')},
+                                                          ensure_ascii=False, sort_keys=True)).encode('utf-8')).hexdigest()
+        with open(AUDIT_FILE, 'a', encoding='utf-8') as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + '\n')
+
+
+def audit_check():
+    prev, entries = '0' * 64, []
+    if AUDIT_FILE.exists():
+        for line in AUDIT_FILE.read_text(encoding='utf-8').splitlines():
+            e = json.loads(line)
+            want = hashlib.sha256((prev + json.dumps({k: e[k] for k in ('seq', 'at', 'event', 'detail')},
+                                                     ensure_ascii=False, sort_keys=True)).encode('utf-8')).hexdigest()
+            if e['prev'] != prev or e['hash'] != want:
+                return dict(valid=False, broken_at=e['seq'], count=len(entries) + 1, entries=entries[-40:])
+            prev = e['hash']
+            entries.append(e)
+    return dict(valid=True, count=len(entries), entries=entries[-40:][::-1], head=prev[:12])
+
+
+def set_password(password, confirm):
+    if configured():
+        raise ValueError('Đã có mật khẩu nạp dữ liệu.')
+    if len(password) < 8:
+        raise ValueError('Mật khẩu cần ít nhất 8 ký tự.')
+    if password != confirm:
+        raise ValueError('Hai lần nhập mật khẩu không giống nhau.')
+    salt = secrets.token_bytes(16)
+    write_json(SECURITY_FILE, dict(salt=salt.hex(), hash=_scrypt(password, salt).hex(), created_at=time.strftime('%Y-%m-%d %H:%M:%S')))
+    audit('setup', {})
+    return new_session()
+
+
+def unlock(password):
+    now = time.time()
+    if FAILS['until'] > now:
+        raise ValueError(f'Nhập sai nhiều lần. Thử lại sau {int(FAILS["until"] - now) + 1} giây.')
+    sec = read_json(SECURITY_FILE, None)
+    if sec is None:
+        raise ValueError('Chưa đặt mật khẩu nạp dữ liệu.')
+    if not hmac.compare_digest(_scrypt(password, bytes.fromhex(sec['salt'])).hex(), sec['hash']):
+        FAILS['n'] += 1
+        audit('unlock_failed', {'n': FAILS['n']})
+        if FAILS['n'] >= 5:
+            FAILS.update(n=0, until=now + 60)
+        raise ValueError('Mật khẩu không đúng.')
+    FAILS.update(n=0, until=0.0)
+    audit('unlock', {})
+    return new_session()
+
+
+def new_session():
+    token = secrets.token_urlsafe(24)
+    SESSIONS[token] = time.time() + SESSION_TTL
+    return token
+
+
+def session_left(token, touch=True):
+    until = SESSIONS.get(token)
+    if until is None or until < time.time():
+        SESSIONS.pop(token, None)
+        return 0
+    if touch:
+        SESSIONS[token] = time.time() + SESSION_TTL
+        until = SESSIONS[token]
+    return int(until - time.time())
+
+
+def batches():
+    return read_json(BATCH_FILE, [])
+
+
+def current_batches():
+    code = company()['code']
+    return [b for b in batches() if b['company'] == code]
+
+
+def package_summary():
+    mine = current_batches()
+    if not mine:
+        return None
+    last = mine[-1]
+    return dict(version=last['version'], sealed_at=last['sealed_at'], files=sum(len(b['files']) for b in mine),
+                manifest=last['manifest'][:12], amendments=len(mine) - 1, last_reason=last['reason'], company=last['company'])
+
+
+SLOTS = [
+    ('agent1', 'invoices', 'Hóa đơn bán'), ('agent1', 'payments', 'Tiền khách trả'), ('agent1', 'outflows', 'Khoản chi'),
+    ('agent1', 'bank', 'Dòng sao kê'), ('agent1', 'statements', 'Kỳ sao kê'), ('agent1', 'actions', 'Hứa trả và nhắc nợ'),
+    ('agent2', 'transactions', 'Sổ giao dịch'),
+    ('agent3', 'xml', 'Hóa đơn XML hoặc ZIP'), ('agent3', 'list', 'Sao kê hoặc bảng kê'),
+]
+
+
+def slot_of(kind):
+    if kind.startswith('a1:'):
+        return 'agent1:' + kind[3:]
+    return {'transactions': 'agent2:transactions', 'invoice_xml': 'agent3:xml', 'zip': 'agent3:xml',
+            'statement_or_list': 'agent3:list'}.get(kind, '')
+
+
+def slots_state(pending_records):
+    sealed = {f.get('slot') for b in current_batches() for f in b['files'] if f.get('slot')}
+    waiting = {r.get('slot') for r in pending_records
+               if any(c.get('state') == 'ready' for c in r.get('checks', {}).values())}
+    out = []
+    for aid, key, label in SLOTS:
+        s = f'{aid}:{key}'
+        out.append(dict(agent=aid, key=key, label=label, state='sealed' if s in sealed else 'pending' if s in waiting else 'empty'))
+    return out
+
+
 # ----------------------------------------------------------------------------------------------------------- inbox
 def pending():
     out = []
@@ -432,11 +576,58 @@ def history():
     return read_json(WORK / 'history.json', [])
 
 
+def _day(text):
+    m = re.match(r'\s*(\d{4})-(\d{2})-(\d{2})', text) or None
+    if m:
+        return f'{m.group(1)}-{m.group(2)}-{m.group(3)}'
+    m = re.match(r'\s*(\d{1,2})/(\d{1,2})/(\d{4})', text)
+    return f'{m.group(3)}-{int(m.group(2)):02d}-{int(m.group(1)):02d}' if m else None
+
+
+DATE_COLUMNS = ('issue date', 'ngay lap', 'payment date', 'ngay thanh toan', 'posted at', 'ngay giao dich', 'date', 'ngay chi', 'ngay su kien', 'end date')
+
+
+def period_of(name, raw, kind):
+    """First and last document date in the file, as ISO days, or None when it cannot be read cheaply."""
+    ext = Path(name).suffix.lower()
+    try:
+        days = []
+        if ext in ('.csv', '.txt') and kind != 'unknown':
+            text = raw.decode('utf-8-sig', 'replace')
+            lines = text.splitlines()
+            delimiter = max((',', ';', '\t'), key=lines[0].count)
+            rows = csv.reader(lines, delimiter=delimiter)
+            header = [plain(c) for c in next(rows)]
+            col = next((header.index(c) for c in DATE_COLUMNS if c in header), None)
+            if col is None:
+                return None
+            for i, row in enumerate(rows):
+                if i > 300000:
+                    break
+                d = _day(row[col]) if col < len(row) else None
+                if d:
+                    days.append(d)
+        elif ext == '.xml':
+            days = re.findall(rb'<NLap>(\d{4}-\d{2}-\d{2})', raw[:200000])
+            days = [d.decode() for d in days]
+        elif ext == '.zip':
+            with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                for member in z.infolist()[:500]:
+                    if member.filename.lower().endswith('.xml'):
+                        days += [d.decode() for d in re.findall(rb'<NLap>(\d{4}-\d{2}-\d{2})', z.read(member)[:200000])]
+        return [min(days), max(days)] if days else None
+    except (zipfile.BadZipFile, ValueError, IndexError, StopIteration, csv.Error):
+        return None
+
+
 def add_file(name, raw):
     clean = re.sub(r'[^\w.\-]', '_', Path(name).name)[:120] or 'tep'
     fid = uuid.uuid4().hex[:12]
     (PENDING / f'{fid}.bin').write_bytes(raw)
     record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'), **classify(clean, raw))
+    record['slot'] = slot_of(record['kind'])
+    record['period'] = period_of(clean, raw, record['kind'])
+    record['sha256'] = hashlib.sha256(raw).hexdigest()
     record['checks'] = {aid: check(aid, record, raw) for aid in record['targets']}
     write_json(PENDING / f'{fid}.json', record)
     return record
@@ -573,8 +764,14 @@ def ensure_agent3_workspace(password=None):
     return dict(state='ok', message=f'Đã tạo doanh nghiệp {wid} ở Agent 3.{extra}', id=wid)
 
 
-def commit(fids):
-    results = []
+def commit(fids, reason=''):
+    """Write the checked files to their agents and record them as one sealed batch (version) of the company's package."""
+    c = company()
+    prior = current_batches()
+    reason = (reason or '').strip()
+    if prior and len(reason) < 10:
+        raise ValueError('Gói đã được niêm phong. Bổ sung hoặc thay thế cần lý do, ít nhất 10 ký tự.')
+    entries = []
     for fid in fids:
         record = read_json(PENDING / f'{fid}.json', None)
         if record is None:
@@ -620,18 +817,26 @@ def commit(fids):
                                         if used else 'Agent 3 không dùng tệp này.')
                 else:
                     outcome[aid] = dict(state='error', message=res.get('error', f'Lỗi {status}'))
-        entry = dict(id=fid, name=record['name'], label=record['label'], size=record['size'],
-                     at=time.strftime('%Y-%m-%d %H:%M:%S'), results=outcome)
-        results.append(entry)
+        if any(v['state'] == 'done' for v in outcome.values()):
+            entries.append(dict(name=record['name'], label=record['label'], size=record['size'], sha256=record.get('sha256')
+                                or hashlib.sha256(raw).hexdigest(), slot=record.get('slot', ''), period=record.get('period'),
+                                results=outcome))
         if all(v['state'] in ('done', 'skipped') for v in outcome.values()):
             remove_file(fid)
+    if not entries:
+        raise ValueError('Không tệp nào được ghi. Xem kết quả kiểm tra của từng tệp.')
+    manifest = hashlib.sha256('\n'.join(sorted(f'{e["name"]}:{e["sha256"]}' for e in entries)).encode('utf-8')).hexdigest()
+    batch = dict(id=uuid.uuid4().hex[:10], company=c['code'], version=len(prior) + 1, kind='bổ sung' if prior else 'gốc',
+                 sealed_at=time.strftime('%Y-%m-%d %H:%M:%S'), reason=reason, files=entries, manifest=manifest)
     with LOCK:
-        write_json(WORK / 'history.json', (results + history())[:200])
+        write_json(BATCH_FILE, batches() + [batch])
+    audit('commit', dict(batch=batch['id'], version=batch['version'], company=c['code'], files=len(entries), manifest=manifest[:16],
+                         reason=reason))
     # Files that failed only because they point at rows written just now (payments after invoices) pass on a new check.
     for record in pending():
-        if any(c.get('state') != 'ready' for c in record.get('checks', {}).values()):
+        if any(s.get('state') != 'ready' for s in record.get('checks', {}).values()):
             recheck(record['id'])
-    return results
+    return batch
 
 
 # ----------------------------------------------------------------------------------------------------------- agent 4
@@ -668,7 +873,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'no-referrer')
         self.send_header('Content-Security-Policy',
-                         "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; "
+                         "default-src 'self'; style-src 'self'; font-src 'self'; "
                          f"img-src 'self' data:; frame-src http://{HOST}:* http://localhost:*; frame-ancestors 'self'; base-uri 'none'")
         for k, v in (extra or {}).items():
             self.send_header(k, v)
@@ -680,9 +885,11 @@ class Handler(BaseHTTPRequestHandler):
         if folder.resolve() not in target.parents and target != folder.resolve() or not target.is_file():
             return self.send(404, {'error': 'Không có trang này.'})
         ctype = mimetypes.guess_type(target.name)[0] or 'application/octet-stream'
+        if target.suffix == '.woff2':
+            ctype = 'font/woff2'
         if ctype.startswith('text/') or ctype in ('application/javascript',):
             ctype += '; charset=utf-8'
-        self.send(200, target.read_bytes(), ctype)
+        self.send(200, target.read_bytes(), ctype, {'Cache-Control': 'public, max-age=3600'} if target.suffix in ('.woff2', '.svg') else None)
 
     def body(self, limit):
         length = int(self.headers.get('Content-Length', 0))
@@ -702,13 +909,27 @@ class Handler(BaseHTTPRequestHandler):
         if self.headers.get('X-Platform') != '1':
             raise PermissionError('Thiếu tiêu đề X-Platform.')
 
+    def token(self):
+        return self.headers.get('X-Session', '')
+
+    def need_session(self):
+        if not session_left(self.token()):
+            raise AuthError('Cần mở khóa nạp dữ liệu bằng mật khẩu.')
+
     def route(self, method):
         url = urlsplit(self.path)
         path, query = url.path, {k: v[-1] for k, v in parse_qs(url.query).items()}
         if method == 'GET':
             if path == '/api/state':
-                return self.send(200, dict(company=company(), agents=[agent_state(a) for a in AGENTS],
-                                           pending=pending(), history=history()[:30], origin=ORIGIN))
+                left = session_left(self.token(), touch=False)
+                recs = pending() if left else []
+                return self.send(200, dict(company=company(), agents=[agent_state(a) for a in AGENTS], origin=ORIGIN,
+                                           intake=dict(configured=configured(), unlocked=bool(left), seconds_left=left),
+                                           package=package_summary(), slots=slots_state(recs), pending=recs,
+                                           batches=list(reversed(batches()))[:30] if left else []))
+            if path == '/api/intake/audit':
+                self.need_session()
+                return self.send(200, audit_check())
             if path == '/api/agents/agent1/key':
                 return self.send(200, dict(key=agent1_key()))
             m = re.fullmatch(r'/api/agents/(agent[1-4])/log', path)
@@ -718,12 +939,31 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, agent4_metrics())
             if path.startswith('/agent4/') or path == '/agent4':
                 return self.static(CHAT, path[len('/agent4/'):])
+            if path.startswith('/design/platform-fonts/'):
+                return self.static(DESIGN / 'fonts', path[len('/design/platform-fonts/'):])
+            if path.startswith('/design/'):
+                return self.static(DESIGN, path[len('/design/'):])
             if path.startswith('/api/'):
                 return self.send(404, {'error': 'Không có địa chỉ này.'})
             return self.static(STATIC, path.lstrip('/') if '.' in path.rsplit('/', 1)[-1] else '')
         self.guard()
+        if method == 'POST' and path == '/api/intake/setup':
+            b = self.json_body()
+            return self.send(200, dict(token=set_password(str(b.get('password', '')), str(b.get('confirm', '')))))
+        if method == 'POST' and path == '/api/intake/unlock':
+            return self.send(200, dict(token=unlock(str(self.json_body().get('password', '')))))
+        if method == 'POST' and path == '/api/intake/lock':
+            SESSIONS.pop(self.token(), None)
+            audit('lock', {})
+            return self.send(200, dict(ok=True))
         if method == 'PUT' and path == '/api/company':
+            if current_batches():
+                try:
+                    self.need_session()
+                except AuthError:
+                    raise AuthError('Gói dữ liệu đã niêm phong nên cấu hình bị khóa. Mở khóa ở trang Nạp dữ liệu rồi sửa.') from None
             data, code_changed = save_company(self.json_body())
+            audit('company_saved', dict(code=data['code'], tax_code=data['tax_code']))
             sync = dict(agent3=ensure_agent3_workspace() if health('agent3') else dict(state='offline', message='Agent 3 chưa bật.'))
             if code_changed and PROCS.get('agent1') and PROCS['agent1'].poll() is None:
                 stop_agent('agent1')
@@ -740,20 +980,27 @@ class Handler(BaseHTTPRequestHandler):
             aid, action = m.groups()
             return self.send(200, start_agent(aid) if action == 'start' else stop_agent(aid))
         if method == 'POST' and path == '/api/inbox':
+            self.need_session()
             name = query.get('name', '')
             if not name:
                 raise ValueError('Thiếu tên tệp.')
-            return self.send(200, add_file(name, self.body(300 * 1024 * 1024)))
+            record = add_file(name, self.body(300 * 1024 * 1024))
+            audit('upload', dict(name=record['name'], size=record['size'], sha256=record['sha256'][:16]))
+            return self.send(200, record)
         m = re.fullmatch(r'/api/inbox/([0-9a-f]{12})/(check|delete)', path)
         if method == 'POST' and m:
+            self.need_session()
             fid, action = m.groups()
             if action == 'delete':
                 remove_file(fid)
+                audit('discard', dict(id=fid))
                 return self.send(200, dict(ok=True))
             return self.send(200, recheck(fid))
         if method == 'POST' and path == '/api/inbox/commit':
-            ids = [i for i in self.json_body().get('ids', []) if re.fullmatch(r'[0-9a-f]{12}', str(i))]
-            return self.send(200, dict(results=commit(ids)))
+            self.need_session()
+            b = self.json_body()
+            ids = [i for i in b.get('ids', []) if re.fullmatch(r'[0-9a-f]{12}', str(i))]
+            return self.send(200, dict(batch=commit(ids, str(b.get('reason', '')))))
         if method == 'POST' and path == '/api/agent4/query':
             question = str(self.json_body().get('question', '')).strip()[:2000]
             if not question:
@@ -764,6 +1011,8 @@ class Handler(BaseHTTPRequestHandler):
     def handle_one(self, method):
         try:
             self.route(method)
+        except AuthError as e:
+            self.send(401, {'error': str(e), 'locked': True})
         except PermissionError as e:
             self.send(403, {'error': str(e)})
         except (ValueError, KeyError) as e:
