@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Văn phòng kế toán số</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/app.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#overview" aria-label="Về trang tổng quan">
+    <span class="brand-mark" aria-hidden="true">KT</span>
+    <span class="brand-name">Văn phòng kế toán số</span>
+  </a>
+  <button class="menu-toggle" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Menu</button>
+  <a class="company" id="company-chip" href="#config">
+    <span class="company-name" id="company-name">Chưa cấu hình doanh nghiệp</span>
+    <span class="company-meta" id="company-meta">Bấm để nhập thông tin</span>
+  </a>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" id="sidebar" aria-label="Điều hướng">
+    <div class="nav-group">
+      <a class="nav-link" href="#overview" data-view="overview">Tổng quan</a>
+      <a class="nav-link" href="#config" data-view="config">Cấu hình doanh nghiệp</a>
+      <a class="nav-link" href="#data" data-view="data">Nạp dữ liệu <span class="count" id="pending-count" hidden></span></a>
+    </div>
+    <div class="nav-group" id="nav-agents" aria-label="Các agent"></div>
+    <p class="nav-foot">Dữ liệu ở lại trên máy này. Mỗi agent giữ kho riêng.</p>
+  </nav>
+
+  <main class="content" id="content">
+    <!-- Overview -->
+    <section class="view" id="view-overview" aria-labelledby="h-overview">
+      <div class="page-head">
+        <h1 id="h-overview">Tổng quan</h1>
+        <p class="lead">Một hồ sơ doanh nghiệp và một nơi nạp tệp cho cả bốn agent.</p>
+      </div>
+      <ol class="steps" id="steps">
+        <li data-step="config"><strong>Cấu hình doanh nghiệp</strong><span>Tên, mã số thuế, kỳ kê khai, định dạng tệp.</span><a href="#config">Mở cấu hình</a></li>
+        <li data-step="agents"><strong>Bật các agent</strong><span>Agent nào tắt sẽ không nhận tệp.</span><button type="button" id="start-all">Bật tất cả</button></li>
+        <li data-step="data"><strong>Nạp dữ liệu</strong><span>Thả tệp một lần, portal gửi tới agent đọc được.</span><a href="#data">Nạp tệp</a></li>
+      </ol>
+      <h2 class="section-title">Các agent</h2>
+      <div class="agents" id="agent-grid"></div>
+    </section>
+
+    <!-- Config -->
+    <section class="view" id="view-config" aria-labelledby="h-config" hidden>
+      <div class="page-head">
+        <h1 id="h-config">Cấu hình doanh nghiệp</h1>
+        <p class="lead">Lưu một lần, portal chuyển đến agent cần dùng. Nhãn bên phải mỗi ô cho biết agent nào dùng.</p>
+      </div>
+      <form id="company-form" class="form" novalidate>
+        <fieldset>
+          <legend>Thông tin pháp lý</legend>
+          <label class="field"><span class="label">Tên doanh nghiệp <i>Agent 3</i></span>
+            <input name="legal_name" required autocomplete="organization"></label>
+          <div class="row">
+            <label class="field"><span class="label">Mã số thuế <i>Agent 3</i></span>
+              <input name="tax_code" inputmode="numeric" placeholder="10 hoặc 13 chữ số"></label>
+            <label class="field"><span class="label">Mã doanh nghiệp dùng chung <i>Agent 1, 2</i></span>
+              <input name="code" required placeholder="VD: SAOVIET" autocapitalize="characters"></label>
+          </div>
+          <label class="field"><span class="label">Địa chỉ đăng ký <i>Agent 3</i></span>
+            <input name="registered_address" autocomplete="street-address"></label>
+          <label class="field"><span class="label">Ngành nghề <i>Agent 3</i></span>
+            <input name="industry" placeholder="Mỗi ngành cách nhau bằng dấu chấm phẩy"></label>
+        </fieldset>
+        <fieldset>
+          <legend>Thuế và kỳ kế toán</legend>
+          <div class="row">
+            <label class="field"><span class="label">Phương pháp tính thuế GTGT <i>Agent 3</i></span>
+              <select name="vat_method"><option value="DEDUCTION">Khấu trừ</option><option value="DIRECT">Trực tiếp</option></select></label>
+            <label class="field"><span class="label">Kỳ kê khai <i>Agent 3</i></span>
+              <select name="filing_period"><option value="MONTH">Theo tháng</option><option value="QUARTER">Theo quý</option></select></label>
+            <label class="field"><span class="label">Tháng kết thúc năm tài chính <i>Agent 3</i></span>
+              <input name="fiscal_year_end_month" type="number" min="1" max="12"></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Định dạng tệp nhập</legend>
+          <div class="row">
+            <label class="field"><span class="label">Ngày trong tệp <i>Agent 1, 2</i></span>
+              <select name="date_format"><option value="dmy">31/12/2026</option><option value="iso">2026-12-31</option></select></label>
+            <label class="field"><span class="label">Số tiền trong tệp <i>Agent 1</i></span>
+              <select name="number_format"><option value="vi-VN">1.250.000,50</option><option value="plain">1250000.50</option></select></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Liên kết mã</legend>
+          <label class="field"><span class="label">Mã doanh nghiệp ở Agent 2 <i>Agent 2</i></span>
+            <input name="agent2_company" placeholder="Để trống nếu trùng mã dùng chung">
+            <span class="hint">Agent 2 chỉ nhận tệp cho doanh nghiệp đã có trong danh mục của nó. Bộ demo dùng C001 hoặc C002.</span></label>
+          <p class="hint">Agent 4 đang chạy trên kho dữ liệu demo cố định nên chưa dùng hồ sơ này.</p>
+        </fieldset>
+        <div class="form-actions">
+          <button type="submit" class="primary">Lưu cấu hình</button>
+          <span class="saved" id="saved-at"></span>
+        </div>
+        <ul class="sync" id="sync-result" aria-live="polite"></ul>
+      </form>
+    </section>
+
+    <!-- Data -->
+    <section class="view" id="view-data" aria-labelledby="h-data" hidden>
+      <div class="page-head">
+        <h1 id="h-data">Nạp dữ liệu</h1>
+        <p class="lead">Portal nhận dạng từng tệp, chạy kiểm tra của agent nhận, và chỉ ghi khi bạn bấm Ghi vào agent.</p>
+      </div>
+      <label class="drop" id="drop">
+        <input type="file" id="file-input" multiple accept=".csv,.xlsx,.xml,.zip,.txt">
+        <span class="drop-title">Thả tệp vào đây hoặc bấm để chọn</span>
+        <span class="drop-sub">CSV, XLSX, XML hóa đơn điện tử, ZIP. Tối đa 300 MB mỗi tệp.</span>
+      </label>
+      <div class="queue-head">
+        <h2 class="section-title">Hàng chờ</h2>
+        <button type="button" class="primary" id="commit" disabled>Ghi vào agent</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table" id="queue">
+          <thead><tr><th>Tệp</th><th>Nhận dạng</th><th>Kết quả kiểm tra</th><th class="right">Thao tác</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="empty" id="queue-empty">Chưa có tệp nào chờ ghi.</p>
+
+      <details class="routing">
+        <summary>Agent nào nhận loại tệp nào</summary>
+        <table class="table compact">
+          <thead><tr><th>Loại tệp</th><th>Agent</th><th>Ghi chú</th></tr></thead>
+          <tbody>
+            <tr><td>Hóa đơn bán, tiền khách trả, khoản chi, sao kê, kỳ sao kê, hứa trả (CSV hoặc XLSX theo mẫu Agent 1)</td><td>Agent 1</td><td>Gộp theo mã dòng, không xóa dữ liệu cũ.</td></tr>
+            <tr><td>Sổ giao dịch theo mẫu Agent 2</td><td>Agent 2</td><td>Thay toàn bộ giao dịch của doanh nghiệp.</td></tr>
+            <tr><td>Hóa đơn XML, tệp ZIP, sao kê ngân hàng, bảng kê cổng thuế</td><td>Agent 3</td><td>Agent 3 tự phân loại, bỏ qua tệp trùng nội dung.</td></tr>
+            <tr><td>Chưa có</td><td>Agent 4</td><td>Đang dùng kho dữ liệu demo.</td></tr>
+          </tbody>
+        </table>
+      </details>
+
+      <h2 class="section-title">Lịch sử ghi</h2>
+      <div class="table-wrap">
+        <table class="table" id="history">
+          <thead><tr><th>Thời điểm</th><th>Tệp</th><th>Kết quả</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="empty" id="history-empty">Chưa ghi tệp nào.</p>
+    </section>
+
+    <!-- Agent frame -->
+    <section class="view agent-view" id="view-agent" hidden>
+      <div class="agent-bar">
+        <div class="agent-title"><span class="agent-no" id="agent-no"></span><h1 id="agent-name"></h1><span class="status" id="agent-status"></span></div>
+        <div class="agent-actions">
+          <button type="button" id="agent-toggle"></button>
+          <a id="agent-newtab" target="_blank" rel="noopener">Mở tab riêng</a>
+        </div>
+      </div>
+      <div class="agent-body">
+        <iframe id="agent-frame" title="Giao diện agent" hidden></iframe>
+        <div class="agent-off" id="agent-off" hidden>
+          <h2>Agent đang tắt</h2>
+          <p id="agent-off-text"></p>
+          <button type="button" class="primary" id="agent-start">Bật agent</button>
+          <details><summary>Nhật ký khởi động</summary><pre id="agent-log"></pre></details>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

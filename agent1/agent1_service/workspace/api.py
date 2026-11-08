@@ -82,7 +82,7 @@ def install(app, store, authorize, firm_id):
             response.headers["X-Content-Type-Options"] = "nosniff"
             response.headers["Referrer-Policy"] = "no-referrer"
             response.headers["Content-Security-Policy"] = (
-                "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+                "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors " + os.environ.get("AGENT1_FRAME_ANCESTORS", "'none'") + "; base-uri 'self'; form-action 'self'"
             )
         return response
 

@@ -5,6 +5,7 @@ import argparse
 import csv
 import io
 import json
+import os
 import secrets
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -72,7 +73,7 @@ def make_server(store, port=8765, qa=False, instance_id='', notifications=None, 
             self.send_header('Content-Length', str(len(body)))
             self.send_header('Cache-Control', 'no-store')
             self.send_header('X-Content-Type-Options', 'nosniff')
-            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; frame-ancestors 'none'; base-uri 'none'")
+            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; frame-ancestors " + os.environ.get('SOSOAT_FRAME_ANCESTORS', "'none'") + "; base-uri 'none'")
             self.send_header('Referrer-Policy', 'no-referrer')
             if extra:
                 for key, value in extra.items():

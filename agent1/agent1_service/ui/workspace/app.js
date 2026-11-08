@@ -212,7 +212,7 @@
   $("connect-cancel").onclick = () => $("connect-dialog").close();
   $("connect-form").onsubmit = async (event) => {
     event.preventDefault();
-    const button = event.submitter;
+    const button = event.submitter || $("connect-form").querySelector("button[type=submit]");
     button.disabled = true;
     token = $("token-input").value.trim();
     try {
@@ -239,6 +239,17 @@
       button.disabled = false;
     }
   };
+  // Inside the platform shell: the shell sends the access key once, it is kept in memory only like a typed key.
+  if (window.parent !== window) {
+    window.addEventListener("message", (event) => {
+      const data = event.data || {};
+      if (event.source !== window.parent || data.type !== "platform-access-key" || token) return;
+      if (!/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(event.origin)) return;
+      $("token-input").value = String(data.key || "");
+      $("connect-form").requestSubmit();
+    });
+    window.parent.postMessage({ type: "platform-ready", agent: "agent1" }, "*");
+  }
   $("logout").onclick = () => {
     token = "";
     state = null;

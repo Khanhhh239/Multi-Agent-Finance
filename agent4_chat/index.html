@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent 4 Hỏi đáp số liệu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="chat.css">
+<script src="chat.js" defer></script>
+</head>
+<body>
+<div class="chat">
+  <aside class="side" aria-label="Gợi ý câu hỏi">
+    <h2>Thử hỏi</h2>
+    <ul class="suggest" id="suggest"></ul>
+    <h2>Chỉ tiêu có sẵn</h2>
+    <p class="muted" id="metric-count">Đang tải danh mục.</p>
+    <ul class="metrics" id="metrics"></ul>
+    <p class="note">Số liệu lấy từ kho dữ liệu mô phỏng của Agent 4, không phải sổ thật của doanh nghiệp.</p>
+  </aside>
+
+  <section class="main">
+    <ol class="thread" id="thread" aria-live="polite">
+      <li class="intro">
+        <h1>Hỏi số liệu tài chính</h1>
+        <p>Đặt câu hỏi bằng tiếng Việt về doanh thu, lợi nhuận, công nợ hay dòng tiền. Agent 4 chuyển câu hỏi thành truy vấn đã kiểm tra, chạy trên kho chỉ đọc và cho biết nguồn số liệu.</p>
+      </li>
+    </ol>
+    <form class="composer" id="composer">
+      <label class="sr-only" for="question">Câu hỏi</label>
+      <textarea id="question" rows="1" placeholder="Ví dụ: Doanh thu thuần quý 3 năm 2026 là bao nhiêu?" required></textarea>
+      <button type="submit" id="send">Gửi</button>
+    </form>
+  </section>
+</div>
+</body>
+</html>

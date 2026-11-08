@@ -1,0 +1,4 @@
+portal/config.local.json
+portal/workspace/
+__pycache__/
+*.py[cod]

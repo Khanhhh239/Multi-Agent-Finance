@@ -1,0 +1,12 @@
+{
+  "port": 8800,
+  "workspace": "portal/workspace",
+  "agents": {
+    "agent1": {"port": 8011},
+    "agent2": {"port": 8766, "data_root": "agent2/.runtime/platform/data", "reports_root": "agent2/.runtime/platform/reports",
+               "database": "agent2/.runtime/platform/review.sqlite3"},
+    "agent3": {"port": 8640, "env": {"AGENT3_WORKSPACES": "portal/workspace/agent3/workspaces",
+                                     "AGENT3_ADMIN_STORE": "portal/workspace/agent3/admin.json"}},
+    "agent4": {"port": 8040}
+  }
+}
