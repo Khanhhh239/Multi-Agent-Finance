@@ -88,6 +88,9 @@
   }
 
   function renderNav() {
+    const signature = state.agents.map((a) => [a.id, a.name, a.state].join(":" )).join("|");
+    if ($("nav-agents").dataset.signature === signature) { markCurrent(); return; }
+    $("nav-agents").dataset.signature = signature;
     $("nav-agents").replaceChildren(
       ...state.agents.map((a) =>
         el("a", { class: "nav-link", href: "#" + a.id, "data-view": a.id },
@@ -101,22 +104,38 @@
 
   function renderOverview() {
     const c = state.company;
+    $("today").textContent = new Intl.DateTimeFormat("vi-VN", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+    const runningCount = state.agents.filter((a) => a.state === "running").length;
+    const stat = (label, value, detail) => el("div", { class: "workspace-stat" }, el("span", {}, label), el("strong", {}, value), el("small", {}, detail));
+    $("workspace-stats").replaceChildren(
+      stat("Doanh nghiệp đang làm việc", c.code || "Chưa thiết lập", c.tax_code ? "Mã số thuế · " + c.tax_code : "Bổ sung hồ sơ để bắt đầu"),
+      stat("Agent đang hoạt động", runningCount + " / " + state.agents.length, runningCount === state.agents.length ? "Các không gian đã sẵn sàng mở" : "Bật agent cần dùng trong phần nghiệp vụ"),
+      stat("Gói dữ liệu chung", state.package ? "Phiên bản " + state.package.version : "Chưa niêm phong", state.package ? "Niêm phong ngày " + dmy(state.package.sealed_at) : "Nạp tệp và kiểm tra trước khi ghi"));
     const steps = $("steps").children;
     steps[0].classList.toggle("done", Boolean(c.legal_name && c.code));
     steps[1].classList.toggle("done", state.agents.every((a) => a.state === "running"));
     steps[2].classList.toggle("done", Boolean(state.package));
+    $("start-all").disabled = state.agents.every((a) => a.state !== "stopped");
+    $("start-all").textContent = runningCount === state.agents.length ? "Tất cả đang hoạt động" : "Bật các agent đang tắt";
+    const signature = JSON.stringify([state.agents.map((a) => [a.id, a.state, a.name]), state.intake.unlocked, state.batches, c.code]);
+    if ($("agent-grid").dataset.signature === signature) return;
+    $("agent-grid").dataset.signature = signature;
+    const descriptions = {
+      agent1: "Theo dõi thu chi, dự báo dòng tiền theo tuần và chủ động với các kịch bản thanh toán.",
+      agent2: "Rà soát giao dịch bất thường, xem bằng chứng và theo dõi hồ sơ cần xử lý.",
+      agent3: "Đối chiếu hóa đơn, sao kê và bảng kê thuế để phát hiện chênh lệch cần kiểm tra.",
+      agent4: "Hỏi số liệu tài chính bằng tiếng Việt và xem câu trả lời kèm nguồn dữ liệu."
+    };
     $("agent-grid").replaceChildren(
       ...state.agents.map((a) => {
-        const running = a.state === "running";
         const files = state.intake.unlocked ? receivedCount(a.id) : null;
-        return el("article", { class: "agent" },
-          el("span", { class: "big", "aria-hidden": "true" }, a.number),
-          el("h3", {}, a.name, el("span", { class: "status" }, el("span", { class: "dot " + a.state }), STATE_TEXT[a.state])),
-          el("p", {}, a.summary),
+        return el("article", { class: "agent", "data-id": a.id },
+          el("div", { class: "agent-head" }, el("span", { class: "big" }, "A" + a.number),
+            el("span", { class: "status" }, el("span", { class: "dot " + a.state }), STATE_TEXT[a.state])),
+          el("h3", {}, a.name),
+          el("p", {}, descriptions[a.id] || a.summary),
           el("div", { class: "actions" },
-            el("a", { class: "btn primary", href: "#" + a.id }, "Mở " + AGENT_LABEL[a.id]),
-            a.owned || a.state === "stopped"
-              ? el("button", { type: "button", onclick: () => toggleAgent(a) }, running || a.state === "starting" ? "Tắt" : "Bật") : null,
+            el("a", { href: "#" + a.id }, "Mở " + AGENT_LABEL[a.id] + " →"),
             el("span", { class: "sub" }, a.id === "agent4" ? "Kho dữ liệu demo" : files === null ? "Mở khóa để xem" : files ? files + " tệp đã ghi qua gói" : "Chưa nhận tệp")));
       }));
   }
@@ -299,6 +318,7 @@
     if (!isAgent && currentAgent) { $("agent-frame").removeAttribute("src"); delete $("agent-frame").dataset.src; }
     currentAgent = isAgent ? view : null;
     $("sidebar").classList.remove("open");
+    $("nav-backdrop").hidden = true;
     $("menu-toggle").setAttribute("aria-expanded", "false");
     if (state) render();
     markCurrent();
@@ -455,10 +475,16 @@
 
   // ------------------------------------------------------------------ wire up
   window.addEventListener("hashchange", show);
+  document.querySelector(".skip-link").addEventListener("click", (event) => {
+    event.preventDefault();
+    $("content").focus();
+  });
   $("menu-toggle").addEventListener("click", () => {
     const open = $("sidebar").classList.toggle("open");
     $("menu-toggle").setAttribute("aria-expanded", String(open));
+    $("nav-backdrop").hidden = !open;
   });
+  $("nav-backdrop").addEventListener("click", () => $("menu-toggle").click());
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && $("sidebar").classList.contains("open")) {
       $("menu-toggle").click();

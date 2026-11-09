@@ -1,0 +1,28 @@
+{
+  "profile_id": "minh_phat_enterprise_x10",
+  "data_version": "3.0.0",
+  "seed": 20261108,
+  "company_code": "MPX10",
+  "company_name": "Công ty Cổ phần Phân phối và Dịch vụ Minh Phát — MÔ PHỎNG",
+  "start": "2023-01-01",
+  "as_of": "2026-10-14",
+  "last_closed_month": "2026-08",
+  "customers": 18000,
+  "vendors": 1200,
+  "employees": 5000,
+  "items": 4000,
+  "assets": 1000,
+  "contracts": 2000,
+  "annual_invoice_counts": {"2023": 270000, "2024": 300000, "2025": 335000, "2026": 305000},
+  "annual_gross_revenue_vnd": {"2023": 9300000000000, "2024": 10300000000000, "2025": 11500000000000, "2026": 10000000000000},
+  "opening_bank_vnd": 1100000000000,
+  "opening_revolver_vnd": 1000000000000,
+  "revolver_limit_vnd": 2500000000000,
+  "memory_limit": "1800MB",
+  "threads": 2,
+  "synthetic": true,
+  "accounting_compatibility": "TT133-compatible account model retained for existing agents; this is a synthetic benchmark, not a statutory regime determination for a large enterprise",
+  "reference_sources": [
+    {"url": "https://digiworld.com.vn/thong-cao-bao-chi/digiworld-ch%C3%ADnh-th%E1%BB%A9c-v%C6%B0%E1%BB%A3t-ng%C6%B0%E1%BB%A1ng-t%E1%BB%B7-%C4%91%C3%B4-h%C6%B0%E1%BB%9Bng-t%E1%BB%9Bi-t%C4%83ng-tr%C6%B0%E1%BB%9Fng-k%E1%BB%B7-l%E1%BB%A5c-n%C4%83m-2026", "use": "Public scale and diversified distribution business, 2025 audited revenue 26,632bn and net profit 547bn. No private database, counterparties or personal data copied. Our gross margin target follows the supplied service-heavy simulation brief, not Digiworld's actual gross margin."}
+  ]
+}

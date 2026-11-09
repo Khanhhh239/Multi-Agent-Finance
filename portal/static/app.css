@@ -122,7 +122,7 @@ button.link { height: auto; padding: 0; border: 0; background: none; color: var(
 .form { background: var(--kt-surface); border: 1px solid var(--kt-line); border-radius: var(--radius); padding: 8px 24px 24px; max-width: 820px; }
 fieldset { border: 0; padding: 18px 0 6px; margin: 0; min-width: 0; }
 fieldset + fieldset { border-top: 1px solid var(--kt-line); }
-legend { float: left; width: 100%; padding: 0; margin-bottom: 12px; font-weight: 600; color: var(--kt-ink); font-size: var(--fs-3); }
+legend { float: none; width: 100%; padding: 0; margin-bottom: 12px; font-weight: 600; color: var(--kt-ink); font-size: var(--fs-3); }
 .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 16px; }
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
 .label { display: flex; justify-content: space-between; gap: 8px; font-weight: 500; color: var(--kt-ink); }

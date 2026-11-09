@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import time
 import uuid
 from datetime import date
@@ -159,7 +160,9 @@ class QueryService:
         return f"tại {scope.as_of.isoformat()}"
 
 
-def build_default_service(database_path: str | Path = "data/cfo_warehouse.duckdb") -> QueryService:
+def build_default_service(database_path: str | Path | None = None) -> QueryService:
+    if database_path is None:
+        database_path = os.getenv("AGENT4_DB", "data/cfo_warehouse.duckdb")
     catalog = CatalogSnapshot()
     return QueryService(
         catalog=catalog,

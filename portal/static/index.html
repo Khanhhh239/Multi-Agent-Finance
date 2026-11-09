@@ -8,15 +8,17 @@
 <title>Văn phòng kế toán số</title>
 <link rel="stylesheet" href="/design/platform-theme.css">
 <link rel="stylesheet" href="/app.css">
+<link rel="stylesheet" href="/workspace.css">
 <script src="/design/platform-theme.js"></script>
 <script src="/app.js" defer></script>
 </head>
 <body>
+<a class="skip-link" href="#content">Đến nội dung chính</a>
 <header class="topbar">
   <button class="menu-toggle" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Menu</button>
   <a class="brand" href="#overview" aria-label="Về trang tổng quan">
     <span class="brand-mark" aria-hidden="true">KT</span>
-    <span class="brand-name">Văn phòng kế toán số</span>
+    <span class="brand-name">Kế toán số<small>Không gian làm việc</small></span>
   </a>
   <div class="top-right">
     <a class="chip" id="package-chip" href="#data" hidden></a>
@@ -30,28 +32,31 @@
 <div class="shell">
   <nav class="sidebar" id="sidebar" aria-label="Điều hướng">
     <div class="nav-group">
-      <p class="nav-title">Thiết lập</p>
-      <a class="nav-link" href="#overview" data-view="overview">Tổng quan</a>
-      <a class="nav-link" href="#config" data-view="config">Cấu hình doanh nghiệp</a>
-      <a class="nav-link" href="#data" data-view="data">Nạp dữ liệu <span class="lock" id="lock-badge" hidden>Khóa</span><span class="count" id="pending-count" hidden></span></a>
+      <p class="nav-title">Không gian chung</p>
+      <a class="nav-link" href="#overview" data-view="overview"><span class="nav-icon" aria-hidden="true">⌂</span>Tổng quan</a>
+      <a class="nav-link" href="#config" data-view="config"><span class="nav-icon" aria-hidden="true">▤</span>Hồ sơ doanh nghiệp</a>
+      <a class="nav-link" href="#data" data-view="data"><span class="nav-icon" aria-hidden="true">↥</span>Nạp dữ liệu <span class="lock" id="lock-badge" hidden>Khóa</span><span class="count" id="pending-count" hidden></span></a>
     </div>
     <div class="nav-group">
-      <p class="nav-title">Agent</p>
+      <p class="nav-title">Nghiệp vụ · 4 agent</p>
       <div id="nav-agents"></div>
     </div>
+    <div class="sidebar-note"><span class="sidebar-note-icon" aria-hidden="true">◎</span><strong>Một nơi, bốn nghiệp vụ</strong><p>Hồ sơ và dữ liệu chung cho công việc kế toán mỗi ngày.</p><span class="demo-label">Dữ liệu hiện tại: mô phỏng</span></div>
   </nav>
+  <button class="nav-backdrop" id="nav-backdrop" aria-label="Đóng menu" hidden></button>
 
-  <main class="content" id="content">
+  <main class="content" id="content" tabindex="-1">
     <!-- Overview -->
     <section class="view" id="view-overview" aria-labelledby="h-overview">
+      <div class="page-head overview-heading"><div><p class="eyebrow">Không gian làm việc</p><h1 id="h-overview">Tổng quan</h1><p class="lead">Mọi nghiệp vụ kế toán, trong cùng một văn phòng.</p></div><span class="today" id="today"></span></div>
       <div class="overview-hero">
         <div class="hero-copy">
-          <p class="eyebrow">Văn phòng kế toán số</p>
-          <h1 id="h-overview">Điều hành kế toán<br>trên một nền tảng</h1>
-          <p>Quản lý dòng tiền, soát giao dịch, kiểm tra thuế GTGT và hỏi đáp số liệu trong cùng một văn phòng.</p>
+          <p class="eyebrow">Kết nối dữ liệu · Hiểu rõ doanh nghiệp</p>
+          <h2>Vững số liệu.<br>Chủ động mỗi ngày.</h2>
+          <p>Từ dòng tiền đến thuế, bắt đầu bằng một bộ hồ sơ rõ ràng và dữ liệu được kiểm tra.</p>
           <div class="hero-actions">
             <a class="btn primary" href="#data">Nạp dữ liệu <span aria-hidden="true">↗</span></a>
-            <a class="hero-link" href="#config">Cấu hình doanh nghiệp</a>
+            <a class="hero-link" href="#config">Xem hồ sơ doanh nghiệp →</a>
           </div>
         </div>
         <div class="photo-mosaic" aria-label="Ba địa danh miền Trung">
@@ -69,14 +74,15 @@
           </div>
         </div>
       </div>
-      <h2 class="section-title">Quy trình làm việc</h2>
+      <div class="workspace-stats" id="workspace-stats" aria-label="Trạng thái không gian làm việc"></div>
+      <div class="section-heading"><div><h2 class="section-title">Chọn nghiệp vụ bạn cần</h2><p>Mở agent để tiếp tục công việc.</p></div><span class="section-caption">4 không gian chuyên biệt</span></div>
+      <div class="agents" id="agent-grid"></div>
+      <div class="section-heading"><div><h2 class="section-title">Chuẩn bị không gian làm việc</h2><p>Ba bước để dữ liệu sẵn sàng cho các agent.</p></div></div>
       <ol class="steps" id="steps">
         <li data-step="config"><strong>Cấu hình doanh nghiệp</strong><span>Tên, mã số thuế, kỳ kê khai, định dạng tệp.</span><a href="#config">Mở cấu hình</a></li>
         <li data-step="agents"><strong>Bật các agent</strong><span>Agent nào tắt sẽ không nhận dữ liệu.</span><button type="button" id="start-all">Bật tất cả</button></li>
         <li data-step="data"><strong>Nạp gói dữ liệu</strong><span>Thả tệp một lần, niêm phong bằng mật khẩu.</span><a href="#data">Nạp dữ liệu</a></li>
       </ol>
-      <h2 class="section-title">Không gian nghiệp vụ</h2>
-      <div class="agents" id="agent-grid"></div>
       <footer class="photo-credits">
         Ảnh Wikimedia Commons (thu nhỏ, cắt khung hiển thị) ·
         <a href="https://commons.wikimedia.org/wiki/File:2024-12-20_Night_in_Hoi_An.jpg">Alexkom000</a> <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> ·
@@ -88,10 +94,12 @@
     <!-- Config -->
     <section class="view" id="view-config" aria-labelledby="h-config" hidden>
       <div class="page-head">
-        <h1 id="h-config">Cấu hình doanh nghiệp</h1>
-        <p class="lead">Lưu một lần, portal chuyển đến agent cần dùng. Nhãn bên phải mỗi ô cho biết agent nào dùng.</p>
+        <p class="eyebrow">Thiết lập không gian làm việc</p>
+        <h1 id="h-config">Hồ sơ doanh nghiệp</h1>
+        <p class="lead">Thông tin dùng chung để các agent nhận đúng doanh nghiệp và định dạng dữ liệu.</p>
       </div>
-      <p class="banner" id="config-lock" hidden>Gói dữ liệu đã niêm phong nên cấu hình bị khóa. Mở khóa ở trang Nạp dữ liệu rồi quay lại sửa.</p>
+      <p class="banner" id="config-lock" hidden>Hồ sơ đang được bảo vệ vì đã có gói niêm phong. <a href="#data">Mở khóa để chỉnh sửa →</a></p>
+      <div class="config-layout">
       <form id="company-form" class="form" novalidate>
         <fieldset>
           <legend>Thông tin pháp lý</legend>
@@ -141,13 +149,16 @@
         </div>
         <ul class="sync" id="sync-result" aria-live="polite"></ul>
       </form>
+      <aside class="context-panel"><span class="context-icon" aria-hidden="true">▤</span><h2>Một hồ sơ dùng chung</h2><p>Kiểm tra mã doanh nghiệp trước khi nạp tệp để dữ liệu được đưa vào đúng hồ sơ.</p><ul><li><strong>Agent 1 & 2</strong><span>Mã doanh nghiệp và định dạng tệp.</span></li><li><strong>Agent 3</strong><span>Thông tin pháp lý, mã số thuế và kỳ kê khai.</span></li><li><strong>Agent 4</strong><span>Kho mô phỏng riêng, chưa dùng hồ sơ này.</span></li></ul><a href="#data">Tiếp tục đến nạp dữ liệu →</a></aside>
+      </div>
     </section>
 
     <!-- Data: locked -->
     <section class="view" id="view-data" aria-labelledby="h-data" hidden>
       <div class="gate" id="gate" hidden>
+        <div class="gate-intro"><p class="eyebrow">Trung tâm dữ liệu</p><h2>Dữ liệu đúng.<br>Công việc liền mạch.</h2><p>Nạp và kiểm tra các tệp cho Agent 1–3 tại một nơi, trước khi xác nhận ghi.</p><ol class="intake-steps"><li><strong>01</strong><span>Chọn tệp theo mẫu<small>CSV, Excel, hóa đơn XML hoặc ZIP.</small></span></li><li><strong>02</strong><span>Kiểm tra kết quả<small>Xem agent nhận, kỳ dữ liệu và lỗi cần sửa.</small></span></li><li><strong>03</strong><span>Niêm phong và ghi<small>Lưu phiên bản để theo dõi lần cập nhật.</small></span></li></ol><p class="gate-footnote">Agent 4 sử dụng kho dữ liệu mô phỏng riêng.</p></div>
         <form id="gate-form" class="gate-body" novalidate>
-          <h1 id="h-data">Nạp dữ liệu có mật khẩu</h1>
+          <span class="context-icon" aria-hidden="true">↥</span><p class="eyebrow">Khu vực được bảo vệ</p><h1 id="h-data">Mở không gian dữ liệu</h1>
           <p class="lead" id="gate-lead"></p>
           <label class="field"><span class="label" id="gate-label">Mật khẩu</span>
             <input type="password" name="password" id="gate-password" autocomplete="current-password" required></label>
@@ -155,7 +166,7 @@
             <input type="password" name="confirm" autocomplete="new-password"></label>
           <p class="error-text" id="gate-error" role="alert"></p>
           <button type="submit" class="primary" id="gate-submit">Mở khóa</button>
-          <p class="hint">Mật khẩu chỉ lưu dưới dạng băm trên máy này. Quên mật khẩu thì xóa tệp <code>intake_security.json</code> trong thư mục làm việc của portal.</p>
+          <p class="hint">Phiên làm việc tự khóa sau 20 phút không sử dụng. Nếu quên mật khẩu, liên hệ người quản trị hệ thống.</p>
         </form>
       </div>
 
@@ -163,6 +174,7 @@
       <div id="intake" hidden>
         <div class="page-head head-split">
           <div>
+            <p class="eyebrow">Trung tâm dữ liệu</p>
             <h1 id="h-intake">Nạp dữ liệu</h1>
             <p class="lead">Tệp được nhận dạng và kiểm tra theo mẫu của từng agent trước khi niêm phong.</p>
           </div>
@@ -170,15 +182,16 @@
         </div>
 
         <p class="banner" id="intake-company"></p>
+        <ol class="intake-progress" aria-label="Các bước nạp dữ liệu"><li><b>1</b> Chọn tệp</li><li><b>2</b> Xem kết quả kiểm tra</li><li><b>3</b> Niêm phong và ghi</li></ol>
 
-        <section class="package" aria-labelledby="h-package">
-          <div class="package-head">
+        <details class="package" aria-labelledby="h-package">
+          <summary class="package-head">
             <h2 id="h-package">Gói dữ liệu</h2>
             <p id="package-line"></p>
-          </div>
+          </summary>
           <div class="slots" id="slots"></div>
-          <p class="banner warn" id="period-warning" hidden></p>
-        </section>
+        </details>
+        <p class="banner warn" id="period-warning" hidden></p>
 
         <label class="drop" id="drop">
           <input type="file" id="file-input" multiple accept=".csv,.xlsx,.xml,.zip,.txt">

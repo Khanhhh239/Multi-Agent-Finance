@@ -247,8 +247,11 @@ def agent_state(aid):
     else:
         state = 'stopped'
     info = AGENTS[aid]
+    url = agent_url(aid, info['page']) if info['page'] else '/agent4/'
+    if aid == 'agent3' and (workspace := agent3_workspace()):
+        url += '#/?dn=' + quote(workspace)
     return dict(id=aid, number=int(aid[-1]), name=info['name'], summary=info['summary'], state=state, owned=owned,
-                port=agent_port(aid), url=(agent_url(aid, info['page']) if info['page'] else '/agent4/'),
+                port=agent_port(aid), url=url,
                 root=str(agent_root(aid)), log=f'/api/agents/{aid}/log',
                 exit_code=(proc.returncode if proc is not None and proc.poll() is not None else None))
 
