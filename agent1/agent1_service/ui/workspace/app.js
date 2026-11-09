@@ -1,18 +1,6 @@
 "use strict";
 (() => {
   const $ = (id) => document.getElementById(id);
-  // Retain the originating portal across Agent 1 pages and standalone-tab reloads.
-  let portalOrigin = new URLSearchParams(location.search).get("portal");
-  try {
-    if (!portalOrigin) portalOrigin = sessionStorage.getItem("agent1-portal-origin");
-    const portal = new URL(portalOrigin);
-    if (portal.protocol === "http:" && ["127.0.0.1", "localhost"].includes(portal.hostname) &&
-        !portal.username && !portal.password && portal.origin !== location.origin) {
-      $("portal-return").href = portal.origin + "/#overview";
-      $("portal-return").hidden = false;
-      try { sessionStorage.setItem("agent1-portal-origin", portal.origin); } catch (e) { /* private mode */ }
-    }
-  } catch (e) { /* No portal context when Agent 1 is opened independently. */ }
   const fmt = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 0 });
   const short = (n) =>
     Math.abs(n) >= 1e9

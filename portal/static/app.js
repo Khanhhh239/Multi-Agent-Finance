@@ -296,7 +296,7 @@
         : "Cấu hình doanh nghiệp để nạp dữ liệu";
     source.href = a.id !== "agent4" && !state.company.code ? "#config" : "#data";
     const page = new URL(a.url, location.href);
-    if (a.id === "agent1") page.searchParams.set("portal", location.origin);
+    page.searchParams.set("portal", location.origin);
     const pageUrl = page.href;
     $("agent-newtab").href = pageUrl;
     $("agent-toggle").textContent = a.state === "running" || a.state === "starting" ? "Tắt agent" : "Bật agent";
