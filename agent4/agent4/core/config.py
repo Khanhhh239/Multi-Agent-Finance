@@ -6,6 +6,8 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
+_WAREHOUSE_DIR = Path("data/enterprise-x10-v3")
+
 
 def _env_path(name: str, default: str) -> Path:
     return Path(os.getenv(name, default))
@@ -20,11 +22,11 @@ class AppConfig:
     """Server-owned configuration shared by deterministic pipeline stages."""
 
     db_path: Path = field(
-        default_factory=lambda: _env_path("AGENT4_DB", "data/cfo_warehouse.duckdb")
+        default_factory=lambda: _env_path("AGENT4_DB", str(_WAREHOUSE_DIR / "warehouse.duckdb"))
     )
     ground_truth_path: Path = field(
         default_factory=lambda: _env_path(
-            "AGENT4_GROUND_TRUTH", "data/cfo_warehouse_ground_truth.json"
+            "AGENT4_GROUND_TRUTH", str(_WAREHOUSE_DIR / "warehouse_ground_truth.json")
         )
     )
     qwen_base_url: str = field(

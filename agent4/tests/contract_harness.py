@@ -23,7 +23,14 @@ DB_PATH = REPO_ROOT / "data" / "cfo_warehouse.duckdb"
 GROUND_TRUTH_PATH = REPO_ROOT / "data" / "cfo_warehouse_ground_truth.json"
 
 SUPPORTED_LOCALES = {"vi-VN", "en-US"}
-COMMON_STATUSES = {"ok", "needs_clarification", "unsupported", "forbidden", "rejected", "unavailable"}
+COMMON_STATUSES = {
+    "ok",
+    "needs_clarification",
+    "unsupported",
+    "forbidden",
+    "rejected",
+    "unavailable",
+}
 FINAL_STATUSES = {
     "ready",
     "needs_clarification",
@@ -130,15 +137,33 @@ class ContractError(Exception):
     @staticmethod
     def _sanitize_message(msg: str) -> str:
         # Section 1.1: Public error must not contain raw SQL, stack trace, credentials, or raw financial rows.
-        sanitized = re.sub(r"(SELECT|WITH|INSERT|UPDATE|DELETE|DROP)\s+.*", "[REDACTED]", msg, flags=re.IGNORECASE)
-        sanitized = re.sub(r"Traceback \(most recent call last\).*", "[REDACTED]", sanitized, flags=re.DOTALL)
-        sanitized = re.sub(r"(password|secret|token|api_key)\s*=\s*\S+", "[REDACTED]", sanitized, flags=re.IGNORECASE)
+        sanitized = re.sub(
+            r"(SELECT|WITH|INSERT|UPDATE|DELETE|DROP)\s+.*", "[REDACTED]", msg, flags=re.IGNORECASE
+        )
+        sanitized = re.sub(
+            r"Traceback \(most recent call last\).*", "[REDACTED]", sanitized, flags=re.DOTALL
+        )
+        sanitized = re.sub(
+            r"(password|secret|token|api_key)\s*=\s*\S+",
+            "[REDACTED]",
+            sanitized,
+            flags=re.IGNORECASE,
+        )
         return sanitized
 
     @classmethod
     def _sanitize_details(cls, details: dict[str, Any]) -> dict[str, Any]:
         clean: dict[str, Any] = {}
-        forbidden_keys = {"sql", "raw_sql", "stack_trace", "traceback", "credentials", "password", "rows", "raw_rows"}
+        forbidden_keys = {
+            "sql",
+            "raw_sql",
+            "stack_trace",
+            "traceback",
+            "credentials",
+            "password",
+            "rows",
+            "raw_rows",
+        }
         for k, v in details.items():
             if k.lower() in forbidden_keys:
                 continue
@@ -166,7 +191,9 @@ def enforce_exact_keys(
 ) -> None:
     """Section 1.1: Unknown field must be rejected at module boundaries."""
     if not isinstance(obj, dict):
-        raise ContractError("invalid_request", stage, "Input payload must be a JSON object.", final_status="error")
+        raise ContractError(
+            "invalid_request", stage, "Input payload must be a JSON object.", final_status="error"
+        )
     allowed = required_keys | (optional_keys or set())
     unknown = set(obj.keys()) - allowed
     if unknown:
@@ -183,7 +210,7 @@ def enforce_exact_keys(
             "invalid_request",
             stage,
             f"Missing required fields at boundary: {sorted(missing)}",
-            details={"missing_fields": sorted   (missing)},
+            details={"missing_fields": sorted(missing)},
             final_status="error",
         )
 
@@ -200,11 +227,15 @@ def query_intake(payload: dict[str, Any], max_question_length: int = 500) -> dic
         stage=stage,
     )
     if payload["api_version"] != "v1":
-        raise ContractError("invalid_request", stage, "Unsupported api_version.", final_status="error")
+        raise ContractError(
+            "invalid_request", stage, "Unsupported api_version.", final_status="error"
+        )
 
     question = payload["question"]
     if not isinstance(question, str) or not question.strip():
-        raise ContractError("invalid_request", stage, "Question must be a non-empty string.", final_status="error")
+        raise ContractError(
+            "invalid_request", stage, "Question must be a non-empty string.", final_status="error"
+        )
     if len(question) > max_question_length:
         raise ContractError(
             "question_too_long",
@@ -258,7 +289,9 @@ def build_auth_context(
     """Builds AuthContext strictly from server/IdP claims, ignoring request_body."""
     stage = "auth_policy_context"
     if not idp_claims or not server_policy:
-        raise ContractError("forbidden", stage, "Missing authentication or policy claims.", final_status="forbidden")
+        raise ContractError(
+            "forbidden", stage, "Missing authentication or policy claims.", final_status="forbidden"
+        )
 
     enforce_exact_keys(
         idp_claims,
@@ -278,11 +311,15 @@ def build_auth_context(
     roles = list(idp_claims["roles"])
     allowed_views = list(server_policy["allowed_views"])
     allowed_metrics = (
-        list(server_policy["allowed_metrics"]) if server_policy.get("allowed_metrics") is not None else None
+        list(server_policy["allowed_metrics"])
+        if server_policy.get("allowed_metrics") is not None
+        else None
     )
 
     if not user_id or not tenant_id or not roles or not allowed_views:
-        raise ContractError("forbidden", stage, "Incomplete authorization context.", final_status="forbidden")
+        raise ContractError(
+            "forbidden", stage, "Incomplete authorization context.", final_status="forbidden"
+        )
 
     policy_blob = json.dumps(
         {
@@ -316,12 +353,28 @@ DEFAULT_METRICS_DEFINITIONS: list[dict[str, Any]] = [
         "label": "Doanh thu thuần",
         "label_en": "Net Revenue",
         "description": "Tổng doanh thu bán hàng và cung cấp dịch vụ thuần (TK 511)",
-        "aliases": ["doanh thu", "doanh thu thuần", "doanh số", "net revenue", "revenue", "sales", "total revenue"],
+        "aliases": [
+            "doanh thu",
+            "doanh thu thuần",
+            "doanh số",
+            "net revenue",
+            "revenue",
+            "sales",
+            "total revenue",
+        ],
         "unit": "VND",
         "kind": "amount",
         "period_type": "flow",
         "supported_views": ["mgmt", "tax", "gl"],
-        "supported_dimensions": ["month", "quarter", "year", "branch_code", "product_line", "partner_code", "segment"],
+        "supported_dimensions": [
+            "month",
+            "quarter",
+            "year",
+            "branch_code",
+            "product_line",
+            "partner_code",
+            "segment",
+        ],
         "supported_operations": ["aggregate", "timeseries", "breakdown", "ranking", "comparison"],
         "default_view": "mgmt",
         "status": "approved",
@@ -376,7 +429,13 @@ DEFAULT_METRICS_DEFINITIONS: list[dict[str, Any]] = [
         "label": "Biên lợi nhuận gộp",
         "label_en": "Gross Profit Margin",
         "description": "Tỷ lệ lợi nhuận gộp chia cho doanh thu thuần (%)",
-        "aliases": ["biên lợi nhuận gộp", "biên lãi gộp", "tỷ suất lợi nhuận gộp", "gross margin", "gross profit margin"],
+        "aliases": [
+            "biên lợi nhuận gộp",
+            "biên lãi gộp",
+            "tỷ suất lợi nhuận gộp",
+            "gross margin",
+            "gross profit margin",
+        ],
         "unit": "%",
         "kind": "ratio",
         "period_type": "flow",
@@ -412,7 +471,14 @@ DEFAULT_METRICS_DEFINITIONS: list[dict[str, Any]] = [
         "kind": "amount",
         "period_type": "flow",
         "supported_views": ["mgmt", "tax", "gl"],
-        "supported_dimensions": ["month", "quarter", "year", "branch_code", "department_code", "cost_category"],
+        "supported_dimensions": [
+            "month",
+            "quarter",
+            "year",
+            "branch_code",
+            "department_code",
+            "cost_category",
+        ],
         "supported_operations": ["aggregate", "timeseries", "breakdown", "ranking", "comparison"],
         "default_view": "mgmt",
         "status": "approved",
@@ -447,7 +513,12 @@ DEFAULT_METRICS_DEFINITIONS: list[dict[str, Any]] = [
         "label": "Biên lợi nhuận ròng",
         "label_en": "Net Profit Margin",
         "description": "Lợi nhuận ròng chia cho doanh thu thuần (%)",
-        "aliases": ["biên lợi nhuận ròng", "tỷ suất lợi nhuận ròng", "net profit margin", "net margin"],
+        "aliases": [
+            "biên lợi nhuận ròng",
+            "tỷ suất lợi nhuận ròng",
+            "net profit margin",
+            "net margin",
+        ],
         "unit": "%",
         "kind": "ratio",
         "period_type": "flow",
@@ -467,7 +538,14 @@ DEFAULT_METRICS_DEFINITIONS: list[dict[str, Any]] = [
         "label": "Chi phí lương và bảo hiểm",
         "label_en": "Payroll and Insurance Expense",
         "description": "Chi phí lương, thưởng và bảo hiểm trích theo lương trong kỳ",
-        "aliases": ["chi phí lương", "chi phí nhân sự", "quỹ lương", "payroll", "payroll expense", "salary expense"],
+        "aliases": [
+            "chi phí lương",
+            "chi phí nhân sự",
+            "quỹ lương",
+            "payroll",
+            "payroll expense",
+            "salary expense",
+        ],
         "unit": "VND",
         "kind": "amount",
         "period_type": "flow",
@@ -487,7 +565,13 @@ DEFAULT_METRICS_DEFINITIONS: list[dict[str, Any]] = [
         "label": "Số dư tiền và tương đương tiền",
         "label_en": "Cash and Bank Balance",
         "description": "Số dư tiền mặt (TK 111) và tiền gửi ngân hàng (TK 112) tại thời điểm as_of",
-        "aliases": ["số dư tiền", "số dư tiền mặt", "tiền gửi ngân hàng", "cash balance", "cash and bank balance"],
+        "aliases": [
+            "số dư tiền",
+            "số dư tiền mặt",
+            "tiền gửi ngân hàng",
+            "cash balance",
+            "cash and bank balance",
+        ],
         "unit": "VND",
         "kind": "amount",
         "period_type": "snapshot",
@@ -561,7 +645,14 @@ DEFAULT_METRICS_DEFINITIONS: list[dict[str, Any]] = [
         "label": "Tổng dư nợ vay",
         "label_en": "Total Loan Balance",
         "description": "Tổng dư nợ vay ngắn hạn và dài hạn (TK 341) tại thời điểm as_of",
-        "aliases": ["dư nợ vay", "nợ vay ngân hàng", "vay ngân hàng", "loan balance", "total debt", "bank loan"],
+        "aliases": [
+            "dư nợ vay",
+            "nợ vay ngân hàng",
+            "vay ngân hàng",
+            "loan balance",
+            "total debt",
+            "bank loan",
+        ],
         "unit": "VND",
         "kind": "amount",
         "period_type": "snapshot",
@@ -660,7 +751,9 @@ class MetricCatalog:
     def get_capability(self, metric_id: str) -> dict[str, Any]:
         m = self._metrics.get(metric_id)
         if not m:
-            raise ContractError("unknown_metric", "metric_catalog", f"Metric '{metric_id}' not found.")
+            raise ContractError(
+                "unknown_metric", "metric_catalog", f"Metric '{metric_id}' not found."
+            )
         return {
             "metric_id": m["metric_id"],
             "unit": m["unit"],
@@ -677,7 +770,9 @@ class MetricCatalog:
     def list_visible_metrics(self, auth_context: dict[str, Any]) -> list[dict[str, Any]]:
         allowed_views = set(auth_context.get("allowed_views") or [])
         allowed_metrics = (
-            set(auth_context["allowed_metrics"]) if auth_context.get("allowed_metrics") is not None else None
+            set(auth_context["allowed_metrics"])
+            if auth_context.get("allowed_metrics") is not None
+            else None
         )
         visible: list[dict[str, Any]] = []
         for m in self._metrics.values():
@@ -742,12 +837,16 @@ class EmbeddingProvider:
             )
         texts = request["texts"]
         if not isinstance(texts, list) or not texts or len(texts) > self.max_batch_size:
-            raise ContractError("invalid_request", stage, "Invalid batch size for embedding.", final_status="error")
+            raise ContractError(
+                "invalid_request", stage, "Invalid batch size for embedding.", final_status="error"
+            )
 
         vectors: list[dict[str, Any]] = []
         for text in texts:
             if not isinstance(text, str) or len(text) > self.max_text_length:
-                raise ContractError("invalid_request", stage, "Invalid text length in embedding request.")
+                raise ContractError(
+                    "invalid_request", stage, "Invalid text length in embedding request."
+                )
             digest = hashlib.sha256(text.lower().encode("utf-8")).digest()
             raw_vals = [((b / 127.5) - 1.0) for b in digest[: self.dimension]]
             if request["normalize"]:
@@ -773,7 +872,9 @@ class EmbeddingProvider:
 def build_metric_documents(catalog: MetricCatalog, locale: str = "vi-VN") -> list[dict[str, Any]]:
     """Implements Contract 6: metric.document-builder.v1."""
     if locale not in SUPPORTED_LOCALES:
-        raise ContractError("unsupported_locale", "document_builder", f"Unsupported locale: {locale}")
+        raise ContractError(
+            "unsupported_locale", "document_builder", f"Unsupported locale: {locale}"
+        )
     docs: list[dict[str, Any]] = []
     catalog_hash = catalog.get_catalog_hash()
     for m_id in sorted(catalog._metrics.keys()):
@@ -800,7 +901,9 @@ def build_metric_documents(catalog: MetricCatalog, locale: str = "vi-VN") -> lis
 # =====================================================================
 # Contracts 7, 8, 9, 10, 11: Retrieval Pipeline
 # =====================================================================
-def dense_retrieve(request: dict[str, Any], catalog: MetricCatalog, expected_dim: int = 16) -> dict[str, Any]:
+def dense_retrieve(
+    request: dict[str, Any], catalog: MetricCatalog, expected_dim: int = 16
+) -> dict[str, Any]:
     """Implements Contract 7: metric.retrieval.dense.v1."""
     stage = "dense_retrieval"
     enforce_exact_keys(
@@ -810,8 +913,14 @@ def dense_retrieve(request: dict[str, Any], catalog: MetricCatalog, expected_dim
     )
     emb = request["query_embedding"]
     enforce_exact_keys(emb, required_keys={"values", "dimension", "normalized"}, stage=stage)
-    if emb["dimension"] != expected_dim or len(emb["values"]) != expected_dim or not emb["normalized"]:
-        raise ContractError("invalid_request", stage, "Query embedding dimension or normalization mismatch.")
+    if (
+        emb["dimension"] != expected_dim
+        or len(emb["values"]) != expected_dim
+        or not emb["normalized"]
+    ):
+        raise ContractError(
+            "invalid_request", stage, "Query embedding dimension or normalization mismatch."
+        )
     if request["catalog_hash"] != catalog.get_catalog_hash():
         raise ContractError("invalid_request", stage, "Catalog hash mismatch in dense retriever.")
 
@@ -825,7 +934,9 @@ def dense_retrieve(request: dict[str, Any], catalog: MetricCatalog, expected_dim
             if alias in q_lower:
                 score = max(score, 0.85 + min(len(alias) * 0.005, 0.14))
         for token in re.findall(r"\w+", q_lower):
-            if len(token) > 2 and token in (m["label"].lower() + " " + m.get("label_en", "").lower()):
+            if len(token) > 2 and token in (
+                m["label"].lower() + " " + m.get("label_en", "").lower()
+            ):
                 score = max(score, 0.55)
         if score > 0.2:
             scored.append((round(min(score, 0.99), 4), m_id))
@@ -963,7 +1074,9 @@ def rerank_candidates(
     for cand in fusion_result.get("candidates", []):
         m_id = cand["metric_id"]
         if not catalog.contains(m_id):
-            raise ContractError("unknown_metric", stage, f"Reranker received unknown metric '{m_id}'.")
+            raise ContractError(
+                "unknown_metric", stage, f"Reranker received unknown metric '{m_id}'."
+            )
         m = catalog.get(m_id)
         assert m is not None
         label_match = 0.95 if any(a in q_text for a in m.get("aliases", [])) else 0.5
@@ -1106,7 +1219,11 @@ DEFAULT_FEWSHOT_BANK: list[dict[str, Any]] = [
         "locale": "vi-VN",
         "intent": "metric_selection",
         "expected_selection": {"status": "resolved", "metric_ids": ["net_profit_margin"]},
-        "context_constraints": {"supported_views": ["mgmt"], "required_dimensions": [], "required_time_modes": ["range"]},
+        "context_constraints": {
+            "supported_views": ["mgmt"],
+            "required_dimensions": [],
+            "required_time_modes": ["range"],
+        },
         "quality_status": "approved",
         "source": "human_reviewed",
         "example_version": "fewshot-v4",
@@ -1118,7 +1235,11 @@ DEFAULT_FEWSHOT_BANK: list[dict[str, Any]] = [
         "locale": "vi-VN",
         "intent": "metric_selection",
         "expected_selection": {"status": "resolved", "metric_ids": ["net_revenue"]},
-        "context_constraints": {"supported_views": ["mgmt", "tax"], "required_dimensions": [], "required_time_modes": ["range"]},
+        "context_constraints": {
+            "supported_views": ["mgmt", "tax"],
+            "required_dimensions": [],
+            "required_time_modes": ["range"],
+        },
         "quality_status": "approved",
         "source": "human_reviewed",
         "example_version": "fewshot-v4",
@@ -1130,7 +1251,11 @@ DEFAULT_FEWSHOT_BANK: list[dict[str, Any]] = [
         "locale": "vi-VN",
         "intent": "metric_selection",
         "expected_selection": {"status": "resolved", "metric_ids": ["operating_expense"]},
-        "context_constraints": {"supported_views": ["mgmt", "tax"], "required_dimensions": [], "required_time_modes": ["range"]},
+        "context_constraints": {
+            "supported_views": ["mgmt", "tax"],
+            "required_dimensions": [],
+            "required_time_modes": ["range"],
+        },
         "quality_status": "approved",
         "source": "human_reviewed",
         "example_version": "fewshot-v4",
@@ -1142,7 +1267,11 @@ DEFAULT_FEWSHOT_BANK: list[dict[str, Any]] = [
         "locale": "vi-VN",
         "intent": "metric_selection",
         "expected_selection": {"status": "resolved", "metric_ids": ["net_revenue"]},
-        "context_constraints": {"supported_views": ["mgmt"], "required_dimensions": [], "required_time_modes": ["range"]},
+        "context_constraints": {
+            "supported_views": ["mgmt"],
+            "required_dimensions": [],
+            "required_time_modes": ["range"],
+        },
         "quality_status": "draft",
         "source": "synthetic_unreviewed",
         "example_version": "fewshot-v4",
@@ -1253,7 +1382,9 @@ def validate_llm_selection_draft(draft: dict[str, Any]) -> dict[str, Any]:
         stage=stage,
     )
     if draft["status"] not in {"resolved", "ambiguous", "unsupported"}:
-        raise ContractError("invalid_request", stage, f"Invalid LLM selection status: {draft['status']}")
+        raise ContractError(
+            "invalid_request", stage, f"Invalid LLM selection status: {draft['status']}"
+        )
     if not isinstance(draft["metric_ids"], list):
         raise ContractError("invalid_request", stage, "metric_ids must be a list.")
 
@@ -1305,12 +1436,16 @@ def validate_metrics(
 
     selected_ids = list(checked_llm["metric_ids"])
     if not selected_ids:
-        raise ContractError("unsupported_metric", stage, "No metrics selected.", final_status="unsupported")
+        raise ContractError(
+            "unsupported_metric", stage, "No metrics selected.", final_status="unsupported"
+        )
 
     candidate_ids = {c["metric_id"] for c in retrieval_result.get("candidates", [])}
     allowed_views = set(auth_context.get("allowed_views") or [])
     allowed_metrics = (
-        set(auth_context["allowed_metrics"]) if auth_context.get("allowed_metrics") is not None else None
+        set(auth_context["allowed_metrics"])
+        if auth_context.get("allowed_metrics") is not None
+        else None
     )
     requested_view = q_ctx.get("requested_view") or "mgmt"
     requested_dimensions = list(q_ctx.get("requested_dimensions") or [])
@@ -1473,7 +1608,9 @@ def validate_semantic_plan_draft(
         serialized,
         re.IGNORECASE,
     ):
-        raise ContractError("invalid_request", stage, "SemanticPlanDraft must not contain SQL or physical tables.")
+        raise ContractError(
+            "invalid_request", stage, "SemanticPlanDraft must not contain SQL or physical tables."
+        )
 
     if plan_draft["status"] == "needs_clarification":
         return {
@@ -1496,7 +1633,9 @@ def validate_semantic_plan_draft(
         )
 
     if plan_draft["status"] != "ready":
-        raise ContractError("invalid_request", stage, f"Invalid plan status: {plan_draft['status']}")
+        raise ContractError(
+            "invalid_request", stage, f"Invalid plan status: {plan_draft['status']}"
+        )
 
     # Only use metrics in ValidatedMetricSet
     validated_ids = set(validated_metrics["metric_ids"])
@@ -1567,7 +1706,12 @@ def validate_semantic_plan_draft(
     dimensions = list(plan_draft.get("dimensions") or [])
     for dim in dimensions:
         if dim not in ALLOWED_DIMENSIONS:
-            raise ContractError("unsupported_metric", stage, f"Dimension '{dim}' is not in allowlist.", final_status="unsupported")
+            raise ContractError(
+                "unsupported_metric",
+                stage,
+                f"Dimension '{dim}' is not in allowlist.",
+                final_status="unsupported",
+            )
         for cap in caps:
             if dim not in cap["supported_dimensions"]:
                 raise ContractError(
@@ -1585,22 +1729,50 @@ def validate_semantic_plan_draft(
         op = flt["op"]
         val = flt["value"]
         if fld not in ALLOWED_FILTER_FIELDS:
-            raise ContractError("invalid_request", stage, f"Filter field '{fld}' is not allowlisted.", final_status="unsupported")
+            raise ContractError(
+                "invalid_request",
+                stage,
+                f"Filter field '{fld}' is not allowlisted.",
+                final_status="unsupported",
+            )
         if op not in ALLOWED_OPERATORS:
-            raise ContractError("invalid_request", stage, f"Filter operator '{op}' is not allowlisted.", final_status="unsupported")
+            raise ContractError(
+                "invalid_request",
+                stage,
+                f"Filter operator '{op}' is not allowlisted.",
+                final_status="unsupported",
+            )
         allowed_vals = ALLOWED_FILTER_FIELDS[fld]
         vals_to_check = val if isinstance(val, list) else [val]
         for v in vals_to_check:
-            if not isinstance(v, str) or INJECTION_PATTERNS.search(v) or ";" in v or "--" in v or "'" in v:
-                raise ContractError("invalid_request", stage, f"Invalid filter value '{v}'.", final_status="unsupported")
+            if (
+                not isinstance(v, str)
+                or INJECTION_PATTERNS.search(v)
+                or ";" in v
+                or "--" in v
+                or "'" in v
+            ):
+                raise ContractError(
+                    "invalid_request",
+                    stage,
+                    f"Invalid filter value '{v}'.",
+                    final_status="unsupported",
+                )
             if allowed_vals is not None and v not in allowed_vals:
-                raise ContractError("invalid_request", stage, f"Value '{v}' not in allowlist for '{fld}'.", final_status="unsupported")
+                raise ContractError(
+                    "invalid_request",
+                    stage,
+                    f"Value '{v}' not in allowlist for '{fld}'.",
+                    final_status="unsupported",
+                )
 
     # Validate top_k
     top_k = plan_draft.get("top_k")
     if top_k is not None:
         if not isinstance(top_k, int) or top_k < 1 or top_k > max_top_k:
-            raise ContractError("invalid_request", stage, f"top_k must be between 1 and {max_top_k}.")
+            raise ContractError(
+                "invalid_request", stage, f"top_k must be between 1 and {max_top_k}."
+            )
 
     applied_defaults: list[str] = []
     operation = plan_draft.get("operation") or "aggregate"
@@ -1649,7 +1821,10 @@ def compile_sql(
 ) -> dict[str, Any]:
     """Implements Contract 18: sql.compiler.v1. Accepts ONLY ValidatedPlan."""
     stage = "sql_compiler"
-    if not isinstance(validated_plan, dict) or validated_plan.get("contract_version") != "validated-plan.v1":
+    if (
+        not isinstance(validated_plan, dict)
+        or validated_plan.get("contract_version") != "validated-plan.v1"
+    ):
         raise ContractError(
             "invalid_request",
             stage,
@@ -1658,7 +1833,11 @@ def compile_sql(
     if validated_plan.get("status") != "validated":
         raise ContractError("invalid_request", stage, "ValidatedPlan status must be 'validated'.")
     if validated_plan.get("catalog_hash") != catalog.get_catalog_hash():
-        raise ContractError("invalid_request", stage, "Catalog hash mismatch between ValidatedPlan and CatalogSnapshot.")
+        raise ContractError(
+            "invalid_request",
+            stage,
+            "Catalog hash mismatch between ValidatedPlan and CatalogSnapshot.",
+        )
 
     metric_ids = validated_plan["metric_ids"]
     metrics = [catalog.get(m_id) for m_id in metric_ids]
@@ -1678,7 +1857,11 @@ def compile_sql(
     time_spec = validated_plan["time"]
     grain = time_spec.get("grain")
 
-    if validated_plan["operation"] == "timeseries" and grain in {"month", "quarter", "year"} and grain not in dimensions:
+    if (
+        validated_plan["operation"] == "timeseries"
+        and grain in {"month", "quarter", "year"}
+        and grain not in dimensions
+    ):
         dimensions = [grain] + dimensions
 
     for dim in dimensions:
@@ -1710,7 +1893,9 @@ def compile_sql(
             where_clauses.append("posting_date <= CAST(? AS DATE)")
             params.append(time_spec["as_of"])
         else:
-            where_clauses.append("posting_date >= CAST(? AS DATE) AND posting_date <= CAST(? AS DATE)")
+            where_clauses.append(
+                "posting_date >= CAST(? AS DATE) AND posting_date <= CAST(? AS DATE)"
+            )
             params.extend([time_spec["start"], time_spec["end"]])
             where_clauses.append("NOT is_closing")
 
@@ -1737,7 +1922,9 @@ def compile_sql(
     elif group_by_parts:
         order_sql = f" ORDER BY {', '.join(dimensions)} ASC"
 
-    effective_cap = min(int(validated_plan["top_k"]), row_cap) if validated_plan.get("top_k") else row_cap
+    effective_cap = (
+        min(int(validated_plan["top_k"]), row_cap) if validated_plan.get("top_k") else row_cap
+    )
     params.append(effective_cap)
 
     sql = (
@@ -1747,7 +1934,10 @@ def compile_sql(
         f") "
         f"SELECT {', '.join(select_parts)} FROM tenant_scoped{group_sql}{order_sql} LIMIT ?"
     )
-    fingerprint = "sha256:" + hashlib.sha256((sql + json.dumps(params, default=str)).encode("utf-8")).hexdigest()[:16]
+    fingerprint = (
+        "sha256:"
+        + hashlib.sha256((sql + json.dumps(params, default=str)).encode("utf-8")).hexdigest()[:16]
+    )
 
     return {
         "contract_version": "bound-query.v1",
@@ -1786,23 +1976,31 @@ def validate_sql_safety(
     # Approved relations check
     from_matches = re.findall(r"\bFROM\s+([a-zA-Z0-9_]+)", sql_no_comments, re.IGNORECASE)
     cte_names = set(re.findall(r"\bWITH\s+([a-zA-Z0-9_]+)\s+AS", sql_no_comments, re.IGNORECASE))
-    approved_relations = all((rel in ALLOWED_RELATIONS or rel in cte_names) for rel in from_matches) and bool(from_matches)
+    approved_relations = all(
+        (rel in ALLOWED_RELATIONS or rel in cte_names) for rel in from_matches
+    ) and bool(from_matches)
 
     # No literal user-controlled strings embedded in WHERE (excluding account_code LIKE '511%' and cost_category IN ('LUONG', ...))
     sql_without_known_literals = re.sub(r"account_code\s+LIKE\s+'[0-9]+%'", "", sql_no_comments)
-    sql_without_known_literals = re.sub(r"account_type\s*=\s*'(REVENUE|EXPENSE)'", "", sql_without_known_literals)
+    sql_without_known_literals = re.sub(
+        r"account_type\s*=\s*'(REVENUE|EXPENSE)'", "", sql_without_known_literals
+    )
     sql_without_known_literals = re.sub(
         r"cost_category\s+IN\s*\('LUONG',\s*'BAOHIEM',\s*'THUONG'\)", "", sql_without_known_literals
     )
     sql_without_known_literals = re.sub(r"PRINTF\('%04d-%02d'", "", sql_without_known_literals)
     sql_without_known_literals = re.sub(r"\|\|\s*'-Q'\s*\|\|", "", sql_without_known_literals)
     has_unparameterized_quotes = "'" in sql_without_known_literals
-    parameterized = (not has_unparameterized_quotes) and (sql_no_comments.count("?") == len(params)) and len(params) > 0
+    parameterized = (
+        (not has_unparameterized_quotes)
+        and (sql_no_comments.count("?") == len(params))
+        and len(params) > 0
+    )
 
     # Row cap check
-    row_cap_present = bool(re.search(r"\bLIMIT\s+(\?|\d+)\s*$", sql_no_comments, re.IGNORECASE)) and (
-        0 < int(bound_query.get("row_cap", 0)) <= 1000
-    )
+    row_cap_present = bool(
+        re.search(r"\bLIMIT\s+(\?|\d+)\s*$", sql_no_comments, re.IGNORECASE)
+    ) and (0 < int(bound_query.get("row_cap", 0)) <= 1000)
 
     # Tenant scope & hash check
     expected_tenant = runtime_context.get("tenant_id")
@@ -1812,7 +2010,9 @@ def validate_sql_safety(
         and f"tenant:{expected_tenant}" in sql
     )
     hash_matches = bound_query.get("catalog_hash") == catalog.get_catalog_hash()
-    approved_columns = not bool(re.search(r"\b(password|secret|tax_id|credit_limit)\b", sql_no_comments, re.IGNORECASE))
+    approved_columns = not bool(
+        re.search(r"\b(password|secret|tax_id|credit_limit)\b", sql_no_comments, re.IGNORECASE)
+    )
 
     checks = {
         "read_only": read_only,
@@ -1849,7 +2049,11 @@ def execute_safe_sql(
 ) -> dict[str, Any]:
     """Implements Contract 20: sql.execution.v1 on read-only DuckDB."""
     stage = "sql_execution"
-    if not isinstance(safety_result, dict) or safety_result.get("status") != "allowed" or "safe_bound_query" not in safety_result:
+    if (
+        not isinstance(safety_result, dict)
+        or safety_result.get("status") != "allowed"
+        or "safe_bound_query" not in safety_result
+    ):
         raise ContractError(
             "unsafe_sql_rejected",
             stage,
@@ -1875,7 +2079,9 @@ def execute_safe_sql(
         col_names = [desc[0] for desc in cur.description]
         raw_rows = cur.fetchall()
     except Exception as exc:
-        raise ContractError("execution_failed", stage, f"Database execution error: {type(exc).__name__}") from exc
+        raise ContractError(
+            "execution_failed", stage, f"Database execution error: {type(exc).__name__}"
+        ) from exc
     finally:
         con.close()
 
@@ -1938,7 +2144,9 @@ def validate_result(
 
     # Check duplicate columns & expected columns
     no_duplicates = len(col_keys) == len(set(col_keys))
-    expected_keys = list(validated_plan.get("dimensions") or []) + list(validated_plan["metric_ids"])
+    expected_keys = list(validated_plan.get("dimensions") or []) + list(
+        validated_plan["metric_ids"]
+    )
     columns_expected = col_keys == expected_keys and no_duplicates
 
     types_valid = True
@@ -2119,7 +2327,9 @@ def validate_answer(
 
     def _fail_or_fallback(reason: str) -> dict[str, Any]:
         if fallback_on_failure:
-            safe_draft = generate_grounded_answer(validated_plan, validated_result, catalog, locale=locale)
+            safe_draft = generate_grounded_answer(
+                validated_plan, validated_result, catalog, locale=locale
+            )
             return {
                 "status": "valid",
                 "answer": safe_draft["summary"],
@@ -2215,7 +2425,9 @@ def build_final_response(
 ) -> dict[str, Any]:
     """Implements Contract 24: query.response.v1."""
     if status not in FINAL_STATUSES:
-        raise ContractError("invalid_request", "final_response", f"Invalid final status '{status}'.")
+        raise ContractError(
+            "invalid_request", "final_response", f"Invalid final status '{status}'."
+        )
 
     data_block = None
     if execution_result is not None and status in {"ready", "no_data"}:

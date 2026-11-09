@@ -13,9 +13,9 @@ from agent4.core.errors import ContractError
 from agent4.metric_selection import validate_llm_selection_draft, validate_metrics
 
 
-@pytest.fixture
-def catalog() -> MetricCatalog:
-    return MetricCatalog()
+@pytest.fixture(name="catalog")
+def catalog_fixture(selection_catalog: MetricCatalog) -> MetricCatalog:
+    return selection_catalog
 
 
 @pytest.fixture

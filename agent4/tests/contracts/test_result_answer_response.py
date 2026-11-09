@@ -62,7 +62,9 @@ class TestResultValidationContract:
     def test_result_validation_rejects_nan_infinity_and_duplicate_columns(
         self, catalog: MetricCatalog, analyst_auth: dict
     ) -> None:
-        v_plan = _make_validated_plan(catalog, analyst_auth, ["net_profit_margin"], "2026-08-01", "2026-08-31")
+        v_plan = _make_validated_plan(
+            catalog, analyst_auth, ["net_profit_margin"], "2026-08-01", "2026-08-31"
+        )
 
         # 1. NaN value in decimal column
         nan_result = {
@@ -111,7 +113,9 @@ class TestResultValidationContract:
         self, catalog: MetricCatalog, analyst_auth: dict, runtime_context: dict
     ) -> None:
         # Sunday 2026-08-16 has 0 revenue -> gross_margin denominator is 0 -> returns NULL
-        v_plan = _make_validated_plan(catalog, analyst_auth, ["gross_margin"], "2026-08-16", "2026-08-16")
+        v_plan = _make_validated_plan(
+            catalog, analyst_auth, ["gross_margin"], "2026-08-16", "2026-08-16"
+        )
         bound = compile_sql(v_plan, catalog)
         safe = validate_sql_safety(bound, catalog, runtime_context)
         exec_res = execute_safe_sql(safe)
@@ -125,7 +129,9 @@ class TestResultValidationContract:
         self, catalog: MetricCatalog, analyst_auth: dict, runtime_context: dict
     ) -> None:
         # 1. October 2026 query overlaps unclosed month and watermark 2026-10-14 -> status == 'partial'
-        v_plan_oct = _make_validated_plan(catalog, analyst_auth, ["net_revenue"], "2026-10-01", "2026-10-31")
+        v_plan_oct = _make_validated_plan(
+            catalog, analyst_auth, ["net_revenue"], "2026-10-01", "2026-10-31"
+        )
         bound_oct = compile_sql(v_plan_oct, catalog)
         safe_oct = validate_sql_safety(bound_oct, catalog, runtime_context)
         exec_oct = execute_safe_sql(safe_oct)
@@ -134,7 +140,9 @@ class TestResultValidationContract:
         assert "partial_data_watermark" in val_oct["warnings"]
 
         # 2. Year 2022 query before data_start (2024-12-31) -> status == 'no_data'
-        v_plan_old = _make_validated_plan(catalog, analyst_auth, ["net_revenue"], "2022-01-01", "2022-03-31")
+        v_plan_old = _make_validated_plan(
+            catalog, analyst_auth, ["net_revenue"], "2022-01-01", "2022-03-31"
+        )
         bound_old = compile_sql(v_plan_old, catalog)
         safe_old = validate_sql_safety(bound_old, catalog, runtime_context)
         exec_old = execute_safe_sql(safe_old)
@@ -149,7 +157,9 @@ class TestAnswerGenerationAndValidationContracts:
     def test_grounded_answer_passes_validation(
         self, catalog: MetricCatalog, analyst_auth: dict
     ) -> None:
-        v_plan = _make_validated_plan(catalog, analyst_auth, ["net_profit_margin"], "2026-08-01", "2026-08-31")
+        v_plan = _make_validated_plan(
+            catalog, analyst_auth, ["net_profit_margin"], "2026-08-01", "2026-08-31"
+        )
         val_res = {
             "status": "valid",
             "result": {
@@ -163,7 +173,9 @@ class TestAnswerGenerationAndValidationContracts:
             "warnings": [],
         }
         draft = generate_grounded_answer(v_plan, val_res, catalog, locale="vi-VN")
-        checked = validate_answer(draft, val_res, v_plan, catalog, locale="vi-VN", fallback_on_failure=False)
+        checked = validate_answer(
+            draft, val_res, v_plan, catalog, locale="vi-VN", fallback_on_failure=False
+        )
         assert checked["status"] == "valid"
         assert "12.45 %" in checked["answer"]
         assert checked["validated_claims"][0]["verified"] is True
@@ -171,7 +183,9 @@ class TestAnswerGenerationAndValidationContracts:
     def test_answer_validator_rejects_hallucinations_and_falls_back(
         self, catalog: MetricCatalog, analyst_auth: dict
     ) -> None:
-        v_plan = _make_validated_plan(catalog, analyst_auth, ["operating_expense"], "2026-09-01", "2026-09-30")
+        v_plan = _make_validated_plan(
+            catalog, analyst_auth, ["operating_expense"], "2026-09-01", "2026-09-30"
+        )
         val_res = {
             "status": "partial",
             "result": {
@@ -188,7 +202,13 @@ class TestAnswerGenerationAndValidationContracts:
         # Case 1: Number in claim differs from result
         bad_num_draft = {
             "summary": "Chi phí hoạt động: 9999999999.00 VND.",
-            "claims": [{"text": "Chi phí hoạt động: 9999999999.00 VND", "source_columns": ["operating_expense"], "source_rows": [0]}],
+            "claims": [
+                {
+                    "text": "Chi phí hoạt động: 9999999999.00 VND",
+                    "source_columns": ["operating_expense"],
+                    "source_rows": [0],
+                }
+            ],
             "warnings": ["partial_data_watermark"],
             "table_caption": None,
         }
@@ -204,7 +224,13 @@ class TestAnswerGenerationAndValidationContracts:
         # Case 2: Causal speculation not in data ("sự kiện ra mắt")
         speculative_draft = {
             "summary": "Chi phí hoạt động: 1391237000.00 VND tăng đột biến do sự kiện ra mắt.",
-            "claims": [{"text": "Chi phí hoạt động: 1391237000.00 VND", "source_columns": ["operating_expense"], "source_rows": [0]}],
+            "claims": [
+                {
+                    "text": "Chi phí hoạt động: 1391237000.00 VND",
+                    "source_columns": ["operating_expense"],
+                    "source_rows": [0],
+                }
+            ],
             "warnings": ["partial_data_watermark"],
             "table_caption": None,
         }
@@ -214,7 +240,13 @@ class TestAnswerGenerationAndValidationContracts:
         # Case 3: Omitting required partial warning
         missing_warn_draft = {
             "summary": "Chi phí hoạt động: 1391237000.00 VND.",
-            "claims": [{"text": "Chi phí hoạt động: 1391237000.00 VND", "source_columns": ["operating_expense"], "source_rows": [0]}],
+            "claims": [
+                {
+                    "text": "Chi phí hoạt động: 1391237000.00 VND",
+                    "source_columns": ["operating_expense"],
+                    "source_rows": [0],
+                }
+            ],
             "warnings": [],
             "table_caption": None,
         }
@@ -237,7 +269,9 @@ class TestFinalResponseAndObservabilityContracts:
             "temporarily_unavailable",
             "error",
         }
-        v_plan = _make_validated_plan(catalog, analyst_auth, ["net_revenue"], "2026-08-01", "2026-08-31")
+        v_plan = _make_validated_plan(
+            catalog, analyst_auth, ["net_revenue"], "2026-08-01", "2026-08-31"
+        )
         bound = compile_sql(v_plan, catalog)
         safe = validate_sql_safety(bound, catalog, runtime_context)
         exec_res = execute_safe_sql(safe)

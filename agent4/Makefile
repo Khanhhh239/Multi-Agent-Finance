@@ -13,8 +13,8 @@ CHECK_PATHS ?= agent4 tests scripts vals
 .DEFAULT_GOAL := help
 
 .PHONY: help install-dev format format-check lint typecheck \
-	test test-core test-selection test-planning test-sql test-answer \
-	test-security test-benchmark verify ci eval-validate eval
+	test test-core test-selection test-warehouse test-planning test-sql test-answer \
+	test-security test-benchmark test-mpx10 verify ci eval-validate eval
 
 help:
 	@echo "Codex verification commands"
@@ -26,6 +26,8 @@ help:
 	@echo "  make test              Run the complete test suite"
 	@echo "  make test-core         Run M0 contract tests"
 	@echo "  make test-selection    Run M1 contract tests"
+	@echo "  make test-warehouse    Run catalog SQL against the configured DuckDB read-only"
+	@echo "  make test-mpx10        Run M0/M1 contracts and verify the MPX10 v3 references"
 	@echo "  make test-planning     Run M2 contract tests"
 	@echo "  make test-sql          Run M3 contract tests"
 	@echo "  make test-answer       Run M4.1 contract tests"
@@ -66,8 +68,16 @@ test-core:
 
 test-selection:
 	$(PYTEST) -q \
+		tests/contracts/test_metric_selection_e0.py \
 		tests/contracts/test_retrieval_and_fewshot.py \
-		tests/contracts/test_selection_and_metric_validation.py
+		tests/contracts/test_selection_and_metric_validation.py \
+		tests/contracts/test_metric_selection_recovery.py
+
+test-warehouse:
+	$(PYTHON) -m scripts.check_warehouse
+
+test-mpx10: test-core test-selection
+	$(PYTHON) -m scripts.check_mpx10
 
 test-planning:
 	$(PYTEST) -q tests/contracts/test_planning_and_plan_validation.py

@@ -85,7 +85,9 @@ class TestQueryPlanningAndPlanValidationContracts:
             question_for_user="Bạn muốn xem doanh thu của chi nhánh Đà Nẵng trong khoảng thời gian nào?",
             unresolved_slots=["time"],
         )
-        v_plan = validate_semantic_plan_draft(clarify_draft, validated_metrics, catalog, analyst_auth)
+        v_plan = validate_semantic_plan_draft(
+            clarify_draft, validated_metrics, catalog, analyst_auth
+        )
         assert v_plan["status"] == "needs_clarification"
         assert v_plan["unresolved_slots"] == ["time"]
         assert "Đà Nẵng" in v_plan["question_for_user"]
@@ -97,19 +99,35 @@ class TestQueryPlanningAndPlanValidationContracts:
         # 'cash_balance' has period_type='snapshot', so mode='range' must be rejected
         bad_snapshot_plan = _make_base_plan(
             metric_ids=["cash_balance"],
-            time={"mode": "range", "start": "2026-08-01", "end": "2026-08-31", "as_of": None, "grain": "month"},
+            time={
+                "mode": "range",
+                "start": "2026-08-01",
+                "end": "2026-08-31",
+                "as_of": None,
+                "grain": "month",
+            },
         )
         with pytest.raises(ContractError) as exc_info:
-            validate_semantic_plan_draft(bad_snapshot_plan, validated_metrics, catalog, analyst_auth)
+            validate_semantic_plan_draft(
+                bad_snapshot_plan, validated_metrics, catalog, analyst_auth
+            )
         assert exc_info.value.code == "invalid_request"
         assert exc_info.value.final_status == "unsupported"
 
         # Valid snapshot plan with mode='as_of' succeeds
         good_snapshot_plan = _make_base_plan(
             metric_ids=["cash_balance"],
-            time={"mode": "as_of", "start": None, "end": None, "as_of": "2026-08-31", "grain": None},
+            time={
+                "mode": "as_of",
+                "start": None,
+                "end": None,
+                "as_of": "2026-08-31",
+                "grain": None,
+            },
         )
-        v_plan = validate_semantic_plan_draft(good_snapshot_plan, validated_metrics, catalog, analyst_auth)
+        v_plan = validate_semantic_plan_draft(
+            good_snapshot_plan, validated_metrics, catalog, analyst_auth
+        )
         assert v_plan["status"] == "validated"
 
     def test_dimension_and_filter_allowlist_and_limits(
@@ -131,7 +149,13 @@ class TestQueryPlanningAndPlanValidationContracts:
         with pytest.raises(ContractError) as e_date:
             validate_semantic_plan_draft(
                 _make_base_plan(
-                    time={"mode": "range", "start": "2026-09-30", "end": "2026-09-01", "as_of": None, "grain": "month"}
+                    time={
+                        "mode": "range",
+                        "start": "2026-09-30",
+                        "end": "2026-09-01",
+                        "as_of": None,
+                        "grain": "month",
+                    }
                 ),
                 validated_metrics,
                 catalog,
@@ -143,7 +167,13 @@ class TestQueryPlanningAndPlanValidationContracts:
         with pytest.raises(ContractError) as e_max_days:
             validate_semantic_plan_draft(
                 _make_base_plan(
-                    time={"mode": "range", "start": "2020-01-01", "end": "2026-09-30", "as_of": None, "grain": "year"}
+                    time={
+                        "mode": "range",
+                        "start": "2020-01-01",
+                        "end": "2026-09-30",
+                        "as_of": None,
+                        "grain": "year",
+                    }
                 ),
                 validated_metrics,
                 catalog,

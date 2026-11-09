@@ -224,6 +224,9 @@ get_catalog_hash()
 Approved MetricCatalogSnapshot
 ```
 
+Offline builders enumerate the snapshot with `MetricCatalog.list_approved_metrics()`.
+This snapshot is for indexing. `list_visible_metrics(auth_context)` governs selection.
+
 ### Output: `MetricDocument`
 
 ```json
@@ -442,6 +445,8 @@ retrieval_unavailable
 
 Ở chế độ full catalog, candidate được xếp theo thứ tự catalog sau khi lọc quyền truy cập, với `retrieval_sources=["catalog_full"]`. Các trường score, embedding và phiên bản index là `null` khi tầng tương ứng không chạy.
 
+Ở chế độ online, `AuthContext` do server cung cấp giới hạn tập metric trước khi cắt Top-K. Dense retrieval dùng index offline khớp phiên bản và trả `retrieval_unavailable` khi index thiếu, lỗi thời hoặc provider gặp sự cố. Nếu cấu hình bật mở rộng quan hệ, orchestrator thêm các metric được phép trước khi rerank. Reranker giữ nguyên tập đã nhận.
+
 ## 12. Dynamic Few-shot Example Bank Contract
 
 **Contract ID:** `fewshot.example-bank.v1`
@@ -465,7 +470,8 @@ retrieval_unavailable
   },
   "quality_status": "approved",
   "source": "human_reviewed",
-  "example_version": "fewshot-v4"
+  "example_version": "fewshot-v4",
+  "token_count": 185
 }
 ```
 
@@ -475,6 +481,7 @@ retrieval_unavailable
 - Không lưu raw transaction data trong example.
 - Không lưu prompt injection chưa được làm sạch.
 - Example phải có version và quality source.
+- `decision_tags` và `confusable_metrics` là metadata tùy chọn dùng cho xếp hạng. Prompt chỉ nhận `question` và `expected_selection`.
 - Example có output metric ngoài candidate set phải bị loại trong production mode `compatible_only`.
 
 ## 13. Dynamic Few-shot Retrieval Contract
@@ -531,6 +538,7 @@ retrieval_unavailable
 - Dynamic few-shot không được cấp quyền cho metric.
 - Không chọn chính câu hỏi hiện tại.
 - Không vượt token budget.
+- Budget tính bằng ước lượng bảo thủ trên JSON của ví dụ sẽ gửi vào prompt. Ví dụ phải khớp locale, version và view của request.
 - Nên ưu tiên đa dạng intent/time/view nhưng không đánh đổi compatibility.
 - `no_compatible_examples` là kết quả hợp lệ, không nhất thiết là system error.
 - Production mặc định dùng `compatible_only=true`:
@@ -591,6 +599,7 @@ fewshot_unavailable
 - Không tự thay đổi view, tenant hoặc role.
 - LLM output luôn phải qua Metrics Validation.
 - `metric_ids` gồm các định danh duy nhất. Trạng thái `ambiguous` và `unsupported` phải có danh sách rỗng. Tin nhắn nếu có phải đúng với trạng thái tương ứng.
+- Pipeline tích hợp có tối đa một hành động recovery mỗi request. Retry định dạng chỉ dùng lời nhắc schema cố định và không đưa bản nháp lỗi vào prompt.
 
 ### Status
 
@@ -649,6 +658,7 @@ Ngoài ra phải kiểm tra:
 - Các metric có period type tương thích.
 - Dimension và operation có capability tương ứng.
 - `ambiguous` trả `needs_clarification` cùng câu hỏi làm rõ. `unsupported` và bản nháp `resolved` không có metric đều trả lỗi `unsupported_metric`.
+- Validator trực tiếp giữ nguyên kiểm tra subset. Nếu bật recovery và mọi metric thiếu đều hiển thị theo policy, pipeline có thể mở rộng tập ứng viên rồi gọi lại Validator với toàn bộ draft và context ban đầu.
 
 ### Errors
 
@@ -849,6 +859,9 @@ SafeBoundQuery + ExecutionPolicy
 - Connection read-only.
 - Timeout bắt buộc.
 - Row cap bắt buộc.
+- `AppConfig` dùng kho MPX10 v3.0.0 tại `data/enterprise-x10-v3/warehouse.duckdb`
+  theo mặc định. Có thể chỉ định cặp kho và ground truth tương ứng bằng
+  `AGENT4_DB` và `AGENT4_GROUND_TRUTH`.
 - Không trả credential, stack trace hoặc raw SQL trong public response.
 - Retry giới hạn và chỉ áp dụng cho lỗi hạ tầng retryable.
 

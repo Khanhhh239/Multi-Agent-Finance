@@ -347,6 +347,14 @@ class MetricCatalog:
     def contains(self, metric_id: str) -> bool:
         return metric_id in self._metrics
 
+    def list_approved_metrics(self) -> list[dict[str, Any]]:
+        """Return an isolated, ordered snapshot for offline document building."""
+        return [
+            copy.deepcopy(metric)
+            for _, metric in sorted(self._metrics.items())
+            if metric["status"] == "approved"
+        ]
+
     def get_capability(self, metric_id: str) -> dict[str, Any]:
         """Return the governed capability surface for one metric."""
 

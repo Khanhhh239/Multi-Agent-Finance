@@ -18,6 +18,18 @@ def _reject(
     return ContractError(code, STAGE, message, details=details, final_status=final_status)
 
 
+def require_authorized_view(auth_context: dict[str, Any], query_context: dict[str, Any]) -> str:
+    requested_view = query_context.get("requested_view") or "mgmt"
+    if requested_view not in (auth_context.get("allowed_views") or []):
+        raise _reject(
+            "forbidden_metric",
+            "Requested view is not authorized.",
+            final_status="forbidden",
+            requested_view=requested_view,
+        )
+    return requested_view
+
+
 def validate_metrics(
     llm_selection: dict[str, Any],
     retrieval_result: dict[str, Any],
@@ -43,17 +55,9 @@ def validate_metrics(
         raise _reject("unsupported_metric", "No supported metric was selected.")
 
     context = query_context or {}
-    requested_view = context.get("requested_view") or "mgmt"
+    requested_view = require_authorized_view(auth_context, context)
     operation = context.get("requested_operation") or "aggregate"
     dimensions = set(context.get("requested_dimensions") or ())
-    if requested_view not in (auth_context.get("allowed_views") or []):
-        raise _reject(
-            "forbidden_metric",
-            "Requested view is not authorized.",
-            final_status="forbidden",
-            requested_view=requested_view,
-        )
-
     candidates = {candidate["metric_id"] for candidate in retrieval_result.get("candidates", [])}
     allowed_metrics = auth_context.get("allowed_metrics")
     capabilities = {}

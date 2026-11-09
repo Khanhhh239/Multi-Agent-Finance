@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import copy
+from pathlib import Path
 
 import pytest
 
@@ -82,13 +83,25 @@ class TestGeneralConventions:
             monkeypatch.delenv(name, raising=False)
 
         config = AppConfig()
-        assert str(config.db_path) == "data/cfo_warehouse.duckdb"
-        assert str(config.ground_truth_path) == "data/cfo_warehouse_ground_truth.json"
+        assert config.db_path == Path("data/enterprise-x10-v3/warehouse.duckdb")
+        assert config.ground_truth_path == Path(
+            "data/enterprise-x10-v3/warehouse_ground_truth.json"
+        )
         assert config.qwen_base_url == "http://localhost:11434/api/chat"
         assert config.qwen_model == "qwen3:4b"
         assert config.max_question_length == 500
         assert config.default_row_cap == 1000
         assert config.query_timeout_ms == 5000
+
+    def test_app_config_supports_explicit_warehouse_override(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.setenv("AGENT4_DB", "data/cfo_warehouse.duckdb")
+        monkeypatch.setenv("AGENT4_GROUND_TRUTH", "data/cfo_warehouse_ground_truth.json")
+
+        config = AppConfig()
+        assert config.db_path == Path("data/cfo_warehouse.duckdb")
+        assert config.ground_truth_path == Path("data/cfo_warehouse_ground_truth.json")
 
 
 class TestQueryIntakeContract:

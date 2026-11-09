@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from .errors import ConfigurationError
 
@@ -21,11 +21,22 @@ class StrictModel(BaseModel):
 
 
 class EmbeddingConfig(StrictModel):
-    provider: Literal["hashing"] = "hashing"
-    model: str = "hashing-v1"
+    provider: Literal["hashing", "ollama", "mock"] = "hashing"
+    model: str = Field(default="hashing-v1", min_length=1)
+    model_version: str = Field(default="1", min_length=1)
     dimensions: int = Field(default=768, ge=64)
+    base_url: str = Field(default="http://localhost:11434", min_length=1)
+    normalize: bool = True
+    timeout_s: float = Field(default=30.0, gt=0, allow_inf_nan=False)
     cache_enabled: bool = True
     cache_path: Path = PROJECT_DIR / ".cache" / "metric_selection_index.npz"
+
+    @model_validator(mode="before")
+    @classmethod
+    def set_default_model(cls, data: object) -> object:
+        if isinstance(data, dict) and data.get("provider") == "ollama" and "model" not in data:
+            return {**data, "model": "qwen3-embedding:0.6b"}
+        return data
 
 
 class RetrievalConfig(StrictModel):
@@ -63,15 +74,21 @@ class RerankingConfig(StrictModel):
 
 class FewshotConfig(StrictModel):
     enabled: bool = False
-    strategy: Literal["zero", "static", "similarity", "coverage", "adaptive"] = "zero"
+    strategy: Literal["zero", "static", "similarity", "coverage", "hybrid"] = "zero"
     min_examples: int = Field(default=0, ge=0)
     max_examples: int = Field(default=4, ge=0)
+    token_budget: int = Field(default=2500, ge=0)
     initial_pool_size: int = Field(default=15, ge=1)
     example_bank_path: Path = PROJECT_DIR / "data" / "example_bank.jsonl"
-    alpha: float = 1.0
-    beta: float = 0.5
-    gamma: float = 0.5
-    delta: float = 0.25
+    alpha: float = Field(default=1.0, ge=0, allow_inf_nan=False)
+    beta: float = Field(default=0.5, ge=0, allow_inf_nan=False)
+    gamma: float = Field(default=0.5, ge=0, allow_inf_nan=False)
+    delta: float = Field(default=0.25, ge=0, allow_inf_nan=False)
+
+    @field_validator("strategy", mode="before")
+    @classmethod
+    def normalize_legacy_strategy(cls, value: object) -> object:
+        return "hybrid" if value == "adaptive" else value
 
     @model_validator(mode="after")
     def validate_range(self) -> FewshotConfig:
@@ -86,7 +103,7 @@ class LLMSelectionConfig(StrictModel):
     model: str = "qwen3:4b"
     temperature: float = Field(default=0.0, ge=0)
     timeout_s: float = Field(default=360.0, gt=0)
-    max_retries: int = Field(default=0, ge=0, le=3)
+    max_retries: int = Field(default=0, ge=0, le=1)
     context_window: int = Field(default=8192, ge=1)
 
 
@@ -94,6 +111,12 @@ class EvaluationConfig(StrictModel):
     save_traces: bool = True
     report_per_category: bool = True
     random_seed: int = 20261101
+
+
+class RecoveryConfig(StrictModel):
+    enable_empty_candidate_fallback: bool = False
+    degraded_lexical_fallback: bool = False
+    enable_candidate_expansion: bool = False
 
 
 class MetricSelectionConfig(StrictModel):
@@ -105,6 +128,7 @@ class MetricSelectionConfig(StrictModel):
     reranking: RerankingConfig = Field(default_factory=RerankingConfig)
     fewshot: FewshotConfig = Field(default_factory=FewshotConfig)
     llm: LLMSelectionConfig = Field(default_factory=LLMSelectionConfig)
+    recovery: RecoveryConfig = Field(default_factory=RecoveryConfig)
     evaluation: EvaluationConfig = Field(default_factory=EvaluationConfig)
 
 

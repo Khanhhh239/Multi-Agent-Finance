@@ -47,7 +47,10 @@ class TestSecurityAndTrustBoundaries:
                     "clarification_question": None,
                     "unsupported_reason": None,
                 },
-                {"status": "candidates_found", "candidates": [{"metric_id": "payroll_expense", "rank": 1}]},
+                {
+                    "status": "candidates_found",
+                    "candidates": [{"metric_id": "payroll_expense", "rank": 1}],
+                },
                 catalog,
                 analyst_auth,
             )
@@ -60,7 +63,10 @@ class TestSecurityAndTrustBoundaries:
                     "clarification_question": None,
                     "unsupported_reason": None,
                 },
-                {"status": "candidates_found", "candidates": [{"metric_id": "operating_expense", "rank": 1}]},
+                {
+                    "status": "candidates_found",
+                    "candidates": [{"metric_id": "operating_expense", "rank": 1}],
+                },
                 catalog,
                 analyst_auth,
                 query_context={"requested_view": "tax"},
@@ -87,7 +93,13 @@ class TestSecurityAndTrustBoundaries:
                 "plan_version": "1.0",
                 "status": "ready",
                 "metric_ids": ["operating_expense"],
-                "time": {"mode": "range", "start": "2026-09-01", "end": "2026-09-30", "as_of": None, "grain": "month"},
+                "time": {
+                    "mode": "range",
+                    "start": "2026-09-01",
+                    "end": "2026-09-30",
+                    "as_of": None,
+                    "grain": "month",
+                },
                 "dimensions": [],
                 "filters": [{"field": "partner_code", "op": "=", "value": "NCC-MK-DG"}],
                 "view": "mgmt",
@@ -148,7 +160,13 @@ class TestSecurityAndTrustBoundaries:
                     "plan_version": "1.0",
                     "status": "ready",
                     "metric_ids": ["net_revenue"],
-                    "time": {"mode": "range", "start": "2026-08-01", "end": "2026-08-31", "as_of": None, "grain": "month"},
+                    "time": {
+                        "mode": "range",
+                        "start": "2026-08-01",
+                        "end": "2026-08-31",
+                        "as_of": None,
+                        "grain": "month",
+                    },
                     "dimensions": [],
                     "filters": [
                         {
@@ -179,7 +197,13 @@ class TestSecurityAndTrustBoundaries:
                     "plan_version": "1.0",
                     "status": "ready",
                     "metric_ids": ["net_revenue"],
-                    "time": {"mode": "range", "start": "2026-08-01", "end": "2026-08-31", "as_of": None, "grain": "month"},
+                    "time": {
+                        "mode": "range",
+                        "start": "2026-08-01",
+                        "end": "2026-08-31",
+                        "as_of": None,
+                        "grain": "month",
+                    },
                     "dimensions": ["branch_code; DROP TABLE ap_bill"],
                     "filters": [],
                     "view": "mgmt",

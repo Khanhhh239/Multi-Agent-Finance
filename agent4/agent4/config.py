@@ -4,6 +4,7 @@ Everything that changes between a developer laptop, the eval harness and a
 demo is read from environment variables here, so that no module hard-codes a
 path, a model name or "today".
 """
+
 from __future__ import annotations
 
 import os

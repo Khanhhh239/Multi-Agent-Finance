@@ -20,7 +20,7 @@ from agent4.metric_selection.catalog_adapter import (
     build_full_catalog_retrieval_result,
 )
 from agent4.metric_selection.config import LLMSelectionConfig
-from agent4.metric_selection.eval_adapter import predict, predict_e0
+from agent4.metric_selection.eval_adapter import predict_e0
 from vals.run_eval import Prediction
 
 
@@ -193,9 +193,8 @@ async def test_e0_uses_only_authorized_candidates_and_scores_validated_output(
         "AsyncClient",
         lambda **kwargs: client(transport=httpx.MockTransport(ollama), **kwargs),
     )
-    assert predict is predict_e0
     prediction = Prediction.model_validate(
-        await predict(
+        await predict_e0(
             {
                 "id": "BM-999",
                 "user_query": "Doanh thu thuần?",

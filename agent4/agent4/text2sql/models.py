@@ -26,7 +26,10 @@ class QueryRequest(StrictModel):
 
 def make_query_request(question: str) -> QueryRequest:
     return QueryRequest(
-        api_version="v1", question=question, locale="vi-VN", session_id=None,
+        api_version="v1",
+        question=question,
+        locale="vi-VN",
+        session_id=None,
         options=QueryOptions(include_table=True, explain_metrics=True),
     )
 
@@ -194,8 +197,13 @@ class QueryResponse(StrictModel):
     api_version: Literal["v1"]
     request_id: str
     status: Literal[
-        "ready", "needs_clarification", "unsupported", "forbidden", "no_data",
-        "temporarily_unavailable", "error",
+        "ready",
+        "needs_clarification",
+        "unsupported",
+        "forbidden",
+        "no_data",
+        "temporarily_unavailable",
+        "error",
     ]
     error: ErrorData | None
     answer: str

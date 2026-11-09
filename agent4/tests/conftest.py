@@ -3,18 +3,21 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Generator
+from collections.abc import Generator
+from typing import Any
 
 import duckdb
 import pytest
 
+from agent4.core.catalog import MetricCatalog
+from agent4.core.context import build_auth_context, build_runtime_context
+from agent4.metric_selection.embedding import EmbeddingProvider
 from tests.contract_harness import (
     DB_PATH,
     GROUND_TRUTH_PATH,
-    EmbeddingProvider,
-    MetricCatalog,
-    build_auth_context,
 )
+from tests.contract_harness import EmbeddingProvider as LegacyEmbeddingProvider
+from tests.contract_harness import MetricCatalog as LegacyMetricCatalog
 
 
 @pytest.fixture(scope="session")
@@ -35,14 +38,24 @@ def ground_truth_events() -> list[dict[str, Any]]:
 
 
 @pytest.fixture()
-def catalog() -> MetricCatalog:
-    """Approved MetricCatalog snapshot."""
+def catalog() -> LegacyMetricCatalog:
+    """Catalog for the legacy planning, SQL, answer and DB benchmark suites."""
+    return LegacyMetricCatalog()
+
+
+@pytest.fixture()
+def embedding_provider() -> LegacyEmbeddingProvider:
+    """Embedding fixture for the legacy DB benchmark suite."""
+    return LegacyEmbeddingProvider()
+
+
+@pytest.fixture()
+def selection_catalog() -> MetricCatalog:
     return MetricCatalog()
 
 
 @pytest.fixture()
-def embedding_provider() -> EmbeddingProvider:
-    """Deterministic multilingual embedding provider."""
+def selection_embedding_provider() -> EmbeddingProvider:
     return EmbeddingProvider()
 
 
@@ -50,7 +63,11 @@ def embedding_provider() -> EmbeddingProvider:
 def analyst_auth() -> dict[str, Any]:
     """AuthContext for finance_analyst with access only to 'mgmt' view."""
     return build_auth_context(
-        idp_claims={"user_id": "user-analyst-1", "tenant_id": "minh-phat", "roles": ["finance_analyst"]},
+        idp_claims={
+            "user_id": "user-analyst-1",
+            "tenant_id": "minh-phat",
+            "roles": ["finance_analyst"],
+        },
         server_policy={"allowed_views": ["mgmt"], "policy_version": "2026.11"},
     )
 
@@ -59,23 +76,23 @@ def analyst_auth() -> dict[str, Any]:
 def cfo_auth() -> dict[str, Any]:
     """AuthContext for CFO/controller with access to 'mgmt', 'tax', and 'gl' views."""
     return build_auth_context(
-        idp_claims={"user_id": "user-cfo-1", "tenant_id": "minh-phat", "roles": ["cfo", "controller"]},
+        idp_claims={
+            "user_id": "user-cfo-1",
+            "tenant_id": "minh-phat",
+            "roles": ["cfo", "controller"],
+        },
         server_policy={"allowed_views": ["mgmt", "tax", "gl"], "policy_version": "2026.11"},
     )
 
 
 @pytest.fixture()
-def runtime_context(analyst_auth: dict[str, Any], catalog: MetricCatalog) -> dict[str, Any]:
+def runtime_context(analyst_auth: dict[str, Any], catalog: LegacyMetricCatalog) -> dict[str, Any]:
     """RuntimeContext adhering to Section 1.2 of contracts.md."""
-    return {
-        "request_id": "req-123",
-        "trace_id": "trace-123",
-        "tenant_id": analyst_auth["tenant_id"],
-        "user_id": analyst_auth["user_id"],
-        "roles": analyst_auth["roles"],
-        "allowed_views": analyst_auth["allowed_views"],
-        "locale": "vi-VN",
-        "timezone": "Asia/Ho_Chi_Minh",
-        "catalog_hash": catalog.get_catalog_hash(),
-        "policy_hash": analyst_auth["policy_hash"],
-    }
+    return build_runtime_context(
+        request_id="req-123",
+        trace_id="trace-123",
+        auth_context=analyst_auth,
+        locale="vi-VN",
+        timezone="Asia/Ho_Chi_Minh",
+        catalog_hash=catalog.get_catalog_hash(),
+    )

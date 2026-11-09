@@ -2,10 +2,9 @@
 
 Repository này chứa nền dữ liệu tổng hợp và Metric Selection Engine của Agent 4.
 
-Repo cũng có vertical slice Text-to-SQL an toàn: câu hỏi → semantic plan đã
-kiểm tra → SQL tham số hóa xác định → DuckDB read-only → câu trả lời có
-provenance. Đây là **synthetic demonstrator**, không phải chứng nhận tích hợp DB
-thật/RLS/tenant thật.
+Checkout này có code production đến bước chọn và xác thực metric (M1). Các
+contract từ lập kế hoạch đến trả lời được kiểm tra qua test harness trên dữ
+liệu mô phỏng.
 
 ## Thành phần được giữ lại
 
@@ -28,7 +27,71 @@ pip install -r requirements.txt
 pip install -e . --no-deps
 ```
 
-## Sinh lại dữ liệu
+## Kho dữ liệu Agent 4
+
+`AppConfig` mặc định dùng kho mô phỏng Minh Phát MPX10 v3.0.0 tại
+`data/enterprise-x10-v3/warehouse.duckdb`. Seed là `20261108`, ngày chốt dữ
+liệu là `2026-10-14` và tháng khóa sổ cuối là `2026-08`. Có thể chọn kho
+khác qua `AGENT4_DB` và tệp ground truth tương ứng qua `AGENT4_GROUND_TRUTH`.
+
+### Nghiệm thu module 0 và 1
+
+Từ thư mục `agent4`, chạy:
+
+```bash
+make test-mpx10 PYTHON=.venv/bin/python
+```
+
+Lệnh chạy contract tests của M0 và M1, bao gồm E0, rồi mở DuckDB ở chế độ
+chỉ đọc để so 29 kết quả catalog M0, 70 ca SQL tham chiếu và 5 kịch bản
+ground truth với bộ MPX10 v3. Lệnh chạy offline. Test M1 dùng cấu hình kiểm
+thử và phản hồi mô hình giả lập. Các ca SQL dùng truy vấn tham chiếu có sẵn.
+Kết quả cuối phải hiện `29 catalog results, 70 golden cases and 5 scenarios matched`.
+
+Baseline catalog và golden rows của MPX10 nằm trong
+`data/eval/mpx10-v3-reference.json`. Trình kiểm tra phát lại SQL cố định của
+v1 cho các ca còn phù hợp với MPX10. Các câu gắn với sự kiện, mã đối tác,
+giả định doanh thu bằng 0 hoặc danh sách chiều riêng của kho cũ được liệt
+kê trong `scripts/check_mpx10.py`. Đây là bộ tham chiếu dữ liệu để nghiệm thu
+offline. Việc đưa kết quả số vào benchmark v2 cần đối soát và phê duyệt theo
+`docs/evaluation.md`.
+
+### Tạo lại kho MPX10
+
+Tệp DuckDB sinh cục bộ được Git bỏ qua. Dùng thư mục checkout riêng của
+`platform-Khanh` tại commit `2991a5354391e7c5174479c8516fa202174d929e` và
+Python có DuckDB 2.0.0 theo lockfile. [Mã nguồn pipeline MPX10](https://github.com/Khanhhh239/Multi-Agent-Finance/tree/2991a5354391e7c5174479c8516fa202174d929e/data_pipeline)
+
+```bash
+# Chạy từ agent4, PLATFORM_CHECKOUT trỏ đến thư mục gốc của checkout riêng.
+dataset=data/enterprise-x10-v3
+.venv/bin/python "$PLATFORM_CHECKOUT/data_pipeline/enterprise.py" --out "$dataset"
+.venv/bin/python "$PLATFORM_CHECKOUT/data_pipeline/validate.py" "$dataset"
+.venv/bin/python - "$dataset" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+dataset = Path(sys.argv[1])
+report = json.loads((dataset / "validation.json").read_text(encoding="utf-8"))
+assert report["all_pass"]
+(dataset / "warehouse_ground_truth.json").write_text(
+    json.dumps(report["ground_truth"], ensure_ascii=False, indent=2) + "\n",
+    encoding="utf-8",
+)
+PY
+```
+
+Pipeline yêu cầu đường dẫn đích chưa có `warehouse.duckdb`. Để build lần
+khác, dùng thư mục phiên bản mới và đặt hai biến môi trường tương ứng. Chỉ
+dùng tùy chọn `--smoke` ở thư mục thử riêng vì nó sinh bộ dữ liệu nhỏ hơn với
+cùng version.
+
+### Fixture v2.1 cho benchmark cũ
+
+Các test chứa giá trị tuyệt đối và kịch bản của v2.1 dùng riêng
+`data/cfo_warehouse.duckdb` và `data/cfo_warehouse_ground_truth.json`. Nếu
+checkout mới thiếu fixture, tạo bằng lệnh:
 
 ```bash
 python -m agent4.datagen.build \
@@ -36,7 +99,7 @@ python -m agent4.datagen.build \
   --seed 20251
 ```
 
-Ngày dữ liệu mặc định là `2026-10-14`; có thể thay đổi bằng biến môi trường
+Ngày dữ liệu của fixture mặc định là `2026-10-14`; có thể thay đổi bằng biến môi trường
 `AGENT4_AS_OF`. Tháng khóa sổ mặc định là `2026-08`; có thể thay đổi bằng
 `AGENT4_LAST_CLOSED_MONTH`.
 
@@ -55,6 +118,7 @@ make lint
 make typecheck
 make test-core
 make test-selection
+make test-warehouse
 make test-planning
 make test-sql
 make test-answer
@@ -84,7 +148,9 @@ make eval \
   OUTPUT_DIR=reports/eval/selection-dev-v1
 ```
 
-## Safe Text-to-SQL demo
+## Safe Text-to-SQL demo (tham chiếu phiên bản trước)
+
+Các lệnh demo và API dưới đây cần checkout có vertical slice Text-to-SQL.
 
 CLI một lệnh (tự sinh warehouse deterministic nếu file local chưa tồn tại):
 
