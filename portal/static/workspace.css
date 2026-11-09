@@ -21,6 +21,7 @@ a { text-underline-offset: 4px; }
 .company:hover { background: #f6f8f7; }
 .chip { color: var(--kt-accent); background: var(--kt-accent-soft); border: 0; padding: 7px 12px; font-size: 11px; }
 .menu-toggle { color: var(--kt-ink); border-color: var(--kt-line); }
+.menu-toggle:hover { background: var(--kt-accent-soft); border-color: #a8c5bf; }
 .sidebar { padding: 30px 16px 20px; gap: 32px; }
 .nav-title { font-size: 10px; letter-spacing: .1em; margin: 0 12px 12px; color: #7b8d91; }
 .nav-link { min-height: 47px; padding: 10px 12px; font-size: 12px; gap: 9px; border-radius: 9px; }
@@ -90,10 +91,8 @@ a { text-underline-offset: 4px; }
 .photo-credits a { color: var(--kt-muted); }
 .config-layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 24px; align-items: start; }
 .form { padding: 0; background: transparent; border: 0; max-width: none; display: grid; gap: 18px; }
-.form fieldset { background: white; border: 1px solid var(--kt-line); border-radius: 12px; padding: 22px 24px 8px; }
-.form legend { float: left; font-size: 15px; margin-bottom: 20px; }
-/* Clear floated legends before flex/grid fields; avoids collapsed first input. */
-.form legend + * { clear: both; }
+.form fieldset { background: white; border: 1px solid var(--kt-line); border-radius: 12px; padding: 22px 24px 8px; margin: 0; }
+.form legend { float: none; border: 0; padding: 0; font-size: 15px; margin-bottom: 20px; }
 .form .field { margin-bottom: 18px; }
 .label { font-size: 12px; align-items: baseline; }
 .label i { font-size: 10px; white-space: nowrap; background: #f1f5f6; padding: 2px 6px; border-radius: 4px; }

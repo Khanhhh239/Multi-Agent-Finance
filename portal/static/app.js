@@ -9,6 +9,38 @@
   let token = "";
   try { token = sessionStorage.getItem("kt-session") || ""; } catch (e) { token = ""; }
 
+  const sidebarMedia = window.matchMedia("(max-width: 900px)");
+  let desktopSidebarOpen = true;
+  let mobileSidebarOpen = false;
+  try { desktopSidebarOpen = localStorage.getItem("kt-sidebar-collapsed") !== "1"; } catch (e) { /* private mode */ }
+
+  function renderSidebar() {
+    const mobile = sidebarMedia.matches;
+    const open = mobile ? mobileSidebarOpen : desktopSidebarOpen;
+    const sidebar = $("sidebar");
+    const toggle = $("menu-toggle");
+    document.querySelector(".shell").classList.toggle("sidebar-collapsed", !mobile && !open);
+    document.body.classList.toggle("sidebar-open", mobile && open);
+    sidebar.classList.toggle("open", mobile && open);
+    sidebar.inert = !open;
+    sidebar.setAttribute("aria-hidden", String(!open));
+    $("nav-backdrop").hidden = !mobile || !open;
+    toggle.setAttribute("aria-expanded", String(open));
+    const label = open ? (mobile ? "Đóng menu điều hướng" : "Thu gọn menu điều hướng") : "Mở menu điều hướng";
+    toggle.setAttribute("aria-label", label);
+    toggle.title = label;
+  }
+
+  function setSidebarOpen(open, returnFocus = false) {
+    if (sidebarMedia.matches) mobileSidebarOpen = open;
+    else {
+      desktopSidebarOpen = open;
+      try { localStorage.setItem("kt-sidebar-collapsed", open ? "0" : "1"); } catch (e) { /* private mode */ }
+    }
+    renderSidebar();
+    if (returnFocus) $("menu-toggle").focus();
+  }
+
   function setToken(value) {
     token = value || "";
     try { token ? sessionStorage.setItem("kt-session", token) : sessionStorage.removeItem("kt-session"); } catch (e) { /* private mode */ }
@@ -263,12 +295,15 @@
       : state.company.code ? ["Hồ sơ " + state.company.code, state.package ? "Gói chung v" + state.package.version : "Chưa niêm phong"].join(" · ")
         : "Cấu hình doanh nghiệp để nạp dữ liệu";
     source.href = a.id !== "agent4" && !state.company.code ? "#config" : "#data";
-    $("agent-newtab").href = a.url;
+    const page = new URL(a.url, location.href);
+    if (a.id === "agent1") page.searchParams.set("portal", location.origin);
+    const pageUrl = page.href;
+    $("agent-newtab").href = pageUrl;
     $("agent-toggle").textContent = a.state === "running" || a.state === "starting" ? "Tắt agent" : "Bật agent";
     $("agent-toggle").hidden = !(a.owned || a.state === "stopped");
     const frame = $("agent-frame");
     const up = a.state === "running";
-    if (up && frame.dataset.src !== a.url) { frame.dataset.src = a.url; frame.src = a.url; }
+    if (up && frame.dataset.src !== pageUrl) { frame.dataset.src = pageUrl; frame.src = pageUrl; }
     if (!up) { frame.removeAttribute("src"); delete frame.dataset.src; }
     frame.hidden = !up;
     $("agent-off").hidden = up;
@@ -317,9 +352,7 @@
     $("view-agent").hidden = !isAgent;
     if (!isAgent && currentAgent) { $("agent-frame").removeAttribute("src"); delete $("agent-frame").dataset.src; }
     currentAgent = isAgent ? view : null;
-    $("sidebar").classList.remove("open");
-    $("nav-backdrop").hidden = true;
-    $("menu-toggle").setAttribute("aria-expanded", "false");
+    if (sidebarMedia.matches) setSidebarOpen(false, $("sidebar").contains(document.activeElement));
     if (state) render();
     markCurrent();
     document.title = (isAgent && state ? AGENT_LABEL[view] + " " + agentById(view).name : TITLES[view] || "") + " | Văn phòng kế toán số";
@@ -480,15 +513,21 @@
     $("content").focus();
   });
   $("menu-toggle").addEventListener("click", () => {
-    const open = $("sidebar").classList.toggle("open");
-    $("menu-toggle").setAttribute("aria-expanded", String(open));
-    $("nav-backdrop").hidden = !open;
+    setSidebarOpen($("menu-toggle").getAttribute("aria-expanded") !== "true");
   });
-  $("nav-backdrop").addEventListener("click", () => $("menu-toggle").click());
+  $("nav-backdrop").addEventListener("click", () => setSidebarOpen(false, true));
+  $("sidebar").addEventListener("click", (event) => {
+    if (sidebarMedia.matches && event.target.closest("a[href]")) setSidebarOpen(false, true);
+  });
+  sidebarMedia.addEventListener("change", () => {
+    const hadSidebarFocus = $("sidebar").contains(document.activeElement);
+    mobileSidebarOpen = false;
+    renderSidebar();
+    if ($("sidebar").inert && hadSidebarFocus) $("menu-toggle").focus();
+  });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && $("sidebar").classList.contains("open")) {
-      $("menu-toggle").click();
-      $("menu-toggle").focus();
+    if (event.key === "Escape" && $("menu-toggle").getAttribute("aria-expanded") === "true") {
+      setSidebarOpen(false, true);
     }
   });
   $("company-form").addEventListener("submit", saveCompany);
@@ -519,6 +558,7 @@
     if (e.dataTransfer.files.length) upload([...e.dataTransfer.files]);
   });
 
+  renderSidebar();
   show();
   refresh().then(show);
   setInterval(() => document.visibilityState === "visible" && refresh(), 4000);

@@ -43,6 +43,9 @@
 .nav-more button { padding-left: 22px !important; white-space: normal !important; }
 .shell { margin-left: 188px; }
 .topbar { padding-inline: 24px; }
+.workspace-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.portal-return { display: inline-flex; align-items: center; min-height: 36px; margin-right: 8px; padding: 0 10px; border: 1px solid var(--line); border-radius: 6px; color: var(--green); font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.portal-return:hover { background: var(--paper); }
 main { max-width: 1580px; padding: 24px 24px 0; }
 .paper { border-radius: 6px; box-shadow: none; }
 .forecast-toolbar { align-items: center; gap: 10px; }
