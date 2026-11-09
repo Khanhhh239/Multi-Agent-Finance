@@ -13,12 +13,16 @@ export function toast(title, sub = '', kind = 'success') {
 }
 
 export async function runAnalysis(btnHost) {
-  if (btnHost) btnHost.innerHTML = '<span class="muted">Đang phân tích...</span>';
-  const rep = await post(`/api/workspaces/${state.ws}/run`);
-  await loadWorkspaces();
-  toast('Đã phân tích xong', `${rep.items.length} việc, thuế có nguy cơ ${Number(rep.totals.at_risk_vat).toLocaleString('vi-VN')} đ`);
-  window.dispatchEvent(new Event('hashchange'));
-  return rep;
+  const buttons = [...(btnHost?.querySelectorAll('button') || [])];
+  buttons.forEach((b) => { b.disabled = true; b.setAttribute('aria-busy', 'true'); });
+  try {
+    const rep = await post(`/api/workspaces/${state.ws}/run`);
+    await loadWorkspaces();
+    toast('Đã phân tích xong', `${rep.items.length} việc, thuế có nguy cơ ${Number(rep.totals.at_risk_vat).toLocaleString('vi-VN')} đ`);
+    window.dispatchEvent(new Event('hashchange'));
+    return rep;
+  } catch (err) { if (err.name !== 'AbortError') toast('Không chạy được phân tích', err.message, 'error'); return null; }
+  finally { buttons.forEach((b) => { b.disabled = false; b.removeAttribute('aria-busy'); }); }
 }
 
 // A banner when files or decisions changed after the last analysis.
@@ -58,8 +62,8 @@ export async function nextSteps(ws, rep) {
     ['Xử lý việc cần làm', rep && open === 0, '#/viec', rep ? (open ? `còn ${open} việc` : 'Đã xử lý hết') : ''],
   ];
   const next = steps.find((s) => !s[1]);
-  return `<div class="steps-card"><div class="steps-head"><h3>Tiến độ kỳ này</h3>${next ? `<a class="cds--btn cds--btn--primary cds--btn--sm" href="${next[2]}">Làm tiếp: ${esc(next[0])}</a>` : '<span class="muted small">Đã xong các bước</span>'}</div>
-    <ol class="checklist">${steps.map(([label, done, href, note]) => `<li class="${done ? 'done' : ''}"><a href="${href}"><span class="dot">${done ? '✓' : ''}</span><span>${esc(label)}</span></a><span class="muted small">${esc(note)}</span></li>`).join('')}</ol></div>`;
+  return `<details class="steps-card"><summary>Tiến độ kỳ này <span class="muted small">${next ? ` · Tiếp theo: ${esc(next[0])}` : ' · Đã xong các bước'}</span></summary><div class="steps-head">${next ? `<a class="cds--btn cds--btn--primary cds--btn--sm" href="${next[2]}">Làm tiếp: ${esc(next[0])}</a>` : '<span class="muted small">Đã xong các bước</span>'}</div>
+    <ol class="checklist">${steps.map(([label, done, href, note]) => `<li class="${done ? 'done' : ''}"><a href="${href}"><span class="dot">${done ? '✓' : ''}</span><span>${esc(label)}</span></a><span class="muted small">${esc(note)}</span></li>`).join('')}</ol></details>`;
 }
 
 // A5: sellers that appear on a risk list since this browser last looked.

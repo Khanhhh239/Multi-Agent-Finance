@@ -8,14 +8,26 @@ export const store = {
   set(k, v) { try { localStorage.setItem(k, v); } catch { /* private mode */ } },
 };
 
+let pageController = new AbortController();
+let cleanups = [];
+export function onPageLeave(fn) { cleanups.push(fn); }
+export function beginPage() {
+  pageController.abort();
+  cleanups.splice(0).forEach((fn) => fn());
+  pageController = new AbortController();
+  return pageController.signal;
+}
+export const pageSignal = () => pageController.signal;
 export async function api(path, opts = {}) {
-  const res = await fetch(path, opts);
+  const signal = opts.signal || pageController.signal;
+  const res = await fetch(path, { ...opts, signal });
   const type = res.headers.get('content-type') || '';
   const body = type.includes('json') ? await res.json() : await res.text();
-  if (!res.ok) throw new Error(typeof body === 'object' ? body.detail || JSON.stringify(body) : body);
+  signal.throwIfAborted();
+  if (!res.ok) { const error = new Error(typeof body === 'object' ? body.detail || JSON.stringify(body) : body); error.status = res.status; throw error; }
   return body;
 }
-export const post = (path, data) => api(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data ?? {}) });
+export const post = (path, data, opts = {}) => api(path, { ...opts, method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data ?? {}) });
 export const put = (path, data) => api(path, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
 
 const STATUS = {
@@ -38,7 +50,7 @@ export const field = (f, value = '') => {
   const opt = f.required ? '' : ' (không bắt buộc)';
   if (f.type === 'choice') {
     return `<div class="cds--form-item"><div class="cds--select"><label class="cds--label" for="${id}">${esc(f.label)}${opt}</label>
-      <div class="cds--select-input__wrapper"><select class="cds--select-input" id="${id}" name="${f.key}">
+      <div class="cds--select-input__wrapper"><select class="cds--select-input" id="${id}" name="${f.key}" ${f.required ? 'required' : ''}>
       ${f.choices.map(([v, l]) => `<option value="${esc(v)}" ${v === value ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>${help}</div></div>`;
   }
   const v = Array.isArray(value) ? value.join('; ') : value;
@@ -65,7 +77,7 @@ export async function loadWorkspaces() {
 export async function loadReport() {
   state.report = null;
   if (!state.ws) return null;
-  try { state.report = await api(`/api/workspaces/${state.ws}/report`); } catch { state.report = null; }
+  try { state.report = await api(`/api/workspaces/${state.ws}/report`); } catch (err) { if (err.status !== 404) throw err; state.report = null; }
   return state.report;
 }
 

@@ -3,7 +3,8 @@ import '@fontsource/be-vietnam-pro/400.css';
 import '@fontsource/be-vietnam-pro/500.css';
 import '@fontsource/be-vietnam-pro/600.css';
 import './app.css';
-import { $, app, esc, loadWorkspaces, notice, state, store } from './core.js';
+import { $, app, beginPage, esc, loadWorkspaces, notice, state, store } from './core.js';
+import { decoratePage, installValidation, portalOrigin } from './interactions.js';
 import { pageIntake } from './pages_intake.js';
 import { pageOverview, pageReview } from './pages_work.js';
 import { pageBank, pageCalendar, pageInvoices, pageLaw } from './pages_more.js';
@@ -28,22 +29,30 @@ const HIDDEN = [
 ];
 
 function renderNav(cur) {
-  $('#nav').innerHTML = NAV.map(([href, label]) => `<li class="cds--side-nav__item"><a class="cds--side-nav__link" href="${href}" ${href === cur ? 'aria-current="page"' : ''}>
+  const active = cur.startsWith('#/quan-tri') || ['#/thiet-lap', '#/cai-dat'].includes(cur) ? '#/quan-tri'
+    : ['#/ngan-hang', '#/so-lieu', '#/giai-trinh', '#/lich', '#/luat', '#/tin-luat'].includes(cur) ? '#/' : cur;
+  $('#nav').innerHTML = NAV.map(([href, label]) => `<li class="cds--side-nav__item"><a class="cds--side-nav__link" href="${href}" ${href === active ? 'aria-current="page"' : ''}>
     <span class="cds--side-nav__link-text">${esc(label)}</span></a></li>`).join('');
+  $('.admin-link').setAttribute('aria-current', active === '#/quan-tri' ? 'page' : 'false');
+  decoratePage($('#nav'));
 }
 
 async function route() {
+  const signal = beginPage();
   const cur = location.hash.split('?')[0] || '#/';
   const dn = new URLSearchParams(location.hash.split('?')[1] || '').get('dn');   // link that opens one enterprise
   if (dn && dn !== state.ws && state.workspaces.some((w) => w.id === dn)) { state.ws = dn; store.set('agent3.ws', dn); await loadWorkspaces(); }
+  if (signal.aborted) return;
+  if (cur === '#/nap' && document.documentElement.classList.contains('in-platform') && portalOrigin()) { window.top.location.href = portalOrigin() + '/#data'; return; }
   renderNav(cur);
   document.body.classList.remove('nav-open');
+  $('.menu-toggle').setAttribute('aria-expanded', 'false');
   $('#modal-root').innerHTML = '';
   const entry = NAV.find(([h]) => h === cur) || HIDDEN.find(([h]) => h === cur) || NAV[0];
   const page = entry[2];
   document.title = `${entry[1]} · Agent 3 Trợ lý thuế`;
-  try { await page(); } catch (err) { app().innerHTML = notice('error', 'Có lỗi khi tải trang', err.message); }
-  app().focus({ preventScroll: true });
+  try { await page(); } catch (err) { if (signal.aborted) return; app().innerHTML = `<h1 class="page">${esc(entry[1])}</h1>` + notice('error', 'Có lỗi khi tải trang', err.message); }
+  if (!signal.aborted) { decoratePage(app()); if (!document.querySelector('.drawer')) app().focus({ preventScroll: true }); }
 }
 
 document.addEventListener('click', (e) => {
@@ -52,9 +61,10 @@ document.addEventListener('click', (e) => {
 });
 $('#ws-select').onchange = (e) => {
   if (e.target.value === '__new') { e.target.value = state.ws || ''; location.hash = '#/thiet-lap'; return; }
-  state.ws = e.target.value || null; store.set('agent3.ws', state.ws || ''); location.hash = '#/'; route();
+  state.ws = e.target.value || null; store.set('agent3.ws', state.ws || ''); if (location.hash === '#/') route(); else location.hash = '#/';
 };
-$('.menu-toggle').onclick = () => document.body.classList.toggle('nav-open');
+$('.menu-toggle').setAttribute('aria-expanded', 'false');
+$('.menu-toggle').onclick = () => { const open = document.body.classList.toggle('nav-open'); $('.menu-toggle').setAttribute('aria-expanded', String(open)); };
 const initial = store.get('agent3.theme') || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'g100' : 'g10');
 document.body.className = `cds--${initial}`;
 $('.theme-toggle').onclick = () => {
@@ -63,5 +73,13 @@ $('.theme-toggle').onclick = () => {
   store.set('agent3.theme', next);
 };
 window.addEventListener('hashchange', route);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('#modal-root').innerHTML) $('#modal-root').innerHTML = ''; });
+installValidation();
+$('.skip-link').onclick = (e) => { e.preventDefault(); app().focus(); };
+const observer = new MutationObserver(() => decoratePage(app()));
+observer.observe(app(), { childList: true, subtree: true });
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if ($('#modal-root').innerHTML) $('#modal-root').innerHTML = '';
+  else if (document.body.classList.contains('nav-open')) { document.body.classList.remove('nav-open'); $('.menu-toggle').setAttribute('aria-expanded', 'false'); $('.menu-toggle').focus(); }
+});
 loadWorkspaces().then(route).catch((err) => { app().innerHTML = notice('error', 'Không kết nối được máy chủ Agent 3', err.message); });

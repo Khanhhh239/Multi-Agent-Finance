@@ -1,6 +1,6 @@
 // Question assistant: guide generated from the domain catalog, suggestions from this enterprise's data, answers with
 // "how the question was understood" and other domains to pick when it was misunderstood.
-import { $, api, app, button, esc, loading, needWorkspace, notice, post, state, tag } from './core.js';
+import { $, api, app, button, esc, loading, needWorkspace, notice, onPageLeave, pageSignal, post, state, tag } from './core.js';
 
 let guideCache = null;
 
@@ -51,42 +51,53 @@ function answerHtml(q, a, secs) {
 
 export async function pageAsk() {
   if (needWorkspace()) return;
+  const signal = pageSignal();
+  const workspace = state.ws;
+  let timer;
+  onPageLeave(() => clearInterval(timer));
   const key = `agent3.chat2.${state.ws}`;
   let history = [];
   try { history = JSON.parse(sessionStorage.getItem(key) || '[]'); } catch { history = []; }
   const save = () => { try { sessionStorage.setItem(key, JSON.stringify(history.slice(-30))); } catch { /* private mode */ } };
   app().innerHTML = `<h1 class="page">Hỏi đáp</h1><p class="lead">Hỏi bằng lời thường về số liệu của doanh nghiệp hoặc về quy định. Câu ngoài phạm vi thì trợ lý từ chối, không đoán.</p>
     <div class="ask-wrap"><div id="sugg" class="sugg"></div>
-    <div id="chat" class="chat"></div><div id="pending"></div>
+    <div id="chat" class="chat" role="log" aria-label="Hội thoại" aria-live="polite"></div><div id="pending" role="status"></div>
     <form id="ask" class="bar ask-bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
     <label class="cds--label" for="q">Câu hỏi (Enter để gửi)</label><input class="cds--text-input" id="q" name="q" autocomplete="off" maxlength="500" placeholder="Ví dụ: quý này có bao nhiêu thuế có nguy cơ?"></div>${button('Hỏi', 'primary', 'type="submit"')}
     ${history.length ? button('Xóa lịch sử', 'ghost', 'id="clear"') : ''}</form>
     <div id="guide-box">${loading('Đang tải hướng dẫn')}</div></div>`;
   const chat = $('#chat');
+  const pending = $('#pending');
+  const form = $('#ask');
+  const submit = form.querySelector('[type="submit"]');
+  const input = $('#q');
   const draw = () => { chat.innerHTML = history.join(''); };
   draw();
   let busy = false;
   const ask = async (q, domain) => {
-    if (busy || !q) return;
+    if (busy || !q || signal.aborted) return;
     busy = true;
+    submit.disabled = true; input.disabled = true; form.setAttribute('aria-busy', 'true');
     history.push(`<div class="msg-user"><div>${esc(q)}${domain ? ' <span class="small">(đã chọn lại loại câu hỏi)</span>' : ''}</div></div>`); draw();
     const t0 = Date.now();
     const tick = () => {
       const s = Math.round((Date.now() - t0) / 1000);
-      $('#pending').innerHTML = loading(s > 3 ? `Đang trả lời (${s} giây). Câu về quy định cần tìm điều khoản và kiểm tra căn cứ, có thể mất 30 đến 60 giây` : 'Đang trả lời');
+      if (!signal.aborted) pending.innerHTML = loading(s > 3 ? `Đang trả lời (${s} giây). Đang tìm điều khoản và kiểm tra căn cứ` : 'Đang trả lời');
     };
     tick();
-    const timer = setInterval(tick, 1000);
+    timer = setInterval(tick, 1000);
     try {
-      const a = await post(`/api/workspaces/${state.ws}/ask`, domain ? { question: q, domain } : { question: q });
+      const a = await post(`/api/workspaces/${workspace}/ask`, domain ? { question: q, domain } : { question: q }, { signal });
+      if (signal.aborted) return;
       history.push(answerHtml(q, a, Math.round((Date.now() - t0) / 1000)));
-    } catch (err) { history.push(notice('error', 'Không trả lời được', err.message)); }
+    } catch (err) { if (signal.aborted) return; history.push(notice('error', 'Không trả lời được', err.message)); input.value = q; }
     clearInterval(timer);
-    $('#pending').innerHTML = '';
+    pending.innerHTML = '';
     busy = false;
+    submit.disabled = false; input.disabled = false; form.removeAttribute('aria-busy'); input.focus();
     save();
     draw();
-    chat.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    chat.lastElementChild?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'nearest' });
   };
   $('#ask').onsubmit = (e) => { e.preventDefault(); const q = $('#q').value.trim(); $('#q').value = ''; ask(q); };
   app().addEventListener('click', (e) => {
@@ -94,14 +105,16 @@ export async function pageAsk() {
     if (c) { ask(c.dataset.q); return; }
     const alt = e.target.closest('.alt-q');
     if (alt) ask(alt.dataset.q, alt.dataset.domain);
-  });
+  }, { signal });
   if ($('#clear')) $('#clear').onclick = () => { history = []; save(); draw(); $('#clear').remove(); };
   try {
     guideCache ||= await api('/api/chat/guide');
+    if (signal.aborted) return;
     $('#guide-box').innerHTML = guideHtml(guideCache);
-  } catch (err) { $('#guide-box').innerHTML = notice('error', 'Không tải được hướng dẫn', err.message); }
+  } catch (err) { if (signal.aborted) return; $('#guide-box').innerHTML = notice('error', 'Không tải được hướng dẫn', err.message); }
   try {
     const s = await api(`/api/workspaces/${state.ws}/chat/suggestions`);
+    if (signal.aborted) return;
     $('#sugg').innerHTML = `<div class="muted small">Thử hỏi:</div><div class="chips">${s.slice(0, 5).map((q) => `<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm chip-q" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;
-  } catch { $('#sugg').innerHTML = ''; }
+  } catch { if (!signal.aborted) $('#sugg').innerHTML = ''; }
 }

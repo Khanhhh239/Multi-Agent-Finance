@@ -1,7 +1,7 @@
 // The controlled AI layer in the interface: plain explanations, line classification, bank-text proposals,
 // explanation letter and dossier, law alerts, VAT figures. AI output is always labelled and verified; people decide.
 import { toast } from './ux.js';
-import { $, api, app, button, dmy, esc, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, state, store, table, tag } from './core.js';
+import { $, api, app, button, dmy, esc, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, onPageLeave, pageSignal, post, state, store, table, tag } from './core.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 const aiTag = (mode) => (mode === 'AI_VERIFIED' ? tag('LLM_VERIFIED', 'AI, đã kiểm tra') : tag('INFO', 'Câu mẫu'));
@@ -17,7 +17,9 @@ export async function explainBox(el, index) {
 
 // ---------------------------------------------------------------- AI jobs toolbar (review page)
 export async function aiToolbar(el) {
+  const signal = pageSignal();
   const s = await api(`/api/workspaces/${state.ws}/ai`);
+  if (signal.aborted || !el.isConnected) return;
   const job = s.job;
   const running = job && job.running;
   el.innerHTML = `<div class="panel ai-panel"><h3>Trợ lý AI chạy trên máy (${esc(s.model)})</h3>
@@ -32,7 +34,7 @@ export async function aiToolbar(el) {
   const finished = el.dataset.wasRunning === '1' && !running;     // a job just ended: show the new findings
   el.dataset.wasRunning = running ? '1' : '0';
   if (finished && !document.querySelector('.drawer')) rerender();
-  else if (running) setTimeout(() => { if (document.body.contains(el)) aiToolbar(el); }, 3000);
+  else if (running) { const timer = setTimeout(() => { if (document.body.contains(el)) aiToolbar(el).catch(() => {}); }, 3000); onPageLeave(() => clearTimeout(timer)); }
 }
 
 // ---------------------------------------------------------------- A2 proposals (bank page)
@@ -95,7 +97,7 @@ export async function pageDossier() {
 export async function pageVat() {
   if (needWorkspace()) return;
   let v;
-  try { v = await api(`/api/workspaces/${state.ws}/vat-summary`); } catch (err) { app().innerHTML = `<h1 class="page">Số liệu thuế GTGT</h1>${notice('info', 'Chưa phân tích', err.message)}`; return; }
+  try { v = await api(`/api/workspaces/${state.ws}/vat-summary`); } catch (err) { if (err.name === 'AbortError') throw err; app().innerHTML = `<h1 class="page">Số liệu thuế GTGT</h1>${notice('info', 'Chưa phân tích', err.message)}`; return; }
   const diff = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? tag('LLM_VERIFIED', 'Khớp') : `<span class="risk-text">${Number(x) > 0 ? '+' : ''}${money(x)}</span>`);
   const change = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? 'không đổi' : `${Number(x) > 0 ? 'tăng' : 'giảm'} ${money(Math.abs(Number(x)))}`);
   app().innerHTML = `<h1 class="page">Số liệu thuế giá trị gia tăng theo kỳ</h1><p class="lead">${esc(v.note)}</p>

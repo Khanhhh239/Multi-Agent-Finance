@@ -1,6 +1,6 @@
 // Invoices, bank, calendar, questions, legal corpus and enterprise settings.
 import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put,
-  state, table, tag } from './core.js';
+  onPageLeave, state, table, tag } from './core.js';
 import { bankProposals, lawAlerts, riskImport } from './pages_ai.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
@@ -21,7 +21,7 @@ export async function pageInvoices() {
       <select class="cds--select-input filter-select" id="st" aria-label="Tình trạng"><option value="">Mọi tình trạng</option><option value="AT_RISK">Có nguy cơ</option><option value="REVIEW">Cần xem xét</option><option value="OK">Không cảnh báo</option><option value="UNPAID">Chưa ghép thanh toán</option></select>
       <select class="cds--select-input filter-select" id="mon" aria-label="Tháng"><option value="">Mọi tháng</option>${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}</select>
       <input class="cds--text-input filter-input" id="iq" placeholder="Tìm số hóa đơn, người bán, mã số thuế, tên hàng" aria-label="Tìm hóa đơn">
-      <span class="muted small" id="icount"></span>
+      <span class="muted small" id="icount" role="status"></span>${button('Xóa bộ lọc', 'ghost', 'id="reset-invoices"')}
       <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx">Xuất Excel</a></div>
     <div id="ilist"></div>`;
   let sort = ['issue_date', -1];
@@ -34,7 +34,7 @@ export async function pageInvoices() {
       .sort((x, y) => { const a = keyOf[sort[0]](x); const b = keyOf[sort[0]](y); return (a > b ? 1 : a < b ? -1 : 0) * sort[1]; });
     const pages = Math.max(1, Math.ceil(view.length / PAGE));
     page = Math.min(page, pages - 1);
-    const th = (k, l, num) => `<th class="${num ? 'num ' : ''}sortable" data-sort="${k}"><div class="cds--table-header-label">${esc(l)}${sort[0] === k ? (sort[1] > 0 ? ' ▲' : ' ▼') : ''}</div></th>`;
+    const th = (k, l, num) => `<th class="${num ? 'num ' : ''}sortable" aria-sort="${sort[0] === k ? (sort[1] > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" class="sort-button" data-sort="${k}">${esc(l)}${sort[0] === k ? (sort[1] > 0 ? ' ↑' : ' ↓') : ''}</button></th>`;
     $('#icount').textContent = `${view.length} hóa đơn`;
     $('#ilist').innerHTML = view.length ? `<div class="table-wrap"><table class="cds--data-table cds--data-table--md"><thead><tr><th>Hóa đơn</th>${th('issue_date', 'Ngày')}${th('seller', 'Người bán hoặc người mua')}${th('gross', 'Tổng thanh toán', true)}${th('vat', 'Thuế', true)}<th>Toàn vẹn</th><th>Thanh toán</th><th>Cảnh báo</th></tr></thead><tbody>
       ${view.slice(page * PAGE, page * PAGE + PAGE).map((i) => {
@@ -49,10 +49,11 @@ export async function pageInvoices() {
       : '<div class="empty">Không có hóa đơn nào khớp.</div>';
     if ($('#prev')) $('#prev').onclick = () => { page -= 1; paint(); };
     if ($('#next')) $('#next').onclick = () => { page += 1; paint(); };
-    app().querySelectorAll('[data-sort]').forEach((h) => { h.onclick = () => { sort = [h.dataset.sort, sort[0] === h.dataset.sort ? -sort[1] : -1]; paint(); }; });
+    app().querySelectorAll('[data-sort]').forEach((h) => { h.onclick = () => { const key = h.dataset.sort; sort = [key, sort[0] === key ? -sort[1] : -1]; paint(); app().querySelector(`[data-sort="${key}"]`)?.focus({ preventScroll: true }); }; });
   };
   ['role', 'st', 'mon'].forEach((id) => { $(`#${id}`).onchange = () => { page = 0; paint(); }; });
   $('#iq').oninput = () => { page = 0; paint(); };
+  $('#reset-invoices').onclick = () => { ['role', 'st', 'mon', 'iq'].forEach((id) => { $(`#${id}`).value = ''; }); page = 0; paint(); };
   paint();
 }
 
@@ -155,22 +156,22 @@ export async function pageLaw() {
     <div class="kpi"><span class="label">Lần đồng bộ gần nhất</span><span class="value" style="font-size:1.25rem">${s?.last_snapshot?.created_at ? dmy(s.last_snapshot.created_at) : 'chưa có'}</span>
     <span class="sub">${st.job.running ? `đang chạy${st.job.external ? ' từ dòng lệnh' : ''}: ${st.job.done} văn bản, ${esc(st.job.last)}` : ''}</span></div>
     <div class="kpi"><span class="label">Hết hiệu lực theo văn bản thay thế</span><span class="value">${s ? s.ended_by_later_act ?? 0 : 0}</span><span class="sub">đọc từ điều khoản hiệu lực thi hành của văn bản mới</span></div></div>
-    <div class="bar">${button(st.job.running ? 'Đang đồng bộ' : 'Đồng bộ kho luật', 'primary', `id="sync" ${st.job.running ? 'disabled' : ''}`)}${button('Chỉ văn bản lõi', 'tertiary', `id="sync-core" ${st.job.running ? 'disabled' : ''}`)}
-    <span>${st.job.error ? notice('error', 'Lỗi đồng bộ', st.job.error) : ''}</span></div>
-    <div id="alerts"></div>
     <h2 class="section">Tìm trong kho</h2><form id="lsearch" class="bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
     <label class="cds--label" for="lq">Nội dung</label><input class="cds--text-input" id="lq" placeholder="Ví dụ: thời hạn nộp hồ sơ khai thuế theo quý"></div>
     <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="lasof">Ngày áp dụng</label><input class="cds--text-input" id="lasof" type="date" value="${new Date().toISOString().slice(0, 10)}"></div>
     ${button('Tìm', 'primary', 'type="submit"')}</form><div id="lres"></div>
+    <h2 class="section">Văn bản</h2><div id="ldocs">${loading('Đang tải danh sách')}</div><details class="law-management"><summary>Đồng bộ và lịch sử kho luật</summary>    <div class="bar">${button(st.job.running ? 'Đang đồng bộ' : 'Đồng bộ kho luật', 'primary', `id="sync" ${st.job.running ? 'disabled' : ''}`)}${button('Chỉ văn bản lõi', 'tertiary', `id="sync-core" ${st.job.running ? 'disabled' : ''}`)}
+    <span>${st.job.error ? notice('error', 'Lỗi đồng bộ', st.job.error) : ''}</span></div>
+    <div id="alerts"></div>
     <h2 class="section">Thay đổi gần đây</h2>${table(['Lần', 'Loại', 'Văn bản', 'Chi tiết'], (st.changes || []).slice(0, 15).map((c) => `<tr><td>${c.snapshot_id}</td><td>${esc(c.kind)}</td><td>${esc(c.doc_num || '')}</td><td>${esc(c.detail)}</td></tr>`), 'Chưa có thay đổi.')}
-    <h2 class="section">Văn bản</h2><div id="ldocs">${loading('Đang tải danh sách')}</div>`;
+</details>`;
   const startSync = async (q) => {
     try { await post(`/api/law/sync${q}`); rerender(); } catch (err) { $('#lres').innerHTML = notice('error', 'Chưa đồng bộ được', err.message); }
   };
   $('#sync').onclick = () => startSync('');
   $('#sync-core').onclick = () => startSync('?core_only=true');
   lawAlerts($('#alerts')).catch(() => {});
-  if (st.job.running) setTimeout(() => { if (location.hash.startsWith('#/luat') && !hashParams().get('doc')) rerender(); }, 5000);
+  if (st.job.running) { const timer = setTimeout(() => { if (!hashParams().get('doc')) rerender(); }, 5000); onPageLeave(() => clearTimeout(timer)); }
   $('#lsearch').onsubmit = async (e) => {
     e.preventDefault();
     const q = $('#lq').value.trim();
