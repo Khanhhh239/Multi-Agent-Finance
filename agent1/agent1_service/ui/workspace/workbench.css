@@ -44,6 +44,11 @@
 .shell { margin-left: 188px; }
 .topbar { padding-inline: 24px; }
 .workspace-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.company-profile { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; margin-bottom: 20px; padding: 14px 18px; background: var(--white); border: 1px solid var(--line); border-radius: 8px; }
+.company-profile dl { display: flex; flex-wrap: wrap; gap: 12px 32px; margin: 0; }
+.company-profile dt { color: var(--muted); font-size: 11px; }
+.company-profile dd { margin: 3px 0 0; color: var(--ink); font-size: 13px; font-weight: 600; }
+.company-profile a { font-size: 12px; text-decoration: none; }
 main { max-width: 1580px; padding: 24px 24px 0; }
 .paper { border-radius: 6px; box-shadow: none; }
 .forecast-toolbar { align-items: center; gap: 10px; }

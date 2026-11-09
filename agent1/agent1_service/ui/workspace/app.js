@@ -1,6 +1,14 @@
 "use strict";
 (() => {
   const $ = (id) => document.getElementById(id);
+  const connectHash = new URLSearchParams(location.hash.slice(1));
+  const hasPortalTicket = connectHash.has("portal-connect");
+  const portalTicket = connectHash.get("portal-connect");
+  if (hasPortalTicket) {
+    const cleanUrl = new URL(location.href);
+    cleanUrl.hash = "overview";
+    history.replaceState(null, "", cleanUrl.href);
+  }
   const fmt = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 0 });
   const short = (n) =>
     Math.abs(n) >= 1e9
@@ -49,6 +57,20 @@
     amount: "Số tiền",
     known_at: "Ngày ghi nhận",
     currency: "Đồng tiền",
+    seller_mst: "MST người bán",
+    buyer_mst: "MST người mua",
+    symbol: "Ký hiệu hóa đơn",
+    invoice_no: "Số chứng từ",
+    amount_net: "Tiền trước thuế",
+    vat: "Tiền thuế VAT",
+    record_version: "Phiên bản chứng từ",
+    adjustment_type: "Loại: replacement / adjustment",
+    adjusts_invoice_id: "Mã hóa đơn gốc",
+    adjusts_symbol: "Ký hiệu hóa đơn gốc",
+    adjusts_invoice_no: "Số hóa đơn gốc",
+    adjusts_issue_date: "Ngày lập hóa đơn gốc",
+    event_type: "Loại: cancel",
+    event_date: "Ngày hủy",
     payment_id: "Mã thanh toán",
     payment_date: "Ngày tiền về",
     expense_id: "Mã khoản chi",
@@ -70,6 +92,7 @@
     lastForecast = null,
     baselineForecast = null,
     currentView = "overview",
+    appliedCompanyProfile = "",
     manualMapping = {},
     poll = null;
   const charts = new Map();
@@ -107,7 +130,7 @@
     return iso;
   }
   const dateColumns = new Set(["date", "issue_date", "due_date", "payment_date", "known_at",
-    "promised_date", "promise_date", "start_date", "end_date", "cutoff"]);
+    "promised_date", "promise_date", "start_date", "end_date", "cutoff", "event_date", "adjusts_issue_date"]);
   $("today").textContent = displayDate(localDate);
   for (const id of ["train-asof", "forecast-cutoff", "actuals-date"]) {
     setDate(id, localDate);
@@ -210,13 +233,13 @@
   });
   $("connect-top").onclick = $("connect-open").onclick = connect;
   $("connect-cancel").onclick = () => $("connect-dialog").close();
-  $("connect-form").onsubmit = async (event) => {
-    event.preventDefault();
-    const button = event.submitter || $("connect-form").querySelector("button[type=submit]");
-    button.disabled = true;
-    token = $("token-input").value.trim();
+  async function connectWithKey(key, expectedCompany = null) {
+    token = key;
     try {
       const access = await api("/access");
+      if (expectedCompany && access.company !== expectedCompany) {
+        throw new Error("Kết nối không khớp doanh nghiệp. Mở lại tab từ workspace tổng.");
+      }
       if (access.role === "reader") {
         document.body.classList.add("reader-mode");
         $("company-name").textContent = access.company;
@@ -234,11 +257,45 @@
       );
     } catch (err) {
       token = "";
+      throw err;
+    } finally {
+      $("token-input").value = "";
+    }
+  }
+  $("connect-form").onsubmit = async (event) => {
+    event.preventDefault();
+    const button = event.submitter || $("connect-form").querySelector("button[type=submit]");
+    button.disabled = true;
+    try {
+      await connectWithKey($("token-input").value.trim());
+    } catch (err) {
       $("connect-error").textContent = err.message;
     } finally {
       button.disabled = false;
     }
   };
+  async function redeemPortalTicket(ticket) {
+    const submit = $("connect-form").querySelector("button[type=submit]");
+    for (const button of [$("connect-top"), $("connect-open"), submit]) button.disabled = true;
+    notice("Đang kết nối với doanh nghiệp từ workspace tổng…");
+    try {
+      const response = await fetch("/v1/portal-connect/redeem", {
+        method: "POST", cache: "no-store", credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ticket: ticket || "" }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(typeof result.detail === "string" ? result.detail : "Không đổi được mã kết nối. Mở lại tab từ workspace tổng.");
+      if (!result.key || !result.company) throw new Error("Kết nối thiếu thông tin doanh nghiệp. Mở lại tab từ workspace tổng.");
+      await connectWithKey(result.key, result.company);
+    } catch (err) {
+      connect();
+      $("connect-error").textContent = err.message;
+      notice(err.message, true);
+    } finally {
+      for (const button of [$("connect-top"), $("connect-open"), submit]) button.disabled = false;
+    }
+  }
   // Inside the platform shell: the shell sends the access key once, it is kept in memory only like a typed key.
   if (window.parent !== window) {
     window.addEventListener("message", (event) => {
@@ -277,6 +334,29 @@
     empty.append(copy);
     $("overview-chart").replaceChildren(empty);
   }
+  function applyCompanyProfile(profile) {
+    const managed = Boolean(profile?.managed);
+    $("company-profile").hidden = !managed;
+    $("import-format-hint").hidden = !managed;
+    $("date-format").disabled = managed;
+    $("number-format").disabled = managed;
+    if (!managed) return;
+    const signature = JSON.stringify([profile.code, profile.date_format, profile.number_format]);
+    if (appliedCompanyProfile && appliedCompanyProfile !== signature) resetPreview();
+    appliedCompanyProfile = signature;
+    $("date-format").value = profile.date_format === "iso" ? "%Y-%m-%d" : "%d/%m/%Y";
+    $("number-format").value = profile.number_format;
+    $("profile-code").textContent = profile.code;
+    $("profile-date").textContent = profile.date_format === "iso" ? "2026-12-31 (năm-tháng-ngày)" : "31/12/2026 (ngày/tháng/năm)";
+    $("profile-number").textContent = profile.number_format === "plain" ? "1250000.50" : "1.250.000,50";
+    const home = $("portal-return").getAttribute("href");
+    $("profile-settings").hidden = !home;
+    if (home) {
+      const settings = new URL(home);
+      settings.hash = "config";
+      $("profile-settings").href = settings.href;
+    }
+  }
   async function refresh() {
     const next = await api("/workspace");
     if (state && state.dataset_hash !== next.dataset_hash) {
@@ -291,6 +371,7 @@
     )
       clearForecast();
     state = next;
+    applyCompanyProfile(state.company_profile);
     $("company-name").textContent = state.company;
     $("mode-badge").textContent = state.synthetic_sandbox ? "MÔI TRƯỜNG DEMO · ĐƯỢC PHÉP TRAIN" : state.company;
     $("connection-state").textContent = "Đã kết nối · dữ liệu riêng";
@@ -454,7 +535,7 @@
           payment_id: $("allocate-id").value,
           bank_id: $("allocate-bank").value,
           invoice_id: $("allocate-invoice").value,
-          amount: Number($("allocate-amount").value),
+          amount: $("allocate-amount").value,
         }),
       });
       await refresh();
@@ -494,6 +575,8 @@
     preview = null;
     $("commit-import").disabled = true;
   };
+  $("xml-known-at").value = localDate;
+  $("xml-known-at").onchange = resetPreview;
   $("import-file").onchange = () => {
     resetPreview();
     $("sheet-name").replaceChildren();
@@ -527,6 +610,10 @@
       form.append("mapping", JSON.stringify(manualMapping));
       form.append("date_format", $("date-format").value);
       form.append("number_format", $("number-format").value);
+      if (file.name.toLowerCase().endsWith(".xml")) {
+        if (!$("xml-known-at").value) throw new Error("Chọn ngày biết dữ liệu XML.");
+        form.append("known_at", $("xml-known-at").value);
+      }
       preview = await api("/imports/preview", { method: "POST", body: form });
       const previousSheet = $("sheet-name").value;
       $("sheet-name").replaceChildren(
@@ -551,6 +638,7 @@
             select.append(option);
           });
           select.value = manualMapping[field] || "";
+          select.disabled = preview.mapping_locked;
           select.onchange = () => {
             manualMapping[field] = select.value;
             preview = null;
@@ -560,7 +648,7 @@
           return label;
         }),
       );
-      $("mapping-panel").hidden = false;
+      $("mapping-panel").hidden = preview.mapping_locked;
       $("preview-panel").hidden = false;
       $("preview-title").textContent =
         preview.valid_rows +
@@ -631,7 +719,8 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   async function template(kind) {
-    const blob = await api("/templates/" + kind);
+    const formats = new URLSearchParams({ date_format: $("date-format").value, number_format: $("number-format").value });
+    const blob = await api("/templates/" + kind + "?" + formats);
     download(blob, "agent1-" + kind + ".csv");
     notice(
       "Đã tải mẫu. Thay toàn bộ dòng DEMO bằng dữ liệu thật trước khi nạp.",
@@ -1138,4 +1227,5 @@
   switchView(
     titles[location.hash.slice(1)] ? location.hash.slice(1) : "overview",
   );
+  if (hasPortalTicket) redeemPortalTicket(portalTicket);
 })();

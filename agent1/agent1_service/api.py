@@ -556,5 +556,6 @@ def create_app(state_dir=None,token=None,firm_id=None,engine=run,key_dir=None,ba
         return (Path(__file__).parent/'ui/index.html').read_text(encoding='utf-8')
     app.state.store=store
     from .workspace.api import install
-    install(app,store,authorize,firm_id)
+    install(app,store,authorize,firm_id,bank_registry=bank_registry,bank_accounts_file=account_registry_path,
+            bank_accounts_required=bool(bank_accounts_file or os.environ.get('AGENT1_BANK_ACCOUNTS_FILE')))
     return app

@@ -5,6 +5,7 @@ from datetime import date, timedelta
 import numpy as np
 from sklearn.ensemble import HistGradientBoostingRegressor
 from .cash_history import weekly_cash
+from .data import account_scope
 
 
 def history(data, clock, accounts):
@@ -117,9 +118,7 @@ def predict_candidate(name, model, y, gap=0):
 
 
 def select_operating(data, asof, try_deep=False):
-    accounts = sorted(
-        {r["account"] for r in data.get("statements", []) if r["known_at"] <= asof}
-    )
+    accounts = account_scope(data, asof)
     if not accounts:
         return None
     y, gap = available_history(data, asof, accounts)

@@ -1,4 +1,5 @@
 import base64
+import csv
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import io
@@ -15,7 +16,7 @@ import zipfile
 import pandas as pd
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, Header
 from fastapi.responses import Response, FileResponse
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from agent1.adaptive.data import (
     SCHEMAS,
     IDS,
@@ -23,9 +24,18 @@ from agent1.adaptive.data import (
     parse_rows,
     validate_dataset,
     fingerprint,
+    merge_import,
+    account_scope,
+    vnd,
+    ACCOUNTING,
+    MONEY_FIELDS,
 )
+from ..ingest.einvoice_xml import read_invoice_xml
+from ..ingest.strict_files import read_csv, read_excel, source_hash
 from agent1.adaptive.methods import train, forecast, CATALOG
 from typing import Annotated
+from .company_profile import company_profile, import_formats
+from .portal_connect import install_portal_connect
 
 
 class Training(BaseModel):
@@ -39,7 +49,12 @@ class Allocation(BaseModel):
     payment_id: str = Field(min_length=1, max_length=160)
     bank_id: str = Field(min_length=1, max_length=160)
     invoice_id: str = Field(min_length=1, max_length=160)
-    amount: float = Field(gt=0, allow_inf_nan=False)
+    amount: int = Field(strict=True, gt=0, le=999999999999999999)
+
+    @field_validator("amount", mode="before")
+    @classmethod
+    def exact_vnd(cls, value):
+        return vnd(value)
 
 
 class Prediction(BaseModel):
@@ -63,7 +78,12 @@ def demo_training_allowed(firm):
     return os.environ.get("AGENT1_DEMO_TRAINING") == "1" and firm.startswith("DEMO_")
 
 
-def install(app, store, authorize, firm_id):
+def display_money(row):
+    """JSON numbers beyond JavaScript's exact range are displayed as decimal text."""
+    return {k: str(v) if k in MONEY_FIELDS | {"unallocated", "total_received"} and isinstance(v, int) and abs(v) > 2**53 - 1 else v for k, v in row.items()}
+
+
+def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts_file=None, bank_accounts_required=False):
     router = APIRouter(prefix="/v1")
     executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="company-training")
     app.state.company_executor = executor
@@ -110,6 +130,32 @@ def install(app, store, authorize, firm_id):
             if not pointers:
                 return dict(invoices=[], payments=[], outflows=[])
             return one(firm, "datasets", pointers[0]["version"])["data"]
+
+    def check_bank_scope(data, *, allow_update=False):
+        if not (data.get("bank") or data.get("statements")):
+            return
+        configured = bank_accounts_required or os.environ.get("AGENT1_BANK_ACCOUNTS_FILE") or (bank_accounts_file and Path(bank_accounts_file).is_file()) or data.get("bank_scope")
+        if not configured:
+            return
+        scope = bank_registry()
+        for kind in ("bank", "statements"):
+            for row in data.get(kind, []):
+                account = scope["accounts"].get(row["account"])
+                if not account or account["currency"] != "VND":
+                    raise ValueError("Tài khoản ngoài danh mục VND được duyệt: " + row["account"])
+        changed = bool(data.get("bank_scope") and data["bank_scope"] != scope)
+        if changed and not allow_update:
+            raise ValueError("Danh mục tài khoản đã đổi; đối chiếu phạm vi trước khi nhập tiếp")
+        data["bank_scope"] = scope
+        return changed
+
+    def save_dataset(firm, data):
+        version = fingerprint(data)
+        store.put_many(firm, {
+            "company_datasets": [dict(id=version, data=data, created_at=datetime.now(timezone.utc).isoformat())],
+            "company_dataset_active": [dict(id="active", version=version, counts={k: len(data.get(k, [])) for k in SCHEMAS})],
+        })
+        return version
 
     def public_run(row):
         return {
@@ -194,6 +240,7 @@ def install(app, store, authorize, firm_id):
         )
         return dict(
             company=firm,
+            company_profile=company_profile(firm),
             synthetic_sandbox=demo_training_allowed(firm),
             counts=counts,
             dataset_hash=dataset_hash,
@@ -211,10 +258,12 @@ def install(app, store, authorize, firm_id):
         )
 
     @router.get("/templates/{kind}")
-    def template(kind: str, firm=Depends(authorize)):
+    def template(kind: str, date_format: str | None = None, number_format: str | None = None, firm=Depends(authorize)):
         if kind not in SCHEMAS:
             raise HTTPException(404, "Không có mẫu")
+        date_format, number_format = import_formats(company_profile(firm), date_format, number_format)
         examples = {
+            "invoice_events": dict(event_id="CANCEL01", invoice_id="DEMO_HD001", event_type="cancel", event_date="01/02/2026", known_at="01/02/2026"),
             "actions": dict(
                 event_id="EVENT01",
                 invoice_id="DEMO_HD001",
@@ -264,8 +313,14 @@ def install(app, store, authorize, firm_id):
                 known_at="01/11/2026",
             ),
         }
+        example = examples[kind]
+        for field, value in example.items():
+            if field.endswith("date") or field in ("date", "known_at"):
+                example[field] = datetime.strptime(value, "%d/%m/%Y").strftime(date_format)
+            elif field in ("amount", "opening_balance", "closing_balance") and number_format == "vi-VN":
+                example[field] = f"{int(value):,}".replace(",", ".") + ",00"
         csv = (
-            pd.DataFrame([examples[kind]], columns=list(SCHEMAS[kind]))
+            pd.DataFrame([example], columns=list(SCHEMAS[kind]))
             .to_csv(index=False)
             .encode("utf-8-sig")
         )
@@ -282,40 +337,43 @@ def install(app, store, authorize, firm_id):
         file: UploadFile = File(...),
         kind: str = Form(...),
         mapping: str = Form("{}"),
-        date_format: str = Form("%d/%m/%Y"),
-        number_format: str = Form("vi-VN"),
+        date_format: str | None = Form(None),
+        number_format: str | None = Form(None),
         sheet: str = Form(""),
+        known_at: str | None = Form(None),
         firm=Depends(authorize),
     ):
         if kind not in SCHEMAS:
             raise HTTPException(422, "Loại bảng không hợp lệ")
+        profile = company_profile(firm)
+        date_format, number_format = import_formats(profile, date_format, number_format)
         content = await file.read(5_000_001)
         if len(content) > 5_000_000:
             raise HTTPException(413, "Tối đa 5 MB mỗi file")
         try:
             suffix = Path(file.filename or "").suffix.lower()
+            sheets = []
             if suffix == ".xlsx":
                 with zipfile.ZipFile(io.BytesIO(content)) as z:
                     if sum(f.file_size for f in z.infolist()) > 30_000_000:
                         raise ValueError("Workbook vượt giới hạn giải nén 30 MB")
                 with pd.ExcelFile(io.BytesIO(content)) as workbook:
                     sheets = workbook.sheet_names
-                    raw = workbook.parse(
-                        sheet_name=sheet or sheets[0],
-                        dtype=object,
-                        keep_default_na=False,
-                    )
+                raw = read_excel(content, file.filename, sheet_name=sheet or sheets[0])
             elif suffix == ".csv":
-                raw = pd.read_csv(
-                    io.BytesIO(content),
-                    dtype=str,
-                    sep=None,
-                    engine="python",
-                    encoding="utf-8-sig",
-                    keep_default_na=False,
-                )
+                header = content.decode("utf-8-sig").splitlines()[0] if content else ""
+                try:
+                    delimiter = csv.Sniffer().sniff(header, delimiters=",;\t").delimiter
+                except csv.Error:
+                    delimiter = ","
+                raw = read_csv(content, file.filename, delimiter=delimiter)
+            elif suffix == ".xml" and kind == "invoices":
+                row = read_invoice_xml(content, firm, validate=False)
+                received = date(known_at) if known_at else str(pd.Timestamp.now(tz="Asia/Ho_Chi_Minh").date())
+                row.update(amount=row.pop("amount_gross"), known_at=received)
+                raw = pd.DataFrame([row])
             else:
-                raise ValueError("Chọn CSV UTF-8 hoặc XLSX")
+                raise ValueError("Chọn CSV UTF-8, XLSX hoặc XML hóa đơn")
             if len(raw) > 50000:
                 raise ValueError("Tối đa 50.000 dòng mỗi lần nạp")
             selected = json.loads(mapping)
@@ -323,12 +381,19 @@ def install(app, store, authorize, firm_id):
                 raise ValueError("Ánh xạ phải là đối tượng")
             schema_id = fingerprint([kind, list(raw.columns)])
             saved = one(firm, "mappings", schema_id)
-            selected = selected or (
+            selected = suggested_mapping(raw.columns, kind) if suffix == ".xml" else selected or (
                 saved["mapping"] if saved else suggested_mapping(raw.columns, kind)
             )
             accepted, errors, warnings = parse_rows(
-                raw, kind, selected, date_format, number_format
+                raw, kind, selected,
+                "%Y-%m-%d" if suffix == ".xml" else date_format,
+                "plain" if suffix == ".xml" else number_format,
+                source="xml" if suffix == ".xml" else "erp",
             )
+            for i, row in enumerate(accepted, 2):
+                if kind == "invoices" and ACCOUNTING <= row.keys():
+                    row.update(source_file=file.filename, source_row=i, source_sha256=source_hash(content))
+                    row["source_lineage"][row["source"]] = dict(file=file.filename, row=i, sha256=source_hash(content))
             staged = current(firm)
             base_hash = fingerprint(staged)
             merged = {r[IDS[kind]]: r for r in staged.get(kind, [])}
@@ -338,11 +403,16 @@ def install(app, store, authorize, firm_id):
                 if r[IDS[kind]] in merged and merged[r[IDS[kind]]] != r
             ][:10]
             updates = sum(r[IDS[kind]] in merged for r in accepted)
-            merged.update({r[IDS[kind]]: r for r in accepted})
-            staged[kind] = list(merged.values())
             if not errors:
                 try:
-                    validate_dataset(staged)
+                    staged = merge_import(staged, kind, accepted)
+                    if check_bank_scope(staged, allow_update=kind in ("bank", "statements")):
+                        warnings.append("Danh mục tài khoản đã đổi. Phạm vi sau khi lưu: " + ", ".join(sorted(staged["bank_scope"]["accounts"])))
+                    if kind in ("bank", "statements") and not staged.get("bank_scope"):
+                        warnings.append("Chưa có danh mục tài khoản ngân hàng được duyệt; chưa xác nhận phạm vi tài khoản đầy đủ.")
+                    changes = [dict(before=merged[r[IDS[kind]]], after=r) for r in staged[kind]
+                               if r[IDS[kind]] in merged and merged[r[IDS[kind]]] != r][:10]
+                    updates = sum(r[IDS[kind]] in merged and merged[r[IDS[kind]]] != r for r in staged[kind])
                 except ValueError as exc:
                     errors.append(dict(row=0, column="reference", message=str(exc)))
             for e in errors:
@@ -369,11 +439,13 @@ def install(app, store, authorize, firm_id):
                         id=identifier,
                         kind=kind,
                         records=accepted,
+                        bank_scope=staged.get("bank_scope"),
                         base_hash=base_hash,
                         valid=not errors,
                         errors=errors,
                         schema_id=schema_id,
                         mapping=selected,
+                        company_profile=profile if profile["managed"] else None,
                         created_at=datetime.now(timezone.utc).isoformat(),
                     )
                 ],
@@ -382,16 +454,17 @@ def install(app, store, authorize, firm_id):
                 id=identifier,
                 columns=list(raw.columns),
                 sheets=sheets if suffix == ".xlsx" else [],
-                changes=changes,
+                changes=[dict(before=display_money(r["before"]), after=display_money(r["after"])) for r in changes],
                 fields=list(SCHEMAS[kind]),
                 mapping=selected,
+                mapping_locked=suffix == ".xml",
                 rows=len(raw),
                 valid_rows=len(accepted),
                 updates=updates,
                 errors=errors[:100],
                 error_count=len(errors),
                 warnings=warnings,
-                sample=accepted[:5],
+                sample=[display_money(r) for r in accepted[:5]],
                 can_commit=not errors and bool(accepted),
             )
         except (ValueError, TypeError, UnicodeError, zipfile.BadZipFile) as exc:
@@ -403,39 +476,22 @@ def install(app, store, authorize, firm_id):
             p = one(firm, "previews", identifier)
             if not p or not p["valid"] or not p["records"]:
                 raise HTTPException(422, "Bản xem trước còn lỗi hoặc không tồn tại")
+            profile = company_profile(firm)
+            if (profile["managed"] or p.get("company_profile")) and p.get("company_profile") != profile:
+                raise HTTPException(409, "Cấu hình doanh nghiệp đã đổi. Kiểm tra file lại trước khi ghi.")
             data = current(firm)
             if p["base_hash"] != fingerprint(data):
                 raise HTTPException(
                     409, "Dữ liệu đã đổi. Xem trước lại để tránh ghi đè."
                 )
-            key = IDS[p["kind"]]
-            merged = {r[key]: r for r in data.get(p["kind"], [])}
-            merged.update({r[key]: r for r in p["records"]})
-            data[p["kind"]] = list(merged.values())
-            validate_dataset(data)
-            version = fingerprint(data)
-            put(
-                firm,
-                "datasets",
-                [
-                    dict(
-                        id=version,
-                        data=data,
-                        created_at=datetime.now(timezone.utc).isoformat(),
-                    )
-                ],
-            )
-            put(
-                firm,
-                "dataset_active",
-                [
-                    dict(
-                        id="active",
-                        version=version,
-                        counts={k: len(data.get(k, [])) for k in SCHEMAS},
-                    )
-                ],
-            )
+            try:
+                data = merge_import(data, p["kind"], p["records"])
+                check_bank_scope(data, allow_update=p["kind"] in ("bank", "statements"))
+                if data.get("bank_scope") != p.get("bank_scope"):
+                    raise ValueError("Danh mục tài khoản đã đổi từ lần xem trước; kiểm tra file lại")
+            except ValueError as exc:
+                raise HTTPException(422, str(exc))
+            version = save_dataset(firm, data)
             if "schema_id" in p:
                 put(firm, "mappings", [dict(id=p["schema_id"], mapping=p["mapping"])])
             return dict(version=version, accepted=len(p["records"]), updated=True)
@@ -446,7 +502,10 @@ def install(app, store, authorize, firm_id):
             raise HTTPException(404, "Không có bảng này")
         with mutex:
             data = current(firm)
+            if kind == "invoice_events" or (kind == "invoices" and any(r["invoice_id"] == identifier and ACCOUNTING <= r.keys() for r in data.get(kind, []))):
+                raise HTTPException(409, "Giữ lịch sử chứng từ kế toán: nhập sự kiện hủy hoặc phiên bản sửa thay vì xóa")
             before = len(data.setdefault(kind, []))
+            history = data.setdefault("record_history", {}).setdefault(kind, list(data[kind]))
             data[kind] = [r for r in data[kind] if r[IDS[kind]] != identifier]
             if before == len(data[kind]):
                 raise HTTPException(404, "Không tìm thấy mã")
@@ -454,29 +513,9 @@ def install(app, store, authorize, firm_id):
                 validate_dataset(data)
             except ValueError as exc:
                 raise HTTPException(409, "Xóa thanh toán liên quan trước. " + str(exc))
-            version = fingerprint(data)
-            put(
-                firm,
-                "datasets",
-                [
-                    dict(
-                        id=version,
-                        data=data,
-                        created_at=datetime.now(timezone.utc).isoformat(),
-                    )
-                ],
-            )
-            put(
-                firm,
-                "dataset_active",
-                [
-                    dict(
-                        id="active",
-                        version=version,
-                        counts={k: len(data.get(k, [])) for k in SCHEMAS},
-                    )
-                ],
-            )
+            removed = next(r for r in reversed(history) if r[IDS[kind]] == identifier)
+            history.append({IDS[kind]: identifier, "known_at": max(removed["known_at"], str(pd.Timestamp.now(tz="Asia/Ho_Chi_Minh").date())), "_deleted": True})
+            version = save_dataset(firm, data)
             return dict(deleted=True, version=version)
 
     @router.post("/training", status_code=202)
@@ -495,6 +534,10 @@ def install(app, store, authorize, firm_id):
                     409, "Đang có một tác vụ huấn luyện. Chờ tác vụ hoàn tất."
                 )
             data = current(firm)
+            try:
+                check_bank_scope(data)
+            except ValueError as exc:
+                raise HTTPException(422, str(exc))
             if any(
                 str(r["invoice_id"]).startswith("DEMO_") for r in data["invoices"]
             ) and not demo_training_allowed(firm):
@@ -510,13 +553,7 @@ def install(app, store, authorize, firm_id):
             # Automatically include eligible cash learners; the UI need not name algorithms.
             from agent1.adaptive.operating import available_history
 
-            accounts = sorted(
-                {
-                    r["account"]
-                    for r in data.get("statements", [])
-                    if r["known_at"] <= asof
-                }
-            )
+            accounts = account_scope(data, asof)
             cash_history, _ = (
                 available_history(data, asof, accounts) if accounts else ([], 0)
             )
@@ -694,9 +731,9 @@ def install(app, store, authorize, firm_id):
         used = {}
         for r in data.get("payments", []):
             if r.get("bank_id"):
-                used[r["bank_id"]] = used.get(r["bank_id"], 0) + r["amount"]
+                used[r["bank_id"]] = used.get(r["bank_id"], 0) + vnd(r["amount"])
         rows = [
-            dict(**r, unallocated=r["amount"] - used.get(r["bank_id"], 0))
+            dict(**r, unallocated=vnd(r["amount"]) - used.get(r["bank_id"], 0))
             for r in data.get("bank", [])
             if r["direction"] == "in"
         ]
@@ -705,12 +742,12 @@ def install(app, store, authorize, firm_id):
             for r in rows
             if r["unallocated"] > 0.01 and r.get("component") != "cash_sale"
         ]
-        return dict(
-            total_received=sum(r["amount"] for r in rows),
+        return display_money(dict(
+            total_received=sum(vnd(r["amount"]) for r in rows),
             unallocated=sum(r["unallocated"] for r in pending),
             pending_count=len(pending),
-            pending=pending[:100],
-        )
+            pending=[display_money(r) for r in pending[:100]],
+        ))
 
     @router.post("/allocations")
     def allocate(body: Allocation, firm=Depends(authorize)):
@@ -732,39 +769,17 @@ def install(app, store, authorize, firm_id):
                 )
             if existing and existing.get("bank_id") == body.bank_id:
                 return dict(version=fingerprint(data), replayed=True)
-            payments[body.payment_id] = dict(
+            payment = dict(
                 **body.model_dump(),
                 payment_date=transaction["date"],
                 known_at=max(transaction["known_at"], str(datetime.now().date())),
             )
-            data["payments"] = list(payments.values())
             try:
-                validate_dataset(data)
+                data = merge_import(data, "payments", [payment])
+                check_bank_scope(data)
             except ValueError as exc:
                 raise HTTPException(422, str(exc))
-            identifier = fingerprint(data)
-            put(
-                firm,
-                "datasets",
-                [
-                    dict(
-                        id=identifier,
-                        data=data,
-                        created_at=datetime.now(timezone.utc).isoformat(),
-                    )
-                ],
-            )
-            put(
-                firm,
-                "dataset_active",
-                [
-                    dict(
-                        id="active",
-                        version=identifier,
-                        counts={k: len(data.get(k, [])) for k in SCHEMAS},
-                    )
-                ],
-            )
+            identifier = save_dataset(firm, data)
             return dict(version=identifier, replayed=False)
 
     @router.get("/forecasts")
@@ -879,6 +894,7 @@ def install(app, store, authorize, firm_id):
                 bundle = pickle.loads(base64.b64decode(weight["artifact"]))
         try:
             data = current(firm)
+            check_bank_scope(data)
             started = time.perf_counter()
             result = forecast(
                 data,
@@ -896,14 +912,7 @@ def install(app, store, authorize, firm_id):
             )
             result.update(
                 inference_ms=round((time.perf_counter() - started) * 1000),
-                accounts=sorted(
-                    {
-                        r["account"]
-                        for k in ("bank", "statements")
-                        for r in data.get(k, [])
-                        if r["known_at"] <= cutoff
-                    }
-                ),
+                accounts=account_scope(data, cutoff),
                 model_version=model["id"] if model else None,
                 stale_model=bool(model and model["dataset_hash"] != fingerprint(data)),
                 scenario=dict(
@@ -960,6 +969,7 @@ def install(app, store, authorize, firm_id):
         except ValueError as exc:
             raise HTTPException(422, str(exc))
 
+    install_portal_connect(app, router, authorize, firm_id)
     app.include_router(router)
     root = Path(__file__).resolve().parents[1] / "ui/workspace"
 

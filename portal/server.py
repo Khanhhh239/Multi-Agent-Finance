@@ -35,7 +35,7 @@ from base64 import b64encode
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import parse_qs, quote, urlsplit
+from urllib.parse import parse_qs, quote, urlencode, urlsplit
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
 
@@ -115,6 +115,16 @@ def company():
     return {**COMPANY_FIELDS, **read_json(COMPANY_FILE, {})}
 
 
+def agent1_profile_file(data):
+    """Publish only the company settings Agent 1 consumes, separately for each firm."""
+    profile = {key: data[key] for key in ('code', 'date_format', 'number_format')}
+    profile['code'] = profile['code'] or 'SME'
+    path = WORK / 'agent1_profiles' / (profile['code'] + '.json')
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(path, profile)
+    return path
+
+
 def save_company(body):
     data = {k: body.get(k, v) for k, v in COMPANY_FIELDS.items()}
     data['code'] = str(data['code']).strip().upper()
@@ -125,6 +135,10 @@ def save_company(body):
         problems.append('Cần tên doanh nghiệp.')
     if data['tax_code'] and not mst_ok(data['tax_code']):
         problems.append('Mã số thuế không đúng chữ số kiểm tra.')
+    if data['date_format'] not in ('dmy', 'iso'):
+        problems.append('Chọn định dạng ngày trong tệp hợp lệ.')
+    if data['number_format'] not in ('vi-VN', 'plain'):
+        problems.append('Chọn định dạng số tiền trong tệp hợp lệ.')
     try:
         data['fiscal_year_end_month'] = int(data['fiscal_year_end_month'])
         assert 1 <= data['fiscal_year_end_month'] <= 12
@@ -134,6 +148,7 @@ def save_company(body):
         raise ValueError(' '.join(problems))
     previous = company()
     data['updated_at'] = time.strftime('%Y-%m-%d %H:%M')
+    agent1_profile_file(data)
     write_json(COMPANY_FILE, data)
     return data, previous.get('code') != data['code']
 
@@ -191,6 +206,7 @@ def launch_spec(aid):
         code = c['code'] or 'SME'
         env.update(AGENT1_THREADS='4', OMP_NUM_THREADS='4', OPENBLAS_NUM_THREADS='1', AGENT1_STATE_DIR=str(state),
                    AGENT1_KEY_DIR=str(keys), AGENT1_FIRM_ID=code, AGENT1_RESEARCH_MODE='0',
+                   AGENT1_COMPANY_PROFILE_FILE=str(agent1_profile_file(c)),
                    AGENT1_DEMO_TRAINING='1' if code.startswith('DEMO_') else '0', AGENT1_FRAME_ANCESTORS=' '.join(ORIGINS))
         if code.startswith('DEMO_'):
             keys.mkdir(parents=True, exist_ok=True)
@@ -302,6 +318,29 @@ def agent1_key():
         return (keys / 'api-token.txt').read_text(encoding='utf-8').strip()
     except OSError:
         return ''
+
+
+def agent1_connect_link(expected_company, origin):
+    code = company()['code'] or 'SME'
+    if expected_company != code:
+        raise ValueError('Doanh nghiệp đã đổi. Tải lại trang rồi mở tab mới.')
+    if origin not in ORIGINS:
+        raise PermissionError('Yêu cầu không đến từ trang portal.')
+    key = agent1_key()
+    if not key:
+        raise ValueError('Agent 1 chưa sẵn sàng kết nối. Bật Agent 1 rồi thử lại.')
+    status, result = call('POST', agent_url('agent1', '/v1/portal-connect/tickets'),
+                          dict(company=code), {'Authorization': 'Bearer ' + key}, timeout=10)
+    if not isinstance(result, dict):
+        raise ValueError('Agent 1 chưa hỗ trợ kết nối tab riêng. Khởi động lại Agent 1 rồi thử lại.')
+    if status != 201:
+        detail = result.get('detail') or result.get('error')
+        raise ValueError(detail if isinstance(detail, str) else 'Không tạo được kết nối tab riêng. Kiểm tra Agent 1 đã được khởi động lại với code mới.')
+    ticket = result.get('ticket', '')
+    if result.get('company') != code or not isinstance(ticket, str) or not re.fullmatch(r'[A-Za-z0-9_-]{40,128}', ticket):
+        raise ValueError('Mã kết nối không khớp doanh nghiệp. Tải lại trang rồi thử lại.')
+    url = agent_url('agent1', '/workspace') + '?' + urlencode({'portal': origin}) + '#portal-connect=' + ticket
+    return dict(url=url, company=code, expires_in=60)
 
 
 def log_tail(aid, lines=60):
@@ -981,6 +1020,9 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(404, {'error': 'Không có địa chỉ này.'})
             return self.static(STATIC, path.lstrip('/') if '.' in path.rsplit('/', 1)[-1] else '')
         self.guard()
+        if method == 'POST' and path == '/api/agents/agent1/connect-link':
+            body = self.json_body()
+            return self.send(200, agent1_connect_link(body.get('company'), self.headers.get('Origin') or ORIGIN))
         if method == 'POST' and path == '/api/intake/setup':
             b = self.json_body()
             return self.send(200, dict(token=set_password(str(b.get('password', '')), str(b.get('confirm', '')))))
@@ -1049,7 +1091,7 @@ class Handler(BaseHTTPRequestHandler):
     def handle_one(self, method):
         try:
             path = urlsplit(self.path).path
-            if method != 'GET' and (path == '/api/company' or path == '/api/agent3/workspace' or path.startswith('/api/inbox')):
+            if method != 'GET' and (path in ('/api/company', '/api/agent3/workspace', '/api/agents/agent1/connect-link') or path.startswith('/api/inbox')):
                 with LOCK:
                     self.route(method)
             else:

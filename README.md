@@ -32,6 +32,7 @@ Cổng mặc định: portal 8800, Agent 1 là 8011, Agent 2 là 8766, Agent 3 l
 
 1. **Cấu hình doanh nghiệp**: tên, mã số thuế, mã dùng chung, phương pháp thuế, kỳ kê khai, định dạng ngày và số tiền trong tệp. Nhãn bên phải mỗi ô cho biết agent nào dùng ô đó.
    - Agent 1 và Agent 2 dùng mã dùng chung. Đổi mã thì portal khởi động lại Agent 1 với kho của mã mới.
+   - Agent 1 nhận mã doanh nghiệp, định dạng ngày và số tiền qua hồ sơ riêng của mã đó. Các giá trị hiện trong Agent 1 và áp dụng cho cả tệp nhập lẫn tệp mẫu; chỉnh tại cấu hình chung rồi kiểm tra lại tệp. Sau khi cập nhật code này, khởi động lại portal và Agent 1 một lần để bật kết nối hồ sơ.
    - Agent 3 tạo doanh nghiệp theo mã số thuế. Lần đầu cần mật khẩu quản trị Agent 3. Portal chuyển mật khẩu cho Agent 3 rồi đăng xuất ngay, không lưu lại.
    - Agent 2 chỉ nhận tệp cho doanh nghiệp đã có trong danh mục của nó. Ô "Mã doanh nghiệp ở Agent 2" dùng khi mã khác mã chung.
 2. **Nạp dữ liệu**: thả tệp vào một ô. Portal nhận dạng từng tệp và chạy bước xem trước của agent nhận. Chưa có gì được ghi ở bước này.
@@ -39,7 +40,7 @@ Cổng mặc định: portal 8800, Agent 1 là 8011, Agent 2 là 8766, Agent 3 l
    - Sổ giao dịch theo mẫu Agent 2 đi tới Agent 2.
    - Hóa đơn XML, ZIP, sao kê ngân hàng và bảng kê cổng thuế đi tới Agent 3. Agent 3 tự phân loại lại.
 3. Bấm **Ghi vào agent**. Với tệp của Agent 2, nút hỏi xác nhận lần hai vì Agent 2 thay toàn bộ giao dịch cũ. Sau mỗi lần ghi, portal kiểm tra lại các tệp còn chờ. Ví dụ tiền khách trả bị lỗi tham chiếu sẽ qua sau khi hóa đơn đã ghi.
-4. Mở **Agent 1 đến 4** ở menu trái. Mỗi agent hiện trong cùng khung. Agent 1 tự nhận khóa kết nối từ portal qua `postMessage`, không cần dán khóa.
+4. Mở **Agent 1 đến 4** ở menu trái. Mỗi agent hiện trong cùng khung. Agent 1 tự nhận khóa kết nối từ portal qua `postMessage`, không cần dán khóa. Bấm **Mở tab riêng** ở Agent 1 cũng tự kết nối đúng doanh nghiệp bằng mã dùng một lần, hết hạn sau 60 giây. Khóa chỉ giữ trong bộ nhớ của tab; nếu tải lại tab riêng thì mở tab mới từ portal hoặc nhập khóa để kết nối lại.
 
 ## Thay đổi nhỏ trong code agent
 

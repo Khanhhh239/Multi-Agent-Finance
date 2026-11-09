@@ -3,10 +3,12 @@
 from datetime import date, timedelta
 import numpy as np
 import pandas as pd
+from .data import as_of, effective_data
 
 
 def weekly_cash(data, start, weeks, asof, accounts):
     """One common scope for all weeks. Uncovered dates are missing rather than zero."""
+    data = as_of(data, asof)
     periods = [r for r in data.get("statements", []) if r["known_at"] <= asof]
     dates = pd.date_range(start, periods=7 * weeks)
     covered = np.full(len(dates), bool(accounts))
@@ -34,6 +36,7 @@ def weekly_cash(data, start, weeks, asof, accounts):
 
 
 def evaluate_plan(data, plan, asof, accounts):
+    data = as_of(data, asof)
     flows = weekly_cash(
         data,
         str(date.fromisoformat(plan["cutoff"]) + timedelta(days=1)),
@@ -157,6 +160,7 @@ def calibrate_bands(plan, previous, data):
 
 def partial_distribution(data, opened, clock, base):
     """Empirical receipt fractions conditional on an earlier comparable open balance."""
+    data = effective_data(data, clock)
     horizon = base.shape[1] - 1
     days_in_horizon = horizon * 7
     payments = {}

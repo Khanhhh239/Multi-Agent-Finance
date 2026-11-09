@@ -68,6 +68,14 @@
       </header>
       <main id="main" tabindex="-1">
         <div id="notice" role="status" aria-live="polite" hidden></div>
+        <section class="company-profile" id="company-profile" aria-label="Cấu hình doanh nghiệp dùng chung" hidden>
+          <dl>
+            <div><dt>Mã doanh nghiệp</dt><dd id="profile-code"></dd></div>
+            <div><dt>Ngày trong tệp</dt><dd id="profile-date"></dd></div>
+            <div><dt>Số tiền trong tệp</dt><dd id="profile-number"></dd></div>
+          </dl>
+          <a id="profile-settings" class="link-button" target="_top" hidden>Sửa cấu hình ở workspace tổng →</a>
+        </section>
         <section class="view" id="view-overview">
           <div class="page-heading">
             <div>
@@ -201,11 +209,12 @@
                 ></label>
                 <div class="section-heading">
                   <h2>Nạp một bảng dữ liệu</h2>
-                  <span class="small-badge">CSV / XLSX</span>
+                  <span class="small-badge">CSV / XLSX / XML</span>
                 </div>
                 <label
                   >Bạn muốn nạp bảng nào?<select id="table-kind">
                     <option value="invoices">Hóa đơn bán hàng</option>
+                    <option value="invoice_events">Sự kiện hủy hóa đơn</option>
                     <option value="bank">Dòng sao kê ngân hàng</option>
                     <option value="statements">Kỳ sao kê và số dư</option>
                     <option value="payments">Khoản thanh toán đã nhận</option>
@@ -226,23 +235,26 @@
                     </select></label
                   ><label
                     >Số tiền trong file<select id="number-format">
-                      <option value="vi-VN">Việt Nam · 1.500.000,50</option>
+                      <option value="vi-VN">Việt Nam · 1.500.000,00</option>
                       <option value="plain">
-                        Không phân cách · 1500000.50
+                        Không phân cách · 1500000
                       </option>
                     </select></label
                   >
                 </div>
+                <p class="helper" id="import-format-hint" hidden>Định dạng tệp lấy từ cấu hình doanh nghiệp ở workspace tổng. Đổi cấu hình tại đó rồi kiểm tra file lại.</p>
+                <label>Ngày biết dữ liệu (khi nạp XML)<input id="xml-known-at" type="date" /></label>
+                <p class="helper">XML dùng ngày/số chuẩn trong chứng từ. Tiền VND phải nguyên đồng; hóa đơn thiếu hạn thanh toán cần bổ sung tại nguồn.</p>
                 <label class="drop-zone" id="drop-zone" for="import-file"
                   ><img
                     src="/workspace-assets/vendor/file-spreadsheet.svg"
                     alt="" /><b id="file-label"
                     >Kéo file vào đây, hoặc bấm để chọn</b
-                  ><span>Tối đa 5 MB · CSV UTF-8 hoặc Excel (.xlsx)</span
+                  ><span>Tối đa 5 MB · CSV UTF-8, Excel (.xlsx) hoặc XML hóa đơn</span
                   ><input
                     type="file"
                     id="import-file"
-                    accept=".csv,.xlsx"
+                    accept=".csv,.xlsx,.xml"
                     required
                 /></label>
                 <div class="form-actions">
@@ -651,10 +663,13 @@
             <details>
               <summary>Điều chỉnh, hủy hóa đơn hoặc thu thừa?</summary>
               <p>
-                Sửa tại nguồn rồi nạp lại cùng mã. Khoản thu thừa, hoàn tiền và
-                hóa đơn hủy cần đối soát ở hệ thống kế toán trước; importer sẽ
-                chặn số âm và tổng thu vượt giá trị hóa đơn. Xóa bản ghi nhập
-                nhầm trong mục Dữ liệu.
+                Nhập chứng từ đầy đủ MST, ký hiệu/số, tiền trước thuế và VAT.
+                Hóa đơn thay thế dùng replacement, điều chỉnh dùng adjustment
+                trong adjustment_type và tham chiếu hóa đơn gốc; điều chỉnh giảm
+                dùng chênh lệch âm. Hủy bằng bảng Sự kiện hủy hóa đơn (cancel).
+                Bản sửa cùng mã cần tăng record_version và ngày ghi nhận mới hơn.
+                Lịch sử được giữ theo ngày biết dữ liệu. Khoản hoàn/thu thừa cần
+                đối soát tại nguồn; tổng thu vẫn bị chặn khi vượt công nợ hiệu lực.
               </p>
             </details>
             <details>

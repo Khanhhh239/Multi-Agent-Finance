@@ -359,6 +359,41 @@
   }
 
   // ------------------------------------------------------------------ actions
+  async function openAgent1Tab(event) {
+    if (currentAgent !== "agent1") return;
+    event.preventDefault();
+    const agent = agentById("agent1");
+    if (agent.state !== "running") {
+      toast("Bật Agent 1 rồi mở tab riêng.", true);
+      return;
+    }
+    const company = state.company.code || "SME";
+    const agentOrigin = new URL(agent.url, location.href).origin;
+    // Open during the click, then sever the opener before any navigation.
+    const tab = window.open("about:blank", "_blank");
+    if (!tab) {
+      toast("Trình duyệt đã chặn tab mới. Cho phép mở tab rồi bấm lại.", true);
+      return;
+    }
+    try {
+      tab.opener = null;
+      tab.document.title = "Đang kết nối Agent 1";
+      if (tab.document.body) tab.document.body.textContent = "Đang kết nối Agent 1 với doanh nghiệp của bạn…";
+      const result = await api("/api/agents/agent1/connect-link", { method: "POST", json: { company } });
+      if ((state.company.code || "SME") !== company || result.company !== company) {
+        throw new Error("Doanh nghiệp đã đổi. Mở lại tab từ workspace tổng.");
+      }
+      const target = new URL(result.url);
+      if (target.origin !== agentOrigin || target.pathname !== "/workspace" || target.searchParams.get("portal") !== location.origin) {
+        throw new Error("Địa chỉ kết nối không khớp Agent 1 đang mở.");
+      }
+      if (!tab.closed) tab.location.replace(target.href);
+    } catch (err) {
+      if (!tab.closed) tab.close();
+      toast(err.message, true);
+    }
+  }
+
   async function toggleAgent(a) {
     const action = a.state === "running" || a.state === "starting" ? "stop" : "start";
     try {
@@ -508,6 +543,7 @@
 
   // ------------------------------------------------------------------ wire up
   window.addEventListener("hashchange", show);
+  $("agent-newtab").addEventListener("click", openAgent1Tab);
   document.querySelector(".skip-link").addEventListener("click", (event) => {
     event.preventDefault();
     $("content").focus();

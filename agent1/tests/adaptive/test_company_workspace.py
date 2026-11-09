@@ -1,6 +1,9 @@
 """Synthetic fixtures verify mechanics only; never production method selection evidence."""
 
 import time
+import io
+import hashlib
+import json
 from datetime import date, timedelta
 from unittest.mock import patch
 
@@ -15,9 +18,12 @@ from agent1.adaptive.data import (
     observed,
     validate_dataset,
     fingerprint,
+    account_scope,
 )
 from agent1.adaptive.methods import Method, features, forecast, train
 from agent1_service.api import create_app
+from agent1.synth.einvoice import invoice_to_xml
+from agent1.synth.names import make_mst
 
 
 def company_data(days=210):
@@ -95,6 +101,470 @@ def import_all(client, data):
         )
 
 
+def accounting_invoice(invoice_id="ORIGINAL", **changes):
+    rng = np.random.default_rng(9)
+    row = dict(
+        invoice_id=invoice_id,
+        customer_id="BUYER",
+        seller_mst=make_mst(rng),
+        buyer_mst=make_mst(rng),
+        symbol="1C26TAA",
+        invoice_no=invoice_id,
+        issue_date="2026-01-01",
+        due_date="2026-02-01",
+        known_at="2026-01-01",
+        amount_net=1000,
+        vat=100,
+        amount=1100,
+        currency="VND",
+        record_version=1,
+    )
+    return dict(row, **changes)
+
+
+def active_data(client):
+    store = client.app.state.store
+    pointer = store.one("SME", "company_dataset_active", "active")
+    return store.one("SME", "company_datasets", pointer["version"])["data"]
+
+
+def test_accounting_lifecycle_preserves_asof_and_allocations(client):
+    original = accounting_invoice()
+    import_all(
+        client,
+        {
+            "invoices": [original],
+            "payments": [
+                dict(
+                    payment_id="P",
+                    invoice_id="ORIGINAL",
+                    payment_date="2026-01-05",
+                    known_at="2026-01-05",
+                    amount=500,
+                )
+            ],
+        },
+    )
+    replacement = accounting_invoice(
+        "REPLACEMENT",
+        issue_date="2026-01-10",
+        known_at="2026-01-20",
+        adjustment_type="replacement",
+        adjusts_invoice_id="ORIGINAL",
+    )
+    import_all(client, {"invoices": [replacement]})
+    delta = accounting_invoice(
+        "DELTA",
+        issue_date="2026-01-21",
+        known_at="2026-01-25",
+        amount_net=-500,
+        vat=-50,
+        amount=-550,
+        adjustment_type="adjustment",
+        adjusts_invoice_id="REPLACEMENT",
+    )
+    import_all(client, {"invoices": [delta]})
+    data = active_data(client)
+    early = observed(data, "2026-01-19").set_index("invoice_id")
+    assert (
+        list(early.index) == ["ORIGINAL"]
+        and early.loc["ORIGINAL", "remaining_amount"] == 600
+    )
+    later = observed(data, "2026-01-24").set_index("invoice_id")
+    assert (
+        list(later.index) == ["REPLACEMENT"]
+        and later.loc["REPLACEMENT", "remaining_amount"] == 600
+    )
+    adjusted = observed(data, "2026-01-25").iloc[0]
+    assert (
+        adjusted.amount == 550
+        and adjusted.remaining_amount == 50
+        and adjusted.known_at == pd.Timestamp("2026-01-25")
+    )
+    plan = client.post(
+        "/v1/predict",
+        json=dict(cutoff="2026-01-25", opening_balance=0, payments_complete=True),
+    )
+    assert plan.status_code == 200, plan.text
+    assert plan.json()["open_invoices"] == 1
+    cancel = dict(
+        event_id="CANCEL",
+        invoice_id="REPLACEMENT",
+        event_type="cancel",
+        event_date="2026-01-26",
+        known_at="2026-02-01",
+    )
+    import_all(client, {"invoice_events": [cancel]})
+    data = active_data(client)
+    assert len(observed(data, "2026-01-31")) == 1
+    assert observed(data, "2026-02-01").empty
+    plan = client.post(
+        "/v1/predict",
+        json=dict(cutoff="2026-02-01", opening_balance=0, payments_complete=True),
+    )
+    assert plan.status_code == 200 and plan.json()["open_invoices"] == 0, plan.text
+    assert client.delete("/v1/records/invoices/REPLACEMENT").status_code == 409
+    # Events are immutable and replaying the identical event is safe.
+    assert upload(client, "invoice_events", [cancel])["can_commit"]
+    assert not upload(
+        client, "invoice_events", [dict(cancel, event_date="2026-01-27")]
+    )["can_commit"]
+    # A later extraction correction keeps the already known document chain.
+    import_all(
+        client,
+        {"invoices": [dict(replacement, record_version=2, known_at="2026-03-01")]},
+    )
+    assert observed(active_data(client), "2026-01-25").iloc[0].remaining_amount == 50
+
+
+def test_late_revisions_and_payment_corrections_do_not_erase_history(client):
+    import_all(client, {"invoices": [accounting_invoice()]})
+    correction = accounting_invoice(
+        amount_net=2000, vat=200, amount=2200, record_version=2, known_at="2026-02-01"
+    )
+    import_all(client, {"invoices": [correction]})
+    pay = dict(
+        payment_id="P",
+        invoice_id="ORIGINAL",
+        payment_date="2026-01-15",
+        known_at="2026-02-02",
+        amount=1000,
+    )
+    import_all(client, {"payments": [pay]})
+    import_all(client, {"payments": [dict(pay, amount=1500, known_at="2026-03-01")]})
+    data = active_data(client)
+    assert observed(data, "2026-01-31").iloc[0].amount == 1100
+    assert observed(data, "2026-02-02").iloc[0].remaining_amount == 1200
+    assert observed(data, "2026-03-01").iloc[0].remaining_amount == 700
+    for bad in [
+        dict(correction, amount=3300),
+        dict(correction, record_version=1),
+        dict(correction, known_at="2026-01-01"),
+    ]:
+        before = fingerprint(active_data(client))
+        assert not upload(client, "invoices", [bad])["can_commit"]
+        assert fingerprint(active_data(client)) == before
+
+
+def test_legacy_invoice_can_be_completed_without_losing_its_original_clock(client):
+    full = accounting_invoice()
+    basic = {
+        k: full[k]
+        for k in (
+            "invoice_id",
+            "customer_id",
+            "issue_date",
+            "due_date",
+            "known_at",
+            "amount",
+            "currency",
+        )
+    }
+    import_all(client, {"invoices": [basic]})
+    legacy = dict(full, available_on="2026-01-03", amount_gross=full["amount"])
+    del legacy["known_at"], legacy["amount"]
+    import_all(client, {"invoices": [legacy]})
+    data = active_data(client)
+    assert (
+        len(data["invoices"]) == 1 and data["invoices"][0]["known_at"] == "2026-01-03"
+    )
+    assert observed(data, "2026-01-02").iloc[0].known_at == pd.Timestamp("2026-01-01")
+    # Changing accounting facts also requires a new knowledge day.
+    assert not upload(
+        client,
+        "invoices",
+        [dict(full, amount_net=1100, vat=0, record_version=2, known_at="2026-01-03")],
+    )["can_commit"]
+    missing_clock = accounting_invoice("NO_CLOCK")
+    del missing_clock["known_at"]
+    preview = upload(client, "invoices", [missing_clock])
+    assert preview["can_commit"] and preview["sample"][0]["known_at"] == str(
+        pd.Timestamp.now(tz="Asia/Ho_Chi_Minh").date()
+    )
+
+
+def test_adjustment_settlement_keeps_its_own_business_and_knowledge_dates(client):
+    import_all(
+        client,
+        {
+            "invoices": [accounting_invoice()],
+            "payments": [
+                dict(
+                    payment_id="P",
+                    invoice_id="ORIGINAL",
+                    amount=550,
+                    payment_date="2026-01-05",
+                    known_at="2026-01-05",
+                )
+            ],
+        },
+    )
+    delta = accounting_invoice(
+        "DELTA",
+        adjustment_type="adjustment",
+        adjusts_invoice_id="ORIGINAL",
+        amount_net=-500,
+        vat=-50,
+        amount=-550,
+        issue_date="2026-01-21",
+        known_at="2026-02-02",
+    )
+    import_all(client, {"invoices": [delta]})
+    assert pd.isna(observed(active_data(client), "2026-02-01").iloc[0].settled)
+    settled = observed(active_data(client), "2026-02-02").iloc[0]
+    assert settled.remaining_amount == 0 and settled.received == 550
+    assert settled.settled == pd.Timestamp(
+        "2026-01-21"
+    ) and settled.settled_known_at == pd.Timestamp("2026-02-02")
+
+
+def test_xml_and_excel_share_accounting_gate_and_document_identity(client):
+    original = accounting_invoice()
+    inv = pd.Series(dict(original, amount_gross=1100, term_days=31, vat_rate=0.1))
+    content = invoice_to_xml(
+        inv,
+        pd.Series(dict(name="Seller", mst=original["seller_mst"])),
+        pd.Series(dict(name="Buyer", mst=original["buyer_mst"])),
+    )
+    preview = client.post(
+        "/v1/imports/preview",
+        files={"file": ("invoice.xml", content)},
+        data=dict(kind="invoices", known_at="2026-01-02"),
+    ).json()
+    assert preview["can_commit"] and preview["mapping_locked"], preview
+    assert client.post("/v1/imports/" + preview["id"] + "/commit").is_success
+    erp = dict(original, invoice_id="ERP-ALIAS", known_at="2026-01-03")
+    workbook = io.BytesIO()
+    pd.DataFrame([erp]).to_excel(workbook, index=False, sheet_name="Invoices")
+    preview = client.post(
+        "/v1/imports/preview",
+        files={"file": ("ledger.xlsx", workbook.getvalue())},
+        data=dict(
+            kind="invoices",
+            sheet="Invoices",
+            date_format="%Y-%m-%d",
+            number_format="plain",
+        ),
+    ).json()
+    assert preview["can_commit"], preview
+    assert client.post("/v1/imports/" + preview["id"] + "/commit").is_success
+    rows = active_data(client)["invoices"]
+    assert len(rows) == 1 and rows[0]["sources"] == ["erp", "xml"]
+    assert rows[0]["source_ids"] == {"xml": "ORIGINAL", "erp": "ERP-ALIAS"}
+    assert (
+        rows[0]["source_lineage"]["xml"]["sha256"]
+        == hashlib.sha256(content).hexdigest()
+    )
+    import_all(
+        client,
+        {
+            "payments": [
+                dict(
+                    payment_id="P",
+                    invoice_id="ERP-ALIAS",
+                    payment_date="2026-01-05",
+                    known_at="2026-01-05",
+                    amount=1100,
+                )
+            ]
+        },
+    )
+    assert observed(active_data(client), "2026-01-05").iloc[0].remaining_amount == 0
+    for xml in [b'<!DOCTYPE x [<!ENTITY e "bad">]><HDon/>', b"<HDon>"]:
+        assert (
+            client.post(
+                "/v1/imports/preview",
+                files={"file": ("bad.xml", xml)},
+                data=dict(kind="invoices"),
+            ).status_code
+            == 422
+        )
+
+
+def test_invalid_lifecycle_and_accounting_rows_never_commit(client):
+    import_all(client, {"invoices": [accounting_invoice()]})
+    for row in [
+        accounting_invoice("X", buyer_mst="bad"),
+        accounting_invoice("X", vat=300),
+        accounting_invoice(
+            "X", adjustment_type="replacement", adjusts_invoice_id="MISSING"
+        ),
+        accounting_invoice("X", adjustment_type="replacement", adjusts_invoice_id="X"),
+    ]:
+        preview = upload(client, "invoices", [row])
+        assert not preview["can_commit"]
+        assert (
+            client.post("/v1/imports/" + preview["id"] + "/commit").status_code == 422
+        )
+    assert len(active_data(client)["invoices"]) == 1
+    partial = dict(accounting_invoice("X"))
+    del partial["vat"]
+    assert not upload(client, "invoices", [partial])["can_commit"]
+
+
+def test_exact_vnd_and_strict_headers(client):
+    huge = 100000000000000001
+    import_all(
+        client,
+        {"invoices": [dict(accounting_invoice(), amount_net=huge, vat=0, amount=huge)]},
+    )
+    assert active_data(client)["invoices"][0]["amount"] == huge
+    assert observed(active_data(client), "2026-01-02").iloc[0].amount == huge
+    assert observed(active_data(client), "2026-01-02").iloc[0].remaining_amount == huge
+    assert upload(
+        client,
+        "invoices",
+        [dict(accounting_invoice(), amount_net=huge, vat=0, amount=huge)],
+    )["sample"][0]["amount"] == str(huge)
+    import_all(
+        client,
+        {
+            "bank": [
+                dict(
+                    bank_id="B",
+                    account="A",
+                    date="2026-01-01",
+                    known_at="2026-01-01",
+                    direction="in",
+                    amount=1,
+                )
+            ],
+            "statements": [
+                dict(
+                    statement_id="S",
+                    account="A",
+                    start_date="2026-01-01",
+                    end_date="2026-01-01",
+                    known_at="2026-01-01",
+                    opening_balance=huge,
+                    closing_balance=huge + 1,
+                )
+            ],
+        },
+    )
+    assert not upload(
+        client,
+        "statements",
+        [
+            dict(
+                active_data(client)["statements"][0],
+                closing_balance=huge + 2,
+                known_at="2026-02-01",
+            )
+        ],
+    )["can_commit"]
+    for text in ["invoice_id,invoice_id\nI,I\n", "invoice_id,customer_id\nI,C,EXTRA\n"]:
+        assert (
+            client.post(
+                "/v1/imports/preview",
+                files={"file": ("bad.csv", text.encode())},
+                data=dict(kind="invoices"),
+            ).status_code
+            == 422
+        )
+    assert (
+        client.post(
+            "/v1/allocations",
+            json=dict(payment_id="P", invoice_id="ORIGINAL", bank_id="B", amount=0.5),
+        ).status_code
+        == 422
+    )
+    import_all(
+        client,
+        {
+            "bank": [
+                dict(
+                    bank_id="LARGE",
+                    account="A",
+                    date="2026-01-02",
+                    known_at="2026-01-02",
+                    direction="in",
+                    amount=huge,
+                )
+            ]
+        },
+    )
+    pending = client.get("/v1/reconciliation").json()["pending"]
+    assert next(r for r in pending if r["bank_id"] == "LARGE")["unallocated"] == str(
+        huge
+    )
+    assert client.post(
+        "/v1/allocations",
+        json=dict(
+            payment_id="EXACT", bank_id="LARGE", invoice_id="ORIGINAL", amount=str(huge)
+        ),
+    ).is_success
+    assert active_data(client)["payments"][0]["amount"] == huge
+    assert not upload(
+        client,
+        "bank",
+        [
+            dict(
+                bank_id="USD",
+                account="A",
+                date="2026-01-02",
+                known_at="2026-01-02",
+                direction="in",
+                amount=100,
+                currency="USD",
+            )
+        ],
+    )["can_commit"]
+
+
+def test_reviewed_bank_scope_requires_preview_and_unchanged_evidence(
+    client, tmp_path, monkeypatch
+):
+    evidence = tmp_path / "accounts.txt"
+    evidence.write_bytes(b"synthetic account confirmation")
+    registry = dict(
+        firm_id="SME",
+        source_type="bank_confirmation",
+        reviewed_by="Test",
+        reviewed_on="2026-01-01",
+        evidence_file=evidence.name,
+        evidence_sha256=hashlib.sha256(evidence.read_bytes()).hexdigest(),
+        accounts=[dict(account_id=a, bank="vcb", currency="VND") for a in ("A", "B")],
+    )
+    path = tmp_path / "scope.json"
+    path.write_text(json.dumps(registry), encoding="utf-8")
+    # The app resolves its registry when constructed, just as the research API does.
+    monkeypatch.setenv("AGENT1_BANK_ACCOUNTS_FILE", str(path))
+    app = create_app(
+        tmp_path / "scoped-data",
+        key_dir=tmp_path / "scoped-keys",
+        token="scope",
+        firm_id="SME",
+    )
+    with TestClient(app) as scoped:
+        scoped.headers["Authorization"] = "Bearer scope"
+        bank = dict(
+            bank_id="B1",
+            account="A",
+            date="2026-01-01",
+            known_at="2026-01-01",
+            direction="in",
+            amount=100,
+        )
+        assert not upload(scoped, "bank", [dict(bank, account="UNKNOWN")])["can_commit"]
+        import_all(scoped, {"bank": [bank]})
+        assert account_scope(active_data(scoped), "2026-01-01") == ["A", "B"]
+        registry["accounts"].append(dict(account_id="C", bank="vcb", currency="VND"))
+        path.write_text(json.dumps(registry), encoding="utf-8")
+        preview = upload(scoped, "bank", [bank])
+        assert preview["can_commit"] and any(
+            "Phạm vi" in w for w in preview["warnings"]
+        )
+        assert scoped.post("/v1/imports/" + preview["id"] + "/commit").is_success
+        assert account_scope(active_data(scoped), "2026-01-01") == ["A", "B", "C"]
+        preview = upload(scoped, "bank", [dict(bank, bank_id="B2")])
+        assert preview["can_commit"]
+        evidence.write_bytes(b"changed evidence")
+        assert (
+            scoped.post("/v1/imports/" + preview["id"] + "/commit").status_code == 422
+        )
+
+
 def test_vietnamese_mapping_strict_money_dates():
     raw = pd.DataFrame(
         [
@@ -103,14 +573,22 @@ def test_vietnamese_mapping_strict_money_dates():
                 "Mã khách hàng": "KH1",
                 "Ngày lập": "01/01/2026",
                 "Hạn thanh toán": "31/01/2026",
-                "Số tiền": "1.500.000,50",
+                "Số tiền": "1.500.000,00",
             }
         ]
     )
     mapping = suggested_mapping(raw.columns, "invoices")
     rows, errors, warnings = parse_rows(raw, "invoices", mapping)
-    assert not errors and rows[0]["amount"] == 1500000.5 and warnings
-    for invalid in ["1.2.3", "1,000.00", "NaN", "inf", "-50", "=SUM(1,2)"]:
+    assert not errors and rows[0]["amount"] == 1500000 and warnings
+    for invalid in [
+        "1.500.000,50",
+        "1.2.3",
+        "1,000.00",
+        "NaN",
+        "inf",
+        "-50",
+        "=SUM(1,2)",
+    ]:
         raw.loc[0, "Số tiền"] = invalid
         assert parse_rows(raw, "invoices", mapping)[1]
     raw.loc[0, "Số tiền"] = "1000"
@@ -126,14 +604,19 @@ def test_excel_native_date_and_numeric_values():
                 customer_id="C",
                 issue_date=pd.Timestamp("2026-01-01"),
                 due_date=pd.Timestamp("2026-02-01"),
-                amount=1500000.5,
+                amount=1500000.0,
             )
         ]
     )
     rows, errors, _ = parse_rows(
         raw, "invoices", suggested_mapping(raw.columns, "invoices")
     )
-    assert not errors and rows[0]["amount"] == 1500000.5
+    assert not errors and rows[0]["amount"] == 1500000
+    for value in (1500000.5, float(2**53)):
+        raw.loc[0, "amount"] = value
+        assert parse_rows(raw, "invoices", suggested_mapping(raw.columns, "invoices"))[
+            1
+        ]
 
 
 def test_duplicates_orphans_overpayments_and_schedule_clock():
@@ -400,7 +883,9 @@ def test_api_end_to_end_real_models_version_activation_and_update(client):
     assert client.get("/v1/workspace").json()["active_version"] == "second-version"
     assert client.post("/v1/models/" + version["id"] + "/activate").status_code == 200
     assert client.get("/v1/workspace").json()["active_version"] == version["id"]
-    update = dict(data["invoices"][0], amount=200000)
+    update = dict(
+        data["invoices"][0], amount=200000, known_at="2025-08-02", record_version=2
+    )
     preview = upload(client, "invoices", [update])
     assert preview["updates"] == 1
     assert client.post("/v1/imports/" + preview["id"] + "/commit").status_code == 200

@@ -51,7 +51,7 @@ Nếu dữ liệu thay đổi sau khi học, API và giao diện báo cần xem 
 
 ### Hợp đồng đầu vào SME
 
-CSV UTF-8 hoặc XLSX, cho chọn sheet (mặc định sheet đầu); ≤5 MB/file, ≤50.000 dòng, ZIP XLSX giải nén ≤30 MB.
+CSV UTF-8 hoặc XLSX, cho chọn sheet (mặc định sheet đầu), và XML hóa đơn điện tử phiên bản 2.0.0/2.0.1/2.1.0; ≤5 MB/file, ≤50.000 dòng, ZIP XLSX giải nén ≤30 MB.
 Worker học local giới hạn 50.000 hóa đơn. Mã là chuỗi ổn định; giữ số 0 đầu bằng kiểu
 Text trong Excel. File không được có dòng tổng cộng. Tên cột Việt/Anh tự nhận diện;
 người dùng có thể ghép lại trước khi lưu.
@@ -59,6 +59,7 @@ người dùng có thể ghép lại trước khi lưu.
 | Bảng | Trường bắt buộc | Trường bổ sung |
 |---|---|---|
 | `invoices` | `invoice_id`, `customer_id`, `issue_date`, `due_date`, `amount` | `known_at`, `currency` (VND) |
+| `invoice_events` | `event_id`, `invoice_id`, `event_type=cancel`, `event_date`, `known_at` | — |
 | `payments` | `payment_id`, `invoice_id`, `payment_date`, `amount` | `known_at, bank_id` |
 | `bank` | `bank_id, account, date, direction, amount` | `known_at, component` |
 | `statements` | `statement_id, account, start_date, end_date, opening_balance, closing_balance` | `known_at` |
@@ -66,18 +67,22 @@ người dùng có thể ghép lại trước khi lưu.
 | `outflows` | `expense_id`, `date`, `amount`, `category`, `known_at` | — |
 
 - Chọn rõ ngày `dd/mm/yyyy`, `yyyy-mm-dd` hoặc `dd-mm-yy`; ngày Excel bản địa được đọc trực tiếp.
-- Chọn số Việt Nam `1.500.000,50` hoặc số thuần `1500000.50`; không đoán dấu phân cách.
-- Tiền dương, hữu hạn; chỉ VND. Không tự quy đổi FX, xử lý âm/hoàn tiền/thu thừa.
-- `known_at` là ngày thông tin sẵn có, không phải ngày tải lên. Khi thiếu trên hóa đơn/
-  thanh toán, giả định bằng ngày nghiệp vụ và hiện cảnh báo; kiểm định dựa vào giả định này.
+- Chọn số Việt Nam `1.500.000,00` hoặc số thuần `1500000`; không đoán dấu phân cách.
+- Chỉ nhận VND nguyên đồng, lưu và đối chiếu bằng số nguyên, không làm tròn. Ô Excel số thực có phần lẻ hoặc vượt giới hạn nguyên chính xác bị chặn; số lớn nên để kiểu Text. Không tự quy đổi FX hoặc xử lý hoàn/thu thừa.
+- Hóa đơn có thông tin kế toán cần đủ `seller_mst, buyer_mst, symbol, invoice_no, amount_net, vat`; dùng chung `validate_invoices`, đối chiếu XML/ERP và bộ xử lý vòng đời của ingest cũ. Bảng đơn giản vẫn dùng được nhưng hiện cảnh báo chưa kiểm tra đầy đủ T0, không được làm gốc chứng từ điều chỉnh/thay thế.
+- Thay thế: `adjustment_type=replacement`; điều chỉnh: `adjustment_type=adjustment` với chênh lệch có dấu ở `amount_net, vat, amount`. Tham chiếu bằng `adjusts_invoice_id` hoặc đủ `adjusts_symbol, adjusts_invoice_no, adjusts_issue_date`. Hủy bằng `invoice_events`. Bộ kiểm tra chặn chuỗi thiếu gốc/vòng, chứng từ đã hết hiệu lực và tổng thu vượt công nợ hiệu lực. Khoản thu đi theo chuỗi thay thế, không nhân đôi.
+- XML dùng ngày/số chuẩn của XML; chọn ngày biết dữ liệu riêng trước khi xem trước. Không suy hạn thanh toán khi XML thiếu trường đó. Nguồn, dòng và SHA-256 được giữ cho chứng từ đầy đủ.
+- `known_at` (nhận cả tên cột `available_on`) là ngày thông tin sẵn có, không phải ngày tải lên. Khi thiếu trên hóa đơn đơn giản/
+  thanh toán, giả định bằng ngày nghiệp vụ và hiện cảnh báo; chứng từ kế toán đầy đủ thiếu ngày này dùng ngày nạp, tránh suy đã biết từ ngày lập. Kiểm định dựa vào ngày biết dữ liệu đó.
   Lịch chi bắt buộc có `known_at` vì ngày chi có thể ở tương lai.
 - Một khoản chuyển khoản phân bổ nhiều hóa đơn phải tách thành dòng với mã thanh toán riêng.
   Một hóa đơn trả nhiều lần giữ đủ các phần. Tổng thu không vượt giá trị hóa đơn.
 - Nhập hóa đơn trước thanh toán. Dòng lỗi chặn **cả lần lưu**; không âm thầm bỏ lỗi.
-- Cùng ID là cập nhật thay thế, ID mới là thêm. Xem trước nêu số dòng bị cập nhật;
+- Cùng ID là phiên bản sửa: ngày ghi nhận phải mới hơn; hóa đơn đổi nội dung cần tăng `record_version`. Phiên bản cũ của các bảng được giữ để dựng lại theo ngày biết dữ liệu, không dùng bản sửa đến muộn cho gốc lịch sử. Chứng từ kế toán và sự kiện hủy không bị xóa vật lý qua workspace. Xem trước nêu số dòng bị cập nhật;
   nếu dữ liệu đổi giữa xem trước và lưu, trả 409 để tránh ghi đè.
 - Mỗi lần lưu tạo snapshot bất biến và hash dữ liệu. Xóa bản ghi nhập nhầm tạo snapshot mới,
   không xóa lịch sử kiểm toán. Cần xóa thanh toán liên quan trước khi xóa hóa đơn.
+- Nếu đã cấu hình danh mục ngân hàng được duyệt (cùng `AGENT1_BANK_ACCOUNTS_FILE` của luồng cũ), workspace kiểm tra doanh nghiệp, bằng chứng/hash và tài khoản VND ở cả xem trước/lưu. Phạm vi dự báo giữ toàn bộ tài khoản được duyệt, kể cả tài khoản chưa tải sao kê. Khi chưa có danh mục, bản xem trước cảnh báo chưa xác nhận phạm vi đầy đủ.
 - Mẫu có tiền tố `DEMO_`; worker chỉ học trên bộ mẫu trong kho `DEMO_` khởi động với `-DemoTraining`.
   Xem sáu bảng thực hành tại [Đại Phát](../pilot/demo_dai_phat).
 - Phải xác nhận đã có đầy đủ các khoản thu đến ngày chốt trước **cả học và dự báo**.
@@ -165,8 +170,8 @@ Kịch bản chậm thu làm tròn lên số tuần, hệ số chi nhân lịch 
 
 | Endpoint | Mục đích |
 |---|---|
-| `GET /v1/workspace` | Số lượng dữ liệu, tiến độ job, báo cáo phiên bản, trạng thái stale |
-| `GET /v1/templates/{kind}` | Tải mẫu CSV |
+| `GET /v1/workspace` | Hồ sơ định dạng (`company_profile`), số lượng dữ liệu, tiến độ job, báo cáo phiên bản, trạng thái stale |
+| `GET /v1/templates/{kind}` | Tải mẫu CSV theo định dạng hồ sơ; khi chạy độc lập có thể chọn `date_format`, `number_format` qua query |
 | `POST /v1/imports/preview` | Multipart file, kind, mapping JSON, date_format, number_format |
 | `POST /v1/imports/{id}/commit` | Lưu snapshot đã kiểm tra |
 | `DELETE /v1/records/{kind}/{id}` | Xóa bản ghi khỏi snapshot hiện tại |
@@ -174,6 +179,12 @@ Kịch bản chậm thu làm tròn lên số tuần, hệ số chi nhân lịch 
 | `POST /v1/models/{id}/activate` | Chọn bản mới hoặc quay về bản cũ |
 | `POST /v1/predict` | Kế toán tạo dự báo/kịch bản đã lưu |
 | `GET /v1/forecasts/{id}/xlsx` | Tải Excel của dự báo đã lưu |
+| `POST /v1/portal-connect/tickets` | Token kế toán và `{company}` → mã kết nối dùng một lần, hết hạn sau 60 giây |
+| `POST /v1/portal-connect/redeem` | `{ticket}` → khóa truy cập và mã doanh nghiệp; chỉ đổi được một lần |
+
+Khi portal khởi động Agent 1, `AGENT1_COMPANY_PROFILE_FILE` trỏ tới hồ sơ riêng chỉ chứa `code`, `date_format` (`dmy` hoặc `iso`) và `number_format` (`vi-VN` hoặc `plain`). Mã phải khớp doanh nghiệp của token. Agent 1 đọc lại hồ sơ khi tải workspace, tạo mẫu và nhập tệp; các ô định dạng trong giao diện lấy từ cấu hình chung. Hồ sơ đổi sau bước xem trước thì phải kiểm tra tệp lại trước khi ghi. Khi chạy độc lập không đặt biến này, Agent 1 vẫn cho chọn định dạng từng tệp như trước.
+
+Portal dùng `POST /api/agents/agent1/connect-link` để mở tab riêng. API kế toán cấp mã ngẫu nhiên lưu tạm trong bộ nhớ của tiến trình; URL chuyển tab chỉ chứa mã này trong fragment. Agent 1 xóa fragment trước khi đổi mã qua POST cùng origin. Khóa truy cập giữ trong bộ nhớ JavaScript, không lưu vào URL hay trình duyệt. Mã hết hạn, đã đổi hoặc mất sau khi Agent 1 khởi động lại đều yêu cầu mở tab mới từ portal; truy cập trực tiếp vẫn dùng hộp kết nối thủ công. Tải lại tab riêng cũng cần kết nối lại.
 
 Job chạy riêng qua executor một worker; request vẫn trả ngay. Khởi động lại máy chủ
 đánh dấu job dở dang là lỗi có thể chạy lại, không giả báo hoàn thành. Xóa toàn DN qua

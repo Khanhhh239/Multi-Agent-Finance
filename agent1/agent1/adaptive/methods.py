@@ -19,7 +19,7 @@ from sklearn.ensemble import (
     ExtraTreesClassifier,
     HistGradientBoostingClassifier,
 )
-from .data import observed, fingerprint
+from .data import observed, fingerprint, as_of, _payment_links, payment_target
 from .cash_history import partial_distribution
 
 CATALOG = [
@@ -542,11 +542,13 @@ def forecast(
     # Keep four-week collections scores and short-term receipt cohorts comparable.
     receipt_horizon = max(13, horizon)
     clock = pd.Timestamp(cutoff)
+    data = as_of(data, clock)
     frame = observed(data, clock)
     opened = frame[frame.remaining_amount > 0.01].copy()
+    links = _payment_links([r for r in data.get("invoices", []) if r["issue_date"] <= cutoff and r["known_at"] <= cutoff])
     actions = sorted(
         (
-            r
+            dict(r, invoice_id=payment_target(r["invoice_id"], links))
             for r in data.get("actions", [])
             if r["date"] <= cutoff and r["known_at"] <= cutoff
         ),

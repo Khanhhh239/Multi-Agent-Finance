@@ -3,9 +3,12 @@
 from datetime import date, timedelta
 import numpy as np
 from .cash_history import weekly_cash
+from .data import effective_data
 
 
 def build(data, clock, accounts):
+    data = effective_data(data, clock)
+    data["invoices"] = [dict(r, issue_date=r.get("origin_issue_date", r["issue_date"])) for r in data["invoices"]]
     end = date.fromisoformat(clock)
     # Cash labels must be traceable to the same verified bank scope.
     bank = {
@@ -66,6 +69,7 @@ def point(model, kind):
 
 
 def receipts(data, origin, end, accounts):
+    data = effective_data(data, end)
     # Excludes all opening invoices even if settled after origin.
     start = date.fromisoformat(origin) + timedelta(days=1)
     if not np.isfinite(weekly_cash(data, str(start), 13, end, accounts)).all():
@@ -73,7 +77,7 @@ def receipts(data, origin, end, accounts):
     inv = {
         r["invoice_id"]
         for r in data["invoices"]
-        if r["issue_date"] > origin and r["known_at"] <= end
+        if r.get("origin_issue_date", r["issue_date"]) > origin and r["known_at"] <= end
     }
     bank = {
         r["bank_id"]

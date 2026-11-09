@@ -37,12 +37,12 @@ def source_hash(content):
     return hashlib.sha256(content).hexdigest()
 
 
-def read_csv(content, filename):
+def read_csv(content, filename, *, delimiter=','):
     try:
         stream = io.StringIO(content.decode('utf-8-sig'), newline='')
     except UnicodeDecodeError as exc:
         raise ValueError(f'{filename}: mã hóa CSV phải là UTF-8') from exc
-    reader = csv.DictReader(stream, strict=True)
+    reader = csv.DictReader(stream, strict=True, delimiter=delimiter)
     try:
         fields = reader.fieldnames
         if not fields or any(not f or not f.strip() for f in fields) or len(fields) != len(set(fields)):
@@ -59,10 +59,10 @@ def read_csv(content, filename):
     return frame
 
 
-def read_excel(content, filename):
+def read_excel(content, filename, *, sheet_name=0):
     # Preserve numeric cell types: converting a binary float to text here would
     # falsely make it look like an exact decimal source amount.
-    raw = pd.read_excel(io.BytesIO(content), header=None, dtype=object, keep_default_na=False)
+    raw = pd.read_excel(io.BytesIO(content), sheet_name=sheet_name, header=None, dtype=object, keep_default_na=False)
     if raw.empty:
         raise ValueError(f'{filename}: dòng 1: workbook trống')
     headers = [str(value).strip() for value in raw.iloc[0]]
