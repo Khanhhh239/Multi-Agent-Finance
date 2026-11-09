@@ -265,6 +265,7 @@ def start_agent(aid):
         cmd, cwd, env = launch_spec(aid)
         if not Path(cmd[0]).exists():
             raise ValueError(f'Không thấy Python cho {aid}: {cmd[0]}. Khai báo "python" trong portal/config.local.json.')
+        LOGS.mkdir(parents=True, exist_ok=True)
         log = open(LOGS / f'{aid}.log', 'ab')
         log.write(f'\n--- {time.strftime("%Y-%m-%d %H:%M:%S")} {" ".join(cmd)}\n'.encode())
         log.flush()
