@@ -3,3 +3,28 @@ portal/workspace/
 __pycache__/
 *.py[cod]
 agent3/agent3_tax_compliance/models
+
+# Local Python environments and tool caches
+.venv/
+.venv-*/
+.pytest_cache/
+.ruff_cache/
+
+# Local Agent 1 artifacts left at the root before the platform merge.
+# The active Agent 1 project now lives in /agent1/.
+/data/
+/outputs/
+/research/references/data-checks/t1/t1_adjacent_source_research.json
+/research/references/data-checks/t1/t1_erpnext_source_research.json
+/research/references/data-checks/t1/t1_global_b2g_source_research.json
+/research/references/data-checks/t1/t1_late_only_augmentation.json
+/research/references/data-checks/t1/t1_public_b2g_v01.json
+/research/references/data-checks/t1/t1_public_no_access_research.json
+/research/references/data-checks/t1/t1_real_ar_source_research.json
+/scripts/data_audit/build_t1_late_only_augmentation.py
+/scripts/data_audit/build_t1_public_b2g_dataset.py
+/scripts/data_audit/research_t1_adjacent_sources.py
+/scripts/data_audit/research_t1_erpnext_sources.py
+/scripts/data_audit/research_t1_global_b2g_sources.py
+/scripts/data_audit/research_t1_public_no_access_sources.py
+/tests/test_t1_public_b2g.py
