@@ -96,63 +96,55 @@
 
     <!-- Config -->
     <section class="view" id="view-config" aria-labelledby="h-config" hidden>
-      <div class="page-head">
-        <p class="eyebrow">Thiết lập không gian làm việc</p>
-        <h1 id="h-config">Hồ sơ doanh nghiệp</h1>
-        <p class="lead">Thông tin dùng chung để các agent nhận đúng doanh nghiệp và định dạng dữ liệu.</p>
+      <div class="profile-heading">
+        <div><p class="profile-eyebrow">Không gian làm việc / Hồ sơ</p><h1 id="h-config">Hồ sơ doanh nghiệp</h1>
+          <p class="profile-lead">Một hồ sơ thống nhất để các agent nhận đúng doanh nghiệp và xử lý dữ liệu.</p></div>
+        <span class="profile-status" id="profile-status" role="status">Đang tải hồ sơ</span>
       </div>
-      <p class="banner" id="config-lock" hidden>Hồ sơ đang được bảo vệ vì đã có gói niêm phong. <a href="#data">Mở khóa để chỉnh sửa →</a></p>
+      <div class="profile-lock" id="config-lock" hidden><div><strong>Hồ sơ đang được bảo vệ</strong><p>Gói dữ liệu đã niêm phong. Mở khóa tại Nạp dữ liệu trước khi chỉnh sửa hồ sơ.</p></div><a class="btn" href="#data">Mở khóa để chỉnh sửa <span aria-hidden="true">↗</span></a></div>
       <div class="config-layout">
-      <form id="company-form" class="form" novalidate>
-        <fieldset>
-          <legend>Thông tin pháp lý</legend>
-          <label class="field"><span class="label">Tên doanh nghiệp <i>Agent 3</i></span>
-            <input name="legal_name" required autocomplete="organization"></label>
-          <div class="row">
-            <label class="field"><span class="label">Mã số thuế <i>Agent 3</i></span>
-              <input name="tax_code" inputmode="numeric" placeholder="10 hoặc 13 chữ số"></label>
-            <label class="field"><span class="label">Mã doanh nghiệp dùng chung <i>Agent 1, 2</i></span>
-              <input name="code" required placeholder="VD: SAOVIET" autocapitalize="characters"></label>
-          </div>
-          <label class="field"><span class="label">Địa chỉ đăng ký <i>Agent 3</i></span>
-            <input name="registered_address" autocomplete="street-address"></label>
-          <label class="field"><span class="label">Ngành nghề <i>Agent 3</i></span>
-            <input name="industry" placeholder="Mỗi ngành cách nhau bằng dấu chấm phẩy"></label>
-        </fieldset>
-        <fieldset>
-          <legend>Thuế và kỳ kế toán</legend>
-          <div class="row">
-            <label class="field"><span class="label">Phương pháp tính thuế GTGT <i>Agent 3</i></span>
-              <select name="vat_method"><option value="DEDUCTION">Khấu trừ</option><option value="DIRECT">Trực tiếp</option></select></label>
-            <label class="field"><span class="label">Kỳ kê khai <i>Agent 3</i></span>
-              <select name="filing_period"><option value="MONTH">Theo tháng</option><option value="QUARTER">Theo quý</option></select></label>
-            <label class="field"><span class="label">Tháng kết thúc năm tài chính <i>Agent 3</i></span>
-              <input name="fiscal_year_end_month" type="number" min="1" max="12"></label>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Định dạng tệp nhập</legend>
-          <div class="row">
-            <label class="field"><span class="label">Ngày trong tệp <i>Agent 1, 2</i></span>
-              <select name="date_format"><option value="dmy">31/12/2026</option><option value="iso">2026-12-31</option></select></label>
-            <label class="field"><span class="label">Số tiền trong tệp <i>Agent 1</i></span>
-              <select name="number_format"><option value="vi-VN">1.250.000,50</option><option value="plain">1250000.50</option></select></label>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Liên kết mã</legend>
-          <label class="field"><span class="label">Mã doanh nghiệp ở Agent 2 <i>Agent 2</i></span>
-            <input name="agent2_company" placeholder="Để trống nếu trùng mã dùng chung">
-            <span class="hint">Agent 2 chỉ nhận dữ liệu cho doanh nghiệp đã có trong danh mục của nó. Bộ demo dùng C001 hoặc C002.</span></label>
-          <p class="hint">Agent 4 đang chạy trên kho dữ liệu demo cố định nên chưa dùng hồ sơ này.</p>
-        </fieldset>
-        <div class="form-actions">
-          <button type="submit" class="primary">Lưu cấu hình</button>
-          <span class="saved" id="saved-at"></span>
-        </div>
-        <ul class="sync" id="sync-result" aria-live="polite"></ul>
-      </form>
-      <aside class="context-panel"><span class="context-icon" aria-hidden="true">▤</span><h2>Một hồ sơ dùng chung</h2><p>Kiểm tra mã doanh nghiệp trước khi nạp tệp để dữ liệu được đưa vào đúng hồ sơ.</p><ul><li><strong>Agent 1 & 2</strong><span>Mã doanh nghiệp và định dạng tệp.</span></li><li><strong>Agent 3</strong><span>Thông tin pháp lý, mã số thuế và kỳ kê khai.</span></li><li><strong>Agent 4</strong><span>Kho mô phỏng riêng, chưa dùng hồ sơ này.</span></li></ul><a href="#data">Tiếp tục đến nạp dữ liệu →</a></aside>
+        <form id="company-form" class="form" novalidate>
+          <div id="profile-errors" class="profile-errors" tabindex="-1" role="alert" hidden></div>
+          <fieldset class="profile-section"><legend><span aria-hidden="true">01</span> Thông tin doanh nghiệp</legend>
+            <p class="profile-section-note">Thông tin pháp lý cho Agent 3; mã dùng chung kết nối doanh nghiệp với Agent 1 và 2.</p>
+            <label class="field" for="profile-legal-name"><span class="label">Tên doanh nghiệp <span class="profile-required">Bắt buộc</span></span><input id="profile-legal-name" name="legal_name" required autocomplete="organization" placeholder="Tên đầy đủ theo đăng ký doanh nghiệp"></label>
+            <div class="row">
+              <label class="field" for="profile-tax-code"><span class="label">Mã số thuế</span><input id="profile-tax-code" name="tax_code" inputmode="numeric" placeholder="10 hoặc 13 chữ số" aria-describedby="profile-tax-help"><span class="hint" id="profile-tax-help">Nhập mã số thuế để liên kết doanh nghiệp với Agent 3.</span></label>
+              <label class="field" for="profile-code"><span class="label">Mã dùng chung <span class="profile-required">Bắt buộc</span></span><input id="profile-code" name="code" required placeholder="VD: SAOVIET" autocapitalize="characters" aria-describedby="profile-code-help"><span class="hint" id="profile-code-help">Tối đa 64 ký tự: chữ không dấu, số, gạch ngang hoặc gạch dưới.</span></label>
+            </div>
+            <label class="field" for="profile-address"><span class="label">Địa chỉ đăng ký</span><input id="profile-address" name="registered_address" autocomplete="street-address" placeholder="Địa chỉ theo đăng ký doanh nghiệp"></label>
+            <label class="field" for="profile-industry"><span class="label">Ngành nghề</span><input id="profile-industry" name="industry" placeholder="VD: Bán buôn vật liệu xây dựng" aria-describedby="profile-industry-help"><span class="hint" id="profile-industry-help">Nếu có nhiều ngành, phân cách bằng dấu chấm phẩy.</span></label>
+          </fieldset>
+          <fieldset class="profile-section"><legend><span aria-hidden="true">02</span> Thuế và kỳ kế toán</legend>
+            <p class="profile-section-note">Agent 3 sử dụng các lựa chọn này để xác định phạm vi kiểm tra và kỳ kê khai.</p>
+            <div class="row">
+              <label class="field" for="profile-vat"><span class="label">Phương pháp tính thuế GTGT</span><select id="profile-vat" name="vat_method"><option value="DEDUCTION">Khấu trừ</option><option value="DIRECT">Trực tiếp</option></select></label>
+              <label class="field" for="profile-filing"><span class="label">Kỳ kê khai</span><select id="profile-filing" name="filing_period"><option value="MONTH">Theo tháng</option><option value="QUARTER">Theo quý</option></select></label>
+              <label class="field" for="profile-year-end"><span class="label">Tháng kết thúc năm tài chính</span><select id="profile-year-end" name="fiscal_year_end_month"><option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option><option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option><option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option><option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option></select></label>
+            </div>
+          </fieldset>
+          <fieldset class="profile-section"><legend><span aria-hidden="true">03</span> Định dạng dữ liệu</legend>
+            <p class="profile-section-note">Chọn cách viết trong tệp nguồn. Ngày được dùng cho Agent 1 và 2; số tiền được dùng cho Agent 1.</p>
+            <div class="row">
+              <label class="field" for="profile-date"><span class="label">Ngày trong tệp</span><select id="profile-date" name="date_format"><option value="dmy">Ngày / tháng / năm</option><option value="iso">Năm - tháng - ngày</option></select></label>
+              <label class="field" for="profile-number"><span class="label">Số tiền trong tệp</span><select id="profile-number" name="number_format"><option value="vi-VN">Dấu chấm ngăn nghìn, dấu phẩy thập phân</option><option value="plain">Không ngăn nghìn, dấu chấm thập phân</option></select></label>
+            </div>
+            <div class="profile-preview"><div><span>Ví dụ ngày</span><strong id="profile-date-preview">31/12/2026</strong></div><div><span>Ví dụ số tiền</span><strong id="profile-number-preview">1.250.000,50</strong></div><p>Chỉ xem trước định dạng, không thay đổi dữ liệu trong tệp.</p></div>
+          </fieldset>
+          <fieldset class="profile-section"><legend><span aria-hidden="true">04</span> Liên kết hệ thống</legend>
+            <p class="profile-section-note">Dùng mã riêng khi danh mục doanh nghiệp của Agent 2 có định danh khác.</p>
+            <label class="field" for="profile-agent2"><span class="label">Mã doanh nghiệp ở Agent 2 <span class="profile-optional">Không bắt buộc</span></span><input id="profile-agent2" name="agent2_company" placeholder="Để trống để dùng mã chung" aria-describedby="profile-agent2-help"><span class="hint" id="profile-agent2-help">Doanh nghiệp cần có sẵn trong danh mục Agent 2. Bộ demo dùng C001 hoặc C002.</span></label>
+          </fieldset>
+          <div class="form-actions profile-actions"><div class="profile-action-note"><strong id="profile-save-note" role="status">Thông tin được lưu trên máy này</strong><span class="saved" id="saved-at"></span></div><div class="profile-action-buttons"><button type="button" id="profile-reset">Hủy thay đổi</button><button type="submit" class="primary" id="profile-submit">Lưu hồ sơ</button></div></div>
+          <section class="profile-sync" id="profile-sync" aria-labelledby="profile-sync-title" hidden><h2 id="profile-sync-title">Lưu hồ sơ và kết nối agent</h2><p>Hồ sơ đã được lưu. Kiểm tra kết quả từng agent bên dưới trước khi tiếp tục.</p><ul class="sync" id="sync-result" aria-live="polite"></ul></section>
+        </form>
+        <aside class="profile-summary" aria-labelledby="profile-summary-title">
+          <div class="profile-summary-top"><span class="profile-summary-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V4h11v17M15 10h5v11M2 21h20M8 8h3M8 12h3M8 16h3M17 14h1M17 17h1"/></svg></span><span class="profile-summary-caption">Tóm tắt hồ sơ</span></div>
+          <h2 id="profile-summary-title">Chưa có doanh nghiệp</h2><span class="profile-summary-state" id="profile-summary-state">Chưa thiết lập</span>
+          <dl class="profile-summary-values"><dt>Mã dùng chung</dt><dd id="profile-summary-code">—</dd><dt>Mã số thuế</dt><dd id="profile-summary-tax">—</dd><dt>Thuế GTGT</dt><dd id="profile-summary-vat">—</dd><dt>Kỳ kê khai</dt><dd id="profile-summary-filing">—</dd></dl>
+          <div class="profile-consumers"><h3>Hồ sơ được sử dụng ở đâu?</h3><ul><li><strong>Agent 1 &amp; 2</strong><span>Mã doanh nghiệp và định dạng dữ liệu nhập.</span></li><li><strong>Agent 3</strong><span>Thông tin pháp lý, mã số thuế và kỳ kê khai.</span></li><li><strong>Agent 4</strong><span>Kho mô phỏng riêng, chưa dùng hồ sơ này.</span></li></ul></div>
+          <a class="profile-next" href="#data">Tiếp tục đến Nạp dữ liệu <span aria-hidden="true">→</span></a>
+        </aside>
       </div>
     </section>
 

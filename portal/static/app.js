@@ -5,6 +5,9 @@
   const STATE_TEXT = { running: "Đang chạy", starting: "Đang khởi động", stopped: "Đang tắt", "busy-port": "Cổng bị chiếm" };
   const CHECK_TEXT = { ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua", stale: "Chờ kiểm tra lại" };
   let state = null;
+  let profileSaving = false;
+  let profileVersion = 0;
+  let profileErrors = {};
   let currentAgent = null;
   let token = "";
   try { token = sessionStorage.getItem("kt-session") || ""; } catch (e) { token = ""; }
@@ -112,11 +115,89 @@
     const c = state.company;
     const form = $("company-form");
     if (!form.dataset.dirty) for (const [k, v] of Object.entries(c)) if (form.elements[k]) form.elements[k].value = v ?? "";
-    $("saved-at").textContent = c.updated_at ? "Lưu lần cuối " + c.updated_at : "";
+    profileText("saved-at", c.updated_at ? "Lưu lần cuối " + c.updated_at : "Chưa có lần lưu nào");
     const locked = Boolean(state.package) && !state.intake.unlocked;
     $("config-lock").hidden = !locked;
-    for (const input of form.elements) if (input.name) input.disabled = locked;
-    form.querySelector("button[type=submit]").disabled = locked;
+    for (const input of form.elements) if (input.name) input.disabled = locked || profileSaving;
+    form.querySelector("button[type=submit]").disabled = locked || profileSaving;
+    $("profile-reset").disabled = !form.dataset.dirty || profileSaving;
+    form.setAttribute("aria-busy", String(profileSaving));
+    profileText("profile-submit", profileSaving ? "Đang lưu hồ sơ…" : "Lưu hồ sơ");
+    const configured = Boolean(c.legal_name && c.code);
+    const dirty = Boolean(form.dataset.dirty);
+    const label = locked ? "Đang được bảo vệ" : profileSaving ? "Đang lưu hồ sơ" : dirty ? "Có thay đổi chưa lưu" : configured ? "Đã lưu" : "Chưa thiết lập";
+    profileText("profile-status", label);
+    $("profile-status").dataset.state = locked ? "locked" : dirty ? "draft" : configured ? "saved" : "empty";
+    profileText("profile-save-note", profileSaving ? "Đang lưu, vui lòng chờ" : locked ? "Mở khóa để lưu chỉnh sửa" : dirty ? "Có thay đổi chưa lưu" : "Thông tin được lưu trên máy này");
+    updateProfileSummary();
+  }
+
+  function profileText(id, text) { if ($(id).textContent !== text) $(id).textContent = text; }
+
+  function profileValues() {
+    const form = $("company-form");
+    return Object.fromEntries([...form.elements].filter((input) => input.name).map((input) => [input.name, input.value]));
+  }
+
+  function updateProfileSummary() {
+    const c = profileValues();
+    profileText("profile-summary-title", c.legal_name.trim() || "Chưa có doanh nghiệp");
+    profileText("profile-summary-state", $("company-form").dataset.dirty ? "Bản nháp chưa lưu" : state.company.code ? "Thông tin đã lưu" : "Chưa thiết lập");
+    profileText("profile-summary-code", c.code.trim() || "Chưa nhập");
+    profileText("profile-summary-tax", c.tax_code.trim() || "Chưa nhập");
+    profileText("profile-summary-vat", { DEDUCTION: "Khấu trừ", DIRECT: "Trực tiếp" }[c.vat_method] || "Chưa chọn");
+    profileText("profile-summary-filing", { MONTH: "Theo tháng", QUARTER: "Theo quý" }[c.filing_period] || "Chưa chọn");
+    profileText("profile-date-preview", c.date_format === "iso" ? "2026-12-31" : "31/12/2026");
+    profileText("profile-number-preview", c.number_format === "plain" ? "1250000.50" : "1.250.000,50");
+  }
+
+  function validateProfile(body) {
+    const errors = {};
+    if (!body.legal_name.trim()) errors.legal_name = "Nhập tên doanh nghiệp.";
+    if (!/^[A-Z0-9][A-Z0-9_-]{0,63}$/.test(body.code.trim().toUpperCase())) errors.code = "Nhập mã gồm chữ không dấu, số, gạch ngang hoặc gạch dưới, tối đa 64 ký tự.";
+    if (body.tax_code) {
+      const digits = body.tax_code.replace(/[^0-9]/g, "");
+      const weights = [31,29,23,19,17,13,7,5,3];
+      if (![10,13].includes(digits.length) || 10 - weights.reduce((sum,w,i) => sum + Number(digits[i]) * w, 0) % 11 !== Number(digits[9])) errors.tax_code = "Mã số thuế cần 10 hoặc 13 chữ số và đúng chữ số kiểm tra.";
+    }
+    for (const [key, choices] of Object.entries({ vat_method:["DEDUCTION","DIRECT"], filing_period:["MONTH","QUARTER"], date_format:["dmy","iso"], number_format:["vi-VN","plain"] })) {
+      if (!choices.includes(body[key])) errors[key] = "Chọn một giá trị hợp lệ.";
+    }
+    if (!/^(?:[1-9]|1[0-2])$/.test(body.fiscal_year_end_month)) errors.fiscal_year_end_month = "Chọn tháng kết thúc năm tài chính từ 1 đến 12.";
+    return errors;
+  }
+
+  function showProfileErrors(errors, general = "", focus = false) {
+    profileErrors = errors;
+    const form = $("company-form");
+    form.querySelectorAll(".profile-field-error").forEach((node) => node.remove());
+    for (const input of form.elements) if (input.name) { input.removeAttribute("aria-invalid"); input.removeAttribute("aria-errormessage"); }
+    const summary = $("profile-errors");
+    summary.replaceChildren();
+    summary.hidden = !general && !Object.keys(errors).length;
+    if (summary.hidden) return;
+    summary.append(el("h2", {}, general ? "Chưa lưu được hồ sơ" : "Kiểm tra lại thông tin"));
+    if (general) summary.append(el("p", {}, general));
+    for (const [key, message] of Object.entries(errors)) {
+      const input = form.elements[key];
+      input.setAttribute("aria-invalid", "true");
+      const id = input.id + "-error";
+      input.setAttribute("aria-errormessage", id);
+      input.after(el("span", { id, class:"profile-field-error" }, message));
+      summary.append(el("a", { href:"#" + input.id, onclick:(event) => { event.preventDefault(); input.focus(); } }, message));
+    }
+    if (focus) summary.focus();
+  }
+
+  function editProfile(event) {
+    if (!event.target.name) return;
+    const values = profileValues();
+    const dirty = Object.entries(values).some(([key,value]) => value !== String(state.company[key] ?? ""));
+    if (dirty) $("company-form").dataset.dirty = "1";
+    else delete $("company-form").dataset.dirty;
+    if (profileErrors[event.target.name]) { const remaining = { ...profileErrors }; delete remaining[event.target.name]; showProfileErrors(remaining); }
+    $("profile-sync").hidden = true;
+    renderConfig();
   }
 
   function renderNav() {
@@ -327,8 +408,11 @@
   }
 
   async function refresh() {
+    const version = profileVersion;
     try {
-      state = await api("/api/state");
+      const next = await api("/api/state");
+      if (version !== profileVersion && state) next.company = state.company;
+      state = next;
       if (token && !state.intake.unlocked) setToken("");
       render();
     } catch (err) {
@@ -512,21 +596,28 @@
   async function saveCompany(event) {
     event.preventDefault();
     const form = event.target;
+    if (profileSaving || (state.package && !state.intake.unlocked)) return;
     const body = Object.fromEntries(new FormData(form).entries());
-    const button = form.querySelector("button[type=submit]");
-    button.disabled = true;
+    const errors = validateProfile(body);
+    showProfileErrors(errors, "", Boolean(Object.keys(errors).length));
+    if (Object.keys(errors).length) return;
+    profileSaving = true;
+    renderConfig();
     try {
       const res = await api("/api/company", { method: "PUT", json: body });
+      profileVersion += 1;
+      state.company = res.company;
       delete form.dataset.dirty;
-      await refresh();
+      $("profile-sync").hidden = false;
       $("sync-result").replaceChildren(
-        el("li", { class: "ok" }, "Đã lưu hồ sơ. Agent 1 và Agent 2 dùng mã " + res.company.code + " cho lần nạp tiếp theo."),
-        ...Object.entries(res.sync).map(([aid, s]) => syncItem(aid, s)));
-      toast("Đã lưu cấu hình doanh nghiệp.");
+        el("li", { class: "ok" }, "Đã lưu hồ sơ doanh nghiệp " + res.company.code + "."),
+        ...Object.entries(res.sync || {}).map(([aid, s]) => syncItem(aid, s)));
+      toast("Đã lưu hồ sơ. Xem kết quả kết nối từng agent bên dưới.");
+      render();
+      await refresh();
     } catch (err) {
-      $("sync-result").replaceChildren(el("li", { class: "error" }, err.message));
-      toast(err.message, true);
-    } finally { button.disabled = false; }
+      showProfileErrors({}, err.message, !$("view-config").hidden);
+    } finally { profileSaving = false; renderConfig(); }
   }
 
   // Agent 1 asks for its access key once it has loaded inside the frame.
@@ -567,8 +658,28 @@
     }
   });
   $("company-form").addEventListener("submit", saveCompany);
-  $("company-form").addEventListener("input", (e) => (e.currentTarget.dataset.dirty = "1"));
-  $("company-form").addEventListener("change", (e) => (e.currentTarget.dataset.dirty = "1"));
+  $("company-form").addEventListener("input", editProfile);
+  $("company-form").addEventListener("change", editProfile);
+  $("profile-reset").addEventListener("click", () => {
+    if (profileSaving) return;
+    delete $("company-form").dataset.dirty;
+    showProfileErrors({});
+    $("profile-sync").hidden = true;
+    renderConfig();
+    $("profile-status").setAttribute("tabindex", "-1");
+    $("profile-status").focus({ preventScroll:true });
+  });
+  $("company-form").addEventListener("focusin", (event) => {
+    if (!event.target.matches("input,select,a,button")) return;
+    const target = event.target;
+    requestAnimationFrame(() => {
+      if (!target.isConnected || target.closest(".profile-actions")) return;
+      const bounds = target.getBoundingClientRect();
+      const actions = $("profile-submit").closest(".profile-actions").getBoundingClientRect();
+      const header = document.querySelector(".topbar").getBoundingClientRect();
+      if (bounds.bottom > actions.top - 12 || bounds.top < header.bottom + 12) target.scrollIntoView({ block:"center", behavior:"instant" });
+    });
+  });
   $("gate-form").addEventListener("submit", unlockGate);
   $("lock-now").addEventListener("click", lockNow);
   $("audit").addEventListener("toggle", (e) => e.target.open && loadAudit());
@@ -595,6 +706,7 @@
   });
 
   renderSidebar();
+  for (const input of $("company-form").elements) if (input.name || input.tagName === "BUTTON") input.disabled = true;
   show();
   refresh().then(show);
   setInterval(() => document.visibilityState === "visible" && refresh(), 4000);
