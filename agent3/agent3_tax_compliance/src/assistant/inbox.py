@@ -20,7 +20,7 @@ from ..extraction.xml_context import similarity
 
 from .intake import IntakeError, extract_zip, is_mt940, read_mt940, suggest_mapping
 from .pack import BankFormat, Pack
-from .sources import (DEFAULT_PORTAL_COLUMNS, SourceError, _find_header, parse_amount, parse_date, read_bank_statement, read_invoices,
+from .sources import (DEFAULT_PORTAL_COLUMNS, PORTAL_BANK_FORMAT, SourceError, _find_header, bank_txn_value, parse_amount, parse_date, read_bank_statement, read_invoices,
                       read_portal_list, read_table)
 
 KIND_FOLDER = {'purchase_xml': 'invoices/purchase', 'sales_xml': 'invoices/sales', 'bank': 'bank', 'portal_list': 'portal'}
@@ -65,6 +65,13 @@ def classify(path: Path, tax_code: str, pack: Pack) -> tuple[str | None, str]:
         portal = BankFormat(name='portal', columns=pack.portal_columns or DEFAULT_PORTAL_COLUMNS)
         if _find_header(rows, portal)[0] is not None:
             return 'portal_list', 'tiêu đề cột khớp bảng kê hóa đơn của cổng thuế'
+        if _find_header(rows, PORTAL_BANK_FORMAT)[0] is not None:
+            try:
+                if read_bank_statement(path, pack):
+                    return 'bank', 'sao kê dùng chung đã chuẩn hóa'
+            except SourceError as error:
+                return None, str(error)
+            return None, 'sao kê dùng chung không có giao dịch'
         try:
             suggest_mapping(path)
             return 'bank', 'có dòng tiêu đề với cột ngày và cột số tiền'
@@ -113,6 +120,23 @@ def ingest(ws: Path, name: str, raw: bytes, tax_code: str, pack: Pack) -> list[d
                     rec.update(saved_as=same.name, reason=f'{reason}; tệp này đã nạp trước đó (trùng nội dung với {same.name}), giữ một bản', duplicate=True)
                     out.append(rec)
                     continue
+                if kind == 'bank' and reason == 'sao kê dùng chung đã chuẩn hóa':
+                    rec['portal_bank'] = True
+                    incoming = {txn.txn_id: bank_txn_value(txn) for txn in read_bank_statement(p, pack)}
+                    conflict = False
+                    for old in folder.glob('sao_ke_*.csv'):
+                        with old.open('rb') as stream:
+                            is_shared = stream.readline(128).startswith(b'portal_bank_id,portal_bank_account,')
+                        if not is_shared:
+                            continue
+                        if any(txn.txn_id in incoming and incoming[txn.txn_id] != bank_txn_value(txn)
+                               for txn in read_bank_statement(old, pack)):
+                            conflict = True
+                            break
+                    if conflict:
+                        rec.update(kind=None, label='Không dùng', reason='Mã giao dịch trùng với sao kê đã nạp nhưng nội dung khác')
+                        out.append(rec)
+                        continue
                 dest = folder / 'purchase_list.csv' if kind == 'portal_list' and p.suffix.lower() == '.csv' else (
                     folder / f'purchase_list{p.suffix.lower()}' if kind == 'portal_list' else _unique(folder, n))
                 shutil.move(str(p), dest)

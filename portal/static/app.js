@@ -311,7 +311,7 @@
     const rows = state.pending.map((r) =>
       el("tr", { role: "row" },
         el("td", { role: "cell" }, el("div", { class: "file-name" }, r.name), el("div", { class: "sub" }, sizeText(r.size) + ", thêm lúc " + r.added_at.slice(11, 16))),
-        el("td", { role: "cell" }, r.label, r.note && r.targets.length ? el("div", { class: "sub" }, r.note) : null),
+        el("td", { role: "cell" }, r.label, r.note ? el("div", { class: "sub" }, r.note) : null),
         el("td", { role: "cell", class: "sub", "data-label": "Kỳ dữ liệu" }, periodText(r.period)),
         el("td", { role: "cell" }, checkLines(r)),
         el("td", { role: "cell", class: "right" }, el("div", { class: "queue-actions" },
@@ -319,7 +319,7 @@
           el("button", { type: "button", class: "link", onclick: () => dropFile(r.id) }, "Bỏ")))));
     $("queue").tBodies[0].replaceChildren(...rows);
     $("queue-empty").hidden = rows.length > 0;
-    const ready = state.pending.filter((r) => Object.values(r.checks || {}).some((c) => c.state === "ready"));
+    const ready = state.pending.filter(canWrite);
     $("reason-field").hidden = !state.package;
     const button = $("commit");
     button.disabled = !ready.length;
@@ -542,8 +542,14 @@
     refresh();
   }
 
+  function canWrite(record) {
+    const checks = Object.values(record.checks || {});
+    return checks.some((c) => c.state === "ready") &&
+      (record.kind !== "shared_bank" || checks.every((c) => c.state === "ready" || c.state === "done"));
+  }
+
   async function commitAll() {
-    const ready = state.pending.filter((r) => Object.values(r.checks || {}).some((c) => c.state === "ready"));
+    const ready = state.pending.filter(canWrite);
     const ids = ready.map((r) => r.id);
     const replaces = ready.some((r) => r.checks.agent2 && r.checks.agent2.state === "ready");
     const button = $("commit");

@@ -1,0 +1,3 @@
+bank_id,account,date,direction,amount,description,counterparty_account,counterparty_name
+MOCK-20261001-001,000012345678,2026-10-01,in,12000000,Thu hóa đơn MOCK-001,000011112222,Khách hàng mô phỏng
+MOCK-20261002-002,000012345678,2026-10-02,out,8500000,Chi hóa đơn MOCK-002,000033334444,Nhà cung cấp mô phỏng

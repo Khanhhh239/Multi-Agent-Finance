@@ -5,7 +5,9 @@ because every bank exports a different layout. XLSX is read with the standard li
 Invoices: signed XML read by the fixed-core extractor, which also runs the data guards.
 """
 import csv
+import hashlib
 import io
+import json
 import re
 import zipfile
 from datetime import date, datetime, timedelta
@@ -91,6 +93,15 @@ def parse_date(value, fmt) -> date:
 
 
 # ----------------------------------------------------------------------------- bank statements
+PORTAL_BANK_FORMAT = BankFormat(
+    name='Sao kê dùng chung',
+    columns={'bank_id': 'portal_bank_id', 'account': 'portal_bank_account', 'date': 'Ngày giao dịch',
+             'debit': 'Ghi Nợ', 'credit': 'Ghi Có', 'description': 'Nội dung',
+             'counterparty_account': 'Số tài khoản đối ứng', 'counterparty_name': 'Tên đơn vị đối ứng'},
+    date_format='%Y-%m-%d', thousands='', decimal='.',
+)
+
+
 def _find_header(rows, fmt: BankFormat):
     wanted = {k: fold(v) for k, v in fmt.columns.items() if v}
     for i, row in enumerate(rows[:40]):
@@ -102,7 +113,7 @@ def _find_header(rows, fmt: BankFormat):
 
 def read_bank_statement(path: Path, pack: Pack) -> list[BankTxn]:
     errors = []
-    for fmt in pack.bank_formats:
+    for fmt in (PORTAL_BANK_FORMAT, *pack.bank_formats):
         rows = read_table(path, fmt.delimiter)
         head, idx = _find_header(rows, fmt)
         if head is None:
@@ -121,14 +132,39 @@ def read_bank_statement(path: Path, pack: Pack) -> list[BankTxn]:
                 raise SourceError(f'{path.name} dòng {n}: có cả ghi nợ và ghi có trên cùng một dòng; kiểm tra lại cột tiền')
             if not debit and not credit:
                 continue
+            txn_id = f'{path.name}:{n}'
+            if fmt is PORTAL_BANK_FORMAT:
+                bank_id, account = str(cell('bank_id')).strip(), str(cell('account')).strip()
+                if not bank_id or not account or (debit or credit) <= 0:
+                    raise SourceError(f'{path.name} dòng {n}: mã giao dịch, tài khoản hoặc số tiền không hợp lệ')
+                identity = json.dumps([account, bank_id], ensure_ascii=False).encode('utf-8')
+                txn_id = 'portal-bank:' + hashlib.sha256(identity).hexdigest()
             out.append(BankTxn(
-                txn_id=f'{path.name}:{n}', booked=parse_date(cell('date'), fmt.date_format),
+                txn_id=txn_id, booked=parse_date(cell('date'), fmt.date_format),
                 amount=debit or credit, direction='OUT' if debit else 'IN',
                 counterparty_account=re.sub(r'\D', '', str(cell('counterparty_account'))) or None,
                 counterparty_name=str(cell('counterparty_name')).strip() or None,
                 description=str(cell('description')).strip(), source=f'{path.name} dòng {n} ({fmt.name})'))
         return out
     raise SourceError(f'{path.name}: chưa có mẫu sao kê khớp tiêu đề cột của tệp (đã thử {errors or "không có mẫu nào"})')
+
+
+def bank_txn_value(txn):
+    return (txn.booked, txn.amount, txn.direction, txn.counterparty_account, txn.counterparty_name, txn.description)
+
+
+def distinct_portal_bank_transactions(transactions):
+    """Deduplicate overlapping common exports without collapsing legitimate same-amount transfers."""
+    seen = {}
+    for txn in transactions:
+        if txn.txn_id.startswith('portal-bank:'):
+            value = bank_txn_value(txn)
+            if txn.txn_id in seen:
+                if seen[txn.txn_id] != value:
+                    raise SourceError(f'Sao kê dùng chung có mã giao dịch mâu thuẫn tại {txn.source}')
+                continue
+            seen[txn.txn_id] = value
+        yield txn
 
 
 # ----------------------------------------------------------------------------- invoices

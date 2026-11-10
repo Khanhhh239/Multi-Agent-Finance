@@ -35,7 +35,7 @@ Cổng mặc định: portal 8800, Agent 1 là 8011, Agent 2 là 8766, Agent 3 l
    - Agent 1 nhận mã doanh nghiệp, định dạng ngày và số tiền qua hồ sơ riêng của mã đó. Các giá trị hiện trong Agent 1 và áp dụng cho cả tệp nhập lẫn tệp mẫu; chỉnh tại cấu hình chung rồi kiểm tra lại tệp. Sau khi cập nhật code này, khởi động lại portal và Agent 1 một lần để bật kết nối hồ sơ.
    - Agent 3 tạo doanh nghiệp theo mã số thuế. Lần đầu cần mật khẩu quản trị Agent 3. Portal chuyển mật khẩu cho Agent 3 rồi đăng xuất ngay, không lưu lại.
    - Agent 2 chỉ nhận tệp cho doanh nghiệp đã có trong danh mục của nó. Ô "Mã doanh nghiệp ở Agent 2" dùng khi mã khác mã chung.
-2. **Nạp dữ liệu**: thả tệp vào một ô. Portal nhận dạng từng tệp và chạy bước xem trước của agent nhận. Chưa có gì được ghi ở bước này.
+2. **Nạp dữ liệu**: thả tệp vào một ô. Portal nhận dạng từng tệp và chạy bước xem trước của agent nhận. Một tệp sao kê chung được chuẩn hóa cho cả Agent 1 và Agent 3. Chưa có gì được ghi ở bước này. Xem [hướng dẫn demo và tệp mẫu](DEMO.md).
    - Bảng mẫu Agent 1 (hóa đơn, tiền về, khoản chi, sao kê, kỳ sao kê, hứa trả) đi tới Agent 1.
    - Sổ giao dịch theo mẫu Agent 2 đi tới Agent 2.
    - Hóa đơn XML, ZIP, sao kê ngân hàng và bảng kê cổng thuế đi tới Agent 3. Agent 3 tự phân loại lại.

@@ -310,7 +310,7 @@ async def inbox_upload(wid: str, name: str, request: Request):
     except IntakeError as e:
         raise HTTPException(422, str(e))
     for rec in files:
-        if rec.get('kind') == 'bank' and rec.get('saved_as'):
+        if rec.get('kind') == 'bank' and rec.get('saved_as') and not rec.get('portal_bank'):
             _auto_bank_format(ws, rec)
     return dict(files=files)
 

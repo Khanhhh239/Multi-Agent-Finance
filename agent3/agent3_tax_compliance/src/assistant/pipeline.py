@@ -21,7 +21,7 @@ from .matching import match_payments
 from .models import Report
 from .pack import load_decisions, load_pack
 from .rules import evaluate, load_ruleset, param, totals
-from .sources import read_bank_statement, read_invoices, read_portal_list
+from .sources import distinct_portal_bank_transactions, read_bank_statement, read_invoices, read_portal_list
 
 DEFAULT_RULESET = Path(__file__).resolve().parents[2] / 'configs/assistant/ruleset_2026_11_draft.json'
 STATUS_ORDER = {'AT_RISK': 0, 'REVIEW': 1, 'OPPORTUNITY': 2, 'INFO': 3}
@@ -173,6 +173,7 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
             txns.extend(read_mt940(raw, p.name))
         elif p.suffix.lower() in ('.csv', '.xlsx'):
             txns.extend(read_bank_statement(p, pack))
+    txns = list(distinct_portal_bank_transactions(txns))
     portal_file = ws / 'portal' / 'purchase_list.csv'
     portal = read_portal_list(portal_file, pack) if portal_file.exists() else None
     matches = match_payments(invoices, txns, pack.thresholds, decisions)

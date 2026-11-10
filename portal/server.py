@@ -32,12 +32,18 @@ import unicodedata
 import uuid
 import zipfile
 from base64 import b64encode
+from decimal import Decimal, InvalidOperation
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, quote, urlencode, urlsplit
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
+
+if __package__:
+    from . import bank_intake
+else:
+    import bank_intake
 
 ROOT = Path(__file__).resolve().parent.parent
 PORTAL = ROOT / 'portal'
@@ -412,28 +418,50 @@ A2_REQUIRED = {plain(c) for c in ('transaction_id', 'posted_at', 'created_at', '
                'writeoff_provision_vnd', 'production_cost_vnd')}
 
 
-def xlsx_header(raw):
-    """First non-empty row of the first sheet, read with zipfile only."""
+def xlsx_rows(raw, *, header_only=False):
+    """Read the first worksheet while keeping text identifiers and exact numeric values."""
     ns = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
     with zipfile.ZipFile(io.BytesIO(raw)) as z:
+        if sum(member.file_size for member in z.infolist()) > 64 * 1024 * 1024:
+            raise ValueError('Excel vượt 64 MB sau khi giải nén')
         shared = []
         if 'xl/sharedStrings.xml' in z.namelist():
             for si in ElementTree.fromstring(z.read('xl/sharedStrings.xml')).findall('m:si', ns):
                 shared.append(''.join(t.text or '' for t in si.iter(f'{{{ns["m"]}}}t')))
         sheets = sorted(n for n in z.namelist() if re.fullmatch(r'xl/worksheets/sheet\d+\.xml', n))
         if not sheets:
-            return []
+            return
+        seen_header = False
         for row in ElementTree.fromstring(z.read(sheets[0])).iter(f'{{{ns["m"]}}}row'):
-            values = []
+            cells = {}
             for cell in row.findall('m:c', ns):
+                column = re.match(r'[A-Z]+', cell.get('r', ''))
+                if not column:
+                    raise ValueError('Vị trí ô Excel không hợp lệ')
+                idx = 0
+                for letter in column[0]:
+                    idx = idx * 26 + ord(letter) - 64
+                if idx > 16384:
+                    raise ValueError('Vị trí cột Excel không hợp lệ')
+                if not header_only and cell.find('m:f', ns) is not None:
+                    raise ValueError('Sao kê Excel không được có công thức; xuất lại dưới dạng giá trị')
                 v = cell.find('m:v', ns)
                 text = ''.join(t.text or '' for t in cell.iter(f'{{{ns["m"]}}}t')) if cell.get('t') == 'inlineStr' else (v.text if v is not None else '')
                 if cell.get('t') == 's' and text:
                     text = shared[int(text)]
-                values.append(text or '')
-            if any(x.strip() for x in values):
-                return values
-    return []
+                elif text and cell.get('t') in (None, 'n') and not header_only:
+                    text = Decimal(text)
+                cells[idx - 1] = text if text is not None else ''
+            values = [cells.get(i, '') for i in range(max(cells, default=-1) + 1)]
+            if seen_header or any(str(x).strip() for x in values):
+                yield values
+                seen_header = True
+                if header_only:
+                    return
+
+
+def xlsx_header(raw):
+    return next(xlsx_rows(raw, header_only=True), [])
 
 
 def csv_header(raw):
@@ -463,6 +491,12 @@ def classify(name, raw):
     cols = {plain(c) for c in header if str(c).strip()}
     if A2_REQUIRED <= cols:
         return dict(base, kind='transactions', label='Sổ giao dịch', targets=['agent2'], columns=len(cols))
+    try:
+        if bank_intake.columns(header, plain):
+            return dict(base, kind='shared_bank', label='Sao kê dùng chung', targets=['agent1', 'agent3'],
+                        note='Một tệp gốc, hệ thống tự chuẩn hóa cho dòng tiền và thuế GTGT.')
+    except ValueError as exc:
+        return dict(base, note=str(exc))
     for kind, (label, spec) in A1_TABLES.items():
         if all(canon in cols or any(a in cols for a in aliases) for canon, aliases in spec.items()):
             return dict(base, kind=f'a1:{kind}', label=label, targets=['agent1'], columns=len(cols))
@@ -594,11 +628,17 @@ def slot_of(kind):
             'statement_or_list': 'agent3:list'}.get(kind, '')
 
 
+def target_slot(record, aid):
+    if record.get('kind') == 'shared_bank':
+        return 'agent1:bank' if aid == 'agent1' else 'agent3:list'
+    return record.get('slot')
+
+
 def slots_state(pending_records):
-    sealed = {f.get('slot') for b in current_batches() for f in b['files']
-              if any(result.get('state') == 'done' for result in f.get('results', {}).values())}
-    waiting = {r.get('slot') for r in pending_records
-               if any(c.get('state') == 'ready' for c in r.get('checks', {}).values())}
+    sealed = {target_slot(f, aid) for b in current_batches() for f in b['files']
+              for aid, result in f.get('results', {}).items() if result.get('state') == 'done'}
+    waiting = {target_slot(r, aid) for r in pending_records
+               for aid, check_result in r.get('checks', {}).items() if check_result.get('state') == 'ready'}
     out = []
     for aid, key, label in SLOTS:
         s = f'{aid}:{key}'
@@ -689,14 +729,28 @@ def add_file(name, raw):
     if not context['code']:
         raise ValueError('Lưu hồ sơ doanh nghiệp trước khi nạp tệp.')
     clean = re.sub(r'[^\w.\-]', '_', Path(name).name)[:120] or 'tep'
+    classification = classify(clean, raw)
+    digest = hashlib.sha256(raw).hexdigest()
+    if classification['kind'] == 'shared_bank':
+        for existing in pending():
+            if existing.get('sha256') == digest and existing.get('intake_context') == context:
+                return existing
+        received = {aid: result for batch in current_batches() for item in batch['files']
+                    if item.get('kind') == 'shared_bank' and item.get('sha256') == digest
+                    and item.get('intake_context') == context
+                    for aid, result in item.get('results', {}).items() if result.get('state') == 'done'}
+        if set(received) >= set(classification['targets']):
+            raise ValueError('Sao kê này đã được ghi vào cả Agent 1 và Agent 3 cho doanh nghiệp đang chọn.')
     fid = uuid.uuid4().hex[:12]
     (PENDING / f'{fid}.bin').write_bytes(raw)
     record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'),
-                  intake_context=context, **classify(clean, raw))
+                  intake_context=context, **classification)
     record['slot'] = slot_of(record['kind'])
     record['period'] = period_of(clean, raw, record['kind'])
-    record['sha256'] = hashlib.sha256(raw).hexdigest()
-    record['checks'] = {aid: check(aid, record, raw) for aid in record['targets']}
+    record['sha256'] = digest
+    if classification['kind'] == 'shared_bank' and received:
+        record['applied'] = received
+    record['checks'] = preview_file(record, raw)
     write_json(PENDING / f'{fid}.json', record)
     return record
 
@@ -707,8 +761,13 @@ def recheck(fid):
         raise ValueError('Lưu hồ sơ doanh nghiệp trước khi kiểm tra tệp.')
     record = pending_file(fid, context)
     raw = (PENDING / f'{fid}.bin').read_bytes()
-    record['checks'] = {aid: check(aid, record, raw) for aid in record['targets']}
+    if record.get('applied') and record.get('intake_context') != context:
+        raise ValueError('Tệp đã ghi một phần với cấu hình cũ. Giữ nguyên hồ sơ để ghi tiếp.')
+    if not record.get('applied'):
+        record.update(classify(record['name'], raw))
+        record['slot'] = slot_of(record['kind'])
     record['intake_context'] = context
+    record['checks'] = preview_file(record, raw)
     write_json(PENDING / f'{fid}.json', record)
     return record
 
@@ -730,16 +789,44 @@ def agent2_company():
     return c.get('agent2_company') or c['code']
 
 
-def check(aid, record, raw):
+def shared_bank_rows(record, raw):
+    rows = (xlsx_rows(raw) if record['name'].lower().endswith('.xlsx') else
+            (row for row in bank_intake.csv_rows(raw) if any(cell.strip() for cell in row)))
+    header = next(rows, [])
+    fields = bank_intake.columns(header, plain)
+    if fields is None:
+        raise ValueError('Thiếu cột sao kê dùng chung. Xem mẫu trên màn Nạp dữ liệu.')
+    return bank_intake.normalize_rows(rows, fields, record['intake_context']['number_format'], plain)
+
+
+def preview_file(record, raw):
+    rows = None
+    if record['kind'] == 'shared_bank':
+        try:
+            rows = shared_bank_rows(record, raw)
+        except (ValueError, InvalidOperation, csv.Error, ElementTree.ParseError, zipfile.BadZipFile) as exc:
+            return {aid: dict(state='error', message=str(exc)) for aid in record['targets']}
+        record['period'] = [min(row[2] for row in rows), max(row[2] for row in rows)]
+    applied = record.get('applied', {})
+    return {aid: applied[aid] if aid in applied else check(aid, record, raw, bank_rows=rows)
+            for aid in record['targets']}
+
+
+def check(aid, record, raw, *, bank_rows=None):
     """Run the agent's own preview; nothing is written to the agent here."""
     c = company()
     if not health(aid):
         return dict(state='offline', message='Agent chưa bật. Bật ở trang Tổng quan rồi bấm Kiểm tra lại.')
     if aid == 'agent1':
         key = agent1_key()
-        body, ctype = multipart(dict(kind=record['kind'].split(':', 1)[1], mapping='{}',
-                                     date_format='%Y-%m-%d' if c['date_format'] == 'iso' else '%d/%m/%Y',
-                                     number_format=c['number_format']), 'file', record['name'], raw)
+        shared = bank_rows is not None
+        kind = 'bank' if shared else record['kind'].split(':', 1)[1]
+        mapping = json.dumps({field: field for field in ('bank_id', 'account', 'date', 'direction', 'amount', 'known_at', 'component')}) if shared else '{}'
+        body, ctype = multipart(dict(kind=kind, mapping=mapping,
+                                     date_format='%Y-%m-%d' if shared or c['date_format'] == 'iso' else '%d/%m/%Y',
+                                     number_format='plain' if shared else c['number_format']), 'file',
+                                'sao_ke_chung.csv' if shared else record['name'],
+                                bank_intake.project(bank_rows, aid) if shared else raw)
         status, res = call('POST', agent_url('agent1', '/v1/imports/preview'), body,
                            {'Authorization': f'Bearer {key}', 'Content-Type': ctype})
         if status != 200:
@@ -777,6 +864,11 @@ def check(aid, record, raw):
         wid = agent3_workspace()
         if not wid:
             return dict(state='error', message='Cần mã số thuế hợp lệ trong Cấu hình để Agent 3 tạo không gian làm việc.')
+        if bank_rows is not None:
+            workspace = ensure_agent3_workspace()
+            if workspace['state'] != 'ok':
+                return dict(state='error', message=workspace['message'])
+            return dict(state='ready', rows=len(bank_rows), message=f'{len(bank_rows)} dòng sao kê đã chuẩn hóa')
         return dict(state='ready', message='Agent 3 tự phân loại khi ghi; tệp trùng nội dung không bị nạp hai lần.')
     return dict(state='error', message='Agent này chưa nhận tệp.')
 
@@ -849,16 +941,36 @@ def commit(fids, reason=''):
     for record in records:
         fid = record['id']
         raw = (PENDING / f'{fid}.bin').read_bytes()
+        shared = record['kind'] == 'shared_bank'
+        bank_rows = None
+        applied = record.get('applied', {})
+        if shared:
+            if not all(aid in applied or record['checks'].get(aid, {}).get('state') == 'ready' for aid in record['targets']):
+                continue
+            bank_rows = shared_bank_rows(record, raw)
+            # Keep the original once per company, including when a downstream write needs a retry.
+            archive = WORK / 'bank_sources' / hashlib.sha256(context['code'].encode()).hexdigest()
+            archive.mkdir(parents=True, exist_ok=True)
+            original = archive / hashlib.sha256(raw).hexdigest()
+            if not original.exists():
+                original.write_bytes(raw)
         outcome = {}
         for aid in record['targets']:
+            if aid in applied:
+                outcome[aid] = applied[aid]
+                continue
             chk = record.get('checks', {}).get(aid, {})
             if chk.get('state') != 'ready':
                 outcome[aid] = dict(state='skipped', message='Chưa qua kiểm tra nên không ghi.')
                 continue
             if aid == 'agent1':
-                chk = check('agent1', record, raw)          # fresh preview: an earlier write in this batch changes the base
+                chk = check('agent1', record, raw, bank_rows=bank_rows)  # fresh preview after earlier writes
                 if chk.get('state') != 'ready':
                     outcome[aid] = dict(state='error', message=chk.get('message', 'Kiểm tra lại không đạt.'))
+                    if shared:
+                        record['checks'][aid] = outcome[aid]
+                        write_json(PENDING / f'{fid}.json', record)
+                        break
                     continue
                 status, res = call('POST', agent_url('agent1', f'/v1/imports/{chk["preview"]}/commit'), b'',
                                    {'Authorization': f'Bearer {agent1_key()}'})
@@ -880,20 +992,32 @@ def commit(fids, reason=''):
                 if ws['state'] != 'ok':
                     outcome[aid] = dict(state='error', message=ws['message'])
                     continue
-                status, res = call('PUT', agent_url('agent3', f'/api/workspaces/{ws["id"]}/inbox?name={quote(record["name"])}'), raw,
+                content = bank_intake.project(bank_rows, aid) if shared else raw
+                name = f'sao_ke_{hashlib.sha256(content).hexdigest()[:16]}.csv' if shared else record['name']
+                status, res = call('PUT', agent_url('agent3', f'/api/workspaces/{ws["id"]}/inbox?name={quote(name)}'), content,
                                    {'Content-Type': 'application/octet-stream'}, timeout=600)
                 if status == 200:
                     used = [f for f in res.get('files', []) if f.get('label') != 'Không dùng']
-                    outcome[aid] = dict(state='done' if used else 'skipped',
+                    rejection = '; '.join(f.get('reason', '') for f in res.get('files', []))
+                    outcome[aid] = dict(state='done' if used else 'error' if shared else 'skipped',
                                         message=(f'Đã nạp {len(used)} tệp: ' + ', '.join(sorted({f["label"] for f in used})))
-                                        if used else 'Agent 3 không dùng tệp này.')
+                                        if used else rejection or 'Agent 3 không dùng tệp này.')
                 else:
                     outcome[aid] = dict(state='error', message=res.get('error', f'Lỗi {status}'))
+            if shared:
+                if outcome[aid]['state'] == 'done':
+                    applied[aid] = outcome[aid]
+                    record['applied'] = applied
+                record['checks'][aid] = outcome[aid]
+                write_json(PENDING / f'{fid}.json', record)
+                if outcome[aid]['state'] != 'done':
+                    break
         if any(v['state'] == 'done' for v in outcome.values()):
             entries.append(dict(name=record['name'], label=record['label'], size=record['size'], sha256=record.get('sha256')
-                                or hashlib.sha256(raw).hexdigest(), slot=record.get('slot', ''), period=record.get('period'),
-                                results=outcome))
-            if all(v['state'] in ('done', 'skipped') for v in outcome.values()):
+                                or hashlib.sha256(raw).hexdigest(), kind=record['kind'], slot=record.get('slot', ''), period=record.get('period'),
+                                results=outcome, **({'intake_context': context} if shared else {})))
+            if (len(applied) == len(record['targets']) if shared else
+                    all(v['state'] in ('done', 'skipped') for v in outcome.values())):
                 completed.append(fid)
     if not entries:
         raise ValueError('Không tệp nào được ghi. Xem kết quả kiểm tra của từng tệp.')
