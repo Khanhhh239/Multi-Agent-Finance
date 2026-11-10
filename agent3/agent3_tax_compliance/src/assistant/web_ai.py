@@ -8,6 +8,7 @@ import csv
 import io
 import json
 import threading
+import contextvars
 import zipfile
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -19,6 +20,8 @@ from ..lawbase import rag
 from ..lawbase.store import Corpus
 from . import ai as ai_mod
 from .web import LAW_DB, _as_of, _json, _run, app, ws_path
+from . import web as _web
+from .platform_context import LOCK_HELD, writing
 
 _jobs: dict = {}
 _gpu = threading.Lock()
@@ -36,22 +39,32 @@ def _read(path: Path, default):
 
 
 def _write(path: Path, data):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix('.tmp')
-    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=1, default=str), encoding='utf-8')
-    tmp.replace(path)
+    with writing():
+        _web.bridge.require()
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_suffix('.tmp')
+        tmp.write_text(json.dumps(data, ensure_ascii=False, indent=1, default=str), encoding='utf-8')
+        _web.bridge.require()
+        tmp.replace(path)
 
 
 def _start(wid: str, task: str, work):
+    context = contextvars.copy_context()
+    revision = _web.bridge.require(wid)['profile_revision']
     job = _jobs.get(wid)
     if job and job['running']:
         raise HTTPException(409, f'đang chạy việc {job["task"]}; chờ xong rồi thử lại')
-    job = _jobs[wid] = dict(task=task, running=True, done=0, total=0, error=None, started=datetime.now().isoformat(timespec='seconds'))
+    job = _jobs[wid] = dict(task=task, profile_revision=revision, running=True, done=0, total=0, error=None, started=datetime.now().isoformat(timespec='seconds'))
 
     def run():
         try:
             with _gpu:
-                work(job)
+                def guarded():
+                    LOCK_HELD.set(False)  # The request releases its lock before this background job writes.
+                    _web.bridge.require(wid)
+                    work(job)
+                    _web.bridge.require(wid)
+                context.run(guarded)
         except Exception as e:  # noqa: BLE001 - shown to the user
             job['error'] = f'{type(e).__name__}: {str(e)[:300]}'
         finally:
@@ -64,9 +77,12 @@ def _start(wid: str, task: str, work):
 @app.get('/api/workspaces/{wid}/ai')
 def ai_status(wid: str):
     ws = ws_path(wid)
+    job = _jobs.get(wid)
+    if job and job.get('profile_revision') != _web.bridge.require(wid)['profile_revision']:
+        job = None
     labels = _read(ws / 'ai' / 'line_labels.json', {})
     flagged = sum(1 for r in labels.values() if ai_mod.flagged(r['labels']))
-    return _json(dict(job=_jobs.get(wid), model=ai_mod.MODEL, labelled_invoices=len(labels), flagged_invoices=flagged,
+    return _json(dict(job=job, model=ai_mod.MODEL, labelled_invoices=len(labels), flagged_invoices=flagged,
                       proposals=_read(ws / 'ai' / 'bank_links.json', [])))
 
 
@@ -183,6 +199,7 @@ async def dossier(wid: str, request: Request):
             c.close()
     with _gpu:
         letter = ai_mod.draft_letter(ai_mod.AI(), company, facts, passages, request_text)
+    _web.bridge.require(ws.name)
     stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     out = ws / 'out' / 'dossier'
     out.mkdir(parents=True, exist_ok=True)
@@ -495,6 +512,7 @@ def export_xlsx(wid: str, kind: str):
     else:
         raise HTTPException(404, 'không có bảng này')
     out = ws / 'out' / f'{kind}.xlsx'
+    _web.bridge.require(ws.name)
     out.parent.mkdir(parents=True, exist_ok=True)
     _write_xlsx(out, [[str(c) if not isinstance(c, (int, float)) else c for c in r] for r in rows])
     return FileResponse(out, filename=f'{kind}.xlsx', media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

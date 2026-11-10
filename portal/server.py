@@ -71,6 +71,7 @@ for folder in (PENDING, LOGS):
     folder.mkdir(parents=True, exist_ok=True)
 LOCK = threading.RLock()
 AGENT4_TOKEN = secrets.token_urlsafe(24)          # lives only as long as this shell; the chat never sees it
+AGENT3_TOKEN = secrets.token_urlsafe(32)          # backend bridge only; never returned in portal state
 
 
 def path_of(value, default):
@@ -239,6 +240,9 @@ def launch_spec(aid):
         env.update(AGENT4_DEMO_TOKEN=AGENT4_TOKEN)
     env.update({k: str(path_of(v, v)) if k.endswith(('_DIR', '_STORE', 'WORKSPACES')) else str(v)
                 for k, v in agent_cfg(aid).get('env', {}).items()})
+    if aid == 'agent3':
+        env.update(AGENT3_COMPANY_PROFILE_FILE=str(COMPANY_FILE), AGENT3_PORTAL_URL=ORIGIN,
+                   AGENT3_PLATFORM_TOKEN=AGENT3_TOKEN)
     return [agent_python(aid), *cmd], root, env
 
 
@@ -878,52 +882,16 @@ def agent3_workspace():
     return tax if tax and mst_ok(tax) else ''
 
 
-def agent3_admin_cookie(password):
-    """Log in to Agent 3 (or set its first admin password) and return the session cookie. The password is not kept."""
-    status, info = call('GET', agent_url('agent3', '/api/admin/status'))
-    if status != 200:
-        raise ValueError('Agent 3 chưa bật.')
-    action = 'login' if info.get('configured') else 'setup'
-    req = Request(agent_url('agent3', f'/api/admin/{action}'), method='POST',
-                  data=json.dumps({'password': password}).encode('utf-8'), headers={'Content-Type': 'application/json'})
-    try:
-        with urlopen(req, timeout=20) as r:
-            cookie = r.headers.get('Set-Cookie', '').split(';', 1)[0]
-    except HTTPError as e:
-        try:
-            detail = json.loads(e.read()).get('detail')
-        except ValueError:
-            detail = None
-        raise ValueError(f'Agent 3: {detail or e.code}') from None
-    if not cookie:
-        raise ValueError('Agent 3 không cấp phiên quản trị.')
-    return cookie, action
-
-
 def ensure_agent3_workspace(password=None):
-    c = company()
-    wid = agent3_workspace()
-    if not wid:
-        return dict(state='skipped', message='Chưa có mã số thuế hợp lệ.')
-    status, listing = call('GET', agent_url('agent3', '/api/workspaces'))
+    """Synchronize from the shared file through the backend-only bridge."""
+    status, result = call('POST', agent_url('agent3', '/api/platform/sync'), {},
+                          {'X-Agent3-Platform-Token': AGENT3_TOKEN})
+    if status == 0:
+        return dict(state='offline', message='Agent 3 chưa bật. Khởi động Agent 3 từ portal để đồng bộ hồ sơ.')
     if status != 200:
-        return dict(state='offline', message='Agent 3 chưa bật; sẽ tạo khi bật và lưu lại cấu hình.')
-    if any(w.get('id') == wid for w in listing):
-        return dict(state='ok', message=f'Đã có không gian {wid} ở Agent 3.', id=wid)
-    profile = dict(tax_code=c['tax_code'], legal_name=c['legal_name'], registered_address=c['registered_address'] or None,
-                   vat_method=c['vat_method'], filing_period=c['filing_period'],
-                   industry=[x.strip() for x in re.split(r'[;\n]', str(c['industry'])) if x.strip()],
-                   fiscal_year_end_month=c['fiscal_year_end_month'])
-    if not password:
-        return dict(state='needs_admin', message='Agent 3 cần mật khẩu quản trị để tạo doanh nghiệp. Nhập bên dưới; '
-                                                 'lần đầu, mật khẩu này trở thành mật khẩu quản trị của Agent 3.')
-    cookie, action = agent3_admin_cookie(password)
-    status, res = call('POST', agent_url('agent3', '/api/workspaces'), dict(id=wid, profile=profile, by='portal'), {'Cookie': cookie})
-    call('POST', agent_url('agent3', '/api/admin/logout'), b'', {'Cookie': cookie})
-    if status != 200:
-        return dict(state='error', message=f'Agent 3 từ chối hồ sơ: {res.get("error", status)}')
-    extra = ' Đã đặt mật khẩu quản trị Agent 3.' if action == 'setup' else ''
-    return dict(state='ok', message=f'Đã tạo doanh nghiệp {wid} ở Agent 3.{extra}', id=wid)
+        return dict(state='error', message='Không đồng bộ được Agent 3. Kiểm tra hồ sơ chung và khởi động lại Agent 3 từ portal.')
+    return dict(state='ok', id=result['workspace_id'], profile_revision=result['profile_revision'],
+                message='Hồ sơ Agent 3 đã đồng bộ từ portal.')
 
 
 def commit(fids, reason=''):
@@ -987,15 +955,15 @@ def commit(fids, reason=''):
                                 else dict(state='error', message=res.get('error', f'Lỗi {status}')))
             elif aid == 'agent3':
                 ws = ensure_agent3_workspace()
-                if ws['state'] == 'needs_admin':
-                    ws['message'] = 'Chưa có doanh nghiệp này ở Agent 3. Vào Cấu hình, nhập mật khẩu quản trị Agent 3 để tạo.'
+                if ws['state'] == 'ok' and intake_context() != context:
+                    ws = dict(state='error', message='Hồ sơ doanh nghiệp đã đổi trong khi ghi. Kiểm tra lại tệp trước khi gửi Agent 3.')
                 if ws['state'] != 'ok':
                     outcome[aid] = dict(state='error', message=ws['message'])
                     continue
                 content = bank_intake.project(bank_rows, aid) if shared else raw
                 name = f'sao_ke_{hashlib.sha256(content).hexdigest()[:16]}.csv' if shared else record['name']
                 status, res = call('PUT', agent_url('agent3', f'/api/workspaces/{ws["id"]}/inbox?name={quote(name)}'), content,
-                                   {'Content-Type': 'application/octet-stream'}, timeout=600)
+                                   {'Content-Type': 'application/octet-stream', 'X-Agent3-Profile-Revision': ws['profile_revision']}, timeout=600)
                 if status == 200:
                     used = [f for f in res.get('files', []) if f.get('label') != 'Không dùng']
                     rejection = '; '.join(f.get('reason', '') for f in res.get('files', []))

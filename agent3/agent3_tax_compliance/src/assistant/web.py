@@ -9,8 +9,9 @@ import dataclasses
 import json
 import os
 import re
-import shutil
 import threading
+import hmac
+import anyio
 from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
@@ -28,7 +29,6 @@ from .intake import IntakeError, extract_zip, suggest_mapping
 from .sources import read_bank_statement
 from .rules import load_ruleset, param
 from .pack import PackError, load_pack
-from .synth import generate as generate_demo
 
 PROJECT = Path(__file__).resolve().parents[2]
 WORKSPACES = Path(os.environ.get('AGENT3_WORKSPACES') or PROJECT / 'data/workspaces')   # the override is only for interface tests
@@ -38,6 +38,70 @@ ID = re.compile(r'^[a-z0-9][a-z0-9-]{1,40}$')
 app = FastAPI(title='Agent 3 - Trợ lý thuế')
 from . import admin as _admin  # noqa: E402
 _admin.install(app)
+
+from .platform_context import Bridge, LOCK as PLATFORM_LOCK, LOCK_HELD, REVISION, etag, writing
+
+
+def _bridge_save(ws, data, by):
+    _save_pack(ws, data, by, trusted=True)
+
+
+bridge = Bridge(os.environ.get('AGENT3_COMPANY_PROFILE_FILE'), os.environ.get('AGENT3_PLATFORM_TOKEN', ''),
+                os.environ.get('AGENT3_PORTAL_URL', ''), WORKSPACES, _bridge_save)
+
+
+@app.on_event('startup')
+def sync_platform_startup():
+    try:
+        with PLATFORM_LOCK:
+            bridge.sync()
+    except HTTPException:
+        pass  # The context endpoint explains the problem without opening old data.
+
+
+@app.middleware('http')
+async def platform_boundary(request, call_next):
+    path = request.url.path
+    if request.method == 'POST' and path in ('/api/workspaces', '/api/demo'):
+        return JSONResponse({'detail': 'Doanh nghiệp được quản lý tại portal.'}, status_code=410)
+    protected = path.startswith('/api/workspaces/') or path == '/api/platform/sync'
+    if not protected:
+        return await call_next(request)
+    # Do not occupy the worker pool while a long model job owns the disk lock.
+    while not PLATFORM_LOCK.acquire(blocking=False):
+        await anyio.sleep(.025)
+    token = None
+    held = LOCK_HELD.set(True)
+    try:
+        if path.startswith('/api/workspaces/'):
+            revision = request.headers.get('X-Agent3-Profile-Revision', '')
+            if request.method == 'GET' and (path.endswith(('.xlsx', '.html', '.zip'))):
+                revision = revision or request.query_params.get('profile_revision', '')
+            c = bridge.require(path.split('/')[3], revision)
+            token = REVISION.set(c['profile_revision'])
+        response = await call_next(request)
+        if token is not None:
+            bridge.require()
+        return response
+    except HTTPException as exc:
+        return JSONResponse({'detail': exc.detail}, status_code=exc.status_code)
+    finally:
+        if token is not None:
+            REVISION.reset(token)
+        LOCK_HELD.reset(held)
+        PLATFORM_LOCK.release()
+
+
+@app.get('/api/platform/context')
+def platform_context():
+    return bridge.context()
+
+
+@app.post('/api/platform/sync')
+def platform_sync(request: Request):
+    if not bridge.token or not hmac.compare_digest(request.headers.get('X-Agent3-Platform-Token', ''), bridge.token):
+        raise HTTPException(403, 'Kết nối portal chưa được xác thực. Khởi động lại Agent 3 từ portal.')
+    return bridge.sync()
 
 
 def _warm_up():
@@ -62,6 +126,7 @@ def _json(obj, status=200):
 
 
 def ws_path(wid: str) -> Path:
+    bridge.require(wid)
     if not ID.match(wid):
         raise HTTPException(400, 'mã không gian làm việc không hợp lệ')
     p = WORKSPACES / wid
@@ -81,8 +146,14 @@ def _pack_diff(old: dict, new: dict) -> list[str]:
     return [labels.get(k, k) for k in sorted(set(old) | set(new)) if k not in ('pack_version',) and old.get(k) != new.get(k)]
 
 
-def _save_pack(ws: Path, data: dict, by: str = ''):
+def _save_pack(ws: Path, data: dict, by: str = '', trusted=False):
+    if not isinstance(data, dict):
+        raise HTTPException(422, 'Cấu hình phải là một đối tượng JSON.')
     old = json.loads((ws / 'pack.json').read_text(encoding='utf-8')) if (ws / 'pack.json').exists() else {}
+    if not trusted:
+        bridge.require(ws.name)
+        if data.get('profile') != old.get('profile') or data.get('simulated') != old.get('simulated'):
+            raise HTTPException(422, 'Hồ sơ doanh nghiệp chỉ được cập nhật từ portal.')
     tmp = ws / 'pack.json.tmp'
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
     try:
@@ -90,6 +161,8 @@ def _save_pack(ws: Path, data: dict, by: str = ''):
     except PackError as e:
         tmp.unlink()
         raise HTTPException(422, str(e))
+    if not trusted:
+        bridge.require(ws.name)
     tmp.replace(ws / 'pack.json')
     changed = _pack_diff(old, data)
     if changed:                                          # who changed which part of the configuration, and when
@@ -97,7 +170,9 @@ def _save_pack(ws: Path, data: dict, by: str = ''):
         hist = json.loads(hist_path.read_text(encoding='utf-8')) if hist_path.exists() else []
         hist.append(dict(at=datetime.now().isoformat(timespec='seconds'), by=by or 'không ghi', changed=changed,
                          created=not old))
-        hist_path.write_text(json.dumps(hist[-200:], ensure_ascii=False, indent=1), encoding='utf-8')
+        hist_tmp = hist_path.with_suffix('.tmp')
+        hist_tmp.write_text(json.dumps(hist[-200:], ensure_ascii=False, indent=1), encoding='utf-8')
+        hist_tmp.replace(hist_path)
 
 
 def _as_of(ws: Path) -> date:
@@ -115,9 +190,11 @@ def schema():
 
 @app.get('/api/workspaces')
 def list_workspaces():
-    WORKSPACES.mkdir(parents=True, exist_ok=True)
+    context = bridge.context()
+    if context['state'] != 'ready':
+        return []
     out = []
-    for p in sorted(WORKSPACES.iterdir()):
+    for p in [WORKSPACES / context['workspace_id']]:
         if (p / 'pack.json').exists():
             d = _pack_data(p)
             files = {f['key']: len(list((p / f['folder']).glob('*'))) if f['folder'] and (p / f['folder']).exists() else 0 for f in FILES}
@@ -127,50 +204,26 @@ def list_workspaces():
 
 
 @app.post('/api/workspaces')
-async def create_workspace(request: Request):
-    body = await request.json()
-    wid = re.sub(r'[^a-z0-9-]', '-', (body.get('id') or body.get('profile', {}).get('tax_code') or '').lower()).strip('-')
-    if not ID.match(wid):
-        raise HTTPException(400, 'cần mã số thuế hoặc mã không gian làm việc')
-    p = WORKSPACES / wid
-    if p.exists():
-        raise HTTPException(409, 'đã có không gian làm việc này')
-    p.mkdir(parents=True)
-    data = dict(pack_version=1, profile=body['profile'], bank_formats=body.get('bank_formats', []), thresholds=body.get('thresholds', {}),
-                policies=body.get('policies', []), reference_lists=body.get('reference_lists', []), days_off=body.get('days_off', []),
-                ai_categories=body.get('ai_categories', []))
-    src_id = body.get('copy_from')
-    if src_id:                                           # reuse another enterprise's set-up; profile and decisions stay its own
-        src = ws_path(src_id)
-        sd = _pack_data(src)
-        for k in ('bank_formats', 'thresholds', 'policies', 'reference_lists', 'portal_columns', 'ai_categories', 'days_off'):
-            if sd.get(k) and not body.get(k):
-                data[k] = sd[k]
-    try:
-        _save_pack(p, data, body.get('by', ''))
-    except HTTPException:
-        shutil.rmtree(p)
-        raise
-    return dict(id=wid)
-
-
 @app.post('/api/demo')
-def create_demo():
-    p = WORKSPACES / 'mo-phong-minh-an'
-    generate_demo(p)
-    return dict(id=p.name)
+def managed_enterprise_only():
+    raise HTTPException(410, 'Doanh nghiệp được quản lý tại portal.')
 
 
 @app.get('/api/workspaces/{wid}/pack')
 def get_pack(wid: str):
-    return _pack_data(ws_path(wid))
+    ws = ws_path(wid)
+    return JSONResponse(_pack_data(ws), headers={'ETag': etag(ws)})
 
 
 @app.put('/api/workspaces/{wid}/pack')
 async def put_pack(wid: str, request: Request, by: str = ''):
     ws = ws_path(wid)
+    if not request.headers.get('If-Match'):
+        raise HTTPException(428, 'Cần tải lại cấu hình trước khi lưu.')
+    if request.headers['If-Match'] != etag(ws):
+        raise HTTPException(412, 'Cấu hình đã được cập nhật. Tải lại trước khi lưu.')
     _save_pack(ws, await request.json(), by)
-    return dict(ok=True)
+    return JSONResponse(dict(ok=True), headers={'ETag': etag(ws)})
 
 
 @app.get('/api/workspaces/{wid}/pack/history')
@@ -248,6 +301,7 @@ async def upload(wid: str, kind: str, name: str, request: Request):
     if suffix not in spec['accept']:
         raise HTTPException(415, f'chỉ nhận {", ".join(spec["accept"])}')
     raw = await request.body()
+    bridge.require(ws.name)
     if len(raw) > 300 * 1024 * 1024:
         raise HTTPException(413, 'tệp quá lớn')
     folder = ws / spec['folder']
@@ -301,6 +355,7 @@ async def inbox_upload(wid: str, name: str, request: Request):
     """One drop zone: the file (or every member of a zip) is classified and stored where it belongs."""
     ws = ws_path(wid)
     raw = await request.body()
+    bridge.require(ws.name)
     if len(raw) > 300 * 1024 * 1024:
         raise HTTPException(413, 'tệp quá lớn')
     clean = re.sub(r'[^\w.\-]', '_', Path(name).name)
@@ -402,7 +457,9 @@ def _run(ws: Path):
             return rep
     except Exception as e:  # noqa: BLE001 - shown to the user, never hidden
         raise HTTPException(422, f'{type(e).__name__}: {e}')
-    report_mod.write(rep, ws / 'out')
+    with writing():
+        bridge.require(ws.name)
+        report_mod.write(rep, ws / 'out')
     return rep
 
 
@@ -449,7 +506,10 @@ async def add_decision(wid: str, request: Request):
     items = json.loads(path.read_text(encoding='utf-8')) if path.exists() else []
     items = [x for x in items if x['invoice_key'] != d['invoice_key']] + [dict(invoice_key=d['invoice_key'], action=d['action'],
                                                                                evidence=d['evidence'], by=d['by'], at=date.today().isoformat())]
-    path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding='utf-8')
+    bridge.require(ws.name)
+    tmp = path.with_suffix('.tmp')
+    tmp.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding='utf-8')
+    tmp.replace(path)
     if d['action'] == 'CONFIRMED_OK':
         from .web_ai import _remember_confirmed
         _remember_confirmed(ws, [d['invoice_key']], d['action'])

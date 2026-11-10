@@ -6,6 +6,8 @@ from src.assistant import admin
 
 @pytest.fixture(autouse=True)
 def _admin_session(request, tmp_path, monkeypatch):
+    from src.assistant import web
+    monkeypatch.setattr(web, 'bridge', web.bridge)
     monkeypatch.setattr(admin, 'STORE', tmp_path / 'admin.json')
     if 'real_admin' not in request.keywords:
         monkeypatch.setattr(admin, 'is_admin', lambda req: True)

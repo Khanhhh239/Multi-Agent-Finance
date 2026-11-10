@@ -1,3 +1,4 @@
+from support import managed_company, pack_headers
 """The settings lock: changes to configuration need the administrator password; daily work does not."""
 import pytest
 from fastapi.testclient import TestClient
@@ -17,11 +18,11 @@ def client(tmp_path, monkeypatch):
 def test_settings_are_locked_until_login(client):
     assert client.get('/api/admin/status').json() == dict(configured=False, logged_in=False, ttl_minutes=30)
     r = client.post('/api/demo')
-    assert r.status_code == 401 and r.json()['admin_required']
+    assert r.status_code == 410
     assert client.post('/api/admin/setup', json=dict(password='ngan')).status_code == 422
     assert client.post('/api/admin/setup', json=dict(password='mat-khau-dai')).status_code == 200
     assert client.post('/api/admin/setup', json=dict(password='mat-khau-khac')).status_code == 409
-    wid = client.post('/api/demo').json()['id']                       # the setup call logged the administrator in
+    wid = managed_company(client, demo=True)                       # the setup call logged the administrator in
     client.post('/api/admin/logout')
     assert client.put(f'/api/workspaces/{wid}/pack', json={}).status_code == 401
     assert client.post(f'/api/workspaces/{wid}/run').status_code == 200   # daily work stays open

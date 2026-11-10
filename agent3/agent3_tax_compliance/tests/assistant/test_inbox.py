@@ -1,3 +1,4 @@
+from support import managed_company, pack_headers
 """One drop zone: mixed files are put where they belong; file status, mapping preview and coverage warnings."""
 import io
 import shutil
@@ -19,7 +20,7 @@ def env(tmp_path, monkeypatch):
     pack = (demo / 'pack.json').read_text(encoding='utf-8')
     import json
     prof = json.loads(pack)['profile']
-    wid = c.post('/api/workspaces', json=dict(profile=prof)).json()['id']
+    wid = managed_company(c, profile=prof)
     return c, wid, demo
 
 

@@ -1,3 +1,4 @@
+from support import managed_company, pack_headers
 """Enterprise adaptation: the fixed core reads each enterprise's own configuration."""
 import json
 from datetime import date
@@ -13,7 +14,7 @@ def env(tmp_path, monkeypatch):
     monkeypatch.setattr(web, 'WORKSPACES', tmp_path / 'ws')
     monkeypatch.setattr(web, '_as_of', lambda ws: date(2026, 10, 15))
     c = TestClient(web.app)
-    demo = c.post('/api/demo').json()['id']
+    demo = managed_company(c, demo=True)
     return c, demo
 
 
@@ -21,9 +22,15 @@ def test_fiscal_year_and_own_days_off_change_the_calendar(env):
     c, demo = env
     ws = web.WORKSPACES / demo
     pack = json.loads((ws / 'pack.json').read_text(encoding='utf-8'))
-    pack['profile']['fiscal_year_end_month'] = 6
+    source = web.bridge.source
+    master = json.loads(source.read_text(encoding='utf-8'))
+    master['fiscal_year_end_month'] = 6
+    source.write_text(json.dumps(master), encoding='utf-8')
+    context = c.post('/api/platform/sync', headers={'X-Agent3-Platform-Token': web.bridge.token}).json()
+    c.headers['X-Agent3-Profile-Revision'] = context['profile_revision']
+    pack = c.get(f'/api/workspaces/{demo}/pack').json()
     pack['days_off'] = ['2026-10-20']
-    assert c.put(f'/api/workspaces/{demo}/pack?by=Kế toán trưởng', json=pack).status_code == 200
+    assert c.put(f'/api/workspaces/{demo}/pack?by=Kế toán trưởng', json=pack, headers=pack_headers(c, demo)).status_code == 200
     rep = pipeline.run(ws, pipeline.DEFAULT_RULESET, date(2026, 10, 15))
     cal = {e['period']: e for e in rep.calendar}
     fin = next(e for p, e in cal.items() if p.startswith('Quyết toán'))
@@ -31,20 +38,13 @@ def test_fiscal_year_and_own_days_off_change_the_calendar(env):
     sep = cal['Tờ khai thuế GTGT tháng 09/2026']
     assert sep['due'] == date(2026, 10, 21) and sep['moved_from'] == date(2026, 10, 20)          # the enterprise's own day off
     hist = c.get(f'/api/workspaces/{demo}/pack/history').json()
-    assert hist[0]['by'] == 'Kế toán trưởng' and 'hồ sơ' in hist[0]['changed'] and 'ngày nghỉ' in hist[0]['changed']
+    assert hist[0]['by'] == 'Kế toán trưởng' and 'ngày nghỉ' in hist[0]['changed']
 
 
-def test_new_enterprise_can_copy_configuration_but_keeps_its_own_profile(env):
+def test_new_enterprise_can_only_be_created_from_portal(env):
     c, demo = env
-    r = c.post('/api/workspaces', json=dict(profile=dict(tax_code='0100109106', legal_name='Công ty TNHH Nhà hàng Thử', vat_method='DEDUCTION', filing_period='QUARTER'),
-                                             copy_from=demo, ai_categories=[dict(name='Nguyên liệu thực phẩm', description='thịt, cá, rau dùng chế biến món ăn')]))
-    assert r.status_code == 200
-    new = c.get(f'/api/workspaces/{r.json()["id"]}/pack').json()
-    src = c.get(f'/api/workspaces/{demo}/pack').json()
-    assert new['bank_formats'] == src['bank_formats'] and new['policies'] == src['policies']
-    assert new['profile']['legal_name'] == 'Công ty TNHH Nhà hàng Thử' and new['ai_categories'][0]['name'] == 'Nguyên liệu thực phẩm'
-    bad = c.post('/api/workspaces', json=dict(profile=dict(tax_code='0101243150', legal_name='X', fiscal_year_end_month=13)))
-    assert bad.status_code == 422
+    assert c.post('/api/workspaces', json=dict(copy_from=demo)).status_code == 410
+
 
 
 def test_enterprise_categories_reach_the_model_and_count_as_business(tmp_path):

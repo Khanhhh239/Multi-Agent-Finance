@@ -4,7 +4,7 @@ import { $, api, app, button, esc, notice, post, put, state, store } from './cor
 import { toast } from './ux.js';
 
 export const ADMIN_TABS = [
-  ['#/quan-tri', 'Tổng quan quản trị'], ['#/quan-tri/doanh-nghiep', 'Cấu hình doanh nghiệp'], ['#/thiet-lap', 'Thêm doanh nghiệp'],
+  ['#/quan-tri', 'Tổng quan quản trị'], ['#/quan-tri/doanh-nghiep', 'Cấu hình doanh nghiệp'], ['#/thiet-lap', 'Thiết lập nghiệp vụ thuế'],
   ['#/quan-tri/danh-muc?ten=policy_presets', 'Quy định chi tiêu gợi ý'], ['#/quan-tri/danh-muc?ten=ai_categories', 'Nhóm hàng cho AI'],
   ['#/quan-tri/danh-muc?ten=holidays', 'Lịch nghỉ lễ'], ['#/quan-tri/danh-muc?ten=law_topics', 'Chủ đề tin luật'],
   ['#/quan-tri/danh-muc?ten=chat_domains', 'Câu hỏi của trợ lý'], ['#/quan-tri/kho-luat', 'Kho luật'], ['#/quan-tri/lich-su', 'Lịch sử thay đổi'],
@@ -80,12 +80,12 @@ export async function pageAdminHome() {
     <div class="grid2">
       <div class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm)">
         <h3 style="margin-top:0;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px">
-          <span>🏢</span> Doanh nghiệp đang chọn
+          <span>🏢</span> Doanh nghiệp từ portal
         </h3>
-        <p class="muted" style="font-size:13.5px;line-height:1.65">${state.workspaces.length} doanh nghiệp trên máy. Đang chọn: <strong>${esc(state.workspaces.find((w) => w.id === state.ws)?.name || 'chưa chọn')}</strong>.</p>
+        <p class="muted" style="font-size:13.5px;line-height:1.65">Doanh nghiệp từ hồ sơ chung tại portal: <strong>${esc(state.workspaces.find((w) => w.id === state.ws)?.name || 'chưa chọn')}</strong>.</p>
         <div class="bar" style="margin-top:20px">
           ${button('Cấu hình doanh nghiệp này', 'primary', 'data-go="#/quan-tri/doanh-nghiep"')}
-          ${button('Thêm doanh nghiệp mới', 'tertiary', 'data-go="#/thiet-lap"')}
+          ${button('Thiết lập nghiệp vụ thuế', 'tertiary', 'data-go="#/thiet-lap"')}
         </div>
       </div>
       <div class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm)">

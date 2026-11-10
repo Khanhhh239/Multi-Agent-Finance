@@ -8,6 +8,7 @@ export const store = {
   set(k, v) { try { localStorage.setItem(k, v); } catch { /* private mode */ } },
 };
 
+const packEtags = new Map();
 let pageController = new AbortController();
 let cleanups = [];
 export function onPageLeave(fn) { cleanups.push(fn); }
@@ -20,11 +21,21 @@ export function beginPage() {
 export const pageSignal = () => pageController.signal;
 export async function api(path, opts = {}) {
   const signal = opts.signal || pageController.signal;
-  const res = await fetch(path, { ...opts, signal });
+  const headers = new Headers(opts.headers);
+  const key = path.split('?')[0];
+  if (path.startsWith('/api/workspaces/')) {
+    headers.set('X-Agent3-Profile-Revision', state.platform?.profile_revision || '');
+    if (opts.method === 'PUT' && key.endsWith('/pack') && packEtags.has(key)) headers.set('If-Match', packEtags.get(key));
+  }
+  const revision = state.platform?.profile_revision;
+  const res = await fetch(path, { ...opts, headers, signal });
   const type = res.headers.get('content-type') || '';
   const body = type.includes('json') ? await res.json() : await res.text();
   signal.throwIfAborted();
-  if (!res.ok) { const error = new Error(typeof body === 'object' ? body.detail || JSON.stringify(body) : body); error.status = res.status; throw error; }
+  if (path.startsWith('/api/workspaces/') && revision !== state.platform?.profile_revision) throw new DOMException('Context changed', 'AbortError');
+  if (res.headers.get('etag')) packEtags.set(key, res.headers.get('etag'));
+  if (!res.ok && body?.detail?.context_stale) window.dispatchEvent(new Event('agent3-context-stale'));
+  if (!res.ok) { const error = new Error(typeof body === 'object' ? body.detail?.message || body.detail || JSON.stringify(body) : body); error.status = res.status; throw error; }
   return body;
 }
 export const post = (path, data, opts = {}) => api(path, { ...opts, method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data ?? {}) });
@@ -61,17 +72,30 @@ export const table = (head, rows, empty = 'Không có dữ liệu.') => (rows.le
   <thead><tr>${head.map((h) => `<th${h.num ? ' class="num"' : ''}><div class="cds--table-header-label">${esc(h.label || h)}</div></th>`).join('')}</tr></thead>
   <tbody>${rows.join('')}</tbody></table></div>` : `<div class="empty">${esc(empty)}</div>`);
 
-export const state = { ws: store.get('agent3.ws'), workspaces: [], report: null, schema: null };
+export const state = { platform: null, ws: null, workspaces: [], report: null, schema: null };
 export const app = () => $('#app');
 export const hashParams = () => new URLSearchParams(location.hash.split('?')[1] || '');
 
 export async function loadWorkspaces() {
-  state.workspaces = await api('/api/workspaces');
-  // No enterprise is opened by default: the first screen is the fixed framework until the user picks or sets one up.
-  if (!state.workspaces.find((w) => w.id === state.ws)) state.ws = null;
-  $('#ws-select').innerHTML = `<option value="" ${state.ws ? '' : 'selected'}>${state.workspaces.length ? 'Chọn doanh nghiệp' : 'Chưa có doanh nghiệp'}</option>`
-    + state.workspaces.map((w) => `<option value="${esc(w.id)}" ${w.id === state.ws ? 'selected' : ''}>${esc(w.name)}${w.simulated ? ' (mô phỏng)' : ''}</option>`).join('')
-    + '<option value="__new">+ Thêm doanh nghiệp</option>';
+  state.platform = await api('/api/platform/context');
+  state.ws = state.platform.state === 'ready' ? state.platform.workspace_id : null;
+  state.workspaces = state.ws ? await api('/api/workspaces') : [];
+  const company = $('#active-company');
+  if (company) {
+    company.textContent = state.platform.profile ? `${state.platform.profile.legal_name} · MST ${state.platform.profile.tax_code}` : 'Chưa kết nối doanh nghiệp';
+    company.title = company.textContent;
+  }
+  const link = $('#company-profile-link');
+  if (link) { link.innerHTML = portalLink('config', 'Hồ sơ chung'); }
+}
+
+export function portalLink(section = 'config', label = 'Mở hồ sơ chung tại portal') {
+  try {
+    const u = new URL(state.platform?.portal_url);
+    if (u.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(u.hostname) && !u.username && !u.password)
+      return `<a class="cds--btn cds--btn--tertiary" href="${esc(u.origin)}/#${esc(section)}" target="_top">${esc(label)}</a>`;
+  } catch { /* No trusted portal connection. */ }
+  return '<p class="muted">Khởi động Agent 3 từ portal để kết nối hồ sơ doanh nghiệp chung.</p>';
 }
 
 export async function loadReport() {
@@ -86,6 +110,7 @@ export const invLabel = (i) => (i ? `${i.template || ''}${i.symbol || ''}/${i.nu
 
 export function needWorkspace() {
   if (state.ws) return false;
-  app().innerHTML = `<h1 class="page">Chưa chọn doanh nghiệp</h1><p class="lead">Chọn doanh nghiệp ở ô góc trên bên phải, hoặc thiết lập doanh nghiệp mới.</p>${button('Thiết lập doanh nghiệp', 'primary', 'data-go="#/thiet-lap"')}${button('Về trang đầu', 'ghost', 'data-go="#/"')}`;
+  const messages = { sync_required: 'Hồ sơ đang chờ đồng bộ. Lưu lại hồ sơ tại portal hoặc khởi động lại Agent 3 từ portal.', conflict: 'Có nhiều dữ liệu trùng MST hoặc trùng dữ liệu mô phỏng. Cần kiểm tra trước khi liên kết.', invalid_profile: 'Hồ sơ chung chưa hợp lệ. Kiểm tra lại thông tin tại portal.', missing_profile: 'Chưa có hồ sơ doanh nghiệp chung. Hoàn tất hồ sơ tại portal.' };
+  app().innerHTML = `<h1 class="page">Kết nối hồ sơ doanh nghiệp</h1><p class="lead">${esc(messages[state.platform?.state] || 'Agent 3 sử dụng doanh nghiệp do portal quản lý.')}</p>${portalLink()}`;
   return true;
 }

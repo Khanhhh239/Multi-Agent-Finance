@@ -66,6 +66,7 @@ class SharedBankTest(unittest.TestCase):
                 return 200, {'accepted': 2}
             if method == 'PUT' and '/inbox?' in url:
                 self.assertIn(b'portal_bank_id,portal_bank_account', body)
+                self.assertEqual(headers['X-Agent3-Profile-Revision'], 'mock-profile-revision')
                 if sum(m == 'PUT' for m, _ in calls) == 1:
                     return 503, {'error': 'Mock offline during write'}
                 return 200, {'files': [{'label': 'Sao kê ngân hàng'}]}
@@ -78,7 +79,7 @@ class SharedBankTest(unittest.TestCase):
             with patch.multiple(server, WORK=work, PENDING=pending_dir, BATCH_FILE=work / 'batches.json',
                                 AUDIT_FILE=work / 'audit.jsonl'), patch.object(server, 'company', return_value=CONTEXT), \
                  patch.object(server, 'health', return_value=True), patch.object(server, 'agent1_key', return_value='mock-key'), \
-                 patch.object(server, 'ensure_agent3_workspace', return_value={'state': 'ok', 'id': CONTEXT['tax_code']}), \
+                 patch.object(server, 'ensure_agent3_workspace', return_value={'state': 'ok', 'id': CONTEXT['tax_code'], 'profile_revision': 'mock-profile-revision'}), \
                  patch.object(server, 'call', side_effect=fake_call):
                 record = server.add_file('bank.csv', SAMPLE)
                 self.assertEqual(server.add_file('renamed.csv', SAMPLE)['id'], record['id'])

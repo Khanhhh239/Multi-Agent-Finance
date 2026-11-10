@@ -1,8 +1,8 @@
-import { $, esc, onPageLeave } from './core.js';
+import { $, esc, onPageLeave, state } from './core.js';
 
 export function portalOrigin() {
   try {
-    const value = new URLSearchParams(location.search).get('portal') || sessionStorage.getItem('kt-portal-origin');
+    const value = state.platform?.portal_url;
     const u = new URL(value);
     if (u.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(u.hostname) && !u.username && !u.password && u.origin !== location.origin) return u.origin;
   } catch { /* standalone */ }
@@ -10,8 +10,13 @@ export function portalOrigin() {
 }
 
 export function intakeLinks(root) {
+  root.querySelectorAll('a[href^="/api/workspaces/"]').forEach((a) => {
+    const u = new URL(a.href);
+    u.searchParams.set('profile_revision', state.platform?.profile_revision || '');
+    if (a.href !== u.href) a.href = u.href;
+  });
   const origin = portalOrigin();
-  if (!document.documentElement.classList.contains('in-platform') || !origin) return;
+  if (!origin) return;
   root.querySelectorAll('a[href^="#/nap"], [data-go^="#/nap"]').forEach((el) => {
     const action = el.getAttribute('href') || el.dataset.go;
     if (action.includes('b=chay')) {

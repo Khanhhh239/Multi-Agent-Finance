@@ -12,13 +12,28 @@ const invoices = Array.from({ length: 65 }, (_, n) => ({ key: 'invoice-' + n, nu
 const items = invoices.map((inv, n) => ({ code: 'R02_PAYMENT', invoice_keys: [inv.key], title: 'Cần bổ sung chứng từ thanh toán', status: n % 2 ? 'REVIEW' : 'AT_RISK', amount: '1000000', detail: 'Chưa có chứng từ thanh toán phù hợp.', action: 'Kiểm tra và bổ sung chứng từ.', basis: ['Căn cứ mô phỏng, không dùng để tư vấn thuế'] }));
 const report = { meta: { as_of: '2026-10-15', period: ['2026-09-01', '2026-09-30'] }, invoices, items, matches: [], transactions: [], calendar: [], totals: { at_risk_vat: '33000000', at_risk_invoices: 33, penalty_estimate: '6600000', penalty_rate: .2, review_vat: '32000000', review_invoices: 32, opportunity_vat: '0' } };
 const workspaces = ['demo-a','demo-b'].map((id) => ({ id, name: 'Công ty mô phỏng ' + id.toUpperCase(), tax_code: '0109999982', simulated: true, files: { purchase_xml: 65, sales_xml: 0, bank: 0, portal_list: 0 } }));
-let asks = 0, decisions = 0, reportMode = 'normal';
+let asks = 0, decisions = 0, reportMode = 'normal', activeWorkspace = 'demo-a', contextState = 'ready', adminLoggedIn = false, saveError = false, savedPack = null;
+const profileData = () => ({ legal_name: 'Công ty mô phỏng ' + activeWorkspace.toUpperCase(), tax_code: '0109999982', registered_address:'Địa chỉ kiểm thử', industry:['5610 Nhà hàng'], vat_method:'DEDUCTION', filing_period:'MONTH', fiscal_year_end_month:12 });
+const packData = () => ({ pack_version:1, profile:profileData(), policies:[{id:'OWN',flag:'Quy định đã chỉnh riêng',min_gross:123000}], thresholds:{match_days_after_invoice:30}, bank_formats:[], reference_lists:[], ai_categories:[{name:'Nguyên liệu',description:'Dùng cho nhà hàng'}], days_off:['2027-02-05'] });
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://local');
   if (url.pathname === '/frame') { res.setHeader('Content-Type', 'text/html'); res.end('<iframe title="Agent 3" style="width:100%;height:95vh;border:0" src="/?portal=http://127.0.0.1:8800#/?dn=demo-a"></iframe>'); return; }
   if (url.pathname.startsWith('/api/')) {
     let data = {};
-    if (url.pathname === '/api/workspaces') data = workspaces;
+    if (url.pathname === '/api/platform/context') data = {state:contextState, workspace_id:contextState === 'ready' ? activeWorkspace : null, profile:contextState === 'ready' ? profileData() : null, profile_revision:activeWorkspace + '-revision', portal_url:'http://127.0.0.1:8800'};
+    else if (url.pathname === '/api/workspaces') data = workspaces.filter(w => w.id === activeWorkspace);
+    else if (url.pathname.endsWith('/pack/history')) data = [];
+    else if (url.pathname.endsWith('/pack')) {
+      res.setHeader('ETag','"pack-v1"');
+      if(req.method === 'PUT') {
+        const chunks=[]; for await(const chunk of req) chunks.push(chunk);
+        savedPack=JSON.parse(Buffer.concat(chunks).toString());
+        assert.equal(req.headers['if-match'],'"pack-v1"');
+        res.statusCode=saveError ? 422 : 200; data=saveError ? {detail:'Lỗi lưu thiết lập mô phỏng'} : {ok:true};
+      } else data = packData();
+    }
+    else if (url.pathname === '/api/presets') data = {policies:[{id:'PRESET',flag:'Gợi ý chung',recommended:true}],industry_codes:['56']};
+    else if (url.pathname === '/api/admin/catalog') data = [];
     else if (url.pathname.endsWith('/report')) { res.statusCode = reportMode === 'missing' ? 404 : reportMode === 'error' ? 503 : 200; data = reportMode === 'normal' ? report : { detail:'Lỗi máy chủ mô phỏng' }; }
     else if (url.pathname.endsWith('/freshness')) data = { stale: false, analysed: true };
     else if (url.pathname.endsWith('/ai')) data = { model:'qwen3:8b', labelled_invoices:0, flagged_invoices:0, proposals:[], job:null };
@@ -29,7 +44,7 @@ const server = http.createServer(async (req, res) => {
     else if (url.pathname.endsWith('/ask')) { asks++; await new Promise((r) => setTimeout(r, 600)); data = { text: 'Câu trả lời mô phỏng ' + asks, branch: 'DATA', citations: [], facts: [], links: [] }; }
     else if (url.pathname.endsWith('/chat/suggestions')) data = ['Có bao nhiêu hóa đơn?', 'Hóa đơn nào cần xem?'];
     else if (url.pathname === '/api/chat/guide') data = { groups: [] };
-    else if (url.pathname === '/api/admin/status') data = { configured:true, logged_in:false, ttl_minutes:20 };
+    else if (url.pathname === '/api/admin/status') data = { configured:true, logged_in:adminLoggedIn, ttl_minutes:20 };
     else if (url.pathname === '/api/law/status') data = { stats:null, job:{running:false}, changes:[] };
     else if (url.pathname === '/api/law/docs' || url.pathname.endsWith('/law-alerts') || url.pathname.endsWith('/coverage')) data = [];
     else if (url.pathname.endsWith('/vat-summary')) data = { rows:[], note:'Số liệu mô phỏng' };
@@ -123,11 +138,13 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     await go('#/hoi'); await wait('document.querySelector(".chip-q")'); const before=asks;
     await evaluate('document.querySelector(".chip-q").click()'); await wait('document.querySelector(".msg-bot")');
     check('one request after repeated navigation', asks===before+1);
-    await go('#/hoi');await wait('document.querySelector(".chip-q")');await evaluate('document.querySelector(".chip-q").click();let s=document.querySelector("#ws-select");s.value="demo-b";s.dispatchEvent(new Event("change"))');await sleep(900);
-    check('workspace change cancels stale reply',await evaluate('document.querySelector("h1").textContent.includes("DEMO-B") && !document.querySelector(".msg-bot")'));
+    await go('#/hoi');await wait('document.querySelector(".chip-q")');await evaluate('document.querySelector(".chip-q").click()');
+    activeWorkspace='demo-b';await evaluate('window.dispatchEvent(new Event("agent3-context-stale"))');await sleep(900);
+    check('workspace change cancels stale reply',await evaluate('document.querySelector("#active-company").textContent.includes("DEMO-B") && !document.querySelector(".msg-bot")'));
+    check('no local enterprise selector',await evaluate('!document.querySelector("#ws-select") && !document.body.textContent.includes("Thêm doanh nghiệp")'));
     await go('#/luat');await wait('document.querySelector("#lsearch")');
     check('law maintenance collapsed',await evaluate('!document.querySelector(".law-management").open'));
-    for (const route of ['#/ngan-hang','#/so-lieu','#/lich','#/nap','#/giai-trinh']) {
+    for (const route of ['#/ngan-hang','#/so-lieu','#/lich','#/giai-trinh']) {
       await go(route);await sleep(100);
       check('secondary page '+route,await evaluate('!!document.querySelector("h1.page") && !document.querySelector("#app > .cds--inline-notification--error")'));
     }
@@ -147,8 +164,31 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     const dark=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(output,'dark.png'),Buffer.from(dark.data,'base64'));
     await evaluate('document.documentElement.style.zoom="2"');await sleep(100);
     check('200 percent reflow',await evaluate('document.documentElement.scrollWidth<=innerWidth'));
-    await evaluate('document.documentElement.style.zoom="";var selectedWorkspace=document.querySelector("#ws-select");selectedWorkspace.value="";selectedWorkspace.dispatchEvent(new Event("change"))');await sleep(150);
-    check('no workspace welcome',await evaluate('!document.querySelector("#run") && document.querySelector("h1").textContent.includes("Agent 3")'));
+    await evaluate('document.documentElement.style.zoom=""');
+    adminLoggedIn=true;
+    await go('#/thiet-lap'); await wait('document.querySelector("#setup") && document.querySelector("[data-cus]")');
+    check('five internal setup steps',await evaluate('document.querySelectorAll(".steps a").length===5 && !document.querySelector("#f-tax_code")'));
+    check('existing policies kept, presets not auto-selected',await evaluate('document.querySelector("[data-cus]").checked && !document.querySelector("[data-pol]").checked && document.querySelector("[data-f=flag]").value.includes("Gợi ý")'));
+    for(const width of widths){
+      await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false}); await sleep(80);
+      check('setup no page overflow '+width,await evaluate('document.documentElement.scrollWidth<=innerWidth'));
+      if(width<=390) {
+        check('mobile header does not overlap '+width,await evaluate('document.querySelector("#active-company").getBoundingClientRect().right<=document.querySelector("#company-profile-link").getBoundingClientRect().left+1'));
+        check('mobile profile values readable '+width,await evaluate('document.querySelector(".shared-profile dd").clientWidth>120'));
+      }
+      const shot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(output,'managed-setup-'+width+'.png'),Buffer.from(shot.data,'base64'));
+    }
+    await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+    await go('#/thiet-lap?buoc=5');await wait('document.querySelector("#setup-msg")');
+    saveError=true;await evaluate('document.querySelector("#setup").requestSubmit()');await wait('document.querySelector("#setup-msg").textContent.includes("Lỗi lưu")');
+    check('setup save failure retains settings and unlocks',await evaluate('!document.querySelector("#setup button[type=submit]").disabled && document.querySelector("#app").textContent.includes("Quy định đã chỉnh riêng")'));
+    saveError=false;await evaluate('document.querySelector("#setup").requestSubmit()');await wait('document.querySelector("#cfg-ho-so")');
+    check('setup saves internal settings and preserves profile',savedPack.profile.legal_name===profileData().legal_name && savedPack.policies[0].id==='OWN' && savedPack.thresholds.match_days_after_invoice===30);
+    check('shared profile is read only',await evaluate('!document.querySelector("#f-profile") && document.querySelector("#cfg-ho-so a").href.endsWith("/#config")'));
+    contextState='missing_profile';await evaluate('window.dispatchEvent(new Event("agent3-context-stale"))');await sleep(200);
+    check('no profile routes to portal',await evaluate('!document.querySelector("#run") && !document.querySelector("#demo") && document.querySelector("h1").textContent.includes("Kết nối hồ sơ")'));
+    const empty=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(output,'managed-no-profile.png'),Buffer.from(empty.data,'base64'));
+    contextState='ready';
     await send('Page.navigate',{url:origin+'/frame'});
     await wait(`!!document.querySelector('iframe')?.contentDocument?.querySelector('a[href="http://127.0.0.1:8800/#data"]')`);
     check('embedded intake uses validated portal link',await evaluate(`Array.from(document.querySelector('iframe').contentDocument.querySelectorAll('a')).some(a => a.href === 'http://127.0.0.1:8800/#data')`));

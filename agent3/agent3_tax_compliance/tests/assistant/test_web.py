@@ -1,3 +1,4 @@
+from support import managed_company, pack_headers
 """HTTP layer of the local app: workspaces, uploads, decisions, pack invariants, law endpoints. No network, no model."""
 import io
 import json
@@ -19,7 +20,7 @@ def client(tmp_path, monkeypatch):
 
 
 def test_demo_run_report_and_not_claimed_decision(client):
-    wid = client.post('/api/demo').json()['id']
+    wid = managed_company(client, demo=True)
     assert [w['id'] for w in client.get('/api/workspaces').json()] == [wid]
     rep = client.post(f'/api/workspaces/{wid}/run').json()
     assert rep['totals']['at_risk_invoices'] > 0
@@ -33,26 +34,24 @@ def test_demo_run_report_and_not_claimed_decision(client):
 
 
 def test_pack_can_only_tighten(client):
-    wid = client.post('/api/demo').json()['id']
+    wid = managed_company(client, demo=True)
     pack = client.get(f'/api/workspaces/{wid}/pack').json()
     pack['thresholds'] = dict(match_days_after_invoice=400)
-    r = client.put(f'/api/workspaces/{wid}/pack', json=pack)
+    r = client.put(f'/api/workspaces/{wid}/pack', json=pack, headers=pack_headers(client, wid))
     assert r.status_code >= 400
     pack['thresholds'] = dict(match_days_after_invoice=30)
-    assert client.put(f'/api/workspaces/{wid}/pack', json=pack).status_code == 200
+    assert client.put(f'/api/workspaces/{wid}/pack', json=pack, headers=pack_headers(client, wid)).status_code == 200
 
 
 def test_profile_is_validated_against_the_input_schema(client):
     bad = dict(tax_code='0109999982', legal_name='Công ty thử', vat_method='KHAU_TRU', filing_period='MONTH')
-    r = client.post('/api/workspaces', json=dict(profile=bad))
-    assert r.status_code == 422 and 'phương pháp' in r.json()['detail']
-    assert client.post('/api/workspaces', json=dict(profile=dict(bad, vat_method='DEDUCTION', tax_code='0109999981'))).status_code == 422
-    assert not (web.WORKSPACES / '0109999982').exists()          # a rejected profile leaves nothing behind
+    assert client.post('/api/workspaces', json=dict(profile=bad)).status_code == 410
+    assert client.post('/api/demo').status_code == 410
+    assert not (web.WORKSPACES / '0109999982').exists()
 
 
 def test_uploads_are_checked(client):
-    wid = client.post('/api/workspaces', json=dict(profile=dict(tax_code='0109999982', legal_name='Công ty thử', vat_method='DEDUCTION',
-                                                                 filing_period='MONTH'))).json()['id']
+    wid = managed_company(client)
     assert client.put(f'/api/workspaces/{wid}/files/purchase_xml?name=a.exe', content=b'x').status_code == 415
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, 'w') as z:
@@ -63,7 +62,7 @@ def test_uploads_are_checked(client):
     r = client.put(f'/api/workspaces/{wid}/files/purchase_xml?name=../../hd%201.xml', content=b'<HDon/>')
     assert r.status_code == 200 and r.json()['saved'] == ['hd_1.xml']
     assert client.get(f'/api/workspaces/{wid}/files/purchase_xml').json() == ['escape.xml', 'hd_1.xml']
-    assert client.get('/api/workspaces/..%2Fetc/pack').status_code in (400, 404)
+    assert client.get('/api/workspaces/..%2Fetc/pack').status_code in (400, 403, 404)
 
 
 def test_law_endpoints_without_corpus_and_with_a_running_sync(client):
@@ -80,7 +79,7 @@ def test_index_is_not_cached(client):
 
 
 def test_decision_suggestion_comes_from_an_earlier_decision_on_the_same_seller(client):
-    wid = client.post('/api/demo').json()['id']
+    wid = managed_company(client, demo=True)
     rep = client.post(f'/api/workspaces/{wid}/run').json()
     invs = {i['key']: i for i in rep['invoices']}
     by_seller = {}
@@ -98,8 +97,7 @@ def test_decision_suggestion_comes_from_an_earlier_decision_on_the_same_seller(c
 
 def test_unknown_bank_layout_is_recognised_on_upload_and_then_readable(client, tmp_path):
     from src.assistant.synth import _write_xlsx
-    wid = client.post('/api/workspaces', json=dict(profile=dict(tax_code='0109999982', legal_name='Công ty thử', vat_method='DEDUCTION',
-                                                                 filing_period='QUARTER'))).json()['id']
+    wid = managed_company(client)
     rows = [['NGÂN HÀNG THỬ - SAO KÊ'], ['Số tài khoản: 123'], [],
             ['Ngày hiệu lực', 'Diễn giải', 'Phát sinh Nợ', 'Phát sinh Có', 'TK đối ứng', 'Tên đơn vị thụ hưởng'],
             ['05/08/2026', 'TT HD 12', '5.500.000', '', '111222', 'CONG TY ABC'],

@@ -1,3 +1,4 @@
+from support import managed_company, pack_headers
 """R14, exposure, declared figures, bulk and confirmed-OK decisions, Excel export, deadline open items."""
 import zipfile
 from datetime import date
@@ -13,7 +14,7 @@ def env(tmp_path, monkeypatch):
     monkeypatch.setattr(web, 'WORKSPACES', tmp_path / 'ws')
     monkeypatch.setattr(web, '_as_of', lambda ws: date(2026, 10, 15))
     c = TestClient(web.app)
-    wid = c.post('/api/demo').json()['id']
+    wid = managed_company(c, demo=True)
     rep = c.post(f'/api/workspaces/{wid}/run').json()
     return c, wid, rep
 
