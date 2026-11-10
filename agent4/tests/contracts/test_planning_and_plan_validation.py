@@ -5,17 +5,23 @@
 
 from __future__ import annotations
 
+from dataclasses import FrozenInstanceError, asdict, replace
+from datetime import date, timedelta
+
 import pytest
 
-from agent4.core.context import query_intake
+from agent4.core.catalog import MetricCatalog as ProductionCatalog
+from agent4.core.context import build_auth_context, query_intake
 from agent4.core.errors import ContractError as ProductionContractError
 from agent4.metric_selection.catalog_adapter import (
     build_canonical_catalog,
     build_full_catalog_retrieval_result,
 )
 from agent4.metric_selection.validator import validate_metrics
-from agent4.planning.eval_adapter import predict, predict_baseline
+from agent4.planning.eval_adapter import predict, predict_baseline, predict_validated
 from agent4.planning.planner import build_semantic_plan_draft, parse_time_slot
+from agent4.planning.validator import PlanClarification, ValidatedPlan
+from agent4.planning.validator import validate_semantic_plan_draft as seal_plan
 from tests.contract_harness import (
     ContractError,
     MetricCatalog,
@@ -472,3 +478,299 @@ def production_plan(cfo_auth):
         return build_semantic_plan_draft(query, metrics, context)
 
     return plan
+
+
+@pytest.fixture
+def plan_gate(cfo_auth):
+    catalog = build_canonical_catalog()
+    metrics = validate_metrics(
+        {
+            "status": "resolved",
+            "metric_ids": ["net_revenue"],
+            "clarification_question": None,
+            "unsupported_reason": None,
+        },
+        build_full_catalog_retrieval_result("Doanh thu", catalog, cfo_auth),
+        catalog,
+        cfo_auth,
+        {},
+    )
+    return catalog, metrics
+
+
+class TestProductionPlanValidation:
+    def test_plan_gate_preserves_and_seals_planner_output(self, plan_gate, cfo_auth):
+        catalog, metrics = plan_gate
+        question = "Bottom 5 customers by net revenue for branches HN and HCM in Q2 2026"
+        query = query_intake({"api_version": "v1", "question": question, "locale": "en-US"})
+        draft = build_semantic_plan_draft(query, metrics, {})
+        plan = seal_plan(draft, metrics, catalog, cfo_auth, row_cap=80)
+        assert isinstance(plan, ValidatedPlan)
+        assert (plan.status, plan.contract_version) == ("validated", "validated-plan.v1")
+        assert (plan.tenant_id, plan.policy_hash, plan.catalog_hash) == (
+            cfo_auth["tenant_id"],
+            cfo_auth["policy_hash"],
+            catalog.get_catalog_hash(),
+        )
+        assert (plan.dimensions, plan.operation, plan.top_k, plan.row_cap) == (
+            ("partner_code",),
+            "ranking",
+            5,
+            80,
+        )
+        draft["time"]["start"] = "2026-04-02"
+        draft["filters"][0]["value"].append("DN")
+        draft["sort"]["direction"] = "desc"
+        draft["metric_ids"].clear()
+        assert plan.time.start == date(2026, 4, 1)
+        assert plan.filters[0].value == ("HN", "HCM")
+        assert plan.sort.direction == "asc"
+        assert plan.metric_ids == ("net_revenue",)
+        for target, attribute in (
+            (plan, "row_cap"),
+            (plan.time, "start"),
+            (plan.filters[0], "value"),
+            (plan.sort, "direction"),
+        ):
+            with pytest.raises(FrozenInstanceError):
+                setattr(target, attribute, None)
+        with pytest.raises(TypeError, match="Use validate_semantic_plan_draft"):
+            replace(plan, _seal=object(), row_cap=9999)
+
+    def test_plan_gate_defaults_and_catalog_capabilities(self, plan_gate, cfo_auth):
+        catalog, metrics = plan_gate
+        metrics["validated_capabilities"]["net_revenue"]["supported_dimensions"] = ["cost_category"]
+        draft = _make_base_plan(
+            metric_ids=["net_revenue"], operation=None, dimensions=["branch_code"]
+        )
+        plan = seal_plan(draft, metrics, catalog, cfo_auth)
+        assert plan.operation == "aggregate"
+        assert plan.applied_defaults == ("operation=aggregate",)
+        draft["dimensions"] = ["cost_category"]
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(draft, metrics, catalog, cfo_auth)
+        assert error.value.code == "unsupported_metric"
+
+    def test_plan_gate_clarification_has_no_executable_fields(self, plan_gate, cfo_auth):
+        catalog, metrics = plan_gate
+        query = query_intake(
+            {"api_version": "v1", "question": "What is our net revenue?", "locale": "en-US"}
+        )
+        draft = build_semantic_plan_draft(query, metrics, {})
+        decision = seal_plan(draft, metrics, catalog, cfo_auth)
+        assert isinstance(decision, PlanClarification)
+        assert asdict(decision) == {
+            "status": "needs_clarification",
+            "question_for_user": draft["question_for_user"],
+            "unresolved_slots": ("time",),
+        }
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(asdict(decision), metrics, catalog, cfo_auth)
+        assert error.value.code == "invalid_request"
+        draft["question_for_user"] = "Which month from the previous year would you like to see?"
+        assert (
+            seal_plan(draft, metrics, catalog, cfo_auth).question_for_user
+            == draft["question_for_user"]
+        )
+
+    @pytest.mark.parametrize(
+        "update",
+        [
+            {"tenant_id": "forged"},
+            {"catalog_hash": "forged"},
+            {"policy_hash": "forged"},
+            {"row_cap": 10000},
+            {"plan_version": "1.1"},
+            {"status": "validated"},
+            {"time": {"mode": "none", "start": None, "end": None, "as_of": None}},
+            {"dimensions": ["branch_code", "branch_code"]},
+            {"metric_ids": ["net_revenue", "net_revenue"]},
+            {"filters": [{"field": "branch_code", "op": "=", "value": ["HN"]}]},
+            {"filters": [{"field": "branch_code", "op": "IN", "value": "HN"}]},
+            {"filters": [{"field": "branch_code", "op": "IN", "value": []}]},
+            {"filters": [{"field": "branch_code", "op": "!=", "value": "HN"}]},
+            {"filters": [{"field": "branch_code", "op": "=", "value": "unknown"}]},
+            {"filters": [{"field": "partner_code", "op": "=", "value": "KH１２３４"}]},
+            {"top_k": 0},
+            {"top_k": 101},
+            {"top_k": True},
+            {"top_k": "5"},
+            {"sort": {"metric_id": "cogs", "direction": "asc"}},
+            {"sort": {"metric_id": "net_revenue", "direction": "sideways"}},
+            {"operation": "ranking", "sort": None},
+            {"operation": "timeseries", "dimensions": ["year"]},
+        ],
+    )
+    def test_plan_gate_rejects_invalid_schema_and_slots(self, update, plan_gate, cfo_auth):
+        catalog, metrics = plan_gate
+        draft = _make_base_plan(metric_ids=["net_revenue"])
+        draft.update(update)
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(draft, metrics, catalog, cfo_auth)
+        assert (error.value.code, error.value.stage) == (
+            "invalid_request",
+            "semantic_plan_validation",
+        )
+
+    @pytest.mark.parametrize(
+        ("start", "end", "status"),
+        [
+            ("2026-09-31", "2026-10-01", "error"),
+            ("20260901", "2026-10-01", "error"),
+            ("2026-09-30", "2026-09-01", "error"),
+            ("2020-01-01", "2026-10-01", "unsupported"),
+            (0, "2026-10-01", "error"),
+        ],
+    )
+    def test_plan_gate_date_errors(self, start, end, status, plan_gate, cfo_auth):
+        catalog, metrics = plan_gate
+        draft = _make_base_plan(metric_ids=["net_revenue"])
+        draft["time"].update(start=start, end=end)
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(draft, metrics, catalog, cfo_auth)
+        assert (error.value.code, error.value.final_status) == ("invalid_request", status)
+
+    def test_plan_gate_hard_and_policy_limits(self, plan_gate, cfo_auth):
+        catalog, metrics = plan_gate
+        draft = _make_base_plan(
+            metric_ids=["net_revenue"],
+            sort={"metric_id": "net_revenue", "direction": "desc"},
+            top_k=100,
+        )
+        start = date.fromisoformat(draft["time"]["start"])
+        draft["time"]["end"] = (start + timedelta(days=750)).isoformat()
+        assert seal_plan(draft, metrics, catalog, cfo_auth).top_k == 100
+        for limits in (
+            {"max_days": 749},
+            {"max_days": 751},
+            {"max_top_k": 99},
+            {"max_top_k": 101},
+            {"row_cap": 1001},
+            {"row_cap": False},
+        ):
+            with pytest.raises(ProductionContractError) as error:
+                seal_plan(draft, metrics, catalog, cfo_auth, **limits)
+            assert error.value.code == "invalid_request"
+
+    def test_plan_gate_snapshot_and_flow_modes(self, plan_gate, cfo_auth):
+        catalog, flow = plan_gate
+        snapshot = {**flow, "metric_ids": ["cash_and_equivalents"]}
+        draft = _make_base_plan(metric_ids=["cash_and_equivalents"])
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(draft, snapshot, catalog, cfo_auth)
+        assert (error.value.code, error.value.final_status) == ("invalid_request", "unsupported")
+        draft["time"].update(mode="as_of", as_of="2026-09-30", start=None, end=None, grain=None)
+        assert seal_plan(draft, snapshot, catalog, cfo_auth).time.as_of == date(2026, 9, 30)
+        draft["metric_ids"] = ["net_revenue"]
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(draft, flow, catalog, cfo_auth)
+        assert (error.value.code, error.value.final_status) == ("invalid_request", "unsupported")
+
+    def test_plan_gate_rechecks_auth_and_upstream_selection(
+        self, plan_gate, cfo_auth, analyst_auth
+    ):
+        catalog, metrics = plan_gate
+        draft = _make_base_plan(metric_ids=["net_revenue"], view="tax")
+        restricted = build_auth_context(
+            {"user_id": "restricted", "tenant_id": "minh-phat", "roles": ["cfo"]},
+            {"allowed_views": ["mgmt", "tax"], "allowed_metrics": ["cogs"], "policy_version": "v2"},
+        )
+        for auth in (analyst_auth, restricted, {"allowed_views": ["tax"]}):
+            with pytest.raises(ProductionContractError) as error:
+                seal_plan(draft, metrics, catalog, auth)
+            assert (error.value.code, error.value.final_status) == ("forbidden_metric", "forbidden")
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(draft, {**metrics, "catalog_hash": "stale"}, catalog, cfo_auth)
+        assert error.value.code == "invalid_request"
+        draft["metric_ids"] = ["cogs"]
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(draft, metrics, catalog, cfo_auth)
+        assert error.value.code == "metric_outside_candidates"
+
+    @pytest.mark.parametrize(
+        ("ids", "update", "expected_code"),
+        [
+            (["net_revenue", "cash_and_equivalents"], {}, "incompatible_metrics"),
+            (
+                ["net_revenue", "net_margin_pct"],
+                {"dimensions": ["branch_code"]},
+                "unsupported_metric",
+            ),
+            (
+                ["net_revenue"],
+                {"filters": [{"field": "department_code", "op": "=", "value": "KD"}]},
+                "unsupported_metric",
+            ),
+            (
+                ["net_revenue"],
+                {"filters": [{"field": "partner_code", "op": "=", "value": "NCC-PP-TN"}]},
+                "unsupported_metric",
+            ),
+            (["cash_and_equivalents"], {"view": "tax"}, "unsupported_view"),
+            (["missing_metric"], {}, "unknown_metric"),
+        ],
+    )
+    def test_plan_gate_catalog_and_metric_compatibility(
+        self, ids, update, expected_code, plan_gate, cfo_auth
+    ):
+        catalog, metrics = plan_gate
+        draft = _make_base_plan(metric_ids=ids, **update)
+        if ids == ["cash_and_equivalents"]:
+            draft["time"].update(mode="as_of", start=None, end=None, as_of="2026-09-30", grain=None)
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(draft, {**metrics, "metric_ids": ids}, catalog, cfo_auth)
+        assert error.value.code == expected_code
+
+    @pytest.mark.asyncio
+    async def test_plan_gate_benchmark_adapter_records_validation(self, cfo_auth):
+        request = {
+            "id": "plan-gate-regression",
+            "user_query": "What is the profit margin by branch?",
+            "locale": "en-US",
+            "auth_context": cfo_auth,
+            "query_context": {},
+        }
+        baseline = Prediction.model_validate(await predict(request))
+        result = Prediction.model_validate(await predict_validated(request))
+        assert result.plan == baseline.plan
+        assert result.final_status == "needs_clarification"
+        assert result.stage_latency_ms["plan_validation_ms"] >= 0
+        assert result.execution is None
+
+    @pytest.mark.parametrize(
+        ("status", "verified", "expected"),
+        [("draft", True, "unsupported_metric"), ("approved", False, "unsupported_data_source")],
+    )
+    def test_plan_gate_rechecks_current_metric_governance(
+        self, status, verified, expected, plan_gate, cfo_auth
+    ):
+        catalog, metrics = plan_gate
+        definition = catalog.get("net_revenue")
+        definition.update(status=status, verified_handler=verified)
+        current = ProductionCatalog([definition])
+        with pytest.raises(ProductionContractError) as error:
+            seal_plan(
+                _make_base_plan(metric_ids=["net_revenue"]),
+                {**metrics, "catalog_hash": current.get_catalog_hash()},
+                current,
+                cfo_auth,
+            )
+        assert error.value.code == expected
+
+    @pytest.mark.asyncio
+    async def test_plan_gate_benchmark_adapter_projects_sealed_fields(self, cfo_auth):
+        result = Prediction.model_validate(
+            await predict_validated(
+                {
+                    "id": "sealed-regression",
+                    "user_query": "Net revenue for branch HN and HCM in Q2 2026?",
+                    "locale": "en-US",
+                    "auth_context": cfo_auth,
+                    "query_context": {},
+                }
+            )
+        )
+        assert result.final_status == "ready"
+        assert result.plan.time.start == date(2026, 4, 1)
+        assert result.plan.filters[0].values == ["HN", "HCM"]
+        assert result.stage_latency_ms["plan_validation_ms"] >= 0

@@ -79,7 +79,11 @@ _FILTERS = {
         "ENT": "doanh nghiệp lớn|enterprise",
     },
 }
-_PARTNER = r"(?:KH\d{4,7}|KHLE-(?:HN|HCM|DN)|NCC-[A-Z0-9]{2,12}(?:-[A-Z0-9]{2,12}){0,3})"
+ALLOWED_DIMENSIONS = frozenset(_DIMENSIONS)
+ALLOWED_FILTER_VALUES = {field: frozenset(values) for field, values in _FILTERS.items()}
+PARTNER_CODE_PATTERN = (
+    r"(?:KH[0-9]{4,7}|KHLE-(?:HN|HCM|DN)|NCC-[A-Z0-9]{2,12}(?:-[A-Z0-9]{2,12}){0,3})"
+)
 _SQL = re.compile(
     r"\b(?:select\b[^?]*\bfrom|select\s+\*|(?:drop|create|alter|truncate)\s+table|"
     r"insert\s+into|delete\s+from|update\s+\w+\s+set|or\s+1\s*=\s*1|"
@@ -193,7 +197,9 @@ def _filters(question: str, original: str) -> tuple[list[dict], bool]:
         if values:
             filters.append(_filter(field, values))
 
-    partners = list(dict.fromkeys(re.findall(rf"(?<![\w-]){_PARTNER}(?![\w-])", question.upper())))
+    partners = list(
+        dict.fromkeys(re.findall(rf"(?<![\w-]){PARTNER_CODE_PATTERN}(?![\w-])", question.upper()))
+    )
     if partners:
         filters.append(_filter("partner_code", partners))
     return filters, unresolved

@@ -78,7 +78,8 @@ Thực hiện 7 chốt kiểm tra nghiêm ngặt trước khi tạo `ValidatedPl
 1. **Kiểm tra schema & phiên bản**:
    - Đủ 14 trường bắt buộc của `SemanticPlanDraft`, không thừa trường lạ (`enforce_exact_keys`), `plan_version == "1.0"`.
 2. **Chặn SQL và tên bảng vật lý trong Draft**:
-   - Nếu `json.dumps(plan_draft)` chứa từ khóa DML/DDL hoặc `SELECT`, `FROM`, `gl_wide`, `gl_entry`, `ar_invoice_line`, `duckdb_tables` $\rightarrow$ ném `ContractError("invalid_request")`.
+   - Từ chối cú pháp SQL, định danh bảng vật lý và giá trị ngoài allowlist.
+     Áp dụng cả khi draft chỉ yêu cầu làm rõ.
 3. **Kiểm tra tập con Metric**:
    - `set(plan_draft["metric_ids"]).issubset(set(validated_metrics["metric_ids"]))`.
 4. **Kiểm tra quyền trên `view`**:
@@ -94,6 +95,8 @@ Thực hiện 7 chốt kiểm tra nghiêm ngặt trước khi tạo `ValidatedPl
 7. **Niêm phong `ValidatedPlan`**:
    - Tự động gán default được phép (ví dụ `operation = "aggregate"` nếu `operation` là `None`, ghi vào `applied_defaults = ["operation=aggregate"]`).
    - Đóng dấu `contract_version = "validated-plan.v1"`, `status = "validated"`, `tenant_id`, `catalog_hash`, `policy_hash`.
+   - Lưu `row_cap` tối đa 1000 từ policy phía server. Draft yêu cầu làm rõ
+     trả quyết định riêng `PlanClarification`.
 
 ---
 
@@ -107,7 +110,7 @@ Thực hiện 7 chốt kiểm tra nghiêm ngặt trước khi tạo `ValidatedPl
   - Phát hiện khi thiếu `time` để trả về `status = "needs_clarification"`, `unresolved_slots = ["time"]`, kèm câu hỏi làm rõ bằng tiếng Việt hoặc tiếng Anh theo `locale`.
 
 ### Issue M2.2: Xây dựng Semantic Plan Validator (`agent4/planning/validator.py`)
-- [ ] **Task M2.2.1 — Hiện thực hóa hàm `validate_semantic_plan_draft()`**:
+- [x] **Task M2.2.1 — Hiện thực hóa hàm `validate_semantic_plan_draft()`**:
   - Kiểm tra 14 trường bắt buộc của `SemanticPlanDraft` bằng `enforce_exact_keys`.
   - Kiểm tra chống nhúng SQL/bảng vật lý.
   - Kiểm tra `snapshot` (`as_of`) vs `flow` (`range`), kiểm tra `start <= end` và `max_days <= 750`.
@@ -120,9 +123,10 @@ Thực hiện 7 chốt kiểm tra nghiêm ngặt trước khi tạo `ValidatedPl
 
 Chạy câu lệnh kiểm thử cho riêng Module 3:
 ```bash
-PYTHONPATH=.venv/lib/python3.13/site-packages pytest -v \
+.venv/bin/python -m pytest -v \
   tests/contracts/test_planning_and_plan_validation.py \
-  tests/security/test_security_redteam.py -k "plan or sql_injection"
+  tests/security/test_security_redteam.py \
+  tests/security/test_plan_validation_security.py -k "plan or sql_injection"
 ```
 
 **Các bài test & câu hỏi Benchmark bắt buộc phải PASS**:
@@ -133,4 +137,5 @@ PYTHONPATH=.venv/lib/python3.13/site-packages pytest -v \
   - `test_snapshot_metric_rejects_invalid_range_mode`
   - `test_dimension_and_filter_allowlist_and_limits`
 - `test_sql_injection_in_filter_and_dimension_is_blocked` trong `test_security_redteam.py`.
+- Các ca production trong `TestProductionPlanValidation` và `test_plan_validation_security.py`.
 - 15/15 câu hỏi nhóm `5_ambiguous_needs_clarification` (`BM-076` $\rightarrow$ `BM-090`) trong `data/eval/contract_benchmark_questions.jsonl`.

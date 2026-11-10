@@ -735,20 +735,25 @@ NormalizedQuery + ValidatedMetricSet + QueryContext
 ### Input
 
 ```text
-SemanticPlanDraft + CatalogSnapshot + AuthContext + Policy
+SemanticPlanDraft + ValidatedMetricSet + CatalogSnapshot + AuthContext + Policy
 ```
 
 ### Output: `ValidatedPlan`
 
 ```json
 {
+  "contract_version": "validated-plan.v1",
+  "status": "validated",
   "metric_ids": ["net_profit_margin"],
-  "time": {},
+  "time": {"mode": "range", "start": "2026-09-01", "end": "2026-09-30", "as_of": null, "grain": "month"},
   "dimensions": [],
   "filters": [],
   "view": "mgmt",
   "operation": "aggregate",
+  "sort": null,
+  "top_k": null,
   "comparison": null,
+  "row_cap": 1000,
   "tenant_id": "tenant-a",
   "catalog_hash": "catalog-abc",
   "policy_hash": "policy-def",
@@ -758,11 +763,25 @@ SemanticPlanDraft + CatalogSnapshot + AuthContext + Policy
 
 ### Rules
 
-- `ValidatedPlan` là immutable trust boundary trước SQL Compiler.
-- Kiểm tra date range, max days, row cap, top-k, filter và dimension.
-- Kiểm tra tenant/policy/catalog hash.
-- Không cho snapshot metric dùng range không hợp lệ.
-- Không cho mix metric không tương thích.
+- `agent4.planning.validator.validate_semantic_plan_draft()` là điểm tạo
+  `ValidatedPlan` bất biến của core mới. Ví dụ JSON trên mô tả các giá trị
+  trường. Downstream dùng đối tượng đã niêm phong với ngày dạng `date`, tuple
+  và các record con bất biến. Dict và kiểu plan của API demo không thuộc contract này.
+- Chỉ nhận 14 trường của draft và đúng cấu trúc từng slot. Chặn SQL, định danh
+  vật lý và giá trị ngoài allowlist. Metric phải nằm trong `ValidatedMetricSet`
+  và vẫn được phê duyệt, hỗ trợ và cấp quyền trong catalog cùng auth hiện tại.
+  `tenant_id` và `policy_hash` lấy từ `AuthContext`. `catalog_hash` lấy từ
+  catalog hiện tại và phải khớp hash của kết quả chọn metric.
+- Flow cần range với grain tháng, quý hoặc năm. Snapshot cần ngày chốt
+  as-of. Không trộn hai loại kỳ. Policy có thể hạ giới hạn tối đa 750 ngày
+  tính bằng `end - start`, 100 cho `top_k` và 1000 cho `row_cap`.
+  Xếp hạng cần chiều và thứ tự theo một metric trong plan. Khi có `top_k`
+  thì cần thứ tự. Compiler áp giới hạn dòng hiệu dụng nhỏ hơn giữa hai giới hạn.
+- Default được áp là `operation=aggregate` khi operation rỗng và được ghi
+  trong `applied_defaults`. `comparison` hiện phải là `null`.
+- Draft cần làm rõ trả `PlanClarification` với `status`,
+  `question_for_user` và `unresolved_slots`. Chỉ draft sẵn sàng, hợp lệ mới
+  được niêm phong.
 
 ## 18. SQL Compiler Contract
 

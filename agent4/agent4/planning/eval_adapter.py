@@ -7,11 +7,12 @@ Metric validation and planning use the production implementations.
 from __future__ import annotations
 
 import re
+from dataclasses import asdict
 from functools import cache
 from time import perf_counter
 from typing import Any
 
-from agent4.core.context import query_intake
+from agent4.core.context import build_auth_context, query_intake
 from agent4.core.errors import ContractError
 from agent4.metric_selection.catalog_adapter import (
     build_canonical_catalog,
@@ -148,6 +149,15 @@ async def predict_baseline(request: dict[str, Any]) -> dict[str, Any]:
 
 
 async def predict(request: dict[str, Any]) -> dict[str, Any]:
+    return _predict(request, validate_plan=False)
+
+
+async def predict_validated(request: dict[str, Any]) -> dict[str, Any]:
+    """Run the production plan gate before emitting a benchmark prediction."""
+    return _predict(request, validate_plan=True)
+
+
+def _predict(request: dict[str, Any], *, validate_plan: bool) -> dict[str, Any]:
     # Keep baseline runnable in a checkout without planner.py.
     from agent4.planning.planner import build_semantic_plan_draft
 
@@ -155,7 +165,39 @@ async def predict(request: dict[str, Any]) -> dict[str, Any]:
         query, metrics, selection = _prepare(request)
         started = perf_counter()
         draft = build_semantic_plan_draft(query, metrics, request["query_context"])
-        planning_ms = (perf_counter() - started) * 1000
+        latency = {"planning_ms": (perf_counter() - started) * 1000}
+        if validate_plan:
+            from agent4.planning.validator import PlanClarification, validate_semantic_plan_draft
+
+            fixture = request["auth_context"]
+            auth = build_auth_context(
+                {key: fixture[key] for key in ("user_id", "tenant_id", "roles")},
+                {
+                    "allowed_views": fixture["allowed_views"],
+                    "allowed_metrics": fixture.get("allowed_metrics"),
+                    "policy_version": "contract-benchmark-v2",
+                },
+            )
+            started = perf_counter()
+            decision = validate_semantic_plan_draft(draft, metrics, _catalog(), auth)
+            latency["plan_validation_ms"] = (perf_counter() - started) * 1000
+            if isinstance(decision, PlanClarification):
+                # Preserve the slots the gate accepted, plus its non-executable decision.
+                draft.update(asdict(decision))
+            else:
+                sealed = asdict(decision)
+                for key in (
+                    "metric_ids",
+                    "time",
+                    "dimensions",
+                    "filters",
+                    "view",
+                    "operation",
+                    "sort",
+                    "top_k",
+                    "comparison",
+                ):
+                    draft[key] = sealed[key]
     except ContractError as error:
         return _error_prediction(request, error)
     return {
@@ -163,7 +205,7 @@ async def predict(request: dict[str, Any]) -> dict[str, Any]:
         "selection": selection,
         "plan": _benchmark_plan(draft, query["normalized_question"]),
         "final_status": draft["status"],
-        "stage_latency_ms": {"planning_ms": planning_ms},
+        "stage_latency_ms": latency,
     }
 
 
