@@ -53,8 +53,17 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
   const errors = [], results = [];
   try {
     const active = path.join(profile,'DevToolsActivePort');
-    for (let n=0; !fs.existsSync(active) && n<100; n++) await sleep(100);
-    const port = fs.readFileSync(active,'utf8').split('\n')[0];
+    let port = '';
+    for (let n=0; n<100; n++) {
+      try {
+        if (fs.existsSync(active)) {
+          const content = fs.readFileSync(active, 'utf8');
+          port = content.split('\n')[0].trim();
+          if (port) break;
+        }
+      } catch (e) {}
+      await sleep(100);
+    }
     const target = await (await fetch('http://127.0.0.1:'+port+'/json/new?about:blank',{method:'PUT'})).json();
     ws = new WebSocket(target.webSocketDebuggerUrl);
     await new Promise((r,j) => { ws.onopen=r; ws.onerror=j; });
@@ -136,11 +145,12 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
     check('reduced motion',await evaluate('getComputedStyle(document.querySelector("#run")).transitionDuration==="0s"'));
     const dark=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(output,'dark.png'),Buffer.from(dark.data,'base64'));
-    await evaluate('document.documentElement.style.zoom="2"');await sleep(50);
+    await evaluate('document.documentElement.style.zoom="2"');await sleep(100);
     check('200 percent reflow',await evaluate('document.documentElement.scrollWidth<=innerWidth'));
     await evaluate('document.documentElement.style.zoom="";var selectedWorkspace=document.querySelector("#ws-select");selectedWorkspace.value="";selectedWorkspace.dispatchEvent(new Event("change"))');await sleep(150);
     check('no workspace welcome',await evaluate('!document.querySelector("#run") && document.querySelector("h1").textContent.includes("Agent 3")'));
-    await send('Page.navigate',{url:origin+'/frame'});await sleep(500);
+    await send('Page.navigate',{url:origin+'/frame'});
+    await wait(`!!document.querySelector('iframe')?.contentDocument?.querySelector('a[href="http://127.0.0.1:8800/#data"]')`);
     check('embedded intake uses validated portal link',await evaluate(`Array.from(document.querySelector('iframe').contentDocument.querySelectorAll('a')).some(a => a.href === 'http://127.0.0.1:8800/#data')`));
     check('no uncaught browser errors',errors.length===0);
     fs.writeFileSync(path.join(output,'ui-results.json'),JSON.stringify({passed:results,errors,asks,decisions,origin},null,2));

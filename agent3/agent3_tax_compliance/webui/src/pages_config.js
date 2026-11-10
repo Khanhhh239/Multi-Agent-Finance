@@ -44,28 +44,59 @@ const MONTHS = Array.from({ length: 12 }, (_, i) => [String(i + 1), `Tháng ${i 
 // ---------------------------------------------------------------- welcome: the fixed framework before any enterprise
 export async function pageWelcome() {
   const list = state.workspaces;
-  app().innerHTML = `<h1 class="page">Agent 3 trợ lý thuế</h1>
-    <p class="lead">Khung kiểm tra thuế dùng chung cho mọi doanh nghiệp. Doanh nghiệp tự thiết lập cấu hình của mình trong vài phút để biến khung này thành trợ lý thuế riêng. Mọi dữ liệu xử lý trên máy này.</p>
+  const ICONS = [
+    `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--a3-primary);margin-bottom:8px" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 13"/></svg>`,
+    `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--a3-primary);margin-bottom:8px" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
+    `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--a3-primary);margin-bottom:8px" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+    `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--a3-primary);margin-bottom:8px" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+    `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--a3-primary);margin-bottom:8px" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+    `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--a3-primary);margin-bottom:8px" aria-hidden="true"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><rect x="4" y="8" width="16" height="12" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M9 17h6"/></svg>`
+  ];
+  const fixedItems = [
+    ['Đọc và kiểm tra hóa đơn điện tử', 'Chữ ký số, tổng tiền, hóa đơn trùng, bị thay thế, sai mã số thuế người mua'],
+    ['Ghép chứng từ thanh toán', 'Khoản chi trong sao kê với hóa đơn; AI đọc nội dung chuyển khoản viết tự do'],
+    ['14 luật rủi ro theo ngày hiệu lực', 'Ngưỡng thanh toán không dùng tiền mặt, mua nhiều lần trong ngày, người bán rủi ro, tiền thu chưa có hóa đơn'],
+    ['Lịch thuế và mức thiệt hại', 'Hạn tờ khai, tạm nộp, quyết toán; tự khai bổ sung so với để bị phát hiện'],
+    ['Kho luật tự cập nhật', 'Văn bản từ cổng pháp luật quốc gia, tự biết văn bản nào đã bị thay thế'],
+    ['Trợ lý AI chạy trên máy', 'Chỉ đề xuất, có kiểm tra tự động, người duyệt quyết định']
+  ];
+
+  app().innerHTML = `<span class="eyebrow">Hệ thống Trợ lý Thuế GTGT Doanh nghiệp</span>
+    <h1 class="page">Agent 3 trợ lý thuế</h1>
+    <p class="lead">Khung kiểm tra thuế dùng chung cho mọi doanh nghiệp. Doanh nghiệp tự thiết lập cấu hình của mình trong vài phút để biến khung này thành trợ lý thuế riêng. Mọi dữ liệu xử lý an toàn nội bộ trên máy này.</p>
     <div class="welcome-grid">
-      <div class="panel welcome-main"><h3>Bắt đầu với doanh nghiệp của bạn</h3>
-        <ol class="welcome-steps"><li><strong>Thiết lập</strong>: hồ sơ, năm tài chính, quy định chi tiêu nội bộ, nhóm hàng đặc thù, ngày nghỉ (khoảng 3 phút)</li>
+      <div class="panel welcome-main">
+        <h3 style="margin-top:0;font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px">
+          <span>🚀</span> Bắt đầu với doanh nghiệp của bạn
+        </h3>
+        <ol class="welcome-steps">
+          <li><strong>Thiết lập</strong>: hồ sơ, năm tài chính, quy định chi tiêu nội bộ, nhóm hàng đặc thù, ngày nghỉ (khoảng 3 phút)</li>
           <li><strong>Nạp dữ liệu</strong>: thả hóa đơn XML, sao kê ngân hàng, bảng kê cổng thuế vào một ô</li>
-          <li><strong>Xử lý việc cần làm</strong>: mỗi việc có số tiền, căn cứ và cách xử lý ít thiệt hại nhất</li></ol>
-        <div class="bar">${button('Thiết lập doanh nghiệp của tôi', 'primary', 'data-go="#/thiet-lap"')}</div></div>
-      <div class="panel"><h3>Xem thử trước</h3><p class="muted">Một doanh nghiệp mô phỏng có sẵn hóa đơn, sao kê hai ngân hàng và các tình huống rủi ro, để thử toàn bộ luồng. Không phải doanh nghiệp thật.</p>
-        ${button('Xem thử với dữ liệu mô phỏng', 'tertiary', 'id="demo"')}<div id="demo-msg"></div></div>
+          <li><strong>Xử lý việc cần làm</strong>: mỗi việc có số tiền, căn cứ và cách xử lý ít thiệt hại nhất</li>
+        </ol>
+        <div class="bar">${button('Thiết lập doanh nghiệp của tôi', 'primary', 'data-go="#/thiet-lap"')}</div>
+      </div>
+      <div class="panel">
+        <h3 style="margin-top:0;font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px">
+          <span>🧪</span> Xem thử trước
+        </h3>
+        <p class="muted" style="line-height:1.65;font-size:13.5px">Một doanh nghiệp mô phỏng có sẵn hóa đơn, sao kê hai ngân hàng và các tình huống rủi ro, để thử toàn bộ luồng. Không phải doanh nghiệp thật.</p>
+        <div class="bar" style="margin-top:20px">${button('Xem thử với dữ liệu mô phỏng', 'tertiary', 'id="demo"')}</div>
+        <div id="demo-msg"></div>
+      </div>
     </div>
+
     <h2 class="section">Khung cố định có sẵn cho mọi doanh nghiệp</h2>
     <div class="fixed-grid">
-      ${[['Đọc và kiểm tra hóa đơn điện tử', 'Chữ ký số, tổng tiền, hóa đơn trùng, bị thay thế, sai mã số thuế người mua'],
-        ['Ghép chứng từ thanh toán', 'Khoản chi trong sao kê với hóa đơn; AI đọc nội dung chuyển khoản viết tự do'],
-        ['14 luật rủi ro theo ngày hiệu lực', 'Ngưỡng thanh toán không dùng tiền mặt, mua nhiều lần trong ngày, người bán rủi ro, tiền thu chưa có hóa đơn'],
-        ['Lịch thuế và mức thiệt hại', 'Hạn tờ khai, tạm nộp, quyết toán; tự khai bổ sung so với để bị phát hiện'],
-        ['Kho luật tự cập nhật', 'Văn bản từ cổng pháp luật quốc gia, tự biết văn bản nào đã bị thay thế'],
-        ['Trợ lý AI chạy trên máy', 'Chỉ đề xuất, có kiểm tra tự động, người duyệt quyết định']].map(([t, d]) => `<div class="fixed-card"><strong>${esc(t)}</strong><span class="muted small">${esc(d)}</span></div>`).join('')}
+      ${fixedItems.map(([t, d], idx) => `<div class="fixed-card">
+        ${ICONS[idx]}
+        <strong>${esc(t)}</strong>
+        <span class="muted small">${esc(d)}</span>
+      </div>`).join('')}
     </div>
-    ${list.length ? `<h2 class="section">Doanh nghiệp đã thiết lập trên máy này</h2>${table(['Doanh nghiệp', 'Mã số thuế', ''], list.map((w) => `<tr><td>${esc(w.name)}${w.simulated ? ' <span class="muted small">(mô phỏng)</span>' : ''}</td><td>${esc(w.tax_code)}</td>
-      <td>${button('Mở', 'ghost', `data-open="${esc(w.id)}"`)}</td></tr>`))}` : ''}`;
+
+    ${list.length ? `<h2 class="section">Doanh nghiệp đã thiết lập trên máy này</h2>${table(['Doanh nghiệp', 'Mã số thuế', ''], list.map((w) => `<tr><td><strong>${esc(w.name)}</strong>${w.simulated ? ' <span class="cds--tag cds--tag--magenta" style="margin-left:6px">mô phỏng</span>' : ''}</td><td><code>${esc(w.tax_code)}</code></td>
+      <td>${button('Mở không gian làm việc', 'ghost', `data-open="${esc(w.id)}"`)}</td></tr>`))}` : ''}`;
   $('#demo').onclick = async () => {
     $('#demo-msg').innerHTML = loading('Đang tạo dữ liệu mô phỏng');
     const r = await post('/api/demo');
@@ -92,7 +123,7 @@ export async function pageSetup() {
   let step = Math.max(0, Math.min(5, Number(new URLSearchParams(location.hash.split('?')[1] || '').get('buoc') || 1) - 1));
   const steps = ['Hồ sơ', 'Quy định chi tiêu', 'Ngưỡng nội bộ', 'Nhóm hàng đặc thù', 'Ngày nghỉ', 'Xác nhận'];
   const draw = () => {
-    const nav = `<nav class="steps">${steps.map((s, i) => `<a class="${i === step ? 'on' : ''}" ${i < step ? `data-step="${i}" href="javascript:void 0"` : ''}><span class="n">${i + 1}</span>${esc(s)}</a>`).join('')}</nav>`;
+    const nav = `<nav class="steps">${steps.map((s, i) => `<a class="${i === step ? 'on' : i < step ? 'done' : ''}" ${i < step ? `data-step="${i}" href="javascript:void 0"` : ''}><span class="n">${i < step ? '✓' : i + 1}</span>${esc(s)}</a>`).join('')}</nav>`;
     let body = '';
     if (step === 1) {
       const key = (d.profile.industry || []).join(';');
@@ -143,8 +174,14 @@ export async function pageSetup() {
         <dt>Ngày nghỉ thêm</dt><dd>${d.days_off.length ? d.days_off.map(dmy).join(', ') : 'không có'}</dd>
         ${d.copy_from ? `<dt>Sao chép từ</dt><dd>${esc(others.find((w) => w.id === d.copy_from)?.name || '')}</dd>` : ''}</dl><div id="setup-msg"></div>`;
     }
-    app().innerHTML = `<h1 class="page">Thiết lập doanh nghiệp</h1><p class="lead">Biến khung cố định thành trợ lý thuế của doanh nghiệp bạn. Bước ${step + 1}/${steps.length}: ${esc(steps[step])}.</p>${nav}<form id="setup">${body}
-      <div class="bar">${step > 0 ? button('Quay lại', 'ghost', 'id="back"') : button('Hủy', 'ghost', 'data-go="#/"')}${button(step === steps.length - 1 ? 'Tạo doanh nghiệp' : 'Tiếp tục', 'primary', 'type="submit"')}</div></form>`;
+    app().innerHTML = `<span class="eyebrow">Cấu hình khởi tạo doanh nghiệp</span>
+      <h1 class="page">Thiết lập doanh nghiệp</h1>
+      <p class="lead">Biến khung kiểm tra thuế dùng chung thành trợ lý thuế riêng của doanh nghiệp. Bước ${step + 1}/${steps.length}: <strong>${esc(steps[step])}</strong>.</p>
+      ${nav}
+      <form id="setup">
+        <div class="panel" style="padding:26px 28px;border-radius:12px;box-shadow:var(--a3-shadow-sm);margin-bottom:20px;border:1px solid var(--cds-border-subtle)">${body}</div>
+        <div class="bar">${step > 0 ? button('Quay lại', 'ghost', 'id="back"') : button('Hủy', 'ghost', 'data-go="#/"')}${button(step === steps.length - 1 ? 'Tạo doanh nghiệp' : 'Tiếp tục', 'primary', 'type="submit"')}</div>
+      </form>`;
     app().querySelectorAll('[data-step]').forEach((a) => { a.onclick = () => { collect(); step = Number(a.dataset.step); draw(); }; });
     if ($('#back')) $('#back').onclick = () => { collect(); step -= 1; draw(); };
     app().querySelectorAll('[data-pol],[data-cus]').forEach((c) => { c.onchange = () => c.closest('[data-card]').classList.toggle('on', c.checked); });
@@ -221,10 +258,22 @@ export async function pageConfig() {
     try { await put(`/api/workspaces/${state.ws}/pack?by=${encodeURIComponent(store.get('agent3.reviewer') || '')}`, next); toast(msg || 'Đã lưu cấu hình', 'Chạy lại phân tích để áp dụng'); await loadWorkspaces(); rerender(); }
     catch (err) { toast('Không lưu được', err.message, 'error'); }
   };
-  const sec = (id, title, sub, inner) => `<section class="cfg" id="cfg-${id}"><h2 class="section">${esc(title)}</h2><p class="muted small">${esc(sub)}</p>${inner}</section>`;
+  const SEC_ICONS = {
+    'ho-so': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+    'ngan-hang': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
+    'bang-ke': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>`,
+    'quy-dinh': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    'nguong': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>`,
+    'nhom-hang': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>`,
+    'ngay-nghi': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+    'rui-ro': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+    'lich-su': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+  };
+  const sec = (id, title, sub, inner) => `<section class="cfg" id="cfg-${id}"><h2 class="section">${SEC_ICONS[id] || ''} <span>${esc(title)}</span></h2><p class="section-desc">${esc(sub)}</p>${inner}</section>`;
   const cats = pack.ai_categories || [];
-  app().innerHTML = `<h1 class="page">Cấu hình doanh nghiệp</h1>
-    <p class="lead">Phần riêng của ${esc(pack.profile.legal_name)}. Khung cố định (luật rủi ro, kho luật, cách kiểm tra) dùng chung và không sửa ở đây; các mục dưới đây làm khung đó khớp với doanh nghiệp. Ngưỡng chỉ được chặt hơn luật, quy định nội bộ chỉ thêm nhắc nhở.</p>
+  app().innerHTML = `<span class="eyebrow">Cấu hình riêng của doanh nghiệp</span>
+    <h1 class="page">${esc(pack.profile.legal_name)}</h1>
+    <p class="lead">Thiết lập các tham số, quy định chi tiêu, ngưỡng kiểm soát và danh mục đặc thù khớp với doanh nghiệp của bạn. Khung kiểm tra luật thuế dùng chung luôn được bảo toàn.</p>
     <nav class="cfg-nav">${[['ho-so', 'Hồ sơ'], ['ngan-hang', 'Mẫu sao kê'], ['bang-ke', 'Cột bảng kê'], ['quy-dinh', 'Quy định chi tiêu'], ['nguong', 'Ngưỡng'], ['nhom-hang', 'Nhóm hàng đặc thù'], ['ngay-nghi', 'Ngày nghỉ'], ['rui-ro', 'Danh sách rủi ro'], ['lich-su', 'Lịch sử thay đổi']]
       .map(([id, l]) => `<a href="javascript:void 0" data-jump="cfg-${id}">${esc(l)}</a>`).join('')}</nav>
     ${sec('ho-so', 'Hồ sơ', 'Thông tin trên giấy chứng nhận đăng ký thuế; kỳ khai và năm tài chính quyết định lịch hạn nộp.', `<form id="f-profile"><div class="form-grid">

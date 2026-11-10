@@ -26,14 +26,29 @@ function bindLogout() {
 
 function loginForm(st) {
   const setup = !st.configured;
-  app().innerHTML = `<h1 class="page">Quản trị</h1><p class="lead">${setup
+  app().innerHTML = `<span class="eyebrow">Hệ thống bảo vệ</span>
+    <h1 class="page">Quản trị hệ thống</h1>
+    <p class="lead">${setup
     ? 'Lần đầu sử dụng: đặt mật khẩu quản trị. Mật khẩu này dùng để thay đổi cấu hình doanh nghiệp, danh mục dùng chung và kho luật; công việc hằng ngày (nạp dữ liệu, xử lý việc, hỏi đáp) không cần mật khẩu.'
-    : 'Trang này dùng để thay đổi cấu hình. Nhập mật khẩu quản trị.'}</p>
-    <form id="admin-form" class="panel narrow"><div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="pw">Mật khẩu${setup ? ' mới (ít nhất 8 ký tự)' : ''}</label>
-    <input class="cds--text-input" id="pw" type="password" autocomplete="${setup ? 'new-password' : 'current-password'}" required></div>
-    ${setup ? '<div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="pw2">Nhập lại mật khẩu</label><input class="cds--text-input" id="pw2" type="password" autocomplete="new-password" required></div>' : ''}
-    <div class="bar">${button(setup ? 'Đặt mật khẩu' : 'Đăng nhập', 'primary', 'type="submit"')}</div><div id="admin-msg"></div>
-    <p class="muted small">Mật khẩu chỉ lưu dạng mã băm trên máy này. Phiên đăng nhập hết hạn sau ${st.ttl_minutes} phút không thao tác.</p></form>`;
+    : 'Khu vực quản trị cấu hình và danh mục hệ thống. Vui lòng nhập mật khẩu quản trị để tiếp tục.'}</p>
+    <div style="display:flex;justify-content:center;margin:32px 0">
+      <form id="admin-form" class="panel narrow" style="width:100%;max-width:440px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--cds-border-subtle)">
+          <div style="background:var(--a3-primary-soft);color:var(--a3-primary);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;flex:none">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <h3 style="margin:0;font-size:16px;font-weight:600">${setup ? 'Thiết lập mật khẩu quản trị' : 'Xác thực quản trị viên'}</h3>
+            <span class="muted small">${st.ttl_minutes} phút không thao tác sẽ tự khóa</span>
+          </div>
+        </div>
+        <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="pw">Mật khẩu${setup ? ' mới (ít nhất 8 ký tự)' : ''}</label>
+        <input class="cds--text-input" id="pw" type="password" autocomplete="${setup ? 'new-password' : 'current-password'}" required></div>
+        ${setup ? '<div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="pw2">Nhập lại mật khẩu</label><input class="cds--text-input" id="pw2" type="password" autocomplete="new-password" required></div>' : ''}
+        <div class="bar" style="margin-top:20px">${button(setup ? 'Đặt mật khẩu' : 'Đăng nhập', 'primary', 'type="submit"')}</div><div id="admin-msg"></div>
+        <p class="muted small" style="margin-top:14px">Mật khẩu được mã hóa băm an toàn trên máy cục bộ.</p>
+      </form>
+    </div>`;
   $('#admin-form').onsubmit = async (e) => {
     e.preventDefault();
     const pw = $('#pw').value;
@@ -59,14 +74,44 @@ export function adminOnly(page) {
 
 export async function pageAdminHome() {
   const cats = await api('/api/admin/catalog');
-  app().innerHTML = `<h1 class="page">Quản trị</h1><p class="lead">Mọi thay đổi ở đây được kiểm tra hợp lệ, ghi phiên bản và lưu vào lịch sử (ai sửa, khi nào, sửa gì). Danh mục dùng chung áp dụng cho mọi doanh nghiệp; cấu hình doanh nghiệp chỉ áp dụng cho doanh nghiệp đang chọn.</p>
-    <div class="grid2"><div class="panel"><h3>Doanh nghiệp</h3><p class="muted">${state.workspaces.length} doanh nghiệp. Đang chọn: ${esc(state.workspaces.find((w) => w.id === state.ws)?.name || 'chưa chọn')}.</p>
-      <div class="bar">${button('Cấu hình doanh nghiệp đang chọn', 'primary', 'data-go="#/quan-tri/doanh-nghiep"')}${button('Thêm doanh nghiệp', 'tertiary', 'data-go="#/thiet-lap"')}</div></div>
-    <div class="panel"><h3>Danh mục dùng chung</h3><ul class="list-plain">${cats.map((c) => `<li><a href="#/quan-tri/danh-muc?ten=${c.name}">${esc(NAMES[c.name] || c.name)}</a> <span class="muted small">phiên bản ${esc(c.version)}</span></li>`).join('')}</ul></div></div>
-    <div class="panel narrow"><h3>Đổi mật khẩu quản trị</h3><form id="pwchg"><div class="form-grid">
-      <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="old">Mật khẩu hiện tại</label><input class="cds--text-input" id="old" type="password" autocomplete="current-password"></div>
-      <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="new">Mật khẩu mới</label><input class="cds--text-input" id="new" type="password" autocomplete="new-password"></div></div>
-      <div class="bar">${button('Đổi mật khẩu', 'secondary', 'type="submit"')}</div></form></div>`;
+  app().innerHTML = `<span class="eyebrow">Bảng điều khiển quản trị</span>
+    <h1 class="page">Quản trị & Danh mục dùng chung</h1>
+    <p class="lead">Mọi thay đổi ở đây được kiểm tra hợp lệ, ghi phiên bản và lưu vào nhật ký lịch sử. Danh mục dùng chung áp dụng cho mọi doanh nghiệp; cấu hình doanh nghiệp áp dụng riêng cho từng không gian.</p>
+    <div class="grid2">
+      <div class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm)">
+        <h3 style="margin-top:0;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px">
+          <span>🏢</span> Doanh nghiệp đang chọn
+        </h3>
+        <p class="muted" style="font-size:13.5px;line-height:1.65">${state.workspaces.length} doanh nghiệp trên máy. Đang chọn: <strong>${esc(state.workspaces.find((w) => w.id === state.ws)?.name || 'chưa chọn')}</strong>.</p>
+        <div class="bar" style="margin-top:20px">
+          ${button('Cấu hình doanh nghiệp này', 'primary', 'data-go="#/quan-tri/doanh-nghiep"')}
+          ${button('Thêm doanh nghiệp mới', 'tertiary', 'data-go="#/thiet-lap"')}
+        </div>
+      </div>
+      <div class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm)">
+        <h3 style="margin-top:0;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px">
+          <span>📚</span> Danh mục dùng chung toàn hệ thống
+        </h3>
+        <ul class="list-plain" style="margin-top:14px">
+          ${cats.map((c) => `<li style="padding:10px 0;border-bottom:1px solid var(--cds-border-subtle);display:flex;justify-content:space-between;align-items:center">
+            <a href="#/quan-tri/danh-muc?ten=${c.name}" style="font-weight:500;text-decoration:none">${esc(NAMES[c.name] || c.name)}</a>
+            <span class="cds--tag cds--tag--teal" style="font-size:11.5px">v${esc(c.version)}</span>
+          </li>`).join('')}
+        </ul>
+      </div>
+    </div>
+    <div class="panel narrow" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm);margin-top:24px;max-width:560px">
+      <h3 style="margin-top:0;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px">
+        <span>🔑</span> Đổi mật khẩu quản trị
+      </h3>
+      <form id="pwchg" style="margin-top:16px">
+        <div class="form-grid">
+          <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="old">Mật khẩu hiện tại</label><input class="cds--text-input" id="old" type="password" autocomplete="current-password"></div>
+          <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="new">Mật khẩu mới</label><input class="cds--text-input" id="new" type="password" autocomplete="new-password"></div>
+        </div>
+        <div class="bar" style="margin-top:18px">${button('Đổi mật khẩu', 'secondary', 'type="submit"')}</div>
+      </form>
+    </div>`;
   $('#pwchg').onsubmit = async (e) => {
     e.preventDefault();
     try { const r = await post('/api/admin/password', { old: $('#old').value, new: $('#new').value }); toast('Đã đổi mật khẩu', r.note); window.dispatchEvent(new Event('hashchange')); }
@@ -149,11 +194,17 @@ export async function pageCatalog() {
   const ed = EDITORS[name];
   if (!ed) { app().innerHTML = notice('error', 'Không có danh mục này'); return; }
   const { data, history } = await api(`/api/admin/catalog/${name}`);
-  app().innerHTML = `<h1 class="page">${esc(NAMES[name])}</h1><p class="lead">${esc(ed.help)}</p><p class="muted small">Phiên bản ${esc(data.version)}. Áp dụng cho mọi doanh nghiệp.</p>
-    <form id="cat-form"><div id="cat-body">${ed.render(data)}</div>
+  app().innerHTML = `<span class="eyebrow">Danh mục dùng chung hệ thống</span>
+    <h1 class="page">${esc(NAMES[name])}</h1>
+    <p class="lead">${esc(ed.help)}</p>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <span class="cds--tag cds--tag--teal">Phiên bản ${esc(data.version)}</span>
+      <span class="muted small">Áp dụng chung cho mọi doanh nghiệp trên máy này</span>
+    </div>
+    <form id="cat-form"><div id="cat-body" class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm);margin-bottom:24px">${ed.render(data)}</div>
     <div class="bar sticky-save"><input class="cds--text-input filter-input" id="by" placeholder="Người sửa" value="${esc(store.get('agent3.reviewer') || '')}" required>
     ${button('Lưu danh mục', 'primary', 'type="submit"')}<span id="cat-msg"></span></div></form>
-    ${history.length ? `<h2 class="section">Lịch sử</h2><ul class="list-plain small">${history.map((h) => `<li>${esc(h.at.replace('T', ' '))}: ${esc(h.by)} ${esc(JSON.stringify(h.summary))}</li>`).join('')}</ul>` : ''}`;
+    ${history.length ? `<h2 class="section">Nhật ký phiên bản danh mục</h2><ul class="list-plain small" style="background:var(--a3-surface);border:1px solid var(--cds-border-subtle);border-radius:10px;padding:16px 20px">${history.map((h) => `<li style="padding:6px 0;border-bottom:1px solid var(--cds-border-subtle)">${esc(h.at.replace('T', ' '))}: <strong>${esc(h.by)}</strong> ${esc(JSON.stringify(h.summary))}</li>`).join('')}</ul>` : ''}`;
   const body = $('#cat-body');
   body.addEventListener('click', (e) => {
     if (e.target.closest('.del-row')) e.target.closest('tr').remove();
