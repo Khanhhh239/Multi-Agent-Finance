@@ -5,7 +5,7 @@ Demo này minh họa việc nạp **một tệp sao kê** trên portal và ghi c
 ## Chuẩn bị
 
 1. Checkout nhánh `platform-Khanh` và chạy portal cùng các agent theo [README](README.md). Mở [Nạp dữ liệu](http://127.0.0.1:8800/#data).
-2. Dùng một hồ sơ doanh nghiệp dành riêng cho demo. Lưu mã công ty và MST hợp lệ trong **Hồ sơ doanh nghiệp**, rồi tạo workspace cùng MST cho A3 nếu chưa có. A1 và A3 phải ở trạng thái đang chạy. Nếu A1 bắt buộc dùng danh mục tài khoản, thêm tài khoản mẫu `000012345678` vào danh mục của **môi trường thử** hoặc dùng mã tài khoản thử đã đăng ký nhất quán trong tệp.
+2. Dùng một hồ sơ doanh nghiệp dành riêng cho demo. Lưu mã công ty và MST hợp lệ trong **Hồ sơ doanh nghiệp** của portal; A3 tự đồng bộ, không tạo workspace riêng. Bật A1 và A3 từ portal. Nếu vừa cập nhật code, khởi động lại portal và các agent để nhận bản mới. Nếu A1 bắt buộc dùng danh mục tài khoản, thêm tài khoản mẫu `000012345678` vào danh mục của **môi trường thử** hoặc dùng mã tài khoản thử đã đăng ký nhất quán trong tệp.
 3. Lấy tệp [sao-ke-chung.csv](portal/static/samples/sao-ke-chung.csv). Khi portal đang chạy, cũng có thể tải từ [mục mẫu sao kê](http://127.0.0.1:8800/samples/sao-ke-chung.csv). Giữ tài khoản và mã giao dịch ở dạng văn bản nếu mở hoặc lưu lại bằng Excel.
 
 ## Trình diễn và kết quả mong đợi

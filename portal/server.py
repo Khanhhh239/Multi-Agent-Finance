@@ -827,10 +827,10 @@ def check(aid, record, raw, *, bank_rows=None):
         kind = 'bank' if shared else record['kind'].split(':', 1)[1]
         mapping = json.dumps({field: field for field in ('bank_id', 'account', 'date', 'direction', 'amount', 'known_at', 'component')}) if shared else '{}'
         body, ctype = multipart(dict(kind=kind, mapping=mapping,
-                                     date_format='%Y-%m-%d' if shared or c['date_format'] == 'iso' else '%d/%m/%Y',
-                                     number_format='plain' if shared else c['number_format']), 'file',
+                                     date_format='%Y-%m-%d' if c['date_format'] == 'iso' else '%d/%m/%Y',
+                                     number_format=c['number_format']), 'file',
                                 'sao_ke_chung.csv' if shared else record['name'],
-                                bank_intake.project(bank_rows, aid) if shared else raw)
+                                bank_intake.project(bank_rows, aid, date_format=c['date_format'], number_format=c['number_format']) if shared else raw)
         status, res = call('POST', agent_url('agent1', '/v1/imports/preview'), body,
                            {'Authorization': f'Bearer {key}', 'Content-Type': ctype})
         if status != 200:

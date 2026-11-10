@@ -123,12 +123,20 @@ def normalize_rows(rows, fields, number_format, normalize):
     return sorted(output.values())
 
 
-def project(rows, agent):
+def project(rows, agent, *, date_format='iso', number_format='plain'):
     out = io.StringIO(newline='')
     writer = csv.writer(out, lineterminator='\n')
     if agent == 'agent1':
+        if date_format not in ('iso', 'dmy') or number_format not in ('plain', 'vi-VN'):
+            raise ValueError('Định dạng hồ sơ doanh nghiệp không hợp lệ')
+        def formatted_day(value):
+            parsed = date.fromisoformat(value)
+            return parsed.isoformat() if date_format == 'iso' else parsed.strftime('%d/%m/%Y')
         writer.writerow(('bank_id', 'account', 'date', 'direction', 'amount', 'known_at', 'component'))
-        writer.writerows(row[:7] for row in rows)
+        for bank_id, account, booked, direction, amount, known, component, *_ in rows:
+            exact = int(amount)
+            amount = format(exact, ',').replace(',', '.') if number_format == 'vi-VN' else str(exact)
+            writer.writerow((bank_id, account, formatted_day(booked), direction, amount, formatted_day(known), component))
     else:
         writer.writerow(('portal_bank_id', 'portal_bank_account', 'Ngày giao dịch', 'Ghi Nợ', 'Ghi Có',
                          'Nội dung', 'Số tài khoản đối ứng', 'Tên đơn vị đối ứng'))
