@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/app.css">
 <link rel="stylesheet" href="/workspace.css">
 <script src="/design/platform-theme.js"></script>
+<script src="/face-api.min.js"></script>
 <script src="/app.js" defer></script>
 </head>
 <body>
@@ -162,6 +163,17 @@
             <input type="password" name="confirm" autocomplete="new-password"></label>
           <p class="error-text" id="gate-error" role="alert"></p>
           <button type="submit" class="primary" id="gate-submit">Mở khóa</button>
+          <div id="gate-biometric-section" hidden style="margin-top: 14px;">
+            <div style="display: flex; align-items: center; margin: 12px 0; color: var(--kt-muted, #718096); font-size: 13px;">
+              <span style="flex: 1; height: 1px; background: var(--kt-line, #e2e8f0);"></span>
+              <span style="padding: 0 10px;">hoặc</span>
+              <span style="flex: 1; height: 1px; background: var(--kt-line, #e2e8f0);"></span>
+            </div>
+            <button type="button" class="secondary" id="gate-biometric-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 0 2 2v2M3 17v2a2 2 0 0 0 2 2h2M21 17v2a2 2 0 0 1-2 2h-2M9 9h.01M15 9h.01M9 15c1 1 2 1.5 3 1.5s2-.5 3-1.5"/></svg>
+              <span id="gate-biometric-label">Mở khóa bằng FaceID / Sinh trắc học</span>
+            </button>
+          </div>
           <p class="hint">Phiên làm việc tự khóa sau 20 phút không sử dụng. Nếu quên mật khẩu, liên hệ người quản trị hệ thống.</p>
         </form>
       </div>
@@ -174,7 +186,7 @@
             <h1 id="h-intake">Nạp dữ liệu</h1>
             <p class="lead">Tệp được nhận dạng và kiểm tra theo mẫu của từng agent trước khi niêm phong.</p>
           </div>
-          <div class="session"><span id="session-left"></span><button type="button" id="lock-now">Khóa lại</button></div>
+          <div class="session"><span id="session-left"></span><button type="button" id="face-manage-btn" class="secondary" style="font-size: 12.5px; padding: 4px 10px; margin-right: 6px;"></button><button type="button" id="lock-now">Khóa lại</button></div>
         </div>
 
         <p class="banner" id="intake-company"></p>
@@ -268,5 +280,33 @@
   </main>
 </div>
 <div class="toast" id="toast" role="status" hidden></div>
+
+<!-- FaceID AI Modal -->
+<div id="face-modal" class="face-modal" hidden>
+  <div class="face-card">
+    <div class="face-card-head">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--kt-accent);"><path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 0 2 2v2M3 17v2a2 2 0 0 0 2 2h2M21 17v2a2 2 0 0 1-2 2h-2M9 9h.01M15 9h.01M9 15c1 1 2 1.5 3 1.5s2-.5 3-1.5"/></svg>
+        <h3 id="face-modal-title" style="margin: 0; font-size: 17px; font-weight: 600;">Quét khuôn mặt FaceID</h3>
+      </div>
+      <button type="button" id="face-modal-close" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--kt-muted); line-height: 1;">&times;</button>
+    </div>
+    <div class="face-viewport">
+      <video id="face-video" autoplay playsinline muted></video>
+      <canvas id="face-canvas"></canvas>
+      <div class="face-reticle"></div>
+      <div id="face-spinner" class="face-spinner">
+        <div class="face-ring"></div>
+        <span id="face-loading-text">Đang tải mô hình AI nhận diện...</span>
+      </div>
+    </div>
+    <div class="face-card-foot">
+      <p id="face-feedback" class="face-feedback">Đang chuẩn bị camera...</p>
+      <div style="display: flex; gap: 10px; justify-content: flex-end; width: 100%;">
+        <button type="button" class="secondary" id="face-cancel-btn">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

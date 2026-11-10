@@ -83,6 +83,10 @@ export async function pageSetup() {
       const codes = (d.profile.industry || []).map((x) => (String(x).match(/^\s*(\d{2,5})/) || [])[1]).filter(Boolean);
       body = `<p class="muted">Quy định chi tiêu nội bộ: mỗi quy định chỉ thêm nhắc nhở cho kế toán khi gặp hóa đơn phù hợp, không làm thay đổi kết quả theo luật.
         ${codes.length ? `Gợi ý theo ngành ${codes.map(esc).join(', ')}.` : 'Chưa có ngành nghề trong hồ sơ chung; chỉ hiển thị gợi ý chung.'} Sửa nội dung, số tiền, từ khóa theo quy chế của doanh nghiệp.</p>
+        <div class="bar" style="margin-bottom:12px">
+          ${button('Chọn gợi ý theo ngành', 'tertiary', 'id="setup-sync-policies" type="button"')}
+          ${button('Chọn tất cả gợi ý', 'ghost', 'id="setup-all-policies" type="button"')}
+        </div>
         <div class="preset-list">${presets.map((p, i) => policyCard({ ...p, ...(d.edits[p.id] || {}) }, i, d.picked.has(p.id))).join('')}</div>
         <h3 class="sub-h">Quy định riêng của doanh nghiệp</h3>
         <div id="custom-list">${d.custom.map((c, i) => policyCard({ ...c, recommended: false }, i, true, 'cus')).join('') || '<p class="muted small">Chưa có. Ví dụ: "Mua văn phòng phẩm từ 1 triệu cần phiếu đề xuất" khi tên hàng có "giấy, bút, mực in".</p>'}</div>
@@ -99,6 +103,9 @@ export async function pageSetup() {
         <div class="bar">${button('Thêm nhóm', 'ghost', 'id="add-cat"')}<span class="muted small">Không bắt buộc. Tối đa 10 nhóm.</span></div>`;
     } else if (step === 4) {
       body = `<p class="muted">Ngày nghỉ Tết và nghỉ bù do Chính phủ công bố hằng năm. Hạn nộp trùng ngày nghỉ sẽ được dời sang ngày làm việc kế tiếp (khoản 7 Điều 3 Nghị định 252/2026). Thứ Bảy, Chủ nhật và lễ cố định (1/1, 30/4, 1/5, 2/9) đã có sẵn.</p>
+        <div class="bar" style="margin-bottom:12px">
+          ${button('Đồng bộ từ lịch nghỉ lễ hệ thống', 'tertiary', 'id="setup-sync-holidays" type="button"')}
+        </div>
         <div class="cds--form-item"><label class="cds--label" for="days">Mỗi dòng một ngày, dạng năm-tháng-ngày</label><textarea class="cds--text-area" id="days" rows="6" placeholder="2027-02-05&#10;2027-02-08">${esc(d.days_off.join('\n'))}</textarea></div>`;
     } else {
       body = `<p class="muted">Kiểm tra lại rồi lưu thiết lập nghiệp vụ thuế. Mọi mục đều sửa được sau trong trang Cấu hình doanh nghiệp.</p>
@@ -117,13 +124,52 @@ export async function pageSetup() {
       ${sharedProfile(d.profile)}${nav}
       <form id="setup">
         <div class="panel" style="padding:26px 28px;border-radius:12px;box-shadow:var(--a3-shadow-sm);margin-bottom:20px;border:1px solid var(--cds-border-subtle)">${body}</div>
-        <div class="bar">${step > 1 ? button('Quay lại', 'ghost', 'id="back"') : button('Hủy', 'ghost', 'data-go="#/"')}${button(step === steps.length ? 'Lưu thiết lập' : 'Tiếp tục', 'primary', 'type="submit"')}</div>
+        <div class="bar">${step > 1 ? button('Quay lại', 'ghost', 'id="back"') : button('Trở về cấu hình doanh nghiệp', 'ghost', 'data-go="#/quan-tri/doanh-nghiep"')}${button(step === steps.length ? 'Lưu thiết lập' : 'Tiếp tục', 'primary', 'type="submit"')}</div>
       </form>`;
     app().querySelectorAll('[data-step]').forEach((a) => { a.onclick = () => { collect(); step = Number(a.dataset.step); draw(); }; });
     if ($('#back')) $('#back').onclick = () => { collect(); step -= 1; draw(); };
     app().querySelectorAll('[data-pol],[data-cus]').forEach((c) => { c.onchange = () => c.closest('[data-card]').classList.toggle('on', c.checked); });
     if ($('#add-pol')) $('#add-pol').onclick = () => { collect(); d.custom.push({ flag: 'Quy định mới: sửa nội dung nhắc', description_contains: [] }); draw(); };
     if ($('#add-cat')) $('#add-cat').onclick = () => { collect(); if (d.ai_categories.length < 10) d.ai_categories.push({ name: '', description: '' }); draw(); };
+    if ($('#setup-sync-policies')) $('#setup-sync-policies').onclick = () => {
+      collect();
+      let count = 0;
+      presets.forEach((p) => {
+        if (p.industry_fit || p.recommended) {
+          d.picked.add(p.id);
+          count++;
+        }
+      });
+      draw();
+      toast(`Đã chọn ${count} quy định gợi ý theo ngành`);
+    };
+    if ($('#setup-all-policies')) $('#setup-all-policies').onclick = () => {
+      collect();
+      presets.forEach((p) => d.picked.add(p.id));
+      draw();
+      toast('Đã chọn tất cả gợi ý');
+    };
+    if ($('#setup-sync-holidays')) $('#setup-sync-holidays').onclick = async () => {
+      try {
+        const res = await api('/api/admin/catalog/holidays');
+        const yearsObj = res.data?.years || {};
+        const datesFromCatalog = [];
+        for (const y in yearsObj) {
+          for (const item of yearsObj[y] || []) {
+            if (item.date && /^\d{4}-\d{2}-\d{2}$/.test(item.date)) {
+              datesFromCatalog.push(item.date);
+            }
+          }
+        }
+        const existing = $('#days').value.split(/\s+/).map((s) => s.trim()).filter((s) => /^\d{4}-\d{2}-\d{2}$/.test(s));
+        const combined = Array.from(new Set([...existing, ...datesFromCatalog])).sort();
+        $('#days').value = combined.join('\n');
+        d.days_off = combined;
+        toast('Đã đồng bộ ngày nghỉ từ hệ thống', `Tổng cộng ${combined.length} ngày`);
+      } catch (err) {
+        toast('Chưa đồng bộ được lịch nghỉ', err.message, 'error');
+      }
+    };
     $('#setup').onsubmit = async (e) => {
       e.preventDefault();
       if (!collect()) return;
@@ -203,16 +249,38 @@ export async function pageConfig() {
   };
   const sec = (id, title, sub, inner) => `<section class="cfg" id="cfg-${id}"><h2 class="section">${SEC_ICONS[id] || ''} <span>${esc(title)}</span></h2><p class="section-desc">${esc(sub)}</p>${inner}</section>`;
   const cats = pack.ai_categories || [];
+  const indCodes = (pack.profile.industry || []).map((x) => (String(x).match(/^\s*(\d{2,5})/) || [])[1]).filter(Boolean);
+  const indText = indCodes.length ? `ngành VSIC ${indCodes.join(', ')}` : 'ngành';
+  const wizardBanner = `
+    <div class="panel" style="border-radius:12px;padding:18px 22px;background:var(--a3-surface);border:1px solid var(--cds-border-subtle);margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;box-shadow:var(--a3-shadow-sm)">
+      <div style="max-width:650px">
+        <h4 style="margin:0 0 6px 0;font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">
+          <span>🧭</span> Hướng dẫn thiết lập nghiệp vụ thuế (Wizard 5 bước)
+        </h4>
+        <p class="muted small" style="margin:0;line-height:1.55">Trình hỗ trợ thiết lập tuần tự: chọn quy định chi tiêu, ngưỡng kiểm soát, nhóm hàng AI và ngày nghỉ theo từng bước có giải thích chi tiết.</p>
+      </div>
+      <div class="bar" style="margin:0">
+        ${button('Chạy wizard thiết lập 5 bước', 'secondary', 'data-go="#/thiet-lap"')}
+      </div>
+    </div>`;
+
   app().innerHTML = `<span class="eyebrow">Cấu hình riêng của doanh nghiệp</span>
     <h1 class="page">${esc(pack.profile.legal_name)}</h1>
     <p class="lead">Thiết lập các tham số, quy định chi tiêu, ngưỡng kiểm soát và danh mục đặc thù khớp với doanh nghiệp của bạn. Khung kiểm tra luật thuế dùng chung luôn được bảo toàn.</p>
+    ${wizardBanner}
     <nav class="cfg-nav">${[['ho-so', 'Hồ sơ'], ['ngan-hang', 'Mẫu sao kê'], ['bang-ke', 'Cột bảng kê'], ['quy-dinh', 'Quy định chi tiêu'], ['nguong', 'Ngưỡng'], ['nhom-hang', 'Nhóm hàng đặc thù'], ['ngay-nghi', 'Ngày nghỉ'], ['rui-ro', 'Danh sách rủi ro'], ['lich-su', 'Lịch sử thay đổi']]
       .map(([id, l]) => `<a href="javascript:void 0" data-jump="cfg-${id}">${esc(l)}</a>`).join('')}</nav>
     <section id="cfg-ho-so">${sharedProfile(pack.profile)}</section>
     ${sec('ngan-hang', 'Mẫu sao kê ngân hàng', 'Mỗi ngân hàng một mẫu; tạo bằng nút Nhận dạng cột ở Nạp dữ liệu, Sao kê ngân hàng.', table(['Tên mẫu', 'Cột ngày', 'Cột tiền ra', 'Cột tiền vào', 'Cách viết số', ''], (pack.bank_formats || []).map((f, i) => `<tr><td>${esc(f.name)}</td><td class="mono">${esc(f.columns.date)}</td>
       <td class="mono">${esc(f.columns.debit)}</td><td class="mono">${esc(f.columns.credit || '')}</td><td>${f.thousands === '.' ? '1.234.567' : '1,234,567'}</td><td>${button('Xóa', 'ghost', `data-delfmt="${i}"`)}</td></tr>`), 'Chưa có mẫu. Nạp sao kê rồi bấm Nhận dạng cột.') + `<div class="bar">${button('Thêm mẫu từ tệp sao kê', 'ghost', 'data-go="#/nap?b=bank"')}</div>`)}
     ${sec('bang-ke', 'Cột của bảng kê cổng thuế', 'Khi cổng hóa đơn điện tử đổi mẫu tệp xuất, chọn lại cột ở đây; không cần sửa tệp.', '<div id="portal-map"><div class="bar">' + button('Đọc tiêu đề bảng kê đã nạp', 'ghost', 'id="portal-load"') + '</div></div>')}
-    ${sec('quy-dinh', 'Quy định chi tiêu nội bộ', 'Chỉ thêm nhắc nhở cho kế toán, không thay đổi kết quả theo luật.', `<div class="preset-list">${presets.policies.map((p, i) => `<label class="preset"><input type="checkbox" data-preset="${i}" ${(pack.policies || []).some((x) => x.id === p.id) ? 'checked' : ''}>
+    ${sec('quy-dinh', 'Quy định chi tiêu nội bộ', 'Chỉ thêm nhắc nhở cho kế toán, không thay đổi kết quả theo luật.', `
+      <div class="bar" style="margin-bottom:14px">
+        ${button(`Chọn gợi ý theo ${indText}`, 'tertiary', 'id="sync-industry-policies" type="button"')}
+        ${button('Chọn tất cả gợi ý', 'ghost', 'id="select-all-presets" type="button"')}
+        ${button('Bỏ chọn tất cả', 'ghost', 'id="deselect-all-presets" type="button"')}
+      </div>
+      <div class="preset-list">${presets.policies.map((p, i) => `<label class="preset"><input type="checkbox" data-preset="${i}" ${(pack.policies || []).some((x) => x.id === p.id) ? 'checked' : ''}>
       <span><strong>${esc(p.flag)}</strong>${p.industry_fit ? '<span class="badge-fit">Gợi ý cho ngành của bạn</span>' : ''}<span class="muted small">${p.min_gross ? `từ ${money(p.min_gross)}` : ''}${p.description_contains ? ` khi tên hàng có: ${p.description_contains.map(esc).join(', ')}` : ''}</span></span></label>`).join('')}
       ${(pack.policies || []).filter((x) => !presets.policies.some((p) => p.id === x.id)).map((x) => `<label class="preset"><input type="checkbox" checked data-custom="${esc(x.id)}"><span><strong>${esc(x.flag)}</strong><span class="muted small">quy định riêng</span></span></label>`).join('')}</div>
       <form id="f-pol" style="margin-top:.75rem"><div class="form-grid">${field({ key: 'flag', label: 'Thêm quy định riêng: nội dung nhắc', example: 'Mua văn phòng phẩm từ 1 triệu cần phiếu đề xuất' })}${field({ key: 'min_gross', label: 'Áp dụng từ số tiền (đồng)', example: '1000000' })}${field({ key: 'description_contains', label: 'Tên hàng có chứa (cách nhau dấu chấm phẩy)', example: 'giấy; bút; mực in' })}</div>
@@ -221,16 +289,110 @@ export async function pageConfig() {
       ${field({ key: 'match_days_after_invoice', label: 'Số ngày tối đa từ ngày hóa đơn đến ngày thanh toán', example: '90 (không quá 90)' }, pack.thresholds?.match_days_after_invoice ?? '')}
       ${field({ key: 'non_cash_threshold_override', label: 'Ngưỡng nội bộ yêu cầu chuyển khoản (đồng)', example: 'để trống dùng 5.000.000 theo luật' }, pack.thresholds?.non_cash_threshold_override ?? '')}</div>
       <div class="bar">${button('Lưu ngưỡng', 'primary', 'type="submit"')}</div></form>`)}
-    ${sec('nhom-hang', 'Nhóm hàng đặc thù cho AI', 'AI coi các nhóm này là phục vụ kinh doanh khi phân loại dòng hàng (ví dụ nhà hàng mua thực phẩm). Chạy lại Phân loại dòng hàng sau khi đổi.', `<form id="f-cat">${(cats.length ? cats : [{ name: '', description: '' }]).concat([{ name: '', description: '' }]).map((c, i) => `<div class="form-grid cat-row">
-      <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label">Tên nhóm</label><input class="cds--text-input" data-cat="${i}" data-k="name" value="${esc(c.name)}" placeholder="Nguyên liệu thực phẩm"></div>
-      <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label">Mô tả</label><input class="cds--text-input" data-cat="${i}" data-k="description" value="${esc(c.description)}" placeholder="thịt, cá, rau dùng chế biến món ăn"></div></div>`).join('')}
+    ${sec('nhom-hang', 'Nhóm hàng đặc thù cho AI', 'AI coi các nhóm này là phục vụ kinh doanh khi phân loại dòng hàng (ví dụ nhà hàng mua thực phẩm). Chạy lại Phân loại dòng hàng sau khi đổi.', `<form id="f-cat">
+      <div class="bar" style="margin-bottom:12px">
+        ${button('Nạp gợi ý nhóm hàng từ hệ thống', 'tertiary', 'id="sync-cats-sys" type="button"')}
+      </div>
+      <div id="cat-rows-container">
+      ${(cats.length ? cats : [{ name: '', description: '' }]).concat([{ name: '', description: '' }]).map((c, i) => `<div class="form-grid cat-row">
+        <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label">Tên nhóm</label><input class="cds--text-input" data-cat="${i}" data-k="name" value="${esc(c.name)}" placeholder="Nguyên liệu thực phẩm"></div>
+        <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label">Mô tả</label><input class="cds--text-input" data-cat="${i}" data-k="description" value="${esc(c.description)}" placeholder="thịt, cá, rau dùng chế biến món ăn"></div></div>`).join('')}
+      </div>
       <div class="bar">${button('Lưu nhóm hàng', 'primary', 'type="submit"')}</div></form>`)}
-    ${sec('ngay-nghi', 'Ngày nghỉ trong năm', 'Tết và nghỉ bù do Chính phủ công bố hằng năm; thứ Bảy, Chủ nhật và lễ cố định đã có sẵn.', `<form id="f-days"><div class="cds--form-item"><textarea class="cds--text-area" id="days" rows="4" placeholder="2027-02-05">${esc((pack.days_off || []).join('\n'))}</textarea></div>
-      <div class="bar">${button('Lưu ngày nghỉ', 'primary', 'type="submit"')}</div></form>`)}
+    ${sec('ngay-nghi', 'Ngày nghỉ trong năm', 'Tết và nghỉ bù do Chính phủ công bố hằng năm; thứ Bảy, Chủ nhật và lễ cố định đã có sẵn.', `<form id="f-days">
+      <div class="bar" style="margin-bottom:12px">
+        ${button('Đồng bộ từ lịch nghỉ lễ hệ thống', 'tertiary', 'id="sync-holidays-sys" type="button"')}
+      </div>
+      <div class="cds--form-item"><textarea class="cds--text-area" id="days" rows="5" placeholder="2026-02-16&#10;2026-02-17&#10;2027-02-05">${esc((pack.days_off || []).join('\n'))}</textarea></div>
+      <div class="bar">${button('Lưu ngày nghỉ', 'primary', 'type="submit"')}<span id="days-msg" class="muted small"></span></div></form>`)}
     ${sec('rui-ro', 'Danh sách doanh nghiệp rủi ro', 'Người bán trong danh sách sẽ được gắn cờ cần xem; luôn ghi ngày và nguồn.', table(['Tên danh sách', 'Ngày', { label: 'Số mã số thuế', num: true }, 'Nguồn'], (pack.reference_lists || []).map((r) => `<tr><td>${esc(r.name)}</td><td>${dmy(r.as_of)}</td><td class="num">${r.tax_ids.length}</td><td>${esc(r.source || '')}</td></tr>`), 'Chưa có.') + '<div id="riskimp"></div>')}
     ${sec('lich-su', 'Lịch sử thay đổi cấu hình', 'Ai đổi phần nào, lúc nào.', table(['Thời điểm', 'Người', 'Phần thay đổi'], history.slice(0, 30).map((h) => `<tr><td>${esc(h.at.replace('T', ' '))}</td><td>${esc(h.by)}</td><td>${h.created ? 'Tạo doanh nghiệp' : esc(h.changed.join(', '))}</td></tr>`), 'Chưa có thay đổi nào được ghi.'))}`;
   app().querySelectorAll('[data-jump]').forEach((a) => { a.onclick = () => document.getElementById(a.dataset.jump).scrollIntoView({ block: 'start' }); });
   app().querySelectorAll('[data-delfmt]').forEach((b) => { b.onclick = () => save({ ...pack, bank_formats: pack.bank_formats.filter((_, i) => i !== Number(b.dataset.delfmt)) }, 'Đã xóa mẫu sao kê'); });
+  const polBtn = $('#sync-industry-policies');
+  if (polBtn) polBtn.onclick = () => {
+    let count = 0;
+    presets.policies.forEach((p, i) => {
+      const cb = app().querySelector(`[data-preset="${i}"]`);
+      if (cb && (p.industry_fit || p.recommended)) {
+        cb.checked = true;
+        count++;
+      }
+    });
+    toast(`Đã chọn ${count} quy định gợi ý`, 'Bấm "Lưu quy định" để lưu thay đổi');
+  };
+  const selAll = $('#select-all-presets');
+  if (selAll) selAll.onclick = () => {
+    presets.policies.forEach((_, i) => {
+      const cb = app().querySelector(`[data-preset="${i}"]`);
+      if (cb) cb.checked = true;
+    });
+    toast('Đã chọn tất cả gợi ý', 'Bấm "Lưu quy định" để lưu');
+  };
+  const deselAll = $('#deselect-all-presets');
+  if (deselAll) deselAll.onclick = () => {
+    presets.policies.forEach((_, i) => {
+      const cb = app().querySelector(`[data-preset="${i}"]`);
+      if (cb) cb.checked = false;
+    });
+    toast('Đã bỏ chọn gợi ý', 'Bấm "Lưu quy định" để lưu');
+  };
+  const syncHolBtn = $('#sync-holidays-sys');
+  if (syncHolBtn) syncHolBtn.onclick = async () => {
+    try {
+      syncHolBtn.disabled = true;
+      const res = await api('/api/admin/catalog/holidays');
+      const yearsObj = res.data?.years || {};
+      const datesFromCatalog = [];
+      for (const y in yearsObj) {
+        for (const item of yearsObj[y] || []) {
+          if (item.date && /^\d{4}-\d{2}-\d{2}$/.test(item.date)) {
+            datesFromCatalog.push(item.date);
+          }
+        }
+      }
+      const existing = $('#days').value.split(/\s+/).map((s) => s.trim()).filter((s) => /^\d{4}-\d{2}-\d{2}$/.test(s));
+      const combined = Array.from(new Set([...existing, ...datesFromCatalog])).sort();
+      $('#days').value = combined.join('\n');
+      toast('Đã đồng bộ ngày nghỉ từ hệ thống', `Tổng cộng ${combined.length} ngày (đã hợp nhất). Bấm "Lưu ngày nghỉ" để áp dụng.`);
+    } catch (err) {
+      toast('Chưa đồng bộ được lịch nghỉ', err.message, 'error');
+    } finally {
+      if (syncHolBtn.isConnected) syncHolBtn.disabled = false;
+    }
+  };
+  const syncCatsBtn = $('#sync-cats-sys');
+  if (syncCatsBtn) syncCatsBtn.onclick = async () => {
+    try {
+      syncCatsBtn.disabled = true;
+      const res = await api('/api/admin/catalog/ai_categories');
+      const catsList = (res.data?.categories || []).filter((c) => !['CA_NHAN', 'KHONG_RO'].includes(c.id));
+      if (!catsList.length) {
+        toast('Không có nhóm hàng mẫu nào', '', 'warning');
+        return;
+      }
+      const currentRows = [...app().querySelectorAll('.cat-row')].map((r) => ({
+        name: r.querySelector('[data-k="name"]')?.value.trim() || '',
+        description: r.querySelector('[data-k="description"]')?.value.trim() || '',
+      })).filter((c) => c.name || c.description);
+      const newItems = catsList.map((c) => ({
+        name: c.id.replace(/_/g, ' '),
+        description: c.description,
+      })).filter((n) => !currentRows.some((cr) => cr.name.toLowerCase() === n.name.toLowerCase()));
+      const merged = [...currentRows, ...newItems].slice(0, 10);
+      const container = $('#cat-rows-container');
+      if (container) {
+        container.innerHTML = merged.concat([{ name: '', description: '' }]).map((c, i) => `<div class="form-grid cat-row">
+          <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label">Tên nhóm</label><input class="cds--text-input" data-cat="${i}" data-k="name" value="${esc(c.name)}" placeholder="Nguyên liệu thực phẩm"></div>
+          <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label">Mô tả</label><input class="cds--text-input" data-cat="${i}" data-k="description" value="${esc(c.description)}" placeholder="thịt, cá, rau dùng chế biến món ăn"></div></div>`).join('');
+      }
+      toast('Đã nạp nhóm hàng gợi ý', `Thêm ${newItems.length} nhóm. Bấm "Lưu nhóm hàng" để áp dụng.`);
+    } catch (err) {
+      toast('Chưa nạp được nhóm hàng', err.message, 'error');
+    } finally {
+      if (syncCatsBtn.isConnected) syncCatsBtn.disabled = false;
+    }
+  };
   const policiesFromChecks = () => [
     ...presets.policies.filter((p, i) => app().querySelector(`[data-preset="${i}"]`).checked).map((p) => cleanPolicy({ ...p, ...((pack.policies || []).find((x) => x.id === p.id) || {}) })),
     ...(pack.policies || []).filter((x) => !presets.policies.some((p) => p.id === x.id) && app().querySelector(`[data-custom="${x.id}"]`)?.checked)];

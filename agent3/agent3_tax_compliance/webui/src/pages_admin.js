@@ -4,7 +4,7 @@ import { $, api, app, button, esc, notice, post, put, state, store } from './cor
 import { toast } from './ux.js';
 
 export const ADMIN_TABS = [
-  ['#/quan-tri', 'Tổng quan quản trị'], ['#/quan-tri/doanh-nghiep', 'Cấu hình doanh nghiệp'], ['#/thiet-lap', 'Thiết lập nghiệp vụ thuế'],
+  ['#/quan-tri', 'Tổng quan quản trị'], ['#/quan-tri/doanh-nghiep', 'Cấu hình doanh nghiệp'],
   ['#/quan-tri/danh-muc?ten=policy_presets', 'Quy định chi tiêu gợi ý'], ['#/quan-tri/danh-muc?ten=ai_categories', 'Nhóm hàng cho AI'],
   ['#/quan-tri/danh-muc?ten=holidays', 'Lịch nghỉ lễ'], ['#/quan-tri/danh-muc?ten=law_topics', 'Chủ đề tin luật'],
   ['#/quan-tri/danh-muc?ten=chat_domains', 'Câu hỏi của trợ lý'], ['#/quan-tri/kho-luat', 'Kho luật'], ['#/quan-tri/lich-su', 'Lịch sử thay đổi'],
@@ -15,7 +15,8 @@ async function status() { return api('/api/admin/status'); }
 
 function subnav() {
   const cur = location.hash;
-  return `<nav class="admin-nav" aria-label="Quản trị">${ADMIN_TABS.map(([h, l]) => `<a href="${h}" class="${cur === h || (h !== '#/quan-tri' && cur.startsWith(h)) ? 'on' : ''}">${esc(l)}</a>`).join('')}
+  const isMatch = (h) => cur === h || (h === '#/quan-tri/doanh-nghiep' && cur.startsWith('#/thiet-lap')) || (h !== '#/quan-tri' && cur.startsWith(h));
+  return `<nav class="admin-nav" aria-label="Quản trị">${ADMIN_TABS.map(([h, l]) => `<a href="${h}" class="${isMatch(h) ? 'on' : ''}">${esc(l)}</a>`).join('')}
     <button type="button" class="cds--btn cds--btn--ghost cds--btn--sm" id="admin-logout">Đăng xuất quản trị</button></nav>`;
 }
 
@@ -85,7 +86,7 @@ export async function pageAdminHome() {
         <p class="muted" style="font-size:13.5px;line-height:1.65">Doanh nghiệp từ hồ sơ chung tại portal: <strong>${esc(state.workspaces.find((w) => w.id === state.ws)?.name || 'chưa chọn')}</strong>.</p>
         <div class="bar" style="margin-top:20px">
           ${button('Cấu hình doanh nghiệp này', 'primary', 'data-go="#/quan-tri/doanh-nghiep"')}
-          ${button('Thiết lập nghiệp vụ thuế', 'tertiary', 'data-go="#/thiet-lap"')}
+          ${button('Chạy wizard thiết lập (5 bước)', 'ghost', 'data-go="#/thiet-lap"')}
         </div>
       </div>
       <div class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm)">

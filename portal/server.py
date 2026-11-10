@@ -31,7 +31,16 @@ import time
 import unicodedata
 import uuid
 import zipfile
+import base64
+import math
 from base64 import b64encode
+
+try:
+    from cryptography.hazmat.primitives.asymmetric import ec
+    from cryptography.hazmat.primitives import hashes, serialization
+    HAS_CRYPTOGRAPHY = True
+except ImportError:
+    HAS_CRYPTOGRAPHY = False
 from decimal import Decimal, InvalidOperation
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -599,6 +608,211 @@ def session_left(token, touch=True):
     return int(until - time.time())
 
 
+BIOMETRIC_CHALLENGES: dict[str, float] = {}
+
+
+def b64_decode(data: str) -> bytes:
+    s = str(data or '').replace('-', '+').replace('_', '/')
+    pad = len(s) % 4
+    if pad:
+        s += '=' * (4 - pad)
+    return base64.b64decode(s)
+
+
+def b64_encode(data: bytes) -> str:
+    return base64.b64encode(data).decode('ascii').replace('+', '-').replace('/', '_').rstrip('=')
+
+
+def has_biometric() -> bool:
+    if not configured():
+        return False
+    sec = read_json(SECURITY_FILE, {})
+    return bool(sec and (sec.get('ai_face_descriptor') or sec.get('biometric')))
+
+
+def create_biometric_challenge() -> str:
+    now = time.time()
+    for k in [k for k, exp in BIOMETRIC_CHALLENGES.items() if exp < now]:
+        BIOMETRIC_CHALLENGES.pop(k, None)
+    chal = secrets.token_urlsafe(32)
+    BIOMETRIC_CHALLENGES[chal] = now + 60.0
+    return chal
+
+
+def extract_der_from_attestation(att_bytes: bytes) -> bytes:
+    idx = att_bytes.find(b'authData')
+    if idx == -1:
+        raise ValueError('Không tìm thấy authData trong attestationObject.')
+    post = att_bytes[idx + 8:]
+    if not post:
+        raise ValueError('authData rỗng.')
+    if post[0] == 0x58:
+        auth_len = post[1]
+        auth_data = post[2:2 + auth_len]
+    elif post[0] == 0x59:
+        auth_len = int.from_bytes(post[1:3], 'big')
+        auth_data = post[3:3 + auth_len]
+    else:
+        auth_data = post[1:]
+
+    if len(auth_data) < 55:
+        raise ValueError('authData quá ngắn.')
+    cred_id_len = int.from_bytes(auth_data[53:55], 'big')
+    cose_bytes = auth_data[55 + cred_id_len:]
+    idx_x = cose_bytes.find(b'\x21\x58\x20')
+    idx_y = cose_bytes.find(b'\x22\x58\x20')
+    if idx_x != -1 and idx_y != -1:
+        x_bytes = cose_bytes[idx_x + 3:idx_x + 35]
+        y_bytes = cose_bytes[idx_y + 3:idx_y + 35]
+        pub_num = ec.EllipticCurvePublicNumbers(int.from_bytes(x_bytes, 'big'), int.from_bytes(y_bytes, 'big'), ec.SECP256R1())
+        return pub_num.public_key().public_bytes(serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo)
+    raise ValueError('Không trích xuất được tọa độ P-256 từ COSE key.')
+
+
+def register_biometric(credential_id: str, public_key_der_b64: str = '', attestation_b64: str = ''):
+    if not HAS_CRYPTOGRAPHY:
+        raise ValueError('Máy chủ chưa hỗ trợ thư viện cryptography cho WebAuthn.')
+    sec = read_json(SECURITY_FILE, None)
+    if sec is None:
+        raise ValueError('Chưa đặt mật khẩu nạp dữ liệu.')
+
+    der_bytes = None
+    if public_key_der_b64:
+        try:
+            raw = b64_decode(public_key_der_b64)
+            serialization.load_der_public_key(raw)
+            der_bytes = raw
+        except Exception:
+            der_bytes = None
+
+    if not der_bytes and attestation_b64:
+        try:
+            der_bytes = extract_der_from_attestation(b64_decode(attestation_b64))
+        except Exception as exc:
+            raise ValueError(f'Không trích xuất được khóa công khai từ attestationObject: {exc}') from exc
+
+    if not der_bytes:
+        raise ValueError('Không nhận được khóa công khai sinh trắc học hợp lệ.')
+
+    sec['biometric'] = dict(
+        credential_id=credential_id,
+        public_key=b64_encode(der_bytes),
+        created_at=time.strftime('%Y-%m-%d %H:%M:%S'),
+        counter=0
+    )
+    write_json(SECURITY_FILE, sec)
+    audit('biometric_registered', dict(credential_id=credential_id[:16] + '...'))
+
+
+def save_face_descriptor(descriptor: list[float]):
+    if not configured():
+        raise ValueError('Chưa đặt mật khẩu nạp dữ liệu.')
+    if not isinstance(descriptor, list) or len(descriptor) != 128:
+        raise ValueError('Vector đặc trưng khuôn mặt không hợp lệ (cần 128 chiều).')
+    sec = read_json(SECURITY_FILE, {})
+    sec['ai_face_descriptor'] = [float(x) for x in descriptor]
+    sec['ai_face_enrolled_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
+    write_json(SECURITY_FILE, sec)
+    audit('ai_face_enrolled', {})
+
+
+def verify_face_descriptor(probe_descriptor: list[float], threshold: float = 0.55) -> str:
+    now = time.time()
+    if FAILS['until'] > now:
+        raise ValueError(f'Nhập sai nhiều lần. Thử lại sau {int(FAILS["until"] - now) + 1} giây.')
+    sec = read_json(SECURITY_FILE, None)
+    if not sec or not sec.get('ai_face_descriptor'):
+        raise ValueError('Chưa đăng ký khuôn mặt FaceID.')
+    if not isinstance(probe_descriptor, list) or len(probe_descriptor) != 128:
+        raise ValueError('Dữ liệu quét khuôn mặt không hợp lệ.')
+
+    enrolled = sec['ai_face_descriptor']
+    # Calculate Euclidean distance
+    dist = math.sqrt(sum((float(a) - float(b)) ** 2 for a, b in zip(enrolled, probe_descriptor)))
+    if dist > threshold:
+        FAILS['n'] += 1
+        audit('ai_face_unlock_failed', {'dist': round(dist, 4), 'n': FAILS['n']})
+        if FAILS['n'] >= 5:
+            FAILS.update(n=0, until=now + 60)
+        raise ValueError(f'Khuôn mặt không khớp (độ sai biệt: {dist:.2f} > {threshold}).')
+
+    FAILS.update(n=0, until=0.0)
+    audit('ai_face_unlock', {'dist': round(dist, 4)})
+    return new_session()
+
+
+def remove_biometric():
+    sec = read_json(SECURITY_FILE, None)
+    if sec:
+        sec.pop('biometric', None)
+        sec.pop('ai_face_descriptor', None)
+        sec.pop('ai_face_enrolled_at', None)
+        write_json(SECURITY_FILE, sec)
+        audit('biometric_removed', {})
+
+
+def verify_biometric(credential_id: str, client_data_b64: str, auth_data_b64: str, signature_b64: str) -> str:
+    now = time.time()
+    if FAILS['until'] > now:
+        raise ValueError(f'Nhập sai nhiều lần. Thử lại sau {int(FAILS["until"] - now) + 1} giây.')
+    if not HAS_CRYPTOGRAPHY:
+        raise ValueError('Máy chủ chưa hỗ trợ thư viện cryptography.')
+    sec = read_json(SECURITY_FILE, None)
+    bio = sec.get('biometric') if sec else None
+    if not bio:
+        raise ValueError('Chưa kích hoạt mở khóa bằng FaceID/sinh trắc học.')
+    if bio.get('credential_id') != credential_id:
+        raise ValueError('Mã định danh thiết bị sinh trắc học không khớp.')
+
+    try:
+        client_data_raw = b64_decode(client_data_b64)
+        client_data = json.loads(client_data_raw.decode('utf-8'))
+    except Exception:
+        raise ValueError('Dữ liệu xác thực clientDataJSON không hợp lệ.')
+
+    if client_data.get('type') != 'webauthn.get':
+        raise ValueError('Loại thao tác xác thực không hợp lệ.')
+
+    chal = client_data.get('challenge', '')
+    exp = BIOMETRIC_CHALLENGES.pop(chal, None)
+    if not exp or exp < now:
+        raise ValueError('Phiên xác thực sinh trắc học đã hết hạn hoặc bị phát lại. Vui lòng thử lại.')
+
+    origin = client_data.get('origin', '')
+    if not any(origin.startswith(o) for o in ORIGINS):
+        raise ValueError(f'Nguồn gốc {origin} không hợp lệ.')
+
+    try:
+        auth_data = b64_decode(auth_data_b64)
+    except Exception:
+        raise ValueError('Dữ liệu authenticatorData không hợp lệ.')
+
+    if len(auth_data) < 37:
+        raise ValueError('Độ dài authenticatorData không đúng.')
+
+    flags = auth_data[32]
+    if not (flags & 0x01):
+        raise ValueError('Không phát hiện hiện diện của người dùng (User Present flag is off).')
+
+    try:
+        der_bytes = b64_decode(bio['public_key'])
+        pub_key = serialization.load_der_public_key(der_bytes)
+        sig = b64_decode(signature_b64)
+        client_hash = hashlib.sha256(client_data_raw).digest()
+        signed_payload = auth_data + client_hash
+        pub_key.verify(sig, signed_payload, ec.ECDSA(hashes.SHA256()))
+    except Exception:
+        FAILS['n'] += 1
+        audit('biometric_unlock_failed', {'n': FAILS['n']})
+        if FAILS['n'] >= 5:
+            FAILS.update(n=0, until=now + 60)
+        raise ValueError('Chữ ký sinh trắc học không khớp hoặc bị từ chối.')
+
+    FAILS.update(n=0, until=0.0)
+    audit('biometric_unlock', {})
+    return new_session()
+
+
 def batches():
     return read_json(BATCH_FILE, [])
 
@@ -1089,7 +1303,7 @@ class Handler(BaseHTTPRequestHandler):
                 left = session_left(self.token(), touch=False)
                 recs = pending() if left else []
                 return self.send(200, dict(company=company(), agents=[agent_state(a) for a in AGENTS], origin=ORIGIN,
-                                           intake=dict(configured=configured(), unlocked=bool(left), seconds_left=left),
+                                           intake=dict(configured=configured(), unlocked=bool(left), seconds_left=left, has_biometric=has_biometric()),
                                            package=package_summary(), slots=slots_state(recs), pending=recs,
                                            batches=list(reversed(current_batches()))[:30] if left else []))
             if path == '/api/intake/audit':
@@ -1110,6 +1324,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.static(DESIGN, path[len('/design/'):])
             if path.startswith('/api/'):
                 return self.send(404, {'error': 'Không có địa chỉ này.'})
+            if path.startswith('/models/'):
+                return self.static(STATIC / 'models', path[len('/models/'):])
             return self.static(STATIC, path.lstrip('/') if '.' in path.rsplit('/', 1)[-1] else '')
         self.guard()
         if method == 'POST' and path == '/api/agents/agent1/connect-link':
@@ -1120,6 +1336,27 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, dict(token=set_password(str(b.get('password', '')), str(b.get('confirm', '')))))
         if method == 'POST' and path == '/api/intake/unlock':
             return self.send(200, dict(token=unlock(str(self.json_body().get('password', '')))))
+        if method == 'POST' and path == '/api/intake/face/register':
+            b = self.json_body()
+            pw = str(b.get('password', ''))
+            descriptor = b.get('descriptor', [])
+            if pw:
+                unlock(pw)
+            else:
+                self.need_session()
+            save_face_descriptor(descriptor)
+            token = new_session()
+            audit('ai_face_unlock', {'action': 'initial_registration'})
+            return self.send(200, dict(ok=True, token=token))
+        if method == 'POST' and path == '/api/intake/face/verify':
+            b = self.json_body()
+            descriptor = b.get('descriptor', [])
+            token = verify_face_descriptor(descriptor)
+            return self.send(200, dict(token=token))
+        if method == 'POST' and path == '/api/intake/face/remove':
+            self.need_session()
+            remove_biometric()
+            return self.send(200, dict(ok=True))
         if method == 'POST' and path == '/api/intake/lock':
             SESSIONS.pop(self.token(), None)
             audit('lock', {})

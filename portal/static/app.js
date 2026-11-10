@@ -352,9 +352,24 @@
       $("gate-confirm-field").hidden = !first;
       $("gate-password").autocomplete = first ? "new-password" : "current-password";
       $("gate-submit").textContent = first ? "Đặt mật khẩu và mở" : "Mở khóa";
+      const bioSec = $("gate-biometric-section");
+      if (bioSec) {
+        bioSec.hidden = first;
+        const bioLabel = $("gate-biometric-label");
+        if (bioLabel) {
+          bioLabel.textContent = i.has_biometric
+            ? "Mở khóa bằng FaceID / Sinh trắc học"
+            : "Thiết lập & Mở bằng FaceID (Tùy chọn)";
+        }
+      }
       return;
     }
     $("session-left").textContent = "Đã mở khóa, còn " + Math.max(1, Math.round(i.seconds_left / 60)) + " phút";
+    const faceMng = $("face-manage-btn");
+    if (faceMng) {
+      faceMng.textContent = i.has_biometric ? "🛡️ Quét lại FaceID" : "+ Đăng ký FaceID";
+      faceMng.title = i.has_biometric ? "Cập nhật lại khuôn mặt nhận diện FaceID" : "Đăng ký khuôn mặt nhận diện FaceID";
+    }
     const c = state.company;
     $("intake-company").replaceChildren(c.code
       ? el("strong", {}, c.legal_name + " · " + c.code)
@@ -509,6 +524,215 @@
     await api("/api/intake/lock", { method: "POST" }).catch(() => {});
     setToken("");
     await refresh();
+  }
+
+  function bufToB64Url(buf) {
+    const bytes = new Uint8Array(buf);
+    let str = "";
+    for (let i = 0; i < bytes.length; i++) str += String.fromCharCode(bytes[i]);
+    return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  function b64UrlToBuf(b64url) {
+    let str = (b64url || "").replace(/-/g, "+").replace(/_/g, "/");
+    while (str.length % 4) str += "=";
+    const raw = atob(str);
+    const buf = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
+    return buf.buffer;
+  }
+
+  function checkLocalhostForBiometrics() {
+    if (window.location.hostname === "127.0.0.1") {
+      const target = window.location.href.replace("127.0.0.1", "localhost");
+      if (confirm("Chuẩn bảo mật WebAuthn / FaceID yêu cầu truy cập qua tên miền 'localhost' thay vì địa chỉ IP '127.0.0.1'.\n\nBấm OK để chuyển sang " + target + " và kích hoạt FaceID.")) {
+        window.location.href = target;
+      }
+      return false;
+    }
+    return true;
+  }
+
+  let faceModelsLoaded = false;
+  let faceStream = null;
+  let faceAnimationId = null;
+
+  async function loadFaceModels() {
+    if (faceModelsLoaded) return true;
+    if (typeof faceapi === "undefined") {
+      throw new Error("Chưa tải được thư viện AI face-api.js.");
+    }
+    const MODEL_PATH = "/models";
+    $("face-spinner").hidden = false;
+    $("face-loading-text").textContent = "Đang tải mô hình AI khuôn mặt...";
+    try {
+      await Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_PATH),
+        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_PATH),
+        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_PATH)
+      ]);
+      faceModelsLoaded = true;
+      $("face-spinner").hidden = true;
+      return true;
+    } catch (err) {
+      $("face-loading-text").textContent = "Lỗi tải mô hình AI: " + err.message;
+      throw err;
+    }
+  }
+
+  function stopFaceCamera() {
+    if (faceAnimationId) {
+      cancelAnimationFrame(faceAnimationId);
+      faceAnimationId = null;
+    }
+    if (faceStream) {
+      faceStream.getTracks().forEach((track) => track.stop());
+      faceStream = null;
+    }
+    const video = $("face-video");
+    if (video) video.srcObject = null;
+    const modal = $("face-modal");
+    if (modal) modal.hidden = true;
+    const reticle = document.querySelector(".face-reticle");
+    if (reticle) reticle.classList.remove("active");
+  }
+
+  async function openFaceModal(mode, password = "") {
+    const modal = $("face-modal");
+    const video = $("face-video");
+    const canvas = $("face-canvas");
+    const titleEl = $("face-modal-title");
+    const feedback = $("face-feedback");
+    const reticle = document.querySelector(".face-reticle");
+
+    modal.hidden = false;
+    titleEl.textContent = mode === "register" ? "Đăng ký khuôn mặt FaceID mới" : "Quét khuôn mặt để mở khóa";
+    feedback.className = "face-feedback";
+    feedback.textContent = "Đang khởi động camera...";
+    if (reticle) reticle.classList.remove("active");
+
+    try {
+      await loadFaceModels();
+      faceStream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" }
+      });
+      video.srcObject = faceStream;
+      await video.play();
+
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+
+      let consecutiveMatches = 0;
+      let isProcessing = false;
+
+      const detectFrame = async () => {
+        if (!faceStream || modal.hidden) return;
+
+        if (!isProcessing && video.readyState === 4) {
+          isProcessing = true;
+          try {
+            const detection = await faceapi.detectSingleFace(
+              video,
+              new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 })
+            ).withFaceLandmarks().withFaceDescriptor();
+
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (detection) {
+              if (reticle) reticle.classList.add("active");
+              feedback.className = "face-feedback ok";
+
+              if (mode === "register") {
+                consecutiveMatches++;
+                feedback.textContent = "Đã nhận diện khuôn mặt! Giữ nguyên... (" + consecutiveMatches + "/3)";
+                if (consecutiveMatches >= 3) {
+                  feedback.textContent = "Đang lưu trữ vector sinh trắc học...";
+                  const descArray = Array.from(detection.descriptor);
+                  const res = await api("/api/intake/face/register", {
+                    method: "POST",
+                    json: { descriptor: descArray, password: password }
+                  });
+                  stopFaceCamera();
+                  if (res && res.token) setToken(res.token);
+                  toast("Đã đăng ký FaceID và mở khóa thành công!");
+                  await refresh();
+                  return;
+                }
+              } else {
+                feedback.textContent = "Đang đối soát nhận diện khuôn mặt...";
+                const descArray = Array.from(detection.descriptor);
+                const res = await api("/api/intake/face/verify", {
+                  method: "POST",
+                  json: { descriptor: descArray }
+                });
+                stopFaceCamera();
+                setToken(res.token);
+                toast("Nhận diện FaceID chính xác! Đã mở khóa.");
+                await refresh();
+                return;
+              }
+            } else {
+              consecutiveMatches = 0;
+              if (reticle) reticle.classList.remove("active");
+              feedback.className = "face-feedback";
+              feedback.textContent = "Vui lòng nhìn thẳng vào vòng quét...";
+            }
+          } catch (err) {
+            feedback.className = "face-feedback err";
+            feedback.textContent = err.message || "Lỗi đối soát khuôn mặt.";
+          } finally {
+            isProcessing = false;
+          }
+        }
+        faceAnimationId = requestAnimationFrame(detectFrame);
+      };
+
+      faceAnimationId = requestAnimationFrame(detectFrame);
+    } catch (err) {
+      feedback.className = "face-feedback err";
+      feedback.textContent = "Không thể mở camera: " + (err.message || err);
+      toast(err.message || "Không thể truy cập camera.", true);
+    }
+  }
+
+  async function unlockBiometric() {
+    const errEl = $("gate-error");
+    if (errEl) errEl.textContent = "";
+
+    // If biometric is not yet enrolled, prompt for password first to link FaceID
+    if (!state?.intake?.has_biometric) {
+      const pwInput = $("gate-password");
+      let pw = (pwInput?.value || "").trim();
+      if (!pw) {
+        pw = prompt("Nhập mật khẩu nạp dữ liệu một lần để đăng ký FaceID:") || "";
+      }
+      if (!pw) {
+        if (errEl) errEl.textContent = "Cần mật khẩu để liên kết FaceID lần đầu.";
+        return;
+      }
+      openFaceModal("register", pw);
+      return;
+    }
+
+    // Biometric already enrolled -> open direct camera scanner
+    openFaceModal("verify");
+  }
+
+  async function toggleBiometric() {
+    if (!state?.intake) return;
+    if (state.intake.has_biometric) {
+      if (!confirm("Bạn có chắc chắn muốn hủy FaceID trên máy này?")) return;
+      try {
+        await api("/api/intake/biometric/remove", { method: "POST" });
+        toast("Đã hủy FaceID.");
+        await refresh();
+      } catch (err) {
+        toast(err.message, true);
+      }
+    } else {
+      await registerBiometric();
+    }
   }
 
   async function upload(files) {
@@ -687,6 +911,10 @@
     });
   });
   $("gate-form").addEventListener("submit", unlockGate);
+  $("gate-biometric-btn")?.addEventListener("click", unlockBiometric);
+  $("face-manage-btn")?.addEventListener("click", () => openFaceModal("register"));
+  $("face-modal-close")?.addEventListener("click", stopFaceCamera);
+  $("face-cancel-btn")?.addEventListener("click", stopFaceCamera);
   $("lock-now").addEventListener("click", lockNow);
   $("audit").addEventListener("toggle", (e) => e.target.open && loadAudit());
   $("start-all").addEventListener("click", async () => {
