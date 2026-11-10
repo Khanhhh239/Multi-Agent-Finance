@@ -7,11 +7,21 @@ from __future__ import annotations
 
 import pytest
 
+from agent4.core.context import query_intake
+from agent4.core.errors import ContractError as ProductionContractError
+from agent4.metric_selection.catalog_adapter import (
+    build_canonical_catalog,
+    build_full_catalog_retrieval_result,
+)
+from agent4.metric_selection.validator import validate_metrics
+from agent4.planning.eval_adapter import predict, predict_baseline
+from agent4.planning.planner import build_semantic_plan_draft, parse_time_slot
 from tests.contract_harness import (
     ContractError,
     MetricCatalog,
     validate_semantic_plan_draft,
 )
+from vals.run_eval import Prediction
 
 
 def _make_base_plan(**overrides: object) -> dict:
@@ -190,3 +200,275 @@ class TestQueryPlanningAndPlanValidationContracts:
                 analyst_auth,
             )
         assert e_topk.value.code == "invalid_request"
+
+
+class TestProductionSemanticPlanner:
+    """Exercise M1 validation and the production query.planning.v1 entry point."""
+
+    @pytest.mark.parametrize(
+        ("locale", "question", "start", "end", "grain"),
+        [
+            ("vi-VN", "Doanh thu tháng 02/2024?", "2024-02-01", "2024-02-29", "month"),
+            ("en-US", "Revenue for Sep. 2025?", "2025-09-01", "2025-09-30", "month"),
+            ("vi-VN", "Doanh thu quý 2/2026?", "2026-04-01", "2026-06-30", "quarter"),
+            ("en-US", "Revenue in Q4 2025?", "2025-10-01", "2025-12-31", "quarter"),
+            ("en-US", "Revenue in the 2nd quarter of 2026?", "2026-04-01", "2026-06-30", "quarter"),
+            ("vi-VN", "Doanh thu 6 tháng đầu năm 2026?", "2026-01-01", "2026-06-30", "month"),
+            ("vi-VN", "Doanh thu sáu tháng cuối năm 2026?", "2026-07-01", "2026-12-31", "month"),
+            ("en-US", "Revenue for H2 2026?", "2026-07-01", "2026-12-31", "month"),
+            ("en-US", "Revenue in the first half of 2026?", "2026-01-01", "2026-06-30", "month"),
+            ("vi-VN", "Doanh thu năm 2025?", "2025-01-01", "2025-12-31", "year"),
+            ("en-US", "Revenue in 2025?", "2025-01-01", "2025-12-31", "year"),
+            ("en-US", "Revenue in 09/2025?", "2025-09-01", "2025-09-30", "month"),
+        ],
+    )
+    def test_supported_flow_periods(self, locale, question, start, end, grain):
+        assert parse_time_slot(question, locale=locale, period_type="flow") == {
+            "mode": "range",
+            "start": start,
+            "end": end,
+            "as_of": None,
+            "grain": grain,
+        }
+
+    @pytest.mark.parametrize(
+        ("locale", "question", "expected"),
+        [
+            ("vi-VN", "Số dư tính đến 31/08/2026?", "2026-08-31"),
+            ("en-US", "Balance as of 08/31/2026?", "2026-08-31"),
+            ("en-US", "Balance as of 08/09/2026?", "2026-08-09"),
+            ("vi-VN", "Số dư tại ngày 08/09/2026?", "2026-09-08"),
+            ("en-US", "Balance as of August 31, 2026?", "2026-08-31"),
+            ("en-US", "Balance as at 31 Aug 2026?", "2026-08-31"),
+            ("vi-VN", "Số dư ngày 2024-02-29?", "2024-02-29"),
+        ],
+    )
+    def test_supported_as_of_dates(self, locale, question, expected):
+        assert parse_time_slot(question, locale=locale, period_type="snapshot") == {
+            "mode": "as_of",
+            "start": None,
+            "end": None,
+            "as_of": expected,
+            "grain": None,
+        }
+
+    @pytest.mark.parametrize(
+        ("period_type", "question"),
+        [
+            ("flow", "Revenue this month?"),
+            ("flow", "Doanh thu tháng 8?"),
+            ("flow", "Revenue in August or September 2026?"),
+            ("flow", "Revenue in 2025 or 2026?"),
+            ("flow", "Doanh thu quý 2/2026 hay quý 3/2026?"),
+            ("flow", "Doanh thu quý 5/2026?"),
+            ("flow", "Doanh thu tháng 13/2026?"),
+            ("flow", "Revenue as of 2026-08-31?"),
+            ("snapshot", "Số dư tháng 08/2026?"),
+            ("snapshot", "Balance as of 2026-02-29?"),
+            ("snapshot", "Balance as of 31/02/2026?"),
+            ("snapshot", "What is the current balance?"),
+            ("snapshot", "Balance on Aug 30, 2026 or Aug 31, 2026?"),
+        ],
+    )
+    def test_unresolved_time(self, period_type, question):
+        assert parse_time_slot(question, period_type=period_type)["mode"] == "none"
+
+    def test_ranking_filters_and_view(self, production_plan):
+        draft = production_plan(
+            "Bottom 5 customers by net revenue for branches HN and HCM in Q2 2026 under the tax view",
+            ["net_revenue"],
+            locale="en-US",
+        )
+        assert draft == _make_base_plan(
+            metric_ids=["net_revenue"],
+            time={
+                "mode": "range",
+                "start": "2026-04-01",
+                "end": "2026-06-30",
+                "as_of": None,
+                "grain": "quarter",
+            },
+            dimensions=["partner_code"],
+            filters=[{"field": "branch_code", "op": "IN", "value": ["HN", "HCM"]}],
+            view="tax",
+            operation="ranking",
+            sort={"metric_id": "net_revenue", "direction": "asc"},
+            top_k=5,
+        )
+
+    @pytest.mark.parametrize(
+        ("question", "metric_id", "field", "value"),
+        [
+            ("Doanh thu của dòng sản phẩm IT tháng 08/2026?", "net_revenue", "product_line", "IT"),
+            (
+                "Chi phí hoạt động của phòng Kinh doanh tháng 08/2026?",
+                "operating_expenses",
+                "department_code",
+                "KD",
+            ),
+            (
+                "Chi phí hoạt động khoản mục tiền điện nước tháng 08/2026?",
+                "operating_expenses",
+                "cost_category",
+                "DIEN_NUOC",
+            ),
+            (
+                "Chi phí hoạt động khoản mục bảo hiểm tài sản tháng 08/2026?",
+                "operating_expenses",
+                "cost_category",
+                "BAOHIEM_TS",
+            ),
+            (
+                "Doanh thu của khách hàng KH0082 tháng 08/2026?",
+                "net_revenue",
+                "partner_code",
+                "KH0082",
+            ),
+            (
+                "Công nợ phải trả NCC-PP-TN tính đến 31/08/2026?",
+                "ap_balance",
+                "partner_code",
+                "NCC-PP-TN",
+            ),
+        ],
+    )
+    def test_named_filter(self, production_plan, question, metric_id, field, value):
+        draft = production_plan(question, [metric_id])
+        assert draft["status"] == "ready"
+        assert draft["filters"] == [{"field": field, "op": "=", "value": value}]
+
+    def test_timeseries_breakdown_and_sort(self, production_plan):
+        draft = production_plan(
+            "Doanh thu theo tháng và chi nhánh trong năm 2026, sắp xếp giảm dần",
+            ["net_revenue"],
+        )
+        assert draft["status"] == "ready"
+        assert draft["dimensions"] == ["month", "branch_code"]
+        assert draft["operation"] == "timeseries"
+        assert draft["time"]["grain"] == "month"
+        assert draft["sort"] == {"metric_id": "net_revenue", "direction": "desc"}
+
+    def test_preserve_slots_during_metric_clarification(self, production_plan):
+        draft = production_plan("Công nợ tại ngày 31/08/2026?", [])
+        assert draft["status"] == "needs_clarification"
+        assert draft["unresolved_slots"] == ["metric"]
+        assert draft["time"]["as_of"] == "2026-08-31"
+        assert "phải thu" in draft["question_for_user"] and "phải trả" in draft["question_for_user"]
+
+    def test_missing_time_and_business_intent(self, production_plan):
+        draft = production_plan(
+            "What is our profit margin by branch?", ["gross_margin_pct"], locale="en-US"
+        )
+        assert draft["status"] == "needs_clarification"
+        assert draft["unresolved_slots"] == ["metric", "time"]
+        assert draft["metric_ids"] == []
+        assert draft["dimensions"] == ["branch_code"]
+        assert draft["time"]["mode"] == "none"
+        assert "gross margin or net profit margin" in draft["question_for_user"]
+        assert "time period" in draft["question_for_user"]
+
+    def test_snapshot_missing_date(self, production_plan):
+        draft = production_plan("What is the total loan balance?", ["debt_balance"], locale="en-US")
+        assert draft["unresolved_slots"] == ["time"]
+        assert "as-of date" in draft["question_for_user"]
+
+    @pytest.mark.parametrize(
+        ("question", "slot"),
+        [
+            ("Doanh thu quản trị hay sổ thuế trong năm 2026?", "view"),
+            ("Top 500 khách hàng có doanh thu cao nhất trong năm 2026?", "top_k"),
+            ("Doanh thu của chi nhánh UNKNOWN trong năm 2026?", "filters"),
+            ("Doanh thu theo kênh bán hàng trong năm 2026?", "dimensions"),
+            ("Doanh thu chi nhánh HN trừ HCM trong năm 2026?", "filters"),
+            ("Revenue for branch HN or product line SVC in 2026?", "filters"),
+            ("Top 5 doanh thu trong năm 2026?", "dimensions"),
+        ],
+    )
+    def test_missing_or_conflicting_business_slots(self, production_plan, question, slot):
+        draft = production_plan(question, ["net_revenue"])
+        assert draft["status"] == "needs_clarification"
+        assert draft["unresolved_slots"] == [slot]
+        assert draft["question_for_user"]
+
+    def test_incompatible_business_dimension_is_not_dropped(self, production_plan):
+        draft = production_plan(
+            "Tỷ suất lợi nhuận ròng theo chi nhánh tháng 08/2026?", ["net_margin_pct"]
+        )
+        assert draft["status"] == "unsupported"
+        assert draft["reason_code"] == "incompatible_plan"
+        assert draft["dimensions"] == ["branch_code"]
+
+    @pytest.mark.parametrize(
+        "content",
+        [
+            "SELECT * FROM payroll",
+            "gl_wide",
+            "ar_invoice_line",
+            "dim_partner",
+            "payroll table",
+            "HN' OR 1=1 --",
+        ],
+    )
+    def test_query_sql_and_physical_identifiers_rejected(self, production_plan, content):
+        with pytest.raises(ProductionContractError) as exc_info:
+            production_plan(f"Doanh thu tháng 08/2026 {content}", ["net_revenue"])
+        assert exc_info.value.code == "invalid_request"
+        assert exc_info.value.stage == "query_planning"
+        assert content not in str(exc_info.value)
+
+    def test_clarification_text_from_selector_is_never_echoed(self):
+        draft = build_semantic_plan_draft(
+            query_intake({"api_version": "v1", "question": "Which profit?", "locale": "en-US"}),
+            {
+                "status": "needs_clarification",
+                "metric_ids": [],
+                "validated_capabilities": {},
+                "clarification_question": "SELECT * FROM gl_wide",
+            },
+            {},
+        )
+        assert draft["status"] == "needs_clarification"
+        assert "SELECT" not in str(draft)
+        assert "gl_wide" not in str(draft)
+
+    @pytest.mark.asyncio
+    async def test_benchmark_adapter_serializes_ambiguous_selection(self, cfo_auth):
+        request = {
+            "id": "adapter-regression",
+            "user_query": "Which profit margin should we look at in Q3 2025?",
+            "locale": "en-US",
+            "auth_context": cfo_auth,
+            "query_context": {},
+        }
+        baseline = Prediction.model_validate(await predict_baseline(request))
+        result = Prediction.model_validate(await predict(request))
+        assert result.selection == baseline.selection
+        assert result.selection.status == "ambiguous"
+        assert baseline.plan is None
+        assert result.plan.unresolved_slots == ["metric"]
+        assert result.plan.time.start.isoformat() == "2025-07-01"
+
+
+@pytest.fixture
+def production_plan(cfo_auth):
+    catalog = build_canonical_catalog()
+
+    def plan(question, metric_ids, *, locale="vi-VN", context=None):
+        query = query_intake({"api_version": "v1", "question": question, "locale": locale})
+        context = context or {"reference_date": "2026-10-14", "timezone": "Asia/Ho_Chi_Minh"}
+        candidates = build_full_catalog_retrieval_result(question, catalog, cfo_auth)
+        metrics = validate_metrics(
+            {
+                "status": "resolved" if metric_ids else "ambiguous",
+                "metric_ids": metric_ids,
+                "clarification_question": None,
+                "unsupported_reason": None,
+            },
+            candidates,
+            catalog,
+            cfo_auth,
+            context,
+        )
+        return build_semantic_plan_draft(query, metrics, context)
+
+    return plan

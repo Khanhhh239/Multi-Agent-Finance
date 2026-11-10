@@ -708,6 +708,25 @@ NormalizedQuery + ValidatedMetricSet + QueryContext
 - Chỉ sử dụng metric trong `ValidatedMetricSet`.
 - Có thể trả `needs_clarification` nếu thiếu kỳ, view hoặc dimension quan trọng.
 - Không tự thêm default làm thay đổi business meaning nếu chưa được policy cho phép.
+- `build_semantic_plan_draft(normalized_query, validated_metrics, query_context)`
+  trả dict đủ 14 trường. Bản nháp vẫn phải qua Plan Validation trước khi dùng downstream.
+- Khoảng thời gian dùng ngày ISO và bao gồm cả ngày đầu lẫn ngày cuối. Nửa năm
+  dùng grain tháng. Ngày dạng số dùng ngày/tháng/năm cho `vi-VN` và
+  tháng/ngày/năm cho `en-US`. Snapshot cần ngày chốt cụ thể, flow cần một kỳ
+  có giới hạn. Kỳ thiếu, không hợp lệ hoặc mơ hồ có `time.mode = "none"` và
+  các trường ngày và grain bằng `null`.
+- Planner giữ các slot đã xác định khi cần làm rõ. Khi metric còn mơ hồ,
+  `metric_ids` rỗng. `unresolved_slots` liệt kê các slot cần bổ sung và
+  `question_for_user` dùng ngôn ngữ của `NormalizedQuery`. Nếu view không được
+  nêu, planner theo mặc định `mgmt` của Metrics Validation. Hai yêu cầu view
+  xung đột cần làm rõ.
+- Chiều dùng allowlist của module plan. Bộ lọc dùng `{field, op, value}` với
+  `=` cho một giá trị và `IN` cho danh sách. Xếp hạng dùng `ranking`,
+  `sort = {metric_id, direction}` và, khi được yêu cầu, `top_k` từ 1 đến 100.
+  Adapter đánh giá chuyển riêng sang tên chiều, toán tử và `rank` của benchmark v2.
+- `comparison` là `null` trong M2.1. Yêu cầu so sánh rõ ràng mà không còn slot
+  cần làm rõ có trạng thái `unsupported`. Draft không mang theo câu hỏi gốc,
+  câu làm rõ từ model, metadata phân quyền hay định danh vật lý.
 
 ## 17. Semantic Plan Validation Contract
 
