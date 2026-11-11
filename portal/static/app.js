@@ -604,6 +604,7 @@
   let faceModelsLoaded = false;
   let faceStream = null;
   let faceAnimationId = null;
+  let isFaceCompleted = false;
 
   async function loadFaceModels() {
     if (faceModelsLoaded) return true;
@@ -629,6 +630,7 @@
   }
 
   function stopFaceCamera() {
+    isFaceCompleted = true;
     if (faceAnimationId) {
       cancelAnimationFrame(faceAnimationId);
       faceAnimationId = null;
@@ -654,6 +656,7 @@
     const reticle = document.querySelector(".face-reticle");
 
     modal.hidden = false;
+    isFaceCompleted = false;
     titleEl.textContent = mode === "register" ? "Đăng ký khuôn mặt FaceID mới" : "Quét khuôn mặt để mở khóa";
     feedback.className = "face-feedback";
     feedback.textContent = "Đang khởi động camera...";
@@ -674,15 +677,17 @@
       let isProcessing = false;
 
       const detectFrame = async () => {
-        if (!faceStream || modal.hidden) return;
+        if (!faceStream || modal.hidden || isFaceCompleted) return;
 
-        if (!isProcessing && video.readyState === 4) {
+        if (!isProcessing && video.readyState === 4 && !isFaceCompleted) {
           isProcessing = true;
           try {
             const detection = await faceapi.detectSingleFace(
               video,
               new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 })
             ).withFaceLandmarks().withFaceDescriptor();
+
+            if (isFaceCompleted) return;
 
             const ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -695,6 +700,7 @@
                 consecutiveMatches++;
                 feedback.textContent = "Đã nhận diện khuôn mặt! Giữ nguyên... (" + consecutiveMatches + "/3)";
                 if (consecutiveMatches >= 3) {
+                  isFaceCompleted = true;
                   feedback.textContent = "Đang lưu trữ vector sinh trắc học...";
                   const descArray = Array.from(detection.descriptor);
                   const res = await api("/api/intake/face/register", {
@@ -708,6 +714,7 @@
                   return;
                 }
               } else {
+                isFaceCompleted = true;
                 feedback.textContent = "Đang đối soát nhận diện khuôn mặt...";
                 const descArray = Array.from(detection.descriptor);
                 const res = await api("/api/intake/face/verify", {
@@ -727,13 +734,17 @@
               feedback.textContent = "Vui lòng nhìn thẳng vào vòng quét...";
             }
           } catch (err) {
-            feedback.className = "face-feedback err";
-            feedback.textContent = err.message || "Lỗi đối soát khuôn mặt.";
+            if (!isFaceCompleted) {
+              feedback.className = "face-feedback err";
+              feedback.textContent = err.message || "Lỗi đối soát khuôn mặt.";
+            }
           } finally {
             isProcessing = false;
           }
         }
-        faceAnimationId = requestAnimationFrame(detectFrame);
+        if (!isFaceCompleted) {
+          faceAnimationId = requestAnimationFrame(detectFrame);
+        }
       };
 
       faceAnimationId = requestAnimationFrame(detectFrame);
