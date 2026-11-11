@@ -62,3 +62,34 @@ def test_refund_and_bonus_separate_cash_directions_and_cutoff():
         asof='2025-02-01',start='2025-02-01',end='2025-03-01')
     inflows,outflows=weekly_extended_cash(schedule,'2025-02-01')
     assert inflows[0]==300 and outflows[0]==0 and outflows[1]==126
+
+
+@pytest.mark.parametrize('value',['false','true',0,1,None])
+@pytest.mark.parametrize('kind',['rent','loan'])
+def test_contract_builders_reject_non_boolean_verification(kind,value):
+    with pytest.raises(ValueError,match='verified phải là bool'):
+        if kind=='rent':
+            rent_events('rent',[dict(effective_from='2025-01-01',amount=100,verified=value)],
+                months=['2025-02'],due_day=20,known_at='2025-01-01',source='HĐ')
+        else:
+            loan_events('loan',[dict(date='2025-02-20',principal=1000,interest=70,verified=value)],
+                known_at='2025-01-01',source='Tín dụng')
+
+
+@pytest.mark.parametrize('verified',[False,True])
+@pytest.mark.parametrize('kind',['rent','loan'])
+def test_contract_verification_is_preserved_in_strict_schedule(kind,verified):
+    if kind=='rent':
+        events=rent_events('rent',[dict(effective_from='2025-01-01',amount=100,verified=verified)],
+            months=['2025-02'],due_day=20,known_at='2025-01-01',source='HĐ')
+    else:
+        events=loan_events('loan',[dict(date='2025-02-20',principal=1000,interest=70,verified=verified)],
+            known_at='2025-01-01',source='Tín dụng')
+    kwargs=dict(asof='2025-02-01',start='2025-02-01',end='2025-02-28',strict=True)
+    if verified:
+        schedule=extended_schedule(events,**kwargs)
+        assert len(schedule)==(1 if kind=='rent' else 2)
+        assert schedule.verified.all()
+    else:
+        with pytest.raises(ValueError,match='chưa xác minh'):
+            extended_schedule(events,**kwargs)

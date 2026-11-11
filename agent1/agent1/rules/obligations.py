@@ -19,6 +19,11 @@ def money(value):
     return float(amount.quantize(Decimal('1'),rounding=ROUND_HALF_UP))
 
 
+def _verified(value):
+    if not isinstance(value,(bool,np.bool_)):raise ValueError('verified phải là bool')
+    return bool(value)
+
+
 def extended_schedule(events,*,asof,start,end,strict=False):
     """Một hồ sơ/một kỳ có mã duy nhất; người dùng cung cấp hạn và số tiền.
 
@@ -40,8 +45,7 @@ def extended_schedule(events,*,asof,start,end,strict=False):
         if pd.isna(due):raise ValueError('Thiếu ngày theo hợp đồng/hồ sơ')
         source=str(event.get('source','')).strip()
         if not source:raise ValueError('Cần nguồn hồ sơ/hợp đồng')
-        verified=event.get('verified',False)
-        if not isinstance(verified,(bool,np.bool_)):raise ValueError('verified phải là bool')
+        verified=_verified(event.get('verified',False))
         if strict and not verified:raise ValueError('Hồ sơ chưa xác minh')
         if category=='vat_refund':
             approval=event.get('refund_approved_at')
@@ -68,7 +72,7 @@ def rent_events(contract_id,steps,*,months,due_day,known_at,source,business_day=
         step=matches[0]
         rows.append(dict(obligation_id=f'{contract_id}:{period}',category='rent_contract',due_date=due,
             amount=money(step['amount']),known_at=step.get('known_at',known_at),source=source,
-            verified=bool(step.get('verified',False)),business_day=business_day))
+            verified=_verified(step.get('verified',False)),business_day=business_day))
     return rows
 
 
@@ -80,7 +84,7 @@ def loan_events(contract_id,installments,*,known_at,source):
             rows.append(dict(obligation_id=f'{contract_id}:{index}:{field}',category=category,
                 due_date=installment['date'],amount=money(installment[field]),
                 known_at=installment.get('known_at',known_at),source=source,
-                verified=bool(installment.get('verified',False)),business_day=installment.get('business_day','none')))
+                verified=_verified(installment.get('verified',False)),business_day=installment.get('business_day','none')))
     return rows
 
 

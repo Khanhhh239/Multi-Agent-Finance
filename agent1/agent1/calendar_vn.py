@@ -144,6 +144,13 @@ def month_end(y, m) -> pd.Timestamp:
     return pd.Timestamp(y, m, 1) + pd.offsets.MonthEnd(0)
 
 
+def _monthly_due_date(y, m, day) -> pd.Timestamp:
+    """Giữ ngày theo hợp đồng, cắt ngày 29–31 tại cuối tháng ngắn."""
+    if isinstance(day, (bool, np.bool_)) or not isinstance(day, (int, np.integer)) or not 1 <= day <= 31:
+        raise ValueError("Ngày thanh toán phải là số nguyên từ 1..31")
+    return pd.Timestamp(y, m, min(int(day), month_end(y, m).day))
+
+
 # --------------------------------------------------------------------- T5: lịch nghĩa vụ
 
 def vat_deadline(period_end: pd.Timestamp, monthly: bool) -> pd.Timestamp:
@@ -198,9 +205,9 @@ def obligation_schedule(firm: dict, start, end, payroll_by_month: dict | None = 
         rows.append((prev_business_day(raw), "payroll_net", gross * (1 - SI_RATE_EMPLOYEE), (y, m)))
         rows.append((si_deadline(y, m), "social_insurance", gross * (SI_RATE_EMPLOYER + SI_RATE_EMPLOYEE), (y, m)))
         if firm.get("rent"):
-            rows.append((next_business_day(pd.Timestamp(y, m, firm.get("rent_day", 5))), "rent", firm["rent"], (y, m)))
+            rows.append((next_business_day(_monthly_due_date(y, m, firm.get("rent_day", 5))), "rent", firm["rent"], (y, m)))
         if firm.get("loan_payment"):
-            rows.append((next_business_day(pd.Timestamp(y, m, firm.get("loan_day", 25))), "loan_service",
+            rows.append((next_business_day(_monthly_due_date(y, m, firm.get("loan_day", 25))), "loan_service",
                          firm["loan_payment"], (y, m)))
         pe = month_end(y, m)
         if monthly_vat or m in (3, 6, 9, 12):

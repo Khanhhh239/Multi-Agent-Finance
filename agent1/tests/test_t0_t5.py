@@ -79,6 +79,31 @@ def test_obligation_schedule_contains_core_items():
     assert TS("2025-02-20") in set(s.loc[s["category"] == "vat", "date"])
 
 
+@pytest.mark.parametrize("start,end,day,expected", [
+    ("2025-02-01", "2025-02-28", 31, "2025-02-28"),
+    ("2024-02-01", "2024-02-29", 30, "2024-02-29"),
+    ("2024-06-01", "2024-07-02", 31, "2024-07-01"),
+])
+@pytest.mark.parametrize("category,amount_field,day_field", [
+    ("rent", "rent", "rent_day"),
+    ("loan_service", "loan_payment", "loan_day"),
+])
+def test_contract_due_day_clamped_before_business_day_roll(start,end,day,expected,category,amount_field,day_field):
+    schedule=cal.obligation_schedule({amount_field:100,day_field:day},start,end)
+    period=(TS(start).year,TS(start).month)
+    installment=schedule[schedule.category.eq(category)&schedule.period.map(lambda value:value==period)]
+    assert len(installment)==1
+    assert installment.iloc[0].date==TS(expected)
+    assert installment.iloc[0].amount==100
+
+
+@pytest.mark.parametrize("day",[0,32,1.5,True])
+@pytest.mark.parametrize("amount_field,day_field",[("rent","rent_day"),("loan_payment","loan_day")])
+def test_invalid_contract_due_day_rejected(day,amount_field,day_field):
+    with pytest.raises(ValueError,match="1..31"):
+        cal.obligation_schedule({amount_field:100,day_field:day},"2025-02-01","2025-02-28")
+
+
 # ----------------------------------------------------------------------------- T0
 def test_mst_checksum():
     assert valid_mst("0100109106")
