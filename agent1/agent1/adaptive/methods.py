@@ -82,6 +82,20 @@ CATALOG.extend(
 )
 
 
+def available_settlements(history):
+    """Settled records available to an issuance-time feature, without lookahead."""
+    settled = history.dropna(subset=["settled", "settled_known_at"]).copy()
+    settled["available"] = pd.concat(
+        [
+            settled.known_at,
+            settled.settled_known_at + pd.Timedelta(days=1),
+            settled.settled + pd.Timedelta(days=1),
+        ],
+        axis=1,
+    ).max(axis=1)
+    return settled
+
+
 def features(frame, history):
     import heapq
 
@@ -98,15 +112,7 @@ def features(frame, history):
             return 0.0
         return (-left[0] + right[0]) / 2 if len(left) == len(right) else -left[0]
 
-    settled = history.dropna(subset=["settled", "settled_known_at"]).copy()
-    settled["available"] = pd.concat(
-        [
-            settled.known_at,
-            settled.settled_known_at + pd.Timedelta(days=1),
-            settled.settled + pd.Timedelta(days=1),
-        ],
-        axis=1,
-    ).max(axis=1)
+    settled = available_settlements(history)
     events = list(settled.sort_values("available").itertuples())
     cursor = 0
     firm = ([], [])
@@ -288,16 +294,21 @@ class Method:
 
     def distribution(self, frame, ages=None, horizon=13):
         x = features(frame, self.history)
+        return self.distribution_from_features(x, ages, horizon)
+
+    def distribution_from_features(self, x, ages=None, horizon=13):
+        """Serving and explanation share the same conditional payment function."""
+        x = np.asarray(x, float)
         ages = (
-            np.zeros(len(frame), int)
+            np.zeros(len(x), int)
             if ages is None
             else np.maximum(np.asarray(ages, int), 0)
         )
         if self.name in ["due", "customer"]:
             days = x[:, 1] + (x[:, 2] if self.name == "customer" else 0)
             week = np.clip(np.ceil((days - ages) / 7).astype(int), 1, horizon + 1)
-            p = np.zeros((len(frame), horizon + 1))
-            p[np.arange(len(frame)), week - 1] = 1
+            p = np.zeros((len(x), horizon + 1))
+            p[np.arange(len(x)), week - 1] = 1
             overdue = (ages > x[:, 1]) & (days <= ages)
             if overdue.any():
                 # Only observed events support inflows after the contractual date.
@@ -320,7 +331,7 @@ class Method:
                     survival *= 1 - h
                 p[overdue, -1] = survival
             return p
-        survival = np.ones(len(frame))
+        survival = np.ones(len(x))
         parts = []
         for offset in range(1, horizon + 1):
             k = np.minimum(np.floor(ages / 7).astype(int) + offset, WEEKS)
@@ -513,6 +524,8 @@ def train(data, asof, progress=lambda x: None, names=None):
             + Path(__file__).with_name("new_credit.py").read_bytes()
             + Path(__file__).with_name("risk.py").read_bytes()
             + Path(__file__).with_name("collections.py").read_bytes()
+            + Path(__file__).with_name("collection_explanations.py").read_bytes()
+            + Path(__file__).with_name("cash_explanations.py").read_bytes()
         ).hexdigest(),
         dependencies={
             name: version(name)
@@ -545,6 +558,7 @@ def forecast(
     data = as_of(data, clock)
     frame = observed(data, clock)
     opened = frame[frame.remaining_amount > 0.01].copy()
+    open_before_rules = len(opened)
     links = _payment_links([r for r in data.get("invoices", []) if r["issue_date"] <= cutoff and r["known_at"] <= cutoff])
     actions = sorted(
         (
@@ -555,6 +569,7 @@ def forecast(
         key=lambda r: (r["date"], r["known_at"], r["event_id"]),
     )
     lost = {r["invoice_id"] for r in actions if r["kind"] == "write_off"}
+    writeoff_excluded = int(opened.invoice_id.isin(lost).sum())
     opened = opened[~opened.invoice_id.isin(lost)]
     if delay_days and delay_customer and delay_customer not in set(opened.customer_id):
         raise ValueError("Khách đã chọn không có hóa đơn đang mở tại ngày dự báo.")
@@ -610,9 +625,14 @@ def forecast(
         raise ValueError("Phiên bản học sau ngày dự báo")
     if opened.empty:
         p = np.zeros((0, receipt_horizon + 1))
+        serving_components = []
     else:
         ages = (clock - opened.issue_date).dt.days.to_numpy()
         if bundle:
+            serving_components = [
+                (bundle["weight"], bundle["model"]),
+                (1 - bundle["weight"], bundle["anchor"]),
+            ]
             options = {"horizon": receipt_horizon} if receipt_horizon != 13 else {}
             p = bundle["weight"] * bundle["model"].distribution(
                 opened, ages, **options
@@ -620,11 +640,9 @@ def forecast(
                 opened, ages, **options
             )
         else:
-            p = (
-                Method("customer")
-                .fit(frame, clock)
-                .distribution(opened, ages, horizon=receipt_horizon)
-            )
+            baseline = Method("customer").fit(frame, clock)
+            serving_components = [(1.0, baseline)]
+            p = baseline.distribution(opened, ages, horizon=receipt_horizon)
     if delay_days:
         shift = int(np.ceil(delay_days / 7))
         delayed = np.zeros_like(p)
@@ -638,6 +656,7 @@ def forecast(
         p[affected] = delayed[affected]
     payment_times = p.copy()
     cash_p, partial_n = partial_distribution(data, opened, clock, p)
+    partial_profile = np.any(cash_p != p, axis=1)
     if delay_days and partial_n:
         for i in np.flatnonzero(affected):
             if not np.array_equal(cash_p[i], p[i]):
@@ -653,13 +672,20 @@ def forecast(
     outgoing = np.zeros(horizon)
     known_variable = np.zeros(horizon)
     scheduled = np.zeros(horizon, bool)
-    for r in data.get("outflows", []):
+    scheduled_outflows = []
+    for index, r in enumerate(data.get("outflows", [])):
         if pd.Timestamp(r["known_at"]) > clock:
             continue
         days = (pd.Timestamp(r["date"]) - clock).days
         if 1 <= days <= 7 * horizon:
             outgoing[(days - 1) // 7] += r["amount"] * expense_multiplier
             scheduled[(days - 1) // 7] = True
+            scheduled_outflows.append(dict(
+                expense_id=str(r.get("expense_id", f"ROW-{index + 1}")),
+                date=r["date"], known_at=r["known_at"], category=r["category"],
+                week=(days - 1) // 7 + 1, original_amount=float(r["amount"]),
+                amount=float(r["amount"] * expense_multiplier),
+            ))
             if r["category"] == "variable_cost":
                 known_variable[(days - 1) // 7] += r["amount"] * expense_multiplier
     coverage = [
@@ -674,6 +700,7 @@ def forecast(
     operating_weeks = min(horizon, 13) if operating else 0
     estimate = None
     new_credit = None
+    variable_cost_topup = np.zeros(horizon)
     if include_operating and not operating:
         raise ValueError(
             "Chưa có phiên bản được kiểm định trên lịch sử sao kê cho bán thu ngay và chi biến đổi."
@@ -695,9 +722,10 @@ def forecast(
                 new_credit = point(m, operating["credit"]["kind"])[:operating_weeks]
                 incoming[:operating_weeks] += new_credit
         incoming[:operating_weeks] += estimate[:, 0]
-        outgoing[:operating_weeks] += np.maximum(
+        variable_cost_topup[:operating_weeks] = np.maximum(
             0, estimate[:, 1] * expense_multiplier - known_variable[:operating_weeks]
         )
+        outgoing += variable_cost_topup
     expected = balance + np.cumsum(incoming - outgoing)
     rng = np.random.default_rng(7)
     paths = np.full((400, horizon), float(balance)) - np.cumsum(outgoing)
@@ -735,11 +763,11 @@ def forecast(
     from .risk import predict_risk
 
     risk_values = predict_risk(bundle.get("risk") if bundle else None, opened)
+    triage_model = Method("customer").fit(frame, clock) if len(opened) else None
     triage_p = (
-        Method("customer")
-        .fit(frame, clock)
-        .distribution(opened, (clock - opened.issue_date).dt.days.to_numpy())[:, :4]
-        .sum(1)
+        triage_model.distribution(
+            opened, (clock - opened.issue_date).dt.days.to_numpy()
+        )[:, :4].sum(1)
         if len(opened)
         else np.array([])
     )
@@ -747,9 +775,8 @@ def forecast(
         dict(
             invoice_id=str(r.invoice_id),
             customer_id=str(r.customer_id),
-            outstanding=float(r.remaining_amount),
+            outstanding=int(r.remaining_amount),
             write_off_probability_365d_at_issue=risk_values[i],
-            amount_at_risk_4w=float(r.remaining_amount * (1 - triage_p[i])),
             overdue_days=max(0, (clock - r.due_date).days),
             due_date=str(r.due_date.date()),
             disputed=disputes.get(r.invoice_id, False),
@@ -768,19 +795,48 @@ def forecast(
         for i, r in enumerate(opened.itertuples())
         if not deferred.get(r.invoice_id)
     ]
-    policy = bundle.get("collection_policy", "amount") if bundle else "amount"
+    from .collection_explanations import rank_with_explanations
 
-    def priority_value(r):
-        return (
-            r["amount_at_risk_4w"]
-            if policy == "amount_at_risk"
-            else 1 - r["triage_probability_4w"]
-            if policy == "risk"
-            else r["outstanding"]
+    priorities, collection_ranking = rank_with_explanations(
+        priorities,
+        policy=bundle.get("collection_policy", "amount") if bundle else "amount",
+        cutoff=str(clock.date()),
+        evaluation=bundle.get("collection_evaluation") if bundle else None,
+        has_serving_model=bundle is not None,
+        model_asof=bundle.get("asof") if bundle else None,
+        delay_days=delay_days,
+        delay_customer=delay_customer,
+        eligibility={
+            "open_before_rules": open_before_rules,
+            "writeoff_excluded": writeoff_excluded,
+            "recent_contact_or_skip_excluded": sum(bool(deferred.get(i)) for i in opened.invoice_id),
+            "cooldown_days": 7,
+        },
+    )
+    explanation_references = {}
+    if priorities:
+        from .explanations import explain_collections
+
+        reference = explain_collections(
+            priorities, opened, serving_components, clock,
+            delay_days=delay_days, delay_customer=delay_customer,
+            model_asof=bundle.get("asof") if bundle else None,
         )
-
-    priorities = sorted(priorities, key=lambda r: -priority_value(r))[:30]
-    return dict(
+        if reference:
+            explanation_references[reference["hash"]] = reference
+        if collection_ranking["uses_probability"]:
+            reference = explain_collections(
+                priorities, opened, [(1.0, triage_model)], clock,
+                model_asof=str(clock.date()),
+                probability_field="triage_probability_4w",
+                output_field="triage_explanation",
+            )
+            if reference:
+                explanation_references[reference["hash"]] = reference
+            for row in priorities:
+                row["ranking_explanation"]["probability_explanation"] = row.pop("triage_explanation")
+    result = dict(
+        explanation_references=explanation_references,
         cutoff=str(clock.date()),
         horizon_weeks=horizon,
         operating_weeks=operating_weeks,
@@ -817,6 +873,7 @@ def forecast(
             for i in range(horizon)
         ],
         collections=priorities,
+        collection_ranking=collection_ranking,
         alerts=[
             dict(
                 week=i + 1,
@@ -845,3 +902,21 @@ def forecast(
         ],
         pilot_ready=False,
     )
+    from .cash_explanations import explain_cash
+
+    cash_sales = np.zeros(horizon)
+    credit_receipts = np.zeros(horizon)
+    if estimate is not None:
+        cash_sales[:operating_weeks] = estimate[:, 0]
+    if new_credit is not None:
+        credit_receipts[:operating_weeks] = new_credit
+    result["cash_decomposition"] = explain_cash(
+        opened, cash_p[:, :horizon] * amounts[:, None], result["weeks"],
+        cutoff=str(clock.date()), opening_balance=balance, cash_floor=cash_floor,
+        scheduled_outflows=scheduled_outflows, cash_sales=cash_sales,
+        new_credit=credit_receipts, variable_cost_topup=variable_cost_topup,
+        partial_profile=partial_profile, partial_supported=partial_n,
+        written_off_count=writeoff_excluded,
+        model_asof=bundle.get("asof") if bundle else str(clock.date()),
+    )
+    return result

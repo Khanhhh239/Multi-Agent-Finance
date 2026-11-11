@@ -30,7 +30,8 @@
     invoices: "Hóa đơn", bank: "Dòng sao kê", payments: "Thanh toán", statements: "Kỳ sao kê", actions: "Nhật ký", outflows: "Lịch cố định · T5",
     identifier: "Mã bản ghi", status: "Trạng thái", remaining_amount: "Còn lại", allocated_amount: "Đã phân bổ",
     value: "Giá trị", source_file: "Tên tệp", imported_by: "Người nạp", created_at: "Thời gian",
-    new: "Mới", changed: "Sửa", unchanged: "Trùng giữ nguyên", error_count: "Lỗi", rows: "Số dòng",
+    new: "Mới", changed: "Sửa", unchanged: "Trùng giữ nguyên", error_count: "Lỗi", rows: "Số dòng", valid_rows: "Dòng hợp lệ",
+    legacy: "Nhật ký cũ", note: "Ghi chú",
     outstanding_before: "Công nợ trước", outstanding_after: "Công nợ sau",
     promise_reliability: "Tỷ lệ giữ hứa ước tính",
     promised_date: "Ngày khách hứa",
@@ -96,6 +97,8 @@
     outstanding: "Còn phải thu",
     overdue_days: "Ngày quá hạn",
     payment_probability_4w: "Xác suất tất toán 4 tuần",
+    collection_rank: "Ưu tiên",
+    priority_score: "Điểm ưu tiên",
   };
   let token = "",
     connected = false,
@@ -114,6 +117,7 @@
     inactive:"Chưa có hiệu lực / chứng từ liên quan", written_off:"Đã xóa nợ", outgoing:"Tiền chi", non_ar:"Ngoài công nợ",
     allocated:"Đã phân bổ hết", pending:"Chưa phân bổ", linked:"Có liên kết sao kê", unlinked:"Chưa liên kết sao kê",
     future:"Chưa đến ngày ghi nhận", committed:"Đã lưu", preview:"Đã kiểm tra, chưa lưu", invalid:"Có lỗi, chưa lưu",
+    legacy_preview:"Đã kiểm tra · chưa rõ xác nhận",
     accepted:"Đã duyệt", reversed:"Đã đảo", rejected:"Đã từ chối", corrected:"Đã sửa nguồn", active:"Đang hiệu lực"};
   const charts = new Map();
   const node = (tag, text, cls) => {
@@ -542,7 +546,7 @@
   }
   function valueTable(record) {
     return table(Object.entries(record).map(([field, value]) => ({field:labels[field] || field,
-      value:typeof value === "object" ? JSON.stringify(value) : value})), ["field", "value"]);
+      value:value == null ? "—" : typeof value === "object" ? JSON.stringify(value) : value})), ["field", "value"]);
   }
   async function showRecord(kind, identifier) {
     const result = await api("/records/" + encodeURIComponent(kind) + "/" + encodeURIComponent(identifier));
@@ -587,15 +591,17 @@
     const requestId = ++importsRequest;
     const result = await api("/imports?offset=" + importsOffset + "&limit=20&kind=" + encodeURIComponent($("records-kind").value));
     if (requestId !== importsRequest) return;
-    const fields = ["source_file", "created_at", "imported_by", "status", "rows", "new", "changed", "unchanged", "error_count", "outstanding_before", "outstanding_after"];
+    const fields = ["source_file", "created_at", "imported_by", "status", "rows", "valid_rows", "new", "changed", "unchanged", "error_count", "outstanding_before", "outstanding_after"];
     const grid = table(result.rows, fields, {created_at:displayTime, status:value => statusLabels[value] || value,
       imported_by:value => value || "Chưa ghi tên"});
     Array.from(grid.querySelectorAll("tbody tr")).forEach((row, index) => {
-      const button = node("button", result.rows[index].source_file, "link-button"); button.type = "button";
+      const button = node("button", result.rows[index].source_file || "Chưa ghi tên tệp · nhật ký cũ", "link-button"); button.type = "button";
       button.onclick = () => action(() => showImport(result.rows[index].id), button); row.cells[0].replaceChildren(button);
     });
     $("import-history-table").replaceChildren(grid);
     $("import-history-status").textContent = result.total ? "Lịch sử của bảng " + labels[$("records-kind").value] + ". Bấm tên tệp để xem bản ghi và lỗi." : "Chưa có lần nạp được ghi nhật ký cho bảng này.";
+    if (result.legacy_count) $("import-history-status").textContent += " Có " + result.legacy_count +
+      " lần kiểm tra từ phiên bản cũ: chưa ghi tên tệp, người nạp hoặc kết quả xác nhận. Dấu — là thông tin chưa được ghi lại.";
     $("imports-page").textContent = result.total ? `${importsOffset + 1}–${Math.min(importsOffset + 20, result.total)} / ${result.total}` : "0 lần nạp";
     $("imports-prev").disabled = importsOffset === 0;
     $("imports-next").disabled = importsOffset + 20 >= result.total;
@@ -603,7 +609,14 @@
   async function showImport(identifier) {
     const result = await api("/imports/" + encodeURIComponent(identifier)), target = $("import-history-detail");
     target.replaceChildren(node("h3", "Chi tiết lần nạp"));
-    const values = node("div", undefined, "table-scroll"); values.append(valueTable(result.batch)); target.append(values);
+    const batch = {...result.batch, status:statusLabels[result.batch.status] || result.batch.status};
+    batch.kind = labels[batch.kind] || batch.kind;
+    batch.created_at = displayTime(batch.created_at);
+    batch.source_file ||= "Chưa ghi tên tệp";
+    batch.imported_by ||= "Chưa ghi tên";
+    delete batch.legacy; delete batch.note;
+    const values = node("div", undefined, "table-scroll"); values.append(valueTable(batch)); target.append(values);
+    if (result.batch.note) target.prepend(node("p", result.batch.note, "warning-box"));
     result.errors.forEach(error => target.append(node("p", (error.row ? "Dòng " + error.row + ": " : "") + error.message, "error-text")));
     const links = node("div", undefined, "record-links");
     result.records.forEach(row => links.append(recordLink(row.kind, row.identifier))); target.append(links);
@@ -1434,6 +1447,359 @@
         table(r.weeks, ["week", "actual_balance", "in_error", "out_error"]),
       );
     });
+  function renderPaymentExplanation(explanation, plan, expectedProbability) {
+    const panel = node("section", undefined, "t1-explanation");
+    const available = explanation?.status === "available";
+    const probability = expectedProbability ?? explanation?.probability;
+    const validProbability = Number.isFinite(probability) && probability >= 0 && probability <= 1;
+    panel.append(node("h3", "Vì sao có khả năng tất toán này?"));
+    if (validProbability) panel.append(node("p", "Tất toán trong 4 tuần: " +
+      (probability * 100).toLocaleString("vi-VN", {maximumFractionDigits: 2}) + "%", "t1-probability"));
+    if (explanation?.cutoff) panel.append(node("p", "Ngày dự báo " + displayDate(explanation.cutoff), "muted"));
+    if (!available) {
+      panel.append(node("p", "Kế hoạch này chưa có lời giải thích đã được kiểm tra. Tạo kế hoạch mới để xem."));
+      return panel;
+    }
+    if (explanation.scenario_shift_weeks) panel.append(node("p",
+      "Kịch bản thu chậm thêm " + explanation.scenario_shift_weeks + " tuần."));
+
+    // Fail closed, including for saved plans without diagnostics. Users only
+    // receive reviewed drivers; raw SHAP and diagnostics stay in the saved plan.
+    const checks = explanation.stability, support = explanation.plausibility, reference = explanation.reference;
+    const factors = explanation.factors || [];
+    const reconstructs = Number.isFinite(explanation.baseline_probability) && factors.every(f => Number.isFinite(f.contribution_pp)) &&
+      Math.abs(explanation.baseline_probability + factors.reduce((total, f) => total + f.contribution_pp / 100, 0) - probability) <= 1e-10;
+    const checked = validProbability && Number.isFinite(explanation.probability) &&
+      Math.abs(probability - explanation.probability) <= 1e-10 && reconstructs &&
+      checks?.checked === true && checks.sample_count >= 3 &&
+      support?.status === "no_warning" && Number.isFinite(support.unsupported_fraction) &&
+      support.unsupported_fraction >= 0 && support.unsupported_fraction <= 0.1 &&
+      Number.isFinite(reference?.max_weighted_cdf_distance) && reference.max_weighted_cdf_distance >= 0 && reference.max_weighted_cdf_distance <= 0.1;
+    const drivers = checked ? factors.filter(factor => {
+      const stability = factor.stability, effect = factor.contribution_pp;
+      const review = factor.business_review;
+      if (review?.protocol !== "t1-business-evidence-v1" || review.status !== "eligible" ||
+          review.feature !== factor.feature || review.value_unit !== factor.value_unit ||
+          String(review.value) !== String(factor.value) ||
+          !["amount", "age_days", "customer_delay_days", "company_delay_days"].includes(factor.feature)) return false;
+      const actualValue = typeof factor.value === "number" ? Number.isFinite(factor.value)
+        : factor.value_unit === "VND" && typeof factor.value === "string" && /^-?\d+(\.\d+)?$/.test(factor.value);
+      if (!actualValue || !Number.isFinite(effect) || stability?.status !== "stable" ||
+          (stability.reasons || []).length || !Number.isFinite(stability.min_contribution_pp) ||
+          !Number.isFinite(stability.max_contribution_pp) || stability.min_contribution_pp > stability.max_contribution_pp ||
+          effect < stability.min_contribution_pp - 1e-8 || effect > stability.max_contribution_pp + 1e-8) return false;
+      return factor.direction === "increase" && effect >= 1 && stability.min_contribution_pp >= 1 ||
+        factor.direction === "decrease" && effect <= -1 && stability.max_contribution_pp <= -1;
+    }).sort((a, b) => Math.abs(b.contribution_pp) - Math.abs(a.contribution_pp)).slice(0, 3) : [];
+    if (drivers.length) {
+      const table = node("table", undefined, "t1-drivers"), head = node("thead"), header = node("tr"), body = node("tbody");
+      ["Yếu tố ảnh hưởng", "Giá trị thực", "Chiều ảnh hưởng trong dự báo"].forEach(label => header.append(node("th", label)));
+      head.append(header); table.append(head);
+      const names = {
+        customer_delay_days: "Mức chậm thanh toán ước tính của khách trước ngày lập",
+        company_delay_days: "Mức chậm thanh toán chung của khách hàng trước ngày lập",
+      };
+      drivers.forEach(factor => {
+        const row = node("tr"), reason = node("td");
+        const value = paymentFactorValue(factor.value, factor);
+        reason.append(node("p", factor.direction === "increase"
+          ? "Góp phần tăng khả năng tất toán trong 4 tuần."
+          : "Góp phần giảm khả năng tất toán trong 4 tuần.",
+          factor.direction === "increase" ? "effect-increase" : "effect-decrease"));
+        const evidence = paymentFactorEvidence(factor, explanation);
+        if (evidence) reason.append(node("p", evidence, "t1-business-evidence"));
+        row.append(node("td", names[factor.feature] || factor.label), node("td", value),
+          reason);
+        body.append(row);
+      });
+      table.append(body); panel.append(table);
+      panel.append(node("p", "Các yếu tố này chỉ giải thích một phần dự báo, chưa chứng minh nguyên nhân khách hàng sẽ trả hoặc chưa trả.", "muted"));
+      const largest = Math.max(...drivers.map(f => Math.abs(f.contribution_pp)));
+      if (factors.some(f => Math.abs(f.contribution_pp) > largest && !drivers.includes(f))) {
+        panel.append(node("p", "Chưa đủ cơ sở để diễn giải yếu tố có ảnh hưởng lớn nhất thành lý do nghiệp vụ.", "muted"));
+      }
+    } else panel.append(node("p", "Chưa đủ cơ sở để đưa ra lý do nghiệp vụ đáng tin cho dự báo này.", "muted"));
+    const context = factors.filter(f => ["term_days", "customer_history_count", "amount"].includes(f.feature) &&
+      f.value != null && !drivers.includes(f) && (Number.isFinite(f.value) ||
+        f.value_unit === "VND" && typeof f.value === "string" && /^\d+$/.test(f.value)));
+    if (context.length) {
+      const information = node("div", undefined, "t1-input-context");
+      information.append(node("h4", "Thông tin đầu vào"), node("p",
+        "Các thông tin dưới đây được sử dụng trong dự báo; chưa đủ căn cứ coi chúng là lý do xác suất cao hay thấp.", "muted"));
+      const names = {term_days: "Kỳ hạn thanh toán", customer_history_count: "Số hóa đơn khách đã tất toán trước ngày lập", amount: "Giá trị hóa đơn"};
+      context.forEach(f => information.append(node("p", names[f.feature] + ": " + paymentFactorValue(f.value, f))));
+      panel.append(information);
+    }
+    return panel;
+  }
+  function paymentFactorValue(value, factor) {
+    if (factor.value_unit === "VND") return rankingNumber(value, "VND");
+    if (["customer_delay_days", "company_delay_days"].includes(factor.feature)) {
+      if (value === 0) return "đúng hạn";
+      return (value < 0 ? "sớm hơn hạn " : "chậm hơn hạn ") + fmt.format(Math.abs(value)) + " ngày";
+    }
+    return value.toLocaleString("vi-VN", {maximumFractionDigits: 2}) + " " + factor.value_unit;
+  }
+  function paymentFactorEvidence(factor, explanation) {
+    const e = factor.business_review?.evidence;
+    if (e?.protocol !== "t1-business-evidence-v1") return null;
+    if (["customer_delay_days", "company_delay_days"].includes(factor.feature)) {
+      if (e.scope !== "settlements_available_before_invoice_issue" || !e.asof || !e.source_hash ||
+          ![e.count, e.late_count, e.on_time_count, e.early_count].every(n => Number.isInteger(n) && n >= 0) ||
+          e.count < 10 || e.late_count + e.on_time_count + e.early_count !== e.count) return null;
+      return "Trong " + fmt.format(e.count) + " hóa đơn " +
+        (factor.feature === "customer_delay_days" ? "của khách này " : "trong lịch sử doanh nghiệp ") +
+        "đã được ghi nhận tất toán trước ngày lập hóa đơn này, " + fmt.format(e.late_count) + " hóa đơn được trả sau hạn.";
+    }
+    if (factor.feature === "age_days" && e.cutoff === explanation.cutoff && e.due_date &&
+        Number.isInteger(e.overdue_days) && e.overdue_days >= 0) {
+      return "Hóa đơn đến hạn ngày " + displayDate(e.due_date) + (e.overdue_days
+        ? "; tại ngày dự báo đã quá hạn " + fmt.format(e.overdue_days) + " ngày." : ".");
+    }
+    return null;
+  }
+  function rankingNumber(value, unit) {
+    if (value == null) return "—";
+    if (unit === "VND" && typeof value === "string" && /^-?\d+(\.\d+)?$/.test(value)) {
+      const negative = value.startsWith("-"), [whole, fraction = ""] = value.replace(/^-/, "").split(".");
+      // Round decimal text without first passing exact VND through Number.
+      let cents = BigInt(whole) * 100n + BigInt((fraction + "00").slice(0, 2));
+      if ((fraction[2] || "0") >= "5") cents += 1n;
+      const digits = (cents % 100n).toString().padStart(2, "0").replace(/0+$/, "");
+      return (negative && cents ? "-" : "") + fmt.format(cents / 100n) + (digits ? "," + digits : "") + " VND";
+    }
+    return unit === "probability" ? (value * 100).toLocaleString("vi-VN", {maximumFractionDigits: 2}) + "%"
+      : value.toLocaleString("vi-VN", {maximumFractionDigits: 2}) + (unit === "VND" ? " VND" : " " + unit);
+  }
+  function renderCollectionPolicy(policy) {
+    const panel = node("div", undefined, "collection-policy");
+    if (!policy) {
+      panel.append(node("p", "Kế hoạch cũ chưa lưu chính sách xếp hạng. Tạo kế hoạch mới để xem lý do ưu tiên.", "muted"));
+      return panel;
+    }
+    const excluded = policy.eligibility || {};
+    panel.append(node("p", "Chính sách: " + policy.label + " · Hiển thị " + policy.displayed_count +
+      "/" + policy.eligible_count + " khoản đủ điều kiện."),
+      node("p", "Điểm = " + policy.formula + ". " + policy.selection.message, "muted"),
+      node("p", "Loại khỏi danh sách: " + (excluded.writeoff_excluded || 0) + " khoản đã xóa nợ; " +
+        (excluded.recent_contact_or_skip_excluded || 0) + " khoản vừa liên hệ hoặc tạm bỏ qua chưa đủ 7 ngày.", "muted"));
+    return panel;
+  }
+  function renderRankingExplanation(invoice, plan) {
+    const e = invoice.ranking_explanation, panel = node("section", undefined, "t1-explanation ranking-explanation");
+    if (!e) {
+      panel.append(node("p", "Kế hoạch này chưa lưu lý do xếp hạng. Tạo kế hoạch mới để xem."));
+      return panel;
+    }
+    panel.append(node("h3", "Vì sao khoản này được ưu tiên trước?"),
+      node("p", "Ưu tiên " + e.rank + "/" + e.eligible_count + " · Chính sách: " + e.label),
+      node("p", "Điểm ưu tiên: " + rankingNumber(e.score, e.score_unit)),
+      node("p", "Công thức: " + e.formula + ". " + e.selection.message),
+      node("p", "Ngày dự báo " + displayDate(e.cutoff) + " · Phiên bản dự báo: " +
+        (e.displayed_model_version || plan.model_version || "Theo lịch sử"), "muted"));
+    const next = e.next;
+    if (next) {
+      panel.append(node("p", next.tied
+        ? "Cùng điểm với hóa đơn " + next.invoice_id + "; đứng trước theo thứ tự bản ghi trong snapshot dữ liệu."
+        : "Đứng trước hóa đơn " + next.invoice_id + " vì điểm cao hơn: " + rankingNumber(e.score, e.score_unit) +
+          " so với " + rankingNumber(next.score, e.score_unit) + "."));
+    } else panel.append(node("p", "Đây là khoản cuối trong danh sách đủ điều kiện."));
+    if (e.tie_break.group_size > 1) panel.append(node("p", "Vị trí " + e.tie_break.position +
+      "/" + e.tie_break.group_size + " trong nhóm cùng điểm; không ưu tiên thêm theo ngày quá hạn hoặc mã hóa đơn.", "muted"));
+    panel.append(node("h4", "Nguồn xác suất"),
+      node("p", (e.uses_probability ? "Dùng trong điểm: " : "Ước lượng tham khảo: ") + rankingNumber(e.triage_probability_4w, "probability") + " tất toán trong 4 tuần · " +
+        e.probability_source.label + " (" + displayDate(e.probability_source.asof) + ")."),
+      node("p", "Trên bảng dự báo: " + rankingNumber(e.displayed_probability_4w, "probability") + " tất toán trong 4 tuần."));
+    if (!e.uses_probability) panel.append(node("p", "Chính sách này chỉ dùng dư nợ; các xác suất không tham gia điểm ưu tiên."));
+    else if (e.probability_source.differs_from_displayed) panel.append(node("p",
+      "Điểm dùng một ước lượng riêng từ lịch sử khách, khác nguồn với xác suất dự báo đang hiển thị. " + e.probability_source.detail,
+      "ranking-source-note"));
+    else panel.append(node("p", "Hai xác suất cùng nguồn lịch sử khách và cùng giả định tại ngày chốt.", "muted"));
+    const list = node("ul");
+    e.factors.forEach(f => {
+      const value = f.unit === "boolean" ? (f.value ? "Có" : "Chưa ghi nhận")
+        : f.unit === "date" ? (f.value ? displayDate(f.value) : "Chưa có") : rankingNumber(f.value, f.unit);
+      let line = f.label + ": " + value + ". " + f.message;
+      if (f.reliability != null) line += " Tỷ lệ giữ hứa ước tính: " + rankingNumber(f.reliability, "probability") + ".";
+      list.append(node("li", line));
+    });
+    panel.append(node("h4", "Yếu tố tính điểm và thông tin xử lý"), list);
+    const rules = node("ul"); e.business_rules.forEach(rule => rules.append(node("li", rule)));
+    panel.append(node("h4", "Quy tắc lập danh sách"), rules, node("p", e.limitation, "muted"));
+    if (e.probability_explanation) {
+      const details = node("details");
+      details.append(node("summary", "Vì sao có khả năng tất toán này?"),
+        node("p", "Các yếu tố dưới đây giải thích khả năng tất toán, chưa giải thích toàn bộ thứ tự ưu tiên.", "muted"),
+        renderPaymentExplanation(e.probability_explanation, plan, e.triage_probability_4w));
+      panel.append(details);
+    }
+    return panel;
+  }
+  function collectionExplanationCell(invoice, plan, index, kind) {
+    const ranking = kind === "ranking", cell = node("td"),
+      button = node("button", ranking ? "Vì sao ưu tiên?" : "Giải thích"),
+      detail = node("dialog", undefined, "t1-explanation-dialog"), close = node("button", "Đóng giải thích", "button"),
+      label = ranking ? "Giải thích thứ tự ưu tiên hóa đơn " : "Giải thích xác suất tất toán hóa đơn ";
+    detail.id = (ranking ? "ranking-explanation-" : "payment-explanation-") + index;
+    detail.setAttribute("aria-label", label + invoice.invoice_id);
+    close.type = "button"; close.onclick = () => detail.close();
+    detail.onclose = () => { button.setAttribute("aria-expanded", "false"); detail.remove(); };
+    button.type = "button"; button.setAttribute("aria-label", label + invoice.invoice_id);
+    button.setAttribute("aria-expanded", "false"); button.setAttribute("aria-controls", detail.id);
+    button.onclick = () => {
+      if (detail.open) return;
+      if (!detail.children.length) detail.append(close, node("h2", "Hóa đơn " + invoice.invoice_id),
+        ranking ? renderRankingExplanation(invoice, plan) : renderPaymentExplanation(invoice.payment_explanation, plan, invoice.payment_probability_4w));
+      document.body.append(detail); detail.showModal(); button.setAttribute("aria-expanded", "true");
+    };
+    cell.append(button); return cell;
+  }
+  function renderCollections(plan) {
+    if (!plan.collections.length) {
+      const eligibility = plan.collection_ranking?.eligibility;
+      const open = plan.open_invoices ?? (eligibility ? eligibility.open_before_rules - (eligibility.writeoff_excluded || 0) : null);
+      return node("p", open === 0 ? "Không có công nợ còn mở tại ngày dự báo."
+        : open > 0 ? `Còn ${fmt.format(open)} hóa đơn đang mở; chưa có khoản đủ điều kiện trong hàng đợi thu nợ.` +
+          (eligibility?.recent_contact_or_skip_excluded ? ` ${fmt.format(eligibility.recent_contact_or_skip_excluded)} khoản đang tạm hoãn do vừa liên hệ hoặc bỏ qua chưa đủ 7 ngày.` : "")
+        : "Chưa có khoản nào trong hàng đợi thu nợ của kế hoạch này.", "muted");
+    }
+    const fields = ["collection_rank", "priority_score", "invoice_id", "customer_id", "outstanding", "overdue_days", "due_date",
+      "promised_date", "promise_reliability", "disputed", "reason", "payment_probability_4w"];
+    const result = table(plan.collections, fields, {
+      promise_reliability: v => v == null ? "Chưa đủ lịch sử" : Math.round(v * 100) + "%",
+      disputed: v => v ? "Có" : "Không",
+      payment_probability_4w: v => (v * 100).toLocaleString("vi-VN", {maximumFractionDigits: 2}) + "%",
+      outstanding: v => rankingNumber(v, "VND"),
+      priority_score: v => rankingNumber(v, plan.collection_ranking?.score_unit || ""),
+    });
+    result.querySelector("thead tr").append(node("th", "Lý do ưu tiên"));
+    result.querySelector("thead tr").append(node("th", "Giải thích xác suất"));
+    const body = result.querySelector("tbody"), invoiceRows = [...body.children];
+    invoiceRows.forEach((row, i) => {
+      const invoice = plan.collections[i];
+      row.append(collectionExplanationCell(invoice, plan, i, "ranking"), collectionExplanationCell(invoice, plan, i, "payment"));
+    });
+    return result;
+  }
+  function cashDetailTable(headers, rows) {
+    const result = node("table"), head = node("thead"), heading = node("tr"), body = node("tbody");
+    headers.forEach(label => heading.append(node("th", label)));
+    head.append(heading);
+    rows.forEach(values => {
+      const row = node("tr");
+      values.forEach(value => row.append(node("td", value)));
+      body.append(row);
+    });
+    result.append(head, body);
+    return result;
+  }
+  function cashPagedTable(host, headers, rows) {
+    let offset = 0;
+    const render = () => {
+      const scroll = node("div", undefined, "table-scroll"), controls = node("div", undefined, "cash-pagination");
+      scroll.append(cashDetailTable(headers, rows.slice(offset, offset + 20)));
+      const previous = node("button", "← Trước", "button"), next = node("button", "Sau →", "button");
+      previous.type = next.type = "button";
+      previous.disabled = offset === 0; next.disabled = offset + 20 >= rows.length;
+      previous.onclick = () => { offset -= 20; render(); };
+      next.onclick = () => { offset += 20; render(); };
+      const status = node("span", rows.length ? `${offset + 1}–${Math.min(offset + 20, rows.length)} / ${rows.length} dòng` : "Không có khoản phù hợp.");
+      status.setAttribute("role", "status");
+      controls.append(previous, status, next);
+      host.replaceChildren(scroll, controls);
+    };
+    render();
+  }
+  function renderCashDecomposition(plan) {
+    const panel = node("div", undefined, "cash-decomposition"), d = plan.cash_decomposition;
+    if (!d) {
+      panel.append(node("p", "Kế hoạch cũ chưa lưu phân rã dòng tiền. Tạo kế hoạch mới để xem theo hóa đơn, lịch chi và so sánh thu sớm/chậm."));
+      return panel;
+    }
+    const money = value => fmt.format(Math.abs(value) < 0.000001 ? 0 : value) + " VND";
+    panel.append(node("p", "Ngày " + displayDate(d.cutoff) + " · Phiên bản " + (d.model_version || "Theo lịch sử") + " · Phân rã số dư kỳ vọng.", "muted"));
+    const f = d.risk_focus, risk = node("div", undefined, "cash-risk-focus");
+    let message;
+    if (f.trigger === "expected_shortfall") {
+      message = `Tuần ${f.week} (${displayDate(f.date)}): số dư kỳ vọng thiếu ${money(f.expected_shortfall)} so với ngưỡng ${money(f.cash_floor)}.`;
+    } else if (f.trigger === "simulation_only") {
+      message = `Tuần ${f.week}: số dư kỳ vọng vẫn đạt ngưỡng, nhưng ít nhất 25% đường mô phỏng xuống dưới ngưỡng. Phân rã dưới đây giải thích số dư kỳ vọng; chưa phân rã xác suất cảnh báo.`;
+    } else {
+      message = `Chưa có cảnh báo dưới ngưỡng trong kỳ. Số dư kỳ vọng thấp nhất ở tuần ${f.week} (${displayDate(f.date)}).`;
+    }
+    risk.append(node("h3", "Vì sao cần chú ý tuần " + f.week + "?"), node("p", message));
+    const bridge = node("div", undefined, "cash-bridge");
+    [["Số dư đầu", f.opening_balance], ["+ Thu đến tuần " + f.week, f.cumulative_cash_in],
+      ["− Chi đến tuần " + f.week, f.cumulative_cash_out], ["= Số dư tuần " + f.week, f.balance]].forEach(([label, value]) => {
+      const item = node("div"); item.append(node("span", label), node("strong", money(value))); bridge.append(item);
+    });
+    risk.append(bridge);
+    const customers = f.largest_unreceived_customers.filter(row => row.unreceived > 0.000001);
+    if (customers.length) risk.append(node("p", "Dư nợ chưa dự thu đến hết tuần này: " + money(f.unreceived_ar) + ". Các khách có phần chưa thu lớn nhất: " +
+      customers.map(row => row.customer_id + " · " + money(row.unreceived)).join("; ") + ". Kế hoạch còn phụ thuộc vào việc thu các khoản này."));
+    if (f.largest_scheduled_outflows.length) risk.append(node("p", "Các khoản chi đã biết lớn nhất đến tuần này: " +
+      f.largest_scheduled_outflows.map(row => row.expense_id + " · " + displayDate(row.date) + " · " + money(row.amount)).join("; ") + "."));
+    if (f.unknown_outflow_weeks.length) risk.append(node("p", "Chưa xác nhận đủ lịch chi ở tuần " + f.unknown_outflow_weeks.join(", ") + "; số dư có thể thiếu các khoản chi chưa nạp.", "warning-box"));
+    panel.append(risk, node("h3", "Tiền dự thu đến từ khoản nào?"), node("p", d.scope.description));
+    const filters = node("div", undefined, "cash-filters");
+    const weekLabel = node("label", "Kỳ cần xem"), weekSelect = node("select");
+    const all = node("option", "Toàn kỳ " + d.weeks.length + " tuần"); all.value = "all"; weekSelect.append(all);
+    d.weeks.forEach(week => { const option = node("option", `Tuần ${week.week} · ${displayDate(week.date)}`); option.value = String(week.week); weekSelect.append(option); });
+    weekSelect.setAttribute("aria-label", "Kỳ phân rã dòng tiền"); weekLabel.append(weekSelect);
+    const groupLabel = node("label", "Nhóm dự thu"), group = node("select");
+    [["invoices", "Theo hóa đơn"], ["customers", "Theo khách hàng"]].forEach(([value, label]) => { const option = node("option", label); option.value = value; group.append(option); });
+    group.setAttribute("aria-label", "Nhóm đóng góp dự thu"); groupLabel.append(group);
+    const searchLabel = node("label", "Tìm mã hóa đơn/khách"), search = node("input");
+    search.type = "search"; search.setAttribute("aria-label", "Tìm khoản dự thu"); searchLabel.append(search);
+    filters.append(weekLabel, groupLabel, searchLabel);
+    const summary = node("p"), receipts = node("div"), expenses = node("div");
+    const expenseDetails = node("details", undefined, "cash-details");
+    expenseDetails.append(node("summary", "Lịch chi đã biết và số tiền sau kịch bản"), expenses);
+    const renderRows = () => {
+      const week = weekSelect.value === "all" ? null : Number(weekSelect.value);
+      const selected = week ? [d.weeks[week - 1]] : d.weeks;
+      const sum = field => selected.reduce((total, row) => total + row[field], 0);
+      summary.textContent = "Dự thu " + money(sum("cash_in")) + " = công nợ mở " + money(sum("ar_in")) + " + bán thu ngay " + money(sum("cash_sale_in")) + " + bán chịu mới " + money(sum("new_credit_in")) + ". Dự chi " + money(sum("cash_out")) + " = lịch đã biết " + money(sum("scheduled_out")) + " + chi biến đổi bổ sung " + money(sum("variable_cost_topup")) + ".";
+      const byCustomer = group.value === "customers", query = search.value.trim().toLocaleLowerCase("vi");
+      const source = (byCustomer ? d.customers : d.invoices).filter(row =>
+        ((row.invoice_id || "") + " " + row.customer_id).toLocaleLowerCase("vi").includes(query));
+      const amountFor = row => week ? row.expected_by_week[week - 1] : row.expected_in;
+      const sorted = [...source].sort((a, b) => amountFor(b) - amountFor(a));
+      const rows = sorted.map(row => {
+        const pending = Math.max(0, row.outstanding - (week ? row.expected_by_week.slice(0, week).reduce((sum, value) => sum + value, 0) : row.expected_in));
+        return [byCustomer ? row.customer_id : row.invoice_id, byCustomer ? row.invoice_count : row.customer_id,
+          money(row.outstanding), money(amountFor(row)), money(pending)];
+      });
+      cashPagedTable(receipts, [byCustomer ? "Khách hàng" : "Hóa đơn", byCustomer ? "Số hóa đơn" : "Khách hàng", "Dư nợ tại ngày chốt", week ? "Dự thu tuần " + week : "Dự thu trong kỳ", week ? "Chưa dự thu đến tuần " + week : "Chưa dự thu trong kỳ"], rows);
+      cashPagedTable(expenses, ["Mã khoản chi", "Ngày", "Loại chi", "Số tiền gốc", "Sau kịch bản"],
+        d.outflows.filter(row => !week || row.week === week).map(row => [row.expense_id, displayDate(row.date), row.category, money(row.original_amount), money(row.amount)]));
+    };
+    weekSelect.value = "all"; group.value = "invoices"; search.value = "";
+    weekSelect.onchange = group.onchange = search.oninput = renderRows;
+    panel.append(filters, summary, receipts, node("p", "Số tiền là kỳ vọng phân bổ theo tuần, không phải cam kết thu hoặc xác suất tất toán 4 tuần. Thu hoạt động và hóa đơn chưa phát hành nằm ở nhóm riêng.", "muted"), expenseDetails);
+    renderRows();
+    const weekly = node("details", undefined, "cash-details"), weeklyScroll = node("div", undefined, "table-scroll");
+    weekly.append(node("summary", "Đối chiếu thu, chi và thay đổi số dư từng tuần"), weeklyScroll);
+    weeklyScroll.append(cashDetailTable(["Tuần", "Số dư đầu tuần", "+ Công nợ mở", "+ Bán thu ngay", "+ Bán chịu mới", "− Lịch chi", "− Chi biến đổi bổ sung", "Thay đổi số dư", "Số dư cuối tuần"],
+      d.weeks.map(w => [w.week, ...[w.opening_balance, w.ar_in, w.cash_sale_in, w.new_credit_in, w.scheduled_out, w.variable_cost_topup, w.net_change, w.balance].map(money)])));
+    panel.append(weekly, node("h3", "Nếu tiền thu sớm hoặc chậm 2 tuần?"));
+    const comparison = d.timing_comparison, comparisonScroll = node("div", undefined, "table-scroll");
+    comparisonScroll.append(cashDetailTable(["Kịch bản", "Dự thu công nợ", "Số dư thấp nhất", "Chênh mức thấp nhất", "Số dư cuối kỳ", "Tuần đầu dưới ngưỡng", "Thu bị đẩy ra ngoài kỳ"],
+      comparison.scenarios.map(s => [s.label, money(s.ar_in), money(s.minimum_balance), money(s.minimum_balance_change), money(s.closing_balance), s.first_below_floor_week || "Không có", money(s.receipts_pushed_beyond_horizon)])));
+    panel.append(comparisonScroll);
+    const timingDetails = node("details", undefined, "cash-details"), timingScroll = node("div", undefined, "table-scroll");
+    const [current, early, late] = comparison.scenarios;
+    timingScroll.append(cashDetailTable(["Tuần", "Ngày", "Số dư đang xem", "Thu sớm", "Chênh thu sớm", "Thu chậm", "Chênh thu chậm"],
+      current.weeks.map((w, i) => [w.week, displayDate(w.date), ...[w.balance, early.weeks[i].balance, early.weeks[i].balance_change, late.weeks[i].balance, late.weeks[i].balance_change].map(money)])));
+    timingDetails.append(node("summary", "So sánh số dư từng tuần"), timingScroll);
+    panel.append(timingDetails);
+    comparison.assumptions.forEach(note => panel.append(node("p", note, "muted")));
+    const assumptions = node("details", undefined, "cash-details");
+    assumptions.append(node("summary", "Cách phân bổ tiền và giới hạn mô phỏng"));
+    d.assumptions.forEach(note => assumptions.append(node("p", note)));
+    panel.append(assumptions);
+    return panel;
+  }
   function renderForecast() {
     const r = lastForecast;
     $("actuals-result").replaceChildren();
@@ -1480,7 +1846,7 @@
       : "Chi chỉ gồm lịch cố định T5 đã nạp; chưa bao gồm chi hoạt động phát sinh khác.");
     if (r.unknown_outflow_weeks?.length) assumptions.push("Chưa xác nhận lịch cố định T5 ở tuần " + r.unknown_outflow_weeks.join(", ") + ".");
     $("forecast-assumptions").replaceChildren(...assumptions.map(a => node("p", a)));
-    $("forecast-customers").replaceChildren(...[...new Set(r.collections.map(x => x.customer_id))].map(id => {
+    $("forecast-customers").replaceChildren(...[...new Set((r.cash_decomposition?.customers || r.collections).map(x => x.customer_id))].map(id => {
       const option = node("option"); option.value = id; return option;
     }));
     $("forecast-alerts").replaceChildren();
@@ -1542,31 +1908,9 @@
         },
       ),
     );
-    $("collections-table").replaceChildren(
-      r.collections.length
-        ? table(
-            r.collections,
-            [
-              "invoice_id",
-              "customer_id",
-              "outstanding",
-              "overdue_days",
-              "due_date",
-              "promised_date",
-              "promise_reliability",
-              "disputed",
-              "reason",
-              "payment_probability_4w",
-            ],
-            {
-              promise_reliability: (v) =>
-                v == null ? "Chưa đủ lịch sử" : Math.round(v * 100) + "%",
-              disputed: (v) => (v ? "Có" : "Không"),
-              payment_probability_4w: (v) => (v * 100).toFixed(0) + "%",
-            },
-          )
-        : node("p", "Không có công nợ còn mở tại ngày dự báo.", "muted"),
-    );
+    $("collection-policy").replaceChildren(renderCollectionPolicy(r.collection_ranking));
+    $("collections-table").replaceChildren(renderCollections(r));
+    $("cash-decomposition").replaceChildren(renderCashDecomposition(r));
     drawVisibleChart();
     notice("Đã mở kế hoạch " + period + " tuần · " + displayDate(r.cutoff) + ".");
   }
@@ -1579,6 +1923,12 @@
     charts.get(target.id)?.destroy();
     target.replaceChildren();
     const weeks = lastForecast.weeks;
+    const theme = getComputedStyle(target);
+    const color = (token, fallback) => theme.getPropertyValue(token).trim() || fallback;
+    const axisFont = "11px " + theme.fontFamily;
+    // The probability band must remain translucent so it cannot cover the
+    // expected balance line drawn underneath it. Theme tokens use six-digit hex.
+    const bandFill = color("--kt-accent-soft", "#d6e2c2").replace(/^#[0-9a-f]{6}$/i, hex => hex + "80");
     const plot = new uPlot(
       {
         width: target.clientWidth,
@@ -1592,24 +1942,24 @@
           },
           {
             label: "Số dư",
-            stroke: "#1b6148",
+            stroke: color("--kt-accent", "#1b6148"),
             width: 2.5,
             value: (_u, v) => (v == null ? "—" : short(v)),
           },
           {
             label: "P10",
-            stroke: "#a6b990",
+            stroke: color("--kt-field-line", "#a6b990"),
             width: 1,
             value: (_u, v) => (v == null ? "—" : short(v)),
           },
           {
             label: "P90",
-            stroke: "#a6b990",
+            stroke: color("--kt-field-line", "#a6b990"),
             width: 1,
             value: (_u, v) => (v == null ? "—" : short(v)),
           },
         ],
-        bands: [{ series: [3, 2], fill: "#d6e2c24d" }],
+        bands: [{ series: [3, 2], fill: bandFill }],
         scales: {
           x: { time: true },
           y: {
@@ -1621,19 +1971,19 @@
         },
         axes: [
           {
-            stroke: "#7f8b78",
+            stroke: color("--muted", "#7f8b78"),
             grid: { show: false },
             ticks: { show: false },
-            font: "10px Segoe UI",
+            font: axisFont,
             space: 70,
             values: (_u, ticks) =>
               ticks.map((t) => displayDate(new Date(t * 1000).toISOString())),
           },
           {
-            stroke: "#7f8b78",
-            grid: { stroke: "#e6eadf", width: 1 },
+            stroke: color("--muted", "#7f8b78"),
+            grid: { stroke: color("--line", "#e6eadf"), width: 1 },
             ticks: { show: false },
-            font: "10px Segoe UI",
+            font: axisFont,
             size: 60,
             values: (_u, ticks) => ticks.map(short),
           },

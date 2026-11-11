@@ -1,17 +1,18 @@
 """Excel export of a saved forecast, including plans from older releases."""
 
 from datetime import date
+from decimal import Decimal
 from io import BytesIO
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
-
-DATE_FIELDS = {"date", "due_date", "promised_date", "cutoff"}
+DATE_FIELDS = {"date", "due_date", "promised_date", "cutoff", "known_at"}
 PERCENT_FIELDS = {
     "below_floor_probability",
     "payment_probability_4w",
+    "triage_probability_4w",
     "promise_reliability",
     "write_off_probability_365d_at_issue",
 }
@@ -22,7 +23,20 @@ OUTFLOW_LABELS = {
 }
 
 
-def _value(field, value):
+def _value(field, value, score_unit=None):
+    if (
+        field == "outstanding"
+        or field == "priority_score"
+        and score_unit != "probability"
+    ) and value is not None:
+        number = Decimal(str(value))
+        # Excel retains at most 15 significant digits in a numeric cell.
+        # Keep large amounts/scores as decimal text, including fractional scores.
+        if len(number.as_tuple().digits) > 15:
+            return str(value)
+        return int(number) if number == number.to_integral_value() else float(number)
+    if field == "priority_score_unit":
+        return {"probability": "Xác suất", "VND": "VND"}.get(value, value)
     if field in DATE_FIELDS and value:
         return date.fromisoformat(value)
     if field == "outflow_status":
@@ -35,7 +49,12 @@ def _value(field, value):
 def _write_table(sheet, columns, rows):
     sheet.append([label for _, label in columns])
     for row in rows:
-        sheet.append([_value(field, row.get(field)) for field, _ in columns])
+        sheet.append(
+            [
+                _value(field, row.get(field), row.get("priority_score_unit"))
+                for field, _ in columns
+            ]
+        )
         for cell, (field, _) in zip(sheet[sheet.max_row], columns):
             if isinstance(cell.value, str):
                 # Customer identifiers and notes are data, including strings starting with '='.
@@ -43,7 +62,15 @@ def _write_table(sheet, columns, rows):
             elif isinstance(cell.value, date):
                 cell.number_format = "dd-mm-yy"
             elif isinstance(cell.value, (int, float)):
-                cell.number_format = "0.0%" if field in PERCENT_FIELDS else "#,##0.##"
+                cell.number_format = (
+                    "0.0%"
+                    if field in PERCENT_FIELDS
+                    or (
+                        field == "priority_score"
+                        and row.get("priority_score_unit") == "probability"
+                    )
+                    else "#,##0.##"
+                )
     for cell in sheet[1]:
         cell.font = Font(bold=True, color="FFFFFF")
         cell.fill = PatternFill("solid", fgColor="264A42")
@@ -86,6 +113,37 @@ def workbook_bytes(plan, company):
     details.extend(
         ("Phạm vi và giả định", note) for note in plan.get("assumptions", [])
     )
+    ranking = plan.get("collection_ranking")
+    if ranking:
+        details.extend(
+            [
+                ("Chính sách ưu tiên thu nợ", ranking["label"]),
+                ("Công thức điểm ưu tiên", ranking["formula"]),
+                ("Quy tắc xếp hạng", "Điểm giảm dần; cùng điểm giữ thứ tự snapshot."),
+            ]
+        )
+    decomposition = plan.get("cash_decomposition")
+    if decomposition:
+        details.extend(
+            [
+                ("Dự thu công nợ mở (VND)", decomposition["totals"]["ar_in"]),
+                ("Dự thu bán ngay (VND)", decomposition["totals"]["cash_sale_in"]),
+                ("Dự thu bán chịu mới (VND)", decomposition["totals"]["new_credit_in"]),
+                ("Chi đã có lịch (VND)", decomposition["totals"]["scheduled_out"]),
+                (
+                    "Chi biến đổi bổ sung (VND)",
+                    decomposition["totals"]["variable_cost_topup"],
+                ),
+                ("Số dư cuối kỳ (VND)", decomposition["totals"]["closing_balance"]),
+            ]
+        )
+        details.extend(
+            ("Giới hạn phân rã tiền", note) for note in decomposition["assumptions"]
+        )
+        details.extend(
+            ("Giả định thu sớm/chậm", note)
+            for note in decomposition["timing_comparison"]["assumptions"]
+        )
     _write_table(
         summary,
         [("label", "Chỉ tiêu"), ("value", "Kết quả")],
@@ -95,7 +153,9 @@ def workbook_bytes(plan, company):
     for row in summary.iter_rows(min_row=2):
         row[1].alignment = Alignment(wrap_text=True, vertical="top")
         if len(str(row[1].value or "")) > 85:
-            summary.row_dimensions[row[1].row].height = 36
+            summary.row_dimensions[row[1].row].height = min(
+                120, 18 * ((len(str(row[1].value)) + 84) // 85)
+            )
     _write_table(
         workbook.create_sheet("Kế hoạch từng tuần"),
         [
@@ -129,9 +189,134 @@ def workbook_bytes(plan, company):
                 "Rủi ro xóa nợ 365 ngày lúc phát hành",
             ),
             ("reason", "Lý do"),
+            ("collection_rank", "Thứ tự ưu tiên"),
+            ("priority_score", "Điểm ưu tiên"),
+            ("priority_score_unit", "Đơn vị điểm"),
+            ("priority_policy_label", "Chính sách ưu tiên"),
+            ("triage_probability_4w", "Xác suất lịch sử khách 4 tuần"),
+            ("ranking_probability_source", "Nguồn ước lượng xếp hạng"),
         ],
-        plan.get("collections", []),
+        (
+            {
+                **row,
+                "priority_policy_label": row.get("ranking_explanation", {}).get(
+                    "label"
+                ),
+                "ranking_probability_source": row.get("ranking_explanation", {})
+                .get("probability_source", {})
+                .get("label"),
+            }
+            for row in plan.get("collections", [])
+        ),
     )
+    if decomposition:
+        _cash_sheets(workbook, decomposition)
     buffer = BytesIO()
     workbook.save(buffer)
     return buffer.getvalue()
+
+
+def _cash_sheets(workbook, decomposition):
+    _write_table(
+        workbook.create_sheet("Phân rã từng tuần"),
+        [
+            ("week", "Tuần"),
+            ("date", "Đến ngày"),
+            ("opening_balance", "Số dư đầu tuần"),
+            ("ar_in", "Thu công nợ mở"),
+            ("cash_sale_in", "Thu bán ngay"),
+            ("new_credit_in", "Thu bán chịu mới"),
+            ("scheduled_out", "Chi đã có lịch"),
+            ("variable_cost_topup", "Chi biến đổi bổ sung"),
+            ("net_change", "Thay đổi số dư"),
+            ("balance", "Số dư cuối tuần"),
+            ("headroom", "Số dư trừ ngưỡng"),
+            ("outflow_status", "Phạm vi lịch chi"),
+        ],
+        decomposition["weeks"],
+    )
+    weekly_columns = [
+        (f"receipt_week_{w['week']}", f"Dự thu tuần {w['week']} (VND)")
+        for w in decomposition["weeks"]
+    ]
+    for key, title, identifiers in (
+        (
+            "invoices",
+            "Thu theo hóa đơn",
+            [("invoice_id", "Hóa đơn"), ("customer_id", "Khách hàng")],
+        ),
+        (
+            "customers",
+            "Thu theo khách",
+            [("customer_id", "Khách hàng"), ("invoice_count", "Số hóa đơn")],
+        ),
+    ):
+        _write_table(
+            workbook.create_sheet(title),
+            identifiers
+            + [
+                ("outstanding", "Dư nợ tại ngày chốt"),
+                ("expected_in", "Dự thu trong kỳ"),
+                ("expected_after_horizon", "Chưa dự thu trong kỳ"),
+            ]
+            + weekly_columns,
+            (
+                {
+                    **row,
+                    **{
+                        f"receipt_week_{i + 1}": amount
+                        for i, amount in enumerate(row["expected_by_week"])
+                    },
+                }
+                for row in decomposition[key]
+            ),
+        )
+    _write_table(
+        workbook.create_sheet("Lịch chi đã biết"),
+        [
+            ("expense_id", "Mã khoản chi"),
+            ("date", "Ngày chi"),
+            ("known_at", "Ngày ghi nhận"),
+            ("week", "Tuần"),
+            ("category", "Loại chi"),
+            ("original_amount", "Số tiền gốc"),
+            ("amount", "Số tiền sau kịch bản"),
+        ],
+        decomposition["outflows"],
+    )
+    scenarios = decomposition["timing_comparison"]["scenarios"]
+    _write_table(
+        workbook.create_sheet("So sánh thời điểm"),
+        [
+            ("label", "Kịch bản"),
+            ("shift_weeks", "Dịch tuần"),
+            ("ar_in", "Dự thu công nợ"),
+            ("cash_in", "Tổng dự thu"),
+            ("cash_out", "Tổng dự chi"),
+            ("minimum_balance", "Số dư thấp nhất"),
+            ("minimum_balance_change", "Chênh mức thấp nhất"),
+            ("closing_balance", "Số dư cuối kỳ"),
+            ("closing_balance_change", "Chênh số dư cuối kỳ"),
+            ("first_below_floor_week", "Tuần đầu dưới ngưỡng"),
+            ("receipts_pushed_beyond_horizon", "Thu bị đẩy ra ngoài kỳ"),
+        ],
+        scenarios,
+    )
+    _write_table(
+        workbook.create_sheet("Kịch bản từng tuần"),
+        [
+            ("label", "Kịch bản"),
+            ("week", "Tuần"),
+            ("date", "Đến ngày"),
+            ("ar_in", "Thu công nợ"),
+            ("cash_in", "Tổng dự thu"),
+            ("cash_out", "Tổng dự chi"),
+            ("balance", "Số dư"),
+            ("balance_change", "Chênh so với đang xem"),
+        ],
+        (
+            {**week, "label": scenario["label"]}
+            for scenario in scenarios
+            for week in scenario["weeks"]
+        ),
+    )

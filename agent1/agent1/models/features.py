@@ -254,7 +254,6 @@ class SnapshotBuilder:
             c["top1"], c["top2"] = top1, top2
             vd = h.groupby(["customer_id", "dow"]).size().groupby("customer_id").max()
             c["c_dow_strength"] = vd / c["c_n_hist"]
-            fm = op.groupby("firm_id")["f_delay_mean"].first()
             op = op.merge(c, left_on="customer_id", right_index=True, how="left")
             prior = op["f_delay_mean"].fillna(0.0)
             n = op["c_n_hist"].fillna(0)

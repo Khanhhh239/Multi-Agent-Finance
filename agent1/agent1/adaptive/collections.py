@@ -21,16 +21,6 @@ def budget_metrics(scores, unresolved_amount, budget):
     )
 
 
-def select_policy(amount, probability, outcomes, budget=10):
-    """Validation arrays only; callers must keep an independent temporal audit."""
-    amount = np.asarray(amount, float)
-    p = np.asarray(probability, float)
-    policies = {"amount": amount, "risk": 1 - p, "amount_at_risk": amount * (1 - p)}
-    report = {n: budget_metrics(s, outcomes, budget) for n, s in policies.items()}
-    winner = max(report, key=lambda n: report[n]["normalized_value"])
-    return winner, report
-
-
 def train_policy(data, asof):
     import pandas as pd
     from .data import observed

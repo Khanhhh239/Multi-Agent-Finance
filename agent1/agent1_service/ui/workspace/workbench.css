@@ -124,9 +124,63 @@ main { max-width: 1580px; padding: 24px 24px 0; }
 .forecast-totals span { display: block; color: var(--muted); font-size: 12px; }
 .forecast-totals strong { display: block; font-variant-numeric: tabular-nums; font-size: clamp(14px, 1.6vw, 23px); }
 .forecast-results .table-scroll { max-height: 450px; }
+.t1-explanation-dialog { width:min(960px, calc(100vw - 32px)); max-width:none; max-height:90vh; padding:20px; overflow:auto; color:var(--ink); background:var(--white); border-radius:var(--kt-radius, 6px); box-shadow:0 24px 80px color-mix(in srgb, var(--ink) 22%, transparent); }
+.t1-explanation-dialog::backdrop { background:color-mix(in srgb, var(--ink) 48%, transparent); }
+.t1-explanation-dialog > button { float:right; position:sticky; top:0; z-index:2; }
+.t1-explanation-dialog > button:hover, .forecast-results .button:hover { background:var(--kt-accent-soft, var(--paper)); }
+.t1-explanation-dialog > h2 { padding-right:150px; overflow-wrap:anywhere; }
+.t1-explanation { max-width:100%; clear:both; overflow-wrap:anywhere; }
+.t1-explanation p { white-space:normal; margin:8px 0; }
+.t1-explanation table { width:100%; margin:12px 0; }
+.t1-explanation td, .t1-explanation th { white-space:normal; border-color:var(--line); }
+.t1-explanation tbody tr:hover, .forecast-results tbody tr:hover { background:var(--paper); }
+.forecast-results td { border-color:var(--line); }
+.t1-explanation th { position:static; }
+.t1-explanation .effect-increase { color:var(--kt-ok, #215c45); }
+.t1-explanation .effect-decrease { color:var(--kt-err, #923a2a); }
+.t1-explanation .t1-probability { font-family:var(--kt-display, inherit) !important; font-size:clamp(22px, 2.2vw, 28px); font-weight:540; font-variant-numeric:lining-nums tabular-nums; color:var(--ink); margin:14px 0; }
+.t1-drivers td:last-child { width:52%; }
+.t1-drivers .t1-business-evidence { margin-top:10px; }
+.t1-input-context { margin-top:18px; border-top:1px solid var(--line); padding-top:10px; }
+.collection-policy p { margin:8px 0; overflow-wrap:anywhere; }
+.ranking-explanation li { margin:8px 0; white-space:normal; }
+.ranking-explanation details { margin-top:16px; border-top:1px solid var(--line); padding-top:12px; }
+.ranking-explanation summary { cursor:pointer; }
+.ranking-source-note { padding:10px; border-left:3px solid var(--kt-accent, var(--line)); background:var(--paper); }
+.cash-decomposition { min-width:0; overflow-wrap:anywhere; }
+.cash-decomposition p { white-space:normal; }
+.cash-decomposition h3 { margin:22px 0 10px; }
+.cash-risk-focus { border-left:3px solid var(--kt-accent, #a6b990); padding-left:14px; }
+.cash-risk-focus h3 { margin-top:12px; }
+.cash-bridge { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px; padding:12px 0; border-block:1px solid var(--line); }
+.cash-bridge span { display:block; font-size:12px; color:var(--muted); }
+.cash-bridge strong { display:block; font-family:var(--kt-display, inherit) !important; font-size:18px; font-weight:540; font-variant-numeric:lining-nums tabular-nums; }
+.cash-filters { display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+.cash-filters label { flex:1 1 180px; margin:0; }
+.cash-filters input, .cash-filters select { width:100%; margin-top:4px; }
+.cash-pagination { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:8px 0 18px; }
+.cash-pagination span { font-size:12px; }
+.cash-details { padding:12px 0; border-top:1px solid var(--line); }
+.cash-details > summary { cursor:pointer; }
+.cash-details[open] > summary { margin-bottom:12px; }
+@media (max-width:600px) {
+  .cash-bridge { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width:600px) {
+  .t1-explanation-dialog > button { position:static; float:none; display:block; margin-left:auto; }
+  .t1-explanation-dialog > h2 { padding-right:0; margin:12px 0; font-size:24px; }
+  .t1-explanation thead { display:none; }
+  .t1-explanation tbody tr { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .t1-explanation td { padding:0; border:0; }
+  .t1-explanation .t1-drivers td { padding-block:0; }
+  .t1-drivers td:last-child { width:auto; }
+  .t1-drivers td:nth-child(2), .t1-drivers td:last-child { grid-column:1 / -1; }
+  .t1-explanation td:first-child { grid-column:1 / -1; font-weight:600; }
+  .t1-explanation td:nth-child(2)::before { content:"Giá trị: "; color:var(--muted); }
+}
 .forecast-results th { position: sticky; top: 0; background: #f1f4f6; z-index: 1; }
 .forecast-results .forecast-empty { text-align: left; min-height: 0; }
-.scenario-line { font-size: 13px; padding: 6px 0; color: #405363; }
+.scenario-line { font-size: 13px; padding: 6px 0; color: var(--muted); }
 .side-explainer summary { cursor: pointer; }
 .forecast-results .chart-slot { min-width: 0; }
 .reconciliation-toolbar { display:flex; flex-wrap:wrap; gap:12px; align-items:end; margin-bottom:16px; }

@@ -8,15 +8,6 @@ from .cash_history import weekly_cash
 from .data import account_scope
 
 
-def history(data, clock, accounts):
-    end = date.fromisoformat(clock)
-    panel = weekly_cash(
-        data, str(end - timedelta(weeks=260) + timedelta(days=1)), 260, clock, accounts
-    )[:, 2:]
-    gaps = np.where(~np.isfinite(panel).all(axis=1))[0]
-    return panel[gaps[-1] + 1 :] if len(gaps) else panel
-
-
 def available_history(data, clock, accounts):
     """Keep the weekly grid fixed; bridge up to six unreconciled weeks at the origin."""
     end = date.fromisoformat(clock)

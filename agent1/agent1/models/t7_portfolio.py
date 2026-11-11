@@ -1,6 +1,5 @@
 """Bằng chứng chung của nhiều bộ phát hiện và danh mục; không dùng cảnh báo tương lai."""
 from __future__ import annotations
-import numpy as np
 import pandas as pd
 from .t7_changepoint import cusum, page_hinkley, bocpd
 
@@ -19,14 +18,6 @@ def consensus_alarms(dates, z, raw=None, *, window_days=30, cooldown_days=30):
         if support >= 2 and (not confirmed or when - last >= pd.Timedelta(days=cooldown_days)):
             confirmed.append(when); last = when
     return pd.DatetimeIndex(confirmed)
-
-
-def portfolio_stream(residuals):
-    """Đầu vào (firm_id, customer_id, date, z) đã tính PIT as-of; mỗi khách một phiếu/tuần."""
-    data = residuals.copy()
-    data['week'] = data['date'].dt.to_period('W-SUN').dt.start_time
-    per_customer = data.groupby(['firm_id', 'week', 'customer_id']).z.mean()
-    return per_customer.groupby(['firm_id', 'week']).agg(z='mean', n='size').reset_index()
 
 
 class RegimeController:

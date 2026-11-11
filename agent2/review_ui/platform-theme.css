@@ -242,8 +242,8 @@ html[data-agent="2"].compact-workbench main { margin-left: 0; }
   [data-agent="3"] #app :is(.form-grid, .fixed-grid, .kpis, .checklist) { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* 7. Inside the portal frame: the portal owns data entry, so each agent's own import entry is hidden there */
-html.in-platform [data-platform-hide], html.in-platform a[href="#data"], html.in-platform [data-view="data"]:not(.reconciliation-nav),
+/* 7. Agent 1 keeps direct imports in the portal; other agents use the shared intake. */
+html.in-platform [data-platform-hide], html.in-platform a[href="#data"], html.in-platform:not([data-agent="1"]) [data-view="data"],
 html.in-platform a.nav-item[href="/data-import"], html.in-platform a[href="#/nap"], html.in-platform[data-agent="3"] #nav a[href$="/#data"] { display: none !important; }
 
 /* Sổ Son — presentation only; business controls and API contracts remain intact. */

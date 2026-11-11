@@ -2,7 +2,6 @@
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
-from .features import SnapshotBuilder
 
 
 def estimate_k(history):
@@ -43,12 +42,3 @@ def apply_learned_eb(frame,learned,firm_industries):
     n=frame.c_n_hist.fillna(0)
     frame['c_delay_eb']=(n*frame.c_delay_mean.fillna(0)+k*frame.f_delay_mean.fillna(0))/(n+k)
     return frame
-
-
-class EBSnapshotBuilder(SnapshotBuilder):
-    def __init__(self,*args,learned,firm_industries,**kwargs):
-        super().__init__(*args,**kwargs);self.learned=learned;self.firm_industries=firm_industries
-
-    def snapshot(self,T,visible_from=None,firms=None):
-        frame=super().snapshot(T,visible_from=visible_from,firms=firms)
-        return apply_learned_eb(frame,self.learned,self.firm_industries)

@@ -22,6 +22,28 @@ def import_counts(before, after, kind, accepted):
     return dict(new=added, changed=updated, unchanged=max(0, accepted - added - updated))
 
 
+def preview_history(preview):
+    """Expose older checks without inventing a file name or a commit result."""
+    legacy = not preview.get("source_file")
+    status = "preview" if preview["valid"] else "invalid"
+    if legacy and preview["valid"]:
+        status = "legacy_preview"
+    row = dict(
+        id=preview["id"], kind=preview["kind"], source_file=preview.get("source_file"),
+        imported_by=preview.get("imported_by", ""), created_at=preview["created_at"],
+        status=status, rows=preview.get("row_count"),
+        valid_rows=preview.get("valid_rows", len(preview.get("records", []))),
+        error_count=preview.get("error_count", len(preview.get("errors", []))),
+        legacy=legacy,
+    )
+    if legacy:
+        row["note"] = (
+            "Lần kiểm tra từ phiên bản cũ, chưa ghi tên tệp, người nạp và kết quả xác nhận. "
+            "Không thể xác định đã lưu hay chưa chỉ từ lần kiểm tra này."
+        )
+    return row
+
+
 def public_record(row, kind):
     fields = set(SCHEMAS[kind]) | {"source_file", "source_row", "source_sha256", "t9_decision_id",
                                       "known_at_time", "correction_id", "_deleted"}

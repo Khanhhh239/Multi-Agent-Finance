@@ -122,6 +122,58 @@ def test_record_search_filter_and_pagination(client):
     assert client.get("/v1/records?kind=secret").status_code == 422
 
 
+def test_legacy_checks_without_file_metadata_remain_visible_and_read_only(client):
+    p = preview(client, "invoices", [invoice()])
+    store = client.app.state.store
+    saved = store.one("CATALOG", "company_previews", p["id"])
+    for field in ("source_file", "source_sha256", "imported_by", "row_count", "valid_rows", "error_count"):
+        saved.pop(field)
+    store.put("CATALOG", "company_previews", [saved])
+    store.put("OTHER", "company_previews", [dict(saved, id="other-company-check")])
+    before = client.get("/v1/workspace").json()
+    writes_before = store.connection.total_changes
+
+    history = client.get("/v1/imports?kind=invoices").json()
+    assert history["total"] == history["legacy_count"] == 1
+    row = history["rows"][0]
+    assert row["id"] == p["id"] and row["status"] == "legacy_preview"
+    assert row["source_file"] is None and row["imported_by"] == ""
+    assert row["rows"] is None and row["valid_rows"] == 1 and row["error_count"] == 0
+    assert row["created_at"] == saved["created_at"]
+    assert "outstanding_before" not in row and "new" not in row
+    assert client.get("/v1/imports?kind=bank").json()["total"] == 0
+    page = client.get("/v1/imports?offset=1&limit=1").json()
+    assert page["total"] == 1 and not page["rows"]
+    detail = client.get("/v1/imports/" + p["id"]).json()
+    assert detail["batch"] == row and detail["records"] == []
+    assert "Không thể xác định đã lưu hay chưa" in detail["batch"]["note"]
+    assert client.get("/v1/imports/other-company-check").status_code == 404
+    assert client.get("/v1/workspace").json() == before
+    assert store.connection.total_changes == writes_before
+
+
+def test_legacy_invalid_checks_keep_errors_and_do_not_duplicate_confirmed_imports(client):
+    bad = preview(client, "payments", [dict(payment_id="P", invoice_id="absent", payment_date="2026-10-15", amount=10)])
+    store = client.app.state.store
+    saved = store.one("CATALOG", "company_previews", bad["id"])
+    for field in ("source_file", "source_sha256", "imported_by", "row_count", "valid_rows", "error_count"):
+        saved.pop(field)
+    store.put("CATALOG", "company_previews", [saved])
+    p, _ = commit(client, "invoices", [invoice()])
+    confirmed_preview = store.one("CATALOG", "company_previews", p["id"])
+    confirmed_preview.pop("source_file")
+    store.put("CATALOG", "company_previews", [confirmed_preview])
+
+    history = client.get("/v1/imports").json()
+    assert history["total"] == 2 and history["legacy_count"] == 1
+    rows = {row["id"]: row for row in history["rows"]}
+    assert rows[p["id"]]["status"] == "committed"
+    assert rows[p["id"]]["source_file"] == "source.csv"
+    assert rows[bad["id"]]["status"] == "invalid" and rows[bad["id"]]["error_count"] > 0
+    detail = client.get("/v1/imports/" + bad["id"]).json()
+    assert detail["errors"] and detail["batch"]["status"] == "invalid"
+
+
 def test_record_links_show_imported_payments_decisions_and_reversal(client):
     commit(client, "invoices", [invoice()])
     commit(client, "bank", [dict(bank_id="B1", account="A", date="2026-10-15", direction="in", amount=5000000,

@@ -1,5 +1,4 @@
 """Đặc trưng phản ứng nhanh cho ablation; không đổi bộ đặc trưng mặc định."""
-import numpy as np
 import pandas as pd
 from .features import SnapshotBuilder
 

@@ -93,7 +93,6 @@ class Reconciler:
             by_cust = {k: g for k, g in fi_no.groupby("customer_id")}
             no_rows = {number: g[['customer_id', 'issue_date']].values for number, g in fi_no.groupby('no')}
             first_issue=fi_no.groupby('customer_id').issue_date.min().reindex(ids).to_numpy()
-            share = (b["true_customer_id"].value_counts(normalize=True) if False else None)
             for t in b.itertuples(index=False):
                 known=np.flatnonzero(first_issue<=np.datetime64(t.value_date))
                 active_keys=[keys[j] for j in known]
@@ -174,84 +173,6 @@ class Reconciler:
     def reconcile(self, bank, inv, cust, tau_auto=.9):
         from .reconciliation_pipeline import reconcile
         return reconcile(self, bank, inv, cust, tau_auto=tau_auto)
-
-    # ------------------------------------------------------------------ phân bổ vào hoá đơn
-    @staticmethod
-    def allocate(best: pd.DataFrame, bank: pd.DataFrame, inv: pd.DataFrame) -> pd.DataFrame:
-        """Phân bổ theo thời gian, giữ số dư còn lại từng HĐ: số HĐ trong nội dung -> khớp đúng số dư một HĐ
-        -> subset-sum 2..4 HĐ -> trả một phần cho HĐ cũ nhất. Ngày trả ước lượng = ngày giao dịch tất toán HĐ."""
-        b = bank.set_index("txn_id")
-        inv = inv.sort_values("due_date")
-        remain = dict(zip(inv["invoice_id"], (inv["amount_gross"] - inv["credit_note"]).astype(float)))
-        by_cust = {k: g[["invoice_id", "invoice_no", "issue_date"]].values for k, g in inv.groupby("customer_id")}
-        links = []
-        m = best[best["matched"]].copy()
-        m["vd"] = m["txn_id"].map(b["value_date"])
-        for r in m.sort_values(["vd", "txn_id"]).itertuples():
-            t = b.loc[r.txn_id]
-            g = by_cust.get(r.customer_id)
-            if g is None:
-                continue
-            op = [(iid, int(no)) for iid, no, d in g if d <= t.value_date and remain[iid] > TOL]
-            if not op:
-                continue
-            amt = float(t.amount)
-            nums = set(memo_numbers(t.memo))
-            chosen = [iid for iid, no in op if no in nums]
-            if not chosen:
-                one = [iid for iid, _ in op if abs(remain[iid] - amt) <= TOL]
-                chosen = one[:1]
-            if not chosen:
-                cand = [iid for iid, _ in op[:12]]
-                a = np.array([remain[c] for c in cand])
-                for rr in (2, 3, 4):
-                    if chosen or len(a) < rr:
-                        break
-                    for comb in itertools.combinations(range(len(a)), rr):
-                        if abs(a[list(comb)].sum() - amt) <= TOL:
-                            chosen = [cand[c] for c in comb]
-                            break
-            if not chosen:
-                chosen = [op[0][0]]
-            left = amt + TOL
-            for iid in chosen:
-                pay = min(remain[iid], left)
-                if pay <= 0:
-                    break
-                remain[iid] -= pay
-                left -= pay
-                links.append((r.txn_id, iid, t.value_date, "full" if remain[iid] <= TOL else "partial"))
-        return pd.DataFrame(links, columns=["txn_id", "invoice_id", "est_pay_date", "kind"])
-
-
-def rule_exact_amount(bank: pd.DataFrame, inv: pd.DataFrame) -> pd.DataFrame:
-    """Mốc R1: khớp giao dịch với hoá đơn mở DUY NHẤT trong công ty có đúng số tiền."""
-    out = []
-    for fid, b in bank.groupby("firm_id"):
-        fi = inv[inv["firm_id"] == fid].copy()
-        fi["a"] = (fi["amount_gross"] - fi["credit_note"]).round(-3)
-        idx = fi.groupby("a")["invoice_id"].apply(list).to_dict()
-        for t in b.itertuples():
-            c = idx.get(round(t.amount, -3), [])
-            if len(c) == 1:
-                out.append((t.txn_id, c[0], t.value_date, "full"))
-    return pd.DataFrame(out, columns=["txn_id", "invoice_id", "est_pay_date", "kind"])
-
-
-def rule_memo_regex(bank: pd.DataFrame, inv: pd.DataFrame) -> pd.DataFrame:
-    """Mốc R2: chỉ dùng số hoá đơn trong nội dung chuyển khoản."""
-    out = []
-    for fid, b in bank.groupby("firm_id"):
-        fi = inv[inv["firm_id"] == fid]
-        no = {}
-        for iid, n, d in zip(fi["invoice_id"], fi["invoice_no"].astype(int), fi["issue_date"]):
-            no.setdefault(n, []).append((d, iid))
-        for t in b.itertuples():
-            for n in memo_numbers(t.memo):
-                c = [iid for d, iid in no.get(n, []) if d <= t.value_date]
-                if c:
-                    out.append((t.txn_id, c[-1], t.value_date, "full"))
-    return pd.DataFrame(out, columns=["txn_id", "invoice_id", "est_pay_date", "kind"])
 
 
 def score_links(pred: pd.DataFrame, truth: pd.DataFrame) -> dict:

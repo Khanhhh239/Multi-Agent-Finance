@@ -222,10 +222,7 @@ class HazardLR:
         if fit:
             self.mu, self.sd = X.mean(0), X.std(0) + 1e-6
         X = np.clip((X - self.mu) / self.sd, -Z_CLIP, Z_CLIP)
-        kcol = len(self.feats)  # cột k -> one-hot
-        oh = np.eye(K)[np.clip(np.round(X[:, kcol] * self.sd[kcol] + self.mu[kcol]).astype(int), 0, K - 1)] \
-            if False else np.zeros((len(X), 0))
-        return np.hstack([X, nan.astype(float), oh])
+        return np.hstack([X, nan.astype(float)])
 
     def hazards(self, df):
         X, _, ix = expand(df, False, self.feats)
@@ -488,17 +485,6 @@ def evaluate_quantiles(y_rem, Q):
         "MAE_p50_paid": float(np.mean(np.abs(y - Q[:, 1])[np.asarray(y_rem) <= CAP])),
         "cov80": coverage(y, Q[:, 0], Q[:, 2]), "IS80": interval_score(y, Q[:, 0], Q[:, 2], 0.2),
     }
-
-
-def weekly_cdf_from_quantiles(Q, qs=QS):
-    """CDF tuần xấp xỉ từ 3 phân vị (nội suy tuyến tính, đuôi phẳng) — để so IBS với mô hình phân vị."""
-    grid = 7 * np.arange(1, K + 1)
-    xs = np.column_stack([np.zeros(len(Q)), Q, np.full(len(Q), CAP * 1.5)])
-    ps = np.array([0.0, *qs, 0.999])
-    out = np.zeros((len(Q), K))
-    for i in range(len(Q)):
-        out[i] = np.interp(grid, np.maximum.accumulate(xs[i]), ps)
-    return out
 
 
 def collections_by_week(df, P, amount_col="amount_open"):

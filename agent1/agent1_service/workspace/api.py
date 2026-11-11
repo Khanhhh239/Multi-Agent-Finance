@@ -38,7 +38,7 @@ from typing import Annotated, Any
 from .company_profile import company_profile, import_formats
 from .portal_connect import install_portal_connect
 from .sessions import WorkspaceSessions
-from .catalog import outstanding, import_counts, record_rows, search_rows, record_detail
+from .catalog import outstanding, import_counts, preview_history, record_rows, search_rows, record_detail
 from .reconciliation import WorkspaceSource
 from agent1.reconciliation import operations as t9_operations
 from agent1.reconciliation.pipeline import today as t9_today
@@ -658,14 +658,12 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             batches = {r["id"]: r for r in records(firm, "imports")}
             history = list(batches.values())
             for p in records(firm, "previews"):
-                if p["id"] not in batches and p.get("source_file"):
-                    history.append(dict(id=p["id"], kind=p["kind"], source_file=p["source_file"],
-                                        imported_by=p.get("imported_by", ""), created_at=p["created_at"],
-                                        status="preview" if p["valid"] else "invalid", rows=p["row_count"],
-                                        valid_rows=p["valid_rows"], error_count=p["error_count"]))
+                if p["id"] not in batches:
+                    history.append(preview_history(p))
             history = sorted((r for r in history if not kind or r["kind"] == kind),
                              key=lambda r: (r["created_at"], r["id"]), reverse=True)
             return display_money(dict(total=len(history), offset=offset, limit=limit,
+                                      legacy_count=sum(bool(r.get("legacy")) for r in history),
                                       rows=[{k: v for k, v in r.items() if k != "record_ids"}
                                             for r in history[offset:offset + limit]]))
 
@@ -675,7 +673,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         preview = one(firm, "previews", identifier)
         if not batch and not preview:
             raise HTTPException(404, "Không tìm thấy lần nạp")
-        return display_money(dict(batch={k: v for k, v in (batch or {}).items() if k != "record_ids"},
+        return display_money(dict(batch={k: v for k, v in (batch or preview_history(preview)).items() if k != "record_ids"},
                                   errors=(preview or {}).get("errors", [])[:100],
                                   records=[dict(kind=(batch or preview)["kind"], identifier=r)
                                            for r in (batch or {}).get("record_ids", [])[:100]],
@@ -1120,7 +1118,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                         if reviewed
                         else None,
                         coverage=len(reviewed) / max(1, plan["open_invoices"]),
-                        reviewed_vnd=sum(r["outstanding"] for r in reviewed),
+                        reviewed_vnd=sum(int(r["outstanding"]) for r in reviewed),
                     )
                 )
         return dict(
@@ -1192,6 +1190,30 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 ),
                 confirmed_weeks=body.confirmed_weeks,
                 dataset_hash=fingerprint(data),
+            )
+            for invoice in result["collections"]:
+                explanation = invoice.get("payment_explanation")
+                if explanation is not None:
+                    explanation.update(
+                        model_version=result["model_version"],
+                        dataset_hash=result["dataset_hash"],
+                    )
+                ranking = invoice.get("ranking_explanation")
+                if ranking is not None:
+                    ranking.update(
+                        displayed_model_version=result["model_version"],
+                        dataset_hash=result["dataset_hash"],
+                    )
+                    ranking["probability_source"]["dataset_hash"] = result["dataset_hash"]
+                    if ranking.get("probability_explanation"):
+                        ranking["probability_explanation"]["dataset_hash"] = result["dataset_hash"]
+            result["collection_ranking"].update(
+                model_version=result["model_version"],
+                dataset_hash=result["dataset_hash"],
+            )
+            result["cash_decomposition"].update(
+                model_version=result["model_version"],
+                dataset_hash=result["dataset_hash"],
             )
             result.update(
                 id=uuid.uuid4().hex,

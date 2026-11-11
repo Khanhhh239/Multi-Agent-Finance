@@ -16,9 +16,10 @@ Mã chỉ số: `agent1/eval/metrics.py`. Nguyên tắc: **đo phân phối, kh�
 | **C-index** | tỷ lệ cặp (i trả sớm hơn j) được xếp đúng; lấy mẫu 400k cặp | Xếp hạng ưu tiên đòi nợ | >0,5 tốt hơn ngẫu nhiên |
 | **WAPE dòng thu theo tuần** | `Σ|thực − dự báo| / Σ thực` của `số tiền mở × P(trả tuần k)` cộng theo (công ty, ngày cắt), tuần 1–4 và 5–13 | **Con số kinh tế gần nhất**: sai số dòng thu mà CFO nhìn | Thấp tốt; mốc B1 |
 
-**Lưu ý đo (trung thực):** với mô hình chỉ cho 3 phân vị (B0, B1, QLGBM, AFT) CDF theo tuần được nội suy từ 3 phân vị
-(`weekly_cdf_from_quantiles`) — đây là xấp xỉ thô, **thiên lợi cho mô hình hazard** ở IBS và WAPE. So sánh công bằng
-nhất ở các chỉ số phân vị (pinball, MAE, cov80, IS80).
+**Lưu ý về phép đo cũ:** các báo cáo dùng `weekly_cdf_from_quantiles` nội suy tuyến tính CDF theo tuần từ 3 phân vị
+(B0, B1, QLGBM, AFT) — đây là xấp xỉ thô, **thiên lợi cho mô hình hazard** ở IBS và WAPE. So sánh công bằng
+nhất ở các chỉ số phân vị (pinball, MAE, cov80, IS80). Mã hiện tại dùng `cdf_from_quantiles` với nội suy PCHIP;
+hàm nội suy tuyến tính cũ đã được loại bỏ. Thay đổi mã không cập nhật lại các kết quả lịch sử.
 
 ## 1.2 T2 — nợ xấu / cure
 

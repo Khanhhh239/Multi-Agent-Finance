@@ -168,6 +168,134 @@ Trả `weeks` (thu, chi, số dư, P10/P90), `collections`, `alerts`, `model_ver
 Không gửi giao dịch hay nhắc nợ. Ngày dự báo không được trước ngày chốt của phiên bản học.
 Kịch bản chậm thu làm tròn lên số tuần, hệ số chi nhân lịch chi đã biết.
 
+Mỗi dòng `collections` có `payment_explanation` giải thích đúng xác suất tất toán 4 tuần sau trộn/kịch bản, độc lập với kỳ dòng tiền. UI hiển thị kết quả → tối đa ba yếu tố → giá trị thực → chiều ảnh hưởng. Không hiển thị đối chiếu giả định, mức nền, tên thành viên hoặc chi tiết kỹ thuật. Trường `comparison` trong kế hoạch cũ được bỏ qua; kế hoạch mới không tính/lưu thêm trường này.
+
+Hộp giải thích, lý do ưu tiên và phân rã dòng tiền dùng màu/font từ theme Sổ Son đang nạp. CSS riêng nằm trong `ui/workspace/workbench.css`; biểu đồ canvas đọc token màu và font hiện hành thay vì giữ bảng màu cũ. Theme dùng chung tiếp tục được đồng bộ từ `design/`, không sửa riêng bản sao của Agent1.
+
+Mỗi yếu tố mới có `business_review`, protocol `t1-business-evidence-v1`. Ngoài kiểm tra SHAP, UI yêu cầu đánh giá nghiệp vụ khớp feature/giá trị/đơn vị, chiều nhất quán và tối thiểu 1 điểm phần trăm trên toàn khoảng đóng góp. Ngưỡng này là chính sách lọc ban đầu, không phải bằng chứng thống kê hoặc chứng nhận mô hình. Kỳ hạn luôn `context_only` cho tới khi có kiểm định phản ứng riêng; số hóa đơn lịch sử luôn là thông tin đầu vào, không đo chất lượng trả nợ. Giá trị hóa đơn có thể là yếu tố chính nếu đạt ngưỡng nhưng không có câu suy diễn khả năng chi trả.
+
+`business_review.evidence` của lịch sử lấy đúng các khoản tất toán mà từng thành viên được phép biết tại ngày lập hóa đơn đích: `max(known_at, settled_known_at + 1 ngày, settled + 1 ngày) <= issue_date`. Dùng chung hàm với chuẩn bị feature. Kiểm tra trung vị đã giới hạn, phép co về doanh nghiệp và số lượng khớp đầu vào đang phục vụ. Lưu số khoản trễ/đúng/sớm, ngày giới hạn và hash nguồn có ngày. Chỉ thêm câu thực tế nếu ít nhất 10 hóa đơn và tất cả thành viên thống nhất bằng chứng. Câu không tự quyết định chiều SHAP. Tuổi hóa đơn có thể kèm ngày đến hạn/số ngày quá hạn có kiểm tra. Thiếu bằng chứng thì không bịa câu nghiệp vụ.
+
+Yêu cầu toàn lời giải thích có ba mẫu kiểm tra, không cảnh báo tổ hợp (tỷ trọng <=10%), khoảng cách CDF <=0,1, khớp xác suất trên dòng và tái tạo từ toàn bộ đóng góp. Thiếu đánh giá trong kế hoạch cũ không có lý do chính. UI tách thông tin đầu vào khỏi lý do, báo chưa đủ cơ sở nếu không có yếu tố đạt, và nêu rõ phần còn thiếu nếu yếu tố lớn nhất bị giữ lại. Toàn bộ sáu SHAP và kiểm tra vẫn lưu để kiểm toán; các yếu tố hiển thị chỉ là một phần, không được cộng riêng để tái tạo dự báo.
+
+`baseline_probability + sum(factors[].contribution)` khớp xác suất trong sai số
+`1e-10`; `contribution` dùng đơn vị xác suất, `contribution_pp` dùng điểm phần trăm.
+
+Protocol `t1-4w-exact-interventional-v2` liệt kê đủ 64 liên minh của sáu đầu vào
+đã chuẩn bị: log giá trị hóa đơn, kỳ hạn, trễ khách có co về DN, trễ DN,
+log số quan sát khách và tuổi hóa đơn. Tính qua cùng hàm phân phối với serving,
+gồm tổ hợp và baseline; tuổi hóa đơn quyết định risk set. Thu chậm theo kịch bản
+được giữ cố định cho hóa đơn đang giải thích, kể cả khi chỉ áp dụng cho một khách.
+Đây là SHAP tính trực tiếp bằng NumPy, không thêm phụ thuộc `shap`.
+
+Nền chung là công nợ mở đã biết tại cutoff (sau loại xóa nợ, gồm cả khoản đang
+hoãn liên hệ), mỗi hóa đơn có trọng số bằng nhau trong quần thể. Có tối đa 512
+hóa đơn thì dùng toàn bộ; lớn hơn dùng mẫu 128, phân tầng đồng thời theo tuổi,
+kỳ hạn, log giá trị, log số lịch sử và trễ khách. Chia tối đa 16 tầng theo không
+gian đầu vào; tập lớn dành tầng riêng cho hai đuôi 1% giá trị và khách chưa có
+lịch sử để giảm nguy cơ bỏ sót nhóm hiếm. Lấy mẫu không hoàn lại, trọng số bằng tỷ trọng tầng/số mẫu trong
+tầng. Hash mã chỉ giúp thứ tự tái lập, không quyết định chọn cách đều theo mã.
+Lưu khoảng cách CDF có trọng số của mẫu so với quần thể để kiểm tra đại diện.
+
+Từ 16 hóa đơn trở lên, kiểm tra thêm ba mẫu phân tầng độc lập với seed cố định.
+Với nền đầy đủ, đây là độ nhạy khi lấy tập con (80%, tối đa 128), không phải sai
+số xấp xỉ của nền đầy đủ. Với nền mẫu, các mẫu kiểm tra có cùng kích thước 128.
+`factors[].stability` lưu khoảng đóng góp, đổi dấu, thay đổi mức đóng góp và yếu
+tố đứng đầu. Cảnh báo đổi dấu khi biên độ >=0,1 điểm %; đổi mức khi vượt
+max(0,5 điểm %, 25% độ lớn đóng góp chính); yếu tố đứng đầu được coi đồng hạng
+trong 0,1 điểm %. Thiếu ba mẫu hoặc dưới 16 hóa đơn trả `insufficient`.
+Đây là ngưỡng kỹ thuật, không phải kiểm định thống kê hay khoảng tin cậy dự báo.
+
+`plausibility` kiểm tra ràng buộc trễ khách bằng trễ DN khi chưa có lịch sử,
+cùng các ô tứ phân vị chưa quan sát ở cặp đầu vào có |tương quan| >=0,8. Tỷ trọng
+tổ hợp bị cảnh báo (bỏ liên minh rỗng/đầy đủ) >10% tạo trạng thái `caution`.
+Đây là chẩn đoán hỗ trợ dữ liệu, chưa phải bộ lấy mẫu có điều kiện hoặc chứng minh
+mọi tổ hợp hợp lý. Các đầu vào tuần/ngày đến hạn dẫn xuất vẫn được tính lại bởi
+hàm serving, không mask riêng.
+
+`explanation_references[hash]` lưu một bản nền gồm mã hóa đơn, đầu vào đã chuẩn
+bị của từng thành viên, trọng số và vị trí của cả mẫu chính/mẫu kiểm tra, chính
+sách, ngày chốt và seed. Mỗi lời giải thích tham chiếu hash đó; cùng với
+`model_version`, `dataset_hash` của kế hoạch đủ truy vết nền và kết quả đã dùng.
+GET không tính lại. Mức nền là trung bình dự báo có trọng số, không phải tỷ lệ
+trả thực tế. Exactness chỉ áp dụng cho nền và sáu nhóm đầu vào này; độ ổn định
+chỉ xét lấy mẫu nền, không bảo đảm hết thiên lệch hoặc chứng minh nhân quả.
+Một hóa đơn duy nhất có đóng góp bằng không và thông báo thiếu đối tượng so
+sánh. Mô hình tùy chỉnh chưa hỗ trợ trả `status=unavailable`; không tạo lý do giả.
+Kế hoạch cũ chưa có trường này vẫn đọc được và UI yêu cầu tạo kế hoạch mới.
+Giải thích T1 này độc lập với chính sách xếp hạng và chưa giải thích số dư T6.
+
+Giải thích xếp hạng mới dùng protocol `collection-ranking-v2`: `collection_ranking`
+ở cấp kế hoạch ghi chính sách thực tế, công thức, đơn vị điểm, nguồn chọn chính sách,
+số khoản đủ điều kiện/hiển thị và số khoản loại theo xóa nợ hoặc liên hệ/tạm bỏ qua
+chưa đủ 7 ngày. Mỗi dòng có `collection_rank`, `priority_score`,
+`priority_score_unit`, `priority_policy` và `ranking_explanation`.
+Ba chính sách vẫn là dư nợ, `1 - triage_probability_4w` và tích của hai yếu tố.
+Không đổi quy tắc cộng điểm: tranh chấp/lời hứa/ngày quá hạn chỉ được giải thích
+như ngữ cảnh xử lý; cùng điểm giữ thứ tự snapshot. So sánh khoản kế tiếp dựa trên
+toàn bộ danh sách đủ điều kiện, kể cả khoản thứ 31 ngoài giới hạn hiển thị 30.
+
+`ranking_explanation.probability_source` xác định baseline `customer` fit từ
+snapshot tại cutoff, không dùng kịch bản thu chậm. Nguồn này khác artifact T1 đã
+chọn hoặc xác suất T1 sau thu chậm; không dùng việc hai con số tình cờ bằng nhau
+để khẳng định cùng nguồn. Khi chính sách dùng xác suất, `probability_explanation`
+chứa SHAP của đúng `triage_probability_4w`, với `model_version=null` và
+`model_asof=cutoff`; không gán phiên bản T1 đang phục vụ cho baseline này.
+`displayed_model_version` ghi phiên bản dự báo để đối chiếu; các trường có cùng
+`dataset_hash` của kế hoạch. GET không tính lại. Excel giữ thứ tự, điểm/đơn vị,
+nhãn chính sách và xác suất/nguồn lịch sử khách; các kế hoạch cũ vẫn đọc được.
+Điểm là giá trị phân luồng công nợ, không phải tổn thất hoặc hiệu quả thu nợ nhân quả.
+
+V2 giữ dư nợ VND nguyên và tính điểm bằng Decimal từ biểu diễn thập phân của
+xác suất, để hai khoản lệch 1 VND không bị coi là bằng điểm khi số tiền lớn.
+So sánh điểm, thứ tự và nhóm bằng điểm đều dùng giá trị chưa làm tròn. Trong
+JSON, dư nợ/điểm VND nguyên vượt `2^53−1` và điểm VND có phần lẻ được ghi bằng
+chuỗi thập phân; xác suất vẫn là số ước lượng. UI định dạng trực tiếp chuỗi tiền,
+không đổi qua Number; hiển thị tối đa hai chữ số thập phân. Excel giữ số tiền/điểm
+vượt 15 chữ số có nghĩa dưới dạng ô văn bản để không làm mất chữ số. Giá trị
+VND lớn trong bảng yếu tố SHAP cũng dùng chuỗi thập phân. Kế hoạch cũ giữ bản
+lưu ban đầu; tạo dự báo mới để dùng cách tính V2.
+
+Hàng đợi trống được phân biệt với hết công nợ: nếu còn hóa đơn mở nhưng đều
+bị tạm loại theo quy tắc, UI nêu số khoản mở và số khoản hoãn liên hệ; kế hoạch
+cũ thiếu số liệu phạm vi dùng thông báo trung tính.
+
+Phân rã T6 được lưu trong `cash_decomposition`, protocol `cash-decomposition-v1`,
+target `expected_balance`, đơn vị VND. `invoices[].expected_by_week` dùng đúng
+ma trận phân bổ tiền sau xử lý trả từng phần, kịch bản chậm thu và gộp phần
+ngoài kỳ; không nhân lại với `payment_probability_4w`. `customers` cộng theo
+khách từ toàn bộ hóa đơn mở sau loại xóa nợ, không dùng danh sách ưu tiên 30
+khoản và không loại khoản đang hoãn liên hệ. `expected_after_horizon` là dư
+nợ chưa dự thu trong kỳ, không phải dự báo xóa nợ hoặc cam kết sẽ thu sau kỳ.
+
+`weeks` phân rã thu thành `ar_in`, `cash_sale_in`, `new_credit_in`; chi thành
+`scheduled_out` và `variable_cost_topup`. Phần chi biến đổi bổ sung đã trừ
+nghĩa vụ biến đổi có lịch để tránh tính hai lần. Mỗi tuần lưu số dư đầu,
+thay đổi và số dư cuối. Runtime kiểm tra tổng thu/chi/số dư khớp đường kỳ vọng
+đang phục vụ. `outflows` giữ mã, ngày, ngày biết, loại, số tiền gốc và sau hệ số
+kịch bản. Các dòng ngoài kỳ hoặc chỉ biết sau cutoff không được đưa vào.
+
+`risk_focus` lấy tuần cảnh báo đầu tiên (số dư kỳ vọng dưới ngưỡng hoặc tỷ lệ
+đường mô phỏng dưới ngưỡng ≥25%); nếu không có cảnh báo lấy tuần có số dư kỳ
+vọng thấp nhất. Lưu lũy kế thu/chi, mức thiếu kỳ vọng, khách có dư nợ chưa dự
+thu lớn nhất và khoản chi lớn đã biết. Cảnh báo chỉ do mô phỏng được ghi
+`simulation_only`, không quy thành thiếu trên đường kỳ vọng. Lịch chi chưa
+biết vẫn được báo thiếu phạm vi.
+
+`timing_comparison` so kế hoạch đang xem với dịch dự thu công nợ trong kỳ
+sớm/chậm hai tuần cho mọi khách; số dư đầu, lịch chi và các dòng hoạt động
+giữ nguyên. Thu sớm dồn tối thiểu vào tuần 1; phần ngoài kỳ không có ngày thu
+không được kéo vào. Thu chậm vượt kỳ ghi trong `receipts_pushed_beyond_horizon`.
+Đây là so sánh xác định của số dư kỳ vọng, không tính lại xác suất cảnh báo hay
+P10/P90. Phân rã không dùng SHAP cho số dư/phân vị. Mở rộng SHAP sau này cần
+chốt mục tiêu theo tuần hay toàn kỳ, mức ngưỡng/phân vị và cơ chế mô phỏng.
+
+`model_version`, `model_asof`, `dataset_hash`, cutoff và giả định được lưu cùng
+phân rã; GET và xuất Excel dùng bản đã lưu. Excel bổ sung `Phân rã từng tuần`,
+`Thu theo hóa đơn`, `Thu theo khách`, `Lịch chi đã biết`, `So sánh thời điểm`,
+`Kịch bản từng tuần`. Ba sheet cũ giữ vị trí và cột ban đầu; kế hoạch cũ chưa
+có phân rã vẫn xuất ba sheet. UI có lọc tuần, tìm mã và phân trang 20 dòng.
+
 | Endpoint | Mục đích |
 |---|---|
 | `GET /v1/workspace` | Hồ sơ định dạng (`company_profile`), số lượng dữ liệu, tiến độ job, báo cáo phiên bản, trạng thái stale |

@@ -500,18 +500,17 @@ def merge_import(data, kind, incoming):
 
 def invoice_view(data, clock=None):
     """Use the original lifecycle engine; exact VND stays in the canonical rows."""
+    columns = [
+        "invoice_id",
+        "customer_id",
+        "issue_date",
+        "due_date",
+        "known_at",
+        "amount",
+    ]
     rows = deepcopy(data.get("invoices", []))
     if not rows:
-        return pd.DataFrame(
-            columns=[
-                "invoice_id",
-                "customer_id",
-                "issue_date",
-                "due_date",
-                "known_at",
-                "amount",
-            ]
-        )
+        return pd.DataFrame(columns=columns)
     events = data.get("invoice_events", [])
     for row in rows:
         row.setdefault("amount_gross_minor", vnd(row["amount"]))
@@ -519,16 +518,7 @@ def invoice_view(data, clock=None):
         row.setdefault("currency", "VND")
     frame = effective_invoices(rows, events, clock)
     if frame.empty:
-        return pd.DataFrame(
-            columns=[
-                "invoice_id",
-                "customer_id",
-                "issue_date",
-                "due_date",
-                "known_at",
-                "amount",
-            ]
-        )
+        return pd.DataFrame(columns=columns)
     frame["amount"] = frame.amount_gross_minor.map(int)
     # A late adjustment must not become an issuance-time feature or backdate a
     # settlement that became complete only through that adjustment.

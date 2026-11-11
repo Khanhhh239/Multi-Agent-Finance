@@ -1056,6 +1056,12 @@ def test_variable_forecast_horizon_and_excel_export(client):
         "Kết quả dự báo",
         "Kế hoạch từng tuần",
         "Khoản cần chú ý",
+        "Phân rã từng tuần",
+        "Thu theo hóa đơn",
+        "Thu theo khách",
+        "Lịch chi đã biết",
+        "So sánh thời điểm",
+        "Kịch bản từng tuần",
     ]
     weeks = workbook["Kế hoạch từng tuần"]
     assert weeks.max_row == 27
