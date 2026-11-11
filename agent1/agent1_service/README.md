@@ -65,6 +65,7 @@ người dùng có thể ghép lại trước khi lưu.
 | `statements` | `statement_id, account, start_date, end_date, opening_balance, closing_balance` | `known_at` |
 | `actions` | `event_id, invoice_id, date, kind` | `known_at, promise_date` |
 | `outflows` | `expense_id`, `date`, `amount`, `category`, `known_at` | — |
+| `expense_payments` | `settlement_id`, `expense_id`, `bank_id`, `payment_date`, `amount`, `known_at` | Thanh toán thực tế của nghĩa vụ T5, kể cả nhận hoàn |
 
 - Chọn rõ ngày `dd/mm/yyyy`, `yyyy-mm-dd` hoặc `dd-mm-yy`; ngày Excel bản địa được đọc trực tiếp.
 - Chọn số Việt Nam `1.500.000,00` hoặc số thuần `1500000`; không đoán dấu phân cách.
@@ -503,6 +504,63 @@ hoặc bản điều chỉnh. Sự kiện hủy đã xác nhận được nhập
 Các loại XML nhiều hóa đơn liên quan hoặc chiết khấu thương mại chưa được ánh
 xạ an toàn sẽ bị từ chối. Thông báo hủy XML riêng của cơ quan thuế cần mẫu
 thực tế để bổ sung parser; hiện cần nhập sự kiện hủy đã xác nhận như trên.
+
+<a id="t5-ledger"></a>
+
+## T5: nghĩa vụ, thanh toán và phần còn lại — 11/11/2026
+
+Workspace dùng cùng bảng `outflows` cho mỗi lần đến hạn. `expense_id` có thể
+ghép từ cột `obligation_id`; `date` có thể ghép từ `due_date`. Cùng mã được sửa
+bằng ngày ghi nhận mới hơn; phiên bản cũ vẫn phục vụ dự báo tại ngày trước đó.
+Không tạo mã mới cho cùng một lần đến hạn chỉ để sửa số tiền hoặc ngày trả.
+
+Các trường tùy chọn: `status` (`open`/`cancelled`), `forecast_date` (ngày dự kiến
+trả/nhận phần còn lại, từ ngày đến hạn), `source`, `verified` (`true`/`false`),
+`refund_approved_at`, `business_day` (`none`/`following`/`preceding`) và
+`replaces_expense_id`. `verified` xác nhận hồ sơ do doanh nghiệp cung cấp;
+không xác nhận registry luật đã được chuyên gia kiểm tra.
+
+Loại mở rộng gồm `pit_withholding`, `foreign_contractor_tax`, `salary_bonus`,
+`rent_contract`, `loan_interest`, `loan_principal`, `cit_final` và `vat_refund`.
+Các loại này cần `source` và `verified=true`. Số tiền và hạn lấy từ hồ sơ đã
+xác nhận, không tự tính nghĩa vụ thuế. `cit_final` là số quyết toán còn phải
+nộp sau khi trừ tạm nộp; bộ sinh lịch nhận riêng `cit_by_year={2024: ...}`.
+
+Nạp sao kê trước, rồi nạp bảng **Thanh toán nghĩa vụ T5** (`expense_payments`):
+
+```csv
+settlement_id,expense_id,bank_id,payment_date,amount,known_at
+TRA-001,THUE-202602,BANK-CHI-001,2026-02-09,4000000,2026-02-09
+```
+
+Một dòng sao kê có thể trả nhiều nghĩa vụ nhưng tổng phân bổ không vượt tiền
+sao kê; tổng thanh toán mỗi nghĩa vụ không vượt số tiền nghĩa vụ. Ngày và chiều
+phải khớp sao kê. Trả từng phần/trả sớm chỉ làm giảm số còn phải chi; giao dịch
+đã xảy ra thuộc số dư đầu, không bị trừ lại trong dự báo. Tiền hoàn cần sao kê
+chiều thu, nhóm `other`, `cash_flow_class=non_ar`, và ngày nhận từ ngày quyết
+định trở đi. Chi cố định không được gắn vào nhóm sao kê `variable_cost`.
+
+Khoản chi đến/quá hạn chưa trả được giữ và đưa sang ngày làm việc kế tiếp;
+doanh nghiệp có thể nhập `forecast_date` mới. Khoản hoàn chưa có quyết định
+không vào dự thu. Khoản hoàn quá ngày dự kiến nhận cần ngày dự kiến mới,
+không tự chuyển sang ngày mai. Hủy phần còn lại bằng `status=cancelled`;
+các khoản đã thanh toán và lịch sử ghi nhận vẫn được giữ.
+
+Đổi lịch thuê cũ sang hồ sơ hợp đồng hoặc chia `loan_service` thành gốc/lãi:
+các mã mới khai `replaces_expense_id` trỏ đến mã cũ. Mã cũ được loại khỏi dự
+chi từ ngày biết bản thay thế. Không cho thay mã đã có thanh toán; trường
+hợp đó cần giữ cùng mã và sửa hồ sơ/phân bổ tương ứng.
+
+Có một khoản chi trong tuần chỉ cho trạng thái `scheduled_unconfirmed`.
+Chỉ các tuần người dùng xác nhận đã rà soát đủ mới nhận `scheduled` hoặc
+`confirmed_zero`; mọi tuần chưa xác nhận đều tiếp tục cảnh báo thiếu lịch.
+Dự báo lưu `t5` (nghĩa vụ, thanh toán, phần còn lại), dòng thu hoàn
+`obligation_in`, phân rã thu/chi và Excel tương ứng. Giao thức dải tiền mới
+`cash-v3-t5-ledger` không dùng các kế hoạch cũ để hiệu chỉnh dải.
+
+Kiểm thử: `tests/adaptive/test_t5_runtime.py`, `tests/test_obligations.py`,
+`tests/test_t0_t5.py` và các kiểm thử Workspace. Đây là kiểm chứng kỹ thuật;
+không đổi giá trị hay trạng thái xác minh của các quy tắc pháp lý lịch sử.
 
 ## Giới hạn hiện tại
 

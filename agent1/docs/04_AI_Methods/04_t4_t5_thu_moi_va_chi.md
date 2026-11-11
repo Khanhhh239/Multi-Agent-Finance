@@ -2,6 +2,8 @@
 
 > **Phạm vi sau gộp 06/11/2026:** Phần quy tắc và số đo gốc là hồ sơ thiết kế/thử nghiệm, không xác nhận pháp luật hiện hành hoặc việc đã tích hợp nghĩa vụ mở rộng. Kết quả chấm code không thay xác minh quy tắc bởi chuyên gia.
 
+> **Runtime cập nhật 11/11/2026:** nghĩa vụ mở rộng đã nối vào Workspace qua bảng T5, kèm thanh toán sao kê, số còn lại, tiền hoàn riêng và xác nhận độ phủ lịch. Đọc [hợp đồng T5 đang chạy](../../agent1_service/README.md#t5-ledger). Các kết quả nghiên cứu và nhận định “chưa tích hợp” ở phần hồ sơ bên dưới giữ nguyên phạm vi 06/11; không phải trạng thái runtime mới. Bộ sinh lịch đã thêm quyết toán TNDN theo số còn phải nộp được cung cấp, sửa biên ngày và lịch sử sửa đổi; không thay registry pháp lý.
+
 ## 4.1 T4 — Doanh thu mới chưa lập hoá đơn
 
 Vì sao cần: dự báo 13 tuần không thể chỉ nhìn công nợ đang có — hoá đơn lập trong 13 tuần tới (đặc biệt COD/kỳ hạn ngắn) đóng góp

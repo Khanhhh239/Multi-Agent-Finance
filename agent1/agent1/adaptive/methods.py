@@ -669,27 +669,24 @@ def forecast(
     cash_p = np.column_stack((cash_p[:, :horizon], cash_p[:, horizon:].sum(1)))
     amounts = opened.remaining_amount.to_numpy()
     incoming = (cash_p[:, :horizon] * amounts[:, None]).sum(0)
+    from .obligations import cash_schedule
+
+    t5 = cash_schedule(data, clock, horizon, expense_multiplier)
     outgoing = np.zeros(horizon)
+    obligation_in = np.zeros(horizon)
     known_variable = np.zeros(horizon)
     scheduled = np.zeros(horizon, bool)
-    scheduled_outflows = []
-    for index, r in enumerate(data.get("outflows", [])):
-        if pd.Timestamp(r["known_at"]) > clock:
-            continue
-        days = (pd.Timestamp(r["date"]) - clock).days
-        if 1 <= days <= 7 * horizon:
-            outgoing[(days - 1) // 7] += r["amount"] * expense_multiplier
-            scheduled[(days - 1) // 7] = True
-            scheduled_outflows.append(dict(
-                expense_id=str(r.get("expense_id", f"ROW-{index + 1}")),
-                date=r["date"], known_at=r["known_at"], category=r["category"],
-                week=(days - 1) // 7 + 1, original_amount=float(r["amount"]),
-                amount=float(r["amount"] * expense_multiplier),
-            ))
-            if r["category"] == "variable_cost":
-                known_variable[(days - 1) // 7] += r["amount"] * expense_multiplier
+    scheduled_outflows = t5['outflows']
+    for r in scheduled_outflows:
+        week = r['week'] - 1
+        outgoing[week] += r['amount']
+        scheduled[week] = True
+        if r['category'] == 'variable_cost':
+            known_variable[week] += r['amount']
+    for r in t5['inflows']:
+        obligation_in[r['week'] - 1] += r['amount']
     coverage = [
-        "scheduled"
+        ("scheduled" if i + 1 in confirmed_weeks else "scheduled_unconfirmed")
         if scheduled[i]
         else "confirmed_zero"
         if i + 1 in confirmed_weeks
@@ -726,9 +723,11 @@ def forecast(
             0, estimate[:, 1] * expense_multiplier - known_variable[:operating_weeks]
         )
         outgoing += variable_cost_topup
+    incoming += obligation_in
     expected = balance + np.cumsum(incoming - outgoing)
     rng = np.random.default_rng(7)
     paths = np.full((400, horizon), float(balance)) - np.cumsum(outgoing)
+    paths += np.cumsum(obligation_in)
     if operating:
         errors = operating["residuals"][:, :operating_weeks]
         draws = np.maximum(0, estimate + errors[rng.integers(0, len(errors), 400)])
@@ -850,8 +849,9 @@ def forecast(
         outstanding=float(amounts.sum()),
         minimum_balance=float(expected.min()),
         opening_balance=float(balance),
+        t5=t5,
         cash_floor=float(cash_floor),
-        unknown_outflow_weeks=[i + 1 for i, v in enumerate(coverage) if v == "unknown"],
+        unknown_outflow_weeks=[i + 1 for i, v in enumerate(coverage) if v in {"unknown", "scheduled_unconfirmed"}],
         timing_dependence="shared_customer_stress"
         if shared_customer_risk
         else "independent",
@@ -863,6 +863,7 @@ def forecast(
                 new_credit_in=float(new_credit[i])
                 if new_credit is not None and i < operating_weeks
                 else 0.0,
+                obligation_in=float(obligation_in[i]),
                 cash_out=float(outgoing[i]),
                 balance=float(expected[i]),
                 low=float(low[i]),
@@ -899,6 +900,8 @@ def forecast(
             )
             + " Xác suất và dải tiền chưa hiệu chỉnh.",
             "Danh sách thu hồi xếp theo phương án đã kiểm định hoặc theo dư nợ khi dùng mốc.",
+            "T5 chỉ dự báo phần nghĩa vụ còn lại sau thanh toán đã ghi nhận. Khoản chi đến/quá hạn chưa trả chuyển sang ngày làm việc kế tiếp; số dư đầu đã gồm giao dịch thực tế đến ngày chốt.",
+            "Khoản hoàn đã duyệt nhưng quá ngày dự kiến nhận cần ngày dự kiến mới; không tự coi là tiền sẽ về ngay.",
         ],
         pilot_ready=False,
     )
@@ -914,6 +917,7 @@ def forecast(
         opened, cash_p[:, :horizon] * amounts[:, None], result["weeks"],
         cutoff=str(clock.date()), opening_balance=balance, cash_floor=cash_floor,
         scheduled_outflows=scheduled_outflows, cash_sales=cash_sales,
+        scheduled_inflows=t5['inflows'], obligation_in=obligation_in,
         new_credit=credit_receipts, variable_cost_topup=variable_cost_topup,
         partial_profile=partial_profile, partial_supported=partial_n,
         written_off_count=writeoff_excluded,

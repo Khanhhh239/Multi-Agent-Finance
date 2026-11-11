@@ -67,7 +67,7 @@ def _timing_comparison(ar, cash_sales, new_credit, outgoing, opening, floor, wee
         "scenarios": scenarios,
         "assumptions": [
             "So với kế hoạch đang xem: dịch phần dự thu công nợ trong kỳ sớm/chậm 2 tuần cho mọi khách; thu sớm nhất vào tuần 1.",
-            "Giữ nguyên số dư đầu, lịch chi, thu bán ngay và thu bán chịu mới. Nếu đang xem một kịch bản, so sánh được tính tiếp từ kịch bản đó.",
+            "Giữ nguyên số dư đầu, lịch chi, tiền hoàn theo hồ sơ, thu bán ngay và thu bán chịu mới. Nếu đang xem một kịch bản, so sánh được tính tiếp từ kịch bản đó.",
             "Không kéo phần dư nợ chưa có thời điểm thu trong kỳ vào kịch bản sớm. Thu chậm ra ngoài kỳ được ghi riêng, không coi là mất tiền.",
             "Đây là độ nhạy số dư kỳ vọng, chưa mô phỏng lại xác suất thiếu tiền hay P10/P90 và chưa chứng minh tác động của biện pháp thu nợ.",
         ],
@@ -90,15 +90,18 @@ def explain_cash(
     partial_supported,
     written_off_count,
     model_asof=None,
+    scheduled_inflows=(),
+    obligation_in=None,
 ):
     horizon = len(weeks)
     amounts = opened.remaining_amount.to_numpy(float)
     ar = receipt_amounts.sum(axis=0)
+    obligation_in = np.zeros(horizon) if obligation_in is None else obligation_in
     scheduled = np.zeros(horizon)
     for row in scheduled_outflows:
         scheduled[row["week"] - 1] += row["amount"]
     # Preserve serving's addition order, including at large VND magnitudes.
-    incoming = ar + new_credit + cash_sales
+    incoming = ar + new_credit + cash_sales + obligation_in
     outgoing = scheduled + variable_cost_topup
     balances = opening_balance + np.cumsum(incoming - outgoing)
     _check(incoming, [w["cash_in"] for w in weeks], "dự thu")
@@ -153,6 +156,7 @@ def explain_cash(
             "ar_in": float(ar[i]),
             "cash_sale_in": float(cash_sales[i]),
             "new_credit_in": float(new_credit[i]),
+            "obligation_in": float(obligation_in[i]),
             "cash_in": float(incoming[i]),
             "scheduled_out": float(scheduled[i]),
             "variable_cost_topup": float(variable_cost_topup[i]),
@@ -211,6 +215,7 @@ def explain_cash(
             "ar_in": float(ar.sum()),
             "cash_sale_in": float(cash_sales.sum()),
             "new_credit_in": float(new_credit.sum()),
+            "obligation_in": float(obligation_in.sum()),
             "cash_in": float(incoming.sum()),
             "scheduled_out": float(scheduled.sum()),
             "variable_cost_topup": float(variable_cost_topup.sum()),
@@ -228,6 +233,7 @@ def explain_cash(
         "outflows": sorted(
             scheduled_outflows, key=lambda r: (r["date"], r["expense_id"])
         ),
+        "inflows": sorted(scheduled_inflows, key=lambda r: (r['date'], r['expense_id'])),
         "weeks": bridge,
         "risk_focus": {
             "week": focus["week"],
@@ -257,11 +263,11 @@ def explain_cash(
                 key=lambda r: (-r["amount"], r["expense_id"]),
             )[:3],
             "unknown_outflow_weeks": [
-                w["week"] for w in bridge if w["outflow_status"] == "unknown"
+                w["week"] for w in bridge if w["outflow_status"] in {"unknown", "scheduled_unconfirmed"}
             ],
         },
         "timing_comparison": _timing_comparison(
-            ar, cash_sales, new_credit, outgoing, opening_balance, cash_floor, weeks
+            ar, cash_sales + obligation_in, new_credit, outgoing, opening_balance, cash_floor, weeks
         ),
         "assumptions": [
             "Dự thu hóa đơn = dư nợ tại ngày chốt × phần tiền phân bổ vào từng tuần; không nhân lại số tiền với xác suất tất toán 4 tuần.",

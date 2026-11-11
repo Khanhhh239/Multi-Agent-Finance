@@ -195,7 +195,7 @@
             <form id="records-filter" class="records-filter">
               <label>Bảng<select id="records-kind"><option value="invoices">Hóa đơn</option><option value="payments">Thanh toán</option>
                 <option value="bank">Dòng sao kê</option><option value="statements">Kỳ sao kê</option>
-                <option value="outflows">Lịch cố định · T5</option><option value="actions">Nhật ký thu nợ</option><option value="invoice_events">Sự kiện hóa đơn</option></select></label>
+                <option value="outflows">Lịch cố định · T5</option><option value="expense_payments">Thanh toán nghĩa vụ T5</option><option value="actions">Nhật ký thu nợ</option><option value="invoice_events">Sự kiện hóa đơn</option></select></label>
               <label>Tìm kiếm<input id="records-query" maxlength="200" placeholder="Mã, khách hàng, tài khoản, nội dung…"></label>
               <label>Trạng thái<select id="records-status"><option value="">Tất cả</option></select></label>
               <label>Từ ngày<input id="records-from" type="date"></label><label>Đến ngày<input id="records-to" type="date"></label>
@@ -258,6 +258,7 @@
                     <option value="payments">Khoản thanh toán đã nhận</option>
                     <option value="actions">Nhật ký thu nợ và lời hứa</option>
                     <option value="outflows">Lịch cố định · T5 (tùy chọn)</option>
+                    <option value="expense_payments">Thanh toán nghĩa vụ T5 trên sao kê</option>
                   </select></label
                 >
                 <div class="two-fields">
@@ -425,6 +426,7 @@
                   <option value="invoices">Hóa đơn</option><option value="bank">Dòng sao kê ngân hàng</option>
                   <option value="payments">Thanh toán nhập từ CSV</option><option value="statements">Kỳ sao kê và số dư</option>
                   <option value="actions">Nhật ký thu nợ và lời hứa</option><option value="outflows">Lịch cố định · T5</option>
+                  <option value="expense_payments">Thanh toán nghĩa vụ T5</option>
                 </select></label>
                 <label>Mã bản ghi<input id="source-correction-id" required placeholder="Ví dụ: HD001 hoặc GD001" /></label>
               </div>
@@ -466,6 +468,7 @@
                     <option value="payments">Thanh toán</option>
                     <option value="actions">Nhật ký thu nợ và lời hứa</option>
                     <option value="outflows">Lịch cố định · T5</option>
+                    <option value="expense_payments">Thanh toán nghĩa vụ T5</option>
                   </select></label
                 ><label
                   >Mã bản ghi<input
@@ -685,10 +688,16 @@
                 <li>Số tiền và loại chi</li>
                 <li>Ngày doanh nghiệp biết khoản chi</li>
                 <li>Cùng một lần đến hạn dùng một mã ổn định để nạp lại không cộng trùng</li>
+                  <li>Thanh toán thực tế nạp ở bảng Thanh toán nghĩa vụ T5, liên kết đúng mã lần đến hạn và mã dòng sao kê; hỗ trợ trả từng phần</li>
+                  <li>Hủy phần còn lại bằng trạng thái cancelled. Khoản đến/quá hạn chưa trả được giữ lại trong dự báo</li>
+                  <li>Nghĩa vụ mở rộng dùng loại pit_withholding, foreign_contractor_tax, salary_bonus, rent_contract, loan_interest, loan_principal hoặc cit_final; cần nguồn hồ sơ và verified=true</li>
+                  <li>Hoàn VAT dùng loại vat_refund, ngày quyết định hoàn và ngày dự kiến nhận; tiền hoàn được ghi riêng ở dòng thu</li>
+                  <li>Chia lịch vay tổng thành gốc/lãi hoặc thay lịch thuê cũ: khai mã lịch được thay thế để không cộng hai lần; lịch đã trả phải giữ cùng mã</li>
               </ul>
               <button class="button template-link" data-kind="outflows">
                 Tải mẫu lịch cố định T5 ↓
               </button>
+                <button class="button template-link" data-kind="expense_payments">Tải mẫu thanh toán nghĩa vụ T5 ↓</button>
             </article>
           </div>
           <article class="paper">

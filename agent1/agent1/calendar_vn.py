@@ -183,18 +183,26 @@ def license_fee_deadline(y: int):
 
 
 def obligation_schedule(firm: dict, start, end, payroll_by_month: dict | None = None,
-                        vat_by_period: dict | None = None, cit_by_quarter: dict | None = None) -> pd.DataFrame:
+                        vat_by_period: dict | None = None, cit_by_quarter: dict | None = None,
+                        cit_by_year: dict | None = None) -> pd.DataFrame:
     """Sinh lịch chi tất định của một doanh nghiệp (ngày, loại, số tiền).
 
     firm: {revenue_prev_year, payday (int 1..31 hoặc 'eom'), payroll_lag_month (0/1), rent, rent_day,
            loan_payment, loan_day, charter_capital, license_fee}
     payroll_by_month: {(y,m): tổng lương gross}; vat_by_period: {period_end: số thuế};
-    cit_by_quarter: {quarter_end: số tạm nộp}.
+    cit_by_quarter: {quarter_end: số tạm nộp}; cit_by_year: {fiscal_year: số còn phải nộp
+    khi quyết toán, đã trừ tạm nộp}. Không suy ra số quyết toán từ doanh thu.
     """
     start, end = pd.Timestamp(start), pd.Timestamp(end)
+    if pd.isna(start) or pd.isna(end) or end < start:
+        raise ValueError("Khoảng ngày không hợp lệ")
     rows = []
     monthly_vat = firm.get("revenue_prev_year", 0) > MONTHLY_VAT_THRESHOLD
-    for p in pd.period_range(start - pd.offsets.MonthBegin(2), end, freq="M"):
+    # Anchor to whole months: a mid-month start must not lose the previous
+    # quarter; the next month's payroll can roll back into the requested end.
+    first = start.to_period("M") - 3
+    last = end.to_period("M") + 1
+    for p in pd.period_range(first, last, freq="M"):
         y, m = p.year, p.month
         gross = (payroll_by_month or {}).get((y, m), firm.get("payroll_gross", 0.0))
         # lương: payday của tháng (lag 0) hoặc tháng sau (lag 1)
@@ -220,5 +228,10 @@ def obligation_schedule(firm: dict, start, end, payroll_by_month: dict | None = 
             if dl is not None:
                 fee = load_rules(dl)["license_fee_high"] if firm.get("charter_capital", 0) > load_rules(dl)["license_fee_capital_threshold"] else load_rules(dl)["license_fee_low"]
                 rows.append((dl, "license_fee", fee, (y, m)))
+    for year, amount in (cit_by_year or {}).items():
+        if not np.isfinite(amount) or amount < 0:
+            raise ValueError("Số quyết toán còn phải nộp phải hữu hạn và không âm")
+        if amount:
+            rows.append((cit_final_deadline(int(year)), "cit_final", amount, (int(year), 12)))
     df = pd.DataFrame(rows, columns=["date", "category", "amount", "period"])
-    return df[(df["date"] >= start) & (df["date"] <= end)].sort_values("date").reset_index(drop=True)
+    return df[(df["date"] >= start) & (df["date"] <= end)].sort_values(["date", "category", "period"]).reset_index(drop=True)

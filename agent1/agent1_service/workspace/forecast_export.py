@@ -8,7 +8,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
-DATE_FIELDS = {"date", "due_date", "promised_date", "cutoff", "known_at"}
+DATE_FIELDS = {"date", "due_date", "promised_date", "cutoff", "known_at", "forecast_date", "payment_date"}
 PERCENT_FIELDS = {
     "below_floor_probability",
     "payment_probability_4w",
@@ -17,7 +17,8 @@ PERCENT_FIELDS = {
     "write_off_probability_365d_at_issue",
 }
 OUTFLOW_LABELS = {
-    "scheduled": "Có lịch",
+    "scheduled": "Đã xác nhận đủ lịch",
+    "scheduled_unconfirmed": "Có khoản chi, chưa xác nhận đủ",
     "confirmed_zero": "Đã xác nhận 0",
     "unknown": "Chưa biết",
 }
@@ -129,6 +130,7 @@ def workbook_bytes(plan, company):
                 ("Dự thu công nợ mở (VND)", decomposition["totals"]["ar_in"]),
                 ("Dự thu bán ngay (VND)", decomposition["totals"]["cash_sale_in"]),
                 ("Dự thu bán chịu mới (VND)", decomposition["totals"]["new_credit_in"]),
+                ("Dự thu hoàn theo hồ sơ T5 (VND)", decomposition["totals"].get("obligation_in", 0)),
                 ("Chi đã có lịch (VND)", decomposition["totals"]["scheduled_out"]),
                 (
                     "Chi biến đổi bổ sung (VND)",
@@ -211,6 +213,19 @@ def workbook_bytes(plan, company):
     )
     if decomposition:
         _cash_sheets(workbook, decomposition)
+    if plan.get('t5'):
+        _write_table(workbook.create_sheet('Nghĩa vụ T5'), [
+            ('expense_id', 'Mã nghĩa vụ'), ('due_date', 'Ngày đến hạn'),
+            ('category', 'Loại'), ('direction', 'Chiều tiền'), ('status', 'Trạng thái'),
+            ('obligation_amount', 'Số tiền nghĩa vụ'), ('settled_amount', 'Đã thanh toán'),
+            ('remaining_amount', 'Còn lại'), ('forecast_date', 'Ngày dự kiến còn lại'),
+            ('known_at', 'Ngày ghi nhận'), ('source', 'Nguồn hồ sơ'),
+        ], plan['t5']['obligations'])
+        _write_table(workbook.create_sheet('Thanh toán T5'), [
+            ('settlement_id', 'Mã thanh toán'), ('expense_id', 'Mã nghĩa vụ'),
+            ('bank_id', 'Mã dòng sao kê'), ('payment_date', 'Ngày thanh toán'),
+            ('amount', 'Số tiền'), ('known_at', 'Ngày ghi nhận'),
+        ], plan['t5']['payments'])
     buffer = BytesIO()
     workbook.save(buffer)
     return buffer.getvalue()
@@ -232,6 +247,7 @@ def _cash_sheets(workbook, decomposition):
             ("balance", "Số dư cuối tuần"),
             ("headroom", "Số dư trừ ngưỡng"),
             ("outflow_status", "Phạm vi lịch chi"),
+            ("obligation_in", "Thu hoàn theo hồ sơ T5"),
         ],
         decomposition["weeks"],
     )
@@ -285,6 +301,12 @@ def _cash_sheets(workbook, decomposition):
         decomposition["outflows"],
     )
     scenarios = decomposition["timing_comparison"]["scenarios"]
+    if decomposition.get('inflows'):
+        _write_table(workbook.create_sheet('Hoàn thuế theo lịch'), [
+            ('expense_id', 'Mã nghĩa vụ'), ('date', 'Ngày dự kiến nhận'),
+            ('known_at', 'Ngày được biết'), ('original_amount', 'Số còn được nhận'),
+            ('amount', 'Dự thu'), ('source', 'Nguồn quyết định'),
+        ], decomposition['inflows'])
     _write_table(
         workbook.create_sheet("So sánh thời điểm"),
         [

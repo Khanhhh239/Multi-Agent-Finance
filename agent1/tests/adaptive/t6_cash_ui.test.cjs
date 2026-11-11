@@ -14,7 +14,8 @@ class Element {
 function content(node) { return [node.textContent || "", ...node.children.map(content)].join(" "); }
 function descendants(node, predicate) { return [...(predicate(node) ? [node] : []), ...node.children.flatMap(child => descendants(child, predicate))]; }
 function ui() {
-  const scope = {node: (tag, text) => new Element(tag, text), fmt: new Intl.NumberFormat("vi-VN"), displayDate: value => value};
+  const scope = {node: (tag, text) => new Element(tag, text), fmt: new Intl.NumberFormat("vi-VN"), displayDate: value => value,
+    statusLabels: {overdue: "Quá hạn, còn phải trả", partial: "Một phần", paid: "Đã tất toán"}};
   vm.createContext(scope);
   vm.runInContext(source.slice(source.indexOf("  function cashDetailTable("), source.indexOf("  function renderForecast(")), scope);
   return scope;
@@ -39,6 +40,18 @@ test("cash UI shows saved provenance, money bridge and both timing scenarios saf
   const text = content(panel);
   for (const expected of ["SAVED", "2026-02-10", "thiếu 90 VND", "Thu sớm 2 tuần", "Thu chậm 2 tuần", "<script>unsafe</script>", "<img onerror=unsafe>", "990 VND"]) assert.ok(text.includes(expected), expected);
   assert.equal(descendants(panel, node => node.tag === "script" || node.tag === "img").length, 0);
+});
+
+test("T5 UI keeps paid remainder, overdue warning and refunds visible without HTML injection", () => {
+  const data = plan();
+  data.t5 = {obligations: [{expense_id: "<script>rent</script>", due_date: "2026-02-09", category: "rent",
+    status: "overdue", obligation_amount: 100, settled_amount: 40, remaining_amount: 60, forecast_date: "2026-02-11"}]};
+  data.cash_decomposition.inflows = [{expense_id: "R", date: "2026-02-12", amount: 300, source: "Quyết định đã duyệt"}];
+  data.cash_decomposition.weeks[0].obligation_in = 300;
+  const panel = ui().renderCashDecomposition(data), text = content(panel);
+  for (const expected of ["<script>rent</script>", "Quá hạn", "40 VND", "60 VND", "ngày làm việc kế tiếp", "Quyết định đã duyệt", "300 VND"])
+    assert.ok(text.includes(expected), expected);
+  assert.equal(descendants(panel, node => node.tag === "script").length, 0);
 });
 
 test("grouping and search use the full saved contributions, with pagination instead of truncation", () => {

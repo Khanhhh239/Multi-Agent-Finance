@@ -37,7 +37,7 @@ REASONS = {
     'rejected': 'Kế toán đã từ chối; có thể phân bổ thủ công khi có bằng chứng mới',
 }
 
-EDITABLE_KINDS = ('invoices', 'bank', 'payments', 'statements', 'actions', 'outflows')
+EDITABLE_KINDS = ('invoices', 'bank', 'payments', 'statements', 'actions', 'outflows', 'expense_payments')
 
 
 def correction_time():

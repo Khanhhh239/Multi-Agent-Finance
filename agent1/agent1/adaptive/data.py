@@ -45,6 +45,27 @@ SCHEMAS = {
 REQUIRED = {k: set(v) - {"known_at", "currency"} for k, v in SCHEMAS.items()}
 REQUIRED["outflows"].add("known_at")
 IDS = {"invoices": "invoice_id", "payments": "payment_id", "outflows": "expense_id"}
+SCHEMAS["outflows"]["expense_id"].append("obligation_id")
+SCHEMAS["outflows"]["date"].append("due_date")
+SCHEMAS["outflows"].update({
+    "status": ["trang thai nghia vu"],
+    "forecast_date": ["ngay du kien tra con lai"],
+    "source": ["ho so hop dong"],
+    "verified": ["da xac nhan ho so"],
+    "refund_approved_at": ["ngay quyet dinh hoan"],
+    "business_day": ["quy uoc ngay lam viec"],
+    "replaces_expense_id": ["ma lich duoc thay the"],
+})
+SCHEMAS["expense_payments"] = {
+    "settlement_id": ["ma thanh toan nghia vu"],
+    "expense_id": ["ma khoan chi", "obligation_id"],
+    "bank_id": ["ma dong sao ke"],
+    "payment_date": ["ngay thanh toan"],
+    "amount": ["so tien"],
+    "known_at": ["ngay ghi nhan", "available_on"],
+}
+REQUIRED["expense_payments"] = set(SCHEMAS["expense_payments"])
+IDS["expense_payments"] = "settlement_id"
 SCHEMAS["payments"]["bank_id"] = ["ma dong sao ke"]
 SCHEMAS["bank"] = {
     "bank_id": ["ma dong sao ke"],
@@ -114,7 +135,7 @@ SCHEMAS["invoice_events"] = {
 IDS["invoice_events"] = "event_id"
 REQUIRED["invoice_events"] = set(SCHEMAS["invoice_events"])
 MONEY_FIELDS = {"amount", "amount_net", "vat", "opening_balance", "closing_balance"}
-for _kind in ("payments", "outflows", "bank", "statements"):
+for _kind in ("payments", "outflows", "expense_payments", "bank", "statements"):
     SCHEMAS[_kind]["currency"] = ["tien te"]
 
 
@@ -214,7 +235,11 @@ def parse_rows(
                     if not re.fullmatch(r"[1-9]\d*", str(value)):
                         raise ValueError()
                     value = int(value)
-                elif field.endswith("date") or field in ["date", "known_at"]:
+                elif field == "verified":
+                    if str(value).strip().lower() not in ("true", "false"):
+                        raise ValueError()
+                    value = str(value).strip().lower() == "true"
+                elif field.endswith("date") or field in ["date", "known_at", "refund_approved_at"]:
                     parsed = (
                         pd.Timestamp(value)
                         if isinstance(value, (datetime, calendar_date, pd.Timestamp))
@@ -731,6 +756,8 @@ def validate_dataset(data):
         paid[target] = paid.get(target, 0) + vnd(row["amount"])
         if paid[target] > effective.get(target, vnd(inv["amount"])):
             raise ValueError("Tổng thu vượt giá trị hóa đơn: " + row["invoice_id"])
+    from .obligations import validate_obligations
+    validate_obligations(data)
     periods = {}
     for s in sorted(data.get("statements", []), key=lambda r: r["start_date"]):
         prev = periods.get(s["account"])

@@ -6,6 +6,7 @@ from unidecode import unidecode
 
 from agent1.adaptive.data import IDS, SCHEMAS, vnd
 from agent1.reconciliation.pipeline import NON_AR, today
+from agent1.adaptive.obligations import cash_schedule
 
 
 def outstanding(source):
@@ -57,6 +58,10 @@ def record_rows(source, kind):
         if row["known_at"] <= today() and row["payment_date"] <= today():
             paid[row["invoice_id"]] += vnd(row["amount"])
             used[row.get("bank_id", "")] += vnd(row["amount"])
+    for row in data.get('expense_payments', []):
+        if row['known_at'] <= today() and row['payment_date'] <= today():
+            used[row['bank_id']] += vnd(row['amount'])
+    obligations = {r['expense_id']: r for r in cash_schedule(data, today())['obligations']} if kind == 'outflows' else {}
     effective = {}
     if kind == "invoices" and data.get("invoices"):
         effective = {r["invoice_id"]: r for r in source.view(today())["invoices"].to_dict("records")}
@@ -85,6 +90,12 @@ def record_rows(source, kind):
                              "partial" if row["allocated_amount"] else "pending")
         elif kind == "payments":
             row["status"] = "linked" if row.get("bank_id") else "unlinked"
+        elif kind == 'expense_payments':
+            row['status'] = 'linked'
+        elif kind == 'outflows' and row['identifier'] in obligations:
+            obligation = obligations[row['identifier']]
+            row.update(status=obligation['status'], remaining_amount=obligation['remaining_amount'],
+                       allocated_amount=obligation['settled_amount'])
         if row.get("known_at", "") > today():
             row["status"] = "future"
         result.append(row)
@@ -92,7 +103,7 @@ def record_rows(source, kind):
 
 
 def search_rows(rows, query, status, start, end, kind):
-    date_field = dict(invoices="issue_date", payments="payment_date", statements="end_date",
+    date_field = dict(invoices="issue_date", payments="payment_date", expense_payments="payment_date", statements="end_date",
                       invoice_events="event_date").get(kind, "date")
     query = unidecode(query).casefold().strip()
     return [row for row in rows if
@@ -134,6 +145,17 @@ def record_detail(source, kind, identifier, imports):
         rows = all_receipts if target == "payments" else data.get(target, [])
         linked.extend(dict(kind=target, identifier=r[IDS[target]], record=public_record(r, target))
                       for r in rows if r[IDS[target]] in ids and (target, r[IDS[target]]) != (kind, identifier))
+    expense_ids = {identifier} if kind == 'outflows' else {seed['expense_id']} if kind == 'expense_payments' else set()
+    settlements = [r for r in data.get('expense_payments', [])
+                   if r['expense_id'] in expense_ids or r['bank_id'] in bank_ids]
+    expense_ids.update(r['expense_id'] for r in settlements)
+    settlement_banks = {r['bank_id'] for r in settlements}
+    for target, rows in (('expense_payments', settlements),
+                         ('outflows', [r for r in data.get('outflows', []) if r['expense_id'] in expense_ids]),
+                         ('bank', [r for r in data.get('bank', []) if r['bank_id'] in settlement_banks])):
+        linked.extend(dict(kind=target, identifier=r[IDS[target]], record=public_record(r, target))
+                      for r in rows if (target, r[IDS[target]]) != (kind, identifier)
+                      and not any(p['kind'] == target and p['identifier'] == r[IDS[target]] for p in linked))
     return dict(kind=kind, identifier=identifier, record=public_record(seed, kind), deleted=raw is None,
                 versions=[public_record(r, kind) for r in versions], related=linked,
                 decisions=decisions,

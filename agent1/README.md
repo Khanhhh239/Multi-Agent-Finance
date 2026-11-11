@@ -42,6 +42,8 @@ Trang **Sổ dữ liệu** cho tìm theo mã, khách hàng, nội dung, lọc ng
 
 `payment_id` là định danh khoản thanh toán: cùng mã/nội dung không cộng thêm, khác mã là hai khoản riêng. Phân bổ vẫn bị chặn nếu vượt giá trị hóa đơn hoặc tiền sao kê. `outflows` trong Workspace biểu diễn các lần đến hạn của **lịch cố định T5** (lương, thuê, trả nợ định kỳ…), là dữ liệu tùy chọn; không yêu cầu bảng chi dự kiến tổng quát. Chi hoạt động khác chỉ được ước lượng từ sao kê khi bật tùy chọn và có mô hình đủ lịch sử. Số dư dự báo phải được đọc cùng phạm vi chi này.
 
+**T5 cập nhật 11/11/2026:** nạp khoản thực trả/nhận ở bảng **Thanh toán nghĩa vụ T5** (`expense_payments`), liên kết `expense_id` và dòng sao kê. Dự báo chỉ tính phần còn lại; khoản chi đến/quá hạn chưa trả được chuyển sang ngày làm việc kế tiếp hoặc ngày dự kiến mới do doanh nghiệp nhập. Không tự coi lịch cũ là đã trả. Tuần có một vài khoản chi vẫn báo chưa xác nhận đủ nếu chưa được rà soát. Nghĩa vụ theo hồ sơ (TNCN, thuế nhà thầu, thưởng, thuê, gốc/lãi vay, quyết toán TNDN còn phải nộp) và hoàn VAT đã duyệt dùng cùng luồng nạp T5; hoàn VAT được tách thành dòng thu. Xem [hợp đồng T5](agent1_service/README.md#t5-ledger).
+
 “Đã nạp đủ thanh toán đến ngày chốt” là xác nhận của người dùng. Ví dụ, dự báo 31/10 nhưng mới nạp thanh toán đến 25/10 thì không được mặc nhiên coi các hóa đơn còn thiếu payment là chưa trả. Ngày giao dịch lớn nhất không chứng minh dữ liệu đầy đủ. Kỳ sao kê chỉ được ghi khi số dư đầu kỳ cộng thu trừ chi khớp số dư cuối kỳ; tài khoản/kỳ chưa nạp không có bằng chứng kiểm tra đầy đủ.
 
 ## Thử toàn bộ luồng bằng Đại Phát

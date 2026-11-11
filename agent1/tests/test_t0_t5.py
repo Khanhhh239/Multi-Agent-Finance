@@ -104,6 +104,43 @@ def test_invalid_contract_due_day_rejected(day,amount_field,day_field):
         cal.obligation_schedule({amount_field:100,day_field:day},"2025-02-01","2025-02-28")
 
 
+def test_cit_shifted_into_february_survives_midmonth_start():
+    taxes={TS('2024-12-31'):100}
+    for start in ('2025-02-01','2025-02-02','2025-02-03'):
+        schedule=cal.obligation_schedule({},start,'2025-02-05',cit_by_quarter=taxes)
+        installment=schedule[schedule.category.eq('cit_provisional')]
+        assert list(installment.date)==[TS('2025-02-03')]
+        assert list(installment.amount)==[100]
+
+
+def test_next_month_payroll_rolled_into_requested_end_is_not_lost():
+    schedule=cal.obligation_schedule(dict(payday=1,payroll_lag_month=0,payroll_gross=100),
+        '2025-05-01','2025-05-31')
+    pay=schedule[schedule.category.eq('payroll_net')]
+    assert list(pay.date)==[TS('2025-05-30')]
+    assert list(pay.amount)==[89.5]
+
+
+def test_annual_cit_adds_only_declared_remaining_tax_once():
+    schedule=cal.obligation_schedule({},'2025-02-01','2025-04-30',cit_by_year={2024:125})
+    final=schedule[schedule.category.eq('cit_final')]
+    assert list(final.date)==[TS('2025-03-31')]
+    assert list(final.amount)==[125]
+    assert not cal.obligation_schedule({},'2025-02-01','2025-04-30').category.eq('cit_final').any()
+    with pytest.raises(ValueError):
+        cal.obligation_schedule({},'2025-02-01','2025-04-30',cit_by_year={2024:-1})
+
+
+@pytest.mark.parametrize('start,end',[('2025-02-02','2025-02-05'),('2025-05-02','2025-05-31'),('2024-04-30','2024-05-02')])
+def test_slicing_calendar_does_not_change_due_events(start,end):
+    firm=dict(payroll_gross=100,payday=1,payroll_lag_month=0,rent=20,rent_day=31)
+    kwargs=dict(cit_by_quarter={TS('2024-12-31'):100},cit_by_year={2024:125})
+    full=cal.obligation_schedule(firm,'2024-01-01','2026-01-01',**kwargs)
+    expected=full[full.date.between(TS(start),TS(end))].reset_index(drop=True)
+    actual=cal.obligation_schedule(firm,start,end,**kwargs)
+    pd.testing.assert_frame_equal(actual,expected)
+
+
 # ----------------------------------------------------------------------------- T0
 def test_mst_checksum():
     assert valid_mst("0100109106")

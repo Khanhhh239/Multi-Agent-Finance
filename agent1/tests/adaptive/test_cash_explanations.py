@@ -142,7 +142,7 @@ def test_full_ledger_contributions_reconcile_to_served_path_and_do_not_follow_qu
     assert d["risk_focus"]["trigger"] == "expected_shortfall"
     assert d["risk_focus"]["week"] == 1 and d["risk_focus"]["expected_shortfall"] == 250
     assert d["risk_focus"]["largest_scheduled_outflows"][0]["expense_id"] == "E1"
-    assert d["risk_focus"]["unknown_outflow_weeks"] == []
+    assert d["risk_focus"]["unknown_outflow_weeks"] == [1, 2, 4]
 
 
 def test_timing_scenarios_never_pull_tail_forward_and_do_not_lose_delayed_money(book):
@@ -389,6 +389,7 @@ def test_export_contains_full_contributions_scenarios_and_legacy_support(book):
     assert wb["So sánh thời điểm"].max_row == 4
     assert wb["Kịch bản từng tuần"].max_row == 13
     del plan["cash_decomposition"]
+    del plan["t5"]
     legacy = load_workbook(BytesIO(workbook_bytes(plan, "TEST")))
     assert legacy.sheetnames == [
         "Kết quả dự báo",

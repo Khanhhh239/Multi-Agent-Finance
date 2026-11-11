@@ -403,10 +403,15 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 category="Lương",
                 known_at="01/11/2026",
             ),
+            "expense_payments": dict(
+                settlement_id="DEMO_TRA001", expense_id="DEMO_CHI001",
+                bank_id="DEMO_BANK_CHI001", payment_date="30/11/2026",
+                amount="20000000", known_at="30/11/2026",
+            ),
         }
         example = examples[kind]
         for field, value in example.items():
-            if field.endswith("date") or field in ("date", "known_at"):
+            if field.endswith("date") or field in ("date", "known_at", "refund_approved_at"):
                 example[field] = datetime.strptime(value, "%d/%m/%Y").strftime(date_format)
             elif field in ("amount", "opening_balance", "closing_balance") and number_format == "vi-VN":
                 example[field] = f"{int(value):,}".replace(",", ".") + ",00"
@@ -1218,7 +1223,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             result.update(
                 id=uuid.uuid4().hex,
                 created_at=datetime.now(timezone.utc).isoformat(),
-                band_protocol="cash-v2",
+                band_protocol="cash-v3-t5-ledger",
             )
             if result["accounts"]:
                 from agent1.adaptive.cash_history import calibrate_bands

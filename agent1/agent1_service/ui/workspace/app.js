@@ -28,6 +28,10 @@
   const labels = {
     field: "Trường", before: "Trước khi sửa", after: "Sau khi sửa",
     invoices: "Hóa đơn", bank: "Dòng sao kê", payments: "Thanh toán", statements: "Kỳ sao kê", actions: "Nhật ký", outflows: "Lịch cố định · T5",
+    expense_payments: "Thanh toán nghĩa vụ T5", settlement_id: "Mã thanh toán nghĩa vụ",
+    forecast_date: "Ngày dự kiến trả/nhận còn lại", source: "Nguồn hồ sơ/hợp đồng",
+    verified: "Đã xác nhận hồ sơ (true/false)", refund_approved_at: "Ngày quyết định hoàn",
+    business_day: "Dời ngày (none/following/preceding)", replaces_expense_id: "Mã lịch được thay thế",
     identifier: "Mã bản ghi", status: "Trạng thái", remaining_amount: "Còn lại", allocated_amount: "Đã phân bổ",
     value: "Giá trị", source_file: "Tên tệp", imported_by: "Người nạp", created_at: "Thời gian",
     new: "Mới", changed: "Sửa", unchanged: "Trùng giữ nguyên", error_count: "Lỗi", rows: "Số dòng", valid_rows: "Dòng hợp lệ",
@@ -114,6 +118,8 @@
     poll = null;
   let recordsOffset = 0, importsOffset = 0, recordsRequest = 0, importsRequest = 0;
   const statusLabels = {recorded:"Đã ghi nhận", open:"Chưa thanh toán", partial:"Một phần", paid:"Đã tất toán",
+    cancelled:"Đã hủy nghĩa vụ", replaced:"Đã thay thế", overdue:"Quá hạn, còn phải trả",
+    awaiting_approval:"Chờ quyết định hoàn", awaiting_refund_date:"Cần ngày dự kiến nhận hoàn mới",
     inactive:"Chưa có hiệu lực / chứng từ liên quan", written_off:"Đã xóa nợ", outgoing:"Tiền chi", non_ar:"Ngoài công nợ",
     allocated:"Đã phân bổ hết", pending:"Chưa phân bổ", linked:"Có liên kết sao kê", unlinked:"Chưa liên kết sao kê",
     future:"Chưa đến ngày ghi nhận", committed:"Đã lưu", preview:"Đã kiểm tra, chưa lưu", invalid:"Có lỗi, chưa lưu",
@@ -154,6 +160,7 @@
     return iso;
   }
   const dateColumns = new Set(["date", "issue_date", "due_date", "payment_date", "known_at",
+    "forecast_date", "refund_approved_at",
     "promised_date", "promise_date", "start_date", "end_date", "cutoff", "event_date", "adjusts_issue_date"]);
   $("today").textContent = displayDate(localDate);
   for (const id of ["train-asof", "forecast-cutoff", "actuals-date"]) {
@@ -450,6 +457,7 @@
                     bank: "dòng sao kê",
                     statements: "kỳ đã đối chiếu",
                     outflows: "lần đến hạn T5",
+                    expense_payments: "thanh toán nghĩa vụ T5",
                     invoice_events: "sự kiện hủy hóa đơn",
                   }[key] || key,
           ),
@@ -511,7 +519,8 @@
     bank:["identifier", "account", "date", "direction", "amount", "allocated_amount", "remaining_amount", "status"],
     payments:["identifier", "invoice_id", "bank_id", "payment_date", "amount", "status"],
     statements:["identifier", "account", "start_date", "end_date", "opening_balance", "closing_balance"],
-    outflows:["identifier", "date", "amount", "category", "known_at"],
+    outflows:["identifier", "date", "amount", "allocated_amount", "remaining_amount", "category", "status", "known_at"],
+    expense_payments:["identifier", "expense_id", "bank_id", "payment_date", "amount", "known_at"],
     actions:["identifier", "invoice_id", "date", "kind", "promise_date"],
     invoice_events:["identifier", "invoice_id", "event_type", "event_date", "known_at"],
   };
@@ -1717,6 +1726,17 @@
       return panel;
     }
     const money = value => fmt.format(Math.abs(value) < 0.000001 ? 0 : value) + " VND";
+    let t5Ledger = null;
+    if (plan.t5) {
+      const ledger = node("details", undefined, "cash-details"), content = node("div");
+      ledger.append(node("summary", "Nghĩa vụ T5: đã thanh toán, còn lại và khoản quá hạn"), content);
+      cashPagedTable(content, ["Mã", "Đến hạn", "Loại", "Trạng thái", "Nghĩa vụ", "Đã thanh toán", "Còn lại", "Dự kiến còn lại"],
+        plan.t5.obligations.map(r => [r.expense_id, displayDate(r.due_date), r.category, statusLabels[r.status] || r.status,
+          money(r.obligation_amount), money(r.settled_amount), money(r.remaining_amount), r.forecast_date ? displayDate(r.forecast_date) : "—"]));
+      t5Ledger = ledger;
+      if (plan.t5.obligations.some(r => r.status === "overdue")) panel.append(node("p", "Khoản chi đến/quá hạn chưa thanh toán được đưa sang ngày làm việc kế tiếp. Có thể sửa ngày dự kiến hoặc nạp thanh toán thực tế để cập nhật phần còn lại.", "warning-box"));
+      if (plan.t5.obligations.some(r => r.status === "awaiting_refund_date")) panel.append(node("p", "Có khoản hoàn quá ngày dự kiến nhận. Khoản này chưa được cộng vào dự thu; cần xác nhận ngày nhận mới.", "warning-box"));
+    }
     panel.append(node("p", "Ngày " + displayDate(d.cutoff) + " · Phiên bản " + (d.model_version || "Theo lịch sử") + " · Phân rã số dư kỳ vọng.", "muted"));
     const f = d.risk_focus, risk = node("div", undefined, "cash-risk-focus");
     let message;
@@ -1758,8 +1778,8 @@
     const renderRows = () => {
       const week = weekSelect.value === "all" ? null : Number(weekSelect.value);
       const selected = week ? [d.weeks[week - 1]] : d.weeks;
-      const sum = field => selected.reduce((total, row) => total + row[field], 0);
-      summary.textContent = "Dự thu " + money(sum("cash_in")) + " = công nợ mở " + money(sum("ar_in")) + " + bán thu ngay " + money(sum("cash_sale_in")) + " + bán chịu mới " + money(sum("new_credit_in")) + ". Dự chi " + money(sum("cash_out")) + " = lịch đã biết " + money(sum("scheduled_out")) + " + chi biến đổi bổ sung " + money(sum("variable_cost_topup")) + ".";
+      const sum = field => selected.reduce((total, row) => total + (row[field] || 0), 0);
+      summary.textContent = "Dự thu " + money(sum("cash_in")) + " = công nợ mở " + money(sum("ar_in")) + " + bán thu ngay " + money(sum("cash_sale_in")) + " + bán chịu mới " + money(sum("new_credit_in")) + " + hoàn theo hồ sơ T5 " + money(sum("obligation_in")) + ". Dự chi " + money(sum("cash_out")) + " = lịch đã biết " + money(sum("scheduled_out")) + " + chi biến đổi bổ sung " + money(sum("variable_cost_topup")) + ".";
       const byCustomer = group.value === "customers", query = search.value.trim().toLocaleLowerCase("vi");
       const source = (byCustomer ? d.customers : d.invoices).filter(row =>
         ((row.invoice_id || "") + " " + row.customer_id).toLocaleLowerCase("vi").includes(query));
@@ -1771,17 +1791,24 @@
           money(row.outstanding), money(amountFor(row)), money(pending)];
       });
       cashPagedTable(receipts, [byCustomer ? "Khách hàng" : "Hóa đơn", byCustomer ? "Số hóa đơn" : "Khách hàng", "Dư nợ tại ngày chốt", week ? "Dự thu tuần " + week : "Dự thu trong kỳ", week ? "Chưa dự thu đến tuần " + week : "Chưa dự thu trong kỳ"], rows);
-      cashPagedTable(expenses, ["Mã khoản chi", "Ngày", "Loại chi", "Số tiền gốc", "Sau kịch bản"],
+      cashPagedTable(expenses, ["Mã khoản chi", "Ngày", "Loại chi", "Còn phải chi", "Sau kịch bản"],
         d.outflows.filter(row => !week || row.week === week).map(row => [row.expense_id, displayDate(row.date), row.category, money(row.original_amount), money(row.amount)]));
     };
     weekSelect.value = "all"; group.value = "invoices"; search.value = "";
     weekSelect.onchange = group.onchange = search.oninput = renderRows;
     panel.append(filters, summary, receipts, node("p", "Số tiền là kỳ vọng phân bổ theo tuần, không phải cam kết thu hoặc xác suất tất toán 4 tuần. Thu hoạt động và hóa đơn chưa phát hành nằm ở nhóm riêng.", "muted"), expenseDetails);
     renderRows();
+    if (d.inflows?.length) {
+      const refunds = node("details", undefined, "cash-details"), content = node("div");
+      refunds.append(node("summary", "Tiền hoàn theo hồ sơ đã duyệt"), content);
+      cashPagedTable(content, ["Mã", "Ngày dự kiến nhận", "Số còn nhận", "Nguồn hồ sơ"],
+        d.inflows.map(r => [r.expense_id, displayDate(r.date), money(r.amount), r.source]));
+      panel.append(refunds);
+    }
     const weekly = node("details", undefined, "cash-details"), weeklyScroll = node("div", undefined, "table-scroll");
     weekly.append(node("summary", "Đối chiếu thu, chi và thay đổi số dư từng tuần"), weeklyScroll);
-    weeklyScroll.append(cashDetailTable(["Tuần", "Số dư đầu tuần", "+ Công nợ mở", "+ Bán thu ngay", "+ Bán chịu mới", "− Lịch chi", "− Chi biến đổi bổ sung", "Thay đổi số dư", "Số dư cuối tuần"],
-      d.weeks.map(w => [w.week, ...[w.opening_balance, w.ar_in, w.cash_sale_in, w.new_credit_in, w.scheduled_out, w.variable_cost_topup, w.net_change, w.balance].map(money)])));
+    weeklyScroll.append(cashDetailTable(["Tuần", "Số dư đầu tuần", "+ Công nợ mở", "+ Bán thu ngay", "+ Bán chịu mới", "+ Hoàn theo hồ sơ T5", "− Lịch chi", "− Chi biến đổi bổ sung", "Thay đổi số dư", "Số dư cuối tuần"],
+      d.weeks.map(w => [w.week, ...[w.opening_balance, w.ar_in, w.cash_sale_in, w.new_credit_in, w.obligation_in || 0, w.scheduled_out, w.variable_cost_topup, w.net_change, w.balance].map(money)])));
     panel.append(weekly, node("h3", "Nếu tiền thu sớm hoặc chậm 2 tuần?"));
     const comparison = d.timing_comparison, comparisonScroll = node("div", undefined, "table-scroll");
     comparisonScroll.append(cashDetailTable(["Kịch bản", "Dự thu công nợ", "Số dư thấp nhất", "Chênh mức thấp nhất", "Số dư cuối kỳ", "Tuần đầu dưới ngưỡng", "Thu bị đẩy ra ngoài kỳ"],
@@ -1798,6 +1825,7 @@
     assumptions.append(node("summary", "Cách phân bổ tiền và giới hạn mô phỏng"));
     d.assumptions.forEach(note => assumptions.append(node("p", note)));
     panel.append(assumptions);
+    if (t5Ledger) panel.append(t5Ledger);
     return panel;
   }
   function renderForecast() {
@@ -1901,7 +1929,8 @@
             ({
               unknown: "Chưa biết",
               confirmed_zero: "Đã xác nhận 0",
-              scheduled: "Có lịch",
+              scheduled: "Đã xác nhận đủ lịch",
+              scheduled_unconfirmed: "Có khoản chi, chưa xác nhận đủ",
             })[v] || "Chưa biết",
           below_floor_probability: (v) =>
             v == null ? "—" : Math.round(v * 100) + "%",

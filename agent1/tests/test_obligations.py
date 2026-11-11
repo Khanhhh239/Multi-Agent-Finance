@@ -93,3 +93,61 @@ def test_contract_verification_is_preserved_in_strict_schedule(kind,verified):
     else:
         with pytest.raises(ValueError,match='chưa xác minh'):
             extended_schedule(events,**kwargs)
+
+
+def test_refund_schedule_retains_approval_knowledge_when_reused_at_earlier_cutoff():
+    schedule=extended_schedule([event(category='vat_refund',refund_approved_at='2025-02-10')],
+        asof='2025-02-12',start='2025-02-01',end='2025-02-28')
+    assert schedule.known_at.iloc[0]==pd.Timestamp('2025-02-10')
+    assert weekly_extended_cash(schedule,'2025-02-02')[0].sum()==0
+    assert weekly_extended_cash(schedule,'2025-02-12')[0].sum()==100
+
+
+def test_versions_select_latest_known_and_ignore_future_same_id():
+    versions=[event(),event(amount=150,known_at='2025-02-10'),event(amount=999,known_at='2025-03-01')]
+    kwargs=dict(start='2025-02-01',end='2025-02-28')
+    assert extended_schedule(versions,asof='2025-02-02',**kwargs).amount.sum()==100
+    assert extended_schedule(list(reversed(versions)),asof='2025-02-12',**kwargs).amount.sum()==150
+    assert extended_schedule([*versions,event(known_at='2025-02-15',status='cancelled')],
+        asof='2025-02-16',**kwargs).empty
+
+
+def test_rent_amendment_keeps_previous_price_before_knowledge_date():
+    steps=[dict(effective_from='2025-01-01',effective_to='2025-12-31',amount=100,known_at='2025-01-01'),
+        dict(effective_from='2025-03-01',amount=150,known_at='2025-02-15')]
+    kwargs=dict(months=['2025-03'],due_day=5,known_at='2025-01-01',source='HĐ')
+    events=rent_events('R',steps,**kwargs)
+    assert len(events)==2 and len({r['obligation_id'] for r in events})==1
+    for cutoff,expected in [('2025-02-01',100),('2025-02-16',150)]:
+        result=extended_schedule(events,asof=cutoff,start='2025-03-01',end='2025-03-31')
+        assert result.amount.sum()==expected
+    earlier=rent_events('R',steps,asof='2025-02-01',**kwargs)
+    assert len(earlier)==1 and earlier[0]['amount']==100
+
+
+def test_rent_same_knowledge_date_cannot_choose_between_overlapping_prices():
+    with pytest.raises(ValueError,match='chồng lấn'):
+        rent_events('R',[dict(effective_from='2025-01-01',amount=100),
+            dict(effective_from='2025-02-01',amount=150)],months=['2025-03'],due_day=5,
+            known_at='2025-01-01',source='HĐ')
+
+
+def test_loan_installment_ids_do_not_shift_when_future_installments_are_inserted():
+    original=[dict(date='2025-02-20',principal=100,interest=10)]
+    kwargs=dict(known_at='2025-01-01',source='HĐ')
+    first=loan_events('L',original,**kwargs)
+    amended=loan_events('L',[dict(date='2025-01-20',principal=50,interest=5,known_at='2025-03-01'),*original],**kwargs)
+    assert first==amended[2:]
+
+
+def test_rescheduled_loan_keeps_original_installment_identity_until_amendment_known():
+    rows=loan_events('L',[
+        dict(installment_id='P1',date='2025-02-20',principal=100,interest=10,known_at='2025-01-01'),
+        dict(installment_id='P1',date='2025-02-25',principal=100,interest=12,known_at='2025-02-15'),
+    ],known_at='2025-01-01',source='Loan contract')
+    kwargs=dict(start='2025-02-01',end='2025-02-28')
+    before=extended_schedule(rows,asof='2025-02-02',**kwargs)
+    after=extended_schedule(rows,asof='2025-02-16',**kwargs)
+    assert set(before.obligation_id)==set(after.obligation_id)
+    assert set(before.date)=={pd.Timestamp('2025-02-20')} and before.amount.sum()==110
+    assert set(after.date)=={pd.Timestamp('2025-02-25')} and after.amount.sum()==112
