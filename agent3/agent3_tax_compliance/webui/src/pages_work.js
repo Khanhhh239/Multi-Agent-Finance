@@ -1,5 +1,5 @@
 // Overview, data intake and the review queue.
-import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, needWorkspace, notice, post, put,
+import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, moneyShort, needWorkspace, notice, post, put,
   state, store, table, tag } from './core.js';
 import { aiToolbar, explainBox } from './pages_ai.js';
 import { pageWelcome } from './pages_config.js';
@@ -18,10 +18,52 @@ export async function pageOverview() {
   const files = ws.files;
   const period = rep?.meta.period ? ` Dữ liệu từ ${dmy(rep.meta.period[0])} đến ${dmy(rep.meta.period[1])}.` : '';
 
-  const iconShield = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
-  const iconGavel = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 13-7.5 7.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L11 10"/><path d="m16 16 6-6"/><path d="m8 8 6-6"/><path d="m9 7 8 8"/><path d="m21 11-8-8"/></svg>`;
-  const iconReview = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><circle cx="11" cy="14" r="3"/><path d="m13.5 16.5 2.5 2.5"/></svg>`;
-  const iconLightbulb = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`;
+
+  // Series for the sparklines and the small table, from the report only (nothing estimated).
+  // By month when the data spans several months; otherwise by week, so a single month still shows a shape.
+  const dated = (rep?.items || []).filter((it) => ['AT_RISK', 'REVIEW', 'OPPORTUNITY'].includes(it.status))
+    .map((it) => ({ it, d: (invoiceOf(it.invoice_keys[0])?.issue_date || '').slice(0, 10) })).filter((x) => x.d);
+  const byWeek = new Set(dated.map((x) => x.d.slice(0, 7))).size < 2;
+  const bucketOf = (d) => {
+    if (!byWeek) return d.slice(0, 7);
+    const day = Number(d.slice(8, 10));
+    return `${d.slice(0, 7)}-${String(Math.min(4, Math.floor((day - 1) / 7)) + 1)}`;   // four buckets per month: 1-7, 8-14, 15-21, 22-end
+  };
+  const bucketLabel = (k) => {
+    if (!byWeek) return `Tháng ${Number(k.slice(5, 7))}/${k.slice(0, 4)}`;
+    const w = Number(k.slice(8)); const mo = Number(k.slice(5, 7));
+    const last = new Date(Number(k.slice(0, 4)), mo, 0).getDate();
+    return `${(w - 1) * 7 + 1}–${w === 4 ? last : w * 7}/${mo}/${k.slice(0, 4)}`;
+  };
+  const monthly = (() => {
+    const m = {};
+    dated.forEach(({ it, d }) => { const e = m[bucketOf(d)] ||= { AT_RISK: 0, REVIEW: 0, OPPORTUNITY: 0 }; e[it.status] += Number(it.amount || 0); });
+    return Object.keys(m).sort().map((k) => ({ k, ...m[k] }));
+  })();
+  const spark = (status) => {
+    const v = monthly.map((e) => e[status]);
+    if (v.length < 2 || !v.some(Boolean)) return '';
+    const W = 92; const H = 28; const max = Math.max(...v);
+    const pts = v.map((x, i) => [2 + (i / (v.length - 1)) * (W - 8), H - 4 - (x / max) * (H - 10)]);
+    const last = pts[pts.length - 1];
+    return `<svg class="spark spark-${status.toLowerCase()}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Diễn biến theo tháng, ${v.length} tháng"><polyline points="${pts.map((q) => q.map((n) => n.toFixed(1)).join(',')).join(' ')}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.6"/></svg>`;
+  };
+  const monthChart = () => {
+    if (monthly.length < 2) return '';
+    const total = (e) => e.AT_RISK + e.REVIEW;
+    const max = Math.max(...monthly.map(total), 1);
+    const X = 118; const BW = 300; const ROW = 34;
+    const rows = monthly.map((e, i) => {
+      const y = 10 + i * ROW;
+      const wr = (e.AT_RISK / max) * BW; const wv = (e.REVIEW / max) * BW;
+      const parts = [e.AT_RISK ? `${moneyShort(e.AT_RISK) || money(e.AT_RISK)} có nguy cơ` : '', e.REVIEW ? `${moneyShort(e.REVIEW) || money(e.REVIEW)} cần xem xét` : ''].filter(Boolean);
+      return `<text class="t-month" x="0" y="${y + 15}">${esc(bucketLabel(e.k))}</text>
+        ${wr ? `<rect class="bar-risk" x="${X}" y="${y}" width="${wr.toFixed(1)}" height="20"/>` : ''}${wv ? `<rect class="bar-review" x="${(X + wr).toFixed(1)}" y="${y}" width="${wv.toFixed(1)}" height="20"/>` : ''}
+        <text class="t-val" x="${(X + wr + wv + 10).toFixed(1)}" y="${y + 15}">${esc(parts.join(' · ') || 'không có việc')}</text>`;
+    }).join('');
+    return `<section class="tufte" aria-labelledby="tufte-h"><h2 class="section" id="tufte-h">${byWeek ? 'Thuế cần chú ý theo tuần lập hóa đơn' : 'Thuế cần chú ý theo tháng lập hóa đơn'}</h2>
+      <svg class="tufte-svg" viewBox="0 0 700 ${monthly.length * ROW + 14}" role="img" aria-label="Thuế có nguy cơ và cần xem xét theo tháng">${rows}</svg></section>`;
+  };
 
   app().innerHTML = `<span class="eyebrow">Trợ lý giám sát thuế GTGT</span>
     <h1 class="page">${esc(ws.name)}</h1>
@@ -39,33 +81,37 @@ export async function pageOverview() {
       <div class="kpi kpi-risk">
         <div class="kpi-head">
           <span class="label">Thuế đầu vào có nguy cơ bị loại</span>
-          <div class="kpi-icon">${iconShield}</div>
+          ${spark('AT_RISK')}
         </div>
         <div class="value risk">${t ? money(t.at_risk_vat) : '—'}</div>
+        ${t && moneyShort(t.at_risk_vat) ? `<span class="short-read">khoảng ${moneyShort(t.at_risk_vat)}</span>` : ''}
         <div class="sub">${t ? `${t.at_risk_invoices} hóa đơn vi phạm điều kiện khấu trừ` : 'Chưa phân tích'}</div>
       </div>
       <div class="kpi">
         <div class="kpi-head">
-          <span class="label">Ước tính phạt tối đa (khai sai 20%)</span>
-          <div class="kpi-icon">${iconGavel}</div>
+          <span class="label">Ước tính phạt tối đa</span>
+          ${spark('AT_RISK')}
         </div>
         <div class="value">${t ? money(t.penalty_estimate) : '—'}</div>
+        ${t && moneyShort(t.penalty_estimate) ? `<span class="short-read">khoảng ${moneyShort(t.penalty_estimate)}</span>` : ''}
         <div class="sub">${t ? `${Math.round(t.penalty_rate * 100)}% số thuế khai thiếu theo luật thuế` : 'Chưa có số liệu'}</div>
       </div>
       <div class="kpi kpi-warn">
         <div class="kpi-head">
           <span class="label">Hóa đơn cần người xem xét</span>
-          <div class="kpi-icon">${iconReview}</div>
+          ${spark('REVIEW')}
         </div>
         <div class="value warn">${t ? money(t.review_vat) : '—'}</div>
+        ${t && moneyShort(t.review_vat) ? `<span class="short-read">khoảng ${moneyShort(t.review_vat)}</span>` : ''}
         <div class="sub">${t ? `${t.review_invoices} hóa đơn cần đối chiếu chứng từ` : 'Không có hóa đơn chờ'}</div>
       </div>
       <div class="kpi kpi-opportunity">
         <div class="kpi-head">
           <span class="label">Có thể đang bỏ sót khấu trừ</span>
-          <div class="kpi-icon">${iconLightbulb}</div>
+          ${spark('OPPORTUNITY')}
         </div>
         <div class="value">${t ? money(t.opportunity_vat) : '—'}</div>
+        ${t && moneyShort(t.opportunity_vat) ? `<span class="short-read">khoảng ${moneyShort(t.opportunity_vat)}</span>` : ''}
         <div class="sub">Hóa đơn trên cổng thuế chưa có tệp lưu trữ</div>
       </div>
     </div>
@@ -79,6 +125,8 @@ export async function pageOverview() {
       </details>` : ''}
       <span id="run-msg"></span>
     </div>
+
+    ${monthChart()}
 
     <div class="quick-links">
       <a href="#/so-lieu"><span>📊</span> Số liệu thuế GTGT theo kỳ</a>
@@ -269,7 +317,7 @@ export async function pageReview() {
     if (!body.action || !body.evidence || !body.by) { toast('Cần quyết định, chứng từ hoặc lý do và người duyệt', '', 'error'); return; }
     store.set('agent3.reviewer', body.by);
     const submit = $('#bulk-go'); submit.disabled = true;
-    try { const r = await post(`/api/workspaces/${state.ws}/decisions/bulk`, body); toast(`Đã ghi ${r.decisions} quyết định`, `Thuế có nguy cơ còn ${Number(r.totals.at_risk_vat).toLocaleString('vi-VN')} đ`); rerender(); }
+    try { const r = await post(`/api/workspaces/${state.ws}/decisions/bulk`, body); toast(`Đã ghi ${r.decisions} quyết định`, `Thuế có nguy cơ còn ${Number(r.totals.at_risk_vat).toLocaleString('vi-VN')} đ`); window.sonStamp?.(body.by); rerender(); }
     catch (err) { if (submit.isConnected) { toast('Không ghi được', err.message, 'error'); submit.disabled = false; } }
   };
   $('#q').oninput = () => { shown = PAGE; paint(); }; $('#month').onchange = () => { shown = PAGE; paint(); };
@@ -420,6 +468,7 @@ function openItem(it, index) {
       try {
         const r = await post(`/api/workspaces/${state.ws}/decisions`, { ...d, invoice_key: it.invoice_keys[0] });
         toast('Đã lưu quyết định', `Thuế có nguy cơ còn ${Number(r.totals.at_risk_vat).toLocaleString('vi-VN')} đ`);
+        window.sonStamp?.(d.by);
         if (goNext && after) { try { sessionStorage.setItem('agent3.openNext', itemId(after)); } catch { /* private mode */ } }
         closeDialog(); rerender();
       }

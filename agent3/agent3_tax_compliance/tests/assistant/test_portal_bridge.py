@@ -27,14 +27,17 @@ def isolated_function(name, env):
 
 
 def test_launch_passes_trusted_bridge_environment_after_custom_config(tmp_path):
-    env = dict(os=os, company=lambda: {}, agent_root=lambda aid: tmp_path, agent_port=lambda aid: 8640,
-               agent_python=lambda aid: 'python', agent_cfg=lambda aid: {'env': {'AGENT3_PLATFORM_TOKEN': 'untrusted override'}},
+    demo = {'code': 'MPX10', 'tax_code': '0999999905'}
+    env = dict(os=os, json=json, CFG={'demo_company': demo}, company=lambda: {}, agent_root=lambda aid: tmp_path, agent_port=lambda aid: 8640,
+               agent_python=lambda aid: 'python', agent_cfg=lambda aid: {'env': {'AGENT3_PLATFORM_TOKEN': 'untrusted override',
+                                                                                 'AGENT3_DEMO_COMPANY': '{}'}},
                path_of=lambda value, default: value, COMPANY_FILE=tmp_path / 'company.json', ORIGIN='http://127.0.0.1:8800', AGENT3_TOKEN='backend secret')
     args, cwd, child_env = isolated_function('launch_spec', env)('agent3')
     assert args == ['python', '-m', 'src.assistant.web']
     assert child_env['AGENT3_PLATFORM_TOKEN'] == 'backend secret'
     assert child_env['AGENT3_COMPANY_PROFILE_FILE'] == str(tmp_path / 'company.json')
     assert child_env['AGENT3_PORTAL_URL'] == 'http://127.0.0.1:8800'
+    assert json.loads(child_env['AGENT3_DEMO_COMPANY']) == demo
 
 
 @pytest.mark.parametrize('status,expected', [(200, 'ok'), (0, 'offline'), (403, 'error'), (404, 'error')])

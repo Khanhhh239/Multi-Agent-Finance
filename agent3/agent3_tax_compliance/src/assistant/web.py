@@ -47,7 +47,8 @@ def _bridge_save(ws, data, by):
 
 
 bridge = Bridge(os.environ.get('AGENT3_COMPANY_PROFILE_FILE'), os.environ.get('AGENT3_PLATFORM_TOKEN', ''),
-                os.environ.get('AGENT3_PORTAL_URL', ''), WORKSPACES, _bridge_save)
+                os.environ.get('AGENT3_PORTAL_URL', ''), WORKSPACES, _bridge_save,
+                demo_company=json.loads(os.environ.get('AGENT3_DEMO_COMPANY', 'null')))
 
 
 @app.on_event('startup')

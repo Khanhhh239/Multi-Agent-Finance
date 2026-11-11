@@ -35,13 +35,14 @@ def etag(ws):
 
 
 class Bridge:
-    def __init__(self, source, token, portal_url, root, save):
+    def __init__(self, source, token, portal_url, root, save, demo_company=None):
         self.source = Path(source) if source else None
         self.token = token
         u = urlsplit(portal_url)
         self.portal_url = portal_url.rstrip('/') if u.scheme == 'http' and u.hostname in ('localhost', '127.0.0.1', '::1') and not u.username and not u.password and u.path in ('', '/') and not u.query and not u.fragment else None
         self.root = root
         self.save = save
+        self.demo_company = demo_company
         self.bound = None
 
     def context(self):
@@ -71,19 +72,24 @@ class Bridge:
                     or not isinstance(industry, list) or any(not isinstance(x, str) for x in industry)):
                 return dict(base, state='invalid_profile')
             revision = digest(dict(code=c.get('code'), profile=profile))
-            result = dict(base, profile=profile, profile_revision=revision, state='sync_required')
+            # Only the server configuration can register a demo identity.
+            simulated = self.demo_company == {'code': c.get('code'), 'tax_code': wid}
+            result = dict(base, profile=profile, profile_revision=revision, state='sync_required',
+                          simulated=simulated)
             matches = []
             for p in self.root.glob('*/pack.json'):
                 old = json.loads(p.read_text(encoding='utf-8'))
                 if not isinstance(old, dict) or not isinstance(old.get('profile'), dict):
                     return dict(result, state='conflict')
                 if str(old.get('profile', {}).get('tax_code', '')).replace('-', '') == wid:
-                    if old.get('simulated'):
+                    if old.get('simulated', False) is not simulated:
                         return dict(result, state='conflict')
                     matches.append(p.parent.name)
             if len(matches) > 1:
                 return dict(result, state='conflict')
             chosen = matches[0] if matches else wid
+            if simulated and chosen != wid:
+                return dict(result, state='conflict')
             if not re.fullmatch(r'[a-z0-9][a-z0-9-]{1,40}', chosen):
                 return dict(result, state='conflict')
             if (self.root / chosen).is_symlink():
@@ -109,6 +115,8 @@ class Bridge:
         ws = self.root / c['workspace_id']
         old = json.loads((ws / 'pack.json').read_text(encoding='utf-8')) if (ws / 'pack.json').exists() else dict(pack_version=1, policies=[], thresholds={}, bank_formats=[], reference_lists=[], ai_categories=[], days_off=[])
         next_pack = dict(old, profile=c['profile'])
+        if c['simulated']:
+            next_pack['simulated'] = True
         ws.mkdir(parents=True, exist_ok=True)
         if old != next_pack:
             self.save(ws, next_pack, 'portal')

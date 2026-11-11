@@ -53,7 +53,7 @@ export async function bankProposals(el) {
     const who = $('#reviewer').value.trim();
     if (accept && !who) { $('#pmsg').innerHTML = notice('warning', 'Cần tên người duyệt'); return; }
     store.set('agent3.reviewer', who);
-    try { await post(`/api/workspaces/${state.ws}/ai/bank/decide`, { txn_id: s.proposals[n].txn_id, invoice_key: s.proposals[n].invoice_key, accept, by: who }); rerender(); }
+    try { await post(`/api/workspaces/${state.ws}/ai/bank/decide`, { txn_id: s.proposals[n].txn_id, invoice_key: s.proposals[n].invoice_key, accept, by: who }); if (accept) window.sonStamp?.(who); rerender(); }
     catch (err) { $('#pmsg').innerHTML = notice('error', 'Không ghi được', err.message); }
   };
   el.querySelectorAll('[data-acc]').forEach((b) => { b.onclick = () => decide(Number(b.dataset.acc), true); });

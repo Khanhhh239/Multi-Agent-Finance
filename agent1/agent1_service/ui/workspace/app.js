@@ -446,6 +446,7 @@
                     bank: "dòng sao kê",
                     statements: "kỳ đã đối chiếu",
                     outflows: "lần đến hạn T5",
+                    invoice_events: "sự kiện hủy hóa đơn",
                   }[key] || key,
           ),
         );

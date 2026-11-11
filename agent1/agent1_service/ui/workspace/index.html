@@ -12,8 +12,9 @@
     <script defer src="/workspace-assets/app.js"></script>
   <link rel="stylesheet" href="/workspace-assets/ledger.css" />
   <link rel="stylesheet" href="/workspace-assets/workbench.css" />
-  <link rel="stylesheet" href="/workspace-assets/platform-theme.css?v=c8d21200">
-<script src="/workspace-assets/platform-theme.js?v=103a67db"></script>
+
+<script src="/workspace-assets/platform-theme.js?v=3dfd7376"></script>
+<link rel="stylesheet" href="/workspace-assets/platform-theme.css?v=8ebe092b">
 </head>
   <body>
     <a class="skip" href="#main">Đến nội dung</a>
@@ -24,7 +25,7 @@
       >
       <nav aria-label="Điều hướng chính">
         <button data-view="forecast"><img src="/workspace-assets/vendor/chart-line.svg" alt="">Dự báo</button>
-        <button data-view="data"><img src="/workspace-assets/vendor/database-import.svg" alt="">Dữ liệu</button>
+        <button data-view="data" class="reconciliation-nav"><img src="/workspace-assets/vendor/database-import.svg" alt=""><span class="standalone-data-label">Dữ liệu</span><span class="embedded-data-label">Đối soát</span></button>
         <button data-view="records"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Sổ dữ liệu</button>
         <details class="nav-more">
           <summary>Quản lý</summary>
@@ -85,10 +86,13 @@
 
             </div>
           </div>
+          <details class="entry-help">
+          <summary>Hướng dẫn bắt đầu và dữ liệu xem thử</summary>
           <div class="entry-choice">
             <article><h2>Bắt đầu với doanh nghiệp của bạn</h2><p>Dùng sổ công nợ, các khoản đã thu và lịch chi của doanh nghiệp để lập kế hoạch dòng tiền.</p><button class="button primary" data-view="data">Thiết lập doanh nghiệp của tôi</button></article>
             <article><h2>Xem thử trước</h2><p>Khám phá Đại Phát: 12.780 hóa đơn, 120 khách hàng, sổ ngân hàng và bốn kịch bản dòng tiền có sẵn.</p><a class="button" href="/workspace-assets/dai-phat.html">Xem thử với dữ liệu mô phỏng →</a></article>
           </div>
+          </details>
           <div class="metrics">
             <div>
               <span>CÔNG NỢ ĐANG MỞ</span><strong id="kpi-outstanding">—</strong
@@ -218,9 +222,9 @@
           <div class="page-heading compact">
             <div>
               <div class="eyebrow">02 / DỮ LIỆU DOANH NGHIỆP</div>
-              <h1>Sổ dữ liệu doanh nghiệp</h1>
-              <a href="/workspace-assets/demo-dai-phat-input-train.zip" download>Tải đầu vào Đại Phát · 6 CSV + hướng dẫn train</a>
-              <p>
+              <h1><span class="standalone-data-label">Sổ dữ liệu doanh nghiệp</span><span class="embedded-data-label">Đối soát khoản thu</span></h1>
+              <a data-platform-hide href="/workspace-assets/demo-dai-phat-input-train.zip" download>Tải đầu vào Đại Phát · 6 CSV + hướng dẫn train</a>
+              <p data-platform-hide>
                 Chọn file, ghép cột, kiểm tra rồi mới lưu. Tệp gốc trên máy bạn
                 không bị sửa; Workspace lưu các bản ghi đã kiểm tra.
               </p>
@@ -230,11 +234,11 @@
             </button>
           </div>
           <div class="data-counts" id="data-counts"></div>
-          <div class="step-strip">
+          <div class="step-strip" data-platform-hide>
             <span class="selected">1. Chọn dữ liệu</span
             ><span>2. Kiểm tra & ghép cột</span><span>3. Xác nhận lưu</span>
           </div>
-          <div class="split-layout">
+          <div class="split-layout" data-platform-hide>
             <article class="paper">
               <form id="import-form">
                 <label id="sheet-label" hidden
@@ -357,7 +361,7 @@
             <p id="reconciliation-status" role="status">Nạp hóa đơn và sao kê để bắt đầu. Đối soát dùng chứng từ đã biết đến ngày hiện tại.</p>
             <details class="form-options"><summary>ⓘ Khi nào cần ghép thêm?</summary><p>Thanh toán đã có mã hóa đơn và mã dòng sao kê trong CSV được ghi nhận khi nạp file. Bạn không cần nhập lại ở đây.</p>
             <p>Nếu đã biết các hóa đơn cần ghép, nạp bảng thanh toán bổ sung bằng CSV để xử lý hàng loạt. Giữ cùng mã thanh toán khi cập nhật bản ghi cũ; một khoản chuyển cho nhiều hóa đơn có thể có nhiều dòng phân bổ.</p></details>
-            <button type="button" class="link-button" id="import-allocations">Nạp CSV thanh toán bổ sung</button>
+            <button type="button" class="link-button" id="import-allocations" data-platform-hide>Nạp CSV thanh toán bổ sung</button>
             <h3>Khoản thu chưa phân bổ</h3>
             <div id="pending-rows" class="table-scroll" aria-live="polite"></div>
             <h3>Đề xuất và hàng chờ kiểm tra</h3>
@@ -393,7 +397,7 @@
               <div id="reconciliation-history"><p class="muted">Chưa tải lịch sử.</p></div>
             </details>
           </article>
-          <article id="preview-panel" class="paper preview-panel" hidden>
+          <article id="preview-panel" class="paper preview-panel" data-platform-hide hidden>
             <div class="section-heading">
               <div>
                 <span class="eyebrow">KẾT QUẢ KIỂM TRA</span>

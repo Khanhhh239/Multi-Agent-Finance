@@ -64,7 +64,10 @@ HOST = '127.0.0.1'
 
 # ----------------------------------------------------------------------------------------------------------- config
 def load_config():
-    local = PORTAL / 'config.local.json'
+    override = os.environ.get('MAF_PORTAL_CONFIG')
+    local = Path(override).resolve() if override else PORTAL / 'config.local.json'
+    if override and not local.is_file():
+        raise FileNotFoundError(local)
     cfg = json.loads((local if local.exists() else PORTAL / 'config.example.json').read_text(encoding='utf-8'))
     cfg.setdefault('port', 8800)
     return cfg
@@ -210,7 +213,7 @@ def agent_url(aid, path=''):
 def agent1_storage():
     code = company()['code'] or 'SME'
     name = '.state-business' if code == 'SME' else f'.state-business-firm-{code}-data'
-    root = agent_root('agent1')
+    root = path_of(agent_cfg('agent1').get('storage_root'), agent_root('agent1'))
     return root / name, root / (name + '-keys')
 
 
@@ -251,7 +254,8 @@ def launch_spec(aid):
                 for k, v in agent_cfg(aid).get('env', {}).items()})
     if aid == 'agent3':
         env.update(AGENT3_COMPANY_PROFILE_FILE=str(COMPANY_FILE), AGENT3_PORTAL_URL=ORIGIN,
-                   AGENT3_PLATFORM_TOKEN=AGENT3_TOKEN)
+                   AGENT3_PLATFORM_TOKEN=AGENT3_TOKEN,
+                   AGENT3_DEMO_COMPANY=json.dumps(CFG.get('demo_company')))
     return [agent_python(aid), *cmd], root, env
 
 
@@ -1084,10 +1088,10 @@ def check(aid, record, raw, *, bank_rows=None):
         wid = agent3_workspace()
         if not wid:
             return dict(state='error', message='Cần mã số thuế hợp lệ trong Cấu hình để Agent 3 tạo không gian làm việc.')
+        workspace = ensure_agent3_workspace()
+        if workspace['state'] != 'ok':
+            return dict(state='error', message=workspace['message'])
         if bank_rows is not None:
-            workspace = ensure_agent3_workspace()
-            if workspace['state'] != 'ok':
-                return dict(state='error', message=workspace['message'])
             return dict(state='ready', rows=len(bank_rows), message=f'{len(bank_rows)} dòng sao kê đã chuẩn hóa')
         return dict(state='ready', message='Agent 3 tự phân loại khi ghi; tệp trùng nội dung không bị nạp hai lần.')
     return dict(state='error', message='Agent này chưa nhận tệp.')

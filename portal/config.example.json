@@ -1,6 +1,7 @@
 {
   "port": 8800,
   "workspace": "portal/workspace",
+  "demo_company": null,
   "agents": {
     "agent1": {"port": 8011},
     "agent2": {"port": 8766, "data_root": "agent2/.runtime/platform/data", "reports_root": "agent2/.runtime/platform/reports",

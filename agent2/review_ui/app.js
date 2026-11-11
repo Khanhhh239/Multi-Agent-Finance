@@ -110,13 +110,38 @@ async function loadQueue() {
     const usedMinutes=selectedCompany?Number(result.budget.used_minutes_by_company[selectedCompany]||0):Object.values(result.budget.used_minutes_by_company).reduce((sum,value)=>sum+Number(value),0);
     const companyLabel=selectedCompany?"công ty":"các công ty đang hiển thị";
     $("queue-note").textContent=`Tồn ${number(result.counts.backlog)} hồ sơ / ${number(result.counts.backlog_minutes)} phút; ${number(result.counts.source)} hồ sơ nguồn, ${number(result.counts.rereview)} chờ tái rà soát. Đã phân bổ ${number(usedCases)} lượt / ${number(usedMinutes)} phút cho ${companyLabel}; hạn mức mỗi công ty ${result.budget.limit} lượt / ${result.budget.capacity_minutes} phút/ngày.`;
-    $("case-list").innerHTML=result.items.length ? result.items.map(row=>`<button class="case-card ${row.case_id===state.selected?"selected":""} ${row.case_type==="source"?"source-case":""}" data-case="${esc(row.case_id)}" aria-pressed="${row.case_id===state.selected}"><div class="case-top"><span class="chip priority-${esc(row.priority)}">● ${esc(priorities[row.priority])}</span><span class="score">${row.case_type==="source"?row.estimated_minutes:row.max_score}<small>${row.case_type==="source"?"phút":"điểm"}</small></span></div><div class="case-title">${esc(headline(row))}</div><p class="case-summary">${esc(row.explanation_vi)}</p><div class="case-sub">${esc(row.company_id)} · ${row.case_type==="source"?"hồ sơ nguồn "+esc(row.source_scope):row.observation_count+" nghiệp vụ"} · ${esc(statuses[row.status])}</div>${row.collection_summary?.active_count?`<div class="collection-badge">${row.collection_summary.ready_for_rereview?"Đã nhận · chờ rà lại":"Chờ bổ sung"} · ${row.collection_summary.active_count} yêu cầu${row.collection_summary.overdue_count?" · quá hạn "+row.collection_summary.overdue_count:""}</div>`:""}<div class="case-bottom"><div>${row.rule_ids.slice(0,3).map(code=>`<span class="rule-tag">${esc(code)}</span>`).join("")}${row.requires_rereview?'<span class="rule-tag rereview-tag">Tái rà soát</span>':""}</div><span class="case-time">${date(row.opened_at)}</span></div><div class="case-bottom"><span class="case-code">${esc(row.case_id)}</span>${row.admitted_today?`<span class="admitted-label">Đã phân bổ ${row.estimated_minutes} phút ✓</span>`:""}</div></button>`).join("") : '<div class="empty-state">Không có hồ sơ phù hợp bộ lọc.<br>Thử đổi trạng thái hoặc nội dung tìm kiếm.</div>';
+    $("case-list").innerHTML = result.items.length ? renderCaseTable(result.items) : '<div class="empty-state">Không có hồ sơ phù hợp bộ lọc.<br>Thử đổi trạng thái hoặc nội dung tìm kiếm.</div>';
     $("page-range").textContent=result.total ? `${state.offset+1}–${Math.min(state.offset+state.limit,result.total)} / ${number(result.total)} hồ sơ` : "0 hồ sơ";
     $("previous").disabled=state.offset===0;
     $("next").disabled=state.offset+state.limit>=result.total;
     document.querySelectorAll("[data-case]").forEach(button=>button.addEventListener("click",()=>openCase(button.dataset.case)));
   } catch(error) { if(request!==state.request)return;notice(error.message);$("case-list").innerHTML='<div class="empty-state">Không thể đọc hàng đợi. Kiểm tra thông báo và thử lại.</div>';for(const id of ["stat-new","stat-high","stat-gap","stat-closed"])$(id).textContent="—";$("queue-total").textContent="—";$("previous").disabled=true;$("next").disabled=true;state.selected=null;state.detail=null;$("detail-panel").innerHTML='<div class="detail-placeholder"><h2>Tạm dừng rà soát</h2><p>Chưa đọc được dữ liệu hoặc nhật ký. Tải lại sau khi đã kiểm tra thông báo.</p></div>'; }
 }
+function renderCaseTable(rows) {
+  const body = rows.map(row => {
+    const priority = priorities[row.priority] || row.priority;
+    const value = row.case_type === "source" ? row.estimated_minutes + " phút" : row.max_score + " điểm";
+    const collection = row.collection_summary;
+    const waiting = collection?.active_count ? `${collection.active_count} yêu cầu · ${collection.ready_for_rereview ? "Chờ rà lại" : "Chờ bổ sung"}` : "";
+    return `<tr class="${row.case_id === state.selected ? "selected" : ""}">
+      <td><button class="link-button case-title" data-case="${esc(row.case_id)}" aria-pressed="${row.case_id === state.selected}">${esc(headline(row))}</button>
+        <span class="case-code">${esc(row.case_id)}</span>
+        <details class="case-context"><summary>Nội dung hồ sơ</summary><p>${esc(row.explanation_vi)}</p>
+          <p>${row.case_type === "source" ? "Hồ sơ nguồn · " + esc(row.source_scope) : esc(row.observation_count) + " nghiệp vụ"}</p>
+          ${waiting ? `<p>${esc(waiting)}</p>` : ""}
+          ${collection?.overdue_count ? `<p>${esc(collection.overdue_count)} yêu cầu quá hạn</p>` : ""}
+          ${row.admitted_today ? `<p>Đã phân bổ ${esc(row.estimated_minutes)} phút hôm nay</p>` : ""}
+        </details></td>
+      <td>${esc(row.company_id)}</td>
+      <td><span class="chip priority-${esc(row.priority)}">${esc(priority)}</span><small>${esc(value)}</small></td>
+      <td>${row.rule_ids.map(code => `<span class="rule-tag">${esc(code)}</span>`).join(" ")}${row.requires_rereview ? '<span class="rereview-tag">Tái rà soát</span>' : ""}</td>
+      <td>${esc(statuses[row.status] || row.status)}</td>
+      <td>${date(row.opened_at)}</td>
+    </tr>`;
+  }).join("");
+  return `<div class="case-table-wrap"><table class="data-table case-table"><thead><tr><th scope="col">Hồ sơ</th><th scope="col">Doanh nghiệp</th><th scope="col">Ưu tiên</th><th scope="col">Quy tắc</th><th scope="col">Trạng thái</th><th scope="col">Ngày mở</th></tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
 async function openCase(identifier,{updateLocation=true}={}) {
   const scenario=state.scenario, request=++openGeneration;
   caseRouteKey=caseKey(scenario,identifier);

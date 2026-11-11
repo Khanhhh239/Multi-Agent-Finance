@@ -41,6 +41,14 @@ export async function api(path, opts = {}) {
 export const post = (path, data, opts = {}) => api(path, { ...opts, method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data ?? {}) });
 export const put = (path, data) => api(path, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
 
+// Short reading of a large amount, the way it is said aloud: "3,4 nghìn tỷ đồng". Empty below one million.
+export const moneyShort = (v) => {
+  const n = Number(v);
+  if (!Number.isFinite(n) || Math.abs(n) < 1e6) return '';
+  const f = (x) => x.toLocaleString('vi-VN', { maximumFractionDigits: 1 });
+  return Math.abs(n) >= 1e12 ? `${f(n / 1e12)} nghìn tỷ đồng` : Math.abs(n) >= 1e9 ? `${f(n / 1e9)} tỷ đồng` : `${f(n / 1e6)} triệu đồng`;
+};
+
 const STATUS = {
   AT_RISK: ['Có nguy cơ bị loại', 'red'], REVIEW: ['Cần xem xét', 'magenta'], OPPORTUNITY: ['Có thể đang bỏ sót', 'blue'], INFO: ['Thông tin', 'gray'],
   LLM_VERIFIED: ['Đã kiểm tra căn cứ', 'green'], EXTRACTIVE: ['Trích nguyên văn', 'teal'], ABSTAIN: ['Không đủ căn cứ', 'gray'],

@@ -95,7 +95,7 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     await send('Page.navigate',{url:origin+'/#/?dn=demo-a'});
     await wait('document.querySelector("#run")');
     check('overview workspace', await evaluate('document.querySelector("h1").textContent.includes("DEMO-A")'));
-    check('product stylesheet order',await evaluate('[...document.querySelectorAll("link[rel=stylesheet]")].at(-1).href.includes("agent3-product")'));
+    check('shared theme follows product stylesheet',await evaluate('[...document.querySelectorAll("link[rel=stylesheet]")].at(-1).href.includes("platform-theme")'));
     const widths=[1440,1024,768,390,320];
     for(const width of widths){
       await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});

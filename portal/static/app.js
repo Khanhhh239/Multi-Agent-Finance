@@ -2,6 +2,7 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const AGENT_LABEL = { agent1: "Agent 1", agent2: "Agent 2", agent3: "Agent 3", agent4: "Agent 4" };
+  const WORKSPACE_LABEL = { agent1: "Dòng tiền", agent2: "Kiểm soát", agent3: "Thuế", agent4: "Hỏi Đáp" };
   const STATE_TEXT = { running: "Đang chạy", starting: "Đang khởi động", stopped: "Đang tắt", "busy-port": "Cổng bị chiếm" };
   const CHECK_TEXT = { ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua", stale: "Chờ kiểm tra lại" };
   let state = null;
@@ -9,6 +10,7 @@
   let profileVersion = 0;
   let profileErrors = {};
   let currentAgent = null;
+  let intakeStage = "choose";
   let token = "";
   try { token = sessionStorage.getItem("kt-session") || ""; } catch (e) { token = ""; }
 
@@ -24,6 +26,7 @@
     const toggle = $("menu-toggle");
     document.querySelector(".shell").classList.toggle("sidebar-collapsed", !mobile && !open);
     document.body.classList.toggle("sidebar-open", mobile && open);
+    document.body.classList.toggle("desktop-sidebar-open", !mobile && open);
     sidebar.classList.toggle("open", mobile && open);
     sidebar.inert = !open;
     sidebar.setAttribute("aria-hidden", String(!open));
@@ -95,6 +98,7 @@
   const agentById = (id) => state.agents.find((a) => a.id === id);
   const dmy = (iso) => (iso ? iso.slice(8, 10) + "/" + iso.slice(5, 7) + "/" + iso.slice(0, 4) : "");
   const stamp = (s) => (s ? dmy(s.slice(0, 10)) + " " + s.slice(11, 16) : "");
+  const monogram = (company) => company.split(/\s+/).filter(Boolean).slice(-2).map((word) => [...word][0]).join("").toUpperCase() || "—";
 
   // ------------------------------------------------------------------ render
   function renderTop() {
@@ -102,6 +106,10 @@
     const configured = Boolean(c.legal_name && c.code);
     $("company-name").textContent = configured ? c.legal_name : "Chưa cấu hình doanh nghiệp";
     $("company-meta").textContent = configured ? [c.tax_code && "MST " + c.tax_code, "Mã " + c.code].filter(Boolean).join(", ") : "Bấm để nhập thông tin";
+    $("masthead-period").textContent = new Intl.DateTimeFormat("vi-VN", { month: "long", year: "numeric", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
+    $("sidebar-monogram").textContent = c.code ? c.code.slice(0, 2) : monogram(c.legal_name || "");
+    $("sidebar-company").textContent = c.legal_name || "Chưa cấu hình doanh nghiệp";
+    $("company-chip").title = c.legal_name || "Hồ sơ doanh nghiệp";
     const p = state.package;
     $("package-chip").hidden = !p;
     if (p) $("package-chip").textContent = "Gói v" + p.version + ", niêm phong " + stamp(p.sealed_at).slice(0, 10);
@@ -145,6 +153,10 @@
     profileText("profile-summary-state", $("company-form").dataset.dirty ? "Bản nháp chưa lưu" : state.company.code ? "Thông tin đã lưu" : "Chưa thiết lập");
     profileText("profile-summary-code", c.code.trim() || "Chưa nhập");
     profileText("profile-summary-tax", c.tax_code.trim() || "Chưa nhập");
+    profileText("profile-monogram", c.code.trim().slice(0, 2).toUpperCase() || monogram(c.legal_name));
+    profileText("profile-summary-address", c.registered_address.trim() || "Chưa nhập");
+    profileText("profile-summary-industry", c.industry.trim() || "Chưa nhập");
+    profileText("profile-summary-year", c.fiscal_year_end_month ? "Tháng " + c.fiscal_year_end_month : "Chưa chọn");
     profileText("profile-summary-vat", { DEDUCTION: "Khấu trừ", DIRECT: "Trực tiếp" }[c.vat_method] || "Chưa chọn");
     profileText("profile-summary-filing", { MONTH: "Theo tháng", QUARTER: "Theo quý" }[c.filing_period] || "Chưa chọn");
     profileText("profile-date-preview", c.date_format === "iso" ? "2026-12-31" : "31/12/2026");
@@ -207,7 +219,10 @@
     $("nav-agents").replaceChildren(
       ...state.agents.map((a) =>
         el("a", { class: "nav-link", href: "#" + a.id, "data-view": a.id },
-          el("span", { class: "num" }, a.number), a.name, el("span", { class: "dot " + a.state, title: STATE_TEXT[a.state] }))));
+          el("span", { class: "num", "aria-hidden": "true" }, "A" + a.number), WORKSPACE_LABEL[a.id] + " · A" + a.number, el("span", { class: "dot " + a.state, title: STATE_TEXT[a.state] }))));
+    $("profile-agent-list").replaceChildren(...state.agents.map((a) =>
+      el("li", {}, el("a", { href: "#" + a.id }, WORKSPACE_LABEL[a.id] + " · A" + a.number),
+        el("span", {}, a.id === "agent4" ? "Kho mô phỏng riêng" : STATE_TEXT[a.state]))));
     markCurrent();
   }
 
@@ -245,7 +260,7 @@
         return el("article", { class: "agent", "data-id": a.id },
           el("div", { class: "agent-head" }, el("span", { class: "big" }, "A" + a.number),
             el("span", { class: "status" }, el("span", { class: "dot " + a.state }), STATE_TEXT[a.state])),
-          el("h3", {}, a.name),
+          el("h3", {}, a.id === "agent4" ? "Hỏi Đáp" : a.name),
           el("p", {}, descriptions[a.id] || a.summary),
           el("div", { class: "actions" },
             el("a", { href: "#" + a.id }, "Mở " + AGENT_LABEL[a.id] + " →"),
@@ -320,10 +335,16 @@
     $("queue").tBodies[0].replaceChildren(...rows);
     $("queue-empty").hidden = rows.length > 0;
     const ready = state.pending.filter(canWrite);
+    const targets = new Set(ready.flatMap((record) => record.targets.filter((aid) => record.checks[aid]?.state === "ready")));
+    $("intake-summary-count").textContent = ready.length + " / " + rows.length + " tệp sẵn sàng ghi";
+    $("intake-summary-agents").textContent = targets.size
+      ? "Nghiệp vụ nhận tệp: " + [...targets].map((aid) => AGENT_LABEL[aid]).join(", ")
+      : "Chưa có tệp sẵn sàng để phân phối.";
+    $("intake-next").disabled = !ready.length;
     $("reason-field").hidden = !state.package;
     const button = $("commit");
     button.disabled = !ready.length;
-    if (button.dataset.confirm !== "1") button.textContent = ready.length ? "Niêm phong và ghi " + ready.length + " tệp" : "Niêm phong và ghi vào agent";
+    if (button.dataset.confirm !== "1") button.textContent = ready.length && ready.length < rows.length ? "Ghi " + ready.length + " tệp sẵn sàng" : "Ghi toàn bộ dữ liệu";
 
     const mine = state.batches.filter((b) => b.company === state.company.code);
     const hist = mine.map((b) =>
@@ -338,12 +359,38 @@
     $("history-empty").hidden = hist.length > 0;
   }
 
+  function showIntakeStage(stage, focus = false) {
+    intakeStage = stage;
+    $("intake").dataset.stage = stage;
+    const [title, description] = {
+      choose: ["Nạp dữ liệu chung", "Tiếp nhận tệp một lần cho các nghiệp vụ sử dụng dữ liệu chung."],
+      review: ["Kiểm tra tệp", "Xem loại tệp, kỳ dữ liệu và kết quả kiểm tra theo từng agent."],
+      confirm: ["Xác nhận và nạp toàn bộ dữ liệu", "Kiểm tra danh sách tệp và nghiệp vụ nhận dữ liệu trước khi ghi."],
+      history: ["Lịch sử dữ liệu", "Xem các phiên bản đã niêm phong và kết quả ghi vào từng agent."],
+    }[stage];
+    $("h-intake").textContent = title;
+    $("intake-lead").textContent = description;
+    $("intake-choose").hidden = stage !== "choose";
+    $("intake-queue").hidden = stage !== "review" && stage !== "confirm";
+    $("intake-next").hidden = stage !== "review";
+    $("commit-bar").hidden = stage !== "confirm";
+    $("intake-history").hidden = stage !== "history";
+    $("intake-versions").hidden = stage !== "history";
+    for (const button of $("intake-tabs").querySelectorAll("button")) {
+      if (button.dataset.intakeStage === stage) {
+        button.setAttribute("aria-current", "step");
+        if (focus) button.focus();
+      } else button.removeAttribute("aria-current");
+    }
+  }
+
   function renderData() {
     const i = state.intake;
     $("view-data").setAttribute("aria-labelledby", i.unlocked ? "h-intake" : "h-data");
     $("gate").hidden = i.unlocked;
     $("intake").hidden = !i.unlocked;
     if (!i.unlocked) {
+      intakeStage = "choose";
       const first = !i.configured;
       $("gate-lead").textContent = first
         ? "Đặt mật khẩu một lần. Từ đó mọi lần nạp, bổ sung hay sửa cấu hình sau khi niêm phong đều phải mở khóa."
@@ -378,13 +425,14 @@
     $("drop").hidden = !c.code;
     renderSlots();
     renderQueue();
+    showIntakeStage(intakeStage);
   }
 
   function renderAgentView() {
     if (!currentAgent) return;
     const a = agentById(currentAgent);
     $("agent-no").textContent = a.number;
-    $("agent-name").textContent = a.name;
+    $("agent-name").textContent = a.id === "agent4" ? "Hỏi Đáp" : a.name;
     $("agent-status").replaceChildren(el("span", { class: "dot " + a.state }), STATE_TEXT[a.state]);
     const source = $("agent-source");
     source.textContent = a.id === "agent4" ? "Nguồn số liệu: kho mô phỏng của Agent 4"
@@ -754,6 +802,7 @@
     await refresh();
     toast(failures.length ? "Đã nhận " + uploaded + " tệp. " + failures.join(". ")
       : "Đã kiểm tra " + uploaded + " tệp. Xem kết quả trước khi niêm phong.", failures.length > 0);
+    if (uploaded && state.intake.unlocked && location.hash === "#data") showIntakeStage("review", true);
   }
 
   async function recheck(id) {
@@ -791,6 +840,7 @@
     try {
       const res = await api("/api/inbox/commit", { method: "POST", json: { ids, reason } });
       $("reason").value = "";
+      intakeStage = "history";
       toast("Đã niêm phong gói phiên bản " + res.batch.version + " với " + res.batch.files.length + " tệp.");
     } catch (err) { toast(err.message, true); }
     refresh();
@@ -890,6 +940,13 @@
   $("company-form").addEventListener("submit", saveCompany);
   $("company-form").addEventListener("input", editProfile);
   $("company-form").addEventListener("change", editProfile);
+  for (const button of document.querySelectorAll("[data-profile-section]")) {
+    button.addEventListener("click", () => {
+      for (const other of document.querySelectorAll("[data-profile-section]")) other.removeAttribute("aria-current");
+      button.setAttribute("aria-current", "location");
+      $(button.dataset.profileSection).scrollIntoView({ block: "nearest" });
+    });
+  }
   $("profile-reset").addEventListener("click", () => {
     if (profileSaving) return;
     delete $("company-form").dataset.dirty;
@@ -927,6 +984,11 @@
   $("agent-start").addEventListener("click", () => toggleAgent(agentById(currentAgent)));
   $("agent-toggle").addEventListener("click", () => toggleAgent(agentById(currentAgent)));
   $("commit").addEventListener("click", commitAll);
+  $("intake-tabs").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-intake-stage]");
+    if (button && state?.intake.unlocked) showIntakeStage(button.dataset.intakeStage);
+  });
+  $("intake-next").addEventListener("click", () => showIntakeStage("confirm", true));
   $("file-input").addEventListener("change", (e) => {
     if (e.target.files.length) upload([...e.target.files]);
     e.target.value = "";

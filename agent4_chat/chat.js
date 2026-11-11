@@ -26,11 +26,35 @@
   }
 
   const vnd = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 2 });
+  const dec1 = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 1 });
+  // Large amounts are hard to read as 13 digits: give the short reading an accountant says aloud.
+  function shortVnd(n) {
+    const a = Math.abs(n);
+    if (a >= 1e12) return dec1.format(n / 1e12) + " nghìn tỷ đồng";
+    if (a >= 1e9) return dec1.format(n / 1e9) + " tỷ đồng";
+    if (a >= 1e6) return dec1.format(n / 1e6) + " triệu đồng";
+    return "";
+  }
+  // Column keys are internal identifiers; the metric catalog supplies the Vietnamese name when it is loaded.
+  const LABELS = {
+    net_revenue: "Doanh thu thuần", gross_revenue: "Doanh thu gộp", revenue: "Doanh thu", net_profit: "Lợi nhuận sau thuế",
+    gross_profit: "Lợi nhuận gộp", cash: "Tiền mặt", cash_end: "Tiền mặt cuối kỳ", accounts_receivable: "Công nợ phải thu",
+    accounts_payable: "Công nợ phải trả", expense: "Chi phí", cogs: "Giá vốn", month: "Tháng", period: "Kỳ", quarter: "Quý", year: "Năm",
+    value: "Giá trị", amount: "Số tiền", as_of: "Tại ngày", date: "Ngày",
+  };
+  const metricNames = {};
+  const label = (key) => LABELS[key] || metricNames[key] || String(key).replace(/_/g, " ");
+  const WARNINGS = [
+    [/DEMO DATA\s*[—-]\s*NOT REAL FINANCIAL RESULTS/i, "Dữ liệu mô phỏng, không phải kết quả tài chính thật."],
+  ];
   function cell(value, column) {
     if (value === null || value === undefined) return "";
     if (column.type === "decimal" || column.type === "integer") {
       const n = Number(value);
-      return Number.isFinite(n) ? vnd.format(n) + (column.unit && column.unit !== "count" ? " " + column.unit : "") : value;
+      if (!Number.isFinite(n)) return value;
+      const text = vnd.format(n) + (column.unit && column.unit !== "count" ? " " + column.unit : "");
+      const short = column.unit === "VND" ? shortVnd(n) : "";
+      return short ? [text, el("small", { class: "short" }, short)] : text;
     }
     return value;
   }
@@ -40,7 +64,7 @@
     const cols = data.columns;
     return el("div", { class: "result" },
       el("table", {},
-        el("thead", {}, el("tr", {}, cols.map((c) => el("th", {}, c.key)))),
+        el("thead", {}, el("tr", {}, cols.map((c) => el("th", { class: c.type === "decimal" || c.type === "integer" ? "num" : "" }, label(c.key))))),
         el("tbody", {}, data.rows.slice(0, 50).map((r) =>
           el("tr", {}, cols.map((c) => el("td", { class: c.type === "decimal" || c.type === "integer" ? "num" : "" }, cell(r[c.key], c))))))));
   }
@@ -61,7 +85,7 @@
       if (p.data_watermark) rows.push(["Dữ liệu đến", p.data_watermark]);
       rows.push(["Danh mục", p.catalog_hash.slice(0, 12)]);
     }
-    return el("details", { class: "source" }, el("summary", {}, "Cách hiểu câu hỏi và nguồn"),
+    return el("details", { class: "source" }, el("summary", {}, "Kiểm tra nguồn"),
       el("dl", {}, rows.map(([k, v]) => [el("dt", {}, k), el("dd", {}, v)])));
   }
 
@@ -69,6 +93,7 @@
   function readable(text) {
     return String(text)
       .replace(/(\d+(?:\.\d+)?) VND/g, (_, n) => vnd.format(Math.round(Number(n))) + " đồng")
+      .replace(/(\d{1,3}(?:\.\d{3}){2,}) đồng/g, (m, g) => { const s = shortVnd(Number(g.replace(/\./g, ""))); return s ? m + " (khoảng " + s + ")" : m; })
       .replace(/khung mgmt/g, "khung quản trị").replace(/khung tax/g, "khung thuế")
       .replace(/(\d{4})-(\d{2})-(\d{2})/g, "$3/$2/$1").replace(/–/g, " đến ");
   }
@@ -81,7 +106,7 @@
       table(res.data),
       res.data && res.data.truncated ? el("p", { class: "source" }, "Chỉ hiện 50 dòng đầu.") : null,
       source(res),
-      warnings.length ? el("ul", { class: "warnings" }, warnings.map((w) => el("li", {}, w))) : null,
+      warnings.length ? el("ul", { class: "warnings" }, warnings.map((w) => el("li", {}, WARNINGS.reduce((t, [re, vi]) => t.replace(re, vi), String(w))))) : null,
     ];
   }
 
@@ -114,6 +139,7 @@
       const res = await fetch("/api/agent4/metrics", { cache: "no-store" }).then((r) => r.json());
       const list = Array.isArray(res) ? res : res.items || res.metrics || [];
       if (!list.length) throw new Error(res.error || "Danh mục trống.");
+      for (const m of list) { const id = m.metric_id || m.id; const name = m.label || m.name; if (id && name && name !== id) metricNames[id] = name; }
       $("metric-count").textContent = list.length + " chỉ tiêu.";
       $("metrics").replaceChildren(...list.slice(0, 40).map((m) =>
         el("li", {}, m.label || m.name || m.metric_id || m.id, m.unit ? el("span", {}, " (" + m.unit + ")") : null)));

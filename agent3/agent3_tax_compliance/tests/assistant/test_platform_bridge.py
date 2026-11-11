@@ -112,6 +112,29 @@ def test_duplicate_or_simulated_workspace_is_not_automatically_adopted(env):
     assert sync(c, b).status_code == 409
 
 
+def test_registered_demo_keeps_simulation_and_rejects_other_company(env):
+    c, wid, b = env
+    url = f'/api/workspaces/{wid}/pack'
+    pack = dict(c.get(url).json(), simulated=True)
+    (b.root / wid / 'pack.json').write_text(json.dumps(pack), encoding='utf-8')
+    b.demo_company = {'code': 'DEMO_A', 'tax_code': wid}
+    write_master(b, code='DEMO_A', legal_name='Doanh nghiệp mô phỏng')
+    assert sync(c, b).json()['state'] == 'ready'
+    assert c.get(url).json()['simulated'] is True
+    write_master(b, code='OTHER')
+    assert sync(c, b).status_code == 409
+    assert c.get(url).status_code == 409
+
+
+def test_registered_demo_creates_only_simulated_workspace(env):
+    c, _, b = env
+    b.demo_company = {'code': 'DEMO_B', 'tax_code': '0100109106'}
+    write_master(b, code='DEMO_B', tax_code='0100109106')
+    result = sync(c, b).json()
+    assert result['simulated'] is True
+    assert c.get(f'/api/workspaces/{result["workspace_id"]}/pack').json()['simulated'] is True
+
+
 def test_concurrent_saves_only_one_wins(env):
     c, wid, b = env
     url = f'/api/workspaces/{wid}/pack'

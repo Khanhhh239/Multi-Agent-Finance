@@ -63,6 +63,13 @@ def inject(page: Path, url: str):
         if i < 0:
             raise SystemExit(f'{page}: no </head>; add the two tags by hand')
         new = text[:i] + f'<link rel="stylesheet" href="{css}">{nl}<script src="{js}"></script>{nl}' + text[i:]
+    # Product-specific styles load first; shared workspace tokens are authoritative.
+    theme_link = re.search(r'[ \t]*<link\b[^>]*href="' + re.escape(css) + r'"[^>]*>[ \t]*(?:\r?\n)?', new)
+    if theme_link:
+        tag = theme_link.group(0).strip()
+        new = new[:theme_link.start()] + new[theme_link.end():]
+        new = new.replace('</head>', tag + LF + '</head>', 1)
+        new = re.sub(r'\n[ \t]*\n[ \t]*\n', LF + LF, new)
     if new != text:
         stale.append(str(page.relative_to(ROOT)))
         if not CHECK:

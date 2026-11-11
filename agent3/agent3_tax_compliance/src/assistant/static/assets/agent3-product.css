@@ -1132,3 +1132,44 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---- Sổ cái: figures read like a ledger line, not like admin-panel cards ---- */
+[data-agent="3"] .kpis { gap: 0; margin: 22px 0 30px; border-top: 2px solid var(--kt-ink); border-bottom: 1px solid var(--kt-line); background: transparent; }
+[data-agent="3"] #app .kpi { background: transparent; border: 0; border-left: 1px solid var(--kt-line); border-radius: 0; box-shadow: none; transform: none; min-height: 0; padding: 14px 22px 14px; justify-content: flex-start; gap: 2px; }
+[data-agent="3"] #app .kpi:first-child { border-left: 0; padding-left: 4px; }
+[data-agent="3"] #app .kpi:hover { transform: none; box-shadow: none; border-color: var(--kt-line); }
+[data-agent="3"] #app .kpi.kpi-risk, [data-agent="3"] #app .kpi.kpi-warn, [data-agent="3"] #app .kpi.kpi-opportunity { border-top: 0; }
+[data-agent="3"] .kpi .kpi-head { display: block; }
+[data-agent="3"] .kpi .label { margin: 0; font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--kt-muted); }
+[data-agent="3"] .kpi .value { margin: 8px 0 0; font-size: clamp(26px, 2.5vw, 38px); line-height: 1.1; color: var(--kt-ink); }
+[data-agent="3"] .kpi .value.risk { color: var(--kt-err); }
+[data-agent="3"] .kpi .value.warn { color: var(--kt-ink); }
+[data-agent="3"] .kpi .sub { margin-top: 6px; font-size: 12px; color: var(--kt-muted); }
+[data-agent="3"] .kpi .spark { display: block; margin-top: 10px; fill: none; stroke: var(--kt-muted); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+[data-agent="3"] .kpi .spark circle { fill: var(--kt-muted); stroke: none; }
+[data-agent="3"] .kpi .spark-at_risk { stroke: var(--kt-err); }
+[data-agent="3"] .kpi .spark-at_risk circle { fill: var(--kt-err); }
+
+/* Small table by month, Tufte style: one ink, the bar carries the number, the label sits on the bar */
+[data-agent="3"] .tufte { margin: 4px 0 30px; max-width: 780px; }
+[data-agent="3"] .tufte-svg { display: block; width: 100%; height: auto; overflow: visible; }
+[data-agent="3"] .tufte-svg text { font-family: var(--kt-font); fill: var(--kt-text); font-variant-numeric: lining-nums tabular-nums; }
+[data-agent="3"] .tufte-svg .t-month { font-size: 13px; font-weight: 500; fill: var(--kt-ink); }
+[data-agent="3"] .tufte-svg .t-val { font-size: 12.5px; fill: var(--kt-muted); }
+[data-agent="3"] .tufte-svg .bar-risk { fill: var(--kt-err); }
+[data-agent="3"] .tufte-svg .bar-review { fill: #8c7f82; }
+
+/* Ledger fields: the line is what you write on */
+[data-agent="3"] #app :is(.cds--text-input, .cds--select-input, .cds--text-area) { background: transparent; border: 0; border-bottom: 1.5px solid var(--kt-field-line); border-radius: 0; min-height: 46px; font-size: 15px; padding-inline: 4px; }
+[data-agent="3"] #app :is(.cds--text-input, .cds--select-input, .cds--text-area):focus { outline: 0; border-bottom-color: var(--kt-accent); box-shadow: 0 1.5px 0 var(--kt-accent); }
+[data-agent="3"] #app .cds--label { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--kt-muted); }
+@media (max-width: 900px) { [data-agent="3"] .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } [data-agent="3"] #app .kpi:nth-child(3) { border-left: 0; padding-left: 4px; } }
+[data-agent="3"] .kpi .value.warn { border-left: 0; padding-left: 0; }
+[data-agent="3"] #app .kpi { position: relative; }
+[data-agent="3"] .kpi .label { min-height: 2.9em; }
+[data-agent="3"] .kpi .value { font-size: clamp(24px, 2.3vw, 34px); }
+[data-agent="3"] .kpi .sub { padding-right: 86px; min-height: 2.9em; }
+[data-agent="3"] .kpi .spark { position: absolute; right: 18px; bottom: 16px; margin: 0; width: 72px; height: auto; }
+[data-agent="3"] .kpi .kpi-head { height: 36px; overflow: visible; }
+[data-agent="3"] .kpi .label { min-height: 0; line-height: 1.4; }
+[data-agent="3"] .kpi .value { margin-top: 4px; }
