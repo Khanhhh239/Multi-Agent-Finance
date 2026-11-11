@@ -141,9 +141,9 @@
           <h1 id="h-data">Mở khóa dữ liệu</h1>
           <p class="lead" id="gate-lead"></p>
           <label class="field"><span class="label" id="gate-label">Mật khẩu</span>
-            <input type="password" name="password" id="gate-password" autocomplete="current-password" required></label>
+            <input type="password" class="son-box" name="password" id="gate-password" autocomplete="current-password" required></label>
           <label class="field" id="gate-confirm-field" hidden><span class="label">Nhập lại mật khẩu</span>
-            <input type="password" name="confirm" autocomplete="new-password"></label>
+            <input type="password" class="son-box" name="confirm" autocomplete="new-password"></label>
           <p class="error-text" id="gate-error" role="alert"></p>
           <button type="submit" class="primary" id="gate-submit">Mở khóa</button>
           <div id="gate-biometric-section" hidden style="margin-top: 14px;">
@@ -174,7 +174,7 @@
         <nav class="paper-tabs" id="intake-tabs" aria-label="Các bước nạp dữ liệu">
           <button type="button" data-intake-stage="choose" aria-current="step">Chọn tệp</button>
           <button type="button" data-intake-stage="review">Kiểm tra tệp</button>
-          <button type="button" data-intake-stage="confirm">Xác nhận &amp; nạp dữ liệu</button>
+          <button type="button" data-intake-stage="confirm">Xác nhận và nạp dữ liệu</button>
           <button type="button" data-intake-stage="history">Lịch sử dữ liệu</button>
         </nav>
         <section id="intake-choose" class="intake-choose">
@@ -213,7 +213,7 @@
           <h2>Tóm tắt nạp dữ liệu</h2>
           <p id="intake-summary-count" aria-live="polite"></p>
           <p id="intake-summary-agents"></p>
-          <button type="button" class="primary" id="intake-next">Xác nhận &amp; tiếp tục</button>
+          <button type="button" class="primary" id="intake-next">Xác nhận và tiếp tục</button>
           <div class="commit-bar" id="commit-bar">
             <label class="field" id="reason-field" hidden><span class="label">Lý do bổ sung hoặc thay thế</span>
               <input id="reason" maxlength="300" placeholder="Nhập lý do, ít nhất 10 ký tự"></label>
@@ -272,7 +272,7 @@
           <a class="agent-source" id="agent-source" href="#data"></a>
         </div>
         <div class="agent-actions">
-          <a class="btn" href="#overview">← Workspace tổng</a>
+          <a class="btn" href="#overview">← Trang chung</a>
           <button type="button" id="agent-toggle"></button>
           <a id="agent-newtab" target="_blank" rel="noopener">Mở tab riêng</a>
         </div>

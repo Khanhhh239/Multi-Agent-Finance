@@ -7,6 +7,7 @@ seller identity from an unrelated record would defeat the quality gate.
 from __future__ import annotations
 
 import re
+from datetime import date
 from itertools import groupby
 
 import pandas as pd
@@ -32,7 +33,18 @@ def _business_payload(row):
     return payload
 
 
+_ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}')
+
+
 def _date(value):
+    # A plain YYYY-MM-DD needs no pandas: building a Series per call made one preview of a 50,000-invoice store take minutes.
+    if isinstance(value, str) and _ISO_DAY.fullmatch(value):
+        try:
+            day = date.fromisoformat(value)
+        except ValueError:
+            return None
+        if 1700 <= day.year <= 2200:
+            return day.isoformat()
     result = local_dates(pd.Series([value]), dayfirst=False).iloc[0]
     return None if pd.isna(result) else result.date().isoformat()
 

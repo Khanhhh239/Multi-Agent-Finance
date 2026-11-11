@@ -24,7 +24,50 @@
     } catch (e) { /* Independently opened agents may have no portal context. */ }
   }
 
+  // The browser's own file control is written in the browser's language. Swap it for a Vietnamese button and file name.
+  function enhanceFiles() {
+    document.querySelectorAll('input[type=file]:not([data-son-file])').forEach((input) => {
+      input.dataset.sonFile = '1';
+      const cs = getComputedStyle(input);
+      const box = input.getBoundingClientRect();
+      if (input.hidden || cs.display === 'none' || /visually-hidden|sr-only|hidden/.test(input.className) || (box.width < 4 && box.height < 4)) return;
+      const wrap = document.createElement('span');
+      const btn = document.createElement('button');
+      const name = document.createElement('span');
+      wrap.className = 'son-file';
+      btn.type = 'button'; btn.className = 'son-file-btn secondary'; btn.textContent = 'Chọn tệp';
+      name.className = 'son-file-name'; name.textContent = 'Chưa chọn tệp';
+      input.classList.add('son-file-input');
+      input.before(wrap);
+      wrap.append(btn, name);
+      btn.addEventListener('click', () => input.click());
+      input.addEventListener('change', () => {
+        const f = input.files;
+        name.textContent = !f || !f.length ? 'Chưa chọn tệp' : f.length === 1 ? f[0].name : f.length + ' tệp đã chọn';
+      });
+    });
+  }
+
+  // Agent 2 tool pages have no shell of their own: give them the same tab strip as the review page.
+  function toolTabs() {
+    if (document.documentElement.dataset.agent !== '2' || !document.body.classList.contains('tool-page') || document.querySelector('.son-tabs')) return;
+    const here = location.pathname.replace(/\/+$/, '') || '/';
+    const tabs = [['/', 'Hồ sơ rà soát'], ['/data-import', 'Nhập CSV / Excel'], ['/company-ml', 'Dữ liệu và ML'], ['/ml-reviews', 'Phiếu rà ML']];
+    if (here === '/p2-controls') tabs.push(['/p2-controls', 'Đối chứng P2']);
+    const nav = document.createElement('nav');
+    nav.className = 'son-tabs'; nav.setAttribute('aria-label', 'Nghiệp vụ soát giao dịch');
+    for (const [href, label] of tabs) {
+      const a = document.createElement('a');
+      a.href = href + location.search; a.textContent = label;
+      if (href === here) a.setAttribute('aria-current', 'page');
+      nav.append(a);
+    }
+    document.body.prepend(nav);
+  }
+
   function decorate() {
+    enhanceFiles();
+    toolTabs();
     const root = document.documentElement;
     const agent = root.dataset.agent;
     const headings = agent ? document.querySelectorAll('main h1, #main h1, .intro h1, #app h1') : document.querySelectorAll('#view-config .profile-heading, #intake .page-head');

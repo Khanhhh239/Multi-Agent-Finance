@@ -272,7 +272,7 @@ test('switching company clears old versions and disables training until new data
   const h=harness();await h.tick();await h.submit('ml-data-form');await h.submit('ml-evaluate-form');
   await h.change('ml-company','C002');
   assert.equal(h.nodes['ml-evaluate'].disabled,true);assert.doesNotMatch(h.nodes['ml-versions'].innerHTML,/Xác nhận dùng v1/);
-  assert.match(h.nodes['ml-current'].innerHTML,/chưa có model/);
+  assert.match(h.nodes['ml-current'].innerHTML,/chưa có mô hình/);
   await h.submit('ml-data-form');
   const last=h.requests.filter(r=>r.path.endsWith('/data-update')).at(-1);
   assert.equal(last.body.company_id,'C002');assert.equal(last.body.expected_revision,null);

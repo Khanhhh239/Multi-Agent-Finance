@@ -42,7 +42,7 @@
       !overview.can_manage?'Phiên hiện tại chỉ có quyền xem nên nút chọn tệp bị khóa. Cần dùng tài khoản kế toán trưởng hoặc giám đốc có quyền trên doanh nghiệp để nhập CSV/Excel.':
       !current?'Chọn doanh nghiệp và tải danh mục trước khi chọn tệp.':
       busy?'Đang xử lý dữ liệu; chờ hoàn tất để chọn tệp khác.':
-      `Đã sẵn sàng nhập dữ liệu cho ${context().company_id}. Chọn tệp CSV/Excel, sau đó bấm “Kiểm tra & tạo bản xem trước”.`;
+      `Đã sẵn sàng nhập dữ liệu cho ${context().company_id}. Chọn tệp CSV/Excel, sau đó bấm “Kiểm tra và tạo bản xem trước”.`;
     status.className=loadError?'note error':'note';status.setAttribute('aria-busy',String(loading));
     $('import-retry').hidden=!loadError;$('import-retry').disabled=busy;
   }
@@ -71,14 +71,14 @@
   function render(value){
     preview=value;$('import-preview-section').hidden=false;
     const s=value.summary;
-    $('import-summary').innerHTML=`<p><strong>${escape(s.company_id)} · ${s.rows} dòng qua kiểm tra${value.valid?` · ${value.feature_count} feature`:''}</strong><br>Bỏ qua ${s.skipped_blank_rows} dòng rỗng · cắt khoảng trắng ở ${s.trimmed_cells} ô.${value.valid?`<br>Thay thế ${s.previous_rows} → ${s.rows} giao dịch. ${escape(s.first_at)} → ${escape(s.last_at)}`:''}</p>`;
+    $('import-summary').innerHTML=`<p><strong>${escape(s.company_id)} · ${s.rows} dòng qua kiểm tra${value.valid?` · ${value.feature_count} đặc trưng`:''}</strong><br>Bỏ qua ${s.skipped_blank_rows} dòng rỗng · cắt khoảng trắng ở ${s.trimmed_cells} ô.${value.valid?`<br>Thay thế ${s.previous_rows} → ${s.rows} giao dịch. ${escape(s.first_at)} → ${escape(s.last_at)}`:''}</p>`;
     $('import-errors').innerHTML=errorsTable(value);
     $('import-warnings').innerHTML=value.warnings.length?`<h3>Đọc trước khi lưu</h3><ul>${value.warnings.map(w=>`<li>${escape(w)}</li>`).join('')}</ul>`:'';
     const missing=Object.entries(s.missing_optional||{});
     if(missing.length)$('import-warnings').innerHTML+=`<details><summary>Ô tùy chọn còn thiếu</summary><p>${missing.map(([k,v])=>`${escape(k)}: ${v} dòng`).join(' · ')}</p></details>`;
     $('import-rows').innerHTML=rowsTable(value.normalized_preview);$('import-normalized').open=!!value.valid;
     $('import-save-section').hidden=!value.valid;$('import-ack').checked=false;
-    notice(value.valid?'Kiểm tra đạt. Xem dữ liệu chuẩn hóa và cảnh báo trước khi xác nhận lưu.':'Có lỗi cần sửa. Dữ liệu và model hiện tại được giữ nguyên.',!value.valid);
+    notice(value.valid?'Kiểm tra đạt. Xem dữ liệu chuẩn hóa và cảnh báo trước khi xác nhận lưu.':'Có lỗi cần sửa. Dữ liệu và mô hình hiện tại được giữ nguyên.',!value.valid);
     controls();
   }
   async function encode(file){
@@ -89,7 +89,7 @@
   $('import-form').addEventListener('submit',async event=>{
     event.preventDefault();if(busy||!current||!overview?.can_manage)return;
     invalidate();busy=true;controls();const own=generation,file=$('import-file').files[0];
-    notice('Đang kiểm tra tệp, chuẩn hóa dữ liệu và tạo feature…');
+    notice('Đang kiểm tra tệp, chuẩn hóa dữ liệu và tạo đặc trưng…');
     try{
       if(!file||file.size>current.max_bytes||!file.size)throw new Error('Chọn tệp không rỗng, tối đa 10 MB.');
       const value=await api('/api/data-import/preview',{...context(),filename:file.name,content_base64:await encode(file),

@@ -27,7 +27,7 @@ export function intakeLinks(root) {
     const a = document.createElement('a');
     a.className = el.className;
     a.href = origin + '/#data'; a.target = '_top';
-    a.textContent = 'Nạp dữ liệu tại workspace tổng';
+    if (el.closest('#nav')) a.innerHTML = '<span class="cds--side-nav__link-text">Nạp dữ liệu</span>'; else a.textContent = 'Nạp dữ liệu chung';
     el.replaceWith(a);
   });
 }

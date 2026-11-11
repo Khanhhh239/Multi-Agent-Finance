@@ -77,7 +77,7 @@ export async function pageAsk() {
   const save = () => { try { sessionStorage.setItem(key, JSON.stringify(history.slice(-30))); } catch { /* private mode */ } };
 
   app().innerHTML = `<div class="ask-wrap">
-    <h1 class="page">Trợ lý hỏi đáp thuế & Dữ liệu</h1>
+    <h1 class="page">Hỏi đáp thuế và dữ liệu</h1>
     <p class="lead">Hỏi bằng ngôn ngữ tự nhiên về dữ liệu thuế của doanh nghiệp hoặc các quy định pháp luật. Trợ lý chỉ trả lời khi có căn cứ đối chiếu cụ thể từ hóa đơn hoặc điều luật.</p>
     
     <div id="sugg" class="sugg" style="margin-bottom:12px"></div>
@@ -85,7 +85,7 @@ export async function pageAsk() {
     <div id="pending" role="status"></div>
 
     <form id="ask" class="ask-bar">
-      <div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
+      <div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:0">
         <label class="cds--label" for="q">Nhập câu hỏi (Enter để gửi)</label>
         <input class="cds--text-input" id="q" name="q" autocomplete="off" maxlength="500" placeholder="Ví dụ: quý 3 có bao nhiêu tiền thuế có nguy cơ bị loại?">
       </div>

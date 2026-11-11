@@ -7,7 +7,7 @@
   function summaryTable(data){
     const progress=`<p><strong>${data.reviewed}/${data.total} phiếu đã rà</strong> · ${Number(data.total_unique_review_minutes).toFixed(2)} phút cho các giao dịch duy nhất đã xác nhận.</p>`;
     if(!data.complete)return progress+`<p class="note">${escape(data.reason)}</p>`;
-    return progress+'<div class="table-wrap"><table><thead><tr><th>Doanh nghiệp</th><th>Model</th><th>Đã rà</th><th>Hữu ích</th><th>Chưa đủ căn cứ</th><th>Phút theo danh sách model</th></tr></thead><tbody>'+data.metrics.map(m=>`<tr><td>${escape(m.company_id)}</td><td>${escape(m.algorithm)}</td><td>${m.reviewed}/${m.selected}</td><td>${m.useful}</td><td>${m.unknown}</td><td>${m.full_budget_review_minutes==null?'Chưa đủ phiếu':Number(m.full_budget_review_minutes).toFixed(2)}</td></tr>`).join('')+'</tbody></table></div>';
+    return progress+'<div class="table-wrap"><table><thead><tr><th>Doanh nghiệp</th><th>Model</th><th>Đã rà</th><th>Hữu ích</th><th>Chưa đủ căn cứ</th><th>Phút theo danh sách mô hình</th></tr></thead><tbody>'+data.metrics.map(m=>`<tr><td>${escape(m.company_id)}</td><td>${escape(m.algorithm)}</td><td>${m.reviewed}/${m.selected}</td><td>${m.useful}</td><td>${m.unknown}</td><td>${m.full_budget_review_minutes==null?'Chưa đủ phiếu':Number(m.full_budget_review_minutes).toFixed(2)}</td></tr>`).join('')+'</tbody></table></div>';
   }
   global.MLReviewUI={escape,duration,evidenceTable,summaryTable};
   if(!global.document?.getElementById('review-packet'))return;
@@ -85,7 +85,7 @@
   }
   async function refreshList(){
     const value=await api('/api/ml-reviews/units?'+new URLSearchParams({packet:pid(),company:$('review-company').value}));items=value.items;
-    $('review-progress').textContent=`${value.reviewed}/${value.total} phiếu đã xác nhận · giao dịch trùng giữa model chỉ rà một lần.`;listMarkup();
+    $('review-progress').textContent=`${value.reviewed}/${value.total} phiếu đã xác nhận · giao dịch trùng giữa mô hình chỉ rà một lần.`;listMarkup();
   }
   async function openUnit(rid,preserve=false){
     const draft=preserve&&dirty?form():null;

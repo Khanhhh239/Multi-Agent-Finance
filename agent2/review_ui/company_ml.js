@@ -23,7 +23,7 @@
     }).join("")}</tbody></table></div>`;
   }
   function scoreTable(result){
-    return `<p><strong>${result.run.rows} giao dịch đã chấm · ${result.run.flagged} vượt ngưỡng</strong> · v${result.run.number}</p><p class="hint">Hiển thị ${result.items.length}/${result.total} dòng. Kết quả đầy đủ được lưu cùng lượt chạy.</p><div class="table-wrap"><table><thead><tr><th>Giao dịch</th><th>Thời điểm</th><th>Điểm bất thường</th><th>Kết quả</th></tr></thead><tbody>${result.items.map(r=>`<tr><td>${escape(r.transaction_id)}</td><td>${escape(date(r.posted_at))}</td><td>${Number(r.anomaly_score).toFixed(6)}</td><td>${r.flagged?"Cần đối chiếu":"Trong ngưỡng model"}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<p><strong>${result.run.rows} giao dịch đã chấm · ${result.run.flagged} vượt ngưỡng</strong> · v${result.run.number}</p><p class="hint">Hiển thị ${result.items.length}/${result.total} dòng. Kết quả đầy đủ được lưu cùng lượt chạy.</p><div class="table-wrap"><table><thead><tr><th>Giao dịch</th><th>Thời điểm</th><th>Điểm bất thường</th><th>Kết quả</th></tr></thead><tbody>${result.items.map(r=>`<tr><td>${escape(r.transaction_id)}</td><td>${escape(date(r.posted_at))}</td><td>${Number(r.anomaly_score).toFixed(6)}</td><td>${r.flagged?"Cần đối chiếu":"Trong ngưỡng mô hình"}</td></tr>`).join("")}</tbody></table></div>`;
   }
   global.CompanyMLUI={escape,local,versionTable,scoreTable};
   labels.data_imported="Nhập CSV / Excel";labels.labels_updated="Cập nhật nhãn đã rà";
@@ -68,7 +68,7 @@
       !checked()?readinessError||"Đang kiểm tra nhãn theo kỳ train đã chọn…":
       readiness.catboost.eligible?`CatBoost: ${readiness.catboost.verified_train_rows}/${readiness.catboost.train_rows} dòng train có nhãn hợp lệ trước cuối kỳ train · lớp 0: ${readiness.catboost.class_counts['0']} · lớp 1: ${readiness.catboost.class_counts['1']}. Đủ điều kiện.`:readiness.catboost.reason;
     $("ml-score-readiness").textContent=!ready?"Cập nhật dữ liệu cho bộ đang chọn để kiểm tra model.":
-      !checked()?readinessError||"Đang kiểm tra tương thích của model đang dùng…":
+      !checked()?readinessError||"Đang kiểm tra tương thích của mô hình đang dùng…":
       readiness.model.can_score?`Model tương thích · ${readiness.model.inference_rows} giao dịch ngoài kỳ train/calibration có thể chấm.`:readiness.model.reason;
     $("ml-score-readiness").className=checked()&&current.active_version&&!readiness.model.compatible?"note error":"note";
   }
@@ -85,7 +85,7 @@
       const result=await api("/api/company-ml/readiness?"+new URLSearchParams(params));
       if(own!==readinessSequence||key!==readinessKey())return;
       if(result.company_id!==selected.company_id||result.scenario!==selected.scenario||result.data_revision!==current.data.revision||result.active_version!==current.active_version)
-        throw new Error("Dữ liệu hoặc model đã đổi. Tải lại cấu hình trước khi tiếp tục.");
+        throw new Error("Dữ liệu hoặc mô hình đã đổi. Tải lại cấu hình trước khi tiếp tục.");
       readiness=result;readinessFor=key;readinessError="";
     }catch(error){
       if(own!==readinessSequence||key!==readinessKey())return;
@@ -130,10 +130,10 @@
     if(importLink)importLink.href="/data-import?"+new URLSearchParams({company:data.company_id,scenario:context().scenario});
     const active=data.versions.find(v=>v.version_id===data.active_version);
     const imported=data.data?.source==="csv_excel_upload",sourceNote=$("ml-source-note");
-    $("ml-update").textContent=imported?"Cập nhật nhãn cho dữ liệu đã nhập":"Cập nhật & kiểm tra dữ liệu";
-    if(sourceNote)sourceNote.textContent=imported?"Đang dùng dữ liệu CSV/Excel đã kiểm tra. Chọn nhãn đã rà để bổ sung mà vẫn giữ nguyên giao dịch và feature. Để thay dữ liệu, mở màn hình nhập CSV/Excel.":"Đọc bộ nguồn đã kết nối với máy chủ và kiểm tra feature, thời gian, mã giao dịch trước khi lưu vào không gian ML của doanh nghiệp. Model đang dùng được giữ nguyên.";
-    $("ml-data-summary").innerHTML=data.data?`<p><strong>${data.data.rows} giao dịch · ${data.data.columns.length} feature</strong> · ${data.data.labels_count} nhãn đã rà · Bộ ${escape(data.data.scenario)}<br>${escape(date(data.data.first_at))} → ${escape(date(data.data.last_at))}${data.data.scenario!==context().scenario?"<br>Cập nhật bộ đang chọn trước khi tiếp tục cấu hình/chạy ML.":""}</p>`:"<p>Chưa cập nhật dữ liệu ML cho doanh nghiệp này.</p>";
-    $("ml-current").innerHTML=active?`<p class="note"><strong>Đang dùng: ${escape(overview.algorithms.find(a=>a.id===active.algorithm)?.label)} · v${active.number}</strong><br>Kích hoạt riêng cho ${escape(data.company_id)}. Cập nhật dữ liệu không tự đổi phiên bản.</p>`:'<p class="note">Doanh nghiệp chưa có model đang dùng. Cần đánh giá và xác nhận trước lần chạy đầu tiên.</p>';
+    $("ml-update").textContent=imported?"Cập nhật nhãn cho dữ liệu đã nhập":"Cập nhật và kiểm tra dữ liệu";
+    if(sourceNote)sourceNote.textContent=imported?"Đang dùng dữ liệu CSV/Excel đã kiểm tra. Chọn nhãn đã rà để bổ sung mà vẫn giữ nguyên giao dịch và đặc trưng. Để thay dữ liệu, mở màn hình nhập CSV/Excel.":"Đọc bộ nguồn đã kết nối với máy chủ và kiểm tra đặc trưng, thời gian, mã giao dịch trước khi lưu vào không gian ML của doanh nghiệp. Model đang dùng được giữ nguyên.";
+    $("ml-data-summary").innerHTML=data.data?`<p><strong>${data.data.rows} giao dịch · ${data.data.columns.length} đặc trưng</strong> · ${data.data.labels_count} nhãn đã rà · Bộ ${escape(data.data.scenario)}<br>${escape(date(data.data.first_at))} → ${escape(date(data.data.last_at))}${data.data.scenario!==context().scenario?"<br>Cập nhật bộ đang chọn trước khi tiếp tục cấu hình/chạy ML.":""}</p>`:"<p>Chưa cập nhật dữ liệu ML cho doanh nghiệp này.</p>";
+    $("ml-current").innerHTML=active?`<p class="note"><strong>Đang dùng: ${escape(overview.algorithms.find(a=>a.id===active.algorithm)?.label)} · v${active.number}</strong><br>Kích hoạt riêng cho ${escape(data.company_id)}. Cập nhật dữ liệu không tự đổi phiên bản.</p>`:'<p class="note">Doanh nghiệp chưa có mô hình đang dùng. Cần đánh giá và xác nhận trước lần chạy đầu tiên.</p>';
     const formKey=JSON.stringify([data.company_id,data.data?.revision]);
     if(formKey!==formRevision){
       const defaults=data.data?.suggested_windows;
@@ -149,7 +149,7 @@
     const notes={catboost:"CatBoost học từ nhãn xác nhận. Mọi dòng train phải có nhãn 0/1 và thời điểm biết nhãn trước cuối kỳ train.",
       autoencoder:"Autoencoder học tái tạo dữ liệu qua lớp nén. Cần xem cảnh báo hội tụ trong kết quả đánh giá.",
       ecod:"ECOD dùng phân phối tham chiếu cố định từ train; batch mới không làm thay phân phối đã lưu.",
-      lof:"LOF chạy ở chế độ novelty, dùng model đã học để chấm dữ liệu mới.",
+      lof:"LOF chạy ở chế độ novelty, dùng mô hình đã học để chấm dữ liệu mới.",
       isolation_forest:"Isolation Forest học trên kỳ train. Ngưỡng được chọn riêng bằng calibration của doanh nghiệp."};
     $("ml-algorithm-note").textContent=notes[$("ml-algorithm").value]||"";
   }
@@ -184,9 +184,9 @@
       if(action==="data-update"||action==="labels-update"){$("ml-labels").value="";clearLabelPreview();}
       if(action==="labels-update"){
         const counts=result.label_update;
-        notice(`Đã xử lý nhãn: ${counts.existing} → ${counts.total}. Thêm ${counts.added}, trùng ${counts.unchanged}, sửa ${counts.updated}, giữ nhãn cũ do xung đột ${counts.skipped}. Giao dịch, feature và model đang dùng được giữ nguyên.`);return;
+        notice(`Đã xử lý nhãn: ${counts.existing} → ${counts.total}. Thêm ${counts.added}, trùng ${counts.unchanged}, sửa ${counts.updated}, giữ nhãn cũ do xung đột ${counts.skipped}. Giao dịch, đặc trưng và mô hình đang dùng được giữ nguyên.`);return;
       }
-      notice({evaluate:"Đã lưu ứng viên. Đối chiếu kết quả rồi chọn Xác nhận dùng phiên bản.","data-update":"Dữ liệu đã được kiểm tra và cập nhật. Tiếp theo chọn hoặc giữ model của doanh nghiệp.",activate:"Đã cố định phiên bản ML cho doanh nghiệp.",keep:"Đã giữ nguyên phiên bản hiện tại.",score:"Đã chấm bằng phiên bản đang dùng; kết quả lưu trong lịch sử."}[action]);
+      notice({evaluate:"Đã lưu ứng viên. Đối chiếu kết quả rồi chọn Xác nhận dùng phiên bản.","data-update":"Dữ liệu đã được kiểm tra và cập nhật. Tiếp theo chọn hoặc giữ mô hình của doanh nghiệp.",activate:"Đã cố định phiên bản ML cho doanh nghiệp.",keep:"Đã giữ nguyên phiên bản hiện tại.",score:"Đã chấm bằng phiên bản đang dùng; kết quả lưu trong lịch sử."}[action]);
     }catch(error){scheduleReadiness();notice(error.message,true);}
     finally{
       busy=false;

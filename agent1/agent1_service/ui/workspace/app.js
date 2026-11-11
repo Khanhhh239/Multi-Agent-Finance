@@ -21,8 +21,8 @@
     overview: "Tổng quan",
     data: "Dữ liệu doanh nghiệp",
     records: "Sổ dữ liệu và lịch sử nạp",
-    training: "Thiết lập & kiểm định",
-    forecast: "Dự báo & kịch bản",
+    training: "Thiết lập và kiểm định",
+    forecast: "Dự báo và kịch bản",
     guide: "Hướng dẫn dữ liệu",
   };
   const labels = {
@@ -265,7 +265,7 @@
     try {
       const access = await api("/access");
       if (expectedCompany && access.company !== expectedCompany) {
-        throw new Error("Kết nối không khớp doanh nghiệp. Mở lại tab từ workspace tổng.");
+        throw new Error("Kết nối không khớp doanh nghiệp. Mở lại tab từ trang chung.");
       }
       if (key) await api("/session", { method: "POST" });
       connected = true;
@@ -309,7 +309,7 @@
   async function redeemPortalTicket(ticket) {
     const submit = $("connect-form").querySelector("button[type=submit]");
     for (const button of [$("connect-top"), $("connect-open"), submit]) button.disabled = true;
-    notice("Đang kết nối với doanh nghiệp từ workspace tổng…");
+    notice("Đang kết nối với doanh nghiệp từ trang chung…");
     try {
       const response = await fetch("/v1/portal-connect/redeem", {
         method: "POST", cache: "no-store", credentials: "same-origin",
@@ -317,8 +317,8 @@
         body: JSON.stringify({ ticket: ticket || "" }),
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(typeof result.detail === "string" ? result.detail : "Không đổi được mã kết nối. Mở lại tab từ workspace tổng.");
-      if (!result.key || !result.company) throw new Error("Kết nối thiếu thông tin doanh nghiệp. Mở lại tab từ workspace tổng.");
+      if (!response.ok) throw new Error(typeof result.detail === "string" ? result.detail : "Không đổi được mã kết nối. Mở lại tab từ trang chung.");
+      if (!result.key || !result.company) throw new Error("Kết nối thiếu thông tin doanh nghiệp. Mở lại tab từ trang chung.");
       await connectWithKey(result.key, result.company);
     } catch (err) {
       connect();

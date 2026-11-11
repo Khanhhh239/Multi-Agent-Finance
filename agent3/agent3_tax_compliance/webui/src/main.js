@@ -28,9 +28,11 @@ const HIDDEN = [
   ['#/cai-dat', 'Cấu hình doanh nghiệp', adminOnly(pageConfig)],
 ];
 
+const DETAIL = ['#/ngan-hang', '#/so-lieu', '#/giai-trinh', '#/lich', '#/luat', '#/tin-luat'];
+
 function renderNav(cur) {
   const active = cur.startsWith('#/quan-tri') || ['#/thiet-lap', '#/cai-dat'].includes(cur) ? '#/quan-tri'
-    : ['#/ngan-hang', '#/so-lieu', '#/giai-trinh', '#/lich', '#/luat', '#/tin-luat'].includes(cur) ? '#/' : cur;
+    : cur;
   $('#nav').innerHTML = NAV.map(([href, label]) => `<li class="cds--side-nav__item"><a class="cds--side-nav__link" href="${href}" ${href === active ? 'aria-current="page"' : ''}>
     <span class="cds--side-nav__link-text">${esc(label)}</span></a></li>`).join('');
   $('.admin-link').setAttribute('aria-current', active === '#/quan-tri' ? 'page' : 'false');
@@ -43,6 +45,7 @@ async function route() {
   if (signal.aborted) return;
   if (cur === '#/nap' && state.ws && portalOrigin()) { window.top.location.href = portalOrigin() + '/#data'; return; }
   renderNav(cur);
+  const company = $('#active-company'); if (company) company.title = company.textContent;
   document.body.classList.remove('nav-open');
   $('.menu-toggle').setAttribute('aria-expanded', 'false');
   $('#modal-root').innerHTML = '';
@@ -50,6 +53,7 @@ async function route() {
   const page = entry[2];
   document.title = `${entry[1]} · Agent 3 Trợ lý thuế`;
   try { if (needWorkspace()) return; await page(); } catch (err) { if (signal.aborted) return; app().innerHTML = `<h1 class="page">${esc(entry[1])}</h1>` + notice('error', 'Có lỗi khi tải trang', err.message); }
+  if (!signal.aborted && DETAIL.includes(cur) && !app().querySelector('.back-crumb')) app().insertAdjacentHTML('afterbegin', '<a class="back-crumb" href="#/">← Quay về Tổng quan</a>');
   if (!signal.aborted) { decoratePage(app()); if (!document.querySelector('.drawer')) app().focus({ preventScroll: true }); }
 }
 

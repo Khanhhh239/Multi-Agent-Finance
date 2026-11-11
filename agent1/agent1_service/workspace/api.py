@@ -16,6 +16,7 @@ import zipfile
 import pandas as pd
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, Header, Request, Query
 from fastapi.responses import Response, FileResponse
+from starlette.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from agent1.adaptive.data import (
     SCHEMAS,
@@ -485,7 +486,8 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 if kind == "invoices" and ACCOUNTING <= row.keys():
                     row.update(source_file=file.filename, source_row=i, source_sha256=source_hash(content))
                     row["source_lineage"][row["source"]] = dict(file=file.filename, row=i, sha256=source_hash(content))
-            staged = current(firm)
+            # current() waits for the dataset lock: never block the event loop on it (health checks and every other request stall).
+            staged = await run_in_threadpool(current, firm)
             base_hash = fingerprint(staged)
             merged = {r[IDS[kind]]: r for r in staged.get(kind, [])}
             changes = [

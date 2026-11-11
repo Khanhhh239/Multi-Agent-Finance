@@ -71,11 +71,31 @@ export async function pageDossier() {
     <div class="cds--form-item"><label class="cds--label" for="req">Nội dung công văn của cơ quan thuế (không bắt buộc)</label>
     <textarea class="cds--text-area" id="req" rows="4" placeholder="Ví dụ: Đề nghị doanh nghiệp giải trình việc kê khai khấu trừ thuế GTGT đầu vào của các hóa đơn mua hàng của Công ty TNHH Điện máy Thành Công trong quý 3/2026..."></textarea></div>
     <h2 class="section">Hóa đơn đưa vào hồ sơ</h2>
-    ${table(['', 'Hóa đơn', 'Người bán', 'Vấn đề', { label: 'Tổng thanh toán', num: true }], keys.map((k) => { const i = invoiceOf(k); const its = rep.items.filter((x) => x.invoice_keys.includes(k));
-      return `<tr><td><input type="checkbox" class="pick" value="${esc(k)}"></td><td>${esc(invLabel(i))}<div class="muted small">${dmy(i.issue_date)}</div></td><td>${esc(i.seller_name)}</td><td><div class="chips">${its.map((x) => tag(x.status, x.title.slice(0, 48))).join('')}</div></td><td class="num">${money(i.gross)}</td></tr>`; }), 'Không có hóa đơn nào có vấn đề.')}
+    <div class="bar"><input class="cds--text-input filter-input" id="dq" placeholder="Tìm số hóa đơn hoặc người bán" aria-label="Tìm hóa đơn"><span class="muted small" id="dcount"></span>
+      ${button('Chọn các hóa đơn đang hiện', 'ghost', 'id="dpick"')}${button('Bỏ chọn tất cả', 'ghost', 'id="dnone"')}</div>
+    <div id="dlist"></div>
     <div class="bar">${button('Soạn thư và lập hồ sơ', 'primary', 'id="make"')}<span id="mk"></span></div><div id="letter"></div>`;
+  // 2,500 or more invoices must not be rendered at once: filter, page by 50, remember what was ticked.
+  const PAGE = 50; let shown = PAGE; const picked = new Set();
+  const rowsOf = (k) => { const i = invoiceOf(k); return { k, i, its: rep.items.filter((x) => x.invoice_keys.includes(k)) }; };
+  const all = keys.map(rowsOf);
+  const view = () => { const q = $('#dq').value.trim().toLowerCase(); return q ? all.filter((r) => `${invLabel(r.i)} ${r.i.seller_name}`.toLowerCase().includes(q)) : all; };
+  const paint = () => {
+    const v = view();
+    $('#dcount').textContent = `${v.length} hóa đơn, đã chọn ${picked.size}`;
+    $('#dlist').innerHTML = table(['', 'Hóa đơn', 'Người bán', 'Vấn đề', { label: 'Tổng thanh toán', num: true }], v.slice(0, shown).map(({ k, i, its }) => `<tr><td><input type="checkbox" class="pick" value="${esc(k)}" ${picked.has(k) ? 'checked' : ''} aria-label="Chọn hóa đơn"></td>
+      <td>${esc(invLabel(i))}<div class="muted small">${dmy(i.issue_date)}</div></td><td>${esc(i.seller_name)}</td>
+      <td><div class="chips" title="${esc(its.map((x) => x.title).join('; '))}">${its[0] ? tag(its[0].status, its[0].title) : ''}${its.length > 1 ? `<span class="muted small">và ${its.length - 1} vấn đề khác</span>` : ''}</div></td><td class="num">${money(i.gross)}</td></tr>`), 'Không có hóa đơn nào khớp.')
+      + (v.length > shown ? `<div class="bar"><span class="muted small">Đang hiện ${shown} trên ${v.length}</span>${button(`Hiện thêm ${Math.min(PAGE, v.length - shown)}`, 'ghost', 'id="dmore"')}</div>` : '');
+    app().querySelectorAll('.pick').forEach((c) => { c.onchange = () => { c.checked ? picked.add(c.value) : picked.delete(c.value); $('#dcount').textContent = `${view().length} hóa đơn, đã chọn ${picked.size}`; }; });
+    if ($('#dmore')) $('#dmore').onclick = () => { shown += PAGE; paint(); };
+  };
+  $('#dq').oninput = () => { shown = PAGE; paint(); };
+  $('#dpick').onclick = () => { view().slice(0, shown).forEach((r) => picked.add(r.k)); paint(); };
+  $('#dnone').onclick = () => { picked.clear(); paint(); };
+  paint();
   $('#make').onclick = async () => {
-    const invoice_keys = [...app().querySelectorAll('.pick:checked')].map((c) => c.value);
+    const invoice_keys = [...picked];
     if (!invoice_keys.length) { $('#mk').innerHTML = notice('warning', 'Chọn ít nhất một hóa đơn'); return; }
     $('#mk').innerHTML = loading('Đang gom chứng từ và soạn thư bằng mô hình trên máy (khoảng 1 đến 2 phút)');
     try {

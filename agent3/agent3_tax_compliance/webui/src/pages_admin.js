@@ -44,8 +44,8 @@ function loginForm(st) {
           </div>
         </div>
         <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="pw">Mật khẩu${setup ? ' mới (ít nhất 8 ký tự)' : ''}</label>
-        <input class="cds--text-input" id="pw" type="password" autocomplete="${setup ? 'new-password' : 'current-password'}" required></div>
-        ${setup ? '<div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="pw2">Nhập lại mật khẩu</label><input class="cds--text-input" id="pw2" type="password" autocomplete="new-password" required></div>' : ''}
+        <input class="cds--text-input son-box" id="pw" type="password" autocomplete="${setup ? 'new-password' : 'current-password'}" required></div>
+        ${setup ? '<div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="pw2">Nhập lại mật khẩu</label><input class="cds--text-input son-box" id="pw2" type="password" autocomplete="new-password" required></div>' : ''}
         <div class="bar" style="margin-top:20px">${button(setup ? 'Đặt mật khẩu' : 'Đăng nhập', 'primary', 'type="submit"')}</div><div id="admin-msg"></div>
         <p class="muted small" style="margin-top:14px">Mật khẩu được mã hóa băm an toàn trên máy cục bộ.</p>
       </form>
@@ -76,7 +76,7 @@ export function adminOnly(page) {
 export async function pageAdminHome() {
   const cats = await api('/api/admin/catalog');
   app().innerHTML = `<span class="eyebrow">Bảng điều khiển quản trị</span>
-    <h1 class="page">Quản trị & Danh mục dùng chung</h1>
+    <h1 class="page">Quản trị và Danh mục dùng chung</h1>
     <p class="lead">Mọi thay đổi ở đây được kiểm tra hợp lệ, ghi phiên bản và lưu vào nhật ký lịch sử. Danh mục dùng chung áp dụng cho mọi doanh nghiệp; cấu hình doanh nghiệp áp dụng riêng cho từng không gian.</p>
     <div class="grid2">
       <div class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm)">

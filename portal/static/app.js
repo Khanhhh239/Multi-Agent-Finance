@@ -2,7 +2,7 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const AGENT_LABEL = { agent1: "Agent 1", agent2: "Agent 2", agent3: "Agent 3", agent4: "Agent 4" };
-  const WORKSPACE_LABEL = { agent1: "Dòng tiền", agent2: "Kiểm soát", agent3: "Thuế", agent4: "Hỏi Đáp" };
+  const WORKSPACE_LABEL = { agent1: "Dòng tiền", agent2: "Kiểm soát", agent3: "Thuế", agent4: "Hỏi đáp" };
   const STATE_TEXT = { running: "Đang chạy", starting: "Đang khởi động", stopped: "Đang tắt", "busy-port": "Cổng bị chiếm" };
   const CHECK_TEXT = { ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua", stale: "Chờ kiểm tra lại" };
   let state = null;
@@ -219,7 +219,7 @@
     $("nav-agents").replaceChildren(
       ...state.agents.map((a) =>
         el("a", { class: "nav-link", href: "#" + a.id, "data-view": a.id },
-          el("span", { class: "num", "aria-hidden": "true" }, "A" + a.number), WORKSPACE_LABEL[a.id] + " · A" + a.number, el("span", { class: "dot " + a.state, title: STATE_TEXT[a.state] }))));
+          el("span", { class: "num", "aria-hidden": "true" }, "A" + a.number), WORKSPACE_LABEL[a.id], el("span", { class: "dot " + a.state, title: STATE_TEXT[a.state] }))));
     $("profile-agent-list").replaceChildren(...state.agents.map((a) =>
       el("li", {}, el("a", { href: "#" + a.id }, WORKSPACE_LABEL[a.id] + " · A" + a.number),
         el("span", {}, a.id === "agent4" ? "Kho mô phỏng riêng" : STATE_TEXT[a.state]))));
@@ -260,7 +260,7 @@
         return el("article", { class: "agent", "data-id": a.id },
           el("div", { class: "agent-head" }, el("span", { class: "big" }, "A" + a.number),
             el("span", { class: "status" }, el("span", { class: "dot " + a.state }), STATE_TEXT[a.state])),
-          el("h3", {}, a.id === "agent4" ? "Hỏi Đáp" : a.name),
+          el("h3", {}, a.id === "agent4" ? "Hỏi đáp" : a.name),
           el("p", {}, descriptions[a.id] || a.summary),
           el("div", { class: "actions" },
             el("a", { href: "#" + a.id }, "Mở " + AGENT_LABEL[a.id] + " →"),
@@ -406,7 +406,7 @@
         if (bioLabel) {
           bioLabel.textContent = i.has_biometric
             ? "Mở khóa bằng FaceID / Sinh trắc học"
-            : "Thiết lập & Mở bằng FaceID (Tùy chọn)";
+            : "Thiết lập và Mở bằng FaceID (Tùy chọn)";
         }
       }
       return;
@@ -432,7 +432,7 @@
     if (!currentAgent) return;
     const a = agentById(currentAgent);
     $("agent-no").textContent = a.number;
-    $("agent-name").textContent = a.id === "agent4" ? "Hỏi Đáp" : a.name;
+    $("agent-name").textContent = a.id === "agent4" ? "Hỏi đáp" : a.name;
     $("agent-status").replaceChildren(el("span", { class: "dot " + a.state }), STATE_TEXT[a.state]);
     const source = $("agent-source");
     source.textContent = a.id === "agent4" ? "Nguồn số liệu: kho mô phỏng của Agent 4"
@@ -528,7 +528,7 @@
       if (tab.document.body) tab.document.body.textContent = "Đang kết nối Agent 1 với doanh nghiệp của bạn…";
       const result = await api("/api/agents/agent1/connect-link", { method: "POST", json: { company } });
       if ((state.company.code || "SME") !== company || result.company !== company) {
-        throw new Error("Doanh nghiệp đã đổi. Mở lại tab từ workspace tổng.");
+        throw new Error("Doanh nghiệp đã đổi. Mở lại tab từ trang chung.");
       }
       const target = new URL(result.url);
       if (target.origin !== agentOrigin || target.pathname !== "/workspace" || target.searchParams.get("portal") !== location.origin) {
@@ -764,10 +764,9 @@
       const pwInput = $("gate-password");
       let pw = (pwInput?.value || "").trim();
       if (!pw) {
-        pw = prompt("Nhập mật khẩu nạp dữ liệu một lần để đăng ký FaceID:") || "";
-      }
-      if (!pw) {
-        if (errEl) errEl.textContent = "Cần mật khẩu để liên kết FaceID lần đầu.";
+        // No native prompt(): it would show the password in clear text and cannot be styled or automated.
+        if (errEl) errEl.textContent = "Nhập mật khẩu vào ô phía trên, rồi bấm lại nút FaceID để đăng ký lần đầu.";
+        pwInput?.focus();
         return;
       }
       openFaceModal("register", pw);

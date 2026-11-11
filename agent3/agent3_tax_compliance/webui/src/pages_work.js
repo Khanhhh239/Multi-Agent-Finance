@@ -130,10 +130,10 @@ export async function pageOverview() {
 
     <div class="quick-links">
       <a href="#/so-lieu"><span>📊</span> Số liệu thuế GTGT theo kỳ</a>
-      <a href="#/lich"><span>📅</span> Lịch thuế & Hạn nộp</a>
+      <a href="#/lich"><span>📅</span> Lịch thuế và Hạn nộp</a>
       <a href="#/ngan-hang"><span>🏦</span> Giao dịch ngân hàng</a>
       <a href="#/giai-trinh"><span>📑</span> Soạn hồ sơ giải trình</a>
-      <a href="#/luat"><span>⚖️</span> Kho luật & Điểm mới</a>
+      <a href="#/luat"><span>⚖️</span> Kho luật và Điểm mới</a>
     </div>
 
     <div class="grid2">
@@ -361,7 +361,7 @@ async function exposureBox(el, index) {
     const e = ex[index];
     if (!e) return;
     el.innerHTML = `<div class="panel exposure" style="border-left:3px solid var(--a3-danger);background:var(--cds-layer)">
-      <h3 style="margin-top:0">Đánh giá thiệt hại & Phương án xử lý tối ưu</h3>
+      <h3 style="margin-top:0">Đánh giá thiệt hại và Phương án xử lý tối ưu</h3>
       ${e.declared
         ? `<table class="mini" style="width:100%;font-size:13px">
             <tr><td>Tự khai bổ sung và nộp ngay</td><td class="num"><strong>${money(Number(e.amount) + Number(e.interest))}</strong></td><td class="muted small">thuế ${money(e.amount)} + tiền chậm nộp ${money(e.interest)} (${e.days_late} ngày); không bị phạt khai sai</td></tr>
@@ -402,7 +402,7 @@ function openItem(it, index) {
 
     <div id="exposure"></div>
 
-    <h3 class="section">Chi tiết vấn đề & Khuyến nghị</h3>
+    <h3 class="section">Chi tiết vấn đề và Khuyến nghị</h3>
     <div style="background:var(--cds-layer);padding:14px 16px;border-radius:8px;border:1px solid var(--cds-border-subtle);margin-bottom:14px">
       <p style="margin:0 0 8px;font-size:13.5px"><strong>Hiện tượng:</strong> ${esc(it.detail)}</p>
       <p style="margin:0;font-size:13.5px;color:var(--a3-primary)"><strong>Hành động cần làm:</strong> ${esc(it.action)}</p>
@@ -413,7 +413,7 @@ function openItem(it, index) {
       ${it.basis.map((b) => `<li>${esc(b)}</li>`).join('')}
     </ul>
 
-    ${canDecide ? `<h3 class="section">Phê duyệt & Quyết định xử lý</h3>
+    ${canDecide ? `<h3 class="section">Phê duyệt và Quyết định xử lý</h3>
       <div id="suggest"></div>
       <form id="decide">
         <div class="form-grid">

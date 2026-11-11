@@ -416,3 +416,40 @@ html body :is(td.num, th.num, .num, [data-num], .amount) { text-align: right; fo
 .son-stamp small { font-size: 11px; letter-spacing: .08em; opacity: .85; }
 @keyframes son-stamp { 0% { opacity: 0; transform: scale(2.1) rotate(-14deg); } 14% { opacity: .96; transform: scale(.94) rotate(-7deg); } 20% { transform: scale(1.02) rotate(-7deg); } 26% { transform: scale(1) rotate(-7deg); } 78% { opacity: .96; } 100% { opacity: 0; transform: scale(1) rotate(-7deg); } }
 @media (prefers-reduced-motion: reduce) { .son-stamp > div { animation: son-stamp-still 2.2s both; } @keyframes son-stamp-still { 0%, 85% { opacity: .96; } 100% { opacity: 0; } } }
+
+/* ===== Consistency pass (audit 11/11/2026) ===== */
+/* Fields are lines on paper everywhere; opt out with class son-box */
+html body :is(input:not([type]), input[type=text], input[type=search], input[type=number], input[type=date], input[type=month], input[type=password], input[type=email], input[type=tel], input[type=url], select, textarea):not(.son-box) {
+  background-color: transparent !important; border: 0 !important; border-bottom: 1.5px solid var(--kt-field-line) !important; border-radius: 0 !important; box-shadow: none; padding-block: 9px; }
+html body :is(input:not([type]), input[type=text], input[type=search], input[type=number], input[type=date], input[type=month], input[type=password], input[type=email], input[type=tel], input[type=url], select, textarea):not(.son-box):hover:not(:disabled) { border-bottom-color: var(--kt-accent) !important; }
+html body :is(input:not([type]), input[type=text], input[type=search], input[type=number], input[type=date], input[type=month], input[type=password], input[type=email], input[type=tel], input[type=url], select, textarea):not(.son-box):focus { outline: 0 !important; border-bottom-color: var(--kt-accent) !important; box-shadow: 0 1.5px 0 var(--kt-accent); }
+html body :is(input, select, textarea):disabled { opacity: .55; }
+/* The browser's own file control speaks the browser's language; the enhancer in platform-theme.js replaces it */
+.son-file { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.son-file-btn { margin: 0 !important; }
+.son-file-name { color: var(--kt-muted); font-size: 13px; overflow-wrap: anywhere; }
+input.son-file-input { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0 !important; overflow: hidden; pointer-events: none; padding: 0 !important; border: 0 !important; }
+/* Section headings share the display face in every agent */
+html body :is(h2) { font-family: var(--kt-display) !important; font-weight: 540; letter-spacing: -.01em; }
+/* One look for the big figures */
+[data-agent] :is(.metrics strong, .stats strong, .kpi .value), #view-overview :is(.metric strong, .stat strong) { font-size: clamp(24px, 2.2vw, 32px); font-weight: 520; line-height: 1.15; }
+/* Agent 1: the data tab in the rail reads like its neighbours when the app runs on its own */
+[data-agent="1"] .rail nav .reconciliation-nav :is(.standalone-data-label, .embedded-data-label) { font-size: inherit; color: inherit; font-weight: inherit; letter-spacing: inherit; text-transform: none; }
+/* Agent 2: the top bar scrolls instead of spilling out on a phone; stray pages follow the warm palette */
+[data-agent="2"] .sidebar { overflow-x: auto; scrollbar-width: thin; }
+[data-agent="2"] .sidebar .nav-item { flex: none; white-space: nowrap; }
+[data-agent="2"] .tool-page { color: var(--kt-text); background: var(--kt-canvas); }
+[data-agent="2"] .tool-page :is(.lead, .hint, small) { color: var(--kt-muted); }
+[data-agent="2"] .tool-page :is(.note, .steps li) { background: var(--kt-accent-soft); }
+[data-agent="2"] .tool-page a { color: var(--kt-accent); }
+[data-agent="2"] .tool-page .badge { background: var(--kt-accent-soft); color: var(--kt-accent-strong); }
+[data-agent="2"] .tool-page main { max-width: 1180px; margin-inline: auto; }
+.son-tabs { display: flex; gap: 4px; overflow-x: auto; padding: 8px var(--kt-gutter, 24px); background: var(--kt-surface); border-bottom: 1px solid var(--kt-line); scrollbar-width: thin; }
+.son-tabs a { flex: none; padding: 8px 14px; border-radius: 6px; color: var(--kt-text); text-decoration: none !important; font-size: 14px; font-weight: 500; white-space: nowrap; }
+.son-tabs a:hover { background: var(--kt-accent-soft); }
+.son-tabs a[aria-current="page"] { background: var(--kt-accent-soft); color: var(--kt-accent-strong); font-weight: 600; }
+/* Portal: the headings of the stand-alone pages need air under the top bar */
+#view-config .profile-heading, #intake .page-head { margin-top: 22px; }
+[data-agent="1"] .rail nav .reconciliation-nav { justify-content: flex-start; text-align: left; }
+[data-agent="1"] .rail nav .reconciliation-nav :is(.standalone-data-label, .embedded-data-label) { margin: 0; }
+html body input.son-box { background-color: var(--kt-surface); border: 1px solid var(--kt-field-line); border-radius: var(--kt-radius); padding: 10px 12px; }

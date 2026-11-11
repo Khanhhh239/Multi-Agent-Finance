@@ -248,18 +248,6 @@
   margin-bottom: 8px;
 }
 
-[data-agent="3"] .kpi .kpi-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  background: var(--cds-layer-hover);
-  color: var(--a3-primary);
-}
-
 [data-agent="3"] .kpi .value {
   font-size: clamp(22px, 2.1vw, 30px);
   font-weight: 700;
@@ -276,30 +264,15 @@
 [data-agent="3"] .kpi.kpi-risk {
   border-top: 3px solid var(--a3-danger);
 }
-[data-agent="3"] .kpi.kpi-risk .kpi-icon {
-  background: var(--a3-danger-soft);
-  color: var(--a3-danger);
-}
-
 [data-agent="3"] .kpi .value.warn {
   color: var(--a3-warning);
 }
 [data-agent="3"] .kpi.kpi-warn {
   border-top: 3px solid var(--a3-warning);
 }
-[data-agent="3"] .kpi.kpi-warn .kpi-icon {
-  background: var(--a3-warning-soft);
-  color: var(--a3-warning);
-}
-
 [data-agent="3"] .kpi.kpi-opportunity {
   border-top: 3px solid var(--a3-primary);
 }
-[data-agent="3"] .kpi.kpi-opportunity .kpi-icon {
-  background: var(--a3-primary-soft);
-  color: var(--a3-primary);
-}
-
 [data-agent="3"] .kpi .sub {
   font-size: 12px;
   color: var(--cds-text-secondary);
@@ -1173,3 +1146,29 @@
 [data-agent="3"] .kpi .kpi-head { height: 36px; overflow: visible; }
 [data-agent="3"] .kpi .label { min-height: 0; line-height: 1.4; }
 [data-agent="3"] .kpi .value { margin-top: 4px; }
+
+/* ===== Consistency pass (audit 11/11/2026) ===== */
+/* Status tags use the shared palette: red only for risk, ochre for review, ink for the rest */
+[data-agent="3"] .cds--tag { border: 1px solid transparent; font-weight: 500; }
+[data-agent="3"] .cds--tag--red { background: var(--kt-err-soft); color: var(--kt-err); border-color: #f2c4ca; }
+[data-agent="3"] :is(.cds--tag--magenta, .cds--tag--warm-gray) { background: var(--kt-warn-soft); color: var(--kt-warn); border-color: #ecd9c7; }
+[data-agent="3"] :is(.cds--tag--green, .cds--tag--teal) { background: var(--kt-ok-soft); color: var(--kt-ok); border-color: #e2cdd0; }
+[data-agent="3"] :is(.cds--tag--blue, .cds--tag--purple, .cds--tag--cool-gray, .cds--tag--gray) { background: #f1ecea; color: #4d4044; border-color: #e0d6d3; }
+/* Table headers read the same whether sortable or not */
+[data-agent="3"] .cds--data-table thead th, [data-agent="3"] .cds--data-table thead th .cds--table-header-label { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+[data-agent="3"] .cds--data-table thead th.num, [data-agent="3"] .cds--data-table thead th.num .cds--table-sort__flex { text-align: right; justify-content: flex-end; }
+/* Header: a long company name wraps instead of being cut */
+[data-agent="3"] .ws-select, [data-agent="3"] #active-company { white-space: nowrap; max-width: min(62vw, 720px); overflow: hidden; text-overflow: ellipsis; }
+/* Pages that open from the overview carry a way back instead of a wrong menu highlight */
+[data-agent="3"] .back-crumb { display: inline-block; margin: 0 0 10px; font-size: 13px; color: var(--kt-accent); text-decoration: none; }
+[data-agent="3"] .back-crumb:hover { text-decoration: underline; }
+/* Ask page: same left edge as every other page, no empty block while there is no conversation, no spill on a phone */
+[data-agent="3"] .ask-wrap { margin: 0; max-width: 56rem; }
+[data-agent="3"] .chat { min-height: 0; }
+[data-agent="3"] .ask-bar { flex-wrap: wrap; }
+[data-agent="3"] .ask-bar .cds--form-item { flex: 1 1 14rem; min-width: 0; }
+[data-agent="3"] .ask-bar .cds--btn { flex: none; }
+/* Administrator sign-in: a visible field */
+[data-agent="3"] #app input.son-box { background: var(--kt-surface) !important; border: 1px solid var(--kt-field-line) !important; border-radius: var(--kt-radius) !important; padding-inline: 12px; }
+[data-agent="3"] .cds--data-table thead th button.sort-button { font: inherit; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; }
+[data-agent="3"] .cds--data-table thead th.num button.sort-button { text-align: right; }

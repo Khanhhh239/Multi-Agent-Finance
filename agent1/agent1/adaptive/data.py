@@ -540,18 +540,19 @@ def invoice_view(data, clock=None):
             limit is None or (row["known_at"] <= limit and row["issue_date"] <= limit)
         ):
             adjustments.setdefault(row["adjusts_invoice_id"], []).append(row)
-    for index, active in frame.iterrows():
-        changes = adjustments.get(active.invoice_id, [])
-        frame.at[index, "known_at"] = max(
-            [active.known_at, *[r["known_at"] for r in changes]]
-        )
-        frame.at[index, "balance_effective_date"] = max(
-            [active.issue_date, *[r["issue_date"] for r in changes]]
-        )
-        root = by_id[active.invoice_id]
+    # Plain lists and one column assignment: iterrows() with three .at writes per row took minutes on 50,000 invoices.
+    known_at, balance_date, origin_date = [], [], []
+    for invoice_id, known, issued in zip(frame["invoice_id"], frame["known_at"], frame["issue_date"]):
+        changes = adjustments.get(invoice_id, [])
+        known_at.append(max([known, *[r["known_at"] for r in changes]]))
+        balance_date.append(max([issued, *[r["issue_date"] for r in changes]]))
+        root = by_id[invoice_id]
         while root.get("adjustment_type") == "replacement":
             root = by_id[root["adjusts_invoice_id"]]
-        frame.at[index, "origin_issue_date"] = root["issue_date"]
+        origin_date.append(root["issue_date"])
+    frame["known_at"] = known_at
+    frame["balance_effective_date"] = balance_date
+    frame["origin_issue_date"] = origin_date
     return frame
 
 
