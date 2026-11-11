@@ -151,6 +151,56 @@ test("company mismatch is rejected before workspace data is loaded", async () =>
   assert.equal(input.value, "");
 });
 
+function sessionUI(embedded = false) {
+  const calls = [], elements = new Map();
+  const $ = id => { if (!elements.has(id)) elements.set(id, {value:"", close() { this.closed = true; }}); return elements.get(id); };
+  const window = {}; window.parent = embedded ? {} : window;
+  const scope = {window, $, token:"", connected:false, notice() {},
+    api:async (path, options) => { calls.push([path, options]); return {company:"TEST_A", role:"accountant"}; },
+    refresh:async () => calls.push(["refresh"])};
+  vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  async function connectWithKey(", '  $("connect-form").onsubmit ='), scope);
+  vm.runInContext(section(agentSource, "  async function restoreSession(", "  // Inside the platform shell:"), scope);
+  return {scope, calls, $};
+}
+
+test("standalone connection exchanges its key for a session before loading company data", async () => {
+  const ui = sessionUI();
+  await ui.scope.connectWithKey("synthetic-key", "TEST_A");
+  assert.deepEqual(ui.calls.map(call => call[0]), ["/access", "/session", "refresh"]);
+  assert.equal(ui.calls[1][1].method, "POST");
+  assert.equal(ui.scope.connected, true);
+  assert.equal(ui.scope.token, "");
+  assert.equal(ui.$("token-input").value, "");
+});
+
+test("reload restores a cookie session without requiring the access key again", async () => {
+  const ui = sessionUI();
+  ui.scope.fetch = async (url, options) => {
+    assert.equal(url, "/v1/access"); assert.equal(options.credentials, "same-origin");
+    return {ok:true};
+  };
+  await ui.scope.restoreSession();
+  assert.equal(ui.scope.connected, true);
+  assert.equal(ui.scope.token, "");
+  assert.deepEqual(ui.calls.map(call => call[0]), ["/access", "refresh"]);
+});
+
+test("embedded portal retains its in-memory fallback when third-party cookies are blocked", async () => {
+  const ui = sessionUI(true);
+  await ui.scope.connectWithKey("synthetic-key", "TEST_A");
+  assert.equal(ui.scope.connected, true);
+  assert.equal(ui.scope.token, "synthetic-key");
+});
+
+test("an expired browser session does not fabricate a connected workspace", async () => {
+  const ui = sessionUI();
+  ui.scope.fetch = async () => ({ok:false});
+  await ui.scope.restoreSession();
+  assert.equal(ui.scope.connected, false);
+  assert.equal(ui.calls.length, 0);
+});
+
 test("manual allocation sends VND text without rounding through a JavaScript number", async () => {
   const nodes = new Map(), calls = [];
   const $ = id => {
@@ -158,7 +208,8 @@ test("manual allocation sends VND text without rounding through a JavaScript num
     return nodes.get(id);
   };
   let pending;
-  const scope = { $, action: work => { pending = work(); }, refresh: async () => {}, notice() {},
+  const scope = { $, action: work => { pending = work(); }, refresh: async () => {}, loadReconciliation: async () => {},
+    reconciliationReviewer: () => "Kế toán thử", notice() {},
     api: async (url, options) => calls.push([url, JSON.parse(options.body)]) };
   vm.createContext(scope);
   vm.runInContext(section(agentSource, '  $("allocate-form").onsubmit =', '  $("saved-plans").onclick ='), scope);
@@ -166,4 +217,177 @@ test("manual allocation sends VND text without rounding through a JavaScript num
   await pending;
   assert.equal(calls[0][0], "/allocations");
   assert.equal(calls[0][1].amount, "100000000000000001");
+  assert.equal(calls[0][1].reviewed_by, "Kế toán thử");
+});
+
+test("T9 money display preserves exact VND above Number.MAX_SAFE_INTEGER", () => {
+  const scope = { fmt: new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 0 }) };
+  vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  function exactMoney(", "  function reconciliationReviewer("), scope);
+  assert.equal(scope.exactMoney("100000000000000001"), "100.000.000.000.000.001");
+});
+
+test("T9 review requires an identified accountant", () => {
+  let focused = false;
+  const input = { value: "  ", focus() { focused = true; } };
+  const scope = { $: () => input };
+  vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  function reconciliationReviewer(", "  function chooseAllocation("), scope);
+  assert.throws(() => scope.reconciliationReviewer(), /Nhập tên người xử lý/);
+  assert.equal(focused, true);
+  input.value = "  Kế toán A  ";
+  assert.equal(scope.reconciliationReviewer(), "Kế toán A");
+});
+
+function reviewUI(stale = false) {
+  const calls = [], target = { children: [], replaceChildren() { this.children = []; }, append(...items) { this.children.push(...items); } };
+  function node(tag, text) {
+    return { tag, textContent: text, value: "", children: [], append(...items) { this.children.push(...items); }, focus() { this.focused = true; } };
+  }
+  const proposal = { id: "proposal-1", stale, cases: [{ bank_id: "B1", status: "auto", date: "2026-03-01", account: "A",
+    available_minor: 100, reason: "unique_transport", reason_text: "Cần đối chiếu chứng từ", memo: "<script>unsafe</script>",
+    allocations: [{ invoice_id: "I1", amount_minor: 100 }], candidates: [] }] };
+  let pending;
+  const scope = { node, $: () => target, crypto: { randomUUID: () => "test-key" },
+    reconciliationState: { proposal }, exactMoney: String, displayDate: String, reconciliationReviewer: () => "Accountant",
+    action: work => { pending = work(); }, api: async (url, options) => { calls.push([url, JSON.parse(options.body)]); },
+    refresh: async () => {}, loadReconciliation: async () => {}, notice() {} };
+  vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  function renderReconciliationCases(", "  function renderReconciliationHistory("), scope);
+  scope.renderReconciliationCases(proposal);
+  const all = object => [object, ...(object.children || []).flatMap(all)];
+  return { calls, proposal, scope, elements: all(target), readElements: () => all(target), run: async (form, kind) => {
+    form.onsubmit({ preventDefault() {}, submitter: { value: kind } });
+    await pending;
+  } };
+}
+
+test("T9 reject requires a reason and approval sends only the selected bank case", async () => {
+  const ui = reviewUI();
+  const form = ui.elements.find(x => x.tag === "form");
+  const note = ui.elements.find(x => x.tag === "textarea");
+  await assert.rejects(ui.run(form, "reject"), /Nhập lý do từ chối/);
+  assert.equal(ui.calls.length, 0);
+  assert.equal(note.focused, true);
+  note.value = "Đã đối chiếu";
+  await ui.run(form, "accept");
+  assert.equal(ui.calls[0][0], "/reconciliation/accept");
+  assert.equal(ui.calls[0][1].bank_id, "B1");
+  assert.equal(ui.calls[0][1].proposal_id, "proposal-1");
+  assert.equal(ui.calls[0][1].reviewed_by, "Accountant");
+  assert.equal(ui.elements.some(x => x.textContent === "<script>unsafe</script>"), true);
+});
+
+test("T9 stale proposals have no approval form and replaced proposals cannot be submitted", async () => {
+  assert.equal(reviewUI(true).elements.some(x => x.tag === "form"), false);
+  const ui = reviewUI();
+  ui.scope.reconciliationState = { proposal: { id: "new-proposal" } };
+  await assert.rejects(ui.run(ui.elements.find(x => x.tag === "form"), "accept"), /Đề xuất đã đổi/);
+  assert.equal(ui.calls.length, 0);
+});
+
+test("T9 candidate selection works outside the first page of pending bank rows", () => {
+  const ui = reviewUI();
+  let selected;
+  ui.scope.reconciliationState.pending = [];
+  ui.scope.chooseAllocation = (...args) => { selected = args; };
+  ui.proposal.cases[0].available_minor = "100000000000000001";
+  ui.proposal.cases[0].candidates = [{ invoice_id: "I1", customer_id: "C1", score: 1,
+    amount_open_minor: "100000000000000000", evidence: ["Khớp số hóa đơn"] }];
+  ui.scope.renderReconciliationCases(ui.proposal);
+  ui.readElements().find(x => x.tag === "button" && x.textContent === "Chọn để ghép thủ công").onclick();
+  assert.equal(selected[0].bank_id, "B1");
+  assert.equal(selected[1], "I1");
+  assert.equal(selected[2], "100000000000000000");
+});
+
+function sourceCorrectionUI() {
+  const nodes = new Map(), calls = [], trace = [];
+  const $ = id => {
+    if (!nodes.has(id)) nodes.set(id, { id, value: "", disabled: false, hidden: false, open: false,
+      children: [], replaceChildren(...items) { this.children = items; }, append(...items) { this.children.push(...items); } });
+    return nodes.get(id);
+  };
+  let pending;
+  const scope = { $, sourceCorrection: {base_hash:"dataset-1", records:[], preview:null, key:null},
+    crypto:{randomUUID:()=>"correction-key"},
+    action:work=>{pending=work();}, api:async (url, options)=>{
+      calls.push([url, JSON.parse(options.body)]);
+      return url.endsWith("/preview") ? {id:"C-1", changes:[], affected_decisions:[], affected_payments:[], affected_actions:[]}
+        : {reversed_count:2};
+    }, renderSourceCorrectionPreview:()=>trace.push("preview"),
+    refresh:async()=>trace.push("refresh"), loadReconciliation:async()=>trace.push("reload"), notice() {} };
+  vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  function invalidateSourceCorrection(", "  function renderSourceCorrectionPreview("), scope);
+  vm.runInContext(section(agentSource, '  $("source-correction-form").onsubmit =', '  $("saved-plans").onclick ='), scope);
+  return { scope, $, calls, trace, wait:()=>pending };
+}
+
+test("source correction preview preserves exact VND and sends only edited fields", async () => {
+  const ui = sourceCorrectionUI();
+  ui.scope.sourceCorrection.records = [{kind:"bank", identifier:"B1", values:{amount:"100", account:"A"},
+    inputs:{amount:{value:"100000000000000001"}, account:{value:"A"}}}];
+  ui.$("source-correction-reviewer").value = "  Accountant  ";
+  ui.$("source-correction-note").value = "Bank statement proof";
+  ui.$("source-correction-form").onsubmit({preventDefault(){}});
+  await ui.wait();
+  assert.equal(ui.calls.length, 1);
+  assert.equal(ui.calls[0][0], "/corrections/preview");
+  assert.deepEqual(ui.calls[0][1], {base_hash:"dataset-1", reviewed_by:"Accountant", note:"Bank statement proof",
+    changes:[{kind:"bank", identifier:"B1", values:{amount:"100000000000000001"}}]});
+  assert.equal(ui.scope.sourceCorrection.preview.id, "C-1");
+  assert.deepEqual(ui.trace, ["preview"]);
+});
+
+test("source correction commit requires a preview and uses its immutable server ID", async () => {
+  const ui = sourceCorrectionUI();
+  ui.$("commit-source-correction").onclick();
+  await assert.rejects(ui.wait(), /Xem trước bản sửa/);
+  assert.equal(ui.calls.length, 0);
+  ui.scope.sourceCorrection.preview = {id:"C-1"}; ui.scope.sourceCorrection.key = "stable-key";
+  ui.$("commit-source-correction").onclick(); await ui.wait();
+  assert.equal(ui.calls[0][0], "/corrections/C-1/commit");
+  assert.deepEqual(ui.calls[0][1], {idempotency_key:"stable-key"});
+  assert.equal(ui.scope.sourceCorrection.preview, null);
+  assert.equal(ui.$("commit-source-correction").disabled, true);
+  assert.deepEqual(ui.trace, ["refresh", "reload"]);
+});
+
+test("source correction editing invalidates approval and a failed commit retains the retry key", async () => {
+  const ui = sourceCorrectionUI();
+  ui.scope.sourceCorrection.preview = {id:"C-1"}; ui.scope.sourceCorrection.key = "stable-key";
+  ui.scope.api = async()=>{throw Error("Connection interrupted");};
+  ui.$("commit-source-correction").onclick();
+  await assert.rejects(ui.wait(), /Connection interrupted/);
+  assert.equal(ui.scope.sourceCorrection.preview.id, "C-1");
+  assert.equal(ui.scope.sourceCorrection.key, "stable-key");
+  ui.scope.invalidateSourceCorrection();
+  assert.equal(ui.scope.sourceCorrection.preview, null);
+  assert.equal(ui.$("source-correction-preview").hidden, true);
+  assert.equal(ui.$("commit-source-correction").disabled, true);
+});
+
+test("source correction requires changed values, a reviewer and correction evidence", async () => {
+  const ui = sourceCorrectionUI();
+  ui.$("source-correction-form").onsubmit({preventDefault(){}});
+  await assert.rejects(ui.wait(), /ít nhất một thay đổi/);
+  ui.scope.sourceCorrection.records = [{kind:"bank", identifier:"B1", values:{amount:"100"}, inputs:{amount:{value:"200"}}}];
+  ui.$("source-correction-form").onsubmit({preventDefault(){}});
+  await assert.rejects(ui.wait(), /tên người xử lý và lý do/);
+  assert.equal(ui.calls.length, 0);
+});
+
+test("source correction rejects a late preview response after the user edits values", async () => {
+  const ui = sourceCorrectionUI();
+  let resolve;
+  ui.scope.api = () => new Promise(done => { resolve = done; });
+  ui.scope.sourceCorrection.records = [{kind:"bank", identifier:"B1", values:{amount:"100"}, inputs:{amount:{value:"200"}}}];
+  ui.$("source-correction-reviewer").value = "Accountant";
+  ui.$("source-correction-note").value = "Proof";
+  ui.$("source-correction-form").onsubmit({preventDefault(){}});
+  ui.scope.invalidateSourceCorrection();
+  resolve({id:"old-preview"});
+  await assert.rejects(ui.wait(), /Giá trị đã thay đổi/);
+  assert.equal(ui.scope.sourceCorrection.preview, null);
+  assert.equal(ui.$("commit-source-correction").disabled, true);
 });

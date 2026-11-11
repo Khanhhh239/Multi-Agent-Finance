@@ -51,6 +51,16 @@
 .company-profile a { font-size: 12px; text-decoration: none; }
 main { max-width: 1580px; padding: 24px 24px 0; }
 .paper { border-radius: 6px; box-shadow: none; }
+.records-filter { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin-bottom:16px; }
+.records-filter label { flex:1 1 145px; margin:0; }
+.records-filter label:nth-child(2) { flex:2 1 240px; }
+.records-filter .button { min-height:44px; }
+.records-pagination { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:12px; margin-top:12px; }
+.record-links { display:flex; flex-wrap:wrap; gap:8px 20px; }
+.record-detail td { overflow-wrap:anywhere; max-width:650px; }
+.record-decision { border:1px solid var(--line); padding:12px; margin:10px 0; }
+#import-history-detail { margin-top:18px; }
+.reader-mode [data-view="records"] { display:none; }
 .forecast-toolbar { align-items: center; gap: 10px; }
 .forecast-toolbar h1 { margin: 0; }
 .forecast-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -119,6 +129,27 @@ main { max-width: 1580px; padding: 24px 24px 0; }
 .scenario-line { font-size: 13px; padding: 6px 0; color: #405363; }
 .side-explainer summary { cursor: pointer; }
 .forecast-results .chart-slot { min-width: 0; }
+.reconciliation-toolbar { display:flex; flex-wrap:wrap; gap:12px; align-items:end; margin-bottom:16px; }
+.pending-actions { display:flex; flex-wrap:wrap; gap:4px 12px; }
+.reconciliation-toolbar label { flex:1 1 240px; max-width:380px; margin:0; }
+.reconciliation-toolbar .button { min-height:44px; }
+.reconciliation-panel h3 { margin-top:24px; }
+.reconciliation-panel h4 { margin:0 0 8px; font-size:15px; }
+.reconciliation-case { border:1px solid var(--line); padding:16px; margin:12px 0; overflow-wrap:anywhere; }
+.reconciliation-case p { margin:8px 0; }
+.reconciliation-case summary, #reconciliation-ledger > summary { cursor:pointer; padding:8px 0; }
+.reconciliation-review { display:grid; gap:10px; margin-top:12px; }
+.reconciliation-panel textarea { width:100%; min-height:66px; border:1px solid var(--line); padding:10px; font:inherit; color:inherit; background:white; }
+.reconciliation-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.reconciliation-candidates > div { display:grid; gap:5px; padding:10px 0; border-bottom:1px solid var(--line); }
+.reconciliation-candidates small { color:var(--muted); }
+#reconciliation-ledger { margin-top:24px; }
+.source-correction-record { border:1px solid var(--line); padding:16px; margin:16px 0; }
+.source-correction-record legend { padding:0 8px; font-weight:600; }
+.correction textarea { width:100%; min-height:74px; font:inherit; padding:10px; border:1px solid var(--line); }
+#source-correction-preview { border:1px solid var(--line); padding:16px; margin-top:16px; overflow-wrap:anywhere; }
+#source-correction-preview table { margin:12px 0; }
+#source-correction-preview summary { cursor:pointer; padding:8px 0; }
 @media (max-width: 1080px) {
   .forecast-workbench { grid-template-columns: minmax(0, 1fr); }
   .forecast-inputs form { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; }
@@ -127,7 +158,7 @@ main { max-width: 1580px; padding: 24px 24px 0; }
 }
 @media (max-width: 740px) {
   .rail { position: relative; width: 100%; height: auto; padding: 8px 12px; flex-direction: row; flex-wrap: wrap; gap: 8px; border-right: 0; border-bottom: 1px solid var(--line); overflow: visible; }
-  .rail nav { display: flex; flex: 1 1 auto; order: 0; overflow: visible; }
+  .rail nav { display: flex; flex: 1 1 auto; order: 0; overflow: visible; flex-wrap:wrap; min-width:0; }
   .rail nav button { width: auto; }
   .nav-more { position: relative; }
   .nav-more[open] { background: white; }

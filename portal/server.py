@@ -416,7 +416,7 @@ A1_TABLES = {   # column names and aliases as Agent 1 accepts them (agent1/adapt
                                  'amount': ['so tien', 'tong thanh toan', 'amount gross']}),
     'payments': ('Tiền khách trả', {'payment id': ['ma thanh toan', 'ma giao dich', 'txn id'], 'invoice id': ['ma hoa don', 'so hoa don'],
                                     'payment date': ['ngay thanh toan', 'ngay tien ve', 'value date'], 'amount': ['so tien']}),
-    'outflows': ('Khoản chi', {'expense id': ['ma khoan chi'], 'date': ['ngay chi'], 'amount': ['so tien'],
+    'outflows': ('Lịch cố định T5', {'expense id': ['ma khoan chi'], 'date': ['ngay chi'], 'amount': ['so tien'],
                                'category': ['loai chi'], 'known at': ['ngay ghi nhan']}),
     'bank': ('Dòng sao kê (dòng tiền)', {'bank id': ['ma dong sao ke'], 'account': ['tai khoan'], 'date': ['ngay giao dich'],
                                          'direction': ['thu chi'], 'amount': ['so tien']}),
@@ -832,7 +832,7 @@ def package_summary():
 
 
 SLOTS = [
-    ('agent1', 'invoices', 'Hóa đơn bán'), ('agent1', 'payments', 'Tiền khách trả'), ('agent1', 'outflows', 'Khoản chi'),
+    ('agent1', 'invoices', 'Hóa đơn bán'), ('agent1', 'payments', 'Tiền khách trả'), ('agent1', 'outflows', 'Lịch cố định T5'),
     ('agent1', 'bank', 'Dòng sao kê'), ('agent1', 'statements', 'Kỳ sao kê'), ('agent1', 'actions', 'Hứa trả và nhắc nợ'),
     ('agent2', 'transactions', 'Sổ giao dịch'),
     ('agent3', 'xml', 'Hóa đơn XML hoặc ZIP'), ('agent3', 'list', 'Sao kê hoặc bảng kê'),
@@ -1039,7 +1039,9 @@ def check(aid, record, raw, *, bank_rows=None):
         key = agent1_key()
         shared = bank_rows is not None
         kind = 'bank' if shared else record['kind'].split(':', 1)[1]
-        mapping = json.dumps({field: field for field in ('bank_id', 'account', 'date', 'direction', 'amount', 'known_at', 'component')}) if shared else '{}'
+        mapping = json.dumps({field: field for field in ('bank_id', 'account', 'date', 'direction', 'amount', 'known_at',
+                                                        'component', 'memo', 'counterparty', 'customer_id',
+                                                        'cash_flow_class')}) if shared else '{}'
         body, ctype = multipart(dict(kind=kind, mapping=mapping,
                                      date_format='%Y-%m-%d' if c['date_format'] == 'iso' else '%d/%m/%Y',
                                      number_format=c['number_format']), 'file',

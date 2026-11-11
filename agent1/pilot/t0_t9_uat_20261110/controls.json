@@ -1,0 +1,16 @@
+{
+  "synthetic": true,
+  "currency": "VND",
+  "known_at": "2026-10-31",
+  "invoices": 13,
+  "bank_lines": 14,
+  "initial_imported_payments": 2000000,
+  "invoice_face_total": 112000000,
+  "bank_movement": 95990000,
+  "statement_opening": 100000000,
+  "statement_closing": 195990000,
+  "initial_total_received": 97990000,
+  "large_invoice": "9007199254741010",
+  "large_receipt": "9007199254741009",
+  "large_remaining_after_accept": "1"
+}

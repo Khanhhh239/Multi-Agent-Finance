@@ -20,7 +20,7 @@ LIFECYCLE = {'replacement', 'adjustment'}
 TRANSPORT_FIELDS = {
     'id', 'source', 'sources', 'source_ids', 'source_versions', 'source_payloads',
     'source_lineage', 'source_file', 'source_row', 'source_sha256', 'revision',
-    'available_on', 'known_at', 'ingested_on',
+    'available_on', 'known_at', 'known_at_time', 'ingested_on',
 }
 
 

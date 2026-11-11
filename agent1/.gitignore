@@ -78,3 +78,7 @@ report-password.txt
 *.pickle
 
 .state*/
+
+# Browser screenshots and local verification output are regenerated on demand.
+/outputs/ui_checks/
+/pilot/t0_t9_uat_20261110/verification.json

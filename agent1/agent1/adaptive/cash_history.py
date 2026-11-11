@@ -40,7 +40,7 @@ def evaluate_plan(data, plan, asof, accounts):
     flows = weekly_cash(
         data,
         str(date.fromisoformat(plan["cutoff"]) + timedelta(days=1)),
-        13,
+        len(plan["weeks"]),
         asof,
         accounts,
     )

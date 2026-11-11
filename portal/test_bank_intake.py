@@ -25,8 +25,21 @@ class SharedBankTest(unittest.TestCase):
         self.assertEqual([r['Ghi Có'] for r in tax], ['12000000', ''])
         self.assertEqual([r['Ghi Nợ'] for r in tax], ['', '8500000'])
         self.assertEqual(cash[0]['account'], '000012345678')
+        self.assertEqual(cash[0]['memo'], 'Thu hóa đơn MOCK-001')
+        self.assertEqual(cash[0]['counterparty'], 'Khách hàng mô phỏng')
         self.assertEqual(tax[0]['portal_bank_id'], cash[0]['bank_id'])
         self.assertEqual(tax[1]['Số tài khoản đối ứng'], '000033334444')
+
+    def test_explicit_customer_and_non_ar_class_survive_projection(self):
+        raw = (b'bank_id,account,date,direction,amount,description,counterparty_name,customer_id,cash_flow_class\n'
+               b'LOAN-1,00123,2026-10-02,in,9000000,Loan drawdown,Lender,C_LOAN,financing\n')
+        record = dict(server.classify('bank.csv', raw), name='bank.csv', intake_context=CONTEXT)
+        rows = server.shared_bank_rows(record, raw)
+        cash = list(csv.DictReader(io.StringIO(bank_intake.project(rows, 'agent1').decode())))
+        self.assertEqual(cash[0]['memo'], 'Loan drawdown')
+        self.assertEqual(cash[0]['counterparty'], 'Lender')
+        self.assertEqual(cash[0]['customer_id'], 'C_LOAN')
+        self.assertEqual(cash[0]['cash_flow_class'], 'financing')
 
     def test_vietnamese_split_amount_and_validation(self):
         raw = ('Mã giao dịch;Tài khoản;Ngày giao dịch;Ghi Nợ;Ghi Có\n'

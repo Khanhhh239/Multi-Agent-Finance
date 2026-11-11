@@ -17,3 +17,7 @@ data/synthetic/v3_final_20261027_*/*.parquet filter=lfs diff=lfs merge=lfs -text
 /outputs/analysis/** -text
 /outputs/maintenance/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 /outputs/t1/v4_shortpay_4shock_20261028_inference_2025-12-31/** -text
+
+# UAT manifests verify the exact UTF-8 fixture bytes on every platform.
+/pilot/t0_t9_uat_20261110/**/*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/pilot/t0_t9_uat_20261110/**/*.xml -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -1,0 +1,2 @@
+﻿invoice_id,customer_id,customer_name,seller_mst,buyer_mst,symbol,invoice_no,record_version,issue_date,due_date,known_at,amount_net,vat,amount,currency,adjustment_type,adjusts_invoice_id
+L_DELTA,L_BUYER,TEST L_BUYER,0868126054,3178638929,1C26TAA,L_DELTA,1,2026-10-21,2026-10-31,2026-10-25,-5000000,-500000,-5500000,VND,adjustment,L_REPLACEMENT

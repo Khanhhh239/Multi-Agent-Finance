@@ -1,0 +1,2 @@
+﻿invoice_id,customer_id,customer_name,seller_mst,buyer_mst,symbol,invoice_no,record_version,issue_date,due_date,known_at,amount_net,vat,amount,currency
+L_ORIGINAL,L_BUYER,TEST L_BUYER,0868126054,3178638929,1C26TAA,L_ORIGINAL,1,2026-10-01,2026-10-31,2026-10-01,10000000,1000000,11000000,VND

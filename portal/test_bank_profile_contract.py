@@ -67,6 +67,8 @@ class BankProfileContractTest(unittest.TestCase):
                     self.assertEqual(captured[0]['known_at'], '2026-10-03')
                     self.assertEqual(captured[0]['account'], '000012345678')
                     self.assertEqual(captured[0]['bank_id'], 'MOCK-20261001-001')
+                    self.assertEqual(captured[0]['memo'], 'Thu hóa đơn MOCK-001')
+                    self.assertEqual(captured[0]['counterparty'], 'Khách hàng mô phỏng')
 
     def test_managed_guard_still_rejects_old_iso_plain_override(self):
         with self.assertRaises(HTTPException) as error:
@@ -81,10 +83,13 @@ class BankProfileContractTest(unittest.TestCase):
         for number_format in ('plain', 'vi-VN'):
             with self.subTest(number_format=number_format):
                 projected = bank_intake.project(rows, 'agent1', date_format='dmy', number_format=number_format)
-                mapping = {key: key for key in ('bank_id', 'account', 'date', 'direction', 'amount', 'known_at', 'component')}
+                mapping = {key: key for key in ('bank_id', 'account', 'date', 'direction', 'amount', 'known_at', 'component',
+                                                'memo', 'counterparty', 'customer_id', 'cash_flow_class')}
                 accepted, errors, _ = parse_rows(read_csv(projected, 'bank.csv'), 'bank', mapping, '%d/%m/%Y', number_format)
                 self.assertEqual(errors, [])
                 self.assertEqual(accepted[0]['amount'], 9007199254740991)
+                self.assertEqual(accepted[0]['memo'], 'Thu hóa đơn MOCK-001')
+                self.assertEqual(accepted[0]['counterparty'], 'Khách hàng mô phỏng')
                 self.assertEqual(bank_intake.project(rows, 'agent3', date_format='dmy', number_format=number_format), tax_bytes)
 
 

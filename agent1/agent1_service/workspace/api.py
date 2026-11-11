@@ -14,7 +14,7 @@ import threading
 import uuid
 import zipfile
 import pandas as pd
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, Header
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, Header, Request, Query
 from fastapi.responses import Response, FileResponse
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from agent1.adaptive.data import (
@@ -33,9 +33,15 @@ from agent1.adaptive.data import (
 from ..ingest.einvoice_xml import read_invoice_xml
 from ..ingest.strict_files import read_csv, read_excel, source_hash
 from agent1.adaptive.methods import train, forecast, CATALOG
-from typing import Annotated
+from typing import Annotated, Any
 from .company_profile import company_profile, import_formats
 from .portal_connect import install_portal_connect
+from .sessions import WorkspaceSessions
+from .catalog import outstanding, import_counts, record_rows, search_rows, record_detail
+from .reconciliation import WorkspaceSource
+from agent1.reconciliation import operations as t9_operations
+from agent1.reconciliation.pipeline import today as t9_today
+from agent1.reconciliation.pipeline import NON_AR
 
 
 class Training(BaseModel):
@@ -46,15 +52,67 @@ class Training(BaseModel):
 
 
 class Allocation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     payment_id: str = Field(min_length=1, max_length=160)
     bank_id: str = Field(min_length=1, max_length=160)
     invoice_id: str = Field(min_length=1, max_length=160)
     amount: int = Field(strict=True, gt=0, le=999999999999999999)
+    reviewed_by: str = Field(min_length=1, max_length=200)
+    note: str = Field(min_length=1, max_length=2000)
 
     @field_validator("amount", mode="before")
     @classmethod
     def exact_vnd(cls, value):
         return vnd(value)
+
+    @field_validator("reviewed_by", "note")
+    @classmethod
+    def nonblank_review(cls, value):
+        value = value.strip()
+        if not value:
+            raise ValueError("Cần tên người xử lý và nguồn bằng chứng")
+        return value
+
+
+class ReconciliationRun(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+class ReconciliationReview(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    idempotency_key: str = Field(min_length=1, max_length=200)
+    proposal_id: str = Field(min_length=1, max_length=160)
+    bank_id: str = Field(min_length=1, max_length=160)
+    reviewed_by: str = Field(min_length=1, max_length=200)
+    note: str = Field(default="", max_length=2000)
+
+
+class ReconciliationReverse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    idempotency_key: str = Field(min_length=1, max_length=200)
+    decision_id: str = Field(min_length=1, max_length=160)
+    reviewed_by: str = Field(min_length=1, max_length=200)
+    note: str = Field(min_length=1, max_length=2000)
+
+
+class CorrectionChange(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    kind: str = Field(min_length=1, max_length=30)
+    identifier: str = Field(min_length=1, max_length=160)
+    values: dict[str, Any]
+
+
+class CorrectionPreview(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    base_hash: str = Field(min_length=1, max_length=100)
+    changes: list[CorrectionChange] = Field(min_length=1, max_length=20)
+    reviewed_by: str = Field(min_length=1, max_length=200)
+    note: str = Field(min_length=1, max_length=2000)
+
+
+class CorrectionCommit(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    idempotency_key: str = Field(min_length=1, max_length=200)
 
 
 class Prediction(BaseModel):
@@ -80,11 +138,27 @@ def demo_training_allowed(firm):
 
 def display_money(row):
     """JSON numbers beyond JavaScript's exact range are displayed as decimal text."""
-    return {k: str(v) if k in MONEY_FIELDS | {"unallocated", "total_received"} and isinstance(v, int) and abs(v) > 2**53 - 1 else v for k, v in row.items()}
+    if isinstance(row, list):
+        return [display_money(r) for r in row]
+    if not isinstance(row, dict):
+        return row
+    fields = MONEY_FIELDS | {"unallocated", "total_received", "unallocated_minor", "amount_minor", "amount_open_minor", "available_minor",
+                             "remaining_amount", "allocated_amount", "outstanding_before", "outstanding_after"}
+    return {k: str(v) if k in fields and isinstance(v, int) and abs(v) > 2**53 - 1 else display_money(v) for k, v in row.items()}
 
 
 def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts_file=None, bank_accounts_required=False):
     router = APIRouter(prefix="/v1")
+    bearer_authorize = authorize
+    sessions = WorkspaceSessions(firm_id)
+    app.state.workspace_sessions = sessions
+
+    def credential(authorization, request):
+        return authorization if authorization else sessions.credential(request)
+
+    def authorize(authorization: str | None = Header(None), request: Request = None):
+        return bearer_authorize(credential(authorization, request))
+
     executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="company-training")
     app.state.company_executor = executor
     mutex = threading.RLock()
@@ -115,7 +189,8 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
     def one(firm, kind, identifier):
         return store.one(firm, "company_" + kind, identifier)
 
-    def read_access(authorization: str | None = Header(None)):
+    def read_access(authorization: str | None = Header(None), request: Request = None):
+        authorization = credential(authorization, request)
         for env in ("AGENT1_AGENT4_TOKEN", "AGENT1_VIEWER_TOKEN"):
             secret = os.environ.get(env)
             if secret and hmac.compare_digest(
@@ -150,6 +225,10 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         return changed
 
     def save_dataset(firm, data):
+        try:
+            WorkspaceSource(store, firm, data).validate_managed()
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
         version = fingerprint(data)
         store.put_many(firm, {
             "company_datasets": [dict(id=version, data=data, created_at=datetime.now(timezone.utc).isoformat())],
@@ -212,12 +291,23 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         put(firm_id, "forecast_index", [meta])
 
     @router.get("/access")
-    def access(authorization: str | None = Header(None), firm=Depends(read_access)):
+    def access(request: Request, authorization: str | None = Header(None), firm=Depends(read_access)):
         try:
-            authorize(authorization)
+            authorize(authorization, request)
         except HTTPException:
             return dict(company=firm, role="reader")
         return dict(company=firm, role="accountant")
+
+    @router.post("/session")
+    def browser_session(request: Request, response: Response,
+                        authorization: str | None = Header(None), firm=Depends(read_access)):
+        sessions.issue(request, response, credential(authorization, request))
+        return dict(company=firm, expires_in=sessions.ttl)
+
+    @router.delete("/session")
+    def end_browser_session(request: Request, response: Response):
+        sessions.revoke(request, response)
+        return dict(disconnected=True)
 
     @router.get("/workspace")
     def workspace(firm=Depends(authorize)):
@@ -341,6 +431,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         number_format: str | None = Form(None),
         sheet: str = Form(""),
         known_at: str | None = Form(None),
+        imported_by: str = Form("", max_length=200),
         firm=Depends(authorize),
     ):
         if kind not in SCHEMAS:
@@ -406,6 +497,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             if not errors:
                 try:
                     staged = merge_import(staged, kind, accepted)
+                    WorkspaceSource(store, firm, staged).validate_managed()
                     if check_bank_scope(staged, allow_update=kind in ("bank", "statements")):
                         warnings.append("Danh mục tài khoản đã đổi. Phạm vi sau khi lưu: " + ", ".join(sorted(staged["bank_scope"]["accounts"])))
                     if kind in ("bank", "statements") and not staged.get("bank_scope"):
@@ -439,6 +531,12 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                         id=identifier,
                         kind=kind,
                         records=accepted,
+                        source_file=Path(file.filename or "Không rõ tên tệp").name,
+                        source_sha256=source_hash(content),
+                        imported_by=imported_by.strip(),
+                        row_count=len(raw),
+                        valid_rows=len(accepted),
+                        error_count=len(errors),
                         bank_scope=staged.get("bank_scope"),
                         base_hash=base_hash,
                         valid=not errors,
@@ -476,25 +574,110 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             p = one(firm, "previews", identifier)
             if not p or not p["valid"] or not p["records"]:
                 raise HTTPException(422, "Bản xem trước còn lỗi hoặc không tồn tại")
+            if p.get("committed_result"):
+                return dict(p["committed_result"], replayed=True)
             profile = company_profile(firm)
             if (profile["managed"] or p.get("company_profile")) and p.get("company_profile") != profile:
                 raise HTTPException(409, "Cấu hình doanh nghiệp đã đổi. Kiểm tra file lại trước khi ghi.")
             data = current(firm)
+            before = data
             if p["base_hash"] != fingerprint(data):
                 raise HTTPException(
                     409, "Dữ liệu đã đổi. Xem trước lại để tránh ghi đè."
                 )
             try:
                 data = merge_import(data, p["kind"], p["records"])
+                WorkspaceSource(store, firm, data).validate_managed()
                 check_bank_scope(data, allow_update=p["kind"] in ("bank", "statements"))
                 if data.get("bank_scope") != p.get("bank_scope"):
                     raise ValueError("Danh mục tài khoản đã đổi từ lần xem trước; kiểm tra file lại")
             except ValueError as exc:
                 raise HTTPException(422, str(exc))
-            version = save_dataset(firm, data)
+            version = fingerprint(data)
+            counts = import_counts(before, data, p["kind"], len(p["records"]))
+            old_rows = {r[IDS[p["kind"]]]: r for r in before.get(p["kind"], [])}
+            incoming_ids = {x[IDS[p["kind"]]] for x in p["records"]}
+            batch = dict(id=identifier, kind=p["kind"], source_file=p.get("source_file", "Không rõ tên tệp"),
+                         source_sha256=p.get("source_sha256"), imported_by=p.get("imported_by", ""),
+                         created_at=datetime.now(timezone.utc).isoformat(), status="committed",
+                         rows=p.get("row_count", len(p["records"])), valid_rows=len(p["records"]), error_count=0,
+                         **counts, before_version=p["base_hash"], version=version,
+                         outstanding_before=outstanding(WorkspaceSource(store, firm, before)),
+                         outstanding_after=outstanding(WorkspaceSource(store, firm, data)),
+                         record_ids=[r[IDS[p["kind"]]] for r in data.get(p["kind"], [])
+                                     if old_rows.get(r[IDS[p["kind"]]]) != r or r[IDS[p["kind"]]] in incoming_ids])
+            result = dict(version=version, accepted=len(p["records"]), updated=True, **counts)
+            batches = {
+                "company_datasets": [dict(id=version, data=data, created_at=batch["created_at"])],
+                "company_dataset_active": [dict(id="active", version=version, counts={k: len(data.get(k, [])) for k in SCHEMAS})],
+                "company_imports": [batch],
+                "company_previews": [dict(p, committed_result=result)],
+            }
             if "schema_id" in p:
-                put(firm, "mappings", [dict(id=p["schema_id"], mapping=p["mapping"])])
-            return dict(version=version, accepted=len(p["records"]), updated=True)
+                batches["company_mappings"] = [dict(id=p["schema_id"], mapping=p["mapping"])]
+            store.put_many(firm, batches)
+            return result
+
+    @router.get("/records")
+    def browse_records(kind: str, q: str = Query("", max_length=200), status: str = "",
+                       date_from: str = "", date_to: str = "", offset: int = Query(0, ge=0),
+                       limit: int = Query(25, ge=1, le=100), firm=Depends(authorize)):
+        if kind not in SCHEMAS:
+            raise HTTPException(422, "Loại bảng không hợp lệ")
+        if date_from:
+            date_from = date(date_from)
+        if date_to:
+            date_to = date(date_to)
+        if date_from and date_to and date_from > date_to:
+            raise HTTPException(422, "Ngày bắt đầu phải trước ngày kết thúc")
+        with mutex:
+            rows = record_rows(WorkspaceSource(store, firm, current(firm)), kind)
+            selected = search_rows(rows, q, status, date_from, date_to, kind)
+            return display_money(dict(kind=kind, total=len(selected), offset=offset, limit=limit,
+                                      statuses=sorted({r["status"] for r in rows}), rows=selected[offset:offset + limit]))
+
+    @router.get("/records/{kind}/{identifier:path}")
+    def browse_record(kind: str, identifier: str, firm=Depends(authorize)):
+        if kind not in SCHEMAS:
+            raise HTTPException(404, "Không có bảng này")
+        with mutex:
+            try:
+                return display_money(record_detail(WorkspaceSource(store, firm, current(firm)), kind, identifier,
+                                                   records(firm, "imports")))
+            except KeyError:
+                raise HTTPException(404, "Không tìm thấy bản ghi của doanh nghiệp")
+
+    @router.get("/imports")
+    def import_history(kind: str = "", offset: int = Query(0, ge=0), limit: int = Query(20, ge=1, le=100),
+                       firm=Depends(authorize)):
+        if kind and kind not in SCHEMAS:
+            raise HTTPException(422, "Loại bảng không hợp lệ")
+        with mutex:
+            batches = {r["id"]: r for r in records(firm, "imports")}
+            history = list(batches.values())
+            for p in records(firm, "previews"):
+                if p["id"] not in batches and p.get("source_file"):
+                    history.append(dict(id=p["id"], kind=p["kind"], source_file=p["source_file"],
+                                        imported_by=p.get("imported_by", ""), created_at=p["created_at"],
+                                        status="preview" if p["valid"] else "invalid", rows=p["row_count"],
+                                        valid_rows=p["valid_rows"], error_count=p["error_count"]))
+            history = sorted((r for r in history if not kind or r["kind"] == kind),
+                             key=lambda r: (r["created_at"], r["id"]), reverse=True)
+            return display_money(dict(total=len(history), offset=offset, limit=limit,
+                                      rows=[{k: v for k, v in r.items() if k != "record_ids"}
+                                            for r in history[offset:offset + limit]]))
+
+    @router.get("/imports/{identifier}")
+    def import_detail(identifier: str, firm=Depends(authorize)):
+        batch = one(firm, "imports", identifier)
+        preview = one(firm, "previews", identifier)
+        if not batch and not preview:
+            raise HTTPException(404, "Không tìm thấy lần nạp")
+        return display_money(dict(batch={k: v for k, v in (batch or {}).items() if k != "record_ids"},
+                                  errors=(preview or {}).get("errors", [])[:100],
+                                  records=[dict(kind=(batch or preview)["kind"], identifier=r)
+                                           for r in (batch or {}).get("record_ids", [])[:100]],
+                                  record_count=len((batch or {}).get("record_ids", []))))
 
     @router.delete("/records/{kind}/{identifier:path}")
     def remove(kind: str, identifier: str, firm=Depends(authorize)):
@@ -727,27 +910,115 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
 
     @router.get("/reconciliation")
     def reconciliation(firm=Depends(authorize)):
-        data = current(firm)
-        used = {}
-        for r in data.get("payments", []):
-            if r.get("bank_id"):
-                used[r["bank_id"]] = used.get(r["bank_id"], 0) + vnd(r["amount"])
-        rows = [
-            dict(**r, unallocated=vnd(r["amount"]) - used.get(r["bank_id"], 0))
-            for r in data.get("bank", [])
-            if r["direction"] == "in"
-        ]
-        pending = [
-            r
-            for r in rows
-            if r["unallocated"] > 0.01 and r.get("component") != "cash_sale"
-        ]
-        return display_money(dict(
-            total_received=sum(vnd(r["amount"]) for r in rows),
-            unallocated=sum(r["unallocated"] for r in pending),
-            pending_count=len(pending),
-            pending=[display_money(r) for r in pending[:100]],
-        ))
+        with mutex:
+            data = current(firm)
+            source = WorkspaceSource(store, firm, data)
+            try:
+                visible = source.view(t9_today())
+            except (ValueError, KeyError, TypeError) as exc:
+                raise HTTPException(422, str(exc)) from exc
+            used = {}
+            for r in visible["links"].to_dict("records"):
+                used[r["txn_id"]] = used.get(r["txn_id"], 0) + r["amount_minor"]
+            rows = [dict(**r, unallocated=vnd(r["amount"]) - used.get(r["bank_id"], 0))
+                    for r in visible["bank"] if r["direction"] == "in"]
+            pending = [r for r in rows if r["unallocated"] > 0 and r.get("component") != "cash_sale"
+                       and r.get("cash_flow_class") not in NON_AR]
+            proposals = records(firm, "t9_proposals")
+            latest = max(proposals, key=lambda r: r["created_at"], default=None)
+            if latest:
+                latest = dict(latest, stale=latest["snapshot_hash"] != visible["snapshot_hash"]
+                              or latest["cutoff"] != t9_today()
+                              or latest["ledger_sequence"] != len(source.ledger.events()))
+                rejected = source.rejected_banks()
+                latest["cases"] = [dict(r, status="rejected", note=rejected[r["bank_id"]]["note"],
+                                        reviewed_by=rejected[r["bank_id"]]["reviewed_by"])
+                                   if r["bank_id"] in rejected else r for r in latest["cases"]]
+            history = source.history()
+            open_invoices = visible["invoices"].to_dict("records")
+            return display_money(dict(
+                total_received=sum(vnd(r["amount"]) for r in rows),
+                unallocated=sum(r["unallocated"] for r in pending), pending_count=len(pending),
+                pending=pending[:100], proposal=latest, history=history[:100], history_count=len(history),
+                invoices=[dict(invoice_id=r["invoice_id"], customer_id=r["customer_id"], amount_open_minor=r["amount_open_minor"])
+                          for r in open_invoices if r["closure_type"] == "open"][:1000],
+            ))
+
+    @router.get("/corrections/record")
+    def correction_record(kind: str, identifier: str, firm=Depends(authorize)):
+        with mutex:
+            try:
+                return display_money(WorkspaceSource(store, firm, current(firm)).correction_record(kind, identifier))
+            except ValueError as exc:
+                raise HTTPException(422, str(exc)) from exc
+
+    @router.post("/corrections/preview")
+    def correction_preview(body: CorrectionPreview, firm=Depends(authorize)):
+        with mutex, store.lock:
+            data = current(firm)
+            if body.base_hash != fingerprint(data):
+                raise HTTPException(409, "Dữ liệu đã đổi. Tải lại bản ghi trước khi sửa.")
+            try:
+                preview, staged = WorkspaceSource(store, firm, data).preview_correction(
+                    [r.model_dump() for r in body.changes], body.reviewed_by, body.note)
+                check_bank_scope(staged)
+                put(firm, "correction_previews", [preview])
+                return display_money({k:v for k,v in preview.items() if k != 'changes_input'})
+            except (ValueError, TypeError, KeyError) as exc:
+                raise HTTPException(422, str(exc)) from exc
+
+    @router.post("/corrections/{identifier}/commit")
+    def correction_commit(identifier: str, body: CorrectionCommit, firm=Depends(authorize)):
+        with mutex, store.lock:
+            preview = one(firm, "correction_previews", identifier)
+            if not preview:
+                raise HTTPException(404, "Không tìm thấy bản xem trước của doanh nghiệp")
+            try:
+                return WorkspaceSource(store, firm, current(firm)).commit_correction(
+                    preview, body.idempotency_key, validate_scope=check_bank_scope)
+            except (ValueError, TypeError, KeyError) as exc:
+                raise HTTPException(409, str(exc)) from exc
+
+    @router.post("/reconciliation/run")
+    def reconciliation_run(body: ReconciliationRun, firm=Depends(authorize)):
+        with mutex:
+            data = current(firm)
+            try:
+                check_bank_scope(data)
+                result = t9_operations.propose(WorkspaceSource(store, firm, data), t9_today())
+                return display_money(result)
+            except (ValueError, KeyError, TypeError) as exc:
+                raise HTTPException(422, str(exc)) from exc
+
+    @router.post("/reconciliation/accept")
+    def reconciliation_accept(body: ReconciliationReview, firm=Depends(authorize)):
+        with mutex:
+            try:
+                data = current(firm)
+                check_bank_scope(data)
+                result = t9_operations.accept(WorkspaceSource(store, firm, data), body.idempotency_key,
+                    body.reviewed_by, proposal_id=body.proposal_id, txn_ids=[body.bank_id], note=body.note)
+                return result
+            except (ValueError, KeyError, TypeError) as exc:
+                raise HTTPException(409, str(exc)) from exc
+
+    @router.post("/reconciliation/reject")
+    def reconciliation_reject(body: ReconciliationReview, firm=Depends(authorize)):
+        with mutex:
+            try:
+                return WorkspaceSource(store, firm, current(firm)).reject(body.idempotency_key,
+                    body.proposal_id, body.bank_id, body.reviewed_by, body.note)
+            except (ValueError, KeyError, TypeError) as exc:
+                raise HTTPException(409, str(exc)) from exc
+
+    @router.post("/reconciliation/reverse")
+    def reconciliation_reverse(body: ReconciliationReverse, firm=Depends(authorize)):
+        with mutex:
+            try:
+                return t9_operations.reverse(WorkspaceSource(store, firm, current(firm)), body.idempotency_key,
+                                              body.decision_id, body.reviewed_by, body.note)
+            except (ValueError, KeyError, TypeError) as exc:
+                raise HTTPException(409, str(exc)) from exc
 
     @router.post("/allocations")
     def allocate(body: Allocation, firm=Depends(authorize)):
@@ -760,27 +1031,23 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 raise HTTPException(404, "Không có dòng sao kê")
             payments = {r["payment_id"]: r for r in data["payments"]}
             existing = payments.get(body.payment_id)
-            if existing and any(
-                existing.get(k) not in (None, v) for k, v in body.model_dump().items()
-            ):
+            if existing and any(existing.get(k) not in (None, getattr(body, k))
+                                for k in ("payment_id", "bank_id", "invoice_id", "amount")):
                 raise HTTPException(
                     409,
                     "Mã thanh toán đã có nội dung khác. Xem trước bản cập nhật hoặc hoàn phân bổ trước.",
                 )
-            if existing and existing.get("bank_id") == body.bank_id:
+            if existing and existing.get("bank_id") == body.bank_id and not existing.get("t9_decision_id"):
                 return dict(version=fingerprint(data), replayed=True)
-            payment = dict(
-                **body.model_dump(),
-                payment_date=transaction["date"],
-                known_at=max(transaction["known_at"], str(datetime.now().date())),
-            )
             try:
-                data = merge_import(data, "payments", [payment])
                 check_bank_scope(data)
-            except ValueError as exc:
-                raise HTTPException(422, str(exc))
-            identifier = save_dataset(firm, data)
-            return dict(version=identifier, replayed=False)
+                source = WorkspaceSource(store, firm, data,
+                                         payment_ids={(body.bank_id, body.invoice_id): body.payment_id})
+                return t9_operations.accept(source, "workspace-payment:" + body.payment_id, body.reviewed_by,
+                    allocations=[dict(txn_id=body.bank_id, invoice_id=body.invoice_id, amount_minor=body.amount)],
+                    note=body.note)
+            except (ValueError, KeyError, TypeError) as exc:
+                raise HTTPException(422, str(exc)) from exc
 
     @router.get("/forecasts")
     def histories(firm=Depends(read_access)):
@@ -969,7 +1236,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         except ValueError as exc:
             raise HTTPException(422, str(exc))
 
-    install_portal_connect(app, router, authorize, firm_id)
+    install_portal_connect(app, router, bearer_authorize, firm_id)
     app.include_router(router)
     root = Path(__file__).resolve().parents[1] / "ui/workspace"
 

@@ -67,6 +67,13 @@ IDS.update(bank="bank_id", statements="statement_id")
 for kind in ("bank", "statements"):
     REQUIRED[kind] = set(SCHEMAS[kind]) - {"known_at"}
 SCHEMAS["bank"]["component"] = ["nhom du bao"]
+SCHEMAS["bank"].update({
+    "memo": ["noi dung", "noi dung chuyen khoan", "dien giai"],
+    "counterparty": ["ten nguoi chuyen", "ten doi tac"],
+    "customer_id": ["ma khach hang", "ma khach"],
+    "cash_flow_class": ["loai dong tien"],
+})
+SCHEMAS["invoices"]["customer_name"] = ["ten khach hang", "ten nguoi mua"]
 SCHEMAS["actions"] = {
     "event_id": ["ma su kien"],
     "invoice_id": ["ma hoa don"],
@@ -346,12 +353,20 @@ def parse_rows(
 
 def as_of(data, clock):
     """Select whole record versions by knowledge date, including late corrections."""
-    limit = pd.Timestamp(clock).date().isoformat()
+    stamp = pd.Timestamp(clock)
+    if stamp.tzinfo is not None:
+        stamp = stamp.tz_convert('Asia/Ho_Chi_Minh').tz_localize(None)
+    limit = stamp.date().isoformat()
+    intraday = (isinstance(clock, str) and len(clock) > 10
+                or isinstance(clock, (datetime, pd.Timestamp)) and stamp != stamp.normalize())
     result = dict(data)
     for kind, history in data.get("record_history", {}).items():
         selected = {}
         for row in history:
-            if row["known_at"] <= limit:
+            available = pd.Timestamp(row.get('known_at_time') or row['known_at'])
+            if available.tzinfo is not None:
+                available = available.tz_convert('Asia/Ho_Chi_Minh').tz_localize(None)
+            if row["known_at"] <= limit and (not intraday or available <= stamp):
                 selected[row[IDS[kind]]] = row
         result[kind] = [r for r in selected.values() if not r.get("_deleted")]
     return result
@@ -368,6 +383,14 @@ def merge_import(data, kind, incoming):
     history = result.setdefault("record_history", {}).setdefault(
         kind, list(existing.values())
     )
+    last_known = {}
+    for version in history:
+        key = version[IDS[kind]]
+        last_known[key] = max(last_known.get(key, "0001-01-01"), version["known_at"])
+    for row in incoming:
+        key = row[IDS[kind]]
+        if key not in existing and key in last_known and row["known_at"] <= last_known[key]:
+            raise ValueError("Nhập lại mã đã xóa cần ngày ghi nhận mới hơn lịch sử trước; không được sửa ngược snapshot")
     if kind == "invoices":
         full = [r for r in incoming if ACCOUNTING <= r.keys()]
         old_full = [r for r in existing.values() if ACCOUNTING <= r.keys()]
@@ -580,10 +603,9 @@ def effective_data(data, clock):
     )
     frame = invoice_view(result, clock)
     result["invoices"] = frame.to_dict("records")
-    result["payments"] = [
-        dict(r, invoice_id=payment_target(r["invoice_id"], links))
-        for r in result.get("payments", [])
-    ]
+    for kind in ("payments", "actions"):
+        result[kind] = [dict(r, invoice_id=payment_target(r["invoice_id"], links))
+                        for r in result.get(kind, [])]
     return result
 
 
@@ -600,6 +622,7 @@ def account_scope(data, clock):
 
 
 def validate_dataset(data):
+    from agent1.reconciliation.pipeline import NON_AR
     for kind in SCHEMAS:
         for row in data.get(kind, []):
             if row.get("currency", "VND") != "VND":
@@ -683,7 +706,15 @@ def validate_dataset(data):
             raise ValueError("Ngày hứa trả phải từ ngày ghi lời hứa")
     paid = {}
     links = _payment_links(canonical)
+    bank_parties = {}
     for row in data.get("payments", []):
+        if row["invoice_id"] not in invoices:
+            raise ValueError("Thanh toán tham chiếu hóa đơn chưa có: " + row["invoice_id"])
+        inv = invoices[row["invoice_id"]]
+        target = payment_target(row["invoice_id"], links)
+        party = invoices.get(target, inv)["customer_id"]
+        if party != inv["customer_id"]:
+            raise ValueError("Hóa đơn thay thế không được tự chuyển khoản thu đã ghi nhận sang khách khác; cần đối chiếu và phân bổ lại")
         bank_id = row.get("bank_id")
         if bank_id:
             txn = bank.get(bank_id)
@@ -691,23 +722,21 @@ def validate_dataset(data):
                 not txn
                 or txn["direction"] != "in"
                 or txn.get("component") == "cash_sale"
+                or txn.get("cash_flow_class") in NON_AR
                 or row["payment_date"] != txn["date"]
                 or row["known_at"] < txn["known_at"]
             ):
                 raise ValueError(
                     "Sai tham chiếu, ngày hoặc chiều dòng sao kê: " + bank_id
                 )
+            if txn.get("customer_id") not in (None, "", party) or bank_parties.get(bank_id, party) != party:
+                raise ValueError("Một dòng sao kê không được phân bổ chéo khách hàng: " + bank_id)
+            bank_parties[bank_id] = party
             allocations[bank_id] = allocations.get(bank_id, 0) + vnd(row["amount"])
             if allocations[bank_id] > vnd(txn["amount"]):
                 raise ValueError("Phân bổ vượt số tiền đã nhận: " + bank_id)
-        if row["invoice_id"] not in invoices:
-            raise ValueError(
-                "Thanh toán tham chiếu hóa đơn chưa có: " + row["invoice_id"]
-            )
-        inv = invoices[row["invoice_id"]]
         if row["payment_date"] < inv["issue_date"]:
             raise ValueError("Thanh toán trước ngày lập hóa đơn: " + row["payment_id"])
-        target = payment_target(row["invoice_id"], links)
         paid[target] = paid.get(target, 0) + vnd(row["amount"])
         if paid[target] > effective.get(target, vnd(inv["amount"])):
             raise ValueError("Tổng thu vượt giá trị hóa đơn: " + row["invoice_id"])

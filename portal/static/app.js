@@ -295,7 +295,7 @@
         el("h3", {}, AGENT_LABEL[aid] + " · " + name),
         aid === "agent4" ? el("p", { class: "hint" }, "Kho mô phỏng riêng. Tệp trong gói được chuyển đến Agent 1–3.") :
           el("ul", {}, state.slots.filter((s) => s.agent === aid).map((s) =>
-          el("li", {}, el("span", { class: "mark " + s.state }), s.label,
+          el("li", {}, el("span", { class: "mark " + s.state }), s.agent === "agent1" && s.key === "outflows" ? "Lịch cố định T5 (tùy chọn)" : s.label,
             el("span", { class: "slot-note" }, s.state === "sealed" ? "đã niêm phong" : s.state === "pending" ? "chờ ghi" : ""))))));
     $("slots").replaceChildren(...groups);
     const p = state.package;

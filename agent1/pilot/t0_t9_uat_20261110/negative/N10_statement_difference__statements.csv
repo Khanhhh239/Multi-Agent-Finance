@@ -1,0 +1,2 @@
+﻿statement_id,account,start_date,end_date,opening_balance,closing_balance,known_at
+S_BAD,000012345678,2026-09-01,2026-09-29,100000000,100000001,2026-09-30

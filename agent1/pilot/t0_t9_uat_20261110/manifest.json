@@ -1,0 +1,152 @@
+{
+  "pack": "T0/T9 UAT 2026-11-10",
+  "synthetic": true,
+  "files": [
+    {
+      "path": "01_core/01_invoices.csv",
+      "bytes": 1784,
+      "sha256": "c78b66b5b1e67d264dde44511d4871fabfa0d25eb716e490bfbca5d0e6f47f7a"
+    },
+    {
+      "path": "01_core/02_bank.csv",
+      "bytes": 1254,
+      "sha256": "6ebbad2fdcc7994f5317b12ee97538ff47d2032a48bcf2c60506bf92d1e7a4ee"
+    },
+    {
+      "path": "01_core/03_payments.csv",
+      "bytes": 127,
+      "sha256": "ab3ff6b3740419db509a60a8041fedf043c0ffb9ef234bf69e6a9a96732456e5"
+    },
+    {
+      "path": "01_core/04_statements.csv",
+      "bytes": 159,
+      "sha256": "75805f2809346d69da68907497c5f9ebba5dfea1fd741ac49ab3457d5f9dba0d"
+    },
+    {
+      "path": "02_large_vnd/01_invoices.csv",
+      "bytes": 298,
+      "sha256": "5de13f86f1164075ed04355fdcf7570996dddea3963a14c9faa2767fb08dfcc9"
+    },
+    {
+      "path": "02_large_vnd/02_bank.csv",
+      "bytes": 177,
+      "sha256": "5af111eda77805b907237f9778725653df6bbc36fb977e7e757b2ede96a26587"
+    },
+    {
+      "path": "03_lifecycle/01_invoices.csv",
+      "bytes": 294,
+      "sha256": "23c87c698f28f9c4368e2ac66273c8ac56158ddf5b2c27202da36ff6f14a029a"
+    },
+    {
+      "path": "03_lifecycle/02_payments.csv",
+      "bytes": 107,
+      "sha256": "94ccaa633b84b2dfdf082cfb429be511428175e03d8de5f1ec63481c01b235e3"
+    },
+    {
+      "path": "03_lifecycle/03_replacement__invoices.csv",
+      "bytes": 358,
+      "sha256": "5cc9e09fffa2111d2e89d4b69039d21525a9075e465a630bf313e181e3a6fc2a"
+    },
+    {
+      "path": "03_lifecycle/04_adjustment__invoices.csv",
+      "bytes": 348,
+      "sha256": "8ab0d0fc92af3cb0a45e4e1615ccccc61f1c3be871e7f7ef5ec8649a91b4eb63"
+    },
+    {
+      "path": "03_lifecycle/05_cancel__invoice_events.csv",
+      "bytes": 108,
+      "sha256": "04aab98824922bfe9576e51ebf2e25376d64262043d3de8d4039f02a6f460a1f"
+    },
+    {
+      "path": "03_lifecycle/optional_original.xml",
+      "bytes": 763,
+      "sha256": "1fea26c446349063d020d3223f61d81da9f052fc0e74816fd7fddb91889969fc"
+    },
+    {
+      "path": "04_pagination/01_invoices.csv",
+      "bytes": 13694,
+      "sha256": "a2660fc06f83cc39d782d0738c2bfaab26529e0307a23c07343c013f398405e4"
+    },
+    {
+      "path": "04_pagination/02_bank.csv",
+      "bytes": 9009,
+      "sha256": "69f8ff1021fdd05fc46e79a58f3055657d7cc61ffd6e304042f2ed83f211a4c9"
+    },
+    {
+      "path": "05_portal_shared/bank_statement.csv",
+      "bytes": 318,
+      "sha256": "49edbef57a2da086b52bc5243f400a146bd6128bc8ac95bccbce2dec5ffeec2a"
+    },
+    {
+      "path": "negative/N01_duplicate_id__invoices.csv",
+      "bytes": 409,
+      "sha256": "f2492b42ec7978d92d91c9cfe8e8039b13aa31c5f092e343ddf097d9243fa8a2"
+    },
+    {
+      "path": "negative/N02_missing_customer__invoices.csv",
+      "bytes": 262,
+      "sha256": "9da6eb8b901e016d396a73fa0977642d879059a8abd1cb89280b3a566d0c6000"
+    },
+    {
+      "path": "negative/N03_bad_date__invoices.csv",
+      "bytes": 283,
+      "sha256": "050e39fb17419a9ad8ccfd88cb68dc3fcdabc450e0b79831de93a6c5d060fda4"
+    },
+    {
+      "path": "negative/N04_fractional_vnd__invoices.csv",
+      "bytes": 282,
+      "sha256": "efa582909b2e3e38e62991588845b89e74c6c326b7bebfdcb584efc417c04224"
+    },
+    {
+      "path": "negative/N05_foreign_currency__bank.csv",
+      "bytes": 169,
+      "sha256": "c9430d46a0f572b15fe9d49e9b5d3b18bc3a5991437dd157b249e378cfd1413e"
+    },
+    {
+      "path": "negative/N06_orphan_payment__payments.csv",
+      "bytes": 121,
+      "sha256": "bbdb75cfec50f5bebfeea45712c547c7417f403736fcc0b01753cb4b826b366b"
+    },
+    {
+      "path": "negative/N07_cross_customer__payments.csv",
+      "bytes": 122,
+      "sha256": "2b1a1c1f526f8242b96326361d3973f866442bf2e5683c1d422a07a586c1304e"
+    },
+    {
+      "path": "negative/N08_overallocated__payments.csv",
+      "bytes": 126,
+      "sha256": "06426585784741dd71afb83efc50b8e8f359852bfe54b3a55f3566dcc01ed786"
+    },
+    {
+      "path": "negative/N09_bad_direction__bank.csv",
+      "bytes": 179,
+      "sha256": "24c86b32dd776dea1168ef3f18cd7f077c7b837403f0a76a2e067876be931882"
+    },
+    {
+      "path": "negative/N10_statement_difference__statements.csv",
+      "bytes": 159,
+      "sha256": "c9b25d20ad3337dc99134f0ca6d9bcb9baedac9763b3aed2c9f8ff09dc3884af"
+    },
+    {
+      "path": "negative/N11_missing_account__bank.csv",
+      "bytes": 152,
+      "sha256": "5e4b1638f4d09c6415b3f0a777114faffe8b5280dc542d8c6e7dc39f09e12b3a"
+    },
+    {
+      "path": "negative/N12_cash_sale_allocation__payments.csv",
+      "bytes": 120,
+      "sha256": "15fb1ed7ddf2f3f6da9c71af9d2c1eca5bf2474cc00d6153598937af87296d0c"
+    },
+    {
+      "path": "negative/N13_bad_tax_id__invoices.csv",
+      "bytes": 285,
+      "sha256": "7c8a770b9cc9907bd52427a7b71faf5aa63758e72dc2e0c9110fb2142e74457b"
+    },
+    {
+      "path": "negative/N14_bad_net_vat__invoices.csv",
+      "bytes": 288,
+      "sha256": "c560fcacc5864c5005ad96f33a6e5b0705a617dccd890debf0bd9170264fa07a"
+    }
+  ],
+  "source_policy": "Synthetic fixtures follow the repository's T0/T9 input contracts, exact VND, accounting totals, bank conservation and lifecycle checks. They are not paired real-company invoice/bank ground truth or an independent forecasting benchmark."
+}

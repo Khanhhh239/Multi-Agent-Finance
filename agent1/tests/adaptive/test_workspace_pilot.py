@@ -72,6 +72,20 @@ def test_bank_conservation_coverage_and_actual_balance():
         validate_dataset(d)
 
 
+@pytest.mark.parametrize("horizon", [1, 13, 26, 52])
+def test_actual_balances_cover_the_entire_selected_forecast_horizon(horizon):
+    data = book()
+    end = str(date(2026, 1, 31) + timedelta(weeks=horizon))
+    data["statements"][0].update(end_date=end, known_at=end)
+    validate_dataset(data)
+    plan = forecast(data, "2026-01-31", 150, horizon_weeks=horizon)
+    actuals = evaluate_plan(data, plan, end, ["Q"])
+    assert len(actuals) == horizon
+    assert all(row["covered"] and row["balance_available"] for row in actuals)
+    assert actuals[-1]["week"] == horizon
+    assert actuals[-1]["actual_balance"] == 150
+
+
 def test_allocations_roles_recovery(tmp_path, monkeypatch):
     monkeypatch.setenv("AGENT1_AGENT4_TOKEN", "reader-a")
     app = create_app(
@@ -88,7 +102,8 @@ def test_allocations_roles_recovery(tmp_path, monkeypatch):
         app.state.store.put(
             "A", "company_dataset_active", [dict(id="active", version=digest)]
         )
-        req = dict(payment_id="pay-A", bank_id="T", invoice_id="A", amount=30.0)
+        req = dict(payment_id="pay-A", bank_id="T", invoice_id="A", amount=30.0,
+                   reviewed_by="Test reviewer", note="Test bank evidence")
         assert c.post("/v1/allocations", json=req, headers=root).is_success
         assert c.post("/v1/allocations", json=req, headers=root).json()["replayed"]
         assert c.get("/v1/reconciliation", headers=root).json()["unallocated"] == 70

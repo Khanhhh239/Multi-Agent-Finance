@@ -38,13 +38,13 @@ Cổng mặc định: portal 8800, Agent 1 là 8011, Agent 2 là 8766, Agent 3 l
 2. **Nạp dữ liệu**: thả tệp vào một ô. Portal nhận dạng từng tệp và chạy bước xem trước của agent nhận. Một tệp sao kê chung được chuẩn hóa cho cả Agent 1 và Agent 3. Chưa có gì được ghi ở bước này. Xem [hướng dẫn demo và tệp mẫu](DEMO.md).
    - Bảng mẫu Agent 1 (hóa đơn, tiền về, khoản chi, sao kê, kỳ sao kê, hứa trả) đi tới Agent 1.
    - Sổ giao dịch theo mẫu Agent 2 đi tới Agent 2.
-   - Hóa đơn XML, ZIP, sao kê ngân hàng và bảng kê cổng thuế đi tới Agent 3. Agent 3 tự phân loại lại.
+   - Hóa đơn XML, ZIP, sao kê ngân hàng và bảng kê cổng thuế đi tới Agent 3. Agent 3 tự phân loại lại. Tệp chỉ đi Agent 3 không tự được chép sang Agent 1.
 3. Bấm **Ghi vào agent**. Với tệp của Agent 2, nút hỏi xác nhận lần hai vì Agent 2 thay toàn bộ giao dịch cũ. Sau mỗi lần ghi, portal kiểm tra lại các tệp còn chờ. Ví dụ tiền khách trả bị lỗi tham chiếu sẽ qua sau khi hóa đơn đã ghi.
-4. Mở **Agent 1 đến 4** ở menu trái. Mỗi agent hiện trong cùng khung. Agent 1 tự nhận khóa kết nối từ portal qua `postMessage`, không cần dán khóa. Bấm **Mở tab riêng** ở Agent 1 cũng tự kết nối đúng doanh nghiệp bằng mã dùng một lần, hết hạn sau 60 giây. Khóa chỉ giữ trong bộ nhớ của tab; nếu tải lại tab riêng thì mở tab mới từ portal hoặc nhập khóa để kết nối lại.
+4. Mở **Agent 1 đến 4** ở menu trái. Mỗi agent hiện trong cùng khung. Cách kết nối, đối soát và sửa dữ liệu nguồn của Agent 1 nằm trong [README của Agent 1](agent1/README.md).
 
 ## Thay đổi nhỏ trong code agent
 
-Chỉ ba chỗ, mặc định giữ nguyên hành vi cũ:
+Các điểm tích hợp Portal:
 
 | Tệp | Thay đổi |
 |---|---|

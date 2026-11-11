@@ -1,0 +1,2 @@
+﻿invoice_id,customer_id,customer_name,seller_mst,buyer_mst,symbol,invoice_no,record_version,issue_date,due_date,known_at,amount_net,vat,amount,currency
+BAD_DATE,C_EXACT,TEST C_EXACT,3342988067,0408128292,1C26TAA,I_EXACT,1,2026-02-30,2026-10-31,2026-10-01,10000000,0,10000000,VND

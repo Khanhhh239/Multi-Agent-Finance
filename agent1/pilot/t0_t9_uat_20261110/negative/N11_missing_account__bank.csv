@@ -1,0 +1,2 @@
+﻿bank_id,date,known_at,direction,amount,currency,component,customer_id,memo
+BAD_ACCOUNT,2026-10-15,2026-10-31,in,10000000,VND,other,C_EXACT,I_EXACT

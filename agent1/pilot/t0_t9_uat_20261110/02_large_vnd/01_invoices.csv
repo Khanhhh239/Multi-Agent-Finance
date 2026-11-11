@@ -1,0 +1,2 @@
+﻿invoice_id,customer_id,customer_name,seller_mst,buyer_mst,symbol,invoice_no,record_version,issue_date,due_date,known_at,amount_net,vat,amount,currency
+I_LARGE,C_LARGE,TEST C_LARGE,3342988067,2714985525,1C26TAA,I_LARGE,1,2026-10-01,2026-10-31,2026-10-01,9007199254741010,0,9007199254741010,VND

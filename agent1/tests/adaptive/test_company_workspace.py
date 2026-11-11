@@ -465,7 +465,8 @@ def test_exact_vnd_and_strict_headers(client):
     assert (
         client.post(
             "/v1/allocations",
-            json=dict(payment_id="P", invoice_id="ORIGINAL", bank_id="B", amount=0.5),
+            json=dict(payment_id="P", invoice_id="ORIGINAL", bank_id="B", amount=0.5,
+                      reviewed_by="Test reviewer", note="Test evidence"),
         ).status_code
         == 422
     )
@@ -491,7 +492,8 @@ def test_exact_vnd_and_strict_headers(client):
     assert client.post(
         "/v1/allocations",
         json=dict(
-            payment_id="EXACT", bank_id="LARGE", invoice_id="ORIGINAL", amount=str(huge)
+            payment_id="EXACT", bank_id="LARGE", invoice_id="ORIGINAL", amount=str(huge),
+            reviewed_by="Test reviewer", note="Large VND bank evidence"
         ),
     ).is_success
     assert active_data(client)["payments"][0]["amount"] == huge
@@ -1061,3 +1063,631 @@ def test_variable_forecast_horizon_and_excel_export(client):
     assert weeks["B27"].number_format == "dd-mm-yy"
     assert weeks["E20"].value == 800000
     assert workbook["Khoản cần chú ý"].max_row == len(plan["collections"]) + 1
+
+
+@pytest.fixture
+def t9_workspace(client, monkeypatch):
+    from agent1.reconciliation import operations
+    from agent1_service.workspace import reconciliation, api
+    clock = ["2026-03-01"]
+    monkeypatch.setattr(operations, "today", lambda: clock[0])
+    monkeypatch.setattr(reconciliation, "today", lambda: clock[0])
+    monkeypatch.setattr(api, "t9_today", lambda: clock[0])
+    return client, clock
+
+
+def seed_t9(client, *, invoices=None, bank=None, payments=None):
+    data = dict(
+        invoices=invoices or [dict(invoice_id="I1", customer_id="C1", customer_name="Khach mot",
+                                  issue_date="2026-01-01", due_date="2026-02-01", known_at="2026-01-01", amount=100)],
+        bank=bank or [dict(bank_id="B1", account="A", date="2026-02-01", known_at="2026-02-02",
+                          direction="in", amount=100, memo="Thanh toan I1", counterparty="Khach mot")],
+    )
+    if payments:
+        data["payments"] = payments
+    import_all(client, data)
+
+
+def run_t9(client):
+    response = client.post("/v1/reconciliation/run", json={})
+    assert response.is_success, response.text
+    return response.json()
+
+
+def review_t9(client, proposal, action="accept", **changes):
+    body = dict(idempotency_key="review-" + action, proposal_id=proposal["id"], bank_id="B1",
+                reviewed_by="Ke toan", note="Da doi chieu bang ke")
+    return client.post("/v1/reconciliation/" + action, json=dict(body, **changes))
+
+
+def test_t9_workspace_proposal_scores_and_acceptance_update_the_forecast_dataset(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    before = active_data(client)
+    proposal = run_t9(client)
+    assert proposal["method"] == "constrained_flow"
+    assert proposal["cases"][0]["candidates"][0]["score"] == 1
+    assert proposal["cases"][0]["available_minor"] == 100
+    assert proposal["allocations"][0]["amount_minor"] == 100
+    assert active_data(client) == before
+    assert client.get("/v1/reconciliation").json()["unallocated"] == 100
+    accepted = review_t9(client, proposal)
+    assert accepted.is_success, accepted.text
+    assert review_t9(client, proposal).json()["replayed"]
+    data = active_data(client)
+    assert observed(data, "2026-03-01").iloc[0].remaining_amount == 0
+    assert observed(data, "2026-02-28").iloc[0].remaining_amount == 100
+    assert data["payments"][0]["t9_decision_id"] == accepted.json()["decision_id"]
+    view = client.get("/v1/reconciliation").json()
+    assert view["pending_count"] == 0 and view["proposal"]["stale"]
+    assert view["history"][0]["status"] == "committed"
+    assert view["history"][0]["reviewed_by"] == "Ke toan"
+    assert client.app.state.store.get("SME", "t9_events") == []  # Research inputs stay separate.
+    assert len(client.app.state.store.get("SME", "company_t9_events")) > 0
+
+
+def test_t9_workspace_rejection_is_audited_idempotent_and_does_not_allocate(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    proposal = run_t9(client)
+    before = active_data(client)
+    assert review_t9(client, proposal, "reject", note="   ").status_code == 409
+    result = review_t9(client, proposal, "reject", note="Khach chua xac nhan")
+    assert result.is_success, result.text
+    assert review_t9(client, proposal, "reject", note="Khach chua xac nhan").json()["replayed"]
+    assert review_t9(client, proposal, "reject", note="Ly do khac").status_code == 409
+    assert active_data(client) == before
+    assert client.app.state.store.get("SME", "company_t9_events") == []
+    assert review_t9(client, proposal).status_code == 409
+    fresh = run_t9(client)
+    assert fresh["cases"][0]["status"] == "rejected" and not fresh["allocations"]
+    view = client.get("/v1/reconciliation").json()
+    assert view["unallocated"] == 100 and view["history"][0]["note"] == "Khach chua xac nhan"
+    manual = client.post("/v1/allocations", json=dict(payment_id="MANUAL", invoice_id="I1", bank_id="B1", amount=100,
+                                                       reviewed_by="Ke toan", note="Bang ke bo sung da ky"))
+    assert manual.is_success, manual.text
+    assert client.get("/v1/reconciliation").json()["pending_count"] == 0
+
+
+def test_t9_workspace_scores_cannot_force_an_ambiguous_reference(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client, invoices=[dict(invoice_id=i, customer_id="C1", customer_name="Khach mot", amount=100,
+                                  issue_date="2026-01-01", due_date="2026-02-01", known_at="2026-01-01") for i in ("I1", "I2")])
+    proposal = run_t9(client)
+    assert not proposal["allocations"]
+    case = proposal["cases"][0]
+    assert case["status"] == "review" and len(case["candidates"]) == 2
+    assert case["candidates"][0]["score"] == 1
+    assert case["reason_text"]
+    assert review_t9(client, proposal).status_code == 409
+    assert not active_data(client)["payments"]
+
+
+def test_t9_workspace_approval_is_per_bank_and_other_cases_become_stale(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client, invoices=[dict(invoice_id=f"I{n}", customer_id=f"C{n}", amount=100*n,
+                                  issue_date="2026-01-01", due_date="2026-02-01", known_at="2026-01-01") for n in (1, 2)],
+            bank=[dict(bank_id=f"B{n}", account="A", date="2026-02-01", known_at="2026-02-02", direction="in",
+                       amount=100*n, memo=f"I{n}", customer_id=f"C{n}") for n in (1, 2)])
+    proposal = run_t9(client)
+    assert len(proposal["allocations"]) == 2
+    assert review_t9(client, proposal).is_success
+    assert {r["bank_id"] for r in active_data(client)["payments"]} == {"B1"}
+    assert review_t9(client, proposal, bank_id="B2", idempotency_key="second").status_code == 409
+    assert review_t9(client, run_t9(client), bank_id="B2", idempotency_key="second").is_success
+    assert len(active_data(client)["payments"]) == 2
+
+
+def test_t9_workspace_partial_imports_reserve_cash_and_reversal_preserves_history(t9_workspace):
+    client, clock = t9_workspace
+    seed_t9(client, payments=[dict(payment_id="IMPORT", invoice_id="I1", bank_id="B1", amount=20,
+                                   payment_date="2026-02-01", known_at="2026-02-02")])
+    proposal = run_t9(client)
+    assert proposal["allocations"][0]["amount_minor"] == 80
+    accepted = review_t9(client, proposal).json()
+    clock[0] = "2026-03-02"
+    body = dict(idempotency_key="reverse", decision_id=accepted["decision_id"], reviewed_by="Ke toan", note="Sai bang ke")
+    response = client.post("/v1/reconciliation/reverse", json=body)
+    assert response.is_success, response.text
+    assert client.post("/v1/reconciliation/reverse", json=body).json()["replayed"]
+    data = active_data(client)
+    assert [r["payment_id"] for r in data["payments"]] == ["IMPORT"]
+    assert observed(data, "2026-03-01").iloc[0].remaining_amount == 0
+    assert observed(data, "2026-03-02").iloc[0].remaining_amount == 80
+    view = client.get("/v1/reconciliation").json()
+    assert view["unallocated"] == 80 and view["history"][0]["status"] == "reversed"
+    assert view["history"][0]["reversal"]["note"] == "Sai bang ke"
+    assert data["bank"][0]["amount"] == 100
+
+
+def test_t9_workspace_stale_sources_and_managed_payment_edits_are_blocked(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    proposal = run_t9(client)
+    import_all(client, {"payments": [dict(payment_id="P0", invoice_id="I1", bank_id="B1", amount=20,
+                                        payment_date="2026-02-01", known_at="2026-02-02")]})
+    assert review_t9(client, proposal).status_code == 409
+    accepted = review_t9(client, run_t9(client))
+    assert accepted.is_success, accepted.text
+    payment = next(r for r in active_data(client)["payments"] if r.get("t9_decision_id"))
+    before = active_data(client)
+    assert client.delete("/v1/records/payments/" + payment["payment_id"]).status_code == 422
+    assert not upload(client, "payments", [dict(payment, amount=79, known_at="2026-03-02")])["can_commit"]
+    assert active_data(client) == before
+    # A corrected payer on the source cannot silently move a committed receipt.
+    bank = active_data(client)["bank"][0]
+    assert not upload(client, "bank", [dict(bank, customer_id="OTHER", known_at="2026-03-02")])["can_commit"]
+
+
+def test_t9_workspace_acceptance_rolls_back_events_and_dataset_together(t9_workspace, monkeypatch):
+    client, _ = t9_workspace
+    from agent1_service.workspace import reconciliation
+    seed_t9(client)
+    proposal = run_t9(client)
+    before = active_data(client)
+    original = reconciliation.dataset_batches
+    def invalid_batch(data):
+        batches, result = original(data)
+        batches["company_datasets"][0]["not_serializable"] = object()
+        return batches, result
+    monkeypatch.setattr(reconciliation, "dataset_batches", invalid_batch)
+    assert review_t9(client, proposal).status_code == 409
+    assert active_data(client) == before
+    store = client.app.state.store
+    assert not store.get("SME", "company_t9_events")
+    assert not store.get("SME", "company_t9_requests")
+    assert not store.get("SME", "company_t9_reviews")
+
+
+def test_t9_workspace_huge_vnd_stays_exact_and_non_ar_is_not_matched(t9_workspace):
+    client, _ = t9_workspace
+    huge = 2**53 + 17
+    seed_t9(client, invoices=[dict(invoice_id="I1", customer_id="C1", amount=str(huge + 1), issue_date="2026-01-01",
+                                  due_date="2026-02-01", known_at="2026-01-01")],
+            bank=[dict(bank_id="B1", account="A", date="2026-02-01", known_at="2026-02-02", direction="in", amount=str(huge), memo="I1"),
+                  dict(bank_id="NONAR", account="A", date="2026-02-01", known_at="2026-02-02", direction="in", amount=100,
+                       memo="I1", cash_flow_class="financing")])
+    proposal = run_t9(client)
+    assert proposal["allocations"][0]["amount_minor"] == str(huge)
+    assert next(r for r in proposal["cases"] if r["bank_id"] == "NONAR")["reason"] == "non_ar_bank_movement"
+    assert review_t9(client, proposal).is_success
+    assert observed(active_data(client), "2026-03-01").iloc[0].remaining_amount == 1
+    view = client.get("/v1/reconciliation").json()
+    assert view["pending_count"] == 0 and view["unallocated"] == 0
+    assert client.post("/v1/allocations", json=dict(payment_id="INVALID", invoice_id="I1", bank_id="NONAR", amount=1,
+                                                      reviewed_by="Test reviewer", note="Loan transfer")).status_code == 422
+
+
+def test_t9_workspace_routes_require_accountant_and_ui_contains_review_controls(t9_workspace, monkeypatch):
+    client, _ = t9_workspace
+    monkeypatch.setenv("AGENT1_VIEWER_TOKEN", "readonly")
+    for endpoint in ("run", "accept", "reject", "reverse"):
+        assert client.post("/v1/reconciliation/" + endpoint, json={}, headers={"Authorization": "Bearer readonly"}).status_code == 401
+    html = client.get("/workspace").text
+    for identifier in ("run-reconciliation", "reconciliation-reviewer", "reconciliation-cases", "reconciliation-history", "allocate-note"):
+        assert f'id="{identifier}"' in html
+
+
+def test_t9_workspace_mixed_optional_invoice_metadata_does_not_create_nan_candidates(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client, invoices=[
+        dict(invoice_id="I1", customer_id="C1", amount=100, issue_date="2026-01-01", due_date="2026-02-01", known_at="2026-01-01"),
+        dict(invoice_id="I2", customer_id="C2", customer_name="Khach hai", amount=200,
+             issue_date="2026-01-01", due_date="2026-02-01", known_at="2026-01-01"),
+    ])
+    proposal = run_t9(client)
+    assert proposal["allocations"][0]["invoice_id"] == "I1"
+    assert review_t9(client, proposal).is_success
+
+
+def test_t0_deleted_id_cannot_be_reimported_with_retroactive_knowledge(client):
+    seed_t9(client)
+    assert client.delete('/v1/records/bank/B1').is_success
+    before = active_data(client)
+    changed = dict(bank_id='B1', account='A', date='2026-02-01', known_at='2026-02-03', direction='in', amount=200)
+    preview = upload(client, 'bank', [changed])
+    assert not preview['can_commit'], 'Reusing a deleted ID must not rewrite an older snapshot'
+    assert active_data(client) == before
+
+
+@pytest.mark.parametrize('change', [dict(cash_flow_class='financing'), dict(customer_id='OTHER')])
+def test_t0_payment_csv_obeys_bank_class_and_customer_constraints(t9_workspace, change):
+    client, _ = t9_workspace
+    bank = dict(bank_id='B1', account='A', date='2026-02-01', known_at='2026-02-02', direction='in', amount=100, **change)
+    seed_t9(client, bank=[bank])
+    payment = dict(payment_id='P1', invoice_id='I1', bank_id='B1', amount=100,
+                   payment_date='2026-02-01', known_at='2026-02-02')
+    assert not upload(client, 'payments', [payment])['can_commit']
+    assert not active_data(client)['payments']
+
+
+def test_t0_payment_csv_cannot_split_a_bank_receipt_across_customers(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client, invoices=[dict(invoice_id=i, customer_id=c, amount=100, issue_date='2026-01-01',
+                                  due_date='2026-02-01', known_at='2026-01-01') for i, c in [('I1', 'C1'), ('I2', 'C2')]])
+    receipts = [dict(payment_id='P' + str(n), invoice_id=i, bank_id='B1', amount=50,
+                     payment_date='2026-02-01', known_at='2026-02-02') for n, i in enumerate(('I1', 'I2'))]
+    assert not upload(client, 'payments', receipts)['can_commit']
+    assert client.get('/v1/reconciliation').is_success
+
+
+def test_t9_writeoff_follows_replacement_chain_and_cannot_be_allocated(t9_workspace):
+    client, _ = t9_workspace
+    original = accounting_invoice()
+    replacement = accounting_invoice('REPLACEMENT', issue_date='2026-01-10', known_at='2026-01-20',
+                                     adjustment_type='replacement', adjusts_invoice_id='ORIGINAL')
+    import_all(client, dict(invoices=[original]))
+    import_all(client, dict(invoices=[replacement]))
+    import_all(client, dict(actions=[dict(event_id='WO', invoice_id='ORIGINAL', date='2026-01-05',
+                                         known_at='2026-01-05', kind='write_off')],
+                           bank=[dict(bank_id='B1', account='A', date='2026-02-01', known_at='2026-02-02',
+                                      direction='in', amount=1100, memo='REPLACEMENT', customer_id='BUYER')]))
+    assert observed(active_data(client), '2026-03-01').iloc[0].written_off_at == pd.Timestamp('2026-01-05')
+    proposal = run_t9(client)
+    assert not proposal['allocations'], 'A replaced invoice must retain its write-off state'
+    manual = client.post('/v1/allocations', json=dict(payment_id='P1', invoice_id='REPLACEMENT', bank_id='B1', amount=100,
+                                                      reviewed_by='Test reviewer', note='Replaced invoice'))
+    assert manual.status_code == 422
+
+
+def test_t9_manual_retry_cannot_silently_change_reviewer_or_evidence(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    request = dict(payment_id='P1', invoice_id='I1', bank_id='B1', amount=100,
+                   reviewed_by='Original reviewer', note='Original evidence')
+    assert client.post('/v1/allocations', json=request).is_success
+    assert client.post('/v1/allocations', json=request).json()['replayed']
+    response = client.post('/v1/allocations', json=dict(request, reviewed_by='Other reviewer', note='Other evidence'))
+    assert response.status_code in (409, 422)
+    assert client.get('/v1/reconciliation').json()['history'][0]['reviewed_by'] == 'Original reviewer'
+
+
+def test_t9_manual_allocation_requires_explicit_reviewer_and_evidence(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    request = dict(payment_id='P1', invoice_id='I1', bank_id='B1', amount=100)
+    for incomplete in (request, dict(request, reviewed_by='Accountant'),
+                       dict(request, note='Signed receipt'),
+                       dict(request, reviewed_by='  ', note='Signed receipt'),
+                       dict(request, reviewed_by='Accountant', note='  ')):
+        response = client.post('/v1/allocations', json=incomplete)
+        assert response.status_code == 422, response.text
+        assert client.get('/v1/reconciliation').json()['history'] == []
+    response = client.post('/v1/allocations', json=dict(request, reviewed_by=' Accountant ', note=' Signed receipt '))
+    assert response.is_success, response.text
+    history = client.get('/v1/reconciliation').json()['history']
+    assert history[0]['reviewed_by'] == 'Accountant'
+    assert history[0]['note'] == 'Signed receipt'
+
+
+def test_t0_replacement_cannot_move_observed_receipts_to_another_customer(t9_workspace):
+    client, _ = t9_workspace
+    original = accounting_invoice()
+    import_all(client, dict(invoices=[original], payments=[dict(payment_id='P1', invoice_id='ORIGINAL', amount=500,
+                                                               payment_date='2026-01-05', known_at='2026-01-05')]))
+    replacement = accounting_invoice('REPLACEMENT', customer_id='OTHER',
+        buyer_mst=make_mst(np.random.default_rng(21)), issue_date='2026-01-10', known_at='2026-01-20',
+        adjustment_type='replacement', adjusts_invoice_id='ORIGINAL')
+    assert not upload(client, 'invoices', [replacement])['can_commit']
+    assert observed(active_data(client), '2026-03-01').iloc[0].customer_id == 'BUYER'
+
+
+def test_t9_accepted_bank_source_cannot_be_moved_to_a_different_account(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    assert review_t9(client, run_t9(client)).is_success
+    bank = active_data(client)['bank'][0]
+    assert not upload(client, 'bank', [dict(bank, account='OTHER', known_at='2026-03-01')])['can_commit']
+    assert active_data(client)['bank'][0]['account'] == 'A'
+
+
+def test_t0_restore_deleted_id_with_a_later_clock_preserves_the_old_snapshot():
+    from agent1.adaptive.data import merge_import, as_of
+    first = dict(invoice_id='I1', customer_id='C1', amount=100, issue_date='2026-01-01',
+                 due_date='2026-02-01', known_at='2026-01-01')
+    data = dict(invoices=[], payments=[], outflows=[], record_history=dict(invoices=[first,
+        dict(invoice_id='I1', known_at='2026-02-01', _deleted=True)]))
+    restored = merge_import(data, 'invoices', [dict(first, amount=200, known_at='2026-02-02', record_version=2)])
+    assert as_of(restored, '2026-01-31')['invoices'][0]['amount'] == 100
+    assert not as_of(restored, '2026-02-01')['invoices']
+    assert as_of(restored, '2026-02-02')['invoices'][0]['amount'] == 200
+
+
+@pytest.mark.parametrize('kind,change', [
+    ('bank', dict(amount=110)), ('bank', dict(date='2026-02-03')),
+    ('bank', dict(customer_id='OTHER')), ('invoices', dict(customer_id='OTHER', record_version=2)),
+])
+def test_t0_reversed_ledger_endpoints_cannot_be_reused_with_changed_identity(t9_workspace, kind, change):
+    client, clock = t9_workspace
+    seed_t9(client)
+    accepted = review_t9(client, run_t9(client)).json()
+    clock[0] = '2026-03-02'
+    response = client.post('/v1/reconciliation/reverse', json=dict(idempotency_key='undo',
+        decision_id=accepted['decision_id'], reviewed_by='Ke toan', note='Doi chieu nguon'))
+    assert response.is_success, response.text
+    original = active_data(client)[kind][0]
+    preview = upload(client, kind, [dict(original, known_at=clock[0], **change)])
+    assert not preview['can_commit'], 'An immutable ledger endpoint must not become an unusable new proposal'
+    assert run_t9(client)['allocations']
+
+
+def preview_source_edit(client, changes, **extra):
+    body = dict(base_hash=fingerprint(active_data(client)), changes=changes,
+                reviewed_by='Ke toan sua nguon', note='Doi chieu chung tu goc, sua loi nhap')
+    return client.post('/v1/corrections/preview', json=dict(body, **extra))
+
+
+def commit_source_edit(client, preview, key='correct-1'):
+    return client.post('/v1/corrections/' + preview['id'] + '/commit', json=dict(idempotency_key=key))
+
+
+def test_source_correction_bank_reverses_old_allocation_and_counts_corrected_cash_once(t9_workspace, monkeypatch):
+    client, _ = t9_workspace
+    from agent1_service.workspace import reconciliation
+    from agent1.reconciliation.ledger import DecisionLedger
+    from agent1.adaptive.data import as_of
+    timestamp = ['2026-03-01T10:00:00+07:00']
+    monkeypatch.setattr(reconciliation, 'correction_time', lambda: timestamp[0])
+    seed_t9(client, invoices=[dict(invoice_id=i, customer_id=c, amount=a, issue_date='2026-01-01',
+                                  due_date='2026-02-01', known_at='2026-01-01') for i,c,a in [('I1','C1',100),('I2','C2',150)]])
+    old = review_t9(client, run_t9(client)).json()
+    before = active_data(client)
+    ledger = DecisionLedger(client.app.state.store, 'SME', prefix='company_')
+    old_sequence = len(ledger.events())
+    timestamp[0] = '2026-03-01T11:00:00+07:00'
+    response = preview_source_edit(client, [dict(kind='bank', identifier='B1', values=dict(
+        amount='150', date='2026-02-03', account='CORRECT', customer_id='C2', memo='TT I2'))])
+    assert response.is_success, response.text
+    preview = response.json()
+    assert len(preview['affected_decisions']) == len(preview['affected_payments']) == 1
+    assert active_data(client) == before and ledger.gold('2026-03-01')['decisions'][0]['status'] == 'committed'
+    timestamp[0] = '2026-03-01T11:01:00+07:00'
+    result = commit_source_edit(client, preview)
+    assert result.is_success, result.text
+    assert commit_source_edit(client, preview).json()['replayed']
+    data = active_data(client)
+    assert not data['payments'] and data['bank'][0]['bank_id'] == 'B1' and data['bank'][0]['amount'] == 150
+    assert as_of(data, '2026-03-01T10:30:00+07:00')['bank'][0]['amount'] == 100
+    assert len(as_of(data, '2026-03-01T10:30:00+07:00')['payments']) == 1
+    assert as_of(data, '2026-03-01T11:02:00+07:00')['bank'][0]['amount'] == 150
+    assert ledger.gold('2026-03-01', until_sequence=old_sequence)['bank_movements'][0]['net_minor'] == 100
+    gold = ledger.gold('2026-03-01')
+    assert gold['bank_movements'][0]['net_minor'] == 150
+    assert gold['decisions'][0]['decision_id'] == old['decision_id'] and gold['decisions'][0]['status'] == 'reversed'
+    timestamp[0] = '2026-03-01T12:00:00+07:00'
+    proposal = run_t9(client)
+    assert proposal['allocations'][0]['invoice_id'] == 'I2'
+    accepted = review_t9(client, proposal, idempotency_key='accept-corrected')
+    assert accepted.is_success, accepted.text
+    assert ledger.gold('2026-03-01')['bank_movements'][0]['net_minor'] == 150
+    assert not as_of(active_data(client), '2026-03-01T11:30:00+07:00')['payments']
+    history = client.get('/v1/reconciliation').json()['history']
+    assert any(r['status'] == 'corrected' and r['changes'][0]['before']['amount'] == 100 for r in history)
+    assert client.app.state.store.one('SME', 'company_datasets', fingerprint(before))['data'] == before
+
+
+def test_source_correction_invoice_can_change_party_and_amount_then_be_reviewed_again(t9_workspace):
+    client, _ = t9_workspace
+    from agent1.reconciliation.ledger import DecisionLedger
+    seed_t9(client)
+    assert review_t9(client, run_t9(client)).is_success
+    response = preview_source_edit(client, [dict(kind='invoices', identifier='I1', values=dict(
+        customer_id='C2', amount='200', issue_date='2026-01-02'))])
+    assert response.is_success, response.text
+    result = commit_source_edit(client, response.json())
+    assert result.is_success, result.text
+    assert not active_data(client)['payments']
+    proposal = run_t9(client)
+    accepted = review_t9(client, proposal, idempotency_key='corrected-invoice')
+    assert accepted.is_success, accepted.text
+    row = observed(active_data(client), '2026-03-01').iloc[0]
+    assert row.customer_id == 'C2' and row.remaining_amount == 100
+    gold = DecisionLedger(client.app.state.store, 'SME', prefix='company_').gold('2026-03-01')
+    assert gold['bank_movements'][0]['net_minor'] == 100
+    assert gold['invoices'][0]['party_id'] == 'C2'
+
+
+def test_source_correction_supports_same_day_unallocated_record_and_keeps_old_version(t9_workspace, monkeypatch):
+    client, _ = t9_workspace
+    from agent1_service.workspace import reconciliation
+    from agent1.adaptive.data import as_of
+    seed_t9(client, invoices=[dict(invoice_id='I1', customer_id='C1', amount=100, issue_date='2026-03-01',
+                                  due_date='2026-04-01', known_at='2026-03-01')])
+    monkeypatch.setattr(reconciliation, 'correction_time', lambda: '2026-03-01T11:00:00+07:00')
+    response = preview_source_edit(client, [dict(kind='invoices', identifier='I1', values=dict(amount='200'))])
+    assert response.is_success, response.text
+    assert not response.json()['affected_decisions']
+    assert commit_source_edit(client, response.json()).is_success
+    data = active_data(client)
+    assert as_of(data, '2026-03-01T10:00:00+07:00')['invoices'][0]['amount'] == 100
+    assert as_of(data, '2026-03-01T12:00:00+07:00')['invoices'][0]['amount'] == 200
+    assert as_of(data, '2026-03-01')['invoices'][0]['amount'] == 200
+
+
+def test_source_correction_stale_preview_and_changed_idempotency_key_are_blocked(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    changes = [dict(kind='bank', identifier='B1', values=dict(amount='120'))]
+    first = preview_source_edit(client, changes).json()
+    assert review_t9(client, run_t9(client)).is_success
+    assert commit_source_edit(client, first).status_code == 409
+    fresh = preview_source_edit(client, changes).json()
+    assert commit_source_edit(client, fresh).is_success
+    second = preview_source_edit(client, [dict(kind='bank', identifier='B1', values=dict(amount='130'))]).json()
+    assert commit_source_edit(client, second).status_code == 409
+    assert commit_source_edit(client, second, key='correct-2').is_success
+
+
+def test_source_correction_batch_checks_statement_balance_and_preserves_imported_receipt_history(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client, payments=[dict(payment_id='IMPORTED', invoice_id='I1', bank_id='B1', amount=20,
+                                   payment_date='2026-02-01', known_at='2026-02-02')])
+    import_all(client, dict(statements=[dict(statement_id='S1', account='A', start_date='2026-02-01', end_date='2026-02-28',
+                                            opening_balance=0, closing_balance=100, known_at='2026-02-28')]))
+    bank_change = dict(kind='bank', identifier='B1', values=dict(amount='200'))
+    assert preview_source_edit(client, [bank_change]).status_code == 422
+    response = preview_source_edit(client, [bank_change, dict(kind='statements', identifier='S1', values=dict(closing_balance='200'))])
+    assert response.is_success, response.text
+    assert response.json()['affected_payments'][0]['payment_id'] == 'IMPORTED'
+    assert commit_source_edit(client, response.json()).is_success
+    assert not active_data(client)['payments']
+    assert observed(active_data(client), '2026-02-28').iloc[0].received == 20
+    assert active_data(client)['statements'][0]['closing_balance'] == 200
+
+
+def test_source_correction_is_atomic_if_dataset_write_fails(t9_workspace, monkeypatch):
+    client, _ = t9_workspace
+    from agent1_service.workspace import reconciliation
+    seed_t9(client)
+    assert review_t9(client, run_t9(client)).is_success
+    response = preview_source_edit(client, [dict(kind='bank', identifier='B1', values=dict(amount='120'))])
+    assert response.is_success, response.text
+    before = active_data(client)
+    events = client.app.state.store.get('SME', 'company_t9_events')
+    original = reconciliation.dataset_batches
+    def fail(data):
+        batches, result = original(data)
+        batches['company_datasets'][0]['invalid'] = object()
+        return batches, result
+    monkeypatch.setattr(reconciliation, 'dataset_batches', fail)
+    assert commit_source_edit(client, response.json()).status_code == 409
+    assert active_data(client) == before
+    assert client.app.state.store.get('SME', 'company_t9_events') == events
+
+
+def test_source_correction_read_and_write_require_accountant_and_server_owns_knowledge_clock(t9_workspace, monkeypatch):
+    client, _ = t9_workspace
+    monkeypatch.setenv('AGENT1_VIEWER_TOKEN', 'readonly')
+    seed_t9(client)
+    readonly = dict(Authorization='Bearer readonly')
+    assert client.get('/v1/corrections/record?kind=bank&identifier=B1', headers=readonly).status_code == 401
+    assert client.post('/v1/corrections/preview', json={}, headers=readonly).status_code == 401
+    assert client.post('/v1/corrections/unknown/commit', json=dict(idempotency_key='x'), headers=readonly).status_code == 401
+    record = client.get('/v1/corrections/record?kind=bank&identifier=B1')
+    assert record.is_success and record.json()['values']['amount'] == '100'
+    for values in (dict(known_at='2020-01-01'), dict(bank_id='OTHER'), dict(amount=100.5), dict(amount=True)):
+        assert preview_source_edit(client, [dict(kind='bank', identifier='B1', values=values)]).status_code == 422
+    assert preview_source_edit(client, [dict(kind='bank', identifier='MISSING', values=dict(amount='120'))]).status_code == 422
+    from html.parser import HTMLParser
+    class Forms(HTMLParser):
+        depth = 0
+        def __init__(self):
+            super().__init__()
+            self.identifiers = set()
+        def handle_starttag(self, tag, attrs):
+            if tag == 'form':
+                assert not self.depth, 'Nested HTML forms prevent source correction submission'
+                self.depth += 1
+            for key, value in attrs:
+                if key == 'id':
+                    assert value not in self.identifiers
+                    self.identifiers.add(value)
+        def handle_endtag(self, tag):
+            if tag == 'form':
+                self.depth -= 1
+    forms = Forms()
+    forms.feed(client.get('/workspace').text)
+    assert forms.depth == 0
+    assert {'source-correction-load', 'source-correction-form', 'source-correction-preview', 'commit-source-correction'} <= forms.identifiers
+
+
+def test_source_correction_reverses_shared_bank_decisions_and_preserves_unrelated_cash(t9_workspace):
+    client, _ = t9_workspace
+    from agent1.reconciliation.ledger import DecisionLedger
+    seed_t9(client, invoices=[dict(invoice_id=i, customer_id='C1', amount=a, issue_date='2026-01-01',
+        due_date='2026-02-01', known_at='2026-01-01') for i,a in [('I1',100),('I2',200),('I3',70)]],
+        bank=[dict(bank_id=b, account='A', date='2026-02-01', known_at='2026-02-02', direction='in',
+                   amount=a, memo=m, customer_id='C1') for b,a,m in [('B1',150,'I1 I2'),('B2',70,'I3')]])
+    for pid, iid, bid, amount in [('P1','I1','B1',100), ('P2','I2','B1',50), ('P3','I3','B2',70)]:
+        response = client.post('/v1/allocations', json=dict(payment_id=pid, invoice_id=iid, bank_id=bid, amount=amount,
+                                                            reviewed_by='Test reviewer', note='Shared bank source evidence'))
+        assert response.is_success, response.text
+    response = preview_source_edit(client, [dict(kind='invoices', identifier='I1', values=dict(amount='90'))])
+    assert response.is_success, response.text
+    assert len(response.json()['affected_decisions']) == 2
+    assert {r['payment_id'] for r in response.json()['affected_payments']} == {'P1','P2'}
+    assert commit_source_edit(client, response.json()).is_success
+    assert [r['payment_id'] for r in active_data(client)['payments']] == ['P3']
+    ledger = DecisionLedger(client.app.state.store, 'SME', prefix='company_')
+    gold = ledger.gold('2026-03-01')
+    assert gold['bank_movements'][0]['net_minor'] == 220
+    assert sorted(r['status'] for r in gold['decisions']) == ['committed','reversed','reversed']
+    second = preview_source_edit(client, [dict(kind='bank', identifier='B1', values=dict(amount='160'))])
+    assert second.is_success, second.text
+    assert commit_source_edit(client, second.json(), key='second-correction').is_success
+    assert ledger.gold('2026-03-01')['bank_movements'][0]['net_minor'] == 230
+
+
+def test_source_correction_full_invoice_keeps_original_source_retry_idempotent(t9_workspace):
+    client, _ = t9_workspace
+    original = accounting_invoice()
+    import_all(client, dict(invoices=[original]))
+    response = preview_source_edit(client, [dict(kind='invoices', identifier='ORIGINAL',
+        values=dict(amount='2200', amount_net='2000', vat='200'))])
+    assert response.is_success, response.text
+    assert commit_source_edit(client, response.json()).is_success
+    corrected = active_data(client)['invoices'][0]
+    assert corrected['amount'] == 2200 and corrected['record_version'] == 2
+    assert corrected['source_lineage']['workspace_correction']['correction_id'] == response.json()['id']
+    # An older original file cannot silently overwrite reviewed corrected facts.
+    retry = upload(client, 'invoices', [original])
+    assert not retry['can_commit'] or not retry['updates']
+    assert active_data(client)['invoices'][0]['amount'] == 2200
+
+
+def test_source_correction_imported_payment_and_nonfinancial_edit_do_not_erase_unrelated_allocations(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client, payments=[dict(payment_id='CSV1', invoice_id='I1', bank_id='B1', amount=20,
+                                   payment_date='2026-02-01', known_at='2026-02-02')])
+    change = dict(kind='payments', identifier='CSV1', values=dict(amount='30'))
+    response = preview_source_edit(client, [change])
+    assert response.is_success, response.text
+    assert commit_source_edit(client, response.json()).is_success
+    assert observed(active_data(client), '2026-03-01').iloc[0].received == 30
+    assert observed(active_data(client), '2026-02-28').iloc[0].received == 20
+    assert review_t9(client, run_t9(client)).is_success
+    preview = preview_source_edit(client, [dict(kind='invoices', identifier='I1', values=dict(customer_name='Ten da sua'))])
+    assert preview.is_success and not preview.json()['affected_decisions']
+    assert commit_source_edit(client, preview.json(), key='rename').is_success
+    assert observed(active_data(client), '2026-03-01').iloc[0].remaining_amount == 0
+    protected = next(r for r in active_data(client)['payments'] if r.get('t9_decision_id'))
+    assert client.get('/v1/corrections/record', params=dict(kind='payments', identifier=protected['payment_id'])).status_code == 422
+
+
+def test_source_correction_clears_old_writeoff_with_explicit_preview(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    import_all(client, dict(actions=[dict(event_id='WO1', invoice_id='I1', date='2026-02-01',
+                                          known_at='2026-02-02', kind='write_off')]))
+    preview = preview_source_edit(client, [dict(kind='invoices', identifier='I1', values=dict(amount='120'))])
+    assert preview.is_success, preview.text
+    assert preview.json()['affected_actions'][0]['event_id'] == 'WO1'
+    assert commit_source_edit(client, preview.json()).is_success
+    assert not active_data(client)['actions']
+    assert observed(active_data(client), '2026-02-28').iloc[0].written_off_at == pd.Timestamp('2026-02-01')
+    assert pd.isna(observed(active_data(client), '2026-03-01').iloc[0].written_off_at)
+
+
+def test_source_correction_preview_is_invalidated_by_another_source_revision_and_cannot_change_ids(t9_workspace):
+    client, _ = t9_workspace
+    seed_t9(client)
+    preview = preview_source_edit(client, [dict(kind='bank', identifier='B1', values=dict(amount='120'))]).json()
+    other = preview_source_edit(client, [dict(kind='bank', identifier='B1', values=dict(amount='130'))]).json()
+    assert commit_source_edit(client, other, key='other-editor').is_success
+    assert commit_source_edit(client, preview).status_code == 409
+    assert active_data(client)['bank'][0]['amount'] == 130
+    assert commit_source_edit(client, other, key='new-key-same-preview').status_code == 409
+
+
+def test_source_correction_can_correct_a_credit_to_a_debit_without_retaining_old_cash(t9_workspace):
+    client, _ = t9_workspace
+    from agent1.reconciliation.ledger import DecisionLedger
+    seed_t9(client)
+    assert review_t9(client, run_t9(client)).is_success
+    preview = preview_source_edit(client, [dict(kind='bank', identifier='B1', values=dict(direction='out'))])
+    assert preview.is_success, preview.text
+    assert commit_source_edit(client, preview.json()).is_success
+    gold = DecisionLedger(client.app.state.store, 'SME', prefix='company_').gold('2026-03-01')
+    assert gold['bank_movements'][0]['net_minor'] == -100
+    assert not run_t9(client)['allocations']
+    assert client.get('/v1/reconciliation').json()['total_received'] == 0

@@ -17,17 +17,19 @@ def propose(source, cutoff):
         result = source.propose(cutoff)
         result.update(created_on=today(), ledger_sequence=len(source.ledger.events()))
         result['id'] = fingerprint(result)[:32]
-        source.store.put(source.firm, 't9_proposals', [result])
+        source.store.put(source.firm, getattr(source, 'proposal_kind', 't9_proposals'), [result])
     return result
 
 
-def accept(source, key, actor, *, proposal_id=None, allocations=None, note=''):
+def accept(source, key, actor, *, proposal_id=None, allocations=None, note='', txn_ids=None):
     if not isinstance(actor, str) or not actor.strip():
         raise ValueError('Cần tên người xác nhận')
     if bool(proposal_id) == bool(allocations):
         raise ValueError('Chọn một đề xuất hoặc cung cấp phân bổ thủ công')
-    request_hash = fingerprint(dict(action='accept', actor=actor, proposal_id=proposal_id,
-                                    allocations=allocations, note=note))
+    request = dict(action='accept', actor=actor, proposal_id=proposal_id, allocations=allocations, note=note)
+    if txn_ids is not None:
+        request['txn_ids'] = txn_ids
+    request_hash = fingerprint(request)
     with source.store.lock:
         cached = source.ledger.cached(key, request_hash)
         if cached:
@@ -35,7 +37,7 @@ def accept(source, key, actor, *, proposal_id=None, allocations=None, note=''):
         now = today()
         view = source.view(now)
         if proposal_id:
-            proposal = next((r for r in source.store.get(source.firm, 't9_proposals') if r['id'] == proposal_id), None)
+            proposal = next((r for r in source.store.get(source.firm, getattr(source, 'proposal_kind', 't9_proposals')) if r['id'] == proposal_id), None)
             if proposal is None:
                 raise ValueError('Không tìm thấy đề xuất của doanh nghiệp')
             if proposal['cutoff'] != now:
@@ -45,6 +47,12 @@ def accept(source, key, actor, *, proposal_id=None, allocations=None, note=''):
                 raise ValueError('Đề xuất đã cũ; cần chạy đối soát lại')
             allocations = [dict(txn_id=a['payment_id'], invoice_id=a['invoice_id'], amount_minor=a['amount_minor'])
                            for a in proposal['allocations']]
+            if txn_ids is not None:
+                if not txn_ids or not set(txn_ids) <= {a['txn_id'] for a in allocations}:
+                    raise ValueError('Giao dịch không có phân bổ trong đề xuất')
+                allocations = [a for a in allocations if a['txn_id'] in txn_ids]
+            if hasattr(source, 'check_review'):
+                source.check_review(proposal, {a['txn_id'] for a in allocations})
             if not allocations:
                 raise ValueError('Đề xuất không có phân bổ xác định được')
         elif not isinstance(note, str) or not note.strip():
@@ -78,6 +86,7 @@ def accept(source, key, actor, *, proposal_id=None, allocations=None, note=''):
         gold = view['gold']
         ledger_inv = {r['id']: r for r in gold['invoices']}
         ledger_pay = {r['id']: r for r in gold['payments']}
+        ledger_bank = {r['id']: r for r in gold.get('banks', [])}
         commands = []
 
         def record(kind, identifier, data, effective):
@@ -104,8 +113,14 @@ def accept(source, key, actor, *, proposal_id=None, allocations=None, note=''):
                 continue
             record('payment', tid, dict(side='AR', party_id=parties[tid], amount_minor=money(bank),
                                        source_ref=bank.get('source_sha256') or tid), day(bank['value_date']))
-            record('bank', tid, dict(direction='credit', amount_minor=money(bank), account_id=bank.get('account_id', 'legacy'),
-                                    source_ref=bank.get('source_sha256') or tid), day(bank['value_date']))
+            if tid in ledger_bank:
+                recorded = ledger_bank[tid]
+                if (recorded['amount_minor'] != money(bank) or recorded['effective_on'] != day(bank['value_date'])
+                        or recorded['direction'] != 'credit' or recorded['account_id'] != bank.get('account_id', 'legacy')):
+                    raise ValueError('Sao kê không khớp phiên bản nguồn hiện hành trong ledger')
+            else:
+                record('bank', tid, dict(direction='credit', amount_minor=money(bank), account_id=bank.get('account_id', 'legacy'),
+                                        source_ref=bank.get('source_sha256') or tid), day(bank['value_date']))
             record('bank_link', tid, dict(payment_id=tid, bank_id=tid, fee_minor=0), day(bank['value_date']))
         decision = 'D-' + fingerprint(dict(key=key, request=request_hash))[:24]
         base = dict(tenant_id=source.firm, decision_id=decision, effective_on=now, available_on=now)
@@ -116,7 +131,8 @@ def accept(source, key, actor, *, proposal_id=None, allocations=None, note=''):
             dict(base, action='approve', reviewed_by=actor),
             dict(base, action='commit', external_result='verified', reviewed_by=actor),
         ])
-        result = source.ledger.transact(key, commands, request_hash=request_hash)
+        batches, fields = source.accept_batches(allocations, decision, actor, note, proposal_id) if hasattr(source, 'accept_batches') else (None, None)
+        result = source.ledger.transact(key, commands, request_hash=request_hash, batches=batches, result_fields=fields)
         return dict(result, decision_id=decision)
 
 
@@ -136,7 +152,8 @@ def reverse(source, key, decision_id, actor, note):
             raise ValueError('Cần đảo write-off trước khi thay đổi phân bổ liên quan')
         command = dict(tenant_id=source.firm, action='reverse_writeoff' if written else 'reverse',
                        decision_id=decision_id, effective_on=now, available_on=now, reviewed_by=actor, note=note)
-        return source.ledger.transact(key, [command], request_hash=request_hash)
+        batches, fields = source.reverse_batches(decision_id, actor, note) if hasattr(source, 'reverse_batches') else (None, None)
+        return source.ledger.transact(key, [command], request_hash=request_hash, batches=batches, result_fields=fields)
 
 
 def writeoff(source, key, invoice_id, effective_on, actor, source_ref):

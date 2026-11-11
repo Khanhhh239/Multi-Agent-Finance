@@ -1,0 +1,2 @@
+﻿payment_id,invoice_id,bank_id,amount,payment_date,known_at
+BAD_REF,MISSING,B_EXISTING,2000000,2026-10-15,2026-10-31

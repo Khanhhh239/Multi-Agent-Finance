@@ -17,6 +17,8 @@ ALIASES = {
     'description': ('description', 'noi dung', 'dien giai'),
     'counterparty_account': ('counterparty account', 'tai khoan doi tac', 'so tai khoan doi ung', 'tai khoan doi ung', 'beneficiary account'),
     'counterparty_name': ('counterparty name', 'ten doi tac', 'ten don vi doi ung', 'ten doi ung', 'beneficiary name'),
+    'customer_id': ('customer id', 'ma khach hang'),
+    'cash_flow_class': ('cash flow class', 'loai dong tien'),
     'known_at': ('known at', 'ngay ghi nhan', 'available on'),
     'component': ('component', 'nhom du bao'),
     'currency': ('currency', 'tien te', 'loai tien'),
@@ -112,7 +114,8 @@ def normalize_rows(rows, fields, number_format, normalize):
                 direction, amount = ('out', debit) if debit else ('in', credit)
             component = str(get('component')).strip() or 'other'
             values = (bank_id, account, booked, direction, str(int(amount)), known, component,
-                      *(str(get(k)).strip() for k in ('description', 'counterparty_account', 'counterparty_name')))
+                      *(str(get(k)).strip() for k in ('description', 'counterparty_account', 'counterparty_name',
+                                                     'customer_id', 'cash_flow_class')))
             if bank_id in output and output[bank_id] != values:
                 raise ValueError('Mã giao dịch trùng nhưng nội dung khác, hoặc dùng chung giữa hai tài khoản')
             output[bank_id] = values
@@ -132,15 +135,17 @@ def project(rows, agent, *, date_format='iso', number_format='plain'):
         def formatted_day(value):
             parsed = date.fromisoformat(value)
             return parsed.isoformat() if date_format == 'iso' else parsed.strftime('%d/%m/%Y')
-        writer.writerow(('bank_id', 'account', 'date', 'direction', 'amount', 'known_at', 'component'))
-        for bank_id, account, booked, direction, amount, known, component, *_ in rows:
+        writer.writerow(('bank_id', 'account', 'date', 'direction', 'amount', 'known_at', 'component',
+                         'memo', 'counterparty', 'customer_id', 'cash_flow_class'))
+        for bank_id, account, booked, direction, amount, known, component, description, _, name, customer_id, cash_flow_class in rows:
             exact = int(amount)
             amount = format(exact, ',').replace(',', '.') if number_format == 'vi-VN' else str(exact)
-            writer.writerow((bank_id, account, formatted_day(booked), direction, amount, formatted_day(known), component))
+            writer.writerow((bank_id, account, formatted_day(booked), direction, amount, formatted_day(known), component,
+                             description, name, customer_id, cash_flow_class))
     else:
         writer.writerow(('portal_bank_id', 'portal_bank_account', 'Ngày giao dịch', 'Ghi Nợ', 'Ghi Có',
                          'Nội dung', 'Số tài khoản đối ứng', 'Tên đơn vị đối ứng'))
-        for bank_id, account, booked, direction, amount, _, _, description, peer, name in rows:
+        for bank_id, account, booked, direction, amount, _, _, description, peer, name, *_ in rows:
             writer.writerow((bank_id, account, booked, amount if direction == 'out' else '',
                              amount if direction == 'in' else '', description, peer, name))
     return out.getvalue().encode('utf-8')

@@ -1,0 +1,109 @@
+{
+  "allocations": {
+    "B_EXACT": {
+      "I_EXACT": 10000000
+    },
+    "B_PART": {
+      "I_PART": 8000000
+    },
+    "B_GROUP": {
+      "I_GROUP1": 3000000,
+      "I_GROUP2": 7000000
+    },
+    "B_MULTI1": {
+      "I_MULTI": 5000000
+    },
+    "B_MULTI2": {
+      "I_MULTI": 7000000
+    },
+    "B_EXISTING": {
+      "I_EXISTING": 8000000
+    },
+    "B_FEE": {
+      "I_FEE": 9990000
+    },
+    "B_OVER": {
+      "I_OVER": 10000000
+    }
+  },
+  "cases": [
+    {
+      "bank_id": "B_AMB",
+      "status": "review",
+      "reason": "ambiguous_subset",
+      "available_minor": 6000000
+    },
+    {
+      "bank_id": "B_EARLY",
+      "status": "review",
+      "reason": "reference_conflict",
+      "available_minor": 5000000
+    },
+    {
+      "bank_id": "B_EXACT",
+      "status": "auto",
+      "reason": "unique_transport",
+      "available_minor": 10000000
+    },
+    {
+      "bank_id": "B_EXISTING",
+      "status": "auto",
+      "reason": "unique_transport",
+      "available_minor": 8000000
+    },
+    {
+      "bank_id": "B_FEE",
+      "status": "auto",
+      "reason": "unique_transport",
+      "available_minor": 9990000
+    },
+    {
+      "bank_id": "B_GROUP",
+      "status": "auto",
+      "reason": "unique_transport",
+      "available_minor": 10000000
+    },
+    {
+      "bank_id": "B_MULTI1",
+      "status": "auto",
+      "reason": "unique_transport",
+      "available_minor": 5000000
+    },
+    {
+      "bank_id": "B_MULTI2",
+      "status": "auto",
+      "reason": "unique_transport",
+      "available_minor": 7000000
+    },
+    {
+      "bank_id": "B_OVER",
+      "status": "auto",
+      "reason": "unique_transport",
+      "available_minor": 11000000
+    },
+    {
+      "bank_id": "B_PART",
+      "status": "auto",
+      "reason": "unique_transport",
+      "available_minor": 8000000
+    },
+    {
+      "bank_id": "B_UNKNOWN",
+      "status": "review",
+      "reason": "unknown_party",
+      "available_minor": 4000000
+    },
+    {
+      "bank_id": "B_LOAN",
+      "status": "unmatched",
+      "reason": "non_ar_bank_movement",
+      "available_minor": 9000000
+    },
+    {
+      "bank_id": "B_CASH",
+      "status": "unmatched",
+      "reason": "non_ar_bank_movement",
+      "available_minor": 3000000
+    }
+  ]
+}

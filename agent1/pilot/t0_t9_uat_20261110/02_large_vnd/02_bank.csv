@@ -1,0 +1,2 @@
+﻿bank_id,account,date,known_at,direction,amount,currency,component,customer_id,memo
+B_LARGE,000012345678,2026-10-15,2026-10-31,in,9007199254741009,VND,other,C_LARGE,I_LARGE
