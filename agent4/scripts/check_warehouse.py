@@ -1,5 +1,6 @@
 """Exercise the core catalog's trusted SQL against the configured DuckDB."""
 
+from collections.abc import Collection
 from pathlib import Path
 from time import perf_counter
 
@@ -34,9 +35,16 @@ def open_warehouse(db_path: Path) -> duckdb.DuckDBPyConnection:
     )
 
 
-def catalog_results(db: duckdb.DuckDBPyConnection, info: dict[str, str]) -> dict[str, str | None]:
+def catalog_results(
+    db: duckdb.DuckDBPyConnection,
+    info: dict[str, str],
+    *,
+    metric_ids: Collection[str] | None = None,
+) -> dict[str, str | None]:
     results = {}
-    for metric in MetricCatalog().list_approved_metrics():
+    for metric in MetricCatalog(canonical=True).list_metrics(
+        approved_only=True, allowed_metrics=metric_ids
+    ):
         if not metric["verified_handler"]:
             continue
         for view in metric["supported_views"]:
@@ -50,7 +58,9 @@ def catalog_results(db: duckdb.DuckDBPyConnection, info: dict[str, str]) -> dict
                 params = [info["as_of_date"]]
             else:
                 relation = f"v_{view}"
-                period = "year_month = ? AND NOT is_closing"
+                period = (
+                    "year_month = ? AND NOT is_closing AND source_module IS DISTINCT FROM 'OPENING'"
+                )
                 params = [info["last_closed_month"]]
 
             rows, result = db.execute(

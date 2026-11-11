@@ -5,7 +5,7 @@ from typing import Any
 
 import numpy as np
 
-from agent4.core.catalog import MetricCatalog
+from agent4.core.catalog import CANONICAL_TO_LEGACY, LEGACY_METRIC_IDS, MetricCatalog
 from agent4.core.errors import ContractError, enforce_exact_keys
 
 from .embedding import DOCUMENT_VERSION
@@ -69,18 +69,17 @@ def dense_retrieve(
     if not np.isclose(np.linalg.norm(vector), 1.0, atol=1e-6):
         raise ContractError("invalid_request", _STAGE, "Query embedding must have unit length.")
 
-    approved = {metric["metric_id"] for metric in catalog.list_approved_metrics()}
-    if allowed_metric_ids is not None:
-        approved.intersection_update(allowed_metric_ids)
-    scores = np.clip(index.vectors @ vector, -1.0, 1.0)
-    ranked = sorted(
-        (
-            (metric_id, float(score))
-            for metric_id, score in zip(index.metric_ids, scores, strict=True)
-            if metric_id in approved
-        ),
-        key=lambda pair: (-pair[1], pair[0]),
-    )
+    candidates = catalog.list_metrics(approved_only=True, allowed_metrics=allowed_metric_ids)
+    scores = dict(zip(index.metric_ids, np.clip(index.vectors @ vector, -1.0, 1.0), strict=True))
+    ranked = []
+    for metric in candidates:
+        metric_id = metric["metric_id"]
+        index_id = metric_id
+        if index_id not in scores:
+            index_id = LEGACY_METRIC_IDS.get(metric_id) or CANONICAL_TO_LEGACY.get(metric_id)
+        if index_id in scores:
+            ranked.append((metric_id, float(scores[index_id])))
+    ranked.sort(key=lambda pair: (-pair[1], pair[0]))
     return {
         "source": "dense",
         "hits": [

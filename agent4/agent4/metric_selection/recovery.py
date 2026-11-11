@@ -9,17 +9,25 @@ from functools import partial
 from time import perf_counter
 from typing import Any
 
+from agent4.core.cache import build_scoped_cache_key, file_revision
 from agent4.core.catalog import MetricCatalog
 from agent4.core.errors import ContractError
 
 from .catalog_adapter import build_full_catalog_retrieval_result
-from .config import FewshotConfig, MetricSelectionConfig
+from .config import FewshotConfig, MetricSelectionConfig, backend_cache_identity
 from .embedding import EmbeddingProvider
 from .fewshot import EXAMPLE_BANK_VERSION, load_example_bank, retrieve_dynamic_fewshot
 from .index import MetricVectorIndex
 from .llm_selector import LLMMetricSelector, SelectionFormatError
-from .orchestrator import orchestrate_retrieval
+from .orchestrator import _RETRIEVAL_SELECTION_CACHE, _cache_scope, _retrieve_with_revision
 from .validator import require_authorized_view, validate_metrics
+
+
+@dataclass
+class _CheckedSelection:
+    draft: dict[str, Any]
+    example_ids: list[str]
+    retried_schema: bool
 
 
 @dataclass
@@ -34,6 +42,7 @@ class SelectionTrace:
     recovery_reason: str | None = None
     candidate_expanded: bool = False
     usage: dict[str, int] | None = None
+    selection_cache_hit: bool | None = None
 
     @property
     def recovery_triggered(self) -> bool:
@@ -84,7 +93,7 @@ async def select_metrics_with_recovery(
     require_authorized_view(auth_context, context)
     provider = embedding_provider or EmbeddingProvider(config.embedding)
     retrieve = partial(
-        orchestrate_retrieval,
+        _retrieve_with_revision,
         normalized_query,
         catalog,
         provider,
@@ -98,9 +107,9 @@ async def select_metrics_with_recovery(
             and config.retrieval.mode in ("dense_only", "hybrid")
             and config.retrieval.dense_enabled
         ):
-            retrieval = await asyncio.to_thread(retrieve, config=config)
+            retrieval, revision = await asyncio.to_thread(retrieve, config=config)
         else:
-            retrieval = retrieve(config=config)
+            retrieval, revision = retrieve(config=config)
         trace.initial_retrieved_metric_ids = _candidate_ids(retrieval)
         status = retrieval["status"]
         if status == "retrieval_unavailable":
@@ -115,7 +124,7 @@ async def select_metrics_with_recovery(
                     "expansion": config.expansion.model_copy(update={"enabled": False}),
                 }
             )
-            retrieval = retrieve(config=lexical_config)
+            retrieval, _ = retrieve(config=lexical_config)
             if retrieval["status"] != "candidates_found":
                 raise _retrieval_unavailable()
             for candidate in retrieval["candidates"]:
@@ -146,8 +155,12 @@ async def select_metrics_with_recovery(
         fewshot=config.fewshot if config.fewshot.enabled else None,
         retry_schema=config.llm.max_retries == 1,
         expand_candidates=config.recovery.enable_candidate_expansion,
+        retrieval_revision=revision,
+        cache_enabled=config.cache_enabled,
     )
-    return {**validated, **asdict(trace), "recovery_triggered": trace.recovery_triggered}
+    observations = asdict(trace)
+    observations.pop("selection_cache_hit")
+    return {**validated, **observations, "recovery_triggered": trace.recovery_triggered}
 
 
 def _select_examples(
@@ -157,6 +170,9 @@ def _select_examples(
     auth_context: dict[str, Any],
     query_context: dict[str, Any],
     config: FewshotConfig,
+    *,
+    catalog_hash: str,
+    cache_enabled: bool,
 ) -> list[dict[str, Any]]:
     view = query_context.get("requested_view") or "mgmt"
     if (
@@ -183,7 +199,9 @@ def _select_examples(
             "example_bank_version": EXAMPLE_BANK_VERSION,
             "compatible_only": True,
         },
-        load_example_bank(config.example_bank_path),
+        load_example_bank(
+            config.example_bank_path, catalog_hash=catalog_hash, cache_enabled=cache_enabled
+        ),
         config=config,
     )["examples"]
 
@@ -202,15 +220,23 @@ async def _select_from_retrieval(
     fewshot: FewshotConfig | None = None,
     retry_schema: bool = False,
     expand_candidates: bool = False,
+    retrieval_revision: str | None = None,
+    cache_enabled: bool = True,
 ) -> dict[str, Any]:
     trace.retrieved_metric_ids = _candidate_ids(retrieval)
     trace.retrieval_result = retrieval
-    allowed_views = set(auth_context["allowed_views"])
-    candidates = []
-    for metric_id in trace.retrieved_metric_ids:
-        metric = catalog.get(metric_id)
-        metric["supported_views"] = sorted(allowed_views.intersection(metric["supported_views"]))
-        candidates.append(metric)
+    key = None
+    if (
+        retrieval_revision is not None
+        and type(selector) is LLMMetricSelector
+        and trace.recovery_reason in (None, "empty_candidates")
+        and trace.retrieved_metric_ids
+    ):
+        key = _selection_key(
+            retrieval_revision, catalog, auth_context, query_context, selector, seed, fewshot, trace
+        )
+    cached = _RETRIEVAL_SELECTION_CACHE.get(key) if key is not None else None
+    trace.selection_cache_hit = cached is not None if key is not None else None
 
     draft = {
         "status": "unsupported",
@@ -218,7 +244,21 @@ async def _select_from_retrieval(
         "clarification_question": None,
         "unsupported_reason": None,
     }
-    if candidates:
+    if cached is not None:
+        draft = cached.draft
+        trace.selected_example_ids = cached.example_ids
+        trace.usage = {"input_tokens": 0, "output_tokens": 0}
+        if cached.retried_schema:
+            trace.recovery_reason = "invalid_selection_format"
+    elif trace.retrieved_metric_ids:
+        allowed_views = set(auth_context["allowed_views"])
+        candidates = []
+        for metric_id in trace.retrieved_metric_ids:
+            metric = catalog.get(metric_id)
+            metric["supported_views"] = sorted(
+                allowed_views.intersection(metric["supported_views"])
+            )
+            candidates.append(metric)
         examples = None
         if fewshot is not None:
             with trace.measure("fewshot_ms"):
@@ -229,6 +269,8 @@ async def _select_from_retrieval(
                     auth_context,
                     query_context,
                     fewshot,
+                    catalog_hash=catalog.get_catalog_hash(),
+                    cache_enabled=cache_enabled,
                 )
                 trace.selected_example_ids = [example["example_id"] for example in examples]
         select = partial(selector.select, question, candidates, examples=examples, seed=seed)
@@ -245,7 +287,7 @@ async def _select_from_retrieval(
 
     with trace.measure("validation_ms"):
         try:
-            return validate_metrics(draft, retrieval, catalog, auth_context, query_context)
+            validated = validate_metrics(draft, retrieval, catalog, auth_context, query_context)
         except ContractError as exc:
             if (
                 exc.code != "metric_outside_candidates"
@@ -283,4 +325,57 @@ async def _select_from_retrieval(
             }
             trace.retrieved_metric_ids = _candidate_ids(expanded)
             trace.retrieval_result = expanded
-            return validate_metrics(draft, expanded, catalog, auth_context, query_context)
+            validated = validate_metrics(draft, expanded, catalog, auth_context, query_context)
+    if key is not None and cached is None:
+        _RETRIEVAL_SELECTION_CACHE.set(
+            key,
+            _CheckedSelection(
+                draft,
+                trace.selected_example_ids,
+                trace.recovery_reason == "invalid_selection_format",
+            ),
+            row_count=len(draft["metric_ids"]),
+        )
+    return validated
+
+
+def _selection_key(
+    revision: str,
+    catalog: MetricCatalog,
+    auth_context: dict[str, Any],
+    context: dict[str, Any],
+    selector: LLMMetricSelector,
+    seed: int,
+    fewshot: FewshotConfig | None,
+    trace: SelectionTrace,
+) -> str | None:
+    scope = _cache_scope(auth_context, catalog.get_catalog_hash())
+    if scope is None:
+        return None
+    relevant = {
+        key: context[key]
+        for key in ("requested_view", "requested_dimensions", "requested_operation", "time_mode")
+        if key in context
+    }
+    if "requested_dimensions" in relevant and not isinstance(
+        relevant["requested_dimensions"], list
+    ):
+        return None
+    try:
+        bank_revision = None
+        if fewshot and fewshot.max_examples and fewshot.token_budget and fewshot.strategy != "zero":
+            bank_revision = file_revision(fewshot.example_bank_path)
+        return build_scoped_cache_key(
+            "validated-selection",
+            **scope,
+            retrieval_revision=revision,
+            candidate_ids=trace.retrieved_metric_ids,
+            prior_recovery=trace.recovery_reason,
+            query_context=relevant,
+            selector=backend_cache_identity(selector.config),
+            seed=seed,
+            example_bank=bank_revision,
+        )
+    except (OSError, TypeError):
+        # Uncacheable context or artifact still goes through the normal selection path.
+        return None

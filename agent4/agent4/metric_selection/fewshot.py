@@ -9,6 +9,7 @@ from itertools import combinations, product
 from pathlib import Path
 from typing import Any
 
+from agent4.core.cache import LRUTTLCache, file_revision
 from agent4.core.context import SUPPORTED_LOCALES
 from agent4.core.errors import ContractError, enforce_exact_keys
 from agent4.engine.metrics import REGISTRY
@@ -21,6 +22,9 @@ EXAMPLE_BANK_VERSION = "fewshot-v4"
 _BANK_STAGE = "fewshot_example_bank"
 _STAGE = "fewshot_retrieval"
 _STRATEGIES = ("zero", "static", "similarity", "coverage", "hybrid")
+_BANK_CACHE = LRUTTLCache(
+    max_entries=2, ttl_seconds=3600, max_bytes_budget=4 * 1024**2, max_rows_per_entry=4096
+)
 _TAGS = {"decision_tags", "confusable_metrics"}
 _RECORD_KEYS = {
     "example_id",
@@ -204,12 +208,17 @@ def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return record
 
 
-def load_example_bank(path: str | Path | None = None) -> list[dict[str, Any]]:
+def load_example_bank(
+    path: str | Path | None = None, *, catalog_hash: str | None = None, cache_enabled: bool = True
+) -> list[dict[str, Any]]:
     """Read a server-configured JSONL bank, normalizing the repository's legacy records."""
-    bank_path = Path(path) if path is not None else FewshotConfig().example_bank_path
+    bank_path = (Path(path) if path is not None else FewshotConfig().example_bank_path).absolute()
     examples = []
     seen: set[str] = set()
     try:
+        key = (file_revision(bank_path), catalog_hash) if cache_enabled else None
+        if key is not None and (cached := _BANK_CACHE.get(key)) is not None:
+            return cached
         with bank_path.open(encoding="utf-8") as file:
             for line in file:
                 if not line.strip():
@@ -231,6 +240,8 @@ def load_example_bank(path: str | Path | None = None) -> list[dict[str, Any]]:
             retryable=True,
             final_status="temporarily_unavailable",
         ) from exc
+    if key is not None:
+        _BANK_CACHE.set(key, examples)
     return examples
 
 

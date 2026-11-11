@@ -37,7 +37,7 @@ agent4/sql/
   ```json
   {
     "contract_version": "bound-query.v1",
-    "sql": "WITH tenant_scoped AS (SELECT * FROM v_mgmt /* tenant:minh-phat */ WHERE posting_date >= CAST(? AS DATE) AND posting_date <= CAST(? AS DATE) AND NOT is_closing) SELECT ... FROM tenant_scoped LIMIT ?",
+    "sql": "SELECT ... FROM v_mgmt WHERE posting_date >= CAST(? AS DATE) AND posting_date <= CAST(? AS DATE) AND NOT is_closing HAVING COUNT(*) > 0 LIMIT ?",
     "params": ["2026-08-01", "2026-08-31", 1000],
     "metric_ids": ["net_revenue"],
     "dimensions": [],
@@ -46,7 +46,8 @@ agent4/sql/
     "fingerprint": "sha256:a1b2c3d4e5f60123",
     "source": "v_mgmt",
     "catalog_hash": "catalog-abc123def456",
-    "tenant_id": "minh-phat"
+    "tenant_id": "minh-phat",
+    "policy_hash": "policy-abc123"
   }
   ```
 - **Quy tắc biên dịch trên `cfo_warehouse.duckdb`**:
@@ -63,32 +64,37 @@ agent4/sql/
      - Với metric `snapshot` (`mode == "as_of"`): dùng `posting_date <= CAST(? AS DATE)` (tính lũy kế số dư từ bút toán đầu kỳ `2024-12-31` đến ngày `as_of`).
      - Với metric `flow` (`mode == "range"`): dùng `posting_date >= CAST(? AS DATE) AND posting_date <= CAST(? AS DATE) AND NOT is_closing` (loại bỏ các bút toán kết chuyển cuối kỳ `911` có `is_closing = TRUE`).
   4. **Sắp xếp xác định (`ORDER BY`) & Giới hạn dòng (`LIMIT ?`)**:
-     - Nếu có `top_k` hoặc `operation == "ranking"`: `ORDER BY <primary_metric> DESC` (hoặc `ASC`).
+     - Nếu plan có sort, dùng metric và chiều sắp xếp đã được validator chấp nhận. Sắp thêm theo tất cả chiều để xử lý đồng hạng.
      - Nếu có `GROUP BY`: bắt buộc `ORDER BY {', '.join(dimensions)} ASC` trên **tất cả** các chiều để thứ tự dòng trả về từ DuckDB luôn xác định 100% khi breakdown đa chiều (như `BM-053`, `BM-056`).
      - Luôn kết thúc bằng `LIMIT ?` với `effective_cap = min(top_k, row_cap)`.
 
 ### 3.2. SQL Safety Validation Contract (`sql.safety.v1` — `agent4/sql/safety.py`)
-Kiểm tra độc lập `BoundQuery` qua **7 chốt an toàn bắt buộc**:
-1. `read_only`: Câu lệnh sau khi bỏ comment chỉ bắt đầu bằng `SELECT` hoặc `WITH`, và tuyệt đối không chứa bất kỳ từ khóa nào trong:
-   `INSERT, UPDATE, DELETE, DROP, ALTER, COPY, ATTACH, DETACH, PRAGMA, CREATE, REPLACE, TRUNCATE, GRANT, REVOKE, CALL, EXPORT, IMPORT, LOAD, INSTALL`.
-2. `single_statement`: Không chứa dấu chấm phẩy `;` trong câu lệnh SQL.
-3. `approved_relations`: Mọi bảng/view sau từ khóa `FROM` (trừ tên CTE nội bộ) phải thuộc tập `ALLOWED_RELATIONS` (`v_mgmt`, `v_tax`, `v_gl`, `budget`, ...). Chặn hoàn toàn việc truy vấn các bảng hệ thống như `duckdb_tables`, `sqlite_master`.
-4. `approved_columns`: Không truy xuất các cột nhạy cảm (`password`, `secret`, `tax_id`, `credit_limit`).
-5. `parameterized`: Không có chuỗi literal do user kiểm soát nằm trực tiếp trong SQL; số lượng dấu `?` trong câu lệnh phải bằng đúng `len(params)`.
-6. `row_cap_present`: Câu lệnh kết thúc bằng `LIMIT ?` (hoặc số nguyên) và `0 < row_cap <= 1000`.
-7. `tenant_scope_present`: `bound_query["tenant_id"] == runtime_context["tenant_id"]`, có đánh dấu phạm vi tenant, và `bound_query["catalog_hash"] == catalog.get_catalog_hash()`.
+Gate tái tạo template từ plan đã niêm phong rồi kiểm tra `BoundQuery`
+qua **7 chốt an toàn bắt buộc**:
+
+1. `read_only`: Câu lệnh khớp chính xác template SELECT của compiler.
+2. `single_statement`: Câu lệnh không chứa dấu chấm phẩy.
+3. `approved_relations`: Quan hệ và metadata source khớp template đã được phép.
+4. `approved_columns`: Projection, metric, dimension và unit khớp template và catalog.
+5. `parameterized`: Số placeholder, giá trị bind và fingerprint khớp template và plan.
+6. `row_cap_present`: Câu lệnh kết thúc bằng `LIMIT ?`. Tham số cuối bằng cap hợp lệ của query, trong giới hạn của plan và tối đa 1000.
+7. `tenant_scope_present`: Tenant của query, runtime và warehouse khớp. Catalog hash, policy hash và view được đối chiếu với runtime. Tenant của warehouse lấy từ cấu hình server, vì fixture dùng một database riêng cho mỗi tenant.
 
 Nếu bất kỳ chốt nào bằng `False` $\rightarrow$ ném `ContractError("unsafe_sql_rejected", stage="sql_safety", details={"checks": checks})`.
 
-### 3.3. SQL Execution Contract (`sql.execution.v1` — `agent4/sql/executor.py`)
+### 3.3. SQL Execution Contract & L3 Execution Cache (`sql.execution.v1` — `agent4/sql/executor.py`)
 - **Input**: Kết quả `safety_result` (`status == "allowed"` và chứa `safe_bound_query`).
-- **Quy trình thực thi trên `cfo_warehouse.duckdb`**:
+- **Quy trình thực thi & Cache L3 trên `cfo_warehouse.duckdb`**:
   1. Kiểm tra đầu vào: nếu không phải output hợp lệ từ `validate_sql_safety` $\rightarrow$ từ chối ngay với `unsafe_sql_rejected`.
   2. Mở kết nối `duckdb.connect(str(db_path), read_only=True)`.
   3. Lấy `data_watermark` từ bảng `company_info` (`SELECT value FROM company_info WHERE key = 'as_of_date'` $\rightarrow$ `"2026-10-14"`).
-  4. Thực thi `con.execute(bound["sql"], bound["params"])` và đo thời gian `execution_ms`.
-  5. Định dạng từng giá trị số của metric thành chuỗi thập phân 2 chữ số sau dấu phẩy (`f"{Decimal(str(val)):.2f}"`), giữ `None` nếu giá trị SQL là `NULL` (ví dụ chia tỷ số có mẫu số bằng 0).
-  6. Trả về `ExecutionResult`:
+  4. **Tra cứu L3 SQL Execution Cache (`agent4/core/cache.py`)**:
+     - Khóa cache: `sha256(tenant_id | catalog_hash | data_watermark | query_fingerprint | row_cap)`.
+     - Nếu `use_cache=True` và có cache hit: trả về bản sao sâu (`deepcopy`) của `ExecutionResult` ngay lập tức (ghi nhận `cache_hit=True`), đảm bảo cô lập tuyệt đối theo `tenant_id` và tự động mất hiệu lực khi `data_watermark` hoặc `catalog_hash` thay đổi.
+  5. Nếu cache miss: thực thi `con.execute(bound["sql"], bound["params"])` và đo thời gian `execution_ms`.
+  6. Định dạng từng giá trị số của metric thành chuỗi thập phân 2 chữ số sau dấu phẩy (`f"{Decimal(str(val)):.2f}"`), giữ `None` nếu giá trị SQL là `NULL` (ví dụ chia tỷ số có mẫu số bằng 0).
+  7. Lưu vào **L3 Cache** (`LRUTTLCache(maxsize=256, ttl_seconds=600, max_rows_per_entry=200)`) nếu `row_count <= 200` (không cache bảng lớn để bảo vệ bộ nhớ RAM).
+  8. Trả về `ExecutionResult`:
      ```json
      {
        "columns": [{"key": "net_revenue", "type": "decimal", "unit": "VND"}],
@@ -105,22 +111,23 @@ Nếu bất kỳ chốt nào bằng `False` $\rightarrow$ ném `ContractError("u
 ## 4. Phân rã Milestone 3 $\rightarrow$ Issues $\rightarrow$ Tasks
 
 ### Issue M3.1: Xây dựng Deterministic SQL Compiler (`agent4/sql/compiler.py`)
-- [ ] **Task M3.1.1**: Viết hàm `compile_sql(validated_plan, catalog, row_cap=1000)`:
-  - Kiểm tra `validated_plan.get("contract_version") == "validated-plan.v1"` và khớp `catalog_hash`.
+- [x] **Task M3.1.1**: Viết hàm `compile_sql(validated_plan, catalog, row_cap=1000)`:
+  - Nhận đối tượng `ValidatedPlan` bất biến từ validator và đối chiếu `catalog_hash`.
   - Ánh xạ `view` sang `v_mgmt` / `v_tax` / `v_gl` hoặc bảng `budget`.
   - Sinh mệnh đề `SELECT`, `WHERE` tham số hóa (`?`), `GROUP BY`, `ORDER BY` xác định trên toàn bộ `dimensions`, và `LIMIT ?`.
-  - Tính `fingerprint = "sha256:" + sha256(sql + json.dumps(params))[:16]`.
+  - Tính `fingerprint` bằng SHA-256 từ JSON của cặp SQL và tham số.
 
 ### Issue M3.2: Xây dựng SQL Safety Validator (`agent4/sql/safety.py`)
-- [ ] **Task M3.2.1**: Viết hàm `validate_sql_safety(bound_query, catalog, runtime_context)`:
+- [x] **Task M3.2.1**: Viết hàm `validate_sql_safety(bound_query, catalog, runtime_context, *, warehouse_tenant_id)`:
   - Kiểm tra đủ 7 chốt (`read_only`, `single_statement`, `approved_relations`, `approved_columns`, `parameterized`, `row_cap_present`, `tenant_scope_present`).
   - Trả về `{"status": "allowed", "query_fingerprint": ..., "checks": checks, "safe_bound_query": ...}` hoặc ném `ContractError("unsafe_sql_rejected")`.
 
-### Issue M3.3: Xây dựng Read-Only DuckDB Executor (`agent4/sql/executor.py`)
-- [ ] **Task M3.3.1**: Viết hàm `execute_safe_sql(safety_result, db_path, timeout_ms=5000, simulate_outage=False)`:
+### Issue M3.3: Xây dựng Read-Only DuckDB Executor & L3 Result Cache (`agent4/sql/executor.py`)
+- [ ] **Task M3.3.1**: Viết hàm `execute_safe_sql(safety_result, db_path, timeout_ms=5000, simulate_outage=False, cache=None)`:
   - Kết nối `cfo_warehouse.duckdb` với `read_only=True`.
   - Xử lý lỗi `database_unavailable` (`final_status="temporarily_unavailable"`, `retryable=True`) khi DB mất kết nối hoặc quá `timeout_ms`.
   - Trích xuất `data_watermark = "2026-10-14"` và chuẩn hóa `columns`, `rows`.
+- [ ] **Task M3.3.2**: Tích hợp **L3 SQL Execution Cache** (`agent4/core/cache.py`) khóa theo `(tenant_id, catalog_hash, data_watermark, query_fingerprint, row_cap)` với giới hạn `max_rows_per_entry <= 200` và không cache khi xảy ra lỗi tạm thời.
 
 ---
 
@@ -131,7 +138,7 @@ Chạy câu lệnh kiểm thử cho riêng Module 4:
 PYTHONPATH=.venv/lib/python3.13/site-packages pytest -v tests/contracts/test_compiler_safety_execution.py
 ```
 
-**Các bài test bắt buộc phải PASS (14/14 tests)**:
+**Các bài test bắt buộc phải PASS (14/14 tests + L3 Cache tests)**:
 - `TestSQLCompilerContract::test_compiler_accepts_only_validated_plan`
 - `TestSQLCompilerContract::test_compiler_parameterized_and_row_cap`
 - `TestSQLSafetyValidationContract::test_safety_gate_allows_valid_bound_query`
@@ -140,3 +147,4 @@ PYTHONPATH=.venv/lib/python3.13/site-packages pytest -v tests/contracts/test_com
 - `TestSQLExecutionOnDuckDBContract::test_duckdb_read_only_connection_blocks_writes`
 - `TestSQLExecutionOnDuckDBContract::test_execute_mgmt_vs_tax_view_on_real_duckdb` (xác nhận trên `cfo_warehouse.duckdb` tháng `2026-08`: OPEX `v_mgmt = 3028615501.00` vs `v_tax = 2928697501.00`).
 - `TestSQLExecutionOnDuckDBContract::test_database_outage_returns_temporarily_unavailable`
+- Kiểm tra L3 SQL Cache: hit đúng khi trùng `(tenant_id, catalog_hash, data_watermark, query_fingerprint)` và tự động miss khi khác `tenant_id` hoặc `data_watermark`.

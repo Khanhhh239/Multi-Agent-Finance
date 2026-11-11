@@ -78,7 +78,6 @@ def rerank_candidates(
     phrase_query = f" {' '.join(query_tokens)} "
     query_terms = set(query_tokens)
     locale = normalized_query["locale"]
-    visible = {metric["metric_id"]: metric for metric in catalog.list_visible_metrics(auth_context)}
     if requested_view is not None and requested_view not in (
         auth_context.get("allowed_views") or []
     ):
@@ -115,8 +114,8 @@ def rerank_candidates(
             )
         ):
             raise ContractError("invalid_request", _STAGE, "Invalid reranking candidate.")
-        metric = visible.get(metric_id)
-        if metric is None:
+        metric = catalog.get(metric_id)
+        if metric is None or not catalog.validate_access(metric_id, auth_context):
             raise ContractError(
                 "forbidden", _STAGE, "Candidate is not authorized.", final_status="forbidden"
             )

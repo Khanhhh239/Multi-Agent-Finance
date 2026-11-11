@@ -9,6 +9,7 @@ from datetime import date
 from typing import Any, Literal
 
 from agent4.core.catalog import MetricCatalog
+from agent4.core.context import ROW_SCOPE_FIELDS
 from agent4.core.errors import ContractError, enforce_exact_keys
 
 from .planner import ALLOWED_DIMENSIONS, ALLOWED_FILTER_VALUES, PARTNER_CODE_PATTERN
@@ -32,7 +33,7 @@ _FIELDS = {
 }
 _SLOTS = {"metric", "time", "dimensions", "filters", "view", "sort", "top_k"}
 _OPERATIONS = ("aggregate", "timeseries", "breakdown", "ranking")
-_GRAINS = ("month", "quarter", "year")
+_GRAINS = ("day", "month", "quarter", "year")
 _VIEWS = ("mgmt", "tax")
 _DIMENSION_ALIASES = {"branch_code": "branch", "department_code": "department"}
 _PARTNER_SIDES = {"customer", "vendor"}
@@ -264,6 +265,45 @@ def _auth_scope(auth: dict[str, Any], view: str | None, ids: tuple[str, ...]) ->
         raise _forbidden()
 
 
+def _scope_row_filters(
+    filters: tuple[ValidatedFilter, ...], auth: dict[str, Any]
+) -> tuple[ValidatedFilter, ...]:
+    """Reject explicit out-of-scope values and add any missing server filters."""
+    scoped = list(filters)
+    for key, column in ROW_SCOPE_FIELDS.items():
+        if key not in auth or auth[key] == ["*"]:
+            continue
+        allowed = auth[key]
+        if (
+            not isinstance(allowed, list)
+            or not allowed
+            or any(
+                not isinstance(code, str) or code not in ALLOWED_FILTER_VALUES[column]
+                for code in allowed
+            )
+        ):
+            raise _forbidden()
+        requested = [item for item in filters if item.field == column]
+        for item in requested:
+            values = (item.value,) if isinstance(item.value, str) else item.value
+            if not set(values).issubset(allowed):
+                raise _forbidden()
+        if not requested:
+            scoped.append(
+                ValidatedFilter(column, "=", allowed[0])
+                if len(allowed) == 1
+                else ValidatedFilter(column, "IN", tuple(allowed))
+            )
+    return tuple(scoped)
+
+
+def validate_requested_row_scope(filters: list[dict], auth: dict[str, Any]) -> None:
+    fields = {
+        field for key, field in ROW_SCOPE_FIELDS.items() if key in auth and auth[key] != ["*"]
+    }
+    _scope_row_filters(_filters([item for item in filters if item["field"] in fields]), auth)
+
+
 def _capabilities(
     ids: tuple[str, ...], selected: dict[str, Any], catalog: MetricCatalog, catalog_hash: str
 ) -> list[dict[str, Any]]:
@@ -286,7 +326,8 @@ def _capabilities(
         if cap["status"] != "approved":
             raise _unsupported("unsupported_metric", "Plan metric is not approved.")
         if cap["verified_handler"] is not True:
-            raise _unsupported("unsupported_data_source", "Plan metric has no verified handler.")
+            code = "unsupported_metric" if cap["metadata_only"] else "unsupported_data_source"
+            raise _unsupported(code, "Plan metric has no verified handler.")
         capabilities.append(cap)
     return capabilities
 
@@ -395,6 +436,7 @@ def validate_semantic_plan_draft(
     sort = _sort(plan_draft["sort"], ids)
 
     _auth_scope(auth_context, view, ids)
+    scoped_filters = _scope_row_filters(filters, auth_context)
     catalog_hash = catalog.get_catalog_hash()
     capabilities = _capabilities(ids, validated_metrics, catalog, catalog_hash)
 
@@ -426,7 +468,7 @@ def validate_semantic_plan_draft(
         metric_ids=ids,
         time=time,
         dimensions=dimensions,
-        filters=filters,
+        filters=scoped_filters,
         view=view,
         operation=operation,
         sort=sort,

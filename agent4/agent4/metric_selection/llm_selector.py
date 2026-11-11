@@ -1,4 +1,4 @@
-"""Ollama metric selection and the untrusted draft boundary."""
+"""Remote metric selection and the untrusted draft boundary."""
 
 from __future__ import annotations
 
@@ -11,10 +11,21 @@ import httpx
 
 from agent4.core.errors import ContractError, enforce_exact_keys
 
-from .config import LLMSelectionConfig
+from .config import LLMSelectionConfig, openai_endpoint
 
 STAGE = "llm_metric_selection"
 _KEYS = {"status", "metric_ids", "clarification_question", "unsupported_reason"}
+_RESPONSE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "status": {"type": "string", "enum": ["resolved", "ambiguous", "unsupported"]},
+        "metric_ids": {"type": "array", "items": {"type": "string"}, "maxItems": 8},
+        "clarification_question": {"type": ["string", "null"], "maxLength": 120},
+        "unsupported_reason": {"type": ["string", "null"], "maxLength": 120},
+    },
+    "required": sorted(_KEYS),
+    "additionalProperties": False,
+}
 _METRIC_ID = re.compile(r"[a-z][a-z0-9_]*")
 INJECTION_PATTERNS = re.compile(
     r"\b(?:ignore|disregard|override)\s+(?:(?:all|the|previous|prior|earlier|above|system)\s+)*"
@@ -26,7 +37,12 @@ INJECTION_PATTERNS = re.compile(
     re.IGNORECASE,
 )
 _UNSAFE_OUTPUT = re.compile(
-    r"\b(?:select|from|drop|insert|update|delete|alter|attach|create|truncate|pragma)\b"
+    r"\bselect\s+(?:\*|\d+\b|[^;]*?\bfrom\b)"
+    r"|\b(?:drop|alter|create)\s+(?:(?:or replace|temp(?:orary)?)\s+)?"
+    r"(?:table|view|schema|database|index|function|macro|extension)\b"
+    r"|\b(?:insert\s+into|delete\s+from|update\s+[^;]*?\bset|truncate\s+table)\b"
+    r"|\b(?:attach|detach|pragma)\s+(?:database\s+)?[\w'\"]+"
+    r"|;\s*--"
     r"|\b(?:sum|avg|count|min|max|coalesce|round)\s*\("
     r"|\b(?:v_gl|v_mgmt|v_tax|gl_wide|gl_entry|gl_journal|credit_amount|debit_amount"
     r"|account_code|employee_code|net_pay|read_csv(?:_auto)?|read_parquet)\b"
@@ -36,6 +52,9 @@ _UNSAFE_OUTPUT = re.compile(
     r"|\b\d+(?:\.\d+)?\s*[+*/=×÷−-]\s*\d+(?:\.\d+)?\b",
     re.IGNORECASE,
 )
+_THINK_BLOCK = re.compile(r"<think>.*?</think>", re.IGNORECASE | re.DOTALL)
+_SQL_BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
+_DEFAULT_CLARIFICATION = "Bạn vui lòng làm rõ chỉ số tài chính và kỳ thời gian cần tra cứu?"
 _CANDIDATE_FIELDS = (
     "metric_id",
     "label",
@@ -81,16 +100,49 @@ def _invalid_draft(message: str) -> ContractError:
     return ContractError("invalid_request", STAGE, message)
 
 
+def _reject_unsafe_text(value: Any) -> None:
+    if isinstance(value, str):
+        text = unicodedata.normalize("NFKC", value)
+        text = "".join(char for char in text if unicodedata.category(char) != "Cf")
+        if _UNSAFE_OUTPUT.search(_SQL_BLOCK_COMMENT.sub(" ", text)):
+            raise _invalid_draft("Selection contains prohibited content.")
+
+
+def _reject_unsafe_draft(draft: dict[str, Any]) -> None:
+    for key in ("status", "clarification_question", "unsupported_reason"):
+        _reject_unsafe_text(draft.get(key))
+    ids = draft.get("metric_ids")
+    for value in ids if isinstance(ids, list) else [ids]:
+        _reject_unsafe_text(value)
+
+
+def _normalize_model_draft(draft: Any) -> Any:
+    if not isinstance(draft, dict):
+        return draft
+    # Inspect decoded fields before discarding any inactive model output.
+    _reject_unsafe_draft(draft)
+    if draft.keys() != _KEYS:
+        return draft
+    clarification = draft["clarification_question"]
+    reason = draft["unsupported_reason"]
+    if (
+        draft["status"] == "resolved"
+        and isinstance(draft["metric_ids"], list)
+        and draft["metric_ids"]
+        and all(value is None or isinstance(value, str) for value in (clarification, reason))
+    ):
+        return {**draft, "clarification_question": None, "unsupported_reason": None}
+    if draft["status"] == "ambiguous" and (
+        clarification is None or (isinstance(clarification, str) and not clarification.strip())
+    ):
+        return {**draft, "clarification_question": _DEFAULT_CLARIFICATION}
+    return draft
+
+
 def validate_llm_selection_draft(draft: dict[str, Any]) -> dict[str, Any]:
     """Validate structure and reject unsafe text before any selection is used."""
     if isinstance(draft, dict):
-        ids = draft.get("metric_ids")
-        values = [
-            draft.get(key) for key in ("status", "clarification_question", "unsupported_reason")
-        ]
-        values.extend(ids if isinstance(ids, list) else [ids])
-        if any(isinstance(value, str) and _UNSAFE_OUTPUT.search(value) for value in values):
-            raise _invalid_draft("Selection contains prohibited content.")
+        _reject_unsafe_draft(draft)
     try:
         enforce_exact_keys(draft, required_keys=_KEYS, stage=STAGE)
     except ContractError as exc:
@@ -191,42 +243,64 @@ class LLMMetricSelector:
             "dynamic_fewshot": {"examples": prompt_examples},
             "question": question,
         }
-        try:
-            async with httpx.AsyncClient(timeout=self.config.timeout_s, trust_env=False) as client:
-                response = await client.post(
-                    f"{self.config.base_url.rstrip('/')}/api/chat",
-                    json={
-                        "model": self.config.model,
-                        "messages": [
-                            {
-                                "role": "system",
-                                "content": _SYSTEM_PROMPT
-                                + (_FORMAT_REMINDER if remind_schema else ""),
-                            },
-                            {
-                                "role": "user",
-                                "content": json.dumps(
-                                    payload, ensure_ascii=False, separators=(",", ":")
-                                ),
-                            },
-                        ],
-                        "format": "json",
-                        "stream": False,
-                        "think": False,
-                        "options": {
-                            "temperature": self.config.temperature,
-                            "seed": seed,
-                            "num_ctx": self.config.context_window,
-                            "num_predict": 384,
-                        },
+        request = {
+            "model": self.config.model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": _SYSTEM_PROMPT + (_FORMAT_REMINDER if remind_schema else ""),
+                },
+                {
+                    "role": "user",
+                    "content": json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
+                },
+            ],
+            "stream": False,
+        }
+        openai = self.config.provider == "openai"
+        if openai:
+            url = openai_endpoint(self.config.base_url, "chat/completions")
+            request.update(
+                temperature=self.config.temperature,
+                seed=seed,
+                max_tokens=self.config.max_tokens,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": "metric_selection",
+                        "strict": True,
+                        "schema": _RESPONSE_SCHEMA,
                     },
-                )
+                }
+                if self.config.structured_output
+                else {"type": "json_object"},
+            )
+        else:
+            url = f"{self.config.base_url.rstrip('/')}/api/chat"
+            request.update(
+                format=_RESPONSE_SCHEMA if self.config.structured_output else "json",
+                think=False,
+                options={
+                    "temperature": self.config.temperature,
+                    "seed": seed,
+                    "num_ctx": self.config.context_window,
+                    "num_predict": self.config.max_tokens,
+                },
+            )
+        headers = (
+            {"Authorization": f"Bearer {self.config.api_key}"} if self.config.api_key else None
+        )
+        try:
+            async with httpx.AsyncClient(
+                timeout=self.config.timeout_s, trust_env=False, headers=headers
+            ) as client:
+                response = await client.post(url, json=request)
                 response.raise_for_status()
-        except httpx.HTTPError as exc:
+        except (httpx.HTTPError, httpx.InvalidURL) as exc:
             raise ContractError(
                 "llm_unavailable",
                 STAGE,
-                "Ollama selection failed.",
+                "Metric selection provider is temporarily unavailable.",
                 retryable=True,
                 final_status="temporarily_unavailable",
             ) from exc
@@ -235,26 +309,35 @@ class LLMMetricSelector:
             if not isinstance(body, dict):
                 raise TypeError("Expected an object")
         except (ValueError, TypeError) as exc:
-            raise SelectionFormatError("Ollama returned a malformed response.") from exc
+            raise SelectionFormatError("Provider returned a malformed response.") from exc
 
-        input_tokens = body.get("prompt_eval_count")
-        output_tokens = body.get("eval_count")
+        counts = body.get("usage") if openai else body
         usage = None
-        if all(type(count) is int and count >= 0 for count in (input_tokens, output_tokens)):
-            usage = {"input_tokens": input_tokens, "output_tokens": output_tokens}
+        if isinstance(counts, dict):
+            fields = (
+                ("prompt_tokens", "completion_tokens")
+                if openai
+                else ("prompt_eval_count", "eval_count")
+            )
+            input_tokens, output_tokens = (counts.get(field) for field in fields)
+            if all(type(count) is int and count >= 0 for count in (input_tokens, output_tokens)):
+                usage = {"input_tokens": input_tokens, "output_tokens": output_tokens}
         try:
-            content = body["message"]["content"]
-            if isinstance(content, str) and _UNSAFE_OUTPUT.search(content):
-                raise _invalid_draft("Selection contains prohibited content.")
-            if body.get("done_reason") != "stop":
-                raise SelectionFormatError("Ollama returned an incomplete selection.")
+            choice = body["choices"][0] if openai else body
+            content = choice["message"]["content"]
+            if isinstance(content, str):
+                content = _THINK_BLOCK.sub("", content).strip()
+                _reject_unsafe_text(content)
+            finish_key = "finish_reason" if openai else "done_reason"
+            if choice.get(finish_key) != "stop":
+                raise SelectionFormatError("Provider returned an incomplete selection.")
             try:
-                draft = json.loads(content)
+                draft = _normalize_model_draft(json.loads(content))
             except (ValueError, TypeError) as exc:
-                raise SelectionFormatError("Ollama returned malformed selection JSON.") from exc
+                raise SelectionFormatError("Provider returned malformed selection JSON.") from exc
             return validate_llm_selection_draft(draft), usage
-        except (KeyError, TypeError) as exc:
-            error = SelectionFormatError("Ollama returned an invalid response schema.")
+        except (AttributeError, IndexError, KeyError, TypeError) as exc:
+            error = SelectionFormatError("Provider returned an invalid response schema.")
             error.usage = usage
             raise error from exc
         except SelectionFormatError as exc:

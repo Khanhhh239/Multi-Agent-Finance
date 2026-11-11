@@ -84,6 +84,10 @@ data/eval/
 ```
 - Nếu `options.include_table == False`: trường `data.columns` và `data.rows` trả về mảng rỗng `[]`, nhưng vẫn giữ `row_count` và `truncated`.
 - Nếu `status` là lỗi (`unsupported`, `forbidden`, `temporarily_unavailable`, `error`): trường `error` chứa đối tượng `CommonError` đã được làm sạch (`code`, `stage`, `message`, `retryable`, `details`), còn `data` và `provenance` là `null`.
+- **Tích hợp Opt-in `evidence` (Preview Evidence — `evidence.preview.v1`)**:
+  - Khi `options.include_evidence_preview == True` (hoặc khi bật chế độ trả kèm bằng chứng đối chiếu), `build_final_response()` đính kèm khóa `"evidence"` từ `agent4/answer/evidence.py` gồm `claim_citations`, `preview_table` (`sample_rows` tối đa 5 dòng), `metric_explanations` và `verification_badge`. Mặc định giữ nguyên đúng 9 khóa gốc của `query.response.v1` để tương thích 100% với các bài kiểm thử schema nghiêm ngặt.
+- **Tích hợp Opt-in `clarification` (Chế độ hỏi lại có hướng dẫn — `query.clarification.v1`)**:
+  - Khi `status == "needs_clarification"` và `options.clarification_mode == "guided"` (hoặc khi request có `session_id`), đính kèm khối `"clarification"` từ `agent4/planning/clarification.py` chứa `unresolved_slots`, `partial_interpretation` và `slot_prompts` (kèm `choices`).
 
 ### 3.2. Observability Contract (`observability.pipeline.v1` — `agent4/pipeline.py`)
 ```json
@@ -120,6 +124,7 @@ data/eval/
   "error_code": null
 }
 ```
+- Hỗ trợ ghi nhận bổ sung chỉ số hiệu quả bộ nhớ đệm (`cache_stats`: `embedding_hit`, `selection_hit`, `sql_result_hit`, `active_entries`, `estimated_memory_kb`) phục vụ đo lường tối ưu hóa thời gian và bộ nhớ.
 
 ---
 
@@ -128,15 +133,21 @@ data/eval/
 ### Issue M4.2: Xây dựng Pipeline Orchestrator & FastAPI Endpoint (`agent4/pipeline.py`, `agent4/api.py`)
 - [ ] **Task M4.2.1 — Hiện thực hóa `build_final_response()` và `build_observability_record()` (`agent4/pipeline.py`)**:
   - Kiểm tra `status in FINAL_STATUSES`.
-  - Đóng gói `data`, `interpretation`, `provenance` và `warnings`.
-  - Tạo bản ghi observability không chứa bất kỳ khóa nhạy cảm nào (`sql`, `rows`, `chain_of_thought`, `credentials`).
+  - Đóng gói `data`, `interpretation`, `provenance`, `warnings`, và đính kèm có điều kiện `evidence` (`evidence.preview.v1`) / `clarification` (`query.clarification.v1`).
+  - Tạo bản ghi observability (kèm `cache_stats` khi bật) không chứa bất kỳ khóa nhạy cảm nào (`sql`, `rows`, `chain_of_thought`, `credentials`).
 - [ ] **Task M4.2.2 — Hiện thực hóa hàm điều phối `run_governed_pipeline(request_payload, idp_claims, server_policy)` (`agent4/pipeline.py`)**:
-  - Chạy tuần tự từ Bước 1 (`query_intake` & `build_auth_context`) đến Bước 9 (`validate_answer` & `build_final_response`), đo thời gian từng bước vào `stage_latencies_ms`.
+  - Chạy tuần tự từ Bước 1 (`query_intake` & `build_auth_context`) đến Bước 9 (`validate_answer`, `build_evidence_preview` & `build_final_response`), đo thời gian từng bước vào `stage_latencies_ms`.
+  - Kết nối `ClarificationSessionStore` (khi request có `session_id`) để hỗ trợ hội thoại làm rõ đa lượt (`M2.3`) và kết nối Multi-Tier Governed Cache (`L1`/`L2`/`L3` từ `M1.4` & `M3.3`).
   - Bắt mọi `ContractError` ở bất kỳ tầng nào và chuyển thành `FinalResponse` có `status = exc.final_status` và `error = exc.to_dict()`.
 - [ ] **Task M4.2.3 — Xây dựng FastAPI Endpoint (`agent4/api.py`)**:
   - Tạo endpoint `POST /v1/query` nhận body theo `query.intake.v1`, lấy `AuthContext` từ dependency xác thực của server, gọi `run_governed_pipeline()` và trả về JSON `query.response.v1`.
 
-### Issue M4.3: Đánh giá Toàn diện trên Bộ Benchmark 120 Câu Hỏi (`scripts/evaluate_contract_benchmark.py`, `tests/benchmark/test_e2e_benchmark_db.py`)
+### Issue M4.3: Benchmark dev v2 và regression snapshot v1
+
+Benchmark dev dùng 140 ca v2 với `vals/run_eval.py` và production adapter
+`agent4.eval_adapter:predict`. Bộ 120 ca v1 bên dưới được giữ làm fixture
+regression. Xem [báo cáo M4.3](../../reports/issues/M4.3_verification.md) để
+đối chiếu kết quả dev và các cổng phát hành còn mở.
 - [ ] **Task M4.3.1 — Kiểm định 8 Nhóm Câu Hỏi Benchmark (120 câu)**:
   1. `1_single_multi_metric_aggregate` (`BM-001` $\rightarrow$ `BM-020`, 20 câu): Tính 1 hoặc nhiều metric tương thích (`flow` hoặc `snapshot`).
   2. `2_timeseries_and_comparison` (`BM-021` $\rightarrow$ `BM-040`, 20 câu): Chuỗi thời gian theo tháng/quý/năm, so sánh kỳ và phát hiện `partial_data_watermark` ở tháng `2026-10`.

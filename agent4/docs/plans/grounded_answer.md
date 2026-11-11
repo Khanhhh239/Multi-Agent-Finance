@@ -26,12 +26,13 @@ agent4/answer/
 ├── __init__.py
 ├── result_validator.py   # Contract 21 (result.validation.v1 - Kiểm định schema, NaN/Inf, partial watermark, no_data)
 ├── generator.py          # Contract 22 (answer.generation.v1 - Sinh AnswerDraft có claims gắn với dòng/cột)
-└── validator.py          # Contract 23 (answer.validation.v1 - Đối chiếu số liệu, chặn suy diễn & fallback an toàn)
+├── validator.py          # Contract 23 (answer.validation.v1 - Đối chiếu số liệu, chặn suy diễn & fallback an toàn)
+└── evidence.py           # Preview Evidence (evidence.preview.v1 - Tạo claim_citations, sample_rows & metric_explanations)
 ```
 
 ---
 
-## 3. Đặc tả Kỹ thuật & Hợp đồng Dữ liệu (Contracts 21, 22, 23)
+## 3. Đặc tả Kỹ thuật & Hợp đồng Dữ liệu (Contracts 21, 22, 23 & Evidence Preview)
 
 ### 3.1. Result Validation Contract (`result.validation.v1` — `agent4/answer/result_validator.py`)
 - **Input**: `ExecutionResult` + `ValidatedPlan` + `MetricCatalog`.
@@ -88,11 +89,21 @@ Thực hiện **5 bước thẩm định nghiêm ngặt** trên `AnswerDraft`:
 - Nếu `fallback_on_failure=True` (mặc định trên pipeline): khi bất kỳ bước nào trong 5 bước trên thất bại, `validate_answer` tự động gọi `generate_grounded_answer()` để lấy câu trả lời chuẩn từ template xác định, đánh dấu `used_fallback: True` và ghi rõ `rejection_reason`.
 - Nếu `fallback_on_failure=False` (dùng khi test trực tiếp bộ chặn của validator): ném `ContractError("ungrounded_answer", stage="answer_validation")`.
 
+### 3.4. Preview Evidence Contract (`evidence.preview.v1` — `agent4/answer/evidence.py`)
+- **Mục tiêu**: Cung cấp bằng chứng đối chiếu trực tiếp cho từng con số trong câu trả lời, bảng dữ liệu mẫu thu gọn (`sample_rows`), và định nghĩa nghiệp vụ từ `MetricCatalog` mà **tuyệt đối không lộ câu lệnh SQL thô hay bảng vật lý**.
+- **Output (`EvidencePreview`)**:
+  - `claim_citations`: Danh sách liên kết từng `claim` đã xác thực với `metric_id`, `metric_label`, `value`, `unit`, `source_columns`, `source_rows` và `cited_row_preview` (bản chụp đúng dòng dữ liệu tạo ra con số đó).
+  - `preview_table`: Bảng dữ liệu mẫu giới hạn tối đa `preview_limit = 5` dòng (`sample_rows`, ưu tiên các dòng trong `source_rows`), kèm `sample_row_count`, `total_row_count` và `is_sample_truncated`.
+  - `metric_explanations`: Định nghĩa nghiệp vụ từ `MetricCatalog` (`metric_id`, `label`, `description`, `unit`, `kind`, `period_type`, `active_view`, `view_explanation` giải thích sự khác biệt giữa Sổ quản trị `mgmt` và Sổ thuế `tax`).
+  - `verification_badge`: `numbers_verified: true`, `source_relation`, `data_watermark`, `period_close_status` (`"closed"` hoặc `"open_partial"`), `applied_defaults`, `query_fingerprint`.
+- **Chốt chặn An toàn trên Evidence Preview**:
+  - Mọi giá trị chuỗi trong `sample_rows` và `cited_row_preview` đều đi qua bộ lọc `INJECTION_PATTERNS` và `FORBIDDEN_SQL_PATTERNS` để khử độc tấn công gián tiếp từ DB (`A8_PROMPT_INJECTION`).
+
 ---
 
 ## 4. Phân rã Milestone 4 (Phần 1) $\rightarrow$ Issues $\rightarrow$ Tasks
 
-### Issue M4.1: Xây dựng `result_validator.py`, `generator.py` và `validator.py`
+### Issue M4.1: Xây dựng `result_validator.py`, `generator.py`, `validator.py` và `evidence.py`
 - [ ] **Task M4.1.1 — Hiện thực hóa `validate_result()` (`agent4/answer/result_validator.py`)**:
   - Kiểm tra 5 chốt `schema_valid`, `types_valid`, `columns_expected`, `row_count_valid`, `semantic_constraints_valid`.
   - Xử lý mẫu số bằng `0` cho metric `ratio` (`val is None` $\rightarrow$ thêm `"ratio_undefined"` vào `warnings`).
@@ -101,6 +112,8 @@ Thực hiện **5 bước thẩm định nghiêm ngặt** trên `AnswerDraft`:
   - Sinh `summary`, `claims` (kèm `source_columns`, `source_rows`), `warnings`, `table_caption` hỗ trợ cả `vi-VN` và `en-US`.
 - [ ] **Task M4.1.3 — Hiện thực hóa `validate_answer()` (`agent4/answer/validator.py`)**:
   - Kiểm tra đủ 5 điều kiện reject trong Mục 23 của `contracts.md` và tự động fallback về `generate_grounded_answer()` khi phát hiện vi phạm.
+- [ ] **Task M4.1.4 — Hiện thực hóa `build_evidence_preview()` (`agent4/answer/evidence.py`)**:
+  - Sinh `claim_citations`, `preview_table` (`sample_rows` giới hạn `preview_limit=5`), `metric_explanations` và `verification_badge`; quét khử độc `INJECTION_PATTERNS` trên mọi ô dữ liệu preview.
 
 ---
 
@@ -110,6 +123,7 @@ Chạy câu lệnh kiểm thử cho riêng Module 5:
 ```bash
 PYTHONPATH=.venv/lib/python3.13/site-packages pytest -v \
   tests/contracts/test_result_answer_response.py \
+  tests/contracts/test_evidence_preview.py \
   tests/security/test_security_redteam.py -k "a8"
 ```
 
@@ -119,4 +133,5 @@ PYTHONPATH=.venv/lib/python3.13/site-packages pytest -v \
 - `TestResultValidationContract::test_partial_data_watermark_and_no_data_detection` (tháng `2026-10` trả `partial`; năm `2022` trả `no_data`).
 - `TestAnswerGenerationAndValidationContracts::test_grounded_answer_passes_validation`
 - `TestAnswerGenerationAndValidationContracts::test_answer_validator_rejects_hallucinations_and_falls_back` (chặn sai lệch con số, chặn suy diễn `"sự kiện ra mắt"`, chặn bỏ sót warning `partial_data_watermark`).
+- `TestEvidencePreviewContracts` trong `tests/contracts/test_evidence_preview.py` (kiểm tra `claim_citations` khớp ô dữ liệu, giới hạn `sample_rows <= 5`, giải thích metric/view và không lộ SQL).
 - `TestSecurityAndTrustBoundaries::test_indirect_prompt_injection_from_db_a8_is_neutralized` (chặn câu lệnh tiêm nhiễm từ hóa đơn `927` của `NCC-MK-DG` trong `cfo_warehouse.duckdb`).

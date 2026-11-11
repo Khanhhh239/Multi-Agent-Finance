@@ -5,20 +5,25 @@ from __future__ import annotations
 import hashlib
 import re
 from typing import Any
+from uuid import uuid4
 
 import httpx
 import numpy as np
 
+from agent4.core.cache import LRUTTLCache, build_scoped_cache_key
 from agent4.core.catalog import MetricCatalog
 from agent4.core.context import SUPPORTED_LOCALES
 from agent4.core.errors import ContractError, enforce_exact_keys
 from agent4.engine.metrics import GROUP_LABELS
 
-from .config import EmbeddingConfig
+from .config import EmbeddingConfig, backend_cache_identity, openai_endpoint
 
 DOCUMENT_VERSION = "metric-doc-v2"
 _EMBEDDING_STAGE = "embedding_provider"
 _REQUEST_KEYS = {"texts", "model_id", "model_version", "normalize"}
+_QUERY_CACHE = LRUTTLCache(
+    max_entries=1024, ttl_seconds=3600, max_bytes_budget=32 * 1024**2, max_rows_per_entry=1
+)
 _DIMENSION_NAMES = {
     "branch_code": "branch",
     "department_code": "department",
@@ -52,6 +57,7 @@ class EmbeddingProvider:
         self.max_batch_size = max_batch_size
         self.max_text_length = max_text_length
         self._transport = transport
+        self._transport_partition = uuid4().hex if transport is not None else None
 
     @property
     def model_id(self) -> str:
@@ -69,7 +75,16 @@ class EmbeddingProvider:
     def normalize(self) -> bool:
         return self.config.normalize
 
-    def embed(self, request: dict[str, Any]) -> dict[str, Any]:
+    def cache_identity(self) -> dict[str, Any]:
+        return {
+            "config": backend_cache_identity(self.config),
+            "transport_partition": self._transport_partition,
+            "max_text_length": self.max_text_length,
+        }
+
+    def embed(
+        self, request: dict[str, Any], *, cache_scope: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         enforce_exact_keys(request, required_keys=_REQUEST_KEYS, stage=_EMBEDDING_STAGE)
         if request["model_id"] != self.model_id or request["model_version"] != self.model_version:
             raise ContractError("invalid_request", _EMBEDDING_STAGE, "Embedding model mismatch.")
@@ -88,8 +103,19 @@ class EmbeddingProvider:
         if not self.available:
             raise _embedding_unavailable()
 
-        if self.config.provider == "ollama":
-            vectors = self._embed_with_ollama(texts)
+        key = None
+        if cache_scope is not None and len(texts) == 1:
+            key = build_scoped_cache_key(
+                "query-embedding",
+                **cache_scope,
+                normalized_question=texts[0],
+                backend=self.cache_identity(),
+            )
+            if (cached := _QUERY_CACHE.get(key)) is not None:
+                return cached
+
+        if self.config.provider in ("ollama", "openai"):
+            vectors = self._embed_remote(texts)
         else:
             # SHAKE supplies a deterministic byte for every requested dimension.
             digests = [
@@ -104,7 +130,7 @@ class EmbeddingProvider:
                 raise _embedding_unavailable()
             vectors = vectors / norms
 
-        return {
+        result = {
             "vectors": [
                 {"values": values, "dimension": self.dimension, "normalized": self.normalize}
                 for values in vectors.tolist()
@@ -113,23 +139,34 @@ class EmbeddingProvider:
             "model_version": self.model_version,
             "dimension": self.dimension,
         }
+        if key is not None:
+            _QUERY_CACHE.set(key, result, row_count=1)
+        return result
 
-    def _embed_with_ollama(self, texts: list[str]) -> np.ndarray:
+    def _embed_remote(self, texts: list[str]) -> np.ndarray:
+        payload = {"model": self.model_id, "input": texts, "dimensions": self.dimension}
+        openai = self.config.provider == "openai"
+        if openai:
+            url = openai_endpoint(self.config.base_url, "embeddings")
+        else:
+            url = f"{self.config.base_url.rstrip('/')}/api/embed"
+            payload["truncate"] = False
+        headers = (
+            {"Authorization": f"Bearer {self.config.api_key}"} if self.config.api_key else None
+        )
         try:
             with httpx.Client(
-                timeout=self.config.timeout_s, trust_env=False, transport=self._transport
+                timeout=self.config.timeout_s,
+                trust_env=False,
+                transport=self._transport,
+                headers=headers,
             ) as client:
-                response = client.post(
-                    f"{self.config.base_url.rstrip('/')}/api/embed",
-                    json={
-                        "model": self.model_id,
-                        "input": texts,
-                        "dimensions": self.dimension,
-                        "truncate": False,
-                    },
-                )
+                response = client.post(url, json=payload)
                 response.raise_for_status()
-            rows = response.json()["embeddings"]
+            body = response.json()
+            rows = (
+                _openai_embedding_rows(body["data"], len(texts)) if openai else body["embeddings"]
+            )
             if (
                 not isinstance(rows, list)
                 or len(rows) != len(texts)
@@ -156,6 +193,17 @@ class EmbeddingProvider:
         ) as exc:
             raise _embedding_unavailable() from exc
         return vectors
+
+
+def _openai_embedding_rows(data: Any, count: int) -> list:
+    if not isinstance(data, list) or len(data) != count:
+        raise ValueError("Invalid embedding response length")
+    if any(not isinstance(item, dict) or type(item.get("index")) is not int for item in data):
+        raise ValueError("Invalid embedding response index")
+    ordered = sorted(data, key=lambda item: item["index"])
+    if [item["index"] for item in ordered] != list(range(count)):
+        raise ValueError("Missing or duplicate embedding response index")
+    return [item["embedding"] for item in ordered]
 
 
 def _embedding_unavailable() -> ContractError:

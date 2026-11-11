@@ -69,9 +69,7 @@ def lexical_retrieve(
     query_terms = set(query) - _STOP_WORDS
     entries = []
     frequency: Counter[str] = Counter()
-    for metric in catalog.list_approved_metrics():
-        if allowed_metric_ids is not None and metric["metric_id"] not in allowed_metric_ids:
-            continue
+    for metric in catalog.list_metrics(approved_only=True, allowed_metrics=allowed_metric_ids):
         labels, aliases = metric_terms(metric)
         shared = {
             token for term in (*labels, *aliases) for token in lexical_tokens(term)

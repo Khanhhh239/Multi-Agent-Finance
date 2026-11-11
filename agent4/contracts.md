@@ -73,7 +73,10 @@ unavailable
   "session_id": null,
   "options": {
     "include_table": true,
-    "explain_metrics": true
+    "explain_metrics": true,
+    "include_evidence_preview": false,
+    "clarification_mode": "strict",
+    "use_cache": true
   }
 }
 ```
@@ -132,6 +135,14 @@ Authenticated request + identity provider claims + server policy
 - Không lấy auth context từ request body.
 - Không cho LLM thay đổi policy.
 - Policy hash phải được gắn vào `ValidatedPlan`.
+- Server policy có thể cung cấp `allowed_branches` và `allowed_departments`.
+  Danh sách mã được đưa vào policy hash. `["*"]` cấp toàn phạm vi cho chiều đó.
+  Validator từ chối filter ngoài phạm vi và bổ sung filter bắt buộc khi
+  câu hỏi không lọc chiều bị giới hạn, kể cả khi tiếp tục session làm rõ.
+- `X-Demo-Persona` chỉ được đọc khi demo mode được bật và host chưa đưa claims
+  hoặc policy. Demo trả `422` cho `unsupported`. SQL evidence của tenant demo
+  chỉ xuất hiện sau khi truy vấn qua SQL safety và hoàn tất, dùng placeholder
+  và che mã đối tác trong semantic plan.
 - Authorization failure phải fail closed.
 
 ## 4. Metric Catalog Contract
@@ -142,19 +153,19 @@ Authenticated request + identity provider claims + server policy
 
 ```json
 {
-  "metric_id": "net_profit_margin",
+  "metric_id": "net_margin_pct",
   "label": "Biên lợi nhuận ròng",
   "description": "Lợi nhuận ròng chia cho doanh thu thuần",
-  "unit": "%",
+  "unit": "ratio",
   "kind": "ratio",
   "period_type": "flow",
   "supported_views": ["mgmt"],
-  "supported_dimensions": ["month", "quarter", "branch"],
+  "supported_dimensions": ["month", "quarter", "branch_code"],
   "supported_operations": ["aggregate", "timeseries", "breakdown"],
   "default_view": "mgmt",
   "status": "approved",
   "owner": "finance",
-  "catalog_version": "2026.11.1"
+  "catalog_version": "2026.11.2"
 }
 ```
 
@@ -164,6 +175,9 @@ Authenticated request + identity provider claims + server policy
 get(metric_id)
 contains(metric_id)
 get_capability(metric_id)
+has_verified_sql_handler(metric_id)
+validate_access(metric_id, auth_context)
+list_metrics(approved_only=False, allowed_metrics=None)
 list_visible_metrics(auth_context)
 get_catalog_hash()
 ```
@@ -171,7 +185,8 @@ get_catalog_hash()
 ### Rules
 
 - Catalog là source of truth duy nhất của metric.
-- Metric chưa approved không được public cho production selection.
+- `MetricCatalog()` mặc định liệt kê 13 metric M0.2 đã xác minh. Pipeline production dùng `MetricCatalog(canonical=True)` để liệt kê 22 metric canonical đã xác minh. Cả hai chế độ tra cứu được ID của hai bộ catalog và chỉ liệt kê ID được yêu cầu khi có `allowed_metrics`, theo quyền view của người dùng.
+- Metric canonical chỉ có metadata trả `unsupported_metric` khi được chọn. Metric lạ trả `unknown_metric`.
 - Formula/handler/source phải được version hóa cùng metric.
 - Downstream module không được tự copy hoặc thay đổi business definition.
 
@@ -213,6 +228,11 @@ get_catalog_hash()
 - Batch size và text length phải có giới hạn.
 - Không gửi raw financial data nhạy cảm nếu provider chưa được phê duyệt.
 - Provider failure là `unavailable`, không phải `unsupported`.
+- Provider remote dùng Ollama `/api/embed` hoặc OpenAI-compatible
+  `/v1/embeddings`. Batch OpenAI ghép vector theo `index` trong response.
+- Khi caching được bật, hybrid/dense retrieval có thể tự tạo lại index thiếu
+  hoặc stale cho Ollama/OpenAI. Archive hỏng trả `retrieval_unavailable`.
+  Index remote ghi dấu nhận dạng backend để phát hiện khi đổi endpoint.
 
 ## 6. Metric Document Builder Contract
 
@@ -598,6 +618,10 @@ fewshot_unavailable
 - Không tạo metric mới.
 - Không tự thay đổi view, tenant hoặc role.
 - LLM output luôn phải qua Metrics Validation.
+- Selector remote dùng Ollama `/api/chat` hoặc OpenAI-compatible
+  `/v1/chat/completions`. Selector bỏ khối thinking và chuẩn hóa trường tin
+  nhắn theo trạng thái trước khi kiểm tra schema. Nội dung giải mã được kiểm
+  tra an toàn trước khi bỏ trường tin nhắn thừa.
 - `metric_ids` gồm các định danh duy nhất. Trạng thái `ambiguous` và `unsupported` phải có danh sách rỗng. Tin nhắn nếu có phải đúng với trạng thái tương ứng.
 - Pipeline tích hợp có tối đa một hành động recovery mỗi request. Retry định dạng chỉ dùng lời nhắc schema cố định và không đưa bản nháp lỗi vào prompt.
 
@@ -712,9 +736,12 @@ NormalizedQuery + ValidatedMetricSet + QueryContext
   trả dict đủ 14 trường. Bản nháp vẫn phải qua Plan Validation trước khi dùng downstream.
 - Khoảng thời gian dùng ngày ISO và bao gồm cả ngày đầu lẫn ngày cuối. Nửa năm
   dùng grain tháng. Ngày dạng số dùng ngày/tháng/năm cho `vi-VN` và
-  tháng/ngày/năm cho `en-US`. Snapshot cần ngày chốt cụ thể, flow cần một kỳ
-  có giới hạn. Kỳ thiếu, không hợp lệ hoặc mơ hồ có `time.mode = "none"` và
-  các trường ngày và grain bằng `null`.
+  tháng/ngày/năm cho `en-US`. Flow chấp nhận ngày đơn với grain ngày và khoảng
+  có hai đầu mút rõ ràng. FY dùng năm dương lịch khi câu hỏi không yêu cầu lịch
+  tài chính khác. Snapshot có thể lấy ngày chốt từ ngày cụ thể hoặc cuối kỳ
+  đã nêu. Kỳ thiếu, không hợp lệ hoặc mơ hồ có `time.mode = "none"` và các
+  trường ngày và grain bằng `null`. Breakdown và ranking không nhóm theo
+  chiều thời gian dùng grain tháng cho flow.
 - Planner giữ các slot đã xác định khi cần làm rõ. Khi metric còn mơ hồ,
   `metric_ids` rỗng. `unresolved_slots` liệt kê các slot cần bổ sung và
   `question_for_user` dùng ngôn ngữ của `NormalizedQuery`. Nếu view không được
@@ -725,7 +752,8 @@ NormalizedQuery + ValidatedMetricSet + QueryContext
   `sort = {metric_id, direction}` và, khi được yêu cầu, `top_k` từ 1 đến 100.
   Adapter đánh giá chuyển riêng sang tên chiều, toán tử và `rank` của benchmark v2.
 - `comparison` là `null` trong M2.1. Yêu cầu so sánh rõ ràng mà không còn slot
-  cần làm rõ có trạng thái `unsupported`. Draft không mang theo câu hỏi gốc,
+  cần làm rõ có trạng thái `unsupported`. Câu yêu cầu xem các giá trị theo
+  từng kỳ trong một khoảng rõ ràng dùng `timeseries`. Draft không mang theo câu hỏi gốc,
   câu làm rõ từ model, metadata phân quyền hay định danh vật lý.
 
 ## 17. Semantic Plan Validation Contract
@@ -772,7 +800,7 @@ SemanticPlanDraft + ValidatedMetricSet + CatalogSnapshot + AuthContext + Policy
   và vẫn được phê duyệt, hỗ trợ và cấp quyền trong catalog cùng auth hiện tại.
   `tenant_id` và `policy_hash` lấy từ `AuthContext`. `catalog_hash` lấy từ
   catalog hiện tại và phải khớp hash của kết quả chọn metric.
-- Flow cần range với grain tháng, quý hoặc năm. Snapshot cần ngày chốt
+- Flow cần range với grain ngày, tháng, quý hoặc năm. Snapshot cần ngày chốt
   as-of. Không trộn hai loại kỳ. Policy có thể hạ giới hạn tối đa 750 ngày
   tính bằng `end - start`, 100 cho `top_k` và 1000 cho `row_cap`.
   Xếp hạng cần chiều và thứ tự theo một metric trong plan. Khi có `top_k`
@@ -782,6 +810,16 @@ SemanticPlanDraft + ValidatedMetricSet + CatalogSnapshot + AuthContext + Policy
 - Draft cần làm rõ trả `PlanClarification` với `status`,
   `question_for_user` và `unresolved_slots`. Chỉ draft sẵn sàng, hợp lệ mới
   được niêm phong.
+
+### Guided clarification (`query.clarification.v1`)
+
+- `clarification_mode: "guided"` adds `clarification` to a clarification response.
+  It contains the pending slots, authorized choices, partial interpretation and an opaque session ID.
+- Continue by sending the session ID and the selected choice or explicit reporting period in
+  `question`. The server uses the first pending slot for a text reply and validates the resulting plan.
+- Sessions are process-local, tenant/user scoped, limited to three follow-up turns and
+  expire after 300 seconds of inactivity. Authorization or catalog changes invalidate the session.
+- Optional server reporting calendar metadata provides period suggestions.
 
 ## 18. SQL Compiler Contract
 
@@ -797,8 +835,9 @@ ValidatedPlan + CatalogSnapshot
 
 ```json
 {
-  "sql": "WITH aggregated AS (...) SELECT ... LIMIT ?",
-  "params": ["2026-09-01", "2026-10-01"],
+  "contract_version": "bound-query.v1",
+  "sql": "SELECT ... FROM v_mgmt WHERE ... LIMIT ?",
+  "params": ["2026-09-01", "2026-09-30", 1000],
   "metric_ids": ["net_profit_margin"],
   "dimensions": [],
   "units": {
@@ -807,7 +846,9 @@ ValidatedPlan + CatalogSnapshot
   "row_cap": 1000,
   "fingerprint": "sha256:abc",
   "source": "v_mgmt",
-  "catalog_hash": "catalog-abc"
+  "catalog_hash": "catalog-abc",
+  "tenant_id": "tenant-a",
+  "policy_hash": "policy-def"
 }
 ```
 
@@ -819,6 +860,14 @@ ValidatedPlan + CatalogSnapshot
 - Chỉ sinh read-only `SELECT`/CTE.
 - Luôn có row cap.
 - Catalog hash của plan phải khớp catalog hiện tại.
+- Downstream dùng đối tượng `BoundQuery` bất biến. Scope tenant và policy
+  được giữ trong metadata nội bộ. Warehouse một tenant cần được ràng buộc
+  với tenant tương ứng trước khi thực thi.
+- Compiler dùng binding đã xác minh cho 22 metric canonical và sáu ID tương thích M0.2. Metric tiền tệ dùng hai chữ số thập phân và tỷ lệ canonical dùng sáu chữ số. `gross_margin` và `net_profit_margin` tiếp tục trả phần trăm với hai chữ số.
+- Metric thiếu binding và plan trộn các nguồn vật lý bị từ chối với `unsupported_data_source`. Tỷ lệ snapshot dùng số dư lũy kế tại một ngày chốt, với phép chia cho 0 trả `NULL`. Chuỗi snapshot nhiều kỳ nằm ngoài phạm vi compiler hiện tại.
+- Giới hạn hiệu dụng là giá trị nhỏ nhất của `top_k` (nếu có), giới hạn
+  của plan và giới hạn của compiler. Xếp hạng dùng metric và chiều sắp xếp
+  của plan, rồi sắp theo tất cả chiều để xử lý các hàng đồng hạng.
 
 ## 19. SQL Safety Validation Contract
 
@@ -827,7 +876,7 @@ ValidatedPlan + CatalogSnapshot
 ### Input
 
 ```text
-BoundQuery + DatabasePolicy + RuntimeContext
+BoundQuery + CatalogSnapshot + RuntimeContext + server-configured warehouse tenant
 ```
 
 ### Output
@@ -844,9 +893,14 @@ BoundQuery + DatabasePolicy + RuntimeContext
     "parameterized": true,
     "row_cap_present": true,
     "tenant_scope_present": true
-  }
+  },
+  "safe_bound_query": "<internal SafeBoundQuery>"
 }
 ```
+
+Gate kiểm tra câu lệnh và metadata bằng cách tái tạo template được phép
+từ plan đã niêm phong với catalog hiện tại. Chỉ khi đủ bảy bằng chứng,
+gate mới cấp `SafeBoundQuery` bất biến cho executor.
 
 ### Reject nếu
 
@@ -855,9 +909,12 @@ BoundQuery + DatabasePolicy + RuntimeContext
 - Relation ngoài allowlist.
 - Identifier ngoài catalog/policy.
 - Literal user-controlled bị nhúng trực tiếp.
-- Thiếu tenant predicate hoặc DB-side RLS tương đương.
+- Thiếu tenant scope. Với warehouse một tenant, scope lấy từ cấu hình
+  server chỉ định tenant sở hữu database. Tenant của query, runtime và
+  warehouse phải khớp. Executor phải dùng đúng warehouse đã được cấp quyền.
 - Thiếu row cap.
-- Hash không khớp.
+- Catalog hash hoặc policy hash không khớp, hoặc runtime không cấp quyền
+  cho view của plan.
 
 ## 20. SQL Execution Contract
 
@@ -897,6 +954,11 @@ SafeBoundQuery + ExecutionPolicy
 - Connection read-only.
 - Timeout bắt buộc.
 - Row cap bắt buộc.
+- Safety gate niêm phong đường dẫn warehouse do server cấu hình cho tenant.
+  Executor mở đúng đường dẫn đó và vô hiệu hóa truy cập ngoài warehouse.
+- Kết quả nội bộ có `cache_hit`. Khóa cache L3 bao gồm tenant, policy,
+  catalog, watermark, query fingerprint, row cap và phiên bản file warehouse.
+  Giới hạn 200 dòng mỗi entry. Lỗi thực thi không được lưu.
 - `AppConfig` dùng kho MPX10 v3.0.0 tại `data/enterprise-x10-v3/warehouse.duckdb`
   theo mặc định. Có thể chỉ định cặp kho và ground truth tương ứng bằng
   `AGENT4_DB` và `AGENT4_GROUND_TRUTH`.
@@ -1122,3 +1184,15 @@ AnswerDraft
 FinalResponse
   → public contract
 ```
+
+## 28. Governed Cache Contract
+
+**Contract ID** `cache.governed.v1`
+
+- `LRUTTLCache.get(key)` trả `None` khi miss hoặc quá TTL. `set(key, value, row_count=...)` trả `False` khi mục vượt giới hạn. Cache dùng thời gian monotonic, tính TTL từ lúc ghi và thu hồi theo LRU khi vượt số mục hoặc ngân sách byte ước tính. Với `clone_on_read=True`, cache sao chép cả lúc ghi và lúc đọc.
+- `stats()` trả `hits`, `misses`, `evictions`, `active_entries` và `estimated_memory_kb`. Số liệu theo từng process. Ngân sách byte áp cho các mục đang giữ, dựa trên kích thước ước tính của payload và khóa.
+- L1 giữ tối đa hai mục cho mỗi loại artifact `.npz` và `.jsonl`. Khóa gắn đường dẫn, revision của file và `catalog_hash`. Index luôn được đối chiếu metadata với catalog và embedding provider khi được yêu cầu kiểm tra freshness.
+- Khóa L2 bắt buộc có `tenant_id`, `policy_hash` và `catalog_hash` từ server, cùng allowlist view và metric thực tế. Thiếu định danh tenant hoặc policy thì bỏ qua L2. L2a giới hạn 1024 mục trong 3600 giây và gắn input embedding đã chuẩn hóa với cấu hình backend.
+- L2b dùng chung giới hạn 512 mục trong 1800 giây cho truy hồi và chọn metric. Khóa gắn locale, requested view, cấu hình và revision các artifact được dùng. Cache chọn metric còn gắn câu hỏi gốc, thứ tự ứng viên, context kiểm định, cấu hình selector và seed. Lần hit vẫn chạy `validate_metrics()` với context hiện tại.
+- L2 chỉ ghi dữ liệu hợp lệ. Lỗi tạm thời và kết quả chọn metric do truy hồi suy giảm vì lỗi hạ tầng được xử lý lại ở request kế tiếp. Kết quả nghiệp vụ giữ nguyên khi hit, còn latency và token phản ánh công việc thực sự của request. Selection hit dùng 0 token LLM.
+- `MetricSelectionConfig.cache_enabled` mặc định bật. Đặt `false` để chạy truy hồi và chọn metric qua các tầng gốc cho đối chiếu. `EmbeddingConfig.cache_enabled` vẫn điều khiển việc ghi index offline.

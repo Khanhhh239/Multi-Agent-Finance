@@ -9,7 +9,7 @@ from time import perf_counter
 from typing import Any, Literal
 
 from agent4.core.catalog import MetricCatalog
-from agent4.core.context import query_intake
+from agent4.core.context import build_auth_context, query_intake
 from agent4.core.errors import ContractError
 
 from .catalog_adapter import build_canonical_catalog, build_full_catalog_retrieval_result
@@ -30,12 +30,15 @@ def _e0_pipeline():
         or config.llm.provider != "ollama"
         or config.llm.model != "qwen3:4b"
         or config.llm.temperature != 0
-        or config.llm.max_retries != 0
     ):
         raise ConfigurationError(
             "E0 requires full catalog, Ollama qwen3:4b and zero-shot selection."
         )
-    return build_canonical_catalog(), LLMMetricSelector(config.llm)
+    # E0 is the historical zero-shot control. Keep its wire format and token cap.
+    llm = config.llm.model_copy(
+        update={"structured_output": False, "max_retries": 0, "max_tokens": 384}
+    )
+    return build_canonical_catalog(), LLMMetricSelector(llm)
 
 
 async def predict_e0(request: dict[str, Any]) -> dict[str, Any]:
@@ -55,6 +58,26 @@ def _online_pipeline(config_path: str | None):
         config,
         EmbeddingProvider(config.embedding),
         LLMMetricSelector(config.llm),
+    )
+
+
+def _benchmark_auth(fixture: dict[str, Any]) -> dict[str, Any]:
+    """Translate legacy benchmark claims and allowlists at the adapter boundary."""
+    claim_fields = ("user_id", "tenant_id", "roles")
+    if (
+        fixture.get("policy_hash")
+        or not all(key in fixture for key in claim_fields)
+        or not fixture.get("roles")
+        or not fixture.get("allowed_views")
+    ):
+        return fixture
+    return build_auth_context(
+        {key: fixture[key] for key in claim_fields},
+        {
+            "allowed_views": fixture["allowed_views"],
+            "allowed_metrics": fixture.get("allowed_metrics"),
+            "policy_version": "contract-benchmark-v2",
+        },
     )
 
 
@@ -90,7 +113,7 @@ async def _predict_online(
         catalog,
         provider,
         config=config,
-        auth_context=request["auth_context"],
+        auth_context=_benchmark_auth(request["auth_context"]),
         query_context=request["query_context"],
     )
     retrieval = (
@@ -110,7 +133,15 @@ async def _predict_online(
             if fewshot_strategy is not None
             else None
         )
-        return await _select(request, retrieval, catalog, selector, started, fewshot=fewshot)
+        return await _select(
+            request,
+            retrieval,
+            catalog,
+            selector,
+            started,
+            fewshot=fewshot,
+            cache_enabled=config.cache_enabled,
+        )
     return {
         "id": request["id"],
         "retrieved_metric_ids": [item["metric_id"] for item in retrieval["candidates"]],
@@ -159,7 +190,7 @@ async def predict_e5(request: dict[str, Any]) -> dict[str, Any]:
         validated = await select_metrics_with_recovery(
             query,
             catalog,
-            auth_context=request["auth_context"],
+            auth_context=_benchmark_auth(request["auth_context"]),
             query_context=request["query_context"],
             config=config,
             embedding_provider=provider,
@@ -180,6 +211,7 @@ async def _select(
     started: float,
     *,
     fewshot: FewshotConfig | None = None,
+    cache_enabled: bool = True,
 ) -> dict[str, Any]:
     trace = SelectionTrace(stage_latency_ms={"retrieval_ms": (perf_counter() - started) * 1000})
     try:
@@ -194,6 +226,7 @@ async def _select(
             request["seed"],
             trace,
             fewshot=fewshot,
+            cache_enabled=cache_enabled,
         )
     except ContractError as exc:
         return _prediction(request["id"], trace, error=exc)

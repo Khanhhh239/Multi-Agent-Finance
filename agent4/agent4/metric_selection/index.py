@@ -2,17 +2,20 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from threading import Lock
 from typing import Any
 from zipfile import BadZipFile
 
 import numpy as np
 
+from agent4.core.cache import LRUTTLCache, file_revision
 from agent4.core.catalog import MetricCatalog
 from agent4.core.errors import ContractError
 
@@ -29,6 +32,10 @@ _METADATA_TYPES = {
     "document_version": str,
     "index_version": str,
 }
+_BUILD_LOCK = Lock()
+_INDEX_CACHE = LRUTTLCache(
+    max_entries=2, ttl_seconds=3600, max_bytes_budget=16 * 1024**2, max_rows_per_entry=4096
+)
 
 
 @dataclass(frozen=True)
@@ -44,8 +51,12 @@ class MetricVectorIndex:
         return is_index_stale(self.metadata, catalog_hash, embedding_provider)
 
 
+class _IndexRebuildRequired(ContractError):
+    """A missing or incompatible index can be regenerated from the catalog."""
+
+
 def _index_metadata(catalog_hash: str, provider: EmbeddingProvider) -> dict[str, Any]:
-    return {
+    metadata = {
         "catalog_hash": catalog_hash,
         "model_id": provider.model_id,
         "model_version": provider.model_version,
@@ -54,6 +65,10 @@ def _index_metadata(catalog_hash: str, provider: EmbeddingProvider) -> dict[str,
         "document_version": DOCUMENT_VERSION,
         "index_version": INDEX_VERSION,
     }
+    if provider.config.provider in ("ollama", "openai"):
+        endpoint = (provider.config.provider, provider.config.base_url.rstrip("/"))
+        metadata["backend"] = hashlib.sha256(json.dumps(endpoint).encode()).hexdigest()
+    return metadata
 
 
 def is_index_stale(
@@ -61,8 +76,8 @@ def is_index_stale(
 ) -> bool:
     """Compare the stored build metadata with the active catalog and provider."""
     expected = _index_metadata(catalog_hash, embedding_provider)
-    return any(
-        type(index_meta.get(key)) is not type(value) or index_meta[key] != value
+    return index_meta.keys() != expected.keys() or any(
+        type(index_meta[key]) is not type(value) or index_meta[key] != value
         for key, value in expected.items()
     )
 
@@ -133,29 +148,75 @@ def load_index(
     *,
     catalog_hash: str | None = None,
     embedding_provider: EmbeddingProvider | None = None,
+    cache_enabled: bool = True,
 ) -> MetricVectorIndex:
     """Load a validated archive and optionally reject stale metadata."""
     if (catalog_hash is None) != (embedding_provider is None):
         raise ValueError("Freshness checks require both the catalog hash and embedding provider.")
+    path = Path(path).absolute()
     try:
-        with np.load(path, allow_pickle=False) as archive:
-            if set(archive.files) != _ARCHIVE_FIELDS:
-                raise ValueError("Invalid index archive fields")
-            metadata = json.loads(archive["metadata"].item())
-            vectors, metric_ids, texts = (
-                archive["vectors"],
-                archive["metric_ids"],
-                archive["document_texts"],
-            )
-        _validate_index(metadata, vectors, metric_ids, texts)
+        key = (file_revision(path), catalog_hash) if cache_enabled else None
+        cached = _INDEX_CACHE.get(key) if key is not None else None
+        index = cached if cached is not None else _read_index(path)
+    except FileNotFoundError as exc:
+        raise _index_unavailable("Metric vector index is missing.", rebuild=True) from exc
     except (AttributeError, BadZipFile, EOFError, OSError, TypeError, ValueError) as exc:
         raise _index_unavailable("Metric vector index is missing or invalid.") from exc
     if (
         catalog_hash is not None
         and embedding_provider is not None
-        and is_index_stale(metadata, catalog_hash, embedding_provider)
+        and index.is_stale(catalog_hash, embedding_provider)
     ):
-        raise _index_unavailable("Metric vector index is stale.")
+        raise _index_unavailable("Metric vector index is stale.", rebuild=True)
+    if key is not None and cached is None:
+        _INDEX_CACHE.set(key, index, row_count=len(index.metric_ids))
+    return index
+
+
+def load_or_build_index(
+    catalog: MetricCatalog, provider: EmbeddingProvider, *, cache_enabled: bool
+) -> MetricVectorIndex:
+    """Reload a fresh index or build it once on an eligible cold path."""
+    path = provider.config.cache_path
+    kwargs = {
+        "catalog_hash": catalog.get_catalog_hash(),
+        "embedding_provider": provider,
+        "cache_enabled": cache_enabled,
+    }
+    try:
+        return load_index(path, **kwargs)
+    except _IndexRebuildRequired:
+        if not (
+            cache_enabled
+            and provider.config.cache_enabled
+            and provider.available
+            and provider.normalize
+            and provider.config.provider in ("ollama", "openai")
+        ):
+            raise
+
+    with _BUILD_LOCK:
+        # A concurrent request may already have published a compatible archive.
+        try:
+            return load_index(path, **kwargs)
+        except _IndexRebuildRequired:
+            try:
+                return build_index(catalog, provider, path)
+            except (ContractError, OSError, ValueError) as exc:
+                raise _index_unavailable("Metric vector index could not be rebuilt.") from exc
+
+
+def _read_index(path: Path) -> MetricVectorIndex:
+    with np.load(path, allow_pickle=False) as archive:
+        if set(archive.files) != _ARCHIVE_FIELDS:
+            raise ValueError("Invalid index archive fields")
+        metadata = json.loads(archive["metadata"].item())
+        vectors, metric_ids, texts = (
+            archive["vectors"],
+            archive["metric_ids"],
+            archive["document_texts"],
+        )
+    _validate_index(metadata, vectors, metric_ids, texts)
     return MetricVectorIndex(vectors, tuple(metric_ids.tolist()), tuple(texts.tolist()), metadata)
 
 
@@ -164,8 +225,9 @@ def _validate_index(
 ) -> None:
     if (
         not isinstance(metadata, dict)
-        or metadata.keys() != _METADATA_TYPES.keys()
+        or metadata.keys() - {"backend"} != _METADATA_TYPES.keys()
         or any(type(metadata[key]) is not kind for key, kind in _METADATA_TYPES.items())
+        or ("backend" in metadata and not isinstance(metadata["backend"], str))
         or metadata["dimension"] < 1
     ):
         raise ValueError("Invalid index metadata")
@@ -186,8 +248,9 @@ def _validate_index(
         raise ValueError("Invalid normalized index vectors")
 
 
-def _index_unavailable(message: str) -> ContractError:
-    return ContractError(
+def _index_unavailable(message: str, *, rebuild: bool = False) -> ContractError:
+    error = _IndexRebuildRequired if rebuild else ContractError
+    return error(
         "retrieval_unavailable",
         "vector_index",
         message,

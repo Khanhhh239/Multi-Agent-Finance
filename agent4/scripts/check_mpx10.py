@@ -103,6 +103,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write-reference", type=Path, help="Author a candidate at a new path")
     args = parser.parse_args()
+    expected = None if args.write_reference else json.loads(REFERENCE.read_text(encoding="utf-8"))
+    # The frozen reference covers the metric IDs shipped with MPX10 v3.
+    metric_ids = (
+        {key.rsplit(" [", 1)[0] for key in expected["catalog_baseline"]} if expected else None
+    )
     config = AppConfig()
     with open_warehouse(config.db_path) as db:
         info = dict(db.execute("SELECT key, value FROM company_info").fetchall())
@@ -115,7 +120,7 @@ def main() -> None:
         check_ground_truth(db, config.ground_truth_path)
         results = {
             "snapshot": {**identity, "gl_rows": count},
-            "catalog_baseline": catalog_results(db, info),
+            "catalog_baseline": catalog_results(db, info, metric_ids=metric_ids),
             "golden_rows": golden_rows(db),
         }
 
@@ -125,7 +130,6 @@ def main() -> None:
             output.write("\n")
         return
 
-    expected = json.loads(REFERENCE.read_text(encoding="utf-8"))
     if expected["snapshot"] != results["snapshot"]:
         raise SystemExit("Reference snapshot does not match the database")
     for name in ("catalog_baseline", "golden_rows"):

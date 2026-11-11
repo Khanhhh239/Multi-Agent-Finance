@@ -292,7 +292,7 @@ class TestProductionSemanticPlanner:
                 "start": "2026-04-01",
                 "end": "2026-06-30",
                 "as_of": None,
-                "grain": "quarter",
+                "grain": "month",
             },
             dimensions=["partner_code"],
             filters=[{"field": "branch_code", "op": "IN", "value": ["HN", "HCM"]}],

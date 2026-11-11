@@ -50,7 +50,8 @@ llm:
   model: qwen3:4b
   temperature: 0
   timeout_s: 360
-  max_retries: 0
+  max_retries: 1
+  structured_output: true
   context_window: 8192
 
 evaluation:

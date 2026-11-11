@@ -38,6 +38,12 @@ class AppConfig:
     )
     default_row_cap: int = field(default_factory=lambda: _env_int("AGENT4_DEFAULT_ROW_CAP", 1000))
     query_timeout_ms: int = field(default_factory=lambda: _env_int("AGENT4_QUERY_TIMEOUT_MS", 5000))
+    reporting_data_watermark: str | None = field(
+        default_factory=lambda: os.getenv("AGENT4_REPORTING_DATA_WATERMARK")
+    )
+    reporting_last_closed_month: str | None = field(
+        default_factory=lambda: os.getenv("AGENT4_REPORTING_LAST_CLOSED_MONTH")
+    )
 
     def __post_init__(self) -> None:
         if not self.qwen_base_url.strip() or not self.qwen_model.strip():

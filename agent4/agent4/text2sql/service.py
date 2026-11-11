@@ -69,60 +69,103 @@ class QueryService:
                 if partial:
                     answer += f" Dữ liệu cập nhật đến {watermark}."
             return QueryResponse(
-                api_version="v1", request_id=request_id, status=status,
-                error=None, answer=answer, data=data,
+                api_version="v1",
+                request_id=request_id,
+                status=status,
+                error=None,
+                answer=answer,
+                data=data,
                 interpretation=Interpretation(
-                    metric_ids=list(plan.metric_ids), dimensions=list(plan.dimensions),
-                    view=plan.view, time=plan.time,
+                    metric_ids=list(plan.metric_ids),
+                    dimensions=list(plan.dimensions),
+                    view=plan.view,
+                    time=plan.time,
                 ),
                 provenance=Provenance(
-                    catalog_hash=plan.catalog_hash, data_watermark=watermark,
-                    source=bound.source, query_fingerprint=bound.fingerprint,
-                ), warnings=warnings,
+                    catalog_hash=plan.catalog_hash,
+                    data_watermark=watermark,
+                    source=bound.source,
+                    query_fingerprint=bound.fingerprint,
+                ),
+                warnings=warnings,
             )
         except (Forbidden, PlanRejected) as exc:
             return QueryResponse(
-                api_version="v1", request_id=request_id, status=exc.status, error=ErrorData(
-                    code=exc.code, message=str(exc), retryable=False,
-                ), answer=str(exc), data=None, interpretation=None, provenance=None,
+                api_version="v1",
+                request_id=request_id,
+                status=exc.status,
+                error=ErrorData(
+                    code=exc.code,
+                    message=str(exc),
+                    retryable=False,
+                ),
+                answer=str(exc),
+                data=None,
+                interpretation=None,
+                provenance=None,
                 warnings=[DEMO_WARNING],
             )
         except DataUnavailable as exc:
             return QueryResponse(
-                api_version="v1", request_id=request_id, status="temporarily_unavailable",
-                error=ErrorData(code=exc.code, message="Nguồn dữ liệu tạm thời không khả dụng.", retryable=True),
-                answer="Không thể truy vấn dữ liệu lúc này; vui lòng thử lại.", data=None,
-                interpretation=None, provenance=None, warnings=[DEMO_WARNING],
+                api_version="v1",
+                request_id=request_id,
+                status="temporarily_unavailable",
+                error=ErrorData(
+                    code=exc.code, message="Nguồn dữ liệu tạm thời không khả dụng.", retryable=True
+                ),
+                answer="Không thể truy vấn dữ liệu lúc này; vui lòng thử lại.",
+                data=None,
+                interpretation=None,
+                provenance=None,
+                warnings=[DEMO_WARNING],
             )
         except Text2SQLError as exc:
             return QueryResponse(
-                api_version="v1", request_id=request_id, status="error",
-                error=ErrorData(code=exc.code, message="Truy vấn bị chặn bởi lớp an toàn.", retryable=False),
-                answer="Không thể xử lý truy vấn an toàn.", data=None,
-                interpretation=None, provenance=None, warnings=[DEMO_WARNING],
+                api_version="v1",
+                request_id=request_id,
+                status="error",
+                error=ErrorData(
+                    code=exc.code, message="Truy vấn bị chặn bởi lớp an toàn.", retryable=False
+                ),
+                answer="Không thể xử lý truy vấn an toàn.",
+                data=None,
+                interpretation=None,
+                provenance=None,
+                warnings=[DEMO_WARNING],
             )
         finally:
             _ = round((time.perf_counter() - started) * 1000, 3)
 
     def _decision(self, request_id: str, draft: SemanticPlanDraft, status: str) -> QueryResponse:
         answer = draft.question_for_user or "Yêu cầu này chưa được hỗ trợ bởi danh mục hiện tại."
-        error = None if status == "needs_clarification" else ErrorData(
-            code=draft.reason_code or "unsupported_metric", message=answer, retryable=False,
+        error = (
+            None
+            if status == "needs_clarification"
+            else ErrorData(
+                code=draft.reason_code or "unsupported_metric",
+                message=answer,
+                retryable=False,
+            )
         )
         return QueryResponse(
-            api_version="v1", request_id=request_id, status=status,
-            error=error, answer=answer, data=None,
+            api_version="v1",
+            request_id=request_id,
+            status=status,
+            error=error,
+            answer=answer,
+            data=None,
             interpretation=None,
             provenance=Provenance(
-                catalog_hash=self.catalog.hash, data_watermark=None,
-                source="synthetic_duckdb", query_fingerprint=None,
-            ), warnings=[DEMO_WARNING],
+                catalog_hash=self.catalog.hash,
+                data_watermark=None,
+                source="synthetic_duckdb",
+                query_fingerprint=None,
+            ),
+            warnings=[DEMO_WARNING],
         )
 
     @staticmethod
-    def _is_no_data(
-        data: ResultData, metric_ids: tuple[str, ...], units: dict[str, str]
-    ) -> bool:
+    def _is_no_data(data: ResultData, metric_ids: tuple[str, ...], units: dict[str, str]) -> bool:
         if data.row_count == 0:
             return True
         if any(units.get(metric_id) in {"%", "ratio", "days"} for metric_id in metric_ids):
@@ -144,7 +187,9 @@ class QueryService:
 
     def _render(self, metric_ids: tuple[str, ...], data: ResultData, time_scope, view: str) -> str:
         labels = [self.catalog.get(metric_id).label for metric_id in metric_ids]
-        if data.row_count == 1 and not any(key in data.rows[0] for key in ("month", "branch", "customer")):
+        if data.row_count == 1 and not any(
+            key in data.rows[0] for key in ("month", "branch", "customer")
+        ):
             facts = []
             for metric_id, label in zip(metric_ids, labels, strict=True):
                 value = data.rows[0].get(metric_id)

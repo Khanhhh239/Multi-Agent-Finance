@@ -6,6 +6,7 @@ import re
 import unicodedata
 from typing import Any
 
+from agent4.core.catalog import CANONICAL_METRIC_DEFINITIONS, LEGACY_METRIC_IDS
 from agent4.core.errors import ContractError
 
 from ._time import parse_time_slot
@@ -13,13 +14,21 @@ from ._time import parse_time_slot
 __all__ = ["build_semantic_plan_draft", "parse_time_slot"]
 
 _STAGE = "query_planning"
+_METRIC_ORDER = {
+    metric["metric_id"]: index
+    for index, metric in enumerate(CANONICAL_METRIC_DEFINITIONS)
+    if metric["verified_handler"]
+}
+_METRIC_ORDER.update(
+    {alias: _METRIC_ORDER[canonical] for alias, canonical in LEGACY_METRIC_IDS.items()}
+)
 _DIMENSIONS = {
     "month": r"tháng|months?",
     "quarter": r"quý|quarters?",
     "year": r"năm|years?",
     "branch_code": r"chi nhánh|branch(?:es)?|branch_code",
     "product_line": r"dòng sản phẩm|nhóm sản phẩm|product lines?|product_line",
-    "department_code": r"phòng ban|phòng|departments?|department_code",
+    "department_code": r"phòng ban|phòng|bộ phận|departments?|department_code",
     "cost_category": r"khoản mục chi phí|khoản mục|cost categor(?:y|ies)|cost_category",
     "partner_code": r"mã đối tác|đối tác|khách hàng|nhà cung cấp|partners?|customers?|vendors?|suppliers?|partner_code",
     "segment": r"phân khúc(?: khách hàng)?|segments?",
@@ -105,7 +114,7 @@ _RESERVED_IDS = {
     "loan",
     "payroll",
 }
-_GROUP = r"(?:theo(?: từng)?|từng|by|per|each)"
+_GROUP = r"(?:theo(?: từng)?|từng|mỗi|by|per|each)"
 _EXPLICIT_GROUP = r"(?:group(?:ed)? by|breakdown by|phân tích theo|phân bổ theo|chia theo)"
 _RANK = r"\b(?:top|bottom|xếp hạng|rank(?:ing)?|cao nhất|thấp nhất|highest|lowest|best|worst)\b"
 _LIMIT = r"\b(?:top|bottom)\s*([+-]?\d{1,3})(?!\w|[.,]\d)"
@@ -114,7 +123,7 @@ _ASC = r"\b(?:bottom|thấp nhất|nhỏ nhất|tăng dần|lowest|worst|ascendi
 _DESC = r"\b(?:cao nhất|lớn nhất|giảm dần|highest|best|descending|desc)\b"
 _VIEWS = {
     "mgmt": r"quản trị|management (?:view|books|reporting)|mgmt",
-    "tax": r"góc nhìn thuế|sổ thuế|báo cáo thuế|theo thuế|tax (?:view|books|reporting)|(?:under|in|for|view) tax",
+    "tax": r"(?:góc nhìn|sổ|báo cáo|theo|view|khung) thuế|tax (?:view|books|reporting)|(?:under|in|for|view) tax|view\s*[:=]\s*tax",
 }
 _MESSAGES = {
     "vi-VN": {
@@ -151,12 +160,15 @@ def _has(pattern: str, text: str) -> bool:
 
 
 def _metric_ambiguity(question: str) -> str:
-    if _has(r"công nợ|outstanding balances?", question) and not _has(
-        r"phải thu|phải trả|khách hàng|nhà cung cấp|receivable|payable", question
+    if _has(r"công nợ|outstanding balances?|debt", question) and not _has(
+        r"phải thu|phải trả|khách hàng|nhà cung cấp|receivable|payable|loan|short.term|long.term",
+        question,
     ):
         return "debt"
-    if not _has(r"gộp|ròng|sau thuế|trước thuế|gross|net|operating|before tax|after tax", question):
-        if _has(r"(?:biên|tỷ suất) lợi nhuận|profit margin", question):
+    if not _has(
+        r"gộp|ròng|sau thuế|trước thuế|hoạt động|gross|net|operating|before tax|after tax", question
+    ):
+        if _has(r"(?:biên|tỷ suất) lợi nhuận|margin", question):
             return "margin"
         if _has(r"lợi nhuận|profit", question):
             return "profit"
@@ -228,8 +240,19 @@ def _dimensions(question: str, ranking: bool) -> list[str]:
     return list(dict.fromkeys(dimensions))
 
 
+def _apply_time_grain(time: dict, operation: str, grains: list[str]) -> None:
+    if time["mode"] == "range":
+        if len(grains) == 1:
+            time["grain"] = grains[0]
+        elif not grains and operation in ("breakdown", "ranking"):
+            time["grain"] = "month"
+
+
 def _unresolved_grouping(question: str, sort_requested: bool) -> bool:
-    view_cues = r"góc nhìn|sổ (?:thuế|quản trị)|thuế|quản trị|management|tax"
+    view_cues = (
+        r"góc nhìn|(?:view|khung|sổ) (?:thuế|quản trị|tax|management|mgmt)|"
+        r"thuế|quản trị|management|tax"
+    )
     for match in re.finditer(rf"\b(?:{_EXPLICIT_GROUP}|theo(?: từng)?|by|per) ", question):
         target = question[match.end() :]
         if re.match(rf"(?:{_DIMENSION_NAMES}|{view_cues})\b", target):
@@ -274,7 +297,10 @@ def _metric_input(metrics: dict[str, Any]) -> tuple[list[str], list[dict[str, An
     ):
         raise ContractError("invalid_request", _STAGE, "Invalid validated metric set.")
 
-    caps = [capabilities[item] for item in ids]
+    ordered_ids = sorted(
+        ids, key=lambda mid: _METRIC_ORDER.get(mid, len(CANONICAL_METRIC_DEFINITIONS))
+    )
+    caps = [capabilities[item] for item in ordered_ids]
     for cap in caps:
         if (
             not isinstance(cap, dict)
@@ -286,7 +312,7 @@ def _metric_input(metrics: dict[str, Any]) -> tuple[list[str], list[dict[str, An
             )
         ):
             raise ContractError("invalid_request", _STAGE, "Invalid metric capabilities.")
-    return ids.copy(), caps
+    return ordered_ids, caps
 
 
 def build_semantic_plan_draft(
@@ -298,8 +324,7 @@ def build_semantic_plan_draft(
     original = unicodedata.normalize("NFKC", normalized_query["question"])
     question = " ".join(original.casefold().split())
     locale = normalized_query["locale"]
-    if _SQL.search(question):
-        raise ContractError("invalid_request", _STAGE, "Prohibited query content.")
+    requested_views = detect_query_views(question)
     ids, capabilities = _metric_input(validated_metrics)
     periods = {cap["period_type"] for cap in capabilities}
     if len(periods) > 1:
@@ -307,7 +332,7 @@ def build_semantic_plan_draft(
     period_type = next(iter(periods), None)
     time = parse_time_slot(question, locale=locale, period_type=period_type)
     metric_intent = _metric_ambiguity(question)
-    views = {view for view, pattern in _VIEWS.items() if _has(pattern, question)}
+    views = requested_views
     requested_view = query_context.get("requested_view")
     if requested_view is not None and requested_view not in ("mgmt", "tax"):
         raise ContractError("invalid_request", _STAGE, "Invalid requested business view.")
@@ -352,8 +377,8 @@ def build_semantic_plan_draft(
         or _unresolved_grouping(question, sort_requested)
     ):
         unresolved["dimensions"] = "dimensions"
-    elif grains and time["mode"] == "range":
-        time["grain"] = grains[0]
+    else:
+        _apply_time_grain(time, operation, grains)
     negated_filter = filters and _has(
         r"except|exclude|excluding|without|không (?:bao gồm|gồm|tính)|ngoại trừ|trừ|not in",
         question,
@@ -371,7 +396,7 @@ def build_semantic_plan_draft(
 
     reason = None
     if not unresolved:
-        if _has(r"so sánh|versus|vs|compared (?:to|with)|year.over.year", question):
+        if requests_comparison(question):
             reason = "unsupported_comparison"
         elif any(
             view not in cap["supported_views"]
@@ -406,3 +431,25 @@ def build_semantic_plan_draft(
         "unresolved_slots": list(unresolved),
         "reason_code": reason,
     }
+
+
+def detect_query_views(question: str) -> set[str]:
+    question = " ".join(unicodedata.normalize("NFKC", question).casefold().split())
+    if _SQL.search(question):
+        raise ContractError("invalid_request", _STAGE, "Prohibited query content.")
+    return {view for view, pattern in _VIEWS.items() if _has(pattern, question)}
+
+
+def requests_comparison(question: str) -> bool:
+    if not _has(r"so sánh|versus|vs|compare|compared (?:to|with)|year.over.year", question):
+        return False
+    grouped_range = (
+        _has(r"between|giữa", question)
+        and set(_dimensions(question, ranking=False)).intersection(_PERIOD_DIMENSIONS)
+        and not _has(
+            r"change|growth|difference|delta|increase|decrease|percent(?:age)?|"
+            r"chênh lệch|thay đổi|tăng trưởng|tăng|giảm|phần trăm",
+            question,
+        )
+    )
+    return not grouped_range

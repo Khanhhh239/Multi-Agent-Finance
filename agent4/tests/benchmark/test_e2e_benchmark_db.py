@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 from decimal import Decimal
+
 import pytest
 
 from scripts.evaluate_contract_benchmark import (

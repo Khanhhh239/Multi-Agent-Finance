@@ -14,9 +14,10 @@ CHECK_PATHS ?= agent4 tests scripts vals
 
 .PHONY: help install-dev format format-check lint typecheck \
 	test test-core test-selection test-warehouse test-planning test-sql test-answer \
-	test-security test-benchmark test-mpx10 verify ci eval-validate eval
+	test-security test-benchmark test-mpx10 verify ci eval-validate eval demo
 
 help:
+	@echo "  make demo              Start the governed synthetic-data demo on port 8000"
 	@echo "Codex verification commands"
 	@echo "  make install-dev       Install the package with development tools"
 	@echo "  make format            Format Python sources and tests"
@@ -68,6 +69,7 @@ test-core:
 
 test-selection:
 	$(PYTEST) -q \
+		tests/contracts/test_cache_governance.py \
 		tests/contracts/test_metric_selection_e0.py \
 		tests/contracts/test_retrieval_and_fewshot.py \
 		tests/contracts/test_selection_and_metric_validation.py \
@@ -80,13 +82,13 @@ test-mpx10: test-core test-selection
 	$(PYTHON) -m scripts.check_mpx10
 
 test-planning:
-	$(PYTEST) -q tests/contracts/test_planning_and_plan_validation.py
+	$(PYTEST) -q tests/contracts/test_planning_and_plan_validation.py tests/contracts/test_clarification_mode.py
 
 test-sql:
 	$(PYTEST) -q tests/contracts/test_compiler_safety_execution.py
 
 test-answer:
-	$(PYTEST) -q tests/contracts/test_result_answer_response.py
+	$(PYTEST) -q tests/contracts/test_result_answer_response.py tests/contracts/test_evidence_preview.py tests/contracts/test_governed_pipeline.py
 
 test-security:
 	$(PYTEST) -q tests/security
@@ -124,3 +126,7 @@ eval:
 		--output-dir "$(OUTPUT_DIR)" \
 		$(if $(strip $(BASELINE)),--baseline "$(BASELINE)") \
 		$(if $(strip $(THRESHOLDS)),--thresholds "$(THRESHOLDS)") $(EVAL_EXTRA)
+
+
+demo:
+	AGENT4_DEMO_MODE=1 $(PYTHON) -m uvicorn agent4.api:create_demo_app --factory --host 0.0.0.0 --port 8000

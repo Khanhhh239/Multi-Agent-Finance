@@ -50,6 +50,12 @@ def _config(**recovery: bool) -> MetricSelectionConfig:
 
 
 @pytest.fixture
+def analyst_auth(analyst_auth: dict, request: pytest.FixtureRequest) -> dict:
+    # Each test's simulated model is independent, even when the prompt is identical.
+    return {**analyst_auth, "policy_hash": f"{analyst_auth['policy_hash']}/{request.node.name}"}
+
+
+@pytest.fixture
 def stub_model(monkeypatch: pytest.MonkeyPatch):
     original_client = httpx.AsyncClient
 

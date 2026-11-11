@@ -13,10 +13,18 @@ from .errors import ContractError, enforce_exact_keys
 SUPPORTED_LOCALES = {"vi-VN", "en-US"}
 _INTAKE_KEYS = {"api_version", "question", "locale"}
 _INTAKE_OPTIONAL_KEYS = {"session_id", "options"}
-_OPTION_KEYS = {"include_table", "explain_metrics"}
+_OPTION_KEYS = {
+    "include_table",
+    "explain_metrics",
+    "include_evidence_preview",
+    "clarification_mode",
+    "use_cache",
+}
 _AUTH_KEYS = {"user_id", "tenant_id", "roles"}
 _POLICY_KEYS = {"allowed_views", "policy_version"}
-_POLICY_OPTIONAL_KEYS = {"allowed_metrics"}
+ROW_SCOPE_FIELDS = {"allowed_branches": "branch_code", "allowed_departments": "department_code"}
+_POLICY_OPTIONAL_KEYS = {"allowed_metrics", *ROW_SCOPE_FIELDS}
+_SCOPE_CODE = re.compile(r"[A-Z][A-Z0-9_]{0,31}")
 
 
 def query_intake(
@@ -70,7 +78,9 @@ def query_intake(
             stage=stage,
         )
         for key, value in options_in.items():
-            if not isinstance(value, bool):
+            if key == "clarification_mode" and value in ("guided", "strict"):
+                continue
+            if key == "clarification_mode" or not isinstance(value, bool):
                 raise ContractError(
                     "invalid_request",
                     stage,
@@ -80,8 +90,18 @@ def query_intake(
         options = {
             "include_table": options_in.get("include_table", True),
             "explain_metrics": options_in.get("explain_metrics", True),
+            **{
+                key: options_in[key]
+                for key in ("include_evidence_preview", "clarification_mode", "use_cache")
+                if key in options_in
+            },
         }
 
+    session_id = payload.get("session_id")
+    if session_id is not None and (
+        not isinstance(session_id, str) or re.fullmatch(r"[0-9a-f]{32}", session_id) is None
+    ):
+        raise ContractError("invalid_request", stage, "Invalid clarification session identifier.")
     normalized_question = re.sub(r"\s+", " ", question.strip()).lower()
     normalized_question = re.sub(r"[?!.]+$", "", normalized_question).strip()
     return {
@@ -90,6 +110,7 @@ def query_intake(
         "normalized_question": normalized_question,
         "locale": locale,
         "options": copy.deepcopy(options),
+        **({"session_id": session_id} if session_id else {}),
     }
 
 
@@ -137,6 +158,15 @@ def build_auth_context(
     if allowed_metrics is not None and not _string_list(allowed_metrics):
         raise _forbidden(stage, "Invalid allowed metric policy.")
 
+    row_scope = {}
+    for key in ROW_SCOPE_FIELDS.keys() & server_policy.keys():
+        codes = server_policy[key]
+        if not _nonempty_string_list(codes) or (
+            codes != ["*"] and not all(_SCOPE_CODE.fullmatch(code) for code in codes)
+        ):
+            raise _forbidden(stage, "Invalid row scope policy.")
+        row_scope[key] = sorted(set(codes))
+
     roles_copy = copy.deepcopy(roles)
     views_copy = copy.deepcopy(allowed_views)
     metrics_copy = copy.deepcopy(allowed_metrics)
@@ -147,6 +177,7 @@ def build_auth_context(
             "allowed_views": sorted(views_copy),
             "allowed_metrics": sorted(metrics_copy) if metrics_copy is not None else None,
             "policy_version": policy_version,
+            **row_scope,
         },
         sort_keys=True,
     )
@@ -159,6 +190,7 @@ def build_auth_context(
         "allowed_views": views_copy,
         "allowed_metrics": metrics_copy,
         "policy_hash": policy_hash,
+        **row_scope,
     }
 
 
@@ -187,7 +219,7 @@ def build_runtime_context(
         "policy_hash",
     }
     _require_auth_keys(auth_context, required_auth_keys, stage)
-    enforce_exact_keys(auth_context, required_auth_keys, set(), stage)
+    enforce_exact_keys(auth_context, required_auth_keys, set(ROW_SCOPE_FIELDS), stage)
     if auth_context["contract_version"] != "auth-context.v1":
         raise _forbidden(stage, "Invalid authorization context version.")
     if not _nonempty_string(auth_context["user_id"]) or not _nonempty_string(

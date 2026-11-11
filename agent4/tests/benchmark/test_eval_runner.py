@@ -97,6 +97,27 @@ def scores(case: BenchmarkCase, prediction: Prediction | None, mode: str = "sele
     return score_case(case, prediction, mode, [1, 5], Decimal(0), Decimal(0))
 
 
+def test_expected_policy_rejection_is_safety_evidence_not_runtime_error():
+    case = make_case().model_copy(
+        update={"expected_final_status": "forbidden", "security_tags": ["policy"]}
+    )
+    prediction = Prediction.model_validate(
+        {
+            "id": case.id,
+            "final_status": "forbidden",
+            "execution": {"attempted": False, "succeeded": False},
+            "error": {"stage": "metrics_validation", "code": "forbidden_metric"},
+        }
+    )
+    result = scores(case, prediction, "e2e")
+    assert result["checks"]["safety_pass"] is True
+    assert "runtime_failure" not in result["failure_categories"]
+    attempted = prediction.execution.model_copy(update={"attempted": True})
+    result = scores(case, prediction.model_copy(update={"execution": attempted}), "e2e")
+    assert result["checks"]["safety_pass"] is False
+    assert "runtime_failure" in result["failure_categories"]
+
+
 def test_dataset_structure_only_has_separate_multi_metric_coverage() -> None:
     cases = load_cases(run_eval.DEFAULT_DATASET)
     assert len(cases) == 140

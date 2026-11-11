@@ -107,11 +107,21 @@ flowchart LR
   - **Task M1.3.1 (Bounded Recovery):** Triển khai `recovery.py` xử lý có giới hạn (`max_retries <= 1`) các tình huống `empty_candidates`, `retrieval_unavailable`, lỗi JSON schema, và mở rộng ứng viên có kiểm soát mà tuyệt đối không đi vòng qua `validate_metrics()`.
   - **Task M1.3.2 (Full Verification & Experiment `E5`):** Pass toàn bộ **18/18 contract tests** của Module 2 trên code production, chạy thực nghiệm `E5`, tổng hợp bảng so sánh `E0`–`E5`, và khóa cấu hình `config/selection.yaml`.
 
+#### Issue M1.4 (M1-S6): Multi-Tier Governed Cache (L1 Artifact & L2 Embedding/Selection Cache)
+- **Module:** `agent4/core/`, `agent4/metric_selection/`
+- **File đích:** `agent4/core/cache.py`, `agent4/metric_selection/index.py`, `agent4/metric_selection/embedding.py`, `agent4/metric_selection/fewshot.py`, `agent4/metric_selection/orchestrator.py`
+- **Contract ID:** `cache.governed.v1`, `metric.embedding-provider.v1`, `metric.retrieval.orchestrator.v1`
+- **Tasks chi tiết:**
+  - **Task M1.4.1 (`LRUTTLCache` & Scoped Key Builder):** Xây dựng `agent4/core/cache.py` với giới hạn `max_entries`, `ttl_seconds`, `max_rows_per_entry`, `clone_on_read=True` (bảo toàn tính bất biến) và hàm tạo khóa bắt buộc nhúng `tenant_id`, `policy_hash`, `catalog_hash`.
+  - **Task M1.4.2 (L1 Artifact Memory Cache):** Lưu `MetricVectorIndex` (`.npz`) và `ExampleBank` (`jsonl`) trên RAM theo `(path, mtime_ns, catalog_hash)` (`maxsize=2`), tránh đọc đĩa lặp lại ở mỗi request.
+  - **Task M1.4.3 (L2 Embedding & Selection Cache):** Cache vector nhúng câu hỏi và kết quả truy hồi/chọn metric đã qua kiểm duyệt; tuyệt đối không cache các lỗi tạm thời (`retrieval_unavailable`).
+  - **Task M1.4.4 (Verification):** Pass toàn bộ `tests/contracts/test_cache_governance.py`.
+
 
 ---
 
 ### Milestone 2: Query Planning & Plan Validation (M2)
-> **Mục tiêu:** Chuyển đổi yêu cầu người dùng thành bản kế hoạch ngữ nghĩa độc lập với cơ sở dữ liệu vật lý, phát hiện câu hỏi mơ hồ và thẩm định tính hợp lệ của ranh giới truy vấn.
+> **Mục tiêu:** Chuyển đổi yêu cầu người dùng thành bản kế hoạch ngữ nghĩa độc lập với cơ sở dữ liệu vật lý, phát hiện câu hỏi mơ hồ, hỗ trợ hỏi lại có hướng dẫn đa lượt và thẩm định tính hợp lệ của ranh giới truy vấn.
 
 #### Issue M2.1: Semantic Query Planner
 - **Module:** `agent4/planning/`
@@ -133,10 +143,19 @@ flowchart LR
   - **Task M2.2.4 (Trust Boundary Sealing):** Tạo đối tượng `ValidatedPlan` bất biến, gắn `tenant_id`, `policy_hash`, `catalog_hash`, và danh sách `applied_defaults`.
   - **Task M2.2.5 (Verification Test):** Chạy và pass 100% các bài test trong [tests/contracts/test_planning_and_plan_validation.py](file:///home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/tests/contracts/test_planning_and_plan_validation.py).
 
+#### Issue M2.3: Interactive Clarification Mode & Multi-turn Session Resolution
+- **Module:** `agent4/planning/`
+- **File đích:** `agent4/planning/clarification.py`
+- **Contract ID:** `query.clarification.v1`, `query.planning.v1`, `query.plan-validation.v1`
+- **Tasks chi tiết:**
+  - **Task M2.3.1 (Structured Clarification & Suggested Choices):** Sinh cấu trúc `clarification` gồm `unresolved_slots`, `partial_interpretation` (các slot đã hiểu) và `slot_prompts` kèm danh sách lựa chọn gợi ý (`choices`) song ngữ lấy từ `MetricCatalog` (lọc theo `auth_context`) và từ điển allowlist.
+  - **Task M2.3.2 (Multi-turn Session Store & Slot Merging):** Lưu trạng thái chờ làm rõ trong `ClarificationSessionStore` (khóa theo `(tenant_id, user_id, session_id)`, `ttl=300s`, `max_turns=3`), hợp nhất câu trả lời bổ sung ở lượt tiếp theo và bắt buộc kiểm định lại qua `validate_semantic_plan_draft()`.
+  - **Task M2.3.3 (Verification Test):** Pass toàn bộ `tests/contracts/test_clarification_mode.py`.
+
 ---
 
 ### Milestone 3: SQL Compilation, Safety & DuckDB Execution (M3)
-> **Mục tiêu:** Biên dịch an toàn sang SQL tham số hóa từ ValidatedPlan, kiểm tra an toàn 7 chốt, và thực thi read-only trên DuckDB thật.
+> **Mục tiêu:** Biên dịch an toàn sang SQL tham số hóa từ ValidatedPlan, kiểm tra an toàn 7 chốt, và thực thi read-only trên DuckDB thật kèm L3 Execution Cache.
 
 #### Issue M3.1: Deterministic SQL Compiler
 - **Module:** `agent4/sql/`
@@ -164,47 +183,49 @@ flowchart LR
     7. `tenant_scope_present`: Kiểm tra tenant scope và khớp `catalog_hash`.
   - **Task M3.2.2 (Rejection Details):** Từ chối fail-closed và ghi nhận chi tiết chốt kiểm tra bị vi phạm.
 
-#### Issue M3.3: Read-Only SQL Execution on DuckDB
+#### Issue M3.3: Read-Only SQL Execution on DuckDB & L3 Result Cache
 - **Module:** `agent4/sql/`
 - **File đích:** `agent4/sql/executor.py`
-- **Contract ID:** `sql.execution.v1`
+- **Contract ID:** `sql.execution.v1`, `cache.governed.v1`
 - **Tasks chi tiết:**
   - **Task M3.3.1 (Read-Only Connection):** Kết nối tới `data/cfo_warehouse.duckdb` bằng `duckdb.connect(db_path, read_only=True)`.
   - **Task M3.3.2 (Timeout & Outage Handling):** Đo thời gian thực thi, ngắt truy vấn nếu vượt quá timeout, chuyển lỗi gián đoạn thành trạng thái `temporarily_unavailable` có cờ `retryable: true`.
   - **Task M3.3.3 (Watermark & Column Formatting):** Trích xuất tự động `data_watermark` từ bảng `company_info` (`as_of_date`), format kết quả thành các đối tượng `columns` (kèm `type`, `unit`) và `rows` dạng chuỗi số thập phân có cấu trúc.
-  - **Task M3.3.4 (Verification Test):** Chạy và pass 100% các bài test trong [tests/contracts/test_compiler_safety_execution.py](file:///home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/tests/contracts/test_compiler_safety_execution.py).
+  - **Task M3.3.4 (L3 SQL Result Cache):** Tích hợp cache kết quả SQL theo khóa `(tenant_id, catalog_hash, data_watermark, query_fingerprint, row_cap)` với giới hạn `max_rows_per_entry <= 200`.
+  - **Task M3.3.5 (Verification Test):** Chạy và pass 100% các bài test trong [tests/contracts/test_compiler_safety_execution.py](file:///home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/tests/contracts/test_compiler_safety_execution.py).
 
 ---
 
-### Milestone 4: Grounded Answer, E2E Pipeline & Evaluation Benchmark (M4)
-> **Mục tiêu:** Kiểm định kết quả truy vấn, sinh câu trả lời bám sát số liệu, tích hợp toàn bộ pipeline và xác nhận độ chính xác qua 120 câu hỏi benchmark.
+### Milestone 4: Grounded Answer, Evidence Preview, E2E Pipeline & Evaluation Benchmark (M4)
+> **Mục tiêu:** Kiểm định kết quả truy vấn, sinh câu trả lời bám sát số liệu kèm Preview Evidence, tích hợp toàn bộ pipeline và xác nhận độ chính xác qua bộ câu hỏi benchmark.
 
-#### Issue M4.1: Result Validation & Grounded Answer Generation
+#### Issue M4.1: Result Validation, Grounded Answer Generation & Preview Evidence
 - **Module:** `agent4/answer/`
-- **File đích:** `result_validator.py`, `generator.py`, `validator.py`
-- **Contract ID:** `result.validation.v1`, `answer.generation.v1`, `answer.validation.v1`
+- **File đích:** `result_validator.py`, `generator.py`, `validator.py`, `evidence.py`
+- **Contract ID:** `result.validation.v1`, `answer.generation.v1`, `answer.validation.v1`, `evidence.preview.v1`
 - **Tasks chi tiết:**
   - **Task M4.1.1 (Result Validator):** Kiểm tra schema cột không trùng lặp, giá trị số không bị `NaN` hay `Infinity`. Xử lý an toàn mẫu số bằng 0 của ratio (`ratio_undefined` kèm `val = None`). Phát hiện và gắn cảnh báo `partial_data_watermark` khi kỳ truy vấn chạm hoặc vượt mốc `2026-10-14` (kỳ chưa đóng sổ). Phát hiện `no_data` khi kết quả trả về 0 dòng hoặc ngoài dải thời gian dữ liệu.
   - **Task M4.1.2 (Answer Generator):** Sinh câu trả lời có cấu trúc với danh sách các khẳng định số liệu (`claims`), mỗi claim liên kết chặt với `source_columns` và `source_rows`. Ưu tiên deterministic templates cho câu trả lời định lượng chính xác.
   - **Task M4.1.3 (Answer Validator):** Đối chiếu từng con số trong câu trả lời với kết quả thực tế. Chặn đứng các suy diễn nguyên nhân vô căn cứ (ví dụ tự giải thích *"do nắng nóng"*, *"do sự kiện ra mắt"* khi query không trích xuất text diễn giải). Chặn rò rỉ prompt injection từ cột description của nhà cung cấp `NCC-MK-DG` (`A8_PROMPT_INJECTION`).
   - **Task M4.1.4 (Automatic Fallback):** Nếu answer draft của LLM bị validator từ chối, tự động thay thế bằng deterministic safe template, tuyệt đối không trả câu trả lời lỗi ra ngoài.
+  - **Task M4.1.5 (Preview Evidence Builder):** Triển khai `build_evidence_preview()` trong `agent4/answer/evidence.py` tạo `claim_citations` (liên kết từng con số tới dòng/cột nguồn), `preview_table` (`sample_rows` giới hạn tối đa 5 dòng đã khử độc A8 injection), `metric_explanations` (từ `MetricCatalog` kèm giải thích sổ `mgmt`/`tax`) và `verification_badge`.
 
 #### Issue M4.2: End-to-End Orchestrator Pipeline & Observability
 - **Module:** `agent4/`
 - **File đích:** `agent4/pipeline.py`, `agent4/api.py`
 - **Contract ID:** `query.response.v1`, `observability.pipeline.v1`
 - **Tasks chi tiết:**
-  - **Task M4.2.1 (Pipeline Orchestrator):** Xây dựng hàm `run_pipeline(request, auth_context)` liên kết thông suốt cả 9 bước. Xử lý chuẩn 7 trạng thái phản hồi cuối: `ready`, `needs_clarification`, `unsupported`, `forbidden`, `no_data`, `temporarily_unavailable`, `error`.
-  - **Task M4.2.2 (Provenance Assembly):** Gắn đầy đủ thông tin truy xuất nguồn gốc: `catalog_hash`, `data_watermark`, `source` (`v_mgmt`/`v_tax`), `query_fingerprint`.
-  - **Task M4.2.3 (Observability Logger):** Thu thập telemetry và latency từng stage, token usage, candidate count. Bảo đảm không log Chain-of-Thought, raw SQL công khai, credential hay raw financial rows.
+  - **Task M4.2.1 (Pipeline Orchestrator):** Xây dựng hàm `run_governed_pipeline(request, idp_claims, server_policy)` liên kết thông suốt cả 9 bước cùng Multi-Tier Cache (`M1.4`, `M3.3`), `ClarificationSessionStore` (`M2.3`) và `Preview Evidence` (`M4.1`). Xử lý chuẩn 7 trạng thái phản hồi cuối: `ready`, `needs_clarification`, `unsupported`, `forbidden`, `no_data`, `temporarily_unavailable`, `error`.
+  - **Task M4.2.2 (Provenance & Opt-in Evidence/Clarification Assembly):** Gắn đầy đủ thông tin truy xuất nguồn gốc (`catalog_hash`, `data_watermark`, `source`, `query_fingerprint`) và đính kèm có điều kiện khối `evidence` / `clarification` theo `options`.
+  - **Task M4.2.3 (Observability Logger):** Thu thập telemetry, latency từng stage, `cache_stats` (`hits`, `misses`, `estimated_memory_kb`), token usage, candidate count. Bảo đảm không log Chain-of-Thought, raw SQL công khai, credential hay raw financial rows.
   - **Task M4.2.4 (FastAPI Service):** Tạo endpoint `POST /v1/query` tiếp nhận `query.intake.v1` và trả về `query.response.v1`.
 
 #### Issue M4.3: Full Suite Verification & 120-Question Benchmark
 - **Module:** `tests/`, `scripts/`
 - **File đích:** `tests/benchmark/test_e2e_benchmark_db.py`, `scripts/evaluate_contract_benchmark.py`
 - **Tasks chi tiết:**
-  - **Task M4.3.1 (Unit & Security Tests):** Chạy toàn bộ 180 tests (`pytest tests/`) đạt tỷ lệ pass 100%, bao gồm các bài kiểm tra tấn công Red-Team (SQLi, direct prompt injection, indirect injection A8).
-  - **Task M4.3.2 (Benchmark Runner):** Chạy `python scripts/evaluate_contract_benchmark.py` đối chiếu 120 câu hỏi song ngữ qua 8 categories với cơ sở dữ liệu `cfo_warehouse.duckdb`.
+  - **Task M4.3.1 (Unit & Security Tests):** Chạy toàn bộ test suite (`pytest tests/`) đạt tỷ lệ pass 100%, bao gồm các bài kiểm tra tấn công Red-Team (SQLi, direct prompt injection, indirect injection A8) và contract tests cho Cache, Clarification, Evidence Preview.
+  - **Task M4.3.2 (Benchmark Runner):** Chạy `python scripts/evaluate_contract_benchmark.py` đối chiếu bộ câu hỏi song ngữ với cơ sở dữ liệu `cfo_warehouse.duckdb`.
   - **Task M4.3.3 (Ground Truth Verification):** Xác nhận số liệu của các sự kiện nghiệp vụ trong `cfo_warehouse_ground_truth.json` khớp chính xác 100%:
     - `A1_MARKETING_SPIKE` (BM-023: chi phí marketing T9 tăng lên 1,39 tỷ).
     - `A2_DISTRESSED_CUSTOMER` (BM-067: nợ quá hạn của KH0082).

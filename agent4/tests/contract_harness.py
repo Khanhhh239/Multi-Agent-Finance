@@ -11,10 +11,9 @@ import json
 import math
 import re
 import time
-from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 import duckdb
 
@@ -1768,11 +1767,8 @@ def validate_semantic_plan_draft(
 
     # Validate top_k
     top_k = plan_draft.get("top_k")
-    if top_k is not None:
-        if not isinstance(top_k, int) or top_k < 1 or top_k > max_top_k:
-            raise ContractError(
-                "invalid_request", stage, f"top_k must be between 1 and {max_top_k}."
-            )
+    if top_k is not None and (not isinstance(top_k, int) or top_k < 1 or top_k > max_top_k):
+        raise ContractError("invalid_request", stage, f"top_k must be between 1 and {max_top_k}.")
 
     applied_defaults: list[str] = []
     operation = plan_draft.get("operation") or "aggregate"
@@ -2214,9 +2210,10 @@ def validate_result(
                 "checks": checks,
             }
         # Detect partial data per watermark / unclosed month
-        if end_d > wm_date or end_d.strftime("%Y-%m") > last_closed_month:
-            if "partial_data_watermark" not in warnings:
-                warnings.append("partial_data_watermark")
+        if (end_d > wm_date or end_d.strftime("%Y-%m") > last_closed_month) and (
+            "partial_data_watermark" not in warnings
+        ):
+            warnings.append("partial_data_watermark")
     elif time_spec["mode"] == "as_of":
         as_of_d = datetime.date.fromisoformat(time_spec["as_of"])
         if as_of_d < data_start_date:
@@ -2369,11 +2366,11 @@ def validate_answer(
             if pm.get("label_en"):
                 summary_masked = summary_masked.replace(pm["label_en"].lower(), "")
     for m_id, m in catalog._metrics.items():
-        if m_id not in plan_metrics:
-            if m["label"].lower() in summary_masked or (
-                m.get("label_en") and m["label_en"].lower() in summary_masked
-            ):
-                return _fail_or_fallback(f"Answer mentions metric '{m_id}' outside ValidatedPlan.")
+        if m_id not in plan_metrics and (
+            m["label"].lower() in summary_masked
+            or (m.get("label_en") and m["label_en"].lower() in summary_masked)
+        ):
+            return _fail_or_fallback(f"Answer mentions metric '{m_id}' outside ValidatedPlan.")
 
     # 5. Verify every claim maps to result rows and numbers match
     validated_claims: list[dict[str, Any]] = []

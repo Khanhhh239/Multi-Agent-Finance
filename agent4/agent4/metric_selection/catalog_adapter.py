@@ -4,40 +4,15 @@ from __future__ import annotations
 
 from typing import Any
 
-from agent4.core.catalog import CATALOG_VERSION, MetricCatalog
-from agent4.engine.metrics import REGISTRY, MetricDef
-
-
-def metric_def_to_catalog_dict(
-    metric: MetricDef, *, status: str = "approved", verified_handler: bool = True
-) -> dict[str, Any]:
-    operations = ["aggregate", "compare", "comparison"]
-    if {"month", "quarter", "year"}.intersection(metric.group_bys):
-        operations.append("timeseries")
-    if metric.group_bys:
-        operations.extend(("breakdown", "rank", "ranking"))
-    return {
-        "metric_id": metric.id,
-        "label": metric.label,
-        "description": metric.description,
-        "aliases": list(metric.synonyms),
-        "category": metric.category,
-        "unit": metric.unit,
-        "kind": metric.kind,
-        "period_type": metric.period_type,
-        "supported_views": list(metric.views),
-        "supported_dimensions": list(metric.group_bys),
-        "supported_operations": operations,
-        "default_view": metric.default_view,
-        "status": status,
-        "verified_handler": verified_handler,
-        "owner": "finance",
-        "catalog_version": CATALOG_VERSION,
-    }
+from agent4.core.catalog import MetricCatalog, metric_def_to_catalog_dict
+from agent4.engine.metrics import REGISTRY
 
 
 def build_canonical_catalog() -> MetricCatalog:
-    return MetricCatalog([metric_def_to_catalog_dict(metric) for metric in REGISTRY.values()])
+    """Build the metadata-only catalog used by the selection and planning experiments."""
+    return MetricCatalog(
+        [metric_def_to_catalog_dict(metric, verified_handler=True) for metric in REGISTRY.values()]
+    )
 
 
 def build_full_catalog_retrieval_result(

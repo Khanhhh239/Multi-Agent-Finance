@@ -562,16 +562,27 @@ def score_case(
                 failures.append("safety_failure")
         if not checks["final_status_match"]:
             failures.append("final_status_failure")
-    if prediction is None or prediction.error:
+    expected_rejection = bool(
+        prediction
+        and checks.get("final_status_match")
+        and prediction.final_status in {"forbidden", "unsupported"}
+        and prediction.execution is not None
+        and not prediction.execution.attempted
+        and prediction.result is None
+    )
+    if prediction is None or (prediction.error and not expected_rejection):
         stage = prediction.error.stage if prediction and prediction.error else "prediction"
         failures.append(
             {
                 "sql_generation": "sql_generation_failure",
                 "sql_compilation": "sql_generation_failure",
+                "sql_compiler": "sql_generation_failure",
                 "sql_execution": "sql_execution_failure",
                 "answer_validation": "answer_hallucination",
                 "retrieval": "retrieval_failure",
+                "metric_retrieval": "retrieval_failure",
                 "metric_selection": "metric_selection_failure",
+                "llm_metric_selection": "metric_selection_failure",
             }.get(stage, "runtime_failure")
         )
     return {

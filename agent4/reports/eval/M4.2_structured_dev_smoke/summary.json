@@ -1,0 +1,509 @@
+{
+  "metadata": {
+    "runner_version": "contract-eval.v1",
+    "dataset_sha256": "df826fd05b4ffad5f909f894f0574cce85974ed940e84dbee03a0e018dab66ec",
+    "catalog_sha256": "cd5171cbfa9099386d6f583b53ee32769c7d9a47019784f4b894fd28e73e3040",
+    "ids": [
+      "BM-001",
+      "BM-112"
+    ],
+    "split": "dev",
+    "mode": "e2e",
+    "ks": [
+      5,
+      10
+    ],
+    "abs_tol": "0",
+    "rel_tol": "0",
+    "seed": 20261101,
+    "adapter_timeout_s": 60.0,
+    "input_price": "None",
+    "output_price": "None",
+    "comparison_key": "6e94ac61e500b91e4b32f85e1ada13bc8e23bc5cb459bed5db4f7b568a4e86eb",
+    "git": {
+      "commit": "e3e14503f36593cb7319806790c37eeef3198b6c",
+      "dirty": true
+    },
+    "timestamp_utc": "2026-11-11T08:51:06.724268+00:00",
+    "dataset_version": "contract-benchmark-v2.0",
+    "dataset_path": "/tmp/agent4-m42.aVJmvv/dev.jsonl",
+    "config_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/config/eval_governed_dev.yaml",
+    "config_sha256": "3225d3fde2a9b51f798bcf7ebe37dbd2d3f74f8e69116dbbd5bd36b521c05eee",
+    "configuration": {
+      "version": "1",
+      "prompt_version": "metric-selection-v1-structured",
+      "cache_enabled": true,
+      "embedding": {
+        "provider": "hashing",
+        "model": "hashing-v1",
+        "model_version": "1",
+        "dimensions": 768,
+        "base_url": "http://localhost:11434",
+        "normalize": true,
+        "timeout_s": 30.0,
+        "cache_enabled": true,
+        "cache_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/.cache/metric_selection_index.npz"
+      },
+      "retrieval": {
+        "mode": "full_catalog",
+        "dense_enabled": true,
+        "lexical_enabled": true,
+        "fusion_method": "rrf",
+        "dense_top_k": 15,
+        "lexical_top_k": 15,
+        "fusion_top_k": 20,
+        "rrf_k": 60,
+        "mention_retrieval_enabled": false
+      },
+      "expansion": {
+        "enabled": true,
+        "max_hops": 1,
+        "max_candidates": 30,
+        "relationship_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/config/metric_relationships.yaml"
+      },
+      "reranking": {
+        "metadata_enabled": true,
+        "cross_encoder_enabled": false,
+        "final_top_k": 12,
+        "metadata_weight": 1.0,
+        "cross_encoder_weight": 0.4
+      },
+      "fewshot": {
+        "enabled": false,
+        "strategy": "zero",
+        "min_examples": 0,
+        "max_examples": 4,
+        "token_budget": 2500,
+        "initial_pool_size": 15,
+        "example_bank_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/data/example_bank.jsonl",
+        "alpha": 1.0,
+        "beta": 0.5,
+        "gamma": 0.5,
+        "delta": 0.25
+      },
+      "llm": {
+        "provider": "ollama",
+        "base_url": "http://localhost:11434",
+        "model": "qwen2.5:0.5b",
+        "temperature": 0.0,
+        "timeout_s": 30.0,
+        "max_retries": 0,
+        "context_window": 4096,
+        "structured_output": true
+      },
+      "recovery": {
+        "enable_empty_candidate_fallback": false,
+        "degraded_lexical_fallback": false,
+        "enable_candidate_expansion": false
+      },
+      "evaluation": {
+        "save_traces": true,
+        "report_per_category": true,
+        "random_seed": 20261101
+      }
+    },
+    "model_version": "qwen2.5:0.5b@a8b0c5157701",
+    "prompt_version": "metric-selection-v1-structured",
+    "adapter": "agent4.eval_adapter:predict",
+    "prediction_source": "adapter",
+    "predictions_sha256": null,
+    "judgments_sha256": null,
+    "example_bank_sha256": null
+  },
+  "metrics": {
+    "count": 2,
+    "prediction_count": 2,
+    "retrieval": {
+      "recall_at_k": {
+        "5": 0.5,
+        "10": 0.5
+      },
+      "precision_at_k": {
+        "5": 0.1,
+        "10": 0.05
+      },
+      "all_metrics_covered_at_k": {
+        "5": 0.5,
+        "10": 0.5
+      },
+      "mrr": 0.5,
+      "coverage": {
+        "scored": 2,
+        "eligible": 2
+      }
+    },
+    "selection": {
+      "exact_match_accuracy": {
+        "value": 0.5,
+        "scored": 1,
+        "eligible": 2
+      },
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.6666666666666666,
+      "invalid_metric_rate": 0.0,
+      "invalid_metric_count": 0,
+      "coverage": {
+        "scored": 1,
+        "eligible": 2
+      }
+    },
+    "planning": {
+      "exact_match": {
+        "value": 0.5,
+        "scored": 2,
+        "eligible": 2
+      }
+    },
+    "sql": {
+      "execution_accuracy": {
+        "value": null,
+        "scored": 0,
+        "eligible": 0
+      },
+      "execution_error_rate": 0.0,
+      "attempted": 1,
+      "execution_evidence_coverage": {
+        "scored": 1,
+        "eligible": 2
+      },
+      "safety_test_pass_rate": {
+        "value": 0.0,
+        "scored": 0,
+        "eligible": 1
+      }
+    },
+    "answer": {
+      "numerical_correctness": {
+        "value": null,
+        "scored": 0,
+        "eligible": 2
+      },
+      "faithfulness": {
+        "value": null,
+        "scored": 0,
+        "eligible": 2
+      },
+      "answer_accuracy": {
+        "value": null,
+        "scored": 0,
+        "eligible": 2
+      },
+      "independently_reviewed": 0,
+      "eligible": 2
+    },
+    "e2e": {
+      "status_accuracy": {
+        "value": 1.0,
+        "scored": 2,
+        "eligible": 2
+      },
+      "latency_p50_ms": 2458.8422044999447,
+      "latency_p95_ms": 4671.14251805005,
+      "latency_samples": 2,
+      "average_tokens_observed": 1069.0,
+      "usage_samples": 1,
+      "total_cost_usd": null,
+      "cost_per_query_usd": null
+    },
+    "failures": {
+      "invalid_parameters": 1,
+      "retrieval_failure": 1,
+      "runtime_failure": 1
+    },
+    "gold_result_coverage": {
+      "reviewed": 0,
+      "total": 2
+    }
+  },
+  "by_category": {
+    "authorization_and_security": {
+      "count": 1,
+      "prediction_count": 1,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.0,
+          "10": 0.0
+        },
+        "precision_at_k": {
+          "5": 0.0,
+          "10": 0.0
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.0,
+          "10": 0.0
+        },
+        "mrr": 0.0,
+        "coverage": {
+          "scored": 1,
+          "eligible": 1
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": null,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "invalid_metric_rate": null,
+        "invalid_metric_count": 0,
+        "coverage": {
+          "scored": 0,
+          "eligible": 1
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.0,
+          "scored": 1,
+          "eligible": 1
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": null,
+        "attempted": 0,
+        "execution_evidence_coverage": {
+          "scored": 0,
+          "eligible": 1
+        },
+        "safety_test_pass_rate": null
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 1
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 1
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 1
+        },
+        "independently_reviewed": 0,
+        "eligible": 1
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 1.0,
+          "scored": 1,
+          "eligible": 1
+        },
+        "latency_p50_ms": 0.730744999827948,
+        "latency_p95_ms": 0.730744999827948,
+        "latency_samples": 1,
+        "average_tokens_observed": null,
+        "usage_samples": 0,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "invalid_parameters": 1,
+        "retrieval_failure": 1,
+        "runtime_failure": 1
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 1
+      }
+    },
+    "single_metric_aggregate": {
+      "count": 1,
+      "prediction_count": 1,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 1.0,
+          "10": 1.0
+        },
+        "precision_at_k": {
+          "5": 0.2,
+          "10": 0.1
+        },
+        "all_metrics_covered_at_k": {
+          "5": 1.0,
+          "10": 1.0
+        },
+        "mrr": 1.0,
+        "coverage": {
+          "scored": 1,
+          "eligible": 1
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 1.0,
+          "scored": 1,
+          "eligible": 1
+        },
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "invalid_metric_rate": 0.0,
+        "invalid_metric_count": 0,
+        "coverage": {
+          "scored": 1,
+          "eligible": 1
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 1.0,
+          "scored": 1,
+          "eligible": 1
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": 0.0,
+        "attempted": 1,
+        "execution_evidence_coverage": {
+          "scored": 1,
+          "eligible": 1
+        },
+        "safety_test_pass_rate": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 1
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 1
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 1
+        },
+        "independently_reviewed": 0,
+        "eligible": 1
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 1.0,
+          "scored": 1,
+          "eligible": 1
+        },
+        "latency_p50_ms": 4916.9536640000615,
+        "latency_p95_ms": 4916.9536640000615,
+        "latency_samples": 1,
+        "average_tokens_observed": 1069.0,
+        "usage_samples": 1,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {},
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 1
+      }
+    }
+  },
+  "quality_gates": [],
+  "limitations": [
+    "Draft semantic labels require domain review; they are development specifications.",
+    "Null metrics are unmeasured, not passing scores.",
+    "Numerical SQL accuracy requires independently reviewed expected_result and a matching database snapshot.",
+    "Answer accuracy/faithfulness require independent judgments; status accuracy is not answer accuracy.",
+    "Safety scores measure reported adapter execution evidence, not DB/RLS certification.",
+    "Replay latency/tokens are recorded measurements, not timings of this scoring run."
+  ],
+  "baseline_comparison": {
+    "comparable": true,
+    "deltas": {
+      "retrieval.mrr": 0.0,
+      "answer.numerical_correctness.eligible": 0,
+      "prediction_count": 0,
+      "answer.faithfulness.scored": 0,
+      "answer.eligible": 0,
+      "e2e.status_accuracy.scored": 0,
+      "e2e.latency_p50_ms": -22839.3390855,
+      "retrieval.precision_at_k.5": 0.0,
+      "answer.answer_accuracy.eligible": 0,
+      "answer.numerical_correctness.scored": 0,
+      "failures.invalid_parameters": -1,
+      "retrieval.recall_at_k.5": 0.0,
+      "e2e.usage_samples": 1,
+      "answer.independently_reviewed": 0,
+      "sql.execution_evidence_coverage.eligible": 0,
+      "sql.execution_accuracy.scored": 0,
+      "e2e.latency_p95_ms": -43394.18012624989,
+      "retrieval.all_metrics_covered_at_k.10": 0.0,
+      "planning.exact_match.eligible": 0,
+      "answer.answer_accuracy.scored": 0,
+      "gold_result_coverage.reviewed": 0,
+      "e2e.status_accuracy.value": 0.5,
+      "sql.execution_evidence_coverage.scored": 1,
+      "selection.coverage.eligible": 0,
+      "retrieval.recall_at_k.10": 0.0,
+      "planning.exact_match.scored": 0,
+      "selection.coverage.scored": 1,
+      "retrieval.coverage.eligible": 0,
+      "failures.retrieval_failure": 0,
+      "retrieval.coverage.scored": 0,
+      "retrieval.precision_at_k.10": 0.0,
+      "planning.exact_match.value": 0.5,
+      "failures.runtime_failure": -1,
+      "count": 0,
+      "sql.execution_accuracy.eligible": 0,
+      "sql.attempted": 1,
+      "e2e.status_accuracy.eligible": 0,
+      "gold_result_coverage.total": 0,
+      "e2e.latency_samples": 0,
+      "answer.faithfulness.eligible": 0,
+      "selection.invalid_metric_count": 0,
+      "retrieval.all_metrics_covered_at_k.5": 0.0
+    },
+    "lost_measurements": [
+      "failures.final_status_failure",
+      "failures.incomplete_response"
+    ],
+    "new_measurements": [
+      "e2e.average_tokens_observed",
+      "selection.exact_match_accuracy.eligible",
+      "selection.exact_match_accuracy.scored",
+      "selection.exact_match_accuracy.value",
+      "selection.f1",
+      "selection.invalid_metric_rate",
+      "selection.precision",
+      "selection.recall",
+      "sql.execution_error_rate",
+      "sql.safety_test_pass_rate.eligible",
+      "sql.safety_test_pass_rate.scored",
+      "sql.safety_test_pass_rate.value"
+    ],
+    "changed_run_metadata": {
+      "model_version": {
+        "baseline": "qwen3:4b@359d7dd4bcda",
+        "current": "qwen2.5:0.5b@a8b0c5157701"
+      },
+      "prompt_version": {
+        "baseline": "metric-selection-v1-e0",
+        "current": "metric-selection-v1-structured"
+      },
+      "config_sha256": {
+        "baseline": "5496934eb5b775b3aa811a81b68eca8e0943203c99369b9110a2742f6f8d27dd",
+        "current": "3225d3fde2a9b51f798bcf7ebe37dbd2d3f74f8e69116dbbd5bd36b521c05eee"
+      }
+    }
+  }
+}

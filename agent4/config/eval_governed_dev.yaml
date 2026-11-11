@@ -1,0 +1,13 @@
+version: "1"
+prompt_version: metric-selection-v1-structured
+cache_enabled: true
+retrieval:
+  mode: full_catalog
+llm:
+  provider: ollama
+  model: qwen2.5:0.5b
+  temperature: 0
+  timeout_s: 30
+  max_retries: 1
+  context_window: 4096
+  structured_output: true

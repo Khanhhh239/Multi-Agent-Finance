@@ -24,7 +24,8 @@ agent4/core/
 ├── config.py     # Cấu hình hệ thống (DuckDB path, Qwen local endpoint, giới hạn hệ thống)
 ├── errors.py     # Lớp ContractError, bộ lọc làm sạch thông báo lỗi và kiểm tra unknown fields
 ├── context.py    # Xử lý Query Intake (query.intake.v1) và Auth/Runtime Context (auth.policy-context.v1)
-└── catalog.py    # Quản lý MetricCatalog (metric.catalog.v1), kiểm tra quyền và tính catalog_hash
+├── catalog.py    # Quản lý MetricCatalog (metric.catalog.v1), kiểm tra quyền và tính catalog_hash
+└── cache.py      # Bộ nhớ đệm có kiểm soát LRUTTLCache (giới hạn RAM, TTL, cô lập tenant/policy/watermark)
 ```
 
 ---
@@ -73,6 +74,10 @@ agent4/core/
     }
   }
   ```
+- **Các cờ mở rộng tùy chọn trong `options` (`optional_keys`, tương thích ngược 100%)**:
+  - `include_evidence_preview: bool` (mặc định `False`): Đính kèm khối `evidence` (`evidence.preview.v1`) trong phản hồi cuối. `explain_metrics` điều khiển phần giải thích metric trong evidence.
+  - `clarification_mode: Literal["strict", "guided"]` (mặc định `"strict"`): Khi là `"guided"` hoặc khi có `session_id`, đính kèm khối `clarification` có gợi ý `choices` và `partial_interpretation`.
+  - `use_cache: bool` (mặc định `True`): Cho phép bật/tắt tra cứu cache L2/L3 theo từng request.
 - **Mã lỗi phải xử lý**:
   - `invalid_request`: `api_version != "v1"`, `question` rỗng/chỉ chứa khoảng trắng, hoặc truyền thêm trường lạ (ví dụ `tenant_id`, `roles`, `admin_override`).
   - `unsupported_locale`: `locale` không thuộc `{"vi-VN", "en-US"}` (trạng thái cuối: `unsupported`).
@@ -114,6 +119,13 @@ agent4/core/
 - **Metrics đặc biệt dùng để kiểm định chốt chặn**:
   - `experimental_cash_burn`: `status: "draft"` (chưa được phê duyệt).
   - `unverified_custom_kpi`: `status: "approved"`, `verified_handler: False` (chưa kiểm chứng nguồn/handler).
+
+### 3.5. Multi-Tier Governed Cache (`cache.governed.v1` — `agent4/core/cache.py`)
+- **Mục tiêu**: Tối ưu thời gian phản hồi và kiểm soát chặt bộ nhớ RAM qua lớp `LRUTTLCache` dùng chung cho toàn hệ thống (xem chi tiết tại [Issue M1.4](../issues/M1.4_governed_cache.md)):
+  - **Giới hạn bộ nhớ cứng**: Hỗ trợ `max_entries`, `ttl_seconds`, `max_bytes_budget` và `max_rows_per_entry` (ví dụ chỉ cache kết quả SQL có `row_count <= 200`).
+  - **Cô lập bảo mật tuyệt đối (`build_scoped_cache_key`)**: Mọi khóa cache ngữ nghĩa và thực thi bắt buộc nhúng `tenant_id`, `policy_hash`, `catalog_hash` (và `data_watermark` đối với SQL Result Cache) để ngăn chặn rò rỉ dữ liệu chéo giữa các tenant/role.
+  - **Bảo toàn tính bất biến (`clone_on_read=True`)**: Trả về bản sao sâu (`copy.deepcopy`) hoặc đối tượng frozen khi đọc từ cache để đảm bảo module sau không bao giờ làm biến đổi dữ liệu đang lưu trong cache.
+  - **Chỉ số quan sát**: Cung cấp `stats()` gồm `hits`, `misses`, `evictions`, `active_entries` và `estimated_memory_kb`.
 
 ---
 

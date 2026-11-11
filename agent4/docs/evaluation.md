@@ -236,6 +236,9 @@ Không truyền `expected_*`, category, notes hoặc fixture hints. Adapter khô
 planner, hoặc đưa câu benchmark vào dynamic few-shot bank. Hệ thống phải tạo
 prediction trước; runner mới đọc expectation để chấm.
 
+Adapter E2E chuyển cảnh báo API `partial_data_watermark` thành `partial_data`
+và `ratio_undefined` thành `undefined_ratio` trong `Prediction.warning_codes`.
+
 Output dùng schema `Prediction` trong `vals/run_eval.py`. Tùy `--mode`:
 
 - `retrieval`: trả `id`, `retrieved_metric_ids` theo thứ tự rank cuối.

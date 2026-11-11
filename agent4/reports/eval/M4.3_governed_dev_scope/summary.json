@@ -1,0 +1,1425 @@
+{
+  "metadata": {
+    "runner_version": "contract-eval.v1",
+    "dataset_sha256": "094fb090bff62ee8c83045eed3780c371ec3f4cf38095f274237c02a6b5b88d5",
+    "catalog_sha256": "cd5171cbfa9099386d6f583b53ee32769c7d9a47019784f4b894fd28e73e3040",
+    "ids": [
+      "BM-001",
+      "BM-002",
+      "BM-003",
+      "BM-004",
+      "BM-005",
+      "BM-006",
+      "BM-007",
+      "BM-008",
+      "BM-009",
+      "BM-010",
+      "BM-011",
+      "BM-012",
+      "BM-013",
+      "BM-014",
+      "BM-015",
+      "BM-016",
+      "BM-017",
+      "BM-018",
+      "BM-019",
+      "BM-020",
+      "BM-021",
+      "BM-022",
+      "BM-023",
+      "BM-024",
+      "BM-025",
+      "BM-026",
+      "BM-027",
+      "BM-028",
+      "BM-029",
+      "BM-030",
+      "BM-031",
+      "BM-032",
+      "BM-033",
+      "BM-034",
+      "BM-035",
+      "BM-036",
+      "BM-037",
+      "BM-038",
+      "BM-039",
+      "BM-040",
+      "BM-041",
+      "BM-042",
+      "BM-043",
+      "BM-044",
+      "BM-045",
+      "BM-046",
+      "BM-047",
+      "BM-048",
+      "BM-049",
+      "BM-050",
+      "BM-051",
+      "BM-052",
+      "BM-053",
+      "BM-054",
+      "BM-055",
+      "BM-056",
+      "BM-057",
+      "BM-058",
+      "BM-059",
+      "BM-060",
+      "BM-061",
+      "BM-062",
+      "BM-063",
+      "BM-064",
+      "BM-065",
+      "BM-066",
+      "BM-067",
+      "BM-068",
+      "BM-069",
+      "BM-070",
+      "BM-071",
+      "BM-072",
+      "BM-073",
+      "BM-074",
+      "BM-075",
+      "BM-076",
+      "BM-077",
+      "BM-078",
+      "BM-079",
+      "BM-080",
+      "BM-081",
+      "BM-082",
+      "BM-083",
+      "BM-084",
+      "BM-085",
+      "BM-086",
+      "BM-087",
+      "BM-088",
+      "BM-089",
+      "BM-090",
+      "BM-091",
+      "BM-092",
+      "BM-093",
+      "BM-094",
+      "BM-095",
+      "BM-096",
+      "BM-097",
+      "BM-098",
+      "BM-099",
+      "BM-100",
+      "BM-101",
+      "BM-102",
+      "BM-103",
+      "BM-104",
+      "BM-105",
+      "BM-106",
+      "BM-107",
+      "BM-108",
+      "BM-109",
+      "BM-110",
+      "BM-111",
+      "BM-112",
+      "BM-113",
+      "BM-114",
+      "BM-115",
+      "BM-116",
+      "BM-117",
+      "BM-118",
+      "BM-119",
+      "BM-120",
+      "BM-121",
+      "BM-122",
+      "BM-123",
+      "BM-124",
+      "BM-125",
+      "BM-126",
+      "BM-127",
+      "BM-128",
+      "BM-129",
+      "BM-130",
+      "BM-131",
+      "BM-132",
+      "BM-133",
+      "BM-134",
+      "BM-135",
+      "BM-136",
+      "BM-137",
+      "BM-138",
+      "BM-139",
+      "BM-140"
+    ],
+    "split": "dev",
+    "mode": "e2e",
+    "ks": [
+      5,
+      10
+    ],
+    "abs_tol": "0",
+    "rel_tol": "0",
+    "seed": 20261101,
+    "adapter_timeout_s": 60.0,
+    "input_price": "None",
+    "output_price": "None",
+    "comparison_key": "4a8dfd61e180391698ce436a13e8b30aeee4284e7fb8b812ed6a1c76dceb8e77",
+    "git": {
+      "commit": "e3e14503f36593cb7319806790c37eeef3198b6c",
+      "dirty": true
+    },
+    "timestamp_utc": "2026-11-11T08:59:20.113007+00:00",
+    "dataset_version": "contract-benchmark-v2.0",
+    "dataset_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/data/eval/contract_benchmark_questions.jsonl",
+    "config_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/config/eval_governed_dev.yaml",
+    "config_sha256": "3225d3fde2a9b51f798bcf7ebe37dbd2d3f74f8e69116dbbd5bd36b521c05eee",
+    "configuration": {
+      "version": "1",
+      "prompt_version": "metric-selection-v1-structured",
+      "cache_enabled": true,
+      "embedding": {
+        "provider": "hashing",
+        "model": "hashing-v1",
+        "model_version": "1",
+        "dimensions": 768,
+        "base_url": "http://localhost:11434",
+        "normalize": true,
+        "timeout_s": 30.0,
+        "cache_enabled": true,
+        "cache_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/.cache/metric_selection_index.npz"
+      },
+      "retrieval": {
+        "mode": "full_catalog",
+        "dense_enabled": true,
+        "lexical_enabled": true,
+        "fusion_method": "rrf",
+        "dense_top_k": 15,
+        "lexical_top_k": 15,
+        "fusion_top_k": 20,
+        "rrf_k": 60,
+        "mention_retrieval_enabled": false
+      },
+      "expansion": {
+        "enabled": true,
+        "max_hops": 1,
+        "max_candidates": 30,
+        "relationship_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/config/metric_relationships.yaml"
+      },
+      "reranking": {
+        "metadata_enabled": true,
+        "cross_encoder_enabled": false,
+        "final_top_k": 12,
+        "metadata_weight": 1.0,
+        "cross_encoder_weight": 0.4
+      },
+      "fewshot": {
+        "enabled": false,
+        "strategy": "zero",
+        "min_examples": 0,
+        "max_examples": 4,
+        "token_budget": 2500,
+        "initial_pool_size": 15,
+        "example_bank_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/data/example_bank.jsonl",
+        "alpha": 1.0,
+        "beta": 0.5,
+        "gamma": 0.5,
+        "delta": 0.25
+      },
+      "llm": {
+        "provider": "ollama",
+        "base_url": "http://localhost:11434",
+        "model": "qwen2.5:0.5b",
+        "temperature": 0.0,
+        "timeout_s": 30.0,
+        "max_retries": 0,
+        "context_window": 4096,
+        "structured_output": true
+      },
+      "recovery": {
+        "enable_empty_candidate_fallback": false,
+        "degraded_lexical_fallback": false,
+        "enable_candidate_expansion": false
+      },
+      "evaluation": {
+        "save_traces": true,
+        "report_per_category": true,
+        "random_seed": 20261101
+      }
+    },
+    "model_version": "qwen2.5:0.5b@a8b0c5157701",
+    "prompt_version": "metric-selection-v1-structured",
+    "adapter": "agent4.eval_adapter:predict",
+    "prediction_source": "adapter",
+    "predictions_sha256": null,
+    "judgments_sha256": null,
+    "example_bank_sha256": null
+  },
+  "metrics": {
+    "count": 140,
+    "prediction_count": 140,
+    "retrieval": {
+      "recall_at_k": {
+        "5": 0.31736111111111115,
+        "10": 0.42597222222222225
+      },
+      "precision_at_k": {
+        "5": 0.085,
+        "10": 0.0575
+      },
+      "all_metrics_covered_at_k": {
+        "5": 0.275,
+        "10": 0.38333333333333336
+      },
+      "mrr": 0.3117171717171717,
+      "coverage": {
+        "scored": 114,
+        "eligible": 120
+      }
+    },
+    "selection": {
+      "exact_match_accuracy": {
+        "value": 0.25,
+        "scored": 123,
+        "eligible": 140
+      },
+      "precision": 0.28187919463087246,
+      "recall": 0.267515923566879,
+      "f1": 0.2745098039215686,
+      "invalid_metric_rate": 0.4966442953020134,
+      "invalid_metric_count": 74,
+      "coverage": {
+        "scored": 123,
+        "eligible": 140
+      }
+    },
+    "planning": {
+      "exact_match": {
+        "value": 0.12142857142857143,
+        "scored": 140,
+        "eligible": 140
+      }
+    },
+    "sql": {
+      "execution_accuracy": {
+        "value": null,
+        "scored": 0,
+        "eligible": 0
+      },
+      "execution_error_rate": 0.0,
+      "attempted": 35,
+      "execution_evidence_coverage": {
+        "scored": 140,
+        "eligible": 140
+      },
+      "safety_test_pass_rate": {
+        "value": 0.8666666666666667,
+        "scored": 15,
+        "eligible": 15
+      }
+    },
+    "answer": {
+      "numerical_correctness": {
+        "value": null,
+        "scored": 0,
+        "eligible": 140
+      },
+      "faithfulness": {
+        "value": null,
+        "scored": 0,
+        "eligible": 140
+      },
+      "answer_accuracy": {
+        "value": null,
+        "scored": 0,
+        "eligible": 140
+      },
+      "independently_reviewed": 0,
+      "eligible": 140
+    },
+    "e2e": {
+      "status_accuracy": {
+        "value": 0.4714285714285714,
+        "scored": 140,
+        "eligible": 140
+      },
+      "latency_p50_ms": 1030.2709764999918,
+      "latency_p95_ms": 2069.58998120001,
+      "latency_samples": 140,
+      "average_tokens_observed": 1075.904347826087,
+      "usage_samples": 115,
+      "total_cost_usd": null,
+      "cost_per_query_usd": null
+    },
+    "failures": {
+      "final_status_failure": 74,
+      "incomplete_response": 64,
+      "invalid_parameters": 123,
+      "metric_selection_failure": 99,
+      "retrieval_failure": 63,
+      "runtime_failure": 25,
+      "missing_required_warning": 14,
+      "ambiguous_query_handling_failure": 2,
+      "safety_failure": 2
+    },
+    "gold_result_coverage": {
+      "reviewed": 0,
+      "total": 140
+    }
+  },
+  "by_category": {
+    "ambiguous_needs_clarification": {
+      "count": 15,
+      "prediction_count": 15,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.36363636363636365,
+          "10": 0.36363636363636365
+        },
+        "precision_at_k": {
+          "5": 0.07272727272727274,
+          "10": 0.03636363636363637
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.36363636363636365,
+          "10": 0.36363636363636365
+        },
+        "mrr": 0.3181818181818182,
+        "coverage": {
+          "scored": 11,
+          "eligible": 11
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.2,
+          "scored": 14,
+          "eligible": 15
+        },
+        "precision": 0.21428571428571427,
+        "recall": 0.2727272727272727,
+        "f1": 0.23999999999999996,
+        "invalid_metric_rate": 0.5,
+        "invalid_metric_count": 7,
+        "coverage": {
+          "scored": 14,
+          "eligible": 15
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.4,
+          "scored": 15,
+          "eligible": 15
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": null,
+        "attempted": 0,
+        "execution_evidence_coverage": {
+          "scored": 15,
+          "eligible": 15
+        },
+        "safety_test_pass_rate": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "independently_reviewed": 0,
+        "eligible": 15
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.9333333333333333,
+          "scored": 15,
+          "eligible": 15
+        },
+        "latency_p50_ms": 911.3469929998246,
+        "latency_p95_ms": 1495.156821600038,
+        "latency_samples": 15,
+        "average_tokens_observed": 1057.357142857143,
+        "usage_samples": 14,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "metric_selection_failure": 12,
+        "invalid_parameters": 9,
+        "retrieval_failure": 7,
+        "ambiguous_query_handling_failure": 1,
+        "final_status_failure": 1
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 15
+      }
+    },
+    "authorization_and_security": {
+      "count": 10,
+      "prediction_count": 10,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.0,
+          "10": 0.0
+        },
+        "precision_at_k": {
+          "5": 0.0,
+          "10": 0.0
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.0,
+          "10": 0.0
+        },
+        "mrr": 0.0,
+        "coverage": {
+          "scored": 2,
+          "eligible": 6
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.4,
+          "scored": 6,
+          "eligible": 10
+        },
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "invalid_metric_rate": 1.0,
+        "invalid_metric_count": 2,
+        "coverage": {
+          "scored": 6,
+          "eligible": 10
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.0,
+          "scored": 10,
+          "eligible": 10
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": null,
+        "attempted": 0,
+        "execution_evidence_coverage": {
+          "scored": 10,
+          "eligible": 10
+        },
+        "safety_test_pass_rate": {
+          "value": 0.8,
+          "scored": 10,
+          "eligible": 10
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 10
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 10
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 10
+        },
+        "independently_reviewed": 0,
+        "eligible": 10
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.8,
+          "scored": 10,
+          "eligible": 10
+        },
+        "latency_p50_ms": 0.33930350002719933,
+        "latency_p95_ms": 998.3268349500348,
+        "latency_samples": 10,
+        "average_tokens_observed": 1076.5,
+        "usage_samples": 2,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "invalid_parameters": 10,
+        "final_status_failure": 2,
+        "incomplete_response": 2,
+        "metric_selection_failure": 2,
+        "missing_required_warning": 2,
+        "retrieval_failure": 2,
+        "runtime_failure": 2,
+        "safety_failure": 2
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 10
+      }
+    },
+    "business_views": {
+      "count": 15,
+      "prediction_count": 15,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.06666666666666667,
+          "10": 0.26666666666666666
+        },
+        "precision_at_k": {
+          "5": 0.013333333333333334,
+          "10": 0.02666666666666667
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.06666666666666667,
+          "10": 0.26666666666666666
+        },
+        "mrr": 0.10161616161616162,
+        "coverage": {
+          "scored": 15,
+          "eligible": 15
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.06666666666666667,
+          "scored": 11,
+          "eligible": 15
+        },
+        "precision": 0.09090909090909091,
+        "recall": 0.06666666666666667,
+        "f1": 0.07692307692307691,
+        "invalid_metric_rate": 0.8181818181818182,
+        "invalid_metric_count": 9,
+        "coverage": {
+          "scored": 11,
+          "eligible": 15
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.06666666666666667,
+          "scored": 15,
+          "eligible": 15
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": 0.0,
+        "attempted": 4,
+        "execution_evidence_coverage": {
+          "scored": 15,
+          "eligible": 15
+        },
+        "safety_test_pass_rate": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "independently_reviewed": 0,
+        "eligible": 15
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.2,
+          "scored": 15,
+          "eligible": 15
+        },
+        "latency_p50_ms": 1053.1061679998857,
+        "latency_p95_ms": 2487.2560758999043,
+        "latency_samples": 15,
+        "average_tokens_observed": 1087.909090909091,
+        "usage_samples": 11,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "final_status_failure": 12,
+        "incomplete_response": 12,
+        "invalid_parameters": 14,
+        "metric_selection_failure": 14,
+        "retrieval_failure": 10,
+        "runtime_failure": 3,
+        "missing_required_warning": 3
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 15
+      }
+    },
+    "dimensional_breakdown_filter_topk": {
+      "count": 20,
+      "prediction_count": 20,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.4,
+          "10": 0.55
+        },
+        "precision_at_k": {
+          "5": 0.08,
+          "10": 0.05500000000000001
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.4,
+          "10": 0.55
+        },
+        "mrr": 0.36454545454545456,
+        "coverage": {
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.1,
+          "scored": 20,
+          "eligible": 20
+        },
+        "precision": 0.14705882352941177,
+        "recall": 0.25,
+        "f1": 0.18518518518518517,
+        "invalid_metric_rate": 0.6176470588235294,
+        "invalid_metric_count": 21,
+        "coverage": {
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.0,
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": 0.0,
+        "attempted": 4,
+        "execution_evidence_coverage": {
+          "scored": 20,
+          "eligible": 20
+        },
+        "safety_test_pass_rate": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "independently_reviewed": 0,
+        "eligible": 20
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.2,
+          "scored": 20,
+          "eligible": 20
+        },
+        "latency_p50_ms": 1060.7122530000197,
+        "latency_p95_ms": 1717.7041504001409,
+        "latency_samples": 20,
+        "average_tokens_observed": 1080.45,
+        "usage_samples": 20,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "final_status_failure": 16,
+        "incomplete_response": 16,
+        "invalid_parameters": 20,
+        "metric_selection_failure": 18,
+        "runtime_failure": 12,
+        "retrieval_failure": 8
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 20
+      }
+    },
+    "multi_metrics": {
+      "count": 20,
+      "prediction_count": 20,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.35416666666666663,
+          "10": 0.5058333333333334
+        },
+        "precision_at_k": {
+          "5": 0.2,
+          "10": 0.13999999999999999
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.1,
+          "10": 0.25
+        },
+        "mrr": 0.5066666666666666,
+        "coverage": {
+          "scored": 18,
+          "eligible": 20
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.1,
+          "scored": 15,
+          "eligible": 20
+        },
+        "precision": 0.53125,
+        "recall": 0.2982456140350877,
+        "f1": 0.3820224719101123,
+        "invalid_metric_rate": 0.1875,
+        "invalid_metric_count": 6,
+        "coverage": {
+          "scored": 15,
+          "eligible": 20
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.1,
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": 0.0,
+        "attempted": 3,
+        "execution_evidence_coverage": {
+          "scored": 20,
+          "eligible": 20
+        },
+        "safety_test_pass_rate": {
+          "value": 1.0,
+          "scored": 2,
+          "eligible": 2
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "independently_reviewed": 0,
+        "eligible": 20
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.35,
+          "scored": 20,
+          "eligible": 20
+        },
+        "latency_p50_ms": 1282.6247115000342,
+        "latency_p95_ms": 3010.1822416000914,
+        "latency_samples": 20,
+        "average_tokens_observed": 1088.0666666666666,
+        "usage_samples": 15,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "final_status_failure": 13,
+        "incomplete_response": 11,
+        "invalid_parameters": 18,
+        "metric_selection_failure": 16,
+        "retrieval_failure": 11,
+        "runtime_failure": 3,
+        "ambiguous_query_handling_failure": 1
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 20
+      }
+    },
+    "no_data_and_edge_cases": {
+      "count": 8,
+      "prediction_count": 8,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.375,
+          "10": 0.375
+        },
+        "precision_at_k": {
+          "5": 0.07500000000000001,
+          "10": 0.037500000000000006
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.375,
+          "10": 0.375
+        },
+        "mrr": 0.375,
+        "coverage": {
+          "scored": 8,
+          "eligible": 8
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.375,
+          "scored": 8,
+          "eligible": 8
+        },
+        "precision": 0.42857142857142855,
+        "recall": 0.375,
+        "f1": 0.39999999999999997,
+        "invalid_metric_rate": 0.42857142857142855,
+        "invalid_metric_count": 3,
+        "coverage": {
+          "scored": 8,
+          "eligible": 8
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.125,
+          "scored": 8,
+          "eligible": 8
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": 0.0,
+        "attempted": 4,
+        "execution_evidence_coverage": {
+          "scored": 8,
+          "eligible": 8
+        },
+        "safety_test_pass_rate": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 8
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 8
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 8
+        },
+        "independently_reviewed": 0,
+        "eligible": 8
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.375,
+          "scored": 8,
+          "eligible": 8
+        },
+        "latency_p50_ms": 989.0860530000509,
+        "latency_p95_ms": 1078.7812810500213,
+        "latency_samples": 8,
+        "average_tokens_observed": 1065.5,
+        "usage_samples": 8,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "final_status_failure": 5,
+        "invalid_parameters": 7,
+        "metric_selection_failure": 5,
+        "retrieval_failure": 5,
+        "incomplete_response": 2,
+        "missing_required_warning": 2,
+        "runtime_failure": 1
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 8
+      }
+    },
+    "single_metric_aggregate": {
+      "count": 20,
+      "prediction_count": 20,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.25,
+          "10": 0.4
+        },
+        "precision_at_k": {
+          "5": 0.05,
+          "10": 0.04
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.25,
+          "10": 0.4
+        },
+        "mrr": 0.1812121212121212,
+        "coverage": {
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.25,
+          "scored": 20,
+          "eligible": 20
+        },
+        "precision": 0.3,
+        "recall": 0.3,
+        "f1": 0.3,
+        "invalid_metric_rate": 0.5,
+        "invalid_metric_count": 10,
+        "coverage": {
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.25,
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": 0.0,
+        "attempted": 15,
+        "execution_evidence_coverage": {
+          "scored": 20,
+          "eligible": 20
+        },
+        "safety_test_pass_rate": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "independently_reviewed": 0,
+        "eligible": 20
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.75,
+          "scored": 20,
+          "eligible": 20
+        },
+        "latency_p50_ms": 1029.4076289999339,
+        "latency_p95_ms": 1170.5672503499613,
+        "latency_samples": 20,
+        "average_tokens_observed": 1066.1,
+        "usage_samples": 20,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "final_status_failure": 5,
+        "incomplete_response": 5,
+        "invalid_parameters": 15,
+        "metric_selection_failure": 15,
+        "retrieval_failure": 11,
+        "runtime_failure": 2
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 20
+      }
+    },
+    "timeseries_and_comparison": {
+      "count": 20,
+      "prediction_count": 20,
+      "retrieval": {
+        "recall_at_k": {
+          "5": 0.5,
+          "10": 0.55
+        },
+        "precision_at_k": {
+          "5": 0.1,
+          "10": 0.05500000000000001
+        },
+        "all_metrics_covered_at_k": {
+          "5": 0.5,
+          "10": 0.55
+        },
+        "mrr": 0.4166666666666667,
+        "coverage": {
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.35,
+          "scored": 19,
+          "eligible": 20
+        },
+        "precision": 0.30434782608695654,
+        "recall": 0.35,
+        "f1": 0.3255813953488372,
+        "invalid_metric_rate": 0.5652173913043478,
+        "invalid_metric_count": 13,
+        "coverage": {
+          "scored": 19,
+          "eligible": 20
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.1,
+          "scored": 20,
+          "eligible": 20
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": 0.0,
+        "attempted": 4,
+        "execution_evidence_coverage": {
+          "scored": 20,
+          "eligible": 20
+        },
+        "safety_test_pass_rate": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 20
+        },
+        "independently_reviewed": 0,
+        "eligible": 20
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.2,
+          "scored": 20,
+          "eligible": 20
+        },
+        "latency_p50_ms": 1039.9296634999473,
+        "latency_p95_ms": 1882.6666347001153,
+        "latency_samples": 20,
+        "average_tokens_observed": 1078.0526315789473,
+        "usage_samples": 19,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "final_status_failure": 16,
+        "incomplete_response": 16,
+        "invalid_parameters": 18,
+        "metric_selection_failure": 13,
+        "runtime_failure": 2,
+        "retrieval_failure": 9,
+        "missing_required_warning": 7
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 20
+      }
+    },
+    "unsupported_out_of_catalog": {
+      "count": 12,
+      "prediction_count": 12,
+      "retrieval": {
+        "recall_at_k": {
+          "5": null,
+          "10": null
+        },
+        "precision_at_k": {
+          "5": null,
+          "10": null
+        },
+        "all_metrics_covered_at_k": {
+          "5": null,
+          "10": null
+        },
+        "mrr": null,
+        "coverage": {
+          "scored": 0,
+          "eligible": 0
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 0.6666666666666666,
+          "scored": 10,
+          "eligible": 12
+        },
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "invalid_metric_rate": 0.5,
+        "invalid_metric_count": 3,
+        "coverage": {
+          "scored": 10,
+          "eligible": 12
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 0.0,
+          "scored": 12,
+          "eligible": 12
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": 0.0,
+        "attempted": 1,
+        "execution_evidence_coverage": {
+          "scored": 12,
+          "eligible": 12
+        },
+        "safety_test_pass_rate": {
+          "value": 1.0,
+          "scored": 3,
+          "eligible": 3
+        }
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 12
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 12
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 12
+        },
+        "independently_reviewed": 0,
+        "eligible": 12
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 0.6666666666666666,
+          "scored": 12,
+          "eligible": 12
+        },
+        "latency_p50_ms": 1565.7558764999067,
+        "latency_p95_ms": 1963.0839633000162,
+        "latency_samples": 12,
+        "average_tokens_observed": 1091.1666666666667,
+        "usage_samples": 6,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {
+        "final_status_failure": 4,
+        "invalid_parameters": 12,
+        "metric_selection_failure": 4
+      },
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 12
+      }
+    }
+  },
+  "quality_gates": [],
+  "limitations": [
+    "Draft semantic labels require domain review; they are development specifications.",
+    "Null metrics are unmeasured, not passing scores.",
+    "Numerical SQL accuracy requires independently reviewed expected_result and a matching database snapshot.",
+    "Answer accuracy/faithfulness require independent judgments; status accuracy is not answer accuracy.",
+    "Safety scores measure reported adapter execution evidence, not DB/RLS certification.",
+    "Replay latency/tokens are recorded measurements, not timings of this scoring run."
+  ],
+  "baseline_comparison": {
+    "comparable": true,
+    "deltas": {
+      "failures.final_status_failure": -11,
+      "selection.invalid_metric_count": -5,
+      "gold_result_coverage.reviewed": 0,
+      "selection.coverage.eligible": 0,
+      "e2e.latency_p95_ms": -142.180953749923,
+      "planning.exact_match.value": 0.0,
+      "answer.eligible": 0,
+      "selection.f1": 0.007843137254901988,
+      "retrieval.precision_at_k.10": -0.0008333333333333318,
+      "selection.coverage.scored": 3,
+      "retrieval.mrr": -0.008333333333333304,
+      "sql.attempted": -2,
+      "answer.faithfulness.scored": 0,
+      "sql.safety_test_pass_rate.value": 0.6000000000000001,
+      "failures.invalid_parameters": 0,
+      "retrieval.recall_at_k.5": -0.004166666666666652,
+      "answer.answer_accuracy.eligible": 0,
+      "answer.faithfulness.eligible": 0,
+      "failures.retrieval_failure": -3,
+      "selection.exact_match_accuracy.scored": 3,
+      "selection.invalid_metric_rate": -0.0033557046979865723,
+      "answer.independently_reviewed": 0,
+      "e2e.latency_p50_ms": 23.17008149987032,
+      "e2e.usage_samples": -5,
+      "selection.recall": 0.0,
+      "retrieval.all_metrics_covered_at_k.5": 0.0,
+      "planning.exact_match.scored": 0,
+      "sql.execution_accuracy.eligible": 0,
+      "retrieval.coverage.eligible": 0,
+      "sql.execution_error_rate": 0.0,
+      "answer.numerical_correctness.eligible": 0,
+      "failures.metric_selection_failure": -7,
+      "retrieval.recall_at_k.10": -0.004166666666666652,
+      "sql.safety_test_pass_rate.scored": 0,
+      "prediction_count": 0,
+      "retrieval.precision_at_k.5": -0.0016666666666666635,
+      "retrieval.all_metrics_covered_at_k.10": 0.0,
+      "sql.safety_test_pass_rate.eligible": 0,
+      "failures.runtime_failure": -5,
+      "selection.precision": 0.01605640982074591,
+      "answer.numerical_correctness.scored": 0,
+      "failures.safety_failure": -9,
+      "count": 0,
+      "sql.execution_accuracy.scored": 0,
+      "selection.exact_match_accuracy.eligible": 0,
+      "sql.execution_evidence_coverage.eligible": 0,
+      "retrieval.coverage.scored": -3,
+      "answer.answer_accuracy.scored": 0,
+      "failures.incomplete_response": 0,
+      "sql.execution_evidence_coverage.scored": 0,
+      "e2e.status_accuracy.scored": 0,
+      "e2e.latency_samples": 0,
+      "e2e.status_accuracy.value": 0.07857142857142857,
+      "failures.missing_required_warning": 0,
+      "selection.exact_match_accuracy.value": 0.057142857142857134,
+      "failures.ambiguous_query_handling_failure": 0,
+      "e2e.average_tokens_observed": 10.862681159420163,
+      "gold_result_coverage.total": 0,
+      "planning.exact_match.eligible": 0,
+      "e2e.status_accuracy.eligible": 0
+    },
+    "lost_measurements": [],
+    "new_measurements": [],
+    "changed_run_metadata": {}
+  }
+}

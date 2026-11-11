@@ -67,13 +67,17 @@ def validate_metrics(
             raise _reject(
                 "unknown_metric", "Metric is absent from the catalog.", metric_id=metric_id
             )
+        capability = catalog.get_capability(metric_id)
+        if capability["metadata_only"]:
+            raise _reject(
+                "unsupported_metric", "Metric has no verified handler.", metric_id=metric_id
+            )
         if metric_id not in candidates:
             raise _reject(
                 "metric_outside_candidates",
                 "Metric is absent from the candidates.",
                 metric_id=metric_id,
             )
-        capability = catalog.get_capability(metric_id)
         if capability["status"] != "approved":
             raise _reject("unsupported_metric", "Metric is not approved.", metric_id=metric_id)
         if capability["verified_handler"] is not True:

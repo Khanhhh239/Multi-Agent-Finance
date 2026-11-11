@@ -287,6 +287,19 @@ flowchart LR
   - [ ] **Task M1.3.2 (Full Contract Verification Gate)**: Xác nhận cả 2 file `tests/contracts/test_retrieval_and_fewshot.py` và `tests/contracts/test_selection_and_metric_validation.py` import 100% từ `agent4.metric_selection` và pass 18/18 tests cùng `make verify`.
   - [ ] **Task M1.3.3 (Thực nghiệm `E5` & Chốt cấu hình Submission)**: Chạy **`E5` (Best Configuration + Bounded Recovery)** qua `vals/run_eval.py`, lập bảng so sánh tổng hợp `E0`–`E5`, chọn kiến trúc chiến thắng dựa trên số liệu thực nghiệm và khóa cấu hình trong `config/selection.yaml`.
 
+### Sub-milestone M1-S6: Multi-Tier Governed Cache (Tối ưu Thời gian & Bộ nhớ)
+#### Issue `M1.4` (`docs/issues/M1.4_governed_cache.md`): In-Memory Artifact Cache (L1) & Query Embedding / Selection Cache (L2)
+- **Mục tiêu**: Giảm thiểu thời gian đọc đĩa lặp lại của `.npz` index / `example_bank.jsonl` và cắt giảm độ trễ gọi Ollama Embedding / LLM Selection thông qua bộ nhớ đệm có giới hạn RAM (`LRUTTLCache`) và khóa bảo mật theo tenant/policy/catalog.
+- **File đích**: `agent4/core/cache.py`, `agent4/metric_selection/index.py`, `agent4/metric_selection/embedding.py`, `agent4/metric_selection/fewshot.py`, `agent4/metric_selection/orchestrator.py`
+- **Contracts**: `cache.governed.v1`, `metric.embedding-provider.v1`, `metric.retrieval.orchestrator.v1`, `metric.validation.v1`
+- **Tasks**:
+  - [ ] **Task M1.4.1 (`LRUTTLCache` & Scoped Key Builder — `agent4/core/cache.py`)**: Hiện thực hóa bộ nhớ đệm `LRUTTLCache` thread-safe với giới hạn `max_entries`, `ttl_seconds`, `max_bytes_budget`, `max_rows_per_entry`, cơ chế `clone_on_read=True` (bảo toàn bất biến dữ liệu), và hàm `build_scoped_cache_key()` bắt buộc nhúng `tenant_id`, `policy_hash`, `catalog_hash`.
+  - [ ] **Task M1.4.2 (L1 Artifact Memory Cache — `index.py`, `fewshot.py`)**: Giữ `MetricVectorIndex` (`.npz`) và `ExampleBank` (`data/example_bank.jsonl`) trong bộ nhớ theo khóa `(path, mtime_ns, catalog_hash)` với `maxsize=2`, loại bỏ hoàn toàn I/O đọc đĩa lặp lại ở mỗi truy vấn trong `orchestrate_retrieval()`.
+  - [ ] **Task M1.4.3 (L2a Query Embedding & L2b Validated Selection Cache — `embedding.py`, `orchestrator.py`)**:
+    - Cache vector nhúng câu hỏi theo `sha256(normalized_question | model_id | model_version | normalize)` (`maxsize=1024, ttl_s=3600`).
+    - Cache kết quả truy hồi và chọn metric đã qua kiểm duyệt theo `sha256(normalized_question | locale | catalog_hash | policy_hash | requested_view | config_hash)` (`maxsize=512, ttl_s=1800`). Tuyệt đối không cache các phản hồi lỗi tạm thời (`retrieval_unavailable`, `temporarily_unavailable`).
+  - [ ] **Task M1.4.4 (Verification & Cache Security Tests)**: Thêm `tests/contracts/test_cache_governance.py` kiểm chứng cô lập tenant/policy, tự động vô hiệu hóa khi `catalog_hash` đổi, giới hạn thu hồi bộ nhớ LRU và bảo toàn bất biến dữ liệu.
+
 ---
 
 ## 6. Evaluation Strategy
