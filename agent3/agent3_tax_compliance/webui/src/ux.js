@@ -32,7 +32,7 @@ export async function freshBanner(el) {
     const f = await api(`/api/workspaces/${state.ws}/freshness`);
     if (!f.stale) { el.innerHTML = ''; return; }
     el.innerHTML = `<div class="banner banner-warn"><div><strong>${f.analysed ? 'Dữ liệu đã thay đổi sau lần phân tích gần nhất' : 'Chưa có kết quả phân tích'}</strong>
-      <div class="small">${f.analysed ? 'Số liệu đang hiển thị có thể đã cũ.' : 'Nạp dữ liệu rồi chạy phân tích để xem kết quả.'}</div></div>
+      <div class="small">${f.analysed ? 'Số liệu đang hiển thị có thể đã cũ.' : 'Nạp dữ liệu rồi chạy phân tích để xem kết quả.'}${f.reason ? ' ' + esc(f.reason) : ''}</div></div>
       <button type="button" class="cds--btn cds--btn--primary cds--btn--sm" id="fresh-run">Chạy phân tích ngay</button></div>`;
     $('#fresh-run').onclick = () => runAnalysis($('#fresh-run').parentElement);
   } catch { el.innerHTML = ''; }

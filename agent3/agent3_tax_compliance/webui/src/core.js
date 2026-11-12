@@ -1,7 +1,21 @@
 // Shared helpers and state for the Agent 3 interface. Markup uses Carbon Design System classes.
 export const $ = (s, el = document) => el.querySelector(s);
 export const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-export const money = (v) => (v === null || v === undefined || v === '' ? '' : Number(v).toLocaleString('vi-VN', { maximumFractionDigits: 0 }) + ' đ');
+export const money = (v) => {
+  if (v === null || v === undefined || v === '') return '—';
+  const raw = String(v); if (!/^-?\d+(\.\d+)?$/.test(raw)) return 'Không xác định';
+  const [whole, fraction = ''] = raw.split('.');
+  const tail = fraction.replace(/0+$/, '');
+  return whole.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (tail ? ',' + tail : '') + ' đ';
+};
+export function compareDecimal(a, b) {
+  const parts = value => String(value ?? '0').split('.');
+  const [aw, af = ''] = parts(a), [bw, bf = ''] = parts(b);
+  const scale = Math.max(af.length, bf.length);
+  const integer = (whole, fraction) => BigInt((whole.startsWith('-') ? '-' : '') + whole.replace(/^-/, '') + fraction.padEnd(scale, '0'));
+  const x = integer(aw, af), y = integer(bw, bf);
+  return x > y ? 1 : x < y ? -1 : 0;
+}
 export const dmy = (s) => (s ? s.slice(0, 10).split('-').reverse().join('/') : '');
 export const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
@@ -38,8 +52,33 @@ export async function api(path, opts = {}) {
   if (!res.ok) { const error = new Error(typeof body === 'object' ? body.detail?.message || body.detail || JSON.stringify(body) : body); error.status = res.status; throw error; }
   return body;
 }
-export const post = (path, data, opts = {}) => api(path, { ...opts, method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data ?? {}) });
+export const post = (path, data, opts = {}) => api(path, { ...opts, method: 'POST', headers: { 'Content-Type': 'application/json', ...opts.headers }, body: JSON.stringify(data ?? {}) });
 export const put = (path, data) => api(path, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+
+export async function decisionContext() {
+  const path = `/api/workspaces/${state.ws}/decisions`;
+  const journal = await api(path);
+  return { etag: packEtags.get(path), events: journal.events || [], report_revision: state.report?.meta.report_revision, workspace: state.ws, revision: state.platform?.profile_revision };
+}
+
+export async function decide(path, body, context) {
+  if (!context?.etag || !context.report_revision) throw new Error('Cần chạy phân tích và tải lại quyết định trước khi lưu.');
+  if (context.workspace !== state.ws || context.revision !== state.platform?.profile_revision) throw new Error('Hồ sơ đã thay đổi; không gửi quyết định cũ.');
+  const hash = JSON.stringify(body);
+  if (hash !== context.body) { context.request_id = crypto.randomUUID(); context.body = hash; }
+  return post(path, { ...body, request_id: context.request_id, report_revision: context.report_revision }, { headers: { 'If-Match': context.etag } });
+}
+
+export async function saveBankFormat(format) {
+  const path = `/api/workspaces/${state.ws}/pack`;
+  const target = `/api/workspaces/${state.ws}/bank/formats`;
+  const result = await post(target, format, { headers: { 'If-Match': packEtags.get(path) || '' } });
+  if (packEtags.has(target)) packEtags.set(path, packEtags.get(target));
+  return result;
+}
+
+export const balance = (value) => value === null || value === undefined ? 'Chưa đủ dữ liệu / không áp dụng'
+  : `${String(value).startsWith('-') ? 'Đầu vào vượt đầu ra' : 'Đầu ra vượt đầu vào'}: ${money(String(value).replace(/^-/, ''))}`;
 
 // Short reading of a large amount, the way it is said aloud: "3,4 nghìn tỷ đồng". Empty below one million.
 export const moneyShort = (v) => {

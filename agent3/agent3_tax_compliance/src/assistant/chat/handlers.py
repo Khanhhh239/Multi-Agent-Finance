@@ -9,6 +9,7 @@ from decimal import Decimal
 
 from ..report import STATUS_VI, money
 from ..rules import load_ruleset, param
+from .. import accounting, decisions as decision_store
 
 ZERO = Decimal(0)
 
@@ -63,6 +64,8 @@ def _per_invoice_risk(items):
     per = {}
     for it in items:
         k = it.invoice_keys[0] if it.invoice_keys else f'{it.code}:{it.detail}'
+        if '#dup:' in k:
+            continue
         per[k] = max(per.get(k, ZERO), it.amount)
     return per
 
@@ -93,21 +96,26 @@ def risk_total(ctx, p, q):
         return _no_data(domain='risk_total')
     at = _items(rep, p.period, ('AT_RISK',))
     rv = _items(rep, p.period, ('REVIEW',))
-    per, per_rv = _per_invoice_risk(at), _per_invoice_risk(rv)
-    per_rv = {k: v for k, v in per_rv.items() if k not in per}
-    groups = defaultdict(lambda: [0, ZERO])
+    scoped = accounting.data(rep)
+    keys = {i.key for i in _invoices(rep, None, p.period)}
+    scoped['invoices'] = [i for i in scoped['invoices'] if i['key'] in keys]
+    categories = accounting.buckets(scoped)
+    per = {i.key: i.vat or ZERO for i in rep.invoices if categories.get(i.key) == 'AT_RISK'}
+    per_rv = {i.key: i.vat or ZERO for i in rep.invoices if categories.get(i.key) == 'REVIEW'}
+    groups = defaultdict(lambda: [0, set()])
     for it in at + rv:
         groups[(STATUS_VI[it.status], it.title)][0] += 1
-        groups[(STATUS_VI[it.status], it.title)][1] += it.amount
-    rows = [dict(status=s, issue=t, count=n, amount=money(a)) for (s, t), (n, a) in sorted(groups.items(), key=lambda kv: (kv[0][0] != STATUS_VI['AT_RISK'], -kv[1][1]))]
-    total = sum(per.values(), ZERO)
+        groups[(STATUS_VI[it.status], it.title)][1].update(it.invoice_keys)
+    # Reasons overlap, so this table reports counts; monetary totals above are disjoint.
+    rows = [dict(status=s, issue=t, count=n) for (s, t), (n, _) in sorted(groups.items())]
+    total = accounting.totals(scoped, load_ruleset(ctx.ruleset_path), ctx.as_of)['at_risk_vat']
     if not per and not per_rv:
         text = f'Trong {_scope(p.period)}: không có hóa đơn nào có nguy cơ hoặc cần xem xét theo các luật đang chạy.'
     else:
         text = (f'Trong {_scope(p.period)}: thuế GTGT đầu vào có nguy cơ bị loại là {money(total)} trên {len(per)} hóa đơn; '
                 f'thêm {len(per_rv)} khoản cần xem xét. Chia theo lý do (một hóa đơn có thể có nhiều lý do):')
-    return ChatAnswer('risk_total', text, rows, [('status', 'Mức'), ('issue', 'Lý do'), ('count', 'Số khoản'), ('amount', 'Thuế')],
-                      facts=[dict(scope=_scope(p.period), at_risk=str(total), invoices=sorted(per), review=sorted(per_rv))],
+    return ChatAnswer('risk_total', text, rows, [('status', 'Mức'), ('issue', 'Lý do'), ('count', 'Số cảnh báo')],
+                      facts=[dict(scope=_scope(p.period), at_risk=str(total) if total is not None else None, invoices=sorted(per), review=sorted(per_rv))],
                       links=[('Mở Việc cần xử lý', '#/viec')])
 
 
@@ -255,22 +263,14 @@ def _period_key(d, quarterly):
 
 
 def _vat_rows(ctx, period):
-    rep = ctx.report
-    quarterly = ctx.pack.filing_period == 'QUARTER'
-    risk = _per_invoice_risk(_items(rep, None, ('AT_RISK',)))
-    rows = {}
-    for i in _invoices(rep, None, period):
-        if not i.issue_date or i.vat is None:
-            continue
-        r = rows.setdefault(_period_key(i.issue_date, quarterly), dict(output=ZERO, input=ZERO, risk=ZERO, sales=0, purchases=0))
-        if i.role == 'SALE':
-            r['output'] += i.vat
-            r['sales'] += 1
-        else:
-            r['input'] += i.vat
-            r['purchases'] += 1
-            r['risk'] += risk.get(i.key, ZERO)
-    return dict(sorted(rows.items(), key=lambda kv: (kv[0][-4:], kv[0])))
+    return {r['period']: dict(r, input=r['input_vat'], output=r['output_vat'], risk=r['at_risk']) for r in _vat_view(ctx, period)['rows']}
+
+
+def _vat_view(ctx, period):
+    rep = accounting.data(ctx.report)
+    keys = {i.key for i in _invoices(ctx.report, None, period)}
+    rep['invoices'] = [i for i in rep['invoices'] if i['key'] in keys]
+    return accounting.vat_summary(rep, dict(filing_period=ctx.pack.filing_period, vat_method=ctx.pack.vat_method), ctx.declared())
 
 
 def purchase_summary(ctx, p, q):
@@ -281,12 +281,12 @@ def purchase_summary(ctx, p, q):
     risk = _per_invoice_risk(_items(rep, p.period, ('AT_RISK',)))
     net, vat = sum((i.net or 0) for i in invs), sum((i.vat or 0) for i in invs)
     at = sum((risk.get(i.key, ZERO) for i in invs), ZERO)
-    rows = [dict(period=k, n=r['purchases'], vat=money(r['input']), risk=money(r['risk']), safe=money(r['input'] - r['risk']))
+    rows = [dict(period=k, n=r['purchases'], vat=money(r['input']), risk=money(r['risk']), safe=money(r['no_alert_vat']))
             for k, r in _vat_rows(ctx, p.period).items() if r['purchases']]
     return ChatAnswer('purchase_summary', f'Mua vào trong {_scope(p.period)}: {len(invs)} hóa đơn, tiền hàng trước thuế {money(net)}, '
-                      f'thuế GTGT đầu vào {money(vat)}; trong đó có nguy cơ bị loại {money(at)}, phần còn lại {money(vat - at)}. '
-                      'Không tính bản nhập trùng.', rows,
-                      [('period', 'Kỳ'), ('n', 'Số hóa đơn'), ('vat', 'Thuế đầu vào'), ('risk', 'Có nguy cơ'), ('safe', 'Còn lại')],
+                      f'thuế GTGT đầu vào {money(vat)}; trong đó có nguy cơ bị loại {money(at)}. '
+                      'Không tính bản nhập trùng; phần không kê khai và chờ xem xét được tách ở trang GTGT.', rows,
+                      [('period', 'Kỳ'), ('n', 'Số hóa đơn'), ('vat', 'Thuế đầu vào'), ('risk', 'Có nguy cơ'), ('safe', 'Chưa phát hiện cảnh báo')],
                       facts=[dict(n=len(invs), net=str(net), vat=str(vat), at_risk=str(at))])
 
 
@@ -310,26 +310,28 @@ def sales_summary(ctx, p, q):
 
 
 def vat_payable(ctx, p, q):
-    rows_raw = _vat_rows(ctx, p.period)
-    if not rows_raw:
+    view = _vat_view(ctx, p.period)
+    if view['calculation_status'] == 'UNSUPPORTED_DIRECT':
+        return ChatAnswer('vat_payable', view['note'], facts=[dict(vat_method='DIRECT', calculation_status='UNSUPPORTED_DIRECT')], links=[('Mở Số liệu thuế GTGT', '#/so-lieu')])
+    if not view['rows']:
         return _no_data(domain='vat_payable')
-    declared = ctx.declared()
     rows = []
-    for k, r in rows_raw.items():
-        safe = r['input'] - r['risk']
-        d = declared.get(k) or {}
-        rows.append(dict(period=k, output=money(r['output']), input=money(safe), net=money(r['output'] - safe),
-                         declared=(money(Decimal(str(d['output_vat'])) - Decimal(str(d.get('input_vat', 0)))) if 'output_vat' in d else 'chưa nhập')))
-    last_k, last = list(rows_raw.items())[-1]
-    net = last['output'] - (last['input'] - last['risk'])
-    text = (f'{last_k}: thuế đầu ra {money(last["output"])}, thuế đầu vào sau khi trừ phần có nguy cơ {money(last["input"] - last["risk"])}, '
-            + (f'ước tính phải nộp {money(net)}.' if net >= 0 else f'ước tính còn được khấu trừ chuyển kỳ sau {money(-net)}.')
-            + ' Đây là số tham khảo: chưa gồm thuế còn được khấu trừ của kỳ trước và các khoản điều chỉnh khác trên tờ khai.')
-    if any(r['declared'] != 'chưa nhập' for r in rows):
-        text += ' Cột "Đã khai" lấy từ số liệu đã nhập ở trang Số liệu thuế GTGT.'
-    return ChatAnswer('vat_payable', text, rows, [('period', 'Kỳ'), ('output', 'Thuế đầu ra'), ('input', 'Đầu vào an toàn'),
-                                                 ('net', 'Phải nộp (nếu dương)'), ('declared', 'Đã khai')],
-                      facts=[dict(period=last_k, net=str(net))], links=[('Mở Số liệu thuế GTGT', '#/so-lieu')])
+    def balance(value):
+        if value is None:
+            return 'Chưa đủ dữ liệu'
+        return ('Đầu ra vượt đầu vào ' if value >= 0 else 'Đầu vào vượt đầu ra ') + money(abs(value))
+    for r in view['rows']:
+        rows.append(dict(period=r['period'], output=money(r['output_vat']), input=money(r['no_alert_vat']),
+                         review=money(r['review_vat']), excluded=money(r['not_claimed_vat']),
+                         without_review=balance(r['scenario_without_review']), with_review=balance(r['scenario_with_review'])))
+    last = view['rows'][-1]
+    text = (f'{last["period"]}: chưa tính phần chờ duyệt: {balance(last["scenario_without_review"])}; '
+            f'giả định phần chờ duyệt được chấp nhận: {balance(last["scenario_with_review"])}. ' + view['note'])
+    return ChatAnswer('vat_payable', text, rows, [('period', 'Kỳ'), ('output', 'Thuế đầu ra'), ('input', 'Chưa phát hiện cảnh báo'),
+                                                 ('review', 'Chờ duyệt'), ('excluded', 'Không kê khai'), ('without_review', 'Chưa tính chờ duyệt'), ('with_review', 'Nếu chờ duyệt được chấp nhận')],
+                      facts=[dict(period=r['period'], net_min=str(r['net_min']) if r['net_min'] is not None else None,
+                                  net_max=str(r['net_max']) if r['net_max'] is not None else None) for r in view['rows']],
+                      links=[('Mở Số liệu thuế GTGT', '#/so-lieu')])
 
 
 # ----------------------------------------------------------------------------- THANH_TOAN
@@ -386,36 +388,16 @@ def deadlines(ctx, p, q):
 
 
 def penalty_exposure(ctx, p, q):
-    rep = ctx.report
-    rs = load_ruleset(ctx.ruleset_path)
-    rate, rate_basis = param(rs, 'UNDERDECLARATION_PENALTY_RATE', ctx.as_of)
-    late = param(rs, 'LATE_PAYMENT_RATE_PER_DAY', ctx.as_of) if 'LATE_PAYMENT_RATE_PER_DAY' in rs['parameters'] else None
-    quarterly = ctx.pack.filing_period == 'QUARTER'
-    due = {c['period'].replace('Tờ khai thuế GTGT ', '').capitalize(): c['due'] for c in rep.calendar if c['period'].startswith('Tờ khai thuế GTGT')}
-    by_key = _inv_by_key(rep)
-    rows, tot_amt, tot_int, tot_pen, not_due = [], ZERO, ZERO, ZERO, 0
-    for k, amt in sorted(_per_invoice_risk(_items(rep, p.period, ('AT_RISK',))).items(), key=lambda kv: -kv[1]):
-        inv = by_key.get(k)
-        if not inv or not inv.issue_date:
-            continue
-        d = due.get(_period_key(inv.issue_date, quarterly))
-        days = max(0, (ctx.as_of - d).days) if d else 0
-        not_due += not days
-        interest = (amt * Decimal(str(late[0])) * days).quantize(Decimal(1)) if late else ZERO
-        pen = (amt * Decimal(str(rate))).quantize(Decimal(1))
-        rows.append(dict(invoice=_inv_label(rep, k), amount=money(amt), days=days, interest=money(interest), penalty=money(pen)))
-        tot_amt, tot_int, tot_pen = tot_amt + amt, tot_int + interest, tot_pen + pen
-    if not rows:
-        return ChatAnswer('penalty_exposure', f'Trong {_scope(p.period)}: không có khoản nào có nguy cơ nên không có tiền phạt hay tiền chậm nộp ước tính.')
-    text = (f'Giả sử các hóa đơn có nguy cơ trong {_scope(p.period)} đã được kê khai khấu trừ: tự khai bổ sung ngay thì nộp lại {money(tot_amt)} thuế '
-            f'cộng tiền chậm nộp khoảng {money(tot_int)} tính tới {ctx.as_of:%d/%m/%Y}. Nếu cơ quan thuế phát hiện, có thể bị phạt thêm tối đa '
-            f'{money(tot_pen)} (mức {Decimal(str(rate)) * 100:.0f}% số thuế khai sai).')
-    if not_due:
-        text += f' {not_due} hóa đơn thuộc kỳ chưa tới hạn nộp tờ khai: chỉ cần không kê khai, chưa phát sinh tiền chậm nộp.'
-    return ChatAnswer('penalty_exposure', text, rows, [('invoice', 'Hóa đơn'), ('amount', 'Thuế'), ('days', 'Số ngày chậm'),
-                                                      ('interest', 'Tiền chậm nộp'), ('penalty', 'Phạt tối đa nếu bị phát hiện')],
-                      citations=[x for x in (rate_basis, late[1] if late else None) if x],
-                      facts=[dict(amount=str(tot_amt), interest=str(tot_int), penalty=str(tot_pen))])
+    values = accounting.exposure(ctx.report, load_ruleset(ctx.ruleset_path))
+    allowed = {i.finding_id for i in _items(ctx.report, p.period, ('AT_RISK',))}
+    unique = {r['invoice_key']: r for r in values.values() if r['finding_id'] in allowed}
+    rows = [dict(invoice=_inv_label(ctx.report, k), amount=money(r['amount']) if r['amount'] is not None else None,
+                 days=r['days_late'], interest=money(r['interest']) if r['interest'] is not None else None,
+                 penalty=money(r['penalty']) if r['penalty'] is not None else None) for k, r in unique.items()]
+    return ChatAnswer('penalty_exposure', accounting.EXPOSURE_NOTE, rows,
+                      [('invoice', 'Hóa đơn'), ('amount', 'Thuế theo giả định'), ('days', 'Ngày sau hạn lịch'),
+                       ('interest', 'Chậm nộp theo giả định'), ('penalty', 'Phạt theo giả định')],
+                      facts=list(unique.values()), citations=sorted({b for r in unique.values() for b in r['basis']}))
 
 
 def what_if_evidence(ctx, p, q):
@@ -489,13 +471,12 @@ def data_status(ctx, p, q):
 
 
 def decisions_log(ctx, p, q):
-    path = ctx.workspace / 'decisions.json'
-    ds = json.loads(path.read_text(encoding='utf-8')) if path.exists() else []
+    ds = decision_store.history(ctx.workspace)
     if not ds:
         return ChatAnswer('decisions_log', 'Chưa có quyết định nào được ghi nhận. Quyết định được ghi khi người duyệt xử lý một việc trong trang Việc cần xử lý.',
                           links=[('Mở Việc cần xử lý', '#/viec')])
     names = {'PAYMENT_EVIDENCE_ATTACHED': 'đã bổ sung chứng từ', 'NOT_CLAIMED': 'không kê khai khấu trừ', 'CONFIRMED_OK': 'xác nhận không có vấn đề'}
-    rows = [dict(invoice=_inv_label(ctx.report, d['invoice_key']), action=names.get(d['action'], d['action']), evidence=d.get('evidence', ''),
+    rows = [dict(invoice=_inv_label(ctx.report, d.get('invoice_key', d.get('subject', ''))), action=names.get(d['action'], d['action']), evidence=d.get('evidence', ''),
                  by=d.get('by', ''), at=d.get('at', d.get('decided_at', ''))) for d in ds]
     cnt = defaultdict(int)
     for d in ds:

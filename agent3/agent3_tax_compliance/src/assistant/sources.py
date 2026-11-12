@@ -205,7 +205,8 @@ def read_invoices(folder: Path, role: str, as_of: date) -> tuple[list[InvoiceFac
             template=f['template'], symbol=f['symbol'], number=f['number'], issue_date=issued, currency=f['currency'],
             net=_dec(f['net_total']), vat=_dec(f['vat_total']), gross=_dec(f['gross_total']), payment_label=f['payment_method'],
             descriptions=tuple(r['description'].value for r in inv.items if r['description'].value and not is_note(r)),
-            guard_errors=tuple(sorted({c.code for c in inv.errors})), signed=inv.fidelity_policy == FIDELITY_SIGNED, related=related)
+            guard_errors=tuple(sorted({c.code for c in inv.errors})), signed=inv.fidelity_policy == FIDELITY_SIGNED, related=related,
+            source_sha256=__import__('hashlib').sha256(path.read_bytes()).hexdigest())
         if fact.key in seen:
             fact.duplicate_of = seen[fact.key]
             fact.key = f'{fact.key}#dup:{path.name}'   # each file keeps its own identity in the report
@@ -228,12 +229,17 @@ def read_portal_list(path: Path, pack: Pack) -> list[dict]:
     head, idx = _find_header(rows, fmt)
     if head is None:
         raise SourceError(f'{Path(path).name}: không thấy dòng tiêu đề của bảng kê cổng thuế (cần các cột MST người bán, ký hiệu, số hóa đơn, ngày lập)')
+    if not {'seller_tax_id', 'template', 'symbol', 'number', 'issue_date'} <= set(idx):
+        raise SourceError('Ánh xạ bảng kê thiếu cột định danh hoặc ngày lập.')
     out = []
     for n, row in enumerate(rows[head + 1:], head + 2):
         if not any(str(c).strip() for c in row):
             continue
-        get = lambda k: str(row[idx[k]]).strip() if idx[k] < len(row) else ''  # noqa: E731
+        raw = lambda k: row[idx[k]] if k in idx and idx[k] < len(row) else ''  # noqa: E731
+        get = lambda k: str(raw(k)).strip()  # noqa: E731
+        if not get('seller_tax_id') or not get('number'):
+            raise SourceError(f'{Path(path).name} dòng {n}: thiếu mã số thuế người bán hoặc số hóa đơn')
         out.append(dict(key=invoice_key(get('seller_tax_id'), get('template'), get('symbol'), get('number')),
-                        issue_date=get('issue_date'), vat=parse_amount(get('vat')) if 'vat' in idx else None,
-                        gross=parse_amount(get('gross')) if 'gross' in idx else None, source=f'{Path(path).name} dòng {n}'))
+                        issue_date=parse_date(raw('issue_date'), '%Y-%m-%d').isoformat(), vat=parse_amount(raw('vat')) if 'vat' in idx else None,
+                        gross=parse_amount(raw('gross')) if 'gross' in idx else None, source=f'{Path(path).name} dòng {n}'))
     return out

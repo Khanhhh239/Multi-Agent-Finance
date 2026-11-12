@@ -79,7 +79,7 @@ export async function pageAsk() {
   app().innerHTML = `<div class="ask-wrap">
     <h1 class="page">Hỏi đáp thuế và dữ liệu</h1>
     <p class="lead">Hỏi bằng ngôn ngữ tự nhiên về dữ liệu thuế của doanh nghiệp hoặc các quy định pháp luật. Trợ lý chỉ trả lời khi có căn cứ đối chiếu cụ thể từ hóa đơn hoặc điều luật.</p>
-    
+
     <div id="sugg" class="sugg" style="margin-bottom:12px"></div>
     <div id="chat" class="chat" role="log" aria-label="Hội thoại" aria-live="polite"></div>
     <div id="pending" role="status"></div>

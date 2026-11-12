@@ -41,6 +41,7 @@ class InvoiceFact:
     signed: bool                            # seller signature verified
     related: dict | None = None             # replacement / adjustment reference
     duplicate_of: str | None = None         # file of the first copy, when this file repeats an invoice
+    source_sha256: str = ''
 
     @property
     def display(self) -> str:
@@ -67,6 +68,8 @@ class RiskItem:
     action: str
     detail: str = ''
     evidence: tuple[str, ...] = ()
+    finding_id: str = ''
+    txn_ids: tuple[str, ...] = ()
 
 
 @dataclass

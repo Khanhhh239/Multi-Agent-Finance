@@ -1,5 +1,5 @@
 // Invoices, bank, calendar, questions, legal corpus and enterprise settings.
-import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put,
+import { $, api, app, button, compareDecimal, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put,
   onPageLeave, state, table, tag } from './core.js';
 import { bankProposals, lawAlerts, riskImport } from './pages_ai.js';
 
@@ -15,7 +15,9 @@ export async function pageInvoices() {
   const months = [...new Set(rep.invoices.filter((i) => i.issue_date).map((i) => i.issue_date.slice(0, 7)))].sort();
   const worst = (i) => { const its = (risk.get(i.key) || []).filter((x) => x.status !== 'INFO'); return its.some((x) => x.status === 'AT_RISK') ? 'AT_RISK' : its.some((x) => x.status === 'REVIEW') ? 'REVIEW' : its.length ? 'OTHER' : 'OK'; };
   const PAGE = 50;
-  let page = 0;
+  const viewKey = `agent3.invoices.${state.ws}.${state.platform?.profile_revision}`;
+  let savedView = {}; try { savedView = JSON.parse(sessionStorage.getItem(viewKey) || '{}'); } catch {}
+  let page = savedView.page || 0;
   app().innerHTML = `<h1 class="page">Hóa đơn</h1><p class="lead">${rep.invoices.length} hóa đơn đọc từ tệp XML. Lọc, tìm và xem theo trang 50 dòng; bấm tiêu đề cột để sắp xếp; bấm dòng có cảnh báo để xử lý.</p>
     <div class="bar"><select class="cds--select-input filter-select" id="role" aria-label="Loại hóa đơn"><option value="">Mua vào và bán ra</option><option value="PURCHASE">Mua vào</option><option value="SALE">Bán ra</option></select>
       <select class="cds--select-input filter-select" id="st" aria-label="Tình trạng"><option value="">Mọi tình trạng</option><option value="AT_RISK">Có nguy cơ</option><option value="REVIEW">Cần xem xét</option><option value="OK">Không cảnh báo</option><option value="UNPAID">Chưa ghép thanh toán</option></select>
@@ -24,14 +26,14 @@ export async function pageInvoices() {
       <span class="muted small" id="icount" role="status"></span>${button('Xóa bộ lọc', 'ghost', 'id="reset-invoices"')}
       <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx">Xuất Excel</a></div>
     <div id="ilist"></div>`;
-  let sort = ['issue_date', -1];
-  const keyOf = { issue_date: (i) => i.issue_date || '', gross: (i) => Number(i.gross || 0), vat: (i) => Number(i.vat || 0), seller: (i) => (i.role === 'SALE' ? i.buyer_name : i.seller_name) || '' };
+  let sort = savedView.sort || ['issue_date', -1];
+  const keyOf = { issue_date: (i) => i.issue_date || '', gross: (i) => i.gross || '0', vat: (i) => i.vat || '0', seller: (i) => (i.role === 'SALE' ? i.buyer_name : i.seller_name) || '' };
   const paint = () => {
     const role = $('#role').value; const st = $('#st').value; const mon = $('#mon').value; const q = $('#iq').value.trim().toLowerCase();
     const view = rep.invoices.filter((i) => (!role || i.role === role) && (!mon || (i.issue_date || '').startsWith(mon))
       && (!st || (st === 'UNPAID' ? i.role === 'PURCHASE' && !matched.get(i.key) : worst(i) === st))
       && (!q || `${invLabel(i)} ${i.number} ${i.seller_name} ${i.seller_tax_id} ${i.buyer_name || ''} ${(i.descriptions || []).join(' ')}`.toLowerCase().includes(q)))
-      .sort((x, y) => { const a = keyOf[sort[0]](x); const b = keyOf[sort[0]](y); return (a > b ? 1 : a < b ? -1 : 0) * sort[1]; });
+      .sort((x, y) => { const a = keyOf[sort[0]](x); const b = keyOf[sort[0]](y); return (['gross', 'vat'].includes(sort[0]) ? compareDecimal(a, b) : a > b ? 1 : a < b ? -1 : 0) * sort[1]; });
     const pages = Math.max(1, Math.ceil(view.length / PAGE));
     page = Math.min(page, pages - 1);
     const th = (k, l, num) => `<th class="${num ? 'num ' : ''}sortable" aria-sort="${sort[0] === k ? (sort[1] > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" class="sort-button" data-sort="${k}">${esc(l)}${sort[0] === k ? (sort[1] > 0 ? ' ↑' : ' ↓') : ''}</button></th>`;
@@ -41,7 +43,7 @@ export async function pageInvoices() {
         const m = matched.get(i.key);
         const its = (risk.get(i.key) || []).filter((x) => x.status !== 'INFO');
         const integrity = i.guard_errors.length ? tag('AT_RISK', `Lỗi ${i.guard_errors.length}`) : i.signed ? tag('LLM_VERIFIED', 'Chữ ký hợp lệ') : tag('INFO', 'Không ký');
-        return `<tr class="${its.length ? 'clickable' : ''}" ${its.length ? `data-go="#/viec?open=${esc(i.key)}"` : ''}><td>${esc(invLabel(i))}${i.duplicate_of ? ' <span class="muted small">(bản trùng)</span>' : ''}<div class="muted small">${i.role === 'SALE' ? 'Bán ra' : 'Mua vào'}</div></td><td>${dmy(i.issue_date)}</td>
+        return `<tr class="${its.length ? 'clickable' : ''}" ${its.length ? `data-go="#/viec?open=${encodeURIComponent(i.key)}"` : ''}><td>${esc(invLabel(i))}${i.duplicate_of ? ' <span class="muted small">(bản trùng)</span>' : ''}<div class="muted small">${i.role === 'SALE' ? 'Bán ra' : 'Mua vào'}</div></td><td>${dmy(i.issue_date)}</td>
           <td>${esc(i.role === 'SALE' ? i.buyer_name : i.seller_name)}</td><td class="num">${money(i.gross)}</td><td class="num">${money(i.vat)}</td><td>${integrity}</td>
           <td>${i.role === 'SALE' ? '' : m ? (m.status === 'MATCHED' ? 'Đã ghép' : 'Cần xác nhận') : '<span class="muted">Chưa ghép</span>'}</td><td><div class="chips">${its.map((x) => tag(x.status, x.title.length > 40 ? `${x.title.slice(0, 38)}…` : x.title)).join('')}</div></td></tr>`;
       }).join('')}</tbody></table></div>
@@ -54,7 +56,10 @@ export async function pageInvoices() {
   ['role', 'st', 'mon'].forEach((id) => { $(`#${id}`).onchange = () => { page = 0; paint(); }; });
   $('#iq').oninput = () => { page = 0; paint(); };
   $('#reset-invoices').onclick = () => { ['role', 'st', 'mon', 'iq'].forEach((id) => { $(`#${id}`).value = ''; }); page = 0; paint(); };
+  ['role', 'st', 'mon', 'iq'].forEach(id => { $(`#${id}`).value = savedView[id] || ''; });
   paint();
+  onPageLeave(() => { if (!app().querySelector('#ilist')) return; try { sessionStorage.setItem(viewKey, JSON.stringify({sort, page, scroll: window.scrollY, ...Object.fromEntries(['role', 'st', 'mon', 'iq'].map(id => [id, $(`#${id}`).value]))})); } catch {} });
+  requestAnimationFrame(() => { if (app().querySelector('#ilist')) window.scrollTo(0, savedView.scroll || 0); });
 }
 
 export async function pageBank() {
@@ -62,7 +67,7 @@ export async function pageBank() {
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Ngân hàng</h1>${notice('info', 'Chưa phân tích')}`; return; }
   const usedBy = new Map(rep.matches.flatMap((m) => m.txn_ids.map((t) => [t, m])));
-  app().innerHTML = `<h1 class="page">Ngân hàng</h1><p class="lead">${rep.transactions.length} giao dịch từ các tệp sao kê. Một khoản chi chỉ được ghép khi đúng số tiền và có dấu hiệu nhận ra người bán (tài khoản, tên hoặc mã số thuế, số hóa đơn).</p><div id="props"></div>
+  app().innerHTML = `<h1 class="page">Ngân hàng</h1><a href="#/du-lieu">Chọn bảng kê cổng thuế đang dùng</a><p class="lead">${rep.transactions.length} giao dịch từ các tệp sao kê. Một khoản chi chỉ được ghép khi đúng số tiền và có dấu hiệu nhận ra người bán (tài khoản, tên hoặc mã số thuế, số hóa đơn).</p><div id="props"></div>
     ${table(['Ngày', 'Chiều', { label: 'Số tiền', num: true }, 'Đối ứng', 'Nội dung', 'Ghép với hóa đơn', 'Nguồn'], rep.transactions.map((t) => {
       const m = usedBy.get(t.txn_id);
       return `<tr><td>${dmy(t.booked)}</td><td>${t.direction === 'OUT' ? 'Chi' : 'Thu'}</td><td class="num">${money(t.amount)}</td>
@@ -75,8 +80,8 @@ export async function pageBank() {
 export async function pageCalendar() {
   if (needWorkspace()) return;
   const rep = await loadReport();
-  app().innerHTML = `<h1 class="page">Lịch thuế</h1><p class="lead">Hạn nộp tờ khai thuế giá trị gia tăng theo kỳ khai, tạm nộp thuế thu nhập doanh nghiệp theo quý và quyết toán năm; căn cứ đọc từ kho luật và được kiểm tra còn hiệu lực. Hạn chưa dời khi trùng ngày nghỉ.</p>
-    ${table(['Kỳ', 'Hạn nộp', 'Tình trạng', 'Căn cứ'], (rep?.calendar || []).map((c) => `<tr><td>${esc(c.period)}</td><td>${dmy(c.due)}</td><td>${esc(c.status)}${c.open_items ? `<div><a href="#/viec" class="risk-text">còn ${c.open_items} việc chưa xử lý của kỳ này</a></div>` : ''}${c.extension ? `<div class="muted small">${esc(c.extension)}</div>` : ''}</td><td class="muted small">${esc(c.basis)}</td></tr>`), 'Chưa có dữ liệu.')}`;
+  app().innerHTML = `<h1 class="page">Lịch thuế</h1><p class="lead">Hạn lịch theo bộ quy tắc nháp, đã tính dời ngày nghỉ theo cấu hình. Tình trạng được tính tại ngày phân tích ${dmy(rep?.meta.as_of)}; chưa xác nhận đã kê khai hoặc nộp tiền.</p>
+    ${table(['Kỳ', 'Hạn nộp', 'Tình trạng', 'Căn cứ'], (rep?.calendar || []).map((c) => `<tr><td>${esc(c.period)}</td><td>${dmy(c.due)}${c.moved_from ? `<div class="muted small">Dời từ ${dmy(c.moved_from)} do ngày nghỉ</div>` : ''}</td><td>${esc(c.status)}${c.open_items ? `<div><a href="#/viec" class="risk-text">còn ${c.open_items} việc chưa xử lý của kỳ này</a></div>` : ''}${c.extension ? `<div class="muted small">${esc(c.extension)}</div>` : ''}</td><td class="muted small">${esc(c.basis)}</td></tr>`), 'Chưa có dữ liệu.')}`;
 }
 
 export async function pageAsk() {

@@ -1,7 +1,7 @@
 // The controlled AI layer in the interface: plain explanations, line classification, bank-text proposals,
 // explanation letter and dossier, law alerts, VAT figures. AI output is always labelled and verified; people decide.
 import { toast } from './ux.js';
-import { $, api, app, button, dmy, esc, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, onPageLeave, pageSignal, post, state, store, table, tag } from './core.js';
+import { $, api, app, balance, button, decide, decisionContext, dmy, esc, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, onPageLeave, pageSignal, post, state, store, table, tag } from './core.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 const aiTag = (mode) => (mode === 'AI_VERIFIED' ? tag('LLM_VERIFIED', 'AI, đã kiểm tra') : tag('INFO', 'Câu mẫu'));
@@ -41,6 +41,7 @@ export async function aiToolbar(el) {
 export async function bankProposals(el) {
   const s = await api(`/api/workspaces/${state.ws}/ai`);
   if (!s.proposals.length) { el.innerHTML = ''; return; }
+  const context = await decisionContext();
   const by = store.get('agent3.reviewer') || '';
   el.innerHTML = `<h2 class="section">Đề xuất ghép từ nội dung chuyển khoản (${s.proposals.length})</h2>
     <p class="muted">Số tiền khớp chính xác; AI đọc nội dung chuyển khoản và tìm thấy cụm chữ nhắc tới người bán. Xác nhận thì hệ thống ghi quyết định có tên người duyệt và chạy lại.</p>
@@ -49,15 +50,17 @@ export async function bankProposals(el) {
       <td>${dmy(p.booked)}<div class="muted small">${esc(p.source || '')}</div></td><td class="num">${money(p.amount)}</td><td>${esc(p.description || '')}<div class="muted small">${esc(p.counterparty_name || '')}</div></td>
       <td>${esc(p.seller_name)}<div class="muted small">số ${esc(p.invoice_number || '')}</div></td><td>cụm "<strong>${esc(p.name_in_text)}</strong>", độ giống ${p.similarity}<div class="muted small">${esc(p.reason)}</div></td>
       <td><div class="chips">${button('Xác nhận', 'primary', `data-acc="${n}"`)}${button('Bác bỏ', 'ghost', `data-rej="${n}"`)}</div></td></tr>`))}<div id="pmsg"></div>`;
-  const decide = async (n, accept) => {
+  const decideProposal = async (n, accept) => {
     const who = $('#reviewer').value.trim();
-    if (accept && !who) { $('#pmsg').innerHTML = notice('warning', 'Cần tên người duyệt'); return; }
+    if (!who) { $('#pmsg').innerHTML = notice('warning', 'Cần tên người duyệt'); return; }
     store.set('agent3.reviewer', who);
-    try { await post(`/api/workspaces/${state.ws}/ai/bank/decide`, { txn_id: s.proposals[n].txn_id, invoice_key: s.proposals[n].invoice_key, accept, by: who }); if (accept) window.sonStamp?.(who); rerender(); }
+    const buttons = [...el.querySelectorAll('button')]; buttons.forEach(b => { b.disabled = true; });
+    try { const result = await decide(`/api/workspaces/${state.ws}/ai/bank/decide`, { txn_id: s.proposals[n].txn_id, invoice_key: s.proposals[n].invoice_key, accept, by: who }, context); if (result.report_pending) toast('Quyết định đã lưu; cần chạy lại báo cáo', result.message, 'warning'); if (accept) window.sonStamp?.(who); rerender(); }
     catch (err) { $('#pmsg').innerHTML = notice('error', 'Không ghi được', err.message); }
+    finally { buttons.forEach(b => { b.disabled = false; }); }
   };
-  el.querySelectorAll('[data-acc]').forEach((b) => { b.onclick = () => decide(Number(b.dataset.acc), true); });
-  el.querySelectorAll('[data-rej]').forEach((b) => { b.onclick = () => decide(Number(b.dataset.rej), false); });
+  el.querySelectorAll('[data-acc]').forEach((b) => { b.onclick = () => decideProposal(Number(b.dataset.acc), true); });
+  el.querySelectorAll('[data-rej]').forEach((b) => { b.onclick = () => decideProposal(Number(b.dataset.rej), false); });
 }
 
 // ---------------------------------------------------------------- A3 + F5 explanation letter and dossier
@@ -97,6 +100,7 @@ export async function pageDossier() {
   $('#make').onclick = async () => {
     const invoice_keys = [...picked];
     if (!invoice_keys.length) { $('#mk').innerHTML = notice('warning', 'Chọn ít nhất một hóa đơn'); return; }
+    const submit = $('#make'); submit.disabled = true;
     $('#mk').innerHTML = loading('Đang gom chứng từ và soạn thư bằng mô hình trên máy (khoảng 1 đến 2 phút)');
     try {
       const r = await post(`/api/workspaces/${state.ws}/dossier`, { invoice_keys, request_text: $('#req').value });
@@ -110,6 +114,7 @@ export async function pageDossier() {
         ${r.passages.length ? `<h3>Điều khoản</h3><ul>${r.passages.map((p) => `<li><strong>${esc(p.pid)}</strong> <a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.path)}</a></li>`).join('')}</ul>` : ''}
         <p class="muted small">Bản nháp; người có thẩm quyền phải đọc, sửa và ký trước khi gửi.</p></div>`;
     } catch (err) { $('#mk').innerHTML = notice('error', 'Không lập được hồ sơ', err.message); }
+    finally { if (submit.isConnected) submit.disabled = false; }
   };
 }
 
@@ -117,26 +122,28 @@ export async function pageDossier() {
 export async function pageVat() {
   if (needWorkspace()) return;
   let v;
-  try { v = await api(`/api/workspaces/${state.ws}/vat-summary`); } catch (err) { if (err.name === 'AbortError') throw err; app().innerHTML = `<h1 class="page">Số liệu thuế GTGT</h1>${notice('info', 'Chưa phân tích', err.message)}`; return; }
+  try { v = await api(`/api/workspaces/${state.ws}/vat-summary`); } catch (err) { if (err.name === 'AbortError') throw err; const missing = [404, 409].includes(err.status); app().innerHTML = `<h1 class="page">Số liệu thuế GTGT</h1>${notice(missing ? 'info' : 'error', missing ? 'Cần chạy phân tích' : 'Không tải được số liệu', err.message)}`; return; }
   const diff = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? tag('LLM_VERIFIED', 'Khớp') : `<span class="risk-text">${Number(x) > 0 ? '+' : ''}${money(x)}</span>`);
   const change = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? 'không đổi' : `${Number(x) > 0 ? 'tăng' : 'giảm'} ${money(Math.abs(Number(x)))}`);
   app().innerHTML = `<h1 class="page">Số liệu thuế giá trị gia tăng theo kỳ</h1><p class="lead">${esc(v.note)}</p>
-    ${table(['Kỳ', { label: 'Thuế đầu ra', num: true }, { label: 'Thuế đầu vào', num: true }, { label: 'Có nguy cơ bị loại', num: true }, 'So với kỳ trước', { label: 'Đầu vào an toàn', num: true }, { label: 'Phải nộp (ước tính)', num: true }, 'Hóa đơn'],
-      v.rows.map((r) => `<tr><td>${esc(r.period)}</td><td class="num">${money(r.output_vat)}</td><td class="num">${money(r.input_vat)}</td><td class="num">${Number(r.at_risk) ? `<strong>${money(r.at_risk)}</strong>` : money(0)}</td>
-        <td class="muted small">${change(r.risk_change)}</td><td class="num">${money(r.input_safe)}</td><td class="num">${money(r.net)}</td><td class="muted small">${r.purchases} mua vào, ${r.sales} bán ra${r.review ? `, ${r.review} cần xem` : ''}</td></tr>`))}
+    ${table(['Kỳ', 'Thuế đầu ra', 'Thuế đầu vào', 'Không kê khai', 'Có nguy cơ', 'Chờ xem xét', 'Chưa phát hiện cảnh báo', 'Chênh lệch: chưa tính chờ duyệt', 'Chênh lệch: nếu chờ duyệt được chấp nhận'],
+      v.rows.map(r => `<tr><td>${esc(r.period)}</td><td class="num">${money(r.output_vat)}</td><td class="num">${money(r.input_vat)}</td><td class="num">${money(r.not_claimed_vat)}</td><td class="num">${money(r.at_risk)}</td><td class="num">${money(r.review_vat)}</td><td class="num">${money(r.no_alert_vat)}</td><td>${balance(r.scenario_without_review)}</td><td>${balance(r.scenario_with_review)}</td></tr>`))}
+    ${v.calculation_status === 'UNSUPPORTED_DIRECT' ? notice('warning', 'Chưa hỗ trợ tính thuế theo phương pháp trực tiếp', 'Chỉ hiển thị số liệu hóa đơn; không tính thuế phải nộp bằng công thức khấu trừ.') : ''}
     <h2 class="section">Đối chiếu với số đã khai</h2>
-    <p class="muted">Nhập số thuế đầu ra và đầu vào đã khai trên tờ khai của từng kỳ (lấy từ tờ khai đã nộp). Hệ thống so với số tính từ hóa đơn: chênh lệch đầu ra là dấu hiệu khai thiếu doanh thu hoặc sót hóa đơn; đầu vào khai cao hơn phần an toàn là phần có thể bị loại.</p>
-    <form id="decl">${table(['Kỳ', 'Đầu ra đã khai', 'Chênh lệch đầu ra', 'Đầu vào đã khai', 'Chênh lệch so với đầu vào an toàn'], v.rows.map((r) => `<tr><td>${esc(r.period)}</td>
-      <td><input class="cds--text-input decl" data-p="${esc(r.period)}" data-k="output_vat" value="${r.declared?.output_vat ?? ''}" placeholder="vd 20.000.000" inputmode="numeric"></td><td>${diff(r.diff_output)}</td>
-      <td><input class="cds--text-input decl" data-p="${esc(r.period)}" data-k="input_vat" value="${r.declared?.input_vat ?? ''}" placeholder="vd 15.084.000" inputmode="numeric"></td><td>${diff(r.diff_input)}</td></tr>`))}
+    <p class="muted">Nhập số liệu lấy từ tờ khai để đối chiếu với hóa đơn đã nạp. Chênh lệch cần kiểm tra chứng từ, không tự chứng minh khai sai hay xác nhận đã nộp tờ khai.</p>
+    <form id="decl">${table(['Kỳ', 'Đầu ra đã khai', 'Chênh lệch đầu ra', 'Đầu vào đã khai', 'Chênh lệch với phần chưa có cảnh báo'], v.rows.map((r) => `<tr><td>${esc(r.period)}</td>
+      <td><input class="cds--text-input decl" aria-label="Đầu ra đã khai ${esc(r.period)}" data-p="${esc(r.period_key)}" data-k="output_vat" value="${r.declared?.output_vat ?? ''}" placeholder="vd 20.000.000" inputmode="numeric"></td><td>${diff(r.diff_output)}</td>
+      <td><input class="cds--text-input decl" aria-label="Đầu vào đã khai ${esc(r.period)}" data-p="${esc(r.period_key)}" data-k="input_vat" value="${r.declared?.input_vat ?? ''}" placeholder="vd 15.084.000" inputmode="numeric"></td><td>${diff(r.diff_input)}</td></tr>`))}
       <div class="bar">${button('Lưu và đối chiếu', 'primary', 'type="submit"')}</div></form>
-    ${v.rows.some((r) => !r.sales) ? notice('info', 'Chưa có hóa đơn bán ra ở một số kỳ', 'Số phải nộp ước tính sẽ âm nếu thiếu thuế đầu ra; nạp hóa đơn bán ra để số liệu đầy đủ.') : ''}`;
+    ${v.rows.some((r) => !r.sales) ? notice('info', 'Chưa có hóa đơn bán ra ở một số kỳ', 'Chênh lệch chỉ phản ánh các tệp đã nạp; kiểm tra mức đầy đủ dữ liệu trước khi dùng số liệu.') : ''}`;
   $('#decl').onsubmit = async (e) => {
     e.preventDefault();
+    const submit = e.target.querySelector('button[type=submit]'); submit.disabled = true;
     const body = {};
     app().querySelectorAll('.decl').forEach((i) => { if (i.value.trim()) { body[i.dataset.p] ||= {}; body[i.dataset.p][i.dataset.k] = i.value.trim(); } });
     try { await api(`/api/workspaces/${state.ws}/declared`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); toast('Đã lưu số đã khai'); rerender(); }
     catch (err) { toast('Không lưu được', err.message, 'error'); }
+    finally { if (submit.isConnected) submit.disabled = false; }
   };
 }
 

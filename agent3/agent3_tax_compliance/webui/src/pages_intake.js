@@ -1,5 +1,5 @@
 // Data intake: one drop zone for everything, file-by-file status, editable bank mapping, coverage check before analysis.
-import { $, api, app, button, dmy, esc, field, hashParams, loadWorkspaces, loading, money, needWorkspace, notice, post, put, state, table, tag } from './core.js';
+import { $, api, app, button, dmy, esc, field, hashParams, loadWorkspaces, loading, money, needWorkspace, notice, post, put, saveBankFormat, state, table, tag } from './core.js';
 
 const KIND_LABEL = { purchase_xml: 'Hóa đơn mua vào', sales_xml: 'Hóa đơn bán ra', bank: 'Sao kê ngân hàng', portal_list: 'Bảng kê cổng thuế' };
 const FIELD_LABEL = { date: 'Ngày giao dịch', debit: 'Ghi nợ (tiền ra)', credit: 'Ghi có (tiền vào)', description: 'Nội dung', counterparty_account: 'Tài khoản đối ứng', counterparty_name: 'Tên đối ứng' };
@@ -104,10 +104,35 @@ async function mappingEditor(name) {
   box.querySelectorAll('select').forEach((sel) => { sel.onchange = refresh; });
   refresh();
   $('#save-fmt').onclick = async () => {
-    try { await post(`/api/workspaces/${state.ws}/bank/formats`, read()); $('#fmt-msg').innerHTML = notice('success', 'Đã lưu mẫu; tệp này đã đọc được'); setTimeout(() => window.dispatchEvent(new Event('hashchange')), 700); }
+    const submit = $('#save-fmt'); submit.disabled = true;
+    try { await saveBankFormat(read()); $('#fmt-msg').innerHTML = notice('success', 'Đã lưu mẫu; chạy lại phân tích để kiểm tra toàn bộ tệp'); }
     catch (err) { $('#fmt-msg').innerHTML = notice('error', 'Không lưu được', err.message); }
+    finally { if (submit.isConnected) submit.disabled = false; }
   };
   box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+export async function pageBankFormats() {
+  await api(`/api/workspaces/${state.ws}/pack`);
+  const rows = await api(`/api/workspaces/${state.ws}/details/bank`);
+  app().innerHTML = `<h1 class="page">Nhận dạng cột sao kê</h1><p class="lead">Chỉnh cách đọc các tệp đã nạp. Lưu mẫu cần quyền quản trị; thao tác này không nạp thêm tệp.</p>${detailsTable('bank', rows)}<div id="suggest"></div>`;
+  app().querySelectorAll('[data-suggest]').forEach(b => { b.onclick = () => mappingEditor(b.dataset.suggest); });
+}
+
+export async function pageDataWorkspace() {
+  const versions = await api(`/api/workspaces/${state.ws}/portal/lists`);
+  app().innerHTML = `<h1 class="page">Bảng kê cổng thuế đang sử dụng</h1>
+    <p class="lead">Các bản nguồn được giữ riêng. Chỉ bản được chọn mới được phân tích; chọn lại không xóa bản cũ.</p>
+    ${versions.error ? notice('warning', 'Cần chọn bản bảng kê', versions.error) : ''}
+    <form id="active-list"><label for="list-version">Bản nguồn</label><select id="list-version" class="cds--select-input" required><option value="">Chọn bảng kê</option>${versions.files.map(name => `<option value="${esc(name)}" ${name === versions.active ? 'selected' : ''}>${esc(name)}</option>`).join('')}</select>
+    <div class="bar">${button('Sử dụng bản này', 'primary', 'type="submit"')}<span id="list-result"></span></div></form>
+    <a class="cds--btn cds--btn--ghost" href="#/quan-tri/mau-sao-ke">Nhận dạng cột sao kê (quản trị)</a>`;
+  $('#active-list').onsubmit = async e => {
+    e.preventDefault(); const submit = e.target.querySelector('button'); submit.disabled = true;
+    try { await put(`/api/workspaces/${state.ws}/portal/active-list`, {name: $('#list-version').value}); $('#list-result').innerHTML = notice('success', 'Đã chọn bảng kê; chạy lại phân tích để áp dụng.'); }
+    catch (err) { $('#list-result').innerHTML = notice('error', 'Không đổi được bảng kê', err.message); }
+    finally { if (submit.isConnected) submit.disabled = false; }
+  };
 }
 
 export async function pageIntake() {

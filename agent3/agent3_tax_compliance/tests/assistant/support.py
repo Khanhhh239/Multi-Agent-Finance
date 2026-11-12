@@ -29,3 +29,12 @@ def managed_company(client, profile=None, demo=False):
 
 def pack_headers(client, wid):
     return {'If-Match': client.get(f'/api/workspaces/{wid}/pack').headers['etag']}
+
+
+def decide(client, wid, body, bulk=False):
+    import uuid
+    base = f'/api/workspaces/{wid}'
+    report = client.get(base + '/report').json()
+    headers = {'If-Match': client.get(base + '/decisions').headers['etag']}
+    payload = dict(body, request_id=uuid.uuid4().hex, report_revision=report['meta']['report_revision'])
+    return client.post(base + '/decisions' + ('/bulk' if bulk else ''), json=payload, headers=headers)

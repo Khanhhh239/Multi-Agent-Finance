@@ -43,8 +43,16 @@ def match_payments(invoices: list[InvoiceFact], txns: list[BankTxn], thresholds:
     remaining = []
     for inv in pending:                                   # human decisions first
         d = decisions.get(inv.key)
+        if d and '_scopes' in d:
+            d = d['_scopes'].get('payment')
         if d and d['action'] == 'PAYMENT_EVIDENCE_ATTACHED':
-            out.append(Match((inv.key,), (), 'MATCHED', 'DECISION', f'{d["evidence"]} (xác nhận bởi {d["by"]})'))
+            tids = tuple(d.get('txn_ids', ()))
+            valid = all(t in {x.txn_id for x in debits} for t in tids)
+            if not valid or used.intersection(tids):
+                remaining.append(inv)
+                continue
+            used.update(tids)
+            out.append(Match((inv.key,), tids, 'MATCHED', 'DECISION', f'{d["evidence"]} (xác nhận bởi {d["by"]})'))
         else:
             remaining.append(inv)
 
@@ -53,6 +61,8 @@ def match_payments(invoices: list[InvoiceFact], txns: list[BankTxn], thresholds:
     pairs = []
     for inv in remaining:
         for t in debits:
+            if t.txn_id in used:
+                continue
             if not _in_window(inv, t, before, after) or abs(t.amount - inv.gross) > ONE:
                 continue
             sig = seller_signal(inv, t)

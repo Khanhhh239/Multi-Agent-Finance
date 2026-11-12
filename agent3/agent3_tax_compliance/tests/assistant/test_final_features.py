@@ -1,4 +1,4 @@
-from support import managed_company, pack_headers
+from support import managed_company, pack_headers, decide
 """R14, exposure, declared figures, bulk and confirmed-OK decisions, Excel export, deadline open items."""
 import zipfile
 from datetime import date
@@ -32,9 +32,9 @@ def test_exposure_compares_self_correction_with_being_found(env):
     ex = c.get(f'/api/workspaces/{wid}/exposure').json()
     i = next(n for n, it in enumerate(rep['items']) if it['status'] == 'AT_RISK' and it['code'] == 'R01_PAYMENT_EVIDENCE')
     e = ex[str(i)]
-    assert e['declared'] is True and e['days_late'] > 0
+    assert e['declared'] is None and e['overdue'] is True and e['days_late'] > 0
     assert float(e['penalty']) == round(float(e['amount']) * 0.2) and float(e['interest']) == round(float(e['amount']) * 0.0003 * e['days_late'])
-    assert any('Điều 44' in b for b in e['basis'])
+    assert e['scenario'] and e['filing_status'] == 'UNKNOWN'
 
 
 def test_declared_figures_show_the_difference(env):
@@ -50,12 +50,12 @@ def test_bulk_and_confirmed_ok_decisions(env):
     c, wid, rep = env
     review = [i for i in rep['items'] if i['status'] == 'REVIEW' and i['code'] in ('R08_RISKY_SELLER', 'R13_LOW_VOLUME_SELLER')]
     keys = [i['invoice_keys'][0] for i in review]
-    out = c.post(f'/api/workspaces/{wid}/decisions/bulk', json=dict(invoice_keys=keys, action='CONFIRMED_OK', evidence='Đã kiểm tra hợp đồng và giao nhận', by='Kế toán trưởng')).json()
+    out = decide(c, wid, dict(finding_ids=[i['finding_id'] for i in review], action='CONFIRMED_OK', evidence='Đã kiểm tra hợp đồng và giao nhận', by='Kế toán trưởng'), bulk=True).json()
     assert out['decisions'] == len(keys)
     after = c.get(f'/api/workspaces/{wid}/report').json()
     done = [i for i in after['items'] if i['invoice_keys'] and i['invoice_keys'][0] in keys and i['code'] in ('R08_RISKY_SELLER', 'R13_LOW_VOLUME_SELLER')]
     assert done and all(i['status'] == 'INFO' and 'Kế toán trưởng' in i['detail'] for i in done)
-    bad = c.post(f'/api/workspaces/{wid}/decisions/bulk', json=dict(invoice_keys=keys, action='IGNORE', evidence='x', by='y'))
+    bad = decide(c, wid, dict(invoice_keys=keys, action='IGNORE', evidence='x', by='y'), bulk=True)
     assert bad.status_code == 422
 
 

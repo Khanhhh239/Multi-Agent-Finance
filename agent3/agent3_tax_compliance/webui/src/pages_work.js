@@ -1,12 +1,15 @@
 // Overview, data intake and the review queue.
 import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, moneyShort, needWorkspace, notice, post, put,
-  state, store, table, tag } from './core.js';
+  state, store, table, tag, decide, decisionContext, onPageLeave } from './core.js';
 import { aiToolbar, explainBox } from './pages_ai.js';
 import { pageWelcome } from './pages_config.js';
 import { deadlineBanner, freshBanner, nextSteps, sellerWatch, toast } from './ux.js';
 import { bindDialog, closeDialog } from './interactions.js';
 
-const itemId = (it) => `${it.code}|${it.invoice_keys.join(',')}`;
+const itemId = (it) => it.finding_id || `${it.code}|${it.invoice_keys.join(',')}`;
+let reviewItems = [];
+let reviewSnapshot = null;
+let lastOpened = null;
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 
@@ -19,29 +22,13 @@ export async function pageOverview() {
   const period = rep?.meta.period ? ` Dữ liệu từ ${dmy(rep.meta.period[0])} đến ${dmy(rep.meta.period[1])}.` : '';
 
 
-  // Series for the sparklines and the small table, from the report only (nothing estimated).
-  // By month when the data spans several months; otherwise by week, so a single month still shows a shape.
-  const dated = (rep?.items || []).filter((it) => ['AT_RISK', 'REVIEW', 'OPPORTUNITY'].includes(it.status))
-    .map((it) => ({ it, d: (invoiceOf(it.invoice_keys[0])?.issue_date || '').slice(0, 10) })).filter((x) => x.d);
-  const byWeek = new Set(dated.map((x) => x.d.slice(0, 7))).size < 2;
-  const bucketOf = (d) => {
-    if (!byWeek) return d.slice(0, 7);
-    const day = Number(d.slice(8, 10));
-    return `${d.slice(0, 7)}-${String(Math.min(4, Math.floor((day - 1) / 7)) + 1)}`;   // four buckets per month: 1-7, 8-14, 15-21, 22-end
-  };
-  const bucketLabel = (k) => {
-    if (!byWeek) return `Tháng ${Number(k.slice(5, 7))}/${k.slice(0, 4)}`;
-    const w = Number(k.slice(8)); const mo = Number(k.slice(5, 7));
-    const last = new Date(Number(k.slice(0, 4)), mo, 0).getDate();
-    return `${(w - 1) * 7 + 1}–${w === 4 ? last : w * 7}/${mo}/${k.slice(0, 4)}`;
-  };
-  const monthly = (() => {
-    const m = {};
-    dated.forEach(({ it, d }) => { const e = m[bucketOf(d)] ||= { AT_RISK: 0, REVIEW: 0, OPPORTUNITY: 0 }; e[it.status] += Number(it.amount || 0); });
-    return Object.keys(m).sort().map((k) => ({ k, ...m[k] }));
-  })();
+  // Monetary aggregation lives in the backend; Number conversion is for SVG coordinates only.
+  const byWeek = false;
+  const bucketLabel = (key) => key === 'undated' ? 'Chưa rõ ngày' : `Tháng ${key.slice(5)}/${key.slice(0, 4)}`;
+  const monthly = rep?.totals.series || [];
   const spark = (status) => {
-    const v = monthly.map((e) => e[status]);
+    if (t?.missing_vat_invoices) return '';
+    const v = monthly.map((e) => Math.abs(Number(e[status] || 0)));
     if (v.length < 2 || !v.some(Boolean)) return '';
     const W = 92; const H = 28; const max = Math.max(...v);
     const pts = v.map((x, i) => [2 + (i / (v.length - 1)) * (W - 8), H - 4 - (x / max) * (H - 10)]);
@@ -49,14 +36,15 @@ export async function pageOverview() {
     return `<svg class="spark spark-${status.toLowerCase()}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Diễn biến theo tháng, ${v.length} tháng"><polyline points="${pts.map((q) => q.map((n) => n.toFixed(1)).join(',')).join(' ')}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.6"/></svg>`;
   };
   const monthChart = () => {
+    if (t?.missing_vat_invoices) return notice('info', 'Chưa đủ số thuế để vẽ biểu đồ', 'Một số hóa đơn thiếu số thuế; không thay giá trị thiếu bằng 0.');
     if (monthly.length < 2) return '';
-    const total = (e) => e.AT_RISK + e.REVIEW;
+    const total = (e) => Number(e.total || 0);
     const max = Math.max(...monthly.map(total), 1);
     const X = 118; const BW = 300; const ROW = 34;
     const rows = monthly.map((e, i) => {
       const y = 10 + i * ROW;
-      const wr = (e.AT_RISK / max) * BW; const wv = (e.REVIEW / max) * BW;
-      const parts = [e.AT_RISK ? `${moneyShort(e.AT_RISK) || money(e.AT_RISK)} có nguy cơ` : '', e.REVIEW ? `${moneyShort(e.REVIEW) || money(e.REVIEW)} cần xem xét` : ''].filter(Boolean);
+      const wr = (Math.abs(Number(e.AT_RISK)) / max) * BW; const wv = (Math.abs(Number(e.REVIEW)) / max) * BW;
+      const parts = [Number(e.AT_RISK) ? `${moneyShort(e.AT_RISK) || money(e.AT_RISK)} có nguy cơ` : '', Number(e.REVIEW) ? `${moneyShort(e.REVIEW) || money(e.REVIEW)} cần xem xét` : ''].filter(Boolean);
       return `<text class="t-month" x="0" y="${y + 15}">${esc(bucketLabel(e.k))}</text>
         ${wr ? `<rect class="bar-risk" x="${X}" y="${y}" width="${wr.toFixed(1)}" height="20"/>` : ''}${wv ? `<rect class="bar-review" x="${(X + wr).toFixed(1)}" y="${y}" width="${wv.toFixed(1)}" height="20"/>` : ''}
         <text class="t-val" x="${(X + wr + wv + 10).toFixed(1)}" y="${y + 15}">${esc(parts.join(' · ') || 'không có việc')}</text>`;
@@ -73,9 +61,11 @@ export async function pageOverview() {
       ${period ? `<span>${period.trim()}</span>` : ''}
     </div>
     ${ws.simulated ? '<p class="lead">Dữ liệu mô phỏng đối soát nội bộ, không phải doanh nghiệp thật.</p>' : ''}
+    ${notice('warning', 'Kết quả rà soát theo quy tắc nháp', 'Chưa có chuyên gia thuế duyệt. Cảnh báo và ước tính không phải kết luận vi phạm hoặc số thuế phải nộp.')}
+    ${(rep?.meta.data_warnings || []).map(w => notice('warning', w)).join('')}
     <div id="fresh"></div>
     <div id="watch"></div>
-    ${deadlineBanner(rep, rep ? new Date(rep.meta.as_of) : new Date())}
+    ${deadlineBanner(rep)}
 
     <div class="kpis">
       <div class="kpi kpi-risk">
@@ -85,16 +75,16 @@ export async function pageOverview() {
         </div>
         <div class="value risk">${t ? money(t.at_risk_vat) : '—'}</div>
         ${t && moneyShort(t.at_risk_vat) ? `<span class="short-read">khoảng ${moneyShort(t.at_risk_vat)}</span>` : ''}
-        <div class="sub">${t ? `${t.at_risk_invoices} hóa đơn vi phạm điều kiện khấu trừ` : 'Chưa phân tích'}</div>
+        <div class="sub">${t ? `${t.at_risk_invoices} hóa đơn có cảnh báo cần kiểm tra` : 'Chưa phân tích'}</div>
       </div>
       <div class="kpi">
         <div class="kpi-head">
-          <span class="label">Ước tính phạt tối đa</span>
+          <span class="label">Kịch bản phạt nếu xác định khai sai</span>
           ${spark('AT_RISK')}
         </div>
         <div class="value">${t ? money(t.penalty_estimate) : '—'}</div>
         ${t && moneyShort(t.penalty_estimate) ? `<span class="short-read">khoảng ${moneyShort(t.penalty_estimate)}</span>` : ''}
-        <div class="sub">${t ? `${Math.round(t.penalty_rate * 100)}% số thuế khai thiếu theo luật thuế` : 'Chưa có số liệu'}</div>
+        <div class="sub">${t ? `Giả định có thiếu thuế; chưa xác nhận đã kê khai` : 'Chưa có số liệu'}</div>
       </div>
       <div class="kpi kpi-warn">
         <div class="kpi-head">
@@ -175,11 +165,13 @@ export async function pageOverview() {
         </div>
 
         <h2 class="section">Hạn nộp gần nhất</h2>
-        ${table(['Kỳ', 'Hạn', 'Tình trạng'], (rep?.calendar || []).slice(-3).reverse().map((c) => `<tr>
+        ${table(['Kỳ', 'Hạn', 'Tình trạng'], (rep?.calendar || []).filter(c => c.due >= new Date().toLocaleDateString('sv-SE')).slice(0, 3).map((c) => `<tr>
           <td><strong>${esc(c.period)}</strong></td>
           <td>${dmy(c.due)}</td>
           <td>${esc(c.status)}</td>
-        </tr>`), 'Chưa có dữ liệu lịch.')}
+        </tr>`), 'Chưa có hạn sắp tới trong dữ liệu đã nạp.')}
+        <details><summary>Hạn đã qua — cần kiểm tra tình trạng kê khai</summary>
+        ${table(['Kỳ', 'Hạn'], (rep?.calendar || []).filter(c => c.due < new Date().toLocaleDateString('sv-SE')).map(c => `<tr><td>${esc(c.period)}</td><td>${dmy(c.due)}</td></tr>`), 'Không có hạn đã qua.')}</details>
       </div>
     </div>
     <div id="next"></div>`;
@@ -201,7 +193,11 @@ export async function pageReview() {
   if (needWorkspace()) return;
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Việc cần xử lý</h1>${notice('info', 'Chưa phân tích', 'Chạy phân tích ở trang Tổng quan để kiểm tra rủi ro.')}`; return; }
+  if (rep.meta.schema_version !== 2) { app().innerHTML = `<h1 class="page">Việc cần xử lý</h1>${notice('warning', 'Báo cáo phiên bản cũ', 'Về Tổng quan và chạy lại phân tích trước khi lưu quyết định.')}<a href="#/">Về Tổng quan</a>`; return; }
   const filter = hashParams().get('loc') || 'all';
+  const viewKey = `agent3.review.${state.ws}.${state.platform?.profile_revision}`;
+  let savedView = {}; try { savedView = JSON.parse(sessionStorage.getItem(viewKey) || '{}'); } catch {}
+  const context = await decisionContext();
   const months = [...new Set(rep.invoices.filter((i) => i.issue_date).map((i) => i.issue_date.slice(0, 7)))].sort();
   const items = rep.items.filter((it) => filter === 'all' || it.status === filter);
   const count = (s) => rep.items.filter((i) => i.status === s).length;
@@ -257,11 +253,12 @@ export async function pageReview() {
     <div id="list"></div>`;
 
   const PAGE = 50;
-  let shown = PAGE;
-  let code = hashParams().get('nhom') || '';
+  let shown = savedView.shown || PAGE;
+  let code = hashParams().get('nhom') || savedView.code || '';
   const idxOf = new Map(rep.items.map((it, i) => [it, i]));
-  const textOf = (it) => { const inv = invoiceOf(it.invoice_keys[0]); return `${invLabel(inv)} ${inv?.seller_name || ''} ${it.title} ${it.detail}`.toLowerCase(); };
-  const monthOf = (it) => (invoiceOf(it.invoice_keys[0])?.issue_date || '').slice(0, 7);
+  const txnOf = it => rep.transactions.find(t => it.txn_ids?.includes(t.txn_id));
+  const textOf = (it) => { const inv = invoiceOf(it.invoice_keys[0]); const txn = txnOf(it); return `${invLabel(inv)} ${inv?.seller_name || txn?.counterparty_name || ''} ${it.title} ${it.detail}`.toLowerCase(); };
+  const monthOf = (it) => (invoiceOf(it.invoice_keys[0])?.issue_date || txnOf(it)?.booked || '').slice(0, 7);
   const groups = {};
   items.forEach((it) => { const g = groups[it.code] ||= { title: it.title, status: it.status, n: 0, amount: 0 }; g.n += 1; g.amount += Number(it.amount || 0); });
 
@@ -270,14 +267,16 @@ export async function pageReview() {
     $('#group').innerHTML = `<option value="">Mọi vấn đề</option>${opts.map(([c, g]) => `<option value="${esc(c)}" ${c === code ? 'selected' : ''}>${esc(g.title)} (${g.n})</option>`).join('')}`;
   };
 
+  const selectedPicks = new Set();
   const rowTpl = (it) => {
     const inv = invoiceOf(it.invoice_keys[0]);
+    const txn = txnOf(it);
     const i = idxOf.get(it);
     return `<tr class="clickable" tabindex="0" data-item="${i}">
-      <td class="pickcell">${(it.status === 'AT_RISK' || it.status === 'REVIEW') && it.invoice_keys.length ? `<input type="checkbox" class="bulk-pick" data-idx="${i}" aria-label="Chọn">` : ''}</td>
+      <td class="pickcell">${(it.status === 'AT_RISK' || it.status === 'REVIEW') && it.invoice_keys.length ? `<input type="checkbox" class="bulk-pick" data-idx="${i}" aria-label="Chọn" ${selectedPicks.has(it.finding_id) ? 'checked' : ''}>` : ''}</td>
       <td>${tag(it.status)}</td>
-      <td><strong>${esc(invLabel(inv) || it.invoice_keys[0] || '')}</strong><div class="muted small">${dmy(inv?.issue_date)}</div></td>
-      <td><strong>${esc(inv?.seller_name || '')}</strong><div class="muted small mono">MST ${esc(inv?.seller_tax_id || '')}</div></td>
+      <td><strong>${esc(invLabel(inv) || it.invoice_keys[0] || (txn ? 'Khoản thu' : ''))}</strong><div class="muted small">${dmy(inv?.issue_date || txn?.booked)}</div></td>
+      <td><strong>${esc(inv?.seller_name || txn?.counterparty_name || '')}</strong><div class="muted small mono">${inv ? 'MST ' + esc(inv.seller_tax_id || '') : esc(txn?.source || '')}</div></td>
       <td><span class="cell-title">${esc(it.title)}</span><div class="muted small">${esc(it.detail)}</div></td>
       <td class="num"><strong>${money(it.amount)}</strong></td>
     </tr>`;
@@ -296,11 +295,13 @@ export async function pageReview() {
   const paint = () => {
     const q = $('#q').value.trim().toLowerCase(); const m = $('#month').value;
     const view = items.filter((it) => (!code || it.code === code) && (!q || textOf(it).includes(q)) && (!m || monthOf(it) === m));
+    reviewItems = view;
+    reviewSnapshot = () => { try { sessionStorage.setItem(viewKey, JSON.stringify({q: $('#q').value, month: $('#month').value, code, shown, scroll: window.scrollY, focus: lastOpened})); } catch {} };
     $('#shown').textContent = q || m || code ? `${view.length} việc khớp` : `${view.length} việc`;
     $('#list').innerHTML = table(['', 'Trạng thái', 'Hóa đơn', 'Người bán', 'Lý do', { label: 'Số tiền', num: true }], view.slice(0, shown).map(rowTpl), 'Không có việc nào khớp bộ lọc.')
       + (view.length > shown ? `<div class="bar" style="margin-top:16px"><span class="muted small">Đang hiện ${shown} trên ${view.length} việc</span>${button(`Hiện thêm ${Math.min(PAGE, view.length - shown)} việc`, 'ghost', 'id="more"')}${button('Hiện tất cả', 'ghost', 'id="all"')}</div>` : '');
     picks = [...app().querySelectorAll('.bulk-pick')];
-    picks.forEach((c) => { c.onclick = (e) => e.stopPropagation(); c.onchange = syncBulk; });
+    picks.forEach((c) => { c.onclick = (e) => e.stopPropagation(); c.onchange = () => { const key = rep.items[Number(c.dataset.idx)].finding_id; c.checked ? selectedPicks.add(key) : selectedPicks.delete(key); syncBulk(); }; });
     app().querySelectorAll('[data-item]').forEach((tr) => {
       tr.onclick = () => openItem(rep.items[Number(tr.dataset.item)], Number(tr.dataset.item));
       tr.onkeydown = (e) => { if (e.target === tr && ['Enter', ' '].includes(e.key)) { e.preventDefault(); tr.click(); } };
@@ -313,11 +314,11 @@ export async function pageReview() {
   $('#group').onchange = () => { code = $('#group').value; shown = PAGE; paint(); };
   $('#bulk-go').onclick = async () => {
     const chosen = picks.filter((c) => c.checked).map((c) => rep.items[Number(c.dataset.idx)]);
-    const body = { invoice_keys: [...new Set(chosen.map((x) => x.invoice_keys[0]))], action: $('#bulk-action').value, evidence: $('#bulk-ev').value.trim(), by: $('#bulk-by').value.trim() };
+    const body = { invoice_keys: [...new Set(chosen.map((x) => x.invoice_keys[0]))], finding_ids: chosen.map(x => x.finding_id), action: $('#bulk-action').value, evidence: $('#bulk-ev').value.trim(), by: $('#bulk-by').value.trim() };
     if (!body.action || !body.evidence || !body.by) { toast('Cần quyết định, chứng từ hoặc lý do và người duyệt', '', 'error'); return; }
     store.set('agent3.reviewer', body.by);
     const submit = $('#bulk-go'); submit.disabled = true;
-    try { const r = await post(`/api/workspaces/${state.ws}/decisions/bulk`, body); toast(`Đã ghi ${r.decisions} quyết định`, `Thuế có nguy cơ còn ${Number(r.totals.at_risk_vat).toLocaleString('vi-VN')} đ`); window.sonStamp?.(body.by); rerender(); }
+    try { reviewSnapshot?.(); const r = await decide(`/api/workspaces/${state.ws}/decisions/bulk`, body, context); if (r.report_pending) { toast('Quyết định đã lưu; cần chạy lại báo cáo', r.message, 'warning'); submit.disabled = false; return; } toast(`Đã ghi ${r.decisions} quyết định`, `Thuế có nguy cơ còn ${money(r.totals.at_risk_vat)}`); window.sonStamp?.(body.by); rerender(); }
     catch (err) { if (submit.isConnected) { toast('Không ghi được', err.message, 'error'); submit.disabled = false; } }
   };
   $('#q').oninput = () => { shown = PAGE; paint(); }; $('#month').onchange = () => { shown = PAGE; paint(); };
@@ -326,7 +327,10 @@ export async function pageReview() {
     $('#q').value = ''; $('#month').value = ''; code = ''; $('#group').value = ''; shown = PAGE; paint();
   };
 
+  $('#q').value = savedView.q || ''; $('#month').value = savedView.month || '';
   paintGroups(); paint();
+  onPageLeave(() => { if (app().querySelector('#shown')) reviewSnapshot?.(); });
+  requestAnimationFrame(() => { if (app().querySelector('#shown') && !document.querySelector('.drawer')) { window.scrollTo(0, savedView.scroll || 0); const idx = rep.items.findIndex(it => itemId(it) === savedView.focus); app().querySelector(`[data-item="${idx}"]`)?.focus({preventScroll: true}); } });
   aiToolbar($('#ai-tools')).catch((err) => { const el = $('#ai-tools'); if (el && err.name !== 'AbortError') el.innerHTML = notice('info', 'Trợ lý AI chưa sẵn sàng', 'Bạn vẫn có thể xem chứng từ và xử lý công việc bình thường.'); });
   freshBanner($('#fresh'));
 
@@ -344,6 +348,7 @@ export async function pageReview() {
 }
 
 export function decisionChoices(it) {
+  if (it.code.startsWith('R14')) return [['CONFIRMED_NON_REVENUE', 'Đã kiểm tra: không phải khoản thu bán hàng'], ['SALES_EVIDENCE_ATTACHED', 'Đã bổ sung hóa đơn bán ra liên quan']];
   const payment = /^R0[123]_/.test(it.code);
   const out = [];
   if (payment) out.push(['PAYMENT_EVIDENCE_ATTACHED', 'Đã có chứng từ thanh toán không dùng tiền mặt']);
@@ -362,21 +367,29 @@ async function exposureBox(el, index) {
     if (!e) return;
     el.innerHTML = `<div class="panel exposure" style="border-left:3px solid var(--a3-danger);background:var(--cds-layer)">
       <h3 style="margin-top:0">Đánh giá thiệt hại và Phương án xử lý tối ưu</h3>
-      ${e.declared
+      <p>${esc(e.note)}</p>
+      ${e.overdue === true
         ? `<table class="mini" style="width:100%;font-size:13px">
-            <tr><td>Tự khai bổ sung và nộp ngay</td><td class="num"><strong>${money(Number(e.amount) + Number(e.interest))}</strong></td><td class="muted small">thuế ${money(e.amount)} + tiền chậm nộp ${money(e.interest)} (${e.days_late} ngày); không bị phạt khai sai</td></tr>
-            <tr><td>Để cơ quan thuế phát hiện</td><td class="num risk-text"><strong>${money(Number(e.amount) + Number(e.interest) + Number(e.penalty))}</strong></td><td class="muted small">thêm phạt 20% (${money(e.penalty)}), tiền chậm nộp tiếp tục tăng</td></tr>
+            <tr><td>Thuế theo giả định</td><td class="num"><strong>${money(e.amount)}</strong></td><td class="muted small">Chưa xác nhận đã khấu trừ hoặc thực tế thiếu thuế</td></tr>
+            <tr><td>Chậm nộp theo giả định</td><td class="num">${money(e.interest) || 'Chưa đủ dữ liệu'}</td><td class="muted small">${e.days_late} ngày sau hạn lịch</td></tr>
+            <tr><td>Phạt theo giả định</td><td class="num">${money(e.penalty) || 'Chưa đủ dữ liệu'}</td><td class="muted small">Không phải kết luận xử phạt</td></tr>
           </table>`
-        : `<p style="font-size:13.5px">Kỳ của hóa đơn này chưa đến hạn khai (${dmy(e.due)}): xử lý xong trước khi nộp tờ khai thì <strong>không phát sinh phạt hay tiền chậm nộp</strong>.</p>`}
+        : `<p>${e.due ? `Hạn theo lịch: ${dmy(e.due)}; chưa quá hạn lịch.` : 'Chưa xác định được hạn; không tính số ngày chậm.'} Chưa có bằng chứng xác nhận tình trạng kê khai hoặc nộp.</p>`}
       <div class="cite" style="margin-top:8px">${e.basis.filter(Boolean).map(esc).join('<br>')}</div>
     </div>`;
   } catch { el.innerHTML = ''; }
 }
 
 function openItem(it, index) {
+  lastOpened = itemId(it);
   const inv = invoiceOf(it.invoice_keys[0]);
   const match = state.report.matches.find((m) => m.invoice_keys.includes(it.invoice_keys[0]));
-  const canDecide = (it.status === 'AT_RISK' || it.status === 'REVIEW') && it.invoice_keys.length > 0;
+  const canDecide = (it.status === 'AT_RISK' || it.status === 'REVIEW') && (it.invoice_keys.length > 0 || it.txn_ids?.length > 0);
+  const receipt = it.code.startsWith('R14');
+  const selectedSales = new Set();
+  const txn = state.report.transactions.find(t => it.txn_ids?.includes(t.txn_id));
+  const contextReady = decisionContext();
+  contextReady.catch(() => {});
 
   $('#modal-root').innerHTML = `<aside class="drawer" role="dialog" aria-labelledby="drawer-title">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
@@ -389,8 +402,9 @@ function openItem(it, index) {
 
     <div id="plain" style="margin-top:1rem"></div>
 
-    <h3 class="section">Thông tin hóa đơn</h3>
-    <dl class="kv">
+    <h3 class="section">${receipt ? 'Thông tin giao dịch' : 'Thông tin hóa đơn'}</h3>
+    ${receipt && txn ? `<dl class="kv"><dt>Ngày</dt><dd>${dmy(txn.booked)}</dd><dt>Số tiền</dt><dd>${money(txn.amount)}</dd><dt>Đối tác</dt><dd>${esc(txn.counterparty_name)}</dd><dt>Nội dung</dt><dd>${esc(txn.description)}</dd><dt>Nguồn</dt><dd>${esc(txn.source)}</dd></dl>` : ''}
+    <dl class="kv" ${receipt ? 'hidden' : ''}>
       <dt>Số hóa đơn</dt><dd><strong>${esc(invLabel(inv) || it.invoice_keys[0])}</strong></dd>
       <dt>Người bán</dt><dd><strong>${esc(inv?.seller_name || '')}</strong> <span class="muted">(MST: ${esc(inv?.seller_tax_id || '')})</span></dd>
       <dt>Ngày lập</dt><dd>${dmy(inv?.issue_date)}</dd>
@@ -401,6 +415,7 @@ function openItem(it, index) {
     </dl>
 
     <div id="exposure"></div>
+    <details><summary>Lịch sử quyết định và bằng chứng</summary><div id="decision-history"></div></details>
 
     <h3 class="section">Chi tiết vấn đề và Khuyến nghị</h3>
     <div style="background:var(--cds-layer);padding:14px 16px;border-radius:8px;border:1px solid var(--cds-border-subtle);margin-bottom:14px">
@@ -420,7 +435,9 @@ function openItem(it, index) {
           ${field({ key: 'action', label: 'Quyết định xử lý', type: 'choice', required: true, choices: decisionChoices(it), help: decisionHelp(it) }, decisionChoices(it)[0][0])}
           ${field({ key: 'evidence', label: 'Chứng từ hoặc lý do giải trình', required: true, example: 'Ủy nhiệm chi số 5521 ngày 05/09/2026' })}
           ${field({ key: 'by', label: 'Người duyệt', required: true, example: 'Kế toán trưởng' }, store.get('agent3.reviewer') || '')}
+          ${receipt ? field({ key: 'category', label: 'Loại khoản thu nếu không phải bán hàng', type: 'choice', choices: [['LOAN', 'Khoản vay'], ['INTERNAL_TRANSFER', 'Chuyển nội bộ'], ['CAPITAL', 'Góp vốn'], ['REFUND', 'Hoàn tiền'], ['OTHER', 'Khác, ghi rõ bằng chứng']] }) : ''}
         </div>
+        ${receipt ? `<details><summary>Hóa đơn bán ra liên quan (khi xác nhận đã bổ sung hóa đơn)</summary><label for="sales-query">Tìm số hóa đơn hoặc người mua</label><input id="sales-query" class="cds--text-input"><div id="sales-picks" class="sales-evidence-list"></div><div id="sales-selected" role="status"></div></details>` : ''}
         <div class="bar" style="margin-top:16px">
           ${button('Lưu và mở việc tiếp theo', 'primary', 'type="submit" data-next="1"')}
           ${button('Lưu quyết định này', 'secondary', 'type="submit"')}
@@ -430,6 +447,23 @@ function openItem(it, index) {
   </aside>`;
 
   bindDialog();
+  const historyBox = $('#decision-history');
+  contextReady.then(ctx => {
+    if (!historyBox.isConnected) return;
+    const rows = ctx.events.filter(e => e.finding_id === it.finding_id || it.invoice_keys.includes(e.invoice_key) || e.txn_ids?.some(t => it.txn_ids?.includes(t)));
+    historyBox.innerHTML = table(['Thời điểm', 'Người duyệt', 'Quyết định', 'Bằng chứng'], rows.map(e => `<tr><td>${esc(e.at)}${e.legacy ? ' (dữ liệu cũ)' : ''}</td><td>${esc(e.by)}</td><td>${esc(e.action)}${e.supersedes ? '<div class="muted small">Thay thế một quyết định trước; bản trước vẫn được giữ</div>' : ''}</td><td>${esc(e.evidence)}</td></tr>`), 'Chưa có quyết định cho đối tượng này.');
+  }).catch(err => { if (historyBox.isConnected) historyBox.innerHTML = notice('error', 'Không tải được lịch sử', err.message); });
+  if (receipt) {
+    const sales = state.report.invoices.filter(i => i.role === 'SALE' && !i.duplicate_of);
+    const paintSales = () => {
+      const q = $('#sales-query').value.trim().toLowerCase();
+      const filtered = sales.filter(i => `${invLabel(i)} ${i.buyer_name}`.toLowerCase().includes(q));
+      $('#sales-picks').innerHTML = filtered.slice(0, 50).map(i => `<label><input type="checkbox" value="${esc(i.key)}" ${selectedSales.has(i.key) ? 'checked' : ''}> ${esc(invLabel(i))} — ${esc(i.buyer_name)} — ${money(i.gross)}</label>`).join('');
+      $('#sales-selected').textContent = `Hiện tối đa 50/${filtered.length} hóa đơn; đã chọn ${selectedSales.size}. Tìm để thu hẹp kết quả.`;
+      $('#sales-picks').onchange = e => { if (e.target.matches('input')) { e.target.checked ? selectedSales.add(e.target.value) : selectedSales.delete(e.target.value); paintSales(); } };
+    };
+    $('#sales-query').oninput = paintSales; paintSales();
+  }
   if (Number.isInteger(index)) explainBox($('#plain'), index);
   if (it.status === 'AT_RISK' && Number.isInteger(index)) exposureBox($('#exposure'), index);
 
@@ -459,14 +493,16 @@ function openItem(it, index) {
       const d = Object.fromEntries(new FormData(form).entries());
       store.set('agent3.reviewer', d.by);
       const goNext = e.submitter && e.submitter.dataset.next;
-      const open = state.report.items.filter((x) => (x.status === 'AT_RISK' || x.status === 'REVIEW') && itemId(x) !== itemId(it) && !x.invoice_keys.includes(it.invoice_keys[0]));
+      const open = reviewItems.filter((x) => (x.status === 'AT_RISK' || x.status === 'REVIEW') && itemId(x) !== itemId(it) && !x.invoice_keys.includes(it.invoice_keys[0]));
       const after = open[open.indexOf(open.find((x) => state.report.items.indexOf(x) > index))] || open[0];
       $('#dmsg').innerHTML = '<span class="muted">Đang lưu quyết định...</span>';
       const message = $('#dmsg');
       const buttons = [...form.querySelectorAll('button[type="submit"]')];
       buttons.forEach((b) => { b.disabled = true; });
       try {
-        const r = await post(`/api/workspaces/${state.ws}/decisions`, { ...d, invoice_key: it.invoice_keys[0] });
+        reviewSnapshot?.();
+        const r = await decide(`/api/workspaces/${state.ws}/decisions`, { ...d, invoice_key: it.invoice_keys[0], finding_id: it.finding_id, invoice_keys: receipt ? [...selectedSales] : undefined }, await contextReady);
+        if (r.report_pending) { message.innerHTML = notice('warning', 'Quyết định đã lưu; cần chạy lại báo cáo', r.message); buttons.forEach(b => { b.disabled = false; }); return; }
         toast('Đã lưu quyết định', `Thuế có nguy cơ còn ${Number(r.totals.at_risk_vat).toLocaleString('vi-VN')} đ`);
         window.sonStamp?.(d.by);
         if (goNext && after) { try { sessionStorage.setItem('agent3.openNext', itemId(after)); } catch { /* private mode */ } }

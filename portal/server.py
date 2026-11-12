@@ -1093,7 +1093,13 @@ def check(aid, record, raw, *, bank_rows=None):
             return dict(state='error', message=workspace['message'])
         if bank_rows is not None:
             return dict(state='ready', rows=len(bank_rows), message=f'{len(bank_rows)} dòng sao kê đã chuẩn hóa')
-        return dict(state='ready', message='Agent 3 tự phân loại khi ghi; tệp trùng nội dung không bị nạp hai lần.')
+        status, result = call('POST', agent_url('agent3', f'/api/workspaces/{workspace["id"]}/inbox/preview?name={quote(record["name"])}'), raw,
+                              {'Content-Type': 'application/octet-stream', 'X-Agent3-Profile-Revision': workspace['profile_revision']}, timeout=600)
+        if status != 200 or not result.get('ready'):
+            details = [f'{r.get("file")}: {r.get("reason")}' for r in result.get('files', []) if not r.get('checked')]
+            return dict(state='error', message='Agent 3 chưa kiểm tra đạt nội dung tệp.', detail=details[:5])
+        return dict(state='ready', message=f'Agent 3 đã đọc cấu trúc/toàn bộ dòng của {len(result["files"])} tệp; chưa phải kết luận hợp lệ thuế.',
+                    warning='Cùng nội dung sao kê giữ một bản; bản sao hóa đơn đổi tên có thể được giữ để báo trùng.')
     return dict(state='error', message='Agent này chưa nhận tệp.')
 
 

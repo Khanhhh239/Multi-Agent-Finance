@@ -138,8 +138,9 @@ def test_end_to_end_matches_every_label_without_false_alarms(ws, rep):
 
 def test_money_at_risk_is_the_sum_of_distinct_invoices(rep):
     per = {}
+    originals = {i.key for i in rep.invoices if not i.duplicate_of}
     for it in rep.items:
-        if it.status == 'AT_RISK':
+        if it.status == 'AT_RISK' and it.invoice_keys[0] in originals:
             per[it.invoice_keys[0]] = max(per.get(it.invoice_keys[0], Decimal(0)), it.amount)
     assert rep.totals['at_risk_vat'] == sum(per.values()) and rep.totals['at_risk_invoices'] == len(per)
     assert rep.totals['penalty_estimate'] == (rep.totals['at_risk_vat'] * Decimal('0.20')).quantize(Decimal(1))
@@ -183,7 +184,7 @@ def test_not_claimed_decision_removes_risk_but_keeps_audit_trail(ws, rep):
         key: dict(invoice_key=key, action='NOT_CLAIMED', evidence='Bản trùng, không đưa vào tờ khai', by='Kế toán trưởng')})
     after = [it for it in decided.items if key in it.invoice_keys and it.code == 'R05_DUPLICATE']
     assert after and all(it.status == 'INFO' and it.amount == 0 and 'Kế toán trưởng' in it.detail for it in after)
-    assert decided.totals['at_risk_vat'] == rep.totals['at_risk_vat'] - dup.amount
+    assert decided.totals['at_risk_vat'] == rep.totals['at_risk_vat']  # duplicate copy was never counted twice
 
 
 def test_calendar_has_cit_deadlines_and_moves_deadlines_off_weekends(ws, rep):

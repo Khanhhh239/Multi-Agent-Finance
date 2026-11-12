@@ -29,6 +29,7 @@ from .intake import IntakeError, extract_zip, suggest_mapping
 from .sources import read_bank_statement
 from .rules import load_ruleset, param
 from .pack import PackError, load_pack
+from . import decisions as decision_store, portal_lists
 
 PROJECT = Path(__file__).resolve().parents[2]
 WORKSPACES = Path(os.environ.get('AGENT3_WORKSPACES') or PROJECT / 'data/workspaces')   # the override is only for interface tests
@@ -238,10 +239,10 @@ def portal_suggest(wid: str):
     """Header row of the loaded portal list, so the user can map its columns when the portal changes its layout."""
     from .sources import DEFAULT_PORTAL_COLUMNS, read_table
     ws = ws_path(wid)
-    files = sorted((ws / 'portal').glob('purchase_list.*')) if (ws / 'portal').exists() else []
-    if not files:
+    active = portal_lists.active_path(ws, load_pack(ws / 'pack.json'))
+    if not active:
         raise HTTPException(404, 'chưa nạp bảng kê cổng thuế')
-    rows = read_table(files[0])
+    rows = read_table(active)
     head = max(rows[:30], key=lambda r: sum(bool(str(c).strip()) for c in r), default=[])
     current = _pack_data(ws).get('portal_columns') or DEFAULT_PORTAL_COLUMNS
     return dict(headers=[str(c) for c in head if str(c).strip()], current=current,
@@ -308,13 +309,20 @@ async def upload(wid: str, kind: str, name: str, request: Request):
     folder = ws / spec['folder']
     folder.mkdir(parents=True, exist_ok=True)
     try:
+        if kind == 'portal_list':
+            import tempfile
+            with tempfile.TemporaryDirectory(prefix='portal-validate-') as tmp:
+                source = Path(tmp) / clean
+                source.write_bytes(raw)
+                target = portal_lists.ingest(ws, source, load_pack(ws / 'pack.json'))
+                return dict(saved=[target.name])
         if suffix == '.zip':
             names = extract_zip(raw, folder)
         else:
             target = folder / ('purchase_list' + suffix if kind == 'portal_list' else clean)
             target.write_bytes(raw)
             names = [target.name]
-    except IntakeError as e:
+    except (IntakeError, ValueError) as e:
         raise HTTPException(422, str(e))
     return dict(saved=names)
 
@@ -344,11 +352,17 @@ def bank_suggest(wid: str, name: str):
 @app.post('/api/workspaces/{wid}/bank/formats')
 async def bank_save_format(wid: str, request: Request):
     ws = ws_path(wid)
+    if not request.headers.get('If-Match'):
+        raise HTTPException(428, 'Cần tải lại cấu hình trước khi lưu mẫu.')
+    if request.headers['If-Match'] != etag(ws):
+        raise HTTPException(412, 'Mẫu sao kê đã thay đổi; tải lại trước khi lưu.')
     fmt = await request.json()
+    if not isinstance(fmt, dict) or not isinstance(fmt.get('name'), str):
+        raise HTTPException(422, 'Mẫu sao kê cần tên và ánh xạ cột hợp lệ.')
     data = _pack_data(ws)
     data['bank_formats'] = [f for f in data.get('bank_formats', []) if f['name'] != fmt['name']] + [fmt]
     _save_pack(ws, data)
-    return dict(ok=True, formats=len(data['bank_formats']))
+    return JSONResponse(dict(ok=True, formats=len(data['bank_formats'])), headers={'ETag': etag(ws)})
 
 
 @app.put('/api/workspaces/{wid}/inbox')
@@ -369,6 +383,23 @@ async def inbox_upload(wid: str, name: str, request: Request):
         if rec.get('kind') == 'bank' and rec.get('saved_as') and not rec.get('portal_bank'):
             _auto_bank_format(ws, rec)
     return dict(files=files)
+
+
+@app.post('/api/workspaces/{wid}/inbox/preview')
+async def inbox_preview(wid: str, name: str, request: Request):
+    ws = ws_path(wid)
+    raw = await request.body()
+    if len(raw) > 300 * 1024 * 1024:
+        raise HTTPException(413, 'Tệp quá lớn.')
+    clean = re.sub(r'[^\w.\-]', '_', Path(name).name)
+    if clean in ('', '.', '..'):
+        raise HTTPException(422, 'Tên tệp không hợp lệ.')
+    pack = load_pack(ws / 'pack.json')
+    try:
+        rows = await anyio.to_thread.run_sync(lambda: inbox.preview(clean, raw, pack.tax_code, pack, _as_of(ws)))
+    except (ValueError, OSError) as exc:
+        raise HTTPException(422, str(exc))
+    return dict(ready=bool(rows) and all(r['checked'] for r in rows), files=rows)
 
 
 def _auto_bank_format(ws: Path, rec: dict):
@@ -441,12 +472,13 @@ def _cached_report(ws: Path):
     """The analysis result for the current inputs. Recomputed only when a file of the workspace, the ruleset, the shared
     catalogs or the analysis date changes; with hundreds of invoices a rerun takes seconds, a cache hit milliseconds."""
     from . import catalog
-    key = (str(ws), pipeline.input_digest(ws), str(_as_of(ws)), pipeline.DEFAULT_RULESET.stat().st_mtime,
-           catalog.path('holidays').stat().st_mtime)
+    key = pipeline.analysis_signature(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
     hit = _REPORTS.get(str(ws))
     if hit and hit[0] == key:
         return hit[1], True
     rep = pipeline.run(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
+    if rep.meta['analysis_signature'] != key:
+        raise HTTPException(409, 'Dữ liệu thay đổi trong khi phân tích; chạy lại với dữ liệu mới.')
     _REPORTS[str(ws)] = (key, rep)
     return rep, False
 
@@ -455,12 +487,19 @@ def _run(ws: Path):
     try:
         rep, cached = _cached_report(ws)
         if cached and (ws / 'out' / 'report.json').exists():
-            return rep
+            saved = json.loads((ws / 'out/report.json').read_text(encoding='utf-8'))
+            if saved['meta'].get('analysis_signature') == rep.meta['analysis_signature']:
+                return rep
     except Exception as e:  # noqa: BLE001 - shown to the user, never hidden
         raise HTTPException(422, f'{type(e).__name__}: {e}')
     with writing():
         bridge.require(ws.name)
-        report_mod.write(rep, ws / 'out')
+        if pipeline.analysis_signature(ws, pipeline.DEFAULT_RULESET, _as_of(ws)) != rep.meta['analysis_signature']:
+            raise HTTPException(409, 'Dữ liệu thay đổi trước khi xuất báo cáo; chạy lại phân tích.')
+        try:
+            report_mod.write(rep, ws / 'out')
+        except (OSError, ValueError, TypeError) as exc:
+            raise HTTPException(422, f'Không xuất được báo cáo: {exc}')
     return rep
 
 
@@ -478,7 +517,12 @@ def freshness(wid: str):
     if not p.exists():
         return dict(analysed=False, stale=True)
     meta = json.loads(p.read_text(encoding='utf-8'))['meta']
-    return dict(analysed=True, stale=meta.get('input_sha256') != pipeline.input_digest(ws), as_of=meta.get('as_of'))
+    try:
+        current = pipeline.analysis_signature(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
+        stale, reason = meta.get('analysis_signature') != current, None
+    except (ValueError, OSError) as exc:
+        stale, reason = True, str(exc)
+    return dict(analysed=True, stale=stale, as_of=meta.get('as_of'), reason=reason)
 
 
 @app.get('/api/workspaces/{wid}/report')
@@ -499,23 +543,69 @@ def get_report_html(wid: str):
 
 @app.post('/api/workspaces/{wid}/decisions')
 async def add_decision(wid: str, request: Request):
+    return await save_decisions(wid, request)
+
+
+@app.get('/api/workspaces/{wid}/decisions')
+def get_decisions(wid: str):
     ws = ws_path(wid)
-    d = await request.json()
-    if d.get('action') not in ('PAYMENT_EVIDENCE_ATTACHED', 'NOT_CLAIMED', 'CONFIRMED_OK') or not d.get('evidence') or not d.get('by') or not d.get('invoice_key'):
-        raise HTTPException(422, 'cần mã hóa đơn, thao tác, chứng từ và người duyệt')
-    path = ws / 'decisions.json'
-    items = json.loads(path.read_text(encoding='utf-8')) if path.exists() else []
-    items = [x for x in items if x['invoice_key'] != d['invoice_key']] + [dict(invoice_key=d['invoice_key'], action=d['action'],
-                                                                               evidence=d['evidence'], by=d['by'], at=date.today().isoformat())]
+    return JSONResponse(dict(schema_version=2, events=decision_store.history(ws)), headers={'ETag': decision_store.etag(ws)})
+
+
+async def save_decisions(wid, request, body=None):
+    ws = ws_path(wid)
+    if not request.headers.get('If-Match'):
+        raise HTTPException(428, 'Cần phiên bản quyết định trước khi lưu.')
+    d = body if body is not None else await request.json()
+    if not isinstance(d, dict) or not isinstance(d.get('request_id'), str) or not 1 <= len(d['request_id']) <= 128 or not d.get('report_revision'):
+        raise HTTPException(428, 'Cần mã yêu cầu và phiên bản báo cáo.')
+    receipt = decision_store.retry(ws, d)
+    if not receipt:
+        if request.headers['If-Match'] != decision_store.etag(ws):
+            raise HTTPException(412, 'Quyết định đã thay đổi; tải lại trước khi lưu.')
+        p = ws / 'out/report.json'
+        if not p.exists():
+            raise HTTPException(409, 'Chạy phân tích trước khi lưu quyết định.')
+        report = json.loads(p.read_text(encoding='utf-8'))
+        signature = pipeline.analysis_signature(ws, pipeline.DEFAULT_RULESET, _as_of(ws))
+        if d['report_revision'] != report['meta'].get('report_revision') or signature != report['meta'].get('analysis_signature'):
+            raise HTTPException(409, 'Báo cáo đã cũ; phân tích lại và kiểm tra quyết định trước khi lưu.')
+        events = decision_store.validate(d, report, ws)
+        bridge.require(ws.name)
+        receipt = decision_store.append(ws, d, events)
     bridge.require(ws.name)
-    tmp = path.with_suffix('.tmp')
-    tmp.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding='utf-8')
-    tmp.replace(path)
-    if d['action'] == 'CONFIRMED_OK':
-        from .web_ai import _remember_confirmed
-        _remember_confirmed(ws, [d['invoice_key']], d['action'])
-    rep = _run(ws)
-    return _json(dict(totals=rep.totals, decisions=len(items)))
+    try:
+        rep = _run(ws)
+        result = dict(saved=True, report_pending=False, totals=rep.totals, decisions=receipt['decisions'])
+    except HTTPException as exc:
+        result = dict(saved=True, report_pending=True, totals=None, decisions=receipt['decisions'], message=str(exc.detail))
+    response = _json(result)
+    response.headers['ETag'] = decision_store.etag(ws)
+    return response
+
+
+@app.get('/api/workspaces/{wid}/portal/lists')
+def portal_list_versions(wid: str):
+    ws = ws_path(wid)
+    error = None
+    try:
+        active = portal_lists.active_path(ws, load_pack(ws / 'pack.json'))
+    except ValueError as exc:
+        active, error = None, str(exc)
+    return dict(active=active.name if active else None, files=[p.name for p in portal_lists.candidates(ws)], error=error)
+
+
+@app.put('/api/workspaces/{wid}/portal/active-list')
+async def portal_list_select(wid: str, request: Request):
+    ws = ws_path(wid)
+    name = (await request.json()).get('name', '')
+    if not isinstance(name, str) or Path(name).name != name:
+        raise HTTPException(422, 'Tên bảng kê không hợp lệ.')
+    try:
+        rows = portal_lists.select(ws, ws / 'portal' / name, load_pack(ws / 'pack.json'))
+    except (ValueError, OSError) as exc:
+        raise HTTPException(422, str(exc))
+    return dict(ok=True, rows=len(rows))
 
 
 @app.post('/api/workspaces/{wid}/ask')
