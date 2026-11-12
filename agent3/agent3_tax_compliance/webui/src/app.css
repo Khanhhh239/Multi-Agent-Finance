@@ -191,7 +191,7 @@ section.cfg { scroll-margin-top: 6rem; }
 .banner-info { background: var(--cds-layer-accent, #edf5ff); border-left: 3px solid var(--cds-interactive, #0f62fe); color: var(--cds-text-primary); }
 
 /* Hỏi đáp: bố cục hội thoại */
-.ask-wrap { max-width: 56rem; }
+.ask-wrap { width: 100%; max-width: 1240px; margin: 0 auto; }
 .sugg { margin: 0 0 1rem; }
 .sugg .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .35rem; }
 .sugg .chip-q { border: 1px solid var(--cds-border-subtle-01, #c6c6c6); background: var(--cds-layer-01, #fff); color: var(--cds-text-primary); border-radius: 1rem; min-height: 0; padding: .3rem .8rem; max-inline-size: none; }

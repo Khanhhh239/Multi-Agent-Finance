@@ -100,7 +100,7 @@ export const tag = (key, text) => {
 export const notice = (kind, title, sub = '') => `<div class="cds--inline-notification cds--inline-notification--${kind} cds--inline-notification--low-contrast notice" role="${kind === 'error' ? 'alert' : 'status'}">
   <div class="cds--inline-notification__details"><div class="cds--inline-notification__text-wrapper">
   <div class="cds--inline-notification__title">${esc(title)}</div><div class="cds--inline-notification__subtitle">${esc(sub)}</div></div></div></div>`;
-export const loading = (text = 'Đang xử lý') => `<div class="bar"><div class="cds--loading cds--loading--small" aria-live="polite"><svg class="cds--loading__svg" viewBox="0 0 100 100"><title>${esc(text)}</title><circle class="cds--loading__stroke" cx="50%" cy="50%" r="44"></circle></svg></div><span class="muted">${esc(text)}...</span></div>`;
+export const loading = (text = 'Đang xử lý') => `<div class="bar kt-loading-wrap" style="display:inline-flex;align-items:center;gap:10px;padding:6px 0" aria-live="polite"><span class="kt-spinner teal" aria-hidden="true"></span><span class="muted" style="font-size:13px;font-weight:500">${esc(text)}...</span></div>`;
 export const button = (label, cls = 'primary', attrs = '') => `<button ${/\btype=/.test(attrs) ? '' : 'type="button" '}class="cds--btn cds--btn--${cls} cds--btn--md" ${attrs}>${esc(label)}</button>`;
 export const field = (f, value = '') => {
   const id = `f-${f.key}`;

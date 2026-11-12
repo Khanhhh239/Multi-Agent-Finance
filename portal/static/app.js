@@ -74,25 +74,45 @@
     toast.timer = setTimeout(() => (t.hidden = true), error ? 7000 : 3500);
   }
 
+  let activeLoadingCount = 0;
+  function startLoading() {
+    activeLoadingCount++;
+    const bar = $("top-progress");
+    if (bar) bar.classList.add("active");
+  }
+  function stopLoading() {
+    activeLoadingCount = Math.max(0, activeLoadingCount - 1);
+    if (activeLoadingCount === 0) {
+      const bar = $("top-progress");
+      if (bar) bar.classList.remove("active");
+    }
+  }
+
   async function api(path, options = {}) {
-    const headers = { "X-Platform": "1", ...(options.headers || {}) };
-    if (token) headers["X-Session"] = token;
-    if (options.json !== undefined) {
-      headers["Content-Type"] = "application/json";
-      options.body = JSON.stringify(options.json);
-    }
-    const res = await fetch(path, { ...options, headers, cache: "no-store" });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      if (res.status === 401 && data.locked) {
-        setToken("");
-        if (state) { state.intake.unlocked = false; state.pending = []; state.batches = []; render(); }
+    const isSilent = options.silent || path.includes('/health');
+    if (!isSilent) startLoading();
+    try {
+      const headers = { "X-Platform": "1", ...(options.headers || {}) };
+      if (token) headers["X-Session"] = token;
+      if (options.json !== undefined) {
+        headers["Content-Type"] = "application/json";
+        options.body = JSON.stringify(options.json);
       }
-      const err = new Error(data.error || "Yêu cầu không thành công (" + res.status + ").");
-      err.locked = Boolean(data.locked);
-      throw err;
+      const res = await fetch(path, { ...options, headers, cache: "no-store" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (res.status === 401 && data.locked) {
+          setToken("");
+          if (state) { state.intake.unlocked = false; state.pending = []; state.batches = []; render(); }
+        }
+        const err = new Error(data.error || "Yêu cầu không thành công (" + res.status + ").");
+        err.locked = Boolean(data.locked);
+        throw err;
+      }
+      return data;
+    } finally {
+      if (!isSilent) stopLoading();
     }
-    return data;
   }
 
   const sizeText = (n) => (n < 1024 ? n + " B" : n < 1048576 ? (n / 1024).toFixed(0) + " KB" : (n / 1048576).toFixed(1) + " MB");
@@ -495,7 +515,18 @@
     }
 
     if (isOnline) {
-      if (frame.dataset.src !== pageUrl) { frame.dataset.src = pageUrl; frame.src = pageUrl; }
+      if (frame.dataset.src !== pageUrl) {
+        startLoading();
+        frame.classList.add("is-loading");
+        frame.dataset.src = pageUrl;
+        frame.src = pageUrl;
+        const onLoad = () => {
+          frame.removeEventListener("load", onLoad);
+          frame.classList.remove("is-loading");
+          stopLoading();
+        };
+        frame.addEventListener("load", onLoad);
+      }
       frame.hidden = false;
       $("agent-off").hidden = true;
     } else {

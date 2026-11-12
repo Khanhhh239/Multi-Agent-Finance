@@ -827,3 +827,35 @@ button.primary:hover,.btn.primary:hover { background:var(--kt-accent-strong); }
 #view-config :is(input,select):focus-visible { outline:0; border-bottom-color:var(--profile-accent); box-shadow:0 1.5px 0 var(--profile-accent); }
 #view-config .label { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--profile-muted); }
 #view-config .profile-required, #view-config .profile-optional { text-transform:none; letter-spacing:0; }
+
+
+/* Top Progress Bar & Smooth Iframe Transitions */
+.kt-top-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--kt-accent, #97162d) 0%, #d93850 30%, #0f766e 70%, var(--kt-accent, #97162d) 100%);
+  background-size: 200% 100%;
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  animation: ktProgressAnim 1.6s infinite linear;
+}
+.kt-top-progress.active {
+  opacity: 1;
+}
+@keyframes ktProgressAnim {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.agent-frame {
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+}
+.agent-frame.is-loading {
+  opacity: 0.45;
+  filter: blur(1.5px);
+}
