@@ -2,6 +2,18 @@
 // "how the question was understood" and other domains to pick when it was misunderstood.
 import { $, api, app, button, esc, loading, needWorkspace, notice, onPageLeave, pageSignal, post, sonHeader, state, tag } from './core.js';
 
+const ICONS_CHAT = {
+  sparkles: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>',
+  bolt: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  search: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  calendar: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  law: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M4 7h16"/><path d="M5 7l-3 7h6l-3-7z"/><path d="M19 7l-3 7h6l-3-7z"/><circle cx="12" cy="3" r="1"/></svg>',
+  book: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  alertTriangle: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  shieldLock: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><rect x="9.5" y="10" width="5" height="4" rx="1"/><path d="M10.5 10V8.5a1.5 1.5 0 0 1 3 0V10"/></svg>',
+  trash: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>',
+};
+
 let guideCache = null;
 
 function guideHtml(g) {
@@ -64,10 +76,10 @@ function answerHtml(q, a, secs) {
       <div class="bot-text">${esc(a.text)}</div>
       ${tableHtml}
       ${cites.length ? `<div class="cite-box">
-        <div class="cite-head"><span aria-hidden="true">📜</span> Căn cứ pháp lý trích dẫn:</div>
+        <div class="cite-head"><span class="cite-icon" aria-hidden="true">${ICONS_CHAT.book}</span> Căn cứ pháp lý trích dẫn:</div>
         <div class="cite-links">${cites.join('; ')}</div>
       </div>` : ''}
-      ${rag?.dropped?.length ? `<div class="cite-warning">⚠️ ${rag.dropped.length} câu của mô hình đã bị loại bỏ do không có trích dẫn điều luật bảo đảm.</div>` : ''}
+      ${rag?.dropped?.length ? `<div class="cite-warning"><span class="warn-icon" aria-hidden="true">${ICONS_CHAT.alertTriangle}</span> ${rag.dropped.length} câu của mô hình đã bị loại bỏ do không có trích dẫn điều luật bảo đảm.</div>` : ''}
       ${(a.links || []).length ? `<div class="chips" style="margin-top:10px">${a.links.map(([l, h]) => `<a class="cds--btn cds--btn--ghost cds--btn--sm" href="${esc(h)}" style="border-radius:6px">${esc(l)} →</a>`).join('')}</div>` : ''}
       ${alts}
       <div class="bot-actions-row">
@@ -95,29 +107,29 @@ function userMsgHtml(q, domain) {
 function renderHero() {
   return `<div class="chat-hero" id="chat-hero">
     <div class="hero-badge">
-      <span aria-hidden="true">✨</span>
+      <span class="sparkle-icon" aria-hidden="true">${ICONS_CHAT.sparkles}</span>
       <span>TRỢ LÝ AI ĐỐI SOÁT THUẾ GTGT</span>
     </div>
     <h2 class="hero-title">Xin chào! Trợ lý có thể hỗ trợ gì cho doanh nghiệp hôm nay?</h2>
     <p class="hero-desc">Hỏi bằng ngôn ngữ tự nhiên về số liệu thuế, rà soát hóa đơn rủi ro hoặc tra cứu căn cứ pháp lý từ Cơ sở dữ liệu Quốc gia. Dữ liệu xử lý an toàn 100% nội bộ trên máy này.</p>
     <div class="prompt-cards-grid">
       <div class="prompt-card chip-q" data-q="Quý này có bao nhiêu tiền thuế có nguy cơ bị loại?">
-        <div class="card-icon">⚡</div>
+        <div class="card-icon">${ICONS_CHAT.bolt}</div>
         <div class="card-title">Rủi ro thuế kỳ hiện tại</div>
         <div class="card-sub">Tổng số thuế GTGT có nguy cơ và cần xem xét</div>
       </div>
       <div class="prompt-card chip-q" data-q="Hóa đơn số 340 có vấn đề gì và căn cứ xử lý?">
-        <div class="card-icon">🔍</div>
+        <div class="card-icon">${ICONS_CHAT.search}</div>
         <div class="card-title">Đối chiếu hóa đơn</div>
         <div class="card-sub">Kiểm tra tính hợp lệ và cảnh báo nhà cung cấp</div>
       </div>
       <div class="prompt-card chip-q" data-q="Hạn nộp tờ khai thuế giá trị gia tăng quý 1 năm 2026 khi nào?">
-        <div class="card-icon">📅</div>
+        <div class="card-icon">${ICONS_CHAT.calendar}</div>
         <div class="card-title">Lịch nộp tờ khai</div>
         <div class="card-sub">Theo dõi hạn nộp tờ khai và dời ngày nghỉ</div>
       </div>
       <div class="prompt-card chip-q" data-q="Điều kiện khấu trừ thuế giá trị gia tăng đầu vào gồm những gì?">
-        <div class="card-icon">⚖️</div>
+        <div class="card-icon">${ICONS_CHAT.law}</div>
         <div class="card-title">Điều kiện khấu trừ</div>
         <div class="card-sub">Trích dẫn luật thuế GTGT và chứng từ thanh toán</div>
       </div>
@@ -151,9 +163,9 @@ export async function pageAsk() {
         </button>
       </div>
       <div class="ask-bar-footer">
-        <span class="privacy-badge">🔒 Dữ liệu được xử lý an toàn nội bộ trên máy này</span>
+        <span class="privacy-badge"><span class="privacy-icon" aria-hidden="true">${ICONS_CHAT.shieldLock}</span> <span>Dữ liệu được xử lý an toàn nội bộ trên máy này</span></span>
         <div style="display:flex;align-items:center;gap:12px">
-          ${history.length ? '<button type="button" class="btn-clear-chat" id="clear">🗑️ Xóa hội thoại</button>' : ''}
+          ${history.length ? `<button type="button" class="btn-clear-chat" id="clear"><span class="clear-icon" aria-hidden="true">${ICONS_CHAT.trash}</span> <span>Xóa hội thoại</span></button>` : ''}
         </div>
       </div>
     </form>

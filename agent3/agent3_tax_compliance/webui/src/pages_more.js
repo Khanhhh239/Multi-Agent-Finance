@@ -1,6 +1,20 @@
 // Invoices, bank, calendar, questions, legal corpus and enterprise settings.
-import { $, api, app, button, compareDecimal, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put, sonHeader,
+import { $, api, app, button, compareDecimal, dmy, esc, field, formatSpecialMoney, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put, sonHeader,
   onPageLeave, state, table, tag } from './core.js';
+
+const ICONS_INV = {
+  inbox: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+  send: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+  alert: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  shieldCheck: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>',
+  checkCircle: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+  check: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  search: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  download: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  list: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+  clock: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  minus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+};
 import { bankProposals, lawAlerts, riskImport } from './pages_ai.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
@@ -18,50 +32,272 @@ export async function pageInvoices() {
   const viewKey = `agent3.invoices.${state.ws}.${state.platform?.profile_revision}`;
   let savedView = {}; try { savedView = JSON.parse(sessionStorage.getItem(viewKey) || '{}'); } catch {}
   let page = savedView.page || 0;
+  let tabFilter = savedView.tabFilter || 'all';
+
+  const purchaseInvs = rep.invoices.filter((i) => i.role === 'PURCHASE');
+  const saleInvs = rep.invoices.filter((i) => i.role === 'SALE');
+  const purchaseGross = purchaseInvs.reduce((s, i) => s + Number(i.gross || 0), 0);
+  const purchaseVat = purchaseInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
+  const saleGross = saleInvs.reduce((s, i) => s + Number(i.gross || 0), 0);
+  const saleVat = saleInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
+  const atRiskCount = rep.invoices.filter((i) => worst(i) === 'AT_RISK').length;
+  const reviewCount = rep.invoices.filter((i) => worst(i) === 'REVIEW').length;
+  const unpaidCount = purchaseInvs.filter((i) => !matched.get(i.key)).length;
+
   app().innerHTML = `
-    ${sonHeader('Hóa đơn', 'Hóa đơn GTGT', 'QUẢN LÝ CHỨNG TỪ', `<span class="ctx-chip chip-count">${rep.invoices.length} hóa đơn</span>`)}
-    <p class="lead" style="margin-top:10px">${rep.invoices.length} hóa đơn đọc từ tệp XML. Lọc, tìm và xem theo trang 50 dòng; bấm tiêu đề cột để sắp xếp; bấm dòng có cảnh báo để xử lý.</p>
-    <div class="bar"><select class="cds--select-input filter-select" id="role" aria-label="Loại hóa đơn"><option value="">Mua vào và bán ra</option><option value="PURCHASE">Mua vào</option><option value="SALE">Bán ra</option></select>
-      <select class="cds--select-input filter-select" id="st" aria-label="Tình trạng"><option value="">Mọi tình trạng</option><option value="AT_RISK">Có nguy cơ</option><option value="REVIEW">Cần xem xét</option><option value="OK">Không cảnh báo</option><option value="UNPAID">Chưa ghép thanh toán</option></select>
-      <select class="cds--select-input filter-select" id="mon" aria-label="Tháng"><option value="">Mọi tháng</option>${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}</select>
-      <input class="cds--text-input filter-input" id="iq" placeholder="Tìm số hóa đơn, người bán, mã số thuế, tên hàng" aria-label="Tìm hóa đơn">
-      <span class="muted small" id="icount" role="status"></span>${button('Xóa bộ lọc', 'ghost', 'id="reset-invoices"')}
-      <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx">Xuất Excel</a></div>
+    ${sonHeader('Hóa đơn', 'Hóa đơn GTGT', 'QUẢN LÝ CHỨNG TỪ', `<span class="ctx-chip chip-count">${rep.invoices.length.toLocaleString('vi-VN')} hóa đơn</span>`)}
+    
+    <div class="inv-balance-ribbon">
+      <div class="ribbon-col col-purchase">
+        <div class="ribbon-badge-label">
+          <span class="ribbon-icon">${ICONS_INV.inbox}</span>
+          <span class="ribbon-title">HÓA ĐƠN ĐẦU VÀO (MUA VÀO)</span>
+          <span class="ribbon-count">${purchaseInvs.length.toLocaleString('vi-VN')} HĐ</span>
+        </div>
+        <div class="ribbon-values">
+          <span class="ribbon-gross">${formatSpecialMoney(purchaseGross)}</span>
+          <span class="ribbon-vat-sub">Thuế VAT: <strong>${formatSpecialMoney(purchaseVat)}</strong></span>
+        </div>
+      </div>
+
+      <div class="ribbon-divider" aria-hidden="true"></div>
+
+      <div class="ribbon-col col-sale">
+        <div class="ribbon-badge-label">
+          <span class="ribbon-icon">${ICONS_INV.send}</span>
+          <span class="ribbon-title">HÓA ĐƠN ĐẦU RA (BÁN RA)</span>
+          <span class="ribbon-count">${saleInvs.length.toLocaleString('vi-VN')} HĐ</span>
+        </div>
+        <div class="ribbon-values">
+          <span class="ribbon-gross">${formatSpecialMoney(saleGross)}</span>
+          <span class="ribbon-vat-sub">Thuế VAT: <strong>${formatSpecialMoney(saleVat)}</strong></span>
+        </div>
+      </div>
+
+      <div class="ribbon-divider" aria-hidden="true"></div>
+
+      <div class="ribbon-col col-risk">
+        <div class="ribbon-badge-label">
+          <span class="ribbon-icon">${ICONS_INV.alert}</span>
+          <span class="ribbon-title">CẢNH BÁO RỦI RO & ĐỐI SOÁT</span>
+          <span class="ribbon-count ${atRiskCount > 0 ? 'has-risk' : ''}">${(atRiskCount + reviewCount).toLocaleString('vi-VN')} cần lưu ý</span>
+        </div>
+        <div class="ribbon-values">
+          <div class="ribbon-tags-row">
+            <span class="risk-mini-tag risk-tag-danger">${atRiskCount} có nguy cơ</span>
+            <span class="risk-mini-tag risk-tag-warn">${reviewCount} cần xem xét</span>
+            <span class="risk-mini-tag risk-tag-bank">${unpaidCount} chưa ghép tiền</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inv-segmented-pills">
+      ${[
+        ['all', 'Tất cả', rep.invoices.length, ICONS_INV.list],
+        ['PURCHASE', 'Mua vào', purchaseInvs.length, ICONS_INV.inbox],
+        ['SALE', 'Bán ra', saleInvs.length, ICONS_INV.send],
+        ['RISK', 'Có cảnh báo', atRiskCount + reviewCount, ICONS_INV.alert],
+        ['UNPAID', 'Chưa ghép ngân hàng', unpaidCount, ICONS_INV.clock],
+      ].map(([k, l, n, icon]) => `<button type="button" class="inv-filter-pill ${k === tabFilter ? 'active' : ''}" data-tab="${k}">
+        <span class="pill-icon">${icon}</span>
+        <span>${esc(l)}</span>
+        <span class="pill-count">${n.toLocaleString('vi-VN')}</span>
+      </button>`).join('')}
+    </div>
+
+    <div class="inv-toolbar">
+      <div class="inv-search-wrap">
+        <span class="inv-search-icon" aria-hidden="true">${ICONS_INV.search}</span>
+        <input class="cds--text-input inv-search-input" id="iq" placeholder="Tìm theo số hóa đơn, tên đối tác, mã số thuế hoặc nội dung hàng hóa..." aria-label="Tìm hóa đơn">
+        <button type="button" class="inv-search-clear" id="iq-clear" title="Xóa tìm kiếm" hidden aria-label="Xóa tìm kiếm">✕</button>
+      </div>
+
+      <select class="cds--select-input inv-filter-select" id="st" aria-label="Tình trạng">
+        <option value="">Mọi tình trạng</option>
+        <option value="AT_RISK">Có nguy cơ</option>
+        <option value="REVIEW">Cần xem xét</option>
+        <option value="OK">Không cảnh báo</option>
+        <option value="UNPAID">Chưa ghép thanh toán</option>
+      </select>
+
+      <select class="cds--select-input inv-filter-select" id="mon" aria-label="Tháng">
+        <option value="">Mọi kỳ tháng</option>
+        ${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}
+      </select>
+
+      <span class="muted small" id="icount" role="status" style="white-space:nowrap;margin:0 4px"></span>
+      ${button('Xóa lọc', 'ghost', 'id="reset-invoices" class="cds--btn--sm"')}
+      <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx" style="display:inline-flex;align-items:center;gap:6px">
+        ${ICONS_INV.download} Xuất Excel
+      </a>
+    </div>
+
     <div id="ilist"></div>`;
+
   let sort = savedView.sort || ['issue_date', -1];
   const keyOf = { issue_date: (i) => i.issue_date || '', gross: (i) => i.gross || '0', vat: (i) => i.vat || '0', seller: (i) => (i.role === 'SALE' ? i.buyer_name : i.seller_name) || '' };
+
   const paint = () => {
-    const role = $('#role').value; const st = $('#st').value; const mon = $('#mon').value; const q = $('#iq').value.trim().toLowerCase();
-    const view = rep.invoices.filter((i) => (!role || i.role === role) && (!mon || (i.issue_date || '').startsWith(mon))
-      && (!st || (st === 'UNPAID' ? i.role === 'PURCHASE' && !matched.get(i.key) : worst(i) === st))
-      && (!q || `${invLabel(i)} ${i.number} ${i.seller_name} ${i.seller_tax_id} ${i.buyer_name || ''} ${(i.descriptions || []).join(' ')}`.toLowerCase().includes(q)))
-      .sort((x, y) => { const a = keyOf[sort[0]](x); const b = keyOf[sort[0]](y); return (['gross', 'vat'].includes(sort[0]) ? compareDecimal(a, b) : a > b ? 1 : a < b ? -1 : 0) * sort[1]; });
+    const st = $('#st').value; const mon = $('#mon').value; const q = $('#iq').value.trim().toLowerCase();
+    const view = rep.invoices.filter((i) => {
+      if (tabFilter === 'PURCHASE' && i.role !== 'PURCHASE') return false;
+      if (tabFilter === 'SALE' && i.role !== 'SALE') return false;
+      if (tabFilter === 'RISK' && !['AT_RISK', 'REVIEW'].includes(worst(i))) return false;
+      if (tabFilter === 'UNPAID' && (i.role !== 'PURCHASE' || matched.get(i.key))) return false;
+
+      if (mon && !(i.issue_date || '').startsWith(mon)) return false;
+      if (st) {
+        if (st === 'UNPAID' && (i.role !== 'PURCHASE' || matched.get(i.key))) return false;
+        if (st !== 'UNPAID' && worst(i) !== st) return false;
+      }
+      if (q && !`${invLabel(i)} ${i.number} ${i.seller_name} ${i.seller_tax_id} ${i.buyer_name || ''} ${(i.descriptions || []).join(' ')}`.toLowerCase().includes(q)) {
+        return false;
+      }
+      return true;
+    }).sort((x, y) => {
+      const a = keyOf[sort[0]](x); const b = keyOf[sort[0]](y);
+      return (['gross', 'vat'].includes(sort[0]) ? compareDecimal(a, b) : a > b ? 1 : a < b ? -1 : 0) * sort[1];
+    });
+
     const pages = Math.max(1, Math.ceil(view.length / PAGE));
     page = Math.min(page, pages - 1);
     const th = (k, l, num) => `<th class="${num ? 'num ' : ''}sortable" aria-sort="${sort[0] === k ? (sort[1] > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" class="sort-button" data-sort="${k}">${esc(l)}${sort[0] === k ? (sort[1] > 0 ? ' ↑' : ' ↓') : ''}</button></th>`;
-    $('#icount').textContent = `${view.length} hóa đơn`;
-    $('#ilist').innerHTML = view.length ? `<div class="table-wrap"><table class="cds--data-table cds--data-table--md"><thead><tr><th>Hóa đơn</th>${th('issue_date', 'Ngày')}${th('seller', 'Người bán hoặc người mua')}${th('gross', 'Tổng thanh toán', true)}${th('vat', 'Thuế', true)}<th>Toàn vẹn</th><th>Thanh toán</th><th>Cảnh báo</th></tr></thead><tbody>
-      ${view.slice(page * PAGE, page * PAGE + PAGE).map((i) => {
-        const m = matched.get(i.key);
-        const its = (risk.get(i.key) || []).filter((x) => x.status !== 'INFO');
-        const integrity = i.guard_errors.length ? tag('AT_RISK', `Lỗi ${i.guard_errors.length}`) : i.signed ? tag('LLM_VERIFIED', 'Chữ ký hợp lệ') : tag('INFO', 'Không ký');
-        return `<tr class="${its.length ? 'clickable' : ''}" ${its.length ? `data-go="#/viec?open=${encodeURIComponent(i.key)}"` : ''}><td>${esc(invLabel(i))}${i.duplicate_of ? ' <span class="muted small">(bản trùng)</span>' : ''}<div class="muted small">${i.role === 'SALE' ? 'Bán ra' : 'Mua vào'}</div></td><td>${dmy(i.issue_date)}</td>
-          <td>${esc(i.role === 'SALE' ? i.buyer_name : i.seller_name)}</td><td class="num">${money(i.gross)}</td><td class="num">${money(i.vat)}</td><td>${integrity}</td>
-          <td>${i.role === 'SALE' ? '' : m ? (m.status === 'MATCHED' ? 'Đã ghép' : 'Cần xác nhận') : '<span class="muted">Chưa ghép</span>'}</td><td><div class="chips">${its.map((x) => tag(x.status, x.title.length > 40 ? `${x.title.slice(0, 38)}…` : x.title)).join('')}</div></td></tr>`;
-      }).join('')}</tbody></table></div>
-      <div class="bar pager">${button('Trang trước', 'ghost', `id="prev" ${page === 0 ? 'disabled' : ''}`)}<span class="small">Trang ${page + 1} / ${pages}</span>${button('Trang sau', 'ghost', `id="next" ${page >= pages - 1 ? 'disabled' : ''}`)}</div>`
-      : '<div class="empty">Không có hóa đơn nào khớp.</div>';
+    $('#icount').textContent = `${view.length.toLocaleString('vi-VN')} hóa đơn`;
+
+    $('#ilist').innerHTML = view.length ? `<div class="table-wrap inv-table-wrap"><table class="cds--data-table cds--data-table--md inv-data-table">
+      <thead>
+        <tr>
+          <th>Hóa đơn & Ký hiệu</th>
+          ${th('issue_date', 'Ngày lập')}
+          ${th('seller', 'Người bán / Người mua')}
+          ${th('gross', 'Tổng thanh toán', true)}
+          ${th('vat', 'Thuế GTGT', true)}
+          <th>Toàn vẹn</th>
+          <th>Thanh toán</th>
+          <th>Cảnh báo rủi ro</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${view.slice(page * PAGE, page * PAGE + PAGE).map((i) => {
+          const m = matched.get(i.key);
+          const its = (risk.get(i.key) || []).filter((x) => x.status !== 'INFO');
+          const integrity = i.guard_errors.length
+            ? `<span class="integrity-badge badge-err">${ICONS_INV.alert} Lỗi XML (${i.guard_errors.length})</span>`
+            : (i.signed ? `<span class="integrity-badge badge-ok">${ICONS_INV.shieldCheck} Ký hợp lệ</span>` : `<span class="integrity-badge badge-none">Không ký</span>`);
+          
+          const payStatus = i.role === 'SALE'
+            ? '<span class="muted small">—</span>'
+            : (m ? (m.status === 'MATCHED'
+                ? `<span class="pay-badge pay-ok">${ICONS_INV.checkCircle} Đã ghép</span>`
+                : `<span class="pay-badge pay-ambig">${ICONS_INV.clock} Mơ hồ</span>`)
+              : `<span class="pay-badge pay-none">${ICONS_INV.minus} Chưa ghép</span>`);
+              
+          const partnerName = i.role === 'SALE' ? (i.buyer_name || 'Khách hàng') : (i.seller_name || 'Nhà cung cấp');
+          const partnerTax = i.role === 'SALE' ? (i.buyer_tax_id || '') : (i.seller_tax_id || '');
+
+          return `<tr class="${its.length ? 'clickable row-has-risk' : ''}" ${its.length ? `data-go="#/viec?open=${encodeURIComponent(i.key)}" title="Bấm để mở việc cần xử lý"` : ''}>
+            <td>
+              <div class="inv-code-pill ${i.role === 'SALE' ? 'pill-sale' : 'pill-purchase'}" title="${esc(invLabel(i))}">
+                <span class="inv-type-icon">${i.role === 'SALE' ? ICONS_INV.send : ICONS_INV.inbox}</span>
+                <span class="inv-code-text">${esc(invLabel(i))}</span>
+                ${i.duplicate_of ? '<span class="dup-pill">Trùng</span>' : ''}
+              </div>
+              <div class="inv-role-sub">${i.role === 'SALE' ? '<span class="role-badge sale">Bán ra</span>' : '<span class="role-badge purchase">Mua vào</span>'}</div>
+            </td>
+            <td>${dmy(i.issue_date)}</td>
+            <td>
+              <div class="partner-name" title="${esc(partnerName)}">${esc(partnerName)}</div>
+              ${partnerTax ? `<div class="partner-tax mono"><span class="mst-tag">MST</span> <code>${esc(partnerTax)}</code></div>` : ''}
+            </td>
+            <td class="num font-num"><strong>${money(i.gross)}</strong></td>
+            <td class="num font-num vat-cell"><span class="vat-amount">${money(i.vat)}</span></td>
+            <td>${integrity}</td>
+            <td>${payStatus}</td>
+            <td>
+              <div class="chips">
+                ${its.length ? its.map((x) => tag(x.status, x.title.length > 36 ? `${x.title.slice(0, 34)}…` : x.title)).join('') : `<span class="tag-ok-check">${ICONS_INV.check} Hợp lệ</span>`}
+              </div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table></div>
+    <div class="bar pager">
+      ${button('Trang trước', 'ghost', `id="prev" ${page === 0 ? 'disabled' : ''}`)}
+      <span class="small">Trang <strong>${page + 1}</strong> / ${pages} (${view.length.toLocaleString('vi-VN')} hóa đơn)</span>
+      ${button('Trang sau', 'ghost', `id="next" ${page >= pages - 1 ? 'disabled' : ''}`)}
+    </div>`
+    : `<div class="empty invoice-empty">
+        <div class="empty-icon-wrap" style="color:var(--cds-text-secondary);margin-bottom:8px">${ICONS_INV.alert}</div>
+        <div style="font-weight:600;font-size:15px;margin-bottom:4px">Không có hóa đơn nào khớp bộ lọc</div>
+        <div class="muted small">Thử xóa bộ lọc hoặc điều chỉnh từ khóa tìm kiếm.</div>
+      </div>`;
+
     if ($('#prev')) $('#prev').onclick = () => { page -= 1; paint(); };
     if ($('#next')) $('#next').onclick = () => { page += 1; paint(); };
-    app().querySelectorAll('[data-sort]').forEach((h) => { h.onclick = () => { const key = h.dataset.sort; sort = [key, sort[0] === key ? -sort[1] : -1]; paint(); app().querySelector(`[data-sort="${key}"]`)?.focus({ preventScroll: true }); }; });
+    app().querySelectorAll('[data-sort]').forEach((h) => {
+      h.onclick = () => {
+        const key = h.dataset.sort;
+        sort = [key, sort[0] === key ? -sort[1] : -1];
+        paint();
+        app().querySelector(`[data-sort="${key}"]`)?.focus({ preventScroll: true });
+      };
+    });
   };
-  ['role', 'st', 'mon'].forEach((id) => { $(`#${id}`).onchange = () => { page = 0; paint(); }; });
-  $('#iq').oninput = () => { page = 0; paint(); };
-  $('#reset-invoices').onclick = () => { ['role', 'st', 'mon', 'iq'].forEach((id) => { $(`#${id}`).value = ''; }); page = 0; paint(); };
-  ['role', 'st', 'mon', 'iq'].forEach(id => { $(`#${id}`).value = savedView[id] || ''; });
+
+  app().querySelectorAll('.inv-filter-pill').forEach((btn) => {
+    btn.onclick = () => {
+      app().querySelectorAll('.inv-filter-pill').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      tabFilter = btn.dataset.tab;
+      page = 0;
+      paint();
+    };
+  });
+
+  ['st', 'mon'].forEach((id) => { $(`#${id}`).onchange = () => { page = 0; paint(); }; });
+  
+  const iq = $('#iq');
+  const iqClear = $('#iq-clear');
+  iq.oninput = () => {
+    iqClear.hidden = !iq.value;
+    page = 0;
+    paint();
+  };
+  iqClear.onclick = () => {
+    iq.value = '';
+    iqClear.hidden = true;
+    page = 0;
+    paint();
+  };
+
+  $('#reset-invoices').onclick = () => {
+    tabFilter = 'all';
+    app().querySelectorAll('.inv-filter-pill').forEach((b) => b.classList.toggle('active', b.dataset.tab === 'all'));
+    ['st', 'mon', 'iq'].forEach((id) => { $(`#${id}`).value = ''; });
+    iqClear.hidden = true;
+    page = 0;
+    paint();
+  };
+
+  ['st', 'mon', 'iq'].forEach(id => { $(`#${id}`).value = savedView[id] || ''; });
+  if (savedView.iq) iqClear.hidden = false;
   paint();
-  onPageLeave(() => { if (!app().querySelector('#ilist')) return; try { sessionStorage.setItem(viewKey, JSON.stringify({sort, page, scroll: window.scrollY, ...Object.fromEntries(['role', 'st', 'mon', 'iq'].map(id => [id, $(`#${id}`).value]))})); } catch {} });
-  requestAnimationFrame(() => { if (app().querySelector('#ilist')) window.scrollTo(0, savedView.scroll || 0); });
+
+  onPageLeave(() => {
+    if (!app().querySelector('#ilist')) return;
+    try {
+      sessionStorage.setItem(viewKey, JSON.stringify({
+        sort, page, tabFilter, scroll: window.scrollY,
+        ...Object.fromEntries(['st', 'mon', 'iq'].map(id => [id, $(`#${id}`).value]))
+      }));
+    } catch {}
+  });
+
+  requestAnimationFrame(() => {
+    if (app().querySelector('#ilist')) window.scrollTo(0, savedView.scroll || 0);
+  });
 }
 
 export async function pageBank() {
