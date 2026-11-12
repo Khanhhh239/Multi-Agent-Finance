@@ -209,7 +209,7 @@
           <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label">Tên nhóm</label><input class="cds--text-input" data-cat="${n}" data-k="name" value="${t(e.name)}" placeholder="Nguyên liệu thực phẩm"></div>
           <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label">Mô tả</label><input class="cds--text-input" data-cat="${n}" data-k="description" value="${t(e.description)}" placeholder="thịt, cá, rau dùng chế biến món ăn"></div></div>`).join(``)),G(`Đã nạp nhóm hàng gợi ý`,`Thêm ${i.length} nhóm. Bấm "Lưu nhóm hàng" để áp dụng.`)}catch(e){G(`Chưa nạp được nhóm hàng`,e.message,`error`)}finally{S.isConnected&&(S.disabled=!1)}});let w=()=>[...s.policies.filter((e,t)=>A().querySelector(`[data-preset="${t}"]`).checked).map(e=>Ee({...e,...(r.policies||[]).find(t=>t.id===e.id)||{}})),...(r.policies||[]).filter(e=>!s.policies.some(t=>t.id===e.id)&&A().querySelector(`[data-custom="${e.id}"]`)?.checked)];e(`#f-pol`).onsubmit=e=>{e.preventDefault();let t=Object.fromEntries(new FormData(e.target).entries()),n=w();if(t.flag){let e={id:`RIENG_${Date.now().toString(36).toUpperCase()}`,flag:t.flag};t.min_gross&&(e.min_gross=Number(String(t.min_gross).replace(/\D/g,``))),t.description_contains&&(e.description_contains=t.description_contains.split(`;`).map(e=>e.trim()).filter(Boolean)),n.push(e)}c({...r,policies:n},`Đã lưu quy định chi tiêu`)},e(`#f-th`).onsubmit=e=>{e.preventDefault();let t=Object.fromEntries(new FormData(e.target).entries()),n={};t.match_days_after_invoice&&(n.match_days_after_invoice=Number(t.match_days_after_invoice)),t.non_cash_threshold_override&&(n.non_cash_threshold_override=Number(String(t.non_cash_threshold_override).replace(/\D/g,``))),c({...r,thresholds:n},`Đã lưu ngưỡng`)},e(`#f-cat`).onsubmit=e=>{e.preventDefault();let t={};e.target.querySelectorAll(`[data-cat]`).forEach(e=>{t[e.dataset.cat]||={},t[e.dataset.cat][e.dataset.k]=e.value.trim()}),c({...r,ai_categories:Object.values(t).filter(e=>e.name&&e.description)},`Đã lưu nhóm hàng đặc thù`)},e(`#f-days`).onsubmit=t=>{t.preventDefault(),c({...r,days_off:e(`#days`).value.split(/\s+/).map(e=>e.trim()).filter(Boolean)},`Đã lưu ngày nghỉ`)},e(`#portal-load`).onclick=async()=>{try{let n=await m(`/api/workspaces/${k.ws}/portal/suggest`);e(`#portal-map`).innerHTML=`<form id="f-portal"><div class="form-grid">${Object.entries(n.fields).map(([e,r])=>`<div class="cds--form-item"><div class="cds--select"><label class="cds--label">${t(r)}</label>
         <div class="cds--select-input__wrapper"><select class="cds--select-input" name="${e}"><option value="">(không có)</option>${n.headers.map(r=>`<option ${r===n.current[e]?`selected`:``}>${t(r)}</option>`).join(``)}</select></div></div></div>`).join(``)}</div>
-        <div class="bar">${T(`Lưu cột bảng kê`,`primary`,`type="submit"`)}</div></form>`,e(`#f-portal`).onsubmit=e=>{e.preventDefault();let t=Object.fromEntries([...new FormData(e.target).entries()].filter(([,e])=>e));c({...r,portal_columns:t},`Đã lưu cột bảng kê`)}}catch(t){e(`#portal-map`).insertAdjacentHTML(`beforeend`,C(`warning`,`Chưa đọc được bảng kê`,t.message))}},Ce(e(`#riskimp`))}var K={risk:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,penalty:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>`,review:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M11 8v6M8 11h6"/></svg>`,opportunity:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,chart:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,calendar:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,bank:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>`,dossier:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,law:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`},q=e=>e.finding_id||`${e.code}|${e.invoice_keys.join(`,`)}`,Ne=[],Pe=null,Fe=null,Ie=()=>window.dispatchEvent(new Event(`hashchange`));async function Le(){if(!k.ws){await ke();return}let i=k.workspaces.find(e=>e.id===k.ws),o=await P(),s=o?.totals,c=i.files;o?.meta.period&&`${a(o.meta.period[0])}${a(o.meta.period[1])}`;let l=e=>e===`undated`?`Chưa rõ ngày`:`Tháng ${e.slice(5)}/${e.slice(0,4)}`,u=o?.totals.series||[],d=e=>{if(s?.missing_vat_invoices)return``;let t=u.map(t=>Math.abs(Number(t[e]||0)));if(t.length<2||!t.some(Boolean))return``;let n=Math.max(...t),r=t.map((e,r)=>[2+r/(t.length-1)*88,26-e/n*20]),i=r[r.length-1],a=r.map(e=>e.map(e=>e.toFixed(1)).join(`,`)).join(` `),o=`2,30 ${a} ${i[0].toFixed(1)},30`,c=`spark-g-${e.toLowerCase()}`,l={at_risk:[`#ff8389`,`rgba(255, 131, 137, 0.28)`,`rgba(255, 131, 137, 0)`],review:[`#fcd34d`,`rgba(252, 211, 77, 0.28)`,`rgba(252, 211, 77, 0)`],opportunity:[`#2dd4bf`,`rgba(45, 212, 191, 0.28)`,`rgba(45, 212, 191, 0)`]}[e.toLowerCase()]||[`#60a5fa`,`rgba(96, 165, 250, 0.28)`,`rgba(96, 165, 250, 0)`];return`<svg class="spark spark-${e.toLowerCase()}" viewBox="0 0 96 30" width="96" height="30" role="img" aria-label="Diễn biến theo tháng, ${t.length} tháng">
+        <div class="bar">${T(`Lưu cột bảng kê`,`primary`,`type="submit"`)}</div></form>`,e(`#f-portal`).onsubmit=e=>{e.preventDefault();let t=Object.fromEntries([...new FormData(e.target).entries()].filter(([,e])=>e));c({...r,portal_columns:t},`Đã lưu cột bảng kê`)}}catch(t){e(`#portal-map`).insertAdjacentHTML(`beforeend`,C(`warning`,`Chưa đọc được bảng kê`,t.message))}},Ce(e(`#riskimp`))}var K={risk:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,penalty:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>`,review:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M11 8v6M8 11h6"/></svg>`,opportunity:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,chart:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,calendar:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,bank:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>`,dossier:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,law:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,list:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,search:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,download:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,checkCircle:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,invoice:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16l3-2 3 2 3-2 3 2 3-2 3 2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,creditCard:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,pen:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,layers:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,clockHistory:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>`,alertTriangle:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,emptyScale:`<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>`},q=e=>e.finding_id||`${e.code}|${e.invoice_keys.join(`,`)}`,Ne=[],Pe=null,Fe=null,Ie=()=>window.dispatchEvent(new Event(`hashchange`));async function Le(){if(!k.ws){await ke();return}let i=k.workspaces.find(e=>e.id===k.ws),o=await P(),s=o?.totals,c=i.files;o?.meta.period&&`${a(o.meta.period[0])}${a(o.meta.period[1])}`;let l=e=>e===`undated`?`Chưa rõ ngày`:`Tháng ${e.slice(5)}/${e.slice(0,4)}`,u=o?.totals.series||[],d=e=>{if(s?.missing_vat_invoices)return``;let t=u.map(t=>Math.abs(Number(t[e]||0)));if(t.length<2||!t.some(Boolean))return``;let n=Math.max(...t),r=t.map((e,r)=>[2+r/(t.length-1)*88,26-e/n*20]),i=r[r.length-1],a=r.map(e=>e.map(e=>e.toFixed(1)).join(`,`)).join(` `),o=`2,30 ${a} ${i[0].toFixed(1)},30`,c=`spark-g-${e.toLowerCase()}`,l={at_risk:[`#ff8389`,`rgba(255, 131, 137, 0.28)`,`rgba(255, 131, 137, 0)`],review:[`#fcd34d`,`rgba(252, 211, 77, 0.28)`,`rgba(252, 211, 77, 0)`],opportunity:[`#2dd4bf`,`rgba(45, 212, 191, 0.28)`,`rgba(45, 212, 191, 0)`]}[e.toLowerCase()]||[`#60a5fa`,`rgba(96, 165, 250, 0.28)`,`rgba(96, 165, 250, 0)`];return`<svg class="spark spark-${e.toLowerCase()}" viewBox="0 0 96 30" width="96" height="30" role="img" aria-label="Diễn biến theo tháng, ${t.length} tháng">
       <defs>
         <linearGradient id="${c}" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="${l[1]}"/>
@@ -405,7 +405,7 @@
       </tbody>
     </table>
   </div>`:`<div class="review-empty-state">
-      <div class="empty-icon-wrap">⚖️</div>
+      <div class="empty-icon-wrap">${K.emptyScale}</div>
       <h3 class="empty-title">Không tìm thấy việc nào khớp bộ lọc</h3>
       <p class="empty-desc">Thử điều chỉnh lại từ khóa tìm kiếm, nhóm lỗi, kỳ phát sinh hoặc chọn tab "Tất cả" để xem danh sách đầy đủ.</p>
       <button type="button" class="cds--btn cds--btn--secondary cds--btn--sm" id="empty-reset-btn">✕ Đặt lại tất cả bộ lọc</button>
@@ -415,7 +415,7 @@
     <div class="review-summary-strip">
       <div class="rev-summary-card card-risk">
         <div class="rev-card-top">
-          <span class="rev-card-icon">🚨</span>
+          <span class="rev-icon-box badge-risk">${K.risk}</span>
           <span class="rev-card-label">Nguy cơ bị loại</span>
           <span class="rev-card-count pill-risk">${m(`AT_RISK`)} việc</span>
         </div>
@@ -425,7 +425,7 @@
 
       <div class="rev-summary-card card-warn">
         <div class="rev-card-top">
-          <span class="rev-card-icon">⚠️</span>
+          <span class="rev-icon-box badge-warn">${K.review}</span>
           <span class="rev-card-label">Cần xem xét</span>
           <span class="rev-card-count pill-warn">${m(`REVIEW`)} việc</span>
         </div>
@@ -435,7 +435,7 @@
 
       <div class="rev-summary-card card-opp">
         <div class="rev-card-top">
-          <span class="rev-card-icon">💡</span>
+          <span class="rev-icon-box badge-opportunity">${K.opportunity}</span>
           <span class="rev-card-label">Cơ hội khấu trừ</span>
           <span class="rev-card-count pill-opp">${m(`OPPORTUNITY`)} việc</span>
         </div>
@@ -445,7 +445,7 @@
 
       <div class="rev-summary-card card-progress">
         <div class="rev-card-top">
-          <span class="rev-card-icon">📊</span>
+          <span class="rev-icon-box badge-progress">${K.chart}</span>
           <span class="rev-card-label">Tiến độ phê duyệt</span>
           <span class="rev-card-count pill-progress">${x} đã duyệt</span>
         </div>
@@ -464,7 +464,7 @@
 
     <div class="toolbar smart-toolbar">
       <div class="status-filter-pills segmented-pills">
-        ${[[`all`,`Tất cả`,i.items.length,`pill-all`,`📋`],[`AT_RISK`,`Có nguy cơ`,m(`AT_RISK`),`pill-risk`,`🚨`],[`REVIEW`,`Cần xem xét`,m(`REVIEW`),`pill-warn`,`⚠️`],[`OPPORTUNITY`,`Bỏ sót`,m(`OPPORTUNITY`),`pill-opp`,`💡`]].map(([e,n,r,i,a])=>`<a class="${e===s?`active `+i:``}" href="#/viec?loc=${e}">
+        ${[[`all`,`Tất cả`,i.items.length,`pill-all`,K.list],[`AT_RISK`,`Có nguy cơ`,m(`AT_RISK`),`pill-risk`,K.risk],[`REVIEW`,`Cần xem xét`,m(`REVIEW`),`pill-warn`,K.review],[`OPPORTUNITY`,`Bỏ sót`,m(`OPPORTUNITY`),`pill-opp`,K.opportunity]].map(([e,n,r,i,a])=>`<a class="${e===s?`active `+i:``}" href="#/viec?loc=${e}">
           <span class="tab-icon">${a}</span>
           <span class="tab-label">${t(n)}</span>
           <span class="pill-count">${r}</span>
@@ -474,7 +474,7 @@
       <div class="filter-field filter-field-search" style="flex: 2 1 260px">
         <span class="filter-label">Tìm kiếm</span>
         <div class="search-input-wrap">
-          <span class="search-icon" aria-hidden="true">🔍</span>
+          <span class="search-icon" aria-hidden="true">${K.search}</span>
           <input class="cds--text-input filter-input search-input" id="q" placeholder="Số hóa đơn, người bán, lý do..." aria-label="Tìm việc">
           <button type="button" class="search-clear-btn" id="q-clear" title="Xóa tìm kiếm" hidden aria-label="Xóa tìm kiếm">✕</button>
         </div>
@@ -497,7 +497,7 @@
         <span class="muted small count-tag" id="shown" role="status"></span>
         ${T(`Xóa lọc`,`ghost`,`id="reset-filters" class="cds--btn--sm btn-reset"`)}
         <a class="cds--btn cds--btn--ghost cds--btn--sm btn-export" href="/api/workspaces/${t(k.ws)}/export/viec-can-xu-ly.xlsx">
-          <span class="btn-icon">📥</span> Xuất Excel
+          <span class="btn-icon">${K.download}</span> Xuất Excel
         </a>
       </div>
     </div>
@@ -505,7 +505,7 @@
     <div class="bulk floating-bulk-dock" id="bulk" hidden>
       <div class="bulk-dock-inner">
         <div class="bulk-badge-group">
-          <span class="bulk-sparkle-icon">⚡</span>
+          <span class="bulk-sparkle-icon">${K.layers}</span>
           <span class="bulk-count-pill" id="bulk-n">Đã chọn 0 việc</span>
         </div>
         <div class="bulk-controls">
@@ -513,7 +513,7 @@
           <input class="cds--text-input bulk-input" id="bulk-ev" aria-label="Chứng từ hoặc lý do chung" placeholder="Chứng từ hoặc lý do chung...">
           <input class="cds--text-input bulk-input bulk-by" id="bulk-by" aria-label="Người duyệt" placeholder="Người duyệt" value="${t(o.get(`agent3.reviewer`)||``)}">
           <button type="button" class="cds--btn cds--btn--primary bulk-confirm-btn" id="bulk-go">
-            <span class="btn-icon">✍️</span> Ghi cho các việc đã chọn
+            <span class="btn-icon">${K.pen}</span> Ghi cho các việc đã chọn
           </button>
         </div>
       </div>
@@ -526,7 +526,7 @@
       <td class="status-cell">${ze(e.status)}</td>
       <td class="invoice-cell">
         <div class="inv-code-pill" title="${t(e.invoice_keys[0]||``)}">
-          <span class="inv-badge-icon">${r?`💳`:`📄`}</span>
+          <span class="inv-badge-icon">${r?K.creditCard:K.invoice}</span>
           <span class="inv-badge-text">${t(I(n)||e.invoice_keys[0]||(r?`Khoản thu`:`Chưa gắn mã`))}</span>
         </div>
         <div class="inv-date-sub">${a(n?.issue_date||r?.booked)||`—`}</div>
@@ -560,7 +560,7 @@
         </div>
       </div>
     `:``;e(`#list`).innerHTML=Ve(r.slice(0,w),te)+a;let o=e(`#pick-all`);B=[...A().querySelectorAll(`.bulk-pick`)],o&&(o.checked=B.length>0&&B.every(e=>e.checked),o.indeterminate=B.some(e=>e.checked)&&!o.checked,o.onchange=()=>{B.forEach(e=>{e.checked=o.checked;let t=i.items[Number(e.dataset.idx)].finding_id;o.checked?z.add(t):z.delete(t);let n=e.closest(`tr`);n&&n.classList.toggle(`row-checked`,o.checked)}),V()}),B.forEach(e=>{e.onclick=e=>e.stopPropagation(),e.onchange=()=>{let t=i.items[Number(e.dataset.idx)].finding_id;e.checked?z.add(t):z.delete(t);let n=e.closest(`tr`);if(n&&n.classList.toggle(`row-checked`,e.checked),o){let e=B.length>0&&B.every(e=>e.checked);o.checked=e,o.indeterminate=B.some(e=>e.checked)&&!e}V()}}),A().querySelectorAll(`[data-item]`).forEach(e=>{e.onclick=()=>Ge(i.items[Number(e.dataset.item)],Number(e.dataset.item)),e.onkeydown=t=>{t.target===e&&[`Enter`,` `].includes(t.key)&&(t.preventDefault(),e.click())}}),e(`#more`)&&(e(`#more`).onclick=()=>{w+=50,H()}),e(`#all`)&&(e(`#all`).onclick=()=>{w=r.length,H()});let l=e(`#empty-reset-btn`);l&&(l.onclick=()=>{s===`all`?(e(`#q`).value=``,e(`#month`).value=``,E=``,e(`#group`).value=``,w=50,H()):location.hash=`#/viec`});let u=e(`#q`),d=e(`#q-clear`);u&&d&&(d.hidden=!u.value,u.oninput=()=>{d.hidden=!u.value,w=50,H()},d.onclick=()=>{u.value=``,d.hidden=!0,w=50,H()}),V()};e(`#group`).onchange=()=>{E=e(`#group`).value,w=50,H()},e(`#month`).onchange=()=>{w=50,H()},e(`#bulk-go`).onclick=async()=>{let t=B.filter(e=>e.checked).map(e=>i.items[Number(e.dataset.idx)]),r={invoice_keys:[...new Set(t.map(e=>e.invoice_keys[0]))],finding_ids:t.map(e=>e.finding_id),action:e(`#bulk-action`).value,evidence:e(`#bulk-ev`).value.trim(),by:e(`#bulk-by`).value.trim()};if(!r.action||!r.evidence||!r.by){G(`Cần quyết định, chứng từ hoặc lý do và người duyệt`,``,`error`);return}o.set(`agent3.reviewer`,r.by);let a=e(`#bulk-go`);a.disabled=!0;try{Pe?.();let e=await _(`/api/workspaces/${k.ws}/decisions/bulk`,r,d);if(e.report_pending){G(`Quyết định đã lưu; cần chạy lại báo cáo`,e.message,`warning`),a.disabled=!1;return}G(`Đã ghi ${e.decisions} quyết định`,`Thuế có nguy cơ còn ${n(e.totals.at_risk_vat)}`),window.sonStamp?.(r.by),Ie()}catch(e){a.isConnected&&(G(`Không ghi được`,e.message,`error`),a.disabled=!1)}},e(`#reset-filters`).onclick=()=>{s===`all`?(e(`#q`).value=``,e(`#month`).value=``,E=``,e(`#group`).value=``,w=50,H()):location.hash=`#/viec`},e(`#q`).value=l.q||``,e(`#month`).value=l.month||``,R(),H(),u(()=>{A().querySelector(`#shown`)&&Pe?.()}),requestAnimationFrame(()=>{if(A().querySelector(`#shown`)&&!document.querySelector(`.drawer`)){window.scrollTo(0,l.scroll||0);let e=i.items.findIndex(e=>q(e)===l.focus);A().querySelector(`[data-item="${e}"]`)?.focus({preventScroll:!0})}}),ve(e(`#ai-tools`)).catch(t=>{let n=e(`#ai-tools`);n&&t.name!==`AbortError`&&(n.innerHTML=C(`info`,`Trợ lý AI chưa sẵn sàng`,`Bạn vẫn có thể xem chứng từ và xử lý công việc bình thường.`))}),de(e(`#fresh`));let U=null;try{U=sessionStorage.getItem(`agent3.openNext`),sessionStorage.removeItem(`agent3.openNext`)}catch{}if(U){let e=i.items.findIndex(e=>q(e)===U);e>=0&&Ge(i.items[e],e)}let W=j().get(`open`);if(W&&!U){let e=i.items.findIndex(e=>e.code===W||q(e)===W||e.invoice_keys.includes(W));e>=0&&Ge(i.items[e],e)}}function J(e){if(e.code.startsWith(`R14`))return[[`CONFIRMED_NON_REVENUE`,`Đã kiểm tra: không phải khoản thu bán hàng`],[`SALES_EVIDENCE_ATTACHED`,`Đã bổ sung hóa đơn bán ra liên quan`]];let t=/^R0[123]_/.test(e.code),n=[];return t&&n.push([`PAYMENT_EVIDENCE_ATTACHED`,`Đã có chứng từ thanh toán không dùng tiền mặt`]),e.status===`REVIEW`&&n.push([`CONFIRMED_OK`,`Đã kiểm tra, không có vấn đề (ghi rõ căn cứ kiểm tra)`]),n.push([`NOT_CLAIMED`,`Không kê khai khấu trừ hóa đơn này`]),n}var Ue=e=>/^R0[123]_/.test(e.code)||e.status===`REVIEW`?``:`Với loại rủi ro này, chứng từ thanh toán không khắc phục được; cần hóa đơn thay thế hoặc điều chỉnh từ người bán, hoặc không kê khai.`;async function We(e,r){try{let i=(await p(`/api/workspaces/${k.ws}/exposure`))[r];if(!i)return;e.innerHTML=`<div class="panel exposure-panel">
-      <h3 class="exposure-title" style="margin-top:0"><span class="sec-icon">⚠️</span> Đánh giá thiệt hại và Phương án xử lý tối ưu</h3>
+      <h3 class="exposure-title" style="margin-top:0"><span class="sec-icon">${K.alertTriangle}</span> Đánh giá thiệt hại và Phương án xử lý tối ưu</h3>
       <p class="exposure-note">${t(i.note)}</p>
       ${i.overdue===!0?`<div class="exposure-table-wrap"><table class="mini exposure-table" style="width:100%;font-size:13px">
             <tr><td>Thuế theo giả định</td><td class="num"><strong>${n(i.amount)}</strong></td><td class="muted small">Chưa xác nhận đã khấu trừ hoặc thực tế thiếu thuế</td></tr>
@@ -601,32 +601,32 @@
         <h3 class="dossier-card-title"><span class="dossier-icon">${K.bank}</span> Chứng từ Ngân hàng đối chiếu</h3>
         ${c?`
           <div class="match-badge ${c.status===`MATCHED`?`match-ok`:`match-warn`}">
-            ${c.status===`MATCHED`?`✓ Đã ghép chứng từ thanh toán`:`⚠ Khớp mơ hồ / Cần xem lại`}
+            ${c.status===`MATCHED`?`<span class="match-icon">`+K.checkCircle+`</span> Đã ghép chứng từ thanh toán`:`<span class="match-icon">`+K.alertTriangle+`</span> Khớp mơ hồ / Cần xem lại`}
           </div>
           <p class="small" style="margin:8px 0 12px">${t(c.note)}</p>
           ${f?`<dl class="kv"><dt>Ngày hạch toán</dt><dd>${a(f.booked)}</dd><dt>Số tiền TT</dt><dd><strong>${n(f.amount)}</strong></dd><dt>Nội dung CK</dt><dd>${t(f.description)}</dd></dl>`:``}
         `:`
-          <div class="match-badge match-empty">⚠ Chưa ghép được chứng từ thanh toán không dùng tiền mặt</div>
+          <div class="match-badge match-empty"><span class="match-icon">${K.alertTriangle}</span> Chưa ghép được chứng từ thanh toán không dùng tiền mặt</div>
           <p class="muted small" style="margin-top:8px">Hóa đơn có giá trị từ 20 triệu đồng trở lên cần chứng từ thanh toán không dùng tiền mặt để đủ điều kiện khấu trừ thuế GTGT.</p>
         `}
       </div>
     </div>
 
     <div id="exposure"></div>
-    <details><summary>Lịch sử quyết định và bằng chứng</summary><div id="decision-history"></div></details>
+    <details class="decision-history-details"><summary><span class="sec-icon">${K.clockHistory}</span> Lịch sử quyết định và bằng chứng</summary><div id="decision-history"></div></details>
 
-    <h3 class="section">Chi tiết vấn đề và Khuyến nghị</h3>
+    <h3 class="section"><span class="sec-icon">${K.alertTriangle}</span> Chi tiết vấn đề và Khuyến nghị</h3>
     <div style="background:var(--cds-layer);padding:14px 16px;border-radius:8px;border:1px solid var(--cds-border-subtle);margin-bottom:14px">
       <p style="margin:0 0 8px;font-size:13.5px"><strong>Hiện tượng:</strong> ${t(r.detail)}</p>
       <p style="margin:0;font-size:13.5px;color:var(--a3-primary)"><strong>Hành động cần làm:</strong> ${t(r.action)}</p>
     </div>
 
-    <h3 class="section">Căn cứ pháp lý</h3>
+    <h3 class="section"><span class="sec-icon">${K.law}</span> Căn cứ pháp lý</h3>
     <ul style="font-size:13px;line-height:1.6;margin:0 0 16px 20px;padding:0">
       ${r.basis.map(e=>`<li>${t(e)}</li>`).join(``)}
     </ul>
 
-    ${l?`<h3 class="section">Phê duyệt và Quyết định xử lý</h3>
+    ${l?`<h3 class="section"><span class="sec-icon">${K.pen}</span> Phê duyệt và Quyết định xử lý</h3>
       <div id="suggest"></div>
       <form id="decide">
         <div class="form-grid">

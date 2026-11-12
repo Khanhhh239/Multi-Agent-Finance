@@ -1,13 +1,24 @@
 const ICONS = {
-  risk: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-  penalty: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
-  review: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M11 8v6M8 11h6"/></svg>',
-  opportunity: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
-  chart: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
-  calendar: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-  bank: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>',
-  dossier: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
-  law: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+  risk: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+  penalty: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
+  review: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M11 8v6M8 11h6"/></svg>',
+  opportunity: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  chart: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  calendar: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  bank: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>',
+  dossier: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  law: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  list: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+  search: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  download: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  checkCircle: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+  invoice: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16l3-2 3 2 3-2 3 2 3-2 3 2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  creditCard: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+  pen: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+  layers: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
+  clockHistory: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>',
+  alertTriangle: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  emptyScale: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>'
 };
 
 // Overview, data intake and the review queue.
@@ -300,7 +311,7 @@ function reviewAmountFormatted(amount, status) {
 function reviewTable(items, rowRenderer) {
   if (!items.length) {
     return `<div class="review-empty-state">
-      <div class="empty-icon-wrap">⚖️</div>
+      <div class="empty-icon-wrap">${ICONS.emptyScale}</div>
       <h3 class="empty-title">Không tìm thấy việc nào khớp bộ lọc</h3>
       <p class="empty-desc">Thử điều chỉnh lại từ khóa tìm kiếm, nhóm lỗi, kỳ phát sinh hoặc chọn tab "Tất cả" để xem danh sách đầy đủ.</p>
       <button type="button" class="cds--btn cds--btn--secondary cds--btn--sm" id="empty-reset-btn">✕ Đặt lại tất cả bộ lọc</button>
@@ -354,7 +365,7 @@ export async function pageReview() {
     <div class="review-summary-strip">
       <div class="rev-summary-card card-risk">
         <div class="rev-card-top">
-          <span class="rev-card-icon">🚨</span>
+          <span class="rev-icon-box badge-risk">${ICONS.risk}</span>
           <span class="rev-card-label">Nguy cơ bị loại</span>
           <span class="rev-card-count pill-risk">${count('AT_RISK')} việc</span>
         </div>
@@ -364,7 +375,7 @@ export async function pageReview() {
 
       <div class="rev-summary-card card-warn">
         <div class="rev-card-top">
-          <span class="rev-card-icon">⚠️</span>
+          <span class="rev-icon-box badge-warn">${ICONS.review}</span>
           <span class="rev-card-label">Cần xem xét</span>
           <span class="rev-card-count pill-warn">${count('REVIEW')} việc</span>
         </div>
@@ -374,7 +385,7 @@ export async function pageReview() {
 
       <div class="rev-summary-card card-opp">
         <div class="rev-card-top">
-          <span class="rev-card-icon">💡</span>
+          <span class="rev-icon-box badge-opportunity">${ICONS.opportunity}</span>
           <span class="rev-card-label">Cơ hội khấu trừ</span>
           <span class="rev-card-count pill-opp">${count('OPPORTUNITY')} việc</span>
         </div>
@@ -384,7 +395,7 @@ export async function pageReview() {
 
       <div class="rev-summary-card card-progress">
         <div class="rev-card-top">
-          <span class="rev-card-icon">📊</span>
+          <span class="rev-icon-box badge-progress">${ICONS.chart}</span>
           <span class="rev-card-label">Tiến độ phê duyệt</span>
           <span class="rev-card-count pill-progress">${resolved} đã duyệt</span>
         </div>
@@ -404,10 +415,10 @@ export async function pageReview() {
     <div class="toolbar smart-toolbar">
       <div class="status-filter-pills segmented-pills">
         ${[
-          ['all', 'Tất cả', rep.items.length, 'pill-all', '📋'],
-          ['AT_RISK', 'Có nguy cơ', count('AT_RISK'), 'pill-risk', '🚨'],
-          ['REVIEW', 'Cần xem xét', count('REVIEW'), 'pill-warn', '⚠️'],
-          ['OPPORTUNITY', 'Bỏ sót', count('OPPORTUNITY'), 'pill-opp', '💡']
+          ['all', 'Tất cả', rep.items.length, 'pill-all', ICONS.list],
+          ['AT_RISK', 'Có nguy cơ', count('AT_RISK'), 'pill-risk', ICONS.risk],
+          ['REVIEW', 'Cần xem xét', count('REVIEW'), 'pill-warn', ICONS.review],
+          ['OPPORTUNITY', 'Bỏ sót', count('OPPORTUNITY'), 'pill-opp', ICONS.opportunity]
         ].map(([k, l, n, cls, icon]) => `<a class="${k === filter ? 'active ' + cls : ''}" href="#/viec?loc=${k}">
           <span class="tab-icon">${icon}</span>
           <span class="tab-label">${esc(l)}</span>
@@ -418,7 +429,7 @@ export async function pageReview() {
       <div class="filter-field filter-field-search" style="flex: 2 1 260px">
         <span class="filter-label">Tìm kiếm</span>
         <div class="search-input-wrap">
-          <span class="search-icon" aria-hidden="true">🔍</span>
+          <span class="search-icon" aria-hidden="true">${ICONS.search}</span>
           <input class="cds--text-input filter-input search-input" id="q" placeholder="Số hóa đơn, người bán, lý do..." aria-label="Tìm việc">
           <button type="button" class="search-clear-btn" id="q-clear" title="Xóa tìm kiếm" hidden aria-label="Xóa tìm kiếm">✕</button>
         </div>
@@ -441,7 +452,7 @@ export async function pageReview() {
         <span class="muted small count-tag" id="shown" role="status"></span>
         ${button('Xóa lọc', 'ghost', 'id="reset-filters" class="cds--btn--sm btn-reset"')}
         <a class="cds--btn cds--btn--ghost cds--btn--sm btn-export" href="/api/workspaces/${esc(state.ws)}/export/viec-can-xu-ly.xlsx">
-          <span class="btn-icon">📥</span> Xuất Excel
+          <span class="btn-icon">${ICONS.download}</span> Xuất Excel
         </a>
       </div>
     </div>
@@ -449,7 +460,7 @@ export async function pageReview() {
     <div class="bulk floating-bulk-dock" id="bulk" hidden>
       <div class="bulk-dock-inner">
         <div class="bulk-badge-group">
-          <span class="bulk-sparkle-icon">⚡</span>
+          <span class="bulk-sparkle-icon">${ICONS.layers}</span>
           <span class="bulk-count-pill" id="bulk-n">Đã chọn 0 việc</span>
         </div>
         <div class="bulk-controls">
@@ -457,7 +468,7 @@ export async function pageReview() {
           <input class="cds--text-input bulk-input" id="bulk-ev" aria-label="Chứng từ hoặc lý do chung" placeholder="Chứng từ hoặc lý do chung...">
           <input class="cds--text-input bulk-input bulk-by" id="bulk-by" aria-label="Người duyệt" placeholder="Người duyệt" value="${esc(store.get('agent3.reviewer') || '')}">
           <button type="button" class="cds--btn cds--btn--primary bulk-confirm-btn" id="bulk-go">
-            <span class="btn-icon">✍️</span> Ghi cho các việc đã chọn
+            <span class="btn-icon">${ICONS.pen}</span> Ghi cho các việc đã chọn
           </button>
         </div>
       </div>
@@ -496,7 +507,7 @@ export async function pageReview() {
       <td class="status-cell">${reviewStatusBadge(it.status)}</td>
       <td class="invoice-cell">
         <div class="inv-code-pill" title="${esc(it.invoice_keys[0] || '')}">
-          <span class="inv-badge-icon">${txn ? '💳' : '📄'}</span>
+          <span class="inv-badge-icon">${txn ? ICONS.creditCard : ICONS.invoice}</span>
           <span class="inv-badge-text">${esc(invLabel(inv) || it.invoice_keys[0] || (txn ? 'Khoản thu' : 'Chưa gắn mã'))}</span>
         </div>
         <div class="inv-date-sub">${dmy(inv?.issue_date || txn?.booked) || '—'}</div>
@@ -677,7 +688,7 @@ async function exposureBox(el, index) {
     const e = ex[index];
     if (!e) return;
     el.innerHTML = `<div class="panel exposure-panel">
-      <h3 class="exposure-title" style="margin-top:0"><span class="sec-icon">⚠️</span> Đánh giá thiệt hại và Phương án xử lý tối ưu</h3>
+      <h3 class="exposure-title" style="margin-top:0"><span class="sec-icon">${ICONS.alertTriangle}</span> Đánh giá thiệt hại và Phương án xử lý tối ưu</h3>
       <p class="exposure-note">${esc(e.note)}</p>
       ${e.overdue === true
         ? `<div class="exposure-table-wrap"><table class="mini exposure-table" style="width:100%;font-size:13px">
@@ -735,32 +746,32 @@ function openItem(it, index) {
         <h3 class="dossier-card-title"><span class="dossier-icon">${ICONS.bank}</span> Chứng từ Ngân hàng đối chiếu</h3>
         ${match ? `
           <div class="match-badge ${match.status === 'MATCHED' ? 'match-ok' : 'match-warn'}">
-            ${match.status === 'MATCHED' ? '✓ Đã ghép chứng từ thanh toán' : '⚠ Khớp mơ hồ / Cần xem lại'}
+            ${match.status === 'MATCHED' ? '<span class="match-icon">' + ICONS.checkCircle + '</span> Đã ghép chứng từ thanh toán' : '<span class="match-icon">' + ICONS.alertTriangle + '</span> Khớp mơ hồ / Cần xem lại'}
           </div>
           <p class="small" style="margin:8px 0 12px">${esc(match.note)}</p>
           ${txn ? `<dl class="kv"><dt>Ngày hạch toán</dt><dd>${dmy(txn.booked)}</dd><dt>Số tiền TT</dt><dd><strong>${money(txn.amount)}</strong></dd><dt>Nội dung CK</dt><dd>${esc(txn.description)}</dd></dl>` : ''}
         ` : `
-          <div class="match-badge match-empty">⚠ Chưa ghép được chứng từ thanh toán không dùng tiền mặt</div>
+          <div class="match-badge match-empty"><span class="match-icon">${ICONS.alertTriangle}</span> Chưa ghép được chứng từ thanh toán không dùng tiền mặt</div>
           <p class="muted small" style="margin-top:8px">Hóa đơn có giá trị từ 20 triệu đồng trở lên cần chứng từ thanh toán không dùng tiền mặt để đủ điều kiện khấu trừ thuế GTGT.</p>
         `}
       </div>
     </div>
 
     <div id="exposure"></div>
-    <details><summary>Lịch sử quyết định và bằng chứng</summary><div id="decision-history"></div></details>
+    <details class="decision-history-details"><summary><span class="sec-icon">${ICONS.clockHistory}</span> Lịch sử quyết định và bằng chứng</summary><div id="decision-history"></div></details>
 
-    <h3 class="section">Chi tiết vấn đề và Khuyến nghị</h3>
+    <h3 class="section"><span class="sec-icon">${ICONS.alertTriangle}</span> Chi tiết vấn đề và Khuyến nghị</h3>
     <div style="background:var(--cds-layer);padding:14px 16px;border-radius:8px;border:1px solid var(--cds-border-subtle);margin-bottom:14px">
       <p style="margin:0 0 8px;font-size:13.5px"><strong>Hiện tượng:</strong> ${esc(it.detail)}</p>
       <p style="margin:0;font-size:13.5px;color:var(--a3-primary)"><strong>Hành động cần làm:</strong> ${esc(it.action)}</p>
     </div>
 
-    <h3 class="section">Căn cứ pháp lý</h3>
+    <h3 class="section"><span class="sec-icon">${ICONS.law}</span> Căn cứ pháp lý</h3>
     <ul style="font-size:13px;line-height:1.6;margin:0 0 16px 20px;padding:0">
       ${it.basis.map((b) => `<li>${esc(b)}</li>`).join('')}
     </ul>
 
-    ${canDecide ? `<h3 class="section">Phê duyệt và Quyết định xử lý</h3>
+    ${canDecide ? `<h3 class="section"><span class="sec-icon">${ICONS.pen}</span> Phê duyệt và Quyết định xử lý</h3>
       <div id="suggest"></div>
       <form id="decide">
         <div class="form-grid">

@@ -3095,3 +3095,118 @@ html.in-platform .cds--header,
   border-color: #24373b;
   color: #ecf3f1;
 }
+
+
+/* ==========================================================================
+   Harmonized Vector SVG Icons for Work Queue (Matches Overview Tab Standard)
+   ========================================================================== */
+
+/* Vector Icon Boxes for Review Summary Strip */
+[data-agent="3"] .rev-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+[data-agent="3"] .rev-icon-box svg {
+  display: block;
+}
+[data-agent="3"] .badge-progress {
+  background: rgba(105, 41, 196, 0.12);
+  color: #6929c4;
+}
+
+/* Vector Icons In Toolbar, Tabs & Table */
+[data-agent="3"] .tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+[data-agent="3"] .tab-icon svg {
+  display: block;
+  stroke: currentColor;
+}
+[data-agent="3"] .search-icon svg {
+  display: block;
+  stroke: var(--cds-text-secondary);
+}
+[data-agent="3"] .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+[data-agent="3"] .btn-icon svg {
+  display: block;
+  stroke: currentColor;
+}
+[data-agent="3"] .inv-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cds-text-secondary);
+}
+[data-agent="3"] .inv-badge-icon svg {
+  display: block;
+  stroke: currentColor;
+}
+[data-agent="3"] .bulk-sparkle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+[data-agent="3"] .bulk-sparkle-icon svg {
+  display: block;
+  stroke: currentColor;
+}
+[data-agent="3"] .sec-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  vertical-align: -2px;
+  color: var(--a3-primary);
+}
+[data-agent="3"] .sec-icon svg {
+  display: block;
+  stroke: currentColor;
+}
+[data-agent="3"] .exposure-title .sec-icon {
+  color: #da1e28;
+}
+[data-agent="3"] .empty-icon-wrap {
+  display: grid;
+  place-items: center;
+  color: var(--cds-text-secondary);
+  opacity: 0.65;
+  margin-bottom: 12px;
+}
+[data-agent="3"] .empty-icon-wrap svg {
+  display: block;
+  stroke: currentColor;
+}
+
+/* Dark Mode Adjustments */
+[data-agent="3"] body.cds--g100 .badge-progress {
+  background: rgba(105, 41, 196, 0.22);
+  color: #a87ffb;
+}
+[data-agent="3"] body.cds--g100 .empty-icon-wrap {
+  color: #94a9a7;
+}
+
+[data-agent="3"] .match-icon {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: -2px;
+  margin-right: 4px;
+}
+[data-agent="3"] .match-icon svg {
+  display: block;
+  stroke: currentColor;
+}
