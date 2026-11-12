@@ -263,8 +263,73 @@ export async function pageOverview() {
   };
 }
 
+// --- Work Queue Enhancements ---
+function formatDetail(detail) {
+  if (!detail) return '';
+  const escaped = esc(detail);
+  return escaped.replace(/Lỗi:\s*([A-Z0-9_,\s]+)/g, (match, errs) => {
+    const pills = errs.split(',')
+      .map(e => e.trim())
+      .filter(Boolean)
+      .map(e => `<span class="tech-err-pill" title="Mã lỗi kỹ thuật: ${e}">${e}</span>`)
+      .join(' ');
+    return `<div class="tech-err-row"><span class="tech-err-label">Lỗi kỹ thuật:</span> ${pills}</div>`;
+  });
+}
+
+function reviewStatusBadge(status) {
+  if (status === 'AT_RISK') {
+    return `<span class="rev-badge rev-badge-risk" title="Có nguy cơ bị cơ quan thuế loại trừ"><span class="badge-dot dot-risk"></span>Có nguy cơ</span>`;
+  }
+  if (status === 'REVIEW') {
+    return `<span class="rev-badge rev-badge-warn" title="Cần rà soát và đối chiếu bổ sung chứng từ"><span class="badge-dot dot-warn"></span>Cần xem xét</span>`;
+  }
+  if (status === 'OPPORTUNITY') {
+    return `<span class="rev-badge rev-badge-opp" title="Cơ hội khấu trừ hợp lệ"><span class="badge-dot dot-opp"></span>Bỏ sót</span>`;
+  }
+  return tag(status);
+}
+
+function reviewAmountFormatted(amount, status) {
+  const cls = status === 'AT_RISK' ? 'val-risk' : (status === 'REVIEW' ? 'val-warn' : 'val-opp');
+  return `<div class="rev-money-cell ${cls}">
+    ${formatSpecialMoney(amount)}
+  </div>`;
+}
+
+function reviewTable(items, rowRenderer) {
+  if (!items.length) {
+    return `<div class="review-empty-state">
+      <div class="empty-icon-wrap">⚖️</div>
+      <h3 class="empty-title">Không tìm thấy việc nào khớp bộ lọc</h3>
+      <p class="empty-desc">Thử điều chỉnh lại từ khóa tìm kiếm, nhóm lỗi, kỳ phát sinh hoặc chọn tab "Tất cả" để xem danh sách đầy đủ.</p>
+      <button type="button" class="cds--btn cds--btn--secondary cds--btn--sm" id="empty-reset-btn">✕ Đặt lại tất cả bộ lọc</button>
+    </div>`;
+  }
+
+  return `<div class="table-wrap review-table-wrap">
+    <table class="cds--data-table cds--data-table--md review-data-table">
+      <thead>
+        <tr>
+          <th class="pickcell" style="width:40px">
+            <input type="checkbox" id="pick-all" aria-label="Chọn tất cả trên trang" title="Chọn tất cả các việc trên trang hiện tại">
+          </th>
+          <th style="width:130px"><div class="cds--table-header-label">Trạng thái</div></th>
+          <th style="width:165px"><div class="cds--table-header-label">Hóa đơn / Ký hiệu</div></th>
+          <th style="min-width:180px"><div class="cds--table-header-label">Nhà cung cấp / Đối tác</div></th>
+          <th><div class="cds--table-header-label">Vấn đề & Căn cứ kỹ thuật</div></th>
+          <th class="num" style="width:145px"><div class="cds--table-header-label">Số tiền thuế</div></th>
+          <th style="width:36px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${items.map(rowRenderer).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
 export async function pageReview() {
-  if (needWorkspace()) return;
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Việc cần xử lý</h1>${notice('info', 'Chưa phân tích', 'Chạy phân tích ở trang Tổng quan để kiểm tra rủi ro.')}`; return; }
   if (rep.meta.schema_version !== 2) { app().innerHTML = `<h1 class="page">Việc cần xử lý</h1>${notice('warning', 'Báo cáo phiên bản cũ', 'Về Tổng quan và chạy lại phân tích trước khi lưu quyết định.')}<a href="#/">Về Tổng quan</a>`; return; }
@@ -276,53 +341,126 @@ export async function pageReview() {
   const items = rep.items.filter((it) => filter === 'all' || it.status === filter);
   const count = (s) => rep.items.filter((i) => i.status === s).length;
 
+  const atRiskVat = rep.totals?.at_risk_vat || rep.items.filter(i => i.status === 'AT_RISK').reduce((acc, i) => acc + Number(i.amount || 0), 0);
+  const reviewVat = rep.items.filter(i => i.status === 'REVIEW').reduce((acc, i) => acc + Number(i.amount || 0), 0);
+  const oppVat = rep.items.filter(i => i.status === 'OPPORTUNITY').reduce((acc, i) => acc + Number(i.amount || 0), 0);
+  const totalAll = rep.items.length;
+  const resolved = context?.events?.length || 0;
+  const pct = totalAll > 0 ? Math.min(100, Math.round((resolved / (resolved + totalAll)) * 100)) : 0;
+
   app().innerHTML = `
     ${sonHeader('Việc cần xử lý', 'Việc cần xử lý', 'RÀ SOÁT & ĐỐI CHIẾU THUẾ', `<span class="ctx-chip chip-count">${rep.items.length} việc cần xử lý</span>`)}
-    <p class="lead" style="margin-top:10px">Danh sách các vấn đề thuế được sắp xếp theo mức độ ảnh hưởng số tiền. Bấm vào từng dòng để mở ngăn chi tiết đối chiếu chứng từ, căn cứ điều luật và lưu quyết định phê duyệt.</p>
+    
+    <div class="review-summary-strip">
+      <div class="rev-summary-card card-risk">
+        <div class="rev-card-top">
+          <span class="rev-card-icon">🚨</span>
+          <span class="rev-card-label">Nguy cơ bị loại</span>
+          <span class="rev-card-count pill-risk">${count('AT_RISK')} việc</span>
+        </div>
+        <div class="rev-card-val">${formatSpecialMoney(atRiskVat)}</div>
+        <div class="rev-card-sub">Tổng tiền thuế GTGT có nguy cơ cao</div>
+      </div>
+
+      <div class="rev-summary-card card-warn">
+        <div class="rev-card-top">
+          <span class="rev-card-icon">⚠️</span>
+          <span class="rev-card-label">Cần xem xét</span>
+          <span class="rev-card-count pill-warn">${count('REVIEW')} việc</span>
+        </div>
+        <div class="rev-card-val">${formatSpecialMoney(reviewVat)}</div>
+        <div class="rev-card-sub">Cần rà soát và bổ sung chứng từ</div>
+      </div>
+
+      <div class="rev-summary-card card-opp">
+        <div class="rev-card-top">
+          <span class="rev-card-icon">💡</span>
+          <span class="rev-card-label">Cơ hội khấu trừ</span>
+          <span class="rev-card-count pill-opp">${count('OPPORTUNITY')} việc</span>
+        </div>
+        <div class="rev-card-val">${formatSpecialMoney(oppVat)}</div>
+        <div class="rev-card-sub">Hóa đơn hợp lệ chưa kê khai</div>
+      </div>
+
+      <div class="rev-summary-card card-progress">
+        <div class="rev-card-top">
+          <span class="rev-card-icon">📊</span>
+          <span class="rev-card-label">Tiến độ phê duyệt</span>
+          <span class="rev-card-count pill-progress">${resolved} đã duyệt</span>
+        </div>
+        <div class="rev-progress-val">
+          <div class="progress-pct">${pct}%</div>
+          <div class="progress-text-sub">${totalAll} việc đang chờ xử lý</div>
+        </div>
+        <div class="rev-progress-bar-wrap">
+          <div class="rev-progress-bar-fill" style="width: ${Math.max(pct, 2)}%"></div>
+        </div>
+      </div>
+    </div>
+
     <div id="fresh"></div>
     <div id="ai-tools"></div>
 
-    <div class="toolbar">
-      <div class="status-filter-pills">
+    <div class="toolbar smart-toolbar">
+      <div class="status-filter-pills segmented-pills">
         ${[
-          ['all', 'Tất cả', rep.items.length, ''],
-          ['AT_RISK', 'Có nguy cơ', count('AT_RISK'), 'risk'],
-          ['REVIEW', 'Cần xem xét', count('REVIEW'), 'warn'],
-          ['OPPORTUNITY', 'Bỏ sót', count('OPPORTUNITY'), '']
-        ].map(([k, l, n]) => `<a class="${k === filter ? 'active' : ''}" href="#/viec?loc=${k}">${esc(l)} <span class="pill-count">${n}</span></a>`).join('')}
+          ['all', 'Tất cả', rep.items.length, 'pill-all', '📋'],
+          ['AT_RISK', 'Có nguy cơ', count('AT_RISK'), 'pill-risk', '🚨'],
+          ['REVIEW', 'Cần xem xét', count('REVIEW'), 'pill-warn', '⚠️'],
+          ['OPPORTUNITY', 'Bỏ sót', count('OPPORTUNITY'), 'pill-opp', '💡']
+        ].map(([k, l, n, cls, icon]) => `<a class="${k === filter ? 'active ' + cls : ''}" href="#/viec?loc=${k}">
+          <span class="tab-icon">${icon}</span>
+          <span class="tab-label">${esc(l)}</span>
+          <span class="pill-count">${n}</span>
+        </a>`).join('')}
       </div>
 
-      <div class="filter-field" style="flex: 2 1 240px">
-        <span>Tìm kiếm</span>
-        <input class="cds--text-input filter-input" id="q" placeholder="Số hóa đơn, người bán, lý do..." aria-label="Tìm việc">
+      <div class="filter-field filter-field-search" style="flex: 2 1 260px">
+        <span class="filter-label">Tìm kiếm</span>
+        <div class="search-input-wrap">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input class="cds--text-input filter-input search-input" id="q" placeholder="Số hóa đơn, người bán, lý do..." aria-label="Tìm việc">
+          <button type="button" class="search-clear-btn" id="q-clear" title="Xóa tìm kiếm" hidden aria-label="Xóa tìm kiếm">✕</button>
+        </div>
       </div>
 
-      <div class="filter-field">
-        <span>Vấn đề</span>
+      <div class="filter-field filter-field-group">
+        <span class="filter-label">Vấn đề</span>
         <select class="cds--select-input filter-select" id="group" aria-label="Lọc theo vấn đề"></select>
       </div>
 
-      <div class="filter-field">
-        <span>Kỳ phát sinh</span>
+      <div class="filter-field filter-field-month">
+        <span class="filter-label">Kỳ phát sinh</span>
         <select class="cds--select-input filter-select" id="month" aria-label="Lọc theo tháng">
           <option value="">Mọi tháng</option>
           ${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}
         </select>
       </div>
 
-      <div style="display:flex;align-items:center;gap:8px;margin-top:auto">
-        <span class="muted small" id="shown" role="status"></span>
-        ${button('Xóa bộ lọc', 'ghost', 'id="reset-filters"')}
-        <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/viec-can-xu-ly.xlsx">Xuất Excel</a>
+      <div class="toolbar-actions">
+        <span class="muted small count-tag" id="shown" role="status"></span>
+        ${button('Xóa lọc', 'ghost', 'id="reset-filters" class="cds--btn--sm btn-reset"')}
+        <a class="cds--btn cds--btn--ghost cds--btn--sm btn-export" href="/api/workspaces/${esc(state.ws)}/export/viec-can-xu-ly.xlsx">
+          <span class="btn-icon">📥</span> Xuất Excel
+        </a>
       </div>
     </div>
 
-    <div class="bulk" id="bulk" hidden>
-      <span id="bulk-n"></span>
-      <select class="cds--select-input filter-select" id="bulk-action" aria-label="Quyết định hàng loạt"></select>
-      <input class="cds--text-input filter-input" id="bulk-ev" aria-label="Chứng từ hoặc lý do chung" placeholder="Chứng từ hoặc lý do chung">
-      <input class="cds--text-input filter-input" id="bulk-by" aria-label="Người duyệt" placeholder="Người duyệt" value="${esc(store.get('agent3.reviewer') || '')}">
-      ${button('Ghi cho các việc đã chọn', 'primary', 'id="bulk-go"')}
+    <div class="bulk floating-bulk-dock" id="bulk" hidden>
+      <div class="bulk-dock-inner">
+        <div class="bulk-badge-group">
+          <span class="bulk-sparkle-icon">⚡</span>
+          <span class="bulk-count-pill" id="bulk-n">Đã chọn 0 việc</span>
+        </div>
+        <div class="bulk-controls">
+          <select class="cds--select-input bulk-select" id="bulk-action" aria-label="Quyết định hàng loạt"></select>
+          <input class="cds--text-input bulk-input" id="bulk-ev" aria-label="Chứng từ hoặc lý do chung" placeholder="Chứng từ hoặc lý do chung...">
+          <input class="cds--text-input bulk-input bulk-by" id="bulk-by" aria-label="Người duyệt" placeholder="Người duyệt" value="${esc(store.get('agent3.reviewer') || '')}">
+          <button type="button" class="cds--btn cds--btn--primary bulk-confirm-btn" id="bulk-go">
+            <span class="btn-icon">✍️</span> Ghi cho các việc đã chọn
+          </button>
+        </div>
+      </div>
     </div>
 
     <div id="list"></div>`;
@@ -347,13 +485,40 @@ export async function pageReview() {
     const inv = invoiceOf(it.invoice_keys[0]);
     const txn = txnOf(it);
     const i = idxOf.get(it);
-    return `<tr class="clickable" tabindex="0" data-item="${i}">
-      <td class="pickcell">${(it.status === 'AT_RISK' || it.status === 'REVIEW') && it.invoice_keys.length ? `<input type="checkbox" class="bulk-pick" data-idx="${i}" aria-label="Chọn" ${selectedPicks.has(it.finding_id) ? 'checked' : ''}>` : ''}</td>
-      <td>${tag(it.status)}</td>
-      <td><strong>${esc(invLabel(inv) || it.invoice_keys[0] || (txn ? 'Khoản thu' : ''))}</strong><div class="muted small">${dmy(inv?.issue_date || txn?.booked)}</div></td>
-      <td><strong>${esc(inv?.seller_name || txn?.counterparty_name || '')}</strong><div class="muted small mono">${inv ? 'MST ' + esc(inv.seller_tax_id || '') : esc(txn?.source || '')}</div></td>
-      <td><span class="cell-title">${esc(it.title)}</span><div class="muted small">${esc(it.detail)}</div></td>
-      <td class="num"><strong>${money(it.amount)}</strong></td>
+    const isPickable = (it.status === 'AT_RISK' || it.status === 'REVIEW') && it.invoice_keys.length;
+    const isChecked = selectedPicks.has(it.finding_id);
+    const rowClass = it.status === 'AT_RISK' ? 'row-risk' : (it.status === 'REVIEW' ? 'row-warn' : 'row-opp');
+
+    return `<tr class="clickable review-row ${rowClass} ${isChecked ? 'row-checked' : ''}" tabindex="0" data-item="${i}">
+      <td class="pickcell">
+        ${isPickable ? `<input type="checkbox" class="bulk-pick" data-idx="${i}" aria-label="Chọn" ${isChecked ? 'checked' : ''}>` : ''}
+      </td>
+      <td class="status-cell">${reviewStatusBadge(it.status)}</td>
+      <td class="invoice-cell">
+        <div class="inv-code-pill" title="${esc(it.invoice_keys[0] || '')}">
+          <span class="inv-badge-icon">${txn ? '💳' : '📄'}</span>
+          <span class="inv-badge-text">${esc(invLabel(inv) || it.invoice_keys[0] || (txn ? 'Khoản thu' : 'Chưa gắn mã'))}</span>
+        </div>
+        <div class="inv-date-sub">${dmy(inv?.issue_date || txn?.booked) || '—'}</div>
+      </td>
+      <td class="seller-cell">
+        <div class="seller-name" title="${esc(inv?.seller_name || txn?.counterparty_name || '')}">
+          ${esc(inv?.seller_name || txn?.counterparty_name || 'Đối tác chưa xác định')}
+        </div>
+        <div class="seller-tax-sub mono">
+          ${inv ? `<span class="mst-tag">MST</span> <code>${esc(inv.seller_tax_id || '—')}</code>` : `<span class="bank-tag">${esc(txn?.source || 'Ngân hàng')}</span>`}
+        </div>
+      </td>
+      <td class="issue-cell">
+        <div class="issue-title">${esc(it.title)}</div>
+        <div class="issue-detail-wrap">${formatDetail(it.detail)}</div>
+      </td>
+      <td class="amount-cell num">
+        ${reviewAmountFormatted(it.amount, it.status)}
+      </td>
+      <td class="action-cell">
+        <span class="row-arrow" aria-hidden="true" title="Xem chi tiết">→</span>
+      </td>
     </tr>`;
   };
 
@@ -373,20 +538,92 @@ export async function pageReview() {
     reviewItems = view;
     reviewSnapshot = () => { try { sessionStorage.setItem(viewKey, JSON.stringify({q: $('#q').value, month: $('#month').value, code, shown, scroll: window.scrollY, focus: lastOpened})); } catch {} };
     $('#shown').textContent = q || m || code ? `${view.length} việc khớp` : `${view.length} việc`;
-    $('#list').innerHTML = table(['', 'Trạng thái', 'Hóa đơn', 'Người bán', 'Lý do', { label: 'Số tiền', num: true }], view.slice(0, shown).map(rowTpl), 'Không có việc nào khớp bộ lọc.')
-      + (view.length > shown ? `<div class="bar" style="margin-top:16px"><span class="muted small">Đang hiện ${shown} trên ${view.length} việc</span>${button(`Hiện thêm ${Math.min(PAGE, view.length - shown)} việc`, 'ghost', 'id="more"')}${button('Hiện tất cả', 'ghost', 'id="all"')}</div>` : '');
+
+    const paginationHtml = view.length > shown ? `
+      <div class="pagination-bar">
+        <div class="pagination-info">
+          <span class="muted small">Đang hiển thị <strong>${Math.min(shown, view.length)}</strong> trên tổng số <strong>${view.length}</strong> việc (${Math.round((Math.min(shown, view.length) / view.length) * 100)}%)</span>
+        </div>
+        <div class="pagination-buttons">
+          ${button(`Hiện thêm ${Math.min(PAGE, view.length - shown)} việc`, 'ghost', 'id="more" class="btn-load-more"')}
+          ${button('Hiện tất cả', 'ghost', 'id="all" class="btn-load-all"')}
+        </div>
+      </div>
+    ` : '';
+
+    $('#list').innerHTML = reviewTable(view.slice(0, shown), rowTpl) + paginationHtml;
+
+    const pickAll = $('#pick-all');
     picks = [...app().querySelectorAll('.bulk-pick')];
-    picks.forEach((c) => { c.onclick = (e) => e.stopPropagation(); c.onchange = () => { const key = rep.items[Number(c.dataset.idx)].finding_id; c.checked ? selectedPicks.add(key) : selectedPicks.delete(key); syncBulk(); }; });
+    if (pickAll) {
+      pickAll.checked = picks.length > 0 && picks.every(c => c.checked);
+      pickAll.indeterminate = picks.some(c => c.checked) && !pickAll.checked;
+      pickAll.onchange = () => {
+        picks.forEach(c => {
+          c.checked = pickAll.checked;
+          const key = rep.items[Number(c.dataset.idx)].finding_id;
+          pickAll.checked ? selectedPicks.add(key) : selectedPicks.delete(key);
+          const tr = c.closest('tr');
+          if (tr) tr.classList.toggle('row-checked', pickAll.checked);
+        });
+        syncBulk();
+      };
+    }
+
+    picks.forEach((c) => {
+      c.onclick = (e) => e.stopPropagation();
+      c.onchange = () => {
+        const key = rep.items[Number(c.dataset.idx)].finding_id;
+        c.checked ? selectedPicks.add(key) : selectedPicks.delete(key);
+        const tr = c.closest('tr');
+        if (tr) tr.classList.toggle('row-checked', c.checked);
+        if (pickAll) {
+          const allChecked = picks.length > 0 && picks.every(p => p.checked);
+          pickAll.checked = allChecked;
+          pickAll.indeterminate = picks.some(p => p.checked) && !allChecked;
+        }
+        syncBulk();
+      };
+    });
+
     app().querySelectorAll('[data-item]').forEach((tr) => {
       tr.onclick = () => openItem(rep.items[Number(tr.dataset.item)], Number(tr.dataset.item));
       tr.onkeydown = (e) => { if (e.target === tr && ['Enter', ' '].includes(e.key)) { e.preventDefault(); tr.click(); } };
     });
+
     if ($('#more')) $('#more').onclick = () => { shown += PAGE; paint(); };
     if ($('#all')) $('#all').onclick = () => { shown = view.length; paint(); };
+
+    const emptyReset = $('#empty-reset-btn');
+    if (emptyReset) {
+      emptyReset.onclick = () => {
+        if (filter !== 'all') { location.hash = '#/viec'; return; }
+        $('#q').value = ''; $('#month').value = ''; code = ''; $('#group').value = ''; shown = PAGE; paint();
+      };
+    }
+
+    const qInput = $('#q');
+    const qClear = $('#q-clear');
+    if (qInput && qClear) {
+      qClear.hidden = !qInput.value;
+      qInput.oninput = () => {
+        qClear.hidden = !qInput.value;
+        shown = PAGE;
+        paint();
+      };
+      qClear.onclick = () => {
+        qInput.value = '';
+        qClear.hidden = true;
+        shown = PAGE;
+        paint();
+      };
+    }
+
     syncBulk();
   };
 
   $('#group').onchange = () => { code = $('#group').value; shown = PAGE; paint(); };
+  $('#month').onchange = () => { shown = PAGE; paint(); };
   $('#bulk-go').onclick = async () => {
     const chosen = picks.filter((c) => c.checked).map((c) => rep.items[Number(c.dataset.idx)]);
     const body = { invoice_keys: [...new Set(chosen.map((x) => x.invoice_keys[0]))], finding_ids: chosen.map(x => x.finding_id), action: $('#bulk-action').value, evidence: $('#bulk-ev').value.trim(), by: $('#bulk-by').value.trim() };
@@ -396,7 +633,6 @@ export async function pageReview() {
     try { reviewSnapshot?.(); const r = await decide(`/api/workspaces/${state.ws}/decisions/bulk`, body, context); if (r.report_pending) { toast('Quyết định đã lưu; cần chạy lại báo cáo', r.message, 'warning'); submit.disabled = false; return; } toast(`Đã ghi ${r.decisions} quyết định`, `Thuế có nguy cơ còn ${money(r.totals.at_risk_vat)}`); window.sonStamp?.(body.by); rerender(); }
     catch (err) { if (submit.isConnected) { toast('Không ghi được', err.message, 'error'); submit.disabled = false; } }
   };
-  $('#q').oninput = () => { shown = PAGE; paint(); }; $('#month').onchange = () => { shown = PAGE; paint(); };
   $('#reset-filters').onclick = () => {
     if (filter !== 'all') { location.hash = '#/viec'; return; }
     $('#q').value = ''; $('#month').value = ''; code = ''; $('#group').value = ''; shown = PAGE; paint();
@@ -440,17 +676,17 @@ async function exposureBox(el, index) {
     const ex = await api(`/api/workspaces/${state.ws}/exposure`);
     const e = ex[index];
     if (!e) return;
-    el.innerHTML = `<div class="panel exposure" style="border-left:3px solid var(--a3-danger);background:var(--cds-layer)">
-      <h3 style="margin-top:0">Đánh giá thiệt hại và Phương án xử lý tối ưu</h3>
-      <p>${esc(e.note)}</p>
+    el.innerHTML = `<div class="panel exposure-panel">
+      <h3 class="exposure-title" style="margin-top:0"><span class="sec-icon">⚠️</span> Đánh giá thiệt hại và Phương án xử lý tối ưu</h3>
+      <p class="exposure-note">${esc(e.note)}</p>
       ${e.overdue === true
-        ? `<table class="mini" style="width:100%;font-size:13px">
+        ? `<div class="exposure-table-wrap"><table class="mini exposure-table" style="width:100%;font-size:13px">
             <tr><td>Thuế theo giả định</td><td class="num"><strong>${money(e.amount)}</strong></td><td class="muted small">Chưa xác nhận đã khấu trừ hoặc thực tế thiếu thuế</td></tr>
             <tr><td>Chậm nộp theo giả định</td><td class="num">${money(e.interest) || 'Chưa đủ dữ liệu'}</td><td class="muted small">${e.days_late} ngày sau hạn lịch</td></tr>
             <tr><td>Phạt theo giả định</td><td class="num">${money(e.penalty) || 'Chưa đủ dữ liệu'}</td><td class="muted small">Không phải kết luận xử phạt</td></tr>
-          </table>`
-        : `<p>${e.due ? `Hạn theo lịch: ${dmy(e.due)}; chưa quá hạn lịch.` : 'Chưa xác định được hạn; không tính số ngày chậm.'} Chưa có bằng chứng xác nhận tình trạng kê khai hoặc nộp.</p>`}
-      <div class="cite" style="margin-top:8px">${e.basis.filter(Boolean).map(esc).join('<br>')}</div>
+          </table></div>`
+        : `<p class="exposure-due-note">${e.due ? `Hạn theo lịch: ${dmy(e.due)}; chưa quá hạn lịch.` : 'Chưa xác định được hạn; không tính số ngày chậm.'} Chưa có bằng chứng xác nhận tình trạng kê khai hoặc nộp.</p>`}
+      <div class="cite exposure-cite" style="margin-top:8px">${e.basis.filter(Boolean).map(esc).join('<br>')}</div>
     </div>`;
   } catch { el.innerHTML = ''; }
 }
@@ -468,15 +704,15 @@ function openItem(it, index) {
 
   $('#modal-root').innerHTML = `<aside class="drawer" role="dialog" aria-labelledby="drawer-title">
     <div class="drawer-top-bar">
-      <div>
+      <div class="drawer-header-content">
         <div class="drawer-subhead">
-          ${tag(it.status)}
+          ${reviewStatusBadge(it.status)}
           <span class="rule-code-badge">${esc(it.code)}</span>
-          ${it.amount ? `<span class="amount-badge">Thuế: ${money(it.amount)}</span>` : ''}
+          ${it.amount ? `<span class="amount-badge">Số tiền thuế: <strong>${money(it.amount)}</strong></span>` : ''}
         </div>
         <h2 id="drawer-title">${esc(it.title)}</h2>
       </div>
-      <button class="cds--btn cds--btn--ghost cds--btn--sm close" id="close" type="button" aria-label="Đóng ngăn chi tiết">✕ Đóng</button>
+      <button class="cds--btn cds--btn--ghost cds--btn--sm close drawer-close-btn" id="close" type="button" aria-label="Đóng ngăn chi tiết">✕ Đóng</button>
     </div>
 
     <div id="plain" style="margin-top:1rem"></div>
@@ -534,9 +770,9 @@ function openItem(it, index) {
           ${receipt ? field({ key: 'category', label: 'Loại khoản thu nếu không phải bán hàng', type: 'choice', choices: [['LOAN', 'Khoản vay'], ['INTERNAL_TRANSFER', 'Chuyển nội bộ'], ['CAPITAL', 'Góp vốn'], ['REFUND', 'Hoàn tiền'], ['OTHER', 'Khác, ghi rõ bằng chứng']] }) : ''}
         </div>
         ${receipt ? `<details><summary>Hóa đơn bán ra liên quan (khi xác nhận đã bổ sung hóa đơn)</summary><label for="sales-query">Tìm số hóa đơn hoặc người mua</label><input id="sales-query" class="cds--text-input"><div id="sales-picks" class="sales-evidence-list"></div><div id="sales-selected" role="status"></div></details>` : ''}
-        <div class="bar" style="margin-top:16px">
-          ${button('Lưu và mở việc tiếp theo', 'primary', 'type="submit" data-next="1"')}
-          ${button('Lưu quyết định này', 'secondary', 'type="submit"')}
+        <div class="bar drawer-action-bar" style="margin-top:16px">
+          ${button('Lưu và mở việc tiếp theo →', 'primary', 'type="submit" data-next="1" class="btn-save-next"')}
+          ${button('Lưu quyết định này', 'secondary', 'type="submit" class="btn-save-current"')}
           <span id="dmsg"></span>
         </div>
       </form>` : ''}
