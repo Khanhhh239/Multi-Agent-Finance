@@ -1,5 +1,5 @@
 // Invoices, bank, calendar, questions, legal corpus and enterprise settings.
-import { $, api, app, button, compareDecimal, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put,
+import { $, api, app, button, compareDecimal, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put, sonHeader,
   onPageLeave, state, table, tag } from './core.js';
 import { bankProposals, lawAlerts, riskImport } from './pages_ai.js';
 

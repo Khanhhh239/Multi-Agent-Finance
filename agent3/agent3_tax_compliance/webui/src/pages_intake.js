@@ -1,5 +1,5 @@
 // Data intake: one drop zone for everything, file-by-file status, editable bank mapping, coverage check before analysis.
-import { $, api, app, button, dmy, esc, field, hashParams, loadWorkspaces, loading, money, needWorkspace, notice, post, put, saveBankFormat, state, table, tag } from './core.js';
+import { $, api, app, button, dmy, esc, field, hashParams, loadWorkspaces, loading, money, needWorkspace, notice, post, put, saveBankFormat, sonHeader, state, table, tag } from './core.js';
 
 const KIND_LABEL = { purchase_xml: 'Hóa đơn mua vào', sales_xml: 'Hóa đơn bán ra', bank: 'Sao kê ngân hàng', portal_list: 'Bảng kê cổng thuế' };
 const FIELD_LABEL = { date: 'Ngày giao dịch', debit: 'Ghi nợ (tiền ra)', credit: 'Ghi có (tiền vào)', description: 'Nội dung', counterparty_account: 'Tài khoản đối ứng', counterparty_name: 'Tên đối ứng' };
