@@ -11,7 +11,7 @@ const ICONS = {
 };
 
 // Overview, data intake and the review queue.
-import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, moneyShort, needWorkspace, notice, post, put,
+import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, moneyShort, needWorkspace, notice, post, put, sonHeader,
   state, store, table, tag, decide, decisionContext, onPageLeave } from './core.js';
 import { aiToolbar, explainBox } from './pages_ai.js';
 import { pageWelcome } from './pages_config.js';
@@ -85,23 +85,7 @@ export async function pageOverview() {
   };
 
   app().innerHTML = `
-    <div class="workspace-heading">
-      <span class="top-label">TRỢ LÝ THUẾ GTGT</span>
-      <span class="divider">/</span>
-      <span id="breadcrumb">Tổng quan</span>
-    </div>
-    <div class="page-heading son-illustrated">
-      <div>
-        <div class="eyebrow">KHÔNG GIAN DOANH NGHIỆP</div>
-        <h1 class="page">Tổng quan</h1>
-      </div>
-    </div>
-    <div class="context-chips-bar">
-      <span class="ctx-chip chip-company"><strong>${esc(ws.name)}</strong></span>
-      <span class="ctx-chip chip-taxcode">MST: <code>${esc(ws.tax_code)}</code></span>
-      ${period ? `<span class="ctx-chip chip-period">${period.trim()}</span>` : ''}
-      <span class="ctx-chip chip-date">${rep ? `Phân tích: ${dmy(rep.meta.as_of)}` : 'Chưa có kết quả'}</span>
-    </div>
+    ${sonHeader('Tổng quan', 'Tổng quan', 'KHÔNG GIAN DOANH NGHIỆP', rep ? `<span class="ctx-chip chip-date">Phân tích: ${dmy(rep.meta.as_of)}</span>` : '')}
     ${ws.simulated ? '<p class="lead" style="margin-top: 8px;">Dữ liệu mô phỏng đối soát nội bộ, không phải doanh nghiệp thật.</p>' : ''}
     <details class="compliance-disclaimer-strip">
       <summary class="disclaimer-summary">
@@ -265,8 +249,9 @@ export async function pageReview() {
   const items = rep.items.filter((it) => filter === 'all' || it.status === filter);
   const count = (s) => rep.items.filter((i) => i.status === s).length;
 
-  app().innerHTML = `<h1 class="page">Việc cần xử lý</h1>
-    <p class="lead">Danh sách các vấn đề thuế được sắp xếp theo mức độ ảnh hưởng số tiền. Bấm vào từng dòng để mở ngăn chi tiết đối chiếu chứng từ, căn cứ điều luật và lưu quyết định phê duyệt.</p>
+  app().innerHTML = `
+    ${sonHeader('Việc cần xử lý', 'Việc cần xử lý', 'RÀ SOÁT & ĐỐI CHIẾU THUẾ', `<span class="ctx-chip chip-count">${rep.items.length} việc cần xử lý</span>`)}
+    <p class="lead" style="margin-top:10px">Danh sách các vấn đề thuế được sắp xếp theo mức độ ảnh hưởng số tiền. Bấm vào từng dòng để mở ngăn chi tiết đối chiếu chứng từ, căn cứ điều luật và lưu quyết định phê duyệt.</p>
     <div id="fresh"></div>
     <div id="ai-tools"></div>
 

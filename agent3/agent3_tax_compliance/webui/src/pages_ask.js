@@ -1,6 +1,6 @@
 // Question assistant: guide generated from the domain catalog, suggestions from this enterprise's data, answers with
 // "how the question was understood" and other domains to pick when it was misunderstood.
-import { $, api, app, button, esc, loading, needWorkspace, notice, onPageLeave, pageSignal, post, state, tag } from './core.js';
+import { $, api, app, button, esc, loading, needWorkspace, notice, onPageLeave, pageSignal, post, sonHeader, state, tag } from './core.js';
 
 let guideCache = null;
 
@@ -78,8 +78,8 @@ export async function pageAsk() {
   const save = () => { try { sessionStorage.setItem(key, JSON.stringify(history.slice(-30))); } catch { /* private mode */ } };
 
   app().innerHTML = `<div class="ask-wrap">
-    <h1 class="page">Hỏi đáp thuế và dữ liệu</h1>
-    <p class="lead">Hỏi bằng ngôn ngữ tự nhiên về dữ liệu thuế của doanh nghiệp hoặc các quy định pháp luật. Trợ lý chỉ trả lời khi có căn cứ đối chiếu cụ thể từ hóa đơn hoặc điều luật.</p>
+    ${sonHeader('Hỏi đáp', 'Hỏi đáp thuế & dữ liệu', 'TRỢ LÝ AI ĐỐI CHIẾU')}
+    <p class="lead" style="margin-top:10px">Hỏi bằng ngôn ngữ tự nhiên về dữ liệu thuế của doanh nghiệp hoặc các quy định pháp luật. Trợ lý chỉ trả lời khi có căn cứ đối chiếu cụ thể từ hóa đơn hoặc điều luật.</p>
 
     <div id="sugg" class="sugg" style="margin-bottom:12px"></div>
     <div id="chat" class="chat" role="log" aria-label="Hội thoại" aria-live="polite"></div>

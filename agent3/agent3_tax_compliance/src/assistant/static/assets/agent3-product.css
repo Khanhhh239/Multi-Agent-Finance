@@ -1734,3 +1734,30 @@ html.in-platform[data-agent="3"] .side .cds--side-nav__link[aria-current="page"]
 html.in-platform[data-agent="3"] .side .cds--side-nav__link[aria-current="page"]::before {
   display: none !important;
 }
+
+/* Ensure .cds--header is completely hidden when embedded in platform */
+html.in-platform[data-agent="3"] .cds--header,
+html.in-platform .cds--header,
+.in-platform .cds--header {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  border: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+[data-agent="3"] .chip-count {
+  background: var(--kt-accent-soft, #f7e9e8);
+  color: var(--kt-accent, #97162d);
+  font-weight: 600;
+  border-color: rgba(151, 22, 45, 0.2);
+}
+
+[data-agent="3"] .chip-date {
+  color: var(--cds-text-secondary);
+  font-weight: 500;
+}

@@ -1,7 +1,7 @@
 // The controlled AI layer in the interface: plain explanations, line classification, bank-text proposals,
 // explanation letter and dossier, law alerts, VAT figures. AI output is always labelled and verified; people decide.
 import { toast } from './ux.js';
-import { $, api, app, balance, button, decide, decisionContext, dmy, esc, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, onPageLeave, pageSignal, post, state, store, table, tag } from './core.js';
+import { $, api, app, balance, button, decide, decisionContext, dmy, esc, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, onPageLeave, pageSignal, post, sonHeader, state, store, table, tag } from './core.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 const aiTag = (mode) => (mode === 'AI_VERIFIED' ? tag('LLM_VERIFIED', 'AI, đã kiểm tra') : tag('INFO', 'Câu mẫu'));
@@ -69,8 +69,9 @@ export async function pageDossier() {
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Giải trình</h1>${notice('info', 'Chưa phân tích')}`; return; }
   const keys = [...new Set(rep.items.filter((i) => i.status !== 'INFO').flatMap((i) => i.invoice_keys))].filter((k) => invoiceOf(k));
-  app().innerHTML = `<h1 class="page">Giải trình với cơ quan thuế</h1>
-    <p class="lead">Khi nhận công văn yêu cầu giải trình hoặc bổ sung hồ sơ: chọn hóa đơn liên quan, dán nội dung công văn. Hệ thống gom hóa đơn XML, chứng từ thanh toán đã ghép, quyết định của người duyệt và điều khoản luật thành một tệp nén, kèm bản nháp thư. Mỗi đoạn thư ghi rõ dựa vào dữ kiện nào; đoạn có số liệu không khớp dữ kiện bị loại.</p>
+  app().innerHTML = `
+    ${sonHeader('Giải trình', 'Giải trình với cơ quan thuế', 'HỒ SƠ GIẢI TRÌNH & BẢO VỆ SỐ LIỆU')}
+    <p class="lead" style="margin-top:10px">Khi nhận công văn yêu cầu giải trình hoặc bổ sung hồ sơ: chọn hóa đơn liên quan, dán nội dung công văn. Hệ thống gom hóa đơn XML, chứng từ thanh toán đã ghép, quyết định của người duyệt và điều khoản luật thành một tệp nén, kèm bản nháp thư. Mỗi đoạn thư ghi rõ dựa vào dữ kiện nào; đoạn có số liệu không khớp dữ kiện bị loại.</p>
     <div class="cds--form-item"><label class="cds--label" for="req">Nội dung công văn của cơ quan thuế (không bắt buộc)</label>
     <textarea class="cds--text-area" id="req" rows="4" placeholder="Ví dụ: Đề nghị doanh nghiệp giải trình việc kê khai khấu trừ thuế GTGT đầu vào của các hóa đơn mua hàng của Công ty TNHH Điện máy Thành Công trong quý 3/2026..."></textarea></div>
     <h2 class="section">Hóa đơn đưa vào hồ sơ</h2>
@@ -125,7 +126,9 @@ export async function pageVat() {
   try { v = await api(`/api/workspaces/${state.ws}/vat-summary`); } catch (err) { if (err.name === 'AbortError') throw err; const missing = [404, 409].includes(err.status); app().innerHTML = `<h1 class="page">Số liệu thuế GTGT</h1>${notice(missing ? 'info' : 'error', missing ? 'Cần chạy phân tích' : 'Không tải được số liệu', err.message)}`; return; }
   const diff = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? tag('LLM_VERIFIED', 'Khớp') : `<span class="risk-text">${Number(x) > 0 ? '+' : ''}${money(x)}</span>`);
   const change = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? 'không đổi' : `${Number(x) > 0 ? 'tăng' : 'giảm'} ${money(Math.abs(Number(x)))}`);
-  app().innerHTML = `<h1 class="page">Số liệu thuế giá trị gia tăng theo kỳ</h1><p class="lead">${esc(v.note)}</p>
+  app().innerHTML = `
+    ${sonHeader('Số liệu thuế GTGT', 'Số liệu thuế giá trị gia tăng', 'TỔNG HỢP & ĐỐI CHIẾU NGHĨA VỤ')}
+    <p class="lead" style="margin-top:10px">${esc(v.note)}</p>
     ${table(['Kỳ', 'Thuế đầu ra', 'Thuế đầu vào', 'Không kê khai', 'Có nguy cơ', 'Chờ xem xét', 'Chưa phát hiện cảnh báo', 'Chênh lệch: chưa tính chờ duyệt', 'Chênh lệch: nếu chờ duyệt được chấp nhận'],
       v.rows.map(r => `<tr><td>${esc(r.period)}</td><td class="num">${money(r.output_vat)}</td><td class="num">${money(r.input_vat)}</td><td class="num">${money(r.not_claimed_vat)}</td><td class="num">${money(r.at_risk)}</td><td class="num">${money(r.review_vat)}</td><td class="num">${money(r.no_alert_vat)}</td><td>${balance(r.scenario_without_review)}</td><td>${balance(r.scenario_with_review)}</td></tr>`))}
     ${v.calculation_status === 'UNSUPPORTED_DIRECT' ? notice('warning', 'Chưa hỗ trợ tính thuế theo phương pháp trực tiếp', 'Chỉ hiển thị số liệu hóa đơn; không tính thuế phải nộp bằng công thức khấu trừ.') : ''}

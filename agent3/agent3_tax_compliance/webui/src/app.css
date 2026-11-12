@@ -235,11 +235,11 @@ section.cfg { scroll-margin-top: 6rem; }
 /* Seamless transition when embedded in portal */
 .in-platform .kt-portal-return { display: none !important; }
 .in-platform .cds--header {
-  height: 2.5rem !important;
-  background: var(--cds-layer-01, #f4f4f4) !important;
-  color: var(--cds-text-primary) !important;
-  border-bottom: 1px solid var(--cds-border-subtle, #e0e0e0) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 .in-platform .cds--header__name {
   display: none !important;

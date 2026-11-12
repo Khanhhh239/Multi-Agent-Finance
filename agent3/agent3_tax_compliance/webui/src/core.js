@@ -119,6 +119,32 @@ export const table = (head, rows, empty = 'Không có dữ liệu.') => (rows.le
   <thead><tr>${head.map((h) => `<th${h.num ? ' class="num"' : ''}><div class="cds--table-header-label">${esc(h.label || h)}</div></th>`).join('')}</tr></thead>
   <tbody>${rows.join('')}</tbody></table></div>` : `<div class="empty">${esc(empty)}</div>`);
 
+export function sonHeader(breadcrumb, title, eyebrow = 'KHÔNG GIAN DOANH NGHIỆP', extraChips = '') {
+  const ws = state.workspaces.find((w) => w.id === state.ws);
+  const rep = state.report;
+  const period = rep?.meta?.period ? `Kỳ: ${dmy(rep.meta.period[0])} - ${dmy(rep.meta.period[1])}` : '';
+  return `
+    <div class="workspace-heading">
+      <span class="top-label">TRỢ LÝ THUẾ GTGT</span>
+      <span class="divider">/</span>
+      <span id="breadcrumb">${esc(breadcrumb)}</span>
+    </div>
+    <div class="page-heading son-illustrated">
+      <div>
+        <div class="eyebrow">${esc(eyebrow)}</div>
+        <h1 class="page">${esc(title)}</h1>
+      </div>
+    </div>
+    ${ws ? `
+    <div class="context-chips-bar">
+      <span class="ctx-chip chip-company"><strong>${esc(ws.name)}</strong></span>
+      <span class="ctx-chip chip-taxcode">MST: <code>${esc(ws.tax_code)}</code></span>
+      ${period ? `<span class="ctx-chip chip-period">${esc(period)}</span>` : ''}
+      ${extraChips}
+    </div>` : ''}
+  `;
+}
+
 export const state = { platform: null, ws: null, workspaces: [], report: null, schema: null };
 export const app = () => $('#app');
 export const hashParams = () => new URLSearchParams(location.hash.split('?')[1] || '');

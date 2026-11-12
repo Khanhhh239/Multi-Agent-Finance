@@ -121,8 +121,9 @@ export async function pageBankFormats() {
 
 export async function pageDataWorkspace() {
   const versions = await api(`/api/workspaces/${state.ws}/portal/lists`);
-  app().innerHTML = `<h1 class="page">Bảng kê cổng thuế đang sử dụng</h1>
-    <p class="lead">Các bản nguồn được giữ riêng. Chỉ bản được chọn mới được phân tích; chọn lại không xóa bản cũ.</p>
+  app().innerHTML = `
+    ${sonHeader('Bảng kê', 'Bảng kê cổng thuế đang sử dụng', 'NGUỒN DỮ LIỆU ĐỐI SOÁT')}
+    <p class="lead" style="margin-top:10px">Các bản nguồn được giữ riêng. Chỉ bản được chọn mới được phân tích; chọn lại không xóa bản cũ.</p>
     ${versions.error ? notice('warning', 'Cần chọn bản bảng kê', versions.error) : ''}
     <form id="active-list"><label for="list-version">Bản nguồn</label><select id="list-version" class="cds--select-input" required><option value="">Chọn bảng kê</option>${versions.files.map(name => `<option value="${esc(name)}" ${name === versions.active ? 'selected' : ''}>${esc(name)}</option>`).join('')}</select>
     <div class="bar">${button('Sử dụng bản này', 'primary', 'type="submit"')}<span id="list-result"></span></div></form>

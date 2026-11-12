@@ -18,7 +18,9 @@ export async function pageInvoices() {
   const viewKey = `agent3.invoices.${state.ws}.${state.platform?.profile_revision}`;
   let savedView = {}; try { savedView = JSON.parse(sessionStorage.getItem(viewKey) || '{}'); } catch {}
   let page = savedView.page || 0;
-  app().innerHTML = `<h1 class="page">Hóa đơn</h1><p class="lead">${rep.invoices.length} hóa đơn đọc từ tệp XML. Lọc, tìm và xem theo trang 50 dòng; bấm tiêu đề cột để sắp xếp; bấm dòng có cảnh báo để xử lý.</p>
+  app().innerHTML = `
+    ${sonHeader('Hóa đơn', 'Hóa đơn GTGT', 'QUẢN LÝ CHỨNG TỪ', `<span class="ctx-chip chip-count">${rep.invoices.length} hóa đơn</span>`)}
+    <p class="lead" style="margin-top:10px">${rep.invoices.length} hóa đơn đọc từ tệp XML. Lọc, tìm và xem theo trang 50 dòng; bấm tiêu đề cột để sắp xếp; bấm dòng có cảnh báo để xử lý.</p>
     <div class="bar"><select class="cds--select-input filter-select" id="role" aria-label="Loại hóa đơn"><option value="">Mua vào và bán ra</option><option value="PURCHASE">Mua vào</option><option value="SALE">Bán ra</option></select>
       <select class="cds--select-input filter-select" id="st" aria-label="Tình trạng"><option value="">Mọi tình trạng</option><option value="AT_RISK">Có nguy cơ</option><option value="REVIEW">Cần xem xét</option><option value="OK">Không cảnh báo</option><option value="UNPAID">Chưa ghép thanh toán</option></select>
       <select class="cds--select-input filter-select" id="mon" aria-label="Tháng"><option value="">Mọi tháng</option>${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}</select>
@@ -67,7 +69,9 @@ export async function pageBank() {
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Ngân hàng</h1>${notice('info', 'Chưa phân tích')}`; return; }
   const usedBy = new Map(rep.matches.flatMap((m) => m.txn_ids.map((t) => [t, m])));
-  app().innerHTML = `<h1 class="page">Ngân hàng</h1><a href="#/du-lieu">Chọn bảng kê cổng thuế đang dùng</a><p class="lead">${rep.transactions.length} giao dịch từ các tệp sao kê. Một khoản chi chỉ được ghép khi đúng số tiền và có dấu hiệu nhận ra người bán (tài khoản, tên hoặc mã số thuế, số hóa đơn).</p><div id="props"></div>
+  app().innerHTML = `
+    ${sonHeader('Ngân hàng', 'Giao dịch ngân hàng', 'ĐỐI SOÁT THANH TOÁN', `<span class="ctx-chip chip-count">${rep.transactions.length} giao dịch</span>`)}
+    <p class="lead" style="margin-top:10px">${rep.transactions.length} giao dịch từ các tệp sao kê. Một khoản chi chỉ được ghép khi đúng số tiền và có dấu hiệu nhận ra người bán. <a href="#/du-lieu">Chọn bảng kê cổng thuế đang dùng ↗</a></p><div id="props"></div>
     ${table(['Ngày', 'Chiều', { label: 'Số tiền', num: true }, 'Đối ứng', 'Nội dung', 'Ghép với hóa đơn', 'Nguồn'], rep.transactions.map((t) => {
       const m = usedBy.get(t.txn_id);
       return `<tr><td>${dmy(t.booked)}</td><td>${t.direction === 'OUT' ? 'Chi' : 'Thu'}</td><td class="num">${money(t.amount)}</td>
@@ -80,7 +84,9 @@ export async function pageBank() {
 export async function pageCalendar() {
   if (needWorkspace()) return;
   const rep = await loadReport();
-  app().innerHTML = `<h1 class="page">Lịch thuế</h1><p class="lead">Hạn lịch theo bộ quy tắc nháp, đã tính dời ngày nghỉ theo cấu hình. Tình trạng được tính tại ngày phân tích ${dmy(rep?.meta.as_of)}; chưa xác nhận đã kê khai hoặc nộp tiền.</p>
+  app().innerHTML = `
+    ${sonHeader('Lịch thuế', 'Lịch thuế', 'THEO DÕI NGHĨA VỤ')}
+    <p class="lead" style="margin-top:10px">Hạn lịch theo bộ quy tắc nháp, đã tính dời ngày nghỉ theo cấu hình. Tình trạng được tính tại ngày phân tích ${dmy(rep?.meta.as_of)}; chưa xác nhận đã kê khai hoặc nộp tiền.</p>
     ${table(['Kỳ', 'Hạn nộp', 'Tình trạng', 'Căn cứ'], (rep?.calendar || []).map((c) => `<tr><td>${esc(c.period)}</td><td>${dmy(c.due)}${c.moved_from ? `<div class="muted small">Dời từ ${dmy(c.moved_from)} do ngày nghỉ</div>` : ''}</td><td>${esc(c.status)}${c.open_items ? `<div><a href="#/viec" class="risk-text">còn ${c.open_items} việc chưa xử lý của kỳ này</a></div>` : ''}${c.extension ? `<div class="muted small">${esc(c.extension)}</div>` : ''}</td><td class="muted small">${esc(c.basis)}</td></tr>`), 'Chưa có dữ liệu.')}`;
 }
 
@@ -155,7 +161,9 @@ export async function pageLaw() {
       ${d.provisions.length ? d.provisions.map((p) => `<div class="law-prov l${p.level}">${esc(p.text)}</div>`).join('') : notice('warning', 'Văn bản chưa có toàn văn trong kho', 'Trang nguồn chỉ có tệp đính kèm.')}`;
     return;
   }
-  app().innerHTML = `<h1 class="page">Kho luật</h1><p class="lead">Văn bản thuế lấy tự động từ Cơ sở dữ liệu quốc gia về pháp luật (vbpl.vn) của Bộ Tư pháp, theo từng điều, khoản, điểm, có ngày hiệu lực. Chỉ đọc trang được phép theo robots.txt, tối đa 1 yêu cầu mỗi 2 giây.</p>
+  app().innerHTML = `
+    ${sonHeader('Kho luật', 'Kho luật thuế', 'CĂN CỨ PHÁP LÝ')}
+    <p class="lead" style="margin-top:10px">Văn bản thuế lấy tự động từ Cơ sở dữ liệu quốc gia về pháp luật (vbpl.vn) của Bộ Tư pháp, theo từng điều, khoản, điểm, có ngày hiệu lực. Chỉ đọc trang được phép theo robots.txt, tối đa 1 yêu cầu mỗi 2 giây.</p>
     <div class="kpis"><div class="kpi"><span class="label">Văn bản</span><span class="value">${s ? s.documents : 0}</span><span class="sub">${s ? `${s.in_force} còn hiệu lực` : ''}</span></div>
     <div class="kpi"><span class="label">Điều khoản</span><span class="value">${s ? s.provisions.toLocaleString('vi-VN') : 0}</span><span class="sub">${s ? `${s.chunks.toLocaleString('vi-VN')} đoạn tìm kiếm` : ''}</span></div>
     <div class="kpi"><span class="label">Lần đồng bộ gần nhất</span><span class="value" style="font-size:1.25rem">${s?.last_snapshot?.created_at ? dmy(s.last_snapshot.created_at) : 'chưa có'}</span>
