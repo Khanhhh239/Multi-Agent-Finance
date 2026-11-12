@@ -40,76 +40,136 @@ export async function pageInvoices() {
   const purchaseVat = purchaseInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
   const saleGross = saleInvs.reduce((s, i) => s + Number(i.gross || 0), 0);
   const saleVat = saleInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
+  const totalGross = purchaseGross + saleGross;
+  const purchasePct = totalGross > 0 ? Math.round((purchaseGross / totalGross) * 100) : 50;
+  const salePct = 100 - purchasePct;
+  const vatDiff = purchaseVat - saleVat; // > 0: khấu trừ chuyển sau; < 0: phải nộp
   const atRiskCount = rep.invoices.filter((i) => worst(i) === 'AT_RISK').length;
   const reviewCount = rep.invoices.filter((i) => worst(i) === 'REVIEW').length;
   const unpaidCount = purchaseInvs.filter((i) => !matched.get(i.key)).length;
+  const signedCount = rep.invoices.filter((i) => i.signed).length;
+  const signedPct = rep.invoices.length > 0 ? Math.round((signedCount / rep.invoices.length) * 100) : 100;
 
   app().innerHTML = `
     ${sonHeader('Hóa đơn', 'Hóa đơn GTGT', 'QUẢN LÝ CHỨNG TỪ', `<span class="ctx-chip chip-count">${rep.invoices.length.toLocaleString('vi-VN')} hóa đơn</span>`)}
     
-    <div class="inv-balance-ribbon">
-      <div class="ribbon-col col-purchase">
-        <div class="ribbon-badge-label">
-          <span class="ribbon-icon">${ICONS_INV.inbox}</span>
-          <span class="ribbon-title">HÓA ĐƠN ĐẦU VÀO (MUA VÀO)</span>
-          <span class="ribbon-count">${purchaseInvs.length.toLocaleString('vi-VN')} HĐ</span>
-        </div>
-        <div class="ribbon-values">
-          <span class="ribbon-gross">${formatSpecialMoney(purchaseGross)}</span>
-          <span class="ribbon-vat-sub">Thuế VAT: <strong>${formatSpecialMoney(purchaseVat)}</strong></span>
-        </div>
-      </div>
-
-      <div class="ribbon-divider" aria-hidden="true"></div>
-
-      <div class="ribbon-col col-sale">
-        <div class="ribbon-badge-label">
-          <span class="ribbon-icon">${ICONS_INV.send}</span>
-          <span class="ribbon-title">HÓA ĐƠN ĐẦU RA (BÁN RA)</span>
-          <span class="ribbon-count">${saleInvs.length.toLocaleString('vi-VN')} HĐ</span>
-        </div>
-        <div class="ribbon-values">
-          <span class="ribbon-gross">${formatSpecialMoney(saleGross)}</span>
-          <span class="ribbon-vat-sub">Thuế VAT: <strong>${formatSpecialMoney(saleVat)}</strong></span>
-        </div>
-      </div>
-
-      <div class="ribbon-divider" aria-hidden="true"></div>
-
-      <div class="ribbon-col col-risk">
-        <div class="ribbon-badge-label">
-          <span class="ribbon-icon">${ICONS_INV.alert}</span>
-          <span class="ribbon-title">CẢNH BÁO RỦI RO & ĐỐI SOÁT</span>
-          <span class="ribbon-count ${atRiskCount > 0 ? 'has-risk' : ''}">${(atRiskCount + reviewCount).toLocaleString('vi-VN')} cần lưu ý</span>
-        </div>
-        <div class="ribbon-values">
-          <div class="ribbon-tags-row">
-            <span class="risk-mini-tag risk-tag-danger">${atRiskCount} có nguy cơ</span>
-            <span class="risk-mini-tag risk-tag-warn">${reviewCount} cần xem xét</span>
-            <span class="risk-mini-tag risk-tag-bank">${unpaidCount} chưa ghép tiền</span>
+    <!-- EXECUTIVE INVOICE & VAT BALANCE HUB -->
+    <div class="inv-balance-hub">
+      <div class="hub-main-grid">
+        <!-- CỘT 1: HÓA ĐƠN MUA VÀO (ĐẦU VÀO) -->
+        <div class="hub-card hub-card-purchase">
+          <div class="hub-card-header">
+            <span class="hub-icon-badge badge-purchase">${ICONS_INV.inbox}</span>
+            <div class="hub-title-box">
+              <span class="hub-role-label">HÓA ĐƠN ĐẦU VÀO</span>
+              <span class="hub-action-sub">Mua vào để khấu trừ thuế</span>
+            </div>
+            <span class="hub-count-tag count-purchase">${purchaseInvs.length.toLocaleString('vi-VN')} HĐ</span>
           </div>
+          <div class="hub-money-body">
+            <div class="hub-money-primary">
+              <span class="hub-currency-label">Tổng TT:</span>
+              <span class="hub-amount font-num">${money(purchaseGross)}</span>
+            </div>
+            <div class="hub-vat-pill vat-purchase">
+              <span class="vat-pill-label">Thuế GTGT đầu vào:</span>
+              <span class="vat-pill-val font-num"><strong>${money(purchaseVat)}</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CỘT 2: CÁN CÂN GTGT & ĐỐI CHIẾU TRUNG TÂM -->
+        <div class="hub-card hub-card-center">
+          <div class="center-balance-head">
+            <span class="balance-title">CÂN ĐỐI NGHĨA VỤ THUẾ GTGT</span>
+            <span class="balance-sub">Đối chiếu Mua vào ⟷ Bán ra</span>
+          </div>
+
+          <div class="balance-ratio-bar-wrap">
+            <div class="ratio-labels">
+              <span class="ratio-label-p">Mua: <strong>${purchasePct}%</strong></span>
+              <span class="ratio-label-s">Bán: <strong>${salePct}%</strong></span>
+            </div>
+            <div class="ratio-bar-track">
+              <div class="ratio-bar-fill-p" style="width:${purchasePct}%" title="Tỷ trọng mua vào: ${purchasePct}%"></div>
+              <div class="ratio-bar-fill-s" style="width:${salePct}%" title="Tỷ trọng bán ra: ${salePct}%"></div>
+            </div>
+          </div>
+
+          <div class="balance-result-box ${vatDiff >= 0 ? 'result-credit' : 'result-payable'}">
+            <span class="result-status-icon">${vatDiff >= 0 ? ICONS_INV.shieldCheck : ICONS_INV.alert}</span>
+            <div class="result-info">
+              <div class="result-name">${vatDiff >= 0 ? 'Thuế GTGT còn được khấu trừ:' : 'Thuế GTGT phải nộp dự kiến:'}</div>
+              <div class="result-value font-num">${vatDiff >= 0 ? '+' : ''}${money(Math.abs(vatDiff))}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CỘT 3: HÓA ĐƠN BÁN RA (ĐẦU RA) -->
+        <div class="hub-card hub-card-sale">
+          <div class="hub-card-header">
+            <span class="hub-icon-badge badge-sale">${ICONS_INV.send}</span>
+            <div class="hub-title-box">
+              <span class="hub-role-label">HÓA ĐƠN ĐẦU RA</span>
+              <span class="hub-action-sub">Bán ra phát sinh thuế nộp</span>
+            </div>
+            <span class="hub-count-tag count-sale">${saleInvs.length.toLocaleString('vi-VN')} HĐ</span>
+          </div>
+          <div class="hub-money-body">
+            <div class="hub-money-primary">
+              <span class="hub-currency-label">Tổng TT:</span>
+              <span class="hub-amount font-num">${money(saleGross)}</span>
+            </div>
+            <div class="hub-vat-pill vat-sale">
+              <span class="vat-pill-label">Thuế GTGT đầu ra:</span>
+              <span class="vat-pill-val font-num"><strong>${money(saleVat)}</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DẢI FOOTNOTE GIÁM SÁT RỦI RO & CHỨNG TỪ DƯỚI ĐÁY -->
+      <div class="hub-footer-strip">
+        <div class="strip-left">
+          <span class="strip-label">Giám sát rủi ro:</span>
+          <span class="audit-badge audit-risk ${atRiskCount > 0 ? 'has-issue' : ''}">
+            ${ICONS_INV.alert} <strong>${atRiskCount.toLocaleString('vi-VN')}</strong> có nguy cơ
+          </span>
+          <span class="audit-badge audit-review">
+            <strong>${reviewCount.toLocaleString('vi-VN')}</strong> cần xem xét
+          </span>
+          <span class="audit-badge audit-bank">
+            ${ICONS_INV.clock} <strong>${unpaidCount.toLocaleString('vi-VN')}</strong> chưa ghép ngân hàng
+          </span>
+        </div>
+        <div class="strip-right">
+          <span class="audit-badge audit-signed">
+            ${ICONS_INV.checkCircle} Chữ ký số: <strong>${signedPct}% hợp lệ</strong> (${signedCount.toLocaleString('vi-VN')}/${rep.invoices.length.toLocaleString('vi-VN')})
+          </span>
         </div>
       </div>
     </div>
 
+    <!-- SEGMENTED TABS -->
     <div class="inv-segmented-pills">
       ${[
-        ['all', 'Tất cả', rep.invoices.length, ICONS_INV.list],
-        ['PURCHASE', 'Mua vào', purchaseInvs.length, ICONS_INV.inbox],
-        ['SALE', 'Bán ra', saleInvs.length, ICONS_INV.send],
-        ['RISK', 'Có cảnh báo', atRiskCount + reviewCount, ICONS_INV.alert],
-        ['UNPAID', 'Chưa ghép ngân hàng', unpaidCount, ICONS_INV.clock],
-      ].map(([k, l, n, icon]) => `<button type="button" class="inv-filter-pill ${k === tabFilter ? 'active' : ''}" data-tab="${k}">
+        ['all', 'Tất cả', rep.invoices.length, ICONS_INV.list, 'pill-tab-all'],
+        ['PURCHASE', 'Mua vào', purchaseInvs.length, ICONS_INV.inbox, 'pill-tab-purchase'],
+        ['SALE', 'Bán ra', saleInvs.length, ICONS_INV.send, 'pill-tab-sale'],
+        ['RISK', 'Có cảnh báo', atRiskCount + reviewCount, ICONS_INV.alert, 'pill-tab-risk'],
+        ['UNPAID', 'Chưa ghép ngân hàng', unpaidCount, ICONS_INV.clock, 'pill-tab-bank'],
+      ].map(([k, l, n, icon, cls]) => `<button type="button" class="inv-filter-pill ${cls} ${k === tabFilter ? 'active' : ''}" data-tab="${k}">
         <span class="pill-icon">${icon}</span>
-        <span>${esc(l)}</span>
+        <span class="pill-name">${esc(l)}</span>
         <span class="pill-count">${n.toLocaleString('vi-VN')}</span>
       </button>`).join('')}
     </div>
 
+    <!-- UNIFIED SINGLE-LINE TOOLBAR -->
     <div class="inv-toolbar">
       <div class="inv-search-wrap">
         <span class="inv-search-icon" aria-hidden="true">${ICONS_INV.search}</span>
-        <input class="cds--text-input inv-search-input" id="iq" placeholder="Tìm theo số hóa đơn, tên đối tác, mã số thuế hoặc nội dung hàng hóa..." aria-label="Tìm hóa đơn">
+        <input class="cds--text-input inv-search-input" id="iq" placeholder="Tìm theo số hóa đơn, đối tác, MST hoặc nội dung hàng hóa..." aria-label="Tìm hóa đơn">
         <button type="button" class="inv-search-clear" id="iq-clear" title="Xóa tìm kiếm" hidden aria-label="Xóa tìm kiếm">✕</button>
       </div>
 
@@ -126,11 +186,11 @@ export async function pageInvoices() {
         ${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}
       </select>
 
-      <span class="muted small" id="icount" role="status" style="white-space:nowrap;margin:0 4px"></span>
-      ${button('Xóa lọc', 'ghost', 'id="reset-invoices" class="cds--btn--sm"')}
-      <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx" style="display:inline-flex;align-items:center;gap:6px">
-        ${ICONS_INV.download} Xuất Excel
+      ${button('✕ Đặt lại', 'ghost', 'id="reset-invoices" class="cds--btn--sm btn-inv-reset"')}
+      <a class="cds--btn cds--btn--ghost cds--btn--sm btn-inv-export" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx">
+        <span class="btn-icon">${ICONS_INV.download}</span> <span>Xuất Excel</span>
       </a>
+      <span class="muted small inv-counter" id="icount" role="status"></span>
     </div>
 
     <div id="ilist"></div>`;
@@ -162,20 +222,20 @@ export async function pageInvoices() {
 
     const pages = Math.max(1, Math.ceil(view.length / PAGE));
     page = Math.min(page, pages - 1);
-    const th = (k, l, num) => `<th class="${num ? 'num ' : ''}sortable" aria-sort="${sort[0] === k ? (sort[1] > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" class="sort-button" data-sort="${k}">${esc(l)}${sort[0] === k ? (sort[1] > 0 ? ' ↑' : ' ↓') : ''}</button></th>`;
+    const th = (k, l, num, extraCls = '') => `<th class="${num ? 'num ' : ''}${extraCls} sortable" aria-sort="${sort[0] === k ? (sort[1] > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" class="sort-button" data-sort="${k}">${esc(l)}${sort[0] === k ? (sort[1] > 0 ? ' ↑' : ' ↓') : ''}</button></th>`;
     $('#icount').textContent = `${view.length.toLocaleString('vi-VN')} hóa đơn`;
 
     $('#ilist').innerHTML = view.length ? `<div class="table-wrap inv-table-wrap"><table class="cds--data-table cds--data-table--md inv-data-table">
       <thead>
         <tr>
-          <th>Hóa đơn & Ký hiệu</th>
-          ${th('issue_date', 'Ngày lập')}
-          ${th('seller', 'Người bán / Người mua')}
-          ${th('gross', 'Tổng thanh toán', true)}
-          ${th('vat', 'Thuế GTGT', true)}
-          <th>Toàn vẹn</th>
-          <th>Thanh toán</th>
-          <th>Cảnh báo rủi ro</th>
+          <th style="min-width:160px">Hóa đơn & Ký hiệu</th>
+          ${th('issue_date', 'Ngày lập', false, 'th-date')}
+          ${th('seller', 'Người bán / Người mua', false, 'th-partner')}
+          ${th('gross', 'Tổng thanh toán', true, 'th-gross')}
+          ${th('vat', 'Thuế GTGT', true, 'th-vat')}
+          <th style="min-width:110px">Toàn vẹn</th>
+          <th style="min-width:115px">Thanh toán</th>
+          <th style="min-width:150px">Cảnh báo rủi ro</th>
         </tr>
       </thead>
       <tbody>
@@ -205,7 +265,7 @@ export async function pageInvoices() {
               </div>
               <div class="inv-role-sub">${i.role === 'SALE' ? '<span class="role-badge sale">Bán ra</span>' : '<span class="role-badge purchase">Mua vào</span>'}</div>
             </td>
-            <td>${dmy(i.issue_date)}</td>
+            <td class="font-date">${dmy(i.issue_date)}</td>
             <td>
               <div class="partner-name" title="${esc(partnerName)}">${esc(partnerName)}</div>
               ${partnerTax ? `<div class="partner-tax mono"><span class="mst-tag">MST</span> <code>${esc(partnerTax)}</code></div>` : ''}
