@@ -267,14 +267,43 @@
     <!-- Agent frame -->
     <section class="view agent-view" id="view-agent" aria-labelledby="agent-name" hidden>
       <div class="agent-bar">
-        <div>
-          <div class="agent-title"><span class="agent-no" id="agent-no"></span><h1 id="agent-name"></h1><span class="status" id="agent-status"></span></div>
-          <a class="agent-source" id="agent-source" href="#data"></a>
+        <div class="agent-brand-col">
+          <div class="agent-title">
+            <span class="agent-no" id="agent-no">A3</span>
+            <div class="agent-headings">
+              <div class="agent-name-row">
+                <h1 id="agent-name">Agent 3</h1>
+                <span class="agent-subtag" id="agent-subtag">Tuân thủ thuế GTGT</span>
+                <span class="status status-pill" id="agent-status"></span>
+              </div>
+              <div class="agent-source-wrap">
+                <svg class="agent-source-icon" viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true">
+                  <path d="M1.75 2.5h4.086a1.25 1.25 0 0 1 .884.366l1.414 1.414a.25.25 0 0 0 .177.07h5.939c.69 0 1.25.56 1.25 1.25v7.15c0 .69-.56 1.25-1.25 1.25H1.75C1.06 14 .5 13.44.5 12.75V3.75c0-.69.56-1.25 1.25-1.25z"/>
+                </svg>
+                <a class="agent-source" id="agent-source" href="#data"></a>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="agent-actions">
-          <a class="btn" href="#overview">← Trang chung</a>
-          <button type="button" id="agent-toggle"></button>
-          <a id="agent-newtab" target="_blank" rel="noopener">Mở tab riêng</a>
+          <a class="btn btn-ghost" id="agent-back" href="#overview" title="Quay lại trang tổng quan">
+            <svg class="btn-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 13L5 8l5-5"/>
+            </svg>
+            <span>Tổng quan</span>
+          </a>
+          <button type="button" class="btn btn-power" id="agent-toggle" title="Bật hoặc tắt agent">
+            <svg class="btn-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 2v6M3.5 4.5a6.5 6.5 0 1 0 9 0"/>
+            </svg>
+            <span class="btn-text"></span>
+          </button>
+          <a class="btn btn-popout" id="agent-newtab" target="_blank" rel="noopener" title="Mở rộng sang tab mới">
+            <svg class="btn-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4M10 2h4v4M6.5 9.5L14 2"/>
+            </svg>
+            <span>Mở tab riêng</span>
+          </a>
         </div>
       </div>
       <div class="agent-body">

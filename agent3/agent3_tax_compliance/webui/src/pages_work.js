@@ -1,3 +1,15 @@
+const ICONS = {
+  risk: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+  penalty: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
+  review: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M11 8v6M8 11h6"/></svg>',
+  opportunity: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  chart: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  calendar: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  bank: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>',
+  dossier: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  law: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+};
+
 // Overview, data intake and the review queue.
 import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, moneyShort, needWorkspace, notice, post, put,
   state, store, table, tag, decide, decisionContext, onPageLeave } from './core.js';
@@ -30,10 +42,29 @@ export async function pageOverview() {
     if (t?.missing_vat_invoices) return '';
     const v = monthly.map((e) => Math.abs(Number(e[status] || 0)));
     if (v.length < 2 || !v.some(Boolean)) return '';
-    const W = 92; const H = 28; const max = Math.max(...v);
+    const W = 96; const H = 30; const max = Math.max(...v);
     const pts = v.map((x, i) => [2 + (i / (v.length - 1)) * (W - 8), H - 4 - (x / max) * (H - 10)]);
     const last = pts[pts.length - 1];
-    return `<svg class="spark spark-${status.toLowerCase()}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Diễn biến theo tháng, ${v.length} tháng"><polyline points="${pts.map((q) => q.map((n) => n.toFixed(1)).join(',')).join(' ')}"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.6"/></svg>`;
+    const polyPts = pts.map((q) => q.map((n) => n.toFixed(1)).join(',')).join(' ');
+    const areaPts = `2,${H} ${polyPts} ${last[0].toFixed(1)},${H}`;
+    const gradId = `spark-g-${status.toLowerCase()}`;
+    const colorMap = {
+      at_risk: ['#ff8389', 'rgba(255, 131, 137, 0.28)', 'rgba(255, 131, 137, 0)'],
+      review: ['#fcd34d', 'rgba(252, 211, 77, 0.28)', 'rgba(252, 211, 77, 0)'],
+      opportunity: ['#2dd4bf', 'rgba(45, 212, 191, 0.28)', 'rgba(45, 212, 191, 0)']
+    };
+    const c = colorMap[status.toLowerCase()] || ['#60a5fa', 'rgba(96, 165, 250, 0.28)', 'rgba(96, 165, 250, 0)'];
+    return `<svg class="spark spark-${status.toLowerCase()}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Diễn biến theo tháng, ${v.length} tháng">
+      <defs>
+        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${c[1]}"/>
+          <stop offset="100%" stop-color="${c[2]}"/>
+        </linearGradient>
+      </defs>
+      <polygon points="${areaPts}" fill="url(#${gradId})"/>
+      <polyline points="${polyPts}" stroke="${c[0]}"/>
+      <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.8" fill="${c[0]}"/>
+    </svg>`;
   };
   const monthChart = () => {
     if (t?.missing_vat_invoices) return notice('info', 'Chưa đủ số thuế để vẽ biểu đồ', 'Một số hóa đơn thiếu số thuế; không thay giá trị thiếu bằng 0.');
@@ -70,16 +101,22 @@ export async function pageOverview() {
     <div class="kpis">
       <div class="kpi kpi-risk">
         <div class="kpi-head">
-          <span class="label">Thuế đầu vào có nguy cơ bị loại</span>
+          <div class="kpi-title-wrap">
+            <span class="kpi-badge badge-risk">${ICONS.risk}</span>
+            <span class="label">Thuế đầu vào có nguy cơ bị loại</span>
+          </div>
           ${spark('AT_RISK')}
         </div>
         <div class="value risk">${t ? money(t.at_risk_vat) : '—'}</div>
         ${t && moneyShort(t.at_risk_vat) ? `<span class="short-read">khoảng ${moneyShort(t.at_risk_vat)}</span>` : ''}
         <div class="sub">${t ? `${t.at_risk_invoices} hóa đơn có cảnh báo cần kiểm tra` : 'Chưa phân tích'}</div>
       </div>
-      <div class="kpi">
+      <div class="kpi kpi-penalty">
         <div class="kpi-head">
-          <span class="label">Kịch bản phạt nếu xác định khai sai</span>
+          <div class="kpi-title-wrap">
+            <span class="kpi-badge badge-penalty">${ICONS.penalty}</span>
+            <span class="label">Kịch bản phạt nếu xác định khai sai</span>
+          </div>
           ${spark('AT_RISK')}
         </div>
         <div class="value">${t ? money(t.penalty_estimate) : '—'}</div>
@@ -88,7 +125,10 @@ export async function pageOverview() {
       </div>
       <div class="kpi kpi-warn">
         <div class="kpi-head">
-          <span class="label">Hóa đơn cần người xem xét</span>
+          <div class="kpi-title-wrap">
+            <span class="kpi-badge badge-warn">${ICONS.review}</span>
+            <span class="label">Hóa đơn cần người xem xét</span>
+          </div>
           ${spark('REVIEW')}
         </div>
         <div class="value warn">${t ? money(t.review_vat) : '—'}</div>
@@ -97,7 +137,10 @@ export async function pageOverview() {
       </div>
       <div class="kpi kpi-opportunity">
         <div class="kpi-head">
-          <span class="label">Có thể đang bỏ sót khấu trừ</span>
+          <div class="kpi-title-wrap">
+            <span class="kpi-badge badge-opportunity">${ICONS.opportunity}</span>
+            <span class="label">Có thể đang bỏ sót khấu trừ</span>
+          </div>
           ${spark('OPPORTUNITY')}
         </div>
         <div class="value">${t ? money(t.opportunity_vat) : '—'}</div>
@@ -119,11 +162,11 @@ export async function pageOverview() {
     ${monthChart()}
 
     <div class="quick-links">
-      <a href="#/so-lieu"><span>📊</span> Số liệu thuế GTGT theo kỳ</a>
-      <a href="#/lich"><span>📅</span> Lịch thuế và Hạn nộp</a>
-      <a href="#/ngan-hang"><span>🏦</span> Giao dịch ngân hàng</a>
-      <a href="#/giai-trinh"><span>📑</span> Soạn hồ sơ giải trình</a>
-      <a href="#/luat"><span>⚖️</span> Kho luật và Điểm mới</a>
+      <a href="#/so-lieu"><span class="icon-wrap">${ICONS.chart}</span> <span>Số liệu thuế GTGT theo kỳ</span></a>
+      <a href="#/lich"><span class="icon-wrap">${ICONS.calendar}</span> <span>Lịch thuế và Hạn nộp</span></a>
+      <a href="#/ngan-hang"><span class="icon-wrap">${ICONS.bank}</span> <span>Giao dịch ngân hàng</span></a>
+      <a href="#/giai-trinh"><span class="icon-wrap">${ICONS.dossier}</span> <span>Soạn hồ sơ giải trình</span></a>
+      <a href="#/luat"><span class="icon-wrap">${ICONS.law}</span> <span>Kho luật và Điểm mới</span></a>
     </div>
 
     <div class="grid2">
@@ -392,27 +435,48 @@ function openItem(it, index) {
   contextReady.catch(() => {});
 
   $('#modal-root').innerHTML = `<aside class="drawer" role="dialog" aria-labelledby="drawer-title">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+    <div class="drawer-top-bar">
       <div>
+        <div class="drawer-subhead">
+          ${tag(it.status)}
+          <span class="rule-code-badge">${esc(it.code)}</span>
+          ${it.amount ? `<span class="amount-badge">Thuế: ${money(it.amount)}</span>` : ''}
+        </div>
         <h2 id="drawer-title">${esc(it.title)}</h2>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:4px">${tag(it.status)} <span class="muted small">${esc(it.code)}</span></div>
       </div>
       <button class="cds--btn cds--btn--ghost cds--btn--sm close" id="close" type="button" aria-label="Đóng ngăn chi tiết">✕ Đóng</button>
     </div>
 
     <div id="plain" style="margin-top:1rem"></div>
 
-    <h3 class="section">${receipt ? 'Thông tin giao dịch' : 'Thông tin hóa đơn'}</h3>
-    ${receipt && txn ? `<dl class="kv"><dt>Ngày</dt><dd>${dmy(txn.booked)}</dd><dt>Số tiền</dt><dd>${money(txn.amount)}</dd><dt>Đối tác</dt><dd>${esc(txn.counterparty_name)}</dd><dt>Nội dung</dt><dd>${esc(txn.description)}</dd><dt>Nguồn</dt><dd>${esc(txn.source)}</dd></dl>` : ''}
-    <dl class="kv" ${receipt ? 'hidden' : ''}>
-      <dt>Số hóa đơn</dt><dd><strong>${esc(invLabel(inv) || it.invoice_keys[0])}</strong></dd>
-      <dt>Người bán</dt><dd><strong>${esc(inv?.seller_name || '')}</strong> <span class="muted">(MST: ${esc(inv?.seller_tax_id || '')})</span></dd>
-      <dt>Ngày lập</dt><dd>${dmy(inv?.issue_date)}</dd>
-      <dt>Tổng thanh toán</dt><dd><strong>${money(inv?.gross)}</strong></dd>
-      <dt>Tiền thuế GTGT</dt><dd><strong style="color:var(--a3-primary)">${money(inv?.vat)}</strong></dd>
-      <dt>Chứng từ ngân hàng</dt><dd>${match ? `✓ ${match.status === 'MATCHED' ? 'Đã ghép' : 'Mơ hồ'}. ${esc(match.note)}` : '<span style="color:var(--a3-warning)">Chưa ghép được chứng từ thanh toán</span>'}</dd>
-      <dt>Tệp XML gốc</dt><dd class="mono small">${esc(inv?.file || '')}</dd>
-    </dl>
+    <div class="dossier-grid">
+      <div class="dossier-card">
+        <h3 class="dossier-card-title"><span class="dossier-icon">${ICONS.dossier}</span> ${receipt ? 'Thông tin giao dịch' : 'Hóa đơn đầu vào XML'}</h3>
+        ${receipt && txn ? `<dl class="kv"><dt>Ngày</dt><dd>${dmy(txn.booked)}</dd><dt>Số tiền</dt><dd><strong>${money(txn.amount)}</strong></dd><dt>Đối tác</dt><dd>${esc(txn.counterparty_name)}</dd><dt>Nội dung</dt><dd>${esc(txn.description)}</dd><dt>Nguồn</dt><dd class="mono small">${esc(txn.source)}</dd></dl>` : ''}
+        <dl class="kv" ${receipt ? 'hidden' : ''}>
+          <dt>Số hóa đơn</dt><dd><strong>${esc(invLabel(inv) || it.invoice_keys[0])}</strong></dd>
+          <dt>Người bán</dt><dd><strong>${esc(inv?.seller_name || '')}</strong> <div class="muted small">MST: ${esc(inv?.seller_tax_id || '')}</div></dd>
+          <dt>Ngày lập</dt><dd>${dmy(inv?.issue_date)}</dd>
+          <dt>Tổng thanh toán</dt><dd><strong>${money(inv?.gross)}</strong></dd>
+          <dt>Tiền thuế GTGT</dt><dd><strong style="color:var(--a3-primary);font-size:15px">${money(inv?.vat)}</strong></dd>
+          <dt>Tệp XML gốc</dt><dd class="mono small" style="word-break:break-all">${esc(inv?.file || '')}</dd>
+        </dl>
+      </div>
+
+      <div class="dossier-card">
+        <h3 class="dossier-card-title"><span class="dossier-icon">${ICONS.bank}</span> Chứng từ Ngân hàng đối chiếu</h3>
+        ${match ? `
+          <div class="match-badge ${match.status === 'MATCHED' ? 'match-ok' : 'match-warn'}">
+            ${match.status === 'MATCHED' ? '✓ Đã ghép chứng từ thanh toán' : '⚠ Khớp mơ hồ / Cần xem lại'}
+          </div>
+          <p class="small" style="margin:8px 0 12px">${esc(match.note)}</p>
+          ${txn ? `<dl class="kv"><dt>Ngày hạch toán</dt><dd>${dmy(txn.booked)}</dd><dt>Số tiền TT</dt><dd><strong>${money(txn.amount)}</strong></dd><dt>Nội dung CK</dt><dd>${esc(txn.description)}</dd></dl>` : ''}
+        ` : `
+          <div class="match-badge match-empty">⚠ Chưa ghép được chứng từ thanh toán không dùng tiền mặt</div>
+          <p class="muted small" style="margin-top:8px">Hóa đơn có giá trị từ 20 triệu đồng trở lên cần chứng từ thanh toán không dùng tiền mặt để đủ điều kiện khấu trừ thuế GTGT.</p>
+        `}
+      </div>
+    </div>
 
     <div id="exposure"></div>
     <details><summary>Lịch sử quyết định và bằng chứng</summary><div id="decision-history"></div></details>

@@ -51,6 +51,7 @@ function answerHtml(q, a, secs) {
 
   return `<div class="answer msg-bot">
     <div class="ans-head">
+      <span class="bot-avatar" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><rect x="3" y="8" width="18" height="12" rx="4"/><circle cx="9" cy="13" r="1.5" fill="currentColor"/><circle cx="15" cy="13" r="1.5" fill="currentColor"/><path d="M9 17h6"/></svg></span>
       ${tag(a.branch === 'REFUSED' ? 'ABSTAIN' : a.branch, a.branch === 'REFUSED' ? 'Không trả lời' : a.branch === 'HELP' ? 'Hướng dẫn' : undefined)}
       ${rag ? tag(rag.mode) : ''}
       <span class="muted small" style="margin-left:auto">${secs}s${how ? ` · ${esc(how)}` : ''}</span>

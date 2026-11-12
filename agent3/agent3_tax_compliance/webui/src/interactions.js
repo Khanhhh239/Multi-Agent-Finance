@@ -52,6 +52,7 @@ export function bindDialog() {
   observer.observe($('#modal-root'), { childList: true });
   const close = () => closeDialog();
   $('#close', dialog)?.addEventListener('click', close, { signal: controller.signal });
+  backdrop.addEventListener('click', close, { signal: controller.signal });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { e.preventDefault(); close(); }
     if (e.key !== 'Tab') return;

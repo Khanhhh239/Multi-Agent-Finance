@@ -1267,3 +1267,292 @@
 [data-agent="3"] #app input.son-box { background: var(--kt-surface) !important; border: 1px solid var(--kt-field-line) !important; border-radius: var(--kt-radius) !important; padding-inline: 12px; }
 [data-agent="3"] .cds--data-table thead th button.sort-button { font: inherit; font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; }
 [data-agent="3"] .cds--data-table thead th.num button.sort-button { text-align: right; }
+
+
+/* ==========================================================================
+   Modern Enterprise SaaS / Fintech Dashboard Enhancements
+   ========================================================================== */
+
+/* Custom Slim Scrollbars */
+[data-agent="3"] * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cds-border-subtle) transparent;
+}
+[data-agent="3"] *::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+[data-agent="3"] *::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-agent="3"] *::-webkit-scrollbar-thumb {
+  background: var(--cds-border-subtle);
+  border-radius: 9999px;
+}
+[data-agent="3"] *::-webkit-scrollbar-thumb:hover {
+  background: var(--cds-border-strong);
+}
+
+/* Status Badges with glowing dot indicator */
+[data-agent="3"] .cds--tag::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-right: 5px;
+  box-shadow: 0 0 5px currentColor;
+  flex-shrink: 0;
+}
+
+/* KPI Card Title Wrap & Badges */
+[data-agent="3"] .kpi-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+[data-agent="3"] .kpi-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+[data-agent="3"] .badge-risk {
+  background: var(--a3-danger-soft);
+  color: var(--a3-danger);
+}
+[data-agent="3"] .badge-penalty {
+  background: var(--a3-primary-soft);
+  color: var(--a3-primary);
+}
+[data-agent="3"] .badge-warn {
+  background: var(--a3-warning-soft);
+  color: var(--a3-warning);
+}
+[data-agent="3"] .badge-opportunity {
+  background: var(--a3-primary-soft);
+  color: var(--a3-primary);
+}
+
+/* Glowing Sparklines */
+[data-agent="3"] .spark {
+  overflow: visible;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+}
+[data-agent="3"] .spark polyline {
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+[data-agent="3"] .spark circle {
+  transition: transform 180ms ease;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+[data-agent="3"] .kpi:hover .spark circle {
+  transform: scale(1.3);
+  transform-origin: center;
+}
+
+/* KPI Card Accents */
+[data-agent="3"] #app .kpi {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+}
+[data-agent="3"] #app .kpi::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--a3-primary);
+  opacity: 0.9;
+  border-radius: 14px 14px 0 0;
+}
+[data-agent="3"] #app .kpi.kpi-risk::before {
+  background: linear-gradient(90deg, #ff8389, #da1e28);
+}
+[data-agent="3"] #app .kpi.kpi-penalty::before {
+  background: linear-gradient(90deg, #60a5fa, #0043ce);
+}
+[data-agent="3"] #app .kpi.kpi-warn::before {
+  background: linear-gradient(90deg, #fcd34d, #f1c21b);
+}
+[data-agent="3"] #app .kpi.kpi-opportunity::before {
+  background: linear-gradient(90deg, #2dd4bf, #096b66);
+}
+
+/* Quick Action Cards with SVG Icons */
+[data-agent="3"] .quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 20px 0 28px;
+}
+[data-agent="3"] .quick-links a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--a3-surface);
+  border: 1px solid var(--cds-border-subtle);
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--cds-text-primary);
+  text-decoration: none;
+  box-shadow: var(--a3-shadow-sm);
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-agent="3"] .quick-links a:hover {
+  border-color: var(--a3-primary);
+  color: var(--a3-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--a3-shadow-md);
+}
+[data-agent="3"] .quick-links a .icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--a3-primary-soft);
+  color: var(--a3-primary);
+  flex-shrink: 0;
+}
+
+/* Dossier Cards in Drawer */
+[data-agent="3"] .dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin: 12px 0 18px;
+}
+[data-agent="3"] .dossier-card {
+  background: var(--cds-layer);
+  border: 1px solid var(--cds-border-subtle);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: var(--a3-shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+[data-agent="3"] .dossier-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cds-text-primary);
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+[data-agent="3"] .dossier-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--a3-primary-soft);
+  color: var(--a3-primary);
+}
+[data-agent="3"] .match-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+[data-agent="3"] .match-ok {
+  background: var(--a3-success-soft);
+  color: var(--a3-success);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+[data-agent="3"] .match-warn {
+  background: var(--a3-warning-soft);
+  color: var(--a3-warning);
+  border: 1px solid rgba(252, 211, 77, 0.3);
+}
+[data-agent="3"] .match-empty {
+  background: var(--a3-danger-soft);
+  color: var(--a3-danger);
+  border: 1px solid rgba(255, 131, 137, 0.3);
+}
+[data-agent="3"] .rule-code-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--cds-layer-hover);
+  color: var(--cds-text-secondary);
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid var(--cds-border-subtle);
+}
+[data-agent="3"] .amount-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--a3-danger-soft);
+  color: var(--a3-danger);
+  font-size: 12px;
+  font-weight: 600;
+}
+[data-agent="3"] .drawer-subhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+[data-agent="3"] .drawer-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--cds-border-subtle);
+}
+
+/* Chat Bot Avatar & Glow Focus */
+[data-agent="3"] .bot-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--a3-primary-soft);
+  color: var(--a3-primary);
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+[data-agent="3"] .msg-bot {
+  border-left: 3px solid var(--a3-primary) !important;
+  background: var(--a3-surface);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: var(--a3-shadow-sm);
+  transition: box-shadow 150ms ease;
+}
+[data-agent="3"] .msg-bot:hover {
+  box-shadow: var(--a3-shadow-md);
+}
+[data-agent="3"] .ask-bar:focus-within {
+  border-color: var(--a3-primary);
+  box-shadow: 0 0 0 3px var(--a3-primary-soft), var(--a3-shadow-md);
+}

@@ -429,23 +429,56 @@
     showIntakeStage(intakeStage);
   }
 
+  const AGENT_SUBTAGS = {
+    agent1: "Quản lý Bán hàng & Hóa đơn",
+    agent2: "Ngân hàng & Sổ cái",
+    agent3: "Tuân thủ thuế GTGT & Hóa đơn",
+    agent4: "Mô phỏng & Hỏi đáp thông minh"
+  };
+
   function renderAgentView() {
     if (!currentAgent) return;
     const a = agentById(currentAgent);
-    $("agent-no").textContent = a.number;
-    $("agent-name").textContent = a.id === "agent4" ? "Hỏi đáp" : a.name;
-    $("agent-status").replaceChildren(el("span", { class: "dot " + a.state }), STATE_TEXT[a.state]);
+    const noEl = $("agent-no");
+    if (noEl) {
+      noEl.textContent = "A" + a.number;
+      noEl.setAttribute("data-agent", a.id);
+    }
+    const nameEl = $("agent-name");
+    if (nameEl) nameEl.textContent = a.id === "agent4" ? "Agent 4 · Hỏi đáp" : a.name;
+    const subtagEl = $("agent-subtag");
+    if (subtagEl) subtagEl.textContent = AGENT_SUBTAGS[a.id] || "Không gian làm việc chuyên biệt";
+
+    const statusEl = $("agent-status");
+    if (statusEl) {
+      statusEl.className = "status status-pill " + a.state;
+      statusEl.replaceChildren(el("span", { class: "dot " + a.state }), el("span", { class: "status-text" }, STATE_TEXT[a.state]));
+    }
+
     const source = $("agent-source");
-    source.textContent = a.id === "agent4" ? "Nguồn số liệu: kho mô phỏng của Agent 4"
-      : state.company.code ? ["Hồ sơ " + state.company.code, state.package ? "Gói chung v" + state.package.version : "Chưa niêm phong"].join(" · ")
-        : "Cấu hình doanh nghiệp để nạp dữ liệu";
-    source.href = a.id !== "agent4" && !state.company.code ? "#config" : "#data";
+    if (source) {
+      source.textContent = a.id === "agent4" ? "Kho mô phỏng độc lập của Agent 4"
+        : state.company.code ? ["Hồ sơ " + state.company.code, state.package ? "Gói chung v" + state.package.version : "Chưa niêm phong"].join(" · ")
+          : "Cấu hình doanh nghiệp để nạp dữ liệu";
+      source.href = a.id !== "agent4" && !state.company.code ? "#config" : "#data";
+    }
+
     const page = new URL(a.url, location.href);
     page.searchParams.set("portal", location.origin);
     const pageUrl = page.href;
-    $("agent-newtab").href = pageUrl;
-    $("agent-toggle").textContent = a.state === "running" || a.state === "starting" ? "Tắt agent" : "Bật agent";
-    $("agent-toggle").hidden = !(a.owned || a.state === "stopped");
+    const newtab = $("agent-newtab");
+    if (newtab) newtab.href = pageUrl;
+
+    const toggleBtn = $("agent-toggle");
+    if (toggleBtn) {
+      const isRunning = a.state === "running" || a.state === "starting";
+      toggleBtn.classList.toggle("is-running", isRunning);
+      toggleBtn.classList.toggle("is-stopped", !isRunning);
+      const btnText = toggleBtn.querySelector(".btn-text");
+      if (btnText) btnText.textContent = isRunning ? "Tắt agent" : "Bật agent";
+      else toggleBtn.textContent = isRunning ? "Tắt agent" : "Bật agent";
+      toggleBtn.hidden = !(a.owned || a.state === "stopped");
+    }
     const frame = $("agent-frame-" + a.id) || $("agent-frame");
     if (a.state === "running") {
       offlineFailures[a.id] = 0;

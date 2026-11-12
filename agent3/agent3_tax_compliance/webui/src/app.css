@@ -231,3 +231,8 @@ section.cfg { scroll-margin-top: 6rem; }
   [data-agent="3"] .shared-profile .kv { grid-template-columns:minmax(0,1fr); gap:4px; }
   [data-agent="3"] .shared-profile .kv dd { margin-bottom:12px; }
 }
+
+/* Seamless transition when embedded in portal */
+.in-platform .kt-portal-return { display: none !important; }
+.in-platform .cds--header { border-bottom: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); }
+
