@@ -84,16 +84,36 @@ export async function pageOverview() {
       <svg class="tufte-svg" viewBox="0 0 700 ${monthly.length * ROW + 14}" role="img" aria-label="Thuế có nguy cơ và cần xem xét theo tháng">${rows}</svg></section>`;
   };
 
-  app().innerHTML = `<span class="eyebrow">Trợ lý giám sát thuế GTGT</span>
-    <h1 class="page">${esc(ws.name)}</h1>
-    <div class="context-line">
-      <span><strong>MST:</strong> ${esc(ws.tax_code)}</span>
-      <span>${rep ? `Phân tích ngày ${dmy(rep.meta.as_of)}` : 'Chưa có kết quả phân tích'}</span>
-      ${period ? `<span>${period.trim()}</span>` : ''}
+  app().innerHTML = `
+    <div class="workspace-heading">
+      <span class="top-label">TRỢ LÝ THUẾ GTGT</span>
+      <span class="divider">/</span>
+      <span id="breadcrumb">Tổng quan</span>
     </div>
-    ${ws.simulated ? '<p class="lead">Dữ liệu mô phỏng đối soát nội bộ, không phải doanh nghiệp thật.</p>' : ''}
-    ${notice('warning', 'Kết quả rà soát theo quy tắc nháp', 'Chưa có chuyên gia thuế duyệt. Cảnh báo và ước tính không phải kết luận vi phạm hoặc số thuế phải nộp.')}
-    ${(rep?.meta.data_warnings || []).map(w => notice('warning', w)).join('')}
+    <div class="page-heading son-illustrated">
+      <div>
+        <div class="eyebrow">KHÔNG GIAN DOANH NGHIỆP</div>
+        <h1 class="page">Tổng quan</h1>
+      </div>
+    </div>
+    <div class="context-chips-bar">
+      <span class="ctx-chip chip-company"><strong>${esc(ws.name)}</strong></span>
+      <span class="ctx-chip chip-taxcode">MST: <code>${esc(ws.tax_code)}</code></span>
+      ${period ? `<span class="ctx-chip chip-period">${period.trim()}</span>` : ''}
+      <span class="ctx-chip chip-date">${rep ? `Phân tích: ${dmy(rep.meta.as_of)}` : 'Chưa có kết quả'}</span>
+    </div>
+    ${ws.simulated ? '<p class="lead" style="margin-top: 8px;">Dữ liệu mô phỏng đối soát nội bộ, không phải doanh nghiệp thật.</p>' : ''}
+    <details class="compliance-disclaimer-strip">
+      <summary class="disclaimer-summary">
+        <span class="disclaimer-badge">🛡️ Lưu ý nghiệp vụ</span>
+        <span class="disclaimer-title">Kết quả rà soát tự động theo quy tắc dự thảo (Chưa thay thế kết luận chính thức của chuyên gia thuế)</span>
+        <span class="disclaimer-toggle">Chi tiết căn cứ ▾</span>
+      </summary>
+      <div class="disclaimer-body">
+        <p>Cảnh báo và ước tính tiền thuế không phải kết luận vi phạm chính thức hoặc số thuế phải nộp. Vui lòng đối chiếu với hóa đơn gốc, chứng từ thanh toán ngân hàng và xác nhận của kế toán trưởng trước khi kê khai chính thức.</p>
+        ${(rep?.meta.data_warnings || []).map(w => `<p class="data-warning-item">⚠️ ${esc(w)}</p>`).join('')}
+      </div>
+    </details>
     <div id="fresh"></div>
     <div id="watch"></div>
     ${deadlineBanner(rep)}

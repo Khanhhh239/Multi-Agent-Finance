@@ -234,5 +234,42 @@ section.cfg { scroll-margin-top: 6rem; }
 
 /* Seamless transition when embedded in portal */
 .in-platform .kt-portal-return { display: none !important; }
-.in-platform .cds--header { border-bottom: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); }
+.in-platform .cds--header {
+  height: 2.5rem !important;
+  background: var(--cds-layer-01, #f4f4f4) !important;
+  color: var(--cds-text-primary) !important;
+  border-bottom: 1px solid var(--cds-border-subtle, #e0e0e0) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.in-platform .cds--header__name {
+  display: none !important;
+}
+.in-platform .ws-picker {
+  display: none !important;
+}
+.in-platform #company-profile-link {
+  display: none !important;
+}
+.in-platform .cds--header__action {
+  height: 2.5rem !important;
+  width: 2.5rem !important;
+  color: var(--cds-icon-primary) !important;
+  border: 0;
+}
+.in-platform .cds--header__action:hover {
+  background: var(--cds-layer-hover, #e5e5e5) !important;
+}
+.in-platform .cds--header__menu-trigger {
+  color: var(--cds-icon-primary) !important;
+}
+.in-platform .side {
+  height: auto !important;
+  min-height: 0 !important;
+  position: static !important;
+}
+.in-platform .app {
+  margin-left: 0 !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
 

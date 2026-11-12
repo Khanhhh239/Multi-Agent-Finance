@@ -552,6 +552,7 @@ button.primary:hover,.btn.primary:hover { background:var(--kt-accent-strong); }
 }
 
 .agent-source {
+  display: inline-flex !important;
   color: var(--kt-muted);
   text-decoration: none;
   border-bottom: 1px dashed var(--kt-line);
