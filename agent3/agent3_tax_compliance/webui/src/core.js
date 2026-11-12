@@ -8,6 +8,24 @@ export const money = (v) => {
   const tail = fraction.replace(/0+$/, '');
   return whole.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (tail ? ',' + tail : '') + ' đ';
 };
+
+export function formatSpecialMoney(v) {
+  if (v === null || v === undefined || v === '') return '<span class="kpi-amount-empty">—</span>';
+  const raw = String(v);
+  if (!/^-?\d+(\.\d+)?$/.test(raw)) return '<span class="kpi-amount-empty">Không xác định</span>';
+  const [whole, fraction = ''] = raw.split('.');
+  const tail = fraction.replace(/0+$/, '');
+  const isNegative = whole.startsWith('-');
+  const absWhole = whole.replace(/^-/, '');
+  const formattedWhole = absWhole.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  
+  return `<span class="kpi-money-wrap">
+    ${isNegative ? '<span class="kpi-sign">-</span>' : ''}
+    <span class="kpi-digits">${formattedWhole}</span>
+    ${tail ? `<span class="kpi-tail">,${tail}</span>` : ''}
+    <span class="kpi-currency-symbol">₫</span>
+  </span>`;
+}
 export function compareDecimal(a, b) {
   const parts = value => String(value ?? '0').split('.');
   const [aw, af = ''] = parts(a), [bw, bf = ''] = parts(b);

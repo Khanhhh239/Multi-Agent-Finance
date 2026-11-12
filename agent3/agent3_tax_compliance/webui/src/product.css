@@ -2130,3 +2130,243 @@ html.in-platform .cds--header,
 [data-agent="3"] .btn-clear-chat:hover {
   color: #da1e28;
 }
+
+
+/* ==========================================================================
+   Financial KPI Cards v2 (Overview Page)
+   ========================================================================== */
+[data-agent="3"] .kpis-v2 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 18px 0 24px;
+}
+@media (max-width: 1120px) {
+  [data-agent="3"] .kpis-v2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  [data-agent="3"] .kpis-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+[data-agent="3"] .kpi-card-v2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--cds-layer, #ffffff);
+  border: 1px solid var(--cds-border-subtle, #e0e0e0);
+  border-radius: 14px;
+  padding: 18px 20px;
+  min-height: 165px;
+  text-decoration: none !important;
+  color: inherit !important;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 4px 12px rgba(0, 0, 0, 0.02);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
+}
+
+[data-agent="3"] .kpi-card-v2:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Color Accents & Radial Soft Glows */
+[data-agent="3"] .kpi-card-risk {
+  border-top: 3.5px solid #da1e28;
+  background: radial-gradient(circle at 10% 10%, rgba(218, 30, 40, 0.035) 0%, var(--cds-layer, #ffffff) 65%);
+}
+[data-agent="3"] .kpi-card-risk:hover {
+  border-color: rgba(218, 30, 40, 0.4);
+  box-shadow: 0 8px 24px rgba(218, 30, 40, 0.08);
+}
+
+[data-agent="3"] .kpi-card-penalty {
+  border-top: 3.5px solid #8a3ffc;
+  background: radial-gradient(circle at 10% 10%, rgba(138, 63, 252, 0.035) 0%, var(--cds-layer, #ffffff) 65%);
+}
+[data-agent="3"] .kpi-card-penalty:hover {
+  border-color: rgba(138, 63, 252, 0.4);
+  box-shadow: 0 8px 24px rgba(138, 63, 252, 0.08);
+}
+
+[data-agent="3"] .kpi-card-warn {
+  border-top: 3.5px solid #d97706;
+  background: radial-gradient(circle at 10% 10%, rgba(217, 119, 6, 0.035) 0%, var(--cds-layer, #ffffff) 65%);
+}
+[data-agent="3"] .kpi-card-warn:hover {
+  border-color: rgba(217, 119, 6, 0.4);
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.08);
+}
+
+[data-agent="3"] .kpi-card-opportunity {
+  border-top: 3.5px solid #0f766e;
+  background: radial-gradient(circle at 10% 10%, rgba(15, 118, 110, 0.035) 0%, var(--cds-layer, #ffffff) 65%);
+}
+[data-agent="3"] .kpi-card-opportunity:hover {
+  border-color: rgba(15, 118, 110, 0.4);
+  box-shadow: 0 8px 24px rgba(15, 118, 110, 0.08);
+}
+
+/* Card Header */
+[data-agent="3"] .kpi-head-v2 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+[data-agent="3"] .kpi-title-wrap-v2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+[data-agent="3"] .kpi-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+[data-agent="3"] .badge-risk {
+  background: rgba(218, 30, 40, 0.12);
+  color: #da1e28;
+}
+[data-agent="3"] .badge-penalty {
+  background: rgba(138, 63, 252, 0.12);
+  color: #8a3ffc;
+}
+[data-agent="3"] .badge-warn {
+  background: rgba(217, 119, 6, 0.12);
+  color: #d97706;
+}
+[data-agent="3"] .badge-opportunity {
+  background: rgba(15, 118, 110, 0.12);
+  color: #0f766e;
+}
+[data-agent="3"] .kpi-title-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cds-text-secondary, #525252);
+  line-height: 1.35;
+}
+
+/* Money Block (Distinctive & High Impact) */
+[data-agent="3"] .kpi-money-block {
+  margin: 6px 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+[data-agent="3"] .kpi-main-money {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--kt-font-sans, "Be Vietnam Pro", -apple-system, sans-serif);
+  line-height: 1.15;
+}
+[data-agent="3"] .kpi-money-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+[data-agent="3"] .kpi-digits {
+  font-size: clamp(24px, 2.3vw, 31px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+[data-agent="3"] .kpi-tail {
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 700;
+  opacity: 0.85;
+}
+[data-agent="3"] .kpi-currency-symbol {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cds-text-secondary, #78696d);
+  margin-left: 2px;
+}
+[data-agent="3"] .kpi-amount-empty {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--cds-text-secondary, #8d8d8d);
+}
+
+/* Distinctive Money Colors */
+[data-agent="3"] .val-risk .kpi-digits { color: #da1e28; }
+[data-agent="3"] .val-penalty .kpi-digits { color: #6929c4; }
+[data-agent="3"] .val-warn .kpi-digits { color: #b45309; }
+[data-agent="3"] .val-opportunity .kpi-digits { color: #0f766e; }
+
+/* Human Readable Pill */
+[data-agent="3"] .kpi-human-read {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.01em;
+}
+[data-agent="3"] .tag-risk {
+  background: rgba(218, 30, 40, 0.09);
+  color: #ba1b23;
+  border: 1px solid rgba(218, 30, 40, 0.18);
+}
+[data-agent="3"] .tag-penalty {
+  background: rgba(138, 63, 252, 0.09);
+  color: #6929c4;
+  border: 1px solid rgba(138, 63, 252, 0.18);
+}
+[data-agent="3"] .tag-warn {
+  background: rgba(217, 119, 6, 0.09);
+  color: #b45309;
+  border: 1px solid rgba(217, 119, 6, 0.18);
+}
+[data-agent="3"] .tag-opportunity {
+  background: rgba(15, 118, 110, 0.09);
+  color: #0f766e;
+  border: 1px solid rgba(15, 118, 110, 0.18);
+}
+
+/* Card Footer */
+[data-agent="3"] .kpi-footer-v2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid var(--cds-border-subtle, #f0f0f0);
+  font-size: 11.5px;
+  color: var(--cds-text-secondary, #6f6f6f);
+  margin-top: auto;
+}
+[data-agent="3"] .kpi-sub-text strong {
+  color: var(--cds-text-primary);
+  font-weight: 700;
+}
+[data-agent="3"] .kpi-arrow-action {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cds-text-secondary);
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+[data-agent="3"] .kpi-card-v2:hover .kpi-arrow-action {
+  transform: translateX(4px);
+  color: var(--kt-accent, #97162d);
+}
+[data-agent="3"] .kpi-card-opportunity:hover .kpi-arrow-action {
+  color: #0f766e;
+}
+[data-agent="3"] .kpi-card-penalty:hover .kpi-arrow-action {
+  color: #8a3ffc;
+}
+[data-agent="3"] .kpi-card-warn:hover .kpi-arrow-action {
+  color: #d97706;
+}

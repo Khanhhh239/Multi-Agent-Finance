@@ -11,7 +11,7 @@ const ICONS = {
 };
 
 // Overview, data intake and the review queue.
-import { $, api, app, button, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, moneyShort, needWorkspace, notice, post, put, sonHeader,
+import { $, api, app, button, dmy, esc, field, formatSpecialMoney, hashParams, invLabel, invoiceOf, loadReport, loadWorkspaces, loading, money, moneyShort, needWorkspace, notice, post, put, sonHeader,
   state, store, table, tag, decide, decisionContext, onPageLeave } from './core.js';
 import { aiToolbar, explainBox } from './pages_ai.js';
 import { pageWelcome } from './pages_config.js';
@@ -102,55 +102,82 @@ export async function pageOverview() {
     <div id="watch"></div>
     ${deadlineBanner(rep)}
 
-    <div class="kpis">
-      <div class="kpi kpi-risk">
-        <div class="kpi-head">
-          <div class="kpi-title-wrap">
-            <span class="kpi-badge badge-risk">${ICONS.risk}</span>
-            <span class="label">Thuế đầu vào có nguy cơ bị loại</span>
+    <div class="kpis-v2">
+      <!-- 1. Thuế đầu vào có nguy cơ bị loại -->
+      <a href="#/viec?loc=AT_RISK" class="kpi-card-v2 kpi-card-risk" title="Bấm để xem danh sách việc có nguy cơ bị loại">
+        <div class="kpi-head-v2">
+          <div class="kpi-title-wrap-v2">
+            <span class="kpi-icon-box badge-risk">${ICONS.risk}</span>
+            <span class="kpi-title-label">Thuế đầu vào có nguy cơ bị loại</span>
           </div>
           ${spark('AT_RISK')}
         </div>
-        <div class="value risk">${t ? money(t.at_risk_vat) : '—'}</div>
-        ${t && moneyShort(t.at_risk_vat) ? `<span class="short-read">khoảng ${moneyShort(t.at_risk_vat)}</span>` : ''}
-        <div class="sub">${t ? `${t.at_risk_invoices} hóa đơn có cảnh báo cần kiểm tra` : 'Chưa phân tích'}</div>
-      </div>
-      <div class="kpi kpi-penalty">
-        <div class="kpi-head">
-          <div class="kpi-title-wrap">
-            <span class="kpi-badge badge-penalty">${ICONS.penalty}</span>
-            <span class="label">Kịch bản phạt nếu xác định khai sai</span>
+        <div class="kpi-money-block">
+          <div class="kpi-main-money val-risk">${formatSpecialMoney(t?.at_risk_vat)}</div>
+          ${t && moneyShort(t.at_risk_vat) ? `<span class="kpi-human-read tag-risk">~ ${moneyShort(t.at_risk_vat)}</span>` : ''}
+        </div>
+        <div class="kpi-footer-v2">
+          <span class="kpi-sub-text">${t ? `<strong>${t.at_risk_invoices}</strong> hóa đơn có cảnh báo vi phạm` : 'Chưa có phân tích'}</span>
+          <span class="kpi-arrow-action" aria-hidden="true">→</span>
+        </div>
+      </a>
+
+      <!-- 2. Kịch bản phạt nếu khai sai -->
+      <a href="#/so-lieu" class="kpi-card-v2 kpi-card-penalty" title="Bấm để xem đối chiếu số liệu và kịch bản">
+        <div class="kpi-head-v2">
+          <div class="kpi-title-wrap-v2">
+            <span class="kpi-icon-box badge-penalty">${ICONS.penalty}</span>
+            <span class="kpi-title-label">Kịch bản phạt nếu khai sai</span>
           </div>
           ${spark('AT_RISK')}
         </div>
-        <div class="value">${t ? money(t.penalty_estimate) : '—'}</div>
-        ${t && moneyShort(t.penalty_estimate) ? `<span class="short-read">khoảng ${moneyShort(t.penalty_estimate)}</span>` : ''}
-        <div class="sub">${t ? `Giả định có thiếu thuế; chưa xác nhận đã kê khai` : 'Chưa có số liệu'}</div>
-      </div>
-      <div class="kpi kpi-warn">
-        <div class="kpi-head">
-          <div class="kpi-title-wrap">
-            <span class="kpi-badge badge-warn">${ICONS.review}</span>
-            <span class="label">Hóa đơn cần người xem xét</span>
+        <div class="kpi-money-block">
+          <div class="kpi-main-money val-penalty">${formatSpecialMoney(t?.penalty_estimate)}</div>
+          ${t && moneyShort(t.penalty_estimate) ? `<span class="kpi-human-read tag-penalty">~ ${moneyShort(t.penalty_estimate)}</span>` : ''}
+        </div>
+        <div class="kpi-footer-v2">
+          <span class="kpi-sub-text">${t ? `Ước tính chậm nộp & xử phạt vi phạm` : 'Chưa có số liệu'}</span>
+          <span class="kpi-arrow-action" aria-hidden="true">→</span>
+        </div>
+      </a>
+
+      <!-- 3. Hóa đơn cần xem xét -->
+      <a href="#/viec?loc=REVIEW" class="kpi-card-v2 kpi-card-warn" title="Bấm để xem danh sách hóa đơn cần duyệt">
+        <div class="kpi-head-v2">
+          <div class="kpi-title-wrap-v2">
+            <span class="kpi-icon-box badge-warn">${ICONS.review}</span>
+            <span class="kpi-title-label">Hóa đơn cần người xem xét</span>
           </div>
           ${spark('REVIEW')}
         </div>
-        <div class="value warn">${t ? money(t.review_vat) : '—'}</div>
-        ${t && moneyShort(t.review_vat) ? `<span class="short-read">khoảng ${moneyShort(t.review_vat)}</span>` : ''}
-        <div class="sub">${t ? `${t.review_invoices} hóa đơn cần đối chiếu chứng từ` : 'Không có hóa đơn chờ'}</div>
-      </div>
-      <div class="kpi kpi-opportunity">
-        <div class="kpi-head">
-          <div class="kpi-title-wrap">
-            <span class="kpi-badge badge-opportunity">${ICONS.opportunity}</span>
-            <span class="label">Có thể đang bỏ sót khấu trừ</span>
+        <div class="kpi-money-block">
+          <div class="kpi-main-money val-warn">${formatSpecialMoney(t?.review_vat)}</div>
+          ${t && moneyShort(t.review_vat) ? `<span class="kpi-human-read tag-warn">~ ${moneyShort(t.review_vat)}</span>` : ''}
+        </div>
+        <div class="kpi-footer-v2">
+          <span class="kpi-sub-text">${t ? `<strong>${t.review_invoices}</strong> hóa đơn cần đối chiếu chứng từ` : 'Không có hóa đơn chờ'}</span>
+          <span class="kpi-arrow-action" aria-hidden="true">→</span>
+        </div>
+      </a>
+
+      <!-- 4. Có thể đang bỏ sót khấu trừ -->
+      <a href="#/viec?loc=OPPORTUNITY" class="kpi-card-v2 kpi-card-opportunity" title="Bấm để xem hóa đơn bỏ sót khấu trừ">
+        <div class="kpi-head-v2">
+          <div class="kpi-title-wrap-v2">
+            <span class="kpi-icon-box badge-opportunity">${ICONS.opportunity}</span>
+            <span class="kpi-title-label">Có thể đang bỏ sót khấu trừ</span>
           </div>
           ${spark('OPPORTUNITY')}
         </div>
-        <div class="value">${t ? money(t.opportunity_vat) : '—'}</div>
-        ${t && moneyShort(t.opportunity_vat) ? `<span class="short-read">khoảng ${moneyShort(t.opportunity_vat)}</span>` : ''}
-        <div class="sub">Hóa đơn trên cổng thuế chưa có tệp lưu trữ</div>
-      </div>
+        <div class="kpi-money-block">
+          <div class="kpi-main-money val-opportunity">${formatSpecialMoney(t?.opportunity_vat)}</div>
+          ${t && moneyShort(t.opportunity_vat) ? `<span class="kpi-human-read tag-opportunity">~ ${moneyShort(t.opportunity_vat)}</span>` : ''}
+        </div>
+        <div class="kpi-footer-v2">
+          <span class="kpi-sub-text">Hóa đơn trên cổng thuế chưa lưu trữ XML</span>
+          <span class="kpi-arrow-action" aria-hidden="true">→</span>
+        </div>
+      </a>
     </div>
 
     <div class="bar">
