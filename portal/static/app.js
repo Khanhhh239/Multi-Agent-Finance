@@ -10,6 +10,7 @@
   let profileVersion = 0;
   let profileErrors = {};
   let currentAgent = null;
+  const offlineFailures = { agent1: 0, agent2: 0, agent3: 0, agent4: 0 };
   let intakeStage = "choose";
   let token = "";
   try { token = sessionStorage.getItem("kt-session") || ""; } catch (e) { token = ""; }
@@ -445,13 +446,31 @@
     $("agent-newtab").href = pageUrl;
     $("agent-toggle").textContent = a.state === "running" || a.state === "starting" ? "Tắt agent" : "Bật agent";
     $("agent-toggle").hidden = !(a.owned || a.state === "stopped");
-    const frame = $("agent-frame");
-    const up = a.state === "running";
-    if (up && frame.dataset.src !== pageUrl) { frame.dataset.src = pageUrl; frame.src = pageUrl; }
-    if (!up) { frame.removeAttribute("src"); delete frame.dataset.src; }
-    frame.hidden = !up;
-    $("agent-off").hidden = up;
-    if (!up) {
+    const frame = $("agent-frame-" + a.id) || $("agent-frame");
+    if (a.state === "running") {
+      offlineFailures[a.id] = 0;
+    } else {
+      offlineFailures[a.id] = (offlineFailures[a.id] || 0) + 1;
+    }
+
+    // Grace period: keep frame visible during temporary glitches (< 3 poll cycles = 12s)
+    const isOnline = a.state === "running" || (frame.dataset.src && a.state === "starting" && offlineFailures[a.id] < 3);
+
+    for (const id of ["agent1", "agent2", "agent3", "agent4"]) {
+      const f = $("agent-frame-" + id);
+      if (f && id !== a.id) f.hidden = true;
+    }
+
+    if (isOnline) {
+      if (frame.dataset.src !== pageUrl) { frame.dataset.src = pageUrl; frame.src = pageUrl; }
+      frame.hidden = false;
+      $("agent-off").hidden = true;
+    } else {
+      frame.hidden = true;
+      if (a.state === "stopped") { frame.removeAttribute("src"); delete frame.dataset.src; }
+      $("agent-off").hidden = false;
+    }
+    if (!isOnline) {
       $("agent-off-text").textContent =
         a.state === "starting" ? "Đang khởi động, trang sẽ tự mở khi agent sẵn sàng."
           : a.state === "busy-port" ? "Cổng " + a.port + " đang bị chương trình khác dùng. Tắt chương trình đó hoặc đổi cổng trong portal/config.local.json."
@@ -497,7 +516,14 @@
     const isAgent = /^agent[1-4]$/.test(view);
     for (const id of ["overview", "config", "data"]) $("view-" + id).hidden = id !== view;
     $("view-agent").hidden = !isAgent;
-    if (!isAgent && currentAgent) { $("agent-frame").removeAttribute("src"); delete $("agent-frame").dataset.src; }
+    if (!isAgent) {
+      for (const id of ["agent1", "agent2", "agent3", "agent4"]) {
+        const f = $("agent-frame-" + id);
+        if (f) f.hidden = true;
+      }
+      const singleFrame = $("agent-frame");
+      if (singleFrame) singleFrame.hidden = true;
+    }
     currentAgent = isAgent ? view : null;
     if (sidebarMedia.matches) setSidebarOpen(false, $("sidebar").contains(document.activeElement));
     if (state) render();
@@ -913,12 +939,13 @@
   // Agent 1 asks for its access key once it has loaded inside the frame.
   window.addEventListener("message", async (event) => {
     const a1 = state && agentById("agent1");
-    if (!a1 || event.data?.type !== "platform-ready" || event.source !== $("agent-frame").contentWindow) return;
+    const a1Frame = $("agent-frame-agent1") || $("agent-frame");
+    if (!a1 || event.data?.type !== "platform-ready" || (a1Frame && event.source !== a1Frame.contentWindow)) return;
     const origin = new URL(a1.url).origin;
     if (event.origin !== origin) return;
     try {
       const { key } = await api("/api/agents/agent1/key");
-      if (key) $("agent-frame").contentWindow.postMessage({ type: "platform-access-key", key }, origin);
+      if (key && a1Frame) a1Frame.contentWindow.postMessage({ type: "platform-access-key", key }, origin);
     } catch (err) { toast(err.message, true); }
   });
 

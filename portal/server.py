@@ -267,7 +267,7 @@ def port_open(port):
 
 def health(aid):
     try:
-        with urlopen(agent_url(aid, AGENTS[aid]['health']), timeout=1.5) as r:
+        with urlopen(agent_url(aid, AGENTS[aid]['health']), timeout=5.0) as r:
             return 200 <= r.status < 300
     except (URLError, OSError, ValueError):
         return False
@@ -319,7 +319,10 @@ def stop_agent(aid):
         proc = PROCS.pop(aid, None)
         if proc is None or proc.poll() is not None:
             raise ValueError('Portal không khởi động agent này nên không dừng nó.')
-        proc.terminate()
+        if os.name == 'nt':
+            subprocess.run(['taskkill', '/F', '/T', '/PID', str(proc.pid)], capture_output=True)
+        else:
+            proc.terminate()
         try:
             proc.wait(8)
         except subprocess.TimeoutExpired:

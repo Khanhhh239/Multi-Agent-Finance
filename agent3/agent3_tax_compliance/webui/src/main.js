@@ -76,7 +76,14 @@ $('.theme-toggle').onclick = () => {
 window.addEventListener('hashchange', route);
 installValidation();
 $('.skip-link').onclick = (e) => { e.preventDefault(); app().focus(); };
-const observer = new MutationObserver(() => decoratePage(app()));
+let decorateTimer = null;
+const observer = new MutationObserver(() => {
+  if (decorateTimer) return;
+  decorateTimer = setTimeout(() => {
+    decorateTimer = null;
+    decoratePage(app());
+  }, 100);
+});
 observer.observe(app(), { childList: true, subtree: true });
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
@@ -93,9 +100,14 @@ async function refreshContext() {
     const res = await fetch('/api/platform/context', { cache: 'no-store' });
     if (!res.ok) return;
     const next = await res.json();
-    if (JSON.stringify(next) !== JSON.stringify(state.platform)) {
+    const changed = !state.platform ||
+      next.profile_revision !== state.platform.profile_revision ||
+      next.workspace_id !== state.platform.workspace_id ||
+      next.state !== state.platform.state;
+    if (changed) {
       const draft = [...app().querySelectorAll('input,select,textarea')].filter(e => !['password', 'file', 'hidden'].includes(e.type)).map(e => ({ name: e.name || e.id || e.dataset.f, value: e.value, checked: e.checked }));
       if (draft.length) try { sessionStorage.setItem('agent3.previous-context-draft', JSON.stringify({ revision: state.platform?.profile_revision, path: location.hash, fields: draft })); } catch { /* storage unavailable */ }
+      state.platform = next;
       beginPage();
       state.report = null;
       $('#modal-root').replaceChildren();

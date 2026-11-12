@@ -73,6 +73,8 @@ export function decoratePage(root) {
     el.onkeydown = (e) => { if (e.target === el && ['Enter', ' '].includes(e.key)) { e.preventDefault(); el.click(); } };
   });
   root.querySelectorAll('.bar:has(.filter-input)').forEach((bar) => {
+    if (bar.dataset.decorated) return;
+    bar.dataset.decorated = "1";
     bar.classList.add('toolbar');
     bar.querySelectorAll('input[aria-label],select[aria-label]').forEach((input) => {
       if (input.closest('label')) return;

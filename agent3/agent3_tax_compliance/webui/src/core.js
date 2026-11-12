@@ -145,10 +145,18 @@ export function portalLink(section = 'config', label = 'Mở hồ sơ chung tạ
   return '<p class="muted">Khởi động Agent 3 từ portal để kết nối hồ sơ doanh nghiệp chung.</p>';
 }
 
-export async function loadReport() {
-  state.report = null;
-  if (!state.ws) return null;
-  try { state.report = await api(`/api/workspaces/${state.ws}/report`); } catch (err) { if (err.status !== 404) throw err; state.report = null; }
+let reportWs = null;
+export async function loadReport(force = false) {
+  if (!state.ws) { state.report = null; reportWs = null; return null; }
+  if (!force && state.report && reportWs === state.ws) return state.report;
+  try {
+    state.report = await api(`/api/workspaces/${state.ws}/report`);
+    reportWs = state.ws;
+  } catch (err) {
+    if (err.status !== 404) throw err;
+    state.report = null;
+    reportWs = null;
+  }
   return state.report;
 }
 
