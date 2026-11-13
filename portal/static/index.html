@@ -55,16 +55,117 @@
   <main class="content" id="content" tabindex="-1">
     <!-- Overview -->
     <section class="view" id="view-overview" aria-labelledby="h-overview">
-      <div class="page-head overview-heading"><div><p class="eyebrow">Không gian làm việc</p><h1 id="h-overview">Tổng quan</h1><p class="lead">Mọi nghiệp vụ kế toán, trong cùng một văn phòng.</p></div><span class="today" id="today"></span></div>
-      <div class="workspace-stats" id="workspace-stats" aria-label="Trạng thái không gian làm việc"></div>
-      <div class="section-heading"><div><h2 class="section-title">Chọn nghiệp vụ bạn cần</h2><p>Mở agent để tiếp tục công việc.</p></div><span class="section-caption">4 không gian chuyên biệt</span></div>
-      <div class="agents" id="agent-grid"></div>
-      <div class="section-heading"><div><h2 class="section-title">Chuẩn bị không gian làm việc</h2><p>Ba bước để dữ liệu sẵn sàng cho các agent.</p></div></div>
-      <ol class="steps" id="steps">
-        <li data-step="config"><strong>Cấu hình doanh nghiệp</strong><span>Tên, mã số thuế, kỳ kê khai, định dạng tệp.</span><a href="#config">Mở cấu hình</a></li>
-        <li data-step="agents"><strong>Bật các agent</strong><span>Agent nào tắt sẽ không nhận dữ liệu.</span><button type="button" id="start-all">Bật tất cả</button></li>
-        <li data-step="data"><strong>Nạp gói dữ liệu</strong><span>Thả tệp một lần, niêm phong bằng mật khẩu.</span></li>
-      </ol>
+      <!-- 1. Sleek Minimalist Masthead -->
+      <header class="overview-header">
+        <div class="company-brand-box">
+          <span class="company-monogram-brand" id="overview-monogram">SS</span>
+          <div class="company-meta-col">
+            <div class="company-tagline-row">
+              <h1 id="h-overview" class="overview-company-title">Sổ Son</h1>
+              <span class="mst-pill" id="overview-tax-badge">MST: —</span>
+            </div>
+            <p class="overview-company-sub" id="overview-company-fullname">Văn phòng kế toán số</p>
+          </div>
+        </div>
+        <div class="header-right-controls">
+          <div class="live-status-badge" id="overview-status-pill">
+            <span class="pulse-dot"></span>
+            <span id="overview-system-status">Đang tải trạng thái...</span>
+          </div>
+          <button type="button" class="btn-primary-smart" id="start-all">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Bật các agent</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 2. Central Heritage Visual Showcase (Artistic Hero Gallery) -->
+      <section class="heritage-showcase" aria-label="Không gian cảm hứng di sản miền Trung">
+        <div class="showcase-header">
+          <div class="showcase-title-wrap">
+            <span class="showcase-badge">Bản sắc Sổ Son · Miền Trung</span>
+            <h2 class="showcase-title">Chính trực từng con số — Vẹn tròn chữ tín chữ son</h2>
+          </div>
+          <span class="showcase-date" id="today"></span>
+        </div>
+        <div class="showcase-gallery">
+          <div class="gallery-card card-hoi-an">
+            <img src="/places/hoi-an.webp" width="1200" height="800" alt="Hội An lung linh bên dòng sông Hoài" loading="eager" fetchpriority="high">
+            <div class="card-overlay">
+              <div class="card-tag">Hội An · Quảng Nam</div>
+              <p class="card-meaning">Minh bạch như dòng sông Hoài</p>
+            </div>
+          </div>
+          <div class="gallery-card card-quy-nhon">
+            <img src="/places/quy-nhon.webp" width="1200" height="643" alt="Eo Gió Quy Nhơn hùng vĩ nhìn ra biển" loading="lazy">
+            <div class="card-overlay">
+              <div class="card-tag">Eo Gió · Quy Nhơn</div>
+              <p class="card-meaning">Kiên định trước rủi ro tài chính</p>
+            </div>
+          </div>
+          <div class="gallery-card card-ly-son">
+            <img src="/places/quang-ngai.webp" width="1200" height="800" alt="Đảo Bé Lý Sơn biển xanh ngọc bích" loading="lazy">
+            <div class="card-overlay">
+              <div class="card-tag">Đảo Bé · Lý Sơn</div>
+              <p class="card-meaning">Son sắt và vẹn tròn chữ tín</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. The 4 Specialized Workstations (Clean Interactive Tiles) -->
+      <div class="workstations-header">
+        <h2 class="workstations-title">Không gian Nghiệp vụ Kế toán</h2>
+        <span class="workstations-hint">Chọn không gian để mở bàn làm việc chuyên sâu</span>
+      </div>
+      <div class="agents workstations-grid" id="agent-grid"></div>
+
+      <!-- 4. Executive Setup Progress (Tiến trình chuẩn bị đồng bộ & cân đối) -->
+      <div class="setup-progress-card">
+        <div class="setup-card-header">
+          <div class="setup-header-left">
+            <span class="setup-badge">Quy trình vận hành</span>
+            <h3 class="setup-title">Tiến trình Chuẩn bị Không gian Làm việc</h3>
+          </div>
+          <div class="setup-header-right">
+            <div class="setup-progress-meter">
+              <span class="meter-label" id="setup-progress-text">Tiến độ: 3/3 bước</span>
+              <div class="meter-track">
+                <div class="meter-bar" id="meter-bar" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ol class="steps setup-steps-grid" id="steps">
+          <li data-step="config" class="setup-step-card">
+            <div class="step-card-top">
+              <span class="step-num-badge">1</span>
+              <a href="#config" class="step-action-link">Cấu hình ↗</a>
+            </div>
+            <div class="step-card-name">Hồ sơ Doanh nghiệp</div>
+            <div class="step-card-desc" id="step-config-desc">Đã cấu hình mã định danh & mã số thuế</div>
+          </li>
+          <li data-step="agents" class="setup-step-card">
+            <div class="step-card-top">
+              <span class="step-num-badge">2</span>
+              <span class="step-action-link" id="step-agents-link">Dịch vụ ↗</span>
+            </div>
+            <div class="step-card-name">Kích hoạt 4 Agent</div>
+            <div class="step-card-desc" id="step-agents-status">4/4 Agent đang trực tuyến</div>
+          </li>
+          <li data-step="data" class="setup-step-card">
+            <div class="step-card-top">
+              <span class="step-num-badge">3</span>
+              <a href="#data" class="step-action-link">Nạp tệp ↗</a>
+            </div>
+            <div class="step-card-name">Niêm phong Dữ liệu</div>
+            <div class="step-card-desc" id="step-data-desc">Gói dữ liệu đã được đối soát & niêm phong</div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Hidden container for workspace-stats to maintain backward compatibility -->
+      <div id="workspace-stats" style="display: none;" aria-hidden="true"></div>
     </section>
 
     <!-- Config -->

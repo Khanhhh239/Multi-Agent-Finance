@@ -251,42 +251,150 @@
     return state.batches.filter((b) => b.company === state.company.code).flatMap((b) => b.files).filter((f) => f.results[aid] && f.results[aid].state === "done").length;
   }
 
+  const AGENT_SVGS = {
+    agent1: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+    agent2: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`,
+    agent3: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+    agent4: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg>`
+  };
+
+  const WORKSTATION_INFO = {
+    agent1: {
+      title: "Quản trị Dòng tiền",
+      desc: "Dự báo thu chi theo tuần, kiểm soát thanh khoản và phân tích kịch bản công nợ khách hàng.",
+      icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`
+    },
+    agent2: {
+      title: "Soát xét Giao dịch",
+      desc: "Rà soát giao dịch bất thường, xung đột lợi ích và phòng ngừa gian lận chứng từ bằng ML.",
+      icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`
+    },
+    agent3: {
+      title: "Tuân thủ Thuế GTGT",
+      desc: "Đối chiếu tự động 3 bên giữa hóa đơn XML, sao kê ngân hàng và bảng kê cổng Cục Thuế.",
+      icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`
+    },
+    agent4: {
+      title: "Trợ lý CFO & Sổ cái",
+      desc: "Hỏi đáp chỉ tiêu tài chính bằng tiếng Việt và trích xuất dữ liệu sổ cái DuckDB có kiểm chứng.",
+      icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg>`
+    }
+  };
+
   function renderOverview() {
     const c = state.company;
-    $("today").textContent = new Intl.DateTimeFormat("vi-VN", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+    if ($("today")) {
+      $("today").textContent = new Intl.DateTimeFormat("vi-VN", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+    }
+
+    // 1. Sleek Minimalist Header
+    const monogram = (c.code || "SS").slice(0, 2).toUpperCase();
+    if ($("overview-monogram")) $("overview-monogram").textContent = monogram;
+    if ($("overview-company-fullname")) {
+      $("overview-company-fullname").textContent = c.legal_name || "Văn phòng kế toán số";
+    }
+    if ($("overview-tax-badge")) {
+      $("overview-tax-badge").textContent = c.tax_code ? "MST: " + c.tax_code : "MST: —";
+    }
+
     const runningCount = state.agents.filter((a) => a.state === "running").length;
-    const stat = (label, value, detail) => el("div", { class: "workspace-stat" }, el("span", {}, label), el("strong", {}, value), el("small", {}, detail));
-    $("workspace-stats").replaceChildren(
-      stat("Doanh nghiệp đang làm việc", c.code || "Chưa thiết lập", c.tax_code ? "Mã số thuế · " + c.tax_code : "Bổ sung hồ sơ để bắt đầu"),
-      stat("Agent đang hoạt động", runningCount + " / " + state.agents.length, runningCount === state.agents.length ? "Các không gian đã sẵn sàng mở" : "Bật agent cần dùng trong phần nghiệp vụ"),
-      stat("Gói dữ liệu chung", state.package ? "Phiên bản " + state.package.version : "Chưa niêm phong", state.package ? "Niêm phong ngày " + dmy(state.package.sealed_at) : "Nạp tệp và kiểm tra trước khi ghi"));
-    const steps = $("steps").children;
-    steps[0].classList.toggle("done", Boolean(c.legal_name && c.code));
-    steps[1].classList.toggle("done", state.agents.every((a) => a.state === "running"));
-    steps[2].classList.toggle("done", Boolean(state.package));
-    $("start-all").disabled = state.agents.every((a) => a.state !== "stopped");
-    $("start-all").textContent = runningCount === state.agents.length ? "Tất cả đang hoạt động" : "Bật các agent đang tắt";
-    const signature = JSON.stringify([state.agents.map((a) => [a.id, a.state, a.name]), state.intake.unlocked, state.batches, c.code]);
-    if ($("agent-grid").dataset.signature === signature) return;
-    $("agent-grid").dataset.signature = signature;
-    const descriptions = {
-      agent1: "Theo dõi thu chi, dự báo dòng tiền theo tuần và chủ động với các kịch bản thanh toán.",
-      agent2: "Rà soát giao dịch bất thường, xem bằng chứng và theo dõi hồ sơ cần xử lý.",
-      agent3: "Đối chiếu hóa đơn, sao kê và bảng kê thuế để phát hiện chênh lệch cần kiểm tra.",
-      agent4: "Hỏi số liệu tài chính bằng tiếng Việt và xem câu trả lời kèm nguồn dữ liệu."
-    };
-    $("agent-grid").replaceChildren(
-      ...state.agents.map((a) => {
-        const files = state.intake.unlocked ? receivedCount(a.id) : null;
-        return el("article", { class: "agent", "data-id": a.id },
-          el("div", { class: "agent-head" }, el("span", { class: "big" }, "A" + a.number),
-            el("span", { class: "status" }, el("span", { class: "dot " + a.state }), STATE_TEXT[a.state])),
-          el("h3", {}, a.id === "agent4" ? "Hỏi đáp" : a.name),
-          el("p", {}, descriptions[a.id] || a.summary),
-          el("div", { class: "actions" },
-            el("a", { href: "#" + a.id }, "Mở " + AGENT_LABEL[a.id] + " →"),
-            el("span", { class: "sub" }, a.id === "agent4" ? "Kho dữ liệu demo" : files === null ? "Mở khóa để xem" : files ? files + " tệp đã ghi qua gói" : "Chưa nhận tệp")));
-      }));
+    const pill = $("overview-status-pill");
+    const statusText = $("overview-system-status");
+    if (statusText) {
+      if (runningCount === state.agents.length) {
+        statusText.textContent = "4/4 Agent sẵn sàng";
+        if (pill) pill.classList.remove("is-partial");
+      } else if (runningCount > 0) {
+        statusText.textContent = runningCount + "/4 Agent trực tuyến";
+        if (pill) pill.classList.add("is-partial");
+      } else {
+        statusText.textContent = "Các agent đang tạm dừng";
+        if (pill) pill.classList.add("is-partial");
+      }
+    }
+
+    if ($("start-all")) {
+      $("start-all").disabled = state.agents.every((a) => a.state !== "stopped");
+      $("start-all").innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${runningCount === state.agents.length ? "Tất cả đang chạy" : "Bật các agent"}</span>`;
+    }
+
+    // 2. The 4 Specialized Workstations (NO FAKE NUMBERS, 100% Interactive Tiles)
+    const signature = JSON.stringify([state.agents.map((a) => [a.id, a.state, a.name]), c.code]);
+    if ($("agent-grid").dataset.signature !== signature) {
+      $("agent-grid").dataset.signature = signature;
+
+      $("agent-grid").replaceChildren(
+        ...state.agents.map((a) => {
+          const info = WORKSTATION_INFO[a.id] || {
+            title: a.name,
+            desc: a.summary,
+            icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>`
+          };
+
+          const iconBox = el("div", { class: "ws-icon-box" });
+          iconBox.innerHTML = info.icon;
+
+          const isRunning = a.state === "running";
+          const statusDot = el("span", {
+            class: "ws-status-dot " + (isRunning ? "" : "is-stopped"),
+            title: isRunning ? "Đang hoạt động" : "Đang tạm dừng"
+          });
+
+          return el("a", { class: "workstation-card", href: "#" + a.id, "data-id": a.id },
+            el("div", { class: "ws-card-top" },
+              el("div", { class: "ws-card-meta" },
+                el("span", { class: "ws-num-pill" }, "A" + a.number),
+                iconBox
+              ),
+              statusDot
+            ),
+            el("h3", { class: "ws-title" }, info.title),
+            el("p", { class: "ws-desc" }, info.desc),
+            el("div", { class: "ws-card-foot" },
+              el("span", {}, "Mở không gian tác nghiệp"),
+              el("span", { class: "ws-arrow" }, "↗")
+            )
+          );
+        })
+      );
+    }
+
+    // 3. Executive Setup Progress
+    const step1Done = Boolean(c.legal_name && c.code);
+    const step2Done = state.agents.every((a) => a.state === "running");
+    const step3Done = Boolean(state.package);
+    const doneCount = (step1Done ? 1 : 0) + (step2Done ? 1 : 0) + (step3Done ? 1 : 0);
+    const pct = Math.round((doneCount / 3) * 100);
+
+    if ($("meter-bar")) $("meter-bar").style.width = pct + "%";
+    if ($("setup-progress-text")) {
+      $("setup-progress-text").textContent = doneCount === 3
+        ? "Sẵn sàng vận hành (3/3 hoàn tất) ✓"
+        : "Tiến độ: " + doneCount + "/3 bước (" + pct + "%)";
+    }
+
+    const steps = $("steps") ? $("steps").children : [];
+    if (steps.length >= 3) {
+      steps[0].classList.toggle("done", step1Done);
+      steps[1].classList.toggle("done", step2Done);
+      steps[2].classList.toggle("done", step3Done);
+    }
+
+    if ($("step-config-desc")) {
+      $("step-config-desc").textContent = step1Done
+        ? (c.code ? "Mã: " + c.code : "") + (c.tax_code ? " · MST: " + c.tax_code : "")
+        : "Chưa cấu hình thông tin doanh nghiệp";
+    }
+    if ($("step-agents-status")) {
+      $("step-agents-status").textContent = runningCount === state.agents.length
+        ? "4/4 Agent đang trực tuyến"
+        : runningCount + "/4 Agent trực tuyến";
+    }
+    if ($("step-data-desc")) {
+      $("step-data-desc").textContent = state.package
+        ? "Gói v" + state.package.version + " (" + state.package.files + " tệp) · Đã niêm phong"
+        : "Chưa niêm phong gói dữ liệu";
+    }
   }
 
   function checkLines(record) {
