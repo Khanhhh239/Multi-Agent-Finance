@@ -20,7 +20,7 @@ from agent1.adaptive.data import (
     fingerprint,
     account_scope,
 )
-from agent1.adaptive.methods import Method, features, forecast, train
+from experiments.t1_compact.historical_workspace import Method, features, forecast, train
 from agent1_service.api import create_app
 from agent1.synth.einvoice import invoice_to_xml
 from agent1.synth.names import make_mst
@@ -836,12 +836,12 @@ def test_api_requires_completeness_and_rejects_demo(client):
 def test_api_end_to_end_real_models_version_activation_and_update(client):
     data = company_data()
     import_all(client, data)
-    original = train
-    # Bounded algorithms for integration speed; full-bag execution is checked separately.
+    from agent1.adaptive.methods import train as original
+    # Real global/local engine; this short history must retain its global fallback.
     with patch(
         "agent1_service.workspace.api.train",
-        lambda data, asof, progress: original(
-            data, asof, progress, names=["customer", "survival", "logistic"]
+        lambda data, asof, progress, **kwargs: original(
+            data, asof, progress, **kwargs
         ),
     ):
         started = client.post(
@@ -855,7 +855,7 @@ def test_api_end_to_end_real_models_version_activation_and_update(client):
                 break
             time.sleep(0.05)
         assert result["jobs"][0]["status"] == "completed", result
-    assert result["active_version"] is None
+    assert result["active_version"] == result["versions"][0]["id"]
     version = result["versions"][0]
     assert (
         not {"artifact", "model", "selection", "selected_method", "selected_weight"}
@@ -873,7 +873,8 @@ def test_api_end_to_end_real_models_version_activation_and_update(client):
     )
     assert prediction.status_code == 200, prediction.text
     assert (
-        prediction.json()["model_version"] == version["id"]
+        prediction.json()["model_version"] == version["t1_version"]
+        and prediction.json()["company_bundle_version"] == version["id"]
         and len(prediction.json()["weeks"]) == 13
     )
     assert prediction.json()["pilot_ready"] is False
@@ -899,7 +900,7 @@ def test_api_end_to_end_real_models_version_activation_and_update(client):
             "opening_balance": 1e6,
             "payments_complete": True,
         },
-    ).json()["stale_model"]
+    ).json()["stale_model"] is False  # The correction is known after this origin.
     assert (
         client.delete(
             "/v1/records/invoices/" + data["payments"][0]["invoice_id"]
@@ -962,7 +963,7 @@ def test_delete_and_duplicate_training_blocked_until_worker_finishes(client):
 
     started, release = Event(), Event()
 
-    def worker(*_):
+    def worker(*_, **kwargs):
         started.set()
         release.wait(5)
         raise ValueError("Expected test failure")
@@ -1060,8 +1061,9 @@ def test_variable_forecast_horizon_and_excel_export(client):
         "Thu theo hóa đơn",
         "Thu theo khách",
         "Lịch chi đã biết",
-        "So sánh thời điểm",
-        "Kịch bản từng tuần",
+        "Bằng chứng partial theo tuần",
+        "Profile partial và hỗ trợ",
+        "Phiên bản T10",
         "Nghĩa vụ T5",
         "Thanh toán T5",
     ]

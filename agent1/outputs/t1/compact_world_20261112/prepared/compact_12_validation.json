@@ -1,0 +1,16 @@
+{
+  "world": "compact_12_validation",
+  "role": "validation",
+  "kind": "additional_stress",
+  "firms": 6,
+  "anchors": 1178,
+  "unique_invoices": 642,
+  "min_origin": "2024-01-01",
+  "max_origin": "2024-03-25",
+  "label_end": "2024-06-30",
+  "sha256": "d100110d7f42e505556b3f1bd5faccaed21de63bdc645ea5025cd609878f6e68",
+  "protocol_sha256": "b846f91a4bedb1a00ffe7ef22df477a94745709f684400f5f10eb17b11a5bff9",
+  "replay_manifest_sha256": "388cd8a21f7c245b337297afa317b337ebb4a7b80204d68a45d70fd4cb5232b4",
+  "open_anchors": 2060,
+  "excluded_accounting_or_late_cash": 518
+}

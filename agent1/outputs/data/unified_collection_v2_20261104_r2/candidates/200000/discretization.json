@@ -1,9 +1,0 @@
-{
-  "train_teacher_forced_cash_wape": 0.006108319589799108,
-  "train_teacher_forced_cash_bias": 0.000161364323037281,
-  "source_recursive_class_replay": {
-    "unsupported": 0,
-    "cash_wape": 0.0013858745333730055,
-    "cumulative_cash_bias": 3.2364194897083014e-05
-  }
-}

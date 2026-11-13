@@ -14,7 +14,7 @@ from threadpoolctl import threadpool_limits
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from agent1.adaptive.methods import Method
+from experiments.t1_compact.historical_workspace import Method
 
 ORIGIN = pd.Timestamp("2020-01-15")
 FIRM = "HR-CA02"

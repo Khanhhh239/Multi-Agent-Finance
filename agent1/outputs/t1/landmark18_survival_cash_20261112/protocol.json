@@ -1,0 +1,307 @@
+{
+  "version": "landmark-18-cash-survival-v2",
+  "dependencies": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1"
+  },
+  "seed": 261112,
+  "source": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t1\\compact_world_20261112",
+  "previous": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t1\\compact_ensemble_20261112_v3",
+  "feature_schema": "t1-landmark-18-v2",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "receipt_count",
+    "received_fraction_28d",
+    "customer_settlements_180d",
+    "customer_delay_180d",
+    "customer_delay_std_180d",
+    "customer_delay_trend_180d",
+    "company_delay_180d",
+    "company_delay_trend_180d",
+    "customer_overdue_share",
+    "customer_overdue90_share",
+    "company_overdue_share",
+    "company_overdue90_share",
+    "customer_outstanding_share"
+  ],
+  "groups": [
+    {
+      "key": "invoice_terms",
+      "label": "Giá trị và điều khoản",
+      "features": [
+        "relative_amount",
+        "term_days"
+      ]
+    },
+    {
+      "key": "invoice_age",
+      "label": "Tuổi hóa đơn",
+      "features": [
+        "age_days"
+      ]
+    },
+    {
+      "key": "receipt_state",
+      "label": "Trạng thái thu tiền",
+      "features": [
+        "received_fraction",
+        "receipt_recency_days",
+        "receipt_count",
+        "received_fraction_28d"
+      ]
+    },
+    {
+      "key": "customer_history",
+      "label": "Lịch sử khách",
+      "features": [
+        "customer_settlements_180d",
+        "customer_delay_180d",
+        "customer_delay_std_180d",
+        "customer_delay_trend_180d"
+      ]
+    },
+    {
+      "key": "company_history",
+      "label": "Lịch sử doanh nghiệp",
+      "features": [
+        "company_delay_180d",
+        "company_delay_trend_180d"
+      ]
+    },
+    {
+      "key": "overdue_context",
+      "label": "Công nợ hiện tại",
+      "features": [
+        "customer_overdue_share",
+        "customer_overdue90_share",
+        "company_overdue_share",
+        "company_overdue90_share",
+        "customer_outstanding_share"
+      ]
+    }
+  ],
+  "feature_definition": {
+    "history_days": 180,
+    "receipt_window_days": 28,
+    "history_trend": "OLS delay-days per 30 calendar days; customer estimates shrink toward company",
+    "count_transform": "log1p",
+    "overdue_thresholds_days": [
+      30,
+      90
+    ],
+    "customer_exposure": "customer open balance divided by company open balance"
+  },
+  "candidates": [
+    {
+      "name": "due",
+      "family": "rule",
+      "title": "Ngày đến hạn",
+      "eligible": true,
+      "reason": "available",
+      "trials": 1
+    },
+    {
+      "name": "customer",
+      "family": "hybrid",
+      "title": "Lịch sử khách hàng",
+      "eligible": true,
+      "reason": "available",
+      "trials": 1
+    },
+    {
+      "name": "survival",
+      "family": "statistical",
+      "title": "Sống sót thực nghiệm",
+      "eligible": true,
+      "reason": "available",
+      "trials": 1
+    },
+    {
+      "name": "logistic",
+      "family": "supervised",
+      "title": "Logistic hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "forest",
+      "family": "supervised",
+      "title": "Random forest hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "extra",
+      "family": "supervised",
+      "title": "Extra trees hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "hist",
+      "family": "supervised",
+      "title": "Histogram boosting hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "lightgbm",
+      "family": "supervised",
+      "title": "LightGBM hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "xgboost",
+      "family": "supervised",
+      "title": "XGBoost hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "logistic_regularized",
+      "family": "supervised",
+      "title": "Logistic regularized",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "forest_shallow",
+      "family": "supervised",
+      "title": "Random forest shallow",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "hist_regularized",
+      "family": "supervised",
+      "title": "Histogram regularized",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "neural_wide",
+      "family": "deep",
+      "title": "Neural wide",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "neural_deep",
+      "family": "deep",
+      "title": "Neural deep",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "spline",
+      "family": "statistical",
+      "title": "Hazard spline",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "neural",
+      "family": "deep",
+      "title": "Neural logistic hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    }
+  ],
+  "budget": {
+    "risk_rows": 100000,
+    "learned_trials": 2,
+    "baseline_trials": 1,
+    "threads": 2,
+    "blas_threads": 1,
+    "neural_max_iter": [
+      120,
+      180
+    ]
+  },
+  "source_audit_sha256": "ac65c447c6f41167c3a9c7faf33d6b59d66d0cca2aaf8310cdf2fae5164855b5",
+  "source_protocol_sha256": "b846f91a4bedb1a00ffe7ef22df477a94745709f684400f5f10eb17b11a5bff9",
+  "previous_artifact_metadata_sha256": "23bda71d4434a13b688e32c55a6a9c687f54548a6192ddcc37b87eedce5ff940",
+  "validation_origins": [
+    "2024-01-01",
+    "2024-01-29",
+    "2024-02-26",
+    "2024-03-25"
+  ],
+  "available_asof": "2024-07-01",
+  "selection_score": "0.5 * (sum absolute weekly cash error / outstanding + mean absolute cumulative cash error / outstanding); equal World/firm/origin",
+  "selection_cash": "same observed partial-payment override as T6; actual receipts capped at the origin claim; shared source landmarks",
+  "payment_diagnostics": "Brier4, Brier13, amount-weighted integrated Brier over all 13 weeks",
+  "stability": {
+    "minimum_mean_gain": 0.0001,
+    "minimum_window_gain": 1e-05,
+    "minimum_window_fraction": 0.75,
+    "maximum_window_regression": 0.001
+  },
+  "ensemble_guard": "amount-weighted integrated Brier may rise at most 2% plus 0.0001 per addition",
+  "survival_contract": "same open landmarks, as-of receipts and cash-full-settlement labels; noncash writeoff never creates a Paid label; every mature unpaid landmark remains exposed through 13 weeks",
+  "maximum_members": 3,
+  "weight_step": 0.05,
+  "calibration": {
+    "method": "identity"
+  },
+  "shap": {
+    "groups": 6,
+    "coalitions": 64,
+    "census_limit": 512,
+    "stratified_primary": 128,
+    "sensitivity_samples": 3,
+    "single_invoice_p95_seconds": 1.0,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true
+  },
+  "latency_inputs": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t6\\baseline_workspace_trained_t1_20261112\\inputs",
+  "latency_input_hashes": {
+    "01_invoices.csv": "b8bd1e816e0c122bd4cfe37db1f92937b943552bce24677690e61b2eefb00b37",
+    "03_payments.csv": "d86c49f2912c69fc8604f604f036fed2ffad681d3f525c84115d82a16912a138",
+    "06_actions.csv": "bfb5c460d18e58761fe6e2ff3e43df3241815fe6fd6fb68d2c9f66c77901d912"
+  },
+  "source_hashes": {
+    "agent1/adaptive/compact_t1.py": "22d6bd721ae2c6cf307fa2ca5b4432e43ee5aa9540bdb2c389957a947a4bc389",
+    "agent1/adaptive/compact_ensemble.py": "61cd14f5cdd4d7951fe527107fdb46e040ef4d3ce953d95e81743ae6f07d777c",
+    "agent1/adaptive/landmark_features.py": "8c4e92b811f72bec727f30525880626cc8b30e62404ab5a73ce62893810ff2fe",
+    "agent1/adaptive/landmark_explanations.py": "43857eb6f47923d1cb27897a763a7a8ba51d73cc4fc50bb510ae315b3a3d8d5a",
+    "agent1/adaptive/explanation_reference.py": "bb999301e6dce06337aad0bb219c7ba644e51116d163f6944d8442dc2624eb3b",
+    "agent1/adaptive/explanations.py": "4ebd1717bcef04ed54d525199393f9e23dc4186f188db7ad469f4461a033a33f",
+    "agent1/adaptive/methods.py": "0cf57c5284c43d97dc0319611e325ddd9b2034177a2b390b279eef5ceef838a0",
+    "agent1/adaptive/cash_history.py": "ad2877d5fddcc4b03d50b4abe7d58a1f6f90a657839c5ff5e791665aca413215",
+    "agent1/adaptive/data.py": "5ee4f5e0a00d92fa3a063b89b86cabd48c5205391dc4bf23323e175eaaac6831",
+    "agent1_service/ingest/invoices.py": "b0e3a4ceb1620dc019986ce2fc9fc07ab6d4b87d523475b495b151099873f14f",
+    "agent1_service/ingest/money.py": "d88b7215c23eb3cfaea2ba55b68b51fc34faf8f754d31648b0e1cf76549b8d84",
+    "experiments/t1_compact/train.py": "35677462a3f636277a7a92c62df2e23a05a2cf9148d4faf889b41ebee4a0cc85",
+    "experiments/t1_compact/train_ensemble.py": "ff35fa3329e3a497cd338f1a99f520679cd533c5fb65709cc7b04f8feb069dd5",
+    "experiments/t1_compact/landmark_data.py": "5b4c3ff30d02090cbb49b04c84572b430855c5bfdd9cbbd7defcf0eae677bd2a",
+    "experiments/t1_compact/train_landmark.py": "e4ae9380524ce8688624b5b78fa7203871089b04c979fd72ba913b9513f63f27"
+  },
+  "limitations": [
+    "Reused simulator-family Worlds and reused test holdout.",
+    "Sampled eligible fixed-claim landmarks. Cash labels cap receipts at outstanding claims.",
+    "This run changes features, the validation objective and the neural iteration budget together.",
+    "Company adaptation and real-company holdout evaluation require a separate dated local validation."
+  ]
+}

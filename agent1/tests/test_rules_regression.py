@@ -3,6 +3,7 @@ import pytest
 from agent1 import calendar_vn as cal
 from agent1.rules import load_rules
 from agent1.rules.provisioning import suggest_provision
+from agent1.rules.regression_cases import cases, calculate, coverage
 
 
 @pytest.mark.parametrize('date,expected', [('2019-12-31',4180000),('2020-01-01',4420000),
@@ -35,3 +36,14 @@ def test_provision_uses_calendar_months(months, rate):
 def test_unverified_rules_are_not_silently_approved():
     with pytest.raises(ValueError,match='xác minh'):
         load_rules('2026-10-16',strict=True)
+
+
+@pytest.mark.parametrize('case',cases(),ids=lambda case:case['case'])
+def test_configured_business_outcome(case):
+    actual=calculate(case)
+    if isinstance(case['expected'],str):assert actual==case['expected']
+    else:assert actual==pytest.approx(case['expected'])
+
+
+def test_all_registered_versions_have_two_business_cases():
+    assert min(coverage().values())>=2

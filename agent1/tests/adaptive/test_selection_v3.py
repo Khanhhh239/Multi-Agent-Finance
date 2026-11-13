@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from agent1.adaptive.collections import budget_metrics
-from agent1.adaptive.methods import DistributionEnsemble
+from experiments.t1_compact.historical_workspace import DistributionEnsemble
 from agent1.adaptive.operating import fit_candidate, predict_candidate
 from agent1.adaptive.risk import train_risk, predict_risk
 

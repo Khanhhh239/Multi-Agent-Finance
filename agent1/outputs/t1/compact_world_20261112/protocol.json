@@ -1,0 +1,49 @@
+{
+  "version": "compact-t1-world-training-v1",
+  "seed": 261112,
+  "feature_schema": "t1-compact-landmark-v1",
+  "max_state_features": 10,
+  "max_shap_groups": 6,
+  "fit_first": "2020-01-06",
+  "fit_last": "2023-09-25",
+  "fit_label_end": "2023-12-31",
+  "validation_origins": [
+    "2024-01-01",
+    "2024-01-29",
+    "2024-02-26",
+    "2024-03-25"
+  ],
+  "selection_label_end": "2024-06-30",
+  "available_asof": "2024-07-01",
+  "test_origins": [
+    "2024-07-01",
+    "2024-09-30",
+    "2024-12-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-29"
+  ],
+  "test_label_end": "2025-12-31",
+  "stride_days": 28,
+  "max_anchors_per_firm_origin": 40,
+  "max_fit_anchors_per_firm": 1100,
+  "max_eval_anchors_per_firm_origin": 100,
+  "weighting": "equal_world_then_firm; equal_origin_sampled_open_invoices; no class rebalancing",
+  "target": "cash_full_settlement within 4/13 weeks of an observed open landmark; nonpaid outcomes remain in the unresolved tail",
+  "score": "equal-World mean of mean(Paid Brier4, Paid Brier13)",
+  "feature_drop_relative_tolerance": 0.002,
+  "feature_selection": "backward elimination on validation only, scalar features excluding mandatory term and age; one pass in declared order",
+  "shap_budget": {
+    "single_invoice_p95_seconds": 1.0,
+    "queue20_p95_seconds": 10.0,
+    "background_max": 24,
+    "coalitions_max": 64
+  },
+  "limitations": [
+    "Regenerated retained configurations are reference scenarios, not pristine fresh tests.",
+    "Additional stress test seed is locked before fitting; simulator-family validation is not real-world acceptance.",
+    "Known ledger allocations, not private invoice truth, determine observed receipt histories.",
+    "Credit-note and late-known pre-origin cash revisions are excluded from fixed-claim label evaluation and counted.",
+    "This experiment does not change T6 partial-cash profiles or missing bank inflow/outflow scopes."
+  ]
+}

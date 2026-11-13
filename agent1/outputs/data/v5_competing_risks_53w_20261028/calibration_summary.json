@@ -1,7 +1,0 @@
-{
-  "analysis_code_sha256": "b20ebe79724690e1ff4b2d380eff1c742b95186949ea58e1e91d67db0478c32b",
-  "model_sha256": "0afb6f43f74a5033e8e22d6882769722c4381166af446a88b28c8ccd4617fb6b",
-  "calibration_bins_sha256": "bd0d2ff3583e5b834131900e37b54bf0b287410bcb93a677a7796ad9cc0e0310",
-  "calibration_ece_sha256": "424c5ba638a54d8356986c93b81e363143441d93de5f9a8b38adee92b2f0c176",
-  "method": "Equal-count reliability bins on fully observed validation/test anchors"
-}

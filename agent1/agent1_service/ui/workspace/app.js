@@ -29,10 +29,14 @@
     field: "Trường", before: "Trước khi sửa", after: "Sau khi sửa",
     invoices: "Hóa đơn", bank: "Dòng sao kê", payments: "Thanh toán", statements: "Kỳ sao kê", actions: "Nhật ký", outflows: "Lịch cố định · T5",
     expense_payments: "Thanh toán nghĩa vụ T5", settlement_id: "Mã thanh toán nghĩa vụ",
+    obligation_ref: "Hợp đồng/khoản cố định", payment_period: "Kỳ thanh toán", installment_no: "Đợt đến hạn",
+    identity_status: "Định danh nghiệp vụ", input_expense_id: "Mã trong file", classification: "Kết quả", row: "Dòng",
+    message: "Lưu ý",
     forecast_date: "Ngày dự kiến trả/nhận còn lại", source: "Nguồn hồ sơ/hợp đồng",
     verified: "Đã xác nhận hồ sơ (true/false)", refund_approved_at: "Ngày quyết định hoàn",
     business_day: "Dời ngày (none/following/preceding)", replaces_expense_id: "Mã lịch được thay thế",
     identifier: "Mã bản ghi", status: "Trạng thái", remaining_amount: "Còn lại", allocated_amount: "Đã phân bổ",
+    cancelled_amount: "Đã hủy", replaced_amount: "Đã thay thế",
     value: "Giá trị", source_file: "Tên tệp", imported_by: "Người nạp", created_at: "Thời gian",
     new: "Mới", changed: "Sửa", unchanged: "Trùng giữ nguyên", error_count: "Lỗi", rows: "Số dòng", valid_rows: "Dòng hợp lệ",
     legacy: "Nhật ký cũ", note: "Ghi chú",
@@ -45,6 +49,7 @@
     event_id: "Mã sự kiện",
     promise_date: "Ngày hứa trả",
     actual_balance: "Số dư thực tế",
+    median_balance: "Trung vị số dư · P50",
     in_error: "Chênh thu (VND)",
     out_error: "Chênh chi (VND)",
     bank_id: "Mã dòng sao kê",
@@ -95,7 +100,7 @@
     week: "Tuần",
     cash_in: "Dự kiến thu",
     cash_out: "Dự kiến chi",
-    balance: "Số dư dự kiến",
+    balance: "Số dư kỳ vọng",
     low: "Mô phỏng P10",
     high: "Mô phỏng P90",
     outstanding: "Còn phải thu",
@@ -111,7 +116,6 @@
     reconciliationState = null,
     sourceCorrection = {base_hash:null, records:[], preview:null, key:null, edit_revision:0},
     lastForecast = null,
-    baselineForecast = null,
     currentView = "overview",
     appliedCompanyProfile = "",
     manualMapping = {},
@@ -373,7 +377,6 @@
   $("refresh").onclick = () => action(refresh, $("refresh"));
   function clearForecast() {
     lastForecast = null;
-    baselineForecast = null;
     charts.forEach((chart) => chart.destroy());
     charts.clear();
     $("forecast-output").hidden = true;
@@ -519,7 +522,7 @@
     bank:["identifier", "account", "date", "direction", "amount", "allocated_amount", "remaining_amount", "status"],
     payments:["identifier", "invoice_id", "bank_id", "payment_date", "amount", "status"],
     statements:["identifier", "account", "start_date", "end_date", "opening_balance", "closing_balance"],
-    outflows:["identifier", "date", "amount", "allocated_amount", "remaining_amount", "category", "status", "known_at"],
+    outflows:["identifier", "obligation_ref", "payment_period", "installment_no", "identity_status", "date", "amount", "allocated_amount", "cancelled_amount", "replaced_amount", "remaining_amount", "category", "status", "known_at"],
     expense_payments:["identifier", "expense_id", "bank_id", "payment_date", "amount", "known_at"],
     actions:["identifier", "invoice_id", "date", "kind", "promise_date"],
     invoice_events:["identifier", "invoice_id", "event_type", "event_date", "known_at"],
@@ -543,6 +546,7 @@
     $("records-status").value = selectedStatus;
     const fields = recordFields[kind], grid = table(result.rows, fields, {
       status:value => statusLabels[value] || value, direction:value => value === "in" ? "Thu" : "Chi",
+      identity_status:value => value === "identified" ? "Đủ định danh" : "Cần bổ sung định danh",
     });
     Array.from(grid.querySelectorAll("tbody tr")).forEach((row, index) => {
       row.cells[0].replaceChildren(recordLink(kind, result.rows[index].identifier));
@@ -1111,9 +1115,11 @@
         preview.valid_rows +
         "/" +
         preview.rows +
-        " dòng hợp lệ · " +
-        preview.updates +
-        " dòng sẽ cập nhật";
+        " dòng hợp lệ · " + (preview.counts
+          ? preview.counts.new + " thêm mới · " + preview.counts.changed + " sửa · " + preview.counts.unchanged + " trùng giữ nguyên"
+            + (preview.counts.review ? " · " + preview.counts.review + " cần kiểm tra" : "")
+          : preview.updates + " dòng sẽ cập nhật");
+      renderImportPlan($("import-plan"), preview);
       $("import-warnings").replaceChildren(
         ...preview.warnings.map((w) => node("p", w, "warning-box")),
       );
@@ -1144,7 +1150,7 @@
       }
       $("preview-table").replaceChildren(table(preview.sample, preview.fields));
       $("changed-rows").replaceChildren(
-        ...(preview.changes || []).flatMap((x) => [
+        ...(preview.row_results?.length ? [] : preview.changes || []).flatMap((x) => [
           node("strong", "Trước / sau thay đổi"),
           table([x.before, x.after], preview.fields),
         ]),
@@ -1153,6 +1159,52 @@
       $("preview-panel").scrollIntoView({ behavior: "smooth", block: "start" });
     }, event.submitter);
   };
+  function renderImportPlan(host, result) {
+    host.replaceChildren();
+    if (!result.row_results?.length) return;
+    const classifications = {new:"Thêm mới", changed:"Sửa", unchanged:"Trùng giữ nguyên", review:"Cần kiểm tra"};
+    host.append(node("p", result.can_commit
+      ? "Đối chiếu từng dòng trước khi xác nhận. Các khoản cũ không có trong file vẫn được giữ."
+      : "Lần nạp còn lỗi, chưa thể lưu bất kỳ dòng nào. Sửa file và kiểm tra lại.", result.can_commit ? "helper" : "warning-box"));
+    const grid = node("div"), edits = node("div"), controls = node("div", undefined, "cash-pagination");
+    const filterLabel = node("label", "Kết quả nạp"), filter = node("select");
+    filter.setAttribute("aria-label", "Lọc kết quả nạp T5");
+    const all = node("option", "Tất cả"); all.value = ""; filter.append(all);
+    Object.entries(classifications).forEach(([value, label]) => {
+      const option = node("option", label); option.value = value; filter.append(option);
+    });
+    filter.value = ""; filterLabel.append(filter);
+    let offset = 0;
+    const render = () => {
+      const rows = result.row_results.filter(row => !filter.value || row.classification === filter.value);
+      const page = rows.slice(offset, offset + 20);
+      const fields = ["row", "classification", "input_expense_id", "expense_id", "obligation_ref", "category", "payment_period", "installment_no", "date", "amount", "identity_status", "message"];
+      const scroll = node("div", undefined, "table-scroll");
+      scroll.append(table(page.map(row => ({...row.after, ...row})), fields, {
+        classification:value => classifications[value],
+        identity_status:value => value === "identified" ? "Đủ định danh" : "Cần bổ sung định danh",
+      }));
+      grid.replaceChildren(scroll);
+      edits.replaceChildren(...page.filter(row => row.classification === "changed").map(row => {
+        const detail = node("details", undefined, "form-options"), diff = node("div", undefined, "table-scroll");
+        const changed = Object.keys(row.after).filter(field => row.before?.[field] !== row.after[field]);
+        Object.keys(row.before || {}).forEach(field => { if (!(field in row.after)) changed.push(field); });
+        diff.append(table([{...row.before, classification:"Trước"}, {...row.after, classification:"Sau"}],
+          ["classification", "expense_id", ...changed.filter(field => field !== "expense_id")]));
+        detail.append(node("summary", "Dòng " + row.row + " · " + row.expense_id + " · Trước / sau thay đổi"), diff);
+        return detail;
+      }));
+      const previous = node("button", "← Trước", "button"), next = node("button", "Sau →", "button");
+      previous.type = next.type = "button";
+      previous.disabled = offset === 0; next.disabled = offset + 20 >= rows.length;
+      previous.onclick = () => { offset -= 20; render(); };
+      next.onclick = () => { offset += 20; render(); };
+      controls.replaceChildren(previous, node("span", rows.length
+        ? `${offset + 1}–${Math.min(offset + 20, rows.length)} / ${rows.length} dòng` : "Không có dòng phù hợp."), next);
+    };
+    filter.onchange = () => { offset = 0; render(); };
+    host.append(filterLabel, grid, controls, edits); render();
+  }
   $("commit-import").onclick = () =>
     action(async () => {
       if (!preview) return;
@@ -1242,7 +1294,7 @@
     );
     const latest = state.jobs[0];
     if (latest && latest.status === "failed") notice(latest.message, true);
-    else if (latest && latest.status === "completed") notice("Kiểm định hoàn tất. Xem kết quả phiên bản trước khi sử dụng.");
+    else if (latest && latest.status === "completed") notice(latest.message || "Đã hoàn tất chu kỳ cập nhật và lưu quyết định chọn phiên bản.");
     $("train-button").disabled = state.jobs.some((j) =>
       ["queued", "running"].includes(j.status),
     );
@@ -1278,41 +1330,30 @@
         ),
       );
       const measures = node("div", undefined, "audit-metrics");
+      const candidate = audit?.candidate?.score ?? audit?.challenger?.score;
+      const baseline = audit?.baseline?.score;
+      const metric = value => Number.isFinite(value) ? value.toFixed(4) : "Chưa đủ nhãn";
       [
-        ["ỨNG VIÊN", audit.candidate_brier4.toFixed(4)],
-        ["MỐC LỊCH SỬ", audit.baseline_brier4.toFixed(4)],
-        ["HÓA ĐƠN KIỂM TRA", fmt.format(audit.n)],
+        ["LỖI DỰ THU ỨNG VIÊN", metric(candidate)],
+        ["LỖI DỰ THU ĐỐI CHỨNG", metric(baseline)],
+        ["SNAPSHOT KIỂM TRA", fmt.format(audit?.n ?? audit?.rows ?? 0)],
       ].forEach(([label, value]) => {
         const item = node("div", label);
         item.append(node("b", value));
         measures.append(item);
       });
-      info.append(
-        measures,
-        node(
-          "p",
-          audit.accepted
-            ? "Ứng viên không kém mốc trên bài kiểm tra. Sẵn sàng để bạn xem xét sử dụng."
-            : "Ứng viên chưa vượt mốc lịch sử. Phiên bản này dùng phương án mốc để dự báo.",
-        ),
-      );
-      info.append(
-        node(
-          "small",
-          "Cải thiện Brier, khoảng 95%: [" +
-            audit.improvement_ci_low.toFixed(4) +
-            "; " +
-            audit.improvement_ci_high.toFixed(4) +
-            "]. " +
-            (audit.ci_reliable
-              ? ""
-              : "Ít nhóm khách hàng; khoảng ước lượng cần thận trọng. ") +
-            version.train_n +
-            " hóa đơn học, " +
-            version.validation_n +
-            " hóa đơn hiệu chỉnh.",
-        ),
-      );
+      const messages = {
+        accepted_historical_audit: "Đã chọn qua kiểm định quá khứ và học lại bằng dữ liệu hợp lệ gần nhất.",
+        accepted_prospective_audit: "Đã chọn sau khi chấm dự báo đã lưu trước khi biết kết quả.",
+        pending_prospective_audit: "Giữ model đang dùng; ứng viên mới chờ đủ 13 tuần để đối chiếu.",
+        kept_incumbent: "Giữ model đang dùng vì chưa có bằng chứng đủ để thay thế.",
+      };
+      info.append(measures, node("p", messages[version.promotion_status] || "Đã lưu kết quả kiểm định."));
+      info.append(node("small",
+        (version.train_n ?? 0) + " snapshot học, " +
+        (version.validation_n ?? 0) + " snapshot validation. " +
+        "Điểm lỗi dự thu càng thấp càng tốt; chưa đủ nhãn thì chưa kết luận ứng viên tốt hơn."
+      ));
       if (version.risk_status) info.append(node("p", version.risk_status === "evaluated"
         ? "Rủi ro xóa nợ: đã kiểm tra trên lịch sử đủ thời gian quan sát."
         : "Rủi ro xóa nợ: chưa đủ lịch sử có nhãn; chưa đưa ra xác suất."));
@@ -1466,11 +1507,46 @@
       (probability * 100).toLocaleString("vi-VN", {maximumFractionDigits: 2}) + "%", "t1-probability"));
     if (explanation?.cutoff) panel.append(node("p", "Ngày dự báo " + displayDate(explanation.cutoff), "muted"));
     if (!available) {
-      panel.append(node("p", "Kế hoạch này chưa có lời giải thích đã được kiểm tra. Tạo kế hoạch mới để xem."));
+      panel.append(node("p", explanation?.status === "deferred"
+        ? explanation.reason
+        : "Kế hoạch này chưa có lời giải thích đã được kiểm tra. Tạo kế hoạch mới để xem."));
       return panel;
     }
     if (explanation.scenario_shift_weeks) panel.append(node("p",
       "Kịch bản thu chậm thêm " + explanation.scenario_shift_weeks + " tuần."));
+
+      if (["compact-t1-grouped-exact-v1", "landmark-grouped-exact-reference-v2"].includes(explanation.protocol)) {
+        const factors = explanation.factors || [];
+        const landmark = explanation.protocol === "landmark-grouped-exact-reference-v2";
+        const schema = explanation.feature_schema || explanation.model_version;
+        const valid = validProbability && explanation.method === "exact_grouped_interventional_shapley" &&
+          schema === (landmark ? "t1-landmark-18-v2" : "t1-compact-landmark-v1") &&
+          Number.isFinite(explanation.probability) && Math.abs(probability - explanation.probability) <= 1e-10 &&
+          Number.isFinite(explanation.baseline_probability) && factors.length > 0 && factors.length <= 6 &&
+          factors.every(f => Number.isFinite(f.contribution_pp)) &&
+          Math.abs(explanation.baseline_probability + factors.reduce((s, f) => s + f.contribution_pp / 100, 0) - probability) <= 1e-10;
+        if (!valid) {
+          panel.append(node("p", "Lời giải thích không khớp dự báo đã lưu."));
+          return panel;
+        }
+        panel.append(node("p", landmark
+          ? "Ảnh hưởng của từng nhóm thông tin so với các hóa đơn tham chiếu tại ngày dự báo. Các đóng góp giải thích mô hình và không chứng minh nguyên nhân khách sẽ trả tiền."
+          : "Ảnh hưởng của từng nhóm thông tin trong mô hình. Các đóng góp này chưa được kiểm tra độ ổn định và không chứng minh nguyên nhân khách sẽ trả tiền.", "muted"));
+        if ((explanation.reference?.population ?? 0) < 16) {
+          panel.append(node("p", "Chưa đủ cơ sở đánh giá độ ổn định trên danh mục ít hóa đơn tham chiếu.", "muted"));
+        }
+        const grid = node("table", undefined, "t1-grouped-drivers"), head = node("thead"), header = node("tr"), body = node("tbody");
+        ["Nhóm thông tin", "Thay đổi xác suất dự báo"].forEach(label => header.append(node("th", label)));
+        head.append(header); grid.append(head);
+        factors.forEach(f => {
+          const row = node("tr"), effect = Math.abs(f.contribution_pp) < 0.005 ? 0 : f.contribution_pp;
+          row.append(node("td", f.label), node("td", (effect > 0 ? "+" : "") + effect.toLocaleString("vi-VN", {maximumFractionDigits: 2}) + " điểm phần trăm"));
+          body.append(row);
+        });
+        grid.append(body); panel.append(grid);
+        panel.append(node("p", "Mốc tham chiếu: " + (explanation.baseline_probability * 100).toLocaleString("vi-VN", {maximumFractionDigits: 2}) + "% trên mẫu hóa đơn đang mở. Đây là đóng góp theo nhóm; chưa tách riêng từng thông tin trong nhóm.", "muted"));
+        return panel;
+      }
 
     // Fail closed, including for saved plans without diagnostics. Users only
     // receive reviewed drivers; raw SHAP and diagnostics stay in the saved plan.
@@ -1719,6 +1795,115 @@
     };
     render();
   }
+  function renderT10Evidence(plan) {
+    const panel = node("details", undefined, "cash-details");
+    panel.append(node("summary", "Vì sao dự thu số tiền này? · T1 + adapter partial"));
+    if (!plan.t10) {
+      panel.append(node("p", "Kế hoạch cũ chưa lưu bằng chứng partial. Tạo kế hoạch mới để giải thích đúng phiên bản."));
+      return panel;
+    }
+    const t = plan.t10, identity = t.identity, profile = t.partial_profile;
+    const money = value => fmt.format(value) + " VND";
+    panel.append(node("p", "T1 " + identity.t1_version + " · Adapter " + identity.adapter_version + " · Partial " + identity.partial_version + " · T6 " + identity.t6.version, "muted"));
+    panel.append(node("p", "SHAP giải thích xác suất tất toán trong 4 tuần. Bảng tiền dưới đây do cả T1 + adapter tính; chưa tính SHAP của tiền thu."));
+    const label = node("label", "Hóa đơn cần xem"), select = node("select"), detail = node("div");
+    select.setAttribute("aria-label", "Hóa đơn giải thích partial");
+    plan.cash_decomposition.invoices.forEach(row => {
+      const option = node("option", row.invoice_id + " · " + row.customer_id);
+      option.value = row.invoice_id; select.append(option);
+    });
+    label.append(select); panel.append(label, detail);
+    const render = () => {
+      const invoice = plan.cash_decomposition.invoices.find(row => row.invoice_id === select.value);
+      detail.replaceChildren();
+      if (!invoice?.receipt_explanation) { detail.append(node("p", "Không có hóa đơn mở cần giải thích.")); return; }
+      const evidence = invoice.receipt_explanation, next = evidence.weeks[0];
+      cashPagedTable(detail, ["Tuần", "Dư nợ đầu tuần kỳ vọng", "Tất toán", "Partial", "Dự thu", "Dư nợ cuối tuần kỳ vọng", "P(tất toán tuần)", "Hazard tất toán"],
+        evidence.weeks.map(w => [w.week, money(w.expected_opening_debt), money(w.expected_from_settlement), money(w.expected_from_partial), money(w.expected_receipt), money(w.expected_remaining_debt), (100*w.settlement_probability).toFixed(2) + "%", (100*w.settlement_hazard).toFixed(2) + "%"]));
+      detail.append(node("p", `Dư nợ tại ngày chốt ${money(invoice.outstanding)}; tuần 1 dự thu ${money(next.expected_receipt)}, gồm tất toán ${money(next.expected_from_settlement)} và partial ${money(next.expected_from_partial)}. Số hiển thị được làm tròn; JSON/Excel giữ giá trị engine.`));
+      const states = node("details", undefined, "cash-details"), host = node("div");
+      states.append(node("summary", "Mở bằng chứng trạng thái và công thức partial"), host);
+      cashPagedTable(host, ["Tuần", "Ô profile", "Đã có tiền thu?", "Dư nợ kỳ vọng trạng thái", "q khi chưa tất toán", "Tỷ lệ trả trung bình"],
+        evidence.weeks.flatMap(w => w.partial_states.map(s => [w.week, s.cell, s.received_cash_state ? "Có" : "Chưa", money(s.expected_opening_debt), (100*profile.probability[s.cell]).toFixed(2) + "%", (100*profile.mean_ratios[s.cell]).toFixed(2) + "%"])));
+      states.append(node("p", evidence.formula)); detail.append(states);
+    };
+    select.onchange = render;
+    if (plan.cash_decomposition.invoices.length) select.value = plan.cash_decomposition.invoices[0].invoice_id;
+    render();
+    const support = node("details", undefined, "cash-details"), host = node("div");
+    support.append(node("summary", "Mở profile partial và mức hỗ trợ dữ liệu"), node("p", "Học đến " + displayDate(profile.fitted_through) + ". " + (t.partial_support_status === "recorded_training_evidence" ? "Có bằng chứng số tuần học và prior nguồn." : "Chưa ghi số tuần hỗ trợ; không suy thành bằng chứng local.")), host);
+    cashPagedTable(host, ["Ô profile", "q khi chưa tất toán", "Tuần học", "Tuần hiệu dụng", "Tuần partial", "Phân phối tỷ lệ · trọng số"],
+      profile.probability.map((q, cell) => {
+        const e = profile.evidence?.cells?.[cell];
+        return [cell, (100*q).toFixed(2) + "%", e?.weeks ?? "Chưa ghi", e?.effective_weeks ?? "Chưa ghi", e?.partial_weeks ?? "Chưa ghi", profile.ratios[cell].map((r, i) => `${(100*r).toFixed(2)}% · ${(100*profile.weights[cell][i]).toFixed(2)}%`).join("; ")];
+      }));
+    support.append(node("p", "Prior " + (profile.evidence?.prior_sha256 || "Không ghi prior") + " · Strength " + (profile.evidence?.prior_strength ?? "Chưa ghi")));
+    panel.append(support);
+    const source = node("button", "Tải bằng chứng T10 đã lưu", "button"); source.type = "button";
+    source.onclick = () => action(async () => {
+      const evidence = await api("/forecasts/" + encodeURIComponent(plan.id) + "/explanations");
+      download(new Blob([JSON.stringify(evidence, null, 2)], {type: "application/json"}), "t10-" + plan.id + ".json");
+    }, source);
+    panel.append(source);
+    t.assumptions.forEach(note => panel.append(node("p", note, "muted")));
+    return panel;
+  }
+  function renderT10ScenarioResult(result) {
+    const panel = node("div"), pct = value => (100*value).toFixed(2) + "%", money = value => fmt.format(value) + " VND";
+    panel.append(node("p", "Xác suất thiếu tiền ít nhất một tuần: " + pct(result.baseline_any_shortfall_probability) + " → " + pct(result.scenario_any_shortfall_probability) + "; thay đổi " + (100*result.delta_any_shortfall_probability).toFixed(2) + " điểm %. Sai số MC của chênh lệch " + (100*result.delta_probability_mc_standard_error).toFixed(2) + " điểm %."));
+    panel.append(node("p", "Dùng cùng nguồn ngẫu nhiên theo hóa đơn và hoạt động. Dải dưới đây là phân vị MC thô; đây là giả định trong mô hình, chưa chứng minh tác động của việc gọi điện."));
+    const host = node("div"); panel.append(host);
+    cashPagedTable(host, ["Tuần", "Kỳ vọng gốc", "Kỳ vọng kịch bản", "Δ kỳ vọng", "P10 gốc", "P10 kịch bản", "Δ P10", "P50 gốc", "P50 kịch bản", "Δ P50", "P90 gốc", "P90 kịch bản", "Δ P90", "P(thiếu) gốc", "P(thiếu) kịch bản", "Δ điểm %"],
+      result.weeks.map(w => [w.week, money(w.baseline.expected_balance), money(w.scenario.expected_balance), money(w.delta.expected_balance),
+        ...["0.1", "0.5", "0.9"].flatMap(q => [money(w.baseline.balance_quantiles[q]), money(w.scenario.balance_quantiles[q]), money(w.delta.balance_quantiles[q])]),
+        pct(w.baseline.below_floor_probability), pct(w.scenario.below_floor_probability), (100*w.delta.below_floor_probability).toFixed(2)]));
+    if (result.outflows_pushed_beyond_horizon?.length) {
+      const beyond = node("div");
+      panel.append(node("p", "Khoản chi dời ra ngoài kỳ vẫn còn phải trả:"), beyond);
+      cashPagedTable(beyond, ["Khoản chi", "Ngày sau khi dời", "Số tiền còn phải trả"],
+        result.outflows_pushed_beyond_horizon.map(r => [r.expense_id, displayDate(r.date), money(r.amount)]));
+    }
+    result.limitations.forEach(note => panel.append(node("p", note, "muted")));
+    if (result.id) panel.append(node("p", "Kịch bản đã lưu: " + result.id, "muted"));
+    return panel;
+  }
+  function renderT10Scenarios(plan) {
+    const panel = node("details", undefined, "cash-details"); panel.append(node("summary", "Nếu khách trả chậm hoặc dời khoản chi? · Chạy lại T6"));
+    if (!plan.t10?.replay) { panel.append(node("p", "Kế hoạch này chưa có snapshot để chạy lại đúng phiên bản.")); return panel; }
+    const form = node("form", undefined, "cash-filters"), customer = node("select"), expense = node("select"), delay = node("input"), move = node("input"), output = node("div");
+    [[customer, "Khách trả chậm", [...new Set(plan.cash_decomposition.invoices.map(r => r.customer_id))], "Tất cả khách"],
+      [expense, "Khoản chi cần dời", plan.cash_decomposition.outflows.map(r => r.expense_id), "Không dời chi"]].forEach(([select, title, ids, empty]) => {
+      const label = node("label", title), option = node("option", empty); option.value = ""; select.append(option);
+      ids.forEach(id => { const o = node("option", id); o.value = id; select.append(o); });
+      select.setAttribute("aria-label", title); label.append(select); form.append(label);
+    });
+    [[delay, "Số tuần trả chậm thêm", 13], [move, "Số tuần dời chi thêm", 52]].forEach(([input, title, max]) => {
+      const label = node("label", title); input.type = "number"; input.min = 0; input.max = max; input.step = 1; input.value = "0";
+      input.setAttribute("aria-label", title); label.append(input); form.append(label);
+    });
+    const submit = node("button", "So sánh với forecast đã lưu", "button"); submit.type = "submit"; form.append(submit);
+    form.onsubmit = event => { event.preventDefault(); action(async () => {
+      const result = await api("/forecasts/" + encodeURIComponent(plan.id) + "/scenarios", {method: "POST", body: JSON.stringify({customer_id: customer.value || null, customer_delay_weeks: Number(delay.value), expense_id: expense.value || null, expense_delay_weeks: Number(move.value)})});
+      output.replaceChildren(renderT10ScenarioResult(result));
+    }, submit); };
+    const saved = node("button", "Mở kịch bản đã lưu", "button"), history = node("div"); saved.type = "button";
+    saved.onclick = () => action(async () => {
+      const rows = await api("/forecasts/" + encodeURIComponent(plan.id) + "/scenarios");
+      history.replaceChildren();
+      if (!rows.length) history.append(node("p", "Chưa có kịch bản đã lưu."));
+      rows.forEach(row => {
+        const button = node("button", row.created_at + " · " + (row.assumptions.customer_id || "Tất cả khách") + " chậm " + row.assumptions.customer_delay_weeks + " tuần · " + (row.assumptions.expense_id || "Không dời chi"), "button");
+        button.type = "button";
+        button.onclick = () => action(async () => {
+          const result = await api("/forecasts/" + encodeURIComponent(plan.id) + "/scenarios/" + encodeURIComponent(row.id));
+          output.replaceChildren(renderT10ScenarioResult(result));
+        }, button);
+        history.append(button);
+      });
+    }, saved);
+    panel.append(node("p", "So với kế hoạch đang xem; giữ dữ liệu, T1, adapter, partial, T6, số đường và seed đã lưu. Kịch bản không sửa lịch chi hoặc công nợ thật."), form, saved, history, output);
+    return panel;
+  }
   function renderCashDecomposition(plan) {
     const panel = node("div", undefined, "cash-decomposition"), d = plan.cash_decomposition;
     if (!d) {
@@ -1730,9 +1915,10 @@
     if (plan.t5) {
       const ledger = node("details", undefined, "cash-details"), content = node("div");
       ledger.append(node("summary", "Nghĩa vụ T5: đã thanh toán, còn lại và khoản quá hạn"), content);
-      cashPagedTable(content, ["Mã", "Đến hạn", "Loại", "Trạng thái", "Nghĩa vụ", "Đã thanh toán", "Còn lại", "Dự kiến còn lại"],
-        plan.t5.obligations.map(r => [r.expense_id, displayDate(r.due_date), r.category, statusLabels[r.status] || r.status,
-          money(r.obligation_amount), money(r.settled_amount), money(r.remaining_amount), r.forecast_date ? displayDate(r.forecast_date) : "—"]));
+      cashPagedTable(content, ["Mã", "Hợp đồng/khoản cố định", "Kỳ thanh toán", "Đợt đến hạn", "Đến hạn", "Loại", "Trạng thái", "Nghĩa vụ", "Đã thanh toán", "Đã hủy", "Đã thay thế", "Còn phải trả/nhận", "Dự kiến còn lại"],
+        plan.t5.obligations.map(r => [r.expense_id, r.obligation_ref || "Cần bổ sung định danh", r.payment_period || "—", r.installment_no || "—", displayDate(r.due_date), r.category, statusLabels[r.status] || r.status,
+          money(r.obligation_amount), money(r.settled_amount), money(r.cancelled_amount || 0), money(r.replaced_amount || 0),
+          money(r.remaining_amount), r.forecast_date ? displayDate(r.forecast_date) : "—"]));
       t5Ledger = ledger;
       if (plan.t5.obligations.some(r => r.status === "overdue")) panel.append(node("p", "Khoản chi đến/quá hạn chưa thanh toán được đưa sang ngày làm việc kế tiếp. Có thể sửa ngày dự kiến hoặc nạp thanh toán thực tế để cập nhật phần còn lại.", "warning-box"));
       if (plan.t5.obligations.some(r => r.status === "awaiting_refund_date")) panel.append(node("p", "Có khoản hoàn quá ngày dự kiến nhận. Khoản này chưa được cộng vào dự thu; cần xác nhận ngày nhận mới.", "warning-box"));
@@ -1809,18 +1995,8 @@
     weekly.append(node("summary", "Đối chiếu thu, chi và thay đổi số dư từng tuần"), weeklyScroll);
     weeklyScroll.append(cashDetailTable(["Tuần", "Số dư đầu tuần", "+ Công nợ mở", "+ Bán thu ngay", "+ Bán chịu mới", "+ Hoàn theo hồ sơ T5", "− Lịch chi", "− Chi biến đổi bổ sung", "Thay đổi số dư", "Số dư cuối tuần"],
       d.weeks.map(w => [w.week, ...[w.opening_balance, w.ar_in, w.cash_sale_in, w.new_credit_in, w.obligation_in || 0, w.scheduled_out, w.variable_cost_topup, w.net_change, w.balance].map(money)])));
-    panel.append(weekly, node("h3", "Nếu tiền thu sớm hoặc chậm 2 tuần?"));
-    const comparison = d.timing_comparison, comparisonScroll = node("div", undefined, "table-scroll");
-    comparisonScroll.append(cashDetailTable(["Kịch bản", "Dự thu công nợ", "Số dư thấp nhất", "Chênh mức thấp nhất", "Số dư cuối kỳ", "Tuần đầu dưới ngưỡng", "Thu bị đẩy ra ngoài kỳ"],
-      comparison.scenarios.map(s => [s.label, money(s.ar_in), money(s.minimum_balance), money(s.minimum_balance_change), money(s.closing_balance), s.first_below_floor_week || "Không có", money(s.receipts_pushed_beyond_horizon)])));
-    panel.append(comparisonScroll);
-    const timingDetails = node("details", undefined, "cash-details"), timingScroll = node("div", undefined, "table-scroll");
-    const [current, early, late] = comparison.scenarios;
-    timingScroll.append(cashDetailTable(["Tuần", "Ngày", "Số dư đang xem", "Thu sớm", "Chênh thu sớm", "Thu chậm", "Chênh thu chậm"],
-      current.weeks.map((w, i) => [w.week, displayDate(w.date), ...[w.balance, early.weeks[i].balance, early.weeks[i].balance_change, late.weeks[i].balance, late.weeks[i].balance_change].map(money)])));
-    timingDetails.append(node("summary", "So sánh số dư từng tuần"), timingScroll);
-    panel.append(timingDetails);
-    comparison.assumptions.forEach(note => panel.append(node("p", note, "muted")));
+    panel.append(weekly);
+    panel.append(renderT10Evidence(plan), renderT10Scenarios(plan));
     const assumptions = node("details", undefined, "cash-details");
     assumptions.append(node("summary", "Cách phân bổ tiền và giới hạn mô phỏng"));
     d.assumptions.forEach(note => assumptions.append(node("p", note)));
@@ -1849,24 +2025,16 @@
     const total = (plan, field) => plan.weeks.reduce((sum, week) => sum + week[field], 0);
     $("forecast-totals").replaceChildren(...[
       ["Dự thu", total(r, "cash_in")], ["Dự chi", total(r, "cash_out")],
-      ["Số dư thấp nhất", r.minimum_balance],
+      ["Số dư kỳ vọng thấp nhất", r.minimum_balance],
     ].map(([label, value]) => {
       const item = node("div"); item.append(node("span", label), node("strong", short(value))); return item;
     }));
     $("forecast-comparison").replaceChildren();
-    if (isBase) baselineForecast = r;
-    else {
+    if (!isBase) {
       const summary = [scenario.delay_days ? `Thu chậm ${scenario.delay_days} ngày${scenario.delay_customer ? " · " + scenario.delay_customer : ""}` : null,
         (scenario.expense_multiplier ?? 1) !== 1 ? `Chi ${Math.round(scenario.expense_multiplier * 100)}% kế hoạch` : null,
         scenario.shared_customer_risk ? "Rủi ro chung theo khách" : null].filter(Boolean).join(" · ");
       $("forecast-comparison").append(node("p", summary, "scenario-line"));
-      const base = baselineForecast;
-      if (base && base.weeks.length === period && ["cutoff", "dataset_hash", "opening_balance", "cash_floor", "model_version", "operating_included"].every(k => base[k] === r[k]) &&
-          JSON.stringify(base.confirmed_weeks) === JSON.stringify(r.confirmed_weeks)) {
-        $("forecast-comparison").append(node("p", "So với kế hoạch gốc · Chênh thu " + short(total(r,"cash_in")-total(base,"cash_in")) +
-          " · Chênh chi " + short(total(r,"cash_out")-total(base,"cash_out")) +
-          " · Chênh số dư thấp nhất " + short(r.minimum_balance-base.minimum_balance), "scenario-line"));
-      }
     }
     const assumptions = [...(r.assumptions || [])];
     if (r.inference_ms != null) assumptions.push(`Thời gian tính dự báo ${(r.inference_ms / 1000).toFixed(2)} giây. Phiên bản đã học chỉ tính xác suất và mô phỏng cho công nợ đang mở.`);
@@ -1919,6 +2087,7 @@
           "cash_in",
           "cash_out",
           "balance",
+          "median_balance",
           "low",
           "high",
           "outflow_status",
@@ -1970,7 +2139,7 @@
               v ? displayDate(new Date(v * 1000).toISOString()) : "—",
           },
           {
-            label: "Số dư",
+            label: "Số dư kỳ vọng",
             stroke: color("--kt-accent", "#1b6148"),
             width: 2.5,
             value: (_u, v) => (v == null ? "—" : short(v)),
@@ -1985,6 +2154,13 @@
             label: "P90",
             stroke: color("--kt-field-line", "#a6b990"),
             width: 1,
+            value: (_u, v) => (v == null ? "—" : short(v)),
+          },
+          {
+            label: "Trung vị · P50",
+            stroke: color("--muted", "#7f8b78"),
+            dash: [5, 4],
+            width: 1.5,
             value: (_u, v) => (v == null ? "—" : short(v)),
           },
         ],
@@ -2025,6 +2201,7 @@
         weeks.map((w) => w.balance),
         weeks.map((w) => w.low),
         weeks.map((w) => w.high),
+        weeks.map((w) => w.median_balance ?? null),
       ],
       target,
     );

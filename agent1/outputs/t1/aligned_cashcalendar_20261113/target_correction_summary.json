@@ -1,0 +1,22 @@
+{
+  "train": {
+    "rows": 78171,
+    "changed_days": 86
+  },
+  "validation": {
+    "rows": 4034,
+    "changed_days": 7
+  },
+  "weight_validation": {
+    "rows": 1911,
+    "changed_days": 6
+  },
+  "audit": {
+    "rows": 1317,
+    "changed_days": 3
+  },
+  "fresh_test": {
+    "rows": 3506,
+    "changed_days": 2
+  }
+}

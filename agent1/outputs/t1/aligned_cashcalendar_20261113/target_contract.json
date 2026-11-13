@@ -1,0 +1,9 @@
+{
+  "version": "cash-calendar-full-settlement-v2",
+  "baseline_cache": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t1\\aligned_refit_20261112",
+  "target": "First actual cash date with cumulative receipts known by label_end covering original gross claim; noncash credits excluded.",
+  "unchanged": "Features, invoice keys, eligibility, cash amounts, World seeds, splits, candidates, budgets and selection thresholds.",
+  "reason": "Model-independent check found posting-order Paid times earlier than full cash recovery; repair target before final aggregate reporting.",
+  "original_frozen_sha256": "c442b0cb0d1fb18398cb852175fb7f12f8186b59363a7de6b291222f76bcf3b9",
+  "holdout_scope": "Same new-seed Worlds after mechanical label correction, not newly unseen seeds after correction. No aggregate test scores used to alter hyperparameters."
+}

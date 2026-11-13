@@ -7,6 +7,7 @@ from unidecode import unidecode
 from agent1.adaptive.data import IDS, SCHEMAS, vnd
 from agent1.reconciliation.pipeline import NON_AR, today
 from agent1.adaptive.obligations import cash_schedule
+from agent1.adaptive.obligation_imports import identity_status
 
 
 def outstanding(source):
@@ -70,6 +71,8 @@ def record_rows(source, kind):
         row = public_record(raw, kind)
         row["identifier"] = raw[IDS[kind]]
         row["status"] = "recorded"
+        if kind == 'outflows':
+            row['identity_status'] = identity_status(raw)
         if kind == "invoices":
             current = effective.get(row["identifier"])
             if current is None:
@@ -95,7 +98,9 @@ def record_rows(source, kind):
         elif kind == 'outflows' and row['identifier'] in obligations:
             obligation = obligations[row['identifier']]
             row.update(status=obligation['status'], remaining_amount=obligation['remaining_amount'],
-                       allocated_amount=obligation['settled_amount'])
+                       allocated_amount=obligation['settled_amount'],
+                       identity_status=obligation['identity_status'],
+                       cancelled_amount=obligation['cancelled_amount'], replaced_amount=obligation['replaced_amount'])
         if row.get("known_at", "") > today():
             row["status"] = "future"
         result.append(row)

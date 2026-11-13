@@ -6,25 +6,10 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$workspacePath = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..')).TrimEnd([char[]]'\/')
-$workspacePrefix = $workspacePath + [IO.Path]::DirectorySeparatorChar
+Import-Module (Join-Path $PSScriptRoot 'archive_common.psm1') -Force
 $archivePrefix = 'data/T0/raw/benchrec_kaggle/2026-10-19-v3/'
 $allowedNames = @('BenchRec_cash_v1.0_eval.csv', 'BenchRec_cash_v1.0_solution.csv', 'BenchRec_cash_v1.0_train.csv', 'MatcherByChatGPT_submission.csv')
 
-function Get-SafePath([string]$Relative) {
-    if ([string]::IsNullOrWhiteSpace($Relative) -or [IO.Path]::IsPathRooted($Relative)) { throw 'Invalid relative path' }
-    $full = [IO.Path]::GetFullPath((Join-Path $workspacePath $Relative))
-    if (-not $full.StartsWith($workspacePrefix, [StringComparison]::OrdinalIgnoreCase)) { throw "Path leaves workspace: $Relative" }
-    $ancestor = $full
-    while ($ancestor -ne $workspacePath) {
-        if (Test-Path -LiteralPath $ancestor) {
-            if (((Get-Item -LiteralPath $ancestor -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw "Linked path rejected: $Relative" }
-        }
-        $ancestor = Split-Path -Path $ancestor -Parent
-    }
-    return $full
-}
-function Get-Digest([string]$Path) { return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
 function Get-StreamDigest([IO.Stream]$Stream) {
     $algorithm = [Security.Cryptography.SHA256]::Create()
     try { return [Convert]::ToHexString($algorithm.ComputeHash($Stream)).ToLowerInvariant() }
@@ -82,10 +67,7 @@ try {
                 # Both absolute paths were validated within the workspace.
                 Move-Item -LiteralPath $item.Temporary -Destination $item.Destination
                 $created = $false
-                $file = Get-Item -LiteralPath $item.Destination
-                $file.CreationTimeUtc = [datetime]::Parse($item.Entry.original_creation_time_utc).ToUniversalTime()
-                $file.LastWriteTimeUtc = [datetime]::Parse($item.Entry.original_last_write_time_utc).ToUniversalTime()
-                $file.Attributes = [IO.FileAttributes][int]$item.Entry.original_attributes
+                Set-ArchiveMetadata $item.Destination $item.Entry
                 $restored++
             } finally {
                 if ($created -and (Test-Path -LiteralPath $item.Temporary)) { Remove-Item -LiteralPath $item.Temporary -Force }

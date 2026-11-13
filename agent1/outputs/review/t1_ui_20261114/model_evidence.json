@@ -1,0 +1,45 @@
+{
+  "global_forecast": {
+    "mode": "company_trained",
+    "source": "global_catalog",
+    "local_adaptation": false
+  },
+  "current_partial_prior": [
+    {
+      "cell": 0,
+      "partial_weeks": 91,
+      "mean_ratio": 0.4932626065492756,
+      "ratio_50percent_weight": 0.251959909581982
+    },
+    {
+      "cell": 1,
+      "partial_weeks": 4,
+      "mean_ratio": 0.5469379705554249,
+      "ratio_50percent_weight": 0.8928485902999936
+    },
+    {
+      "cell": 2,
+      "partial_weeks": 54,
+      "mean_ratio": 0.47746050178344873,
+      "ratio_50percent_weight": 0.3711775711110834
+    },
+    {
+      "cell": 3,
+      "partial_weeks": 18,
+      "mean_ratio": 0.6424817946636089,
+      "ratio_50percent_weight": 0.644306208289783
+    },
+    {
+      "cell": 4,
+      "partial_weeks": 18,
+      "mean_ratio": 0.4620287787622047,
+      "ratio_50percent_weight": 0.6227413619391426
+    },
+    {
+      "cell": 5,
+      "partial_weeks": 12,
+      "mean_ratio": 0.5756686306425647,
+      "ratio_50percent_weight": 0.7226999290240667
+    }
+  ]
+}

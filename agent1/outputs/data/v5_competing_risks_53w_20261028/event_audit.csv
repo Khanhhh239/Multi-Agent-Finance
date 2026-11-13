@@ -1,5 +1,0 @@
-world,role,n_invoices,first_cutoff,last_cutoff,paid_events_by_365,writeoff_events_by_365,open_at_365
-v4_shortpay_4shock_20261028_validation_000,validation,12169,2024-07-01,2024-12-16,10047,1595,527
-v4_shortpay_4shock_20261028_validation_001,validation,12993,2024-07-01,2024-12-16,11656,1022,315
-v4_shortpay_4shock_20261028_test_000,test,5772,2024-07-01,2024-12-16,4539,1173,60
-v4_shortpay_4shock_20261028_test_001,test,14564,2024-07-01,2024-12-16,12504,1413,647

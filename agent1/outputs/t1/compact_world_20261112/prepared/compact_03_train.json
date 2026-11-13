@@ -1,0 +1,16 @@
+{
+  "world": "compact_03_train",
+  "role": "train",
+  "kind": "retained_config_replay",
+  "firms": 12,
+  "anchors": 11304,
+  "unique_invoices": 6949,
+  "min_origin": "2020-01-06",
+  "max_origin": "2023-09-11",
+  "label_end": "2023-12-31",
+  "sha256": "40f191f6d9a115fca3bd0a240c606070860bd5fe3dd1d70dcdb805fc07c56e89",
+  "protocol_sha256": "b846f91a4bedb1a00ffe7ef22df477a94745709f684400f5f10eb17b11a5bff9",
+  "replay_manifest_sha256": "1dee08d1dc29ab038c5cadcb754fdba348189dc2266ac8b85901e6f11fa19ec9",
+  "open_anchors": 34437,
+  "excluded_accounting_or_late_cash": 4290
+}

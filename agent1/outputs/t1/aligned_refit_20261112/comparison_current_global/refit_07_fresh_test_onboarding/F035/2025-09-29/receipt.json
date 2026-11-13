@@ -1,0 +1,37 @@
+{
+  "rows": {
+    "fit": 0,
+    "validation": 52,
+    "audit": 33
+  },
+  "local_fit_label_end": "2025-03-03",
+  "status": "insufficient_mature_local_windows",
+  "audit_passed": false,
+  "scratch_fallback": "workspace_history_baseline",
+  "world": "refit_07_fresh_test_onboarding",
+  "firm": "F035",
+  "origin": "2025-09-29",
+  "anchors": 30,
+  "workspace_method": "forest_shallow",
+  "workspace_audit": {
+    "n": 47,
+    "customer_clusters": 21,
+    "candidate_brier4": 0.06509021952113865,
+    "baseline_brier4": 0.0425531914893617,
+    "brier_improvement": -0.022537028031776946,
+    "improvement_ci_low": -0.057410670148051554,
+    "improvement_ci_high": 0.012999451676326915,
+    "ci_reliable": true,
+    "amount_weighted_brier4": 0.07430502465025372,
+    "log_loss4": 0.20365083054228655,
+    "observed_paid_rate4": 0.7872340425531915,
+    "predicted_paid_rate4": 0.802772834818283,
+    "accepted": false
+  },
+  "workspace_fallback": null,
+  "workspace_warnings": [],
+  "prediction_sha256": "5837dc40fac3b17e86d63978dad39b36a2cbb89ebcf8c666b09d0bdfc480c3b0",
+  "models_sha256": "1d3083cf072d4c6a03cd016c84278190142099484a433d2655bdc2391b987bb9",
+  "frozen_sha256": "c442b0cb0d1fb18398cb852175fb7f12f8186b59363a7de6b291222f76bcf3b9",
+  "seconds": 8.346420800007763
+}

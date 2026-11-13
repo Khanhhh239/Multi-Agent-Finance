@@ -21,8 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from agent1.paths import SYNTH, OUT  # noqa: E402
 from agent1.threads import NT  # noqa: E402
 from agent1.models import t1, t4_revenue as T4  # noqa: E402
-from agent1.models.t6_cash import simulate, collection_kernel, ACI, K, conditional_payment_pmf  # noqa: E402
-from agent1.models.features import FEATURES  # noqa: E402
+from agent1.models.t6_cash import simulate, collection_kernel, ACI, K  # noqa: E402
 from agent1.eval import metrics as M  # noqa: E402
 from agent1.eval.cluster import mean_ci
 from agent1.eval.alerts import choose_threshold, event_metrics
@@ -152,7 +151,7 @@ def main(*,target_world='tgt',evaluation_world=None,result_dir=None,source_budge
     if result_dir is not None:
         RES=Path(result_dir);RES.mkdir(parents=True,exist_ok=True)
     evaluation_world=evaluation_world or target_world
-    version=f'cash-e2e-{label_mode}-v1' if target_world!=evaluation_world else 'cash-asof-outflows-owner-tcopula-v5-true-labels'
+    version=f'cash-e2e-{label_mode}-v2-unconditional' if target_world!=evaluation_world else 'cash-asof-outflows-owner-tcopula-v6-unconditional'
     version+='-fullweek'
     inv_s = pd.read_parquet(SYNTH / "src" / "invoices.parquet")
     inv_t = pd.read_parquet(SYNTH / target_world / "invoices.parquet")
@@ -180,18 +179,6 @@ def main(*,target_world='tgt',evaluation_world=None,result_dir=None,source_budge
     log("predict hazards", len(Ste))
     H = m_ft.hazards(Ste)
     P_all, _ = t1.pmf_from_hazard(H)
-    cure_split=O-pd.Timedelta(days=183)
-    cure_train=R1.censor(Ssrc[Ssrc.cutoff<cure_split],cure_split)
-    cure_cal=R1.censor(Ssrc[Ssrc.cutoff.between(cure_split,O-pd.Timedelta(days=120))],O)
-    if source_budget:
-        cure_train=cure_train.sample(min(source_budget,len(cure_train)),random_state=11)
-        cure_cal=cure_cal.sample(min(10000,len(cure_cal)),random_state=11)
-    log('T2 cure source fit/calibrate',len(cure_train),len(cure_cal))
-    cure=t1.CureGBM().fit(cure_train,calibration=cure_cal)
-    bad_all=cure.predict_proba_calibrated(Ste)
-    conditional_all,cure_conflicts=conditional_payment_pmf(P_all,bad_all)
-    pd.DataFrame([dict(n=len(Ste),mean_p_bad=float(bad_all.mean()),
-                      incompatible_cure_share=float(cure_conflicts.mean()),seed=11)]).to_csv(RES/'cure_diagnostics.csv',index=False)
     b1w = np.clip(np.ceil(t1.b1_predict(Ste) / 7).astype(int) - 1, 0, K)      # tuần trả theo B1 (K = ngoài)
     P_b1 = np.zeros_like(P_all)
     inside = b1w < K
@@ -276,8 +263,6 @@ def main(*,target_world='tgt',evaluation_world=None,result_dir=None,source_budge
             policy=draw_policy(ctx,T)
             bal, _ = simulate(snap, P_all[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=rho, seed=int(T.value % 1e6),**policy)
             res["MC-copula-t (T1+T4+T5)"] = bal
-            res['MC-copula-t + calibrated cure'] = simulate(snap,conditional_all[msk],B0,ko,rq,ker,cap_rate,cap_sz,
-                n=1000,rho=rho,seed=int(T.value%1e6),p_bad=bad_all[msk],**policy)[0]
             res["MC-independent (rho=0)"] = simulate(snap, P_all[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=0.0, seed=2,**policy)[0]
             res["MC with B1 point dates"] = simulate(snap, P_b1[msk], B0, ko, rq, ker, cap_rate, cap_sz, n=1000, rho=0.0, seed=3,**policy)[0]
             Xq, scale_d = direct_features(ctx, snap, T, ko)
@@ -368,7 +353,7 @@ def main(*,target_world='tgt',evaluation_world=None,result_dir=None,source_budge
               open(RES / "t6_rho.json", "w"), indent=2)
     (RES/'run_metadata.json').write_text(json.dumps(dict(
         origin=str(O.date()),visible_from=str(VIS.date()),n_paths=1000,nu=4,rho=rho,
-        bootstrap_seed=7,source_t1_seed=7,cure_seed=11,
+        bootstrap_seed=7,source_t1_seed=7,
         simulation_seed_policy={'copula':'cutoff_timestamp_ns_mod_1000000','independent':2,'point_dates':3},
         target_used_for_hyperparameter_selection=False,labels=label_mode,
         target_world=target_world,evaluation_world=evaluation_world,source_budget=source_budget,n_weeks=n_weeks,

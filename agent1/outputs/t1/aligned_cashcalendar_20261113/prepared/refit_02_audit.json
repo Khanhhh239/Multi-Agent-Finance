@@ -1,0 +1,9 @@
+{
+  "world": "refit_02_audit",
+  "role": "audit",
+  "rows": 832,
+  "sha256": "59b515e2b8ff49db71d1ece2a800200578e21e68cd574564f2e176bd27a0c3a9",
+  "parent_prepared_sha256": "4040dced5116e073a64e3d1cbcb2df246e55a167194e6ac6fb2f2bac9bcc7af8",
+  "label_changed_rows": 3,
+  "target_contract_sha256": "e4dffe55145f780af4605d929295fbe4c4e64fd1f7652ed17f1b887900a0671b"
+}

@@ -1,0 +1,1197 @@
+{
+  "refit_04_fresh_test/F019/old_global": {
+    "p95_seconds": 0.1432183650060324,
+    "passed": true,
+    "contexts": {
+      "refit_04_fresh_test/F019": {
+        "p50_seconds": 0.13187584999832325,
+        "p95_seconds": 0.1432183650060324,
+        "max_seconds": 0.14741670001239982,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_04_fresh_test/F019": 142
+    },
+    "max_additivity_error": 3.885780586188048e-16,
+    "background_count": 142,
+    "references": {
+      "refit_04_fresh_test/F019": {
+        "count": 142,
+        "population": 142,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.1102230246251565e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.0558483470148836,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_04_fresh_test/F019/global_refit": {
+    "p95_seconds": 0.1884568700013915,
+    "passed": true,
+    "contexts": {
+      "refit_04_fresh_test/F019": {
+        "p50_seconds": 0.14918254999793135,
+        "p95_seconds": 0.1884568700013915,
+        "max_seconds": 0.19131200000992976,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_04_fresh_test/F019": 142
+    },
+    "max_additivity_error": 6.661338147750939e-16,
+    "background_count": 142,
+    "references": {
+      "refit_04_fresh_test/F019": {
+        "count": 142,
+        "population": 142,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.1102230246251565e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.2509418865669275,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_04_fresh_test/F019/global_finetuned": {
+    "p95_seconds": 0.18686043000634528,
+    "passed": true,
+    "contexts": {
+      "refit_04_fresh_test/F019": {
+        "p50_seconds": 0.13891679999505868,
+        "p95_seconds": 0.18686043000634528,
+        "max_seconds": 0.1913222000002861,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_04_fresh_test/F019": 142
+    },
+    "max_additivity_error": 8.881784197001252e-16,
+    "background_count": 142,
+    "references": {
+      "refit_04_fresh_test/F019": {
+        "count": 142,
+        "population": 142,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.1102230246251565e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.1532291761988418,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_04_fresh_test/F019/global_adapted_audited": {
+    "p95_seconds": 0.13885674999983166,
+    "passed": true,
+    "contexts": {
+      "refit_04_fresh_test/F019": {
+        "p50_seconds": 0.13066144999902463,
+        "p95_seconds": 0.13885674999983166,
+        "max_seconds": 0.14338539999153,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_04_fresh_test/F019": 142
+    },
+    "max_additivity_error": 8.881784197001252e-16,
+    "background_count": 142,
+    "references": {
+      "refit_04_fresh_test/F019": {
+        "count": 142,
+        "population": 142,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.1102230246251565e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.1532291761988418,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_04_fresh_test/F019/local_neural18": {
+    "p95_seconds": 0.1610379600111628,
+    "passed": true,
+    "contexts": {
+      "refit_04_fresh_test/F019": {
+        "p50_seconds": 0.13333485000475775,
+        "p95_seconds": 0.1610379600111628,
+        "max_seconds": 0.17133329999342095,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_04_fresh_test/F019": 142
+    },
+    "max_additivity_error": 9.992007221626409e-16,
+    "background_count": 142,
+    "references": {
+      "refit_04_fresh_test/F019": {
+        "count": 142,
+        "population": 142,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.1102230246251565e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 2.689249027135597,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_04_fresh_test/F019/workspace": {
+    "firm": "refit_04_fresh_test_F019",
+    "origin": "2025-09-29",
+    "population": 142,
+    "reference": {
+      "kind": "open_invoices_at_cutoff",
+      "count": 142,
+      "population": 142,
+      "cutoff": "2025-09-29",
+      "hash": "c39b274df27e0a799c8eb6ee0f62136dba3f65a20372e427fd126df042cd4246",
+      "selection": "census",
+      "policy": "open-invoices-stratified-v2",
+      "weighting": "equal_per_open_invoice",
+      "max_weighted_cdf_distance": 1.1102230246251565e-15
+    },
+    "samples": [
+      {
+        "invoice_id": "F019-C25TBU-00000185",
+        "seconds": 0.3973907000035979,
+        "additivity_error": 1.6653345369377348e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000435",
+        "seconds": 0.36104469999554567,
+        "additivity_error": 1.3877787807814457e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000551",
+        "seconds": 0.34446700000262354,
+        "additivity_error": 6.661338147750939e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000565",
+        "seconds": 0.380586500003119,
+        "additivity_error": 2.220446049250313e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000537",
+        "seconds": 0.3676938999997219,
+        "additivity_error": 1.3877787807814457e-17
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000454",
+        "seconds": 0.47987760000978597,
+        "additivity_error": 4.440892098500626e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000563",
+        "seconds": 0.39692130000912584,
+        "additivity_error": 2.220446049250313e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000006",
+        "seconds": 0.36453659999824595,
+        "additivity_error": 3.122502256758253e-17
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000028",
+        "seconds": 0.34294479999516625,
+        "additivity_error": 8.326672684688674e-17
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000523",
+        "seconds": 0.3652235999907134,
+        "additivity_error": 1.1102230246251565e-16
+      },
+      {
+        "invoice_id": "F019-C24THQ-00000529",
+        "seconds": 0.3124707999959355,
+        "additivity_error": 7.632783294297951e-17
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000556",
+        "seconds": 0.33322420000331476,
+        "additivity_error": 6.661338147750939e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000360",
+        "seconds": 0.3288362000021152,
+        "additivity_error": 6.938893903907228e-17
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000357",
+        "seconds": 0.35685469998861663,
+        "additivity_error": 6.938893903907228e-17
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000040",
+        "seconds": 0.3790711000037845,
+        "additivity_error": 4.163336342344337e-17
+      },
+      {
+        "invoice_id": "F019-C24THQ-00000511",
+        "seconds": 0.4347335999918869,
+        "additivity_error": 2.7755575615628914e-17
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000525",
+        "seconds": 0.43343360000289977,
+        "additivity_error": 5.551115123125783e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000099",
+        "seconds": 0.46583029998873826,
+        "additivity_error": 2.7755575615628914e-17
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000538",
+        "seconds": 0.34407969999301713,
+        "additivity_error": 3.3306690738754696e-16
+      },
+      {
+        "invoice_id": "F019-C25TBU-00000278",
+        "seconds": 0.3465582000062568,
+        "additivity_error": 4.163336342344337e-17
+      }
+    ],
+    "p95_seconds": 0.4665326649897907,
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "feature_preparation_included": true
+  },
+  "refit_05_fresh_test/F018/old_global": {
+    "p95_seconds": 0.24429871500469744,
+    "passed": true,
+    "contexts": {
+      "refit_05_fresh_test/F018": {
+        "p50_seconds": 0.21025735000148416,
+        "p95_seconds": 0.24429871500469744,
+        "max_seconds": 0.24710719998984132,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_05_fresh_test/F018": 229
+    },
+    "max_additivity_error": 1.3322676295501878e-15,
+    "background_count": 229,
+    "references": {
+      "refit_05_fresh_test/F018": {
+        "count": 229,
+        "population": 229,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.887379141862766e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.4440597073854562,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_05_fresh_test/F018/global_refit": {
+    "p95_seconds": 0.2347947749985906,
+    "passed": true,
+    "contexts": {
+      "refit_05_fresh_test/F018": {
+        "p50_seconds": 0.21081400000548456,
+        "p95_seconds": 0.2347947749985906,
+        "max_seconds": 0.2546834999957355,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_05_fresh_test/F018": 229
+    },
+    "max_additivity_error": 1.3322676295501878e-15,
+    "background_count": 229,
+    "references": {
+      "refit_05_fresh_test/F018": {
+        "count": 229,
+        "population": 229,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.887379141862766e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.3204291003205144,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_05_fresh_test/F018/global_finetuned": {
+    "p95_seconds": 0.25484916000641533,
+    "passed": true,
+    "contexts": {
+      "refit_05_fresh_test/F018": {
+        "p50_seconds": 0.19781404999957886,
+        "p95_seconds": 0.25484916000641533,
+        "max_seconds": 0.26777219999348745,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_05_fresh_test/F018": 229
+    },
+    "max_additivity_error": 2.1094237467877974e-15,
+    "background_count": 229,
+    "references": {
+      "refit_05_fresh_test/F018": {
+        "count": 229,
+        "population": 229,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.887379141862766e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.2084909245130877,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_05_fresh_test/F018/global_adapted_audited": {
+    "p95_seconds": 0.24585716500587296,
+    "passed": true,
+    "contexts": {
+      "refit_05_fresh_test/F018": {
+        "p50_seconds": 0.21075079999718582,
+        "p95_seconds": 0.24585716500587296,
+        "max_seconds": 0.25358189998951275,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_05_fresh_test/F018": 229
+    },
+    "max_additivity_error": 2.1094237467877974e-15,
+    "background_count": 229,
+    "references": {
+      "refit_05_fresh_test/F018": {
+        "count": 229,
+        "population": 229,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.887379141862766e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.2084909245130877,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_05_fresh_test/F018/local_neural18": {
+    "p95_seconds": 0.2067728649992205,
+    "passed": true,
+    "contexts": {
+      "refit_05_fresh_test/F018": {
+        "p50_seconds": 0.18943270000454504,
+        "p95_seconds": 0.2067728649992205,
+        "max_seconds": 0.2458381000033114,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_05_fresh_test/F018": 229
+    },
+    "max_additivity_error": 2.7755575615628914e-15,
+    "background_count": 229,
+    "references": {
+      "refit_05_fresh_test/F018": {
+        "count": 229,
+        "population": 229,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 1.887379141862766e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.5680027824336165,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_05_fresh_test/F018/workspace": {
+    "firm": "refit_05_fresh_test_F018",
+    "origin": "2025-09-29",
+    "population": 229,
+    "reference": {
+      "kind": "open_invoices_at_cutoff",
+      "count": 229,
+      "population": 229,
+      "cutoff": "2025-09-29",
+      "hash": "b4ce862e97c89e81123830ad5d2d3d2a0876a7b8d081f103a7fbec3e973cc29c",
+      "selection": "census",
+      "policy": "open-invoices-stratified-v2",
+      "weighting": "equal_per_open_invoice",
+      "max_weighted_cdf_distance": 1.887379141862766e-15
+    },
+    "samples": [
+      {
+        "invoice_id": "F018-C24TLQ-00000992",
+        "seconds": 2.531754199997522,
+        "additivity_error": 4.2500725161431774e-17
+      },
+      {
+        "invoice_id": "F018-C24TLQ-00001333",
+        "seconds": 2.9575531000009505,
+        "additivity_error": 2.7755575615628914e-17
+      },
+      {
+        "invoice_id": "F018-C24TLQ-00001334",
+        "seconds": 2.562957500005723,
+        "additivity_error": 4.163336342344337e-17
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000015",
+        "seconds": 2.1521150000044145,
+        "additivity_error": 2.42861286636753e-17
+      },
+      {
+        "invoice_id": "F018-C22TPE-00000261",
+        "seconds": 1.853048500008299,
+        "additivity_error": 7.28583859910259e-17
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000426",
+        "seconds": 2.189265900000464,
+        "additivity_error": 1.3877787807814457e-17
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000704",
+        "seconds": 2.366526400001021,
+        "additivity_error": 8.881784197001252e-16
+      },
+      {
+        "invoice_id": "F018-C23TKC-00000089",
+        "seconds": 1.8834738000005018,
+        "additivity_error": 3.469446951953614e-17
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000691",
+        "seconds": 2.375143699988257,
+        "additivity_error": 7.771561172376096e-16
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000747",
+        "seconds": 2.321332599996822,
+        "additivity_error": 5.551115123125783e-16
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000719",
+        "seconds": 2.464592599993921,
+        "additivity_error": 1.1102230246251565e-16
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000642",
+        "seconds": 2.3739561999973375,
+        "additivity_error": 5.551115123125783e-16
+      },
+      {
+        "invoice_id": "F018-C24TLQ-00001308",
+        "seconds": 2.274338799994439,
+        "additivity_error": 6.938893903907228e-18
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000040",
+        "seconds": 2.2480412000004435,
+        "additivity_error": 6.938893903907228e-18
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000743",
+        "seconds": 2.7143725999922026,
+        "additivity_error": 0.0
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000488",
+        "seconds": 2.365023400008795,
+        "additivity_error": 1.942890293094024e-16
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000388",
+        "seconds": 2.3877290000091307,
+        "additivity_error": 1.6653345369377348e-16
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000123",
+        "seconds": 2.2161460000061197,
+        "additivity_error": 4.5102810375396984e-17
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000487",
+        "seconds": 2.7035584000113886,
+        "additivity_error": 2.220446049250313e-16
+      },
+      {
+        "invoice_id": "F018-C25TPQ-00000635",
+        "seconds": 2.72479109998676,
+        "additivity_error": 1.1102230246251565e-16
+      }
+    ],
+    "p95_seconds": 2.7364291999874695,
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "feature_preparation_included": true
+  },
+  "refit_06_fresh_test/F010/old_global": {
+    "p95_seconds": 0.21959308999721544,
+    "passed": true,
+    "contexts": {
+      "refit_06_fresh_test/F010": {
+        "p50_seconds": 0.1988690000071074,
+        "p95_seconds": 0.21959308999721544,
+        "max_seconds": 0.2315534000081243,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_06_fresh_test/F010": 231
+    },
+    "max_additivity_error": 9.992007221626409e-16,
+    "background_count": 231,
+    "references": {
+      "refit_06_fresh_test/F010": {
+        "count": 231,
+        "population": 231,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 3.1086244689504383e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.7513806139444723,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_06_fresh_test/F010/global_refit": {
+    "p95_seconds": 0.23508656500489453,
+    "passed": true,
+    "contexts": {
+      "refit_06_fresh_test/F010": {
+        "p50_seconds": 0.2133195499991416,
+        "p95_seconds": 0.23508656500489453,
+        "max_seconds": 0.24608689999149647,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_06_fresh_test/F010": 231
+    },
+    "max_additivity_error": 1.9984014443252818e-15,
+    "background_count": 231,
+    "references": {
+      "refit_06_fresh_test/F010": {
+        "count": 231,
+        "population": 231,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 3.1086244689504383e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.8685793914001998,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_06_fresh_test/F010/global_finetuned": {
+    "p95_seconds": 0.2954685799952131,
+    "passed": true,
+    "contexts": {
+      "refit_06_fresh_test/F010": {
+        "p50_seconds": 0.23421024999697693,
+        "p95_seconds": 0.2954685799952131,
+        "max_seconds": 0.30263689999992494,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_06_fresh_test/F010": 231
+    },
+    "max_additivity_error": 9.992007221626409e-16,
+    "background_count": 231,
+    "references": {
+      "refit_06_fresh_test/F010": {
+        "count": 231,
+        "population": 231,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 3.1086244689504383e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.7513806139444723,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_06_fresh_test/F010/global_adapted_audited": {
+    "p95_seconds": 0.23748618500540034,
+    "passed": true,
+    "contexts": {
+      "refit_06_fresh_test/F010": {
+        "p50_seconds": 0.19558439999673283,
+        "p95_seconds": 0.23748618500540034,
+        "max_seconds": 0.25057879999803845,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_06_fresh_test/F010": 231
+    },
+    "max_additivity_error": 9.992007221626409e-16,
+    "background_count": 231,
+    "references": {
+      "refit_06_fresh_test/F010": {
+        "count": 231,
+        "population": 231,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 3.1086244689504383e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 1.8340219076417226,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_06_fresh_test/F010/local_neural18": {
+    "p95_seconds": 0.2519882900051016,
+    "passed": true,
+    "contexts": {
+      "refit_06_fresh_test/F010": {
+        "p50_seconds": 0.2078090499926475,
+        "p95_seconds": 0.2519882900051016,
+        "max_seconds": 0.26095799999893643,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_06_fresh_test/F010": 231
+    },
+    "max_additivity_error": 1.5265566588595902e-16,
+    "background_count": 231,
+    "references": {
+      "refit_06_fresh_test/F010": {
+        "count": 231,
+        "population": 231,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 3.1086244689504383e-15
+      }
+    },
+    "max_background_sensitivity_change_pp": 0.3876071445646412,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_06_fresh_test/F010/workspace": {
+    "firm": "refit_06_fresh_test_F010",
+    "origin": "2025-09-29",
+    "population": 231,
+    "reference": {
+      "kind": "open_invoices_at_cutoff",
+      "count": 231,
+      "population": 231,
+      "cutoff": "2025-09-29",
+      "hash": "27fea463735d65ab28a436a311fb02c858b791621501d9b003a77be9ed21131a",
+      "selection": "census",
+      "policy": "open-invoices-stratified-v2",
+      "weighting": "equal_per_open_invoice",
+      "max_weighted_cdf_distance": 3.1086244689504383e-15
+    },
+    "samples": [
+      {
+        "invoice_id": "F010-C25TLY-00000560",
+        "seconds": 1.306313200009754,
+        "additivity_error": 3.3306690738754696e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000634",
+        "seconds": 1.1722101000050316,
+        "additivity_error": 3.3306690738754696e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000822",
+        "seconds": 1.171832700012601,
+        "additivity_error": 1.942890293094024e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00001081",
+        "seconds": 1.2891201000020374,
+        "additivity_error": 2.220446049250313e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000739",
+        "seconds": 1.238320400007069,
+        "additivity_error": 5.551115123125783e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000985",
+        "seconds": 1.2407780999928946,
+        "additivity_error": 5.551115123125783e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00001078",
+        "seconds": 1.1934602000110317,
+        "additivity_error": 1.942890293094024e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000815",
+        "seconds": 1.1849122000130592,
+        "additivity_error": 2.220446049250313e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000947",
+        "seconds": 1.295527399997809,
+        "additivity_error": 1.3877787807814457e-17
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000957",
+        "seconds": 1.1685993999999482,
+        "additivity_error": 3.885780586188048e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000453",
+        "seconds": 1.1406144999928074,
+        "additivity_error": 2.3592239273284576e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000329",
+        "seconds": 1.185291399990092,
+        "additivity_error": 9.71445146547012e-17
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000953",
+        "seconds": 1.3021894000121392,
+        "additivity_error": 6.661338147750939e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00001159",
+        "seconds": 1.5196255999908317,
+        "additivity_error": 2.220446049250313e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00001028",
+        "seconds": 1.263685700003407,
+        "additivity_error": 1.249000902703301e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00001048",
+        "seconds": 1.1997875999950338,
+        "additivity_error": 4.996003610813204e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00001144",
+        "seconds": 1.3386501999921165,
+        "additivity_error": 6.661338147750939e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000938",
+        "seconds": 1.278142499999376,
+        "additivity_error": 3.885780586188048e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000241",
+        "seconds": 1.158719300001394,
+        "additivity_error": 1.249000902703301e-16
+      },
+      {
+        "invoice_id": "F010-C25TLY-00000143",
+        "seconds": 1.1313426999986405,
+        "additivity_error": 1.249000902703301e-16
+      }
+    ],
+    "p95_seconds": 1.3476989699920525,
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "feature_preparation_included": true
+  },
+  "refit_07_fresh_test_onboarding/F000/old_global": {
+    "p95_seconds": 0.13666021000462936,
+    "passed": true,
+    "contexts": {
+      "refit_07_fresh_test_onboarding/F000": {
+        "p50_seconds": 0.12326904999645194,
+        "p95_seconds": 0.13666021000462936,
+        "max_seconds": 0.1547807000024477,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_07_fresh_test_onboarding/F000": 122
+    },
+    "max_additivity_error": 1.9984014443252818e-15,
+    "background_count": 122,
+    "references": {
+      "refit_07_fresh_test_onboarding/F000": {
+        "count": 122,
+        "population": 122,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 8.881784197001252e-16
+      }
+    },
+    "max_background_sensitivity_change_pp": 2.092506056867414,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_07_fresh_test_onboarding/F000/global_refit": {
+    "p95_seconds": 0.13496909499808682,
+    "passed": true,
+    "contexts": {
+      "refit_07_fresh_test_onboarding/F000": {
+        "p50_seconds": 0.12860440000076778,
+        "p95_seconds": 0.13496909499808682,
+        "max_seconds": 0.13996600000245962,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_07_fresh_test_onboarding/F000": 122
+    },
+    "max_additivity_error": 3.219646771412954e-15,
+    "background_count": 122,
+    "references": {
+      "refit_07_fresh_test_onboarding/F000": {
+        "count": 122,
+        "population": 122,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 8.881784197001252e-16
+      }
+    },
+    "max_background_sensitivity_change_pp": 2.345259695941003,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_07_fresh_test_onboarding/F000/global_finetuned": {
+    "p95_seconds": 0.1381893299956573,
+    "passed": true,
+    "contexts": {
+      "refit_07_fresh_test_onboarding/F000": {
+        "p50_seconds": 0.12388170000485843,
+        "p95_seconds": 0.1381893299956573,
+        "max_seconds": 0.13836470000387635,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_07_fresh_test_onboarding/F000": 122
+    },
+    "max_additivity_error": 1.9984014443252818e-15,
+    "background_count": 122,
+    "references": {
+      "refit_07_fresh_test_onboarding/F000": {
+        "count": 122,
+        "population": 122,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 8.881784197001252e-16
+      }
+    },
+    "max_background_sensitivity_change_pp": 2.092506056867414,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_07_fresh_test_onboarding/F000/global_adapted_audited": {
+    "p95_seconds": 0.12618937500228639,
+    "passed": true,
+    "contexts": {
+      "refit_07_fresh_test_onboarding/F000": {
+        "p50_seconds": 0.12242094999965047,
+        "p95_seconds": 0.12618937500228639,
+        "max_seconds": 0.12706669999170117,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "refit_07_fresh_test_onboarding/F000": 122
+    },
+    "max_additivity_error": 1.9984014443252818e-15,
+    "background_count": 122,
+    "references": {
+      "refit_07_fresh_test_onboarding/F000": {
+        "count": 122,
+        "population": 122,
+        "selection": "census",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 8.881784197001252e-16
+      }
+    },
+    "max_background_sensitivity_change_pp": 2.092506056867414,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "refit_07_fresh_test_onboarding/F000/local_neural18": {
+    "status": "local_model_unavailable",
+    "fallback": "workspace"
+  },
+  "refit_07_fresh_test_onboarding/F000/workspace": {
+    "firm": "refit_07_fresh_test_onboarding_F000",
+    "origin": "2025-09-29",
+    "population": 122,
+    "reference": {
+      "kind": "open_invoices_at_cutoff",
+      "count": 122,
+      "population": 122,
+      "cutoff": "2025-09-29",
+      "hash": "7d3a55724da459d26dc6c4db501e676f3592b4aee771d5c2ad9c16ec3ddd6414",
+      "selection": "census",
+      "policy": "open-invoices-stratified-v2",
+      "weighting": "equal_per_open_invoice",
+      "max_weighted_cdf_distance": 8.881784197001252e-16
+    },
+    "samples": [
+      {
+        "invoice_id": "F000-C25TVN-00000732",
+        "seconds": 0.2551420999952825,
+        "additivity_error": 1.3322676295501878e-15
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000833",
+        "seconds": 0.22094990000186954,
+        "additivity_error": 0.0
+      },
+      {
+        "invoice_id": "F000-C25TVN-00001008",
+        "seconds": 0.24029679999512155,
+        "additivity_error": 2.7755575615628914e-17
+      },
+      {
+        "invoice_id": "F000-C25TVN-00001027",
+        "seconds": 0.25691579999693204,
+        "additivity_error": 5.551115123125783e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00001020",
+        "seconds": 0.2370165000029374,
+        "additivity_error": 7.979727989493313e-17
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000986",
+        "seconds": 0.2497674000042025,
+        "additivity_error": 4.440892098500626e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000958",
+        "seconds": 0.24083270000119228,
+        "additivity_error": 8.326672684688674e-17
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000463",
+        "seconds": 0.3180988000094658,
+        "additivity_error": 1.1102230246251565e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000883",
+        "seconds": 0.2270483000029344,
+        "additivity_error": 8.881784197001252e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000931",
+        "seconds": 0.23739710000518244,
+        "additivity_error": 5.551115123125783e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000549",
+        "seconds": 0.22687650000443682,
+        "additivity_error": 2.7755575615628914e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000950",
+        "seconds": 0.24041980000038166,
+        "additivity_error": 1.1102230246251565e-15
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000916",
+        "seconds": 0.2611217000085162,
+        "additivity_error": 9.992007221626409e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00001033",
+        "seconds": 0.25299819999781903,
+        "additivity_error": 6.661338147750939e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000459",
+        "seconds": 0.2258636999904411,
+        "additivity_error": 1.6653345369377348e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000857",
+        "seconds": 0.24815460000536405,
+        "additivity_error": 7.771561172376096e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000649",
+        "seconds": 0.21361800000886433,
+        "additivity_error": 1.942890293094024e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000613",
+        "seconds": 0.22025730001041666,
+        "additivity_error": 1.1102230246251565e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00001036",
+        "seconds": 0.25713359999645036,
+        "additivity_error": 5.551115123125783e-16
+      },
+      {
+        "invoice_id": "F000-C25TVN-00000951",
+        "seconds": 0.22154359999694861,
+        "additivity_error": 4.440892098500626e-16
+      }
+    ],
+    "p95_seconds": 0.2639705550085637,
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "feature_preparation_included": true
+  }
+}

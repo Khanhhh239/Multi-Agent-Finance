@@ -1,7 +1,0 @@
-{
-  "scope": "Explanatory retrospective profiles; no oracle fields passed to any estimator",
-  "top_1_share_of_net_missing_writeoff_events": 0.18827308886251132,
-  "top_5_share_of_net_missing_writeoff_events": 0.3700197554671714,
-  "top_20_share_of_net_missing_writeoff_events": 0.7433750518519551,
-  "source_sha256": "b5fe8269c81cc6e8a6267060b1746473fcd9b3df70e24fc6c64349391b8ebf63"
-}

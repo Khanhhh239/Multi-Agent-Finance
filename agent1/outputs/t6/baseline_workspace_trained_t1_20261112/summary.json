@@ -1,0 +1,847 @@
+{
+  "protocol": "workspace-trained-t1-t6-baseline-v2",
+  "t1_mode": "workspace",
+  "cutoffs": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-04-30",
+    "2026-07-31"
+  ],
+  "origins": [
+    {
+      "cutoff": "2025-09-30",
+      "horizon_end": "2025-12-30",
+      "opening_balance": 500000000,
+      "accounts": [
+        "DP-VND01"
+      ],
+      "open_invoices": 287,
+      "outstanding": 10258200000.0,
+      "origin_data_hash": "888547595d65dbd7a02d7e8834c8ae6ffdda6577aebea29ffbacfd23de91a727",
+      "future_removal_invariance": true,
+      "t1": {
+        "mode": "company_trained",
+        "trained": true,
+        "asof": "2025-09-30",
+        "selected_method": "extra",
+        "selected_weight": 1.0,
+        "serving_weight": 1.0,
+        "serving_members": [
+          "extra"
+        ],
+        "train_n": 11286,
+        "validation_n": 84,
+        "audit": {
+          "n": 78,
+          "customer_clusters": 72,
+          "candidate_brier4": 0.10517249166978483,
+          "baseline_brier4": 0.15384615384615385,
+          "brier_improvement": 0.048673662176369016,
+          "improvement_ci_low": 0.006944580407441097,
+          "improvement_ci_high": 0.09090822866847763,
+          "ci_reliable": true,
+          "amount_weighted_brier4": 0.10922090085343121,
+          "log_loss4": 0.32193002629134504,
+          "observed_paid_rate4": 0.15384615384615385,
+          "predicted_paid_rate4": 0.155381794604237,
+          "accepted": true
+        },
+        "windows": {
+          "train_through": "2025-06-10",
+          "validation_label_through": "2025-08-05",
+          "audit_label_through": "2025-09-30"
+        },
+        "selection": [
+          {
+            "method": "due",
+            "validation_brier4": 0.19047619047619047,
+            "status": "evaluated",
+            "seconds": 0.359
+          },
+          {
+            "method": "customer",
+            "validation_brier4": 0.16666666666666666,
+            "status": "evaluated",
+            "seconds": 0.354
+          },
+          {
+            "method": "survival",
+            "validation_brier4": 0.13901033159766807,
+            "status": "evaluated",
+            "seconds": 0.338
+          },
+          {
+            "method": "logistic",
+            "validation_brier4": 0.1293877861618805,
+            "status": "evaluated",
+            "seconds": 1.266
+          },
+          {
+            "method": "forest",
+            "validation_brier4": 0.1067886667962329,
+            "status": "evaluated",
+            "seconds": 6.085
+          },
+          {
+            "method": "extra",
+            "validation_brier4": 0.10613641102256317,
+            "status": "evaluated",
+            "seconds": 4.709
+          },
+          {
+            "method": "hist",
+            "validation_brier4": 0.10747248093755783,
+            "status": "evaluated",
+            "seconds": 2.165
+          },
+          {
+            "method": "lightgbm",
+            "validation_brier4": 0.11006635593190983,
+            "status": "evaluated",
+            "seconds": 1.582
+          },
+          {
+            "method": "xgboost",
+            "validation_brier4": 0.1088679135677824,
+            "status": "evaluated",
+            "seconds": 1.897
+          },
+          {
+            "method": "logistic_regularized",
+            "validation_brier4": 0.12940077990866414,
+            "status": "evaluated",
+            "seconds": 1.406
+          },
+          {
+            "method": "forest_shallow",
+            "validation_brier4": 0.11067760608015442,
+            "status": "evaluated",
+            "seconds": 4.867
+          },
+          {
+            "method": "hist_regularized",
+            "validation_brier4": 0.10659584187863992,
+            "status": "evaluated",
+            "seconds": 2.607
+          },
+          {
+            "method": "neural_wide",
+            "validation_brier4": 0.10762278459368983,
+            "status": "evaluated",
+            "seconds": 59.164
+          },
+          {
+            "method": "neural_deep",
+            "validation_brier4": 0.10717137312834321,
+            "status": "evaluated",
+            "seconds": 48.142
+          },
+          {
+            "method": "spline",
+            "validation_brier4": 0.1307183237069061,
+            "status": "evaluated",
+            "seconds": 1.068
+          },
+          {
+            "method": "neural",
+            "validation_brier4": 0.11327896948147835,
+            "status": "evaluated",
+            "seconds": 48.013
+          },
+          {
+            "method": "pool",
+            "members": [
+              "extra",
+              "hist_regularized",
+              "forest"
+            ],
+            "validation_brier4": 0.10621148760500543,
+            "status": "evaluated"
+          }
+        ],
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pandas": "3.0.6",
+          "scikit-learn": "1.9.1",
+          "lightgbm": "4.7.0",
+          "xgboost": "3.4.1"
+        },
+        "code_hash": "077546989ebbd1c5b9246a38ede802c792d3daf83605db2a6b7da4d4c4bfa547",
+        "training_seconds": 260.991,
+        "training_config": {
+          "methods": "all default CATALOG candidates",
+          "neural_max_iter": 100,
+          "neural_batch_size": 128,
+          "thread_limit": 2
+        },
+        "reused_checkpoint": true,
+        "artifact_sha256": "199bc02539f6a0fd0bfeae0f23ac988628ae1a1573a82ba0b83377748ab8dff7"
+      },
+      "unknown_outflow_weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "forecast_and_replay_seconds": 109.248,
+      "metrics": {
+        "weeks": 13,
+        "mae_balance_vnd": 1941603393.2867713,
+        "bias_balance_vnd": 1675623710.8837256,
+        "coverage80": 0.0,
+        "mean_width80_vnd": 649190000.0,
+        "interval_score80_vnd": 16911926956.153847,
+        "brier_weekly_shortfall": 0.0,
+        "actual_shortfall_weeks": 0,
+        "alert_weeks": 0,
+        "true_alert_weeks": 0,
+        "false_alert_weeks": 0,
+        "missed_shortfall_weeks": 0,
+        "recall_weekly": null,
+        "precision_weekly": null,
+        "mae_cumulative_opening_ar_vnd": 231899430.7316584,
+        "mae_weekly_opening_ar_vnd": 64938147.75877115
+      }
+    },
+    {
+      "cutoff": "2025-12-31",
+      "horizon_end": "2026-04-01",
+      "opening_balance": 500000000,
+      "accounts": [
+        "DP-VND01"
+      ],
+      "open_invoices": 286,
+      "outstanding": 10213000000.0,
+      "origin_data_hash": "bc23794a5da57d5ff17d7cc446d4cfbd33d982a347c2a8a987060a3a7a0e1398",
+      "future_removal_invariance": true,
+      "t1": {
+        "mode": "company_trained",
+        "trained": true,
+        "asof": "2025-12-31",
+        "selected_method": "lightgbm",
+        "selected_weight": 1.0,
+        "serving_weight": 1.0,
+        "serving_members": [
+          "lightgbm"
+        ],
+        "train_n": 11556,
+        "validation_n": 84,
+        "audit": {
+          "n": 82,
+          "customer_clusters": 73,
+          "candidate_brier4": 0.09406034671774265,
+          "baseline_brier4": 0.14634146341463414,
+          "brier_improvement": 0.052281116696891484,
+          "improvement_ci_low": 0.0070679359871811875,
+          "improvement_ci_high": 0.10549797917065061,
+          "ci_reliable": true,
+          "amount_weighted_brier4": 0.09282320741386522,
+          "log_loss4": 0.2765576197710881,
+          "observed_paid_rate4": 0.14634146341463414,
+          "predicted_paid_rate4": 0.13939050626675767,
+          "accepted": true
+        },
+        "windows": {
+          "train_through": "2025-09-10",
+          "validation_label_through": "2025-11-05",
+          "audit_label_through": "2025-12-31"
+        },
+        "selection": [
+          {
+            "method": "due",
+            "validation_brier4": 0.19047619047619047,
+            "status": "evaluated",
+            "seconds": 0.648
+          },
+          {
+            "method": "customer",
+            "validation_brier4": 0.16666666666666666,
+            "status": "evaluated",
+            "seconds": 0.584
+          },
+          {
+            "method": "survival",
+            "validation_brier4": 0.13901029126576944,
+            "status": "evaluated",
+            "seconds": 0.583
+          },
+          {
+            "method": "logistic",
+            "validation_brier4": 0.12923330266582939,
+            "status": "evaluated",
+            "seconds": 1.847
+          },
+          {
+            "method": "forest",
+            "validation_brier4": 0.10405659217568666,
+            "status": "evaluated",
+            "seconds": 7.362
+          },
+          {
+            "method": "extra",
+            "validation_brier4": 0.10357732627304558,
+            "status": "evaluated",
+            "seconds": 5.409
+          },
+          {
+            "method": "hist",
+            "validation_brier4": 0.10243543307907646,
+            "status": "evaluated",
+            "seconds": 3.395
+          },
+          {
+            "method": "lightgbm",
+            "validation_brier4": 0.09896081340136793,
+            "status": "evaluated",
+            "seconds": 2.499
+          },
+          {
+            "method": "xgboost",
+            "validation_brier4": 0.1086301449365126,
+            "status": "evaluated",
+            "seconds": 2.685
+          },
+          {
+            "method": "logistic_regularized",
+            "validation_brier4": 0.12924579369943287,
+            "status": "evaluated",
+            "seconds": 1.914
+          },
+          {
+            "method": "forest_shallow",
+            "validation_brier4": 0.10824934524144535,
+            "status": "evaluated",
+            "seconds": 5.693
+          },
+          {
+            "method": "hist_regularized",
+            "validation_brier4": 0.10196434505761715,
+            "status": "evaluated",
+            "seconds": 3.268
+          },
+          {
+            "method": "neural_wide",
+            "validation_brier4": 0.11120104884364837,
+            "status": "evaluated",
+            "seconds": 89.092
+          },
+          {
+            "method": "neural_deep",
+            "validation_brier4": 0.11153640210246889,
+            "status": "evaluated",
+            "seconds": 111.339
+          },
+          {
+            "method": "spline",
+            "validation_brier4": 0.130336427624725,
+            "status": "evaluated",
+            "seconds": 1.807
+          },
+          {
+            "method": "neural",
+            "validation_brier4": 0.11330452991461741,
+            "status": "evaluated",
+            "seconds": 79.435
+          },
+          {
+            "method": "pool",
+            "members": [
+              "lightgbm",
+              "hist_regularized",
+              "hist"
+            ],
+            "validation_brier4": 0.10095439017621825,
+            "status": "evaluated"
+          }
+        ],
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pandas": "3.0.6",
+          "scikit-learn": "1.9.1",
+          "lightgbm": "4.7.0",
+          "xgboost": "3.4.1"
+        },
+        "code_hash": "077546989ebbd1c5b9246a38ede802c792d3daf83605db2a6b7da4d4c4bfa547",
+        "training_seconds": 427.723,
+        "training_config": {
+          "methods": "all default CATALOG candidates",
+          "neural_max_iter": 100,
+          "neural_batch_size": 128,
+          "thread_limit": 2
+        },
+        "reused_checkpoint": false,
+        "artifact_sha256": "d42d050e7453bc95c0f1a7050dcfddc878c9362f2c657980636ef4ef9c7effe7"
+      },
+      "unknown_outflow_weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "forecast_and_replay_seconds": 118.243,
+      "metrics": {
+        "weeks": 13,
+        "mae_balance_vnd": 2021726980.5353677,
+        "bias_balance_vnd": 1704550545.758804,
+        "coverage80": 0.0,
+        "mean_width80_vnd": 578154615.3846154,
+        "interval_score80_vnd": 17868208830.0,
+        "brier_weekly_shortfall": 0.0,
+        "actual_shortfall_weeks": 0,
+        "alert_weeks": 0,
+        "true_alert_weeks": 0,
+        "false_alert_weeks": 0,
+        "missed_shortfall_weeks": 0,
+        "recall_weekly": null,
+        "precision_weekly": null,
+        "mae_cumulative_opening_ar_vnd": 426957516.1642727,
+        "mae_weekly_opening_ar_vnd": 76244708.18039286
+      }
+    },
+    {
+      "cutoff": "2026-04-30",
+      "horizon_end": "2026-07-30",
+      "opening_balance": 540000000,
+      "accounts": [
+        "DP-VND01"
+      ],
+      "open_invoices": 291,
+      "outstanding": 10465800000.0,
+      "origin_data_hash": "345d048ec9221f29d50b6b48d293559eb3c28b2e748ce7eb8d01cf8d5bfef551",
+      "future_removal_invariance": true,
+      "t1": {
+        "mode": "company_trained",
+        "trained": true,
+        "asof": "2026-04-30",
+        "selected_method": "hist",
+        "selected_weight": 1.0,
+        "serving_weight": 1.0,
+        "serving_members": [
+          "hist"
+        ],
+        "train_n": 11910,
+        "validation_n": 80,
+        "audit": {
+          "n": 78,
+          "customer_clusters": 72,
+          "candidate_brier4": 0.09917978967584887,
+          "baseline_brier4": 0.15384615384615385,
+          "brier_improvement": 0.05466636417030498,
+          "improvement_ci_low": 0.006649527397478667,
+          "improvement_ci_high": 0.10662951284860521,
+          "ci_reliable": true,
+          "amount_weighted_brier4": 0.09723087845405208,
+          "log_loss4": 0.29234908437222284,
+          "observed_paid_rate4": 0.15384615384615385,
+          "predicted_paid_rate4": 0.15298755561330982,
+          "accepted": true
+        },
+        "windows": {
+          "train_through": "2026-01-08",
+          "validation_label_through": "2026-03-05",
+          "audit_label_through": "2026-04-30"
+        },
+        "selection": [
+          {
+            "method": "due",
+            "validation_brier4": 0.225,
+            "status": "evaluated",
+            "seconds": 0.579
+          },
+          {
+            "method": "customer",
+            "validation_brier4": 0.1625,
+            "status": "evaluated",
+            "seconds": 0.562
+          },
+          {
+            "method": "survival",
+            "validation_brier4": 0.13614086384652818,
+            "status": "evaluated",
+            "seconds": 0.518
+          },
+          {
+            "method": "logistic",
+            "validation_brier4": 0.12890045938067018,
+            "status": "evaluated",
+            "seconds": 2.05
+          },
+          {
+            "method": "forest",
+            "validation_brier4": 0.10887967674689616,
+            "status": "evaluated",
+            "seconds": 7.227
+          },
+          {
+            "method": "extra",
+            "validation_brier4": 0.1078683499031973,
+            "status": "evaluated",
+            "seconds": 5.185
+          },
+          {
+            "method": "hist",
+            "validation_brier4": 0.10625350244125271,
+            "status": "evaluated",
+            "seconds": 3.304
+          },
+          {
+            "method": "lightgbm",
+            "validation_brier4": 0.10729959999369801,
+            "status": "evaluated",
+            "seconds": 2.468
+          },
+          {
+            "method": "xgboost",
+            "validation_brier4": 0.10982303977137578,
+            "status": "evaluated",
+            "seconds": 2.084
+          },
+          {
+            "method": "logistic_regularized",
+            "validation_brier4": 0.1289127296621631,
+            "status": "evaluated",
+            "seconds": 1.285
+          },
+          {
+            "method": "forest_shallow",
+            "validation_brier4": 0.11152890746097692,
+            "status": "evaluated",
+            "seconds": 4.187
+          },
+          {
+            "method": "hist_regularized",
+            "validation_brier4": 0.10770320031403616,
+            "status": "evaluated",
+            "seconds": 2.428
+          },
+          {
+            "method": "neural_wide",
+            "validation_brier4": 0.11231871823060117,
+            "status": "evaluated",
+            "seconds": 91.45
+          },
+          {
+            "method": "neural_deep",
+            "validation_brier4": 0.11730238818675412,
+            "status": "evaluated",
+            "seconds": 107.102
+          },
+          {
+            "method": "spline",
+            "validation_brier4": 0.12847806625844696,
+            "status": "evaluated",
+            "seconds": 1.918
+          },
+          {
+            "method": "neural",
+            "validation_brier4": 0.1155628254667354,
+            "status": "evaluated",
+            "seconds": 76.601
+          },
+          {
+            "method": "pool",
+            "members": [
+              "hist",
+              "lightgbm",
+              "hist_regularized"
+            ],
+            "validation_brier4": 0.10696472432945385,
+            "status": "evaluated"
+          }
+        ],
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pandas": "3.0.6",
+          "scikit-learn": "1.9.1",
+          "lightgbm": "4.7.0",
+          "xgboost": "3.4.1"
+        },
+        "code_hash": "077546989ebbd1c5b9246a38ede802c792d3daf83605db2a6b7da4d4c4bfa547",
+        "training_seconds": 421.912,
+        "training_config": {
+          "methods": "all default CATALOG candidates",
+          "neural_max_iter": 100,
+          "neural_batch_size": 128,
+          "thread_limit": 2
+        },
+        "reused_checkpoint": true,
+        "artifact_sha256": "babe9c8d810cb3d3b5ab04c22ce9a194ae05b3fa6fe05dc4a0ed82c7abe31eb5"
+      },
+      "unknown_outflow_weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "forecast_and_replay_seconds": 110.213,
+      "metrics": {
+        "weeks": 13,
+        "mae_balance_vnd": 1933070960.7159371,
+        "bias_balance_vnd": 1701468485.1397328,
+        "coverage80": 0.15384615384615385,
+        "mean_width80_vnd": 562343076.9230769,
+        "interval_score80_vnd": 17198828753.076923,
+        "brier_weekly_shortfall": 0.0,
+        "actual_shortfall_weeks": 0,
+        "alert_weeks": 0,
+        "true_alert_weeks": 0,
+        "false_alert_weeks": 0,
+        "missed_shortfall_weeks": 0,
+        "recall_weekly": null,
+        "precision_weekly": null,
+        "mae_cumulative_opening_ar_vnd": 190106720.01411325,
+        "mae_weekly_opening_ar_vnd": 49683815.76072752
+      }
+    },
+    {
+      "cutoff": "2026-07-31",
+      "horizon_end": "2026-10-30",
+      "opening_balance": 540000000,
+      "accounts": [
+        "DP-VND01"
+      ],
+      "open_invoices": 295,
+      "outstanding": 10972400000.0,
+      "origin_data_hash": "4878ad038e1dcd2e52f197fce0e56b5c5e4d0748a9e56eb822e0259f5eea35b2",
+      "future_removal_invariance": true,
+      "t1": {
+        "mode": "company_trained",
+        "trained": true,
+        "asof": "2026-07-31",
+        "selected_method": "hist",
+        "selected_weight": 1.0,
+        "serving_weight": 1.0,
+        "serving_members": [
+          "hist"
+        ],
+        "train_n": 12186,
+        "validation_n": 84,
+        "audit": {
+          "n": 82,
+          "customer_clusters": 73,
+          "candidate_brier4": 0.09805493245736711,
+          "baseline_brier4": 0.13414634146341464,
+          "brier_improvement": 0.03609140900604752,
+          "improvement_ci_low": -0.007550561913238836,
+          "improvement_ci_high": 0.08563245680706948,
+          "ci_reliable": true,
+          "amount_weighted_brier4": 0.09053110654995447,
+          "log_loss4": 0.30097167049360835,
+          "observed_paid_rate4": 0.13414634146341464,
+          "predicted_paid_rate4": 0.15371364543182653,
+          "accepted": true
+        },
+        "windows": {
+          "train_through": "2026-04-10",
+          "validation_label_through": "2026-06-05",
+          "audit_label_through": "2026-07-31"
+        },
+        "selection": [
+          {
+            "method": "due",
+            "validation_brier4": 0.19047619047619047,
+            "status": "evaluated",
+            "seconds": 0.366
+          },
+          {
+            "method": "customer",
+            "validation_brier4": 0.16666666666666666,
+            "status": "evaluated",
+            "seconds": 0.365
+          },
+          {
+            "method": "survival",
+            "validation_brier4": 0.13901020416956547,
+            "status": "evaluated",
+            "seconds": 0.444
+          },
+          {
+            "method": "logistic",
+            "validation_brier4": 0.12781022598967992,
+            "status": "evaluated",
+            "seconds": 1.37
+          },
+          {
+            "method": "forest",
+            "validation_brier4": 0.10532950514383643,
+            "status": "evaluated",
+            "seconds": 6.01
+          },
+          {
+            "method": "extra",
+            "validation_brier4": 0.10486916937457941,
+            "status": "evaluated",
+            "seconds": 4.665
+          },
+          {
+            "method": "hist",
+            "validation_brier4": 0.10204507060020569,
+            "status": "evaluated",
+            "seconds": 2.572
+          },
+          {
+            "method": "lightgbm",
+            "validation_brier4": 0.10443527039322742,
+            "status": "evaluated",
+            "seconds": 1.936
+          },
+          {
+            "method": "xgboost",
+            "validation_brier4": 0.10914612796355322,
+            "status": "evaluated",
+            "seconds": 1.828
+          },
+          {
+            "method": "logistic_regularized",
+            "validation_brier4": 0.12783095754758875,
+            "status": "evaluated",
+            "seconds": 1.644
+          },
+          {
+            "method": "forest_shallow",
+            "validation_brier4": 0.10818270458818928,
+            "status": "evaluated",
+            "seconds": 4.869
+          },
+          {
+            "method": "hist_regularized",
+            "validation_brier4": 0.1026725182887344,
+            "status": "evaluated",
+            "seconds": 2.966
+          },
+          {
+            "method": "neural_wide",
+            "validation_brier4": 0.11151226688090292,
+            "status": "evaluated",
+            "seconds": 72.284
+          },
+          {
+            "method": "neural_deep",
+            "validation_brier4": 0.10307311266653023,
+            "status": "evaluated",
+            "seconds": 86.978
+          },
+          {
+            "method": "spline",
+            "validation_brier4": 0.1304520632649117,
+            "status": "evaluated",
+            "seconds": 1.669
+          },
+          {
+            "method": "neural",
+            "validation_brier4": 0.10660378361760572,
+            "status": "evaluated",
+            "seconds": 63.323
+          },
+          {
+            "method": "pool",
+            "members": [
+              "hist",
+              "hist_regularized",
+              "neural_deep"
+            ],
+            "validation_brier4": 0.10240106500963081,
+            "status": "evaluated"
+          }
+        ],
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pandas": "3.0.6",
+          "scikit-learn": "1.9.1",
+          "lightgbm": "4.7.0",
+          "xgboost": "3.4.1"
+        },
+        "code_hash": "077546989ebbd1c5b9246a38ede802c792d3daf83605db2a6b7da4d4c4bfa547",
+        "training_seconds": 341.132,
+        "training_config": {
+          "methods": "all default CATALOG candidates",
+          "neural_max_iter": 100,
+          "neural_batch_size": 128,
+          "thread_limit": 2
+        },
+        "reused_checkpoint": false,
+        "artifact_sha256": "2c40b0a257e465492a6d32c275cbfd91fcea52ca5810470545dc65d79890fd5f"
+      },
+      "unknown_outflow_weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "forecast_and_replay_seconds": 104.69,
+      "metrics": {
+        "weeks": 13,
+        "mae_balance_vnd": 2244745824.898328,
+        "bias_balance_vnd": 2157422201.1405916,
+        "coverage80": 0.23076923076923078,
+        "mean_width80_vnd": 603938461.5384616,
+        "interval_score80_vnd": 20455934641.53846,
+        "brier_weekly_shortfall": 0.0,
+        "actual_shortfall_weeks": 0,
+        "alert_weeks": 0,
+        "true_alert_weeks": 0,
+        "false_alert_weeks": 0,
+        "missed_shortfall_weeks": 0,
+        "recall_weekly": null,
+        "precision_weekly": null,
+        "mae_cumulative_opening_ar_vnd": 350124416.5669541,
+        "mae_weekly_opening_ar_vnd": 65786054.283889
+      }
+    }
+  ],
+  "overall": {
+    "weeks": 52,
+    "mae_balance_vnd": 2035286789.8591013,
+    "bias_balance_vnd": 1809766235.7307131,
+    "coverage80": 0.09615384615384616,
+    "mean_width80_vnd": 598406538.4615384,
+    "interval_score80_vnd": 18108724795.192307,
+    "brier_weekly_shortfall": 0.0,
+    "actual_shortfall_weeks": 0,
+    "alert_weeks": 0,
+    "true_alert_weeks": 0,
+    "false_alert_weeks": 0,
+    "missed_shortfall_weeks": 0,
+    "recall_weekly": null,
+    "precision_weekly": null,
+    "mae_cumulative_opening_ar_vnd": 299772020.86924964,
+    "mae_weekly_opening_ar_vnd": 64163181.49594513
+  },
+  "elapsed_seconds": 1272.614
+}

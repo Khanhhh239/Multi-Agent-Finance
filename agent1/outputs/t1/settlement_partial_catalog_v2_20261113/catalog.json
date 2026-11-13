@@ -1,0 +1,151 @@
+{
+  "version": "t1-partial-catalog-v2",
+  "feature_schema": "t1-landmark-18-v2",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "receipt_count",
+    "received_fraction_28d",
+    "customer_settlements_180d",
+    "customer_delay_180d",
+    "customer_delay_std_180d",
+    "customer_delay_trend_180d",
+    "company_delay_180d",
+    "company_delay_trend_180d",
+    "customer_overdue_share",
+    "customer_overdue90_share",
+    "company_overdue_share",
+    "company_overdue90_share",
+    "customer_outstanding_share"
+  ],
+  "synthetic": true,
+  "label_contract": "cash-calendar-full-settlement-v2",
+  "models": {
+    "default": {
+      "directory": "default",
+      "metadata_sha256": "c3730dc824c990954bdef5985def77171f68a1479b1237b23fbb9695ad78d440",
+      "available_asof": "2024-07-01"
+    },
+    "neural": {
+      "directory": "neural",
+      "metadata_sha256": "79f623101d7f8081a32caa2c4a81874d79e0741881bfc19c0d51a9d213ef7a49",
+      "available_asof": "2024-07-01"
+    },
+    "lightgbm": {
+      "directory": "lightgbm",
+      "metadata_sha256": "5ab50e6c9087e6a8ab33e384660fe390f02bc932ad99b2a283f2640fb0b07094",
+      "available_asof": "2024-07-01"
+    },
+    "xgboost": {
+      "directory": "xgboost",
+      "metadata_sha256": "ff374e474fa9b42a596bc64b812eeb49b4b352930187fecaec16fc9c5cda5590",
+      "available_asof": "2024-07-01"
+    }
+  },
+  "shared_pretraining_sample_sha256": "e0c1f69e77fb93cb872ef1ace68164fd9133fa8e343d9b4831b2a05908c280ee",
+  "replay": {
+    "file": "replay.npz",
+    "sha256": "ae98182d70d672ac4f9c589320e3d34e5d44fb44cf56899ba2795026dbf92924",
+    "available_asof": "2024-07-01",
+    "evidence": {
+      "snapshots": 78171,
+      "unique_invoices": 40761,
+      "risk_rows_available": 655492,
+      "risk_rows_used": 4096,
+      "event_rows": 308,
+      "unique_invoices_represented": 3521,
+      "latest_origin": "2023-09-11",
+      "label_end": "2023-12-31",
+      "censored_snapshots": 0,
+      "sample_sha256": "1b078a31e758b0e79996a5445c7490dff51dc4183e90e8bcb9631c355364f954"
+    },
+    "sources": [
+      {
+        "file": "compact_00_train.parquet",
+        "sha256": "a83f4a329d3437266f6931bd1afb95e23b4c82f1c3e5402e5a2b095dac1db0c8",
+        "rows": 13200
+      },
+      {
+        "file": "compact_01_train.parquet",
+        "sha256": "50e6272bd7ac9b076e3cc82b4b05de00c8cacfd3a510b00772f3602435d5cc5c",
+        "rows": 13019
+      },
+      {
+        "file": "compact_02_train.parquet",
+        "sha256": "5f69418054233f947730b10ca524217640db776b03767e3568b900b3fc942991",
+        "rows": 11876
+      },
+      {
+        "file": "compact_03_train.parquet",
+        "sha256": "d50b0ff3decb13535c80aef1d6f371b0ca290c12dfc075c5a07b7df512946f16",
+        "rows": 11304
+      },
+      {
+        "file": "compact_08_train.parquet",
+        "sha256": "e98e4b2018f8439f237f607cc6252a96479d972ee1a6b82833aa17a8145b3667",
+        "rows": 8540
+      },
+      {
+        "file": "compact_09_train.parquet",
+        "sha256": "a85064e95f13f3594f4a0b62ad733b2504e6875a2ee503497638ec72e18e8456",
+        "rows": 8132
+      },
+      {
+        "file": "compact_10_train.parquet",
+        "sha256": "0d233792b2689b6411cb3cc239f2279cf48a97afa6d7da20fe95133a961c5afe",
+        "rows": 5500
+      },
+      {
+        "file": "compact_11_train.parquet",
+        "sha256": "5e0805b0528aceaa0e53315a5f426ab8adfbf6bff27349678c5fdab3e49fe8f6",
+        "rows": 6600
+      }
+    ]
+  },
+  "partial": {
+    "file": "partial.json",
+    "sha256": "a1cb01de2a6cfed1d5708406783ebd717552beba47c537b7ef6c463f48cbe470",
+    "available_asof": "2024-07-01",
+    "sources": [
+      {
+        "file": "compact_04_validation.parquet",
+        "sha256": "50e131f542421c73ef7bba99c50353de5dbd473fd7dd0b7edd318b065895dd58",
+        "rows": 1466
+      },
+      {
+        "file": "compact_05_validation.parquet",
+        "sha256": "09e0542ca1c28d1a082f5cbaf4d4699fe69068e60929bff15bfc443089adbae5",
+        "rows": 1390
+      },
+      {
+        "file": "compact_12_validation.parquet",
+        "sha256": "d98c5fe7d4093d1752ad6b30b2eaa58fdfe943470c6adc30cc0f828055a90dcf",
+        "rows": 1178
+      }
+    ]
+  },
+  "label_audit": {
+    "source_target_contract": {
+      "version": "cash-calendar-full-settlement-v2",
+      "baseline_cache": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t1\\aligned_refit_20261112",
+      "target": "First actual cash date with cumulative receipts known by label_end covering original gross claim; noncash credits excluded.",
+      "unchanged": "Features, invoice keys, eligibility, cash amounts, World seeds, splits, candidates, budgets and selection thresholds.",
+      "reason": "Model-independent check found posting-order Paid times earlier than full cash recovery; repair target before final aggregate reporting.",
+      "original_frozen_sha256": "c442b0cb0d1fb18398cb852175fb7f12f8186b59363a7de6b291222f76bcf3b9",
+      "holdout_scope": "Same new-seed Worlds after mechanical label correction, not newly unseen seeds after correction. No aggregate test scores used to alter hyperparameters."
+    },
+    "source_metadata_sha256": {
+      "neural": "f56896227499d9889f2b4bea732ded91c719fff2e628c6474dd0b4225fbd24f0",
+      "lightgbm": "b696e6370818012436a1960d07029d9e17ab7eb0a4a01726a63766ffcfb7eef6",
+      "xgboost": "cb3b3b28e79414edacf8eca287d2e2ae1578c14628a1d2f349a0a6e54fe4fd80",
+      "customer": "eac0aa40a99888a2f7b8dc976d18e7b1db4c951cb6dba71ba6b9bedc3cf87e43"
+    },
+    "original_g0_sha256": "953ca30df6de2646b40598e35d7504c5cb4d792136c1440b547a8e87c3f90c96",
+    "original_g0_status": "quarantined_pre_cash_calendar_target",
+    "g0_composition": "same members and weights, corrected-label members"
+  },
+  "bundle_quality": "requires_new_validation_and_audit; historical scores do not certify adapter v2"
+}

@@ -1,0 +1,128 @@
+[
+  {
+    "name": "compact_00_train",
+    "role": "train",
+    "kind": "retained_config_replay",
+    "template": "v4_shortpay_4shock_20261028_train_000",
+    "firms": 12,
+    "directory": "worlds\\compact_00_train",
+    "replay_manifest_sha256": "87ce7a415f05cc56bdbd6e08fe406be2780dfa6a99f42662e3f0d569e2ccb492"
+  },
+  {
+    "name": "compact_01_train",
+    "role": "train",
+    "kind": "retained_config_replay",
+    "template": "v4_shortpay_4shock_20261028_train_001",
+    "firms": 12,
+    "directory": "worlds\\compact_01_train",
+    "replay_manifest_sha256": "84e9b83fe8562817c1b40b88288f50c430529840c02a16fb2074c4a89c6db948"
+  },
+  {
+    "name": "compact_02_train",
+    "role": "train",
+    "kind": "retained_config_replay",
+    "template": "v4_shortpay_4shock_20261028_train_002",
+    "firms": 12,
+    "directory": "worlds\\compact_02_train",
+    "replay_manifest_sha256": "2f13003aed9663ec424be29e5f7ec0ca3565fad4511b83724f247a6db868e203"
+  },
+  {
+    "name": "compact_03_train",
+    "role": "train",
+    "kind": "retained_config_replay",
+    "template": "v4_shortpay_4shock_20261028_train_003",
+    "firms": 12,
+    "directory": "worlds\\compact_03_train",
+    "replay_manifest_sha256": "1dee08d1dc29ab038c5cadcb754fdba348189dc2266ac8b85901e6f11fa19ec9"
+  },
+  {
+    "name": "compact_04_validation",
+    "role": "validation",
+    "kind": "retained_config_replay",
+    "template": "v4_shortpay_4shock_20261028_validation_000",
+    "firms": 6,
+    "directory": "worlds\\compact_04_validation",
+    "replay_manifest_sha256": "673288655c655cb7110b111eca9150b55639726a9f3a45b733747268a87c1494"
+  },
+  {
+    "name": "compact_05_validation",
+    "role": "validation",
+    "kind": "retained_config_replay",
+    "template": "v4_shortpay_4shock_20261028_validation_001",
+    "firms": 6,
+    "directory": "worlds\\compact_05_validation",
+    "replay_manifest_sha256": "2cbadd623d60e3e38a3a16f0c4801a8126ef4b51902171969e4ab4b717c11915"
+  },
+  {
+    "name": "compact_06_test",
+    "role": "test",
+    "kind": "retained_config_replay",
+    "template": "v4_shortpay_4shock_20261028_test_000",
+    "firms": 6,
+    "directory": "worlds\\compact_06_test",
+    "replay_manifest_sha256": "d2cf182e452e7a2929fdc7c6b49e2baa9c86dbee179d671862ae30f41eb6fb08"
+  },
+  {
+    "name": "compact_07_test",
+    "role": "test",
+    "kind": "retained_config_replay",
+    "template": "v4_shortpay_4shock_20261028_test_001",
+    "firms": 6,
+    "directory": "worlds\\compact_07_test",
+    "replay_manifest_sha256": "cdb197d4cda70b2ccb6bbc0182d15e15e8c1b53ef7af7e14e3094069cd034e3d"
+  },
+  {
+    "name": "compact_08_train",
+    "role": "train",
+    "kind": "retained_stress_config_replay",
+    "template": "practical_v6_20261105_aug_supported_000",
+    "firms": 8,
+    "directory": "worlds\\compact_08_train",
+    "replay_manifest_sha256": "f9989a88eb5ce44d67601af193e2fdbcfb49bd8ddba8433fe3417f2993617399"
+  },
+  {
+    "name": "compact_09_train",
+    "role": "train",
+    "kind": "retained_stress_config_replay",
+    "template": "practical_v6_20261105_aug_supported_001",
+    "firms": 8,
+    "directory": "worlds\\compact_09_train",
+    "replay_manifest_sha256": "0e68ada14fa453b1c347a818022743de2af1cbaa7cca2e8156fd8be76f50aed9"
+  },
+  {
+    "name": "compact_10_train",
+    "role": "train",
+    "kind": "additional_stress",
+    "template": "v4_shortpay_4shock_20261028_train_000",
+    "firms": 6,
+    "directory": "worlds\\compact_10_train",
+    "replay_manifest_sha256": "ed61374ea95809c3f09142bfdfe19314af2a0fb73b6c4f29c5dad4286e72bb82"
+  },
+  {
+    "name": "compact_11_train",
+    "role": "train",
+    "kind": "additional_stress",
+    "template": "v4_shortpay_4shock_20261028_train_001",
+    "firms": 6,
+    "directory": "worlds\\compact_11_train",
+    "replay_manifest_sha256": "b06e2d5b02bdcfda2fbd701f995edd8c587c722a66e6e1ca085002487246df80"
+  },
+  {
+    "name": "compact_12_validation",
+    "role": "validation",
+    "kind": "additional_stress",
+    "template": "v4_shortpay_4shock_20261028_train_002",
+    "firms": 6,
+    "directory": "worlds\\compact_12_validation",
+    "replay_manifest_sha256": "388cd8a21f7c245b337297afa317b337ebb4a7b80204d68a45d70fd4cb5232b4"
+  },
+  {
+    "name": "compact_13_test",
+    "role": "test",
+    "kind": "additional_stress",
+    "template": "v4_shortpay_4shock_20261028_train_003",
+    "firms": 6,
+    "directory": "worlds\\compact_13_test",
+    "replay_manifest_sha256": "09fa7710cb1ea2785b103d599922d5fe015dc8f2258493b372f71ad43a6c5d9f"
+  }
+]

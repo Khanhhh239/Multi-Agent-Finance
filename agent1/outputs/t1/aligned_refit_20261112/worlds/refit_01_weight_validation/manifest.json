@@ -1,0 +1,198 @@
+{
+  "config": {
+    "name": "refit_01_weight_validation",
+    "seed": 261112902,
+    "start": "2019-01-01",
+    "end": "2025-12-31",
+    "n_firms": 40,
+    "tail": "uk",
+    "industry_mix": {
+      "steel_metals": 0.2,
+      "textile_clothing": 0.2,
+      "plastic_rubber": 0.2,
+      "wholesale": 0.2,
+      "food_processing": 0.1,
+      "services": 0.1
+    },
+    "posting_mode_p": [
+      0.45,
+      0.3,
+      0.25
+    ],
+    "payrun_p": [
+      0.34,
+      0.07,
+      0.07,
+      0.06,
+      0.06,
+      0.12,
+      0.08,
+      0.08,
+      0.07,
+      0.05
+    ],
+    "late_scale": 1.55,
+    "dispute_scale": 1.6,
+    "n_cust_median": 60.0,
+    "revenue_median": 40000000000.0,
+    "memo_invoice_no_p": [
+      2.0,
+      2.0
+    ],
+    "ontime_shift": {
+      "steel_metals": 1.5852874021663275,
+      "textile_clothing": 1.0254328453817796,
+      "plastic_rubber": 0.4981237163147021,
+      "wholesale": 0.9554614515383556,
+      "food_processing": 0.8536614581650509,
+      "services": 0.748668172289366
+    },
+    "pd_mult": {
+      "steel_metals": 1.954499983273107,
+      "textile_clothing": 4.267202900663197,
+      "plastic_rubber": 2.382829554266311,
+      "wholesale": 3.8283931925208767,
+      "food_processing": 3.1096513347049903,
+      "services": 5.2324558945666295
+    },
+    "write_xml": 0,
+    "cod_mult": 1.8,
+    "cash_cap_days": 60.0,
+    "promises_mode": "legacy",
+    "rng_version": 3,
+    "supplier_cash_firm_p": 0.2,
+    "macro_regime": "baseline",
+    "season_override": null,
+    "hard_case": null,
+    "accounting_version": 6,
+    "shock_schedule": [
+      {
+        "family": "demand",
+        "start": "2019-10-21",
+        "rise_weeks": 2,
+        "peak_weeks": 4,
+        "recovery_weeks": 8,
+        "severity": 1.1,
+        "industries": [
+          "textile_clothing",
+          "steel_metals",
+          "plastic_rubber"
+        ],
+        "regions": [],
+        "reference_event": "vn_2008_2009_export_demand_replay_assumption"
+      },
+      {
+        "family": "price",
+        "start": "2021-03-01",
+        "rise_weeks": 3,
+        "peak_weeks": 5,
+        "recovery_weeks": 10,
+        "severity": 0.8,
+        "industries": [],
+        "regions": [],
+        "reference_event": "vn_2011_2012_inflation_credit_replay_assumption"
+      },
+      {
+        "family": "credit",
+        "start": "2021-03-01",
+        "rise_weeks": 3,
+        "peak_weeks": 5,
+        "recovery_weeks": 10,
+        "severity": 0.9,
+        "industries": [],
+        "regions": [],
+        "reference_event": "vn_2011_2012_inflation_credit_replay_assumption"
+      },
+      {
+        "family": "supply",
+        "start": "2022-02-07",
+        "rise_weeks": 2,
+        "peak_weeks": 6,
+        "recovery_weeks": 10,
+        "severity": 1.0,
+        "industries": [
+          "food_processing",
+          "wholesale"
+        ],
+        "regions": [],
+        "reference_event": "vn_2015_2016_drought_salt_replay_assumption"
+      },
+      {
+        "family": "price",
+        "start": "2023-07-03",
+        "rise_weeks": 2,
+        "peak_weeks": 5,
+        "recovery_weeks": 10,
+        "severity": 1.0,
+        "industries": [
+          "steel_metals",
+          "plastic_rubber",
+          "wholesale",
+          "food_processing"
+        ],
+        "regions": [],
+        "reference_event": "vn_2026_energy_replay_assumption"
+      },
+      {
+        "family": "credit",
+        "start": "2023-02-06",
+        "severity": 1.25,
+        "rise_weeks": 3,
+        "peak_weeks": 6,
+        "recovery_weeks": 12,
+        "reference_event": "aligned_refit_predeclared_synthetic_stress"
+      },
+      {
+        "family": "credit",
+        "start": "2024-08-05",
+        "severity": 1.25,
+        "rise_weeks": 3,
+        "peak_weeks": 6,
+        "recovery_weeks": 12,
+        "reference_event": "aligned_refit_predeclared_synthetic_stress"
+      },
+      {
+        "family": "credit",
+        "start": "2025-02-03",
+        "severity": 1.25,
+        "rise_weeks": 3,
+        "peak_weeks": 6,
+        "recovery_weeks": 12,
+        "reference_event": "aligned_refit_predeclared_synthetic_stress"
+      },
+      {
+        "family": "credit",
+        "start": "2025-07-07",
+        "severity": 1.25,
+        "rise_weeks": 3,
+        "peak_weeks": 6,
+        "recovery_weeks": 12,
+        "reference_event": "aligned_refit_predeclared_synthetic_stress"
+      }
+    ],
+    "customer_realism": false,
+    "realism": "v1"
+  },
+  "firm_indices": [
+    11,
+    20,
+    21,
+    24,
+    25,
+    33
+  ],
+  "files": {
+    "bank_txns.parquet": "18d04aa8b47e32afc86473d97df5b8b996adb3545d113038d76979b9cbfbbe93",
+    "customers.parquet": "815bbd4a1110a9f27bb614f37fedb90d4f093534c7fd47f8f62af641b2a3a4de",
+    "daily_cash.parquet": "7b025846ef0ff10e8f68a599fa3ac7297d53135cb655ef9a5388dac84f50faab",
+    "events.parquet": "00f0fb93ec5cd01654b257b418f515a2c09f3b14345b568d0bd0627b131a4931",
+    "firms.parquet": "60b946378e711b1356569ee3ef497f908b65648ff4125bd9b95dc4d95ad1ecc7",
+    "inventory_weekly.parquet": "aee72baa124aab2d7d3c1278684c3d6b6c7e353d99079747d5e39d31dadc3286",
+    "invoices.parquet": "deba4a8ae91e93db5d47d8ad00bf32fb3bc5df6df78f5bbb882f51b6eca08a9a",
+    "macro.parquet": "f88ee0b674dcb3c709c89467ed3ab4dcb4909e633b8a63a52613d3b033896437",
+    "outflows.parquet": "9f1b3b62105a4ec082a7e3c773facb9d3bf3907bde10f92e1d4ecd46c9fe3d75",
+    "payments.parquet": "dfe2e1b6a683d4f947d367a6bc529a6bb02acd150e7d096f531b263ae2e7be96",
+    "promises.parquet": "33a8df6bab217b11db2e4c8737827f07a9ef91b764c51df3d0de920fdfdfefdf",
+    "shock_truth.parquet": "7927284a9c78ac0324a23c07de4f23a82ca39038cfe98501ac216dfffd2bd607"
+  }
+}

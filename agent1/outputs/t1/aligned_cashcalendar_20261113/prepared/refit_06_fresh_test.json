@@ -1,0 +1,9 @@
+{
+  "world": "refit_06_fresh_test",
+  "role": "fresh_test",
+  "rows": 895,
+  "sha256": "d29650990fd989883f0504fc63431521b4c71d96cd84fe2c311d17910f124981",
+  "parent_prepared_sha256": "d29650990fd989883f0504fc63431521b4c71d96cd84fe2c311d17910f124981",
+  "label_changed_rows": 0,
+  "target_contract_sha256": "e4dffe55145f780af4605d929295fbe4c4e64fd1f7652ed17f1b887900a0671b"
+}

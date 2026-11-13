@@ -3,7 +3,7 @@
 from datetime import date, timedelta
 import numpy as np
 import pandas as pd
-from .data import as_of, effective_data
+from .data import as_of
 
 
 def weekly_cash(data, start, weeks, asof, accounts):
@@ -127,6 +127,9 @@ def calibrate_bands(plan, previous, data):
                 "new_credit_included",
                 "confirmed_weeks",
                 "band_protocol",
+                "adapter_version",
+                "partial_version",
+                "t6_version",
             )
         ):
             continue
@@ -146,6 +149,7 @@ def calibrate_bands(plan, previous, data):
         last = date.fromisoformat(old["cutoff"])
     n = len(scores)
     plan["calibration_origins"] = n
+    plan["band_status"] = "insufficient_out_of_sample_errors"
     if n < 12:
         return
     delta = np.sort(scores, axis=0)[int(np.ceil((n + 1) * 0.8)) - 1]
@@ -153,59 +157,7 @@ def calibrate_bands(plan, previous, data):
         w.update(raw_low=w["low"], raw_high=w["high"])
         w["low"] -= float(extra)
         w["high"] += float(extra)
+    plan["band_status"] = "calibrated_out_of_sample"
     plan["assumptions"].append(
         f"Dải số dư điều chỉnh bằng sai số tại {n} gốc lịch sử không chồng lấn; xác suất cảnh báo vẫn là mô phỏng."
     )
-
-
-def partial_distribution(data, opened, clock, base):
-    """Empirical receipt fractions conditional on an earlier comparable open balance."""
-    data = effective_data(data, clock)
-    horizon = base.shape[1] - 1
-    days_in_horizon = horizon * 7
-    payments = {}
-    for r in data.get("payments", []):
-        if r["known_at"] <= str(clock.date()) and r["payment_date"] <= str(
-            clock.date()
-        ):
-            payments.setdefault(r["invoice_id"], []).append(
-                (
-                    date.fromisoformat(r["payment_date"]),
-                    r["amount"],
-                    date.fromisoformat(r["known_at"]),
-                )
-            )
-    if not any(len(v) > 1 for v in payments.values()):
-        return base, 0
-    cohorts = {}
-    result = base.copy()
-    supported = 0
-    for i, r in enumerate(opened.itertuples()):
-        if r.received <= 0.01:
-            continue
-        age = min((clock - r.issue_date).days // 7, 104) * 7
-        if age not in cohorts:
-            samples = []
-            for inv in data["invoices"]:
-                origin = date.fromisoformat(inv["issue_date"]) + timedelta(days=age)
-                if origin + timedelta(days=days_in_horizon) > clock.date() or inv[
-                    "known_at"
-                ] > str(origin):
-                    continue
-                entries = payments.get(inv["invoice_id"], [])
-                received = sum(a for d, a, k in entries if d <= origin and k <= origin)
-                remaining = inv["amount"] - received
-                if received <= 0.01 or remaining <= 0.01:
-                    continue
-                buckets = np.zeros(horizon + 1)
-                for d, a, _ in entries:
-                    delay = (d - origin).days
-                    if 1 <= delay <= days_in_horizon:
-                        buckets[(delay - 1) // 7] += a / remaining
-                buckets[-1] = max(0, 1 - buckets.sum())
-                samples.append(buckets / buckets.sum())
-            cohorts[age] = np.mean(samples, axis=0) if len(samples) >= 20 else None
-        if cohorts[age] is not None:
-            result[i] = cohorts[age]
-            supported += 1
-    return result, supported

@@ -1,0 +1,21 @@
+{
+  "python_passed": 115,
+  "ui_passed": 28,
+  "git_diff_check_passed": true,
+  "python_warnings": 10,
+  "warning_scope": "Starlette deprecation and deliberately short MLP fixtures; research Neural trials have no convergence warnings.",
+  "python_test_files": [
+    "test_landmark_refit_adaptation.py",
+    "test_workspace_world_comparison.py",
+    "test_t1_explanations.py",
+    "test_landmark_t1.py",
+    "test_compact_ensemble.py",
+    "test_workspace_pilot.py",
+    "test_collection_explanations.py",
+    "test_cash_explanations.py"
+  ],
+  "ui_test_files": [
+    "t1_explanations_ui.test.cjs",
+    "t6_cash_ui.test.cjs"
+  ]
+}

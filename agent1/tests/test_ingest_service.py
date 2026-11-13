@@ -6,6 +6,7 @@ import pytest
 from agent1_service.ingest.bank_statement import BANK_COLUMNS,normalize_statement,read_statement
 from agent1_service.ingest.privacy import anonymize
 from agent1_service.ingest.einvoice_xml import read_invoice_xml
+from agent1_service.ingest.dates import local_dates
 from agent1.synth.einvoice import invoice_to_xml
 from agent1.synth.names import make_mst
 
@@ -48,3 +49,20 @@ def test_xml_namespace_roundtrip_and_entity_rejection():
     row=read_invoice_xml(content,'F000')
     assert row['amount_gross']=='1100000' and row['invoice_id']=='i'
     with pytest.raises(ValueError):read_invoice_xml(b'<!DOCTYPE x [<!ENTITY test "x">]><HDon/>','F000')
+
+
+def test_mixed_offsets_are_normalized_to_vietnam_business_date():
+    values=pd.Series(['2024-07-01T20:00:00Z','2024-07-02T03:00:00+07:00','2024-07-02'])
+    result=local_dates(values,dayfirst=False)
+    assert result.eq(pd.Timestamp('2024-07-02')).all()
+    assert result.dt.tz is None
+
+
+def test_vietnam_dayfirst_without_timezone_is_preserved():
+    result=local_dates(pd.Series(['03/04/2024','15/03/2024']))
+    assert result.tolist()==[pd.Timestamp('2024-04-03'),pd.Timestamp('2024-03-15')]
+
+
+def test_iso_date_is_year_first_even_in_dayfirst_erp_column():
+    result=local_dates(pd.Series(['2024-02-01','03/04/2024']))
+    assert result.tolist()==[pd.Timestamp('2024-02-01'),pd.Timestamp('2024-04-03')]

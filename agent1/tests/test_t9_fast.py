@@ -15,7 +15,11 @@ def test_vectorized_amount_features_match_reference_including_credit_dates_and_t
             credit_note_date=pd.to_datetime(['2024-02-01' if i%2 else '2025-01-01' for i in range(size)])))
         for amount in [amounts[0],amounts[:2].sum(),amounts[:3].sum()+TOL,amounts[:3].sum()+TOL+1,1.]:
             expected=Reconciler._amount_feats(frame,amount,date)
-            actual=FastAmountReconciler._amount_feats(frame,amount,date)
+            history=dict(issue=np.full(size,np.datetime64('2020-01-01','ns')),
+                due=frame.due_date.to_numpy(dtype='datetime64[ns]'),amount=frame.amount_gross.to_numpy(float),
+                clear=frame.ledger_clear_date.to_numpy(dtype='datetime64[ns]'),
+                credit=frame.credit_note.to_numpy(float),credit_date=frame.credit_note_date.to_numpy(dtype='datetime64[ns]'))
+            actual=FastAmountReconciler._array_amount_features(history,amount,np.datetime64(date,'ns'))
             for key in expected:np.testing.assert_allclose(actual[key],expected[key],equal_nan=True)
 
 

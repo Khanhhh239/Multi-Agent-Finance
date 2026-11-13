@@ -1,0 +1,42 @@
+{
+  "global_finetuned_vs_old_global": {
+    "mean_delta": 0.0007355873146917245,
+    "ci95": [
+      -0.0016332738135981847,
+      0.0030449925472416776
+    ],
+    "firms_improved": 9,
+    "firms": 24,
+    "positive_favors_challenger": true
+  },
+  "global_adapted_audited_vs_old_global": {
+    "mean_delta": 0.0003886681186731968,
+    "ci95": [
+      -0.0012203382881209488,
+      0.0019024632317082594
+    ],
+    "firms_improved": 6,
+    "firms": 24,
+    "positive_favors_challenger": true
+  },
+  "global_finetuned_vs_local_neural18": {
+    "mean_delta": 0.041592497952634144,
+    "ci95": [
+      0.025790940082705344,
+      0.05709977466030106
+    ],
+    "firms_improved": 20,
+    "firms": 24,
+    "positive_favors_challenger": true
+  },
+  "global_adapted_audited_vs_workspace": {
+    "mean_delta": 0.03350352282408608,
+    "ci95": [
+      0.01696650389257445,
+      0.05063482102285142
+    ],
+    "firms_improved": 19,
+    "firms": 24,
+    "positive_favors_challenger": true
+  }
+}

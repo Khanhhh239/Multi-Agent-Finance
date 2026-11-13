@@ -6,12 +6,28 @@ import pandas as pd
 
 from agent1.calendar_vn import next_business_day
 from agent1.rules.obligations import CATEGORIES, extended_schedule
+from .obligation_imports import IDENTITY_FIELDS, identity_status, validate_identities
+
+
+def obligation_amounts(row):
+    """Separate discharged amounts, including rows in older saved forecasts."""
+    remaining = row.get('remaining_amount', 0)
+    cancelled = row.get('cancelled_amount', 0)
+    replaced = row.get('replaced_amount', 0)
+    if row.get('status') == 'cancelled':
+        cancelled = row.get('cancelled_amount', remaining)
+        remaining = 0
+    elif row.get('status') == 'replaced':
+        replaced = row.get('replaced_amount', remaining)
+        remaining = 0
+    return dict(remaining_amount=remaining, cancelled_amount=cancelled, replaced_amount=replaced)
 
 
 def validate_obligations(data):
     from .data import as_of, vnd
     from agent1.reconciliation.pipeline import NON_AR
 
+    validate_identities(data)
     expenses = {r['expense_id']: r for r in data.get('outflows', [])}
     if len(expenses) != len(data.get('outflows', [])):
         raise ValueError('Mã lần đến hạn T5 bị trùng')
@@ -145,6 +161,7 @@ def cash_schedule(data, cutoff, horizon=13, multiplier=1.0):
                    category=r['category'], direction=direction, obligation_amount=amount,
                    settled_amount=settled, remaining_amount=remaining, source=r.get('source', ''),
                    status='partial' if settled else 'open', overdue=bool(due <= clock))
+        row.update({field: r[field] for field in IDENTITY_FIELDS if field in r}, identity_status=identity_status(r))
         if identifier in replaced:
             row['status'] = 'replaced'
         elif r.get('status') == 'cancelled':
@@ -179,6 +196,6 @@ def cash_schedule(data, cutoff, horizon=13, multiplier=1.0):
                 (incoming if direction == 'inflow' else outgoing).append(movement)
                 row.update(forecast_date=movement['date'], week=movement['week'])
         ledger.append(row)
-    return dict(protocol='t5-ledger-v1', obligations=ledger, payments=payments,
+    return dict(protocol='t5-ledger-v1', obligations=[dict(r, **obligation_amounts(r)) for r in ledger], payments=payments,
                 outflows=outgoing, inflows=incoming,
                 overdue_policy='next_business_day_outgoing;explicit_date_for_overdue_refund')

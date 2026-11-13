@@ -1,10 +1,8 @@
 """Verify one-use portal authentication using isolated stores and synthetic credentials."""
 
 from concurrent.futures import ThreadPoolExecutor
-import importlib.util
 import io
 import json
-from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
 import pytest
@@ -114,12 +112,9 @@ def test_ticket_capacity_recovers_after_expiry():
 
 
 @pytest.fixture
-def portal(connection, monkeypatch):
+def portal(connection, monkeypatch, portal_module):
     client, _ = connection
-    path = Path(__file__).resolve().parents[3] / "portal" / "server.py"
-    spec = importlib.util.spec_from_file_location("portal_connect_test", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    module = portal_module
     monkeypatch.setattr(module, "company", lambda: dict(code="TEST_A"))
     monkeypatch.setattr(module, "agent1_key", lambda: "synthetic-portal-key")
     monkeypatch.setattr(module, "ORIGINS", ("http://localhost:9912",))

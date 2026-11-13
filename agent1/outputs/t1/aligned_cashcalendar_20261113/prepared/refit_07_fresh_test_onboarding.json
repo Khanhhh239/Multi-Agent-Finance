@@ -1,0 +1,9 @@
+{
+  "world": "refit_07_fresh_test_onboarding",
+  "role": "fresh_test",
+  "rows": 708,
+  "sha256": "f4856a2aef62cef5e74537d90dfb33a6f625a182848c9dcd049c6d7235474dcd",
+  "parent_prepared_sha256": "f4856a2aef62cef5e74537d90dfb33a6f625a182848c9dcd049c6d7235474dcd",
+  "label_changed_rows": 0,
+  "target_contract_sha256": "e4dffe55145f780af4605d929295fbe4c4e64fd1f7652ed17f1b887900a0671b"
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="compact grouped attribution remains distinct from reviewed causal business reasons" time="0.031809" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="landmark18 grouped explanations retain their schema across saved model identifiers" time="0.002516" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="business view contains only the final probability and reviewed drivers, with no technical section" time="0.004029" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="saved hypothetical contrasts are never used as business reasons; contract terms are context only" time="0.002900" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="all old comparison variants remain hidden" time="0.022793" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="negative historical delay is described as early payment rather than negative lateness" time="0.002590" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="unstable effects are removed before selecting the three main reasons" time="0.013120" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="only the three largest eligible drivers are shown; neutral effects invent no reason" time="0.011790" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="missing checks, poor support and an unrepresentative reference suppress explanations" time="0.019593" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="a stable label alone cannot justify a direction that crosses zero or an ambiguous value" time="0.011210" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="an explanation must reconstruct and match the probability shown on the invoice" time="0.002878" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="business sentences use stored historical facts, never infer payment quality from invoice count" time="0.004666" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="small effects and missing business review never become reasons, even if SHAP is stable" time="0.006114" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="a withheld larger driver is acknowledged instead of presenting a partial explanation as complete" time="0.001867" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="the row button opens only its saved explanation in a native dialog and cleans up after closing" time="0.003235" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="old plans and unsupported models do not fabricate an attribution" time="0.001379" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="floating-point noise at zero is never displayed as a negative probability" time="0.001498" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="ranking explanation shows its score, peer comparison and distinct probability source" time="0.002518" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="score ties and amount-only policies do not invent probability-based ordering" time="0.002031" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="ranking has its own dialog and old forecasts remain readable" time="0.004141" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="policy summary shows eligibility counts and audit status without claiming causal benefit" time="0.002868" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="large VND and fractional priority scores retain their digits in the table and explanation" time="0.002930" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="an empty contact queue distinguishes deferred debt, no debt and legacy unknown scope" time="0.001413" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t1_explanations_ui.test.cjs"/>
+	<testcase name="cash UI shows saved provenance, money bridge and T10 entry points safely as text" time="0.045400" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t6_cash_ui.test.cjs"/>
+	<testcase name="adapter UI uses saved engine components and never fabricates missing partial support" time="0.003531" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t6_cash_ui.test.cjs"/>
+	<testcase name="risk comparison shows portfolio quantiles and probability changes as model sensitivity" time="0.003452" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t6_cash_ui.test.cjs"/>
+	<testcase name="scenario form sends assumptions against the saved forecast without replacing its seed or bundle" time="0.025765" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t6_cash_ui.test.cjs"/>
+	<testcase name="T5 UI keeps paid remainder, overdue warning and refunds visible without HTML injection" time="0.003512" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t6_cash_ui.test.cjs"/>
+	<testcase name="T5 ledger separates cancelled and replaced amounts from what remains payable" time="0.003198" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t6_cash_ui.test.cjs"/>
+	<testcase name="grouping and search use the full saved contributions, with pagination instead of truncation" time="0.006720" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t6_cash_ui.test.cjs"/>
+	<testcase name="simulation-only risk and old plans never fabricate a cash shortfall decomposition" time="0.004437" classname="test" file="D:\CURRICULUM\Semester VI\Finance Project\Finance Project\agent1\tests\adaptive\t6_cash_ui.test.cjs"/>
+	<!-- tests 31 -->
+	<!-- suites 0 -->
+	<!-- pass 31 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 326.4564 -->
+</testsuites>

@@ -1,0 +1,32 @@
+{
+  "candidate": "neural_wide",
+  "compact_kind": "classifier",
+  "name": "neural_wide",
+  "schema": "t1-compact-landmark-v1",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "customer_delay_180d",
+    "company_delay_180d",
+    "customer_settlements_180d",
+    "customer_overdue_share",
+    "company_overdue_share"
+  ],
+  "active": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_horizon_weeks": 13,
+  "model_sha256": "c6afe9aa35e1a06c97cd0cca2d27340f316fe7025747ca16a011d7496a33f004"
+}

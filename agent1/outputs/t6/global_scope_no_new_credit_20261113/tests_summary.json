@@ -1,0 +1,8 @@
+{
+  "python_passed": 48,
+  "warnings": 1,
+  "warning_scope": "Starlette/httpx deprecation",
+  "command": "python -m pytest tests/adaptive/test_t6_scope_backtest.py tests/adaptive/test_t6_baseline_runner.py tests/adaptive/test_cash_explanations.py tests/adaptive/test_landmark_refit_adaptation.py -q",
+  "study_date": "2026-11-13",
+  "new_forecast_scope_tests": 8
+}

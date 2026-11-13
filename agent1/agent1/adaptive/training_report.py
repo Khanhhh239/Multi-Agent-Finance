@@ -11,10 +11,12 @@ def report_data(bundle, data, identifier):
     def estimator(model):
         if hasattr(model, "members"):
             return {"ensemble": [estimator(m) for m in model.members]}
-        obj = getattr(model, "estimator", None)
+        obj = getattr(model, "booster", None)
+        if obj is None:
+            obj = getattr(model, "estimator", None)
         return {
             "method": getattr(model, "variant", getattr(model, "name", None)),
-            "parameters": obj.get_params(deep=True) if obj is not None else {},
+            "parameters": obj.get_params(deep=True) if hasattr(obj, "get_params") else {},
         }
 
     dates = [r["issue_date"] for r in data.get("invoices", [])]
@@ -43,6 +45,14 @@ def report_data(bundle, data, identifier):
                 "code_hash",
                 "dependencies",
                 "algorithm_version",
+                "policy",
+                "fit_data",
+                "final_data",
+                "training_trace",
+                "update_period",
+                "promotion_status",
+                "t1_version",
+                "catalog_sha256",
                 "limitation",
             ]
         },

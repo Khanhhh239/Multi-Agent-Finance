@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT))
 import pandas as pd
 from threadpoolctl import threadpool_limits
 from agent1.adaptive.data import parse_rows, suggested_mapping
-from agent1.adaptive.methods import train, Method
+from experiments.t1_compact.historical_workspace import train, Method
 from agent1.adaptive.operating import select_operating
 
 if __name__ == "__main__":

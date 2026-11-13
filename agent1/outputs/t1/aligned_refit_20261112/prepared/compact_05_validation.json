@@ -1,0 +1,8 @@
+{
+  "sha256": "b47ac898bdf81706d06a6bc38a6913eb02294c0a7f83deb8e3dc9581d2a2082d",
+  "contract": "workspace-accounting-landmark18-v1",
+  "source_sha256": "24d577ebcf7a8ba065ed86baa859532a32ef77e5eca0a139dce7ef8c26589368",
+  "world": "compact_05_validation",
+  "rows": 1390,
+  "role": "validation"
+}

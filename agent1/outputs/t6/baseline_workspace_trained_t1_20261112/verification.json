@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "bank_balances_checked": 52,
+  "weekly_error_bridges_checked": 52,
+  "snapshot_files_checked": 147,
+  "trained_t1_bundles_checked": 4,
+  "t1_probabilities_checked": 120,
+  "t1_cash_contributions_checked": 897,
+  "origins": [
+    {
+      "cutoff": "2025-09-30",
+      "selected_method": "extra",
+      "serving_weight": 1.0,
+      "t1_probabilities_checked": 30,
+      "t1_cash_contributions_checked": 224,
+      "partial_profiles": 63
+    },
+    {
+      "cutoff": "2025-12-31",
+      "selected_method": "lightgbm",
+      "serving_weight": 1.0,
+      "t1_probabilities_checked": 30,
+      "t1_cash_contributions_checked": 222,
+      "partial_profiles": 64
+    },
+    {
+      "cutoff": "2026-04-30",
+      "selected_method": "hist",
+      "serving_weight": 1.0,
+      "t1_probabilities_checked": 30,
+      "t1_cash_contributions_checked": 226,
+      "partial_profiles": 65
+    },
+    {
+      "cutoff": "2026-07-31",
+      "selected_method": "hist",
+      "serving_weight": 1.0,
+      "t1_probabilities_checked": 30,
+      "t1_cash_contributions_checked": 225,
+      "partial_profiles": 70
+    }
+  ],
+  "mae_balance_vnd": 2035286789.8591013,
+  "coverage80": 0.09615384615384616
+}

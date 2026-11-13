@@ -1,0 +1,37 @@
+{
+  "engine_fixture": true,
+  "real_company_acceptance": false,
+  "cash_band_acceptance": false,
+  "identity": {
+    "t1_version": "global:f855bf6acf32951c83382716",
+    "t1_sha256": "f9c2074aa137f4bfaa3f2105a1ed5b75e622a73d73fc2c59b277460a2fde4601",
+    "adapter_version": "settlement-partial-cash-v2",
+    "partial_version": "141c49f9ff676c5dd25ced4389d771e1b069a59e425c54f0625e6c9bfb2e59ab",
+    "t6": {
+      "version": "settlement-partial-paths-v2",
+      "source_sha256": "96719bd00664dcbbaa375be3a34237b9389429359db026e1364f65b2319af8fd",
+      "runtime": {
+        "python": "3.13.9",
+        "numpy": "2.5.4",
+        "pandas": "3.0.6",
+        "lightgbm": "4.7.0",
+        "xgboost": "3.4.1",
+        "torch": null,
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.1"
+      }
+    }
+  },
+  "invoice_count": 3,
+  "full_shap_targets": [
+    "payment_probability_4w",
+    "payment_probability_4w",
+    "payment_probability_4w"
+  ],
+  "adapter_components_reconcile": true,
+  "noop_exact": true,
+  "paired_random_numbers": true,
+  "baseline_any_shortfall_probability": 0.849,
+  "delayed_any_shortfall_probability": 1.0,
+  "expense_deferred_any_shortfall_probability": 0.6235
+}

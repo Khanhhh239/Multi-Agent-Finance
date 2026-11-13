@@ -1,0 +1,9 @@
+{
+  "world": "compact_04_validation",
+  "role": "validation",
+  "rows": 1466,
+  "sha256": "50e131f542421c73ef7bba99c50353de5dbd473fd7dd0b7edd318b065895dd58",
+  "parent_prepared_sha256": "a7870ef9ac6a4b459f612ade3479e39cb5c875366689ab251a7d9a8a438b9481",
+  "label_changed_rows": 4,
+  "target_contract_sha256": "e4dffe55145f780af4605d929295fbe4c4e64fd1f7652ed17f1b887900a0671b"
+}

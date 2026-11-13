@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "verifier_sha256": "c066834a282cbf483bcdd5446b7bd9cbcec2ab09b338c6e989507ef43760eb54",
+  "raw_bank_truth_checks": 1040,
+  "independent_bank_metric_groups": 60,
+  "independent_ar_metric_groups": 30,
+  "rebuilt_from_saved_models": 4,
+  "ar_invariant_across_scopes_and_stress": true,
+  "maximum_numeric_difference_vnd": 0.0,
+  "snapshot_hashes_checked": 173,
+  "new_invoice_forecasting": false,
+  "protocol_sha256": "511840f7a58601c0071bf00dae0db1d9e62c267224630bf66b267ec084a3174c",
+  "synthetic_only": true,
+  "independent_firms": 1
+}

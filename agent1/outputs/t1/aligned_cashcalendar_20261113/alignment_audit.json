@@ -1,0 +1,156 @@
+[
+  {
+    "world": "compact_00_train",
+    "rows": 13200,
+    "changed_rows": 10904,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_01_train",
+    "rows": 13019,
+    "changed_rows": 10797,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_02_train",
+    "rows": 11876,
+    "changed_rows": 7925,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_03_train",
+    "rows": 11304,
+    "changed_rows": 10023,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_04_validation",
+    "rows": 1466,
+    "changed_rows": 981,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_05_validation",
+    "rows": 1390,
+    "changed_rows": 1390,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_08_train",
+    "rows": 8540,
+    "changed_rows": 7181,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_09_train",
+    "rows": 8132,
+    "changed_rows": 6217,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_10_train",
+    "rows": 5500,
+    "changed_rows": 4940,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_11_train",
+    "rows": 6600,
+    "changed_rows": 6349,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  },
+  {
+    "world": "compact_12_validation",
+    "rows": 1178,
+    "changed_rows": 850,
+    "changed_features": [
+      "relative_amount",
+      "customer_settlements_180d",
+      "customer_delay_180d",
+      "customer_delay_std_180d",
+      "customer_delay_trend_180d",
+      "company_delay_180d",
+      "company_delay_trend_180d"
+    ]
+  }
+]

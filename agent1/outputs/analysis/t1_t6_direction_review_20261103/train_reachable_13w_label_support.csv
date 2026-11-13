@@ -1,5 +1,0 @@
-world,fit_firms,fit_anchors,unique_open_invoice_weeks,positive_receipt_invoice_weeks,partial_receipt_invoice_weeks,unique_partial_invoices,full_receipt_invoice_weeks,no_receipt_invoice_weeks,cash_exceeds_opening_balance
-v4_shortpay_4shock_20261028_train_000,32,50000,226268,26185,3570,3156,22615,200083,0
-v4_shortpay_4shock_20261028_train_001,32,50000,270258,23994,2744,2463,21250,246264,0
-v4_shortpay_4shock_20261028_train_002,32,50000,229627,21848,2618,2340,19230,207779,0
-v4_shortpay_4shock_20261028_train_003,32,50000,223995,28887,3487,3107,25400,195108,0

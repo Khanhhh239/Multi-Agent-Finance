@@ -1,0 +1,32 @@
+{
+  "candidate": "hist_regularized",
+  "compact_kind": "classifier",
+  "name": "hist_regularized",
+  "schema": "t1-compact-landmark-v1",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "customer_delay_180d",
+    "company_delay_180d",
+    "customer_settlements_180d",
+    "customer_overdue_share",
+    "company_overdue_share"
+  ],
+  "active": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_horizon_weeks": 13,
+  "model_sha256": "2f3bbc4d1efc22c2ab60542ab402d632d0b5845a5061d1d088034c0b1303524f"
+}

@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "anchors": 3506,
+  "probability_mass_tolerance": 1e-12,
+  "independent_cash_score_max_difference": 1.1102230246251565e-16,
+  "score_differences": {
+    "old_global": 5.551115123125783e-17,
+    "global_refit": 1.1102230246251565e-16,
+    "global_reweighted": 0.0,
+    "global_finetuned": 0.0,
+    "global_adapted_audited": 5.551115123125783e-17,
+    "local_neural18": 5.551115123125783e-17,
+    "workspace": 5.551115123125783e-17
+  },
+  "reconstructed_global_max_difference": 0.0,
+  "all_model_and_input_hashes_checked": true,
+  "local_training_snapshot_rows": {
+    "fit": 26317,
+    "validation": 4397,
+    "audit": 2550
+  },
+  "cash_calendar_paid_labels_consistent": true,
+  "fresh_test_not_used_for_global_refit": true
+}

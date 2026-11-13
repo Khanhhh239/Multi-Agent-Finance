@@ -81,7 +81,7 @@ def scenario_library(sim_args=None):
     deterministic = np.zeros_like(P)
     inside = median < K
     deterministic[np.where(inside)[0], median[inside]] = 1
-    args0 = dict(sim_args, P=deterministic, n=1, rho=0., rho_customer=0., capex_rate=0., p_bad=None)
+    args0 = dict(sim_args, P=deterministic, n=1, rho=0., rho_customer=0., capex_rate=0.)
     if args0.get('rev_q') is not None:
         args0['rev_q'] = np.repeat(np.asarray(args0['rev_q'])[:, 1:2], 3, axis=1)
     rows = []

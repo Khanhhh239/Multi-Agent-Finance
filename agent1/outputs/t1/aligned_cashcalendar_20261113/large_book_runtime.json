@@ -1,0 +1,112 @@
+{
+  "passed": true,
+  "open_invoices": 1136,
+  "history_invoices": 18184,
+  "source_open_invoices": 142,
+  "replication_factor": 8,
+  "amount_scale_factors": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "fixture": "Replicated dated ledger with distinct invoice/customer IDs and integer monetary scales; technical load only, not new accuracy data.",
+  "shap": {
+    "p95_seconds": 0.3197341199949733,
+    "passed": true,
+    "contexts": {
+      "large_book": {
+        "p50_seconds": 0.2969126999960281,
+        "p95_seconds": 0.3197341199949733,
+        "max_seconds": 0.32375490000413265,
+        "repetitions": 20
+      }
+    },
+    "open_populations": {
+      "large_book": 1136
+    },
+    "max_additivity_error": 2.220446049250313e-16,
+    "background_count": 128,
+    "references": {
+      "large_book": {
+        "count": 128,
+        "population": 1136,
+        "selection": "weighted_stratified_sample",
+        "audit_sample_count": 3,
+        "max_weighted_cdf_distance": 0.05848528672032216
+      }
+    },
+    "max_background_sensitivity_change_pp": 3.3644307405310823,
+    "model_and_context_ready": true,
+    "feature_preparation_included": true,
+    "probability_pooling_included": true,
+    "calibration": {
+      "method": "identity"
+    },
+    "model_loading_included": false,
+    "ledger_context_construction_included": false,
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.13.9"
+  },
+  "runs": [
+    {
+      "simulation_paths": 400,
+      "shap_limit": 30,
+      "repeat": 0,
+      "seconds": 14.418171500001336
+    },
+    {
+      "simulation_paths": 1000,
+      "shap_limit": 30,
+      "repeat": 0,
+      "seconds": 14.228506500003277
+    },
+    {
+      "simulation_paths": 1000,
+      "shap_limit": 10,
+      "repeat": 0,
+      "seconds": 11.496247399991262
+    },
+    {
+      "simulation_paths": 1000,
+      "shap_limit": 30,
+      "repeat": 1,
+      "seconds": 13.631503199998406
+    },
+    {
+      "simulation_paths": 1000,
+      "shap_limit": 10,
+      "repeat": 1,
+      "seconds": 12.018470300012268
+    },
+    {
+      "simulation_paths": 400,
+      "shap_limit": 30,
+      "repeat": 1,
+      "seconds": 14.296548199999961
+    },
+    {
+      "simulation_paths": 1000,
+      "shap_limit": 10,
+      "repeat": 2,
+      "seconds": 10.932469000006677
+    },
+    {
+      "simulation_paths": 400,
+      "shap_limit": 30,
+      "repeat": 2,
+      "seconds": 13.89778070000466
+    },
+    {
+      "simulation_paths": 1000,
+      "shap_limit": 30,
+      "repeat": 2,
+      "seconds": 13.619007400004193
+    }
+  ],
+  "all_expected_cash_and_queue_invariant": true
+}

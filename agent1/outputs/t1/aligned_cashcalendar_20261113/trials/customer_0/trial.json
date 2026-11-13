@@ -1,0 +1,24 @@
+{
+  "name": "customer",
+  "trial": 0,
+  "score": 0.31289912124007346,
+  "windows": {
+    "2024-01-01": 0.33933920657255734,
+    "2024-01-29": 0.32562792630009163,
+    "2024-02-26": 0.29852859585803954,
+    "2024-03-25": 0.28810075622960596
+  },
+  "cash_weekly_mae_vnd": 230638193.39097562,
+  "cash_cumulative_mae_vnd": 576337940.9285097,
+  "cash_bias13_fraction": 0.05085718445852919,
+  "brier4": 0.21185395607299357,
+  "brier13": 0.16100086297507565,
+  "integrated_brier13": 0.17759899044136915,
+  "seconds": 0.01553750000311993,
+  "parameters": {},
+  "warnings": [],
+  "sample_sha256": "e0c1f69e77fb93cb872ef1ace68164fd9133fa8e343d9b4831b2a05908c280ee",
+  "protocol_sha256": "5031d434b9d7806f1b28655856009dbccad440e37c79f7c539929e9d4ed525eb",
+  "prediction_sha256": "360016a09a9ed8dace7d35d8f5afe3efd1bfb4b876e51b8ef575216f713a51a4",
+  "model_metadata_sha256": "eac0aa40a99888a2f7b8dc976d18e7b1db4c951cb6dba71ba6b9bedc3cf87e43"
+}

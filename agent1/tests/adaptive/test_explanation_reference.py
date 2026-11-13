@@ -10,8 +10,8 @@ from agent1.adaptive.explanation_reference import (
     reference_plan,
     stability_report,
 )
-from agent1.adaptive.explanations import explain_collections
-from agent1.adaptive.methods import Method
+from experiments.t1_compact.historical_workspace import explain_collections
+from experiments.t1_compact.historical_workspace import Method
 
 
 def cohort(n):

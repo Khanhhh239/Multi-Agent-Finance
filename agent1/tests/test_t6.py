@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
-from agent1.models.t6_cash import simulate, collection_kernel, ACI,conditional_payment_pmf
+from agent1.models.t6_cash import simulate, collection_kernel, ACI
 
 
 def test_simulation_conserves_money_and_is_reproducible():
@@ -22,12 +22,13 @@ def test_t_copula_preserves_payment_probability_marginals():
         np.testing.assert_allclose(net.mean(0)[:2], [.2, .3], atol=.008)
 
 
-def test_bad_debt_has_correct_horizon_loss():
+def test_t1_tail_is_preserved_without_a_second_bad_debt_draw():
     inv = pd.DataFrame({'amount_open': [100.]})
-    p = np.zeros((1, 13)); p[0, 0] = 1
-    _, net = simulate(inv, p, 0., np.zeros(13), None, np.zeros(17), 0., [], n=50000,
-                      p_bad=np.array([.3]), seed=15)
+    p = np.zeros((1, 13)); p[0, 0] = .7
+    _, net = simulate(inv, p, 0., np.zeros(13), None, np.zeros(17), 0., [], n=50000, seed=15)
     assert abs(net.sum(1).mean() - 70.) < 1.
+    with pytest.raises(TypeError, match="p_bad"):
+        simulate(inv, p, 0., np.zeros(13), None, np.zeros(17), 0., [], p_bad=np.array([.3]))
 
 
 def test_crn_identical_scenario_and_forced_collection():
@@ -56,16 +57,6 @@ def test_aci_direction_and_bounds():
     assert aci.a[0] == .005
     lo, hi = aci.interval(np.arange(100), 0)
     assert lo < hi
-
-
-def test_cure_decomposition_recovers_unconditional_mass_in_independent_limit():
-    p=np.zeros((2,13));p[0,:2]=[.2,.3];p[1,0]=.1
-    bad=np.array([.2,.5])
-    conditional,conflict=conditional_payment_pmf(p,bad)
-    np.testing.assert_allclose(conditional*(1-bad[:,None]),p)
-    assert not conflict.any()
-    _,conflict=conditional_payment_pmf(p,np.array([.9,.99]))
-    assert conflict.all()
 
 
 def test_owner_draw_is_path_dependent_and_conserves_cash():

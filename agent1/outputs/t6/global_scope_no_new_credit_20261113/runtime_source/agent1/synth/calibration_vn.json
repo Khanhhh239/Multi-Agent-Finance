@@ -1,0 +1,71 @@
+{
+  "_meta": {
+    "purpose": "Target marginals for the Agent 1 synthetic invoice/payment generator. Every value is copied from a primary document read on 2026-09-19; nothing is inferred.",
+    "primary_source": "Atradius Payment Practices Barometer - B2B payment practices trends - Vietnam 2025 (PDF, 14 pages). Survey fielded in the second half of Q2 2025.",
+    "sample": {
+      "respondents": 300,
+      "method": "Computer-assisted web interviews, international internet panel, accounts-receivable contacts",
+      "by_sector": {"manufacturing": 217, "wholesale_trade": 63, "retail_distribution": 20},
+      "by_size": {"small": 46, "medium": 100, "medium_large": 111, "large": 43},
+      "by_industry_quota": {"steel_metals": 100, "textile_clothing": 100, "plastic_rubber": 100}
+    },
+    "caveats": [
+      "Perception survey of 300 firms, not transaction data.",
+      "Only three industries (steel and metals, textile and clothing, plastic and rubber); about half of respondents are medium-large or large.",
+      "Single time point; treat every value as a prior with an uncertainty band, not as ground truth.",
+      "Delay length beyond terms is reported only qualitatively ('about one month'); the tail shape must come from other sources (UK PPR buckets, Coface APAC ultra-long delays) and be run as a sensitivity range."
+    ]
+  },
+  "overall": {
+    "share_of_b2b_sales_on_credit": 0.65,
+    "avg_payment_terms_days_from_invoicing": 45,
+    "invoice_value_outcome": {"paid_on_time": 0.58, "overdue": 0.39, "bad_debt": 0.03},
+    "avg_delay_beyond_terms": "about one month (qualitative)",
+    "share_firms_extending_more_credit": 0.75,
+    "dso_change_last_12m": {"longer": 0.18, "no_change": 0.27, "shorter": 0.55},
+    "reasons_for_late_payment_multi_response": {
+      "customer_liquidity_issues": 0.47,
+      "delays_in_payment_process": 0.38,
+      "supply_chain_disruptions": 0.29,
+      "operational_constraints": 0.26
+    },
+    "financing_sources_used_multi_response": {"bank_loans": 0.77, "trade_credit": 0.75, "internal_funds": 0.65, "invoice_financing": 0.45},
+    "expect_customer_insolvencies_to_rise": 0.56
+  },
+  "by_industry": {
+    "steel_metals": {"on_credit": 0.61, "terms_days": 43, "overdue": 0.35, "bad_debt": 0.02, "delay_beyond_terms": "one month"},
+    "textile_clothing": {"on_credit": 0.66, "terms_days": "just over 40", "overdue": 0.34, "bad_debt": "around 0.04", "delay_beyond_terms": "one additional month"},
+    "plastic_rubber": {"on_credit": 0.69, "terms_days": "nearly 50", "overdue": 0.47, "bad_debt": "around 0.04", "delay_beyond_terms": "one additional month"}
+  },
+  "secondary_shape_evidence": {
+    "uk_payment_practices_reporting": {
+      "fields": ["Average time to pay", "% Invoices paid within 30 days", "% Invoices paid between 31 and 60 days", "% Invoices paid later than 60 days", "% Invoices not paid within agreed terms", "% Invoices not paid due to dispute"],
+      "note": "Use the bucket shares to fit the delay-distribution shape; large UK payers, not Vietnamese SMEs."
+    },
+    "coface_asia_payment_survey_2025": {
+      "markets": ["Australia", "China", "Hong Kong SAR", "India", "Japan", "Malaysia", "Singapore", "Taiwan", "Thailand"],
+      "vietnam_included": false,
+      "avg_payment_terms_days_2024": 65,
+      "avg_payment_delay_days_2024": 65,
+      "share_companies_with_delays_2024": 0.49,
+      "share_companies_with_ultra_long_delays_2024": 0.40,
+      "ultra_long_delay_definition": "more than 180 days and more than 2 percent of annual revenue",
+      "sample": "about 2,400 companies, 13 sectors"
+    },
+    "xero_small_business_insights": {
+      "note": "Statistics cover fully paid invoices only and exclude invoices paid more than one year after issue, so they understate delay (survivor bias). Use as a lower bound.",
+      "countries": ["Australia", "Canada", "New Zealand", "United Kingdom", "United States"]
+    }
+  },
+  "deterministic_calendar_vn": {
+    "vat_declaration_deadlines": {
+      "monthly_filers": "20th day of the following month",
+      "quarterly_filers": "last day of the first month of the following quarter",
+      "per_occurrence": "within 10 days of the taxable event",
+      "weekend_or_holiday_rule": "moves to the next working day",
+      "source": "Law on Tax Administration 38/2019/QH14, Article 44 (effective 2020-07-01), as summarised by Vietnamese legal portals; verify against the statute text before production use"
+    },
+    "regional_minimum_wage_vnd_per_month_from_2026_01_01": {"region_I": 5310000, "region_II": 4730000, "region_III": 4140000, "region_IV": 3700000, "source": "Decree 293/2025/NĐ-CP issued 2025-11-10"},
+    "mandatory_insurance_contribution_2026": {"total": 0.32, "employee": 0.105, "employer": 0.215, "source": "Vietnamese legal-portal summaries of the 2024 Social Insurance Law; verify current decree before use"}
+  }
+}

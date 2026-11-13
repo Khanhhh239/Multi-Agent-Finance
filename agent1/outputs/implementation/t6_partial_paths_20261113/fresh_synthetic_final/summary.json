@@ -1,0 +1,29 @@
+{
+  "companies": 2,
+  "protocol_sha256": "88671c3a45776fc3cd25ac347be702c23f4f3a667c89d6f417768052762a349b",
+  "models": {
+    "global": {
+      "mae_balance_vnd": 6769407.032049216,
+      "mae_weekly_ar_vnd": 2201079.6927624904,
+      "mae_cumulative_ar_vnd": 6769407.032049216,
+      "coverage80": 0.5,
+      "interval_score80_vnd": 26104167.9260379,
+      "crps_balance_vnd": 4596188.216927265,
+      "energy_path_vnd": 4999686.329644417,
+      "brier_weekly_shortfall": 0.0,
+      "brier_any_shortfall": 0.0
+    },
+    "adapted": {
+      "mae_balance_vnd": 6769407.032049216,
+      "mae_weekly_ar_vnd": 2201079.6927624904,
+      "mae_cumulative_ar_vnd": 6769407.032049216,
+      "coverage80": 0.5,
+      "interval_score80_vnd": 26104167.9260379,
+      "crps_balance_vnd": 4596188.216927265,
+      "energy_path_vnd": 4999686.329644417,
+      "brier_weekly_shortfall": 0.0,
+      "brier_any_shortfall": 0.0
+    }
+  },
+  "interpretation": "Declared held-out companies; synthetic flags remain per company; no tenant activation"
+}

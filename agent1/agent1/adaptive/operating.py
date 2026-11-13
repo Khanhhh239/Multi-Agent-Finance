@@ -108,7 +108,7 @@ def predict_candidate(name, model, y, gap=0):
     return np.asarray(out)[gap:]
 
 
-def select_operating(data, asof, try_deep=False):
+def select_operating(data, asof, try_deep=False, *, include_new_credit=True):
     accounts = account_scope(data, asof)
     if not accounts:
         return None
@@ -189,5 +189,5 @@ def select_operating(data, asof, try_deep=False):
         reference_mae=reference,
         validation=losses,
         unavailable=unavailable,
-        credit=select_credit(data, asof, accounts),
+        credit=select_credit(data, asof, accounts) if include_new_credit else None,
     )

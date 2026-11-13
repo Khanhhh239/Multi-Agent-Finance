@@ -1,0 +1,237 @@
+{
+  "rows": {
+    "fit": 404,
+    "validation": 31,
+    "audit": 34
+  },
+  "local_fit_label_end": "2024-09-09",
+  "status": "adapted",
+  "reweighted_weights": [
+    0.95,
+    0.05
+  ],
+  "continuation_epochs": 20,
+  "continuation_weight": 1.0,
+  "selected_validation_mode": "finetuned",
+  "audit_passed": true,
+  "audit_global": {
+    "score": 0.35509958966219823,
+    "windows": {
+      "2025-01-06": 0.35509958966219823
+    },
+    "cash_weekly_mae_vnd": 82541982.84499867,
+    "cash_cumulative_mae_vnd": 196335828.1722705,
+    "cash_bias13_fraction": -0.06694839165683064,
+    "brier4": 0.2184514407522733,
+    "brier13": 0.07513240604401927,
+    "integrated_brier13": 0.10001428008006405
+  },
+  "audit_proposed": {
+    "score": 0.3033526860469743,
+    "windows": {
+      "2025-01-06": 0.3033526860469743
+    },
+    "cash_weekly_mae_vnd": 67395234.81701761,
+    "cash_cumulative_mae_vnd": 208262861.24461094,
+    "cash_bias13_fraction": -0.10463588493429965,
+    "brier4": 0.21992484506274024,
+    "brier13": 0.08101026095200478,
+    "integrated_brier13": 0.09712527940739422
+  },
+  "final_local_refit": true,
+  "frozen_scaler": true,
+  "global_replay_fraction": 0.3,
+  "scratch_warnings": [
+    "Stochastic Optimizer: Maximum iterations (400) reached and the optimization hasn't converged yet."
+  ],
+  "tuning": [
+    {
+      "epochs": 5,
+      "weight": 0.0,
+      "guard": true,
+      "score": 0.27560631368489297,
+      "windows": {
+        "2024-09-09": 0.29984105377411496,
+        "2024-10-07": 0.25137157359567097
+      },
+      "cash_weekly_mae_vnd": 29103114.733525984,
+      "cash_cumulative_mae_vnd": 125642927.47745109,
+      "cash_bias13_fraction": 0.16791014847940147,
+      "brier4": 0.08893939880386731,
+      "brier13": 0.24787128179986456,
+      "integrated_brier13": 0.16143273702922492
+    },
+    {
+      "epochs": 5,
+      "weight": 0.25,
+      "guard": true,
+      "score": 0.26735733043911075,
+      "windows": {
+        "2024-09-09": 0.29008437827903655,
+        "2024-10-07": 0.24463028259918496
+      },
+      "cash_weekly_mae_vnd": 28728902.693507213,
+      "cash_cumulative_mae_vnd": 115439208.22912109,
+      "cash_bias13_fraction": 0.15672193153418776,
+      "brier4": 0.08739984713922536,
+      "brier13": 0.24226019728195192,
+      "integrated_brier13": 0.15336949249479304
+    },
+    {
+      "epochs": 5,
+      "weight": 0.5,
+      "guard": true,
+      "score": 0.2591698543934901,
+      "windows": {
+        "2024-09-09": 0.28032770278395813,
+        "2024-10-07": 0.23801200600302208
+      },
+      "cash_weekly_mae_vnd": 28363447.168621354,
+      "cash_cumulative_mae_vnd": 105235488.98079112,
+      "cash_bias13_fraction": 0.14553371458897402,
+      "brier4": 0.08626638103138347,
+      "brier13": 0.2370393345271892,
+      "integrated_brier13": 0.14614122030577617
+    },
+    {
+      "epochs": 5,
+      "weight": 0.75,
+      "guard": true,
+      "score": 0.25138621690584256,
+      "windows": {
+        "2024-09-09": 0.2705710272888797,
+        "2024-10-07": 0.23220140652280538
+      },
+      "cash_weekly_mae_vnd": 27997991.64373549,
+      "cash_cumulative_mae_vnd": 95779175.5589841,
+      "cash_bias13_fraction": 0.13434549764376025,
+      "brier4": 0.08553900048034159,
+      "brier13": 0.23220869353557644,
+      "integrated_brier13": 0.13974792046217457
+    },
+    {
+      "epochs": 5,
+      "weight": 1.0,
+      "guard": true,
+      "score": 0.24399701586935058,
+      "windows": {
+        "2024-09-09": 0.2608143517938013,
+        "2024-10-07": 0.22717967994489988
+      },
+      "cash_weekly_mae_vnd": 27632536.118849628,
+      "cash_cumulative_mae_vnd": 87052866.97689912,
+      "cash_bias13_fraction": 0.12315728069854648,
+      "brier4": 0.08521770548609975,
+      "brier13": 0.22776827430711355,
+      "integrated_brier13": 0.1341895929639882
+    },
+    {
+      "epochs": 20,
+      "weight": 0.0,
+      "guard": true,
+      "score": 0.27560631368489297,
+      "windows": {
+        "2024-09-09": 0.29984105377411496,
+        "2024-10-07": 0.25137157359567097
+      },
+      "cash_weekly_mae_vnd": 29103114.733525984,
+      "cash_cumulative_mae_vnd": 125642927.47745109,
+      "cash_bias13_fraction": 0.16791014847940147,
+      "brier4": 0.08893939880386731,
+      "brier13": 0.24787128179986456,
+      "integrated_brier13": 0.16143273702922492
+    },
+    {
+      "epochs": 20,
+      "weight": 0.25,
+      "guard": true,
+      "score": 0.26711797365781703,
+      "windows": {
+        "2024-09-09": 0.2898938638793348,
+        "2024-10-07": 0.24434208343629926
+      },
+      "cash_weekly_mae_vnd": 28743667.23598874,
+      "cash_cumulative_mae_vnd": 114808152.0047151,
+      "cash_bias13_fraction": 0.15661035262855713,
+      "brier4": 0.08697988096617935,
+      "brier13": 0.24024052444729108,
+      "integrated_brier13": 0.15209483869256435
+    },
+    {
+      "epochs": 20,
+      "weight": 0.5,
+      "guard": true,
+      "score": 0.2586911408309026,
+      "windows": {
+        "2024-09-09": 0.27994667398455453,
+        "2024-10-07": 0.23743560767725067
+      },
+      "cash_weekly_mae_vnd": 28392976.2535844,
+      "cash_cumulative_mae_vnd": 103973376.53197911,
+      "cash_bias13_fraction": 0.14531055677771276,
+      "brier4": 0.08558235041826984,
+      "brier13": 0.2333721697753086,
+      "integrated_brier13": 0.14396862539987132
+    },
+    {
+      "epochs": 20,
+      "weight": 0.75,
+      "guard": true,
+      "score": 0.25084840099035777,
+      "windows": {
+        "2024-09-09": 0.26999948408977426,
+        "2024-10-07": 0.23169731789094122
+      },
+      "cash_weekly_mae_vnd": 28042285.271180056,
+      "cash_cumulative_mae_vnd": 94219613.49013862,
+      "cash_bias13_fraction": 0.13401076092686845,
+      "brier4": 0.08474680716013877,
+      "brier13": 0.22726621778391698,
+      "integrated_brier13": 0.1370540971511455
+    },
+    {
+      "epochs": 20,
+      "weight": 1.0,
+      "guard": true,
+      "score": 0.2434959863888816,
+      "windows": {
+        "2024-09-09": 0.260052294194994,
+        "2024-10-07": 0.22693967858276923
+      },
+      "cash_weekly_mae_vnd": 27691594.288775712,
+      "cash_cumulative_mae_vnd": 85373321.84580554,
+      "cash_bias13_fraction": 0.12271096507602407,
+      "brier4": 0.08447325119178616,
+      "brier13": 0.22192266847311634,
+      "integrated_brier13": 0.13135125394638716
+    }
+  ],
+  "world": "refit_05_fresh_test",
+  "firm": "F030",
+  "origin": "2025-04-07",
+  "anchors": 15,
+  "workspace_method": "pool",
+  "workspace_audit": {
+    "n": 25,
+    "customer_clusters": 7,
+    "candidate_brier4": 0.07651393791038391,
+    "baseline_brier4": 0.16,
+    "brier_improvement": 0.08348606208961609,
+    "improvement_ci_low": -0.026606119818786394,
+    "improvement_ci_high": 0.3002922872391065,
+    "ci_reliable": false,
+    "amount_weighted_brier4": 0.034050693505733795,
+    "log_loss4": 0.2240680276568299,
+    "observed_paid_rate4": 0.76,
+    "predicted_paid_rate4": 0.7818041779134846,
+    "accepted": true
+  },
+  "workspace_fallback": null,
+  "workspace_warnings": [
+    "Stochastic Optimizer: Maximum iterations (100) reached and the optimization hasn't converged yet."
+  ],
+  "prediction_sha256": "461b8c5c6cc5d7aaa3d1833d7a6724ca18d782e1e82aadcf8fbf3067af3740a3",
+  "models_sha256": "bf7169aa4ea1e352bf8220d94203e1ef8a54e05a6ac146241393095ec91acff4",
+  "frozen_sha256": "c442b0cb0d1fb18398cb852175fb7f12f8186b59363a7de6b291222f76bcf3b9",
+  "seconds": 78.16702869998699
+}

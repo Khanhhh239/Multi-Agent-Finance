@@ -1,10 +1,8 @@
 """Synthetic inputs verify company scoping and import formats, not forecast accuracy."""
 
 import csv
-import importlib.util
 import io
 import json
-from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -110,11 +108,8 @@ def test_independent_agent_retains_manual_format_choices(profile_client, monkeyp
     assert preview.status_code == 200 and preview.json()["can_commit"]
 
 
-def test_portal_publishes_scoped_profiles_and_rejects_invalid_formats(tmp_path, monkeypatch):
-    server_path = Path(__file__).resolve().parents[3] / "portal" / "server.py"
-    spec = importlib.util.spec_from_file_location("portal_profile_test", server_path)
-    portal = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(portal)
+def test_portal_publishes_scoped_profiles_and_rejects_invalid_formats(tmp_path, monkeypatch, portal_module):
+    portal = portal_module
     monkeypatch.setattr(portal, "WORK", tmp_path)
     monkeypatch.setattr(portal, "COMPANY_FILE", tmp_path / "company.json")
     company = dict(code="TEST_A", legal_name="Test company", date_format="iso", number_format="plain")

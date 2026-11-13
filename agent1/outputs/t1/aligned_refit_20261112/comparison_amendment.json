@@ -1,0 +1,7 @@
+{
+  "reason": "Honor requested current-global 75/25 continuation baseline. Refit challenger failed preregistered audit. Initial comparison interrupted after one insufficient-history context and before any aggregate scores; retained under comparison/. Atomic protocol writes fix concurrent-reader JSON race.",
+  "current_global_sha256": "57fa9541185efa9d9dc2a0f04d86a15eb863134f13f3d684f07dd690ef60ec7e",
+  "replay_sha256": "005ace8462953ad3c3ef0331e60f7d2495e20af346447ef09d8e5722be5cff53",
+  "refit_candidate_changed": false,
+  "fresh_scores_used_for_amendment": false
+}

@@ -1,0 +1,23 @@
+{
+  "research_integration_accepted": true,
+  "real_pilot_accepted": false,
+  "feature_context_contract": "workspace-accounting-landmark18-v1",
+  "artifact_directory": "serving_artifact",
+  "refit_accepted": false,
+  "required_hashes": {
+    "serving_artifact/metadata.json": "57fa9541185efa9d9dc2a0f04d86a15eb863134f13f3d684f07dd690ef60ec7e",
+    "frozen.json": "510fffa474193a4d0f05367e964343e6987d7ab497b600fa084af221f249d6b4",
+    "audit_results.json": "f168b841ba4d98645f298273a8d226b28fa351e987524b86198194a5026313be",
+    "fresh_results.json": "d5e4b96641e53a75734f4ffe04999dc4b017d075def4cad3aa12e021ca631b93",
+    "verification.json": "cfce69eab5fff739ac9abd2824f8f5e9b09acc8ebb35cd35355f6b0b51356eb3",
+    "adaptation_current_global_protocol.json": "3b03bfeb87e061ab5eeae2bf1af0719ecc03e22d38e72c7035366870af208c43",
+    "runtime_verification.json": "86e95dcdd930d2ff6b59e03937c8969b2cab51943c9992f6d9fb4e18ee02f080",
+    "runtime_shap.json": "d74c28f13615e5c89c65480a13ae24b7ad297ddb1fb7df11ff9c474b0aa6858f",
+    "large_book_runtime.json": "ac7b398fca900a15dfe18f332de0ff6e47bcdea2b2e3e83bc2ebd4fa2c6fdbc9",
+    "tests_summary.json": "5d5cd2c8c39793c4af95df58e0ec6ed6dcd7b08a49e42faa464711eeb4182571"
+  },
+  "service_default_automatically_changed": false,
+  "global_shap_pass": true,
+  "large_book_shap_pass": true,
+  "unit_and_ui_tests_passed": true
+}

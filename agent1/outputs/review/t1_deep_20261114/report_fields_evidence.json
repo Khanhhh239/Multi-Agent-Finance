@@ -1,0 +1,53 @@
+{
+  "bundle_identity": {
+    "update_asof": "2025-12-31",
+    "asof": "2024-07-01",
+    "t1_parameter_asof": "2024-07-01",
+    "partial_version": "141c49f9ff676c5dd25ced4389d771e1b069a59e425c54f0625e6c9bfb2e59ab",
+    "adapter_version": "settlement-partial-cash-v2",
+    "serving_manifest": {
+      "t1_version": "global:f855bf6acf32951c83382716",
+      "t1_model_sha256": "9be8387c2896523b81616c08dc22d551876aa42b167ba552e1b27969e97af838",
+      "adapter_version": "settlement-partial-cash-v2",
+      "partial_version": "141c49f9ff676c5dd25ced4389d771e1b069a59e425c54f0625e6c9bfb2e59ab",
+      "data_version": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+      "policy": {
+        "catalog_sha256": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+        "method": "frozen_global"
+      },
+      "policy_version": "8c1da34fd5fd23a3b98604599a62ea61c3a853cf53f714e4c18bbf56676c8403",
+      "ready_on": "2024-07-01"
+    }
+  },
+  "report_training_keys": [
+    "asof",
+    "windows",
+    "train_n",
+    "validation_n",
+    "selection",
+    "selected_method",
+    "selected_weight",
+    "audit",
+    "collection_evaluation",
+    "code_hash",
+    "dependencies",
+    "algorithm_version",
+    "policy",
+    "fit_data",
+    "final_data",
+    "training_trace",
+    "update_period",
+    "promotion_status",
+    "t1_version",
+    "catalog_sha256",
+    "limitation"
+  ],
+  "missing_identity_fields": [
+    "update_asof",
+    "t1_parameter_asof",
+    "partial_version",
+    "adapter_version",
+    "serving_manifest"
+  ],
+  "report_update_period": null
+}

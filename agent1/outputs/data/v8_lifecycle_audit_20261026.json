@@ -1,8 +1,0 @@
-{
-  "controls": [],
-  "hard_cases": {
-    "heterogeneity": {
-      "customer_between_variance_share": 0.614874536897607
-    }
-  }
-}

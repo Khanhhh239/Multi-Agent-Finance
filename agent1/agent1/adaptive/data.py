@@ -48,6 +48,9 @@ IDS = {"invoices": "invoice_id", "payments": "payment_id", "outflows": "expense_
 SCHEMAS["outflows"]["expense_id"].append("obligation_id")
 SCHEMAS["outflows"]["date"].append("due_date")
 SCHEMAS["outflows"].update({
+    "obligation_ref": ["ma hop dong", "contract_id", "ma khoan co dinh", "fixed_cost_id"],
+    "payment_period": ["ky thanh toan", "ky nghia vu"],
+    "installment_no": ["dot den han", "dot thanh toan"],
     "status": ["trang thai nghia vu"],
     "forecast_date": ["ngay du kien tra con lai"],
     "source": ["ho so hop dong"],
@@ -231,10 +234,12 @@ def parse_rows(
                         value == 0 or (value < 0 and not adjustment)
                     ):
                         raise ValueError()
-                elif field == "record_version":
+                elif field in ("record_version", "installment_no"):
+                    if field == "installment_no" and isinstance(value, float) and value.is_integer():
+                        value = int(value)
                     if not re.fullmatch(r"[1-9]\d*", str(value)):
                         raise ValueError()
-                    value = int(value)
+                    value = str(value) if field == "installment_no" else int(value)
                 elif field == "verified":
                     if str(value).strip().lower() not in ("true", "false"):
                         raise ValueError()
@@ -388,10 +393,15 @@ def as_of(data, clock):
     for kind, history in data.get("record_history", {}).items():
         selected = {}
         for row in history:
+            if row["known_at"] > limit:
+                continue
+            if not intraday:
+                selected[row[IDS[kind]]] = row
+                continue
             available = pd.Timestamp(row.get('known_at_time') or row['known_at'])
             if available.tzinfo is not None:
                 available = available.tz_convert('Asia/Ho_Chi_Minh').tz_localize(None)
-            if row["known_at"] <= limit and (not intraday or available <= stamp):
+            if available <= stamp:
                 selected[row[IDS[kind]]] = row
         result[kind] = [r for r in selected.values() if not r.get("_deleted")]
     return result
@@ -399,6 +409,12 @@ def as_of(data, clock):
 
 def merge_import(data, kind, incoming):
     """Stage one import without mutating the active dataset or its audit history."""
+    if kind == 'outflows':
+        from .obligation_imports import plan_obligation_import
+        plan = plan_obligation_import(data, incoming)
+        if plan['errors']:
+            raise ValueError('; '.join('Dòng ' + str(e['row']) + ': ' + e['message'] for e in plan['errors']))
+        incoming = plan['records']
     result = deepcopy(data)
     existing = {r[IDS[kind]]: r for r in result.get(kind, [])}
     for row in incoming:

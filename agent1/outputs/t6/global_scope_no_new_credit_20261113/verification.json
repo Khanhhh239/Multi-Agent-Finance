@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "plans": 80,
+  "measured_weeks": 1040,
+  "future_removal_checks": 80,
+  "maximum_error_bridge_residual_vnd": 1.430511474609375e-06,
+  "new_invoice_forecasts": 0,
+  "all_open_invoices_used": true,
+  "stress_shortfall_weeks": 52,
+  "original_bank_unchanged": true,
+  "snapshot_hashes_checked": 173,
+  "elapsed_seconds": 2223.0105834999995,
+  "result_hashes": {
+    "weekly.csv": "6f4efb82c0e909790119ffaf32461c20c21985656e7f7e3fb3ed644a23959f92",
+    "metrics.csv": "94c38d98eb01530d1ee1e1e8f6cdac8d8164c7bd207f141eff6158f691c172d7",
+    "ar_metrics.csv": "41ff17675e7e0add9192e55389a1fd4efe3698a57c1fb3a73b3c95a4dde0ece4",
+    "per_origin_metrics.csv": "a4c09519636b06f9799b0e729245ba96a23fe5ac7a08742217ba226687bb1a37",
+    "contexts.json": "8e566294ec8b1bfaca7feffcd9a5c52cfb32c71f08d3e011eee2465ea20c70d2",
+    "REPORT.md": "9ceaf28147d695ce4e84599450f61f293ea8cdd3f432e0c335c20d83bc6a3b00"
+  }
+}

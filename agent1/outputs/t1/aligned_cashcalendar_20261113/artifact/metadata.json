@@ -1,0 +1,84 @@
+{
+  "available_asof": "2025-04-01",
+  "synthetic": true,
+  "activation": "research_candidate",
+  "data_fingerprint": "5031d434b9d7806f1b28655856009dbccad440e37c79f7c539929e9d4ed525eb",
+  "source_sha256": "8c4e92b811f72bec727f30525880626cc8b30e62404ab5a73ce62893810ff2fe",
+  "feature_context_contract": "workspace-accounting-landmark18-v1",
+  "refit": true,
+  "selection_members": [
+    "neural",
+    "customer",
+    "neural_wide"
+  ],
+  "protocol_sha256": "5031d434b9d7806f1b28655856009dbccad440e37c79f7c539929e9d4ed525eb",
+  "compact_kind": "ensemble",
+  "name": "compact_ensemble",
+  "schema": "t1-landmark-18-v2",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "receipt_count",
+    "received_fraction_28d",
+    "customer_settlements_180d",
+    "customer_delay_180d",
+    "customer_delay_std_180d",
+    "customer_delay_trend_180d",
+    "company_delay_180d",
+    "company_delay_trend_180d",
+    "customer_overdue_share",
+    "customer_overdue90_share",
+    "company_overdue_share",
+    "company_overdue90_share",
+    "customer_outstanding_share"
+  ],
+  "active": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "max_horizon_weeks": 13,
+  "members": [
+    {
+      "directory": "member_0",
+      "name": "neural",
+      "metadata_sha256": "cd82bc9e30db8bb0dc39548b1e637a6ea24f3db2054fe9ee7abdf5fdb02aed3c"
+    },
+    {
+      "directory": "member_1",
+      "name": "customer",
+      "metadata_sha256": "7d37e7b3ad8358cfc7e5f0a90e0e0590846e49f0e67d608002afb31162d8083c"
+    },
+    {
+      "directory": "member_2",
+      "name": "neural_wide",
+      "metadata_sha256": "a3c10e838e4dde44612b84d74b0c6943910b888466fa89baf9784a9e511cec0b"
+    }
+  ],
+  "weights": [
+    0.3,
+    0.4,
+    0.3
+  ],
+  "calibration": {
+    "method": "identity"
+  }
+}

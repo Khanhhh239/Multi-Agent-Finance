@@ -1,0 +1,74 @@
+{
+  "available_asof": "2024-07-01",
+  "label_contract": "cash-calendar-full-settlement-v2",
+  "target_contract_sha256": "e4dffe55145f780af4605d929295fbe4c4e64fd1f7652ed17f1b887900a0671b",
+  "source_metadata_sha256": {
+    "neural": "f56896227499d9889f2b4bea732ded91c719fff2e628c6474dd0b4225fbd24f0",
+    "lightgbm": "b696e6370818012436a1960d07029d9e17ab7eb0a4a01726a63766ffcfb7eef6",
+    "xgboost": "cb3b3b28e79414edacf8eca287d2e2ae1578c14628a1d2f349a0a6e54fe4fd80",
+    "customer": "eac0aa40a99888a2f7b8dc976d18e7b1db4c951cb6dba71ba6b9bedc3cf87e43"
+  },
+  "compact_kind": "ensemble",
+  "name": "compact_ensemble",
+  "schema": "t1-landmark-18-v2",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "receipt_count",
+    "received_fraction_28d",
+    "customer_settlements_180d",
+    "customer_delay_180d",
+    "customer_delay_std_180d",
+    "customer_delay_trend_180d",
+    "company_delay_180d",
+    "company_delay_trend_180d",
+    "customer_overdue_share",
+    "customer_overdue90_share",
+    "company_overdue_share",
+    "company_overdue90_share",
+    "customer_outstanding_share"
+  ],
+  "active": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "max_horizon_weeks": 13,
+  "members": [
+    {
+      "directory": "member_0",
+      "name": "neural",
+      "metadata_sha256": "820f194a56fed02a8a7a51bea8dc4ed47329bb8189355ce89841d8a2eaded1f3"
+    },
+    {
+      "directory": "member_1",
+      "name": "customer",
+      "metadata_sha256": "6adf5d54dc008a4e21dbb8feace359815bcb37eb4290ece68dd1265c8ccd16bf"
+    }
+  ],
+  "weights": [
+    0.75,
+    0.25
+  ],
+  "calibration": {
+    "method": "identity"
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "available_asof": "2024-07-01",
+  "activation": "candidate_only",
+  "synthetic": true,
+  "data_fingerprint": "ac65c447c6f41167c3a9c7faf33d6b59d66d0cca2aaf8310cdf2fae5164855b5",
+  "source_sha256": "4f2fdee7ee02e32600706b6d8687e70a04ee724c8ae9cdc3962edd6e3920d5e3",
+  "protocol_sha256": "3064ab4b42a76fe6c8c5079bad5911087bc99388e236cbe9e13910e2f258cf37",
+  "validation": {
+    "members": [
+      "neural_wide",
+      "due",
+      "hist_regularized"
+    ],
+    "weights": [
+      0.35,
+      0.3,
+      0.35
+    ],
+    "score": 0.15084738515629584,
+    "brier4": 0.15959298113750994,
+    "brier13": 0.1421017891750816,
+    "windows": {
+      "2024-01-01": 0.1630034361207512,
+      "2024-01-29": 0.14877872895770597,
+      "2024-02-26": 0.1527202177488405,
+      "2024-03-25": 0.1388871577978857
+    },
+    "stable": true,
+    "latency": {
+      "p95_seconds": 0.11882660000410399,
+      "passed": true,
+      "contexts": {
+        "compact_04_validation/F016": {
+          "p50_seconds": 0.09862094999698456,
+          "p95_seconds": 0.11882660000410399,
+          "max_seconds": 0.14291480000247248,
+          "repetitions": 20
+        },
+        "compact_05_validation/F024": {
+          "p50_seconds": 0.0943239500047639,
+          "p95_seconds": 0.10273132500369685,
+          "max_seconds": 0.11396460000833031,
+          "repetitions": 20
+        },
+        "compact_12_validation/F033": {
+          "p50_seconds": 0.09735540000110632,
+          "p95_seconds": 0.10619015999982366,
+          "max_seconds": 0.10987539999769069,
+          "repetitions": 20
+        },
+        "workspace_large": {
+          "p50_seconds": 0.1015456000022823,
+          "p95_seconds": 0.1110209550090076,
+          "max_seconds": 0.12502119998680428,
+          "repetitions": 20
+        }
+      },
+      "open_populations": {
+        "compact_04_validation/F016": 276,
+        "compact_05_validation/F024": 103,
+        "compact_12_validation/F033": 285,
+        "workspace_large": 295
+      },
+      "max_additivity_error": 2.220446049250313e-16,
+      "background_count": 24,
+      "model_and_context_ready": true,
+      "feature_preparation_included": true,
+      "probability_pooling_included": true,
+      "calibration": {
+        "method": "identity"
+      },
+      "model_loading_included": false,
+      "ledger_context_construction_included": false,
+      "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+      "python": "3.13.9"
+    }
+  },
+  "compact_kind": "ensemble",
+  "name": "compact_ensemble",
+  "schema": "t1-compact-landmark-v1",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "customer_delay_180d",
+    "company_delay_180d",
+    "customer_settlements_180d",
+    "customer_overdue_share",
+    "company_overdue_share"
+  ],
+  "active": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_horizon_weeks": 13,
+  "members": [
+    {
+      "directory": "member_0",
+      "name": "neural_wide",
+      "metadata_sha256": "2112c0554b9ad174fc632bbea7f333834c00fb73ea13853c942d47a7c8b046d7"
+    },
+    {
+      "directory": "member_1",
+      "name": "due",
+      "metadata_sha256": "ba782552176b3b9c3e1864e5e6e1ad25dde628bc70aa4f5943ee7dae0becd470"
+    },
+    {
+      "directory": "member_2",
+      "name": "hist_regularized",
+      "metadata_sha256": "1909be0258f53b12b9c81ffe3e3828f4c055a537cbfc3db26a69c38b425ea7ef"
+    }
+  ],
+  "weights": [
+    0.35,
+    0.3,
+    0.35
+  ],
+  "calibration": {
+    "method": "identity"
+  }
+}

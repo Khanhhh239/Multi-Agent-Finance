@@ -1,0 +1,84 @@
+{
+  "spec": {
+    "version": "new-company-partial-paths-v1",
+    "catalog_sha256": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+    "source_sha256": "6ab968dd0e744decd3b579fb084f829180222177749bef1fd63f7b16ff0981b2",
+    "companies": [
+      {
+        "firm_id": "T6_FRESH_261113605_0",
+        "dataset": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\implementation\\t6_partial_paths_20261113\\fresh_synthetic\\synthetic_company_0.json",
+        "cutoff": "2025-12-31",
+        "truth_asof": "2026-04-30",
+        "opening_balance": 374325000,
+        "accounts": [
+          "Q"
+        ],
+        "synthetic": true,
+        "generator_seed": 261113605,
+        "dataset_sha256": "b2b3de9c08fe94ed8dac2df23e0031d4dae85f6735747adb79ff8766a8462ac1",
+        "heldout_from_global_and_policy_selection": true
+      },
+      {
+        "firm_id": "T6_FRESH_261113605_1",
+        "dataset": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\implementation\\t6_partial_paths_20261113\\fresh_synthetic\\synthetic_company_1.json",
+        "cutoff": "2025-12-31",
+        "truth_asof": "2026-04-30",
+        "opening_balance": 140750000,
+        "accounts": [
+          "Q"
+        ],
+        "synthetic": true,
+        "generator_seed": 261113606,
+        "dataset_sha256": "4c625ebffe20a9cb6f4d1e5ffc9c53d143a4e3411cddcabcebfb32b3ce663af0",
+        "heldout_from_global_and_policy_selection": true
+      }
+    ],
+    "development_firms": [],
+    "update_policy": {
+      "interval_days": 28,
+      "lookback_days": 730,
+      "stride_days": 56,
+      "risk_cap": 3000,
+      "half_life_days": 180.0,
+      "partial_prior_strength": 30.0,
+      "replay_fraction": 0.3,
+      "minimum_fit_snapshots": 60,
+      "minimum_fit_invoices": 20,
+      "minimum_validation_snapshots": 20,
+      "minimum_audit_snapshots": 20,
+      "minimum_cash_gain": 0.0001,
+      "ibs_ratio": 1.02,
+      "ibs_slack": 0.0001,
+      "alphas": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "validation_offsets_days": [
+        210,
+        182
+      ]
+    },
+    "forecast_policy": {
+      "horizon_weeks": 13,
+      "simulation_paths": 1000,
+      "simulation_seed": 7,
+      "shap_limit": 0,
+      "cash_floor": 0,
+      "include_operating": false,
+      "shared_customer_risk": false
+    },
+    "models": [
+      "global",
+      "adapted"
+    ],
+    "alert_rule": "expected balance below floor OR weekly simulation probability >= 0.25",
+    "selection": "history through cutoff only; no selection on future scores",
+    "calibration": "none; raw partial paths first; later studies need separate past OOS errors",
+    "aggregation": "one result per company; no invoice/origin independence claim"
+  },
+  "spec_sha256": "82fd21cafef2afeaab4a79cc0f90e08a737e7cb4a6fc35e9e6078ac7ac18be46",
+  "locked_at": "2026-11-13T15:42:05.895678+00:00"
+}

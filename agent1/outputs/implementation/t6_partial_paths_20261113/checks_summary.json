@@ -1,0 +1,23 @@
+{
+  "python_unique_cases": 389,
+  "python_passed": 386,
+  "python_failed": 0,
+  "python_skipped": 3,
+  "evidence": [
+    "tests.xml",
+    "recheck.xml",
+    "periodic_and_joint.xml",
+    "final_cash.xml"
+  ],
+  "interpretation": "Latest outcome per pytest case; broad run plus affected-case reruns, not another full run",
+  "ui_passed": 28,
+  "ui_failed": 0,
+  "lint_issues": 0,
+  "synthetic_integration": {
+    "status": "synthetic_integration_only",
+    "companies": 2,
+    "all_predictions_frozen_before_scoring": true,
+    "real_company_acceptance": false,
+    "cash_band_acceptance": false
+  }
+}

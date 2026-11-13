@@ -1,0 +1,16 @@
+{
+  "python_unique_cases": 404,
+  "python_passed": 401,
+  "python_failed": 0,
+  "python_skipped": 3,
+  "ui_passed": 31,
+  "ui_failed": 0,
+  "lint_issues": 0,
+  "noop_exact": true,
+  "adapter_components_reconcile": true,
+  "paired_random_numbers": true,
+  "real_company_acceptance": false,
+  "cash_band_acceptance": false,
+  "aggregation": "Latest result per classname/name from broad tests.xml then affected recheck.xml; not a second fresh full-suite run",
+  "finalized_on": "2026-11-14"
+}

@@ -1,0 +1,138 @@
+{
+  "checks": [
+    {
+      "name": "training_body",
+      "text": "Phiên bản dự báo\n\nHọc tiếp bằng lịch sử gần đây. Giữ phiên bản đang dùng cho đến khi có đủ bằng chứng để thay thế.\n\nTạo phiên bản mới\nNgày chốt dữ liệu\nTôi xác nhận đã nạp đầy đủ thanh toán đến ngày chốt. Hóa đơn còn thiếu thanh toán trong bảng thực sự chưa được tất toán.\nĐiều kiện dữ liệu và tùy chọn học\nBắt đầu kiểm định\n↗\nPhiên bản của doanh nghiệp\nTải báo cáo kiểm định ↓\nPhiên bản 1 · dữ liệu đến 01-07-24\nLỖI DỰ THU ỨNG VIÊN\nChưa đủ nhãn\nLỖI DỰ THU ĐỐI CHỨNG\nChưa đủ nhãn\nSNAPSHOT KIỂM TRA\n0\n\nGiữ model đang dùng vì chưa có bằng chứng đủ để thay thế.\n\n0 snapshot học, 0 snapshot validation. Điểm lỗi dự thu càng thấp càng tốt; chưa đủ nhãn thì chưa kết luận ứng viên tốt hơn.\n● Đang sử dụng"
+    },
+    {
+      "name": "lifecycle_api",
+      "next_due": "2026-12-12",
+      "pending": 1,
+      "requested_by_browser": false,
+      "due_date_visible": false
+    },
+    {
+      "name": "layout",
+      "width": 1500,
+      "view": "overview",
+      "document_width": 1500,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 1500,
+      "view": "data",
+      "document_width": 1500,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 1500,
+      "view": "records",
+      "document_width": 1500,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 1500,
+      "view": "training",
+      "document_width": 1500,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 1500,
+      "view": "forecast",
+      "document_width": 1500,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 1500,
+      "view": "guide",
+      "document_width": 1500,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 390,
+      "view": "overview",
+      "document_width": 390,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 390,
+      "view": "data",
+      "document_width": 390,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 390,
+      "view": "records",
+      "document_width": 390,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 390,
+      "view": "training",
+      "document_width": 390,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 390,
+      "view": "forecast",
+      "document_width": 390,
+      "overflow": false
+    },
+    {
+      "name": "layout",
+      "width": 390,
+      "view": "guide",
+      "document_width": 390,
+      "overflow": false
+    },
+    {
+      "name": "saved_forecast_loaded",
+      "invoices": 3
+    }
+  ],
+  "javascript_errors": [],
+  "api_paths": [
+    "/v1/access",
+    "/v1/forecasts",
+    "/v1/forecasts/1fe5bf08c9504ddc9939c5fc96fcc495",
+    "/v1/imports",
+    "/v1/records",
+    "/v1/workspace",
+    "/workspace",
+    "/workspace-assets/app.js",
+    "/workspace-assets/ledger.css",
+    "/workspace-assets/platform-fonts/bvp-latin-400.woff2",
+    "/workspace-assets/platform-fonts/bvp-latin-500.woff2",
+    "/workspace-assets/platform-fonts/bvp-latin-600.woff2",
+    "/workspace-assets/platform-fonts/bvp-latin-ext-400.woff2",
+    "/workspace-assets/platform-fonts/bvp-latin-ext-500.woff2",
+    "/workspace-assets/platform-fonts/bvp-latin-ext-600.woff2",
+    "/workspace-assets/platform-fonts/bvp-vietnamese-400.woff2",
+    "/workspace-assets/platform-fonts/bvp-vietnamese-500.woff2",
+    "/workspace-assets/platform-fonts/bvp-vietnamese-600.woff2",
+    "/workspace-assets/platform-fonts/fraunces-latin-ext.woff2",
+    "/workspace-assets/platform-fonts/fraunces-latin.woff2",
+    "/workspace-assets/platform-fonts/fraunces-vietnamese.woff2",
+    "/workspace-assets/platform-theme.css",
+    "/workspace-assets/platform-theme.js",
+    "/workspace-assets/style.css",
+    "/workspace-assets/vendor/chart-line.svg",
+    "/workspace-assets/vendor/database-import.svg",
+    "/workspace-assets/vendor/download.svg",
+    "/workspace-assets/vendor/file-spreadsheet.svg",
+    "/workspace-assets/vendor/refresh.svg",
+    "/workspace-assets/vendor/uPlot.iife.min.js",
+    "/workspace-assets/vendor/uPlot.min.css",
+    "/workspace-assets/workbench.css"
+  ]
+}

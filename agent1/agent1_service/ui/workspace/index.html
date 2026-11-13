@@ -134,7 +134,7 @@
                 </div>
               </div>
               <div class="chart-foot">
-                <span class="dot"></span>Số dư dự kiến<span class="muted"
+                <span class="dot"></span>Số dư kỳ vọng<span class="muted"
                   >Chỉ hiển thị kết quả từ dữ liệu đã nạp</span
                 >
               </div>
@@ -410,6 +410,7 @@
               </button>
             </div>
             <div id="import-warnings"></div>
+            <div id="import-plan"></div>
             <button class="button" id="all-errors" hidden>
               Tải toàn bộ lỗi
             </button>
@@ -490,8 +491,8 @@
               <div class="eyebrow">03 / THIẾT LẬP và KIỂM ĐỊNH</div>
               <h1>Phiên bản dự báo</h1>
               <p>
-                Chọn phương án bằng lịch sử riêng. Chỉ đưa vào sử dụng khi bạn
-                đã xem kết quả.
+                Học tiếp bằng lịch sử gần đây. Giữ phiên bản đang dùng cho đến
+                khi có đủ bằng chứng để thay thế.
               </p>
             </div>
           </div>
@@ -520,9 +521,9 @@
                   ><input type="checkbox" id="try-deep" />Kiểm định mở rộng cho
                   bán thu ngay và chi biến đổi nếu đủ lịch sử sao kê</label
                 ><p class="helper">
-                  Cần ít nhất 60 hóa đơn trước ngày chốt 112 ngày (20 đã tất
-                  toán), và 20 hóa đơn ở mỗi cửa sổ kiểm định. Thiếu lịch sử?
-                  Bạn vẫn có thể lập dự báo theo điều khoản và lịch sử hiện có.
+                  Mặc định xem xét cập nhật mỗi 28 ngày. Các tuần đã quan sát
+                  được dùng để học; bài kiểm tra dự thu cần đủ 13 tuần.
+                  Khi thiếu lịch sử, hệ thống giữ phiên bản đang dùng hoặc mô hình nền.
                 </p></details>
                 <button class="button primary" id="train-button">
                   Bắt đầu kiểm định <span>↗</span>
@@ -688,6 +689,9 @@
                 <li>Số tiền và loại chi</li>
                 <li>Ngày doanh nghiệp biết khoản chi</li>
                 <li>Cùng một lần đến hạn dùng một mã ổn định để nạp lại không cộng trùng</li>
+                <li>Bổ sung mã hợp đồng/khoản cố định, kỳ thanh toán (YYYY-MM, YYYY-Q1…YYYY-Q4 hoặc YYYY) và đợt đến hạn (1, 2…). Gốc và lãi vay là hai loại nghĩa vụ riêng</li>
+                <li>Mỗi kỳ/đợt mới có mã lần đến hạn riêng. Đổi ngày trả vẫn giữ kỳ nghĩa vụ; đợt đến hạn khác với số lần thực trả. Dữ liệu cũ chưa đủ định danh được nhắc bổ sung theo cùng mã</li>
+                <li>Trước khi lưu, đối chiếu các dòng thêm mới, sửa và trùng giữ nguyên. Khi mã trong file khác mã được giữ lại, dùng mã được giữ lại để nạp thanh toán</li>
                   <li>Thanh toán thực tế nạp ở bảng Thanh toán nghĩa vụ T5, liên kết đúng mã lần đến hạn và mã dòng sao kê; hỗ trợ trả từng phần</li>
                   <li>Hủy phần còn lại bằng trạng thái cancelled. Khoản đến/quá hạn chưa trả được giữ lại trong dự báo</li>
                   <li>Nghĩa vụ mở rộng dùng loại pit_withholding, foreign_contractor_tax, salary_bonus, rent_contract, loan_interest, loan_principal hoặc cit_final; cần nguồn hồ sơ và verified=true</li>

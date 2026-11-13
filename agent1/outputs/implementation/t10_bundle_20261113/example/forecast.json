@@ -1,0 +1,3688 @@
+{
+  "t1_provenance": {
+    "source": "global_catalog",
+    "catalog_sha256": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+    "metadata_sha256": "c3730dc824c990954bdef5985def77171f68a1479b1237b23fbb9695ad78d440",
+    "local_adaptation": false,
+    "synthetic": true
+  },
+  "compute_budget": {
+    "simulation_paths": 2000,
+    "simulation_seed": 261113710,
+    "shap_limit": 3,
+    "explained_invoices": 3,
+    "displayed_invoices": 3,
+    "all_open_invoices_forecast": true
+  },
+  "explanation_references": {
+    "29724ea492838ad9a9d2dd71c9f3d38b890da30f957caca244ceb4b692e7c796": {
+      "protocol": "landmark-grouped-exact-reference-v2",
+      "cutoff": "2026-02-10",
+      "schema": "t1-landmark-18-v2",
+      "policy": "open-invoices-stratified-v2",
+      "selection": "census",
+      "population": 3,
+      "count": 3,
+      "weighting": "equal_per_open_invoice",
+      "strata_population": [
+        3
+      ],
+      "stratify_features": [
+        "age_days",
+        "term_days",
+        "amount",
+        "customer_history_count",
+        "customer_delay_days"
+      ],
+      "max_weighted_cdf_distance": 0.0,
+      "cdf_distances": {
+        "age_days": 0.0,
+        "term_days": 0.0,
+        "amount": 0.0,
+        "customer_history_count": 0.0,
+        "customer_delay_days": 0.0
+      },
+      "audit_sample_count": 0,
+      "audit_kind": "stratified_subset_sensitivity",
+      "sample_sets": [
+        {
+          "role": "primary",
+          "seed": null,
+          "positions": [
+            0,
+            1,
+            2
+          ],
+          "weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        }
+      ],
+      "invoice_ids": [
+        "I0",
+        "I2",
+        "I1"
+      ],
+      "union_count": 3,
+      "prepared_inputs": [
+        {
+          "method": "compact_ensemble",
+          "weight": 1.0,
+          "values": [
+            [
+              0.6931471805599453,
+              31.0,
+              40.0,
+              0.4,
+              9.0,
+              0.6931471805599453,
+              0.4,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.6153846153846154
+            ],
+            [
+              0.6931471805599453,
+              31.0,
+              40.0,
+              0.0,
+              180.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.6153846153846154
+            ],
+            [
+              0.6931471805599453,
+              31.0,
+              40.0,
+              0.0,
+              180.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.38461538461538464
+            ]
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "key": "invoice_terms",
+          "columns": [
+            "relative_amount",
+            "term_days"
+          ]
+        },
+        {
+          "key": "invoice_age",
+          "columns": [
+            "age_days"
+          ]
+        },
+        {
+          "key": "receipt_state",
+          "columns": [
+            "received_fraction",
+            "receipt_recency_days",
+            "receipt_count",
+            "received_fraction_28d"
+          ]
+        },
+        {
+          "key": "customer_history",
+          "columns": [
+            "customer_settlements_180d",
+            "customer_delay_180d",
+            "customer_delay_std_180d",
+            "customer_delay_trend_180d"
+          ]
+        },
+        {
+          "key": "company_history",
+          "columns": [
+            "company_delay_180d",
+            "company_delay_trend_180d"
+          ]
+        },
+        {
+          "key": "overdue_context",
+          "columns": [
+            "customer_overdue_share",
+            "customer_overdue90_share",
+            "company_overdue_share",
+            "company_overdue90_share",
+            "customer_outstanding_share"
+          ]
+        }
+      ],
+      "hash": "29724ea492838ad9a9d2dd71c9f3d38b890da30f957caca244ceb4b692e7c796",
+      "elapsed_seconds": 0.09214719998999499
+    }
+  },
+  "cutoff": "2026-02-10",
+  "horizon_weeks": 13,
+  "operating_weeks": 0,
+  "mode": "company_trained",
+  "open_invoices": 3,
+  "partial_cash_supported": 3,
+  "adapter_version": "settlement-partial-cash-v2",
+  "partial_version": "141c49f9ff676c5dd25ced4389d771e1b069a59e425c54f0625e6c9bfb2e59ab",
+  "serving_manifest": {
+    "t1_version": "global:f855bf6acf32951c83382716",
+    "t1_model_sha256": "9be8387c2896523b81616c08dc22d551876aa42b167ba552e1b27969e97af838",
+    "adapter_version": "settlement-partial-cash-v2",
+    "partial_version": "141c49f9ff676c5dd25ced4389d771e1b069a59e425c54f0625e6c9bfb2e59ab",
+    "data_version": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+    "policy": {
+      "catalog_sha256": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+      "method": "frozen_global"
+    },
+    "policy_version": "8c1da34fd5fd23a3b98604599a62ea61c3a853cf53f714e4c18bbf56676c8403",
+    "ready_on": "2024-07-01"
+  },
+  "written_off_count": 0,
+  "payment_delay_shift_days": null,
+  "operating_included": false,
+  "new_credit_included": false,
+  "outstanding": 260000000.0,
+  "minimum_balance": -39794601.71989758,
+  "opening_balance": 20000000.0,
+  "t5": {
+    "protocol": "t5-ledger-v1",
+    "obligations": [
+      {
+        "expense_id": "RENT",
+        "due_date": "2026-02-12",
+        "known_at": "2026-02-10",
+        "category": "rent",
+        "direction": "outflow",
+        "obligation_amount": 120000000,
+        "settled_amount": 0,
+        "remaining_amount": 120000000,
+        "source": "",
+        "status": "open",
+        "overdue": false,
+        "identity_status": "missing",
+        "forecast_date": "2026-02-12",
+        "week": 1,
+        "cancelled_amount": 0,
+        "replaced_amount": 0
+      }
+    ],
+    "payments": [],
+    "outflows": [
+      {
+        "expense_id": "RENT",
+        "due_date": "2026-02-12",
+        "known_at": "2026-02-10",
+        "category": "rent",
+        "direction": "outflow",
+        "obligation_amount": 120000000,
+        "settled_amount": 0,
+        "remaining_amount": 120000000,
+        "source": "",
+        "status": "open",
+        "overdue": false,
+        "identity_status": "missing",
+        "date": "2026-02-12",
+        "week": 1,
+        "original_amount": 120000000,
+        "amount": 120000000.0
+      }
+    ],
+    "inflows": [],
+    "overdue_policy": "next_business_day_outgoing;explicit_date_for_overdue_refund",
+    "outflows_pushed_beyond_horizon": [],
+    "scenario_expense_shifts": {}
+  },
+  "cash_floor": 5000000.0,
+  "unknown_outflow_weeks": [],
+  "timing_dependence": "independent",
+  "band_protocol": "settlement-partial-paths-v2",
+  "band_status": "raw_simulation",
+  "any_below_floor_probability": 0.849,
+  "weeks": [
+    {
+      "week": 1,
+      "date": "2026-02-17",
+      "cash_in": 60205398.28010242,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 120000000.0,
+      "balance": -39794601.71989758,
+      "expected_balance": -39794601.71989758,
+      "median_balance": -40000000.0,
+      "balance_quantiles": {
+        "0.1": -100000000.0,
+        "0.5": -40000000.0,
+        "0.9": 60000000.0
+      },
+      "low": -100000000.0,
+      "high": 60000000.0,
+      "outflow_status": "scheduled",
+      "below_floor_probability": 0.849
+    },
+    {
+      "week": 2,
+      "date": "2026-02-24",
+      "cash_in": 39738137.85118531,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": -56463.86871227622,
+      "expected_balance": -56463.86871227622,
+      "median_balance": 0.0,
+      "balance_quantiles": {
+        "0.1": -100000000.0,
+        "0.5": 0.0,
+        "0.9": 100000000.0
+      },
+      "low": -100000000.0,
+      "high": 100000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.6235
+    },
+    {
+      "week": 3,
+      "date": "2026-03-03",
+      "cash_in": 24899972.25188482,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 24843508.383172546,
+      "expected_balance": 24843508.383172546,
+      "median_balance": 50000000.0,
+      "balance_quantiles": {
+        "0.1": -70000000.0,
+        "0.5": 50000000.0,
+        "0.9": 160000000.0
+      },
+      "low": -70000000.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.48
+    },
+    {
+      "week": 4,
+      "date": "2026-03-10",
+      "cash_in": 18716270.268915802,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 43559778.652088344,
+      "expected_balance": 43559778.652088344,
+      "median_balance": 60000000.0,
+      "balance_quantiles": {
+        "0.1": -40000000.0,
+        "0.5": 60000000.0,
+        "0.9": 160000000.0
+      },
+      "low": -40000000.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.3735
+    },
+    {
+      "week": 5,
+      "date": "2026-03-17",
+      "cash_in": 13143729.42729387,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 56703508.07938222,
+      "expected_balance": 56703508.07938222,
+      "median_balance": 60000000.0,
+      "balance_quantiles": {
+        "0.1": -40000000.0,
+        "0.5": 60000000.0,
+        "0.9": 160000000.0
+      },
+      "low": -40000000.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.298
+    },
+    {
+      "week": 6,
+      "date": "2026-03-24",
+      "cash_in": 9287743.474213582,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 65991251.553595796,
+      "expected_balance": 65991251.553595796,
+      "median_balance": 60000000.0,
+      "balance_quantiles": {
+        "0.1": -40000000.0,
+        "0.5": 60000000.0,
+        "0.9": 160000000.0
+      },
+      "low": -40000000.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.248
+    },
+    {
+      "week": 7,
+      "date": "2026-03-31",
+      "cash_in": 7617306.933241953,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 73608558.48683774,
+      "expected_balance": 73608558.48683774,
+      "median_balance": 60000000.0,
+      "balance_quantiles": {
+        "0.1": -40000000.0,
+        "0.5": 60000000.0,
+        "0.9": 160000000.0
+      },
+      "low": -40000000.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.21
+    },
+    {
+      "week": 8,
+      "date": "2026-04-07",
+      "cash_in": 6749104.832324114,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 80357663.31916186,
+      "expected_balance": 80357663.31916186,
+      "median_balance": 60000000.0,
+      "balance_quantiles": {
+        "0.1": -40000000.0,
+        "0.5": 60000000.0,
+        "0.9": 160000000.0
+      },
+      "low": -40000000.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.1775
+    },
+    {
+      "week": 9,
+      "date": "2026-04-14",
+      "cash_in": 4847043.811556295,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 85204707.13071816,
+      "expected_balance": 85204707.13071816,
+      "median_balance": 60000000.0,
+      "balance_quantiles": {
+        "0.1": -40000000.0,
+        "0.5": 60000000.0,
+        "0.9": 160000000.0
+      },
+      "low": -40000000.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.1565
+    },
+    {
+      "week": 10,
+      "date": "2026-04-21",
+      "cash_in": 4288842.247500459,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 89493549.37821862,
+      "expected_balance": 89493549.37821862,
+      "median_balance": 60000000.0,
+      "balance_quantiles": {
+        "0.1": -6960155.353191487,
+        "0.5": 60000000.0,
+        "0.9": 160000000.0
+      },
+      "low": -6960155.353191487,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.141
+    },
+    {
+      "week": 11,
+      "date": "2026-04-28",
+      "cash_in": 3672716.926507552,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 93166266.30472617,
+      "expected_balance": 93166266.30472617,
+      "median_balance": 60000000.0,
+      "balance_quantiles": {
+        "0.1": 0.0,
+        "0.5": 60000000.0,
+        "0.9": 160000000.0
+      },
+      "low": 0.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.1265
+    },
+    {
+      "week": 12,
+      "date": "2026-05-05",
+      "cash_in": 3444911.096635122,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 96611177.40136129,
+      "expected_balance": 96611177.40136129,
+      "median_balance": 98981199.39068389,
+      "balance_quantiles": {
+        "0.1": 0.0,
+        "0.5": 98981199.39068389,
+        "0.9": 160000000.0
+      },
+      "low": 0.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.1145
+    },
+    {
+      "week": 13,
+      "date": "2026-05-12",
+      "cash_in": 2923259.637690603,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_out": 0.0,
+      "balance": 99534437.03905189,
+      "expected_balance": 99534437.03905189,
+      "median_balance": 100000000.0,
+      "balance_quantiles": {
+        "0.1": 0.0,
+        "0.5": 100000000.0,
+        "0.9": 160000000.0
+      },
+      "low": 0.0,
+      "high": 160000000.0,
+      "outflow_status": "confirmed_zero",
+      "below_floor_probability": 0.104
+    }
+  ],
+  "collections": [
+    {
+      "invoice_id": "I1",
+      "customer_id": "B",
+      "outstanding": 100000000,
+      "write_off_probability_365d_at_issue": null,
+      "overdue_days": 9,
+      "due_date": "2026-02-01",
+      "disputed": false,
+      "promised_date": null,
+      "promise_reliability": null,
+      "reason": "Dư nợ lớn trước",
+      "payment_probability_4w": 0.4668305015535549,
+      "triage_probability_4w": 0.4668305015535549,
+      "amount_at_risk_4w": "53316949.84464451",
+      "collection_rank": 1,
+      "priority_score": 100000000,
+      "priority_score_unit": "VND",
+      "priority_policy": "amount",
+      "ranking_explanation": {
+        "protocol": "collection-ranking-v2",
+        "cutoff": "2026-02-10",
+        "policy": "amount",
+        "label": "Dư nợ lớn trước",
+        "formula": "Dư nợ còn phải thu",
+        "score_unit": "VND",
+        "uses_probability": false,
+        "rank": 1,
+        "eligible_count": 3,
+        "score": 100000000,
+        "selection": {
+          "status": "saved_without_audit",
+          "message": "Dùng chính sách lưu trong phiên bản; chưa có báo cáo kiểm định chính sách đi kèm."
+        },
+        "probability_source": {
+          "method": "active_t1",
+          "label": "T1 đang dùng cho dự báo",
+          "asof": "2024-07-01",
+          "model_version": "global:f855bf6acf32951c83382716",
+          "scenario_shift_applied": false,
+          "detail": "Cùng phân phối T1 đang dự báo; không fit thêm model customer local.",
+          "used_in_score": false,
+          "differs_from_displayed": false
+        },
+        "triage_probability_4w": 0.4668305015535549,
+        "displayed_probability_4w": 0.4668305015535549,
+        "displayed_model_version": null,
+        "factors": [
+          {
+            "feature": "outstanding",
+            "label": "Dư nợ còn phải thu",
+            "value": 100000000,
+            "unit": "VND",
+            "affects_score": true,
+            "message": "Tham gia điểm ưu tiên."
+          },
+          {
+            "feature": "unresolved_probability_4w",
+            "label": "Nguy cơ chưa tất toán trong 4 tuần",
+            "value": 0.5331694984464451,
+            "unit": "probability",
+            "affects_score": false,
+            "message": "Chỉ để tham khảo; chính sách dư nợ không dùng xác suất."
+          },
+          {
+            "feature": "overdue_days",
+            "label": "Số ngày quá hạn",
+            "value": 9,
+            "unit": "ngày",
+            "affects_score": false,
+            "message": "Không cộng điểm riêng; tuổi hóa đơn có thể ảnh hưởng ước lượng thanh toán."
+          },
+          {
+            "feature": "disputed",
+            "label": "Tranh chấp",
+            "value": false,
+            "unit": "boolean",
+            "affects_score": false,
+            "message": "Chưa ghi nhận tranh chấp tại ngày dự báo."
+          },
+          {
+            "feature": "promised_date",
+            "label": "Lời hứa trả",
+            "value": null,
+            "unit": "date",
+            "state": "none",
+            "reliability": null,
+            "affects_score": false,
+            "message": "Chưa có lời hứa được ghi nhận."
+          }
+        ],
+        "tie_break": {
+          "rule": "snapshot_order",
+          "group_size": 2,
+          "position": 1
+        },
+        "previous": null,
+        "next": {
+          "invoice_id": "I2",
+          "rank": 2,
+          "score": 100000000,
+          "score_difference": 0,
+          "tied": true
+        },
+        "business_rules": [
+          "Loại hóa đơn đã ghi nhận xóa nợ tại ngày dự báo.",
+          "Tạm loại hóa đơn có lần liên hệ hoặc tạm bỏ qua gần nhất chưa đủ 7 ngày.",
+          "Tranh chấp, lời hứa và ngày quá hạn không cộng/trừ điểm riêng.",
+          "Điểm giảm dần; khi bằng điểm giữ thứ tự bản ghi trong snapshot dữ liệu."
+        ],
+        "limitation": "Điểm phân luồng công nợ, không phải số tiền chắc chắn mất hoặc tiền tăng thêm do liên hệ khách."
+      },
+      "payment_explanation": {
+        "protocol": "landmark-grouped-exact-reference-v2",
+        "status": "available",
+        "method": "exact_grouped_interventional_shapley",
+        "target": "payment_probability_4w",
+        "horizon_weeks": 4,
+        "cutoff": "2026-02-10",
+        "model_asof": "2024-07-01",
+        "model_version": "t1-landmark-18-v2",
+        "feature_schema": "t1-landmark-18-v2",
+        "units": "probability",
+        "contribution_units": "percentage_points",
+        "probability": 0.4668305015535549,
+        "baseline_probability": 0.5702986396629297,
+        "reconstructed_probability": 0.4668305015535548,
+        "additivity_error": 5.551115123125783e-17,
+        "factors": [
+          {
+            "feature": "receipt_state",
+            "label": "Trạng thái thu tiền",
+            "value": {
+              "received_fraction": 0.0,
+              "receipt_recency_days": 180.0,
+              "receipt_count": 0.0,
+              "received_fraction_28d": 0.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": -0.10622111373975075,
+            "contribution_pp": -10.622111373975075,
+            "direction": "decrease",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": -10.622111373975075,
+              "max_contribution_pp": -10.622111373975075,
+              "max_change_pp": 0.0,
+              "meaningful": true
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "receipt_state",
+              "value": {
+                "received_fraction": 0.0,
+                "receipt_recency_days": 180.0,
+                "receipt_count": 0.0,
+                "received_fraction_28d": 0.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "overdue_context",
+            "label": "Công nợ hiện tại",
+            "value": {
+              "customer_overdue_share": 0.0,
+              "customer_overdue90_share": 0.0,
+              "company_overdue_share": 0.0,
+              "company_overdue90_share": 0.0,
+              "customer_outstanding_share": 0.38461538461538464
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.002752975630375881,
+            "contribution_pp": 0.27529756303758807,
+            "direction": "increase",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.27529756303758807,
+              "max_contribution_pp": 0.27529756303758807,
+              "max_change_pp": 0.0,
+              "meaningful": true
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "overdue_context",
+              "value": {
+                "customer_overdue_share": 0.0,
+                "customer_overdue90_share": 0.0,
+                "company_overdue_share": 0.0,
+                "company_overdue90_share": 0.0,
+                "customer_outstanding_share": 0.38461538461538464
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "invoice_terms",
+            "label": "Giá trị và điều khoản",
+            "value": {
+              "relative_amount": 0.6931471805599453,
+              "term_days": 31.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "invoice_terms",
+              "value": {
+                "relative_amount": 0.6931471805599453,
+                "term_days": 31.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "invoice_age",
+            "label": "Tuổi hóa đơn",
+            "value": {
+              "age_days": 40.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "invoice_age",
+              "value": {
+                "age_days": 40.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "customer_history",
+            "label": "Lịch sử khách",
+            "value": {
+              "customer_settlements_180d": 0.0,
+              "customer_delay_180d": 0.0,
+              "customer_delay_std_180d": 0.0,
+              "customer_delay_trend_180d": 0.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "customer_history",
+              "value": {
+                "customer_settlements_180d": 0.0,
+                "customer_delay_180d": 0.0,
+                "customer_delay_std_180d": 0.0,
+                "customer_delay_trend_180d": 0.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "company_history",
+            "label": "Lịch sử doanh nghiệp",
+            "value": {
+              "company_delay_180d": 0.0,
+              "company_delay_trend_180d": 0.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "company_history",
+              "value": {
+                "company_delay_180d": 0.0,
+                "company_delay_trend_180d": 0.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          }
+        ],
+        "scenario_shift_weeks": 0,
+        "stability": {
+          "checked": false,
+          "sample_count": 0,
+          "top_feature_agreement": null,
+          "sign_change_tolerance_pp": 0.1,
+          "absolute_change_tolerance_pp": 0.5,
+          "relative_change_tolerance": 0.25,
+          "scope": "background_sampling_sensitivity_only"
+        },
+        "reference": {
+          "kind": "open_invoices_at_cutoff",
+          "count": 3,
+          "population": 3,
+          "selection": "census",
+          "weighting": "equal_per_open_invoice",
+          "hash": "29724ea492838ad9a9d2dd71c9f3d38b890da30f957caca244ceb4b692e7c796",
+          "cutoff": "2026-02-10",
+          "max_weighted_cdf_distance": 0.0,
+          "audit_sample_count": 0
+        },
+        "group_count": 6,
+        "coalition_count": 64,
+        "background_count": 3,
+        "background_union_count": 3,
+        "limitations": [
+          "Exact for the declared groups and finite reference distribution. Within-group feature effects are combined.",
+          "Sensitivity concerns background sampling. It does not measure uncertainty in the prediction or support of every hybrid input.",
+          "Attributions describe predictive associations. Causal or collection-effect conclusions require separate evidence."
+        ]
+      }
+    },
+    {
+      "invoice_id": "I2",
+      "customer_id": "A",
+      "outstanding": 100000000,
+      "write_off_probability_365d_at_issue": null,
+      "overdue_days": 9,
+      "due_date": "2026-02-01",
+      "disputed": false,
+      "promised_date": null,
+      "promise_reliability": null,
+      "reason": "Dư nợ lớn trước",
+      "payment_probability_4w": 0.4644184242597269,
+      "triage_probability_4w": 0.4644184242597269,
+      "amount_at_risk_4w": "53558157.57402731",
+      "collection_rank": 2,
+      "priority_score": 100000000,
+      "priority_score_unit": "VND",
+      "priority_policy": "amount",
+      "ranking_explanation": {
+        "protocol": "collection-ranking-v2",
+        "cutoff": "2026-02-10",
+        "policy": "amount",
+        "label": "Dư nợ lớn trước",
+        "formula": "Dư nợ còn phải thu",
+        "score_unit": "VND",
+        "uses_probability": false,
+        "rank": 2,
+        "eligible_count": 3,
+        "score": 100000000,
+        "selection": {
+          "status": "saved_without_audit",
+          "message": "Dùng chính sách lưu trong phiên bản; chưa có báo cáo kiểm định chính sách đi kèm."
+        },
+        "probability_source": {
+          "method": "active_t1",
+          "label": "T1 đang dùng cho dự báo",
+          "asof": "2024-07-01",
+          "model_version": "global:f855bf6acf32951c83382716",
+          "scenario_shift_applied": false,
+          "detail": "Cùng phân phối T1 đang dự báo; không fit thêm model customer local.",
+          "used_in_score": false,
+          "differs_from_displayed": false
+        },
+        "triage_probability_4w": 0.4644184242597269,
+        "displayed_probability_4w": 0.4644184242597269,
+        "displayed_model_version": null,
+        "factors": [
+          {
+            "feature": "outstanding",
+            "label": "Dư nợ còn phải thu",
+            "value": 100000000,
+            "unit": "VND",
+            "affects_score": true,
+            "message": "Tham gia điểm ưu tiên."
+          },
+          {
+            "feature": "unresolved_probability_4w",
+            "label": "Nguy cơ chưa tất toán trong 4 tuần",
+            "value": 0.5355815757402731,
+            "unit": "probability",
+            "affects_score": false,
+            "message": "Chỉ để tham khảo; chính sách dư nợ không dùng xác suất."
+          },
+          {
+            "feature": "overdue_days",
+            "label": "Số ngày quá hạn",
+            "value": 9,
+            "unit": "ngày",
+            "affects_score": false,
+            "message": "Không cộng điểm riêng; tuổi hóa đơn có thể ảnh hưởng ước lượng thanh toán."
+          },
+          {
+            "feature": "disputed",
+            "label": "Tranh chấp",
+            "value": false,
+            "unit": "boolean",
+            "affects_score": false,
+            "message": "Chưa ghi nhận tranh chấp tại ngày dự báo."
+          },
+          {
+            "feature": "promised_date",
+            "label": "Lời hứa trả",
+            "value": null,
+            "unit": "date",
+            "state": "none",
+            "reliability": null,
+            "affects_score": false,
+            "message": "Chưa có lời hứa được ghi nhận."
+          }
+        ],
+        "tie_break": {
+          "rule": "snapshot_order",
+          "group_size": 2,
+          "position": 2
+        },
+        "previous": {
+          "invoice_id": "I1",
+          "rank": 1,
+          "score": 100000000,
+          "score_difference": 0,
+          "tied": true
+        },
+        "next": {
+          "invoice_id": "I0",
+          "rank": 3,
+          "score": 60000000,
+          "score_difference": 40000000,
+          "tied": false
+        },
+        "business_rules": [
+          "Loại hóa đơn đã ghi nhận xóa nợ tại ngày dự báo.",
+          "Tạm loại hóa đơn có lần liên hệ hoặc tạm bỏ qua gần nhất chưa đủ 7 ngày.",
+          "Tranh chấp, lời hứa và ngày quá hạn không cộng/trừ điểm riêng.",
+          "Điểm giảm dần; khi bằng điểm giữ thứ tự bản ghi trong snapshot dữ liệu."
+        ],
+        "limitation": "Điểm phân luồng công nợ, không phải số tiền chắc chắn mất hoặc tiền tăng thêm do liên hệ khách."
+      },
+      "payment_explanation": {
+        "protocol": "landmark-grouped-exact-reference-v2",
+        "status": "available",
+        "method": "exact_grouped_interventional_shapley",
+        "target": "payment_probability_4w",
+        "horizon_weeks": 4,
+        "cutoff": "2026-02-10",
+        "model_asof": "2024-07-01",
+        "model_version": "t1-landmark-18-v2",
+        "feature_schema": "t1-landmark-18-v2",
+        "units": "probability",
+        "contribution_units": "percentage_points",
+        "probability": 0.4644184242597269,
+        "baseline_probability": 0.5702986396629297,
+        "reconstructed_probability": 0.4644184242597269,
+        "additivity_error": 0.0,
+        "factors": [
+          {
+            "feature": "receipt_state",
+            "label": "Trạng thái thu tiền",
+            "value": {
+              "received_fraction": 0.0,
+              "receipt_recency_days": 180.0,
+              "receipt_count": 0.0,
+              "received_fraction_28d": 0.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": -0.10507618963859353,
+            "contribution_pp": -10.507618963859352,
+            "direction": "decrease",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": -10.507618963859352,
+              "max_contribution_pp": -10.507618963859352,
+              "max_change_pp": 0.0,
+              "meaningful": true
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "receipt_state",
+              "value": {
+                "received_fraction": 0.0,
+                "receipt_recency_days": 180.0,
+                "receipt_count": 0.0,
+                "received_fraction_28d": 0.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "overdue_context",
+            "label": "Công nợ hiện tại",
+            "value": {
+              "customer_overdue_share": 0.0,
+              "customer_overdue90_share": 0.0,
+              "company_overdue_share": 0.0,
+              "company_overdue90_share": 0.0,
+              "customer_outstanding_share": 0.6153846153846154
+            },
+            "value_unit": "prepared_group",
+            "contribution": -0.0008040257646093063,
+            "contribution_pp": -0.08040257646093063,
+            "direction": "decrease",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": -0.08040257646093063,
+              "max_contribution_pp": -0.08040257646093063,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "overdue_context",
+              "value": {
+                "customer_overdue_share": 0.0,
+                "customer_overdue90_share": 0.0,
+                "company_overdue_share": 0.0,
+                "company_overdue90_share": 0.0,
+                "customer_outstanding_share": 0.6153846153846154
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "invoice_terms",
+            "label": "Giá trị và điều khoản",
+            "value": {
+              "relative_amount": 0.6931471805599453,
+              "term_days": 31.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "invoice_terms",
+              "value": {
+                "relative_amount": 0.6931471805599453,
+                "term_days": 31.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "invoice_age",
+            "label": "Tuổi hóa đơn",
+            "value": {
+              "age_days": 40.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "invoice_age",
+              "value": {
+                "age_days": 40.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "customer_history",
+            "label": "Lịch sử khách",
+            "value": {
+              "customer_settlements_180d": 0.0,
+              "customer_delay_180d": 0.0,
+              "customer_delay_std_180d": 0.0,
+              "customer_delay_trend_180d": 0.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "customer_history",
+              "value": {
+                "customer_settlements_180d": 0.0,
+                "customer_delay_180d": 0.0,
+                "customer_delay_std_180d": 0.0,
+                "customer_delay_trend_180d": 0.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "company_history",
+            "label": "Lịch sử doanh nghiệp",
+            "value": {
+              "company_delay_180d": 0.0,
+              "company_delay_trend_180d": 0.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "company_history",
+              "value": {
+                "company_delay_180d": 0.0,
+                "company_delay_trend_180d": 0.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          }
+        ],
+        "scenario_shift_weeks": 0,
+        "stability": {
+          "checked": false,
+          "sample_count": 0,
+          "top_feature_agreement": null,
+          "sign_change_tolerance_pp": 0.1,
+          "absolute_change_tolerance_pp": 0.5,
+          "relative_change_tolerance": 0.25,
+          "scope": "background_sampling_sensitivity_only"
+        },
+        "reference": {
+          "kind": "open_invoices_at_cutoff",
+          "count": 3,
+          "population": 3,
+          "selection": "census",
+          "weighting": "equal_per_open_invoice",
+          "hash": "29724ea492838ad9a9d2dd71c9f3d38b890da30f957caca244ceb4b692e7c796",
+          "cutoff": "2026-02-10",
+          "max_weighted_cdf_distance": 0.0,
+          "audit_sample_count": 0
+        },
+        "group_count": 6,
+        "coalition_count": 64,
+        "background_count": 3,
+        "background_union_count": 3,
+        "limitations": [
+          "Exact for the declared groups and finite reference distribution. Within-group feature effects are combined.",
+          "Sensitivity concerns background sampling. It does not measure uncertainty in the prediction or support of every hybrid input.",
+          "Attributions describe predictive associations. Causal or collection-effect conclusions require separate evidence."
+        ]
+      }
+    },
+    {
+      "invoice_id": "I0",
+      "customer_id": "A",
+      "outstanding": 60000000,
+      "write_off_probability_365d_at_issue": null,
+      "overdue_days": 9,
+      "due_date": "2026-02-01",
+      "disputed": false,
+      "promised_date": null,
+      "promise_reliability": null,
+      "reason": "Dư nợ lớn trước",
+      "payment_probability_4w": 0.7796469931755076,
+      "triage_probability_4w": 0.7796469931755076,
+      "amount_at_risk_4w": "13221180.409469544",
+      "collection_rank": 3,
+      "priority_score": 60000000,
+      "priority_score_unit": "VND",
+      "priority_policy": "amount",
+      "ranking_explanation": {
+        "protocol": "collection-ranking-v2",
+        "cutoff": "2026-02-10",
+        "policy": "amount",
+        "label": "Dư nợ lớn trước",
+        "formula": "Dư nợ còn phải thu",
+        "score_unit": "VND",
+        "uses_probability": false,
+        "rank": 3,
+        "eligible_count": 3,
+        "score": 60000000,
+        "selection": {
+          "status": "saved_without_audit",
+          "message": "Dùng chính sách lưu trong phiên bản; chưa có báo cáo kiểm định chính sách đi kèm."
+        },
+        "probability_source": {
+          "method": "active_t1",
+          "label": "T1 đang dùng cho dự báo",
+          "asof": "2024-07-01",
+          "model_version": "global:f855bf6acf32951c83382716",
+          "scenario_shift_applied": false,
+          "detail": "Cùng phân phối T1 đang dự báo; không fit thêm model customer local.",
+          "used_in_score": false,
+          "differs_from_displayed": false
+        },
+        "triage_probability_4w": 0.7796469931755076,
+        "displayed_probability_4w": 0.7796469931755076,
+        "displayed_model_version": null,
+        "factors": [
+          {
+            "feature": "outstanding",
+            "label": "Dư nợ còn phải thu",
+            "value": 60000000,
+            "unit": "VND",
+            "affects_score": true,
+            "message": "Tham gia điểm ưu tiên."
+          },
+          {
+            "feature": "unresolved_probability_4w",
+            "label": "Nguy cơ chưa tất toán trong 4 tuần",
+            "value": 0.22035300682449244,
+            "unit": "probability",
+            "affects_score": false,
+            "message": "Chỉ để tham khảo; chính sách dư nợ không dùng xác suất."
+          },
+          {
+            "feature": "overdue_days",
+            "label": "Số ngày quá hạn",
+            "value": 9,
+            "unit": "ngày",
+            "affects_score": false,
+            "message": "Không cộng điểm riêng; tuổi hóa đơn có thể ảnh hưởng ước lượng thanh toán."
+          },
+          {
+            "feature": "disputed",
+            "label": "Tranh chấp",
+            "value": false,
+            "unit": "boolean",
+            "affects_score": false,
+            "message": "Chưa ghi nhận tranh chấp tại ngày dự báo."
+          },
+          {
+            "feature": "promised_date",
+            "label": "Lời hứa trả",
+            "value": null,
+            "unit": "date",
+            "state": "none",
+            "reliability": null,
+            "affects_score": false,
+            "message": "Chưa có lời hứa được ghi nhận."
+          }
+        ],
+        "tie_break": {
+          "rule": "snapshot_order",
+          "group_size": 1,
+          "position": 1
+        },
+        "previous": {
+          "invoice_id": "I2",
+          "rank": 2,
+          "score": 100000000,
+          "score_difference": 40000000,
+          "tied": false
+        },
+        "next": null,
+        "business_rules": [
+          "Loại hóa đơn đã ghi nhận xóa nợ tại ngày dự báo.",
+          "Tạm loại hóa đơn có lần liên hệ hoặc tạm bỏ qua gần nhất chưa đủ 7 ngày.",
+          "Tranh chấp, lời hứa và ngày quá hạn không cộng/trừ điểm riêng.",
+          "Điểm giảm dần; khi bằng điểm giữ thứ tự bản ghi trong snapshot dữ liệu."
+        ],
+        "limitation": "Điểm phân luồng công nợ, không phải số tiền chắc chắn mất hoặc tiền tăng thêm do liên hệ khách."
+      },
+      "payment_explanation": {
+        "protocol": "landmark-grouped-exact-reference-v2",
+        "status": "available",
+        "method": "exact_grouped_interventional_shapley",
+        "target": "payment_probability_4w",
+        "horizon_weeks": 4,
+        "cutoff": "2026-02-10",
+        "model_asof": "2024-07-01",
+        "model_version": "t1-landmark-18-v2",
+        "feature_schema": "t1-landmark-18-v2",
+        "units": "probability",
+        "contribution_units": "percentage_points",
+        "probability": 0.7796469931755076,
+        "baseline_probability": 0.5702986396629297,
+        "reconstructed_probability": 0.7796469931755076,
+        "additivity_error": 0.0,
+        "factors": [
+          {
+            "feature": "receipt_state",
+            "label": "Trạng thái thu tiền",
+            "value": {
+              "received_fraction": 0.4,
+              "receipt_recency_days": 9.0,
+              "receipt_count": 0.6931471805599453,
+              "received_fraction_28d": 0.4
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.21129730337834426,
+            "contribution_pp": 21.129730337834427,
+            "direction": "increase",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 21.129730337834427,
+              "max_contribution_pp": 21.129730337834427,
+              "max_change_pp": 0.0,
+              "meaningful": true
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "receipt_state",
+              "value": {
+                "received_fraction": 0.4,
+                "receipt_recency_days": 9.0,
+                "receipt_count": 0.6931471805599453,
+                "received_fraction_28d": 0.4
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "overdue_context",
+            "label": "Công nợ hiện tại",
+            "value": {
+              "customer_overdue_share": 0.0,
+              "customer_overdue90_share": 0.0,
+              "company_overdue_share": 0.0,
+              "company_overdue90_share": 0.0,
+              "customer_outstanding_share": 0.6153846153846154
+            },
+            "value_unit": "prepared_group",
+            "contribution": -0.0019489498657664353,
+            "contribution_pp": -0.19489498657664353,
+            "direction": "decrease",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": -0.19489498657664353,
+              "max_contribution_pp": -0.19489498657664353,
+              "max_change_pp": 0.0,
+              "meaningful": true
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "overdue_context",
+              "value": {
+                "customer_overdue_share": 0.0,
+                "customer_overdue90_share": 0.0,
+                "company_overdue_share": 0.0,
+                "company_overdue90_share": 0.0,
+                "customer_outstanding_share": 0.6153846153846154
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "invoice_terms",
+            "label": "Giá trị và điều khoản",
+            "value": {
+              "relative_amount": 0.6931471805599453,
+              "term_days": 31.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "invoice_terms",
+              "value": {
+                "relative_amount": 0.6931471805599453,
+                "term_days": 31.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "invoice_age",
+            "label": "Tuổi hóa đơn",
+            "value": {
+              "age_days": 40.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "invoice_age",
+              "value": {
+                "age_days": 40.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "customer_history",
+            "label": "Lịch sử khách",
+            "value": {
+              "customer_settlements_180d": 0.0,
+              "customer_delay_180d": 0.0,
+              "customer_delay_std_180d": 0.0,
+              "customer_delay_trend_180d": 0.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "customer_history",
+              "value": {
+                "customer_settlements_180d": 0.0,
+                "customer_delay_180d": 0.0,
+                "customer_delay_std_180d": 0.0,
+                "customer_delay_trend_180d": 0.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          },
+          {
+            "feature": "company_history",
+            "label": "Lịch sử doanh nghiệp",
+            "value": {
+              "company_delay_180d": 0.0,
+              "company_delay_trend_180d": 0.0
+            },
+            "value_unit": "prepared_group",
+            "contribution": 0.0,
+            "contribution_pp": 0.0,
+            "direction": "neutral",
+            "stability": {
+              "status": "insufficient",
+              "reasons": [],
+              "min_contribution_pp": 0.0,
+              "max_contribution_pp": 0.0,
+              "max_change_pp": 0.0,
+              "meaningful": false
+            },
+            "business_review": {
+              "status": "context_only",
+              "feature": "company_history",
+              "value": {
+                "company_delay_180d": 0.0,
+                "company_delay_trend_180d": 0.0
+              },
+              "reason": "Grouped predictive attribution requires separate business evidence."
+            }
+          }
+        ],
+        "scenario_shift_weeks": 0,
+        "stability": {
+          "checked": false,
+          "sample_count": 0,
+          "top_feature_agreement": null,
+          "sign_change_tolerance_pp": 0.1,
+          "absolute_change_tolerance_pp": 0.5,
+          "relative_change_tolerance": 0.25,
+          "scope": "background_sampling_sensitivity_only"
+        },
+        "reference": {
+          "kind": "open_invoices_at_cutoff",
+          "count": 3,
+          "population": 3,
+          "selection": "census",
+          "weighting": "equal_per_open_invoice",
+          "hash": "29724ea492838ad9a9d2dd71c9f3d38b890da30f957caca244ceb4b692e7c796",
+          "cutoff": "2026-02-10",
+          "max_weighted_cdf_distance": 0.0,
+          "audit_sample_count": 0
+        },
+        "group_count": 6,
+        "coalition_count": 64,
+        "background_count": 3,
+        "background_union_count": 3,
+        "limitations": [
+          "Exact for the declared groups and finite reference distribution. Within-group feature effects are combined.",
+          "Sensitivity concerns background sampling. It does not measure uncertainty in the prediction or support of every hybrid input.",
+          "Attributions describe predictive associations. Causal or collection-effect conclusions require separate evidence."
+        ]
+      }
+    }
+  ],
+  "collection_ranking": {
+    "protocol": "collection-ranking-v2",
+    "policy": "amount",
+    "label": "Dư nợ lớn trước",
+    "formula": "Dư nợ còn phải thu",
+    "score_unit": "VND",
+    "uses_probability": false,
+    "cutoff": "2026-02-10",
+    "model_asof": "2024-07-01",
+    "model_version": null,
+    "selection": {
+      "status": "saved_without_audit",
+      "message": "Dùng chính sách lưu trong phiên bản; chưa có báo cáo kiểm định chính sách đi kèm."
+    },
+    "eligible_count": 3,
+    "displayed_count": 3,
+    "limit": 30,
+    "eligibility": {
+      "open_before_rules": 3,
+      "writeoff_excluded": 0,
+      "recent_contact_or_skip_excluded": 0,
+      "cooldown_days": 7
+    },
+    "business_rules": [
+      "Loại hóa đơn đã ghi nhận xóa nợ tại ngày dự báo.",
+      "Tạm loại hóa đơn có lần liên hệ hoặc tạm bỏ qua gần nhất chưa đủ 7 ngày.",
+      "Tranh chấp, lời hứa và ngày quá hạn không cộng/trừ điểm riêng.",
+      "Điểm giảm dần; khi bằng điểm giữ thứ tự bản ghi trong snapshot dữ liệu."
+    ],
+    "limitation": "Điểm phân luồng công nợ, không phải số tiền chắc chắn mất hoặc tiền tăng thêm do liên hệ khách."
+  },
+  "alerts": [
+    {
+      "week": 1,
+      "message": "Có nguy cơ xuống dưới mức tiền tối thiểu. Kiểm tra thu, chi và phạm vi lịch."
+    },
+    {
+      "week": 2,
+      "message": "Có nguy cơ xuống dưới mức tiền tối thiểu. Kiểm tra thu, chi và phạm vi lịch."
+    },
+    {
+      "week": 3,
+      "message": "Có nguy cơ xuống dưới mức tiền tối thiểu. Kiểm tra thu, chi và phạm vi lịch."
+    },
+    {
+      "week": 4,
+      "message": "Có nguy cơ xuống dưới mức tiền tối thiểu. Kiểm tra thu, chi và phạm vi lịch."
+    },
+    {
+      "week": 5,
+      "message": "Có nguy cơ xuống dưới mức tiền tối thiểu. Kiểm tra thu, chi và phạm vi lịch."
+    }
+  ],
+  "assumptions": [
+    "Chỉ gồm công nợ đang mở và lịch chi đã khai báo; chưa gồm doanh số mới.",
+    "Chưa gồm thu từ hóa đơn bán chịu chưa phát hành.",
+    "Adapter xét trả từng phần cho toàn bộ 3 khoản mở, gồm khoản chưa từng thu; 3 khoản có tiền kỳ vọng thay đổi so với chỉ dự báo tất toán.",
+    "Mô phỏng thời điểm trả độc lập. Xác suất cảnh báo lấy từ mô phỏng; trạng thái hiệu chỉnh dải tiền được lưu riêng.",
+    "Danh sách thu hồi xếp theo phương án đã kiểm định hoặc theo dư nợ khi dùng mốc.",
+    "T5 chỉ dự báo phần nghĩa vụ còn lại sau thanh toán đã ghi nhận. Khoản chi đến/quá hạn chưa trả chuyển sang ngày làm việc kế tiếp; số dư đầu đã gồm giao dịch thực tế đến ngày chốt.",
+    "Khoản hoàn đã duyệt nhưng quá ngày dự kiến nhận cần ngày dự kiến mới; không tự coi là tiền sẽ về ngay."
+  ],
+  "pilot_ready": false,
+  "cash_decomposition": {
+    "protocol": "cash-decomposition-v2",
+    "target": "expected_balance",
+    "units": "VND",
+    "cutoff": "2026-02-10",
+    "model_asof": "2024-07-01",
+    "model_version": null,
+    "dataset_hash": null,
+    "scope": {
+      "open_invoices": 3,
+      "customers": 2,
+      "written_off_count": 0,
+      "partial_cash_supported": 3,
+      "description": "Toàn bộ công nợ đang mở sau loại xóa nợ; gồm cả khoản vừa liên hệ/tạm bỏ qua, không giới hạn 30 khoản ưu tiên."
+    },
+    "totals": {
+      "opening_balance": 20000000.0,
+      "ar_in": 199534437.03905192,
+      "cash_sale_in": 0.0,
+      "new_credit_in": 0.0,
+      "obligation_in": 0.0,
+      "cash_in": 199534437.03905192,
+      "scheduled_out": 120000000.0,
+      "variable_cost_topup": 0.0,
+      "cash_out": 120000000.0,
+      "net_change": 79534437.03905192,
+      "closing_balance": 99534437.03905189,
+      "expected_after_horizon": 60465562.96094808
+    },
+    "invoices": [
+      {
+        "invoice_id": "I2",
+        "customer_id": "A",
+        "due_date": "2026-02-01",
+        "outstanding": 100000000.0,
+        "received_before_cutoff": 0.0,
+        "expected_in": 72647215.78559366,
+        "expected_after_horizon": 27352784.21440634,
+        "expected_by_week": [
+          18314938.98878094,
+          13453158.516484508,
+          9009718.960185193,
+          7154591.975221737,
+          5255195.491551732,
+          3897437.2074071644,
+          3278996.9580449956,
+          2951123.8347776504,
+          2284022.9788206215,
+          2078999.8482378693,
+          1822954.169184981,
+          1694997.4929747833,
+          1451079.3639214714
+        ],
+        "receipt_basis": "settlement_partial_adapter",
+        "receipt_explanation": {
+          "target": "expected_invoice_receipt_by_week",
+          "units": "VND",
+          "status": "verified",
+          "shift_weeks": 0,
+          "t1_settlement_distribution": [
+            0.17742344414729216,
+            0.1306251227531674,
+            0.08710174930723887,
+            0.06926810805202852,
+            0.05059019458937962,
+            0.037157954959946046,
+            0.031202748286382916,
+            0.02819276602574141,
+            0.02149730929421345,
+            0.019617688419294323,
+            0.017143227817275022,
+            0.01600972945705713,
+            0.01531497425674646,
+            0.2988549826342368
+          ],
+          "t1_tail_probability": 0.2988549826342368,
+          "weeks": [
+            {
+              "week": 1,
+              "source_week": 1,
+              "expected_opening_debt": 100000000.0,
+              "settlement_probability": 0.17742344414729216,
+              "settlement_hazard": 0.17742344414729214,
+              "expected_from_settlement": 17742344.414729215,
+              "expected_from_partial": 572594.5740517267,
+              "expected_receipt": 18314938.98878094,
+              "expected_remaining_debt": 81685061.01121905,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 100000000.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 0.0
+                }
+              ]
+            },
+            {
+              "week": 2,
+              "source_week": 2,
+              "expected_opening_debt": 81685061.01121905,
+              "settlement_probability": 0.1306251227531674,
+              "settlement_hazard": 0.15879995828200744,
+              "expected_from_settlement": 12971584.280844819,
+              "expected_from_partial": 481574.23563969036,
+              "expected_receipt": 13453158.516484508,
+              "expected_remaining_debt": 68231902.49473454,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 81058405.444342
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 626655.5668770528
+                }
+              ]
+            },
+            {
+              "week": 3,
+              "source_week": 3,
+              "expected_opening_debt": 68231902.49473454,
+              "settlement_probability": 0.08710174930723887,
+              "settlement_hazard": 0.12587841449662673,
+              "expected_from_settlement": 8588923.704125617,
+              "expected_from_partial": 420795.25605957635,
+              "expected_receipt": 9009718.960185193,
+              "expected_remaining_debt": 59222183.53454935,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 67192232.39664952
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1039670.0980850365
+                }
+              ]
+            },
+            {
+              "week": 4,
+              "source_week": 4,
+              "expected_opening_debt": 59222183.53454935,
+              "settlement_probability": 0.06926810805202852,
+              "settlement_hazard": 0.11452119412170242,
+              "expected_from_settlement": 6782195.176871217,
+              "expected_from_partial": 372396.7983505208,
+              "expected_receipt": 7154591.975221737,
+              "expected_remaining_debt": 52067591.55932761,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 57877883.82795806
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1344299.7065913011
+                }
+              ]
+            },
+            {
+              "week": 5,
+              "source_week": 5,
+              "expected_opening_debt": 52067591.55932761,
+              "settlement_probability": 0.05059019458937962,
+              "settlement_hazard": 0.09445842964156222,
+              "expected_from_settlement": 4918222.933912349,
+              "expected_from_partial": 336972.55763938325,
+              "expected_receipt": 5255195.491551733,
+              "expected_remaining_debt": 46812396.067775875,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 50502461.13344145
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1565130.425886193
+                }
+              ]
+            },
+            {
+              "week": 6,
+              "source_week": 6,
+              "expected_opening_debt": 46812396.067775875,
+              "settlement_probability": 0.037157954959946046,
+              "settlement_hazard": 0.07661570164766543,
+              "expected_from_settlement": 3586564.5705410647,
+              "expected_from_partial": 310872.6368660998,
+              "expected_receipt": 3897437.2074071644,
+              "expected_remaining_debt": 42914958.860368714,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 45065341.22398403
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1747054.84379187
+                }
+              ]
+            },
+            {
+              "week": 7,
+              "source_week": 7,
+              "expected_opening_debt": 42914958.860368714,
+              "settlement_probability": 0.031202748286382916,
+              "settlement_hazard": 0.06967489799003675,
+              "expected_from_settlement": 2990095.380842816,
+              "expected_from_partial": 288901.5772021794,
+              "expected_receipt": 3278996.9580449956,
+              "expected_remaining_debt": 39635961.902323715,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 41005949.99253098
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1909008.8678377608
+                }
+              ]
+            },
+            {
+              "week": 8,
+              "source_week": 8,
+              "expected_opening_debt": 39635961.902323715,
+              "settlement_probability": 0.02819276602574141,
+              "settlement_hazard": 0.0676684831936437,
+              "expected_from_settlement": 2682105.4218512964,
+              "expected_from_partial": 269018.4129263538,
+              "expected_receipt": 2951123.8347776504,
+              "expected_remaining_debt": 36684838.06754606,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 37592684.99426519
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2043276.908058558
+                }
+              ]
+            },
+            {
+              "week": 9,
+              "source_week": 9,
+              "expected_opening_debt": 36684838.06754606,
+              "settlement_probability": 0.02149730929421345,
+              "settlement_hazard": 0.05534297409393894,
+              "expected_from_settlement": 2030248.0428125488,
+              "expected_from_partial": 253774.9360080728,
+              "expected_receipt": 2284022.9788206215,
+              "expected_remaining_debt": 34400815.08872544,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 34537861.18625467
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2146976.88129143
+                }
+              ]
+            },
+            {
+              "week": 10,
+              "source_week": 10,
+              "expected_opening_debt": 34400815.08872544,
+              "settlement_probability": 0.019617688419294323,
+              "settlement_hazard": 0.05346284461603249,
+              "expected_from_settlement": 1839165.431753396,
+              "expected_from_partial": 239834.4164844732,
+              "expected_receipt": 2078999.8482378693,
+              "expected_remaining_debt": 32321815.24048757,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 32150766.20032036
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2250048.888405122
+                }
+              ]
+            },
+            {
+              "week": 11,
+              "source_week": 11,
+              "expected_opening_debt": 32321815.24048757,
+              "settlement_probability": 0.017143227817275022,
+              "settlement_hazard": 0.04935818259637011,
+              "expected_from_settlement": 1595346.058486126,
+              "expected_from_partial": 227608.11069885493,
+              "expected_receipt": 1822954.169184981,
+              "expected_remaining_debt": 30498861.071302593,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 29988222.350633338
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2333592.8898542756
+                }
+              ]
+            },
+            {
+              "week": 12,
+              "source_week": 12,
+              "expected_opening_debt": 30498861.071302593,
+              "settlement_probability": 0.01600972945705713,
+              "settlement_hazard": 0.04848792981219738,
+              "expected_from_settlement": 1478826.6349772809,
+              "expected_from_partial": 216170.8579975026,
+              "expected_receipt": 1694997.4929747835,
+              "expected_remaining_debt": 28803863.57832781,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 28092433.74673785
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2406427.3245647824
+                }
+              ]
+            },
+            {
+              "week": 13,
+              "source_week": 13,
+              "expected_opening_debt": 28803863.57832781,
+              "settlement_probability": 0.01531497425674646,
+              "settlement_hazard": 0.0487474181436793,
+              "expected_from_settlement": 1404113.9820062423,
+              "expected_from_partial": 46965.381915229125,
+              "expected_receipt": 1451079.3639214714,
+              "expected_remaining_debt": 27352784.214406338,
+              "partial_states": [
+                {
+                  "cell": 4,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 26340583.76822203
+                },
+                {
+                  "cell": 5,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2463279.810105815
+                }
+              ]
+            }
+          ],
+          "source": "active_t1_and_partial_adapter",
+          "partial_profile_ref": "t10.partial_profile",
+          "formula": "settlement = sum(state_debt) * hazard; partial = sum(state_debt * (1-hazard) * q[cell] * mean_ratio[cell])"
+        }
+      },
+      {
+        "invoice_id": "I1",
+        "customer_id": "B",
+        "due_date": "2026-02-01",
+        "outstanding": 100000000.0,
+        "received_before_cutoff": 0.0,
+        "expected_in": 71668355.65425132,
+        "expected_after_horizon": 28331644.345748678,
+        "expected_by_week": [
+          18548205.511055443,
+          13484585.984179828,
+          8954981.27067218,
+          7179130.401681135,
+          5386845.120953078,
+          3980949.7915571453,
+          3298510.90568085,
+          2894844.1300825253,
+          2052832.8684422912,
+          1795294.6473100167,
+          1503796.9437928146,
+          1402542.6404464168,
+          1185835.4383976029
+        ],
+        "receipt_basis": "settlement_partial_adapter",
+        "receipt_explanation": {
+          "target": "expected_invoice_receipt_by_week",
+          "units": "VND",
+          "status": "verified",
+          "shift_weeks": 0,
+          "t1_settlement_distribution": [
+            0.1797724608476891,
+            0.13096041323160929,
+            0.08656177376837428,
+            0.0695358537058822,
+            0.051971489820511745,
+            0.03805691847835272,
+            0.03144206965164176,
+            0.027633012585206736,
+            0.01906354257827505,
+            0.01658343788591673,
+            0.013679861870533577,
+            0.012785642705792268,
+            0.012403569469543602,
+            0.30954995340067093
+          ],
+          "t1_tail_probability": 0.30954995340067093,
+          "weeks": [
+            {
+              "week": 1,
+              "source_week": 1,
+              "expected_opening_debt": 100000000.0,
+              "settlement_probability": 0.1797724608476891,
+              "settlement_hazard": 0.1797724608476891,
+              "expected_from_settlement": 17977246.08476891,
+              "expected_from_partial": 570959.426286532,
+              "expected_receipt": 18548205.511055443,
+              "expected_remaining_debt": 81451794.48894456,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 100000000.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 0.0
+                }
+              ]
+            },
+            {
+              "week": 2,
+              "source_week": 2,
+              "expected_opening_debt": 81451794.48894456,
+              "settlement_probability": 0.13096041323160929,
+              "settlement_hazard": 0.15966351650049976,
+              "expected_from_settlement": 13004879.933380917,
+              "expected_from_partial": 479706.05079891183,
+              "expected_receipt": 13484585.984179828,
+              "expected_remaining_debt": 67967208.50476474,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 80826928.4508129
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 624866.0381316523
+                }
+              ]
+            },
+            {
+              "week": 3,
+              "source_week": 3,
+              "expected_opening_debt": 67967208.50476474,
+              "settlement_probability": 0.08656177376837428,
+              "settlement_hazard": 0.12558523468350208,
+              "expected_from_settlement": 8535677.830853395,
+              "expected_from_partial": 419303.4398187836,
+              "expected_receipt": 8954981.270672178,
+              "expected_remaining_debt": 59012227.234092556,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 66931571.62891815
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1035636.8758465729
+                }
+              ]
+            },
+            {
+              "week": 4,
+              "source_week": 4,
+              "expected_opening_debt": 59012227.234092556,
+              "settlement_probability": 0.0695358537058822,
+              "settlement_hazard": 0.11537288238367553,
+              "expected_from_settlement": 6808410.751877694,
+              "expected_from_partial": 370719.64980344084,
+              "expected_receipt": 7179130.401681135,
+              "expected_remaining_debt": 51833096.83241142,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 57672693.380029075
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1339533.854063482
+                }
+              ]
+            },
+            {
+              "week": 5,
+              "source_week": 5,
+              "expected_opening_debt": 51833096.83241142,
+              "settlement_probability": 0.051971489820511745,
+              "settlement_hazard": 0.0974764872558292,
+              "expected_from_settlement": 5052508.202814714,
+              "expected_from_partial": 334336.9181383648,
+              "expected_receipt": 5386845.120953079,
+              "expected_remaining_debt": 46446251.71145834,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 50275015.22174436
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1558081.6106670704
+                }
+              ]
+            },
+            {
+              "week": 6,
+              "source_week": 6,
+              "expected_opening_debt": 46446251.71145834,
+              "settlement_probability": 0.03805691847835272,
+              "settlement_hazard": 0.07908785530311048,
+              "expected_from_settlement": 3673334.434727666,
+              "expected_from_partial": 307615.35682947893,
+              "expected_receipt": 3980949.791557145,
+              "expected_remaining_debt": 42465301.91990119,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 44712861.50192928
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1733390.2095290667
+                }
+              ]
+            },
+            {
+              "week": 7,
+              "source_week": 7,
+              "expected_opening_debt": 42465301.91990119,
+              "settlement_probability": 0.03144206965164176,
+              "settlement_hazard": 0.07095272894050632,
+              "expected_from_settlement": 3013029.056499513,
+              "expected_from_partial": 285481.84918133705,
+              "expected_receipt": 3298510.90568085,
+              "expected_remaining_debt": 39166791.01422034,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 40576295.380147465
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 1889006.5397537407
+                }
+              ]
+            },
+            {
+              "week": 8,
+              "source_week": 8,
+              "expected_opening_debt": 39166791.01422034,
+              "settlement_probability": 0.027633012585206736,
+              "settlement_hazard": 0.06711945185567747,
+              "expected_from_settlement": 2628853.5438203444,
+              "expected_from_partial": 265990.58626218105,
+              "expected_receipt": 2894844.1300825253,
+              "expected_remaining_debt": 36271946.88413782,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 37147700.37528673
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2019090.6389336302
+                }
+              ]
+            },
+            {
+              "week": 9,
+              "source_week": 9,
+              "expected_opening_debt": 36271946.88413782,
+              "settlement_probability": 0.01906354257827505,
+              "settlement_hazard": 0.04963610990198842,
+              "expected_from_settlement": 1800398.3419001522,
+              "expected_from_partial": 252434.52654213892,
+              "expected_receipt": 2052832.8684422912,
+              "expected_remaining_debt": 34219114.01569553,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 34149134.42258937
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2122812.4615484728
+                }
+              ]
+            },
+            {
+              "week": 10,
+              "source_week": 10,
+              "expected_opening_debt": 34219114.01569553,
+              "settlement_probability": 0.01658343788591673,
+              "settlement_hazard": 0.04543376952484952,
+              "expected_from_settlement": 1554703.3395336594,
+              "expected_from_partial": 240591.30777635708,
+              "expected_receipt": 1795294.6473100164,
+              "expected_remaining_debt": 32423819.368385512,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 31980949.621780995
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2238164.3939145533
+                }
+              ]
+            },
+            {
+              "week": 11,
+              "source_week": 11,
+              "expected_opening_debt": 32423819.368385512,
+              "settlement_probability": 0.013679861870533577,
+              "settlement_hazard": 0.0392626716479557,
+              "expected_from_settlement": 1273045.7734335475,
+              "expected_from_partial": 230751.17035926715,
+              "expected_receipt": 1503796.9437928146,
+              "expected_remaining_debt": 30920022.424592696,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 30082861.91358256
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2340957.4548029723
+                }
+              ]
+            },
+            {
+              "week": 12,
+              "source_week": 12,
+              "expected_opening_debt": 30920022.424592696,
+              "settlement_probability": 0.012785642705792268,
+              "settlement_hazard": 0.03819583729854619,
+              "expected_from_settlement": 1181016.1457971432,
+              "expected_from_partial": 221526.49464927337,
+              "expected_receipt": 1402542.6404464166,
+              "expected_remaining_debt": 29517479.78414628,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 28480364.54147565
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2439657.883117067
+                }
+              ]
+            },
+            {
+              "week": 13,
+              "source_week": 13,
+              "expected_opening_debt": 29517479.78414628,
+              "settlement_probability": 0.012403569469543602,
+              "settlement_hazard": 0.03852596287490761,
+              "expected_from_settlement": 1137189.3303248563,
+              "expected_from_partial": 48646.108072746596,
+              "expected_receipt": 1185835.4383976029,
+              "expected_remaining_debt": 28331644.345748678,
+              "partial_states": [
+                {
+                  "cell": 4,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 26993172.17521146
+                },
+                {
+                  "cell": 5,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 2524307.608934841
+                }
+              ]
+            }
+          ],
+          "source": "active_t1_and_partial_adapter",
+          "partial_profile_ref": "t10.partial_profile",
+          "formula": "settlement = sum(state_debt) * hazard; partial = sum(state_debt * (1-hazard) * q[cell] * mean_ratio[cell])"
+        }
+      },
+      {
+        "invoice_id": "I0",
+        "customer_id": "A",
+        "due_date": "2026-02-01",
+        "outstanding": 60000000.0,
+        "received_before_cutoff": 40000000.0,
+        "expected_in": 55218865.59920692,
+        "expected_after_horizon": 4781134.400793083,
+        "expected_by_week": [
+          23342253.780266024,
+          12800393.35052097,
+          6935272.021027449,
+          4382547.892012929,
+          2501688.81478906,
+          1409356.475249272,
+          1039799.0695161071,
+          903136.8674639377,
+          510187.9642933815,
+          414547.75195257337,
+          345965.8135297564,
+          347370.9632139217,
+          286344.83537152864
+        ],
+        "receipt_basis": "settlement_partial_adapter",
+        "receipt_explanation": {
+          "target": "expected_invoice_receipt_by_week",
+          "units": "VND",
+          "status": "verified",
+          "shift_weeks": 0,
+          "t1_settlement_distribution": [
+            0.3808986835907947,
+            0.21081442278405055,
+            0.11483010006583605,
+            0.0731037867348262,
+            0.041611553222104775,
+            0.02304929584638445,
+            0.016938000388673137,
+            0.014884840186766024,
+            0.007928527830127957,
+            0.00634220859163496,
+            0.005209616335121191,
+            0.005395314250438073,
+            0.00531442536769183,
+            0.09367922480555003
+          ],
+          "t1_tail_probability": 0.09367922480555003,
+          "weeks": [
+            {
+              "week": 1,
+              "source_week": 1,
+              "expected_opening_debt": 60000000.0,
+              "settlement_probability": 0.3808986835907947,
+              "settlement_hazard": 0.38089868359079476,
+              "expected_from_settlement": 22853921.015447687,
+              "expected_from_partial": 488332.7648183405,
+              "expected_receipt": 23342253.780266028,
+              "expected_remaining_debt": 36657746.21973397,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 60000000.0
+                }
+              ]
+            },
+            {
+              "week": 2,
+              "source_week": 2,
+              "expected_opening_debt": 36657746.21973397,
+              "settlement_probability": 0.21081442278405055,
+              "settlement_hazard": 0.34051683819181106,
+              "expected_from_settlement": 12482579.837981626,
+              "expected_from_partial": 317813.51253934513,
+              "expected_receipt": 12800393.350520972,
+              "expected_remaining_debt": 23857352.869212996,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 36657746.21973397
+                }
+              ]
+            },
+            {
+              "week": 3,
+              "source_week": 3,
+              "expected_opening_debt": 23857352.869212996,
+              "settlement_probability": 0.11483010006583605,
+              "settlement_hazard": 0.28124855795949394,
+              "expected_from_settlement": 6709846.091196951,
+              "expected_from_partial": 225425.92983049763,
+              "expected_receipt": 6935272.0210274495,
+              "expected_remaining_debt": 16922080.848185547,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 23857352.869213
+                }
+              ]
+            },
+            {
+              "week": 4,
+              "source_week": 4,
+              "expected_opening_debt": 16922080.848185547,
+              "settlement_probability": 0.0731037867348262,
+              "settlement_hazard": 0.24911260648681893,
+              "expected_from_settlement": 4215503.667272182,
+              "expected_from_partial": 167044.22474074608,
+              "expected_receipt": 4382547.892012929,
+              "expected_remaining_debt": 12539532.956172619,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 16922080.84818555
+                }
+              ]
+            },
+            {
+              "week": 5,
+              "source_week": 5,
+              "expected_opening_debt": 12539532.956172619,
+              "settlement_probability": 0.041611553222104775,
+              "settlement_hazard": 0.1888404148496494,
+              "expected_from_settlement": 2367970.6054644883,
+              "expected_from_partial": 133718.20932457174,
+              "expected_receipt": 2501688.81478906,
+              "expected_remaining_debt": 10037844.141383559,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 12539532.956172623
+                }
+              ]
+            },
+            {
+              "week": 6,
+              "source_week": 6,
+              "expected_opening_debt": 10037844.141383559,
+              "settlement_probability": 0.02304929584638445,
+              "settlement_hazard": 0.12895327514599866,
+              "expected_from_settlement": 1294412.8774364854,
+              "expected_from_partial": 114943.59781278681,
+              "expected_receipt": 1409356.4752492723,
+              "expected_remaining_debt": 8628487.666134287,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 10037844.141383562
+                }
+              ]
+            },
+            {
+              "week": 7,
+              "source_week": 7,
+              "expected_opening_debt": 8628487.666134287,
+              "settlement_probability": 0.016938000388673137,
+              "settlement_hazard": 0.10879160924224547,
+              "expected_from_settlement": 938707.0585256162,
+              "expected_from_partial": 101092.0109904908,
+              "expected_receipt": 1039799.069516107,
+              "expected_remaining_debt": 7588688.596618179,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 8628487.66613429
+                }
+              ]
+            },
+            {
+              "week": 8,
+              "source_week": 8,
+              "expected_opening_debt": 7588688.596618179,
+              "settlement_probability": 0.014884840186766024,
+              "settlement_hazard": 0.1072749131931285,
+              "expected_from_settlement": 814075.9104518996,
+              "expected_from_partial": 89060.95701203811,
+              "expected_receipt": 903136.8674639377,
+              "expected_remaining_debt": 6685551.729154241,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 7588688.596618183
+                }
+              ]
+            },
+            {
+              "week": 9,
+              "source_week": 9,
+              "expected_opening_debt": 6685551.729154241,
+              "settlement_probability": 0.007928527830127957,
+              "settlement_hazard": 0.06400719734791593,
+              "expected_from_settlement": 427923.42890767637,
+              "expected_from_partial": 82264.53538570508,
+              "expected_receipt": 510187.96429338143,
+              "expected_remaining_debt": 6175363.76486086,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 6685551.729154245
+                }
+              ]
+            },
+            {
+              "week": 10,
+              "source_week": 10,
+              "expected_opening_debt": 6175363.76486086,
+              "settlement_probability": 0.00634220859163496,
+              "settlement_hazard": 0.05470213396999875,
+              "expected_from_settlement": 337805.5759788948,
+              "expected_from_partial": 76742.17597367856,
+              "expected_receipt": 414547.7519525733,
+              "expected_remaining_debt": 5760816.012908286,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 6175363.764860864
+                }
+              ]
+            },
+            {
+              "week": 11,
+              "source_week": 11,
+              "expected_opening_debt": 5760816.012908286,
+              "settlement_probability": 0.005209616335121191,
+              "settlement_hazard": 0.04753361128449504,
+              "expected_from_settlement": 273832.3890390772,
+              "expected_from_partial": 72133.4244906792,
+              "expected_receipt": 345965.8135297564,
+              "expected_remaining_debt": 5414850.19937853,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 5760816.01290829
+                }
+              ]
+            },
+            {
+              "week": 12,
+              "source_week": 12,
+              "expected_opening_debt": 5414850.19937853,
+              "settlement_probability": 0.005395314250438073,
+              "settlement_hazard": 0.05168471859286097,
+              "expected_from_settlement": 279865.00877737656,
+              "expected_from_partial": 67505.95443654516,
+              "expected_receipt": 347370.9632139217,
+              "expected_remaining_debt": 5067479.236164608,
+              "partial_states": [
+                {
+                  "cell": 2,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 3,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 5414850.199378532
+                }
+              ]
+            },
+            {
+              "week": 13,
+              "source_week": 13,
+              "expected_opening_debt": 5067479.236164608,
+              "settlement_probability": 0.00531442536769183,
+              "settlement_hazard": 0.053684507626412664,
+              "expected_from_settlement": 272045.12770056684,
+              "expected_from_partial": 14299.707670961805,
+              "expected_receipt": 286344.83537152864,
+              "expected_remaining_debt": 4781134.400793079,
+              "partial_states": [
+                {
+                  "cell": 4,
+                  "received_cash_state": false,
+                  "expected_opening_debt": 0.0
+                },
+                {
+                  "cell": 5,
+                  "received_cash_state": true,
+                  "expected_opening_debt": 5067479.236164611
+                }
+              ]
+            }
+          ],
+          "source": "active_t1_and_partial_adapter",
+          "partial_profile_ref": "t10.partial_profile",
+          "formula": "settlement = sum(state_debt) * hazard; partial = sum(state_debt * (1-hazard) * q[cell] * mean_ratio[cell])"
+        }
+      }
+    ],
+    "customers": [
+      {
+        "customer_id": "A",
+        "invoice_count": 2,
+        "outstanding": 160000000.0,
+        "expected_in": 127866081.38480058,
+        "expected_after_horizon": 32133918.615199424,
+        "expected_by_week": [
+          41657192.76904696,
+          26253551.86700548,
+          15944990.981212642,
+          11537139.867234666,
+          7756884.306340791,
+          5306793.682656436,
+          4318796.027561103,
+          3854260.7022415884,
+          2794210.943114003,
+          2493547.6001904425,
+          2168919.9827147373,
+          2042368.456188705,
+          1737424.1992930002
+        ]
+      },
+      {
+        "customer_id": "B",
+        "invoice_count": 1,
+        "outstanding": 100000000.0,
+        "expected_in": 71668355.65425132,
+        "expected_after_horizon": 28331644.345748678,
+        "expected_by_week": [
+          18548205.511055443,
+          13484585.984179828,
+          8954981.27067218,
+          7179130.401681135,
+          5386845.120953078,
+          3980949.7915571453,
+          3298510.90568085,
+          2894844.1300825253,
+          2052832.8684422912,
+          1795294.6473100167,
+          1503796.9437928146,
+          1402542.6404464168,
+          1185835.4383976029
+        ]
+      }
+    ],
+    "outflows": [
+      {
+        "expense_id": "RENT",
+        "due_date": "2026-02-12",
+        "known_at": "2026-02-10",
+        "category": "rent",
+        "direction": "outflow",
+        "obligation_amount": 120000000,
+        "settled_amount": 0,
+        "remaining_amount": 120000000,
+        "source": "",
+        "status": "open",
+        "overdue": false,
+        "identity_status": "missing",
+        "date": "2026-02-12",
+        "week": 1,
+        "original_amount": 120000000,
+        "amount": 120000000.0
+      }
+    ],
+    "inflows": [],
+    "weeks": [
+      {
+        "week": 1,
+        "date": "2026-02-17",
+        "opening_balance": 20000000.0,
+        "ar_in": 60205398.28010242,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 60205398.28010242,
+        "scheduled_out": 120000000.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 120000000.0,
+        "net_change": -59794601.71989758,
+        "balance": -39794601.71989758,
+        "headroom": -44794601.71989758,
+        "outflow_status": "scheduled"
+      },
+      {
+        "week": 2,
+        "date": "2026-02-24",
+        "opening_balance": -39794601.71989758,
+        "ar_in": 39738137.85118531,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 39738137.85118531,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 39738137.85118531,
+        "balance": -56463.86871227622,
+        "headroom": -5056463.868712276,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 3,
+        "date": "2026-03-03",
+        "opening_balance": -56463.86871227622,
+        "ar_in": 24899972.25188482,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 24899972.25188482,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 24899972.25188482,
+        "balance": 24843508.383172546,
+        "headroom": 19843508.383172546,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 4,
+        "date": "2026-03-10",
+        "opening_balance": 24843508.383172546,
+        "ar_in": 18716270.268915802,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 18716270.268915802,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 18716270.268915802,
+        "balance": 43559778.652088344,
+        "headroom": 38559778.652088344,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 5,
+        "date": "2026-03-17",
+        "opening_balance": 43559778.652088344,
+        "ar_in": 13143729.42729387,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 13143729.42729387,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 13143729.42729387,
+        "balance": 56703508.07938222,
+        "headroom": 51703508.07938222,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 6,
+        "date": "2026-03-24",
+        "opening_balance": 56703508.07938222,
+        "ar_in": 9287743.474213582,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 9287743.474213582,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 9287743.474213582,
+        "balance": 65991251.553595796,
+        "headroom": 60991251.553595796,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 7,
+        "date": "2026-03-31",
+        "opening_balance": 65991251.553595796,
+        "ar_in": 7617306.933241953,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 7617306.933241953,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 7617306.933241953,
+        "balance": 73608558.48683774,
+        "headroom": 68608558.48683774,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 8,
+        "date": "2026-04-07",
+        "opening_balance": 73608558.48683774,
+        "ar_in": 6749104.832324114,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 6749104.832324114,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 6749104.832324114,
+        "balance": 80357663.31916186,
+        "headroom": 75357663.31916186,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 9,
+        "date": "2026-04-14",
+        "opening_balance": 80357663.31916186,
+        "ar_in": 4847043.811556295,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 4847043.811556295,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 4847043.811556295,
+        "balance": 85204707.13071816,
+        "headroom": 80204707.13071816,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 10,
+        "date": "2026-04-21",
+        "opening_balance": 85204707.13071816,
+        "ar_in": 4288842.247500459,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 4288842.247500459,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 4288842.247500459,
+        "balance": 89493549.37821862,
+        "headroom": 84493549.37821862,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 11,
+        "date": "2026-04-28",
+        "opening_balance": 89493549.37821862,
+        "ar_in": 3672716.926507552,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 3672716.926507552,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 3672716.926507552,
+        "balance": 93166266.30472617,
+        "headroom": 88166266.30472617,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 12,
+        "date": "2026-05-05",
+        "opening_balance": 93166266.30472617,
+        "ar_in": 3444911.096635122,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 3444911.096635122,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 3444911.096635122,
+        "balance": 96611177.40136129,
+        "headroom": 91611177.40136129,
+        "outflow_status": "confirmed_zero"
+      },
+      {
+        "week": 13,
+        "date": "2026-05-12",
+        "opening_balance": 96611177.40136129,
+        "ar_in": 2923259.637690603,
+        "cash_sale_in": 0.0,
+        "new_credit_in": 0.0,
+        "obligation_in": 0.0,
+        "cash_in": 2923259.637690603,
+        "scheduled_out": 0.0,
+        "variable_cost_topup": 0.0,
+        "cash_out": 0.0,
+        "net_change": 2923259.637690603,
+        "balance": 99534437.03905189,
+        "headroom": 94534437.03905189,
+        "outflow_status": "confirmed_zero"
+      }
+    ],
+    "risk_focus": {
+      "week": 1,
+      "date": "2026-02-17",
+      "balance": -39794601.71989758,
+      "cash_floor": 5000000.0,
+      "trigger": "expected_shortfall",
+      "first_expected_shortfall_week": 1,
+      "first_simulated_alert_week": 1,
+      "expected_shortfall": 44794601.71989758,
+      "opening_balance": 20000000.0,
+      "cumulative_cash_in": 60205398.28010242,
+      "cumulative_cash_out": 120000000.0,
+      "headroom": -44794601.71989758,
+      "unreceived_ar": 199794601.71989757,
+      "largest_unreceived_customers": [
+        {
+          "customer_id": "A",
+          "unreceived": 118342807.23095304,
+          "expected_in": 41657192.76904696
+        },
+        {
+          "customer_id": "B",
+          "unreceived": 81451794.48894456,
+          "expected_in": 18548205.511055443
+        }
+      ],
+      "largest_scheduled_outflows": [
+        {
+          "expense_id": "RENT",
+          "due_date": "2026-02-12",
+          "known_at": "2026-02-10",
+          "category": "rent",
+          "direction": "outflow",
+          "obligation_amount": 120000000,
+          "settled_amount": 0,
+          "remaining_amount": 120000000,
+          "source": "",
+          "status": "open",
+          "overdue": false,
+          "identity_status": "missing",
+          "date": "2026-02-12",
+          "week": 1,
+          "original_amount": 120000000,
+          "amount": 120000000.0
+        }
+      ],
+      "unknown_outflow_weeks": []
+    },
+    "assumptions": [
+      "Dự thu hóa đơn = dư nợ tại ngày chốt × phần tiền phân bổ vào từng tuần; không nhân lại số tiền với xác suất tất toán 4 tuần.",
+      "Phần chưa dự thu trong kỳ chỉ là dư nợ còn ngoài kỳ kỳ vọng, không phải dự báo xóa nợ hay cam kết sẽ thu đủ sau kỳ.",
+      "Thu/chi hoạt động ước lượng được ghi riêng, không gán cho hóa đơn chưa tồn tại. Chi biến đổi chỉ bổ sung phần vượt chi biến đổi đã có lịch, tránh tính hai lần.",
+      "Số dư kỳ vọng = số dư đầu + lũy kế dự thu − lũy kế dự chi. Phân rã này không phải SHAP của xác suất thiếu tiền hoặc phân vị số dư.",
+      "Mỗi đường cập nhật dư nợ sau từng tuần, có thể thu partial nhiều lần và dừng sau tất toán. Seed, số đường, phụ thuộc theo khách và trạng thái dải được lưu cùng forecast. Kịch bản rủi ro chạy lại T6 với cùng nguồn ngẫu nhiên."
+    ]
+  },
+  "t10": {
+    "protocol": "t10-settlement-partial-evidence-v1",
+    "identity": {
+      "t1_version": "global:f855bf6acf32951c83382716",
+      "t1_sha256": "f9c2074aa137f4bfaa3f2105a1ed5b75e622a73d73fc2c59b277460a2fde4601",
+      "adapter_version": "settlement-partial-cash-v2",
+      "partial_version": "141c49f9ff676c5dd25ced4389d771e1b069a59e425c54f0625e6c9bfb2e59ab",
+      "t6": {
+        "version": "settlement-partial-paths-v2",
+        "source_sha256": "96719bd00664dcbbaa375be3a34237b9389429359db026e1364f65b2319af8fd",
+        "runtime": {
+          "python": "3.13.9",
+          "numpy": "2.5.4",
+          "pandas": "3.0.6",
+          "lightgbm": "4.7.0",
+          "xgboost": "3.4.1",
+          "torch": null,
+          "scipy": "1.18.1",
+          "scikit-learn": "1.9.1"
+        }
+      }
+    },
+    "partial_profile": {
+      "probability": [
+        0.01594855726105948,
+        0.03721803031711941,
+        0.014579191838084912,
+        0.020461716374277236,
+        0.0034532798939303985,
+        0.005179963109432573
+      ],
+      "ratios": [
+        [
+          0.3039125704317382,
+          0.3118611178488513,
+          0.31545741324921134,
+          0.3162100784775922,
+          0.3163722646981281,
+          0.31941474974884726,
+          0.3263240455021669,
+          0.3273751063969096,
+          0.33329630041106545,
+          0.34509803921568627,
+          0.3487792725460887,
+          0.3528403649377489,
+          0.35782442748091603,
+          0.36221713105921344,
+          0.3676076401121203,
+          0.3678134902670892,
+          0.36811280833593113,
+          0.3691983122362869,
+          0.37592716652127606,
+          0.3766849926905174,
+          0.3777576307041402,
+          0.3790405725028807,
+          0.3835091083413231,
+          0.3993148597669262,
+          0.4014077275655088,
+          0.4015311722033354,
+          0.40222564858885834,
+          0.40727007476749133,
+          0.40831442109561206,
+          0.40933659562195907,
+          0.41336141566442924,
+          0.41827392294464844,
+          0.42267050912584053,
+          0.43522821401996437,
+          0.436046511627907,
+          0.45204090359311433,
+          0.45744979119630497,
+          0.45951658854884664,
+          0.46099290780141844,
+          0.46346873241301684,
+          0.47175374454534735,
+          0.4720798489344483,
+          0.48580748143521413,
+          0.4911369306202299,
+          0.4947773501924134,
+          0.5,
+          0.5001071658212474,
+          0.5022882018082375,
+          0.5042864346949067,
+          0.5138368934889526,
+          0.5163984786976205,
+          0.5236777137727239,
+          0.5258810308228717,
+          0.5328228758621371,
+          0.5331708431716048,
+          0.5340403608856275,
+          0.5355230274901821,
+          0.5364806866952789,
+          0.5384201215291131,
+          0.5398596364945114,
+          0.5577392967173058,
+          0.5588543485854,
+          0.5602044746332411,
+          0.566401340594889,
+          0.5677302146020211,
+          0.5743825387708213,
+          0.5765144223897237,
+          0.5775205886089839,
+          0.5777007510109763,
+          0.5792451989484472,
+          0.5822981366459627,
+          0.585328515629397,
+          0.593401376691194,
+          0.5967199052707151,
+          0.5969753250198991,
+          0.6126512482769184,
+          0.614392135780662,
+          0.6314943452551811,
+          0.6338118387960272,
+          0.6415543946476033,
+          0.6432999337206129,
+          0.6478781988986071,
+          0.6499961764930795,
+          0.6601565514107631,
+          0.6745450064211496,
+          0.6753297198043751,
+          0.6778384485031067,
+          0.6778946099846344,
+          0.6865100769872015,
+          0.6887052341597796,
+          0.6961620992972858,
+          0.7014373521334395
+        ],
+        [
+          0.5,
+          0.9181643494970047,
+          0.9298417360091369,
+          0.9511076371215977,
+          0.9516283348666054
+        ],
+        [
+          0.2065893368737335,
+          0.22429138971655588,
+          0.2472500867912807,
+          0.2565757346534274,
+          0.2578422053231939,
+          0.26275725455586235,
+          0.2960172228202368,
+          0.30694557684468,
+          0.308495752674548,
+          0.3121098626716604,
+          0.3161138573387168,
+          0.32672505559595705,
+          0.3308066010094327,
+          0.34983116843610257,
+          0.36163602098507613,
+          0.37497127236219807,
+          0.37699098363230815,
+          0.3898119939068388,
+          0.39836934149547854,
+          0.41592585975097174,
+          0.4183050280264369,
+          0.42033112902447267,
+          0.42156294461716814,
+          0.4236091499576391,
+          0.428207852860535,
+          0.4699121935501195,
+          0.4828943947104491,
+          0.48649963512527367,
+          0.49300248138957814,
+          0.49392472587177716,
+          0.4968439607536475,
+          0.5,
+          0.504560450223171,
+          0.5170866728514288,
+          0.538151066692293,
+          0.5491782418259507,
+          0.5504010064475546,
+          0.5598477214197738,
+          0.5659565798111968,
+          0.5999340072592015,
+          0.6002073443553227,
+          0.6148476503247279,
+          0.6313814626402569,
+          0.6429194666829948,
+          0.6445375443119562,
+          0.6517016654598118,
+          0.6532716550725661,
+          0.659307851153996,
+          0.6622516556291391,
+          0.6627030711553755,
+          0.6662820648243697,
+          0.6681430877219323,
+          0.6711714286132983,
+          0.6789122317353751,
+          0.682678582511016
+        ],
+        [
+          0.29265513259455844,
+          0.5,
+          0.9031963470319635,
+          0.9100830314349361,
+          0.9104882805031926,
+          0.9157445001724915,
+          0.923428411022566,
+          0.9271725419903072,
+          0.9280128754614,
+          0.9339525283797729,
+          0.9402119985509758,
+          0.9447977613838716,
+          0.9457205624611309,
+          0.9458338006055848,
+          0.9496772986624263,
+          0.9513113161728995,
+          0.9692130812468064,
+          0.9837655340851948,
+          0.9848026315789474
+        ],
+        [
+          0.21769512753933098,
+          0.26550627129391785,
+          0.2680277307713303,
+          0.27495914909827274,
+          0.27859950679981443,
+          0.3500583430571762,
+          0.35300744317038824,
+          0.36310820624546114,
+          0.4054838957139256,
+          0.4064335515649778,
+          0.4094329573079129,
+          0.4215873654561915,
+          0.46757773479841025,
+          0.4678206242063757,
+          0.4764721588925175,
+          0.4912596716747861,
+          0.5,
+          0.5884083553986467,
+          0.5972912840269379
+        ],
+        [
+          0.2541508908229663,
+          0.2649685742639762,
+          0.4774193548387097,
+          0.5,
+          0.9023339317773789,
+          0.921566193523294,
+          0.9225443618792383,
+          0.9259385085782232,
+          0.9321975969216083,
+          0.9437693590659996,
+          0.9688105674329844,
+          0.9728040459945608,
+          0.985480571685778
+        ]
+      ],
+      "weights": [
+        [
+          0.00758705690217145,
+          0.0080073126359825,
+          0.00758705690217145,
+          0.008450846814133476,
+          0.0080073126359825,
+          0.006811557906897146,
+          0.009412979604187511,
+          0.007385274111271972,
+          0.006811557906897146,
+          0.01020580541645931,
+          0.009412979604187511,
+          0.0080073126359825,
+          0.01020580541645931,
+          0.009412979604187511,
+          0.00758705690217145,
+          0.009934375278678112,
+          0.00891894885620225,
+          0.01020580541645931,
+          0.00779435286618945,
+          0.006997665442530698,
+          0.00758705690217145,
+          0.009162635192684652,
+          0.008450846814133476,
+          0.009162635192684652,
+          0.00891894885620225,
+          0.006811557906897146,
+          0.007385274111271972,
+          0.008450846814133476,
+          0.00758705690217145,
+          0.009670164004738581,
+          0.00779435286618945,
+          0.009670164004738581,
+          0.009934375278678112,
+          0.00758705690217145,
+          0.01020580541645931,
+          0.009934375278678112,
+          0.009162635192684652,
+          0.008450846814133476,
+          0.00758705690217145,
+          0.007385274111271972,
+          0.008450846814133476,
+          0.007385274111271972,
+          0.009412979604187511,
+          0.007188857867009508,
+          0.0080073126359825,
+          0.251959909581982,
+          0.009934375278678112,
+          0.00758705690217145,
+          0.00758705690217145,
+          0.00758705690217145,
+          0.008450846814133476,
+          0.008450846814133476,
+          0.006997665442530698,
+          0.007385274111271972,
+          0.006630400024130545,
+          0.006811557906897146,
+          0.007385274111271972,
+          0.009934375278678112,
+          0.006997665442530698,
+          0.008226090959840126,
+          0.009412979604187511,
+          0.00779435286618945,
+          0.007385274111271972,
+          0.009670164004738581,
+          0.00758705690217145,
+          0.0080073126359825,
+          0.006630400024130545,
+          0.006811557906897146,
+          0.0080073126359825,
+          0.007188857867009508,
+          0.0080073126359825,
+          0.00891894885620225,
+          0.007385274111271972,
+          0.007385274111271972,
+          0.007188857867009508,
+          0.00758705690217145,
+          0.01020580541645931,
+          0.00891894885620225,
+          0.0080073126359825,
+          0.0080073126359825,
+          0.007385274111271972,
+          0.006811557906897146,
+          0.009162635192684652,
+          0.006811557906897146,
+          0.006630400024130545,
+          0.008450846814133476,
+          0.009162635192684652,
+          0.010484651654159141,
+          0.009934375278678112,
+          0.0080073126359825,
+          0.008226090959840126,
+          0.006811557906897146
+        ],
+        [
+          0.8928485902999936,
+          0.02747384391514498,
+          0.02400964928914667,
+          0.02337109680370332,
+          0.03229681969201135
+        ],
+        [
+          0.014165363828681719,
+          0.014165363828681719,
+          0.012717473617960665,
+          0.015358468090652494,
+          0.011417577210127832,
+          0.016209191152424113,
+          0.009454246093671494,
+          0.014165363828681719,
+          0.014165363828681719,
+          0.008719804270339826,
+          0.011113919200905507,
+          0.012050009831980622,
+          0.014949999484810692,
+          0.012050009831980622,
+          0.008719804270339826,
+          0.013064944447229668,
+          0.0123792440049617,
+          0.008719804270339826,
+          0.012050009831980622,
+          0.009454246093671494,
+          0.008719804270339826,
+          0.013788626618942345,
+          0.013788626618942345,
+          0.011729531859347083,
+          0.012050009831980622,
+          0.010250547653200852,
+          0.009712557990276635,
+          0.013421908984197218,
+          0.011113919200905507,
+          0.013421908984197218,
+          0.010250547653200852,
+          0.3711775711110834,
+          0.013788626618942345,
+          0.010250547653200852,
+          0.009977927566073396,
+          0.009977927566073396,
+          0.013421908984197218,
+          0.008719804270339826,
+          0.011417577210127832,
+          0.012717473617960665,
+          0.015778097004702202,
+          0.008958049515574645,
+          0.008719804270339826,
+          0.013788626618942345,
+          0.008719804270339826,
+          0.009712557990276635,
+          0.012050009831980622,
+          0.009712557990276635,
+          0.013788626618942345,
+          0.010250547653200852,
+          0.011729531859347083,
+          0.008958049515574645,
+          0.011113919200905507,
+          0.011113919200905507,
+          0.010818337177058006
+        ],
+        [
+          0.02134133088236853,
+          0.644306208289783,
+          0.015032600382400176,
+          0.01720155557338796,
+          0.016298749265101647,
+          0.02077374408784732,
+          0.02192442546248451,
+          0.02442053136814041,
+          0.023771051202346304,
+          0.016298749265101647,
+          0.02313884439065744,
+          0.01674406883825918,
+          0.018650388763650348,
+          0.017671541905528703,
+          0.028707504520150647,
+          0.02022125263911736,
+          0.017671541905528703,
+          0.017671541905528703,
+          0.01815436935261726
+        ],
+        [
+          0.015903679474174322,
+          0.015903679474174322,
+          0.02726666706891971,
+          0.024479647913919794,
+          0.014668221116631292,
+          0.01427811008509317,
+          0.018695537108071224,
+          0.02257797568429048,
+          0.015903679474174322,
+          0.024479647913919794,
+          0.02726666706891971,
+          0.026541492043789902,
+          0.021977499504240643,
+          0.024479647913919794,
+          0.02257797568429048,
+          0.019206342475372833,
+          0.6227413619391426,
+          0.015903679474174322,
+          0.025148488582781108
+        ],
+        [
+          0.022470553286475473,
+          0.025712681857399868,
+          0.030226489322402943,
+          0.7226999290240667,
+          0.023084500837627305,
+          0.02187293407606692,
+          0.019637226789512068,
+          0.020173761299594223,
+          0.02787838057730472,
+          0.02072495517495207,
+          0.016704743961982318,
+          0.020173761299594223,
+          0.028640082493021083
+        ]
+      ],
+      "fitted_through": "2024-06-30",
+      "evidence": {
+        "cells": [
+          {
+            "weeks": 5668,
+            "effective_weeks": 5554.615571499306,
+            "partial_weeks": 91
+          },
+          {
+            "weeks": 68,
+            "effective_weeks": 66.73595894884207,
+            "partial_weeks": 4
+          },
+          {
+            "weeks": 3565,
+            "effective_weeks": 3456.0539372210555,
+            "partial_weeks": 54
+          },
+          {
+            "weeks": 802,
+            "effective_weeks": 779.3999313655784,
+            "partial_weeks": 18
+          },
+          {
+            "weeks": 5419,
+            "effective_weeks": 5232.849551895526,
+            "partial_weeks": 18
+          },
+          {
+            "weeks": 2271,
+            "effective_weeks": 2192.217465394611,
+            "partial_weeks": 12
+          }
+        ],
+        "prior_sha256": null,
+        "prior_strength": 30.0,
+        "label_contract": "cash-calendar-full-settlement-v2"
+      },
+      "version": "settlement-partial-cash-v2",
+      "mean_ratios": [
+        0.4932626065492756,
+        0.5469379705554249,
+        0.47746050178344873,
+        0.6424817946636089,
+        0.4620287787622047,
+        0.5756686306425647
+      ],
+      "cell_definitions": [
+        {
+          "cell": 0,
+          "received_cash_state": false,
+          "overdue_days_band": "<=0"
+        },
+        {
+          "cell": 1,
+          "received_cash_state": true,
+          "overdue_days_band": "<=0"
+        },
+        {
+          "cell": 2,
+          "received_cash_state": false,
+          "overdue_days_band": "1..90"
+        },
+        {
+          "cell": 3,
+          "received_cash_state": true,
+          "overdue_days_band": "1..90"
+        },
+        {
+          "cell": 4,
+          "received_cash_state": false,
+          "overdue_days_band": ">=91"
+        },
+        {
+          "cell": 5,
+          "received_cash_state": true,
+          "overdue_days_band": ">=91"
+        }
+      ]
+    },
+    "provenance": {
+      "model_asof": "2024-07-01",
+      "serving_manifest": {
+        "t1_version": "global:f855bf6acf32951c83382716",
+        "t1_model_sha256": "9be8387c2896523b81616c08dc22d551876aa42b167ba552e1b27969e97af838",
+        "adapter_version": "settlement-partial-cash-v2",
+        "partial_version": "141c49f9ff676c5dd25ced4389d771e1b069a59e425c54f0625e6c9bfb2e59ab",
+        "data_version": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+        "policy": {
+          "catalog_sha256": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+          "method": "frozen_global"
+        },
+        "policy_version": "8c1da34fd5fd23a3b98604599a62ea61c3a853cf53f714e4c18bbf56676c8403",
+        "ready_on": "2024-07-01"
+      }
+    },
+    "partial_support_status": "recorded_training_evidence",
+    "targets": {
+      "settlement": "payment_probability_4w",
+      "receipts": "expected_invoice_receipt_by_week",
+      "accounting": "expected_balance",
+      "sensitivity": "paired_t6_balance_and_shortfall_probability"
+    },
+    "feature_cash_attribution": {
+      "status": "not_computed",
+      "reason": "SHAP T1 chỉ giải thích xác suất tất toán 4 tuần. Ảnh hưởng feature lên tiền phải chấm cả T1 + adapter."
+    },
+    "checks": {
+      "adapter_components_reconcile": true,
+      "accounting_reconciles": true
+    },
+    "assumptions": [
+      "Partial q là xác suất trả từng phần khi chưa tất toán trong tuần; tỷ lệ trả tính trên dư nợ còn lại.",
+      "Dư nợ kỳ vọng là trung bình trên các trạng thái. Không nhân thêm xác suất tất toán vào tiền engine đã tính.",
+      "Mức hỗ trợ partial gồm tuần quan sát, tuần hiệu dụng, số tuần partial và prior nguồn; không phải độ tin cậy đã hiệu chỉnh.",
+      "Phân rã kế toán cộng khớp số dư kỳ vọng. P10/P50/P90 lấy từ đường tiền của toàn danh mục; không cộng phân vị từng hóa đơn.",
+      "Kịch bản là độ nhạy trong mô hình. Không suy gọi điện hay biện pháp thu nợ chắc chắn tạo ra thay đổi đó."
+    ],
+    "replay": {
+      "status": "frozen",
+      "snapshot_sha256": "b818b887bfb2904e979ce329807d9884fb9b31315bc8c1d7d5d0fef3d1886ca3",
+      "forecast_sha256": "d3131101c90f434c48fb50741de7b477e823ace49764c281f8fe44f717d81fcb",
+      "data_sha256": "e7e85dd50813b38d8c90bc79d627fa5cb566ca67c3de8f3ac54d06ab620b669b",
+      "bundle_sha256": "f07567175b6768688bb58e30d657055c60333bbf358483cf5598717261eaf90a"
+    }
+  },
+  "t6_version": {
+    "version": "settlement-partial-paths-v2",
+    "source_sha256": "96719bd00664dcbbaa375be3a34237b9389429359db026e1364f65b2319af8fd",
+    "runtime": {
+      "python": "3.13.9",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "lightgbm": "4.7.0",
+      "xgboost": "3.4.1",
+      "torch": null,
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1"
+    }
+  },
+  "id": "T10-ENGINE-FIXTURE",
+  "synthetic": true,
+  "real_company_acceptance": false
+}

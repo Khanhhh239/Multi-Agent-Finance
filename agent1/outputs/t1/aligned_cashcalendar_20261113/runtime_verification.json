@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "contexts": [
+    {
+      "context": "refit_04_fresh_test/F019",
+      "open_invoices": 142,
+      "explained": 30,
+      "max_additivity_error": 1.1102230246251565e-15,
+      "future_removal_invariance": true,
+      "full_cash_forecast_agreement": true,
+      "opening_balance_fixture": 0
+    },
+    {
+      "context": "refit_05_fresh_test/F018",
+      "open_invoices": 229,
+      "explained": 30,
+      "max_additivity_error": 2.7755575615628914e-15,
+      "future_removal_invariance": true,
+      "full_cash_forecast_agreement": true,
+      "opening_balance_fixture": 0
+    },
+    {
+      "context": "refit_06_fresh_test/F010",
+      "open_invoices": 231,
+      "explained": 30,
+      "max_additivity_error": 1.4432899320127035e-15,
+      "future_removal_invariance": true,
+      "full_cash_forecast_agreement": true,
+      "opening_balance_fixture": 0
+    },
+    {
+      "context": "refit_07_fresh_test_onboarding/F000",
+      "open_invoices": 122,
+      "explained": 30,
+      "max_additivity_error": 9.43689570931383e-16,
+      "future_removal_invariance": true,
+      "full_cash_forecast_agreement": true,
+      "opening_balance_fixture": 0
+    }
+  ],
+  "partial": false,
+  "expected_cash_invariant_to_mc": true,
+  "collection_queue_invariant_to_budget": true,
+  "fixture_scope": "AR-only with zero opening balance; not a bank-balance accuracy backtest"
+}

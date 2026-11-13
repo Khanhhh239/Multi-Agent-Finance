@@ -1,9 +1,0 @@
-{
-  "path": "outputs/implementation/retrain-demo.json",
-  "bytes": 1757,
-  "sha256": "c3c57f23435d88f26069a843d717dcd6e43bf8714bf2968a986df74cb80af56d",
-  "model_id": "70c5aa04e904f0a92ecb89f9",
-  "model_sha256": "11aae63a92accc4374c763a0ce7fde896e79ab3fe9681f445f139f7fbfa7be39",
-  "reason": "Obsolete T1 demo configuration: pre-reviewed-ledger labels and resolved-only validation; invalid for current observed-cash runtime",
-  "action": "delete"
-}

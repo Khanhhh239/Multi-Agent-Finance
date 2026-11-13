@@ -1,6 +1,6 @@
 # T0, T9 và T10: phần đã triển khai và cách demo
 
-**Cập nhật:** 11/11/2026.
+**Cập nhật:** 14/11/2026. Phần T10 đã đồng bộ với bundle partial/T6 mới; dữ liệu demo và số đo cũ bên dưới giữ đúng phạm vi lịch sử.
 
 **Phạm vi:** Agent 1 trong workspace hiện tại, gồm cả các thay đổi chưa commit.
 
@@ -56,36 +56,26 @@ Các kết quả dưới đây chứng minh chức năng phần mềm và tính 
 - Thiếu vài nghìn đồng chưa được tự coi là phí ngân hàng hoặc tự xóa nợ.
 - Khả năng chạy đúng các ca chức năng chưa chứng minh tỷ lệ đối soát đạt yêu cầu trên mọi doanh nghiệp. Các kết quả nghiên cứu T9 cũ không tự trở thành kết quả của adapter Workspace hiện tại.
 
-## 3. T10 — Giải thích dự báo và hỗ trợ người sử dụng
+## 3. T10 — Giải thích đúng forecast đã lưu
 
-### Những việc đã làm được
+Hợp đồng chi tiết và bước 7: [T10 cho bundle mới, ngày 13/11](04_AI_Methods/T10_BUNDLE_EVIDENCE_2026-11-13.md).
 
-**Giải thích xác suất tất toán hóa đơn.** Trong Khoản cần chú ý, mỗi hóa đơn có thể mở kết quả giải thích xác suất tất toán trong **4 tuần**. Lõi dùng Shapley trên đủ 64 tổ hợp của sáu nhóm đầu vào: giá trị hóa đơn, kỳ hạn, lịch sử trễ của khách, lịch sử trễ doanh nghiệp, lượng lịch sử của khách và tuổi hóa đơn. Kết quả được kiểm tra cộng khớp với đúng xác suất đang hiển thị, kể cả khi phối hợp nhiều mô hình.
+| Người dùng muốn hiểu | Dữ liệu T10 sử dụng |
+|---|---|
+| Vì sao hóa đơn có xác suất tất toán này? | Grouped SHAP đúng T1 đang phục vụ; đích xác suất tất toán 4 tuần, reference và đóng góp nhóm đã lưu |
+| Vì sao dự thu số tiền này vào tuần đó? | Dư nợ đầu/cuối kỳ vọng, xác suất/hazard tất toán T1, tiền từ tất toán, tiền partial, q và phân phối tỷ lệ của adapter |
+| Vì sao số dư kỳ vọng tuần này thấp? | Phân rã cộng khớp số dư đầu + thu − chi, truy xuống toàn bộ hóa đơn, khách, T5 và hoạt động |
+| Nếu khách trả chậm hoặc dời chi? | Chạy lại T6 bằng snapshot/bundle đã lưu với cùng nguồn ngẫu nhiên; so kỳ vọng, P10/P50/P90 và xác suất thiếu tiền từng tuần/cả kỳ |
 
-**Lọc lý do trước khi đưa lên giao diện.** Có kiểm tra độ nhạy theo mẫu nền, mức hỗ trợ dữ liệu và bằng chứng lịch sử. Giao diện chỉ chọn tối đa ba yếu tố đủ điều kiện; không đủ bằng chứng thì nói rõ chưa đủ cơ sở. Kỳ hạn và số lượng lịch sử được giữ làm thông tin đầu vào, không tự suy thành lý do khách trả tốt hoặc xấu. Hệ số ngưỡng hiện tại là quy tắc lọc sản phẩm, chưa phải chứng nhận thống kê.
+**Bằng chứng partial.** Adapter xuất số theo hóa đơn/tuần ngay khi tính kỳ vọng. Profile lưu đủ 6 ô trạng thái, q, các tỷ lệ/trọng số, trung bình tỷ lệ, ngày fit, số tuần/tuần hiệu dụng/tuần partial nếu có, cùng prior và strength. Giao diện diễn đạt các trường engine đã kiểm; không tự suy hỗ trợ khi artifact chưa ghi. SHAP T1 không được gán thành giải thích tiền; attribution feature lên đầu ra cả T1 + adapter hiện được ghi `not_computed`.
 
-**Giải thích thứ tự ưu tiên thu nợ.** Nút Vì sao ưu tiên? cho biết chính sách, công thức, điểm, khoản được so sánh và cách xử lý bằng điểm. Các chính sách hiện có là dư nợ, nguy cơ chưa tất toán, hoặc dư nợ × nguy cơ. Xác suất dùng để xếp hạng có nguồn riêng và không bị đánh đồng với xác suất dự báo đã áp kịch bản. Tranh chấp, lời hứa và quá hạn là thông tin xử lý, không tự được cộng điểm ngoài công thức.
+**Đúng phiên bản.** Forecast lưu T1, adapter, partial, T6, manifest nguồn và giả định. Artifact bundle thực tế, dữ liệu theo cutoff và công thức/seed/budget được lưu nội bộ cùng giao dịch với forecast. Source engine lưu một lần theo hash và giữ phiên bản runtime. Đổi model active hoặc nạp dữ liệu mới không đổi lời giải thích của kế hoạch cũ. Sai hash/engine/runtime thì từ chối chạy kịch bản, không dùng bản hôm nay thay thế; cần phục hồi môi trường đúng source/runtime đã lưu.
 
-**Phân rã dòng tiền.** Xem dự thu theo từng hóa đơn, khách hàng và tuần; lịch chi và phần thu/chi hoạt động được ghi riêng. Bảng đối chiếu giữ đúng:
+**Kịch bản rủi ro.** Chọn khách, số tuần chậm thêm, khoản chi và số tuần dời thêm từ kế hoạch đang mở. T6 giữ nguyên thứ tự rút số theo hóa đơn/hoạt động giữa baseline và kịch bản, lưu kết quả so sánh và sai số MC của Δ xác suất thiếu tiền cả kỳ. Tiền ra ngoài kỳ được ghi riêng, không biến thành mất nợ hoặc xóa nghĩa vụ. Kịch bản hiển thị phân vị MC thô, giữ riêng trạng thái dải đã hiệu chỉnh của forecast gốc.
 
-```text
-Số dư cuối tuần = Số dư đầu tuần + Dự thu trong tuần − Dự chi trong tuần
-```
+**Giao diện và export.** Có bảng dự thu toàn danh mục, lọc tuần/khách/hóa đơn, mở bằng chứng partial và tải JSON đã lưu. Excel gồm phân rã kế toán cùng ba sheet mới: Bằng chứng partial theo tuần, Profile partial và hỗ trợ, Phiên bản T10. Bộ sinh dịch kỳ vọng sớm/chậm 2 tuần và hai sheet tương ứng đã xóa; thay bằng kịch bản T6 đầy đủ.
 
-Phân rã dùng toàn bộ công nợ thuộc phạm vi dự báo, kể cả hóa đơn đang tạm hoãn liên hệ; không chỉ dùng các khoản đứng đầu danh sách ưu tiên. Cảnh báo chỉ ra tuần cần chú ý, khách hàng còn phụ thuộc và các khoản chi lớn.
-
-**So sánh kịch bản.** Người dùng có thể tạo kế hoạch với giả định thu chậm, thay đổi chi và rủi ro chung theo khách. Phần phân rã còn có so sánh thu sớm/chậm 2 tuần từ kế hoạch đang xem, chỉ dịch phần dự thu trong kỳ và ghi riêng phần bị đẩy ra ngoài kỳ.
-
-**Lưu và xuất kết quả.** Kế hoạch giữ ngày chốt, phiên bản mô hình, hash dữ liệu, giả định và kết quả giải thích. Excel có các bảng kế hoạch/ưu tiên cùng sáu sheet phân rã: Phân rã từng tuần, Thu theo hóa đơn, Thu theo khách, Lịch chi đã biết, So sánh thời điểm và Kịch bản từng tuần.
-
-Trong mã nghiên cứu `models/t10.py` còn có đóng góp mô hình, mô phỏng thu sớm một hóa đơn, dời chi và thư viện kịch bản. Báo cáo này phân biệt phần mã nghiên cứu đó với các thao tác đã có trên Workspace nêu trên.
-
-### Giới hạn cần trình bày đúng
-
-- Giải thích SHAP mô tả ảnh hưởng lên dự báo, không chứng minh nguyên nhân kinh doanh hoặc hiệu quả của việc gọi điện thu nợ.
-- Xác suất tất toán trong 4 tuần khác với tỷ lệ tiền dự kiến thu trong toàn kỳ; không lấy một xác suất rồi nhân lại toàn bộ dư nợ để giải thích mọi dòng tiền.
-- So sánh sớm/chậm 2 tuần trong bảng phân rã là độ nhạy số dư kỳ vọng, chưa mô phỏng lại P10/P90 hoặc xác suất thiếu tiền. Phần phân rã số dư chưa phải SHAP của rủi ro thiếu tiền.
-- Kế hoạch cũ thiếu các trường giải thích mới cần được tạo lại để có đầy đủ chi tiết; không tự suy thêm lý do cho kết quả cũ.
+**Giới hạn cần trình bày đúng.** Phân rã kế toán cộng khớp kỳ vọng, không cộng P10 hóa đơn thành P10 danh mục. Kịch bản là độ nhạy trong mô hình, không chứng minh gọi điện tạo ra thay đổi đó. Không dùng LLM để tính hoặc bịa số; luồng hiện tại dùng bảng/template. Kế hoạch cũ chưa có snapshot/bằng chứng partial cần lập mới. Source/runtime lịch sử được giữ nhưng chưa có bộ tự triển khai nhiều môi trường engine. Các kiểm thử chức năng chưa nghiệm thu chất lượng tiền, cảnh báo hoặc tác động can thiệp trên doanh nghiệp thật.
 
 ## 4. Chuẩn bị demo cả ba phần
 
@@ -198,23 +188,29 @@ Trong Dự báo, xác nhận phạm vi thanh toán đến ngày chốt và nhậ
 ### Sáu thao tác trình bày
 
 1. **Tạo dự báo mới.** Chỉ ra ngày chốt, kỳ kế hoạch, phạm vi chi và phiên bản được dùng. Tạo mới để nhận đầy đủ các trường giải thích hiện tại.
-2. **Mở Giải thích của một hóa đơn trong Khoản cần chú ý.** Chỉ ra xác suất tất toán 4 tuần, giá trị đầu vào, yếu tố đủ điều kiện và chiều ảnh hưởng. Nếu hiện “Chưa đủ cơ sở…”, giải thích đây là cơ chế từ chối nêu lý do khi thiếu bằng chứng; không cố tìm một câu kết luận thuận lợi.
+2. **Mở Giải thích của một hóa đơn trong Khoản cần chú ý.** Chỉ ra xác suất tất toán 4 tuần, baseline, nhóm đầu vào và đóng góp cộng khớp. Giữ đúng reference/schema T1 hiện tại; thiếu hỗ trợ thì không tự dựng lý do nghiệp vụ.
 3. **Mở Vì sao ưu tiên?** Cho thấy công thức và điểm xếp hạng. Nếu chính sách chỉ theo dư nợ, giải thích đúng chính sách đó; không nói rằng SHAP hay xác suất quyết định thứ tự khi chúng không tham gia công thức.
 4. **Mở Tiền dự thu và nguy cơ thiếu tiền.** Xem theo tuần, hóa đơn và khách hàng; tìm một mã; đối chiếu số dư đầu + thu − chi = số dư cuối. Chỉ ra phần chi đã biết và phần ngoài phạm vi ước lượng.
-5. **Xem so sánh Thu sớm 2 tuần / Thu chậm 2 tuần.** So mức thấp nhất và số dư cuối kỳ; kiểm tra phần thu bị đẩy ra ngoài kỳ. Sau đó có thể tạo riêng kế hoạch **26 tuần**, kịch bản thu chậm **28 ngày**, rồi so với kế hoạch gốc 26 tuần cùng đầu vào. Hai thao tác này là hai loại so sánh khác nhau.
-6. **Xuất Excel.** Mở bảng kế hoạch, khoản cần chú ý và các sheet phân rã/so sánh. Đối chiếu một hóa đơn hoặc một tuần giữa web và Excel để cho thấy cùng một kế hoạch đã lưu.
+5. **Mở Vì sao dự thu số tiền này? rồi Chạy lại T6.** Chọn hóa đơn, xem tiền tất toán/partial, dư nợ và mức hỗ trợ profile. Chọn khách trả chậm thêm 2 tuần hoặc dời một khoản chi; so kỳ vọng, P10/P50/P90, xác suất thiếu tiền từng tuần/cả kỳ và Δ với forecast đã lưu. Mở lại kịch bản đã lưu; không coi thay đổi theo giả định là tác động chắc chắn của việc gọi điện.
+6. **Xuất Excel và tải bằng chứng T10.** Mở bảng kế hoạch, khoản cần chú ý, phân rã và ba sheet partial/phiên bản mới. Đối chiếu một hóa đơn/tuần giữa web, JSON và Excel; các số hiển thị trên web có làm tròn.
 
 Không dùng các số dư hoặc xác suất trong ảnh/báo cáo cũ làm đáp án cố định. Giá trị phụ thuộc dữ liệu, phiên bản và kịch bản đang chọn; kiểm tra sự nhất quán của kế hoạch hiện tại.
 
 **Câu trình bày:** “T10 cho người dùng biết dự báo dựa trên đầu vào nào, vì sao một khoản được ưu tiên và thu chi nào tạo nên số dư. Khi thay giả định, người dùng xem được chênh lệch; kết quả vẫn là ước lượng theo mô hình, không phải cam kết tiền sẽ về.”
 
-## 8. Kiểm chứng đã thực hiện khi soạn báo cáo
+## 8. Kiểm chứng theo phiên bản
+
+Bản T10 **13–14/11/2026** có kiểm công thức partial, bundle/global SHAP, replay
+với nguồn ngẫu nhiên chung, hash/phiên bản, API khi active thay đổi và browser
+desktop/mobile. Xem [kết quả bản mới](../outputs/implementation/t10_bundle_20261113/README.md).
+Các con số và lệnh 11/11 sau đây là bằng chứng lịch sử, không đại diện bản mới.
 
 Ngày **11/11/2026**, chạy lại các nhóm kiểm thử T0, T9, Workspace và giải thích T10 trên kho tạm: **275 kiểm thử Python đạt, không có bài thất bại hoặc bị bỏ qua**. Hai file kiểm thử giao diện giải thích đạt **24/24 kiểm thử JavaScript**.
 
 Phạm vi gồm nhập XML/ERP/sao kê, tiền và ngày, vòng đời hóa đơn, lịch sử snapshot, duyệt/từ chối/đảo, sửa nguồn, giao dịch nguyên tử, UAT, tra cứu, SHAP, ưu tiên, phân rã và Excel. Có 4 cảnh báo Python: một cảnh báo phụ thuộc và ba cảnh báo chưa hội tụ ở kiểm thử neural cố ý giới hạn 2 vòng lặp. Không dùng các vòng lặp ngắn đó để kết luận chất lượng huấn luyện.
 
-Lệnh chạy lại từ **gốc repository**:
+Lệnh đã dùng từ **gốc repository** trong lần đo 11/11 (một số file đã dọn;
+lệnh kiểm bản hiện tại nằm ở liên kết kết quả 13/11 ở trên):
 
 ```powershell
 $env:PYTHONDONTWRITEBYTECODE = '1'
@@ -250,7 +246,8 @@ Lệnh UAT đã được kiểm tra ở chế độ `-DryRun`; phần hướng d
 | T0: đọc chứng từ, kiểm tiền và ngày | [ingest](../agent1_service/ingest/), [hợp đồng dữ liệu Workspace](../agent1/adaptive/data.py) |
 | T0: nạp/ghi, tra cứu và lịch sử | [API Workspace](../agent1_service/workspace/api.py), [catalog](../agent1_service/workspace/catalog.py) |
 | T9: adapter và sổ quyết định | [adapter Workspace](../agent1_service/workspace/reconciliation.py), [pipeline quan sát](../agent1/reconciliation/pipeline.py), [ledger](../agent1/reconciliation/ledger.py) |
-| T10: xác suất và lý do nghiệp vụ | [giải thích T1](../agent1/adaptive/explanations.py), [bằng chứng nghiệp vụ](../agent1/adaptive/business_explanations.py), [mẫu nền](../agent1/adaptive/explanation_reference.py) |
+| T10: xác suất và lý do nghiệp vụ | [giải thích T1](../agent1/adaptive/explanations.py), [grouped SHAP landmark](../agent1/adaptive/landmark_explanations.py), [mẫu nền](../agent1/adaptive/explanation_reference.py) |
+| T10: snapshot, adapter và kịch bản | [T10 bundle](../agent1/adaptive/t10_explanations.py), [cash adapter](../agent1/adaptive/cash_adapter.py), [hợp đồng bước 7](04_AI_Methods/T10_BUNDLE_EVIDENCE_2026-11-13.md) |
 | T10: ưu tiên, dòng tiền và Excel | [giải thích ưu tiên](../agent1/adaptive/collection_explanations.py), [phân rã dòng tiền](../agent1/adaptive/cash_explanations.py), [xuất Excel](../agent1_service/workspace/forecast_export.py) |
 | Bộ demo | [UAT T0/T9](../pilot/t0_t9_uat_20261110/README.md), [Đại Phát](../pilot/demo_dai_phat/README.md) |
 | Hướng dẫn dịch vụ | [README Agent 1](../README.md), [README dịch vụ](../agent1_service/README.md) |

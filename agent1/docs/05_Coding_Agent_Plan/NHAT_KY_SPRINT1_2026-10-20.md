@@ -315,7 +315,7 @@ Xem [NHAT_KY_SPRINT1_2026-10-20.md](NHAT_KY_SPRINT1_2026-10-20.md#giao-viec-2122
 ## 21. Nhãn mềm T9 và G13 đạt trên tgt5 (agent1-Khanh, 24/10/2026)
 
 - Phiên trước bị cắt: chuỗi `tgt5` chết vì lỗi `fork` (cạn tài nguyên), thí nghiệm độ phủ 50% bị cắt giữa chừng. Khi đó chạy lại bằng một chuỗi duy nhất `scripts/sprint5/g13_all_chain.sh` (tuần tự, nhường RAM). Launcher này đã xóa trong đợt dọn 06/11/2026; tên file được giữ ở đây để ghi nhận lịch sử.
-- **Nhãn mềm** (`agent1/models/t9_soft_labels.py`, đăng ký trước `G13_SOFT_LABELS_PREREG.md`, commit `fbe3f62`): phần tiền dư của giao dịch đã biết khách → hoá đơn chưa nhãn theo hạn sớm nhất, bỏ qua hoá đơn đã đóng trong sổ cái. Đo nguồn: độ phủ 74,6% → 90,9%; 1/3 nhãn mềm sai > 14 ngày. Ngưỡng 0,8 chọn trên nguồn theo quy tắc ghi trước.
+- **Nhãn mềm** (`agent1/models/t9_soft_labels.py`, đăng ký trước `G13_SOFT_LABELS_PREREG.md`, commit `fbe3f62`; mã hiện chuyển vào `agent1/models/t9_research.py` từ 13/11/2026): phần tiền dư của giao dịch đã biết khách → hoá đơn chưa nhãn theo hạn sớm nhất, bỏ qua hoá đơn đã đóng trong sổ cái. Đo nguồn: độ phủ 74,6% → 90,9%; 1/3 nhãn mềm sai > 14 ngày. Ngưỡng 0,8 chọn trên nguồn theo quy tắc ghi trước.
 - **tgt5 (niêm phong, 20 sự kiện, 30 công ty), đo một lần:** T9 v2 báo giả **2,007** [1,24; 2,74]; **T9 v2 + nhãn mềm 0,769 [0,37; 1,17]**, phát hiện 0,90, độ sớm 8,0; nhãn thật 0,334. Độ phủ nhãn 60,6% → 94,8%; nhãn mềm riêng: MAE 14,2 ngày, 27% sai > 14 ngày.
   ⇒ **`G13_tgt5` đạt ở điểm ước lượng** (CI trên 1,17 chạm ngưỡng, chỉ 20 sự kiện). Dòng G13 chính thức (tgt, nhãn T9 cũ) vẫn trượt — việc chuyển sang đường nhãn mềm là quyết định của chủ dự án.
 - **Ablation độ phủ nhãn thật (tgt3, phần T9 v2 bỏ sót):** điền 50% → báo giả **2,07**; 80% → **1,37**; 100% → 0,87 (T9 v2 gốc 2,71). Cần độ phủ rất cao (≥ ~95%) khi nhãn là thật.
@@ -325,7 +325,7 @@ Xem [NHAT_KY_SPRINT1_2026-10-20.md](NHAT_KY_SPRINT1_2026-10-20.md#giao-viec-2122
 
 ## 22. Mũi B1 — hàng chờ duyệt thông minh; áp quy tắc dừng G13 (agent1-Khanh, 24/10/2026)
 
-- `agent1/models/t9_review_queue.py` (+ `tests/test_t9_review_queue.py`): mô phỏng kế toán duyệt b giao dịch/DN/tuần, người duyệt hoàn hảo (cận trên).
+- `agent1/models/t9_review_queue.py` (+ `tests/test_t9_review_queue.py`; mã hiện chuyển vào `agent1/models/t9_research.py` từ 13/11/2026): mô phỏng kế toán duyệt b giao dịch/DN/tuần, người duyệt hoàn hảo (cận trên).
 - Chọn trên nguồn: chính sách `leftover` (tiền chưa giải thích lớn nhất trước) thắng ngẫu nhiên; duyệt 5/tuần ≈ 2,8 lượt thực/DN/tuần ⇒ độ phủ 95,2%, MAE nhãn 0,26 ngày.
 - Đăng ký trước `G13_REVIEW_QUEUE_PREREG.md` (commit `faa93e0`, trước khi có `tgt6`, seed 6606).
 - **`tgt6` (31 sự kiện): duyệt 5/tuần báo giả 0,970 [0,64; 1,31] (đạt sát), nhãn thật 0,937. Lặp lại `tgt3`: 1,371 (trượt; nhãn thật 0,903).**

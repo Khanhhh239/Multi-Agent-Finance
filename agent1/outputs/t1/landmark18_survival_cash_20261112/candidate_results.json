@@ -1,0 +1,338 @@
+[
+  {
+    "name": "due",
+    "family": "rule",
+    "title": "Ngày đến hạn",
+    "eligible": true,
+    "reason": "available",
+    "trials": 1,
+    "status": "trained",
+    "selected_trial": 0,
+    "score": 0.30989112726258505,
+    "brier4": 0.21000974032227146,
+    "brier13": 0.16121266635000575,
+    "integrated_brier13": 0.17561594009995876,
+    "windows": {
+      "2024-01-01": 0.32264162009695646,
+      "2024-01-29": 0.3194544372079021,
+      "2024-02-26": 0.28096968937628464,
+      "2024-03-25": 0.3164987623691975
+    },
+    "prediction_sha256": "abe6812dcd918a927a1c6a094c7873fc4170f23cb320feb086da2aec285c1615"
+  },
+  {
+    "name": "customer",
+    "family": "hybrid",
+    "title": "Lịch sử khách hàng",
+    "eligible": true,
+    "reason": "available",
+    "trials": 1,
+    "status": "trained",
+    "selected_trial": 0,
+    "score": 0.3101463810244192,
+    "brier4": 0.21183462720898588,
+    "brier13": 0.16117579337991278,
+    "integrated_brier13": 0.17750745894892736,
+    "windows": {
+      "2024-01-01": 0.3363626173128768,
+      "2024-01-29": 0.3217498282721256,
+      "2024-02-26": 0.29670130584170584,
+      "2024-03-25": 0.28577177267096887
+    },
+    "prediction_sha256": "5fe55e7f2145bf55bc6fd7bc24ae7e1dc63bffb48121ab373dd79ef653e217ce"
+  },
+  {
+    "name": "survival",
+    "family": "statistical",
+    "title": "Sống sót thực nghiệm",
+    "eligible": true,
+    "reason": "available",
+    "trials": 1,
+    "status": "trained",
+    "selected_trial": 0,
+    "score": 0.297508230045931,
+    "brier4": 0.20908982183692,
+    "brier13": 0.15789259549719356,
+    "integrated_brier13": 0.1751772783878987,
+    "windows": {
+      "2024-01-01": 0.28698330642187037,
+      "2024-01-29": 0.3237142317666847,
+      "2024-02-26": 0.2912210979918107,
+      "2024-03-25": 0.2881142840033587
+    },
+    "prediction_sha256": "4bab10360f83d16a0f64ab3af43dcf208b8d4843eeeadbeb817d29b8b3ad4153"
+  },
+  {
+    "name": "logistic",
+    "family": "supervised",
+    "title": "Logistic hazard",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 0,
+    "score": 0.2938329530255461,
+    "brier4": 0.1976542960132461,
+    "brier13": 0.1500779347801419,
+    "integrated_brier13": 0.16406418511151957,
+    "windows": {
+      "2024-01-01": 0.282049061688222,
+      "2024-01-29": 0.3190008715910569,
+      "2024-02-26": 0.29461234594083,
+      "2024-03-25": 0.2796695328820754
+    },
+    "prediction_sha256": "436736d5b0706209d2b54bcdf850aa21ab0c4475632ed5cbc79f8cd3a4f04322"
+  },
+  {
+    "name": "forest",
+    "family": "supervised",
+    "title": "Random forest hazard",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 1,
+    "score": 0.2953731476680226,
+    "brier4": 0.19024633423960624,
+    "brier13": 0.14635900800008744,
+    "integrated_brier13": 0.16071939221932277,
+    "windows": {
+      "2024-01-01": 0.28544055126590095,
+      "2024-01-29": 0.3251053210702914,
+      "2024-02-26": 0.2913981695983624,
+      "2024-03-25": 0.2795485487375361
+    },
+    "prediction_sha256": "36afc72e7359c5759453eee970c25069466178a9a752df53f8745d5aa73ff13c"
+  },
+  {
+    "name": "extra",
+    "family": "supervised",
+    "title": "Extra trees hazard",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 1,
+    "score": 0.29867103090083597,
+    "brier4": 0.19881437202868146,
+    "brier13": 0.15052191927178543,
+    "integrated_brier13": 0.16576640516031654,
+    "windows": {
+      "2024-01-01": 0.2855931104502367,
+      "2024-01-29": 0.3277191223440617,
+      "2024-02-26": 0.2992363338077487,
+      "2024-03-25": 0.28213555700129683
+    },
+    "prediction_sha256": "68a90e1504ca31fb0a485bfe83c2a143f78334326f3b5e807bc0fb41215e3abc"
+  },
+  {
+    "name": "hist",
+    "family": "supervised",
+    "title": "Histogram boosting hazard",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 1,
+    "score": 0.286534339320465,
+    "brier4": 0.17472693761365923,
+    "brier13": 0.14655065354803842,
+    "integrated_brier13": 0.15209851884120057,
+    "windows": {
+      "2024-01-01": 0.2889221037140292,
+      "2024-01-29": 0.30646991607994223,
+      "2024-02-26": 0.2795353720944991,
+      "2024-03-25": 0.27120996539339004
+    },
+    "prediction_sha256": "a6dcdebf320a728f1ed19b94bfc81aec2fca165d797209686cb1949b54484c70"
+  },
+  {
+    "name": "lightgbm",
+    "family": "supervised",
+    "title": "LightGBM hazard",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 1,
+    "score": 0.28639720135547575,
+    "brier4": 0.17532763472923157,
+    "brier13": 0.14587247503909537,
+    "integrated_brier13": 0.15203724917119602,
+    "windows": {
+      "2024-01-01": 0.288487497164044,
+      "2024-01-29": 0.305671156978035,
+      "2024-02-26": 0.28102771608111154,
+      "2024-03-25": 0.27040243519871293
+    },
+    "prediction_sha256": "db4c701dcf3e92459338fed7241fbe1cf9594954770f089a9bab2d54dce6f684"
+  },
+  {
+    "name": "xgboost",
+    "family": "supervised",
+    "title": "XGBoost hazard",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 1,
+    "score": 0.2883838562339052,
+    "brier4": 0.1824527368971537,
+    "brier13": 0.14588973650089815,
+    "integrated_brier13": 0.1545233639883792,
+    "windows": {
+      "2024-01-01": 0.28638068857125276,
+      "2024-01-29": 0.31050853389660543,
+      "2024-02-26": 0.28343099752822276,
+      "2024-03-25": 0.27321520493953966
+    },
+    "prediction_sha256": "ac4c1ef555903af421a26fe9d06af18ed87b0f26a5f1d09dca77b0b768d32f88"
+  },
+  {
+    "name": "logistic_regularized",
+    "family": "supervised",
+    "title": "Logistic regularized",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 0,
+    "score": 0.2938567322945581,
+    "brier4": 0.19765488946102233,
+    "brier13": 0.15016107927463718,
+    "integrated_brier13": 0.16408776641321032,
+    "windows": {
+      "2024-01-01": 0.2820227194745591,
+      "2024-01-29": 0.31903884220019496,
+      "2024-02-26": 0.29464578370406636,
+      "2024-03-25": 0.27971958379941225
+    },
+    "prediction_sha256": "7d0eb7ccc632482c5518883382caf95a259ac64d580dc643cc9e78aee9495340"
+  },
+  {
+    "name": "forest_shallow",
+    "family": "supervised",
+    "title": "Random forest shallow",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 0,
+    "score": 0.30171528863456376,
+    "brier4": 0.2024201641990912,
+    "brier13": 0.14834875658511748,
+    "integrated_brier13": 0.16728830403951986,
+    "windows": {
+      "2024-01-01": 0.28975530425389767,
+      "2024-01-29": 0.3338909163897481,
+      "2024-02-26": 0.29968167789128175,
+      "2024-03-25": 0.28353325600332796
+    },
+    "prediction_sha256": "c9bb904b09a116fd2181228fc283fd5521af71e278eb4088943b3bc9b48dd904"
+  },
+  {
+    "name": "hist_regularized",
+    "family": "supervised",
+    "title": "Histogram regularized",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 1,
+    "score": 0.2860650184066003,
+    "brier4": 0.17348322225723461,
+    "brier13": 0.1464909072390626,
+    "integrated_brier13": 0.1521236016378592,
+    "windows": {
+      "2024-01-01": 0.28832098740206635,
+      "2024-01-29": 0.3054845260642177,
+      "2024-02-26": 0.27997662436679427,
+      "2024-03-25": 0.27047793579332313
+    },
+    "prediction_sha256": "5922198663d57003b39492d420b6e8bfe8855bb28f55c97acdfab606741dd56a"
+  },
+  {
+    "name": "neural_wide",
+    "family": "deep",
+    "title": "Neural wide",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 1,
+    "score": 0.2798381523520651,
+    "brier4": 0.16877106103016265,
+    "brier13": 0.1643666369285001,
+    "integrated_brier13": 0.16004200066731192,
+    "windows": {
+      "2024-01-01": 0.29299763940641893,
+      "2024-01-29": 0.30267869349691434,
+      "2024-02-26": 0.2599630560959902,
+      "2024-03-25": 0.26371322040893724
+    },
+    "prediction_sha256": "719914d10e8f94e04a13679c54d8ea9c771f093e1a59a8b1d5a8ee2c00c8c6ef"
+  },
+  {
+    "name": "neural_deep",
+    "family": "deep",
+    "title": "Neural deep",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 0,
+    "score": 0.2756148926699641,
+    "brier4": 0.1672603241332387,
+    "brier13": 0.1573499710752824,
+    "integrated_brier13": 0.15176991001496645,
+    "windows": {
+      "2024-01-01": 0.285759183510366,
+      "2024-01-29": 0.29296007710076816,
+      "2024-02-26": 0.2694401346750246,
+      "2024-03-25": 0.25430017539369804
+    },
+    "prediction_sha256": "8b9b1cd005c7ec1f4b99f22968bb32a714183be6a35d92d41bd241fa2a8c1362"
+  },
+  {
+    "name": "spline",
+    "family": "statistical",
+    "title": "Hazard spline",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 1,
+    "score": 0.29040990451631193,
+    "brier4": 0.1980788387223381,
+    "brier13": 0.14704348400707223,
+    "integrated_brier13": 0.16232577972478093,
+    "windows": {
+      "2024-01-01": 0.2794878656776797,
+      "2024-01-29": 0.31449807334107127,
+      "2024-02-26": 0.2908164941381491,
+      "2024-03-25": 0.27683718490834835
+    },
+    "prediction_sha256": "4b87e42f34586434ae5b9f642ceff6a7f71031f5ad07e4dd3d751954afb99824"
+  },
+  {
+    "name": "neural",
+    "family": "deep",
+    "title": "Neural logistic hazard",
+    "eligible": true,
+    "reason": "available",
+    "trials": 2,
+    "status": "trained",
+    "selected_trial": 0,
+    "score": 0.271183284094825,
+    "brier4": 0.1631823673608796,
+    "brier13": 0.15451348626583056,
+    "integrated_brier13": 0.15011465464057072,
+    "windows": {
+      "2024-01-01": 0.2828398151670804,
+      "2024-01-29": 0.28547798281605263,
+      "2024-02-26": 0.262700417373731,
+      "2024-03-25": 0.25371492102243637
+    },
+    "prediction_sha256": "d5471407238a776b7613800659bfd689b1c715b340586def2134abfaecbef903"
+  }
+]

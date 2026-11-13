@@ -5,8 +5,8 @@ from copy import deepcopy
 import numpy as np
 import pandas as pd
 import pytest
-from agent1.adaptive.business_explanations import HistoryEvidence, review_factors
-from agent1.adaptive.methods import features
+from experiments.t1_compact.historical_workspace import HistoryEvidence, review_factors
+from experiments.t1_compact.historical_workspace import features
 
 
 @pytest.fixture

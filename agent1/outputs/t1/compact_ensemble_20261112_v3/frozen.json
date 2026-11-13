@@ -1,0 +1,33 @@
+{
+  "artifact_metadata_sha256": "23bda71d4434a13b688e32c55a6a9c687f54548a6192ddcc37b87eedce5ff940",
+  "reference_metadata_sha256": "2112c0554b9ad174fc632bbea7f333834c00fb73ea13853c942d47a7c8b046d7",
+  "selection_sha256": "454f33448c8569c97e2272ef4e66019e871f2f030a001619050a68f98672fc2c",
+  "protocol_sha256": "3064ab4b42a76fe6c8c5079bad5911087bc99388e236cbe9e13910e2f258cf37",
+  "validation_rows_sha256": "6263a33fae97a041ebfecd8dfba82f0b76bddb0d1cf1ddfbc701e3b50b1b1d7d",
+  "feature_names": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "customer_delay_180d",
+    "company_delay_180d",
+    "customer_settlements_180d",
+    "customer_overdue_share",
+    "company_overdue_share"
+  ],
+  "members": [
+    "neural_wide",
+    "due",
+    "hist_regularized"
+  ],
+  "weights": [
+    0.35,
+    0.3,
+    0.35
+  ],
+  "calibration": {
+    "method": "identity"
+  },
+  "test_access": "pending final evaluation"
+}

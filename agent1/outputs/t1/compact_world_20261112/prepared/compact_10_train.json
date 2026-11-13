@@ -1,0 +1,16 @@
+{
+  "world": "compact_10_train",
+  "role": "train",
+  "kind": "additional_stress",
+  "firms": 6,
+  "anchors": 5500,
+  "unique_invoices": 3219,
+  "min_origin": "2020-01-06",
+  "max_origin": "2023-09-11",
+  "label_end": "2023-12-31",
+  "sha256": "41e11f6a3650ff63a1ea453bff57872720fd2807019685c1099d006d8ba33f29",
+  "protocol_sha256": "b846f91a4bedb1a00ffe7ef22df477a94745709f684400f5f10eb17b11a5bff9",
+  "replay_manifest_sha256": "ed61374ea95809c3f09142bfdfe19314af2a0fb73b6c4f29c5dad4286e72bb82",
+  "open_anchors": 25339,
+  "excluded_accounting_or_late_cash": 5416
+}

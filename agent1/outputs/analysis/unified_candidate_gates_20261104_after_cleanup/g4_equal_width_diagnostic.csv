@@ -1,7 +1,0 @@
-world,anchors,ece_4w_equal_width_10,threshold,passes_numeric_threshold,scope
-v4_shortpay_4shock_20261028_test_000,5772,0.0719243122991597,0.05,False,"mapped G4 diagnostic; first eligible anchors, not original source rolling protocol"
-v4_shortpay_4shock_20261028_test_001,14564,0.02761574881407851,0.05,True,"mapped G4 diagnostic; first eligible anchors, not original source rolling protocol"
-v4_shortpay_4shock_20261028_validation_000,12169,0.048303901277387325,0.05,True,"mapped G4 diagnostic; first eligible anchors, not original source rolling protocol"
-v4_shortpay_4shock_20261028_validation_001,12993,0.02366456061858534,0.05,True,"mapped G4 diagnostic; first eligible anchors, not original source rolling protocol"
-v6_holdout_20261101_000,5280,0.04909691318959028,0.05,True,"mapped G4 diagnostic; first eligible anchors, not original source rolling protocol"
-v6_holdout_20261101_001,14443,0.02573572684064111,0.05,True,"mapped G4 diagnostic; first eligible anchors, not original source rolling protocol"

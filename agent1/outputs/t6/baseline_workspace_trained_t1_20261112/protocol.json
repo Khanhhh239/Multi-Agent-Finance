@@ -1,0 +1,128 @@
+{
+  "protocol": "workspace-trained-t1-t6-baseline-v2",
+  "generated_at_utc": "2026-11-12T03:05:01.907550+00:00",
+  "synthetic": true,
+  "t1_mode": "workspace",
+  "model_mode": "company_trained",
+  "model_training": true,
+  "trained_t1_required": true,
+  "training_config": {
+    "methods": "all default CATALOG candidates",
+    "neural_max_iter": 100,
+    "neural_batch_size": 128,
+    "thread_limit": 2
+  },
+  "future_removal_check": {
+    "target": "weekly cash, per-invoice cash contributions and T1 four-week probabilities",
+    "money_atol_vnd": 0.01,
+    "probability_atol": 1e-12
+  },
+  "horizon_weeks": 13,
+  "cutoffs": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-04-30",
+    "2026-07-31"
+  ],
+  "truth_asof": "2026-10-31",
+  "cash_floor": 200000000,
+  "simulations": 400,
+  "forecast_seed": 7,
+  "timing_dependence": "independent",
+  "operating_included": false,
+  "confirmed_outflow_weeks": [],
+  "calibration": "none",
+  "selection": "Fixed month-end origins before scoring; non-overlapping outcome windows",
+  "full_data_hash": "7b6ff9b4f816a423e3455257a63c89c4a35f1cf2970d803e9856b601ca7a0e4f",
+  "input_files": {
+    "invoices": {
+      "path": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t6\\baseline_workspace_trained_t1_20261112\\inputs\\01_invoices.csv",
+      "sha256": "b8bd1e816e0c122bd4cfe37db1f92937b943552bce24677690e61b2eefb00b37",
+      "rows": 12780,
+      "warnings": [
+        "Hóa đơn đơn giản chưa có MST, ký hiệu/số và tiền trước thuế/VAT: chưa kiểm tra đủ T0; không dùng cho điều chỉnh/thay thế."
+      ]
+    },
+    "bank": {
+      "path": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t6\\baseline_workspace_trained_t1_20261112\\inputs\\02_bank.csv",
+      "sha256": "1b625af699122bd431f77ab76c00f3cfe69753d295de010b53076641dbcc04c8",
+      "rows": 17642,
+      "warnings": []
+    },
+    "payments": {
+      "path": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t6\\baseline_workspace_trained_t1_20261112\\inputs\\03_payments.csv",
+      "sha256": "d86c49f2912c69fc8604f604f036fed2ffad681d3f525c84115d82a16912a138",
+      "rows": 16258,
+      "warnings": []
+    },
+    "statements": {
+      "path": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t6\\baseline_workspace_trained_t1_20261112\\inputs\\04_statements.csv",
+      "sha256": "f56ee60aa680531f3809946fa0cdea06dd9442ca3fb79bfe41aef1f11f7c2b7c",
+      "rows": 142,
+      "warnings": []
+    },
+    "outflows": {
+      "path": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t6\\baseline_workspace_trained_t1_20261112\\inputs\\05_outflows.csv",
+      "sha256": "58874c6ceaa0527cf8096e786ba5de1e9207bd1e8e0b5d20977c9aff23a080ee",
+      "rows": 27,
+      "warnings": []
+    },
+    "actions": {
+      "path": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t6\\baseline_workspace_trained_t1_20261112\\inputs\\06_actions.csv",
+      "sha256": "bfb5c460d18e58761fe6e2ff3e43df3241815fe6fd6fb68d2c9f66c77901d912",
+      "rows": 5001,
+      "warnings": []
+    },
+    "manifest": {
+      "path": "D:\\CURRICULUM\\Semester VI\\Finance Project\\Finance Project\\agent1\\outputs\\t6\\baseline_workspace_trained_t1_20261112\\inputs\\manifest.json",
+      "sha256": "c98918ef138ab5fceb5268ed03f8204f6f978983000ff5dfbe8f91d0954c120b"
+    }
+  },
+  "source_hashes": {
+    "agent1\\adaptive\\business_explanations.py": "d7cfc16ca28f844252837915e26052fd2dda67c5de3907f1e48581369dd51715",
+    "agent1\\adaptive\\cash_explanations.py": "5c36cef8f1b4486d6d8dd339d3570e0facb80f0fb19abfa0c9f9783606fd8b71",
+    "agent1\\adaptive\\cash_history.py": "e49b22846df3e1f71aa0b09450fdf64404ad4b4a214a9525ad6663341ced6863",
+    "agent1\\adaptive\\collections.py": "9af81f8029deb8b1d1e3b7ee3e8fddb9f3c9d15cebd2f8bb86f396331b42c25d",
+    "agent1\\adaptive\\collection_explanations.py": "3c8d1d8414381049308f7cdcdbc73a31b4d8c717bca691d3f31d3f86b1774c79",
+    "agent1\\adaptive\\data.py": "5ee4f5e0a00d92fa3a063b89b86cabd48c5205391dc4bf23323e175eaaac6831",
+    "agent1\\adaptive\\explanations.py": "cf184e0268d2cc6c339b2dcf180f785e4083aac598a18df11163a106f3134d1f",
+    "agent1\\adaptive\\explanation_reference.py": "bb999301e6dce06337aad0bb219c7ba644e51116d163f6944d8442dc2624eb3b",
+    "agent1\\adaptive\\methods.py": "b5692d6126818229c04dec60f94a83c748300048dc4b1d50b4f97068914b745e",
+    "agent1\\adaptive\\new_credit.py": "8212b25bf92def81f4250bc901ea559ea480eb0254cdcc2049e43caabbe8cc6a",
+    "agent1\\adaptive\\obligations.py": "eaa22d5031b8baf81effaa8e74919ae106293cf159d291760621ae0ca72f4655",
+    "agent1\\adaptive\\obligation_imports.py": "8c194c1ed89c06b7e030dac0dbaa0159a55ee73650bccefaf8ebf5c78fe122c0",
+    "agent1\\adaptive\\operating.py": "431196d63c299b724f6c68e64ae3a00a63471063f7fc671eecefc657b903d644",
+    "agent1\\adaptive\\risk.py": "c2b6da897295f82229d1ecad319042d7aadc6074f8dbf4c8c37ae3863f27b0c6",
+    "agent1\\adaptive\\training_report.py": "98a23ab42f8c56e9baae6b6ef9c00d41da745d6735d49f7175c7251b3f633c00",
+    "agent1\\adaptive\\__init__.py": "e5f482d1532294d673c5549d87e9609b90367de94816e33b82903d18a5d670ab",
+    "scripts\\business\\backtest_t6_baseline.py": "ad28d77c2d28f059847f1d7d0f807dbf5ce079d902e332f39c6f75fd597bc834"
+  },
+  "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+  "dependencies": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6"
+  },
+  "limitations": [
+    "one synthetic company",
+    "missing historical expense schedules",
+    "no operating/new-credit forecasts",
+    "retrospective, not prospective",
+    "not a product gate or real-world validation"
+  ],
+  "status": "complete",
+  "elapsed_seconds": 1272.614,
+  "results": {
+    "attempt1_protocol.json": "5dc115baeba59a8b739e66f39ca5c85655b2e77162dc0f3611e751033006c557",
+    "debug_full_plan.json": "57312d1766702c9e0379636741a7b5345d0ffd3d1ece85b3127db58941da159f",
+    "debug_future_removal_differences.json": "2a4f2911e5d6f7f48b1113db19497608da3697e39de7f4bc28c59730d2ead013",
+    "debug_past_plan.json": "5465e22ecd076bb0b37e6481526cc368b6da4019be2211fbf880095af7e3cba4",
+    "metrics.csv": "ea7f2ad58001d95874166790af42b044929e116dbdcbcc613fda963aebddaa28",
+    "REPORT.md": "bf8c8449c82653fa11cfa22a42ac41b6af6b61fc6b6a640fdf955b367c1caf54",
+    "snapshot.json": "0152297ae714d2d577e5ec3a20ace694119fc2dc1100d21d502a21609d361549",
+    "summary.json": "c08fdfc19568691d4bd26a02eae97bd8f2da881dacb0a9efda3885dc65182067",
+    "verify_results.py": "9deaf3b1401d505dd55e413a7d431c4fb9afa19f02bc8beb2c6bcf58f8ca566a",
+    "weekly.csv": "e20dc41075e15a119698ba9b4a71c85567fe4898356e67a32370feb1bdcf4f80",
+    "verification.json": "6277569487ee41fa848d807706dac74090b1d270bdbd721a06c8c5c4b4c5c901"
+  },
+  "validation_status": "passed"
+}

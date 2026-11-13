@@ -1,5 +1,11 @@
 # 03 · Evaluation — Kết quả, tiêu chí và lịch sử đối chứng
 
+**Định hướng tiếp theo từ session 13/11/2026:**
+[Pipeline T1 → T6 → T10, global và học local](../04_AI_Methods/T1_T6_T10_GLOBAL_LOCAL_PIPELINE_2026-11-13.md)
+tổng hợp kết quả A0/A1/A2, Neural/LightGBM/XGBoost và T6, rồi chốt kiến
+trúc thích nghi theo doanh nghiệp. Đây là quyết định thiết kế, không phải
+lượt đo mới hoặc thay đổi các report/artifact/gate lịch sử bên dưới.
+
 **Cập nhật 06/11/2026.** Phân biệt ứng viên nghiên cứu, trạng thái pipeline
 triển khai và hồ sơ lịch sử. Các đợt gộp tài liệu không tạo kết quả đo mới,
 không đổi model hoặc trạng thái nghiệm thu.
@@ -8,6 +14,11 @@ không đổi model hoặc trạng thái nghiệm thu.
 
 | Tài liệu | Phạm vi |
 |---|---|
+| [Fine-tune trên Đại Phát so với Workspace ngày 13/11](T1_DAI_PHAT_FINETUNE_VS_WORKSPACE_2026-11-13.md) | Học tiếp bằng lịch sử Đại Phát trước bốn origin; đối chiếu Workspace đã train và global gốc; kết quả AR, xác suất, dải tiền và từng kỳ |
+| [Chốt phiên bản T1 ngày 13/11](T1_CHOT_2026-11-13.md) | Khóa global 18 feature 75/25 cho nghiên cứu; giữ Workspace mặc định và cho Đại Phát; chưa mặc định refit/fine-tune; tách quyết định T1 khỏi nghiệm thu T6/pilot |
+| [Backtest T6 global, không dự thu hóa đơn mới ngày 13/11](T6_GLOBAL_SCOPE_NO_NEW_INVOICES_2026-11-13.md) | Tách thu danh mục mở/số dư ngân hàng; Workspace tại từng origin; dữ liệu Đại Phát gốc và stress phản thực tế; dải tiền, cảnh báo và phân rã phạm vi |
+| [Refit, học tiếp local và T6 ngày 13/11](T1_REFIT_LOCAL_ADAPTATION_2026-11-13.md) | Đồng bộ 18 feature, sửa nhãn ngày tiền thực thu, refit/audit và so sánh global–global thích nghi–Workspace trên bốn World mới; tách kết quả sau sửa nhãn và kiểm tải danh mục lớn |
+| [Chốt T1 cho T6/SHAP ngày 12/11](T1_T6_SHAP_SELECTION_2026-11-12.md) | Ensemble 18 feature; Workspace trên ba World/18 doanh nghiệp/108 origin, phục vụ thực tế và SHAP; ứng viên nghiên cứu, không tự kích hoạt dịch vụ |
 | [Khánh và V6 hiện tại](T1_V6_PROGRESS_VS_KHANH_2026-11-05.md) | Bản `both`, 93 feature; Paid/phân vị trên 65.221 anchor; đã gộp quyết định chốt nghiên cứu và bỏ các bản nháp lặp |
 | [V6 gốc và Khánh](T1_V6_PROGRESS_VS_KHANH_V6_ORIGINAL_DETAIL_2026-11-05.md) | Bản 64 feature khóa 01/11; số đo riêng và cash head lịch sử |
 | [Practical v6](T1_V6_PRACTICAL_FEATURES_2026-11-05.md) | Ablation ngành/ledger, chọn trên nguồn, augmentation và bốn fresh World |

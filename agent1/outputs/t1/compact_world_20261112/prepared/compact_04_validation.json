@@ -1,0 +1,16 @@
+{
+  "world": "compact_04_validation",
+  "role": "validation",
+  "kind": "retained_config_replay",
+  "firms": 6,
+  "anchors": 1466,
+  "unique_invoices": 866,
+  "min_origin": "2024-01-01",
+  "max_origin": "2024-03-25",
+  "label_end": "2024-06-30",
+  "sha256": "f04710bd2c814db224cce6c44f8ac877c68e124f36904f9d55e1e715aba9f06e",
+  "protocol_sha256": "b846f91a4bedb1a00ffe7ef22df477a94745709f684400f5f10eb17b11a5bff9",
+  "replay_manifest_sha256": "673288655c655cb7110b111eca9150b55639726a9f3a45b733747268a87c1494",
+  "open_anchors": 2697,
+  "excluded_accounting_or_late_cash": 823
+}

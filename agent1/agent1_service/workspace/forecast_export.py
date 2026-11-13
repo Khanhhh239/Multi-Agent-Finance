@@ -7,6 +7,7 @@ from io import BytesIO
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
+from agent1.adaptive.obligations import obligation_amounts
 
 DATE_FIELDS = {"date", "due_date", "promised_date", "cutoff", "known_at", "forecast_date", "payment_date"}
 PERCENT_FIELDS = {
@@ -96,7 +97,7 @@ def workbook_bytes(plan, company):
         ("Ngày dự báo", _value("cutoff", plan["cutoff"])),
         ("Số tuần", len(plan["weeks"])),
         ("Số dư đầu kỳ (VND)", plan.get("opening_balance")),
-        ("Số dư thấp nhất (VND)", plan.get("minimum_balance")),
+        ("Số dư kỳ vọng thấp nhất (VND)", plan.get("minimum_balance")),
         ("Ngưỡng tiền tối thiểu (VND)", plan.get("cash_floor")),
         ("Công nợ đang mở (VND)", plan.get("outstanding")),
         (
@@ -142,10 +143,6 @@ def workbook_bytes(plan, company):
         details.extend(
             ("Giới hạn phân rã tiền", note) for note in decomposition["assumptions"]
         )
-        details.extend(
-            ("Giả định thu sớm/chậm", note)
-            for note in decomposition["timing_comparison"]["assumptions"]
-        )
     _write_table(
         summary,
         [("label", "Chỉ tiêu"), ("value", "Kết quả")],
@@ -166,7 +163,8 @@ def workbook_bytes(plan, company):
             ("cash_in", "Dự thu (VND)"),
             ("new_credit_in", "Thu từ bán chịu mới (VND)"),
             ("cash_out", "Dự chi (VND)"),
-            ("balance", "Số dư (VND)"),
+            ("balance", "Số dư kỳ vọng (VND)"),
+            ("median_balance", "Trung vị số dư · P50 (VND)"),
             ("low", "P10 (VND)"),
             ("high", "P90 (VND)"),
             ("outflow_status", "Lịch chi"),
@@ -213,14 +211,19 @@ def workbook_bytes(plan, company):
     )
     if decomposition:
         _cash_sheets(workbook, decomposition)
+    if plan.get("t10"):
+        _t10_sheets(workbook, plan)
     if plan.get('t5'):
         _write_table(workbook.create_sheet('Nghĩa vụ T5'), [
             ('expense_id', 'Mã nghĩa vụ'), ('due_date', 'Ngày đến hạn'),
+            ('obligation_ref', 'Hợp đồng/khoản cố định'), ('payment_period', 'Kỳ thanh toán'),
+            ('installment_no', 'Đợt đến hạn'),
             ('category', 'Loại'), ('direction', 'Chiều tiền'), ('status', 'Trạng thái'),
             ('obligation_amount', 'Số tiền nghĩa vụ'), ('settled_amount', 'Đã thanh toán'),
-            ('remaining_amount', 'Còn lại'), ('forecast_date', 'Ngày dự kiến còn lại'),
+            ('cancelled_amount', 'Đã hủy'), ('replaced_amount', 'Đã thay thế'),
+            ('remaining_amount', 'Còn phải trả/nhận'), ('forecast_date', 'Ngày dự kiến còn lại'),
             ('known_at', 'Ngày ghi nhận'), ('source', 'Nguồn hồ sơ'),
-        ], plan['t5']['obligations'])
+        ], (dict(r, **obligation_amounts(r)) for r in plan['t5']['obligations']))
         _write_table(workbook.create_sheet('Thanh toán T5'), [
             ('settlement_id', 'Mã thanh toán'), ('expense_id', 'Mã nghĩa vụ'),
             ('bank_id', 'Mã dòng sao kê'), ('payment_date', 'Ngày thanh toán'),
@@ -300,45 +303,37 @@ def _cash_sheets(workbook, decomposition):
         ],
         decomposition["outflows"],
     )
-    scenarios = decomposition["timing_comparison"]["scenarios"]
     if decomposition.get('inflows'):
         _write_table(workbook.create_sheet('Hoàn thuế theo lịch'), [
             ('expense_id', 'Mã nghĩa vụ'), ('date', 'Ngày dự kiến nhận'),
             ('known_at', 'Ngày được biết'), ('original_amount', 'Số còn được nhận'),
             ('amount', 'Dự thu'), ('source', 'Nguồn quyết định'),
         ], decomposition['inflows'])
-    _write_table(
-        workbook.create_sheet("So sánh thời điểm"),
-        [
-            ("label", "Kịch bản"),
-            ("shift_weeks", "Dịch tuần"),
-            ("ar_in", "Dự thu công nợ"),
-            ("cash_in", "Tổng dự thu"),
-            ("cash_out", "Tổng dự chi"),
-            ("minimum_balance", "Số dư thấp nhất"),
-            ("minimum_balance_change", "Chênh mức thấp nhất"),
-            ("closing_balance", "Số dư cuối kỳ"),
-            ("closing_balance_change", "Chênh số dư cuối kỳ"),
-            ("first_below_floor_week", "Tuần đầu dưới ngưỡng"),
-            ("receipts_pushed_beyond_horizon", "Thu bị đẩy ra ngoài kỳ"),
-        ],
-        scenarios,
-    )
-    _write_table(
-        workbook.create_sheet("Kịch bản từng tuần"),
-        [
-            ("label", "Kịch bản"),
-            ("week", "Tuần"),
-            ("date", "Đến ngày"),
-            ("ar_in", "Thu công nợ"),
-            ("cash_in", "Tổng dự thu"),
-            ("cash_out", "Tổng dự chi"),
-            ("balance", "Số dư"),
-            ("balance_change", "Chênh so với đang xem"),
-        ],
-        (
-            {**week, "label": scenario["label"]}
-            for scenario in scenarios
-            for week in scenario["weeks"]
-        ),
-    )
+
+
+def _t10_sheets(workbook, plan):
+    t10 = plan["t10"]
+    _write_table(workbook.create_sheet("Bằng chứng partial theo tuần"), [
+        ("invoice_id", "Hóa đơn"), ("customer_id", "Khách hàng"), ("week", "Tuần"),
+        ("expected_opening_debt", "Dư nợ đầu kỳ vọng"),
+        ("settlement_probability", "P tất toán tuần"), ("settlement_hazard", "Hazard tất toán"),
+        ("expected_from_settlement", "Thu từ tất toán"), ("expected_from_partial", "Thu từ partial"),
+        ("expected_receipt", "Tổng dự thu"), ("expected_remaining_debt", "Dư nợ cuối kỳ vọng"),
+    ], (dict(w, invoice_id=r["invoice_id"], customer_id=r["customer_id"])
+        for r in plan["cash_decomposition"]["invoices"] for w in r["receipt_explanation"]["weeks"]))
+    p = t10["partial_profile"]
+    support = p.get("evidence", {}).get("cells", [])
+    _write_table(workbook.create_sheet("Profile partial và hỗ trợ"), [
+        ("cell", "Ô profile"), ("q", "q khi chưa tất toán"), ("mean_ratio", "Tỷ lệ trả trung bình"),
+        ("weeks", "Tuần học"), ("effective_weeks", "Tuần hiệu dụng"), ("partial_weeks", "Tuần partial"),
+        ("ratio", "Tỷ lệ trả"), ("weight", "Trọng số tỷ lệ"),
+    ], (dict(cell=c, q=q, mean_ratio=p["mean_ratios"][c],
+             **(support[c] if c < len(support) else {}), ratio=r, weight=p["weights"][c][j])
+        for c, q in enumerate(p["probability"]) for j, r in enumerate(p["ratios"][c])))
+    _write_table(workbook.create_sheet("Phiên bản T10"), [("key", "Trường"), ("value", "Giá trị")], [
+        *[dict(key=k, value=v if isinstance(v, str) else str(v)) for k, v in t10["identity"].items()],
+        dict(key="snapshot_sha256", value=t10.get("replay", {}).get("snapshot_sha256")),
+        dict(key="partial_prior_sha256", value=p.get("evidence", {}).get("prior_sha256")),
+        dict(key="partial_prior_strength", value=p.get("evidence", {}).get("prior_strength")),
+        *[dict(key="Giả định/giới hạn", value=note) for note in t10["assumptions"]],
+    ])

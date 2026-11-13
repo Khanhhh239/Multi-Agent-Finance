@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-13",
+  "code_sha256": "06730a92b2c637fdcc106e001bdf9c3c1a2530a836308b93ab6623a7d28c9c27",
+  "full_adaptive": {
+    "command": ".venv/Scripts/python.exe -m pytest agent1/tests/adaptive -q --disable-warnings --tb=short",
+    "passed": 354,
+    "skipped": 3
+  },
+  "latest_focused": {
+    "files": [
+      "test_t1_periodic.py",
+      "test_cash_adapter.py",
+      "test_workspace_pilot.py"
+    ],
+    "passed": 38,
+    "note": "Includes the additional catalog label/prior integrity regression and latest selector assertions."
+  },
+  "ruff": {
+    "selection": "E9,F",
+    "status": "passed"
+  },
+  "pipeline_audit": "F013_pipeline_audit.json",
+  "limitation": "Software regression and re-evaluation on an existing synthetic company; no unseen holdout or real-company acceptance.",
+  "existing_tenant_stores_modified": false,
+  "removed_from_serving": [
+    "cohort partial overrides",
+    "production override label columns",
+    "single all-or-nothing cash draw",
+    "T1-only version hash"
+  ],
+  "historical_replay": "Legacy override remains only in experiments/t1_compact/legacy_cash.py because historical callers still use it."
+}

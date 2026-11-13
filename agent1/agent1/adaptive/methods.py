@@ -1,538 +1,27 @@
-"""Executable method bag. No synthetic loader, no company IDs as memorization features."""
+"""T1 global/local entry point and T6 forecast serving. No scratch-local T1 bag."""
 
-import hashlib
-import time
-import os
-from importlib.metadata import version
-from pathlib import Path
 import numpy as np
 import pandas as pd
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import SplineTransformer
-from sklearn.compose import ColumnTransformer
-from sklearn.neural_network import MLPClassifier
-from threadpoolctl import threadpool_limits
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import (
-    RandomForestClassifier,
-    ExtraTreesClassifier,
-    HistGradientBoostingClassifier,
-)
-from .data import observed, fingerprint, as_of, _payment_links, payment_target
-from .cash_history import partial_distribution
-
-CATALOG = [
-    ("due", "rule", "Ngày đến hạn", "Không cần học; điều khoản hóa đơn"),
-    (
-        "customer",
-        "hybrid",
-        "Lịch sử khách hàng",
-        "Trung vị trễ khách, co về doanh nghiệp",
-    ),
-    (
-        "survival",
-        "statistical",
-        "Sống sót thực nghiệm",
-        "Ước lượng hazard, giữ hóa đơn chưa trả ở risk set",
-    ),
-    ("logistic", "supervised", "Logistic hazard", "Chuẩn hoá + regularization"),
-    ("forest", "supervised", "Random forest hazard", "Bagging cây quyết định"),
-    ("extra", "supervised", "Extra trees hazard", "Randomized tree ensemble"),
-    ("hist", "supervised", "Histogram boosting hazard", "Boosting phi tuyến"),
-    ("lightgbm", "supervised", "LightGBM hazard", "Leaf-wise gradient boosting"),
-    ("xgboost", "supervised", "XGBoost hazard", "Regularized gradient boosting"),
-    (
-        "blend",
-        "ensemble",
-        "Ensemble có neo",
-        "Trộn mô hình học với mốc; trọng số chọn trên validation",
-    ),
-]
-CATALOG.extend(
-    [
-        ("logistic_regularized", "supervised", "Logistic regularized", "C=0.1"),
-        ("forest_shallow", "supervised", "Random forest shallow", "Depth=5"),
-        (
-            "hist_regularized",
-            "supervised",
-            "Histogram regularized",
-            "Regularization=10",
-        ),
-        ("neural_wide", "deep", "Neural wide", "MLP 64–32, validation riêng"),
-        ("neural_deep", "deep", "Neural deep", "MLP 64–32–16, regularization mạnh"),
-    ]
-)
-WEEKS = 52
-CATALOG.extend(
-    [
-        (
-            "spline",
-            "statistical",
-            "Hazard spline",
-            "Đường cong tuổi nợ với lịch sử khách co về DN",
-        ),
-        (
-            "neural",
-            "deep",
-            "Neural logistic hazard",
-            "MLP hai tầng, likelihood tuần quan sát đủ",
-        ),
-    ]
-)
+from .data import observed, as_of, _payment_links, payment_target
+from .cash_adapter import expected_cash_components, iter_cash_paths, VERSION as ADAPTER_VERSION
 
 
-def available_settlements(history):
-    """Settled records available to an issuance-time feature, without lookahead."""
-    settled = history.dropna(subset=["settled", "settled_known_at"]).copy()
-    settled["available"] = pd.concat(
-        [
-            settled.known_at,
-            settled.settled_known_at + pd.Timedelta(days=1),
-            settled.settled + pd.Timedelta(days=1),
-        ],
-        axis=1,
-    ).max(axis=1)
-    return settled
+def train(data, asof, progress=lambda x: None, names=None, *, incumbent=None, catalog=None, policy=None):
+    """Production T1 uses pretrained families only; no scratch-local ensemble."""
+    from .t1_update import train_update
 
-
-def features(frame, history):
-    import heapq
-
-    def add(heaps, value):
-        left, right = heaps
-        heapq.heappush(left, -value)
-        heapq.heappush(right, -heapq.heappop(left))
-        if len(right) > len(left):
-            heapq.heappush(left, -heapq.heappop(right))
-
-    def median(heaps):
-        left, right = heaps
-        if not left:
-            return 0.0
-        return (-left[0] + right[0]) / 2 if len(left) == len(right) else -left[0]
-
-    settled = available_settlements(history)
-    events = list(settled.sort_values("available").itertuples())
-    cursor = 0
-    firm = ([], [])
-    customers = {}
-    result = np.zeros((len(frame), 5))
-    invoices = list(frame.itertuples())
-    for position in np.argsort(frame.issue_date.to_numpy(), kind="stable"):
-        r = invoices[position]
-        while cursor < len(events) and events[cursor].available <= r.issue_date:
-            e = events[cursor]
-            delay = min(180, max(-60, (e.settled - e.due_date).days))
-            add(firm, delay)
-            add(customers.setdefault(e.customer_id, ([], [])), delay)
-            cursor += 1
-        group = customers.get(r.customer_id, ([], []))
-        n = len(group[0]) + len(group[1])
-        centre = median(firm)
-        result[position] = [
-            np.log1p(r.amount),
-            (r.due_date - r.issue_date).days,
-            (n * median(group) + 5 * centre) / (n + 5),
-            centre,
-            np.log1p(n),
-        ]
-    return result
-
-
-def design(x, k):
-    k = np.asarray(k)
-    return np.column_stack([x, k, x[:, 1] - 7 * k])
-
-
-class DistributionEnsemble:
-    """Convex probability pooling; members selected exclusively on validation."""
-
-    def __init__(self, members):
-        self.members = members
-
-    def distribution(self, frame, ages=None, horizon=13):
-        return np.mean(
-            [m.distribution(frame, ages, horizon) for m in self.members], axis=0
-        )
-
-
-class Method:
-    def __init__(self, name, seed=7):
-        self.variant = name
-        self.name = {
-            "logistic_regularized": "logistic",
-            "forest_shallow": "forest",
-            "hist_regularized": "hist",
-        }.get(name, name)
-        self.seed = seed
-
-    def fit(self, frame, clock):
-        self.history = frame.copy()
-        learned = self.name not in ("due", "customer", "survival")
-        self.x = features(frame, frame) if learned else None
-        duration = (frame.settled - frame.issue_date).dt.days.to_numpy(float)
-        available = (pd.Timestamp(clock) - frame.issue_date).dt.days.to_numpy()
-        if "written_off_at" in frame:
-            stop = (frame.written_off_at - frame.issue_date).dt.days.to_numpy(float)
-            available = np.minimum(available, np.where(np.isfinite(stop), stop, np.inf))
-        masks = []
-        risk = []
-        events = []
-        for k in range(1, WEEKS + 1):
-            m = (available >= 7 * k) & (np.isnan(duration) | (duration > 7 * (k - 1)))
-            if k == 1:
-                m = (available >= 7) & (np.isnan(duration) | (duration >= 0))
-            event = (duration <= 7 * k) & (
-                (duration > 7 * (k - 1)) | ((k == 1) & (duration == 0))
-            )
-            risk.append(int(m.sum()))
-            events.append(int(event[m].sum()))
-            if learned:
-                masks.append((np.flatnonzero(m), event[m]))
-        self.hazard = (np.asarray(events) + 0.5) / (np.asarray(risk) + 5)
-        if not learned:
-            return self
-        total = sum(risk)
-        if total == 0:
-            raise ValueError("Không có tuần quan sát đủ")
-        sample = np.sort(
-            np.random.default_rng(7).choice(total, min(total, 100000), replace=False)
-        )
-        x = np.empty((len(sample), 7))
-        y = np.empty(len(sample), int)
-        offset = 0
-        for k, (indices, labels) in enumerate(masks, 1):
-            lo, hi = np.searchsorted(sample, [offset, offset + len(indices)])
-            local = sample[lo:hi] - offset
-            x[lo:hi] = design(self.x[indices[local]], np.full(hi - lo, k))
-            y[lo:hi] = labels[local]
-            offset += len(indices)
-        if len(np.unique(y)) < 2:
-            raise ValueError("Chưa đủ cả hai lớp để học")
-        if self.name == "spline":
-            transform = ColumnTransformer(
-                [("week", SplineTransformer(n_knots=4, degree=2), [5])],
-                remainder="passthrough",
-            )
-            self.estimator = make_pipeline(
-                transform, StandardScaler(), LogisticRegression(max_iter=300)
-            )
-        elif self.name.startswith("neural"):
-            self.estimator = make_pipeline(
-                StandardScaler(),
-                MLPClassifier(
-                    hidden_layer_sizes={
-                        "neural": (32, 16),
-                        "neural_wide": (64, 32),
-                        "neural_deep": (64, 32, 16),
-                    }[self.name],
-                    alpha=0.1 if self.name == "neural_deep" else 0.01,
-                    batch_size=int(os.environ.get("AGENT1_NEURAL_BATCH_SIZE", "128")),
-                    max_iter=int(os.environ.get("AGENT1_NEURAL_MAX_ITER", "100")),
-                    random_state=self.seed,
-                ),
-            )
-        elif self.name == "logistic":
-            self.estimator = make_pipeline(
-                StandardScaler(),
-                LogisticRegression(
-                    C=0.1 if self.variant == "logistic_regularized" else 1, max_iter=300
-                ),
-            )
-        elif self.name == "forest":
-            self.estimator = RandomForestClassifier(
-                n_estimators=100,
-                max_depth=5 if self.variant == "forest_shallow" else 10,
-                min_samples_leaf=15,
-                n_jobs=2,
-                random_state=7,
-            )
-        elif self.name == "extra":
-            self.estimator = ExtraTreesClassifier(
-                n_estimators=100,
-                max_depth=12,
-                min_samples_leaf=12,
-                n_jobs=2,
-                random_state=7,
-            )
-        elif self.name == "hist":
-            self.estimator = HistGradientBoostingClassifier(
-                l2_regularization=10 if self.variant == "hist_regularized" else 5,
-                max_iter=100,
-                max_leaf_nodes=15,
-                random_state=7,
-            )
-        elif self.name == "lightgbm":
-            from lightgbm import LGBMClassifier
-
-            self.estimator = LGBMClassifier(
-                n_estimators=100,
-                num_leaves=15,
-                min_child_samples=30,
-                verbosity=-1,
-                n_jobs=2,
-                random_state=7,
-            )
-        elif self.name == "xgboost":
-            from xgboost import XGBClassifier
-
-            self.estimator = XGBClassifier(
-                n_estimators=100,
-                max_depth=3,
-                learning_rate=0.05,
-                n_jobs=2,
-                random_state=7,
-            )
-        else:
-            raise ValueError("Unknown method")
-        # Small neural minibatches suffer from nested BLAS thread overhead.
-        # Limit BLAS only; tree/OpenMP budgets remain managed by the worker.
-        with threadpool_limits(limits=1, user_api="blas"):
-            self.estimator.fit(x, y)
-        return self
-
-    def distribution(self, frame, ages=None, horizon=13):
-        x = features(frame, self.history)
-        return self.distribution_from_features(x, ages, horizon)
-
-    def distribution_from_features(self, x, ages=None, horizon=13):
-        """Serving and explanation share the same conditional payment function."""
-        x = np.asarray(x, float)
-        ages = (
-            np.zeros(len(x), int)
-            if ages is None
-            else np.maximum(np.asarray(ages, int), 0)
-        )
-        if self.name in ["due", "customer"]:
-            days = x[:, 1] + (x[:, 2] if self.name == "customer" else 0)
-            week = np.clip(np.ceil((days - ages) / 7).astype(int), 1, horizon + 1)
-            p = np.zeros((len(x), horizon + 1))
-            p[np.arange(len(x)), week - 1] = 1
-            overdue = (ages > x[:, 1]) & (days <= ages)
-            if overdue.any():
-                # Only observed events support inflows after the contractual date.
-                p[overdue] = 0
-                survival = np.ones(int(overdue.sum()))
-                duration = np.sort(
-                    (self.history.settled - self.history.issue_date)
-                    .dt.days.dropna()
-                    .to_numpy()
-                )
-                for offset in range(horizon):
-                    start = ages[overdue] + 7 * offset
-                    k = np.minimum(start // 7, WEEKS - 1)
-                    observed_event = (
-                        np.searchsorted(duration, start + 7, side="right")
-                        - np.searchsorted(duration, start, side="right")
-                    ) > 0
-                    h = np.where(observed_event, self.hazard[k], 0)
-                    p[overdue, offset] = survival * h
-                    survival *= 1 - h
-                p[overdue, -1] = survival
-            return p
-        survival = np.ones(len(x))
-        parts = []
-        for offset in range(1, horizon + 1):
-            k = np.minimum(np.floor(ages / 7).astype(int) + offset, WEEKS)
-            h = (
-                self.hazard[k - 1]
-                if self.name == "survival"
-                else self.estimator.predict_proba(design(x, k))[:, 1]
-            )
-            h = np.clip(h, 0.0001, 0.9999)
-            parts.append(survival * h)
-            survival *= 1 - h
-        return np.column_stack([*parts, survival])
-
-
-def score(p, frame):
-    days = (frame.settled - frame.issue_date).dt.days.fillna(10000).to_numpy()
-    truth = days <= 28
-    prob = p[:, :4].sum(1)
-    # Invoice cohorts mature at 28 days, including rows still unpaid; no paid-only evaluation.
-    return float(np.mean((prob - truth) ** 2))
-
-
-def audit_metrics(candidate, base, frame):
-    """Paired customer-cluster bootstrap; intervals concern this audit cohort only."""
-    truth = (
-        (frame.settled - frame.issue_date).dt.days.fillna(10000).to_numpy() <= 28
-    ).astype(float)
-    prob = candidate[:, :4].sum(1)
-    reference = base[:, :4].sum(1)
-    losses = (prob - truth) ** 2
-    baseline = (reference - truth) ** 2
-    groups = frame.customer_id.to_numpy()
-    unique = np.unique(groups)
-    rng = np.random.default_rng(7)
-    sums = np.array([(baseline - losses)[groups == g].sum() for g in unique])
-    counts = np.array([(groups == g).sum() for g in unique])
-    samples = rng.integers(0, len(unique), size=(1000, len(unique)))
-    improvement = sums[samples].sum(1) / counts[samples].sum(1)
-    lo, hi = np.quantile(improvement, [0.025, 0.975])
-    clipped = np.clip(prob, 1e-7, 1 - 1e-7)
-    return dict(
-        n=len(frame),
-        customer_clusters=len(unique),
-        candidate_brier4=float(losses.mean()),
-        baseline_brier4=float(baseline.mean()),
-        brier_improvement=float((baseline - losses).mean()),
-        improvement_ci_low=float(lo),
-        improvement_ci_high=float(hi),
-        ci_reliable=len(unique) >= 10,
-        amount_weighted_brier4=float(np.average(losses, weights=frame.amount)),
-        log_loss4=float(
-            -(truth * np.log(clipped) + (1 - truth) * np.log1p(-clipped)).mean()
-        ),
-        observed_paid_rate4=float(truth.mean()),
-        predicted_paid_rate4=float(prob.mean()),
-    )
-
-
-def train(data, asof, progress=lambda x: None, names=None):
-    asof = pd.Timestamp(asof)
-    cut = asof - pd.Timedelta(days=112)
-    cal_end = asof - pd.Timedelta(days=56)
-    train_frame = observed(data, cut)
-    train_frame = train_frame[train_frame.known_at <= train_frame.issue_date]
-    cal_history = observed(data, cal_end)
-    cal = cal_history[
-        (cal_history.issue_date > cut)
-        & (cal_history.issue_date <= asof - pd.Timedelta(days=84))
-        & (cal_history.known_at <= cal_history.issue_date)
-    ]
-    audit_history = observed(data, asof)
-    audit = audit_history[
-        (audit_history.issue_date > cal_end)
-        & (audit_history.issue_date <= asof - pd.Timedelta(days=28))
-        & (audit_history.known_at <= audit_history.issue_date)
-    ]
-    if (
-        len(train_frame) < 60
-        or len(cal) < 20
-        or len(audit) < 20
-        or train_frame.settled.notna().sum() < 20
-    ):
-        raise ValueError(
-            "Chưa đủ lịch sử: cần ≥60 hóa đơn trước 112 ngày, ≥20 đã trả, ≥20 hóa đơn ở mỗi cửa sổ kiểm định 28 ngày. Dùng dự báo theo điều khoản trước."
-        )
-    names = names or [r[0] for r in CATALOG if r[0] != "blend"]
-    rows = []
-    predictions = {}
-    for name in names:
-        progress(
-            "Đang kiểm định phương án " + str(len(rows) + 1) + "/" + str(len(names))
-        )
-        started = time.monotonic()
-        try:
-            if name.startswith("neural") and (
-                len(train_frame) < 1000
-                or train_frame.settled.count() < 200
-                or train_frame.customer_id.nunique() < 20
-            ):
-                raise ValueError("Cần 1.000 hóa đơn học, 200 tất toán và 20 khách")
-            model = Method(name).fit(train_frame, cut)
-            p = model.distribution(cal)
-            predictions[name] = p
-            rows.append(
-                dict(
-                    method=name,
-                    validation_brier4=score(p, cal),
-                    status="evaluated",
-                    seconds=round(time.monotonic() - started, 3),
-                )
-            )
-        except (ValueError, ImportError) as exc:
-            rows.append(
-                dict(method=name, status="unavailable", reason=type(exc).__name__)
-            )
-    # Equal pooling of the three best validation candidates is itself an audited candidate.
-    ranked = sorted(predictions, key=lambda n: score(predictions[n], cal))[:3]
-    if len(ranked) > 1:
-        predictions["pool"] = np.mean([predictions[n] for n in ranked], axis=0)
-        rows.append(
-            dict(
-                method="pool",
-                members=ranked,
-                validation_brier4=score(predictions["pool"], cal),
-                status="evaluated",
-            )
-        )
-
-    def fit_selected(selected, history, clock):
-        if selected == "pool":
-            return DistributionEnsemble([Method(n).fit(history, clock) for n in ranked])
-        return Method(selected).fit(history, clock)
-
-    anchor = predictions["customer"]
-    choices = []
-    for name, p in predictions.items():
-        for w in [0, 0.25, 0.5, 0.75, 1.0]:
-            choices.append((score(w * p + (1 - w) * anchor, cal), name, w))
-    best, name, w = min(choices, key=lambda r: r[0])
-    progress("Đang kiểm tra độc lập theo thời gian")
-    refit = cal_history[cal_history.known_at <= cal_history.issue_date]
-    a = Method("customer").fit(refit, cal_end)
-    m = fit_selected(name, refit, cal_end)
-    base = a.distribution(audit)
-    candidate = w * m.distribution(audit) + (1 - w) * base
-    base_score = score(base, audit)
-    candidate_score = score(candidate, audit)
-    accepted = candidate_score <= base_score
-    metrics = audit_metrics(candidate, base, audit)
-    metrics["accepted"] = bool(accepted)
-    # Test is an acceptance gate, never a search set. Failed candidate remains in the report.
-    progress("Đang học lại trên dữ liệu doanh nghiệp đã quan sát")
-    final_frame = audit_history[audit_history.known_at <= audit_history.issue_date]
-    final_anchor = Method("customer").fit(final_frame, asof)
-    final_model = fit_selected(name, final_frame, asof) if accepted else final_anchor
+    if names is not None:
+        raise ValueError("T1 mới chỉ chọn global Neural/LightGBM/XGBoost và các bản học tiếp; names của catalog local cũ không còn được dùng.")
+    result = train_update(data, asof, progress, incumbent=incumbent, catalog=catalog, policy=policy)
     from .risk import train_risk
 
-    progress("Đang kiểm định rủi ro xóa nợ")
-    risk = train_risk(data, asof)
-    from .collections import train_policy
-
-    progress("Đang kiểm định danh sách thu hồi")
-    collection = train_policy(data, asof)
-    return dict(
-        risk=risk,
-        collection_policy=collection["policy"],
-        collection_evaluation=collection,
-        model=final_model,
-        anchor=final_anchor,
-        weight=w if accepted else 0.0,
-        asof=str(asof.date()),
-        dataset_hash=fingerprint(data),
-        selection=rows,
-        selected_method=name,
-        selected_weight=w,
-        audit=metrics,
-        windows=dict(
-            train_through=str(cut.date()),
-            validation_label_through=str(cal_end.date()),
-            audit_label_through=str(asof.date()),
-        ),
-        validation_n=len(cal),
-        train_n=len(train_frame),
-        algorithm_version="company-bag-v3",
-        code_hash=hashlib.sha256(
-            Path(__file__).read_bytes()
-            + Path(__file__).with_name("data.py").read_bytes()
-            + Path(__file__).with_name("operating.py").read_bytes()
-            + Path(__file__).with_name("cash_history.py").read_bytes()
-            + Path(__file__).with_name("new_credit.py").read_bytes()
-            + Path(__file__).with_name("risk.py").read_bytes()
-            + Path(__file__).with_name("collections.py").read_bytes()
-            + Path(__file__).with_name("collection_explanations.py").read_bytes()
-            + Path(__file__).with_name("cash_explanations.py").read_bytes()
-        ).hexdigest(),
-        dependencies={
-            name: version(name)
-            for name in ["numpy", "pandas", "scikit-learn", "lightgbm", "xgboost"]
-        },
-        limitation="Kiểm định xác suất trả trong 4 tuần; dải tiền 13 tuần là mô phỏng, chưa hiệu chỉnh bằng thực tế.",
-    )
+    progress("Đang kiểm định rủi ro và chính sách thu hồi độc lập với T1")
+    result["risk"] = train_risk(data, pd.Timestamp(asof))
+    # Ranking remains a separate policy. Do not backtest a freshly selected T1
+    # on older origins or fit the removed customer/scratch-local T1 in triage.
+    result["collection_policy"] = (incumbent or {}).get("collection_policy", "amount")
+    result["collection_evaluation"] = (incumbent or {}).get("collection_evaluation", {"status": "fixed_amount_policy", "policy": "amount"})
+    return result
 
 
 def forecast(
@@ -548,9 +37,21 @@ def forecast(
     delay_customer=None,
     include_operating=False,
     horizon_weeks=13,
+    simulation_paths=1000,
+    shap_limit=30,
+    simulation_seed=7,
+    return_paths=False,
+    expense_shifts=None,
+    receipt_shifts=None,
 ):
     if type(horizon_weeks) is not int or not 1 <= horizon_weeks <= 52:
         raise ValueError("Kỳ dự báo phải từ 1 đến 52 tuần.")
+    if type(simulation_paths) is not int or not 100 <= simulation_paths <= 10000:
+        raise ValueError("Số đường mô phỏng phải từ 100 đến 10000.")
+    if type(shap_limit) is not int or not 0 <= shap_limit <= 30:
+        raise ValueError("Số hóa đơn giải thích SHAP phải từ 0 đến 30.")
+    if type(simulation_seed) is not int or not 0 <= simulation_seed < 2**32:
+        raise ValueError("Seed mô phỏng không hợp lệ.")
     horizon = horizon_weeks
     # Keep four-week collections scores and short-term receipt cohorts comparable.
     receipt_horizon = max(13, horizon)
@@ -571,6 +72,7 @@ def forecast(
     lost = {r["invoice_id"] for r in actions if r["kind"] == "write_off"}
     writeoff_excluded = int(opened.invoice_id.isin(lost).sum())
     opened = opened[~opened.invoice_id.isin(lost)]
+    opened.attrs["cutoff"] = str(clock.date())
     if delay_days and delay_customer and delay_customer not in set(opened.customer_id):
         raise ValueError("Khách đã chọn không có hóa đơn đang mở tại ngày dự báo.")
     disputes = {}
@@ -621,8 +123,21 @@ def forecast(
             (recent.settled - recent.due_date).dt.days.median()
             - (prior.settled - prior.due_date).dt.days.median()
         )
-    if bundle and pd.Timestamp(bundle["asof"]) > clock:
+    if bundle is None:
+        from .t1_catalog import GlobalCatalog
+        bundle = GlobalCatalog().default_bundle(clock)
+    if pd.Timestamp(bundle["asof"]) > clock:
         raise ValueError("Phiên bản học sau ngày dự báo")
+    partial = bundle.get("partial")
+    if partial is None or partial.version != ADAPTER_VERSION:
+        raise ValueError("Bundle dự báo thiếu nhánh partial; cập nhật phiên bản T1 + adapter")
+    if pd.Timestamp(partial.fitted_through) > clock:
+        raise ValueError("Nhánh partial được học sau ngày dự báo")
+    if bundle and any(getattr(bundle.get(key), "requires_ledger_context", False)
+                      for key in ("model", "anchor")):
+        from .compact_t1 import workspace_context
+
+        opened.attrs["compact_context"] = workspace_context(data, clock)
     if opened.empty:
         p = np.zeros((0, receipt_horizon + 1))
         serving_components = []
@@ -639,39 +154,49 @@ def forecast(
             ) + (1 - bundle["weight"]) * bundle["anchor"].distribution(
                 opened, ages, **options
             )
-        else:
-            baseline = Method("customer").fit(frame, clock)
-            serving_components = [(1.0, baseline)]
-            p = baseline.distribution(opened, ages, horizon=receipt_horizon)
-    if delay_days:
-        shift = int(np.ceil(delay_days / 7))
-        delayed = np.zeros_like(p)
+    raw_payment_times = p.copy()
+    cash_trace = expected_cash_components(p, opened, partial)
+    cash_fractions = cash_trace["cash"].copy()
+    partial_profile = np.any(np.abs(cash_fractions - p) > 1e-12, axis=1)
+    partial_n = int(partial_profile.sum())
+    receipt_shifts = receipt_shifts or {}
+    if receipt_shifts and shap_limit:
+        raise ValueError("Kịch bản dời thu dùng SHAP đã lưu của kế hoạch gốc; đặt shap_limit=0 khi mô phỏng lại.")
+    if (not isinstance(receipt_shifts, dict) or any(type(v) is not int or not 0 <= v <= 52
+                                                   for v in receipt_shifts.values())
+            or set(receipt_shifts) - set(opened.customer_id.astype(str))):
+        raise ValueError("Khách hàng hoặc số tuần dời thu không hợp lệ.")
+    invoice_shifts = np.array([
+        (int(np.ceil(delay_days / 7)) if delay_days and (not delay_customer or str(c) == delay_customer) else 0)
+        + receipt_shifts.get(str(c), 0) for c in opened.customer_id
+    ], dtype=int)
+    for i in np.flatnonzero(invoice_shifts):
+        shift = invoice_shifts[i]
+        p[i] = 0
+        cash_fractions[i] = 0
         for k in range(receipt_horizon + 1):
-            delayed[:, min(receipt_horizon, k + shift)] += p[:, k]
-        affected = (
-            np.ones(len(opened), dtype=bool)
-            if not delay_customer
-            else (opened.customer_id == delay_customer).to_numpy()
-        )
-        p[affected] = delayed[affected]
+            p[i, min(receipt_horizon, k + shift)] += raw_payment_times[i, k]
+            cash_fractions[i, min(receipt_horizon, k + shift)] += cash_trace["cash"][i, k]
     payment_times = p.copy()
-    cash_p, partial_n = partial_distribution(data, opened, clock, p)
-    partial_profile = np.any(cash_p != p, axis=1)
-    if delay_days and partial_n:
-        for i in np.flatnonzero(affected):
-            if not np.array_equal(cash_p[i], p[i]):
-                delayed = np.zeros(receipt_horizon + 1)
-                buckets = np.minimum(
-                    np.arange(receipt_horizon + 1) + shift, receipt_horizon
-                )
-                np.add.at(delayed, buckets, cash_p[i])
-                cash_p[i] = delayed
-    cash_p = np.column_stack((cash_p[:, :horizon], cash_p[:, horizon:].sum(1)))
     amounts = opened.remaining_amount.to_numpy()
-    incoming = (cash_p[:, :horizon] * amounts[:, None]).sum(0)
+    incoming = (cash_fractions[:, :receipt_horizon] * amounts[:, None]).sum(0)[:horizon].copy()
+    cash_fractions = np.column_stack((cash_fractions[:, :horizon], cash_fractions[:, horizon:].sum(1)))
     from .obligations import cash_schedule
 
     t5 = cash_schedule(data, clock, horizon, expense_multiplier)
+    expense_shifts = expense_shifts or {}
+    if (not isinstance(expense_shifts, dict) or any(type(v) is not int or not 0 <= v <= 52
+                                                   for v in expense_shifts.values())
+            or set(expense_shifts) - {r['expense_id'] for r in t5['outflows']}):
+        raise ValueError("Khoản chi hoặc số tuần dời chi không hợp lệ.")
+    moved, beyond = [], []
+    for row in t5['outflows']:
+        shift_out = expense_shifts.get(row['expense_id'], 0)
+        row = dict(row, week=row['week'] + shift_out,
+                   date=str((pd.Timestamp(row['date']) + pd.Timedelta(weeks=shift_out)).date()))
+        (moved if row['week'] <= horizon else beyond).append(row)
+    t5.update(outflows=moved, outflows_pushed_beyond_horizon=beyond,
+              scenario_expense_shifts=expense_shifts)
     outgoing = np.zeros(horizon)
     obligation_in = np.zeros(horizon)
     known_variable = np.zeros(horizon)
@@ -725,12 +250,12 @@ def forecast(
         outgoing += variable_cost_topup
     incoming += obligation_in
     expected = balance + np.cumsum(incoming - outgoing)
-    rng = np.random.default_rng(7)
-    paths = np.full((400, horizon), float(balance)) - np.cumsum(outgoing)
+    rng = np.random.default_rng(simulation_seed)
+    paths = np.full((simulation_paths, horizon), float(balance)) - np.cumsum(outgoing)
     paths += np.cumsum(obligation_in)
     if operating:
         errors = operating["residuals"][:, :operating_weeks]
-        draws = np.maximum(0, estimate + errors[rng.integers(0, len(errors), 400)])
+        draws = np.maximum(0, estimate + errors[rng.integers(0, len(errors), simulation_paths)])
         costs = known_variable[:operating_weeks]
         added = np.maximum(0, draws[:, :, 1] * expense_multiplier - costs)
         point_added = np.maximum(0, estimate[:, 1] * expense_multiplier - costs)
@@ -738,38 +263,27 @@ def forecast(
         if new_credit is not None:
             residuals = operating["credit"]["residuals"][:, :operating_weeks]
             operating_movements += np.maximum(
-                0, new_credit + residuals[rng.integers(len(residuals), size=400)]
+                0, new_credit + residuals[rng.integers(len(residuals), size=simulation_paths)]
             )
         movement = np.zeros_like(paths)
         movement[:, :operating_weeks] = operating_movements
         paths += np.cumsum(movement, axis=1)
-    # Independent payment-time draws; conservative labels make the assumption explicit.
-    customer_draws = {}
-    cash_events = np.zeros((400, horizon + 1))
-    trajectory = np.arange(400)
-    for customer, prob, amount in zip(opened.customer_id, cash_p, amounts):
-        if shared_customer_risk:
-            if customer not in customer_draws:
-                customer_draws[customer] = rng.random(400)
-            week = np.searchsorted(
-                np.cumsum(prob / prob.sum()), customer_draws[customer]
-            )
-        else:
-            week = rng.choice(horizon + 1, size=400, p=prob / prob.sum())
-        cash_events[trajectory, np.minimum(week, horizon)] += amount
+    # Multiple cash receipts per invoice/path; settlement collects its residual.
+    # Always draw in the same invoice order, including when only one customer
+    # is shifted. Partitioning the book before draws breaks paired scenarios.
+    cash_events = np.zeros((simulation_paths, receipt_horizon))
+    for i, invoice_paths in enumerate(iter_cash_paths(
+            raw_payment_times, opened, partial, amounts, rng, simulation_paths,
+            shared_customer=shared_customer_risk)):
+        weeks_shift = invoice_shifts[i]
+        if weeks_shift < receipt_horizon:
+            cash_events[:, weeks_shift:] += invoice_paths.receipts[:, :receipt_horizon - weeks_shift]
     paths += np.cumsum(cash_events[:, :horizon], axis=1)
-    low, high = np.quantile(paths, [0.1, 0.9], axis=0)
+    low, median, high = np.quantile(paths, [0.1, 0.5, 0.9], axis=0)
     from .risk import predict_risk
 
     risk_values = predict_risk(bundle.get("risk") if bundle else None, opened)
-    triage_model = Method("customer").fit(frame, clock) if len(opened) else None
-    triage_p = (
-        triage_model.distribution(
-            opened, (clock - opened.issue_date).dt.days.to_numpy()
-        )[:, :4].sum(1)
-        if len(opened)
-        else np.array([])
-    )
+    triage_p = payment_times[:, :4].sum(1)
     priorities = [
         dict(
             invoice_id=str(r.invoice_id),
@@ -811,13 +325,24 @@ def forecast(
             "recent_contact_or_skip_excluded": sum(bool(deferred.get(i)) for i in opened.invoice_id),
             "cooldown_days": 7,
         },
+        probability_source={
+            "method": "active_t1", "label": "T1 đang dùng cho dự báo",
+            "asof": bundle.get("asof"), "model_version": bundle.get("t1_version"),
+            "scenario_shift_applied": bool(delay_days),
+            "detail": "Cùng phân phối T1 đang dự báo; không fit thêm model customer local.",
+        },
     )
     explanation_references = {}
     if priorities:
         from .explanations import explain_collections
 
+        explanation_rows = priorities[:shap_limit]
+        for row in priorities[shap_limit:]:
+            row["payment_explanation"] = dict(status="deferred", target="payment_probability_4w",
+                probability=row["payment_probability_4w"], cutoff=str(clock.date()),
+                reason="Chưa tính SHAP cho hóa đơn này theo giới hạn giải thích của kế hoạch.")
         reference = explain_collections(
-            priorities, opened, serving_components, clock,
+            explanation_rows, opened, serving_components, clock,
             delay_days=delay_days, delay_customer=delay_customer,
             model_asof=bundle.get("asof") if bundle else None,
         )
@@ -825,16 +350,25 @@ def forecast(
             explanation_references[reference["hash"]] = reference
         if collection_ranking["uses_probability"]:
             reference = explain_collections(
-                priorities, opened, [(1.0, triage_model)], clock,
-                model_asof=str(clock.date()),
+                explanation_rows, opened, serving_components, clock,
+                delay_days=delay_days, delay_customer=delay_customer,
+                model_asof=bundle.get("asof"),
                 probability_field="triage_probability_4w",
                 output_field="triage_explanation",
             )
             if reference:
                 explanation_references[reference["hash"]] = reference
+            for row in priorities[shap_limit:]:
+                row["triage_explanation"] = dict(status="deferred", target="triage_probability_4w",
+                    probability=row["triage_probability_4w"], cutoff=str(clock.date()),
+                    reason="Chưa tính SHAP theo giới hạn giải thích của kế hoạch.")
             for row in priorities:
                 row["ranking_explanation"]["probability_explanation"] = row.pop("triage_explanation")
     result = dict(
+        t1_provenance=bundle.get("t1_provenance") if bundle else None,
+        compute_budget=dict(simulation_paths=simulation_paths, simulation_seed=simulation_seed,
+                            shap_limit=shap_limit, explained_invoices=min(shap_limit, len(priorities)),
+                            displayed_invoices=len(priorities), all_open_invoices_forecast=True),
         explanation_references=explanation_references,
         cutoff=str(clock.date()),
         horizon_weeks=horizon,
@@ -842,6 +376,9 @@ def forecast(
         mode="company_trained" if bundle else "history_baseline",
         open_invoices=len(opened),
         partial_cash_supported=partial_n,
+        adapter_version=ADAPTER_VERSION,
+        partial_version=partial.digest,
+        serving_manifest=bundle.get("serving_manifest"),
         written_off_count=len(lost),
         payment_delay_shift_days=shift_days,
         operating_included=estimate is not None,
@@ -855,6 +392,9 @@ def forecast(
         timing_dependence="shared_customer_stress"
         if shared_customer_risk
         else "independent",
+        band_protocol="settlement-partial-paths-v2",
+        band_status="raw_simulation",
+        any_below_floor_probability=float((paths < cash_floor).any(axis=1).mean()),
         weeks=[
             dict(
                 week=i + 1,
@@ -866,6 +406,9 @@ def forecast(
                 obligation_in=float(obligation_in[i]),
                 cash_out=float(outgoing[i]),
                 balance=float(expected[i]),
+                expected_balance=float(expected[i]),
+                median_balance=float(median[i]),
+                balance_quantiles={"0.1": float(low[i]), "0.5": float(median[i]), "0.9": float(high[i])},
                 low=float(low[i]),
                 high=float(high[i]),
                 outflow_status=coverage[i],
@@ -892,13 +435,13 @@ def forecast(
             "Đã gồm ước lượng thu hóa đơn bán chịu phát hành trong kỳ dự báo."
             if new_credit is not None
             else "Chưa gồm thu từ hóa đơn bán chịu chưa phát hành.",
-            f"{partial_n} hóa đơn có phân bổ theo lịch trả từng phần quan sát được. Các khoản khác dự báo phần còn lại lúc tất toán.",
+            f"Adapter xét trả từng phần cho toàn bộ {len(opened)} khoản mở, gồm khoản chưa từng thu; {partial_n} khoản có tiền kỳ vọng thay đổi so với chỉ dự báo tất toán.",
             (
                 "Kịch bản căng thẳng: hóa đơn cùng khách chịu chung một cú sốc."
                 if shared_customer_risk
                 else "Mô phỏng thời điểm trả độc lập."
             )
-            + " Xác suất và dải tiền chưa hiệu chỉnh.",
+            + " Xác suất cảnh báo lấy từ mô phỏng; trạng thái hiệu chỉnh dải tiền được lưu riêng.",
             "Danh sách thu hồi xếp theo phương án đã kiểm định hoặc theo dư nợ khi dùng mốc.",
             "T5 chỉ dự báo phần nghĩa vụ còn lại sau thanh toán đã ghi nhận. Khoản chi đến/quá hạn chưa trả chuyển sang ngày làm việc kế tiếp; số dư đầu đã gồm giao dịch thực tế đến ngày chốt.",
             "Khoản hoàn đã duyệt nhưng quá ngày dự kiến nhận cần ngày dự kiến mới; không tự coi là tiền sẽ về ngay.",
@@ -914,7 +457,7 @@ def forecast(
     if new_credit is not None:
         credit_receipts[:operating_weeks] = new_credit
     result["cash_decomposition"] = explain_cash(
-        opened, cash_p[:, :horizon] * amounts[:, None], result["weeks"],
+        opened, cash_fractions[:, :horizon] * amounts[:, None], result["weeks"],
         cutoff=str(clock.date()), opening_balance=balance, cash_floor=cash_floor,
         scheduled_outflows=scheduled_outflows, cash_sales=cash_sales,
         scheduled_inflows=t5['inflows'], obligation_in=obligation_in,
@@ -923,4 +466,11 @@ def forecast(
         written_off_count=writeoff_excluded,
         model_asof=bundle.get("asof") if bundle else str(clock.date()),
     )
+    from .t10_explanations import attach_evidence
+    attach_evidence(result, opened, cash_trace, raw_payment_times, partial, bundle,
+                    invoice_shifts=invoice_shifts)
+    # Research callers can freeze full joint paths before opening held-out truth.
+    # The public serving API keeps its compact JSON response.
+    if return_paths:
+        result["balance_paths"] = paths.tolist()
     return result

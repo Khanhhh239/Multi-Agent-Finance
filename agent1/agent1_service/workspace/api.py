@@ -1,10 +1,8 @@
-import base64
 import csv
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import io
 import json
-import pickle
 import re
 import os
 import time
@@ -33,7 +31,10 @@ from agent1.adaptive.data import (
 )
 from ..ingest.einvoice_xml import read_invoice_xml
 from ..ingest.strict_files import read_csv, read_excel, source_hash
-from agent1.adaptive.methods import train, forecast, CATALOG
+from agent1.adaptive.methods import train, forecast
+from agent1.adaptive.t1_catalog import CATALOG
+from agent1.adaptive.obligations import obligation_amounts
+from agent1.adaptive.obligation_imports import plan_obligation_import
 from typing import Annotated, Any
 from .company_profile import company_profile, import_formats
 from .portal_connect import install_portal_connect
@@ -50,6 +51,7 @@ class Training(BaseModel):
     asof: str
     payments_complete: bool = False
     try_deep_cash: bool = False
+    force: bool = False
 
 
 class Allocation(BaseModel):
@@ -121,6 +123,9 @@ class Prediction(BaseModel):
     cutoff: str
     opening_balance: float = Field(allow_inf_nan=False)
     horizon_weeks: int = Field(default=13, ge=1, le=52)
+    simulation_paths: int = Field(default=1000, ge=100, le=10000, strict=True)
+    shap_limit: int = Field(default=30, ge=0, le=30, strict=True)
+    simulation_seed: int = Field(default=7, ge=0, lt=2**32, strict=True)
     delay_days: int = Field(default=0, ge=0, le=90)
     expense_multiplier: float = Field(default=1, ge=0, le=3, allow_inf_nan=False)
     payments_complete: bool = False
@@ -131,6 +136,14 @@ class Prediction(BaseModel):
     shared_customer_risk: bool = False
     delay_customer: str | None = None
     include_operating: bool = False
+
+
+class ForecastScenario(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    customer_id: str | None = Field(default=None, min_length=1, max_length=160)
+    customer_delay_weeks: int = Field(default=0, ge=0, le=13, strict=True)
+    expense_id: str | None = Field(default=None, min_length=1, max_length=160)
+    expense_delay_weeks: int = Field(default=0, ge=0, le=52, strict=True)
 
 
 def demo_training_allowed(firm):
@@ -144,7 +157,8 @@ def display_money(row):
     if not isinstance(row, dict):
         return row
     fields = MONEY_FIELDS | {"unallocated", "total_received", "unallocated_minor", "amount_minor", "amount_open_minor", "available_minor",
-                             "remaining_amount", "allocated_amount", "outstanding_before", "outstanding_after"}
+                             "remaining_amount", "allocated_amount", "cancelled_amount", "replaced_amount",
+                             "outstanding_before", "outstanding_after"}
     return {k: str(v) if k in fields and isinstance(v, int) and abs(v) > 2**53 - 1 else display_money(v) for k, v in row.items()}
 
 
@@ -324,10 +338,17 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             counts = {k: len(data.get(k, [])) for k in SCHEMAS}
         active = records(firm, "model_active")
         versions = sorted(
-            records(firm, "models"), key=lambda r: r["created_at"], reverse=True
+            (r for r in records(firm, "models") if r.get("algorithm_version") == "t1-partial-bundle-v2"), key=lambda r: r["created_at"], reverse=True
         )
         jobs = sorted(
             records(firm, "jobs"), key=lambda r: r["created_at"], reverse=True
+        )
+        active = [r for r in active if any(v["id"] == r["version"] for v in versions)]
+        from agent1.adaptive.t1_data import visible_data
+        from .t1_lifecycle import current_data as current_t1_data
+        model_data_hash = (
+            fingerprint(visible_data(current_t1_data(store, firm), pd.Timestamp.now(tz="Asia/Ho_Chi_Minh")))
+            if active else None
         )
         return dict(
             company=firm,
@@ -344,7 +365,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 and next(
                     (v for v in versions if v["id"] == active[0]["version"]), {}
                 ).get("dataset_hash")
-                != dataset_hash
+                != model_data_hash
             ),
         )
 
@@ -402,6 +423,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 amount="20000000",
                 category="Lương",
                 known_at="01/11/2026",
+                obligation_ref="DEMO_LUONG", payment_period="2026-11", installment_no="1",
             ),
             "expense_payments": dict(
                 settlement_id="DEMO_TRA001", expense_id="DEMO_CHI001",
@@ -494,6 +516,19 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             # current() waits for the dataset lock: never block the event loop on it (health checks and every other request stall).
             staged = await run_in_threadpool(current, firm)
             base_hash = fingerprint(staged)
+            before_import = staged
+            import_plan, counts = None, None
+            if kind == 'outflows':
+                source_rows = {}
+                if selected.get('expense_id') in raw.columns:
+                    for i, value in enumerate(raw[selected['expense_id']], 2):
+                        source_rows.setdefault(str(value).strip(), i)
+                import_plan = plan_obligation_import(staged, accepted,
+                    row_numbers=[source_rows.get(r['expense_id'], i + 2) for i, r in enumerate(accepted)])
+                errors.extend(import_plan['errors'])
+                warnings.extend(import_plan['warnings'])
+                accepted = import_plan['records']
+                counts = import_plan['counts']
             merged = {r[IDS[kind]]: r for r in staged.get(kind, [])}
             changes = [
                 dict(before=merged[r[IDS[kind]]], after=r)
@@ -512,6 +547,8 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                     changes = [dict(before=merged[r[IDS[kind]]], after=r) for r in staged[kind]
                                if r[IDS[kind]] in merged and merged[r[IDS[kind]]] != r][:10]
                     updates = sum(r[IDS[kind]] in merged and merged[r[IDS[kind]]] != r for r in staged[kind])
+                    if import_plan is None:
+                        counts = import_counts(before_import, staged, kind, len(accepted))
                 except ValueError as exc:
                     errors.append(dict(row=0, column="reference", message=str(exc)))
             for e in errors:
@@ -543,6 +580,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                         imported_by=imported_by.strip(),
                         row_count=len(raw),
                         valid_rows=len(accepted),
+                        import_plan=import_plan,
                         error_count=len(errors),
                         bank_scope=staged.get("bank_scope"),
                         base_hash=base_hash,
@@ -566,6 +604,8 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 rows=len(raw),
                 valid_rows=len(accepted),
                 updates=updates,
+                counts=counts,
+                row_results=display_money(import_plan['rows']) if import_plan else [],
                 errors=errors[:100],
                 error_count=len(errors),
                 warnings=warnings,
@@ -706,6 +746,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             version = save_dataset(firm, data)
             return dict(deleted=True, version=version)
 
+    @router.post("/t1/updates", status_code=202)
     @router.post("/training", status_code=202)
     def training(body: Training, firm=Depends(authorize)):
         asof = date(body.asof)
@@ -766,96 +807,42 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
 
         def worker():
             try:
+                from .t1_lifecycle import run_cycle
 
                 def progress(message):
                     job.update(status="running", message=message, last_stage=message)
                     put(firm, "jobs", [job])
 
-                if (
-                    len(data["invoices"]) >= 10000
-                    or deep_cash
-                    or os.environ.get("AGENT1_ISOLATE_TRAINING") == "1"
-                ):
-                    from .train_worker import isolated_train
-
-                    progress(
-                        "Đang học trong worker riêng; không giới hạn tổng thời gian"
-                    )
-                    bundle = isolated_train(data, asof, deep_cash, progress)
-                else:
-                    bundle = train(data, asof, progress)
-                    from agent1.adaptive.operating import select_operating
-
-                    bundle["operating"] = select_operating(data, asof, False)
-                # Only internally generated artifacts are deserialized, never uploads.
-                bundle["synthetic_sandbox"] = demo_training_allowed(firm)
-                from agent1.adaptive.training_report import save_training_report
-
-                report_path = save_training_report(bundle, data, identifier)
-                artifact = base64.b64encode(pickle.dumps(bundle)).decode()
-                metadata = {
-                    k: bundle[k]
-                    for k in [
-                        "asof",
-                        "dataset_hash",
-                        "audit",
-                        "validation_n",
-                        "train_n",
-                        "algorithm_version",
-                        "limitation",
-                        "windows",
-                        "code_hash",
-                        "dependencies",
-                    ]
-                }
-                metadata["synthetic_sandbox"] = demo_training_allowed(firm)
-                metadata["risk_status"] = bundle.get("risk", {}).get(
-                    "status", "unavailable"
-                )
-                metadata["risk_quality"] = {
-                    k: v
-                    for k, v in bundle.get("risk", {}).items()
-                    if k
-                    in (
-                        "status",
-                        "audit_brier",
-                        "baseline_brier",
-                        "accepted",
-                        "n",
-                        "audit_n",
-                        "horizon_days",
-                    )
-                }
-                metadata["collection_quality"] = {
-                    k: v
-                    for k, v in bundle.get("collection_evaluation", {}).items()
-                    if k in ("status", "audit", "baseline", "accepted", "metric")
-                }
-                put(firm, "weights", [dict(id=identifier, artifact=artifact)])
-                put(
-                    firm,
-                    "models",
-                    [
-                        dict(
-                            id=identifier,
-                            created_at=created,
-                            artifact_id=identifier,
-                            operating_ready=bool(bundle["operating"]),
-                            **metadata,
+                def fit(given, when, callback, *, incumbent, catalog, policy):
+                    if len(given["invoices"]) >= 10000 or deep_cash or os.environ.get("AGENT1_ISOLATE_TRAINING") == "1":
+                        from .train_worker import isolated_train
+                        return isolated_train(
+                            given, str(when.date()), deep_cash, callback,
+                            incumbent=incumbent, policy=policy, catalog_path=str(catalog.path),
                         )
-                    ],
+                    bundle = train(given, when, callback, incumbent=incumbent, catalog=catalog, policy=policy)
+                    from agent1.adaptive.operating import select_operating
+                    bundle["operating"] = select_operating(given, str(when.date()), False, include_new_credit=False)
+                    bundle["synthetic_sandbox"] = demo_training_allowed(firm)
+                    return bundle
+
+                decision = run_cycle(
+                    store, firm, asof, payments_complete=True, force=body.force,
+                    progress=progress, trainer=fit,
                 )
                 job.update(
-                    status="completed",
-                    message="Kiểm định xong. Xem kết quả và chọn phiên bản trước khi sử dụng.",
-                    version=identifier,
-                    encrypted_report=bool(report_path),
+                    status="completed", version=decision.get("model_id"),
+                    decision=decision,
+                    message=(
+                        "Chưa đến chu kỳ cập nhật tiếp theo: " + decision["next_due"]
+                        if decision["status"] == "not_due"
+                        else "Đã chọn phiên bản dự báo; ứng viên thiếu nhãn được giữ để chấm sau."
+                    ),
                 )
             except Exception as exc:
                 job.update(
                     status="failed",
-                    message=str(exc)
-                    if isinstance(exc, ValueError)
+                    message=str(exc) if isinstance(exc, ValueError)
                     else "Tác vụ thất bại; dữ liệu và phiên bản đang dùng được giữ nguyên.",
                 )
             finally:
@@ -874,12 +861,25 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             )
             if not row:
                 raise HTTPException(404, "Không tìm thấy phiên bản của doanh nghiệp")
+            if row.get("algorithm_version") != "t1-partial-bundle-v2":
+                raise HTTPException(422, "T1 local cũ đã được thay thế; tạo phiên bản global → local mới.")
             put(firm, "model_active", [dict(id="active", version=identifier)])
+            from .t1_lifecycle import current_data as current_t1_data
+            from agent1.adaptive.t1_data import visible_data
             return dict(
                 active_version=identifier,
                 mode="shadow",
-                stale=row["dataset_hash"] != fingerprint(current(firm)),
+                stale=row["dataset_hash"] != fingerprint(visible_data(
+                    current_t1_data(store, firm), pd.Timestamp.now(tz="Asia/Ho_Chi_Minh"))),
             )
+
+    @router.get("/t1/updates")
+    def t1_updates(firm=Depends(read_access)):
+        return dict(
+            state=one(firm, "t1_update_state", "current"),
+            runs=sorted(records(firm, "t1_update_runs"), key=lambda r:r["created_at"], reverse=True)[:100],
+            challengers=[{k:v for k,v in row.items() if k not in {"snapshot", "artifact_id"}} for row in records(firm, "t1_challengers")],
+        )
 
     @router.delete("/models/{identifier}")
     def retire_model(identifier: str, confirm: str, firm=Depends(authorize)):
@@ -1065,6 +1065,11 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         row = one(firm, "predictions", identifier)
         if not row:
             raise HTTPException(404, "Không có dự báo này")
+        if row.get('t5'):
+            # Adapt presentation without rewriting the saved plan or cash path.
+            row = dict(row, t5=dict(row['t5'], obligations=[
+                dict(r, **obligation_amounts(r)) for r in row['t5']['obligations']
+            ]))
         return row
 
     @router.get("/forecasts/{identifier}/xlsx")
@@ -1079,6 +1084,46 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 "Content-Disposition": f'attachment; filename="agent1-{identifier}.xlsx"'
             },
         )
+
+    @router.get("/forecasts/{identifier}/explanations")
+    def forecast_explanations(identifier: str, firm=Depends(read_access)):
+        plan = saved_forecast(identifier, firm)
+        if not plan.get("t10"):
+            raise HTTPException(409, "Kế hoạch cũ chưa lưu bằng chứng adapter T10; cần lập dự báo mới.")
+        return dict(forecast_id=identifier, t10=plan["t10"],
+                    cash_decomposition=plan["cash_decomposition"], collections=plan["collections"],
+                    explanation_references=plan.get("explanation_references", {}))
+
+    @router.post("/forecasts/{identifier}/scenarios")
+    def forecast_scenario(identifier: str, body: ForecastScenario, firm=Depends(authorize)):
+        from agent1.adaptive.t10_explanations import replay_scenario
+
+        # Deliberately do not read current data, active model, or the catalog.
+        plan = one(firm, "predictions", identifier)
+        if not plan:
+            raise HTTPException(404, "Không có dự báo này")
+        try:
+            result = replay_scenario(plan, one(firm, "forecast_replays", identifier), **body.model_dump())
+        except ValueError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        result.update(id=uuid.uuid4().hex, created_at=datetime.now(timezone.utc).isoformat())
+        put(firm, "forecast_scenarios", [result])
+        return result
+
+    @router.get("/forecasts/{identifier}/scenarios")
+    def forecast_scenarios(identifier: str, firm=Depends(read_access)):
+        if not one(firm, "predictions", identifier):
+            raise HTTPException(404, "Không có dự báo này")
+        return [{k: row[k] for k in ("id", "created_at", "assumptions", "delta_any_shortfall_probability")}
+                for row in sorted(records(firm, "forecast_scenarios"), key=lambda r: r["created_at"], reverse=True)
+                if row["forecast_id"] == identifier][:100]
+
+    @router.get("/forecasts/{identifier}/scenarios/{scenario_id}")
+    def saved_scenario(identifier: str, scenario_id: str, firm=Depends(read_access)):
+        result = one(firm, "forecast_scenarios", scenario_id)
+        if not result or result["forecast_id"] != identifier:
+            raise HTTPException(404, "Không có kịch bản này")
+        return result
 
     @router.get("/forecasts/{identifier}/actuals")
     def actuals(
@@ -1156,17 +1201,15 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         cutoff = date(body.cutoff)
         if any(week > body.horizon_weeks for week in body.confirmed_weeks):
             raise HTTPException(422, "Tuần xác nhận lịch chi phải nằm trong kỳ dự báo.")
-        active = records(firm, "model_active")
         bundle = None
         model = None
-        if active:
-            model = one(firm, "models", active[0]["version"])
-            if model:
-                weight = one(firm, "weights", model["artifact_id"])
-                bundle = pickle.loads(base64.b64decode(weight["artifact"]))
         try:
             data = current(firm)
             check_bank_scope(data)
+            from .t1_lifecycle import load_active, current_data as current_t1_data
+            bundle, model = load_active(store, firm, cutoff)
+            from agent1.adaptive.t1_data import visible_data
+            t1_input_hash = fingerprint(visible_data(current_t1_data(store, firm), cutoff))
             started = time.perf_counter()
             result = forecast(
                 data,
@@ -1181,12 +1224,16 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 body.delay_customer,
                 body.include_operating,
                 horizon_weeks=body.horizon_weeks,
+                simulation_paths=body.simulation_paths,
+                shap_limit=body.shap_limit,
+                simulation_seed=body.simulation_seed,
             )
             result.update(
                 inference_ms=round((time.perf_counter() - started) * 1000),
                 accounts=account_scope(data, cutoff),
                 model_version=model["id"] if model else None,
-                stale_model=bool(model and model["dataset_hash"] != fingerprint(data)),
+                stale_model=bool(model and model.get("algorithm_version") == "t1-partial-bundle-v2" and model["dataset_hash"] != t1_input_hash),
+                t1_input_dataset_hash=t1_input_hash,
                 scenario=dict(
                     delay_days=body.delay_days,
                     expense_multiplier=body.expense_multiplier,
@@ -1196,6 +1243,12 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 confirmed_weeks=body.confirmed_weeks,
                 dataset_hash=fingerprint(data),
             )
+            if bundle and bundle.get("t1_version"):
+                result["company_bundle_version"] = result["model_version"]
+                result["model_version"] = bundle["t1_version"]
+            elif bundle and bundle.get("t1_provenance"):
+                result["company_bundle_version"] = result["model_version"]
+                result["model_version"] = "landmark:" + bundle["t1_provenance"]["metadata_sha256"][:16]
             for invoice in result["collections"]:
                 explanation = invoice.get("payment_explanation")
                 if explanation is not None:
@@ -1210,8 +1263,12 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                         dataset_hash=result["dataset_hash"],
                     )
                     ranking["probability_source"]["dataset_hash"] = result["dataset_hash"]
+                    if ranking["probability_source"].get("method") == "active_t1":
+                        ranking["probability_source"]["model_version"] = result["model_version"]
                     if ranking.get("probability_explanation"):
                         ranking["probability_explanation"]["dataset_hash"] = result["dataset_hash"]
+                        if ranking["probability_source"].get("method") == "active_t1":
+                            ranking["probability_explanation"]["model_version"] = result["model_version"]
             result["collection_ranking"].update(
                 model_version=result["model_version"],
                 dataset_hash=result["dataset_hash"],
@@ -1223,7 +1280,6 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             result.update(
                 id=uuid.uuid4().hex,
                 created_at=datetime.now(timezone.utc).isoformat(),
-                band_protocol="cash-v3-t5-ledger",
             )
             if result["accounts"]:
                 from agent1.adaptive.cash_history import calibrate_bands
@@ -1240,11 +1296,18 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 calibrate_bands(
                     result, (one(firm, "predictions", r["id"]) for r in past), data
                 )
-            put(firm, "predictions", [result])
-            put(
-                firm,
-                "forecast_index",
-                [
+            from agent1.adaptive.t10_explanations import archive_engine, freeze_replay
+            replay = freeze_replay(result, data, bundle, dict(
+                cutoff=cutoff, balance=body.opening_balance, delay_days=body.delay_days,
+                expense_multiplier=body.expense_multiplier, confirmed_weeks=body.confirmed_weeks,
+                cash_floor=body.cash_floor, shared_customer_risk=body.shared_customer_risk,
+                delay_customer=body.delay_customer, include_operating=body.include_operating,
+                horizon_weeks=body.horizon_weeks, simulation_paths=body.simulation_paths,
+                simulation_seed=body.simulation_seed, shap_limit=body.shap_limit,
+            ))
+            batches = {
+                "company_predictions": [result], "company_forecast_replays": [replay],
+                "company_forecast_index": [
                     {
                         k: result[k]
                         for k in (
@@ -1260,7 +1323,11 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                         )
                     }
                 ],
-            )
+            }
+            engine_id = result["t10"]["identity"]["t6"]["source_sha256"]
+            if not one(firm, "forecast_engines", engine_id):
+                batches["company_forecast_engines"] = [archive_engine(result["t6_version"])]
+            store.put_many(firm, batches)
             return result
         except ValueError as exc:
             raise HTTPException(422, str(exc))

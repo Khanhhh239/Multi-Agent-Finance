@@ -55,7 +55,7 @@ def build(variant):
     review_stats = None
     if variant.startswith("v2rev"):
         # B1: kế toán duyệt b giao dịch/DN/tuần theo chính sách đã chọn trên nguồn (leftover), người duyệt hoàn hảo (cận trên).
-        from agent1.models.t9_review_queue import simulate_review
+        from agent1.models.t9_research import simulate_review
         truth = pd.read_parquet(SYNTH / WORLD / "payments.parquet", columns=["txn_id", "invoice_id", "amount", "pay_date_true"])
         truth = truth[truth.txn_id.isin(bank.txn_id)]
         links, review_stats = simulate_review(links, bank, truth, per_week=int(variant[len("v2rev"):]), policy=REVIEW_POLICY)
@@ -67,7 +67,7 @@ def build(variant):
     labelled["paid_date_true"] = labelled.pop("paid_date_est")      # tên cột nội bộ T1; giá trị là nhãn ƯỚC LƯỢNG
     if variant == "v2soft" or variant.startswith("v2rev"):
         # Nhãn mềm: chỉ cho hoá đơn T9 bỏ sót; không thay liên kết T9. Ngày = ngày giao dịch tất toán theo phân bổ FIFO theo khách.
-        from agent1.models.t9_soft_labels import soft_fifo_labels
+        from agent1.models.t9_research import soft_fifo_labels
         soft = soft_fifo_labels(links, bank, inv, asg, min_confidence=SOFT_CONFIDENCE)
         missing = labelled.paid_date_true.isna()
         labelled.loc[missing, "paid_date_true"] = labelled.loc[missing, "invoice_id"].map(soft)

@@ -71,6 +71,22 @@ def test_overdue_outgoing_is_carried_and_cancelled_remainder_is_not_projected():
     assert not cash_schedule(data,'2026-02-11')['outflows']
 
 
+@pytest.mark.parametrize('settled',[0,40,100])
+def test_cancelled_amount_is_separate_from_remaining_and_preserves_earlier_snapshot(settled):
+    data=dict(book(),outflows=[expense()],bank=[bank(amount=settled)] if settled else [],
+        expense_payments=[payment(amount=settled)] if settled else [])
+    data=merge_import(data,'outflows',[expense(known_at='2026-02-11',status='cancelled')])
+    before=cash_schedule(data,CUTOFF)['obligations'][0]
+    assert before['remaining_amount']==100-settled
+    assert before['cancelled_amount']==before['replaced_amount']==0
+    plan=forecast(data,'2026-02-11',1000-settled,horizon_weeks=1)
+    row=plan['t5']['obligations'][0]
+    assert row['status']=='cancelled' and row['settled_amount']==settled
+    assert row['cancelled_amount']==100-settled and row['remaining_amount']==row['replaced_amount']==0
+    assert row['obligation_amount']==sum(row[k] for k in ('settled_amount','cancelled_amount','replaced_amount','remaining_amount'))
+    assert plan['weeks'][0]['cash_out']==0 and plan['weeks'][0]['balance']==1000-settled
+
+
 @pytest.mark.parametrize('change',[
     {'amount':101},{'bank_id':'missing'},{'payment_date':'2026-02-08'},
     {'known_at':'2026-01-31'},{'expense_id':'missing'},
@@ -122,8 +138,7 @@ def test_refund_has_own_cash_direction_and_approval_clock_and_is_not_cost_scaled
     assert plan['weeks'][0]['balance']==1100
     assert plan['cash_decomposition']['totals']['obligation_in']==100
     assert plan['t5']['inflows'][0]['known_at']=='2026-02-10'
-    for scenario in plan['cash_decomposition']['timing_comparison']['scenarios']:
-        assert scenario['weeks'][0]['cash_in']==100
+    assert plan['cash_decomposition']['weeks'][0]['cash_in']==100
 
 
 def test_overdue_refund_requires_new_expected_date_and_receipt_is_subtracted():
@@ -155,7 +170,13 @@ def test_split_contract_replaces_legacy_combined_service_once_and_preserves_earl
         data=merge_import(data,'outflows',[expense(identifier,category=category,amount=amount,
             known_at=CUTOFF,source='Loan contract',verified=True,replaces_expense_id='COMBINED')])
     assert sum(r['amount'] for r in cash_schedule(data,CUTOFF)['outflows'])==110
-    assert cash_schedule(data,CUTOFF)['obligations'][0]['status']=='replaced'
+    ledger=cash_schedule(data,CUTOFF)['obligations']
+    original=next(r for r in ledger if r['expense_id']=='COMBINED')
+    assert original['status']=='replaced' and original['replaced_amount']==110
+    assert original['remaining_amount']==original['cancelled_amount']==0
+    assert sum(r['remaining_amount'] for r in ledger)==110
+    earlier=cash_schedule(data,'2026-02-09')['obligations'][0]
+    assert earlier['remaining_amount']==110 and earlier['replaced_amount']==0
     assert [r['expense_id'] for r in cash_schedule(data,'2026-02-09')['outflows']]==['COMBINED']
 
 
@@ -198,9 +219,43 @@ def test_api_import_settlement_forecast_records_and_export_are_connected(client)
     assert result.status_code==200,result.text
     plan=result.json()
     assert plan['weeks'][0]['balance']==1000
-    assert plan['band_protocol']=='cash-v3-t5-ledger'
+    assert plan['band_protocol']=='settlement-partial-paths-v2'
     export=load_workbook(BytesIO(workbook_bytes(plan,'SME')))
     assert export['Nghĩa vụ T5'].max_row==3 and export['Thanh toán T5'].max_row==2
     assert export['Hoàn thuế theo lịch'].max_row==2
     assert client.delete('/v1/records/outflows/E').status_code==409
     assert client.delete('/v1/records/bank/B').status_code==409
+
+
+def test_cancelled_replaced_records_and_old_saved_exports_show_discharged_amounts(client):
+    data=dict(book(),outflows=[expense('CANCELLED',status='cancelled'),expense('OLD'),
+        expense('NEW',amount=120,known_at='2026-02-02',replaces_expense_id='OLD')])
+    for kind,rows in data.items():
+        if rows:upload(client,kind,rows)
+    records={r['identifier']:r for r in client.get('/v1/records',params={'kind':'outflows'}).json()['rows']}
+    assert records['CANCELLED']['remaining_amount']==0 and records['CANCELLED']['cancelled_amount']==100
+    assert records['OLD']['remaining_amount']==0 and records['OLD']['replaced_amount']==100
+    assert records['NEW']['remaining_amount']==120 and records['NEW']['cancelled_amount']==records['NEW']['replaced_amount']==0
+
+    # A forecast saved by the previous release still has the unpaid amount in
+    # inactive rows. Reads and exports adapt it without rewriting history.
+    legacy=dict(forecast(data,CUTOFF,1000,horizon_weeks=1),id='LEGACY-T5')
+    for row in legacy['t5']['obligations']:
+        if row['status'] in {'cancelled','replaced'}:row['remaining_amount']=100
+        row.pop('cancelled_amount');row.pop('replaced_amount')
+    client.app.state.store.put('SME','company_predictions',[legacy])
+    response=client.get('/v1/forecasts/LEGACY-T5')
+    assert response.status_code==200,response.text
+    rows={r['expense_id']:r for r in response.json()['t5']['obligations']}
+    assert rows['CANCELLED']['remaining_amount']==0 and rows['CANCELLED']['cancelled_amount']==100
+    assert rows['OLD']['remaining_amount']==0 and rows['OLD']['replaced_amount']==100
+    assert response.json()['weeks']==legacy['weeks']
+    for output in (workbook_bytes(legacy,'SME'),client.get('/v1/forecasts/LEGACY-T5/xlsx').content):
+        sheet=load_workbook(BytesIO(output))['Nghĩa vụ T5']
+        headers=[c.value for c in sheet[1]]
+        exported={values[0]:dict(zip(headers,values)) for values in sheet.iter_rows(min_row=2,values_only=True)}
+        assert exported['CANCELLED']['Còn phải trả/nhận']==0 and exported['CANCELLED']['Đã hủy']==100
+        assert exported['OLD']['Còn phải trả/nhận']==0 and exported['OLD']['Đã thay thế']==100
+        assert exported['NEW']['Còn phải trả/nhận']==120
+    saved=client.app.state.store.get('SME','company_predictions')[0]
+    assert saved==legacy

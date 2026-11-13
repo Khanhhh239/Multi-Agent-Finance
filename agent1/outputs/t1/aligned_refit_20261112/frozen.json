@@ -1,0 +1,46 @@
+{
+  "artifact_metadata_sha256": "4a32a1b6c91703ca8f12e545ab6fc0f36b8be6601533f62ff9b77b74036d8aa9",
+  "protocol_sha256": "5ef70c7c42ef59dcd602f283beb5b09772c5d9a5905debc9c0e40eaeeddefd1f",
+  "members": [
+    "neural",
+    "customer",
+    "due"
+  ],
+  "weights": [
+    0.55,
+    0.05,
+    0.4
+  ],
+  "weight_selection_sha256": "0a7253544ecbcfab712751d85ce5ce70729bf76e7a0c570b2297f93004b7a5df",
+  "adaptation_neural_sha256": "a6781749b0151f7f8f4462d842c989f776a36e18d7da83660df36c9b20c07343",
+  "replay_sha256": "964a8fbd57624403a769aedd1d522492b5e5987c7e1988bd5f8d46633b8ef398",
+  "source_sha256": {
+    "agent1\\adaptive\\__init__.py": "e5f482d1532294d673c5549d87e9609b90367de94816e33b82903d18a5d670ab",
+    "agent1\\adaptive\\business_explanations.py": "d7cfc16ca28f844252837915e26052fd2dda67c5de3907f1e48581369dd51715",
+    "agent1\\adaptive\\cash_explanations.py": "5c36cef8f1b4486d6d8dd339d3570e0facb80f0fb19abfa0c9f9783606fd8b71",
+    "agent1\\adaptive\\cash_history.py": "ad2877d5fddcc4b03d50b4abe7d58a1f6f90a657839c5ff5e791665aca413215",
+    "agent1\\adaptive\\collection_explanations.py": "3c8d1d8414381049308f7cdcdbc73a31b4d8c717bca691d3f31d3f86b1774c79",
+    "agent1\\adaptive\\collections.py": "9af81f8029deb8b1d1e3b7ee3e8fddb9f3c9d15cebd2f8bb86f396331b42c25d",
+    "agent1\\adaptive\\compact_ensemble.py": "61cd14f5cdd4d7951fe527107fdb46e040ef4d3ce953d95e81743ae6f07d777c",
+    "agent1\\adaptive\\compact_t1.py": "c417edfaf44e883fbf59244ee99f3f46bec6eacd8c25288c9922f539babac0b0",
+    "agent1\\adaptive\\data.py": "998543c50bdc64622c03e6385bed07645d28ed6dd68c016d0a0531c41baecbe8",
+    "agent1\\adaptive\\explanation_reference.py": "bb999301e6dce06337aad0bb219c7ba644e51116d163f6944d8442dc2624eb3b",
+    "agent1\\adaptive\\explanations.py": "4ebd1717bcef04ed54d525199393f9e23dc4186f188db7ad469f4461a033a33f",
+    "agent1\\adaptive\\landmark_adaptation.py": "ffffd5154212e18d9288f685df28d9bc2e9c7c0b51babd1737aa4be05fc22380",
+    "agent1\\adaptive\\landmark_explanations.py": "e3668d04786076b29a6d8074cca79e49711884bc4428e4ca6cf6f8682ece37fd",
+    "agent1\\adaptive\\landmark_features.py": "8c4e92b811f72bec727f30525880626cc8b30e62404ab5a73ce62893810ff2fe",
+    "agent1\\adaptive\\landmark_serving.py": "1bd83647b75f018344052d9a0df465ebff0a8ec92c117efeb00cc5188beae985",
+    "agent1\\adaptive\\ledger_bridge.py": "a6a99d467bd677561239df68bee24cf817fd0e28f3d82c64180f071139e74553",
+    "agent1\\adaptive\\methods.py": "e93f7fcb057566772be5db011a752cc6c7df83106d1849686852502c90b188a3",
+    "agent1\\adaptive\\new_credit.py": "8212b25bf92def81f4250bc901ea559ea480eb0254cdcc2049e43caabbe8cc6a",
+    "agent1\\adaptive\\obligation_imports.py": "8c194c1ed89c06b7e030dac0dbaa0159a55ee73650bccefaf8ebf5c78fe122c0",
+    "agent1\\adaptive\\obligations.py": "eaa22d5031b8baf81effaa8e74919ae106293cf159d291760621ae0ca72f4655",
+    "agent1\\adaptive\\operating.py": "431196d63c299b724f6c68e64ae3a00a63471063f7fc671eecefc657b903d644",
+    "agent1\\adaptive\\risk.py": "c2b6da897295f82229d1ecad319042d7aadc6074f8dbf4c8c37ae3863f27b0c6",
+    "agent1\\adaptive\\training_report.py": "98a23ab42f8c56e9baae6b6ef9c00d41da745d6735d49f7175c7251b3f633c00",
+    "experiments\\t1_compact\\refit_landmark.py": "83d9a47ffb8b434afbd48c75b71dc082c6283155724d97dac74d5693989b4bd9",
+    "experiments\\t1_compact\\aligned_data.py": "14100b3f04a0233e0f5f4a709ef84a0c1f8b7c8142f7e47ab1cde8d8aa81e012",
+    "experiments\\t1_compact\\fresh_refit_worlds.py": "99a6855b7b6d8eb6da502b73c19263b150b3ca611d7afd353cbd5add078a6b7c",
+    "experiments\\t1_compact\\train_landmark.py": "1977ee475bf8642e44bc66de48ef481246d60665af257843efd5127b53db16a6"
+  }
+}

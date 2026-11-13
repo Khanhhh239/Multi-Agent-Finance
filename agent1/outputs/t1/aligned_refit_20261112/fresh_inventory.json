@@ -1,0 +1,75 @@
+[
+  {
+    "role": "weight_validation",
+    "seed": 261112901,
+    "scenario": "baseline",
+    "firms": 6,
+    "name": "refit_00_weight_validation",
+    "directory": "worlds\\refit_00_weight_validation",
+    "manifest_sha256": "fb19e8a15876da40a472459d09621b75ead949ab5ef6b31d565b46f4d592bc86"
+  },
+  {
+    "role": "weight_validation",
+    "seed": 261112902,
+    "scenario": "credit",
+    "firms": 6,
+    "name": "refit_01_weight_validation",
+    "directory": "worlds\\refit_01_weight_validation",
+    "manifest_sha256": "185d52e855ee522aec53d42ca511f46b8ba6b8a1651e9b557f2d988fcb785ebb"
+  },
+  {
+    "role": "audit",
+    "seed": 261112903,
+    "scenario": "baseline",
+    "firms": 6,
+    "name": "refit_02_audit",
+    "directory": "worlds\\refit_02_audit",
+    "manifest_sha256": "03112be5124bee7c943974145911f0cf9f2b1d5e3a7c5afb848a7f6d739995e7"
+  },
+  {
+    "role": "audit",
+    "seed": 261112904,
+    "scenario": "supply",
+    "firms": 6,
+    "name": "refit_03_audit",
+    "directory": "worlds\\refit_03_audit",
+    "manifest_sha256": "e44ce56d1e06c44f2166559bae5516e7b93785861787d27587a26b2220ac8607"
+  },
+  {
+    "role": "fresh_test",
+    "seed": 261112905,
+    "scenario": "baseline",
+    "firms": 6,
+    "name": "refit_04_fresh_test",
+    "directory": "worlds\\refit_04_fresh_test",
+    "manifest_sha256": "7748e97f8ff66f35f2514c7986a1c30d6c165c0e6c47014ffcbf75ffbd7c5060"
+  },
+  {
+    "role": "fresh_test",
+    "seed": 261112906,
+    "scenario": "credit",
+    "firms": 6,
+    "name": "refit_05_fresh_test",
+    "directory": "worlds\\refit_05_fresh_test",
+    "manifest_sha256": "94de30b35ab8ea1d493665a1cba71389a9115529cb32beaabf8f858ccf935f29"
+  },
+  {
+    "role": "fresh_test",
+    "seed": 261112907,
+    "scenario": "supply",
+    "firms": 6,
+    "name": "refit_06_fresh_test",
+    "directory": "worlds\\refit_06_fresh_test",
+    "manifest_sha256": "5bb4791a5618bb91e6d0773ea878737cbf68c007ea739a4ba871467b47762c74"
+  },
+  {
+    "role": "fresh_test",
+    "seed": 261113999,
+    "scenario": "short_history",
+    "firms": 6,
+    "start": "2025-01-01",
+    "name": "refit_07_fresh_test_onboarding",
+    "directory": "worlds\\refit_07_fresh_test_onboarding",
+    "manifest_sha256": "64877ea98160267d39c4da571efda7a70a88107eb817580ee9c994b795a1be37"
+  }
+]

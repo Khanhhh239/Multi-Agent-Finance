@@ -1,0 +1,127 @@
+{
+  "version": "compact-world-replay-v1",
+  "entries": [
+    {
+      "template": "v4_shortpay_4shock_20261028_train_000",
+      "role": "train",
+      "firms": 12,
+      "kind": "retained_config_replay",
+      "selection_seed": 26111200
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_001",
+      "role": "train",
+      "firms": 12,
+      "kind": "retained_config_replay",
+      "selection_seed": 26111201
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_002",
+      "role": "train",
+      "firms": 12,
+      "kind": "retained_config_replay",
+      "selection_seed": 26111202
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_003",
+      "role": "train",
+      "firms": 12,
+      "kind": "retained_config_replay",
+      "selection_seed": 26111203
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_validation_000",
+      "role": "validation",
+      "firms": 6,
+      "kind": "retained_config_replay",
+      "selection_seed": 26111204
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_validation_001",
+      "role": "validation",
+      "firms": 6,
+      "kind": "retained_config_replay",
+      "selection_seed": 26111205
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_test_000",
+      "role": "test",
+      "firms": 6,
+      "kind": "retained_config_replay",
+      "selection_seed": 26111206
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_test_001",
+      "role": "test",
+      "firms": 6,
+      "kind": "retained_config_replay",
+      "selection_seed": 26111207
+    },
+    {
+      "template": "practical_v6_20261105_aug_supported_000",
+      "role": "train",
+      "firms": 8,
+      "kind": "retained_stress_config_replay",
+      "selection_seed": 26111300
+    },
+    {
+      "template": "practical_v6_20261105_aug_supported_001",
+      "role": "train",
+      "firms": 8,
+      "kind": "retained_stress_config_replay",
+      "selection_seed": 26111301
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_000",
+      "role": "train",
+      "firms": 6,
+      "kind": "additional_stress",
+      "seed": 261112101,
+      "selection_seed": 26111400,
+      "late_scale": 1.55,
+      "dispute_scale": 1.6,
+      "stress_family": "credit"
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_001",
+      "role": "train",
+      "firms": 6,
+      "kind": "additional_stress",
+      "seed": 261112102,
+      "selection_seed": 26111401,
+      "late_scale": 1.35,
+      "dispute_scale": 1.6,
+      "stress_family": "supply"
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_002",
+      "role": "validation",
+      "firms": 6,
+      "kind": "additional_stress",
+      "seed": 261112103,
+      "selection_seed": 26111402,
+      "late_scale": 1.55,
+      "dispute_scale": 1.6,
+      "stress_family": "credit"
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_003",
+      "role": "test",
+      "firms": 6,
+      "kind": "additional_stress",
+      "seed": 261112104,
+      "selection_seed": 26111403,
+      "late_scale": 1.35,
+      "dispute_scale": 1.6,
+      "stress_family": "supply"
+    }
+  ],
+  "note": "Selected-firm regenerated data, not recovery of deleted historical Parquet. World roles stay locked; no prior test/holdout World enters training.",
+  "sources": {
+    "agent1\\synth\\world.py": "254559ca85d9b5649d113acd10f6e15b28aa58d274a28dbf69033b900d3d2541",
+    "agent1\\synth\\calibration_vn.json": "d3d126197a3c7e41c87d7fb065af13e09ac2d725f373217509e8ad9a626104a2",
+    "data\\raw\\wdi_vn\\wdi_vietnam.csv": null,
+    "data\\raw\\oxcgrt\\OxCGRT_compact_national_v1.csv": null
+  },
+  "missing_raw_policy": "Explicit generator fallback assumptions for absent WDI/OxCGRT; this is a new synthetic cohort, not byte-identical historical data or a real-data replay."
+}

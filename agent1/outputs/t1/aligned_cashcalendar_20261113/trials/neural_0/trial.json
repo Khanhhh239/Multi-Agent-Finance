@@ -1,0 +1,38 @@
+{
+  "name": "neural",
+  "trial": 0,
+  "score": 0.26851995071849,
+  "windows": {
+    "2024-01-01": 0.29187755077677624,
+    "2024-01-29": 0.28070445170323727,
+    "2024-02-26": 0.2503881148280966,
+    "2024-03-25": 0.25110968556585017
+  },
+  "cash_weekly_mae_vnd": 202809361.73309213,
+  "cash_cumulative_mae_vnd": 566836131.2516321,
+  "cash_bias13_fraction": -0.06593331215067534,
+  "brier4": 0.16143331917938755,
+  "brier13": 0.15159748605439288,
+  "integrated_brier13": 0.14564423768684925,
+  "seconds": 40.10835509999015,
+  "parameters": {
+    "memory": null,
+    "steps": [
+      [
+        "standardscaler",
+        "StandardScaler()"
+      ],
+      [
+        "mlpclassifier",
+        "MLPClassifier(alpha=0.01, batch_size=1024, hidden_layer_sizes=(32, 16),\n              max_iter=400, random_state=261112)"
+      ]
+    ],
+    "transform_input": null,
+    "verbose": false
+  },
+  "warnings": [],
+  "sample_sha256": "e0c1f69e77fb93cb872ef1ace68164fd9133fa8e343d9b4831b2a05908c280ee",
+  "protocol_sha256": "5031d434b9d7806f1b28655856009dbccad440e37c79f7c539929e9d4ed525eb",
+  "prediction_sha256": "753a9e9e56688995af93c0559426b200d0d9eeda3f5905c1b2ccf71ae6392b3d",
+  "model_metadata_sha256": "f56896227499d9889f2b4bea732ded91c719fff2e628c6474dd0b4225fbd24f0"
+}

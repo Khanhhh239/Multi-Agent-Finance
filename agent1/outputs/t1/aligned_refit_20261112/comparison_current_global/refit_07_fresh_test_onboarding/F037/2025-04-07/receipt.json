@@ -1,0 +1,23 @@
+{
+  "rows": {
+    "fit": 0,
+    "validation": 0,
+    "audit": 7
+  },
+  "local_fit_label_end": null,
+  "status": "insufficient_mature_local_windows",
+  "audit_passed": false,
+  "scratch_fallback": "workspace_history_baseline",
+  "world": "refit_07_fresh_test_onboarding",
+  "firm": "F037",
+  "origin": "2025-04-07",
+  "anchors": 15,
+  "workspace_method": "customer_fallback",
+  "workspace_audit": null,
+  "workspace_fallback": "Chưa đủ lịch sử: cần ≥60 hóa đơn trước 112 ngày, ≥20 đã trả, ≥20 hóa đơn ở mỗi cửa sổ kiểm định 28 ngày. Dùng dự báo theo điều khoản trước.",
+  "workspace_warnings": [],
+  "prediction_sha256": "9b0ed51142993a818c66c575bba0bf8da934716db2b305867676e9fa13c2d8ba",
+  "models_sha256": "5ce156226620c24a0f70494bba5e5a90109c23b40264752b1c6974e28850c08a",
+  "frozen_sha256": "c442b0cb0d1fb18398cb852175fb7f12f8186b59363a7de6b291222f76bcf3b9",
+  "seconds": 0.6234861999982968
+}

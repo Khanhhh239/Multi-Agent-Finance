@@ -2,76 +2,12 @@
 
 import numpy as np
 
-PROTOCOL = "cash-decomposition-v1"
+PROTOCOL = "cash-decomposition-v2"
 
 
 def _check(actual, expected, label):
     if not np.allclose(actual, expected, rtol=1e-12, atol=1e-6):
         raise ValueError(f"Phân rã dòng tiền không khớp {label}.")
-
-
-def _timing_comparison(ar, cash_sales, new_credit, outgoing, opening, floor, weeks):
-    """Shift finite forecast receipts only; the unresolved tail has no known date."""
-    horizon = len(ar)
-    current_balance = opening + np.cumsum(ar + new_credit + cash_sales - outgoing)
-    scenarios = []
-    for key, label, shift in (
-        ("current", "Kế hoạch đang xem", 0),
-        ("early", "Thu sớm 2 tuần", -2),
-        ("late", "Thu chậm 2 tuần", 2),
-    ):
-        shifted = np.zeros(horizon)
-        pushed_out = 0.0
-        for i, amount in enumerate(ar):
-            target = max(0, i + shift)
-            if target < horizon:
-                shifted[target] += amount
-            else:
-                pushed_out += amount
-        cin = shifted + new_credit + cash_sales
-        balances = opening + np.cumsum(cin - outgoing)
-        shortfalls = np.flatnonzero(balances < floor)
-        scenarios.append(
-            {
-                "key": key,
-                "label": label,
-                "shift_weeks": shift,
-                "ar_in": float(shifted.sum()),
-                "cash_in": float(cin.sum()),
-                "cash_out": float(outgoing.sum()),
-                "receipts_pushed_beyond_horizon": float(pushed_out),
-                "minimum_balance": float(balances.min()),
-                "closing_balance": float(balances[-1]),
-                "first_below_floor_week": int(shortfalls[0] + 1)
-                if len(shortfalls)
-                else None,
-                "minimum_balance_change": float(balances.min() - current_balance.min()),
-                "closing_balance_change": float(balances[-1] - current_balance[-1]),
-                "weeks": [
-                    {
-                        "week": w["week"],
-                        "date": w["date"],
-                        "ar_in": float(shifted[i]),
-                        "cash_in": float(cin[i]),
-                        "cash_out": float(outgoing[i]),
-                        "balance": float(balances[i]),
-                        "balance_change": float(balances[i] - current_balance[i]),
-                    }
-                    for i, w in enumerate(weeks)
-                ],
-            }
-        )
-    return {
-        "target": "expected_balance",
-        "relative_to": "saved_plan",
-        "scenarios": scenarios,
-        "assumptions": [
-            "So với kế hoạch đang xem: dịch phần dự thu công nợ trong kỳ sớm/chậm 2 tuần cho mọi khách; thu sớm nhất vào tuần 1.",
-            "Giữ nguyên số dư đầu, lịch chi, tiền hoàn theo hồ sơ, thu bán ngay và thu bán chịu mới. Nếu đang xem một kịch bản, so sánh được tính tiếp từ kịch bản đó.",
-            "Không kéo phần dư nợ chưa có thời điểm thu trong kỳ vào kịch bản sớm. Thu chậm ra ngoài kỳ được ghi riêng, không coi là mất tiền.",
-            "Đây là độ nhạy số dư kỳ vọng, chưa mô phỏng lại xác suất thiếu tiền hay P10/P90 và chưa chứng minh tác động của biện pháp thu nợ.",
-        ],
-    }
 
 
 def explain_cash(
@@ -125,7 +61,7 @@ def explain_cash(
                 "expected_in": total,
                 "expected_after_horizon": max(0.0, float(amounts[i] - total)),
                 "expected_by_week": receipt_amounts[i].tolist(),
-                "receipt_basis": "observed_partial_profile"
+                "receipt_basis": "settlement_partial_adapter"
                 if partial_profile[i]
                 else "settlement_timing",
             }
@@ -266,14 +202,11 @@ def explain_cash(
                 w["week"] for w in bridge if w["outflow_status"] in {"unknown", "scheduled_unconfirmed"}
             ],
         },
-        "timing_comparison": _timing_comparison(
-            ar, cash_sales + obligation_in, new_credit, outgoing, opening_balance, cash_floor, weeks
-        ),
         "assumptions": [
             "Dự thu hóa đơn = dư nợ tại ngày chốt × phần tiền phân bổ vào từng tuần; không nhân lại số tiền với xác suất tất toán 4 tuần.",
             "Phần chưa dự thu trong kỳ chỉ là dư nợ còn ngoài kỳ kỳ vọng, không phải dự báo xóa nợ hay cam kết sẽ thu đủ sau kỳ.",
             "Thu/chi hoạt động ước lượng được ghi riêng, không gán cho hóa đơn chưa tồn tại. Chi biến đổi chỉ bổ sung phần vượt chi biến đổi đã có lịch, tránh tính hai lần.",
             "Số dư kỳ vọng = số dư đầu + lũy kế dự thu − lũy kế dự chi. Phân rã này không phải SHAP của xác suất thiếu tiền hoặc phân vị số dư.",
-            "Mô phỏng hiện dùng 400 đường, seed 7; mỗi dư nợ được rút một tuần thu (kể cả khi kỳ vọng dùng hồ sơ trả từng phần). Rủi ro thời điểm độc lập hoặc dùng cùng biến ngẫu nhiên theo khách khi bật căng thẳng; thu/chi hoạt động dùng sai số lịch sử nếu có. Xác suất cảnh báo chưa hiệu chỉnh.",
+            "Mỗi đường cập nhật dư nợ sau từng tuần, có thể thu partial nhiều lần và dừng sau tất toán. Seed, số đường, phụ thuộc theo khách và trạng thái dải được lưu cùng forecast. Kịch bản rủi ro chạy lại T6 với cùng nguồn ngẫu nhiên.",
         ],
     }

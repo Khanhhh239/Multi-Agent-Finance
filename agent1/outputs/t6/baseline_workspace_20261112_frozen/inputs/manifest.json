@@ -1,0 +1,31 @@
+{
+  "company": "Đại Phát — doanh nghiệp mô phỏng",
+  "synthetic": true,
+  "cutoff": "2026-10-31",
+  "counts": {
+    "invoices": 12780,
+    "bank": 17642,
+    "payments": 16258,
+    "statements": 142,
+    "outflows": 27,
+    "actions": 5001
+  },
+  "customers": 120,
+  "opening_balance": 425000000,
+  "open_invoices": 322,
+  "cases": {
+    "Đúng hạn": 1278,
+    "Trả sớm": 1278,
+    "Chậm 7 ngày": 1278,
+    "Chậm 30 ngày": 1278,
+    "Trả từng phần": 1278,
+    "Tranh chấp đã xử lý": 1278,
+    "Xóa nợ": 1278,
+    "Chậm trên 90 ngày": 1278,
+    "Lời hứa trả": 1278,
+    "Chưa thu một phần": 1278
+  },
+  "validation": "validate_dataset passed; reconciled all statement periods",
+  "training": "Preview uses the baseline. Training is available in a DEMO_ workspace started with -DemoTraining.",
+  "scope": "VND, one bank account. Does not cover FX, tax compliance, or every real-world case."
+}

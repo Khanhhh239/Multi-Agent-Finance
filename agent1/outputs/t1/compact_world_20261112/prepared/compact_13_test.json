@@ -1,0 +1,16 @@
+{
+  "world": "compact_13_test",
+  "role": "test",
+  "kind": "additional_stress",
+  "firms": 6,
+  "anchors": 1990,
+  "unique_invoices": 1466,
+  "min_origin": "2024-07-01",
+  "max_origin": "2025-09-29",
+  "label_end": "2025-12-31",
+  "sha256": "91f82b406d9ee8fbda0cc91669454b0fed1d4f705d999248d30d18303a476bc8",
+  "protocol_sha256": "b846f91a4bedb1a00ffe7ef22df477a94745709f684400f5f10eb17b11a5bff9",
+  "replay_manifest_sha256": "09fa7710cb1ea2785b103d599922d5fe015dc8f2258493b372f71ad43a6c5d9f",
+  "open_anchors": 2379,
+  "excluded_accounting_or_late_cash": 332
+}

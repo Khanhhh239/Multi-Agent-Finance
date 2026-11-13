@@ -1,0 +1,44 @@
+[
+  {
+    "name": "neural_0",
+    "iterations": 192,
+    "maximum": 400,
+    "warnings": [],
+    "validation_score": 0.26851995071849
+  },
+  {
+    "name": "neural_1",
+    "iterations": 192,
+    "maximum": 600,
+    "warnings": [],
+    "validation_score": 0.26951688773143606
+  },
+  {
+    "name": "neural_deep_0",
+    "iterations": 219,
+    "maximum": 400,
+    "warnings": [],
+    "validation_score": 0.2800237658688192
+  },
+  {
+    "name": "neural_deep_1",
+    "iterations": 96,
+    "maximum": 600,
+    "warnings": [],
+    "validation_score": 0.26936269915701294
+  },
+  {
+    "name": "neural_wide_0",
+    "iterations": 186,
+    "maximum": 400,
+    "warnings": [],
+    "validation_score": 0.276930817456585
+  },
+  {
+    "name": "neural_wide_1",
+    "iterations": 202,
+    "maximum": 600,
+    "warnings": [],
+    "validation_score": 0.28140756853255416
+  }
+]

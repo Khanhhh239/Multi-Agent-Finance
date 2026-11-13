@@ -2,9 +2,10 @@ import sys
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from agent1.models.t9_soft_labels import soft_fifo_labels  # noqa: E402
+from agent1.models.t9_research import queued_transactions, soft_fifo_labels  # noqa: E402
 
 M = 1e6
 
@@ -50,3 +51,19 @@ def test_ledger_cleared_invoices_do_not_absorb_cash():
     out = soft_fifo_labels(pd.DataFrame(columns=["txn_id", "invoice_id", "amount", "est_pay_date"]), bank, inv, asg)
     assert "A" not in out.index
     assert out["B"] == pd.Timestamp("2024-02-05")        # t1 (150) tất toán B (100) và một phần C
+
+
+@pytest.mark.parametrize("leftover", [0., 25_000., 25_001.])
+def test_queue_and_soft_labels_share_the_remaining_cash_tolerance(leftover):
+    inv, bank, asg = _case()
+    inv = inv[inv.invoice_id == "B"].assign(amount_gross=50_001.)
+    bank = bank.iloc[:1].copy()
+    links = pd.DataFrame(dict(txn_id=["t1"], invoice_id=["A"],
+                             amount=[bank.iloc[0].amount - leftover]))
+    queued = queued_transactions(links, bank)
+    labels = soft_fifo_labels(links, bank, inv, asg)
+    if leftover > 25_000.:
+        assert queued.leftover.tolist() == [leftover]
+        assert labels.to_dict() == {"B": bank.iloc[0].value_date}
+    else:
+        assert queued.empty and labels.empty

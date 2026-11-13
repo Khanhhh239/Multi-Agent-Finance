@@ -1,0 +1,8 @@
+{
+  "sha256": "85a6e3012c38173b108545384c9f2ac18e30d6e91d23ac1d2e07417b08893869",
+  "contract": "workspace-accounting-landmark18-v1",
+  "source_sha256": "40f191f6d9a115fca3bd0a240c606070860bd5fe3dd1d70dcdb805fc07c56e89",
+  "world": "compact_03_train",
+  "rows": 11304,
+  "role": "train"
+}

@@ -4,7 +4,7 @@
 
 ## 1. Căn cứ (chỉ nguồn)
 - Nhãn mềm giúp nhưng chưa vững: G13 đạt `tgt5` (0,77) nhưng trượt `tgt3` (1,81) (`G13_SOFT_LABELS_PREREG.md` mục 6).
-- Trong vận hành thật, độ phủ nhãn đến từ **máy + kế toán duyệt hàng chờ**. Mô phỏng `agent1/models/t9_review_queue.py`: hàng chờ = tiền vào T9 chưa phân bổ hết;
+- Trong vận hành thật, độ phủ nhãn đến từ **máy + kế toán duyệt hàng chờ**. Mô phỏng `agent1/models/t9_review_queue.py` (mã đã chuyển vào `agent1/models/t9_research.py` ngày 13/11/2026, giữ nguyên phạm vi protocol): hàng chờ = tiền vào T9 chưa phân bổ hết;
   mỗi tuần mỗi doanh nghiệp duyệt tối đa b giao dịch; người duyệt **hoàn hảo** (lấy liên kết đúng từ bảng thanh toán) ⇒ kết quả là **cận trên** cho người thật.
 - Đo trên DN nguồn giữ lại 2024H1 (`outputs/t9/review/source_review.csv`), luồng T9 v2 → duyệt → nhãn mềm (ngưỡng 0,8):
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="5" time="10.995" timestamp="2026-11-14T00:40:27.245717+07:00" hostname="LAPTOP-J7QNDDFO"><testcase classname="agent1.outputs.review.t1_ui_20261114.test_review_regressions" name="test_adjustment_and_reversal_must_invalidate_fixed_claim" time="0.326"><failure message="AssertionError: Claim 1100 -&gt; 990 -&gt; 1100 survives as an unchanged target&#10;assert False&#10; +  where False =    relative_amount  term_days  age_days  ...  cash_11  cash_12  cash_13\n0         0.693147       30.0      31.0  ...      0.0      0.0      0.0\n\n[1 rows x 39 columns].empty">agent1\outputs\review\t1_ui_20261114\test_review_regressions.py:50: in test_adjustment_and_reversal_must_invalidate_fixed_claim
+    assert frame.empty, "Claim 1100 -&gt; 990 -&gt; 1100 survives as an unchanged target"
+E   AssertionError: Claim 1100 -&gt; 990 -&gt; 1100 survives as an unchanged target
+E   assert False
+E    +  where False =    relative_amount  term_days  age_days  ...  cash_11  cash_12  cash_13\n0         0.693147       30.0      31.0  ...      0.0      0.0      0.0\n\n[1 rows x 39 columns].empty</failure></testcase><testcase classname="agent1.outputs.review.t1_ui_20261114.test_review_regressions" name="test_day_120_customer_change_must_not_erase_mature_91_day_label" time="0.395"><failure message="AssertionError: assert [] == ['ORIGINAL']&#10;  &#10;  Right contains one more item: 'ORIGINAL'&#10;  Use -v to get more diff">agent1\outputs\review\t1_ui_20261114\test_review_regressions.py:61: in test_day_120_customer_change_must_not_erase_mature_91_day_label
+    assert actual.invoice_id.tolist() == expected.invoice_id.tolist()
+E   AssertionError: assert [] == ['ORIGINAL']
+E     
+E     Right contains one more item: 'ORIGINAL'
+E     Use -v to get more diff</failure></testcase><testcase classname="agent1.outputs.review.t1_ui_20261114.test_review_regressions" name="test_empty_prior_ratio_atom_must_not_become_observed_cash_behavior" time="0.045"><failure message="AssertionError: Only observed partial ratio is 1%; empty-prior placeholder makes it 48.42%&#10;assert np.float64(0.4841935483870968) == 0.01 ± 1.0e-08&#10;  &#10;  comparison failed&#10;  Obtained: 0.4841935483870968&#10;  Expected: 0.01 ± 1.0e-08">agent1\outputs\review\t1_ui_20261114\test_review_regressions.py:75: in test_empty_prior_ratio_atom_must_not_become_observed_cash_behavior
+    assert learned.means[0] == pytest.approx(0.01), (
+E   AssertionError: Only observed partial ratio is 1%; empty-prior placeholder makes it 48.42%
+E   assert np.float64(0.4841935483870968) == 0.01 ± 1.0e-08
+E     
+E     comparison failed
+E     Obtained: 0.4841935483870968
+E     Expected: 0.01 ± 1.0e-08</failure></testcase><testcase classname="agent1.outputs.review.t1_ui_20261114.test_review_regressions" name="test_saved_forecast_must_protect_its_registry_model_from_deletion" time="1.567"><failure message="AssertionError: {&quot;deleted&quot;:true}&#10;assert 200 == 409&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">agent1\outputs\review\t1_ui_20261114\test_review_regressions.py:105: in test_saved_forecast_must_protect_its_registry_model_from_deletion
+    assert response.status_code == 409, response.text
+E   AssertionError: {"deleted":true}
+E   assert 200 == 409
+E    +  where 200 = &lt;Response [200 OK]&gt;.status_code</failure></testcase><testcase classname="agent1.outputs.review.t1_ui_20261114.test_review_regressions" name="test_promoted_live_audit_metrics_must_survive_next_candidate_fit" time="0.689"><failure message="AssertionError: assert None == {'score': 0.0, 'integrated_brier13': 0.0, 'cash_weekly_mae_vnd': 0.0, 'cash_cumulative_mae_vnd': 0.0, ...}&#10; +  where None = &lt;built-in method get of dict object at 0x000002C95B441A40&gt;('challenger')&#10; +    where &lt;built-in method get of dict object at 0x000002C95B441A40&gt; = {'accepted': False}.get">agent1\outputs\review\t1_ui_20261114\test_review_regressions.py:121: in test_promoted_live_audit_metrics_must_survive_next_candidate_fit
+    assert active["audit"].get("challenger") == accepted["evaluation"]["challenger"]
+E   AssertionError: assert None == {'score': 0.0, 'integrated_brier13': 0.0, 'cash_weekly_mae_vnd': 0.0, 'cash_cumulative_mae_vnd': 0.0, ...}
+E    +  where None = &lt;built-in method get of dict object at 0x000002C95B441A40&gt;('challenger')
+E    +    where &lt;built-in method get of dict object at 0x000002C95B441A40&gt; = {'accepted': False}.get</failure></testcase></testsuite></testsuites>

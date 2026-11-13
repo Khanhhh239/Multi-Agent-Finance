@@ -4,7 +4,7 @@
 
 ## 1. Căn cứ
 - Ablation (`G13_E2E_T9V2_PREREG.md` mục 6): giữ nhãn T9 v2, điền nhãn **thật** vào phần thiếu ⇒ báo giả G13 từ 2,71 về 0,87. **Độ phủ nhãn là đòn bẩy.**
-- Nhãn mềm (`agent1/models/t9_soft_labels.py`): với giao dịch đã biết khách (độ tin cậy ≥ ngưỡng) mà còn tiền dư sau các liên kết T9, phân bổ phần dư cho hoá đơn **chưa có nhãn** của khách đó
+- Nhãn mềm (`agent1/models/t9_soft_labels.py`, mã đã chuyển vào `agent1/models/t9_research.py` ngày 13/11/2026, giữ nguyên phạm vi protocol): với giao dịch đã biết khách (độ tin cậy ≥ ngưỡng) mà còn tiền dư sau các liên kết T9, phân bổ phần dư cho hoá đơn **chưa có nhãn** của khách đó
   theo thứ tự hạn sớm nhất, bỏ qua hoá đơn đã đóng trong sổ cái (as-of). Nhãn là ngày giao dịch.
 - Đo **chỉ trên nguồn** (DN giữ lại, 2024H1, `outputs/t9/soft/source_soft_labels.csv`, 11.536 hoá đơn đã trả):
 

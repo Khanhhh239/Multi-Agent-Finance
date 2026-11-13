@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts")); sys.path.insert(0, str(ROOT / "scripts" / "sprint5"))
 from agent1.paths import OUT, SYNTH  # noqa: E402
 from agent1.models.t9_fast import fast_source, reconcile_arrays, concatenate_parts  # noqa: E402
-from agent1.models.t9_soft_labels import soft_fifo_labels  # noqa: E402
+from agent1.models.t9_research import soft_fifo_labels  # noqa: E402
 from agent1.api_surface import build_bank_labels  # noqa: E402
 from run_e2e_protocol import source_reconciler  # noqa: E402
 from run_t9_hardcases import load_observed  # noqa: E402

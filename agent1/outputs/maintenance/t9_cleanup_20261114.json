@@ -1,0 +1,231 @@
+{
+  "status": "verified",
+  "scope": "agent1/outputs/t9",
+  "created_at": "2026-11-14T01:07:39.4824532+07:00",
+  "before_files": 16,
+  "after_files": 0,
+  "deleted_files": 16,
+  "deleted_bytes": 35633.0,
+  "removed": [
+    {
+      "path": "agent1/outputs/t9/hard_cases/protocol.json",
+      "bytes": 8716,
+      "sha256": "e67b1a694b3aea26d27a401fe854c47191954c876fba6970c28bba3f2012d30c",
+      "reason": "Retired hard-case evaluation summary and cache signatures, not a World generation protocol"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/cod_realistic/complete.json",
+      "bytes": 1356,
+      "sha256": "1c1465576678acfaa2b2af168e794be6e42b29f0aeab8a0509c3b5be01b66f94",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/credit_note/complete.json",
+      "bytes": 1457,
+      "sha256": "8ab2fd0e716ebd3b145d5c056a14a8c299804688443ad2b6c29db5f7ac079e4a",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/discount_early/complete.json",
+      "bytes": 1463,
+      "sha256": "8f2c152ea52e1cd1bb0fa7029785bb7f6ea5629d87840ef4e44b8d76f0eb7ada",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/fx/complete.json",
+      "bytes": 1448,
+      "sha256": "05d52d8b29530c42e624ef61fc8f5710318004fc4d977e557bb7e66d425d1337",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/group_payer/complete.json",
+      "bytes": 1354,
+      "sha256": "490fc15addbc38905dc6bf277cb93ae904d963427425d73aaae415a62a3005c3",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/heterogeneity/complete.json",
+      "bytes": 1356,
+      "sha256": "749793ee932d0f0142249280c5176e99227661f9886edc26f1d9af322d2b094d",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/lumpy_customer/complete.json",
+      "bytes": 1360,
+      "sha256": "247225f6f7ddae13c18feb911e1f88c5c3f45dfdc9f42b358621cc9debd73f6d",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/new_company/complete.json",
+      "bytes": 1457,
+      "sha256": "4bfa2cf8184c60047aed5fda4d1f0df7b786771391ac6ba72e82ea6f4c750f54",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/retention/complete.json",
+      "bytes": 1455,
+      "sha256": "3c0a2720a85072c3eb081cf7d9673ab2347723f3a31c85176952cc745d98950b",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/seasonal_extreme/complete.json",
+      "bytes": 1462,
+      "sha256": "a15d0058fc5fd1a32407929508d637e23ab6e6e7bf68f85e638d33566f8eae0b",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/supply_shock/complete.json",
+      "bytes": 1461,
+      "sha256": "f4ee2589a265aff51864d5380e6a99f7f8287ed933e52bb5141302458f947ff6",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/hard_cases/verbal/complete.json",
+      "bytes": 1452,
+      "sha256": "47bc8e7446807d7a711d60068f53a9785d7624c4377c7d04dd196f240acb5aef",
+      "reason": "Orphan completion marker for retired hard-case benchmark; metrics payload absent; contains code/data hashes, not generation config"
+    },
+    {
+      "path": "agent1/outputs/t9/sprint3/source_policy.json",
+      "bytes": 2449,
+      "sha256": "d4ebaaefaad29bb1f6303994b47fed7bda94904125dc78846c075321f1809dee",
+      "reason": "Old source-selected reconciliation threshold and model hashes; current constrained-flow runtime does not load this research policy"
+    },
+    {
+      "path": "agent1/outputs/t9/supply_shock_2022/protocol.json",
+      "bytes": 2966,
+      "sha256": "eb3ba3da766932eae30e81e1710a1848203ed1391268dde4d6685094ccdee20b",
+      "reason": "Retired evaluation windows, source model training dates and hashes; no synthetic shock generator parameters"
+    },
+    {
+      "path": "agent1/outputs/t9/supply_shock_2022/source_model/metadata.json",
+      "bytes": 4421,
+      "sha256": "b7de635bb49466b749faaf776d575a78a18ec2e518ddf1eff5362db9b5ac92b8",
+      "reason": "Orphan historical model metadata and fitted isotonic calibration; model.txt absent; not synthetic calibration config"
+    }
+  ],
+  "guard_trees": [
+    {
+      "root": "agent1/data",
+      "files": 45,
+      "tree_sha256": "27f6b9a8def384ea594c448c2f5fe53025e91f853e47f58ee09ed6f2696bee67",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/outputs/t1",
+      "files": 5032,
+      "tree_sha256": "f43c3ad0293fcc80ed5da121ffe50e17a2b236fde8cacf8a96dafc87ca8730df",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/outputs/t6",
+      "files": 36,
+      "tree_sha256": "6635bae4a1cb9a89a36c5acc7fbc5438b30691968d47b3c966cd13f89121fdd2",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/outputs/data",
+      "files": 16,
+      "tree_sha256": "2dfa3a96633d042d1440c8f9ae712a6edcac81c4c13ab9c4ef18cef4a0419c0e",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/outputs/implementation",
+      "files": 43,
+      "tree_sha256": "a820e26cfdb7991f2d26b25f28e5e676d5c95b4862f6081c5b263f097061387b",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/agent1",
+      "files": 119,
+      "tree_sha256": "ef661c90f8755592f951a236236f436e2d6c88899a9c562f859fa3eb193e6c54",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/agent1_service",
+      "files": 100,
+      "tree_sha256": "494dcd8ff6b2a380facbf50dfc86761b513ddc9e36e4153dae40003650d15ae7",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/experiments",
+      "files": 96,
+      "tree_sha256": "1815d1aa71f81fec308e1b2203844345115a0970d3d6c628d26b7094e28ad737",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/scripts",
+      "files": 141,
+      "tree_sha256": "8ffead02f8677075fc28be3af3af40b7d8101abd7d34caa3d42b0c33dfd7d128",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    },
+    {
+      "root": "agent1/tests",
+      "files": 131,
+      "tree_sha256": "378d70f46df9e8adcca2931655ea8d9666f11151264d211c15010c2c1ac3b84d",
+      "algorithm": "SHA256 of sorted UTF8 relative-path:SHA256 lines joined with LF, no trailing LF"
+    }
+  ],
+  "protected_files": 5759,
+  "current_runtime": "agent1/agent1/reconciliation + agent1/agent1_service/workspace/reconciliation.py",
+  "references": [
+    "agent1/scripts/run_t9_hardcases.py",
+    "agent1/scripts/run_t9_supply_shock.py",
+    "agent1/scripts/sprint1/t9_source_diagnostics.py",
+    "agent1/scripts/build_hard_cases.py",
+    "agent1/agent1_service/workspace/api.py"
+  ],
+  "notes": [
+    "All 16 files were read and classified; no World configuration or data generation manifest found in this folder.",
+    "Legacy report/gate/research scripts may refer to removed metadata. No historical gate is recalculated and no source code is changed.",
+    "Current T9 canonical implementation verification remains in outputs/implementation. Historical verification is not represented as a fresh test run."
+  ],
+  "removed_empty_directories": [
+    "agent1/outputs/t9/supply_shock_2022/source_model",
+    "agent1/outputs/t9/hard_cases/seasonal_extreme",
+    "agent1/outputs/t9/hard_cases/discount_early",
+    "agent1/outputs/t9/hard_cases/lumpy_customer",
+    "agent1/outputs/t9/hard_cases/cod_realistic",
+    "agent1/outputs/t9/hard_cases/heterogeneity",
+    "agent1/outputs/t9/hard_cases/supply_shock",
+    "agent1/outputs/t9/hard_cases/credit_note",
+    "agent1/outputs/t9/hard_cases/group_payer",
+    "agent1/outputs/t9/hard_cases/new_company",
+    "agent1/outputs/t9/hard_cases/retention",
+    "agent1/outputs/t9/supply_shock_2022",
+    "agent1/outputs/t9/hard_cases/verbal",
+    "agent1/outputs/t9/hard_cases/fx",
+    "agent1/outputs/t9/hard_cases",
+    "agent1/outputs/t9/sprint3",
+    "agent1/outputs/t9"
+  ],
+  "completed_at": "2026-11-14T01:07:44.8779423+07:00",
+  "validation": {
+    "deleted_files_absent": 16,
+    "t9_directory_absent": true,
+    "protected_hashes_checked": 5759,
+    "protected_trees_rechecked_after_tests": 10,
+    "tests": {
+      "file": "agent1/tests/test_observed_reconciliation.py",
+      "selected": [
+        "test_proposal_does_not_create_cash_labels_and_port_preserves_money",
+        "test_acceptance_is_idempotent_encrypted_and_not_visible_in_the_past",
+        "test_reversal_keeps_cash_and_old_snapshot_but_reopens_invoice"
+      ],
+      "passed": 3,
+      "deselected": 39,
+      "failed": 0,
+      "warnings": 1,
+      "warning_reason": "Existing Starlette TestClient/httpx deprecation",
+      "elapsed_seconds": 7.1
+    },
+    "world_configs_manifests_and_generator_source_unchanged": true,
+    "current_t9_implementation_record_unchanged": true
+  },
+  "updated_indexes": [
+    {
+      "path": "agent1/outputs/README.md",
+      "sha256": "c55398a9df80ee22c6e42e84e86a13c7704fcec92764dfdf9b3edeaff0f0b020"
+    }
+  ]
+}

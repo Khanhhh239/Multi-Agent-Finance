@@ -36,12 +36,12 @@ def collection_kernel(inv_hist: pd.DataFrame, T, label_col="paid_date_true", wee
 
 
 def simulate(open_df, P, B0, known_out, rev_q, kernel, capex_rate, capex_sizes, n=1000, rho=0.15, nu=DEFAULT_NU, seed=0,
-             rev_corr=0.7, p_bad=None, rho_bad=.15, rho_customer=0., recovery_rate=.25,
+             rev_corr=0.7, rho_customer=0.,
              payment_shift=None, force_week=None,draw_cap=None,draw_target=None,draw_weeks=None):
     """Trả về mảng mẫu số dư cuối tuần (n x K) và dòng ròng (n x K)."""
     # Dòng RNG riêng giữ CRN giữa các kịch bản dù số bước mô phỏng thay đổi.
     streams = [np.random.default_rng(s) for s in np.random.SeedSequence(seed).spawn(4)]
-    rng, rev_rng, bad_rng, cap_rng = streams
+    rng, rev_rng, _, cap_rng = streams
     amt = open_df["amount_open"].values
     m = len(amt)
     P = np.asarray(P, float)
@@ -50,12 +50,10 @@ def simulate(open_df, P, B0, known_out, rev_q, kernel, capex_rate, capex_sizes, 
         raise ValueError('PMF không hợp lệ')
     if known_out.shape != (K,) or not np.isfinite(known_out).all():
         raise ValueError('known_out phải có 13 tuần hữu hạn')
-    if not 0 <= rho <= 1 or not 0 <= rho_customer <= 1 - rho or not 0 <= rho_bad <= 1 or nu <= 2:
+    if not 0 <= rho <= 1 or not 0 <= rho_customer <= 1 - rho or nu <= 2:
         raise ValueError('Tham số copula không hợp lệ')
     if not np.isfinite(amt).all() or (amt < 0).any() or n < 1:
         raise ValueError('Tiền mở hoặc số đường không hợp lệ')
-    if not 0 <= recovery_rate <= 1:
-        raise ValueError('recovery_rate phải trong [0,1]')
     g = rng.standard_normal(n)
     t_scale = np.sqrt(rng.chisquare(nu, n) / nu)
     # --- thu từ HĐ mở: copula t một nhân tố
@@ -78,19 +76,9 @@ def simulate(open_df, P, B0, known_out, rev_q, kernel, capex_rate, capex_sizes, 
         if force_week is not None:
             forced = np.broadcast_to(np.asarray(force_week, int), (m,))
             wk = np.where(forced[None, :] >= 0, forced[None, :], wk)
-        defaulted = np.zeros((n, m), bool)
-        if p_bad is not None:
-            bad_prob = np.asarray(p_bad, float)
-            if bad_prob.shape != (m,) or not np.isfinite(bad_prob).all() or ((bad_prob < 0) | (bad_prob > 1)).any():
-                raise ValueError('p_bad phải có một xác suất cho mỗi HĐ')
-            ub = norm.cdf(np.sqrt(rho_bad) * g[:, None] + np.sqrt(1 - rho_bad) * bad_rng.standard_normal((n, m)))
-            defaulted = ub > (1 - bad_prob[None, :])
-            wk[defaulted] = K
         inflow = np.zeros((n, K))
         for k in range(K):
             inflow[:, k] = ((wk == k) * amt[None, :]).sum(1)
-        # Thu hồi sau 120–360 ngày từ cutoff: ngoài chân trời 13 tuần.
-        # Giữ tham số thu hồi để E2E dài hơn sử dụng, không cộng 25% ngay trong tuần vỡ nợ.
     else:
         inflow = np.zeros((n, K))
     # --- doanh thu mới (lập HĐ ở tuần j) -> thu theo kernel
@@ -126,18 +114,6 @@ def simulate(open_df, P, B0, known_out, rev_q, kernel, capex_rate, capex_sizes, 
     else:
         bal = B0 + np.cumsum(net, axis=1)
     return bal, net
-
-
-def conditional_payment_pmf(P,p_bad):
-    """Tách phần cure khỏi CDF vô điều kiện; báo va chạm khi p_bad vượt S13."""
-    P,p_bad=np.asarray(P,float),np.asarray(p_bad,float)
-    if P.ndim!=2 or p_bad.shape!=(len(P),) or ((p_bad<0)|(p_bad>1)).any():
-        raise ValueError('PMF hoặc p_bad không hợp lệ')
-    conflict=p_bad>1-P.sum(1)+1e-8
-    conditional=P/np.maximum(1-p_bad[:,None],1e-12)
-    conditional/=np.maximum(conditional.sum(1,keepdims=True),1.)
-    conditional[p_bad>=1]=0.
-    return conditional,conflict
 
 
 class ACI:

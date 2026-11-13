@@ -1,0 +1,73 @@
+{
+  "available_asof": "2024-07-01",
+  "contract": "workspace-accounting-landmark18-v1",
+  "compact_kind": "ensemble",
+  "name": "compact_ensemble",
+  "schema": "t1-landmark-18-v2",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "receipt_count",
+    "received_fraction_28d",
+    "customer_settlements_180d",
+    "customer_delay_180d",
+    "customer_delay_std_180d",
+    "customer_delay_trend_180d",
+    "company_delay_180d",
+    "company_delay_trend_180d",
+    "customer_overdue_share",
+    "customer_overdue90_share",
+    "company_overdue_share",
+    "company_overdue90_share",
+    "customer_outstanding_share"
+  ],
+  "active": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "max_horizon_weeks": 13,
+  "members": [
+    {
+      "directory": "member_0",
+      "name": "neural",
+      "metadata_sha256": "abfc596e4817ec780514e29e5ecb6c9e90f2d7bac3b6eca735cb17e6fb896703"
+    },
+    {
+      "directory": "member_1",
+      "name": "customer",
+      "metadata_sha256": "6adf5d54dc008a4e21dbb8feace359815bcb37eb4290ece68dd1265c8ccd16bf"
+    },
+    {
+      "directory": "member_2",
+      "name": "neural_wide",
+      "metadata_sha256": "8de55ed94fe0138077c1c46b1dc0503f0e9eeee37c16d6f39cd063793a825d5b"
+    }
+  ],
+  "weights": [
+    0.7,
+    0.2,
+    0.1
+  ],
+  "calibration": {
+    "method": "identity"
+  }
+}

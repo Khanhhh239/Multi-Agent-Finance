@@ -37,6 +37,8 @@ _ISO_DAY = re.compile(r'\d{4}-\d{2}-\d{2}')
 
 
 def _date(value):
+    if value is None:
+        return None
     # A plain YYYY-MM-DD needs no pandas: building a Series per call made one preview of a 50,000-invoice store take minutes.
     if isinstance(value, str) and _ISO_DAY.fullmatch(value):
         try:

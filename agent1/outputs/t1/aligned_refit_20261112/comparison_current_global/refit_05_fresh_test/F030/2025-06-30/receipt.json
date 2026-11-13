@@ -1,0 +1,39 @@
+{
+  "rows": {
+    "fit": 403,
+    "validation": 35,
+    "audit": 17
+  },
+  "local_fit_label_end": "2024-12-02",
+  "status": "insufficient_mature_local_windows",
+  "audit_passed": false,
+  "scratch_fallback": "workspace_history_baseline",
+  "world": "refit_05_fresh_test",
+  "firm": "F030",
+  "origin": "2025-06-30",
+  "anchors": 15,
+  "workspace_method": "spline",
+  "workspace_audit": {
+    "n": 29,
+    "customer_clusters": 8,
+    "candidate_brier4": 0.02498567374845948,
+    "baseline_brier4": 0.0,
+    "brier_improvement": -0.02498567374845948,
+    "improvement_ci_low": -0.07684293440874887,
+    "improvement_ci_high": -0.005076484787579165,
+    "ci_reliable": false,
+    "amount_weighted_brier4": 0.015006477167582926,
+    "log_loss4": 0.10663640383500879,
+    "observed_paid_rate4": 0.8275862068965517,
+    "predicted_paid_rate4": 0.823671706411134,
+    "accepted": false
+  },
+  "workspace_fallback": null,
+  "workspace_warnings": [
+    "Stochastic Optimizer: Maximum iterations (100) reached and the optimization hasn't converged yet."
+  ],
+  "prediction_sha256": "a468b69c0d5b6b77e75c099fe48b265f3a2b1bed036f30efe70dddcaa4e14df9",
+  "models_sha256": "a92f9813e7c50a28dd184f9a060abeec6102e144f97037d9c92050f8c3c3e7ae",
+  "frozen_sha256": "c442b0cb0d1fb18398cb852175fb7f12f8186b59363a7de6b291222f76bcf3b9",
+  "seconds": 62.30120559998613
+}

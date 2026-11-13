@@ -1,0 +1,9 @@
+{
+  "world": "compact_10_train",
+  "role": "train",
+  "rows": 5500,
+  "sha256": "0d233792b2689b6411cb3cc239f2279cf48a97afa6d7da20fe95133a961c5afe",
+  "parent_prepared_sha256": "a0961ebcbe524ddf34066cbdecb15b3b2a66877c9a3270871520f80d04ba91b3",
+  "label_changed_rows": 9,
+  "target_contract_sha256": "e4dffe55145f780af4605d929295fbe4c4e64fd1f7652ed17f1b887900a0671b"
+}

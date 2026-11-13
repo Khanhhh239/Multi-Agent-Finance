@@ -1,0 +1,287 @@
+{
+  "version": "aligned-landmark-refit-v1",
+  "contract": "workspace-accounting-landmark18-v1",
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "receipt_count",
+    "received_fraction_28d",
+    "customer_settlements_180d",
+    "customer_delay_180d",
+    "customer_delay_std_180d",
+    "customer_delay_trend_180d",
+    "company_delay_180d",
+    "company_delay_trend_180d",
+    "customer_overdue_share",
+    "customer_overdue90_share",
+    "company_overdue_share",
+    "company_overdue90_share",
+    "customer_outstanding_share"
+  ],
+  "source_inventory_sha256": "6a53b3f034fcaa36bb5534f073a9916dfa00264fcd8dac985dc04acd8d30c61a",
+  "candidates": [
+    {
+      "name": "due",
+      "family": "rule",
+      "title": "Ngày đến hạn",
+      "eligible": true,
+      "reason": "available",
+      "trials": 1
+    },
+    {
+      "name": "customer",
+      "family": "hybrid",
+      "title": "Lịch sử khách hàng",
+      "eligible": true,
+      "reason": "available",
+      "trials": 1
+    },
+    {
+      "name": "survival",
+      "family": "statistical",
+      "title": "Sống sót thực nghiệm",
+      "eligible": true,
+      "reason": "available",
+      "trials": 1
+    },
+    {
+      "name": "logistic",
+      "family": "supervised",
+      "title": "Logistic hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "forest",
+      "family": "supervised",
+      "title": "Random forest hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "extra",
+      "family": "supervised",
+      "title": "Extra trees hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "hist",
+      "family": "supervised",
+      "title": "Histogram boosting hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "lightgbm",
+      "family": "supervised",
+      "title": "LightGBM hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "xgboost",
+      "family": "supervised",
+      "title": "XGBoost hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "logistic_regularized",
+      "family": "supervised",
+      "title": "Logistic regularized",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "forest_shallow",
+      "family": "supervised",
+      "title": "Random forest shallow",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "hist_regularized",
+      "family": "supervised",
+      "title": "Histogram regularized",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "neural_wide",
+      "family": "deep",
+      "title": "Neural wide",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "neural_deep",
+      "family": "deep",
+      "title": "Neural deep",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "spline",
+      "family": "statistical",
+      "title": "Hazard spline",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    },
+    {
+      "name": "neural",
+      "family": "deep",
+      "title": "Neural logistic hazard",
+      "eligible": true,
+      "reason": "available",
+      "trials": 2
+    }
+  ],
+  "neural_max_iter": [
+    400,
+    600
+  ],
+  "require_neural_convergence": true,
+  "risk_row_limit": 100000,
+  "seed": 261112,
+  "maximum_members": 3,
+  "weight_step": 0.05,
+  "initial_fit": "8 existing train Worlds, 2020-01 to 2023-09, labels through 2023-12",
+  "selection": "3 existing validation Worlds, Jan-Mar 2024, labels through June 2024",
+  "refit": "selected member configurations, train + original validation, fresh deterministic 100000 risk-row sample",
+  "post_refit_weights": "two new Worlds, Jul-Dec 2024; members/configurations locked, labels through 2025-03-31",
+  "available_asof": "2025-04-01",
+  "independent_world_design": [
+    {
+      "role": "weight_validation",
+      "seed": 261112901,
+      "scenario": "baseline",
+      "firms": 6
+    },
+    {
+      "role": "weight_validation",
+      "seed": 261112902,
+      "scenario": "credit",
+      "firms": 6
+    },
+    {
+      "role": "audit",
+      "seed": 261112903,
+      "scenario": "baseline",
+      "firms": 6
+    },
+    {
+      "role": "audit",
+      "seed": 261112904,
+      "scenario": "supply",
+      "firms": 6
+    },
+    {
+      "role": "fresh_test",
+      "seed": 261112905,
+      "scenario": "baseline",
+      "firms": 6
+    },
+    {
+      "role": "fresh_test",
+      "seed": 261112906,
+      "scenario": "credit",
+      "firms": 6
+    },
+    {
+      "role": "fresh_test",
+      "seed": 261112907,
+      "scenario": "supply",
+      "firms": 6
+    }
+  ],
+  "origins": {
+    "weight_validation": [
+      "2024-07-01",
+      "2024-09-30",
+      "2024-12-30"
+    ],
+    "audit": [
+      "2025-04-07",
+      "2025-06-30"
+    ],
+    "fresh_test": [
+      "2025-04-07",
+      "2025-06-30",
+      "2025-09-29"
+    ]
+  },
+  "additional_fresh_test": {
+    "role": "fresh_test",
+    "seed": 261113999,
+    "scenario": "short_history",
+    "firms": 6,
+    "start": "2025-01-01"
+  },
+  "stability": {
+    "minimum_mean_gain": 0.0001,
+    "minimum_window_gain": 1e-05,
+    "minimum_window_fraction": 0.75,
+    "maximum_window_regression": 0.001
+  },
+  "audit_gate": {
+    "max_cash_score_ratio_to_old": 1.02,
+    "max_ibrier_ratio_to_old": 1.02,
+    "ibrier_slack": 0.0001,
+    "single_invoice_shap_p95_seconds": 1.0
+  },
+  "adaptation": {
+    "fit_offsets_days": [
+      1001,
+      301
+    ],
+    "stride_days": 56,
+    "validation_offsets_days": [
+      210,
+      182
+    ],
+    "audit_offset_days": 91,
+    "fit_label_end_offset": 210,
+    "max_snapshots_per_origin": 50,
+    "neural_epochs": [
+      5,
+      20
+    ],
+    "learning_rate": 0.0001,
+    "global_replay_fraction": 0.3,
+    "local_weight_grid": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "audit_minimum_gain": 0.0001,
+    "minimum_fit_rows": 60,
+    "minimum_validation_rows": 20,
+    "minimum_audit_rows": 20,
+    "scratch_max_iter": 400,
+    "final_refit": "locked adaptation mode/epochs/weight, all mature local fit+validation+audit rows; no future labels"
+  },
+  "evaluation": "equal World/firm/origin cash score 50% weekly + 50% cumulative; Brier and SHAP diagnostics; paired firm bootstrap",
+  "limitations": [
+    "All Worlds share one simulator family; fresh seeds do not establish real-company performance.",
+    "Local adaptation of a test tenant is allowed using its past only, never global cross-tenant fitting.",
+    "Old test results are regression diagnostics, never new independent evidence."
+  ]
+}

@@ -117,6 +117,7 @@ def rank_with_explanations(
     delay_customer=None,
     eligibility=None,
     limit=30,
+    probability_source=None,
 ):
     """Retain descending score and the original snapshot order for exact ties.
 
@@ -188,6 +189,8 @@ def rank_with_explanations(
             "differs_from_displayed": bool(has_serving_model or shifted),
             "detail": "Ước lượng riêng từ dữ liệu đã biết tại ngày dự báo; không áp dụng kịch bản thu chậm.",
         }
+        if probability_source is not None:
+            source = dict(probability_source, used_in_score=spec["uses_probability"], differs_from_displayed=False)
         factors = [
             {
                 "feature": "outstanding",

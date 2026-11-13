@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from agent1.models.t9_review_queue import queued_transactions, simulate_review  # noqa: E402
+from agent1.models.t9_research import queued_transactions, simulate_review  # noqa: E402
 
 M = 1e6
 COLS = ["txn_id", "invoice_id", "est_pay_date", "kind", "amount", "method", "confidence"]

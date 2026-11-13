@@ -1,6 +1,28 @@
 # Agent1 — Không gian dòng tiền cho doanh nghiệp
 
-## Luồng doanh nghiệp (07/11/2026)
+## T1 global → local và cập nhật định kỳ
+
+Luồng `/v1` hiện dùng [bundle T1 + partial v2](../docs/04_AI_Methods/T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md):
+Neural/LightGBM/XGBoost global và các bản học tiếp, không còn ensemble học từ
+đầu bằng local/Workspace. Gói global cấu hình bằng `AGENT1_T1_GLOBAL_CATALOG`;
+export các artifact hiện có bằng `scripts/package_t1_global_catalog.py`.
+
+`POST /v1/training` hoặc `/v1/t1/updates` tạo chu kỳ, mặc định cách 28 ngày,
+cửa sổ 730 ngày. `GET /v1/t1/updates` trả trạng thái, quyết định và challenger.
+Chỉ đổi model khi qua audit hợp lệ; incumbent quá mới thì lưu dự báo ghép cặp
+và chờ đủ 91 ngày để chấm. Bản local cũ không còn được kích hoạt trong luồng mới.
+Partial được học/lưu riêng trong cùng bundle; validation, audit và T6 dùng
+cùng adapter. T6 mô phỏng nhiều lần thu trên dư nợ còn lại. Contract global
+và phạm vi thanh toán được kiểm trước khi dựng nhãn. SHAP nhận đúng T1 đang
+dùng. Đường env research allowlist cũ không
+override `/v1/predict` nữa. Các API nghiên cứu legacy được ghi riêng bên dưới.
+
+Job để scheduler gọi theo nguồn dữ liệu đã xác nhận đầy đủ:
+`python -m agent1_service.jobs.t1_update --firm SME --state PATH --payments-complete`.
+Đặt `PYTHONPATH` tới thư mục `agent1`; không cần web server đang chạy. Chưa tự
+cài scheduler hoặc chạy cập nhật trên kho doanh nghiệp nào trong lượt sửa mã.
+
+## Luồng doanh nghiệp (cập nhật T1 ngày 13/11/2026)
 
 [Bắt đầu từ README](../README.md) · [Bàn giao kỹ thuật](../docs/HANDOFF.md) · [Sổ tay PDF](../docs/06_Pilot/pdf/So-tay-Agent1.pdf).
 
@@ -38,16 +60,15 @@ Docker cần daemon hoạt động; kiểm thử Python local không thay cho ki
 
 ### Hai giai đoạn sử dụng
 
-1. **Thiết lập:** nạp hóa đơn → nạp thanh toán → nạp lịch chi → xem lỗi/ghép cột →
-   xác nhận lưu → xác nhận phạm vi thanh toán → kiểm định → xem chỉ số → chọn phiên bản.
-2. **Vận hành:** nhập ngày dự báo, số dư thực tế và ngưỡng cảnh báo → dự báo 1–52 tuần
-   (mặc định 13) → xem khoản cần chú ý và tuần thiếu tiền → thử kịch bản → xuất Excel
-   với ba sheet: kết quả, kế hoạch tuần và khoản cần chú ý. Mỗi tháng nạp dữ liệu mới và
-   kiểm định lại; phiên bản cũ tiếp tục dùng cho đến khi người phụ trách chọn bản mới.
+1. **Thiết lập:** nạp hóa đơn, thanh toán và lịch chi; kiểm tra ghép cột, xác nhận
+   dữ liệu thu đầy đủ đến ngày chốt, rồi chạy kiểm định T1 global → local.
+2. **Vận hành:** dự báo 1–52 tuần (mặc định 13), xem khoản cần chú ý và tuần thiếu
+   tiền, thử kịch bản, xuất Excel. Nạp dữ liệu mới theo kỳ; job cập nhật mặc định
+   cách 28 ngày và chỉ thay model khi qua audit hợp lệ.
 
-Không đủ lịch sử vẫn dùng dự báo điều khoản/lịch sử; không tự tạo nhãn, tự sinh dữ liệu
-để đủ ngưỡng hoặc tự kích hoạt phiên bản mới. Danh sách phiên bản cho phép quay về bản cũ.
-Nếu dữ liệu thay đổi sau khi học, API và giao diện báo cần xem xét kiểm định lại.
+Thiếu lịch sử thì giữ global G0 hoặc model hiện tại. Không tự tạo nhãn hoặc dữ liệu
+để đạt ngưỡng. Model local cũ không còn được kích hoạt; phiên bản mới và dự báo cũ
+vẫn được lưu để truy vết. Dữ liệu thay đổi sau khi học sẽ hiện cảnh báo cần xem xét.
 
 ### Hợp đồng đầu vào SME
 
@@ -89,63 +110,28 @@ người dùng có thể ghép lại trước khi lưu.
 - Phải xác nhận đã có đầy đủ các khoản thu đến ngày chốt trước **cả học và dự báo**.
   Đây là xác nhận của người cung cấp dữ liệu, không phải kiểm toán sao kê tự động.
 
-### Bag of methods thực thi
+### T1 phục vụ và giao thức chọn phiên bản
 
-Danh mục duy trì trong `agent1/adaptive/methods.py::CATALOG`; toàn bộ fit/predict chạy
-ở máy chủ. API khách hàng trả chất lượng và phiên bản, không trả estimator, trọng số,
-mã nguồn hoặc bảng chọn phương pháp. Người vận hành có thể xem catalog/code này.
+Catalog hiện tại ở `agent1/adaptive/t1_catalog.py`: G0 Neural 75% + customer 25%,
+ba global Neural/LightGBM/XGBoost và ba nhánh học tiếp tương ứng. Không còn các
+cây/Neural local train từ đầu hoặc pool top-3 trong T1 phục vụ. Các họ dùng chung
+18 feature, snapshot, nhãn và trọng số; learning rate/budget riêng cho mỗi họ.
 
-| Mã nội bộ | Loại | Cách hoạt động / preset |
-|---|---|---|
-| `due` | Quy tắc | Ngày đến hạn; khoản quá hạn chỉ có xác suất thu ở độ tuổi có lịch sử hỗ trợ |
-| `customer` | Hybrid | Trung vị trễ khách, co về doanh nghiệp với 5 quan sát giả; mốc so sánh |
-| `survival` | Thống kê | Hazard thực nghiệm theo tuổi hóa đơn, giữ khoản chưa trả trong risk set |
-| `logistic` | Có giám sát | Logistic hazard + StandardScaler, C=1 |
-| `logistic_regularized` | Có giám sát | Logistic hazard, C=0.1 |
-| `forest` | Bagging | Random Forest 100 cây, depth=10, leaf≥15 |
-| `forest_shallow` | Bagging | Random Forest, depth=5 |
-| `extra` | Bagging | Extra Trees 100 cây, depth=12, leaf≥12 |
-| `hist` | Boosting | Histogram GBM 100 vòng, 15 lá, L2=5 |
-| `hist_regularized` | Boosting | Histogram GBM, L2=10 |
-| `lightgbm` | Boosting | LightGBM 100 vòng, 15 lá, leaf≥30 |
-| `xgboost` | Boosting | XGBoost 100 vòng, depth=3, learning rate=.05 |
-| `spline` | Thống kê | Logistic trên spline của tuổi nợ |
-| `neural` | DL hóa đơn | Hazard MLP (32,16), tối thiểu 1.000 hóa đơn, 200 tất toán, 20 khách trong tập học |
-| `neural_wide`, `neural_deep` | DL hóa đơn | Hai cấu hình MLP riêng (64,32) và (64,32,16), cùng điều kiện dữ liệu |
-| `blend` | Ensemble | Ứng viên + mốc lịch sử; trọng số chọn trong {0,.25,.5,.75,1} |
+Mỗi chu kỳ bắt đầu từ global gốc trên cửa sổ local trượt tối đa 730 ngày, trọng số
+half-life 180 ngày, replay 30%. Dùng snapshot gần đây với tuần đã quan sát đủ;
+không gán nhãn âm cho phần chưa theo dõi. Validation gồm T−210/T−182, audit
+T−91→T; chọn bằng cash13 với guard IBS. Chỉ refit cấu hình đã khóa. Không chấm
+ngược incumbent trên origin trước khi phiên bản đó sẵn sàng.
 
-Có 16 cấu hình hóa đơn và 1 cơ chế ensemble. Lưới cấu hình được khóa trước,
-chọn phương pháp và trọng số bằng tập validation của doanh nghiệp. Có thể thêm
-ứng viên qua `Method` cùng kiểm thử và quy tắc kiểm định. Bag chuỗi tiền riêng có
-baseline, mô hình thống kê, ensemble và GRU/LSTM hoặc Chronos khi đủ điều kiện
-dữ liệu và phụ thuộc. Xem [cấu hình chạy](../docs/HANDOFF.md#cấu-hình-cần-biết).
+Khi incumbent quá mới, giữ nó và lưu cặp dự báo challenger/incumbent. Sau 91 ngày,
+chấm một challenger đủ nhãn theo FIFO với policy đã khóa; chỉ đổi sang đúng
+artifact đã được chấm. Đủ điều kiện cập nhật không có nghĩa chắc chắn thay model.
+Mọi kết quả vẫn mang `pilot_ready=false` đến khi có kiểm định triển khai riêng.
 
-Đặc trưng: log số tiền, kỳ hạn, trễ khách co về doanh nghiệp, trễ doanh nghiệp,
-log số lần tất toán trước đó; thêm tuổi tuần và khoảng tới hạn cho hazard.
-Các thống kê chỉ dùng hóa đơn/thanh toán đã được biết **trước lúc phát hành** hóa đơn
-được dự báo. Không dùng ID làm đặc trưng ghi nhớ. Hazard chỉ dùng tuần quan sát đầy đủ
-(tối đa 52 tuần); không sửa `t1.py::expand` hoặc giao thức `run_real_v2.py` cũ.
-Tất toán là thời điểm tổng phần thu đủ giá trị hóa đơn; các lần trả nhỏ vẫn giảm công nợ.
-
-### Giao thức chọn và nghiệm thu phiên bản
-
-Với ngày chốt T, cắt theo **thời gian**, không chia ngẫu nhiên:
-
-1. Học trên thông tin quan sát đến T−112 ngày (≥60 hóa đơn, ≥20 tất toán).
-2. Hiệu chỉnh bằng hóa đơn phát hành trong (T−112, T−84], nhãn quan sát tới T−56
-   (≥20 hóa đơn). Chọn phương pháp và trọng số bằng Brier trả đủ trong 28 ngày.
-3. Học lại tới T−56; kiểm tra ứng viên duy nhất trên hóa đơn trong (T−56, T−28],
-   nhãn quan sát tới T (≥20). Tập này chỉ làm cổng chấp nhận, không chọn lại phương án.
-4. Nếu Brier ứng viên không tốt bằng mốc, phiên bản dùng mốc. Sau đó học lại bằng dữ liệu
-   quan sát đến T, lưu artifact, hash snapshot, cửa sổ đánh giá và kết quả trước khi refit.
-5. Người phụ trách xem báo cáo rồi kích hoạt. Mọi kết quả còn mang `pilot_ready=false`.
-
-Hóa đơn được ghi nhận sau ngày phát hành loại khỏi đánh giá tại gốc phát hành để tránh
-giả vờ biết trước. Nhãn gồm cả hóa đơn chưa trả đủ sau 28 ngày, không chỉ các khoản đã trả.
-API báo Brier ứng viên/mốc, Brier theo tiền, log loss, tỷ lệ trả thực/dự báo, cải thiện và
-bootstrap ghép cặp theo khách hàng (1.000 mẫu, seed 7). Ít hơn 10 nhóm khách hàng thì
-gắn `ci_reliable=false`. Cổng chấp nhận dùng điểm ước lượng, **không chứng minh thắng có ý nghĩa
-thống kê**. Một cửa sổ audit không thay cho monitoring nhiều kỳ trên dữ liệu thật.
+Xem đầy đủ cửa sổ, guard, schema, API và job tại
+[hợp đồng T1 hiện tại](../docs/04_AI_Methods/T1_GLOBAL_LOCAL_RUNTIME_2026-11-13.md).
+API công khai chỉ trả metadata/chất lượng; không trả estimator, trọng số hoặc
+bảng dự báo từng hóa đơn dùng audit. Bag learner chuỗi tiền là thành phần riêng.
 
 ### API cho Agent4
 
@@ -169,62 +155,25 @@ Trả `weeks` (thu, chi, số dư, P10/P90), `collections`, `alerts`, `model_ver
 Không gửi giao dịch hay nhắc nợ. Ngày dự báo không được trước ngày chốt của phiên bản học.
 Kịch bản chậm thu làm tròn lên số tuần, hệ số chi nhân lịch chi đã biết.
 
-Mỗi dòng `collections` có `payment_explanation` giải thích đúng xác suất tất toán 4 tuần sau trộn/kịch bản, độc lập với kỳ dòng tiền. UI hiển thị kết quả → tối đa ba yếu tố → giá trị thực → chiều ảnh hưởng. Không hiển thị đối chiếu giả định, mức nền, tên thành viên hoặc chi tiết kỹ thuật. Trường `comparison` trong kế hoạch cũ được bỏ qua; kế hoạch mới không tính/lưu thêm trường này.
+Mỗi dòng `collections` có `payment_explanation` cho đúng xác suất tất toán 4 tuần
+sau pooling/kịch bản, độc lập với kỳ dự báo tiền. T1 landmark 18 feature dùng
+`landmark-grouped-exact-reference-v2`: sáu nhóm giá trị/điều khoản, tuổi hóa đơn,
+trạng thái thu tiền, lịch sử khách, lịch sử doanh nghiệp và công nợ hiện tại.
+Không dùng bộ giải thích năm feature tại ngày phát hành của Workspace cũ.
 
-Hộp giải thích, lý do ưu tiên và phân rã dòng tiền dùng màu/font từ theme Sổ Son đang nạp. CSS riêng nằm trong `ui/workspace/workbench.css`; biểu đồ canvas đọc token màu và font hiện hành thay vì giữ bảng màu cũ. Theme dùng chung tiếp tục được đồng bộ từ `design/`, không sửa riêng bản sao của Agent1.
+SHAP liệt kê đủ liên minh của các nhóm đang có ảnh hưởng, chạy qua chính phân
+phối đang phục vụ. `baseline_probability + sum(factors[].contribution)` khớp
+xác suất, `contribution_pp` dùng điểm phần trăm. Đây là đóng góp theo nhóm,
+không phải bằng chứng nhân quả. UI giữ thông tin nhóm và cảnh báo thiếu đối
+chứng khi quần thể nhỏ; mô hình không hỗ trợ trả `status=unavailable`.
 
-Mỗi yếu tố mới có `business_review`, protocol `t1-business-evidence-v1`. Ngoài kiểm tra SHAP, UI yêu cầu đánh giá nghiệp vụ khớp feature/giá trị/đơn vị, chiều nhất quán và tối thiểu 1 điểm phần trăm trên toàn khoảng đóng góp. Ngưỡng này là chính sách lọc ban đầu, không phải bằng chứng thống kê hoặc chứng nhận mô hình. Kỳ hạn luôn `context_only` cho tới khi có kiểm định phản ứng riêng; số hóa đơn lịch sử luôn là thông tin đầu vào, không đo chất lượng trả nợ. Giá trị hóa đơn có thể là yếu tố chính nếu đạt ngưỡng nhưng không có câu suy diễn khả năng chi trả.
+Mẫu nền gồm công nợ đủ điều kiện tại cutoff, toàn bộ hoặc lấy mẫu phân tầng khi
+lớn. Lưu hash, thành viên, trọng số, đầu vào đã chuẩn bị và kiểm tra độ nhạy tại
+`explanation_references`. Lời giải thích lưu cùng `model_version` và `dataset_hash`;
+GET không tính lại bằng dữ liệu hoặc model mới. Kế hoạch cũ giữ bản gốc.
 
-`business_review.evidence` của lịch sử lấy đúng các khoản tất toán mà từng thành viên được phép biết tại ngày lập hóa đơn đích: `max(known_at, settled_known_at + 1 ngày, settled + 1 ngày) <= issue_date`. Dùng chung hàm với chuẩn bị feature. Kiểm tra trung vị đã giới hạn, phép co về doanh nghiệp và số lượng khớp đầu vào đang phục vụ. Lưu số khoản trễ/đúng/sớm, ngày giới hạn và hash nguồn có ngày. Chỉ thêm câu thực tế nếu ít nhất 10 hóa đơn và tất cả thành viên thống nhất bằng chứng. Câu không tự quyết định chiều SHAP. Tuổi hóa đơn có thể kèm ngày đến hạn/số ngày quá hạn có kiểm tra. Thiếu bằng chứng thì không bịa câu nghiệp vụ.
-
-Yêu cầu toàn lời giải thích có ba mẫu kiểm tra, không cảnh báo tổ hợp (tỷ trọng <=10%), khoảng cách CDF <=0,1, khớp xác suất trên dòng và tái tạo từ toàn bộ đóng góp. Thiếu đánh giá trong kế hoạch cũ không có lý do chính. UI tách thông tin đầu vào khỏi lý do, báo chưa đủ cơ sở nếu không có yếu tố đạt, và nêu rõ phần còn thiếu nếu yếu tố lớn nhất bị giữ lại. Toàn bộ sáu SHAP và kiểm tra vẫn lưu để kiểm toán; các yếu tố hiển thị chỉ là một phần, không được cộng riêng để tái tạo dự báo.
-
-`baseline_probability + sum(factors[].contribution)` khớp xác suất trong sai số
-`1e-10`; `contribution` dùng đơn vị xác suất, `contribution_pp` dùng điểm phần trăm.
-
-Protocol `t1-4w-exact-interventional-v2` liệt kê đủ 64 liên minh của sáu đầu vào
-đã chuẩn bị: log giá trị hóa đơn, kỳ hạn, trễ khách có co về DN, trễ DN,
-log số quan sát khách và tuổi hóa đơn. Tính qua cùng hàm phân phối với serving,
-gồm tổ hợp và baseline; tuổi hóa đơn quyết định risk set. Thu chậm theo kịch bản
-được giữ cố định cho hóa đơn đang giải thích, kể cả khi chỉ áp dụng cho một khách.
-Đây là SHAP tính trực tiếp bằng NumPy, không thêm phụ thuộc `shap`.
-
-Nền chung là công nợ mở đã biết tại cutoff (sau loại xóa nợ, gồm cả khoản đang
-hoãn liên hệ), mỗi hóa đơn có trọng số bằng nhau trong quần thể. Có tối đa 512
-hóa đơn thì dùng toàn bộ; lớn hơn dùng mẫu 128, phân tầng đồng thời theo tuổi,
-kỳ hạn, log giá trị, log số lịch sử và trễ khách. Chia tối đa 16 tầng theo không
-gian đầu vào; tập lớn dành tầng riêng cho hai đuôi 1% giá trị và khách chưa có
-lịch sử để giảm nguy cơ bỏ sót nhóm hiếm. Lấy mẫu không hoàn lại, trọng số bằng tỷ trọng tầng/số mẫu trong
-tầng. Hash mã chỉ giúp thứ tự tái lập, không quyết định chọn cách đều theo mã.
-Lưu khoảng cách CDF có trọng số của mẫu so với quần thể để kiểm tra đại diện.
-
-Từ 16 hóa đơn trở lên, kiểm tra thêm ba mẫu phân tầng độc lập với seed cố định.
-Với nền đầy đủ, đây là độ nhạy khi lấy tập con (80%, tối đa 128), không phải sai
-số xấp xỉ của nền đầy đủ. Với nền mẫu, các mẫu kiểm tra có cùng kích thước 128.
-`factors[].stability` lưu khoảng đóng góp, đổi dấu, thay đổi mức đóng góp và yếu
-tố đứng đầu. Cảnh báo đổi dấu khi biên độ >=0,1 điểm %; đổi mức khi vượt
-max(0,5 điểm %, 25% độ lớn đóng góp chính); yếu tố đứng đầu được coi đồng hạng
-trong 0,1 điểm %. Thiếu ba mẫu hoặc dưới 16 hóa đơn trả `insufficient`.
-Đây là ngưỡng kỹ thuật, không phải kiểm định thống kê hay khoảng tin cậy dự báo.
-
-`plausibility` kiểm tra ràng buộc trễ khách bằng trễ DN khi chưa có lịch sử,
-cùng các ô tứ phân vị chưa quan sát ở cặp đầu vào có |tương quan| >=0,8. Tỷ trọng
-tổ hợp bị cảnh báo (bỏ liên minh rỗng/đầy đủ) >10% tạo trạng thái `caution`.
-Đây là chẩn đoán hỗ trợ dữ liệu, chưa phải bộ lấy mẫu có điều kiện hoặc chứng minh
-mọi tổ hợp hợp lý. Các đầu vào tuần/ngày đến hạn dẫn xuất vẫn được tính lại bởi
-hàm serving, không mask riêng.
-
-`explanation_references[hash]` lưu một bản nền gồm mã hóa đơn, đầu vào đã chuẩn
-bị của từng thành viên, trọng số và vị trí của cả mẫu chính/mẫu kiểm tra, chính
-sách, ngày chốt và seed. Mỗi lời giải thích tham chiếu hash đó; cùng với
-`model_version`, `dataset_hash` của kế hoạch đủ truy vết nền và kết quả đã dùng.
-GET không tính lại. Mức nền là trung bình dự báo có trọng số, không phải tỷ lệ
-trả thực tế. Exactness chỉ áp dụng cho nền và sáu nhóm đầu vào này; độ ổn định
-chỉ xét lấy mẫu nền, không bảo đảm hết thiên lệch hoặc chứng minh nhân quả.
-Một hóa đơn duy nhất có đóng góp bằng không và thông báo thiếu đối tượng so
-sánh. Mô hình tùy chỉnh chưa hỗ trợ trả `status=unavailable`; không tạo lý do giả.
-Kế hoạch cũ chưa có trường này vẫn đọc được và UI yêu cầu tạo kế hoạch mới.
-Giải thích T1 này độc lập với chính sách xếp hạng và chưa giải thích số dư T6.
+Hộp giải thích, lý do ưu tiên và phân rã tiền dùng theme Sổ Son. Giải thích T1
+độc lập với chính sách xếp hạng và chưa tự giải thích toàn bộ số dư T6.
 
 Giải thích xếp hạng mới dùng protocol `collection-ranking-v2`: `collection_ranking`
 ở cấp kế hoạch ghi chính sách thực tế, công thức, đơn vị điểm, nguồn chọn chính sách,
@@ -236,15 +185,12 @@ Không đổi quy tắc cộng điểm: tranh chấp/lời hứa/ngày quá hạ
 như ngữ cảnh xử lý; cùng điểm giữ thứ tự snapshot. So sánh khoản kế tiếp dựa trên
 toàn bộ danh sách đủ điều kiện, kể cả khoản thứ 31 ngoài giới hạn hiển thị 30.
 
-`ranking_explanation.probability_source` xác định baseline `customer` fit từ
-snapshot tại cutoff, không dùng kịch bản thu chậm. Nguồn này khác artifact T1 đã
-chọn hoặc xác suất T1 sau thu chậm; không dùng việc hai con số tình cờ bằng nhau
-để khẳng định cùng nguồn. Khi chính sách dùng xác suất, `probability_explanation`
-chứa SHAP của đúng `triage_probability_4w`, với `model_version=null` và
-`model_asof=cutoff`; không gán phiên bản T1 đang phục vụ cho baseline này.
-`displayed_model_version` ghi phiên bản dự báo để đối chiếu; các trường có cùng
-`dataset_hash` của kế hoạch. GET không tính lại. Excel giữ thứ tự, điểm/đơn vị,
-nhãn chính sách và xác suất/nguồn lịch sử khách; các kế hoạch cũ vẫn đọc được.
+`ranking_explanation.probability_source` của dự báo mới là `active_t1`, cùng
+model, pooling và kịch bản với xác suất T1 hiển thị. Không fit một customer T1
+riêng để xếp hạng. Khi chính sách dùng xác suất, `probability_explanation` giải
+thích đúng nguồn đó và mang cùng phiên bản T1. `displayed_model_version` và
+`dataset_hash` cho phép đối chiếu; GET không tính lại. Bản kế hoạch lịch sử giữ
+nguồn xác suất đã ghi tại thời điểm tạo.
 Điểm là giá trị phân luồng công nợ, không phải tổn thất hoặc hiệu quả thu nợ nhân quả.
 
 V2 giữ dư nợ VND nguyên và tính điểm bằng Decimal từ biểu diễn thập phân của
@@ -261,7 +207,7 @@ Hàng đợi trống được phân biệt với hết công nợ: nếu còn h�
 bị tạm loại theo quy tắc, UI nêu số khoản mở và số khoản hoãn liên hệ; kế hoạch
 cũ thiếu số liệu phạm vi dùng thông báo trung tính.
 
-Phân rã T6 được lưu trong `cash_decomposition`, protocol `cash-decomposition-v1`,
+Phân rã T6 được lưu trong `cash_decomposition`, protocol `cash-decomposition-v2`,
 target `expected_balance`, đơn vị VND. `invoices[].expected_by_week` dùng đúng
 ma trận phân bổ tiền sau xử lý trả từng phần, kịch bản chậm thu và gộp phần
 ngoài kỳ; không nhân lại với `payment_probability_4w`. `customers` cộng theo
@@ -283,19 +229,23 @@ thu lớn nhất và khoản chi lớn đã biết. Cảnh báo chỉ do mô ph�
 `simulation_only`, không quy thành thiếu trên đường kỳ vọng. Lịch chi chưa
 biết vẫn được báo thiếu phạm vi.
 
-`timing_comparison` so kế hoạch đang xem với dịch dự thu công nợ trong kỳ
-sớm/chậm hai tuần cho mọi khách; số dư đầu, lịch chi và các dòng hoạt động
-giữ nguyên. Thu sớm dồn tối thiểu vào tuần 1; phần ngoài kỳ không có ngày thu
-không được kéo vào. Thu chậm vượt kỳ ghi trong `receipts_pushed_beyond_horizon`.
-Đây là so sánh xác định của số dư kỳ vọng, không tính lại xác suất cảnh báo hay
-P10/P90. Phân rã không dùng SHAP cho số dư/phân vị. Mở rộng SHAP sau này cần
-chốt mục tiêu theo tuần hay toàn kỳ, mức ngưỡng/phân vị và cơ chế mô phỏng.
+T10 cho bundle partial/T6 mới dùng `t10.identity`, `t10.partial_profile` và
+`invoices[].receipt_explanation`: phân rã từng tuần thành tất toán + partial,
+lưu dư nợ đầu/cuối kỳ vọng, hazard, q, phân phối tỷ lệ, số tuần hỗ trợ và prior.
+SHAP T1 giữ đích xác suất tất toán 4 tuần; không coi là SHAP tiền thu.
 
-`model_version`, `model_asof`, `dataset_hash`, cutoff và giả định được lưu cùng
-phân rã; GET và xuất Excel dùng bản đã lưu. Excel bổ sung `Phân rã từng tuần`,
-`Thu theo hóa đơn`, `Thu theo khách`, `Lịch chi đã biết`, `So sánh thời điểm`,
-`Kịch bản từng tuần`. Ba sheet cũ giữ vị trí và cột ban đầu; kế hoạch cũ chưa
-có phân rã vẫn xuất ba sheet. UI có lọc tuần, tìm mã và phân trang 20 dòng.
+Forecast và replay snapshot (dữ liệu theo cutoff, artifact thực tế T1/partial,
+tham số T6, hash) được ghi cùng giao dịch. Source engine và runtime được giữ
+theo hash; GET/Excel không nạp model active mới. Kịch bản kiểm đúng phiên bản,
+phát lại baseline, rồi chạy T6 với cùng nguồn ngẫu nhiên theo hóa đơn/hoạt động.
+Trả kỳ vọng, P10/P50/P90, xác suất thiếu tiền từng tuần/cả kỳ và các chênh lệch.
+Sai engine/runtime trả 409; cần môi trường đúng bản đã lưu. Phân vị kịch bản là
+MC thô, không tự áp dải đã nới cho giả định chưa kiểm chứng. Không diễn giải
+độ nhạy thành tác động chắc chắn của việc liên hệ thu nợ.
+
+Bộ sinh `timing_comparison`, UI và hai sheet chỉ dịch kỳ vọng đã xóa. Excel
+thêm `Bằng chứng partial theo tuần`, `Profile partial và hỗ trợ`, `Phiên bản T10`;
+phân rã toàn danh mục có lọc/phân trang. [Hợp đồng T10 và bước 7](../docs/04_AI_Methods/T10_BUNDLE_EVIDENCE_2026-11-13.md).
 
 | Endpoint | Mục đích |
 |---|---|
@@ -306,7 +256,10 @@ có phân rã vẫn xuất ba sheet. UI có lọc tuần, tìm mã và phân tra
 | `DELETE /v1/records/{kind}/{id}` | Xóa bản ghi khỏi snapshot hiện tại |
 | `POST /v1/training` | `{asof, payments_complete}` → 202 job ID; poll workspace |
 | `POST /v1/models/{id}/activate` | Chọn bản mới hoặc quay về bản cũ |
-| `POST /v1/predict` | Kế toán tạo dự báo/kịch bản đã lưu |
+| `POST /v1/predict` | Kế toán tạo dự báo và snapshot T10 đã lưu |
+| `GET /v1/forecasts/{id}/explanations` | Đọc bằng chứng đúng forecast đã lưu |
+| `POST /v1/forecasts/{id}/scenarios` | `{customer_id, customer_delay_weeks, expense_id, expense_delay_weeks}`; chạy T6 theo snapshot với nguồn ngẫu nhiên chung |
+| `GET /v1/forecasts/{id}/scenarios/{scenario_id}` | Đọc kết quả kịch bản đã lưu |
 | `GET /v1/forecasts/{id}/xlsx` | Tải Excel của dự báo đã lưu |
 | `POST /v1/portal-connect/tickets` | Token kế toán và `{company}` → mã kết nối dùng một lần, hết hạn sau 60 giây |
 | `POST /v1/portal-connect/redeem` | `{ticket}` → khóa truy cập và mã doanh nghiệp; chỉ đổi được một lần |
@@ -508,6 +461,40 @@ thực tế để bổ sung parser; hiện cần nhập sự kiện hủy đã x
 <a id="t5-ledger"></a>
 
 ## T5: nghĩa vụ, thanh toán và phần còn lại — 11/11/2026
+
+**Nhận diện và nạp bổ sung — 12/11/2026:** mỗi dòng vẫn là một lần đến hạn,
+không phải mẫu tự lặp. Thêm ba cột tùy chọn đi cùng nhau: `obligation_ref`
+(mã hợp đồng hoặc khoản cố định, có thể ghép từ `contract_id`/`fixed_cost_id`),
+`payment_period` (`YYYY-MM`, `YYYY-Q1`…`YYYY-Q4` hoặc `YYYY`) và
+`installment_no` (số nguyên dương). Định danh nghiệp vụ gồm mã này **và loại
+nghĩa vụ, kỳ, đợt**; gốc và lãi cùng hợp đồng là hai khoản riêng. Đợt đến hạn
+khác với số lần thực trả. Kỳ không tự suy từ ngày trả: dời tiền thuê tháng 11
+sang tháng 12 vẫn giữ kỳ `2026-11`.
+
+```csv
+expense_id,obligation_ref,category,payment_period,installment_no,date,amount,known_at
+THUE-202611,HD-THUE-01,rent,2026-11,1,2026-11-30,10000000,2026-11-01
+THUE-202612,HD-THUE-01,rent,2026-12,1,2026-12-31,10000000,2026-11-01
+```
+
+Trước khi lưu, Workspace phân loại và phân trang toàn bộ các dòng **thêm
+mới / sửa / trùng giữ nguyên / cần kiểm tra**, cho lọc kết quả và xem trước–sau
+của từng bản sửa. File bổ sung không xóa các dòng vắng mặt. Mã khác nhưng
+khớp định danh nghiệp vụ được đối chiếu về mã lần đến hạn đã có, giữ liên kết
+sao kê. Màn hình chỉ rõ mã được giữ: dùng mã này trong `expense_payments` và
+`replaces_expense_id`; không tạo bí danh thanh toán mới từ mã nạp nhầm.
+Nạp lại nội dung không đổi không tăng nghĩa vụ hay sửa ngày biết ban đầu.
+Bản sửa nội dung cần `known_at` mới hơn, giữ snapshot trước đó. Một mã đã
+đủ định danh không được dùng sang hợp đồng/loại/kỳ/đợt khác; kỳ mới cần mã
+mới. Các nội dung xung đột trong cùng file hoặc lỗi bất kỳ chặn cả lần lưu.
+Khi dữ liệu đổi sau bước kiểm tra, phải xem trước lại.
+
+Dữ liệu cũ thiếu toàn bộ ba cột vẫn hoạt động và có nhãn **cần bổ sung định
+danh**. Bổ sung theo cùng `expense_id` với ngày ghi nhận mới hơn; lịch sử cũ
+không bị sửa. Nếu file sau bỏ cả ba cột của khoản đã được định danh, hệ thống
+giữ định danh hiện có. Không được bỏ một phần hoặc đổi định danh qua sửa
+nguồn. Với khoản chưa bổ sung định danh, việc chống trùng vẫn dựa vào mã lần
+đến hạn; hệ thống không tự gộp chỉ vì cùng số tiền và ngày trả.
 
 Workspace dùng cùng bảng `outflows` cho mỗi lần đến hạn. `expense_id` có thể
 ghép từ cột `obligation_id`; `date` có thể ghép từ `due_date`. Cùng mã được sửa
@@ -758,6 +745,21 @@ Dashboard hiển thị báo cáo đã lưu, phiên bản và cảnh báo local.
 
 
 ## Vận hành pilot SME
+
+### T6 và ứng viên T1 landmark 18 feature
+
+`POST /v1/predict` nhận `simulation_paths` (100–10000, mặc định 1000),
+`shap_limit` (0–30, mặc định 30), và `simulation_seed` (mặc định 7). Toàn bộ
+công nợ hợp lệ vẫn tham gia dự báo. Danh sách thu hồi vẫn tối đa 30 dòng;
+những dòng ngoài giới hạn SHAP mang trạng thái `deferred`. Giới hạn này áp
+dụng cả giải thích xác suất T1 và xác suất xếp hạng nếu policy dùng xác suất.
+`compute_budget` trong kế hoạch lưu cấu hình thực tế. Tăng đường mô phỏng
+chỉ thay độ chính xác số của dải/xác suất mô phỏng; kỳ vọng tiền tính giải tích.
+
+`/v1/predict` nạp catalog global bằng `AGENT1_T1_GLOBAL_CATALOG` và bundle đã
+được chọn cho doanh nghiệp. Hai biến research allowlist cũ không còn override
+T1 phục vụ. Loader kiểm hash và ngày sẵn sàng; catalog hiện là artifact synthetic,
+chưa thay cổng pilot thật. Chi tiết T1 ở hợp đồng hiện tại phía trên.
 
 Xem [bộ pilot](../pilot/BO_PILOT_SME.md) và [sổ nghiệm thu](../pilot/quyet_dinh.md). Mỗi DN dùng tiến trình, thư mục CSDL, khóa mã hóa và token riêng. Đặt các token đọc riêng biệt bằng `AGENT1_AGENT4_TOKEN`, `AGENT1_VIEWER_TOKEN`; không tái sử dụng giữa các DN hoặc với token quản trị. Thu hồi bằng cách xóa/đổi biến và khởi động lại. Quyền đọc chỉ mở danh sách và bản dự báo đã lưu. Kế toán giữ quyền nhập, chạy, kích hoạt và đối chiếu.
 

@@ -1466,3 +1466,7 @@ dialog p {
     scroll-behavior: auto !important;
   }
 }
+/* Active T1 uses six grouped contributions, including on narrow screens. */
+.t1-explanation .t1-grouped-drivers { width: 100%; min-width: 0; table-layout: fixed; }
+.t1-explanation .t1-grouped-drivers th,
+.t1-explanation .t1-grouped-drivers td { white-space: normal; overflow-wrap: anywhere; }

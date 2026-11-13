@@ -1,6 +1,77 @@
 # Hướng dẫn đọc tài liệu cho AI và người mới vào dự án
 
+**Bước 7, T10 ngày 13–14/11/2026:**
+[Giải thích đúng forecast/bundle đã lưu, adapter partial và kịch bản T6](04_AI_Methods/T10_BUNDLE_EVIDENCE_2026-11-13.md).
+Có bằng chứng tất toán + partial theo tuần và mô phỏng so sánh P10/P50/P90,
+Δ xác suất thiếu tiền với nguồn ngẫu nhiên chung. Đã xóa bộ dịch kỳ vọng cũ;
+tài liệu T0–T9–T10 đã cập nhật từ bản 11/11. Đây là chức năng/kiểm thử,
+chưa phải nghiệm thu chất lượng tiền hoặc tác động can thiệp trên SME thật.
+
+**Bổ sung T6 và vận hành ngày 13/11/2026:**
+[Chuỗi partial, kỳ vọng/P50/phân vị, bundle và quy trình doanh nghiệp mới](04_AI_Methods/T6_PARTIAL_PATHS_PERIODIC_2026-11-13.md).
+Có kiểm thử bất biến tiền/phân phối, runner lock → predict → score và hai
+ledger toy tạo mới. Chưa nghiệm thu chất lượng dải hoặc doanh nghiệp thật;
+nhánh giữ incumbent khi thiếu nhãn được kiểm riêng. Bản sao adapter cũ và
+nhánh cure/p_bad của engine nghiên cứu đã xóa, snapshot lịch sử giữ nguyên.
+
+**Yêu cầu hiện hành: chọn cả T1 + adapter partial, T6 thu nhiều lần.**
+[Runtime bundle v2](04_AI_Methods/T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md)
+thay các mô tả adapter/lựa chọn/T6 bên dưới. Catalog kiểm contract nhãn tiền,
+validation dùng chung partial, audit so hai bundle thực tế; không kế thừa điểm
+chất lượng cũ. G0 nguồn v1 sai contract được cách ly, giữ cấu trúc G0 bằng các
+thành phần đã sửa nhãn. Chỉ có kiểm thử phần mềm và audit tích hợp synthetic;
+chưa có kết luận chất lượng trên doanh nghiệp thật.
+
+**T1 theo yêu cầu mới nhất: bỏ Workspace/local ensemble, đã sửa mã phục vụ.**
+[T1 global → local và cập nhật theo chu kỳ](04_AI_Methods/T1_GLOBAL_LOCAL_RUNTIME_2026-11-13.md)
+thay phần T1 của bản chốt pipeline trước: giữ các global Neural/LightGBM/XGBoost,
+học tiếp, validation/audit và challenger chờ nhãn; không còn chọn Workspace.
+Đây là triển khai/kiểm thử phần mềm, chưa phải số đo selector trên doanh nghiệp
+mới. T6/T10 vẫn có các giới hạn riêng được ghi trong hợp đồng.
+
+**Quyết định kiến trúc trước yêu cầu bỏ Workspace (13/11/2026):**
+[Pipeline T1 → T6 → T10, global và học local](04_AI_Methods/T1_T6_T10_GLOBAL_LOCAL_PIPELINE_2026-11-13.md)
+chốt giữ Neural/LightGBM/XGBoost global và học tiếp, Workspace làm ứng viên
+local, validation/audit chọn theo doanh nghiệp. T6 giữ engine chung với các
+thành phần thu/chi, profile và hiệu chỉnh local; T10 giải thích đúng bundle.
+Phần T1 có Workspace trong quyết định này đã được thay bằng hợp đồng runtime
+ở đầu trang. Các phần T6/T10 vẫn là định hướng phát triển. Không đổi artifact frozen, kích hoạt
+tenant hoặc tuyên bố selector/T6 mới đã được đánh giá hoàn chỉnh.
+
 **Cập nhật 06/11/2026.** Thư mục `docs/` chứa cả đặc tả, kế hoạch, kết quả đã đo và ảnh chụp lịch sử. Ngày trong tên file là ngày của **lần đo hoặc quyết định đó**, không tự biến nó thành kết luận hiện hành.
+
+**Bổ sung fine-tune Đại Phát ngày 13/11/2026:** [So sánh fine-tune và Workspace](03_Evaluation/T1_DAI_PHAT_FINETUNE_VS_WORKSPACE_2026-11-13.md)
+đã học tiếp global bằng lịch sử Đại Phát trước từng ngày chốt, dùng lại đúng
+Workspace baseline. Fine-tune cải thiện so với global gốc nhưng trung bình vẫn
+kém Workspace trên bốn kỳ; đề xuất giữ Workspace cho bản bàn giao Đại Phát.
+Đây là một doanh nghiệp synthetic và các origin đã được xem, với số đo AR và
+xác suất riêng; không tự đổi cấu hình tenant hoặc gate T6/pilot.
+
+**Chốt T1 ngày 13/11/2026:** [Quyết định phiên bản T1](03_Evaluation/T1_CHOT_2026-11-13.md)
+giữ global 18 feature Neural 75%/customer 25% làm bản nghiên cứu chính để đi
+tiếp với T6; chưa mặc định refit hoặc fine-tune. Workspace vẫn là luồng mặc
+định dịch vụ và được giữ cho Đại Phát. Đây là quyết định khóa lựa chọn nghiên
+cứu, không phải phép đo mới, kích hoạt tenant hoặc nghiệm thu T6/pilot.
+
+**Bổ sung backtest T6 ngày 13/11/2026:** [Global, danh mục mở và số dư ngân hàng](03_Evaluation/T6_GLOBAL_SCOPE_NO_NEW_INVOICES_2026-11-13.md)
+tắt nhánh dự báo thu hóa đơn mới theo yêu cầu, tách nhãn thu AR và số dư sao kê,
+giữ riêng dữ liệu Đại Phát gốc với stress phản thực tế. Các stress lặp lại danh
+mục của cùng doanh nghiệp synthetic, không phải doanh nghiệp hoặc holdout độc
+lập; không tự thay model/gate sản phẩm.
+
+**Bổ sung 13/11/2026:** [Refit T1, học tiếp local và T6](03_Evaluation/T1_REFIT_LOCAL_ADAPTATION_2026-11-13.md)
+ghi lượt sửa nhãn Paid theo ngày tiền thực thu và đối chiếu global nguyên bản,
+global học tiếp, Neural local 18 feature và Workspace trên bốn World tạo mới
+trong session. Cohort được dùng lại sau sửa nhãn cơ học; đọc đúng giới hạn này.
+Bản refit không qua audit; giữ artifact cũ làm global hiện tại. T6 có tham số
+1000 đường/30 SHAP và đường tích hợp research có allowlist/hash, chưa kích hoạt
+tenant hay thay gate pilot.
+
+**Bổ sung 12/11/2026:** [Quyết định T1 cho T6 và SHAP](03_Evaluation/T1_T6_SHAP_SELECTION_2026-11-12.md)
+dùng đối chiếu Workspace trên ba World, 18 doanh nghiệp, 108 origin; chọn
+ensemble 18 feature làm ứng viên tổng quát. Phân biệt điểm World frozen với
+điểm serving, giữ ngoại lệ local và giới hạn test synthetic đã dùng lại. Không
+tự diễn giải thành model mới đã kích hoạt trong dịch vụ hoặc qua gate pilot.
 
 **Luồng dịch vụ vừa tích hợp:** giữ T0 Khánh, dùng constrained flow/ledger từ
 T0 Thắng cho T9 và snapshot theo ngày biết. Đọc [hợp đồng runtime](../agent1_service/README.md#luong-t0-t9-thong-nhat).

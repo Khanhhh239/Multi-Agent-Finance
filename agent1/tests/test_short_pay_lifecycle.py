@@ -1,6 +1,7 @@
 """A deliberately short second payment must not strand a small AR balance forever."""
 import numpy as np
 import pandas as pd
+import pytest
 
 from agent1.data.accounting import derive_invoice_accounting
 from agent1.synth.world import World, WorldConfig
@@ -67,52 +68,36 @@ def test_short_second_payment_is_followed_by_full_settlement():
     assert accounting.loc[short_ids, 'paid_date_true'].notna().all()
 
 
-def test_short_residual_stopped_by_default_has_dated_writeoff(monkeypatch):
-    world = World(WorldConfig(seed=95318, start='2023-01-01', end='2024-12-31',
+@pytest.mark.parametrize('end,default_day,closure', [
+    pytest.param('2024-12-31', 10, 'writeoff', id='default-writeoff'),
+    pytest.param('2023-03-31', -1, 'open', id='observation-end-censored'),
+])
+def test_unsettled_short_residual_has_expected_lifecycle(monkeypatch, end, default_day, closure):
+    world = World(WorldConfig(seed=95318, start='2023-01-01', end=end,
                               n_firms=1, write_xml=0, rng_version=3))
     firm, customer, invoices, liquidity, stress = _settlement_inputs(world, n=400)
     calls = []
 
-    def scheduled_then_stopped(cal, week0_i, customer_i, start_i, *args, **kwargs):
+    def scheduled_then_unsettled(cal, week0_i, customer_i, start_i, *args, **kwargs):
         if not len(start_i):
             return np.empty(0, dtype=int)
         calls.append(len(start_i))
         return np.asarray(start_i).copy() if len(calls) == 1 else np.full(len(start_i), -1)
 
-    monkeypatch.setattr('agent1.synth.world.weekly_payment_dates', scheduled_then_stopped)
+    monkeypatch.setattr('agent1.synth.world.weekly_payment_dates', scheduled_then_unsettled)
     settled, payments = world.settle(firm, customer, invoices, liquidity,
-                                     np.array([10]), stress)
+                                     np.array([default_day]), stress)
     short_ids = payments.loc[payments.kind.eq('partial')].groupby('k').size()
     short_ids = short_ids.index[short_ids.ge(2)]
     assert len(short_ids) > 5 and len(calls) == 2
     assert not payments.loc[payments.k.isin(short_ids), 'kind'].eq('final').any()
-    assert settled.loc[short_ids, 'writeoff_i'].ge(0).all()
-    assert settled.loc[short_ids, 'is_bad_debt'].all()
     accounting = _accounting(world, settled, payments)
-    assert accounting.loc[short_ids, 'closure_type'].eq('writeoff').all()
-    assert accounting.loc[short_ids, 'writeoff_amount'].gt(0).all()
-    assert accounting.loc[short_ids, 'remaining_amount'].eq(0).all()
-
-
-def test_short_residual_at_observation_end_is_censored(monkeypatch):
-    world = World(WorldConfig(seed=95318, start='2023-01-01', end='2023-03-31',
-                              n_firms=1, write_xml=0, rng_version=3))
-    firm, customer, invoices, liquidity, stress = _settlement_inputs(world, n=400)
-    calls = []
-
-    def scheduled_then_censored(cal, week0_i, customer_i, start_i, *args, **kwargs):
-        if not len(start_i):
-            return np.empty(0, dtype=int)
-        calls.append(len(start_i))
-        return np.asarray(start_i).copy() if len(calls) == 1 else np.full(len(start_i), -1)
-
-    monkeypatch.setattr('agent1.synth.world.weekly_payment_dates', scheduled_then_censored)
-    settled, payments = world.settle(firm, customer, invoices, liquidity,
-                                     np.array([-1]), stress)
-    short_ids = payments.loc[payments.kind.eq('partial')].groupby('k').size()
-    short_ids = short_ids.index[short_ids.ge(2)]
-    assert len(short_ids) > 5 and len(calls) == 2
-    assert settled.loc[short_ids, 'writeoff_i'].eq(-1).all()
-    accounting = _accounting(world, settled, payments)
-    assert accounting.loc[short_ids, 'closure_type'].eq('open').all()
-    assert accounting.loc[short_ids, 'remaining_amount'].gt(0).all()
+    assert accounting.loc[short_ids, 'closure_type'].eq(closure).all()
+    if closure == 'writeoff':
+        assert settled.loc[short_ids, 'writeoff_i'].ge(0).all()
+        assert settled.loc[short_ids, 'is_bad_debt'].all()
+        assert accounting.loc[short_ids, 'writeoff_amount'].gt(0).all()
+        assert accounting.loc[short_ids, 'remaining_amount'].eq(0).all()
+    else:
+        assert settled.loc[short_ids, 'writeoff_i'].eq(-1).all()
+        assert accounting.loc[short_ids, 'remaining_amount'].gt(0).all()

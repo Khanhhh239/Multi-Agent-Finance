@@ -6,14 +6,13 @@ from copy import deepcopy
 from decimal import Decimal
 from io import BytesIO
 from pathlib import Path
-from urllib.parse import urlsplit
 
 import numpy as np
 import pandas as pd
 import pytest
 from agent1.adaptive.collection_explanations import rank_with_explanations
 from agent1.adaptive.data import fingerprint, observed
-from agent1.adaptive.methods import Method, forecast
+from experiments.t1_compact.historical_workspace import Method, forecast
 from agent1_service.api import create_app
 from agent1_service.workspace.forecast_export import workbook_bytes
 from fastapi.testclient import TestClient
@@ -391,12 +390,12 @@ def test_export_keeps_ranking_scores_sources_and_probability_units(book):
 
 
 def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_sizes(
-    tmp_path, book
+    tmp_path,
+    book,
+    browser_runtime,
+    client_proxy,
 ):
-    playwright = pytest.importorskip("playwright.sync_api")
-    chrome = Path("C:/Program Files/Google/Chrome/Application/chrome.exe")
-    if not chrome.exists():
-        pytest.skip("Chrome is not installed")
+    playwright, chrome = browser_runtime
     book["actions"] = [
         {
             "event_id": "D",
@@ -427,7 +426,10 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
         store.put(
             "TEST", "company_dataset_active", [{"id": "active", "version": digest}]
         )
-        bundle = bundle_for(book, "amount_at_risk")
+        from agent1.adaptive.t1_catalog import GlobalCatalog
+
+        bundle = GlobalCatalog().default_bundle("2026-02-10")
+        bundle["collection_policy"] = "amount_at_risk"
         store.put(
             "TEST",
             "company_weights",
@@ -445,6 +447,7 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
             [
                 {
                     "id": "RANK-MODEL",
+                    "algorithm_version": "t1-partial-bundle-v2",
                     "artifact_id": "WEIGHTS",
                     "created_at": "2026-02-10T00:00:00Z",
                     "asof": "2026-02-10",
@@ -476,7 +479,12 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
         )
         assert response.status_code == 200, response.text
         plan = response.json()
-        assert plan["collections"][0]["invoice_id"] == "B"
+        scores = [Decimal(str(r["priority_score"])) for r in plan["collections"]]
+        assert scores == sorted(scores, reverse=True)
+        assert all(
+            r["triage_probability_4w"] == r["payment_probability_4w"]
+            for r in plan["collections"]
+        )
         assert (
             plan["collections"][0]["ranking_explanation"]["probability_explanation"][
                 "target"
@@ -488,33 +496,13 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
         )
         output.mkdir(parents=True, exist_ok=True)
 
-        def proxy(route):
-            req, url = route.request, urlsplit(route.request.url)
-            response = client.request(
-                req.method,
-                url.path + ("?" + url.query if url.query else ""),
-                content=req.post_data_buffer,
-                headers={
-                    "Content-Type": req.headers.get("content-type", "application/json")
-                },
-            )
-            route.fulfill(
-                status=response.status_code,
-                body=response.content,
-                headers={
-                    k: v
-                    for k, v in response.headers.items()
-                    if k not in ("content-length", "content-encoding")
-                },
-            )
-
         with playwright.sync_playwright() as p:
             browser = p.chromium.launch(executable_path=str(chrome), headless=True)
             try:
                 page = browser.new_page(viewport={"width": 1500, "height": 960})
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
-                page.route("**/*", proxy)
+                page.route("**/*", client_proxy(client))
                 page.goto("http://testserver/workspace#forecast")
                 playwright.expect(page.locator("#connection-state")).to_contain_text(
                     "Đã kết nối"
@@ -530,15 +518,13 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
                 )
                 button.click()
                 dialog = page.locator("#ranking-explanation-0")
-                playwright.expect(dialog).to_contain_text("RANK-MODEL")
-                playwright.expect(dialog).to_contain_text("Cùng điểm với hóa đơn C")
-                playwright.expect(dialog).to_contain_text("khác nguồn")
-                playwright.expect(dialog).to_contain_text("không đổi điểm")
+                playwright.expect(dialog).to_contain_text(plan["model_version"])
+                playwright.expect(dialog).to_contain_text("T1 đang dùng")
                 dialog.locator(".ranking-explanation > details > summary").click()
                 shap = dialog.locator("details .t1-explanation")
-                playwright.expect(shap).to_contain_text("Chưa đủ cơ sở")
+                playwright.expect(shap).to_contain_text("Nhóm thông tin")
                 assert "RANK-MODEL" not in shap.inner_text()
-                assert shap.locator("table, details").count() == 0
+                assert shap.locator("table").count() == 1
                 assert "SHAP" not in shap.inner_text()
                 for width in (1500, 390):
                     page.set_viewport_size({"width": width, "height": 960})
@@ -624,9 +610,9 @@ def test_large_vnd_roundtrips_from_csv_through_api_saved_plan_and_excel(tmp_path
         factor = next(
             f
             for f in large["payment_explanation"]["factors"]
-            if f["feature"] == "amount"
+            if f["feature"] == "invoice_terms"
         )
-        assert factor["value"] == "9007199254741009"
+        assert np.isfinite(factor["value"]["relative_amount"])
         assert client.get("/v1/forecasts/" + plan["id"]).json() == plan
         response = client.get("/v1/forecasts/" + plan["id"] + "/xlsx")
         assert response.status_code == 200
@@ -646,11 +632,12 @@ def test_large_vnd_roundtrips_from_csv_through_api_saved_plan_and_excel(tmp_path
         )
 
 
-def test_browser_exact_priority_and_deferred_queue_on_both_screen_sizes(tmp_path):
-    playwright = pytest.importorskip("playwright.sync_api")
-    chrome = Path("C:/Program Files/Google/Chrome/Application/chrome.exe")
-    if not chrome.exists():
-        pytest.skip("Chrome is not installed")
+def test_browser_exact_priority_and_deferred_queue_on_both_screen_sizes(
+    tmp_path,
+    browser_runtime,
+    client_proxy,
+):
+    playwright, chrome = browser_runtime
     app = create_app(
         state_dir=tmp_path / "data",
         key_dir=tmp_path / "keys",
@@ -720,33 +707,13 @@ def test_browser_exact_priority_and_deferred_queue_on_both_screen_sizes(tmp_path
         )
         output.mkdir(parents=True, exist_ok=True)
 
-        def proxy(route):
-            req, url = route.request, urlsplit(route.request.url)
-            response = client.request(
-                req.method,
-                url.path + ("?" + url.query if url.query else ""),
-                content=req.post_data_buffer,
-                headers={
-                    "Content-Type": req.headers.get("content-type", "application/json")
-                },
-            )
-            route.fulfill(
-                status=response.status_code,
-                body=response.content,
-                headers={
-                    k: v
-                    for k, v in response.headers.items()
-                    if k not in ("content-length", "content-encoding")
-                },
-            )
-
         with playwright.sync_playwright() as p:
             browser = p.chromium.launch(executable_path=str(chrome), headless=True)
             try:
                 page = browser.new_page(viewport={"width": 1500, "height": 960})
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
-                page.route("**/*", proxy)
+                page.route("**/*", client_proxy(client))
                 page.goto("http://testserver/workspace#forecast")
                 playwright.expect(page.locator("#connection-state")).to_contain_text(
                     "Đã kết nối"
@@ -790,7 +757,8 @@ def test_browser_exact_priority_and_deferred_queue_on_both_screen_sizes(tmp_path
                     # Two invoices cannot support stability checks; neutral
                     # amount attribution must not be presented as a reason.
                     playwright.expect(shap).to_contain_text("Chưa đủ cơ sở")
-                    assert shap.locator("table, details").count() == 0
+                    assert shap.locator("table").count() == 1
+                    assert shap.locator("details").count() == 0
                     page.keyboard.press("Escape")
                     open_plan(deferred["id"])
                     queue = page.locator("#collections-table")

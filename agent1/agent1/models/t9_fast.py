@@ -77,25 +77,6 @@ class FastAmountReconciler(Reconciler):
         return dict(amt_exact_single=exact,amt_subset_hit=subset,amt_rel_gap=float(min(best/max(amount,1),1.)),
                     cust_open_n=len(selected),days_from_oldest_due=float(np.floor(days)))
 
-    @staticmethod
-    def _amount_feats(op,amt,date):
-        if op is None or op.empty:
-            return dict(amt_exact_single=0,amt_subset_hit=0,amt_rel_gap=1.,cust_open_n=0,days_from_oldest_due=np.nan)
-        known=op.ledger_clear_date if 'ledger_clear_date' in op else pd.Series(pd.NaT,index=op.index)
-        opened=op[known.isna()|(known>=date)].head(12)
-        if opened.empty:opened=op.tail(6)
-        adjustment=(opened.credit_note.where(opened.credit_note_date<=date,0.)
-                    if 'credit_note_date' in opened and 'credit_note' in opened else 0.)
-        amounts=(opened.amount_gross-adjustment).to_numpy()
-        exact=int(np.any(np.abs(amounts-amt)<=TOL));best=np.min(np.abs(amounts-amt)) if len(amounts) else amt
-        subset=0
-        for size in (2,3):
-            if len(amounts)<size:continue
-            indices=subset_indices(min(len(amounts),10),size)
-            if np.any(np.abs(amounts[indices].sum(1)-amt)<=TOL):
-                subset,best=1,0.;break
-        return dict(amt_exact_single=exact,amt_subset_hit=subset,amt_rel_gap=float(min(best/max(amt,1),1.)),
-                    cust_open_n=len(opened),days_from_oldest_due=float((date-opened.due_date.iloc[0]).days))
 
 
 def fast_source(source):
@@ -150,7 +131,6 @@ def reconcile_arrays(rec,bank,invoices,customers,tau_auto=.9,assignments=None,ru
         assignments=rec.assign_customers(candidates,thr=tau_auto) if len(candidates) else pd.DataFrame()
     assigned=assignments.set_index('txn_id') if assignments is not None and len(assignments) else pd.DataFrame()
     links,reviews=[],[]
-    from agent1.models.t9_recon import memo_numbers
     for txn in bank.sort_values(['value_date','txn_id']).itertuples(index=False):
         if getattr(txn,'direction','in')!='in' or txn.amount<=0:
             reviews.append(dict(txn_id=txn.txn_id,reason='not_positive_inflow',amount=txn.amount));continue

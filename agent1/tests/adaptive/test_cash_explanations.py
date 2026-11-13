@@ -6,10 +6,10 @@ from copy import deepcopy
 from datetime import date, timedelta
 from io import BytesIO
 from pathlib import Path
-from urllib.parse import urlsplit
 
 import numpy as np
 import pytest
+from agent1.adaptive.cash_adapter import PartialModel
 from agent1.adaptive.data import fingerprint
 from agent1.adaptive.methods import forecast
 from agent1_service.api import create_app
@@ -96,9 +96,10 @@ def book():
     }
 
 
-def bundle():
+def bundle(partial_probability=0.0):
     return {
         "asof": CUTOFF,
+        "partial": PartialModel(np.full(6, partial_probability), tuple(np.array([0.5]) for _ in range(6)), tuple(np.ones(1) for _ in range(6)), "2024-01-01", {}),
         "model": ReceiptProfile(),
         "anchor": ReceiptProfile(),
         "weight": 0.35,
@@ -145,25 +146,14 @@ def test_full_ledger_contributions_reconcile_to_served_path_and_do_not_follow_qu
     assert d["risk_focus"]["unknown_outflow_weeks"] == [1, 2, 4]
 
 
-def test_timing_scenarios_never_pull_tail_forward_and_do_not_lose_delayed_money(book):
+def test_tail_is_reported_as_residual_without_an_invented_receipt_date(book):
     plan = forecast(book, CUTOFF, 100, bundle(), horizon_weeks=4)
     d = plan["cash_decomposition"]
-    current, early, late = d["timing_comparison"]["scenarios"]
     assert d["totals"]["expected_after_horizon"] == 500
-    np.testing.assert_allclose(
-        [w["ar_in"] for w in current["weeks"]], [200, 300, 400, 300]
-    )
-    np.testing.assert_allclose([w["ar_in"] for w in early["weeks"]], [900, 300, 0, 0])
-    np.testing.assert_allclose([w["ar_in"] for w in late["weeks"]], [0, 0, 200, 300])
-    assert early["ar_in"] == current["ar_in"] == 1200
-    assert late["ar_in"] + late["receipts_pushed_beyond_horizon"] == current["ar_in"]
-    assert late["receipts_pushed_beyond_horizon"] == 700
-    assert early["closing_balance"] == current["closing_balance"] == 300
-    assert late["closing_balance_change"] == -700
-    assert early["first_below_floor_week"] is None
-    assert all(w["balance_change"] >= 0 for w in early["weeks"])
-    assert all(w["balance_change"] <= 0 for w in late["weeks"])
-    assert "below_floor_probability" not in early and "low" not in early["weeks"][0]
+    assert "timing_comparison" not in d
+    for invoice in d["invoices"]:
+        assert invoice["expected_in"] + invoice["expected_after_horizon"] == invoice["outstanding"]
+        assert invoice["receipt_explanation"]["t1_tail_probability"] >= 0
 
 
 @pytest.mark.parametrize("horizon", [1, 4, 26, 52])
@@ -181,11 +171,10 @@ def test_any_horizon_and_existing_customer_delay_use_the_actual_shifted_cash(
         expense_multiplier=1.5,
     )
     d = plan["cash_decomposition"]
-    current = d["timing_comparison"]["scenarios"][0]
     np.testing.assert_allclose(
-        [w["balance"] for w in current["weeks"]], [w["balance"] for w in plan["weeks"]]
+        [w["balance"] for w in d["weeks"]], [w["balance"] for w in plan["weeks"]]
     )
-    assert current["cash_out"] == sum(w["cash_out"] for w in plan["weeks"])
+    assert d["totals"]["cash_out"] == sum(w["cash_out"] for w in plan["weeks"])
     assert all(r["amount"] == r["original_amount"] * 1.5 for r in d["outflows"])
     assert len(d["invoices"][0]["expected_by_week"]) == horizon
     assert sum(w["ar_in"] for w in d["weeks"][:2]) == 0
@@ -257,7 +246,7 @@ def test_empty_ar_still_explains_spending_and_does_not_invent_customers(book):
     assert not d["invoices"] and not d["customers"]
     assert d["risk_focus"]["trigger"] == "minimum_expected_balance"
     assert d["totals"]["closing_balance"] == 100
-    assert all(s["closing_balance"] == 100 for s in d["timing_comparison"]["scenarios"])
+    assert plan["t10"]["checks"]["accounting_reconciles"]
 
 
 def test_operating_and_new_credit_stay_separate_and_variable_cost_is_not_counted_twice(
@@ -327,10 +316,9 @@ def test_operating_and_new_credit_stay_separate_and_variable_cost_is_not_counted
         == d["weeks"][13]["variable_cost_topup"]
         == 0
     )
-    for scenario in d["timing_comparison"]["scenarios"]:
-        for i, week in enumerate(scenario["weeks"]):
-            assert week["cash_in"] - week["ar_in"] == (120 if i < 13 else 0)
-            assert week["cash_out"] == plan["weeks"][i]["cash_out"]
+    for i, week in enumerate(d["weeks"]):
+        assert week["cash_in"] - week["ar_in"] == (120 if i < 13 else 0)
+        assert week["cash_out"] == plan["weeks"][i]["cash_out"]
 
 
 def test_simulation_only_alert_is_not_misreported_as_expected_shortfall(book):
@@ -343,7 +331,7 @@ def test_simulation_only_alert_is_not_misreported_as_expected_shortfall(book):
     assert focus["first_expected_shortfall_week"] is None
 
 
-def test_actual_partial_receipt_profile_explains_money_instead_of_four_week_settlement():
+def test_partial_adapter_explains_repeated_cash_instead_of_four_week_settlement():
     origin = date(2024, 1, 1)
     data = {"invoices": [], "payments": [], "outflows": []}
     for i in range(21):
@@ -371,12 +359,12 @@ def test_actual_partial_receipt_profile_explains_money_instead_of_four_week_sett
                     "known_at": when,
                 }
             )
-    plan = forecast(data, CUTOFF, 0, bundle(), horizon_weeks=4)
+    plan = forecast(data, CUTOFF, 0, bundle(1.0), horizon_weeks=4)
     assert plan["partial_cash_supported"] == 1
     invoice = plan["cash_decomposition"]["invoices"][0]
-    assert invoice["receipt_basis"] == "observed_partial_profile"
-    np.testing.assert_allclose(invoice["expected_by_week"], [40, 40, 0, 0])
-    assert invoice["expected_in"] == 80
+    assert invoice["receipt_basis"] == "settlement_partial_adapter"
+    np.testing.assert_allclose(invoice["expected_by_week"], [40, 20, 10, 5])
+    assert invoice["expected_in"] == 75
     assert plan["collections"][0]["payment_probability_4w"] == 0
 
 
@@ -386,10 +374,10 @@ def test_export_contains_full_contributions_scenarios_and_legacy_support(book):
     assert wb["Thu theo hóa đơn"].max_row == 4
     assert wb["Thu theo khách"].max_row == 3
     assert wb["Phân rã từng tuần"]["J5"].value == 300
-    assert wb["So sánh thời điểm"].max_row == 4
-    assert wb["Kịch bản từng tuần"].max_row == 13
+    assert wb["Bằng chứng partial theo tuần"].max_row == 13
     del plan["cash_decomposition"]
     del plan["t5"]
+    del plan["t10"]
     legacy = load_workbook(BytesIO(workbook_bytes(plan, "TEST")))
     assert legacy.sheetnames == [
         "Kết quả dự báo",
@@ -444,8 +432,10 @@ def test_api_persists_provenance_and_uses_saved_values_on_get_and_export(
         assert response.status_code == 200, response.text
         plan = response.json()
         d = plan["cash_decomposition"]
-        assert d["dataset_hash"] == digest and d["model_version"] == "CASH-MODEL"
-        assert d["cutoff"] == d["model_asof"] == CUTOFF
+        assert d["dataset_hash"] == digest and d["model_version"].startswith("global:")
+        assert plan["company_bundle_version"] == "CASH-MODEL"
+        assert d["cutoff"] == CUTOFF
+        assert d["model_asof"] <= CUTOFF
         app.state.store.put(
             "TEST", "company_dataset_active", [{"id": "active", "version": "CHANGED"}]
         )
@@ -458,16 +448,13 @@ def test_api_persists_provenance_and_uses_saved_values_on_get_and_export(
         exported = client.get("/v1/forecasts/" + plan["id"] + "/xlsx")
         assert exported.status_code == 200
         wb = load_workbook(BytesIO(exported.content))
-        assert wb["So sánh thời điểm"].max_row == 4
+        assert "Bằng chứng partial theo tuần" in wb.sheetnames
 
 
 def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobile(
-    tmp_path, book
+    tmp_path, book, browser_runtime, client_proxy,
 ):
-    playwright = pytest.importorskip("playwright.sync_api")
-    chrome = Path("C:/Program Files/Google/Chrome/Application/chrome.exe")
-    if not chrome.exists():
-        pytest.skip("Chrome is not installed")
+    playwright, chrome = browser_runtime
     app = create_app(
         state_dir=tmp_path / "data",
         key_dir=tmp_path / "keys",
@@ -496,33 +483,13 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
         )
         output.mkdir(parents=True, exist_ok=True)
 
-        def proxy(route):
-            req, url = route.request, urlsplit(route.request.url)
-            response = client.request(
-                req.method,
-                url.path + ("?" + url.query if url.query else ""),
-                content=req.post_data_buffer,
-                headers={
-                    "Content-Type": req.headers.get("content-type", "application/json")
-                },
-            )
-            route.fulfill(
-                status=response.status_code,
-                body=response.content,
-                headers={
-                    k: v
-                    for k, v in response.headers.items()
-                    if k not in ("content-length", "content-encoding")
-                },
-            )
-
         with playwright.sync_playwright() as p:
             browser = p.chromium.launch(executable_path=str(chrome), headless=True)
             try:
                 page = browser.new_page(viewport={"width": 1500, "height": 1000})
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
-                page.route("**/*", proxy)
+                page.route("**/*", client_proxy(client))
                 page.goto("http://testserver/workspace#forecast")
                 playwright.expect(page.locator("#connection-state")).to_contain_text(
                     "Đã kết nối"
@@ -531,8 +498,8 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 page.locator("#saved-plans").click()
                 page.locator("#plans-list button").first.click()
                 panel = page.locator("#cash-decomposition")
-                playwright.expect(panel).to_contain_text("Thu sớm 2 tuần")
-                playwright.expect(panel).to_contain_text("Thu chậm 2 tuần")
+                playwright.expect(panel).to_contain_text("T1 + adapter partial")
+                playwright.expect(panel).to_contain_text("Chạy lại T6")
                 playwright.expect(panel).to_contain_text("không giới hạn 30")
                 contributions = panel.locator(".table-scroll").first
                 playwright.expect(contributions.locator("tbody tr")).to_have_count(3)
@@ -550,6 +517,15 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 expenses = panel.locator("details").first
                 playwright.expect(expenses).to_contain_text("E1")
                 assert "E2" not in expenses.inner_text()
+                panel.get_by_text("Vì sao dự thu số tiền này? · T1 + adapter partial", exact=True).click()
+                page.get_by_label("Hóa đơn giải thích partial").select_option("A")
+                playwright.expect(panel).to_contain_text("Dư nợ tại ngày chốt 800 VND")
+                panel.get_by_text("Nếu khách trả chậm hoặc dời khoản chi? · Chạy lại T6", exact=True).click()
+                page.get_by_label("Khách trả chậm", exact=True).select_option("C1")
+                page.get_by_label("Số tuần trả chậm thêm").fill("2")
+                page.get_by_role("button", name="So sánh với forecast đã lưu", exact=True).click()
+                playwright.expect(panel).to_contain_text("Xác suất thiếu tiền ít nhất một tuần")
+                playwright.expect(panel).to_contain_text("Δ P50")
                 for width in (1500, 390):
                     page.set_viewport_size({"width": width, "height": 1000})
                     page.wait_for_function(

@@ -1,0 +1,29 @@
+{
+  "world": "compact_13_test",
+  "role": "test",
+  "anchors": 1990,
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "receipt_count",
+    "received_fraction_28d",
+    "customer_settlements_180d",
+    "customer_delay_180d",
+    "customer_delay_std_180d",
+    "customer_delay_trend_180d",
+    "company_delay_180d",
+    "company_delay_trend_180d",
+    "customer_overdue_share",
+    "customer_overdue90_share",
+    "company_overdue_share",
+    "company_overdue90_share",
+    "customer_outstanding_share"
+  ],
+  "sha256": "e0b941f44a28d7de185c4e412e00f683b9cb5925eb3f1b44443326ff89c4213e",
+  "protocol_sha256": "d2205023e59fa8ab92cf9184a200008673798cc4d49ddcfc1a9e443fb7d99d74",
+  "source_prepared_sha256": "91f82b406d9ee8fbda0cc91669454b0fed1d4f705d999248d30d18303a476bc8",
+  "source_manifest_sha256": "09fa7710cb1ea2785b103d599922d5fe015dc8f2258493b372f71ad43a6c5d9f"
+}

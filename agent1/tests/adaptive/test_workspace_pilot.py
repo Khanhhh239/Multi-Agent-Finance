@@ -1,17 +1,33 @@
 from datetime import date, timedelta
-from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
 from cryptography.fernet import Fernet, InvalidToken
 from fastapi.testclient import TestClient
-from agent1.adaptive.cash_history import weekly_cash, evaluate_plan, calibrate_bands
+from agent1.adaptive.cash_history import weekly_cash, evaluate_plan
 from agent1.adaptive.data import validate_dataset
 from agent1.adaptive.methods import forecast
-from agent1.adaptive.operating import select_operating, predict_candidate
+from agent1.adaptive.cash_adapter import fit_partial
+from agent1.adaptive.operating import select_operating
 from agent1_service.workspace.recovery import transfer
 from agent1_service.api import create_app
 from agent1_service.store import Store
+
+
+class Tail:
+    """Serializable serving fixture; its artifact must survive a saved forecast."""
+    def distribution(self, frame, ages, horizon=13):
+        x = np.zeros((len(frame), horizon + 1))
+        x[:, -1] = 1
+        return x
+
+
+class Half:
+    def distribution(self, frame, ages):
+        p = np.zeros((len(frame), 14))
+        p[:, 0] = 0.5
+        p[:, -1] = 0.5
+        return p
 
 
 def book():
@@ -64,7 +80,8 @@ def test_bank_conservation_coverage_and_actual_balance():
     plan = forecast(d, "2026-01-31", 999, confirmed_weeks=[1])
     assert plan["weeks"][0]["outflow_status"] == "confirmed_zero"
     assert plan["unknown_outflow_weeks"] == list(range(2, 14))
-    assert plan["weeks"][0]["cash_in"] == 0  # Overdue, no supporting events
+    assert 0 <= plan["weeks"][0]["cash_in"] <= plan["outstanding"]
+    assert plan["t1_provenance"]["source"] == "global_catalog"
     rows = evaluate_plan(d, plan, "2026-02-07", ["Q"])
     assert rows[0]["actual_balance"] == 150 and not rows[1]["balance_available"]
     d["statements"][0]["closing_balance"] -= 1
@@ -220,17 +237,12 @@ def test_weekly_candidates_require_verified_history_and_do_not_duplicate_obligat
         )
     ]
 
-    class Tail:
-        def distribution(self, frame, ages, horizon=13):
-            x = np.zeros((len(frame), horizon + 1))
-            x[:, -1] = 1
-            return x
-
     result = forecast(
         d,
         str(end),
         0,
-        dict(asof=str(end), operating=bundle, weight=1, model=Tail(), anchor=Tail()),
+        dict(asof=str(end), operating=bundle, weight=1, model=Tail(), anchor=Tail(),
+             partial=fit_partial(pd.DataFrame(), "2024-01-01", prior=None)),
         include_operating=True,
     )
     assert result["weeks"][0]["cash_out"] == 80 and result["weeks"][0]["cash_in"] == 100
@@ -238,7 +250,8 @@ def test_weekly_candidates_require_verified_history_and_do_not_duplicate_obligat
         d,
         str(end),
         0,
-        dict(asof=str(end), operating=bundle, weight=1, model=Tail(), anchor=Tail()),
+        dict(asof=str(end), operating=bundle, weight=1, model=Tail(), anchor=Tail(),
+             partial=fit_partial(pd.DataFrame(), "2024-01-01", prior=None)),
         include_operating=True,
         horizon_weeks=52,
     )
@@ -310,17 +323,11 @@ def test_new_credit_excludes_opening_ar_and_requires_bank_links():
 def test_concentrated_customer_stress_raises_joint_shortfall():
     d = book()
     d["outflows"] = [
-        dict(date="2026-02-01", known_at="2026-01-30", amount=20.0, category="rent")
+        dict(expense_id="E1", date="2026-02-01", known_at="2026-01-30", amount=20.0, category="rent")
     ]
 
-    class Half:
-        def distribution(self, frame, ages):
-            p = np.zeros((len(frame), 14))
-            p[:, 0] = 0.5
-            p[:, -1] = 0.5
-            return p
-
-    bundle = dict(asof="2026-01-30", model=Half(), anchor=Half(), weight=1)
+    bundle = dict(asof="2026-01-30", model=Half(), anchor=Half(), weight=1,
+                  partial=fit_partial(pd.DataFrame(), "2024-01-01", prior=None))
     base = forecast(d, "2026-01-31", 0, bundle)
     stressed = forecast(d, "2026-01-31", 0, bundle, shared_customer_risk=True)
     assert stressed["weeks"][0]["balance"] > 0

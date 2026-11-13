@@ -5,20 +5,23 @@ import os
 import time
 
 
-def _run(channel, data, asof, deep, names):
+def _run(channel, data, asof, deep, names, incumbent, policy, catalog_path):
     try:
         from agent1.adaptive.methods import train
         from agent1.adaptive.operating import select_operating
         from threadpoolctl import threadpool_limits
+        from agent1.adaptive.t1_catalog import GlobalCatalog
 
         with threadpool_limits(limits=2):
             bundle = train(
-                data, asof, lambda msg: channel.send(("progress", msg)), names=names
+                data, asof, lambda msg: channel.send(("progress", msg)), names=names,
+                incumbent=incumbent, policy=policy,
+                catalog=GlobalCatalog(catalog_path),
             )
             channel.send(
                 ("progress", "Đang kiểm định chuỗi tiền và các phương án học mở rộng")
             )
-            bundle["operating"] = select_operating(data, asof, deep)
+            bundle["operating"] = select_operating(data, asof, deep, include_new_credit=False)
         channel.send(("progress", "Đang hoàn tất phiên bản và báo cáo"))
         channel.send(("ready", bundle))
     except (MemoryError, ValueError, RuntimeError, ImportError) as exc:
@@ -34,14 +37,14 @@ def _run(channel, data, asof, deep, names):
         channel.close()
 
 
-def isolated_train(data, asof, deep, progress, names=None):
+def isolated_train(data, asof, deep, progress, names=None, *, incumbent=None, policy=None, catalog_path=None):
     import psutil
 
     rss = max(128, int(os.environ.get("AGENT1_TRAIN_MIB", "2048"))) * 2**20
     ctx = mp.get_context("spawn")
     reader, writer = ctx.Pipe(duplex=False)
     child = ctx.Process(
-        target=_run, args=(writer, data, asof, deep, names), daemon=True
+        target=_run, args=(writer, data, asof, deep, names, incumbent, policy, catalog_path), daemon=True
     )
     child.start()
     writer.close()

@@ -1,0 +1,29 @@
+{
+  "world": "compact_01_train",
+  "role": "train",
+  "anchors": 13019,
+  "features": [
+    "relative_amount",
+    "term_days",
+    "age_days",
+    "received_fraction",
+    "receipt_recency_days",
+    "receipt_count",
+    "received_fraction_28d",
+    "customer_settlements_180d",
+    "customer_delay_180d",
+    "customer_delay_std_180d",
+    "customer_delay_trend_180d",
+    "company_delay_180d",
+    "company_delay_trend_180d",
+    "customer_overdue_share",
+    "customer_overdue90_share",
+    "company_overdue_share",
+    "company_overdue90_share",
+    "customer_outstanding_share"
+  ],
+  "sha256": "a7e74b763735176979f7facbc2addad754ba43152e1a3f7543914ca96ad9352a",
+  "protocol_sha256": "d2205023e59fa8ab92cf9184a200008673798cc4d49ddcfc1a9e443fb7d99d74",
+  "source_prepared_sha256": "cc5fb9f073c6396713b7a53217ecc6f5cd9a98837bc5f220bab1f04a8f71c9b4",
+  "source_manifest_sha256": "84e9b83fe8562817c1b40b88288f50c430529840c02a16fb2074c4a89c6db948"
+}

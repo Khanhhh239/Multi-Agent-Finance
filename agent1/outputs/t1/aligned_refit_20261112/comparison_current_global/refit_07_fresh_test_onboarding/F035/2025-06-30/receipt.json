@@ -1,0 +1,37 @@
+{
+  "rows": {
+    "fit": 0,
+    "validation": 0,
+    "audit": 28
+  },
+  "local_fit_label_end": null,
+  "status": "insufficient_mature_local_windows",
+  "audit_passed": false,
+  "scratch_fallback": "workspace_history_baseline",
+  "world": "refit_07_fresh_test_onboarding",
+  "firm": "F035",
+  "origin": "2025-06-30",
+  "anchors": 33,
+  "workspace_method": "hist_regularized",
+  "workspace_audit": {
+    "n": 55,
+    "customer_clusters": 26,
+    "candidate_brier4": 0.08380598355646693,
+    "baseline_brier4": 0.12727272727272726,
+    "brier_improvement": 0.04346674371626034,
+    "improvement_ci_low": -0.018758174431059288,
+    "improvement_ci_high": 0.11771895078798157,
+    "ci_reliable": true,
+    "amount_weighted_brier4": 0.12996959891181806,
+    "log_loss4": 0.25597620845135005,
+    "observed_paid_rate4": 0.6727272727272727,
+    "predicted_paid_rate4": 0.7251397669003673,
+    "accepted": true
+  },
+  "workspace_fallback": null,
+  "workspace_warnings": [],
+  "prediction_sha256": "dae0b8d7ccf312885e932ca394d985749515aaebbf790ee54fd423d368561ae5",
+  "models_sha256": "684515a93abda1afe26e93f52a8ed7b31ccb210dcd57799697cc2cea3b916929",
+  "frozen_sha256": "c442b0cb0d1fb18398cb852175fb7f12f8186b59363a7de6b291222f76bcf3b9",
+  "seconds": 6.472680000006221
+}

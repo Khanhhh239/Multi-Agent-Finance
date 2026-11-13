@@ -42,6 +42,32 @@ function explanation() {
       contribution_pp: 7.25, direction: "increase", stability: {status: "stable", reasons: [], min_contribution_pp: 7, max_contribution_pp: 7.5}}]};
 }
 
+test("compact grouped attribution remains distinct from reviewed causal business reasons", () => {
+  const scope = ui(), e = explanation();
+  e.protocol = "compact-t1-grouped-exact-v1";
+  e.method = "exact_grouped_interventional_shapley";
+  e.model_version = "t1-compact-landmark-v1";
+  e.factors = [{feature: "receipt_state", label: "Khoản đã thu và lần thu gần nhất", contribution_pp: 7.25}];
+  e.stability = {checked: false, sample_count: 0};
+  const content = text(scope.renderPaymentExplanation(e, {}, 0.3725));
+  assert.ok(content.includes("Khoản đã thu và lần thu gần nhất"));
+  assert.ok(content.includes("chưa được kiểm tra độ ổn định"));
+  assert.ok(content.includes("điểm phần trăm"));
+  e.factors[0].contribution_pp = 50;
+  assert.ok(text(scope.renderPaymentExplanation(e, {})).includes("không khớp"));
+});
+
+test("landmark18 grouped explanations retain their schema across saved model identifiers", () => {
+  const scope = ui(), e = explanation();
+  Object.assign(e, {protocol: "landmark-grouped-exact-reference-v2", feature_schema: "t1-landmark-18-v2",
+    model_version: "landmark:artifact-id", method: "exact_grouped_interventional_shapley"});
+  e.factors = [{feature: "receipt_state", label: "Trạng thái thu tiền", contribution_pp: 7.25}];
+  assert.ok(text(scope.renderPaymentExplanation(e, {}, .3725)).includes("Trạng thái thu tiền"));
+  e.factors[0].contribution_pp = 9;
+  assert.ok(text(scope.renderPaymentExplanation(e, {}, .3725)).includes("không khớp"));
+  assert.ok(text(scope.renderPaymentExplanation({status:"deferred",reason:"Giới hạn 10 hóa đơn"}, {})).includes("Giới hạn 10 hóa đơn"));
+});
+
 test("business view contains only the final probability and reviewed drivers, with no technical section", () => {
   const scope = ui(), panel = scope.renderPaymentExplanation(explanation(), {model_version: "NEW-MODEL"}), content = text(panel);
   for (const expected of ["37,25%", "2026-11-11", "100.000 VND", "2 tuần", "Giá trị thực", "Góp phần tăng khả năng tất toán trong 4 tuần"]) {

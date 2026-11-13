@@ -1,0 +1,13 @@
+{
+  "global_serving_artifact": "serving_artifact",
+  "refit_promoted": false,
+  "research_integration_accepted": true,
+  "local_continuation_implemented": true,
+  "local_selection_uses_past_only": true,
+  "automatic_tenant_activation": false,
+  "real_pilot_accepted": false,
+  "simulation_paths_default": 1000,
+  "shap_limit_default": 30,
+  "report_sha256": "1986d879e03863ceb1bb5a0cd76fbce560db440b49b8bd1170ad670279648705",
+  "fresh_results_sha256": "d5e4b96641e53a75734f4ffe04999dc4b017d075def4cad3aa12e021ca631b93"
+}

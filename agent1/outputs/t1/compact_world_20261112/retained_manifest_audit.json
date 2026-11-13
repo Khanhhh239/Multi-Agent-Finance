@@ -1,0 +1,446 @@
+{
+  "status": "recipe_and_roles_verified_new_synthetic_cohort",
+  "original_cohort_sha256": "b8448695225b78ca29f202f7167def653aaf515c1adc03fc62d281365eef0155",
+  "original_payload_recovery_required": false,
+  "policy": "User permitted skipping byte-identical historical recovery. New data must keep its own manifests, hashes and evaluation; no fallback is passed off as the original dataset.",
+  "entries": [
+    {
+      "template": "v4_shortpay_4shock_20261028_train_000",
+      "new_role": "train",
+      "kind": "retained_config_replay",
+      "retained_manifest_sha256": "e316bf81f70ec059ff975634c4168ba01afe887ebcb2511992d76a83ce379f2b",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_001",
+      "new_role": "train",
+      "kind": "retained_config_replay",
+      "retained_manifest_sha256": "2d71fa68f619c898e9d2d7606941b09a2fac2b2a9808c7c0ccfd5ec06ebf4ef8",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_002",
+      "new_role": "train",
+      "kind": "retained_config_replay",
+      "retained_manifest_sha256": "afcb03283ce0e853fdc3f0190445bcfed8ab8899ba4e83249fc8f444590a90ea",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_003",
+      "new_role": "train",
+      "kind": "retained_config_replay",
+      "retained_manifest_sha256": "912dca0ed9fcda4f4bd5c4b2bae7d20daeca8bad540df20e38253e072b13a52a",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_validation_000",
+      "new_role": "validation",
+      "kind": "retained_config_replay",
+      "retained_manifest_sha256": "686aceb99299bc45c659bee51bc6ad38631462f37de6d76cce266cdf660cffd4",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_validation_001",
+      "new_role": "validation",
+      "kind": "retained_config_replay",
+      "retained_manifest_sha256": "9f18a17cd9b494acc3642068e1aa159af28d3daf5f00cb26034ffb2d74cd3be0",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_test_000",
+      "new_role": "test",
+      "kind": "retained_config_replay",
+      "retained_manifest_sha256": "7e5378ad023a95609caf8d6a38985c2ca507f61fff30ed3445ea9a9c650d7078",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_test_001",
+      "new_role": "test",
+      "kind": "retained_config_replay",
+      "retained_manifest_sha256": "e0c6a5d58cda3c94326c4522c8671a2030e3bae2f4c51d4cd8535060a42fa6f1",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "practical_v6_20261105_aug_supported_000",
+      "new_role": "train",
+      "kind": "retained_stress_config_replay",
+      "retained_manifest_sha256": "397032e6ec915b6bd97c95b0d8aed1a8c2e5e65a597bb916cbe19f037a2fd651",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "practical_v6_20261105_aug_supported_001",
+      "new_role": "train",
+      "kind": "retained_stress_config_replay",
+      "retained_manifest_sha256": "ae6e93e3e2fa400de92b5f712859fbbbbcf180262777ead8d463e517d4bbc5d5",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_000",
+      "new_role": "train",
+      "kind": "additional_stress",
+      "retained_manifest_sha256": "e316bf81f70ec059ff975634c4168ba01afe887ebcb2511992d76a83ce379f2b",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_001",
+      "new_role": "train",
+      "kind": "additional_stress",
+      "retained_manifest_sha256": "2d71fa68f619c898e9d2d7606941b09a2fac2b2a9808c7c0ccfd5ec06ebf4ef8",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_002",
+      "new_role": "validation",
+      "kind": "additional_stress",
+      "retained_manifest_sha256": "afcb03283ce0e853fdc3f0190445bcfed8ab8899ba4e83249fc8f444590a90ea",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    },
+    {
+      "template": "v4_shortpay_4shock_20261028_train_003",
+      "new_role": "test",
+      "kind": "additional_stress",
+      "retained_manifest_sha256": "912dca0ed9fcda4f4bd5c4b2bae7d20daeca8bad540df20e38253e072b13a52a",
+      "config_matches_retained_manifest": true,
+      "retained_cohort_manifest_hash_matches": true,
+      "retained_role_preserved": true,
+      "sources": {
+        "calibration": {
+          "expected": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "actual": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+          "status": "matched"
+        },
+        "wdi": {
+          "expected": "ad14c83a9ba7a5b7b37b9527789c66b2c7068ae310b64e36657f3dd3426f2c26",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "oxcgrt": {
+          "expected": "fa5c95fa8f5e386517698cdc17581f7e3333348907c57ad8459c877580d0fe79",
+          "actual": null,
+          "status": "missing_explicit_synthetic_fallback"
+        },
+        "shock_design": {
+          "expected": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "actual": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+          "status": "matched"
+        }
+      },
+      "original_table_payloads_available": false
+    }
+  ]
+}

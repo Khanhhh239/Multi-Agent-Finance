@@ -1,0 +1,9 @@
+{
+  "world": "compact_08_train",
+  "role": "train",
+  "rows": 8540,
+  "sha256": "e98e4b2018f8439f237f607cc6252a96479d972ee1a6b82833aa17a8145b3667",
+  "parent_prepared_sha256": "2f875d6ee04f3c2be3deeb645f386aacd8fc5f4d8323b7faf3c9e339c96d6448",
+  "label_changed_rows": 3,
+  "target_contract_sha256": "e4dffe55145f780af4605d929295fbe4c4e64fd1f7652ed17f1b887900a0671b"
+}

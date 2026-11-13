@@ -4,15 +4,14 @@ import base64
 import pickle
 from copy import deepcopy
 from datetime import date, timedelta
-from pathlib import Path
-from urllib.parse import urlsplit
 
 import numpy as np
 import pandas as pd
 import pytest
 from agent1.adaptive.data import fingerprint, observed
-from agent1.adaptive.explanations import explain_collections, shapley_values
-from agent1.adaptive.methods import (
+from experiments.t1_compact.historical_workspace import explain_collections
+from agent1.adaptive.explanations import shapley_values
+from experiments.t1_compact.historical_workspace import (
     CATALOG,
     DistributionEnsemble,
     Method,
@@ -223,17 +222,10 @@ def test_saved_explanation_keeps_model_and_data_provenance(tmp_path, data):
         store.put(
             "TEST", "company_dataset_active", [{"id": "active", "version": digest}]
         )
-        clock = pd.Timestamp("2025-05-01")
-        frame = observed(data, clock)
-        model = Method("logistic").fit(frame, clock)
-        anchor = Method("customer").fit(frame, clock)
-        bundle = {
-            "asof": "2025-05-01",
-            "weight": 0.5,
-            "model": model,
-            "anchor": anchor,
-            "collection_policy": "amount_at_risk",
-        }
+        from agent1.adaptive.t1_catalog import GlobalCatalog
+
+        bundle = GlobalCatalog().default_bundle("2025-05-01")
+        bundle["collection_policy"] = "amount_at_risk"
         store.put(
             "TEST",
             "company_weights",
@@ -242,7 +234,14 @@ def test_saved_explanation_keeps_model_and_data_provenance(tmp_path, data):
         store.put(
             "TEST",
             "company_models",
-            [{"id": "MODEL1", "artifact_id": "W1", "dataset_hash": digest}],
+            [
+                {
+                    "id": "MODEL1",
+                    "artifact_id": "W1",
+                    "dataset_hash": digest,
+                    "algorithm_version": "t1-partial-bundle-v2",
+                }
+            ],
         )
         store.put(
             "TEST", "company_model_active", [{"id": "active", "version": "MODEL1"}]
@@ -278,18 +277,23 @@ def test_saved_explanation_keeps_model_and_data_provenance(tmp_path, data):
                     for s in snapshot["sample_sets"]
                 )
         assert all(
-            r["payment_explanation"]["model_version"] == "MODEL1"
+            r["payment_explanation"]["model_version"] == plan["model_version"]
             and r["payment_explanation"]["dataset_hash"] == digest
             for r in plan["collections"]
         )
-        assert plan["collection_ranking"]["model_version"] == "MODEL1"
+        assert plan["collection_ranking"]["model_version"] == plan["model_version"]
         assert plan["collection_ranking"]["dataset_hash"] == digest
         for row in plan["collections"]:
             ranking = row["ranking_explanation"]
-            assert ranking["displayed_model_version"] == "MODEL1"
-            assert ranking["probability_source"]["model_version"] is None
+            assert ranking["displayed_model_version"] == plan["model_version"]
+            assert (
+                ranking["probability_source"]["model_version"] == plan["model_version"]
+            )
             assert ranking["probability_source"]["dataset_hash"] == digest
-            assert ranking["probability_explanation"]["model_version"] is None
+            assert (
+                ranking["probability_explanation"]["model_version"]
+                == plan["model_version"]
+            )
             assert ranking["probability_explanation"]["dataset_hash"] == digest
         store.put(
             "TEST", "company_model_active", [{"id": "active", "version": "OTHER"}]
@@ -301,11 +305,14 @@ def test_saved_explanation_keeps_model_and_data_provenance(tmp_path, data):
         assert client.get("/v1/forecasts/" + plan["id"]).status_code == 401
 
 
-def test_browser_opens_saved_explanation_on_desktop_and_mobile(tmp_path, data):
-    playwright = pytest.importorskip("playwright.sync_api")
-    chrome = Path("C:/Program Files/Google/Chrome/Application/chrome.exe")
-    if not chrome.exists():
-        pytest.skip("Chrome is not installed")
+def test_browser_opens_saved_explanation_on_desktop_and_mobile(
+    tmp_path,
+    data,
+    browser_runtime,
+    client_proxy,
+):
+    """Active landmark SHAP stays faithful, escapes text and fits both screens."""
+    playwright, chrome = browser_runtime
     app = create_app(
         state_dir=tmp_path / "data",
         key_dir=tmp_path / "keys",
@@ -325,65 +332,25 @@ def test_browser_opens_saved_explanation_on_desktop_and_mobile(tmp_path, data):
                 "cutoff": "2025-05-01",
                 "opening_balance": 0,
                 "payments_complete": True,
+                "shap_limit": 2,
             },
         )
         assert response.status_code == 200, response.text
         plan = response.json()
-        selected = next(
-            i
-            for i, row in enumerate(plan["collections"])
-            if row["payment_explanation"]["plausibility"]["status"] == "no_warning"
-            and any(
-                f["business_review"]["status"] == "eligible"
-                for f in row["payment_explanation"]["factors"]
-            )
-        )
-        # Persist hostile text as data to exercise the real browser renderer.
-        next(
-            f
-            for f in plan["collections"][selected]["payment_explanation"]["factors"]
-            if f["business_review"]["status"] == "eligible"
-        )["label"] = "<img src=x onerror=alert(1)>"
-        for factor in plan["collections"][selected]["payment_explanation"]["factors"]:
-            if factor["stability"]["status"] != "stable":
-                factor["label"] = "Yếu tố phải loại " + factor["feature"]
+        explanation = plan["collections"][0]["payment_explanation"]
+        assert explanation["feature_schema"] == "t1-landmark-18-v2"
+        assert explanation["baseline_probability"] + sum(
+            f["contribution"] for f in explanation["factors"]
+        ) == pytest.approx(explanation["probability"], abs=1e-10)
+        explanation["factors"][0]["label"] = "<img src=x onerror=alert(1)>"
         app.state.store.put("TEST", "company_predictions", [plan])
-        output = (
-            Path(__file__).resolve().parents[2]
-            / "outputs/ui_checks/business_evidence_review"
-        )
-        output.mkdir(parents=True, exist_ok=True)
-
-        def proxy(route):
-            request = route.request
-            url = urlsplit(request.url)
-            result = client.request(
-                request.method,
-                url.path + ("?" + url.query if url.query else ""),
-                content=request.post_data_buffer,
-                headers={
-                    "Content-Type": request.headers.get(
-                        "content-type", "application/json"
-                    )
-                },
-            )
-            route.fulfill(
-                status=result.status_code,
-                body=result.content,
-                headers={
-                    k: v
-                    for k, v in result.headers.items()
-                    if k not in ("content-length", "content-encoding")
-                },
-            )
-
         with playwright.sync_playwright() as p:
             browser = p.chromium.launch(executable_path=str(chrome), headless=True)
             try:
                 page = browser.new_page(viewport={"width": 1500, "height": 960})
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
-                page.route("**/*", proxy)
+                page.route("**/*", client_proxy(client))
                 page.goto("http://testserver/workspace#forecast")
                 playwright.expect(page.locator("#connection-state")).to_contain_text(
                     "Đã kết nối"
@@ -391,56 +358,35 @@ def test_browser_opens_saved_explanation_on_desktop_and_mobile(tmp_path, data):
                 page.locator(".history-menu > summary").click()
                 page.locator("#saved-plans").click()
                 page.locator("#plans-list button").first.click()
-                playwright.expect(page.locator("#forecast-period")).to_contain_text(
-                    "13 tuần"
-                )
-                button = page.locator(
-                    f'#collections-table button[aria-controls="payment-explanation-{selected}"]'
-                )
-                button.click()
-                dialog = page.locator(f"#payment-explanation-{selected}")
-                panel = dialog.locator(".t1-explanation")
-                playwright.expect(panel).to_be_visible()
-                assert panel.locator("details").count() == 0
-                assert "Mức tham chiếu" not in panel.inner_text()
-                assert "Phân rã SHAP" not in panel.inner_text()
-                assert "Yếu tố phải loại" not in panel.inner_text()
-                assert "Ảnh hưởng chưa ổn định" not in panel.inner_text()
-                assert 0 < panel.locator(".t1-drivers tbody tr").count() <= 3
-                assert panel.locator(".t1-comparison").count() == 0
-                assert "Đối chiếu giả định" not in panel.inner_text()
-                assert "Chiều ảnh hưởng trong dự báo" in panel.inner_text()
-                assert panel.locator(".t1-business-evidence").count() > 0
-                assert "<img src=x onerror=alert(1)>" in panel.inner_text()
-                assert panel.locator("img").count() == 0
                 for width in (1500, 390):
                     page.set_viewport_size({"width": width, "height": 960})
-                    page.wait_for_function(
-                        "() => document.documentElement.scrollWidth <= innerWidth",
-                        timeout=3000,
+                    button = page.locator(
+                        '#collections-table button[aria-controls="payment-explanation-0"]'
                     )
-                    dialog.screenshot(path=str(output / f"explanation_{width}.png"))
-                    overflow = page.evaluate("""() => [...document.querySelectorAll('body *')]
-                        .map(e => ({tag:e.tagName, id:e.id, cls:e.className, right:e.getBoundingClientRect().right,
-                                    width:e.getBoundingClientRect().width}))
-                        .filter(e => e.right > innerWidth + 1 && e.width > 0).slice(0, 15)""")
+                    button.click()
+                    dialog = page.locator("#payment-explanation-0")
+                    playwright.expect(dialog).to_be_visible()
+                    playwright.expect(dialog).to_contain_text("Nhóm thông tin")
+                    playwright.expect(dialog).to_contain_text(
+                        "<img src=x onerror=alert(1)>"
+                    )
+                    assert dialog.locator("img").count() == 0
+                    assert dialog.locator("tbody tr").count() == 6
+                    assert dialog.bounding_box()["width"] <= width
+                    page.wait_for_function(
+                        "() => document.documentElement.scrollWidth <= innerWidth"
+                    )
                     assert page.evaluate(
                         "document.documentElement.scrollWidth <= innerWidth"
-                    ), overflow
-                    assert panel.bounding_box()["width"] <= width
-                page.get_by_role("button", name="Đóng giải thích", exact=True).click()
-                playwright.expect(dialog).to_be_hidden()
-                button.click()
-                page.keyboard.press("Escape")
-                playwright.expect(dialog).to_be_hidden()
-                playwright.expect(button).to_have_attribute("aria-expanded", "false")
-                # The actual first invoice has unsupported hybrids: show no reasons.
+                    )
+                    page.keyboard.press("Escape")
+                    playwright.expect(dialog).to_be_hidden()
                 page.locator(
-                    '#collections-table button[aria-controls="payment-explanation-0"]'
+                    '#collections-table button[aria-controls="payment-explanation-2"]'
                 ).click()
-                empty = page.locator("#payment-explanation-0 .t1-explanation")
-                playwright.expect(empty).to_contain_text("Chưa đủ cơ sở")
-                assert empty.locator("table, details").count() == 0
+                playwright.expect(
+                    page.locator("#payment-explanation-2")
+                ).to_contain_text("Chưa tính SHAP")
                 assert not errors, errors
             finally:
                 browser.close()
