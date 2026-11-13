@@ -116,7 +116,7 @@ def load_pack(path: Path) -> Pack:
         version=int(data.get('pack_version', 1)), tax_code=prof['tax_code'], legal_name=prof['legal_name'],
         registered_address=prof.get('registered_address'), industry=tuple(prof.get('industry', ())),
         vat_method=prof.get('vat_method', 'DEDUCTION'), filing_period=prof.get('filing_period', 'MONTH'),
-        bank_formats=[BankFormat(**b) for b in data.get('bank_formats', [])], thresholds=thresholds,
+        bank_formats=_bank_formats(data.get('bank_formats', [])), thresholds=thresholds,
         policies=[Policy(p['id'], p['flag'], Decimal(str(p['min_gross'])) if p.get('min_gross') is not None else None,
                          tuple(p.get('description_contains', ())), tuple(p.get('seller_tax_ids', ()))) for p in data.get('policies', [])],
         reference_lists=lists, portal_columns=data.get('portal_columns'), simulated=bool(data.get('simulated', False)),
@@ -132,6 +132,28 @@ def _fy_month(v) -> int:
     if not 1 <= m <= 12:
         raise PackError('tháng kết thúc năm tài chính phải là số từ 1 đến 12')
     return m
+
+
+def _bank_formats(values):
+    if not isinstance(values, list):
+        raise PackError('Mẫu sao kê phải là danh sách.')
+    out, names = [], set()
+    for value in values:
+        try:
+            fmt = BankFormat(**value)
+            if (not isinstance(fmt.name, str) or not fmt.name.strip() or fmt.name in names
+                    or not isinstance(fmt.columns, dict) or not {'date', 'debit'} <= set(fmt.columns)
+                    or any(not isinstance(v, str) or not v.strip() for v in fmt.columns.values())
+                    or not isinstance(fmt.date_format, str) or not fmt.date_format
+                    or not isinstance(fmt.delimiter, str) or len(fmt.delimiter) != 1
+                    or not isinstance(fmt.thousands, str) or not isinstance(fmt.decimal, str)
+                    or fmt.thousands == fmt.decimal):
+                raise ValueError('invalid bank layout')
+        except (TypeError, ValueError):
+            raise PackError('Mẫu sao kê cần tên riêng, cột ngày/tiền ra, định dạng ngày và dấu phân cách hợp lệ.')
+        names.add(fmt.name)
+        out.append(fmt)
+    return out
 
 
 def _days_off(values) -> tuple:
@@ -158,6 +180,9 @@ def _ai_categories(values) -> tuple:
 
 def load_decisions(path: Path) -> dict:
     """Human decisions recorded by the reviewer: invoice key -> decision record (evidence reference is mandatory)."""
+    from .decisions import projection
+    if (Path(path).parent / 'decisions_v2.json').exists():
+        return projection(Path(path).parent)
     if not Path(path).exists():
         return {}
     out = {}

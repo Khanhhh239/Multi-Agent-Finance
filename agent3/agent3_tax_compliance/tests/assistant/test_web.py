@@ -1,4 +1,4 @@
-from support import managed_company, pack_headers
+from support import managed_company, pack_headers, decide
 """HTTP layer of the local app: workspaces, uploads, decisions, pack invariants, law endpoints. No network, no model."""
 import io
 import json
@@ -26,11 +26,12 @@ def test_demo_run_report_and_not_claimed_decision(client):
     assert rep['totals']['at_risk_invoices'] > 0
     assert client.get(f'/api/workspaces/{wid}/report').json()['totals'] == rep['totals']
     dup = next(it for it in rep['items'] if it['code'] == 'R05_DUPLICATE')
-    bad = client.post(f'/api/workspaces/{wid}/decisions', json=dict(invoice_key=dup['invoice_keys'][0], action='IGNORE', evidence='x', by='y'))
+    bad = decide(client, wid, dict(invoice_key=dup['invoice_keys'][0], action='IGNORE', evidence='x', by='y'))
     assert bad.status_code == 422
-    ok = client.post(f'/api/workspaces/{wid}/decisions', json=dict(invoice_key=dup['invoice_keys'][0], action='NOT_CLAIMED',
+    ok = decide(client, wid, dict(invoice_key=dup['invoice_keys'][0], action='NOT_CLAIMED',
                                                                   evidence='Bản trùng', by='Kế toán trưởng')).json()
-    assert float(ok['totals']['at_risk_vat']) < float(rep['totals']['at_risk_vat'])
+    # A duplicate copy never inflates the monetary total in the first place.
+    assert ok['saved'] and ok['totals']['at_risk_vat'] == rep['totals']['at_risk_vat']
 
 
 def test_pack_can_only_tighten(client):
@@ -90,7 +91,7 @@ def test_decision_suggestion_comes_from_an_earlier_decision_on_the_same_seller(c
     first, second = pair[0], next(x for x in pair if x['invoice_keys'][0] != pair[0]['invoice_keys'][0])
     url = f'/api/workspaces/{wid}/decisions/suggest?key={second["invoice_keys"][0]}&code={second["code"]}'
     assert client.get(url).json()['suggestion'] is None
-    client.post(f'/api/workspaces/{wid}/decisions', json=dict(invoice_key=first['invoice_keys'][0], action='NOT_CLAIMED', evidence='trả tiền mặt', by='kt'))
+    decide(client, wid, dict(invoice_key=first['invoice_keys'][0], action='NOT_CLAIMED', evidence='trả tiền mặt', by='kt')).raise_for_status()
     s = client.get(url).json()['suggestion']
     assert s['action'] == 'NOT_CLAIMED' and 'cùng người bán' in s['because']
 

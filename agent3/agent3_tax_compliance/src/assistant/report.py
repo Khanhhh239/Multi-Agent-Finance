@@ -31,6 +31,8 @@ def to_json(report: Report) -> str:
 
 
 def money(v) -> str:
+    if v is None:
+        return 'Chưa đủ dữ liệu'
     return f'{Decimal(v):,.0f}'.replace(',', '.') + ' đ'
 
 
@@ -128,7 +130,10 @@ def write(report: Report, out_dir: Path) -> dict:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = dict(json=out_dir / 'report.json', markdown=out_dir / 'report.md', html=out_dir / 'report.html')
-    paths['json'].write_text(to_json(report), encoding='utf-8')
-    paths['markdown'].write_text(to_markdown(report), encoding='utf-8')
-    paths['html'].write_text(to_html(report), encoding='utf-8')
+    # Render everything before publishing; JSON is the commit marker read by the API.
+    content = dict(json=to_json(report), markdown=to_markdown(report), html=to_html(report))
+    for kind in ('markdown', 'html', 'json'):
+        tmp = paths[kind].with_suffix(paths[kind].suffix + '.tmp')
+        tmp.write_text(content[kind], encoding='utf-8')
+        tmp.replace(paths[kind])
     return paths

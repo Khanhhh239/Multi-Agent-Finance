@@ -127,7 +127,7 @@ def test_deadlines_and_penalty_and_data_status(ctx):
     a = ask(ctx, 'hạn nộp tờ khai', 'deadlines')
     assert a['rows'] and 'Hạn gần nhất' in a['text']
     a = ask(ctx, 'nếu bị phát hiện thì phạt bao nhiêu', 'penalty_exposure')
-    assert 'phạt thêm tối đa' in a['text'] or 'không có khoản nào' in a['text']
+    assert 'giả định' in a['text'] and 'Chưa xác nhận' in a['text']
     a = ask(ctx, 'đã nạp những dữ liệu gì', 'data_status')
     assert f'{ctx.report.meta["counts"]["purchase_invoices"]} hóa đơn mua vào' in a['text']
 
@@ -165,7 +165,7 @@ class FakeEmbed:
         for t in texts:
             v = np.zeros(4096, dtype=np.float32)
             for w in fold(t).split():
-                v[hash(w) % 4096] += 1
+                v[int.from_bytes(__import__('hashlib').sha256(w.encode()).digest()[:4], 'little') % 4096] += 1
             rows.append(v / max(np.linalg.norm(v), 1e-9))
         return np.vstack(rows)
 

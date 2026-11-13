@@ -12,7 +12,9 @@ def scalar(service, auth, question, metric):
 
 
 def test_f01_net_revenue_excludes_opening_and_closing(finance_service, auth):
-    assert scalar(finance_service, auth, "Doanh thu thuần tháng 10/2026", "net_revenue") == Decimal(90)
+    assert scalar(finance_service, auth, "Doanh thu thuần tháng 10/2026", "net_revenue") == Decimal(
+        90
+    )
 
 
 @pytest.mark.parametrize(
@@ -34,7 +36,9 @@ def test_finance_catalog_values(finance_service, auth, question, metric, expecte
 
 
 def test_f04_gross_profit(finance_service, auth):
-    assert scalar(finance_service, auth, "Lợi nhuận gộp tháng 10/2026", "gross_profit") == Decimal(30)
+    assert scalar(finance_service, auth, "Lợi nhuận gộp tháng 10/2026", "gross_profit") == Decimal(
+        30
+    )
 
 
 def test_f05_gross_margin_is_ratio_of_sums(finance_service, auth):
@@ -43,11 +47,15 @@ def test_f05_gross_margin_is_ratio_of_sums(finance_service, auth):
 
 
 def test_f07_net_profit(finance_service, auth):
-    assert scalar(finance_service, auth, "Lợi nhuận sau thuế tháng 10/2026", "net_profit") == Decimal(11)
+    assert scalar(
+        finance_service, auth, "Lợi nhuận sau thuế tháng 10/2026", "net_profit"
+    ) == Decimal(11)
 
 
 def test_f09_cash_snapshot_includes_opening(finance_service, auth):
-    assert scalar(finance_service, auth, "Số dư tiền cuối tháng 10/2026", "cash_and_equivalents") == Decimal(1045)
+    assert scalar(
+        finance_service, auth, "Số dư tiền cuối tháng 10/2026", "cash_and_equivalents"
+    ) == Decimal(1045)
 
 
 def test_f10_ar_snapshot(finance_service, auth):

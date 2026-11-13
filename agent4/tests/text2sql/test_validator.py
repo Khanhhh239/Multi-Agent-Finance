@@ -13,13 +13,32 @@ from agent4.text2sql.models import (
 from agent4.text2sql.validation import SemanticValidator
 
 
-def draft(metric="net_revenue", *, dimensions=None, view="mgmt", time=None, operation="aggregate", filters=None, top_k=None, sort=None):
+def draft(
+    metric="net_revenue",
+    *,
+    dimensions=None,
+    view="mgmt",
+    time=None,
+    operation="aggregate",
+    filters=None,
+    top_k=None,
+    sort=None,
+):
     return SemanticPlanDraft(
-        plan_version="1.0", status="ready", metric_ids=[metric],
+        plan_version="1.0",
+        status="ready",
+        metric_ids=[metric],
         time=time or TimeDraft.range(date(2026, 10, 1), date(2026, 10, 31)),
-        dimensions=dimensions or [], filters=filters or [], view=view, operation=operation,
-        sort=sort, top_k=top_k, comparison=None, question_for_user=None,
-        unresolved_slots=[], reason_code=None,
+        dimensions=dimensions or [],
+        filters=filters or [],
+        view=view,
+        operation=operation,
+        sort=sort,
+        top_k=top_k,
+        comparison=None,
+        question_for_user=None,
+        unresolved_slots=[],
+        reason_code=None,
     )
 
 
@@ -33,7 +52,8 @@ def test_v05_wrong_view(catalog, auth):
     with pytest.raises(PlanRejected) as caught:
         SemanticValidator(catalog).validate(
             draft(
-                "cash_and_equivalents", view="tax",
+                "cash_and_equivalents",
+                view="tax",
                 time=TimeDraft.as_of_date(date(2026, 10, 31)),
             ),
             auth,
@@ -42,7 +62,9 @@ def test_v05_wrong_view(catalog, auth):
 
 
 def test_v06_view_permission(catalog):
-    auth = AuthContext(user_id="u", tenant_id="t", roles=frozenset(), allowed_views=frozenset({"mgmt"}))
+    auth = AuthContext(
+        user_id="u", tenant_id="t", roles=frozenset(), allowed_views=frozenset({"mgmt"})
+    )
     with pytest.raises(Forbidden):
         SemanticValidator(catalog).validate(draft("taxable_income", view="tax"), auth)
 
@@ -51,9 +73,11 @@ def test_v07_unsupported_group(catalog, auth):
     with pytest.raises(PlanRejected) as caught:
         SemanticValidator(catalog).validate(
             draft(
-                "total_assets", dimensions=["branch"],
+                "total_assets",
+                dimensions=["branch"],
                 time=TimeDraft.as_of_date(date(2026, 10, 31)),
-            ), auth
+            ),
+            auth,
         )
     assert caught.value.code == "unsupported_grouping"
 
@@ -72,8 +96,14 @@ def test_v09_rank_is_bounded_by_contract():
 def test_v10_sort_metric_must_be_selected(catalog, auth):
     with pytest.raises(PlanRejected) as caught:
         SemanticValidator(catalog).validate(
-            draft("net_revenue", dimensions=["month"], operation="rank", top_k=5,
-                  sort=SortDraft(metric_id="gross_profit", direction="desc")), auth
+            draft(
+                "net_revenue",
+                dimensions=["month"],
+                operation="rank",
+                top_k=5,
+                sort=SortDraft(metric_id="gross_profit", direction="desc"),
+            ),
+            auth,
         )
     assert caught.value.code == "invalid_sort"
 

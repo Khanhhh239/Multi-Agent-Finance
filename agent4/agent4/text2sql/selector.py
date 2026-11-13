@@ -36,18 +36,49 @@ class OfflineSemanticSelector:
 
     def select(self, question: str) -> SemanticPlanDraft:
         normalized = _fold(question)
-        if any(term in normalized for term in ("drop table", "delete from", "insert into", "mat khau", "schema", "bang nao")):
+        if any(
+            term in normalized
+            for term in (
+                "drop table",
+                "delete from",
+                "insert into",
+                "mat khau",
+                "schema",
+                "bang nao",
+            )
+        ):
             return self._unsupported("out_of_domain")
-        if any(term in normalized for term in ("du bao", "forecast", "ty gia", "gia co phieu", "bitcoin")):
+        if any(
+            term in normalized
+            for term in ("du bao", "forecast", "ty gia", "gia co phieu", "bitcoin")
+        ):
             return self._unsupported("unsupported_metric")
         if re.search(r"\b(loi nhuan|lai|loi)\b", normalized) and not any(
-            qualifier in normalized for qualifier in ("gop", "rong", "sau thue", "truoc thue", "hoat dong", "bien", "ebitda")
+            qualifier in normalized
+            for qualifier in (
+                "gop",
+                "rong",
+                "sau thue",
+                "truoc thue",
+                "hoat dong",
+                "bien",
+                "ebitda",
+            )
         ):
-            return self._clarify("Bạn muốn lợi nhuận gộp, lợi nhuận hoạt động hay lợi nhuận sau thuế?", "metric_variant")
-        if "cong no" in normalized and not any(word in normalized for word in ("phai thu", "phai tra", "khach", "nha cung cap")):
+            return self._clarify(
+                "Bạn muốn lợi nhuận gộp, lợi nhuận hoạt động hay lợi nhuận sau thuế?",
+                "metric_variant",
+            )
+        if "cong no" in normalized and not any(
+            word in normalized for word in ("phai thu", "phai tra", "khach", "nha cung cap")
+        ):
             return self._clarify("Bạn muốn xem công nợ phải thu hay phải trả?", "metric_variant")
-        if "dong tien" in normalized and not any(word in normalized for word in ("thuan", "thu chi", "theo nhom")):
-            return self._clarify("Bạn muốn số dư tiền hay dòng tiền thuần trong kỳ?", "metric_variant")
+        if "dong tien" in normalized and not any(
+            word in normalized for word in ("thuan", "thu chi", "theo nhom")
+        ):
+            return self._clarify(
+                "Bạn muốn số dư tiền hay dòng tiền thuần trong kỳ?", "metric_variant"
+            )
 
         metric_ids = self._metric_ids(normalized, question)
         if not metric_ids:
@@ -64,7 +95,11 @@ class OfflineSemanticSelector:
             for phrase in ("khung thue", "so thue", "theo thue", "tax view", "tax basis")
         )
         tax_default = all(metric.default_view == "tax" for metric in metrics)
-        view = "tax" if (explicit_tax_view or tax_default) and all("tax" in m.views for m in metrics) else None
+        view = (
+            "tax"
+            if (explicit_tax_view or tax_default) and all("tax" in m.views for m in metrics)
+            else None
+        )
         top_match = re.search(r"\btop\s*(\d+)\b", normalized)
         top_k = min(int(top_match.group(1)), 100) if top_match else None
         if any(word in normalized for word in ("lon nhat", "nhieu nhat", "top")) and top_k is None:
@@ -72,10 +107,20 @@ class OfflineSemanticSelector:
         operation = "rank" if top_k else ("timeseries" if dimensions else "aggregate")
         sort = SortDraft(metric_id=metric_ids[0], direction="desc") if top_k else None
         return SemanticPlanDraft(
-            plan_version="1.0", status="ready", metric_ids=metric_ids,
-            time=time, dimensions=dimensions,
-            filters=[], view=view, operation=operation, sort=sort, top_k=top_k,
-            comparison=None, question_for_user=None, unresolved_slots=[], reason_code=None,
+            plan_version="1.0",
+            status="ready",
+            metric_ids=metric_ids,
+            time=time,
+            dimensions=dimensions,
+            filters=[],
+            view=view,
+            operation=operation,
+            sort=sort,
+            top_k=top_k,
+            comparison=None,
+            question_for_user=None,
+            unresolved_slots=[],
+            reason_code=None,
         )
 
     def _metric_ids(self, normalized: str, original: str) -> list[str]:
@@ -86,10 +131,16 @@ class OfflineSemanticSelector:
             (("doanh thu truoc giam tru", "doanh thu gop"), "gross_revenue"),
             (("loi nhuan sau thue", "lai rong", "loi nhuan rong"), "net_profit"),
             (("bien loi nhuan rong", "bien lai rong", "net margin"), "net_margin_pct"),
-            (("so du tien", "con bao nhieu tien", "tien con bao nhieu", "tien mat va tien gui"), "cash_and_equivalents"),
+            (
+                ("so du tien", "con bao nhieu tien", "tien con bao nhieu", "tien mat va tien gui"),
+                "cash_and_equivalents",
+            ),
             (("dong tien thuan",), "net_cash_flow"),
             (("tong tai san",), "total_assets"),
-            (("cong no phai thu theo khach", "khach hang nao no", "top khach hang no"), "ar_by_customer"),
+            (
+                ("cong no phai thu theo khach", "khach hang nao no", "top khach hang no"),
+                "ar_by_customer",
+            ),
             (("tuoi no", "ar aging"), "ar_aging"),
             (("phai thu qua han", "no qua han"), "overdue_receivables"),
             (("chung tu khong can doi", "lech no co"), "unbalanced_journals"),
@@ -103,7 +154,11 @@ class OfflineSemanticSelector:
             if any(phrase in normalized for phrase in phrases):
                 found.append(metric_id)
         # Keep intentional multi-metric questions, but remove amount/% confusion.
-        if "gross_margin_pct" in found and "gross_profit" in found and "loi nhuan gop va" not in normalized:
+        if (
+            "gross_margin_pct" in found
+            and "gross_profit" in found
+            and "loi nhuan gop va" not in normalized
+        ):
             found.remove("gross_profit")
         if not found:
             candidates = self.lexical.retrieve(original, 1)
@@ -122,12 +177,18 @@ class OfflineSemanticSelector:
             (("theo khoan muc",), "cost_category"),
             (("theo phong ban",), "department"),
         ]
-        return [dimension for phrases, dimension in mapping if any(p in normalized for p in phrases)]
+        return [
+            dimension for phrases, dimension in mapping if any(p in normalized for p in phrases)
+        ]
 
     def _time(self, normalized: str, period_type: str) -> TimeDraft | None:
         explicit_date = re.search(r"(?:ngay|as.of)\s*(\d{1,2})[/-](\d{1,2})[/-](\d{4})", normalized)
         if explicit_date:
-            value = date(int(explicit_date.group(3)), int(explicit_date.group(2)), int(explicit_date.group(1)))
+            value = date(
+                int(explicit_date.group(3)),
+                int(explicit_date.group(2)),
+                int(explicit_date.group(1)),
+            )
             if period_type == "snapshot":
                 return TimeDraft.as_of_date(value)
             return TimeDraft.range(value, value)
@@ -137,41 +198,85 @@ class OfflineSemanticSelector:
             start = date(year, 3 * (q - 1) + 1, 1)
             end_month = q * 3
             end = date(year, end_month, calendar.monthrange(year, end_month)[1])
-            return TimeDraft.as_of_date(end) if period_type == "snapshot" else TimeDraft.range(start, end)
+            return (
+                TimeDraft.as_of_date(end)
+                if period_type == "snapshot"
+                else TimeDraft.range(start, end)
+            )
         month = re.search(r"thang\s*(1[0-2]|0?[1-9])(?:\s*/\s*|\s+nam\s+)(20\d{2})", normalized)
         if month:
             start, end = _month_range(int(month.group(2)), int(month.group(1)))
-            return TimeDraft.as_of_date(end) if period_type == "snapshot" else TimeDraft.range(start, end)
+            return (
+                TimeDraft.as_of_date(end)
+                if period_type == "snapshot"
+                else TimeDraft.range(start, end)
+            )
         year = re.search(r"nam\s*(20\d{2})", normalized)
         if year:
             y = int(year.group(1))
-            return TimeDraft.as_of_date(date(y, 12, 31)) if period_type == "snapshot" else TimeDraft.range(date(y, 1, 1), date(y, 12, 31))
+            return (
+                TimeDraft.as_of_date(date(y, 12, 31))
+                if period_type == "snapshot"
+                else TimeDraft.range(date(y, 1, 1), date(y, 12, 31))
+            )
         if "thang nay" in normalized:
             start, end = _month_range(self.today.year, self.today.month)
             end = min(end, self.today)
-            return TimeDraft.as_of_date(end) if period_type == "snapshot" else TimeDraft.range(start, end)
+            return (
+                TimeDraft.as_of_date(end)
+                if period_type == "snapshot"
+                else TimeDraft.range(start, end)
+            )
         if "thang truoc" in normalized:
             previous = self.today.replace(day=1) - timedelta(days=1)
             start, end = _month_range(previous.year, previous.month)
-            return TimeDraft.as_of_date(end) if period_type == "snapshot" else TimeDraft.range(start, end)
+            return (
+                TimeDraft.as_of_date(end)
+                if period_type == "snapshot"
+                else TimeDraft.range(start, end)
+            )
         if any(word in normalized for word in ("hien tai", "bay gio", "cuoi ky")):
-            return TimeDraft.as_of_date(self.today) if period_type == "snapshot" else TimeDraft.range(date(self.today.year, 1, 1), self.today)
+            return (
+                TimeDraft.as_of_date(self.today)
+                if period_type == "snapshot"
+                else TimeDraft.range(date(self.today.year, 1, 1), self.today)
+            )
         return None
 
     @staticmethod
     def _clarify(question: str, slot: str) -> SemanticPlanDraft:
         return SemanticPlanDraft(
-            plan_version="1.0", status="needs_clarification", metric_ids=[],
+            plan_version="1.0",
+            status="needs_clarification",
+            metric_ids=[],
             time=TimeDraft.none(),
-            dimensions=[], filters=[], view=None, operation=None, sort=None, top_k=None,
-            comparison=None, question_for_user=question, unresolved_slots=[slot], reason_code=None,
+            dimensions=[],
+            filters=[],
+            view=None,
+            operation=None,
+            sort=None,
+            top_k=None,
+            comparison=None,
+            question_for_user=question,
+            unresolved_slots=[slot],
+            reason_code=None,
         )
 
     @staticmethod
     def _unsupported(reason: str) -> SemanticPlanDraft:
         return SemanticPlanDraft(
-            plan_version="1.0", status="unsupported", metric_ids=[],
+            plan_version="1.0",
+            status="unsupported",
+            metric_ids=[],
             time=TimeDraft.none(),
-            dimensions=[], filters=[], view=None, operation=None, sort=None, top_k=None,
-            comparison=None, question_for_user=None, unresolved_slots=[], reason_code=reason,
+            dimensions=[],
+            filters=[],
+            view=None,
+            operation=None,
+            sort=None,
+            top_k=None,
+            comparison=None,
+            question_for_user=None,
+            unresolved_slots=[],
+            reason_code=reason,
         )

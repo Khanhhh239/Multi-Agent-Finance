@@ -1,18 +1,5 @@
-from .candidate_generator import (
-    CandidateGenerationResult,
-    CandidateGenerator,
-    FullCatalogCandidateGenerator,
-)
-from .dense import DenseRetriever
-from .embedding import EmbeddingProvider, HashingEmbeddingProvider
+"""Lexical retrieval used by the platform demo selector."""
+
 from .lexical import LexicalRetriever
 
-__all__ = [
-    "CandidateGenerationResult",
-    "CandidateGenerator",
-    "DenseRetriever",
-    "EmbeddingProvider",
-    "FullCatalogCandidateGenerator",
-    "HashingEmbeddingProvider",
-    "LexicalRetriever",
-]
+__all__ = ["LexicalRetriever"]

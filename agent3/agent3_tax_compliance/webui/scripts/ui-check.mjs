@@ -9,8 +9,8 @@ const root = fileURLToPath(new URL('../../src/assistant/static/', import.meta.ur
 const output = fileURLToPath(new URL('../.qa/', import.meta.url));
 fs.mkdirSync(output, { recursive: true });
 const invoices = Array.from({ length: 65 }, (_, n) => ({ key: 'invoice-' + n, number: String(n + 1).padStart(6, '0'), template: '1', symbol: 'C26TAA', role: n % 3 ? 'PURCHASE' : 'SALE', issue_date: '2026-09-15', seller_name: 'Nhà cung cấp mô phỏng ' + n, seller_tax_id: '0109999982', buyer_name: 'Doanh nghiệp mô phỏng', gross: '11000000', vat: '1000000', guard_errors: [], signed: true, descriptions: ['Hàng hóa thử nghiệm'], file: n + '.xml' }));
-const items = invoices.map((inv, n) => ({ code: 'R02_PAYMENT', invoice_keys: [inv.key], title: 'Cần bổ sung chứng từ thanh toán', status: n % 2 ? 'REVIEW' : 'AT_RISK', amount: '1000000', detail: 'Chưa có chứng từ thanh toán phù hợp.', action: 'Kiểm tra và bổ sung chứng từ.', basis: ['Căn cứ mô phỏng, không dùng để tư vấn thuế'] }));
-const report = { meta: { as_of: '2026-10-15', period: ['2026-09-01', '2026-09-30'] }, invoices, items, matches: [], transactions: [], calendar: [], totals: { at_risk_vat: '33000000', at_risk_invoices: 33, penalty_estimate: '6600000', penalty_rate: .2, review_vat: '32000000', review_invoices: 32, opportunity_vat: '0' } };
+const items = invoices.map((inv, n) => ({ finding_id:'finding-'+n, txn_ids:[], code: 'R02_PAYMENT', invoice_keys: [inv.key], title: 'Cần bổ sung chứng từ thanh toán', status: n % 2 ? 'REVIEW' : 'AT_RISK', amount: '1000000', detail: 'Chưa có chứng từ thanh toán phù hợp.', action: 'Kiểm tra và bổ sung chứng từ.', basis: ['Căn cứ mô phỏng, không dùng để tư vấn thuế'] }));
+const report = { meta: { schema_version:2, report_revision:'report-v2', as_of: '2026-10-15', period: ['2026-09-01', '2026-09-30'] }, invoices, items, matches: [], transactions: [], calendar: [], totals: { series:[], at_risk_vat: '33000000', at_risk_invoices: 33, penalty_estimate: '6600000', penalty_rate: .2, review_vat: '32000000', review_invoices: 32, opportunity_vat: '0' } };
 const workspaces = ['demo-a','demo-b'].map((id) => ({ id, name: 'Công ty mô phỏng ' + id.toUpperCase(), tax_code: '0109999982', simulated: true, files: { purchase_xml: 65, sales_xml: 0, bank: 0, portal_list: 0 } }));
 let asks = 0, decisions = 0, reportMode = 'normal', activeWorkspace = 'demo-a', contextState = 'ready', adminLoggedIn = false, saveError = false, savedPack = null;
 const profileData = () => ({ legal_name: 'Công ty mô phỏng ' + activeWorkspace.toUpperCase(), tax_code: '0109999982', registered_address:'Địa chỉ kiểm thử', industry:['5610 Nhà hàng'], vat_method:'DEDUCTION', filing_period:'MONTH', fiscal_year_end_month:12 });
@@ -40,6 +40,7 @@ const server = http.createServer(async (req, res) => {
     else if (url.pathname.endsWith('/ai/explain')) { res.statusCode = 503; data = { detail:'Mô hình chưa sẵn sàng' }; }
     else if (url.pathname.endsWith('/exposure')) data = {};
     else if (url.pathname.endsWith('/decisions/suggest')) data = { suggestion: null };
+    else if (url.pathname.endsWith('/decisions') && req.method === 'GET') { res.setHeader('ETag', '"decisions-v2"'); data={schema_version:2,events:[]}; }
     else if (url.pathname.endsWith('/decisions') || url.pathname.endsWith('/decisions/bulk')) { decisions++; res.statusCode = 422; data = { detail: 'Lỗi lưu mô phỏng; dữ liệu biểu mẫu được giữ' }; }
     else if (url.pathname.endsWith('/ask')) { asks++; await new Promise((r) => setTimeout(r, 600)); data = { text: 'Câu trả lời mô phỏng ' + asks, branch: 'DATA', citations: [], facts: [], links: [] }; }
     else if (url.pathname.endsWith('/chat/suggestions')) data = ['Có bao nhiêu hóa đơn?', 'Hóa đơn nào cần xem?'];
@@ -62,7 +63,7 @@ const origin = 'http://127.0.0.1:' + server.address().port;
 if (process.argv.includes('--serve')) { console.log(origin); } else {
   const chromePath = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
   const profile = path.join(output, 'chrome-test-' + Date.now());
-  const chrome = spawn(chromePath, ['--headless=new','--no-first-run','--no-default-browser-check','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'], { stdio:'ignore', windowsHide:true });
+  const chrome = spawn(chromePath, ['--headless=new','--disable-gpu','--disable-renderer-backgrounding','--no-first-run','--no-default-browser-check','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'], { stdio:'ignore', windowsHide:true });
   let ws;
   const sleep = (n) => new Promise((r) => setTimeout(r,n));
   const errors = [], results = [];
@@ -95,7 +96,7 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     await send('Page.navigate',{url:origin+'/#/?dn=demo-a'});
     await wait('document.querySelector("#run")');
     check('overview workspace', await evaluate('document.querySelector("h1").textContent.includes("DEMO-A")'));
-    check('shared theme follows product stylesheet',await evaluate('[...document.querySelectorAll("link[rel=stylesheet]")].at(-1).href.includes("platform-theme")'));
+    check('product stylesheet follows shared theme',await evaluate('[...document.querySelectorAll("link[rel=stylesheet]")].at(-1).href.includes("agent3-product")'));
     const widths=[1440,1024,768,390,320];
     for(const width of widths){
       await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});

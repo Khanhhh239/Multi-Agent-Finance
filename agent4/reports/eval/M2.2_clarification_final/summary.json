@@ -1,0 +1,406 @@
+{
+  "metadata": {
+    "runner_version": "contract-eval.v1",
+    "dataset_sha256": "094fb090bff62ee8c83045eed3780c371ec3f4cf38095f274237c02a6b5b88d5",
+    "catalog_sha256": "cd5171cbfa9099386d6f583b53ee32769c7d9a47019784f4b894fd28e73e3040",
+    "ids": [
+      "BM-076",
+      "BM-077",
+      "BM-078",
+      "BM-079",
+      "BM-080",
+      "BM-081",
+      "BM-082",
+      "BM-083",
+      "BM-084",
+      "BM-085",
+      "BM-086",
+      "BM-087",
+      "BM-088",
+      "BM-089",
+      "BM-090"
+    ],
+    "split": "dev",
+    "mode": "e2e",
+    "ks": [
+      5,
+      10
+    ],
+    "abs_tol": "0",
+    "rel_tol": "0",
+    "seed": 20261101,
+    "adapter_timeout_s": 60.0,
+    "input_price": "None",
+    "output_price": "None",
+    "comparison_key": "7a50ddbce54b62892b92fccf399b1023b5d86cf3dd8d5e051b48179fdd040078",
+    "git": {
+      "commit": "bdc5a4c0eb6d8803cf8257261919667116b34b43",
+      "dirty": true
+    },
+    "timestamp_utc": "2026-11-10T03:29:44.416788+00:00",
+    "dataset_version": "contract-benchmark-v2.0",
+    "dataset_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/data/eval/contract_benchmark_questions.jsonl",
+    "config_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/config/selection.yaml",
+    "config_sha256": "5496934eb5b775b3aa811a81b68eca8e0943203c99369b9110a2742f6f8d27dd",
+    "configuration": {
+      "version": "1",
+      "prompt_version": "metric-selection-v1-e0",
+      "embedding": {
+        "provider": "hashing",
+        "model": "hashing-v1",
+        "model_version": "1",
+        "dimensions": 768,
+        "base_url": "http://localhost:11434",
+        "normalize": true,
+        "timeout_s": 30.0,
+        "cache_enabled": true,
+        "cache_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/.cache/metric_selection_index.npz"
+      },
+      "retrieval": {
+        "mode": "full_catalog",
+        "dense_enabled": true,
+        "lexical_enabled": true,
+        "fusion_method": "rrf",
+        "dense_top_k": 15,
+        "lexical_top_k": 15,
+        "fusion_top_k": 20,
+        "rrf_k": 60,
+        "mention_retrieval_enabled": false
+      },
+      "expansion": {
+        "enabled": true,
+        "max_hops": 1,
+        "max_candidates": 30,
+        "relationship_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/config/metric_relationships.yaml"
+      },
+      "reranking": {
+        "metadata_enabled": true,
+        "cross_encoder_enabled": false,
+        "final_top_k": 12,
+        "metadata_weight": 1.0,
+        "cross_encoder_weight": 0.4
+      },
+      "fewshot": {
+        "enabled": false,
+        "strategy": "zero",
+        "min_examples": 0,
+        "max_examples": 4,
+        "token_budget": 2500,
+        "initial_pool_size": 15,
+        "example_bank_path": "/home/ducquan/Documents/Python/AI-Fin/Multi-Agent-Finance/agent4/data/example_bank.jsonl",
+        "alpha": 1.0,
+        "beta": 0.5,
+        "gamma": 0.5,
+        "delta": 0.25
+      },
+      "llm": {
+        "provider": "ollama",
+        "base_url": "http://localhost:11434",
+        "model": "qwen3:4b",
+        "temperature": 0.0,
+        "timeout_s": 360.0,
+        "max_retries": 0,
+        "context_window": 8192
+      },
+      "recovery": {
+        "enable_empty_candidate_fallback": false,
+        "degraded_lexical_fallback": false,
+        "enable_candidate_expansion": false
+      },
+      "evaluation": {
+        "save_traces": true,
+        "report_per_category": true,
+        "random_seed": 20261101
+      }
+    },
+    "model_version": "none",
+    "prompt_version": "none",
+    "adapter": "agent4.planning.eval_adapter:predict_validated",
+    "prediction_source": "adapter",
+    "predictions_sha256": null,
+    "judgments_sha256": null,
+    "example_bank_sha256": null
+  },
+  "metrics": {
+    "count": 15,
+    "prediction_count": 15,
+    "retrieval": {
+      "recall_at_k": {
+        "5": null,
+        "10": null
+      },
+      "precision_at_k": {
+        "5": null,
+        "10": null
+      },
+      "all_metrics_covered_at_k": {
+        "5": null,
+        "10": null
+      },
+      "mrr": null,
+      "coverage": {
+        "scored": 0,
+        "eligible": 11
+      }
+    },
+    "selection": {
+      "exact_match_accuracy": {
+        "value": 1.0,
+        "scored": 15,
+        "eligible": 15
+      },
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "invalid_metric_rate": 0.0,
+      "invalid_metric_count": 0,
+      "coverage": {
+        "scored": 15,
+        "eligible": 15
+      }
+    },
+    "planning": {
+      "exact_match": {
+        "value": 1.0,
+        "scored": 15,
+        "eligible": 15
+      }
+    },
+    "sql": {
+      "execution_accuracy": {
+        "value": null,
+        "scored": 0,
+        "eligible": 0
+      },
+      "execution_error_rate": null,
+      "attempted": 0,
+      "execution_evidence_coverage": {
+        "scored": 0,
+        "eligible": 15
+      },
+      "safety_test_pass_rate": null
+    },
+    "answer": {
+      "numerical_correctness": {
+        "value": null,
+        "scored": 0,
+        "eligible": 15
+      },
+      "faithfulness": {
+        "value": null,
+        "scored": 0,
+        "eligible": 15
+      },
+      "answer_accuracy": {
+        "value": null,
+        "scored": 0,
+        "eligible": 15
+      },
+      "independently_reviewed": 0,
+      "eligible": 15
+    },
+    "e2e": {
+      "status_accuracy": {
+        "value": 1.0,
+        "scored": 15,
+        "eligible": 15
+      },
+      "latency_p50_ms": 0.8986339998955373,
+      "latency_p95_ms": 5.4865950000021115,
+      "latency_samples": 15,
+      "average_tokens_observed": null,
+      "usage_samples": 0,
+      "total_cost_usd": null,
+      "cost_per_query_usd": null
+    },
+    "failures": {},
+    "gold_result_coverage": {
+      "reviewed": 0,
+      "total": 15
+    }
+  },
+  "by_category": {
+    "ambiguous_needs_clarification": {
+      "count": 15,
+      "prediction_count": 15,
+      "retrieval": {
+        "recall_at_k": {
+          "5": null,
+          "10": null
+        },
+        "precision_at_k": {
+          "5": null,
+          "10": null
+        },
+        "all_metrics_covered_at_k": {
+          "5": null,
+          "10": null
+        },
+        "mrr": null,
+        "coverage": {
+          "scored": 0,
+          "eligible": 11
+        }
+      },
+      "selection": {
+        "exact_match_accuracy": {
+          "value": 1.0,
+          "scored": 15,
+          "eligible": 15
+        },
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "invalid_metric_rate": 0.0,
+        "invalid_metric_count": 0,
+        "coverage": {
+          "scored": 15,
+          "eligible": 15
+        }
+      },
+      "planning": {
+        "exact_match": {
+          "value": 1.0,
+          "scored": 15,
+          "eligible": 15
+        }
+      },
+      "sql": {
+        "execution_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 0
+        },
+        "execution_error_rate": null,
+        "attempted": 0,
+        "execution_evidence_coverage": {
+          "scored": 0,
+          "eligible": 15
+        },
+        "safety_test_pass_rate": null
+      },
+      "answer": {
+        "numerical_correctness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "faithfulness": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "answer_accuracy": {
+          "value": null,
+          "scored": 0,
+          "eligible": 15
+        },
+        "independently_reviewed": 0,
+        "eligible": 15
+      },
+      "e2e": {
+        "status_accuracy": {
+          "value": 1.0,
+          "scored": 15,
+          "eligible": 15
+        },
+        "latency_p50_ms": 0.8986339998955373,
+        "latency_p95_ms": 5.4865950000021115,
+        "latency_samples": 15,
+        "average_tokens_observed": null,
+        "usage_samples": 0,
+        "total_cost_usd": null,
+        "cost_per_query_usd": null
+      },
+      "failures": {},
+      "gold_result_coverage": {
+        "reviewed": 0,
+        "total": 15
+      }
+    }
+  },
+  "quality_gates": [
+    {
+      "metric": "planning.exact_match.value",
+      "value": 1.0,
+      "bounds": {
+        "min": 1
+      },
+      "coverage_complete": true,
+      "passed": true
+    },
+    {
+      "metric": "planning.exact_match.scored",
+      "value": 15,
+      "bounds": {
+        "min": 15
+      },
+      "coverage_complete": true,
+      "passed": true
+    },
+    {
+      "metric": "e2e.status_accuracy.value",
+      "value": 1.0,
+      "bounds": {
+        "min": 1
+      },
+      "coverage_complete": true,
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Draft semantic labels require domain review; they are development specifications.",
+    "Null metrics are unmeasured, not passing scores.",
+    "Numerical SQL accuracy requires independently reviewed expected_result and a matching database snapshot.",
+    "Answer accuracy/faithfulness require independent judgments; status accuracy is not answer accuracy.",
+    "Safety scores measure reported adapter execution evidence, not DB/RLS certification.",
+    "Replay latency/tokens are recorded measurements, not timings of this scoring run."
+  ],
+  "baseline_comparison": {
+    "comparable": true,
+    "deltas": {
+      "selection.invalid_metric_count": 0,
+      "e2e.usage_samples": 0,
+      "planning.exact_match.value": 0.0,
+      "sql.execution_accuracy.scored": 0,
+      "selection.invalid_metric_rate": 0.0,
+      "sql.execution_evidence_coverage.scored": 0,
+      "e2e.status_accuracy.scored": 0,
+      "selection.precision": 0.0,
+      "gold_result_coverage.reviewed": 0,
+      "selection.exact_match_accuracy.scored": 0,
+      "retrieval.coverage.eligible": 0,
+      "answer.numerical_correctness.eligible": 0,
+      "selection.coverage.eligible": 0,
+      "sql.execution_evidence_coverage.eligible": 0,
+      "planning.exact_match.eligible": 0,
+      "count": 0,
+      "prediction_count": 0,
+      "answer.answer_accuracy.scored": 0,
+      "sql.attempted": 0,
+      "sql.execution_accuracy.eligible": 0,
+      "retrieval.coverage.scored": 0,
+      "selection.f1": 0.0,
+      "selection.exact_match_accuracy.value": 0.0,
+      "answer.eligible": 0,
+      "e2e.status_accuracy.eligible": 0,
+      "answer.independently_reviewed": 0,
+      "answer.faithfulness.eligible": 0,
+      "e2e.latency_p50_ms": 0.060784999732277356,
+      "selection.coverage.scored": 0,
+      "e2e.status_accuracy.value": 0.0,
+      "e2e.latency_samples": 0,
+      "planning.exact_match.scored": 0,
+      "selection.exact_match_accuracy.eligible": 0,
+      "e2e.latency_p95_ms": 0.2593707003143173,
+      "selection.recall": 0.0,
+      "gold_result_coverage.total": 0,
+      "answer.numerical_correctness.scored": 0,
+      "answer.answer_accuracy.eligible": 0,
+      "answer.faithfulness.scored": 0
+    },
+    "lost_measurements": [],
+    "new_measurements": [],
+    "changed_run_metadata": {}
+  }
+}

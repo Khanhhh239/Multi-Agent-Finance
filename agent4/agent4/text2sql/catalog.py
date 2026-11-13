@@ -6,17 +6,39 @@ from agent4.engine.metrics import REGISTRY, M, MetricDef
 from agent4.metric_selection.catalog import MetricCatalogAdapter
 
 CUSTOM_IDS = frozenset(m.id for m in M if m.kind == "custom")
-SYNTHETIC_CUSTOM_HANDLERS = frozenset({
-    "ar_aging", "overdue_receivables", "dso_actual", "ap_due_soon",
-    "unbalanced_journals", "top_sales_transactions", "payroll_summary",
-    "cit_estimate", "mgmt_vs_tax_gap", "vat_position",
-})
-SYNTHETIC_VERIFIED_GENERIC = frozenset({
-    "net_revenue", "gross_revenue", "revenue_deductions", "cogs",
-    "gross_profit", "gross_margin_pct", "operating_expenses", "operating_profit",
-    "profit_before_tax", "income_tax_expense", "net_profit", "net_margin_pct",
-    "cash_and_equivalents", "ar_balance", "net_cash_flow",
-})
+SYNTHETIC_CUSTOM_HANDLERS = frozenset(
+    {
+        "ar_aging",
+        "overdue_receivables",
+        "dso_actual",
+        "ap_due_soon",
+        "unbalanced_journals",
+        "top_sales_transactions",
+        "payroll_summary",
+        "cit_estimate",
+        "mgmt_vs_tax_gap",
+        "vat_position",
+    }
+)
+SYNTHETIC_VERIFIED_GENERIC = frozenset(
+    {
+        "net_revenue",
+        "gross_revenue",
+        "revenue_deductions",
+        "cogs",
+        "gross_profit",
+        "gross_margin_pct",
+        "operating_expenses",
+        "operating_profit",
+        "profit_before_tax",
+        "income_tax_expense",
+        "net_profit",
+        "net_margin_pct",
+        "cash_and_equivalents",
+        "ar_balance",
+        "net_cash_flow",
+    }
+)
 SYNTHETIC_VERIFIED_GROUP_BYS = {
     "net_revenue": ("month",),
     "gross_profit": ("month",),
@@ -45,9 +67,7 @@ class CatalogSnapshot:
     def __init__(self) -> None:
         self.adapter = MetricCatalogAdapter()
         self.hash = self.adapter.version
-        self._capabilities = {
-            metric.id: self._capability(metric) for metric in self.adapter
-        }
+        self._capabilities = {metric.id: self._capability(metric) for metric in self.adapter}
         if len(self._capabilities) != 66:
             raise ValueError("canonical catalog must contain exactly 66 metrics")
 
@@ -100,17 +120,19 @@ class CatalogSnapshot:
             if allowed_views is not None and not set(metric.views).intersection(allowed_views):
                 continue
             cap = self.capability(metric.id)
-            result.append({
-                "id": metric.id,
-                "label": metric.label,
-                "description": metric.description,
-                "kind": metric.kind,
-                "unit": metric.unit,
-                "group_bys": list(metric.group_bys),
-                "views": list(metric.views),
-                "synthetic_status": cap.synthetic_status,
-                "real_data_status": cap.real_data_status,
-                "verified_group_bys": list(cap.verified_group_bys),
-                "reason": cap.reason,
-            })
+            result.append(
+                {
+                    "id": metric.id,
+                    "label": metric.label,
+                    "description": metric.description,
+                    "kind": metric.kind,
+                    "unit": metric.unit,
+                    "group_bys": list(metric.group_bys),
+                    "views": list(metric.views),
+                    "synthetic_status": cap.synthetic_status,
+                    "real_data_status": cap.real_data_status,
+                    "verified_group_bys": list(cap.verified_group_bys),
+                    "reason": cap.reason,
+                }
+            )
         return result

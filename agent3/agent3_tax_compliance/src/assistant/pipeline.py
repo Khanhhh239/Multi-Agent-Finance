@@ -22,6 +22,7 @@ from .models import Report
 from .pack import load_decisions, load_pack
 from .rules import evaluate, load_ruleset, param, totals
 from .sources import distinct_portal_bank_transactions, read_bank_statement, read_invoices, read_portal_list
+from . import accounting, decisions as decision_store, portal_lists
 
 DEFAULT_RULESET = Path(__file__).resolve().parents[2] / 'configs/assistant/ruleset_2026_11_draft.json'
 STATUS_ORDER = {'AT_RISK': 0, 'REVIEW': 1, 'OPPORTUNITY': 2, 'INFO': 3}
@@ -29,8 +30,28 @@ STATUS_ORDER = {'AT_RISK': 0, 'REVIEW': 1, 'OPPORTUNITY': 2, 'INFO': 3}
 
 def input_digest(ws: Path) -> str:
     h = hashlib.sha256()
-    for p in sorted(x for x in ws.rglob('*') if x.is_file() and 'out' not in x.relative_to(ws).parts and x.name != 'labels.json'):
+    files = [ws / 'pack.json', ws / 'declared.json', ws / 'ai/line_labels.json', ws / 'ai/confirmed_lines.json']
+    for folder, suffixes in [('invoices/purchase', ('.xml',)), ('invoices/sales', ('.xml',)), ('bank', ('.csv', '.xlsx', '.sta', '.mt940', '.txt'))]:
+        files.extend(p for p in (ws / folder).glob('*') if p.suffix.lower() in suffixes)
+    active = portal_lists.active_path(ws, load_pack(ws / 'pack.json'))
+    if active:
+        files.append(active)
+    for p in sorted(p for p in files if p.is_file()):
         h.update(str(p.relative_to(ws)).replace('\\', '/').encode() + b'\0' + p.read_bytes())
+    h.update(json.dumps(decision_store.effective(ws), sort_keys=True, default=str).encode())
+    return h.hexdigest()
+
+
+ALGORITHM_VERSION = 'assistant-consistency-v2'
+
+
+def analysis_signature(ws, ruleset_path, as_of):
+    from . import catalog
+    h = hashlib.sha256()
+    h.update(f'{ALGORITHM_VERSION}:{as_of}:{input_digest(ws)}'.encode())
+    h.update(Path(ruleset_path).read_bytes())
+    for name in catalog.NAMES:
+        h.update(name.encode() + catalog.path(name).read_bytes())
     return h.hexdigest()
 
 
@@ -51,13 +72,15 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
             out.append(dict(period=f'Quý {q}/{y}', due=date(ny, first, cal.monthrange(ny, first)[1]), basis=basis))
     for e in out:
         e['period'] = f'Tờ khai thuế GTGT {e["period"].lower()}'
+    for e, (y, m) in zip(out, periods if pack.filing_period == 'MONTH' else sorted({(y, (m - 1) // 3 + 1) for y, m in periods})):
+        e.update(obligation='VAT', period_key=f'{y}-{m:02d}' if pack.filing_period == 'MONTH' else f'{y}-Q{m}')
     # Corporate income tax: quarterly provisional payment and the annual finalization (calendar-year fiscal period assumed).
     prov = param(ruleset, 'CIT_PROVISIONAL_DUE', as_of) if 'CIT_PROVISIONAL_DUE' in ruleset['parameters'] else None
     fin = param(ruleset, 'CIT_FINALIZATION_DUE', as_of) if 'CIT_FINALIZATION_DUE' in ruleset['parameters'] else None
     if prov:
         for y, q in sorted({(y, (m - 1) // 3 + 1) for y, m in periods}):
             ny, first = (y + 1, 1) if q == 4 else (y, q * 3 + 1)
-            e = dict(period=f'Tạm nộp thuế TNDN quý {q}/{y}', due=date(ny, first, cal.monthrange(ny, first)[1]), basis=prov[1])
+            e = dict(period=f'Tạm nộp thuế TNDN quý {q}/{y}', due=date(ny, first, cal.monthrange(ny, first)[1]), basis=prov[1], obligation='CIT_PROVISIONAL', period_key=f'{y}-Q{q}')
             if (y, q) in ((2026, 2), (2026, 3)):
                 e['extension'] = ('Có thể được gia hạn (quý II/2026: 03 tháng, quý III/2026: 02 tháng) nếu thuộc đối tượng của '
                                   'Nghị định 245/2026/NĐ-CP, khoản 2 Điều 2; phải nộp giấy đề nghị gia hạn')
@@ -70,7 +93,7 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
             dm = fy_end + 3
             dy, dm = (y + (dm - 1) // 12, (dm - 1) % 12 + 1)
             label = f'năm {y}' if fy_end == 12 else f'năm tài chính kết thúc {last:%d/%m/%Y}'
-            out.append(dict(period=f'Quyết toán thuế TNDN {label}', due=date(dy, dm, cal.monthrange(dy, dm)[1]), basis=fin[1]))
+            out.append(dict(period=f'Quyết toán thuế TNDN {label}', due=date(dy, dm, cal.monthrange(dy, dm)[1]), basis=fin[1], obligation='CIT_FINAL', period_key=f'FY-{y}-{fy_end:02d}'))
     shift = param(ruleset, 'DEADLINE_DAY_OFF_SHIFT', as_of) if 'DEADLINE_DAY_OFF_SHIFT' in ruleset['parameters'] else None
     from .catalog import days_off
     fixed_off, dated_off = days_off()                     # shared holiday catalog (admin page), plus the enterprise's own days off
@@ -144,10 +167,14 @@ def apply_not_claimed(items: list, decisions: dict) -> list:
     out = []
     for it in items:
         ds = [decisions.get(k) for k in it.invoice_keys]
-        if it.status == 'REVIEW' and ds and all(d and d['action'] == 'CONFIRMED_OK' for d in ds):
+        confirms = [d.get('_scopes', {}).get('legacy', d if d.get('action') == 'CONFIRMED_OK' else None) if d else None for d in ds]
+        finding = decisions.get(it.finding_id, {}).get('_scopes', {}).get('finding')
+        if it.status == 'REVIEW' and (finding or (confirms and all(confirms))):
+            ds = [finding] if finding else confirms
             note = '; '.join(f'{d["evidence"]} (xác nhận của {d["by"]})' for d in ds)
             out.append(replace(it, status='INFO', amount=Decimal(0), detail=f'{it.detail} Người duyệt đã xác nhận không có vấn đề: {note}.'.strip()))
             continue
+        ds = [d.get('_scopes', {}).get('deduction', d) if d else None for d in ds]
         if it.status != 'INFO' and ds and all(d and d['action'] == 'NOT_CLAIMED' for d in ds):
             note = '; '.join(f'{d["evidence"]} (quyết định của {d["by"]})' for d in ds)
             it = replace(it, status='INFO', amount=Decimal(0),
@@ -174,16 +201,21 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
         elif p.suffix.lower() in ('.csv', '.xlsx'):
             txns.extend(read_bank_statement(p, pack))
     txns = list(distinct_portal_bank_transactions(txns))
-    portal_file = ws / 'portal' / 'purchase_list.csv'
-    portal = read_portal_list(portal_file, pack) if portal_file.exists() else None
+    decisions = decision_store.applicable(decisions, invoices, txns)
+    portal_file = portal_lists.active_path(ws, pack)
+    portal = read_portal_list(portal_file, pack) if portal_file else None
     matches = match_payments(invoices, txns, pack.thresholds, decisions)
     items, flags = evaluate(invoices, matches, pack, ruleset, bad1 + bad2, portal)
     items += purpose_items(ws, invoices, ruleset)
     items += receipt_items(invoices, txns, ruleset)
+    accounting.identify(items)
     items = apply_not_claimed(items, decisions)
     items.sort(key=lambda it: (STATUS_ORDER[it.status], -it.amount, it.code, it.invoice_keys))
     dates = [i.issue_date for i in invoices if i.issue_date]
     meta = dict(workspace=ws.name, company=pack.legal_name, tax_code=pack.tax_code, simulated=pack.simulated, as_of=as_of,
+                schema_version=2, report_revision=analysis_signature(ws, ruleset_path, as_of),
+                analysis_signature=analysis_signature(ws, ruleset_path, as_of), filing_period=pack.filing_period, vat_method=pack.vat_method,
+                not_claimed_keys=[k for k, d in decisions.items() if (d.get('_scopes', {}).get('deduction') or d).get('action') == 'NOT_CLAIMED'],
                 pack_version=pack.version, ruleset_version=ruleset['version'], ruleset_status=ruleset['status'],
                 ruleset_note=ruleset.get('status_note', ''), period=(min(dates), max(dates)) if dates else None,
                 counts=dict(purchase_invoices=len(purchases), sales_invoices=len(sales), bank_transactions=len(txns),
@@ -193,14 +225,21 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
                              'Chứng từ thanh toán chỉ tìm trong sao kê đã nạp; tiền mặt và sao kê thiếu sẽ hiện là chưa có chứng từ',
                              'Không có dữ liệu trực tiếp của cơ quan thuế (tình trạng người bán, thông báo phát hành)',
                              'Ước tính phạt là mức tối đa nếu bị xác định khai sai, chưa gồm tiền chậm nộp'])
+    meta['data_warnings'] = []
+    if any(i.code == 'R07_BUYER_NAME' for i in items):
+        meta['data_warnings'].append('Tên hoặc địa chỉ người mua trên hóa đơn không khớp hồ sơ portal. Kiểm tra Hồ sơ chung; hệ thống không tự sửa hóa đơn.')
+    from ..extraction.xml_context import fold
+    if not pack.simulated and any('mo phong' in fold(name or '') for name in [pack.legal_name] + [i.buyer_name for i in invoices] + [i.seller_name for i in invoices]):
+        meta['data_warnings'].append('Có dấu hiệu dữ liệu mô phỏng nhưng chưa được cấu hình xác thực. Không sử dụng kết quả này để kết luận nghĩa vụ của doanh nghiệp thật.')
     calendar = filing_calendar(pack, invoices, ruleset, as_of)
     by_key = {i.key: i for i in invoices}
     for c in calendar:                                     # open work that changes what goes into this return
-        if not c['period'].startswith('Tờ khai thuế GTGT tháng'):
+        if c['obligation'] != 'VAT':
             continue
-        mm, yy = c['period'][-7:].split('/')
         open_items = [it for it in items if it.status in ('AT_RISK', 'REVIEW') and it.invoice_keys and by_key.get(it.invoice_keys[0])
-                      and by_key[it.invoice_keys[0]].issue_date and f'{by_key[it.invoice_keys[0]].issue_date:%m/%Y}' == f'{mm}/{yy}']
+                      and by_key[it.invoice_keys[0]].issue_date and accounting.period_key(by_key[it.invoice_keys[0]].issue_date, pack.filing_period) == c['period_key']]
         c['open_items'] = len(open_items)
-    return Report(meta=meta, invoices=invoices, transactions=txns, matches=matches, items=items,
-                  totals=totals(items, ruleset, as_of), calendar=calendar, policy_flags=flags)
+    result = Report(meta=meta, invoices=invoices, transactions=txns, matches=matches, items=items,
+                    totals={}, calendar=calendar, policy_flags=flags)
+    result.totals = accounting.totals(result, ruleset, as_of)
+    return result

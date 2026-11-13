@@ -10,6 +10,7 @@ inventory movements, payroll, fixed assets, loans, budgets) and two governed
 views — ``v_mgmt`` (management: every transaction) and ``v_tax`` (tax: only
 CIT-deductible lines) — that the semantic metric layer reads from.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -26,7 +27,7 @@ from ..config import get_settings
 from . import company as C
 from .simulator import Simulator, add_months, is_business_day
 
-DATA_VERSION = 'v2.1'
+DATA_VERSION = "v2.1"
 
 SCHEMA_SQL = """
 CREATE TABLE dim_account(
@@ -121,7 +122,13 @@ def _df(rows, cols):
     return pd.DataFrame(rows, columns=cols)
 
 
-def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: str | None = None, quiet: bool = False) -> dict:
+def build(
+    out: Path,
+    seed: int = 20251,
+    as_of: date | None = None,
+    last_closed: str | None = None,
+    quiet: bool = False,
+) -> dict:
     settings = get_settings()
     as_of = as_of or settings.as_of
     last_closed = last_closed or settings.last_closed_month
@@ -139,31 +146,145 @@ def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: 
     acc_rows = []
     for k, (code, name, typ, nb, parent) in enumerate(C.ACCOUNTS, start=1):
         has_child = any(a[4] == code for a in C.ACCOUNTS)
-        acc_rows.append((k, code, name, typ, nb, parent, 1 if parent is None else 2, not has_child, date(2017, 1, 1), None))
-    acc = _df(acc_rows, ["account_key", "account_code", "account_name", "account_type", "normal_balance", "parent_account_code", "level",
-                         "is_postable", "effective_from", "effective_to"])
+        acc_rows.append(
+            (
+                k,
+                code,
+                name,
+                typ,
+                nb,
+                parent,
+                1 if parent is None else 2,
+                not has_child,
+                date(2017, 1, 1),
+                None,
+            )
+        )
+    acc = _df(
+        acc_rows,
+        [
+            "account_key",
+            "account_code",
+            "account_name",
+            "account_type",
+            "normal_balance",
+            "parent_account_code",
+            "level",
+            "is_postable",
+            "effective_from",
+            "effective_to",
+        ],
+    )
     con.execute("INSERT INTO dim_account SELECT * FROM acc")
     acc_key = dict(zip(acc.account_code, acc.account_key))
-    br = _df([(k, b[0], b[1], b[2]) for k, b in enumerate(C.BRANCHES, 1)], ["branch_key", "branch_code", "branch_name", "region"])
+    br = _df(
+        [(k, b[0], b[1], b[2]) for k, b in enumerate(C.BRANCHES, 1)],
+        ["branch_key", "branch_code", "branch_name", "region"],
+    )
     con.execute("INSERT INTO dim_branch SELECT * FROM br")
     br_key = dict(zip(br.branch_code, br.branch_key))
-    dp = _df([(k, d[0], d[1], d[2]) for k, d in enumerate(C.DEPARTMENTS, 1)], ["department_key", "department_code", "department_name", "expense_account"])
+    dp = _df(
+        [(k, d[0], d[1], d[2]) for k, d in enumerate(C.DEPARTMENTS, 1)],
+        ["department_key", "department_code", "department_name", "expense_account"],
+    )
     con.execute("INSERT INTO dim_department SELECT * FROM dp")
     dp_key = dict(zip(dp.department_code, dp.department_key))
-    em = _df([(k, e["code"], e["name"], e["title"], e["dept"], e["branch"], e["hire"], e["leave"], e["salary"]) for k, e in enumerate(sim.employees, 1)],
-             ["employee_key", "employee_code", "employee_name", "title", "department_code", "branch_code", "hire_date", "leave_date", "base_salary"])
+    em = _df(
+        [
+            (
+                k,
+                e["code"],
+                e["name"],
+                e["title"],
+                e["dept"],
+                e["branch"],
+                e["hire"],
+                e["leave"],
+                e["salary"],
+            )
+            for k, e in enumerate(sim.employees, 1)
+        ],
+        [
+            "employee_key",
+            "employee_code",
+            "employee_name",
+            "title",
+            "department_code",
+            "branch_code",
+            "hire_date",
+            "leave_date",
+            "base_salary",
+        ],
+    )
     con.execute("INSERT INTO dim_employee SELECT * FROM em")
     em_key = dict(zip(em.employee_code, em.employee_key))
     partners = list(sim.customers.values()) + list(sim.vendors.values())
-    pa = _df([(k, p.code, p.name, p.ptype, p.tax_id, p.segment, p.category, p.branch, p.province, p.terms, p.credit_limit, p.salesperson, True)
-              for k, p in enumerate(partners, 1)],
-             ["partner_key", "partner_code", "partner_name", "partner_type", "tax_id", "segment", "vendor_category", "branch_code", "province",
-              "payment_terms_days", "credit_limit", "salesperson_code", "is_active"])
+    pa = _df(
+        [
+            (
+                k,
+                p.code,
+                p.name,
+                p.ptype,
+                p.tax_id,
+                p.segment,
+                p.category,
+                p.branch,
+                p.province,
+                p.terms,
+                p.credit_limit,
+                p.salesperson,
+                True,
+            )
+            for k, p in enumerate(partners, 1)
+        ],
+        [
+            "partner_key",
+            "partner_code",
+            "partner_name",
+            "partner_type",
+            "tax_id",
+            "segment",
+            "vendor_category",
+            "branch_code",
+            "province",
+            "payment_terms_days",
+            "credit_limit",
+            "salesperson_code",
+            "is_active",
+        ],
+    )
     con.execute("INSERT INTO dim_partner SELECT * FROM pa")
     pa_key = dict(zip(pa.partner_code, pa.partner_key))
-    it = _df([(k, i.spec.code, i.spec.name, "SERVICE" if i.spec.is_service else "PRODUCT", i.spec.line, i.spec.unit, i.spec.list_price,
-               round(i.spec.list_price * i.spec.cost_ratio, -3), i.vendor or None, True) for k, i in enumerate(sim.items.values(), 1)],
-             ["item_key", "item_code", "item_name", "item_type", "product_line", "unit", "list_price", "standard_cost", "default_vendor", "is_active"])
+    it = _df(
+        [
+            (
+                k,
+                i.spec.code,
+                i.spec.name,
+                "SERVICE" if i.spec.is_service else "PRODUCT",
+                i.spec.line,
+                i.spec.unit,
+                i.spec.list_price,
+                round(i.spec.list_price * i.spec.cost_ratio, -3),
+                i.vendor or None,
+                True,
+            )
+            for k, i in enumerate(sim.items.values(), 1)
+        ],
+        [
+            "item_key",
+            "item_code",
+            "item_name",
+            "item_type",
+            "product_line",
+            "unit",
+            "list_price",
+            "standard_cost",
+            "default_vendor",
+            "is_active",
+        ],
+    )
     con.execute("INSERT INTO dim_item SELECT * FROM it")
     it_key = dict(zip(it.item_code, it.item_key))
     con.executemany("INSERT INTO dim_product_line VALUES (?, ?)", C.PRODUCT_LINES)
@@ -174,11 +295,42 @@ def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: 
     while d <= date(2026, 12, 31):
         ym = f"{d:%Y-%m}"
         me = add_months(d.replace(day=1), 1) - timedelta(days=1)
-        rows.append((int(f"{d:%Y%m%d}"), d, d.day, d.isoweekday(), is_business_day(d), d.isocalendar()[1], d.month, (d.month - 1) // 3 + 1,
-                     d.year, ym, d.replace(day=1), me, ym <= last_closed))
+        rows.append(
+            (
+                int(f"{d:%Y%m%d}"),
+                d,
+                d.day,
+                d.isoweekday(),
+                is_business_day(d),
+                d.isocalendar()[1],
+                d.month,
+                (d.month - 1) // 3 + 1,
+                d.year,
+                ym,
+                d.replace(day=1),
+                me,
+                ym <= last_closed,
+            )
+        )
         d += timedelta(days=1)
-    per = _df(rows, ["period_key", "calendar_date", "day_of_month", "day_of_week", "is_business_day", "week_of_year", "month_no", "quarter_no",
-                     "year_no", "year_month", "month_start_date", "month_end_date", "is_month_closed"])
+    per = _df(
+        rows,
+        [
+            "period_key",
+            "calendar_date",
+            "day_of_month",
+            "day_of_week",
+            "is_business_day",
+            "week_of_year",
+            "month_no",
+            "quarter_no",
+            "year_no",
+            "year_month",
+            "month_start_date",
+            "month_end_date",
+            "is_month_closed",
+        ],
+    )
     con.execute("INSERT INTO dim_period SELECT * FROM per")
     pc = []
     m = date(2025, 1, 1)
@@ -192,11 +344,49 @@ def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: 
     con.execute("INSERT INTO period_close SELECT * FROM pcd")
 
     # ---- facts
-    jr = _df(sim.L.journals, ["journal_id", "posting_date", "doc_type", "doc_no", "description", "source_module", "is_closing", "created_by", "created_at"])
+    jr = _df(
+        sim.L.journals,
+        [
+            "journal_id",
+            "posting_date",
+            "doc_type",
+            "doc_no",
+            "description",
+            "source_module",
+            "is_closing",
+            "created_by",
+            "created_at",
+        ],
+    )
     con.execute("INSERT INTO gl_journal SELECT * FROM jr")
-    gl = _df(sim.L.rows, ["entry_id", "journal_id", "entry_no", "posting_date", "account", "partner", "item", "branch", "department", "employee",
-                          "product_line", "cost_category", "description", "debit_amount", "credit_amount", "source_document_type",
-                          "source_document_no", "source_module", "is_closing", "tax_deductible", "tax_note", "created_by", "created_at"])
+    gl = _df(
+        sim.L.rows,
+        [
+            "entry_id",
+            "journal_id",
+            "entry_no",
+            "posting_date",
+            "account",
+            "partner",
+            "item",
+            "branch",
+            "department",
+            "employee",
+            "product_line",
+            "cost_category",
+            "description",
+            "debit_amount",
+            "credit_amount",
+            "source_document_type",
+            "source_document_no",
+            "source_module",
+            "is_closing",
+            "tax_deductible",
+            "tax_note",
+            "created_by",
+            "created_at",
+        ],
+    )
     gl["period_key"] = pd.to_datetime(gl.posting_date).dt.strftime("%Y%m%d").astype(int)
     gl["account_key"] = gl.account.map(acc_key)
     if gl.account_key.isna().any():
@@ -207,28 +397,186 @@ def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: 
     gl["department_key"] = gl.department.map(dp_key).astype("Int64")
     gl["employee_key"] = gl.employee.map(em_key).astype("Int64")
     gl["currency_code"] = "VND"
-    gl = gl[["entry_id", "journal_id", "entry_no", "posting_date", "period_key", "account_key", "partner_key", "item_key", "branch_key",
-             "department_key", "employee_key", "product_line", "cost_category", "description", "debit_amount", "credit_amount", "currency_code",
-             "source_document_type", "source_document_no", "source_module", "is_closing", "tax_deductible", "tax_note", "created_by", "created_at"]]
+    gl = gl[
+        [
+            "entry_id",
+            "journal_id",
+            "entry_no",
+            "posting_date",
+            "period_key",
+            "account_key",
+            "partner_key",
+            "item_key",
+            "branch_key",
+            "department_key",
+            "employee_key",
+            "product_line",
+            "cost_category",
+            "description",
+            "debit_amount",
+            "credit_amount",
+            "currency_code",
+            "source_document_type",
+            "source_document_no",
+            "source_module",
+            "is_closing",
+            "tax_deductible",
+            "tax_note",
+            "created_by",
+            "created_at",
+        ]
+    ]
     con.execute("INSERT INTO gl_entry SELECT * FROM gl")
     tables = {
-        "ar_invoice": (sim.ar_invoice_rows, ["invoice_id", "journal_id", "einvoice_no", "issue_date", "due_date", "customer_code", "branch_code",
-                                             "salesperson_code", "subtotal", "vat_amount", "total_amount", "payment_terms_days", "description", "is_opening"]),
-        "ar_invoice_line": (sim.ar_line_rows, ["invoice_id", "item_code", "quantity", "unit_price", "net_amount", "vat_amount", "cost_amount"]),
-        "ar_receipt": (sim.ar_receipt_rows, ["receipt_id", "journal_id", "receipt_date", "bank_txn_date", "customer_code", "invoice_id", "amount",
-                                             "method", "cash_account"]),
-        "ar_adjustment": (sim.ar_adj_rows, ["adjustment_id", "journal_id", "adjustment_date", "customer_code", "invoice_id", "adjustment_type",
-                                            "net_amount", "vat_amount", "total_amount"]),
-        "ap_bill": (sim.ap_bill_rows, ["bill_id", "journal_id", "vendor_invoice_no", "bill_date", "due_date", "vendor_code", "branch_code", "category",
-                                       "subtotal", "vat_amount", "total_amount", "description", "tax_deductible", "is_opening"]),
-        "ap_payment": (sim.ap_payment_rows, ["payment_id", "journal_id", "payment_date", "vendor_code", "bill_id", "amount", "method", "cash_account"]),
-        "inventory_txn": (sim.inv_rows, ["txn_id", "journal_id", "txn_date", "item_code", "txn_type", "quantity", "unit_cost", "value"]),
-        "payroll": (sim.payroll_rows, ["year_month", "employee_code", "branch_code", "department_code", "gross_salary", "bonus", "insurance_base",
-                                       "employer_contribution", "employee_contribution", "pit", "net_pay"]),
-        "fixed_asset": (sim.asset_rows, ["asset_code", "asset_name", "branch_code", "department_code", "acquisition_date", "cost",
-                                         "useful_life_months", "monthly_depreciation"]),
-        "loan": (sim.loan_rows, ["loan_id", "lender", "loan_type", "start_date", "principal", "annual_rate", "maturity_date"]),
-        "service_contract": (sim.contract_rows, ["contract_no", "customer_code", "item_code", "start_date", "end_date"]),
+        "ar_invoice": (
+            sim.ar_invoice_rows,
+            [
+                "invoice_id",
+                "journal_id",
+                "einvoice_no",
+                "issue_date",
+                "due_date",
+                "customer_code",
+                "branch_code",
+                "salesperson_code",
+                "subtotal",
+                "vat_amount",
+                "total_amount",
+                "payment_terms_days",
+                "description",
+                "is_opening",
+            ],
+        ),
+        "ar_invoice_line": (
+            sim.ar_line_rows,
+            [
+                "invoice_id",
+                "item_code",
+                "quantity",
+                "unit_price",
+                "net_amount",
+                "vat_amount",
+                "cost_amount",
+            ],
+        ),
+        "ar_receipt": (
+            sim.ar_receipt_rows,
+            [
+                "receipt_id",
+                "journal_id",
+                "receipt_date",
+                "bank_txn_date",
+                "customer_code",
+                "invoice_id",
+                "amount",
+                "method",
+                "cash_account",
+            ],
+        ),
+        "ar_adjustment": (
+            sim.ar_adj_rows,
+            [
+                "adjustment_id",
+                "journal_id",
+                "adjustment_date",
+                "customer_code",
+                "invoice_id",
+                "adjustment_type",
+                "net_amount",
+                "vat_amount",
+                "total_amount",
+            ],
+        ),
+        "ap_bill": (
+            sim.ap_bill_rows,
+            [
+                "bill_id",
+                "journal_id",
+                "vendor_invoice_no",
+                "bill_date",
+                "due_date",
+                "vendor_code",
+                "branch_code",
+                "category",
+                "subtotal",
+                "vat_amount",
+                "total_amount",
+                "description",
+                "tax_deductible",
+                "is_opening",
+            ],
+        ),
+        "ap_payment": (
+            sim.ap_payment_rows,
+            [
+                "payment_id",
+                "journal_id",
+                "payment_date",
+                "vendor_code",
+                "bill_id",
+                "amount",
+                "method",
+                "cash_account",
+            ],
+        ),
+        "inventory_txn": (
+            sim.inv_rows,
+            [
+                "txn_id",
+                "journal_id",
+                "txn_date",
+                "item_code",
+                "txn_type",
+                "quantity",
+                "unit_cost",
+                "value",
+            ],
+        ),
+        "payroll": (
+            sim.payroll_rows,
+            [
+                "year_month",
+                "employee_code",
+                "branch_code",
+                "department_code",
+                "gross_salary",
+                "bonus",
+                "insurance_base",
+                "employer_contribution",
+                "employee_contribution",
+                "pit",
+                "net_pay",
+            ],
+        ),
+        "fixed_asset": (
+            sim.asset_rows,
+            [
+                "asset_code",
+                "asset_name",
+                "branch_code",
+                "department_code",
+                "acquisition_date",
+                "cost",
+                "useful_life_months",
+                "monthly_depreciation",
+            ],
+        ),
+        "loan": (
+            sim.loan_rows,
+            [
+                "loan_id",
+                "lender",
+                "loan_type",
+                "start_date",
+                "principal",
+                "annual_rate",
+                "maturity_date",
+            ],
+        ),
+        "service_contract": (
+            sim.contract_rows,
+            ["contract_no", "customer_code", "item_code", "start_date", "end_date"],
+        ),
     }
     for name, (rows, cols) in tables.items():
         frame = _df(rows, cols)
@@ -250,10 +598,22 @@ def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: 
     con.executemany("INSERT INTO loan_schedule VALUES (?, ?, ?)", sched)
     con.execute(VIEWS_SQL)
     _build_budget(con, seed)
-    info = {**C.COMPANY, "as_of_date": as_of.isoformat(), "last_closed_month": last_closed, "data_start": "2025-01-01", "seed": str(seed),
-            "generator": "agent4.datagen v2 (event-driven simulation)", "data_version": DATA_VERSION}
-    con.executemany("INSERT INTO company_info VALUES (?, ?)", [(k, str(v)) for k, v in info.items()])
-    con.execute("CREATE TABLE ground_truth AS SELECT * FROM read_json_auto(?)", [_write_gt(out, sim.ground_truth)])
+    info = {
+        **C.COMPANY,
+        "as_of_date": as_of.isoformat(),
+        "last_closed_month": last_closed,
+        "data_start": "2025-01-01",
+        "seed": str(seed),
+        "generator": "agent4.datagen v2 (event-driven simulation)",
+        "data_version": DATA_VERSION,
+    }
+    con.executemany(
+        "INSERT INTO company_info VALUES (?, ?)", [(k, str(v)) for k, v in info.items()]
+    )
+    con.execute(
+        "CREATE TABLE ground_truth AS SELECT * FROM read_json_auto(?)",
+        [_write_gt(out, sim.ground_truth)],
+    )
     stats = _validate(con, quiet=quiet)
     stats["simulation_seconds"] = round(t_sim, 1)
     con.close()
@@ -262,7 +622,15 @@ def build(out: Path, seed: int = 20251, as_of: date | None = None, last_closed: 
 
 def _write_gt(out: Path, gt: list[dict]) -> str:
     path = out.with_name(out.stem + "_ground_truth.json")
-    rows = [{"id": g["id"], "type": g["type"], "detail": g["detail"], "payload": json.dumps(g, ensure_ascii=False)} for g in gt]
+    rows = [
+        {
+            "id": g["id"],
+            "type": g["type"],
+            "detail": g["detail"],
+            "payload": json.dumps(g, ensure_ascii=False),
+        }
+        for g in gt
+    ]
     path.write_text(json.dumps(rows, ensure_ascii=False, indent=1), encoding="utf-8")
     return str(path)
 
@@ -290,15 +658,30 @@ def _build_budget(con: duckdb.DuckDBPyConnection, seed: int = 20251) -> None:
     FROM actual WHERE cost_category IS NOT NULL GROUP BY month_no, COALESCE(branch_code, 'HN'), cost_category HAVING SUM(opex) > 0""").fetchall()
     plans = []
     for year, month, branch, line, category, amount in rows:
-        key = json.dumps([seed, year, month, branch, line, category], separators=(',', ':'))
-        uniform = int.from_bytes(hashlib.sha256(key.encode()).digest()[:8], 'big') / 2**64
+        key = json.dumps([seed, year, month, branch, line, category], separators=(",", ":"))
+        uniform = int.from_bytes(hashlib.sha256(key.encode()).digest()[:8], "big") / 2**64
         if year == 2025:
-            factor = .97 + .06 * uniform if line == 'REVENUE' else .96 + .08 * uniform
+            factor = 0.97 + 0.06 * uniform if line == "REVENUE" else 0.96 + 0.08 * uniform
         else:
-            factor = 1.20 if line == 'REVENUE' else {'MARKETING': 1.15, 'LUONG': 1.07}.get(category, 1.05)
-        plans.append((year, month, branch, line, category, round(float(amount) * factor, -6 if line == 'REVENUE' else -5)))
-    con.executemany('INSERT INTO budget VALUES (?, ?, ?, ?, ?, ?)', sorted(plans, key=lambda r: repr(r[:5])))
-    con.execute('DROP TABLE actual')
+            factor = (
+                1.20
+                if line == "REVENUE"
+                else {"MARKETING": 1.15, "LUONG": 1.07}.get(category, 1.05)
+            )
+        plans.append(
+            (
+                year,
+                month,
+                branch,
+                line,
+                category,
+                round(float(amount) * factor, -6 if line == "REVENUE" else -5),
+            )
+        )
+    con.executemany(
+        "INSERT INTO budget VALUES (?, ?, ?, ?, ?, ?)", sorted(plans, key=lambda r: repr(r[:5]))
+    )
+    con.execute("DROP TABLE actual")
 
 
 def _validate(con: duckdb.DuckDBPyConnection, quiet: bool = False) -> dict:
@@ -308,18 +691,34 @@ def _validate(con: duckdb.DuckDBPyConnection, quiet: bool = False) -> dict:
         "journals": q("SELECT COUNT(*) FROM gl_journal"),
         "ar_invoices": q("SELECT COUNT(*) FROM ar_invoice"),
         "ap_bills": q("SELECT COUNT(*) FROM ap_bill"),
-        "unbalanced_journals": q("SELECT COUNT(*) FROM (SELECT journal_id FROM gl_entry GROUP BY 1 HAVING SUM(debit_amount) <> SUM(credit_amount))"),
-        "revenue_2025": float(q("SELECT SUM(credit_amount-debit_amount) FROM v_gl WHERE account_code LIKE '511%' AND NOT is_closing AND year_no=2025")),
-        "net_profit_2025": float(q("""SELECT -SUM(net_debit) FROM v_gl WHERE NOT is_closing AND year_no=2025
-                                      AND regexp_matches(account_code, '^[5-8]')""")),
-        "ar_gl_vs_subledger_gap": float(q("""SELECT (SELECT SUM(net_debit) FROM v_gl WHERE account_code='131')
-            - ((SELECT SUM(total_amount) FROM ar_invoice) - (SELECT SUM(amount) FROM ar_receipt) - (SELECT SUM(total_amount) FROM ar_adjustment))""")),
-        "ap_gl_vs_subledger_gap": float(q("""SELECT (SELECT -SUM(net_debit) FROM v_gl WHERE account_code='331')
-            - ((SELECT SUM(total_amount) FROM ap_bill) - (SELECT SUM(amount) FROM ap_payment))""")),
-        "inventory_gl_vs_subledger_gap": float(q("""SELECT (SELECT SUM(net_debit) FROM v_gl WHERE account_code LIKE '156%')
-            - (SELECT SUM(value) FROM inventory_txn)""")),
-        "min_bank_balance": float(q("""SELECT MIN(bal) FROM (SELECT posting_date, SUM(SUM(net_debit)) OVER (ORDER BY posting_date) bal
-            FROM v_gl WHERE account_code LIKE '112%' GROUP BY 1)""")),
+        "unbalanced_journals": q(
+            "SELECT COUNT(*) FROM (SELECT journal_id FROM gl_entry GROUP BY 1 HAVING SUM(debit_amount) <> SUM(credit_amount))"
+        ),
+        "revenue_2025": float(
+            q(
+                "SELECT SUM(credit_amount-debit_amount) FROM v_gl WHERE account_code LIKE '511%' AND NOT is_closing AND year_no=2025"
+            )
+        ),
+        "net_profit_2025": float(
+            q("""SELECT -SUM(net_debit) FROM v_gl WHERE NOT is_closing AND year_no=2025
+                                      AND regexp_matches(account_code, '^[5-8]')""")
+        ),
+        "ar_gl_vs_subledger_gap": float(
+            q("""SELECT (SELECT SUM(net_debit) FROM v_gl WHERE account_code='131')
+            - ((SELECT SUM(total_amount) FROM ar_invoice) - (SELECT SUM(amount) FROM ar_receipt) - (SELECT SUM(total_amount) FROM ar_adjustment))""")
+        ),
+        "ap_gl_vs_subledger_gap": float(
+            q("""SELECT (SELECT -SUM(net_debit) FROM v_gl WHERE account_code='331')
+            - ((SELECT SUM(total_amount) FROM ap_bill) - (SELECT SUM(amount) FROM ap_payment))""")
+        ),
+        "inventory_gl_vs_subledger_gap": float(
+            q("""SELECT (SELECT SUM(net_debit) FROM v_gl WHERE account_code LIKE '156%')
+            - (SELECT SUM(value) FROM inventory_txn)""")
+        ),
+        "min_bank_balance": float(
+            q("""SELECT MIN(bal) FROM (SELECT posting_date, SUM(SUM(net_debit)) OVER (ORDER BY posting_date) bal
+            FROM v_gl WHERE account_code LIKE '112%' GROUP BY 1)""")
+        ),
     }
     if not quiet:
         for k, v in stats.items():

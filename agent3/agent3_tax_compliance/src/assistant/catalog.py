@@ -10,6 +10,7 @@ protected settings page, never by editing code.
 Each save is validated, gets a new version stamp and is recorded in data/catalog_history.json (who, when, what changed).
 """
 import json
+import hashlib
 import re
 from datetime import date, datetime
 from pathlib import Path
@@ -34,11 +35,12 @@ def path(name: str) -> Path:
 
 def load(name: str) -> dict:
     p = path(name)
-    mtime = p.stat().st_mtime
+    raw = p.read_bytes()
+    mtime = hashlib.sha256(raw).hexdigest()
     hit = _cache.get(name)
     if hit and hit[0] == mtime:
         return hit[1]
-    data = json.loads(p.read_text(encoding='utf-8'))
+    data = json.loads(raw)
     _cache[name] = (mtime, data)
     return data
 

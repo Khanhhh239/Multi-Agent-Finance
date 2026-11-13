@@ -19,7 +19,10 @@ def test_l0_catalog_has_verified_inventory(catalog):
     public = catalog.public_metrics()
     assert len(public) == 66
     assert Counter(item["kind"] for item in public) == {
-        "flow": 26, "snapshot": 15, "ratio": 5, "custom": 20,
+        "flow": 26,
+        "snapshot": 15,
+        "ratio": 5,
+        "custom": 20,
     }
     assert len(CUSTOM_IDS) == 20
     assert len(catalog.hash) == 16
@@ -42,10 +45,20 @@ def test_query_contract_forbids_unknown_fields():
 def test_plan_contract_rejects_contradictory_status():
     with pytest.raises(ValidationError):
         SemanticPlanDraft(
-            plan_version="1.0", status="ready", metric_ids=[],
-            time=TimeDraft.none(), dimensions=[],
-            filters=[], view=None, operation=None, sort=None, top_k=None,
-            comparison=None, question_for_user=None, unresolved_slots=[], reason_code=None,
+            plan_version="1.0",
+            status="ready",
+            metric_ids=[],
+            time=TimeDraft.none(),
+            dimensions=[],
+            filters=[],
+            view=None,
+            operation=None,
+            sort=None,
+            top_k=None,
+            comparison=None,
+            question_for_user=None,
+            unresolved_slots=[],
+            reason_code=None,
         )
 
 

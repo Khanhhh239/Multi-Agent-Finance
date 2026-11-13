@@ -1,11 +1,5 @@
-from .adapter import MetricCatalogAdapter
-from .document_builder import MetricDocument, MetricDocumentBuilder
-from .relationships import MetricRelationship, RelationshipRegistry
+"""Catalog adapter used by the platform demo API."""
 
-__all__ = [
-    "MetricCatalogAdapter",
-    "MetricDocument",
-    "MetricDocumentBuilder",
-    "MetricRelationship",
-    "RelationshipRegistry",
-]
+from .adapter import MetricCatalogAdapter
+
+__all__ = ["MetricCatalogAdapter"]

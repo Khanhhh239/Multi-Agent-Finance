@@ -1,4 +1,5 @@
 """Read-only adapter around the financial metric source of truth."""
+
 from __future__ import annotations
 
 import hashlib

@@ -18,8 +18,10 @@ def create_app(
     query_service = service or build_default_service()
     configured_token = demo_token if demo_token is not None else os.getenv("AGENT4_DEMO_TOKEN")
     fixed_auth = auth_context or AuthContext(
-        user_id="demo-analyst", tenant_id="tenant_demo_A",
-        roles=frozenset({"finance_analyst"}), allowed_views=frozenset({"mgmt", "tax"}),
+        user_id="demo-analyst",
+        tenant_id="tenant_demo_A",
+        roles=frozenset({"finance_analyst"}),
+        allowed_views=frozenset({"mgmt", "tax"}),
     )
     app = FastAPI(title="AI-fin Safe Financial Text-to-SQL", version="1.0.0")
 
@@ -40,8 +42,10 @@ def create_app(
         if not healthy:
             raise HTTPException(status_code=503, detail="Service is not ready")
         return {
-            "status": "ready", "catalog_hash": query_service.catalog.hash,
-            "metric_count": len(query_service.catalog.public_metrics()), "data_mode": "synthetic",
+            "status": "ready",
+            "catalog_hash": query_service.catalog.hash,
+            "metric_count": len(query_service.catalog.public_metrics()),
+            "data_mode": "synthetic",
         }
 
     @app.get("/v1/metrics")
@@ -55,9 +59,7 @@ def create_app(
         )
         return {
             "catalog_hash": query_service.catalog.hash,
-            "items": query_service.catalog.public_metrics(
-                visible, auth.allowed_views
-            ),
+            "items": query_service.catalog.public_metrics(visible, auth.allowed_views),
         }
 
     @app.post("/v1/query", response_model=QueryResponse)

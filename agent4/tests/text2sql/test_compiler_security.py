@@ -10,12 +10,20 @@ from agent4.text2sql.validation import SemanticValidator
 
 def plan(catalog, auth, *, metric_ids=None, dimensions=None, filters=None, view="mgmt", time=None):
     draft = SemanticPlanDraft(
-        plan_version="1.0", status="ready",
+        plan_version="1.0",
+        status="ready",
         metric_ids=metric_ids or ["net_revenue"],
         time=time or TimeDraft.range(date(2026, 10, 1), date(2026, 10, 31)),
-        dimensions=dimensions or [], filters=filters or [], view=view,
-        operation="timeseries" if dimensions else "aggregate", sort=None, top_k=None,
-        comparison=None, question_for_user=None, unresolved_slots=[], reason_code=None,
+        dimensions=dimensions or [],
+        filters=filters or [],
+        view=view,
+        operation="timeseries" if dimensions else "aggregate",
+        sort=None,
+        top_k=None,
+        comparison=None,
+        question_for_user=None,
+        unresolved_slots=[],
+        reason_code=None,
     )
     return SemanticValidator(catalog).validate(draft, auth)
 
@@ -30,9 +38,9 @@ def test_c01_dates_and_prefixes_are_bound(catalog, auth):
 
 def test_c02_injection_filter_is_bound_not_interpolated(catalog, auth):
     attack = "HN' OR 1=1 --"
-    query = SQLCompiler(catalog).compile(plan(
-        catalog, auth, filters=[FilterDraft(field="branch", operator="eq", values=[attack])]
-    ))
+    query = SQLCompiler(catalog).compile(
+        plan(catalog, auth, filters=[FilterDraft(field="branch", operator="eq", values=[attack])])
+    )
     assert attack not in query.sql
     assert attack in query.params
     assert "branch_code = ?" in query.sql
@@ -43,11 +51,17 @@ def test_c03_dimensions_are_allowlisted(catalog, auth):
     assert "strftime(posting_date" in query.sql
 
 
-@pytest.mark.parametrize("sql", [
-    "DROP TABLE ledger", "SELECT 1; DELETE FROM ledger", "UPDATE ledger SET x=1",
-    "COPY ledger TO '/tmp/leak'", "SELECT * FROM information_schema.tables",
-    "SELECT * FROM read_csv_auto('/tmp/private.csv')",
-])
+@pytest.mark.parametrize(
+    "sql",
+    [
+        "DROP TABLE ledger",
+        "SELECT 1; DELETE FROM ledger",
+        "UPDATE ledger SET x=1",
+        "COPY ledger TO '/tmp/leak'",
+        "SELECT * FROM information_schema.tables",
+        "SELECT * FROM read_csv_auto('/tmp/private.csv')",
+    ],
+)
 def test_c04_c06_unsafe_sql_is_rejected(sql):
     with pytest.raises(UnsafeQuery):
         assert_safe_select(sql)
@@ -62,7 +76,9 @@ def test_c14_ratio_uses_aggregated_num_den(catalog, auth):
 
 
 def test_c20_lineage_contains_only_selected_metrics(catalog, auth):
-    query = SQLCompiler(catalog).compile(plan(catalog, auth, metric_ids=["net_revenue", "gross_profit"]))
+    query = SQLCompiler(catalog).compile(
+        plan(catalog, auth, metric_ids=["net_revenue", "gross_profit"])
+    )
     assert query.metric_ids == ("net_revenue", "gross_profit")
     assert set(query.units) == {"net_revenue", "gross_profit"}
     assert len(query.fingerprint) == 24

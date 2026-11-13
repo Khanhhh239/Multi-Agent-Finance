@@ -34,6 +34,7 @@ PROTECTED = [
     ('POST', r'/api/workspaces'),
     ('POST', r'/api/demo'),
     ('PUT', r'/api/workspaces/[^/]+/pack'),
+    ('POST', r'/api/workspaces/[^/]+/bank/formats'),
     ('PUT', r'/api/workspaces/[^/]+/risk-list'),
     ('POST', r'/api/law/sync'),
     ('PUT', r'/api/admin/catalog/[a-z_]+'),

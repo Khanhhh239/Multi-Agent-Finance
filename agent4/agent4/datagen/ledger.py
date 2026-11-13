@@ -6,6 +6,7 @@ unbalanced journal unless the caller explicitly injects a data-quality defect
 (account, partner) so the simulator can make cash-management decisions and
 derive VAT offsets, payroll payable, etc. exactly as an accountant would.
 """
+
 from __future__ import annotations
 
 from collections import defaultdict
@@ -44,7 +45,9 @@ class Ledger:
         self.journals: list[tuple] = []
         self.balance: dict[str, int] = defaultdict(int)  # debit-positive
         self.partner_balance: dict[tuple[str, str], int] = defaultdict(int)
-        self.month_movement: dict[tuple[str, str], int] = defaultdict(int)  # (yyyy-mm, account) excl. closing
+        self.month_movement: dict[tuple[str, str], int] = defaultdict(
+            int
+        )  # (yyyy-mm, account) excl. closing
         self._entry_id = 0
         self._seq: dict[str, int] = defaultdict(int)
 
@@ -82,7 +85,19 @@ class Ledger:
                 raise ValueError(f"bad line in {description}: {ln}")
         journal_id = self.next_doc(prefix, on)
         created_at = created_at or datetime.combine(on, time(hour, (self._entry_id * 7) % 60))
-        self.journals.append((journal_id, on, doc_type, doc_no or journal_id, description, module, is_closing, created_by, created_at))
+        self.journals.append(
+            (
+                journal_id,
+                on,
+                doc_type,
+                doc_no or journal_id,
+                description,
+                module,
+                is_closing,
+                created_by,
+                created_at,
+            )
+        )
         ym = f"{on:%Y-%m}"
         for n, ln in enumerate(lines, start=1):
             self._entry_id += 1
@@ -92,12 +107,33 @@ class Ledger:
                 self.partner_balance[(ln.account, ln.partner)] += net
             if not is_closing:
                 self.month_movement[(ym, ln.account)] += net
-            self.rows.append((
-                self._entry_id, journal_id, n, on, ln.account, ln.partner, ln.item,
-                ln.branch or branch, ln.department, ln.employee, ln.product_line, ln.cost_category,
-                ln.description or description, ln.debit, ln.credit, doc_type, doc_no or journal_id, module,
-                is_closing, ln.tax_deductible, ln.tax_note, created_by, created_at,
-            ))
+            self.rows.append(
+                (
+                    self._entry_id,
+                    journal_id,
+                    n,
+                    on,
+                    ln.account,
+                    ln.partner,
+                    ln.item,
+                    ln.branch or branch,
+                    ln.department,
+                    ln.employee,
+                    ln.product_line,
+                    ln.cost_category,
+                    ln.description or description,
+                    ln.debit,
+                    ln.credit,
+                    doc_type,
+                    doc_no or journal_id,
+                    module,
+                    is_closing,
+                    ln.tax_deductible,
+                    ln.tax_note,
+                    created_by,
+                    created_at,
+                )
+            )
         return journal_id
 
     def bal(self, *prefixes: str) -> int:

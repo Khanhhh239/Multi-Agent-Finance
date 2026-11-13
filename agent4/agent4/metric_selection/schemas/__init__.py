@@ -1,14 +1,5 @@
-from .evaluation import EvaluationCase, EvaluationSummary
-from .request import MetricSelectionRequest
-from .retrieval import MetricCandidate, PipelineDebugTrace
-from .selection import MetricSelectionResult, StructuredMetricSelection
+"""Candidate schema used by the platform demo selector."""
 
-__all__ = [
-    "EvaluationCase",
-    "EvaluationSummary",
-    "MetricCandidate",
-    "MetricSelectionRequest",
-    "MetricSelectionResult",
-    "PipelineDebugTrace",
-    "StructuredMetricSelection",
-]
+from .retrieval import MetricCandidate
+
+__all__ = ["MetricCandidate"]

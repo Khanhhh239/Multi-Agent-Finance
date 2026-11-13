@@ -5,7 +5,7 @@ import '@fontsource/be-vietnam-pro/600.css';
 import './app.css';
 import { $, app, beginPage, esc, loadWorkspaces, notice, needWorkspace, state, store } from './core.js';
 import { decoratePage, installValidation, portalOrigin } from './interactions.js';
-import { pageIntake } from './pages_intake.js';
+import { pageIntake, pageBankFormats, pageDataWorkspace } from './pages_intake.js';
 import { pageOverview, pageReview } from './pages_work.js';
 import { pageBank, pageCalendar, pageInvoices, pageLaw } from './pages_more.js';
 import { pageAsk } from './pages_ask.js';
@@ -20,6 +20,8 @@ const NAV = [
   ['#/hoi', 'Hỏi đáp', pageAsk],
 ];
 const HIDDEN = [
+  ['#/du-lieu', 'Bảng kê đang sử dụng', pageDataWorkspace],
+  ['#/quan-tri/mau-sao-ke', 'Nhận dạng cột sao kê', adminOnly(pageBankFormats)],
   ['#/ngan-hang', 'Ngân hàng', pageBank], ['#/so-lieu', 'Số liệu thuế GTGT', pageVat], ['#/giai-trinh', 'Giải trình', pageDossier],
   ['#/lich', 'Lịch thuế', pageCalendar], ['#/luat', 'Kho luật', pageLaw], ['#/tin-luat', 'Kho luật', pageLaw],
   ['#/quan-tri', 'Quản trị', adminOnly(pageAdminHome)], ['#/quan-tri/doanh-nghiep', 'Cấu hình doanh nghiệp', adminOnly(pageConfig)],
@@ -28,7 +30,7 @@ const HIDDEN = [
   ['#/cai-dat', 'Cấu hình doanh nghiệp', adminOnly(pageConfig)],
 ];
 
-const DETAIL = ['#/ngan-hang', '#/so-lieu', '#/giai-trinh', '#/lich', '#/luat', '#/tin-luat'];
+const DETAIL = ['#/ngan-hang', '#/so-lieu', '#/giai-trinh', '#/lich', '#/luat', '#/tin-luat', '#/du-lieu'];
 
 function renderNav(cur) {
   const active = cur.startsWith('#/quan-tri') || ['#/thiet-lap', '#/cai-dat'].includes(cur) ? '#/quan-tri'
@@ -54,6 +56,7 @@ async function route() {
   document.title = `${entry[1]} · Agent 3 Trợ lý thuế`;
   try { if (needWorkspace()) return; await page(); } catch (err) { if (signal.aborted) return; app().innerHTML = `<h1 class="page">${esc(entry[1])}</h1>` + notice('error', 'Có lỗi khi tải trang', err.message); }
   if (!signal.aborted && DETAIL.includes(cur) && !app().querySelector('.back-crumb')) app().insertAdjacentHTML('afterbegin', '<a class="back-crumb" href="#/">← Quay về Tổng quan</a>');
+  if (!signal.aborted && ['#/viec', '#/so-lieu', '#/giai-trinh', '#/lich'].includes(cur)) app().querySelector('h1')?.insertAdjacentHTML('afterend', notice('warning', 'Kết quả tham khảo theo quy tắc nháp', 'Chưa có chuyên gia thuế duyệt; chưa xác nhận nghĩa vụ kê khai, nộp thuế hoặc xử phạt.'));
   if (!signal.aborted) { decoratePage(app()); if (!document.querySelector('.drawer')) app().focus({ preventScroll: true }); }
 }
 
@@ -63,17 +66,25 @@ document.addEventListener('click', (e) => {
 });
 $('.menu-toggle').setAttribute('aria-expanded', 'false');
 $('.menu-toggle').onclick = () => { const open = document.body.classList.toggle('nav-open'); $('.menu-toggle').setAttribute('aria-expanded', String(open)); };
-const initial = store.get('agent3.theme') || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'g100' : 'g10');
+const inPlatform = window.self !== window.top;
+const initial = inPlatform ? (store.get('agent3.theme.embedded') || 'g10') : (store.get('agent3.theme') || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'g100' : 'g10'));
 document.body.className = `cds--${initial}`;
 $('.theme-toggle').onclick = () => {
   const next = document.body.classList.contains('cds--g100') ? 'g10' : 'g100';
   document.body.className = `cds--${next}`;
-  store.set('agent3.theme', next);
+  store.set(inPlatform ? 'agent3.theme.embedded' : 'agent3.theme', next);
 };
 window.addEventListener('hashchange', route);
 installValidation();
 $('.skip-link').onclick = (e) => { e.preventDefault(); app().focus(); };
-const observer = new MutationObserver(() => decoratePage(app()));
+let decorateTimer = null;
+const observer = new MutationObserver(() => {
+  if (decorateTimer) return;
+  decorateTimer = setTimeout(() => {
+    decorateTimer = null;
+    decoratePage(app());
+  }, 100);
+});
 observer.observe(app(), { childList: true, subtree: true });
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
@@ -90,9 +101,14 @@ async function refreshContext() {
     const res = await fetch('/api/platform/context', { cache: 'no-store' });
     if (!res.ok) return;
     const next = await res.json();
-    if (JSON.stringify(next) !== JSON.stringify(state.platform)) {
+    const changed = !state.platform ||
+      next.profile_revision !== state.platform.profile_revision ||
+      next.workspace_id !== state.platform.workspace_id ||
+      next.state !== state.platform.state;
+    if (changed) {
       const draft = [...app().querySelectorAll('input,select,textarea')].filter(e => !['password', 'file', 'hidden'].includes(e.type)).map(e => ({ name: e.name || e.id || e.dataset.f, value: e.value, checked: e.checked }));
       if (draft.length) try { sessionStorage.setItem('agent3.previous-context-draft', JSON.stringify({ revision: state.platform?.profile_revision, path: location.hash, fields: draft })); } catch { /* storage unavailable */ }
+      state.platform = next;
       beginPage();
       state.report = null;
       $('#modal-root').replaceChildren();

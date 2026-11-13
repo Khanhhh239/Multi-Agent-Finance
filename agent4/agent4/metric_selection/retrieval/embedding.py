@@ -1,4 +1,5 @@
 """Injectable embedding providers, including a deterministic offline baseline."""
+
 from __future__ import annotations
 
 import hashlib
@@ -55,7 +56,7 @@ class HashingEmbeddingProvider:
         features.extend(f"b:{left}_{right}" for left, right in pairwise(words))
         compact = re.sub(r"\s+", " ", normalized)
         for size in (3, 4, 5):
-            features.extend(f"c:{compact[i:i + size]}" for i in range(len(compact) - size + 1))
+            features.extend(f"c:{compact[i : i + size]}" for i in range(len(compact) - size + 1))
         return features
 
     def _embed(self, text: str) -> list[float]:

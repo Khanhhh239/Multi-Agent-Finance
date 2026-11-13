@@ -67,7 +67,7 @@ def test_file_status_mapping_preview_and_coverage(env):
     assert pv['preview'] and all(not r.get('debit') or r.get('error') for r in pv['preview'][:3])  # user sees the effect at once
     warn = c.get(f'/api/workspaces/{wid}/coverage').json()
     assert any('sao kê chưa đọc được' in w['title'] for w in warn)
-    c.post(f'/api/workspaces/{wid}/bank/formats', json=s['format'])
+    c.post(f'/api/workspaces/{wid}/bank/formats', json=s['format'], headers={'If-Match': c.get(f'/api/workspaces/{wid}/pack').headers['etag']}).raise_for_status()
     assert c.get(f'/api/workspaces/{wid}/details/bank').json()[0]['ok'] is True
     titles = [w['title'] for w in c.get(f'/api/workspaces/{wid}/coverage').json()]
     assert not any('chưa đọc được' in t for t in titles) and any('bảng kê' in t for t in titles)

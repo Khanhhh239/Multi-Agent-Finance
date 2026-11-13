@@ -1,0 +1,1512 @@
+{
+  "snapshot": {
+    "profile_id": "minh_phat_enterprise_x10",
+    "data_version": "3.0.0",
+    "seed": "20261108",
+    "as_of_date": "2026-10-14",
+    "last_closed_month": "2026-08",
+    "gl_rows": 19784697
+  },
+  "catalog_baseline": {
+    "ap_balance [v_mgmt]": "1544246537623.00",
+    "ap_balance [v_gl]": "1544246537623.00",
+    "ar_balance [v_mgmt]": "2881668730133.00",
+    "ar_balance [v_gl]": "2881668730133.00",
+    "budget_amount [budget]": "1116305208252.00",
+    "cash_balance [v_mgmt]": "126152473720.00",
+    "cash_balance [v_gl]": "126152473720.00",
+    "cogs [v_mgmt]": "861043840234.00",
+    "cogs [v_tax]": "861043840234.00",
+    "cogs [v_gl]": "861043840234.00",
+    "gross_margin [v_mgmt]": "18.93",
+    "gross_margin [v_tax]": "18.93",
+    "gross_profit [v_mgmt]": "201065036988.00",
+    "gross_profit [v_tax]": "201065036988.00",
+    "gross_profit [v_gl]": "201065036988.00",
+    "loan_balance [v_mgmt]": "343934823585.00",
+    "loan_balance [v_gl]": "343934823585.00",
+    "net_profit [v_mgmt]": "24733008318.00",
+    "net_profit [v_tax]": "24733008318.00",
+    "net_profit_margin [v_mgmt]": "2.33",
+    "net_profit_margin [v_tax]": "2.33",
+    "net_revenue [v_mgmt]": "1062108877222.00",
+    "net_revenue [v_tax]": "1062108877222.00",
+    "net_revenue [v_gl]": "1062108877222.00",
+    "operating_expense [v_mgmt]": "163773776591.00",
+    "operating_expense [v_tax]": "163773776591.00",
+    "operating_expense [v_gl]": "163773776591.00",
+    "payroll_expense [v_mgmt]": "99543464989.00",
+    "payroll_expense [v_tax]": "99543464989.00"
+  },
+  "golden_rows": {
+    "BM-001": [
+      {
+        "net_revenue": "1062108877222.00"
+      }
+    ],
+    "BM-002": [
+      {
+        "gross_margin": "18.77",
+        "net_profit_margin": "3.12"
+      }
+    ],
+    "BM-003": [
+      {
+        "net_revenue": "11970710116309.00",
+        "cogs": "9473934166332.00",
+        "gross_profit": "2496775949977.00"
+      }
+    ],
+    "BM-004": [
+      {
+        "cash_balance": "78819924402.00"
+      }
+    ],
+    "BM-005": [
+      {
+        "payroll_expense": "99543464989.00"
+      }
+    ],
+    "BM-006": [
+      {
+        "loan_balance": "761726939404.00"
+      }
+    ],
+    "BM-007": [
+      {
+        "operating_expense": "470171099547.00"
+      }
+    ],
+    "BM-008": [
+      {
+        "ar_balance": "2709938381015.00",
+        "ap_balance": "947906376308.00"
+      }
+    ],
+    "BM-009": [
+      {
+        "net_profit": "156266749039.00"
+      }
+    ],
+    "BM-010": [
+      {
+        "cogs": "881602505963.00"
+      }
+    ],
+    "BM-011": [
+      {
+        "operating_expense": "461264156306.00"
+      }
+    ],
+    "BM-012": [
+      {
+        "gross_profit": "217052462502.00",
+        "net_profit": "37243433553.00"
+      }
+    ],
+    "BM-013": [
+      {
+        "budget_amount": "13897999842745.00"
+      }
+    ],
+    "BM-014": [
+      {
+        "ar_balance": "2912196369930.00"
+      }
+    ],
+    "BM-015": [
+      {
+        "ap_balance": "1037688128859.00"
+      }
+    ],
+    "BM-016": [
+      {
+        "net_revenue": "1219885858599.00",
+        "gross_profit": "228284735483.00"
+      }
+    ],
+    "BM-017": [
+      {
+        "net_profit_margin": "3.63"
+      }
+    ],
+    "BM-018": [
+      {
+        "cash_balance": "90489330114.00"
+      }
+    ],
+    "BM-019": [
+      {
+        "payroll_expense": "298630394967.00"
+      }
+    ],
+    "BM-020": [
+      {
+        "gross_margin": "18.74"
+      }
+    ],
+    "BM-021": [
+      {
+        "month": "2026-01",
+        "net_revenue": "1167392363060.00"
+      },
+      {
+        "month": "2026-02",
+        "net_revenue": "611637061807.00"
+      },
+      {
+        "month": "2026-03",
+        "net_revenue": "1171702358801.00"
+      },
+      {
+        "month": "2026-04",
+        "net_revenue": "1179461078681.00"
+      },
+      {
+        "month": "2026-05",
+        "net_revenue": "1085815654878.00"
+      },
+      {
+        "month": "2026-06",
+        "net_revenue": "1159550654303.00"
+      },
+      {
+        "month": "2026-07",
+        "net_revenue": "1219885858599.00"
+      },
+      {
+        "month": "2026-08",
+        "net_revenue": "1062108877222.00"
+      }
+    ],
+    "BM-022": [
+      {
+        "month": "2026-01",
+        "gross_margin": "13.07"
+      },
+      {
+        "month": "2026-02",
+        "gross_margin": "13.08"
+      },
+      {
+        "month": "2026-03",
+        "gross_margin": "13.08"
+      },
+      {
+        "month": "2026-04",
+        "gross_margin": "13.08"
+      },
+      {
+        "month": "2026-05",
+        "gross_margin": "13.1"
+      },
+      {
+        "month": "2026-06",
+        "gross_margin": "13.08"
+      },
+      {
+        "month": "2026-07",
+        "gross_margin": "13.05"
+      },
+      {
+        "month": "2026-08",
+        "gross_margin": "13.06"
+      }
+    ],
+    "BM-023": [
+      {
+        "month": "2026-08",
+        "operating_expense": "16283835543.00"
+      },
+      {
+        "month": "2026-09",
+        "operating_expense": "17786211748.00"
+      }
+    ],
+    "BM-024": [
+      {
+        "quarter": "2025-Q1",
+        "net_revenue": "2525306390325.00"
+      },
+      {
+        "quarter": "2025-Q2",
+        "net_revenue": "2952853396835.00"
+      },
+      {
+        "quarter": "2025-Q3",
+        "net_revenue": "2869768497389.00"
+      },
+      {
+        "quarter": "2025-Q4",
+        "net_revenue": "3622781831760.00"
+      },
+      {
+        "quarter": "2026-Q1",
+        "net_revenue": "2950731783668.00"
+      },
+      {
+        "quarter": "2026-Q2",
+        "net_revenue": "3424827387862.00"
+      }
+    ],
+    "BM-025": [
+      {
+        "month": "2026-01",
+        "net_revenue": "1167392363060.00"
+      },
+      {
+        "month": "2026-02",
+        "net_revenue": "611637061807.00"
+      },
+      {
+        "month": "2026-03",
+        "net_revenue": "1171702358801.00"
+      },
+      {
+        "month": "2026-04",
+        "net_revenue": "1179461078681.00"
+      },
+      {
+        "month": "2026-05",
+        "net_revenue": "1085815654878.00"
+      },
+      {
+        "month": "2026-06",
+        "net_revenue": "1159550654303.00"
+      },
+      {
+        "month": "2026-07",
+        "net_revenue": "1219885858599.00"
+      },
+      {
+        "month": "2026-08",
+        "net_revenue": "1062108877222.00"
+      },
+      {
+        "month": "2026-09",
+        "net_revenue": "1165240350647.00"
+      },
+      {
+        "month": "2026-10",
+        "net_revenue": "568439656561.00"
+      }
+    ],
+    "BM-026": [
+      {
+        "quarter": "2025-Q1",
+        "net_profit_margin": "2.28"
+      },
+      {
+        "quarter": "2025-Q2",
+        "net_profit_margin": "3.8"
+      },
+      {
+        "quarter": "2025-Q3",
+        "net_profit_margin": "3.36"
+      },
+      {
+        "quarter": "2025-Q4",
+        "net_profit_margin": "4.64"
+      },
+      {
+        "quarter": "2026-Q1",
+        "net_profit_margin": "1.67"
+      },
+      {
+        "quarter": "2026-Q2",
+        "net_profit_margin": "3.12"
+      },
+      {
+        "quarter": "2026-Q3",
+        "net_profit_margin": "2.94"
+      }
+    ],
+    "BM-027": [
+      {
+        "month": "2025-01",
+        "cogs": "813852245777.00"
+      },
+      {
+        "month": "2025-02",
+        "cogs": "406982126947.00"
+      },
+      {
+        "month": "2025-03",
+        "cogs": "773562556480.00"
+      },
+      {
+        "month": "2025-04",
+        "cogs": "742682023429.00"
+      },
+      {
+        "month": "2025-05",
+        "cogs": "828799600638.00"
+      },
+      {
+        "month": "2025-06",
+        "cogs": "765218783814.00"
+      },
+      {
+        "month": "2025-07",
+        "cogs": "769721892347.00"
+      },
+      {
+        "month": "2025-08",
+        "cogs": "715754419355.00"
+      },
+      {
+        "month": "2025-09",
+        "cogs": "783460053091.00"
+      },
+      {
+        "month": "2025-10",
+        "cogs": "833092533096.00"
+      },
+      {
+        "month": "2025-11",
+        "cogs": "841531190403.00"
+      },
+      {
+        "month": "2025-12",
+        "cogs": "1199276740955.00"
+      }
+    ],
+    "BM-028": [
+      {
+        "quarter": "2025-Q1",
+        "gross_profit": "530909461121.00"
+      },
+      {
+        "quarter": "2025-Q2",
+        "gross_profit": "616152988954.00"
+      },
+      {
+        "quarter": "2025-Q3",
+        "gross_profit": "600832132596.00"
+      },
+      {
+        "quarter": "2025-Q4",
+        "gross_profit": "748881367306.00"
+      }
+    ],
+    "BM-029": [
+      {
+        "month": "2026-07",
+        "operating_expense": "170407549569.00"
+      },
+      {
+        "month": "2026-08",
+        "operating_expense": "163773776591.00"
+      },
+      {
+        "month": "2026-09",
+        "operating_expense": "168161505203.00"
+      }
+    ],
+    "BM-030": [
+      {
+        "year": "2025",
+        "net_revenue": "11970710116309.00",
+        "net_profit": "434348266192.00"
+      },
+      {
+        "year": "2026",
+        "net_revenue": "8657553907351.00",
+        "net_profit": "222201506088.00"
+      }
+    ],
+    "BM-031": [
+      {
+        "month": "2026-01",
+        "payroll_expense": "99543464989.00"
+      },
+      {
+        "month": "2026-02",
+        "payroll_expense": "99543464989.00"
+      },
+      {
+        "month": "2026-03",
+        "payroll_expense": "99543464989.00"
+      },
+      {
+        "month": "2026-04",
+        "payroll_expense": "99543464989.00"
+      },
+      {
+        "month": "2026-05",
+        "payroll_expense": "99543464989.00"
+      },
+      {
+        "month": "2026-06",
+        "payroll_expense": "99543464989.00"
+      },
+      {
+        "month": "2026-07",
+        "payroll_expense": "99543464989.00"
+      },
+      {
+        "month": "2026-08",
+        "payroll_expense": "99543464989.00"
+      }
+    ],
+    "BM-032": [
+      {
+        "month": "2026-01",
+        "net_profit_margin": "3.28"
+      },
+      {
+        "month": "2026-02",
+        "net_profit_margin": "-4.54"
+      },
+      {
+        "month": "2026-03",
+        "net_profit_margin": "3.31"
+      },
+      {
+        "month": "2026-04",
+        "net_profit_margin": "3.42"
+      },
+      {
+        "month": "2026-05",
+        "net_profit_margin": "2.71"
+      },
+      {
+        "month": "2026-06",
+        "net_profit_margin": "3.21"
+      }
+    ],
+    "BM-033": [
+      {
+        "month": "2026-01",
+        "net_revenue": "325845626965.00"
+      },
+      {
+        "month": "2026-02",
+        "net_revenue": "164647863863.00"
+      },
+      {
+        "month": "2026-03",
+        "net_revenue": "327193911269.00"
+      },
+      {
+        "month": "2026-04",
+        "net_revenue": "328951879399.00"
+      },
+      {
+        "month": "2026-05",
+        "net_revenue": "304538440503.00"
+      },
+      {
+        "month": "2026-06",
+        "net_revenue": "324214337390.00"
+      },
+      {
+        "month": "2026-07",
+        "net_revenue": "342250313941.00"
+      },
+      {
+        "month": "2026-08",
+        "net_revenue": "296488306054.00"
+      }
+    ],
+    "BM-034": [
+      {
+        "month": "2026-01",
+        "budget_amount": "1116305208252.00"
+      },
+      {
+        "month": "2026-02",
+        "budget_amount": "669783124949.00"
+      },
+      {
+        "month": "2026-03",
+        "budget_amount": "1116305208252.00"
+      },
+      {
+        "month": "2026-04",
+        "budget_amount": "1116305208252.00"
+      },
+      {
+        "month": "2026-05",
+        "budget_amount": "1116305208252.00"
+      },
+      {
+        "month": "2026-06",
+        "budget_amount": "1116305208252.00"
+      },
+      {
+        "month": "2026-07",
+        "budget_amount": "1116305208252.00"
+      },
+      {
+        "month": "2026-08",
+        "budget_amount": "1116305208252.00"
+      }
+    ],
+    "BM-035": [
+      {
+        "net_profit": "13889861242.00"
+      }
+    ],
+    "BM-036": [
+      {
+        "month": "2026-01",
+        "operating_expense": "164450984116.00"
+      },
+      {
+        "month": "2026-02",
+        "operating_expense": "141090594778.00"
+      },
+      {
+        "month": "2026-03",
+        "operating_expense": "164629520653.00"
+      },
+      {
+        "month": "2026-04",
+        "operating_expense": "164962404805.00"
+      },
+      {
+        "month": "2026-05",
+        "operating_expense": "161035438772.00"
+      },
+      {
+        "month": "2026-06",
+        "operating_expense": "164123170561.00"
+      },
+      {
+        "month": "2026-07",
+        "operating_expense": "170407549569.00"
+      },
+      {
+        "month": "2026-08",
+        "operating_expense": "163773776591.00"
+      }
+    ],
+    "BM-037": [
+      {
+        "quarter": "2026-Q1",
+        "gross_profit": "557862878371.00"
+      },
+      {
+        "quarter": "2026-Q2",
+        "gross_profit": "642955263910.00"
+      },
+      {
+        "quarter": "2026-Q3",
+        "gross_profit": "647951540573.00"
+      }
+    ],
+    "BM-038": [
+      {
+        "month": "2026-01",
+        "net_revenue": "312316521450.00"
+      },
+      {
+        "month": "2026-02",
+        "net_revenue": "158306881480.00"
+      },
+      {
+        "month": "2026-03",
+        "net_revenue": "316739664663.00"
+      },
+      {
+        "month": "2026-04",
+        "net_revenue": "317725973058.00"
+      },
+      {
+        "month": "2026-05",
+        "net_revenue": "296008340251.00"
+      },
+      {
+        "month": "2026-06",
+        "net_revenue": "312172150299.00"
+      }
+    ],
+    "BM-039": [
+      {
+        "month": "2026-01",
+        "gross_margin": "17.07"
+      },
+      {
+        "month": "2026-02",
+        "gross_margin": "17.07"
+      },
+      {
+        "month": "2026-03",
+        "gross_margin": "17.05"
+      },
+      {
+        "month": "2026-04",
+        "gross_margin": "17.06"
+      },
+      {
+        "month": "2026-05",
+        "gross_margin": "17.09"
+      },
+      {
+        "month": "2026-06",
+        "gross_margin": "17.08"
+      },
+      {
+        "month": "2026-07",
+        "gross_margin": "17.1"
+      },
+      {
+        "month": "2026-08",
+        "gross_margin": "17.08"
+      }
+    ],
+    "BM-040": [
+      {
+        "month": "2026-10",
+        "net_revenue": "568439656561.00"
+      }
+    ],
+    "BM-042": [
+      {
+        "product_line": "CON",
+        "gross_profit": "204884862737.00"
+      },
+      {
+        "product_line": "IT",
+        "gross_profit": "407736041616.00"
+      },
+      {
+        "product_line": "OFF",
+        "gross_profit": "204853239698.00"
+      },
+      {
+        "product_line": "SVC",
+        "gross_profit": "390129920517.00"
+      },
+      {
+        "product_line": null,
+        "gross_profit": "-6785922287.00"
+      }
+    ],
+    "BM-043": [
+      {
+        "month": "2026-04",
+        "operating_expense": "858586623.00"
+      },
+      {
+        "month": "2026-05",
+        "operating_expense": "809799930.00"
+      },
+      {
+        "month": "2026-06",
+        "operating_expense": "848935036.00"
+      }
+    ],
+    "BM-044": [
+      {
+        "partner_code": "C000002",
+        "net_revenue": "36277655226.00"
+      },
+      {
+        "partner_code": "C000003",
+        "net_revenue": "33513170363.00"
+      },
+      {
+        "partner_code": "C000008",
+        "net_revenue": "33343139157.00"
+      },
+      {
+        "partner_code": "C000009",
+        "net_revenue": "30532412131.00"
+      },
+      {
+        "partner_code": "C000007",
+        "net_revenue": "30507544664.00"
+      }
+    ],
+    "BM-045": [
+      {
+        "partner_code": "C000001",
+        "ar_balance": "149858204461.00"
+      },
+      {
+        "partner_code": "C000002",
+        "ar_balance": "120740548660.00"
+      },
+      {
+        "partner_code": "C000004",
+        "ar_balance": "118421879793.00"
+      },
+      {
+        "partner_code": "C000008",
+        "ar_balance": "118317825769.00"
+      },
+      {
+        "partner_code": "C000007",
+        "ar_balance": "114804402008.00"
+      }
+    ],
+    "BM-047": [
+      {
+        "cost_category": "LUONG",
+        "budget_amount": "84173821806.00"
+      },
+      {
+        "cost_category": "MARKETING",
+        "budget_amount": "11784335052.00"
+      },
+      {
+        "cost_category": null,
+        "budget_amount": "841738218072.00"
+      }
+    ],
+    "BM-048": [
+      {
+        "cost_category": "LUONG",
+        "operating_expense": "80601995942.00"
+      },
+      {
+        "cost_category": "BAOHIEM",
+        "operating_expense": "18941469047.00"
+      },
+      {
+        "cost_category": "MARKETING",
+        "operating_expense": "16283835543.00"
+      }
+    ],
+    "BM-049": [
+      {
+        "segment": "DLR",
+        "net_revenue": "487193418738.00"
+      },
+      {
+        "segment": "ENT",
+        "net_revenue": "996307168175.00"
+      },
+      {
+        "segment": "GOV",
+        "net_revenue": "489244770323.00"
+      },
+      {
+        "segment": "RET",
+        "net_revenue": "477946239679.00"
+      },
+      {
+        "segment": "SME",
+        "net_revenue": "974135790947.00"
+      },
+      {
+        "segment": null,
+        "net_revenue": "0.00"
+      }
+    ],
+    "BM-050": [
+      {
+        "product_line": "CON",
+        "gross_margin": "17.07"
+      },
+      {
+        "product_line": "IT",
+        "gross_margin": "13.06"
+      },
+      {
+        "product_line": "OFF",
+        "gross_margin": "17.08"
+      },
+      {
+        "product_line": "SVC",
+        "gross_margin": "45.06"
+      },
+      {
+        "product_line": null,
+        "gross_margin": "100.0"
+      }
+    ],
+    "BM-051": [
+      {
+        "partner_code": "V000268",
+        "ap_balance": "2109266695.00"
+      },
+      {
+        "partner_code": "V000188",
+        "ap_balance": "1772522865.00"
+      },
+      {
+        "partner_code": "V000234",
+        "ap_balance": "1771844788.00"
+      },
+      {
+        "partner_code": "V000287",
+        "ap_balance": "1730495246.00"
+      },
+      {
+        "partner_code": "V001112",
+        "ap_balance": "1693075219.00"
+      }
+    ],
+    "BM-052": [
+      {
+        "branch_code": "BD",
+        "payroll_expense": "14304928861.00"
+      },
+      {
+        "branch_code": "CT",
+        "payroll_expense": "14132508451.00"
+      },
+      {
+        "branch_code": "DN",
+        "payroll_expense": "14206377130.00"
+      },
+      {
+        "branch_code": "HCM",
+        "payroll_expense": "14096974596.00"
+      },
+      {
+        "branch_code": "HN",
+        "payroll_expense": "14425008896.00"
+      },
+      {
+        "branch_code": "HP",
+        "payroll_expense": "14167580696.00"
+      },
+      {
+        "branch_code": "NA",
+        "payroll_expense": "14210086359.00"
+      }
+    ],
+    "BM-053": [
+      {
+        "branch_code": "BD",
+        "product_line": "CON",
+        "cogs": "17719172164.00"
+      },
+      {
+        "branch_code": "BD",
+        "product_line": "IT",
+        "cogs": "45821505279.00"
+      },
+      {
+        "branch_code": "BD",
+        "product_line": "OFF",
+        "cogs": "17364240073.00"
+      },
+      {
+        "branch_code": "BD",
+        "product_line": "SVC",
+        "cogs": "5976290309.00"
+      },
+      {
+        "branch_code": "BD",
+        "product_line": null,
+        "cogs": "0.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": "CON",
+        "cogs": "11279845613.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": "IT",
+        "cogs": "32197148131.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": "OFF",
+        "cogs": "11239116093.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": "SVC",
+        "cogs": "4392447120.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": null,
+        "cogs": "0.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": "CON",
+        "cogs": "23406446411.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": "IT",
+        "cogs": "57929821428.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": "OFF",
+        "cogs": "20421132200.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": "SVC",
+        "cogs": "29707745704.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": null,
+        "cogs": "0.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": "CON",
+        "cogs": "49610575692.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": "IT",
+        "cogs": "128924659283.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": "OFF",
+        "cogs": "48013997690.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": "SVC",
+        "cogs": "16895868067.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": null,
+        "cogs": "0.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": "CON",
+        "cogs": "45501934343.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": "IT",
+        "cogs": "121328089230.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": "OFF",
+        "cogs": "44955074502.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": "SVC",
+        "cogs": "15920562258.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": null,
+        "cogs": "0.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": "CON",
+        "cogs": "17025825515.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": "IT",
+        "cogs": "41042725148.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": "OFF",
+        "cogs": "15402545432.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": "SVC",
+        "cogs": "5181729015.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": null,
+        "cogs": "0.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": "CON",
+        "cogs": "6877654994.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": "IT",
+        "cogs": "17625146829.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": "OFF",
+        "cogs": "6655371565.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": "SVC",
+        "cogs": "2627170146.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": null,
+        "cogs": "0.00"
+      }
+    ],
+    "BM-054": [
+      {
+        "product_line": "CON",
+        "net_revenue": "84056131195.00"
+      },
+      {
+        "product_line": "IT",
+        "net_revenue": "217653939384.00"
+      },
+      {
+        "product_line": "OFF",
+        "net_revenue": "84701218651.00"
+      },
+      {
+        "product_line": "SVC",
+        "net_revenue": "165132718170.00"
+      },
+      {
+        "product_line": null,
+        "net_revenue": "-680530264.00"
+      }
+    ],
+    "BM-055": [
+      {
+        "branch_code": "BD",
+        "net_profit": "-16600537188.00"
+      },
+      {
+        "branch_code": "CT",
+        "net_profit": "-64658058379.00"
+      },
+      {
+        "branch_code": "DN",
+        "net_profit": "234011196913.00"
+      },
+      {
+        "branch_code": "HCM",
+        "net_profit": "327043944303.00"
+      },
+      {
+        "branch_code": "HN",
+        "net_profit": "107964595683.00"
+      },
+      {
+        "branch_code": "HP",
+        "net_profit": "-31544174750.00"
+      },
+      {
+        "branch_code": "NA",
+        "net_profit": "-121868700390.00"
+      }
+    ],
+    "BM-056": [
+      {
+        "branch_code": "BD",
+        "product_line": "CON",
+        "net_revenue": "21364216444.00"
+      },
+      {
+        "branch_code": "BD",
+        "product_line": "IT",
+        "net_revenue": "52707229890.00"
+      },
+      {
+        "branch_code": "BD",
+        "product_line": "OFF",
+        "net_revenue": "20920771156.00"
+      },
+      {
+        "branch_code": "BD",
+        "product_line": "SVC",
+        "net_revenue": "10865982265.00"
+      },
+      {
+        "branch_code": "BD",
+        "product_line": null,
+        "net_revenue": "-78844324.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": "CON",
+        "net_revenue": "13590175410.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": "IT",
+        "net_revenue": "37021722213.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": "OFF",
+        "net_revenue": "13541103706.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": "SVC",
+        "net_revenue": "7987038432.00"
+      },
+      {
+        "branch_code": "CT",
+        "product_line": null,
+        "net_revenue": "-31522663.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": "CON",
+        "net_revenue": "28205265738.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": "IT",
+        "net_revenue": "66608770863.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": "OFF",
+        "net_revenue": "24646348654.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": "SVC",
+        "net_revenue": "54097603767.00"
+      },
+      {
+        "branch_code": "DN",
+        "product_line": null,
+        "net_revenue": "-173924166.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": "CON",
+        "net_revenue": "59865804163.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": "IT",
+        "net_revenue": "148304287858.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": "OFF",
+        "net_revenue": "57939887006.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": "SVC",
+        "net_revenue": "30721429467.00"
+      },
+      {
+        "branch_code": "HCM",
+        "product_line": null,
+        "net_revenue": "-343102440.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": "CON",
+        "net_revenue": "54866744774.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": "IT",
+        "net_revenue": "139534051339.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": "OFF",
+        "net_revenue": "54186205657.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": "SVC",
+        "net_revenue": "29024158538.00"
+      },
+      {
+        "branch_code": "HN",
+        "product_line": null,
+        "net_revenue": "-255094875.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": "CON",
+        "net_revenue": "20532225787.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": "IT",
+        "net_revenue": "47217965008.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": "OFF",
+        "net_revenue": "18572850786.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": "SVC",
+        "net_revenue": "9421325412.00"
+      },
+      {
+        "branch_code": "HP",
+        "product_line": null,
+        "net_revenue": "-80762630.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": "CON",
+        "net_revenue": "8286331316.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": "IT",
+        "net_revenue": "20275169037.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": "OFF",
+        "net_revenue": "8042120296.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": "SVC",
+        "net_revenue": "4784325190.00"
+      },
+      {
+        "branch_code": "NA",
+        "product_line": null,
+        "net_revenue": "-58981852.00"
+      }
+    ],
+    "BM-057": [
+      {
+        "partner_code": "C000003",
+        "net_revenue": "359796954767.00"
+      },
+      {
+        "partner_code": "C000008",
+        "net_revenue": "358650166902.00"
+      },
+      {
+        "partner_code": "C000004",
+        "net_revenue": "350739023722.00"
+      },
+      {
+        "partner_code": "C000001",
+        "net_revenue": "347155055326.00"
+      },
+      {
+        "partner_code": "C000007",
+        "net_revenue": "344917389545.00"
+      },
+      {
+        "partner_code": "C000002",
+        "net_revenue": "344739339954.00"
+      },
+      {
+        "partner_code": "C000010",
+        "net_revenue": "344325154765.00"
+      },
+      {
+        "partner_code": "C000005",
+        "net_revenue": "343907330863.00"
+      },
+      {
+        "partner_code": "C000006",
+        "net_revenue": "336930380070.00"
+      },
+      {
+        "partner_code": "C000009",
+        "net_revenue": "336110679286.00"
+      }
+    ],
+    "BM-058": [
+      {
+        "segment": "DLR",
+        "ar_balance": "195382843780.00"
+      },
+      {
+        "segment": "ENT",
+        "ar_balance": "1169393782727.00"
+      },
+      {
+        "segment": "GOV",
+        "ar_balance": "719267649106.00"
+      },
+      {
+        "segment": "RET",
+        "ar_balance": "47118186941.00"
+      },
+      {
+        "segment": "SME",
+        "ar_balance": "578775918461.00"
+      },
+      {
+        "segment": null,
+        "ar_balance": "0.00"
+      }
+    ],
+    "BM-059": [
+      {
+        "operating_expense": "204452370763.00"
+      }
+    ],
+    "BM-060": [
+      {
+        "department_code": "BGD",
+        "payroll_expense": "9098354357.00"
+      },
+      {
+        "department_code": "CSKH",
+        "payroll_expense": "8992607454.00"
+      },
+      {
+        "department_code": "HCNS",
+        "payroll_expense": "9129980132.00"
+      },
+      {
+        "department_code": "IT",
+        "payroll_expense": "8952490352.00"
+      },
+      {
+        "department_code": "KD",
+        "payroll_expense": "9138546187.00"
+      },
+      {
+        "department_code": "KHO",
+        "payroll_expense": "9160020231.00"
+      },
+      {
+        "department_code": "KSNB",
+        "payroll_expense": "9055352125.00"
+      },
+      {
+        "department_code": "KT",
+        "payroll_expense": "9092624509.00"
+      },
+      {
+        "department_code": "MH",
+        "payroll_expense": "8976385974.00"
+      },
+      {
+        "department_code": "MKT",
+        "payroll_expense": "8949388833.00"
+      },
+      {
+        "department_code": "TCKT",
+        "payroll_expense": "8997714835.00"
+      }
+    ],
+    "BM-061": [
+      {
+        "operating_expense": "163773776591.00"
+      }
+    ],
+    "BM-062": [
+      {
+        "operating_expense": "163773776591.00"
+      }
+    ],
+    "BM-063": [
+      {
+        "net_profit": "24733008318.00"
+      }
+    ],
+    "BM-064": [
+      {
+        "net_profit_margin": "2.33"
+      }
+    ],
+    "BM-065": [
+      {
+        "cost_category": "BAOHIEM",
+        "operating_expense": "18941469047.00"
+      },
+      {
+        "cost_category": "CONGTAC",
+        "operating_expense": "3526262222.00"
+      },
+      {
+        "cost_category": "DIEN_NUOC",
+        "operating_expense": "3526262222.00"
+      },
+      {
+        "cost_category": "KHAUHAO",
+        "operating_expense": "8378804969.00"
+      },
+      {
+        "cost_category": "LUONG",
+        "operating_expense": "80601995942.00"
+      },
+      {
+        "cost_category": "MARKETING",
+        "operating_expense": "16283835543.00"
+      },
+      {
+        "cost_category": "PHANMEM",
+        "operating_expense": "4589393330.00"
+      },
+      {
+        "cost_category": "PHI_NH",
+        "operating_expense": "0.00"
+      },
+      {
+        "cost_category": "THUE_MB",
+        "operating_expense": "10968179992.00"
+      },
+      {
+        "cost_category": "TIEPKHACH",
+        "operating_expense": "3526262222.00"
+      },
+      {
+        "cost_category": "VANCHUYEN",
+        "operating_expense": "10968179992.00"
+      },
+      {
+        "cost_category": "VATTU_DV",
+        "operating_expense": "0.00"
+      },
+      {
+        "cost_category": "VPP",
+        "operating_expense": "2463131110.00"
+      },
+      {
+        "cost_category": null,
+        "operating_expense": "0.00"
+      }
+    ],
+    "BM-074": [
+      {
+        "operating_expense": "502342831363.00"
+      }
+    ],
+    "BM-075": [
+      {
+        "net_profit": "8763877453.00"
+      }
+    ],
+    "BM-103": [
+      {
+        "net_revenue": "0.00"
+      }
+    ],
+    "BM-104": [
+      {
+        "operating_expense": "0.00"
+      }
+    ],
+    "BM-106": [
+      {
+        "cash_balance": "0.00"
+      }
+    ],
+    "BM-108": [
+      {
+        "net_revenue": "2436086331033.00"
+      }
+    ],
+    "BM-110": [
+      {
+        "operating_expense": "0.00"
+      }
+    ]
+  }
+}

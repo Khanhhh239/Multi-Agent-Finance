@@ -4,8 +4,11 @@ __pycache__/
 .cache/
 .hypothesis/
 *.egg-info/
+*.tar.gz
+*.tgz
 data/*.duckdb*
 data/*ground_truth.json
+data/enterprise-x10-v3/
 artifacts/
 data/traces/
 START_CODING_AGENT.md

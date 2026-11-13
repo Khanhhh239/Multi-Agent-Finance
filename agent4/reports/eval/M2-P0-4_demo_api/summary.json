@@ -1,0 +1,293 @@
+{
+  "health": {
+    "status": "ok",
+    "demo_mode": true,
+    "db_path": "data/cfo_warehouse.duckdb",
+    "verified_metrics_count": 22,
+    "llm_model": "qwen3:4b",
+    "embedding_model": "hashing-v1",
+    "retrieval_mode": "full_catalog"
+  },
+  "cases": [
+    {
+      "id": "D-01",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "net_revenue"
+      ],
+      "time": {
+        "mode": "range",
+        "start": "2026-08-01",
+        "end": "2026-08-31",
+        "as_of": null,
+        "grain": "month"
+      },
+      "view": "mgmt",
+      "warnings": [],
+      "error": null,
+      "duration_ms": 36721.9,
+      "checks": {
+        "status": true,
+        "metrics": true
+      }
+    },
+    {
+      "id": "D-02",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "gross_margin"
+      ],
+      "time": {
+        "mode": "range",
+        "start": "2026-08-01",
+        "end": "2026-08-31",
+        "as_of": null,
+        "grain": "month"
+      },
+      "view": "mgmt",
+      "warnings": [],
+      "error": null,
+      "duration_ms": 4012.6,
+      "checks": {
+        "status": true,
+        "metrics": true
+      }
+    },
+    {
+      "id": "D-03",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "cash_and_equivalents"
+      ],
+      "time": {
+        "mode": "as_of",
+        "start": null,
+        "end": null,
+        "as_of": "2025-12-31",
+        "grain": null
+      },
+      "view": "mgmt",
+      "warnings": [],
+      "error": null,
+      "duration_ms": 4497.6,
+      "checks": {
+        "status": true,
+        "metrics": true,
+        "snapshot": true
+      }
+    },
+    {
+      "id": "D-04",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "net_revenue",
+        "cogs",
+        "gross_profit"
+      ],
+      "time": {
+        "mode": "range",
+        "start": "2026-08-01",
+        "end": "2026-08-31",
+        "as_of": null,
+        "grain": "month"
+      },
+      "view": "mgmt",
+      "warnings": [],
+      "error": null,
+      "duration_ms": 4815.3,
+      "checks": {
+        "status": true,
+        "metrics": true
+      }
+    },
+    {
+      "id": "D-05",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "operating_expenses"
+      ],
+      "time": {
+        "mode": "range",
+        "start": "2026-04-01",
+        "end": "2026-06-30",
+        "as_of": null,
+        "grain": "month"
+      },
+      "view": "mgmt",
+      "warnings": [],
+      "error": null,
+      "duration_ms": 4001.0,
+      "checks": {
+        "status": true,
+        "metrics": true,
+        "department_breakdown": true
+      }
+    },
+    {
+      "id": "D-06",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "net_revenue"
+      ],
+      "time": {
+        "mode": "range",
+        "start": "2026-01-01",
+        "end": "2026-08-31",
+        "as_of": null,
+        "grain": "month"
+      },
+      "view": "mgmt",
+      "warnings": [],
+      "error": null,
+      "duration_ms": 4590.2,
+      "checks": {
+        "status": true,
+        "metrics": true,
+        "monthly_range": true
+      }
+    },
+    {
+      "id": "D-07",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "net_profit"
+      ],
+      "time": {
+        "mode": "range",
+        "start": "2026-08-01",
+        "end": "2026-08-31",
+        "as_of": null,
+        "grain": "month"
+      },
+      "view": "tax",
+      "warnings": [],
+      "error": null,
+      "duration_ms": 38276.2,
+      "checks": {
+        "status": true,
+        "metrics": true,
+        "tax_view": true
+      }
+    },
+    {
+      "id": "D-08",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "operating_expenses"
+      ],
+      "time": {
+        "mode": "range",
+        "start": "2026-09-01",
+        "end": "2026-09-30",
+        "as_of": null,
+        "grain": "month"
+      },
+      "view": "mgmt",
+      "warnings": [
+        "partial_data_watermark"
+      ],
+      "error": null,
+      "duration_ms": 38519.3,
+      "checks": {
+        "status": true,
+        "metrics": true,
+        "vendor_redacted": true,
+        "watermark": true
+      }
+    },
+    {
+      "id": "D-09",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "ready",
+      "metric_ids": [
+        "operating_expenses"
+      ],
+      "time": {
+        "mode": "range",
+        "start": "2026-01-01",
+        "end": "2026-09-30",
+        "as_of": null,
+        "grain": "month"
+      },
+      "view": "mgmt",
+      "warnings": [
+        "partial_data_watermark"
+      ],
+      "error": null,
+      "duration_ms": 4223.7,
+      "checks": {
+        "status": true,
+        "metrics": true,
+        "vendor_redacted": true,
+        "watermark": true,
+        "ytd_range": true
+      }
+    },
+    {
+      "id": "D-10",
+      "persona": "cfo_full",
+      "http_status": 200,
+      "status": "needs_clarification",
+      "metric_ids": [],
+      "time": null,
+      "view": null,
+      "warnings": [],
+      "error": null,
+      "duration_ms": 3363.5,
+      "checks": {
+        "status": true
+      }
+    },
+    {
+      "id": "D-11",
+      "persona": "branch_viewer",
+      "http_status": 403,
+      "status": "forbidden",
+      "metric_ids": [],
+      "time": null,
+      "view": null,
+      "warnings": [],
+      "error": "forbidden_metric",
+      "duration_ms": 9.7,
+      "checks": {
+        "status": true
+      }
+    },
+    {
+      "id": "D-12",
+      "persona": "cfo_full",
+      "http_status": 422,
+      "status": "unsupported",
+      "metric_ids": [],
+      "time": null,
+      "view": null,
+      "warnings": [],
+      "error": "unsupported_request",
+      "duration_ms": 3.8,
+      "checks": {
+        "status": true
+      }
+    }
+  ],
+  "count": 12,
+  "statuses_matched": 12,
+  "all_checks_matched": 12,
+  "latency_p50_ms": 4360.6
+}

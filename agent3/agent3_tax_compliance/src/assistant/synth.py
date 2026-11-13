@@ -168,8 +168,9 @@ def _fmt(n: int) -> str:
 
 
 def _write_xlsx(path: Path, rows: list[list]):
+    from decimal import Decimal
     def cell(ref, v):
-        if isinstance(v, int):
+        if isinstance(v, (int, Decimal)) and len(str(v).replace('-', '').replace('.', '')) <= 15:
             return f'<c r="{ref}"><v>{v}</v></c>'
         return f'<c r="{ref}" t="inlineStr"><is><t>{escape(str(v))}</t></is></c>'
     cols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

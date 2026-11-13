@@ -28,16 +28,27 @@ DIMENSIONS: dict[str, tuple[str, str]] = {
 WHERE_PREDICATES = {
     "source_document_type = 'DEPRECIATION'": ("source_document_type = ?", ("DEPRECIATION",)),
     "cost_category IN ('LUONG','THUONG')": (
-        "cost_category IN (?, ?)", ("LUONG", "THUONG"),
+        "cost_category IN (?, ?)",
+        ("LUONG", "THUONG"),
     ),
     "cost_category IN ('LUONG','THUONG','BAOHIEM')": (
-        "cost_category IN (?, ?, ?)", ("LUONG", "THUONG", "BAOHIEM"),
+        "cost_category IN (?, ?, ?)",
+        ("LUONG", "THUONG", "BAOHIEM"),
     ),
 }
-APPROVED_RELATIONS = frozenset({
-    "v_mgmt", "v_tax", "ar_invoice", "ar_receipt", "ar_adjustment",
-    "ap_bill", "ap_payment", "gl_entry", "payroll",
-})
+APPROVED_RELATIONS = frozenset(
+    {
+        "v_mgmt",
+        "v_tax",
+        "ar_invoice",
+        "ar_receipt",
+        "ar_adjustment",
+        "ap_bill",
+        "ap_payment",
+        "gl_entry",
+        "payroll",
+    }
+)
 
 
 def assert_safe_select(sql: str) -> None:
@@ -47,15 +58,36 @@ def assert_safe_select(sql: str) -> None:
     if ";" in sql:
         raise UnsafeQuery("multiple statements are forbidden")
     for token in (
-        " INSERT ", " UPDATE ", " DELETE ", " DROP ", " ALTER ", " COPY ",
-        " ATTACH ", " PRAGMA ", " CREATE ", " REPLACE ", " MERGE ", " TRUNCATE ",
-        " CALL ", " EXPORT ", " IMPORT ", " INSTALL ", " LOAD ",
+        " INSERT ",
+        " UPDATE ",
+        " DELETE ",
+        " DROP ",
+        " ALTER ",
+        " COPY ",
+        " ATTACH ",
+        " PRAGMA ",
+        " CREATE ",
+        " REPLACE ",
+        " MERGE ",
+        " TRUNCATE ",
+        " CALL ",
+        " EXPORT ",
+        " IMPORT ",
+        " INSTALL ",
+        " LOAD ",
     ):
         if token in f" {normalized} ":
             raise UnsafeQuery(f"forbidden SQL token: {token.strip()}")
     unsafe_functions = (
-        "READ_CSV", "READ_JSON", "READ_PARQUET", "READ_TEXT", "READ_BLOB",
-        "GLOB(", "HTTPFS", "SQLITE_SCAN", "POSTGRES_SCAN",
+        "READ_CSV",
+        "READ_JSON",
+        "READ_PARQUET",
+        "READ_TEXT",
+        "READ_BLOB",
+        "GLOB(",
+        "HTTPFS",
+        "SQLITE_SCAN",
+        "POSTGRES_SCAN",
     )
     if any(function in normalized for function in unsafe_functions):
         raise UnsafeQuery("external-access SQL function is forbidden")
@@ -67,9 +99,7 @@ def assert_safe_select(sql: str) -> None:
     }
     relations = {
         match.casefold()
-        for match in re.findall(
-            r"\b(?:FROM|JOIN)\s+([A-Za-z_][A-Za-z0-9_]*)", sql, re.IGNORECASE
-        )
+        for match in re.findall(r"\b(?:FROM|JOIN)\s+([A-Za-z_][A-Za-z0-9_]*)", sql, re.IGNORECASE)
     }
     unexpected = relations.difference(APPROVED_RELATIONS, ctes)
     if unexpected:
@@ -152,7 +182,9 @@ class SQLCompiler:
             query = self._compile_custom(plan, plan.metric_ids[0])
         else:
             if any(self.catalog.get(metric_id).kind == "custom" for metric_id in plan.metric_ids):
-                raise PlanRejected("incompatible_metrics", "Custom metric must execute in its own plan")
+                raise PlanRejected(
+                    "incompatible_metrics", "Custom metric must execute in its own plan"
+                )
             query = self._compile_catalog(plan)
         assert_safe_select(query.sql)
         return query
@@ -163,16 +195,24 @@ class SQLCompiler:
         period_type = self.catalog.get(plan.metric_ids[0]).period_type
         if period_type == "flow":
             assert plan.time.start and plan.time.end
-            clauses.extend([
-                "posting_date >= ?", "posting_date < ?", "COALESCE(is_closing, FALSE) = FALSE",
-                "source_document_type <> 'OPENING'",
-            ])
+            clauses.extend(
+                [
+                    "posting_date >= ?",
+                    "posting_date < ?",
+                    "COALESCE(is_closing, FALSE) = FALSE",
+                    "source_document_type <> 'OPENING'",
+                ]
+            )
             params.extend([plan.time.start, plan.time.end + timedelta(days=1)])
         else:
             assert plan.time.as_of
             clauses.append("posting_date <= ?")
             params.append(plan.time.as_of)
-        field_columns = {name: DIMENSIONS[name][0] for name in DIMENSIONS if name not in {"month", "quarter", "year"}}
+        field_columns = {
+            name: DIMENSIONS[name][0]
+            for name in DIMENSIONS
+            if name not in {"month", "quarter", "year"}
+        }
         for item in plan.filters:
             column = field_columns[item.field]
             if item.operator == "eq":
@@ -202,11 +242,13 @@ class SQLCompiler:
             eligibility, eligibility_params = self._eligibility(eligibility_terms)
             if compiled.startswith("RATIO::"):
                 _, numerator, denominator, expression = compiled.split("::", 3)
-                aggregates.extend([
-                    f"{numerator} AS {metric_id}__num",
-                    f"{denominator} AS {metric_id}__den",
-                    f"{eligibility} AS {metric_id}__rows",
-                ])
+                aggregates.extend(
+                    [
+                        f"{numerator} AS {metric_id}__num",
+                        f"{denominator} AS {metric_id}__den",
+                        f"{eligibility} AS {metric_id}__rows",
+                    ]
+                )
                 expression = expression.replace("numerator", f"{metric_id}__num").replace(
                     "denominator", f"{metric_id}__den"
                 )
@@ -223,7 +265,11 @@ class SQLCompiler:
             expression_params.extend(eligibility_params)
         clauses, where_params = self._base_where(plan)
         selected = ", ".join([*dimension_selects, *aggregates])
-        group_by = f" GROUP BY {', '.join(str(i + 1) for i in range(len(dimension_selects)))}" if dimension_selects else ""
+        group_by = (
+            f" GROUP BY {', '.join(str(i + 1) for i in range(len(dimension_selects)))}"
+            if dimension_selects
+            else ""
+        )
         cte = f"SELECT {selected} FROM {relation} WHERE {' AND '.join(clauses)}{group_by}"
         final_select = ", ".join([*dimension_aliases, *final_metrics])
         ordering = ""
@@ -234,7 +280,9 @@ class SQLCompiler:
         limit = min(plan.top_k or self.row_cap, self.row_cap)
         sql = f"WITH aggregated AS ({cte}) SELECT {final_select} FROM aggregated{ordering} LIMIT {limit + 1}"
         units = {metric_id: self.catalog.get(metric_id).unit for metric_id in plan.metric_ids}
-        return self._bound(sql, [*expression_params, *where_params], plan, units, tuple(dimension_aliases))
+        return self._bound(
+            sql, [*expression_params, *where_params], plan, units, tuple(dimension_aliases)
+        )
 
     def _compile_custom(self, plan: ValidatedPlan, metric_id: str) -> BoundQuery:
         assert plan.time.as_of or plan.time.start
@@ -245,9 +293,7 @@ class SQLCompiler:
             customer_select = "customer_code, " if "customer" in plan.dimensions else ""
             group_by = "1, 2" if customer_select else "1"
             ordering = (
-                "customer_code, CASE aging_bucket "
-                if customer_select
-                else "CASE aging_bucket "
+                "customer_code, CASE aging_bucket " if customer_select else "CASE aging_bucket "
             )
             sql = f"""
                 WITH paid AS (
@@ -332,7 +378,9 @@ class SQLCompiler:
             columns = [mapped[d] for d in plan.dimensions]
             dims = ", ".join(columns)
             select_dims = f"{dims}, " if dims else ""
-            group = f" GROUP BY {', '.join(str(i + 1) for i in range(len(columns)))}" if columns else ""
+            group = (
+                f" GROUP BY {', '.join(str(i + 1) for i in range(len(columns)))}" if columns else ""
+            )
             sql = (
                 f"SELECT {select_dims}SUM(gross_salary + bonus + employer_contribution) AS payroll_summary "
                 f"FROM payroll WHERE year_month >= ? AND year_month <= ?{group} "
@@ -354,8 +402,10 @@ class SQLCompiler:
                   AND COALESCE(is_closing,FALSE)=FALSE AND source_document_type <> 'OPENING' LIMIT 2
             """
             params = [
-                *eligibility_params, *expression_params,
-                plan.time.start, plan.time.end + timedelta(days=1),
+                *eligibility_params,
+                *expression_params,
+                plan.time.start,
+                plan.time.end + timedelta(days=1),
             ]
         elif metric_id == "mgmt_vs_tax_gap":
             assert plan.time.start and plan.time.end
@@ -379,7 +429,9 @@ class SQLCompiler:
             """
             params = [plan.time.start, plan.time.end + timedelta(days=1)]
         else:
-            raise PlanRejected("unsupported_data_source", f"No approved synthetic handler for {metric_id}")
+            raise PlanRejected(
+                "unsupported_data_source", f"No approved synthetic handler for {metric_id}"
+            )
         units = {metric_id: self.catalog.get(metric_id).unit}
         return self._bound(sql, params, plan, units, dimensions)
 
@@ -394,9 +446,13 @@ class SQLCompiler:
         normalized = re.sub(r"\s+", " ", sql.strip())
         fingerprint = hashlib.sha256(normalized.encode()).hexdigest()[:24]
         return BoundQuery(
-            sql=normalized, params=tuple(params), metric_ids=plan.metric_ids,
-            dimensions=dimensions, units=units,
+            sql=normalized,
+            params=tuple(params),
+            metric_ids=plan.metric_ids,
+            dimensions=dimensions,
+            units=units,
             row_cap=min(plan.top_k or self.row_cap, self.row_cap),
-            fingerprint=fingerprint, source="synthetic_duckdb",
+            fingerprint=fingerprint,
+            source="synthetic_duckdb",
             catalog_hash=plan.catalog_hash,
         )

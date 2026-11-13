@@ -1,5 +1,5 @@
 version: "1"
-prompt_version: metric-selection-v1
+prompt_version: metric-selection-v1-e0
 
 embedding:
   provider: hashing
@@ -9,6 +9,7 @@ embedding:
   cache_path: .cache/metric_selection_index.npz
 
 retrieval:
+  mode: full_catalog
   dense_enabled: true
   lexical_enabled: true
   fusion_method: rrf
@@ -32,8 +33,8 @@ reranking:
   cross_encoder_weight: 0.4
 
 fewshot:
-  enabled: true
-  strategy: adaptive
+  enabled: false
+  strategy: zero
   min_examples: 0
   max_examples: 4
   initial_pool_size: 15
@@ -46,10 +47,12 @@ fewshot:
 llm:
   provider: ollama
   base_url: http://localhost:11434
-  model: qwen3:8b
+  model: qwen3:4b
   temperature: 0
-  timeout_s: 180
+  timeout_s: 360
   max_retries: 1
+  structured_output: true
+  context_window: 8192
 
 evaluation:
   save_traces: true

@@ -10,12 +10,20 @@ from agent4.text2sql.validation import SemanticValidator
 def execute(catalog, auth, database, metric_id, time, *, view=None, dimensions=None, top_k=None):
     metric = catalog.get(metric_id)
     draft = SemanticPlanDraft(
-        plan_version="1.0", status="ready", metric_ids=[metric_id],
-        time=time, dimensions=dimensions or [],
-        filters=[], view=view or metric.default_view,
+        plan_version="1.0",
+        status="ready",
+        metric_ids=[metric_id],
+        time=time,
+        dimensions=dimensions or [],
+        filters=[],
+        view=view or metric.default_view,
         operation="rank" if top_k else ("breakdown" if dimensions else "aggregate"),
-        sort=None, top_k=top_k, comparison=None, question_for_user=None,
-        unresolved_slots=[], reason_code=None,
+        sort=None,
+        top_k=top_k,
+        comparison=None,
+        question_for_user=None,
+        unresolved_slots=[],
+        reason_code=None,
     )
     # Ranking handlers own their trusted sort and bounded SQL template.
     if top_k:
@@ -31,9 +39,7 @@ def test_custom_ar_aging_and_overdue(catalog, auth, finance_db):
     overdue = execute(catalog, auth, finance_db, "overdue_receivables", as_of)
     assert aging.rows == [{"aging_bucket": "31_60", "ar_aging": "55.00"}]
     assert Decimal(overdue.rows[0]["overdue_receivables"]) == Decimal(55)
-    by_customer = execute(
-        catalog, auth, finance_db, "ar_aging", as_of, dimensions=["customer"]
-    )
+    by_customer = execute(catalog, auth, finance_db, "ar_aging", as_of, dimensions=["customer"])
     assert by_customer.rows == [
         {"customer_code": "C1", "aging_bucket": "31_60", "ar_aging": "55.00"}
     ]

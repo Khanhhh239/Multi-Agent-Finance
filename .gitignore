@@ -30,3 +30,5 @@ agent3/agent3_tax_compliance/models
 /scripts/data_audit/research_t1_global_b2g_sources.py
 /scripts/data_audit/research_t1_public_no_access_sources.py
 /tests/test_t1_public_b2g.py
+scratch/
+

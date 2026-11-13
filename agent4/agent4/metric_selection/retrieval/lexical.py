@@ -1,4 +1,5 @@
 """Vietnamese-safe BM25 retrieval with exact phrase boosts."""
+
 from __future__ import annotations
 
 import math
@@ -18,12 +19,16 @@ class LexicalRetriever:
         document_frequency: Counter[str] = Counter()
         for metric in catalog:
             phrases = [metric.id.replace("_", " "), metric.label, *metric.synonyms]
-            text = " ".join([metric.id.replace("_", " "), metric.label, metric.description, *metric.synonyms])
+            text = " ".join(
+                [metric.id.replace("_", " "), metric.label, metric.description, *metric.synonyms]
+            )
             tokens = tokenize(text)
             self._records.append((metric.id, tokens, [normalize_text(p) for p in phrases]))
             document_frequency.update(set(tokens))
         self._document_frequency = document_frequency
-        self._avg_length = sum(len(record[1]) for record in self._records) / max(len(self._records), 1)
+        self._avg_length = sum(len(record[1]) for record in self._records) / max(
+            len(self._records), 1
+        )
 
     def _score(self, query: str, tokens: list[str], phrases: list[str]) -> float:
         query_tokens = tokenize(query)
@@ -37,7 +42,9 @@ class LexicalRetriever:
             if not frequency:
                 continue
             document_frequency = self._document_frequency[token]
-            inverse_frequency = math.log(1 + (total - document_frequency + 0.5) / (document_frequency + 0.5))
+            inverse_frequency = math.log(
+                1 + (total - document_frequency + 0.5) / (document_frequency + 0.5)
+            )
             denominator = frequency + self.k1 * (
                 1 - self.b + self.b * len(tokens) / max(self._avg_length, 1)
             )

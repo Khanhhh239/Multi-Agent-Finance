@@ -1,7 +1,39 @@
 // Shared helpers and state for the Agent 3 interface. Markup uses Carbon Design System classes.
 export const $ = (s, el = document) => el.querySelector(s);
 export const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-export const money = (v) => (v === null || v === undefined || v === '' ? '' : Number(v).toLocaleString('vi-VN', { maximumFractionDigits: 0 }) + ' đ');
+export const money = (v) => {
+  if (v === null || v === undefined || v === '') return '—';
+  const raw = String(v); if (!/^-?\d+(\.\d+)?$/.test(raw)) return 'Không xác định';
+  const [whole, fraction = ''] = raw.split('.');
+  const tail = fraction.replace(/0+$/, '');
+  return whole.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (tail ? ',' + tail : '') + ' đ';
+};
+
+export function formatSpecialMoney(v) {
+  if (v === null || v === undefined || v === '') return '<span class="kpi-amount-empty">—</span>';
+  const raw = String(v);
+  if (!/^-?\d+(\.\d+)?$/.test(raw)) return '<span class="kpi-amount-empty">Không xác định</span>';
+  const [whole, fraction = ''] = raw.split('.');
+  const tail = fraction.replace(/0+$/, '');
+  const isNegative = whole.startsWith('-');
+  const absWhole = whole.replace(/^-/, '');
+  const formattedWhole = absWhole.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  
+  return `<span class="kpi-money-wrap">
+    ${isNegative ? '<span class="kpi-sign">-</span>' : ''}
+    <span class="kpi-digits">${formattedWhole}</span>
+    ${tail ? `<span class="kpi-tail">,${tail}</span>` : ''}
+    <span class="kpi-currency-symbol">₫</span>
+  </span>`;
+}
+export function compareDecimal(a, b) {
+  const parts = value => String(value ?? '0').split('.');
+  const [aw, af = ''] = parts(a), [bw, bf = ''] = parts(b);
+  const scale = Math.max(af.length, bf.length);
+  const integer = (whole, fraction) => BigInt((whole.startsWith('-') ? '-' : '') + whole.replace(/^-/, '') + fraction.padEnd(scale, '0'));
+  const x = integer(aw, af), y = integer(bw, bf);
+  return x > y ? 1 : x < y ? -1 : 0;
+}
 export const dmy = (s) => (s ? s.slice(0, 10).split('-').reverse().join('/') : '');
 export const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
@@ -38,8 +70,33 @@ export async function api(path, opts = {}) {
   if (!res.ok) { const error = new Error(typeof body === 'object' ? body.detail?.message || body.detail || JSON.stringify(body) : body); error.status = res.status; throw error; }
   return body;
 }
-export const post = (path, data, opts = {}) => api(path, { ...opts, method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data ?? {}) });
+export const post = (path, data, opts = {}) => api(path, { ...opts, method: 'POST', headers: { 'Content-Type': 'application/json', ...opts.headers }, body: JSON.stringify(data ?? {}) });
 export const put = (path, data) => api(path, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+
+export async function decisionContext() {
+  const path = `/api/workspaces/${state.ws}/decisions`;
+  const journal = await api(path);
+  return { etag: packEtags.get(path), events: journal.events || [], report_revision: state.report?.meta.report_revision, workspace: state.ws, revision: state.platform?.profile_revision };
+}
+
+export async function decide(path, body, context) {
+  if (!context?.etag || !context.report_revision) throw new Error('Cần chạy phân tích và tải lại quyết định trước khi lưu.');
+  if (context.workspace !== state.ws || context.revision !== state.platform?.profile_revision) throw new Error('Hồ sơ đã thay đổi; không gửi quyết định cũ.');
+  const hash = JSON.stringify(body);
+  if (hash !== context.body) { context.request_id = crypto.randomUUID(); context.body = hash; }
+  return post(path, { ...body, request_id: context.request_id, report_revision: context.report_revision }, { headers: { 'If-Match': context.etag } });
+}
+
+export async function saveBankFormat(format) {
+  const path = `/api/workspaces/${state.ws}/pack`;
+  const target = `/api/workspaces/${state.ws}/bank/formats`;
+  const result = await post(target, format, { headers: { 'If-Match': packEtags.get(path) || '' } });
+  if (packEtags.has(target)) packEtags.set(path, packEtags.get(target));
+  return result;
+}
+
+export const balance = (value) => value === null || value === undefined ? 'Chưa đủ dữ liệu / không áp dụng'
+  : `${String(value).startsWith('-') ? 'Đầu vào vượt đầu ra' : 'Đầu ra vượt đầu vào'}: ${money(String(value).replace(/^-/, ''))}`;
 
 // Short reading of a large amount, the way it is said aloud: "3,4 nghìn tỷ đồng". Empty below one million.
 export const moneyShort = (v) => {
@@ -61,7 +118,7 @@ export const tag = (key, text) => {
 export const notice = (kind, title, sub = '') => `<div class="cds--inline-notification cds--inline-notification--${kind} cds--inline-notification--low-contrast notice" role="${kind === 'error' ? 'alert' : 'status'}">
   <div class="cds--inline-notification__details"><div class="cds--inline-notification__text-wrapper">
   <div class="cds--inline-notification__title">${esc(title)}</div><div class="cds--inline-notification__subtitle">${esc(sub)}</div></div></div></div>`;
-export const loading = (text = 'Đang xử lý') => `<div class="bar"><div class="cds--loading cds--loading--small" aria-live="polite"><svg class="cds--loading__svg" viewBox="0 0 100 100"><title>${esc(text)}</title><circle class="cds--loading__stroke" cx="50%" cy="50%" r="44"></circle></svg></div><span class="muted">${esc(text)}...</span></div>`;
+export const loading = (text = 'Đang xử lý') => `<div class="bar kt-loading-wrap" style="display:inline-flex;align-items:center;gap:10px;padding:6px 0" aria-live="polite"><span class="kt-spinner teal" aria-hidden="true"></span><span class="muted" style="font-size:13px;font-weight:500">${esc(text)}...</span></div>`;
 export const button = (label, cls = 'primary', attrs = '') => `<button ${/\btype=/.test(attrs) ? '' : 'type="button" '}class="cds--btn cds--btn--${cls} cds--btn--md" ${attrs}>${esc(label)}</button>`;
 export const field = (f, value = '') => {
   const id = `f-${f.key}`;
@@ -79,6 +136,32 @@ export const field = (f, value = '') => {
 export const table = (head, rows, empty = 'Không có dữ liệu.') => (rows.length ? `<div class="table-wrap"><table class="cds--data-table cds--data-table--md">
   <thead><tr>${head.map((h) => `<th${h.num ? ' class="num"' : ''}><div class="cds--table-header-label">${esc(h.label || h)}</div></th>`).join('')}</tr></thead>
   <tbody>${rows.join('')}</tbody></table></div>` : `<div class="empty">${esc(empty)}</div>`);
+
+export function sonHeader(breadcrumb, title, eyebrow = 'KHÔNG GIAN DOANH NGHIỆP', extraChips = '') {
+  const ws = state.workspaces.find((w) => w.id === state.ws);
+  const rep = state.report;
+  const period = rep?.meta?.period ? `Kỳ: ${dmy(rep.meta.period[0])} - ${dmy(rep.meta.period[1])}` : '';
+  return `
+    <div class="workspace-heading">
+      <span class="top-label">TRỢ LÝ THUẾ GTGT</span>
+      <span class="divider">/</span>
+      <span id="breadcrumb">${esc(breadcrumb)}</span>
+    </div>
+    <div class="page-heading son-illustrated">
+      <div>
+        <div class="eyebrow">${esc(eyebrow)}</div>
+        <h1 class="page">${esc(title)}</h1>
+      </div>
+    </div>
+    ${ws ? `
+    <div class="context-chips-bar">
+      <span class="ctx-chip chip-company"><strong>${esc(ws.name)}</strong></span>
+      <span class="ctx-chip chip-taxcode">MST: <code>${esc(ws.tax_code)}</code></span>
+      ${period ? `<span class="ctx-chip chip-period">${esc(period)}</span>` : ''}
+      ${extraChips}
+    </div>` : ''}
+  `;
+}
 
 export const state = { platform: null, ws: null, workspaces: [], report: null, schema: null };
 export const app = () => $('#app');
@@ -106,10 +189,18 @@ export function portalLink(section = 'config', label = 'Mở hồ sơ chung tạ
   return '<p class="muted">Khởi động Agent 3 từ portal để kết nối hồ sơ doanh nghiệp chung.</p>';
 }
 
-export async function loadReport() {
-  state.report = null;
-  if (!state.ws) return null;
-  try { state.report = await api(`/api/workspaces/${state.ws}/report`); } catch (err) { if (err.status !== 404) throw err; state.report = null; }
+let reportWs = null;
+export async function loadReport(force = false) {
+  if (!state.ws) { state.report = null; reportWs = null; return null; }
+  if (!force && state.report && reportWs === state.ws) return state.report;
+  try {
+    state.report = await api(`/api/workspaces/${state.ws}/report`);
+    reportWs = state.ws;
+  } catch (err) {
+    if (err.status !== 404) throw err;
+    state.report = null;
+    reportWs = null;
+  }
   return state.report;
 }
 

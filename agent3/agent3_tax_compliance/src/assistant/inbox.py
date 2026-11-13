@@ -94,6 +94,51 @@ def _unique(folder: Path, name: str) -> Path:
     return dest
 
 
+def preview(name, raw, tax_code, pack, as_of):
+    """Validate without publishing files, formats, active lists or decisions."""
+    from dataclasses import replace
+    with tempfile.TemporaryDirectory(prefix='agent3-preview-') as folder:
+        tmp = Path(folder)
+        if Path(name).suffix.lower() == '.zip':
+            names = extract_zip(raw, tmp, suffixes=ACCEPT)
+        else:
+            (tmp / name).write_bytes(raw)
+            names = [name]
+        results = []
+        for member in names:
+            path = tmp / member
+            kind, reason = classify(path, tax_code, pack)
+            result = dict(file=member, kind=kind, reason=reason, checked=False)
+            try:
+                if kind == 'portal_list':
+                    rows = read_portal_list(path, pack)
+                    if not rows:
+                        raise SourceError('Bảng kê không có dòng hợp lệ')
+                    result.update(checked=True, rows=len(rows))
+                elif kind == 'bank':
+                    if path.suffix.lower() in ('.sta', '.mt940') or is_mt940(path.read_bytes()):
+                        rows = read_mt940(path.read_bytes(), path.name)
+                    else:
+                        try:
+                            rows = read_bank_statement(path, pack)
+                        except SourceError as exc:
+                            if 'chưa có mẫu sao kê' not in str(exc):
+                                raise
+                            fmt = BankFormat(**suggest_mapping(path)['format'])
+                            rows = read_bank_statement(path, replace(pack, bank_formats=list(pack.bank_formats) + [fmt]))
+                    if not rows:
+                        raise SourceError('Sao kê không có giao dịch hợp lệ')
+                    result.update(checked=True, rows=len(rows))
+                elif kind in ('purchase_xml', 'sales_xml'):
+                    from ..extraction.xml_invoice import extract
+                    extract(path.read_bytes(), today=as_of)
+                    result.update(checked=True, note='Đã đọc cấu trúc; điều kiện thuế và chữ ký cần xem trong báo cáo.')
+            except Exception as exc:
+                result.update(checked=False, reason=str(exc)[:300])
+            results.append(result)
+        return results
+
+
 def ingest(ws: Path, name: str, raw: bytes, tax_code: str, pack: Pack) -> list[dict]:
     """Classify and store one upload (a single file or a zip). Returns one record per file."""
     tmp = Path(tempfile.mkdtemp(prefix='inbox_', dir=ws))
@@ -109,6 +154,15 @@ def ingest(ws: Path, name: str, raw: bytes, tax_code: str, pack: Pack) -> list[d
             kind, reason = classify(p, tax_code, pack)
             rec = dict(file=n, kind=kind, label=KIND_LABEL.get(kind, 'Không dùng'), reason=reason)
             if kind:
+                if kind == 'portal_list':
+                    from .portal_lists import ingest as store_list
+                    try:
+                        dest = store_list(ws, p, pack)
+                        rec.update(saved_as=dest.name, validated=True)
+                    except (SourceError, ValueError) as error:
+                        rec.update(kind=None, label='Không dùng', reason=str(error), validated=False)
+                    out.append(rec)
+                    continue
                 folder = ws / KIND_FOLDER[kind]
                 folder.mkdir(parents=True, exist_ok=True)
                 # The same file dropped again is kept once, so a second drop does not double the data. A bank statement is the same
@@ -161,6 +215,8 @@ def file_details(ws: Path, kind: str, pack: Pack, as_of: date) -> list[dict]:
         return sorted(out, key=lambda r: r['file'])
     out = []
     for p in sorted(folder.glob('*')):
+        if not p.is_file() or p.suffix.lower() not in ('.csv', '.xlsx', '.sta', '.mt940', '.txt'):
+            continue
         try:
             if kind == 'bank':
                 raw = p.read_bytes()
@@ -232,12 +288,15 @@ def coverage(ws: Path, pack: Pack, as_of: date, threshold) -> list[dict]:
         out.append(dict(level='warning', title=f'Thiếu sao kê cho tháng {", ".join(missing)}',
                         detail=f'{n} hóa đơn từ {int(threshold):,} đồng trong các tháng này sẽ bị báo là chưa có chứng từ thanh toán. Nạp sao kê của mọi tài khoản đã dùng để trả tiền.'.replace(',', '.')))
     portal = ws / KIND_FOLDER['portal_list']
-    if not portal.exists() or not any(portal.glob('purchase_list.*')):
+    from .portal_lists import candidates
+    if not portal.exists() or not candidates(ws):
         out.append(dict(level='info', title='Chưa có bảng kê hóa đơn mua vào từ cổng thuế',
                         detail='Có bảng kê thì hệ thống phát hiện được hóa đơn có trên cổng nhưng doanh nghiệp chưa có tệp (có thể đang bỏ sót khấu trừ).'))
     else:
         try:
-            rows = read_portal_list(next(portal.glob('purchase_list.*')), pack)
+            from .portal_lists import active_path
+            active = active_path(ws, pack)
+            rows = read_portal_list(active, pack) if active else []
             keys = {i.key for i in purchases}
             only_portal = [r for r in rows if r['key'] not in keys]
             if only_portal:
