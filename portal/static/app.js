@@ -13,6 +13,7 @@
   const offlineFailures = { agent1: 0, agent2: 0, agent3: 0, agent4: 0 };
   let intakeStage = "choose";
   let token = "";
+  let authVersion = 0;
   try { token = sessionStorage.getItem("kt-session") || ""; } catch (e) { token = ""; }
 
   const sidebarMedia = window.matchMedia("(max-width: 900px)");
@@ -49,7 +50,9 @@
   }
 
   function setToken(value) {
-    token = value || "";
+    const nextToken = value || "";
+    if (token !== nextToken) authVersion += 1;
+    token = nextToken;
     try { token ? sessionStorage.setItem("kt-session", token) : sessionStorage.removeItem("kt-session"); } catch (e) { /* private mode */ }
   }
 
@@ -91,9 +94,11 @@
   async function api(path, options = {}) {
     const isSilent = options.silent || path.includes('/health');
     if (!isSilent) startLoading();
+    const reqToken = token;
+    const reqAuthVersion = authVersion;
     try {
       const headers = { "X-Platform": "1", ...(options.headers || {}) };
-      if (token) headers["X-Session"] = token;
+      if (reqToken) headers["X-Session"] = reqToken;
       if (options.json !== undefined) {
         headers["Content-Type"] = "application/json";
         options.body = JSON.stringify(options.json);
@@ -101,7 +106,7 @@
       const res = await fetch(path, { ...options, headers, cache: "no-store" });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        if (res.status === 401 && data.locked) {
+        if (res.status === 401 && data.locked && reqAuthVersion === authVersion && reqToken === token) {
           setToken("");
           if (state) { state.intake.unlocked = false; state.pending = []; state.batches = []; render(); }
         }
@@ -583,6 +588,11 @@
           el("button", { type: "button", class: "link", onclick: () => dropFile(r.id) }, "Bỏ")))));
     $("queue").tBodies[0].replaceChildren(...rows);
     $("queue-empty").hidden = rows.length > 0;
+    const tabPending = $("intake-tab-pending");
+    if (tabPending) {
+      tabPending.hidden = rows.length === 0;
+      tabPending.textContent = String(rows.length);
+    }
     const ready = state.pending.filter(canWrite);
     const targets = new Set(ready.flatMap((record) => record.targets.filter((aid) => record.checks[aid]?.state === "ready")));
     $("intake-summary-count").textContent = ready.length + " / " + rows.length + " tệp sẵn sàng ghi";
@@ -651,24 +661,49 @@
       const bioSec = $("gate-biometric-section");
       if (bioSec) {
         bioSec.hidden = first;
+        bioSec.dataset.enrolled = i.has_biometric ? "1" : "0";
         const bioLabel = $("gate-biometric-label");
         if (bioLabel) {
           bioLabel.textContent = i.has_biometric
             ? "Mở khóa bằng FaceID / Sinh trắc học"
             : "Thiết lập và Mở bằng FaceID (Tùy chọn)";
         }
+        const bioPill = $("gate-bio-status-pill");
+        if (bioPill) {
+          bioPill.textContent = i.has_biometric ? "Đã kích hoạt AI" : "Chưa đăng ký";
+          bioPill.className = "gate-bio-badge " + (i.has_biometric ? "is-enrolled" : "is-empty");
+        }
+        const bioDesc = $("gate-bio-desc");
+        if (bioDesc) {
+          bioDesc.textContent = i.has_biometric
+            ? "Khuôn mặt quản trị đã được mã hóa thành vector 128 chiều. Nhấn nút bên dưới để mở máy quét và đăng nhập tức thì."
+            : "Nhập mật khẩu quản trị ở cột bên trái, sau đó nhấn nút bên dưới để quét khuôn mặt 3 khung hình và kích hoạt FaceID.";
+        }
+        const bioCaption = $("gate-bio-caption");
+        if (bioCaption) {
+          bioCaption.textContent = i.has_biometric ? "SẴN SÀNG ĐỐI SOÁT · 128-D VECTOR" : "CHỜ ĐĂNG KÝ MẪU KHUÔN MẶT";
+        }
       }
       return;
     }
-    $("session-left").textContent = "Đã mở khóa, còn " + Math.max(1, Math.round(i.seconds_left / 60)) + " phút";
+    $("session-left").textContent = "Đã mở khóa · còn " + Math.max(1, Math.round(i.seconds_left / 60)) + " phút";
+    const faceBadge = $("face-status-badge");
+    if (faceBadge) {
+      faceBadge.textContent = i.has_biometric ? "FaceID: Đã kích hoạt" : "FaceID: Chưa đăng ký";
+      faceBadge.className = "session-bio-state " + (i.has_biometric ? "is-active" : "is-inactive");
+    }
     const faceMng = $("face-manage-btn");
     if (faceMng) {
-      faceMng.textContent = i.has_biometric ? "🛡️ Quét lại FaceID" : "+ Đăng ký FaceID";
+      faceMng.textContent = i.has_biometric ? "Cập nhật FaceID" : "+ Đăng ký FaceID";
       faceMng.title = i.has_biometric ? "Cập nhật lại khuôn mặt nhận diện FaceID" : "Đăng ký khuôn mặt nhận diện FaceID";
+    }
+    const faceRm = $("face-remove-btn");
+    if (faceRm) {
+      faceRm.hidden = !i.has_biometric;
     }
     const c = state.company;
     $("intake-company").replaceChildren(c.code
-      ? el("strong", {}, c.legal_name + " · " + c.code)
+      ? el("strong", {}, c.legal_name + " · Mã " + c.code + (c.tax_code ? " · MST " + c.tax_code : ""))
       : el("a", { href: "#config" }, "Lưu hồ sơ doanh nghiệp để nạp tệp"));
     $("file-input").disabled = !c.code;
     $("drop").hidden = !c.code;
@@ -783,11 +818,25 @@
 
   async function refresh() {
     const version = profileVersion;
+    const reqAuthVersion = authVersion;
+    const reqToken = token;
     try {
-      const next = await api("/api/state");
+      const next = await api("/api/state", { silent: Boolean(state) });
       if (version !== profileVersion && state) next.company = state.company;
+      if (reqAuthVersion !== authVersion || reqToken !== token) {
+        if (state) {
+          next.intake = state.intake;
+          next.pending = state.pending;
+          next.batches = state.batches;
+          state = next;
+          render();
+        }
+        return;
+      }
       state = next;
-      if (token && !state.intake.unlocked) setToken("");
+      if (reqToken && reqToken === token && !state.intake.unlocked) {
+        setToken("");
+      }
       render();
     } catch (err) {
       toast(err.message, true);
@@ -879,6 +928,12 @@
       const body = { password: form.password.value, confirm: form.confirm.value };
       const res = await api(first ? "/api/intake/setup" : "/api/intake/unlock", { method: "POST", json: body });
       setToken(res.token);
+      if (state && state.intake) {
+        state.intake.configured = true;
+        state.intake.unlocked = true;
+        state.intake.seconds_left = 1200;
+        render();
+      }
       form.reset();
       await refresh();
     } catch (err) {
@@ -889,6 +944,12 @@
   async function lockNow() {
     await api("/api/intake/lock", { method: "POST" }).catch(() => {});
     setToken("");
+    if (state && state.intake) {
+      state.intake.unlocked = false;
+      state.pending = [];
+      state.batches = [];
+      render();
+    }
     await refresh();
   }
 
@@ -924,6 +985,62 @@
   let faceAnimationId = null;
   let isFaceCompleted = false;
 
+  function updateFaceHud({ step = 1, pct = 12, status = "", framesText = "", scanState = "scanning" }) {
+    const viewport = $("face-viewport");
+    if (viewport) viewport.dataset.scanState = scanState;
+    const bar = $("face-progress-bar");
+    if (bar) bar.style.width = Math.max(0, Math.min(100, pct)) + "%";
+    const statusEl = $("face-hud-status");
+    if (statusEl && status) statusEl.textContent = status;
+    const framesEl = $("face-hud-frames");
+    if (framesEl && framesText) framesEl.textContent = framesText;
+    for (let i = 1; i <= 3; i++) {
+      const sEl = $("face-step-" + i);
+      if (!sEl) continue;
+      sEl.classList.toggle("is-done", i < step);
+      sEl.classList.toggle("is-active", i === step);
+    }
+  }
+
+  function drawFaceOverlay(ctx, detection, canvas) {
+    if (!ctx || !detection || !detection.landmarks) return;
+    const dims = { width: canvas.width, height: canvas.height };
+    const resized = faceapi.resizeResults(detection, dims);
+    const pts = resized.landmarks.positions;
+    if (!pts || !pts.length) return;
+
+    ctx.save();
+    // Draw subtle gold/emerald landmark points
+    ctx.fillStyle = "rgba(16, 185, 129, 0.82)";
+    ctx.strokeStyle = "rgba(212, 175, 55, 0.45)";
+    ctx.lineWidth = 1.1;
+
+    // Connect jaw, eyebrows, nose, eyes, mouth contours
+    const groups = [
+      resized.landmarks.getJawOutline(),
+      resized.landmarks.getLeftEyeBrow(),
+      resized.landmarks.getRightEyeBrow(),
+      resized.landmarks.getNose(),
+      resized.landmarks.getLeftEye(),
+      resized.landmarks.getRightEye(),
+      resized.landmarks.getMouth()
+    ];
+    for (const grp of groups) {
+      if (!grp || grp.length < 2) continue;
+      ctx.beginPath();
+      ctx.moveTo(grp[0].x, grp[0].y);
+      for (let i = 1; i < grp.length; i++) ctx.lineTo(grp[i].x, grp[i].y);
+      ctx.stroke();
+    }
+
+    for (const pt of pts) {
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
   async function loadFaceModels() {
     if (faceModelsLoaded) return true;
     if (typeof faceapi === "undefined") {
@@ -931,7 +1048,7 @@
     }
     const MODEL_PATH = "/models";
     $("face-spinner").hidden = false;
-    $("face-loading-text").textContent = "Đang tải mô hình AI khuôn mặt...";
+    $("face-loading-text").textContent = "Đang nạp mạng nơ-ron nhận diện 128 chiều...";
     try {
       await Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_PATH),
@@ -962,7 +1079,7 @@
     const modal = $("face-modal");
     if (modal) modal.hidden = true;
     const reticle = document.querySelector(".face-reticle");
-    if (reticle) reticle.classList.remove("active");
+    if (reticle) reticle.classList.remove("active", "verified", "err");
   }
 
   async function openFaceModal(mode, password = "") {
@@ -970,15 +1087,27 @@
     const video = $("face-video");
     const canvas = $("face-canvas");
     const titleEl = $("face-modal-title");
+    const modeBadge = $("face-mode-badge");
     const feedback = $("face-feedback");
     const reticle = document.querySelector(".face-reticle");
+    const targetFrames = mode === "register" ? 3 : 2;
 
     modal.hidden = false;
     isFaceCompleted = false;
-    titleEl.textContent = mode === "register" ? "Đăng ký khuôn mặt FaceID mới" : "Quét khuôn mặt để mở khóa";
+    if (modeBadge) {
+      modeBadge.textContent = mode === "register" ? "ĐĂNG KÝ MẪU SINH TRẮC HỌC MỚI" : "XÁC THỰC MỞ KHÓA BẰNG KHUÔN MẶT";
+    }
+    titleEl.textContent = mode === "register" ? "Thiết lập Khuôn mặt Quản trị" : "Quét Khuôn mặt để Mở khóa";
     feedback.className = "face-feedback";
-    feedback.textContent = "Đang khởi động camera...";
-    if (reticle) reticle.classList.remove("active");
+    feedback.textContent = "Đang khởi tạo ống kính và mạng nơ-ron AI...";
+    if (reticle) reticle.classList.remove("active", "verified", "err");
+    updateFaceHud({
+      step: 1,
+      pct: 15,
+      status: "KHỞI ĐỘNG ỐNG KÍNH",
+      framesText: "0 / " + targetFrames + " MẪU",
+      scanState: "scanning"
+    });
 
     try {
       await loadFaceModels();
@@ -991,7 +1120,22 @@
       canvas.width = video.videoWidth || 640;
       canvas.height = video.videoHeight || 480;
 
+      // Allow camera auto-exposure & white-balance to stabilize on first open
+      await new Promise((resolve) => setTimeout(resolve, 260));
+      if (!faceStream || modal.hidden || isFaceCompleted) return;
+
+      updateFaceHud({
+        step: 2,
+        pct: 32,
+        status: "ĐANG TÌM KHUÔN MẶT",
+        framesText: "0 / " + targetFrames + " MẪU",
+        scanState: "scanning"
+      });
+      feedback.textContent = "Nhìn thẳng vào khung ngắm để định vị 68 điểm mốc...";
+
       let consecutiveMatches = 0;
+      let verifyRetries = 0;
+      const maxVerifyRetries = 3;
       let isProcessing = false;
 
       const detectFrame = async () => {
@@ -1011,45 +1155,133 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             if (detection) {
-              if (reticle) reticle.classList.add("active");
+              drawFaceOverlay(ctx, detection, canvas);
+              if (reticle) {
+                reticle.classList.remove("err");
+                reticle.classList.add("active");
+              }
+              consecutiveMatches++;
+              const stepPct = Math.min(88, 35 + Math.round((consecutiveMatches / targetFrames) * 50));
+              updateFaceHud({
+                step: consecutiveMatches >= targetFrames ? 3 : 2,
+                pct: stepPct,
+                status: consecutiveMatches >= targetFrames ? "ĐỐI SOÁT VECTOR 128-D" : "ĐÃ KHÓA MỤC TIÊU",
+                framesText: Math.min(consecutiveMatches, targetFrames) + " / " + targetFrames + " MẪU",
+                scanState: "locked"
+              });
               feedback.className = "face-feedback ok";
 
               if (mode === "register") {
-                consecutiveMatches++;
-                feedback.textContent = "Đã nhận diện khuôn mặt! Giữ nguyên... (" + consecutiveMatches + "/3)";
-                if (consecutiveMatches >= 3) {
+                feedback.textContent = "Đã định vị 68 điểm mốc! Giữ ổn định... (" + consecutiveMatches + "/" + targetFrames + ")";
+                if (consecutiveMatches >= targetFrames) {
                   isFaceCompleted = true;
-                  feedback.textContent = "Đang lưu trữ vector sinh trắc học...";
+                  updateFaceHud({
+                    step: 3,
+                    pct: 95,
+                    status: "MÃ HÓA & LƯU TRỮ",
+                    framesText: targetFrames + " / " + targetFrames + " MẪU",
+                    scanState: "locked"
+                  });
+                  feedback.textContent = "Đang mã hóa và niêm phong vector sinh trắc học 128 chiều...";
                   const descArray = Array.from(detection.descriptor);
                   const res = await api("/api/intake/face/register", {
                     method: "POST",
                     json: { descriptor: descArray, password: password }
                   });
-                  stopFaceCamera();
+                  updateFaceHud({
+                    step: 4,
+                    pct: 100,
+                    status: "HOÀN TẤT ĐĂNG KÝ",
+                    framesText: targetFrames + " / " + targetFrames + " MẪU",
+                    scanState: "verified"
+                  });
+                  if (reticle) reticle.classList.add("verified");
                   if (res && res.token) setToken(res.token);
+                  if (state && state.intake) {
+                    state.intake.unlocked = true;
+                    state.intake.has_biometric = true;
+                    state.intake.seconds_left = 1200;
+                    render();
+                  }
+                  stopFaceCamera();
                   toast("Đã đăng ký FaceID và mở khóa thành công!");
                   await refresh();
                   return;
                 }
               } else {
-                isFaceCompleted = true;
-                feedback.textContent = "Đang đối soát nhận diện khuôn mặt...";
-                const descArray = Array.from(detection.descriptor);
-                const res = await api("/api/intake/face/verify", {
-                  method: "POST",
-                  json: { descriptor: descArray }
-                });
-                stopFaceCamera();
-                setToken(res.token);
-                toast("Nhận diện FaceID chính xác! Đã mở khóa.");
-                await refresh();
-                return;
+                feedback.textContent = "Đang lấy mẫu ổn định... (" + Math.min(consecutiveMatches, targetFrames) + "/" + targetFrames + ")";
+                if (consecutiveMatches >= targetFrames) {
+                  feedback.textContent = "Đang đối soát vector khuôn mặt 128 chiều...";
+                  const descArray = Array.from(detection.descriptor);
+                  try {
+                    const res = await api("/api/intake/face/verify", {
+                      method: "POST",
+                      json: { descriptor: descArray }
+                    });
+                    isFaceCompleted = true;
+                    updateFaceHud({
+                      step: 4,
+                      pct: 100,
+                      status: "MỞ KHÓA THÀNH CÔNG",
+                      framesText: targetFrames + " / " + targetFrames + " MẪU",
+                      scanState: "verified"
+                    });
+                    if (reticle) reticle.classList.add("verified");
+                    setToken(res.token);
+                    if (state && state.intake) {
+                      state.intake.unlocked = true;
+                      state.intake.seconds_left = 1200;
+                      render();
+                    }
+                    stopFaceCamera();
+                    toast("Nhận diện FaceID chính xác! Đã mở khóa.");
+                    await refresh();
+                    return;
+                  } catch (verifyErr) {
+                    verifyRetries++;
+                    consecutiveMatches = 0;
+                    if (verifyRetries < maxVerifyRetries) {
+                      updateFaceHud({
+                        step: 2,
+                        pct: 40,
+                        status: "LẤY NÉT LẠI (" + verifyRetries + "/" + maxVerifyRetries + ")",
+                        framesText: "0 / " + targetFrames + " MẪU",
+                        scanState: "scanning"
+                      });
+                      feedback.className = "face-feedback";
+                      feedback.textContent = "Khung hình đầu chưa rõ, đang tự động quét lại (" + verifyRetries + "/" + maxVerifyRetries + ")...";
+                    } else {
+                      isFaceCompleted = true;
+                      if (reticle) {
+                        reticle.classList.remove("active");
+                        reticle.classList.add("err");
+                      }
+                      updateFaceHud({
+                        step: 3,
+                        pct: 100,
+                        status: "KHÔNG KHỚP MẪU",
+                        framesText: "THẤT BẠI",
+                        scanState: "error"
+                      });
+                      feedback.className = "face-feedback err";
+                      feedback.textContent = verifyErr.message || "Khuôn mặt không khớp. Vui lòng thử lại hoặc dùng mật khẩu.";
+                      return;
+                    }
+                  }
+                }
               }
             } else {
               consecutiveMatches = 0;
               if (reticle) reticle.classList.remove("active");
+              updateFaceHud({
+                step: 2,
+                pct: 28,
+                status: "ĐANG TÌM KHUÔN MẶT",
+                framesText: "0 / " + targetFrames + " MẪU",
+                scanState: "scanning"
+              });
               feedback.className = "face-feedback";
-              feedback.textContent = "Vui lòng nhìn thẳng vào vòng quét...";
+              feedback.textContent = "Vui lòng đặt khuôn mặt vào chính giữa khung ngắm...";
             }
           } catch (err) {
             if (!isFaceCompleted) {
@@ -1082,8 +1314,7 @@
       const pwInput = $("gate-password");
       let pw = (pwInput?.value || "").trim();
       if (!pw) {
-        // No native prompt(): it would show the password in clear text and cannot be styled or automated.
-        if (errEl) errEl.textContent = "Nhập mật khẩu vào ô phía trên, rồi bấm lại nút FaceID để đăng ký lần đầu.";
+        if (errEl) errEl.textContent = "Nhập mật khẩu quản trị ở cột bên trái trước, sau đó bấm lại nút Thiết lập FaceID.";
         pwInput?.focus();
         return;
       }
@@ -1095,19 +1326,17 @@
     openFaceModal("verify");
   }
 
-  async function toggleBiometric() {
-    if (!state?.intake) return;
-    if (state.intake.has_biometric) {
-      if (!confirm("Bạn có chắc chắn muốn hủy FaceID trên máy này?")) return;
-      try {
-        await api("/api/intake/biometric/remove", { method: "POST" });
-        toast("Đã hủy FaceID.");
-        await refresh();
-      } catch (err) {
-        toast(err.message, true);
-      }
-    } else {
-      await registerBiometric();
+  async function removeFaceBiometric() {
+    if (!state?.intake?.has_biometric) return;
+    if (!confirm("Bạn có chắc chắn muốn xóa mẫu khuôn mặt FaceID hiện tại trên máy này?")) return;
+    try {
+      await api("/api/intake/face/remove", { method: "POST" });
+      if (state && state.intake) state.intake.has_biometric = false;
+      render();
+      toast("Đã hủy đăng ký FaceID.");
+      await refresh();
+    } catch (err) {
+      toast(err.message, true);
     }
   }
 
@@ -1353,6 +1582,7 @@
   $("gate-form").addEventListener("submit", unlockGate);
   $("gate-biometric-btn")?.addEventListener("click", unlockBiometric);
   $("face-manage-btn")?.addEventListener("click", () => openFaceModal("register"));
+  $("face-remove-btn")?.addEventListener("click", removeFaceBiometric);
   $("face-modal-close")?.addEventListener("click", stopFaceCamera);
   $("face-cancel-btn")?.addEventListener("click", stopFaceCamera);
   $("lock-now").addEventListener("click", lockNow);

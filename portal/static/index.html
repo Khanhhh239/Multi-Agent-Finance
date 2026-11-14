@@ -386,132 +386,211 @@
     <section class="view" id="view-data" aria-labelledby="h-data" hidden>
       <div class="gate" id="gate" hidden>
         <div class="gate-intro" data-son-sheet="3" data-son-row="3">
+          <p class="gate-eyebrow">Cổng kiểm soát &amp; Niêm phong chứng từ</p>
           <h2>Nạp dữ liệu chung</h2>
-          <p>Mở khóa để nạp tệp hoặc xem lịch sử dữ liệu.</p>
+          <p>Xác thực quyền quản trị để tiếp nhận chứng từ, phân luồng tự động đến 4 Agent và niêm phong sổ cái bất biến.</p>
+          <div class="gate-security-pills" aria-label="Chuẩn bảo mật áp dụng">
+            <span class="gate-sec-pill">Mã hóa Scrypt 256-bit</span>
+            <span class="gate-sec-pill">Sinh trắc học AI 128 chiều</span>
+            <span class="gate-sec-pill">Nhật ký băm SHA-256</span>
+          </div>
         </div>
-        <form id="gate-form" class="gate-body" novalidate>
-          <h1 id="h-data">Mở khóa dữ liệu</h1>
-          <p class="lead" id="gate-lead"></p>
-          <label class="field"><span class="label" id="gate-label">Mật khẩu</span>
-            <input type="password" class="son-box" name="password" id="gate-password" autocomplete="current-password" required></label>
-          <label class="field" id="gate-confirm-field" hidden><span class="label">Nhập lại mật khẩu</span>
-            <input type="password" class="son-box" name="confirm" autocomplete="new-password"></label>
-          <p class="error-text" id="gate-error" role="alert"></p>
-          <button type="submit" class="primary" id="gate-submit">Mở khóa</button>
-          <div id="gate-biometric-section" hidden style="margin-top: 14px;">
-            <div style="display: flex; align-items: center; margin: 12px 0; color: var(--kt-muted, #718096); font-size: 13px;">
-              <span style="flex: 1; height: 1px; background: var(--kt-line, #e2e8f0);"></span>
-              <span style="padding: 0 10px;">hoặc</span>
-              <span style="flex: 1; height: 1px; background: var(--kt-line, #e2e8f0);"></span>
+
+        <div class="gate-auth-grid">
+          <form id="gate-form" class="gate-body" novalidate>
+            <div class="gate-card-head">
+              <span class="gate-step-tag">PHƯƠNG THỨC 01</span>
+              <span class="gate-card-badge">Khóa mật khẩu</span>
             </div>
-            <button type="button" class="secondary" id="gate-biometric-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 0 2 2v2M3 17v2a2 2 0 0 0 2 2h2M21 17v2a2 2 0 0 1-2 2h-2M9 9h.01M15 9h.01M9 15c1 1 2 1.5 3 1.5s2-.5 3-1.5"/></svg>
+            <h1 id="h-data">Mở khóa dữ liệu</h1>
+            <p class="lead" id="gate-lead"></p>
+            <label class="field"><span class="label" id="gate-label">Mật khẩu</span>
+              <input type="password" class="son-box" name="password" id="gate-password" autocomplete="current-password" placeholder="Nhập mật khẩu quản trị..." required></label>
+            <label class="field" id="gate-confirm-field" hidden><span class="label">Nhập lại mật khẩu</span>
+              <input type="password" class="son-box" name="confirm" autocomplete="new-password" placeholder="Nhập lại mật khẩu xác nhận..."></label>
+            <p class="error-text" id="gate-error" role="alert"></p>
+            <button type="submit" class="primary gate-submit-btn" id="gate-submit">Mở khóa</button>
+            <p class="hint gate-hint-foot">Phiên làm việc tự động khóa sau 20 phút không thao tác. Nếu quên mật khẩu, liên hệ quản trị viên hệ thống.</p>
+          </form>
+
+          <div id="gate-biometric-section" class="gate-biometric-card" hidden>
+            <div class="gate-card-head">
+              <span class="gate-step-tag">PHƯƠNG THỨC 02</span>
+              <span class="gate-bio-badge" id="gate-bio-status-pill">Sinh trắc học AI</span>
+            </div>
+            <h3 class="gate-bio-title">Nhận diện Khuôn mặt (FaceID)</h3>
+            <p class="gate-bio-lead" id="gate-bio-desc">Đối soát trực tiếp 68 điểm mốc khuôn mặt và vector đặc trưng 128 chiều ngay trên trình duyệt, không truyền ảnh gốc ra ngoài.</p>
+
+            <div class="gate-bio-preview" aria-hidden="true">
+              <span class="bio-corner tl"></span>
+              <span class="bio-corner tr"></span>
+              <span class="bio-corner bl"></span>
+              <span class="bio-corner br"></span>
+              <div class="bio-preview-grid"></div>
+              <div class="bio-preview-oval"></div>
+              <div class="bio-preview-beam"></div>
+              <div class="bio-preview-caption" id="gate-bio-caption">TRẠM QUÉT AI · 128-D VECTOR</div>
+            </div>
+
+            <button type="button" class="secondary gate-bio-btn" id="gate-biometric-btn">
               <span id="gate-biometric-label">Mở khóa bằng FaceID / Sinh trắc học</span>
             </button>
+            <p class="hint gate-bio-hint" id="gate-bio-foot-note">Đảm bảo khuôn mặt nằm rõ trong khung ngắm và đủ ánh sáng khi quét.</p>
           </div>
-          <p class="hint">Nếu quên mật khẩu, liên hệ người quản trị hệ thống.</p>
-        </form>
+        </div>
       </div>
 
       <!-- Data: unlocked -->
       <div id="intake" hidden>
         <div class="page-head head-split" data-son-sheet="0" data-son-row="0">
-          <div>
+          <div class="intake-masthead-copy">
+            <p class="intake-eyebrow">Trung tâm tiếp nhận &amp; Phân luồng chứng từ</p>
             <h1 id="h-intake">Nạp dữ liệu chung</h1>
             <p class="lead" id="intake-lead">Tiếp nhận tệp một lần cho các nghiệp vụ sử dụng dữ liệu chung.</p>
           </div>
-          <div class="session"><span id="session-left"></span><button type="button" id="face-manage-btn" class="secondary" style="font-size: 12.5px; padding: 4px 10px; margin-right: 6px;"></button><button type="button" id="lock-now">Khóa lại</button></div>
+          <div class="session" aria-label="Điều khiển phiên bảo mật">
+            <span class="session-pill" id="session-left"></span>
+            <span class="session-bio-state" id="face-status-badge"></span>
+            <button type="button" id="face-manage-btn" class="session-btn"></button>
+            <button type="button" id="face-remove-btn" class="session-btn danger" hidden>Hủy FaceID</button>
+            <button type="button" id="lock-now" class="session-btn lock">Khóa lại</button>
+          </div>
         </div>
 
-        <nav class="paper-tabs" id="intake-tabs" aria-label="Các bước nạp dữ liệu">
-          <button type="button" data-intake-stage="choose" aria-current="step">Chọn tệp</button>
-          <button type="button" data-intake-stage="review">Kiểm tra tệp</button>
-          <button type="button" data-intake-stage="confirm">Xác nhận và nạp dữ liệu</button>
-          <button type="button" data-intake-stage="history">Lịch sử dữ liệu</button>
+        <nav class="paper-tabs intake-stepper" id="intake-tabs" aria-label="Các bước nạp dữ liệu">
+          <button type="button" data-intake-stage="choose" aria-current="step">
+            <span class="step-num">01</span>
+            <span class="step-text">Chọn tệp</span>
+          </button>
+          <button type="button" data-intake-stage="review">
+            <span class="step-num">02</span>
+            <span class="step-text">Kiểm tra tệp</span>
+            <span class="step-badge" id="intake-tab-pending" hidden>0</span>
+          </button>
+          <button type="button" data-intake-stage="confirm">
+            <span class="step-num">03</span>
+            <span class="step-text">Xác nhận và nạp dữ liệu</span>
+          </button>
+          <button type="button" data-intake-stage="history">
+            <span class="step-num">04</span>
+            <span class="step-text">Lịch sử dữ liệu</span>
+          </button>
         </nav>
+
         <section id="intake-choose" class="intake-choose">
-          <div>
-          <div class="intake-company-row"><strong>Doanh nghiệp</strong><p id="intake-company"></p></div>
-          <label class="drop" id="drop">
-            <input type="file" id="file-input" multiple accept=".csv,.xlsx,.xml,.zip,.txt">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/></svg>
-            <span class="drop-title">Thả toàn bộ tệp tại đây</span>
-            <span>hoặc <strong class="drop-pick">chọn tệp</strong> từ máy tính</span>
-            <span class="drop-sub">CSV, XLSX, XML, ZIP, TXT · Tối đa 300 MB mỗi tệp</span>
-          </label>
+          <div class="intake-choose-main">
+            <div class="intake-company-row">
+              <div class="intake-company-meta">
+                <span class="intake-company-label">Đơn vị tiếp nhận chứng từ</span>
+                <p id="intake-company"></p>
+              </div>
+              <a class="intake-sample-link" href="/samples/sao-ke-chung.csv" download>Tải mẫu sao kê chuẩn (CSV)</a>
+            </div>
+            <label class="drop" id="drop">
+              <input type="file" id="file-input" data-son-file="1" multiple accept=".csv,.xlsx,.xml,.zip,.txt">
+              <span class="drop-kicker">KHU VỰC TIẾP NHẬN CHỨNG TỪ GỐC</span>
+              <span class="drop-title">Thả toàn bộ tệp chứng từ tại đây</span>
+              <span class="drop-action-line">hoặc <strong class="drop-pick">chọn tệp từ máy tính</strong> để hệ thống tự động nhận dạng</span>
+              <div class="drop-formats" aria-hidden="true">
+                <span>XML Hóa đơn</span>
+                <span>ZIP Lô hóa đơn</span>
+                <span>CSV / XLSX Sao kê &amp; Sổ</span>
+                <span>TXT Dữ liệu</span>
+              </div>
+              <span class="drop-sub">Hỗ trợ chọn nhiều tệp cùng lúc · Tối đa 300 MB mỗi tệp · Tự động kiểm tra cấu trúc trước khi ghi</span>
+            </label>
           </div>
           <aside class="intake-kinds">
-            <h2>Dữ liệu thường nạp</h2>
-            <dl>
-              <dt>Hóa đơn gốc</dt><dd>Hóa đơn điện tử XML hoặc ZIP hóa đơn · A3</dd>
-              <dt>Sao kê ngân hàng</dt><dd>CSV hoặc XLSX theo mẫu sao kê chung · A1, A3</dd>
-              <dt>Sổ nghiệp vụ</dt><dd>Sổ công nợ theo mẫu A1, sổ giao dịch theo mẫu A2</dd>
+            <div class="intake-card-header">
+              <span class="intake-card-kicker">QUY CHUẨN ĐỊNH TUYẾN</span>
+              <h2>Dữ liệu thường nạp</h2>
+            </div>
+            <dl class="intake-kind-list">
+              <div class="intake-kind-item">
+                <dt>Hóa đơn điện tử gốc <span class="kind-route">Agent 3</span></dt>
+                <dd>Tệp <code>.xml</code> hoặc gói nén <code>.zip</code> chứa hóa đơn GTGT đầu vào, đầu ra.</dd>
+              </div>
+              <div class="intake-kind-item">
+                <dt>Sao kê ngân hàng dùng chung <span class="kind-route">Agent 1 · Agent 3</span></dt>
+                <dd>Tệp <code>.csv</code> hoặc <code>.xlsx</code> nạp một lần, hệ thống tự tách dòng tiền cho A1 và đối chiếu thuế cho A3.</dd>
+              </div>
+              <div class="intake-kind-item">
+                <dt>Sổ nghiệp vụ &amp; Giao dịch <span class="kind-route">Agent 1 · Agent 2</span></dt>
+                <dd>Sổ công nợ, lịch thanh toán chuẩn Agent 1; sổ bút toán giao dịch kiểm soát nội bộ chuẩn Agent 2.</dd>
+              </div>
             </dl>
           </aside>
         </section>
+
         <div id="intake-queue">
-        <p class="banner warn" id="period-warning" hidden></p>
-        <div class="intake-review-grid">
-        <div class="intake-queue-list">
-        <div class="table-wrap">
-          <table class="table" id="queue" role="table" aria-label="Tệp chờ ghi">
-            <thead role="rowgroup"><tr role="row"><th scope="col">Tệp dữ liệu</th><th scope="col">Nhận dạng</th><th scope="col">Kỳ dữ liệu</th><th scope="col">Trạng thái kiểm tra</th><th scope="col" class="right">Thao tác</th></tr></thead>
-            <tbody role="rowgroup"></tbody>
-          </table>
-        </div>
-        <p class="empty" id="queue-empty">Chưa có tệp nào chờ ghi.</p>
-        </div>
-        <aside class="intake-summary">
-          <h2>Tóm tắt nạp dữ liệu</h2>
-          <p id="intake-summary-count" aria-live="polite"></p>
-          <p id="intake-summary-agents"></p>
-          <button type="button" class="primary" id="intake-next">Xác nhận và tiếp tục</button>
-          <div class="commit-bar" id="commit-bar">
-            <label class="field" id="reason-field" hidden><span class="label">Lý do bổ sung hoặc thay thế</span>
-              <input id="reason" maxlength="300" placeholder="Nhập lý do, ít nhất 10 ký tự"></label>
-            <button type="button" class="primary" id="commit" disabled>Ghi toàn bộ dữ liệu</button>
+          <p class="banner warn" id="period-warning" hidden></p>
+          <div class="intake-review-grid">
+            <div class="intake-queue-list">
+              <div class="table-wrap">
+                <table class="table" id="queue" role="table" aria-label="Tệp chờ ghi">
+                  <thead role="rowgroup"><tr role="row"><th scope="col">Tệp dữ liệu</th><th scope="col">Nhận dạng</th><th scope="col">Kỳ dữ liệu</th><th scope="col">Trạng thái kiểm tra</th><th scope="col" class="right">Thao tác</th></tr></thead>
+                  <tbody role="rowgroup"></tbody>
+                </table>
+              </div>
+              <p class="empty" id="queue-empty">Chưa có tệp nào trong hàng đợi kiểm tra. Hãy quay lại Bước 01 để chọn tệp.</p>
+            </div>
+            <aside class="intake-summary">
+              <span class="intake-card-kicker">BẢNG QUYẾT ĐỊNH NIÊM PHONG</span>
+              <h2>Tóm tắt nạp dữ liệu</h2>
+              <p class="intake-summary-stat" id="intake-summary-count" aria-live="polite"></p>
+              <p class="intake-summary-routes" id="intake-summary-agents"></p>
+              <button type="button" class="primary" id="intake-next">Xác nhận và tiếp tục</button>
+              <div class="commit-bar" id="commit-bar">
+                <label class="field" id="reason-field" hidden><span class="label">Lý do bổ sung hoặc thay thế</span>
+                  <input id="reason" maxlength="300" placeholder="Nhập lý do cập nhật gói (ít nhất 10 ký tự)..."></label>
+                <button type="button" class="primary" id="commit" disabled>Ghi toàn bộ dữ liệu</button>
+              </div>
+            </aside>
           </div>
-        </aside>
         </div>
-        </div>
+
         <div id="intake-history" hidden>
-        <details class="package" aria-labelledby="h-package">
-          <summary class="package-head">
-            <h2 id="h-package">Gói dữ liệu</h2>
-            <p id="package-line"></p>
-          </summary>
-          <div class="slots" id="slots"></div>
-        </details>
+          <details class="package" open aria-labelledby="h-package">
+            <summary class="package-head">
+              <div>
+                <span class="intake-card-kicker">TRẠNG THÁI KHAY DỮ LIỆU 4 AGENT</span>
+                <h2 id="h-package">Gói dữ liệu hiện hành</h2>
+              </div>
+              <p id="package-line"></p>
+            </summary>
+            <div class="slots" id="slots"></div>
+          </details>
         </div>
+
         <details class="routing">
-          <summary>Agent nào nhận loại tệp nào</summary>
+          <summary>Bảng quy chiếu chi tiết: Agent nào nhận loại tệp nào</summary>
           <table class="table compact">
-            <thead><tr><th>Loại tệp</th><th>Agent</th><th>Ghi chú</th></tr></thead>
+            <thead><tr><th>Loại tệp chứng từ</th><th>Phân hệ tiếp nhận</th><th>Quy tắc xử lý &amp; Lưu ý</th></tr></thead>
             <tbody>
-              <tr><td>Sao kê dùng chung (CSV hoặc XLSX). <a href="/samples/sao-ke-chung.csv" download>Tải mẫu CSV</a></td><td>Agent 1 và Agent 3</td><td>Mỗi tệp nạp một lần. Cần mã giao dịch duy nhất, tài khoản của doanh nghiệp, ngày và số tiền. Nên có nội dung và đối tác để ghép hóa đơn.</td></tr>
+              <tr><td>Sao kê dùng chung (CSV hoặc XLSX) · <a href="/samples/sao-ke-chung.csv" download>Tải mẫu CSV</a></td><td>Agent 1 và Agent 3</td><td>Mỗi tệp nạp một lần. Cần mã giao dịch duy nhất, tài khoản của doanh nghiệp, ngày và số tiền. Nên có nội dung và đối tác để ghép hóa đơn.</td></tr>
               <tr><td>Sổ hóa đơn bán, tiền khách trả, khoản chi, kỳ sao kê, hứa trả (CSV hoặc XLSX theo mẫu Agent 1)</td><td>Agent 1</td><td>Gộp theo mã dòng, không xóa dữ liệu cũ.</td></tr>
               <tr><td>Sổ giao dịch theo mẫu Agent 2</td><td>Agent 2</td><td>Thay toàn bộ giao dịch của doanh nghiệp.</td></tr>
               <tr><td>Hóa đơn XML, ZIP hóa đơn, bảng kê cổng thuế và sao kê theo mẫu thuế cũ</td><td>Agent 3</td><td>Dùng mẫu sao kê chung ở trên nếu cần cả Agent 1.</td></tr>
-              <tr><td>Chưa có</td><td>Agent 4</td><td>Đang dùng kho dữ liệu demo.</td></tr>
+              <tr><td>Kho dữ liệu truy vấn CFO</td><td>Agent 4</td><td>Đang dùng kho dữ liệu DuckDB độc lập.</td></tr>
             </tbody>
           </table>
         </details>
 
         <div id="intake-versions" hidden>
-        <h2 class="section-title">Các phiên bản của gói</h2>
-        <div class="table-wrap">
-          <table class="table" id="history">
-            <thead><tr><th>Phiên bản</th><th>Niêm phong lúc</th><th>Lý do</th><th>Tệp và kết quả</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <p class="empty" id="history-empty">Chưa niêm phong gói nào.</p>
+          <h2 class="section-title">Các phiên bản niêm phong của gói</h2>
+          <div class="table-wrap">
+            <table class="table" id="history">
+              <thead><tr><th>Phiên bản</th><th>Niêm phong lúc</th><th>Lý do ghi nhận</th><th>Tệp chứng từ và kết quả phân phối</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="empty" id="history-empty">Chưa niêm phong gói dữ liệu nào cho doanh nghiệp này.</p>
 
-        <details class="audit" id="audit">
-          <summary>Kiểm tra tính toàn vẹn của nhật ký</summary>
-          <p class="hint" id="audit-status">Bấm để kiểm tra chuỗi nhật ký.</p>
-          <table class="table compact"><thead><tr><th>Số</th><th>Thời điểm</th><th>Việc</th><th>Chi tiết</th></tr></thead><tbody></tbody></table>
-        </details>
+          <details class="audit" id="audit">
+            <summary>Kiểm tra tính toàn vẹn của nhật ký bất biến (SHA-256 Chain)</summary>
+            <p class="hint" id="audit-status">Bấm để đối soát chuỗi băm nhật ký hệ thống.</p>
+            <table class="table compact"><thead><tr><th>Số thứ tự</th><th>Thời điểm</th><th>Sự kiện</th><th>Chi tiết ghi nhận</th></tr></thead><tbody></tbody></table>
+          </details>
         </div>
       </div>
     </section>
@@ -577,27 +656,58 @@
 
 <!-- FaceID AI Modal -->
 <div id="face-modal" class="face-modal" hidden>
-  <div class="face-card">
+  <div class="face-card" role="dialog" aria-modal="true" aria-labelledby="face-modal-title">
     <div class="face-card-head">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--kt-accent);"><path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 0 2 2v2M3 17v2a2 2 0 0 0 2 2h2M21 17v2a2 2 0 0 1-2 2h-2M9 9h.01M15 9h.01M9 15c1 1 2 1.5 3 1.5s2-.5 3-1.5"/></svg>
-        <h3 id="face-modal-title" style="margin: 0; font-size: 17px; font-weight: 600;">Quét khuôn mặt FaceID</h3>
+      <div class="face-head-titles">
+        <span class="face-mode-kicker" id="face-mode-badge">TRẠM SINH TRẮC HỌC SỔ SON</span>
+        <h3 id="face-modal-title">Quét khuôn mặt FaceID</h3>
       </div>
-      <button type="button" id="face-modal-close" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--kt-muted); line-height: 1;">&times;</button>
+      <button type="button" id="face-modal-close" class="face-close-btn" aria-label="Đóng cửa sổ quét khuôn mặt">&times;</button>
     </div>
-    <div class="face-viewport">
+
+    <div class="face-viewport" id="face-viewport">
       <video id="face-video" autoplay playsinline muted></video>
       <canvas id="face-canvas"></canvas>
-      <div class="face-reticle"></div>
+
+      <div class="face-hud" aria-hidden="true">
+        <div class="face-hud-top">
+          <span class="face-hud-pill" id="face-hud-status">KHỞI ĐỘNG ỐNG KÍNH</span>
+          <span class="face-hud-counter" id="face-hud-frames">0 / 2 MẪU</span>
+        </div>
+        <div class="face-reticle">
+          <span class="face-corner tl"></span>
+          <span class="face-corner tr"></span>
+          <span class="face-corner bl"></span>
+          <span class="face-corner br"></span>
+          <div class="face-laser"></div>
+        </div>
+        <div class="face-hud-bottom">
+          <span>68 LANDMARKS · 128-D EUCLIDEAN</span>
+        </div>
+      </div>
+
       <div id="face-spinner" class="face-spinner">
         <div class="face-ring"></div>
         <span id="face-loading-text">Đang tải mô hình AI nhận diện...</span>
       </div>
     </div>
+
+    <div class="face-progress-section">
+      <div class="face-steps" aria-hidden="true">
+        <span class="face-step is-active" id="face-step-1">01. Ống kính</span>
+        <span class="face-step" id="face-step-2">02. Điểm mốc 68</span>
+        <span class="face-step" id="face-step-3">03. Đối soát 128-D</span>
+      </div>
+      <div class="face-progress-track">
+        <div class="face-progress-fill" id="face-progress-bar"></div>
+      </div>
+    </div>
+
     <div class="face-card-foot">
-      <p id="face-feedback" class="face-feedback">Đang chuẩn bị camera...</p>
-      <div style="display: flex; gap: 10px; justify-content: flex-end; width: 100%;">
-        <button type="button" class="secondary" id="face-cancel-btn">Hủy bỏ</button>
+      <p id="face-feedback" class="face-feedback" aria-live="polite">Đang chuẩn bị camera...</p>
+      <div class="face-foot-actions">
+        <span class="face-security-note">Xử lý cục bộ trên trình duyệt · Không lưu ảnh gốc</span>
+        <button type="button" class="secondary" id="face-cancel-btn">Đóng máy quét</button>
       </div>
     </div>
   </div>

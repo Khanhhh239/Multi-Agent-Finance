@@ -598,21 +598,48 @@ def unlock(password):
     return new_session()
 
 
+def _sync_sessions_to_disk():
+    sec = read_json(SECURITY_FILE, None)
+    if isinstance(sec, dict):
+        now = time.time()
+        sec['sessions'] = {k: v for k, v in SESSIONS.items() if v > now}
+        write_json(SECURITY_FILE, sec)
+
+
 def new_session():
     token = secrets.token_urlsafe(24)
     SESSIONS[token] = time.time() + SESSION_TTL
+    _sync_sessions_to_disk()
     return token
 
 
+def lock_session(token):
+    SESSIONS.pop(token, None)
+    _sync_sessions_to_disk()
+
+
 def session_left(token, touch=True):
+    if not token:
+        return 0
+    now = time.time()
     until = SESSIONS.get(token)
-    if until is None or until < time.time():
-        SESSIONS.pop(token, None)
+    if until is None:
+        sec = read_json(SECURITY_FILE, None)
+        if isinstance(sec, dict) and isinstance(sec.get('sessions'), dict):
+            disk_until = sec['sessions'].get(token)
+            if isinstance(disk_until, (int, float)) and disk_until > now:
+                until = float(disk_until)
+                SESSIONS[token] = until
+    if until is None or until < now:
+        if token in SESSIONS:
+            SESSIONS.pop(token, None)
+            _sync_sessions_to_disk()
         return 0
     if touch:
-        SESSIONS[token] = time.time() + SESSION_TTL
+        SESSIONS[token] = now + SESSION_TTL
         until = SESSIONS[token]
-    return int(until - time.time())
+        _sync_sessions_to_disk()
+    return int(until - now)
 
 
 BIOMETRIC_CHALLENGES: dict[str, float] = {}
@@ -1368,12 +1395,12 @@ class Handler(BaseHTTPRequestHandler):
             descriptor = b.get('descriptor', [])
             token = verify_face_descriptor(descriptor)
             return self.send(200, dict(token=token))
-        if method == 'POST' and path == '/api/intake/face/remove':
+        if method == 'POST' and path in ('/api/intake/face/remove', '/api/intake/biometric/remove'):
             self.need_session()
             remove_biometric()
             return self.send(200, dict(ok=True))
         if method == 'POST' and path == '/api/intake/lock':
-            SESSIONS.pop(self.token(), None)
+            lock_session(self.token())
             audit('lock', {})
             return self.send(200, dict(ok=True))
         if method == 'PUT' and path == '/api/company':

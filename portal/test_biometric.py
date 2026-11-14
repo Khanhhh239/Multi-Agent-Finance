@@ -138,6 +138,21 @@ class BiometricAuthTest(unittest.TestCase):
         server.remove_biometric()
         self.assertFalse(server.has_biometric())
 
+    def test_face_session_persists_across_memory_reload_and_locks_cleanly(self):
+        enrolled_face = [0.05 * (i % 10) for i in range(128)]
+        server.save_face_descriptor(enrolled_face)
+        token = server.verify_face_descriptor([v + 0.001 for v in enrolled_face])
+        self.assertGreater(server.session_left(token, touch=False), 0)
+
+        # Simulate server process restart clearing in-memory SESSIONS
+        server.SESSIONS.clear()
+        self.assertGreater(server.session_left(token, touch=False), 0)
+
+        # Explicit lock must remove from both memory and disk
+        server.lock_session(token)
+        server.SESSIONS.clear()
+        self.assertEqual(server.session_left(token, touch=False), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
