@@ -1,6 +1,6 @@
 // Protected settings ("Quản trị"): not on the menu, opened at #/quan-tri. Needs the administrator password for every
 // change: enterprise profile and policies, new enterprises, shared catalogs, legal corpus, risk lists.
-import { $, api, app, button, esc, notice, post, put, state, store } from './core.js';
+import { $, api, app, button, esc, notice, post, put, sonHeader, state, store } from './core.js';
 import { toast } from './ux.js';
 
 export const ADMIN_TABS = [
@@ -27,21 +27,15 @@ function bindLogout() {
 
 function loginForm(st) {
   const setup = !st.configured;
-  app().innerHTML = `<span class="eyebrow">Hệ thống bảo vệ</span>
-    <h1 class="page">Quản trị hệ thống</h1>
-    <p class="lead">${setup
-    ? 'Lần đầu sử dụng: đặt mật khẩu quản trị. Mật khẩu này dùng để thay đổi cấu hình doanh nghiệp, danh mục dùng chung và kho luật; công việc hằng ngày (nạp dữ liệu, xử lý việc, hỏi đáp) không cần mật khẩu.'
-    : 'Khu vực quản trị cấu hình và danh mục hệ thống. Vui lòng nhập mật khẩu quản trị để tiếp tục.'}</p>
-    <div style="display:flex;justify-content:center;margin:32px 0">
+  const subText = setup
+    ? 'Lần đầu sử dụng: đặt mật khẩu quản trị để bảo vệ cấu hình doanh nghiệp, danh mục dùng chung và kho luật.'
+    : 'Khu vực quản trị cấu hình và danh mục hệ thống. Vui lòng nhập mật khẩu quản trị để tiếp tục.';
+  app().innerHTML = `${sonHeader('Quản trị hệ thống', 'Quản trị hệ thống', 'HỆ THỐNG BẢO VỆ', subText)}
+    <div style="display:flex;justify-content:center;margin:28px 0">
       <form id="admin-form" class="panel narrow" style="width:100%;max-width:440px">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--cds-border-subtle)">
-          <div style="background:var(--a3-primary-soft);color:var(--a3-primary);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;flex:none">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </div>
-          <div>
-            <h3 style="margin:0;font-size:16px;font-weight:600">${setup ? 'Thiết lập mật khẩu quản trị' : 'Xác thực quản trị viên'}</h3>
-            <span class="muted small">${st.ttl_minutes} phút không thao tác sẽ tự khóa</span>
-          </div>
+        <div style="margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--cds-border-subtle)">
+          <h3 style="margin:0;font-size:16px;font-weight:600">${setup ? 'Thiết lập mật khẩu quản trị' : 'Xác thực quản trị viên'}</h3>
+          <span class="muted small">${st.ttl_minutes} phút không thao tác sẽ tự khóa</span>
         </div>
         <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="pw">Mật khẩu${setup ? ' mới (ít nhất 8 ký tự)' : ''}</label>
         <input class="cds--text-input son-box" id="pw" type="password" autocomplete="${setup ? 'new-password' : 'current-password'}" required></div>
@@ -75,13 +69,11 @@ export function adminOnly(page) {
 
 export async function pageAdminHome() {
   const cats = await api('/api/admin/catalog');
-  app().innerHTML = `<span class="eyebrow">Bảng điều khiển quản trị</span>
-    <h1 class="page">Quản trị và Danh mục dùng chung</h1>
-    <p class="lead">Mọi thay đổi ở đây được kiểm tra hợp lệ, ghi phiên bản và lưu vào nhật ký lịch sử. Danh mục dùng chung áp dụng cho mọi doanh nghiệp; cấu hình doanh nghiệp áp dụng riêng cho từng không gian.</p>
+  app().innerHTML = `${sonHeader('Tổng quan quản trị', 'Quản trị và Danh mục dùng chung', 'BẢNG ĐIỀU KHIỂN QUẢN TRỊ', 'Mọi thay đổi ở đây được kiểm tra hợp lệ, ghi phiên bản và lưu vào nhật ký lịch sử.')}
     <div class="grid2">
       <div class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm)">
-        <h3 style="margin-top:0;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px">
-          <span>🏢</span> Doanh nghiệp từ portal
+        <h3 style="margin-top:0;font-size:17px;font-weight:600">
+          Doanh nghiệp từ portal
         </h3>
         <p class="muted" style="font-size:13.5px;line-height:1.65">Doanh nghiệp từ hồ sơ chung tại portal: <strong>${esc(state.workspaces.find((w) => w.id === state.ws)?.name || 'chưa chọn')}</strong>.</p>
         <div class="bar" style="margin-top:20px">
@@ -90,8 +82,8 @@ export async function pageAdminHome() {
         </div>
       </div>
       <div class="panel" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm)">
-        <h3 style="margin-top:0;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px">
-          <span>📚</span> Danh mục dùng chung toàn hệ thống
+        <h3 style="margin-top:0;font-size:17px;font-weight:600">
+          Danh mục dùng chung toàn hệ thống
         </h3>
         <ul class="list-plain" style="margin-top:14px">
           ${cats.map((c) => `<li style="padding:10px 0;border-bottom:1px solid var(--cds-border-subtle);display:flex;justify-content:space-between;align-items:center">
@@ -102,8 +94,8 @@ export async function pageAdminHome() {
       </div>
     </div>
     <div class="panel narrow" style="border-radius:12px;padding:24px 26px;box-shadow:var(--a3-shadow-sm);margin-top:24px;max-width:560px">
-      <h3 style="margin-top:0;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px">
-        <span>🔑</span> Đổi mật khẩu quản trị
+      <h3 style="margin-top:0;font-size:17px;font-weight:600">
+        Đổi mật khẩu quản trị
       </h3>
       <form id="pwchg" style="margin-top:16px">
         <div class="form-grid">
@@ -195,9 +187,7 @@ export async function pageCatalog() {
   const ed = EDITORS[name];
   if (!ed) { app().innerHTML = notice('error', 'Không có danh mục này'); return; }
   const { data, history } = await api(`/api/admin/catalog/${name}`);
-  app().innerHTML = `<span class="eyebrow">Danh mục dùng chung hệ thống</span>
-    <h1 class="page">${esc(NAMES[name])}</h1>
-    <p class="lead">${esc(ed.help)}</p>
+  app().innerHTML = `${sonHeader('Danh mục dùng chung', NAMES[name], 'DANH MỤC HỆ THỐNG', ed.help)}
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
       <span class="cds--tag cds--tag--teal">Phiên bản ${esc(data.version)}</span>
       <span class="muted small">Áp dụng chung cho mọi doanh nghiệp trên máy này</span>
@@ -237,7 +227,7 @@ export async function pageAdminHistory() {
   const all = lists.flat().sort((a, b) => (a.at < b.at ? 1 : -1));
   let packHist = [];
   if (state.ws) { try { packHist = await api(`/api/workspaces/${state.ws}/pack/history`); } catch { packHist = []; } }
-  app().innerHTML = `<h1 class="page">Lịch sử thay đổi</h1><h2 class="section">Danh mục dùng chung</h2>
+  app().innerHTML = `${sonHeader('Lịch sử thay đổi', 'Lịch sử thay đổi', 'NHẬT KÝ QUẢN TRỊ')}<h2 class="section">Danh mục dùng chung</h2>
     ${all.length ? `<ul class="list-plain small">${all.map((h) => `<li>${esc(h.at.replace('T', ' '))}: <strong>${esc(h.label)}</strong>, ${esc(h.by)}, ${esc(JSON.stringify(h.summary))}</li>`).join('')}</ul>` : '<p class="muted">Chưa có thay đổi.</p>'}
     <h2 class="section">Cấu hình doanh nghiệp đang chọn</h2>
     ${packHist.length ? `<ul class="list-plain small">${packHist.slice().reverse().map((h) => `<li>${esc((h.at || '').replace('T', ' '))}: ${esc(h.by || '')} ${esc(JSON.stringify(h.changes || h.diff || h))}</li>`).join('')}</ul>` : '<p class="muted">Chưa có thay đổi.</p>'}`;

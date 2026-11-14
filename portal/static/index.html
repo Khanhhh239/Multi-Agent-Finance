@@ -40,9 +40,25 @@
     </a>
     <div class="nav-group">
       <p class="nav-title">Không gian chung</p>
-      <a class="nav-link" href="#overview" data-view="overview"><span class="nav-icon" aria-hidden="true">⌂</span>Tổng quan</a>
-      <a class="nav-link" href="#config" data-view="config"><span class="nav-icon" aria-hidden="true">▤</span>Hồ sơ doanh nghiệp</a>
-      <a class="nav-link" href="#data" data-view="data"><span class="nav-icon" aria-hidden="true">↥</span>Nạp dữ liệu <span class="lock" id="lock-badge" hidden>Khóa</span><span class="count" id="pending-count" hidden></span></a>
+      <a class="nav-link" href="#overview" data-view="overview">
+        <span class="nav-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+        </span>
+        <span>Tổng quan</span>
+      </a>
+      <a class="nav-link" href="#config" data-view="config">
+        <span class="nav-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="12" y2="16"/></svg>
+        </span>
+        <span>Hồ sơ doanh nghiệp</span>
+      </a>
+      <a class="nav-link" href="#data" data-view="data">
+        <span class="nav-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </span>
+        <span>Nạp dữ liệu</span>
+        <span class="lock" id="lock-badge" hidden>Khóa</span><span class="count" id="pending-count" hidden></span>
+      </a>
     </div>
     <div class="nav-group">
       <p class="nav-title">Nghiệp vụ · 4 agent</p>
@@ -55,23 +71,29 @@
   <main class="content" id="content" tabindex="-1">
     <!-- Overview -->
     <section class="view" id="view-overview" aria-labelledby="h-overview">
-      <!-- 1. Sleek Minimalist Masthead -->
+      <!-- 1. Minimalist Executive Header -->
       <header class="overview-header">
         <div class="company-brand-box">
-          <span class="company-monogram-brand" id="overview-monogram">SS</span>
+          <div class="company-monogram-brand" id="overview-monogram">SS</div>
           <div class="company-meta-col">
             <div class="company-tagline-row">
               <h1 id="h-overview" class="overview-company-title">Sổ Son</h1>
               <span class="mst-pill" id="overview-tax-badge">MST: —</span>
+              <span class="meta-badge" id="overview-vat-badge" hidden></span>
+              <span class="meta-badge" id="overview-period-badge" hidden></span>
             </div>
-            <p class="overview-company-sub" id="overview-company-fullname">Văn phòng kế toán số</p>
+            <p class="overview-company-sub" id="overview-company-fullname">Không gian kế toán số đa tác tử</p>
           </div>
         </div>
         <div class="header-right-controls">
           <div class="live-status-badge" id="overview-status-pill">
             <span class="pulse-dot"></span>
-            <span id="overview-system-status">Đang tải trạng thái...</span>
+            <span id="overview-system-status">Đang tải...</span>
           </div>
+          <a href="#data" class="btn-secondary-smart" id="overview-data-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span id="overview-package-label">Nạp dữ liệu</span>
+          </a>
           <button type="button" class="btn-primary-smart" id="start-all">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             <span>Bật các agent</span>
@@ -79,87 +101,79 @@
         </div>
       </header>
 
-      <!-- 2. Central Heritage Visual Showcase (Artistic Hero Gallery) -->
-      <section class="heritage-showcase" aria-label="Không gian cảm hứng di sản miền Trung">
+      <!-- 2. Pure Aesthetic Central Vietnam Gallery (Chỉ trang trí nghệ thuật, không gắn với Agent) -->
+      <section class="heritage-showcase" aria-label="Bộ ảnh di sản miền Trung">
         <div class="showcase-header">
-          <div class="showcase-title-wrap">
-            <span class="showcase-badge">Bản sắc Sổ Son · Miền Trung</span>
-            <h2 class="showcase-title">Chính trực từng con số — Vẹn tròn chữ tín chữ son</h2>
-          </div>
+          <span class="showcase-badge">Cảm hứng Di sản Miền Trung</span>
           <span class="showcase-date" id="today"></span>
         </div>
         <div class="showcase-gallery">
-          <div class="gallery-card card-hoi-an">
-            <img src="/places/hoi-an.webp" width="1200" height="800" alt="Hội An lung linh bên dòng sông Hoài" loading="eager" fetchpriority="high">
-            <div class="card-overlay">
-              <div class="card-tag">Hội An · Quảng Nam</div>
-              <p class="card-meaning">Minh bạch như dòng sông Hoài</p>
-            </div>
-          </div>
-          <div class="gallery-card card-quy-nhon">
-            <img src="/places/quy-nhon.webp" width="1200" height="643" alt="Eo Gió Quy Nhơn hùng vĩ nhìn ra biển" loading="lazy">
-            <div class="card-overlay">
-              <div class="card-tag">Eo Gió · Quy Nhơn</div>
-              <p class="card-meaning">Kiên định trước rủi ro tài chính</p>
-            </div>
-          </div>
-          <div class="gallery-card card-ly-son">
-            <img src="/places/quang-ngai.webp" width="1200" height="800" alt="Đảo Bé Lý Sơn biển xanh ngọc bích" loading="lazy">
-            <div class="card-overlay">
-              <div class="card-tag">Đảo Bé · Lý Sơn</div>
-              <p class="card-meaning">Son sắt và vẹn tròn chữ tín</p>
-            </div>
-          </div>
+          <figure class="gallery-card card-main">
+            <img src="/places/hoi-an.webp" width="1200" height="800" alt="Phố cổ Hội An" loading="eager" fetchpriority="high">
+            <figcaption class="card-location-pill">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Hội An · Quảng Nam</span>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <img src="/places/quy-nhon.webp" width="1200" height="643" alt="Eo Gió Quy Nhơn" loading="lazy">
+            <figcaption class="card-location-pill">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Eo Gió · Quy Nhơn</span>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <img src="/places/quang-ngai.webp" width="1200" height="800" alt="Đảo Bé Lý Sơn" loading="lazy">
+            <figcaption class="card-location-pill">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Đảo Bé · Lý Sơn</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
-      <!-- 3. The 4 Specialized Workstations (Clean Interactive Tiles) -->
+      <!-- 3. Sleek Minimalist Agent Cards (4 Trạm Nghiệp vụ — Gọn, Ít chữ) -->
       <div class="workstations-header">
-        <h2 class="workstations-title">Không gian Nghiệp vụ Kế toán</h2>
-        <span class="workstations-hint">Chọn không gian để mở bàn làm việc chuyên sâu</span>
+        <h2 class="workstations-title">Phân hệ Nghiệp vụ</h2>
+        <span class="workstations-hint">Chọn phân hệ để làm việc</span>
       </div>
       <div class="agents workstations-grid" id="agent-grid"></div>
 
-      <!-- 4. Executive Setup Progress (Tiến trình chuẩn bị đồng bộ & cân đối) -->
+      <!-- 4. Compact 3-Step Setup Strip -->
       <div class="setup-progress-card">
         <div class="setup-card-header">
-          <div class="setup-header-left">
-            <span class="setup-badge">Quy trình vận hành</span>
-            <h3 class="setup-title">Tiến trình Chuẩn bị Không gian Làm việc</h3>
-          </div>
-          <div class="setup-header-right">
-            <div class="setup-progress-meter">
-              <span class="meter-label" id="setup-progress-text">Tiến độ: 3/3 bước</span>
-              <div class="meter-track">
-                <div class="meter-bar" id="meter-bar" style="width: 100%;"></div>
-              </div>
+          <h3 class="setup-title">Thiết lập nhanh</h3>
+          <div class="setup-progress-meter">
+            <span class="meter-label" id="setup-progress-text">3/3 hoàn tất</span>
+            <div class="meter-track">
+              <div class="meter-bar" id="meter-bar" style="width: 100%;"></div>
             </div>
           </div>
         </div>
         <ol class="steps setup-steps-grid" id="steps">
           <li data-step="config" class="setup-step-card">
-            <div class="step-card-top">
-              <span class="step-num-badge">1</span>
-              <a href="#config" class="step-action-link">Cấu hình ↗</a>
+            <span class="step-num-badge">1</span>
+            <div class="step-card-body">
+              <div class="step-card-name">Hồ sơ đơn vị</div>
+              <div class="step-card-desc" id="step-config-desc">Chưa cấu hình</div>
             </div>
-            <div class="step-card-name">Hồ sơ Doanh nghiệp</div>
-            <div class="step-card-desc" id="step-config-desc">Đã cấu hình mã định danh & mã số thuế</div>
+            <a href="#config" class="step-action-link">Mở</a>
           </li>
           <li data-step="agents" class="setup-step-card">
-            <div class="step-card-top">
-              <span class="step-num-badge">2</span>
-              <span class="step-action-link" id="step-agents-link">Dịch vụ ↗</span>
+            <span class="step-num-badge">2</span>
+            <div class="step-card-body">
+              <div class="step-card-name">Hệ thống Agent</div>
+              <div class="step-card-desc" id="step-agents-status">4/4 sẵn sàng</div>
             </div>
-            <div class="step-card-name">Kích hoạt 4 Agent</div>
-            <div class="step-card-desc" id="step-agents-status">4/4 Agent đang trực tuyến</div>
+            <a href="#agent-grid" class="step-action-link" id="step-agents-link">Bật</a>
           </li>
           <li data-step="data" class="setup-step-card">
-            <div class="step-card-top">
-              <span class="step-num-badge">3</span>
-              <a href="#data" class="step-action-link">Nạp tệp ↗</a>
+            <span class="step-num-badge">3</span>
+            <div class="step-card-body">
+              <div class="step-card-name">Gói chứng từ</div>
+              <div class="step-card-desc" id="step-data-desc">Chưa nạp tệp</div>
             </div>
-            <div class="step-card-name">Niêm phong Dữ liệu</div>
-            <div class="step-card-desc" id="step-data-desc">Gói dữ liệu đã được đối soát & niêm phong</div>
+            <a href="#data" class="step-action-link">Nạp</a>
           </li>
         </ol>
       </div>
@@ -171,63 +185,199 @@
     <!-- Config -->
     <section class="view" id="view-config" aria-labelledby="h-config" hidden>
       <div class="profile-heading" data-son-sheet="2" data-son-row="4">
-        <div><h1 id="h-config">Hồ sơ doanh nghiệp</h1>
-          <p class="profile-lead">Thông tin pháp lý, thuế, kỳ kế toán và thiết lập định dạng.</p></div>
+        <div>
+          <h1 id="h-config">Hồ sơ doanh nghiệp</h1>
+          <p class="profile-lead">Thông tin pháp lý, thuế, kỳ kế toán và thiết lập định dạng dùng chung cho 4 phân hệ.</p>
+        </div>
       </div>
-      <nav class="paper-tabs profile-tabs" aria-label="Các mục hồ sơ">
-        <button type="button" data-profile-section="profile-legal" aria-current="location">Thông tin chung</button>
+      <nav class="paper-tabs profile-tabs" id="profile-tabs" aria-label="Các mục hồ sơ">
+        <button type="button" data-profile-section="all" aria-current="location">Tất cả mục</button>
+        <button type="button" data-profile-section="profile-legal">Thông tin chung</button>
         <button type="button" data-profile-section="profile-accounting">Thiết lập kế toán</button>
+        <button type="button" data-profile-section="profile-format">Định dạng tệp</button>
         <button type="button" data-profile-section="profile-connections">Kết nối tác nghiệp</button>
-        <button type="button" data-profile-section="saved-at">Lần lưu gần nhất</button>
+        <button type="button" data-profile-section="profile-sync">Lần lưu gần nhất</button>
       </nav>
-      <div class="profile-lock" id="config-lock" hidden><div><strong>Hồ sơ đang được bảo vệ</strong><p>Gói dữ liệu đã niêm phong. Mở khóa tại Nạp dữ liệu trước khi chỉnh sửa hồ sơ.</p></div><a class="btn" href="#data">Mở khóa để chỉnh sửa <span aria-hidden="true">↗</span></a></div>
+      <div class="profile-lock" id="config-lock" hidden>
+        <div>
+          <strong>Hồ sơ đang được bảo vệ</strong>
+          <p>Gói dữ liệu đã niêm phong. Mở khóa tại mục Nạp dữ liệu trước khi chỉnh sửa hồ sơ.</p>
+        </div>
+        <a class="btn" href="#data">Mở khóa để chỉnh sửa</a>
+      </div>
       <div class="config-layout">
         <form id="company-form" class="form" novalidate>
           <div id="profile-errors" class="profile-errors" tabindex="-1" role="alert" hidden></div>
-          <fieldset class="profile-section" id="profile-legal"><legend><span aria-hidden="true">01</span> Thông tin pháp lý</legend>
+
+          <fieldset class="profile-section" id="profile-legal" data-section-group="profile-legal">
+            <legend>
+              <span aria-hidden="true">01</span>
+              Thông tin pháp lý
+              <button type="button" class="profile-inline-btn" id="profile-fill-demo">Điền mẫu chuẩn</button>
+            </legend>
             <p class="profile-section-note">Thông tin nhận diện doanh nghiệp dùng cho hạch toán, thuế và báo cáo.</p>
-            <label class="field" for="profile-legal-name"><span class="label">Tên doanh nghiệp <span class="profile-required" aria-hidden="true">*</span></span><input id="profile-legal-name" name="legal_name" required autocomplete="organization" placeholder="Tên đầy đủ theo đăng ký doanh nghiệp"></label>
+            <label class="field" for="profile-legal-name">
+              <span class="label">Tên doanh nghiệp <span class="profile-required" aria-hidden="true">*</span></span>
+              <input id="profile-legal-name" name="legal_name" required autocomplete="organization" placeholder="Tên đầy đủ theo đăng ký doanh nghiệp">
+            </label>
             <div class="row profile-identifiers">
-              <label class="field" for="profile-tax-code"><span class="label">Mã số thuế</span><input id="profile-tax-code" name="tax_code" inputmode="numeric" placeholder="10 hoặc 13 chữ số" aria-describedby="profile-tax-help"><span class="hint" id="profile-tax-help">Nhập mã số thuế để liên kết doanh nghiệp với Agent 3.</span></label>
-              <label class="field" for="profile-code"><span class="label">Mã dùng chung <span class="profile-required" aria-hidden="true">*</span></span><input id="profile-code" name="code" required placeholder="VD: SAOVIET" autocapitalize="characters" aria-describedby="profile-code-help"><span class="hint" id="profile-code-help">Tối đa 64 ký tự: chữ không dấu, số, gạch ngang hoặc gạch dưới.</span></label>
+              <label class="field" for="profile-tax-code">
+                <span class="label">Mã số thuế</span>
+                <input id="profile-tax-code" name="tax_code" inputmode="numeric" placeholder="10 hoặc 13 chữ số" aria-describedby="profile-tax-help">
+                <span class="hint" id="profile-tax-help">Nhập mã số thuế để liên kết doanh nghiệp với Agent 3.</span>
+              </label>
+              <label class="field" for="profile-code">
+                <span class="label">Mã dùng chung <span class="profile-required" aria-hidden="true">*</span></span>
+                <input id="profile-code" name="code" required placeholder="VD: SAOVIET" autocapitalize="characters" aria-describedby="profile-code-help">
+                <span class="hint" id="profile-code-help">Tối đa 64 ký tự: chữ không dấu, số, gạch ngang hoặc gạch dưới.</span>
+              </label>
             </div>
-            <label class="field" for="profile-address"><span class="label">Địa chỉ đăng ký</span><input id="profile-address" name="registered_address" autocomplete="street-address" placeholder="Địa chỉ theo đăng ký doanh nghiệp"></label>
-            <label class="field" for="profile-industry"><span class="label">Ngành nghề</span><input id="profile-industry" name="industry" placeholder="VD: Bán buôn vật liệu xây dựng" aria-describedby="profile-industry-help"><span class="hint" id="profile-industry-help">Nếu có nhiều ngành, phân cách bằng dấu chấm phẩy.</span></label>
+            <label class="field" for="profile-address">
+              <span class="label">Địa chỉ đăng ký</span>
+              <input id="profile-address" name="registered_address" autocomplete="street-address" placeholder="Địa chỉ theo đăng ký doanh nghiệp">
+            </label>
+            <label class="field" for="profile-industry">
+              <span class="label">Ngành nghề</span>
+              <input id="profile-industry" name="industry" placeholder="VD: Bán buôn vật liệu xây dựng" aria-describedby="profile-industry-help">
+              <span class="hint" id="profile-industry-help">Nếu có nhiều ngành, phân cách bằng dấu chấm phẩy.</span>
+            </label>
           </fieldset>
-          <fieldset class="profile-section" id="profile-accounting"><legend><span aria-hidden="true">02</span> Thuế và kỳ kế toán</legend>
+
+          <fieldset class="profile-section" id="profile-accounting" data-section-group="profile-accounting">
+            <legend><span aria-hidden="true">02</span> Thuế và kỳ kế toán</legend>
             <p class="profile-section-note">Thiết lập phương pháp thuế và kỳ kế toán áp dụng cho doanh nghiệp.</p>
             <div class="row">
-              <label class="field" for="profile-vat"><span class="label">Phương pháp tính thuế GTGT</span><select id="profile-vat" name="vat_method"><option value="DEDUCTION">Khấu trừ</option><option value="DIRECT">Trực tiếp</option></select></label>
-              <label class="field" for="profile-filing"><span class="label">Kỳ kê khai</span><select id="profile-filing" name="filing_period"><option value="MONTH">Theo tháng</option><option value="QUARTER">Theo quý</option></select></label>
-              <label class="field" for="profile-year-end"><span class="label">Tháng kết thúc năm tài chính</span><select id="profile-year-end" name="fiscal_year_end_month"><option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option><option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option><option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option><option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option></select></label>
+              <label class="field" for="profile-vat">
+                <span class="label">Phương pháp tính thuế GTGT</span>
+                <select id="profile-vat" name="vat_method">
+                  <option value="DEDUCTION">Khấu trừ</option>
+                  <option value="DIRECT">Trực tiếp</option>
+                </select>
+              </label>
+              <label class="field" for="profile-filing">
+                <span class="label">Kỳ kê khai</span>
+                <select id="profile-filing" name="filing_period">
+                  <option value="MONTH">Theo tháng</option>
+                  <option value="QUARTER">Theo quý</option>
+                </select>
+              </label>
+              <label class="field" for="profile-year-end">
+                <span class="label">Tháng kết thúc năm tài chính</span>
+                <select id="profile-year-end" name="fiscal_year_end_month">
+                  <option value="1">Tháng 1</option>
+                  <option value="2">Tháng 2</option>
+                  <option value="3">Tháng 3</option>
+                  <option value="4">Tháng 4</option>
+                  <option value="5">Tháng 5</option>
+                  <option value="6">Tháng 6</option>
+                  <option value="7">Tháng 7</option>
+                  <option value="8">Tháng 8</option>
+                  <option value="9">Tháng 9</option>
+                  <option value="10">Tháng 10</option>
+                  <option value="11">Tháng 11</option>
+                  <option value="12">Tháng 12</option>
+                </select>
+              </label>
             </div>
           </fieldset>
-          <fieldset class="profile-section"><legend><span aria-hidden="true">03</span> Định dạng</legend>
+
+          <fieldset class="profile-section" id="profile-format" data-section-group="profile-format">
+            <legend><span aria-hidden="true">03</span> Định dạng</legend>
             <p class="profile-section-note">Chọn cách viết trong tệp nguồn. Ngày được dùng cho Agent 1 và 2; số tiền được dùng cho Agent 1.</p>
             <div class="row">
-              <label class="field" for="profile-date"><span class="label">Ngày trong tệp</span><select id="profile-date" name="date_format"><option value="dmy">Ngày/tháng/năm (dd/mm/yyyy)</option><option value="iso">Năm-tháng-ngày (yyyy-mm-dd)</option></select></label>
-              <label class="field" for="profile-number"><span class="label">Số tiền trong tệp</span><select id="profile-number" name="number_format"><option value="vi-VN">1.250.000,50 · Dấu phẩy thập phân</option><option value="plain">1250000.50 · Dấu chấm thập phân</option></select></label>
+              <label class="field" for="profile-date">
+                <span class="label">Ngày trong tệp</span>
+                <select id="profile-date" name="date_format">
+                  <option value="dmy">Ngày/tháng/năm (dd/mm/yyyy)</option>
+                  <option value="iso">Năm-tháng-ngày (yyyy-mm-dd)</option>
+                </select>
+              </label>
+              <label class="field" for="profile-number">
+                <span class="label">Số tiền trong tệp</span>
+                <select id="profile-number" name="number_format">
+                  <option value="vi-VN">1.250.000,50 · Dấu phẩy thập phân</option>
+                  <option value="plain">1250000.50 · Dấu chấm thập phân</option>
+                </select>
+              </label>
             </div>
-            <div class="profile-preview"><div><span>Ví dụ ngày</span><strong id="profile-date-preview">31/12/2026</strong></div><div><span>Ví dụ số tiền</span><strong id="profile-number-preview">1.250.000,50</strong></div><p>Chỉ xem trước định dạng, không thay đổi dữ liệu trong tệp.</p></div>
+            <div class="profile-preview">
+              <div><span>Ví dụ ngày</span><strong id="profile-date-preview">31/12/2026</strong></div>
+              <div><span>Ví dụ số tiền</span><strong id="profile-number-preview">1.250.000,50</strong></div>
+              <p>Chỉ xem trước định dạng, không thay đổi dữ liệu trong tệp.</p>
+            </div>
           </fieldset>
-          <details class="profile-extra"><summary>Mã liên kết riêng cho Agent 2</summary>
-          <fieldset class="profile-section"><legend class="sr-only">Liên kết hệ thống</legend>
-            <p class="profile-section-note">Dùng mã riêng khi danh mục doanh nghiệp của Agent 2 có định danh khác.</p>
-            <label class="field" for="profile-agent2"><span class="label">Mã doanh nghiệp ở Agent 2 <span class="profile-optional">Không bắt buộc</span></span><input id="profile-agent2" name="agent2_company" placeholder="Để trống để dùng mã chung" aria-describedby="profile-agent2-help"><span class="hint" id="profile-agent2-help">Doanh nghiệp cần có sẵn trong danh mục Agent 2. Bộ demo dùng C001 hoặc C002.</span></label>
-          </fieldset></details>
-          <div class="form-actions profile-actions"><div class="profile-action-note"><strong id="profile-save-note" role="status">Thông tin được lưu trên máy này</strong><span class="saved" id="saved-at"></span></div><div class="profile-action-buttons"><button type="button" id="profile-reset">Hủy thay đổi</button><button type="submit" class="primary" id="profile-submit">Lưu hồ sơ</button></div></div>
-          <section class="profile-sync" id="profile-sync" aria-labelledby="profile-sync-title" hidden><h2 id="profile-sync-title">Lưu hồ sơ và kết nối agent</h2><p>Hồ sơ đã được lưu. Kiểm tra kết quả từng agent bên dưới trước khi tiếp tục.</p><ul class="sync" id="sync-result" aria-live="polite"></ul></section>
-        </form>
-        <aside class="profile-summary" aria-labelledby="profile-summary-title">
-          <div class="profile-summary-top">
-            <span class="profile-summary-icon company-monogram" id="profile-monogram" aria-hidden="true">—</span>
-            <div><h2 id="profile-summary-title">Chưa có doanh nghiệp</h2>
-              <p>Mã dùng chung <b id="profile-summary-code">—</b></p>
-              <p>Mã số thuế <b id="profile-summary-tax">—</b></p></div>
+
+          <details class="profile-extra" id="profile-extra-agent2" data-section-group="profile-connections">
+            <summary>Mã liên kết riêng cho Agent 2</summary>
+            <fieldset class="profile-section">
+              <legend class="sr-only">Liên kết hệ thống</legend>
+              <p class="profile-section-note">Dùng mã riêng khi danh mục doanh nghiệp của Agent 2 có định danh khác.</p>
+              <label class="field" for="profile-agent2">
+                <span class="label">Mã doanh nghiệp ở Agent 2 <span class="profile-optional">Không bắt buộc</span></span>
+                <input id="profile-agent2" name="agent2_company" placeholder="Để trống để dùng mã chung" aria-describedby="profile-agent2-help">
+                <span class="hint" id="profile-agent2-help">Doanh nghiệp cần có sẵn trong danh mục Agent 2. Bộ demo dùng C001 hoặc C002.</span>
+              </label>
+            </fieldset>
+          </details>
+
+          <section class="profile-sync" id="profile-sync" data-section-group="profile-sync" aria-labelledby="profile-sync-title">
+            <div class="profile-sync-head">
+              <div>
+                <h2 id="profile-sync-title">Lần lưu gần nhất & đồng bộ tác nghiệp</h2>
+                <p id="profile-sync-lead">Trạng thái lưu hồ sơ và kết nối dữ liệu với 4 phân hệ Agent.</p>
+              </div>
+              <button type="button" class="profile-inline-btn" id="profile-sync-now">Đồng bộ lại với 4 Agent</button>
+            </div>
+            <ul class="sync" id="sync-result" aria-live="polite"></ul>
+          </section>
+
+          <div class="form-actions profile-actions">
+            <div class="profile-action-note">
+              <strong id="profile-save-note" role="status">Thông tin được lưu trên máy này</strong>
+              <span class="saved" id="saved-at"></span>
+            </div>
+            <div class="profile-action-buttons">
+              <button type="button" id="profile-reset">Hủy thay đổi</button>
+              <button type="submit" class="primary" id="profile-submit">Lưu hồ sơ</button>
+            </div>
           </div>
-          <dl class="profile-summary-values"><dt>Địa chỉ</dt><dd id="profile-summary-address">—</dd><dt>Ngành nghề</dt><dd id="profile-summary-industry">—</dd><dt>Kỳ kê khai thuế</dt><dd id="profile-summary-filing">—</dd><dt>Năm tài chính</dt><dd id="profile-summary-year">—</dd><dt>Phương pháp thuế GTGT</dt><dd id="profile-summary-vat">—</dd></dl>
-          <div class="profile-consumers" id="profile-connections"><h3>Kết nối tác nghiệp (A1 – A4)</h3><p>Trạng thái dịch vụ trong văn phòng kế toán.</p><ul id="profile-agent-list"></ul></div>
-          <div class="profile-saved" id="profile-saved"><span id="profile-summary-state"></span><span class="profile-status" id="profile-status" role="status">Đang tải hồ sơ</span></div>
+        </form>
+
+        <aside class="profile-summary" id="profile-summary-aside" aria-labelledby="profile-summary-title">
+          <div class="profile-summary-top" data-focus-field="profile-legal-name" title="Nhấn để chỉnh sửa thông tin pháp lý">
+            <span class="profile-summary-icon company-monogram" id="profile-monogram" aria-hidden="true">—</span>
+            <div>
+              <h2 id="profile-summary-title">Chưa có doanh nghiệp</h2>
+              <p data-focus-field="profile-code">Mã dùng chung <b id="profile-summary-code">—</b></p>
+              <p data-focus-field="profile-tax-code">Mã số thuế <b id="profile-summary-tax">—</b></p>
+            </div>
+          </div>
+          <dl class="profile-summary-values">
+            <dt data-focus-field="profile-address">Địa chỉ</dt>
+            <dd id="profile-summary-address" data-focus-field="profile-address" title="Nhấn để sửa địa chỉ">—</dd>
+            <dt data-focus-field="profile-industry">Ngành nghề</dt>
+            <dd id="profile-summary-industry" data-focus-field="profile-industry" title="Nhấn để sửa ngành nghề">—</dd>
+            <dt data-focus-field="profile-filing">Kỳ kê khai thuế</dt>
+            <dd id="profile-summary-filing" data-focus-field="profile-filing" title="Nhấn để đổi kỳ kê khai">—</dd>
+            <dt data-focus-field="profile-year-end">Năm tài chính</dt>
+            <dd id="profile-summary-year" data-focus-field="profile-year-end" title="Nhấn để đổi tháng kết thúc năm tài chính">—</dd>
+            <dt data-focus-field="profile-vat">Phương pháp thuế GTGT</dt>
+            <dd id="profile-summary-vat" data-focus-field="profile-vat" title="Nhấn để đổi phương pháp tính thuế GTGT">—</dd>
+            <dt data-focus-field="profile-date">Định dạng ngày / số</dt>
+            <dd id="profile-summary-format" data-focus-field="profile-date" title="Nhấn để đổi định dạng ngày và số">—</dd>
+          </dl>
+          <div class="profile-consumers" id="profile-connections">
+            <div class="profile-consumers-head">
+              <h3>Kết nối tác nghiệp (A1 – A4)</h3>
+              <button type="button" class="profile-inline-btn" id="profile-start-all-inline">Bật tất cả</button>
+            </div>
+            <p>Nhấn vào từng phân hệ để mở hoặc bật dịch vụ tại chỗ.</p>
+            <ul id="profile-agent-list"></ul>
+          </div>
+          <div class="profile-saved" id="profile-saved" data-focus-section="profile-sync" title="Nhấn để xem chi tiết lần lưu gần nhất">
+            <span id="profile-summary-state"></span>
+            <span class="profile-status" id="profile-status" role="status">Đang tải hồ sơ</span>
+          </div>
         </aside>
       </div>
     </section>

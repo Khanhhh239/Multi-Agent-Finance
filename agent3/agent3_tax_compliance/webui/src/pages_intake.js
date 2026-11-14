@@ -1,5 +1,6 @@
 // Data intake: one drop zone for everything, file-by-file status, editable bank mapping, coverage check before analysis.
 import { $, api, app, button, dmy, esc, field, hashParams, loadWorkspaces, loading, money, needWorkspace, notice, post, put, saveBankFormat, sonHeader, state, table, tag } from './core.js';
+import { runWithAnalysisEffect } from './ux.js';
 
 const KIND_LABEL = { purchase_xml: 'Hóa đơn mua vào', sales_xml: 'Hóa đơn bán ra', bank: 'Sao kê ngân hàng', portal_list: 'Bảng kê cổng thuế' };
 const FIELD_LABEL = { date: 'Ngày giao dịch', debit: 'Ghi nợ (tiền ra)', credit: 'Ghi có (tiền vào)', description: 'Nội dung', counterparty_account: 'Tài khoản đối ứng', counterparty_name: 'Tên đối ứng' };
@@ -19,11 +20,6 @@ function bindDrop(onFiles) {
   drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove('over'); onFiles([...e.dataTransfer.files]); };
 }
 
-function guideBox(spec, open) {
-  return `<details class="guide" ${open ? 'open' : ''}><summary>Lấy tệp này ở đâu và cần lưu ý gì</summary><div class="guide-body"><ol>${spec.how.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
-    ${spec.pitfalls.length ? `<p class="cell-title">Lưu ý</p><ul>${spec.pitfalls.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}</div></details>`;
-}
-
 function uploadResult(records) {
   const used = records.filter((r) => r.kind);
   const counts = Object.entries(used.reduce((a, r) => ({ ...a, [r.label]: (a[r.label] || 0) + 1 }), {})).map(([k, v]) => `${v} ${k.toLowerCase()}`).join(', ');
@@ -31,8 +27,7 @@ function uploadResult(records) {
   const warned = used.filter((r) => /vẫn nạp để kiểm tra/.test(r.reason));
   const auto = used.filter((r) => r.auto_format);
   return `${used.length ? notice('success', `Đã nhận ${used.length} tệp`, counts) : ''}
-    ${auto.map((r) => notice('info', `Sao kê ${r.file}: đã tự nhận dạng cột`, `Ngày: ${r.auto_format.columns.date}; ghi nợ: ${r.auto_format.columns.debit}; ghi có: ${r.auto_format.columns.credit}; nội dung: ${r.auto_format.columns.description}`
-      + `${r.auto_format.columns.counterparty_name ? `; tên đối ứng: ${r.auto_format.columns.counterparty_name}` : '; chưa thấy cột tên đối ứng'}. Kiểm tra lại ở bước Sao kê ngân hàng nếu cần.`)).join('')}
+    ${auto.map((r) => notice('info', `Sao kê ${r.file}: đã tự nhận dạng cột`, `Ngày: ${r.auto_format.columns.date}; ghi nợ: ${r.auto_format.columns.debit}; ghi có: ${r.auto_format.columns.credit}; nội dung: ${r.auto_format.columns.description}`)).join('')}
     ${warned.length ? notice('warning', `${warned.length} hóa đơn ghi sai mã số thuế doanh nghiệp`, warned.map((r) => `${r.file}: ${r.reason}`).join('; ')) : ''}
     ${rejected.length ? `<div class="panel"><h3>${rejected.length} tệp không dùng</h3>${table(['Tệp', 'Lý do'], rejected.map((r) => `<tr><td class="mono">${esc(r.file)}</td><td>${esc(r.reason)}</td></tr>`))}</div>` : ''}`;
 }
@@ -75,7 +70,7 @@ async function mappingEditor(name) {
   try { s = await post(`/api/workspaces/${state.ws}/bank/suggest?name=${encodeURIComponent(name)}`); } catch (err) { box.innerHTML = notice('error', 'Không nhận dạng được', err.message); return; }
   const fmt = structuredClone(s.format);
   const opts = (cur) => `<option value="">(không có)</option>${s.headers.map((h) => `<option ${h === cur ? 'selected' : ''}>${esc(h)}</option>`).join('')}`;
-  box.innerHTML = `<div class="panel"><h3>Cột của ${esc(name)}</h3><p class="muted">Hệ thống đã đoán cột ở dòng tiêu đề số ${s.header_row}. Nếu đoán sai, chọn lại; bản xem trước cập nhật ngay. Lưu mẫu một lần, lần sau tệp cùng ngân hàng được đọc tự động.</p>
+  box.innerHTML = `<div class="panel"><h3>Cột của ${esc(name)}</h3><p class="muted">Dòng tiêu đề số ${s.header_row}. Chọn lại nếu cần; bản xem trước cập nhật ngay.</p>
     <div class="form-grid">${Object.keys(FIELD_LABEL).map((k) => `<div class="cds--form-item"><div class="cds--select"><label class="cds--label" for="m-${k}">${FIELD_LABEL[k]}${k === 'date' || k === 'debit' ? '' : ' (không bắt buộc)'}</label>
       <div class="cds--select-input__wrapper"><select class="cds--select-input" id="m-${k}" data-col="${k}">${opts(fmt.columns[k])}</select></div></div></div>`).join('')}
       <div class="cds--form-item"><div class="cds--select"><label class="cds--label" for="m-num">Cách viết số tiền</label><div class="cds--select-input__wrapper"><select class="cds--select-input" id="m-num">
@@ -83,7 +78,7 @@ async function mappingEditor(name) {
       <div class="cds--form-item"><div class="cds--select"><label class="cds--label" for="m-date">Cách viết ngày</label><div class="cds--select-input__wrapper"><select class="cds--select-input" id="m-date">
         ${[['%d/%m/%Y', '31/12/2026'], ['%Y-%m-%d', '2026-12-31'], ['%d-%m-%Y', '31-12-2026'], ['%d.%m.%Y', '31.12.2026']].map(([v, l]) => `<option value="${v}" ${fmt.date_format === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div></div></div></div>
     <div id="pv"></div>
-    <div class="bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="fmt-name">Tên mẫu (thường là tên ngân hàng)</label><input class="cds--text-input" id="fmt-name" value="${esc(fmt.name)}"></div>
+    <div class="bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="fmt-name">Tên mẫu</label><input class="cds--text-input" id="fmt-name" value="${esc(fmt.name)}"></div>
       ${button('Lưu mẫu sao kê', 'primary', 'id="save-fmt"')}<span id="fmt-msg"></span></div></div>`;
   const read = () => {
     box.querySelectorAll('[data-col]').forEach((sel) => { if (sel.value) fmt.columns[sel.dataset.col] = sel.value; else delete fmt.columns[sel.dataset.col]; });
@@ -115,19 +110,18 @@ async function mappingEditor(name) {
 export async function pageBankFormats() {
   await api(`/api/workspaces/${state.ws}/pack`);
   const rows = await api(`/api/workspaces/${state.ws}/details/bank`);
-  app().innerHTML = `<h1 class="page">Nhận dạng cột sao kê</h1><p class="lead">Chỉnh cách đọc các tệp đã nạp. Lưu mẫu cần quyền quản trị; thao tác này không nạp thêm tệp.</p>${detailsTable('bank', rows)}<div id="suggest"></div>`;
+  app().innerHTML = `${sonHeader('Mẫu sao kê', 'Nhận dạng cột sao kê', 'QUẢN TRỊ CHỨNG TỪ')}${detailsTable('bank', rows)}<div id="suggest"></div>`;
   app().querySelectorAll('[data-suggest]').forEach(b => { b.onclick = () => mappingEditor(b.dataset.suggest); });
 }
 
 export async function pageDataWorkspace() {
   const versions = await api(`/api/workspaces/${state.ws}/portal/lists`);
   app().innerHTML = `
-    ${sonHeader('Bảng kê', 'Bảng kê cổng thuế đang sử dụng', 'NGUỒN DỮ LIỆU ĐỐI SOÁT')}
-    <p class="lead" style="margin-top:10px">Các bản nguồn được giữ riêng. Chỉ bản được chọn mới được phân tích; chọn lại không xóa bản cũ.</p>
+    ${sonHeader('Bảng kê', 'Bảng kê cổng thuế đang sử dụng', 'QUẢN LÝ CHỨNG TỪ', `<span class="ctx-chip chip-count">${versions.files.length} bản lưu</span>`, 'chung-tu')}
     ${versions.error ? notice('warning', 'Cần chọn bản bảng kê', versions.error) : ''}
-    <form id="active-list"><label for="list-version">Bản nguồn</label><select id="list-version" class="cds--select-input" required><option value="">Chọn bảng kê</option>${versions.files.map(name => `<option value="${esc(name)}" ${name === versions.active ? 'selected' : ''}>${esc(name)}</option>`).join('')}</select>
+    <form id="active-list" style="margin-top:14px"><label for="list-version" class="cds--label">Chọn bản bảng kê cổng thuế để đối chiếu</label><select id="list-version" class="cds--select-input" required><option value="">Chọn bảng kê</option>${versions.files.map(name => `<option value="${esc(name)}" ${name === versions.active ? 'selected' : ''}>${esc(name)}</option>`).join('')}</select>
     <div class="bar">${button('Sử dụng bản này', 'primary', 'type="submit"')}<span id="list-result"></span></div></form>
-    <a class="cds--btn cds--btn--ghost" href="#/quan-tri/mau-sao-ke">Nhận dạng cột sao kê (quản trị)</a>`;
+    <a class="cds--btn cds--btn--ghost cds--btn--sm" href="#/quan-tri/mau-sao-ke">Nhận dạng cột sao kê (quản trị)</a>`;
   $('#active-list').onsubmit = async e => {
     e.preventDefault(); const submit = e.target.querySelector('button'); submit.disabled = true;
     try { await put(`/api/workspaces/${state.ws}/portal/active-list`, {name: $('#list-version').value}); $('#list-result').innerHTML = notice('success', 'Đã chọn bảng kê; chạy lại phân tích để áp dụng.'); }
@@ -139,44 +133,55 @@ export async function pageDataWorkspace() {
 export async function pageIntake() {
   if (needWorkspace()) return;
   state.schema ||= await api('/api/schema');
-  const pack = await api(`/api/workspaces/${state.ws}/pack`);
   const ws = state.workspaces.find((w) => w.id === state.ws);
   const kinds = state.schema.files.filter((f) => f.folder);
   const total = Object.values(ws?.files || {}).reduce((a, n) => a + (Number(n) || 0), 0);
   const asked = hashParams().get('b');
   const step = asked === 'chay' ? 'chay' : asked === 'nhanh' ? 'nhanh' : asked ? 'da-nap' : (total ? 'chay' : 'nhanh');
   const steps = [['nhanh', 'Nạp tệp'], ['da-nap', `Tệp đã nạp (${total})`], ['chay', 'Kiểm tra và chạy']];
-  const header = `<h1 class="page">Nạp dữ liệu</h1><p class="lead">Doanh nghiệp tự xuất tệp từ cổng hóa đơn điện tử, ngân hàng điện tử và phần mềm đang dùng. Hệ thống không đăng nhập thay doanh nghiệp và không gửi dữ liệu ra ngoài máy này.</p>
-    <nav class="steps">${steps.map(([k, l], i) => `<a href="#/nap?b=${k}" class="${k === step ? 'on' : ''}"><span class="n">${i + 1}</span>${esc(l)}</a>`).join('')}</nav>`;
+  const header = `${sonHeader('Nạp dữ liệu', 'Nạp dữ liệu', 'NGUỒN CHỨNG TỪ', `<span class="ctx-chip chip-count">${total} tệp đã nạp</span>`)}
+    <nav class="steps" style="margin-top:14px">${steps.map(([k, l], i) => `<a href="#/nap?b=${k}" class="${k === step ? 'on' : ''}"><span class="n">${i + 1}</span>${esc(l)}</a>`).join('')}</nav>`;
 
   if (step === 'nhanh') {
-    app().innerHTML = `${header}<p>Thả cùng lúc mọi thứ đang có: tệp XML hóa đơn (mua vào và bán ra), tệp nén .zip, sao kê Excel, CSV hoặc MT940, bảng kê từ cổng thuế. Hệ thống tự nhận ra từng loại theo nội dung tệp, không cần đặt tên hay chia thư mục.</p>
+    app().innerHTML = `${header}<p class="muted" style="margin:0 0 12px">Thả tệp XML hóa đơn (mua vào, bán ra), tệp nén .zip, sao kê ngân hàng (.xlsx, .csv, .mt940) và bảng kê cổng thuế vào ô dưới đây.</p>
       ${dropZone('.xml,.zip,.csv,.xlsx,.sta,.mt940,.txt', 'hoặc kéo thả tất cả vào đây')}
-      <details class="guide"><summary>Lấy các tệp này ở đâu</summary><div class="guide-body">${kinds.map((k) => `<p class="cell-title">${esc(k.label)}</p><ol>${k.how.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>`).join('')}</div></details>`;
+      <details class="guide" style="margin-top:14px"><summary>Hướng dẫn xuất tệp từ cổng thuế và ngân hàng</summary><div class="guide-body">${kinds.map((k) => `<p class="cell-title">${esc(k.label)}</p><ol>${k.how.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>`).join('')}</div></details>`;
     bindDrop(async (files) => {
       const recs = await sendAll(files, `/api/workspaces/${state.ws}/inbox`);
       const now = Object.values(state.workspaces.find((w) => w.id === state.ws)?.files || {}).reduce((a, n) => a + (Number(n) || 0), 0);
       const tab = app().querySelector('.steps a[href="#/nap?b=da-nap"]');
       if (tab) tab.lastChild.textContent = `Tệp đã nạp (${now})`;
-      $('#up').innerHTML = `${uploadResult(recs)}<div id="autorun">${loading('Đang tự chạy phân tích với dữ liệu mới')}</div>`;
+      $('#up').innerHTML = `${uploadResult(recs)}<div id="autorun"></div>`;
       if (recs.some((r) => r.kind)) {
-        try {
-          const rep = await post(`/api/workspaces/${state.ws}/run`);
-          const cov = await api(`/api/workspaces/${state.ws}/coverage`);
-          $('#autorun').innerHTML = notice('success', 'Đã phân tích xong', `${rep.items.length} việc; thuế có nguy cơ ${money(rep.totals.at_risk_vat)}`)
-            + cov.filter((w) => w.level === 'warning').map((w) => notice('warning', w.title, w.detail)).join('')
-            + `<div class="bar">${button('Xem việc cần xử lý', 'primary', 'data-go="#/viec"')}${button('Về tổng quan', 'ghost', 'data-go="#/"')}</div>`;
-        } catch (err) { $('#autorun').innerHTML = notice('error', 'Phân tích chưa chạy được', err.message); }
+        await runWithAnalysisEffect({
+          stageEl: $('#autorun'),
+          title: 'Đang tự chạy phân tích với dữ liệu mới vừa nạp',
+          onSuccess: async (rep) => {
+            const cov = await api(`/api/workspaces/${state.ws}/coverage`);
+            if ($('#autorun')?.isConnected) {
+              $('#autorun').innerHTML = notice('success', 'Đã phân tích xong', `${rep.items.length} việc; thuế có nguy cơ ${money(rep.totals.at_risk_vat)}`)
+                + cov.filter((w) => w.level === 'warning').map((w) => notice('warning', w.title, w.detail)).join('')
+                + `<div class="bar">${button('Xem việc cần xử lý', 'primary', 'data-go="#/viec"')}${button('Về tổng quan', 'ghost', 'data-go="#/"')}</div>`;
+            }
+          },
+          onError: (err, host) => {
+            if (host?.isConnected) host.innerHTML = notice('error', 'Phân tích chưa chạy được', err.message);
+          },
+        });
       } else { $('#autorun').innerHTML = ''; }
     });
     return;
   }
   if (step === 'chay') {
-    app().innerHTML = `${header}<h2 class="section" style="margin-top:0">Kiểm tra trước khi phân tích</h2><div id="cov">${loading('Đang kiểm tra dữ liệu đã nạp')}</div>
-      <div class="bar">${button('Chạy phân tích', 'primary', 'id="run2"')}<span id="r2"></span></div>`;
+    app().innerHTML = `${header}<h2 class="section" style="margin-top:0">Kiểm tra mức độ đầy đủ dữ liệu</h2><div id="cov">${loading('Đang kiểm tra dữ liệu đã nạp')}</div>
+      <div class="bar">${button('Chạy phân tích', 'primary', 'id="run2"')}</div><div id="r2"></div>`;
     $('#run2').onclick = async () => {
-      $('#r2').innerHTML = loading('Đang phân tích');
-      try { await post(`/api/workspaces/${state.ws}/run`); location.hash = '#/'; } catch (err) { $('#r2').innerHTML = notice('error', 'Phân tích không chạy được', err.message); }
+      await runWithAnalysisEffect({
+        triggerBtn: $('#run2'),
+        stageEl: $('#r2'),
+        title: 'Đang phân tích dữ liệu hóa đơn và sao kê kỳ thuế',
+        onSuccess: async () => { location.hash = '#/'; },
+      });
     };
     try {
       const cov = await api(`/api/workspaces/${state.ws}/coverage`);
@@ -185,7 +190,6 @@ export async function pageIntake() {
     } catch (err) { $('#cov').innerHTML = notice('error', 'Không kiểm tra được', err.message); }
     return;
   }
-  // "Tệp đã nạp": every kind in one page, each with its file-by-file reading status
   app().innerHTML = `${header}${kinds.map((k) => `<h2 class="section">${esc(k.label)} (${ws?.files?.[k.key] ?? 0})</h2><div id="det-${k.key}">${loading('Đang đọc từng tệp')}</div>`).join('')}<div id="suggest"></div>`;
   await Promise.all(kinds.map(async (k) => {
     try {

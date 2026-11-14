@@ -140,6 +140,68 @@
     $("pending-count").textContent = n;
   }
 
+  let activeProfileTab = "all";
+
+  function spotlightNode(node) {
+    if (!node) return;
+    node.classList.remove("is-spotlight");
+    void node.offsetWidth;
+    node.classList.add("is-spotlight");
+    setTimeout(() => node.classList.remove("is-spotlight"), 1200);
+  }
+
+  function applyProfileTabFilter(tabName, shouldFocus = false) {
+    activeProfileTab = tabName || "all";
+    for (const btn of document.querySelectorAll("[data-profile-section]")) {
+      if (btn.dataset.profileSection === activeProfileTab) btn.setAttribute("aria-current", "location");
+      else btn.removeAttribute("aria-current");
+    }
+    const groups = document.querySelectorAll("#company-form [data-section-group]");
+    for (const g of groups) {
+      const groupName = g.dataset.sectionGroup;
+      if (activeProfileTab === "all") {
+        g.hidden = false;
+      } else if (activeProfileTab === "profile-connections") {
+        g.hidden = groupName !== "profile-connections" && groupName !== "profile-sync";
+        if (g.id === "profile-extra-agent2") g.open = true;
+      } else {
+        g.hidden = groupName !== activeProfileTab;
+      }
+    }
+    if (!shouldFocus) return;
+    if (activeProfileTab === "profile-connections") {
+      spotlightNode($("profile-connections"));
+      spotlightNode($("profile-extra-agent2"));
+      $("profile-agent2")?.focus({ preventScroll: true });
+    } else if (activeProfileTab === "profile-sync") {
+      spotlightNode($("profile-sync"));
+      spotlightNode($("profile-saved"));
+    } else if (activeProfileTab !== "all") {
+      const sec = $(activeProfileTab);
+      spotlightNode(sec);
+      const firstInput = sec?.querySelector("input:not(:disabled), select:not(:disabled)");
+      if (firstInput) firstInput.focus({ preventScroll: true });
+    }
+  }
+
+  function renderDefaultSyncList() {
+    const syncList = $("sync-result");
+    if (!syncList || syncList.dataset.hasCustomSync === "1") return;
+    const c = state.company;
+    const savedLine = c.updated_at
+      ? "Lần lưu gần nhất: " + c.updated_at + " · Mã đơn vị: " + (c.code || "—")
+      : "Chưa có lịch sử lưu trên máy này.";
+    syncList.replaceChildren(
+      el("li", { class: c.updated_at ? "ok" : "" }, savedLine),
+      ...state.agents.map((a) =>
+        el("li", { class: a.state === "running" ? "ok" : "" },
+          el("span", {}, AGENT_LABEL[a.id] + " (" + WORKSPACE_LABEL[a.id] + ")"),
+          el("span", {}, a.id === "agent4" ? "Kho dữ liệu DuckDB sẵn sàng" : STATE_TEXT[a.state] + (c.code ? " · Mã " + c.code : ""))
+        )
+      )
+    );
+  }
+
   function renderConfig() {
     const c = state.company;
     const form = $("company-form");
@@ -150,6 +212,9 @@
     for (const input of form.elements) if (input.name) input.disabled = locked || profileSaving;
     form.querySelector("button[type=submit]").disabled = locked || profileSaving;
     $("profile-reset").disabled = !form.dataset.dirty || profileSaving;
+    if ($("profile-fill-demo")) $("profile-fill-demo").disabled = locked || profileSaving;
+    if ($("profile-sync-now")) $("profile-sync-now").disabled = locked || profileSaving;
+    if ($("profile-start-all-inline")) $("profile-start-all-inline").disabled = state.agents.every((a) => a.state !== "stopped");
     form.setAttribute("aria-busy", String(profileSaving));
     profileText("profile-submit", profileSaving ? "Đang lưu hồ sơ…" : "Lưu hồ sơ");
     const configured = Boolean(c.legal_name && c.code);
@@ -159,9 +224,11 @@
     $("profile-status").dataset.state = locked ? "locked" : dirty ? "draft" : configured ? "saved" : "empty";
     profileText("profile-save-note", profileSaving ? "Đang lưu, vui lòng chờ" : locked ? "Mở khóa để lưu chỉnh sửa" : dirty ? "Có thay đổi chưa lưu" : "Thông tin được lưu trên máy này");
     updateProfileSummary();
+    renderDefaultSyncList();
+    applyProfileTabFilter(activeProfileTab, false);
   }
 
-  function profileText(id, text) { if ($(id).textContent !== text) $(id).textContent = text; }
+  function profileText(id, text) { const node = $(id); if (node && node.textContent !== text) node.textContent = text; }
 
   function profileValues() {
     const form = $("company-form");
@@ -180,6 +247,7 @@
     profileText("profile-summary-year", c.fiscal_year_end_month ? "Tháng " + c.fiscal_year_end_month : "Chưa chọn");
     profileText("profile-summary-vat", { DEDUCTION: "Khấu trừ", DIRECT: "Trực tiếp" }[c.vat_method] || "Chưa chọn");
     profileText("profile-summary-filing", { MONTH: "Theo tháng", QUARTER: "Theo quý" }[c.filing_period] || "Chưa chọn");
+    profileText("profile-summary-format", (c.date_format === "iso" ? "yyyy-mm-dd" : "dd/mm/yyyy") + " · " + (c.number_format === "plain" ? "1250000.50" : "1.250.000,50"));
     profileText("profile-date-preview", c.date_format === "iso" ? "2026-12-31" : "31/12/2026");
     profileText("profile-number-preview", c.number_format === "plain" ? "1250000.50" : "1.250.000,50");
   }
@@ -229,7 +297,7 @@
     if (dirty) $("company-form").dataset.dirty = "1";
     else delete $("company-form").dataset.dirty;
     if (profileErrors[event.target.name]) { const remaining = { ...profileErrors }; delete remaining[event.target.name]; showProfileErrors(remaining); }
-    $("profile-sync").hidden = true;
+    if ($("sync-result")) delete $("sync-result").dataset.hasCustomSync;
     renderConfig();
   }
 
@@ -242,8 +310,16 @@
         el("a", { class: "nav-link", href: "#" + a.id, "data-view": a.id },
           el("span", { class: "num", "aria-hidden": "true" }, "A" + a.number), WORKSPACE_LABEL[a.id], el("span", { class: "dot " + a.state, title: STATE_TEXT[a.state] }))));
     $("profile-agent-list").replaceChildren(...state.agents.map((a) =>
-      el("li", {}, el("a", { href: "#" + a.id }, WORKSPACE_LABEL[a.id] + " · A" + a.number),
-        el("span", {}, a.id === "agent4" ? "Kho mô phỏng riêng" : STATE_TEXT[a.state]))));
+      el("li", {},
+        el("a", { href: "#" + a.id, class: "profile-agent-link" }, WORKSPACE_LABEL[a.id] + " · A" + a.number),
+        el("div", { class: "profile-agent-actions" },
+          el("span", { class: "profile-agent-state state-" + a.state }, a.id === "agent4" && a.state !== "running" ? "Kho mô phỏng" : STATE_TEXT[a.state]),
+          a.state === "stopped"
+            ? el("button", { type: "button", class: "profile-agent-btn", onclick: () => toggleAgent(a) }, "Bật")
+            : el("a", { href: "#" + a.id, class: "profile-agent-btn" }, "Mở")
+        )
+      )
+    ));
     markCurrent();
   }
 
@@ -261,40 +337,59 @@
   const WORKSTATION_INFO = {
     agent1: {
       title: "Quản trị Dòng tiền",
-      desc: "Dự báo thu chi theo tuần, kiểm soát thanh khoản và phân tích kịch bản công nợ khách hàng.",
-      icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`
+      desc: "Dự báo dòng tiền & công nợ 13 tuần",
+      icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`
     },
     agent2: {
       title: "Soát xét Giao dịch",
-      desc: "Rà soát giao dịch bất thường, xung đột lợi ích và phòng ngừa gian lận chứng từ bằng ML.",
-      icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`
+      desc: "Phát hiện giao dịch & chứng từ bất thường",
+      icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`
     },
     agent3: {
       title: "Tuân thủ Thuế GTGT",
-      desc: "Đối chiếu tự động 3 bên giữa hóa đơn XML, sao kê ngân hàng và bảng kê cổng Cục Thuế.",
-      icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`
+      desc: "Đối soát hóa đơn XML & tờ khai thuế",
+      icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`
     },
     agent4: {
       title: "Trợ lý CFO & Sổ cái",
-      desc: "Hỏi đáp chỉ tiêu tài chính bằng tiếng Việt và trích xuất dữ liệu sổ cái DuckDB có kiểm chứng.",
-      icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg>`
+      desc: "Hỏi đáp số liệu & truy vấn sổ cái",
+      icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg>`
     }
   };
 
   function renderOverview() {
     const c = state.company;
     if ($("today")) {
-      $("today").textContent = new Intl.DateTimeFormat("vi-VN", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+      $("today").textContent = new Intl.DateTimeFormat("vi-VN", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date());
     }
 
-    // 1. Sleek Minimalist Header
-    const monogram = (c.code || "SS").slice(0, 2).toUpperCase();
-    if ($("overview-monogram")) $("overview-monogram").textContent = monogram;
+    // 1. Minimalist Executive Header
+    const monogramText = (c.code || "SS").slice(0, 2).toUpperCase();
+    if ($("overview-monogram")) $("overview-monogram").textContent = monogramText;
+    if ($("h-overview")) {
+      $("h-overview").textContent = c.code ? c.code : "Sổ Son";
+    }
     if ($("overview-company-fullname")) {
-      $("overview-company-fullname").textContent = c.legal_name || "Văn phòng kế toán số";
+      $("overview-company-fullname").textContent = c.legal_name || "Không gian kế toán số đa tác tử";
     }
     if ($("overview-tax-badge")) {
       $("overview-tax-badge").textContent = c.tax_code ? "MST: " + c.tax_code : "MST: —";
+    }
+    const vatBadge = $("overview-vat-badge");
+    if (vatBadge) {
+      vatBadge.hidden = !c.vat_method;
+      if (c.vat_method) vatBadge.textContent = c.vat_method === "DEDUCTION" ? "GTGT Khấu trừ" : "GTGT Trực tiếp";
+    }
+    const periodBadge = $("overview-period-badge");
+    if (periodBadge) {
+      periodBadge.hidden = !c.filing_period;
+      if (c.filing_period) periodBadge.textContent = c.filing_period === "MONTH" ? "Kỳ tháng" : "Kỳ quý";
+    }
+    const pkgLabel = $("overview-package-label");
+    if (pkgLabel) {
+      pkgLabel.textContent = state.package
+        ? "Gói v" + state.package.version + " (" + state.package.files + ")"
+        : "Nạp dữ liệu";
     }
 
     const runningCount = state.agents.filter((a) => a.state === "running").length;
@@ -305,21 +400,22 @@
         statusText.textContent = "4/4 Agent sẵn sàng";
         if (pill) pill.classList.remove("is-partial");
       } else if (runningCount > 0) {
-        statusText.textContent = runningCount + "/4 Agent trực tuyến";
+        statusText.textContent = runningCount + "/4 Agent đang chạy";
         if (pill) pill.classList.add("is-partial");
       } else {
-        statusText.textContent = "Các agent đang tạm dừng";
+        statusText.textContent = "Agent đang tắt";
         if (pill) pill.classList.add("is-partial");
       }
     }
 
     if ($("start-all")) {
       $("start-all").disabled = state.agents.every((a) => a.state !== "stopped");
-      $("start-all").innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${runningCount === state.agents.length ? "Tất cả đang chạy" : "Bật các agent"}</span>`;
+      $("start-all").innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${runningCount === state.agents.length ? "Đang chạy" : "Bật tất cả"}</span>`;
     }
 
-    // 2. The 4 Specialized Workstations (NO FAKE NUMBERS, 100% Interactive Tiles)
-    const signature = JSON.stringify([state.agents.map((a) => [a.id, a.state, a.name]), c.code]);
+    // 2. Sleek Minimalist Agent Cards (Ít chữ, hiện đại)
+    const fileCounts = Object.fromEntries(state.agents.map((a) => [a.id, state.intake.unlocked ? receivedCount(a.id) : null]));
+    const signature = JSON.stringify([state.agents.map((a) => [a.id, a.state, a.name]), c.code, fileCounts, state.package?.version]);
     if ($("agent-grid").dataset.signature !== signature) {
       $("agent-grid").dataset.signature = signature;
 
@@ -328,38 +424,64 @@
           const info = WORKSTATION_INFO[a.id] || {
             title: a.name,
             desc: a.summary,
-            icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>`
+            icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>`
           };
 
           const iconBox = el("div", { class: "ws-icon-box" });
           iconBox.innerHTML = info.icon;
 
           const isRunning = a.state === "running";
-          const statusDot = el("span", {
-            class: "ws-status-dot " + (isRunning ? "" : "is-stopped"),
-            title: isRunning ? "Đang hoạt động" : "Đang tạm dừng"
-          });
+          const isStarting = a.state === "starting";
+          const shortState = isRunning ? "Sẵn sàng" : isStarting ? "Đang bật..." : "Đã tắt";
+          const statusBadge = el("span", {
+            class: "ws-status-pill " + (isRunning ? "is-running" : isStarting ? "is-starting" : "is-stopped")
+          },
+            el("span", { class: "ws-status-dot " + (isRunning ? "" : isStarting ? "is-starting" : "is-stopped") }),
+            el("span", {}, shortState)
+          );
 
-          return el("a", { class: "workstation-card", href: "#" + a.id, "data-id": a.id },
+          const files = fileCounts[a.id];
+          const dataNote = a.id === "agent4"
+            ? "Sổ cái DuckDB"
+            : files !== null && files > 0
+              ? files + " chứng từ"
+              : state.package
+                ? "Gói v" + state.package.version
+                : "0 chứng từ";
+
+          const rightAction = a.state === "stopped"
+            ? el("button", {
+                type: "button",
+                class: "ws-quick-start",
+                title: "Bật " + AGENT_LABEL[a.id],
+                onclick: (ev) => {
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  toggleAgent(a);
+                }
+              }, "Bật")
+            : el("span", { class: "ws-enter-label" }, "Mở");
+
+          return el("a", { class: "workstation-card ws-theme-" + a.id, href: "#" + a.id, "data-id": a.id },
             el("div", { class: "ws-card-top" },
-              el("div", { class: "ws-card-meta" },
-                el("span", { class: "ws-num-pill" }, "A" + a.number),
-                iconBox
-              ),
-              statusDot
+              iconBox,
+              el("div", { class: "ws-top-right" },
+                statusBadge,
+                el("span", { class: "ws-num-watermark" }, a.number)
+              )
             ),
             el("h3", { class: "ws-title" }, info.title),
             el("p", { class: "ws-desc" }, info.desc),
             el("div", { class: "ws-card-foot" },
-              el("span", {}, "Mở không gian tác nghiệp"),
-              el("span", { class: "ws-arrow" }, "↗")
+              el("span", { class: "ws-meta-pill" }, dataNote),
+              rightAction
             )
           );
         })
       );
     }
 
-    // 3. Executive Setup Progress
+    // 3. Compact 3-Step Setup Strip
     const step1Done = Boolean(c.legal_name && c.code);
     const step2Done = state.agents.every((a) => a.state === "running");
     const step3Done = Boolean(state.package);
@@ -368,9 +490,7 @@
 
     if ($("meter-bar")) $("meter-bar").style.width = pct + "%";
     if ($("setup-progress-text")) {
-      $("setup-progress-text").textContent = doneCount === 3
-        ? "Sẵn sàng vận hành (3/3 hoàn tất) ✓"
-        : "Tiến độ: " + doneCount + "/3 bước (" + pct + "%)";
+      $("setup-progress-text").textContent = doneCount + "/3 hoàn tất";
     }
 
     const steps = $("steps") ? $("steps").children : [];
@@ -382,18 +502,18 @@
 
     if ($("step-config-desc")) {
       $("step-config-desc").textContent = step1Done
-        ? (c.code ? "Mã: " + c.code : "") + (c.tax_code ? " · MST: " + c.tax_code : "")
-        : "Chưa cấu hình thông tin doanh nghiệp";
+        ? (c.tax_code ? "MST " + c.tax_code : c.code)
+        : "Chưa khai báo";
     }
     if ($("step-agents-status")) {
-      $("step-agents-status").textContent = runningCount === state.agents.length
-        ? "4/4 Agent đang trực tuyến"
-        : runningCount + "/4 Agent trực tuyến";
+      $("step-agents-status").textContent = runningCount + "/4 sẵn sàng";
     }
     if ($("step-data-desc")) {
       $("step-data-desc").textContent = state.package
-        ? "Gói v" + state.package.version + " (" + state.package.files + " tệp) · Đã niêm phong"
-        : "Chưa niêm phong gói dữ liệu";
+        ? state.package.files + " tệp đã nạp"
+        : state.pending.length
+          ? state.pending.length + " tệp chờ"
+          : "Chưa nạp tệp";
     }
   }
 
@@ -1096,10 +1216,11 @@
       profileVersion += 1;
       state.company = res.company;
       delete form.dataset.dirty;
-      $("profile-sync").hidden = false;
+      $("sync-result").dataset.hasCustomSync = "1";
       $("sync-result").replaceChildren(
         el("li", { class: "ok" }, "Đã lưu hồ sơ doanh nghiệp " + res.company.code + "."),
         ...Object.entries(res.sync || {}).map(([aid, s]) => syncItem(aid, s)));
+      spotlightNode($("profile-sync"));
       toast("Đã lưu hồ sơ. Xem kết quả kết nối từng agent bên dưới.");
       render();
       await refresh();
@@ -1151,16 +1272,69 @@
   $("company-form").addEventListener("change", editProfile);
   for (const button of document.querySelectorAll("[data-profile-section]")) {
     button.addEventListener("click", () => {
-      for (const other of document.querySelectorAll("[data-profile-section]")) other.removeAttribute("aria-current");
-      button.setAttribute("aria-current", "location");
-      $(button.dataset.profileSection).scrollIntoView({ block: "nearest" });
+      applyProfileTabFilter(button.dataset.profileSection, true);
     });
   }
+  $("profile-summary-aside")?.addEventListener("click", (event) => {
+    const sectionTarget = event.target.closest("[data-focus-section]");
+    if (sectionTarget) {
+      applyProfileTabFilter(sectionTarget.dataset.focusSection, true);
+      return;
+    }
+    const fieldTarget = event.target.closest("[data-focus-field]");
+    if (!fieldTarget) return;
+    const input = $(fieldTarget.dataset.focusField);
+    if (!input) return;
+    const group = input.closest("[data-section-group]");
+    if (group && group.hidden) applyProfileTabFilter("all", false);
+    const locked = Boolean(state?.package) && !state?.intake.unlocked;
+    if (locked) {
+      spotlightNode($("config-lock"));
+      $("config-lock")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      toast("Hồ sơ đang được bảo vệ. Nhấn 'Mở khóa để chỉnh sửa' phía trên.", true);
+      return;
+    }
+    const fieldWrap = input.closest(".field") || group;
+    spotlightNode(fieldWrap);
+    input.scrollIntoView({ behavior: "smooth", block: "center" });
+    input.focus({ preventScroll: true });
+  });
+  $("profile-fill-demo")?.addEventListener("click", () => {
+    const locked = Boolean(state?.package) && !state?.intake.unlocked;
+    if (locked || profileSaving) return;
+    const form = $("company-form");
+    const defaults = {
+      legal_name: "CÔNG TY TNHH DEMO KẾ TOÁN",
+      tax_code: "0101243150",
+      code: "KT",
+      registered_address: "Số 12 Lê Duẩn, Quận Hải Châu, TP. Đà Nẵng",
+      industry: "Dịch vụ kế toán và tư vấn thuế",
+      vat_method: "DEDUCTION",
+      filing_period: "QUARTER",
+      fiscal_year_end_month: "12",
+      date_format: "dmy",
+      number_format: "vi-VN"
+    };
+    for (const [k, v] of Object.entries(defaults)) {
+      if (form.elements[k] && !form.elements[k].value.trim()) form.elements[k].value = v;
+    }
+    if (!form.elements.registered_address.value.trim()) form.elements.registered_address.value = defaults.registered_address;
+    if (!form.elements.industry.value.trim()) form.elements.industry.value = defaults.industry;
+    form.dataset.dirty = "1";
+    renderConfig();
+    toast("Đã điền thông tin mẫu. Nhấn 'Lưu hồ sơ' để lưu lại.");
+  });
+  $("profile-sync-now")?.addEventListener("click", () => {
+    $("company-form")?.requestSubmit();
+  });
+  $("profile-start-all-inline")?.addEventListener("click", () => {
+    $("start-all")?.click();
+  });
   $("profile-reset").addEventListener("click", () => {
     if (profileSaving) return;
     delete $("company-form").dataset.dirty;
     showProfileErrors({});
-    $("profile-sync").hidden = true;
+    if ($("sync-result")) delete $("sync-result").dataset.hasCustomSync;
     renderConfig();
     $("profile-status").setAttribute("tabindex", "-1");
     $("profile-status").focus({ preventScroll:true });
@@ -1189,6 +1363,15 @@
     }
     toast("Đang bật các agent. Agent 3 có thể mất nửa phút.");
     refresh();
+  });
+  $("step-agents-link")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    const stopped = (state?.agents || []).filter((x) => x.state === "stopped");
+    if (stopped.length) {
+      $("start-all")?.click();
+    } else {
+      $("agent-grid")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   });
   $("agent-start").addEventListener("click", () => toggleAgent(agentById(currentAgent)));
   $("agent-toggle").addEventListener("click", () => toggleAgent(agentById(currentAgent)));

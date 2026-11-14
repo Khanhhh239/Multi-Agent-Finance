@@ -13,28 +13,38 @@ import { adminOnly, pageAdminHistory, pageAdminHome, pageCatalog } from './pages
 import { pageDossier, pageVat } from './pages_ai.js';
 import { pageConfig, pageSetup } from './pages_config.js';
 
-// Five places for daily work. Everything that changes configuration lives under #/quan-tri behind the administrator
-// password (gear icon in the header); detail pages open from links inside these five.
 const NAV = [
-  ['#/', 'Tổng quan', pageOverview], ['#/nap', 'Nạp dữ liệu', pageIntake], ['#/viec', 'Việc cần xử lý', pageReview], ['#/hoa-don', 'Hóa đơn', pageInvoices],
-  ['#/hoi', 'Hỏi đáp', pageAsk],
+  ['#/', 'Tổng quan', pageOverview],
+  ['#/nap', 'Nạp dữ liệu', pageIntake],
+  ['#/viec', 'Việc cần xử lý', pageReview],
+  ['#/hoa-don', 'Hóa đơn & Sao kê', pageInvoices],
+  ['#/so-lieu', 'Số liệu & Giải trình', pageVat],
+  ['#/hoi', 'Hỏi đáp & Kho luật', pageAsk],
+  ['#/quan-tri', 'Cài đặt', adminOnly(pageAdminHome)],
 ];
 const HIDDEN = [
   ['#/du-lieu', 'Bảng kê đang sử dụng', pageDataWorkspace],
   ['#/quan-tri/mau-sao-ke', 'Nhận dạng cột sao kê', adminOnly(pageBankFormats)],
-  ['#/ngan-hang', 'Ngân hàng', pageBank], ['#/so-lieu', 'Số liệu thuế GTGT', pageVat], ['#/giai-trinh', 'Giải trình', pageDossier],
-  ['#/lich', 'Lịch thuế', pageCalendar], ['#/luat', 'Kho luật', pageLaw], ['#/tin-luat', 'Kho luật', pageLaw],
-  ['#/quan-tri', 'Quản trị', adminOnly(pageAdminHome)], ['#/quan-tri/doanh-nghiep', 'Cấu hình doanh nghiệp', adminOnly(pageConfig)],
-  ['#/quan-tri/danh-muc', 'Danh mục dùng chung', adminOnly(pageCatalog)], ['#/quan-tri/kho-luat', 'Kho luật', adminOnly(pageLaw)],
-  ['#/quan-tri/lich-su', 'Lịch sử thay đổi', adminOnly(pageAdminHistory)], ['#/thiet-lap', 'Thiết lập nghiệp vụ thuế', adminOnly(pageSetup)],
+  ['#/ngan-hang', 'Sao kê ngân hàng', pageBank],
+  ['#/giai-trinh', 'Hồ sơ giải trình', pageDossier],
+  ['#/lich', 'Lịch thuế', pageCalendar],
+  ['#/luat', 'Kho luật', pageLaw],
+  ['#/tin-luat', 'Kho luật', pageLaw],
+  ['#/quan-tri/doanh-nghiep', 'Cấu hình doanh nghiệp', adminOnly(pageConfig)],
+  ['#/quan-tri/danh-muc', 'Danh mục dùng chung', adminOnly(pageCatalog)],
+  ['#/quan-tri/kho-luat', 'Kho luật', adminOnly(pageLaw)],
+  ['#/quan-tri/lich-su', 'Lịch sử thay đổi', adminOnly(pageAdminHistory)],
+  ['#/thiet-lap', 'Thiết lập nghiệp vụ thuế', adminOnly(pageSetup)],
   ['#/cai-dat', 'Cấu hình doanh nghiệp', adminOnly(pageConfig)],
 ];
 
-const DETAIL = ['#/ngan-hang', '#/so-lieu', '#/giai-trinh', '#/lich', '#/luat', '#/tin-luat', '#/du-lieu'];
-
 function renderNav(cur) {
-  const active = cur.startsWith('#/quan-tri') || ['#/thiet-lap', '#/cai-dat'].includes(cur) ? '#/quan-tri'
-    : cur;
+  let active = cur;
+  if (cur.startsWith('#/quan-tri') || ['#/thiet-lap', '#/cai-dat'].includes(cur)) active = '#/quan-tri';
+  else if (['#/ngan-hang', '#/du-lieu'].includes(cur)) active = '#/hoa-don';
+  else if (['#/giai-trinh', '#/lich'].includes(cur)) active = '#/so-lieu';
+  else if (['#/luat', '#/tin-luat'].includes(cur)) active = '#/hoi';
+
   $('#nav').innerHTML = NAV.map(([href, label]) => `<li class="cds--side-nav__item"><a class="cds--side-nav__link" href="${href}" ${href === active ? 'aria-current="page"' : ''}>
     <span class="cds--side-nav__link-text">${esc(label)}</span></a></li>`).join('');
   $('.admin-link').setAttribute('aria-current', active === '#/quan-tri' ? 'page' : 'false');
@@ -55,8 +65,6 @@ async function route() {
   const page = entry[2];
   document.title = `${entry[1]} · Agent 3 Trợ lý thuế`;
   try { if (needWorkspace()) return; await page(); } catch (err) { if (signal.aborted) return; app().innerHTML = `<h1 class="page">${esc(entry[1])}</h1>` + notice('error', 'Có lỗi khi tải trang', err.message); }
-  if (!signal.aborted && DETAIL.includes(cur) && !app().querySelector('.back-crumb')) app().insertAdjacentHTML('afterbegin', '<a class="back-crumb" href="#/">← Quay về Tổng quan</a>');
-  if (!signal.aborted && ['#/viec', '#/so-lieu', '#/giai-trinh', '#/lich'].includes(cur)) app().querySelector('h1')?.insertAdjacentHTML('afterend', notice('warning', 'Kết quả tham khảo theo quy tắc nháp', 'Chưa có chuyên gia thuế duyệt; chưa xác nhận nghĩa vụ kê khai, nộp thuế hoặc xử phạt.'));
   if (!signal.aborted) { decoratePage(app()); if (!document.querySelector('.drawer')) app().focus({ preventScroll: true }); }
 }
 

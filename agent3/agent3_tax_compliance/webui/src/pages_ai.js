@@ -1,52 +1,54 @@
 // The controlled AI layer in the interface: plain explanations, line classification, bank-text proposals,
 // explanation letter and dossier, law alerts, VAT figures. AI output is always labelled and verified; people decide.
 import { toast } from './ux.js';
-import { $, api, app, balance, button, decide, decisionContext, dmy, esc, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, onPageLeave, pageSignal, post, sonHeader, state, store, table, tag } from './core.js';
+import { $, api, app, balance, button, computeReportStats, decide, decisionContext, dmy, esc, formatSpecialMoney, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, onPageLeave, pageSignal, post, sonHeader, state, store, table, tag } from './core.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
 const aiTag = (mode) => (mode === 'AI_VERIFIED' ? tag('LLM_VERIFIED', 'AI, đã kiểm tra') : tag('INFO', 'Câu mẫu'));
 
-// ---------------------------------------------------------------- A4 in the review drawer
+// A4 in the review drawer
 export async function explainBox(el, index) {
-  el.innerHTML = `<div class="plain">${loading('Mô hình trên máy đang viết lời giải thích dễ hiểu')}</div>`;
+  el.innerHTML = `<div class="plain">${loading('Đang tóm tắt vấn đề')}</div>`;
   try {
     const e = await post(`/api/workspaces/${state.ws}/ai/explain`, { index });
-    el.innerHTML = `<div class="plain"><div class="bar" style="margin:0 0 .5rem">${aiTag(e.mode)}<span class="muted small">Nói đơn giản${e.note ? ` (${esc(e.note)})` : ''}</span></div>${esc(e.text)}</div>`;
+    el.innerHTML = `<div class="plain"><div class="bar" style="margin:0 0 .5rem">${aiTag(e.mode)}<span class="muted small">Tóm tắt nhanh${e.note ? ` (${esc(e.note)})` : ''}</span></div>${esc(e.text)}</div>`;
   } catch (err) { el.innerHTML = ''; }
 }
 
-// ---------------------------------------------------------------- AI jobs toolbar (review page)
+// AI jobs compact toolbar (review page)
 export async function aiToolbar(el) {
   const signal = pageSignal();
   const s = await api(`/api/workspaces/${state.ws}/ai`);
   if (signal.aborted || !el.isConnected) return;
   const job = s.job;
   const running = job && job.running;
-  el.innerHTML = `<div class="panel ai-panel"><h3>Trợ lý AI chạy trên máy (${esc(s.model)})</h3>
-    <p class="muted small">AI chỉ đề xuất; mọi đề xuất đã qua kiểm tra tự động và chỉ thành "cần xem xét", người duyệt quyết định. Dữ liệu không rời khỏi máy này.</p>
-    <div class="bar">${button(running && job.task === 'phân loại dòng hàng' ? `Đang phân loại ${job.done}/${job.total}` : `Phân loại dòng hàng (${s.labelled_invoices} hóa đơn đã phân loại, ${s.flagged_invoices} cần xem)`, 'tertiary', `id="ai-cls" ${running ? 'disabled' : ''}`)}
-    ${button(running && job.task === 'đọc nội dung chuyển khoản' ? 'Đang đọc nội dung chuyển khoản' : `Đọc nội dung chuyển khoản (${s.proposals.length} đề xuất chờ xác nhận)`, 'tertiary', `id="ai-bank" ${running ? 'disabled' : ''}`)}
-    ${s.proposals.length ? button('Xem đề xuất ghép', 'ghost', 'data-go="#/ngan-hang"') : ''}</div>
-    ${job && job.error ? notice('error', 'Việc AI bị lỗi', job.error) : ''}${job && !job.running && job.result ? notice('success', `Xong: ${job.task}`, JSON.stringify(job.result).replace(/[{}"]/g, '').replace('flagged:', 'hóa đơn cần xem: ').replace('proposals:', 'đề xuất: ')) : ''}</div>`;
+  el.innerHTML = `<div class="a3-ai-compact-bar">
+    <span class="a3-ai-label">AI nội bộ (${esc(s.model)}):</span>
+    <div class="a3-ai-actions">
+      ${button(running && job.task === 'phân loại dòng hàng' ? `Đang phân loại ${job.done}/${job.total}` : `Phân loại dòng hàng (${s.labelled_invoices} HĐ, ${s.flagged_invoices} cần xem)`, 'tertiary', `id="ai-cls" class="cds--btn--sm" ${running ? 'disabled' : ''}`)}
+      ${button(running && job.task === 'đọc nội dung chuyển khoản' ? 'Đang đọc nội dung CK...' : `Đọc nội dung chuyển khoản (${s.proposals.length} đề xuất)`, 'tertiary', `id="ai-bank" class="cds--btn--sm" ${running ? 'disabled' : ''}`)}
+      ${s.proposals.length ? button('Mở đề xuất ghép tại Sao kê →', 'ghost', 'data-go="#/ngan-hang" class="cds--btn--sm"') : ''}
+    </div>
+    ${job && job.error ? notice('error', 'Việc AI bị lỗi', job.error) : ''}${job && !job.running && job.result ? `<span class="muted small">Hoàn tất: ${esc(job.task)}</span>` : ''}
+  </div>`;
   const start = async (path) => { try { await post(`/api/workspaces/${state.ws}/ai/${path}`); aiToolbar(el); } catch (err) { el.insertAdjacentHTML('beforeend', notice('error', 'Không chạy được', err.message)); } };
   $('#ai-cls').onclick = () => start('classify');
   $('#ai-bank').onclick = () => start('bank');
-  const finished = el.dataset.wasRunning === '1' && !running;     // a job just ended: show the new findings
+  const finished = el.dataset.wasRunning === '1' && !running;
   el.dataset.wasRunning = running ? '1' : '0';
   if (finished && !document.querySelector('.drawer')) rerender();
   else if (running) { const timer = setTimeout(() => { if (document.body.contains(el)) aiToolbar(el).catch(() => {}); }, 3000); onPageLeave(() => clearTimeout(timer)); }
 }
 
-// ---------------------------------------------------------------- A2 proposals (bank page)
+// A2 proposals (bank page)
 export async function bankProposals(el) {
   const s = await api(`/api/workspaces/${state.ws}/ai`);
   if (!s.proposals.length) { el.innerHTML = ''; return; }
   const context = await decisionContext();
   const by = store.get('agent3.reviewer') || '';
   el.innerHTML = `<h2 class="section">Đề xuất ghép từ nội dung chuyển khoản (${s.proposals.length})</h2>
-    <p class="muted">Số tiền khớp chính xác; AI đọc nội dung chuyển khoản và tìm thấy cụm chữ nhắc tới người bán. Xác nhận thì hệ thống ghi quyết định có tên người duyệt và chạy lại.</p>
     <div class="bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="reviewer">Người duyệt</label><input class="cds--text-input" id="reviewer" value="${esc(by)}" placeholder="Kế toán trưởng"></div></div>
-    ${table(['Giao dịch', { label: 'Số tiền', num: true }, 'Nội dung chuyển khoản', 'Hóa đơn đề xuất', 'Căn cứ của AI', ''], s.proposals.map((p, n) => `<tr>
+    ${table(['Giao dịch', { label: 'Số tiền', num: true }, 'Nội dung chuyển khoản', 'Hóa đơn đề xuất', 'Căn cứ nhận diện', ''], s.proposals.map((p, n) => `<tr>
       <td>${dmy(p.booked)}<div class="muted small">${esc(p.source || '')}</div></td><td class="num">${money(p.amount)}</td><td>${esc(p.description || '')}<div class="muted small">${esc(p.counterparty_name || '')}</div></td>
       <td>${esc(p.seller_name)}<div class="muted small">số ${esc(p.invoice_number || '')}</div></td><td>cụm "<strong>${esc(p.name_in_text)}</strong>", độ giống ${p.similarity}<div class="muted small">${esc(p.reason)}</div></td>
       <td><div class="chips">${button('Xác nhận', 'primary', `data-acc="${n}"`)}${button('Bác bỏ', 'ghost', `data-rej="${n}"`)}</div></td></tr>`))}<div id="pmsg"></div>`;
@@ -63,23 +65,21 @@ export async function bankProposals(el) {
   el.querySelectorAll('[data-rej]').forEach((b) => { b.onclick = () => decideProposal(Number(b.dataset.rej), false); });
 }
 
-// ---------------------------------------------------------------- A3 + F5 explanation letter and dossier
+// A3 + F5 explanation letter and dossier
 export async function pageDossier() {
   if (needWorkspace()) return;
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Giải trình</h1>${notice('info', 'Chưa phân tích')}`; return; }
   const keys = [...new Set(rep.items.filter((i) => i.status !== 'INFO').flatMap((i) => i.invoice_keys))].filter((k) => invoiceOf(k));
   app().innerHTML = `
-    ${sonHeader('Giải trình', 'Giải trình với cơ quan thuế', 'HỒ SƠ GIẢI TRÌNH & BẢO VỆ SỐ LIỆU')}
-    <p class="lead" style="margin-top:10px">Khi nhận công văn yêu cầu giải trình hoặc bổ sung hồ sơ: chọn hóa đơn liên quan, dán nội dung công văn. Hệ thống gom hóa đơn XML, chứng từ thanh toán đã ghép, quyết định của người duyệt và điều khoản luật thành một tệp nén, kèm bản nháp thư. Mỗi đoạn thư ghi rõ dựa vào dữ kiện nào; đoạn có số liệu không khớp dữ kiện bị loại.</p>
-    <div class="cds--form-item"><label class="cds--label" for="req">Nội dung công văn của cơ quan thuế (không bắt buộc)</label>
-    <textarea class="cds--text-area" id="req" rows="4" placeholder="Ví dụ: Đề nghị doanh nghiệp giải trình việc kê khai khấu trừ thuế GTGT đầu vào của các hóa đơn mua hàng của Công ty TNHH Điện máy Thành Công trong quý 3/2026..."></textarea></div>
-    <h2 class="section">Hóa đơn đưa vào hồ sơ</h2>
+    ${sonHeader('Giải trình', 'Hồ sơ giải trình cơ quan thuế', 'TỔNG HỢP & HỒ SƠ THUẾ', `<span class="ctx-chip chip-count">${keys.length} hóa đơn có cảnh báo</span>`, 'bao-cao')}
+    <div class="cds--form-item" style="margin-top:14px"><label class="cds--label" for="req">Nội dung công văn yêu cầu giải trình (không bắt buộc)</label>
+    <textarea class="cds--text-area" id="req" rows="3" placeholder="Ví dụ: Đề nghị giải trình việc kê khai khấu trừ thuế GTGT đầu vào của các hóa đơn trong kỳ..."></textarea></div>
+    <h2 class="section" style="margin-top:20px">Chọn hóa đơn đưa vào hồ sơ (.zip)</h2>
     <div class="bar"><input class="cds--text-input filter-input" id="dq" placeholder="Tìm số hóa đơn hoặc người bán" aria-label="Tìm hóa đơn"><span class="muted small" id="dcount"></span>
-      ${button('Chọn các hóa đơn đang hiện', 'ghost', 'id="dpick"')}${button('Bỏ chọn tất cả', 'ghost', 'id="dnone"')}</div>
+      ${button('Chọn trang hiện tại', 'ghost', 'id="dpick"')}${button('Bỏ chọn tất cả', 'ghost', 'id="dnone"')}</div>
     <div id="dlist"></div>
-    <div class="bar">${button('Soạn thư và lập hồ sơ', 'primary', 'id="make"')}<span id="mk"></span></div><div id="letter"></div>`;
-  // 2,500 or more invoices must not be rendered at once: filter, page by 50, remember what was ticked.
+    <div class="bar">${button('Soạn thư giải trình & đóng gói hồ sơ', 'primary', 'id="make"')}<span id="mk"></span></div><div id="letter"></div>`;
   const PAGE = 50; let shown = PAGE; const picked = new Set();
   const rowsOf = (k) => { const i = invoiceOf(k); return { k, i, its: rep.items.filter((x) => x.invoice_keys.includes(k)) }; };
   const all = keys.map(rowsOf);
@@ -88,9 +88,9 @@ export async function pageDossier() {
     const v = view();
     $('#dcount').textContent = `${v.length} hóa đơn, đã chọn ${picked.size}`;
     $('#dlist').innerHTML = table(['', 'Hóa đơn', 'Người bán', 'Vấn đề', { label: 'Tổng thanh toán', num: true }], v.slice(0, shown).map(({ k, i, its }) => `<tr><td><input type="checkbox" class="pick" value="${esc(k)}" ${picked.has(k) ? 'checked' : ''} aria-label="Chọn hóa đơn"></td>
-      <td>${esc(invLabel(i))}<div class="muted small">${dmy(i.issue_date)}</div></td><td>${esc(i.seller_name)}</td>
-      <td><div class="chips" title="${esc(its.map((x) => x.title).join('; '))}">${its[0] ? tag(its[0].status, its[0].title) : ''}${its.length > 1 ? `<span class="muted small">và ${its.length - 1} vấn đề khác</span>` : ''}</div></td><td class="num">${money(i.gross)}</td></tr>`), 'Không có hóa đơn nào khớp.')
-      + (v.length > shown ? `<div class="bar"><span class="muted small">Đang hiện ${shown} trên ${v.length}</span>${button(`Hiện thêm ${Math.min(PAGE, v.length - shown)}`, 'ghost', 'id="dmore"')}</div>` : '');
+      <td><strong>${esc(invLabel(i))}</strong><div class="muted small">${dmy(i.issue_date)}</div></td><td>${esc(i.seller_name)}</td>
+      <td><div class="chips" title="${esc(its.map((x) => x.title).join('; '))}">${its[0] ? tag(its[0].status, its[0].title) : ''}${its.length > 1 ? `<span class="muted small">+${its.length - 1} vấn đề</span>` : ''}</div></td><td class="num">${money(i.gross)}</td></tr>`), 'Không có hóa đơn nào khớp.')
+      + (v.length > shown ? `<div class="bar"><span class="muted small">Đang hiện ${shown} / ${v.length}</span>${button(`Hiện thêm ${Math.min(PAGE, v.length - shown)}`, 'ghost', 'id="dmore"')}</div>` : '');
     app().querySelectorAll('.pick').forEach((c) => { c.onchange = () => { c.checked ? picked.add(c.value) : picked.delete(c.value); $('#dcount').textContent = `${view().length} hóa đơn, đã chọn ${picked.size}`; }; });
     if ($('#dmore')) $('#dmore').onclick = () => { shown += PAGE; paint(); };
   };
@@ -102,39 +102,37 @@ export async function pageDossier() {
     const invoice_keys = [...picked];
     if (!invoice_keys.length) { $('#mk').innerHTML = notice('warning', 'Chọn ít nhất một hóa đơn'); return; }
     const submit = $('#make'); submit.disabled = true;
-    $('#mk').innerHTML = loading('Đang gom chứng từ và soạn thư bằng mô hình trên máy (khoảng 1 đến 2 phút)');
+    $('#mk').innerHTML = loading('Đang gom chứng từ và soạn thư giải trình');
     try {
       const r = await post(`/api/workspaces/${state.ws}/dossier`, { invoice_keys, request_text: $('#req').value });
       $('#mk').innerHTML = '';
       const L = r.letter;
       $('#letter').innerHTML = `<div class="panel"><div class="bar" style="margin-top:0">${aiTag(L.mode)}<span class="muted small">${esc(L.note || '')}</span>
         <a class="cds--btn cds--btn--primary cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/dossier/${esc(r.file)}">Tải hồ sơ (.zip)</a></div>
-        <h3>Bản nháp thư</h3>${L.paragraphs.map((p) => `<p>${esc(p.text)} <span class="muted small">${[...p.fact_ids, ...p.passage_ids].map(esc).join(', ')}</span></p>`).join('')}
-        ${L.dropped && L.dropped.length ? notice('info', `${L.dropped.length} đoạn của mô hình bị loại vì không qua kiểm tra`, L.dropped.map((d) => d.reason).join('; ')) : ''}
-        <h3>Dữ kiện</h3><ul>${r.facts.map((f) => `<li><strong>${esc(f.id)}</strong> ${esc(f.text)}</li>`).join('')}</ul>
-        ${r.passages.length ? `<h3>Điều khoản</h3><ul>${r.passages.map((p) => `<li><strong>${esc(p.pid)}</strong> <a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.path)}</a></li>`).join('')}</ul>` : ''}
-        <p class="muted small">Bản nháp; người có thẩm quyền phải đọc, sửa và ký trước khi gửi.</p></div>`;
+        <h3>Bản nháp thư giải trình</h3>${L.paragraphs.map((p) => `<p>${esc(p.text)} <span class="muted small">${[...p.fact_ids, ...p.passage_ids].map(esc).join(', ')}</span></p>`).join('')}
+        ${L.dropped && L.dropped.length ? notice('info', `${L.dropped.length} đoạn bị loại vì không qua kiểm tra căn cứ`, L.dropped.map((d) => d.reason).join('; ')) : ''}
+        <h3>Dữ kiện đối chiếu</h3><ul>${r.facts.map((f) => `<li><strong>${esc(f.id)}</strong> ${esc(f.text)}</li>`).join('')}</ul>
+        ${r.passages.length ? `<h3>Điều khoản trích dẫn</h3><ul>${r.passages.map((p) => `<li><strong>${esc(p.pid)}</strong> <a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.path)}</a></li>`).join('')}</ul>` : ''}</div>`;
     } catch (err) { $('#mk').innerHTML = notice('error', 'Không lập được hồ sơ', err.message); }
     finally { if (submit.isConnected) submit.disabled = false; }
   };
 }
 
-// ---------------------------------------------------------------- F3 VAT figures
+// F3 VAT figures
 export async function pageVat() {
   if (needWorkspace()) return;
   let v;
   try { v = await api(`/api/workspaces/${state.ws}/vat-summary`); } catch (err) { if (err.name === 'AbortError') throw err; const missing = [404, 409].includes(err.status); app().innerHTML = `<h1 class="page">Số liệu thuế GTGT</h1>${notice(missing ? 'info' : 'error', missing ? 'Cần chạy phân tích' : 'Không tải được số liệu', err.message)}`; return; }
   const diff = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? tag('LLM_VERIFIED', 'Khớp') : `<span class="risk-text">${Number(x) > 0 ? '+' : ''}${money(x)}</span>`);
-  const change = (x) => (x === null || x === undefined ? '' : Number(x) === 0 ? 'không đổi' : `${Number(x) > 0 ? 'tăng' : 'giảm'} ${money(Math.abs(Number(x)))}`);
+
   app().innerHTML = `
-    ${sonHeader('Số liệu thuế GTGT', 'Số liệu thuế giá trị gia tăng', 'TỔNG HỢP & ĐỐI CHIẾU NGHĨA VỤ')}
-    <p class="lead" style="margin-top:10px">${esc(v.note)}</p>
-    ${table(['Kỳ', 'Thuế đầu ra', 'Thuế đầu vào', 'Không kê khai', 'Có nguy cơ', 'Chờ xem xét', 'Chưa phát hiện cảnh báo', 'Chênh lệch: chưa tính chờ duyệt', 'Chênh lệch: nếu chờ duyệt được chấp nhận'],
-      v.rows.map(r => `<tr><td>${esc(r.period)}</td><td class="num">${money(r.output_vat)}</td><td class="num">${money(r.input_vat)}</td><td class="num">${money(r.not_claimed_vat)}</td><td class="num">${money(r.at_risk)}</td><td class="num">${money(r.review_vat)}</td><td class="num">${money(r.no_alert_vat)}</td><td>${balance(r.scenario_without_review)}</td><td>${balance(r.scenario_with_review)}</td></tr>`))}
+    ${sonHeader('Số liệu thuế GTGT', 'Số liệu thuế giá trị gia tăng', 'TỔNG HỢP & HỒ SƠ THUẾ', '', 'bao-cao')}
+    <h2 class="section" style="margin-top:16px">Bảng tính thuế GTGT theo kỳ</h2>
+    ${table(['Kỳ', { label: 'Thuế đầu ra', num: true }, { label: 'Tổng thuế đầu vào', num: true }, { label: 'Không kê khai', num: true }, { label: 'Có nguy cơ', num: true }, { label: 'Chờ xem xét', num: true }, { label: 'Chưa cảnh báo', num: true }, 'Cân đối: chưa tính chờ duyệt', 'Cân đối: kể cả chờ duyệt'],
+      v.rows.map(r => `<tr><td><strong>${esc(r.period)}</strong></td><td class="num">${money(r.output_vat)}</td><td class="num">${money(r.input_vat)}</td><td class="num">${money(r.not_claimed_vat)}</td><td class="num"><strong style="color:var(--a3-danger)">${money(r.at_risk)}</strong></td><td class="num">${money(r.review_vat)}</td><td class="num"><strong>${money(r.no_alert_vat)}</strong></td><td>${balance(r.scenario_without_review)}</td><td>${balance(r.scenario_with_review)}</td></tr>`))}
     ${v.calculation_status === 'UNSUPPORTED_DIRECT' ? notice('warning', 'Chưa hỗ trợ tính thuế theo phương pháp trực tiếp', 'Chỉ hiển thị số liệu hóa đơn; không tính thuế phải nộp bằng công thức khấu trừ.') : ''}
-    <h2 class="section">Đối chiếu với số đã khai</h2>
-    <p class="muted">Nhập số liệu lấy từ tờ khai để đối chiếu với hóa đơn đã nạp. Chênh lệch cần kiểm tra chứng từ, không tự chứng minh khai sai hay xác nhận đã nộp tờ khai.</p>
-    <form id="decl">${table(['Kỳ', 'Đầu ra đã khai', 'Chênh lệch đầu ra', 'Đầu vào đã khai', 'Chênh lệch với phần chưa có cảnh báo'], v.rows.map((r) => `<tr><td>${esc(r.period)}</td>
+    <h2 class="section">Đối chiếu với tờ khai đã nộp</h2>
+    <form id="decl">${table(['Kỳ', 'Đầu ra đã khai', 'Chênh lệch đầu ra', 'Đầu vào đã khai', 'Chênh lệch với phần chưa cảnh báo'], v.rows.map((r) => `<tr><td><strong>${esc(r.period)}</strong></td>
       <td><input class="cds--text-input decl" aria-label="Đầu ra đã khai ${esc(r.period)}" data-p="${esc(r.period_key)}" data-k="output_vat" value="${r.declared?.output_vat ?? ''}" placeholder="vd 20.000.000" inputmode="numeric"></td><td>${diff(r.diff_output)}</td>
       <td><input class="cds--text-input decl" aria-label="Đầu vào đã khai ${esc(r.period)}" data-p="${esc(r.period_key)}" data-k="input_vat" value="${r.declared?.input_vat ?? ''}" placeholder="vd 15.084.000" inputmode="numeric"></td><td>${diff(r.diff_input)}</td></tr>`))}
       <div class="bar">${button('Lưu và đối chiếu', 'primary', 'type="submit"')}</div></form>
@@ -150,7 +148,7 @@ export async function pageVat() {
   };
 }
 
-// ---------------------------------------------------------------- A5 law alerts (law page)
+// A5 law alerts (law page)
 export async function lawAlerts(el) {
   const rows = await api('/api/law/alerts');
   if (!rows.length) { el.innerHTML = ''; return; }
@@ -160,7 +158,7 @@ export async function lawAlerts(el) {
       <td>${r.kind === 'EFFECTIVE' ? button('Tóm tắt điểm chính', 'ghost', `data-sum="${n}"`) : ''}</td></tr>`))}`;
   el.querySelectorAll('[data-sum]').forEach((b) => { b.onclick = async () => {
     const n = Number(b.dataset.sum); const box = $(`#sum-${n}`);
-    box.innerHTML = loading('Mô hình trên máy đang đọc văn bản (30 đến 90 giây)');
+    box.innerHTML = loading('Đang đọc văn bản luật');
     try {
       const a = await post(`/api/law/alerts/${encodeURIComponent(rows[n].doc_id)}/summary`);
       box.innerHTML = `<div class="answer"><div class="chips">${tag(a.mode)}</div>${a.sentences.map((s) => `<p style="margin:.4rem 0">${esc(s.text)} <span class="muted small">[${s.citations.map((c) => esc(c.path.split(' > ').slice(1).join(' > '))).join('; ')}]</span></p>`).join('')}
@@ -169,9 +167,9 @@ export async function lawAlerts(el) {
   }; });
 }
 
-// ---------------------------------------------------------------- F6 risk list import (settings page)
+// F6 risk list import (settings page)
 export function riskImport(el) {
-  el.innerHTML = `<h3 style="margin-top:1.5rem">Nhập danh sách từ tệp</h3><p class="muted small">Tệp CSV hoặc văn bản bất kỳ có mã số thuế (ví dụ danh sách doanh nghiệp bỏ địa chỉ kinh doanh do cơ quan thuế công bố). Hệ thống lấy mọi mã số thuế hợp lệ trong tệp.</p>
+  el.innerHTML = `<h3 style="margin-top:1.5rem">Nhập danh sách từ tệp</h3><p class="muted small">Tệp CSV hoặc văn bản bất kỳ có mã số thuế.</p>
     <div class="form-grid"><div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="rl-name">Tên danh sách</label><input class="cds--text-input" id="rl-name" placeholder="Danh sách bỏ địa chỉ kinh doanh tháng 10/2026"></div>
     <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="rl-date">Ngày của danh sách</label><input class="cds--text-input" id="rl-date" type="date"></div>
     <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="rl-src">Nguồn</label><input class="cds--text-input" id="rl-src" placeholder="Thông báo của Thuế tỉnh ..."></div></div>

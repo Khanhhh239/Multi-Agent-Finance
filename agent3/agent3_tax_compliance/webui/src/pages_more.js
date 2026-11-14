@@ -1,184 +1,238 @@
-// Invoices, bank, calendar, questions, legal corpus and enterprise settings.
-import { $, api, app, button, compareDecimal, dmy, esc, field, formatSpecialMoney, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put, sonHeader,
+// Invoices, bank, calendar, legal corpus and enterprise settings.
+import { $, api, app, balance, button, compareDecimal, computeReportStats, dmy, esc, field, hashParams, invLabel, invoiceOf, loadReport, loading, money, needWorkspace, notice, post, put, sonHeader,
   onPageLeave, state, table, tag } from './core.js';
-
-const ICONS_INV = {
-  inbox: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
-  send: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
-  alert: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-  shieldCheck: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>',
-  checkCircle: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-  check: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
-  search: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-  download: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
-  list: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
-  clock: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-  minus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
-};
+import { bindDialog } from './interactions.js';
 import { bankProposals, lawAlerts, riskImport } from './pages_ai.js';
 
 const rerender = () => window.dispatchEvent(new Event('hashchange'));
+
+function openInvoiceDrawer(inv, stats, rep) {
+  const m = stats.matchedMap.get(inv.key);
+  const txn = m ? rep.transactions.find((t) => m.txn_ids.includes(t.txn_id)) : null;
+  const its = (stats.riskByInvoice.get(inv.key) || []).filter((x) => x.status !== 'INFO');
+  const partnerName = inv.role === 'SALE' ? (inv.buyer_name || 'Khách hàng') : (inv.seller_name || 'Nhà cung cấp');
+  const partnerTax = inv.role === 'SALE' ? (inv.buyer_tax_id || '—') : (inv.seller_tax_id || '—');
+
+  $('#modal-root').innerHTML = `<aside class="drawer" role="dialog" aria-labelledby="inv-drawer-title">
+    <div class="drawer-top-bar">
+      <div class="drawer-header-content">
+        <div class="drawer-subhead">
+          <span class="role-badge ${inv.role === 'SALE' ? 'sale' : 'purchase'}">${inv.role === 'SALE' ? 'Hóa đơn bán ra' : 'Hóa đơn mua vào'}</span>
+          ${inv.duplicate_of ? '<span class="dup-pill">Bản trùng XML</span>' : ''}
+          <span class="amount-badge">Tổng TT: <strong>${money(inv.gross)}</strong></span>
+        </div>
+        <h2 id="inv-drawer-title">Hóa đơn ${esc(invLabel(inv))}</h2>
+      </div>
+      <button class="cds--btn cds--btn--ghost cds--btn--sm close drawer-close-btn" id="close" type="button" aria-label="Đóng ngăn chi tiết">Đóng</button>
+    </div>
+
+    <div class="dossier-grid" style="margin-top:16px">
+      <div class="dossier-card">
+        <h3 class="dossier-card-title">Thông tin chứng từ XML</h3>
+        <dl class="kv">
+          <dt>Ký hiệu / Số</dt><dd><strong>${esc(invLabel(inv))}</strong></dd>
+          <dt>Ngày lập</dt><dd>${dmy(inv.issue_date) || '—'}</dd>
+          <dt>${inv.role === 'SALE' ? 'Người mua' : 'Người bán'}</dt><dd><strong>${esc(partnerName)}</strong><div class="muted small">MST: ${esc(partnerTax)}</div></dd>
+          <dt>Tổng thanh toán</dt><dd><strong>${money(inv.gross)}</strong></dd>
+          <dt>Thuế GTGT</dt><dd><strong style="color:var(--a3-primary)">${money(inv.vat)}</strong></dd>
+          <dt>Chữ ký số & XML</dt><dd>${inv.guard_errors?.length ? `Lỗi XML (${inv.guard_errors.join(', ')})` : (inv.signed ? 'Chữ ký số hợp lệ' : 'Chưa ký số')}</dd>
+          <dt>Tệp gốc</dt><dd class="mono small" style="word-break:break-all">${esc(inv.file || '—')}</dd>
+        </dl>
+      </div>
+
+      <div class="dossier-card">
+        <h3 class="dossier-card-title">Đối chiếu thanh toán ngân hàng</h3>
+        ${inv.role === 'SALE' ? '<p class="muted small">Hóa đơn bán ra không bắt buộc ghép ủy nhiệm chi khấu trừ đầu vào.</p>' : (m ? `
+          <div class="match-badge ${m.status === 'MATCHED' ? 'match-ok' : 'match-warn'}">
+            ${m.status === 'MATCHED' ? 'Đã ghép giao dịch ngân hàng' : 'Khớp mơ hồ / Cần kiểm tra'}
+          </div>
+          <p class="small" style="margin:8px 0 12px">${esc(m.note || '')}</p>
+          ${txn ? `<dl class="kv"><dt>Ngày hạch toán</dt><dd>${dmy(txn.booked)}</dd><dt>Số tiền</dt><dd><strong>${money(txn.amount)}</strong></dd><dt>Nội dung</dt><dd>${esc(txn.description || '')}</dd></dl>` : ''}
+        ` : `
+          <div class="match-badge match-empty">Chưa ghép giao dịch ngân hàng</div>
+          <p class="muted small" style="margin-top:8px">Chưa tìm thấy giao dịch chi tiền khớp số tiền và tên nhà cung cấp trong sao kê đã nạp.</p>
+        `)}
+      </div>
+    </div>
+
+    ${(inv.descriptions || []).length ? `
+      <h3 class="section">Nội dung hàng hóa / dịch vụ</h3>
+      <ul style="font-size:13px;line-height:1.6;margin:0 0 16px 20px;padding:0">
+        ${inv.descriptions.slice(0, 15).map((d) => `<li>${esc(d)}</li>`).join('')}
+      </ul>
+    ` : ''}
+
+    <h3 class="section">Kết quả rà soát rủi ro (${its.length} vấn đề)</h3>
+    ${its.length ? `
+      <div style="display:grid;gap:10px;margin-bottom:16px">
+        ${its.map((x) => `<div class="panel" style="margin:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
+            ${tag(x.status)}
+            <span class="mono small muted">${esc(x.code)}</span>
+          </div>
+          <div style="font-weight:600;margin-bottom:4px">${esc(x.title)}</div>
+          <div class="muted small">${esc(x.detail)}</div>
+        </div>`).join('')}
+      </div>
+      <div class="bar">
+        <a class="cds--btn cds--btn--primary cds--btn--md" href="#/viec?open=${encodeURIComponent(inv.key)}">Mở tại Việc cần xử lý để phê duyệt →</a>
+      </div>
+    ` : `<p class="muted small">Hóa đơn này hiện không có cảnh báo rủi ro.</p>`}
+  </aside>`;
+
+  bindDialog();
+}
 
 export async function pageInvoices() {
   if (needWorkspace()) return;
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Hóa đơn</h1>${notice('info', 'Chưa phân tích')}`; return; }
-  const matched = new Map(rep.matches.flatMap((m) => m.invoice_keys.map((k) => [k, m])));
-  const risk = new Map();
-  rep.items.forEach((it) => it.invoice_keys.forEach((k) => risk.set(k, [...(risk.get(k) || []), it])));
+
+  const stats = computeReportStats(rep);
+  const matched = stats.matchedMap;
+  const risk = stats.riskByInvoice;
   const months = [...new Set(rep.invoices.filter((i) => i.issue_date).map((i) => i.issue_date.slice(0, 7)))].sort();
-  const worst = (i) => { const its = (risk.get(i.key) || []).filter((x) => x.status !== 'INFO'); return its.some((x) => x.status === 'AT_RISK') ? 'AT_RISK' : its.some((x) => x.status === 'REVIEW') ? 'REVIEW' : its.length ? 'OTHER' : 'OK'; };
+  const worst = (i) => stats.invoiceBucket(i);
+
   const PAGE = 50;
   const viewKey = `agent3.invoices.${state.ws}.${state.platform?.profile_revision}`;
   let savedView = {}; try { savedView = JSON.parse(sessionStorage.getItem(viewKey) || '{}'); } catch {}
   let page = savedView.page || 0;
   let tabFilter = savedView.tabFilter || 'all';
 
-  const purchaseInvs = rep.invoices.filter((i) => i.role === 'PURCHASE');
-  const saleInvs = rep.invoices.filter((i) => i.role === 'SALE');
-  const purchaseGross = purchaseInvs.reduce((s, i) => s + Number(i.gross || 0), 0);
-  const purchaseVat = purchaseInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
-  const saleGross = saleInvs.reduce((s, i) => s + Number(i.gross || 0), 0);
-  const saleVat = saleInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
-  const totalGross = purchaseGross + saleGross;
-  const purchasePct = totalGross > 0 ? Math.round((purchaseGross / totalGross) * 100) : 50;
-  const salePct = 100 - purchasePct;
-  const vatDiff = purchaseVat - saleVat; // > 0: khấu trừ chuyển sau; < 0: phải nộp
-  const atRiskCount = rep.invoices.filter((i) => worst(i) === 'AT_RISK').length;
-  const reviewCount = rep.invoices.filter((i) => worst(i) === 'REVIEW').length;
-  const unpaidCount = purchaseInvs.filter((i) => !matched.get(i.key)).length;
-  const signedCount = rep.invoices.filter((i) => i.signed).length;
-  const signedPct = rep.invoices.length > 0 ? Math.round((signedCount / rep.invoices.length) * 100) : 100;
+  const purchaseInvs = stats.purchaseInvs;
+  const saleInvs = stats.saleInvs;
+  const purchaseGross = stats.purchaseGross;
+  const purchaseVat = stats.purchaseVat;
+  const saleGross = stats.saleGross;
+  const saleVat = stats.saleVat;
+  const atRiskCount = stats.atRiskInvoices;
+  const reviewCount = stats.reviewInvoices;
+  const unpaidCount = stats.unpaidCount;
+  const dupCount = stats.duplicateInvs.length;
+
+  const nonDupInvoices = rep.invoices.filter((i) => !i.duplicate_of);
+  const signedCount = nonDupInvoices.filter((i) => i.signed).length;
+  const signedPct = nonDupInvoices.length > 0 ? Math.round((signedCount / nonDupInvoices.length) * 100) : 100;
+
+  // Scenario with review matches #/so-lieu (output_vat - no_alert_vat - review_vat)
+  const netVat = stats.scenarioWithReview;
 
   app().innerHTML = `
-    ${sonHeader('Hóa đơn', 'Hóa đơn GTGT', 'QUẢN LÝ CHỨNG TỪ', `<span class="ctx-chip chip-count">${rep.invoices.length.toLocaleString('vi-VN')} hóa đơn</span>`)}
-    
-    <!-- EXECUTIVE INVOICE & VAT BALANCE HUB -->
+    ${sonHeader('Hóa đơn', 'Hóa đơn', 'QUẢN LÝ CHỨNG TỪ', `<span class="ctx-chip chip-count">${nonDupInvoices.length.toLocaleString('vi-VN')} hóa đơn hợp lệ${dupCount ? ` · ${dupCount} bản trùng` : ''}</span>`, 'chung-tu')}
+
     <div class="inv-balance-hub">
       <div class="hub-main-grid">
-        <!-- CỘT 1: HÓA ĐƠN MUA VÀO (ĐẦU VÀO) -->
         <div class="hub-card hub-card-purchase">
           <div class="hub-card-header">
-            <span class="hub-icon-badge badge-purchase">${ICONS_INV.inbox}</span>
             <div class="hub-title-box">
-              <span class="hub-role-label">HÓA ĐƠN ĐẦU VÀO</span>
-              <span class="hub-action-sub">Mua vào để khấu trừ thuế</span>
+              <span class="hub-role-label">HÓA ĐƠN MUA VÀO</span>
+              <span class="hub-action-sub">Đã loại trừ ${dupCount} bản trùng XML</span>
             </div>
             <span class="hub-count-tag count-purchase">${purchaseInvs.length.toLocaleString('vi-VN')} HĐ</span>
           </div>
           <div class="hub-money-body">
             <div class="hub-money-primary">
-              <span class="hub-currency-label">Tổng TT:</span>
+              <span class="hub-currency-label">Tổng thanh toán:</span>
               <span class="hub-amount font-num">${money(purchaseGross)}</span>
             </div>
             <div class="hub-vat-pill vat-purchase">
-              <span class="vat-pill-label">Thuế GTGT đầu vào:</span>
+              <span class="vat-pill-label">Tổng thuế GTGT mua vào:</span>
               <span class="vat-pill-val font-num"><strong>${money(purchaseVat)}</strong></span>
             </div>
           </div>
         </div>
 
-        <!-- CỘT 2: CÁN CÂN GTGT & ĐỐI CHIẾU TRUNG TÂM -->
         <div class="hub-card hub-card-center">
           <div class="center-balance-head">
-            <span class="balance-title">CÂN ĐỐI NGHĨA VỤ THUẾ GTGT</span>
-            <span class="balance-sub">Đối chiếu Mua vào ⟷ Bán ra</span>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="balance-title">PHÂN TÁCH THUẾ GTGT ĐẦU VÀO & CÂN ĐỐI</span>
+              <a href="#/so-lieu" class="small" style="font-weight:600;text-decoration:none">Bảng tính thuế →</a>
+            </div>
+            <span class="balance-sub">Khớp 100% với trang Số liệu thuế GTGT</span>
           </div>
 
-          <div class="balance-ratio-bar-wrap">
-            <div class="ratio-labels">
-              <span class="ratio-label-p">Mua: <strong>${purchasePct}%</strong></span>
-              <span class="ratio-label-s">Bán: <strong>${salePct}%</strong></span>
-            </div>
-            <div class="ratio-bar-track">
-              <div class="ratio-bar-fill-p" style="width:${purchasePct}%" title="Tỷ trọng mua vào: ${purchasePct}%"></div>
-              <div class="ratio-bar-fill-s" style="width:${salePct}%" title="Tỷ trọng bán ra: ${salePct}%"></div>
-            </div>
+          <div class="a3-vat-breakdown">
+            <div class="a3-vat-row"><span>Đầu vào chưa có cảnh báo:</span><strong class="font-num">${money(stats.noAlertVat)}</strong></div>
+            <div class="a3-vat-row"><span>Đầu vào chờ xem xét (${reviewCount} HĐ):</span><strong class="font-num">${money(stats.reviewVat)}</strong></div>
+            <div class="a3-vat-row"><span>Có nguy cơ / Không khai (${atRiskCount} HĐ):</span><strong class="font-num" style="color:var(--a3-danger)">${money(Number(stats.atRiskVat) + stats.notClaimedVat)}</strong></div>
           </div>
 
-          <div class="balance-result-box ${vatDiff >= 0 ? 'result-credit' : 'result-payable'}">
-            <span class="result-status-icon">${vatDiff >= 0 ? ICONS_INV.shieldCheck : ICONS_INV.alert}</span>
+          <div class="balance-result-box ${netVat <= 0 ? 'result-credit' : 'result-payable'}">
             <div class="result-info">
-              <div class="result-name">${vatDiff >= 0 ? 'Thuế GTGT còn được khấu trừ:' : 'Thuế GTGT phải nộp dự kiến:'}</div>
-              <div class="result-value font-num">${vatDiff >= 0 ? '+' : ''}${money(Math.abs(vatDiff))}</div>
+              <div class="result-name">${netVat <= 0 ? 'Đầu vào vượt đầu ra (kể cả chờ duyệt):' : 'Đầu ra vượt đầu vào (kể cả chờ duyệt):'}</div>
+              <div class="result-value font-num">${money(Math.abs(netVat))}</div>
             </div>
           </div>
         </div>
 
-        <!-- CỘT 3: HÓA ĐƠN BÁN RA (ĐẦU RA) -->
         <div class="hub-card hub-card-sale">
           <div class="hub-card-header">
-            <span class="hub-icon-badge badge-sale">${ICONS_INV.send}</span>
             <div class="hub-title-box">
-              <span class="hub-role-label">HÓA ĐƠN ĐẦU RA</span>
-              <span class="hub-action-sub">Bán ra phát sinh thuế nộp</span>
+              <span class="hub-role-label">HÓA ĐƠN BÁN RA</span>
+              <span class="hub-action-sub">Phát sinh nghĩa vụ thuế đầu ra</span>
             </div>
             <span class="hub-count-tag count-sale">${saleInvs.length.toLocaleString('vi-VN')} HĐ</span>
           </div>
           <div class="hub-money-body">
             <div class="hub-money-primary">
-              <span class="hub-currency-label">Tổng TT:</span>
+              <span class="hub-currency-label">Tổng thanh toán:</span>
               <span class="hub-amount font-num">${money(saleGross)}</span>
             </div>
             <div class="hub-vat-pill vat-sale">
-              <span class="vat-pill-label">Thuế GTGT đầu ra:</span>
+              <span class="vat-pill-label">Tổng thuế GTGT bán ra:</span>
               <span class="vat-pill-val font-num"><strong>${money(saleVat)}</strong></span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- DẢI FOOTNOTE GIÁM SÁT RỦI RO & CHỨNG TỪ DƯỚI ĐÁY -->
       <div class="hub-footer-strip">
         <div class="strip-left">
-          <span class="strip-label">Giám sát rủi ro:</span>
-          <span class="audit-badge audit-risk ${atRiskCount > 0 ? 'has-issue' : ''}">
-            ${ICONS_INV.alert} <strong>${atRiskCount.toLocaleString('vi-VN')}</strong> có nguy cơ
-          </span>
-          <span class="audit-badge audit-review">
-            <strong>${reviewCount.toLocaleString('vi-VN')}</strong> cần xem xét
-          </span>
-          <span class="audit-badge audit-bank">
-            ${ICONS_INV.clock} <strong>${unpaidCount.toLocaleString('vi-VN')}</strong> chưa ghép ngân hàng
-          </span>
+          <span class="strip-label">Lọc nhanh rủi ro:</span>
+          <button type="button" class="audit-badge audit-risk clickable-badge" data-quick-st="AT_RISK">
+            <strong>${atRiskCount.toLocaleString('vi-VN')}</strong> HĐ có nguy cơ (${money(stats.atRiskVat)})
+          </button>
+          <button type="button" class="audit-badge audit-review clickable-badge" data-quick-st="REVIEW">
+            <strong>${reviewCount.toLocaleString('vi-VN')}</strong> HĐ cần xem xét (${money(stats.reviewVat)})
+          </button>
+          <button type="button" class="audit-badge audit-bank clickable-badge" data-quick-tab="UNPAID">
+            <strong>${unpaidCount.toLocaleString('vi-VN')}</strong> HĐ mua vào chưa ghép sao kê
+          </button>
         </div>
         <div class="strip-right">
           <span class="audit-badge audit-signed">
-            ${ICONS_INV.checkCircle} Chữ ký số: <strong>${signedPct}% hợp lệ</strong> (${signedCount.toLocaleString('vi-VN')}/${rep.invoices.length.toLocaleString('vi-VN')})
+            Chữ ký số hợp lệ: <strong>${signedPct}%</strong> (${signedCount.toLocaleString('vi-VN')}/${nonDupInvoices.length.toLocaleString('vi-VN')})
           </span>
         </div>
       </div>
     </div>
 
-    <!-- SEGMENTED TABS -->
     <div class="inv-segmented-pills">
       ${[
-        ['all', 'Tất cả', rep.invoices.length, ICONS_INV.list, 'pill-tab-all'],
-        ['PURCHASE', 'Mua vào', purchaseInvs.length, ICONS_INV.inbox, 'pill-tab-purchase'],
-        ['SALE', 'Bán ra', saleInvs.length, ICONS_INV.send, 'pill-tab-sale'],
-        ['RISK', 'Có cảnh báo', atRiskCount + reviewCount, ICONS_INV.alert, 'pill-tab-risk'],
-        ['UNPAID', 'Chưa ghép ngân hàng', unpaidCount, ICONS_INV.clock, 'pill-tab-bank'],
-      ].map(([k, l, n, icon, cls]) => `<button type="button" class="inv-filter-pill ${cls} ${k === tabFilter ? 'active' : ''}" data-tab="${k}">
-        <span class="pill-icon">${icon}</span>
+        ['all', 'Tất cả', rep.invoices.length, 'pill-tab-all'],
+        ['PURCHASE', 'Mua vào', purchaseInvs.length, 'pill-tab-purchase'],
+        ['SALE', 'Bán ra', saleInvs.length, 'pill-tab-sale'],
+        ['RISK', 'Có cảnh báo', atRiskCount + reviewCount, 'pill-tab-risk'],
+        ['UNPAID', 'Chưa ghép sao kê', unpaidCount, 'pill-tab-bank'],
+      ].map(([k, l, n, cls]) => `<button type="button" class="inv-filter-pill ${cls} ${k === tabFilter ? 'active' : ''}" data-tab="${k}">
         <span class="pill-name">${esc(l)}</span>
         <span class="pill-count">${n.toLocaleString('vi-VN')}</span>
       </button>`).join('')}
     </div>
 
-    <!-- UNIFIED SINGLE-LINE TOOLBAR -->
     <div class="inv-toolbar">
       <div class="inv-search-wrap">
-        <span class="inv-search-icon" aria-hidden="true">${ICONS_INV.search}</span>
-        <input class="cds--text-input inv-search-input" id="iq" placeholder="Tìm theo số hóa đơn, đối tác, MST hoặc nội dung hàng hóa..." aria-label="Tìm hóa đơn">
+        <input class="cds--text-input inv-search-input" id="iq" style="padding-left:12px !important" placeholder="Tìm theo số hóa đơn, đối tác, MST hoặc nội dung hàng hóa..." aria-label="Tìm hóa đơn">
         <button type="button" class="inv-search-clear" id="iq-clear" title="Xóa tìm kiếm" hidden aria-label="Xóa tìm kiếm">✕</button>
       </div>
 
       <select class="cds--select-input inv-filter-select" id="st" aria-label="Tình trạng">
         <option value="">Mọi tình trạng</option>
-        <option value="AT_RISK">Có nguy cơ</option>
-        <option value="REVIEW">Cần xem xét</option>
+        <option value="AT_RISK">Có nguy cơ (${atRiskCount})</option>
+        <option value="REVIEW">Cần xem xét (${reviewCount})</option>
         <option value="OK">Không cảnh báo</option>
-        <option value="UNPAID">Chưa ghép thanh toán</option>
+        <option value="UNPAID">Chưa ghép sao kê (${unpaidCount})</option>
       </select>
 
       <select class="cds--select-input inv-filter-select" id="mon" aria-label="Tháng">
@@ -186,9 +240,9 @@ export async function pageInvoices() {
         ${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}
       </select>
 
-      ${button('✕ Đặt lại', 'ghost', 'id="reset-invoices" class="cds--btn--sm btn-inv-reset"')}
+      ${button('Đặt lại', 'ghost', 'id="reset-invoices" class="cds--btn--sm btn-inv-reset"')}
       <a class="cds--btn cds--btn--ghost cds--btn--sm btn-inv-export" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx">
-        <span class="btn-icon">${ICONS_INV.download}</span> <span>Xuất Excel</span>
+        <span>Xuất Excel</span>
       </a>
       <span class="muted small inv-counter" id="icount" role="status"></span>
     </div>
@@ -198,17 +252,23 @@ export async function pageInvoices() {
   let sort = savedView.sort || ['issue_date', -1];
   const keyOf = { issue_date: (i) => i.issue_date || '', gross: (i) => i.gross || '0', vat: (i) => i.vat || '0', seller: (i) => (i.role === 'SALE' ? i.buyer_name : i.seller_name) || '' };
 
+  const isUnpaid = (i) => {
+    if (i.role !== 'PURCHASE' || i.duplicate_of) return false;
+    const m = matched.get(i.key);
+    return !m || m.status !== 'MATCHED';
+  };
+
   const paint = () => {
     const st = $('#st').value; const mon = $('#mon').value; const q = $('#iq').value.trim().toLowerCase();
     const view = rep.invoices.filter((i) => {
-      if (tabFilter === 'PURCHASE' && i.role !== 'PURCHASE') return false;
-      if (tabFilter === 'SALE' && i.role !== 'SALE') return false;
+      if (tabFilter === 'PURCHASE' && (i.role !== 'PURCHASE' || i.duplicate_of)) return false;
+      if (tabFilter === 'SALE' && (i.role !== 'SALE' || i.duplicate_of)) return false;
       if (tabFilter === 'RISK' && !['AT_RISK', 'REVIEW'].includes(worst(i))) return false;
-      if (tabFilter === 'UNPAID' && (i.role !== 'PURCHASE' || matched.get(i.key))) return false;
+      if (tabFilter === 'UNPAID' && !isUnpaid(i)) return false;
 
       if (mon && !(i.issue_date || '').startsWith(mon)) return false;
       if (st) {
-        if (st === 'UNPAID' && (i.role !== 'PURCHASE' || matched.get(i.key))) return false;
+        if (st === 'UNPAID' && !isUnpaid(i)) return false;
         if (st !== 'UNPAID' && worst(i) !== st) return false;
       }
       if (q && !`${invLabel(i)} ${i.number} ${i.seller_name} ${i.seller_tax_id} ${i.buyer_name || ''} ${(i.descriptions || []).join(' ')}`.toLowerCase().includes(q)) {
@@ -225,41 +285,43 @@ export async function pageInvoices() {
     const th = (k, l, num, extraCls = '') => `<th class="${num ? 'num ' : ''}${extraCls} sortable" aria-sort="${sort[0] === k ? (sort[1] > 0 ? 'ascending' : 'descending') : 'none'}"><button type="button" class="sort-button" data-sort="${k}">${esc(l)}${sort[0] === k ? (sort[1] > 0 ? ' ↑' : ' ↓') : ''}</button></th>`;
     $('#icount').textContent = `${view.length.toLocaleString('vi-VN')} hóa đơn`;
 
+    const pageSlice = view.slice(page * PAGE, page * PAGE + PAGE);
+
     $('#ilist').innerHTML = view.length ? `<div class="table-wrap inv-table-wrap"><table class="cds--data-table cds--data-table--md inv-data-table">
       <thead>
         <tr>
-          <th style="min-width:160px">Hóa đơn & Ký hiệu</th>
+          <th style="min-width:155px">Hóa đơn & Ký hiệu</th>
           ${th('issue_date', 'Ngày lập', false, 'th-date')}
-          ${th('seller', 'Người bán / Người mua', false, 'th-partner')}
+          ${th('seller', 'Đối tác / MST', false, 'th-partner')}
           ${th('gross', 'Tổng thanh toán', true, 'th-gross')}
           ${th('vat', 'Thuế GTGT', true, 'th-vat')}
-          <th style="min-width:110px">Toàn vẹn</th>
-          <th style="min-width:115px">Thanh toán</th>
-          <th style="min-width:150px">Cảnh báo rủi ro</th>
+          <th style="min-width:105px">Toàn vẹn XML</th>
+          <th style="min-width:110px">Sao kê NH</th>
+          <th style="min-width:140px">Trạng thái rà soát</th>
         </tr>
       </thead>
       <tbody>
-        ${view.slice(page * PAGE, page * PAGE + PAGE).map((i) => {
+        ${pageSlice.map((i, rowIdx) => {
           const m = matched.get(i.key);
           const its = (risk.get(i.key) || []).filter((x) => x.status !== 'INFO');
+          const bStatus = worst(i);
           const integrity = i.guard_errors.length
-            ? `<span class="integrity-badge badge-err">${ICONS_INV.alert} Lỗi XML (${i.guard_errors.length})</span>`
-            : (i.signed ? `<span class="integrity-badge badge-ok">${ICONS_INV.shieldCheck} Ký hợp lệ</span>` : `<span class="integrity-badge badge-none">Không ký</span>`);
-          
+            ? `<span class="integrity-badge badge-err">Lỗi XML (${i.guard_errors.length})</span>`
+            : (i.signed ? `<span class="integrity-badge badge-ok">Hợp lệ</span>` : `<span class="integrity-badge badge-none">Không ký</span>`);
+
           const payStatus = i.role === 'SALE'
             ? '<span class="muted small">—</span>'
             : (m ? (m.status === 'MATCHED'
-                ? `<span class="pay-badge pay-ok">${ICONS_INV.checkCircle} Đã ghép</span>`
-                : `<span class="pay-badge pay-ambig">${ICONS_INV.clock} Mơ hồ</span>`)
-              : `<span class="pay-badge pay-none">${ICONS_INV.minus} Chưa ghép</span>`);
-              
+                ? `<span class="pay-badge pay-ok">Đã ghép</span>`
+                : `<span class="pay-badge pay-ambig">Mơ hồ</span>`)
+              : `<span class="pay-badge pay-none">Chưa ghép</span>`);
+
           const partnerName = i.role === 'SALE' ? (i.buyer_name || 'Khách hàng') : (i.seller_name || 'Nhà cung cấp');
           const partnerTax = i.role === 'SALE' ? (i.buyer_tax_id || '') : (i.seller_tax_id || '');
 
-          return `<tr class="${its.length ? 'clickable row-has-risk' : ''}" ${its.length ? `data-go="#/viec?open=${encodeURIComponent(i.key)}" title="Bấm để mở việc cần xử lý"` : ''}>
+          return `<tr class="clickable ${its.length ? 'row-has-risk' : ''}" tabindex="0" data-inv-idx="${rowIdx}" title="Bấm để xem chi tiết hóa đơn">
             <td>
               <div class="inv-code-pill ${i.role === 'SALE' ? 'pill-sale' : 'pill-purchase'}" title="${esc(invLabel(i))}">
-                <span class="inv-type-icon">${i.role === 'SALE' ? ICONS_INV.send : ICONS_INV.inbox}</span>
                 <span class="inv-code-text">${esc(invLabel(i))}</span>
                 ${i.duplicate_of ? '<span class="dup-pill">Trùng</span>' : ''}
               </div>
@@ -268,7 +330,7 @@ export async function pageInvoices() {
             <td class="font-date">${dmy(i.issue_date)}</td>
             <td>
               <div class="partner-name" title="${esc(partnerName)}">${esc(partnerName)}</div>
-              ${partnerTax ? `<div class="partner-tax mono"><span class="mst-tag">MST</span> <code>${esc(partnerTax)}</code></div>` : ''}
+              ${partnerTax ? `<div class="partner-tax mono">MST <code>${esc(partnerTax)}</code></div>` : ''}
             </td>
             <td class="num font-num"><strong>${money(i.gross)}</strong></td>
             <td class="num font-num vat-cell"><span class="vat-amount">${money(i.vat)}</span></td>
@@ -276,7 +338,7 @@ export async function pageInvoices() {
             <td>${payStatus}</td>
             <td>
               <div class="chips">
-                ${its.length ? its.map((x) => tag(x.status, x.title.length > 36 ? `${x.title.slice(0, 34)}…` : x.title)).join('') : `<span class="tag-ok-check">${ICONS_INV.check} Hợp lệ</span>`}
+                ${bStatus === 'NOT_CLAIMED' ? tag('INFO', 'Không kê khai') : (its.length ? its.map((x) => tag(x.status, x.title.length > 34 ? `${x.title.slice(0, 32)}…` : x.title)).join('') : `<span class="tag-ok-check">Không cảnh báo</span>`)}
               </div>
             </td>
           </tr>`;
@@ -289,13 +351,17 @@ export async function pageInvoices() {
       ${button('Trang sau', 'ghost', `id="next" ${page >= pages - 1 ? 'disabled' : ''}`)}
     </div>`
     : `<div class="empty invoice-empty">
-        <div class="empty-icon-wrap" style="color:var(--cds-text-secondary);margin-bottom:8px">${ICONS_INV.alert}</div>
         <div style="font-weight:600;font-size:15px;margin-bottom:4px">Không có hóa đơn nào khớp bộ lọc</div>
-        <div class="muted small">Thử xóa bộ lọc hoặc điều chỉnh từ khóa tìm kiếm.</div>
+        <div class="muted small">Thử đặt lại bộ lọc hoặc điều chỉnh từ khóa tìm kiếm.</div>
       </div>`;
 
     if ($('#prev')) $('#prev').onclick = () => { page -= 1; paint(); };
     if ($('#next')) $('#next').onclick = () => { page += 1; paint(); };
+    app().querySelectorAll('[data-inv-idx]').forEach((tr) => {
+      const inv = pageSlice[Number(tr.dataset.invIdx)];
+      tr.onclick = () => openInvoiceDrawer(inv, stats, rep);
+      tr.onkeydown = (e) => { if (e.target === tr && ['Enter', ' '].includes(e.key)) { e.preventDefault(); tr.click(); } };
+    });
     app().querySelectorAll('[data-sort]').forEach((h) => {
       h.onclick = () => {
         const key = h.dataset.sort;
@@ -316,8 +382,28 @@ export async function pageInvoices() {
     };
   });
 
+  app().querySelectorAll('[data-quick-st]').forEach((btn) => {
+    btn.onclick = () => {
+      tabFilter = 'all';
+      app().querySelectorAll('.inv-filter-pill').forEach((b) => b.classList.toggle('active', b.dataset.tab === 'all'));
+      $('#st').value = btn.dataset.quickSt;
+      page = 0;
+      paint();
+    };
+  });
+
+  app().querySelectorAll('[data-quick-tab]').forEach((btn) => {
+    btn.onclick = () => {
+      tabFilter = btn.dataset.quickTab;
+      app().querySelectorAll('.inv-filter-pill').forEach((b) => b.classList.toggle('active', b.dataset.tab === tabFilter));
+      $('#st').value = '';
+      page = 0;
+      paint();
+    };
+  });
+
   ['st', 'mon'].forEach((id) => { $(`#${id}`).onchange = () => { page = 0; paint(); }; });
-  
+
   const iq = $('#iq');
   const iqClear = $('#iq-clear');
   iq.oninput = () => {
@@ -365,15 +451,102 @@ export async function pageBank() {
   const rep = await loadReport();
   if (!rep) { app().innerHTML = `<h1 class="page">Ngân hàng</h1>${notice('info', 'Chưa phân tích')}`; return; }
   const usedBy = new Map(rep.matches.flatMap((m) => m.txn_ids.map((t) => [t, m])));
+  const months = [...new Set(rep.transactions.filter((t) => t.booked).map((t) => t.booked.slice(0, 7)))].sort();
+  const PAGE = 50;
+  let page = 0;
+
   app().innerHTML = `
-    ${sonHeader('Ngân hàng', 'Giao dịch ngân hàng', 'ĐỐI SOÁT THANH TOÁN', `<span class="ctx-chip chip-count">${rep.transactions.length} giao dịch</span>`)}
-    <p class="lead" style="margin-top:10px">${rep.transactions.length} giao dịch từ các tệp sao kê. Một khoản chi chỉ được ghép khi đúng số tiền và có dấu hiệu nhận ra người bán. <a href="#/du-lieu">Chọn bảng kê cổng thuế đang dùng ↗</a></p><div id="props"></div>
-    ${table(['Ngày', 'Chiều', { label: 'Số tiền', num: true }, 'Đối ứng', 'Nội dung', 'Ghép với hóa đơn', 'Nguồn'], rep.transactions.map((t) => {
+    ${sonHeader('Ngân hàng', 'Giao dịch ngân hàng', 'QUẢN LÝ CHỨNG TỪ', '', 'chung-tu')}
+    <div id="props"></div>
+
+    <div class="toolbar inv-toolbar">
+      <div class="inv-search-wrap">
+        <input class="cds--text-input inv-search-input" id="bq" style="padding-left:14px !important" placeholder="Tìm theo đối ứng, số tài khoản, nội dung chuyển khoản, số hóa đơn..." aria-label="Tìm giao dịch ngân hàng">
+        <button type="button" class="inv-search-clear" id="bq-clear" hidden title="Xóa tìm kiếm">✕</button>
+      </div>
+
+      <select class="cds--select-input inv-filter-select" id="bdir" aria-label="Chiều giao dịch">
+        <option value="">Mọi chiều (Thu & Chi)</option>
+        <option value="OUT">Chi ra (Thanh toán)</option>
+        <option value="IN">Thu vào</option>
+      </select>
+
+      <select class="cds--select-input inv-filter-select" id="bmatch" aria-label="Trạng thái ghép hóa đơn">
+        <option value="">Mọi trạng thái ghép</option>
+        <option value="MATCHED">Đã ghép hóa đơn</option>
+        <option value="AMBIGUOUS">Khớp mơ hồ</option>
+        <option value="UNMATCHED">Chưa ghép</option>
+      </select>
+
+      <select class="cds--select-input inv-filter-select" id="bmon" aria-label="Tháng giao dịch">
+        <option value="">Mọi tháng</option>
+        ${months.map((m) => `<option value="${m}">Tháng ${m.slice(5)}/${m.slice(0, 4)}</option>`).join('')}
+      </select>
+
+      ${button('Đặt lại', 'ghost', 'id="breset" class="cds--btn--sm btn-inv-reset"')}
+      <span class="inv-counter" id="bcount" role="status"></span>
+    </div>
+
+    <div id="blist"></div>`;
+
+  const paint = () => {
+    const q = $('#bq').value.trim().toLowerCase();
+    const dir = $('#bdir').value;
+    const matchSt = $('#bmatch').value;
+    const mon = $('#bmon').value;
+
+    const view = rep.transactions.filter((t) => {
+      if (dir && t.direction !== dir) return false;
+      if (mon && !(t.booked || '').startsWith(mon)) return false;
       const m = usedBy.get(t.txn_id);
-      return `<tr><td>${dmy(t.booked)}</td><td>${t.direction === 'OUT' ? 'Chi' : 'Thu'}</td><td class="num">${money(t.amount)}</td>
-        <td>${esc(t.counterparty_name || '')}<div class="muted small mono">${esc(t.counterparty_account || '')}</div></td><td>${esc(t.description)}</td>
-        <td>${m ? `${m.invoice_keys.map((k) => esc(invLabel(invoiceOf(k)))).join(', ')}<div class="muted small">${m.status === 'MATCHED' ? 'Đã ghép' : 'Mơ hồ'}</div>` : ''}</td><td class="muted small">${esc(t.source)}</td></tr>`;
-    }))}`;
+      if (matchSt === 'MATCHED' && (!m || m.status !== 'MATCHED')) return false;
+      if (matchSt === 'AMBIGUOUS' && (!m || m.status === 'MATCHED')) return false;
+      if (matchSt === 'UNMATCHED' && m) return false;
+      if (q) {
+        const invText = m ? m.invoice_keys.map((k) => invLabel(invoiceOf(k))).join(' ') : '';
+        const haystack = `${t.counterparty_name || ''} ${t.counterparty_account || ''} ${t.description || ''} ${t.amount || ''} ${t.source || ''} ${invText}`.toLowerCase();
+        if (!haystack.includes(q)) return false;
+      }
+      return true;
+    });
+
+    const pages = Math.max(1, Math.ceil(view.length / PAGE));
+    page = Math.min(page, pages - 1);
+    $('#bcount').textContent = `${view.length.toLocaleString('vi-VN')} / ${rep.transactions.length.toLocaleString('vi-VN')} giao dịch`;
+
+    const slice = view.slice(page * PAGE, page * PAGE + PAGE);
+    $('#blist').innerHTML = table(
+      ['Ngày', 'Chiều', { label: 'Số tiền', num: true }, 'Đối ứng', 'Nội dung', 'Ghép với hóa đơn', 'Nguồn'],
+      slice.map((t) => {
+        const m = usedBy.get(t.txn_id);
+        return `<tr><td>${dmy(t.booked)}</td><td>${t.direction === 'OUT' ? 'Chi' : 'Thu'}</td><td class="num"><strong>${money(t.amount)}</strong></td>
+          <td>${esc(t.counterparty_name || '')}<div class="muted small mono">${esc(t.counterparty_account || '')}</div></td><td>${esc(t.description)}</td>
+          <td>${m ? `${m.invoice_keys.map((k) => esc(invLabel(invoiceOf(k)))).join(', ')}<div class="muted small">${m.status === 'MATCHED' ? 'Đã ghép' : 'Mơ hồ'}</div>` : '<span class="muted small">Chưa ghép</span>'}</td><td class="muted small">${esc(t.source)}</td></tr>`;
+      }),
+      'Không có giao dịch ngân hàng nào khớp bộ lọc.'
+    ) + (view.length > PAGE ? `<div class="bar pager">
+      ${button('Trang trước', 'ghost', `id="bprev" ${page === 0 ? 'disabled' : ''}`)}
+      <span class="small">Trang <strong>${page + 1}</strong> / ${pages} (${view.length.toLocaleString('vi-VN')} giao dịch)</span>
+      ${button('Trang sau', 'ghost', `id="bnext" ${page >= pages - 1 ? 'disabled' : ''}`)}
+    </div>` : '');
+
+    if ($('#bprev')) $('#bprev').onclick = () => { page -= 1; paint(); };
+    if ($('#bnext')) $('#bnext').onclick = () => { page += 1; paint(); };
+  };
+
+  const bq = $('#bq');
+  const bqClear = $('#bq-clear');
+  bq.oninput = () => { bqClear.hidden = !bq.value; page = 0; paint(); };
+  bqClear.onclick = () => { bq.value = ''; bqClear.hidden = true; page = 0; paint(); };
+  ['bdir', 'bmatch', 'bmon'].forEach((id) => { $(`#${id}`).onchange = () => { page = 0; paint(); }; });
+  $('#breset').onclick = () => {
+    ['bq', 'bdir', 'bmatch', 'bmon'].forEach((id) => { $(`#${id}`).value = ''; });
+    bqClear.hidden = true;
+    page = 0;
+    paint();
+  };
+
+  paint();
   bankProposals($('#props'));
 }
 
@@ -381,63 +554,8 @@ export async function pageCalendar() {
   if (needWorkspace()) return;
   const rep = await loadReport();
   app().innerHTML = `
-    ${sonHeader('Lịch thuế', 'Lịch thuế', 'THEO DÕI NGHĨA VỤ')}
-    <p class="lead" style="margin-top:10px">Hạn lịch theo bộ quy tắc nháp, đã tính dời ngày nghỉ theo cấu hình. Tình trạng được tính tại ngày phân tích ${dmy(rep?.meta.as_of)}; chưa xác nhận đã kê khai hoặc nộp tiền.</p>
-    ${table(['Kỳ', 'Hạn nộp', 'Tình trạng', 'Căn cứ'], (rep?.calendar || []).map((c) => `<tr><td>${esc(c.period)}</td><td>${dmy(c.due)}${c.moved_from ? `<div class="muted small">Dời từ ${dmy(c.moved_from)} do ngày nghỉ</div>` : ''}</td><td>${esc(c.status)}${c.open_items ? `<div><a href="#/viec" class="risk-text">còn ${c.open_items} việc chưa xử lý của kỳ này</a></div>` : ''}${c.extension ? `<div class="muted small">${esc(c.extension)}</div>` : ''}</td><td class="muted small">${esc(c.basis)}</td></tr>`), 'Chưa có dữ liệu.')}`;
-}
-
-export async function pageAsk() {
-  if (needWorkspace()) return;
-  const key = `agent3.chat.${state.ws}`;
-  let history = [];
-  try { history = JSON.parse(sessionStorage.getItem(key) || '[]'); } catch { history = []; }
-  const save = () => { try { sessionStorage.setItem(key, JSON.stringify(history.slice(-30))); } catch { /* private mode */ } };
-  const groups = [['Về dữ liệu của doanh nghiệp (trả lời ngay)', ['Tháng 8 có bao nhiêu thuế có nguy cơ bị loại?', 'Hóa đơn số 340 có vấn đề gì, vì sao?', 'Hạn nộp tờ khai khi nào?']],
-    ['Về quy định (mô hình trên máy đọc luật, 30 đến 60 giây)', ['Mức tính tiền chậm nộp là bao nhiêu mỗi ngày?', 'Lập hóa đơn không đúng thời điểm bị phạt thế nào?', 'Điều kiện khấu trừ thuế giá trị gia tăng đầu vào gồm những gì?']]];
-  app().innerHTML = `<h1 class="page">Hỏi đáp</h1><p class="lead">Câu hỏi về dữ liệu được trả lời từ kết quả phân tích. Câu hỏi về quy định được trả lời từ kho luật: mỗi câu phải trích nguyên văn điều khoản và qua kiểm tra căn cứ; không qua thì hệ thống trích nguyên văn hoặc từ chối. Câu cần phán đoán được chuyển chuyên gia.</p>
-    ${groups.map(([g, qs]) => `<p class="muted small" style="margin:.75rem 0 .25rem">${esc(g)}</p><div class="chips">${qs.map((q) => `<button type="button" class="cds--btn cds--btn--ghost cds--btn--sm chip-q" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>`).join('')}
-    <div id="chat"></div><div id="pending"></div>
-    <form id="ask" class="bar ask-bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
-    <label class="cds--label" for="q">Câu hỏi (Enter để gửi)</label><input class="cds--text-input" id="q" name="q" autocomplete="off" placeholder="Ví dụ: hóa đơn số 340 có vấn đề gì?"></div>${button('Hỏi', 'primary', 'type="submit"')}
-    ${history.length ? button('Xóa lịch sử', 'ghost', 'id="clear"') : ''}</form>`;
-  const chat = $('#chat');
-  const draw = () => { chat.innerHTML = history.join(''); };
-  draw();
-  let busy = false;
-  const ask = async (q) => {
-    if (busy) return;
-    busy = true;
-    history.push(`<div class="answer user"><strong>${esc(q)}</strong></div>`); draw();
-    const t0 = Date.now();
-    const policy = !/hóa đơn số|\d{3,}|tháng \d|hạn nộp|người bán|bao nhiêu thuế/i.test(q);
-    const tick = () => {
-      const s = Math.round((Date.now() - t0) / 1000);
-      $('#pending').innerHTML = loading(policy && s > 2 ? `Đang tìm điều khoản và để mô hình trên máy đọc (${s} giây); câu trả lời được kiểm tra căn cứ trước khi hiện` : `Đang trả lời (${s} giây)`);
-    };
-    tick();
-    const timer = setInterval(tick, 1000);
-    try {
-      const a = await post(`/api/workspaces/${state.ws}/ask`, { question: q });
-      const rag = a.facts?.find((f) => f && f.passages);
-      const cites = rag
-        ? rag.sentences.flatMap((s) => s.citations).filter((c, i, arr) => arr.findIndex((x) => x.path === c.path) === i)
-          .map((c) => `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.doc_num)}</a>: ${esc(c.path.split(' > ').slice(1).join(' > '))}`)
-        : a.citations.map(esc);
-      history.push(`<div class="answer"><div class="chips">${tag(a.branch)}${rag ? tag(rag.mode) : ''}<span class="muted small">${Math.round((Date.now() - t0) / 1000)} giây</span></div><p style="margin:.5rem 0 0">${esc(a.text)}</p>
-        ${cites.length ? `<div class="cite">Căn cứ: ${cites.join('; ')}</div>` : ''}
-        ${rag?.dropped?.length ? `<div class="cite">${rag.dropped.length} câu của mô hình bị loại vì không có căn cứ.</div>` : ''}</div>`);
-    } catch (err) { history.push(notice('error', 'Không trả lời được', err.message)); }
-    clearInterval(timer);
-    $('#pending').innerHTML = '';
-    busy = false;
-    save();
-    draw();
-    $('#q').focus();
-  };
-  $('#ask').onsubmit = (e) => { e.preventDefault(); const q = $('#q').value.trim(); if (q) { $('#q').value = ''; ask(q); } };
-  app().querySelectorAll('[data-q]').forEach((b) => { b.onclick = () => ask(b.dataset.q); });
-  if ($('#clear')) $('#clear').onclick = () => { history = []; save(); rerender(); };
-  $('#q').focus();
+    ${sonHeader('Lịch thuế', 'Lịch thuế', 'TỔNG HỢP & HỒ SƠ THUẾ', rep ? `<span class="ctx-chip chip-date">Tính tại ngày ${dmy(rep.meta.as_of)}</span>` : '', 'bao-cao')}
+    ${table(['Kỳ thuế', 'Hạn nộp', 'Tình trạng', 'Căn cứ pháp lý'], (rep?.calendar || []).map((c) => `<tr><td><strong>${esc(c.period)}</strong></td><td>${dmy(c.due)}${c.moved_from ? `<div class="muted small">Dời từ ${dmy(c.moved_from)} do ngày nghỉ</div>` : ''}</td><td>${esc(c.status)}${c.open_items ? `<div><a href="#/viec" class="risk-text">còn ${c.open_items} việc chưa xử lý của kỳ này</a></div>` : ''}${c.extension ? `<div class="muted small">${esc(c.extension)}</div>` : ''}</td><td class="muted small">${esc(c.basis)}</td></tr>`), 'Chưa có dữ liệu.')}`;
 }
 
 export async function pageLaw() {
@@ -447,7 +565,7 @@ export async function pageLaw() {
   const doc = params.get('doc');
   if (doc) {
     const d = await api(`/api/law/docs/${encodeURIComponent(doc)}`);
-    app().innerHTML = `<div class="bar">${button('Quay lại kho luật', 'ghost', 'data-go="#/luat"')}</div><h1 class="page">${esc(d.doc.doc_type)} ${esc(d.doc.doc_num)}</h1>
+    app().innerHTML = `<div class="bar">${button('← Quay lại kho luật', 'ghost', 'data-go="#/luat"')}</div><h1 class="page">${esc(d.doc.doc_type)} ${esc(d.doc.doc_num)}</h1>
       <p class="lead">${esc(d.doc.title)}</p><dl class="kv"><dt>Ban hành</dt><dd>${dmy(d.doc.issue_date)}</dd><dt>Hiệu lực</dt><dd>${dmy(d.doc.eff_from) || 'không ghi'}${d.doc.eff_to ? ' đến ' + dmy(d.doc.eff_to) : ''}</dd>
       <dt>Tình trạng</dt><dd>${esc(d.doc.status_name || 'không ghi')}</dd><dt>Nguồn</dt><dd><a href="${esc(d.doc.url)}" target="_blank" rel="noopener">Cơ sở dữ liệu quốc gia về pháp luật</a></dd>
       <dt>Chuyên gia duyệt</dt><dd>${esc(d.doc.review_status)}</dd><dt>Dùng để trả lời</dt><dd>${d.doc.indexed ? 'Có' : 'Không (chỉ lưu để đối chiếu)'}</dd></dl>
@@ -458,18 +576,17 @@ export async function pageLaw() {
     return;
   }
   app().innerHTML = `
-    ${sonHeader('Kho luật', 'Kho luật thuế', 'CĂN CỨ PHÁP LÝ')}
-    <p class="lead" style="margin-top:10px">Văn bản thuế lấy tự động từ Cơ sở dữ liệu quốc gia về pháp luật (vbpl.vn) của Bộ Tư pháp, theo từng điều, khoản, điểm, có ngày hiệu lực. Chỉ đọc trang được phép theo robots.txt, tối đa 1 yêu cầu mỗi 2 giây.</p>
-    <div class="kpis"><div class="kpi"><span class="label">Văn bản</span><span class="value">${s ? s.documents : 0}</span><span class="sub">${s ? `${s.in_force} còn hiệu lực` : ''}</span></div>
-    <div class="kpi"><span class="label">Điều khoản</span><span class="value">${s ? s.provisions.toLocaleString('vi-VN') : 0}</span><span class="sub">${s ? `${s.chunks.toLocaleString('vi-VN')} đoạn tìm kiếm` : ''}</span></div>
-    <div class="kpi"><span class="label">Lần đồng bộ gần nhất</span><span class="value" style="font-size:1.25rem">${s?.last_snapshot?.created_at ? dmy(s.last_snapshot.created_at) : 'chưa có'}</span>
-    <span class="sub">${st.job.running ? `đang chạy${st.job.external ? ' từ dòng lệnh' : ''}: ${st.job.done} văn bản, ${esc(st.job.last)}` : ''}</span></div>
-    <div class="kpi"><span class="label">Hết hiệu lực theo văn bản thay thế</span><span class="value">${s ? s.ended_by_later_act ?? 0 : 0}</span><span class="sub">đọc từ điều khoản hiệu lực thi hành của văn bản mới</span></div></div>
-    <h2 class="section">Tìm trong kho</h2><form id="lsearch" class="bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
-    <label class="cds--label" for="lq">Nội dung</label><input class="cds--text-input" id="lq" placeholder="Ví dụ: thời hạn nộp hồ sơ khai thuế theo quý"></div>
+    ${sonHeader('Kho luật', 'Kho luật thuế', 'TƯ VẤN & TRA CỨU LUẬT', `<span class="ctx-chip chip-count">${s ? s.documents : 0} văn bản</span>`, 'tu-van')}
+    <div class="kpis" style="margin-top:14px"><div class="kpi"><span class="label">Văn bản pháp luật</span><span class="value">${s ? s.documents : 0}</span><span class="sub">${s ? `${s.in_force} còn hiệu lực` : ''}</span></div>
+    <div class="kpi"><span class="label">Điều khoản chi tiết</span><span class="value">${s ? s.provisions.toLocaleString('vi-VN') : 0}</span><span class="sub">${s ? `${s.chunks.toLocaleString('vi-VN')} đoạn chỉ mục` : ''}</span></div>
+    <div class="kpi"><span class="label">Đồng bộ gần nhất</span><span class="value" style="font-size:1.25rem">${s?.last_snapshot?.created_at ? dmy(s.last_snapshot.created_at) : 'chưa có'}</span>
+    <span class="sub">${st.job.running ? `đang chạy: ${st.job.done} văn bản` : 'Nguồn: vbpl.vn'}</span></div>
+    <div class="kpi"><span class="label">Văn bản hết hiệu lực</span><span class="value">${s ? s.ended_by_later_act ?? 0 : 0}</span><span class="sub">theo điều khoản thay thế</span></div></div>
+    <h2 class="section">Tra cứu điều khoản</h2><form id="lsearch" class="bar" style="align-items:flex-end"><div class="cds--form-item cds--text-input-wrapper" style="flex:1;min-width:16rem">
+    <label class="cds--label" for="lq">Từ khóa hoặc nội dung</label><input class="cds--text-input" id="lq" placeholder="Ví dụ: thời hạn nộp hồ sơ khai thuế theo quý"></div>
     <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="lasof">Ngày áp dụng</label><input class="cds--text-input" id="lasof" type="date" value="${new Date().toISOString().slice(0, 10)}"></div>
-    ${button('Tìm', 'primary', 'type="submit"')}</form><div id="lres"></div>
-    <h2 class="section">Văn bản</h2><div id="ldocs">${loading('Đang tải danh sách')}</div><details class="law-management"><summary>Đồng bộ và lịch sử kho luật</summary>    <div class="bar">${button(st.job.running ? 'Đang đồng bộ' : 'Đồng bộ kho luật', 'primary', `id="sync" ${st.job.running ? 'disabled' : ''}`)}${button('Chỉ văn bản lõi', 'tertiary', `id="sync-core" ${st.job.running ? 'disabled' : ''}`)}
+    ${button('Tìm kiếm', 'primary', 'type="submit"')}</form><div id="lres"></div>
+    <h2 class="section">Danh mục văn bản</h2><div id="ldocs">${loading('Đang tải danh sách')}</div><details class="law-management"><summary>Đồng bộ và lịch sử kho luật</summary><div class="bar">${button(st.job.running ? 'Đang đồng bộ' : 'Đồng bộ kho luật', 'primary', `id="sync" ${st.job.running ? 'disabled' : ''}`)}${button('Chỉ văn bản lõi', 'tertiary', `id="sync-core" ${st.job.running ? 'disabled' : ''}`)}
     <span>${st.job.error ? notice('error', 'Lỗi đồng bộ', st.job.error) : ''}</span></div>
     <div id="alerts"></div>
     <h2 class="section">Thay đổi gần đây</h2>${table(['Lần', 'Loại', 'Văn bản', 'Chi tiết'], (st.changes || []).slice(0, 15).map((c) => `<tr><td>${c.snapshot_id}</td><td>${esc(c.kind)}</td><td>${esc(c.doc_num || '')}</td><td>${esc(c.detail)}</td></tr>`), 'Chưa có thay đổi.')}
@@ -499,55 +616,4 @@ export async function pageLaw() {
       <td><span class="cell-title">${esc(d.doc_type)} ${esc(d.doc_num)}</span><div class="muted small">${esc((d.title || '').slice(0, 140))}</div></td><td>${dmy(d.issue_date)}</td><td>${dmy(d.eff_from)}</td>
       <td>${d.ended_on ? `Hết hiệu lực từ ${dmy(d.ended_on)} theo ${esc(d.ended_by)}` : esc(d.status_name || '')}${d.structure === 'none' ? '<div class="muted small">chưa có toàn văn</div>' : ''}${d.indexed ? '' : '<div class="muted small">không dùng để trả lời</div>'}</td><td class="num">${d.n_provisions}</td></tr>`), 'Kho trống. Bấm Đồng bộ kho luật.');
   } catch { $('#ldocs').innerHTML = '<div class="empty">Kho trống. Bấm Đồng bộ kho luật.</div>'; }
-}
-
-export async function pageSettings() {
-  if (needWorkspace()) return;
-  const pack = await api(`/api/workspaces/${state.ws}/pack`);
-  const save = async (next, msgEl) => {
-    try { await put(`/api/workspaces/${state.ws}/pack`, next); msgEl.innerHTML = notice('success', 'Đã lưu'); setTimeout(rerender, 600); }
-    catch (err) { msgEl.innerHTML = notice('error', 'Không lưu được', err.message); }
-  };
-  app().innerHTML = `<h1 class="page">Cài đặt của doanh nghiệp</h1><p class="lead">Phần thích ứng do doanh nghiệp giữ. Ngưỡng chỉ được chặt hơn mặc định; chính sách nội bộ chỉ thêm cờ, không làm nhẹ kết quả luật; danh sách tham chiếu phải ghi ngày.</p>
-    <h2 class="section">Mẫu sao kê ngân hàng</h2>${table(['Tên mẫu', 'Cột ngày', 'Cột ghi nợ', 'Cột ghi có', 'Phân cách số'], (pack.bank_formats || []).map((f) => `<tr><td>${esc(f.name)}</td>
-      <td class="mono">${esc(f.columns.date)}</td><td class="mono">${esc(f.columns.debit)}</td><td class="mono">${esc(f.columns.credit || '')}</td><td class="mono">nghìn "${esc(f.thousands)}", thập phân "${esc(f.decimal)}"</td></tr>`), 'Chưa có mẫu. Nạp sao kê rồi dùng Nhận dạng cột.')}
-    <h2 class="section">Ngưỡng</h2><form id="th"><div class="form-grid">
-      ${field({ key: 'match_days_after_invoice', label: 'Số ngày tối đa từ ngày hóa đơn đến ngày thanh toán (không quá 90)', example: '90' }, pack.thresholds?.match_days_after_invoice ?? '')}
-      ${field({ key: 'non_cash_threshold_override', label: 'Ngưỡng nội bộ thấp hơn ngưỡng luật (đồng)', example: 'để trống để dùng ngưỡng luật' }, pack.thresholds?.non_cash_threshold_override ?? '')}</div>
-      <div class="bar">${button('Lưu ngưỡng', 'primary', 'type="submit"')}<span id="thmsg"></span></div></form>
-    <h2 class="section">Chính sách nội bộ</h2>${table(['Mã', 'Cờ', 'Điều kiện'], (pack.policies || []).map((p) => `<tr><td>${esc(p.id)}</td><td>${esc(p.flag)}</td>
-      <td>${p.min_gross ? 'từ ' + money(p.min_gross) : ''} ${(p.description_contains || []).map(esc).join(', ')}</td></tr>`), 'Chưa có.')}
-    <form id="pol" style="margin-top:1rem"><div class="form-grid">${field({ key: 'id', label: 'Mã chính sách', required: true, example: 'TIEP_KHACH' })}${field({ key: 'flag', label: 'Nội dung cờ', required: true, example: 'Cần giấy đề nghị thanh toán' })}
-      ${field({ key: 'min_gross', label: 'Áp dụng từ số tiền (đồng)', example: '2000000' })}${field({ key: 'description_contains', label: 'Tên hàng có chứa', example: 'tiếp khách' })}</div>
-      <div class="bar">${button('Thêm chính sách', 'secondary', 'type="submit"')}<span id="polmsg"></span></div></form>
-    <h2 class="section">Danh sách doanh nghiệp rủi ro</h2>${table(['Tên danh sách', 'Ngày', { label: 'Số mã số thuế', num: true }, 'Nguồn'], (pack.reference_lists || []).map((r) => `<tr><td>${esc(r.name)}</td><td>${dmy(r.as_of)}</td>
-      <td class="num">${r.tax_ids.length}</td><td>${esc(r.source || '')}</td></tr>`), 'Chưa có.')}
-    <form id="ref" style="margin-top:1rem"><div class="form-grid">${field({ key: 'name', label: 'Tên danh sách', required: true, example: 'Danh sách theo công văn số ...' })}
-      <div class="cds--form-item cds--text-input-wrapper"><label class="cds--label" for="ref-date">Ngày của danh sách</label><input class="cds--text-input" id="ref-date" name="as_of" type="date" required></div>
-      ${field({ key: 'source', label: 'Nguồn', example: 'Công văn số ... của Cục Thuế' })}
-      <div class="cds--form-item"><label class="cds--label" for="ref-ids">Mã số thuế, mỗi dòng một mã</label><textarea class="cds--text-area" id="ref-ids" name="tax_ids" rows="4"></textarea></div></div>
-      <div class="bar">${button('Thêm danh sách', 'secondary', 'type="submit"')}<span id="refmsg"></span></div></form><div id="riskimp"></div>`;
-  riskImport($('#riskimp'));
-  $('#th').onsubmit = (e) => {
-    e.preventDefault();
-    const f = Object.fromEntries(new FormData(e.target).entries());
-    const th = { ...pack.thresholds };
-    if (f.match_days_after_invoice) th.match_days_after_invoice = Number(f.match_days_after_invoice); else delete th.match_days_after_invoice;
-    if (f.non_cash_threshold_override) th.non_cash_threshold_override = Number(f.non_cash_threshold_override); else delete th.non_cash_threshold_override;
-    save({ ...pack, thresholds: th }, $('#thmsg'));
-  };
-  $('#pol').onsubmit = (e) => {
-    e.preventDefault();
-    const f = Object.fromEntries(new FormData(e.target).entries());
-    const p = { id: f.id, flag: f.flag };
-    if (f.min_gross) p.min_gross = Number(f.min_gross);
-    if (f.description_contains) p.description_contains = f.description_contains.split(';').map((x) => x.trim()).filter(Boolean);
-    save({ ...pack, policies: [...(pack.policies || []).filter((x) => x.id !== p.id), p] }, $('#polmsg'));
-  };
-  $('#ref').onsubmit = (e) => {
-    e.preventDefault();
-    const f = Object.fromEntries(new FormData(e.target).entries());
-    const ids = f.tax_ids.split(/[\s,;]+/).map((x) => x.trim()).filter(Boolean);
-    save({ ...pack, reference_lists: [...(pack.reference_lists || []), { name: f.name, as_of: f.as_of, source: f.source, tax_ids: ids }] }, $('#refmsg'));
-  };
 }

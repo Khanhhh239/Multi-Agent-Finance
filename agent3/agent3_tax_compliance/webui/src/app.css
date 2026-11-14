@@ -14,7 +14,7 @@ details.guide summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 500
 details.guide .guide-body { padding: 0 1rem 0.75rem; font-size: 0.875rem; }
 details.guide ol, details.guide ul { margin: 0.25rem 0 0.75rem 1.25rem; padding: 0; }
 .plain { background: var(--cds-layer-accent, #e8e8e8); border-left: 3px solid var(--cds-support-info, #0043ce); padding: 0.75rem 1rem; margin: 0 0 1rem; font-size: 0.9375rem; }
-.app { margin-left: 16rem; padding: 4rem 2rem 4rem; min-height: 100vh; box-sizing: border-box; max-width: 100rem; }
+.app { margin-left: 16rem; padding: 4rem 2rem 4rem; min-height: 100vh; box-sizing: border-box; max-width: none; width: calc(100% - 16rem); }
 .side { top: 3rem; width: 16rem; display: flex; flex-direction: column; }
 .side .cds--side-nav__items { flex: 1; overflow-y: auto; }
 .side-foot { padding: 1rem; font-size: 0.75rem; line-height: 1.33; color: var(--cds-text-secondary); border-top: 1px solid var(--cds-border-subtle); }

@@ -1,5 +1,5 @@
 // The fixed framework and the enterprise's own configuration: welcome page, set-up wizard, configuration page.
-import { $, api, app, button, dmy, esc, field, loadWorkspaces, loading, money, notice, needWorkspace, onPageLeave, portalLink, post, put, state, store, table } from './core.js';
+import { $, api, app, button, dmy, esc, field, loadWorkspaces, loading, money, notice, needWorkspace, onPageLeave, portalLink, post, put, sonHeader, state, store, table } from './core.js';
 import { riskImport } from './pages_ai.js';
 import { toast } from './ux.js';
 
@@ -118,9 +118,7 @@ export async function pageSetup() {
         <dt>Ngày nghỉ thêm</dt><dd>${d.days_off.length ? d.days_off.map(dmy).join(', ') : 'không có'}</dd>
 </dl><div id="setup-msg"></div>`;
     }
-    app().innerHTML = `<span class="eyebrow">Cấu hình nghiệp vụ thuế</span>
-      <h1 class="page">Thiết lập nghiệp vụ thuế</h1>
-      <p class="lead">Biến khung kiểm tra thuế dùng chung thành trợ lý thuế riêng của doanh nghiệp. Bước ${step}/${steps.length}: <strong>${esc(steps[step - 1])}</strong>.</p>
+    app().innerHTML = `${sonHeader('Thiết lập nghiệp vụ', 'Thiết lập nghiệp vụ thuế', 'CẤU HÌNH NGHIỆP VỤ THUẾ', `Bước ${step}/${steps.length}: ${steps[step - 1]}`)}
       ${sharedProfile(d.profile)}${nav}
       <form id="setup">
         <div class="panel" style="padding:26px 28px;border-radius:12px;box-shadow:var(--a3-shadow-sm);margin-bottom:20px;border:1px solid var(--cds-border-subtle)">${body}</div>
@@ -236,26 +234,15 @@ export async function pageConfig() {
     try { await put(`/api/workspaces/${state.ws}/pack?by=${encodeURIComponent(store.get('agent3.reviewer') || '')}`, next); toast(msg || 'Đã lưu cấu hình', 'Chạy lại phân tích để áp dụng'); await loadWorkspaces(); rerender(); }
     catch (err) { toast('Không lưu được', err.message, 'error'); }
   };
-  const SEC_ICONS = {
-    'ho-so': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
-    'ngan-hang': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
-    'bang-ke': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>`,
-    'quy-dinh': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
-    'nguong': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>`,
-    'nhom-hang': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>`,
-    'ngay-nghi': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
-    'rui-ro': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
-    'lich-su': `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
-  };
-  const sec = (id, title, sub, inner) => `<section class="cfg" id="cfg-${id}"><h2 class="section">${SEC_ICONS[id] || ''} <span>${esc(title)}</span></h2><p class="section-desc">${esc(sub)}</p>${inner}</section>`;
+  const sec = (id, title, sub, inner) => `<section class="cfg" id="cfg-${id}"><h2 class="section"><span>${esc(title)}</span></h2><p class="section-desc">${esc(sub)}</p>${inner}</section>`;
   const cats = pack.ai_categories || [];
   const indCodes = (pack.profile.industry || []).map((x) => (String(x).match(/^\s*(\d{2,5})/) || [])[1]).filter(Boolean);
   const indText = indCodes.length ? `ngành VSIC ${indCodes.join(', ')}` : 'ngành';
   const wizardBanner = `
     <div class="panel" style="border-radius:12px;padding:18px 22px;background:var(--a3-surface);border:1px solid var(--cds-border-subtle);margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;box-shadow:var(--a3-shadow-sm)">
       <div style="max-width:650px">
-        <h4 style="margin:0 0 6px 0;font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px">
-          <span>🧭</span> Hướng dẫn thiết lập nghiệp vụ thuế (Wizard 5 bước)
+        <h4 style="margin:0 0 6px 0;font-size:15px;font-weight:600">
+          Hướng dẫn thiết lập nghiệp vụ thuế (Wizard 5 bước)
         </h4>
         <p class="muted small" style="margin:0;line-height:1.55">Trình hỗ trợ thiết lập tuần tự: chọn quy định chi tiêu, ngưỡng kiểm soát, nhóm hàng AI và ngày nghỉ theo từng bước có giải thích chi tiết.</p>
       </div>
@@ -264,9 +251,7 @@ export async function pageConfig() {
       </div>
     </div>`;
 
-  app().innerHTML = `<span class="eyebrow">Cấu hình riêng của doanh nghiệp</span>
-    <h1 class="page">${esc(pack.profile.legal_name)}</h1>
-    <p class="lead">Thiết lập các tham số, quy định chi tiêu, ngưỡng kiểm soát và danh mục đặc thù khớp với doanh nghiệp của bạn. Khung kiểm tra luật thuế dùng chung luôn được bảo toàn.</p>
+  app().innerHTML = `${sonHeader('Cấu hình doanh nghiệp', pack.profile.legal_name, 'CẤU HÌNH RIÊNG CỦA DOANH NGHIỆP')}
     ${wizardBanner}
     <nav class="cfg-nav">${[['ho-so', 'Hồ sơ'], ['ngan-hang', 'Mẫu sao kê'], ['bang-ke', 'Cột bảng kê'], ['quy-dinh', 'Quy định chi tiêu'], ['nguong', 'Ngưỡng'], ['nhom-hang', 'Nhóm hàng đặc thù'], ['ngay-nghi', 'Ngày nghỉ'], ['rui-ro', 'Danh sách rủi ro'], ['lich-su', 'Lịch sử thay đổi']]
       .map(([id, l]) => `<a href="javascript:void 0" data-jump="cfg-${id}">${esc(l)}</a>`).join('')}</nav>

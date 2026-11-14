@@ -18,7 +18,7 @@ export function formatSpecialMoney(v) {
   const isNegative = whole.startsWith('-');
   const absWhole = whole.replace(/^-/, '');
   const formattedWhole = absWhole.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  
+
   return `<span class="kpi-money-wrap">
     ${isNegative ? '<span class="kpi-sign">-</span>' : ''}
     <span class="kpi-digits">${formattedWhole}</span>
@@ -98,7 +98,6 @@ export async function saveBankFormat(format) {
 export const balance = (value) => value === null || value === undefined ? 'Chưa đủ dữ liệu / không áp dụng'
   : `${String(value).startsWith('-') ? 'Đầu vào vượt đầu ra' : 'Đầu ra vượt đầu vào'}: ${money(String(value).replace(/^-/, ''))}`;
 
-// Short reading of a large amount, the way it is said aloud: "3,4 nghìn tỷ đồng". Empty below one million.
 export const moneyShort = (v) => {
   const n = Number(v);
   if (!Number.isFinite(n) || Math.abs(n) < 1e6) return '';
@@ -137,30 +136,184 @@ export const table = (head, rows, empty = 'Không có dữ liệu.') => (rows.le
   <thead><tr>${head.map((h) => `<th${h.num ? ' class="num"' : ''}><div class="cds--table-header-label">${esc(h.label || h)}</div></th>`).join('')}</tr></thead>
   <tbody>${rows.join('')}</tbody></table></div>` : `<div class="empty">${esc(empty)}</div>`);
 
-export function sonHeader(breadcrumb, title, eyebrow = 'KHÔNG GIAN DOANH NGHIỆP', extraChips = '') {
+const SUBNAV_GROUPS = {
+  'chung-tu': [
+    ['#/hoa-don', 'Hóa đơn GTGT'],
+    ['#/ngan-hang', 'Sao kê ngân hàng'],
+    ['#/du-lieu', 'Bảng kê cổng thuế'],
+  ],
+  'bao-cao': [
+    ['#/so-lieu', 'Số liệu thuế GTGT'],
+    ['#/giai-trinh', 'Hồ sơ giải trình'],
+    ['#/lich', 'Lịch thuế'],
+  ],
+  'tu-van': [
+    ['#/hoi', 'Hỏi đáp thuế & dữ liệu'],
+    ['#/luat', 'Kho văn bản luật'],
+  ],
+};
+
+export function subNav(group, currentHash) {
+  const tabs = SUBNAV_GROUPS[group];
+  if (!tabs) return '';
+  const cur = (currentHash || location.hash.split('?')[0] || '#/').replace('#/tin-luat', '#/luat');
+  return `<nav class="a3-subnav" aria-label="Điều hướng nhóm trang">
+    ${tabs.map(([href, label]) => `<a href="${href}" class="a3-subnav-link ${cur === href ? 'active' : ''}" ${cur === href ? 'aria-current="page"' : ''}>${esc(label)}</a>`).join('')}
+  </nav>`;
+}
+
+export const DEFAULT_SUBTITLES = {
+  'Tổng quan': 'Tổng hợp rủi ro khấu trừ, đối chiếu số liệu tờ khai và tiến độ xử lý thuế GTGT trong kỳ.',
+  'Việc cần xử lý': 'Rà soát từng cảnh báo hóa đơn, đối chiếu chứng từ thanh toán và ghi nhận quyết định phê duyệt.',
+  'Hóa đơn': 'Tra cứu, kiểm tra tính toàn vẹn chữ ký số XML và trạng thái ghép sao kê của từng hóa đơn.',
+  'Ngân hàng': 'Đối chiếu các khoản thu chi ngân hàng và xác nhận ghép ủy nhiệm chi với hóa đơn mua vào.',
+  'Bảng kê': 'Quản lý và chọn bản bảng kê hóa đơn điện tử từ cổng thuế để đối chiếu chéo với tệp XML.',
+  'Số liệu thuế GTGT': 'Tổng hợp thuế GTGT đầu ra, đầu vào theo kịch bản rà soát và đối chiếu số liệu tờ khai đã nộp.',
+  'Giải trình': 'Tập hợp chứng từ, trích dẫn căn cứ pháp lý và soạn thảo công văn giải trình cơ quan thuế.',
+  'Lịch thuế': 'Theo dõi thời hạn nộp hồ sơ khai thuế và quy tắc dời hạn khi trùng ngày nghỉ lễ, cuối tuần.',
+  'Hỏi đáp': 'Hỏi đáp trực tiếp trên số liệu hóa đơn kỳ này hoặc tra cứu điều khoản luật thuế GTGT.',
+  'Kho luật': 'Tra cứu văn bản quy phạm pháp luật thuế còn hiệu lực từ Cơ sở dữ liệu quốc gia.',
+  'Nạp dữ liệu': 'Tải lên hóa đơn điện tử XML, sao kê ngân hàng và bảng kê cổng thuế để chạy phân tích.',
+  'Mẫu sao kê': 'Chỉnh sửa ánh xạ cột ngày, số tiền và nội dung chuyển khoản cho từng định dạng sao kê ngân hàng.',
+  'Quản trị hệ thống': 'Khu vực bảo vệ dùng để thiết lập cấu hình doanh nghiệp, danh mục dùng chung và kho văn bản luật.',
+  'Tổng quan quản trị': 'Quản lý danh mục dùng chung toàn hệ thống, phiên bản quy tắc và cấu hình riêng của từng doanh nghiệp.',
+  'Cấu hình doanh nghiệp': 'Thiết lập các tham số, quy định chi tiêu, ngưỡng kiểm soát và danh mục đặc thù khớp với doanh nghiệp.',
+  'Thiết lập nghiệp vụ': 'Trình hướng dẫn tuần tự 5 bước giúp cá nhân hóa quy chế kiểm tra thuế cho doanh nghiệp.',
+  'Danh mục dùng chung': 'Chỉnh sửa danh mục hệ thống áp dụng chung cho mọi doanh nghiệp với nhật ký phiên bản đầy đủ.',
+  'Lịch sử thay đổi': 'Theo dõi toàn bộ nhật ký cập nhật danh mục hệ thống và cấu hình nghiệp vụ của doanh nghiệp.',
+};
+
+export function cleanCompanyName(raw) {
+  return String(raw || '').replace(/^["'“”‘’\s]+|["'“”‘’\s]+$/g, '').trim();
+}
+
+export function sonHeader(breadcrumb, title, eyebrow = 'KHÔNG GIAN DOANH NGHIỆP', subtitle = '', navGroup = '') {
   const ws = state.workspaces.find((w) => w.id === state.ws);
-  const rep = state.report;
-  const period = rep?.meta?.period ? `Kỳ: ${dmy(rep.meta.period[0])} - ${dmy(rep.meta.period[1])}` : '';
+  const isOverview = breadcrumb === 'Tổng quan';
+  const rawCompany = ws?.name || state.platform?.profile?.legal_name || '';
+  const cleanName = cleanCompanyName(rawCompany);
+  const taxCode = state.platform?.profile?.tax_code || ws?.tax_code || '';
+
+  const stripHtml = (s) => String(s || '').replace(/<[^>]*>/g, '').trim();
+  const cleanSub = stripHtml(subtitle) || DEFAULT_SUBTITLES[breadcrumb] || '';
+
+  let metaParts = [];
+  if (!isOverview && cleanName) metaParts.push(cleanName);
+  if (taxCode) metaParts.push(`MST ${taxCode}`);
+  if (state.report?.meta?.as_of) metaParts.push(`Kỳ phân tích: ${dmy(state.report.meta.as_of)}`);
+
+  const h1Inner = isOverview && cleanName
+    ? `<span class="a3-h1-main">${esc(title)}</span><span class="a3-h1-sep"> · </span><span class="a3-h1-company">${esc(cleanName)}</span>`
+    : `<span class="a3-h1-main">${esc(title)}</span>`;
+
   return `
-    <div class="workspace-heading">
-      <span class="top-label">TRỢ LÝ THUẾ GTGT</span>
-      <span class="divider">/</span>
-      <span id="breadcrumb">${esc(breadcrumb)}</span>
-    </div>
-    <div class="page-heading son-illustrated">
-      <div>
-        <div class="eyebrow">${esc(eyebrow)}</div>
-        <h1 class="page">${esc(title)}</h1>
+    <div class="page-heading a3-compact-header son-illustrated">
+      <div class="a3-header-main">
+        <div class="eyebrow"><span class="a3-eyebrow-pill">${esc(eyebrow)}</span><span class="a3-eyebrow-dot">·</span><span id="breadcrumb">${esc(breadcrumb)}</span></div>
+        <h1 class="page">${h1Inner}</h1>
+        ${(cleanSub || metaParts.length) ? `<p class="a3-header-sub">${cleanSub ? `<span class="a3-sub-desc">${esc(cleanSub)}</span>` : ''}${metaParts.length ? `<span class="a3-sub-meta">${cleanSub ? ' · ' : ''}${esc(metaParts.join(' · '))}</span>` : ''}</p>` : ''}
       </div>
     </div>
-    ${ws ? `
-    <div class="context-chips-bar">
-      <span class="ctx-chip chip-company"><strong>${esc(ws.name)}</strong></span>
-      <span class="ctx-chip chip-taxcode">MST: <code>${esc(ws.tax_code)}</code></span>
-      ${period ? `<span class="ctx-chip chip-period">${esc(period)}</span>` : ''}
-      ${extraChips}
-    </div>` : ''}
+    ${navGroup ? subNav(navGroup) : ''}
   `;
+}
+
+// Unified mathematical & bucket calculator mirroring backend accounting.py 100%
+export function computeReportStats(rep) {
+  if (!rep) return null;
+  const t = rep.totals || {};
+  const invoices = rep.invoices || [];
+  const items = rep.items || [];
+  const matches = rep.matches || [];
+  const notClaimedKeys = new Set(rep.decisions?.not_claimed_keys || []);
+
+  const matchedMap = new Map(matches.flatMap((m) => (m.invoice_keys || []).map((k) => [k, m])));
+  const riskByInvoice = new Map();
+  items.forEach((it) => {
+    (it.invoice_keys || []).forEach((k) => {
+      if (!riskByInvoice.has(k)) riskByInvoice.set(k, []);
+      riskByInvoice.get(k).push(it);
+    });
+  });
+
+  // Exact invoice status matching accounting.py:buckets(rep)
+  const invoiceBucket = (inv) => {
+    if (!inv || inv.duplicate_of) return 'DUPLICATE';
+    if (inv.role === 'PURCHASE' && notClaimedKeys.has(inv.key)) return 'NOT_CLAIMED';
+    const its = (riskByInvoice.get(inv.key) || []).filter((x) => x.status !== 'INFO');
+    if (its.some((x) => x.status === 'AT_RISK')) return 'AT_RISK';
+    if (its.some((x) => x.status === 'REVIEW')) return 'REVIEW';
+    if (its.length) return 'OTHER';
+    return 'OK';
+  };
+
+  // Unique (non-duplicate) purchase and sales invoices
+  const purchaseInvs = invoices.filter((i) => i.role === 'PURCHASE' && !i.duplicate_of);
+  const saleInvs = invoices.filter((i) => i.role === 'SALE' && !i.duplicate_of);
+  const duplicateInvs = invoices.filter((i) => Boolean(i.duplicate_of));
+
+  const purchaseGross = purchaseInvs.reduce((s, i) => s + Number(i.gross || 0), 0);
+  const purchaseVat = purchaseInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
+  const saleGross = saleInvs.reduce((s, i) => s + Number(i.gross || 0), 0);
+  const saleVat = saleInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
+
+  const atRiskPurchaseInvs = purchaseInvs.filter((i) => invoiceBucket(i) === 'AT_RISK');
+  const reviewPurchaseInvs = purchaseInvs.filter((i) => invoiceBucket(i) === 'REVIEW');
+  const notClaimedInvs = purchaseInvs.filter((i) => invoiceBucket(i) === 'NOT_CLAIMED');
+  const noAlertPurchaseInvs = purchaseInvs.filter((i) => invoiceBucket(i) === 'OK');
+
+  const atRiskVat = t.at_risk_vat !== undefined ? t.at_risk_vat : String(atRiskPurchaseInvs.reduce((s, i) => s + Number(i.vat || 0), 0));
+  const reviewVat = t.review_vat !== undefined ? t.review_vat : String(reviewPurchaseInvs.reduce((s, i) => s + Number(i.vat || 0), 0));
+  const opportunityVat = t.opportunity_vat !== undefined ? t.opportunity_vat : String(items.filter((i) => i.status === 'OPPORTUNITY').reduce((s, i) => s + Number(i.amount || 0), 0));
+  const penaltyEstimate = t.penalty_estimate !== undefined ? t.penalty_estimate : '0';
+
+  const notClaimedVat = notClaimedInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
+  const noAlertVat = noAlertPurchaseInvs.reduce((s, i) => s + Number(i.vat || 0), 0);
+
+  // Matches accounting.py: scenario_without_review = output_vat - no_alert_vat; scenario_with_review = output_vat - no_alert_vat - review_vat
+  const scenarioWithoutReview = saleVat - noAlertVat;
+  const scenarioWithReview = saleVat - noAlertVat - Number(reviewVat || 0);
+
+  // Unpaid purchase invoices (consistent with table row payStatus)
+  const unpaidInvs = purchaseInvs.filter((i) => {
+    const m = matchedMap.get(i.key);
+    return !m || m.status !== 'MATCHED';
+  });
+
+  const atRiskItems = items.filter((i) => i.status === 'AT_RISK').length;
+  const reviewItems = items.filter((i) => i.status === 'REVIEW').length;
+  const opportunityItems = items.filter((i) => i.status === 'OPPORTUNITY').length;
+
+  const atRiskInvoices = t.at_risk_invoices ?? atRiskPurchaseInvs.length;
+  const reviewInvoices = t.review_invoices ?? reviewPurchaseInvs.length;
+
+  return {
+    matchedMap,
+    riskByInvoice,
+    invoiceBucket,
+    purchaseInvs,
+    saleInvs,
+    duplicateInvs,
+    purchaseGross,
+    purchaseVat,
+    saleGross,
+    saleVat,
+    noAlertVat,
+    notClaimedVat,
+    atRiskVat,
+    reviewVat,
+    opportunityVat,
+    penaltyEstimate,
+    scenarioWithoutReview,
+    scenarioWithReview,
+    unpaidInvs,
+    unpaidCount: unpaidInvs.length,
+    atRiskItems,
+    reviewItems,
+    opportunityItems,
+    atRiskInvoices,
+    reviewInvoices,
+  };
 }
 
 export const state = { platform: null, ws: null, workspaces: [], report: null, schema: null };
@@ -189,17 +342,13 @@ export function portalLink(section = 'config', label = 'Mở hồ sơ chung tạ
   return '<p class="muted">Khởi động Agent 3 từ portal để kết nối hồ sơ doanh nghiệp chung.</p>';
 }
 
-let reportWs = null;
-export async function loadReport(force = false) {
-  if (!state.ws) { state.report = null; reportWs = null; return null; }
-  if (!force && state.report && reportWs === state.ws) return state.report;
+export async function loadReport() {
+  if (!state.ws) { state.report = null; return null; }
   try {
     state.report = await api(`/api/workspaces/${state.ws}/report`);
-    reportWs = state.ws;
   } catch (err) {
     if (err.status !== 404) throw err;
     state.report = null;
-    reportWs = null;
   }
   return state.report;
 }
